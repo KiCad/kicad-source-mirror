@@ -3,16 +3,16 @@
 /************************************/
 
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
 
-#include "pcbnew_id.h"
-#include "module_editor_frame.h"
-#include "class_board.h"
+#include <pcbnew_id.h>
+#include <module_editor_frame.h>
+#include <class_board.h>
 
-#include "dialog_graphic_items_options.h"
+#include <dialog_graphic_items_options.h>
 
 extern int g_DrawDefaultLineThickness;
 

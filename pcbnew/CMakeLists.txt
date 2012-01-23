@@ -3,12 +3,17 @@ add_definitions(-DPCBNEW)
 ###
 # Includes
 ###
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-                    ${Boost_INCLUDE_DIR}
-                    ../3d-viewer
-                    ../common
-                    ../polygon)
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ./dialogs
+    ../3d-viewer
+    ../common
+    ${Boost_INCLUDE_DIR}
+    ../polygon
+    ../common/dialogs
+    ${INC_AFTER}
+    )
+
 
 ###
 # Sources
@@ -192,9 +197,10 @@ set(PCBNEW_SRCS
 ###
 # We need some extra sources from common
 ###
-set(PCBNEW_EXTRA_SRCS
+set(PCBNEW_COMMON_SRCS
     ../common/dialogs/dialog_page_settings.cpp
 )
+
 
 ###
 # Windows resource file
@@ -253,10 +259,10 @@ make_lexer(
 # Create the pcbnew executable
 ###
 add_executable(pcbnew WIN32 MACOSX_BUNDLE
-               ${PCBNEW_SRCS}
-               ${PCBNEW_EXTRA_SRCS}
-               ${PCBNEW_RESOURCES}
-              )
+    ${PCBNEW_SRCS}
+    ${PCBNEW_COMMON_SRCS}
+    ${PCBNEW_RESOURCES}
+    )
 
 ###
 # Set properties for APPLE on pcbnew target
@@ -268,17 +274,24 @@ endif(APPLE)
 ###
 # Link executable target pcbnew with correct libraries
 ###
-target_link_libraries(pcbnew 3d-viewer common pcbcommon polygon bitmaps kbool
-                      ${OPENGL_LIBRARIES}
-                      ${wxWidgets_LIBRARIES}
-                      ${GDI_PLUS_LIBRARIES})
+target_link_libraries(pcbnew
+    3d-viewer
+    pcbcommon
+    common
+    polygon
+    bitmaps
+    kbool
+    ${OPENGL_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    )
 
 ###
 # Add pcbnew as install target
 ###
 install(TARGETS pcbnew
-        DESTINATION ${KICAD_BIN}
-        COMPONENT binary)
+    DESTINATION ${KICAD_BIN}
+    COMPONENT binary)
 
 
 # The specctra test fails to build properly using MS Visual Studio.

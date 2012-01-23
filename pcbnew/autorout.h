@@ -31,7 +31,7 @@
 #define AUTOROUT_H
 
 
-#include "base_struct.h"
+#include <base_struct.h>
 
 
 class BOARD;

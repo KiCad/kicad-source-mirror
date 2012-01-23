@@ -25,7 +25,7 @@
 #ifndef __dialog_global_edit_tracks_and_vias__
 #define __dialog_global_edit_tracks_and_vias__
 
-#include "dialog_global_edit_tracks_and_vias_base.h"
+#include <dialog_global_edit_tracks_and_vias_base.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS
@@ -43,7 +43,7 @@ public:
     ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() {};
 
     // Virtual event handlers, overided here
-	void OnSelectionClick( wxCommandEvent& event ){ m_OptionID = event.GetId(); }
+    void OnSelectionClick( wxCommandEvent& event ){ m_OptionID = event.GetId(); }
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void MyInit();

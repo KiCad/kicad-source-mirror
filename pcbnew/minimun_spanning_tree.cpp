@@ -31,8 +31,8 @@
 
 #include <limits.h>
 
-#include "minimun_spanning_tree.h"
-#include "class_pad.h"
+#include <minimun_spanning_tree.h>
+#include <class_pad.h>
 
 /*
  * The class MIN_SPAN_TREE calculates the rectilinear minimum spanning tree

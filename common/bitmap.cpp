@@ -27,7 +27,7 @@
 #include <wx/bitmap.h>
 #include <wx/mstream.h>
 
-#include "bitmaps.h"
+#include <bitmaps.h>
 
 
 #if defined(USE_PNG_BITMAPS)

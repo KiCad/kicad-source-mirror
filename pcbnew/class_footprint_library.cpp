@@ -3,16 +3,16 @@
  * Helper class to read/write footprint libraries.
  */
 
-#include "fctsys.h"
-#include "kicad_string.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "richio.h"
-#include "filter_reader.h"
-#include "macros.h"
-#include "pcbstruct.h"
+#include <fctsys.h>
+#include <kicad_string.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <richio.h>
+#include <filter_reader.h>
+#include <macros.h>
+#include <pcbstruct.h>
 
-#include "class_footprint_library.h"
+#include <class_footprint_library.h>
 
 /*
  * Module library header format:

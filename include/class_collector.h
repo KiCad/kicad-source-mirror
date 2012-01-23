@@ -32,9 +32,9 @@
 
 #include <vector>
 
-#include "fctsys.h"
-#include "base_struct.h"    // SEARCH_RESULT
-#include "common.h"         // GetNewTimeStamp()
+#include <fctsys.h>
+#include <base_struct.h>    // SEARCH_RESULT
+#include <common.h>         // GetNewTimeStamp()
 
 
 class EDA_ITEM;

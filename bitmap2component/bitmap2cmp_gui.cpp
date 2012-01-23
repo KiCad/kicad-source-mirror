@@ -21,23 +21,23 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
 
-#include "wx/wx.h"
-#include "wx/config.h"
-#include "wx/filename.h"
+#include <wx/wx.h>
+#include <wx/config.h>
+#include <wx/filename.h>
 
-#include "bitmap2cmp_gui_base.h"
+#include <bitmap2cmp_gui_base.h>
 
-#include "potracelib.h"
-#include "bitmap_io.h"
+#include <potracelib.h>
+#include <bitmap_io.h>
 
-#include "colors_selection.h"
-#include "build_version.h"
+#include <colors_selection.h>
+#include <build_version.h>
 
 #define KEYWORD_FRAME_POSX wxT( "Bmconverter_Pos_x" )
 #define KEYWORD_FRAME_POSY wxT( "Bmconverter_Pos_y" )
@@ -81,8 +81,8 @@ private:
     void OnExportEeschema( wxCommandEvent& event );
     void OnExportPcbnew( wxCommandEvent& event );
     void Binarize( double aThreshold );     // aThreshold = 0.0 (black level) to 1.0 (white level)
-	void OnOptionsSelection( wxCommandEvent& event );
-	void OnThresholdChange( wxScrollEvent& event );
+    void OnOptionsSelection( wxCommandEvent& event );
+    void OnThresholdChange( wxScrollEvent& event );
     void NegateGreyscaleImage( );
     void ExportFile( FILE* aOutfile, int aFormat );
 };
@@ -113,8 +113,8 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-	m_buttonExportEeschema->Enable( false );
-	m_buttonExportPcbnew->Enable( false );
+    m_buttonExportEeschema->Enable( false );
+    m_buttonExportPcbnew->Enable( false );
 
     if ( m_FramePos == wxDefaultPosition )
         Centre();
@@ -197,8 +197,8 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
     if( ! LoadFile( fullFilename ) )
         return;
 
-	m_buttonExportEeschema->Enable( true );
-	m_buttonExportPcbnew->Enable( true );
+    m_buttonExportEeschema->Enable( true );
+    m_buttonExportPcbnew->Enable( true );
     SetStatusText( fullFilename );
     Refresh();
 }

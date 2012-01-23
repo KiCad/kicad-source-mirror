@@ -28,30 +28,30 @@
  * @brief Footprint editor block handling implementation.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "block_commande.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <block_commande.h>
+#include <macros.h>
 
-#include "wxPcbStruct.h"
-#include "module_editor_frame.h"
-#include "pcbplot.h"
-#include "trigo.h"
+#include <wxPcbStruct.h>
+#include <module_editor_frame.h>
+#include <pcbplot.h>
+#include <trigo.h>
 
-#include "pcbnew.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <protos.h>
 
-#include "class_board.h"
-#include "class_track.h"
-#include "class_drawsegment.h"
-#include "class_pcb_text.h"
-#include "class_mire.h"
-#include "class_module.h"
-#include "class_dimension.h"
-#include "class_edge_mod.h"
+#include <class_board.h>
+#include <class_track.h>
+#include <class_drawsegment.h>
+#include <class_pcb_text.h>
+#include <class_mire.h>
+#include <class_module.h>
+#include <class_dimension.h>
+#include <class_edge_mod.h>
 
 
 #define BLOCK_COLOR BROWN

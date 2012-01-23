@@ -25,17 +25,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "confirm.h"
-#include "worksheet.h"
-#include "plot_common.h"
-#include "class_sch_screen.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <confirm.h>
+#include <worksheet.h>
+#include <plot_common.h>
+#include <class_sch_screen.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_sheet_path.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_sheet_path.h>
 
 
 enum PageFormatReq {
@@ -44,7 +44,7 @@ enum PageFormatReq {
     PAGE_SIZE_A
 };
 
-#include "dialog_plot_schematic_PS_base.h"
+#include <dialog_plot_schematic_PS_base.h>
 
 class DIALOG_PLOT_SCHEMATIC_PS : public DIALOG_PLOT_SCHEMATIC_PS_BASE
 {
@@ -140,7 +140,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::OnPlotCurrent( wxCommandEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC_PS::OnPlotAll( wxCommandEvent& event )
 {
-    m_select_PlotAll = TRUE;
+    m_select_PlotAll = true;
 
     initOptVars();
     createPSFile();

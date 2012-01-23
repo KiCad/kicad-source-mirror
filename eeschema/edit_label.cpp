@@ -28,19 +28,19 @@
  * @brief Label, global label and text creation and editing.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "base_struct.h"
-#include "drawtxt.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
-#include "kicad_device_context.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <base_struct.h>
+#include <drawtxt.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
+#include <kicad_device_context.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_text.h"
-#include "eeschema_id.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_text.h>
+#include <eeschema_id.h>
 
 
 static int       lastGlobalLabelShape = (int) NET_INPUT;

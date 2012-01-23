@@ -2,14 +2,14 @@
 /* Schematic marker object implementation. */
 /*******************************************/
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "class_drawpanel.h"
-#include "trigo.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <class_drawpanel.h>
+#include <trigo.h>
 
-#include "general.h"
-#include "sch_marker.h"
-#include "erc.h"
+#include <general.h>
+#include <sch_marker.h>
+#include <erc.h>
 
 
 /* Marker are mainly used to show an ERC error

@@ -3,23 +3,23 @@
  * @brief Export the layers to Pcbnew.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "macros.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "trigo.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <macros.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <trigo.h>
 
-#include "../pcbnew/class_track.h"
-#include "../pcbnew/class_drawsegment.h"
+#include <../pcbnew/class_track.h>
+#include <../pcbnew/class_drawsegment.h>
 
-#include "gerbview.h"
-#include "class_board_design_settings.h"
-#include "class_gerber_draw_item.h"
-#include "select_layers_to_pcb.h"
-#include "build_version.h"          // BOARD_FILE_VERSION
+#include <gerbview.h>
+#include <class_board_design_settings.h>
+#include <class_gerber_draw_item.h>
+#include <select_layers_to_pcb.h>
+#include <build_version.h>          // BOARD_FILE_VERSION
 
 
 /* A helper class to export a Gerber set of files to Pcbnew
@@ -96,7 +96,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
                                      msg,
                                      this,
                                      wxFD_SAVE,
-                                     FALSE
+                                     false
                                      );
     if( FullFileName == wxEmptyString )
         return;

@@ -8,7 +8,7 @@
 #ifndef _DIALOG_EDIT_LABEL_H_
 #define _DIALOG_EDIT_LABEL_H_
 
-#include "dialog_edit_label_base.h"
+#include <dialog_edit_label_base.h>
 
 
 class SCH_EDIT_FRAME;
@@ -31,7 +31,7 @@ public:
 
 private:
     void InitDialog( );
-  	virtual void OnEnterKey( wxCommandEvent& aEvent );
+    virtual void OnEnterKey( wxCommandEvent& aEvent );
     virtual void OnOkClick( wxCommandEvent& aEvent );
     virtual void OnCancelClick( wxCommandEvent& aEvent );
     void TextPropertiesAccept( wxCommandEvent& aEvent );

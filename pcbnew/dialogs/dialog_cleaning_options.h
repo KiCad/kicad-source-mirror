@@ -6,7 +6,7 @@
 #ifndef DIALOG_CLEANING_OPTIONS_H_
 #define DIALOG_CLEANING_OPTIONS_H_
 
-#include "dialog_cleaning_options_base.h"
+#include <dialog_cleaning_options_base.h>
 
 class DIALOG_CLEANING_OPTIONS: public DIALOG_CLEANING_OPTIONS_BASE
 {
@@ -14,7 +14,7 @@ public:
     static bool cleanVias;
     static bool mergeSegments;
     static bool deleteUnconnectedSegm;
-	static bool connectToPads;
+    static bool connectToPads;
 
 public:
     DIALOG_CLEANING_OPTIONS( wxWindow* parent );
@@ -24,17 +24,17 @@ public:
     }
 
 private:
-		void OnCancelClick( wxCommandEvent& event )
+        void OnCancelClick( wxCommandEvent& event )
         {
             EndModal( wxID_CANCEL );
         }
-		void OnOKClick( wxCommandEvent& event )
+        void OnOKClick( wxCommandEvent& event )
         {
             GetOpts( );
             EndModal( wxID_OK );
         }
 
-		void OnCloseWindow( wxCloseEvent& event )
+        void OnCloseWindow( wxCloseEvent& event )
         {
             GetOpts( );
         }

@@ -27,9 +27,9 @@
  * @file kicad/menubar.cpp
  * @brief (Re)Create the project manager menubar for KiCad
  */
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "kicad.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <kicad.h>
 
 
 /* Menubar and toolbar event table */

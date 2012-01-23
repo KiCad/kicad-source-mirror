@@ -27,15 +27,15 @@
  * @file menubar_pcbframe.cpp
  * Pcbnew editor menu bar
  */
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "protos.h"
-#include "hotkeys.h"
-#include "pcbnew_id.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <protos.h>
+#include <hotkeys.h>
+#include <pcbnew_id.h>
 
-#include "help_common_strings.h"
+#include <help_common_strings.h>
 
 /**
  * Pcbnew mainframe menubar

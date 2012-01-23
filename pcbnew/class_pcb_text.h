@@ -30,8 +30,8 @@
 #ifndef CLASS_PCB_TEXT_H
 #define CLASS_PCB_TEXT_H
 
-#include "class_board_item.h"
-#include "PolyLine.h"
+#include <class_board_item.h>
+#include <PolyLine.h>
 
 
 class LINE_READER;

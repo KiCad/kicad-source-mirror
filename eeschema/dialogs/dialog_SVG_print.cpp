@@ -27,20 +27,20 @@
  * @file eeschema/dialogs/dialog_SVG_print.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "class_sch_screen.h"
-#include "wxEeschemaStruct.h"
-#include "dcsvg.h"
-#include "general.h"
-#include "libeditframe.h"
-#include "sch_sheet_path.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <class_sch_screen.h>
+#include <wxEeschemaStruct.h>
+#include <dcsvg.h>
+#include <general.h>
+#include <libeditframe.h>
+#include <sch_sheet_path.h>
 
-#include "dialog_SVG_print.h"
+#include <dialog_SVG_print.h>
 
 
 // Keys for configuration

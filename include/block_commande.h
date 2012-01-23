@@ -8,8 +8,8 @@
 #define __INCLUDE__BLOCK_COMMANDE_H__ 1
 
 
-#include "base_struct.h"
-#include "class_undoredo_container.h"
+#include <base_struct.h>
+#include <class_undoredo_container.h>
 
 
 // Forward declarations:

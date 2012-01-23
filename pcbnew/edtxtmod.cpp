@@ -27,22 +27,22 @@
  * @brief Edit module text.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "drawtxt.h"
-#include "trigo.h"
-#include "wxBasePcbFrame.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <drawtxt.h>
+#include <trigo.h>
+#include <wxBasePcbFrame.h>
+#include <macros.h>
 
-#include "pcbnew.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <protos.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_text_mod.h"
-#include "class_pcb_text.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_text_mod.h>
+#include <class_pcb_text.h>
 
 
 static void Show_MoveTexte_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,

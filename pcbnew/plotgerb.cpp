@@ -10,17 +10,17 @@
  * format 3.4 uses the native Pcbnew units (1/10000 inch).
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "plot_common.h"
-#include "confirm.h"
-#include "pcbplot.h"
-#include "trigo.h"
-#include "wxBasePcbFrame.h"
-#include "layers_id_colors_and_visibility.h"
+#include <fctsys.h>
+#include <common.h>
+#include <plot_common.h>
+#include <confirm.h>
+#include <pcbplot.h>
+#include <trigo.h>
+#include <wxBasePcbFrame.h>
+#include <layers_id_colors_and_visibility.h>
 
-#include "pcbnew.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <protos.h>
 
 
 bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLayer,

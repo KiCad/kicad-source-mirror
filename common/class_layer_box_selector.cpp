@@ -1,21 +1,21 @@
-#include "common.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
-#include "colors_selection.h"
-#include "layers_id_colors_and_visibility.h"
-#include "bitmaps.h"
-#include "hotkeys.h"
-#include "help_common_strings.h"
+#include <common.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <class_board_design_settings.h>
+#include <colors_selection.h>
+#include <layers_id_colors_and_visibility.h>
+#include <bitmaps.h>
+#include <hotkeys.h>
+#include <help_common_strings.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
 #include <wx/ownerdrw.h>
 #include <wx/menuitem.h>
 #include <wx/bmpcbox.h>
 #include <wx/wx.h>
 
-#include "class_layer_box_selector.h"
+#include <class_layer_box_selector.h>
 
 /* class to display a layer list.
  *

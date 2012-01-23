@@ -29,7 +29,7 @@
 #ifndef _DIALOG_IMAGE_EDITOR_H_
 #define _DIALOG_IMAGE_EDITOR_H_
 
-#include "dialog_image_editor_base.h"
+#include <dialog_image_editor_base.h>
 
 
 class DIALOG_IMAGE_EDITOR : public DIALOG_IMAGE_EDITOR_BASE
@@ -53,15 +53,15 @@ public:
     void TransfertToImage( BITMAP_BASE* aItem );
 
 private:
-	void OnUndoLastChange( wxCommandEvent& event );
-	void OnGreyScaleConvert( wxCommandEvent& event );
-	void OnHalfSize( wxCommandEvent& event );
+    void OnUndoLastChange( wxCommandEvent& event );
+    void OnGreyScaleConvert( wxCommandEvent& event );
+    void OnHalfSize( wxCommandEvent& event );
     void OnMirrorX_click( wxCommandEvent& event );
     void OnMirrorY_click( wxCommandEvent& event );
     void OnRotateClick( wxCommandEvent& event );
     void OnOK_Button( wxCommandEvent& aEvent );
     void OnCancel_Button( wxCommandEvent& aEvent );
-	void OnRedrawPanel( wxPaintEvent& event );
+    void OnRedrawPanel( wxPaintEvent& event );
     bool CheckValues();
 };
 

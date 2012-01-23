@@ -3,19 +3,19 @@
  * @brief Import functions to import footprints from a gpcb (Newlib) library.
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "kicad_string.h"
-#include "trigo.h"
-#include "richio.h"
-#include "filter_reader.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <kicad_string.h>
+#include <trigo.h>
+#include <richio.h>
+#include <filter_reader.h>
+#include <macros.h>
 
-#include "class_pad.h"
-#include "class_module.h"
-#include "class_edge_mod.h"
+#include <class_pad.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
 
 /* read parameters from a line, and return all params in a wxArrayString

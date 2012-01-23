@@ -27,24 +27,24 @@
  * @file lib_pin.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "trigo.h"
-#include "class_drawpanel.h"
-#include "drawtxt.h"
-#include "plot_common.h"
-#include "wxEeschemaStruct.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <trigo.h>
+#include <class_drawpanel.h>
+#include <drawtxt.h>
+#include <plot_common.h>
+#include <wxEeschemaStruct.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "class_libentry.h"
-#include "lib_pin.h"
-#include "transform.h"
-#include "sch_component.h"
+#include <general.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <class_libentry.h>
+#include <lib_pin.h>
+#include <transform.h>
+#include <sch_component.h>
 
 
 /**
@@ -1120,7 +1120,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     }
 
     if( m_name.IsEmpty() )
-        DrawPinName = FALSE;
+        DrawPinName = false;
 
     if( TextInside )  /* Draw the text inside, but the pin numbers outside. */
     {
@@ -1415,7 +1415,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
     }
 
     if( m_name.IsEmpty() )
-        DrawPinName = FALSE;
+        DrawPinName = false;
 
     /* Draw the text inside, but the pin numbers outside. */
     if( TextInside )

@@ -5,14 +5,14 @@
  *  This is migrationary and temporary while we move the IO_MGR.
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "build_version.h"
-#include "wxPcbStruct.h"
-#include "richio.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <build_version.h>
+#include <wxPcbStruct.h>
+#include <richio.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
 #ifdef PCBNEW
 /**
@@ -22,31 +22,31 @@
 //#include "zones.h"
 #endif
 
-#include "zones.h"
+#include <zones.h>
 
 #ifdef CVPCB
-#include "cvpcb.h"
+#include <cvpcb.h>
 #endif
 
-#include "config.h"
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_pcb_text.h"
-#include "class_zone.h"
-#include "class_dimension.h"
-#include "class_drawsegment.h"
-#include "class_mire.h"
+#include <config.h>
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_pcb_text.h>
+#include <class_zone.h>
+#include <class_dimension.h>
+#include <class_drawsegment.h>
+#include <class_mire.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"
-#include "autorout.h"
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <autorout.h>
 
-#include "3d_struct.h"
-#include "trigo.h"
-#include "class_edge_mod.h"
-#include "pcbnew.h"
-#include "drawtxt.h"
+#include <3d_struct.h>
+#include <trigo.h>
+#include <class_edge_mod.h>
+#include <pcbnew.h>
+#include <drawtxt.h>
 
 #define MAX_WIDTH 10000  /* Thickness (in 1 / 10000 ") of maximum reasonable features, text... */
 

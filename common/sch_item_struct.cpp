@@ -27,17 +27,17 @@
  * @file sch_item_struct.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "gr_basic.h"
-#include "base_struct.h"
-#include "sch_item_struct.h"
-#include "class_sch_screen.h"
-#include "class_drawpanel.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <common.h>
+#include <gr_basic.h>
+#include <base_struct.h>
+#include <sch_item_struct.h>
+#include <class_sch_screen.h>
+#include <class_drawpanel.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
+#include <general.h>
+#include <protos.h>
 
 
 const wxString traceFindReplace( wxT( "KicadFindReplace" ) );

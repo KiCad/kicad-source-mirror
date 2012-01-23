@@ -29,18 +29,18 @@
  *        create, edit, and delete components.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "eeschema_id.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <eeschema_id.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "class_library.h"
+#include <general.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <class_library.h>
 
 #include <wx/filename.h>
 #include <wx/wfstream.h>

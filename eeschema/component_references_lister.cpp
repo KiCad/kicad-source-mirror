@@ -32,11 +32,11 @@
 #include <algorithm> // to use sort vector
 #include <vector>
 
-#include "fctsys.h"
-#include "kicad_string.h"
-#include "wxEeschemaStruct.h"
-#include "netlist.h"
-#include "sch_component.h"
+#include <fctsys.h>
+#include <kicad_string.h>
+#include <wxEeschemaStruct.h>
+#include <netlist.h>
+#include <sch_component.h>
 
 
 //#define USE_OLD_ALGO

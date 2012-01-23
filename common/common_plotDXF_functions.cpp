@@ -3,14 +3,14 @@
  * @brief KiCad: Common plot DXF Routines.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "base_struct.h"
-#include "plot_common.h"
-#include "macros.h"
-#include "kicad_string.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <base_struct.h>
+#include <plot_common.h>
+#include <macros.h>
+#include <kicad_string.h>
 
 
 /* Set the plot offset for the current plotting

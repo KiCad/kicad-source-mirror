@@ -27,8 +27,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "class_am_param.h"
-#include "class_aperture_macro.h"
+#include <class_am_param.h>
+#include <class_aperture_macro.h>
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );

@@ -28,27 +28,27 @@
  * @brief Implementation of the class SCH_COMPONENT.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "gr_basic.h"
-#include "trigo.h"
-#include "kicad_string.h"
-#include "richio.h"
-#include "wxEeschemaStruct.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <gr_basic.h>
+#include <trigo.h>
+#include <kicad_string.h>
+#include <richio.h>
+#include <wxEeschemaStruct.h>
+#include <plot_common.h>
 
-#include "general.h"
-#include "class_library.h"
-#include "lib_rectangle.h"
-#include "lib_pin.h"
-#include "lib_text.h"
-#include "sch_component.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
-#include "class_netlist_object.h"
+#include <general.h>
+#include <class_library.h>
+#include <lib_rectangle.h>
+#include <lib_pin.h>
+#include <lib_text.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
+#include <class_netlist_object.h>
 
-#include "dialogs/dialog_schematic_find.h"
+#include <dialogs/dialog_schematic_find.h>
 
 #include <wx/tokenzr.h>
 
@@ -293,7 +293,7 @@ int SCH_COMPONENT::GetPartCount() const
 void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                           int DrawMode, int Color, bool DrawPinText )
 {
-    bool           dummy = FALSE;
+    bool           dummy = false;
 
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
@@ -854,7 +854,7 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
         break;
 
     default:
-        transform = FALSE;
+        transform = false;
         wxMessageBox( wxT( "SetRotateMiroir() error: ill value" ) );
         break;
     }

@@ -2,18 +2,18 @@
  * @file init.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "confirm.h"
-#include "gr_basic.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
-#include "macros.h"
-#include "build_version.h"
+#include <fctsys.h>
+#include <common.h>
+#include <confirm.h>
+#include <gr_basic.h>
+#include <gestfich.h>
+#include <appl_wxstruct.h>
+#include <macros.h>
+#include <build_version.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "cvstruct.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <cvstruct.h>
 
 
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
@@ -53,13 +53,13 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
         m_undefinedComponentCnt -= 1;
 
     m_ListCmp->SetString( NumCmp, msg );
-    m_ListCmp->SetSelection( NumCmp, FALSE );
+    m_ListCmp->SetSelection( NumCmp, false );
 
     // We activate next component:
     if( NumCmp < (m_ListCmp->GetCount() - 1) )
         NumCmp++;
 
-    m_ListCmp->SetSelection( NumCmp, TRUE );
+    m_ListCmp->SetSelection( NumCmp, true );
 
     DisplayStatus();
 }
@@ -107,7 +107,7 @@ bool CVPCB_MAINFRAME::ReadNetList()
     }
 
     if( !m_components.empty() )
-        m_ListCmp->SetSelection( 0, TRUE );
+        m_ListCmp->SetSelection( 0, true );
 
     DisplayStatus();
 

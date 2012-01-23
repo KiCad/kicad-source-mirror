@@ -2,16 +2,16 @@
  * @file dangling_ends.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "sch_item_struct.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <sch_item_struct.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "class_libentry.h"
-#include "lib_pin.h"
-#include "sch_component.h"
+#include <general.h>
+#include <protos.h>
+#include <class_libentry.h>
+#include <lib_pin.h>
+#include <sch_component.h>
 
 
 /* Returns true if the point P is on the segment S. */

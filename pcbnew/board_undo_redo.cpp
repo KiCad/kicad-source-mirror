@@ -2,21 +2,21 @@
 /*  board editor: undo and redo functions for board editor  */
 /*************************************************************/
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <macros.h>
 
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
-#include "class_track.h"
-#include "class_drawsegment.h"
-#include "class_pcb_text.h"
-#include "class_mire.h"
-#include "class_module.h"
-#include "class_dimension.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_track.h>
+#include <class_drawsegment.h>
+#include <class_pcb_text.h>
+#include <class_mire.h>
+#include <class_module.h>
+#include <class_dimension.h>
+#include <class_zone.h>
 
 
 /* Functions to undo and redo edit commands.

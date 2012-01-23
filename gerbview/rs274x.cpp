@@ -2,12 +2,12 @@
  * @file rs274x.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <macros.h>
 
-#include "gerbview.h"
-#include "class_GERBER.h"
+#include <gerbview.h>
+#include <class_GERBER.h>
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );

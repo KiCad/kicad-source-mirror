@@ -28,24 +28,24 @@
  * @brief Code for editing buses, wires, and junctions.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "lib_draw_item.h"
-#include "lib_pin.h"
-#include "general.h"
-#include "protos.h"
-#include "sch_bus_entry.h"
-#include "sch_junction.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_polyline.h"
-#include "sch_text.h"
-#include "sch_component.h"
-#include "sch_sheet.h"
+#include <lib_draw_item.h>
+#include <lib_pin.h>
+#include <general.h>
+#include <protos.h>
+#include <sch_bus_entry.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_polyline.h>
+#include <sch_text.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
 
 
 static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC );

@@ -28,22 +28,22 @@
  * @brief Cod to handle get & place library component.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
-#include "kicad_device_context.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
+#include <kicad_device_context.h>
 
-#include "general.h"
-#include "protos.h"
-#include "class_library.h"
-#include "sch_component.h"
-#include "viewlib_frame.h"
-#include "eeschema_id.h"
+#include <general.h>
+#include <protos.h>
+#include <class_library.h>
+#include <sch_component.h>
+#include <viewlib_frame.h>
+#include <eeschema_id.h>
 
-#include "dialog_get_component.h"
+#include <dialog_get_component.h>
 
 #include <boost/foreach.hpp>
 

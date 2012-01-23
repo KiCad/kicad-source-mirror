@@ -27,7 +27,7 @@
 #define FILTER_READER_H_
 
 #include <wx/wx.h>
-#include "richio.h"
+#include <richio.h>
 
 
 /**

@@ -1,8 +1,12 @@
 add_definitions(-DPCBNEW)
 
-include_directories(${Boost_INCLUDE_DIR}
-                    ../pcbnew
-                    ../polygon)
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ${Boost_INCLUDE_DIR}
+    ../pcbnew
+    ../polygon
+    ${INC_AFTER}
+    )
 
 set(3D-VIEWER_SRCS
     3d_aux.cpp
@@ -12,6 +16,7 @@ set(3D-VIEWER_SRCS
     3d_frame.cpp
     3d_read_mesh.cpp
     3d_toolbar.cpp
-    trackball.cpp)
+    trackball.cpp
+    )
 
 add_library(3d-viewer ${3D-VIEWER_SRCS})

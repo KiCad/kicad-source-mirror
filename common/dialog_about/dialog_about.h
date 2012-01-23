@@ -15,8 +15,8 @@
 #include <wx/stattext.h>
 #include <wx/hyperlink.h>
 
-#include "aboutinfo.h"
-#include "dialog_about_base.h"
+#include <aboutinfo.h>
+#include <dialog_about_base.h>
 
 /* Pixel information of icons in XPM format.
  * All KiCad icons are linked into shared library 'libbitmaps.a'.
@@ -29,7 +29,7 @@
  *  info_xpm[];          // Bulb for description tab
  *  tools_xpm[];         // Sheet of paper icon for license info tab
  */
-#include "bitmaps.h"
+#include <bitmaps.h>
 
 /**
  * About dialog to show application specific information.

@@ -3,9 +3,9 @@
  * @brief Some useful functions to handle strings.
  */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "kicad_string.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <kicad_string.h>
 
 
 int ReadDelimitedText( wxString* aDest, const char* aSource )

@@ -6,8 +6,8 @@
 #define CLASS_PCB_SCREEN_H_
 
 
-#include "class_base_screen.h"
-#include "class_board_item.h"
+#include <class_base_screen.h>
+#include <class_board_item.h>
 
 
 class UNDO_REDO_CONTAINER;

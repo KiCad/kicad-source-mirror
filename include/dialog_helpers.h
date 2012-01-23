@@ -8,7 +8,7 @@
 #define  _DIALOG_HELPERS_H_
 
 
-#include "common.h"             // EDA_UNITS_T
+#include <common.h>             // EDA_UNITS_T
 
 
 class EDA_DRAW_FRAME;

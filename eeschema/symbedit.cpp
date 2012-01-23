@@ -28,20 +28,20 @@
  * @brief Functions to load from and save to file component libraries and symbols.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "class_sch_screen.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <class_sch_screen.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "class_library.h"
+#include <general.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <class_library.h>
 
 #include <boost/foreach.hpp>
 #include <wx/wfstream.h>

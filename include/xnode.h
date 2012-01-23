@@ -25,7 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "richio.h"
+#include <richio.h>
 
 // quiet the deprecated warnings with 3 lines:
 #include <wx/defs.h>

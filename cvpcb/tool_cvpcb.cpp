@@ -27,14 +27,14 @@
  * @file tool_cvpcb.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "common.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <common.h>
 
-#include "bitmaps.h"
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "cvpcb_id.h"
+#include <bitmaps.h>
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <cvpcb_id.h>
 
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()

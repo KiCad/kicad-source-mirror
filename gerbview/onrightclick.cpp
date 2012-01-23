@@ -2,12 +2,12 @@
 /* onrightclick.cpp */
 /********************/
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "id.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <id.h>
 
-#include "gerbview.h"
+#include <gerbview.h>
 
 
 /* Prepare the right-click pullup menu.

@@ -27,21 +27,21 @@
  * @file zones_by_polygon.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "zones.h"
-#include "pcbnew_id.h"
-#include "protos.h"
-#include "zones_functions_for_undo_redo.h"
-#include "drc_stuff.h"
+#include <pcbnew.h>
+#include <zones.h>
+#include <pcbnew_id.h>
+#include <protos.h>
+#include <zones_functions_for_undo_redo.h>
+#include <drc_stuff.h>
 
 bool s_Verbose = false;       // false if zone outline diags must not be shown
 
@@ -66,7 +66,7 @@ static wxPoint         s_CursorLastPosition;        // in move zone outline, las
 static PICKED_ITEMS_LIST s_PickedList;              // a picked list to save zones for undo/redo command
 static PICKED_ITEMS_LIST _AuxiliaryList;            // a picked list to store zones that are deleted or added when combined
 
-#include "dialog_copper_zones.h"
+#include <dialog_copper_zones.h>
 
 
 void PCB_EDIT_FRAME::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container )

@@ -104,7 +104,7 @@ set( includeFileHeader
 #ifndef ${headerTag}
 #define ${headerTag}
 
-#include \"dsnlexer.h\"
+#include <dsnlexer.h>
 
 /**
  * C++ does not put enum _values_ in separate namespaces unless the enum itself
@@ -150,7 +150,7 @@ set( sourceFileHeader
  * your DSN lexer.
  */
 
-#include \"${result}_lexer.h\"
+#include <${result}_lexer.h>
 
 using namespace ${enum};
 

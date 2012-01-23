@@ -28,28 +28,28 @@
  * @brief MODULE class implementation.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "wxstruct.h"
-#include "plot_common.h"
-#include "class_drawpanel.h"
-#include "trigo.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "pcbcommon.h"
-#include "pcbnew.h"
-#include "colors_selection.h"
-#include "richio.h"
-#include "filter_reader.h"
-#include "macros.h"
-#include "3d_struct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <wxstruct.h>
+#include <plot_common.h>
+#include <class_drawpanel.h>
+#include <trigo.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <pcbcommon.h>
+#include <pcbnew.h>
+#include <colors_selection.h>
+#include <richio.h>
+#include <filter_reader.h>
+#include <macros.h>
+#include <3d_struct.h>
 
-#include "drag.h"
+#include <drag.h>
 
-#include "protos.h"
-#include "class_board.h"
-#include "class_edge_mod.h"
-#include "class_module.h"
+#include <protos.h>
+#include <class_board.h>
+#include <class_edge_mod.h>
+#include <class_module.h>
 
 
 MODULE::MODULE( BOARD* parent ) :

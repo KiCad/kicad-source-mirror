@@ -24,8 +24,8 @@
  */
 
 #include <string.h>
-#include "richio.h"
-#include "filter_reader.h"
+#include <richio.h>
+#include <filter_reader.h>
 
 unsigned FILTER_READER::ReadLine() throw( IO_ERROR )
 {

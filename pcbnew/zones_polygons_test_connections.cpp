@@ -7,17 +7,17 @@ using namespace std;
 #include <algorithm> // sort
 
 
-#include "fctsys.h"
-#include "common.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "zones.h"
+#include <pcbnew.h>
+#include <zones.h>
 
 static bool CmpZoneSubnetValue( const BOARD_CONNECTED_ITEM* a, const BOARD_CONNECTED_ITEM* b );
 void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );

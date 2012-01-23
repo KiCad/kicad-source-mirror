@@ -2,15 +2,15 @@
 /**** readgerb.cpp ****/
 /**********************/
 
-#include "fctsys.h"
-#include "common.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "gerbview.h"
-#include "class_GERBER.h"
+#include <fctsys.h>
+#include <common.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <gerbview.h>
+#include <class_GERBER.h>
 
-#include "html_messagebox.h"
+#include <html_messagebox.h>
 
 /* Read a gerber file, RS274D or RS274X format.
  */
@@ -45,7 +45,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     {
         msg = _( "File " ) + GERBER_FullFileName + _( " not found" );
         DisplayError( this, msg, 10 );
-        return FALSE;
+        return false;
     }
 
     gerber->m_FileName = GERBER_FullFileName;

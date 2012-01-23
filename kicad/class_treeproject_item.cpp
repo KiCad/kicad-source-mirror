@@ -5,17 +5,17 @@
  * store info about a file or directory shown in the KiCad tree project files
  */
 
-#include "fctsys.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <gestfich.h>
 
-#include "kicad.h"
-#include "tree_project_frame.h"
-#include "class_treeprojectfiles.h"
-#include "class_treeproject_item.h"
-#include "wx/imaglist.h"
+#include <kicad.h>
+#include <tree_project_frame.h>
+#include <class_treeprojectfiles.h>
+#include <class_treeproject_item.h>
+#include <wx/imaglist.h>
 
-#include "wx/regex.h"
-#include "wx/dir.h"
+#include <wx/regex.h>
+#include <wx/dir.h>
 
 /* sort function for tree items.
  *  items are sorted :

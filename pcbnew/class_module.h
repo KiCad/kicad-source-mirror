@@ -33,11 +33,11 @@
 #define _MODULE_H_
 
 
-#include "dlist.h"
-#include "layers_id_colors_and_visibility.h"       // ALL_LAYERS definition.
-#include "class_board_item.h"
+#include <dlist.h>
+#include <layers_id_colors_and_visibility.h>       // ALL_LAYERS definition.
+#include <class_board_item.h>
 
-#include "class_text_mod.h"
+#include <class_text_mod.h>
 
 
 class LINE_READER;

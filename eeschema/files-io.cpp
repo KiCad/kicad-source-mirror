@@ -27,18 +27,18 @@
  * @file eeschema/files-io.cpp
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "eeschema_id.h"
-#include "class_library.h"
-#include "libeditframe.h"
-#include "sch_sheet.h"
+#include <general.h>
+#include <protos.h>
+#include <eeschema_id.h>
+#include <class_library.h>
+#include <libeditframe.h>
+#include <sch_sheet.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreateBackupFile )

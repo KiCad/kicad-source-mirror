@@ -28,22 +28,22 @@
  * @brief EDGE_MODULE class definition.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "wxstruct.h"
-#include "trigo.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "colors_selection.h"
-#include "richio.h"
-#include "macros.h"
-#include "wxBasePcbFrame.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <wxstruct.h>
+#include <trigo.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <colors_selection.h>
+#include <richio.h>
+#include <macros.h>
+#include <wxBasePcbFrame.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_edge_mod.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
 
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent, STROKE_T aShape ) :

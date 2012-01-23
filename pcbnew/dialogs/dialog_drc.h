@@ -9,15 +9,15 @@
 
 #include <wx/htmllbox.h>
 
-#include "fctsys.h"
-#include "pcbnew.h"
-#include "class_drawpanel.h"
-#include "wxstruct.h"
-#include "drc_stuff.h"
-#include "class_marker_pcb.h"
-#include "class_board.h"
+#include <fctsys.h>
+#include <pcbnew.h>
+#include <class_drawpanel.h>
+#include <wxstruct.h>
+#include <drc_stuff.h>
+#include <class_marker_pcb.h>
+#include <class_board.h>
 
-#include "dialog_drc_base.h"
+#include <dialog_drc_base.h>
 
 
 // forward declarations

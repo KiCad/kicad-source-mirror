@@ -27,17 +27,17 @@
  * @file drawpanel.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "macros.h"
-#include "id.h"
-#include "class_drawpanel.h"
-#include "class_base_screen.h"
-#include "wxstruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <macros.h>
+#include <id.h>
+#include <class_drawpanel.h>
+#include <class_base_screen.h>
+#include <wxstruct.h>
 
-#include "kicad_device_context.h"
+#include <kicad_device_context.h>
 
 #define CURSOR_SIZE 12           // Cursor size in pixels
 

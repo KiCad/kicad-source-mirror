@@ -2,16 +2,16 @@
  * @file events_called_functions.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "general.h"
-#include "kicad_device_context.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <general.h>
+#include <kicad_device_context.h>
+#include <wxEeschemaStruct.h>
 
-#include "protos.h"
-#include "sch_component.h"
-#include "sch_text.h"
+#include <protos.h>
+#include <sch_component.h>
+#include <sch_text.h>
 
 
 void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )

@@ -27,16 +27,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "pcbcommon.h"
-#include "macros.h"
-#include "wxBasePcbFrame.h"
+#include <fctsys.h>
+#include <common.h>
+#include <pcbcommon.h>
+#include <macros.h>
+#include <wxBasePcbFrame.h>
 
-#include "class_track.h"
-#include "class_board.h"
+#include <class_track.h>
+#include <class_board.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
 
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb );

@@ -28,16 +28,16 @@
  * @brief Code to handle manipulation of bus entry objects.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "eeschema_id.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <eeschema_id.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_bus_entry.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_bus_entry.h>
 
 
 static int     s_LastShape = '\\';

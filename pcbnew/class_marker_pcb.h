@@ -7,8 +7,8 @@
 #define CLASS_MARKER_PCB_H
 
 
-#include "class_board_item.h"
-#include "class_marker_base.h"
+#include <class_board_item.h>
+#include <class_marker_base.h>
 
 
 class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE

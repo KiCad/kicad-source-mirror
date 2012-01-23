@@ -28,24 +28,24 @@
  * @brief Electrical Rules Check dialog implementation.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
-#include "class_sch_screen.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <appl_wxstruct.h>
+#include <class_sch_screen.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "netlist.h"
-#include "sch_marker.h"
-#include "sch_sheet.h"
-#include "lib_pin.h"
-#include "protos.h"
+#include <general.h>
+#include <netlist.h>
+#include <sch_marker.h>
+#include <sch_sheet.h>
+#include <lib_pin.h>
+#include <protos.h>
 
-#include "dialog_erc.h"
-#include "dialog_erc_listbox.h"
-#include "erc.h"
+#include <dialog_erc.h>
+#include <dialog_erc_listbox.h>
+#include <erc.h>
 
 
 bool DIALOG_ERC::m_writeErcFile = false;

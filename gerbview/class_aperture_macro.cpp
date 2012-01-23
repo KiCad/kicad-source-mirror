@@ -27,14 +27,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "macros.h"
-#include "trigo.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <common.h>
+#include <macros.h>
+#include <trigo.h>
+#include <gr_basic.h>
 
-#include "gerbview.h"
-#include "class_GERBER.h"
+#include <gerbview.h>
+#include <class_GERBER.h>
 
 
 
@@ -753,7 +753,7 @@ bool APERTURE_MACRO::HasNegativeItems( GERBER_DRAW_ITEM* aParent )
         if( prim_macro->mapExposure( aParent ) == false )   // = is negative
             return true;
     }
-    
+
     return false;
 }
 

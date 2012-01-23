@@ -1,4 +1,4 @@
-#include "dialog_sch_edit_sheet_pin.h"
+#include <dialog_sch_edit_sheet_pin.h>
 
 
 static wxString sheetPinTypes[] =

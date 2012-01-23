@@ -2,15 +2,15 @@
  * @file gerbview/files.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
 
-#include "gerbview.h"
-#include "gerbview_id.h"
-#include "class_gerbview_layer_widget.h"
+#include <gerbview.h>
+#include <gerbview_id.h>
+#include <class_gerbview_layer_widget.h>
 
 
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )

@@ -3,13 +3,17 @@ add_definitions(-DCVPCB)
 ###
 # Includes
 ###
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-                    ${Boost_INCLUDE_DIR}
-                    ../3d-viewer
-                    ../pcbnew
-                    ../polygon
-                    ${CMAKE_SOURCE_DIR}/common)
+
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ./dialogs
+    ${Boost_INCLUDE_DIR}
+    ../3d-viewer
+    ../pcbnew
+    ../polygon
+    ../common
+    ${INC_AFTER}
+    )
 
 ###
 # Sources
@@ -71,9 +75,10 @@ endif(APPLE)
 # Create the cvpcb executable
 ###
 add_executable(cvpcb WIN32 MACOSX_BUNDLE
-               ${CVPCB_SRCS}
-               ${CVPCB_DIALOGS}
-               ${CVPCB_RESOURCES})
+    ${CVPCB_SRCS}
+    ${CVPCB_DIALOGS}
+    ${CVPCB_RESOURCES}
+    )
 
 ###
 # Set properties for APPLE on cvpcb target
@@ -85,11 +90,18 @@ endif(APPLE)
 ###
 # Link executable target cvpcb with correct libraries
 ###
-target_link_libraries(cvpcb 3d-viewer pcbcommon common polygon bitmaps kbool
-                      ${OPENGL_LIBRARIES}
-                      ${wxWidgets_LIBRARIES}
-                      ${GDI_PLUS_LIBRARIES}
-                     )
+target_link_libraries(cvpcb
+    3d-viewer
+    pcbcommon
+    common
+    polygon
+    bitmaps
+    kbool
+    ${OPENGL_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    )
+
 ###
 # Add cvpcb as install target
 ###

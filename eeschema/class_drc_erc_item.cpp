@@ -25,11 +25,11 @@
 /******************************************************************/
 /* class_drc_erc_item.cpp - DRC_ITEM class functions for eeschema */
 /******************************************************************/
-#include "fctsys.h"
-#include "common.h"
+#include <fctsys.h>
+#include <common.h>
 
-#include "class_drc_item.h"
-#include "erc.h"
+#include <class_drc_item.h>
+#include <erc.h>
 
 wxString DRC_ITEM::GetErrorText() const
 {

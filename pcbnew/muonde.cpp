@@ -28,26 +28,26 @@
  * @brief Microwave pcb layout code.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "trigo.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "wxPcbStruct.h"
-#include "dialog_helpers.h"
-#include "richio.h"
-#include "filter_reader.h"
-#include "gr_basic.h"
-#include "pcbcommon.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <trigo.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <wxPcbStruct.h>
+#include <dialog_helpers.h>
+#include <richio.h>
+#include <filter_reader.h>
+#include <gr_basic.h>
+#include <pcbcommon.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_edge_mod.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
 
-#include "protos.h"
-#include "pcbnew.h"
+#include <protos.h>
+#include <pcbnew.h>
 
 
 #define COEFF_COUNT 6

@@ -30,7 +30,7 @@
 #ifndef _LIB_CIRCLE_H_
 #define _LIB_CIRCLE_H_
 
-#include "lib_draw_item.h"
+#include <lib_draw_item.h>
 
 
 class LIB_CIRCLE : public LIB_ITEM

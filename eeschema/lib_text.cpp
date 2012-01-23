@@ -27,21 +27,21 @@
  * @file lib_text.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "plot_common.h"
-#include "drawtxt.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <plot_common.h>
+#include <drawtxt.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <richio.h>
 
-#include "lib_draw_item.h"
-#include "general.h"
-#include "protos.h"
-#include "transform.h"
-#include "lib_text.h"
+#include <lib_draw_item.h>
+#include <general.h>
+#include <protos.h>
+#include <transform.h>
+#include <lib_text.h>
 
 
 LIB_TEXT::LIB_TEXT( LIB_COMPONENT * aParent ) :

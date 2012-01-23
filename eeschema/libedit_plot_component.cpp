@@ -2,19 +2,19 @@
  * @file libedit_plot_component.cpp
  */
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "gr_basic.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "eeschema_id.h"
-#include "class_sch_screen.h"
+#include <gr_basic.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <eeschema_id.h>
+#include <class_sch_screen.h>
 
-#include "general.h"
-#include "libeditframe.h"
-#include "class_library.h"
+#include <general.h>
+#include <libeditframe.h>
+#include <class_library.h>
 
 
 void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )

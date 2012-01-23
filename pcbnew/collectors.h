@@ -35,8 +35,8 @@
 */
 
 
-#include "class_collector.h"
-#include "layers_id_colors_and_visibility.h"              // LAYER_COUNT, layer defs
+#include <class_collector.h>
+#include <layers_id_colors_and_visibility.h>              // LAYER_COUNT, layer defs
 
 
 class BOARD_ITEM;

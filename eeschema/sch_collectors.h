@@ -30,9 +30,9 @@
 #define _SCH_COLLECTORS_H_
 
 
-#include "class_collector.h"
-#include "sch_item_struct.h"
-#include "dialogs/dialog_schematic_find.h"
+#include <class_collector.h>
+#include <sch_item_struct.h>
+#include <dialogs/dialog_schematic_find.h>
 
 
 /**

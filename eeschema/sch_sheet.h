@@ -33,7 +33,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
-#include "sch_text.h"
+#include <sch_text.h>
 
 
 class LINE_READER;

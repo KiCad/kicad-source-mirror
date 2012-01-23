@@ -4,27 +4,27 @@
 // Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
-#include "common.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <common.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <appl_wxstruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "class_library.h"
+#include <general.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <class_library.h>
 
-#include "dialog_edit_component_in_lib.h"
+#include <dialog_edit_component_in_lib.h>
 
 
 DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRAME* aParent ):
     DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( aParent )
 {
-	m_Parent = aParent;
-	m_RecreateToolbar = false;
+    m_Parent = aParent;
+    m_RecreateToolbar = false;
 
-	initDlg();
+    initDlg();
 
     GetSizer()->SetSizeHints( this );
     Center();
@@ -94,7 +94,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::initDlg()
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelClick( wxCommandEvent& event )
 {
-	EndModal( wxID_CANCEL );
+    EndModal( wxID_CANCEL );
 }
 
 

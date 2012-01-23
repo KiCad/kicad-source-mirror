@@ -2,20 +2,20 @@
  * @file viewlibs.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "class_sch_screen.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <class_sch_screen.h>
 
-#include "general.h"
-#include "protos.h"
-#include "viewlib_frame.h"
-#include "eeschema_id.h"
-#include "class_library.h"
-#include "dialog_helpers.h"
+#include <general.h>
+#include <protos.h>
+#include <viewlib_frame.h>
+#include <eeschema_id.h>
+#include <class_library.h>
+#include <dialog_helpers.h>
 
 
 #define NEXT_PART      1
@@ -57,13 +57,13 @@ void LIB_VIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT:
         m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, true );
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, FALSE );
+        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, false );
         m_convert = 1;
         m_canvas->Refresh();
         break;
 
     case ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT:
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, FALSE );
+        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, false );
         m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, true );
         m_convert = 2;
         m_canvas->Refresh();

@@ -6,9 +6,9 @@
 #include <float.h>
 #include <limits.h>
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "PolyLine.h"
+#include <PolyLine.h>
 
 #define NM_PER_MIL 25400
 

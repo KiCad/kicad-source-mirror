@@ -3,29 +3,29 @@
  * @brief Common plot routines.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "plot_common.h"
-#include "base_struct.h"
-#include "drawtxt.h"
-#include "confirm.h"
-#include "trigo.h"
-#include "wxBasePcbFrame.h"
-#include "pcbcommon.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <plot_common.h>
+#include <base_struct.h>
+#include <drawtxt.h>
+#include <confirm.h>
+#include <trigo.h>
+#include <wxBasePcbFrame.h>
+#include <pcbcommon.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_edge_mod.h"
-#include "class_pcb_text.h"
-#include "class_zone.h"
-#include "class_drawsegment.h"
-#include "class_mire.h"
-#include "class_dimension.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_edge_mod.h>
+#include <class_pcb_text.h>
+#include <class_zone.h>
+#include <class_drawsegment.h>
+#include <class_mire.h>
+#include <class_dimension.h>
 
-#include "pcbnew.h"
-#include "pcbplot.h"
+#include <pcbnew.h>
+#include <pcbplot.h>
 
 static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
                                 EDA_DRAW_MODE_T trace_mode );
@@ -37,7 +37,7 @@ static int doIntValueFitToBand( int aInt, int aMin, int aMax )
     if( aInt < aMin ) return aMin;
     if( aInt > aMax ) return aMax;
     return aInt;
-}   
+}
 
 /* Creates the plot for silkscreen layers
  */
@@ -815,7 +815,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
             pos = shape_pos;
             wxSize margin;
             double width_adj = 0;
-            
+
             if( aLayerMask & ALL_CU_LAYERS )
             {
                 width_adj =  aPlotter->get_plot_width_adj();
@@ -913,7 +913,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
             // clearance for vias
             if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
                 via_margin = GetBoard()->GetDesignSettings().m_SolderMaskMargin;
-            
+
             if( aLayerMask & ALL_CU_LAYERS )
             {
                 width_adj =  aPlotter->get_plot_width_adj();
@@ -1008,13 +1008,13 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
             continue;
 
         pos = pts->m_Start;
-        
+
         // It is quite possible that the real drill value is less then small drill value.
         if( g_PcbPlotOptions.m_DrillShapeOpt == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
             diam.x = diam.y = MIN( SMALL_DRILL, pts->GetDrillValue() );
         else
             diam.x = diam.y = pts->GetDrillValue();
-        
+
         diam.x -= aPlotter->get_plot_width_adj();
         diam.x = doIntValueFitToBand( diam.x, 1, pts->m_Width - 1 );
         aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );

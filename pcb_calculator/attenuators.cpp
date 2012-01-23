@@ -25,10 +25,10 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include "wx/wx.h"
+#include <wx/wx.h>
 
-#include "pcb_calculator.h"
-#include "attenuator_classes.h"
+#include <pcb_calculator.h>
+#include <attenuator_classes.h>
 
 extern double ReturnDoubleFromString( const wxString& TextValue );
 

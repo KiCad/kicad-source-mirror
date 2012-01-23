@@ -11,9 +11,9 @@
 #include <wx/dragimag.h>
 #include <wx/filename.h>
 
-#include "id.h"
-#include "wxstruct.h"
-#include "appl_wxstruct.h"
+#include <id.h>
+#include <wxstruct.h>
+#include <appl_wxstruct.h>
 
 extern const wxString g_KicadPrjFilenameExtension;
 

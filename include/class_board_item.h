@@ -31,7 +31,7 @@
 #define BOARD_ITEM_STRUCT_H
 
 
-#include "base_struct.h"
+#include <base_struct.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

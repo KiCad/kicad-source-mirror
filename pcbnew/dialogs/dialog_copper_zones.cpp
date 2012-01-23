@@ -7,18 +7,18 @@
 
 #include <wx/wx.h>
 #include <wx/imaglist.h>
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "PolyLine.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
-#include "zones.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <PolyLine.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
+#include <zones.h>
 
-#include "dialog_copper_zones.h"
-#include "class_zone_setting.h"
-#include "class_board.h"
+#include <dialog_copper_zones.h>
+#include <class_zone_setting.h>
+#include <class_board.h>
 
 
 #define LAYER_BITMAP_SIZE_X 20
@@ -324,9 +324,9 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     m_Zone_Setting->SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() ) );
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
-        g_Zone_45_Only = FALSE;
+        g_Zone_45_Only = false;
     else
-        g_Zone_45_Only = TRUE;
+        g_Zone_45_Only = true;
 
     m_Zone_Setting->m_ThermalReliefGap = ReturnValueFromTextCtrl( *m_AntipadSizeValue,
                                                                        PCB_INTERNAL_UNIT );

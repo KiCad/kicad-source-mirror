@@ -28,16 +28,16 @@
  * @brief Some functions to handle hotkeys in KiCad
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "hotkeys_basic.h"
-#include "id.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "wxstruct.h"
-#include "macros.h"
-#include "dialog_hotkeys_editor.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <hotkeys_basic.h>
+#include <id.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <wxstruct.h>
+#include <macros.h>
+#include <dialog_hotkeys_editor.h>
 
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>

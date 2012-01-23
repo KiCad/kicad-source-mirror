@@ -1,10 +1,10 @@
 /**
  * eeschema/hotkeys.h
  */
-#ifndef KOTKEYS_H
-#define KOTKEYS_H
+#ifndef EESCHEMA_KOTKEYS_H_
+#define EESCHEMA_KOTKEYS_H_
 
-#include "hotkeys_basic.h"
+#include <hotkeys_basic.h>
 
 // List of hot keys id.
 // see also enum common_hotkey_id_commnand in hotkeys_basic.h
@@ -57,4 +57,4 @@ extern struct EDA_HOTKEY_CONFIG s_Libedit_Hokeys_Descr[];
 // List of hotkey descriptors for the lib browser only
 extern struct EDA_HOTKEY_CONFIG s_Viewlib_Hokeys_Descr[];
 
-#endif      // KOTKEYS_H
+#endif      // EESCHEMA_KOTKEYS_H_

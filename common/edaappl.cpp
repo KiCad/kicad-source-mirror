@@ -30,10 +30,10 @@
  *        (locale handling)
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "wx/html/htmlwin.h"
-#include "wx/fs_zip.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <wx/html/htmlwin.h>
+#include <wx/fs_zip.h>
 #include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
@@ -41,16 +41,16 @@
 #include <wx/snglinst.h>
 #include <wx/tokenzr.h>
 
-#include "appl_wxstruct.h"
-#include "wxstruct.h"
-#include "macros.h"
-#include "param_config.h"
-#include "worksheet.h"
-#include "id.h"
-#include "build_version.h"
-#include "hotkeys_basic.h"
-#include "online_help.h"
-#include "gestfich.h"
+#include <appl_wxstruct.h>
+#include <wxstruct.h>
+#include <macros.h>
+#include <param_config.h>
+#include <worksheet.h>
+#include <id.h>
+#include <build_version.h>
+#include <hotkeys_basic.h>
+#include <online_help.h>
+#include <gestfich.h>
 
 
 static const wxChar* CommonConfigPath = wxT( "kicad_common" );

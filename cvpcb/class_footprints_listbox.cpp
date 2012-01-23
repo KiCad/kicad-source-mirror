@@ -3,13 +3,13 @@
  * class to display the list fo available footprints
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <macros.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "cvstruct.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <cvstruct.h>
 
 
 /***************************************/

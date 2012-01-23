@@ -28,17 +28,17 @@
  * @brief Implementation of the label properties dialog.
  */
 
-#include "fctsys.h"
-#include "wx/valgen.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <wx/valgen.h>
+#include <wxEeschemaStruct.h>
 
-#include "class_drawpanel.h"
-#include "general.h"
-#include "drawtxt.h"
-#include "confirm.h"
-#include "sch_text.h"
+#include <class_drawpanel.h>
+#include <general.h>
+#include <drawtxt.h>
+#include <confirm.h>
+#include <sch_text.h>
 
-#include "dialog_edit_label.h"
+#include <dialog_edit_label.h>
 
 
 /* Edit the properties of the text (Label, Global label, graphic text).. )

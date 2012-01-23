@@ -3,7 +3,7 @@
     /*  properties and carateristics				*/
     /************************************************/
 
-#include "dialog_edit_module_for_BoardEditor_base.h"
+#include <dialog_edit_module_for_BoardEditor_base.h>
 
     /**************************************/
     /* class DIALOG_MODULE_BOARD_EDITOR */
@@ -38,7 +38,7 @@ private:
     void OnEditValue( wxCommandEvent& event );
     void OnEditReference( wxCommandEvent& event );
     void On3DShapeSelection( wxCommandEvent& event );
-	void On3DShapeNameSelected( wxCommandEvent& event );
+    void On3DShapeNameSelected( wxCommandEvent& event );
     void Browse3DLib( wxCommandEvent& event );
     void Add3DShape( wxCommandEvent& event );
     void Remove3DShape( wxCommandEvent& event );

@@ -7,7 +7,7 @@
 #ifndef _DIALOG_BUILD_BOM_H_
 #define _DIALOG_BUILD_BOM_H_
 
-#include "dialog_build_BOM_base.h"
+#include <dialog_build_BOM_base.h>
 
 
 class EDA_DRAW_FRAME;
@@ -56,9 +56,9 @@ private:
                                        bool aIncludeSubComponents );
 
 #if defined(KICAD_GOST)
-	wxString PrintFieldData( SCH_COMPONENT* DrawLibItem, bool CompactForm = FALSE );
+    wxString PrintFieldData( SCH_COMPONENT* DrawLibItem, bool CompactForm = false );
 #else
-    void    PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem, bool CompactForm = FALSE );
+    void    PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem, bool CompactForm = false );
 #endif
 
     bool    IsFieldChecked( int aFieldId );

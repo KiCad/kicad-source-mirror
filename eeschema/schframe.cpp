@@ -31,35 +31,35 @@
 #pragma implementation
 #endif
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <gestfich.h>
 
-#include "general.h"
-#include "protos.h"
-#include "eeschema_id.h"
-#include "netlist.h"
-#include "lib_pin.h"
-#include "class_library.h"
-#include "wxEeschemaStruct.h"
-#include "sch_component.h"
+#include <general.h>
+#include <protos.h>
+#include <eeschema_id.h>
+#include <netlist.h>
+#include <lib_pin.h>
+#include <class_library.h>
+#include <wxEeschemaStruct.h>
+#include <sch_component.h>
 
-#include "dialog_helpers.h"
-#include "netlist_control.h"
-#include "libeditframe.h"
-#include "viewlib_frame.h"
-#include "hotkeys.h"
-#include "eeschema_config.h"
-#include "sch_sheet.h"
+#include <dialog_helpers.h>
+#include <netlist_control.h>
+#include <libeditframe.h>
+#include <viewlib_frame.h>
+#include <hotkeys.h>
+#include <eeschema_config.h>
+#include <sch_sheet.h>
 
-#include "dialogs/annotate_dialog.h"
-#include "dialogs/dialog_build_BOM.h"
-#include "dialogs/dialog_erc.h"
-#include "dialogs/dialog_print_using_printer.h"
-#include "dialogs/dialog_schematic_find.h"
-#include "dialogs/dialog_SVG_print.h"
+#include <dialogs/annotate_dialog.h>
+#include <dialogs/dialog_build_BOM.h>
+#include <dialogs/dialog_erc.h>
+#include <dialogs/dialog_print_using_printer.h>
+#include <dialogs/dialog_schematic_find.h>
+#include <dialogs/dialog_SVG_print.h>
 
 #include <wx/display.h>
 #include <build_version.h>

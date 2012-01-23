@@ -28,18 +28,18 @@
  * @brief Functions for backannotating footprint information.
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
-#include "wxEeschemaStruct.h"
-#include "build_version.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <appl_wxstruct.h>
+#include <wxEeschemaStruct.h>
+#include <build_version.h>
 
-#include "general.h"
-#include "sch_sheet_path.h"
-#include "sch_component.h"
-#include "netlist.h"
+#include <general.h>
+#include <sch_sheet_path.h>
+#include <sch_component.h>
+#include <netlist.h>
 
 
 const wxString BackAnnotateFileWildcard( wxT( "Eeschema Back Annotation File (*.stf)|*.stf" ) );

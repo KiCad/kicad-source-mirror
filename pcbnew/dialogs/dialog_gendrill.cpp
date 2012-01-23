@@ -26,18 +26,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "pcbplot.h"
-#include "gendrill.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <pcbplot.h>
+#include <gendrill.h>
 
-#include "class_board.h"
-#include "class_track.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_track.h>
+#include <class_module.h>
 
-#include "dialog_gendrill.h"
+#include <dialog_gendrill.h>
 
 
 // Keywords for read and write config
@@ -320,7 +320,7 @@ void DIALOG_GENDRILL::SetParams( void )
     m_createMap = m_Choice_Drill_Map->GetSelection();
     m_createRpt = m_Choice_Drill_Report->GetSelection();
 
-    m_UnitDrillIsInch = (m_Choice_Unit->GetSelection() == 0) ? FALSE : TRUE;
+    m_UnitDrillIsInch = (m_Choice_Unit->GetSelection() == 0) ? false : true;
     m_MinimalHeader   = m_Check_Minimal->IsChecked();
     m_Mirror = m_Check_Mirror->IsChecked();
     m_ZerosFormat = m_Choice_Zeros_Format->GetSelection();

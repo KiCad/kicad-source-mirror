@@ -201,7 +201,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	RightColumnSizer->Add( Comment4Sizer, 1, wxEXPAND, 5 );
 	
-	bUpperSizerH->Add( RightColumnSizer, 1, wxEXPAND, 5 );
+	bUpperSizerH->Add( RightColumnSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	bMainSizer->Add( bUpperSizerH, 1, wxEXPAND, 5 );
 	

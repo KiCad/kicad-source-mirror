@@ -2,30 +2,30 @@
  * @file modedit.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
-#include "trigo.h"
-#include "3d_viewer.h"
-#include "wxPcbStruct.h"
-#include "kicad_device_context.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <appl_wxstruct.h>
+#include <trigo.h>
+#include <3d_viewer.h>
+#include <wxPcbStruct.h>
+#include <kicad_device_context.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_edge_mod.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "pcbnew_id.h"
-#include "module_editor_frame.h"
-#include "collectors.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <pcbnew_id.h>
+#include <module_editor_frame.h>
+#include <collectors.h>
 
-#include "dialog_edit_module_for_Modedit.h"
+#include <dialog_edit_module_for_Modedit.h>
 
 
 BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )

@@ -12,7 +12,7 @@
 #ifndef ATTENUATORFUNC_H
 #define ATTENUATORFUNC_H
 
-#include "wx/config.h"
+#include <wx/config.h>
 #include <wx/bitmap.h>
 
 enum ATTENUATORS_TYPE {

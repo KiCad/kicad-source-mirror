@@ -24,7 +24,7 @@
 #include <math.h>
 
 // For some unknown reasons, polygon.hpp shoul be included first
-#include "boost/polygon/polygon.hpp"
+#include <boost/polygon/polygon.hpp>
 
 #include <stdio.h>
 #include <string.h>
@@ -33,8 +33,8 @@
 #include <math.h>
 #include <vector>
 
-#include "potracelib.h"
-#include "auxiliary.h"
+#include <potracelib.h>
+#include <auxiliary.h>
 
 
 #ifndef max

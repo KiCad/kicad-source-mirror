@@ -30,7 +30,7 @@
 #ifndef _LIB_TEXT_H_
 #define _LIB_TEXT_H_
 
-#include "lib_draw_item.h"
+#include <lib_draw_item.h>
 
 
 /**

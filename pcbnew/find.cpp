@@ -4,21 +4,21 @@
  */
 
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_marker_pcb.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_marker_pcb.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"
-#include "protos.h"
-#include "find.h"
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <protos.h>
+#include <find.h>
 
 
 static wxString s_OldStringFound;

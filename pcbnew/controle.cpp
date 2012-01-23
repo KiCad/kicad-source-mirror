@@ -27,20 +27,20 @@
  * @file pcbnew/controle.cpp
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "wxPcbStruct.h"
-#include "pcbcommon.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <wxPcbStruct.h>
+#include <pcbcommon.h>
+#include <macros.h>
 
-#include "pcbnew_id.h"
+#include <pcbnew_id.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "collectors.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <collectors.h>
 
 //external functions used here:
 extern bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame,

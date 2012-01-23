@@ -4,21 +4,21 @@
 // Licence:     gpl
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
+#include <fctsys.h>
 #include <wx/tokenzr.h>
-#include "appl_wxstruct.h"
-#include "common.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "id.h"
-#include "macros.h"
+#include <appl_wxstruct.h>
+#include <common.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <id.h>
+#include <macros.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
 
-#include "protos.h"
+#include <protos.h>
 
-#include "dialog_cvpcb_config.h"
+#include <dialog_cvpcb_config.h>
 
 
 DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* parent ) :
@@ -186,7 +186,7 @@ void DIALOG_CVPCB_CONFIG::OnButtonUpClick( wxCommandEvent& event )
         list->SetSelection( jj-1 );
     }
 
-    m_LibListChanged = TRUE;
+    m_LibListChanged = true;
 }
 
 
@@ -229,7 +229,7 @@ void DIALOG_CVPCB_CONFIG::OnButtonDownClick( wxCommandEvent& event )
         list->SetSelection(jj+1);
     }
 
-    m_LibListChanged = TRUE;
+    m_LibListChanged = true;
 }
 
 
@@ -250,7 +250,7 @@ void DIALOG_CVPCB_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
         list->Delete(selections[ii] );
-        m_LibListChanged = TRUE;
+        m_LibListChanged = true;
     }
 }
 
@@ -330,7 +330,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         // Add or insert new library name, if not already in list
         if( list->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
-            m_LibListChanged = TRUE;
+            m_LibListChanged = true;
 
             if( ! insert )
                 list->Append( libfilename );

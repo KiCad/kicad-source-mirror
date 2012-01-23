@@ -2,18 +2,18 @@
  * @file zones_convert_to_polygons_aux_functions.cpp
  */
 
-#include "fctsys.h"
-#include "polygons_defs.h"
-#include "PolyLine.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
+#include <fctsys.h>
+#include <polygons_defs.h>
+#include <PolyLine.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "zones.h"
+#include <pcbnew.h>
+#include <zones.h>
 
 
 /**

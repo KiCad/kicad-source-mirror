@@ -27,21 +27,21 @@
  * D_PAD class implementation.
  */
 
-#include "fctsys.h"
-#include "PolyLine.h"
-#include "common.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "trigo.h"
-#include "richio.h"
-#include "wxstruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <PolyLine.h>
+#include <common.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <trigo.h>
+#include <richio.h>
+#include <wxstruct.h>
+#include <macros.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"                      // ID_TRACK_BUTT
+#include <pcbnew.h>
+#include <pcbnew_id.h>                      // ID_TRACK_BUTT
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
 
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode

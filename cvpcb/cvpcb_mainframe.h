@@ -8,10 +8,10 @@
 #include <wx/listctrl.h>
 #include <wx/filename.h>
 
-#include "wxBasePcbFrame.h"
-#include "param_config.h"
-#include "cvpcb.h"
-#include "footprint_info.h"
+#include <wxBasePcbFrame.h>
+#include <param_config.h>
+#include <cvpcb.h>
+#include <footprint_info.h>
 
 
 /*  Forward declarations of all top-level window classes. */
@@ -243,11 +243,11 @@ public:
 
     /**
      * Function SendMessageToEESCHEMA
- 	 * Send a remote command to Eeschema via a socket,
- 	 * Commands are
- 	 * $PART: "reference"   put cursor on component anchor
+     * Send a remote command to Eeschema via a socket,
+     * Commands are
+     * $PART: "reference"   put cursor on component anchor
      */
-	void SendMessageToEESCHEMA();
+    void SendMessageToEESCHEMA();
 
     DECLARE_EVENT_TABLE()
 };

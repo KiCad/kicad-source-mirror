@@ -28,16 +28,16 @@
  * @brief Schematic component editing code.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "class_library.h"
-#include "sch_component.h"
+#include <general.h>
+#include <protos.h>
+#include <class_library.h>
+#include <sch_component.h>
 
 
 void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC )

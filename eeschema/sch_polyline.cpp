@@ -27,17 +27,17 @@
  * @file sch_polyline.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "trigo.h"
-#include "common.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <trigo.h>
+#include <common.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_polyline.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_polyline.h>
 
 
 SCH_POLYLINE::SCH_POLYLINE( int layer ) :

@@ -1,7 +1,7 @@
 /**
  * @file pcbnew/dialogs/dialog_display_options.h
  */
-#include "dialog_display_options_base.h"
+#include <dialog_display_options_base.h>
 
 class DIALOG_DISPLAY_OPTIONS : public DIALOG_DISPLAY_OPTIONS_BASE
 {

@@ -8,9 +8,9 @@
 #include <vector>
 #include <set>
 
-#include "dcode.h"
-#include "class_gerber_draw_item.h"
-#include "class_aperture_macro.h"
+#include <dcode.h>
+#include <class_gerber_draw_item.h>
+#include <class_aperture_macro.h>
 
 // An useful macro used when reading gerber files;
 #define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \

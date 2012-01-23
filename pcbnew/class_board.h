@@ -7,15 +7,15 @@
 #define CLASS_BOARD_H
 
 
-#include "dlist.h"
+#include <dlist.h>
 
-#include "layers_id_colors_and_visibility.h"
-#include "class_netinfo.h"
-#include "class_pad.h"
-#include "class_colors_design_settings.h"
-#include "class_board_design_settings.h"
-#include "common.h"                         // PAGE_INFO
-#include "class_title_block.h"
+#include <layers_id_colors_and_visibility.h>
+#include <class_netinfo.h>
+#include <class_pad.h>
+#include <class_colors_design_settings.h>
+#include <class_board_design_settings.h>
+#include <common.h>                         // PAGE_INFO
+#include <class_title_block.h>
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;

@@ -27,16 +27,16 @@
  * @file tool_lib.cpp
  */
 
-#include "fctsys.h"
-#include "hotkeys.h"
-#include "eeschema_id.h"
+#include <fctsys.h>
+#include <hotkeys.h>
+#include <eeschema_id.h>
 
-#include "general.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "dialog_helpers.h"
+#include <general.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <dialog_helpers.h>
 
-#include "help_common_strings.h"
+#include <help_common_strings.h>
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140

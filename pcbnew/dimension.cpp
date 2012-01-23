@@ -3,21 +3,21 @@
  * @brief Dialog and code for editing a dimension object.
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "wxPcbStruct.h"
-#include "drawtxt.h"
-#include "dialog_helpers.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <wxPcbStruct.h>
+#include <drawtxt.h>
+#include <dialog_helpers.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_pcb_text.h"
-#include "class_dimension.h"
+#include <class_board.h>
+#include <class_pcb_text.h>
+#include <class_dimension.h>
 
-#include "pcbnew.h"
-#include "dialog_dimension_editor_base.h"
+#include <pcbnew.h>
+#include <dialog_dimension_editor_base.h>
 
 /* Local functions */
 static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,

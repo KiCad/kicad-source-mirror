@@ -6,7 +6,7 @@
 #ifndef _DIALOG_DISPLAY_OPTIONS_H_
 #define _DIALOG_DISPLAY_OPTIONS_H_
 
-#include "dialog_display_options_base.h"
+#include <dialog_display_options_base.h>
 
 ////////////////////////////////////////////
 /// Class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS

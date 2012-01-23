@@ -8,9 +8,9 @@
 #include <vector>
 #include <set>
 
-#include "dcode.h"
-#include "class_gerber_draw_item.h"
-#include "class_aperture_macro.h"
+#include <dcode.h>
+#include <class_gerber_draw_item.h>
+#include <class_aperture_macro.h>
 
 #define CURSEUR_ON_GRILLE  0
 #define CURSEUR_OFF_GRILLE 1
@@ -110,7 +110,7 @@ enum Gerb_Analyse_Cmd
 bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 extern GERBER_IMAGE* g_GERBER_List[32];
 
-#include "pcbcommon.h"
-#include "gerbview_frame.h"
+#include <pcbcommon.h>
+#include <gerbview_frame.h>
 
 #endif  // ifndef GERBVIEW_H

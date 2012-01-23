@@ -2,11 +2,11 @@
  * @file pcbnew/hotkeys.cpp
  */
 
-#include "fctsys.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
 
-#include "hotkeys.h"
+#include <hotkeys.h>
 
 /* How to add a new hotkey:
  *  add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION.

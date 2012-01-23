@@ -27,21 +27,21 @@
  * @file modules.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "drag.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <drag.h>
 
 
 static void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC );

@@ -27,7 +27,7 @@
  * @brief Schematic find and replace dialog implementation.
  */
 
-#include "dialog_schematic_find.h"
+#include <dialog_schematic_find.h>
 
 
 DEFINE_EVENT_TYPE( EVT_COMMAND_FIND_DRC_MARKER )

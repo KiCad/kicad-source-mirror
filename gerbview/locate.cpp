@@ -26,10 +26,10 @@
  * @file locate.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "gerbview.h"
-#include "class_gerber_draw_item.h"
+#include <fctsys.h>
+#include <common.h>
+#include <gerbview.h>
+#include <class_gerber_draw_item.h>
 
 /* localize a gerber item and return a pointer to it.
  * Display info about this item

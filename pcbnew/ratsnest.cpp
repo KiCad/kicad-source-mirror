@@ -3,21 +3,21 @@
  * @brief Ratsnets functions.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "colors_selection.h"
-#include "wxBasePcbFrame.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <colors_selection.h>
+#include <wxBasePcbFrame.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
-#include "minimun_spanning_tree.h"
+#include <minimun_spanning_tree.h>
 
 /**
  * @brief class MIN_SPAN_TREE_PADS (derived from MIN_SPAN_TREE) specialize

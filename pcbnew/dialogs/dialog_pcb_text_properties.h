@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <wx/wx.h>
-#include "dialog_pcb_text_properties_base.h"
+#include <dialog_pcb_text_properties_base.h>
 
 class PCB_EDIT_FRAME;
 class TEXTE_PCB;

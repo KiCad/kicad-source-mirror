@@ -27,31 +27,31 @@
  * @file pcbnew_config.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "xnode.h"
-#include "macros.h"
-#include "pcbcommon.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
-#include "plot_common.h"
-#include "worksheet.h"
-#include "dialog_hotkeys_editor.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <xnode.h>
+#include <macros.h>
+#include <pcbcommon.h>
+#include <wxPcbStruct.h>
+#include <class_board_design_settings.h>
+#include <plot_common.h>
+#include <worksheet.h>
+#include <dialog_hotkeys_editor.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "pcbplot.h"
-#include "pcbnew.h"
-#include "pcbnew_id.h"
-#include "hotkeys.h"
-#include "protos.h"
-#include "pcbnew_config.h"
+#include <pcbplot.h>
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <hotkeys.h>
+#include <protos.h>
+#include <pcbnew_config.h>
 
-#include "dialog_mask_clearance.h"
-#include "dialog_general_options.h"
+#include <dialog_mask_clearance.h>
+#include <dialog_general_options.h>
 
 
 #define HOTKEY_FILENAME wxT( "pcbnew" )

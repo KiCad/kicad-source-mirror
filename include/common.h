@@ -34,9 +34,9 @@
 
 #include <vector>
 
-#include "wx/wx.h"
-#include "wx/confbase.h"
-#include "wx/fileconf.h"
+#include <wx/wx.h>
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
 
 
 class wxAboutDialogInfo;
