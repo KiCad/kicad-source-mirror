@@ -72,6 +72,19 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
+#ifdef USE_WX_OVERLAY
+    if( IsShown() )
+    {
+        m_overlay.Reset();
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC );
+        overlaydc.Clear();
+        /* TODO: Investigate why toolbars are affected - to be searched in wxWidgets */
+        m_mainToolBar->Refresh();
+        m_drawToolBar->Refresh();
+        m_optionsToolBar->Refresh();
+    }
+#endif
+
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 

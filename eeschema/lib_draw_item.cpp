@@ -125,7 +125,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, 
         int  color = GetDefaultColor();
 
         m_Fill = NO_FILL;
-
+#ifndef USE_WX_OVERLAY
         // Erase the old items using the previous attributes.
         if( m_eraseLastDrawItem )
         {
@@ -133,7 +133,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, 
             drawEditGraphics( aPanel->GetClipBox(), aDC, color );
             drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData, aTransform );
         }
-
+#endif
         // Calculate the new attributes at the current cursor position.
         calcEdit( aOffset );
 
