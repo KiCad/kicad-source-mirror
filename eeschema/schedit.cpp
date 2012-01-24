@@ -598,10 +598,12 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
 
     wxCHECK_RET( (item != NULL), wxT( "Cannot move invalid schematic item." ) );
 
+#ifndef USE_WX_OVERLAY
     // Erase the current item at its current position.
     if( aErase )
         item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
+#endif
     item->SetPosition( screen->GetCrossHairPosition() );
 
     // Draw the item item at it's new position.
@@ -671,7 +673,10 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
     }
 
     aItem->SetFlags( IS_MOVED );
-
+#ifdef USE_WX_OVERLAY
+    this->Refresh();
+    this->Update();
+#endif
     m_canvas->CrossHairOff( aDC );
 
     if( aItem->Type() != SCH_SHEET_PIN_T )
