@@ -85,8 +85,21 @@ void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
         if( m_canvas->IsMouseCaptured() )
         {
+#ifdef USE_WX_OVERLAY
+            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
+            oDC.Clear();
+            m_canvas->CallMouseCapture( aDC, aPosition, false );
+#else
             m_canvas->CallMouseCapture( aDC, aPosition, true );
+#endif
         }
+#ifdef USE_WX_OVERLAY
+        else
+        {
+            m_overlay.Reset();
+        }
+#endif
+
     }
 
     if( aHotKey )
