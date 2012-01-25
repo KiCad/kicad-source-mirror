@@ -278,11 +278,11 @@ target_link_libraries(pcbnew
     3d-viewer
     pcbcommon
     common
-    polygon
     bitmaps
+    polygon
     kbool
-    ${OPENGL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
+    ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )
 

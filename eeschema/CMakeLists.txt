@@ -207,8 +207,14 @@ if(APPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries(eeschema common bitmaps kbool polygon ${wxWidgets_LIBRARIES}
-    ${GDI_PLUS_LIBRARIES})
+target_link_libraries(eeschema
+    common
+    bitmaps
+    polygon
+    kbool
+    ${wxWidgets_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    )
 
 install(TARGETS eeschema
         DESTINATION ${KICAD_BIN}
