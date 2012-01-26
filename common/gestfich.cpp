@@ -39,7 +39,7 @@
 
 #include <wx/mimetype.h>
 #include <wx/filename.h>
-
+#include <wx/dir.h>
 
 /* List of default paths used to locate help files and KiCad library files.
  *
@@ -420,6 +420,15 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 
     FullFileName = FindKicadFile( ExecFile );
 
+#ifdef __WXMAC__
+    if( wxFileExists( FullFileName ) || wxDir::Exists( FullFileName ) ) 
+    {
+       ProcessExecute( wxT("open -a ") + ExecFile + wxT(" ") + param );
+    } else {
+       ProcessExecute( wxT("open ") + param );
+    }
+    return 0;
+#else
     if( wxFileExists( FullFileName ) )
     {
         if( !param.IsEmpty() )
@@ -428,7 +437,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
         ProcessExecute( FullFileName );
         return 0;
     }
-
+#endif
     wxString msg;
     msg.Printf( _( "Command <%s> could not found" ), GetChars( FullFileName ) );
     DisplayError( frame, msg, 20 );
@@ -523,7 +532,7 @@ wxString& EDA_APP::GetEditorName()
     // If there is no EDITOR variable set, try the desktop default
         if(!wxGetEnv( wxT( "EDITOR" ), &editorname ))
         {
-#ifdef __WXOSX__
+#ifdef __WXMAC__
           editorname = "/usr/bin/open";
 #elif __WXX11__
           editorname = "/usr/bin/xdg-open";
