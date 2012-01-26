@@ -4,6 +4,16 @@ KiCad ChangeLog 2012
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2012-Jan-26, UPDATE Jean-Pierre Charras <jp.charras@wanadoo.fr>
+================================================================================
+Pcbnew:
+    First draft to use a new netlist format (using S expressions)
+    Eeschema can generate this netlist format.
+    Pcbnew can use (automatic identification) the current format or the new format.
+    Cvpcb does not use yet the new format.
+    To do:
+        New format in Cvpcb: how to use the .cmp file with the new netlist format
+
 
 2012-Jan-22 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================

@@ -686,8 +686,12 @@ TRACK* MergeColinearSegmentIfPossible( BOARD* aPcb, TRACK* aTrackRef, TRACK* aCa
 }
 
 
-bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
+bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
 {
+     /* finds all track segments which are mis-connected (to more than one net).
+     * When such a bad segment is found, it is flagged to be removed.
+     * All tracks having at least one flagged segment are removed.
+     */
     TRACK*          segment;
     TRACK*          other;
     TRACK*          next;
@@ -735,14 +739,14 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
         if( net_code_e < 0 )
             continue;           // the "end" of segment is not connected
 
-        // Netcodes do not agree, so mark the segment as needed to be removed
+        // Netcodes do not agree, so mark the segment as "to be removed"
         if( net_code_s != net_code_e )
         {
             segment->SetState( FLAG0, ON );
         }
     }
 
-    // Remove flagged segments
+    // Remove tracks having a flagged segment
     for( segment = GetBoard()->m_Track;  segment;  segment = next )
     {
         next = (TRACK*) segment->Next();
@@ -752,9 +756,11 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
             segment->SetState( FLAG0, OFF );
             isModified = true;
             GetBoard()->m_Status_Pcb = 0;
-            Remove_One_Track( aDC, segment );
+            Remove_One_Track( NULL, segment );
 
-            // the current segment could be deleted, so restart to the beginning
+            // the current segment is deleted,
+            // we do not know the next "not yet tested" segment,
+            // so restart to the beginning
             next = GetBoard()->m_Track;
         }
     }

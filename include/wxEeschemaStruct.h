@@ -445,37 +445,43 @@ public:
 
     /**
      * Function CreateNetlist
-     * Create a netlist file:
-     *  build netlist info
-     *  test issues
-     *  create file
+     * <ul>
+     * <li> test for some issues (missing or duplicate references and sheet names)
+     * <li> build netlist info
+     * <li> create the netlist file (different formats)
+     * </ul>
      * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
      * @param aFullFileName = full netlist file name
-     * @param aUse_netnames = bool. if true, use net names from labels in schematic
-     *                              if false, use net numbers (net codes)
-     *   bool aUse_netnames is used only for Spice netlist
-     * @param aUsePrefix Prefix reference designator with an 'X' for spice output.
+     * @param aNetlistOptions = netlist options using OR'ed bits.
+     * <p>
+     * For SPICE netlist only:
+     *      if NET_USE_NETNAMES is set, use net names from labels in schematic
+     *                             else use net numbers (net codes)
+     *      if NET_USE_X_PREFIX is set : change "U" and "IC" refernce prefix to "X"
+     * </p>
      * @return true if success.
      */
     bool CreateNetlist( int             aFormat,
                         const wxString& aFullFileName,
-                        bool            aUse_netnames,
-                        bool            aUsePrefix );
+                        unsigned        aNetlistOptions );
 
     /**
      * Function  WriteNetListFile
      * Create the netlist file. Netlist info must be existing
      * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
      * @param aFullFileName = full netlist file name
-     * @param aUse_netnames = bool. if true, use net names from labels in schematic
-     *                              if false, use net numbers (net codes)
-     *   bool aUse_netnames is used only for Spice netlist
+     * @param aNetlistOptions = netlist options using OR'ed bits.
+     * <p>
+     * For SPICE netlist only:
+     *      if NET_USE_NETNAMES is set, use net names from labels in schematic
+     *                             else use net numbers (net codes)
+     *      if NET_USE_X_PREFIX is set : change "U" and "IC" refernce prefix to "X"
+     * </p>
      * @return true if success.
      */
     bool WriteNetListFile( int             aFormat,
                            const wxString& aFullFileName,
-                           bool            aUse_netnames,
-                           bool            aUsePrefix );
+                           unsigned        aNetlistOptions );
 
     /**
      * Function DeleteAnnotation
