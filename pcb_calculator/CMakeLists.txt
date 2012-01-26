@@ -67,7 +67,7 @@ if(APPLE)
 endif(APPLE)
 
 target_link_libraries( pcb_calculator
-    common polygon bitmaps
+    common polygon bitmaps kbool
     ${wxWidgets_LIBRARIES}
     )
 
