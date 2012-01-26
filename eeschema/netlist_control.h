@@ -7,8 +7,6 @@
 #ifndef _NETLIST_CONTROL_H_
 #define _NETLIST_CONTROL_H_
 
-class WinEDA_EnterText;
-
 
 /* Event id for notebook page buttons: */
 enum id_netlist {
@@ -55,7 +53,9 @@ public:
     wxBoxSizer*       m_RightBoxSizer;
     wxBoxSizer*       m_RightOptionsBoxSizer;
     wxBoxSizer*       m_LowBoxSizer;
+    wxRadioBox*       m_NetOption;
 
+public:
     /** Contructor to create a setup page for one netlist format.
      * Used in Netlist format Dialog box creation
      * @param parent = wxNotebook * parent
@@ -75,7 +75,7 @@ public:
 
 #define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
 
-/* Id to select netlist type */
+// Id to select netlist type
 enum  TypeNetForm {
     NET_TYPE_UNINIT = 0,
     NET_TYPE_PCBNEW,
@@ -90,6 +90,12 @@ enum  TypeNetForm {
     NET_TYPE_CUSTOM_MAX = NET_TYPE_CUSTOM1 + CUSTOMPANEL_COUNTMAX - 1
 };
 
+// Options for Spice netlist generation (OR'ed bits
+enum netlistOptions {
+    NET_USE_NETNAMES = 1,   // for Spice netlist : use netnames instead of numbers
+    NET_USE_X_PREFIX = 2,   // for Spice netlist : change "U" and "IC" refernce prefix to "X"
+    NET_PCBNEW_USE_NEW_FORMAT = 1,  // For Pcbnew use the new format (S expression and SWEET)
+};
 
 /* Dialog frame for creating netlists */
 class NETLIST_DIALOG : public wxDialog
@@ -98,7 +104,6 @@ public:
     SCH_EDIT_FRAME*   m_Parent;
     wxNotebook*       m_NoteBook;
     NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
-    wxRadioBox*       m_UseNetNamesInNetlist;
 
 public:
 

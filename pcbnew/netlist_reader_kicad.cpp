@@ -1,0 +1,325 @@
+/**
+ * @file pcbnew/netlist_reader_kicad.cpp
+ */
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2011 Jean-Pierre Charras.
+ * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include <wx/wx.h>
+#include <netlist_lexer.h>  // netlist_lexer is common to Eeschema and Pcbnew
+#include <netlist_reader.h>
+
+using namespace NL_T;
+
+/**
+ * Class PCB_PLOT_PARAMS_PARSER
+ * is the parser class for PCB_PLOT_PARAMS.
+ */
+class NETLIST_READER_KICAD_PARSER : public NETLIST_LEXER
+{
+private:
+    T token;
+    NETLIST_READER * netlist_reader;
+
+public:
+    NETLIST_READER_KICAD_PARSER( FILE_LINE_READER* aReader, NETLIST_READER *aNetlistReader );
+
+    /**
+     * Function Parse
+     * parse the full netlist
+     */
+    void Parse( BOARD * aBrd ) throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function ParseComp
+     * parse the comp description like
+     * (comp (ref P1)
+     * (value DB25FEMELLE)
+     * (footprint DB25FC)
+     * (libsource (lib conn) (part DB25))
+     * (sheetpath (names /) (tstamps /))
+     * (tstamp 3256759C))
+     */
+    MODULE_INFO* ParseComp() throw( IO_ERROR, PARSE_ERROR );
+
+    void ParseNet( BOARD * aBrd ) throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function SkipCurrent
+     * Skip the current token level, i.e
+     * search for the RIGHT parenthesis which closes the current description
+     */
+    void SkipCurrent() throw( IO_ERROR, PARSE_ERROR );
+
+    // Useful for debug only:
+    const char* getTokenName( T aTok )
+    {
+        return NETLIST_LEXER::TokenName( aTok );
+    }
+};
+
+
+bool NETLIST_READER::ReadKicadNetList( FILE* aFile )
+{
+    bool success = true;
+    BOARD * brd = m_pcbframe->GetBoard();
+
+        // netlineReader dtor will close aFile
+    FILE_LINE_READER netlineReader( aFile, m_netlistFullName );
+    NETLIST_READER_KICAD_PARSER netlist_parser( &netlineReader, this );
+
+    netlist_parser.Parse( brd );
+
+    return success;
+}
+
+
+
+// NETLIST_READER_KICAD_PARSER
+NETLIST_READER_KICAD_PARSER::NETLIST_READER_KICAD_PARSER( FILE_LINE_READER* aReader,
+                                                          NETLIST_READER *aNetlistReader ) :
+    NETLIST_LEXER( aReader )
+{
+    netlist_reader = aNetlistReader;
+}
+
+/**
+ * Function SkipCurrent
+ * Skip the current token level, i.e
+ * search for the RIGHT parenthesis which closes the current description
+ */
+void NETLIST_READER_KICAD_PARSER::SkipCurrent() throw( IO_ERROR, PARSE_ERROR )
+{
+    int curr_level = 0;
+    while( ( token = NextTok() ) != T_EOF )
+    {
+        if( token == T_LEFT )
+            curr_level--;
+        if( token == T_RIGHT )
+        {
+            curr_level++;
+            if( curr_level > 0 )
+                return;
+        }
+    }
+}
+
+
+void NETLIST_READER_KICAD_PARSER::Parse( BOARD * aBrd )
+    throw( IO_ERROR, PARSE_ERROR )
+{
+    wxString text;
+    while( ( token = NextTok() ) != T_EOF )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+        if( token == T_components )
+        {
+            // The section comp starts here.
+            while( ( token = NextTok() ) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+                if( token == T_comp )
+                {
+                    // A comp section if found. Read it
+                    MODULE_INFO* mod_info = ParseComp();
+                    netlist_reader->AddModuleInfo( mod_info );
+                }
+            }
+            if( netlist_reader->BuildModuleListOnly() )
+                return; // at this point, the module list is read and built.
+            // Load new footprints
+            netlist_reader->InitializeModules();
+            netlist_reader->TestFootprintsMatchingAndExchange();
+        }
+
+        if( token == T_nets )
+        {
+            // The section nets starts here.
+            while( ( token = NextTok() ) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+                if( token == T_net )
+                {
+                    // A net section if found. Read it
+                    ParseNet( aBrd );
+                }
+            }
+        }
+    }
+}
+
+void NETLIST_READER_KICAD_PARSER::ParseNet( BOARD * aBrd )
+    throw( IO_ERROR, PARSE_ERROR )
+{
+    /* Parses a section like
+     * (net (code 20) (name /PC-A0)
+     *  (node (ref BUS1) (pin 62))
+     *  (node (ref U3) (pin 3))
+     *  (node (ref U9) (pin M6)))
+     */
+
+    wxString code;
+    wxString name;
+    wxString cmpref;
+    wxString pin;
+    D_PAD * pad = NULL;
+    int nodecount = 0;
+    // The token net was read, so the next data is (code <number>)
+    while( (token = NextTok()) != T_RIGHT )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+        switch( token )
+        {
+        case T_code:
+            NeedSYMBOLorNUMBER();
+            code = FROM_UTF8( CurText() );
+            NeedRIGHT();
+        break;
+
+        case T_name:
+            NeedSYMBOLorNUMBER();
+            name = FROM_UTF8( CurText() );
+            NeedRIGHT();
+            if( name.IsEmpty() )      // Give a dummy net name like N-000109
+                name = wxT("N-00000") + code;
+            break;
+
+        case T_node:
+            while( (token = NextTok()) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+                switch( token )
+                {
+                case T_ref:
+                    NeedSYMBOLorNUMBER();
+                    cmpref = FROM_UTF8( CurText() );
+                    NeedRIGHT();
+                    break;
+
+                case T_pin:
+                    NeedSYMBOLorNUMBER();
+                    pin = FROM_UTF8( CurText() );
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    SkipCurrent();
+                    break;
+                }
+            }
+            pad = netlist_reader->SetPadNetName( cmpref, pin, name );
+            nodecount++;
+            break;
+
+        default:
+            SkipCurrent();
+            break;
+        }
+    }
+
+    // When there is onlu one item in net, clear pad netname
+    if( nodecount < 2 && pad )
+        pad->SetNetname( wxEmptyString );
+}
+
+
+MODULE_INFO* NETLIST_READER_KICAD_PARSER::ParseComp()
+    throw( IO_ERROR, PARSE_ERROR )
+{
+   /* Parses a section like
+     * (comp (ref P1)
+     * (value DB25FEMELLE)
+     * (footprint DB25FC)
+     * (libsource (lib conn) (part DB25))
+     * (sheetpath (names /) (tstamps /))
+     * (tstamp 3256759C))
+     *
+     * other fields (unused) are skipped
+     * A component need a reference, value, foorprint name and a full time stamp
+     * The full time stamp is the sheetpath time stamp + the component time stamp
+     */
+    wxString ref;
+    wxString value;
+    wxString footprint;
+    wxString pathtimestamp, timestamp;
+    // The token comp was read, so the next data is (ref P1)
+
+    while( (token = NextTok()) != T_RIGHT )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+        switch( token )
+        {
+        case T_ref:
+            NeedSYMBOLorNUMBER();
+            ref = FROM_UTF8( CurText() );
+            NeedRIGHT();
+            break;
+
+        case T_value:
+            NeedSYMBOLorNUMBER();
+            value = FROM_UTF8( CurText() );
+            NeedRIGHT();
+            break;
+
+        case T_footprint:
+            NeedSYMBOLorNUMBER();
+            footprint = FROM_UTF8( CurText() );
+            NeedRIGHT();
+            break;
+
+        case T_libsource:
+            // Currently not used data, skip it
+            SkipCurrent();
+            break;
+
+        case T_sheetpath:
+            while( ( token = NextTok() ) != T_tstamps );
+            NeedSYMBOLorNUMBER();
+            pathtimestamp = FROM_UTF8( CurText() );
+            NeedRIGHT();
+            NeedRIGHT();
+            break;
+
+        case T_tstamp:
+            NeedSYMBOLorNUMBER();
+            timestamp = FROM_UTF8( CurText() );
+            NeedRIGHT();
+            break;
+
+        default:
+            // Skip not used data (i.e all other tokens)
+            SkipCurrent();
+            break;
+        }
+    }
+    pathtimestamp += timestamp;
+    MODULE_INFO* mod_info = new MODULE_INFO( footprint, ref, value, pathtimestamp );
+
+    return mod_info;
+}

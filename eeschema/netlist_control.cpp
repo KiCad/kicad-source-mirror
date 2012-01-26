@@ -126,6 +126,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_IsCurrentFormat   = NULL;
     m_AddSubPrefix = NULL;
     m_ButtonCancel = NULL;
+    m_NetOption = NULL;
 
     parent->AddPage( this, title, selected );
 
@@ -153,7 +154,18 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
         m_IsCurrentFormat->SetValue( selected );
     }
 
-    /* Create the buttons: Create Neltist or browse Plugin and Cancel
+    if( id_NetType == NET_TYPE_PCBNEW )
+    {
+        wxString netlist_opt[2] = { _( "Pcbnew Format" ), _( "Advanced Format" ) };
+        m_NetOption = new wxRadioBox( this, -1, _( "Netlist Options:" ),
+                                      wxDefaultPosition, wxDefaultSize,
+                                      2, netlist_opt, 1,
+                                      wxRA_SPECIFY_COLS );
+        m_LeftBoxSizer->Add( m_NetOption, 0, wxGROW | wxALL, 5 );
+    }
+
+
+    /* Create the buttons: Create Netlist or browse Plugin and Cancel
      * and a third button for plugins : Remove or Ok button */
     if( idCreateFile )
     {
@@ -275,15 +287,15 @@ void NETLIST_DIALOG::InstallPageSpice()
 
 
     wxString netlist_opt[2] = { _( "Use Net Names" ), _( "Use Net Numbers" ) };
-    m_UseNetNamesInNetlist = new wxRadioBox( page, -1, _( "Netlist Options:" ),
-                                             wxDefaultPosition, wxDefaultSize,
-                                             2, netlist_opt, 1,
-                                             wxRA_SPECIFY_COLS );
+    page->m_NetOption = new wxRadioBox( page, -1, _( "Netlist Options:" ),
+                                        wxDefaultPosition, wxDefaultSize,
+                                        2, netlist_opt, 1,
+                                        wxRA_SPECIFY_COLS );
 
     if( !g_OptNetListUseNames )
-        m_UseNetNamesInNetlist->SetSelection( 1 );
+        page->m_NetOption->SetSelection( 1 );
 
-    page->m_LeftBoxSizer->Add( m_UseNetNamesInNetlist, 0, wxGROW | wxALL, 5 );
+    page->m_LeftBoxSizer->Add( page->m_NetOption, 0, wxGROW | wxALL, 5 );
 
     page->m_LowBoxSizer->Add( new wxStaticText( page, -1, _( "Simulator command:" ) ), 0,
                               wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
@@ -496,7 +508,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
 
     g_OptNetListUseNames = true; // Used for pspice, gnucap
 
-    if( m_UseNetNamesInNetlist->GetSelection() == 1 )
+    if( m_PanelNetType[PANELSPICE]->m_NetOption->GetSelection() == 1 )
         g_OptNetListUseNames = 	false;
 }
 
@@ -519,6 +531,8 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     NETLIST_PAGE_DIALOG* CurrPage;
     CurrPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
+    unsigned netlist_opt = 0;
+
     /* Calculate the netlist filename */
     fn = g_RootSheet->GetScreen()->GetFileName();
 
@@ -527,6 +541,11 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     case NET_TYPE_SPICE:
         fileExt = wxT( "cir" );
         fileWildcard = _( "SPICE netlist file (.cir)|*.cir" );
+        // Set spice netlist options:
+        if( g_OptNetListUseNames )
+            netlist_opt |= NET_USE_NETNAMES;
+        if( CurrPage->m_AddSubPrefix->GetValue() )
+            netlist_opt |= NET_USE_X_PREFIX;
         break;
 
     case NET_TYPE_CADSTAR:
@@ -535,13 +554,19 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
         break;
 
     case NET_TYPE_PCBNEW:
+        if( CurrPage->m_NetOption->GetSelection() != 0 )
+            netlist_opt = NET_PCBNEW_USE_NEW_FORMAT;
+        fileExt = NetlistFileExtension;
+        fileWildcard = NetlistFileWildcard;
+        break;
+
     case NET_TYPE_ORCADPCB2:
         fileExt = NetlistFileExtension;
         fileWildcard = NetlistFileWildcard;
         break;
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
-        fileExt = wxEmptyString;    // wxT( "" );
+        fileExt = wxEmptyString;
         fileWildcard = AllFilesWildcard;
         title.Printf( _( "%s Export" ), CurrPage->m_TitleStringCtrl->GetValue().GetData() );
     }
@@ -562,12 +587,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     else
         m_Parent->SetNetListerCommand( wxEmptyString );
 
-    bool addSubPrefix = false;
-    if( CurrPage->m_AddSubPrefix )
-        addSubPrefix = CurrPage->m_AddSubPrefix->GetValue();
-
-    m_Parent->CreateNetlist( CurrPage->m_IdNetType, dlg.GetPath(), g_OptNetListUseNames,
-                             addSubPrefix );
+    m_Parent->CreateNetlist( CurrPage->m_IdNetType, dlg.GetPath(), netlist_opt );
 
     WriteCurrentNetlistSetup();
 
@@ -575,22 +595,17 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
 }
 
 
-/**
- * Function CreateNetlist
- * Create a netlist file:
- *  build netlist info
- *  test issues
- *  create file
- * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
- * @param aFullFileName = full netlist file name
- * @param aUse_netnames = bool. if true, use net names from labels in schematic
- *                              if false, use net numbers (net codes)
- *   bool aUse_netnames is used only for Spice netlist
- * @return true if success.
+/* Function CreateNetlist
+ *  > test for some issues (missing or duplicate references and sheet names)
+ *  > build netlist info
+ *  > create the netlist file
+ * param aFormat = netlist format (NET_TYPE_PCBNEW ...)
+ * param aFullFileName = full netlist file name
+ * param aNetlistOptions = netlist options using OR'ed bits (see WriteNetListFile).
+ * return true if success.
  */
 bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
-                                    bool aUse_netnames,
-                                    bool aUsePrefix )
+                                    unsigned aNetlistOptions )
 {
     SCH_SHEET_LIST sheets;
     sheets.AnnotatePowerSymbols();
@@ -622,7 +637,7 @@ Do you want to annotate schematic?" ) ) )
     screens.SchematicCleanUp();
 
     BuildNetListBase();
-    bool success = WriteNetListFile( aFormat, aFullFileName, g_OptNetListUseNames, aUsePrefix );
+    bool success = WriteNetListFile( aFormat, aFullFileName, aNetlistOptions );
 
     return success;
 }
@@ -651,17 +666,20 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
     fn.SetExt( wxT( "cir" ) );
     CommandLine += wxT( " \"" ) + fn.GetFullPath() + wxT( "\"" );
 
-    g_OptNetListUseNames = m_UseNetNamesInNetlist->GetSelection() == 0;
     NETLIST_PAGE_DIALOG* CurrPage;
     CurrPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
+    g_OptNetListUseNames = CurrPage->m_NetOption->GetSelection() == 0;
 
-    bool addSubPrefix = false;
+    // Set spice netlist options:
+    unsigned netlist_opt = 0;
 
-    if( CurrPage->m_AddSubPrefix )
-        addSubPrefix = CurrPage->m_AddSubPrefix->GetValue();
+    if( g_OptNetListUseNames )
+        netlist_opt |= NET_USE_NETNAMES;
+    if( CurrPage->m_AddSubPrefix && CurrPage->m_AddSubPrefix->GetValue() )
+        netlist_opt |= NET_USE_X_PREFIX;
 
     if( ! m_Parent->CreateNetlist( CurrPage->m_IdNetType, fn.GetFullPath(),
-                                   g_OptNetListUseNames,addSubPrefix ) )
+                                   netlist_opt ) )
         return;
 
     ExecuteFile( this, ExecFile, CommandLine );

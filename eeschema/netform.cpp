@@ -24,7 +24,7 @@
  */
 
 /**
- * @file netform.cpp
+ * @file eeschema/netform.cpp
  * @brief Net list generation code.
  */
 
@@ -47,8 +47,6 @@
 
 #include <wx/tokenzr.h>
 
-
-
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 
 #include <build_version.h>
@@ -56,13 +54,6 @@
 #define INTERMEDIATE_NETLIST_EXT wxT("xml")
 
 #include <set>
-
-/**
- * @bug - Every place in this file where fprintf() is used and the return
- *        is not checked is a bug.  The fprintf() function can fail and
- *        returns a value less than 0 when it does.
- */
-
 
 /**
  * Class UNIQUE_STRINGS
@@ -99,18 +90,19 @@ bool UNIQUE_STRINGS::Lookup( const wxString& aString )
 
 
 /**
- * Class EXPORT_HELP
+ * Class NETLIST_EXPORT_TOOL
  * is a private implementation class used in this source file to keep track
  * of and recycle datastructures used in the generation of various exported netlist
  * files.  Since it is private it is not in a header file.
  */
-class EXPORT_HELP
+class NETLIST_EXPORT_TOOL
 {
     /// Used to temporary store and filter the list of pins of a schematic component
     /// when generating schematic component data in netlist (comp section)
     NETLIST_OBJECT_LIST m_SortedComponentPinList;
 
-    /// Used for "multi parts per package" components, avoids processing a lib component more than once.
+    /// Used for "multi parts per package" components,
+    /// avoids processing a lib component more than once.
     UNIQUE_STRINGS      m_ReferencesAlreadyFound;
 
     // share a code generated std::set<void*> to reduce code volume
@@ -196,7 +188,7 @@ class EXPORT_HELP
      *   - 6 CA
      * </p>
      */
-    void writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
+    bool writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
 
     /**
      * Function makeGenericRoot
@@ -239,6 +231,16 @@ class EXPORT_HELP
     XNODE* makeGenericLibraries();
 
 public:
+
+    /**
+     * Function WriteKiCadNetList
+     * creates a netlist, using the S expressions.
+     * the netlist creates the same data as the generic XML netlist,
+     * but using SWEET (or S expression), more easy to read and faster to parse
+     * @param aOutFileName = the full filename of the file to create
+     * @return bool - true if there were no errors, else false.
+     */
+    bool WriteKiCadNetList( const wxString& aOutFileName );
 
     /**
      * Function WriteGENERICNetList
@@ -286,7 +288,7 @@ public:
      * .. B * T3 1
      *U1 * 14
      */
-    void WriteNetListCADSTAR( FILE* f );
+    bool WriteNetListCADSTAR( FILE* f );
 
     /**
      * Function WriteNetListPspice
@@ -338,7 +340,7 @@ public:
 };
 
 
-wxString EXPORT_HELP::MakeCommandLine( const wxString& aFormatString,
+wxString NETLIST_EXPORT_TOOL::MakeCommandLine( const wxString& aFormatString,
             const wxString& aTempfile, const wxString& aFinalFile )
 {
     wxString    ret  = aFormatString;
@@ -353,26 +355,29 @@ wxString EXPORT_HELP::MakeCommandLine( const wxString& aFormatString,
 }
 
 
-/**
- * Function  WriteNetListFile
+/* Function  WriteNetListFile
  * creates the netlist file. Netlist info must be existing
- * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
- * @param aFullFileName = full netlist file name
- * @param aUse_netnames = bool. if true, use net names from labels in schematic
- *                              if false, use net numbers (net codes)
- *   bool aUse_netnames is used only for Spice netlist
- * @param aUsePrefix = true, adds an 'X' prefix to any reference designator starting with "U" or "IC",
- *                     false to leave reference designator unchanged.
- * @return true if success.
+ * param aFormat = netlist format (NET_TYPE_PCBNEW ...)
+ * param aFullFileName = full netlist file name
+ * param aNetlistOptions = netlist options using OR'ed bits.
+ * For SPICE netlist only:
+ *      if NET_USE_NETNAMES is set, use net names from labels in schematic
+ *                             else use net numbers (net codes)
+ *      if NET_USE_X_PREFIX is set : change "U" and "IC" refernce prefix to "X"
+ * return true if success.
  */
 bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileName,
-                                       bool aUse_netnames, bool aUsePrefix )
+                                       unsigned aNetlistOptions )
 {
     bool        ret = true;
     FILE*       f = NULL;
-    EXPORT_HELP helper;
+    NETLIST_EXPORT_TOOL helper;
 
-    if( aFormat < NET_TYPE_CUSTOM1 )
+    bool open_file = aFormat < NET_TYPE_CUSTOM1;
+    if( (aFormat == NET_TYPE_PCBNEW) && (aNetlistOptions & NET_PCBNEW_USE_NEW_FORMAT ) )
+        open_file = false;
+
+    if( open_file )
     {
         if( ( f = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
         {
@@ -387,8 +392,13 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        ret = helper.WriteNetListPCBNEW( f, true );
-        fclose( f );
+        if( (aNetlistOptions & NET_PCBNEW_USE_NEW_FORMAT ) )
+            ret = helper.WriteKiCadNetList( aFullFileName );
+        else
+        {
+            ret = helper.WriteNetListPCBNEW( f, true );
+            fclose( f );
+        }
         break;
 
     case NET_TYPE_ORCADPCB2:
@@ -397,12 +407,14 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         break;
 
     case NET_TYPE_CADSTAR:
-        helper.WriteNetListCADSTAR( f );
+        ret = helper.WriteNetListCADSTAR( f );
         fclose( f );
         break;
 
     case NET_TYPE_SPICE:
-        ret = helper.WriteNetListPspice( f, aUse_netnames, aUsePrefix );
+        ret = helper.WriteNetListPspice( f,
+                                         aNetlistOptions & NET_USE_NETNAMES,
+                                         aNetlistOptions & NET_USE_X_PREFIX );
         fclose( f );
         break;
 
@@ -425,7 +437,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
             // "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
             // becomes, after the user selects /tmp/s1.net as the output file from the file dialog:
             // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.xml"
-            wxString commandLine = EXPORT_HELP::MakeCommandLine( m_netListerCommand,
+            wxString commandLine = NETLIST_EXPORT_TOOL::MakeCommandLine( m_netListerCommand,
                                                                  tmpFile.GetFullPath(),
                                                                  aFullFileName );
 
@@ -456,7 +468,7 @@ static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
 }
 
 
-void EXPORT_HELP::sprintPinNetName( wxString* aResult,
+void NETLIST_EXPORT_TOOL::sprintPinNetName( wxString* aResult,
                                     const wxString& aNetNameFormat, NETLIST_OBJECT* aPin )
 {
     int netcode = aPin->GetNet();
@@ -496,7 +508,7 @@ void EXPORT_HELP::sprintPinNetName( wxString* aResult,
 }
 
 
-SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
+SCH_COMPONENT* NETLIST_EXPORT_TOOL::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
 
@@ -543,7 +555,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* 
 }
 
 
-SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatePinList( EDA_ITEM*       aItem,
+SCH_COMPONENT* NETLIST_EXPORT_TOOL::findNextComponentAndCreatePinList( EDA_ITEM*       aItem,
                                                               SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
@@ -643,7 +655,7 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 }
 
 
-XNODE* EXPORT_HELP::makeGenericDesignHeader()
+XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
 {
     XNODE*  xdesign = node( wxT("design") );
 
@@ -682,7 +694,7 @@ XNODE* EXPORT_HELP::makeGenericDesignHeader()
 }
 
 
-XNODE* EXPORT_HELP::makeGenericLibraries()
+XNODE* NETLIST_EXPORT_TOOL::makeGenericLibraries()
 {
     XNODE*  xlibs = node( wxT( "libraries" ) );     // auto_ptr
 
@@ -702,7 +714,7 @@ XNODE* EXPORT_HELP::makeGenericLibraries()
 }
 
 
-XNODE* EXPORT_HELP::makeGenericLibParts()
+XNODE* NETLIST_EXPORT_TOOL::makeGenericLibParts()
 {
     XNODE*      xlibparts = node( wxT( "libparts" ) );   // auto_ptr
     wxString    sLibpart  = wxT( "libpart" );
@@ -780,8 +792,8 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
 
         /* we must erase redundant Pins references in pinList
          * These redundant pins exist because some pins
-         * are found more than one time when we have a component
-         * multiple parts per package or have 2 representations (DeMorgan conversion)
+         * are found more than one time when a component has
+         * multiple parts per package or has 2 representations (DeMorgan conversion)
          * For instance, a 74ls00 has DeMorgan conversion, with different pin shapes,
          * and therefore each pin  appears 2 times in the list.
          * Common pins (VCC, GND) can also be found more than once.
@@ -819,7 +831,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
 }
 
 
-XNODE* EXPORT_HELP::makeGenericListOfNets()
+XNODE* NETLIST_EXPORT_TOOL::makeGenericListOfNets()
 {
     XNODE*      xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
@@ -908,7 +920,7 @@ XNODE* EXPORT_HELP::makeGenericListOfNets()
 }
 
 
-XNODE* EXPORT_HELP::makeGenericRoot()
+XNODE* NETLIST_EXPORT_TOOL::makeGenericRoot()
 {
     XNODE*      xroot = node( wxT( "export" ) );
 
@@ -930,7 +942,7 @@ XNODE* EXPORT_HELP::makeGenericRoot()
 }
 
 
-XNODE* EXPORT_HELP::makeGenericComponents()
+XNODE* NETLIST_EXPORT_TOOL::makeGenericComponents()
 {
     XNODE*      xcomps = node( wxT( "components" ) );
 
@@ -1045,15 +1057,11 @@ XNODE* EXPORT_HELP::makeGenericComponents()
 
 #include <wx/wfstream.h>        // wxFFileOutputStream
 
-bool EXPORT_HELP::WriteGENERICNetList( const wxString& aOutFileName )
+bool NETLIST_EXPORT_TOOL::WriteKiCadNetList( const wxString& aOutFileName )
 {
     // Prepare list of nets generation
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
         g_NetObjectslist[ii]->m_Flag = 0;
-
-#if 0
-
-    // this code seems to work now, for S-expression support.
 
     bool rc = false;
     wxFFileOutputStream os( aOutFileName, wxT( "wt" ) );
@@ -1084,8 +1092,15 @@ bool EXPORT_HELP::WriteGENERICNetList( const wxString& aOutFileName )
     }
 
     return rc;
+}
 
-#elif 1
+bool NETLIST_EXPORT_TOOL::WriteGENERICNetList( const wxString& aOutFileName )
+{
+    // Prepare list of nets generation
+    for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
+        g_NetObjectslist[ii]->m_Flag = 0;
+
+#if 1
     // output the XML format netlist.
     wxXmlDocument   xdoc;
 
@@ -1187,7 +1202,7 @@ bool EXPORT_HELP::WriteGENERICNetList( const wxString& aOutFileName )
 }
 
 
-bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefix )
+bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefix )
 {
     int                 ret = 0;
     int                 nbitems;
@@ -1289,7 +1304,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefi
 
     for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
     {
-        fprintf( f, "*Sheet Name:%s\n", TO_UTF8( sheet->PathHumanReadable() ) );
+        ret |= fprintf( f, "*Sheet Name:%s\n", TO_UTF8( sheet->PathHumanReadable() ) );
 
         for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
         {
@@ -1439,14 +1454,14 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefi
             for( unsigned i = 0;  i < pinSequence.size();  ++i )
             {
                 if( i==0 )
-                    fprintf( f, ";Node Sequence Spec.<" );
+                    ret |= fprintf( f, ";Node Sequence Spec.<" );
 
-                fprintf( f, "%s", TO_UTF8( stdPinNameArray.Item( pinSequence[i] ) ) );
+                ret |= fprintf( f, "%s", TO_UTF8( stdPinNameArray.Item( pinSequence[i] ) ) );
 
                 if( i < pinSequence.size()-1 )
-                    fprintf( f, "," );
+                    ret |= fprintf( f, "," );
                 else
-                    fprintf( f, ">" );
+                    ret |= fprintf( f, ">" );
             }
 
             // Next Netlist line record:
@@ -1478,7 +1493,7 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefi
 }
 
 
-bool EXPORT_HELP::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
+bool NETLIST_EXPORT_TOOL::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 {
     wxString    field;
     wxString    footprint;
@@ -1623,7 +1638,7 @@ bool EXPORT_HELP::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 }
 
 
-bool EXPORT_HELP::addPinToComponentPinList( SCH_COMPONENT* aComponent,
+bool NETLIST_EXPORT_TOOL::addPinToComponentPinList( SCH_COMPONENT* aComponent,
                                       SCH_SHEET_PATH* aSheetPath, LIB_PIN* aPin )
 {
     // Search the PIN description for Pin in g_NetObjectslist
@@ -1662,12 +1677,12 @@ bool EXPORT_HELP::addPinToComponentPinList( SCH_COMPONENT* aComponent,
  * remove duplicate pins from aPinList (list of pins relative to a given component)
  * (i.e. set pointer to duplicate pins to NULL in this list).
  * also set .m_Flag member of "removed" NETLIST_OBJECT pins to 1
+ * When pins are duplicated, not connected duplicate is removed
+ * (for instance when a multiple part per package component has its power pins connected
+ * only on a part).
  */
-void EXPORT_HELP::eraseDuplicatePins( )
+void NETLIST_EXPORT_TOOL::eraseDuplicatePins( )
 {
-    if( m_SortedComponentPinList.size() == 0 )  // Trivial case: component with no pin
-        return;
-
     for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
     {
         if( m_SortedComponentPinList[ii] == NULL ) /* already deleted */
@@ -1717,7 +1732,7 @@ void EXPORT_HELP::eraseDuplicatePins( )
 }
 
 
-void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
+void NETLIST_EXPORT_TOOL::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
                                          LIB_COMPONENT*  aEntry,
                                          SCH_SHEET_PATH* aSheetPath )
 {
@@ -1759,7 +1774,7 @@ void EXPORT_HELP::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
 }
 
 
-bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
+bool NETLIST_EXPORT_TOOL::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
     int         ret = 0;
     int         netCode;
@@ -1852,8 +1867,9 @@ bool EXPORT_HELP::writeGENERICListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjects
 static wxString StartLine( wxT( "." ) );
 
 
-void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
+bool NETLIST_EXPORT_TOOL::WriteNetListCADSTAR( FILE* f )
 {
+    int ret = 0;
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
     wxString footprint;
@@ -1862,11 +1878,11 @@ void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
     SCH_COMPONENT* Component;
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 
-    fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
-    fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( DateAndTime() ) );
-    fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
-    fprintf( f, "\"%s\"\n", TO_UTF8( Title ) );
-    fprintf( f, "\n" );
+    ret |= fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
+    ret |= fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( DateAndTime() ) );
+    ret |= fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
+    ret |= fprintf( f, "\"%s\"\n", TO_UTF8( Title ) );
+    ret |= fprintf( f, "\n" );
 
     // Prepare list of nets generation
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
@@ -1898,28 +1914,32 @@ void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
             */
 
             msg = Component->GetRef( sheet );
-            fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
-            fprintf( f, "%s", TO_UTF8( msg ) );
+            ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
+            ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
             msg = Component->GetField( VALUE )->m_Text;
             msg.Replace( wxT( " " ), wxT( "_" ) );
-            fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
-            fprintf( f, "\n" );
+            ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
+            ret |= fprintf( f, "\n" );
         }
     }
 
-    fprintf( f, "\n" );
+    ret |= fprintf( f, "\n" );
 
     m_SortedComponentPinList.clear();
 
-    writeListOfNetsCADSTAR( f, g_NetObjectslist );
+    if( ! writeListOfNetsCADSTAR( f, g_NetObjectslist ) )
+        ret = -1;   // set error
 
-    fprintf( f, "\n%sEND\n", TO_UTF8( StartLine ) );
+    ret |= fprintf( f, "\n%sEND\n", TO_UTF8( StartLine ) );
+
+    return ret >= 0;
 }
 
 
-void EXPORT_HELP::writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
+bool NETLIST_EXPORT_TOOL::writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList )
 {
+    int ret = 0;
     wxString InitNetDesc  = StartLine + wxT( "ADD_TER" );
     wxString StartNetDesc = StartLine + wxT( "TER" );
     wxString netcodeName, InitNetDescLine;
@@ -1991,21 +2011,23 @@ void EXPORT_HELP::writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjects
             break;
 
         case 1:
-            fprintf( f, "%s\n", TO_UTF8( InitNetDescLine ) );
-            fprintf( f, "%s       %s   %.4s\n",
-                     TO_UTF8( StartNetDesc ),
-                     TO_UTF8( refstr ),
-                     (char*) &aObjectsList[ii]->m_PinNum );
+            ret |= fprintf( f, "%s\n", TO_UTF8( InitNetDescLine ) );
+            ret |= fprintf( f, "%s       %s   %.4s\n",
+                            TO_UTF8( StartNetDesc ),
+                            TO_UTF8( refstr ),
+                            (char*) &aObjectsList[ii]->m_PinNum );
             print_ter++;
             break;
 
         default:
-            fprintf( f, "            %s   %.4s\n",
-                     TO_UTF8( refstr ),
-                     (char*) &aObjectsList[ii]->m_PinNum );
+            ret |= fprintf( f, "            %s   %.4s\n",
+                            TO_UTF8( refstr ),
+                            (char*) &aObjectsList[ii]->m_PinNum );
             break;
         }
 
         aObjectsList[ii]->m_Flag = 1;
     }
+
+    return ret >= 0;
 }
