@@ -147,7 +147,7 @@ void NETLIST_READER_KICAD_PARSER::Parse( BOARD * aBrd )
                     netlist_reader->AddModuleInfo( mod_info );
                 }
             }
-            if( netlist_reader->BuildModuleListOnly() )
+            if( netlist_reader->BuildModuleListOnlyOpt() )
                 return; // at this point, the module list is read and built.
             // Load new footprints
             netlist_reader->InitializeModules();
