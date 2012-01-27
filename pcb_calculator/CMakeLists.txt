@@ -57,8 +57,9 @@ endif(APPLE)
 
 
 add_executable(pcb_calculator WIN32 MACOSX_BUNDLE
-                            ${PCB_CALCULATOR_SRCS}
-                            ${PCB_CALCULATOR_RESOURCES})
+    ${PCB_CALCULATOR_SRCS}
+    ${PCB_CALCULATOR_RESOURCES}
+    )
 
 
 if(APPLE)
@@ -67,7 +68,10 @@ if(APPLE)
 endif(APPLE)
 
 target_link_libraries( pcb_calculator
-    common polygon bitmaps kbool
+    common
+    bitmaps
+    polygon
+    kbool
     ${wxWidgets_LIBRARIES}
     )
 
