@@ -50,7 +50,6 @@
  */
 
 
-#include <algorithm>
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
@@ -69,6 +68,7 @@
 
 #include <netlist_reader.h>
 
+#include <algorithm>
 
 /**
  * Function OpenNetlistFile
@@ -168,7 +168,12 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
     netList_Reader.m_UseCmpFile = useCmpfile;
     netList_Reader.SetFilesnames( aNetlistFullFilename, aCmpFullFileName );
 
-    netList_Reader.ReadNetList( netfile );
+    bool success = netList_Reader.ReadNetList( netfile );
+    if( !success )
+    {
+        wxMessageBox( _("Netlist read error (unrecognized format)") );
+        return false;
+    }
 
     // Delete footprints not found in netlist:
     if( aDeleteExtraFootprints )
@@ -202,29 +207,65 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
 bool NETLIST_READER::ReadNetList( FILE* aFile )
 {
     // Try to determine the netlist type:
-    bool new_fmt = true;
-    std::string header( "(export" );
-    for( unsigned ii = 0; ii < header.size(); ii++ )
+    // Beginning of the first line of known formats, without spaces
+    #define HEADERS_COUNT 3
+    #define HEADER_ORCADPCB "({EESchemaNetlist"
+    #define HEADER_PCB1 "#EESchemaNetlist"
+    #define HEADER_KICAD_NETFMT "(export"
+    const std::string headers[HEADERS_COUNT] =
     {
-        int data;
-        do
-        {
-            data = fgetc( aFile );
-        } while ( ( data == ' ' ) &&( EOF != data ) ) ;
+        HEADER_ORCADPCB, HEADER_PCB1, HEADER_KICAD_NETFMT
+    };
 
-        if( (int)header[ii] == data )
-            continue;
-        new_fmt = false;
-        break;
+    int format = -1;
+    for ( int jj = 0; jj < HEADERS_COUNT; jj++ )
+    {
+        int imax = headers[jj].size();
+        int ii = 0;
+        for( ; ii < imax; ii++ )
+        {
+            int data;
+            // Read header, and skip blanks to avoid errors if an header changes
+            do
+            {
+                data = fgetc( aFile );
+            } while ( ( data == ' ' ) &&( EOF != data ) ) ;
+
+            if( (int)headers[jj][ii] == data )
+                continue;
+            break;
+        }
+        if( ii == imax )    // header found
+        {
+            format = jj;
+            break;
+        }
+        rewind( aFile );
     }
 
     rewind( aFile );
+    bool success = false;
+    switch( format )
+    {
+        case 0:
+            m_typeNetlist = NETLIST_TYPE_ORCADPCB2;
+            success = ReadOldFmtdNetList( aFile );
+            break;
 
-    bool success;
-    if( new_fmt )
-        success = ReadKicadNetList( aFile );
-    else
-        success = ReadOldFmtdNetList( aFile );
+        case 1:
+            m_typeNetlist = NETLIST_TYPE_PCB1;
+            success = ReadOldFmtdNetList( aFile );
+            break;
+
+        case 2:
+            m_typeNetlist = NETLIST_TYPE_KICAD;
+            success = ReadKicadNetList( aFile );
+            break;
+
+        default:    // Unrecognized format:
+            break;
+
+    }
 
     return success;
 }
@@ -497,7 +538,7 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
     // Build the list of references of the net list modules.
     NETLIST_READER netList_Reader( this );
     netList_Reader.SetFilesnames( aNetlistFullFilename, wxEmptyString );
-    netList_Reader.BuildModuleListOnly( true );
+    netList_Reader.BuildModuleListOnlySetOpt( true );
     if( ! netList_Reader.ReadNetList( netfile ) )
         return;  // error
 

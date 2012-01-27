@@ -68,6 +68,14 @@ public: MODULE_INFO( const wxString& libname,
     ~MODULE_INFO() { };
 };
 
+enum typenetlist
+{
+    NETLIST_TYPE_UNSPECIFIED = 0,
+    NETLIST_TYPE_ORCADPCB2,     // the basic format used by pcbnew
+    NETLIST_TYPE_PCB1,          // the format used by pcbnew, basic format + more info
+    NETLIST_TYPE_KICAD
+};
+
 
 /*
  * Helper class, to read a netlist.
@@ -85,8 +93,9 @@ private:
     std::vector <MODULE_INFO*> m_newModulesList;    // The list of new footprints,
                                                     // found in netlist, but not on board
                                                     // (must be loaded from libraries)
-    bool m_BuildModuleListOnly;     // if true read netlist, populates m_modulesInNetlist
+    bool m_buildModuleListOnly;     // if true read netlist, populates m_modulesInNetlist
                                     // but do not read and change nets and modules on board
+    enum typenetlist m_typeNetlist; // type opt the netlist currently read
 
 public:
     bool m_UseCmpFile;              // true to use .cmp files as component/footprint file link
@@ -103,7 +112,8 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
         m_UseTimeStamp     = false;
         m_ChangeFootprints = false;
         m_UseCmpFile = true;
-        m_BuildModuleListOnly = false;
+        m_buildModuleListOnly = false;
+        m_typeNetlist = NETLIST_TYPE_UNSPECIFIED;
     }
 
     ~NETLIST_READER()
@@ -132,7 +142,7 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
     }
 
     /**
-     * Function BuildModuleListOnly
+     * Function BuildModuleListOnlySetOpt
      * Set to true or false the Build Module List Only option
      * When this option is false, a full netlist read is made,
      * and modules are added/modified
@@ -140,19 +150,19 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
      * and only the list of modules found in netlist is built
      * @param aOpt = the value of option
      */
-    void BuildModuleListOnly( bool aOpt )
+    void BuildModuleListOnlySetOpt( bool aOpt )
     {
-        m_BuildModuleListOnly = aOpt;
+        m_buildModuleListOnly = aOpt;
     }
 
     /**
-     * Function BuildModuleListOnly
+     * Function BuildModuleListOnlyOpt
      * Get the Build Module List Only option state
      * @return the state of option (true/false)
      */
-     bool BuildModuleListOnly()
+     bool BuildModuleListOnlyOpt()
     {
-        return m_BuildModuleListOnly;
+        return m_buildModuleListOnly;
     }
 
     /**

@@ -118,7 +118,7 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
         }
     }
 
-    if( BuildModuleListOnly() )
+    if( BuildModuleListOnlyOpt() )
         return true; // at this point, the module list is read and built.
 
     // Load new footprints
