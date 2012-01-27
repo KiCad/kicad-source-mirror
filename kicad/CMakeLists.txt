@@ -40,16 +40,29 @@ if(APPLE)
 endif(APPLE)
 
 add_executable(kicad WIN32 MACOSX_BUNDLE
-               ${KICAD_SRCS}
-               ${KICAD_EXTRA_SRCS}
-               ${KICAD_RESOURCES}
-              )
+    ${KICAD_SRCS}
+    ${KICAD_EXTRA_SRCS}
+    ${KICAD_RESOURCES}
+    )
 
 if(APPLE)
     set_target_properties(kicad PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-    target_link_libraries(kicad common bitmaps kbool polygon ${wxWidgets_LIBRARIES})
+    target_link_libraries(kicad
+        common
+        bitmaps
+        polygon
+        kbool
+        ${wxWidgets_LIBRARIES}
+        )
 else(APPLE)
-    target_link_libraries(kicad common bitmaps kbool polygon ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
+    target_link_libraries(kicad
+        common
+        bitmaps
+        polygon
+        kbool
+        ${wxWidgets_LIBRARIES}
+        ${GDI_PLUS_LIBRARIES}
+        )
 endif(APPLE)
 
 install(TARGETS kicad
