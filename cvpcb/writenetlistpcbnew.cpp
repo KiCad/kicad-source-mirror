@@ -15,48 +15,6 @@
 
 static void WriteFootprintFilterInfos( FILE* dest, COMPONENT_LIST& list );
 
-
-static void RemoveDuplicatePins( COMPONENT& component )
-{
-    PIN_LIST::iterator i;
-    PIN *pin1, *pin2;
-    wxString msg;
-
-    if( component.m_Pins.size() <= 1 )
-        return;
-
-    i = component.m_Pins.begin();
-    pin1 = &(*i);
-    ++i;
-
-    while( i != component.m_Pins.end() )
-    {
-        pin2 = &(*i);
-
-        wxASSERT( pin2 != NULL );
-
-        if( !same_pin_number( pin1, pin2 ) )
-        {
-            pin1 = pin2;
-            ++i;
-            continue;
-        }
-
-        if( !same_pin_net( pin1, pin2 ) )
-        {
-            msg.Printf( _( "Component %s %s pin %s : Different Nets" ),
-                        GetChars( component.m_Reference ),
-                        GetChars( component.m_Value ),
-                        pin1->m_Number.GetData() );
-            DisplayError( NULL, msg, 60 );
-        }
-        pin1 = pin2;
-        i = component.m_Pins.erase( i );
-        delete pin2;
-    }
-}
-
-
 /**
  * Create KiCad net list file.
  *
@@ -88,7 +46,6 @@ int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
         fprintf( file, "%s\n", TO_UTF8( component.m_Value ) );
 
         component.m_Pins.sort();
-        RemoveDuplicatePins( component );
 
         BOOST_FOREACH( PIN& pin, component.m_Pins )
         {

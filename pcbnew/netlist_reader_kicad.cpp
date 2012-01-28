@@ -81,16 +81,26 @@ public:
 
 bool NETLIST_READER::ReadKicadNetList( FILE* aFile )
 {
-    bool success = true;
     BOARD * brd = m_pcbframe->GetBoard();
 
         // netlineReader dtor will close aFile
     FILE_LINE_READER netlineReader( aFile, m_netlistFullName );
     NETLIST_READER_KICAD_PARSER netlist_parser( &netlineReader, this );
 
-    netlist_parser.Parse( brd );
+    try
+    {
+        netlist_parser.Parse( brd );
+    }
+    catch( IO_ERROR& ioe )
+    {
+        ioe.errorText += '\n';
+        ioe.errorText += _("Netlist error.");
 
-    return success;
+        wxMessageBox( ioe.errorText );
+        return false;
+    }
+
+    return true;
 }
 
 

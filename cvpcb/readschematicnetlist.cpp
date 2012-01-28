@@ -16,9 +16,6 @@
 #include <richio.h>
 
 
-#define SEPARATEUR '|'  /* Separator character in NetList */
-
-
 static int ReadPinConnection( FILE_LINE_READER& aNetlistReader, COMPONENT* CurrentCmp );
 static int ReadFootprintFilterList( FILE_LINE_READER& aNetlistReader, COMPONENT_LIST& aComponentsList );
 
@@ -83,8 +80,7 @@ static int ReadFootprintFilterList( FILE_LINE_READER& aNetlistReader, COMPONENT_
  */
 int CVPCB_MAINFRAME::ReadSchematicNetlist()
 {
-    char       alim[1024];
-    int        idx, jj, k, l;
+    int        idx, jj, k;
     char       cbuffer[BUFFER_CHAR_SIZE];      /* temporary storage */
     char*      ptchar;
     COMPONENT* Cmp;
@@ -203,23 +199,12 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
 
         for( jj = 0; idx < k; idx++ )
         {
-            if( Line[idx] == SEPARATEUR )
-                break;
             cbuffer[jj++] = Line[idx];
         }
         cbuffer[jj] = 0;
         // Copy footprint name:
         if( m_isEESchemaNetlist &&  strnicmp( cbuffer, "$noname", 7 ) != 0 )
             Cmp->m_Module = FROM_UTF8(cbuffer);
-
-        if( (Line[++idx] == '(') && (Line[k - 1] == ')' ) )
-        {
-            idx++; l = 0;
-            while( k - 1 > idx )
-                alim[l++] = Line[idx++];
-        }
-        else
-            idx = k;
 
         /* Search component reference */
         while( Line[idx] != ' ' && Line[idx] )
@@ -243,8 +228,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         while( Line[idx] == ' ' && Line[idx] )
             idx++;
 
-        /** goto beginning of value */
-
+        // goto beginning of value
         for( jj = 0 ; ; idx++ )
         {
             if( (Line[idx] == ' ') || (Line[idx] == '\n') || (Line[idx] == '\r') || Line[idx] == 0)

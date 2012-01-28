@@ -166,6 +166,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
     netList_Reader.m_UseTimeStamp     = aSelect_By_Timestamp;
     netList_Reader.m_ChangeFootprints = aChangeFootprint;
     netList_Reader.m_UseCmpFile = useCmpfile;
+    netList_Reader.ReadFootprintFilterSetOpt( true );
     netList_Reader.SetFilesnames( aNetlistFullFilename, aCmpFullFileName );
 
     bool success = netList_Reader.ReadNetList( netfile );
@@ -277,6 +278,9 @@ bool NETLIST_READER::InitializeModules()
         readModuleComponentLinkfile();
     }
 
+    if( m_pcbframe == NULL )
+        return true;
+
     for( unsigned ii = 0; ii < m_modulesInNetlist.size(); ii++ )
     {
         MODULE_INFO* currmod_info = m_modulesInNetlist[ii];
@@ -326,6 +330,9 @@ bool NETLIST_READER::InitializeModules()
 
 void NETLIST_READER::TestFootprintsMatchingAndExchange()
 {
+    if( m_pcbframe == NULL )
+        return;
+
     for( MODULE* module = m_pcbframe->GetBoard()->m_Modules; module; module = module->Next() )
     {
         // Search for the corresponding module info
