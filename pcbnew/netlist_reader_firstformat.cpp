@@ -1,6 +1,7 @@
 /**
  * @file pcbnew/netlist_reader_firstformat.cpp
  */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -43,9 +44,10 @@
 #include <pcbnew.h>
 
 #include <netlist_reader.h>
+#include <boost/foreach.hpp>
 
 // constants used by ReadOldFmtNetlistModuleDescr():
-#define BUILDLIST   true
+#define BUILDLIST  true
 #define READMODULE false
 
 
@@ -72,11 +74,12 @@
  */
 bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
 {
-    int state   = 0;
+    int  state = 0;
     bool is_comment = false;
 
     /* First, read the netlist: Build the list of footprints found in netlist
      */
+
     // netlineReader dtor will close aFile
     FILE_LINE_READER netlineReader( aFile, m_netlistFullName );
 
@@ -92,10 +95,15 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
 
             is_comment = false;
         }
-        if( *line == '{' ) // Start Comment
+        if( *line == '{' ) // Start Comment or Pcbnew info section
         {
             is_comment = true;
-
+            if( m_readFootprintFilter && state == 0 &&
+                (strnicmp( line, "{ Allowed footprints", 20 ) == 0) )
+            {
+                ReadOldFmtFootprintFilterList( netlineReader );
+                continue;
+            }
             if( ( line = strchr( line, '}' ) ) == NULL )
                 continue;
         }
@@ -119,13 +127,13 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
     }
 
     if( BuildModuleListOnlyOpt() )
-        return true; // at this point, the module list is read and built.
+        return true;  // at this point, the module list is read and built.
 
     // Load new footprints
     bool success = InitializeModules();
 
-    if( ! success )
-        wxMessageBox( _("Some footprints are not found in libraries") );
+    if( !success )
+        wxMessageBox( _( "Some footprints are not found in libraries" ) );
 
     TestFootprintsMatchingAndExchange();
 
@@ -184,7 +192,7 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
 /* Function ReadOldFmtNetlistModuleDescr
  * Read the beginning of a footprint  description, from the netlist
  * and add a module info to m_modulesInNetlist
- * Analyze lines like:
+ * Analyze the first line of a component description in netlist like:
  * ( /40C08647 $noname R20 4.7K {Lib=R}
  * (1 VCC)
  * (2 MODB_1)
@@ -195,8 +203,8 @@ MODULE* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildLi
     char*    text;
     wxString timeStampPath;         // the full time stamp read from netlist
     wxString footprintName;         // the footprint name read from netlist
-    wxString cmpValue;             // the component value read from netlist
-    wxString cmpReference;      // the component schematic reference read from netlist
+    wxString cmpValue;              // the component value read from netlist
+    wxString cmpReference;          // the component schematic reference read from netlist
     bool     error = false;
     char     line[1024];
 
@@ -236,13 +244,13 @@ MODULE* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildLi
     if( aBuildList )
     {
         MODULE_INFO* mod_info = new MODULE_INFO( footprintName, cmpReference,
-                                                cmpValue, timeStampPath );
+                                                 cmpValue, timeStampPath );
         AddModuleInfo( mod_info );
         return NULL;
     }
 
     // search the module loaded on board
-    // reference and time stamps are already updated so we can used search by reference
+    // reference and time stamps are already updated so we can use search by reference only
     MODULE* module = m_pcbframe->GetBoard()->FindModuleByReference( cmpReference );
     if( module == NULL )
     {
@@ -266,8 +274,8 @@ MODULE* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildLi
  */
 bool NETLIST_READER::SetPadNetName( char* aText )
 {
-    char*       p;
-    char        line[256];
+    char* p;
+    char  line[256];
 
     if( m_currModule == NULL )
         return false;
@@ -284,8 +292,8 @@ bool NETLIST_READER::SetPadNetName( char* aText )
 
     wxString netName = FROM_UTF8( p );
 
-    bool found = false;
-    for( D_PAD* pad = m_currModule->m_Pads;  pad;  pad = pad->Next() )
+    bool     found = false;
+    for( D_PAD* pad = m_currModule->m_Pads; pad; pad = pad->Next() )
     {
         wxString padName = pad->GetPadName();
 
@@ -312,4 +320,70 @@ bool NETLIST_READER::SetPadNetName( char* aText )
     }
 
     return found;
+}
+
+
+/*
+ * Read the section "Allowed footprints" like:
+ *  { Allowed footprints by component:
+ *  $component R11
+ *  R?
+ *  SM0603
+ *  SM0805
+ *  R?-*
+ *  SM1206
+ *  $endlist
+ *  $endfootprintlist
+ *  }
+ *
+ *  And add the strings giving the footprint filter to m_FootprintFilter
+ *  of the corresponding module info
+ *  This section is used by CvPcb, and is not useful in Pcbnew,
+ *  therefore it it not always read
+ */
+bool NETLIST_READER::ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistReader )
+{
+    wxString     cmpRef;
+    MODULE_INFO* mod_info = NULL;
+
+    while( aNetlistReader.ReadLine() )
+    {
+        const char* Line = aNetlistReader.Line();
+
+        if( strnicmp( Line, "$endlist", 8 ) == 0 ) // end of list for the current component
+        {
+            mod_info = NULL;
+            continue;
+        }
+        if( strnicmp( Line, "$endfootprintlist", 4 ) == 0 )
+            // End of this section
+            return 0;
+
+        if( strnicmp( Line, "$component", 10 ) == 0 ) // New component reference found
+        {
+            cmpRef = FROM_UTF8( Line + 11 );
+            cmpRef.Trim( true );
+            cmpRef.Trim( false );
+
+            // Search the current component in module info list:
+            BOOST_FOREACH( MODULE_INFO * &component, m_modulesInNetlist )
+            {
+                if( component->m_Reference == cmpRef )
+                {
+                    mod_info = component;
+                    break;
+                }
+            }
+        }
+        else if( mod_info )
+        {
+            // Add new filter to list
+            wxString fp = FROM_UTF8( Line + 1 );
+            fp.Trim( false );
+            fp.Trim( true );
+            mod_info->m_FootprintFilter.Add( fp );
+        }
+    }
+
+    return true;
 }

@@ -53,6 +53,7 @@ public:
     wxString m_Reference;
     wxString m_Value;
     wxString m_TimeStamp;
+    wxArrayString m_FootprintFilter;
 
 public: MODULE_INFO( const wxString& libname,
                      const wxString& cmpname,
@@ -95,6 +96,7 @@ private:
                                                     // (must be loaded from libraries)
     bool m_buildModuleListOnly;     // if true read netlist, populates m_modulesInNetlist
                                     // but do not read and change nets and modules on board
+    bool m_readFootprintFilter;     // if true read footprint filter section
     enum typenetlist m_typeNetlist; // type opt the netlist currently read
 
 public:
@@ -113,6 +115,7 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
         m_ChangeFootprints = false;
         m_UseCmpFile = true;
         m_buildModuleListOnly = false;
+        m_readFootprintFilter = false;
         m_typeNetlist = NETLIST_TYPE_UNSPECIFIED;
     }
 
@@ -139,6 +142,19 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
     void AddModuleInfo( MODULE_INFO* aModInfo )
     {
         m_modulesInNetlist.push_back( aModInfo );
+    }
+
+    /**
+     * Function ReadFootprintFilterSetOpt
+     * Set to true or false the read footprint filter option
+     * When this option is false, the footprint filter section is ignored
+     * When this option is true, the footprint filter section is read,
+     *    an filter strings are stored in module info
+     * @param aOpt = the value of option
+     */
+    void ReadFootprintFilterSetOpt( bool aOpt )
+    {
+        m_readFootprintFilter = aOpt;
     }
 
     /**
@@ -217,6 +233,27 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
      * @return true if success
      */
     bool ReadOldFmtdNetList( FILE* aFile );
+
+    /**
+     * Function ReadOldFmtFootprintFilterList
+     * Read the section "Allowed footprints" like:
+     *  { Allowed footprints by component:
+     *  $component R11
+     *  R?
+     *  SM0603
+     *  SM0805
+     *  R?-*
+     *  SM1206
+     *  $endlist
+     *  $endfootprintlist
+     *  }
+     *
+     *  And add the strings giving the footprint filter to m_FootprintFilter
+     *  of the corresponding module info
+     *  <p>This section is used by CvPcb, and is not useful in Pcbnew,
+     *  therefore it it not always read </p>
+     */
+    bool ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistReader );
 
     /**
      * Function ReadKicadNetList
