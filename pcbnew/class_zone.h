@@ -124,6 +124,10 @@ private:
     CPolyLine*            smoothedPoly;         // Corner-smoothed version of m_Poly
     int                   cornerSmoothingType;
     unsigned int          cornerRadius;
+    // Priority: when a zone outline is inside and other zone, if its priority is highter
+    // the other zone priority, it will be created inside.
+    // if priorities are equal, a DRC erroc is set
+    unsigned              m_priority;
 
 public:
     ZONE_CONTAINER( BOARD* parent );
@@ -148,6 +152,18 @@ public:
      */
     const wxPoint GetPosition() const;          // overload
     void SetPosition( const wxPoint& aPos );    // overload
+
+    /**
+     * Function SetPriority
+     * @param aPriority = the priority level
+     */
+    void SetPriority( unsigned aPriority ) { m_priority = aPriority; }
+
+    /**
+     * Function GetPriority
+     * @return the priority level of this zone
+     */
+    unsigned GetPriority() const { return m_priority; }
 
     /**
      * Function copy
@@ -305,11 +321,13 @@ public:
      * in order to have drawable (and plottable) filled polygons
      * drawable filled polygons are polygons without hole
      * @param aPcb: the current board (can be NULL for non copper zones)
+     * @param aCornerBuffer: A reference to a buffer to put polygon corners, or NULL
+     * if NULL (default), uses m_FilledPolysList and fill current zone.
      * @return number of polygons
      * This function does not add holes for pads and tracks but calls
      * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
      */
-    int BuildFilledPolysListData( BOARD* aPcb );
+    int BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>* aCornerBuffer = NULL );
 
     /**
      * Function AddClearanceAreasPolygonsToPolysList
@@ -484,7 +502,26 @@ public:
         return m_Poly->GetHatchStyle();
     }
 
-    /**
+     /**
+     * Function TransformShapeWithClearanceToPolygon
+     * Convert the track shape to a closed polygon
+     * Used in filling zones calculations
+     * Circles (vias) and arcs (ends of tracks) are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the pad
+     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     * @param aAddClearance = true to add a clearance area to the polygon
+     *                      false to create the outline polygon.
+     * clearance when the circle is approximated by segment bigger or equal
+     * to the real clearance value (usually near from 1.0)
+     */
+    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+                                               int                    aClearanceValue,
+                                               int                    aCircleToSegmentsCount,
+                                               double                 aCorrectionFactor,
+                                               bool                   aAddClearance );
+   /**
      * Function IsSame
      * tests if 2 zones are equivalent:
      * 2 zones are equivalent if they have same parameters and same outlines

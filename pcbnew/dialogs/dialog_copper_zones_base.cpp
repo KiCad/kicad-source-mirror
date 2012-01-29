@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -105,11 +105,11 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_MinThicknessValueTitle = new wxStaticText( this, wxID_ANY, _("Minimum width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MinThicknessValueTitle->Wrap( -1 );
+	m_MinThicknessValueTitle->SetToolTip( _("Minimun thickness of filled areas.") );
+	
 	bSizer9->Add( m_MinThicknessValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ZoneMinThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_ZoneMinThicknessCtrl->SetToolTip( _("Minimun thickness of filled areas.") );
-	
 	bSizer9->Add( m_ZoneMinThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText151 = new wxStaticText( this, wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -171,6 +171,15 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	wxBoxSizer* m_MiddleBox;
 	m_MiddleBox = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText171 = new wxStaticText( this, wxID_ANY, _("Priority level:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText171->Wrap( -1 );
+	m_staticText171->SetToolTip( _("On each copper layer, zones are filled by priority order.\nSo when a zone is inside an other zone:\n* If its priority is highter: its outlines are removed from the other layer.\n* If its priority is equal: a DRC error is set.") );
+	
+	m_MiddleBox->Add( m_staticText171, 0, wxRIGHT|wxLEFT, 5 );
+	
+	m_PriorityLevelCtrl = new wxSpinCtrl( this, ID_M_PRIORITYLEVELCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0 );
+	m_MiddleBox->Add( m_PriorityLevelCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText11 = new wxStaticText( this, wxID_ANY, _("Fill mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
