@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_copper_zones_base__
-#define __dialog_copper_zones_base__
+#ifndef __DIALOG_COPPER_ZONES_BASE_H__
+#define __DIALOG_COPPER_ZONES_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -22,6 +23,7 @@
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
+#include <wx/spinctrl.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -59,6 +61,7 @@ class DIALOG_COPPER_ZONE_BASE : public wxDialog
 			ID_M_PADINZONEOPT,
 			wxID_ANTIPAD_SIZE,
 			wxID_COPPER_BRIDGE_VALUE,
+			ID_M_PRIORITYLEVELCTRL,
 			ID_M_FILLMODECTRL,
 			ID_M_ARCAPPROXIMATIONOPT,
 			ID_M_ORIENTEDGESOPT,
@@ -92,6 +95,8 @@ class DIALOG_COPPER_ZONE_BASE : public wxDialog
 		wxTextCtrl* m_AntipadSizeValue;
 		wxStaticText* m_CopperBridgeWidthText;
 		wxTextCtrl* m_CopperWidthValue;
+		wxStaticText* m_staticText171;
+		wxSpinCtrl* m_PriorityLevelCtrl;
 		wxStaticText* m_staticText11;
 		wxChoice* m_FillModeCtrl;
 		wxStaticText* m_staticText12;
@@ -123,4 +128,4 @@ class DIALOG_COPPER_ZONE_BASE : public wxDialog
 	
 };
 
-#endif //__dialog_copper_zones_base__
+#endif //__DIALOG_COPPER_ZONES_BASE_H__

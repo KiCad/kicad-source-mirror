@@ -92,6 +92,9 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if(  m_ThermalReliefCopperBridge != aZoneToCompare.m_ThermalReliefCopperBridge )
         return false;
 
+    if(  GetPriority() != aZoneToCompare.GetPriority() )
+        return false;
+
     // Compare outlines
     wxASSERT( m_Poly );                                      // m_Poly == NULL Should never happen
     wxASSERT( aZoneToCompare.m_Poly );

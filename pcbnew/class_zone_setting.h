@@ -30,6 +30,8 @@ public:
     // Mode for filling zone : 1 use segments, 0 use polygons
     int  m_FillMode;
 
+    int  m_ZonePriority;                    // Priority (0 ... N) of the zone
+
     int  m_ZoneClearance;                   // Clearance value
     int  m_ZoneMinThickness;                // Min thickness value in filled areas
     int  m_NetcodeSelection;                // Net code selection for the current zone

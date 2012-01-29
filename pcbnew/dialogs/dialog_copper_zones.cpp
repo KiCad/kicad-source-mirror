@@ -119,6 +119,8 @@ void DIALOG_COPPER_ZONE::initDialog()
         m_CopperWidthValue->Enable( true );
     }
 
+    m_PriorityLevelCtrl->SetValue( m_Zone_Setting->m_ZonePriority );
+
     AddUnitSymbol( *m_AntipadSizeText, g_UserUnit );
     AddUnitSymbol( *m_CopperBridgeWidthText, g_UserUnit );
     PutValueInLocalUnits( *m_AntipadSizeValue,
@@ -322,6 +324,8 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     m_Zone_Setting->SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
     txtvalue = m_cornerSmoothingCtrl->GetValue();
     m_Zone_Setting->SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() ) );
+
+    m_Zone_Setting->m_ZonePriority = m_PriorityLevelCtrl->GetValue();
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
         g_Zone_45_Only = false;

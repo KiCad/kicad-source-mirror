@@ -329,7 +329,34 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         }
     }
 
-    // Remove thermal symbols
+    // Add zones outlines having an higher priority
+    for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = GetBoard()->GetArea( ii );
+        if( zone->GetLayer() != GetLayer() )
+            continue;
+
+        if( zone->GetPriority() <= GetPriority() )
+            continue;
+
+        // A highter priority zone is found: remove its area
+        item_boundingbox = zone->GetBoundingBox();
+        if( !item_boundingbox.Intersects( zone_boundingbox ) )
+            continue;
+
+        // Add the zone outline area.
+        // However if the zone has the same net as the current zone,
+        // do not add clearance.
+        // the zone will be connected to the current zone, but filled areas
+        // will use different parameters (clearnce, thermal shapes )
+        bool addclearance = GetNet() != zone->GetNet();
+        zone->TransformShapeWithClearanceToPolygon(
+                    cornerBufferPolysToSubstract,
+                    zone_clearance, s_CircleToSegmentsCount,
+                    s_Correction, addclearance );
+    }
+
+   // Remove thermal symbols
     if( m_PadOption == THERMAL_PAD )
     {
         for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )

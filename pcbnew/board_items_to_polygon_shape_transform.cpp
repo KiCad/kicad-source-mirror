@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <fctsys.h>
+#include <polygons_defs.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>
@@ -17,6 +18,7 @@
 #include <class_track.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
+#include <class_zone.h>
 
 
 /* Exported functions */
@@ -129,6 +131,90 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCo
 
     aCornerBuffer.back().end_contour = true;
 }
+
+ /* Function TransformShapeWithClearanceToPolygon
+  * Convert the track shape to a closed polygon
+  * Used in filling zones calculations
+  * Circles (vias) and arcs (ends of tracks) are approximated by segments
+  * param aCornerBuffer = a buffer to store the polygon
+  * param aClearanceValue = the clearance around the pad
+  * param aCircleToSegmentsCount = the number of segments to approximate a circle
+  * param aCorrectionFactor = the correction to apply to circles radius to keep
+  * param aAddClearance = true to add a clearance area to the polygon
+  *                      false to create the outline polygon.
+  * clearance when the circle is approximated by segment bigger or equal
+  * to the real clearance value (usually near from 1.0)
+  */
+void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+                                                      int                    aClearanceValue,
+                                                      int                    aCircleToSegmentsCount,
+                                                      double                 aCorrectionFactor,
+                                                      bool                   aAddClearance )
+{
+
+    /* Creates the main polygon (i.e. the filled area using only one outline)
+     * and reserve a clearance margin around the outlines and holes
+     */
+    std::vector <CPolyPt> zoneOutines;
+    BuildFilledPolysListData( NULL, &zoneOutines );
+    int clearance = 0;
+    if( aAddClearance )
+    {
+        GetClearance();
+        if( aClearanceValue > clearance )
+            clearance = aClearanceValue;
+    }
+
+    // Calculate the polygon with clearance and holes
+    // holes are linked to the main outline, so only one polygon should be created.
+    KPolygonSet polyset_zone_solid_areas;
+    std::vector<KPolyPoint> cornerslist;
+    unsigned ic = 0;
+    unsigned corners_count = zoneOutines.size();
+    while( ic < corners_count )
+    {
+        cornerslist.clear();
+        KPolygon poly;
+        {
+            for( ; ic < corners_count; ic++ )
+            {
+                CPolyPt* corner = &zoneOutines[ic];
+                cornerslist.push_back( KPolyPoint( corner->x, corner->y ) );
+                if( corner->end_contour )
+                {
+                    ic++;
+                    break;
+                }
+            }
+
+            bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
+            polyset_zone_solid_areas.push_back( poly );
+        }
+    }
+
+    polyset_zone_solid_areas += clearance;
+
+    // Put the resultng polygon in buffer
+    for( unsigned ii = 0; ii < polyset_zone_solid_areas.size(); ii++ )
+    {
+        KPolygon& poly = polyset_zone_solid_areas[ii];
+        CPolyPt   corner( 0, 0, false );
+
+        for( unsigned jj = 0; jj < poly.size(); jj++ )
+        {
+            KPolyPoint point = *(poly.begin() + jj);
+            corner.x = point.x();
+            corner.y = point.y();
+            corner.end_contour = false;
+            aCornerBuffer.push_back( corner );
+        }
+
+        corner.end_contour = true;
+        aCornerBuffer.pop_back();
+        aCornerBuffer.push_back( corner );
+    }
+}
+
 
 
 /**
