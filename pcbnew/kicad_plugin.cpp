@@ -102,14 +102,14 @@
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
 
 
+/// Get the length of a string constant, at compile time
+#define SZ( x )         (sizeof(x)-1)
+
 
 /// C string compare test for a specific length of characters.
 /// The -1 is to omit the trailing \0 which is included in sizeof() on a
 /// string constant.
-#define TESTLINE( x )   (strnicmp( line, x, sizeof(x)-1 ) == 0)
-
-/// Get the length of a string constant, at compile time
-#define SZ( x )         (sizeof(x)-1)
+#define TESTLINE( x )   ( !strnicmp( line, x, SZ( x ) ) && isspace( line[SZ( x )] ) )
 
 
 #if 1
@@ -994,7 +994,6 @@ void KICAD_PLUGIN::loadMODULE()
             module->m_KeyWord = FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) );
         }
 
-        // test this longer similar string before the shorter ".SolderPaste"
         else if( TESTLINE( ".SolderPasteRatio" ) )
         {
             double tmp = atof( line + SZ( ".SolderPasteRatio" ) );
@@ -1203,7 +1202,6 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
             pad->SetLocalSolderMaskMargin( tmp );
         }
 
-        // test this before the similar but shorter ".SolderPaste"
         else if( TESTLINE( ".SolderPasteRatio" ) )
         {
             double tmp = atof( line + SZ( ".SolderPasteRatio" ) );
@@ -2176,6 +2174,12 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
         {
             BIU thickness = biuParse( line + SZ( "ZMinThickness" ) );
             zc->SetMinThickness( thickness );
+        }
+
+        else if( TESTLINE( "ZPriority" ) )
+        {
+            int priority = intParse( line + SZ( "ZPriority" ) );
+            zc->SetPriority( priority );
         }
 
         else if( TESTLINE( "$POLYSCORNERS" ) )
@@ -3418,6 +3422,9 @@ void KICAD_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     }
 
     fprintf( m_fp, "ZAux %d %c\n", me->GetNumCorners(), outline_hatch );
+
+    if( me->GetPriority() > 0 )
+        fprintf( m_fp, "ZPriority %d\n", me->GetPriority() );
 
     // Save pad option and clearance
     char padoption;
