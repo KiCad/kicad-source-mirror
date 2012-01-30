@@ -24,6 +24,7 @@
 
 ZONE_SETTING::ZONE_SETTING( void )
 {
+    m_ZonePriority = 0;
     m_FillMode = 0;                                                 // Mode for filling zone : 1 use segments, 0 use polygons
     m_ZoneClearance      = 200;                                     // Clearance value
     m_ZoneMinThickness   = 100;                                     // Min thickness value in filled areas
@@ -50,7 +51,8 @@ ZONE_SETTING::ZONE_SETTING( void )
  */
 void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
 {
-    m_FillMode = aSource.m_FillMode;
+    m_ZonePriority = aSource.GetPriority();
+    m_FillMode     = aSource.m_FillMode;
     m_ZoneClearance      = aSource.m_ZoneClearance;
     m_ZoneMinThickness   = aSource.m_ZoneMinThickness;
     m_NetcodeSelection   = aSource.GetNet();
@@ -88,6 +90,7 @@ void ZONE_SETTING::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport )
     aTarget.SetCornerRadius( cornerRadius );
     if( aFullExport )
     {
+        aTarget.SetPriority( m_ZonePriority );
         aTarget.SetNet( m_NetcodeSelection );
         aTarget.SetLayer( m_CurrentZone_Layer );
     }
