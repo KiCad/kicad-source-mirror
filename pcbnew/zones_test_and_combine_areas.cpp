@@ -454,6 +454,8 @@ int BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
 
             if( area2->GetNet() != aNetCode )
                 continue;
+            if( curr_area->GetPriority() != area2->GetPriority() )
+                continue;
 
             if( curr_area->GetLayer() == area2->GetLayer()
                 && curr_area->utility2 != -1 && area2->utility2 != -1 )
@@ -521,6 +523,9 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 
         // see if areas are on same layer
         if( area_to_test->GetLayer() != area2->GetLayer() )
+            continue;
+
+        if( area_to_test->GetPriority() != area2->GetPriority() )
             continue;
 
         CPolyLine* poly2 = area2->m_Poly;
@@ -942,6 +947,10 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             if( Area_Ref->GetNet() == Area_To_Test->GetNet() && Area_Ref->GetNet() >= 0 )
                 continue;
 
+            // test for different priorities
+            if( Area_Ref->GetPriority() != Area_To_Test->GetPriority() )
+                continue;
+
             // Examine a candidate zone: compare Area_To_Test to Area_Ref
 
             // Get clearance used in zone to zone test.  The policy used to
@@ -1137,6 +1146,10 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
 
         // Test for same net
         if( ( aArea->GetNet() == Area_To_Test->GetNet() ) && (aArea->GetNet() >= 0) )
+            continue;
+
+        // test for same priority
+        if( Area_To_Test->GetPriority() != aArea->GetPriority() )
             continue;
 
         // test for ending line inside Area_To_Test

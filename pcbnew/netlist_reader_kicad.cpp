@@ -62,6 +62,41 @@ public:
      */
     MODULE_INFO* ParseComp() throw( IO_ERROR, PARSE_ERROR );
 
+
+    /**
+     * Function ParseKicadFootprintFilterList
+     * Read the section "libparts" like:
+     * (libparts
+     *   (libpart (lib device) (part C)
+     *     (description "Condensateur non polarise")
+     *     (footprints
+     *       (fp SM*)
+     *       (fp C?)
+     *       (fp C1-1))
+     *     (fields
+     *       (field (name Reference) C)
+     *       (field (name Value) C))
+     *     (pins
+     *       (pin (num 1) (name ~) (type passive))
+     *       (pin (num 2) (name ~) (type passive))))
+     *
+     *  And add the strings giving the footprint filter (subsection footprints)
+     *  of the corresponding module info
+     *  <p>This section is used by CvPcb, and is not useful in Pcbnew,
+     *  therefore it it not always read </p>
+     */
+    bool ParseKicadFootprintFilterList() throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function ParseNet
+     * Parses a section like
+     * (net (code 20) (name /PC-A0)
+     *  (node (ref BUS1) (pin 62))
+     *  (node (ref U3) (pin 3))
+     *  (node (ref U9) (pin M6)))
+     *
+     * and set the corresponfings pads netnames
+     */
     void ParseNet( BOARD * aBrd ) throw( IO_ERROR, PARSE_ERROR );
 
     /**
@@ -252,7 +287,7 @@ void NETLIST_READER_KICAD_PARSER::ParseNet( BOARD * aBrd )
         }
     }
 
-    // When there is onlu one item in net, clear pad netname
+    // When there is only one item in net, clear pad netname
     if( nodecount < 2 && pad )
         pad->SetNetname( wxEmptyString );
 }
@@ -332,4 +367,28 @@ MODULE_INFO* NETLIST_READER_KICAD_PARSER::ParseComp()
     MODULE_INFO* mod_info = new MODULE_INFO( footprint, ref, value, pathtimestamp );
 
     return mod_info;
+}
+
+/* Read the section "libparts" like:
+ * (libparts
+ *   (libpart (lib device) (part C)
+ *     (description "Condensateur non polarise")
+ *     (footprints
+ *       (fp SM*)
+ *       (fp C?)
+ *       (fp C1-1))
+ *     (fields
+ *       (field (name Reference) C)
+ *       (field (name Value) C))
+ *     (pins
+ *       (pin (num 1) (name ~) (type passive))
+ *       (pin (num 2) (name ~) (type passive))))
+ *
+ *  And add the strings giving the footprint filter (subsection footprints)
+ *  of the corresponding module info
+ */
+bool NETLIST_READER_KICAD_PARSER::ParseKicadFootprintFilterList() throw( IO_ERROR, PARSE_ERROR )
+{
+    // TODO
+    return true;
 }

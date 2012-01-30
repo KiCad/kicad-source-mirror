@@ -27,13 +27,16 @@
  * in order to have drawable (and plottable) filled polygons
  * drawable filled polygons are polygons without hole
  * @param aPcb: the current board (can be NULL for non copper zones)
+ * @param aCornerBuffer: A reference to a buffer to put polygon corners, or NULL
+ * if NULL (default), uses m_FilledPolysList and fill current zone.
  * @return number of polygons
  * This function does not add holes for pads and tracks but calls
  * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
  */
-int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
+int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>* aCornerBuffer )
 {
-    m_FilledPolysList.clear();
+    if( aCornerBuffer == NULL )
+        m_FilledPolysList.clear();
 
     /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
@@ -74,13 +77,24 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
             corner.x = (int) smoothedPoly->GetKboolEngine()->GetPolygonXPoint();
             corner.y = (int) smoothedPoly->GetKboolEngine()->GetPolygonYPoint();
             corner.end_contour = false;
-            m_FilledPolysList.push_back( corner );
+            if( aCornerBuffer )
+                aCornerBuffer->push_back( corner );
+            else
+                m_FilledPolysList.push_back( corner );
             count++;
         }
 
         corner.end_contour = true;
-        m_FilledPolysList.pop_back();
-        m_FilledPolysList.push_back( corner );
+        if( aCornerBuffer )
+        {
+            aCornerBuffer->pop_back();
+            aCornerBuffer->push_back( corner );
+        }
+        else
+        {
+            m_FilledPolysList.pop_back();
+            m_FilledPolysList.push_back( corner );
+        }
         smoothedPoly->GetKboolEngine()->EndPolygonGet();
     }
 
@@ -89,12 +103,14 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
     /* For copper layers, we now must add holes in the Polygon list.
      * holes are pads and tracks with their clearance area
      */
+    if( ! aCornerBuffer )
+    {
+        if( IsOnCopperLayer() )
+            AddClearanceAreasPolygonsToPolysList( aPcb );
 
-    if( IsOnCopperLayer() )
-        AddClearanceAreasPolygonsToPolysList( aPcb );
-
-    if ( m_FillMode )   // if fill mode uses segments, create them:
-        Fill_Zone_Areas_With_Segments( );
+        if ( m_FillMode )   // if fill mode uses segments, create them:
+            Fill_Zone_Areas_With_Segments( );
+    }
 
     return count;
 }

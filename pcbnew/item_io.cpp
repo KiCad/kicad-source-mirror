@@ -258,6 +258,13 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 2 )
         return false;
 
+    if( GetPriority() > 0 )
+    {
+        ret = fprintf( aFile, "ZPriority %d\n", GetPriority() );
+        if( ret < 1 )
+            return false;
+    }
+
     // Save pad option and clearance
     switch( m_PadOption )
     {
@@ -1797,6 +1804,17 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
             }
             /* Set hatch mode later, after reading outlines corners data */
         }
+
+        else if( strnicmp( Line, "ZPriority", 9 ) == 0 )
+        {
+            int tmp = 0;
+            text = Line + 9;
+            ret  = sscanf( text, "%d", &tmp );
+            if( ret < 1 )
+                return false;
+            SetPriority( tmp );
+        }
+
         else if( strnicmp( Line, "ZSmoothing", 10 ) == 0 )
         {
             int tempSmoothingType;

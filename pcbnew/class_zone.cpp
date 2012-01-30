@@ -55,6 +55,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     m_CornerSelection = -1;
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
+    m_priority = 0;
     smoothedPoly = NULL;
     cornerSmoothingType = ZONE_SETTING::SMOOTHING_NONE;
     cornerRadius = 0;
@@ -77,6 +78,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_ZoneClearance = aZone.m_ZoneClearance;     // clearance value
     m_ZoneMinThickness = aZone.m_ZoneMinThickness;
     m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
+    m_priority = aZone.m_priority;
     m_ArcToSegmentsCount = aZone.m_ArcToSegmentsCount;
     m_PadOption = aZone.m_PadOption;
     m_ThermalReliefGap = aZone.m_ThermalReliefGap;
@@ -677,15 +679,20 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
         }
 
         frame->AppendMsgPanel( _( "NetName" ), msg, RED );
+#if 1
+        // Display net code : (useful in test or debug)
+        msg.Printf( wxT( "%d" ), GetNet() );
+        frame->AppendMsgPanel( _( "NetCode" ), msg, RED );
+#endif
+
+        // Display priority level
+        msg.Printf( wxT( "%d" ), GetPriority() );
+        frame->AppendMsgPanel( _( "Priority" ), msg, BLUE );
     }
     else
     {
         frame->AppendMsgPanel( _( "Non Copper Zone" ), wxEmptyString, RED );
     }
-
-    /* Display net code : (useful in test or debug) */
-    msg.Printf( wxT( "%d" ), GetNet() );
-    frame->AppendMsgPanel( _( "NetCode" ), msg, RED );
 
     msg = board->GetLayerName( m_Layer );
     frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
