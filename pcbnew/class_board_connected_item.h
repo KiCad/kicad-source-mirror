@@ -90,6 +90,7 @@ public:
 };
 
 
+#if 0   // template for future
 /**
  * Class BOARD_ITEM_LIST
  * is a container for a list of BOARD_ITEMs.
@@ -203,6 +204,6 @@ public:
         return NULL;
     }
 };
+#endif  // future
 
-
-#endif // BOARD_CONNECTED_ITEM_H
+#endif  // BOARD_CONNECTED_ITEM_H
