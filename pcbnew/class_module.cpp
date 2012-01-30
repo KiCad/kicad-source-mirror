@@ -85,7 +85,9 @@ MODULE::MODULE( const MODULE& aModule ) :
 
     m_Pos = aModule.m_Pos;
     m_LibRef = aModule.m_LibRef;
+    m_Layer  = aModule.m_Layer;
     m_Attributs = aModule.m_Attributs;
+    m_ModuleStatus = aModule.m_ModuleStatus;
     m_Orient = aModule.m_Orient;
     m_BoundaryBox = aModule.m_BoundaryBox;
     m_PadNum = aModule.m_PadNum;
@@ -199,6 +201,7 @@ void MODULE::Copy( MODULE* aModule )
     m_Layer         = aModule->m_Layer;
     m_LibRef        = aModule->m_LibRef;
     m_Attributs     = aModule->m_Attributs;
+    m_ModuleStatus  = aModule->m_ModuleStatus;
     m_Orient        = aModule->m_Orient;
     m_BoundaryBox   = aModule->m_BoundaryBox;
     m_PadNum        = aModule->m_PadNum;
