@@ -1135,11 +1135,6 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         Delete_OldZone_Fill( (SEGZONE*) Item );
         break;
 
-    case PCB_ZONE_EDGE_T:
-        Remove_Zone_Corner( DC, (ZONE_CONTAINER*) Item );
-        SetCurItem( NULL );
-        break;
-
     case PCB_ZONE_AREA_T:
     {
         SetCurItem( NULL );
