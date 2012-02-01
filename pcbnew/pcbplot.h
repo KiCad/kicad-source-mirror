@@ -5,7 +5,7 @@
 #ifndef PCBPLOT_H
 #define PCBPLOT_H
 
-#include <pcb_plot_params.h>
+#include "pcb_plot_params.h"
 
 
 class PLOTTER;
@@ -52,7 +52,7 @@ void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* PtMire, int masque_layer,
                     EDA_DRAW_MODE_T trace_mode );
 
 void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
-                        EDA_DRAW_MODE_T trace_mode );
+                        EDA_DRAW_MODE_T trace_mode, int masque_layer );
 
 void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
                       EDA_DRAW_MODE_T trace_mode );

@@ -3,29 +3,29 @@
  * @brief Common plot routines.
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <plot_common.h>
-#include <base_struct.h>
-#include <drawtxt.h>
-#include <confirm.h>
-#include <trigo.h>
-#include <wxBasePcbFrame.h>
-#include <pcbcommon.h>
-#include <macros.h>
+#include "fctsys.h"
+#include "common.h"
+#include "plot_common.h"
+#include "base_struct.h"
+#include "drawtxt.h"
+#include "confirm.h"
+#include "trigo.h"
+#include "wxBasePcbFrame.h"
+#include "pcbcommon.h"
+#include "macros.h"
 
-#include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
-#include <class_edge_mod.h>
-#include <class_pcb_text.h>
-#include <class_zone.h>
-#include <class_drawsegment.h>
-#include <class_mire.h>
-#include <class_dimension.h>
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_edge_mod.h"
+#include "class_pcb_text.h"
+#include "class_zone.h"
+#include "class_drawsegment.h"
+#include "class_mire.h"
+#include "class_dimension.h"
 
-#include <pcbnew.h>
-#include <pcbplot.h>
+#include "pcbnew.h"
+#include "pcbplot.h"
 
 static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
                                 EDA_DRAW_MODE_T trace_mode );
@@ -375,14 +375,14 @@ void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask, EDA_DRAW_
             if( ( GetLayerMask( edge->GetLayer() ) & aLayerMask ) == 0 )
                 continue;
 
-            Plot_1_EdgeModule( plotter, edge, trace_mode );
+            Plot_1_EdgeModule( plotter, edge, trace_mode, aLayerMask );
         }
     }
 }
 
 
 /** Plot a graphic item (outline) relative to a footprint */
-void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* aEdge, EDA_DRAW_MODE_T trace_mode )
+void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* aEdge, EDA_DRAW_MODE_T trace_mode, int masque_layer )
 {
     int     type_trace;         // Type of item to plot.
     int     thickness;          // Segment thickness.
@@ -418,7 +418,16 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* aEdge, EDA_DRAW_MODE_T tr
 
             double endAngle = startAngle + aEdge->GetAngle();
 
-            plotter->thick_arc( pos,
+            if ( ( g_PcbPlotOptions.GetPlotFormat() == PLOT_FORMAT_DXF ) &&
+    	       ( masque_layer & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
+                plotter->thick_arc( pos,
+                                -startAngle,
+                                -endAngle,
+                                radius,
+                                thickness,
+                                trace_mode );
+            else
+                plotter->thick_arc( pos,
                                 -endAngle,
                                 -startAngle,
                                 radius,
@@ -791,7 +800,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
             {
             case PCB_MODULE_EDGE_T:
                 if( aLayerMask & GetLayerMask(  item->GetLayer() ) )
-                    Plot_1_EdgeModule( aPlotter, (EDGE_MODULE*) item, aPlotMode );
+                    Plot_1_EdgeModule( aPlotter, (EDGE_MODULE*) item, aPlotMode, aLayerMask );
 
                 break;
 
@@ -1008,13 +1017,13 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
             continue;
 
         pos = pts->m_Start;
-
+        
         // It is quite possible that the real drill value is less then small drill value.
         if( g_PcbPlotOptions.m_DrillShapeOpt == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
             diam.x = diam.y = MIN( SMALL_DRILL, pts->GetDrillValue() );
         else
             diam.x = diam.y = pts->GetDrillValue();
-
+        
         diam.x -= aPlotter->get_plot_width_adj();
         diam.x = doIntValueFitToBand( diam.x, 1, pts->m_Width - 1 );
         aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
