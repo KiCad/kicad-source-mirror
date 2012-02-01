@@ -60,11 +60,11 @@ public:
      * (sheetpath (names /) (tstamps /))
      * (tstamp 3256759C))
      */
-    MODULE_INFO* ParseComp() throw( IO_ERROR, PARSE_ERROR );
+    COMPONENT_INFO* ParseComp() throw( IO_ERROR, PARSE_ERROR );
 
 
     /**
-     * Function ParseKicadFootprintFilterList
+     * Function ParseKicadLibpartList
      * Read the section "libparts" like:
      * (libparts
      *   (libpart (lib device) (part C)
@@ -85,7 +85,7 @@ public:
      *  <p>This section is used by CvPcb, and is not useful in Pcbnew,
      *  therefore it it not always read </p>
      */
-    bool ParseKicadFootprintFilterList() throw( IO_ERROR, PARSE_ERROR );
+    void ParseKicadLibpartList() throw( IO_ERROR, PARSE_ERROR );
 
     /**
      * Function ParseNet
@@ -116,7 +116,7 @@ public:
 
 bool NETLIST_READER::ReadKicadNetList( FILE* aFile )
 {
-    BOARD * brd = m_pcbframe->GetBoard();
+    BOARD * brd = m_pcbframe ? m_pcbframe->GetBoard() : NULL;
 
         // netlineReader dtor will close aFile
     FILE_LINE_READER netlineReader( aFile, m_netlistFullName );
@@ -188,8 +188,8 @@ void NETLIST_READER_KICAD_PARSER::Parse( BOARD * aBrd )
                 if( token == T_comp )
                 {
                     // A comp section if found. Read it
-                    MODULE_INFO* mod_info = ParseComp();
-                    netlist_reader->AddModuleInfo( mod_info );
+                    COMPONENT_INFO* cmp_info = ParseComp();
+                    netlist_reader->AddModuleInfo( cmp_info );
                 }
             }
             if( netlist_reader->BuildModuleListOnlyOpt() )
@@ -210,6 +210,21 @@ void NETLIST_READER_KICAD_PARSER::Parse( BOARD * aBrd )
                 {
                     // A net section if found. Read it
                     ParseNet( aBrd );
+                }
+            }
+        }
+
+        if( token == T_libparts && netlist_reader->ReadLibpartSectionOpt() )
+        {
+            // The section libparts starts here.
+            while( ( token = NextTok() ) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+                if( token == T_libpart )
+                {
+                    // A libpart section if found. Read it
+                    ParseKicadLibpartList();
                 }
             }
         }
@@ -293,7 +308,7 @@ void NETLIST_READER_KICAD_PARSER::ParseNet( BOARD * aBrd )
 }
 
 
-MODULE_INFO* NETLIST_READER_KICAD_PARSER::ParseComp()
+COMPONENT_INFO* NETLIST_READER_KICAD_PARSER::ParseComp()
     throw( IO_ERROR, PARSE_ERROR )
 {
    /* Parses a section like
@@ -311,6 +326,7 @@ MODULE_INFO* NETLIST_READER_KICAD_PARSER::ParseComp()
     wxString ref;
     wxString value;
     wxString footprint;
+    wxString libpart;
     wxString pathtimestamp, timestamp;
     // The token comp was read, so the next data is (ref P1)
 
@@ -339,8 +355,20 @@ MODULE_INFO* NETLIST_READER_KICAD_PARSER::ParseComp()
             break;
 
         case T_libsource:
-            // Currently not used data, skip it
-            SkipCurrent();
+            // Read libsource
+            while( (token = NextTok()) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+                if( token == T_part )
+                {
+                    NeedSYMBOLorNUMBER();
+                    libpart = FROM_UTF8( CurText() );
+                    NeedRIGHT();
+                }
+                else
+                    SkipCurrent();
+            }
             break;
 
         case T_sheetpath:
@@ -364,9 +392,10 @@ MODULE_INFO* NETLIST_READER_KICAD_PARSER::ParseComp()
         }
     }
     pathtimestamp += timestamp;
-    MODULE_INFO* mod_info = new MODULE_INFO( footprint, ref, value, pathtimestamp );
+    COMPONENT_INFO* cmp_info = new COMPONENT_INFO( footprint, ref, value, pathtimestamp );
+    cmp_info->m_Libpart = libpart;
 
-    return mod_info;
+    return cmp_info;
 }
 
 /* Read the section "libparts" like:
@@ -387,8 +416,66 @@ MODULE_INFO* NETLIST_READER_KICAD_PARSER::ParseComp()
  *  And add the strings giving the footprint filter (subsection footprints)
  *  of the corresponding module info
  */
-bool NETLIST_READER_KICAD_PARSER::ParseKicadFootprintFilterList() throw( IO_ERROR, PARSE_ERROR )
+void NETLIST_READER_KICAD_PARSER::ParseKicadLibpartList() throw( IO_ERROR, PARSE_ERROR )
 {
-    // TODO
-    return true;
+   /* Parses a section like
+     *   (libpart (lib device) (part C)
+     *     (description "Condensateur non polarise")
+     *     (footprints
+     *       (fp SM*)
+     *       (fp C?)
+     *       (fp C1-1))
+     *     (fields
+     *       (field (name Reference) C)
+     *       (field (name Value) C))
+     *     (pins
+     *       (pin (num 1) (name ~) (type passive))
+     *       (pin (num 2) (name ~) (type passive))))
+     *
+     * Currently footprints section/fp are read and data stored
+     * other fields (unused) are skipped
+     */
+    wxString device;
+    wxString filter;
+    LIPBART_INFO* libpart_info = NULL;
+
+    // The last token read was libpart, so read the next token
+    while( (token = NextTok()) != T_RIGHT )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+        switch( token )
+        {
+        case T_part:
+            NeedSYMBOLorNUMBER();
+            device = FROM_UTF8( CurText() );
+            NeedRIGHT();
+            libpart_info = new LIPBART_INFO( device );
+            netlist_reader->AddLibpartInfo( libpart_info );
+            break;
+
+        case T_footprints:
+            // Ensure "(part C)" was already read
+            if( libpart_info == NULL )
+                Expecting( T_part );
+            // Read all fp elements (footprint filter item)
+            while( (token = NextTok()) != T_RIGHT )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+                if( token != T_fp )
+                    Expecting( T_fp );
+                NeedSYMBOLorNUMBER();
+                filter = FROM_UTF8( CurText() );
+                NeedRIGHT();
+                libpart_info->m_FootprintFilter.Add( filter );
+            }
+            break;
+
+        default:
+            // Skip not used data (i.e all other tokens)
+            SkipCurrent();
+            break;
+        }
+    }
 }

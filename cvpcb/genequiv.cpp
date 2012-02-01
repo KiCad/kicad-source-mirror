@@ -38,14 +38,14 @@ void CVPCB_MAINFRAME::WriteStuffList( wxCommandEvent& event )
         return;
     }
 
-    BOOST_FOREACH( COMPONENT& component, m_components )
+    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
     {
-        if( component.m_Module.empty() )
+        if( component.m_Footprint.empty() )
             continue;
 
         fprintf( FileEquiv, "comp = %s module = %s\n",
                  EscapedUTF8( component.m_Reference ).c_str(),
-                 EscapedUTF8( component.m_Module ).c_str() );
+                 EscapedUTF8( component.m_Footprint ).c_str() );
     }
 
     fclose( FileEquiv );

@@ -35,6 +35,8 @@
 #include <cvpcb_mainframe.h>
 #include <cvpcb_id.h>
 
+#include <common_help_msg.h>
+
 
 /**
  * @brief (Re)Create the menubar for the CvPcb mainframe
@@ -63,9 +65,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Open
     AddMenuItem( filesMenu,
                  ID_LOAD_PROJECT,
-                 _( "&Open" ),
-                 _( "Open a net list file" ),
-                 KiBitmap( open_document_xpm ) );
+                 _( "&Open" ), LOAD_FILE_HELP, KiBitmap( open_document_xpm ) );
 
     // Open Recent submenu
     static wxMenu* openRecentMenu;
@@ -86,19 +86,15 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Separator
     filesMenu->AppendSeparator();
 
-    // Save
+    // Save the .cmp file
     AddMenuItem( filesMenu,
                  wxID_SAVE,
-                 _( "&Save\tCtrl+S" ),
-                 _( "Save net list and footprint files" ),
-                 KiBitmap( save_xpm ) );
+                 _( "&Save\tCtrl+S" ), SAVE_HLP_MSG, KiBitmap( save_xpm ) );
 
-    // Save as
+    // Save as the .cmp file
     AddMenuItem( filesMenu,
                  wxID_SAVEAS,
-                 _( "Save &As..." ),
-                 _( "Save new net list and footprint list files" ),
-                 KiBitmap( save_xpm ) );
+                 _( "Save &As..." ), SAVE_AS_HLP_MSG, KiBitmap( save_xpm ) );
 
     // Separator
     filesMenu->AppendSeparator();
@@ -116,7 +112,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Libraries to load
     AddMenuItem( preferencesMenu, wxID_PREFERENCES,
                  _( "&Libraries" ),
-                 _( "Set footprint libraries lo load and library search paths" ),
+                 _( "Set footprint libraries to load and library search paths" ),
                  KiBitmap( config_xpm ) );
 
     // Language submenu
@@ -156,7 +152,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // About
     AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About CvPcb" ),
-                 _( "About CvPcb schematic to pcb converter" ),
+                 _( "About CvPcb footprint selector" ),
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

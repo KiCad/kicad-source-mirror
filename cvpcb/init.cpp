@@ -18,7 +18,7 @@
 
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
 {
-    COMPONENT* Component;
+    COMPONENT_INFO* Component;
     bool       isUndefined = false;
     int        NumCmp;
     wxString   msg;
@@ -39,14 +39,14 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
     if( Component == NULL )
         return;
 
-    isUndefined = Component->m_Module.IsEmpty();
+    isUndefined = Component->m_Footprint.IsEmpty();
 
-    Component->m_Module = package;
+    Component->m_Footprint = package;
 
     msg.Printf( CMP_FORMAT, NumCmp + 1,
                 GetChars( Component->m_Reference ),
                 GetChars( Component->m_Value ),
-                GetChars( Component->m_Module ) );
+                GetChars( Component->m_Footprint ) );
     m_modified = true;
 
     if( isUndefined )
@@ -94,15 +94,15 @@ bool CVPCB_MAINFRAME::ReadNetList()
     m_ListCmp->Clear();
     m_undefinedComponentCnt = 0;
 
-    BOOST_FOREACH( COMPONENT& component, m_components )
+    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
     {
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
                     GetChars( component.m_Reference ),
                     GetChars( component.m_Value ),
-                    GetChars( component.m_Module ) );
+                    GetChars( component.m_Footprint ) );
         m_ListCmp->AppendLine( msg );
 
-        if( component.m_Module.IsEmpty() )
+        if( component.m_Footprint.IsEmpty() )
             m_undefinedComponentCnt += 1;
     }
 
@@ -151,7 +151,7 @@ int CVPCB_MAINFRAME::SaveNetList( const wxString& aFullFileName )
         DisplayError( this, _( "Unable to create component file (.cmp)" ) );
         return 0;
     }
-
+#if 0
     FILE* netlist = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
 
     if( netlist == 0 )
@@ -161,6 +161,6 @@ int CVPCB_MAINFRAME::SaveNetList( const wxString& aFullFileName )
     }
 
     GenNetlistPcbnew( netlist, m_isEESchemaNetlist );
-
+#endif
     return 1;
 }

@@ -126,12 +126,12 @@ found in the default search paths." ),
 
     ii = 0;
 
-    BOOST_FOREACH( COMPONENT& component, m_components )
+    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
     {
         bool found = false;
         m_ListCmp->SetSelection( ii++, true );
 
-        if( !component.m_Module.IsEmpty() )
+        if( !component.m_Footprint.IsEmpty() )
             continue;
 
         BOOST_FOREACH( FOOTPRINT_ALIAS& alias, aliases )

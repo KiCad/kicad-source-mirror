@@ -36,6 +36,8 @@
 #include <cvpcb_mainframe.h>
 #include <cvpcb_id.h>
 
+#include <common_help_msg.h>
+
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()
 {
@@ -48,11 +50,10 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                                       wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     m_mainToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
-                            KiBitmap( open_document_xpm ),
-                            _( "Open a net list file" ) );
+                            KiBitmap( open_document_xpm ), LOAD_FILE_HELP );
 
     m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_xpm ),
-                            _( "Save net list and footprint files" ) );
+                            SAVE_HLP_MSG );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_CREATE_CONFIGWINDOW, wxEmptyString,

@@ -133,7 +133,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
 }
 
 
-void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT*      Component,
+void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
                                                    FOOTPRINT_LIST& list )
 {
     wxString msg;

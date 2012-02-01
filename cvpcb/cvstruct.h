@@ -52,7 +52,7 @@ public:
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
     void     SetFootprintFullList( FOOTPRINT_LIST& list );
-    void     SetFootprintFilteredList( COMPONENT*      Component,
+    void     SetFootprintFilteredList( COMPONENT_INFO*      Component,
                                        FOOTPRINT_LIST& list );
     void     SetActiveFootprintList( bool FullList, bool Redraw = false );
 

@@ -39,13 +39,13 @@ int CVPCB_MAINFRAME::SaveComponentList( const wxString& aFullFileName )
     fprintf( dest, " Created by %s", TO_UTF8( Title ) );
     fprintf( dest, " date = %s\n", TO_UTF8( DateAndTime() ) );
 
-    BOOST_FOREACH( COMPONENT& component, m_components )
+    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
     {
         fprintf( dest, "\nBeginCmp\n" );
         fprintf( dest, "TimeStamp = %s;\n", TO_UTF8( component.m_TimeStamp ) );
         fprintf( dest, "Reference = %s;\n", TO_UTF8( component.m_Reference ) );
         fprintf( dest, "ValeurCmp = %s;\n", TO_UTF8( component.m_Value ) );
-        fprintf( dest, "IdModule  = %s;\n", TO_UTF8( component.m_Module ) );
+        fprintf( dest, "IdModule  = %s;\n", TO_UTF8( component.m_Footprint ) );
         fprintf( dest, "EndCmp\n" );
     }
 
@@ -159,13 +159,13 @@ bool CVPCB_MAINFRAME::LoadComponentFile( const wxString& aFileName )
         } /* End reading component description. */
 
         /* Search corresponding component and NetList Update its parameters. */
-        BOOST_FOREACH( COMPONENT& component, m_components )
+        BOOST_FOREACH( COMPONENT_INFO& component, m_components )
         {
             if( namecmp != component.m_Reference )
                 continue;
 
             /* Copy the name of the corresponding module. */
-            component.m_Module = ilib;
+            component.m_Footprint = ilib;
         }
     }
 

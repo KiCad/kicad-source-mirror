@@ -11,7 +11,7 @@
    width="48"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.1 "
+   inkscape:version="0.48.2 r9819"
    sodipodi:docname="via_sketch.svg">
   <metadata
      id="metadata16">
@@ -21,6 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -44,8 +45,8 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="552"
-     inkscape:window-height="544"
+     inkscape:window-width="1280"
+     inkscape:window-height="969"
      id="namedview12"
      showgrid="false"
      inkscape:snap-grids="false"
@@ -53,9 +54,9 @@
      inkscape:zoom="5.0595999"
      inkscape:cx="25.399999"
      inkscape:cy="22.398101"
-     inkscape:window-x="718"
-     inkscape:window-y="192"
-     inkscape:window-maximized="0"
+     inkscape:window-x="0"
+     inkscape:window-y="26"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <g
      id="g3007"
@@ -125,7 +126,7 @@
        d="m 34.262967,19.039341 a 5.7326025,5.8850077 0 1 1 -11.465205,0 5.7326025,5.8850077 0 1 1 11.465205,0 z" />
   </g>
   <g
-     transform="matrix(0.82404,0,0,0.79493,-4.4140572,14.791779)"
+     transform="matrix(0.82404,0,0,0.79493,-36.234755,13.605914)"
      id="g16">
     <path
        style="fill-rule:evenodd"
