@@ -249,7 +249,7 @@ void DXF_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
              "0\nARC\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%d.0\n50\n%d.0\n51\n%d.0\n",
              TO_UTF8( cname ),
              centre.x, centre.y, radius,
-             EndAngle / 10, StAngle / 10 );
+             StAngle / 10, EndAngle / 10 );
 }
 
 
