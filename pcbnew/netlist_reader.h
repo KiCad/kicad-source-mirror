@@ -30,6 +30,7 @@
  */
 
 #include <algorithm>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <fctsys.h>
 #include <kicad_string.h>
@@ -41,21 +42,47 @@
 #include <class_module.h>
 #include <pcbnew.h>
 
-
 /*
- * Helper class, to store new footprints info found in netlist.
- * New footprints are footprints relative to new components found in netlist
+ * Helper class, to store for a footprint the footprint filter info,
+ * found in new format KiCad netlist.
+ * For CvPcb only
+ * Note: features for CvPcb are for a temporary use.
+ * They could be removed when CvPcb is modified
+ * (perhaps when it does not use anumore a netlist to build the component to footprint link)
  */
-class MODULE_INFO
+class LIPBART_INFO
 {
 public:
-    wxString m_Footprint;
-    wxString m_Reference;
-    wxString m_Value;
-    wxString m_TimeStamp;
-    wxArrayString m_FootprintFilter;
+    wxString m_Libpart;                 // the libpart name.
+    wxArrayString m_FootprintFilter;    // an array of footprint filters found in netlist,
+                                        // for this footprint
 
-public: MODULE_INFO( const wxString& libname,
+public:
+
+    LIPBART_INFO( const wxString& aLibpart )
+    {
+        m_Libpart = aLibpart;
+    }
+};
+
+typedef std::vector <LIPBART_INFO *> LIPBART_INFO_LIST;
+
+
+/*
+ * Helper class, to store components and footprints info found in netlist.
+ * (component reference and time stamp, footprint name ...
+ */
+class COMPONENT_INFO
+{
+public:
+    wxString m_Footprint;               // the footprint name found in netlist, the in .cmp file
+    wxString m_Reference;               // the schematic reference found in netlist
+    wxString m_Value;                   // the schematic value found in netlist
+    wxString m_TimeStamp;               // the schematic full time stamp found in netlist
+    wxString m_Libpart;                 // the schematic libpart found in netlist
+    wxArrayString m_FootprintFilter;    // a footprint filters list found in old format netlist
+
+public: COMPONENT_INFO( const wxString& libname,
                      const wxString& cmpname,
                      const wxString& value,
                      const wxString& timestamp )
@@ -66,38 +93,43 @@ public: MODULE_INFO( const wxString& libname,
         m_TimeStamp = timestamp;
     }
 
-    ~MODULE_INFO() { };
+    ~COMPONENT_INFO() { };
 };
 
 enum typenetlist
 {
     NETLIST_TYPE_UNSPECIFIED = 0,
     NETLIST_TYPE_ORCADPCB2,     // the basic format used by pcbnew
-    NETLIST_TYPE_PCB1,          // the format used by pcbnew, basic format + more info
-    NETLIST_TYPE_KICAD
+    NETLIST_TYPE_PCBNEW,        // the format used by pcbnew, basic format + more info
+    NETLIST_TYPE_KICAD          // new format using common S expression
 };
 
 
+typedef std::vector <COMPONENT_INFO*> COMPONENT_INFO_LIST;
 /*
  * Helper class, to read a netlist.
  */
 class NETLIST_READER
 {
 private:
-    PCB_EDIT_FRAME*            m_pcbframe;          // the main Pcbnew frame
-    wxTextCtrl*                m_messageWindow;     // a textctrl to show messages (can be NULL)
-    wxString                   m_netlistFullName;   // The full netlist filename
-    wxString                   m_cmplistFullName;   // The full component/footprint association filename
-    MODULE*                    m_currModule;        // The footprint currently being read in netlist
-    std::vector <MODULE_INFO*> m_modulesInNetlist;  // The list of footprints, found in netlist
-                                                    // (must be loaded from libraries)
-    std::vector <MODULE_INFO*> m_newModulesList;    // The list of new footprints,
-                                                    // found in netlist, but not on board
-                                                    // (must be loaded from libraries)
-    bool m_buildModuleListOnly;     // if true read netlist, populates m_modulesInNetlist
-                                    // but do not read and change nets and modules on board
-    bool m_readFootprintFilter;     // if true read footprint filter section
-    enum typenetlist m_typeNetlist; // type opt the netlist currently read
+    PCB_EDIT_FRAME*  m_pcbframe;            // the main Pcbnew frame (or NULL for CvPcb)
+    wxTextCtrl*      m_messageWindow;       // a textctrl to show messages (can be NULL)
+    wxString         m_netlistFullName;     // The full netlist filename
+    wxString         m_cmplistFullName;     // The full component/footprint association filename
+    MODULE*          m_currModule;          // The footprint currently being read in netlist
+    COMPONENT_INFO_LIST m_componentsInNetlist;    // The list of footprints, found in netlist
+                                            // (must be loaded from libraries)
+    COMPONENT_INFO_LIST m_newModulesList;      // The list of new footprints,
+                                            // found in netlist, but not on board
+                                            // (must be loaded from libraries)
+    LIPBART_INFO_LIST  m_libpartList;       // For Kicad new netlist format:
+                                            // list of libpart found in netlist
+                                            // A libpart contains the footprint filters for CvPcb
+    bool m_buildModuleListOnly;             // if true read netlist, populates m_componentsInNetlist
+                                            // but do not read and change nets and modules on board
+    bool m_readLibpartSection;              // if true read Libparts section,
+                                            // and therefore the footprints filters
+    enum typenetlist m_typeNetlist;         // type opt the netlist currently read
 
 public:
     bool m_UseCmpFile;              // true to use .cmp files as component/footprint file link
@@ -107,7 +139,9 @@ public:
     bool m_ChangeFootprints;        // Set to true to change existing footprints to new ones
                                     // when netlist gives a different footprint name
 
-public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NULL )
+public:
+
+    NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NULL )
     {
         m_pcbframe = aFrame;
         m_messageWindow    = aMessageWindow;
@@ -115,7 +149,7 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
         m_ChangeFootprints = false;
         m_UseCmpFile = true;
         m_buildModuleListOnly = false;
-        m_readFootprintFilter = false;
+        m_readLibpartSection = false;
         m_typeNetlist = NETLIST_TYPE_UNSPECIFIED;
     }
 
@@ -123,39 +157,96 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
     {
         // Free modules info list:
         for( unsigned ii = 0; ii < m_newModulesList.size(); ii++ )
-            delete m_modulesInNetlist[ii];
+            delete m_componentsInNetlist[ii];
 
-        m_modulesInNetlist.clear();
+        m_componentsInNetlist.clear();
         m_newModulesList.clear();
+
+        // Free libpart info list:
+        for( unsigned ii = 0; ii < m_libpartList.size(); ii++ )
+            delete m_libpartList[ii];
+        m_libpartList.clear();
     }
 
-    std::vector <MODULE_INFO*>& GetModuleInfoList()
+    /**
+     * Function GetNetlistType
+     * @return the type of netlist read:
+     *  NETLIST_TYPE_UNSPECIFIED:   Unknown format
+     *  NETLIST_TYPE_ORCADPCB2:     the basic format used by pcbnew
+     *  NETLIST_TYPE_PCBNEW:        the format used by pcbnew, basic format + more info
+     *  NETLIST_TYPE_KICAD:         the new format
+     */
+    int GetNetlistType()
     {
-        return m_modulesInNetlist;
+        return m_typeNetlist;
     }
+
+    /**
+     * Function GetComponentInfoList
+     * @return the component info list built from the netlist
+     */
+    COMPONENT_INFO_LIST& GetComponentInfoList()
+    {
+        return m_componentsInNetlist;
+    }
+
+    /**
+     * Function GetComponentInfoList
+     * @return a reference to the libpart info corresponding to a given part
+     * @param aPartname = the name of the libpart
+     */
+    LIPBART_INFO* GetLibpart(const wxString & aPartname);
+
+    /**
+     * Function IsCvPcbMode
+     * @return true if the netlist is read by CvPcb
+     * In cvpcb mode, nets are stored in module info,
+     * and the footprint filters list is read.
+     * There is also no board in CvPcb
+     */
+    bool IsCvPcbMode() { return m_pcbframe == 0; }
 
     /**
      * Function AddModuleInfo
      * Add a new module info to the main list of modules ifo
      * @param aModInfo = a reference to the item to add
      */
-    void AddModuleInfo( MODULE_INFO* aModInfo )
+    void AddModuleInfo( COMPONENT_INFO* aModInfo )
     {
-        m_modulesInNetlist.push_back( aModInfo );
+        m_componentsInNetlist.push_back( aModInfo );
     }
 
     /**
-     * Function ReadFootprintFilterSetOpt
-     * Set to true or false the read footprint filter option
-     * When this option is false, the footprint filter section is ignored
-     * When this option is true, the footprint filter section is read,
-     *    an filter strings are stored in module info
+     * Function AddLibpartInfo
+     * LIPBART_INFO items (and therefore footprint filter strings) are stored in
+     * m_libpartList
+     * @param aPartInfo = a refernce to the LIPBART_INFO to add in list
+     */
+    void AddLibpartInfo( LIPBART_INFO * aPartInfo )
+    {
+        m_libpartList.push_back( aPartInfo );
+    }
+
+    /**
+     * Function ReadLibpartSectionSetOpt
+     * Set to true or false the read Partlists section.
+     * footprint filters are found in this section
+     * When this option is false, the Partlists section is ignored
+     * When this option is true, the Partlists section is read,
+     * Libpart items (and therefore footprint filter strings) are stored in
+     * m_libpartList
      * @param aOpt = the value of option
      */
-    void ReadFootprintFilterSetOpt( bool aOpt )
+    void ReadLibpartSectionSetOpt( bool aOpt )
     {
-        m_readFootprintFilter = aOpt;
+        m_readLibpartSection = aOpt;
     }
+
+    /**
+     * Function ReadLibpartSectionOpt
+     * @return the readPartlist option
+     */
+    bool ReadLibpartSectionOpt() { return m_readLibpartSection; }
 
     /**
      * Function BuildModuleListOnlySetOpt
@@ -330,7 +421,7 @@ private:
     /**
      * function readModuleComponentLinkfile
      * read the *.cmp file ( filename in m_cmplistFullName )
-     * and initialize the m_Footprint member of each item in m_modulesInNetlist,
+     * and initialize the m_Footprint member of each item in m_componentsInNetlist,
      * when it is found in file, and with a non empty footprint value
      * giving the equivalence between footprint names and components
      * to find the footprint name corresponding to aCmpIdent

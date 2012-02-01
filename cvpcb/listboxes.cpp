@@ -88,11 +88,11 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
 
     m_ListCmp->m_ComponentList.Clear();
 
-    BOOST_FOREACH( COMPONENT & component, m_components ) {
+    BOOST_FOREACH( COMPONENT_INFO & component, m_components ) {
         msg.Printf( CMP_FORMAT, m_ListCmp->GetCount() + 1,
                    GetChars(component.m_Reference),
                    GetChars(component.m_Value),
-                   GetChars(component.m_Module) );
+                   GetChars(component.m_Footprint) );
         m_ListCmp->m_ComponentList.Add( msg );
     }
 

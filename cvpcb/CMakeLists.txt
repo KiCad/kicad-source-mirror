@@ -26,9 +26,11 @@ set(CVPCB_DIALOGS
     )
 
 set(CVPCB_SRCS
+    ../pcbnew/netlist_reader_common.cpp
+    ../pcbnew/netlist_reader_kicad.cpp
+    ../pcbnew/netlist_reader_firstformat.cpp
     autosel.cpp
     cfg.cpp
-    class_cvpcb.cpp
     class_components_listbox.cpp
     class_DisplayFootprintsFrame.cpp
     class_footprints_listbox.cpp
@@ -43,7 +45,6 @@ set(CVPCB_SRCS
     savecmp.cpp
     setvisu.cpp
     tool_cvpcb.cpp
-    writenetlistpcbnew.cpp
     )
 
 ###

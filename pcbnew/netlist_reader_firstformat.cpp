@@ -30,7 +30,7 @@
 /*
  *  Netlist reader using the first format of pcbnew netlist.
  * This netlist reader build the list of modules found in netlist
- * (list in m_modulesInNetlist)
+ * (list in m_componentsInNetlist)
  * and update pads netnames
  */
 
@@ -98,7 +98,7 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
         if( *line == '{' ) // Start Comment or Pcbnew info section
         {
             is_comment = true;
-            if( m_readFootprintFilter && state == 0 &&
+            if( ReadLibpartSectionOpt() && state == 0 &&
                 (strnicmp( line, "{ Allowed footprints", 20 ) == 0) )
             {
                 ReadOldFmtFootprintFilterList( netlineReader );
@@ -124,6 +124,24 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
         {
             state--;
         }
+    }
+
+    if( IsCvPcbMode() )
+    {
+        for( ; ; )
+        {
+            /* Search the beginning of Allowed footprints section */
+
+            if( netlineReader.ReadLine( ) == 0 )
+                break;
+            char* line = StrPurge( netlineReader.Line() );
+            if( strnicmp( line, "{ Allowed footprints", 20 ) == 0 )
+            {
+                ReadOldFmtFootprintFilterList( netlineReader );
+                return true;
+            }
+        }
+        return true;
     }
 
     if( BuildModuleListOnlyOpt() )
@@ -191,7 +209,7 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
 
 /* Function ReadOldFmtNetlistModuleDescr
  * Read the beginning of a footprint  description, from the netlist
- * and add a module info to m_modulesInNetlist
+ * and add a module info to m_componentsInNetlist
  * Analyze the first line of a component description in netlist like:
  * ( /40C08647 $noname R20 4.7K {Lib=R}
  * (1 VCC)
@@ -243,9 +261,9 @@ MODULE* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildLi
 
     if( aBuildList )
     {
-        MODULE_INFO* mod_info = new MODULE_INFO( footprintName, cmpReference,
+        COMPONENT_INFO* cmp_info = new COMPONENT_INFO( footprintName, cmpReference,
                                                  cmpValue, timeStampPath );
-        AddModuleInfo( mod_info );
+        AddModuleInfo( cmp_info );
         return NULL;
     }
 
@@ -344,7 +362,7 @@ bool NETLIST_READER::SetPadNetName( char* aText )
 bool NETLIST_READER::ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistReader )
 {
     wxString     cmpRef;
-    MODULE_INFO* mod_info = NULL;
+    COMPONENT_INFO* cmp_info = NULL;
 
     while( aNetlistReader.ReadLine() )
     {
@@ -352,7 +370,7 @@ bool NETLIST_READER::ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistR
 
         if( strnicmp( Line, "$endlist", 8 ) == 0 ) // end of list for the current component
         {
-            mod_info = NULL;
+            cmp_info = NULL;
             continue;
         }
         if( strnicmp( Line, "$endfootprintlist", 4 ) == 0 )
@@ -366,22 +384,22 @@ bool NETLIST_READER::ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistR
             cmpRef.Trim( false );
 
             // Search the current component in module info list:
-            BOOST_FOREACH( MODULE_INFO * &component, m_modulesInNetlist )
+            BOOST_FOREACH( COMPONENT_INFO * &component, m_componentsInNetlist )
             {
                 if( component->m_Reference == cmpRef )
                 {
-                    mod_info = component;
+                    cmp_info = component;
                     break;
                 }
             }
         }
-        else if( mod_info )
+        else if( cmp_info )
         {
             // Add new filter to list
             wxString fp = FROM_UTF8( Line + 1 );
             fp.Trim( false );
             fp.Trim( true );
-            mod_info->m_FootprintFilter.Add( fp );
+            cmp_info->m_FootprintFilter.Add( fp );
         }
     }
 

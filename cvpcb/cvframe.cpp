@@ -334,9 +334,9 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = 0;
 
-    BOOST_FOREACH( COMPONENT & component, m_components )
+    BOOST_FOREACH( COMPONENT_INFO & component, m_components )
     {
-        if( component.m_Module.IsEmpty() && ii > selection )
+        if( component.m_Footprint.IsEmpty() && ii > selection )
         {
             m_ListCmp->SetSelection( ii );
             SendMessageToEESCHEMA();
@@ -364,9 +364,9 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = m_ListCmp->GetCount() - 1;
 
-    BOOST_REVERSE_FOREACH( COMPONENT & component, m_components )
+    BOOST_REVERSE_FOREACH( COMPONENT_INFO & component, m_components )
     {
-        if( component.m_Module.IsEmpty() && ii < selection )
+        if( component.m_Footprint.IsEmpty() && ii < selection )
         {
             m_ListCmp->SetSelection( ii );
             SendMessageToEESCHEMA();
@@ -403,9 +403,9 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
     {
         m_ListCmp->SetSelection( 0 );
 
-        BOOST_FOREACH( COMPONENT & component, m_components )
+        BOOST_FOREACH( COMPONENT_INFO & component, m_components )
         {
-            component.m_Module.Empty();
+            component.m_Footprint.Empty();
             SetNewPkg( wxEmptyString );
         }
 
@@ -538,7 +538,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 
     // Preview of the already assigned footprint.
     // Find the footprint that was already choosen for this component and select it.
-    wxString module = *(&m_components[ selection ].m_Module);
+    wxString module = *(&m_components[ selection ].m_Footprint);
 
     bool found = false;
     for( int ii = 0; ii < m_FootprintList->GetCount(); ii++ )
@@ -696,7 +696,7 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
 {
     char          cmd[1024];
     int           selection;
-    COMPONENT*    Component;
+    COMPONENT_INFO*    Component;
 
     if( m_components.empty() )
         return;

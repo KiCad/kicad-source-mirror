@@ -32,12 +32,12 @@ int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
         fprintf( file, "( { netlist created  %s }\n", TO_UTF8( DateAndTime() ) );
 
 
-    BOOST_FOREACH( COMPONENT& component, m_components )
+    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
     {
         fprintf( file, " ( %s ", TO_UTF8( component.m_TimeStamp ) );
 
-        if( !component.m_Module.IsEmpty() )
-            fprintf( file, "%s", TO_UTF8( component.m_Module ) );
+        if( !component.m_Footprint.IsEmpty() )
+            fprintf( file, "%s", TO_UTF8( component.m_Footprint ) );
         else
             fprintf( file, "$noname$" );
 
@@ -67,7 +67,6 @@ int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
     return 0;
 }
 
-
 /*
  * Write the allowed footprint list for each component
  */
@@ -75,7 +74,7 @@ void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
 {
     bool       WriteHeader = false;
 
-    BOOST_FOREACH( COMPONENT& component, list )
+    BOOST_FOREACH( COMPONENT_INFO& component, list )
     {
         unsigned int FilterCount;
         FilterCount = component.m_FootprintFilter.GetCount();
@@ -101,4 +100,3 @@ void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
     if( WriteHeader )
         fprintf( file, "$endfootprintlist\n}\n" );
 }
-

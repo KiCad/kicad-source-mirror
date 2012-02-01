@@ -19,42 +19,9 @@
 
 #define FILTERFOOTPRINTKEY "FilterFootprint"
 
-class PIN
-{
-public:
-    wxString  m_Net;       /* Name of net. */
-    wxString  m_Number;
-    wxString  m_Name;
+#include <netlist_reader.h>
 
-    PIN() {};
-    ~PIN() {};
-};
-
-typedef boost::ptr_vector< PIN > PIN_LIST;
-
-/* PIN object list sort function. */
-extern bool operator<( const PIN& item1, const PIN& item2 );
-
-class COMPONENT
-{
-public:
-    wxString      m_Reference;      // Reference designator: U3, R5
-    wxString      m_Value;          // Value: 7400, 47K
-    wxString      m_TimeStamp;      // Time stamp ( default value = "00000000")
-    wxString      m_Module;         // Footprint (module) name.
-    wxArrayString m_FootprintFilter;// List of allowed footprints (wildcards
-                                    // allowed ). If empty: no filtering
-    PIN_LIST      m_Pins;           // List of component pins.
-
-    COMPONENT() {};
-    ~COMPONENT() {};
-};
-
-typedef boost::ptr_vector< COMPONENT > COMPONENT_LIST;
-
-/* COMPONENT object list sort function. */
-extern bool operator<( const COMPONENT& item1, const COMPONENT& item2 );
-
+typedef boost::ptr_vector< COMPONENT_INFO > COMPONENT_LIST;
 
 extern const wxString FootprintAliasFileExtension;
 extern const wxString RetroFileExtension;
