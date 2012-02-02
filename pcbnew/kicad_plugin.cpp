@@ -71,10 +71,6 @@
 #include <macros.h>
 #include <zones.h>
 
-#ifdef CVPCB
-//#include <cvpcb.h>
-#endif
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
@@ -107,9 +103,10 @@
 
 
 /// C string compare test for a specific length of characters.
-/// The -1 is to omit the trailing \0 which is included in sizeof() on a
-/// string constant.
 #define TESTLINE( x )   ( !strnicmp( line, x, SZ( x ) ) && isspace( line[SZ( x )] ) )
+
+/// C sub-string compare test for a specific length of characters.
+#define TESTSUBSTR( x ) ( !strnicmp( line, x, SZ( x ) ) )
 
 
 #if 1
@@ -560,6 +557,7 @@ void KICAD_PLUGIN::loadSHEET()
 void KICAD_PLUGIN::loadSETUP()
 {
     NETCLASS* netclass_default = m_board->m_NetClasses.GetDefault();
+    BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
 
     while( READLINE() )
     {
@@ -586,7 +584,7 @@ void KICAD_PLUGIN::loadSETUP()
             m_board->SetCopperLayerCount( tmp );
         }
 
-        else if( TESTLINE( "Layer[" ) )
+        else if( TESTSUBSTR( "Layer[" ) )
         {
             // eg: "Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>"
 
@@ -634,7 +632,7 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "TrackMinWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "TrackMinWidth" ) );
-            m_board->GetDesignSettings().m_TrackMinWidth = tmp;
+            bds.m_TrackMinWidth = tmp;
         }
 
         else if( TESTLINE( "ZoneClearence" ) )
@@ -646,25 +644,25 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "DrawSegmWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "DrawSegmWidth" ) );
-            m_board->GetDesignSettings().m_DrawSegmentWidth = tmp;
+            bds.m_DrawSegmentWidth = tmp;
         }
 
         else if( TESTLINE( "EdgeSegmWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "EdgeSegmWidth" ) );
-            m_board->GetDesignSettings().m_EdgeSegmentWidth = tmp;
+            bds.m_EdgeSegmentWidth = tmp;
         }
 
         else if( TESTLINE( "ViaMinSize" ) )
         {
             BIU tmp = biuParse( line + SZ( "ViaMinSize" ) );
-            m_board->GetDesignSettings().m_ViasMinSize = tmp;
+            bds.m_ViasMinSize = tmp;
         }
 
         else if( TESTLINE( "MicroViaMinSize" ) )
         {
             BIU tmp = biuParse( line + SZ( "MicroViaMinSize" ) );
-            m_board->GetDesignSettings().m_MicroViasMinSize = tmp;
+            bds.m_MicroViasMinSize = tmp;
         }
 
         else if( TESTLINE( "ViaSizeList" ) )
@@ -690,7 +688,7 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "ViaMinDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "ViaMinDrill" ) );
-            m_board->GetDesignSettings().m_ViasMinDrill = tmp;
+            bds.m_ViasMinDrill = tmp;
         }
 
         else if( TESTLINE( "MicroViaDrill" ) )
@@ -702,19 +700,19 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "MicroViaMinDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "MicroViaMinDrill" ) );
-            m_board->GetDesignSettings().m_MicroViasMinDrill = tmp;
+            bds.m_MicroViasMinDrill = tmp;
         }
 
         else if( TESTLINE( "MicroViasAllowed" ) )
         {
             int tmp = intParse( line + SZ( "MicroViasAllowed" ) );
-            m_board->GetDesignSettings().m_MicroViasAllowed = tmp;
+            bds.m_MicroViasAllowed = tmp;
         }
 
         else if( TESTLINE( "TextPcbWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "TextPcbWidth" ) );
-            m_board->GetDesignSettings().m_PcbTextWidth = tmp;
+            bds.m_PcbTextWidth = tmp;
         }
 
         else if( TESTLINE( "TextPcbSize" ) )
@@ -722,32 +720,27 @@ void KICAD_PLUGIN::loadSETUP()
             BIU x = biuParse( line + SZ( "TextPcbSize" ), &data );
             BIU y = biuParse( data );
 
-            m_board->GetDesignSettings().m_PcbTextSize = wxSize( x, y );
+            bds.m_PcbTextSize = wxSize( x, y );
         }
 
         else if( TESTLINE( "EdgeModWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "EdgeModWidth" ) );
-            /* @todo
-            g_ModuleSegmentWidth = tmp;
-            */
+            bds.m_ModuleSegmentWidth = tmp;
         }
 
         else if( TESTLINE( "TextModWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "TextModWidth" ) );
-            /* @todo
-            g_ModuleTextWidth = tmp;
-            */
+            bds.m_ModuleTextWidth = tmp;
         }
 
         else if( TESTLINE( "TextModSize" ) )
         {
             BIU x = biuParse( line + SZ( "TextModSize" ), &data );
             BIU y = biuParse( data );
-            /* @todo
-            g_ModuleTextSize = wxSize( x, y );
-            */
+
+            bds.m_ModuleTextSize = wxSize( x, y );
         }
 
         else if( TESTLINE( "PadSize" ) )
@@ -771,19 +764,19 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "Pad2MaskClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( "Pad2MaskClearance" ) );
-            m_board->GetDesignSettings().m_SolderMaskMargin = tmp;
+            bds.m_SolderMaskMargin = tmp;
         }
 
         else if( TESTLINE( "Pad2PasteClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( "Pad2PasteClearance" ) );
-            m_board->GetDesignSettings().m_SolderPasteMargin = tmp;
+            bds.m_SolderPasteMargin = tmp;
         }
 
         else if( TESTLINE( "Pad2PasteClearanceRatio" ) )
         {
             double ratio = atof( line + SZ( "Pad2PasteClearanceRatio" ) );
-            m_board->GetDesignSettings().m_SolderPasteMarginRatio = ratio;
+            bds.m_SolderPasteMarginRatio = ratio;
         }
 
         else if( TESTLINE( "GridOrigin" ) )
@@ -799,6 +792,8 @@ void KICAD_PLUGIN::loadSETUP()
 
         else if( TESTLINE( "$EndSETUP" ) )
         {
+            m_board->SetDesignSettings( bds );
+
             // Until such time as the *.brd file does not have the
             // global parameters:
             // "TrackWidth", "TrackMinWidth", "ViaSize", "ViaDrill",
@@ -861,7 +856,7 @@ void KICAD_PLUGIN::loadMODULE()
 
         // most frequently encountered ones at the top
 
-        if( TESTLINE( "D" ) )          // read a drawing item, e.g. "DS"
+        if( TESTSUBSTR( "D" ) )          // read a drawing item, e.g. "DS"
         {
             loadMODULE_EDGE( module.get() );
         }
@@ -872,7 +867,7 @@ void KICAD_PLUGIN::loadMODULE()
         }
 
         // Read a footprint text description (ref, value, or drawing)
-        else if( TESTLINE( "T" ) )
+        else if( TESTSUBSTR( "T" ) )
         {
             // e.g. "T1 6940 -16220 350 300 900 60 M I 20 N "CFCARD"\r\n"
 
@@ -2776,7 +2771,8 @@ void KICAD_PLUGIN::saveSHEET() const
 
 void KICAD_PLUGIN::saveSETUP() const
 {
-    NETCLASS* netclass_default = m_board->m_NetClasses.GetDefault();
+    NETCLASS* netclass_default       = m_board->m_NetClasses.GetDefault();
+    const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     fprintf( m_fp, "$SETUP\n" );
 
@@ -2812,16 +2808,16 @@ void KICAD_PLUGIN::saveSETUP() const
     fprintf( m_fp, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
     */
 
-    fprintf( m_fp, "TrackMinWidth %s\n", fmtBIU( m_board->GetDesignSettings().m_TrackMinWidth ).c_str() );
+    fprintf( m_fp, "TrackMinWidth %s\n", fmtBIU( bds.m_TrackMinWidth ).c_str() );
 
-    fprintf( m_fp, "DrawSegmWidth %s\n", fmtBIU( m_board->GetDesignSettings().m_DrawSegmentWidth ).c_str() );
-    fprintf( m_fp, "EdgeSegmWidth %s\n", fmtBIU( m_board->GetDesignSettings().m_EdgeSegmentWidth ).c_str() );
+    fprintf( m_fp, "DrawSegmWidth %s\n", fmtBIU( bds.m_DrawSegmentWidth ).c_str() );
+    fprintf( m_fp, "EdgeSegmWidth %s\n", fmtBIU( bds.m_EdgeSegmentWidth ).c_str() );
 
     // Save current default via size, for compatibility with older Pcbnew version;
     fprintf( m_fp, "ViaSize %s\n",  fmtBIU( netclass_default->GetViaDiameter() ).c_str() );
     fprintf( m_fp, "ViaDrill %s\n", fmtBIU( netclass_default->GetViaDrill() ).c_str() );
-    fprintf( m_fp, "ViaMinSize %s\n", fmtBIU( m_board->GetDesignSettings().m_ViasMinSize ).c_str() );
-    fprintf( m_fp, "ViaMinDrill %s\n", fmtBIU( m_board->GetDesignSettings().m_ViasMinDrill ).c_str() );
+    fprintf( m_fp, "ViaMinSize %s\n", fmtBIU( bds.m_ViasMinSize ).c_str() );
+    fprintf( m_fp, "ViaMinDrill %s\n", fmtBIU( bds.m_ViasMinDrill ).c_str() );
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
@@ -2833,28 +2829,29 @@ void KICAD_PLUGIN::saveSETUP() const
     // for old versions compatibility:
     fprintf( m_fp, "MicroViaSize %s\n", fmtBIU( netclass_default->GetuViaDiameter() ).c_str() );
     fprintf( m_fp, "MicroViaDrill %s\n", fmtBIU( netclass_default->GetuViaDrill() ).c_str() );
-    fprintf( m_fp, "MicroViasAllowed %s\n", fmtBIU( m_board->GetDesignSettings().m_MicroViasAllowed ).c_str() );
-    fprintf( m_fp, "MicroViaMinSize %s\n", fmtBIU( m_board->GetDesignSettings().m_MicroViasMinSize ).c_str() );
-    fprintf( m_fp, "MicroViaMinDrill %s\n", fmtBIU( m_board->GetDesignSettings().m_MicroViasMinDrill ).c_str() );
+    fprintf( m_fp, "MicroViasAllowed %s\n", fmtBIU( bds.m_MicroViasAllowed ).c_str() );
+    fprintf( m_fp, "MicroViaMinSize %s\n", fmtBIU( bds.m_MicroViasMinSize ).c_str() );
+    fprintf( m_fp, "MicroViaMinDrill %s\n", fmtBIU( bds.m_MicroViasMinDrill ).c_str() );
 
-    fprintf( m_fp, "TextPcbWidth %s\n", fmtBIU( m_board->GetDesignSettings().m_PcbTextWidth ).c_str() );
-    fprintf( m_fp, "TextPcbSize %s\n",  fmtBIUSize( m_board->GetDesignSettings().m_PcbTextSize ).c_str() );
+    fprintf( m_fp, "TextPcbWidth %s\n", fmtBIU( bds.m_PcbTextWidth ).c_str() );
+    fprintf( m_fp, "TextPcbSize %s\n",  fmtBIUSize( bds.m_PcbTextSize ).c_str() );
 
-    /* @todo no globals
-    fprintf( m_fp, "EdgeModWidth %d\n", g_ModuleSegmentWidth );
-    fprintf( m_fp, "TextModSize %d %d\n", g_ModuleTextSize.x, g_ModuleTextSize.y );
-    fprintf( m_fp, "TextModWidth %d\n", g_ModuleTextWidth );
+    fprintf( m_fp, "EdgeModWidth %s\n", fmtBIU( bds.m_ModuleSegmentWidth ).c_str() );
+    fprintf( m_fp, "TextModSize %s\n", fmtBIUSize( bds.m_ModuleTextSize ).c_str() );
+    fprintf( m_fp, "TextModWidth %s\n", fmtBIU( bds.m_ModuleTextWidth ).c_str() );
+
+    /* @todo
     fprintf( m_fp, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
     fprintf( m_fp, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
     */
 
-    fprintf( m_fp, "Pad2MaskClearance %s\n", fmtBIU( m_board->GetDesignSettings().m_SolderMaskMargin ).c_str() );
+    fprintf( m_fp, "Pad2MaskClearance %s\n", fmtBIU( bds.m_SolderMaskMargin ).c_str() );
 
-    if( m_board->GetDesignSettings().m_SolderPasteMargin != 0 )
-        fprintf( m_fp, "Pad2PasteClearance %s\n", fmtBIU( m_board->GetDesignSettings().m_SolderPasteMargin ).c_str() );
+    if( bds.m_SolderPasteMargin != 0 )
+        fprintf( m_fp, "Pad2PasteClearance %s\n", fmtBIU( bds.m_SolderPasteMargin ).c_str() );
 
-    if( m_board->GetDesignSettings().m_SolderPasteMarginRatio != 0 )
-        fprintf( m_fp, "Pad2PasteClearanceRatio %g\n", m_board->GetDesignSettings().m_SolderPasteMarginRatio );
+    if( bds.m_SolderPasteMarginRatio != 0 )
+        fprintf( m_fp, "Pad2PasteClearanceRatio %g\n", bds.m_SolderPasteMarginRatio );
 
     /* @todo no aFrame
     if ( aFrame->GetScreen()->m_GridOrigin != wxPoint( 0, 0 ) )
