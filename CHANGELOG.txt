@@ -4,6 +4,17 @@ KiCad ChangeLog 2012
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2012-Feb-2 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+  * move globals into BOARD
+    -wxSize g_ModuleTextSize; /* Default footprint texts size */
+    -int g_ModuleSegmentWidth;
+    -int g_ModuleTextWidth;
+    But now the module editor is left hanging.  I'll have to figure out
+    a way to pass from board editor to module editor these values, still.
+
+
 2012-Feb-01, UPDATE Jean-Pierre Charras <jp.charras@wanadoo.fr>
 ================================================================================
 Pcbnew:
