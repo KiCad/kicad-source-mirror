@@ -3,8 +3,8 @@
  * @brief Definition of class FOOTPRINT_EDIT_FRAME.
  */
 
-#ifndef _MODULE_EDITOR_FRAME_H_
-#define _MODULE_EDITOR_FRAME_H_
+#ifndef MODULE_EDITOR_FRAME_H_
+#define MODULE_EDITOR_FRAME_H_
 
 
 class FOOTPRINT_EDIT_FRAME : public PCB_BASE_FRAME
@@ -13,12 +13,15 @@ public:
     MODULE*  CurrentModule;
 
 public:
-    FOOTPRINT_EDIT_FRAME( wxWindow* father,
+    FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
                           const wxString& title,
                           const wxPoint& pos, const wxSize& size,
                           long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~FOOTPRINT_EDIT_FRAME();
+
+    BOARD_DESIGN_SETTINGS& GetDesignSettings() const;       // overload PCB_BASE_FRAME, get parent's
+    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );  // overload
 
     void InstallOptionsFrame( const wxPoint& pos );
 
@@ -199,6 +202,8 @@ public:
 private:
     static wxString m_CurrentLib;
 
+    static BOARD*   s_Pcb;      ///< retain board accross invocations of module editor
+
     /**
      * Function GetComponentFromUndoList
      * performs an undo operation on the last edition:
@@ -328,10 +333,10 @@ public:
      */
     void Enter_Edge_Width( EDGE_MODULE* aEdge );
 
-    /* Function to initialize the move function params of a graphic item type DRAWSEGMENT */
+    /// Function to initialize the move function params of a graphic item type DRAWSEGMENT
     void Start_Move_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );
 
-    /* Function to place a graphic item type EDGE_MODULE currently moved */
+    /// Function to place a graphic item type EDGE_MODULE currently moved
     void Place_EdgeMod( EDGE_MODULE* drawitem );
 
     /**
@@ -355,4 +360,4 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-#endif      // #define _MODULE_EDITOR_FRAME_H_
+#endif      // MODULE_EDITOR_FRAME_H_

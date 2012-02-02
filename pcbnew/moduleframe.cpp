@@ -49,11 +49,9 @@
 
 static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the footprint editor
 
-// Design setting for the module editor:
-static BOARD_DESIGN_SETTINGS s_ModuleEditorDesignSetting;
-
 wxString FOOTPRINT_EDIT_FRAME::m_CurrentLib = wxEmptyString;
 
+BOARD* FOOTPRINT_EDIT_FRAME::s_Pcb;
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
@@ -134,12 +132,12 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
+FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
                                             const wxString& title,
                                             const wxPoint&  pos,
                                             const wxSize&   size,
                                             long            style ) :
-    PCB_BASE_FRAME( father, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
+    PCB_BASE_FRAME( aParent, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
 {
     m_FrameName = wxT( "ModEditFrame" );
     m_showBorderAndTitleBlock = false;   // true to show the frame references
@@ -154,16 +152,21 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
 
     UpdateTitle();
 
-    if( g_ModuleEditor_Pcb == NULL )
-        g_ModuleEditor_Pcb = new BOARD();
+    if( !s_Pcb )
+        s_Pcb = new BOARD();
 
-    SetBoard( g_ModuleEditor_Pcb );
+    SetBoard( s_Pcb );
 
     if( s_screenModule == NULL )
         s_screenModule = new PCB_SCREEN( GetPageSettings().GetSizeIU() );
 
     SetScreen( s_screenModule );
-    GetBoard()->SetDesignSettings( s_ModuleEditorDesignSetting );
+
+    /*  not sure why this was here, formerly s_ModuleEditorDesignSetting, since
+        we get default BOARD_DESIGN_SETTINGS in BOARD's constructor.
+    GetBoard()->SetDesignSettings( BOARD_DESIGN_SETTINGS() );
+    */
+
     GetScreen()->SetCurItem( NULL );
     LoadSettings();
 
@@ -215,16 +218,42 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
 
 FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
-    /* g_ModuleEditor_Pcb and its corresponding PCB_SCREEN are not deleted
-     * here, because if we reopen the Footprint editor, we expect to find
-     * the last edited item
-     */
-    SetScreen( NULL );  /* Do not delete (by the destructor of EDA_DRAW_FRAME) the
-                         * PCB_SCREEN handling g_ModuleEditor_Pcb
-                         */
+    // When user reopens the Footprint editor, user would like to find the last edited item.
+    // Do not delete PCB_SCREEN (by the destructor of EDA_DRAW_FRAME)
+    SetScreen( NULL );
 
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
     frame->m_ModuleEditFrame = NULL;
+
+    // Do not allow PCB_BASE_FRAME::~PCB_BASE_FRAME()
+    // to delete our precious BOARD, which is also in static FOOTPRINT_EDIT_FRAME::s_Pcb.
+    // That function, PCB_BASE_FRAME::~PCB_BASE_FRAME(), runs immediately next
+    // as we return from here.
+    m_Pcb = 0;
+}
+
+
+BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
+{
+    // get the BOARD_DESIGN_SETTINGS from the parent editor, not our BOARD.
+
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+
+    wxASSERT( parentFrame );
+
+    return parentFrame->GetDesignSettings();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
+{
+    // set the BOARD_DESIGN_SETTINGS int parent editor, not our BOARD.
+
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+
+    wxASSERT( parentFrame );
+
+    parentFrame->SetDesignSettings( aSettings );
 }
 
 

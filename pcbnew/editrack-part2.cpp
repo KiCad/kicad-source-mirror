@@ -60,7 +60,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         return true;
     }
 
-    /* Avoid more than one via on the current location: */
+    // Avoid more than one via on the current location:
     if( GetBoard()->GetViaByPosition( g_CurrentTrackSegment->m_End,
                                       g_CurrentTrackSegment->GetLayer() ) )
         return false;
@@ -71,11 +71,11 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             return false;
     }
 
-    /* Is the current segment Ok (no DRC error) ? */
+    // Is the current segment Ok (no DRC error) ?
     if( Drc_On )
     {
         if( BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
-            /* DRC error, the change layer is not made */
+            // DRC error, the change layer is not made
             return false;
 
         // Handle 2 segments.
@@ -94,10 +94,10 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-    /* create the via */
+    // create the via
     SEGVIA* via    = new SEGVIA( GetBoard() );
     via->SetFlags( IS_NEW );
-    via->m_Shape   = GetBoard()->GetDesignSettings().m_CurrentViaType;
+    via->m_Shape   = GetDesignSettings().m_CurrentViaType;
     via->m_Width   = GetBoard()->GetCurrentViaSize();
     via->SetNet( GetBoard()->GetHighLightNetCode() );
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
@@ -116,7 +116,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     else
         last_layer = GetScreen()->m_Route_Layer_BOTTOM;
 
-    /* Adjust the actual via layer pair */
+    // Adjust the actual via layer pair
     switch ( via->GetShape() )
     {
         case VIA_BLIND_BURIED:
@@ -150,7 +150,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
     if( Drc_On && BAD_DRC == m_drc->Drc( via, GetBoard()->m_Track ) )
     {
-        /* DRC fault: the Via cannot be placed here ... */
+        // DRC fault: the Via cannot be placed here ...
         delete via;
 
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
@@ -235,7 +235,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
             Module = (MODULE*) pt_pad->GetParent();
         }
 
-        if( pt_pad ) /* Displaying the ratsnest of the corresponding net. */
+        if( pt_pad ) // Displaying the ratsnest of the corresponding net.
         {
             pt_pad->DisplayInfo( this );
 
@@ -300,7 +300,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
         }
     }
 
-    /* Erase if no pad or module has been selected. */
+    // Erase if no pad or module has been selected.
     if( ( pt_pad == NULL ) && ( Module == NULL ) )
     {
         DrawGeneralRatsnest( DC );

@@ -113,15 +113,13 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
     delete m_Collector;
 
-//    delete m_Pcb;
+    delete m_Pcb;       // is already NULL for FOOTPRINT_EDIT_FRAME
 }
 
 
 void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 {
-    if( m_Pcb != g_ModuleEditor_Pcb )
-        delete m_Pcb;
-
+    delete m_Pcb;
     m_Pcb = aBoard;
 }
 
@@ -179,6 +177,20 @@ void PCB_BASE_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 {
     wxASSERT( m_Pcb );
     m_Pcb->SetTitleBlock( aTitleBlock );
+}
+
+
+BOARD_DESIGN_SETTINGS& PCB_BASE_FRAME::GetDesignSettings() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetDesignSettings();
+}
+
+
+void PCB_BASE_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
+{
+    wxASSERT( m_Pcb );
+    m_Pcb->SetDesignSettings( aSettings );
 }
 
 

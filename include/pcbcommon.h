@@ -2,8 +2,8 @@
  * @file pcbcommon.h
  */
 
-#ifndef __PCBCOMMON_H__
-#define __PCBCOMMON_H__
+#ifndef PCBCOMMON_H_
+#define PCBCOMMON_H_
 
 
 #include <dlist.h>
@@ -13,7 +13,7 @@
 //#include <wx/arrstr.h>                        // wxArrayString class.
 
 
-#define MIN_DRAW_WIDTH 1  /* Minimum trace drawing width. */
+#define MIN_DRAW_WIDTH      1               ///< Minimum trace drawing width.
 
 
 //class PCB_SCREEN;
@@ -30,7 +30,7 @@ class DISPLAY_OPTIONS;
  */
 int GetLayerMask( int aLayerNumber );
 
-/* Look up Table for conversion copper layer count -> general copper layer mask: */
+/// Look up Table for conversion copper layer count -> general copper layer mask:
 extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 
 extern DISPLAY_OPTIONS DisplayOpt;
@@ -52,10 +52,8 @@ extern DLIST<TRACK> g_CurrentTrackList;
 
 #define g_FirstTrackSegment   g_CurrentTrackList.GetFirst()   ///< first segment created
 
-extern BOARD* g_ModuleEditor_Pcb;
-
-/* Pad editing */
+/// Pad editing
 extern D_PAD g_Pad_Master;
 
 
-#endif  /*  __PCBCOMMON_H__ */
+#endif  // PCBCOMMON_H_

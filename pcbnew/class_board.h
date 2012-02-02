@@ -528,17 +528,17 @@ public:
      * Function GetDesignSettings
      * @return the BOARD_DESIGN_SETTINGS for this BOARD
      */
-    // const BOARD_DESIGN_SETTINGS& GetDesignSettings() const  want to use this one
-    BOARD_DESIGN_SETTINGS& GetDesignSettings()
+    BOARD_DESIGN_SETTINGS& GetDesignSettings() const
     {
-        return m_designSettings;
+        // remove const-ness with cast.
+        return (BOARD_DESIGN_SETTINGS&) m_designSettings;
     }
 
     /**
      * Function SetDesignSettings
      * @param aDesignSettings the new BOARD_DESIGN_SETTINGS to use
      */
-    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings );
+    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings ) {  m_designSettings = aDesignSettings; }
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }

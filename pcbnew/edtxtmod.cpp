@@ -76,10 +76,10 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
 
     Text->m_Text = wxT( "text" );
 
-    GetBoard()->GetDesignSettings().m_ModuleTextWidth = Clamp_Text_PenSize( GetBoard()->GetDesignSettings().m_ModuleTextWidth,
-                                            MIN( GetBoard()->GetDesignSettings().m_ModuleTextSize.x, GetBoard()->GetDesignSettings().m_ModuleTextSize.y ), true );
-    Text->m_Size  = GetBoard()->GetDesignSettings().m_ModuleTextSize;
-    Text->m_Thickness = GetBoard()->GetDesignSettings().m_ModuleTextWidth;
+    GetDesignSettings().m_ModuleTextWidth = Clamp_Text_PenSize( GetDesignSettings().m_ModuleTextWidth,
+                                            MIN( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
+    Text->m_Size  = GetDesignSettings().m_ModuleTextSize;
+    Text->m_Thickness = GetDesignSettings().m_ModuleTextWidth;
     Text->m_Pos   = GetScreen()->GetCrossHairPosition();
     Text->SetLocalCoord();
 
@@ -309,15 +309,15 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     switch( aItem->Type() )
     {
     case PCB_TEXT_T:
-        newSize = GetBoard()->GetDesignSettings().m_PcbTextSize;
-        newThickness = GetBoard()->GetDesignSettings().m_PcbTextWidth;
+        newSize = GetDesignSettings().m_PcbTextSize;
+        newThickness = GetDesignSettings().m_PcbTextWidth;
         pcbText = (TEXTE_PCB*) aItem;
         text = (EDA_TEXT*) pcbText;
         break;
 
     case PCB_MODULE_TEXT_T:
-        newSize = GetBoard()->GetDesignSettings().m_ModuleTextSize;
-        newThickness = GetBoard()->GetDesignSettings().m_ModuleTextWidth;
+        newSize = GetDesignSettings().m_ModuleTextSize;
+        newThickness = GetDesignSettings().m_ModuleTextWidth;
         moduleText = (TEXTE_MODULE*) aItem;
         text = (EDA_TEXT*) moduleText;
         break;
@@ -380,7 +380,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
         case TEXT_is_REFERENCE:
             item = module->m_Reference;
 
-            if( item->GetSize() != GetBoard()->GetDesignSettings().m_ModuleTextSize || item->GetThickness() != GetBoard()->GetDesignSettings().m_ModuleTextWidth )
+            if( item->GetSize() != GetDesignSettings().m_ModuleTextSize || item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
                 undoItemList.PushItem( itemWrapper );
 
             break;
@@ -388,7 +388,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
         case TEXT_is_VALUE:
             item = module->m_Value;
 
-            if( item->GetSize() != GetBoard()->GetDesignSettings().m_ModuleTextSize || item->GetThickness() != GetBoard()->GetDesignSettings().m_ModuleTextWidth )
+            if( item->GetSize() != GetDesignSettings().m_ModuleTextSize || item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
                 undoItemList.PushItem( itemWrapper );
 
             break;
@@ -401,8 +401,8 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
                 {
                     item = (TEXTE_MODULE*) boardItem;
 
-                    if( item->GetSize() != GetBoard()->GetDesignSettings().m_ModuleTextSize
-                        || item->GetThickness() != GetBoard()->GetDesignSettings().m_ModuleTextWidth )
+                    if( item->GetSize() != GetDesignSettings().m_ModuleTextSize
+                        || item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
                     {
                         undoItemList.PushItem( itemWrapper );
                         break;
@@ -432,13 +432,13 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
         switch( aType )
         {
         case TEXT_is_REFERENCE:
-            module->m_Reference->SetThickness( GetBoard()->GetDesignSettings().m_ModuleTextWidth );
-            module->m_Reference->SetSize( GetBoard()->GetDesignSettings().m_ModuleTextSize );
+            module->m_Reference->SetThickness( GetDesignSettings().m_ModuleTextWidth );
+            module->m_Reference->SetSize( GetDesignSettings().m_ModuleTextSize );
             break;
 
         case TEXT_is_VALUE:
-            module->m_Value->SetThickness( GetBoard()->GetDesignSettings().m_ModuleTextWidth );
-            module->m_Value->SetSize( GetBoard()->GetDesignSettings().m_ModuleTextSize );
+            module->m_Value->SetThickness( GetDesignSettings().m_ModuleTextWidth );
+            module->m_Value->SetSize( GetDesignSettings().m_ModuleTextSize );
             break;
 
         case TEXT_is_DIVERS:
@@ -447,8 +447,8 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
                 if( boardItem->Type() == PCB_MODULE_TEXT_T )
                 {
                     item = (TEXTE_MODULE*) boardItem;
-                    item->SetThickness( GetBoard()->GetDesignSettings().m_ModuleTextWidth );
-                    item->SetSize( GetBoard()->GetDesignSettings().m_ModuleTextSize );
+                    item->SetThickness( GetDesignSettings().m_ModuleTextWidth );
+                    item->SetSize( GetDesignSettings().m_ModuleTextSize );
                 }
             }
 

@@ -93,13 +93,6 @@ BOARD::~BOARD()
 }
 
 
-void BOARD::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings )
-{
-    // copy all members.
-    m_designSettings = aDesignSettings;
-}
-
-
 void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList )
 {
     TRACK* segment;             // The current segment being analyzed.
