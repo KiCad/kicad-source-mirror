@@ -159,40 +159,40 @@ static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
 void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 {
-    MODULE* Module = GetBoard()->m_Modules;
+    MODULE* module = GetBoard()->m_Modules;
 
-    SaveCopyInUndoList( Module, UR_MODEDIT );
+    SaveCopyInUndoList( module, UR_MODEDIT );
 
     if( aEdge == NULL )
     {
-        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) Module->m_Drawings;
+        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->m_Drawings;
 
         for( ; aEdge != NULL; aEdge = aEdge->Next() )
         {
             if( aEdge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
-            aEdge->SetWidth( g_ModuleSegmentWidth );
+            aEdge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
         }
     }
     else
     {
-        aEdge->SetWidth( g_ModuleSegmentWidth );
+        aEdge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
     }
 
     OnModify();
-    Module->CalculateBoundingBox();
-    Module->m_LastEdit_Time = time( NULL );
+    module->CalculateBoundingBox();
+    module->m_LastEdit_Time = time( NULL );
 }
 
 
-void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* Edge )
+void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 {
-    MODULE* Module    = GetBoard()->m_Modules;
+    MODULE* module    = GetBoard()->m_Modules;
     int     new_layer = SILKSCREEN_N_FRONT;
 
-    if( Edge != NULL )
-        new_layer = Edge->GetLayer();
+    if( aEdge )
+        new_layer = aEdge->GetLayer();
 
     /* Ask for the new layer */
     new_layer = SelectLayer( new_layer, FIRST_COPPER_LAYER, LAST_NO_COPPER_LAYER );
@@ -209,28 +209,28 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* Edge )
             return;
     }
 
-    SaveCopyInUndoList( Module, UR_MODEDIT );
+    SaveCopyInUndoList( module, UR_MODEDIT );
 
-    if( Edge == NULL )
+    if( aEdge == NULL )
     {
-        Edge = (EDGE_MODULE*) (BOARD_ITEM*) Module->m_Drawings;
+        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->m_Drawings;
 
-        for( ; Edge != NULL; Edge = Edge->Next() )
+        for( ; aEdge != NULL; aEdge = aEdge->Next() )
         {
-            if( Edge->Type() != PCB_MODULE_EDGE_T )
+            if( aEdge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
-            Edge->SetLayer( new_layer );
+            aEdge->SetLayer( new_layer );
         }
     }
     else
     {
-        Edge->SetLayer( new_layer );
+        aEdge->SetLayer( new_layer );
     }
 
     OnModify();
-    Module->CalculateBoundingBox();
-    Module->m_LastEdit_Time = time( NULL );
+    module->CalculateBoundingBox();
+    module->m_LastEdit_Time = time( NULL );
 }
 
 
@@ -238,7 +238,7 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
 {
     wxString buffer;
 
-    buffer = ReturnStringFromValue( g_UserUnit, g_ModuleSegmentWidth,
+    buffer = ReturnStringFromValue( g_UserUnit, GetBoard()->GetDesignSettings().m_ModuleSegmentWidth,
                                     GetScreen()->GetInternalUnits() );
     wxTextEntryDialog dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
 
@@ -246,13 +246,13 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
         return; // canceled by user
 
     buffer = dlg.GetValue( );
-    g_ModuleSegmentWidth = ReturnValueFromString( g_UserUnit, buffer,
-                                                  GetScreen()->GetInternalUnits() );
+    GetBoard()->GetDesignSettings().m_ModuleSegmentWidth =
+            ReturnValueFromString( g_UserUnit, buffer, GetScreen()->GetInternalUnits() );
 
     if( aEdge )
     {
         MODULE* module = GetBoard()->m_Modules;
-        aEdge->SetWidth( g_ModuleSegmentWidth );
+        aEdge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
         module->CalculateBoundingBox();
         OnModify();
     }
@@ -337,7 +337,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         if( Edge->GetShape() == S_ARC )
             Edge->SetAngle( ArcValue );
 
-        Edge->SetWidth( g_ModuleSegmentWidth );
+        Edge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
         Edge->SetLayer( module->GetLayer() );
 
         if( module->GetLayer() == LAYER_N_FRONT )
@@ -383,7 +383,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
                 Edge = newedge;     // point now new item
 
                 Edge->SetFlags( IS_NEW );
-                Edge->SetWidth( g_ModuleSegmentWidth );
+                Edge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
                 Edge->SetStart( GetScreen()->GetCrossHairPosition() );
                 Edge->SetEnd( Edge->GetStart() );
 

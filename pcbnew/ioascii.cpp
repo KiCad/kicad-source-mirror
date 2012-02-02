@@ -563,21 +563,21 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "EdgeModWidth" ) == 0 )
         {
-            g_ModuleSegmentWidth = atoi( data );
+            GetBoard()->GetDesignSettings().m_ModuleSegmentWidth = atoi( data );
             continue;
         }
 
         if( stricmp( line, "TextModWidth" ) == 0 )
         {
-            g_ModuleTextWidth = atoi( data );
+            GetBoard()->GetDesignSettings().m_ModuleTextWidth = atoi( data );
             continue;
         }
 
         if( stricmp( line, "TextModSize" ) == 0 )
         {
-            g_ModuleTextSize.x = atoi( data );
+            GetBoard()->GetDesignSettings().m_ModuleTextSize.x = atoi( data );
             data = strtok( NULL, delims );
-            g_ModuleTextSize.y = atoi( data );
+            GetBoard()->GetDesignSettings().m_ModuleTextSize.y = atoi( data );
             continue;
         }
 
@@ -735,9 +735,9 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
              aBoard->GetDesignSettings().m_PcbTextSize.x,
              aBoard->GetDesignSettings().m_PcbTextSize.y );
 
-    fprintf( aFile, "EdgeModWidth %d\n", g_ModuleSegmentWidth );
-    fprintf( aFile, "TextModSize %d %d\n", g_ModuleTextSize.x, g_ModuleTextSize.y );
-    fprintf( aFile, "TextModWidth %d\n", g_ModuleTextWidth );
+    fprintf( aFile, "EdgeModWidth %d\n", aBoard->GetDesignSettings().m_ModuleSegmentWidth );
+    fprintf( aFile, "TextModSize %d %d\n", aBoard->GetDesignSettings().m_ModuleTextSize.x, aBoard->GetDesignSettings().m_ModuleTextSize.y );
+    fprintf( aFile, "TextModWidth %d\n", aBoard->GetDesignSettings().m_ModuleTextWidth );
     fprintf( aFile, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
     fprintf( aFile, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
     fprintf( aFile,

@@ -236,11 +236,11 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
                                                       &bds.m_PcbTextSize.x,
                                                       600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
 
-    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModV" ), &g_ModuleTextSize.y,
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModV" ), &bds.m_ModuleTextSize.y,
                                                       500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModH" ), &g_ModuleTextSize.x,
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModH" ), &bds.m_ModuleTextSize.x,
                                                       500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModW" ), &g_ModuleTextWidth,
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModW" ), &bds.m_ModuleTextWidth,
                                                       100, 1, TEXTS_MAX_WIDTH ) );
 
     pca.push_back( new PARAM_CFG_INT( wxT( "VEgarde" ),
@@ -257,7 +257,7 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
     pca.push_back( new PARAM_CFG_INT( wxT( "TxtLar" ),
                                                       &bds.m_PcbTextWidth,
                                                       120, 0, 0xFFFF ) );
-    pca.push_back( new PARAM_CFG_INT( wxT( "MSegLar" ), &g_ModuleSegmentWidth,
+    pca.push_back( new PARAM_CFG_INT( wxT( "MSegLar" ), &bds.m_ModuleSegmentWidth,
                                                       120, 0, 0xFFFF ) );
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ),
                                                            &m_lastNetListRead ) );

@@ -11,33 +11,39 @@
 class BOARD_DESIGN_SETTINGS
 {
 protected:
-    int    m_CopperLayerCount;            ///< Number of copper layers for this design
-    int    m_EnabledLayers;               ///< Bit-mask for layer enabling
-    int    m_VisibleLayers;               ///< Bit-mask for layer visibility
-    int    m_VisibleElements;             ///< Bit-mask for element category visibility
+    int     m_CopperLayerCount;             ///< Number of copper layers for this design
+    int     m_EnabledLayers;                ///< Bit-mask for layer enabling
+    int     m_VisibleLayers;                ///< Bit-mask for layer visibility
+    int     m_VisibleElements;              ///< Bit-mask for element category visibility
+
 
 public:
-    bool   m_MicroViasAllowed;            ///< true to allow micro vias
-    int    m_CurrentViaType;              ///< via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
+    bool    m_MicroViasAllowed;             ///< true to allow micro vias
+    int     m_CurrentViaType;               ///< via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
 
     /// if true, when creating a new track starting on an existing track, use this track width
-    bool   m_UseConnectedTrackWidth;
-    int    m_DrawSegmentWidth;            ///< current graphic line width (not EDGE layer)
-    int    m_EdgeSegmentWidth;            ///< current graphic line width (EDGE layer only)
-    int    m_PcbTextWidth;                ///< current Pcb (not module) Text width
-    wxSize m_PcbTextSize;                 ///< current Pcb (not module) Text size
-    int    m_TrackMinWidth;               ///< track min value for width ((min copper size value
-    int    m_ViasMinSize;                 ///< vias (not micro vias) min diameter
-    int    m_ViasMinDrill;                ///< vias (not micro vias) min drill diameter
-    int    m_MicroViasMinSize;            ///< micro vias (not vias) min diameter
-    int    m_MicroViasMinDrill;           ///< micro vias (not vias) min drill diameter
+    bool    m_UseConnectedTrackWidth;
+    int     m_DrawSegmentWidth;             ///< current graphic line width (not EDGE layer)
+    int     m_EdgeSegmentWidth;             ///< current graphic line width (EDGE layer only)
+    int     m_PcbTextWidth;                 ///< current Pcb (not module) Text width
+    wxSize  m_PcbTextSize;                  ///< current Pcb (not module) Text size
+    int     m_TrackMinWidth;                ///< track min value for width ((min copper size value
+    int     m_ViasMinSize;                  ///< vias (not micro vias) min diameter
+    int     m_ViasMinDrill;                 ///< vias (not micro vias) min drill diameter
+    int     m_MicroViasMinSize;             ///< micro vias (not vias) min diameter
+    int     m_MicroViasMinDrill;            ///< micro vias (not vias) min drill diameter
 
     // Global mask margins:
-    int    m_SolderMaskMargin;            ///< Solder mask margin
-    int    m_SolderPasteMargin;           ///< Solder paste margin absolute value
-    double m_SolderPasteMarginRatio;      ///< Solder pask margin ratio value of pad size
-                                          ///< The final margin is the sum of these 2 values
-    int    m_BoardThickness;              ///< Board Thickness for 3D viewer
+    int     m_SolderMaskMargin;             ///< Solder mask margin
+    int     m_SolderPasteMargin;            ///< Solder paste margin absolute value
+    double  m_SolderPasteMarginRatio;       ///< Solder pask margin ratio value of pad size
+                                            ///< The final margin is the sum of these 2 values
+    int     m_BoardThickness;               ///< Board Thickness for 3D viewer
+
+    // Variables used in footprint handling
+    wxSize  m_ModuleTextSize;               ///< Default footprint texts size
+    int     m_ModuleTextWidth;
+    int     m_ModuleSegmentWidth;
 
 public:
     BOARD_DESIGN_SETTINGS();

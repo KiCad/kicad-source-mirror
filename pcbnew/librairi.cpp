@@ -87,7 +87,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     SetLocaleTo_C_standard();
 
-    /* Read header and test file type */
+    // Read header and test file type
     reader.ReadLine();
     Line = reader.Line();
 
@@ -104,7 +104,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
         }
     }
 
-    /* Read file: Search the description starting line (skip lib header)*/
+    // Read file: Search the description starting line (skip lib header)
     if( !Footprint_Is_GPCB_Format )
     {
         while( reader.ReadLine() )
@@ -127,10 +127,10 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
     SetLocaleTo_Default();       // revert to the current locale
 
-    /* Insert footprint in list*/
+    // Insert footprint in list
     GetBoard()->Add( module );
 
-    /* Display info : */
+    // Display info :
     module->DisplayInfo( this );
     PlaceModule( module, NULL );
     GetBoard()->m_Status_Pcb = 0;
@@ -216,7 +216,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
     if( CmpName == wxEmptyString )
         return;
 
-    /* Confirmation */
+    // Confirmation
     msg.Printf( _( "Ok to delete module %s in library %s" ),
                 GetChars( CmpName ), GetChars( aLibname ) );
 
@@ -236,7 +236,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
 
     FOOTPRINT_LIBRARY input_lib( lib_module );
 
-    /* Read header. */
+    // Read header.
     if( ! input_lib.IsLibrary() )
     {
         fclose( lib_module );
@@ -247,7 +247,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
         return;
     }
 
-    /* Read module names.  */
+    // Read module names.
     input_lib.RebuildIndex();
     bool found = input_lib.FindInList( CmpName );
 
@@ -259,7 +259,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
         return;
     }
 
-    /* Create new library. */
+    // Create new library.
     newFileName = oldFileName;
     newFileName.SetExt( FILETMP_EXT );
 
@@ -281,7 +281,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
     output_lib.SortList();
     output_lib.WriteSectionIndex();
 
-    /* Copy modules. */
+    // Copy modules.
     rewind( lib_module );
     LineNum = input_lib.m_LineNum;
 
@@ -298,7 +298,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
 
             if( msg.CmpNoCase( CmpName ) == 0 )
             {
-                /* Delete old module (i.e. do not copy description to out_file). */
+                // Delete old module (i.e. do not copy description to out_file).
                 while( GetLine( lib_module, Line, &LineNum ) )
                 {
                     if( strnicmp( Line, "$EndMODULE", 9 ) == 0 )
@@ -318,7 +318,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
 
     wxEndBusyCursor();
 
-    /* The old library file is renamed .bak */
+    // The old library file is renamed .bak
     wxFileName backupFileName = oldFileName;
     backupFileName.SetExt( BACKUP_EXT );
 
@@ -333,7 +333,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
         return;
     }
 
-    /* The temporary file is renamed as the previous library. */
+    // The temporary file is renamed as the previous library.
     if( !wxRenameFile( newFileName.GetFullPath(), oldFileName.GetFullPath() ) )
     {
         msg.Printf( _("Could not create temporary library file <%s>."),
@@ -435,7 +435,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewM
         if( !success )
             break;
 
-        /* Check for request to stop backup (ESCAPE key actuated) */
+        // Check for request to stop backup (ESCAPE key actuated)
         if( m_canvas->GetAbortRequest() )
             break;
     }
@@ -472,7 +472,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     if( !IsWritable( newFileName ) )
         return false;
 
-    /* Ask for the footprint name in lib */
+    // Ask for the footprint name in lib
     Name_Cmp = aModule->m_LibRef;
 
     if( aDisplayDialog )
@@ -506,7 +506,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         return false;
     }
 
-    /* Read library file */
+    // Read library file
     FOOTPRINT_LIBRARY input_lib( lib_module );
 
     if( ! input_lib.IsLibrary() )
@@ -517,7 +517,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         return false;
     }
 
-    /* Read footprints in lib: - search for an existing footprint */
+    // Read footprints in lib: - search for an existing footprint
     input_lib.RebuildIndex();
     bool module_exists = input_lib.FindInList( Name_Cmp );
 
@@ -538,7 +538,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         }
     }
 
-    /* Creates the new library */
+    // Creates the new library
 
     newFileName.SetExt( FILETMP_EXT );
 
@@ -563,7 +563,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
 
     output_lib.SortList();
 
-    /* Create the library header with a new date */
+    // Create the library header with a new date
     output_lib.WriteHeader();
     output_lib.WriteSectionIndex();
 
@@ -595,7 +595,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
 
             if( msg.CmpNoCase( Name_Cmp ) == 0 )
             {
-                /* skip old footprint descr (delete from the lib) */
+                // skip old footprint descr (delete from the lib)
                 while( GetLine( lib_module, Line, &LineNum ) )
                 {
                     if( strnicmp( Line, "$EndMODULE", 9 ) == 0 )
@@ -609,7 +609,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         fprintf( dest, "%s\n", Line );
     }
 
-    /* Write the new footprint ( append it to the list of footprint ) */
+    // Write the new footprint ( append it to the list of footprint )
     tmp = aModule->GetTimeStamp();
     aModule->SetTimeStamp( 0 );
     aModule->Save( dest );
@@ -623,7 +623,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
 
     wxEndBusyCursor();
 
-    /* The old library file is renamed .bak */
+    // The old library file is renamed .bak
     oldFileName = aLibName;
     oldFileName.SetExt( BACKUP_EXT );
 
@@ -637,7 +637,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         DisplayError( this, msg );
     }
 
-    /* The new library file is renamed */
+    // The new library file is renamed
     if( !wxRenameFile( newFileName.GetFullPath(), aLibName ) )
     {
         msg.Printf( _( "Could not create temporary library file <%s>." ),
@@ -667,7 +667,7 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 
     moduleName = aModuleName;
 
-    /* Ask for the new module reference */
+    // Ask for the new module reference
     if( moduleName.IsEmpty() )
     {
         wxTextEntryDialog dlg( this, _( "Module Reference:" ),
@@ -693,23 +693,23 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 
     GetBoard()->Add( Module );
 
-    /* Update parameters: position, timestamp ... */
+    // Update parameters: position, timestamp ...
     newpos = GetScreen()->GetCrossHairPosition();
     Module->SetPosition( newpos );
     Module->m_LastEdit_Time = time( NULL );
 
-    /* Update its name in lib */
+    // Update its name in lib
     Module->m_LibRef = moduleName;
 
-    /* Update reference: */
+    // Update reference:
     Module->m_Reference->m_Text = moduleName;
-    Module->m_Reference->SetThickness( g_ModuleTextWidth );
-    Module->m_Reference->SetSize( g_ModuleTextSize );
+    Module->m_Reference->SetThickness( GetBoard()->GetDesignSettings().m_ModuleTextWidth );
+    Module->m_Reference->SetSize( GetBoard()->GetDesignSettings().m_ModuleTextSize );
 
-    /* Set the value field to a default value */
+    // Set the value field to a default value
     Module->m_Value->m_Text = wxT( "VAL**" );
-    Module->m_Value->SetThickness( g_ModuleTextWidth );
-    Module->m_Value->SetSize( g_ModuleTextSize );
+    Module->m_Value->SetThickness( GetBoard()->GetDesignSettings().m_ModuleTextWidth );
+    Module->m_Value->SetSize( GetBoard()->GetDesignSettings().m_ModuleTextSize );
 
     Module->SetPosition( wxPoint( 0, 0 ) );
 
