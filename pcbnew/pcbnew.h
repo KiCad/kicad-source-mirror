@@ -57,11 +57,6 @@ extern bool        Segments_45_Only;
 extern wxString    g_Shapes3DExtBuffer;
 extern wxString    g_DocModulesFileName;
 
-/* Variables used in footprint handling */
-extern wxSize      g_ModuleTextSize;        /* Default footprint texts size */
-extern int         g_ModuleTextWidth;
-extern int         g_ModuleSegmentWidth;
-
 /* Layer pair for auto routing and switch layers by hotkey */
 extern int         Route_Layer_TOP;
 extern int         Route_Layer_BOTTOM;

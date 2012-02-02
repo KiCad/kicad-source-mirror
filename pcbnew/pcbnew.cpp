@@ -64,9 +64,6 @@ bool           g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. an
 bool           Segments_45_Only;                // True to allow horiz, vert. and 45deg only graphic segments
 bool           g_TwoSegmentTrackBuild = true;
 
-wxSize         g_ModuleTextSize;      /* Default footprint texts size */
-int            g_ModuleSegmentWidth;
-int            g_ModuleTextWidth;
 int            Route_Layer_TOP;
 int            Route_Layer_BOTTOM;
 int            g_MaxLinksShowed;

@@ -45,6 +45,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
                                                 // The final margin is the sum of these 2 values
                                                 // Usually < 0 because the mask is smaller than pad
 
+    m_ModuleTextSize = wxSize( 500, 500 );
+    m_ModuleTextWidth = 100;
+    m_ModuleSegmentWidth = 100;
+
+
     // Layer thickness for 3D viewer
     m_BoardThickness = (int)(1.6 * PCB_INTERNAL_UNIT / 25.4);
 }
