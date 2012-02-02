@@ -51,7 +51,7 @@ static wxPoint s_InitialPosition;  // Initial cursor position.
 static wxPoint s_LastPosition;     // Current cursor position.
 
 
-/* Start move of a graphic element type DRAWSEGMENT */
+// Start move of a graphic element type DRAWSEGMENT
 void PCB_EDIT_FRAME::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
 {
     if( drawitem == NULL )
@@ -119,7 +119,7 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 
     if( Segment->IsNew() )  // Trace in progress.
     {
-        /* Delete current segment. */
+        // Delete current segment.
         DisplayOpt.DisplayDrawItems = SKETCH;
         Segment->Draw( m_canvas, DC, GR_XOR );
         PtStruct = Segment->Back();
@@ -236,14 +236,14 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
     int          s_large;
     DRAWSEGMENT* DrawItem;
 
-    s_large = GetBoard()->GetDesignSettings().m_DrawSegmentWidth;
+    s_large = GetDesignSettings().m_DrawSegmentWidth;
 
     if( getActiveLayer() == EDGE_N )
     {
-        s_large = GetBoard()->GetDesignSettings().m_EdgeSegmentWidth;
+        s_large = GetDesignSettings().m_EdgeSegmentWidth;
     }
 
-    if( Segment == NULL )        /* Create new trace. */
+    if( Segment == NULL )        // Create new trace.
     {
         SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
         Segment->SetFlags( IS_NEW );

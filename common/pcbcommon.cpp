@@ -111,8 +111,6 @@ class BOARD_DESIGN_SETTINGS g_DesignSettings;
  */
 DLIST<TRACK> g_CurrentTrackList;
 
-BOARD* g_ModuleEditor_Pcb = NULL;
-
 bool g_Zone_45_Only = false;
 
 // Default setting used when creating a new zone

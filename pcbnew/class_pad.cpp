@@ -331,8 +331,8 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
  */
 int D_PAD::GetSolderMaskMargin()
 {
-    int margin = m_LocalSolderMaskMargin;
-    MODULE * module = (MODULE*) GetParent();
+    int     margin = m_LocalSolderMaskMargin;
+    MODULE* module = (MODULE*) GetParent();
 
     if( module )
     {
@@ -344,7 +344,7 @@ int D_PAD::GetSolderMaskMargin()
 
         if( margin == 0 )
         {
-            BOARD * brd = GetBoard();
+            BOARD* brd = GetBoard();
             margin = brd->GetDesignSettings().m_SolderMaskMargin;
         }
     }

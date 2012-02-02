@@ -56,17 +56,17 @@ static wxPoint MoveVector;              // Move vector for move edge
 static wxPoint CursorInitialPosition;   // Mouse cursor initial position for move command
 
 
-void FOOTPRINT_EDIT_FRAME::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
+void FOOTPRINT_EDIT_FRAME::Start_Move_EdgeMod( EDGE_MODULE* aEdge, wxDC* DC )
 {
-    if( Edge == NULL )
+    if( aEdge == NULL )
         return;
 
-    Edge->Draw( m_canvas, DC, GR_XOR );
-    Edge->SetFlags( IS_MOVED );
+    aEdge->Draw( m_canvas, DC, GR_XOR );
+    aEdge->SetFlags( IS_MOVED );
     MoveVector.x   = MoveVector.y = 0;
     CursorInitialPosition    = GetScreen()->GetCrossHairPosition();
     m_canvas->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
-    SetCurItem( Edge );
+    SetCurItem( aEdge );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 }
 
@@ -101,23 +101,23 @@ static void ShowCurrentOutlineWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                            const wxPoint& aPosition, bool aErase )
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
-    EDGE_MODULE* Edge   = (EDGE_MODULE*) screen->GetCurItem();
+    EDGE_MODULE* edge   = (EDGE_MODULE*) screen->GetCurItem();
 
-    if( Edge == NULL )
+    if( edge == NULL )
         return;
 
-    MODULE* Module = (MODULE*) Edge->GetParent();
+    MODULE* module = (MODULE*) edge->GetParent();
 
     if( aErase )
     {
-        Edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
+        edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
     }
 
     MoveVector = -(screen->GetCrossHairPosition() - CursorInitialPosition);
 
-    Edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
+    edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
 
-    Module->CalculateBoundingBox();
+    module->CalculateBoundingBox();
 }
 
 
@@ -128,30 +128,30 @@ static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
                                bool aErase )
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
-    EDGE_MODULE* Edge   = (EDGE_MODULE*) screen->GetCurItem();
+    EDGE_MODULE* edge   = (EDGE_MODULE*) screen->GetCurItem();
 
-    if( Edge == NULL )
+    if( edge == NULL )
         return;
 
-    MODULE* module = (MODULE*) Edge->GetParent();
+    MODULE* module = (MODULE*) edge->GetParent();
 
     //  if( erase )
     {
-        Edge->Draw( aPanel, aDC, GR_XOR );
+        edge->Draw( aPanel, aDC, GR_XOR );
     }
 
-    Edge->SetEnd( screen->GetCrossHairPosition() );
+    edge->SetEnd( screen->GetCrossHairPosition() );
 
     // Update relative coordinate.
-    Edge->SetEnd0( Edge->GetEnd() - module->GetPosition() );
+    edge->SetEnd0( edge->GetEnd() - module->GetPosition() );
 
-    wxPoint pt( Edge->GetEnd0() );
+    wxPoint pt( edge->GetEnd0() );
 
     RotatePoint( &pt, -module->GetOrientation() );
 
-    Edge->SetEnd0( pt );
+    edge->SetEnd0( pt );
 
-    Edge->Draw( aPanel, aDC, GR_XOR );
+    edge->Draw( aPanel, aDC, GR_XOR );
 
     module->CalculateBoundingBox();
 }
@@ -172,12 +172,12 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
             if( aEdge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
-            aEdge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
+            aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
         }
     }
     else
     {
-        aEdge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
+        aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
     }
 
     OnModify();
@@ -194,7 +194,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
     if( aEdge )
         new_layer = aEdge->GetLayer();
 
-    /* Ask for the new layer */
+    // Ask for the new layer
     new_layer = SelectLayer( new_layer, FIRST_COPPER_LAYER, LAST_NO_COPPER_LAYER );
 
     if( new_layer < 0 )
@@ -238,7 +238,7 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
 {
     wxString buffer;
 
-    buffer = ReturnStringFromValue( g_UserUnit, GetBoard()->GetDesignSettings().m_ModuleSegmentWidth,
+    buffer = ReturnStringFromValue( g_UserUnit, GetDesignSettings().m_ModuleSegmentWidth,
                                     GetScreen()->GetInternalUnits() );
     wxTextEntryDialog dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
 
@@ -246,36 +246,36 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
         return; // canceled by user
 
     buffer = dlg.GetValue( );
-    GetBoard()->GetDesignSettings().m_ModuleSegmentWidth =
+    GetDesignSettings().m_ModuleSegmentWidth =
             ReturnValueFromString( g_UserUnit, buffer, GetScreen()->GetInternalUnits() );
 
     if( aEdge )
     {
         MODULE* module = GetBoard()->m_Modules;
-        aEdge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
+        aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
         module->CalculateBoundingBox();
         OnModify();
     }
 }
 
 
-void FOOTPRINT_EDIT_FRAME::Delete_Edge_Module( EDGE_MODULE* Edge )
+void FOOTPRINT_EDIT_FRAME::Delete_Edge_Module( EDGE_MODULE* aEdge )
 {
-    if( Edge == NULL )
+    if( aEdge == NULL )
         return;
 
-    if( Edge->Type() != PCB_MODULE_EDGE_T )
+    if( aEdge->Type() != PCB_MODULE_EDGE_T )
     {
         DisplayError( this, wxT( "StructType error: PCB_MODULE_EDGE_T expected" ) );
         return;
     }
 
-    MODULE* Module = (MODULE*) Edge->GetParent();
+    MODULE* module = (MODULE*) aEdge->GetParent();
 
-    /* Delete segment. */
-    Edge->DeleteStructure();
-    Module->m_LastEdit_Time = time( NULL );
-    Module->CalculateBoundingBox();
+    // Delete segment.
+    aEdge->DeleteStructure();
+    module->m_LastEdit_Time = time( NULL );
+    module->CalculateBoundingBox();
     OnModify();
 }
 
@@ -284,24 +284,24 @@ void FOOTPRINT_EDIT_FRAME::Delete_Edge_Module( EDGE_MODULE* Edge )
  */
 static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
-    EDGE_MODULE* Edge = (EDGE_MODULE*) Panel->GetScreen()->GetCurItem();
+    EDGE_MODULE* edge = (EDGE_MODULE*) Panel->GetScreen()->GetCurItem();
 
     Panel->SetMouseCapture( NULL, NULL );
 
-    if( Edge && ( Edge->Type() == PCB_MODULE_EDGE_T ) )
+    if( edge && ( edge->Type() == PCB_MODULE_EDGE_T ) )
     {
-        if( Edge->IsNew() )   // On aborting, delete new outline.
+        if( edge->IsNew() )   // On aborting, delete new outline.
         {
-            MODULE* Module = (MODULE*) Edge->GetParent();
-            Edge->Draw( Panel, DC, GR_XOR, MoveVector );
-            Edge->DeleteStructure();
-            Module->CalculateBoundingBox();
+            MODULE* module = (MODULE*) edge->GetParent();
+            edge->Draw( Panel, DC, GR_XOR, MoveVector );
+            edge->DeleteStructure();
+            module->CalculateBoundingBox();
         }
         else   // On aborting, move existing outline to its initial position.
         {
-            Edge->Draw( Panel, DC, GR_XOR, MoveVector );
-            Edge->ClearFlags();
-            Edge->Draw( Panel, DC, GR_OR );
+            edge->Draw( Panel, DC, GR_XOR, MoveVector );
+            edge->ClearFlags();
+            edge->Draw( Panel, DC, GR_OR );
         }
     }
 
@@ -309,7 +309,7 @@ static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
+EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
                                                       wxDC*        DC,
                                                       int          type_edge )
 {
@@ -319,45 +319,45 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
     if( module == NULL )
         return NULL;
 
-    if( Edge == NULL )       /* Start a new edge item */
+    if( aEdge == NULL )       // Start a new edge item
     {
         SaveCopyInUndoList( module, UR_MODEDIT );
 
-        Edge = new EDGE_MODULE( module );
+        aEdge = new EDGE_MODULE( module );
         MoveVector.x = MoveVector.y = 0;
 
         // Add the new item to the Drawings list head
-        module->m_Drawings.PushFront( Edge );
+        module->m_Drawings.PushFront( aEdge );
 
         // Update characteristics of the segment or arc.
-        Edge->SetFlags( IS_NEW );
-        Edge->SetAngle( angle );
-        Edge->SetShape( type_edge );
+        aEdge->SetFlags( IS_NEW );
+        aEdge->SetAngle( angle );
+        aEdge->SetShape( type_edge );
 
-        if( Edge->GetShape() == S_ARC )
-            Edge->SetAngle( ArcValue );
+        if( aEdge->GetShape() == S_ARC )
+            aEdge->SetAngle( ArcValue );
 
-        Edge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
-        Edge->SetLayer( module->GetLayer() );
+        aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
+        aEdge->SetLayer( module->GetLayer() );
 
         if( module->GetLayer() == LAYER_N_FRONT )
-            Edge->SetLayer( SILKSCREEN_N_FRONT );
+            aEdge->SetLayer( SILKSCREEN_N_FRONT );
 
         if( module->GetLayer() == LAYER_N_BACK )
-            Edge->SetLayer( SILKSCREEN_N_BACK );
+            aEdge->SetLayer( SILKSCREEN_N_BACK );
 
         // Initialize the starting point of the new segment or arc
-        Edge->SetStart( GetScreen()->GetCrossHairPosition() );
+        aEdge->SetStart( GetScreen()->GetCrossHairPosition() );
 
         // Initialize the ending point of the new segment or arc
-        Edge->SetEnd( Edge->GetStart() );
+        aEdge->SetEnd( aEdge->GetStart() );
 
         // Initialize the relative coordinates
-        Edge->SetStart0( Edge->GetStart() - module->GetPosition() );
+        aEdge->SetStart0( aEdge->GetStart() - module->GetPosition() );
 
-        RotatePoint( &Edge->m_Start0, -module->m_Orient );
+        RotatePoint( &aEdge->m_Start0, -module->m_Orient );
 
-        Edge->m_End0 = Edge->m_Start0;
+        aEdge->m_End0 = aEdge->m_Start0;
         module->CalculateBoundingBox();
         m_canvas->SetMouseCapture( ShowNewEdgeModule, Abort_Move_ModuleOutline );
     }
@@ -370,33 +370,33 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
     {
         if( type_edge == S_SEGMENT )
         {
-            if( Edge->m_Start0 != Edge->m_End0 )
+            if( aEdge->m_Start0 != aEdge->m_End0 )
             {
-                Edge->Draw( m_canvas, DC, GR_OR );
+                aEdge->Draw( m_canvas, DC, GR_OR );
 
-                EDGE_MODULE* newedge = new EDGE_MODULE( *Edge );
+                EDGE_MODULE* newedge = new EDGE_MODULE( *aEdge );
 
-                // insert _after_ Edge, which is the same as inserting before Edge->Next()
-                module->m_Drawings.Insert( newedge, Edge->Next() );
-                Edge->ClearFlags();
+                // insert _after_ aEdge, which is the same as inserting before aEdge->Next()
+                module->m_Drawings.Insert( newedge, aEdge->Next() );
+                aEdge->ClearFlags();
 
-                Edge = newedge;     // point now new item
+                aEdge = newedge;     // point now new item
 
-                Edge->SetFlags( IS_NEW );
-                Edge->SetWidth( GetBoard()->GetDesignSettings().m_ModuleSegmentWidth );
-                Edge->SetStart( GetScreen()->GetCrossHairPosition() );
-                Edge->SetEnd( Edge->GetStart() );
+                aEdge->SetFlags( IS_NEW );
+                aEdge->SetWidth( GetDesignSettings().m_ModuleSegmentWidth );
+                aEdge->SetStart( GetScreen()->GetCrossHairPosition() );
+                aEdge->SetEnd( aEdge->GetStart() );
 
                 // Update relative coordinate.
-                Edge->SetStart0( Edge->GetStart() - module->GetPosition() );
+                aEdge->SetStart0( aEdge->GetStart() - module->GetPosition() );
 
-                wxPoint pt( Edge->GetStart0() );
+                wxPoint pt( aEdge->GetStart0() );
 
                 RotatePoint( &pt, -module->GetOrientation() );
 
-                Edge->SetStart0( pt );
+                aEdge->SetStart0( pt );
 
-                Edge->SetEnd0( Edge->GetStart0() );
+                aEdge->SetEnd0( aEdge->GetStart0() );
 
                 module->CalculateBoundingBox();
                 module->m_LastEdit_Time = time( NULL );
@@ -409,25 +409,25 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         }
     }
 
-    return Edge;
+    return aEdge;
 }
 
 
-void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* Edge )
+void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* aEdge )
 {
-    MODULE* Module = GetBoard()->m_Modules;
+    MODULE* module = GetBoard()->m_Modules;
 
-    if( Edge )
+    if( aEdge )
     {
-        Edge->ClearFlags();
+        aEdge->ClearFlags();
 
-        /* If last segment length is 0: remove it */
-        if( Edge->GetStart() == Edge->GetEnd() )
-            Edge->DeleteStructure();
+        // If last segment length is 0: remove it
+        if( aEdge->GetStart() == aEdge->GetEnd() )
+            aEdge->DeleteStructure();
     }
 
-    Module->CalculateBoundingBox();
-    Module->m_LastEdit_Time = time( NULL );
+    module->CalculateBoundingBox();
+    module->m_LastEdit_Time = time( NULL );
     OnModify();
     m_canvas->SetMouseCapture( NULL, NULL );
 }

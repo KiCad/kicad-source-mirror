@@ -703,13 +703,13 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 
     // Update reference:
     Module->m_Reference->m_Text = moduleName;
-    Module->m_Reference->SetThickness( GetBoard()->GetDesignSettings().m_ModuleTextWidth );
-    Module->m_Reference->SetSize( GetBoard()->GetDesignSettings().m_ModuleTextSize );
+    Module->m_Reference->SetThickness( GetDesignSettings().m_ModuleTextWidth );
+    Module->m_Reference->SetSize( GetDesignSettings().m_ModuleTextSize );
 
     // Set the value field to a default value
     Module->m_Value->m_Text = wxT( "VAL**" );
-    Module->m_Value->SetThickness( GetBoard()->GetDesignSettings().m_ModuleTextWidth );
-    Module->m_Value->SetSize( GetBoard()->GetDesignSettings().m_ModuleTextSize );
+    Module->m_Value->SetThickness( GetDesignSettings().m_ModuleTextWidth );
+    Module->m_Value->SetSize( GetDesignSettings().m_ModuleTextSize );
 
     Module->SetPosition( wxPoint( 0, 0 ) );
 

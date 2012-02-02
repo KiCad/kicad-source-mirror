@@ -35,19 +35,19 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     switch( id )
     {
     case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
-        GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth =
-            not GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth;
+        GetDesignSettings().m_UseConnectedTrackWidth =
+            not GetDesignSettings().m_UseConnectedTrackWidth;
         break;
 
     case ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES:
-        GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth = false;
+        GetDesignSettings().m_UseConnectedTrackWidth = false;
         GetBoard()->m_TrackWidthSelector = 0;
         GetBoard()->m_ViaSizeSelector = 0;
         break;
 
     case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
         m_canvas->MoveCursorToCrossHair();
-        GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth = true;
+        GetDesignSettings().m_UseConnectedTrackWidth = true;
         break;
 
     case ID_POPUP_PCB_SELECT_WIDTH1:      // this is the default Netclass selection
@@ -59,7 +59,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH7:
     case ID_POPUP_PCB_SELECT_WIDTH8:
         m_canvas->MoveCursorToCrossHair();
-        GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth = false;
+        GetDesignSettings().m_UseConnectedTrackWidth = false;
         ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
         GetBoard()->m_TrackWidthSelector = ii;
         break;

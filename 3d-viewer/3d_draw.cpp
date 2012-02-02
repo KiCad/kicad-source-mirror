@@ -89,7 +89,7 @@ static void CALLBACK tesswxPoint2Vertex( const GLvoid* data );
 
 void EDA_3D_CANVAS::Redraw( bool finish )
 {
-    /* SwapBuffer requires the window to be shown before calling */
+    // SwapBuffer requires the window to be shown before calling
     if( !IsShown() )
         return;
 
@@ -112,8 +112,8 @@ void EDA_3D_CANVAS::Redraw( bool finish )
 
     InitGL();
 
-    glMatrixMode( GL_MODELVIEW );    /* position viewer */
-    /* transformations */
+    glMatrixMode( GL_MODELVIEW );    // position viewer
+    // transformations
     GLfloat mat[4][4];
 
     // Translate motion first, so rotations don't mess up the orientation...
@@ -180,7 +180,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     g_Parm_3D_Visu.m_Epoxy_Width = pcb->GetDesignSettings().m_BoardThickness
                                    * g_Parm_3D_Visu.m_BoardScale;
 
-    /* calculate z position for each layer */
+    // calculate z position for each layer
     for( ii = 0; ii < 32; ii++ )
     {
         if( ii < g_Parm_3D_Visu.m_Layers )
@@ -205,7 +205,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
-    /* draw axis */
+    // draw axis
     if( g_Parm_3D_Visu.m_Draw3DAxis )
     {
         glEnable( GL_COLOR_MATERIAL );
@@ -222,7 +222,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
         glEnd();
     }
 
-    /* Draw epoxy limits (do not use, works and test in progress) */
+    // Draw epoxy limits (do not use, works and test in progress)
 #if 0
     glEnable( GL_FOG );
     GLfloat param;
@@ -255,14 +255,14 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     glEnd();
 #endif
 
-    /* move the board in order to draw it with its center at 0,0 3D coordinates */
+    // move the board in order to draw it with its center at 0,0 3D coordinates
     glTranslatef( -g_Parm_3D_Visu.m_BoardPos.x * g_Parm_3D_Visu.m_BoardScale,
                   -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BoardScale,
                   0.0F );
 
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
 
-    /* draw tracks and vias : */
+    // draw tracks and vias :
     for( track = pcb->m_Track; track != NULL; track = track->Next() )
     {
         if( track->Type() == PCB_VIA_T )
@@ -370,7 +370,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
         }
     }
 
-    /* draw graphic items */
+    // draw graphic items
     EDA_ITEM* PtStruct;
 
     for( PtStruct = pcb->m_Drawings;  PtStruct != NULL;  PtStruct = PtStruct->Next() )
@@ -390,7 +390,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
         }
     }
 
-    /* draw footprints */
+    // draw footprints
     MODULE* Module = pcb->m_Modules;
 
     for( ; Module != NULL; Module = Module->Next() )
@@ -400,7 +400,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 
     glEndList();
 
-    /* Test for errors */
+    // Test for errors
     CheckGLError();
 
     return m_gllist;
@@ -694,7 +694,7 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
     D_PAD* pad = m_Pads;
 
-    /* Draw pads */
+    // Draw pads
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
 
@@ -703,7 +703,7 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
         pad->Draw3D( glcanvas );
     }
 
-    /* Draw module shape: 3D shape if exists (or module outlines if not exists) */
+    // Draw module shape: 3D shape if exists (or module outlines if not exists)
     S3D_MASTER* Struct3D  = m_3D_Drawings;
     bool        As3dShape = false;
 
@@ -890,7 +890,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 }
 
 
-/* Draw 3D pads. */
+// Draw 3D pads.
 void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
     int ii, ll, layer, nlmax;
@@ -912,7 +912,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
     holeY = (double) m_Drill.y * scale / 2;
     hole  = fmin( holeX, holeY );
 
-    /* Calculate the center of the pad. */
+    // Calculate the center of the pad.
     shape_pos = ReturnShapePos();
     ux0 = shape_pos.x;
     uy0 = shape_pos.y;
@@ -926,7 +926,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
     drillx = m_Pos.x * scale;
     drilly = m_Pos.y * scale;
 
-    /* Draw the pad hole (TODO: draw OBLONG hole) */
+    // Draw the pad hole (TODO: draw OBLONG hole)
     if( holeX && holeY )
     {
         SetGLColor( DARKGRAY );
@@ -981,13 +981,13 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
         break;
 
     case PAD_OVAL:
-        if( dx > dy ) /* Horizontal ellipse */
+        if( dx > dy ) // Horizontal ellipse
         {
             delta_cx = dx - dy;
             delta_cy = 0;
             w = m_Size.y * scale;
         }
-        else /* Vertical ellipse */
+        else // Vertical ellipse
         {
             delta_cx = 0;
             delta_cy = dy - dx;
@@ -1195,7 +1195,7 @@ static void Draw3D_FilledCylinder( double posx, double posy, double rayon,
 }
 
 
-/* Draw a polygon similar to a segment has rounded tips */
+// Draw a polygon similar to a segment has rounded tips
 static void Draw3D_FilledSegment( double startx, double starty, double endx,
                                   double endy, double width, double zpos )
 {

@@ -123,6 +123,14 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload
 
     /**
+     * Function GetDesignSettings
+     * returns the BOARD_DESIGN_SETTINGS for the BOARD owned by this frame.
+     * Overloaded in FOOTPRINT_EDIT_FRAME.
+     */
+    virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
+    virtual void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );
+
+    /**
      * Function SetBoard
      * sets the m_Pcb member in such as way as to ensure deleting any previous
      * BOARD.
@@ -130,9 +138,9 @@ public:
      */
     void SetBoard( BOARD* aBoard );
 
-    BOARD* GetBoard()
+    BOARD* GetBoard() const
     {
-        wxASSERT( m_Pcb );  // phasing out m_Pcb for GerbView
+        wxASSERT( m_Pcb );
         return m_Pcb;
     }
 

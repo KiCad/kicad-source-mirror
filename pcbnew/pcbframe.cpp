@@ -623,7 +623,7 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
     int currLayer = getActiveLayer();
 
-    if( !GetBoard()->GetDesignSettings().m_MicroViasAllowed )
+    if( !GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
 
     if( copperlayercnt < 4 )
