@@ -25,7 +25,8 @@
 
 /**
  * @file tr_modif.cpp
- * @brief Trace editing.
+ * @brief Trace editing: detects an removes a track which is become redunding,
+ * after a new track is craeted.
  */
 
 #include <fctsys.h>
@@ -42,6 +43,10 @@
 static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff );
 
 
+/*
+ * This function try to remove an old track, when a new track is created,
+ * and the old track is no more needed
+ */
 int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
                                          TRACK*             aNewTrack,
                                          int                aNewTrackSegmentsCount,
@@ -292,14 +297,11 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
 }
 
 
-/* Set the bits of .m_State member to on off value, using bit mask State
+/* Set the bits of .m_State member to on/off value, using bit mask State
  * of a list of EDA_ITEM
  */
 static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff )
 {
-    if( Start == NULL )
-        return;
-
     for( ; (Start != NULL ) && ( NbItem > 0 ); NbItem--, Start = Start->Next() )
     {
         Start->SetState( State, onoff );

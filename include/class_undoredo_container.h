@@ -98,6 +98,7 @@ public:
                                         * copy of an active item) and m_Link points the active
                                         * item in schematic */
 
+public:
     ITEM_PICKER( EDA_ITEM* aItem = NULL, UNDO_REDO_T aUndoRedoStatus = UR_UNSPECIFIED );
 
     EDA_ITEM* GetItem() const { return m_PickedItem; }
@@ -105,6 +106,8 @@ public:
     void SetItem( EDA_ITEM* aItem ) { m_PickedItem = aItem; }
 
     KICAD_T GetItemType() const { return m_PickedItemType; }
+
+    void SetStatus( UNDO_REDO_T aStatus ) { m_UndoRedoStatus = aStatus; }
 
     void SetItemType( KICAD_T aType ) { m_PickedItemType = aType; }
 

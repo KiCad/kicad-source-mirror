@@ -50,6 +50,8 @@ static void ComputeBreakPoint( TRACK* track, int n, wxPoint end );
 static void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList );
 static void EnsureEndTrackOnPad( D_PAD* Pad );
 
+// A PICKED_ITEMS_LIST to store tracks  which are modified/added/deleted
+// during a track edition:
 static PICKED_ITEMS_LIST s_ItemsListPicker;
 
 
@@ -456,12 +458,9 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
         else        // If end point of is on a different track,
                     // creates a lock point if not exists
         {
-            TRACK* adr_buf = (TRACK*) LockPoint;
-            GetBoard()->SetHighLightNet( adr_buf->GetNet() );
-
-            // Creates a lock point (if not already exists):
+             // Creates a lock point, if not already exists:
             LockPoint = GetBoard()->CreateLockPoint( g_CurrentTrackSegment->m_End,
-                                                     adr_buf,
+                                                     (TRACK*) LockPoint,
                                                      &s_ItemsListPicker );
         }
     }

@@ -2074,6 +2074,11 @@ BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, int aLayerM
 
 TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS_LIST* aList )
 {
+    /* creates an intermediate point on aSegment and break it into two segments
+     * at aPosition.
+     * The new segment starts from aPosition and ends at the end point of
+     * aSegment. The original segment now ends at aPosition.
+     */
     if( aSegment->m_Start == aPosition || aSegment->m_End == aPosition )
         return NULL;
 
@@ -2087,43 +2092,26 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     // Calculation coordinate of intermediate point relative to the start point of aSegment
      wxPoint delta = aSegment->m_End - aSegment->m_Start;
 
-    // Not yet in use:
-#if 0
-    int ox, oy, fx, fy;
-
-    if( aRefSegm )
-    {
-        ox = aRefSegm->m_Start.x - aSegment->m_Start.x;
-        oy = aRefSegm->m_Start.y - aSegment->m_Start.y;
-        fx = aRefSegm->m_End.x - aSegment->m_Start.x;
-        fy = aRefSegm->m_End.y - aSegment->m_Start.y;
-    }
-#endif
-
     // calculate coordinates of aPosition relative to aSegment->m_Start
-    wxPoint newPoint = aPosition - aSegment->m_Start;
+    wxPoint lockPoint = aPosition - aSegment->m_Start;
 
-    // newPoint must be on aSegment:
-    // Ensure newPoint.y/newPoint.y = delta.y/delta.x
+    // lockPoint must be on aSegment:
+    // Ensure lockPoint.y/lockPoint.y = delta.y/delta.x
     if( delta.x == 0 )
-        newPoint.x = 0;         /* horizontal segment*/
+        lockPoint.x = 0;         /* horizontal segment*/
     else
-        newPoint.y = wxRound( ( (double)newPoint.x * delta.y ) / delta.x );
+        lockPoint.y = wxRound( ( (double)lockPoint.x * delta.y ) / delta.x );
 
     /* Create the intermediate point (that is to say creation of a new
      * segment, beginning at the intermediate point.
      */
-    newPoint.x += aSegment->m_Start.x;
-    newPoint.y += aSegment->m_Start.y;
+    lockPoint += aSegment->m_Start;
 
     TRACK* newTrack = (TRACK*)aSegment->Clone();
-
-    if( aList )
-    {
-        ITEM_PICKER picker( newTrack, UR_NEW );
-        aList->PushItem( picker );
-    }
-
+    // The new segment begins at the new point,
+    newTrack->m_Start = lockPoint;
+    newTrack->start = aSegment;
+    newTrack->SetState( BEGIN_ONPAD, OFF );
 
     DLIST<TRACK>* list = (DLIST<TRACK>*)aSegment->GetList();
     wxASSERT( list );
@@ -2131,27 +2119,21 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 
     if( aList )
     {
-        ITEM_PICKER picker( aSegment, UR_CHANGED );
-        picker.m_Link = aSegment->Clone();
+        // Prepare the undo command for the now track segment
+        ITEM_PICKER picker( newTrack, UR_NEW );
+        aList->PushItem( picker );
+        // Prepare the undo command for the old track segment
+        // before modifications
+        picker.SetItem( aSegment );
+        picker.SetStatus( UR_CHANGED );
+        picker.SetLink( aSegment->Clone() );
         aList->PushItem( picker );
     }
 
-    /* Correct pointer at the end of the new segment. */
-    newTrack->end = aSegment->end;
-    newTrack->SetState( END_ONPAD, aSegment->GetState( END_ONPAD ) );
-
-    /* Set connections info relative to the new point
-    */
-
-    /* Old segment now ends at new point. */
-    aSegment->m_End = newPoint;
+    // Old track segment now ends at new point.
+    aSegment->m_End = lockPoint;
     aSegment->end = newTrack;
     aSegment->SetState( END_ONPAD, OFF );
-
-    /* The new segment begins at the new point. */
-    newTrack->m_Start = newPoint;
-    newTrack->start = aSegment;
-    newTrack->SetState( BEGIN_ONPAD, OFF );
 
     D_PAD * pad = GetPad( newTrack, START );
 
@@ -2163,7 +2145,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
         aSegment->SetState( END_ONPAD, ON );
     }
 
-    aPosition = newPoint;
+    aPosition = lockPoint;
     return newTrack;
 }
 
