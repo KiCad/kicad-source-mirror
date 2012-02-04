@@ -152,7 +152,6 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     FILE*       FichCmp, * NewFile;
     char        line[1024];
     wxString    msg;
-    char*       ignore;
 
     if( old_name == new_name )
         return 0;
@@ -190,9 +189,9 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         return 1;
     }
 
-    ignore = fgets( line, sizeof(line), FichCmp );
+    fgets( line, sizeof(line), FichCmp );
 
-    fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n", TO_UTF8( DateAndTime() ) );
+    fprintf( NewFile, "Cmp-Mod V01 Created by PcbNew date = %s\n", TO_UTF8( DateAndTime() ) );
 
     bool start_descr = false;
 
@@ -588,7 +587,6 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     MODULE*     Module = GetBoard()->m_Modules;
     wxString    msg;
     wxString    wildcard;
-    char*       ignore;
 
     if( Module == NULL )
     {
@@ -619,7 +617,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    ignore = fgets( line, sizeof(line), FichCmp );
+    fgets( line, sizeof(line), FichCmp );
     fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n", TO_UTF8( DateAndTime() ) );
 
     for( ; Module != NULL; Module = Module->Next() )

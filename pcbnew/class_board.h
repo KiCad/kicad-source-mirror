@@ -1308,10 +1308,10 @@ public:
     /**
      * Function CreateLockPoint
      * creates an intermediate point on \a aSegment and break it into two segments
-     * at \a aPoition.
+     * at \a aPosition.
      * <p>
      * The new segment starts from \a aPosition and ends at the end point of \a
-     * aSegement.  The original segment now ends at \a aPosition.
+     * aSegment.  The original segment now ends at \a aPosition.
      * </p>
      *
      * @param aPosition A wxPoint object containing the position to test and the new
