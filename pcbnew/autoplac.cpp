@@ -181,8 +181,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             if( ThisModule == Module )
             {
                 // Module will be placed, add to undo.
-                picker.m_PickedItem     = ThisModule;
-                picker.m_PickedItemType = ThisModule->Type();
+                picker.SetItem( ThisModule );
                 newList.PushItem( picker );
 
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
@@ -199,8 +198,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             if( !bbbox.Contains( Module->m_Pos ) )
             {
                 // Module will be placed, add to undo.
-                picker.m_PickedItem     = Module;
-                picker.m_PickedItemType = Module->Type();
+                picker.SetItem( Module );
                 newList.PushItem( picker );
 
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
@@ -215,8 +213,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
                 break;
 
             // Module will be placed, add to undo.
-            picker.m_PickedItem     = Module;
-            picker.m_PickedItemType = Module->Type();
+            picker.SetItem( Module );
             newList.PushItem( picker );
 
             Module->m_ModuleStatus |= MODULE_to_PLACE;
@@ -232,8 +229,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             if( !(Module->m_ModuleStatus & MODULE_is_PLACED) )
             {
                 // Module will be placed, add to undo.
-                picker.m_PickedItem     = Module;
-                picker.m_PickedItemType = Module->Type();
+                picker.SetItem( Module );
                 newList.PushItem( picker );
 
                 Module->m_ModuleStatus |= MODULE_to_PLACE;

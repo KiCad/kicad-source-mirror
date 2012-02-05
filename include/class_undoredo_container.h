@@ -80,18 +80,16 @@ enum UNDO_REDO_T {
 
 class ITEM_PICKER
 {
-    friend class PICKED_ITEMS_LIST;
-
-public:
-    UNDO_REDO_T    m_UndoRedoStatus;   /* type of operation to undo/redo for this item */
-    EDA_ITEM*      m_PickedItem;       /* Pointer on the schematic or board item that is concerned
+private:
+    int            m_pickerFlags;      /* a copy of m_Flags member. useful in mode/drag
+                                        * undo/redo commands */
+    UNDO_REDO_T    m_undoRedoStatus;   /* type of operation to undo/redo for this item */
+    EDA_ITEM*      m_pickedItem;       /* Pointer on the schematic or board item that is concerned
                                         * (picked), or in undo redo commands, the copy of an
                                         * edited item. */
-    KICAD_T        m_PickedItemType;   /* type of schematic or board item that is concerned */
+    KICAD_T        m_pickedItemType;   /* type of schematic or board item that is concerned */
 
-    int            m_PickerFlags;      /* a copy of m_Flags member. useful in mode/drag
-                                        * undo/redo commands */
-    EDA_ITEM*      m_Link;             /* Pointer on an other item. Used in undo redo command
+    EDA_ITEM*      m_link;             /* Pointer on an other item. Used in undo redo command
                                         * used when a duplicate exists i.e. when an item is
                                         * modified, and the copy of initial item exists (the
                                         * duplicate) m_Item points the duplicate (i.e the old
@@ -101,19 +99,27 @@ public:
 public:
     ITEM_PICKER( EDA_ITEM* aItem = NULL, UNDO_REDO_T aUndoRedoStatus = UR_UNSPECIFIED );
 
-    EDA_ITEM* GetItem() const { return m_PickedItem; }
+    EDA_ITEM* GetItem() const { return m_pickedItem; }
 
-    void SetItem( EDA_ITEM* aItem ) { m_PickedItem = aItem; }
+    void SetItem( EDA_ITEM* aItem )
+    {
+        m_pickedItem = aItem;
+        m_pickedItemType = aItem ? aItem->Type() : TYPE_NOT_INIT;
+    }
 
-    KICAD_T GetItemType() const { return m_PickedItemType; }
+    KICAD_T GetItemType() const { return m_pickedItemType; }
 
-    void SetStatus( UNDO_REDO_T aStatus ) { m_UndoRedoStatus = aStatus; }
+    void SetStatus( UNDO_REDO_T aStatus ) { m_undoRedoStatus = aStatus; }
 
-    void SetItemType( KICAD_T aType ) { m_PickedItemType = aType; }
+    UNDO_REDO_T GetStatus() { return m_undoRedoStatus; }
 
-    void SetLink( EDA_ITEM* aItem ) { m_Link = aItem; }
+    void SetFlags( int aFlags ) { m_pickerFlags = aFlags; }
 
-    EDA_ITEM* GetLink() const { return m_Link; }
+    int GetFlags() { return m_pickerFlags; }
+
+    void SetLink( EDA_ITEM* aItem ) { m_link = aItem; }
+
+    EDA_ITEM* GetLink() const { return m_link; }
 };
 
 

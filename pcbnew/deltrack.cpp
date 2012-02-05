@@ -177,8 +177,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
 
         // redraw the area where the track was
         m_canvas->RefreshDrawingRect( segm->GetBoundingBox() );
-        picker.m_PickedItem     = segm;
-        picker.m_PickedItemType = segm->Type();
+        picker.SetItem( segm );
         itemsList.PushItem( picker );
     }
 
@@ -223,8 +222,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
 
         // redraw the area where the track was
         m_canvas->RefreshDrawingRect( tracksegment->GetBoundingBox() );
-        picker.m_PickedItem     = tracksegment;
-        picker.m_PickedItemType = tracksegment->Type();
+        picker.SetItem( tracksegment );
         itemsList.PushItem( picker );
     }
 

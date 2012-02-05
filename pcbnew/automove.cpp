@@ -264,8 +264,8 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         }
 
         // Undo: add copy of old Module to undo
-        picker.m_Link           = Module->Clone();
-        picker.m_PickedItemType = Module->Type();
+        picker.SetItem( Module );
+        picker.SetLink( Module->Clone() );
 
         if( current.x > (Xsize_allowed + start.x) )
         {
@@ -282,7 +282,6 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         PlaceModule( Module, NULL, true );
 
         // Undo: add new Module to undo
-        picker.m_PickedItem = Module;
         newList.PushItem( picker );
 
         current.x += Module->m_BoundaryBox.GetWidth() + pas_grille;

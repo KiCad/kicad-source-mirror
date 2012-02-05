@@ -33,11 +33,10 @@
 
 ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )
 {
-    m_UndoRedoStatus = aUndoRedoStatus;
-    m_PickedItem     = aItem;
-    m_PickedItemType = TYPE_NOT_INIT;
-    m_PickerFlags = 0;
-    m_Link = NULL;
+    m_undoRedoStatus = aUndoRedoStatus;
+    SetItem( aItem );
+    m_pickerFlags = 0;
+    m_link = NULL;
 }
 
 
@@ -75,7 +74,7 @@ bool PICKED_ITEMS_LIST::ContainsItem( EDA_ITEM* aItem ) const
 {
     for( size_t i = 0;  i < m_ItemsList.size();  i++ )
     {
-        if( m_ItemsList[ i ].m_PickedItem == aItem )
+        if( m_ItemsList[ i ].GetItem() == aItem )
             return true;
     }
 
@@ -97,9 +96,9 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
     while( GetCount() > 0 )
     {
         ITEM_PICKER wrapper = PopItem();
-        if( wrapper.m_PickedItem == NULL ) // No more item in list.
+        if( wrapper.GetItem() == NULL ) // No more item in list.
             break;
-        switch( wrapper.m_UndoRedoStatus )
+        switch( wrapper.GetStatus() )
         {
         case UR_UNSPECIFIED:
             if( show_error_message )
@@ -112,7 +111,7 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
         {
             // Specific to eeschema: a linked list of wires is stored.  The wrapper picks only
             // the first item (head of list), and is owner of all picked items.
-            EDA_ITEM* item = wrapper.m_PickedItem;
+            EDA_ITEM* item = wrapper.GetItem();
 
             while( item )
             {
@@ -135,7 +134,7 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
 
         case UR_CHANGED:
         case UR_EXCHANGE_T:
-            delete wrapper.m_Link;   //  the picker is owner of this item
+            delete wrapper.GetLink();   //  the picker is owner of this item
             break;
 
         case UR_DELETED:            // the picker is owner of this item
@@ -146,12 +145,12 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
                                      * copy of the current module when changed),
                                      * and the picker is owner of this item
                                      */
-            delete wrapper.m_PickedItem;
+            delete wrapper.GetItem();
             break;
 
         default:
             wxFAIL_MSG( wxString::Format( wxT( "Cannot clear unknown undo/redo command %d" ),
-                                          wrapper.m_UndoRedoStatus ) );
+                                          wrapper.GetStatus() ) );
             break;
         }
     }
@@ -172,7 +171,7 @@ ITEM_PICKER PICKED_ITEMS_LIST::GetItemWrapper( unsigned int aIdx )
 EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
-        return m_ItemsList[aIdx].m_PickedItem;
+        return m_ItemsList[aIdx].GetItem();
     else
         return NULL;
 }
@@ -181,7 +180,7 @@ EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx )
 EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
-        return m_ItemsList[aIdx].m_Link;
+        return m_ItemsList[aIdx].GetLink();
     else
         return NULL;
 }
@@ -190,7 +189,7 @@ EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx )
 UNDO_REDO_T PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
-        return m_ItemsList[aIdx].m_UndoRedoStatus;
+        return m_ItemsList[aIdx].GetStatus();
     else
         return UR_UNSPECIFIED;
 }
@@ -199,7 +198,7 @@ UNDO_REDO_T PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx )
 int PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
-        return m_ItemsList[aIdx].m_PickerFlags;
+        return m_ItemsList[aIdx].GetFlags();
     else
         return 0;
 }
@@ -209,7 +208,7 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_PickedItem = aItem;
+        m_ItemsList[aIdx].SetItem( aItem );
         return true;
     }
     else
@@ -221,7 +220,7 @@ bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_ITEM* aLink, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_Link = aLink;
+        m_ItemsList[aIdx].SetLink( aLink );
         return true;
     }
     else
@@ -233,8 +232,8 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UNDO_REDO_T aStatus, uns
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_PickedItem     = aItem;
-        m_ItemsList[aIdx].m_UndoRedoStatus = aStatus;
+        m_ItemsList[aIdx].SetItem( aItem );
+        m_ItemsList[aIdx].SetStatus( aStatus );
         return true;
     }
     else
@@ -246,7 +245,7 @@ bool PICKED_ITEMS_LIST::SetPickedItemStatus( UNDO_REDO_T aStatus, unsigned aIdx 
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_UndoRedoStatus = aStatus;
+        m_ItemsList[aIdx].SetStatus( aStatus );
         return true;
     }
     else
@@ -258,7 +257,7 @@ bool PICKED_ITEMS_LIST::SetPickerFlags( int aFlags, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
-        m_ItemsList[aIdx].m_PickerFlags = aFlags;
+        m_ItemsList[aIdx].SetFlags( aFlags );
         return true;
     }
     else

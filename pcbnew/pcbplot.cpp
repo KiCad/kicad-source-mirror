@@ -549,11 +549,12 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = ReturnStringFromValue( g_UserUnit, m_PSWidthAdjust, PCB_INTERNAL_UNIT );
         m_PSFineAdjustWidthOpt->SetValue( msg );
-        msg.Printf( _( "Width correction constrained!\nThe reasonable width correction value must be in a range of [%+f; %+f]" ),
+        msg.Printf( _( "Width correction constrained!\n"
+"The reasonable width correction value must be in a range of\n"
+" [%+f; %+f] (%s) for current design rules!\n" ),
                     To_User_Unit( g_UserUnit, m_WidthAdjustMinValue, PCB_INTERNAL_UNIT ),
-                    To_User_Unit( g_UserUnit, m_WidthAdjustMaxValue, PCB_INTERNAL_UNIT ) );
-        msg += ( g_UserUnit == INCHES )? _(" (\")") : _(" (mm)");
-        msg += _( " for current design rules!\n" );
+                    To_User_Unit( g_UserUnit, m_WidthAdjustMaxValue, PCB_INTERNAL_UNIT ),
+                    ( g_UserUnit == INCHES )? wxT("\"") : wxT("mm") );
         m_messagesBox->AppendText( msg );
     }
 

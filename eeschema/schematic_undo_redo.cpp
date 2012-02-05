@@ -121,25 +121,19 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     if( aItem == NULL && ( aCommandType != UR_WIRE_IMAGE ) )
         return;
 
-    SCH_ITEM*          CopyOfItem;
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
     commandToUndo->m_TransformPoint = aTransformPoint;
 
-    ITEM_PICKER        itemWrapper( aItem, aCommandType );
+    ITEM_PICKER itemWrapper( aItem, aCommandType );
 
     if( aItem )
-    {
-        itemWrapper.m_PickedItemType = aItem->Type();
-        itemWrapper.m_PickerFlags    = aItem->GetFlags();
-    }
+        itemWrapper.SetFlags( aItem->GetFlags() );
 
     switch( aCommandType )
     {
     case UR_CHANGED:            /* Create a copy of item */
-        CopyOfItem = DuplicateStruct( aItem, true );
-        itemWrapper.m_Link = CopyOfItem;
-        if( CopyOfItem )
-            commandToUndo->PushItem( itemWrapper );
+        itemWrapper.SetLink( DuplicateStruct( aItem, true ) );
+        commandToUndo->PushItem( itemWrapper );
         break;
 
     case UR_NEW:

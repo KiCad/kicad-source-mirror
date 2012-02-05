@@ -48,7 +48,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     lastcmd = GetScreen()->PopCommandFromRedoList();
 
     wrapper = lastcmd->PopItem();
-    m_component = (LIB_COMPONENT*) wrapper.m_PickedItem;
+    m_component = (LIB_COMPONENT*) wrapper.GetItem();
 
     if( m_component == NULL )
         return;
@@ -84,7 +84,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     lastcmd = GetScreen()->PopCommandFromUndoList();
 
     wrapper = lastcmd->PopItem();
-    m_component = (LIB_COMPONENT*) wrapper.m_PickedItem;
+    m_component = (LIB_COMPONENT*) wrapper.GetItem();
 
     if( m_component == NULL )
         return;

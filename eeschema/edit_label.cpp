@@ -263,12 +263,12 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     }
 
     // Prepare undo command for delete old text
-    picker.m_UndoRedoStatus = UR_DELETED;
+    picker.SetStatus( UR_DELETED );
     picker.SetLink( NULL );
     pickList.PushItem( picker );
 
     // Prepare undo command for new text
-    picker.m_UndoRedoStatus = UR_NEW;
+    picker.SetStatus( UR_NEW );
     picker.SetItem(newtext);
     pickList.PushItem( picker );
 

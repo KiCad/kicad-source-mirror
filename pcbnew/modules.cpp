@@ -121,9 +121,9 @@ void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
             TRACK* segm = g_DragSegmentList[ii].m_Segm;
-            itemWrapper.m_PickedItem = segm;
-            itemWrapper.m_Link = segm->Clone();
-            itemWrapper.m_Link->SetState( IN_EDIT, OFF );
+            itemWrapper.SetItem( segm );
+            itemWrapper.SetLink( segm->Clone() );
+            itemWrapper.GetLink()->SetState( IN_EDIT, OFF );
             s_PickedList.PushItem( itemWrapper );
         }
     }
@@ -376,7 +376,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
     else if( aModule->IsMoving() )
     {
         ITEM_PICKER picker( aModule, UR_CHANGED );
-        picker.m_Link = s_ModuleInitialCopy;
+        picker.SetLink( s_ModuleInitialCopy );
         s_PickedList.PushItem( picker );
         s_ModuleInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
     }

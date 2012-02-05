@@ -366,14 +366,12 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
     PICKED_ITEMS_LIST undoItemList;
     unsigned int ii;
 
-    itemWrapper.m_PickedItemType = PCB_MODULE_T;
-
     module = GetBoard()->m_Modules;
 
     // Prepare undo list
     while( module )
     {
-        itemWrapper.m_PickedItem = module;
+        itemWrapper.SetItem( module );
 
         switch( aType )
         {
@@ -388,7 +386,8 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
         case TEXT_is_VALUE:
             item = module->m_Value;
 
-            if( item->GetSize() != GetDesignSettings().m_ModuleTextSize || item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
+            if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
+                item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
                 undoItemList.PushItem( itemWrapper );
 
             break;

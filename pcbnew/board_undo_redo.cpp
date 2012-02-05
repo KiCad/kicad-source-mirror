@@ -312,17 +312,13 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     ITEM_PICKER itemWrapper( aItem, aCommandType );
-    itemWrapper.m_PickedItemType = aItem->Type();
 
     switch( aCommandType )
     {
-    case UR_CHANGED:                        /* Create a copy of schematic */
-        if( itemWrapper.m_Link == NULL )    // When not null, the copy is already done
-            itemWrapper.m_Link = aItem->Clone();;
-
-        if( itemWrapper.m_Link )
-            commandToUndo->PushItem( itemWrapper );
-
+    case UR_CHANGED:                        // Create a copy of item
+        if( itemWrapper.GetLink() == NULL ) // When not null, the copy is already done
+            itemWrapper.SetLink( aItem->Clone() );
+        commandToUndo->PushItem( itemWrapper );
         break;
 
     case UR_NEW:
@@ -466,10 +462,10 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
          *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
          *   - in zones outlines, when a change in one zone merges this zone with an other
          * This test avoids a Pcbnew crash
-         * the test is made only to avoid crashes, so it is not needed for deleted or new items
+         * Obviouly, this test is not made for deleted items
          */
         UNDO_REDO_T status = aList->GetPickedItemStatus( ii );
-        if( status != UR_DELETED && status != UR_NEW )
+        if( status != UR_DELETED )
         {
             if( build_item_list )
                 // Build list of existing items, for integrity test
