@@ -173,7 +173,7 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( int aLayer )
             if( item->GetLayer() == aLayer )
             {
                 item->UnLink();
-                picker.m_PickedItem = item;
+                picker.SetItem( item );
                 pickList.PushItem( picker );
             }
 

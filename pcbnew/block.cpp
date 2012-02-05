@@ -398,8 +398,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             {
                 if( blockIncludeItemsOnInvisibleLayers || m_Pcb->IsModuleLayerVisible( layer ) )
                 {
-                    picker.m_PickedItem     = module;
-                    picker.m_PickedItemType = module->Type();
+                    picker.SetItem ( module );
                     itemsList->PushItem( picker );
                 }
             }
@@ -416,8 +415,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
                 if( blockIncludeItemsOnInvisibleLayers
                   || m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
                 {
-                    picker.m_PickedItem     = pt_segm;
-                    picker.m_PickedItemType = pt_segm->Type();
+                    picker.SetItem ( pt_segm );
                     itemsList->PushItem( picker );
                 }
             }
@@ -486,8 +484,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
 
         if( select_me )
         {
-            picker.m_PickedItem     = PtStruct;
-            picker.m_PickedItemType = PtStruct->Type();
+            picker.SetItem ( PtStruct );
             itemsList->PushItem( picker );
         }
     }
@@ -505,8 +502,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
                   || m_Pcb->IsLayerVisible( area->GetLayer() ) )
                 {
                     BOARD_ITEM* zone_c = (BOARD_ITEM*) area;
-                    picker.m_PickedItem     = zone_c;
-                    picker.m_PickedItemType = zone_c->Type();
+                    picker.SetItem ( zone_c );
                     itemsList->PushItem( picker );
                 }
             }
@@ -854,8 +850,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
         if( newitem )
         {
             newitem->Move( MoveVector );
-            picker.m_PickedItem = newitem;
-            picker.m_PickedItemType = newitem->Type();
+            picker.SetItem ( newitem );
             newList.PushItem( picker );
         }
     }

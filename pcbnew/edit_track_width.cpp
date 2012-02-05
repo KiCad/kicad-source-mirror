@@ -100,7 +100,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         {
             aTrackItem->m_Width = initial_width;
             ITEM_PICKER picker( aTrackItem, UR_CHANGED );
-            picker.m_Link = aTrackItem->Clone();
+            picker.SetLink( aTrackItem->Clone() );
             aItemsListPicker->PushItem( picker );
             aTrackItem->m_Width = new_width;
 

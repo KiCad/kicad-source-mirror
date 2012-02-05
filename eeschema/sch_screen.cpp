@@ -872,7 +872,6 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
     for( item = GetDrawItems(); item != NULL; item = item->Next() )
     {
         picker.SetItem( item );
-        picker.SetItemType( item->Type() );
 
         if( !item->IsConnectable() || !item->IsConnected( position )
             || (item->GetFlags() & SKIP_STRUCT) )
@@ -901,7 +900,7 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
 
         if( addinlist )
         {
-            picker.m_PickerFlags = item->GetFlags();
+            picker.SetFlags( item->GetFlags() );
             m_BlockLocate.m_ItemsSelection.PushItem( picker );
         }
     }
@@ -922,7 +921,6 @@ int SCH_SCREEN::UpdatePickList()
         if( item->HitTest( area ) )
         {
             picker.SetItem( item );
-            picker.SetItemType( item->Type() );
             m_BlockLocate.PushItem( picker );
         }
     }

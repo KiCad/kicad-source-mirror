@@ -320,7 +320,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
         if( g_DragSegmentList[ii].m_Pad_End )
             Track->m_End = Pad_OldPos;
 
-        picker.m_PickedItem = Track;
+        picker.SetItem( Track );
         pickList.PushItem( picker );
     }
 
@@ -333,7 +333,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
         SaveCopyInUndoList( Module, UR_CHANGED );
     else
     {
-        picker.m_PickedItem = Module;
+        picker.SetItem( Module );
         pickList.PushItem( picker );
         SaveCopyInUndoList( pickList, UR_CHANGED );
     }

@@ -265,7 +265,6 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
             if( saveMe )
             {
                 ITEM_PICKER itemWrapper( Module, UR_CHANGED );
-                itemWrapper.m_PickedItemType = Module->Type();
                 itemsList.PushItem( itemWrapper );
             }
         }

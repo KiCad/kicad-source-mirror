@@ -88,7 +88,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
             while( pcb->GetAreaCount() )
             {
                 item = pcb->GetArea( 0 );
-                itemPicker.m_PickedItem = item;
+                itemPicker.SetItem( item );
                 pickersList.PushItem( itemPicker );
                 pcb->Remove( item );
             }
@@ -118,7 +118,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
             if( removeme )
             {
-                itemPicker.m_PickedItem = item;
+                itemPicker.SetItem( item );
                 pickersList.PushItem( itemPicker );
                 item->UnLink();
             }
@@ -131,7 +131,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
             for( item = pcb->m_Modules; item; item = nextitem )
             {
                 nextitem = item->Next();
-                itemPicker.m_PickedItem = item;
+                itemPicker.SetItem( item );
                 pickersList.PushItem( itemPicker );
                 item->UnLink();
             }
@@ -165,7 +165,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
                 if( (track->ReturnMaskLayer() & layers_filter) == 0 )
                     continue;
 
-                itemPicker.m_PickedItem = track;
+                itemPicker.SetItem( track );
                 pickersList.PushItem( itemPicker );
                 track->UnLink();
                 gen_rastnest = true;

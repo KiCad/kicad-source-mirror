@@ -63,7 +63,7 @@ void FOOTPRINT_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     // Retrieve last module state from undo list
     lastcmd = GetScreen()->PopCommandFromRedoList();
     wrapper = lastcmd->PopItem();
-    module = (MODULE *)wrapper.m_PickedItem;
+    module = (MODULE *)wrapper.GetItem();
     delete lastcmd;
 
     if( module )
@@ -91,7 +91,7 @@ void FOOTPRINT_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     // Retrieve last module state from undo list
     lastcmd = GetScreen()->PopCommandFromUndoList();
     wrapper = lastcmd->PopItem();
-    module = (MODULE *)wrapper.m_PickedItem;
+    module = (MODULE *)wrapper.GetItem();
     delete lastcmd;
 
     if( module )
