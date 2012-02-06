@@ -35,7 +35,7 @@
 #include <plot_common.h>
 
 #include <class_pad.h>
-#include <class_zone_setting.h>
+#include <class_zone_settings.h>
 #include <class_board_design_settings.h>
 
 
@@ -100,9 +100,6 @@ int    g_PadCUColor         = GREEN;
 int    g_PadCMPColor        = RED;
 
 
-// Current design settings:
-class BOARD_DESIGN_SETTINGS g_DesignSettings;
-
 /**
  * Used in track creation, a list of track segments currently being created,
  * with the newest track at the end of the list, sorted by new-ness.  e.g. use
@@ -110,10 +107,5 @@ class BOARD_DESIGN_SETTINGS g_DesignSettings;
  * newer track.
  */
 DLIST<TRACK> g_CurrentTrackList;
-
-bool g_Zone_45_Only = false;
-
-// Default setting used when creating a new zone
-ZONE_SETTING g_Zone_Default_Setting;
 
 D_PAD g_Pad_Master( (MODULE*) NULL );

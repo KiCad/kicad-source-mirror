@@ -14,14 +14,6 @@
 #include <macros.h>
 #include <pcbcommon.h>
 
-#ifdef PCBNEW
-/**
- * @todo Fix having to recompile the same file with a different defintion.  This is
- *       what C++ derivation was designed to solve.
- */
-//#include "zones.h"
-#endif
-
 #include <zones.h>
 
 #ifdef CVPCB
@@ -1825,7 +1817,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
             if( ret < 2 )
                 return false;
 
-            if( tempSmoothingType >= ZONE_SETTING::SMOOTHING_LAST)
+            if( tempSmoothingType >= ZONE_SETTINGS::SMOOTHING_LAST )
                 return false;
 
             if( tempSmoothingType < 0 )

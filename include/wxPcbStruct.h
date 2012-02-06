@@ -36,7 +36,7 @@
 #include <class_layer_box_selector.h>
 #include <class_macros_record.h>
 #include <class_undoredo_container.h>
-
+#include <zones.h>
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -119,7 +119,7 @@ protected:
         ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
         if( doLayerWidgetUpdate )
-            syncLayerWidget();
+            syncLayerWidgetLayer();
     }
 
     /**
@@ -132,7 +132,7 @@ protected:
     }
 
     /**
-     * Function syncLayerWidget
+     * Function syncLayerWidgetLayer
      * updates the currently "selected" layer within the PCB_LAYER_WIDGET.
      * The currently active layer is defined by the return value of getActiveLayer().
      * <p>
@@ -140,7 +140,15 @@ protected:
      * here and we do not want to do that.
      * </p>
      */
-    void syncLayerWidget();
+    void syncLayerWidgetLayer();
+
+    /**
+     * Function syncRenderStates
+     * updates the "Render" checkboxes in the layer widget according
+     * to current toggle values determined by IsElementVisible(), and is helpful
+     * immediately after loading a BOARD which may have state information in it.
+     */
+    void syncRenderStates();
 
     virtual void unitsChangeRefresh();
 
@@ -702,7 +710,7 @@ public:
     void OnConfigurePcbOptions( wxCommandEvent& aEvent );
     void InstallDisplayOptionsDialog( wxCommandEvent& aEvent );
     void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
-    bool InstallDialogNonCopperZonesEditor( ZONE_CONTAINER* aZone );
+
     void InstallDialogLayerSetup();
 
     void GenModulesPosition( wxCommandEvent& event );

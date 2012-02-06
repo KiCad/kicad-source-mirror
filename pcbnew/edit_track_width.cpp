@@ -23,7 +23,7 @@
  *  Basic routine used by other routines when editing tracks or vias
  * @param aTrackItem = the track segment or via to modify
  * @param aItemsListPicker = the list picker to use for an undo command (can be NULL)
- * @param aUseNetclassValue = true to use NetClass value, false to use g_DesignSettings value
+ * @param aUseNetclassValue = true to use NetClass value, false to use BOARD::m_designSettings value
  * @return  true if done, false if no not change (because DRC error)
  */
 bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
@@ -71,7 +71,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
 
     aTrackItem->m_Width = new_width;
 
-    /* make a DRC test because the new size is bigger than the old size */
+    // make a DRC test because the new size is bigger than the old size
     if( initial_width < new_width )
     {
         int diagdrc = OK_DRC;
@@ -218,16 +218,16 @@ bool PCB_EDIT_FRAME::Change_Net_Tracks_And_Vias_Sizes( int aNetcode, bool aUseNe
     if( aNetcode <= 0 )
         return false;
 
-    /* Examine segments */
+    // Examine segments
     PICKED_ITEMS_LIST itemsListPicker;
     bool change = false;
 
     for( pt_segm = GetBoard()->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
-        if( aNetcode != pt_segm->GetNet() )         /* not in net */
+        if( aNetcode != pt_segm->GetNet() )         // not in net
             continue;
 
-        /* we have found a item member of the net */
+        // we have found a item member of the net
         if( SetTrackSegmentWidth( pt_segm, &itemsListPicker, aUseNetclassValue ) )
             change = true;
     }
@@ -245,7 +245,7 @@ bool PCB_EDIT_FRAME::Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack, 
 {
     TRACK* pt_segm;
 
-    /* read and edit tracks and vias if required */
+    // read and edit tracks and vias if required
     PICKED_ITEMS_LIST itemsListPicker;
     bool change = false;
 

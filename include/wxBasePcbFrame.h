@@ -39,6 +39,7 @@
 #include <richio.h>
 #include <class_pcb_screen.h>
 
+
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
 #endif
@@ -56,6 +57,7 @@ class EDA_3D_FRAME;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class BOARD_DESIGN_SETTINGS;
+class ZONE_SETTINGS;
 
 /**
  * class PCB_BASE_FRAME
@@ -129,6 +131,9 @@ public:
      */
     virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
     virtual void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );
+
+    const ZONE_SETTINGS& GetZoneSettings() const;
+    void SetZoneSettings( const ZONE_SETTINGS& aSettings );
 
     /**
      * Function SetBoard

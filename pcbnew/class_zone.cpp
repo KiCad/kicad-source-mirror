@@ -48,8 +48,8 @@
 #include <zones.h>
 
 
-ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
-    BOARD_CONNECTED_ITEM( parent, PCB_ZONE_AREA_T )
+ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
+    BOARD_CONNECTED_ITEM( aBoard, PCB_ZONE_AREA_T )
 {
     SetNet( -1 );                               // Net number for fast comparisons
     m_CornerSelection = -1;
@@ -57,12 +57,12 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
     m_priority = 0;
     smoothedPoly = NULL;
-    cornerSmoothingType = ZONE_SETTING::SMOOTHING_NONE;
+    cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
     cornerRadius = 0;
     utility    = 0;                             // flags used in polygon calculations
     utility2   = 0;                             // flags used in polygon calculations
     m_Poly     = new CPolyLine();               // Outlines
-    g_Zone_Default_Setting.ExportSetting( *this );
+    aBoard->GetZoneSettings().ExportSetting( *this );
 }
 
 
