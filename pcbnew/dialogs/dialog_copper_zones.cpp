@@ -19,6 +19,7 @@
 #include <class_zone_settings.h>
 #include <class_board.h>
 #include <dialog_copper_zones_base.h>
+#include <wx/listctrl.h>
 
 
 

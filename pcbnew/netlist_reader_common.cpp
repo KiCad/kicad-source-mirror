@@ -189,8 +189,19 @@ void NETLIST_READER::TestFootprintsMatchingAndExchange()
 {
 #ifdef PCBNEW
 
-    for( MODULE* module = m_pcbframe->GetBoard()->m_Modules; module; module = module->Next() )
+    // If a module is "exchanged", the new module is added to the end of
+    // module list.
+
+    // Calculates the module count
+    int moduleCount = m_pcbframe->GetBoard()->m_Modules.GetCount();
+
+    MODULE* nextmodule;
+    MODULE *module = m_pcbframe->GetBoard()->m_Modules;
+    for( ; module && moduleCount; module = nextmodule, moduleCount-- )
     {
+        // Module can be deleted if exchanged, so store the next module.
+        nextmodule = module->Next();
+
         // Search for the corresponding module info
         COMPONENT_INFO * cmp_info = NULL;
         for( unsigned ii = 0; ii < m_componentsInNetlist.size(); ii++ )
@@ -218,7 +229,6 @@ void NETLIST_READER::TestFootprintsMatchingAndExchange()
                 {
                     // Change old module to the new module (and delete the old one)
                     m_pcbframe->Exchange_Module( module, newModule, NULL );
-                    module = newModule;
                 }
                 else if( m_messageWindow )
                 {
