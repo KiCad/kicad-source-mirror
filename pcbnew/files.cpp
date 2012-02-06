@@ -217,7 +217,7 @@ the changes?" ) ) )
 
     FILTER_READER reader( fileReader );
 
-    /* Read header and TEST if it is a PCB file format */
+    // Read header and TEST if it is a PCB file format
     reader.ReadLine();
 
     if( strncmp( reader.Line(), "PCBNEW-BOARD", 12 ) != 0 )
@@ -324,7 +324,7 @@ this file again." ) );
 
     GetScreen()->ClrModify();
 
-    /* If append option: change the initial board name to <oldname>-append.brd */
+    // If append option: change the initial board name to <oldname>-append.brd
     if( aAppend )
     {
         wxString new_filename = GetScreen()->GetFileName().BeforeLast( '.' );
@@ -343,26 +343,35 @@ this file again." ) );
     UpdateTitle();
     UpdateFileHistory( GetScreen()->GetFileName() );
 
-    /* Rebuild the new pad list (for drc and ratsnet control ...) */
+    // Rebuild the new pad list (for drc and ratsnet control ...)
     GetBoard()->m_Status_Pcb = 0;
 
+    // Dick 5-Feb-2012: I do not agree with this.  The layer widget will show what
+    // is visible or not, and I want the board to look like it did when I saved
+    // it, immediately after loading.
+#if 0
     /* Reset the items visibility flag when loading a new config
-     *  Because it could creates SERIOUS mistakes for the user,
+     * Because it could creates SERIOUS mistakes for the user,
      * if board items are not visible after loading a board...
      * Grid and ratsnest can be left to their previous state
      */
     bool showGrid = IsElementVisible( GRID_VISIBLE );
     bool showRats = IsElementVisible( RATSNEST_VISIBLE );
+
     SetVisibleAlls();
+
     SetElementVisibility( GRID_VISIBLE, showGrid );
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
+#endif
 
     // Update info shown by the horizontal toolbars
     GetBoard()->SetCurrentNetClass( NETCLASS::Default );
     ReFillLayerWidget();
 
     ReCreateLayerBox( NULL );
-    syncLayerWidget();
+    syncLayerWidgetLayer();
+
+    syncRenderStates();
 
     updateTraceWidthSelectBox();
     updateViaSizeSelectBox();
@@ -436,7 +445,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     if( aCreateBackupFile )
     {
-        /* Get the backup file name */
+        // Get the backup file name
         backupFileName = pcbFileName;
         backupFileName.SetExt( pcbBackupFileExtension );
 
@@ -524,7 +533,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
 #endif
 
-    /* Display the file names: */
+    // Display the file names:
     m_messagePanel->EraseMsgBox();
 
     if( saveok )

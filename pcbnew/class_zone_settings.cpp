@@ -1,5 +1,5 @@
 /******************************************************/
-/* class ZONE_SETTING used to handle zones parameters */
+/* class ZONE_SETTINGS used to handle zones parameters */
 /******************************************************/
 
 #ifndef WX_PRECOMP
@@ -22,34 +22,33 @@
 
 #include <class_zone.h>
 
-ZONE_SETTING::ZONE_SETTING( void )
+ZONE_SETTINGS::ZONE_SETTINGS()
 {
     m_ZonePriority = 0;
-    m_FillMode = 0;                                                 // Mode for filling zone : 1 use segments, 0 use polygons
-    m_ZoneClearance      = 200;                                     // Clearance value
-    m_ZoneMinThickness   = 100;                                     // Min thickness value in filled areas
-    m_NetcodeSelection   = 0;                                       // Net code selection for the current zone
-    m_CurrentZone_Layer  = 0;                                       // Layer used to create the current zone
-    m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;                // Option to show the zone area (outlines only, short hatches or full hatches
-    m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;      /* Option to select number of segments to approximate a circle
-                                                                    * ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
-                                                                    * or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF segments */
+    m_FillMode = 0;                                            // Mode for filling zone : 1 use segments, 0 use polygons
+    m_ZoneClearance      = 200;                                // Clearance value
+    m_ZoneMinThickness   = 100;                                // Min thickness value in filled areas
+    m_NetcodeSelection   = 0;                                  // Net code selection for the current zone
+    m_CurrentZone_Layer  = 0;                                  // Layer used to create the current zone
+    m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;           // Option to show the zone area (outlines only, short hatches or full hatches
+
+    m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;  // Option to select number of segments to approximate a circle
+                                                               // ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
+                                                               // or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF segments
+
     m_ThermalReliefGap = 200;                                  // tickness of the gap in thermal reliefs
     m_ThermalReliefCopperBridge = 200;                         // tickness of the copper bridge in thermal reliefs
 
-    m_Zone_Pad_Options = THERMAL_PAD;                               // How pads are covered by copper in zone
+    m_Zone_Pad_Options = THERMAL_PAD;                          // How pads are covered by copper in zone
+
+    m_Zone_45_Only = false;
 
     cornerSmoothingType = SMOOTHING_NONE;
     cornerRadius = 0;
 }
 
 
-/**
- * Function ImportSetting
- * copy settings from a given zone
- * @param aSource: the given zone
- */
-void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
+ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
 {
     m_ZonePriority = aSource.GetPriority();
     m_FillMode     = aSource.m_FillMode;
@@ -64,19 +63,12 @@ void ZONE_SETTING::ImportSetting( const ZONE_CONTAINER& aSource )
     m_Zone_Pad_Options = aSource.m_PadOption;
     cornerSmoothingType = aSource.GetCornerSmoothingType();
     cornerRadius = aSource.GetCornerRadius();
+
+    return *this;
 }
 
 
-/**
- * Function ExportSetting
- * copy settings to a given zone
- * @param aTarget: the given zone
- * @param aFullExport: if false: some parameters are NOT exported
- *   because they must not be  exported when export settings from a zone to others zones
- *   Currently:
- *      m_NetcodeSelection
- */
-void ZONE_SETTING::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport )
+void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) const
 {
     aTarget.m_FillMode = m_FillMode;
     aTarget.m_ZoneClearance    = m_ZoneClearance;
@@ -88,6 +80,7 @@ void ZONE_SETTING::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport )
     aTarget.m_PadOption = m_Zone_Pad_Options;
     aTarget.SetCornerSmoothingType( cornerSmoothingType );
     aTarget.SetCornerRadius( cornerRadius );
+
     if( aFullExport )
     {
         aTarget.SetPriority( m_ZonePriority );

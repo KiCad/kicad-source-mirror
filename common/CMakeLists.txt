@@ -106,7 +106,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/class_text_mod.cpp
     ../pcbnew/class_track.cpp
     ../pcbnew/class_zone.cpp
-    ../pcbnew/class_zone_setting.cpp
+    ../pcbnew/class_zone_settings.cpp
     ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp

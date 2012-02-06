@@ -17,7 +17,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
 {
     m_EnabledLayers = ALL_LAYERS;               // All layers enabled at first.
                                                 // SetCopperLayerCount() will adjust this.
-    SetVisibleAlls();                           // All layers  and all elements visible at first.
+
+    SetVisibleLayers( FULL_LAYERS );
+
+    // set all but hidden text as visible.
+    m_VisibleElements = 0xFFFFFFFF & ~( 1 << MOD_TEXT_INVISIBLE );
 
     SetCopperLayerCount( 2 );                   // Default design is a double sided board
 
@@ -62,11 +66,6 @@ int BOARD_DESIGN_SETTINGS::GetVisibleLayers() const
 }
 
 
-/**
- * Function SetVisibleAlls
- * Set the bit-mask of all visible elements categories,
- * including enabled layers
- */
 void BOARD_DESIGN_SETTINGS::SetVisibleAlls()
 {
     SetVisibleLayers( FULL_LAYERS );
