@@ -576,6 +576,7 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
 
         m_EnabledLayers = getUILayerMask();
         m_Pcb->SetEnabledLayers( m_EnabledLayers );
+
         /* Ensure enabled layers are also visible
          * This is mainly to avoid mistakes if some enabled
          * layers are not visible when exiting this dialog

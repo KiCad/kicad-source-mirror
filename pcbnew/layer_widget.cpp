@@ -45,7 +45,7 @@
 #define BUTT_VOID               4
 
 /* XPM
- * This bitmap  is used for not selected layers
+ * This bitmap is used for not selected layers
  */
 static const char * clear_xpm[] = {
 "10 14 1 1",

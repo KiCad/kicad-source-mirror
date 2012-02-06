@@ -55,10 +55,10 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>
 
     switch( cornerSmoothingType )
     {
-    case ZONE_SETTING::SMOOTHING_CHAMFER:
+    case ZONE_SETTINGS::SMOOTHING_CHAMFER:
         smoothedPoly = m_Poly->Chamfer( cornerRadius );
         break;
-    case ZONE_SETTING::SMOOTHING_FILLET:
+    case ZONE_SETTINGS::SMOOTHING_FILLET:
         smoothedPoly = m_Poly->Fillet( cornerRadius, m_ArcToSegmentsCount );
         break;
     default:
