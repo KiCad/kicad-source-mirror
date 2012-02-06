@@ -333,6 +333,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
     char*     data;
 
     NETCLASS* netclass_default = GetBoard()->m_NetClasses.GetDefault();
+    ZONE_SETTINGS zoneInfo = GetBoard()->GetZoneSettings();
 
     while( aReader->ReadLine() )
     {
@@ -379,6 +380,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             //        file instead so they are there to start new board
             //        projects.
             GetBoard()->m_NetClasses.GetDefault()->SetParams();
+
+            GetBoard()->SetZoneSettings( zoneInfo );
 
             return 0;
         }
@@ -459,7 +462,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "ZoneClearence" ) == 0 )
         {
-            g_Zone_Default_Setting.m_ZoneClearance = atoi( data );
+            zoneInfo.m_ZoneClearance = atoi( data );
             continue;
         }
 
@@ -697,7 +700,7 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
 
 
     fprintf( aFile, "TrackClearence %d\n", netclass_default->GetClearance() );
-    fprintf( aFile, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
+    fprintf( aFile, "ZoneClearence %d\n", aBoard->GetZoneSettings().m_ZoneClearance );
     fprintf( aFile, "TrackMinWidth %d\n", aBoard->GetDesignSettings().m_TrackMinWidth );
 
     fprintf( aFile, "DrawSegmWidth %d\n", aBoard->GetDesignSettings().m_DrawSegmentWidth );

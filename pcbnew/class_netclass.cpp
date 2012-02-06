@@ -39,9 +39,9 @@
 const wxString NETCLASS::Default = wxT("Default");
 
 // Initial values for netclass initialization
-int NETCLASS::DEFAULT_CLEARANCE = 100;                  // track to track and track to pads clearance
-int NETCLASS::DEFAULT_VIA_DRILL = 250;                  // default via drill
-int NETCLASS::DEFAULT_UVIA_DRILL = 50;                  // micro via drill
+int NETCLASS::DEFAULT_CLEARANCE  = 100;         // track to track and track to pads clearance
+int NETCLASS::DEFAULT_VIA_DRILL  = 250;         // default via drill
+int NETCLASS::DEFAULT_UVIA_DRILL = 50;          // micro via drill
 
 
 NETCLASS::NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters ) :
@@ -66,13 +66,20 @@ void NETCLASS::SetParams( const NETCLASS* defaults )
         SetuViaDrill( defaults->GetuViaDrill() );
     }
     else
-    {   // Note:
+    {
+
+/* Dick 5-Feb-2012:  I do not believe this comment to be true with current code.
+        It is certainly not a constructor race.
+
+        // Note:
         // We use m_Parent->GetDesignSettings() to get some default values
         // But when this function is called when instantiating a BOARD class,
         // by the NETCLASSES constructor that calls NETCLASS constructor,
         // the BOARD constructor (see BOARD::BOARD) is not yet run,
         // and BOARD::m_designSettings contains not yet initialized values.
         // So inside the BOARD constructor itself, you SHOULD recall SetParams
+*/
+
         const BOARD_DESIGN_SETTINGS& g = m_Parent->GetDesignSettings();
 
         SetTrackWidth(  g.m_TrackMinWidth );

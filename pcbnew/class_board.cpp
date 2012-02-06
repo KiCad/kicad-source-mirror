@@ -10,7 +10,6 @@
 #include <common.h>
 #include <pcbcommon.h>
 #include <wxBasePcbFrame.h>
-#include <build_version.h>      // BOARD_FILE_VERSION
 
 #include <pcbnew.h>
 #include <colors_selection.h>
@@ -52,16 +51,16 @@ BOARD::BOARD() :
         m_Layer[layer].m_Type = LT_SIGNAL;
     }
 
-    // Initial parameters for the default NETCLASS come from the global
-    // preferences within g_DesignSettings via the NETCLASS() constructor.
-    // Should user eventually load a board from a disk file, then these
-    // defaults will get overwritten during load.
     m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
     m_ViaSizeSelector    = 0;
     m_TrackWidthSelector = 0;
 
+    /*  Dick 5-Feb-2012: this seems unnecessary.  I don't believe the comment in
+        near line 70 of class_netclass.cpp.  I stepped through with debugger.
     // Initialize default values in default netclass.
     m_NetClasses.GetDefault()->SetParams();
+    */
+
     SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
 }
 
@@ -530,14 +529,14 @@ void BOARD::SetVisibleElements( int aMask )
     }
 }
 
+
 // these are not tidy, since there are PCB_VISIBLEs that are not stored in the bitmap.
-void BOARD::SetVisibleAlls(  )
+void BOARD::SetVisibleAlls()
 {
     SetVisibleLayers( FULL_LAYERS );
 
-    /* Call SetElementVisibility for each item,
-     * to ensure specific calculations that can be needed by some items
-     */
+    // Call SetElementVisibility for each item,
+    // to ensure specific calculations that can be needed by some items
     for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
         SetElementVisibility( ii, true );
 }
@@ -557,14 +556,16 @@ bool BOARD::IsElementVisible( int aPCB_VISIBLE ) const
 
 void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
 {
+    m_designSettings.SetElementVisibility( aPCB_VISIBLE, isEnabled );
+
     switch( aPCB_VISIBLE )
     {
     case RATSNEST_VISIBLE:
-        m_designSettings.SetElementVisibility( aPCB_VISIBLE, isEnabled );
+
         // we must clear or set the CH_VISIBLE flags to hide/show ratsnet
         // because we have a tool to show hide ratsnest relative to a pad or a module
         // so the hide/show option is a per item selection
-        if( IsElementVisible(RATSNEST_VISIBLE) )
+        if( IsElementVisible( RATSNEST_VISIBLE ) )
         {
             for( unsigned ii = 0; ii < GetRatsnestsCount(); ii++ )
                 m_FullRatsnest[ii].m_Status |= CH_VISIBLE;
@@ -574,12 +575,10 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
             for( unsigned ii = 0; ii < GetRatsnestsCount(); ii++ )
                 m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
         }
-
         break;
 
-
     default:
-        m_designSettings.SetElementVisibility( aPCB_VISIBLE, isEnabled );
+        ;
     }
 }
 

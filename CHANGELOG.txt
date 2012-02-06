@@ -4,6 +4,32 @@ KiCad ChangeLog 2012
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2012-Feb-5 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+  * Changed classs ZONE_SETTING to class ZONE_SETTINGS, better English.
+  * Changed ZONE_SETTINGS::Import() to operator << ( ZONE_CONTAINER )
+  * move globals into BOARD:
+    bool g_Zone_45_Only, is now in BOARD::m_zoneSettings.m_Zone_45_Only
+    ZONE_SETTINGS g_Zone_Default_Setting is now in BOARD::m_zoneSettings
+  * Added BOARD::{Get,Set}ZoneSettings().
+  * Added PCB_BASE_FRAME::{Get,Set}ZoneSettings().
+  * Save/load BOARD::m_zoneSettings.m_Zone_45_Only to/from BOARD file.
+  * Removed PCB_EDIT_FRAME::InstallDialogNonCopperZonesEditor() in favor of
+    ::InvokeNonCopperZonesEditor() declared in zones.h
+  * Added ::InvokeCopperZonesEditor() declared in zones.h
+  * Removed dialog_copper_zones.h since DIALOG class is now declared in *.cpp.
+  * Renamed to enum ZONE_EDIT_T in zones.h
+  * SetVisibleAlls() is not called as it was in two previous cases for several
+    reasons.  BOARD_DESIGN_SETTINGS constructor controls what is visible initially.
+    and in the near future so will the *.brd file.  I believe the user should
+    have visibility setting rentention accross editing sessions of zones,
+    fields, etc.
+  * BOARD_DESIGN_SETTINGS constructor initializes hidden text as not visible.
+  * Added PCB_EDIT_FRAME::SyncRenderStates() and PCB_LAYER_WIDGET::syncRenderStates()
+    so the checkboxes can be set after loading a BOARD file containing previous
+    visibility settings.
+
 2012-Feb-2 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew

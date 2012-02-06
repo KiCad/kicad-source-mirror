@@ -556,8 +556,9 @@ void KICAD_PLUGIN::loadSHEET()
 
 void KICAD_PLUGIN::loadSETUP()
 {
-    NETCLASS* netclass_default = m_board->m_NetClasses.GetDefault();
+    NETCLASS* netclass_default  = m_board->m_NetClasses.GetDefault();
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
+    ZONE_SETTINGS           zs  = m_board->GetZoneSettings();
 
     while( READLINE() )
     {
@@ -638,7 +639,13 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "ZoneClearence" ) )
         {
             BIU tmp = biuParse( line + SZ( "ZoneClearence" ) );
-            g_Zone_Default_Setting.m_ZoneClearance = tmp;
+            zs.m_ZoneClearance = tmp;
+        }
+
+        else if( TESTLINE( "Zone_45_Only" ) )
+        {
+            bool tmp = (bool) intParse( line + SZ( "Zone_45_Only" ) );
+            zs.m_Zone_45_Only = tmp;
         }
 
         else if( TESTLINE( "DrawSegmWidth" ) )
@@ -793,6 +800,7 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "$EndSETUP" ) )
         {
             m_board->SetDesignSettings( bds );
+            m_board->SetZoneSettings( zs );
 
             // Until such time as the *.brd file does not have the
             // global parameters:
@@ -2109,7 +2117,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
             int     smoothing    = intParse( line + SZ( "ZSmoothing" ), &data );
             BIU     cornerRadius = biuParse( data );
 
-            if( smoothing >= ZONE_SETTING::SMOOTHING_LAST || smoothing < 0 )
+            if( smoothing >= ZONE_SETTINGS::SMOOTHING_LAST || smoothing < 0 )
             {
                 m_error.Printf( wxT( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
                 THROW_IO_ERROR( m_error );
@@ -2804,9 +2812,9 @@ void KICAD_PLUGIN::saveSETUP() const
 
     fprintf( m_fp, "TrackClearence %s\n",  fmtBIU( netclass_default->GetClearance() ).c_str() );
 
-    /* @todo no globals in a plugin.
-    fprintf( m_fp, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
-    */
+    // ZONE_SETTINGS
+    fprintf( m_fp, "ZoneClearence %s\n", fmtBIU( m_board->GetZoneSettings().m_ZoneClearance ).c_str() );
+    fprintf( m_fp, "Zone_45_Only %d\n", m_board->GetZoneSettings().m_Zone_45_Only );
 
     fprintf( m_fp, "TrackMinWidth %s\n", fmtBIU( bds.m_TrackMinWidth ).c_str() );
 

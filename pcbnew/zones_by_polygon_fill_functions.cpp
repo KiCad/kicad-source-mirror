@@ -41,6 +41,8 @@
 #include <pcbnew.h>
 #include <zones.h>
 
+#define FORMAT_STRING _( "Filling zone %d out of %d (net %s)..." )
+
 
 /**
  * Function Delete_OldZone_Fill (obsolete)
@@ -70,7 +72,7 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp )
         if( zone->GetTimeStamp() == TimeStamp )
         {
             modify = true;
-            /* remove item from linked list and free memory */
+            // remove item from linked list and free memory
             zone->DeleteStructure();
         }
     }
@@ -83,15 +85,6 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp )
 }
 
 
-/**
- * Function Fill_Zone
- *  Calculate the zone filling for the outline zone_container
- *  The zone outline is a frontier, and can be complex (with holes)
- *  The filling starts from starting points like pads, tracks.
- * If exists, the old filling is removed
- * @param aZone = zone to fill
- * @return error level (0 = no error)
- */
 int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 {
     wxString msg;
@@ -99,7 +92,10 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
     ClearMsgPanel();
 
     // Shows the net
-    g_Zone_Default_Setting.m_NetcodeSelection = aZone->GetNet();
+    ZONE_SETTINGS zoneInfo = GetZoneSettings();
+    zoneInfo.m_NetcodeSelection = aZone->GetNet();
+    SetZoneSettings( zoneInfo );
+
     msg = aZone->GetNetName();
 
     if( msg.IsEmpty() )
@@ -119,22 +115,12 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 }
 
 
-/*
- * Function Fill_All_Zones
- *  Fill all zones on the board
- * The old fillings are removed
- * aActiveWindow = the current active window, if a progress bar is shown
- *                      = NULL to do not display a progress bar
- * aVerbose = true to show error messages
- * return error level (0 = no error)
- */
 int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 {
     int errorLevel = 0;
     int areaCount = GetBoard()->GetAreaCount();
     wxBusyCursor dummyCursor;
     wxString msg;
-    #define FORMAT_STRING _( "Filling zone %d out of %d (net %s)..." )
     wxProgressDialog * progressDialog = NULL;
 
     // Create a message with a long net name, and build a wxProgressDialog

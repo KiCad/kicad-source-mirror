@@ -86,7 +86,7 @@ public:
      * @param aParent = the parent board
      * @param aName = the name of this new netclass
      * @param initialParameters is a NETCLASS to copy parameters from, or if
-     *  NULL tells me to copy from g_DesignSettings.
+     *  NULL tells me to copy default settings from BOARD::m_designSettings.
      */
     NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters = NULL );
 

@@ -177,15 +177,25 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     // User library path takes precedent over default library search paths.
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
+    // Dick 5-Feb-2012: I don't agree with this, the BOARD contents should dictate
+    // what is visible or not, even initially.  And since PCB_EDIT_FRAME projects settings
+    // have no control over what is visible (see PCB_EDIT_FRAME::GetProjectFileParameters())
+    // this is recklessly turning on things the user may not want to see.
+#if 0
+
     /* Reset the items visibility flag when loading a new configuration because it could
-     * create SERIOUS mistakes for the user f board items are not visible after loading
+     * create SERIOUS mistakes for the user if board items are not visible after loading
      * a board.  Grid and ratsnest can be left to their previous state.
      */
     bool showGrid = IsElementVisible( GRID_VISIBLE );
     bool showRats = IsElementVisible( RATSNEST_VISIBLE );
+
     SetVisibleAlls();
+
     SetElementVisibility( GRID_VISIBLE, showGrid );
     SetElementVisibility( RATSNEST_VISIBLE, showRats );
+#endif
+
     return true;
 }
 
