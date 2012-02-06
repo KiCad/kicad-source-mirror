@@ -532,7 +532,6 @@ void BOARD::SetVisibleElements( int aMask )
 }
 
 
-// these are not tidy, since there are PCB_VISIBLEs that are not stored in the bitmap.
 void BOARD::SetVisibleAlls()
 {
     SetVisibleLayers( FULL_LAYERS );

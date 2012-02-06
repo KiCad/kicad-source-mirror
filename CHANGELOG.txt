@@ -21,12 +21,12 @@ email address.
   * Removed dialog_copper_zones.h since DIALOG class is now declared in *.cpp.
   * Renamed to enum ZONE_EDIT_T in zones.h
   * SetVisibleAlls() is not called as it was in two previous cases for several
-    reasons.  BOARD_DESIGN_SETTINGS constructor controls what is visible initially.
+    reasons.  BOARD_DESIGN_SETTINGS constructor controls what is visible initially,
     and in the near future so will the *.brd file.  I believe the user should
     have visibility setting rentention accross editing sessions of zones,
     fields, etc.
   * BOARD_DESIGN_SETTINGS constructor initializes hidden text as not visible.
-  * Added PCB_EDIT_FRAME::SyncRenderStates() and PCB_LAYER_WIDGET::syncRenderStates()
+  * Added PCB_EDIT_FRAME::syncRenderStates() and PCB_LAYER_WIDGET::SyncRenderStates()
     so the checkboxes can be set after loading a BOARD file containing previous
     visibility settings.
 

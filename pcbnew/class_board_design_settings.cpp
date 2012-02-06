@@ -21,7 +21,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
     SetVisibleLayers( FULL_LAYERS );
 
     // set all but hidden text as visible.
-    m_VisibleElements = -1 & ~( 1 << MOD_TEXT_INVISIBLE );
+    m_VisibleElements = ~( 1 << MOD_TEXT_INVISIBLE );
 
     SetCopperLayerCount( 2 );                   // Default design is a double sided board
 
