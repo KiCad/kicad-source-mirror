@@ -16,6 +16,8 @@
 #include <class_board_design_settings.h>
 #include <common.h>                         // PAGE_INFO
 #include <class_title_block.h>
+#include <class_zone_settings.h>
+
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
@@ -174,6 +176,7 @@ private:
     NETINFO_LIST        m_NetInfo;                      ///< net info list (name, design constraints ..
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
+    ZONE_SETTINGS           m_zoneSettings;
     COLORS_DESIGN_SETTINGS* m_colorsSettings;
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;                   ///< text in lower right of screen and plots
@@ -549,8 +552,11 @@ public:
     TITLE_BLOCK& GetTitleBlock()                            { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
+    const ZONE_SETTINGS& GetZoneSettings() const            { return m_zoneSettings; }
+    void SetZoneSettings( const ZONE_SETTINGS& aSettings )  { m_zoneSettings = aSettings; }
+
     /**
-     * Function SetBoardSettings
+     * Function SetColorSettings
      * @return the current COLORS_DESIGN_SETTINGS in use
      */
     COLORS_DESIGN_SETTINGS* GetColorsSettings() const { return m_colorsSettings; }

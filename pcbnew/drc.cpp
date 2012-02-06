@@ -191,7 +191,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     if( !testNetClasses() )
     {
         // testing the netclasses is a special case because if the netclasses
-        // do not pass the g_DesignSettings checks, then every member of a net
+        // do not pass the BOARD_DESIGN_SETTINGS checks, then every member of a net
         // class (a NET) will cause its items such as tracks, vias, and pads
         // to also fail.  So quit after *all* netclass errors have been reported.
         if( aMessages )

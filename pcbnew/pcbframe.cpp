@@ -403,8 +403,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     ReFillLayerWidget();        // this is near end because contents establish size
+
     m_Layers->ReFillRender();   // Update colors in Render after the config is read
-    syncLayerWidget();
+
+    syncLayerWidgetLayer();
+
     m_auimgr.Update();
 }
 
@@ -639,9 +642,15 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 }
 
 
-void PCB_EDIT_FRAME::syncLayerWidget( )
+void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 {
     m_Layers->SelectLayer( getActiveLayer() );
+}
+
+
+void PCB_EDIT_FRAME::syncRenderStates()
+{
+    m_Layers->SyncRenderStates();
 }
 
 
@@ -667,9 +676,9 @@ void PCB_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
 }
 
 
-void PCB_EDIT_FRAME::SetVisibleAlls( )
+void PCB_EDIT_FRAME::SetVisibleAlls()
 {
-    GetBoard()->SetVisibleAlls(  );
+    GetBoard()->SetVisibleAlls();
 
     for( int ii = 0; ii < PCB_VISIBLE( END_PCB_VISIBLE_LIST ); ii++ )
         m_Layers->SetRenderState( ii, true );

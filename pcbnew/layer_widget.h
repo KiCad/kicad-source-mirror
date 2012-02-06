@@ -49,8 +49,7 @@
 
 /**
  * Class LAYER_WIDGET
- * is abstract and is derived from a wxFormBuilder maintained class called
- * LAYER_PANEL_BASE.  It is used to manage a list of layers, with the notion of
+ * is abstract and is used to manage a list of layers, with the notion of
  * a "current" layer, and layer specific visibility control.  You must derive from
  * it to use it so you can implement the abstract functions which recieve the
  * events.  Each layer is given its own color, and that color can be changed

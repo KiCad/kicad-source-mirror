@@ -28,8 +28,8 @@
 /* class_pcb_layer_widget.h : header for the layers manager */
 /************************************************************/
 
-#ifndef _CLASS_PCB_LAYER_WIDGET_H_
-#define _CLASS_PCB_LAYER_WIDGET_H_
+#ifndef CLASS_PCB_LAYER_WIDGET_H_
+#define CLASS_PCB_LAYER_WIDGET_H_
 
 /**
  * Class PCB_LAYER_WIDGET
@@ -39,6 +39,53 @@
  */
 class PCB_LAYER_WIDGET : public LAYER_WIDGET
 {
+public:
+
+    /**
+     * Constructor
+     * @param aParent is the parent window
+     * @param aFocusOwner is the window that should be sent the focus after
+     * @param aPointSize is the font point size to use within the widget.  This
+     *  effectively sets the overal size of the widget via the row height and bitmap
+     *  button sizes.
+     */
+    PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
+
+    void ReFill();
+
+    /**
+     * Function ReFillRender
+     * rebuilds Render for instance after the config is read
+     */
+    void ReFillRender();
+
+    /**
+     * Function SyncRenderStates
+     * updates the checkboxes (checked or not) to be consistent with the current state
+     * of the visibility of the visible rendering elements.
+     */
+    void SyncRenderStates();
+
+    /**
+     * Function SetLayersManagerTabsText
+     * Update the layer manager tabs labels
+     * Useful when changing Language or to set labels to a non default value
+     */
+    void SetLayersManagerTabsText();
+
+    //-----<implement LAYER_WIDGET abstract callback functions>-----------
+    void OnLayerColorChange( int aLayer, int aColor );
+    bool OnLayerSelect( int aLayer );
+    void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
+    void OnRenderColorChange( int aId, int aColor );
+    void OnRenderEnable( int aId, bool isEnabled );
+    //-----</implement LAYER_WIDGET abstract callback functions>----------
+
+
+protected:
+
+    static const LAYER_WIDGET::ROW  s_render_rows[];
+
     PCB_EDIT_FRAME*    myframe;
 
     // popup menu ids.
@@ -56,40 +103,6 @@ class PCB_LAYER_WIDGET : public LAYER_WIDGET
     /// this is for the popup menu, the right click handler has to be installed
     /// on every child control within the layer panel.
     void installRightLayerClickHandler();
-
-public:
-
-    /**
-     * Constructor
-     * @param aParent is the parent window
-     * @param aFocusOwner is the window that should be sent the focus after
-     * @param aPointSize is the font point size to use within the widget.  This
-     *  effectively sets the overal size of the widget via the row height and bitmap
-     *  button sizes.
-     */
-    PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize = 10 );
-
-    void ReFill();
-
-    /**
-     * Function ReFillRender
-     * Rebuild Render for instance after the config is read
-     */
-    void ReFillRender();
-
-    //-----<implement LAYER_WIDGET abstract callback functions>-----------
-    void OnLayerColorChange( int aLayer, int aColor );
-    bool OnLayerSelect( int aLayer );
-    void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
-    void OnRenderColorChange( int aId, int aColor );
-    void OnRenderEnable( int aId, bool isEnabled );
-    /**
-     * Function SetLayersManagerTabsText
-     * Update the layer manager tabs labels
-     * Useful when changing Language or to set labels to a non default value
-     */
-    void SetLayersManagerTabsText( );
-    //-----</implement LAYER_WIDGET abstract callback functions>----------
 };
 
-#endif  // _CLASS_PCB_LAYER_WIDGET_H_
+#endif  // CLASS_PCB_LAYER_WIDGET_H_

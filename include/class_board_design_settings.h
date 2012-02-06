@@ -2,21 +2,14 @@
 /*  class_board_design_settings.h :  handle board options */
 /**********************************************************/
 
-#ifndef _BOARD_DESIGN_SETTING_H
-#define _BOARD_DESIGN_SETTING_H
+#ifndef BOARD_DESIGN_SETTINGS_H_
+#define BOARD_DESIGN_SETTINGS_H_
 
 #include <pcbstruct.h>      // NB_COLORS
 
 // Class for handle current printed board design settings
 class BOARD_DESIGN_SETTINGS
 {
-protected:
-    int     m_CopperLayerCount;             ///< Number of copper layers for this design
-    int     m_EnabledLayers;                ///< Bit-mask for layer enabling
-    int     m_VisibleLayers;                ///< Bit-mask for layer visibility
-    int     m_VisibleElements;              ///< Bit-mask for element category visibility
-
-
 public:
     bool    m_MicroViasAllowed;             ///< true to allow micro vias
     int     m_CurrentViaType;               ///< via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
@@ -57,9 +50,10 @@ public:
 
     /**
      * Function SetVisibleAlls
-     * Set the bit-mask of all visible elements categories, including layers
+     * Set the bit-mask of all visible elements categories,
+     * including enabled layers
      */
-    void SetVisibleAlls( );
+    void SetVisibleAlls();
 
     /**
      * Function SetVisibleLayers
@@ -177,9 +171,13 @@ public:
      * @param aNewLayerCount = The new number of enabled copper layers
      */
     void SetCopperLayerCount( int aNewLayerCount );
+
+
+private:
+    int     m_CopperLayerCount;     ///< Number of copper layers for this design
+    int     m_EnabledLayers;        ///< Bit-mask for layer enabling
+    int     m_VisibleLayers;        ///< Bit-mask for layer visibility
+    int     m_VisibleElements;      ///< Bit-mask for element category visibility
 };
 
-
-#endif
-
-//  _BOARD_DESIGN_SETTING_H
+#endif  // BOARD_DESIGN_SETTINGS_H_
