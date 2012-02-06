@@ -47,7 +47,7 @@
 #include <module_editor_frame.h>
 
 
-static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the footprint editor
+static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
 
 wxString FOOTPRINT_EDIT_FRAME::m_CurrentLib = wxEmptyString;
 
@@ -157,15 +157,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
 
     SetBoard( s_Pcb );
 
-    if( s_screenModule == NULL )
+    if( !s_screenModule )
         s_screenModule = new PCB_SCREEN( GetPageSettings().GetSizeIU() );
 
     SetScreen( s_screenModule );
-
-    /*  not sure why this was here, formerly s_ModuleEditorDesignSetting, since
-        we get default BOARD_DESIGN_SETTINGS in BOARD's constructor.
-    GetBoard()->SetDesignSettings( BOARD_DESIGN_SETTINGS() );
-    */
 
     GetScreen()->SetCurItem( NULL );
     LoadSettings();

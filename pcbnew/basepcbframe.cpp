@@ -194,6 +194,20 @@ void PCB_BASE_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 }
 
 
+const ZONE_SETTINGS& PCB_BASE_FRAME::GetZoneSettings() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetZoneSettings();
+}
+
+
+void PCB_BASE_FRAME::SetZoneSettings( const ZONE_SETTINGS& aSettings )
+{
+    wxASSERT( m_Pcb );
+    m_Pcb->SetZoneSettings( aSettings );
+}
+
+
 EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 {
     wxASSERT( m_Pcb );
