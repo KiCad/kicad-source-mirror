@@ -145,12 +145,12 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
 
 DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
-    delete GetBoard();
     delete GetScreen();
     SetScreen( NULL );
 
     ( (CVPCB_MAINFRAME*) wxGetApp().GetTopWindow() )->m_DisplayFootprintFrame = NULL;
 }
+
 
 /* Called when the frame is closed
  *  Save current settings (frame position and size
