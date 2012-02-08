@@ -77,7 +77,7 @@ set(COMMON_SRCS
     zoom.cpp
     )
 
-add_library(common ${COMMON_SRCS})
+add_library(common STATIC ${COMMON_SRCS})
 
 set(PCB_COMMON_SRCS
     base_screen.cpp
@@ -125,7 +125,7 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     COMPILE_DEFINITIONS "PCBNEW"
     )
 
-add_library(pcbcommon ${PCB_COMMON_SRCS})
+add_library(pcbcommon STATIC ${PCB_COMMON_SRCS})
 
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp

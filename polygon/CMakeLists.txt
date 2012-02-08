@@ -10,4 +10,4 @@ set(POLYGON_SRCS
     polygon_test_point_inside.cpp
     )
 
-add_library(polygon ${POLYGON_SRCS})
+add_library(polygon STATIC ${POLYGON_SRCS})

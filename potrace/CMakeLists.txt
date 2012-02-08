@@ -13,4 +13,4 @@ set(POTRACE_SRCS
     trace.cpp
     )
 
-add_library(potrace ${POTRACE_SRCS})
+add_library(potrace STATIC ${POTRACE_SRCS})

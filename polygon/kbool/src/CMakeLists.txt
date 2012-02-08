@@ -18,4 +18,4 @@ set(KBOOL_SRCS
     record.cpp
     scanbeam.cpp)
 
-add_library(kbool ${KBOOL_SRCS})
+add_library(kbool STATIC ${KBOOL_SRCS})

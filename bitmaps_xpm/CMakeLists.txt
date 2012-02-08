@@ -449,4 +449,4 @@ foreach(LOOP_VAR ${BITMAP_SRCS})
     set_source_files_properties(${CPP_BITMAP} PROPERTIES COMPILE_FLAGS -DXPMMAIN)
 endforeach(LOOP_VAR)
 
-add_library(bitmaps ${CPP_BITMAPS})
+add_library(bitmaps STATIC ${CPP_BITMAPS})
