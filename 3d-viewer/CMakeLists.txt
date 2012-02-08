@@ -19,4 +19,4 @@ set(3D-VIEWER_SRCS
     trackball.cpp
     )
 
-add_library(3d-viewer ${3D-VIEWER_SRCS})
+add_library(3d-viewer STATIC ${3D-VIEWER_SRCS})

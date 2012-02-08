@@ -676,5 +676,5 @@ foreach( bmn ${BMAPS_BIG} )
 endforeach()
 
 #add_library( bitmaps SHARED ${CPP_LIST} )
-add_library( bitmaps ${CPP_LIST} )
+add_library( bitmaps STATIC ${CPP_LIST} )
 
