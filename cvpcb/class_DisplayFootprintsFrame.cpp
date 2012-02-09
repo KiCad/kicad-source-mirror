@@ -72,11 +72,11 @@ END_EVENT_TABLE()
 /* DISPLAY_FOOTPRINTS_FRAME: the frame to display the current focused footprint */
 /***************************************************************************/
 
-DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
+DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* parent,
                                                     const wxString& title,
                                                     const wxPoint& pos,
                                                     const wxSize& size, long style ) :
-    PCB_BASE_FRAME( father, CVPCB_DISPLAY_FRAME, title, pos, size, style )
+    PCB_BASE_FRAME( parent, CVPCB_DISPLAY_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "CmpFrame" );
     m_showAxis = true;         // true to draw axis.
@@ -146,7 +146,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
 DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
     delete GetScreen();
-    SetScreen( NULL );
+    SetScreen( NULL );      // Be sure there is no double deletion
 
     ( (CVPCB_MAINFRAME*) wxGetApp().GetTopWindow() )->m_DisplayFootprintFrame = NULL;
 }

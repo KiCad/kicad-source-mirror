@@ -47,6 +47,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <modview_frame.h>
 
 #include <dialog_drc.h>
 
@@ -205,6 +206,28 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 m_ModuleEditFrame->SetFocus();
         }
 
+        break;
+
+    case ID_OPEN_MODULE_VIEWER:
+        if( GetActiveViewerFrame() == NULL )
+        {
+            m_ModuleViewerFrame = new FOOTPRINT_VIEWER_FRAME( this, NULL );
+            m_ModuleViewerFrame->Show( true );
+            m_ModuleViewerFrame->Zoom_Automatique( false );
+        }
+        else
+        {
+            FOOTPRINT_VIEWER_FRAME * viewer = GetActiveViewerFrame();
+            if( viewer->IsIconized() )
+                 viewer->Iconize( false );
+
+            viewer->Raise();
+
+            // Raising the window does not set the focus on Linux.  This should work on
+            // any platform.
+            if( wxWindow::FindFocus() != viewer )
+                viewer->SetFocus();
+        }
         break;
 
     case ID_PCB_GLOBAL_DELETE:

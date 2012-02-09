@@ -27,10 +27,6 @@
  * @file basepcbframe.cpp
  */
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include <fctsys.h>
 #include <wxstruct.h>
 #include <pcbcommon.h>
@@ -97,6 +93,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
     m_DisplayPcbTrackFill = true;   // false = sketch , true = filled
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
+    m_ModuleViewerFrame   = NULL;   // Frame for footprint viewer
 
     m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
     m_UserGridUnit        = INCHES;
@@ -751,4 +748,38 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
         if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
             m_zoomSelectBox->SetSelection( i + 1 );
     }
+}
+
+/* Function GetActiveViewerFrame
+ * return a reference to the current Module Viewer Frame if exists
+ * if called from the PCB editor, this is the m_ModuleViewerFrame
+ * or m_ModuleEditFrame->m_ModuleViewerFrame
+ * if called from the module editor, this is the m_ModuleViewerFrame
+ * or parent->m_ModuleViewerFrame
+ */
+FOOTPRINT_VIEWER_FRAME * PCB_BASE_FRAME::GetActiveViewerFrame()
+{
+    if( m_ModuleViewerFrame )
+        return m_ModuleViewerFrame;
+
+    switch( m_Ident )
+    {
+        case PCB_FRAME:
+            if( m_ModuleEditFrame )
+                return ((PCB_BASE_FRAME*)m_ModuleEditFrame)->m_ModuleViewerFrame;
+            break;
+
+        case MODULE_EDITOR_FRAME:
+            return ((PCB_BASE_FRAME*)GetParent())->m_ModuleViewerFrame;
+            break;
+
+        case MODULE_VIEWER_FRAME:
+            return (FOOTPRINT_VIEWER_FRAME *)this;
+            break;
+
+        default:
+            break;
+     }
+
+    return NULL;
 }

@@ -68,7 +68,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
     m_Orient    = source->m_Orient;
     m_Pos       = source->m_Pos;
     m_Layer     = source->m_Layer;
-    m_Thickness     = source->m_Thickness;
+    m_Thickness = source->m_Thickness;
     m_Attributs = source->m_Attributs;
     m_Italic    = source->m_Italic;
     m_Bold      = source->m_Bold;

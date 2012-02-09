@@ -17,6 +17,7 @@
 #include <dialog_exchange_modules_base.h>
 #include <ar_protos.h>
 
+static char*  quiet_gcc_4_4_3;      // GCC 4.4.3 and next ..
 
 int s_SelectionMode = 0;    // Remember the last exchange option, when exit dialog.
 
@@ -152,7 +153,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     FILE*       FichCmp, * NewFile;
     char        line[1024];
     wxString    msg;
-    char*       quiet_gcc_4_4_3;
+//    char*  quiet_gcc_4_4_3;
 
     if( old_name == new_name )
         return 0;
@@ -588,7 +589,6 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     MODULE*     Module = GetBoard()->m_Modules;
     wxString    msg;
     wxString    wildcard;
-    char*       quiet_gcc_4_4_3;
 
     if( Module == NULL )
     {

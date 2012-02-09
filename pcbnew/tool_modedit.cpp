@@ -66,6 +66,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( new_library_xpm ),
                             _( "Create new library and save current module" ) );
 
+    m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString, KiBitmap( library_browse_xpm ),
+                            _( "Open module viewer" ) );
+
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_DELETE_PART, wxEmptyString, KiBitmap( delete_xpm ),
                             _( "Delete part from active library" ) );

@@ -229,18 +229,8 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString, KiBitmap( modedit_xpm ),
                             _( "Open module editor" ) );
 
-#if 0
-    // Not yet existing commands
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
-                            _( "Cut selected item" ) );
-
-    m_mainToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
-                            _( "Copy selected item" ) );
-
-    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
-                            _( "Paste" ) );
-#endif
+    m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString, KiBitmap( library_browse_xpm ),
+                            _( "Open module viewer" ) );
 
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hokeys_Descr, HK_UNDO, IS_COMMENT );

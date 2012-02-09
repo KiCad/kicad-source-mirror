@@ -12,6 +12,7 @@
 
 #include <pcbnew.h>
 #include <class_marker_pcb.h>
+#include <layers_id_colors_and_visibility.h>
 
 
 #define SCALING_FACTOR 30       // Adjust the actual size of markers, when using default shape
@@ -52,6 +53,17 @@ MARKER_PCB::~MARKER_PCB()
 {
 }
 
+/* tests to see if this object is on the given layer.
+ * DRC markers are not really on a copper layer, but
+ * MARKER_PCB::IsOnCopperLayer return true if aLayer is a cooper layer,
+ * because this test is often used to locad a marker
+ * param aLayer The layer to test for.
+ * return bool - true if on given layer, else false.
+ */
+bool MARKER_PCB::IsOnLayer( int aLayer ) const
+{
+    return IsValidCopperLayerIndex( aLayer );
+}
 
 void MARKER_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
