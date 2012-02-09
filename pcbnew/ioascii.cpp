@@ -1101,7 +1101,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
             continue;
         }
 
-        if( TESTLINE( "PCB_TARGET" ) )
+        if( TESTLINE( "PCB_TARGET" ) || TESTLINE( "MIREPCB" ) )
         {
             PCB_TARGET* t = new PCB_TARGET( board );
             board->Add( t, ADD_APPEND );

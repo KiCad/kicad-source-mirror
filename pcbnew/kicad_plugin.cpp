@@ -256,7 +256,7 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
             loadDIMENSION();
         }
 
-        else if( TESTLINE( "$PCB_TARGET" ) )
+        else if( TESTLINE( "$PCB_TARGET" ) || TESTLINE( "$MIREPCB" ) )
         {
             loadPCB_TARGET();
         }
@@ -2459,7 +2459,7 @@ void KICAD_PLUGIN::loadPCB_TARGET()
         const char* data;
         char* line = m_reader->Line();
 
-        if( TESTLINE( "$EndPCB_TARGET" ) )
+        if( TESTLINE( "$EndPCB_TARGET" ) || TESTLINE( "$EndMIREPCB" ) )
         {
             return;     // preferred exit
         }
