@@ -434,7 +434,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
     // ( i.e. for labels that are not prefixed by a sheetpath)
     #define NET_PRIO_MAX 4
 
-    int priority_order[NET_PRIO_MAX+1] = {
+    static int priority_order[NET_PRIO_MAX+1] = {
         NET_ITEM_UNSPECIFIED,
         NET_LABEL,
         NET_HIERLABEL,
@@ -462,15 +462,14 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
         // Calculate candidate priority
         int candidate_priority = 0;
 
-        for( unsigned ii = 0; ii <= NET_PRIO_MAX; ii++ )
+        for( unsigned prio = 0; prio <= NET_PRIO_MAX; prio++ )
         {
-            if ( candidate->m_Type == priority_order[ii]  )
+            if ( candidate->m_Type == priority_order[prio]  )
             {
-                candidate_priority = ii;
+                candidate_priority = prio;
                 break;
             }
         }
-
         if( candidate_priority > item_priority )
         {
             item = candidate;
@@ -504,6 +503,11 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
                     // alphabetic label name order:
                     if( candidate->m_Label.Cmp( item->m_Label ) < 0 )
                         item = candidate;
+                    else if( candidate->m_Label.Cmp( item->m_Label ) == 0 )
+                    {
+                        if( candidate->m_SheetList.PathHumanReadable().Cmp( item->m_SheetList.PathHumanReadable() ) < 0 )
+                            item = candidate;
+                    }
                 }
             }
         }

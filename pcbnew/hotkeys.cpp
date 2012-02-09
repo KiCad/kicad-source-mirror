@@ -258,3 +258,11 @@ struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[] = {
     { &g_ModuleEditSectionTag, module_edit_Hotkey_List, NULL },
     { NULL, NULL, NULL }
 };
+
+// list of sections and corresponding hotkey list for the footprint viewer
+// (used to list current hotkeys in the module viewer)
+struct EDA_HOTKEY_CONFIG g_Module_Viewer_Hokeys_Descr[] = {
+    { &g_CommonSectionTag, common_Hotkey_List, NULL },
+    { NULL, NULL, NULL }
+};
+

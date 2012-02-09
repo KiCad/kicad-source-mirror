@@ -27,6 +27,7 @@
 
 #include <class_module.h>
 #include <class_pad.h>
+#include <class_marker_pcb.h>
 
 
 /*  This module contains out of line member functions for classes given in
@@ -147,6 +148,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     MODULE*     module = NULL;
     D_PAD*      pad    = NULL;
     bool        pad_through = false;
+    MARKER_PCB* marker = NULL;
 
 #if 0   // debugging
     static int  breakhere = 0;
@@ -208,6 +210,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
             breakhere++;
         }
     }
+        break;
+
+    case PCB_MARKER_T:
+        breakhere++;
         break;
 
     default:
@@ -293,6 +299,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         module = (MODULE*) item;
         break;
 
+    case PCB_MARKER_T:
+        marker = (MARKER_PCB*) item;
+        break;
+
     default:
         break;
     }
@@ -324,6 +334,15 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
             if( m_Guide->IgnorePadsOnBack() && pad->IsOnLayer(LAYER_N_BACK ) )
                 goto exit;
         }
+    }
+
+    if( marker )
+    {
+        // Markers are not sensitive to the layer
+        if( marker->HitTest( m_RefPos ) )
+            Append( item );
+
+        goto exit;
     }
 
     if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )

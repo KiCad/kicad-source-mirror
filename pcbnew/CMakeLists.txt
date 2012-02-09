@@ -80,6 +80,9 @@ set(PCBNEW_DIALOGS
     )
 
 set(PCBNEW_SRCS
+    tool_modview.cpp
+    modview.cpp
+    modview_frame.cpp
     pcbframe.cpp
     attribut.cpp
     automove.cpp

@@ -23,6 +23,7 @@
 #include <protos.h>
 #include <pcbnew_id.h>
 #include <module_editor_frame.h>
+#include <modview_frame.h>
 #include <collectors.h>
 
 #include <dialog_edit_module_for_Modedit.h>
@@ -214,6 +215,28 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_SELECT_CURRENT_LIB:
         Select_Active_Library();
+        break;
+
+    case ID_OPEN_MODULE_VIEWER:
+        if( GetActiveViewerFrame() == NULL )
+        {
+            m_ModuleViewerFrame = new FOOTPRINT_VIEWER_FRAME( this, NULL );
+            m_ModuleViewerFrame->Show( true );
+            m_ModuleViewerFrame->Zoom_Automatique( false );
+        }
+        else
+        {
+            FOOTPRINT_VIEWER_FRAME * viewer = GetActiveViewerFrame();
+            if( viewer->IsIconized() )
+                 viewer->Iconize( false );
+
+            viewer->Raise();
+
+            // Raising the window does not set the focus on Linux.  This should work on
+            // any platform.
+            if( wxWindow::FindFocus() != viewer )
+                viewer->SetFocus();
+        }
         break;
 
     case ID_MODEDIT_DELETE_PART:

@@ -47,6 +47,7 @@
 
 /* Forward declarations of classes. */
 class FOOTPRINT_EDIT_FRAME;
+class FOOTPRINT_VIEWER_FRAME;
 class BOARD;
 class BOARD_CONNECTED_ITEM;
 class MODULE;
@@ -81,6 +82,8 @@ public:
 
     EDA_3D_FRAME* m_Draw3DFrame;
     FOOTPRINT_EDIT_FRAME* m_ModuleEditFrame;
+    FOOTPRINT_VIEWER_FRAME * m_ModuleViewerFrame;
+
 
 protected:
     BOARD*              m_Pcb;
@@ -393,7 +396,35 @@ public:
                                         const wxString& aMask,
                                         const wxString& aKeyWord );
 
-    MODULE* Load_Module_From_Library( const wxString& library, wxDC* DC );
+    /**
+     * Function Load_Module_From_Library
+     * Open a dialog to select a footprint, and load in in current board
+     * @param aLibrary = the library name to use, or empty string to search
+     * in all loaded libraries
+     * @param aUseFootprintViewer = true to show the option
+     * allowing the footprint selection by the footprint viewer
+     * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
+     */
+    MODULE* Load_Module_From_Library( const wxString& aLibrary,
+                                      bool aUseFootprintViewer = true,
+                                      wxDC* aDC = NULL );
+
+    /**
+     * SelectFootprintFromLibBrowser
+     * Launch the footprint viewer to select the name of a footprint to load.
+     * @return the selected footprint name
+     */
+    wxString SelectFootprintFromLibBrowser( void );
+
+    /**
+     * Function GetActiveViewerFrame
+     * @return a reference to the current Module Viewer Frame if exists
+     * if called from the PCB editor, this is the m_ModuleViewerFrame
+     * or m_ModuleEditFrame->m_ModuleViewerFrame
+     * if called from the module editor, this is the m_ModuleViewerFrame
+     * or parent->m_ModuleViewerFrame
+     */
+    FOOTPRINT_VIEWER_FRAME * GetActiveViewerFrame();
 
     //  ratsnest functions
     /**

@@ -88,6 +88,9 @@ extern struct EDA_HOTKEY_CONFIG g_Board_Editor_Hokeys_Descr[];
 // List of hotkey descriptors for the footprint editor only
 extern struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[];
 
+// List of hotkey descriptors for the footprint editor only
+extern struct EDA_HOTKEY_CONFIG g_Module_Viewer_Hokeys_Descr[];
+
 // List of common hotkey descriptors
 // used in hotkeys_board_editor.cpp and hotkeys_module_editor.cpp
 extern EDA_HOTKEY* common_Hotkey_List[];

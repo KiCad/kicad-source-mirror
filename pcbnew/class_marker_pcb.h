@@ -95,6 +95,16 @@ public:
     }
 
     /**
+     * Function IsOnLayer
+     * tests to see if this object is on the given layer.
+     * DRC markers are not really on a copper layer, but
+     * IsOnCopperLayer return true if aLayer is a cooper layer
+     * @param aLayer The layer to test for.
+     * @return bool - true if on given layer, else false.
+     */
+    virtual bool IsOnLayer( int aLayer ) const;
+
+    /**
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
