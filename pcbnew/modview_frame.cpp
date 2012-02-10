@@ -512,12 +512,26 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     EDA_DRAW_FRAME::OnActivate( event );
 
     // Ensure we do not have old selection:
-    if( m_FrameIsActive )
-        m_selectedFootprintName.Empty();
+    if( ! m_FrameIsActive )
+        return;
 
-    if( m_LibList )
-        ReCreateLibraryList();
+    m_selectedFootprintName.Empty();
 
+    // Ensure we have the right library list:
+    if( g_LibraryNames.GetCount() == m_LibList->GetCount() )
+    {
+        unsigned ii;
+        for( ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
+        {
+            if( m_LibList->GetString(ii) != g_LibraryNames[ii] )
+                break;
+        }
+        if( ii == g_LibraryNames.GetCount() )
+            return;
+    }
+
+    // If we are here, the library list has changed, rebuild it
+    ReCreateLibraryList();
     DisplayLibInfos();
 }
 
@@ -631,7 +645,7 @@ void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
     }
 
     m_Draw3DFrame = new EDA_3D_FRAME( this, wxEmptyString );
-    Update3D_Frame();
+    Update3D_Frame( false );
     m_Draw3DFrame->Show( true );
 }
 
@@ -640,7 +654,7 @@ void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
  * must be called after a footprint selection
  * Updates the 3D view and 3D frame title.
  */
-void FOOTPRINT_VIEWER_FRAME::Update3D_Frame()
+void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
 {
     if( m_Draw3DFrame == NULL )
         return;
@@ -648,8 +662,12 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame()
     wxString frm3Dtitle;
     frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), GetChars( m_footprintName ) );
     m_Draw3DFrame->SetTitle( frm3Dtitle );
-    m_Draw3DFrame->ReloadRequest();
-    // Force 3D screen refresh immediately
-    if( GetBoard()->m_Modules )
-        m_Draw3DFrame->NewDisplay();
+
+    if( aForceReloadFootprint )
+    {
+        m_Draw3DFrame->ReloadRequest();
+        // Force 3D screen refresh immediately
+        if( GetBoard()->m_Modules )
+            m_Draw3DFrame->NewDisplay();
+    }
 }
