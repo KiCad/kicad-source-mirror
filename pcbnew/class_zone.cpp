@@ -697,7 +697,7 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
     msg = board->GetLayerName( m_Layer );
     frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
 
-    msg.Printf( wxT( "%d" ), m_Poly->corner.size() );
+    msg.Printf( wxT( "%d" ), (int) m_Poly->corner.size() );
     frame->AppendMsgPanel( _( "Corners" ), msg, BLUE );
 
     if( m_FillMode )
@@ -708,12 +708,12 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Fill mode" ), msg, BROWN );
 
     // Useful for statistics :
-    msg.Printf( wxT( "%d" ), m_Poly->m_HatchLines.size() );
+    msg.Printf( wxT( "%d" ), (int) m_Poly->m_HatchLines.size() );
     frame->AppendMsgPanel( _( "Hatch lines" ), msg, BLUE );
 
     if( m_FilledPolysList.size() )
     {
-        msg.Printf( wxT( "%d" ), m_FilledPolysList.size() );
+        msg.Printf( wxT( "%d" ), (int) m_FilledPolysList.size() );
         frame->AppendMsgPanel( _( "Corners in DrawList" ), msg, BLUE );
     }
 }
@@ -897,7 +897,7 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
         text << wxT( " " ) << _( "(Cutout)" );
 
     text << wxT( " " );
-    text << wxString::Format( wxT( "(%8.8X)" ), m_TimeStamp );
+    text << wxString::Format( wxT( "(%08lX)" ), m_TimeStamp );
 
     if ( !IsOnCopperLayer() )
     {
