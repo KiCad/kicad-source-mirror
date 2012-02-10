@@ -161,8 +161,10 @@ private:
      * Function Update3D_Frame
      * must be called after a footprint selection
      * Updates the 3D view and 3D frame title.
+     * @param aForceReloadFootprint = true to reload data (default)
+     *   = false to update title only -(aftre creating the 3D viewer)
      */
-    void Update3D_Frame();
+    void Update3D_Frame( bool aForceReloadFootprint = true );
 
     /*
      * Virtual functions, not used here, but needed by PCB_BASE_FRAME

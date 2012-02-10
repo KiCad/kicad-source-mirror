@@ -109,7 +109,6 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
  */
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
-
     wxString libname = m_libraryName + wxT(".") + ModuleFileExtension;
     MODULE* oldmodule = GetBoard()->m_Modules;
     MODULE * module = Load_Module_From_Library( libname, false );
@@ -126,10 +125,12 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
         m_footprintName = module->GetLibRef();
         module->ClearFlags();
         SetCurItem( NULL );
-   }
 
-    Zoom_Automatique( false );
-    m_canvas->Refresh( );
+        Zoom_Automatique( false );
+        m_canvas->Refresh( );
+        Update3D_Frame();
+        m_FootprintList->SetStringSelection( m_footprintName );
+   }
 }
 
 
