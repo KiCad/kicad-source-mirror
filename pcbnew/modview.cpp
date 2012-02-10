@@ -161,6 +161,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         GetBoard()->m_Modules.DeleteAll();
         GetModuleLibrary( m_libraryName + wxT(".") + ModuleFileExtension,
                           m_footprintName, true );
+        Update3D_Frame();
     }
 
     DisplayLibInfos();

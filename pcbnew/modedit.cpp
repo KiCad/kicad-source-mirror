@@ -419,7 +419,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         Clear_Pcb( true );
         GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-        Load_Module_From_Library( full_libraryfilename, NULL );
+        Load_Module_From_Library( full_libraryfilename, true );
         redraw = true;
     }
 

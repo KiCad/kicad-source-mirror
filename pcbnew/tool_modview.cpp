@@ -67,6 +67,11 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
                                 _( "Display next footprint" ) );
 
         m_mainToolBar->AddSeparator();
+        m_mainToolBar->AddTool( ID_MODVIEW_SHOW_3D_VIEW, wxEmptyString,
+                                KiBitmap( three_d_xpm ),
+                                _( "Show footprint in 3D viewer" ) );
+
+        m_mainToolBar->AddSeparator();
         msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hokeys_Descr,
                              HK_ZOOM_IN, IS_COMMENT );
         m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,

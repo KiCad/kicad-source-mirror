@@ -69,6 +69,10 @@ public:
 
     ~FOOTPRINT_VIEWER_FRAME();
 
+    wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
+
+private:
+
     void OnSize( wxSizeEvent& event );
 
     /**
@@ -119,9 +123,7 @@ public:
     void SaveSettings();
 
     wxString& GetFootprintName( void ) const { return m_footprintName; }
-    wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
 
-private:
     /**
      * Function OnActivate
      * is called when the frame frame is activate to reload the libraries and component lists
@@ -148,6 +150,19 @@ private:
     void SelectAndViewFootprint( int aMode );
 
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+
+    /**
+     * Function Show3D_Frame (virtual)
+     * displays 3D view of the footprint (module) being edited.
+     */
+    void Show3D_Frame( wxCommandEvent& event );
+
+    /**
+     * Function Update3D_Frame
+     * must be called after a footprint selection
+     * Updates the 3D view and 3D frame title.
+     */
+    void Update3D_Frame();
 
     /*
      * Virtual functions, not used here, but needed by PCB_BASE_FRAME
