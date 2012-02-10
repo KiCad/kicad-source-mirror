@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
+#include <macros.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
@@ -77,6 +78,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
               FOOTPRINT_VIEWER_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODVIEW_FOOTPRINT_EXPORT_TO_BOARD,
               FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint )
+    EVT_TOOL( ID_MODVIEW_SHOW_3D_VIEW, FOOTPRINT_VIEWER_FRAME::Show3D_Frame )
 
     /* listbox events */
     EVT_LISTBOX( ID_MODVIEW_LIB_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnLibList )
@@ -263,6 +265,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( wxWindow* parent, wxSemaphore* s
 
 FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 {
+    if( m_Draw3DFrame )
+        m_Draw3DFrame->Destroy();
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
     frame->m_ModuleViewerFrame = NULL;
 }
@@ -441,6 +445,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         DisplayLibInfos();
         Zoom_Automatique( false );
         m_canvas->Refresh();
+        Update3D_Frame();
     }
 }
 
@@ -604,4 +609,47 @@ void FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
     }
 
     UpdateStatusBar();    /* Display new cursor coordinates */
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
+{
+    if( m_Draw3DFrame )
+    {
+        // Raising the window does not show the window on Windows if iconized.
+        // This should work on any platform.
+        if( m_Draw3DFrame->IsIconized() )
+             m_Draw3DFrame->Iconize( false );
+
+        m_Draw3DFrame->Raise();
+
+        // Raising the window does not set the focus on Linux.  This should work on any platform.
+        if( wxWindow::FindFocus() != m_Draw3DFrame )
+            m_Draw3DFrame->SetFocus();
+
+        return;
+    }
+
+    m_Draw3DFrame = new EDA_3D_FRAME( this, wxEmptyString );
+    Update3D_Frame();
+    m_Draw3DFrame->Show( true );
+}
+
+/**
+ * Function Update3D_Frame
+ * must be called after a footprint selection
+ * Updates the 3D view and 3D frame title.
+ */
+void FOOTPRINT_VIEWER_FRAME::Update3D_Frame()
+{
+    if( m_Draw3DFrame == NULL )
+        return;
+
+    wxString frm3Dtitle;
+    frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), GetChars( m_footprintName ) );
+    m_Draw3DFrame->SetTitle( frm3Dtitle );
+    m_Draw3DFrame->ReloadRequest();
+    // Force 3D screen refresh immediately
+    if( GetBoard()->m_Modules )
+        m_Draw3DFrame->NewDisplay();
 }
