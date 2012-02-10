@@ -522,8 +522,8 @@ void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
 {
     wxString string_timestamp, string_oldtimestamp;
 
-    string_timestamp.Printf( wxT( "%8.8X" ), aNewTimeStamp );
-    string_oldtimestamp.Printf( wxT( "%8.8X" ), m_TimeStamp );
+    string_timestamp.Printf( wxT( "%08lX" ), aNewTimeStamp );
+    string_oldtimestamp.Printf( wxT( "%08lX" ), m_TimeStamp );
     EDA_ITEM::SetTimeStamp( aNewTimeStamp );
 
     for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )

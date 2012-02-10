@@ -281,7 +281,7 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
         if( bMessageBoxArc && bDontShowSelfIntersectionArcsWarning == false )
         {
             wxString str;
-            str.Printf( wxT( "Area %8.8X of net \"%s\" has arcs intersecting other sides.\n" ),
+            str.Printf( wxT( "Area %08lX of net \"%s\" has arcs intersecting other sides.\n" ),
                         aCurrArea->GetTimeStamp(), GetChars( aCurrArea->m_Netname ) );
             str += wxT( "This may cause problems with other editing operations,\n" );
             str += wxT( "such as adding cutouts. It can't be fixed automatically.\n" );
@@ -304,7 +304,7 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
         if( bMessageBoxInt && bDontShowSelfIntersectionWarning == false )
         {
             wxString str;
-            str.Printf( wxT( "Area %8.8X of net \"%s\" is self-intersecting and will be clipped.\n" ),
+            str.Printf( wxT( "Area %08lX of net \"%s\" is self-intersecting and will be clipped.\n" ),
                         aCurrArea->GetTimeStamp(), GetChars( aCurrArea->m_Netname ) );
             str += wxT( "This may result in splitting the area.\n" );
             str += wxT( "If the area is complex, this may take a few seconds." );
