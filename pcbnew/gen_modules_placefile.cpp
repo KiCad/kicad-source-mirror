@@ -24,7 +24,7 @@
 #include <pcbnew.h>
 
 
-class LIST_MOD      /* Can list the elements of useful modules. */
+class LIST_MOD      // Can list the elements of useful modules.
 {
 public:
     MODULE*       m_Module;
@@ -35,16 +35,18 @@ public:
 
 #if 1
 static const double conv_unit = 0.0001;      // units = INCHES
+static const char unit_text[] = "## Unit = inches, Angle = deg.\n";
 #else
-static const double conv_unit = 0.000254;    // units = mm
+static const double conv_unit = 0.00254;    // units = mm
+static const char unit_text[] = "## Unit = mm, Angle = deg.\n";
 #endif
 
-static wxPoint File_Place_Offset;  /* Offset coordinates for generated file. */
+static wxPoint File_Place_Offset;  // Offset coordinates for generated file.
 
 static void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile );
 
 
-/* Sort function use by GenereModulesPosition() */
+// Sort function use by GenereModulesPosition()
 static int ListeModCmp( const void* o1, const void* o2 )
 {
     LIST_MOD* ref = (LIST_MOD*) o1;
@@ -95,7 +97,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
 
     File_Place_Offset = GetOriginAxisPosition();
 
-    /* Calculating the number of useful modules (CMS attribute, not VIRTUAL) */
+    // Calculating the number of useful modules (CMS attribute, not VIRTUAL)
     int moduleCount = 0;
 
     for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
@@ -225,8 +227,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     if( doBoardBack )
         fputs( line, fpBack );
 
-    sprintf( line, "## Unit = inches, Angle = deg.\n" );
-    fputs( line, fpFront );
+    fputs( unit_text, fpFront );
 
     if( doBoardBack )
         fputs( line, fpBack );
@@ -353,14 +354,14 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     // numbers like 1.3)
     SetLocaleTo_C_standard();
 
-    /* Generate header file comments.) */
+    // Generate header file comments.)
     sprintf( line, "## Module report - date %s\n", TO_UTF8( DateAndTime() ) );
     fputs( line, rptfile );
 
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
     sprintf( line, "## Created by Pcbnew version %s\n", TO_UTF8( Title ) );
     fputs( line, rptfile );
-    fputs( "## Unit = inches, Angle = deg.\n", rptfile );
+    fputs( unit_text, rptfile );
 
     fputs( "##\n", rptfile );
     fputs( "\n$BeginDESCRIPTION\n", rptfile );
@@ -477,7 +478,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
                  TO_UTF8(Module->m_Reference->m_Text ) );
     }
 
-    /* Write board Edges */
+    // Write board Edges
     EDA_ITEM* PtStruct;
 
     for( PtStruct = GetBoard()->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
@@ -491,7 +492,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
         WriteDrawSegmentPcb( (DRAWSEGMENT*) PtStruct, rptfile );
     }
 
-    /* Generate EOF. */
+    // Generate EOF.
     fputs( "$EndDESCRIPTION\n", rptfile );
     fclose( rptfile );
     SetLocaleTo_Default( );      // revert to the current locale
