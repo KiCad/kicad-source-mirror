@@ -57,13 +57,13 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 
 
 /*
- * Position anchor under the cursor.
+ * Move the footprint anchor position to the current cursor position.
  */
 void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
 {
     wxPoint   moveVector;
-    EDA_ITEM* PtStruct;
-    D_PAD*    pt_pad;
+    EDA_ITEM* item;
+    D_PAD*    pad;
 
     if( pt_mod == NULL )
         return;
@@ -78,30 +78,30 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
     RotatePoint( &moveVector, -pt_mod->m_Orient );
 
     /* Update the pad coordinates. */
-    pt_pad = (D_PAD*) pt_mod->m_Pads;
+    pad = (D_PAD*) pt_mod->m_Pads;
 
-    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
+    for( ; pad != NULL; pad = pad->Next() )
     {
-        pt_pad->m_Pos0 += moveVector;
+        pad->m_Pos0 += moveVector;
     }
 
     /* Update the draw element coordinates. */
-    PtStruct = pt_mod->m_Drawings;
+    item = pt_mod->m_Drawings;
 
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( ; item != NULL; item = item->Next() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-                #undef STRUCT
-                #define STRUCT ( (EDGE_MODULE*) PtStruct )
+            #undef STRUCT
+            #define STRUCT ( (EDGE_MODULE*) item )
             STRUCT->m_Start0 += moveVector;
             STRUCT->m_End0   += moveVector;
             break;
 
         case PCB_MODULE_TEXT_T:
-                #undef STRUCT
-                #define STRUCT ( (TEXTE_MODULE*) PtStruct )
+            #undef STRUCT
+            #define STRUCT ( (TEXTE_MODULE*) item )
             STRUCT->SetPos0( STRUCT->GetPos0() + moveVector );
             break;
 

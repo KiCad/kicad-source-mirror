@@ -31,6 +31,9 @@ const wxString FootprintAliasFileExtension( wxT( "equ" ) );
 const wxString RetroFileWildcard( _( "KiCad retroannotation files (*.stf)|*.stf" ) );
 const wxString FootprintAliasFileWildcard( _( "KiCad footprint alias files (*.equ)|*.equ" ) );
 
+// Wildcard for cvpcb component to footprint link file ( normal output file )
+const wxString ComponentFileWildcard( _( "KiCad cmp/footprint link files (*.cmp)|*.cmp" ) );
+
 const wxString titleLibLoadError( _( "Library Load Error" ) );
 
 
@@ -57,7 +60,7 @@ void EDA_APP::MacOpenFile(const wxString &fileName)
     wxGetApp().GetLibraryPathList().Insert( filename.GetPath(), 0 );
 
     frame->m_NetlistFileName = filename;
-    frame->ReadNetList();
+    frame->ReadNetListAndLinkFiles();
 }
 
 // Create a new application object
@@ -108,7 +111,7 @@ bool EDA_APP::OnInit()
     {
         frame->m_NetlistFileName = filename;
 
-        if( frame->ReadNetList() )
+        if( frame->ReadNetListAndLinkFiles() )
         {
             frame->m_NetlistFileExtension = filename.GetExt();
             return true;

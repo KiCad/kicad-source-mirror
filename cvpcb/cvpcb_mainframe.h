@@ -110,7 +110,15 @@ public:
      */
     void             AssocieModule( wxCommandEvent& event );
 
+    /**
+     * Function WriteStuffList
+     * Creates a file for Eeschema, import footprint selections
+     * in schematic
+     * the file format is
+     * comp = "<reference>" module = "<footprint name">
+     */
     void             WriteStuffList( wxCommandEvent& event );
+
     void             DisplayDocFile( wxCommandEvent& event );
 
     /**
@@ -123,37 +131,64 @@ public:
 
     /**
      * Function SetNewPkg
-     * set the module to the selected component and selects the next component.
+     * links the footprint to the current selected component
+     * and selects the next component.
+     * @param aFootprintName = the selected footprint
      */
-    void             SetNewPkg( const wxString& package );
+    void             SetNewPkg( const wxString& aFootprintName );
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
     void             CreateScreenCmp();
 
     /**
-     * Function SaveNetList
-     * backup and save netlist (.net) file to \a aFullFileName.
+     * Function SaveCmpLinkFile
+     * Saves the component - footprint link file (.cmp file) to \a aFullFileName.
      *
-     * @param aFullFileName A reference wxString object containing the full path and
-     *                      file name of the netlist to save.
-     * @return 0 if an error occurred saving the netlist to \a aFullFileName.
+     * @param aFullFileName A reference wxString object containing the full
+     *                      file name of the netlist or cmp file.
+     * If aFullFileName is empty, a file name will be asked to the user
+     * @return  0 if an error occurred saving the link file to \a aFullFileName.
+     *          -1 if cancelled
+     *          1 if OK
      */
-    int              SaveNetList( const wxString& aFullFileName );
+    int              SaveCmpLinkFile( const wxString& aFullFileName );
+
 
     /**
-     * Function SaveComponentList
-     * backup modules to file \a aFullFileName.
+     * Function LoadComponentFile
+     * loads the .cmp link file \a aCmpFileName which stores
+     * the component/footprint association.
      *
-     * @param aFullFileName Name of net list file to save.
-     * @returns 1 if OK, 0 if error.
+     * @param aFileName The full filename of .cmp file to load
+     * If empty, a filename will be asked to the user
      */
-    int              SaveComponentList( const wxString& aFullFileName );
+    bool             LoadComponentLinkFile( const wxString& aFileName );
+
+    /**
+     * Function WriteComponentLinkFile
+     * Writes the component footprint link file \a aFullFileName on disk.
+     *
+     * @param aFullFileName full filename of .cmp file to write.
+     * @return true if OK, false if error.
+     */
+    bool              WriteComponentLinkFile( const wxString& aFullFileName );
+
+    /**
+     * Function ReadComponentLinkFile
+     * Reads the component footprint link file \a aFullFileName.
+     *
+     * @param aFile = the opened the opened file to read.
+     *  ReadComponentLinkFile will close the file
+     * @return true if OK, false if error.
+     */
+    bool              ReadComponentLinkFile( FILE * aFile );
 
     /**
      * Function ReadNetList
      * reads the netlist (.net) file defined by #m_NetlistFileName.
+     * and the corresponding cmp to footprint (.cmp) link file
      */
-    bool             ReadNetList();
+    bool             ReadNetListAndLinkFiles();
 
     int              ReadSchematicNetlist();
 
@@ -199,21 +234,6 @@ public:
      * @return true if libraries are found, false otherwise.
      */
     bool             LoadFootprintFiles();
-
-    /**
-     * function GenNetlistPcbnew
-     * writes the output netlist file
-     *
-     */
-    int              GenNetlistPcbnew( FILE* f, bool isEESchemaNetlist = true );
-
-    /**
-     * Function LoadComponentFile
-     * loads the .cmp file \a aCmpFileName that stores the component/footprint association.
-     *
-     * @param aFileName The full filename of .cmp file to load
-     */
-    bool             LoadComponentFile( const wxString& aFileName );
 
     /**
      * Function GetProjectFileParameters
