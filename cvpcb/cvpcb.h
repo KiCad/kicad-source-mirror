@@ -29,6 +29,7 @@ extern const wxString ComponentFileExtension;
 
 extern const wxString RetroFileWildcard;
 extern const wxString FootprintAliasFileWildcard;
+extern const wxString ComponentFileWildcard;
 
 extern const wxString titleLibLoadError;
 

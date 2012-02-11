@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -242,7 +242,7 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         unsigned        ii;
         wxMessageDialog dialog( this,
-                                _( "Net and component list modified.\nSave before exit ?" ),
+                                _( "Component to Footprint links modified.\nSave before exit ?" ),
                                 _( "Confirmation" ),
                                 wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxYES_DEFAULT );
 
@@ -259,7 +259,7 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
         case wxID_OK:
         case wxID_YES:
-            diag = SaveNetList( m_NetlistFileName.GetFullPath() );
+            diag = SaveCmpLinkFile( m_NetlistFileName.GetFullPath() );
 
             if( diag > 0 )
             {
@@ -267,7 +267,7 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
             }
             else if( diag == 0 )
             {
-                if( !IsOK( this, _( "Problem when saving files, exit anyway ?" ) ) )
+                if( !IsOK( this, _( "Problem when saving file, exit anyway ?" ) ) )
                 {
                     Event.Veto();
                     return;
@@ -385,7 +385,7 @@ void CVPCB_MAINFRAME::SaveQuitCvpcb( wxCommandEvent& aEvent )
     if( aEvent.GetId() == wxID_SAVEAS )
         m_NetlistFileName.Clear();
 
-    if( SaveNetList( m_NetlistFileName.GetFullPath() ) > 0 )
+    if( SaveCmpLinkFile( m_NetlistFileName.GetFullPath() ) > 0 )
     {
         m_modified = false;
 
@@ -451,7 +451,7 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
 
     wxGetApp().GetLibraryPathList().Insert( newFileName.GetPath(), 0 );
     m_NetlistFileName = newFileName;
-    ReadNetList();
+    ReadNetListAndLinkFiles();
 }
 
 

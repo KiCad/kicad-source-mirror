@@ -36,13 +36,12 @@ set(CVPCB_SRCS
     class_footprints_listbox.cpp
     cvframe.cpp
     cvpcb.cpp
-    genequiv.cpp
-    init.cpp
     listboxes.cpp
     loadcmp.cpp
     menubar.cpp
     readschematicnetlist.cpp
-    savecmp.cpp
+    read_write_cmpfile.cpp
+    readwrite_dlgs.cpp
     setvisu.cpp
     tool_cvpcb.cpp
     )
