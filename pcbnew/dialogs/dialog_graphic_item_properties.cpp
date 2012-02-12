@@ -24,20 +24,17 @@
 
 #include <dialog_graphic_item_properties_base.h>
 
-
-///////////////////////////////////////////////////////////////////////////
-
-class DialogGraphicItemProperties: public DialogGraphicItemProperties_base
+class DIALOG_GRAPHIC_ITEM_PROPERTIES: public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
 private:
-    PCB_EDIT_FRAME* m_Parent;
+    PCB_EDIT_FRAME* m_parent;
     wxDC* m_DC;
     DRAWSEGMENT* m_Item;
-    BOARD_DESIGN_SETTINGS  m_BrdSettings;
+    BOARD_DESIGN_SETTINGS  m_brdSettings;
 
 public:
-    DialogGraphicItemProperties( PCB_EDIT_FRAME* aParent, DRAWSEGMENT * aItem, wxDC * aDC);
-    ~DialogGraphicItemProperties() {};
+    DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_EDIT_FRAME* aParent, DRAWSEGMENT * aItem, wxDC * aDC);
+    ~DIALOG_GRAPHIC_ITEM_PROPERTIES() {};
 
 private:
     void initDlg( );
@@ -46,14 +43,14 @@ private:
     void OnLayerChoice( wxCommandEvent& event );
 };
 
-DialogGraphicItemProperties::DialogGraphicItemProperties( PCB_EDIT_FRAME* aParent,
+DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_EDIT_FRAME* aParent,
                                                           DRAWSEGMENT * aItem, wxDC * aDC):
-    DialogGraphicItemProperties_base( aParent )
+    DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( aParent )
 {
-    m_Parent = aParent;
+    m_parent = aParent;
     m_DC = aDC;
     m_Item = aItem;
-    m_BrdSettings = m_Parent->GetBoard()->GetDesignSettings();
+    m_brdSettings = m_parent->GetDesignSettings();
     initDlg();
     Layout();
     GetSizer()->SetSizeHints( this );
@@ -72,20 +69,41 @@ void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxD
     }
 
     m_canvas->SetIgnoreMouseEvents( true );
-    DialogGraphicItemProperties* dialog = new DialogGraphicItemProperties( this, aItem, aDC );
-    dialog->ShowModal(); dialog->Destroy();
+    DIALOG_GRAPHIC_ITEM_PROPERTIES* dialog = new DIALOG_GRAPHIC_ITEM_PROPERTIES( this, aItem, aDC );
+    dialog->ShowModal();
+    dialog->Destroy();
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
 }
 
 /**************************************************************************/
-void DialogGraphicItemProperties::initDlg( )
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
 /**************************************************************************/
 /* Initialize messages and values in text control,
  * according to the item parameters values
 */
 {
     SetFocus();
+    m_StandardButtonsSizerOK->SetDefault();
+
+    // Set unit symbol
+    wxStaticText * texts_unit[] =
+    {
+        m_StartPointXUnit,
+        m_StartPointYUnit,
+        m_EndPointXUnit,
+        m_EndPointYUnit,
+        m_ThicknessTextUnit,
+        m_DefaulThicknessTextUnit,
+        NULL
+    };
+
+    for( int ii = 0; ; ii++ )
+    {
+        if( texts_unit[ii] == NULL )
+            break;
+        texts_unit[ii]->SetLabel( GetAbbreviatedUnitsLabel() );
+    }
 
     wxString msg;
 
@@ -93,19 +111,20 @@ void DialogGraphicItemProperties::initDlg( )
     switch ( m_Item->GetShape() )
     {
     case S_CIRCLE:
-        m_Start_Center_XText->SetLabel(_("Center X"));
-        m_Start_Center_YText->SetLabel(_("Center Y"));
-        m_EndX_Radius_Text->SetLabel(_("Point X"));
-        m_EndY_Text->SetLabel(_("Point Y"));
+        m_StartPointXLabel->SetLabel(_("Center X"));
+        m_StartPointYLabel->SetLabel(_("Center Y"));
+        m_EndPointXLabel->SetLabel(_("Point X"));
+        m_EndPointYLabel->SetLabel(_("Point Y"));
         m_Angle_Text->Show(false);
         m_Angle_Ctrl->Show(false);
+        m_AngleUnit->Show(false);
         break;
 
     case S_ARC:
-        m_Start_Center_XText->SetLabel(_("Center X"));
-        m_Start_Center_YText->SetLabel(_("Center Y"));
-        m_EndX_Radius_Text->SetLabel(_("Start Point X"));
-        m_EndY_Text->SetLabel(_("Start Point Y"));
+        m_StartPointXLabel->SetLabel(_("Center X"));
+        m_StartPointYLabel->SetLabel(_("Center Y"));
+        m_EndPointXLabel->SetLabel(_("Start Point X"));
+        m_EndPointYLabel->SetLabel(_("Start Point Y"));
         msg << m_Item->GetAngle();
         m_Angle_Ctrl->SetValue(msg);
         break;
@@ -113,45 +132,38 @@ void DialogGraphicItemProperties::initDlg( )
     default:
         m_Angle_Text->Show(false);
         m_Angle_Ctrl->Show(false);
+        m_AngleUnit->Show(false);
         break;
     }
 
-    AddUnitSymbol( *m_Start_Center_XText );
-
     PutValueInLocalUnits( *m_Center_StartXCtrl, m_Item->GetStart().x,
-        m_Parent->GetInternalUnits() );
+        m_parent->GetInternalUnits() );
 
-    AddUnitSymbol( *m_Start_Center_YText );
     PutValueInLocalUnits( *m_Center_StartYCtrl, m_Item->GetStart().y,
-        m_Parent->GetInternalUnits() );
+        m_parent->GetInternalUnits() );
 
-    AddUnitSymbol( *m_EndX_Radius_Text );
     PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_Item->GetEnd().x,
-        m_Parent->GetInternalUnits() );
+        m_parent->GetInternalUnits() );
 
-    AddUnitSymbol( *m_EndY_Text );
     PutValueInLocalUnits( *m_EndY_Ctrl, m_Item->GetEnd().y,
-        m_Parent->GetInternalUnits() );
+        m_parent->GetInternalUnits() );
 
-    AddUnitSymbol( *m_ItemThicknessText );
     PutValueInLocalUnits( *m_ThicknessCtrl, m_Item->GetWidth(),
-        m_Parent->GetInternalUnits() );
-
-    AddUnitSymbol( *m_DefaultThicknessText );
+        m_parent->GetInternalUnits() );
 
     int thickness;
 
     if( m_Item->GetLayer() == EDGE_N )
-        thickness =  m_BrdSettings.m_EdgeSegmentWidth;
+        thickness =  m_brdSettings.m_EdgeSegmentWidth;
     else
-        thickness =  m_BrdSettings.m_DrawSegmentWidth;
+        thickness =  m_brdSettings.m_DrawSegmentWidth;
 
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
-        m_Parent->GetInternalUnits() );
+        m_parent->GetInternalUnits() );
 
     for( int layer=FIRST_NO_COPPER_LAYER; layer <= LAST_NO_COPPER_LAYER;  ++layer )
     {
-        m_LayerSelection->Append( m_Parent->GetBoard()->GetLayerName( layer ) );
+        m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( layer ) );
     }
 
     int layer =  m_Item->GetLayer();
@@ -160,62 +172,62 @@ void DialogGraphicItemProperties::initDlg( )
         layer = FIRST_NO_COPPER_LAYER;
     if ( layer > LAST_NO_COPPER_LAYER )
         layer = LAST_NO_COPPER_LAYER;
-    m_LayerSelection->SetSelection( layer - FIRST_NO_COPPER_LAYER );
+    m_LayerSelectionCtrl->SetSelection( layer - FIRST_NO_COPPER_LAYER );
 }
 
 
 /*******************************************************************/
-void DialogGraphicItemProperties::OnLayerChoice( wxCommandEvent& event )
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
 /*******************************************************************/
 {
     int thickness;
 
-    if( (m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER) == EDGE_N )
-        thickness =  m_BrdSettings.m_EdgeSegmentWidth;
+    if( (m_LayerSelectionCtrl->GetCurrentSelection() + FIRST_NO_COPPER_LAYER) == EDGE_N )
+        thickness =  m_brdSettings.m_EdgeSegmentWidth;
     else
-        thickness =  m_BrdSettings.m_DrawSegmentWidth;
+        thickness =  m_brdSettings.m_DrawSegmentWidth;
 
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
-        m_Parent->GetInternalUnits() );
+        m_parent->GetInternalUnits() );
 }
 
 /*******************************************************************/
-void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
 /*******************************************************************/
 /* Copy values in text control to the item parameters
 */
 {
-    m_Parent->SaveCopyInUndoList( m_Item, UR_CHANGED );
+    m_parent->SaveCopyInUndoList( m_Item, UR_CHANGED );
 
     wxString msg;
 
     if( m_DC )
-        m_Item->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
+        m_Item->Draw( m_parent->GetCanvas(), m_DC, GR_XOR );
 
     msg = m_Center_StartXCtrl->GetValue();
-    m_Item->SetStartX( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
+    m_Item->SetStartX( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
 
     msg = m_Center_StartYCtrl->GetValue();
-    m_Item->SetStartY( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
+    m_Item->SetStartY( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
 
     msg = m_EndX_Radius_Ctrl->GetValue();
-    m_Item->SetEndX( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
+    m_Item->SetEndX( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
 
     msg = m_EndY_Ctrl->GetValue();
-    m_Item->SetEndY( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
+    m_Item->SetEndY( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
 
     msg = m_ThicknessCtrl->GetValue();
-    m_Item->SetWidth( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
+    m_Item->SetWidth( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
 
     msg = m_DefaultThicknessCtrl->GetValue();
-    int thickness = ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() );
+    int thickness = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
 
-    m_Item->SetLayer( m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER);
+    m_Item->SetLayer( m_LayerSelectionCtrl->GetCurrentSelection() + FIRST_NO_COPPER_LAYER);
 
     if( m_Item->GetLayer() == EDGE_N )
-         m_BrdSettings.m_EdgeSegmentWidth = thickness;
+         m_brdSettings.m_EdgeSegmentWidth = thickness;
     else
-         m_BrdSettings.m_DrawSegmentWidth = thickness;
+         m_brdSettings.m_DrawSegmentWidth = thickness;
 
     if( m_Item->GetShape() == S_ARC )
     {
@@ -225,19 +237,19 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
         m_Item->SetAngle( angle );
     }
 
-    m_Parent->OnModify();
+    m_parent->OnModify();
 
     if( m_DC )
-        m_Item->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
+        m_Item->Draw( m_parent->GetCanvas(), m_DC, GR_OR );
 
-    m_Item->DisplayInfo( m_Parent );
+    m_Item->DisplayInfo( m_parent );
 
-    m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
+    m_parent->SetDesignSettings( m_brdSettings );
 
     Close( true );
 }
 
-void DialogGraphicItemProperties::OnCancelClick( wxCommandEvent& event )
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnCancelClick( wxCommandEvent& event )
 {
     event.Skip();
 }

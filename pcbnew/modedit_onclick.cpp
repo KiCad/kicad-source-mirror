@@ -337,15 +337,17 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                              KiBitmap( apply_xpm ) );
 
             wxMenu* edit_mnu = new wxMenu;
-            AddMenuItem( PopMenu, edit_mnu, ID_POPUP_PCB_EDIT_EDGE, _( "Edit" ), KiBitmap( edit_xpm ) );
-            AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE,
-                         _( "Edit Width (Current)" ), KiBitmap( width_segment_xpm ) );
-            AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_WIDTH_ALL_EDGE,
-                         _( "Edit Width (All)" ), KiBitmap( width_segment_xpm ) );
-            AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_LAYER_CURRENT_EDGE,
-                         _( "Edit Layer (Current)" ), KiBitmap( select_layer_pair_xpm ) );
-            AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE,
-                         _( "Edit Layer (All)" ), KiBitmap( select_layer_pair_xpm ) );
+            AddMenuItem( PopMenu, edit_mnu, ID_POPUP_MODEDIT_EDIT_EDGE, _( "Edit" ), KiBitmap( edit_xpm ) );
+            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_BODY_ITEM,
+                         _( "Edit Body Item" ), KiBitmap( options_segment_xpm  ) );
+            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_WIDTH_CURRENT_EDGE,
+                         _( "Change Body Item Width (Current)" ), KiBitmap( width_segment_xpm ) );
+            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE,
+                         _( "Change Body Items Width (All)" ), KiBitmap( width_segment_xpm ) );
+            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_LAYER_CURRENT_EDGE,
+                         _( "Change Body Item Layer (Current)" ), KiBitmap( select_layer_pair_xpm ) );
+            AddMenuItem( edit_mnu, ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE,
+                         _( "Change Body Items Layer (All)" ), KiBitmap( select_layer_pair_xpm ) );
             msg = AddHotkeyName( _("Delete edge" ), g_Module_Editor_Hokeys_Descr, HK_DELETE );
 
             AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_EDGE, msg, KiBitmap( delete_xpm ) );
@@ -360,6 +362,9 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         case PCB_MARKER_T:
         case PCB_DIMENSION_T:
         case PCB_TARGET_T:
+            msg.Printf( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: Unexpected DrawType %d" ),
+                        item->Type() );
+            DisplayError( this, msg );
             break;
 
         case SCREEN_T:
@@ -383,7 +388,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         ( GetToolId() == ID_MODEDIT_CIRCLE_TOOL ) ||
         ( GetToolId() == ID_MODEDIT_ARC_TOOL ) )
     {
-        AddMenuItem( PopMenu, ID_POPUP_PCB_ENTER_EDGE_WIDTH, _("Set Line Width" ),
+        AddMenuItem( PopMenu, ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH, _("Set Line Width" ),
                      KiBitmap( width_segment_xpm ) );
         PopMenu->AppendSeparator();
     }
@@ -391,7 +396,9 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     return true;
 }
 
-
+/*
+ * Called on a mouse left button double click
+ */
 void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* item = GetCurItem();
@@ -418,7 +425,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             break;
 
         case PCB_MODULE_T:
-        {
+            {
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) item );
             int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->ClearFlags();
@@ -426,12 +433,18 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
             if( ret > 0 )
                 m_canvas->Refresh();
-        }
-        break;
+            }
+            break;
 
         case PCB_MODULE_TEXT_T:
             InstallTextModOptionsFrame( (TEXTE_MODULE*) item, DC );
             m_canvas->MoveCursorToCrossHair();
+            break;
+
+        case  PCB_MODULE_EDGE_T :
+            m_canvas->MoveCursorToCrossHair();
+            InstallFootprintBodyItemPropertiesDlg( (EDGE_MODULE*) item );
+            m_canvas->Refresh();
             break;
 
         default:

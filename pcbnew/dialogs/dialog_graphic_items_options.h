@@ -37,9 +37,9 @@
 
 class DIALOG_GRAPHIC_ITEMS_OPTIONS: public DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE
 {
-public:
-    BOARD_DESIGN_SETTINGS  m_BrdSettings;
-    PCB_BASE_FRAME * m_Parent;
+private:
+    BOARD_DESIGN_SETTINGS  m_brdSettings;
+    PCB_BASE_FRAME * m_parent;
 
 public:
     DIALOG_GRAPHIC_ITEMS_OPTIONS( PCB_BASE_FRAME* parent );
