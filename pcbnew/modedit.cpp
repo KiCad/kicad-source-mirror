@@ -179,12 +179,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
-    case ID_POPUP_PCB_EDIT_EDGE:
-    case ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE:
-    case ID_POPUP_PCB_EDIT_WIDTH_ALL_EDGE:
-    case ID_POPUP_PCB_EDIT_LAYER_CURRENT_EDGE:
-    case ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE:
-    case ID_POPUP_PCB_ENTER_EDGE_WIDTH:
+    case ID_POPUP_MODEDIT_EDIT_BODY_ITEM:
+    case ID_POPUP_MODEDIT_EDIT_WIDTH_CURRENT_EDGE:
+    case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
+    case ID_POPUP_MODEDIT_EDIT_LAYER_CURRENT_EDGE:
+    case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
+    case ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
@@ -591,7 +591,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         break;
 
-    case ID_POPUP_PCB_ENTER_EDGE_WIDTH:
+    case ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH:
     {
         EDGE_MODULE* edge = NULL;
         if( GetScreen()->GetCurItem()
@@ -608,25 +608,31 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
     break;
 
-    case ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE:
+    case  ID_POPUP_MODEDIT_EDIT_BODY_ITEM :
+        m_canvas->MoveCursorToCrossHair();
+        InstallFootprintBodyItemPropertiesDlg( (EDGE_MODULE*) GetScreen()->GetCurItem() );
+        m_canvas->Refresh();
+        break;
+
+    case ID_POPUP_MODEDIT_EDIT_WIDTH_CURRENT_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Width( (EDGE_MODULE*) GetScreen()->GetCurItem() );
         m_canvas->Refresh();
         break;
 
-    case ID_POPUP_PCB_EDIT_WIDTH_ALL_EDGE:
+    case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Width( NULL );
         m_canvas->Refresh();
         break;
 
-    case ID_POPUP_PCB_EDIT_LAYER_CURRENT_EDGE:
+    case ID_POPUP_MODEDIT_EDIT_LAYER_CURRENT_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Layer( (EDGE_MODULE*) GetScreen()->GetCurItem() );
         m_canvas->Refresh();
         break;
 
-    case ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE:
+    case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Layer( NULL );
         m_canvas->Refresh();

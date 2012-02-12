@@ -195,7 +195,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
         new_layer = aEdge->GetLayer();
 
     // Ask for the new layer
-    new_layer = SelectLayer( new_layer, FIRST_COPPER_LAYER, LAST_NO_COPPER_LAYER );
+    new_layer = SelectLayer( new_layer, FIRST_COPPER_LAYER, ECO2_N );
 
     if( new_layer < 0 )
         return;
@@ -205,7 +205,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
         /* an edge is put on a copper layer, and it is very dangerous. a
          *confirmation is requested */
         if( !IsOK( this,
-                   _( "The graphic item will be on a copper layer.  It is very dangerous. Are you sure?" ) ) )
+                   _( "The graphic item will be on a copper layer. This is very dangerous. Are you sure?" ) ) )
             return;
     }
 

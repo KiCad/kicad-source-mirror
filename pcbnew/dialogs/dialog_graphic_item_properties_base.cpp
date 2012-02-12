@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,113 +9,165 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DialogGraphicItemProperties_base::DialogGraphicItemProperties_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bLeftSizer;
-	bLeftSizer = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bUpperSizer;
+	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_Start_Center_XText = new wxStaticText( this, wxID_ANY, wxT("Start Position X"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Start_Center_XText->Wrap( -1 );
-	bLeftSizer->Add( m_Start_Center_XText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxFlexGridSizer* fgUpperLeftGridSizer;
+	fgUpperLeftGridSizer = new wxFlexGridSizer( 4, 3, 0, 0 );
+	fgUpperLeftGridSizer->AddGrowableCol( 1 );
+	fgUpperLeftGridSizer->SetFlexibleDirection( wxBOTH );
+	fgUpperLeftGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_StartPointXLabel = new wxStaticText( this, wxID_ANY, _("Start point X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_StartPointXLabel->Wrap( -1 );
+	fgUpperLeftGridSizer->Add( m_StartPointXLabel, 0, wxALIGN_RIGHT|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_Center_StartXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_Center_StartXCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgUpperLeftGridSizer->Add( m_Center_StartXCtrl, 0, wxEXPAND|wxALL, 5 );
 	
-	m_Start_Center_YText = new wxStaticText( this, wxID_ANY, wxT("Start Position Y"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Start_Center_YText->Wrap( -1 );
-	bLeftSizer->Add( m_Start_Center_YText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_StartPointXUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_StartPointXUnit->Wrap( -1 );
+	fgUpperLeftGridSizer->Add( m_StartPointXUnit, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_StartPointYLabel = new wxStaticText( this, wxID_ANY, _("Start point Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_StartPointYLabel->Wrap( -1 );
+	fgUpperLeftGridSizer->Add( m_StartPointYLabel, 0, wxALIGN_RIGHT|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_Center_StartYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_Center_StartYCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgUpperLeftGridSizer->Add( m_Center_StartYCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_EndX_Radius_Text = new wxStaticText( this, wxID_ANY, wxT("End Position X"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_EndX_Radius_Text->Wrap( -1 );
-	bLeftSizer->Add( m_EndX_Radius_Text, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_StartPointYUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_StartPointYUnit->Wrap( -1 );
+	fgUpperLeftGridSizer->Add( m_StartPointYUnit, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_EndPointXLabel = new wxStaticText( this, wxID_ANY, _("End point X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EndPointXLabel->Wrap( -1 );
+	fgUpperLeftGridSizer->Add( m_EndPointXLabel, 0, wxALIGN_RIGHT|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_EndX_Radius_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_EndX_Radius_Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgUpperLeftGridSizer->Add( m_EndX_Radius_Ctrl, 0, wxEXPAND|wxALL, 5 );
 	
-	m_EndY_Text = new wxStaticText( this, wxID_ANY, wxT("End Position Y"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_EndY_Text->Wrap( -1 );
-	bLeftSizer->Add( m_EndY_Text, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_EndPointXUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EndPointXUnit->Wrap( -1 );
+	fgUpperLeftGridSizer->Add( m_EndPointXUnit, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_EndPointYLabel = new wxStaticText( this, wxID_ANY, _("End point Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EndPointYLabel->Wrap( -1 );
+	fgUpperLeftGridSizer->Add( m_EndPointYLabel, 0, wxALIGN_RIGHT|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_EndY_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_EndY_Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgUpperLeftGridSizer->Add( m_EndY_Ctrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_Angle_Text = new wxStaticText( this, wxID_ANY, wxT("Arc Angle (0.1 degree)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EndPointYUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EndPointYUnit->Wrap( -1 );
+	fgUpperLeftGridSizer->Add( m_EndPointYUnit, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	bUpperSizer->Add( fgUpperLeftGridSizer, 1, wxEXPAND, 5 );
+	
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bUpperSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bUpperRightSizer;
+	bUpperRightSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxFlexGridSizer* fgUpperRightGridSizer;
+	fgUpperRightGridSizer = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgUpperRightGridSizer->AddGrowableCol( 1 );
+	fgUpperRightGridSizer->SetFlexibleDirection( wxBOTH );
+	fgUpperRightGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_Angle_Text = new wxStaticText( this, wxID_ANY, _("Arc angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Angle_Text->Wrap( -1 );
-	bLeftSizer->Add( m_Angle_Text, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgUpperRightGridSizer->Add( m_Angle_Text, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
-	m_Angle_Ctrl = new wxTextCtrl( this, wxID_ANGLE_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_Angle_Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_Angle_Ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgUpperRightGridSizer->Add( m_Angle_Ctrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	m_AngleUnit = new wxStaticText( this, wxID_ANY, _("0.1 degree"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AngleUnit->Wrap( -1 );
+	fgUpperRightGridSizer->Add( m_AngleUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
-	wxBoxSizer* bMiddleSizer;
-	bMiddleSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_ItemThicknessText = new wxStaticText( this, wxID_ANY, wxT("Item Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ItemThicknessText->Wrap( -1 );
-	bMiddleSizer->Add( m_ItemThicknessText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_ThicknessLabel = new wxStaticText( this, wxID_ANY, _("Item thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessLabel->Wrap( -1 );
+	fgUpperRightGridSizer->Add( m_ThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_ThicknessCtrl->SetToolTip( wxT("Thickness of this item") );
+	fgUpperRightGridSizer->Add( m_ThicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	bMiddleSizer->Add( m_ThicknessCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_ThicknessTextUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessTextUnit->Wrap( -1 );
+	fgUpperRightGridSizer->Add( m_ThicknessTextUnit, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_DefaultThicknessText = new wxStaticText( this, wxID_ANY, wxT("Default Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DefaultThicknessText->Wrap( -1 );
-	bMiddleSizer->Add( m_DefaultThicknessText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_DefaultThicknessLabel = new wxStaticText( this, wxID_ANY, _("Default thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DefaultThicknessLabel->Wrap( -1 );
+	fgUpperRightGridSizer->Add( m_DefaultThicknessLabel, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_DefaultThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_DefaultThicknessCtrl->SetToolTip( wxT("Default value for thickness when creating a new graphic item") );
+	fgUpperRightGridSizer->Add( m_DefaultThicknessCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	bMiddleSizer->Add( m_DefaultThicknessCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_DefaulThicknessTextUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DefaulThicknessTextUnit->Wrap( -1 );
+	fgUpperRightGridSizer->Add( m_DefaulThicknessTextUnit, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	
+	bUpperRightSizer->Add( fgUpperRightGridSizer, 0, wxEXPAND, 5 );
+	
+	wxFlexGridSizer* fgLowerRightSizer;
+	fgLowerRightSizer = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgLowerRightSizer->AddGrowableCol( 1 );
+	fgLowerRightSizer->SetFlexibleDirection( wxBOTH );
+	fgLowerRightSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LayerLabel->Wrap( -1 );
+	fgLowerRightSizer->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	
+	wxArrayString m_LayerSelectionCtrlChoices;
+	m_LayerSelectionCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_LayerSelectionCtrlChoices, 0 );
+	m_LayerSelectionCtrl->SetSelection( 0 );
+	m_LayerSelectionCtrl->SetToolTip( _("Select the layer on which text should lay.") );
+	
+	fgLowerRightSizer->Add( m_LayerSelectionCtrl, 0, wxEXPAND|wxALL, 5 );
+	
+	bUpperRightSizer->Add( fgLowerRightSizer, 1, wxEXPAND, 5 );
+	
+	bUpperSizer->Add( bUpperRightSizer, 1, wxEXPAND, 5 );
+	
+	bMainSizer->Add( bUpperSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMiddleSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_LayerText = new wxStaticText( this, wxID_ANY, wxT("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LayerText->Wrap( -1 );
-	bMiddleSizer->Add( m_LayerText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	wxArrayString m_LayerSelectionChoices;
-	m_LayerSelection = new wxChoice( this, wxID_LAYER_SELECTION, wxDefaultPosition, wxDefaultSize, m_LayerSelectionChoices, 0 );
-	m_LayerSelection->SetSelection( 0 );
-	bMiddleSizer->Add( m_LayerSelection, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	bMainSizer->Add( bMiddleSizer, 1, wxEXPAND, 5 );
-	
-	wxBoxSizer* bRightSizer;
-	bRightSizer = new wxBoxSizer( wxVERTICAL );
-	
-	m_buttonOK = new wxButton( this, wxID_OK, wxT("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetDefault(); 
-	bRightSizer->Add( m_buttonOK, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonCANCEL, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	
-	bMainSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_StandardButtonsSizer = new wxStdDialogButtonSizer();
+	m_StandardButtonsSizerOK = new wxButton( this, wxID_OK );
+	m_StandardButtonsSizer->AddButton( m_StandardButtonsSizerOK );
+	m_StandardButtonsSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_StandardButtonsSizer->AddButton( m_StandardButtonsSizerCancel );
+	m_StandardButtonsSizer->Realize();
+	bMainSizer->Add( m_StandardButtonsSizer, 0, wxALIGN_BOTTOM|wxALIGN_RIGHT|wxALL, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	
+	this->Centre( wxBOTH );
+	
 	// Connect Events
-	m_LayerSelection->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnLayerChoice ), NULL, this );
-	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnOkClick ), NULL, this );
-	m_buttonCANCEL->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnCancelClick ), NULL, this );
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnClose ) );
+	m_StandardButtonsSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnCancelClick ), NULL, this );
+	m_StandardButtonsSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnOkClick ), NULL, this );
 }
 
-DialogGraphicItemProperties_base::~DialogGraphicItemProperties_base()
+DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::~DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE()
 {
 	// Disconnect Events
-	m_LayerSelection->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnLayerChoice ), NULL, this );
-	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnOkClick ), NULL, this );
-	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGraphicItemProperties_base::OnCancelClick ), NULL, this );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnClose ) );
+	m_StandardButtonsSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnCancelClick ), NULL, this );
+	m_StandardButtonsSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	
 }

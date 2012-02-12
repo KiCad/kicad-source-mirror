@@ -1,13 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_graphic_item_properties_base__
-#define __dialog_graphic_item_properties_base__
+#ifndef __DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE_H__
+#define __DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -23,50 +26,55 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DialogGraphicItemProperties_base
+/// Class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DialogGraphicItemProperties_base : public wxDialog 
+class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public wxDialog 
 {
 	private:
 	
 	protected:
-		enum
-		{
-			wxID_ANGLE_CTRL = 1000,
-			wxID_LAYER_SELECTION,
-		};
-		
-		wxStaticText* m_Start_Center_XText;
+		wxStaticText* m_StartPointXLabel;
 		wxTextCtrl* m_Center_StartXCtrl;
-		wxStaticText* m_Start_Center_YText;
+		wxStaticText* m_StartPointXUnit;
+		wxStaticText* m_StartPointYLabel;
 		wxTextCtrl* m_Center_StartYCtrl;
-		wxStaticText* m_EndX_Radius_Text;
+		wxStaticText* m_StartPointYUnit;
+		wxStaticText* m_EndPointXLabel;
 		wxTextCtrl* m_EndX_Radius_Ctrl;
-		wxStaticText* m_EndY_Text;
+		wxStaticText* m_EndPointXUnit;
+		wxStaticText* m_EndPointYLabel;
 		wxTextCtrl* m_EndY_Ctrl;
+		wxStaticText* m_EndPointYUnit;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_Angle_Text;
 		wxTextCtrl* m_Angle_Ctrl;
-		wxStaticText* m_ItemThicknessText;
+		wxStaticText* m_AngleUnit;
+		wxStaticText* m_ThicknessLabel;
 		wxTextCtrl* m_ThicknessCtrl;
-		wxStaticText* m_DefaultThicknessText;
+		wxStaticText* m_ThicknessTextUnit;
+		wxStaticText* m_DefaultThicknessLabel;
 		wxTextCtrl* m_DefaultThicknessCtrl;
+		wxStaticText* m_DefaulThicknessTextUnit;
+		wxStaticText* m_LayerLabel;
+		wxChoice* m_LayerSelectionCtrl;
 		wxStaticLine* m_staticline1;
-		wxStaticText* m_LayerText;
-		wxChoice* m_LayerSelection;
-		wxButton* m_buttonOK;
-		wxButton* m_buttonCANCEL;
+		wxStdDialogButtonSizer* m_StandardButtonsSizer;
+		wxButton* m_StandardButtonsSizerOK;
+		wxButton* m_StandardButtonsSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnLayerChoice( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DialogGraphicItemProperties_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Graphic item properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 399,247 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
-		~DialogGraphicItemProperties_base();
+		
+		DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Graphic Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 537,215 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		~DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE();
 	
 };
 
-#endif //__dialog_graphic_item_properties_base__
+#endif //__DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE_H__
