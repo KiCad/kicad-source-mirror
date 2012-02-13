@@ -120,8 +120,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( wxWindow* parent, wxSemaphore* s
 
     // Give an icon
     wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( library_browse_xpm ) );
-
+    icon.CopyFromBitmap( KiBitmap( modview_icon_xpm ) );
     SetIcon( icon );
 
     m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;

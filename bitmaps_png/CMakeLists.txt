@@ -324,17 +324,17 @@ set( BMAPS_MID
     mirepcb
     mirror_h
     mirror_v
-    modedit
     mode_module
     mode_track
     modratsnest
     module_check
-    modul_edit
+    module_edit
     module_filtered_list
     module_full_list
     module_options
     module_ratsnest
     module
+    modview_icon
     morgan1
     morgan2
     move_arc
