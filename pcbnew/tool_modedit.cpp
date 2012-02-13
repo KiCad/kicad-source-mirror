@@ -66,7 +66,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( new_library_xpm ),
                             _( "Create new library and save current module" ) );
 
-    m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString, KiBitmap( library_browse_xpm ),
+    m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString, KiBitmap( modview_icon_xpm ),
                             _( "Open module viewer" ) );
 
     m_mainToolBar->AddSeparator();

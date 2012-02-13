@@ -54,7 +54,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
                                 _( "Select library to browse" ) );
 
         m_mainToolBar->AddTool( ID_MODVIEW_SELECT_PART, wxEmptyString,
-                                KiBitmap( add_component_xpm ),
+                                KiBitmap( module_xpm ),
                                 _( "Select footprint to browse" ) );
 
         m_mainToolBar->AddSeparator();
