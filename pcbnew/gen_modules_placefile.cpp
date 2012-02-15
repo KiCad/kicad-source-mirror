@@ -1,6 +1,28 @@
 /**
  * @file gen_modules_placefile.cpp
  */
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 /*
  *  1 - create ascii files for automatic placement of smd components
@@ -22,44 +44,264 @@
 #include <class_drawsegment.h>
 
 #include <pcbnew.h>
+#include <pcb_plot_params.h>
+
+#include <dialog_gen_module_position_file_base.h>
 
 
-class LIST_MOD      // Can list the elements of useful modules.
+class LIST_MOD      // An helper class used to build a list of useful footprints.
 {
 public:
-    MODULE*       m_Module;
-    const wxChar* m_Reference;
-    const wxChar* m_Value;
+    MODULE*       m_Module;         // Link to the actual footprint
+    const wxChar* m_Reference;      // Its schematic reference
+    const wxChar* m_Value;          // Its schematic value
+    int           m_Layer;          // its side (LAYER_N_BACK, or LAYER_N_FRONT)
 };
 
+/*
+ * The dialog to create footprint position files,
+ * and choose options (one or 2 files, units and force all SMD footprints in list)
+ */
+class DIALOG_GEN_MODULE_POSITION : public DIALOG_GEN_MODULE_POSITION_BASE
+{
+private:
+    PCB_EDIT_FRAME* m_parent;
+	static int m_unitsOpt;
+	static int m_fileOpt;
 
-#if 1
-static const double conv_unit = 0.0001;      // units = INCHES
-static const char unit_text[] = "## Unit = inches, Angle = deg.\n";
-#else
-static const double conv_unit = 0.00254;    // units = mm
-static const char unit_text[] = "## Unit = mm, Angle = deg.\n";
-#endif
+public:
+    DIALOG_GEN_MODULE_POSITION( PCB_EDIT_FRAME * parent):
+        DIALOG_GEN_MODULE_POSITION_BASE( parent )
+    {
+        m_parent = parent;
+    }
+
+private:
+	void OnInitDialog( wxInitDialogEvent& event );
+	void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
+	void OnCancelButton( wxCommandEvent& event )
+    {
+        EndModal( wxID_CANCEL );
+    }
+	void OnOKButton( wxCommandEvent& event );
+
+    bool CreateFiles();
+
+    // accessors to options:
+    wxString GetOutputDirectory()
+    {
+        return m_outputDirectoryName->GetValue();
+    }
+
+    bool UnitsMM()
+    {
+        return m_radioBoxUnits->GetSelection() == 1;
+    }
+
+    bool OneFileOnly()
+    {
+        return m_radioBoxFilesCount->GetSelection() == 1;
+    }
+
+    bool ForceAllSmd()
+    {
+        return m_radioBoxForceSmd->GetSelection() == 1;
+    }
+
+    void AddMessage( const wxString & aMessage )
+    {
+        m_messagesBox->AppendText( aMessage );
+    }
+};
+
+// Static members to remember choices
+int DIALOG_GEN_MODULE_POSITION::m_unitsOpt = 0;
+int DIALOG_GEN_MODULE_POSITION::m_fileOpt = 0;
+
+void DIALOG_GEN_MODULE_POSITION::OnInitDialog( wxInitDialogEvent& event )
+{
+    // Output directory
+    m_outputDirectoryName->SetValue( g_PcbPlotOptions.GetOutputDirectory() );
+    m_radioBoxUnits->SetSelection( m_unitsOpt );
+    m_radioBoxFilesCount->SetSelection( m_fileOpt );
+
+    m_sdbSizerButtonsOK->SetDefault();
+    GetSizer()->SetSizeHints(this);
+    Centre();
+}
+
+void DIALOG_GEN_MODULE_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+{
+    // Build the absolute path of current output plot directory
+    // to preselect it when opening the dialog.
+    wxFileName fn( m_outputDirectoryName->GetValue() );
+    wxString path;
+
+    if( fn.IsRelative() )
+        path = wxGetCwd() + fn.GetPathSeparator() + m_outputDirectoryName->GetValue();
+    else
+        path = m_outputDirectoryName->GetValue();
+
+    wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
+
+    if( dirDialog.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
+
+    wxMessageDialog dialog( this, _( "Use a relative path? "),
+                            _( "Plot Output Directory" ),
+                            wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+
+    if( dialog.ShowModal() == wxID_YES )
+    {
+        wxString boardFilePath = ( (wxFileName) m_parent->GetScreen()->GetFileName()).GetPath();
+
+        if( !dirName.MakeRelativeTo( boardFilePath ) )
+            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
+                          _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
+    }
+
+    m_outputDirectoryName->SetValue( dirName.GetFullPath() );
+}
+
+void DIALOG_GEN_MODULE_POSITION::OnOKButton( wxCommandEvent& event )
+{
+    m_unitsOpt = m_radioBoxUnits->GetSelection();
+    m_fileOpt = m_radioBoxFilesCount->GetSelection();
+
+    // Set output directory and replace backslashes with forward ones
+    // (Keep unix convention in cfg files)
+    wxString dirStr;
+    dirStr = m_outputDirectoryName->GetValue();
+    dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
+    g_PcbPlotOptions.SetOutputDirectory( dirStr );
+
+    CreateFiles();
+}
+
+bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
+{
+    BOARD * brd = m_parent->GetBoard();
+    PCB_SCREEN * screen = m_parent->GetScreen();
+    wxFileName  fn;
+    wxString    msg;
+    wxString    frontLayerName;
+    wxString    backLayerName;
+    bool singleFile = OneFileOnly();
+    int fullcount = 0;
+
+    fn = screen->GetFileName();
+    fn.SetPath( GetOutputDirectory() );
+    frontLayerName = brd->GetLayerName( LAYER_N_FRONT );
+    backLayerName = brd->GetLayerName( LAYER_N_BACK );
+
+    // Create the the Front or Top side placement file,
+    // or the single file
+    int side = 1;
+    if( singleFile )
+    {
+        side = 2;
+        fn.SetName( fn.GetName() + wxT( "_" ) + wxT("all") );
+    }
+     else
+        fn.SetName( fn.GetName() + wxT( "_" ) + frontLayerName );
+
+    fn.SetExt( wxT( "pos") );
+
+    int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
+                                                         ForceAllSmd(), side );
+    if( fpcount < 0 )
+    {
+        msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
+        AddMessage( msg + wxT("\n") );
+        wxMessageBox( msg );
+        return false;
+    }
+
+    if( fpcount == 0)
+    {
+        wxMessageBox( _( "No modules for automated placement." ) );
+        return false;
+    }
+
+    if( singleFile  )
+        msg.Printf( _( "Place file: %s\n" ), GetChars( fn.GetFullPath() ) );
+    else
+        msg.Printf( _( "Component side place file: %s\n" ), GetChars( fn.GetFullPath() ) );
+
+    AddMessage( msg );
+    msg.Printf( _( "Footprint count %d\n" ), fpcount );
+    AddMessage( msg );
+
+    if( singleFile  )
+        return true;
+
+    // Create the Back or Bottom side placement file
+    fullcount = fpcount;
+    side = 0;
+    fn = screen->GetFileName();
+    fn.SetPath( GetOutputDirectory() );
+    fn.SetName( fn.GetName() + wxT( "_" ) + backLayerName );
+    fn.SetExt( wxT( "pos" ) );
+
+    fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
+                                                    ForceAllSmd(), side );
+
+    if( fpcount < 0 )
+    {
+        msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
+        AddMessage( msg + wxT("\n") );
+        wxMessageBox( msg );
+        return false;
+    }
+
+    // Display results
+    if( !singleFile )
+    {
+        msg.Printf( _( "Copper side place file: %s\n" ), GetChars( fn.GetFullPath() ) );
+        AddMessage( msg );
+        msg.Printf( _( "Footprint count %d\n" ), fpcount );
+        AddMessage( msg );
+    }
+
+    if( !singleFile )
+    {
+        fullcount += fpcount;
+        msg.Printf( _( "Full footprint count %d\n" ), fullcount );
+        AddMessage( msg );
+    }
+
+    return true;
+}
+
+// Defined values to write coordinates using inches or mm:
+static const double conv_unit_inch = 0.0001;      // units = INCHES
+static const char unit_text_inch[] = "## Unit = inches, Angle = deg.\n";
+
+static const double conv_unit_mm = 0.00254;    // units = mm
+static const char unit_text_mm[] = "## Unit = mm, Angle = deg.\n";
 
 static wxPoint File_Place_Offset;  // Offset coordinates for generated file.
 
-static void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile );
+static void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile,
+                                 double aConvUnit );
 
 
 // Sort function use by GenereModulesPosition()
-static int ListeModCmp( const void* o1, const void* o2 )
+// sort is made by side (layer) top layer first
+// then by reference increasing order
+static bool sortFPlist( const LIST_MOD& ref, const LIST_MOD& tst )
 {
-    LIST_MOD* ref = (LIST_MOD*) o1;
-    LIST_MOD* cmp = (LIST_MOD*) o2;
+    if( ref.m_Layer == tst.m_Layer )
+        return StrNumCmp( ref.m_Reference, tst.m_Reference, 16 ) < 0;
 
-    return StrNumCmp( ref->m_Reference, cmp->m_Reference, 16 );
+    return ref.m_Layer > tst.m_Layer;
 }
 
 
-#if defined(DEBUG)
-
 /**
- * Function HasNonSMDPins
+ * Helper function HasNonSMDPins
  * returns true if the given module has any non smd pins, such as through hole
  * and therefore cannot be placed automatically.
  */
@@ -76,24 +318,24 @@ static bool HasNonSMDPins( MODULE* aModule )
     return false;
 }
 
-#endif
-
-
-void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
+void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
 {
-    bool        doBoardBack = false;
+    DIALOG_GEN_MODULE_POSITION dlg( this );
+    dlg.ShowModal();
+}
+
+/*
+ * Creates a footprint position file
+ * aSide = 0 -> Back (bottom) side)
+ * aSide = 1 -> Front (top) side)
+ * aSide = 2 -> both sides
+ */
+int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
+                                                 bool aUnitsMM,
+                                                 bool aForceSmdItems, int aSide )
+{
     MODULE*     module;
-    LIST_MOD*   list = NULL;
     char        line[1024];
-    wxFileName  fnFront;
-    wxFileName  fnBack;
-    wxString    msg;
-    wxString    frontLayerName;
-    wxString    backLayerName;
-    wxString    Title;
-    FILE*       fpFront = 0;
-    FILE*       fpBack = 0;
-    bool        switchedLocale = false;
 
     File_Place_Offset = GetOriginAxisPosition();
 
@@ -102,6 +344,14 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
 
     for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
+        if( aSide < 2 )
+        {
+            if( module->GetLayer() == LAYER_N_BACK && aSide == 1)
+                continue;
+            if( module->GetLayer() == LAYER_N_FRONT && aSide == 0)
+                continue;
+        }
+
         if( module->m_Attributs & MOD_VIRTUAL )
         {
             D( printf( "skipping module %s because it's virtual\n",
@@ -111,142 +361,88 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
 
         if( ( module->m_Attributs & MOD_CMS )  == 0 )
         {
-#if 1 && defined(DEBUG)  // enable this code to fix a bunch of mis-labeled modules:
-            if( !HasNonSMDPins( module ) )
+            if( aForceSmdItems )    // true to fix a bunch of mis-labeled modules:
             {
-                // all module's pins are SMD, mark the part for pick and place
-                module->m_Attributs |= MOD_CMS;
+                if( !HasNonSMDPins( module ) )
+                {
+                    // all module's pins are SMD, mark the part for pick and place
+                    module->m_Attributs |= MOD_CMS;
+                    OnModify();
+                }
+                else
+                {
+                    D(printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n",
+                            TO_UTF8(module->GetReference()) ) );
+                    continue;
+                }
             }
-            else
-            {
-                printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n",
-                        TO_UTF8(module->GetReference()) );
-                continue;
-            }
-#else
             continue;
-#endif
         }
-
-        if( module->GetLayer() == LAYER_N_BACK )
-            doBoardBack = true;
 
         moduleCount++;
     }
 
-    if( moduleCount == 0 )
+    FILE * file = wxFopen( aFullFileName, wxT( "wt" ) );
+    if( file == NULL )
+        return -1;
+
+    // Select units:
+    double conv_unit = aUnitsMM ? conv_unit_mm : conv_unit_inch;
+    const char *unit_text = aUnitsMM ? unit_text_mm : unit_text_inch;
+
+    // Build and sort the list of modules alphabetically
+    std::vector<LIST_MOD> list;
+    list.reserve(moduleCount);
+    for(  module = GetBoard()->m_Modules; module; module = module->Next() )
     {
-        DisplayError( this, _( "No modules for automated placement." ) );
-        return;
-    }
-
-    wxString boardFilePath = ( (wxFileName) GetScreen()->GetFileName()).GetPath();
-    wxDirDialog dirDialog( this, _( "Select Output Directory" ), boardFilePath );
-
-    if( dirDialog.ShowModal() == wxID_CANCEL )
-        return;
-
-    fnFront = GetScreen()->GetFileName();
-    fnFront.SetPath( dirDialog.GetPath() );
-    frontLayerName = GetBoard()->GetLayerName( LAYER_N_FRONT );
-    fnFront.SetName( fnFront.GetName() + wxT( "_" ) + frontLayerName );
-    fnFront.SetExt( wxT( "pos") );
-    fpFront = wxFopen( fnFront.GetFullPath(), wxT( "wt" ) );
-
-    if( fpFront == 0 )
-    {
-        msg = _( "Unable to create " ) + fnFront.GetFullPath();
-        DisplayError( this, msg );
-        goto exit;
-    }
-
-    if( doBoardBack )
-    {
-        fnBack = GetScreen()->GetFileName();
-        fnBack.SetPath( dirDialog.GetPath() );
-        backLayerName = GetBoard()->GetLayerName( LAYER_N_BACK );
-        fnBack.SetName( fnBack.GetName() + wxT( "_" ) + backLayerName );
-        fnBack.SetExt( wxT( "pos" ) );
-        fpBack = wxFopen( fnBack.GetFullPath(), wxT( "wt" ) );
-
-        if( fpBack == 0 )
+        if( aSide < 2 )
         {
-            msg = _( "Unable to create " ) + fnBack.GetFullPath();
-            DisplayError( this, msg );
-            goto exit;
+            if( module->GetLayer() == LAYER_N_BACK && aSide == 1)
+                continue;
+            if( module->GetLayer() == LAYER_N_FRONT && aSide == 0)
+                continue;
         }
-    }
 
-    // Switch the locale to standard C (needed to print floating point
-    // numbers like 1.3)
-    SetLocaleTo_C_standard( );
-    switchedLocale = true;
-
-    // Display results
-    ClearMsgPanel();
-    AppendMsgPanel( _( "Component side place file:" ), fnFront.GetFullPath(), BLUE );
-
-    if( doBoardBack )
-        AppendMsgPanel( _( "Copper side place file:" ), fnBack.GetFullPath(), BLUE );
-
-    msg.Empty(); msg << moduleCount;
-    AppendMsgPanel( _( "Module count" ), msg, RED );
-
-    // Sort the list of modules alphabetically
-    list = new LIST_MOD[moduleCount];
-
-    module = GetBoard()->m_Modules;
-
-    for( int ii = 0;  module;  module = module->Next() )
-    {
         if( module->m_Attributs & MOD_VIRTUAL )
             continue;
 
         if( (module->m_Attributs & MOD_CMS)  == 0 )
             continue;
-
-        list[ii].m_Module    = module;
-        list[ii].m_Reference = module->m_Reference->m_Text;
-        list[ii].m_Value     = module->m_Value->m_Text;
-        ii++;
+        LIST_MOD item;
+        item.m_Module    = module;
+        item.m_Reference = module->m_Reference->m_Text;
+        item.m_Value     = module->m_Value->m_Text;
+        item.m_Layer     = module->GetLayer();
+        list.push_back( item );
     }
 
-    qsort( list, moduleCount, sizeof(LIST_MOD), ListeModCmp );
+    if( moduleCount > 1 )
+        sort( list.begin(), list.end(), sortFPlist );
+
+    wxString frontLayerName = GetBoard()->GetLayerName( LAYER_N_FRONT );
+    wxString backLayerName = GetBoard()->GetLayerName( LAYER_N_BACK );
+
+    // Switch the locale to standard C (needed to print floating point
+    // numbers like 1.3)
+    SetLocaleTo_C_standard( );
 
     // Write file header
     sprintf( line, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
-    fputs( line, fpFront );
+    fputs( line, file );
 
-    if( doBoardBack )
-        fputs( line, fpBack );
-
-    Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
     sprintf( line, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
-    fputs( line, fpFront );
+    fputs( line, file );
 
-    if( doBoardBack )
-        fputs( line, fpBack );
+    fputs( unit_text, file );
 
-    fputs( unit_text, fpFront );
-
-    if( doBoardBack )
-        fputs( line, fpBack );
-
-    sprintf( line, "## Side : %s\n", TO_UTF8( frontLayerName ) );
-    fputs( line, fpFront );
-
-    if( doBoardBack )
-    {
-        sprintf( line, "## Side : %s\n", TO_UTF8( backLayerName ) );
-        fputs( line, fpBack );
-    }
+    sprintf( line, "## Side : %s\n",
+             ( aSide < 2 ) ? TO_UTF8( frontLayerName ) : "All" );
+    fputs( line, file );
 
     sprintf( line,
              "# Ref    Val                  PosX       PosY        Rot     Side\n" );
-    fputs( line, fpFront );
-
-    if( doBoardBack )
-        fputs( line, fpBack );
+    fputs( line, file );
 
     for( int ii = 0; ii < moduleCount; ii++ )
     {
@@ -256,8 +452,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
         sprintf( line, "%-8.8s %-16.16s ", TO_UTF8( ref ), TO_UTF8( val ) );
 
         module_pos    = list[ii].m_Module->m_Pos;
-        module_pos.x -= File_Place_Offset.x;
-        module_pos.y -= File_Place_Offset.y;
+        module_pos -= File_Place_Offset;
 
         char* text = line + strlen( line );
         sprintf( text, " %9.4f  %9.4f  %8.1f    ",
@@ -273,63 +468,29 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
         {
             strcat( line, TO_UTF8( frontLayerName ) );
             strcat( line, "\n" );
-            fputs( line, fpFront );
+            fputs( line, file );
         }
         else if( layer == LAYER_N_BACK )
         {
             strcat( line, TO_UTF8( backLayerName ) );
             strcat( line, "\n" );
-            fputs( line, fpBack );
+            fputs( line, file );
         }
     }
 
     // Write EOF
-    fputs( "## End\n", fpFront );
+    fputs( "## End\n", file );
 
-    if( doBoardBack )
-        fputs( "## End\n", fpBack );
+    SetLocaleTo_Default( );      // revert to the current locale
 
-    msg = _( "Module position files created:" );
-    msg.Append( wxT( "\n\n" ) + frontLayerName + wxT( ":\n" ) );
-    msg.Append( fnFront.GetFullPath() );
-
-    if( doBoardBack )
-    {
-        msg.Append( wxT( "\n\n" ) + backLayerName + wxT( ":\n" ) );
-        msg.Append( fnBack.GetFullPath() );
-    }
-
-    wxMessageBox( msg, _( "Module Position File" ), wxICON_INFORMATION );
-
-exit:   // the only safe way out of here, no returns please.
-
-    if( list )
-        delete[] list;
-
-    if( switchedLocale )
-        SetLocaleTo_Default( );      // revert to the current locale
-
-    if( fpFront )
-        fclose( fpFront );
-
-    if( fpBack )
-        fclose( fpBack );
+    fclose( file );
+    return moduleCount;
 }
 
 
-/* Print a module report.
- */
-void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
+void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
 {
-    MODULE*  Module;
-    D_PAD*   pad;
-    char     line[1024];
     wxFileName fn;
-    wxString fnFront, msg;
-    FILE*    rptfile;
-    wxPoint  module_pos;
-
-    File_Place_Offset = wxPoint( 0, 0 );
 
     wxString boardFilePath = ( (wxFileName) GetScreen()->GetFileName()).GetPath();
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), boardFilePath );
@@ -341,14 +502,44 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     fn.SetPath( dirDialog.GetPath() );
     fn.SetExt( wxT( "rpt" ) );
 
-    rptfile = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
+    bool success = DoGenFootprintsReport( fn.GetFullPath(), false );
+
+    wxString msg;
+    if( success )
+    {
+        msg.Printf( _( "Module report file created:\n%s" ),
+                    GetChars( fn.GetFullPath() ) );
+        wxMessageBox( msg, _( "Module Report" ), wxICON_INFORMATION );
+    }
+
+    else
+    {
+        msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
+        DisplayError( this, msg );
+    }
+}
+
+/* Print a module report.
+ */
+bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM )
+{
+    MODULE*  Module;
+    D_PAD*   pad;
+    char     line[1024];
+    wxString fnFront, msg;
+    FILE*    rptfile;
+    wxPoint  module_pos;
+
+    File_Place_Offset = wxPoint( 0, 0 );
+
+    rptfile = wxFopen( aFullFilename, wxT( "wt" ) );
 
     if( rptfile == NULL )
-    {
-        msg = _( "Unable to create " ) + fn.GetFullPath();
-        DisplayError( this, msg );
-        return;
-    }
+        return false;
+
+    // Select units:
+    double conv_unit = aUnitsMM ? conv_unit_mm : conv_unit_inch;
+    const char *unit_text = aUnitsMM ? unit_text_mm : unit_text_inch;
 
     // Switch the locale to standard C (needed to print floating point
     // numbers like 1.3)
@@ -489,7 +680,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
         if( ( (DRAWSEGMENT*) PtStruct )->GetLayer() != EDGE_N )
             continue;
 
-        WriteDrawSegmentPcb( (DRAWSEGMENT*) PtStruct, rptfile );
+        WriteDrawSegmentPcb( (DRAWSEGMENT*) PtStruct, rptfile, conv_unit );
     }
 
     // Generate EOF.
@@ -497,10 +688,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     fclose( rptfile );
     SetLocaleTo_Default( );      // revert to the current locale
 
-    msg = _( "Module report file created:" );
-    msg.Append( wxT( "\n" ) + fn.GetFullPath() );
-
-    wxMessageBox( msg, _( "Module Report" ), wxICON_INFORMATION );
+    return true;
 }
 
 
@@ -510,19 +698,19 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
  * Circle
  * Arc
  */
-void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
+void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile, double aConvUnit )
 {
     double ux0, uy0, dx, dy;
     double radius, width;
     char   line[1024];
 
-    ux0 = PtDrawSegment->GetStart().x * conv_unit;
-    uy0 = PtDrawSegment->GetStart().y * conv_unit;
+    ux0 = PtDrawSegment->GetStart().x * aConvUnit;
+    uy0 = PtDrawSegment->GetStart().y * aConvUnit;
 
-    dx = PtDrawSegment->GetEnd().x * conv_unit;
-    dy = PtDrawSegment->GetEnd().y * conv_unit;
+    dx = PtDrawSegment->GetEnd().x * aConvUnit;
+    dy = PtDrawSegment->GetEnd().y * aConvUnit;
 
-    width = PtDrawSegment->GetWidth() * conv_unit;
+    width = PtDrawSegment->GetWidth() * aConvUnit;
 
     switch( PtDrawSegment->GetShape() )
     {
@@ -550,7 +738,7 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
             fprintf( rptfile, "$ARC \n" );
             fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );
             fprintf( rptfile, "start %.6lf %.6lf\n",
-                     endx * conv_unit, endy * conv_unit );
+                     endx * aConvUnit, endy * aConvUnit );
             fprintf( rptfile, "end %.6lf %.6lf\n", dx, dy );
             fprintf( rptfile, "width %.6lf\n", width );
             fprintf( rptfile, "$EndARC \n" );
