@@ -713,8 +713,46 @@ public:
 
     void InstallDialogLayerSetup();
 
-    void GenModulesPosition( wxCommandEvent& event );
-    void GenModuleReport( wxCommandEvent& event );
+    /**
+     * Function GenFootprintsPositionFile
+     * Calls DoGenFootprintsPositionFile to create a footprint position file
+     * See DoGenFootprintsPositionFile for options and file format
+     */
+    void GenFootprintsPositionFile( wxCommandEvent& event );
+
+    /**
+     * Function DoGenFootprintsPositionFile
+     * Creates an ascii footprint position file
+     * @param aFullFilename = the full file name of the file to create
+     * @param aUnitsMM = false to use inches, true to use mm in coordinates
+     * @param aForceSmdItems = true to force all footprints with smd pads in list
+     *                       = false to put only footprints with option "INSERT" in list
+     * @param aSide = 0 to list footprints on BACK side,
+     *                1 to list footprints on FRONT side
+     *                2 to list footprints on both sides
+     * @return the number of footprints found on aSide side,
+     *    or -1 if the file could not be created
+     */
+    int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
+                                      bool aForceSmdItems, int aSide );
+
+    /**
+     * Function GenFootprintsReport
+     * Calls DoGenFootprintsReport to create a footprint reprot file
+     * See DoGenFootprintsReport for file format
+     */
+    void GenFootprintsReport( wxCommandEvent& event );
+
+    /**
+     * Function DoGenFootprintsReport
+     * Creates an ascii footprint report file giving some infos on footprints
+     * and board outlines
+     * @param aFullFilename = the full file name of the file to create
+     * @param aUnitsMM = false to use inches, true to use mm in coordinates
+     * @return true if OK, false if error
+     */
+    bool DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM );
+
     void InstallDrillFrame( wxCommandEvent& event );
     void ToPostProcess( wxCommandEvent& event );
 

@@ -43,6 +43,7 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_freeroute_exchange_base.cpp
     dialogs/dialog_gendrill.cpp
     dialogs/dialog_gendrill_base.cpp
+    dialogs/dialog_gen_module_position_file_base.cpp
     dialogs/dialog_general_options.cpp
     dialogs/dialog_general_options_BoardEditor_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp

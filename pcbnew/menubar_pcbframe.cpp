@@ -127,18 +127,24 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     /* Fabrication Outputs submenu */
     wxMenu* fabricationOutputsMenu = new wxMenu;
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
-                 _( "&Modules Position File" ),
+                 _( "&Modules Position (.pos) File" ),
                  _( "Generate modules position file for pick and place" ),
                  KiBitmap( post_compo_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_DRILL_FILE,
-                 _( "&Drill File" ),
+                 _( "&Drill (.drl) File" ),
                  _( "Generate excellon2 drill file" ),
                  KiBitmap( post_drill_xpm ) );
 
+    // Module Report
+    AddMenuItem( fabricationOutputsMenu, ID_GEN_EXPORT_FILE_MODULE_REPORT,
+                 _( "&Module (.rpt) Report" ),
+                 _( "Create a report of all modules on the current board" ),
+                 KiBitmap( tools_xpm ) );
+
     // Component File
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_CMP_FILE,
-                 _( "&Component File" ),
+                 _( "&Component (.cmp) File" ),
                  _( "(Re)create components file (*.cmp) for CvPcb" ),
                  KiBitmap( create_cmp_file_xpm ) );
 
@@ -146,7 +152,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
                  _( "&BOM File" ),
                  _( "Create a bill of materials from schematic" ),
-                 KiBitmap( tools_xpm ) );
+                 KiBitmap( bom_xpm ) );
 
     // Fabrications Outputs submenu append
     AddMenuItem( filesMenu, fabricationOutputsMenu,
@@ -182,12 +188,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_GENCADFORMAT,
                  _( "&GenCAD" ), _( "Export GenCAD format" ),
                  KiBitmap( export_xpm ) );
-
-    // Module Report
-    AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_MODULE_REPORT,
-                 _( "&Module Report" ),
-                 _( "Create a report of all modules on the current board" ),
-                 KiBitmap( tools_xpm ) );
 
     // VRML
     AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_VRML,
