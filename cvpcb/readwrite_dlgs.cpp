@@ -206,7 +206,7 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
     }
 
     wxString msg;
-    msg.Printf( _("File %s saved"), fn.GetFullPath() );
+    msg.Printf( _("File %s saved"), GetChars( fn.GetFullPath() ) );
     SetStatusText( msg );
     return 1;
 }
