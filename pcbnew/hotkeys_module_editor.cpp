@@ -60,7 +60,9 @@ void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         break;
 
     case HK_SWITCH_UNITS:
-        g_UserUnit = (g_UserUnit == INCHES) ? MILLIMETRES : INCHES;
+        cmd.SetId( (g_UserUnit == INCHES) ?
+                    ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_IN:
