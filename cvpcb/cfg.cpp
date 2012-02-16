@@ -10,6 +10,7 @@
 #include <param_config.h>
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
+#include <wildcards_and_files_ext.h>
 
 
 #define GROUP wxT("/cvpcb")

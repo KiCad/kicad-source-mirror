@@ -63,6 +63,7 @@
 
 #include <wx/display.h>
 #include <build_version.h>
+#include <wildcards_and_files_ext.h>
 
 
 

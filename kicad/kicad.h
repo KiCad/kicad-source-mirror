@@ -156,14 +156,18 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
 // please update both
 enum TreeFileType {
     TREE_PROJECT = 1,
-    TREE_SCHEMA,
-    TREE_PCB,
-    TREE_GERBER,
-    TREE_PDF,
-    TREE_TXT,
-    TREE_NET,
+    TREE_SCHEMA,        // Schematic file (.sch)
+    TREE_PCB,           // board file (.brd)
+    TREE_GERBER,        // Gerber  file (.pho, .g*)
+    TREE_PDF,           // PDF file (.pdf)
+    TREE_TXT,           // ascii text file (.txt)
+    TREE_NET,           // netlist file (.net)
     TREE_UNKNOWN,
     TREE_DIRECTORY,
+    TREE_CMP_LINK,      // cmp/footprint link file (.cmp)
+    TREE_REPORT,        // report file (.rpt)
+    TREE_FP_PLACE,      // fooprints position (place) file (.pos)
+    TREE_DRILL,         // Excellon drill file (.drl)
     TREE_MAX
 };
 

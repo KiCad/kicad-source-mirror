@@ -45,6 +45,7 @@
 
 #include <pcbnew.h>
 #include <pcb_plot_params.h>
+#include <wildcards_and_files_ext.h>
 
 #include <dialog_gen_module_position_file_base.h>
 
@@ -207,7 +208,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
      else
         fn.SetName( fn.GetName() + wxT( "_" ) + frontLayerName );
 
-    fn.SetExt( wxT( "pos") );
+    fn.SetExt( FootprintPlaceFileExtension );
 
     int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
                                                          ForceAllSmd(), side );

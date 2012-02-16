@@ -13,6 +13,7 @@
 #include <tree_project_frame.h>
 #include <class_treeprojectfiles.h>
 #include <class_treeproject_item.h>
+#include <wildcards_and_files_ext.h>
 
 #include <wx/regex.h>
 #include <wx/dir.h>
@@ -37,10 +38,10 @@ const wxChar* s_AllowedExtensionsToList[] =
 {
     wxT( "^.*\\.pro$" ),
     wxT( "^.*\\.pdf$" ),
-    wxT( "^[^$].*\\.brd$" ),
+    wxT( "^[^$].*\\.brd$" ),        // Pcbnew files
     wxT( "^.*\\.net$" ),
     wxT( "^.*\\.txt$" ),
-    wxT( "^.*\\.pho$" ),            // Gerber file
+    wxT( "^.*\\.pho$" ),            // Gerber file (Kicad extension)
     wxT( "^.*\\.gbr$" ),            // Gerber file
     wxT( "^.*\\.gb[alops]$" ),      // Gerber back (or bottom) layer file
     wxT( "^.*\\.gt[alops]$" ),      // Gerber front (or top) layer file
@@ -49,8 +50,10 @@ const wxChar* s_AllowedExtensionsToList[] =
     wxT( "^.*\\.sxw$" ),
     wxT( "^.*\\.htm$" ),
     wxT( "^.*\\.html$" ),
-    wxT( "^.*\\.rpt$" ),
-    wxT( "^.*\\.csv$" ),
+    wxT( "^.*\\.rpt$" ),            // Report files
+    wxT( "^.*\\.csv$" ),            // Report files in comma separateed format
+    wxT( "^.*\\.pos$" ),            // Footprint position files
+    wxT( "^.*\\.cmp$" ),            // Cvpcb cmp/footprint link files
     wxT( "^.*\\.drl$" ),            // Excellon drill files
     NULL                            // end of list
 };
@@ -440,6 +443,23 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
     case TREE_NET:
         ext = NetlistFileExtension;
         break;
+
+    case TREE_CMP_LINK:
+        ext = ComponentFileExtension;
+        break;
+
+    case TREE_REPORT:
+        ext = ReportFileExtension;
+        break;
+
+    case TREE_FP_PLACE:
+        ext = FootprintPlaceFileExtension;
+        break;
+
+    case TREE_DRILL:
+        ext = DrillFileExtension;
+        break;
+
     default:                       /* Eliminates unnecessary GCC warning. */
         break;
     }
@@ -483,6 +503,23 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
     case TREE_NET:
         ext = NetlistFileWildcard;
         break;
+
+    case TREE_CMP_LINK:
+        ext = ComponentFileWildcard;
+        break;
+
+    case TREE_REPORT:
+        ext = ReportFileWildcard;
+        break;
+
+    case TREE_FP_PLACE:
+        ext = FootprintPlaceFileWildcard;
+        break;
+
+    case TREE_DRILL:
+        ext = DrillFileWildcard;
+        break;
+
     default:                       /* Eliminates unnecessary GCC warning. */
         break;
     }

@@ -23,16 +23,12 @@
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
 /* Constant string definitions for CvPcb */
-const wxString ComponentFileExtension( wxT( "cmp" ) );
 const wxString RetroFileExtension( wxT( "stf" ) );
 const wxString FootprintAliasFileExtension( wxT( "equ" ) );
 
 // Wildcard for schematic retroannotation (import footprint names in schematic):
 const wxString RetroFileWildcard( _( "KiCad retroannotation files (*.stf)|*.stf" ) );
 const wxString FootprintAliasFileWildcard( _( "KiCad footprint alias files (*.equ)|*.equ" ) );
-
-// Wildcard for cvpcb component to footprint link file ( normal output file )
-const wxString ComponentFileWildcard( _( "KiCad cmp/footprint link files (*.cmp)|*.cmp" ) );
 
 const wxString titleLibLoadError( _( "Library Load Error" ) );
 

@@ -37,6 +37,7 @@
 #include <sch_sheet.h>
 
 #include <dialogs/dialog_sch_sheet_props.h>
+#include <wildcards_and_files_ext.h>
 
 
 bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )

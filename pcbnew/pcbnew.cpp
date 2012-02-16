@@ -44,6 +44,7 @@
 #include <pcbnew.h>
 #include <protos.h>
 #include <hotkeys.h>
+#include <wildcards_and_files_ext.h>
 
 
 // Colors for layers and items

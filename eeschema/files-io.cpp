@@ -39,6 +39,7 @@
 #include <class_library.h>
 #include <libeditframe.h>
 #include <sch_sheet.h>
+#include <wildcards_and_files_ext.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreateBackupFile )

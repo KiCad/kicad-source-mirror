@@ -41,7 +41,7 @@
 #include <class_DisplayFootprintsFrame.h>
 #include <cvpcb_id.h>
 #include <html_messagebox.h>
-
+#include <wildcards_and_files_ext.h>
 
 #include <build_version.h>
 

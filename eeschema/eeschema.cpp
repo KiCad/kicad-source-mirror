@@ -41,6 +41,7 @@
 #include <hotkeys.h>
 #include <dialogs/dialog_color_config.h>
 #include <transform.h>
+#include <wildcards_and_files_ext.h>
 
 #include <wx/snglinst.h>
 
