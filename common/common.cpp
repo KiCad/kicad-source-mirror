@@ -46,25 +46,6 @@
  *       application class.
  */
 
-
-const wxString ProjectFileExtension( wxT( "pro" ) );
-const wxString SchematicFileExtension( wxT( "sch" ) );
-const wxString NetlistFileExtension( wxT( "net" ) );
-const wxString GerberFileExtension( wxT( "pho" ) );
-const wxString PcbFileExtension( wxT( "brd" ) );
-const wxString PdfFileExtension( wxT( "pdf" ) );
-const wxString MacrosFileExtension( wxT( "mcr" ) );
-
-const wxString ProjectFileWildcard( _( "KiCad project files (*.pro)|*.pro" ) );
-const wxString SchematicFileWildcard( _( "KiCad schematic files (*.sch)|*.sch" ) );
-const wxString NetlistFileWildcard( _( "KiCad netlist files (*.net)|*.net" ) );
-const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
-const wxString PcbFileWildcard( _( "KiCad printed circuit board files (*.brd)|*.brd" ) );
-const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
-const wxString MacrosFileWildcard( _( "KiCad recorded macros (*.mcr)|*.mcr" ) );
-const wxString AllFilesWildcard( _( "All files (*)|*" ) );
-
-
 wxString       g_ProductName    = wxT( "KiCad E.D.A.  " );
 bool           g_ShowPageLimits = true;
 wxString       g_UserLibDirBuffer;

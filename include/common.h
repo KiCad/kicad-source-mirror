@@ -275,32 +275,6 @@ extern wxString       g_UserLibDirBuffer;
 
 extern bool           g_ShowPageLimits;     ///< true to display the page limits
 
-/**
- * File extension definitions.  Please do not changes these.  If a different
- * file extension is needed, create a new definition in the application.
- * Please note, just because they are defined as const doesn't guarantee
- * that they cannot be changed.
- */
-extern const wxString ProjectFileExtension;
-extern const wxString SchematicFileExtension;
-extern const wxString NetlistFileExtension;
-extern const wxString GerberFileExtension;
-extern const wxString PcbFileExtension;
-extern const wxString PdfFileExtension;
-extern const wxString MacrosFileExtension;
-
-/// Proper wxFileDialog wild card definitions.
-extern const wxString ProjectFileWildcard;
-extern const wxString SchematicFileWildcard;
-extern const wxString BoardFileWildcard;
-extern const wxString NetlistFileWildcard;
-extern const wxString GerberFileWildcard;
-extern const wxString PcbFileWildcard;
-extern const wxString PdfFileWildcard;
-extern const wxString MacrosFileWildcard;
-extern const wxString AllFilesWildcard;
-
-
 /// Name of default configuration file. (kicad.pro)
 extern wxString     g_Prj_Default_Config_FullFilename;
 

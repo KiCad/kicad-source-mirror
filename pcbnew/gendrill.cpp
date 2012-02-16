@@ -52,14 +52,10 @@
 #include <pcbplot.h>
 #include <pcbnew.h>
 #include <gendrill.h>
+#include <wildcards_and_files_ext.h>
 
 #include <dialog_gendrill.h>   //  Dialog box for drill file generation
 
-
-const wxString DrillFileExtension( wxT( "drl" ) );
-const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl" ) );
-const wxString RptFileExtension( wxT( "rpt" ) );
-const wxString RptFileWildcard = _( "Drill report files (*.rpt)|*.rpt" );
 
 /*
  *  Creates the drill files in EXCELLON format
@@ -653,10 +649,10 @@ void DIALOG_GENDRILL::GenDrillReport( const wxString aFileName )
 
     fn = aFileName;
     fn.SetName( fn.GetName() + wxT( "-drl" ) );
-    fn.SetExt( RptFileExtension );
+    fn.SetExt( ReportFileExtension );
 
     wxFileDialog dlg( this, _( "Save Drill Report File" ), fn.GetPath(),
-                      fn.GetFullName(), wxGetTranslation( RptFileWildcard ),
+                      fn.GetFullName(), wxGetTranslation( ReportFileWildcard ),
                       wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )

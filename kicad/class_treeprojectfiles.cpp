@@ -41,9 +41,13 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
     m_ImageList->Add( KiBitmap( icon_gerbview_small_xpm ) );    // TREE_GERBER
     m_ImageList->Add( KiBitmap( datasheet_xpm ) );              // TREE_PDF
     m_ImageList->Add( KiBitmap( icon_txt_xpm ) );               // TREE_TXT
-    m_ImageList->Add( KiBitmap( icon_cvpcb_small_xpm ) );       // TREE_NET
+    m_ImageList->Add( KiBitmap( netlist_xpm ) );                // TREE_NET
     m_ImageList->Add( KiBitmap( unknown_xpm ) );                // TREE_UNKNOWN
     m_ImageList->Add( KiBitmap( directory_xpm ) );              // TREE_DIRECTORY
+    m_ImageList->Add( KiBitmap( icon_cvpcb_small_xpm ) );       // TREE_CMP_LINK
+    m_ImageList->Add( KiBitmap( tools_xpm ) );                  // TREE_REPORT
+    m_ImageList->Add( KiBitmap( post_compo_xpm ) );             // TREE_POS
+    m_ImageList->Add( KiBitmap( post_drill_xpm ) );             // TREE_DRILL
 
     SetImageList( m_ImageList );
 }

@@ -51,7 +51,8 @@
 #include <dialog_helpers.h>
 #include <netlist_control.h>
 #include <dialogs/annotate_dialog.h>
-
+#include <wildcards_and_files_ext.h>
+#include <wildcards_and_files_ext.h>
 
 
 //Imported function:

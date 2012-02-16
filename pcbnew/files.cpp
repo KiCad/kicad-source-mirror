@@ -45,6 +45,7 @@
 #include <protos.h>
 #include <pcbnew_id.h>
 #include <io_mgr.h>
+#include <wildcards_and_files_ext.h>
 
 #include <class_board.h>
 #include <build_version.h>      // BOARD_FILE_VERSION

@@ -14,6 +14,8 @@
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>
 
+#include <wildcards_and_files_ext.h>
+
 #include <boost/foreach.hpp>
 
 

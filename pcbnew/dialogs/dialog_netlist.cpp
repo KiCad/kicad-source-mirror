@@ -14,6 +14,7 @@
 
 #include <pcbnew_config.h>
 #include <class_board_design_settings.h>
+#include <wildcards_and_files_ext.h>
 
 #include <dialog_netlist.h>
 

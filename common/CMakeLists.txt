@@ -71,6 +71,7 @@ set(COMMON_SRCS
     selcolor.cpp
     string.cpp
     trigo.cpp
+    wildcards_and_files_ext.cpp
     worksheet.cpp
     wxwineda.cpp
     xnode.cpp

@@ -52,9 +52,8 @@
 
 #include <dialog_mask_clearance.h>
 #include <dialog_general_options.h>
+#include <wildcards_and_files_ext.h>
 
-
-#define HOTKEY_FILENAME wxT( "pcbnew" )
 
 void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
