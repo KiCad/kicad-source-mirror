@@ -573,7 +573,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     m_findReplaceData->SetReplaceString( cfg->Read( ReplaceStringEntry, wxEmptyString ) );
 
     // Load the find and replace string history list.
-    for ( size_t i = 0; i < FR_HISTORY_LIST_CNT; i++ )
+    for( int i = 0; i < FR_HISTORY_LIST_CNT; ++i )
     {
         wxString tmpHistory;
         wxString entry;
@@ -652,17 +652,17 @@ void SCH_EDIT_FRAME::SaveSettings()
     cfg->Write( ReplaceStringEntry, m_findReplaceData->GetReplaceString() );
 
     // Save the find and replace string history list.
-    size_t i;
+    unsigned i;
     wxString tmpHistory;
     wxString entry;     // invoke constructor outside of any loops
 
-    for ( i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
+    for( i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
     {
         entry.Printf( FindStringHistoryEntry, i );
         cfg->Write( entry, m_findStringHistoryList[ i ] );
     }
 
-    for ( i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
+    for( i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
     {
         entry.Printf( ReplaceStringHistoryEntry, i );
         cfg->Write( entry, m_replaceStringHistoryList[ i ] );

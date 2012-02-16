@@ -701,10 +701,11 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             if( !trapezoid2trapezoidDRC( polyref, polycompare, dist_min ) )
                 diag = false;
         }
-        else    // Should not occurs, because aPad and aRefPad are swapped
-                // to have only aPad shape RECT or TRAP and aRefPad shape TRAP or RECT.
+        else
         {
-            wxLogDebug( wxT( "unexpected pad shape" ) );
+            // Should not occur, because aPad and aRefPad are swapped
+            // to have only aPad shape RECT or TRAP and aRefPad shape TRAP or RECT.
+            wxLogDebug( wxT( "unexpected pad shape %d") , aPad->GetShape() );
         }
         break;
 
