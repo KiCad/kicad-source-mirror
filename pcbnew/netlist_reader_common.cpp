@@ -166,8 +166,8 @@ bool NETLIST_READER::InitializeModules()
         if( module )
         {
              // Update current module ( reference, value and "Time Stamp")
-            module->m_Reference->m_Text = currcmp_info->m_Reference;
-            module->m_Value->m_Text     = currcmp_info->m_Value;
+            module->SetReference( currcmp_info->m_Reference );
+            module->SetValue(currcmp_info->m_Value );
             module->SetPath( currcmp_info->m_TimeStamp );
         }
         else   // not existing
@@ -176,11 +176,33 @@ bool NETLIST_READER::InitializeModules()
     }
 
     // clear pads netnames
+#if 1
+    // Clear only footprints found in netlist:
+    // This allow to have some footprints added by hand to the board
+    // left initialized
+    for( unsigned ii = 0; ii < m_componentsInNetlist.size(); ii++ )
+    {
+        COMPONENT_INFO* currcmp_info =  m_componentsInNetlist[ii];
+        // We can used the reference to find the footprint, because
+        // it is now updated
+        wxString * idMod = &currcmp_info->m_Reference;
+
+        MODULE* module = FindModule( *idMod );
+        if( module )
+        {
+            for( D_PAD* pad = module->m_Pads; pad; pad = pad->Next() )
+                pad->SetNetname( wxEmptyString );
+        }
+    }
+
+#else
+    // Clear all footprints
     for( MODULE* module = m_pcbframe->GetBoard()->m_Modules; module; module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad; pad = pad->Next() )
             pad->SetNetname( wxEmptyString );
     }
+#endif
 
     return success;
 }
@@ -310,7 +332,7 @@ void NETLIST_READER::RemoveExtraFootprints()
         for( ii = 0; ii < m_componentsInNetlist.size(); ii++ )
         {
             COMPONENT_INFO* cmp_info = m_componentsInNetlist[ii];
-            if( module->m_Reference->m_Text.CmpNoCase( cmp_info->m_Reference ) == 0 )
+            if( module->GetReference().CmpNoCase( cmp_info->m_Reference ) == 0 )
                 break; // Module is found in net list.
         }
 
@@ -337,7 +359,7 @@ MODULE* NETLIST_READER::FindModule( const wxString& aId )
         }
         else    // identification by Reference
         {
-            if( aId.CmpNoCase( module->m_Reference->m_Text ) == 0 )
+            if( aId.CmpNoCase( module->GetReference() ) == 0 )
                 return module;
         }
     }
@@ -483,7 +505,7 @@ bool NETLIST_READER::loadNewModules()
 {
     bool         success = true;
 #ifdef PCBNEW
-    COMPONENT_INFO* ref, * cmp;
+    COMPONENT_INFO* ref_info, * cmp_info;
     MODULE*      Module = NULL;
     wxPoint      ModuleBestPosition;
     BOARD*       pcb = m_pcbframe->GetBoard();
@@ -502,17 +524,18 @@ bool NETLIST_READER::loadNewModules()
         ModuleBestPosition.y += 5000;
     }
 
-    ref = cmp = m_newModulesList[0];
+    ref_info = cmp_info = m_newModulesList[0];
 
     for( unsigned ii = 0; ii < m_newModulesList.size(); ii++ )
     {
-        cmp = m_newModulesList[ii];
+        cmp_info = m_newModulesList[ii];
 
-        if( (ii == 0) || ( ref->m_Footprint != cmp->m_Footprint) )
+        if( (ii == 0) || ( ref_info->m_Footprint != cmp_info->m_Footprint) )
         {
             // New footprint : must be loaded from a library
-            Module = m_pcbframe->GetModuleLibrary( wxEmptyString, cmp->m_Footprint, false );
-            ref = cmp;
+            Module = m_pcbframe->GetModuleLibrary( wxEmptyString,
+                                                   cmp_info->m_Footprint, false );
+            ref_info = cmp_info;
 
             if( Module == NULL )
             {
@@ -521,8 +544,8 @@ bool NETLIST_READER::loadNewModules()
                 {
                     wxString msg;
                     msg.Printf( _( "Component [%s]: footprint <%s> not found" ),
-                                GetChars( cmp->m_Reference ),
-                                GetChars( cmp->m_Footprint ) );
+                                GetChars( cmp_info->m_Reference ),
+                                GetChars( cmp_info->m_Footprint ) );
 
                     msg += wxT("\n");
                     m_messageWindow->AppendText( msg );
@@ -534,9 +557,9 @@ bool NETLIST_READER::loadNewModules()
 
             /* Update schematic links : reference "Time Stamp" and schematic
              * hierarchical path */
-            Module->m_Reference->m_Text = cmp->m_Reference;
+            Module->SetReference( cmp_info->m_Reference );
             Module->SetTimeStamp( GetNewTimeStamp() );
-            Module->SetPath( cmp->m_TimeStamp );
+            Module->SetPath( cmp_info->m_TimeStamp );
         }
         else
         {
@@ -550,9 +573,9 @@ bool NETLIST_READER::loadNewModules()
             pcb->Add( newmodule, ADD_APPEND );
 
             Module = newmodule;
-            Module->m_Reference->m_Text = cmp->m_Reference;
+            Module->SetReference( cmp_info->m_Reference );
             Module->SetTimeStamp( GetNewTimeStamp() );
-            Module->SetPath( cmp->m_TimeStamp );
+            Module->SetPath( cmp_info->m_TimeStamp );
         }
     }
 #endif

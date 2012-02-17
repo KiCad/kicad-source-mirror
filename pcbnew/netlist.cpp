@@ -169,7 +169,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
     netList_Reader.m_UseCmpFile = useCmpfile;
     netList_Reader.SetFilesnames( aNetlistFullFilename, aCmpFullFileName );
 
-    // True to read footprint filters section: true for CvPcb, false pro Pcbnew
+    // True to read footprint filters section: true for CvPcb, false for Pcbnew
     netList_Reader.ReadLibpartSectionSetOpt( false );
 
     bool success = netList_Reader.ReadNetList( netfile );

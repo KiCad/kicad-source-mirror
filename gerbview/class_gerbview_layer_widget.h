@@ -44,8 +44,9 @@ class GERBER_LAYER_WIDGET : public LAYER_WIDGET
     GERBVIEW_FRAME*    myframe;
 
     // popup menu ids.
-#define ID_SHOW_ALL_COPPERS     wxID_HIGHEST
-#define ID_SHOW_NO_COPPERS      (wxID_HIGHEST+1)
+#define ID_SHOW_ALL_COPPERS             wxID_HIGHEST
+#define ID_SHOW_NO_COPPERS              (wxID_HIGHEST+1)
+#define ID_SHOW_NO_COPPERS_BUT_ACTIVE   (wxID_HIGHEST+2)
 
     /**
      * Function OnRightDownLayers

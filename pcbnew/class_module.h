@@ -78,12 +78,6 @@ public:
     wxString          m_LibRef;        /* Name of the module in library (and
                                         * the default value when loading a
                                         * module from the library) */
-
-    wxString          m_AlternateReference;  /* Used when m_Reference cannot
-                                              * be used to identify the
-                                              * footprint ( after a full
-                                              * reannotation of the schematic */
-
     int           m_Attributs;          ///< Flag bits ( see Mod_Attribut )
     int           flag;                 /* Use to trace ratsnest and auto routing. */
 
@@ -340,6 +334,14 @@ public:
         return m_Reference->m_Text;
     }
 
+    /**
+     * Function SetReference
+     * @param const wxString& - the reference designator text.
+     */
+    void SetReference( const wxString& aReference)
+    {
+        m_Reference->m_Text = aReference;
+    }
 
     /**
      * Function GetValue
@@ -350,6 +352,14 @@ public:
         return m_Value->m_Text;
     }
 
+    /**
+     * Function SetValue
+     * @param const wxString& - the value text.
+     */
+    void SetValue( const wxString& aValue )
+    {
+        m_Value->m_Text = aValue;
+    }
 
     /**
      * Function FindPadByName

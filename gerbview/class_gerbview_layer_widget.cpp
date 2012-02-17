@@ -67,7 +67,7 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFo
 
     // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
     // and not m_LayerScrolledWindow->Connect()
-    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS, wxEVT_COMMAND_MENU_SELECTED,
+    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS_BUT_ACTIVE, wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( GERBER_LAYER_WIDGET::onPopupSelection ), NULL, this );
 
     // install the right click handler into each control at end of ReFill()
@@ -143,10 +143,13 @@ void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
     // menu text is capitalized:
     // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
     menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_COPPERS,
-        _("Show All Layers") ) );
+                                 _("Show All Layers") ) );
+
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS_BUT_ACTIVE,
+                                 _( "Hide All Layers But Active" ) ) );
 
     menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,
-        _( "Hide All Layers" ) ) );
+                                 _( "Hide All Layers" ) ) );
 
     PopupMenu( &menu );
 
@@ -164,12 +167,18 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     {
     case ID_SHOW_ALL_COPPERS:
     case ID_SHOW_NO_COPPERS:
+    case ID_SHOW_NO_COPPERS_BUT_ACTIVE:
         rowCount = GetLayerRowCount();
         for( int row=0; row < rowCount; ++row )
         {
+            bool loc_visible = visible;
+            if( (menuId == ID_SHOW_NO_COPPERS_BUT_ACTIVE ) &&
+                (row == m_CurrentRow ) )
+                loc_visible = true;
+
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            cb->SetValue( visible );
-            if( visible )
+            cb->SetValue( loc_visible );
+            if( loc_visible )
                 visibleLayers |= (1 << row);
             else
                 visibleLayers &= ~(1 << row);

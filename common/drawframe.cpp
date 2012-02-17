@@ -823,6 +823,9 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     // We already decided the formatter above
     Line.Printf( locformatter, dXpos, dYpos );
     SetStatusText( Line, 3 );
+
+    // refresh units display
+    DisplayUnitsMsg();
 }
 
 

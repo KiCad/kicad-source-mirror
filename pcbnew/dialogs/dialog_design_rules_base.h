@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_design_rules_base__
-#define __dialog_design_rules_base__
+#ifndef __DIALOG_DESIGN_RULES_BASE_H__
+#define __DIALOG_DESIGN_RULES_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 class NETS_LIST_CTRL;
 
 #include <wx/colour.h>
@@ -108,9 +109,9 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 777,640 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 777,697 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DESIGN_RULES_BASE();
 	
 };
 
-#endif //__dialog_design_rules_base__
+#endif //__DIALOG_DESIGN_RULES_BASE_H__

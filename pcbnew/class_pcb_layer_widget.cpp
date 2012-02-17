@@ -90,7 +90,7 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwn
 
     // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
     // and not m_LayerScrolledWindow->Connect()
-    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS, wxEVT_COMMAND_MENU_SELECTED,
+    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_NO_COPPERS_BUT_ACTIVE, wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( PCB_LAYER_WIDGET::onPopupSelection ), NULL, this );
 
     // install the right click handler into each control at end of ReFill()
@@ -121,7 +121,7 @@ void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
     // menu text is capitalized:
     // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
     menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_COPPERS, _( "Show All Copper Layers" ) ) );
-
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS_BUT_ACTIVE,  _( "Hide All Copper Layers But Active" ) ) );
     menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,  _( "Hide All Copper Layers" ) ) );
 
     PopupMenu( &menu );
@@ -142,6 +142,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         visible = true;
         goto L_change_coppers;
 
+    case ID_SHOW_NO_COPPERS_BUT_ACTIVE:
     case ID_SHOW_NO_COPPERS:
         visible = false;
     L_change_coppers:
@@ -165,11 +166,16 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
             if( IsValidCopperLayerIndex( layer ) )
             {
-                cb->SetValue( visible );
+                bool loc_visible = visible;
+                if( (menuId == ID_SHOW_NO_COPPERS_BUT_ACTIVE ) &&
+                    (layer == myframe->getActiveLayer() ) )
+                    loc_visible = true;
+
+                cb->SetValue( loc_visible );
 
                 bool isLastCopperLayer = (row==lastCu);
 
-                OnLayerVisible( layer, visible, isLastCopperLayer );
+                OnLayerVisible( layer, loc_visible, isLastCopperLayer );
 
                 if( isLastCopperLayer )
                     break;
