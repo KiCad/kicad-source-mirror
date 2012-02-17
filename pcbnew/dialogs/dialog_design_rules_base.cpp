@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -250,7 +250,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_gridViaSizeList = new wxGrid( m_panelGolbalDesignRules, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_gridViaSizeList->CreateGrid( 7, 2 );
+	m_gridViaSizeList->CreateGrid( 12, 2 );
 	m_gridViaSizeList->EnableEditing( true );
 	m_gridViaSizeList->EnableGridLines( true );
 	m_gridViaSizeList->EnableDragGridSize( false );
@@ -274,6 +274,11 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_gridViaSizeList->SetRowLabelValue( 4, _("Via 5") );
 	m_gridViaSizeList->SetRowLabelValue( 5, _("Via 6") );
 	m_gridViaSizeList->SetRowLabelValue( 6, _("Via 7") );
+	m_gridViaSizeList->SetRowLabelValue( 7, _("Via 8") );
+	m_gridViaSizeList->SetRowLabelValue( 8, _("Via 9") );
+	m_gridViaSizeList->SetRowLabelValue( 9, _("Via 10") );
+	m_gridViaSizeList->SetRowLabelValue( 10, _("Via 11") );
+	m_gridViaSizeList->SetRowLabelValue( 11, _("Via 12") );
 	m_gridViaSizeList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -294,7 +299,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_gridTrackWidthList = new wxGrid( m_panelGolbalDesignRules, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_gridTrackWidthList->CreateGrid( 7, 1 );
+	m_gridTrackWidthList->CreateGrid( 12, 1 );
 	m_gridTrackWidthList->EnableEditing( true );
 	m_gridTrackWidthList->EnableGridLines( true );
 	m_gridTrackWidthList->EnableDragGridSize( false );
@@ -308,6 +313,18 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_gridTrackWidthList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
+	m_gridTrackWidthList->SetRowSize( 0, 17 );
+	m_gridTrackWidthList->SetRowSize( 1, 17 );
+	m_gridTrackWidthList->SetRowSize( 2, 17 );
+	m_gridTrackWidthList->SetRowSize( 3, 17 );
+	m_gridTrackWidthList->SetRowSize( 4, 17 );
+	m_gridTrackWidthList->SetRowSize( 5, 17 );
+	m_gridTrackWidthList->SetRowSize( 6, 17 );
+	m_gridTrackWidthList->SetRowSize( 7, 17 );
+	m_gridTrackWidthList->SetRowSize( 8, 17 );
+	m_gridTrackWidthList->SetRowSize( 9, 17 );
+	m_gridTrackWidthList->SetRowSize( 10, 17 );
+	m_gridTrackWidthList->SetRowSize( 11, 17 );
 	m_gridTrackWidthList->EnableDragRowSize( true );
 	m_gridTrackWidthList->SetRowLabelSize( 80 );
 	m_gridTrackWidthList->SetRowLabelValue( 0, _("Track 1") );
@@ -317,6 +334,11 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_gridTrackWidthList->SetRowLabelValue( 4, _("Track 5") );
 	m_gridTrackWidthList->SetRowLabelValue( 5, _("Track 6") );
 	m_gridTrackWidthList->SetRowLabelValue( 6, _("Track 7") );
+	m_gridTrackWidthList->SetRowLabelValue( 7, _("Track 8") );
+	m_gridTrackWidthList->SetRowLabelValue( 8, _("Track 9") );
+	m_gridTrackWidthList->SetRowLabelValue( 9, _("Track 10") );
+	m_gridTrackWidthList->SetRowLabelValue( 10, _("Track 11") );
+	m_gridTrackWidthList->SetRowLabelValue( 11, _("Track 12") );
 	m_gridTrackWidthList->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
