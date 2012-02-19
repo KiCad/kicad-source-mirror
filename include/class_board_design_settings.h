@@ -6,8 +6,14 @@
 #define BOARD_DESIGN_SETTINGS_H_
 
 #include <pcbstruct.h>      // NB_COLORS
+#include <class_pad.h>
+#include <param_config.h>
 
-// Class for handle current printed board design settings
+
+/**
+ * Class BOARD_DESIGN_SETTINGS
+ * contains design settings for a BOARD object.
+ */
 class BOARD_DESIGN_SETTINGS
 {
 public:
@@ -37,6 +43,8 @@ public:
     wxSize  m_ModuleTextSize;               ///< Default footprint texts size
     int     m_ModuleTextWidth;
     int     m_ModuleSegmentWidth;
+
+    D_PAD   m_Pad_Master;
 
 public:
     BOARD_DESIGN_SETTINGS();
@@ -172,6 +180,13 @@ public:
      */
     void SetCopperLayerCount( int aNewLayerCount );
 
+    /**
+     * Function AppendConfigs
+     * appends to @a aResult the configuration setting accessors which will later
+     * allow reading or writing of configuration file information directly into
+     * this object.
+     */
+    void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
 private:
     int     m_CopperLayerCount;     ///< Number of copper layers for this design

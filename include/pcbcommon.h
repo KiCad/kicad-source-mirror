@@ -52,8 +52,5 @@ extern DLIST<TRACK> g_CurrentTrackList;
 
 #define g_FirstTrackSegment   g_CurrentTrackList.GetFirst()   ///< first segment created
 
-/// Pad editing
-extern D_PAD g_Pad_Master;
-
 
 #endif  // PCBCOMMON_H_

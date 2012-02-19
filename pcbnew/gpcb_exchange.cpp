@@ -167,7 +167,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     char*         line;
     long          ibuf[100];
     EDGE_MODULE*  drawSeg;
-    D_PAD*        Pad;
+    D_PAD*        pad;
     wxArrayString params;
     int           iprmcnt, icnt_max, iflgidx;
 
@@ -257,6 +257,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
     int tsize = ( ibuf[idx+3] * TEXT_DEFAULT_SIZE ) / 100;
     int thickness = m_Reference->m_Size.x / 6;
+
     tsize = MAX( 40, tsize );
     m_Reference->SetSize( wxSize( tsize, tsize ) );
     m_Reference->m_Thickness  = thickness;
@@ -369,16 +370,17 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         }
 
         if( params[0].CmpNoCase( wxT( "Pad" ) ) == 0 )      // Pad with no hole (smd pad)
-        {   //  format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
-            Pad = new D_PAD( this );
-            Pad->m_PadShape  = PAD_RECT;
-            Pad->m_layerMask = LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT;
+        {
+            //  format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
+            pad = new D_PAD( this );
+            pad->SetShape( PAD_RECT );
+            pad->SetLayerMask( LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT );
 
             // Set shape from flags
             iflgidx = params.GetCount() - 2;
 
             if( TestFlags( params[iflgidx], 0x0080, wxT( "onsolder" ) ) )
-                Pad->m_layerMask = LAYER_BACK | SOLDERMASK_LAYER_BACK | SOLDERPASTE_LAYER_BACK;
+                pad->SetLayerMask( LAYER_BACK | SOLDERMASK_LAYER_BACK | SOLDERPASTE_LAYER_BACK );
 
             for( unsigned ii = 0; ii < 5; ii++ )
             {
@@ -401,11 +403,11 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             // Read pad number:
             if( params[1] == wxT( "(" ) )
             {
-                Pad->SetPadName( params[8] );
+                pad->SetPadName( params[8] );
             }
             else
             {
-                Pad->SetPadName( params[10] );
+                pad->SetPadName( params[10] );
             }
             // Calculate the Pad parameters.
             // In Pcb the shape is a segment
@@ -418,43 +420,50 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             wxPoint delta;
             delta.x = ibuf[2] - ibuf[0];
             delta.y = ibuf[3] - ibuf[1];
+
             double angle = atan2( (double)delta.y, (double)delta.x );
+
             // Negate angle (due to Y reversed axis) and convert it to internal units
             angle = - angle * 1800.0 / M_PI;
-            Pad->SetOrientation( wxRound( angle ) );
-            wxPoint padPos;
-            padPos.x  = (ibuf[0] + ibuf[2]) / 2;
-            padPos.y  = (ibuf[1] + ibuf[3]) / 2;
-            Pad->m_Size.x = wxRound( hypot( (double)delta.x, (double)delta.y ) ) + ibuf[4];
-            Pad->m_Size.y = ibuf[4];
+            pad->SetOrientation( wxRound( angle ) );
+
+            wxPoint padPos( (ibuf[0] + ibuf[2]) / 2, (ibuf[1] + ibuf[3]) / 2 );
+
+            pad->SetSize( wxSize(
+                    wxRound( hypot( (double)delta.x, (double)delta.y ) ) + ibuf[4],
+                    ibuf[4] ) );
+
             padPos += m_Pos;
-            Pad->SetPos0( padPos );
-            Pad->SetPosition( padPos );
+            pad->SetPos0( padPos );
+            pad->SetPosition( padPos );
 
             if( !TestFlags( params[iflgidx], 0x0100, wxT( "square" ) ) )
             {
-                if( Pad->m_Size.x == Pad->m_Size.y )
-                    Pad->m_PadShape = PAD_ROUND;
+                if( pad->GetSize().x == pad->GetSize().y )
+                    pad->SetShape( PAD_ROUND );
                 else
-                    Pad->m_PadShape = PAD_OVAL;
+                    pad->SetShape( PAD_OVAL );
             }
 
-            m_Pads.PushBack( Pad );
+            m_Pads.PushBack( pad );
             continue;
         }
 
         if( params[0].CmpNoCase( wxT( "Pin" ) ) == 0 )      // Pad with hole (trough pad)
-        {   // format: Pin[x y Thickness Clearance Mask DrillHole Name Number Flags]
-            Pad = new D_PAD( this );
-            Pad->m_PadShape     = PAD_ROUND;
-            Pad->m_layerMask = ALL_CU_LAYERS |
+        {
+            // format: Pin[x y Thickness Clearance Mask DrillHole Name Number Flags]
+            pad = new D_PAD( this );
+            pad->SetShape( PAD_ROUND );
+
+            pad->SetLayerMask(    ALL_CU_LAYERS |
                                   SILKSCREEN_LAYER_FRONT |
                                   SOLDERMASK_LAYER_FRONT |
-                                  SOLDERMASK_LAYER_BACK;
+                                  SOLDERMASK_LAYER_BACK );
+
             iflgidx = params.GetCount() - 2;
 
             if( TestFlags( params[iflgidx], 0x0100, wxT( "square" ) ) )
-                Pad->m_PadShape = PAD_RECT;
+                pad->SetShape( PAD_RECT );
 
             for( unsigned ii = 0; ii < 6; ii++ )
             {
@@ -476,25 +485,30 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             // Read pad number:
             if( params[1] == wxT( "(" ) )
             {
-                Pad->SetPadName( params[7] );
+                pad->SetPadName( params[7] );
             }
             else
             {
-                Pad->SetPadName( params[9] );
+                pad->SetPadName( params[9] );
             }
-            wxPoint padPos;
-            padPos.x = ibuf[0];
-            padPos.y = ibuf[1];
-            Pad->m_Drill.x = Pad->m_Drill.y = ibuf[5];
-            Pad->m_Size.x  = Pad->m_Size.y = ibuf[3] + Pad->m_Drill.x;
+
+            wxPoint padPos( ibuf[0], ibuf[1] );
+
+            pad->SetDrillSize( wxSize( ibuf[5], ibuf[5] ) );
+
+            int sz = ibuf[3] + pad->GetDrillSize().x;
+
+            pad->SetSize( wxSize( sz, sz ) );
+
             padPos += m_Pos;
-            Pad->SetPos0( padPos );
-            Pad->SetPosition( padPos );
 
-            if( (Pad->m_PadShape == PAD_ROUND) && (Pad->m_Size.x != Pad->m_Size.y) )
-                Pad->m_PadShape = PAD_OVAL;
+            pad->SetPos0( padPos );
+            pad->SetPosition( padPos );
 
-            m_Pads.PushBack( Pad );
+            if( pad->GetShape() == PAD_ROUND  &&  pad->GetSize().x != pad->GetSize().y )
+                pad->SetShape( PAD_OVAL );
+
+            m_Pads.PushBack( pad );
             continue;
         }
     }
@@ -508,7 +522,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         m_Reference->m_Text = filename.GetName();
     }
 
-    /* Recalculate the bounding box */
+    // Recalculate the bounding box
     CalculateBoundingBox();
     return success;
 }

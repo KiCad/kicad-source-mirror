@@ -59,36 +59,30 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 /*
  * Move the footprint anchor position to the current cursor position.
  */
-void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
+void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* aModule )
 {
     wxPoint   moveVector;
-    EDA_ITEM* item;
-    D_PAD*    pad;
 
-    if( pt_mod == NULL )
+    if( aModule == NULL )
         return;
 
-    moveVector = pt_mod->m_Pos - GetScreen()->GetCrossHairPosition();
+    moveVector = aModule->m_Pos - GetScreen()->GetCrossHairPosition();
 
-    pt_mod->m_Pos = GetScreen()->GetCrossHairPosition();
+    aModule->m_Pos = GetScreen()->GetCrossHairPosition();
 
     /* Update the relative coordinates:
      * The coordinates are relative to the anchor point.
      * Calculate deltaX and deltaY from the anchor. */
-    RotatePoint( &moveVector, -pt_mod->m_Orient );
+    RotatePoint( &moveVector, -aModule->m_Orient );
 
-    /* Update the pad coordinates. */
-    pad = (D_PAD*) pt_mod->m_Pads;
-
-    for( ; pad != NULL; pad = pad->Next() )
+    // Update the pad coordinates.
+    for( D_PAD* pad = (D_PAD*) aModule->m_Pads;  pad;  pad = pad->Next() )
     {
-        pad->m_Pos0 += moveVector;
+        pad->SetPos0( pad->GetPos0() + moveVector );
     }
 
-    /* Update the draw element coordinates. */
-    item = pt_mod->m_Drawings;
-
-    for( ; item != NULL; item = item->Next() )
+    // Update the draw element coordinates.
+    for( EDA_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -110,7 +104,7 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
         }
     }
 
-    pt_mod->CalculateBoundingBox();
+    aModule->CalculateBoundingBox();
 }
 
 

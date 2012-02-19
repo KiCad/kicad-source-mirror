@@ -124,9 +124,9 @@ public:
     void ToPrinter( wxCommandEvent& event );
 
     /**
-     * Virtual function PrintPage
-     * used to print a page
-     * Print the page pointed by ActiveScreen, set by the calling print function
+     * Function PrintPage
+     * is used to print a page. Prints the page pointed by ActiveScreen,
+     * set by the calling print function.
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMaskLayer = not used here
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
@@ -341,8 +341,8 @@ public:
 
     /**
      * Function DlgGlobalChange_PadSettings
-     * Function to change pad caracteristics for the given footprint
-     * or all footprints which look like the given footprint
+     * changes pad caracteristics for the given footprint
+     * or all footprints which look like the given footprint.
      * Options are set by the opened dialog.
      * @param aPad is the pattern. The given footprint is the parent of this pad
      */

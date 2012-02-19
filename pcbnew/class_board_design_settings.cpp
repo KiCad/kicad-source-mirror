@@ -13,7 +13,8 @@
 #include <class_track.h>
 
 
-BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
+BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
+    m_Pad_Master( 0 )
 {
     m_EnabledLayers = ALL_LAYERS;               // All layers enabled at first.
                                                 // SetCopperLayerCount() will adjust this.
@@ -56,6 +57,48 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
 
     // Layer thickness for 3D viewer
     m_BoardThickness = (int)(1.6 * PCB_INTERNAL_UNIT / 25.4);
+}
+
+
+void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
+{
+    m_Pad_Master.AppendConfigs( aResult );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "BoardThickness" ),
+                                                      &m_BoardThickness,
+                                                      630, 0, 0xFFFF ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "TxtPcbV" ),
+                                                      &m_PcbTextSize.y,
+                                                      600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "TxtPcbH" ),
+                                                      &m_PcbTextSize.x,
+                                                      600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "TxtModV" ), &m_ModuleTextSize.y,
+                                                      500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
+    aResult->push_back( new PARAM_CFG_INT( wxT( "TxtModH" ), &m_ModuleTextSize.x,
+                                                      500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
+    aResult->push_back( new PARAM_CFG_INT( wxT( "TxtModW" ), &m_ModuleTextWidth,
+                                                      100, 1, TEXTS_MAX_WIDTH ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "VEgarde" ),
+                                                      &m_SolderMaskMargin,
+                                                      100, 0, 10000 ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "DrawLar" ),
+                                                      &m_DrawSegmentWidth,
+                                                      120, 0, 0xFFFF ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "EdgeLar" ),
+                                                      &m_EdgeSegmentWidth,
+                                                      120, 0, 0xFFFF ) );
+    aResult->push_back( new PARAM_CFG_INT( wxT( "TxtLar" ),
+                                                      &m_PcbTextWidth,
+                                                      120, 0, 0xFFFF ) );
+    aResult->push_back( new PARAM_CFG_INT( wxT( "MSegLar" ), &m_ModuleSegmentWidth,
+                                                      120, 0, 0xFFFF ) );
 }
 
 
@@ -123,11 +166,6 @@ void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
 }
 
 
-/**
- * Function SetEnabledLayers
- * changes the bit-mask of enabled layers
- * @param aMask = The new bit-mask of enabled layers
- */
 void BOARD_DESIGN_SETTINGS::SetEnabledLayers( int aMask )
 {
     // Back and front layers are always enabled.

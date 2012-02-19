@@ -94,10 +94,10 @@ public:
     }
 };
 
-/* I use this a lot... */
+// I use this a lot...
 static const double PI2 = M_PI / 2;
 
-/* Absolutely not optimized triangle bag :D */
+// Absolutely not optimized triangle bag :D
 struct VRMLPt
 {
     double x, y, z;
@@ -122,7 +122,7 @@ struct Triangle
 };
 typedef std::vector<Triangle> TriangleBag;
 
-/* A flat triangle fan */
+// A flat triangle fan
 struct FlatFan
 {
     FlatPt              c;
@@ -134,7 +134,7 @@ struct FlatFan
     void bag( int layer, bool close = true );
 };
 
-/* A flat quad ring */
+// A flat quad ring
 struct FlatRing
 {
     std::vector<FlatPt> inner;
@@ -152,7 +152,7 @@ struct FlatRing
     void bag( int layer, bool close = true );
 };
 
-/* A vertical quad loop */
+// A vertical quad loop
 struct VLoop
 {
     std::vector<FlatPt> pts;
@@ -165,12 +165,12 @@ struct VLoop
     void bag( TriangleBag& triangles, bool close = true );
 };
 
-/* The bags for all the layers */
+// The bags for all the layers
 static TriangleBag layer_triangles[LAYER_COUNT];
 static TriangleBag via_triangles[4];
 static double      layer_z[LAYER_COUNT];
 
-static void bag_flat_triangle( int layer, /*{{{*/
+static void bag_flat_triangle( int layer, //{{{
                                double x1, double y1,
                                double x2, double y2,
                                double x3, double y3 )
@@ -181,7 +181,7 @@ static void bag_flat_triangle( int layer, /*{{{*/
 }
 
 
-void FlatFan::bag( int layer, bool close ) /*{{{*/
+void FlatFan::bag( int layer, bool close ) //{{{
 {
     unsigned i;
 
@@ -193,7 +193,7 @@ void FlatFan::bag( int layer, bool close ) /*{{{*/
 }
 
 
-static void bag_flat_quad( int layer, /*{{{*/
+static void bag_flat_quad( int layer, //{{{
                            double x1, double y1,
                            double x2, double y2,
                            double x3, double y3,
@@ -204,7 +204,7 @@ static void bag_flat_quad( int layer, /*{{{*/
 }
 
 
-void FlatRing::bag( int layer, bool close ) /*{{{*/
+void FlatRing::bag( int layer, bool close ) //{{{
 {
     unsigned i;
 
@@ -224,7 +224,7 @@ void FlatRing::bag( int layer, bool close ) /*{{{*/
 }
 
 
-static void bag_vquad( TriangleBag& triangles, /*{{{*/
+static void bag_vquad( TriangleBag& triangles, //{{{
                        double x1, double y1, double x2, double y2,
                        double z1, double z2 )
 {
@@ -237,7 +237,7 @@ static void bag_vquad( TriangleBag& triangles, /*{{{*/
 }
 
 
-void VLoop::bag( TriangleBag& triangles, bool close ) /*{{{*/
+void VLoop::bag( TriangleBag& triangles, bool close ) //{{{
 {
     unsigned i;
 
@@ -253,7 +253,7 @@ void VLoop::bag( TriangleBag& triangles, bool close ) /*{{{*/
 }
 
 
-static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
+static void write_triangle_bag( FILE* output_file, int color_index, //{{{
                                 const TriangleBag& triangles )
 {
     /* A lot of nodes are not required, but blender sometimes chokes
@@ -270,7 +270,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
         "        Shape {\n",
         "          appearance Appearance {\n",
         "            material Material {\n",
-        0,                                          /* Material marker */
+        0,                                          // Material marker
         "              ambientIntensity 0.8\n",
         "              transparency 0.2\n",
         "              shininess 0.2\n",
@@ -280,11 +280,11 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
         "            solid true\n",
         "            coord Coordinate {\n",
         "              point [\n",
-        0,                                          /* Coordinates marker */
+        0,                                          // Coordinates marker
         "              ]\n",
         "            }\n",
         "            coordIndex [\n",
-        0,                                          /* Index marker */
+        0,                                          // Index marker
         "            ]\n",
         "          }\n",
         "        }\n",
@@ -292,7 +292,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
         "    }\n",
         "  ]\n",
         "}\n",
-        0 /* End marker */
+        0 // End marker
     };
     int marker_found = 0, lineno = 0;
 
@@ -305,7 +305,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
             marker_found++;
             switch( marker_found )
             {
-            case 1: /* Material marker */
+            case 1: // Material marker
                 fprintf( output_file,
                          "              diffuseColor %g %g %g\n",
                          (double) ColorRefs[color_index].m_Red / 255.0,
@@ -325,7 +325,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
 
             case 2:
             {
-                /* Coordinates marker */
+                // Coordinates marker
                 for( TriangleBag::const_iterator i = triangles.begin();
                      i != triangles.end();
                      i++ )
@@ -342,8 +342,8 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
 
             case 3:
             {
-                /* Index marker */
-                /* OK, that's sick ... */
+                // Index marker
+                // OK, that's sick ...
                 int j = 0;
                 for( TriangleBag::const_iterator i = triangles.begin();
                      i != triangles.end();
@@ -364,7 +364,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
 }
 
 
-static void compute_layer_Zs( BOARD* pcb ) /*{{{*/
+static void compute_layer_Zs( BOARD* pcb ) //{{{
 {
     int    copper_layers = pcb->GetCopperLayerCount( );
 
@@ -372,18 +372,18 @@ static void compute_layer_Zs( BOARD* pcb ) /*{{{*/
     double board_thickness = pcb->GetDesignSettings().m_BoardThickness;
     double half_thickness  = board_thickness / 2;
 
-    /* Compute each layer's Z value, more or less like the 3d view */
+    // Compute each layer's Z value, more or less like the 3d view
     for( int i = 0; i <= LAYER_N_FRONT; i++ )
     {
         if( i < copper_layers )
             layer_z[i] = board_thickness * i / (copper_layers - 1) - half_thickness;
         else
-            layer_z[i] = half_thickness; /* The component layer... */
+            layer_z[i] = half_thickness; // The component layer...
     }
 
     /* To avoid rounding interference, we apply an epsilon to each
      * successive layer */
-    const double epsilon_z = 10; /* That's 1 mils, about 1/50 mm */
+    const double epsilon_z = 10; // That's 1 mils, about 1/50 mm
     layer_z[SOLDERPASTE_N_BACK]  = -half_thickness - epsilon_z * 4;
     layer_z[ADHESIVE_N_BACK]     = -half_thickness - epsilon_z * 3;
     layer_z[SILKSCREEN_N_BACK]   = -half_thickness - epsilon_z * 2;
@@ -400,7 +400,7 @@ static void compute_layer_Zs( BOARD* pcb ) /*{{{*/
 }
 
 
-static void export_vrml_line( int layer, double startx, double starty, /*{{{*/
+static void export_vrml_line( int layer, double startx, double starty, //{{{
                               double endx, double endy, double width, int divisions )
 {
     double  r     = width / 2;
@@ -408,28 +408,28 @@ static void export_vrml_line( int layer, double startx, double starty, /*{{{*/
     double  alpha;
     FlatFan fan;
 
-    /* Output the 'bone' as a triangle fan, this is the fan centre */
+    // Output the 'bone' as a triangle fan, this is the fan centre
     fan.c.x = (startx + endx) / 2;
     fan.c.y = (starty + endy) / 2;
 
-    /* The 'end' side cap */
+    // The 'end' side cap
     for( alpha = angle - PI2; alpha < angle + PI2; alpha += PI2 / divisions )
         fan.add( endx + r * cos( alpha ), endy + r * sin( alpha ) );
 
     alpha = angle + PI2;
     fan.add( endx + r * cos( alpha ), endy + r * sin( alpha ) );
-    /* The 'start' side cap */
+    // The 'start' side cap
     for( alpha = angle + PI2; alpha < angle + 3 * PI2; alpha += PI2 / divisions )
         fan.add( startx + r * cos( alpha ), starty + r * sin( alpha ) );
 
     alpha = angle + 3 * PI2;
     fan.add( startx + r * cos( alpha ), starty + r * sin( alpha ) );
-    /* Export the fan */
+    // Export the fan
     fan.bag( layer );
 }
 
 
-static void export_vrml_circle( int layer, double startx, double starty, /*{{{*/
+static void export_vrml_circle( int layer, double startx, double starty, //{{{
                                 double endx, double endy, double width, int divisions )
 {
     double   hole, radius;
@@ -448,11 +448,11 @@ static void export_vrml_circle( int layer, double startx, double starty, /*{{{*/
 }
 
 
-static void export_vrml_slot( TriangleBag& triangles, /*{{{*/
+static void export_vrml_slot( TriangleBag& triangles, //{{{
                               int top_layer, int bottom_layer, double xc, double yc,
                               double dx, double dy, int orient, int divisions )
 {
-    double capx, capy; /* Cap center */
+    double capx, capy; // Cap center
     VLoop  loop;
 
     loop.z_top    = layer_z[top_layer];
@@ -465,10 +465,10 @@ static void export_vrml_slot( TriangleBag& triangles, /*{{{*/
         angle += PI2;
     }
 
-    /* The exchange above means that cutter radius is alvays dy/2 */
+    // The exchange above means that cutter radius is alvays dy/2
     double r = dy / 2;
     double alpha;
-    /* The first side cap */
+    // The first side cap
     capx = xc + cos( angle ) * dx / 2;
     capy = yc + sin( angle ) * dx / 2;
 
@@ -478,7 +478,7 @@ static void export_vrml_slot( TriangleBag& triangles, /*{{{*/
     alpha = angle + PI2;
     loop.add( capx + r * cos( alpha ), capy + r * sin( alpha ) );
 
-    /* The other side cap */
+    // The other side cap
     capx = xc - cos( angle ) * dx / 2;
     capy = yc - sin( angle ) * dx / 2;
 
@@ -491,7 +491,7 @@ static void export_vrml_slot( TriangleBag& triangles, /*{{{*/
 }
 
 
-static void export_vrml_hole( TriangleBag& triangles, /*{{{*/
+static void export_vrml_hole( TriangleBag& triangles, //{{{
                               int top_layer, int bottom_layer, double xc, double yc, double hole,
                               int divisions )
 {
@@ -507,7 +507,7 @@ static void export_vrml_hole( TriangleBag& triangles, /*{{{*/
 }
 
 
-static void export_vrml_varc( TriangleBag& triangles, /*{{{*/
+static void export_vrml_varc( TriangleBag& triangles, //{{{
                               int top_layer, int bottom_layer, double startx, double starty,
                               double endx, double endy, int divisions )
 {
@@ -527,11 +527,11 @@ static void export_vrml_varc( TriangleBag& triangles, /*{{{*/
 }
 
 
-static void export_vrml_oval_pad( int layer, /*{{{*/
+static void export_vrml_oval_pad( int layer, //{{{
                                   double xc, double yc,
                                   double dx, double dy, int orient, int divisions )
 {
-    double  capx, capy; /* Cap center */
+    double  capx, capy; // Cap center
     FlatFan fan;
 
     fan.c.x = xc;
@@ -544,11 +544,11 @@ static void export_vrml_oval_pad( int layer, /*{{{*/
         angle += PI2;
     }
 
-    /* The exchange above means that cutter radius is alvays dy/2 */
+    // The exchange above means that cutter radius is alvays dy/2
     double r = dy / 2;
     double alpha;
 
-    /* The first side cap */
+    // The first side cap
     capx = xc + cos( angle ) * dx / 2;
     capy = yc + sin( angle ) * dx / 2;
 
@@ -557,7 +557,7 @@ static void export_vrml_oval_pad( int layer, /*{{{*/
 
     alpha = angle + PI2;
     fan.add( capx + r * cos( alpha ), capy + r * sin( alpha ) );
-    /* The other side cap */
+    // The other side cap
     capx = xc - cos( angle ) * dx / 2;
     capy = yc - sin( angle ) * dx / 2;
 
@@ -570,7 +570,7 @@ static void export_vrml_oval_pad( int layer, /*{{{*/
 }
 
 
-static void export_vrml_arc( int layer, double startx, double starty, /*{{{*/
+static void export_vrml_arc( int layer, double startx, double starty, //{{{
                              double endx, double endy, double width, int divisions )
 {
     FlatRing ring;
@@ -590,7 +590,7 @@ static void export_vrml_arc( int layer, double startx, double starty, /*{{{*/
 }
 
 
-static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) /*{{{*/
+static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) //{{{
 {
     int    layer = drawseg->GetLayer();
     double w     = drawseg->GetWidth();
@@ -599,19 +599,19 @@ static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) /*{{{*/
     double xf    = drawseg->GetEnd().x;
     double yf    = drawseg->GetEnd().y;
 
-    /* Items on the edge layer are high, not thick */
+    // Items on the edge layer are high, not thick
     if( layer == EDGE_N )
     {
         switch( drawseg->GetShape() )
         {
-        /* There is a special 'varc' primitive for this */
+        // There is a special 'varc' primitive for this
         case S_ARC:
             export_vrml_varc( layer_triangles[layer],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER,
                               x, y, xf, yf, 4 );
             break;
 
-        /* Circles on edge are usually important holes */
+        // Circles on edge are usually important holes
         case S_CIRCLE:
             export_vrml_hole( layer_triangles[layer],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER, x, y,
@@ -620,7 +620,7 @@ static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) /*{{{*/
 
         default:
         {
-            /* Simply a quad */
+            // Simply a quad
             double z_top    = layer_z[FIRST_COPPER_LAYER];
             double z_bottom = layer_z[LAST_COPPER_LAYER];
             bag_vquad( layer_triangles[layer], x, y, xf, yf, z_top, z_bottom );
@@ -661,7 +661,7 @@ static void vrml_text_callback( int x0, int y0, int xf, int yf )
 
 static void export_vrml_pcbtext( TEXTE_PCB* text )
 {
-    /* Coupling by globals! Ewwww... */
+    // Coupling by globals! Ewwww...
     s_text_layer = text->GetLayer();
     s_text_width = text->m_Thickness;
 
@@ -677,12 +677,12 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
 
         offset.y = text->GetInterline();
 
-        RotatePoint( &offset, text->m_Orient );
+        RotatePoint( &offset, text->GetOrientation() );
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
             DrawGraphicText( NULL, NULL, pos, (EDA_Colors) 0,
-                             txt, text->m_Orient, size,
+                             txt, text->GetOrientation(), size,
                              text->m_HJustify, text->m_VJustify,
                              text->m_Thickness, text->m_Italic,
                              true,
@@ -695,7 +695,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
     else
     {
         DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) 0,
-                         text->m_Text, text->m_Orient, size,
+                         text->m_Text, text->GetOrientation(), size,
                          text->m_HJustify, text->m_VJustify,
                          text->m_Thickness, text->m_Italic,
                          true,
@@ -704,9 +704,9 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
 }
 
 
-static void export_vrml_drawings( BOARD* pcb ) /*{{{*/
+static void export_vrml_drawings( BOARD* pcb ) //{{{
 {
-    /* draw graphic items */
+    // draw graphic items
     for( EDA_ITEM* drawing = pcb->m_Drawings;  drawing != 0;  drawing = drawing->Next() )
     {
         switch( drawing->Type() )
@@ -726,14 +726,14 @@ static void export_vrml_drawings( BOARD* pcb ) /*{{{*/
 }
 
 
-static void export_round_padstack( BOARD* pcb, double x, double y, double r, /*{{{*/
+static void export_round_padstack( BOARD* pcb, double x, double y, double r, //{{{
                                    int bottom_layer, int top_layer, int divisions )
 {
     int copper_layers = pcb->GetCopperLayerCount( );
 
     for( int layer = bottom_layer; layer < copper_layers; layer++ )
     {
-        /* The last layer is always the component one, unless it's single face */
+        // The last layer is always the component one, unless it's single face
         if( (layer > FIRST_COPPER_LAYER) && (layer == copper_layers - 1) )
             layer = LAST_COPPER_LAYER;
 
@@ -743,7 +743,7 @@ static void export_round_padstack( BOARD* pcb, double x, double y, double r, /*{
 }
 
 
-static void export_vrml_via( BOARD* pcb, SEGVIA* via ) /*{{{*/
+static void export_vrml_via( BOARD* pcb, SEGVIA* via ) //{{{
 {
     double x, y, r, hole;
     int    top_layer, bottom_layer;
@@ -754,15 +754,15 @@ static void export_vrml_via( BOARD* pcb, SEGVIA* via ) /*{{{*/
     y    = via->m_Start.y;
     via->ReturnLayerPair( &top_layer, &bottom_layer );
 
-    /* Export the via padstack */
+    // Export the via padstack
     export_round_padstack( pcb, x, y, r, bottom_layer, top_layer, 8 );
 
-    /* Drill a rough hole */
+    // Drill a rough hole
     export_vrml_hole( via_triangles[via->m_Shape], top_layer, bottom_layer, x, y, hole, 8 );
 }
 
 
-static void export_vrml_tracks( BOARD* pcb ) /*{{{*/
+static void export_vrml_tracks( BOARD* pcb ) //{{{
 {
     for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
     {
@@ -832,7 +832,7 @@ static void export_vrml_zones( BOARD* pcb )
 }
 */
 
-static void export_vrml_text_module( TEXTE_MODULE* module ) /*{{{*/
+static void export_vrml_text_module( TEXTE_MODULE* module ) //{{{
 {
     if( module->IsVisible() )
     {
@@ -853,7 +853,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module ) /*{{{*/
 }
 
 
-static void export_vrml_edge_module( EDGE_MODULE* module ) /*{{{*/
+static void export_vrml_edge_module( EDGE_MODULE* module ) //{{{
 {
     int    layer = module->GetLayer();
     double x     = module->GetStart().x;
@@ -879,23 +879,23 @@ static void export_vrml_edge_module( EDGE_MODULE* module ) /*{{{*/
 }
 
 
-static void export_vrml_pad( BOARD* pcb, D_PAD* pad ) /*{{{*/
+static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
 {
-    double hole_drill_w = (double) pad->m_Drill.x / 2;
-    double hole_drill_h = (double) pad->m_Drill.y / 2;
+    double hole_drill_w = (double) aPad->GetDrillSize().x / 2;
+    double hole_drill_h = (double) aPad->GetDrillSize().y / 2;
     double hole_drill   = MIN( hole_drill_w, hole_drill_h );
-    double hole_x = pad->m_Pos.x;
-    double hole_y = pad->m_Pos.y;
+    double hole_x = aPad->GetPosition().x;
+    double hole_y = aPad->GetPosition().y;
 
-    /* Export the hole on the edge layer */
+    // Export the hole on the edge layer
     if( hole_drill > 0 )
     {
-        if( pad->m_DrillShape == PAD_OVAL )
+        if( aPad->GetDrillShape() == PAD_OVAL )
         {
-            /* Oblong hole (slot) */
+            // Oblong hole (slot)
             export_vrml_slot( layer_triangles[EDGE_N],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER,
-                              hole_x, hole_y, hole_drill_w, hole_drill_h, pad->m_Orient, 6 );
+                              hole_x, hole_y, hole_drill_w, hole_drill_h, aPad->GetOrientation(), 6 );
         }
         else
         {
@@ -906,29 +906,32 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* pad ) /*{{{*/
         }
     }
 
-    /* The pad proper, on the selected layers */
-    unsigned long layer_mask    = pad->m_layerMask;
-    int           copper_layers = pcb->GetCopperLayerCount( );
-    /* The (maybe offseted) pad position */
-    wxPoint       pad_pos   = pad->ReturnShapePos();
-    double        pad_x     = pad_pos.x;
-    double        pad_y     = pad_pos.y;
-    wxSize        pad_delta = pad->m_DeltaSize;
-    double        pad_dx    = pad_delta.x / 2;
-    double        pad_dy    = pad_delta.y / 2;
-    double        pad_w     = pad->m_Size.x / 2;
-    double        pad_h     = pad->m_Size.y / 2;
+    // The pad proper, on the selected layers
+    int         layer_mask    = aPad->GetLayerMask();
+    int         copper_layers = pcb->GetCopperLayerCount( );
+
+    // The (maybe offseted) pad position
+    wxPoint     pad_pos   = aPad->ReturnShapePos();
+    double      pad_x     = pad_pos.x;
+    double      pad_y     = pad_pos.y;
+    wxSize      pad_delta = aPad->GetDelta();
+
+    double      pad_dx    = pad_delta.x / 2;
+    double      pad_dy    = pad_delta.y / 2;
+
+    double      pad_w     = aPad->GetSize().x / 2;
+    double      pad_h     = aPad->GetSize().y / 2;
 
     for( int layer = FIRST_COPPER_LAYER; layer < copper_layers; layer++ )
     {
-        /* The last layer is always the component one, unless it's single face */
+        // The last layer is always the component one, unless it's single face
         if( (layer > FIRST_COPPER_LAYER) && (layer == copper_layers - 1) )
             layer = LAST_COPPER_LAYER;
 
         if( layer_mask & (1 << layer) )
         {
-            /* OK, the pad is on this layer, export it */
-            switch( pad->m_PadShape & 0x7F ) /* What is the masking for? */
+            // OK, the pad is on this layer, export it
+            switch( aPad->GetShape() )
             {
             case PAD_CIRCLE:
                 export_vrml_circle( layer, pad_x, pad_y,
@@ -938,44 +941,47 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* pad ) /*{{{*/
             case PAD_OVAL:
                 export_vrml_oval_pad( layer,
                                       pad_x, pad_y,
-                                      pad_w * 2, pad_h * 2, pad->m_Orient, 4 );
+                                      pad_w * 2, pad_h * 2, aPad->GetOrientation(), 4 );
                 break;
 
             case PAD_RECT:
-                /* Just to be sure :D */
+                // Just to be sure :D
                 pad_dx = 0;
                 pad_dy = 0;
 
             case PAD_TRAPEZOID:
-            {
-                int coord[8] =
                 {
-                    wxRound(-pad_w - pad_dy), wxRound(+pad_h + pad_dx),
-                    wxRound(-pad_w + pad_dy), wxRound(-pad_h - pad_dx),
-                    wxRound(+pad_w - pad_dy), wxRound(+pad_h - pad_dx),
-                    wxRound(+pad_w + pad_dy), wxRound(-pad_h + pad_dx),
-                };
+                    int coord[8] =
+                    {
+                        wxRound(-pad_w - pad_dy), wxRound(+pad_h + pad_dx),
+                        wxRound(-pad_w + pad_dy), wxRound(-pad_h - pad_dx),
+                        wxRound(+pad_w - pad_dy), wxRound(+pad_h - pad_dx),
+                        wxRound(+pad_w + pad_dy), wxRound(-pad_h + pad_dx),
+                    };
 
-                for( int i = 0; i < 4; i++ )
-                {
-                    RotatePoint( &coord[i * 2], &coord[i * 2 + 1], pad->m_Orient );
-                    coord[i * 2]     += wxRound( pad_x );
-                    coord[i * 2 + 1] += wxRound( pad_y );
+                    for( int i = 0; i < 4; i++ )
+                    {
+                        RotatePoint( &coord[i * 2], &coord[i * 2 + 1], aPad->GetOrientation() );
+                        coord[i * 2]     += wxRound( pad_x );
+                        coord[i * 2 + 1] += wxRound( pad_y );
+                    }
+
+                    bag_flat_quad( layer, coord[0], coord[1],
+                                   coord[2], coord[3],
+                                   coord[4], coord[5],
+                                   coord[6], coord[7] );
                 }
+                break;
 
-                bag_flat_quad( layer, coord[0], coord[1],
-                               coord[2], coord[3],
-                               coord[4], coord[5],
-                               coord[6], coord[7] );
-            }
-            break;
+            default:
+                ;
             }
         }
     }
 }
 
 
-/* From axis/rot to quaternion */
+// From axis/rot to quaternion
 static void build_quat( double x, double y, double z, double a, double q[4] )
 {
     double sina = sin( a / 2 );
@@ -987,7 +993,7 @@ static void build_quat( double x, double y, double z, double a, double q[4] )
 }
 
 
-/* From quaternion to axis/rot */
+// From quaternion to axis/rot
 static void from_quat( double q[4], double rot[4] )
 {
     rot[3] = acos( q[3] ) * 2;
@@ -999,7 +1005,7 @@ static void from_quat( double q[4], double rot[4] )
 }
 
 
-/* Quaternion composition */
+// Quaternion composition
 static void compose_quat( double q1[4], double q2[4], double qr[4] )
 {
     double tmp[4];
@@ -1017,11 +1023,11 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                                 FILE* aOutputFile, double aScalingFactor,
                                 bool aExport3DFiles, const wxString & a3D_Subdir )
 {
-    /* Reference and value */
+    // Reference and value
     export_vrml_text_module( aModule->m_Reference );
     export_vrml_text_module( aModule->m_Value );
 
-    /* Export module edges */
+    // Export module edges
     for( EDA_ITEM* item = aModule->m_Drawings;  item != NULL;  item = item->Next() )
     {
         switch( item->Type() )
@@ -1039,13 +1045,13 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         }
     }
 
-    /* Export pads */
-    for( D_PAD* pad = aModule->m_Pads; pad != 0; pad = pad->Next() )
+    // Export pads
+    for( D_PAD* pad = aModule->m_Pads;  pad; pad = pad->Next() )
         export_vrml_pad( aPcb, pad );
 
     bool isFlipped = aModule->GetLayer() == LAYER_N_BACK;
 
-    /* Export the object VRML model(s) */
+    // Export the object VRML model(s)
     for( S3D_MASTER* vrmlm = aModule->m_3D_Drawings; vrmlm != 0; vrmlm = vrmlm->Next() )
     {
         wxString fname = vrmlm->m_Shape3DName;
@@ -1090,21 +1096,21 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
             NEGATE(rotz);
         }
 
-        /* Do some quaternion munching */
+        // Do some quaternion munching
         double q1[4], q2[4], rot[4];
         build_quat( 1, 0, 0, rotx / 180.0 * M_PI, q1 );
         build_quat( 0, 1, 0, roty / 180.0 * M_PI, q2 );
         compose_quat( q1, q2, q1 );
         build_quat( 0, 0, 1, rotz / 180.0 * M_PI, q2 );
         compose_quat( q1, q2, q1 );
-        // Note here aModule->m_Orient is in 0.1 degrees,
-        // so module rotation is aModule->m_Orient / 1800.0
-        build_quat( 0, 0, 1, aModule->m_Orient / 1800.0 * M_PI, q2 );
+        // Note here aModule->GetOrientation() is in 0.1 degrees,
+        // so module rotation is aModule->GetOrientation() / 1800.0
+        build_quat( 0, 0, 1, aModule->GetOrientation() / 1800.0 * M_PI, q2 );
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );
 
         fprintf( aOutputFile, "Transform {\n" );
-        /* A null rotation would fail the acos! */
+        // A null rotation would fail the acos!
         if( rot[3] != 0.0 )
         {
             fprintf( aOutputFile, "  rotation %g %g %g %g\n", rot[0], rot[1], rot[2], rot[3] );
@@ -1115,7 +1121,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                  vrmlm->m_MatScale.y * aScalingFactor,
                  vrmlm->m_MatScale.z * aScalingFactor );
 
-        /* adjust 3D shape offset position (offset is given inch) */
+        // adjust 3D shape offset position (offset is given inch)
         #define UNITS_3D_TO_PCB_UNITS PCB_INTERNAL_UNIT
         int offsetx = wxRound( vrmlm->m_MatPosition.x * UNITS_3D_TO_PCB_UNITS );
         int offsety = wxRound( vrmlm->m_MatPosition.y * UNITS_3D_TO_PCB_UNITS );
@@ -1126,7 +1132,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         else    // In normal mode, Y axis is reversed in Pcbnew.
             NEGATE(offsety);
 
-        RotatePoint(&offsetx, &offsety, aModule->m_Orient);
+        RotatePoint(&offsetx, &offsety, aModule->GetOrientation());
 
         fprintf( aOutputFile, "  translation %g %g %g\n",
                  (double) (offsetx + aModule->m_Pos.x),
@@ -1220,7 +1226,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     // Switch the locale to standard C (needed to print floating point numbers like 1.3)
     SetLocaleTo_C_standard();
 
-    /* Begin with the usual VRML boilerplate */
+    // Begin with the usual VRML boilerplate
     wxString name = aFullFileName;
 
     name.Replace(wxT("\\"), wxT("/" ) );
@@ -1266,20 +1272,20 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
      */
 
     double wrml_3D_models_scaling_factor = 0.1 / board_scaling_factor;
-    /* Preliminary computation: the z value for each layer */
+    // Preliminary computation: the z value for each layer
     compute_layer_Zs( pcb );
 
-    /* Drawing and text on the board, and edges which are special */
+    // Drawing and text on the board, and edges which are special
     export_vrml_drawings( pcb );
 
-    /* Export vias and trackage */
+    // Export vias and trackage
     export_vrml_tracks( pcb );
 
-    /* Export zone fills */
+    // Export zone fills
 /* TODO    export_vrml_zones(pcb);
 */
 
-    /* Export footprints */
+    // Export footprints
     for( MODULE* module = pcb->m_Modules; module != 0; module = module->Next() )
         export_vrml_module( pcb, module, output_file,
                             wrml_3D_models_scaling_factor,
@@ -1292,13 +1298,13 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
                                       layer_triangles[layer],
                                       pcb->GetLayerColor(layer) );
 
-    /* Same thing for the via layers */
+    // Same thing for the via layers
     for( int i = 0; i < 4; i++ )
         write_and_empty_triangle_bag( output_file,
                                       via_triangles[i],
                                       pcb->GetVisibleElementColor( VIAS_VISIBLE + i ) );
 
-    /* Close the outer 'transform' node */
+    // Close the outer 'transform' node
     fputs( "]\n}\n", output_file );
 
     // End of work

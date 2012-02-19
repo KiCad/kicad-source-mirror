@@ -1,3 +1,5 @@
+
+
 /**
  * @file move-drag_pads.cpp
  * @brief Edit footprint pads.
@@ -39,10 +41,10 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     pad->Draw( Panel, DC, GR_XOR );
     pad->ClearFlags();
-    pad->m_Pos   = Pad_OldPos;
+    pad->SetPosition( Pad_OldPos );
     pad->Draw( Panel, DC, GR_XOR );
 
-    /* Pad move in progress: the restore origin. */
+    // Pad move in progress: the restore origin.
     if( g_Drag_Pistes_On )
     {
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
@@ -76,7 +78,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     if( aErase )
         pad->Draw( aPanel, aDC, GR_XOR );
 
-    pad->m_Pos = screen->GetCrossHairPosition();
+    pad->SetPosition( screen->GetCrossHairPosition() );
     pad->Draw( aPanel, aDC, GR_XOR );
 
     if( !g_Drag_Pistes_On )
@@ -91,12 +93,12 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
         if( g_DragSegmentList[ii].m_Pad_Start )
         {
-            Track->m_Start = pad->m_Pos;
+            Track->m_Start = pad->GetPosition();
         }
 
         if( g_DragSegmentList[ii].m_Pad_End )
         {
-            Track->m_End = pad->m_Pos;
+            Track->m_End = pad->GetPosition();
         }
 
         Track->Draw( aPanel, aDC, GR_XOR );
@@ -106,29 +108,31 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
 /* Load list of features for default pad selection.
  */
-void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* pt_pad )
+void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* aPad )
 {
-    if( pt_pad == NULL )
+    if( aPad == NULL )
         return;
 
-    pt_pad->DisplayInfo( this );
+    aPad->DisplayInfo( this );
 
-    g_Pad_Master.m_PadShape     = pt_pad->m_PadShape;
-    g_Pad_Master.m_Attribut     = pt_pad->m_Attribut;
-    g_Pad_Master.m_layerMask = pt_pad->m_layerMask;
-    g_Pad_Master.m_Orient = pt_pad->m_Orient -
-                            ( (MODULE*) pt_pad->GetParent() )->m_Orient;
-    g_Pad_Master.m_Size = pt_pad->m_Size;
-    g_Pad_Master.m_DeltaSize = pt_pad->m_DeltaSize;
-    pt_pad->ComputeShapeMaxRadius();
+    D_PAD& mp = GetDesignSettings().m_Pad_Master;
 
-    g_Pad_Master.m_Offset     = pt_pad->m_Offset;
-    g_Pad_Master.m_Drill      = pt_pad->m_Drill;
-    g_Pad_Master.m_DrillShape = pt_pad->m_DrillShape;
+    mp.SetShape( aPad->GetShape() );
+    mp.SetAttribute( aPad->GetAttribute() );
+    mp.SetLayerMask( aPad->GetLayerMask() );
+
+    mp.SetOrientation( aPad->GetOrientation() - aPad->GetParent()->GetOrientation() );
+
+    mp.SetSize( aPad->GetSize() );
+    mp.SetDelta( aPad->GetDelta() );
+
+    mp.SetOffset( aPad->GetOffset() );
+    mp.SetDrillSize( aPad->GetDrillSize() );
+    mp.SetDrillShape( aPad->GetDrillShape() );
 }
 
 
-/* Imports the new values of dimensions of the pad edge by pt_pad
+/* Imports the new values of dimensions of the pad edge by aPad
  * - Source: selected values of general characteristics
  * - Measurements are modified
  * - The position, names, and keys are not.
@@ -142,72 +146,77 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         aPad->ClearFlags( DO_NOT_DRAW );
     }
 
-    aPad->m_PadShape = g_Pad_Master.m_PadShape;
-    aPad->m_layerMask = g_Pad_Master.m_layerMask;
-    aPad->m_Attribut = g_Pad_Master.m_Attribut;
-    aPad->m_Orient = g_Pad_Master.m_Orient + ( (MODULE*) aPad->GetParent() )->m_Orient;
-    aPad->m_Size = g_Pad_Master.m_Size;
-    aPad->m_DeltaSize  = wxSize( 0, 0 );
-    aPad->m_Offset     = g_Pad_Master.m_Offset;
-    aPad->m_Drill      = g_Pad_Master.m_Drill;
-    aPad->m_DrillShape = g_Pad_Master.m_DrillShape;
+    D_PAD& mp = GetDesignSettings().m_Pad_Master;
 
-    switch( g_Pad_Master.m_PadShape )
+    aPad->SetShape( mp.GetShape() );
+    aPad->SetLayerMask( mp.GetLayerMask() );
+    aPad->SetAttribute( mp.GetAttribute() );
+    aPad->SetOrientation( mp.GetOrientation() + aPad->GetParent()->GetOrientation() );
+    aPad->SetSize( mp.GetSize() );
+    aPad->SetDelta( wxSize( 0, 0 ) );
+    aPad->SetOffset( mp.GetOffset() );
+    aPad->SetDrillSize( mp.GetDrillSize() );
+    aPad->SetDrillShape( mp.GetDrillShape() );
+
+    switch( mp.GetShape() )
     {
     case PAD_TRAPEZOID:
-        aPad->m_DeltaSize = g_Pad_Master.m_DeltaSize;
+        aPad->SetDelta( mp.GetDelta() );
         break;
 
     case PAD_CIRCLE:
-        aPad->m_Size.y = aPad->m_Size.x;
+        // set size.y to size.x
+        aPad->SetSize( wxSize( aPad->GetSize().x, aPad->GetSize().x ) );
         break;
+
+    default:
+        ;
     }
 
-    switch( g_Pad_Master.m_Attribut & 0x7F )
+    switch( mp.GetAttribute() )
     {
     case PAD_SMD:
     case PAD_CONN:
-        aPad->m_Drill    = wxSize( 0, 0 );
-        aPad->m_Offset.x = 0;
-        aPad->m_Offset.y = 0;
+        aPad->SetDrillSize( wxSize( 0, 0 ) );
+        aPad->SetOffset( wxPoint( 0, 0 ) );
     }
-
-    aPad->ComputeShapeMaxRadius();
 
     if( aDraw )
         m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );
 
-    ( (MODULE*) aPad->GetParent() )->m_LastEdit_Time = time( NULL );
+    aPad->GetParent()->m_LastEdit_Time = time( NULL );
 }
 
 
 /* Add a pad on the selected module.
  */
-void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
+void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
 {
-    wxString lastPadName;   // Last used pad name (pad num)
-    lastPadName = g_Pad_Master.GetPadName();
+    // Last used pad name (pad num)
+    wxString lastPadName = GetDesignSettings().m_Pad_Master.GetPadName();
 
     m_Pcb->m_Status_Pcb     = 0;
-    Module->m_LastEdit_Time = time( NULL );
+    aModule->m_LastEdit_Time = time( NULL );
 
-    D_PAD* Pad = new D_PAD( Module );
+    D_PAD* pad = new D_PAD( aModule );
 
-    /* Add the new pad to end of the module pad list. */
-    Module->m_Pads.PushBack( Pad );
+    // Add the new pad to end of the module pad list.
+    aModule->m_Pads.PushBack( pad );
 
-    /* Update the pad properties. */
-    Import_Pad_Settings( Pad, false );
-    Pad->SetNetname( wxEmptyString );
+    // Update the pad properties.
+    Import_Pad_Settings( pad, false );
+    pad->SetNetname( wxEmptyString );
 
-    Pad->m_Pos = GetScreen()->GetCrossHairPosition();
+    pad->SetPosition( GetScreen()->GetCrossHairPosition() );
 
     // Set the relative pad position
     // ( pad position for module orient, 0, and relative to the module position)
-    Pad->m_Pos0 = Pad->m_Pos - Module->m_Pos;
-    RotatePoint( &Pad->m_Pos0, -Module->m_Orient );
 
-    /* Automatically increment the current pad number. */
+    wxPoint pos0 = pad->GetPosition() - aModule->GetPosition();
+    RotatePoint( &pos0, -aModule->GetOrientation() );
+    pad->SetPos0( pos0 );
+
+    // Automatically increment the current pad number.
     long num    = 0;
     int  ponder = 1;
 
@@ -220,14 +229,15 @@ void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
 
     num++;  // Use next number for the new pad
     lastPadName << num;
-    Pad->SetPadName( lastPadName );
-    g_Pad_Master.SetPadName(lastPadName);
+    pad->SetPadName( lastPadName );
 
-    Module->CalculateBoundingBox();
-    Pad->DisplayInfo( this );
+    GetDesignSettings().m_Pad_Master.SetPadName(lastPadName);
+
+    aModule->CalculateBoundingBox();
+    pad->DisplayInfo( this );
 
     if( draw )
-        m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( aModule->GetBoundingBox() );
 }
 
 
@@ -241,20 +251,20 @@ void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
  */
 void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
 {
-    MODULE*  Module;
+    MODULE*  module;
 
     if( aPad == NULL )
         return;
 
-    Module = (MODULE*) aPad->GetParent();
-    Module->m_LastEdit_Time = time( NULL );
+    module = (MODULE*) aPad->GetParent();
+    module->m_LastEdit_Time = time( NULL );
 
     if( aQuery )
     {
         wxString msg;
         msg.Printf( _( "Delete Pad (module %s %s) " ),
-                    GetChars( Module->m_Reference->m_Text ),
-                    GetChars( Module->m_Value->m_Text ) );
+                    GetChars( module->m_Reference->m_Text ),
+                    GetChars( module->m_Value->m_Text ) );
 
         if( !IsOK( this, msg ) )
             return;
@@ -262,53 +272,54 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
 
     m_Pcb->m_Status_Pcb = 0;
     aPad->DeleteStructure();
-    m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
-    Module->CalculateBoundingBox();
+    m_canvas->RefreshDrawingRect( module->GetBoundingBox() );
+    module->CalculateBoundingBox();
 
     OnModify();
 }
 
 
-/* Function to initialize the "move pad" command */
-void PCB_BASE_FRAME::StartMovePad( D_PAD* Pad, wxDC* DC )
+// Function to initialize the "move pad" command
+void PCB_BASE_FRAME::StartMovePad( D_PAD* aPad, wxDC* DC )
 {
-    if( Pad == NULL )
+    if( aPad == NULL )
         return;
 
-    s_CurrentSelectedPad = Pad;
-    Pad_OldPos = Pad->m_Pos;
-    Pad->DisplayInfo( this );
+    s_CurrentSelectedPad = aPad;
+
+    Pad_OldPos = aPad->GetPosition();
+
+    aPad->DisplayInfo( this );
     m_canvas->SetMouseCapture( Show_Pad_Move, Abort_Move_Pad );
 
-    /* Draw the pad  (SKETCH mode) */
-    Pad->Draw( m_canvas, DC, GR_XOR );
-    Pad->SetFlags( IS_MOVED );
-    Pad->Draw( m_canvas, DC, GR_XOR );
+    // Draw the pad  (SKETCH mode)
+    aPad->Draw( m_canvas, DC, GR_XOR );
+    aPad->SetFlags( IS_MOVED );
+    aPad->Draw( m_canvas, DC, GR_XOR );
 
-    /* Build the list of track segments to drag if the command is a drag pad*/
+    // Build the list of track segments to drag if the command is a drag pad
     if( g_Drag_Pistes_On )
-        Build_1_Pad_SegmentsToDrag( m_canvas, DC, Pad );
+        Build_1_Pad_SegmentsToDrag( m_canvas, DC, aPad );
     else
         EraseDragList();
 }
 
 
-/* Routine to place a moved pad. */
-void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
+// Routine to place a moved pad.
+void PCB_BASE_FRAME::PlacePad( D_PAD* aPad, wxDC* DC )
 {
     int     dX, dY;
     TRACK*  Track;
-    MODULE* Module;
 
-    if( Pad == NULL )
+    if( aPad == NULL )
         return;
 
-    Module = (MODULE*) Pad->GetParent();
+    MODULE* module = aPad->GetParent();
 
     ITEM_PICKER       picker( NULL, UR_CHANGED );
     PICKED_ITEMS_LIST pickList;
 
-    /* Save dragged track segments in undo list */
+    // Save dragged track segments in undo list
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         Track = g_DragSegmentList[ii].m_Segm;
@@ -324,34 +335,34 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
         pickList.PushItem( picker );
     }
 
-    /* Save old module and old items values */
-    wxPoint pad_curr_position = Pad->m_Pos;
+    // Save old module and old items values
+    wxPoint pad_curr_position = aPad->GetPosition();
 
-    Pad->m_Pos = Pad_OldPos;
+    aPad->SetPosition( Pad_OldPos );
 
     if( g_DragSegmentList.size() == 0 )
-        SaveCopyInUndoList( Module, UR_CHANGED );
+        SaveCopyInUndoList( module, UR_CHANGED );
     else
     {
-        picker.SetItem( Module );
+        picker.SetItem( module );
         pickList.PushItem( picker );
         SaveCopyInUndoList( pickList, UR_CHANGED );
     }
 
-    Pad->m_Pos = pad_curr_position;
-    Pad->Draw( m_canvas, DC, GR_XOR );
+    aPad->SetPosition( pad_curr_position );
+    aPad->Draw( m_canvas, DC, GR_XOR );
 
-    /* Redraw dragged track segments */
+    // Redraw dragged track segments
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         Track = g_DragSegmentList[ii].m_Segm;
 
         // Set the new state
         if( g_DragSegmentList[ii].m_Pad_Start )
-            Track->m_Start = Pad->m_Pos;
+            Track->m_Start = aPad->GetPosition();
 
         if( g_DragSegmentList[ii].m_Pad_End )
-            Track->m_End = Pad->m_Pos;
+            Track->m_End = aPad->GetPosition();
 
         Track->SetState( IN_EDIT, OFF );
 
@@ -359,21 +370,23 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
             Track->Draw( m_canvas, DC, GR_OR );
     }
 
-    /* Compute local coordinates (i.e refer to Module position and for Module orient = 0) */
-    dX = Pad->m_Pos.x - Pad_OldPos.x;
-    dY = Pad->m_Pos.y - Pad_OldPos.y;
-    RotatePoint( &dX, &dY, -Module->m_Orient );
+    // Compute local coordinates (i.e refer to module position and for module orient = 0)
+    dX = aPad->GetPosition().x - Pad_OldPos.x;
+    dY = aPad->GetPosition().y - Pad_OldPos.y;
 
-    Pad->m_Pos0.x += dX;
-    s_CurrentSelectedPad->m_Pos0.y += dY;
+    RotatePoint( &dX, &dY, -module->GetOrientation() );
 
-    Pad->ClearFlags();
+    aPad->SetX0( dX + aPad->GetPos0().x );
+
+    s_CurrentSelectedPad->SetY0( dY + s_CurrentSelectedPad->GetPos0().y );
+
+    aPad->ClearFlags();
 
     if( DC )
-        Pad->Draw( m_canvas, DC, GR_OR );
+        aPad->Draw( m_canvas, DC, GR_OR );
 
-    Module->CalculateBoundingBox();
-    Module->m_LastEdit_Time = time( NULL );
+    module->CalculateBoundingBox();
+    module->m_LastEdit_Time = time( NULL );
 
     EraseDragList();
 
@@ -383,33 +396,43 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
 }
 
 
-/* Rotate selected pad 90 degrees.
- */
-void PCB_BASE_FRAME::RotatePad( D_PAD* Pad, wxDC* DC )
+// Rotate selected pad 90 degrees.
+void PCB_BASE_FRAME::RotatePad( D_PAD* aPad, wxDC* DC )
 {
-    MODULE* Module;
-
-    if( Pad == NULL )
+    if( aPad == NULL )
         return;
 
-    Module = (MODULE*) Pad->GetParent();
-    Module->m_LastEdit_Time = time( NULL );
+    MODULE* module = aPad->GetParent();
+
+    module->m_LastEdit_Time = time( NULL );
 
     OnModify();
 
     if( DC )
-        Module->Draw( m_canvas, DC, GR_XOR );
+        module->Draw( m_canvas, DC, GR_XOR );
 
-    EXCHG( Pad->m_Size.x, Pad->m_Size.y );
-    EXCHG( Pad->m_Drill.x, Pad->m_Drill.y );
-    EXCHG( Pad->m_Offset.x, Pad->m_Offset.y );
-    Pad->m_Offset.y = -Pad->m_Offset.y;
+    wxSize  sz = aPad->GetSize();
+    EXCHG( sz.x, sz.y );
+    aPad->SetSize( sz );
 
-    EXCHG( Pad->m_DeltaSize.x, Pad->m_DeltaSize.y );
-    Pad->m_DeltaSize.x = -Pad->m_DeltaSize.x;
-    Module->CalculateBoundingBox();
-    Pad->DisplayInfo( this );
+    sz = aPad->GetDrillSize();
+    EXCHG( sz.x, sz.y );
+    aPad->SetDrillSize( sz );
+
+    wxPoint pt = aPad->GetOffset();
+    EXCHG( pt.x, pt.y );
+    aPad->SetOffset( pt );
+
+    aPad->SetOffset( wxPoint( aPad->GetOffset().x, -aPad->GetOffset().y ) );
+
+    sz = aPad->GetDelta();
+    EXCHG( sz.x, sz.y );
+    sz.x = -sz.x;
+    aPad->SetDelta( sz );
+
+    module->CalculateBoundingBox();
+    aPad->DisplayInfo( this );
 
     if( DC )
-        Module->Draw( m_canvas, DC, GR_OR );
+        module->Draw( m_canvas, DC, GR_OR );
 }

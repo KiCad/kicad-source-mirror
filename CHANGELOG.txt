@@ -4,6 +4,19 @@ KiCad ChangeLog 2012
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2012-Feb-19 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+  * remove global g_Pad_Master global and put it into BOARD_DESIGN_SETTINGS
+    which is in turn already within BOARD.
+  * encapsulate class D_PAD with accessors, making data private.
+  * make D_PAD::GetBoundingRadius() do its longer calculation lazily, based on
+    m_boundingRadius == -1.
+
+must test:
+
+
+
 2012-Feb-5 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew

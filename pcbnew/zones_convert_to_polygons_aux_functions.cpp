@@ -68,21 +68,21 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
             // Thermal bridges are like a segment from a starting point inside the pad
             // to an ending point outside the pad
             wxPoint startpoint, endpoint;
-            endpoint.x = ( pad->m_Size.x / 2 ) + aZone->m_ThermalReliefGap;
-            endpoint.y = ( pad->m_Size.y / 2 ) + aZone->m_ThermalReliefGap;
+            endpoint.x = ( pad->GetSize().x / 2 ) + aZone->m_ThermalReliefGap;
+            endpoint.y = ( pad->GetSize().y / 2 ) + aZone->m_ThermalReliefGap;
 
             int copperThickness = aZone->m_ThermalReliefCopperBridge - aZone->m_ZoneMinThickness;
             if( copperThickness < 0 )
                 copperThickness = 0;
 
-            startpoint.x = min( pad->m_Size.x, copperThickness );
-            startpoint.y = min( pad->m_Size.y, copperThickness );
+            startpoint.x = min( pad->GetSize().x, copperThickness );
+            startpoint.y = min( pad->GetSize().y, copperThickness );
             startpoint.x /= 2;
             startpoint.y /= 2;
 
             // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
-            int fAngle = pad->m_Orient;
-            if( pad->m_PadShape == PAD_CIRCLE )
+            int fAngle = pad->GetOrientation();
+            if( pad->GetShape() == PAD_CIRCLE )
             {
                 endpoint.x     = (int) ( endpoint.x * aArcCorrection );
                 endpoint.y     = endpoint.x;

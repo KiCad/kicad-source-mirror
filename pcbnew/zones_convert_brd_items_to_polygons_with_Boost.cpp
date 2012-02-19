@@ -71,7 +71,7 @@ static int  CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZon
 // Local Variables:
 static int s_thermalRot = 450;  // angle of stubs in thermal reliefs for round pads
 
-/* how many segments are used to create a polygon from a circle: */
+// how many segments are used to create a polygon from a circle:
 static int s_CircleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;   /* default value. the real value will be changed to
                                                                            * ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF
                                                                            * if m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF
@@ -201,15 +201,16 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                  * inside the board (in fact inside the hole. Some photo diodes and Leds are
                  * like this)
                  */
-                if( (pad->m_Drill.x == 0) && (pad->m_Drill.y == 0) )
+                if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
 
                 // Use a dummy pad to calculate a hole shape that have the same dimension as
                 // the pad hole
-                dummypad.m_Size     = pad->m_Drill;
-                dummypad.m_Orient   = pad->m_Orient;
-                dummypad.m_PadShape = pad->m_DrillShape;
-                dummypad.m_Pos = pad->m_Pos;
+                dummypad.SetSize( pad->GetDrillSize() );
+                dummypad.SetOrientation( pad->GetOrientation() );
+                dummypad.SetShape( pad->GetDrillShape() );
+                dummypad.SetPosition( pad->GetPosition() );
+
                 pad = &dummypad;
             }
 
@@ -233,7 +234,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             int gap = zone_clearance;
 
             if( (m_PadOption == PAD_NOT_IN_ZONE)
-               || (GetNet() == 0) || pad->m_PadShape == PAD_TRAPEZOID )
+               || (GetNet() == 0) || pad->GetShape() == PAD_TRAPEZOID )
 
             // PAD_TRAPEZOID shapes are not in zones because they are used in microwave apps
             // and i think it is good that shapes are not changed by thermal pads or others
@@ -407,18 +408,19 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     if( m_PadOption == THERMAL_PAD )
     {
         cornerBufferPolysToSubstract.clear();
+
         // Test thermal stubs connections and add polygons to remove unconnected stubs.
         BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this,
                                                  s_Correction, s_thermalRot );
 
-        /* remove copper areas */
+        // remove copper areas
         if( cornerBufferPolysToSubstract.size() )
         {
             KPolygonSet polyset_holes;
             AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
             polyset_zone_solid_areas -= polyset_holes;
 
-            /* put these areas in m_FilledPolysList */
+            // put these areas in m_FilledPolysList
             m_FilledPolysList.clear();
             CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
 
