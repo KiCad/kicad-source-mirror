@@ -33,8 +33,7 @@ public:
     static bool m_Pad_Orient_Filter;
 
 public:
-    DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* parent, D_PAD* Pad );
-    ~DIALOG_GLOBAL_PADS_EDITION() { }
+    DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* aParent, D_PAD* aPad );
 
 private:
     void InstallPadEditor( wxCommandEvent& event );
@@ -43,11 +42,11 @@ private:
 };
 
 
-DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* parent, D_PAD* Pad ) :
-    DIALOG_GLOBAL_PADS_EDITION_BASE( parent )
+DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
+    DIALOG_GLOBAL_PADS_EDITION_BASE( aParent )
 {
-    m_Parent     = parent;
-    m_CurrentPad = Pad;
+    m_Parent     = aParent;
+    m_CurrentPad = aPad;
 
     // Pad filter selection.
     m_Pad_Shape_Filter_CB->SetValue( m_Pad_Shape_Filter );
@@ -61,7 +60,7 @@ DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* parent, 
 }
 
 
-/* Class DIALOG_GLOBAL_PADS_EDITION static variables */
+// Class DIALOG_GLOBAL_PADS_EDITION static variables
 bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Shape_Filter  = true;
 bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter  = true;
 bool DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter = true;
@@ -119,22 +118,23 @@ void PCB_EDIT_FRAME::DlgGlobalChange_PadSettings( D_PAD* aPad, bool aRedraw )
     int     diag;
 
     if( aPad == NULL )
-        aPad = &g_Pad_Master;
+        aPad = &GetDesignSettings().m_Pad_Master;
 
-    MODULE* Module = (MODULE*) aPad->GetParent();
+    MODULE* module = aPad->GetParent();
 
-    if( Module == NULL )
+    if( module == NULL )
     {
         DisplayError( this, wxT( "Global_Import_Pad_Settings() Error: NULL module" ) );
         return;
     }
 
-    Module->DisplayInfo( this );
+    module->DisplayInfo( this );
 
-    DIALOG_GLOBAL_PADS_EDITION* dlg = new DIALOG_GLOBAL_PADS_EDITION( this, aPad );
+    {
+        DIALOG_GLOBAL_PADS_EDITION dlg( this, aPad );
 
-    diag = dlg->ShowModal();
-    dlg->Destroy();
+        diag = dlg.ShowModal();
+    }
 
     if( diag == -1 )
         return;
@@ -162,23 +162,25 @@ void FOOTPRINT_EDIT_FRAME::DlgGlobalChange_PadSettings( D_PAD* aPad )
     int     diag;
 
     if( aPad == NULL )
-        aPad = &g_Pad_Master;
+        aPad = &GetDesignSettings().m_Pad_Master;
 
-    MODULE* Module = (MODULE*) aPad->GetParent();
+    MODULE* module = aPad->GetParent();
 
-    if( Module == NULL )
+    if( module == NULL )
     {
         DisplayError( this, wxT( "Global_Import_Pad_Settings() Error: NULL module" ) );
         return;
     }
 
-    Module->DisplayInfo( this );
+    module->DisplayInfo( this );
 
-    DIALOG_GLOBAL_PADS_EDITION* dlg = new DIALOG_GLOBAL_PADS_EDITION( this, aPad );
-    dlg->m_buttonIdModules->Enable( false );
+    {
+        DIALOG_GLOBAL_PADS_EDITION dlg( this, aPad );
 
-    diag = dlg->ShowModal();
-    dlg->Destroy();
+        dlg.m_buttonIdModules->Enable( false );
+
+        diag = dlg.ShowModal();
+    }
 
     if( diag == -1 )
         return;
@@ -187,7 +189,7 @@ void FOOTPRINT_EDIT_FRAME::DlgGlobalChange_PadSettings( D_PAD* aPad )
     if( diag == 1 )
         edit_Same_Modules = true;
 
-    GlobalChange_PadSettings( aPad,edit_Same_Modules,
+    GlobalChange_PadSettings( aPad, edit_Same_Modules,
                               DIALOG_GLOBAL_PADS_EDITION::m_Pad_Shape_Filter,
                               DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter,
                               DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter,
@@ -215,48 +217,47 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
                                                bool aRedraw, bool aSaveForUndo )
 {
     if( aPad == NULL )
-        aPad = &g_Pad_Master;
+        aPad = &GetDesignSettings().m_Pad_Master;
 
-    MODULE* Module = (MODULE*) aPad->GetParent();
+    MODULE* module = aPad->GetParent();
 
-    if( Module == NULL )
+    if( module == NULL )
     {
         DisplayError( this, wxT( "Global_Import_Pad_Settings() Error: NULL module" ) );
         return;
     }
 
-    /* Search and copy the name of library reference. */
-    MODULE* Module_Ref = Module;
-    int pad_orient = aPad->m_Orient - Module_Ref->m_Orient;
+    // Search and copy the name of library reference.
+    MODULE* Module_Ref = module;
+    int pad_orient = aPad->GetOrientation() - Module_Ref->GetOrientation();
 
     // Prepare an undo list:
     if( aSaveForUndo )
     {
         PICKED_ITEMS_LIST itemsList;
-        Module = (MODULE*) m_Pcb->m_Modules;
-        for( ; Module != NULL; Module = Module->Next() )
+
+        for( module = m_Pcb->m_Modules;  module;  module = module->Next() )
         {
-            if( !aSameFootprints && (Module != Module_Ref) )
+            if( !aSameFootprints && (module != Module_Ref) )
                 continue;
 
-            if( Module->m_LibRef != Module_Ref->m_LibRef )
+            if( module->m_LibRef != Module_Ref->m_LibRef )
                 continue;
 
             bool   saveMe = false;
-            D_PAD* pt_pad = (D_PAD*) Module->m_Pads;
 
-            for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
+            for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
             {
-                /* Filters changes prohibited. */
-                if( aPadShapeFilter && ( pt_pad->m_PadShape != aPad->m_PadShape ) )
+                // Filters changes prohibited.
+                if( aPadShapeFilter && ( pad->GetShape() != aPad->GetShape() ) )
                     continue;
 
-                int currpad_orient = pt_pad->m_Orient - Module->m_Orient;
+                int currpad_orient = pad->GetOrientation() - module->GetOrientation();
+
                 if( aPadOrientFilter && ( currpad_orient != pad_orient ) )
                     continue;
 
-                if( aPadLayerFilter
-                   && ( pt_pad->m_layerMask != aPad->m_layerMask ) )
+                if( aPadLayerFilter  &&  pad->GetLayerMask() != aPad->GetLayerMask() )
                     continue;
 
                 saveMe = true;
@@ -264,7 +265,8 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
 
             if( saveMe )
             {
-                ITEM_PICKER itemWrapper( Module, UR_CHANGED );
+                ITEM_PICKER itemWrapper( module, UR_CHANGED );
+
                 itemsList.PushItem( itemWrapper );
             }
         }
@@ -272,96 +274,86 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
         SaveCopyInUndoList( itemsList, UR_CHANGED );
     }
 
-    /* Update the current module and same others modules if requested. */
-    Module = m_Pcb->m_Modules;
-
-    for( ; Module != NULL; Module = Module->Next() )
+    // Update the current module and same others modules if requested.
+    for( module = m_Pcb->m_Modules;  module;  module = module->Next() )
     {
-        if( !aSameFootprints && (Module != Module_Ref) )
+        if( !aSameFootprints && (module != Module_Ref) )
             continue;
 
-        if( Module->m_LibRef != Module_Ref->m_LibRef )
+        if( module->m_LibRef != Module_Ref->m_LibRef )
             continue;
 
-        /* Erase module on screen */
+        // Erase module on screen
         if( aRedraw )
         {
-            Module->SetFlags( DO_NOT_DRAW );
-            m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
-            Module->ClearFlags( DO_NOT_DRAW );
+            module->SetFlags( DO_NOT_DRAW );
+            m_canvas->RefreshDrawingRect( module->GetBoundingBox() );
+            module->ClearFlags( DO_NOT_DRAW );
         }
 
-        D_PAD* pt_pad = Module->m_Pads;
-
-        for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
+        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
         {
             // Filters changes prohibited.
-            if( aPadShapeFilter && ( pt_pad->m_PadShape != aPad->m_PadShape ) )
+            if( aPadShapeFilter && ( pad->GetShape() != aPad->GetShape() ) )
                 continue;
 
-            if( aPadOrientFilter
-               && ( (pt_pad->m_Orient - Module->m_Orient) != pad_orient ) )
+            if( aPadOrientFilter &&  (pad->GetOrientation() - module->GetOrientation()) != pad_orient )
                 continue;
 
             if( aPadLayerFilter )
             {
-                if( pt_pad->m_layerMask != aPad->m_layerMask )
+                if( pad->GetLayerMask() != aPad->GetLayerMask() )
                     continue;
                 else
                     m_Pcb->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
             }
 
             // Change characteristics:
-            pt_pad->m_Attribut = aPad->m_Attribut;
-            pt_pad->m_PadShape = aPad->m_PadShape;
+            pad->SetAttribute( aPad->GetAttribute() );
+            pad->SetShape( aPad->GetShape() );
 
-            pt_pad->m_layerMask = aPad->m_layerMask;
+            pad->SetLayerMask( aPad->GetLayerMask() );
 
-            pt_pad->m_Size = aPad->m_Size;
-            pt_pad->m_DeltaSize = aPad->m_DeltaSize;
-            pt_pad->m_Offset    = aPad->m_Offset;
+            pad->SetSize( aPad->GetSize() );
+            pad->SetDelta( aPad->GetDelta() );
+            pad->SetOffset( aPad->GetOffset() );
 
-            pt_pad->m_Drill = aPad->m_Drill;
-            pt_pad->m_DrillShape = aPad->m_DrillShape;
+            pad->SetDrillSize( aPad->GetDrillSize() );
+            pad->SetDrillShape( aPad->GetDrillShape() );
 
-            pt_pad->m_Orient = pad_orient + Module->m_Orient;
+            pad->SetOrientation( pad_orient + module->GetOrientation() );
 
-            // copy also local mask margins,
-            // because these parameters usually depend on
-            // pads sizes and layers
-            pt_pad->m_LocalSolderMaskMargin  = aPad->m_LocalSolderMaskMargin;
-            pt_pad->m_LocalSolderPasteMargin = aPad->m_LocalSolderPasteMargin;
-            pt_pad->m_LocalSolderPasteMarginRatio = aPad->m_LocalSolderPasteMarginRatio;
+            // copy also local mask margins, because these parameters usually depend on
+            // pad sizes and layers
+            pad->SetLocalSolderMaskMargin( aPad->GetLocalSolderMaskMargin() );
+            pad->SetLocalSolderPasteMargin( aPad->GetLocalSolderPasteMargin() );
+            pad->SetLocalSolderPasteMarginRatio( aPad->GetLocalSolderPasteMarginRatio() );
 
-
-            if( pt_pad->m_PadShape != PAD_TRAPEZOID )
+            if( pad->GetShape() != PAD_TRAPEZOID )
             {
-                pt_pad->m_DeltaSize.x = 0;
-                pt_pad->m_DeltaSize.y = 0;
+                pad->SetDelta( wxSize( 0, 0 ) );
             }
-            if( pt_pad->m_PadShape == PAD_CIRCLE )
-                pt_pad->m_Size.y = pt_pad->m_Size.x;
 
-            switch( pt_pad->m_Attribut & 0x7F )
+            if( pad->GetShape() == PAD_CIRCLE )
+                pad->SetY( pad->GetSize().x );
+
+            switch( pad->GetAttribute() )
             {
             case PAD_SMD:
             case PAD_CONN:
-                pt_pad->m_Drill    = wxSize( 0, 0 );
-                pt_pad->m_Offset.x = 0;
-                pt_pad->m_Offset.y = 0;
+                pad->SetDrillSize( wxSize( 0, 0 ) );
+                pad->SetOffset( wxPoint( 0, 0 ) );
                 break;
 
             default:
                 break;
             }
-
-            pt_pad->ComputeShapeMaxRadius();
         }
 
-        Module->CalculateBoundingBox();
+        module->CalculateBoundingBox();
 
         if( aRedraw )
-            m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
+            m_canvas->RefreshDrawingRect( module->GetBoundingBox() );
     }
 
     OnModify();

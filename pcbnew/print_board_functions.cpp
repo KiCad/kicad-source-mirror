@@ -198,7 +198,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     if( GetGRForceBlackPenState() == false )
         drawmode = GR_OR;
 
-    /* Print the pcb graphic items (texts, ...) */
+    // Print the pcb graphic items (texts, ...)
     GRSetDrawMode( aDC, drawmode );
 
     for( BOARD_ITEM* item = Pcb->m_Drawings; item; item = item->Next() )
@@ -221,7 +221,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         }
     }
 
-    /* Print tracks */
+    // Print tracks
     pt_trace = Pcb->m_Track;
 
     for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
@@ -229,7 +229,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
             continue;
 
-        if( pt_trace->Type() == PCB_VIA_T ) /* VIA encountered. */
+        if( pt_trace->Type() == PCB_VIA_T ) // VIA encountered.
         {
             int radius = pt_trace->m_Width >> 1;
             int color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + pt_trace->m_Shape );
@@ -256,7 +256,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         pt_trace->Draw( m_canvas, aDC, drawmode );
     }
 
-    /* Draw filled areas (i.e. zones) */
+    // Draw filled areas (i.e. zones)
     for( int ii = 0; ii < Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = Pcb->GetArea( ii );
@@ -295,7 +295,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
                 continue;
 
-            if( pt_trace->Type() == PCB_VIA_T ) /* VIA encountered. */
+            if( pt_trace->Type() == PCB_VIA_T ) // VIA encountered.
             {
                 int diameter;
 
@@ -332,43 +332,41 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
                           int aDraw_mode, int aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt )
 {
-    D_PAD*        pt_pad;
-    EDA_ITEM*     PtStruct;
-    TEXTE_MODULE* TextMod;
-    int           mlayer;
-
-    /* Print pads */
-    pt_pad = aModule->m_Pads;
-
-    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
+    // Print pads
+    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( (pt_pad->m_layerMask & aMasklayer ) == 0 )
+        if( (pad->GetLayerMask() & aMasklayer ) == 0 )
             continue;
 
         // Manage hole according to the print drill option
-        wxSize drill_tmp = pt_pad->m_Drill;
+        wxSize drill_tmp = pad->GetDrillSize();
 
-        switch ( aDrillShapeOpt )
+        switch( aDrillShapeOpt )
         {
-            case PRINT_PARAMETERS::NO_DRILL_SHAPE:
-                pt_pad->m_Drill = wxSize(0,0);
-                break;
-            case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
-                pt_pad->m_Drill.x = min(SMALL_DRILL,pt_pad->m_Drill.x);
-                pt_pad->m_Drill.y = min(SMALL_DRILL,pt_pad->m_Drill.y);
-                break;
-            case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
-                // Do nothing
-                break;
+        case PRINT_PARAMETERS::NO_DRILL_SHAPE:
+            pad->SetDrillSize( wxSize(0,0) );
+            break;
+
+        case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
+            {
+                wxSize sz(  min( SMALL_DRILL, pad->GetDrillSize().x ),
+                            min( SMALL_DRILL, pad->GetDrillSize().y ) );
+
+                pad->SetDrillSize( sz );
+            }
+            break;
+
+        case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
+            // Do nothing
+            break;
         }
 
-        pt_pad->Draw( aPanel, aDC, aDraw_mode );
-        pt_pad->m_Drill = drill_tmp;
+        pad->Draw( aPanel, aDC, aDraw_mode );
+        pad->SetDrillSize( drill_tmp );
     }
 
-    /* Print footprint graphic shapes */
-    PtStruct = aModule->m_Drawings;
-    mlayer   = GetLayerMask( aModule->GetLayer() );
+    // Print footprint graphic shapes
+    int mlayer   = GetLayerMask( aModule->GetLayer() );
 
     if( aModule->GetLayer() == LAYER_N_BACK )
         mlayer = SILKSCREEN_LAYER_BACK;
@@ -384,28 +382,29 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
             aModule->m_Value->Draw( aPanel, aDC, aDraw_mode );
     }
 
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( EDA_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
             if( ( mlayer & aMasklayer ) == 0 )
                 break;
 
-            TextMod = (TEXTE_MODULE*) PtStruct;
-            TextMod->Draw( aPanel, aDC, aDraw_mode );
+            TEXTE_MODULE* textMod;
+            textMod = (TEXTE_MODULE*) item;
+            textMod->Draw( aPanel, aDC, aDraw_mode );
             break;
 
         case PCB_MODULE_EDGE_T:
-        {
-            EDGE_MODULE* edge = (EDGE_MODULE*) PtStruct;
+            {
+                EDGE_MODULE* edge = (EDGE_MODULE*) item;
 
-            if( ( GetLayerMask( edge->GetLayer() ) & aMasklayer ) == 0 )
-                break;
+                if( ( GetLayerMask( edge->GetLayer() ) & aMasklayer ) == 0 )
+                    break;
 
-            edge->Draw( aPanel, aDC, aDraw_mode );
+                edge->Draw( aPanel, aDC, aDraw_mode );
+            }
             break;
-        }
 
         default:
             break;

@@ -78,7 +78,7 @@ void MIN_SPAN_TREE_PADS::AddTreeToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnes
     // The first edge (i.e. rastnest) starts at index 1
     for( int ii = 1; ii < m_Size; ii++ )
     {
-        /* Create the new ratsnest */
+        // Create the new ratsnest
         RATSNEST_ITEM net;
         net.SetNet( netcode );
         net.m_Status   = CH_ACTIF | CH_VISIBLE;
@@ -107,8 +107,8 @@ int MIN_SPAN_TREE_PADS::GetWeight( int aItem1, int aItem2 )
 
     if( pad1 == pad2 )
         return 0;
-    int weight = abs( pad2->m_Pos.x - pad1->m_Pos.x ) +
-                 abs( pad2->m_Pos.y - pad1->m_Pos.y );
+    int weight = abs( pad2->GetPosition().x - pad1->GetPosition().x ) +
+                 abs( pad2->GetPosition().y - pad1->GetPosition().y );
     return weight + 1;
 }
 
@@ -209,7 +209,7 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest()
     if( m_Pcb->GetPadCount() == 0 )
         return;
 
-    /* Created pad list and the net_codes if needed */
+    // Created pad list and the net_codes if needed
     if( (m_Pcb->m_Status_Pcb & NET_CODES_OK) == 0 )
         m_Pcb->BuildListOfNets();
 
@@ -220,9 +220,9 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest()
     }
 
     if( m_Pcb->GetNodesCount() == 0 )
-        return;                       /* No useful connections. */
+        return;                       // No useful connections.
 
-    /* Ratsnest computation */
+    // Ratsnest computation
     unsigned current_net_code = 1;      // First net code is analyzed.
                                         // (net_code = 0 -> no connect)
     noconn = 0;
@@ -309,7 +309,7 @@ static int tst_links_between_blocks( NETINFO_ITEM*          aNetinfo,
     int            subratsnest_id, min_id;
     RATSNEST_ITEM* link, * best_link;
 
-    /* Search a link from a block to an other block */
+    // Search a link from a block to an other block
     best_link = NULL;
 
     for( unsigned ii = aNetinfo->m_RatsnestStartIdx; ii < aNetinfo->m_RatsnestEndIdx; ii++ )
@@ -544,11 +544,11 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         pads_module_count = localPadList.size();
 
         if( pads_module_count == 0 )
-            return;  /* no connection! */
+            return;  // no connection!
 
         sort( localPadList.begin(), localPadList.end(), sortByNetcode );
 
-        /* Build the list of pads linked to the current footprint pads */
+        // Build the list of pads linked to the current footprint pads
         current_net_code = 0;
 
         for( unsigned ii = 0; ii < pads_module_count; ii++ )
@@ -581,7 +581,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             }
         }
 
-        /* Sort the pad list by net_code */
+        // Sort the pad list by net_code
         sort( localPadList.begin() + pads_module_count, localPadList.end(),
                sortByNetcode );
 
@@ -596,7 +596,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         std::vector<D_PAD*> padsBuffer;     // contains pads of only one net
         for( unsigned ii = 0; ii < pads_module_count; ii++ )
         {
-            /* Search the end of pad list relative to the current net */
+            // Search the end of pad list relative to the current net
             unsigned jj = ii + 1;
 
             for( ; jj <= pads_module_count; jj++ )
@@ -656,7 +656,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
 
         if( pad_ref->GetNet() != current_net_code )
         {
-            /* if needed, creates a new ratsnest for the old net */
+            // if needed, creates a new ratsnest for the old net
             if( addRats )
             {
                 m_Pcb->m_LocalRatsnest.push_back( local_rats );
@@ -667,22 +667,22 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             local_rats.m_Lenght = INT_MAX;
         }
 
-        pad_pos = pad_ref->m_Pos - g_Offset_Module;
+        pad_pos = pad_ref->GetPosition() - g_Offset_Module;
 
         // Search the nearest external pad of this current pad
         for( unsigned jj = pads_module_count; jj < localPadList.size(); jj++ )
         {
             pad_externe = localPadList[jj];
 
-            /* we search pads having the same net code */
+            // we search pads having the same net code
             if( pad_externe->GetNet() < pad_ref->GetNet() )
                 continue;
 
             if( pad_externe->GetNet() > pad_ref->GetNet() ) // pads are sorted by net code
                 break;
 
-            distance = abs( pad_externe->m_Pos.x - pad_pos.x ) +
-                       abs( pad_externe->m_Pos.y - pad_pos.y );
+            distance = abs( pad_externe->GetPosition().x - pad_pos.x ) +
+                       abs( pad_externe->GetPosition().y - pad_pos.y );
 
             if( distance < local_rats.m_Lenght )
             {
@@ -724,10 +724,13 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
         else
         {
             g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, tmpcolor);
-            wxPoint tmp = rats->m_PadStart->m_Pos;
-            rats->m_PadStart->m_Pos -= g_Offset_Module;
+
+            wxPoint tmp = rats->m_PadStart->GetPosition();
+
+            rats->m_PadStart->SetPosition( tmp - g_Offset_Module );
             rats->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
-            rats->m_PadStart->m_Pos = tmp;
+
+            rats->m_PadStart->SetPosition( tmp );
         }
     }
 
@@ -827,7 +830,7 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
                 continue;
 
             if( !pad->GetSubNet() || (pad->GetSubNet() != subnet) )
-                s_TargetsLocations.push_back( pad->m_Pos );
+                s_TargetsLocations.push_back( pad->GetPosition() );
         }
 
         // Create a list of tracks ends candidates, not already connected to the
@@ -851,10 +854,11 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
         // Remove duplicate targets, using the C++ unique algorithm
         sort( s_TargetsLocations.begin(), s_TargetsLocations.end(), sort_by_point );
         std::vector< wxPoint >::iterator it = unique( s_TargetsLocations.begin(), s_TargetsLocations.end() );
+
         // Using the C++ unique algorithm only moves the duplicate entries to the end of
         // of the array.  This removes the duplicate entries from the array.
         s_TargetsLocations.resize( it - s_TargetsLocations.begin() );
-    }   /* end if Init */
+    }   // end if Init
 
     // in all cases, sort by distances:
     sort( s_TargetsLocations.begin(), s_TargetsLocations.end(), sort_by_distance );

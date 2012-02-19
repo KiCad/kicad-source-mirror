@@ -3,29 +3,29 @@
  * @brief Common plot routines.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "plot_common.h"
-#include "base_struct.h"
-#include "drawtxt.h"
-#include "confirm.h"
-#include "trigo.h"
-#include "wxBasePcbFrame.h"
-#include "pcbcommon.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <plot_common.h>
+#include <base_struct.h>
+#include <drawtxt.h>
+#include <confirm.h>
+#include <trigo.h>
+#include <wxBasePcbFrame.h>
+#include <pcbcommon.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_edge_mod.h"
-#include "class_pcb_text.h"
-#include "class_zone.h"
-#include "class_drawsegment.h"
-#include "class_mire.h"
-#include "class_dimension.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_edge_mod.h>
+#include <class_pcb_text.h>
+#include <class_zone.h>
+#include <class_drawsegment.h>
+#include <class_mire.h>
+#include <class_dimension.h>
 
-#include "pcbnew.h"
-#include "pcbplot.h"
+#include <pcbnew.h>
+#include <pcbplot.h>
 
 static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
                                 EDA_DRAW_MODE_T trace_mode );
@@ -45,28 +45,27 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* plotter, int aLayerMask, EDA_DRAW_
 {
     bool          trace_val, trace_ref;
     TEXTE_MODULE* pt_texte;
-    EDA_ITEM*     PtStruct;
 
-    /* Plot edge layer and graphic items */
+    // Plot edge layer and graphic items
 
-    for( PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( EDA_ITEM*  item = m_Pcb->m_Drawings;  item;  item = item->Next() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case PCB_LINE_T:
-            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, aLayerMask, trace_mode );
+            PlotDrawSegment( plotter, (DRAWSEGMENT*) item, aLayerMask, trace_mode );
             break;
 
         case PCB_TEXT_T:
-            PlotTextePcb( plotter, (TEXTE_PCB*) PtStruct, aLayerMask, trace_mode );
+            PlotTextePcb( plotter, (TEXTE_PCB*) item, aLayerMask, trace_mode );
             break;
 
         case PCB_DIMENSION_T:
-            PlotDimension( plotter, (DIMENSION*) PtStruct, aLayerMask, trace_mode );
+            PlotDimension( plotter, (DIMENSION*) item, aLayerMask, trace_mode );
             break;
 
         case PCB_TARGET_T:
-            PlotPcbTarget( plotter, (PCB_TARGET*) PtStruct, aLayerMask, trace_mode );
+            PlotPcbTarget( plotter, (PCB_TARGET*) item, aLayerMask, trace_mode );
             break;
 
         case PCB_MARKER_T:
@@ -78,10 +77,10 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* plotter, int aLayerMask, EDA_DRAW_
         }
     }
 
-    /* Plot footprint outlines : */
+    // Plot footprint outlines :
     Plot_Edges_Modules( plotter, m_Pcb, aLayerMask, trace_mode );
 
-    /* Plot pads (creates pads outlines, for pads on silkscreen layers) */
+    // Plot pads (creates pads outlines, for pads on silkscreen layers)
     int layersmask_plotpads = aLayerMask;
     // Calculate the mask layers of allowed layers for pads
 
@@ -94,43 +93,43 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* plotter, int aLayerMask, EDA_DRAW_
         {
             for( D_PAD * pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
             {
-                /* See if the pad is on this layer */
-                if( (pad->m_layerMask & layersmask_plotpads) == 0 )
+                // See if the pad is on this layer
+                if( (pad->GetLayerMask() & layersmask_plotpads) == 0 )
                     continue;
 
                 wxPoint shape_pos = pad->ReturnShapePos();
 
-                switch( pad->m_PadShape & 0x7F )
+                switch( pad->GetShape() )
                 {
                 case PAD_CIRCLE:
-                    plotter->flash_pad_circle( shape_pos, pad->m_Size.x, LINE );
+                    plotter->flash_pad_circle( shape_pos, pad->GetSize().x, LINE );
                     break;
 
                 case PAD_OVAL:
-                    plotter->flash_pad_oval( shape_pos, pad->m_Size, pad->m_Orient, LINE );
+                    plotter->flash_pad_oval( shape_pos, pad->GetSize(), pad->GetOrientation(), LINE );
                     break;
 
                 case PAD_TRAPEZOID:
-                {
-                    wxPoint coord[4];
-                    pad->BuildPadPolygon( coord, wxSize(0,0), 0 );
-                    plotter->flash_pad_trapez( shape_pos, coord, pad->m_Orient, LINE );
+                    {
+                        wxPoint coord[4];
+                        pad->BuildPadPolygon( coord, wxSize(0,0), 0 );
+                        plotter->flash_pad_trapez( shape_pos, coord, pad->GetOrientation(), LINE );
+                    }
                     break;
-                }
 
                 case PAD_RECT:
                 default:
-                    plotter->flash_pad_rect( shape_pos, pad->m_Size, pad->m_Orient, LINE );
+                    plotter->flash_pad_rect( shape_pos, pad->GetSize(), pad->GetOrientation(), LINE );
                     break;
                 }
             }
         }
     }
 
-    /* Plot footprints fields (ref, value ...) */
+    // Plot footprints fields (ref, value ...)
     for( MODULE* Module = m_Pcb->m_Modules; Module; Module = Module->Next() )
     {
-        /* see if we want to plot VALUE and REF fields */
+        // see if we want to plot VALUE and REF fields
         trace_val = g_PcbPlotOptions.m_PlotValue;
         trace_ref = g_PcbPlotOptions.m_PlotReference;
 
@@ -174,7 +173,7 @@ module\n %s's \"value\" text." ),
         if( !text->IsVisible() && !g_PcbPlotOptions.m_PlotInvisibleTexts )
             trace_val = false;
 
-        /* Plot text fields, if allowed */
+        // Plot text fields, if allowed
         if( trace_ref )
             PlotTextModule( plotter, Module->m_Reference, trace_mode );
 
@@ -215,7 +214,7 @@ for module\n %s's \"module text\" text of %s." ),
         }
     }
 
-    /* Plot filled areas */
+    // Plot filled areas
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = m_Pcb->GetArea( ii );
@@ -244,7 +243,7 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte, EDA_DRAW_M
     wxPoint pos;
     int     orient, thickness;
 
-    /* calculate some text parameters :*/
+    // calculate some text parameters :
     size = pt_texte->m_Size;
     pos  = pt_texte->m_Pos;
 
@@ -360,7 +359,7 @@ void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* aMire, int aLayerMask,
 }
 
 
-/* Plot footprints graphic items (outlines) */
+// Plot footprints graphic items (outlines)
 void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask, EDA_DRAW_MODE_T trace_mode )
 {
     for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
@@ -381,7 +380,7 @@ void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask, EDA_DRAW_
 }
 
 
-/** Plot a graphic item (outline) relative to a footprint */
+//* Plot a graphic item (outline) relative to a footprint
 void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* aEdge, EDA_DRAW_MODE_T trace_mode, int masque_layer )
 {
     int     type_trace;         // Type of item to plot.
@@ -419,7 +418,7 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* aEdge, EDA_DRAW_MODE_T tr
             double endAngle = startAngle + aEdge->GetAngle();
 
             if ( ( g_PcbPlotOptions.GetPlotFormat() == PLOT_FORMAT_DXF ) &&
-    	       ( masque_layer & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
+               ( masque_layer & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
                 plotter->thick_arc( pos,
                                 -startAngle,
                                 -endAngle,
@@ -471,7 +470,7 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* aEdge, EDA_DRAW_MODE_T tr
 }
 
 
-/* Plot a PCB Text, i;e. a text found on a copper or technical layer */
+// Plot a PCB Text, i;e. a text found on a copper or technical layer
 void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int aLayerMask,
                    EDA_DRAW_MODE_T trace_mode )
 {
@@ -791,7 +790,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         }
     }
 
-    /* Draw footprint shapes without pads (pads will plotted later) */
+    // Draw footprint shapes without pads (pads will plotted later)
     for( MODULE* module = m_Pcb->m_Modules; module; module = module->Next() )
     {
         for( BOARD_ITEM* item = module->m_Drawings; item; item = item->Next() )
@@ -810,14 +809,14 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         }
     }
 
-    /* Plot footprint pads */
+    // Plot footprint pads
     for( MODULE* module = m_Pcb->m_Modules; module; module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad; pad = pad->Next() )
         {
             wxPoint shape_pos;
 
-            if( (pad->m_layerMask & aLayerMask) == 0 )
+            if( (pad->GetLayerMask() & aLayerMask) == 0 )
                 continue;
 
             shape_pos = pad->ReturnShapePos();
@@ -848,19 +847,19 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
                 break;
             }
 
-            size.x = pad->m_Size.x + ( 2 * margin.x ) + width_adj;
-            size.y = pad->m_Size.y + ( 2 * margin.y ) + width_adj;
+            size.x = pad->GetSize().x + ( 2 * margin.x ) + width_adj;
+            size.y = pad->GetSize().y + ( 2 * margin.y ) + width_adj;
 
-            /* Don't draw a null size item : */
+            // Don't draw a null size item :
             if( size.x <= 0 || size.y <= 0 )
                 continue;
 
-            switch( pad->m_PadShape )
+            switch( pad->GetShape() )
             {
             case PAD_CIRCLE:
                 if( aSkipNPTH_Pads &&
-                    (pad->m_Size == pad->m_Drill) &&
-                    (pad->m_Attribut == PAD_HOLE_NOT_PLATED) )
+                    (pad->GetSize() == pad->GetDrillSize()) &&
+                    (pad->GetAttribute() == PAD_HOLE_NOT_PLATED) )
                     break;
 
                 aPlotter->flash_pad_circle( pos, size.x, aPlotMode );
@@ -868,30 +867,30 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
 
             case PAD_OVAL:
                 if( aSkipNPTH_Pads &&
-                    (pad->m_Size == pad->m_Drill) &&
-                    (pad->m_Attribut == PAD_HOLE_NOT_PLATED) )
+                    (pad->GetSize() == pad->GetDrillSize()) &&
+                    (pad->GetAttribute() == PAD_HOLE_NOT_PLATED) )
                     break;
 
-                aPlotter->flash_pad_oval( pos, size, pad->m_Orient, aPlotMode );
+                aPlotter->flash_pad_oval( pos, size, pad->GetOrientation(), aPlotMode );
                 break;
 
             case PAD_TRAPEZOID:
             {
                 wxPoint coord[4];
                 pad->BuildPadPolygon( coord, margin, 0 );
-                aPlotter->flash_pad_trapez( pos, coord, pad->m_Orient, aPlotMode );
+                aPlotter->flash_pad_trapez( pos, coord, pad->GetOrientation(), aPlotMode );
             }
             break;
 
             case PAD_RECT:
             default:
-                aPlotter->flash_pad_rect( pos, size, pad->m_Orient, aPlotMode );
+                aPlotter->flash_pad_rect( pos, size, pad->GetOrientation(), aPlotMode );
                 break;
             }
         }
     }
 
-    /* Plot vias : */
+    // Plot vias :
     if( aPlotVia )
     {
         for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
@@ -931,7 +930,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
             pos    = Via->m_Start;
             size.x = size.y = Via->m_Width + 2 * via_margin + width_adj;
 
-            /* Don't draw a null size item : */
+            // Don't draw a null size item :
             if( size.x <= 0 )
                 continue;
 
@@ -939,7 +938,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         }
     }
 
-    /* Plot tracks (not vias) : */
+    // Plot tracks (not vias) :
     for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
     {
         wxPoint end;
@@ -957,7 +956,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         aPlotter->thick_segment( pos, end, size.x, aPlotMode );
     }
 
-    /* Plot zones (outdated, for old boards compatibility): */
+    // Plot zones (outdated, for old boards compatibility):
     for( TRACK* track = m_Pcb->m_Zone; track; track = track->Next() )
     {
         wxPoint end;
@@ -972,7 +971,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         aPlotter->thick_segment( pos, end, size.x, aPlotMode );
     }
 
-    /* Plot filled ares */
+    // Plot filled ares
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = m_Pcb->GetArea( ii );
@@ -1003,7 +1002,7 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
     wxPoint   pos;
     wxSize    diam;
     MODULE*   Module;
-    D_PAD*    PtPad;
+    D_PAD*    pad;
     TRACK*    pts;
 
     if( aTraceMode == FILLED )
@@ -1017,13 +1016,13 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
             continue;
 
         pos = pts->m_Start;
-        
+
         // It is quite possible that the real drill value is less then small drill value.
         if( g_PcbPlotOptions.m_DrillShapeOpt == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
             diam.x = diam.y = MIN( SMALL_DRILL, pts->GetDrillValue() );
         else
             diam.x = diam.y = pts->GetDrillValue();
-        
+
         diam.x -= aPlotter->get_plot_width_adj();
         diam.x = doIntValueFitToBand( diam.x, 1, pts->m_Width - 1 );
         aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
@@ -1031,29 +1030,29 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
 
     for( Module = m_Pcb->m_Modules; Module != NULL; Module = Module->Next() )
     {
-        for( PtPad = Module->m_Pads; PtPad != NULL; PtPad = PtPad->Next() )
+        for( pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
         {
-            if( PtPad->m_Drill.x == 0 )
+            if( pad->GetDrillSize().x == 0 )
                 continue;
 
             // Output hole shapes:
-            pos = PtPad->m_Pos;
+            pos = pad->GetPosition();
 
-            if( PtPad->m_DrillShape == PAD_OVAL )
+            if( pad->GetDrillShape() == PAD_OVAL )
             {
-                diam = PtPad->m_Drill;
+                diam = pad->GetDrillSize();
                 diam.x -= aPlotter->get_plot_width_adj();
-                diam.x = doIntValueFitToBand( diam.x, 1, PtPad->m_Size.x - 1 );
+                diam.x = doIntValueFitToBand( diam.x, 1, pad->GetSize().x - 1 );
                 diam.y -= aPlotter->get_plot_width_adj();
-                diam.y = doIntValueFitToBand( diam.y, 1, PtPad->m_Size.y - 1 );
-                aPlotter->flash_pad_oval( pos, diam, PtPad->m_Orient, aTraceMode );
+                diam.y = doIntValueFitToBand( diam.y, 1, pad->GetSize().y - 1 );
+                aPlotter->flash_pad_oval( pos, diam, pad->GetOrientation(), aTraceMode );
             }
             else
             {
                 // It is quite possible that the real pad drill value is less then small drill value.
-                diam.x = aSmallDrillShape ? MIN( SMALL_DRILL, PtPad->m_Drill.x ) : PtPad->m_Drill.x;
+                diam.x = aSmallDrillShape ? MIN( SMALL_DRILL, pad->GetDrillSize().x ) : pad->GetDrillSize().x;
                 diam.x -= aPlotter->get_plot_width_adj();
-                diam.x = doIntValueFitToBand( diam.x, 1, PtPad->m_Size.x - 1 );
+                diam.x = doIntValueFitToBand( diam.x, 1, pad->GetSize().x - 1 );
                 aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
             }
         }

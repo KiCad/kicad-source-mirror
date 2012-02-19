@@ -1181,7 +1181,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  *               D_PAD*  pad = (D_PAD*) item;
  *               if( pad->HitTest( refPos ) )
  *               {
- *                   if( layer_mask & pad->m_layerMask )
+ *                   if( layer_mask & pad->GetLayerMask() )
  *                   {
  *                       found = item;
  *                       return SEARCH_QUIT;
@@ -1572,11 +1572,11 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
     {
         D_PAD* pad = m_NetInfo.GetPad(i);
 
-        if( pad->m_Pos != aPosition )
+        if( pad->GetPosition() != aPosition )
             continue;
 
         /* Pad found, it must be on the correct layer */
-        if( pad->m_layerMask & aLayerMask )
+        if( pad->GetLayerMask() & aLayerMask )
             return pad;
     }
 
@@ -1603,10 +1603,10 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
 
         D_PAD* pad = aPadList[idx];
 
-        if( pad->m_Pos == aPosition )       // candidate found
+        if( pad->GetPosition() == aPosition )       // candidate found
         {
             // The pad must match the layer mask:
-            if( (aLayerMask & pad->m_layerMask) != 0 )
+            if( (aLayerMask & pad->GetLayerMask()) != 0 )
                 return pad;
 
             // More than one pad can be at aPosition
@@ -1616,18 +1616,18 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             for( int ii = idx+1; ii <= idxmax; ii++ )
             {
                 pad = aPadList[ii];
-                if( pad->m_Pos != aPosition )
+                if( pad->GetPosition() != aPosition )
                     break;
-                if( (aLayerMask & pad->m_layerMask) != 0 )
+                if( (aLayerMask & pad->GetLayerMask()) != 0 )
                     return pad;
             }
             // search previous
             for(  int ii = idx-1 ;ii >=0; ii-- )
             {
                 pad = aPadList[ii];
-                if( pad->m_Pos != aPosition )
+                if( pad->GetPosition() != aPosition )
                     break;
-                if( (aLayerMask & pad->m_layerMask) != 0 )
+                if( (aLayerMask & pad->GetLayerMask()) != 0 )
                     return pad;
             }
 
@@ -1635,9 +1635,9 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             return 0;
         }
 
-        if( pad->m_Pos.x == aPosition.x )   // Must search considering Y coordinate
+        if( pad->GetPosition().x == aPosition.x )   // Must search considering Y coordinate
         {
-            if(pad->m_Pos.y < aPosition.y)  // Must search after this item
+            if(pad->GetPosition().y < aPosition.y)  // Must search after this item
             {
                 idx += delta;
                 if( idx > idxmax )
@@ -1650,7 +1650,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
                     idx = 0;
             }
         }
-        else if( pad->m_Pos.x < aPosition.x ) // Must search after this item
+        else if( pad->GetPosition().x < aPosition.x ) // Must search after this item
         {
             idx += delta;
             if( idx > idxmax )
@@ -1674,9 +1674,9 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
  */
 static bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 {
-    if( ref->m_Pos.x == comp->m_Pos.x )
-        return ref->m_Pos.y < comp->m_Pos.y;
-    return ref->m_Pos.x < comp->m_Pos.x;
+    if( ref->GetPosition().x == comp->GetPosition().x )
+        return ref->GetPosition().y < comp->GetPosition().y;
+    return ref->GetPosition().x < comp->GetPosition().x;
 }
 
 
@@ -1919,13 +1919,13 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
                     if( track->GetState( BEGIN_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->start;
-                        lenDie += (double) pad->m_LengthDie;
+                        lenDie += (double) pad->GetDieLength();
                     }
 
                     if( track->GetState( END_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->end;
-                        lenDie += (double) pad->m_LengthDie;
+                        lenDie += (double) pad->GetDieLength();
                     }
                 }
             }
@@ -1949,13 +1949,13 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
                 if( track->GetState( BEGIN_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->start;
-                    lenDie += (double) pad->m_LengthDie;
+                    lenDie += (double) pad->GetDieLength();
                 }
 
                 if( track->GetState( END_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->end;
-                    lenDie += (double) pad->m_LengthDie;
+                    lenDie += (double) pad->GetDieLength();
                 }
             }
         }

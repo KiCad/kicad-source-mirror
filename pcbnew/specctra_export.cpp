@@ -259,12 +259,12 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items )
  */
 static bool isRoundKeepout( D_PAD* aPad )
 {
-    if( aPad->m_PadShape==PAD_CIRCLE )
+    if( aPad->GetShape()==PAD_CIRCLE )
     {
-        if( aPad->m_Drill.x >= aPad->m_Size.x )
+        if( aPad->GetDrillSize().x >= aPad->GetSize().x )
             return true;
 
-        if( (aPad->m_layerMask & ALL_CU_LAYERS) == 0 )
+        if( (aPad->GetLayerMask() & ALL_CU_LAYERS) == 0 )
             return true;
     }
 
@@ -302,7 +302,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     uniqifier = '[';
 
-    bool onAllCopperLayers = ( (aPad->m_layerMask & ALL_CU_LAYERS) == ALL_CU_LAYERS );
+    bool onAllCopperLayers = ( (aPad->GetLayerMask() & ALL_CU_LAYERS) == ALL_CU_LAYERS );
 
     if( onAllCopperLayers )
         uniqifier += 'A';               // A for all layers
@@ -332,11 +332,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     POINT   dsnOffset;
 
-    if( aPad->m_Offset.x || aPad->m_Offset.y )
+    if( aPad->GetOffset().x || aPad->GetOffset().y )
     {
         char offsetTxt[64];
 
-        wxPoint offset( aPad->m_Offset.x, aPad->m_Offset.y );
+        wxPoint offset( aPad->GetOffset().x, aPad->GetOffset().y );
 
         dsnOffset = mapPt( offset );
 
@@ -347,12 +347,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         uniqifier += offsetTxt;
     }
 
-    switch( aPad->m_PadShape )
+    switch( aPad->GetShape() )
     {
     default:
     case PAD_CIRCLE:
         {
-            double  diameter = scale(aPad->m_Size.x);
+            double  diameter = scale(aPad->GetSize().x);
 
             for( int ndx=0;  ndx<reportedLayers;  ++ndx )
             {
@@ -368,7 +368,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             }
 
             snprintf( name, sizeof(name), "Round%sPad_%.6g_mil",
-                     uniqifier.c_str(), scale(aPad->m_Size.x) );
+                     uniqifier.c_str(), scale(aPad->GetSize().x) );
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );
@@ -377,8 +377,8 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     case PAD_RECT:
         {
-            double dx = scale( aPad->m_Size.x ) / 2.0;
-            double dy = scale( aPad->m_Size.y ) / 2.0;
+            double dx = scale( aPad->GetSize().x ) / 2.0;
+            double dy = scale( aPad->GetSize().y ) / 2.0;
 
             POINT   lowerLeft( -dx, -dy );
             POINT   upperRight( dx, dy );
@@ -399,7 +399,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             }
 
             snprintf( name, sizeof(name),  "Rect%sPad_%.6gx%.6g_mil",
-                     uniqifier.c_str(), scale(aPad->m_Size.x), scale(aPad->m_Size.y)  );
+                     uniqifier.c_str(), scale(aPad->GetSize().x), scale(aPad->GetSize().y)  );
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );
@@ -408,8 +408,8 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     case PAD_OVAL:
         {
-            double  dx = scale( aPad->m_Size.x ) / 2.0;
-            double  dy = scale( aPad->m_Size.y ) / 2.0;
+            double  dx = scale( aPad->GetSize().x ) / 2.0;
+            double  dy = scale( aPad->GetSize().y ) / 2.0;
             double  dr = dx - dy;
             double  radius;
             POINT   start;
@@ -447,7 +447,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             }
 
             snprintf( name, sizeof(name),  "Oval%sPad_%.6gx%.6g_mil",
-                     uniqifier.c_str(), scale(aPad->m_Size.x), scale(aPad->m_Size.y)  );
+                     uniqifier.c_str(), scale(aPad->GetSize().x), scale(aPad->GetSize().y)  );
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );
@@ -456,11 +456,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     case PAD_TRAPEZOID:
         {
-            double dx = scale( aPad->m_Size.x ) / 2.0;
-            double dy = scale( aPad->m_Size.y ) / 2.0;
+            double dx = scale( aPad->GetSize().x ) / 2.0;
+            double dy = scale( aPad->GetSize().y ) / 2.0;
 
-            double ddx = scale( aPad->m_DeltaSize.x ) / 2.0;
-            double ddy = scale( aPad->m_DeltaSize.y ) / 2.0;
+            double ddx = scale( aPad->GetDelta().x ) / 2.0;
+            double ddy = scale( aPad->GetDelta().y ) / 2.0;
 
             // see class_pad_draw_functions.cpp which draws the trapezoid pad
             POINT   lowerLeft(  -dx - ddy, -dy - ddx );
@@ -490,15 +490,15 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                 polygon->AppendPoint( lowerRight );
             }
 
-            D(printf( "m_DeltaSize: %d,%d\n", aPad->m_DeltaSize.x, aPad->m_DeltaSize.y );)
+            D(printf( "m_DeltaSize: %d,%d\n", aPad->GetDelta().x, aPad->GetDelta().y );)
 
             // this string _must_ be unique for a given physical shape
             snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_mil",
-                     uniqifier.c_str(), scale(aPad->m_Size.x), scale(aPad->m_Size.y),
-                     aPad->m_DeltaSize.x < 0 ? 'n' : 'p',
-                     abs( scale( aPad->m_DeltaSize.x )),
-                     aPad->m_DeltaSize.y < 0 ? 'n' : 'p',
-                     abs( scale( aPad->m_DeltaSize.y ))
+                     uniqifier.c_str(), scale(aPad->GetSize().x), scale(aPad->GetSize().y),
+                     aPad->GetDelta().x < 0 ? 'n' : 'p',
+                     abs( scale( aPad->GetDelta().x )),
+                     aPad->GetDelta().y < 0 ? 'n' : 'p',
+                     abs( scale( aPad->GetDelta().y ))
                      );
             name[ sizeof(name)-1 ] = 0;
 
@@ -538,8 +538,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         // see if this pad is a through hole with no copper on its perimeter
         if( isRoundKeepout( pad ) )
         {
-            double  diameter = scale( pad->m_Drill.x );
-            POINT   vertex   = mapPt( pad->m_Pos0 );
+            double  diameter = scale( pad->GetDrillSize().x );
+            POINT   vertex   = mapPt( pad->GetPos0() );
 
             int layerCount = aBoard->GetCopperLayerCount();
             for( int layer=0;  layer<layerCount;  ++layer )
@@ -600,14 +600,14 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
             pin->padstack_id = padstack->padstack_id;
 
-            int angle = pad->m_Orient - aModule->m_Orient;   // tenths of degrees
+            int angle = pad->GetOrientation() - aModule->GetOrientation();   // tenths of degrees
             if( angle )
             {
                 NORMALIZE_ANGLE_POS(angle);
                 pin->SetRotation( angle / 10.0 );
             }
 
-            wxPoint pos( pad->m_Pos0 );
+            wxPoint pos( pad->GetPos0() );
 
             pin->SetVertex( mapPt( pos )  );
         }
@@ -1255,7 +1255,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             PLACE* place = new PLACE( comp );
             comp->places.push_back( place );
 
-            place->SetRotation( module->m_Orient/10.0 );
+            place->SetRotation( module->GetOrientation()/10.0 );
             place->SetVertex( mapPt( module->m_Pos ) );
             place->component_id = componentId;
             place->part_number  = TO_UTF8( module->GetValue() );
@@ -1263,7 +1263,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             // module is flipped from bottom side, set side to T_back
             if( module->flag )
             {
-                int angle = 1800 - module->m_Orient;
+                int angle = 1800 - module->GetOrientation();
                 NORMALIZE_ANGLE_POS(angle);
                 place->SetRotation( angle/10.0 );
 

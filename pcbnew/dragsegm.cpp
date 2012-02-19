@@ -35,36 +35,36 @@ DRAG_SEGM::DRAG_SEGM( TRACK* segm )
 /* Redraw the list of segments starting in g_DragSegmentList, while moving a footprint */
 void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
-    D_PAD* pt_pad;
-    TRACK* Track;
-
     if( g_DragSegmentList.size() == 0 )
         return;
 
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         wxPoint pos;
-        Track = g_DragSegmentList[ii].m_Segm;
+
+        TRACK* track = g_DragSegmentList[ii].m_Segm;
+
 #ifndef USE_WX_OVERLAY
-        Track->Draw( panel, DC, GR_XOR );   // erase from screen at old position
+        track->Draw( panel, DC, GR_XOR );   // erase from screen at old position
 #endif
-        pt_pad = g_DragSegmentList[ii].m_Pad_Start;
 
-        if( pt_pad )
+        D_PAD* pad = g_DragSegmentList[ii].m_Pad_Start;
+
+        if( pad )
         {
-            pos = pt_pad->m_Pos - g_Offset_Module;
-            Track->m_Start = pos;
+            pos = pad->GetPosition() - g_Offset_Module;
+            track->m_Start = pos;
         }
 
-        pt_pad = g_DragSegmentList[ii].m_Pad_End;
+        pad = g_DragSegmentList[ii].m_Pad_End;
 
-        if( pt_pad )
+        if( pad )
         {
-            pos = pt_pad->m_Pos - g_Offset_Module;
-            Track->m_End = pos;
+            pos = pad->GetPosition() - g_Offset_Module;
+            track->m_End = pos;
         }
 
-        Track->Draw( panel, DC, GR_XOR );
+        track->Draw( panel, DC, GR_XOR );
     }
 }
 
@@ -74,15 +74,11 @@ void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC )
  *  For each selected track segment set the EDIT flag
  *  and redraw them in EDIT mode (sketch mode)
  */
-void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module )
+void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule )
 {
-    D_PAD* pt_pad;
-
-    pt_pad = Module->m_Pads;
-
-    for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
+    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
     {
-        Build_1_Pad_SegmentsToDrag( panel, DC, pt_pad );
+        Build_1_Pad_SegmentsToDrag( panel, DC, pad );
     }
 
     return;
@@ -95,37 +91,36 @@ void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module )
  *  and redraw them in EDIT mode (sketch mode)
  *  Net codes must be OK.
  */
-void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad )
+void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* aPad )
 {
-    TRACK*  Track;
-    int     net_code = PtPad->GetNet();
-    int     LayerMask;
-    wxPoint pos;
     BOARD*  pcb = ( (PCB_BASE_FRAME*)( panel->GetParent() ) )->GetBoard();
 
-    Track = pcb->m_Track->GetStartNetCode( net_code );
+    int     net_code = aPad->GetNet();
 
-    pos = PtPad->m_Pos;
-    LayerMask = PtPad->m_layerMask;
+    TRACK*  track = pcb->m_Track->GetStartNetCode( net_code );
 
-    for( ; Track; Track = Track->Next() )
+    wxPoint pos = aPad->GetPosition();
+
+    int     layerMask = aPad->GetLayerMask();
+
+    for( ; track; track = track->Next() )
     {
-        if( Track->GetNet() != net_code )
+        if( track->GetNet() != net_code )
             break;
 
-        if( ( LayerMask & Track->ReturnMaskLayer() ) == 0 )
+        if( ( layerMask & track->ReturnMaskLayer() ) == 0 )
             continue;
 
-        if( pos == Track->m_Start )
+        if( pos == track->m_Start )
         {
-            AddSegmentToDragList( panel, DC, STARTPOINT, Track );
-            g_DragSegmentList.back().m_Pad_Start = PtPad;
+            AddSegmentToDragList( panel, DC, STARTPOINT, track );
+            g_DragSegmentList.back().m_Pad_Start = aPad;
         }
 
-        if( pos == Track->m_End )
+        if( pos == track->m_End )
         {
-            AddSegmentToDragList( panel, DC, ENDPOINT, Track );
-            g_DragSegmentList.back().m_Pad_End = PtPad;
+            AddSegmentToDragList( panel, DC, ENDPOINT, track );
+            g_DragSegmentList.back().m_Pad_End = aPad;
         }
     }
 }

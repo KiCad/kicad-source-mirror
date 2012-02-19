@@ -71,7 +71,7 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     m_canvas->DrawBackGround( DC );
     TraceWorkSheet( DC, screen, 0 );
 
-    /* Redraw the footprints */
+    // Redraw the footprints
     for( MODULE* module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
         module->Draw( m_canvas, DC, GR_OR );
@@ -89,7 +89,7 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-    /* Redraw the cursor */
+    // Redraw the cursor
     m_canvas->DrawCrossHair( DC );
 }
 
@@ -130,7 +130,7 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/* Redraw the BOARD items but not cursors, axis or grid */
+// Redraw the BOARD items but not cursors, axis or grid
 void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint& offset )
 {
     /* The order of drawing is flexible on some systems and not on others.  For
@@ -178,7 +178,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
         }
     }
 
-    /* Draw areas (i.e. zones) */
+    // Draw areas (i.e. zones)
     for( int ii = 0; ii < GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = GetArea(ii);
@@ -280,21 +280,19 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
  * and we want to see pad through.
  * The pads must appear on the layers selected in LayerMask
  */
-void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
-                      int ox, int oy, int LayerMask, int draw_mode )
+void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule,
+                      int ox, int oy, int aLayerMask, int draw_mode )
 {
-    int             tmp;
-    PCB_BASE_FRAME* frame;
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
 
-    frame  = (PCB_BASE_FRAME*) panel->GetParent();
+    int tmp = frame->m_DisplayPadFill;
 
-    tmp = frame->m_DisplayPadFill;
     frame->m_DisplayPadFill = false;
 
-    /* Draw pads. */
-    for( D_PAD* pad = Module->m_Pads;  pad;  pad = pad->Next() )
+    // Draw pads.
+    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( (pad->m_layerMask & LayerMask) == 0 )
+        if( (pad->GetLayerMask() & aLayerMask) == 0 )
             continue;
 
         pad->Draw( panel, DC, draw_mode, wxPoint( ox, oy ) );

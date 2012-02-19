@@ -61,7 +61,7 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
 
     m_LastSelected3DShapeIndex = -1;
 
-    /* Init 3D shape list */
+    // Init 3D shape list
     S3D_MASTER* draw3D = m_CurrentModule->m_3D_Drawings;
 
     while( draw3D )
@@ -97,7 +97,7 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
                                         "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)" ) );
 #endif
 
-    /* Controls on right side of the dialog */
+    // Controls on right side of the dialog
     switch( m_CurrentModule->m_Attributs & 255 )
     {
     case 0:
@@ -154,13 +154,13 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
                           m_CurrentModule->m_LocalSolderMaskMargin, internalUnit );
     // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
-                          m_CurrentModule->m_LocalSolderPasteMargin, internalUnit );
-    if( m_CurrentModule->m_LocalSolderPasteMargin == 0 )
+                          m_CurrentModule->GetLocalSolderPasteMargin(), internalUnit );
+    if( m_CurrentModule->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT("-") + m_SolderPasteMarginCtrl->GetValue() );
-    if( m_CurrentModule->m_LocalSolderPasteMarginRatio == 0.0 )
-        msg.Printf( wxT( "-%.1f" ), m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
+    if( m_CurrentModule->GetLocalSolderPasteMarginRatio() == 0.0 )
+        msg.Printf( wxT( "-%.1f" ), m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
     else
-        msg.Printf( wxT( "%.1f" ), m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
+        msg.Printf( wxT( "%.1f" ), m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
     m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
     // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape
@@ -369,21 +369,26 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     // Initialize masks clearances
     int internalUnit = m_Parent->GetInternalUnits();
-    m_CurrentModule->m_LocalClearance =
-        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, internalUnit );
-    m_CurrentModule->m_LocalSolderMaskMargin =
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, internalUnit );
-    m_CurrentModule->m_LocalSolderPasteMargin =
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, internalUnit );
+
+    m_CurrentModule->SetLocalClearance(
+        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, internalUnit ) );
+
+    m_CurrentModule->SetLocalSolderMaskMargin(
+        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, internalUnit ) );
+
+    m_CurrentModule->SetLocalSolderPasteMargin(
+        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, internalUnit ) );
     double   dtmp;
     wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
+
     // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50 %
     if( dtmp < -50 )
         dtmp = -50;
-    m_CurrentModule->m_LocalSolderPasteMarginRatio = dtmp / 100;
 
-    /* Update 3D shape list */
+    m_CurrentModule->SetLocalSolderPasteMarginRatio( dtmp / 100 );
+
+    // Update 3D shape list
     int ii = m_3D_ShapeNameListBox->GetSelection();
     if ( ii >= 0 )
         TransfertDisplayTo3DValues( ii  );

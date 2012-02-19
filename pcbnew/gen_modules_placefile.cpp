@@ -312,7 +312,7 @@ static bool HasNonSMDPins( MODULE* aModule )
 
     for( pad = aModule->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( pad->m_Attribut != PAD_SMD )
+        if( pad->GetAttribute() != PAD_SMD )
             return true;
     }
 
@@ -630,37 +630,42 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
         {
             fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
             sprintf( line, "position %9.6f %9.6f\n",
-                     pad->m_Pos0.x * conv_unit,
-                     pad->m_Pos0.y * conv_unit );
+                     pad->GetPos0().x * conv_unit,
+                     pad->GetPos0().y * conv_unit );
             fputs( line, rptfile );
 
             sprintf( line, "size %9.6f %9.6f\n",
-                     pad->m_Size.x * conv_unit,
-                     pad->m_Size.y * conv_unit );
+                     pad->GetSize().x * conv_unit,
+                     pad->GetSize().y * conv_unit );
             fputs( line, rptfile );
-            sprintf( line, "drill %9.6f\n", pad->m_Drill.x * conv_unit );
+
+            sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
             fputs( line, rptfile );
+
             sprintf( line, "shape_offset %9.6f %9.6f\n",
-                     pad->m_Offset.x * conv_unit,
-                     pad->m_Offset.y * conv_unit );
+                     pad->GetOffset().x * conv_unit,
+                     pad->GetOffset().y * conv_unit );
             fputs( line, rptfile );
 
             sprintf( line, "orientation  %.2f\n",
-                     double(pad->m_Orient - Module->m_Orient) / 10 );
+                     double(pad->GetOrientation() - Module->GetOrientation()) / 10 );
             fputs( line, rptfile );
-            const char* shape_name[6] = { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
-            sprintf( line, "Shape  %s\n", shape_name[pad->m_PadShape] );
+
+            static const char* shape_name[6] = { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
+
+            sprintf( line, "Shape  %s\n", shape_name[pad->GetShape()] );
             fputs( line, rptfile );
 
             int layer = 0;
 
-            if( pad->m_layerMask & LAYER_BACK )
+            if( pad->GetLayerMask() & LAYER_BACK )
                 layer = 1;
 
-            if( pad->m_layerMask & LAYER_FRONT )
+            if( pad->GetLayerMask() & LAYER_FRONT )
                 layer |= 2;
 
-            const char* layer_name[4] = { "??? ", "copper", "component", "all" };
+            static const char* layer_name[4] = { "??? ", "copper", "component", "all" };
+
             sprintf( line, "Layer  %s\n", layer_name[layer] );
             fputs( line, rptfile );
             fprintf( rptfile, "$EndPAD\n" );

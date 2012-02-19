@@ -5,25 +5,36 @@
 #ifndef PAD_SHAPES_H_
 #define PAD_SHAPES_H_
 
-/* Pad shape id : ( .m_PadShape member) */
-#define	PAD_NONE        0
-#define PAD_CIRCLE      1
-#define PAD_ROUND       PAD_CIRCLE
-#define PAD_RECT        2
-#define PAD_OVAL        3
-#define PAD_TRAPEZOID   4       // trapezoid
-#define PAD_RRECT       5
-#define PAD_OCTAGON     6
-#define PAD_SQUARE      7
+/**
+ * Enum PAD_SHAPE_T
+ * is the set of pad shapes, used with D_PAD::{Set,Get}Shape()
+ */
+enum PAD_SHAPE_T
+{
+    PAD_NONE,
+    PAD_CIRCLE,
+    PAD_ROUND = PAD_CIRCLE,
+    PAD_RECT,
+    PAD_OVAL,
+    PAD_TRAPEZOID,
+    PAD_RRECT,
+    PAD_OCTAGON,
+    PAD_SQUARE,
+};
 
 
-/* PADS attributes */
-#define PAD_STANDARD    0       // Usual pad
-#define PAD_SMD         1       // Smd pad, appears on the solder paste layer (default)
-#define PAD_CONN        2       // Like smd, does not appear on the solder paste layer (default)
-#define PAD_HOLE_NOT_PLATED 3   // like PAD_STANDARD, but not plated
-                                // mechanical used only
-                                // no connection allowed
+/**
+ * Enum PAD_ATTR_T
+ * is the set of pad shapes, used with D_PAD::{Set,Get}Attribute()
+ */
+enum PAD_ATTR_T
+{
+    PAD_STANDARD,           ///< Usual pad
+    PAD_SMD,                ///< Smd pad, appears on the solder paste layer (default)
+    PAD_CONN,               ///< Like smd, does not appear on the solder paste layer (default)
+    PAD_HOLE_NOT_PLATED,    ///< like PAD_STANDARD, but not plated
+                            ///< mechanical use only, no connection allowed
+};
 
 
-#endif  /* #ifndef PAD_SHAPES_H_ */
+#endif  // PAD_SHAPES_H_
