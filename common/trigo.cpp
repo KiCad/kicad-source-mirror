@@ -273,19 +273,6 @@ void RotatePoint( int* pX, int* pY, int cx, int cy, double angle )
 }
 
 
-void RotatePoint( wxPoint* point, double angle )
-{
-    int ox, oy;
-
-    ox = point->x;
-    oy = point->y;
-
-    RotatePoint( &ox, &oy, angle );
-    point->x = ox;
-    point->y = oy;
-}
-
-
 void RotatePoint( wxPoint* point, const wxPoint& centre, double angle )
 {
     int ox, oy;

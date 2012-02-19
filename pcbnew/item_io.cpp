@@ -40,7 +40,7 @@
 #include <pcbnew.h>
 #include <drawtxt.h>
 
-#define MAX_WIDTH 10000  /* Thickness (in 1 / 10000 ") of maximum reasonable features, text... */
+#define MAX_WIDTH 10000  // Thickness (in 1 / 10000 ") of maximum reasonable features, text...
 
 
 #if 1 || !defined(USE_NEW_PCBNEW_SAVE)
@@ -678,7 +678,7 @@ bool D_PAD::Save( FILE* aFile ) const
 
     fprintf( aFile, "\n" );
 
-    switch( m_Attribut )
+    switch( GetAttribute() )
     {
     case PAD_STANDARD:
         texttype = "STD"; break;
@@ -704,20 +704,20 @@ bool D_PAD::Save( FILE* aFile ) const
 
     fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
 
-    if( m_LengthDie != 0 )
-        fprintf( aFile, "Le %d\n", m_LengthDie );
+    if( GetDieLength() != 0 )
+        fprintf( aFile, "Le %d\n", GetDieLength() );
 
-    if( m_LocalSolderMaskMargin != 0 )
-        fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
+    if( GetLocalSolderMaskMargin() != 0 )
+        fprintf( aFile, ".SolderMask %d\n", GetLocalSolderMaskMargin() );
 
-    if( m_LocalSolderPasteMargin != 0 )
-        fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+    if( GetLocalSolderPasteMargin() != 0 )
+        fprintf( aFile, ".SolderPaste %d\n", GetLocalSolderPasteMargin() );
 
-    if( m_LocalSolderPasteMarginRatio != 0 )
-        fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
+    if( GetLocalSolderPasteMarginRatio() != 0 )
+        fprintf( aFile, ".SolderPasteRatio %g\n", GetLocalSolderPasteMarginRatio() );
 
-    if( m_LocalClearance != 0 )
-        fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
+    if( GetLocalClearance() != 0 )
+        fprintf( aFile, ".LocalClearance %d\n", GetLocalClearance() );
 
     if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
         return false;
@@ -767,17 +767,17 @@ bool MODULE::Save( FILE* aFile ) const
     fprintf( aFile, "AR %s\n", TO_UTF8( m_Path ) );
     fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
 
-    if( m_LocalSolderMaskMargin != 0 )
-        fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
+    if( GetLocalSolderMaskMargin() != 0 )
+        fprintf( aFile, ".SolderMask %d\n", GetLocalSolderMaskMargin() );
 
     if( m_LocalSolderPasteMargin != 0 )
-        fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+        fprintf( aFile, ".SolderPaste %d\n", GetLocalSolderPasteMargin() );
 
-    if( m_LocalSolderPasteMarginRatio != 0 )
-        fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
+    if( GetLocalSolderPasteMarginRatio() != 0 )
+        fprintf( aFile, ".SolderPasteRatio %g\n", GetLocalSolderPasteMarginRatio() );
 
     if( m_LocalClearance != 0 )
-        fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
+        fprintf( aFile, ".LocalClearance %d\n", GetLocalClearance() );
 
     // attributes
     if( m_Attributs != MOD_DEFAULT )
@@ -892,10 +892,10 @@ int MODULE::Write_3D_Descr( FILE* File ) const
  */
 int D_PAD::ReadDescr( LINE_READER* aReader )
 {
-    char* Line;
-    char  BufLine[1024], BufCar[256];
-    char* PtLine;
-    int   nn, ll, dx, dy;
+    char*   Line;
+    char    BufLine[1024], BufCar[256];
+    char*   PtLine;
+    int     nn, ll, dx, dy;
 
     while( aReader->ReadLine() )
     {
@@ -911,7 +911,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
         switch( Line[0] )
         {
         case 'S': // = Sh
-            /* Read pad name */
+            // Read pad name
             nn = 0;
 
             while( (*PtLine != '"') && *PtLine )
@@ -944,25 +944,19 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
 
             ll = 0xFF & BufCar[0];
 
-            /* Read pad shape */
-            m_PadShape = PAD_CIRCLE;
+            // Read pad shape
+            PAD_SHAPE_T shape;
 
             switch( ll )
             {
-            case 'C':
-                m_PadShape = PAD_CIRCLE; break;
-
-            case 'R':
-                m_PadShape = PAD_RECT; break;
-
-            case 'O':
-                m_PadShape = PAD_OVAL; break;
-
-            case 'T':
-                m_PadShape = PAD_TRAPEZOID; break;
+            default:
+            case 'C':   shape = PAD_CIRCLE;     break;
+            case 'R':   shape = PAD_RECT;       break;
+            case 'O':   shape = PAD_OVAL;       break;
+            case 'T':   shape = PAD_TRAPEZOID;  break;
             }
 
-            ComputeShapeMaxRadius();
+            SetShape( shape );  // sets m_boundingRadius = -1
             break;
 
         case 'D':
@@ -976,7 +970,9 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             {
                 if( BufCar[0] == 'O' )
                 {
-                    m_Drill.x    = dx; m_Drill.y = dy;
+                    m_Drill.x = dx;
+                    m_Drill.y = dy;
+
                     m_DrillShape = PAD_OVAL;
                 }
             }
@@ -987,25 +983,25 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             nn = sscanf( PtLine, "%s %s %X", BufLine, BufCar,
                          &m_layerMask );
 
-            /* BufCar is not used now update attributes */
-            m_Attribut = PAD_STANDARD;
+            // BufCar is not used now update attributes
+            SetAttribute( PAD_STANDARD );
             if( strncmp( BufLine, "SMD", 3 ) == 0 )
-                m_Attribut = PAD_SMD;
+                SetAttribute( PAD_SMD );
 
             if( strncmp( BufLine, "CONN", 4 ) == 0 )
-                m_Attribut = PAD_CONN;
+                SetAttribute( PAD_CONN );
 
             if( strncmp( BufLine, "HOLE", 4 ) == 0 )
-                m_Attribut = PAD_HOLE_NOT_PLATED;
+                SetAttribute( PAD_HOLE_NOT_PLATED );
 
             break;
 
-        case 'N':       /* Read Netname */
+        case 'N':       // Read Netname
             int netcode;
             nn = sscanf( PtLine, "%d", &netcode );
             SetNet( netcode );
 
-            /* read Netname */
+            // read Netname
             ReadDelimitedText( BufLine, PtLine, sizeof(BufLine) );
             SetNetname( FROM_UTF8( StrPurge( BufLine ) ) );
         break;
@@ -1018,18 +1014,18 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
         case 'L':
             int lengthdie;
             nn    = sscanf( PtLine, "%d", &lengthdie );
-            m_LengthDie = lengthdie;
+            SetDieLength( lengthdie );
             break;
 
-        case '.':    /* Read specific data */
+        case '.':    // Read specific data
             if( strnicmp( Line, ".SolderMask ", 12 ) == 0 )
-                m_LocalSolderMaskMargin = atoi( Line + 12 );
+                SetLocalSolderMaskMargin( atoi( Line + 12 ) );
             else if( strnicmp( Line, ".SolderPaste ", 13 )  == 0 )
-                m_LocalSolderPasteMargin = atoi( Line + 13 );
+                SetLocalSolderPasteMargin( atoi( Line + 13 ) );
             else if( strnicmp( Line, ".SolderPasteRatio ", 18 ) == 0 )
-                m_LocalSolderPasteMarginRatio = atoi( Line + 18 );
+                SetLocalSolderPasteMarginRatio( atoi( Line + 18 ) );
             else if( strnicmp( Line, ".LocalClearance ", 16 ) == 0 )
-                m_LocalClearance = atoi( Line + 16 );
+                SetLocalClearance( atoi( Line + 16 ) );
             break;
 
         default:
@@ -1038,7 +1034,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
         }
     }
 
-    return 2;   /* error : EOF */
+    return 2;   // error : EOF
 }
 
 
@@ -1133,10 +1129,14 @@ int MODULE::ReadDescr( LINE_READER* aReader )
             if( Line[1] == 'P' )
             {
                 D_PAD* pad = new D_PAD( this );
+
                 pad->ReadDescr( aReader );
-                RotatePoint( &pad->m_Pos, m_Orient );
-                pad->m_Pos.x += m_Pos.x;
-                pad->m_Pos.y += m_Pos.y;
+
+                wxPoint padpos = pad->GetPosition();
+
+                RotatePoint( &padpos, m_Orient );
+
+                pad->SetPosition( padpos + m_Pos );
 
                 m_Pads.PushBack( pad );
                 continue;
@@ -1176,7 +1176,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
 
             break;
 
-        case 'L':       /* Li = read the library name of the footprint */
+        case 'L':       // Li = read the library name of the footprint
             *BufLine = 0;
             sscanf( PtLine, " %s", BufLine );
             m_LibRef = FROM_UTF8( BufLine );
@@ -1187,7 +1187,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
             break;
 
 
-        case 'O':       /* (Op)tions for auto placement */
+        case 'O':       // (Op)tions for auto placement
             itmp1 = itmp2 = 0;
             sscanf( PtLine, " %X %X", &itmp1, &itmp2 );
 
@@ -1212,7 +1212,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
         case 'A':
             if( Line[1] == 't' )
             {
-                /* At = (At)tributes of module */
+                // At = (At)tributes of module
                 if( strstr( PtLine, "SMD" ) )
                     m_Attributs |= MOD_CMS;
 
@@ -1238,7 +1238,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
                 textm = m_Reference;
             else if( itmp1 == TEXT_is_VALUE )
                 textm = m_Value;
-            else        /* text is a drawing */
+            else        // text is a drawing
             {
                 textm = new TEXTE_MODULE( this );
                 m_Drawings.PushBack( textm );
@@ -1246,7 +1246,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
             textm->ReadDescr( aReader );
             break;
 
-        case 'D':    /* read a drawing item */
+        case 'D':    // read a drawing item
             EDGE_MODULE * edge;
             edge = new EDGE_MODULE( this );
             m_Drawings.PushBack( edge );
@@ -1254,23 +1254,23 @@ int MODULE::ReadDescr( LINE_READER* aReader )
             edge->SetDrawCoord();
             break;
 
-        case 'C':    /* read documentation data */
+        case 'C':    // read documentation data
             m_Doc = FROM_UTF8( StrPurge( PtLine ) );
             break;
 
-        case 'K':    /* Read key words */
+        case 'K':    // Read key words
             m_KeyWord = FROM_UTF8( StrPurge( PtLine ) );
             break;
 
-        case '.':    /* Read specific data */
+        case '.':    // Read specific data
             if( strnicmp( Line, ".SolderMask ", 12 ) == 0 )
-                m_LocalSolderMaskMargin = atoi( Line + 12 );
+                SetLocalSolderMaskMargin( atoi( Line + 12 ) );
             else if( strnicmp( Line, ".SolderPaste ", 13 )  == 0 )
-                m_LocalSolderPasteMargin = atoi( Line + 13 );
+                SetLocalSolderPasteMargin( atoi( Line + 13 ) );
             else if( strnicmp( Line, ".SolderPasteRatio ", 18 ) == 0 )
-                m_LocalSolderPasteMarginRatio = atof( Line + 18 );
+                SetLocalSolderPasteMarginRatio( atof( Line + 18 ) );
             else if( strnicmp( Line, ".LocalClearance ", 16 ) == 0 )
-                m_LocalClearance = atoi( Line + 16 );
+                SetLocalClearance( atoi( Line + 16 ) );
 
             break;
 
@@ -1279,7 +1279,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
         }
     }
 
-    /* Recalculate the bounding box */
+    // Recalculate the bounding box
     CalculateBoundingBox();
     return 0;
 }
@@ -1555,7 +1555,7 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( LINE_READER* aReader )
         Line = aReader->Line();
 
         if( strnicmp( Line, "$End", 4 ) == 0 )
-            return true; /* End of description */
+            return true; // End of description
 
         if( Line[0] == 'P' )
         {
@@ -1595,7 +1595,7 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( LINE_READER* aReader )
                 case 4:
                     sscanf( token,"%X",&status );
                     break;
-                    /* Bezier Control Points*/
+                    // Bezier Control Points
                 case 5:
                     sscanf( token,"%d",&m_BezierC1.x );
                     break;
@@ -1794,7 +1794,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
                     break;
                 }
             }
-            /* Set hatch mode later, after reading outlines corners data */
+            // Set hatch mode later, after reading outlines corners data
         }
 
         else if( strnicmp( Line, "ZPriority", 9 ) == 0 )
@@ -1950,7 +1950,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
         SetNet( 0 );
     }
 
-    /* Set hatch here, when outlines corners are read */
+    // Set hatch here, when outlines corners are read
     m_Poly->SetHatch( outline_hatch );
 
     return error ? 0 : 1;
@@ -2065,13 +2065,13 @@ int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
         line = aReader->Line();
         if( strnicmp( line, "$EndTEXTPCB", 11 ) == 0 )
             return 0;
-        if( strncmp( line, "Te", 2 ) == 0 ) /* Text line (first line for multi line texts */
+        if( strncmp( line, "Te", 2 ) == 0 ) // Text line (first line for multi line texts
         {
             ReadDelimitedText( text, line + 2, sizeof(text) );
             m_Text = FROM_UTF8( text );
             continue;
         }
-        if( strncmp( line, "nl", 2 ) == 0 ) /* next line of the current text */
+        if( strncmp( line, "nl", 2 ) == 0 ) // next line of the current text
         {
             ReadDelimitedText( text, line + 2, sizeof(text) );
             m_Text.Append( '\n' );

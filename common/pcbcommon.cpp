@@ -108,4 +108,3 @@ int    g_PadCMPColor        = RED;
  */
 DLIST<TRACK> g_CurrentTrackList;
 
-D_PAD g_Pad_Master( (MODULE*) NULL );

@@ -174,8 +174,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
 
     m_MicroViaDrillValue->Enable( m_microViasCount );
 
-    /* Count plated pad holes and not plated pad holes:
-     */
+    // Count plated pad holes and not plated pad holes:
     m_platedPadsHoleCount    = 0;
     m_notplatedPadsHoleCount = 0;
 
@@ -183,11 +182,11 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
-            if( pad->m_DrillShape == PAD_CIRCLE )
+            if( pad->GetDrillShape() == PAD_CIRCLE )
             {
-                if( pad->m_Drill.x != 0 )
+                if( pad->GetDrillSize().x != 0 )
                 {
-                    if( pad->m_Attribut == PAD_HOLE_NOT_PLATED )
+                    if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
                         m_notplatedPadsHoleCount++;
                     else
                         m_platedPadsHoleCount++;
@@ -195,9 +194,9 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
             }
             else
             {
-                if( min( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
+                if( min( pad->GetDrillSize().x, pad->GetDrillSize().y ) != 0 )
                 {
-                    if( pad->m_Attribut == PAD_HOLE_NOT_PLATED )
+                    if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
                         m_notplatedPadsHoleCount++;
                     else
                         m_platedPadsHoleCount++;
@@ -229,7 +228,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
 }
 
 
-/* Save drill options: */
+// Save drill options:
 void DIALOG_GENDRILL::UpdateConfig()
 {
     SetParams();
@@ -275,7 +274,7 @@ void DIALOG_GENDRILL::OnOkClick( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::OnCancelClick( wxCommandEvent& event )
 {
-    UpdateConfig();                 /* Save drill options: */
+    UpdateConfig();                 // Save drill options:
     EndModal( wxID_CANCEL );        // Process the default cancel event (close dialog)
 }
 
@@ -294,13 +293,13 @@ void DIALOG_GENDRILL::UpdatePrecisionOptions()
 {
     if( m_Choice_Unit->GetSelection()== 1 )     // Units = inches
     {
-        /* inch options   */
+        // inch options
         m_Choice_Precision->SetString( 0, precisionListForInches[0].GetPrecisionString() );
         m_Choice_Precision->SetString( 1, precisionListForInches[1].GetPrecisionString() );
     }
     else
     {
-        /* metric options */
+        // metric options
         m_Choice_Precision->SetString( 0, precisionListForMetric[0].GetPrecisionString() );
         m_Choice_Precision->SetString( 1, precisionListForMetric[1].GetPrecisionString() );
     }

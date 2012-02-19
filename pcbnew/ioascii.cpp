@@ -334,6 +334,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
     NETCLASS* netclass_default = GetBoard()->m_NetClasses.GetDefault();
     ZONE_SETTINGS zoneInfo = GetBoard()->GetZoneSettings();
+    BOARD_DESIGN_SETTINGS bds = GetBoard()->GetDesignSettings();
 
     while( aReader->ReadLine() )
     {
@@ -456,7 +457,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "TrackMinWidth" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_TrackMinWidth = atoi( data );
+            bds.m_TrackMinWidth = atoi( data );
             continue;
         }
 
@@ -468,13 +469,13 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "DrawSegmWidth" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_DrawSegmentWidth = atoi( data );
+            bds.m_DrawSegmentWidth = atoi( data );
             continue;
         }
 
         if( stricmp( line, "EdgeSegmWidth" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_EdgeSegmentWidth = atoi( data );
+            bds.m_EdgeSegmentWidth = atoi( data );
             continue;
         }
 
@@ -485,7 +486,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "ViaMinSize" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_ViasMinSize = atoi( data );
+            bds.m_ViasMinSize = atoi( data );
             continue;
         }
 
@@ -496,7 +497,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "MicroViaMinSize" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_MicroViasMinSize = atoi( data );
+            bds.m_MicroViasMinSize = atoi( data );
             continue;
         }
 
@@ -526,7 +527,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "ViaMinDrill" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_ViasMinDrill = atoi( data );
+            bds.m_ViasMinDrill = atoi( data );
             continue;
         }
 
@@ -540,80 +541,81 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
         if( stricmp( line, "MicroViaMinDrill" ) == 0 )
         {
             int diameter = atoi( data );
-            GetBoard()->GetDesignSettings().m_MicroViasMinDrill = diameter;
+            bds.m_MicroViasMinDrill = diameter;
             continue;
         }
 
         if( stricmp( line, "MicroViasAllowed" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_MicroViasAllowed = atoi( data );
+            bds.m_MicroViasAllowed = atoi( data );
             continue;
         }
 
         if( stricmp( line, "TextPcbWidth" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_PcbTextWidth = atoi( data );
+            bds.m_PcbTextWidth = atoi( data );
             continue;
         }
 
         if( stricmp( line, "TextPcbSize" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_PcbTextSize.x = atoi( data );
+            bds.m_PcbTextSize.x = atoi( data );
             data = strtok( NULL, delims );
-            GetBoard()->GetDesignSettings().m_PcbTextSize.y = atoi( data );
+            bds.m_PcbTextSize.y = atoi( data );
             continue;
         }
 
         if( stricmp( line, "EdgeModWidth" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_ModuleSegmentWidth = atoi( data );
+            bds.m_ModuleSegmentWidth = atoi( data );
             continue;
         }
 
         if( stricmp( line, "TextModWidth" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_ModuleTextWidth = atoi( data );
+            bds.m_ModuleTextWidth = atoi( data );
             continue;
         }
 
         if( stricmp( line, "TextModSize" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_ModuleTextSize.x = atoi( data );
+            bds.m_ModuleTextSize.x = atoi( data );
             data = strtok( NULL, delims );
-            GetBoard()->GetDesignSettings().m_ModuleTextSize.y = atoi( data );
+            bds.m_ModuleTextSize.y = atoi( data );
             continue;
         }
 
         if( stricmp( line, "PadSize" ) == 0 )
         {
-            g_Pad_Master.m_Size.x = atoi( data );
+            int x = atoi( data );
             data = strtok( NULL, delims );
-            g_Pad_Master.m_Size.y = atoi( data );
+            int y = atoi( data );
+            bds.m_Pad_Master.SetSize( wxSize( x, y ) );
             continue;
         }
 
         if( stricmp( line, "PadDrill" ) == 0 )
         {
-            g_Pad_Master.m_Drill.x = atoi( data );
-            g_Pad_Master.m_Drill.y = g_Pad_Master.m_Drill.x;
+            int sz = atoi( data );
+            bds.m_Pad_Master.SetSize( wxSize( sz, sz ) );
             continue;
         }
 
         if( stricmp( line, "Pad2MaskClearance" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_SolderMaskMargin = atoi( data );
+            bds.m_SolderMaskMargin = atoi( data );
             continue;
         }
 
         if( stricmp( line, "Pad2PasteClearance" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_SolderPasteMargin = atoi( data );
+            bds.m_SolderPasteMargin = atoi( data );
             continue;
         }
 
         if( stricmp( line, "Pad2PasteClearanceRatio" ) == 0 )
         {
-            GetBoard()->GetDesignSettings().m_SolderPasteMarginRatio = atof( data );
+            bds.m_SolderPasteMarginRatio = atof( data );
             continue;
         }
 
@@ -670,6 +672,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
 static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
 {
+    const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
     NETCLASS* netclass_default = aBoard->m_NetClasses.GetDefault();
     char      text[1024];
 
@@ -701,16 +704,16 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
 
     fprintf( aFile, "TrackClearence %d\n", netclass_default->GetClearance() );
     fprintf( aFile, "ZoneClearence %d\n", aBoard->GetZoneSettings().m_ZoneClearance );
-    fprintf( aFile, "TrackMinWidth %d\n", aBoard->GetDesignSettings().m_TrackMinWidth );
+    fprintf( aFile, "TrackMinWidth %d\n", bds.m_TrackMinWidth );
 
-    fprintf( aFile, "DrawSegmWidth %d\n", aBoard->GetDesignSettings().m_DrawSegmentWidth );
-    fprintf( aFile, "EdgeSegmWidth %d\n", aBoard->GetDesignSettings().m_EdgeSegmentWidth );
+    fprintf( aFile, "DrawSegmWidth %d\n", bds.m_DrawSegmentWidth );
+    fprintf( aFile, "EdgeSegmWidth %d\n", bds.m_EdgeSegmentWidth );
 
     // Save current default via size, for compatibility with older Pcbnew version;
     fprintf( aFile, "ViaSize %d\n", netclass_default->GetViaDiameter() );
     fprintf( aFile, "ViaDrill %d\n", netclass_default->GetViaDrill() );
-    fprintf( aFile, "ViaMinSize %d\n", aBoard->GetDesignSettings().m_ViasMinSize );
-    fprintf( aFile, "ViaMinDrill %d\n", aBoard->GetDesignSettings().m_ViasMinDrill );
+    fprintf( aFile, "ViaMinSize %d\n", bds.m_ViasMinSize );
+    fprintf( aFile, "ViaMinDrill %d\n", bds.m_ViasMinDrill );
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
@@ -724,38 +727,41 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
     fprintf( aFile, "MicroViaDrill %d\n", netclass_default->GetuViaDrill() );
     fprintf( aFile,
              "MicroViasAllowed %d\n",
-             aBoard->GetDesignSettings().m_MicroViasAllowed );
+             bds.m_MicroViasAllowed );
     fprintf( aFile,
              "MicroViaMinSize %d\n",
-             aBoard->GetDesignSettings().m_MicroViasMinSize );
+             bds.m_MicroViasMinSize );
     fprintf( aFile,
              "MicroViaMinDrill %d\n",
-             aBoard->GetDesignSettings().m_MicroViasMinDrill );
+             bds.m_MicroViasMinDrill );
 
-    fprintf( aFile, "TextPcbWidth %d\n", aBoard->GetDesignSettings().m_PcbTextWidth );
+    fprintf( aFile, "TextPcbWidth %d\n", bds.m_PcbTextWidth );
     fprintf( aFile,
              "TextPcbSize %d %d\n",
-             aBoard->GetDesignSettings().m_PcbTextSize.x,
-             aBoard->GetDesignSettings().m_PcbTextSize.y );
+             bds.m_PcbTextSize.x,
+             bds.m_PcbTextSize.y );
 
-    fprintf( aFile, "EdgeModWidth %d\n", aBoard->GetDesignSettings().m_ModuleSegmentWidth );
-    fprintf( aFile, "TextModSize %d %d\n", aBoard->GetDesignSettings().m_ModuleTextSize.x, aBoard->GetDesignSettings().m_ModuleTextSize.y );
-    fprintf( aFile, "TextModWidth %d\n", aBoard->GetDesignSettings().m_ModuleTextWidth );
-    fprintf( aFile, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
-    fprintf( aFile, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
+    fprintf( aFile, "EdgeModWidth %d\n", bds.m_ModuleSegmentWidth );
+    fprintf( aFile, "TextModSize %d %d\n", bds.m_ModuleTextSize.x, bds.m_ModuleTextSize.y );
+    fprintf( aFile, "TextModWidth %d\n", bds.m_ModuleTextWidth );
+
+    fprintf( aFile, "PadSize %d %d\n", bds.m_Pad_Master.GetSize().x,
+                                       bds.m_Pad_Master.GetSize().y );
+
+    fprintf( aFile, "PadDrill %d\n", bds.m_Pad_Master.GetDrillSize().x );
     fprintf( aFile,
              "Pad2MaskClearance %d\n",
-             aBoard->GetDesignSettings().m_SolderMaskMargin );
+             bds.m_SolderMaskMargin );
 
-    if( aBoard->GetDesignSettings().m_SolderPasteMargin != 0 )
+    if( bds.m_SolderPasteMargin != 0 )
         fprintf( aFile,
                  "Pad2PasteClearance %d\n",
-                 aBoard->GetDesignSettings().m_SolderPasteMargin );
+                 bds.m_SolderPasteMargin );
 
-    if( aBoard->GetDesignSettings().m_SolderPasteMarginRatio != 0 )
+    if( bds.m_SolderPasteMarginRatio != 0 )
         fprintf( aFile,
                  "Pad2PasteClearanceRatio %g\n",
-                 aBoard->GetDesignSettings().m_SolderPasteMarginRatio );
+                 bds.m_SolderPasteMarginRatio );
 
     if ( aFrame->GetScreen()->m_GridOrigin != wxPoint( 0, 0 ) )
     {

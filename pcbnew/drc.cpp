@@ -422,9 +422,10 @@ void DRC::testPad2Pad()
     {
         D_PAD* pad = sortedPads[i];
 
-        // m_ShapeMaxRadius is the radius value of the circle containing the pad
-        if( pad->m_ShapeMaxRadius > max_size )
-            max_size = pad->m_ShapeMaxRadius;
+        // GetBoundingRadius() is the radius of the minimum sized circle fully containing the pad
+        int radius = pad->GetBoundingRadius();
+        if( radius > max_size )
+            max_size = radius;
     }
 
     // Test the pads
@@ -435,7 +436,7 @@ void DRC::testPad2Pad()
         D_PAD* pad = sortedPads[i];
 
         int    x_limit = max_size + pad->GetClearance() +
-                         pad->m_ShapeMaxRadius + pad->GetPosition().x;
+                         pad->GetBoundingRadius() + pad->GetPosition().x;
 
         if( !doPadToPadsDrc( pad, &sortedPads[i], listEnd, x_limit ) )
         {
@@ -559,7 +560,7 @@ void DRC::testZones()
 
 bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit )
 {
-    int layerMask = aRefPad->m_layerMask & ALL_CU_LAYERS;
+    int layerMask = aRefPad->GetLayerMask() & ALL_CU_LAYERS;
 
     /* used to test DRC pad to holes: this dummy pad has the size and shape of the hole
      * to test pad to pad hole DRC, using the pad to pad DRC test function.
@@ -569,12 +570,14 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
      */
     MODULE dummymodule( m_pcb );    // Creates a dummy parent
     D_PAD dummypad( &dummymodule );
-    dummypad.m_layerMask   |= ALL_CU_LAYERS;  // Ensure the hole is on all copper layers
-    dummypad.m_LocalClearance = 1;   /* Use the minimal local clearance value for the dummy pad
-                                      *  the clearance of the active pad will be used
-                                      *  as minimum distance to a hole
-                                      *  (a value = 0 means use netclass value)
-                                      */
+
+    // Ensure the hole is on all copper layers
+    dummypad.SetLayerMask( ALL_CU_LAYERS | dummypad.GetLayerMask() );
+
+    // Use the minimal local clearance value for the dummy pad.
+    // The clearance of the active pad will be used as minimum distance to a hole
+    // (a value = 0 means use netclass value)
+    dummypad.SetLocalClearance( 1 );
 
     for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
@@ -583,43 +586,40 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
         if( pad == aRefPad )
             continue;
 
-        // We can stop the test when pad->m_Pos.x > x_limit
+        // We can stop the test when pad->GetPosition().x > x_limit
         // because the list is sorted by X values
-        if( pad->m_Pos.x > x_limit )
+        if( pad->GetPosition().x > x_limit )
             break;
 
         // No problem if pads are on different copper layers,
         // but their hole (if any ) can create DRC error because they are on all
         // copper layers, so we test them
-        if( ( pad->m_layerMask & layerMask ) == 0 )
+        if( ( pad->GetLayerMask() & layerMask ) == 0 )
         {
             // if holes are in the same location and have the same size and shape,
             // this can be accepted
             if( pad->GetPosition() == aRefPad->GetPosition()
-                && pad->m_Drill == aRefPad->m_Drill
-                && pad->m_DrillShape == aRefPad->m_DrillShape )
+                && pad->GetDrillSize() == aRefPad->GetDrillSize()
+                && pad->GetDrillShape() == aRefPad->GetDrillShape() )
             {
-                if( aRefPad->m_DrillShape == PAD_CIRCLE )
+                if( aRefPad->GetDrillShape() == PAD_CIRCLE )
                     continue;
 
                 // for oval holes: must also have the same orientation
-                if( pad->m_Orient == aRefPad->m_Orient )
+                if( pad->GetOrientation() == aRefPad->GetOrientation() )
                     continue;
             }
 
             /* Here, we must test clearance between holes and pads
              * dummy pad size and shape is adjusted to pad drill size and shape
              */
-            if( pad->m_Drill.x )
+            if( pad->GetDrillSize().x )
             {
                 // pad under testing has a hole, test this hole against pad reference
                 dummypad.SetPosition( pad->GetPosition() );
-                dummypad.m_Size     = pad->m_Drill;
-                dummypad.m_PadShape = (pad->m_DrillShape == PAD_OVAL) ? PAD_OVAL : PAD_CIRCLE;
-                dummypad.m_Orient   = pad->m_Orient;
-
-                // compute the radius of the circle containing this pad
-                dummypad.ComputeShapeMaxRadius();
+                dummypad.SetSize( pad->GetDrillSize() );
+                dummypad.SetShape( pad->GetDrillShape() == PAD_OVAL ? PAD_OVAL : PAD_CIRCLE );
+                dummypad.SetOrientation( pad->GetOrientation() );
 
                 if( !checkClearancePadToPad( aRefPad, &dummypad ) )
                 {
@@ -630,15 +630,12 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                 }
             }
 
-            if( aRefPad->m_Drill.x ) // pad reference has a hole
+            if( aRefPad->GetDrillSize().x ) // pad reference has a hole
             {
                 dummypad.SetPosition( aRefPad->GetPosition() );
-                dummypad.m_Size     = aRefPad->m_Drill;
-                dummypad.m_PadShape = (aRefPad->m_DrillShape == PAD_OVAL) ? PAD_OVAL : PAD_CIRCLE;
-                dummypad.m_Orient   = aRefPad->m_Orient;
-
-                // compute the radius of the circle containing this pad
-                dummypad.ComputeShapeMaxRadius();
+                dummypad.SetSize( aRefPad->GetDrillSize() );
+                dummypad.SetShape( aRefPad->GetDrillShape() == PAD_OVAL ? PAD_OVAL : PAD_CIRCLE );
+                dummypad.SetOrientation( aRefPad->GetOrientation() );
 
                 if( !checkClearancePadToPad( pad, &dummypad ) )
                 {
@@ -651,7 +648,6 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
             continue;
         }
-
 
         // The pad must be in a net (i.e pt_pad->GetNet() != 0 ),
         // But no problem if pads have the same netcode (same net)

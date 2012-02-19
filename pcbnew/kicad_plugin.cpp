@@ -755,18 +755,14 @@ void KICAD_PLUGIN::loadSETUP()
         {
             BIU x = biuParse( line + SZ( "PadSize" ), &data );
             BIU y = biuParse( data );
-            /* @todo
-            g_Pad_Master.m_Size = wxSize( x, y );
-            */
+
+            bds.m_Pad_Master.SetSize( wxSize( x, y ) );
         }
 
         else if( TESTLINE( "PadDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "PadDrill" ) );
-            /* @todo
-            g_Pad_Master.m_Drill.x( tmp );
-            g_Pad_Master.m_Drill.y( tmp );
-            */
+            bds.m_Pad_Master.SetDrillSize( wxSize( tmp, tmp ) );
         }
 
         else if( TESTLINE( "Pad2MaskClearance" ) )
@@ -1102,11 +1098,10 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
             // chances are both were ASCII, but why take chances?
 
             pad->SetPadName( padname );
-            pad->SetShape( padshape );
+            pad->SetShape( PAD_SHAPE_T( padshape ) );
             pad->SetSize( wxSize( size_x, size_y ) );
             pad->SetDelta( wxSize( delta_x, delta_y ) );
             pad->SetOrientation( orient );
-            pad->ComputeShapeMaxRadius();
         }
 
         else if( TESTLINE( "Dr" ) )         // (Dr)ill
@@ -1118,7 +1113,8 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
             BIU drill_y = drill_x;
             BIU offs_x  = biuParse( data, &data );
             BIU offs_y  = biuParse( data, &data );
-            int drShape = PAD_CIRCLE;
+
+            PAD_SHAPE_T drShape = PAD_CIRCLE;
 
             data = strtok( (char*) data, delims );
             if( data )  // optional shape
@@ -1136,7 +1132,7 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
             }
 
             pad->SetDrillShape( drShape );
-            pad->SetOffset( wxSize( offs_x, offs_y ) );
+            pad->SetOffset( wxPoint( offs_x, offs_y ) );
             pad->SetDrillSize( wxSize( drill_x, drill_y ) );
         }
 
@@ -1145,8 +1141,8 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
             // e.g. "At SMD N 00888000"
             // sscanf( PtLine, "%s %s %X", BufLine, BufCar, &m_layerMask );
 
-            int attribute;
-            int layer_mask;
+            PAD_ATTR_T  attribute;
+            int         layer_mask;
 
             data = strtok( line + SZ( "At" ), delims );
 
@@ -1226,9 +1222,11 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
 
         else if( TESTLINE( "$EndPAD" ) )
         {
-            RotatePoint( &pad->m_Pos, aModule->GetOrientation() );
+            wxPoint padpos = pad->GetPosition();
 
-            pad->m_Pos += aModule->GetPosition();
+            RotatePoint( &padpos, aModule->GetOrientation() );
+
+            pad->SetPosition( padpos + aModule->GetPosition() );
 
             aModule->m_Pads.PushBack( pad.release() );
             return;     // preferred exit
@@ -2849,10 +2847,8 @@ void KICAD_PLUGIN::saveSETUP() const
     fprintf( m_fp, "TextModSize %s\n", fmtBIUSize( bds.m_ModuleTextSize ).c_str() );
     fprintf( m_fp, "TextModWidth %s\n", fmtBIU( bds.m_ModuleTextWidth ).c_str() );
 
-    /* @todo
-    fprintf( m_fp, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
-    fprintf( m_fp, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
-    */
+    fprintf( m_fp, "PadSize %s\n", fmtBIUSize( bds.m_Pad_Master.GetSize() ).c_str() );
+    fprintf( m_fp, "PadDrill %s\n", fmtBIU( bds.m_Pad_Master.GetDrillSize().x ).c_str() );
 
     fprintf( m_fp, "Pad2MaskClearance %s\n", fmtBIU( bds.m_SolderMaskMargin ).c_str() );
 
@@ -3138,7 +3134,7 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
 
     fprintf( m_fp,  "Dr %s %s",
                     fmtBIU( me->GetDrillSize().x ).c_str(),
-                    fmtBIUSize( me->GetOffset() ).c_str() );
+                    fmtBIUPoint( me->GetOffset() ).c_str() );
 
     if( me->GetDrillShape() == PAD_OVAL )
     {

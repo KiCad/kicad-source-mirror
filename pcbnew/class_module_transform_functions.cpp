@@ -161,22 +161,9 @@ void MODULE::Flip( const wxPoint& aCentre )
     NEGATE( m_Orient );
     NORMALIZE_ANGLE_POS( m_Orient );
 
-    // Mirror inversion layers pads.
+    // Mirror pads to other side of board about the x axis, i.e. vertically.
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
-    {
-        pad->m_Pos.y  -= m_Pos.y;
-        pad->m_Pos.y   = -pad->m_Pos.y;
-        pad->m_Pos.y  += m_Pos.y;
-
-        NEGATE( pad->m_Pos0.y );
-        NEGATE( pad->m_Offset.y );
-        NEGATE( pad->m_DeltaSize.y );
-
-        NEGATE_AND_NORMALIZE_ANGLE_POS( pad->m_Orient );
-
-        // flip pads layers
-        pad->m_layerMask = ChangeSideMaskLayer( pad->m_layerMask );
-    }
+        pad->Flip( m_Pos.y );
 
     // Mirror reference.
     pt_texte = m_Reference;
@@ -301,7 +288,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        pad->m_Pos += delta;
+        pad->SetPosition( pad->GetPosition() + delta );
     }
 
     for( EDA_ITEM* item = m_Drawings;  item;  item = item->Next() )
@@ -334,25 +321,22 @@ void MODULE::SetPosition( const wxPoint& newpos )
 
 void MODULE::SetOrientation( double newangle )
 {
-    int px, py;
+    double  angleChange = newangle - m_Orient;  // change in rotation
+    wxPoint pt;
 
-    newangle -= m_Orient;       // = Change in rotation
+    NORMALIZE_ANGLE_POS( newangle );
 
-    m_Orient += newangle;
-
-    NORMALIZE_ANGLE_POS( m_Orient );
+    m_Orient = newangle;
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        px = pad->m_Pos0.x;
-        py = pad->m_Pos0.y;
+        pt = pad->GetPos0();
 
-        pad->m_Orient += newangle;  // change m_Orientation
-        NORMALIZE_ANGLE_POS( pad->m_Orient );
+        pad->SetOrientation( pad->GetOrientation() + angleChange );
 
-        RotatePoint( &px, &py, m_Orient );
-        pad->m_Pos.x = m_Pos.x + px;
-        pad->m_Pos.y = m_Pos.y + py;
+        RotatePoint( &pt, m_Orient );
+
+        pad->SetPosition( GetPosition() + pt );
     }
 
     // Update of the reference and value.

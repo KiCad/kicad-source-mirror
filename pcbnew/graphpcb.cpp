@@ -41,7 +41,7 @@ static void DrawSegmentQcq( int ux0,
                             int color,
                             int op_logic );
 
-static void TraceFilledCircle( BOARD* Pcb,
+static void TraceFilledCircle( BOARD* aPcb,
                                int    cx,
                                int    cy,
                                int    radius,
@@ -84,50 +84,49 @@ int ToMatrixCoordinate( int aPhysicalCoordinate )
 }
 
 
-void PlacePad( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_logic )
+void PlacePad( BOARD* aPcb, D_PAD* aPad, int color, int marge, int op_logic )
 {
     int     dx, dy;
-    wxPoint shape_pos = pt_pad->ReturnShapePos();
+    wxPoint shape_pos = aPad->ReturnShapePos();
 
-    dx = pt_pad->m_Size.x / 2;
+    dx = aPad->GetSize().x / 2;
     dx += marge;
 
-    if( pt_pad->m_PadShape == PAD_CIRCLE )
+    if( aPad->GetShape() == PAD_CIRCLE )
     {
-        TraceFilledCircle( Pcb, shape_pos.x, shape_pos.y, dx,
-                           pt_pad->m_layerMask, color, op_logic );
+        TraceFilledCircle( aPcb, shape_pos.x, shape_pos.y, dx,
+                           aPad->GetLayerMask(), color, op_logic );
         return;
     }
 
-
-    dy = pt_pad->m_Size.y / 2;
+    dy = aPad->GetSize().y / 2;
     dy += marge;
 
-    if( pt_pad->m_PadShape == PAD_TRAPEZOID )
+    if( aPad->GetShape() == PAD_TRAPEZOID )
     {
-        dx += abs( pt_pad->m_DeltaSize.y ) / 2;
-        dy += abs( pt_pad->m_DeltaSize.x ) / 2;
+        dx += abs( aPad->GetDelta().y ) / 2;
+        dy += abs( aPad->GetDelta().x ) / 2;
     }
 
     // The pad is a rectangle horizontally or vertically.
-    if( int( pt_pad->GetOrientation() ) % 900 == 0 )
+    if( int( aPad->GetOrientation() ) % 900 == 0 )
     {
         // Orientation turned 90 deg.
-        if( ( pt_pad->m_Orient == 900 ) || ( pt_pad->m_Orient == 2700 ) )
+        if( aPad->GetOrientation() == 900  ||  aPad->GetOrientation() == 2700 )
         {
             EXCHG( dx, dy );
         }
 
-        TraceFilledRectangle( Pcb, shape_pos.x - dx, shape_pos.y - dy,
+        TraceFilledRectangle( aPcb, shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
-                              pt_pad->m_layerMask, color, op_logic );
+                              aPad->GetLayerMask(), color, op_logic );
     }
     else
     {
-        TraceFilledRectangle( Pcb, shape_pos.x - dx, shape_pos.y - dy,
+        TraceFilledRectangle( aPcb, shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
-                              (int) pt_pad->m_Orient,
-                              pt_pad->m_layerMask, color, op_logic );
+                              (int) aPad->GetOrientation(),
+                              aPad->GetLayerMask(), color, op_logic );
     }
 }
 
@@ -140,7 +139,7 @@ void PlacePad( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_logic )
  * color: mask write in cells
  * op_logic: type of writing in the cell (WRITE, OR)
  */
-void TraceFilledCircle( BOARD* Pcb,
+void TraceFilledCircle( BOARD* aPcb,
                         int    cx,
                         int    cy,
                         int    radius,
@@ -197,8 +196,8 @@ void TraceFilledCircle( BOARD* Pcb,
         break;
     }
 
-    cx -= Pcb->GetBoundingBox().GetX();
-    cy -= Pcb->GetBoundingBox().GetY();
+    cx -= aPcb->GetBoundingBox().GetX();
+    cy -= aPcb->GetBoundingBox().GetY();
 
     distmin = radius;
 
@@ -290,7 +289,7 @@ void TraceFilledCircle( BOARD* Pcb,
 }
 
 
-void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_logic )
+void TraceSegmentPcb( BOARD* aPcb, TRACK* pt_segm, int color, int marge, int op_logic )
 {
     int half_width;
     int ux0, uy0, ux1, uy1;
@@ -298,10 +297,10 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
     half_width = ( pt_segm->m_Width / 2 ) + marge;
 
     // Calculate the bounding rectangle of the segment (if H, V or Via)
-    ux0 = pt_segm->m_Start.x - Pcb->GetBoundingBox().GetX();
-    uy0 = pt_segm->m_Start.y - Pcb->GetBoundingBox().GetY();
-    ux1 = pt_segm->m_End.x - Pcb->GetBoundingBox().GetX();
-    uy1 = pt_segm->m_End.y - Pcb->GetBoundingBox().GetY();
+    ux0 = pt_segm->m_Start.x - aPcb->GetBoundingBox().GetX();
+    uy0 = pt_segm->m_Start.y - aPcb->GetBoundingBox().GetY();
+    ux1 = pt_segm->m_End.x - aPcb->GetBoundingBox().GetX();
+    uy1 = pt_segm->m_End.y - aPcb->GetBoundingBox().GetY();
 
     // Test if VIA (filled circle was drawn)
     if( pt_segm->Type() == PCB_VIA_T )
@@ -323,7 +322,7 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
             mask_layer = -1;
 
         if( mask_layer )
-            TraceFilledCircle( Pcb, pt_segm->m_Start.x, pt_segm->m_Start.y,
+            TraceFilledCircle( aPcb, pt_segm->m_Start.x, pt_segm->m_Start.y,
                                half_width, mask_layer, color, op_logic );
         return;
     }
@@ -516,7 +515,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
 }
 
 
-void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
+void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
                            int aLayerMask, int color, int op_logic )
 {
     int  row, col;
@@ -558,10 +557,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
         break;
     }
 
-    ux0 -= Pcb->GetBoundingBox().GetX();
-    uy0 -= Pcb->GetBoundingBox().GetY();
-    ux1 -= Pcb->GetBoundingBox().GetX();
-    uy1 -= Pcb->GetBoundingBox().GetY();
+    ux0 -= aPcb->GetBoundingBox().GetX();
+    uy0 -= aPcb->GetBoundingBox().GetY();
+    ux1 -= aPcb->GetBoundingBox().GetX();
+    uy1 -= aPcb->GetBoundingBox().GetY();
 
     // Calculating limits coord cells belonging to the rectangle.
     row_max = uy1 / Board.m_GridRouting;
@@ -602,7 +601,7 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
 }
 
 
-void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
+void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
                            int angle, int aLayerMask, int color, int op_logic )
 {
     int  row, col;
@@ -650,10 +649,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
         break;
     }
 
-    ux0 -= Pcb->GetBoundingBox().GetX();
-    uy0 -= Pcb->GetBoundingBox().GetY();
-    ux1 -= Pcb->GetBoundingBox().GetX();
-    uy1 -= Pcb->GetBoundingBox().GetY();
+    ux0 -= aPcb->GetBoundingBox().GetX();
+    uy0 -= aPcb->GetBoundingBox().GetY();
+    ux1 -= aPcb->GetBoundingBox().GetX();
+    uy1 -= aPcb->GetBoundingBox().GetY();
 
     cx    = (ux0 + ux1) / 2;
     cy    = (uy0 + uy1) / 2;

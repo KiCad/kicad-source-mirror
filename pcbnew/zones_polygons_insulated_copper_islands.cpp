@@ -28,7 +28,7 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
 
     // Build a list of points connected to the net:
     // list of coordinates of pads and vias on this layer and on this net.
-    std::vector <wxPoint> ListPointsCandidates;
+    std::vector <wxPoint> listPointsCandidates;
 
     for( MODULE* module = aPcb->m_Modules; module; module = module->Next() )
     {
@@ -40,7 +40,7 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
             if( pad->GetNet() != GetNet() )
                 continue;
 
-            ListPointsCandidates.push_back( pad->m_Pos );
+            listPointsCandidates.push_back( pad->GetPosition() );
         }
     }
 
@@ -52,10 +52,10 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
         if( track->GetNet() != GetNet() )
             continue;
 
-        ListPointsCandidates.push_back( track->m_Start );
+        listPointsCandidates.push_back( track->m_Start );
 
         if( track->Type() != PCB_VIA_T )
-            ListPointsCandidates.push_back( track->m_End );
+            listPointsCandidates.push_back( track->m_End );
     }
 
     // test if a point is inside
@@ -68,10 +68,10 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
         {
             EDA_RECT bbox = CalculateSubAreaBoundaryBox( indexstart, indexend );
 
-            for( unsigned ic = 0; ic < ListPointsCandidates.size(); ic++ )
+            for( unsigned ic = 0; ic < listPointsCandidates.size(); ic++ )
             {
                 // test if this area is connected to a board item:
-                wxPoint pos = ListPointsCandidates[ic];
+                wxPoint pos = listPointsCandidates[ic];
 
                 if( !bbox.Contains( pos ) )
                     continue;

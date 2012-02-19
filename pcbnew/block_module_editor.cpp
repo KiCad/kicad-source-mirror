@@ -443,7 +443,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
             continue;
 
         pad->SetPosition( pad->GetPosition() + offset );
-        pad->m_Pos0 += offset;
+        pad->SetPos0( pad->GetPos0() + offset );
     }
 
     item = module->m_Drawings;
@@ -526,29 +526,38 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 {
 #define SETMIRROR( z ) (z) -= offset.x; (z) = -(z); (z) += offset.x;
     wxPoint     tmp;
+    wxSize      tmpz;
 
     if( module == NULL )
         return;
 
     for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( pad->IsSelected() )
+        // @JP why allow some pads to stay behind?  Do not understand
+        // why this test is here.
+        if( !pad->IsSelected() )
             continue;
 
         tmp = pad->GetPosition();
         SETMIRROR( tmp.x );
         pad->SetPosition( tmp );
 
-        pad->m_Pos0.x = pad->GetPosition().x;
-        NEGATE( pad->m_Offset.x );
-        NEGATE( pad->m_DeltaSize.x );
-        pad->m_Orient      = 1800 - pad->m_Orient;
-        NORMALIZE_ANGLE_POS( pad->m_Orient );
+        pad->SetX0( pad->GetPosition().x );
+
+        tmp = pad->GetOffset();
+        NEGATE( tmp.x );
+        pad->SetOffset( tmp );
+
+        tmpz = pad->GetDelta();
+        NEGATE( tmpz.x );
+        pad->SetDelta( tmpz );
+
+        pad->SetOrientation( 1800 - pad->GetOrientation() );
     }
 
     for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
-        if( !item->IsSelected() )
+        if( !item->IsSelected() )   // @JP why allow some graphics to stay behind?
             continue;
 
         switch( item->Type() )
@@ -609,9 +618,8 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
         ROTATE( pos );
         pad->SetPosition( pos );
 
-        pad->m_Pos0    = pad->GetPosition();
-        pad->m_Orient += 900;
-        NORMALIZE_ANGLE_POS( pad->m_Orient );
+        pad->SetPos0( pad->GetPosition() );
+        pad->SetOrientation( pad->GetOrientation() + 900 );
     }
 
     for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )

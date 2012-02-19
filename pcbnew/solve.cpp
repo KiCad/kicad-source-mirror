@@ -447,9 +447,11 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     routeLayerMask = topLayerMask | bottomLayerMask;
 
     pt_cur_ch = pt_rat;
-    current_net_code   = pt_rat->GetNet();
-    padLayerMaskStart = pt_cur_ch->m_PadStart->m_layerMask;
-    padLayerMaskEnd = pt_cur_ch->m_PadEnd->m_layerMask;
+
+    current_net_code  = pt_rat->GetNet();
+    padLayerMaskStart = pt_cur_ch->m_PadStart->GetLayerMask();
+
+    padLayerMaskEnd = pt_cur_ch->m_PadEnd->GetLayerMask();
 
 
     /* First Test if routing possible ie if the pads are accessible
@@ -469,12 +471,12 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                  + pcbframe->GetBoard()->GetBoundingBox().GetX();
         int cY = ( Board.m_GridRouting * row_source )
                  + pcbframe->GetBoard()->GetBoundingBox().GetY();
-        int dx = pt_cur_ch->m_PadStart->m_Size.x / 2;
-        int dy = pt_cur_ch->m_PadStart->m_Size.y / 2;
+        int dx = pt_cur_ch->m_PadStart->GetSize().x / 2;
+        int dy = pt_cur_ch->m_PadStart->GetSize().y / 2;
         int px = pt_cur_ch->m_PadStart->GetPosition().x;
         int py = pt_cur_ch->m_PadStart->GetPosition().y;
 
-        if( ( ( int( pt_cur_ch->m_PadStart->m_Orient ) / 900 ) & 1 ) != 0 )
+        if( ( ( int( pt_cur_ch->m_PadStart->GetOrientation() ) / 900 ) & 1 ) != 0 )
             EXCHG( dx, dy );
 
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
@@ -484,12 +486,12 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
              + pcbframe->GetBoard()->GetBoundingBox().GetX();
         cY = ( Board.m_GridRouting * row_target )
              + pcbframe->GetBoard()->GetBoundingBox().GetY();
-        dx = pt_cur_ch->m_PadEnd->m_Size.x / 2;
-        dy = pt_cur_ch->m_PadEnd->m_Size.y / 2;
+        dx = pt_cur_ch->m_PadEnd->GetSize().x / 2;
+        dy = pt_cur_ch->m_PadEnd->GetSize().y / 2;
         px = pt_cur_ch->m_PadEnd->GetPosition().x;
         py = pt_cur_ch->m_PadEnd->GetPosition().y;
 
-        if( ( ( int( pt_cur_ch->m_PadEnd->m_Orient ) / 900) & 1 ) != 0 )
+        if( ( ( int( pt_cur_ch->m_PadEnd->GetOrientation() ) / 900) & 1 ) != 0 )
             EXCHG( dx, dy );
 
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
