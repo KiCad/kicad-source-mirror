@@ -78,7 +78,8 @@ static EDA_HOTKEY HkLock_Unlock_Footprint( wxT( "Lock/Unlock Footprint" ),
 static EDA_HOTKEY HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
 static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                      HK_RESET_LOCAL_COORD, ' ' );
-
+static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"), 
+					    HK_SWITCH_HIGHCONTRAST_MODE,'H');
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
@@ -224,6 +225,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkRecordMacros4,          &HkCallMacros4,    &HkRecordMacros5,          &HkCallMacros5,
     &HkRecordMacros6,          &HkCallMacros6,    &HkRecordMacros7,          &HkCallMacros7,
     &HkRecordMacros8,          &HkCallMacros8,    &HkRecordMacros9,          &HkCallMacros9,
+    &HkSwitchHighContrastMode,
     NULL
 };
 
