@@ -447,40 +447,7 @@ bool EDA_APP::SetBinDir()
 
 /* Linux and Unix */
 #elif defined(__UNIX__)
-
-    // Under Linux, if argv[0] doesn't the complete path to the executable,
-    // it's necessary to obtain it using "which <filename>".
-    FILE*    ftmp;
-
-    char     Line[1024];
-    char     FileName[1024];
-    wxString str_arg0;
-
-    FileName[0] = 0;
-    str_arg0    = argv[0];
-
-    if( strchr( (const char*) argv[0], '/' ) == NULL ) // no path
-    {
-        sprintf( FileName, "which %s > %s", TO_UTF8( str_arg0 ), TMP_FILE );
-
-        int ret = system( FileName );
-        (void) ret;
-
-        if( ( ftmp = fopen( TMP_FILE, "rt" ) ) != NULL )
-        {
-            const char* line = fgets( Line, 1000, ftmp );
-            (void) line;
-            fclose( ftmp );
-            remove( TMP_FILE );
-        }
-
-        m_BinDir = FROM_UTF8( Line );
-    }
-    else
-    {
-        m_BinDir = argv[0];
-    }
-
+    m_BinDir = wxStandardPaths().GetExecutablePath();
 #else
     m_BinDir = argv[0];
 #endif /* __UNIX__ */
