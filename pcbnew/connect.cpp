@@ -42,7 +42,7 @@
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb );
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
 
-/* Local functions */
+// Local functions
 static void RebuildTrackChain( BOARD* pcb );
 
 
@@ -276,7 +276,9 @@ void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
         D_PAD * pad = m_sortedPads[ii];
         pad->m_PadsConnected.clear();
         candidates.clear();
-        CollectItemsNearTo( candidates, pad->ReturnShapePos(), pad->m_ShapeMaxRadius );
+
+        CollectItemsNearTo( candidates, pad->ReturnShapePos(), pad->GetBoundingRadius() );
+
         // add pads to pad.m_PadsConnected, if they are connected
         for( unsigned jj = 0; jj < candidates.size(); jj++ )
         {
@@ -285,7 +287,7 @@ void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
             if( pad == candidate_pad )
                 continue;
 
-            if( (pad->m_layerMask & candidate_pad->m_layerMask) == 0 )
+            if( (pad->GetLayerMask() & candidate_pad->GetLayerMask()) == 0 )
                 continue;
             if( pad->HitTest( item->GetPoint() ) )
             {
@@ -311,14 +313,16 @@ void CONNECTIONS::SearchTracksConnectedToPads()
         pad->m_TracksConnected.clear();
         candidates.clear();
 
-        CollectItemsNearTo( candidates, pad->GetPosition(), pad->m_ShapeMaxRadius );
+        CollectItemsNearTo( candidates, pad->GetPosition(), pad->GetBoundingRadius() );
 
         // add this pad to track.m_PadsConnected, if it is connected
         for( unsigned jj = 0; jj < candidates.size(); jj++ )
         {
-            CONNECTED_POINT * cp_item = candidates[jj];
-            if( (pad->m_layerMask & cp_item->GetTrack()->ReturnMaskLayer()) == 0 )
+            CONNECTED_POINT* cp_item = candidates[jj];
+
+            if( (pad->GetLayerMask() & cp_item->GetTrack()->ReturnMaskLayer()) == 0 )
                 continue;
+
             if( pad->HitTest( cp_item->GetPoint() ) )
             {
                 cp_item->GetTrack()->m_PadsConnected.push_back( pad );
@@ -731,7 +735,7 @@ void CONNECTIONS::Propagate_SubNets()
                     pad->SetSubNet( curr_pad->GetSubNet() );
                 }
             }
-            else                              /* the track segment is not attached to a cluster */
+            else                              // the track segment is not attached to a cluster
             {
                 if( pad->GetSubNet() > 0 )
                 {
@@ -758,16 +762,16 @@ void CONNECTIONS::Propagate_SubNets()
     // Examine connections between trcaks and pads
     for( ; curr_track != NULL; curr_track = curr_track->Next() )
     {
-        /* First: handling connections to pads */
+        // First: handling connections to pads
         for( unsigned ii = 0; ii < curr_track->m_PadsConnected.size(); ii++ )
         {
             D_PAD * pad = curr_track->m_PadsConnected[ii];
 
-            if( curr_track->GetSubNet() )        /* the track segment is already a cluster member */
+            if( curr_track->GetSubNet() )        // the track segment is already a cluster member
             {
                 if( pad->GetSubNet() > 0 )
                 {
-                    /* The pad is already a cluster member, so we can merge the 2 clusters */
+                    // The pad is already a cluster member, so we can merge the 2 clusters
                     Merge_SubNets( pad->GetSubNet(), curr_track->GetSubNet() );
                 }
                 else
@@ -777,11 +781,11 @@ void CONNECTIONS::Propagate_SubNets()
                     pad->SetSubNet( curr_track->GetSubNet() );
                 }
             }
-            else                              /* the track segment is not attached to a cluster */
+            else                              // the track segment is not attached to a cluster
             {
                 if( pad->GetSubNet() > 0 )
                 {
-                    /* it is connected to a pad in a cluster, merge this track */
+                    // it is connected to a pad in a cluster, merge this track
                     curr_track->SetSubNet( pad->GetSubNet() );
                 }
                 else
@@ -795,13 +799,13 @@ void CONNECTIONS::Propagate_SubNets()
             }
         }
 
-        /* Test connections between segments */
+        // Test connections between segments
         for( unsigned ii = 0; ii < curr_track->m_TracksConnected.size(); ii++ )
         {
             BOARD_CONNECTED_ITEM* track = curr_track->m_TracksConnected[ii];
             if( curr_track->GetSubNet() )   // The current track is already a cluster member
             {
-                /* The other track is already a cluster member, so we can merge the 2 clusters */
+                // The other track is already a cluster member, so we can merge the 2 clusters
                 if( track->GetSubNet() )
                 {
                     Merge_SubNets( track->GetSubNet(), curr_track->GetSubNet() );
@@ -920,7 +924,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
 
     m_Pcb->Test_Connections_To_Copper_Areas( aNetCode );
 
-    /* Search for the first and the last segment relative to the given net code */
+    // Search for the first and the last segment relative to the given net code
     if( m_Pcb->m_Track )
     {
         CONNECTIONS connections( m_Pcb );
@@ -939,12 +943,12 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
 
     Merge_SubNets_Connected_By_CopperAreas( m_Pcb, aNetCode );
 
-    /* rebuild the active ratsnest for this net */
+    // rebuild the active ratsnest for this net
     DrawGeneralRatsnest( aDC, aNetCode );
     TestForActiveLinksInRatsnest( aNetCode );
     DrawGeneralRatsnest( aDC, aNetCode );
 
-    /* Display results */
+    // Display results
     int net_notconnected_count = 0;
     NETINFO_ITEM* net = m_Pcb->FindNet( aNetCode );
     if( net )       // Should not occur, but ...
@@ -1058,7 +1062,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         }
     }
 
-    /* Sort the track list by net codes: */
+    // Sort the track list by net codes:
     RebuildTrackChain( m_Pcb );
 }
 

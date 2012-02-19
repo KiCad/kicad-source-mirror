@@ -317,30 +317,30 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         fprintf( aFile, "PAD P%d", pad->GetSubRatsnest() );
 
         padstacks.push_back( pad ); // Will have its own padstack later
-        int dx = pad->m_Size.x / 2;
-        int dy = pad->m_Size.y / 2;
+        int dx = pad->GetSize().x / 2;
+        int dy = pad->GetSize().y / 2;
 
-        switch( pad->m_PadShape )
+        switch( pad->GetShape() )
         {
         default:
         case PAD_CIRCLE:
             fprintf( aFile, " ROUND %g\n",
-                     pad->m_Drill.x / SCALE_FACTOR );
+                     pad->GetDrillSize().x / SCALE_FACTOR );
             /* Circle is center, radius */
             fprintf( aFile, "CIRCLE %g %g %g\n",
-                    pad->m_Offset.x / SCALE_FACTOR,
-                    -pad->m_Offset.y / SCALE_FACTOR,
-                    pad->m_Size.x / (SCALE_FACTOR * 2) );
+                    pad->GetOffset().x / SCALE_FACTOR,
+                    -pad->GetOffset().y / SCALE_FACTOR,
+                    pad->GetSize().x / (SCALE_FACTOR * 2) );
             break;
 
         case PAD_RECT:
             fprintf( aFile, " RECTANGULAR %g\n",
-                     pad->m_Drill.x / SCALE_FACTOR );
+                     pad->GetDrillSize().x / SCALE_FACTOR );
 
             // Rectangle is begin, size *not* begin, end!
             fprintf( aFile, "RECTANGLE %g %g %g %g\n",
-                    (-dx + pad->m_Offset.x ) / SCALE_FACTOR,
-                    (-dy - pad->m_Offset.y ) / SCALE_FACTOR,
+                    (-dx + pad->GetOffset().x ) / SCALE_FACTOR,
+                    (-dy - pad->GetOffset().y ) / SCALE_FACTOR,
                     dx / (SCALE_FACTOR / 2), dy / (SCALE_FACTOR / 2) );
             break;
 
@@ -348,76 +348,76 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         {
             // OrCAD Layout call them OVAL or OBLONG - GenCAD call them FINGERs
             fprintf( aFile, " FINGER %g\n",
-                     pad->m_Drill.x / SCALE_FACTOR );
+                     pad->GetDrillSize().x / SCALE_FACTOR );
             int dr = dx - dy;
 
             if( dr >= 0 )       // Horizontal oval
             {
                 int radius = dy;
                 fprintf( aFile, "LINE %g %g %g %g\n",
-                         (-dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y - radius) / SCALE_FACTOR,
-                         (dr + pad->m_Offset.x ) / SCALE_FACTOR,
-                         (-pad->m_Offset.y - radius) / SCALE_FACTOR );
+                         (-dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y - radius) / SCALE_FACTOR,
+                         (dr + pad->GetOffset().x ) / SCALE_FACTOR,
+                         (-pad->GetOffset().y - radius) / SCALE_FACTOR );
 
                 // GenCAD arcs are (start, end, center)
                 fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                         (dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y - radius) / SCALE_FACTOR,
-                         (dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y + radius) / SCALE_FACTOR,
-                         (dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         -pad->m_Offset.y / SCALE_FACTOR );
+                         (dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y - radius) / SCALE_FACTOR,
+                         (dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y + radius) / SCALE_FACTOR,
+                         (dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         -pad->GetOffset().y / SCALE_FACTOR );
 
                 fprintf( aFile, "LINE %g %g %g %g\n",
-                         (dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y + radius) / SCALE_FACTOR,
-                         (-dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y + radius) / SCALE_FACTOR );
+                         (dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y + radius) / SCALE_FACTOR,
+                         (-dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y + radius) / SCALE_FACTOR );
                 fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                         (-dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y + radius) / SCALE_FACTOR,
-                         (-dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y - radius) / SCALE_FACTOR,
-                         (-dr + pad->m_Offset.x) / SCALE_FACTOR,
-                         -pad->m_Offset.y / SCALE_FACTOR );
+                         (-dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y + radius) / SCALE_FACTOR,
+                         (-dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y - radius) / SCALE_FACTOR,
+                         (-dr + pad->GetOffset().x) / SCALE_FACTOR,
+                         -pad->GetOffset().y / SCALE_FACTOR );
             }
             else        // Vertical oval
             {
                 dr = -dr;
                 int radius = dx;
                 fprintf( aFile, "LINE %g %g %g %g\n",
-                         (-radius + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y - dr) / SCALE_FACTOR,
-                         (-radius + pad->m_Offset.x ) / SCALE_FACTOR,
-                         (-pad->m_Offset.y + dr) / SCALE_FACTOR );
+                         (-radius + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y - dr) / SCALE_FACTOR,
+                         (-radius + pad->GetOffset().x ) / SCALE_FACTOR,
+                         (-pad->GetOffset().y + dr) / SCALE_FACTOR );
                 fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                         (-radius + pad->m_Offset.x ) / SCALE_FACTOR,
-                         (-pad->m_Offset.y + dr) / SCALE_FACTOR,
-                         (radius + pad->m_Offset.x ) / SCALE_FACTOR,
-                         (-pad->m_Offset.y + dr) / SCALE_FACTOR,
-                         pad->m_Offset.x / SCALE_FACTOR,
-                         (-pad->m_Offset.y + dr) / SCALE_FACTOR );
+                         (-radius + pad->GetOffset().x ) / SCALE_FACTOR,
+                         (-pad->GetOffset().y + dr) / SCALE_FACTOR,
+                         (radius + pad->GetOffset().x ) / SCALE_FACTOR,
+                         (-pad->GetOffset().y + dr) / SCALE_FACTOR,
+                         pad->GetOffset().x / SCALE_FACTOR,
+                         (-pad->GetOffset().y + dr) / SCALE_FACTOR );
 
                 fprintf( aFile, "LINE %g %g %g %g\n",
-                         (radius + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y + dr) / SCALE_FACTOR,
-                         (radius + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y - dr) / SCALE_FACTOR );
+                         (radius + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y + dr) / SCALE_FACTOR,
+                         (radius + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y - dr) / SCALE_FACTOR );
                 fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                         (radius + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y - dr) / SCALE_FACTOR,
-                         (-radius + pad->m_Offset.x) / SCALE_FACTOR,
-                         (-pad->m_Offset.y - dr) / SCALE_FACTOR,
-                         pad->m_Offset.x / SCALE_FACTOR,
-                         (-pad->m_Offset.y - dr) / SCALE_FACTOR );
+                         (radius + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y - dr) / SCALE_FACTOR,
+                         (-radius + pad->GetOffset().x) / SCALE_FACTOR,
+                         (-pad->GetOffset().y - dr) / SCALE_FACTOR,
+                         pad->GetOffset().x / SCALE_FACTOR,
+                         (-pad->GetOffset().y - dr) / SCALE_FACTOR );
             }
             break;
         }
 
         case PAD_TRAPEZOID:
             fprintf( aFile, " POLYGON %g\n",
-                     pad->m_Drill.x / SCALE_FACTOR );
+                     pad->GetDrillSize().x / SCALE_FACTOR );
 
             // XXX TO BE IMPLEMENTED! and I don't know if it could be actually imported by something
             break;
@@ -461,10 +461,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
         // Straight padstack
         fprintf( aFile, "PADSTACK PAD%d %g\n", i,
-                 pad->m_Drill.x / SCALE_FACTOR );
+                 pad->GetDrillSize().x / SCALE_FACTOR );
         for( int layer = 0; layer < 32; layer++ )
         {
-            if( pad->m_layerMask & (1 << layer) & master_layermask )
+            if( pad->GetLayerMask() & (1 << layer) & master_layermask )
             {
                 fprintf( aFile, "PAD P%d %s 0 0\n", i,
                         TO_UTF8( GenCADLayerName[layer] ) );
@@ -473,10 +473,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
         // Flipped padstack
         fprintf( aFile, "PADSTACK PAD%dF %g\n", i,
-                 pad->m_Drill.x / SCALE_FACTOR );
+                 pad->GetDrillSize().x / SCALE_FACTOR );
         for( int layer = 0; layer < 32; layer++ )
         {
-            if( pad->m_layerMask & (1 << layer) & master_layermask )
+            if( pad->GetLayerMask() & (1 << layer) & master_layermask )
             {
                 fprintf( aFile, "PAD P%d %s 0 0\n", i,
                         TO_UTF8( GenCADLayerNameFlipped[layer] ) );
@@ -516,11 +516,11 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
              *  if the spec explicitly says it's not... */
             layer = "ALL";
 
-            if( ( pad->m_layerMask & ALL_CU_LAYERS ) == LAYER_BACK )
+            if( ( pad->GetLayerMask() & ALL_CU_LAYERS ) == LAYER_BACK )
             {
                 layer = ( module->flag ) ? "TOP" : "BOTTOM";
             }
-            else if( ( pad->m_layerMask & ALL_CU_LAYERS ) == LAYER_FRONT )
+            else if( ( pad->GetLayerMask() & ALL_CU_LAYERS ) == LAYER_FRONT )
             {
                 layer = ( module->flag ) ? "BOTTOM" : "TOP";
             }
@@ -530,7 +530,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             if( pinname.IsEmpty() )
                 pinname = wxT( "none" );
 
-            orient = pad->m_Orient - module->m_Orient;
+            orient = pad->GetOrientation() - module->GetOrientation();
             NORMALIZE_ANGLE_POS( orient );
 
             // Bottom side modules use the flipped padstack
@@ -538,8 +538,8 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                      "PIN %s PAD%dF %g %g %s %g %s\n" :
                      "PIN %s PAD%d %g %g %s %g %s\n",
                      TO_UTF8( pinname ), pad->GetSubRatsnest(),
-                     pad->m_Pos0.x / SCALE_FACTOR,
-                     -pad->m_Pos0.y / SCALE_FACTOR,
+                     pad->GetPos0().x / SCALE_FACTOR,
+                     -pad->GetPos0().y / SCALE_FACTOR,
                      layer, orient / 10.0, mirror );
         }
     }
@@ -562,7 +562,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         TEXTE_MODULE* textmod;
         const char*   mirror;
         const char*   flip;
-        int           orient = module->m_Orient;
+        int           orient = module->GetOrientation();
 
         if( module->flag )
         {
@@ -597,14 +597,14 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
         for( int ii = 0; ii < 2; ii++ )
         {
-            int      orient = textmod->m_Orient;
+            int      orient = textmod->GetOrientation();
             wxString layer  = GenCADLayerName[(module->flag) ?
                                               SILKSCREEN_N_BACK : SILKSCREEN_N_FRONT];
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
                     textmod->GetPos0().x / SCALE_FACTOR,
                     -textmod->GetPos0().y / SCALE_FACTOR,
-                    textmod->m_Size.x / SCALE_FACTOR,
+                    textmod->GetSize().x / SCALE_FACTOR,
                     orient / 10.0,
                     mirror,
                     TO_UTF8( layer ),
@@ -612,9 +612,9 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
             // Please note, the width is approx
             fprintf( aFile, " 0 0 %g %g\n",
-                     ( textmod->m_Size.x * textmod->m_Text.Len() )
+                     ( textmod->GetSize().x * textmod->m_Text.Len() )
                      / SCALE_FACTOR,
-                     textmod->m_Size.y / SCALE_FACTOR );
+                     textmod->GetSize().y / SCALE_FACTOR );
 
             textmod = module->m_Value; // Dirty trick for the second iteration
         }

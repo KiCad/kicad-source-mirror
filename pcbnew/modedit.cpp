@@ -724,11 +724,13 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 {
-    D_PAD*        pad = module->m_Pads;
-    EDA_ITEM*     item = module->m_Drawings;
-    TEXTE_MODULE* textmod;
-    EDGE_MODULE*  edgemod;
-    double        angle = 900; // Necessary +- 900 (+- 90 degrees) )
+    D_PAD*          pad = module->m_Pads;
+    EDA_ITEM*       item = module->m_Drawings;
+    TEXTE_MODULE*   textmod;
+    EDGE_MODULE*    edgemod;
+    wxPoint         pt;
+    wxSize          size;
+    double          angle = 900; // Necessary +- 900 (+- 90 degrees) )
 
     switch( transform )
     {
@@ -737,11 +739,20 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 
         for( ;  pad;  pad = pad->Next() )
         {
-            pad->SetPos0( pad->m_Pos );
-            pad->m_Orient -= angle;
-            RotatePoint( &pad->m_Offset.x, &pad->m_Offset.y, angle );
-            EXCHG( pad->m_Size.x, pad->m_Size.y );
-            RotatePoint( &pad->m_DeltaSize.x, &pad->m_DeltaSize.y, -angle );
+            pad->SetPos0( pad->GetPosition() );
+            pad->SetOrientation( pad->GetOrientation() - angle );
+
+            pt = pad->GetOffset();
+            RotatePoint( &pt, angle );
+            pad->SetOffset( pt );
+
+            size = pad->GetSize();
+            EXCHG( size.x, size.y );
+            pad->SetSize( size );
+
+            size = pad->GetDelta();
+            RotatePoint( &size.x, &size.y, -angle );
+            pad->SetDelta( size );
         }
 
         module->m_Reference->SetPos0( module->m_Reference->m_Pos );
@@ -778,13 +789,22 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
     case ID_MODEDIT_MODULE_MIRROR:
         for( ;  pad;  pad = pad->Next() )
         {
-            NEGATE( pad->m_Pos.y );
-            NEGATE( pad->m_Pos0.y );
-            NEGATE( pad->m_Offset.y );
-            NEGATE( pad->m_DeltaSize.y );
+            pad->SetY( -pad->GetPosition().y );
 
-            if( pad->m_Orient )
-                pad->m_Orient = 3600 - pad->m_Orient;
+            pt = pad->GetPos0();
+            NEGATE( pt.y );
+            pad->SetPos0( pt );
+
+            pt = pad->GetOffset();
+            NEGATE( pt.y );
+            pad->SetOffset( pt );
+
+            size = pad->GetDelta();
+            NEGATE( size.y );
+            pad->SetDelta( size );
+
+            if( pad->GetOrientation() )
+                pad->SetOrientation( 3600 - pad->GetOrientation() );
         }
 
         // Reverse mirror of reference.

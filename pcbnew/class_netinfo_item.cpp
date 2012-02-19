@@ -100,7 +100,7 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
             if( pad->GetNet() == GetNet() )
             {
                 count++;
-                lengthdie += pad->m_LengthDie;
+                lengthdie += pad->GetDieLength();
             }
         }
     }
@@ -172,6 +172,7 @@ void RATSNEST_ITEM::Draw( EDA_DRAW_PANEL* panel,
 
     int color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
 
-    GRLine( panel->GetClipBox(), DC, m_PadStart->m_Pos - aOffset,
-            m_PadEnd->m_Pos - aOffset, 0, color );
+    GRLine( panel->GetClipBox(), DC,
+            m_PadStart->GetPosition() - aOffset,
+            m_PadEnd->GetPosition() - aOffset, 0, color );
 }

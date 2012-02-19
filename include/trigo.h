@@ -22,7 +22,10 @@ void RotatePoint( int *pX, int *pY, int cx, int cy, double angle );
  * Calculates the new coord point point
  * for a rotation angle in (1 / 10 degree)
  */
-void RotatePoint( wxPoint* point, double angle );
+static inline void RotatePoint( wxPoint* point, double angle )
+{
+    RotatePoint( &point->x, &point->y, angle );
+}
 
 /*
  * Calculates the new coord point point

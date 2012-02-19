@@ -18,7 +18,7 @@
 #include <gendrill.h>
 
 
-/* Local Functions */
+// Local Functions
 
 /* Compare function used for sorting holes  by increasing diameter value
  * and X value
@@ -109,39 +109,35 @@ void Build_Holes_List( BOARD* aPcb,
         }
     }
 
-    /* build hole list for pads (assumed always through holes) */
+    // build hole list for pads (assumed always through holes)
     if( !aExcludeThroughHoles || aGenerateNPTH_list )
     {
-        MODULE* Module = aPcb->m_Modules;
-
-        for( ; Module != NULL; Module = Module->Next() )
+        for( MODULE* module = aPcb->m_Modules;  module;  module->Next() )
         {
-            /* Read and analyse pads */
-            D_PAD* pad = Module->m_Pads;
-
-            for( ; pad != NULL; pad = pad->Next() )
+            // Read and analyse pads
+            for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
             {
-                if( ! aGenerateNPTH_list && pad->m_Attribut == PAD_HOLE_NOT_PLATED )
+                if( ! aGenerateNPTH_list && pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
                     continue;
 
-                if( aGenerateNPTH_list && pad->m_Attribut != PAD_HOLE_NOT_PLATED )
+                if( aGenerateNPTH_list && pad->GetAttribute() != PAD_HOLE_NOT_PLATED )
                     continue;
 
-                if( pad->m_Drill.x == 0 )
+                if( pad->GetDrillSize().x == 0 )
                     continue;
 
-                new_hole.m_Hole_NotPlated = (pad->m_Attribut == PAD_HOLE_NOT_PLATED);
+                new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_HOLE_NOT_PLATED);
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
-                new_hole.m_Hole_Orient    = pad->m_Orient;
+                new_hole.m_Hole_Orient    = pad->GetOrientation();
                 new_hole.m_Hole_Shape    = 0;           // hole shape: round
-                new_hole.m_Hole_Diameter = min( pad->m_Drill.x, pad->m_Drill.y );
+                new_hole.m_Hole_Diameter = min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
-                if( pad->m_DrillShape != PAD_CIRCLE )
+                if( pad->GetDrillShape() != PAD_CIRCLE )
                     new_hole.m_Hole_Shape = 1; // oval flag set
 
-                new_hole.m_Hole_Size = pad->m_Drill;
-                new_hole.m_Hole_Pos = pad->m_Pos;               // hole position
+                new_hole.m_Hole_Size = pad->GetDrillSize();
+                new_hole.m_Hole_Pos = pad->GetPosition();               // hole position
                 new_hole.m_Hole_Bottom_Layer = LAYER_N_BACK;
                 new_hole.m_Hole_Top_Layer    = LAYER_N_FRONT;// pad holes are through holes
                 aHoleListBuffer.push_back( new_hole );

@@ -234,7 +234,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     }
 
     // if PAD_SMD pad and high contrast mode
-    if( ( m_Attribut == PAD_SMD || m_Attribut == PAD_CONN ) && DisplayOpt.ContrastModeDisplay )
+    if( ( GetAttribute() == PAD_SMD || GetAttribute() == PAD_CONN ) && DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks
         if( frame && frame->GetToolId() == ID_TRACK_BUTT )
@@ -346,7 +346,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     if( ( m_layerMask & ALL_CU_LAYERS ) == 0 )
         DisplayIsol = false;
 
-    if( m_Attribut == PAD_HOLE_NOT_PLATED )
+    if( GetAttribute() == PAD_HOLE_NOT_PLATED )
         drawInfo.m_ShowNotPlatedHole = true;
 
     drawInfo.m_DrawMode    = aDraw_mode;

@@ -33,6 +33,7 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <trigo.h>
+#include <protos.h>
 #include <richio.h>
 #include <wxstruct.h>
 #include <macros.h>
@@ -47,7 +48,8 @@
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
 
 
-D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
+D_PAD::D_PAD( MODULE* parent ) :
+    BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
     m_NumPadName = 0;
 
@@ -55,40 +57,35 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
     m_Orient = 0;                       // Pad rotation in 1/10 degrees
     m_LengthDie = 0;
 
-    if( m_Parent && (m_Parent->Type()  == PCB_MODULE_T) )
+    if( m_Parent  &&  m_Parent->Type() == PCB_MODULE_T )
     {
-        m_Pos = ( (MODULE*) m_Parent )->GetPosition();
+        m_Pos = GetParent()->GetPosition();
     }
 
-    m_PadShape = PAD_CIRCLE;                        // Shape: PAD_CIRCLE, PAD_RECT PAD_OVAL
-                                                    // PAD_TRAPEZOID
-    m_Attribut = PAD_STANDARD;                      // Type: NORMAL, PAD_SMD, PAD_CONN
-    m_DrillShape     = PAD_CIRCLE;                  // Drill shape = circle
+    m_PadShape = PAD_CIRCLE;            // Shape: PAD_CIRCLE, PAD_RECT PAD_OVAL
+                                        // PAD_TRAPEZOID
+    m_Attribute      = PAD_STANDARD;    // Type: NORMAL, PAD_SMD, PAD_CONN
+    m_DrillShape     = PAD_CIRCLE;      // Drill shape = circle
     m_LocalClearance = 0;
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
-    m_layerMask = PAD_STANDARD_DEFAULT_LAYERS;      // set layers mask to
-                                                    // default for a standard pad
 
-    SetSubRatsnest( 0 );                            // used in ratsnest calculations
-    ComputeShapeMaxRadius();
+    // set layers mask to default for a standard pad
+    m_layerMask = PAD_STANDARD_DEFAULT_LAYERS;
+
+    SetSubRatsnest( 0 );                // used in ratsnest calculations
+
+    m_boundingRadius = -1;
 }
 
 
-D_PAD::~D_PAD()
-{
-}
-
-
-/* Calculate the radius of the circle containing the pad.
- */
-int D_PAD::GetMaxRadius() const
+int D_PAD::boundingRadius() const
 {
     int x, y;
     int radius;
 
-    switch( m_PadShape & 0x7F )
+    switch( GetShape() )
     {
     case PAD_CIRCLE:
         radius = m_Size.x / 2;
@@ -110,35 +107,67 @@ int D_PAD::GetMaxRadius() const
         break;
 
     default:
-        radius = 0;     // quiet compiler
+        radius = 0;
     }
 
     return radius;
 }
 
 
-/* Calculate the radius of the circle containing the pad.
- */
-void D_PAD::ComputeShapeMaxRadius()
-{
-    m_ShapeMaxRadius = GetMaxRadius();
-}
-
-
-/**
- * Function GetBoundingBox
- * returns the bounding box of this pad
- * Mainly used to redraw the screen area occupied by the pad
- */
 EDA_RECT D_PAD::GetBoundingBox() const
 {
     EDA_RECT area;
-    int radius = GetMaxRadius();     // Calculate the radius of the area, considered as a circle
+
+    // radius of pad area, enclosed in minimum sized circle
+    int     radius = boundingRadius();
 
     area.SetOrigin( m_Pos );
     area.Inflate( radius );
 
     return area;
+}
+
+
+void D_PAD::SetOrientation( double aAngle )
+{
+    NORMALIZE_ANGLE_POS( aAngle );
+    m_Orient = aAngle;
+}
+
+
+void D_PAD::Flip( int aTranslationY )
+{
+    int y = GetPosition().y - aTranslationY;
+
+    y = -y;         // invert about x axis.
+
+    y += aTranslationY;
+
+    SetY( y );
+
+    NEGATE( m_Pos0.y );
+    NEGATE( m_Offset.y );
+    NEGATE( m_DeltaSize.y );
+
+    SetOrientation( -GetOrientation() );
+
+    // flip pads layers
+    SetLayerMask( ChangeSideMaskLayer( m_layerMask ) );
+
+    // m_boundingRadius = -1;  the shape has not been changed
+}
+
+
+void D_PAD::AppendConfigs( PARAM_CFG_ARRAY* aResult )
+{
+    aResult->push_back( new PARAM_CFG_INT( wxT( "PadDrlX" ), &m_Drill.x,
+                                                      320, 0, 0x7FFF ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "PadDimH" ), &m_Size.x,
+                                                      550, 0, 0x7FFF ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "PadDimV" ), &m_Size.y,
+                                                      550, 0, 0x7FFF ) );
 }
 
 
@@ -265,9 +294,9 @@ void D_PAD::Copy( D_PAD* source )
     m_Size = source->m_Size;
     m_DeltaSize = source->m_DeltaSize;
     m_Pos0     = source->m_Pos0;
-    m_ShapeMaxRadius    = source->m_ShapeMaxRadius;
+    m_boundingRadius    = source->m_boundingRadius;
     m_PadShape = source->m_PadShape;
-    m_Attribut = source->m_Attribut;
+    m_Attribute = source->m_Attribute;
     m_Orient   = source->m_Orient;
     m_LengthDie = source->m_LengthDie;
     m_LocalClearance = source->m_LocalClearance;
@@ -581,9 +610,9 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     valeur_param( m_Pos.y, Line );
     frame->AppendMsgPanel( _( "Y pos" ), Line, LIGHTBLUE );
 
-    if( m_LengthDie )
+    if( GetDieLength() )
     {
-        valeur_param( m_LengthDie, Line );
+        valeur_param( GetDieLength(), Line );
         frame->AppendMsgPanel( _( "Length on die" ), Line, CYAN );
     }
 }
@@ -596,12 +625,6 @@ bool D_PAD::IsOnLayer( int aLayer ) const
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
 bool D_PAD::HitTest( const wxPoint& refPos )
 {
     int     dx, dy;
@@ -611,8 +634,10 @@ bool D_PAD::HitTest( const wxPoint& refPos )
 
     wxPoint delta = refPos - shape_pos;
 
-    /* Quick test: a test point must be inside the circle. */
-    if( ( abs( delta.x ) > m_ShapeMaxRadius ) || ( abs( delta.y ) > m_ShapeMaxRadius ) )
+    // first test: a test point must be inside a minimum sized bounding circle.
+    int radius = GetBoundingRadius();
+
+    if( ( abs( delta.x ) > radius ) || ( abs( delta.y ) > radius ) )
         return false;
 
     dx = m_Size.x >> 1; // dx also is the radius for rounded pads
@@ -716,7 +741,7 @@ wxString D_PAD::ShowPadShape() const
 
 wxString D_PAD::ShowPadAttr() const
 {
-    switch( m_Attribut & 0x0F )
+    switch( GetAttribute() )
     {
     case PAD_STANDARD:
         return _( "Std" );

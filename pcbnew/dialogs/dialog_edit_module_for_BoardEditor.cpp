@@ -120,14 +120,14 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     // These 2 parameters are usually < 0, so prepare entering a negative
     // value, if current is 0
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
-                          m_CurrentModule->m_LocalSolderPasteMargin,
+                          m_CurrentModule->GetLocalSolderPasteMargin(),
                           internalUnit );
-    if( m_CurrentModule->m_LocalSolderPasteMargin == 0 )
+    if( m_CurrentModule->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) +
                                            m_SolderPasteMarginCtrl->GetValue() );
     msg.Printf( wxT( "%.1f" ),
-                    m_CurrentModule->m_LocalSolderPasteMarginRatio * 100.0 );
-    if( m_CurrentModule->m_LocalSolderPasteMarginRatio == 0.0 &&
+                    m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
+    if( m_CurrentModule->GetLocalSolderPasteMarginRatio() == 0.0 &&
         msg[0] == '0')  // Sometimes Printf add a sign if the value is small
         m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
     else
@@ -462,12 +462,13 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     }
 
     // Initialize masks clearances
-    m_CurrentModule->m_LocalClearance =
-        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, m_Parent->GetInternalUnits() );
-    m_CurrentModule->m_LocalSolderMaskMargin =
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->GetInternalUnits() );
-    m_CurrentModule->m_LocalSolderPasteMargin =
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->GetInternalUnits() );
+    m_CurrentModule->SetLocalClearance(
+        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, m_Parent->GetInternalUnits() ) );
+    m_CurrentModule->SetLocalSolderMaskMargin(
+        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->GetInternalUnits() ) );
+    m_CurrentModule->SetLocalSolderPasteMargin(
+        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->GetInternalUnits() ) );
+
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
@@ -479,7 +480,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     if( dtmp > +100 )
         dtmp = +100;
 
-    m_CurrentModule->m_LocalSolderPasteMarginRatio = dtmp / 100;
+    m_CurrentModule->SetLocalSolderPasteMarginRatio( dtmp / 100 );
 
     // Set Module Position
     modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX, PCB_INTERNAL_UNIT );

@@ -142,7 +142,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
                     if( item->Type() == PCB_PAD_T )
                     {
-                        pos1 = pos2 = ( (D_PAD*) item )->m_Pos;
+                        pos1 = pos2 = ( (D_PAD*) item )->GetPosition();
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {

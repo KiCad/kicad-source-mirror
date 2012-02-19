@@ -102,13 +102,13 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_LocalSolderPasteMargin = aModule.m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio = aModule.m_LocalSolderPasteMarginRatio;
 
-    /* Copy reference and value. */
+    // Copy reference and value.
     m_Reference = new TEXTE_MODULE( *aModule.m_Reference );
     m_Reference->SetParent( this );
     m_Value = new TEXTE_MODULE( *aModule.m_Value );
     m_Value->SetParent( this );
 
-    /* Copy auxiliary data: Pads */
+    // Copy auxiliary data: Pads
     m_Pads.DeleteAll();
 
     for( D_PAD* pad = aModule.m_Pads;  pad;  pad = pad->Next() )
@@ -118,7 +118,7 @@ MODULE::MODULE( const MODULE& aModule ) :
         m_Pads.PushBack( newpad );
     }
 
-    /* Copy auxiliary data: Drawings */
+    // Copy auxiliary data: Drawings
     m_Drawings.DeleteAll();
 
     for( BOARD_ITEM* item = aModule.m_Drawings;  item;  item = item->Next() )
@@ -138,7 +138,7 @@ MODULE::MODULE( const MODULE& aModule ) :
         }
     }
 
-    /* Copy auxiliary data: 3D_Drawings info */
+    // Copy auxiliary data: 3D_Drawings info
     m_3D_Drawings.DeleteAll();
 
     for( S3D_MASTER* item = aModule.m_3D_Drawings;  item;  item = item->Next() )
@@ -217,11 +217,11 @@ void MODULE::Copy( MODULE* aModule )
     m_LocalSolderPasteMargin        = aModule->m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio   = aModule->m_LocalSolderPasteMarginRatio;
 
-    /* Copy reference and value. */
+    // Copy reference and value.
     m_Reference->Copy( aModule->m_Reference );
     m_Value->Copy( aModule->m_Value );
 
-    /* Copy auxiliary data: Pads */
+    // Copy auxiliary data: Pads
     m_Pads.DeleteAll();
 
     for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
@@ -231,7 +231,7 @@ void MODULE::Copy( MODULE* aModule )
         m_Pads.PushBack( newpad );
     }
 
-    /* Copy auxiliary data: Drawings */
+    // Copy auxiliary data: Drawings
     m_Drawings.DeleteAll();
 
     for( BOARD_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
@@ -258,7 +258,7 @@ void MODULE::Copy( MODULE* aModule )
         }
     }
 
-    /* Copy auxiliary data: 3D_Drawings info */
+    // Copy auxiliary data: 3D_Drawings info
     m_3D_Drawings.DeleteAll();
 
     // Ensure there is one (or more) item in m_3D_Drawings
@@ -314,7 +314,7 @@ void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoi
     // Draws footprint anchor
     DrawAncre( aPanel, aDC, aOffset, DIM_ANCRE_MODULE, aDrawMode );
 
-    /* Draw graphic items */
+    // Draw graphic items
     if( brd->IsElementVisible( MOD_REFERENCES_VISIBLE ) )
     {
         if( !(m_Reference->IsMoving()) )
@@ -549,8 +549,8 @@ D_PAD* MODULE::GetPad( const wxPoint& aPosition, int aLayerMask )
 {
     for( D_PAD* pad = m_Pads;   pad;   pad = pad->Next() )
     {
-        /* ... and on the correct layer. */
-        if( ( pad->m_layerMask & aLayerMask ) == 0 )
+        // ... and on the correct layer.
+        if( ( pad->GetLayerMask() & aLayerMask ) == 0 )
             continue;
 
         if( pad->HitTest( aPosition ) )

@@ -666,7 +666,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
 
         for( Pad = aModule->m_Pads; Pad != NULL; Pad = Pad->Next() )
         {
-            if( ( Pad->m_layerMask & otherLayerMask ) == 0 )
+            if( ( Pad->GetLayerMask() & otherLayerMask ) == 0 )
                 continue;
 
             TstOtherSide = true;
