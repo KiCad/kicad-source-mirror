@@ -40,6 +40,7 @@
 #include <protos.h>
 #include <class_library.h>
 #include <sch_component.h>
+#include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
 
@@ -48,7 +49,7 @@
 #include <boost/foreach.hpp>
 
 
-wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
+wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
 {
     wxSemaphore semaphore( 0, 1 );
     wxString cmpname;
@@ -58,6 +59,12 @@ wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
     {
         m_ViewlibFrame->Destroy();
         m_ViewlibFrame = NULL;
+    }
+
+    if( m_LibeditFrame && m_LibeditFrame->m_ViewlibFrame )
+    {
+        m_LibeditFrame->m_ViewlibFrame->Destroy();
+        m_LibeditFrame->m_ViewlibFrame = NULL;
     }
 
     m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore );
@@ -74,36 +81,38 @@ wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
     return cmpname;
 }
 
-
 /*
- * load from a library and place a component
- *  if libname != "", search in lib "libname"
- *  else search in all loaded libs
+ * Function SelectComponentFromLib
+ * Calls the library viewer to select component to import into schematic.
+ * if the library viewer is currently running, it is closed and reopened
+ * in modal mode.
+ * param aLibname = the lib name or an empty string.
+ *     if aLibname is empty, the full list of libraries is used
+ * param aList = list of previously loaded components
+ * param aUseLibBrowser = bool to call the library viewer to select the component
+ * param aUnit = a point to int to return the selected unit (if any)
+ * param aConvert = a point to int to return the selected De Morgan shape (if any)
+ *
+ * return the component name
  */
-SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
-                                               const wxString& libname,
-                                               wxArrayString&  HistoryList,
-                                               bool            UseLibBrowser )
+wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
+                                                     wxArrayString&  aHistoryList,
+                                                     bool            aUseLibBrowser,
+                                                     int*            aUnit,
+                                                     int*            aConvert )
 {
     int             CmpCount  = 0;
-    int             unit      = 1;
-    int             convert   = 1;
-    LIB_COMPONENT*  Entry     = NULL;
-    SCH_COMPONENT*  component = NULL;
-    CMP_LIBRARY*    Library   = NULL;
-    wxString        Name, keys, msg;
-    bool            AllowWildSeach = true;
-    static wxString lastCommponentName;
+    LIB_COMPONENT*  libEntry     = NULL;
+    CMP_LIBRARY*    currLibrary   = NULL;
+    wxString        cmpName, keys, msg;
+    bool            allowWildSeach = true;
 
-    m_itemToRepeat = NULL;
-    m_canvas->SetIgnoreMouseEvents( true );
-
-    if( !libname.IsEmpty() )
+    if( !aLibname.IsEmpty() )
     {
-        Library = CMP_LIBRARY::FindLibrary( libname );
+        currLibrary = CMP_LIBRARY::FindLibrary( aLibname );
 
-        if( Library != NULL )
-            CmpCount = Library->GetCount();
+        if( currLibrary != NULL )
+            CmpCount = currLibrary->GetCount();
     }
     else
     {
@@ -116,27 +125,106 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     /* Ask for a component name or key words */
     msg.Printf( _( "component selection (%d items loaded):" ), CmpCount );
 
-    DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
-                              msg, UseLibBrowser );
-    dlg.SetComponentName( lastCommponentName );
+    DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), aHistoryList,
+                              msg, aUseLibBrowser );
+    if(  aHistoryList.GetCount() )
+        dlg.SetComponentName( aHistoryList[0] );
 
     if ( dlg.ShowModal() == wxID_CANCEL )
-    {
-        m_canvas->SetIgnoreMouseEvents( false );
-        m_canvas->MoveCursorToCrossHair();
-        return NULL;
-    }
+        return wxEmptyString;
 
     if( dlg.m_GetExtraFunction )
     {
-        Name = SelectFromLibBrowser();
-        unit = m_ViewlibFrame->GetUnit();
-        convert = m_ViewlibFrame->GetConvert();
+        cmpName = SelectComponentFromLibBrowser();
+        if( aUnit )
+            *aUnit = m_ViewlibFrame->GetUnit();
+        if( aConvert )
+            *aConvert = m_ViewlibFrame->GetConvert();
+        if( !cmpName.IsEmpty() )
+            AddHistoryComponentName( aHistoryList, cmpName );
+        return cmpName;
     }
     else
+        cmpName = dlg.GetComponentName();
+
+    if( cmpName.IsEmpty() )
+        return wxEmptyString;
+
+#ifndef KICAD_KEEPCASE
+    cmpName.MakeUpper();
+#endif
+
+    if( dlg.IsKeyword() )
     {
-        Name = dlg.GetComponentName();
+        allowWildSeach = false;
+        keys = cmpName;
+        cmpName = DataBaseGetName( this, keys, cmpName );
+
+        if( cmpName.IsEmpty() )
+            return wxEmptyString;
+     }
+    else if( cmpName == wxT( "*" ) )
+    {
+        allowWildSeach = false;
+
+        if( GetNameOfPartToLoad( this, currLibrary, cmpName ) == 0 )
+            return wxEmptyString;
     }
+    else if( cmpName.Contains( wxT( "?" ) ) || cmpName.Contains( wxT( "*" ) ) )
+    {
+        allowWildSeach = false;
+        cmpName = DataBaseGetName( this, keys, cmpName );
+
+        if( cmpName.IsEmpty() )
+            return wxEmptyString;
+    }
+
+    libEntry = CMP_LIBRARY::FindLibraryComponent( cmpName, aLibname );
+
+    if( ( libEntry == NULL ) && allowWildSeach ) /* Search with wildcard */
+    {
+        allowWildSeach = false;
+        wxString wildname = wxChar( '*' ) + cmpName + wxChar( '*' );
+        cmpName = wildname;
+        cmpName = DataBaseGetName( this, keys, cmpName );
+
+        if( !cmpName.IsEmpty() )
+            libEntry = CMP_LIBRARY::FindLibraryComponent( cmpName, aLibname );
+
+        if( libEntry == NULL )
+            return wxEmptyString;
+    }
+
+    if( libEntry == NULL )
+    {
+        msg = _( "Failed to find part " ) + cmpName + _( " in library" );
+        DisplayError( this, msg );
+        return wxEmptyString;
+    }
+
+    AddHistoryComponentName( aHistoryList, cmpName );
+    return cmpName;
+}
+
+
+/*
+ * load from a library and place a component
+ *  if libname != "", search in lib "libname"
+ *  else search in all loaded libs
+ */
+SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
+                                               const wxString& aLibname,
+                                               wxArrayString&  aHistoryList,
+                                               bool            aUseLibBrowser )
+{
+    int unit    = 1;
+    int convert = 1;
+
+    m_itemToRepeat = NULL;
+    m_canvas->SetIgnoreMouseEvents( true );
+
+    wxString Name = SelectComponentFromLibrary( aLibname, aHistoryList, aUseLibBrowser,
+                                                &unit, &convert );
 
     if( Name.IsEmpty() )
     {
@@ -149,76 +237,20 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     Name.MakeUpper();
 #endif
 
-    if( Name.GetChar( 0 ) == '=' )
-    {
-        AllowWildSeach = false;
-        keys = Name.AfterFirst( '=' );
-        Name = DataBaseGetName( this, keys, Name );
-
-        if( Name.IsEmpty() )
-        {
-            m_canvas->SetIgnoreMouseEvents( false );
-            m_canvas->MoveCursorToCrossHair();
-            return NULL;
-        }
-    }
-    else if( Name == wxT( "*" ) )
-    {
-        AllowWildSeach = false;
-
-        if( GetNameOfPartToLoad( this, Library, Name ) == 0 )
-        {
-            m_canvas->SetIgnoreMouseEvents( false );
-            m_canvas->MoveCursorToCrossHair();
-            return NULL;
-        }
-    }
-    else if( Name.Contains( wxT( "?" ) ) || Name.Contains( wxT( "*" ) ) )
-    {
-        AllowWildSeach = false;
-        Name = DataBaseGetName( this, keys, Name );
-
-        if( Name.IsEmpty() )
-        {
-            m_canvas->SetIgnoreMouseEvents( false );
-            m_canvas->MoveCursorToCrossHair();
-            return NULL;
-        }
-    }
-
-    Entry = CMP_LIBRARY::FindLibraryComponent( Name, libname );
-
-    if( ( Entry == NULL ) && AllowWildSeach ) /* Search with wildcard */
-    {
-        AllowWildSeach = false;
-        wxString wildname = wxChar( '*' ) + Name + wxChar( '*' );
-        Name = wildname;
-        Name = DataBaseGetName( this, keys, Name );
-
-        if( !Name.IsEmpty() )
-            Entry = CMP_LIBRARY::FindLibraryComponent( Name, libname );
-
-        if( Entry == NULL )
-        {
-            m_canvas->SetIgnoreMouseEvents( false );
-            m_canvas->MoveCursorToCrossHair();
-            return NULL;
-        }
-    }
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( Name, aLibname );
 
     m_canvas->SetIgnoreMouseEvents( false );
     m_canvas->MoveCursorToCrossHair();
 
     if( Entry == NULL )
     {
-        msg = _( "Failed to find part " ) + Name + _( " in library" );
-        DisplayError( this, msg );
+        wxString msg;
+        msg.Printf( _( "Failed to find part <%s> in library" ), GetChars( Name ) );
+        wxMessageBox( msg );
         return NULL;
     }
 
-    lastCommponentName = Name;
-    AddHistoryComponentName( HistoryList, Name );
-
+    SCH_COMPONENT*  component;
     component = new SCH_COMPONENT( *Entry, m_CurrentSheet, unit, convert,
                                    GetScreen()->GetCrossHairPosition(), true );
 
@@ -230,10 +262,10 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     // Set the component value that can differ from component name in lib, for aliases
     component->GetField( VALUE )->m_Text = Name;
     component->DisplayInfo( this );
-    component->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    component->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     component->SetFlags( IS_NEW );
 
-    MoveItem( (SCH_ITEM*) component, DC );
+    MoveItem( (SCH_ITEM*) component, aDC );
 
     return component;
 }

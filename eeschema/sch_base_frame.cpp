@@ -23,6 +23,37 @@
  */
 
 #include <sch_base_frame.h>
+#include <viewlib_frame.h>
+#include <libeditframe.h>
+
+SCH_BASE_FRAME::SCH_BASE_FRAME( wxWindow* aParent,
+                                id_drawframe aWindowType,
+                                const wxString& aTitle,
+                                const wxPoint& aPosition, const wxSize& aSize,
+                                long aStyle ) :
+    EDA_DRAW_FRAME( aParent, aWindowType, aTitle, aPosition, aSize, aStyle )
+{
+    m_ViewlibFrame = NULL;
+    m_LibeditFrame = NULL;
+}
+
+
+void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
+{
+    if( m_ViewlibFrame )
+    {
+        m_ViewlibFrame->Show( true );
+        return;
+    }
+
+    if( m_LibeditFrame && m_LibeditFrame->m_ViewlibFrame )
+    {
+        m_LibeditFrame->m_ViewlibFrame->Show( true );
+        return;
+    }
+
+    m_ViewlibFrame = new LIB_VIEW_FRAME( this );
+}
 
 
 SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const

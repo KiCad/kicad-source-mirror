@@ -29,6 +29,8 @@
 
 class PAGE_INFO;
 class TITLE_BLOCK;
+class LIB_VIEW_FRAME;
+class LIB_EDIT_FRAME;
 
 
 /**
@@ -43,17 +45,26 @@ class TITLE_BLOCK;
  */
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
+protected:
+    LIB_VIEW_FRAME*       m_ViewlibFrame;       // A library viewer, common to SCH_EDIT_FRAME
+                                                // and LIB_EDIT_FRAME.
+                                                // has no meaning to LIB_VIEW_FRAME
+    LIB_EDIT_FRAME*       m_LibeditFrame;       // the library editor.
+                                                // Is used mainly in SCH_EDIT_FRAME
+                                                // but is defined here because some functions
+                                                // need to know if a library editor or a libray
+                                                // viewer is currently opened
+
 public:
     SCH_BASE_FRAME( wxWindow* aParent,
                     id_drawframe aWindowType,
                     const wxString& aTitle,
                     const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE ) :
-        EDA_DRAW_FRAME( aParent, aWindowType, aTitle, aPosition, aSize, aStyle )
-    {
-    }
+                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     SCH_SCREEN* GetScreen() const;                              // overload EDA_DRAW_FRAME
+
+    void SetLibraryViewerWindow( LIB_VIEW_FRAME* aFrame ) { m_ViewlibFrame = aFrame; }
 
     void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
     const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
@@ -64,6 +75,45 @@ public:
 
     const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME
+
+protected:
+
+    /**
+     * Function SelectComponentFromLibBrowser
+     * Calls the library viewer to select component to import into schematic.
+     * if the library viewer is currently running, it is closed and reopened
+     * in modal mode.
+     * @return the component name
+     */
+    wxString SelectComponentFromLibBrowser( void );
+
+    /**
+     * Function SelectComponentFromLib
+     * Calls the library viewer to select component to import into schematic.
+     * if the library viewer is currently running, it is closed and reopened
+     * in modal mode.
+     * @param aLibname = the lib name or an empty string.
+     *     if aLibname is empty, the full list of libraries is used
+     * @param aHistoryList = list of previously loaded components
+     * @param aUseLibBrowser = bool to call the library viewer to select the component
+     * @param aUnit = a point to int to return the selected unit (if any)
+     * @param aConvert = a point to int to return the selected De Morgan shape (if any)
+     *
+     * @return the component name
+     */
+    wxString SelectComponentFromLibrary( const wxString& aLibname,
+                                         wxArrayString&  aHistoryList,
+                                         bool            aUseLibBrowser,
+                                         int*            aUnit,
+                                         int*            aConvert );
+
+    /**
+     * Function OnOpenLibraryViewer
+     * Open the library viewer only to browse library contents.
+     * If the viewed is already opened from this, raise the viewer
+     * If the viewed is already opened from an other window, close it and reopen
+     */
+    void OnOpenLibraryViewer( wxCommandEvent& event );
 };
 
 #endif // SCH_BASE_FRAME_H_

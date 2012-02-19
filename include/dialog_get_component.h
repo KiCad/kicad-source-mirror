@@ -19,6 +19,7 @@ class DIALOG_GET_COMPONENT : public DIALOG_GET_COMPONENT_BASE
 private:
     bool        m_auxToolSelector;
     wxString    m_Text;
+    bool        m_selectionIsKeyword;
 
 public:
     bool        m_GetExtraFunction;
@@ -30,7 +31,21 @@ public:
                           bool show_extra_tool );
     ~DIALOG_GET_COMPONENT() {};
 
+    /**
+     * Function GetComponentName
+     * @return the selection (name or keyword)
+     */
     wxString GetComponentName( void );
+
+    /**
+     * Function IsKeyword
+     * @return true if the returned string is a keyword
+     */
+    bool     IsKeyword( void )
+    {
+        return m_selectionIsKeyword;
+    }
+
     void     SetComponentName( const wxString& name );
 
 private:

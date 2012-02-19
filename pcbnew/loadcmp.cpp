@@ -178,10 +178,10 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
 
     moduleName.MakeUpper();
 
-    if( moduleName[0] == '=' )   // Selection by keywords
+    if( dlg.IsKeyword() )   // Selection by keywords
     {
         AllowWildSeach = false;
-        keys = moduleName.AfterFirst( '=' );
+        keys = moduleName;
         moduleName = Select_1_Module_From_List( this, aLibrary, wxEmptyString, keys );
 
         if( moduleName.IsEmpty() )  /* Cancel command */

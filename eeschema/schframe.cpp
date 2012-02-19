@@ -27,10 +27,6 @@
  * @file schframe.cpp
  */
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
-
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <gr_basic.h>
@@ -193,8 +189,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_CurrentSheet = new SCH_SHEET_PATH();
     m_TextFieldSize = DEFAULT_SIZE_TEXT;
-    m_LibeditFrame = NULL;              // Component editor frame.
-    m_ViewlibFrame = NULL;              // Frame for browsing component libraries
     m_DefaultSchematicFileName = NAMELESS_PROJECT;
     m_DefaultSchematicFileName += wxT( ".sch" );
     m_showAllPins = false;
@@ -775,20 +769,6 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
         ExecuteFile( this, CVPCB_EXE );
     }
 }
-
-
-void SCH_EDIT_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
-{
-    if( m_ViewlibFrame )
-    {
-        m_ViewlibFrame->Show( true );
-    }
-    else
-    {
-        m_ViewlibFrame = new LIB_VIEW_FRAME( this );
-    }
-}
-
 
 void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 {

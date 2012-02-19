@@ -3,7 +3,6 @@
 /*********************************/
 
 #include <fctsys.h>
-//#include "gr_basic.h"
 #include <common.h>
 #include <macros.h>
 #include <wxstruct.h>
@@ -46,6 +45,7 @@ void DIALOG_GET_COMPONENT::initDialog( wxArrayString& aHistoryList )
 {
     SetFocus();
     m_GetExtraFunction = false;
+    m_selectionIsKeyword = false;
     m_historyList->Append( aHistoryList );
     if( !m_auxToolSelector )
     {
@@ -63,6 +63,7 @@ void DIALOG_GET_COMPONENT::OnCancel( wxCommandEvent& event )
 
 void DIALOG_GET_COMPONENT::Accept( wxCommandEvent& event )
 {
+    m_selectionIsKeyword = false;
     switch( event.GetId() )
     {
     case ID_SEL_BY_LISTBOX:
@@ -74,7 +75,8 @@ void DIALOG_GET_COMPONENT::Accept( wxCommandEvent& event )
         break;
 
     case ID_ACCEPT_KEYWORD:
-        m_Text = wxT( "= " ) + m_textCmpNameCtrl->GetValue();
+        m_selectionIsKeyword = true;
+        m_Text = m_textCmpNameCtrl->GetValue();
         break;
 
     case ID_LIST_ALL:
