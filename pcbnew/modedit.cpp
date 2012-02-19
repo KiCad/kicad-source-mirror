@@ -28,6 +28,12 @@
 
 #include <dialog_edit_module_for_Modedit.h>
 
+// Functions defined in block_module_editor, but used here
+// These 2 functions are used in modedit to rotate or mirror the whole footprint
+// so they are called with force_all = true
+void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all = false );
+void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all = false );
+
 
 BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
 {
@@ -724,141 +730,57 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 {
-    D_PAD*          pad = module->m_Pads;
-    EDA_ITEM*       item = module->m_Drawings;
-    TEXTE_MODULE*   textmod;
-    EDGE_MODULE*    edgemod;
-    wxPoint         pt;
-    wxSize          size;
-    double          angle = 900; // Necessary +- 900 (+- 90 degrees) )
+    TEXTE_MODULE* textmod;
+    wxPoint       pos;
+    double        angle = 900;  // Necessary +- 900 (+- 90 degrees).
+                                // Be prudent: because RotateMarkedItems is used to rotate some items
+                                // used the same value as RotateMarkedItems
 
     switch( transform )
     {
     case ID_MODEDIT_MODULE_ROTATE:
-        module->SetOrientation( angle );
+        #define ROTATE( z ) RotatePoint( (&z), angle )
+        RotateMarkedItems( module, wxPoint(0,0), true );
 
-        for( ;  pad;  pad = pad->Next() )
-        {
-            pad->SetPos0( pad->GetPosition() );
-            pad->SetOrientation( pad->GetOrientation() - angle );
-
-            pt = pad->GetOffset();
-            RotatePoint( &pt, angle );
-            pad->SetOffset( pt );
-
-            size = pad->GetSize();
-            EXCHG( size.x, size.y );
-            pad->SetSize( size );
-
-            size = pad->GetDelta();
-            RotatePoint( &size.x, &size.y, -angle );
-            pad->SetDelta( size );
-        }
-
-        module->m_Reference->SetPos0( module->m_Reference->m_Pos );
+        pos = module->m_Reference->GetPosition();
+        ROTATE( pos );
+        module->m_Reference->SetPosition( pos );
+        module->m_Reference->SetPos0( module->m_Reference->GetPosition() );
         module->m_Reference->m_Orient += angle;
 
         if( module->m_Reference->m_Orient >= 1800 )
             module->m_Reference->m_Orient -= 1800;
 
+        pos = module->m_Value->GetPosition();
+        ROTATE( pos );
+        module->m_Value->SetPosition( pos );
         module->m_Value->SetPos0( module->m_Value->m_Pos );
         module->m_Value->m_Orient += angle;
 
         if( module->m_Value->m_Orient >= 1800 )
             module->m_Value->m_Orient -= 1800;
 
-        for( ; item != NULL; item = item->Next() )
-        {
-            if( item->Type() == PCB_MODULE_EDGE_T )
-            {
-                edgemod = (EDGE_MODULE*) item;
-                edgemod->SetStart0( edgemod->GetStart() );
-                edgemod->SetEnd0(   edgemod->GetEnd() );
-            }
-
-            else if( item->Type() == PCB_MODULE_TEXT_T )
-            {
-                textmod = (TEXTE_MODULE*) item;
-                textmod->SetPos0( textmod->m_Pos );
-            }
-        }
-
-        module->m_Orient = 0;
         break;
 
     case ID_MODEDIT_MODULE_MIRROR:
-        for( ;  pad;  pad = pad->Next() )
-        {
-            pad->SetY( -pad->GetPosition().y );
-
-            pt = pad->GetPos0();
-            NEGATE( pt.y );
-            pad->SetPos0( pt );
-
-            pt = pad->GetOffset();
-            NEGATE( pt.y );
-            pad->SetOffset( pt );
-
-            size = pad->GetDelta();
-            NEGATE( size.y );
-            pad->SetDelta( size );
-
-            if( pad->GetOrientation() )
-                pad->SetOrientation( 3600 - pad->GetOrientation() );
-        }
-
-        // Reverse mirror of reference.
+         // Mirror reference.
         textmod = module->m_Reference;
-        NEGATE( textmod->m_Pos.y );
-        NEGATE( textmod->m_Pos0.y );
+        NEGATE( textmod->m_Pos.x );
+        NEGATE( textmod->m_Pos0.x );
 
         if( textmod->m_Orient )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
-        // Reverse mirror of value.
+        // Mirror value.
         textmod = module->m_Value;
-        NEGATE( textmod->m_Pos.y );
-        NEGATE( textmod->m_Pos0.y );
+        NEGATE( textmod->m_Pos.x );
+        NEGATE( textmod->m_Pos0.x );
 
         if( textmod->m_Orient )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
-        // Reverse mirror of footprints.
-        item = module->m_Drawings;
-
-        for( ; item;  item = item->Next() )
-        {
-            switch( item->Type() )
-            {
-            case PCB_MODULE_EDGE_T:
-                edgemod = (EDGE_MODULE*) item;
-
-                edgemod->SetStartY( -edgemod->GetStart().y );
-                edgemod->SetEndY( -edgemod->GetEnd().y );
-
-                // Invert local coordinates
-                NEGATE( edgemod->m_Start0.y );
-                NEGATE( edgemod->m_End0.y );
-                edgemod->SetAngle( -edgemod->GetAngle() );
-                break;
-
-            case PCB_MODULE_TEXT_T:
-                // Reverse mirror position and mirror.
-                textmod = (TEXTE_MODULE*) item;
-                NEGATE( textmod->m_Pos.y );
-                NEGATE( textmod->m_Pos0.y );
-
-                if( textmod->m_Orient )
-                    textmod->m_Orient = 3600 - textmod->m_Orient;
-
-                break;
-
-            default:
-                DisplayError( this, wxT( "Draw type undefined" ) );
-                break;
-            }
-        }
-
+        // Mirror pads and graphic items of the footprint:
+        MirrorMarkedItems( module, wxPoint(0,0), true );
         break;
 
     default:

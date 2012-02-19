@@ -119,6 +119,10 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Delete component in current library" ) );
 
     m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
+                            HELP_RUN_LIB_VIEWER );
+
+    m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
                             _( "Create a new component" ) );
 

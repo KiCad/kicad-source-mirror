@@ -56,7 +56,13 @@
 
 #define BLOCK_COLOR BROWN
 
+// Functions defined here, but used also in other files
+// These 2 functions are used in modedit to rotate or mirror the whole footprint
+// so they are called with force_all = true
+void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all = false );
+void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all = false );
 
+// Local functions:
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase );
 static int  MarkItemsInBloc( MODULE* module, EDA_RECT& Rect );
@@ -64,8 +70,6 @@ static int  MarkItemsInBloc( MODULE* module, EDA_RECT& Rect );
 static void ClearMarkItems( MODULE* module );
 static void CopyMarkedItems( MODULE* module, wxPoint offset );
 static void MoveMarkedItems( MODULE* module, wxPoint offset );
-static void MirrorMarkedItems( MODULE* module, wxPoint offset );
-static void RotateMarkedItems( MODULE* module, wxPoint offset );
 static void DeleteMarkedItems( MODULE* module );
 
 
@@ -521,8 +525,10 @@ void DeleteMarkedItems( MODULE* module )
 
 
 /** Mirror marked items, refer to a Vertical axis at position offset
+ * Note: because this function is used in global transform,
+ * if force_all is true, all items will be mirrored
  */
-void MirrorMarkedItems( MODULE* module, wxPoint offset )
+void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
 {
 #define SETMIRROR( z ) (z) -= offset.x; (z) = -(z); (z) += offset.x;
     wxPoint     tmp;
@@ -533,9 +539,8 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 
     for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
-        // @JP why allow some pads to stay behind?  Do not understand
-        // why this test is here.
-        if( !pad->IsSelected() )
+        // Skip pads not selected, i.e. not inside the block to mirror:
+        if( !pad->IsSelected() && !force_all )
             continue;
 
         tmp = pad->GetPosition();
@@ -557,7 +562,8 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 
     for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
-        if( !item->IsSelected() )   // @JP why allow some graphics to stay behind?
+        // Skip items not selected, i.e. not inside the block to mirror:
+        if( !item->IsSelected() && !force_all )
             continue;
 
         switch( item->Type() )
@@ -600,9 +606,11 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 }
 
 
-/** Rotate marked items, refer to a Vertical axis at position offset
+/** Rotate marked items, refer to a rotation point at position offset
+ * Note: because this function is used in global transform,
+ * if force_all is true, all items will be rotated
  */
-void RotateMarkedItems( MODULE* module, wxPoint offset )
+void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
 {
 #define ROTATE( z ) RotatePoint( (&z), offset, 900 )
 
@@ -611,7 +619,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
 
     for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( !pad->IsSelected() )
+        if( !pad->IsSelected() && !force_all )
             continue;
 
         wxPoint pos = pad->GetPosition();
@@ -624,7 +632,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
 
     for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
-        if( !item->IsSelected() )
+        if( !item->IsSelected() && !force_all)
             continue;
 
         switch( item->Type() )

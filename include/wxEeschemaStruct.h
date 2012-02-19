@@ -114,8 +114,6 @@ class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
     SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
-    LIB_VIEW_FRAME*       m_ViewlibFrame;
-    LIB_EDIT_FRAME*       m_LibeditFrame;
     wxString              m_DefaultSchematicFileName;
     int m_TextFieldSize;
     PARAM_CFG_ARRAY       m_projectFileParams;
@@ -203,8 +201,6 @@ public:
     void OnCloseWindow( wxCloseEvent& Event );
 
     void SetLibraryEditorWindow( LIB_EDIT_FRAME* aFrame ) { m_LibeditFrame = aFrame; }
-
-    void SetLibraryViewerWindow( LIB_VIEW_FRAME* aFrame ) { m_ViewlibFrame = aFrame; }
 
     bool GetShowAllPins() const { return m_showAllPins; }
 
@@ -746,7 +742,6 @@ private:
     void OnLoadProject( wxCommandEvent& event );
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
-    void OnOpenLibraryViewer( wxCommandEvent& event );
     void OnOpenLibraryEditor( wxCommandEvent& event );
     void OnSetOptions( wxCommandEvent& event );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
@@ -873,11 +868,6 @@ private:
     void InstallHierarchyFrame( wxDC* DC, wxPoint& pos );
     SCH_SHEET* CreateSheet( wxDC* DC );
     void ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
-
-    /**
-     * Use the component viewer to select component to import into schematic.
-     */
-    wxString SelectFromLibBrowser( void );
 
 public:
     /**

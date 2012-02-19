@@ -113,10 +113,9 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
 
 void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 {
-    int        i;
     wxString   msg;
     wxString   CmpName;
-    LIB_ALIAS* LibEntry = NULL;
+    LIB_ALIAS* libEntry = NULL;
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
@@ -133,9 +132,10 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
             return;
     }
 
-    i = GetNameOfPartToLoad( this, m_library, CmpName );
+    wxArrayString historyList;
+    CmpName = SelectComponentFromLibrary( m_library->GetName(), historyList, true, NULL, NULL );
 
-    if( i == 0 )
+    if( CmpName.IsEmpty() )
         return;
 
     GetScreen()->ClrModify();
@@ -149,19 +149,39 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     }
 
     /* Load the new library component */
-    LibEntry = m_library->FindEntry( CmpName );
+    libEntry = m_library->FindEntry( CmpName );
+    CMP_LIBRARY* searchLib = m_library;
+    if( libEntry == NULL )
+    {   // Not found in the active library: search inside the full list
+        // (can happen when using Viewlib to load a component)
+        libEntry = CMP_LIBRARY::FindLibraryEntry( CmpName );
+        if( libEntry )
+        {
+            searchLib = libEntry->GetLibrary();
+            // The entry to load is not in the active lib
+            // Ask for a new active lib
+            wxString msg;
+            msg << _("The selected component is not in the active library");
+            msg << wxT("\n\n");
+            msg << _("Do you want to change the active library?");
+            if( IsOK( this, msg ) )
+                SelectActiveLibrary( searchLib );
+        }
+    }
 
-    if( LibEntry == NULL )
+    if( libEntry == NULL )
     {
         msg.Printf( _( "Component name \"%s\" not found in library \"%s\"." ),
                     GetChars( CmpName ),
-                    GetChars( m_library->GetName() ) );
+                    GetChars( searchLib->GetName() ) );
         DisplayError( this, msg );
         return;
     }
 
-    if( ! LoadComponentFromCurrentLib( LibEntry ) )
-        return;
+    EXCHG( searchLib, m_library );
+    LoadComponentFromCurrentLib( libEntry );
+    EXCHG( searchLib, m_library );
+    DisplayLibInfos();
 }
 
 
