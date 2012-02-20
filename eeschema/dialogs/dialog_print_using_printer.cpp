@@ -335,31 +335,9 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     // Change scale factor and offset to print the whole page.
     bool printReference = parent->GetPrintSheetReference();
 
-    if( printReference )
-    {
-        // Draw the page to a memory and let the dc calculate the drawing limits.
-        wxBitmap psuedoBitmap( 1, 1 );
-        wxMemoryDC memDC;
-        memDC.SelectObject( psuedoBitmap );
-        aScreen->Draw( panel, &memDC, GR_DEFAULT_DRAWMODE );
-        parent->TraceWorkSheet( &memDC, aScreen, g_DrawDefaultLineThickness );
-
-        wxLogDebug( wxT( "MinX = %d, MaxX = %d, MinY = %d, MaxY = %d" ),
-                    memDC.MinX(), memDC.MaxX(), memDC.MinY(), memDC.MaxY() );
-
-        pageSizeIU.x = memDC.MaxX() - memDC.MinX();
-        pageSizeIU.y = memDC.MaxY() - memDC.MinY();
-
-        FitThisSizeToPageMargins( pageSizeIU, parent->GetPageSetupData() );
-        fitRect = GetLogicalPageMarginsRect( parent->GetPageSetupData() );
-    }
-    else
-    {
-        pageSizeIU = aScreen->GetPageSettings().GetSizeIU();
-
-        FitThisSizeToPaper( pageSizeIU );
-        fitRect = GetLogicalPaperRect();
-    }
+    pageSizeIU = aScreen->GetPageSettings().GetSizeIU();
+    FitThisSizeToPaper( pageSizeIU );
+    fitRect = GetLogicalPaperRect();
 
     wxLogDebug( wxT( "Fit rectangle: %d, %d, %d, %d" ),
                 fitRect.x, fitRect.y, fitRect.width, fitRect.height );
