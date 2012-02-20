@@ -94,6 +94,11 @@ public:
     BOARD_ITEM* Back() const { return (BOARD_ITEM*) Pback; }
     BOARD_ITEM* GetParent() const { return (BOARD_ITEM*) m_Parent; }
 
+#if 0
+    // DICK: there is no value in having a polymorphic {Get,Set}Position().  We never
+    // call GetPosition() using a generic pointer, and the virtual is slower and
+    // can never be inlined.
+
     /**
      * Function GetPosition
      * returns the position of this object.
@@ -107,6 +112,7 @@ public:
       * @param aPos is the new position of this object
       */
     virtual void SetPosition( const wxPoint& aPos ) = 0;
+#endif
 
     /**
      * Function GetLayer

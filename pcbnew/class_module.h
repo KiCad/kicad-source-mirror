@@ -163,8 +163,8 @@ public:
      */
     EDA_RECT GetBoundingBox() const;
 
-    void SetPosition( const wxPoint& aPos );                    // overload
-    const wxPoint GetPosition() const       { return m_Pos; }   // overload
+    void SetPosition( const wxPoint& aPos );                        // was overload
+    const wxPoint& GetPosition() const          { return m_Pos; }   // was overload
 
     void SetOrientation( double newangle );
     double GetOrientation() const { return m_Orient; }

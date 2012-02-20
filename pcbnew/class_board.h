@@ -268,12 +268,6 @@ public:
      */
     static wxString GetDefaultLayerName( int aLayerNumber );
 
-    const wxPoint GetPosition() const       // overload
-    {
-        return wxPoint( 0, 0 );     // dummy for pure virtual
-    }
-    void SetPosition( const wxPoint& aPos ) {}  // overload
-
     /**
      * Function Add
      * adds the given item to this BOARD and takes ownership of its memory.

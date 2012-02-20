@@ -125,8 +125,8 @@ public:
      */
     virtual void Flip( const wxPoint& aCentre );
 
-    void SetPosition( const wxPoint& aPos )     { m_Start = aPos; }     // overload
-    const wxPoint GetPosition() const           { return m_Start; }     // overload
+    void SetPosition( const wxPoint& aPos )     { m_Start = aPos; }     // was overload
+    const wxPoint& GetPosition() const          { return m_Start; }     // was overload
 
     void SetWidth( int aWidth )                 { m_Width = aWidth; }
     int GetWidth() const                        { return m_Width; }
@@ -479,12 +479,8 @@ public:
      */
     void ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
 
-    const wxPoint GetPosition() const   // overload
-    {
-        return m_Start;
-    }
-
-    void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // overload
+    const wxPoint& GetPosition() const  {  return m_Start; }       // was overload
+    void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // was overload
 
     /**
      * Function GetClass

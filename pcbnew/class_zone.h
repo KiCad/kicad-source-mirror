@@ -150,8 +150,8 @@ public:
      * Function GetPosition
      * @return a wxPoint, position of the first point of the outline
      */
-    const wxPoint GetPosition() const;          // overload
-    void SetPosition( const wxPoint& aPos );    // overload
+    const wxPoint& GetPosition() const;             // was overload
+    void SetPosition( const wxPoint& aPos );        // was overload
 
     /**
      * Function SetPriority
@@ -481,9 +481,9 @@ public:
         m_Poly->RemoveAllContours();
     }
 
-    wxPoint GetCornerPosition( int aCornerIndex ) const
+    const wxPoint& GetCornerPosition( int aCornerIndex ) const
     {
-        return wxPoint( m_Poly->GetX( aCornerIndex ), m_Poly->GetY( aCornerIndex ) );
+        return m_Poly->GetPos( aCornerIndex );
     }
 
     void SetCornerPosition( int aCornerIndex, wxPoint new_pos )

@@ -113,9 +113,11 @@ bool ZONE_CONTAINER::UnFill()
 }
 
 
-const wxPoint ZONE_CONTAINER::GetPosition() const
+const wxPoint& ZONE_CONTAINER::GetPosition() const
 {
-    return m_Poly? GetCornerPosition( 0 ) : wxPoint( 0, 0 );
+    static const wxPoint dummy;
+
+    return m_Poly ? GetCornerPosition( 0 ) : dummy;
 }
 
 
