@@ -76,12 +76,12 @@ public:
 
     TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
 
-    void SetPosition( const wxPoint& aPos ) // overload a base
+    void SetPosition( const wxPoint& aPos )     // was overload
     {
         m_Pos = aPos;       // in EDA_TEXT
     }
 
-    const wxPoint GetPosition() const       // overload a base
+    const wxPoint& GetPosition() const          // was overload
     {
         return m_Pos;       // from EDA_TEXT
     }

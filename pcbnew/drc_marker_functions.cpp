@@ -55,19 +55,21 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
     if( aItem )     // aItem might be NULL
     {
         textB = aItem->GetSelectMenuText();
-        posB  = aItem->GetPosition();
 
         if( aItem->Type() == PCB_PAD_T )
         {
-            position = aItem->GetPosition();
+            posB = position = ((D_PAD*)aItem)->GetPosition();
         }
         else if( aItem->Type() == PCB_VIA_T )
         {
-            position = aItem->GetPosition();
+            posB = position = ((SEGVIA*)aItem)->GetPosition();
         }
         else if( aItem->Type() == PCB_TRACE_T )
         {
             TRACK*  track  = (TRACK*) aItem;
+
+            posB = track->GetPosition();
+
             wxPoint endPos = track->m_End;
 
             // either of aItem's start or end will be used for the marker position
@@ -95,7 +97,7 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
                              textB, posB );
         else
             fillMe->SetData( aErrorCode, position,
-                            textA, aTrack->GetPosition() );
+                             textA, aTrack->GetPosition() );
     }
     else
     {
@@ -105,7 +107,7 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
                                      textB, posB );
         else
             fillMe = new MARKER_PCB( aErrorCode, position,
-                                    textA, aTrack->GetPosition() );
+                                     textA, aTrack->GetPosition() );
     }
 
     return fillMe;

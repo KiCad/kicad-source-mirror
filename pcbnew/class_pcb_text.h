@@ -47,12 +47,12 @@ public:
 
     ~TEXTE_PCB();
 
-    const wxPoint GetPosition() const           // is an overload
+    const wxPoint& GetPosition() const          // was overload
     {
         return m_Pos;   // within EDA_TEXT
     }
 
-    void SetPosition( const wxPoint& aPos )     // is an overload
+    void SetPosition( const wxPoint& aPos )     // was overload
     {
         m_Pos = aPos;   // within EDA_TEXT
     }

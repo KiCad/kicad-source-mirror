@@ -19,6 +19,7 @@
 
 #include <kbool/include/kbool/booleng.h>
 #include <pad_shapes.h>
+#include <wx/gdicmn.h>
 
 // inflection modes for DS_LINE and DS_LINE_VERTEX, used in math_for_graphics.cpp
 enum
@@ -48,6 +49,7 @@ public:
     int left, right, top, bottom;
 };
 
+
 class CPoint
 {
 public:
@@ -56,6 +58,7 @@ public:
     CPoint( void ) { x = y = 0; };
     CPoint( int i, int j ) { x = i; y = j; };
 };
+
 
 class CSegment
 {
@@ -82,14 +85,13 @@ public:
     bool bFound;
 };
 
-class CPolyPt
+
+class CPolyPt : public wxPoint
 {
 public:
     CPolyPt( int qx = 0, int qy = 0, bool qf = false, int aUtility = 0 )
     { x = qx; y = qy; end_contour = qf; utility = aUtility; };
 
-    int  x;
-    int  y;
     bool end_contour;
     int  utility;
 
@@ -99,6 +101,7 @@ public:
     bool operator != (CPolyPt& cpt2 ) const
     { return (x != cpt2.x) || (y != cpt2.y) || (end_contour != cpt2.end_contour); }
 };
+
 
 #include <polygon_test_point_inside.h>
 
@@ -166,8 +169,12 @@ public:
     int        GetContourStart( int icont );
     int        GetContourEnd( int icont );
     int        GetContourSize( int icont );
-    int        GetX( int ic );
-    int        GetY( int ic );
+
+    int        GetX( int ic ) const { return corner[ic].x; }
+    int        GetY( int ic ) const { return corner[ic].y; }
+
+    const wxPoint& GetPos( int ic ) const { return corner[ic]; }
+
     int        GetEndContour( int ic );
 
     int        GetUtility( int ic ) { return corner[ic].utility; };
