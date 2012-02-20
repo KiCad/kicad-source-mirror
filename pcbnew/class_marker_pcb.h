@@ -77,12 +77,8 @@ public:
         DrawMarker( aPanel, aDC, aDrawMode, aOffset );
     }
 
-    const wxPoint GetPosition() const
-    {
-        return m_Pos;
-    }
-
-    void SetPosition( const wxPoint& aPos ) { m_Pos = aPos; }
+    const wxPoint& GetPosition() const          { return m_Pos; }
+    void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }
 
     /**
      * Function HitTest

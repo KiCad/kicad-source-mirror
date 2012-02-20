@@ -179,6 +179,9 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     case PAD_CONN:
         aPad->SetDrillSize( wxSize( 0, 0 ) );
         aPad->SetOffset( wxPoint( 0, 0 ) );
+        break;
+    default:
+        ;
     }
 
     if( aDraw )

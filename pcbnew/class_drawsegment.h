@@ -94,7 +94,7 @@ public:
     const wxPoint& GetBezControl2() const           { return m_BezierC2; }
 
     void SetPosition( const wxPoint& aPos ) { m_Start = aPos; }     // override
-    const wxPoint GetPosition() const       { return m_Start; }     // override
+    const wxPoint& GetPosition() const      { return m_Start; }     // override
 
     /**
      * Function GetStart

@@ -140,8 +140,8 @@ public:
     PAD_SHAPE_T GetShape() const                { return m_PadShape; }
     void SetShape( PAD_SHAPE_T aShape )         { m_PadShape = aShape; m_boundingRadius = -1; }
 
-    void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }   // overload
-    const wxPoint GetPosition() const           { return m_Pos; }   // overload
+    void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }   // was overload
+    const wxPoint& GetPosition() const          { return m_Pos; }   // was overload
 
     void SetY( int y )                          { m_Pos.y = y; }
     void SetX( int x )                          { m_Pos.x = x; }
