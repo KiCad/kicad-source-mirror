@@ -1032,7 +1032,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     Color = RED;
 
     // if not printing, draw the page limits:
-    if( !screen->m_IsPrinting & g_ShowPageLimits )
+    if( !screen->m_IsPrinting && g_ShowPageLimits )
     {
         GRSetDrawMode( DC, GR_COPY );
         GRRect( m_canvas->GetClipBox(), DC, 0, 0,

@@ -519,6 +519,8 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( !itemCurrentlyEdited ) // no track in progress: switch layer only
         {
             Other_Layer_Route( NULL, aDC );
+            if( DisplayOpt.ContrastModeDisplay )
+                m_canvas->Refresh();
             break;
         }
 
