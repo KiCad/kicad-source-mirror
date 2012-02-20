@@ -7,6 +7,21 @@ email address.
 2012-Feb-19 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew
+  * Remove virtual BOARD_ITEM::{Get,Set}Position() which in turn means all
+    derived classes' implementations of these functions become non virtual and
+    can be truly _inlined_ for speed. GetPosition() in derived classes were also
+    all changed to return const wxPoint&, that is, a reference rather than a
+    full copy of the position wxPoint. There was no need for polymorphism in
+    {Get,Set}Position() since we never call these functions via generic pointer.
+  * Remove BOARD::{Get,Set}Position() since they were only there to satisfy
+    the pure virtuals established BOARD_ITEM, which are now gone.
+  * Added const wxPoint& CPolyLine::GetPos(), made CPolyLine::Get{X,Y}() inline.
+  * Derive CPolyPt from wxPoint so we can return const wxPoint& fromt GetPos().
+
+
+2012-Feb-19 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
   * remove global g_Pad_Master global and put it into BOARD_DESIGN_SETTINGS
     which is in turn already within BOARD.
   * encapsulate class D_PAD with accessors, making data private.

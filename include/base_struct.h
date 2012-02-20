@@ -65,7 +65,7 @@ enum KICAD_T {
     PCB_MODULE_TEXT_T,      ///< class TEXTE_MODULE, text in a footprint
     PCB_MODULE_EDGE_T,      ///< class EDGE_MODULE, a footprint edge
     PCB_TRACE_T,            ///< class TRACKE, a track segment (segment on a copper layer)
-    PCB_VIA_T,              ///< class VIA, a via (like a track segment on a copper layer)
+    PCB_VIA_T,              ///< class SEGVIA, a via (like a track segment on a copper layer)
     PCB_ZONE_T,             ///< class SEGZONE, a segment used to fill a zone area (segment on a
                             ///< copper layer)
     PCB_MARKER_T,           ///< class MARKER_PCB, a marker used to show something
@@ -239,16 +239,19 @@ public:
      */
     bool Contains( const EDA_RECT& aRect ) const;
 
-    wxSize GetSize() const { return m_Size; }
+    const wxSize& GetSize() const { return m_Size; }
     int GetX() const { return m_Pos.x; }
     int GetY() const { return m_Pos.y; }
-    wxPoint GetOrigin() const { return m_Pos; }
-    wxPoint GetPosition() const { return m_Pos; }
-    wxPoint GetEnd() const { return wxPoint( GetRight(), GetBottom() ); }
+
+    const wxPoint& GetOrigin() const { return m_Pos; }
+    const wxPoint& GetPosition() const { return m_Pos; }
+    const wxPoint GetEnd() const { return wxPoint( GetRight(), GetBottom() ); }
+
     int GetWidth() const { return m_Size.x; }
     int GetHeight() const { return m_Size.y; }
     int GetRight() const { return m_Pos.x + m_Size.x; }
     int GetBottom() const { return m_Pos.y + m_Size.y; }
+
     void SetOrigin( const wxPoint& pos ) { m_Pos = pos; }
     void SetOrigin( int x, int y ) { m_Pos.x = x; m_Pos.y = y; }
     void SetSize( const wxSize& size ) { m_Size = size; }

@@ -1172,18 +1172,6 @@ void CPolyLine::UnHatch()
 }
 
 
-int CPolyLine::GetX( int ic )
-{
-    return corner[ic].x;
-}
-
-
-int CPolyLine::GetY( int ic )
-{
-    return corner[ic].y;
-}
-
-
 int CPolyLine::GetEndContour( int ic )
 {
     return corner[ic].end_contour;

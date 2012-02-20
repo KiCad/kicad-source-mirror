@@ -65,7 +65,7 @@ public:
 
     ~DIMENSION();
 
-    const wxPoint GetPosition() const { return m_Pos; }
+    const wxPoint& GetPosition() const      { return m_Pos; }
 
     void SetPosition( const wxPoint& aPos );    // override, sets m_Text's position too
 
