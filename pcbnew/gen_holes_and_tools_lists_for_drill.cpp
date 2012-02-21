@@ -62,8 +62,6 @@ void Build_Holes_List( BOARD* aPcb,
     aHoleListBuffer.clear();
     aToolListBuffer.clear();
 
-    D(printf( "%s:\n", __FUNCTION__ );)
-
     if( (aFirstLayer >= 0) && (aLastLayer >= 0) )
     {
         if( aFirstLayer > aLastLayer )
