@@ -515,7 +515,7 @@ private:
     void EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem );
     LIB_ITEM* LocateItemUsingCursor( const wxPoint& aPosition,
                                      const KICAD_T aFilterList[] = LIB_COLLECTOR::AllItems );
-    void EditField( wxDC* DC, LIB_FIELD* Field );
+    void EditField( LIB_FIELD* Field );
 
 public:
     /**

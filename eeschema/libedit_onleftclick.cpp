@@ -206,7 +206,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     case LIB_FIELD_T:
         if( m_drawItem->GetFlags() == 0 )
         {
-            EditField( DC, (LIB_FIELD*) m_drawItem );
+            EditField( (LIB_FIELD*) m_drawItem );
         }
         break;
 

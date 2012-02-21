@@ -50,6 +50,7 @@ set(EESCHEMA_SRCS
     dialogs/dialog_edit_label_base.cpp
     dialogs/dialog_edit_libentry_fields_in_lib.cpp
     dialogs/dialog_edit_libentry_fields_in_lib_base.cpp
+    dialogs/dialog_lib_edit_one_field.cpp
     dialogs/dialog_eeschema_config.cpp
     dialogs/dialog_eeschema_config_fbp.cpp
     dialogs/dialog_eeschema_options_base.cpp

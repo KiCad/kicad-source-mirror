@@ -775,7 +775,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( m_drawItem->Type() == LIB_FIELD_T )
         {
-            EditField( &dc, (LIB_FIELD*) m_drawItem );
+            EditField( (LIB_FIELD*) m_drawItem );
         }
 
         m_canvas->MoveCursorToCrossHair();
@@ -992,7 +992,7 @@ void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     m_canvas->CrossHairOff( &dc );
-    EditField( &dc, &m_component->GetValueField() );
+    EditField( &m_component->GetValueField() );
     m_canvas->MoveCursorToCrossHair();
     m_canvas->CrossHairOn( &dc );
 }

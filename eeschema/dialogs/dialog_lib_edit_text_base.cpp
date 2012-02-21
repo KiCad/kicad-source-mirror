@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -67,6 +67,9 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	
 	m_CommonConvert = new wxCheckBox( this, wxID_ANY, _("Common to convert"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_CommonConvert, 0, wxALL|wxEXPAND, 5 );
+	
+	m_Invisible = new wxCheckBox( this, wxID_ANY, _("Invisible"), wxDefaultPosition, wxDefaultSize, 0 );
+	sOptionsSizer->Add( m_Invisible, 0, wxALL, 5 );
 	
 	bBottomtBoxSizer->Add( sOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 	
