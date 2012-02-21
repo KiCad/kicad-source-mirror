@@ -62,6 +62,8 @@ void Build_Holes_List( BOARD* aPcb,
     aHoleListBuffer.clear();
     aToolListBuffer.clear();
 
+    D(printf( "%s:\n", __FUNCTION__ );)
+
     if( (aFirstLayer >= 0) && (aLastLayer >= 0) )
     {
         if( aFirstLayer > aLastLayer )
@@ -72,9 +74,7 @@ void Build_Holes_List( BOARD* aPcb,
     */
     if( ! aGenerateNPTH_list )  // vias are always plated !
     {
-        TRACK* track = aPcb->m_Track;
-
-        for( ; track != NULL; track = track->Next() )
+        for( TRACK* track = aPcb->m_Track;  track;  track = track->Next() )
         {
             if( track->Type() != PCB_VIA_T )
                 continue;
@@ -112,7 +112,7 @@ void Build_Holes_List( BOARD* aPcb,
     // build hole list for pads (assumed always through holes)
     if( !aExcludeThroughHoles || aGenerateNPTH_list )
     {
-        for( MODULE* module = aPcb->m_Modules;  module;  module->Next() )
+        for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
         {
             // Read and analyse pads
             for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
