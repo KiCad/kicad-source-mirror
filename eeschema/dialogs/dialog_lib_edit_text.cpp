@@ -1,6 +1,6 @@
 /**
  * @file dialog_lib_edit_text.cpp
- * @brief dialog to editing graphic texts (not fields) in bodu components.
+ * @brief dialog to editing graphic texts (not fields) in body components.
  */
 
 /*
@@ -43,8 +43,8 @@
 DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
     DIALOG_LIB_EDIT_TEXT_BASE( aParent )
 {
-    m_Parent = aParent;
-    m_GraphicText = aText;
+    m_parent = aParent;
+    m_graphicText = aText;
     initDlg();
 
     GetSizer()->SetSizeHints(this);
@@ -58,29 +58,32 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
 
     m_TextValue->SetFocus();
 
-    if ( m_GraphicText )
-    {
-        msg = ReturnStringFromValue( g_UserUnit, m_GraphicText->m_Size.x,
-                                     m_Parent->GetInternalUnits() );
-        m_TextSize->SetValue( msg );
-        m_TextValue->SetValue( m_GraphicText->m_Text );
+    // Disable options for fieldedition, not existing in  graphic text
+    m_Invisible->Show(false);
 
-        if ( m_GraphicText->GetUnit() == 0 )
+    if ( m_graphicText )
+    {
+        msg = ReturnStringFromValue( g_UserUnit, m_graphicText->m_Size.x,
+                                     m_parent->GetInternalUnits() );
+        m_TextSize->SetValue( msg );
+        m_TextValue->SetValue( m_graphicText->m_Text );
+
+        if ( m_graphicText->GetUnit() == 0 )
             m_CommonUnit->SetValue( true );
-        if ( m_GraphicText->GetConvert() == 0 )
+        if ( m_graphicText->GetConvert() == 0 )
             m_CommonConvert->SetValue( true );
-        if ( m_GraphicText->m_Orient == TEXT_ORIENT_VERT )
+        if ( m_graphicText->m_Orient == TEXT_ORIENT_VERT )
             m_Orient->SetValue( true );
 
         int shape = 0;
-        if ( m_GraphicText->m_Italic )
+        if ( m_graphicText->m_Italic )
             shape = 1;
-        if ( m_GraphicText->m_Bold )
+        if ( m_graphicText->m_Bold )
             shape |= 2;
 
         m_TextShapeOpt->SetSelection( shape );
 
-        switch ( m_GraphicText->m_HJustify )
+        switch ( m_graphicText->m_HJustify )
         {
             case GR_TEXT_HJUSTIFY_LEFT:
                 m_TextHJustificationOpt->SetSelection( 0 );
@@ -96,7 +99,7 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
 
         }
 
-        switch ( m_GraphicText->m_VJustify )
+        switch ( m_graphicText->m_VJustify )
         {
         case GR_TEXT_VJUSTIFY_BOTTOM:
             m_TextVJustificationOpt->SetSelection( 0 );
@@ -113,15 +116,15 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
     }
     else
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_Parent->m_textSize,
-                                     m_Parent->GetInternalUnits() );
+        msg = ReturnStringFromValue( g_UserUnit, m_parent->m_textSize,
+                                     m_parent->GetInternalUnits() );
         m_TextSize->SetValue( msg );
 
-        if ( ! m_Parent->m_drawSpecificUnit )
+        if ( ! m_parent->m_drawSpecificUnit )
             m_CommonUnit->SetValue( true );
-        if ( ! m_Parent->m_drawSpecificConvert )
+        if ( ! m_parent->m_drawSpecificConvert )
             m_CommonConvert->SetValue( true );
-        if ( m_Parent->m_textOrientation == TEXT_ORIENT_VERT )
+        if ( m_parent->m_textOrientation == TEXT_ORIENT_VERT )
             m_Orient->SetValue( true );
     }
 
@@ -144,75 +147,75 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
     wxString Line;
 
     Line = m_TextValue->GetValue();
-    m_Parent->m_textOrientation = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
+    m_parent->m_textOrientation = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
     wxString msg = m_TextSize->GetValue();
-    m_Parent->m_textSize = ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() );
-    m_Parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
-    m_Parent->m_drawSpecificUnit = m_CommonUnit->GetValue() ? false : true;
+    m_parent->m_textSize = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    m_parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
+    m_parent->m_drawSpecificUnit = m_CommonUnit->GetValue() ? false : true;
 
-    if( m_GraphicText )
+    if( m_graphicText )
     {
         if( ! Line.IsEmpty() )
-            m_GraphicText->SetText( Line );
+            m_graphicText->SetText( Line );
         else
-            m_GraphicText->SetText( wxT( "[null]" ) );
+            m_graphicText->SetText( wxT( "[null]" ) );
 
-        m_GraphicText->m_Size.x = m_GraphicText->m_Size.y = m_Parent->m_textSize;
-        m_GraphicText->m_Orient = m_Parent->m_textOrientation;
+        m_graphicText->m_Size.x = m_graphicText->m_Size.y = m_parent->m_textSize;
+        m_graphicText->m_Orient = m_parent->m_textOrientation;
 
-        if( m_Parent->m_drawSpecificUnit )
-            m_GraphicText->SetUnit( m_Parent->GetUnit() );
+        if( m_parent->m_drawSpecificUnit )
+            m_graphicText->SetUnit( m_parent->GetUnit() );
         else
-            m_GraphicText->SetUnit( 0 );
+            m_graphicText->SetUnit( 0 );
 
-        if( m_Parent->m_drawSpecificConvert )
-            m_GraphicText->SetConvert( m_Parent->GetConvert() );
+        if( m_parent->m_drawSpecificConvert )
+            m_graphicText->SetConvert( m_parent->GetConvert() );
         else
-            m_GraphicText->SetConvert( 0 );
+            m_graphicText->SetConvert( 0 );
 
         if( ( m_TextShapeOpt->GetSelection() & 1 ) != 0 )
-            m_GraphicText->m_Italic = true;
+            m_graphicText->m_Italic = true;
         else
-            m_GraphicText->m_Italic = false;
+            m_graphicText->m_Italic = false;
 
         if( ( m_TextShapeOpt->GetSelection() & 2 ) != 0 )
-            m_GraphicText->m_Bold = true;
+            m_graphicText->m_Bold = true;
         else
-            m_GraphicText->m_Bold = false;
+            m_graphicText->m_Bold = false;
 
         switch( m_TextHJustificationOpt->GetSelection() )
         {
         case 0:
-            m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
+            m_graphicText->m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
             break;
 
         case 1:
-            m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+            m_graphicText->m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
             break;
 
         case 2:
-            m_GraphicText->m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
+            m_graphicText->m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
             break;
         }
 
         switch( m_TextVJustificationOpt->GetSelection() )
         {
         case 0:
-            m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+            m_graphicText->m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
             break;
 
         case 1:
-            m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+            m_graphicText->m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
             break;
 
         case 2:
-            m_GraphicText->m_VJustify = GR_TEXT_VJUSTIFY_TOP;
+            m_graphicText->m_VJustify = GR_TEXT_VJUSTIFY_TOP;
             break;
         }
     }
 
-    if( m_Parent->GetDrawItem() )
-        m_Parent->GetDrawItem()->DisplayInfo( m_Parent );
+    if( m_parent->GetDrawItem() )
+        m_parent->GetDrawItem()->DisplayInfo( m_parent );
 
     EndModal(wxID_OK);
 }

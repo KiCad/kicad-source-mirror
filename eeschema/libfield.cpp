@@ -13,9 +13,10 @@
 #include <libeditframe.h>
 #include <class_library.h>
 #include <template_fieldnames.h>
+#include <dialog_lib_edit_one_field.h>
 
 
-void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
+void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 {
     wxString text;
     wxString title;
@@ -36,19 +37,17 @@ void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
     }
     else
     {
-        caption = _( "Edit Field" );
+        caption.Printf( _( "Edit Field %s" ), GetChars( aField->GetName() ) );
         title.Printf( _( "Enter a new value for the %s field." ),
                       GetChars( aField->GetName().Lower() ) );
     }
 
-    wxTextEntryDialog dlg( this, title, caption, aField->m_Text );
+    DIALOG_LIB_EDIT_ONE_FIELD dlg( this, caption, aField );
 
-    if( dlg.ShowModal() != wxID_OK || dlg.GetValue() == aField->m_Text )
+    if( dlg.ShowModal() != wxID_OK  )
         return;
 
-    text = dlg.GetValue();
-
-    text.Replace( wxT( " " ), wxT( "_" ) );
+    text = dlg.GetTextField();
 
     // Perform some controls:
     if( ( aField->GetId() == REFERENCE || aField->GetId() == VALUE ) && text.IsEmpty ( ) )
@@ -72,7 +71,7 @@ void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
      * the old one.  Rename the component and remove any conflicting aliases to prevent name
      * errors when updating the library.
      */
-    if( aField->GetId() == VALUE )
+    if( (aField->GetId() == VALUE) && ( text != aField->m_Text ) )
     {
         wxString msg;
 
@@ -142,19 +141,12 @@ this component?" ),
     }
 
     if( !aField->InEditMode() )
-    {
         SaveCopyInUndoList( parent );
-        ( (LIB_ITEM*) aField )->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                                      &fieldText, DefaultTransform );
-    }
 
+    // Update field
+    dlg.TransfertDataToField();
 
-    if( !aField->InEditMode() )
-    {
-        fieldText = aField->GetFullText( m_unit );
-        ( (LIB_ITEM*) aField )->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                                      &fieldText, DefaultTransform );
-    }
+    m_canvas->Refresh();
 
     OnModify();
     UpdateAliasSelectList();
