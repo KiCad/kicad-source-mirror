@@ -13,7 +13,7 @@
 #include <libeditframe.h>
 #include <class_library.h>
 #include <template_fieldnames.h>
-#include <dialog_lib_edit_one_field.h>
+#include <dialog_edit_one_field.h>
 
 
 void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )

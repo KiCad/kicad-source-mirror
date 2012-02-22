@@ -39,6 +39,8 @@
 #include <class_library.h>
 #include <sch_component.h>
 
+#include <dialog_edit_one_field.h>
+
 
 void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC )
 {
@@ -79,44 +81,39 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     wxString title;
     title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
 
-    wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
+//    wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
+    if( aField->GetText().IsEmpty() )  // Means the field was not already in use
+    {
+        aField->m_Pos = component->GetPosition();
+        aField->m_Size.x = aField->m_Size.y = m_TextFieldSize;
+    }
+    DIALOG_SCH_EDIT_ONE_FIELD dlg( this, title, aField );
+
     int response = dlg.ShowModal();
 
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
-    newtext = dlg.GetValue( );
-    newtext.Trim( true );
-    newtext.Trim( false );
+    newtext = dlg.GetTextField( );
 
-    if ( response != wxID_OK || newtext == aField->GetText() )
+    if ( response != wxID_OK )
         return;  // canceled by user
 
-    aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-
+    // make some tests
+    bool can_update = true;
     if( !newtext.IsEmpty() )
     {
-        if( aField->GetText().IsEmpty() )  // Means the field was not already in use
-        {
-            aField->m_Pos = component->GetPosition();
-            aField->m_Size.x = aField->m_Size.y = m_TextFieldSize;
-        }
-
         if( fieldNdx == REFERENCE )
         {
             // Test is reference is acceptable:
             if( SCH_COMPONENT::IsReferenceStringValid( newtext ) )
             {
                 component->SetRef( m_CurrentSheet, newtext );
-                aField->SetText( newtext );
             }
             else
             {
                 DisplayError( this, _( "Illegal reference string!  No change" ) );
+                can_update = false;
             }
-        }
-        else
-        {
-            aField->m_Text = newtext;
         }
     }
     else
@@ -124,20 +121,28 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
         if( fieldNdx == REFERENCE )
         {
             DisplayError( this, _( "The reference field cannot be empty!  No change" ) );
+            can_update = false;
         }
         else if( fieldNdx == VALUE )
         {
             DisplayError( this, _( "The value field cannot be empty!  No change" ) );
+            can_update = false;
         }
         else
         {
-            aField->m_Text = wxT( "~" );
+            dlg.SetTextField( wxT( "~" ) );
         }
     }
 
-    aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+    if( can_update )
+    {
+        aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+        dlg.TransfertDataToField();
+        aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+        OnModify();
+    }
+
     component->DisplayInfo( this );
-    OnModify();
 }
 
 
