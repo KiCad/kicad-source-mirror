@@ -220,6 +220,8 @@ public:
         componentFlatList.push_back( aItem );
     }
 
+    void RemoveItem( int aIndex );
+
     /**
      * Function RemoveSubComponentsFromList
      * Remove sub components from the list, when multiples parts per package are

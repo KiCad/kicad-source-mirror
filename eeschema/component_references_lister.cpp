@@ -42,6 +42,13 @@
 //#define USE_OLD_ALGO
 
 
+void SCH_REFERENCE_LIST::RemoveItem( int aIndex )
+{
+    if( aIndex < componentFlatList.size() )
+        componentFlatList.erase( componentFlatList.begin() + aIndex );
+}
+
+
 bool SCH_REFERENCE_LIST::sortByXPosition( const SCH_REFERENCE& item1,
                                           const SCH_REFERENCE& item2 )
 {

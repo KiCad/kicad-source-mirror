@@ -1780,6 +1780,27 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
 }
 
 
+bool SCH_COMPONENT::operator==( const SCH_COMPONENT& aComponent ) const
+{
+    if( GetFieldCount() !=  aComponent.GetFieldCount() )
+        return false;
+
+    for( int i = VALUE; i < GetFieldCount(); i++ )
+    {
+        if( GetField( i )->GetText().Cmp( aComponent.GetField( i )->GetText() ) != 0 )
+            return false;
+    }
+
+    return true;
+}
+
+
+bool SCH_COMPONENT::operator!=( const SCH_COMPONENT& aComponent ) const
+{
+    return !( *this == aComponent );
+}
+
+
 SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
 {
     wxCHECK_MSG( Type() == aItem.Type(), *this,

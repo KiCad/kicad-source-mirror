@@ -852,150 +852,45 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
 }
 
 
-/* Bom Output format option - single part per line
- *  a common part being defined as have a common value.
- *  This is true for most designs but will produce an
- *  incorrect output if two or more parts with the same
- *  value have different footprints, tolerances, voltage
- *  rating, etc.  Also useful if the following fields
- *  are edited:
- *   FIELD1 - manufacture
- *   FIELD2 - manufacture part number
- *   FIELD3 - distributor part number
- */
-int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aList,
+int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* aFile, SCH_REFERENCE_LIST& aList,
                                                  bool aIncludeSubComponents )
 {
-    int             qty = 0;
-    wxString        refName;
-    wxString        fullRefName;        // reference + part Id (for multiple parts per package
-    wxString        valName;
-#if defined(KICAD_GOST)
-    wxString        footName;
-    wxString        datsName;
-#endif
-    wxString        refNames;
-    wxString        lastRef;
-    wxString        unitId;
-    SCH_COMPONENT*  currCmp;
-    SCH_COMPONENT*  nextCmp;
-    SCH_COMPONENT   dummyCmp;           // A dummy component, to store fields
-
-    for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
+    int index = 0;
+    while( index < aList.GetCount() )
     {
-        currCmp = aList[ii].GetComponent();
-
-        if( ii < aList.GetCount() -1 )
-            nextCmp = aList[ii+1].GetComponent();
-        else
-            nextCmp = NULL;
-
-        // Store fields. Store non empty fields only.
-        for( int jj = FOOTPRINT; jj < currCmp->GetFieldCount(); jj++ )
+        SCH_COMPONENT *component = aList[index].GetComponent();
+        wxString referenceListStr;
+        int qty = 1;
+        referenceListStr.append( aList[index].GetRef() );
+        for( unsigned int i = index+1; i < aList.GetCount(); )
         {
-            // Ensure fields exists in dummy component
-            if( dummyCmp.GetFieldCount() <= jj )
-                dummyCmp.AddField( *currCmp->GetField( jj ) );
-
-            // store useful data
-            if( !currCmp->GetField( jj )->m_Text.IsEmpty() )
-                dummyCmp.GetField( jj )->m_Text = currCmp->GetField( jj )->m_Text;
+            if( *(aList[i].GetComponent()) == *component )
+            {
+                referenceListStr.append( wxT( " " ) + aList[i].GetRef() );
+                aList.RemoveItem( i );
+                qty++;
+            }
+            else
+                i++; // Increment index only when current item is not removed from the list
         }
 
-        refName = aList[ii].GetRef();
-        valName = currCmp->GetField( VALUE )->m_Text;
+        // Write value, quantity and list of references
+        fprintf( aFile, "%15s%c%3d%c\"%s\"", TO_UTF8( component->GetField( VALUE )->GetText() ),
+                 s_ExportSeparatorSymbol, qty,
+                 s_ExportSeparatorSymbol, TO_UTF8( referenceListStr ) );
 
-#if defined(KICAD_GOST)
-        footName = currCmp->GetField( FOOTPRINT )->m_Text;
-        datsName = currCmp->GetField( DATASHEET )->m_Text;
+        // Write the rest of the fields if required
+#if defined( KICAD_GOST )
+        fprintf( aFile, "%c%20s", s_ExportSeparatorSymbol,
+                 TO_UTF8( component->GetField( DATASHEET )->GetText() ) );
 #endif
-
-        int multi = 0;
-
-        if( aIncludeSubComponents )
-        {
-            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( currCmp->GetLibName() );
-
-            if( entry )
-                multi = entry->GetPartCount();
-
-            if ( multi <= 1 )
-                multi = 0;
-        }
-
-        if ( multi && aList[ii].GetUnit() > 0 )
-            unitId.Printf( wxT("%c"), 'A' -1 + aList[ii].GetUnit() );
-        else
-            unitId.Empty();
-
-        fullRefName = refName + unitId;
-
-        if( refNames.IsEmpty() )
-            refNames = fullRefName;
-        else
-            refNames << wxT( ", " ) << fullRefName;
-
-        // In multi parts per package, we have the reference more than once
-        // but we must count only one package
-        if( lastRef != refName )
-            qty++;
-
-        lastRef = refName;
-
-        // if the next component has same value the line will be printed after.
-#if defined(KICAD_GOST)
-        if( nextCmp && nextCmp->GetField( VALUE )->m_Text.CmpNoCase( valName ) == 0
-            && nextCmp->GetField( FOOTPRINT )->m_Text.CmpNoCase( footName ) == 0
-            && nextCmp->GetField( DATASHEET )->m_Text.CmpNoCase( datsName ) == 0 )
-#else
-        if( nextCmp && nextCmp->GetField( VALUE )->m_Text.CmpNoCase( valName ) == 0 )
-#endif
-            continue;
-
-       // Print line for the current component value:
-        fprintf( f, "%15s%c%3d", TO_UTF8( valName ), s_ExportSeparatorSymbol, qty );
-
-        if( IsFieldChecked(FOOTPRINT ) )
-            fprintf( f, "%c%15s", s_ExportSeparatorSymbol,
-#if defined(KICAD_GOST)
-                     TO_UTF8( footName ) );
-#else
-                     TO_UTF8( currCmp->GetField( FOOTPRINT )->m_Text ) );
-#endif
-
-#if defined(KICAD_GOST)
-            fprintf( f, "%c%20s", s_ExportSeparatorSymbol,TO_UTF8( datsName ) );
-#endif
-
-        // wrap the field in quotes, since it has commas in it.
-        fprintf( f, "%c\"%s\"", s_ExportSeparatorSymbol, TO_UTF8( refNames ) );
-
-        // print fields, on demand
-        int last_nonempty_field_idx = 0;
-
-        for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
-        {
-            if ( !dummyCmp.GetField( jj )->m_Text.IsEmpty() )
-                last_nonempty_field_idx = jj;
-        }
-
-        for( int jj = FIELD1; jj <= last_nonempty_field_idx ; jj++ )
-        {
-            if ( IsFieldChecked( jj ) )
-                fprintf( f, "%c%4s", s_ExportSeparatorSymbol,
-                         TO_UTF8( dummyCmp.GetField( jj )->m_Text ) );
-        }
-
-        fprintf( f, "\n" );
-
-        // Clear strings and values, to prepare next component
-        qty = 0;
-        refNames.Empty();
-
-        for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
-            dummyCmp.GetField( jj )->m_Text.Empty();
+        for( int i = FOOTPRINT; i < component->GetFieldCount(); i++ )
+            if( IsFieldChecked( i ) )
+                fprintf( aFile, "%c%15s", s_ExportSeparatorSymbol,
+                         TO_UTF8( component->GetField( i )->GetText() ) );
+        fprintf( aFile, "\n" );
+        index++;
     }
-
     return 0;
 }
 

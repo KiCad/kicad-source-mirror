@@ -401,6 +401,9 @@ public:
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
+    bool operator==( const SCH_COMPONENT& aComponent) const;
+    bool operator!=( const SCH_COMPONENT& aComponent) const;
+
     SCH_ITEM& operator=( const SCH_ITEM& aItem );
 
     /**
