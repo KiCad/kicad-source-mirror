@@ -177,6 +177,7 @@ static EDA_HOTKEY HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                          ID_POPUP_SCH_COPY_ITEM );
 
 static EDA_HOTKEY HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
+static EDA_HOTKEY HkSaveBlock( wxT( "Save Block" ), HK_SAVE_BLOCK, 'C' + GR_KB_CTRL );
 static EDA_HOTKEY HkMove2Drag( wxT( "Move Block -> Drag Block" ),
                                HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
 static EDA_HOTKEY HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
@@ -218,6 +219,7 @@ EDA_HOTKEY* s_Schematic_Hotkey_List[] =
     &HkDelete,
     &HkInsert,
     &HkMove2Drag,
+    &HkSaveBlock,
     &HkMove,
     &HkCopyComponentOrText,
     &HkDrag,
@@ -355,6 +357,10 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_MOVEBLOCK_TO_DRAGBLOCK:   // Switch to drag mode, when block moving
         HandleBlockEndByPopUp( BLOCK_DRAG, aDC );
+        break;
+
+    case HK_SAVE_BLOCK:
+        HandleBlockEndByPopUp( BLOCK_SAVE, aDC );
         break;
 
     case HK_DELETE:

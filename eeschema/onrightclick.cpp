@@ -682,14 +682,20 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
     // a block function.
     if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
     {
-        AddMenuItem( PopMenu, wxID_COPY, _( "Save Block" ), KiBitmap( copy_button_xpm ) );
+        msg = AddHotkeyName( _( "Save Block" ), s_Schematic_Hokeys_Descr,
+                             HK_SAVE_BLOCK );
+        AddMenuItem( PopMenu, wxID_COPY, msg, KiBitmap( copy_button_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), KiBitmap( copyblock_xpm ) );
         msg = AddHotkeyName( _( "Drag Block" ), s_Schematic_Hokeys_Descr,
                              HK_MOVEBLOCK_TO_DRAGBLOCK );
         AddMenuItem( PopMenu, ID_POPUP_DRAG_BLOCK, msg, KiBitmap( move_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), KiBitmap( delete_xpm ) );
-        AddMenuItem( PopMenu, ID_SCH_MIRROR_Y, _( "Mirror Block ||" ), KiBitmap( mirror_h_xpm ) );
-        AddMenuItem( PopMenu, ID_SCH_MIRROR_X, _( "Mirror Block --" ), KiBitmap( mirror_v_xpm ) );
+        msg = AddHotkeyName( _( "Mirror Block ||" ), s_Schematic_Hokeys_Descr,
+                             HK_MIRROR_Y_COMPONENT );
+        AddMenuItem( PopMenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
+        msg = AddHotkeyName( _( "Mirror Block --" ), s_Schematic_Hokeys_Descr,
+                             HK_MIRROR_X_COMPONENT );
+        AddMenuItem( PopMenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
         AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, _( "Rotate Block ccw" ),
                      KiBitmap( rotate_ccw_xpm ) );
 
