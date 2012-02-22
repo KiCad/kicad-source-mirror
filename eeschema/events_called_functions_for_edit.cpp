@@ -35,7 +35,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         MoveItem( (SCH_ITEM*) newitem, &dc );
 
         // Redraw the original part, because StartMovePart() erased it from screen.
-        curr_item->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        curr_item->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
     }
     break;
 
