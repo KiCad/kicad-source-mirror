@@ -29,6 +29,7 @@
  */
 
 
+#include <wx/regex.h>
 #include <algorithm> // to use sort vector
 #include <vector>
 
@@ -106,15 +107,88 @@ bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1,
 }
 
 
+static bool engStrToDouble( wxString aStr, double* aDouble )
+{
+    // A trick to take care of strings without a multiplier
+    aStr.Append( wxT( "R" ) );
+
+    // Regular expression for a value string, e.g., 47k2
+    static wxRegEx valueRegEx( wxT( "^([0-9]+)([pnumRkMGT.])([0-9]*)" ) );
+
+    if( !valueRegEx.Matches( aStr ) )
+        return false;
+
+    wxString valueStr = wxString( valueRegEx.GetMatch( aStr, 1 )
+                                  + wxT( "." )
+                                  + valueRegEx.GetMatch( aStr, 3 ) );
+    wxString multiplierString = valueRegEx.GetMatch( aStr, 2 );
+    double multiplier;
+
+    switch( multiplierString[0] )
+    {
+    case 'p':
+        multiplier = 1e-12;
+        break;
+    case 'n':
+        multiplier = 1e-9;
+        break;
+    case 'u':
+        multiplier = 1e-6;
+        break;
+    case 'm':
+        multiplier = 1e-3;
+        break;
+    case 'k':
+        multiplier = 1e3;
+        break;
+    case 'M':
+        multiplier = 1e6;
+        break;
+    case 'G':
+        multiplier = 1e9;
+        break;
+    case 'T':
+        multiplier = 1e12;
+        break;
+    case 'R':
+    case '.':
+    default:
+        multiplier = 1;
+        break;
+    }
+
+    valueStr.ToDouble( aDouble );
+    *aDouble *= multiplier;
+
+    return true;
+}
+
+
 bool SCH_REFERENCE_LIST::sortByValueOnly( const SCH_REFERENCE& item1,
                                           const SCH_REFERENCE& item2 )
 {
-    int             ii;
-    const wxString* Text1, * Text2;
+    wxString text1 = item1.GetComponent()->GetField( VALUE )->GetText();
+    wxString text2 = item2.GetComponent()->GetField( VALUE )->GetText();
 
-    Text1 = &( item1.m_RootCmp->GetField( VALUE )->m_Text );
-    Text2 = &( item2.m_RootCmp->GetField( VALUE )->m_Text );
-    ii    = Text1->CmpNoCase( *Text2 );
+    double value1, value2;
+
+    // Try to convert value to double (4k7 -> 4700 etc.)
+    bool match1 = engStrToDouble( text1, &value1 );
+    bool match2 = engStrToDouble( text2, &value2 );
+
+    // Values come before other strings
+    if( match1 && !match2 )
+        return true;
+
+    // Values come before other strings
+    if( !match1 && match2 )
+        return false;
+
+    if( match1 && match2 )
+        return value1 < value2;
+
+    // Fall back to normal string compare
+    int ii = text1.CmpNoCase( text2 );
 
     if( ii == 0 )
     {
