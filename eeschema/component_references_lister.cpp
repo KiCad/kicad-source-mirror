@@ -42,7 +42,7 @@
 //#define USE_OLD_ALGO
 
 
-void SCH_REFERENCE_LIST::RemoveItem( int aIndex )
+void SCH_REFERENCE_LIST::RemoveItem( unsigned int aIndex )
 {
     if( aIndex < componentFlatList.size() )
         componentFlatList.erase( componentFlatList.begin() + aIndex );

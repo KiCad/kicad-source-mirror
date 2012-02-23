@@ -220,7 +220,13 @@ public:
         componentFlatList.push_back( aItem );
     }
 
-    void RemoveItem( int aIndex );
+    /**
+     * Function RemoveItem
+     * removes an item from the list of references.
+     *
+     * @param aIndex is the index of the item to be removed.
+     */
+    void RemoveItem( unsigned int aIndex );
 
     /**
      * Function RemoveSubComponentsFromList
