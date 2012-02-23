@@ -855,7 +855,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
 int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* aFile, SCH_REFERENCE_LIST& aList,
                                                  bool aIncludeSubComponents )
 {
-    int index = 0;
+    unsigned int index = 0;
     while( index < aList.GetCount() )
     {
         SCH_COMPONENT *component = aList[index].GetComponent();
