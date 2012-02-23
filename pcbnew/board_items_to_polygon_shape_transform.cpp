@@ -778,10 +778,13 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
             shape_offset = wxPoint( deltasize, 0 );
 
             // Crosspoint of thermal spoke sides, the first point of polygon buffer
-            corners_buffer.push_back( wxPoint( copper_thickness.x / 2, copper_thickness.y / 2 ) );
+            corner.x = copper_thickness.x / 2;
+            corner.y = copper_thickness.y / 2;
+            corners_buffer.push_back( corner );
 
             // Arc start point calculation, the intersecting point of cutout arc and thermal spoke edge
-            if( copper_thickness.x > deltasize )          // If copper thickness is more than shape offset, we need to calculate arc intercept point.
+            // If copper thickness is more than shape offset, we need to calculate arc intercept point.
+            if( copper_thickness.x > deltasize )
             {
                 corner.x = copper_thickness.x / 2;
                 corner.y =  (int) sqrt( ( (double) outer_radius * outer_radius ) -
@@ -801,7 +804,6 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                 corner.x = copper_thickness.x / 2;
                 corner.y = outer_radius;
                 corners_buffer.push_back( corner );
-                corner.x = ( deltasize - copper_thickness.x ) / 2;
             }
 
             // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side
