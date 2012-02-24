@@ -153,6 +153,9 @@ void PS_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
     if( radius <= 0 )
         return;
 
+    if( StAngle > EndAngle )
+        EXCHG( StAngle, EndAngle );
+
     set_current_line_width( width );
 
     // Calculate start point.
