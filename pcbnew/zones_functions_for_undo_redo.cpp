@@ -83,7 +83,7 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if(  m_ArcToSegmentsCount != aZoneToCompare.m_ArcToSegmentsCount )
         return false;
 
-    if(  m_PadOption != aZoneToCompare.m_PadOption )
+    if(  m_PadConnection != aZoneToCompare.m_PadConnection )
         return false;
 
     if(  m_ThermalReliefGap != aZoneToCompare.m_ThermalReliefGap )

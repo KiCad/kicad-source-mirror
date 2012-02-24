@@ -54,9 +54,13 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
+            if( aZone->GetPadConnection( pad ) != THERMAL_PAD )
+                continue;
+
             // check
             if( !pad->IsOnLayer( aZone->GetLayer() ) )
                 continue;
+
             if( pad->GetNet() != aZone->GetNet() )
                 continue;
 

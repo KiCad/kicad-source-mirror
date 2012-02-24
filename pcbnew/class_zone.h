@@ -92,8 +92,6 @@ public:
     //ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
     int                   m_ArcToSegmentsCount;
 
-    int                   m_PadOption;
-
     // thickness of the gap in thermal reliefs.
     int                   m_ThermalReliefGap;
 
@@ -128,6 +126,7 @@ private:
     // the other zone priority, it will be created inside.
     // if priorities are equal, a DRC erroc is set
     unsigned              m_priority;
+    ZoneConnection        m_PadConnection;
 
 public:
     ZONE_CONTAINER( BOARD* parent );
@@ -292,8 +291,8 @@ public:
     int GetZoneClearance() const { return m_ZoneClearance; }
     void SetZoneClearance( int aZoneClearance ) { m_ZoneClearance = aZoneClearance; }
 
-    int GetPadOption() const { return m_PadOption; }
-    void SetPadOption( int aPadOption ) { m_PadOption = aPadOption; }
+    ZoneConnection GetPadConnection( D_PAD* aPad = NULL ) const;
+    void SetPadConnection( ZoneConnection aPadConnection ) { m_PadConnection = aPadConnection; }
 
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness ) { m_ZoneMinThickness = aMinThickness; }

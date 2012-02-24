@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Aug 24 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,6 +24,7 @@
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/panel.h>
+#include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -110,6 +111,8 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxStaticText* m_staticTitleModuleSide;
 		wxStaticText* m_staticModuleSideValue;
 		wxStaticText* m_staticTextWarningPadFlipped;
+		wxStaticText* m_staticText40;
+		wxChoice* m_ZoneConnectionChoice;
 		wxStaticText* m_staticTextWarning;
 		wxStaticText* m_staticTextNetClearance;
 		wxTextCtrl* m_NetClearanceValueCtrl;
@@ -157,7 +160,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,535 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER ); 
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 900,800 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER ); 
 		~DIALOG_PAD_PROPERTIES_BASE();
 	
 };

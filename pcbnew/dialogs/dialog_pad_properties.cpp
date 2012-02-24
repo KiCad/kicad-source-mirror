@@ -187,9 +187,7 @@ void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* Pad )
 }
 
 
-/***************************************/
 void DIALOG_PAD_PROPERTIES::initValues()
-/***************************************/
 {
     SetFocus();     // Required under wxGTK if we want to dismiss the dialog with the ESC key
 
@@ -296,6 +294,26 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_SolderPasteMarginRatioCtrl->SetValue( wxT( "-" ) + msg );
     else
         m_SolderPasteMarginRatioCtrl->SetValue( msg );
+
+    switch( m_dummyPad->GetZoneConnection() )
+    {
+    default:
+    case UNDEFINED_CONNECTION:
+        m_ZoneConnectionChoice->SetSelection( 0 );
+        break;
+
+    case PAD_IN_ZONE:
+        m_ZoneConnectionChoice->SetSelection( 1 );
+        break;
+
+    case THERMAL_PAD:
+        m_ZoneConnectionChoice->SetSelection( 2 );
+        break;
+
+    case PAD_NOT_IN_ZONE:
+        m_ZoneConnectionChoice->SetSelection( 3 );
+        break;
+    }
 
     if( m_CurrentPad )
     {
@@ -413,9 +431,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 }
 
 
-/*********************************************************************/
 void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
-/*********************************************************************/
 {
     switch( m_PadShape->GetSelection() )
     {
@@ -453,9 +469,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 }
 
 
-/**********************************************************************/
 void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
-/**********************************************************************/
 {
     if( m_PadType->GetSelection() == 1 || m_PadType->GetSelection() == 2 )
     {
@@ -484,9 +498,7 @@ void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
 }
 
 
-/*******************************************************************/
 void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
-/********************************************************************/
 {
     switch( m_PadOrient->GetSelection() )
     {
@@ -519,9 +531,7 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 }
 
 
-/*****************************************************************/
 void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
-/*****************************************************************/
 
 /* Adjust the better mask layer according to the selected pad type
  */
@@ -549,9 +559,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 }
 
 
-/****************************************************************/
 void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
-/****************************************************************/
 
 /** SetPadLayersList
  * Update the CheckBoxes state in pad layers list,
@@ -594,9 +602,7 @@ void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 }
 
 
-/*************************************************************************/
 void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
-/*************************************************************************/
 
 /* Updates the different parameters for the component being edited.
  */
@@ -695,6 +701,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->SetLocalSolderMaskMargin( m_Pad_Master.GetLocalSolderMaskMargin() );
         m_CurrentPad->SetLocalSolderPasteMargin( m_Pad_Master.GetLocalSolderPasteMargin() );
         m_CurrentPad->SetLocalSolderPasteMarginRatio( m_Pad_Master.GetLocalSolderPasteMarginRatio() );
+        m_CurrentPad->SetZoneConnection( m_Pad_Master.GetZoneConnection() );
 
         module->CalculateBoundingBox();
         m_CurrentPad->DisplayInfo( m_Parent );
@@ -741,6 +748,26 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
         dtmp = +100;
 
     aPad->SetLocalSolderPasteMarginRatio( dtmp / 100 );
+
+    switch( m_ZoneConnectionChoice->GetSelection() )
+    {
+    default:
+    case 0:
+        aPad->SetZoneConnection( UNDEFINED_CONNECTION );
+        break;
+
+    case 1:
+        aPad->SetZoneConnection( PAD_IN_ZONE );
+        break;
+
+    case 2:
+        aPad->SetZoneConnection( THERMAL_PAD );
+        break;
+
+    case 3:
+        aPad->SetZoneConnection( PAD_NOT_IN_ZONE );
+        break;
+    }
 
     // Read pad position:
     x = ReturnValueFromTextCtrl( *m_PadPosition_X_Ctrl, internalUnits );

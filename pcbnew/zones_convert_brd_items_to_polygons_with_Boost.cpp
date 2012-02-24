@@ -233,8 +233,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
             int gap = zone_clearance;
 
-            if( (m_PadOption == PAD_NOT_IN_ZONE)
-               || (GetNet() == 0) || pad->GetShape() == PAD_TRAPEZOID )
+            if( ( GetPadConnection( pad ) == PAD_NOT_IN_ZONE )
+                || ( GetNet() == 0 ) || ( pad->GetShape() == PAD_TRAPEZOID ) )
 
             // PAD_TRAPEZOID shapes are not in zones because they are used in microwave apps
             // and i think it is good that shapes are not changed by thermal pads or others
@@ -358,29 +358,29 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
    // Remove thermal symbols
-    if( m_PadOption == THERMAL_PAD )
+    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
+        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
-            for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+            if( GetPadConnection( pad ) != THERMAL_PAD )
+                continue;
+
+            if( !pad->IsOnLayer( GetLayer() ) )
+                continue;
+
+            if( pad->GetNet() != GetNet() )
+                continue;
+            item_boundingbox = pad->GetBoundingBox();
+            item_boundingbox.Inflate( m_ThermalReliefGap, m_ThermalReliefGap );
+
+            if( item_boundingbox.Intersects( zone_boundingbox ) )
             {
-                if( !pad->IsOnLayer( GetLayer() ) )
-                    continue;
-
-                if( pad->GetNet() != GetNet() )
-                    continue;
-                item_boundingbox = pad->GetBoundingBox();
-                item_boundingbox.Inflate( m_ThermalReliefGap, m_ThermalReliefGap );
-
-                if( item_boundingbox.Intersects( zone_boundingbox ) )
-                {
-                    CreateThermalReliefPadPolygon( cornerBufferPolysToSubstract,
-                                                   *pad, m_ThermalReliefGap,
-                                                   m_ThermalReliefCopperBridge,
-                                                   m_ZoneMinThickness,
-                                                   s_CircleToSegmentsCount,
-                                                   s_Correction, s_thermalRot );
-                }
+                CreateThermalReliefPadPolygon( cornerBufferPolysToSubstract,
+                                               *pad, m_ThermalReliefGap,
+                                               m_ThermalReliefCopperBridge,
+                                               m_ZoneMinThickness,
+                                               s_CircleToSegmentsCount,
+                                               s_Correction, s_thermalRot );
             }
         }
     }
@@ -405,28 +405,25 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
 
     // Now we remove all unused thermal stubs.
-    if( m_PadOption == THERMAL_PAD )
+    cornerBufferPolysToSubstract.clear();
+
+    // Test thermal stubs connections and add polygons to remove unconnected stubs.
+    BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this,
+                                             s_Correction, s_thermalRot );
+
+    // remove copper areas
+    if( cornerBufferPolysToSubstract.size() )
     {
-        cornerBufferPolysToSubstract.clear();
+        KPolygonSet polyset_holes;
+        AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
+        polyset_zone_solid_areas -= polyset_holes;
 
-        // Test thermal stubs connections and add polygons to remove unconnected stubs.
-        BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this,
-                                                 s_Correction, s_thermalRot );
+        // put these areas in m_FilledPolysList
+        m_FilledPolysList.clear();
+        CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
 
-        // remove copper areas
-        if( cornerBufferPolysToSubstract.size() )
-        {
-            KPolygonSet polyset_holes;
-            AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
-            polyset_zone_solid_areas -= polyset_holes;
-
-            // put these areas in m_FilledPolysList
-            m_FilledPolysList.clear();
-            CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
-
-            if( GetNet() > 0 )
-                Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
-        }
+        if( GetNet() > 0 )
+            Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
     }
 
     cornerBufferPolysToSubstract.clear();

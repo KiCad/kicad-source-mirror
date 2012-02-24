@@ -6,6 +6,8 @@
 #ifndef ZONE_SETTINGS_H_
 #define ZONE_SETTINGS_H_
 
+#include "zones.h"
+
 
 class ZONE_CONTAINER;
 
@@ -45,13 +47,13 @@ public:
 
     long m_ThermalReliefGap;            ///< thickness of the gap in thermal reliefs
     long m_ThermalReliefCopperBridge;   ///< thickness of the copper bridge in thermal reliefs
-    int  m_Zone_Pad_Options;            ///< How pads are covered by copper in zone
 
     bool m_Zone_45_Only;
 
 private:
     int  cornerSmoothingType;           ///< Corner smoothing type
     unsigned int  cornerRadius;         ///< Corner chamfer distance / fillet radius
+    ZoneConnection m_PadConnection;
 
 public:
     ZONE_SETTINGS();
@@ -75,9 +77,9 @@ public:
      */
     void ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport = true ) const;
 
-    void SetCornerSmoothingType( int aType) { cornerSmoothingType = aType; };
+    void SetCornerSmoothingType( int aType) { cornerSmoothingType = aType; }
 
-    int GetCornerSmoothingType() const { return cornerSmoothingType; };
+    int GetCornerSmoothingType() const { return cornerSmoothingType; }
 
     void SetCornerRadius( int aRadius )
     {
@@ -89,7 +91,11 @@ public:
             cornerRadius = aRadius;
     };
 
-    unsigned int GetCornerRadius() const { return cornerRadius; };
+    unsigned int GetCornerRadius() const { return cornerRadius; }
+
+    ZoneConnection GetPadConnection() const { return m_PadConnection; }
+    void SetPadConnection( ZoneConnection aPadConnection ) { m_PadConnection = aPadConnection; }
+
 };
 
 

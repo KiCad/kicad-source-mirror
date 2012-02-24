@@ -189,12 +189,13 @@ void DIALOG_COPPER_ZONE::initDialog()
                                  m_Parent->GetInternalUnits() );
     m_ZoneMinThicknessCtrl->SetValue( msg );
 
-    switch( m_settings.m_Zone_Pad_Options )
+    switch( m_settings.GetPadConnection() )
     {
     case PAD_NOT_IN_ZONE:           // Pads are not covered
         m_PadInZoneOpt->SetSelection( 2 );
         break;
 
+    default:
     case THERMAL_PAD:               // Use thermal relief for pads
         m_PadInZoneOpt->SetSelection( 1 );
         break;
@@ -204,7 +205,7 @@ void DIALOG_COPPER_ZONE::initDialog()
         break;
     }
 
-    if( m_settings.m_Zone_Pad_Options != THERMAL_PAD )
+    if( m_settings.GetPadConnection() != THERMAL_PAD )
     {
         m_AntipadSizeValue->Enable( false );
         m_CopperWidthValue->Enable( false );
@@ -345,17 +346,17 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     {
     case 2:
         // Pads are not covered
-        m_settings.m_Zone_Pad_Options = PAD_NOT_IN_ZONE;
+        m_settings.SetPadConnection( PAD_NOT_IN_ZONE );
         break;
 
     case 1:
         // Use thermal relief for pads
-        m_settings.m_Zone_Pad_Options = THERMAL_PAD;
+        m_settings.SetPadConnection( THERMAL_PAD );
         break;
 
     case 0:
         // pads are covered by copper
-        m_settings.m_Zone_Pad_Options = PAD_IN_ZONE;
+        m_settings.SetPadConnection( PAD_IN_ZONE );
         break;
     }
 

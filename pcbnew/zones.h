@@ -21,7 +21,8 @@ enum ZONE_EDIT_T {
 
 
 /// How pads are covered by copper in zone
-enum {
+enum ZoneConnection {
+    UNDEFINED_CONNECTION = -1,
     PAD_NOT_IN_ZONE,        ///< Pads are not covered
     THERMAL_PAD,            ///< Use thermal relief for pads
     PAD_IN_ZONE             ///< pads are covered by copper
