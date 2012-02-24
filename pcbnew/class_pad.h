@@ -36,7 +36,7 @@
 #include <pad_shapes.h>
 #include <PolyLine.h>
 #include <param_config.h>       // PARAM_CFG_ARRAY
-
+#include "zones.h"
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -265,6 +265,9 @@ public:
      * 1 - if null, the global value
      */
     wxSize GetSolderPasteMargin();
+
+    void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
+    ZoneConnection GetZoneConnection() const;
 
     /* Reading and writing data on files */
     int ReadDescr( LINE_READER* aReader );
@@ -530,6 +533,7 @@ private:
 
     double      m_LocalSolderPasteMarginRatio;  ///< Local solder mask margin ratio value of pad size
                                                 ///< The final margin is the sum of these 2 values
+    ZoneConnection m_ZoneConnection;
 };
 
 #endif  // PAD_H_

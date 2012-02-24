@@ -1018,6 +1018,12 @@ void KICAD_PLUGIN::loadMODULE()
             module->SetLocalClearance( tmp );
         }
 
+        else if( TESTLINE( ".ZoneConnection" ) )
+        {
+            int tmp = intParse( line + SZ( ".ZoneConnection" ) );
+            module->SetZoneConnection( (ZoneConnection)tmp );
+        }
+
         else if( TESTLINE( "$EndMODULE" ) )
         {
             module->CalculateBoundingBox();
@@ -1218,6 +1224,12 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
         {
             BIU tmp = biuParse( line + SZ( ".LocalClearance" ) );
             pad->SetLocalClearance( tmp );
+        }
+
+        else if( TESTLINE( ".ZoneConnection" ) )
+        {
+            int tmp = intParse( line + SZ( ".ZoneConnection" ) );
+            pad->SetZoneConnection( (ZoneConnection)tmp );
         }
 
         else if( TESTLINE( "$EndPAD" ) )
@@ -3177,6 +3189,9 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
     if( me->GetLocalClearance() != 0 )
         fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
 
+    if( me->GetZoneConnection() != UNDEFINED_CONNECTION )
+        fprintf( m_fp, ".ZoneConnection %d\n", me->GetZoneConnection() );
+
     fprintf( m_fp, "$EndPAD\n" );
 
     CHECK_WRITE_ERROR();
@@ -3229,6 +3244,9 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
 
     if( me->GetLocalClearance() != 0 )
         fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
+
+    if( me->GetZoneConnection() != UNDEFINED_CONNECTION )
+        fprintf( m_fp, ".ZoneConnection %d\n", me->GetZoneConnection() );
 
     // attributes
     if( me->GetAttributes() != MOD_DEFAULT )

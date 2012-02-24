@@ -70,6 +70,7 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
+    m_ZoneConnection = UNDEFINED_CONNECTION; // Use parent setting by default
 
     // set layers mask to default for a standard pad
     m_layerMask = PAD_STANDARD_DEFAULT_LAYERS;
@@ -303,6 +304,7 @@ void D_PAD::Copy( D_PAD* source )
     m_LocalSolderMaskMargin  = source->m_LocalSolderMaskMargin;
     m_LocalSolderPasteMargin = source->m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio = source->m_LocalSolderPasteMarginRatio;
+    m_ZoneConnection = source->m_ZoneConnection;
 
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
@@ -437,6 +439,17 @@ wxSize D_PAD::GetSolderPasteMargin()
         pad_margin.y = -m_Size.y / 2;
 
     return pad_margin;
+}
+
+
+ZoneConnection D_PAD::GetZoneConnection() const
+{
+    MODULE* module = (MODULE*) GetParent();
+
+    if( m_ZoneConnection == UNDEFINED_CONNECTION && module )
+        return module->GetZoneConnection();
+    else
+        return m_ZoneConnection;
 }
 
 

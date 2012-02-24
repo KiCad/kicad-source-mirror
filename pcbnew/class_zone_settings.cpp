@@ -39,7 +39,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_ThermalReliefGap = 200;                                  // tickness of the gap in thermal reliefs
     m_ThermalReliefCopperBridge = 200;                         // tickness of the copper bridge in thermal reliefs
 
-    m_Zone_Pad_Options = THERMAL_PAD;                          // How pads are covered by copper in zone
+    m_PadConnection = THERMAL_PAD;                             // How pads are covered by copper in zone
 
     m_Zone_45_Only = false;
 
@@ -60,7 +60,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_ArcToSegmentsCount = aSource.m_ArcToSegmentsCount;
     m_ThermalReliefGap = aSource.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aSource.m_ThermalReliefCopperBridge;
-    m_Zone_Pad_Options = aSource.m_PadOption;
+    m_PadConnection = aSource.GetPadConnection();
     cornerSmoothingType = aSource.GetCornerSmoothingType();
     cornerRadius = aSource.GetCornerRadius();
 
@@ -77,7 +77,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.m_ArcToSegmentsCount = m_ArcToSegmentsCount;
     aTarget.m_ThermalReliefGap = m_ThermalReliefGap;
     aTarget.m_ThermalReliefCopperBridge = m_ThermalReliefCopperBridge;
-    aTarget.m_PadOption = m_Zone_Pad_Options;
+    aTarget.SetPadConnection( m_PadConnection );
     aTarget.SetCornerSmoothingType( cornerSmoothingType );
     aTarget.SetCornerRadius( cornerRadius );
 

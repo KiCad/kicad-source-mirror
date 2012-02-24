@@ -132,6 +132,26 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
         m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
     else
         m_SolderPasteMarginRatioCtrl->SetValue( msg );
+
+    switch( m_CurrentModule->GetZoneConnection() )
+    {
+    default:
+    case UNDEFINED_CONNECTION:
+        m_ZoneConnectionChoice->SetSelection( 0 );
+        break;
+
+    case PAD_IN_ZONE:
+        m_ZoneConnectionChoice->SetSelection( 1 );
+        break;
+
+    case THERMAL_PAD:
+        m_ZoneConnectionChoice->SetSelection( 2 );
+        break;
+
+    case PAD_NOT_IN_ZONE:
+        m_ZoneConnectionChoice->SetSelection( 3 );
+        break;
+    }
 }
 
 
@@ -481,6 +501,26 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
         dtmp = +100;
 
     m_CurrentModule->SetLocalSolderPasteMarginRatio( dtmp / 100 );
+
+    switch( m_ZoneConnectionChoice->GetSelection() )
+    {
+    default:
+    case 0:
+        m_CurrentModule->SetZoneConnection( UNDEFINED_CONNECTION );
+        break;
+
+    case 1:
+        m_CurrentModule->SetZoneConnection( PAD_IN_ZONE );
+        break;
+
+    case 2:
+        m_CurrentModule->SetZoneConnection( THERMAL_PAD );
+        break;
+
+    case 3:
+        m_CurrentModule->SetZoneConnection( PAD_NOT_IN_ZONE );
+        break;
+    }
 
     // Set Module Position
     modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX, PCB_INTERNAL_UNIT );

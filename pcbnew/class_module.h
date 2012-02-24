@@ -38,7 +38,7 @@
 #include <class_board_item.h>
 
 #include <class_text_mod.h>
-
+#include "zones.h"
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -121,6 +121,8 @@ public:
                                                    ///< value of pad size
     // The final margin is the sum of these 2 values
 
+    ZoneConnection m_ZoneConnection;
+
 public:
     MODULE( BOARD* parent );
 
@@ -192,6 +194,9 @@ public:
 
     double GetLocalSolderPasteMarginRatio() const { return m_LocalSolderPasteMarginRatio; }
     void SetLocalSolderPasteMarginRatio( double aRatio ) { m_LocalSolderPasteMarginRatio = aRatio; }
+
+    void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
+    ZoneConnection GetZoneConnection() const { return m_ZoneConnection; }
 
     int GetAttributes() const { return m_Attributs; }
     void SetAttributes( int aAttributes ) { m_Attributs = aAttributes; }

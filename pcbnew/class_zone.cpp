@@ -80,7 +80,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
     m_priority = aZone.m_priority;
     m_ArcToSegmentsCount = aZone.m_ArcToSegmentsCount;
-    m_PadOption = aZone.m_PadOption;
+    m_PadConnection = aZone.m_PadConnection;
     m_ThermalReliefGap = aZone.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
     m_FilledPolysList = aZone.m_FilledPolysList;
@@ -856,7 +856,7 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_ZoneMinThickness = src->m_ZoneMinThickness;
     m_FillMode = src->m_FillMode;               // Filling mode (segments/polygons)
     m_ArcToSegmentsCount = src->m_ArcToSegmentsCount;
-    m_PadOption = src->m_PadOption;
+    m_PadConnection = src->m_PadConnection;
     m_ThermalReliefGap = src->m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = src->m_ThermalReliefCopperBridge;
     m_Poly->m_HatchStyle = src->m_Poly->GetHatchStyle();
@@ -879,6 +879,16 @@ bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
     }
 
     return false;
+}
+
+
+ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
+{
+    if( aPad == NULL || aPad->GetZoneConnection() == UNDEFINED_CONNECTION )
+        return m_PadConnection;
+    else
+        return aPad->GetZoneConnection();
+
 }
 
 

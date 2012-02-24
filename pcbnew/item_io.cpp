@@ -210,7 +210,6 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     int      ret;
     unsigned corners_count = m_Poly->corner.size();
     int      outline_hatch;
-    char     padoption;
 
     fprintf( aFile, "$CZONE_OUTLINE\n" );
 
@@ -258,23 +257,24 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     }
 
     // Save pad option and clearance
-    switch( m_PadOption )
+    int padConnection;
+    switch( m_PadConnection )
     {
     default:
     case PAD_IN_ZONE:
-        padoption = 'I';
+        padConnection = 'I';
         break;
 
     case THERMAL_PAD:
-        padoption = 'T';
+        padConnection = 'T';
         break;
 
     case PAD_NOT_IN_ZONE:
-        padoption = 'X';
+        padConnection = 'X';
         break;
     }
 
-    ret = fprintf( aFile, "ZClearance %d %c\n", m_ZoneClearance, padoption );
+    ret = fprintf( aFile, "ZClearance %d %c\n", m_ZoneClearance, padConnection );
 
     if( ret < 2 )
         return false;
@@ -719,6 +719,9 @@ bool D_PAD::Save( FILE* aFile ) const
     if( GetLocalClearance() != 0 )
         fprintf( aFile, ".LocalClearance %d\n", GetLocalClearance() );
 
+    if( m_ZoneConnection != UNDEFINED_CONNECTION )
+        fprintf( aFile, ".ZoneConnection %d\n", m_ZoneConnection );
+
     if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
         return false;
 
@@ -778,6 +781,9 @@ bool MODULE::Save( FILE* aFile ) const
 
     if( m_LocalClearance != 0 )
         fprintf( aFile, ".LocalClearance %d\n", GetLocalClearance() );
+
+    if( m_ZoneConnection != UNDEFINED_CONNECTION )
+        fprintf( aFile, ".ZoneConnection %d\n", m_ZoneConnection );
 
     // attributes
     if( m_Attributs != MOD_DEFAULT )
@@ -1026,6 +1032,8 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
                 SetLocalSolderPasteMarginRatio( atoi( Line + 18 ) );
             else if( strnicmp( Line, ".LocalClearance ", 16 ) == 0 )
                 SetLocalClearance( atoi( Line + 16 ) );
+            else if( strnicmp( Line, ".ZoneConnection ", 16 ) == 0 )
+                m_ZoneConnection = (ZoneConnection)atoi( Line + 16 );
             break;
 
         default:
@@ -1271,6 +1279,8 @@ int MODULE::ReadDescr( LINE_READER* aReader )
                 SetLocalSolderPasteMarginRatio( atof( Line + 18 ) );
             else if( strnicmp( Line, ".LocalClearance ", 16 ) == 0 )
                 SetLocalClearance( atoi( Line + 16 ) );
+            else if( strnicmp( Line, ".ZoneConnection ", 16 ) == 0 )
+                m_ZoneConnection = (ZoneConnection)atoi( Line + 16 );
 
             break;
 
@@ -1848,9 +1858,9 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
         else if( strnicmp( Line, "ZClearance", 10 ) == 0 ) // Clearance and pad options info found
         {
             int  clearance = 200;
-            char padoption;
+            char padConnection;
             text = Line + 10;
-            ret  = sscanf( text, "%d %1c", &clearance, &padoption );
+            ret  = sscanf( text, "%d %1c", &clearance, &padConnection );
 
             if( ret < 2 )
             {
@@ -1860,21 +1870,21 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
             {
                 m_ZoneClearance = clearance;
 
-                switch( padoption )
+                switch( padConnection )
                 {
                 case 'i':
                 case 'I':
-                    m_PadOption = PAD_IN_ZONE;
+                    m_PadConnection = PAD_IN_ZONE;
                     break;
 
                 case 't':
                 case 'T':
-                    m_PadOption = THERMAL_PAD;
+                    m_PadConnection = THERMAL_PAD;
                     break;
 
                 case 'x':
                 case 'X':
-                    m_PadOption = PAD_NOT_IN_ZONE;
+                    m_PadConnection = PAD_NOT_IN_ZONE;
                     break;
                 }
             }
