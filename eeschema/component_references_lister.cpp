@@ -124,7 +124,7 @@ static bool engStrToDouble( wxString aStr, double* aDouble )
     wxString multiplierString = valueRegEx.GetMatch( aStr, 2 );
     double multiplier;
 
-    switch( multiplierString[0] )
+    switch( (wxChar)multiplierString[0] )
     {
     case 'p':
         multiplier = 1e-12;
