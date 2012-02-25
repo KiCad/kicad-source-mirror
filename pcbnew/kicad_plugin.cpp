@@ -2167,7 +2167,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
             BIU     clearance = biuParse( line + SZ( "ZClearance" ), &data );
             char*   padoption = strtok( (char*) data, delims );  // data: " I"
 
-            int     popt;
+            ZoneConnection popt;
             switch( *padoption )
             {
             case 'I':   popt = PAD_IN_ZONE;        break;
@@ -2181,7 +2181,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
             }
 
             zc->SetZoneClearance( clearance );
-            zc->SetPadOption( popt );
+            zc->SetPadConnection( popt );
         }
 
         else if( TESTLINE( "ZMinThickness" ) )
@@ -3449,7 +3449,7 @@ void KICAD_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     // Save pad option and clearance
     char padoption;
 
-    switch( me->GetPadOption() )
+    switch( me->GetPadConnection() )
     {
     default:
     case PAD_IN_ZONE:       padoption = 'I';  break;
