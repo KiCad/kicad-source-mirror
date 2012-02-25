@@ -132,7 +132,7 @@ void EDA_3D_FRAME::ReCreateMenuBar()
     bool full_options = true;
 
     // If called from the display frame of CvPcb, only some options are relevant
-    if( m_Parent->GetName() == wxT( "CmpFrame" ) )
+    if( Parent()->GetName() == wxT( "CmpFrame" ) )
     // Called from CvPcb: do not display all options
         full_options = false;
 

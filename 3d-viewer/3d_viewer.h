@@ -167,26 +167,27 @@ public: Info_3D_Visu();
 
 class EDA_3D_CANVAS : public wxGLCanvas
 {
-public:
-    EDA_3D_FRAME* m_Parent;
-
 private:
-    bool         m_init;
-    GLuint       m_gllist;
+    bool            m_init;
+    GLuint          m_gllist;
     /// Tracks whether to use Orthographic or Perspective projection
-    //TODO: Does this belong here, or in  EDA_3D_FRAME ???
-    bool         m_ortho;
+    //  TODO: Does this belong here, or in  EDA_3D_FRAME ???
+    bool            m_ortho;
+    wxGLContext*    m_glRC;
+    wxRealPoint     m_draw3dOffset;     // offset to draw the 3 mesh.
+    double          m_ZBottom;          // position of the back layer
+    double          m_ZTop;             // position of the front layer
 
-#if wxCHECK_VERSION( 2, 7, 0 )
-    wxGLContext* m_glRC;
-#endif
 
 public:
     EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList = 0 );
     ~EDA_3D_CANVAS();
 
+    EDA_3D_FRAME*   Parent() { return (EDA_3D_FRAME*)GetParent(); }
+
     void   ClearLists();
 
+    // Event functions:
     void   OnPaint( wxPaintEvent& event );
     void   OnEraseBackground( wxEraseEvent& event );
     void   OnChar( wxKeyEvent& event );
@@ -195,13 +196,13 @@ public:
     void   OnRightClick( wxMouseEvent& event );
     void   OnPopUpMenu( wxCommandEvent& event );
     void   TakeScreenshot( wxCommandEvent& event );
+    void   OnEnterWindow( wxMouseEvent& event );
+
+    // Display functions
+    GLuint DisplayCubeforTest();        // Just a test function
     void   SetView3D( int keycode );
     void   DisplayStatus();
     void   Redraw( bool finish = false );
-    GLuint DisplayCubeforTest();
-
-    void   OnEnterWindow( wxMouseEvent& event );
-
     void   Render();
 
     /**
@@ -211,6 +212,11 @@ public:
     GLuint CreateDrawGL_List();
     void   InitGL();
     void   SetLights();
+    void   SetOffset(double aPosX, double aPosY)
+    {
+        m_draw3dOffset.x = aPosX;
+        m_draw3dOffset.y = aPosY;
+    }
     void   Draw3D_Track( TRACK* track );
 
     /**
@@ -263,10 +269,8 @@ public:
 
 class EDA_3D_FRAME : public wxFrame
 {
-public:
-    PCB_BASE_FRAME* m_Parent;
 private:
-    wxString        m_FrameName;      // name used for writing and reading setup. It is "Frame3D"
+    wxString        m_FrameName;        // name used for writing and reading setup. It is "Frame3D"
     EDA_3D_CANVAS*  m_Canvas;
     wxAuiToolBar*   m_HToolBar;
     wxAuiToolBar*   m_VToolBar;
@@ -284,6 +288,7 @@ public:
         m_auimgr.UnInit();
     };
 
+    PCB_BASE_FRAME* Parent() { return (PCB_BASE_FRAME*)GetParent(); }
     void Exit3DFrame( wxCommandEvent& event );
     void OnCloseWindow( wxCloseEvent& Event );
     void ReCreateMenuBar();
@@ -331,9 +336,6 @@ void SetGLColor( int color );
 void Set_Object_Data( std::vector< S3D_Vertex >& aVertices );
 
 extern Info_3D_Visu g_Parm_3D_Visu;
-extern double       g_Draw3d_dx, g_Draw3d_dy;
-extern double       ZBottom, ZTop;
 extern double       DataScale3D; // 3D scale units.
-extern int          gl_attrib[];
 
 #endif  /*  __3D_VIEWER_H__ */
