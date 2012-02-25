@@ -117,7 +117,7 @@ void EDA_3D_CANVAS::Redraw( bool finish )
     GLfloat mat[4][4];
 
     // Translate motion first, so rotations don't mess up the orientation...
-    glTranslatef( g_Draw3d_dx, g_Draw3d_dy, 0.0F );
+    glTranslatef( m_draw3dOffset.x, m_draw3dOffset.y, 0.0F );
 
     build_rotmatrix( mat, g_Parm_3D_Visu.m_Quat );
     glMultMatrixf( &mat[0][0] );
@@ -145,7 +145,7 @@ void EDA_3D_CANVAS::Redraw( bool finish )
 
 GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 {
-    PCB_BASE_FRAME* pcbframe = m_Parent->m_Parent;
+    PCB_BASE_FRAME* pcbframe = Parent()->Parent();
     BOARD* pcb = pcbframe->GetBoard();
     TRACK* track;
     SEGZONE*             segzone;

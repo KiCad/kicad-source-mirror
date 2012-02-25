@@ -16,10 +16,6 @@
 #include <wxstruct.h>
 
 Info_3D_Visu g_Parm_3D_Visu;
-double       g_Draw3d_dx;
-double       g_Draw3d_dy;
-double       ZBottom;
-double       ZTop;
 double       DataScale3D; // 3D conversion units.
 
 
@@ -40,7 +36,6 @@ EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title, long 
 {
     m_FrameName     = wxT( "Frame3D" );
     m_Canvas        = NULL;
-    m_Parent        = parent;
     m_HToolBar      = NULL;
     m_VToolBar      = NULL;
     m_InternalUnits = 10000;    // Internal units = 1/10000 inch
@@ -101,9 +96,9 @@ void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     SaveSettings();
 
-    if( m_Parent )
+    if( Parent() )
     {
-        m_Parent->m_Draw3DFrame = NULL;
+        Parent()->m_Draw3DFrame = NULL;
     }
 
     Destroy();
@@ -177,7 +172,7 @@ void EDA_3D_FRAME::Process_Zoom( wxCommandEvent& event )
             g_Parm_3D_Visu.m_Rot[ii] = 0.0;
 
         g_Parm_3D_Visu.m_Zoom = 1.0;
-        g_Draw3d_dx = g_Draw3d_dy = 0;
+        m_Canvas->SetOffset(0.0, 0.0);
         trackball( g_Parm_3D_Visu.m_Quat, 0.0, 0.0, 0.0, 0.0 );
         break;
 

@@ -318,7 +318,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             AddMenuItem( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
                          _( "Fill or Refill All Zones" ), KiBitmap( fill_zone_xpm ) );
             AddMenuItem( aPopMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES,
-                         _( "Remove Filled Areas in All Zones" ), KiBitmap( fill_zone_xpm ) );
+                         _( "Remove Filled Areas in All Zones" ), KiBitmap( zone_unfill_xpm ) );
             aPopMenu->AppendSeparator();
         }
 
@@ -632,7 +632,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
         if( edge_zone->m_FilledPolysList.size() > 0 )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE,
-                         _( "Remove Filled Areas in Zone" ), KiBitmap( fill_zone_xpm ) );
+                         _( "Remove Filled Areas in Zone" ), KiBitmap( zone_unfill_xpm ) );
         }
 
         msg = AddHotkeyName( _( "Move Zone" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
