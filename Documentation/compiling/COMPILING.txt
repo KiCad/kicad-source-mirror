@@ -38,8 +38,9 @@ WARNING:
  see wxWidgets_patch_notes.txt for patches and issues in wxWidgets.
 
 If on windows, download
-http://sourceforge.net/projects/wxwindows/files/wxAll/2.8.10/wxWidgets-2.8.12.zip/download
+http://sourceforge.net/projects/wxwindows/files/wxAll/2.9.3/wxWidgets-2.9.3.zip/download
 or a newer version.
+Do NOT use previous versions which all have issues for KiCad.
 Start msys so you have a bash shell.  Decide where your wxWidgets build directory
 will be.  It must be where you can access it from within the msys environment,
 such as home/<user>.   Edit your msys/1.0/etc/fstab file if needed to provide
@@ -82,33 +83,6 @@ development versions of the wxWidgets packages which include the C++ headers. An
 alternative is to build static libaries from source. Verify that wx-config is in
 your path by running it from a command prompt. Linux users then go to next step.
 
-
-Install or Build zlib
----------------------
-If on windows, download http://www.zlib.net/zlib123.zip or a newer version.
-Start msys so you have a bash shell. Decide where your zlib build directory
-will be. It must be where you can access it from within the msys environment,
-such as home/<user>. Edit your msys/1.0/etc/fstab file if needed to provide
-access to this build directory from msys. Unzip the zlib123.zip file into this
-build directory. Change directories into there, and then:
-
-    ./configure
-    make
-    make install
-
-
-If linux, use your package manager to install zlib pre-built binaries.
-
-Note (JP Charras):
-Under Linux, zlib is usually installed.
-If it is not found by the wxWidget installation, wxWidgets creates an alternate zlib library.
-Under Windows, if zlib is not installed, my cmake build will try to use the
-wxWidgets zlib build.  So, under windows kicad build should work without
-zlib install.
-
-If you are using the wxWidget zlib, make sure that the wxWidgets/src/zlib directory is copied
-to ${wxWidgets_ROOT_DIR}/src/zlib
-
 Install CMake
 -------------
 If windows, download the installation binary for windows from cmake.org.
@@ -117,9 +91,9 @@ will have to restart and command shells for the new path to take effect.
 Verify that cmake is in your path by trying to run it from a command prompt.
 
 
-If linux, use your package manager to install cmake. You should get cmake 2.6.1
+If linux, use your package manager to install cmake. You should get cmake 2.6.4
 or later. If only an older one is available in your package repository, build
-2.6.1 from source. Verify that cmake is in your path by trying to run it from a
+cmake from source. Verify that cmake is in your path by trying to run it from a
 command prompt.
 
 

@@ -223,7 +223,7 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
 
     msgtitle = new wxStaticText( parent, -1, text, wxDefaultPosition, wxSize( -1, -1 ), 0 );
 
-    BoxSizer->Add( msgtitle, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM | wxADJUST_MINSIZE );
+    BoxSizer->Add( msgtitle, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM );
 
     wxFlexGridSizer* GridSizer = new wxFlexGridSizer( 3, 2, 0, 0 );
 
@@ -233,16 +233,14 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
 
     GridSizer->Add( msgtitle, 0,
                     wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
-                    5 );
+                    wxLEFT | wxRIGHT , 5 );
     m_XValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
                                    wxDefaultPosition, wxSize( -1, -1 ), 0 );
 
     GridSizer->Add( m_XValueCtrl,
                     0,
                     wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT,
-                    5 );
+                    wxLEFT | wxRIGHT, 5 );
 
     msgtitle = new wxStaticText( parent, -1, wxT( "Y:" ), wxDefaultPosition,
                                  wxSize( -1, -1 ), 0 );
@@ -250,30 +248,26 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
     GridSizer->Add( msgtitle,
                     0,
                     wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
-                    5 );
+                    wxLEFT | wxRIGHT, 5 );
     m_YValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
                                    wxDefaultPosition, wxSize( -1, -1 ), 0 );
 
     GridSizer->Add( m_YValueCtrl, 0,
                     wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT,
-                    5 );
+                    wxLEFT | wxRIGHT, 5 );
 
     msgtitle = new wxStaticText( parent, -1, wxT( "Z:" ), wxDefaultPosition,
                                  wxSize( -1, -1 ), 0 );
 
     GridSizer->Add( msgtitle, 0,
                     wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT | wxADJUST_MINSIZE,
-                    5 );
+                    wxLEFT | wxRIGHT, 5 );
     m_ZValueCtrl = new wxTextCtrl( parent, -1, wxEmptyString,
                                    wxDefaultPosition, wxSize( -1, -1 ), 0 );
 
     GridSizer->Add( m_ZValueCtrl, 0,
                     wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL |
-                    wxLEFT | wxRIGHT,
-                    5 );
+                    wxLEFT | wxRIGHT, 5 );
 }
 
 

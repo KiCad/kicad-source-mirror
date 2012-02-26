@@ -161,7 +161,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
     UpdateTitle();
 
     if( !s_Pcb )
+    {
         s_Pcb = new BOARD();
+        // Ensure all layers and items are visible:
+        s_Pcb->SetVisibleAlls();
+    }
 
     SetBoard( s_Pcb );
 

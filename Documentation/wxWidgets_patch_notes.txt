@@ -6,8 +6,9 @@ Kicad needs wxWidgets, the multi platform G.U.I.
 Known problems:
 wxMSW:
 *DO NOT* use wxMSW.2.8.1
+in fact: use wxWidgets >= 2.9.3
 
-wxMSW and wxGTK
+wxGTK
 Use wxWidgets 2.8.10 or later
 
 Linux and macOSX
@@ -26,14 +27,7 @@ Some zoom values smaller than 3 to 5 create artifacts on screen, mainly values <
 
 See http://trac.wxwidgets.org/ticket/9554 (and 11669).
 
-This is fixed in version 2.9.x
-
-This is a workaround that is not a full fix, but remaining artifacts are acceptable
-edit file  edit file <wxWidgets>/src/msw/dc.cpp
- >> search for line
-    static const int VIEWPORT_EXTENT = 1000;
- >> and replace by
-    static const int VIEWPORT_EXTENT = 10000;
+This is fixed in version 2.9.3
 
 
 wxWidgets 2.9.1 (all platforms)
@@ -43,7 +37,7 @@ after calling this conversion function, the comma is changed in point.
 (Happens after reading a parameter stored in a wxConfig structure, if this
 parameter is a double)
 Workaround:
-Use a version > 2.9.1
+Use a version >= 2.9.3
 
 
 *************************************************************************************
@@ -54,7 +48,7 @@ Without this patch, printing boards and schematics under Linux, and perhaps OSX
 gives ugly drawings.
 
 wxGTK-2.8.11/src/generic/dcpsg.cpp
-serach for:
+search for:
 line 1636
     PsPrint( "%%EndProlog\n" );
 

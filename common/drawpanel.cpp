@@ -1076,13 +1076,13 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     m_requestAutoPan = false;
                 }
 
-                SetCursor( m_currentCursor );
+                SetCursor( (wxStockCursor) m_currentCursor );
            }
             else if( screen->m_BlockLocate.m_State == STATE_BLOCK_END )
             {
                 m_requestAutoPan = false;
                 GetParent()->HandleBlockEnd( &DC );
-                SetCursor( m_currentCursor );
+                SetCursor( (wxStockCursor) m_currentCursor );
                 if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
                 {
                     m_requestAutoPan = true;
