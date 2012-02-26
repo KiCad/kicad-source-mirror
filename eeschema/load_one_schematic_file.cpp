@@ -57,8 +57,6 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 {
     char            Name1[256];
     bool            itemLoaded = false;
-    SCH_ITEM*       Phead;
-    SCH_ITEM*       Pnext;
     SCH_ITEM*       item;
     wxString        MsgDiag;            // Error and log messages
     char*           line;
@@ -228,8 +226,7 @@ again." );
             }
             else
             {
-                item->SetNext( aScreen->GetDrawItems() );
-                aScreen->SetDrawItems( item );
+                aScreen->Append( item );
             }
         }
 
@@ -239,19 +236,6 @@ again." );
             break;
         }
     }
-
-    /* GetDrawItems() was constructed in reverse order - reverse it back: */
-    Phead = NULL;
-
-    while( aScreen->GetDrawItems() )
-    {
-        Pnext = aScreen->GetDrawItems();
-        aScreen->SetDrawItems( aScreen->GetDrawItems()->Next() );
-        Pnext->SetNext( Phead );
-        Phead = Pnext;
-    }
-
-    aScreen->SetDrawItems( Phead );
 
 #if 0 && defined (DEBUG)
     aScreen->Show( 0, std::cout );

@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -224,9 +223,8 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     m_canvas->CrossHairOff( &dc );   // Erase schematic cursor
     text->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
 
-    screen->RemoveFromDrawList( text );
-    screen->AddToDrawList( newtext );
-    GetScreen()->SetCurItem( newtext );
+    screen->Remove( text );
+    screen->Append( newtext );
     m_itemToRepeat = NULL;
     OnModify();
     newtext->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );

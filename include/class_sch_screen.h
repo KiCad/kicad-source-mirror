@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -32,6 +31,7 @@
 #define CLASS_SCREEN_H
 
 #include <macros.h>
+#include <dlist.h>
 #include <sch_item_struct.h>
 #include <class_base_screen.h>
 #include <class_title_block.h>
@@ -73,8 +73,8 @@ class SCH_SCREEN : public BASE_SCREEN
     /// Position of the origin axis, which is used in exports mostly, but not yet in EESCHEMA
     wxPoint     m_originAxisPosition;
 
-    SCH_ITEM*   m_drawList;     ///< Object list for the screen.
-                                /// @todo use DLIST<SCH_ITEM> or superior container
+    DLIST< SCH_ITEM > m_drawList;     ///< Object list for the screen.
+                                      /// @todo use DLIST<SCH_ITEM> or superior container
 
     /**
      * Function addConnectedItemsToBlock
@@ -122,8 +122,17 @@ public:
      * Function GetDrawItems().
      * @return - A pointer to the first item in the linked list of draw items.
      */
-    SCH_ITEM* GetDrawItems() const          { return m_drawList; }
-    void SetDrawItems( SCH_ITEM* aItem )    { m_drawList = aItem; }
+    SCH_ITEM* GetDrawItems() const          { return m_drawList.begin(); }
+
+    void Append( SCH_ITEM* aItem )          { m_drawList.Append( aItem ); }
+
+    /**
+     * Function Append
+     * adds \a aList of SCH_ITEM objects to the list for draw items for the sheet.
+     *
+     * @param aList A reference to a #DLIST containing the #SCH_ITEM to add to the sheet.
+     */
+    void Append( DLIST< SCH_ITEM >& aList ) { m_drawList.Append( aList ); }
 
     /**
      * Function GetCurItem
@@ -184,11 +193,13 @@ public:
     void Plot( PLOTTER* aPlotter );
 
     /**
-     * Remove \a aItem from the schematic associated with this screen.
+     * Function Remove
+     * removes \a aItem from the schematic associated with this screen.
      *
-     * @param aItem - Item to be removed from schematic.
+     * @note The removed item is not deleted.  It is only unlinked from the item list.
+     * @param aItem Item to be removed from schematic.
      */
-    void RemoveFromDrawList( SCH_ITEM* aItem );
+    void Remove( SCH_ITEM* aItem );
 
     /**
      * Function DeleteItem
@@ -200,8 +211,6 @@ public:
     void DeleteItem( SCH_ITEM* aItem );
 
     bool CheckIfOnDrawList( SCH_ITEM* st );
-
-    void AddToDrawList( SCH_ITEM* st );
 
     /**
      * Function SchematicCleanUp
@@ -226,23 +235,24 @@ public:
     /**
      * Function ExtractWires
      * extracts the old wires, junctions and buses.  If \a aCreateCopy is true, replace
-     * them with a copy.  Old item must be put in undo list, and the new ones can be
-     * modified by clean up safely.  If an abort command is made, old wires must be put
-     * in GetDrawItems(), and copies must be deleted.  This is because previously stored
-     * undo commands can handle pointers on wires or buses, and we do not delete wires or
-     * buss-es, we must put they in undo list.
+     * extracted items with a copy of the original.  Old items are to be put in undo list,
+     * and the new ones can be modified by clean up safely.  If an abort draw segmat command
+     * is made, the old wires must be put back into #m_drawList, and the copies must be
+     * deleted.  This is because previously stored undo commands can handle pointers on wires
+     * or buses, and we do not delete wires or buses, we must put them in undo list.
      *
-     * Because cleanup delete and/or modify bus and wires, the it is easier is to put
-     * all wires in undo list and use a new copy of wires for cleanup.
+     * Because cleanup deletes and/or modify bus and wires, it is easier is to put
+     * all the existing  wires in undo list and use a new copy of wires for cleanup.
      */
-    SCH_ITEM* ExtractWires( bool aCreateCopy );
+    void ExtractWires( DLIST< SCH_ITEM >& aList, bool aCreateCopy );
 
     /**
      * Function ReplaceWires
-     * replaces all of the wires and junction in the screen with \a aWireList.
-     * @param aWireList List of wire to replace the existing wires with.
+     * replaces all of the wires, buses, and junctions in the screen with \a aWireList.
+     *
+     * @param aWireList List of wires to replace the existing wires with.
      */
-    void ReplaceWires( SCH_ITEM* aWireList );
+    void ReplaceWires( DLIST< SCH_ITEM >& aWireList );
 
     /**
      * Function MarkConnections

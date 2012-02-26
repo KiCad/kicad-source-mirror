@@ -211,8 +211,7 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                                          ( (SCH_SHEET*) test_item )->GetPosition() );
                         marker->SetMarkerType( MARK_ERC );
                         marker->SetErrorLevel( ERR );
-                        marker->SetNext( screen->GetDrawItems() );
-                        screen->SetDrawItems( marker );
+                        screen->Append( marker );
                     }
 
                     err_count++;
@@ -242,8 +241,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
     marker->SetMarkerType( MARK_ERC );
     marker->SetErrorLevel( WAR );
     screen = aNetItemRef->m_SheetList.LastScreen();
-    marker->SetNext( screen->GetDrawItems() );
-    screen->SetDrawItems( marker );
+    screen->Append( marker );
 
     wxString msg;
 

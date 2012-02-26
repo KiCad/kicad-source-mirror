@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -282,14 +281,14 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     }
     else if( item->IsMoving() || item->IsResized() )
     {
-        screen->RemoveFromDrawList( item );
+        screen->Remove( item );
         delete item;
 
         item = parent->GetUndoItem();
 
         wxCHECK_RET( item != NULL, wxT( "Cannot restore undefined last sheet item." ) );
 
-        screen->AddToDrawList( item );
+        screen->Append( item );
         // the owner of item is no more parent, this is the draw list of screen:
         parent->SetUndoItem( NULL );
 

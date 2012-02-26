@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -103,8 +102,6 @@ SCH_SCREEN::SCH_SCREEN() :
 {
     size_t i;
 
-    SetDrawItems( NULL );               // Schematic items list
-
     SetZoom( 32 );
 
     for( i = 0; i < SCHEMATIC_ZOOM_LIST_CNT; i++ )
@@ -158,46 +155,19 @@ void SCH_SCREEN::Clear()
 
 void SCH_SCREEN::FreeDrawList()
 {
-    SCH_ITEM* item;
-
-    while( GetDrawItems() != NULL )
-    {
-        item = GetDrawItems();
-        SetDrawItems( GetDrawItems()->Next() );
-        SAFE_DELETE( item );
-    }
-
-    SetDrawItems( NULL );
+    m_drawList.DeleteAll();
 }
 
 
-void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM* aItem )
+void SCH_SCREEN::Remove( SCH_ITEM* aItem )
 {
-    if( aItem == GetDrawItems() )
-    {
-        SetDrawItems( GetDrawItems()->Next() );
-    }
-    else
-    {
-        EDA_ITEM* DrawList = GetDrawItems();
-
-        while( DrawList && DrawList->Next() )
-        {
-            if( DrawList->Next() == aItem )
-            {
-                DrawList->SetNext( DrawList->Next()->Next() );
-                break;
-            }
-
-            DrawList = DrawList->Next();
-        }
-    }
+    m_drawList.Remove( aItem );
 }
 
 
 void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invaled item from screen." ) );
+    wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invalid item from screen." ) );
 
     SetModify();
 
@@ -213,34 +183,14 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
     }
     else
     {
-        if( aItem == GetDrawItems() )
-        {
-            SetDrawItems( aItem->Next() );
-            SAFE_DELETE( aItem );
-        }
-        else
-        {
-            SCH_ITEM* itemList = GetDrawItems();
-
-            while( itemList && itemList->Next() )
-            {
-                if( itemList->Next() == aItem )
-                {
-                    itemList->SetNext( aItem->Next() );
-                    SAFE_DELETE( aItem );
-                    return;
-                }
-
-                itemList = itemList->Next();
-            }
-        }
+        delete m_drawList.Remove( aItem );
     }
 }
 
 
 bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* aItem )
 {
-    SCH_ITEM* itemList = GetDrawItems();
+    SCH_ITEM* itemList = m_drawList.begin();
 
     while( itemList )
     {
@@ -254,19 +204,9 @@ bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* aItem )
 }
 
 
-void SCH_SCREEN::AddToDrawList( SCH_ITEM* aItem )
-{
-    if( aItem == NULL )
-        return;
-
-    aItem->SetNext( GetDrawItems() );
-    SetDrawItems( aItem );
-}
-
-
 SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T aType ) const
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->HitTest( aPosition, aAccuracy ) && (aType == NOT_USED) )
             return item;
@@ -302,11 +242,12 @@ SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T 
 }
 
 
-SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
+void SCH_SCREEN::ExtractWires( DLIST< SCH_ITEM >& aList, bool aCreateCopy )
 {
-    SCH_ITEM* item, * next_item, * new_item, * List = NULL;
+    SCH_ITEM* item;
+    SCH_ITEM* next_item;
 
-    for( item = GetDrawItems(); item != NULL; item = next_item )
+    for( item = m_drawList.begin(); item != NULL; item = next_item )
     {
         next_item = item->Next();
 
@@ -314,33 +255,27 @@ SCH_ITEM* SCH_SCREEN::ExtractWires( bool CreateCopy )
         {
         case SCH_JUNCTION_T:
         case SCH_LINE_T:
-            RemoveFromDrawList( item );
-            item->SetNext( List );
-            List = item;
+            m_drawList.Remove( item );
+            aList.Append( item );
 
-            if( CreateCopy )
-            {
-                new_item = item->Clone();
-                new_item->SetNext( GetDrawItems() );
-                SetDrawItems( new_item );
-            }
+            if( aCreateCopy )
+                m_drawList.Insert( item->Clone(), next_item );
+
             break;
 
         default:
             break;
         }
     }
-
-    return List;
 }
 
 
-void SCH_SCREEN::ReplaceWires( SCH_ITEM* aWireList )
+void SCH_SCREEN::ReplaceWires( DLIST< SCH_ITEM >& aWireList )
 {
     SCH_ITEM* item;
     SCH_ITEM* next_item;
 
-    for( item = GetDrawItems(); item != NULL; item = next_item )
+    for( item = m_drawList.begin(); item != NULL; item = next_item )
     {
         next_item = item->Next();
 
@@ -348,7 +283,7 @@ void SCH_SCREEN::ReplaceWires( SCH_ITEM* aWireList )
         {
         case SCH_JUNCTION_T:
         case SCH_LINE_T:
-            RemoveFromDrawList( item );
+            Remove( item );
             delete item;
             break;
 
@@ -357,14 +292,7 @@ void SCH_SCREEN::ReplaceWires( SCH_ITEM* aWireList )
         }
     }
 
-    while( aWireList )
-    {
-        next_item = aWireList->Next();
-
-        aWireList->SetNext( GetDrawItems() );
-        SetDrawItems( aWireList );
-        aWireList = next_item;
-    }
+    m_drawList.Append( aWireList );
 }
 
 
@@ -373,7 +301,7 @@ void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
     wxCHECK_RET( (aSegment != NULL) && (aSegment->Type() == SCH_LINE_T),
                  wxT( "Invalid object pointer." ) );
 
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->GetFlags() & CANDIDATE )
             continue;
@@ -498,50 +426,50 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
 bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 {
-    SCH_ITEM* DrawList, * TstDrawList;
-    bool      Modify = false;
+    SCH_ITEM* item, * testItem;
+    bool      modified = false;
 
-    DrawList = GetDrawItems();
+    item = m_drawList.begin();
 
-    for( ; DrawList != NULL; DrawList = DrawList->Next() )
+    for( ; item != NULL; item = item->Next() )
     {
-        if( DrawList->Type() == SCH_LINE_T )
+        if( item->Type() != SCH_LINE_T )
+            continue;
+
+        testItem = item->Next();
+
+        while( testItem )
         {
-            TstDrawList = DrawList->Next();
-
-            while( TstDrawList )
+            if( testItem->Type() == SCH_LINE_T )
             {
-                if( TstDrawList->Type() == SCH_LINE_T )
-                {
-                    SCH_LINE* line = (SCH_LINE*) DrawList;
+                SCH_LINE* line = (SCH_LINE*) item;
 
-                    if( line->MergeOverlap( (SCH_LINE*) TstDrawList ) )
-                    {
-                        // Keep the current flags, because the deleted segment can be flagged.
-                        DrawList->SetFlags( TstDrawList->GetFlags() );
-                        DeleteItem( TstDrawList );
-                        TstDrawList = GetDrawItems();
-                        Modify = true;
-                    }
-                    else
-                    {
-                        TstDrawList = TstDrawList->Next();
-                    }
+                if( line->MergeOverlap( (SCH_LINE*) testItem ) )
+                {
+                    // Keep the current flags, because the deleted segment can be flagged.
+                    item->SetFlags( testItem->GetFlags() );
+                    DeleteItem( testItem );
+                    testItem = m_drawList.begin();
+                    modified = true;
                 }
                 else
                 {
-                    TstDrawList = TstDrawList->Next();
+                    testItem = testItem->Next();
                 }
+            }
+            else
+            {
+                testItem = testItem->Next();
             }
         }
     }
 
     TestDanglingEnds( aCanvas, aDC );
 
-    if( aCanvas && Modify )
+    if( aCanvas && modified )
         aCanvas->Refresh();
 
-    return Modify;
+    return modified;
 }
 
 
@@ -590,7 +518,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
         || fprintf( aFile, "$EndDescr\n" ) < 0 )
         return false;
 
-    for( SCH_ITEM* item = GetDrawItems(); item; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
         if( !item->Save( aFile ) )
             return false;
@@ -605,7 +533,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 
 void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aColor )
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->IsMoving() || item->IsResized() )
             continue;
@@ -621,7 +549,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aC
 
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
-    for( SCH_ITEM* item = GetDrawItems();  item;  item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
     {
         aPlotter->set_current_line_width( item->GetPenSize() );
         item->Plot( aPlotter );
@@ -655,7 +583,7 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 
 void SCH_SCREEN::ClearDrawingState()
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
         item->ClearFlags();
 }
 
@@ -667,7 +595,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
     SCH_COMPONENT* component = NULL;
     LIB_PIN* pin = NULL;
 
-    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() != SCH_COMPONENT_T )
             continue;
@@ -717,7 +645,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
 
 SCH_SHEET* SCH_SCREEN::GetSheet( const wxString& aName )
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() != SCH_SHEET_T )
             continue;
@@ -736,7 +664,7 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
 {
     SCH_SHEET_PIN* sheetPin = NULL;
 
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() != SCH_SHEET_T )
             continue;
@@ -757,7 +685,7 @@ int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) 
     SCH_ITEM* item;
     int       count = 0;
 
-    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() == SCH_JUNCTION_T  && !aTestJunctions )
             continue;
@@ -772,7 +700,7 @@ int SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) 
 
 void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() == SCH_COMPONENT_T )
         {
@@ -786,7 +714,7 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
 void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
 {
-    SCH_ITEM* item = GetDrawItems();
+    SCH_ITEM* item = m_drawList.begin();
 
     while( item )
     {
@@ -869,7 +797,7 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
     ITEM_PICKER picker;
     bool addinlist = true;
 
-    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         picker.SetItem( item );
 
@@ -915,7 +843,7 @@ int SCH_SCREEN::UpdatePickList()
     area.SetSize( m_BlockLocate.GetSize() );
     area.Normalize();
 
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         // An item is picked if its bounding box intersects the reference area.
         if( item->HitTest( area ) )
@@ -935,10 +863,10 @@ bool SCH_SCREEN::TestDanglingEnds( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
     std::vector< DANGLING_END_ITEM > endPoints;
     bool hasDanglingEnds = false;
 
-    for( item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( item = m_drawList.begin(); item != NULL; item = item->Next() )
         item->GetEndPoints( endPoints );
 
-    for( item = GetDrawItems(); item; item = item->Next() )
+    for( item = m_drawList.begin(); item; item = item->Next() )
     {
         if( item->IsDanglingStateChanged( endPoints ) && ( aCanvas != NULL ) && ( aDC != NULL ) )
         {
@@ -960,7 +888,7 @@ bool SCH_SCREEN::BreakSegment( const wxPoint& aPoint )
     SCH_LINE* newSegment;
     bool brokenSegments = false;
 
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( (item->Type() != SCH_LINE_T) || (item->GetLayer() == LAYER_NOTES) )
             continue;
@@ -974,8 +902,7 @@ bool SCH_SCREEN::BreakSegment( const wxPoint& aPoint )
         newSegment = new SCH_LINE( *segment );
         newSegment->SetStartPoint( aPoint );
         segment->SetEndPoint( aPoint );
-        newSegment->SetNext( segment->Next() );
-        segment->SetNext( newSegment );
+        m_drawList.Insert( newSegment, segment->Next() );
         item = newSegment;
         brokenSegments = true;
     }
@@ -988,7 +915,7 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
 {
     bool brokenSegments = false;
 
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() == SCH_JUNCTION_T )
         {
@@ -1013,7 +940,7 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
 
 int SCH_SCREEN::GetNode( const wxPoint& aPosition, EDA_ITEMS& aList )
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() == SCH_LINE_T && item->HitTest( aPosition )
             && (item->GetLayer() == LAYER_BUS || item->GetLayer() == LAYER_WIRE) )
@@ -1032,7 +959,7 @@ int SCH_SCREEN::GetNode( const wxPoint& aPosition, EDA_ITEMS& aList )
 
 SCH_LINE* SCH_SCREEN::GetWireOrBus( const wxPoint& aPosition )
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( (item->Type() == SCH_LINE_T) && item->HitTest( aPosition )
             && (item->GetLayer() == LAYER_BUS || item->GetLayer() == LAYER_WIRE) )
@@ -1048,7 +975,7 @@ SCH_LINE* SCH_SCREEN::GetWireOrBus( const wxPoint& aPosition )
 SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLayer,
                                SCH_LINE_TEST_T aSearchType )
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() != SCH_LINE_T )
             continue;
@@ -1081,7 +1008,7 @@ SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLay
 
 SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -1106,7 +1033,7 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
     SCH_COMPONENT* component;
     bool           found = false;
 
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
     {
         if( item->Type() != SCH_COMPONENT_T )
             continue;
@@ -1179,7 +1106,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
     {
         SCH_LINE* segment;
 
-        for( item = GetDrawItems(); item != NULL; item = item->Next() )
+        for( item = m_drawList.begin(); item != NULL; item = item->Next() )
         {
             if( !(item->GetFlags() & SELECTEDNODE) )
                 continue;
@@ -1191,7 +1118,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
         }
 
         // Search all attached wires (i.e wire with one new dangling end )
-        for( item = GetDrawItems(); item != NULL; item = item->Next() )
+        for( item = m_drawList.begin(); item != NULL; item = item->Next() )
         {
             bool noconnect = false;
 
@@ -1210,7 +1137,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
 
             /* If the wire start point is connected to a wire that was already found
              * and now is not connected, add the wire to the list. */
-            for( tmp = GetDrawItems(); tmp != NULL; tmp = tmp->Next() )
+            for( tmp = m_drawList.begin(); tmp != NULL; tmp = tmp->Next() )
             {
                 // Ensure tmp is a previously deleted segment:
                 if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
@@ -1234,7 +1161,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
 
             /* If the wire end point is connected to a wire that has already been found
              * and now is not connected, add the wire to the list. */
-            for( tmp = GetDrawItems(); tmp != NULL; tmp = tmp->Next() )
+            for( tmp = m_drawList.begin(); tmp != NULL; tmp = tmp->Next() )
             {
                 // Ensure tmp is a previously deleted segment:
                 if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
@@ -1265,13 +1192,13 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
                 ITEM_PICKER picker( item, UR_DELETED );
                 aList.PushItem( picker );
 
-                item = GetDrawItems();
+                item = m_drawList.begin();
             }
         }
 
         // Get redundant junctions (junctions which connect < 3 end wires
         // and no pin)
-        for( item = GetDrawItems(); item != NULL; item = item->Next() )
+        for( item = m_drawList.begin(); item != NULL; item = item->Next() )
         {
             if( item->GetFlags() & STRUCT_DELETED )
                 continue;
@@ -1293,7 +1220,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
             }
         }
 
-        for( item = GetDrawItems(); item != NULL;  item = item->Next() )
+        for( item = m_drawList.begin(); item != NULL;  item = item->Next() )
         {
             if( item->GetFlags() & STRUCT_DELETED )
                 continue;
@@ -1560,7 +1487,7 @@ void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
-    for( EDA_ITEM* item = m_drawList;  item;  item = item->Next() )
+    for( EDA_ITEM* item = m_drawList.begin();  item != NULL;  item = item->Next() )
     {
         item->Show( nestLevel+1, os );
     }

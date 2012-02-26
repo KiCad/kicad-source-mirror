@@ -559,8 +559,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 
         SetSchItemParent( Struct, GetScreen() );
         Struct->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        Struct->SetNext( GetScreen()->GetDrawItems() );
-        GetScreen()->SetDrawItems( Struct );
+        GetScreen()->Append( Struct );
     }
 
     SaveCopyInUndoList( picklist, UR_NEW );
