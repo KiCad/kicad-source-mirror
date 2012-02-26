@@ -381,7 +381,7 @@ public:
     void SetCurrentCursor( int aCursor )
     {
         m_currentCursor = aCursor;
-        SetCursor( m_currentCursor );
+        SetCursor( (wxStockCursor) m_currentCursor );
     }
 
     /**

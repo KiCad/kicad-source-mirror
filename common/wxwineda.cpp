@@ -26,7 +26,7 @@ EDA_GRAPHIC_TEXT_CTRL::EDA_GRAPHIC_TEXT_CTRL( wxWindow*       parent,
     m_Title = new wxStaticText( parent, -1, Title );
 
     BoxSizer->Add( m_Title, 0,
-                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_FrameText = new wxTextCtrl( parent, -1, TextToEdit );
 
@@ -38,7 +38,7 @@ EDA_GRAPHIC_TEXT_CTRL::EDA_GRAPHIC_TEXT_CTRL( wxWindow*       parent,
         wxStaticText* text = new wxStaticText( parent, -1, msg );
 
         BoxSizer->Add( text, 0,
-                       wxGROW | wxLEFT | wxRIGHT | wxADJUST_MINSIZE, 5 );
+                       wxGROW | wxLEFT | wxRIGHT, 5 );
     }
 
     wxString value = FormatSize( m_Internal_Unit, m_UserUnit, textsize );
@@ -158,7 +158,7 @@ EDA_POSITION_CTRL::EDA_POSITION_CTRL( wxWindow*       parent,
     m_TextX = new wxStaticText( parent, -1, text );
 
     BoxSizer->Add( m_TextX, 0,
-                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
     m_FramePosX = new wxTextCtrl( parent, -1, wxEmptyString,
                                   wxDefaultPosition );
 
@@ -174,7 +174,7 @@ EDA_POSITION_CTRL::EDA_POSITION_CTRL( wxWindow*       parent,
     m_TextY = new wxStaticText( parent, -1, text );
 
     BoxSizer->Add( m_TextY, 0,
-                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_FramePosY = new wxTextCtrl( parent, -1, wxEmptyString );
 
@@ -272,7 +272,7 @@ EDA_VALUE_CTRL::EDA_VALUE_CTRL( wxWindow* parent, const wxString& title,
     m_Text = new wxStaticText( parent, -1, label );
 
     BoxSizer->Add( m_Text, 0,
-                   wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     wxString stringvalue = ReturnStringFromValue( m_UserUnit, m_Value,
                                                   m_Internal_Unit );

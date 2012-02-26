@@ -135,6 +135,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( wxWindow* parent, wxSemaphore* s
         MakeModal(true);
 
     SetBoard( new BOARD() );
+    // Ensure all layers and items are visible:
+    GetBoard()->SetVisibleAlls();
     SetScreen( new PCB_SCREEN(GetPageSizeIU()) );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings();
