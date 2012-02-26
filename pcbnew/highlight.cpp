@@ -75,7 +75,11 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
         list.Add( Line );
     }
 
-    wxSingleChoiceDialog choiceDlg( this, wxEmptyString, _( "Select Net" ), list, NULL );
+#if wxCHECK_VERSION( 2, 9, 4 )
+    wxSingleChoiceDialog choiceDlg( this, wxEmptyString, _( "Select Net" ), list, (void**) NULL );
+#else
+    wxSingleChoiceDialog choiceDlg( this, wxEmptyString, _( "Select Net" ), list, (char**) NULL );
+#endif
 
     if( (choiceDlg.ShowModal() == wxID_CANCEL) || (choiceDlg.GetSelection() == wxNOT_FOUND) )
         return;
