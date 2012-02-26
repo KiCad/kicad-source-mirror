@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1994 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -457,8 +456,13 @@ void GERBVIEW_FRAME::Liste_D_Codes()
         }
     }
 
-    wxSingleChoiceDialog dlg( this, wxEmptyString, _( "D Codes" ), list, NULL,
+#if wxCHECK_VERSION( 2, 9, 4 )
+    wxSingleChoiceDialog dlg( this, wxEmptyString, _( "D Codes" ), list, (void**)NULL,
                               wxCHOICEDLG_STYLE & ~wxCANCEL );
+#else
+    wxSingleChoiceDialog dlg( this, wxEmptyString, _( "D Codes" ), list, (char**)NULL,
+                              wxCHOICEDLG_STYLE & ~wxCANCEL );
+#endif
 
     dlg.ShowModal();
 }
