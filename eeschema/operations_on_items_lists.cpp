@@ -126,11 +126,9 @@ void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList )
         }
         else
         {
-            screen->RemoveFromDrawList( item );
+            screen->Remove( item );
 
             /* Unlink the structure */
-            item->SetNext( 0 );
-            item->SetBack( 0 );
             itemsList.PushItem( itemWrapper );
         }
     }
@@ -160,11 +158,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
     }
     else
     {
-        screen->RemoveFromDrawList( aItem );
-
-        aItem->SetNext( NULL );
-        aItem->SetBack( NULL );  // Only one struct -> no link
-
+        screen->Remove( aItem );
         SaveCopyInUndoList( aItem, UR_DELETED );
         m_canvas->RefreshDrawingRect( aItem->GetBoundingBox() );
     }
@@ -220,8 +214,7 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             }
 
             SetSchItemParent( newitem, screen );
-            newitem->SetNext( screen->GetDrawItems() );
-            screen->SetDrawItems( newitem );
+            screen->Append( newitem );
         }
     }
 

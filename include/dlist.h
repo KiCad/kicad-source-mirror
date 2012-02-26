@@ -63,22 +63,31 @@ protected:
     /**
      * Function append
      * adds \a aNewElement to the end of the list.
+     * @param aNewElement The element to insert.
      */
     void append( EDA_ITEM* aNewElement );
 
     /**
+     * Function append
+     * adds \a aList to the end of the list.
+     * @param aList The list to aList.
+     */
+    void append( DHEAD& aList );
+
+    /**
      * Function insert
-     * puts aNewElement just in front of aElementAfterMe in the list sequence.
-     * If aElementAfterMe is NULL, then simply append().
+     * puts \a aNewElement just in front of \a aElementAfterMe in the list sequence.
+     * If \a aElementAfterMe is NULL, then simply append().
      * @param aNewElement The element to insert.
      * @param aElementAfterMe The element to insert \a aNewElement before,
-     *  if NULL then append aNewElement onto end of list.
+     *                        if NULL then append \a aNewElement onto end of list.
      */
     void insert( EDA_ITEM* aNewElement, EDA_ITEM* aElementAfterMe );
 
     /**
      * Function insert
-     * puts aNewElement in front of list sequence.
+     * puts \a aNewElement in front of list sequence.
+     * @param aNewElement The element to insert.
      */
     void insert( EDA_ITEM* aNewElement )
     {
@@ -88,6 +97,7 @@ protected:
     /**
      * Function remove
      * removes \a aElement from the list, but does not delete it.
+     * @param aElement The element to remove.
      */
     void remove( EDA_ITEM* aElement );
 
@@ -162,6 +172,7 @@ public:
     /**
      * Function Append
      * adds \a aNewElement to the end of the list.
+     * @param aNewElement The element to insert.
      */
     void Append( T* aNewElement )
     {
@@ -169,9 +180,22 @@ public:
     }
 
     /**
+     * Function Append
+     * adds \a aList to the end of the list.
+     * @param aList The list to append to the end of the list.
+     */
+    void Append( DLIST& aList )
+    {
+        append( aList );
+    }
+
+    /**
      * Function Insert
-     * puts aNewElement just in front of aElementAfterMe in the list sequence.
+     * puts \a aNewElement just in front of \a aElementAfterMe in the list sequence.
      * If aElementAfterMe is NULL, then simply Append()
+     * @param aNewElement The element to insert.
+     * @param aElementAfterMe The element to insert \a aNewElement before,
+     *                        if NULL then append \a aNewElement onto end of list.
      */
     void Insert( T* aNewElement, T* aElementAfterMe )
     {
@@ -181,6 +205,7 @@ public:
     /**
      * Function Remove
      * removes \a aElement from the list, but does not delete it.
+     * @param aElement The element to remove from the list.
      * @return T* - the removed element, so you can easily delete it upon return.
      */
     T* Remove( T* aElement )
@@ -210,6 +235,7 @@ public:
     /**
      * Function PushFront
      * puts aNewElement at front of list sequence.
+     * @param aNewElement The element to insert at the front of the list.
      */
     void PushFront( T* aNewElement )
     {
@@ -219,6 +245,7 @@ public:
     /**
      * Function PushBack
      * puts aNewElement at the end of the list sequence.
+     * @param aNewElement The element to push to the end of the list.
      */
     void PushBack( T* aNewElement )
     {

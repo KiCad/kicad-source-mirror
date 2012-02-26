@@ -85,6 +85,36 @@ void DHEAD::append( EDA_ITEM* aNewElement )
 }
 
 
+void DHEAD::append( DHEAD& aList )
+{
+    wxCHECK_RET( aList.GetCount() != 0, wxT( "Attempt to append empty list." ) );
+
+    // Change the item's list to me.
+    for( EDA_ITEM* item = aList.first;  item != NULL;  item = item->Next() )
+        item->SetList( this );
+
+    if( first )       // list is not empty, set last item's next to the first item in aList
+    {
+        wxCHECK_RET( last != NULL, wxT( "Last list element not set." ) );
+
+        last->SetNext( aList.first );
+        aList.first->SetBack( last );
+        last = aList.last;
+    }
+    else              // list is empty, first and last are same as aList
+    {
+        first = aList.first;
+        last  = aList.last;
+    }
+
+    count += aList.count;
+
+    aList.count = 0;
+    aList.first = NULL;
+    aList.last = NULL;
+}
+
+
 void DHEAD::insert( EDA_ITEM* aNewElement, EDA_ITEM* aAfterMe )
 {
     wxASSERT( aNewElement != NULL );

@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-20011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -217,15 +216,14 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
     if( &aItem != this )
     {
-        m_StructType = aItem.Type();
-        Pnext = aItem.Pnext;
-        Pback = aItem.Pback;
+        m_Image = aItem.m_Image;
         m_StructType = aItem.m_StructType;
         m_Parent = aItem.m_Parent;
         m_Son = aItem.m_Son;
         m_Flags = aItem.m_Flags;
-        SetTimeStamp( aItem.m_TimeStamp );
+        m_TimeStamp = aItem.m_TimeStamp;
         m_Status = aItem.m_Status;
+        m_forceVisible = aItem.m_forceVisible;
     }
 
     return *this;

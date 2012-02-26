@@ -178,12 +178,27 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_BREAK_WIRE:
     {
+        DLIST< SCH_ITEM > oldWires;
+
+        oldWires.SetOwnership( false );      // Prevent DLIST for deleting items in destructor.
         m_canvas->MoveCursorToCrossHair();
-        SCH_ITEM* oldWiresList = screen->ExtractWires( true );
+        screen->ExtractWires( oldWires, true );
         screen->BreakSegment( screen->GetCrossHairPosition() );
 
-        if( oldWiresList )
-            SaveCopyInUndoList( oldWiresList, UR_WIRE_IMAGE );
+        if( oldWires.GetCount() != 0 )
+        {
+            PICKED_ITEMS_LIST oldItems;
+
+            oldItems.m_Status = UR_WIRE_IMAGE;
+
+            while( oldWires.GetCount() != 0 )
+            {
+                ITEM_PICKER picker = ITEM_PICKER( oldWires.PopFront(), UR_WIRE_IMAGE );
+                oldItems.PushItem( picker );
+            }
+
+            SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
+        }
 
         screen->TestDanglingEnds( m_canvas, &dc );
     }

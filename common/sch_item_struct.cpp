@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -99,23 +98,6 @@ bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
 {
     wxCHECK_MSG( false, this->Type() < aItem.Type(),
                  wxT( "Less than operator not defined for " ) + GetClass() );
-}
-
-
-SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
-{
-    wxCHECK_MSG( Type() == aItem.Type(), *this,
-                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
-                 GetClass() );
-
-    if( &aItem != this )
-    {
-        EDA_ITEM::operator=( aItem );
-        m_Layer = aItem.m_Layer;
-        m_connections = aItem.m_connections;
-    }
-
-    return *this;
 }
 
 
