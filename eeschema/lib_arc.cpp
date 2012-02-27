@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -228,7 +227,7 @@ EDA_ITEM* LIB_ARC::doClone() const
 }
 
 
-int LIB_ARC::DoCompare( const LIB_ITEM& aOther ) const
+int LIB_ARC::compare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_ARC_T );
 
@@ -250,7 +249,7 @@ int LIB_ARC::DoCompare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_ARC::DoOffset( const wxPoint& aOffset )
+void LIB_ARC::SetOffset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
     m_ArcStart += aOffset;
@@ -258,14 +257,14 @@ void LIB_ARC::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_ARC::DoTestInside( EDA_RECT& aRect ) const
+bool LIB_ARC::Inside( EDA_RECT& aRect ) const
 {
     return aRect.Contains( m_ArcStart.x, -m_ArcStart.y )
         || aRect.Contains( m_ArcEnd.x, -m_ArcEnd.y );
 }
 
 
-void LIB_ARC::DoMove( const wxPoint& aPosition )
+void LIB_ARC::Move( const wxPoint& aPosition )
 {
     wxPoint offset = aPosition - m_Pos;
     m_Pos = aPosition;
@@ -274,7 +273,7 @@ void LIB_ARC::DoMove( const wxPoint& aPosition )
 }
 
 
-void LIB_ARC::DoMirrorHorizontal( const wxPoint& aCenter )
+void LIB_ARC::MirrorHorizontal( const wxPoint& aCenter )
 {
     m_Pos.x -= aCenter.x;
     m_Pos.x *= -1;
@@ -288,7 +287,7 @@ void LIB_ARC::DoMirrorHorizontal( const wxPoint& aCenter )
     EXCHG( m_ArcStart, m_ArcEnd );
 }
 
-void LIB_ARC::DoMirrorVertical( const wxPoint& aCenter )
+void LIB_ARC::MirrorVertical( const wxPoint& aCenter )
 {
     m_Pos.y -= aCenter.y;
     m_Pos.y *= -1;
@@ -302,7 +301,7 @@ void LIB_ARC::DoMirrorVertical( const wxPoint& aCenter )
     EXCHG( m_ArcStart, m_ArcEnd );
 }
 
-void LIB_ARC::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_ARC::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
     RotatePoint( &m_Pos, aCenter, rot_angle );
@@ -312,8 +311,8 @@ void LIB_ARC::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 
 
 
-void LIB_ARC::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                      const TRANSFORM& aTransform )
+void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                    const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 

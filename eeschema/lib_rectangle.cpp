@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -95,7 +94,7 @@ EDA_ITEM* LIB_RECTANGLE::doClone() const
 }
 
 
-int LIB_RECTANGLE::DoCompare( const LIB_ITEM& aOther ) const
+int LIB_RECTANGLE::compare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_RECTANGLE_T );
 
@@ -117,20 +116,20 @@ int LIB_RECTANGLE::DoCompare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_RECTANGLE::DoOffset( const wxPoint& aOffset )
+void LIB_RECTANGLE::SetOffset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
     m_End += aOffset;
 }
 
 
-bool LIB_RECTANGLE::DoTestInside( EDA_RECT& aRect ) const
+bool LIB_RECTANGLE::Inside( EDA_RECT& aRect ) const
 {
     return aRect.Contains( m_Pos.x, -m_Pos.y ) || aRect.Contains( m_End.x, -m_End.y );
 }
 
 
-void LIB_RECTANGLE::DoMove( const wxPoint& aPosition )
+void LIB_RECTANGLE::Move( const wxPoint& aPosition )
 {
     wxPoint size = m_End - m_Pos;
     m_Pos = aPosition;
@@ -138,7 +137,7 @@ void LIB_RECTANGLE::DoMove( const wxPoint& aPosition )
 }
 
 
-void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& aCenter )
+void LIB_RECTANGLE::MirrorHorizontal( const wxPoint& aCenter )
 {
     m_Pos.x -= aCenter.x;
     m_Pos.x *= -1;
@@ -149,7 +148,7 @@ void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& aCenter )
 }
 
 
-void LIB_RECTANGLE::DoMirrorVertical( const wxPoint& aCenter )
+void LIB_RECTANGLE::MirrorVertical( const wxPoint& aCenter )
 {
     m_Pos.y -= aCenter.y;
     m_Pos.y *= -1;
@@ -160,7 +159,7 @@ void LIB_RECTANGLE::DoMirrorVertical( const wxPoint& aCenter )
 }
 
 
-void LIB_RECTANGLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_RECTANGLE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
     RotatePoint( &m_Pos, aCenter, rot_angle );
@@ -168,8 +167,8 @@ void LIB_RECTANGLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                            const TRANSFORM& aTransform )
+void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                          const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 

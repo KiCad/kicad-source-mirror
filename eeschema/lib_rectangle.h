@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -122,35 +121,80 @@ public:
      */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
+    /**
+     * @copydoc LIB_ITEM::SetOffset(const wxPoint&)
+     */
+    virtual void SetOffset( const wxPoint& aOffset );
+
+    /**
+     * @copydoc LIB_ITEM::Inside()
+     */
+    virtual bool Inside( EDA_RECT& aRect ) const;
+
+    /**
+     * @copydoc LIB_ITEM::Move()
+     */
+    virtual void Move( const wxPoint& aPosition );
+
+    /**
+     * @copydoc LIB_ITEM::GetPosition()
+     */
+    virtual wxPoint GetPosition() const { return m_Pos; }
+
+    /**
+     * @copydoc LIB_ITEM::MirrorHorizontal()
+     */
+    virtual void MirrorHorizontal( const wxPoint& aCenter );
+
+    /**
+     * @copydoc LIB_ITEM::MirrorVertical()
+     */
+    virtual void MirrorVertical( const wxPoint& aCenter );
+
+    /**
+     * @copydoc LIB_ITEM::Rotate(const wxPoint&,bool)
+     */
+    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+
+    /**
+     * @copydoc LIB_ITEM::Plot()
+     */
+    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                       const TRANSFORM& aTransform );
+
+    /**
+     * @copydoc LIB_ITEM::GetWidth()
+     */
+    virtual int GetWidth() const { return m_Width; }
+
+    /**
+     * @copydoc LIB_ITEM::SetWidth()
+     */
+    virtual void SetWidth( int aWidth ) { m_Width = aWidth; }
+
     virtual wxString GetSelectMenuText() const;
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_rectangle_xpm; }
 
-protected:
+private:
     virtual EDA_ITEM* doClone() const;
 
     /**
-     * Provide the rectangle draw object specific comparison.
+     * Function compare
+     * provides the rectangle draw object specific comparison.
      *
      * The sort order is as follows:
      *      - Rectangle horizontal (X) start position.
      *      - Rectangle vertical (Y) start position.
      *      - Rectangle horizontal (X) end position.
      *      - Rectangle vertical (Y) end position.
+     *
+     * @param aOther A reference to the other #LIB_ITEM to compare the rectangle against.
+     * @return An integer value less than 0 if the rectangle is less than \a aOther, zero
+     *         if the rectangle is equal to \a aOther, or greater than 0 if the rectangle
+     *         is greater than \a aOther.
      */
-    virtual int DoCompare( const LIB_ITEM& aOther ) const;
-
-    virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_RECT& aRect ) const;
-    virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() const { return m_Pos; }
-    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
-    virtual void DoMirrorVertical( const wxPoint& aCenter );
-    virtual void DoRotate( const wxPoint& aCenter, bool aRotateCCW = true );
-    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform );
-    virtual int DoGetWidth() const { return m_Width; }
-    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
+    virtual int compare( const LIB_ITEM& aOther ) const;
 };
 
 

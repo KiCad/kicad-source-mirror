@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -236,7 +235,7 @@ EDA_ITEM* LIB_TEXT::doClone() const
 }
 
 
-int LIB_TEXT::DoCompare( const LIB_ITEM& other ) const
+int LIB_TEXT::compare( const LIB_ITEM& other ) const
 {
     wxASSERT( other.Type() == LIB_TEXT_T );
 
@@ -263,13 +262,13 @@ int LIB_TEXT::DoCompare( const LIB_ITEM& other ) const
 }
 
 
-void LIB_TEXT::DoOffset( const wxPoint& offset )
+void LIB_TEXT::SetOffset( const wxPoint& aOffset )
 {
-    m_Pos += offset;
+    m_Pos += aOffset;
 }
 
 
-bool LIB_TEXT::DoTestInside( EDA_RECT& rect ) const
+bool LIB_TEXT::Inside( EDA_RECT& rect ) const
 {
     /*
      * FIXME: This should calculate the text size and justification and
@@ -279,27 +278,27 @@ bool LIB_TEXT::DoTestInside( EDA_RECT& rect ) const
 }
 
 
-void LIB_TEXT::DoMove( const wxPoint& newPosition )
+void LIB_TEXT::Move( const wxPoint& newPosition )
 {
     m_Pos = newPosition;
 }
 
 
-void LIB_TEXT::DoMirrorHorizontal( const wxPoint& center )
+void LIB_TEXT::MirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
     m_Pos.x += center.x;
 }
 
-void LIB_TEXT::DoMirrorVertical( const wxPoint& center )
+void LIB_TEXT::MirrorVertical( const wxPoint& center )
 {
     m_Pos.y -= center.y;
     m_Pos.y *= -1;
     m_Pos.y += center.y;
 }
 
-void LIB_TEXT::DoRotate( const wxPoint& center, bool aRotateCCW )
+void LIB_TEXT::Rotate( const wxPoint& center, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
@@ -308,8 +307,8 @@ void LIB_TEXT::DoRotate( const wxPoint& center, bool aRotateCCW )
 }
 
 
-void LIB_TEXT::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                       const TRANSFORM& aTransform )
+void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                     const TRANSFORM& aTransform )
 {
     wxASSERT( plotter != NULL );
 
