@@ -1,5 +1,5 @@
 /**
- * @file dialog_lib_edit_one_field.cpp
+ * @file dialog_edit_one_field.cpp
  * @brief dialog to editing a field ( not a graphic text) in current component.
  */
 

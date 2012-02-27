@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -140,7 +139,7 @@ EDA_ITEM* LIB_POLYLINE::doClone() const
 }
 
 
-int LIB_POLYLINE::DoCompare( const LIB_ITEM& aOther ) const
+int LIB_POLYLINE::compare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_POLYLINE_T );
 
@@ -162,14 +161,14 @@ int LIB_POLYLINE::DoCompare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_POLYLINE::DoOffset( const wxPoint& aOffset )
+void LIB_POLYLINE::SetOffset( const wxPoint& aOffset )
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
         m_PolyPoints[i] += aOffset;
 }
 
 
-bool LIB_POLYLINE::DoTestInside( EDA_RECT& aRect ) const
+bool LIB_POLYLINE::Inside( EDA_RECT& aRect ) const
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {
@@ -181,13 +180,13 @@ bool LIB_POLYLINE::DoTestInside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_POLYLINE::DoMove( const wxPoint& aPosition )
+void LIB_POLYLINE::Move( const wxPoint& aPosition )
 {
-    DoOffset( aPosition - m_PolyPoints[0] );
+    SetOffset( aPosition - m_PolyPoints[0] );
 }
 
 
-void LIB_POLYLINE::DoMirrorHorizontal( const wxPoint& aCenter )
+void LIB_POLYLINE::MirrorHorizontal( const wxPoint& aCenter )
 {
     size_t i, imax = m_PolyPoints.size();
 
@@ -199,7 +198,7 @@ void LIB_POLYLINE::DoMirrorHorizontal( const wxPoint& aCenter )
     }
 }
 
-void LIB_POLYLINE::DoMirrorVertical( const wxPoint& aCenter )
+void LIB_POLYLINE::MirrorVertical( const wxPoint& aCenter )
 {
     size_t i, imax = m_PolyPoints.size();
 
@@ -211,7 +210,7 @@ void LIB_POLYLINE::DoMirrorVertical( const wxPoint& aCenter )
     }
 }
 
-void LIB_POLYLINE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_POLYLINE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
@@ -224,8 +223,8 @@ void LIB_POLYLINE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_POLYLINE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                           const TRANSFORM& aTransform )
+void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                         const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 

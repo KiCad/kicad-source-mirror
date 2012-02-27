@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1677,7 +1676,7 @@ EDA_ITEM* LIB_PIN::doClone() const
 }
 
 
-int LIB_PIN::DoCompare( const LIB_ITEM& other ) const
+int LIB_PIN::compare( const LIB_ITEM& other ) const
 {
     wxASSERT( other.Type() == LIB_PIN_T );
 
@@ -1701,13 +1700,13 @@ int LIB_PIN::DoCompare( const LIB_ITEM& other ) const
 }
 
 
-void LIB_PIN::DoOffset( const wxPoint& offset )
+void LIB_PIN::SetOffset( const wxPoint& aOffset )
 {
-    m_position += offset;
+    m_position += aOffset;
 }
 
 
-bool LIB_PIN::DoTestInside( EDA_RECT& rect ) const
+bool LIB_PIN::Inside( EDA_RECT& rect ) const
 {
     wxPoint end = ReturnPinEndPoint();
 
@@ -1715,7 +1714,7 @@ bool LIB_PIN::DoTestInside( EDA_RECT& rect ) const
 }
 
 
-void LIB_PIN::DoMove( const wxPoint& newPosition )
+void LIB_PIN::Move( const wxPoint& newPosition )
 {
     if( m_position != newPosition )
     {
@@ -1725,7 +1724,7 @@ void LIB_PIN::DoMove( const wxPoint& newPosition )
 }
 
 
-void LIB_PIN::DoMirrorHorizontal( const wxPoint& center )
+void LIB_PIN::MirrorHorizontal( const wxPoint& center )
 {
     m_position.x -= center.x;
     m_position.x *= -1;
@@ -1737,7 +1736,7 @@ void LIB_PIN::DoMirrorHorizontal( const wxPoint& center )
         m_orientation = PIN_RIGHT;
 }
 
-void LIB_PIN::DoMirrorVertical( const wxPoint& center )
+void LIB_PIN::MirrorVertical( const wxPoint& center )
 {
     m_position.y -= center.y;
     m_position.y *= -1;
@@ -1749,7 +1748,7 @@ void LIB_PIN::DoMirrorVertical( const wxPoint& center )
         m_orientation = PIN_UP;
 }
 
-void LIB_PIN::DoRotate( const wxPoint& center, bool aRotateCCW )
+void LIB_PIN::Rotate( const wxPoint& center, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
@@ -1798,8 +1797,8 @@ void LIB_PIN::DoRotate( const wxPoint& center, bool aRotateCCW )
 }
 
 
-void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                      const TRANSFORM& aTransform )
+void LIB_PIN::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                    const TRANSFORM& aTransform )
 {
     if( ! IsVisible() )
         return;
@@ -1816,7 +1815,7 @@ void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-void LIB_PIN::DoSetWidth( int aWidth )
+void LIB_PIN::SetWidth( int aWidth )
 {
     if( m_width != aWidth )
     {

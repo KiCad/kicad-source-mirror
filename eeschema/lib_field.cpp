@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -397,7 +396,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 }
 
 
-int LIB_FIELD::DoCompare( const LIB_ITEM& other ) const
+int LIB_FIELD::compare( const LIB_ITEM& other ) const
 {
     wxASSERT( other.Type() == LIB_FIELD_T );
 
@@ -427,13 +426,13 @@ int LIB_FIELD::DoCompare( const LIB_ITEM& other ) const
 }
 
 
-void LIB_FIELD::DoOffset( const wxPoint& offset )
+void LIB_FIELD::SetOffset( const wxPoint& aOffset )
 {
-    m_Pos += offset;
+    m_Pos += aOffset;
 }
 
 
-bool LIB_FIELD::DoTestInside( EDA_RECT& rect ) const
+bool LIB_FIELD::Inside( EDA_RECT& rect ) const
 {
     /*
      * FIXME: This fails to take into account the size and/or orientation of
@@ -443,27 +442,27 @@ bool LIB_FIELD::DoTestInside( EDA_RECT& rect ) const
 }
 
 
-void LIB_FIELD::DoMove( const wxPoint& newPosition )
+void LIB_FIELD::Move( const wxPoint& newPosition )
 {
     m_Pos = newPosition;
 }
 
 
-void LIB_FIELD::DoMirrorHorizontal( const wxPoint& center )
+void LIB_FIELD::MirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
     m_Pos.x += center.x;
 }
 
-void LIB_FIELD::DoMirrorVertical( const wxPoint& center )
+void LIB_FIELD::MirrorVertical( const wxPoint& center )
 {
     m_Pos.y -= center.y;
     m_Pos.y *= -1;
     m_Pos.y += center.y;
 }
 
-void LIB_FIELD::DoRotate( const wxPoint& center, bool aRotateCCW )
+void LIB_FIELD::Rotate( const wxPoint& center, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
     RotatePoint( &m_Pos, center, rot_angle );
@@ -471,8 +470,8 @@ void LIB_FIELD::DoRotate( const wxPoint& center, bool aRotateCCW )
 }
 
 
-void LIB_FIELD::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                        const TRANSFORM& aTransform )
+void LIB_FIELD::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                      const TRANSFORM& aTransform )
 {
 }
 

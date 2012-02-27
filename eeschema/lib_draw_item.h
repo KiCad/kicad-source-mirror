@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -67,14 +66,9 @@ typedef boost::ptr_vector< LIB_ITEM > LIB_ITEMS;
 typedef std::vector< LIB_PIN* > LIB_PINS;
 
 
-/****************************************************************************/
-/* Classes for handle the body items of a component: pins add graphic items */
-/****************************************************************************/
-
-
 /**
- * Base class for drawable items used in library components.
- *  (graphic shapes, texts, fields, pins)
+ * Class LIB_ITEM
+ * is the base class for drawable items used by schematic library components.
  */
 class LIB_ITEM : public EDA_ITEM
 {
@@ -134,6 +128,9 @@ protected:
 
     wxPoint  m_initialPos;        ///< Temporary position when moving an existing item.
     wxPoint  m_initialCursorPos;  ///< Initial cursor position at the beginning of a move.
+
+    /** Flag to indicate if draw item is fillable.  Default is false. */
+    bool m_isFillable;
 
 public:
 
@@ -217,7 +214,7 @@ public:
      * Function Save
      * writes draw item object to \a aFormatter in component library "*.lib" format.
      *
-     * @param aFormatter A referenct to an #OUTPUTFORMATTER object to write the
+     * @param aFormatter A reference to an #OUTPUTFORMATTER object to write the
      *                   component library item to.
      * @return True if success writing else false.
      */
@@ -294,68 +291,64 @@ public:
     bool operator<( const LIB_ITEM& aOther) const;
 
     /**
-     * Set drawing object offset from the current position.
+     * Function Offset
+     * sets the drawing object by \a aOffset from the current position.
      *
-     * @param aOffset - Coordinates to offset position.
+     * @param aOffset Coordinates to offset the item position.
      */
-    void SetOffset( const wxPoint& aOffset ) { DoOffset( aOffset ); }
+    virtual void SetOffset( const wxPoint& aOffset ) = 0;
 
     /**
-     * Test if any part of the draw object is inside rectangle bounds.
+     * Function Inside
+     * tests if any part of the draw object is inside rectangle bounds of \a aRect.
      *
-     * This is used for block selection.  The real work is done by the
-     * DoTestInside method for each derived object type.
-     *
-     * @param aRect - Rectangle to check against.
-     * @return - True if object is inside rectangle.
+     * @param aRect Rectangle to check against.
+     * @return True if object is inside rectangle.
      */
-    bool Inside( EDA_RECT& aRect ) const { return DoTestInside( aRect ); }
+    virtual bool Inside( EDA_RECT& aRect ) const = 0;
 
     /**
-     * Move a draw object to a new \a aPosition.
+     * Function Move
+     * moves a draw object to \a aPosition.
      *
-     * The real work is done by the DoMove method for each derived object type.
-     *
-     * @param aPosition - Position to move draw item to.
+     * @param aPosition Position to move draw item to.
      */
-    void Move( const wxPoint& aPosition ) { DoMove( aPosition ); }
+    virtual void Move( const wxPoint& aPosition ) = 0;
 
     /**
-     * Return the current draw object start position.
+     * Function GetPosition
+     * returns the current draw object position.
+     *
+     * @return A wxPoint object containing the position of the object.
      */
-    wxPoint GetPosition() const { return DoGetPosition(); }
+    virtual wxPoint GetPosition() const = 0;
 
-    void SetPosition( const wxPoint& aPosition ) { DoMove( aPosition ); }
+    void SetPosition( const wxPoint& aPosition ) { Move( aPosition ); }
 
     /**
-     * Mirror the draw object along the horizontal (X) axis about a point.
+     * Function MirrorHorizontal
+     * mirrors the draw object along the horizontal (X) axis about \a aCenter point.
      *
-     * @param aCenter - Point to mirror around.
+     * @param aCenter Point to mirror around.
      */
-    void MirrorHorizontal( const wxPoint& aCenter )
-    {
-        DoMirrorHorizontal( aCenter );
-    }
+    virtual void MirrorHorizontal( const wxPoint& aCenter ) = 0;
 
     /**
-     * Mirror the draw object along the MirrorVertical (Y) axis about a point.
+     * Function MirrorVertical
+     * mirrors the draw object along the MirrorVertical (Y) axis about \a aCenter point.
      *
-     * @param aCenter - Point to mirror around.
+     * @param aCenter Point to mirror around.
      */
-    void MirrorVertical( const wxPoint& aCenter )
-    {
-        DoMirrorVertical( aCenter );
-    }
+    virtual void MirrorVertical( const wxPoint& aCenter ) = 0;
 
     /**
-     * Rotate about a point.
+     * Function Rotate
+     * rotates the object about \a aCenter point.
      *
-     * @param aCenter - Point to rotate around.
+     * @param aCenter Point to rotate around.
+     * @param aRotateCCW True to rotate counter clockwise.  False to rotate clockwise.
      */
-    void Rotate( const wxPoint& aCenter )
-    {
-        DoRotate( aCenter );
-    }
+    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) = 0;
 
     /**
      * Rotate the draw item.
@@ -365,23 +358,27 @@ public:
     /**
      * Plot the draw item using the plot object.
      *
-     * @param aPlotter - The plot object to plot to.
-     * @param aOffset - Plot offset position.
-     * @param aFill - Flag to indicate whether or not the object is filled.
-     * @param aTransform - The plot transform.
+     * @param aPlotter The plot object to plot to.
+     * @param aOffset Plot offset position.
+     * @param aFill Flag to indicate whether or not the object is filled.
+     * @param aTransform The plot transform.
      */
-    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill, const TRANSFORM& aTransform )
-    {
-        DoPlot( aPlotter, aOffset, aFill, aTransform );
-    }
+    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                       const TRANSFORM& aTransform ) = 0;
 
     /**
-     * Return the width of the draw item.
+     * Function GetWidth
+     * return the width of the draw item.
      *
      * @return Width of draw object.
      */
-    int GetWidth() const { return DoGetWidth(); }
-    void SetWidth( int aWidth ) { DoSetWidth( aWidth ); }
+    virtual int GetWidth() const = 0;
+
+    /**
+     * Function SetWidth
+     * sets the width of the draw item to \a aWidth.
+     */
+    virtual void SetWidth( int aWidth ) = 0;
 
     /**
      * Check if draw object can be filled.
@@ -420,10 +417,11 @@ public:
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
-protected:
+private:
 
     /**
-     * Provide the draw object specific comparison.
+     * Function compare
+     * provides the draw object specific comparison.
      *
      * This is called by the == and < operators.
      *
@@ -433,21 +431,7 @@ protected:
      *      - KICAD_T enum value.
      *      - Result of derived classes comparison.
      */
-    virtual int DoCompare( const LIB_ITEM& aOther ) const = 0;
-    virtual void DoOffset( const wxPoint& aOffset ) = 0;
-    virtual bool DoTestInside( EDA_RECT& aRect ) const = 0;
-    virtual void DoMove( const wxPoint& aPosition ) = 0;
-    virtual wxPoint DoGetPosition() const = 0;
-    virtual void DoMirrorHorizontal( const wxPoint& aCenter ) = 0;
-    virtual void DoMirrorVertical( const wxPoint& aCenter ) = 0;
-    virtual void DoRotate( const wxPoint& aCenter, bool aRotateCCW = true ) = 0;
-    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform ) = 0;
-    virtual int DoGetWidth() const = 0;
-    virtual void DoSetWidth( int aWidth ) = 0;
-
-    /** Flag to indicate if draw item is fillable.  Default is false. */
-    bool m_isFillable;
+    virtual int compare( const LIB_ITEM& aOther ) const = 0;
 };
 
 

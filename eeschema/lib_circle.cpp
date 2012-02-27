@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -121,7 +120,7 @@ EDA_ITEM* LIB_CIRCLE::doClone() const
 }
 
 
-int LIB_CIRCLE::DoCompare( const LIB_ITEM& aOther ) const
+int LIB_CIRCLE::compare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_CIRCLE_T );
 
@@ -140,13 +139,13 @@ int LIB_CIRCLE::DoCompare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_CIRCLE::DoOffset( const wxPoint& aOffset )
+void LIB_CIRCLE::SetOffset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
 }
 
 
-bool LIB_CIRCLE::DoTestInside( EDA_RECT& aRect ) const
+bool LIB_CIRCLE::Inside( EDA_RECT& aRect ) const
 {
     /*
      * FIXME: This fails to take into account the radius around the center
@@ -156,13 +155,13 @@ bool LIB_CIRCLE::DoTestInside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_CIRCLE::DoMove( const wxPoint& aPosition )
+void LIB_CIRCLE::Move( const wxPoint& aPosition )
 {
     m_Pos = aPosition;
 }
 
 
-void LIB_CIRCLE::DoMirrorHorizontal( const wxPoint& aCenter )
+void LIB_CIRCLE::MirrorHorizontal( const wxPoint& aCenter )
 {
     m_Pos.x -= aCenter.x;
     m_Pos.x *= -1;
@@ -170,7 +169,7 @@ void LIB_CIRCLE::DoMirrorHorizontal( const wxPoint& aCenter )
 }
 
 
-void LIB_CIRCLE::DoMirrorVertical( const wxPoint& aCenter )
+void LIB_CIRCLE::MirrorVertical( const wxPoint& aCenter )
 {
     m_Pos.y -= aCenter.y;
     m_Pos.y *= -1;
@@ -178,7 +177,7 @@ void LIB_CIRCLE::DoMirrorVertical( const wxPoint& aCenter )
 }
 
 
-void LIB_CIRCLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_CIRCLE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
@@ -186,8 +185,8 @@ void LIB_CIRCLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform )
+void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                       const TRANSFORM& aTransform )
 {
     wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 

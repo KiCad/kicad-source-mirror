@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -154,15 +153,67 @@ public:
      */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
+    /**
+     * @copydoc LIB_ITEM::SetOffset(const wxPoint&)
+     */
+    virtual void SetOffset( const wxPoint& aOffset );
+
+    /**
+     * @copydoc LIB_ITEM::Inside()
+     */
+    virtual bool Inside( EDA_RECT& aRect ) const;
+
+    /**
+     * @copydoc LIB_ITEM::Move()
+     */
+    virtual void Move( const wxPoint& aPosition );
+
+    /**
+     * @copydoc LIB_ITEM::GetPosition()
+     */
+    virtual wxPoint GetPosition() const { return m_Pos; }
+
+    /**
+     * @copydoc LIB_ITEM::MirrorHorizontal()
+     */
+    virtual void MirrorHorizontal( const wxPoint& aCenter );
+
+    /**
+     * @copydoc LIB_ITEM::MirrorVertical()
+     */
+    virtual void MirrorVertical( const wxPoint& aCenter );
+
+    /**
+     * @copydoc LIB_ITEM::Rotate(const wxPoint&,bool)
+     */
+    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+
+    /**
+     * @copydoc LIB_ITEM::Plot()
+     */
+    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                       const TRANSFORM& aTransform );
+
+    /**
+     * @copydoc LIB_ITEM::GetWidth()
+     */
+    virtual int GetWidth() const { return m_Thickness; }
+
+    /**
+     * @copydoc LIB_ITEM::SetWidth()
+     */
+    virtual void SetWidth( int aWidth ) { m_Thickness = aWidth; }
+
     virtual wxString GetSelectMenuText() const;
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
-protected:
+private:
     virtual EDA_ITEM* doClone() const;
 
     /**
-     * Provide the text draw object specific comparison.
+     * Function compare
+     * provides the text draw object specific comparison.
      *
      * The sort order is as follows:
      *      - Text string, case insensitive compare.
@@ -170,20 +221,13 @@ protected:
      *      - Text vertical (Y) position.
      *      - Text width.
      *      - Text height.
+     *
+     * @param aOther A reference to the other #LIB_ITEM to compare the text against.
+     * @return An integer value less than 0 if the text is less than \a aOther, zero
+     *         if the text is equal to \a aOther, or greater than 0 if the text is
+     *         greater than \a aOther.
      */
-    virtual int DoCompare( const LIB_ITEM& aOther ) const;
-
-    virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_RECT& aRect ) const;
-    virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() const { return m_Pos; }
-    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
-    virtual void DoMirrorVertical( const wxPoint& aCenter );
-    virtual void DoRotate( const wxPoint& aCenter, bool aRotateCCW = true );
-    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform );
-    virtual int DoGetWidth() const { return m_Thickness; }
-    virtual void DoSetWidth( int aWidth ) { m_Thickness = aWidth; }
+    virtual int compare( const LIB_ITEM& aOther ) const;
 };
 
 

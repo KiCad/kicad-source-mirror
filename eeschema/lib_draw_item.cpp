@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -90,7 +89,7 @@ bool LIB_ITEM::operator==( const LIB_ITEM& aOther ) const
     return ( ( Type() == aOther.Type() )
              && ( m_Unit == aOther.m_Unit )
              && ( m_Convert == aOther.m_Convert )
-             && DoCompare( aOther ) == 0 );
+             && compare( aOther ) == 0 );
 }
 
 
@@ -111,7 +110,7 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
     if( result != 0 )
         return result < 0;
 
-    return ( DoCompare( aOther ) < 0 );
+    return ( compare( aOther ) < 0 );
 }
 
 
@@ -125,6 +124,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, 
         int  color = GetDefaultColor();
 
         m_Fill = NO_FILL;
+
 #ifndef USE_WX_OVERLAY
         // Erase the old items using the previous attributes.
         if( m_eraseLastDrawItem )
