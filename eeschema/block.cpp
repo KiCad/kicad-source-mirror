@@ -399,7 +399,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_ZOOM:     /* Window Zoom */
         m_canvas->CallEndMouseCapture( DC );
-        m_canvas->SetCursor( m_canvas->GetDefaultCursor() );
+        m_canvas->SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
         Window_Zoom( GetScreen()->m_BlockLocate );
         break;
 
