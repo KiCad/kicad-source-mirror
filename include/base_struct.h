@@ -173,7 +173,7 @@ public:
      * @return A #SEARCH_RESULT type #SEARCH_QUIT if the iterator function is to
      *          stop the scan, else #SEARCH_CONTINUE;
      */
-    SEARCH_RESULT virtual Inspect( EDA_ITEM* aItem, const void* aTestData ) = 0;
+    virtual SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData ) = 0;
 };
 
 

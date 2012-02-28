@@ -1,5 +1,12 @@
 add_definitions(-DPCBNEW)
 
+FIND_PACKAGE(SWIG REQUIRED)
+INCLUDE(${SWIG_USE_FILE})
+
+FIND_PACKAGE(PythonLibs)
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+
+
 ###
 # Includes
 ###
@@ -209,6 +216,31 @@ set(PCBNEW_COMMON_SRCS
     ../common/dialogs/dialog_page_settings.cpp
 )
 
+##
+# Scripting sources
+##
+set(PCBNEW_SCRIPTING_SRCS
+   kicad_wrap.cxx
+   pcbnew_wrap.cxx
+   )
+
+##
+# Scripting build
+##
+
+SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -DKICAD_TESTING_VERSION -D_FILE_OFFSET_BITS=64 -DPCBNEW -D_LARGE_FILES -D__WXGTK__ -DHAVE_SVN_VERSION -DDEBUG)
+
+add_custom_command(
+               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kicad_wrap.cxx
+               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/kicad_wrap.cxx scripting/kicad.i 
+               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+add_custom_command(
+               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
+               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
+               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 
 ###
 # Windows resource file
@@ -269,6 +301,7 @@ make_lexer(
 add_executable(pcbnew WIN32 MACOSX_BUNDLE
     ${PCBNEW_SRCS}
     ${PCBNEW_COMMON_SRCS}
+    ${PCBNEW_SCRIPTING_SRCS}
     ${PCBNEW_RESOURCES}
     )
 
@@ -292,6 +325,7 @@ target_link_libraries(pcbnew
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
+    ${PYTHON_LIBRARIES}
     )
 
 ###
