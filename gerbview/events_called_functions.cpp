@@ -140,7 +140,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetToolId() == ID_NO_TOOL_SELECTED )
             SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         else
-            m_canvas->SetCursor( m_canvas->GetCurrentCursor() );
+            m_canvas->SetCursor( (wxStockCursor) m_canvas->GetCurrentCursor() );
         break;
 
     default:

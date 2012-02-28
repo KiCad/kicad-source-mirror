@@ -330,5 +330,5 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     screen->m_BlockLocate.m_Command = BLOCK_IDLE;
     Panel->GetParent()->DisplayToolMsg( wxEmptyString );
-    Panel->SetCursor( Panel->GetCurrentCursor() );
+    Panel->SetCursor( (wxStockCursor) Panel->GetCurrentCursor() );
 }

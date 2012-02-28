@@ -234,7 +234,9 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     }
 
     // if PAD_SMD pad and high contrast mode
-    if( ( GetAttribute() == PAD_SMD || GetAttribute() == PAD_CONN ) && DisplayOpt.ContrastModeDisplay )
+    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) && 
+        ( GetAttribute() == PAD_SMD || GetAttribute() == PAD_CONN ) && 
+        DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks
         if( frame && frame->GetToolId() == ID_TRACK_BUTT )
@@ -301,7 +303,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     // if Contrast mode is ON and a technical layer active, show pads on this
     // layer so we can see pads on paste or solder layer and the size of the
     // mask
-    if( DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
+    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) && 
+        DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {
@@ -373,7 +376,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
 
     // Display net names is restricted to pads that are on the active layer
     // in hight contrast mode display
-    if( !IsOnLayer( screen->m_Active_Layer ) && DisplayOpt.ContrastModeDisplay )
+    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) && 
+        !IsOnLayer( screen->m_Active_Layer ) && DisplayOpt.ContrastModeDisplay )
         drawInfo.m_Display_netname = false;
 
     DrawShape( aPanel->GetClipBox(), aDC, drawInfo );

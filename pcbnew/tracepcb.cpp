@@ -109,7 +109,7 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
-    GetBoard()->Draw( m_canvas, DC, GR_OR );
+    GetBoard()->Draw( m_canvas, DC, GR_OR | GR_ALLOW_HIGHCONTRAST);
 
     DrawGeneralRatsnest( DC );
 

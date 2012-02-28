@@ -34,6 +34,7 @@
 #include <gr_basic.h>
 #include <bezier_curves.h>
 #include <class_drawpanel.h>
+#include <class_pcb_screen.h>
 #include <kicad_string.h>
 #include <colors_selection.h>
 #include <trigo.h>
@@ -189,6 +190,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     int l_trace;
     int color, mode;
     int radius;
+    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     BOARD * brd =  GetBoard( );
 
@@ -196,6 +198,16 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         return;
 
     color = brd->GetLayerColor( GetLayer() );
+
+    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  DisplayOpt.ContrastModeDisplay )
+    {
+        if( !IsOnLayer( curr_layer ) )
+        {
+            color &= ~MASKCOLOR;
+            color |= DARKDARKGRAY;
+        }
+    }
+
 
     GRSetDrawMode( DC, draw_mode );
     l_trace = m_Width >> 1;  /* half trace width */

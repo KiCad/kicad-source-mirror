@@ -34,6 +34,9 @@
 
 #include <wx/xml/xml.h>
 
+#if wxCHECK_VERSION( 2, 9, 0  )
+#define wxXmlProperty wxXmlAttribute
+#endif
 
 /**
  * Class XNODE
@@ -78,6 +81,7 @@ public:
      */
     virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
 
+#if !wxCHECK_VERSION( 2, 9, 0  )
     // The following functions did not appear in the base class until recently.
     // Overload them even if they are present in base class, just to make sure
     // they are present in any older base class implementation.
@@ -101,6 +105,7 @@ public:
     }
 
     //-----</overloads>--------------------------------------------------------
+#endif
 };
 
 #endif  // _XATTR_H_

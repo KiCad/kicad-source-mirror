@@ -160,7 +160,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetToolId() == ID_NO_TOOL_SELECTED )
             SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         else
-            SetCursor( m_canvas->GetDefaultCursor() );
+            SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
 
         break;
 

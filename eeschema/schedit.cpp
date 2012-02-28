@@ -437,7 +437,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 
     if( screen->IsBlockActive() )
     {
-        m_canvas->SetCursor( wxCursor( m_canvas->GetDefaultCursor() ) );
+        m_canvas->SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
         screen->ClearBlockCommand();
 
         // Stop the current command (if any) but keep the current tool

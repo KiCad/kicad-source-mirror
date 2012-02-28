@@ -299,7 +299,7 @@ void NETLIST_DIALOG::InstallPageSpice()
     page->m_LeftBoxSizer->Add( page->m_NetOption, 0, wxGROW | wxALL, 5 );
 
     page->m_LowBoxSizer->Add( new wxStaticText( page, -1, _( "Simulator command:" ) ), 0,
-                              wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                              wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     page->m_CommandStringCtrl = new wxTextCtrl( page, -1, m_Parent->GetSimulatorCommand(),
                                                 wxDefaultPosition, wxDefaultSize );
@@ -374,7 +374,7 @@ void NETLIST_DIALOG::InstallCustomPages()
 
         CurrPage->m_LowBoxSizer->Add( new wxStaticText( CurrPage,
                                                         -1, _( "Netlist command:" ) ), 0,
-                                      wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                                      wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
         CurrPage->m_CommandStringCtrl = new wxTextCtrl( CurrPage, -1, Command,
                                                         wxDefaultPosition, wxDefaultSize );
@@ -387,7 +387,7 @@ void NETLIST_DIALOG::InstallCustomPages()
 
         CurrPage->m_LowBoxSizer->Add( new wxStaticText( CurrPage,
                                                         -1, _( "Title:" ) ), 0,
-                                      wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                                      wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
         CurrPage->m_TitleStringCtrl = new wxTextCtrl( CurrPage, -1, title,
                                                       wxDefaultPosition, wxDefaultSize );
