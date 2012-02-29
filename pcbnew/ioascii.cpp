@@ -382,6 +382,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             //        projects.
             GetBoard()->m_NetClasses.GetDefault()->SetParams();
 
+            GetBoard()->SetDesignSettings( bds );
+
             GetBoard()->SetZoneSettings( zoneInfo );
 
             return 0;

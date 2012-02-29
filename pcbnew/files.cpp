@@ -258,8 +258,10 @@ this file again." ) );
         m_DisplayPadFill = DisplayOpt.DisplayPadFill;
         m_DisplayViaFill = DisplayOpt.DisplayViaFill;
 
-        ReadPcbFile( &reader, false );
+        // load project settings before BOARD, in case BOARD file has overrides.
         LoadProjectSettings( GetScreen()->GetFileName() );
+
+        ReadPcbFile( &reader, false );
     }
 
 #else
@@ -272,6 +274,9 @@ this file again." ) );
         m_DisplayModEdge = DisplayOpt.DisplayModEdge;
         m_DisplayPadFill = DisplayOpt.DisplayPadFill;
         m_DisplayViaFill = DisplayOpt.DisplayViaFill;
+
+        // load project settings before BOARD, in case BOARD file has overrides.
+        LoadProjectSettings( GetScreen()->GetFileName() );
     }
     else
     {
@@ -304,11 +309,6 @@ this file again." ) );
         wxString msg = wxString::Format( _( "Error loading board.\n%s" ),
                                          ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Open Board File" ), wxOK | wxICON_ERROR );
-    }
-
-    if( !aAppend )
-    {
-        LoadProjectSettings( GetScreen()->GetFileName() );
     }
 
     if( loadedBoard )
