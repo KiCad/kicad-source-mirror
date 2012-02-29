@@ -103,30 +103,30 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_CONFIG_READ:
-    {
-        fn = GetScreen()->GetFileName();
-        fn.SetExt( ProjectFileExtension );
-
-        wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                          fn.GetFullName(), ProjectFileWildcard,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            break;
-
-        if( !wxFileExists( dlg.GetPath() ) )
         {
-            wxString msg;
-            msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
-            DisplayError( this, msg );
-            break;
+            fn = GetScreen()->GetFileName();
+            fn.SetExt( ProjectFileExtension );
+
+            wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
+                              fn.GetFullName(), ProjectFileWildcard,
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+            if( dlg.ShowModal() == wxID_CANCEL )
+                break;
+
+            if( !wxFileExists( dlg.GetPath() ) )
+            {
+                wxString msg;
+                msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
+                DisplayError( this, msg );
+                break;
+            }
+
+            LoadProjectSettings( dlg.GetPath() );
         }
-
-        LoadProjectSettings( dlg.GetPath() );
         break;
-    }
 
-   /* Hotkey IDs */
+    // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
         ExportHotkeyConfigToFile( g_Board_Editor_Hokeys_Descr );
         break;
@@ -144,7 +144,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         DisplayHotkeyList( this, g_Board_Editor_Hokeys_Descr );
         break;
 
-   /* Macros IDs*/
+    // Macros IDs
     case ID_PREFRENCES_MACROS_SAVE:
         SaveMacros();
         break;
