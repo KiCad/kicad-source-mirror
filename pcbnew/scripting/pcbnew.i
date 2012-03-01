@@ -8,6 +8,9 @@
 	#include <class_module.h>
 	#include <class_track.h>	
 	#include <class_pad.h>
+
+
+	BOARD *GetBoard();
 %}
 
 %include <class_board_item.h>
@@ -16,7 +19,7 @@
 %include <class_track.h>
 
 
-
+BOARD *GetBoard();
 
 /*%template(BOARD_ITEM_List) DLIST<BOARD_ITEM>;
 %template(MODULE_List) DLIST<MODULE>;

@@ -86,6 +86,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_SVG_print.cpp
     dialogs/dialog_SVG_print_base.cpp
     dialogs/dialog_set_grid_base.cpp
+    dialogs/dialog_scripting_base.cpp
+    dialogs/dialog_scripting.cpp
     )
 
 set(PCBNEW_SRCS

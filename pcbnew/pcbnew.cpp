@@ -46,7 +46,10 @@
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <Python.h>
+#include <class_board.h>
 
+
+#include <dialogs/dialog_scripting.h>
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
@@ -131,6 +134,12 @@ static void swig_add_builtin() {
 
 }
 
+static BOARD *st_board;
+
+BOARD *GetBoard()
+{
+	return st_board;
+}
 
 bool EDA_APP::OnInit()
 {
@@ -244,6 +253,8 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
      */
     frame->SetFocus();
     frame->GetCanvas()->SetFocus();
-
+    st_board = frame->GetBoard();
+    DIALOG_SCRIPTING* sw = new DIALOG_SCRIPTING(frame);
+    sw->Show(true);
     return true;
 }
