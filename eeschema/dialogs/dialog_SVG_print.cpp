@@ -228,7 +228,13 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
                                  wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     screen->m_IsPrinting = true;
-    screen->Draw( panel, &dc, GR_COPY );
+    if( frame->IsType( SCHEMATIC_FRAME ) )
+        screen->Draw( panel, &dc, GR_COPY );
+
+    if( frame->IsType( LIBEDITOR_FRAME ) )
+        ((LIB_EDIT_FRAME*)frame)->RedrawComponent( &dc,
+                                                   wxPoint(sheetSize.x/2,
+                                                   sheetSize.y/2) );
 
     if( aPrint_Sheet_Ref )
         frame->TraceWorkSheet( &dc, screen, g_DrawDefaultLineThickness );

@@ -47,7 +47,6 @@
 #include <hotkeys.h>
 
 #include <dialogs/dialog_lib_edit_text.h>
-#include <dialogs/dialog_SVG_print.h>
 #include <dialogs/dialog_edit_component_in_lib.h>
 #include <dialogs/dialog_libedit_dimensions.h>
 
@@ -925,11 +924,6 @@ void LIB_EDIT_FRAME::ClearTempCopyComponent()
     m_tempCopyComponent = NULL;
 }
 
-
-void LIB_EDIT_FRAME::SVG_Print_Component( const wxString& FullFileName )
-{
-    DIALOG_SVG_PRINT::DrawSVGPage( this, FullFileName, GetScreen() );
-}
 
 
 void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )

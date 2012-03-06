@@ -39,7 +39,6 @@
 #include <appl_wxstruct.h>
 #include <online_help.h>
 #include <id.h>
-#include <confirm.h>
 #include <eda_doc.h>
 #include <wxstruct.h>
 #include <macros.h>
@@ -310,7 +309,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
         if( !wxFileName::FileExists( fn ) )
         {
             msg = type + _( " file <" ) + fn + _( "> was not found." );
-            DisplayError( this, msg );
+            wxMessageBox( msg );
             fileHistory->RemoveFileFromHistory( i );
             fn = wxEmptyString;
         }
@@ -349,7 +348,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
         {
             msg.Printf( _( "Help file %s could not be found." ),
                         GetChars( wxGetApp().GetHelpFileName() ) );
-            DisplayError( this, msg );
+            wxMessageBox( msg );
         }
         else
         {
@@ -376,7 +375,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     else
     {
         msg.Printf( _( "Help file %s not found." ), GetChars( wxGetApp().GetHelpFileName() ) );
-        DisplayError( this, msg );
+        wxMessageBox( msg );
     }
 
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
@@ -386,7 +385,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     {
         msg.Printf( _( "Help file %s could not be found." ),
                     GetChars( wxGetApp().GetHelpFileName() ) );
-        DisplayError( this, msg );
+        wxMessageBox( msg );
     }
     else
     {
@@ -589,7 +588,7 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
 
     if( !msg.IsEmpty() )
     {
-        DisplayError( this, msg );
+        wxMessageBox( msg );
         return false;
     }
 
@@ -643,7 +642,7 @@ edits you made?" ),
             if( !wxRenameFile( aFileName.GetFullPath(), backupFileName.GetFullPath() ) )
             {
                 msg = _( "Could not create backup file " ) + backupFileName.GetFullPath();
-                DisplayError( this, msg );
+                wxMessageBox( msg );
             }
         }
 
