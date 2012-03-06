@@ -204,20 +204,25 @@ void PAGE_INFO::SetPortrait( bool isPortrait )
 
 static int clampWidth( int aWidthInMils )
 {
+/*  was giving EESCHEMA single component SVG plotter grief
     if( aWidthInMils < 4000 )       // 4" is about a baseball card
         aWidthInMils = 4000;
+
     else if( aWidthInMils > 44000 ) //44" is plotter size
         aWidthInMils = 44000;
+*/
     return aWidthInMils;
 }
 
 
 static int clampHeight( int aHeightInMils )
 {
+/*  was giving EESCHEMA single component SVG plotter grief
     if( aHeightInMils < 4000 )
         aHeightInMils = 4000;
     else if( aHeightInMils > 44000 )
         aHeightInMils = 44000;
+*/
     return aHeightInMils;
 }
 
