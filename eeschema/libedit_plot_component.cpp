@@ -15,6 +15,7 @@
 #include <general.h>
 #include <libeditframe.h>
 #include <class_library.h>
+#include <dialogs/dialog_SVG_print.h>
 
 
 void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
@@ -127,6 +128,11 @@ void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_j
     image.Destroy();
 }
 
+
+void LIB_EDIT_FRAME::SVG_Print_Component( const wxString& FullFileName )
+{
+    DIALOG_SVG_PRINT::DrawSVGPage( this, FullFileName, GetScreen() );
+}
 
 void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData)
 {

@@ -155,6 +155,10 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
 
     frame->Zoom_Automatique( true );
 
+    // Load config and default values before loading a board file
+    // Some will be overwritten after loading the board file
+    frame->LoadProjectSettings( fn.GetFullPath() );
+
     /* Load file specified in the command line. */
     if( fn.IsOk() )
     {
@@ -179,8 +183,6 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
             wxMessageBox( msg );
         }
     }
-
-    frame->LoadProjectSettings( fn.GetFullPath() );
 
     // update the layer names in the listbox
     frame->ReCreateLayerBox( NULL );

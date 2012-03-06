@@ -530,7 +530,9 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     return true;
 }
 
-
+// note: SCH_SCREEN::Draw is useful only for schematic.
+// library editor and library viewer do not use a draw list, and therefore
+// SCH_SCREEN::Draw draws nothing
 void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aColor )
 {
     for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
