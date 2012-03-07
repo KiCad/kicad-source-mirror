@@ -250,7 +250,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     // paper pageSize is in internal units, either nanometers or deci-mils
     wxSize  pageSize = m_Parent->GetPageSizeIU();
 
-    wxSVGFileDC       dc( FullFileName, pageSize.x, pageSize.y, dpi );
+    KicadSVGFileDC       dc( FullFileName, pageSize.x, pageSize.y, dpi );
 
     EDA_RECT          tmp = *panel->GetClipBox();
     GRResetPenAndBrush( &dc );
