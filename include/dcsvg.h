@@ -1,19 +1,213 @@
-#if wxCHECK_VERSION( 2, 9, 0 )
-// Do nothing, because wxWidgets 3 supports the SVG format
-// previously, was a contribution library, not included in wxWidgets base
-#include <wx/dcsvg.h>
-#else
 
-#ifndef __DCSVG_H
-#define __DCSVG_H
+#ifndef __KICAD_DCSVG_H
+#define __KICAD_DCSVG_H
+
+#include <wx/dc.h>
 #include <wx/wfstream.h>
 #include <wx/string.h>
 
 #define wxSVGVersion wxT( "v0101" )
-#ifdef __BORLANDC__
-#pragma warn -rch
-#pragma warn -ccc
-#endif
+
+#if wxCHECK_VERSION( 2, 9, 0 )
+
+// We could do nothing, because wxWidgets 3 supports the SVG format
+// (previously, it was a contribution library, not included in wxWidgets)
+// However arcs are drawn as pies, and we must change it.
+// Unfortunately most of functions are private, and we cannot derive
+// our KicadSVGFileDCImpl from wxSVGFileDCImpl
+// and just override the 2 incorrect functions
+// Just wxWidget dcsvg is copied here and 2 functions are modified:
+// KicadSVGFileDCImpl::DoDrawArc() and KicadSVGFileDCImpl::DoDrawEllipticArc()
+// Also note: SetLogicalFunction() does not set an error in debug mode
+
+class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
+class WXDLLIMPEXP_FWD_CORE KicadSVGFileDC;
+
+class WXDLLIMPEXP_CORE KicadSVGFileDCImpl : public wxDCImpl
+{
+public:
+    KicadSVGFileDCImpl( KicadSVGFileDC *owner, const wxString &filename,
+                     int width=320, int height=240, double dpi=72.0 );
+
+    virtual ~KicadSVGFileDCImpl();
+
+    bool IsOk() const { return m_OK; }
+
+    virtual bool CanDrawBitmap() const { return true; }
+    virtual bool CanGetTextExtent() const { return true; }
+
+    virtual int GetDepth() const
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::GetDepth Call not implemented"));
+        return -1;
+    }
+
+    virtual void Clear()
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?"));
+    }
+
+    virtual void DestroyClippingRegion()
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::void Call not yet implemented"));
+    }
+
+    virtual wxCoord GetCharHeight() const;
+    virtual wxCoord GetCharWidth() const;
+
+    virtual void SetClippingRegion(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                   wxCoord WXUNUSED(w), wxCoord WXUNUSED(h))
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::SetClippingRegion not implemented"));
+    }
+
+    virtual void SetPalette(const wxPalette&  WXUNUSED(palette))
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::SetPalette not implemented"));
+    }
+
+    virtual void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y),
+                                wxCoord *WXUNUSED(w), wxCoord *WXUNUSED(h))
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::GetClippingBox not implemented"));
+    }
+
+    virtual void SetLogicalFunction(wxRasterOperationMode WXUNUSED(function))
+    {
+//        wxFAIL_MSG(wxT("KicadSVGFILEDC::SetLogicalFunction not implemented"));
+    }
+
+    virtual wxRasterOperationMode GetLogicalFunction() const
+    {
+        wxFAIL_MSG(wxT("wxSVGFILEDC::GetLogicalFunction() not implemented"));
+        return wxCOPY;
+    }
+
+    virtual void SetBackground( const wxBrush &brush );
+    virtual void SetBackgroundMode( int mode );
+    virtual void SetBrush(const wxBrush& brush);
+    virtual void SetFont(const wxFont& font);
+    virtual void SetPen(const wxPen& pen);
+
+private:
+   virtual bool DoGetPixel(wxCoord, wxCoord, wxColour *) const
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoGetPixel Call not implemented"));
+       return true;
+   }
+
+   virtual bool DoBlit(wxCoord, wxCoord, wxCoord, wxCoord, wxDC *,
+                       wxCoord, wxCoord, wxRasterOperationMode = wxCOPY,
+                       bool = 0, int = -1, int = -1);
+
+   virtual void DoCrossHair(wxCoord, wxCoord)
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::CrossHair Call not implemented"));
+   }
+
+   virtual void DoDrawArc(wxCoord, wxCoord, wxCoord, wxCoord, wxCoord, wxCoord);
+
+   virtual void DoDrawBitmap(const wxBitmap &, wxCoord, wxCoord, bool = false);
+
+   virtual void DoDrawCheckMark(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
+
+   virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
+
+   virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
+                                  double sa, double ea);
+
+   virtual void DoDrawIcon(const wxIcon &, wxCoord, wxCoord);
+
+   virtual void DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+
+   virtual void DoDrawLines(int n, wxPoint points[],
+                            wxCoord xoffset = 0, wxCoord yoffset = 0);
+
+   virtual void DoDrawPoint(wxCoord, wxCoord);
+
+   virtual void DoDrawPolygon(int n, wxPoint points[],
+                              wxCoord xoffset, wxCoord yoffset,
+                              wxPolygonFillMode fillStyle);
+
+   virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
+
+   virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
+                                  double angle);
+
+   virtual void DoDrawRoundedRectangle(wxCoord x, wxCoord y,
+                                       wxCoord w, wxCoord h,
+                                       double radius = 20) ;
+
+   virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
+
+   virtual bool DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                            const wxColour& WXUNUSED(col),
+                            wxFloodFillStyle WXUNUSED(style) = wxFLOOD_SURFACE)
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoFloodFill Call not implemented"));
+       return false;
+   }
+
+   virtual void DoGetSize(int * x, int *y) const
+   {
+       if ( x )
+           *x = m_width;
+       if ( y )
+           *y = m_height;
+   }
+
+   virtual void DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h,
+                                wxCoord *descent = NULL,
+                                wxCoord *externalLeading = NULL,
+                                const wxFont *font = NULL) const;
+
+   virtual void DoSetDeviceClippingRegion(const wxRegion& WXUNUSED(region))
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetDeviceClippingRegion not yet implemented"));
+   }
+
+   virtual void DoSetClippingRegion( int WXUNUSED(x),  int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
+   {
+       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetClippingRegion not yet implemented"));
+   }
+
+   virtual void DoGetSizeMM( int *width, int *height ) const;
+
+   virtual wxSize GetPPI() const;
+
+   void Init (const wxString &filename, int width, int height, double dpi);
+
+   void NewGraphics();
+
+   void write( const wxString &s );
+
+private:
+   wxFileOutputStream *m_outfile;
+   wxString            m_filename;
+   int                 m_sub_images; // number of png format images we have
+   bool                m_OK;
+   bool                m_graphics_changed;
+   int                 m_width, m_height;
+   double              m_dpi;
+
+private:
+   DECLARE_ABSTRACT_CLASS(KicadSVGFileDCImpl)
+};
+
+
+class WXDLLIMPEXP_CORE KicadSVGFileDC : public wxDC
+{
+public:
+    KicadSVGFileDC(const wxString& filename,
+                int width = 320,
+                int height = 240,
+                double dpi = 72.0)
+        : wxDC(new KicadSVGFileDCImpl(this, filename, width, height, dpi))
+    {
+    }
+};
+
+#else
 
 class wxSVGFileDC : public wxDC
 {
@@ -387,7 +581,8 @@ public:
     void    SetFont( const wxFont& font );
 
     void SetLogicalFunction( int WXUNUSED (function) )
-    {         /*wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call implemented")); */
+    {
+        //wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction not implemented"));
         return;
     };
 
@@ -414,10 +609,8 @@ public:
     };
 };
 
-#ifdef __BORLANDC__
-#pragma warn .rch
-#pragma warn .ccc
-#endif
-#endif
+typedef KicadSVGFileDC wxSVGFileDC;
 
-#endif // wxCHECK_VERSION
+#endif  // wxCHECK_VERSION
+
+#endif  // __KICAD_DCSVG_H
