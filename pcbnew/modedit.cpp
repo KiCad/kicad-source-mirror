@@ -27,6 +27,7 @@
 #include <collectors.h>
 
 #include <dialog_edit_module_for_Modedit.h>
+#include <wildcards_and_files_ext.h>
 
 // Functions defined in block_module_editor, but used here
 // These 2 functions are used in modedit to rotate or mirror the whole footprint
@@ -247,7 +248,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_DELETE_PART:
     {
-        wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+        wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
         wxString   full_libraryfilename = wxGetApp().FindLibraryPath( fn );
 
         if( wxFileName::FileExists( full_libraryfilename ) )
@@ -287,7 +288,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
     {
         wxFileName fn;
-        fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+        fn = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
         wxString   full_filename = wxGetApp().FindLibraryPath( fn );
         Save_Module_In_Library( full_filename, GetBoard()->m_Modules, true, true );
         GetScreen()->ClrModify();
@@ -415,7 +416,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( !m_CurrentLib.IsEmpty() )
         {
-            wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+            wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
             full_libraryfilename = wxGetApp().FindLibraryPath( fn );
         }
 

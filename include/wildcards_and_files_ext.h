@@ -41,11 +41,13 @@
  * that they cannot be changed.
  * Mainly wild cards are most of time translated when displayed
  */
+extern const wxString VrmlFileExtension;
 extern const wxString ProjectFileExtension;
 extern const wxString SchematicFileExtension;
 extern const wxString NetlistFileExtension;
 extern const wxString GerberFileExtension;
 extern const wxString PcbFileExtension;
+extern const wxString FootprintLibFileExtension;
 extern const wxString PdfFileExtension;
 extern const wxString MacrosFileExtension;
 extern const wxString ComponentFileExtension;
@@ -67,5 +69,8 @@ extern const wxString ComponentFileWildcard;
 extern const wxString DrillFileWildcard;
 extern const wxString ReportFileWildcard;
 extern const wxString FootprintPlaceFileWildcard;
+extern const wxString VrmlFileWildcard;
+extern const wxString DocModulesFileName;
+extern const wxString FootprintLibFileWildcard;
 
 #endif  // INCLUDE_WILDCARDS_AND_FILES_EXT_H_

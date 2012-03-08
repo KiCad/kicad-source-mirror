@@ -240,13 +240,8 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( m_modified )
     {
-        unsigned        ii;
-        wxMessageDialog dialog( this,
-                                _( "Component to Footprint links modified.\nSave before exit ?" ),
-                                _( "Confirmation" ),
-                                wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxYES_DEFAULT );
-
-        ii = dialog.ShowModal();
+        wxString msg = _( "Component to Footprint links modified.\nSave before exit ?" );
+        int ii = DisplayExitDialog( this, msg );
 
         switch( ii )
         {

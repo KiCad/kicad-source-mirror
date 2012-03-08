@@ -461,13 +461,11 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( GetScreen()->IsModify() )
     {
-        unsigned        ii;
-        wxMessageDialog dialog( this, _( "Board modified, Save before exit ?" ),
-                                _( "Confirmation" ),
-                                wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxYES_DEFAULT );
+        wxString msg;
+        msg.Printf( _("Save the changes in\n<%s>\nbefore closing?"),
+                    GetChars( GetScreen()->GetFileName() ) );
 
-        ii = dialog.ShowModal();
-
+        int ii = DisplayExitDialog( this, msg );
         switch( ii )
         {
         case wxID_CANCEL:

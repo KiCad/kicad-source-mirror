@@ -31,6 +31,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <gestfich.h>
+#include <confirm.h>
 
 #include <general.h>
 #include <protos.h>
@@ -422,12 +423,13 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     if( SheetList.IsModified() )
     {
-        wxMessageDialog dialog( this,
-                                _( "Schematic modified, Save before exit?" ),
-                                _( "Confirmation" ), wxYES_NO | wxCANCEL |
-                                wxICON_EXCLAMATION | wxYES_DEFAULT );
+        wxString msg;
+        msg.Printf( _("Save the changes in\n<%s>\nbefore closing?"),
+                    GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
 
-        switch( dialog.ShowModal() )
+        int ii = DisplayExitDialog( this, msg );
+
+        switch( ii )
         {
         case wxID_CANCEL:
             aEvent.Veto();
