@@ -609,7 +609,7 @@ public:
     };
 };
 
-typedef KicadSVGFileDC wxSVGFileDC;
+typedef wxSVGFileDC KicadSVGFileDC;
 
 #endif  // wxCHECK_VERSION
 
