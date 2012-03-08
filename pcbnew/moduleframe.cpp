@@ -45,6 +45,7 @@
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <module_editor_frame.h>
+#include <wildcards_and_files_ext.h>
 
 
 static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
@@ -492,7 +493,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
     }
     else
     {
-        wxFileName fileName = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+        wxFileName fileName = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
         fileName = wxGetApp().FindLibraryPath( fileName );
 
         if( !fileName.IsOk() || !fileName.FileExists() )

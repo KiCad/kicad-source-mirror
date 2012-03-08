@@ -43,6 +43,7 @@
 #include <wildcards_and_files_ext.h>
 
 #include <dialog_pcbnew_config_libs_and_paths.h>
+#include <wildcards_and_files_ext.h>
 
 
 void PCB_EDIT_FRAME::InstallConfigFrame( )
@@ -271,7 +272,8 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
         libpath = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog FilesDialog( this, _( "Footprint library files:" ), libpath,
-                              wxEmptyString, g_FootprintLibFileWildcard,
+                              wxEmptyString,
+                              wxGetTranslation( FootprintLibFileWildcard ),
                               wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
 
     if( FilesDialog.ShowModal() != wxID_OK )

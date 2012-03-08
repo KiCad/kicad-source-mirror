@@ -73,9 +73,6 @@ int            g_MagneticTrackOption = capture_cursor_in_track_tool;
 
 wxPoint        g_Offset_Module;     /* Distance to offset module trace when moving. */
 
-// Wildcard for footprint libraries filesnames
-const wxString g_FootprintLibFileWildcard( _( "KiCad footprint library file (*.mod)|*.mod" ) );
-
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
  * this is of the responsibility to users to create this file

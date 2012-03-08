@@ -17,6 +17,7 @@
 #include <class_text_mod.h>
 
 #include <dialog_edit_module_for_BoardEditor.h>
+#include <wildcards_and_files_ext.h>
 
 
 DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,
@@ -404,18 +405,16 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 {
     wxString fullfilename, shortfilename;
     wxString fullpath;
-    wxString mask = wxT( "*" );
 
     fullpath = wxGetApp().ReturnLastVisitedLibraryPath( LIB3D_PATH );
-    mask    += g_Shapes3DExtBuffer;
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
     fullfilename = EDA_FileSelector( _( "3D Shape:" ),
                                      fullpath,
                                      wxEmptyString,
-                                     g_Shapes3DExtBuffer,
-                                     mask,
+                                     VrmlFileExtension,
+                                     wxGetTranslation( VrmlFileWildcard ),
                                      this,
                                      wxFD_OPEN,
                                      true

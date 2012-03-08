@@ -15,6 +15,7 @@ set(COMMON_ABOUT_DLG_SRCS
     dialog_about/dialog_about.cpp
     dialog_about/dialog_about_base.cpp
     dialogs/dialog_display_info_HTML_base.cpp
+    dialogs/dialog_exit_base.cpp
     dialogs/dialog_image_editor.cpp
     dialogs/dialog_image_editor_base.cpp
     dialogs/dialog_get_component.cpp

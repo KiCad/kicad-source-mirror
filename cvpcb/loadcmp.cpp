@@ -19,6 +19,7 @@
 #include <class_DisplayFootprintsFrame.h>
 #include <richio.h>
 #include <filter_reader.h>
+#include <wildcards_and_files_ext.h>
 
 
 /**
@@ -42,7 +43,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& CmpName )
     for( ii = 0; ii < parent->m_ModuleLibNames.GetCount(); ii++ )
     {
         fn = parent->m_ModuleLibNames[ii];
-        fn.SetExt( ModuleFileExtension );
+        fn.SetExt( FootprintLibFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( fn );
 

@@ -22,6 +22,7 @@
 #include <pcbnew.h>
 #include <class_footprint_library.h>
 #include <module_editor_frame.h>
+#include <wildcards_and_files_ext.h>
 
 
 /*
@@ -151,7 +152,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
         return;
 
     fn.SetName( aModule->m_LibRef );
-    fn.SetExt( aCreateSysLib ? ModuleFileExtension : ModExportFileExtension );
+    fn.SetExt( aCreateSysLib ? FootprintLibFileExtension : ModExportFileExtension );
 
     if( aCreateSysLib )
         path = wxGetApp().ReturnLastVisitedLibraryPath();
@@ -160,8 +161,9 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
 
     fn.SetPath( path );
     title    = aCreateSysLib ? _( "Create New Library" ) : _( "Export Module" );
-    wildcard = aCreateSysLib ?  ModuleFileWildcard : ModExportFileWildcard;
-    wxFileDialog dlg( this, msg, fn.GetPath(), fn.GetFullName(), wildcard,
+    wildcard = aCreateSysLib ?  FootprintLibFileWildcard : ModExportFileWildcard;
+    wxFileDialog dlg( this, msg, fn.GetPath(), fn.GetFullName(),
+                      wxGetTranslation( wildcard ),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -369,7 +371,8 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewM
     if( aLibName.IsEmpty() )
     {
         wxFileDialog dlg( this, _( "Library" ), path,
-                          wxEmptyString, ModuleFileWildcard,
+                          wxEmptyString,
+                          wxGetTranslation( FootprintLibFileWildcard ),
                           wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -730,7 +733,8 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    wxFileName fileName = wxFileName( wxEmptyString, dlg.GetTextSelection(), ModuleFileExtension );
+    wxFileName fileName = wxFileName( wxEmptyString, dlg.GetTextSelection(),
+                                      FootprintLibFileExtension );
     fileName = wxGetApp().FindLibraryPath( fileName );
 
     if( fileName.IsOk() && fileName.FileExists() )

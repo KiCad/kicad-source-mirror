@@ -22,6 +22,7 @@
 
 #include <class_pad.h>
 #include <class_module.h>
+#include <wildcards_and_files_ext.h>
 
 
 /* Read the list of libraries (*.mod files)
@@ -53,7 +54,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
     for( unsigned ii = 0; ii < aFootprintsLibNames.GetCount(); ii++ )
     {
         filename = aFootprintsLibNames[ii];
-        filename.SetExt( ModuleFileExtension );
+        filename.SetExt( FootprintLibFileExtension );
 
         libname = wxGetApp().FindLibraryPath( filename );
 

@@ -35,12 +35,6 @@ extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 
 extern DISPLAY_OPTIONS DisplayOpt;
 
-extern wxString NetExtBuffer;
-extern wxString NetCmpExtBuffer;
-extern const wxString ModuleFileExtension;
-
-extern const wxString ModuleFileWildcard;
-
 extern int g_CurrentVersionPCB;
 
 extern int g_RotationAngle;
