@@ -722,6 +722,12 @@ bool D_PAD::Save( FILE* aFile ) const
     if( m_ZoneConnection != UNDEFINED_CONNECTION )
         fprintf( aFile, ".ZoneConnection %d\n", m_ZoneConnection );
 
+    if( m_ThermalWidth != 0 )
+        fprintf( aFile, ".ThermalWidth %d\n", m_ThermalWidth );
+
+    if( m_ThermalGap != 0 )
+        fprintf( aFile, ".ThermalGap %d\n", m_ThermalGap );
+
     if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
         return false;
 
@@ -784,6 +790,12 @@ bool MODULE::Save( FILE* aFile ) const
 
     if( m_ZoneConnection != UNDEFINED_CONNECTION )
         fprintf( aFile, ".ZoneConnection %d\n", m_ZoneConnection );
+
+    if( m_ThermalWidth != 0 )
+        fprintf( aFile, ".ThermalWidth %d\n", m_ThermalWidth );
+
+    if( m_ThermalGap != 0 )
+        fprintf( aFile, ".ThermalGap %d\n", m_ThermalGap );
 
     // attributes
     if( m_Attributs != MOD_DEFAULT )
@@ -1034,6 +1046,10 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
                 SetLocalClearance( atoi( Line + 16 ) );
             else if( strnicmp( Line, ".ZoneConnection ", 16 ) == 0 )
                 m_ZoneConnection = (ZoneConnection)atoi( Line + 16 );
+            else if( strnicmp( Line, ".ThermalWidth ", 14 ) == 0 )
+                m_ThermalWidth = atoi( Line + 14 );
+            else if( strnicmp( Line, ".ThermalGap ", 12 ) == 0 )
+                m_ThermalGap = atoi( Line + 12 );
             break;
 
         default:
@@ -1281,7 +1297,10 @@ int MODULE::ReadDescr( LINE_READER* aReader )
                 SetLocalClearance( atoi( Line + 16 ) );
             else if( strnicmp( Line, ".ZoneConnection ", 16 ) == 0 )
                 m_ZoneConnection = (ZoneConnection)atoi( Line + 16 );
-
+            else if( strnicmp( Line, ".ThermalWidth ", 14 ) == 0 )
+                m_ThermalWidth = atoi( Line + 14 );
+            else if( strnicmp( Line, ".ThermalGap ", 12 ) == 0 )
+                m_ThermalGap = atoi( Line + 12 );
             break;
 
         default:

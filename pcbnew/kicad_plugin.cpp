@@ -1024,6 +1024,18 @@ void KICAD_PLUGIN::loadMODULE()
             module->SetZoneConnection( (ZoneConnection)tmp );
         }
 
+        else if( TESTLINE( ".ThermalWidth" ) )
+        {
+            BIU tmp = biuParse( line + SZ( ".ThermalWidth" ) );
+            module->SetThermalWidth( tmp );
+        }
+
+        else if( TESTLINE( ".ThermalGap" ) )
+        {
+            BIU tmp = biuParse( line + SZ( ".ThermalGap" ) );
+            module->SetThermalGap( tmp );
+        }
+
         else if( TESTLINE( "$EndMODULE" ) )
         {
             module->CalculateBoundingBox();
@@ -1230,6 +1242,18 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
             pad->SetZoneConnection( (ZoneConnection)tmp );
+        }
+
+        else if( TESTLINE( ".ThermalWidth" ) )
+        {
+            BIU tmp = biuParse( line + SZ( ".ThermalWidth" ) );
+            pad->SetThermalWidth( tmp );
+        }
+
+        else if( TESTLINE( ".ThermalGap" ) )
+        {
+            BIU tmp = biuParse( line + SZ( ".ThermalGap" ) );
+            pad->SetThermalGap( tmp );
         }
 
         else if( TESTLINE( "$EndPAD" ) )
@@ -3192,6 +3216,12 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
     if( me->GetZoneConnection() != UNDEFINED_CONNECTION )
         fprintf( m_fp, ".ZoneConnection %d\n", me->GetZoneConnection() );
 
+    if( me->GetThermalWidth() != 0 )
+        fprintf( m_fp, ".ThermalWidth %d\n", me->GetThermalWidth() );
+
+    if( me->GetThermalGap() != 0 )
+        fprintf( m_fp, ".ThermalGap %d\n", me->GetThermalGap() );
+
     fprintf( m_fp, "$EndPAD\n" );
 
     CHECK_WRITE_ERROR();
@@ -3247,6 +3277,12 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
 
     if( me->GetZoneConnection() != UNDEFINED_CONNECTION )
         fprintf( m_fp, ".ZoneConnection %d\n", me->GetZoneConnection() );
+
+    if( me->GetThermalWidth() != 0 )
+        fprintf( m_fp, ".ThermalWidth %d\n", me->GetThermalWidth() );
+
+    if( me->GetThermalGap() != 0 )
+        fprintf( m_fp, ".ThermalGap %d\n", me->GetThermalGap() );
 
     // attributes
     if( me->GetAttributes() != MOD_DEFAULT )

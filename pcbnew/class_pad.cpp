@@ -71,6 +71,8 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     m_ZoneConnection = UNDEFINED_CONNECTION; // Use parent setting by default
+    m_ThermalWidth = 0; // Use parent setting by default
+    m_ThermalGap = 0; // Use parent setting by default
 
     // set layers mask to default for a standard pad
     m_layerMask = PAD_STANDARD_DEFAULT_LAYERS;
@@ -305,6 +307,8 @@ void D_PAD::Copy( D_PAD* source )
     m_LocalSolderPasteMargin = source->m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio = source->m_LocalSolderPasteMarginRatio;
     m_ZoneConnection = source->m_ZoneConnection;
+    m_ThermalWidth = source->m_ThermalWidth;
+    m_ThermalGap = source->m_ThermalGap;
 
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
@@ -450,6 +454,28 @@ ZoneConnection D_PAD::GetZoneConnection() const
         return module->GetZoneConnection();
     else
         return m_ZoneConnection;
+}
+
+
+int D_PAD::GetThermalWidth() const
+{
+    MODULE* module = (MODULE*) GetParent();
+
+    if( m_ThermalWidth == 0 && module )
+        return module->GetThermalWidth();
+    else
+        return m_ThermalWidth;
+}
+
+
+int D_PAD::GetThermalGap() const
+{
+    MODULE* module = (MODULE*) GetParent();
+
+    if( m_ThermalGap == 0 && module )
+        return module->GetThermalGap();
+    else
+        return m_ThermalGap;
 }
 
 

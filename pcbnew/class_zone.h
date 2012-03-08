@@ -274,13 +274,13 @@ public:
     int GetFillMode() const { return m_FillMode; }
 
     void SetThermalReliefGap( int aThermalReliefGap ) { m_ThermalReliefGap = aThermalReliefGap; }
-    int GetThermalReliefGap() const { return m_ThermalReliefGap; }
+    int GetThermalReliefGap( D_PAD* aPad = NULL ) const;
 
     void SetThermalReliefCopperBridge( int aThermalReliefCopperBridge )
     {
         m_ThermalReliefCopperBridge = aThermalReliefCopperBridge;
     }
-    int GetThermalReliefCopperBridge() const { return m_ThermalReliefCopperBridge; }
+    int GetThermalReliefCopperBridge( D_PAD* aPad = NULL ) const;
 
     void SetArcSegCount( int aArcSegCount ) { m_ArcToSegmentsCount = aArcSegCount; }
     int GetArcSegCount() const { return m_ArcToSegmentsCount; }

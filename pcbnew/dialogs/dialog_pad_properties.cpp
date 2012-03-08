@@ -80,6 +80,9 @@ private:
 
     bool    m_canUpdate;
 
+    static wxPoint prevPosition;
+    static wxSize prevSize;
+
     void initValues();
     void OnPadShapeSelection( wxCommandEvent& event );
     void OnDrillShapeSelected( wxCommandEvent& event );
@@ -93,6 +96,10 @@ private:
     bool TransfertDataToPad( D_PAD* aPad, bool aPromptOnError = false );
     void OnValuesChanged( wxCommandEvent& event );
 };
+
+
+wxPoint DIALOG_PAD_PROPERTIES::prevPosition( -1, -1 );
+wxSize DIALOG_PAD_PROPERTIES::prevSize;
 
 
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
@@ -114,7 +121,14 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
-    Center();
+
+    if( prevPosition.x != -1 )
+        SetSize( prevPosition.x, prevPosition.y,
+                 prevSize.x, prevSize.y );
+    else
+        Center();
+
+    m_PadNumCtrl->SetFocus();
     m_canUpdate = true;
 }
 
@@ -241,12 +255,13 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadShapeOffsetY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_PadShapeDelta_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_PadLengthDie_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     // Display current pad masks clearances units
     m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_ThermalWidthUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_ThermalGapUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     // Display current pad parameters units:
     PutValueInLocalUnits( *m_PadPosition_X_Ctrl, m_dummyPad->GetPosition().x, internalUnits );
@@ -264,12 +279,12 @@ void DIALOG_PAD_PROPERTIES::initValues()
     if( m_dummyPad->GetDelta().x )
     {
         PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->GetDelta().x, internalUnits );
-        m_radioBtnDeltaXdir->SetValue(true);
+        m_trapDeltaDirChoice->SetSelection( 0 );
     }
     else
     {
         PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->GetDelta().y, internalUnits );
-        m_radioBtnDeltaYdir->SetValue(true);
+        m_trapDeltaDirChoice->SetSelection( 1 );
     }
 
     PutValueInLocalUnits( *m_LengthDieCtrl, m_dummyPad->GetDieLength(), internalUnits );
@@ -278,6 +293,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
                           m_dummyPad->GetLocalSolderMaskMargin(),
                           internalUnits );
+    PutValueInLocalUnits( *m_ThermalWidthCtrl, m_dummyPad->GetThermalWidth(), internalUnits );
+    PutValueInLocalUnits( *m_ThermalGapCtrl, m_dummyPad->GetThermalGap(), internalUnits );
 
     // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
@@ -345,7 +362,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_PadOrient->SetSelection( 1 );
         break;
 
-    case - 900:
+    case -900:
         m_PadOrient->SetSelection( 2 );
         break;
 
@@ -437,30 +454,34 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     {
     case 0:     //CIRCLE:
         m_ShapeDelta_Ctrl->Enable( false );
-        m_radioBtnDeltaXdir->Enable( false );
-        m_radioBtnDeltaYdir->Enable( false );
+        m_trapDeltaDirChoice->Enable( false );
         m_ShapeSize_Y_Ctrl->Enable( false );
+        m_ShapeOffset_X_Ctrl->Enable( false );
+        m_ShapeOffset_Y_Ctrl->Enable( false );
         break;
 
     case 1:     //OVALE:
         m_ShapeDelta_Ctrl->Enable( false );
-        m_radioBtnDeltaXdir->Enable( false );
-        m_radioBtnDeltaYdir->Enable( false );
+        m_trapDeltaDirChoice->Enable( false );
         m_ShapeSize_Y_Ctrl->Enable( true );
+        m_ShapeOffset_X_Ctrl->Enable( true );
+        m_ShapeOffset_Y_Ctrl->Enable( true );
         break;
 
     case 2:     // PAD_RECT:
         m_ShapeDelta_Ctrl->Enable( false );
-        m_radioBtnDeltaXdir->Enable( false );
-        m_radioBtnDeltaYdir->Enable( false );
+        m_trapDeltaDirChoice->Enable( false );
         m_ShapeSize_Y_Ctrl->Enable( true );
+        m_ShapeOffset_X_Ctrl->Enable( true );
+        m_ShapeOffset_Y_Ctrl->Enable( true );
         break;
 
     case 3:     //TRAPEZE:
         m_ShapeDelta_Ctrl->Enable( true );
-        m_radioBtnDeltaXdir->Enable( true );
-        m_radioBtnDeltaYdir->Enable( true );
+        m_trapDeltaDirChoice->Enable( true );
         m_ShapeSize_Y_Ctrl->Enable( true );
+        m_ShapeOffset_X_Ctrl->Enable( true );
+        m_ShapeOffset_Y_Ctrl->Enable( true );
         break;
     }
 
@@ -532,9 +553,6 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 
 
 void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
-
-/* Adjust the better mask layer according to the selected pad type
- */
 {
     long layer_mask;
     int  ii;
@@ -549,6 +567,10 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     // Enable/disable drill dialog items:
     event.SetId( m_DrillShapeCtrl->GetSelection() );
     OnDrillShapeSelected( event );
+    if( ii == 0 || ii == NBTYPES-1 )
+        m_DrillShapeCtrl->Enable( true );
+    else
+        m_DrillShapeCtrl->Enable( false );
 
     // Enable/disable Pad name,and pad length die
     // (disable for NPTH pads (mechanical pads)
@@ -610,6 +632,9 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     bool rastnestIsChanged = false;
     int  isign = m_isFlipped ? -1 : 1;
 
+    prevPosition = GetPosition();
+    prevSize = GetSize();
+
     bool success = TransfertDataToPad( m_dummyPad, true );
     if( !success )  // An error on parameters has occured
         return;
@@ -649,7 +674,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         m_CurrentPad->SetOrientation( m_Pad_Master.GetOrientation() * isign + module->GetOrientation() );
 
-        m_CurrentPad->SetSize(  m_Pad_Master.GetSize() );
+        m_CurrentPad->SetSize( m_Pad_Master.GetSize() );
 
         size = m_Pad_Master.GetDelta();
         size.y *= isign;
@@ -702,6 +727,8 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->SetLocalSolderPasteMargin( m_Pad_Master.GetLocalSolderPasteMargin() );
         m_CurrentPad->SetLocalSolderPasteMarginRatio( m_Pad_Master.GetLocalSolderPasteMarginRatio() );
         m_CurrentPad->SetZoneConnection( m_Pad_Master.GetZoneConnection() );
+        m_CurrentPad->SetThermalWidth( m_Pad_Master.GetThermalWidth() );
+        m_CurrentPad->SetThermalGap( m_Pad_Master.GetThermalGap() );
 
         module->CalculateBoundingBox();
         m_CurrentPad->DisplayInfo( m_Parent );
@@ -737,6 +764,10 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
                                                              internalUnits ) );
     aPad->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl,
                                                               internalUnits ) );
+    aPad->SetThermalWidth( ReturnValueFromTextCtrl( *m_ThermalWidthCtrl,
+                                                    internalUnits ) );
+    aPad->SetThermalGap( ReturnValueFromTextCtrl( *m_ThermalGapCtrl,
+                                                  internalUnits ) );
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
@@ -805,7 +836,7 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
     // m_DeltaSize.x or m_DeltaSize.y must be NULL. for a trapezoid.
     wxSize delta;
 
-    if( m_radioBtnDeltaXdir->GetValue() )
+    if( m_trapDeltaDirChoice->GetSelection() == 0 )
         delta.x = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl, internalUnits );
     else
         delta.y = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl, internalUnits );
@@ -1005,9 +1036,9 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
 }
 
 
-/*********************************************************************/
 void DIALOG_PAD_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
-/*********************************************************************/
 {
+    prevPosition = GetPosition();
+    prevSize = GetSize();
     EndModal( wxID_CANCEL );
 }

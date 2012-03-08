@@ -450,6 +450,24 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, in
 }
 
 
+int ZONE_CONTAINER::GetThermalReliefGap( D_PAD* aPad ) const
+{
+    if( aPad == NULL || aPad->GetThermalGap() == 0 )
+        return m_ThermalReliefGap;
+    else
+        return aPad->GetThermalGap();
+}
+
+
+int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
+{
+    if( aPad == NULL || aPad->GetThermalWidth() == 0 )
+        return m_ThermalReliefCopperBridge;
+    else
+        return aPad->GetThermalWidth();
+}
+
+
 bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
 {
     if( HitTestForCorner( refPos ) )
@@ -888,7 +906,6 @@ ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
         return m_PadConnection;
     else
         return aPad->GetZoneConnection();
-
 }
 
 
