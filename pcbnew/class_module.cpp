@@ -69,6 +69,8 @@ MODULE::MODULE( BOARD* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     m_ZoneConnection = UNDEFINED_CONNECTION; // Use zone setting by default
+    m_ThermalWidth = 0; // Use zone setting by default
+    m_ThermalGap = 0; // Use zone setting by default
 
     m_Reference = new TEXTE_MODULE( this, TEXT_is_REFERENCE );
 
@@ -103,6 +105,8 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_LocalSolderPasteMargin = aModule.m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio = aModule.m_LocalSolderPasteMarginRatio;
     m_ZoneConnection = aModule.m_ZoneConnection;
+    m_ThermalWidth = aModule.m_ThermalWidth;
+    m_ThermalGap = aModule.m_ThermalGap;
 
     // Copy reference and value.
     m_Reference = new TEXTE_MODULE( *aModule.m_Reference );
@@ -219,6 +223,8 @@ void MODULE::Copy( MODULE* aModule )
     m_LocalSolderPasteMargin        = aModule->m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio   = aModule->m_LocalSolderPasteMarginRatio;
     m_ZoneConnection                = aModule->m_ZoneConnection;
+    m_ThermalWidth                  = aModule->m_ThermalWidth;
+    m_ThermalGap                    = aModule->m_ThermalGap;
 
     // Copy reference and value.
     m_Reference->Copy( aModule->m_Reference );

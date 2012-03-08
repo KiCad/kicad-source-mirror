@@ -122,6 +122,7 @@ public:
     // The final margin is the sum of these 2 values
 
     ZoneConnection m_ZoneConnection;
+    int m_ThermalWidth, m_ThermalGap;
 
 public:
     MODULE( BOARD* parent );
@@ -197,6 +198,12 @@ public:
 
     void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
     ZoneConnection GetZoneConnection() const { return m_ZoneConnection; }
+
+    void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
+    int GetThermalWidth() const { return m_ThermalWidth; }
+
+    void SetThermalGap( int aGap ) { m_ThermalGap = aGap; }
+    int GetThermalGap() const { return m_ThermalGap; }
 
     int GetAttributes() const { return m_Attributs; }
     void SetAttributes( int aAttributes ) { m_Attributs = aAttributes; }

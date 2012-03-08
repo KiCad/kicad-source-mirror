@@ -75,7 +75,7 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
             endpoint.x = ( pad->GetSize().x / 2 ) + aZone->m_ThermalReliefGap;
             endpoint.y = ( pad->GetSize().y / 2 ) + aZone->m_ThermalReliefGap;
 
-            int copperThickness = aZone->m_ThermalReliefCopperBridge - aZone->m_ZoneMinThickness;
+            int copperThickness = aZone->GetThermalReliefCopperBridge( pad ) - aZone->m_ZoneMinThickness;
             if( copperThickness < 0 )
                 copperThickness = 0;
 
