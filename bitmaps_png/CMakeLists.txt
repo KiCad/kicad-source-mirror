@@ -510,6 +510,7 @@ set( BMAPS_MID
 
 # 48 x 48 for now
 set( BMAPS_BIG
+    dialog_warning
     icon_3d
     icon_cvpcb
     icon_eeschema

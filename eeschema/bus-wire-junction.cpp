@@ -250,7 +250,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     screen->Append( tmp );
 
     // Correct and remove segments that need merged.
-    screen->SchematicCleanUp( m_canvas, DC );
+    screen->SchematicCleanUp( NULL, DC );
 
     // A junction may be needed to connect the last segment.  If the last segment was
     // removed by a cleanup, a junction may be needed to connect the segment's end point
@@ -276,7 +276,8 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     // Now add the new wires and any required junctions to the schematic item list.
     screen->Append( s_wires );
 
-    screen->SchematicCleanUp( m_canvas, DC );
+    screen->SchematicCleanUp( NULL, DC );
+    m_canvas->Refresh();
 
     // Put the snap shot of the previous wire, buses, and junctions in the undo/redo list.
     PICKED_ITEMS_LIST oldItems;
