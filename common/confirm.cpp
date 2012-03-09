@@ -17,7 +17,7 @@ public:
     DIALOG_EXIT( wxWindow * parent, const wxString& aMessage ) :
         DIALOG_EXIT_BASE( parent )
     {
-        m_bitmap->SetBitmap( KiBitmap( cancel_xpm ) );
+        m_bitmap->SetBitmap( KiBitmap( dialog_warning_xpm ) );
         if( ! aMessage.IsEmpty() )
             m_TextInfo->SetLabel( aMessage );
         GetSizer()->Fit( this );

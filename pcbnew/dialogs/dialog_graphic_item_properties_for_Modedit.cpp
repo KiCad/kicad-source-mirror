@@ -215,17 +215,21 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
 
     wxString msg;
 
-    msg = m_Center_StartXCtrl->GetValue();
-    m_item->SetStartX( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
+    wxPoint coord;
 
+    msg = m_Center_StartXCtrl->GetValue();
+    coord.x = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
     msg = m_Center_StartYCtrl->GetValue();
-    m_item->SetStartY( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
+    coord.y = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    m_item->SetStart( coord );
+    m_item->SetStart0( coord );
 
     msg = m_EndX_Radius_Ctrl->GetValue();
-    m_item->SetEndX( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
-
+    coord.x = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
     msg = m_EndY_Ctrl->GetValue();
-    m_item->SetEndY( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
+    coord.y = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    m_item->SetEnd( coord );
+    m_item->SetEnd0( coord );
 
     msg = m_ThicknessCtrl->GetValue();
     m_item->SetWidth( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));

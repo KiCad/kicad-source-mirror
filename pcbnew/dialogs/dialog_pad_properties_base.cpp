@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 24 2011)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -30,7 +30,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizer5->SetFlexibleDirection( wxBOTH );
 	fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_PadNumText = new wxStaticText( m_panel2, wxID_ANY, _("Number:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PadNumText = new wxStaticText( m_panel2, wxID_ANY, _("Pad number:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PadNumText->Wrap( -1 );
 	fgSizer5->Add( m_PadNumText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -44,11 +44,11 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_PadNetNameCtrl = new wxTextCtrl( m_panel2, wxID_PADNETNAMECTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer5->Add( m_PadNetNameCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText44 = new wxStaticText( m_panel2, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText44 = new wxStaticText( m_panel2, wxID_ANY, _("Pad type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText44->Wrap( -1 );
 	fgSizer5->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_PadTypeChoices[] = { _("Through-hole"), _("SMD"), _("Contact"), _("NPTH, Mechanical") };
+	wxString m_PadTypeChoices[] = { _("Through-hole"), _("SMD"), _("Connector"), _("NPTH, Mechanical") };
 	int m_PadTypeNChoices = sizeof( m_PadTypeChoices ) / sizeof( wxString );
 	m_PadType = new wxChoice( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadTypeNChoices, m_PadTypeChoices, 0 );
 	m_PadType->SetSelection( 0 );
@@ -144,7 +144,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_customOrientUnits->Wrap( -1 );
 	fgSizer6->Add( m_customOrientUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 	
-	m_staticText17 = new wxStaticText( m_panel2, wxID_ANY, _("Offset X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText17 = new wxStaticText( m_panel2, wxID_ANY, _("Shape offset X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
 	fgSizer6->Add( m_staticText17, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 	
@@ -155,7 +155,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_PadShapeOffsetX_Unit->Wrap( -1 );
 	fgSizer6->Add( m_PadShapeOffsetX_Unit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 	
-	m_staticText19 = new wxStaticText( m_panel2, wxID_ANY, _("Offset Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19 = new wxStaticText( m_panel2, wxID_ANY, _("Shape offset Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText19->Wrap( -1 );
 	fgSizer6->Add( m_staticText19, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 	
@@ -200,7 +200,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_trapDeltaDirChoice->SetSelection( 0 );
 	fgSizer6->Add( m_trapDeltaDirChoice, 0, wxEXPAND|wxALL, 5 );
 	
-	m_LeftBoxSizer->Add( fgSizer6, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_LeftBoxSizer->Add( fgSizer6, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleUpperSizer;
 	bMiddleUpperSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -362,7 +362,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	bSizer10->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 5 );
 	
-	bGeneralSizer->Add( bSizer10, 0, wxEXPAND|wxALL, 5 );
+	bGeneralSizer->Add( bSizer10, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer13x;
 	bSizer13x = new wxBoxSizer( wxVERTICAL );
