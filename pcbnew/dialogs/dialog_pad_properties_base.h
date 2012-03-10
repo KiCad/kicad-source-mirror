@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Feb  9 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,7 +44,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		{
 			wxID_DIALOG_EDIT_PAD = 1000,
 			wxID_PADNUMCTRL,
-			wxID_PADNETNAMECTRL,
+			wxID_PADNETNAMECTRL
 		};
 		
 		wxNotebook* m_notebook1;
@@ -55,15 +55,14 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxTextCtrl* m_PadNetNameCtrl;
 		wxStaticText* m_staticText44;
 		wxChoice* m_PadType;
-		wxStaticText* m_staticText45;
-		wxChoice* m_PadShape;
-		wxStaticText* m_staticText46;
 		wxStaticText* m_staticText4;
 		wxTextCtrl* m_PadPosition_X_Ctrl;
 		wxStaticText* m_PadPosX_Unit;
 		wxStaticText* m_staticText41;
 		wxTextCtrl* m_PadPosition_Y_Ctrl;
 		wxStaticText* m_PadPosY_Unit;
+		wxStaticText* m_staticText45;
+		wxChoice* m_PadShape;
 		wxStaticText* m_staticText12;
 		wxTextCtrl* m_ShapeSize_X_Ctrl;
 		wxStaticText* m_PadShapeSizeX_Unit;
