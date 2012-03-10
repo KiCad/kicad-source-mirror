@@ -17,6 +17,7 @@
 	#include <dlist.h>
 	#include <base_struct.h>
 	#include <common.h>
+	#include <wx_helpers.h>
 
 %}
 

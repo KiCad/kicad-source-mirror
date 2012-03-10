@@ -18,6 +18,7 @@ include_directories(
     ${Boost_INCLUDE_DIR}
     ../polygon
     ../common/dialogs
+    ./scripting
     ${INC_AFTER}
     )
 
@@ -224,6 +225,7 @@ set(PCBNEW_COMMON_SRCS
 set(PCBNEW_SCRIPTING_SRCS
    kicad_wrap.cxx
    pcbnew_wrap.cxx
+   scripting/helpers.cpp
    )
 
 ##
