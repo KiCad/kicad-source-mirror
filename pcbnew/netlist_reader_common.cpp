@@ -278,27 +278,43 @@ void NETLIST_READER::TestFootprintsMatchingAndExchange()
 }
 
 /**
- * Function SetPadNetName
- *  Update a pad netname
+ * Function SetPadsNetName
+ *  Update pads netnames for a given module.
+ *  Because a pad name can be found more than once in this module,
+ *  all pads matching the pad name are updated
  *  @param aModule = module reference
  *  @param aPadname = pad name (pad num)
  *  @param aNetname = new net name of the pad
- *  @return a pointer to the pad or NULL if the pad is not found
+ *  @param aPadList = a std::vector<D_PAD*>& buffer where the updated pads can be stored
+ *  @return the pad count
  */
-D_PAD* NETLIST_READER::SetPadNetName( const wxString & aModule, const wxString & aPadname,
-                      const wxString & aNetname )
+int NETLIST_READER::SetPadsNetName( const wxString & aModule, const wxString & aPadname,
+                      const wxString & aNetname, std::vector<D_PAD*> & aPadList )
 {
     if( m_pcbframe == NULL )
-        return NULL;
+        return 0;
 
+    int padcount = 0;
     MODULE* module = m_pcbframe->GetBoard()->FindModuleByReference( aModule );
     if( module )
     {
         D_PAD * pad = module->FindPadByName( aPadname );
         if( pad )
         {
+            padcount++;
+            aPadList.push_back( pad );
             pad->SetNetname( aNetname );
-            return pad;
+            // Search for other pads having the same pad name/num
+            for( D_PAD* curr_pad = pad->Next(); curr_pad; curr_pad = curr_pad->Next() )
+            {
+                if( pad->PadNameEqual( curr_pad ) )
+                {
+                    padcount++;
+                    aPadList.push_back( curr_pad );
+                    curr_pad->SetNetname( aNetname );
+                }
+            }
+            return padcount;
         }
         if( m_messageWindow )
         {
@@ -309,7 +325,7 @@ D_PAD* NETLIST_READER::SetPadNetName( const wxString & aModule, const wxString &
         }
     }
 
-    return NULL;
+    return 0;
 }
 
 
