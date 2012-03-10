@@ -8,6 +8,7 @@
 	#include <class_track.h>	
 	#include <class_pad.h>
 	#include <dlist.h>
+        #include <wx_helpers.h>
 
 
 	BOARD *GetBoard();
