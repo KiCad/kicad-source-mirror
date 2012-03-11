@@ -1,6 +1,6 @@
 
 %{
-#include <wx_helpers.h>
+#include <wx_python_helpers.h>
 %}
 
 // encoding setup, ascii by default ///////////////////////////////////////////

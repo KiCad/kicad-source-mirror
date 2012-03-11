@@ -1,5 +1,11 @@
-%module kicad
+//%module kicad
 
+/* OFF NOW, it triggers an error with GCC 4.6 and swig-2.0.4 or trunk.. 
+   http://sourceforge.net/tracker/index.php?func=detail&aid=3391906&group_id=1645&atid=101645
+
+   %include <std_vector.i>
+   %include <std_string.i>
+*/
 %nodefaultctor EDA_ITEM;
 
 
@@ -17,7 +23,10 @@
 	#include <dlist.h>
 	#include <base_struct.h>
 	#include <common.h>
-	#include <wx_helpers.h>
+	#include <wx_python_helpers.h>
+	#include <cstddef>
+        #include <vector>
+	using namespace std;
 
 %}
 
@@ -25,8 +34,12 @@
 %include <base_struct.h>
 %include <common.h>
 
-
+/* all the wx wrappers for wxString, wxPoint, wxRect, wxChar .. */
 %include <wx.i>
 
-
-
+/*
+namespace std 
+{
+	%template(intVector) vector<int>;
+}
+*/
