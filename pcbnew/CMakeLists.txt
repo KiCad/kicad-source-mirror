@@ -91,7 +91,7 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_scripting.cpp
     )
 
-set(PCBNEW_SRCS
+set(PCBNEW_CLASS_SRCS
     tool_modview.cpp
     modview.cpp
     modview_frame.cpp
@@ -114,7 +114,6 @@ set(PCBNEW_SRCS
     dimension.cpp
     cross-probing.cpp
     deltrack.cpp
-    ${PCBNEW_DIALOGS}
     dist.cpp
     dragsegm.cpp
     drc.cpp
@@ -212,6 +211,8 @@ set(PCBNEW_SRCS
     zones_test_and_combine_areas.cpp
     )
 
+set(PCBNEW_SRCS ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS})
+
 ###
 # We need some extra sources from common
 ###
@@ -222,11 +223,15 @@ set(PCBNEW_COMMON_SRCS
 ##
 # Scripting sources
 ##
+set(PCBNEW_SCRIPTING_PYTHON_HELPERS    
+   scripting/wx_python_helpers.cpp
+   scripting/python_scripting.cpp
+   )
+
 set(PCBNEW_SCRIPTING_SRCS
 #   kicad_wrap.cxx
    pcbnew_wrap.cxx
-   scripting/wx_python_helpers.cpp
-   scripting/python_scripting.cpp
+    ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
    )
 
 ##
@@ -234,32 +239,31 @@ set(PCBNEW_SCRIPTING_SRCS
 ##
 
 
-
-SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -DDEBUG )
+set(SWIG_FLAGS -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -DDEBUG)
 
 # collect CFLAGS , and pass them to swig later 
 
 get_directory_property( DirDefs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} COMPILE_DEFINITIONS )
 foreach( d ${DirDefs} )
-    SET(SWIG_OPTS ${SWIG_OPTS} -D${d} )
+    SET(SWIG_FLAGS ${SWIG_FLAGS} -D${d} )
 endforeach()
 
 # check if we have IO_MGR and KICAD_PLUGIN available
 if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
-    SET(SWIG_OPTS ${SWIG_OPTS} -DBUILD_WITH_PLUGIN)
+    SET(SWIG_FLAGS ${SWIG_FLAGS} -DBUILD_WITH_PLUGIN)
 endif()
 
 
-foreach( d ${SWIG_OPTS} )
+foreach( d ${SWIG_FLAGS} )
     message(STATUS "Swig options:" ${d})
 endforeach()
 
-
-if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
-endif()
+SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
 
-
+# we checked the posibility to build kicad thinks in a separate module, but it 
+# will be easier in just one "pcbnew" for now
+#
 #add_custom_command(
 #               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kicad_wrap.cxx
 #               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/kicad_wrap.cxx scripting/kicad.i 
@@ -271,6 +275,26 @@ add_custom_command(
                COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+
+###
+# _pcbnew DLL/DSO file creation
+###
+
+SET(CMAKE_SWIG_FLAGS ${SWIG_FLAGS})
+SET_SOURCE_FILES_PROPERTIES(scripting/pcbnew.i PROPERTIES CPLUSPLUS ON)
+SWIG_ADD_MODULE(pcbnew python scripting/pcbnew.i ${PCBNEW_SCRIPTING_PYTHON_HELPERS} ${PCBNEW_SRCS})
+SWIG_LINK_LIBRARIES(pcbnew 
+    3d-viewer
+    pcbcommon
+    common
+    bitmaps
+    polygon
+    kbool
+    ${wxWidgets_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    ${PYTHON_LIBRARIES})
 
 
 ###
