@@ -223,22 +223,49 @@ set(PCBNEW_COMMON_SRCS
 # Scripting sources
 ##
 set(PCBNEW_SCRIPTING_SRCS
-   kicad_wrap.cxx
+#   kicad_wrap.cxx
    pcbnew_wrap.cxx
-   scripting/helpers.cpp
+   scripting/wx_python_helpers.cpp
+   scripting/python_scripting.cpp
    )
 
 ##
 # Scripting build
 ##
 
-SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -DKICAD_TESTING_VERSION -D_FILE_OFFSET_BITS=64 -DPCBNEW -D_LARGE_FILES -D__WXGTK__ -DHAVE_SVN_VERSION -DDEBUG)
 
-add_custom_command(
-               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kicad_wrap.cxx
-               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/kicad_wrap.cxx scripting/kicad.i 
-               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
+
+SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -DDEBUG )
+
+# collect CFLAGS , and pass them to swig later 
+
+get_directory_property( DirDefs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} COMPILE_DEFINITIONS )
+foreach( d ${DirDefs} )
+    SET(SWIG_OPTS ${SWIG_OPTS} -D${d} )
+endforeach()
+
+# check if we have IO_MGR and KICAD_PLUGIN available
+if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
+    SET(SWIG_OPTS ${SWIG_OPTS} -DBUILD_WITH_PLUGIN)
+endif()
+
+
+foreach( d ${SWIG_OPTS} )
+    message(STATUS "Swig options:" ${d})
+endforeach()
+
+
+if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
+endif()
+
+
+
+#add_custom_command(
+#               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kicad_wrap.cxx
+#               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/kicad_wrap.cxx scripting/kicad.i 
+#               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#)
+
 add_custom_command(
                OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
                COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i

@@ -45,11 +45,10 @@
 #include <protos.h>
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
-#include <Python.h>
 #include <class_board.h>
 
-
 #include <dialogs/dialog_scripting.h>
+#include <scripting/python_scripting.h>
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
@@ -108,64 +107,14 @@ void EDA_APP::MacOpenFile( const wxString& fileName )
 }
 
 
-struct _inittab SWIG_Import_Inittab[1000];
-static int  swig_num_modules = 0;
-
-static void swig_add_module(char *name, void (*initfunc)()) {
-        SWIG_Import_Inittab[swig_num_modules].name = name;
-        SWIG_Import_Inittab[swig_num_modules].initfunc = initfunc;
-        swig_num_modules++;
-        SWIG_Import_Inittab[swig_num_modules].name = (char *) 0;
-        SWIG_Import_Inittab[swig_num_modules].initfunc = 0;
-}
-
-extern "C" void init_kicad(void);
-extern "C" void init_pcbnew(void);
-
-static void swig_add_builtin() {
-        int i = 0;
-        while (PyImport_Inittab[i].name) {
-                swig_add_module(PyImport_Inittab[i].name, PyImport_Inittab[i].initfunc);
-                i++;
-        }
-	swig_add_module("_kicad",init_kicad);
-	swig_add_module("_pcbnew",init_pcbnew);
-        PyImport_Inittab = SWIG_Import_Inittab;
-
-}
-
-static BOARD *st_board;
-
-BOARD *GetBoard()
-{
-	return st_board;
-}
-
 bool EDA_APP::OnInit()
 {
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
     int i=0;
-
-    swig_add_builtin();
     
-
-#if 0
-    while(PyImport_Inittab[i].name)
-    {
-	printf("name[%d]=>%s\n",i,PyImport_Inittab[i].name);
-	i++;
-    }
-#endif
-    Py_Initialize();
-
-    PyRun_SimpleString("import sys\n"
-		       "sys.path.append(\".\")\n"
-                       "import kicad,pcbnew\n"
-		       "from time import time,ctime\n"
-                       "print 'Today is',ctime(time())\n");
-
+    pcbnewInitPythonScripting();
 
     InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
@@ -253,7 +202,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
      */
     frame->SetFocus();
     frame->GetCanvas()->SetFocus();
-    st_board = frame->GetBoard();
+    pythonSetPcbEditFrame(frame);
     DIALOG_SCRIPTING* sw = new DIALOG_SCRIPTING(frame);
     sw->Show(true);
     return true;
