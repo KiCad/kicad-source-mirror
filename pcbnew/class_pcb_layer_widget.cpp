@@ -46,7 +46,7 @@
 #include <pcbnew_id.h>
 
 
-// this is a read only template that is copied and modified before adding to LAYER_WIDGET
+/// This is a read only template that is copied and modified before adding to LAYER_WIDGET
 const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
 
 #define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
@@ -221,8 +221,30 @@ void PCB_LAYER_WIDGET::SyncRenderStates()
 
     for( unsigned row=0;  row<DIM(s_render_rows);  ++row )
     {
-        // this does not fire an event
-        SetRenderState( s_render_rows[row].id, board->IsElementVisible( s_render_rows[row].id ) );
+        int rowId = s_render_rows[row].id;
+
+        // this does not fire a UI event
+        SetRenderState( rowId, board->IsElementVisible( rowId ) );
+    }
+}
+
+
+void PCB_LAYER_WIDGET::SyncLayerVisibilities()
+{
+    BOARD*  board = myframe->GetBoard();
+    int     count = GetLayerRowCount();
+
+    for( int row=0;  row<count;  ++row )
+    {
+        // this utilizes more implementation knowledge than ideal, eventually
+        // add member ROW getRow() or similar to base LAYER_WIDGET.
+
+        wxWindow* w = getLayerComp( row, 0 );
+
+        int layerId = getDecodedId( w->GetId() );
+
+        // this does not fire a UI event
+        SetLayerVisible( layerId, board->IsLayerVisible( layerId ) );
     }
 }
 

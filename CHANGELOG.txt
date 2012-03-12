@@ -4,6 +4,13 @@ KiCad ChangeLog 2012
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2012-Mar-11 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++pcbnew
+  * Add PCB_EDIT_FRAME::syncLayerVisibilities, PCB_LAYER_MANAGER::SyncLayerVisibilities().
+  * Save all visibilities, layer and render, in BOARD and restore on load.
+
+
 2012-Feb-19 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew

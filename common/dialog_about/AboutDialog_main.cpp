@@ -207,6 +207,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddDeveloper( new Contributor( wxT( "Jean-Pierre Charras" ),
                                         wxT( "jean-pierre.charras@gipsa-lab.inpg.fr" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Dick Hollenbeck" ), wxT( "dick@softplc.com" ) ) );
+    info.AddDeveloper( new Contributor( wxT( "Frank Bennett" ), wxT( "bennett78@lpbroadband.net" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Hauptmech" ), wxT( "hauptmech@gmail.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Jerry Jacobs" ),
                                         wxT( "xor.gate.engineering@gmail.com" ) ) );

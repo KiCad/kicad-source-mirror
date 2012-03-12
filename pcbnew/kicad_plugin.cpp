@@ -356,9 +356,17 @@ void KICAD_PLUGIN::loadGENERAL()
         {
             int enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
 
-            // Setup layer visibility
+            // layer usage
             m_board->SetEnabledLayers( enabledLayers );
+
+            // layer visibility equals layer usage, unless overridden later via "VisibleLayers"
             m_board->SetVisibleLayers( enabledLayers );
+        }
+
+        else if( TESTLINE( "VisibleLayers" ) )
+        {
+            int visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
+            m_board->SetVisibleLayers( visibleLayers );
         }
 
         else if( TESTLINE( "Ly" ) )    // Old format for Layer count
@@ -607,18 +615,6 @@ void KICAD_PLUGIN::loadSETUP()
             }
         }
 
-        /* no more used
-        else if( TESTLINE( "TrackWidth" ) )
-        {
-        }
-        else if( TESTLINE( "ViaSize" ) )
-        {
-        }
-        else if( TESTLINE( "MicroViaSize" ) )
-        {
-        }
-        */
-
         else if( TESTLINE( "TrackWidthList" ) )
         {
             BIU tmp = biuParse( line + SZ( "TrackWidthList" ) );
@@ -792,6 +788,12 @@ void KICAD_PLUGIN::loadSETUP()
             GetScreen()->m_GridOrigin.x = Ox;
             GetScreen()->m_GridOrigin.y = Oy;
             */
+        }
+
+        else if( TESTLINE( "VisibleElements" ) )
+        {
+            int visibleElements = hexParse( line + SZ( "VisibleElements" ) );
+            bds.SetVisibleElements( visibleElements );
         }
 
         else if( TESTLINE( "$EndSETUP" ) )
@@ -2765,6 +2767,10 @@ void KICAD_PLUGIN::saveGENERAL() const
     */
 
     fprintf( m_fp, "EnabledLayers %08X\n",  m_board->GetEnabledLayers() );
+
+    if( m_board->GetEnabledLayers() != m_board->GetVisibleLayers() )
+        fprintf( m_fp, "VisibleLayers %08X\n", m_board->GetVisibleLayers() );
+
     fprintf( m_fp, "Links %d\n",            m_board->GetRatsnestsCount() );
     fprintf( m_fp, "NoConn %d\n",           m_board->m_NbNoconnect );
 
@@ -2917,6 +2923,8 @@ void KICAD_PLUGIN::saveSETUP() const
         fprintf( m_fp, "PcbPlotParams %s\n", TO_UTF8( record ) );
     }
     */
+
+    fprintf( m_fp, "VisibleElements %X\n", bds.GetVisibleElements() );
 
     fprintf( m_fp, "$EndSETUP\n\n" );
 }

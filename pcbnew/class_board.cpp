@@ -516,18 +516,15 @@ void BOARD::SetVisibleLayers( int aLayerMask )
 }
 
 
-// these are not tidy, since there are PCB_VISIBLEs that are not stored in the bitmap.
-
 void BOARD::SetVisibleElements( int aMask )
 {
-    /* Call SetElementVisibility for each item,
-     * to ensure specific calculations that can be needed by some items
-     * just change the visibility flags could be not sufficient
-     */
+    // Call SetElementVisibility for each item
+    // to ensure specific calculations that can be needed by some items,
+    // just changing the visibility flags could be not sufficient.
     for( int ii = 0; ii < PCB_VISIBLE( END_PCB_VISIBLE_LIST ); ii++ )
     {
         int item_mask = 1 << ii;
-        SetElementVisibility( ii, aMask & item_mask );
+        SetElementVisibility( ii, bool( aMask & item_mask ) );
     }
 }
 
@@ -563,8 +560,8 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
     {
     case RATSNEST_VISIBLE:
 
-        // we must clear or set the CH_VISIBLE flags to hide/show ratsnet
-        // because we have a tool to show hide ratsnest relative to a pad or a module
+        // we must clear or set the CH_VISIBLE flags to hide/show ratsnest
+        // because we have a tool to show/hide ratsnest relative to a pad or a module
         // so the hide/show option is a per item selection
         if( IsElementVisible( RATSNEST_VISIBLE ) )
         {

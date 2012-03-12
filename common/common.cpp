@@ -265,7 +265,7 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, int aInternal_Uni
 
     value_to_print = To_User_Unit( aUnit, aValue, aInternal_Unit );
 
-    /* Yet another 'if Pcbnew' :( */
+    // Yet another 'if Pcbnew' :(
     StringValue.Printf( ( aInternal_Unit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
                         value_to_print );
 
@@ -293,12 +293,12 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
     int    Value;
     double dtmp = 0;
 
-    /* Acquire the 'right' decimal point separator */
+    // Acquire the 'right' decimal point separator
     const struct lconv* lc = localeconv();
     wxChar decimal_point = lc->decimal_point[0];
     wxString            buf( TextValue.Strip( wxString::both ) );
 
-    /* Convert the period in decimal point */
+    // Convert the period in decimal point
     buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
 
     // An ugly fix needed by WxWidgets 2.9.1 that sometimes
@@ -306,7 +306,7 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
     // TODO: remove this line if WxWidgets 2.9.2 fixes this issue
     buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
 
-    /* Find the end of the numeric part */
+    // Find the end of the numeric part
     unsigned brk_point = 0;
 
     while( brk_point < buf.Len() )
@@ -321,10 +321,10 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
         ++brk_point;
     }
 
-    /* Extract the numeric part */
+    // Extract the numeric part
     buf.Left( brk_point ).ToDouble( &dtmp );
 
-    /* Check the optional unit designator (2 ch significant) */
+    // Check the optional unit designator (2 ch significant)
     wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
 
     if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
@@ -335,7 +335,7 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
     {
         aUnit = MILLIMETRES;
     }
-    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) /* Mils or thous */
+    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) // Mils or thous
     {
         aUnit = INCHES;
         dtmp /= 1000;

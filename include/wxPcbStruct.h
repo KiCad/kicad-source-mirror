@@ -133,8 +133,8 @@ protected:
 
     /**
      * Function syncLayerWidgetLayer
-     * updates the currently "selected" layer within the PCB_LAYER_WIDGET.
-     * The currently active layer is defined by the return value of getActiveLayer().
+     * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
+     * The currently selected layer is defined by the return value of getActiveLayer().
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
@@ -149,6 +149,14 @@ protected:
      * immediately after loading a BOARD which may have state information in it.
      */
     void syncRenderStates();
+
+    /**
+     * Function syncLayerVisibilities
+     * updates each "Layer" checkbox in the layer widget according
+     * to each layer's current visibility determined by IsLayerVisible(), and is
+     * helpful immediately after loading a BOARD which may have state information in it.
+     */
+    void syncLayerVisibilities();
 
     virtual void unitsChangeRefresh();
 
