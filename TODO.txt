@@ -54,6 +54,10 @@ PCBNew
 
 Dick's Peronal TODO Items  (Last Update: 20-Feb-2012)
 -----------------------------------------------------
+0)  Check that the new load visibility BOARD settings is properly setting the toolbar
+    buttons like show grid or ratsnest.  Add PCB_EDIT_FRAME::SetVisibleElements() so
+    toolbar crap is not known to a BOARD.
+
 1) Finish removing global access requirements from KICAD_PLUGIN, so that:
    *)   a BOARD is a fully self contained document description.
    *)   plugin developers do not have to access globals, which assumes there were ever
