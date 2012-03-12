@@ -166,11 +166,12 @@ protected:
 
     /**
      * Function getLayerComp
-     * returns the component within the m_LayersFlexGridSizer at aRow and aCol
-     * or NULL if \a these parameters are out of range.
+     * returns the component within the m_LayersFlexGridSizer at @a aRow and @a aCol
+     * or NULL if these parameters are out of range.
      *
      * @param aRow is the row index
      * @param aColumn is the column
+     * @return wxWindow - the component installed within the sizer at given grid coordinate.
      */
     wxWindow* getLayerComp( int aRow, int aColumn );
     wxWindow* getRenderComp( int aRow, int aColumn );
@@ -277,7 +278,6 @@ public:
         for( int row=0;  row<aRowCount;  ++row )
             AppendRenderRow( aRowsArray[row] );
     }
-
 
     /**
      * Function ClearRenderRows
@@ -418,6 +418,5 @@ public:
 
     //-----</abstract functions>------------------------------------------
 };
-
 
 #endif // LAYERWIDGET_H_

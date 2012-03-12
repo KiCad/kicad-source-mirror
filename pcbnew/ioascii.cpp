@@ -217,9 +217,22 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
             data = strtok( NULL, delims );
             sscanf( data, "%X", &enabledLayers );
 
-            // Setup layer visibility
+            // layer usage
             GetBoard()->SetEnabledLayers( enabledLayers );
+
+            // layer visibility equals layer usage, unless overridden later via "VisibleLayers"
             GetBoard()->SetVisibleLayers( enabledLayers );
+            continue;
+        }
+
+        if( stricmp( data, "VisibleLayers" ) == 0 )
+        {
+            int visibleLayers = -1;
+
+            data = strtok( NULL, delims );
+            sscanf( data, "%X", &visibleLayers );
+
+            GetBoard()->SetVisibleLayers( visibleLayers );
             continue;
         }
 
@@ -634,7 +647,13 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
             GetScreen()->m_GridOrigin.x = Ox;
             GetScreen()->m_GridOrigin.y = Oy;
+            continue;
+        }
 
+        if( stricmp( line, "VisibleElements" ) == 0 )
+        {
+            int visibleElements = strtoul( data, 0, 16 );
+            bds.SetVisibleElements( visibleElements );
             continue;
         }
 #endif
@@ -778,6 +797,8 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
              aFrame->GetOriginAxisPosition().x,
              aFrame->GetOriginAxisPosition().y );
 
+    fprintf( aFile, "VisibleElements %X\n", bds.GetVisibleElements() );
+
     STRING_FORMATTER sf;
 
     g_PcbPlotOptions.Format( &sf, 0 );
@@ -810,7 +831,12 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
     fprintf( File,
              "Ly %8X\n",
              g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS );
+
     fprintf( File, "EnabledLayers %08X\n", GetBoard()->GetEnabledLayers() );
+
+    if( GetBoard()->GetEnabledLayers() != GetBoard()->GetVisibleLayers() )
+        fprintf( File, "VisibleLayers %08X\n", GetBoard()->GetVisibleLayers() );
+
     fprintf( File, "Links %d\n", GetBoard()->GetRatsnestsCount() );
     fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 

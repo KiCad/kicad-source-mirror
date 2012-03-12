@@ -155,7 +155,7 @@ public:
 
     /**
      * Function IsCustom
-     * returns true if the type is "User"
+     * returns true if the type is Custom
      */
     bool IsCustom() const;
 
@@ -195,8 +195,6 @@ public:
     int GetHeightIU() const { return GetHeightMils(); }
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #endif
-
-//    wxPoint GetOffsetMils() const   { return m_Offset; }
 
     int GetLeftMarginMils() const           { return m_left_margin; }
     int GetRightMarginMils() const          { return m_right_margin; }
@@ -268,12 +266,12 @@ private:
 };
 
 
-extern wxString       g_ProductName;
+extern wxString     g_ProductName;
 
 /// Default user lib path can be left void, if the standard lib path is used
-extern wxString       g_UserLibDirBuffer;
+extern wxString     g_UserLibDirBuffer;
 
-extern bool           g_ShowPageLimits;     ///< true to display the page limits
+extern bool         g_ShowPageLimits;       ///< true to display the page limits
 
 /// Name of default configuration file. (kicad.pro)
 extern wxString     g_Prj_Default_Config_FullFilename;

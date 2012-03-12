@@ -370,9 +370,16 @@ this file again." ) );
     ReFillLayerWidget();
 
     ReCreateLayerBox( NULL );
-    syncLayerWidgetLayer();
 
+    // upate the layer widget to match board visibility states, both layers and render columns.
+    syncLayerVisibilities();
+    syncLayerWidgetLayer();
     syncRenderStates();
+
+    // Update the RATSNEST items, which were not loaded at the time
+    // BOARD::SetVisibleElements() was called from within any PLUGIN.
+    // See case RATSNEST_VISIBLE: in BOARD::SetElementVisibility()
+    GetBoard()->SetVisibleElements( GetBoard()->GetVisibleElements() );
 
     updateTraceWidthSelectBox();
     updateViaSizeSelectBox();

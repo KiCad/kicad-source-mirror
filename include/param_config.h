@@ -11,6 +11,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
+
+
 /** Type of parameter in the configuration file */
 enum paramcfg_id {
     PARAM_INT,
@@ -31,11 +33,15 @@ enum paramcfg_id {
 #define INT_MAXVAL 0x7FFFFFFF
 
 
+
 /**
  * Class PARAM_CFG_BASE
- * is a base class which establishes the virtual functions ReadParam and SaveParam,
- * which are re-implemented by a number of base classes, and these function's
+ * is a base class which establishes the interface functions ReadParam and SaveParam,
+ * which are implemented by a number of derived classes, and these function's
  * doxygen comments are inherited also.
+ * <p>
+ * See kicad.odt or kicad.pdf, chapter 2 :
+ * "Installation and configuration/Initialization of the default config".
  */
 class PARAM_CFG_BASE
 {

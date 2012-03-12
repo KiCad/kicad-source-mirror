@@ -653,6 +653,12 @@ void PCB_EDIT_FRAME::syncRenderStates()
 }
 
 
+void PCB_EDIT_FRAME::syncLayerVisibilities()
+{
+    m_Layers->SyncLayerVisibilities();
+}
+
+
 void PCB_EDIT_FRAME::unitsChangeRefresh()
 {
     PCB_BASE_FRAME::unitsChangeRefresh();    // Update the grid size select box.
