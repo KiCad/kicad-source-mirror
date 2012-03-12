@@ -285,11 +285,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
                                                                &m_componentLibFiles,
                                                                GROUPLIB ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "NetFmt" ),
-                                                      &m_netListFormat,
-                                                      NET_TYPE_PCBNEW,
-                                                      NET_TYPE_PCBNEW,
-                                                      NET_TYPE_CUSTOM_MAX ) );
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
+                                                         &m_netListFormat) );
 
     // NOTE: Left as global until supporting code  can be fixed.
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLSpd" ),

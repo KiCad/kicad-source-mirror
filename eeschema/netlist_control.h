@@ -54,9 +54,11 @@ public:
     wxBoxSizer*       m_RightOptionsBoxSizer;
     wxBoxSizer*       m_LowBoxSizer;
     wxRadioBox*       m_NetOption;
+private:
+    wxString          m_pageNetFmtName;
 
 public:
-    /** Contructor to create a setup page for one netlist format.
+    /** Constructor to create a setup page for one netlist format.
      * Used in Netlist format Dialog box creation
      * @param parent = wxNotebook * parent
      * @param title = title (name) of the notebook page
@@ -67,9 +69,19 @@ public:
      *    Only one page can be created with selected = true.
      */
     NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& title,
-                         int id_NetType, int idCheckBox, int idCreateFile,
-                         bool selected );
+                         int id_NetType, int idCheckBox, int idCreateFile );
     ~NETLIST_PAGE_DIALOG() { };
+
+    /**
+     * function GetPageNetFmtName
+     * @return the name of the netlist format for this page
+     * This is usually the page label.
+     * For the pcbnew netlist, this is the page label when the "old" format is selected
+     * and "PcbnewAdvanced" when the advanced format is selected
+     */
+    const wxString GetPageNetFmtName();
+
+    void SetPageNetFmtName( const wxString &aName ) { m_pageNetFmtName =aName; }
 };
 
 
@@ -92,8 +104,8 @@ enum  TypeNetForm {
 
 // Options for Spice netlist generation (OR'ed bits
 enum netlistOptions {
-    NET_USE_NETNAMES = 1,   // for Spice netlist : use netnames instead of numbers
-    NET_USE_X_PREFIX = 2,   // for Spice netlist : change "U" and "IC" refernce prefix to "X"
+    NET_USE_NETNAMES = 1,           // for Spice netlist : use netnames instead of numbers
+    NET_USE_X_PREFIX = 2,           // for Spice netlist : change "U" and "IC" reference prefix to "X"
     NET_PCBNEW_USE_NEW_FORMAT = 1,  // For Pcbnew use the new format (S expression and SWEET)
 };
 
@@ -102,6 +114,7 @@ class NETLIST_DIALOG : public wxDialog
 {
 public:
     SCH_EDIT_FRAME*   m_Parent;
+    wxString          m_NetFmtName;
     wxNotebook*       m_NoteBook;
     NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
 

@@ -1453,7 +1453,13 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 
 EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 {
-    return GetBodyBoundingBox();
+    EDA_RECT bbox = GetBodyBoundingBox();
+    for( size_t i = 0; i < m_Fields.size(); i++ )
+    {
+        bbox.Merge( m_Fields[i].GetBoundingBox() );
+    }
+
+    return bbox;
 }
 
 
@@ -1850,9 +1856,9 @@ bool SCH_COMPONENT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccu
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return rect.Contains( GetBodyBoundingBox() );
 
-    return rect.Intersects( GetBoundingBox() );
+    return rect.Intersects( GetBodyBoundingBox() );
 }
 
 

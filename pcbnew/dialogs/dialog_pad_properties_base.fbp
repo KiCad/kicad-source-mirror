@@ -318,7 +318,7 @@
                                                     <property name="growablerows"></property>
                                                     <property name="hgap">0</property>
                                                     <property name="minimum_size"></property>
-                                                    <property name="name">fgSizer5</property>
+                                                    <property name="name">fgSizerPadType</property>
                                                     <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                     <property name="permission">none</property>
                                                     <property name="rows">0</property>
@@ -863,11 +863,11 @@
                                                 <object class="wxFlexGridSizer" expanded="1">
                                                     <property name="cols">3</property>
                                                     <property name="flexible_direction">wxBOTH</property>
-                                                    <property name="growablecols"></property>
+                                                    <property name="growablecols">1</property>
                                                     <property name="growablerows"></property>
                                                     <property name="hgap">0</property>
                                                     <property name="minimum_size"></property>
-                                                    <property name="name">fgSizer6</property>
+                                                    <property name="name">fgSizerShapeType</property>
                                                     <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                     <property name="permission">none</property>
                                                     <property name="rows">0</property>
@@ -5420,7 +5420,7 @@
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticBoxSizer" expanded="0">
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Technical</property>
+                                                            <property name="label">Technical Layers</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbSizerTechlayers</property>
                                                             <property name="orient">wxVERTICAL</property>

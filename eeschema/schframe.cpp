@@ -623,9 +623,6 @@ void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 {
     int i;
 
-    if( m_netListFormat <  NET_TYPE_PCBNEW )
-        m_netListFormat = NET_TYPE_PCBNEW;
-
     do
     {
         NETLIST_DIALOG* dlg = new NETLIST_DIALOG( this );
