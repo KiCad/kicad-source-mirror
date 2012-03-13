@@ -127,7 +127,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     // system font specific sizing in the future.
     #define ZOOM_DISPLAY_SIZE       60
     #define COORD_DISPLAY_SIZE      165
-    #define DELTA_DISPLAY_SIZE      190
+    #define DELTA_DISPLAY_SIZE      245
     #define UNITS_DISPLAY_SIZE      65
     #define FUNCTION_DISPLAY_SIZE   110
     static const int dims[6] = { -1, ZOOM_DISPLAY_SIZE,
@@ -777,12 +777,12 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
         if( m_internalUnits == EESCHEMA_INTERNAL_UNIT )
         {
             absformatter = wxT( "X %.3f  Y %.3f" );
-            locformatter = wxT( "dx %.3f  dy %.3f" );
+            locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
         }
         else
         {
             absformatter = wxT( "X %.4f  Y %.4f" );
-            locformatter = wxT( "dx %.4f  dy %.4f" );
+            locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
         }
         break;
 
@@ -790,18 +790,18 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
         if( m_internalUnits == EESCHEMA_INTERNAL_UNIT )
         {
             absformatter = wxT( "X %.2f  Y %.2f" );
-            locformatter = wxT( "dx %.2f  dy %.2f" );
+            locformatter = wxT( "dx %.2f  dy %.2f  d %.2f" );
         }
         else
         {
             absformatter = wxT( "X %.3f  Y %.3f" );
-            locformatter = wxT( "dx %.3f  dy %.3f" );
+            locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
         }
         break;
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f" );
+        locformatter = wxT( "dx %f  dy %f  d %f" );
         break;
     }
 
@@ -821,7 +821,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     }
 
     // We already decided the formatter above
-    Line.Printf( locformatter, dXpos, dYpos );
+    Line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
     SetStatusText( Line, 3 );
 
     // refresh units display
