@@ -133,46 +133,52 @@ public:
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /**
-     * Function Move
-     * moves then item to a new position by \a aMoveVector.
-     * @param aMoveVector The displacement vector.
-     */
+    /** @copydoc SCH_ITEM::Move() */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
 
-    /**
-     * Function Mirror_Y
-     * mirrors the item relative to \a aYaxis_position.
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
 
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const { return wxString( _( "Image" ) ); }
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return image_xpm; }
+
+    /** @copydoc SCH_ITEM::GetPosition() */
+    virtual wxPoint GetPosition() const { return m_Pos; }
+
+    /** @copydoc SCH_ITEM::SetPosition() */
+    virtual void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    /** @copydoc SCH_ITEM::HitTest(EDA_RECT&,bool=false,int=0) */
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
+                          int aAccuracy = 0 ) const;
+
+    /** @copydoc SCH_ITEM::Plot() */
+    virtual void Plot( PLOTTER* aPlotter );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
-    virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
-    virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 

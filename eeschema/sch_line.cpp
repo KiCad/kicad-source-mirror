@@ -256,7 +256,7 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 }
 
 
-void SCH_LINE::Mirror_X( int aXaxis_position )
+void SCH_LINE::MirrorX( int aXaxis_position )
 {
     m_start.y -= aXaxis_position;
     NEGATE(  m_start.y );
@@ -267,7 +267,7 @@ void SCH_LINE::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_LINE::Mirror_Y( int aYaxis_position )
+void SCH_LINE::MirrorY( int aYaxis_position )
 {
     m_start.x -= aYaxis_position;
     NEGATE(  m_start.x );
@@ -278,10 +278,10 @@ void SCH_LINE::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_LINE::Rotate( wxPoint rotationPoint )
+void SCH_LINE::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_start, rotationPoint, 900 );
-    RotatePoint( &m_end, rotationPoint, 900 );
+    RotatePoint( &m_start, aPosition, 900 );
+    RotatePoint( &m_end, aPosition, 900 );
 }
 
 
@@ -540,14 +540,17 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
 }
 
 
-bool SCH_LINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TestSegmentHit( aPoint, m_start, m_end, aAccuracy );
+    return TestSegmentHit( aPosition, m_start, m_end, aAccuracy );
 }
 
 
-bool SCH_LINE::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_LINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
+    if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
+        return false;
+
     EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
@@ -568,7 +571,7 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 }
 
 
-void SCH_LINE::doPlot( PLOTTER* aPlotter )
+void SCH_LINE::Plot( PLOTTER* aPlotter )
 {
     aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
     aPlotter->set_current_line_width( GetPenSize() );
@@ -584,7 +587,7 @@ void SCH_LINE::doPlot( PLOTTER* aPlotter )
 }
 
 
-void SCH_LINE::doSetPosition( const wxPoint& aPosition )
+void SCH_LINE::SetPosition( const wxPoint& aPosition )
 {
     m_end = m_end - ( m_start - aPosition );
     m_start = aPosition;

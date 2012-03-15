@@ -1179,7 +1179,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 }
 
 
-bool TRACK::HitTest( const wxPoint& refPos )
+bool TRACK::HitTest( const wxPoint& aPosition )
 {
     int radius = m_Width >> 1;
 
@@ -1188,8 +1188,8 @@ bool TRACK::HitTest( const wxPoint& refPos )
     int dy = m_End.y - m_Start.y;
 
     // (spot_cX, spot_cY) is a vector from m_Start to ref_pos (an origin of m_Start)
-    int spot_cX = refPos.x - m_Start.x;
-    int spot_cY = refPos.y - m_Start.y;
+    int spot_cX = aPosition.x - m_Start.x;
+    int spot_cY = aPosition.y - m_Start.y;
 
     if( Type() == PCB_VIA_T )
     {
@@ -1205,12 +1205,12 @@ bool TRACK::HitTest( const wxPoint& refPos )
 }
 
 
-bool TRACK::HitTest( EDA_RECT& refArea )
+bool TRACK::HitTest( const EDA_RECT& aRect ) const
 {
-    if( refArea.Contains( m_Start ) )
+    if( aRect.Contains( m_Start ) )
         return true;
 
-    if( refArea.Contains( m_End ) )
+    if( aRect.Contains( m_End ) )
         return true;
 
     return false;

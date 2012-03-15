@@ -297,14 +297,8 @@ public:
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness ) { m_ZoneMinThickness = aMinThickness; }
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * For zones, this means near an outline segment
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& refPos );
+    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
+    bool HitTest( const wxPoint& aPosition );
 
     /**
      * Function HitTestFilledArea
@@ -312,7 +306,7 @@ public:
      * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTestFilledArea( const wxPoint& aRefPos );
+    bool HitTestFilledArea( const wxPoint& aRefPos ) const;
 
     /**
      * Function BuildFilledPolysListData
@@ -377,13 +371,8 @@ public:
      */
     bool HitTestForEdge( const wxPoint& refPos );
 
-    /**
-     * Function HitTest (overloaded)
-     * tests if the given EDA_RECT contains the bounds of this object.
-     * @param refArea : the given EDA_RECT
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( EDA_RECT& refArea );
+    /** @copydoc EDA_ITEM::HitTest(EDA_RECT&) */
+    bool HitTest( const EDA_RECT& refArea ) const;
 
     /**
      * Function Fill_Zone

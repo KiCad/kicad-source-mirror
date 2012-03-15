@@ -68,6 +68,7 @@ set(GERBVIEW_SRCS
 set(GERBVIEW_EXTRA_SRCS
     ../pcbnew/layer_widget.cpp
     ../pcbnew/printout_controler.cpp
+    ../pcbnew/class_drc_item.cpp
 )
 
 ###
@@ -114,7 +115,7 @@ endif(APPLE)
 ###
 # Link executable target gerbview with correct libraries
 ###
-target_link_libraries(gerbview common pcbcommon 3d-viewer polygon bitmaps kbool
+target_link_libraries(gerbview pcbcommon common 3d-viewer polygon bitmaps kbool
                       ${OPENGL_LIBRARIES}
                       ${wxWidgets_LIBRARIES}
                       ${GDI_PLUS_LIBRARIES})

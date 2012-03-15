@@ -439,10 +439,10 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 }
 
 
-bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
+bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
 {
     /* Calculate coordinates to test relative to segment origin. */
-    wxPoint relPos = aRefPos - m_Start;
+    wxPoint relPos = aPosition - m_Start;
 
     switch( m_Shape )
     {
@@ -476,13 +476,13 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
     case S_CURVE:
         for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
         {
-            if( TestSegmentHit( aRefPos,m_BezierPoints[i-1], m_BezierPoints[i-1], m_Width / 2 ) )
+            if( TestSegmentHit( aPosition, m_BezierPoints[i-1], m_BezierPoints[i-1], m_Width / 2 ) )
                 return true;
         }
         break;
 
     case S_SEGMENT:
-        if( TestSegmentHit( aRefPos, m_Start, m_End, m_Width / 2 ) )
+        if( TestSegmentHit( aPosition, m_Start, m_End, m_Width / 2 ) )
             return true;
         break;
 
@@ -494,15 +494,16 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
 }
 
 
-bool DRAWSEGMENT::HitTest( EDA_RECT& refArea )
+bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect ) const
 {
     switch( m_Shape )
     {
         case S_CIRCLE:
         {
             int radius = GetRadius();
+
             // Text if area intersects the circle:
-            EDA_RECT area = refArea;
+            EDA_RECT area = aRect;
             area.Inflate( radius );
 
             if( area.Contains( m_Start ) )
@@ -512,9 +513,10 @@ bool DRAWSEGMENT::HitTest( EDA_RECT& refArea )
 
         case S_ARC:
         case S_SEGMENT:
-            if( refArea.Contains( GetStart() ) )
+            if( aRect.Contains( GetStart() ) )
                 return true;
-            if( refArea.Contains( GetEnd() ) )
+
+            if( aRect.Contains( GetEnd() ) )
                 return true;
             break;
     }

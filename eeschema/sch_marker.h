@@ -89,23 +89,21 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    /** virtual function Move
-     * move item to a new position.
-     * @param aMoveVector = the displacement vector
-     */
+    /** @copydoc SCH_ITEM::Move() */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
-    virtual void Rotate( wxPoint rotationPoint );
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
+
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
+
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
     /**
      * Compare DRC marker main and auxiliary text against search string.
@@ -125,18 +123,26 @@ public:
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const { return wxString( _( "ERC Marker" ) ); }
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  erc_xpm; }
+
+    /** @copydoc SCH_ITEM::GetPosition() */
+    virtual wxPoint GetPosition() const { return m_Pos; }
+
+    /** @copydoc SCH_ITEM::SetPosition() */
+    virtual void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 #endif // TYPE_SCH_MARKER_H_

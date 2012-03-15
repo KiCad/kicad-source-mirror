@@ -304,11 +304,11 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             break;
 
         case UR_MIRRORED_Y:
-            item->Mirror_Y( aList->m_TransformPoint.x );
+            item->MirrorY( aList->m_TransformPoint.x );
             break;
 
         case UR_MIRRORED_X:
-            item->Mirror_X( aList->m_TransformPoint.y );
+            item->MirrorX( aList->m_TransformPoint.y );
             break;
 
         case UR_ROTATED:

@@ -80,14 +80,10 @@ public:
     const wxPoint& GetPosition() const          { return m_Pos; }
     void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }
 
-    /**
-     * Function HitTest
-     * @return true if the point aPosRef is within item area
-     * @param aPosRef = a wxPoint to test
-     */
-    bool HitTest( const wxPoint& aPosRef )
+    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
+    bool HitTest( const wxPoint& aPosition )
     {
-        return HitTestMarker( aPosRef );
+        return HitTestMarker( aPosition );
     }
 
     /**

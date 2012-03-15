@@ -118,23 +118,17 @@ public:
      */
     virtual int GetPenSize() const;
 
-    /**
-     * Function Move
-     * moves the item by \a aMoveVector.
-     * @param aMoveVector The displacement vector
-     */
+    /** @copydoc SCH_ITEM::Move() */
     virtual void Move( const wxPoint& aMoveVector );
 
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
 
-    /**
-     * Function Mirror_Y
-     * mirrors the item relative to \a aYaxis_position.
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
     /**
      * Check line against \a aLine to see if it overlaps and merge if it does.
@@ -164,8 +158,10 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const;
 
     virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
@@ -173,18 +169,31 @@ public:
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
+    /** @copydoc SCH_ITEM::GetPosition() */
+    virtual wxPoint GetPosition() const { return m_start; }
+
+    /** @copydoc SCH_ITEM::SetPosition() */
+    virtual void SetPosition( const wxPoint& aPosition );
+
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    /** @copydoc SCH_ITEM::HitTest(EDA_RECT&,bool=false,int=0) */
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
+                          int aAccuracy = 0 ) const;
+
+    /** @copydoc SCH_ITEM::Plot() */
+    virtual void Plot( PLOTTER* aPlotter );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const; // override
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
+    /** @copydoc SCH_ITEM::doIsConnected() */
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
+
     virtual EDA_ITEM* doClone() const;
-    virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_start; }
-    virtual void doSetPosition( const wxPoint& aPosition );
 };
 
 

@@ -303,22 +303,11 @@ public:
                          const KICAD_T scanTypes[] );
 
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& refPos );
+    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function HitTest (overlaid)
-     * tests if the given wxRect intersect this object.
-     * For now, an ending point must be inside this rect.
-     * @param refArea an EDA_RECT to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( EDA_RECT& refArea );
+    /** @copydoc EDA_ITEM::HitTest(EDA_RECT&) */
+    bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function GetVia

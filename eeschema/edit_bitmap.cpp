@@ -179,9 +179,9 @@ void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
         SaveCopyInUndoList( aItem, UR_CHANGED );
 
     if( Is_X_axis )
-        aItem->Mirror_X( aItem->GetPosition().y );
+        aItem->MirrorX( aItem->GetPosition().y );
     else
-        aItem->Mirror_Y( aItem->GetPosition().x );
+        aItem->MirrorY( aItem->GetPosition().x );
 
     OnModify();
     m_canvas->Refresh();

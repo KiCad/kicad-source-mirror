@@ -83,13 +83,13 @@ enum DANGLING_END_T {
 
 
 /**
- * Class DANLIGN_END_ITEM
+ * Class DANGLING_END_ITEM
  * is a helper class used to store the state of schematic  items that can be connected to
  * other schematic items.
  */
 class DANGLING_END_ITEM
 {
-    /// A pointer to the connectable ojbect.
+    /// A pointer to the connectable object.
     const void*    m_item;
 
     /// The position of the connection point.
@@ -186,15 +186,26 @@ public:
     virtual void Move( const wxPoint& aMoveVector ) = 0;
 
     /**
-     * Function Mirror_Y
-     * mirrors item relative to an Y axis about \a aYaxis_position.
+     * Function MirrorY
+     * mirrors item relative to the Y axis about \a aYaxis_position.
      * @param aYaxis_position The Y axis position to mirror around.
      */
-    virtual void Mirror_Y( int aYaxis_position ) = 0;
+    virtual void MirrorY( int aYaxis_position ) = 0;
 
-    virtual void Mirror_X( int aXaxis_position ) = 0;
+    /**
+     * Function MirrorX
+     * mirrors item relative to the X axis about \a aXaxis_position.
+     * @param aXaxis_position The X axis position to mirror around.
+     */
+    virtual void MirrorX( int aXaxis_position ) = 0;
 
-    virtual void Rotate( wxPoint rotationPoint ) = 0;
+    /**
+     * Function Rotate
+     * rotates the item around \a aPosition 90 degrees in the clockwise direction.
+     * @param aPosition A reference to a wxPoint object containing the coordinates to
+     *                  rotate around.
+     */
+    virtual void Rotate( wxPoint aPosition ) = 0;
 
     /**
      * Function Save
@@ -285,7 +296,7 @@ public:
      * Function IsConnected
      * tests the item to see if it is connected to \a aPoint.
      *
-     * @param aPoint - Position to test for connection.
+     * @param aPoint A reference to a wxPoint object containing the coordinates to test.
      * @return True if connection to \a aPoint exists.
      */
     bool IsConnected( const wxPoint& aPoint ) const;
@@ -294,34 +305,37 @@ public:
 
     /**
      * Function HitTest
-     * tests if \a aPoint is contained within or on the bounding box of an item.
+     * tests if \a aPosition is contained within or on the bounding box of an item.
      *
-     * @param aPoint - Point to test.
-     * @param aAccuracy - Increase the item bounding box by this amount.
-     * @return True if \a aPoint is within the item bounding box.
+     * @param aPosition A reference to a wxPoint object containing the coordinates to test.
+     * @param aAccuracy Increase the item bounding box by this amount.
+     * @return True if \a aPosition is within the item bounding box.
      */
-    bool HitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const
-    {
-        return doHitTest( aPoint, aAccuracy );
-    }
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const { return false; }
 
     /**
      * Function HitTest
      * tests if \a aRect intersects or is contained within the bounding box of an item.
      *
-     * @param aRect - Rectangle to test.
-     * @param aContained - Set to true to test for containment instead of an intersection.
-     * @param aAccuracy - Increase aRect by this amount.
+     * @param aRect A reference to a EDA_RECT object containing the rectangle to test.
+     * @param aContained Set to true to test for containment instead of an intersection.
+     * @param aAccuracy Increase \a aRect by this amount.
      * @return True if \a aRect contains or intersects the item bounding box.
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const
     {
-        return doHitTest( aRect, aContained, aAccuracy );
+        return false;
     }
 
     virtual bool CanIncrementLabel() const { return false; }
 
-    void Plot( PLOTTER* aPlotter ) { doPlot( aPlotter ); }
+    /**
+     * Function Plot
+     * plots the schematic item to \a aPlotter.
+     *
+     * @param aPlotter A pointer to a #PLOTTER object.
+     */
+    virtual void Plot( PLOTTER* aPlotter );
 
     /**
      * Function GetNetListItem
@@ -331,15 +345,16 @@ public:
      * Not all schematic objects have net list items associated with them.  This
      * method only needs to be overridden for those schematic objects that have
      * net list objects associated with them.
+     * </p>
      */
     virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
                                  SCH_SHEET_PATH*          aSheetPath ) { }
 
     /**
      * Function GetPosition
-     * @return the schematic item position.
+     * @return A wxPoint object containing the schematic item position.
      */
-    wxPoint GetPosition() const { return doGetPosition(); }
+    virtual wxPoint GetPosition() const = 0;
 
     /**
      * Function SetPosition
@@ -347,34 +362,26 @@ public:
      *
      * @param aPosition A reference to a wxPoint object containing the new position.
      */
-    void SetPosition( const wxPoint& aPosition ) { doSetPosition( aPosition ); }
+    virtual void SetPosition( const wxPoint& aPosition ) = 0;
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
-    /**
-     * @note - The DoXXX() functions below are used to enforce the interface while retaining
-     *         the ability of change the implementation behavior of derived classes.  See
-     *         Herb Sutters explanation of virtuality as to why you might want to do this at:
-     *         http://www.gotw.ca/publications/mill18.htm.
-     */
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const
-    {
-        return false;
-    }
-
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
-    {
-        return false;
-    }
-
+    /**
+     * Function doIsConnected
+     * provides the object specific test to see if it is connected to \a aPosition.
+     *
+     * @note Override this function if the derived object can be connect to another
+     *       object such as a wire, bus, or junction.  Do not override this function
+     *       for objects that cannot have connections.  The default will always return
+     *       false.  This functions is call through the public function IsConnected()
+     *       which performs tests common to all schematic items before calling the
+     *       item specific connection testing.
+     *
+     * @param aPosition A reference to a wxPoint object containing the test position.
+     * @return True if connection to \a aPosition exists.
+     */
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return false; }
-
-    virtual void doPlot( PLOTTER* aPlotter );
-
-    virtual wxPoint doGetPosition() const = 0;
-
-    virtual void doSetPosition( const wxPoint& aPosition ) = 0;
 };
 
 

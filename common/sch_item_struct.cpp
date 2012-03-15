@@ -101,7 +101,7 @@ bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
 }
 
 
-void SCH_ITEM::doPlot( PLOTTER* aPlotter )
+void SCH_ITEM::Plot( PLOTTER* aPlotter )
 {
-    wxFAIL_MSG( wxT( "doPlot() method not implemented for class " ) + GetClass() );
+    wxFAIL_MSG( wxT( "Plot() method not implemented for class " ) + GetClass() );
 }

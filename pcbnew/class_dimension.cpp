@@ -445,12 +445,12 @@ void DIMENSION::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-bool DIMENSION::HitTest( const wxPoint& aPoint )
+bool DIMENSION::HitTest( const wxPoint& aPosition )
 {
     int ux0, uy0;
     int dx, dy, spot_cX, spot_cY;
 
-    if( m_Text.TextHitTest( aPoint ) )
+    if( m_Text.TextHitTest( aPosition ) )
         return true;
 
     // Locate SEGMENTS?
@@ -461,8 +461,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_crossBarFx - ux0;
     dy = m_crossBarFy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -473,8 +473,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_featureLineGFx - ux0;
     dy = m_featureLineGFy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -485,8 +485,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_featureLineDFx - ux0;
     dy = m_featureLineDFy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -497,8 +497,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_arrowD1Fx - ux0;
     dy = m_arrowD1Fy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -509,8 +509,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_arrowD2Fx - ux0;
     dy = m_arrowD2Fy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -521,8 +521,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_arrowG1Fx - ux0;
     dy = m_arrowG1Fy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -533,8 +533,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_arrowG2Fx - ux0;
     dy = m_arrowG2Fy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -543,9 +543,9 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
 }
 
 
-bool DIMENSION::HitTest( EDA_RECT& refArea )
+bool DIMENSION::HitTest( const EDA_RECT& aRect ) const
 {
-    if( refArea.Contains( m_Pos ) )
+    if( aRect.Contains( m_Pos ) )
         return true;
 
     return false;

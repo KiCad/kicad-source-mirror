@@ -54,8 +54,8 @@
 extern void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
 extern void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
 extern void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-extern void Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
-extern void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
+extern void MirrorX( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
+extern void MirrorY( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
 extern void DuplicateItemsInList( SCH_SCREEN*        screen,
                                   PICKED_ITEMS_LIST& aItemsList,
                                   const wxPoint      aMoveVector );
@@ -434,7 +434,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             mirrorPoint = GetScreen()->GetNearestGridPosition( mirrorPoint );
             GetScreen()->SetCrossHairPosition( mirrorPoint );
             SaveCopyInUndoList( block->m_ItemsSelection, UR_MIRRORED_X, mirrorPoint );
-            Mirror_X_ListOfItems( block->m_ItemsSelection, mirrorPoint );
+            MirrorX( block->m_ItemsSelection, mirrorPoint );
             OnModify();
         }
         GetScreen()->TestDanglingEnds( m_canvas, DC );
@@ -452,7 +452,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             mirrorPoint = GetScreen()->GetNearestGridPosition( mirrorPoint );
             GetScreen()->SetCrossHairPosition( mirrorPoint );
             SaveCopyInUndoList( block->m_ItemsSelection, UR_MIRRORED_Y, mirrorPoint );
-            MirrorListOfItems( block->m_ItemsSelection, mirrorPoint );
+            MirrorY( block->m_ItemsSelection, mirrorPoint );
             OnModify();
         }
 

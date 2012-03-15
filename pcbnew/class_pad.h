@@ -353,10 +353,11 @@ public:
         {
             m_boundingRadius = boundingRadius();
         }
+
         return m_boundingRadius;
     }
 
-    const wxPoint ReturnShapePos();
+    const wxPoint ReturnShapePos() const;
 
     /**
      * Function GetSubRatsnest
@@ -385,13 +386,8 @@ public:
      */
     bool IsOnLayer( int aLayer ) const;
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& refPos );
+    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
+    bool HitTest( const wxPoint& aPosition );
 
     /**
      * Function GetClass
