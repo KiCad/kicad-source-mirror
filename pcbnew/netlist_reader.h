@@ -81,6 +81,7 @@ public:
     wxString m_TimeStamp;               // the schematic full time stamp found in netlist
     wxString m_Libpart;                 // the schematic libpart found in netlist
     wxArrayString m_FootprintFilter;    // a footprint filters list found in old format netlist
+    int m_pinCount;                     // the number of pins found in the netlist
 
 public: COMPONENT_INFO( const wxString& libname,
                      const wxString& cmpname,
@@ -91,6 +92,7 @@ public: COMPONENT_INFO( const wxString& libname,
         m_Reference = cmpname;
         m_Value = value;
         m_TimeStamp = timestamp;
+        m_pinCount = 0;
     }
 
     ~COMPONENT_INFO() { };
@@ -409,9 +411,10 @@ private:
      *      If true: component file *.cmp is used
      *      If false: the netlist only is used
      *      This flag is reset to false if the .cmp file is not found
-     * @return a reference to the corresponding module on board (NULL if not found)
+     * @return if aBuildList = true, a reference to the COMPONENT_INFO
+     *         if aBuildList = false, a reference to the corresponding MODULE on board (NULL if not found)
      */
-    MODULE* ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildList );
+    void* ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildList );
 
     /**
      * Function loadNewModules
