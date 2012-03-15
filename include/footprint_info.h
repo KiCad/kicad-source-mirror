@@ -23,10 +23,12 @@ public:
     int       m_Num;        /* Order number in the display list. */
     wxString  m_Doc;        /* Footprint description. */
     wxString  m_KeyWord;    /* Footprint key words. */
+    int       m_padCount;   /* Number of pads */
 
     FOOTPRINT_INFO()
     {
         m_Num = 0;
+        m_padCount = 0;
     }
 };
 

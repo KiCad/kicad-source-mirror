@@ -117,6 +117,9 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
                     if( strnicmp( line, "$EndMODULE", 10 ) == 0 )
                         break;
 
+                    if( strnicmp( line, "$PAD", 4 ) == 0 )
+                        ItemLib->m_padCount++;
+
                     int id = ((line[0] & 0xFF) << 8) + (line[1] & 0xFF);
                     switch( id )
                     {

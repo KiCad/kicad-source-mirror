@@ -173,6 +173,36 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
     Refresh();
 }
 
+void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT_INFO* Component,
+                                                         FOOTPRINT_LIST& list ) {
+    wxString msg;
+    int      OldSelection = GetSelection();
+    bool     HasItem = false;
+
+    m_FilteredFootprintList.Clear();
+
+    for( unsigned ii = 0; ii < list.GetCount(); ii++ )
+    {
+        FOOTPRINT_INFO& footprint = list.GetItem(ii);
+
+        if( Component->m_pinCount == footprint.m_padCount ) {
+          msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
+                     footprint.m_Module.GetData() );
+          m_FilteredFootprintList.Add( msg );
+          HasItem = true;
+        }
+    }
+
+    if( HasItem )
+        SetActiveFootprintList( false );
+    else
+        SetActiveFootprintList( true );
+
+    if( ( GetCount() == 0 ) || ( OldSelection >= GetCount() ) )
+        SetSelection( 0, true );
+
+    Refresh();
+}
 
 /** Set the footprint list. We can have 2 footprint list:
  *  The full footprint list
