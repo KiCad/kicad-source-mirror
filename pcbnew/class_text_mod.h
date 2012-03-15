@@ -167,13 +167,8 @@ public:
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& aRefPos );
+    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
+    bool HitTest( const wxPoint& aPosition );
 
     /**
      * Function IsOnLayer

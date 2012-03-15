@@ -184,8 +184,10 @@ public:
      */
     virtual void SetWidth( int aWidth ) { m_Width = aWidth; }
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  add_polygon_xpm; }
 
 private:

@@ -194,7 +194,7 @@ void SCH_BUS_ENTRY::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
 }
 
 
-void SCH_BUS_ENTRY::Mirror_X( int aXaxis_position )
+void SCH_BUS_ENTRY::MirrorX( int aXaxis_position )
 {
     m_pos.y -= aXaxis_position;
     NEGATE(  m_pos.y );
@@ -203,7 +203,7 @@ void SCH_BUS_ENTRY::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_BUS_ENTRY::Mirror_Y( int aYaxis_position )
+void SCH_BUS_ENTRY::MirrorY( int aYaxis_position )
 {
     m_pos.x -= aYaxis_position;
     NEGATE(  m_pos.x );
@@ -212,9 +212,9 @@ void SCH_BUS_ENTRY::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_BUS_ENTRY::Rotate( wxPoint rotationPoint )
+void SCH_BUS_ENTRY::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_pos, rotationPoint, 900 );
+    RotatePoint( &m_pos, aPosition, 900 );
     RotatePoint( &m_size.x, &m_size.y, 900 );
 }
 
@@ -260,13 +260,13 @@ wxString SCH_BUS_ENTRY::GetSelectMenuText() const
 }
 
 
-bool SCH_BUS_ENTRY::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_BUS_ENTRY::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TestSegmentHit( aPoint, m_pos, m_End(), aAccuracy );
+    return TestSegmentHit( aPosition, m_pos, m_End(), aAccuracy );
 }
 
 
-bool SCH_BUS_ENTRY::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_BUS_ENTRY::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT rect = aRect;
 
@@ -279,7 +279,7 @@ bool SCH_BUS_ENTRY::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccu
 }
 
 
-void SCH_BUS_ENTRY::doPlot( PLOTTER* aPlotter )
+void SCH_BUS_ENTRY::Plot( PLOTTER* aPlotter )
 {
     aPlotter->set_current_line_width( GetPenSize() );
     aPlotter->set_color( ReturnLayerColor( GetLayer() ) );

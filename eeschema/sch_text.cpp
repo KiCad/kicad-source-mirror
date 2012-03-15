@@ -182,7 +182,7 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
 }
 
 
-void SCH_TEXT::Mirror_Y( int aYaxis_position )
+void SCH_TEXT::MirrorY( int aYaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
     // which is the closest position for a true mirrored text
@@ -223,7 +223,7 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_TEXT::Mirror_X( int aXaxis_position )
+void SCH_TEXT::MirrorX( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
     // which is the closest position for a true mirrored text
@@ -264,11 +264,11 @@ void SCH_TEXT::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_TEXT::Rotate( wxPoint rotationPoint )
+void SCH_TEXT::Rotate( wxPoint aPosition )
 {
     int dy;
 
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     SetOrientation( (GetOrientation() + 1) % 4 );
 
     switch( GetOrientation() )
@@ -671,19 +671,19 @@ void SCH_TEXT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 }
 
 
-bool SCH_TEXT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPoint, aAccuracy );
+    return TextHitTest( aPosition, aAccuracy );
 }
 
 
-bool SCH_TEXT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     return TextHitTest( aRect, aContained, aAccuracy );
 }
 
 
-void SCH_TEXT::doPlot( PLOTTER* aPlotter )
+void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector <wxPoint> Poly;
 
@@ -776,7 +776,7 @@ void SCH_LABEL::SetOrientation( int aOrientation )
 }
 
 
-void SCH_LABEL::Mirror_X( int aXaxis_position )
+void SCH_LABEL::MirrorX( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
     // which is the closest position for a true mirrored text
@@ -791,9 +791,9 @@ void SCH_LABEL::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_LABEL::Rotate( wxPoint rotationPoint )
+void SCH_LABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     SetOrientation( (GetOrientation() + 1) % 4 );
 }
 
@@ -944,9 +944,9 @@ wxString SCH_LABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_LABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_LABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPoint, aAccuracy );
+    return TextHitTest( aPosition, aAccuracy );
 }
 
 
@@ -1055,7 +1055,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
+void SCH_GLOBALLABEL::MirrorY( int aYaxis_position )
 {
     /* The global label is NOT really mirrored.
      *  for an horizontal label, the schematic orientation is changed.
@@ -1079,7 +1079,7 @@ void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_GLOBALLABEL::Mirror_X( int aXaxis_position )
+void SCH_GLOBALLABEL::MirrorX( int aXaxis_position )
 {
     switch( GetOrientation() )
     {
@@ -1098,9 +1098,9 @@ void SCH_GLOBALLABEL::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
+void SCH_GLOBALLABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     SetOrientation( (GetOrientation() + 3) % 4 );
 }
 
@@ -1373,9 +1373,9 @@ wxString SCH_GLOBALLABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_GLOBALLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPoint, aAccuracy );
+    return TextHitTest( aPosition, aAccuracy );
 }
 
 
@@ -1663,7 +1663,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 }
 
 
-void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
+void SCH_HIERLABEL::MirrorY( int aYaxis_position )
 {
     /* The hierarchical label is NOT really mirrored for an horizontal label, the schematic
      * orientation is changed.  For a vertical label, the schematic orientation is not changed
@@ -1687,7 +1687,7 @@ void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_HIERLABEL::Mirror_X( int aXaxis_position )
+void SCH_HIERLABEL::MirrorX( int aXaxis_position )
 {
     switch( GetOrientation() )
     {
@@ -1706,9 +1706,9 @@ void SCH_HIERLABEL::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_HIERLABEL::Rotate( wxPoint rotationPoint )
+void SCH_HIERLABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     SetOrientation( (GetOrientation() + 3) % 4 );
 }
 
@@ -1723,7 +1723,7 @@ wxString SCH_HIERLABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_HIERLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_HIERLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPoint, aAccuracy );
+    return TextHitTest( aPosition, aAccuracy );
 }

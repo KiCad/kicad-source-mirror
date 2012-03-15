@@ -490,23 +490,29 @@ public:
 
     /**
      * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
+     * tests if \a aPosition is contained within or on the bounding area of an item.
+     *
+     * @note This function cannot be const because some of the derive objects perform
+     *       intermediate calculations which change object members.  Make sure derived
+     *       objects do not declare this as const.
+     *
+     * @param aPosition A reference to a wxPoint object containing the coordinates to test.
+     * @return True if \a aPosition is within or on the item bounding area.
      */
-    virtual bool HitTest( const wxPoint& refPos )
+    virtual bool HitTest( const wxPoint& aPosition )
     {
         return false;   // derived classes should override this function
     }
 
     /**
-     * Function HitTest (overlaid)
-     * tests if the given EDA_RECT intersect this object.
-     * For now, an ending point must be inside this rect.
-     * @param refArea : the given EDA_RECT
-     * @return bool - true if a hit, else false
+     * Function HitTest
+     * tests if the \a aRect intersects this object.
+     * For now, an ending point must be inside \a aRect.
+     *
+     * @param aRect A reference to an EDA_RECT object containg the area to test.
+     * @return True if \a aRect intersects the object, otherwise false.
      */
-    virtual bool HitTest( EDA_RECT& refArea )
+    virtual bool HitTest( const EDA_RECT& aRect ) const
     {
         return false;   // derived classes should override this function
     }

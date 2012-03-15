@@ -100,7 +100,7 @@ int D_PAD::boundingRadius() const
 
     case PAD_RECT:
         radius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
-                                   + (double) m_Size.x * m_Size.x ) / 2 );
+                                 + (double) m_Size.x * m_Size.x ) / 2 );
         break;
 
     case PAD_TRAPEZOID:
@@ -175,7 +175,7 @@ void D_PAD::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
 
 // Returns the position of the pad.
-const wxPoint D_PAD::ReturnShapePos()
+const wxPoint D_PAD::ReturnShapePos() const
 {
     if( m_Offset.x == 0 && m_Offset.y == 0 )
         return m_Pos;
@@ -664,14 +664,14 @@ bool D_PAD::IsOnLayer( int aLayer ) const
 }
 
 
-bool D_PAD::HitTest( const wxPoint& refPos )
+bool D_PAD::HitTest( const wxPoint& aPosition )
 {
     int     dx, dy;
     double  dist;
 
     wxPoint shape_pos = ReturnShapePos();
 
-    wxPoint delta = refPos - shape_pos;
+    wxPoint delta = aPosition - shape_pos;
 
     // first test: a test point must be inside a minimum sized bounding circle.
     int radius = GetBoundingRadius();

@@ -80,8 +80,6 @@ private:
 
     virtual EDA_ITEM* doClone() const;
 
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
                    const wxPoint& pos = wxPoint( 0, 0 ),
@@ -178,24 +176,20 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    /** virtual function Move
-     * move item to a new position.
-     * @param aMoveVector = the displacement vector
-     */
+    /** @copydoc SCH_ITEM::Move() */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
 
     /**
      * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
@@ -219,15 +213,16 @@ public:
 
     virtual bool IsConnectable() const { return true; }
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  add_hierar_pin_xpm; }
 
-private:
-    virtual void doSetPosition( const wxPoint& aPosition )
-    {
-        ConstrainOnEdge( aPosition );
-    }
+    virtual void SetPosition( const wxPoint& aPosition ) { ConstrainOnEdge( aPosition ); }
+
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 };
 
 
@@ -551,10 +546,7 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    /** virtual function Move
-     * move item to a new position.
-     * @param aMoveVector = the displacement vector
-     */
+    /** @copydoc SCH_ITEM::Move() */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_pos += aMoveVector;
@@ -565,13 +557,14 @@ public:
         }
     }
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
-    virtual void Mirror_X( int aXaxis_position );
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
+
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
+
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
     /**
      * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
@@ -622,14 +615,32 @@ public:
     virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                                  const KICAD_T scanTypes[] );
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return add_hierarchical_subsheet_xpm; }
 
     virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
                                  SCH_SHEET_PATH*          aSheetPath );
 
     SCH_ITEM& operator=( const SCH_ITEM& aSheet );
+
+    /** @copydoc SCH_ITEM::GetPosition() */
+    virtual wxPoint GetPosition() const { return m_pos; }
+
+    /** @copydoc SCH_ITEM::SetPosition() */
+    virtual void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
+
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    /** @copydoc SCH_ITEM::HitTest(EDA_RECT&,bool=false,int=0) */
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
+                          int aAccuracy = 0 ) const;
+
+    /** @copydoc SCH_ITEM::Plot() */
+    virtual void Plot( PLOTTER* aPlotter );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
@@ -647,12 +658,7 @@ protected:
     void renumberPins();
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
-    virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 };
 
 

@@ -229,7 +229,7 @@ wxSize SCH_BITMAP::GetSize() const
 /*
  * Mirror image relative to a horizontal X axis )
  */
-void SCH_BITMAP::Mirror_X( int aXaxis_position )
+void SCH_BITMAP::MirrorX( int aXaxis_position )
 {
     m_Pos.y -= aXaxis_position;
     NEGATE( m_Pos.y );
@@ -242,7 +242,7 @@ void SCH_BITMAP::Mirror_X( int aXaxis_position )
 /*
  * Mirror image relative to a vertical Y axis
  */
-void SCH_BITMAP::Mirror_Y( int aYaxis_position )
+void SCH_BITMAP::MirrorY( int aYaxis_position )
 {
     m_Pos.x -= aYaxis_position;
     NEGATE( m_Pos.x );
@@ -251,9 +251,9 @@ void SCH_BITMAP::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_BITMAP::Rotate( wxPoint rotationPoint )
+void SCH_BITMAP::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     m_Image->Rotate( false );
 }
 
@@ -284,17 +284,17 @@ void SCH_BITMAP::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-bool SCH_BITMAP::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_BITMAP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 
-    return rect.Contains( aPoint );
+    return rect.Contains( aPosition );
 }
 
 
-bool SCH_BITMAP::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_BITMAP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT rect = aRect;
 
@@ -307,13 +307,7 @@ bool SCH_BITMAP::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccurac
 }
 
 
-bool SCH_BITMAP::doIsConnected( const wxPoint& aPosition ) const
-{
-    return m_Pos == aPosition;
-}
-
-
-void SCH_BITMAP::doPlot( PLOTTER* aPlotter )
+void SCH_BITMAP::Plot( PLOTTER* aPlotter )
 {
     m_Image->PlotImage( aPlotter, m_Pos, ReturnLayerColor( GetLayer() ), GetPenSize() );
 }

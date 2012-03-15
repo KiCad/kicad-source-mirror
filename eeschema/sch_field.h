@@ -163,36 +163,36 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    /** virtual function Move
-     * move item to a new position.
-     * @param aMoveVector = the displacement vector
-     */
+    /** @copydoc SCH_ITEM::Move() */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
-    virtual void Mirror_X( int aXaxis_position )
+    /**
+     * @copydoc SCH_ITEM::MirrorX()
+     *
+     * This overload does nothing.  Fields are never mirrored alone.  They are moved
+     * when the parent component is mirrored.  This function is only needed by the
+     * virtual pure function of the master class.
+     */
+    virtual void MirrorX( int aXaxis_position )
     {
-        /* Do Nothing: fields are never mirrored alone.
-         * they are moved when the parent component is mirrored
-         * this function is only needed by the virtual pure function of the
-         * master class */
     }
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
+    /**
+     * @copydoc SCH_ITEM::MirrorY()
+     *
+     * This overload does nothing.  Fields are never mirrored alone.  They are moved
+     * when the parent component is mirrored.  This function is only needed by the
+     * virtual pure function of the master class.
      */
-    virtual void Mirror_Y( int aYaxis_position )
+    virtual void MirrorY( int aYaxis_position )
     {
-        /* Do Nothing: fields are never mirrored alone.
-         * they are moved when the parent component is mirrored
-         * this function is only needed by the virtual pure function of the
-         * master class */
     }
 
     /**
@@ -206,8 +206,10 @@ public:
      */
     virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL );
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const;
 
     /**
@@ -215,17 +217,28 @@ public:
      */
     virtual bool IsReplaceable() const { return true; }
 
+    /** @copydoc SCH_ITEM::GetPosition() */
+    virtual wxPoint GetPosition() const;
+
+    /** @copydoc SCH_ITEM::SetPosition() */
+    virtual void SetPosition( const wxPoint& aPosition );
+
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    /** @copydoc SCH_ITEM::HitTest(EDA_RECT&,bool=false,int=0) */
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
+                          int aAccuracy = 0 ) const;
+
+    /** @copydoc SCH_ITEM::Plot() */
+    virtual void Plot( PLOTTER* aPlotter );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
-    virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const;
-    virtual void doSetPosition( const wxPoint& aPosition );
 };
 
 

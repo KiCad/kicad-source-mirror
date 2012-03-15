@@ -186,22 +186,11 @@ public:
      */
     virtual EDA_RECT GetBoundingBox() const;
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool         HitTest( const wxPoint& aRefPos );
+    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function HitTest (overlayed)
-     * tests if the given EDA_RECT intersect this object.
-     * For now, an ending point must be inside this rect.
-     * @param refArea the given EDA_RECT to test
-     * @return bool - true if a hit, else false
-     */
-    bool         HitTest( EDA_RECT& refArea );
+    /** @copydoc EDA_ITEM::HitTest(EDA_RECT&) */
+    bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function GetClass

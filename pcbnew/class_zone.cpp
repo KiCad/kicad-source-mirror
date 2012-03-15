@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -468,12 +467,12 @@ int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
 }
 
 
-bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
+bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition )
 {
-    if( HitTestForCorner( refPos ) )
+    if( HitTestForCorner( aPosition ) )
         return true;
 
-    if( HitTestForEdge( refPos ) )
+    if( HitTestForEdge( aPosition ) )
         return true;
 
     return false;
@@ -584,22 +583,22 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 }
 
 
-bool ZONE_CONTAINER::HitTest( EDA_RECT& refArea )
+bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect ) const
 {
     bool  is_out_of_box = false;
 
     CRect rect = m_Poly->GetCornerBounds();
 
-    if( rect.left < refArea.GetX() )
+    if( rect.left < aRect.GetX() )
         is_out_of_box = true;
 
-    if( rect.top < refArea.GetY() )
+    if( rect.top < aRect.GetY() )
         is_out_of_box = true;
 
-    if( rect.right > refArea.GetRight() )
+    if( rect.right > aRect.GetRight() )
         is_out_of_box = true;
 
-    if( rect.bottom > refArea.GetBottom() )
+    if( rect.bottom > aRect.GetBottom() )
         is_out_of_box = true;
 
     return is_out_of_box ? false : true;
@@ -633,7 +632,7 @@ int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 }
 
 
-bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
+bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 {
     unsigned indexstart = 0, indexend;
     bool     inside     = false;

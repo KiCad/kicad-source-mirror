@@ -151,22 +151,11 @@ public:
      */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param ref_pos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& ref_pos );
+    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function HitTest (overlaid)
-     * tests if the given EDA_RECT intersect this object.
-     * For now, the anchor must be inside this rect.
-     * @param refArea : the given EDA_RECT
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( EDA_RECT& refArea );
+    /** @copydoc EDA_ITEM::HitTest(EDA_RECT&) */
+    bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function GetClass

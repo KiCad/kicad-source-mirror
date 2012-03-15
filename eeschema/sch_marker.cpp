@@ -1,6 +1,31 @@
-/*******************************************/
-/* Schematic marker object implementation. */
-/*******************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file sch_marker.cpp
+ * @brief Class SCH_MARKER implementation
+ */
 
 #include <fctsys.h>
 #include <wxstruct.h>
@@ -27,9 +52,9 @@ const wxChar* NameMarqueurType[] =
 };
 
 
-/**************************/
+/********************/
 /* class SCH_MARKER */
-/**************************/
+/********************/
 
 SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, SCH_MARKER_T ), MARKER_BASE()
 {
@@ -145,13 +170,13 @@ void SCH_MARKER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 }
 
 
-void SCH_MARKER::Rotate( wxPoint rotationPoint )
+void SCH_MARKER::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
 }
 
 
-void SCH_MARKER::Mirror_X( int aXaxis_position )
+void SCH_MARKER::MirrorX( int aXaxis_position )
 {
     m_Pos.y -= aXaxis_position;
     m_Pos.y  = -m_Pos.y;
@@ -159,7 +184,7 @@ void SCH_MARKER::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_MARKER::Mirror_Y( int aYaxis_position )
+void SCH_MARKER::MirrorY( int aYaxis_position )
 {
     m_Pos.x -= aYaxis_position;
     m_Pos.x  = -m_Pos.x;
@@ -180,8 +205,8 @@ bool SCH_MARKER::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-bool SCH_MARKER::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_MARKER::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return HitTestMarker( aPoint );
+    return HitTestMarker( aPosition );
 }
 

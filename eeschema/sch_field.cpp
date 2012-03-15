@@ -458,9 +458,9 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 }
 
 
-void SCH_FIELD::Rotate( wxPoint rotationPoint )
+void SCH_FIELD::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
 }
 
 
@@ -499,7 +499,7 @@ BITMAP_DEF SCH_FIELD::GetMenuImage() const
 }
 
 
-bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_FIELD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     // Do not hit test hidden or empty fields.
     if( !IsVisible() || IsVoid() )
@@ -509,11 +509,11 @@ bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 
     rect.Inflate( aAccuracy );
 
-    return rect.Contains( aPoint );
+    return rect.Contains( aPosition );
 }
 
 
-bool SCH_FIELD::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_FIELD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
     if( !IsVisible() || IsVoid() )
@@ -530,7 +530,7 @@ bool SCH_FIELD::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 }
 
 
-void SCH_FIELD::doPlot( PLOTTER* aPlotter )
+void SCH_FIELD::Plot( PLOTTER* aPlotter )
 {
     SCH_COMPONENT* parent = ( SCH_COMPONENT* ) GetParent();
 
@@ -593,7 +593,7 @@ void SCH_FIELD::doPlot( PLOTTER* aPlotter )
 }
 
 
-void SCH_FIELD::doSetPosition( const wxPoint& aPosition )
+void SCH_FIELD::SetPosition( const wxPoint& aPosition )
 {
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
 
@@ -608,7 +608,7 @@ void SCH_FIELD::doSetPosition( const wxPoint& aPosition )
 }
 
 
-wxPoint SCH_FIELD::doGetPosition() const
+wxPoint SCH_FIELD::GetPosition() const
 {
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();

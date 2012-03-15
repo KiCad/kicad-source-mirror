@@ -112,30 +112,26 @@ public:
      */
     virtual int GetPenSize() const;
 
-    /**
-     * Function Move
-     * moves an item to a new position by \a aMoveVector.
-     * @param aMoveVector = the displacement vector
-     */
+    /** @copydoc SCH_ITEM::Move() */
     virtual void Move( const wxPoint& aMoveVector )
     {
         for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
             m_points[ii] += aMoveVector;
     }
 
-    /**
-     * Function Mirror_Y
-     * mirrors an item relative to \a aYaxis_position.
-     * @param aYaxis_position The y axis position to mirror around.
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
 
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const;
 
     /**
@@ -153,16 +149,25 @@ public:
         return m_points[ aIndex ];
     }
 
+    /** @copydoc SCH_ITEM::GetPosition() */
+    virtual wxPoint GetPosition() const { return m_points[0]; }
+
+    /** @copydoc SCH_ITEM::SetPosition() */
+    virtual void SetPosition( const wxPoint& aPosition );
+
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    /** @copydoc SCH_ITEM::HitTest(EDA_RECT&,bool=false,int=0) */
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
+                          int aAccuracy = 0 ) const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
-    virtual wxPoint doGetPosition() const { return m_points[0]; }
-    virtual void doSetPosition( const wxPoint& aPosition );
 };
 
 

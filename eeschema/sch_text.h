@@ -187,25 +187,20 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    /** virtual function Move
-     * move item to a new position.
-     * @param aMoveVector = the displacement vector
-     */
+    /** @copydoc SCH_ITEM::Move() */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
-    /**
-     * Function Mirror_Y
-     * mirrors the item relative to \a aYaxisPosition.
-     * @param aYaxis_position The y axis coordinate to mirror around.
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
 
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
     /**
      * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
@@ -237,24 +232,37 @@ public:
 
     virtual bool CanIncrementLabel() const { return true; }
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
     virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
                                  SCH_SHEET_PATH*          aSheetPath );
+
+    /** @copydoc SCH_ITEM::GetPosition() */
+    virtual wxPoint GetPosition() const { return m_Pos; }
+
+    /** @copydoc SCH_ITEM::SetPosition() */
+    virtual void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    /** @copydoc SCH_ITEM::HitTest(EDA_RECT&,bool=false,int=0) */
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
+                          int aAccuracy = 0 ) const;
+
+    /** @copydoc SCH_ITEM::Plot() */
+    virtual void Plot( PLOTTER* aPlotter );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
-    virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 
@@ -303,9 +311,11 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset() const;
 
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
     /**
      * Function GetBoundingBox
@@ -337,8 +347,10 @@ public:
 
     virtual bool IsConnectable() const { return true; }
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  add_line_label_xpm; }
 
     /**
@@ -346,9 +358,13 @@ public:
      */
     virtual bool IsReplaceable() const { return true; }
 
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    /** @copydoc SCH_ITEM::doIsConnected() */
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }
+
     virtual EDA_ITEM* doClone() const;
 };
 
@@ -434,25 +450,30 @@ public:
      */
     virtual void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos );
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
 
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
     virtual bool IsConnectable() const { return true; }
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  add_glabel_xpm; }
 
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    /** @copydoc SCH_ITEM::doIsConnected() */
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }
+
     virtual EDA_ITEM* doClone() const;
 };
 
@@ -540,25 +561,30 @@ public:
      */
     EDA_RECT GetBoundingBox() const;
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    /** @copydoc SCH_ITEM::MirrorY() */
+    virtual void MirrorY( int aYaxis_position );
 
-    virtual void Mirror_X( int aXaxis_position );
+    /** @copydoc SCH_ITEM::MirrorX() */
+    virtual void MirrorX( int aXaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    /** @copydoc SCH_ITEM::Rotate() */
+    virtual void Rotate( wxPoint aPosition );
 
     virtual bool IsConnectable() const { return true; }
 
+    /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  add_hierarchical_label_xpm; }
 
+    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    /** @copydoc SCH_ITEM::doIsConnected() */
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }
+
     virtual EDA_ITEM* doClone() const;
 };
 

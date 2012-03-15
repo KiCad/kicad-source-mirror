@@ -184,13 +184,7 @@ EDA_RECT TEXTE_MODULE::GetTextRect( void ) const
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPos A wxPoint to test
- * @return true if a hit, else false
- */
-bool TEXTE_MODULE::HitTest( const wxPoint& aRefPos )
+bool TEXTE_MODULE::HitTest( const wxPoint& aPosition )
 {
     wxPoint  rel_pos;
     EDA_RECT area = GetTextRect();
@@ -199,7 +193,7 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aRefPos )
      * to test if refPos is within area (which is relative to an horizontal
      * text)
      */
-    rel_pos = aRefPos;
+    rel_pos = aPosition;
     RotatePoint( &rel_pos, m_Pos, -GetDrawRotation() );
 
     if( area.Contains( rel_pos ) )

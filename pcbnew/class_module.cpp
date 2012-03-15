@@ -508,27 +508,27 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-bool MODULE::HitTest( const wxPoint& aRefPos )
+bool MODULE::HitTest( const wxPoint& aPosition )
 {
-    if( m_BoundaryBox.Contains( aRefPos ) )
+    if( m_BoundaryBox.Contains( aPosition ) )
         return true;
 
     return false;
 }
 
 
-bool MODULE::HitTest( EDA_RECT& aRefArea )
+bool MODULE::HitTest( const EDA_RECT& aRect ) const
 {
-    if( m_BoundaryBox.GetX() < aRefArea.GetX() )
+    if( m_BoundaryBox.GetX() < aRect.GetX() )
         return false;
 
-    if( m_BoundaryBox.GetY() < aRefArea.GetY() )
+    if( m_BoundaryBox.GetY() < aRect.GetY() )
         return false;
 
-    if( m_BoundaryBox.GetRight() > aRefArea.GetRight() )
+    if( m_BoundaryBox.GetRight() > aRect.GetRight() )
         return false;
 
-    if( m_BoundaryBox.GetBottom() > aRefArea.GetBottom() )
+    if( m_BoundaryBox.GetBottom() > aRect.GetBottom() )
         return false;
 
     return true;

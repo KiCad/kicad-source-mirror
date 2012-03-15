@@ -162,24 +162,18 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wx
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
-bool PCB_TARGET::HitTest( const wxPoint& refPos )
+bool PCB_TARGET::HitTest( const wxPoint& aPosition )
 {
-    int dX    = refPos.x - m_Pos.x;
-    int dY    = refPos.y - m_Pos.y;
+    int dX = aPosition.x - m_Pos.x;
+    int dY = aPosition.y - m_Pos.y;
     int radius = m_Size / 2;
     return abs( dX ) <= radius && abs( dY ) <= radius;
 }
 
 
-bool PCB_TARGET::HitTest( EDA_RECT& refArea )
+bool PCB_TARGET::HitTest( const EDA_RECT& aRect ) const
 {
-    if( refArea.Contains( m_Pos ) )
+    if( aRect.Contains( m_Pos ) )
         return true;
 
     return false;
