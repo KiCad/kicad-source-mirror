@@ -107,7 +107,21 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     SCH_LINE* nextSegment;
     wxPoint   cursorpos = GetScreen()->GetCrossHairPosition();
 
+    // We should know id a segment is currently in progress
     segment = (SCH_LINE*) GetScreen()->GetCurItem();
+    if( segment )   // a current item exists, but not necessary a currently edited item
+    {
+        if( !segment->GetFlags() || ( segment->Type() != SCH_LINE_T ) )
+        {
+            if( segment->GetFlags() )
+            {
+                wxLogDebug( wxT( "BeginSegment: item->GetFlags()== %X" ),
+                    segment->GetFlags() );
+            }
+            // no wire, bus or graphic line in progress
+            segment = NULL;
+        }
+    }
 
     if( !segment )  /* first point : Create first wire or bus */
     {
