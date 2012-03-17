@@ -83,6 +83,7 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
     // netlineReader dtor will close aFile
     FILE_LINE_READER netlineReader( aFile, m_netlistFullName );
 
+    COMPONENT_INFO *curComponent = NULL;
     while( netlineReader.ReadLine() )
     {
         char* line = StrPurge( netlineReader.Line() );
@@ -116,12 +117,15 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
 
         if( state == 2 )
         {
-            ReadOldFmtNetlistModuleDescr( line, BUILDLIST );
+            curComponent = (COMPONENT_INFO*) ReadOldFmtNetlistModuleDescr( line, BUILDLIST );
             continue;
         }
 
         if( state >= 3 ) // First pass: pad descriptions are not read here.
         {
+            if( curComponent )
+                curComponent->m_pinCount++;
+
             state--;
         }
     }
@@ -191,7 +195,7 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
 
         if( state == 2 )
         {
-            m_currModule = ReadOldFmtNetlistModuleDescr( line, READMODULE );
+            m_currModule = (MODULE*) ReadOldFmtNetlistModuleDescr( line, READMODULE );
             continue;
         }
 
@@ -216,7 +220,7 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
  * (2 MODB_1)
  * )
  */
-MODULE* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildList )
+void* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildList )
 {
     char*    text;
     wxString timeStampPath;         // the full time stamp read from netlist
@@ -264,7 +268,7 @@ MODULE* NETLIST_READER::ReadOldFmtNetlistModuleDescr( char* aText, bool aBuildLi
         COMPONENT_INFO* cmp_info = new COMPONENT_INFO( footprintName, cmpReference,
                                                  cmpValue, timeStampPath );
         AddModuleInfo( cmp_info );
-        return NULL;
+        return cmp_info;
     }
 
     // search the module loaded on board
