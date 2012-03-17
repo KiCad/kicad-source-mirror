@@ -56,7 +56,7 @@ void FOOTPRINTS_LISTBOX::SetString( unsigned linecount, const wxString& text )
 
 wxString FOOTPRINTS_LISTBOX::GetSelectedFootprint()
 {
-    wxString FootprintName;
+    wxString footprintName;
     int      ii = GetFirstSelected();
 
     if( ii >= 0 )
@@ -64,10 +64,10 @@ wxString FOOTPRINTS_LISTBOX::GetSelectedFootprint()
         wxString msg = (*m_ActiveFootprintList)[ii];
         msg.Trim( true );
         msg.Trim( false );
-        FootprintName = msg.AfterFirst( wxChar( ' ' ) );
+        footprintName = msg.AfterFirst( wxChar( ' ' ) );
     }
 
-    return FootprintName;
+    return footprintName;
 }
 
 
@@ -112,7 +112,7 @@ void FOOTPRINTS_LISTBOX::SetSelection( unsigned index, bool State )
 void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
 {
     wxString msg;
-    int      OldSelection = GetSelection();
+    int      oldSelection = GetSelection();
 
     m_FullFootprintList.Clear();
 
@@ -126,8 +126,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
 
     SetActiveFootprintList( true );
 
-    if( ( GetCount() == 0 )
-       || ( OldSelection < 0 ) || ( OldSelection >= GetCount() ) )
+    if(  GetCount() == 0 || oldSelection < 0 || oldSelection >= GetCount() )
         SetSelection( 0, true );
     Refresh();
 }
@@ -139,7 +138,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
     wxString msg;
     unsigned jj;
     int      OldSelection = GetSelection();
-    bool     HasItem = false;
+    bool     hasItem = false;
 
     m_FilteredFootprintList.Clear();
 
@@ -158,11 +157,11 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
             msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
                        footprint.m_Module.GetData() );
             m_FilteredFootprintList.Add( msg );
-            HasItem = true;
+            hasItem = true;
         }
     }
 
-    if( HasItem )
+    if( hasItem )
         SetActiveFootprintList( false );
     else
         SetActiveFootprintList( true );
@@ -173,6 +172,37 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT_INFO* Component,
     Refresh();
 }
 
+void FOOTPRINTS_LISTBOX::SetFootprintFilteredByPinCount( COMPONENT_INFO* Component,
+                                                         FOOTPRINT_LIST& list ) {
+    wxString msg;
+    int      oldSelection = GetSelection();
+    bool     hasItem = false;
+
+    m_FilteredFootprintList.Clear();
+
+    for( unsigned ii = 0; ii < list.GetCount(); ii++ )
+    {
+        FOOTPRINT_INFO& footprint = list.GetItem(ii);
+
+        if( Component->m_pinCount == footprint.m_padCount )
+        {
+            msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
+                     footprint.m_Module.GetData() );
+            m_FilteredFootprintList.Add( msg );
+            hasItem = true;
+        }
+    }
+
+    if( hasItem )
+        SetActiveFootprintList( false );
+    else
+        SetActiveFootprintList( true );
+
+    if( ( GetCount() == 0 ) || ( oldSelection >= GetCount() ) )
+        SetSelection( 0, true );
+
+    Refresh();
+}
 
 /** Set the footprint list. We can have 2 footprint list:
  *  The full footprint list
@@ -244,9 +274,9 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 /********************************************************/
 {
     FOOTPRINT_INFO* Module;
-    wxString   FootprintName = GetSelectedFootprint();
+    wxString   footprintName = GetSelectedFootprint();
 
-    Module = GetParent()->m_footprints.GetModuleInfo( FootprintName );
+    Module = GetParent()->m_footprints.GetModuleInfo( footprintName );
     wxASSERT(Module);
     if( GetParent()->m_DisplayFootprintFrame )
     {
@@ -270,9 +300,9 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 void FOOTPRINTS_LISTBOX::OnLeftDClick( wxListEvent& event )
 /******************************************************/
 {
-    wxString FootprintName = GetSelectedFootprint();
+    wxString footprintName = GetSelectedFootprint();
 
-    GetParent()->SetNewPkg( FootprintName );
+    GetParent()->SetNewPkg( footprintName );
 }
 
 
@@ -323,22 +353,24 @@ void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
         text.Trim(false);      // Remove leading spaces in line
         unsigned jj = 0;
         for( ; jj < text.Len(); jj++ )
-        {   // skip line number
+        {
+            // skip line number
             if( text[jj] == ' ' )
                 break;
         }
+
         for( ; jj < text.Len(); jj++ )
         {   // skip blanks
             if( text[jj] != ' ' )
                 break;
         }
-        int start_char = toupper(text[jj]);
-        if ( key == start_char )
+
+        int start_char = toupper( text[jj] );
+        if( key == start_char )
         {
             Focus( ii );
             SetSelection( ii, true );   // Ensure visible
             break;
         }
     }
-
 }

@@ -54,6 +54,8 @@ public:
     void     SetFootprintFullList( FOOTPRINT_LIST& list );
     void     SetFootprintFilteredList( COMPONENT_INFO*      Component,
                                        FOOTPRINT_LIST& list );
+    void     SetFootprintFilteredByPinCount( COMPONENT_INFO* Component,
+                                             FOOTPRINT_LIST& list );
     void     SetActiveFootprintList( bool FullList, bool Redraw = false );
 
     wxString GetSelectedFootprint();
