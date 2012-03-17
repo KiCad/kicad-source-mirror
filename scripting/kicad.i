@@ -1,0 +1,79 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file kicad.i
+ * @brief General wrappers for kicad / wx structures and classes
+ */
+
+
+/* OFF NOW, it triggers an error with GCC 4.6 and swig-2.0.4 or trunk.. 
+   http://sourceforge.net/tracker/index.php?func=detail&aid=3391906&group_id=1645&atid=101645
+
+   %include <std_vector.i>
+   %include <std_string.i>
+*/
+%nodefaultctor EDA_ITEM;
+
+
+/* swig tries to wrap SetBack/SetNext on derived classes, but this method is
+   private for most childs, so if we don't ignore it it won't compile */
+
+%ignore EDA_ITEM::SetBack;
+%ignore EDA_ITEM::SetNext;
+
+
+%ignore InitKiCadAbout;
+%ignore GetCommandOptions;
+
+%{
+	#include <dlist.h>
+	#include <base_struct.h>
+	#include <common.h>
+	#include <wx_python_helpers.h>
+	#include <cstddef>
+  #include <vector>
+	using namespace std;
+	#include <class_title_block.h>
+	#include <class_colors_design_settings.h>
+
+%}
+
+/* all the wx wrappers for wxString, wxPoint, wxRect, wxChar .. */
+%include <wx.i>
+
+
+%include <dlist.h>
+%include <base_struct.h>
+%include <common.h>
+%include <class_title_block.h>
+%include <class_colors_design_settings.h>
+
+
+/*
+namespace std 
+{
+	%template(intVector) vector<int>;
+}
+*/

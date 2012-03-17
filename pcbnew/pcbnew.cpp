@@ -48,8 +48,8 @@
 #include <class_board.h>
 
 #include <dialogs/dialog_scripting.h>
-#include <scripting/python_scripting.h>
-#include <scripting/pcbnew_scripting_helpers.h>
+#include <python_scripting.h>
+#include <pcbnew_scripting_helpers.h>
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
