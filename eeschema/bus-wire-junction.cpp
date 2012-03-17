@@ -476,7 +476,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     if( m_itemToRepeat == NULL )
         return;
 
-    m_itemToRepeat = m_itemToRepeat->Clone();
+    m_itemToRepeat = (SCH_ITEM*) m_itemToRepeat->Clone();
 
     if( m_itemToRepeat->Type() == SCH_COMPONENT_T ) // If repeat component then put in move mode
     {

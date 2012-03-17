@@ -135,14 +135,15 @@ public:
     /** @copydoc SCH_ITEM::SetPosition() */
     virtual void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 
-    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    /** @copydoc SCH_ITEM::HitTest(const wxPoint&,int)const */
     virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
-
-    virtual EDA_ITEM* doClone() const;
 };
 
 #endif // TYPE_SCH_MARKER_H_

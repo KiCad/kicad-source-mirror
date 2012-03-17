@@ -88,12 +88,7 @@ public:
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
-     /**
-     * Test if the given point is within the bounds of this object.
-     *
-     * @param aPosition - A wxPoint to test
-     * @return - true if a hit, else false
-     */
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
     virtual bool HitTest( const wxPoint& aPosition );
 
     /**
@@ -190,8 +185,10 @@ public:
     /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  add_polygon_xpm; }
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 private:
-    virtual EDA_ITEM* doClone() const;
 
     /**
      * Function compare

@@ -133,7 +133,7 @@ bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-EDA_ITEM* LIB_POLYLINE::doClone() const
+EDA_ITEM* LIB_POLYLINE::Clone() const
 {
     return new LIB_POLYLINE( *this );
 }

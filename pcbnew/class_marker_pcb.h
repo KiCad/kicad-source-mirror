@@ -80,8 +80,8 @@ public:
     const wxPoint& GetPosition() const          { return m_Pos; }
     void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }
 
-    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
-    bool HitTest( const wxPoint& aPosition )
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition )
     {
         return HitTestMarker( aPosition );
     }

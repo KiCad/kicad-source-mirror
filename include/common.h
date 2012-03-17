@@ -276,7 +276,7 @@ extern bool         g_ShowPageLimits;       ///< true to display the page limits
 /// Name of default configuration file. (kicad.pro)
 extern wxString     g_Prj_Default_Config_FullFilename;
 
-/// Name of local configuration file. (<curr projet>.pro)
+/// Name of local configuration file. (\<curr projet\>.pro)
 extern wxString     g_Prj_Config_LocalFilename;
 
 extern EDA_UNITS_T  g_UserUnit;     ///< display units

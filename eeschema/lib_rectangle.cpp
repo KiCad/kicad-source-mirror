@@ -88,7 +88,7 @@ bool LIB_RECTANGLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-EDA_ITEM* LIB_RECTANGLE::doClone() const
+EDA_ITEM* LIB_RECTANGLE::Clone() const
 {
     return new LIB_RECTANGLE( *this );
 }

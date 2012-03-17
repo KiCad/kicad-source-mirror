@@ -221,7 +221,7 @@ bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTran
 }
 
 
-EDA_ITEM* LIB_ARC::doClone() const
+EDA_ITEM* LIB_ARC::Clone() const
 {
     return new LIB_ARC( *this );
 }

@@ -84,7 +84,7 @@ SCH_FIELD::~SCH_FIELD()
 }
 
 
-EDA_ITEM* SCH_FIELD::doClone() const
+EDA_ITEM* SCH_FIELD::Clone() const
 {
     return new SCH_FIELD( *this );
 }

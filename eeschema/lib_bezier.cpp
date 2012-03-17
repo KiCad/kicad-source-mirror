@@ -132,7 +132,7 @@ bool LIB_BEZIER::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-EDA_ITEM* LIB_BEZIER::doClone() const
+EDA_ITEM* LIB_BEZIER::Clone() const
 {
     return new LIB_BEZIER( *this );
 }

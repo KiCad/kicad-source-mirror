@@ -36,21 +36,22 @@ class PCB_BASE_FRAME;
  * Function InvokeNonCopperZonesEditor
  * invokes up a modal dialog window for non-copper zone editing.
  *
- * @param aCaller is the PCB_BASE_FRAME calling parent window for the modal dialog,
- *        and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
+ * @param aParent is the PCB_BASE_FRAME calling parent window for the modal dialog,
+ *                and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
  * @param aZone is the ZONE_CONTAINER to edit.
  * @param aSettings points to the ZONE_SETTINGS to edit.
  * @return ZONE_EDIT_T - tells if user aborted, changed only one zone, or all of them.
  */
-ZONE_EDIT_T InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings );
+ZONE_EDIT_T InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_CONTAINER* aZone,
+                                        ZONE_SETTINGS* aSettings );
 
 /**
  * Function InvokeCopperZonesEditor
  * invokes up a modal dialog window for copper zone editing.
  *
  * @param aCaller is the PCB_BASE_FRAME calling parent window for the modal dialog,
- *        and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
- * @param aZone is the ZONE_CONTAINER to edit.
+ *                and it gives access to the BOARD through PCB_BASE_FRAME::GetBoard().
+ * @param aSettings points to the ZONE_SETTINGS to edit.
  * @return ZONE_EDIT_T - tells if user aborted, changed only one zone, or all of them.
  */
 ZONE_EDIT_T InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings );

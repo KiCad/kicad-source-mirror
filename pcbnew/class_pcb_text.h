@@ -108,14 +108,14 @@ public:
      */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
-    bool HitTest( const wxPoint& aPosition )
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition )
     {
         return TextHitTest( aPosition );
     }
 
-    /** @copydoc EDA_ITEM::HitTest(EDA_RECT&) */
-    bool HitTest( const EDA_RECT& aRect )
+    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
+    virtual bool HitTest( const EDA_RECT& aRect ) const
     {
         return TextHitTest( aRect );
     }
@@ -153,12 +153,12 @@ public:
 
     virtual EDA_RECT GetBoundingBox() const { return GetTextBox(); };
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 #endif  // #define CLASS_PCB_TEXT_H

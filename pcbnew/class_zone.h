@@ -297,8 +297,8 @@ public:
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness ) { m_ZoneMinThickness = aMinThickness; }
 
-    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
-    bool HitTest( const wxPoint& aPosition );
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition );
 
     /**
      * Function HitTestFilledArea
@@ -371,8 +371,8 @@ public:
      */
     bool HitTestForEdge( const wxPoint& refPos );
 
-    /** @copydoc EDA_ITEM::HitTest(EDA_RECT&) */
-    bool HitTest( const EDA_RECT& refArea ) const;
+    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function Fill_Zone
@@ -552,12 +552,12 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 

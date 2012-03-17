@@ -187,13 +187,8 @@ public:
      */
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
-    /**
-     * Test if the given point is within the bounds of this object.
-     *
-     * @param aPosition A point to test in field coordinate system
-     * @return True if a hit, else false
-     */
-    bool HitTest( const wxPoint& aPosition );
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition );
 
      /**
       * @param aPosition = a wxPoint to test
@@ -325,8 +320,10 @@ public:
     /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  move_field_xpm; }
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 private:
-    virtual EDA_ITEM* doClone() const;
 
     /**
      * Function compare

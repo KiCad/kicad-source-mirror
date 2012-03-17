@@ -98,7 +98,7 @@ SCH_SHEET::~SCH_SHEET()
 }
 
 
-EDA_ITEM* SCH_SHEET::doClone() const
+EDA_ITEM* SCH_SHEET::Clone() const
 {
     return new SCH_SHEET( *this );
 }

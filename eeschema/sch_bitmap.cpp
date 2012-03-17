@@ -122,7 +122,7 @@ bool SCH_BITMAP::Save( FILE* aFile ) const
 }
 
 
-EDA_ITEM* SCH_BITMAP::doClone() const
+EDA_ITEM* SCH_BITMAP::Clone() const
 {
     return new SCH_BITMAP( *this );
 }

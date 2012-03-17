@@ -184,7 +184,7 @@ wxString TEXTE_PCB::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* TEXTE_PCB::doClone() const
+EDA_ITEM* TEXTE_PCB::Clone() const
 {
     return new TEXTE_PCB( *this );
 }

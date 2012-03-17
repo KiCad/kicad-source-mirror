@@ -389,22 +389,8 @@ protected:
     EDA_ITEM*     m_Image;
 
 private:
-    void InitVars();
 
-    /**
-     * Function doClone
-     * is used by the derived class to actually implement the cloning.
-     *
-     * The default version will return NULL in release builds and likely crash the
-     * program.  In debug builds, an warning message indicating the derived class
-     * has not implemented cloning.  This really should be a pure virtual function.
-     * Due to the fact that there are so many objects derived from EDA_ITEM, the
-     * decision was made to return NULL until all the objects derived from EDA_ITEM
-     * implement cloning.  Once that happens, this function should be made pure.
-     *
-     * @return A clone of the item.
-     */
-    virtual EDA_ITEM* doClone() const;
+    void InitVars();
 
 public:
 
@@ -542,14 +528,16 @@ public:
      * Function Clone
      * creates a duplicate of this item with linked list members set to NULL.
      *
-     * The Clone() function only calls the private virtual doClone() which actually
-     * does the cloning for the derived object.
-     *
-     * @todo: use this instead of Copy() everywhere, then kill Copy().
+     * The default version will return NULL in release builds and likely crash the
+     * program.  In debug builds, a warning message indicating the derived class
+     * has not implemented cloning.  This really should be a pure virtual function.
+     * Due to the fact that there are so many objects derived from EDA_ITEM, the
+     * decision was made to return NULL until all the objects derived from EDA_ITEM
+     * implement cloning.  Once that happens, this function should be made pure.
      *
      * @return A clone of the item.
      */
-    EDA_ITEM* Clone() const;    // should not be inline, to save the ~ 6 bytes per call site.
+    virtual EDA_ITEM* Clone() const; // should not be inline, to save the ~ 6 bytes per call site.
 
     /**
      * Function IterateForward

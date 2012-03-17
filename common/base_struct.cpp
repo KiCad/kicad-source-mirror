@@ -99,17 +99,10 @@ void EDA_ITEM::SetModified()
 }
 
 
-EDA_ITEM* EDA_ITEM::doClone() const
-{
-    wxCHECK_MSG( false, NULL, wxT( "doClone not implemented in derived class " ) + GetClass() +
-                 wxT( ".  Bad programmer." ) );
-}
-
-
 EDA_ITEM* EDA_ITEM::Clone() const
 {
-    // save about 6 bytes per call by hiding the virtual function in this non-inline function.
-    return doClone();
+    wxCHECK_MSG( false, NULL, wxT( "Clone not implemented in derived class " ) + GetClass() +
+                 wxT( ".  Bad programmer!" ) );
 }
 
 
@@ -272,9 +265,9 @@ std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 #endif
 
 
-/**************************************************/
-/* EDA_TEXT (basic class, not directly used */
-/**************************************************/
+/*******************************************/
+/* EDA_TEXT (base class, not directly used */
+/*******************************************/
 EDA_TEXT::EDA_TEXT( const wxString& text )
 {
     m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT;  // Width and height of font.

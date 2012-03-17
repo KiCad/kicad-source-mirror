@@ -219,7 +219,7 @@ wxString PCB_TARGET::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* PCB_TARGET::doClone() const
+EDA_ITEM* PCB_TARGET::Clone() const
 {
     return new PCB_TARGET( *this );
 }

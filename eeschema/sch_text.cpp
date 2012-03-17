@@ -122,7 +122,7 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
 }
 
 
-EDA_ITEM* SCH_TEXT::doClone() const
+EDA_ITEM* SCH_TEXT::Clone() const
 {
     return new SCH_TEXT( *this );
 }
@@ -758,7 +758,7 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-EDA_ITEM* SCH_LABEL::doClone() const
+EDA_ITEM* SCH_LABEL::Clone() const
 {
     return new SCH_LABEL( *this );
 }
@@ -960,7 +960,7 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-EDA_ITEM* SCH_GLOBALLABEL::doClone() const
+EDA_ITEM* SCH_GLOBALLABEL::Clone() const
 {
     return new SCH_GLOBALLABEL( *this );
 }
@@ -1389,7 +1389,7 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
 }
 
 
-EDA_ITEM* SCH_HIERLABEL::doClone() const
+EDA_ITEM* SCH_HIERLABEL::Clone() const
 {
     return new SCH_HIERLABEL( *this );
 }

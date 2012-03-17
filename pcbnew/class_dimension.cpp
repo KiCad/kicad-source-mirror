@@ -602,7 +602,7 @@ wxString DIMENSION::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* DIMENSION::doClone() const
+EDA_ITEM* DIMENSION::Clone() const
 {
     return new DIMENSION( *this );
 }

@@ -130,7 +130,7 @@ TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
 }
 
 
-EDA_ITEM* TRACK::doClone() const
+EDA_ITEM* TRACK::Clone() const
 {
     return new TRACK( *this );
 }
@@ -152,7 +152,7 @@ SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
 }
 
 
-EDA_ITEM* SEGZONE::doClone() const
+EDA_ITEM* SEGZONE::Clone() const
 {
     return new SEGZONE( *this );
 }
@@ -190,7 +190,7 @@ SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
 }
 
 
-EDA_ITEM* SEGVIA::doClone() const
+EDA_ITEM* SEGVIA::Clone() const
 {
     return new SEGVIA( *this );
 }

@@ -823,7 +823,7 @@ wxString D_PAD::GetSelectMenuText() const
     return text;
 }
 
-EDA_ITEM* D_PAD::doClone() const
+EDA_ITEM* D_PAD::Clone() const
 {
     return new D_PAD( *this );
 }

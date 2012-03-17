@@ -65,7 +65,7 @@ bool SCH_JUNCTION::Save( FILE* aFile ) const
 }
 
 
-EDA_ITEM* SCH_JUNCTION::doClone() const
+EDA_ITEM* SCH_JUNCTION::Clone() const
 {
     return new SCH_JUNCTION( *this );
 }

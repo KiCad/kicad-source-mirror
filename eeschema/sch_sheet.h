@@ -78,8 +78,6 @@ private:
      */
     int m_edge;
 
-    virtual EDA_ITEM* doClone() const;
-
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
                    const wxPoint& pos = wxPoint( 0, 0 ),
@@ -221,8 +219,11 @@ public:
 
     virtual void SetPosition( const wxPoint& aPosition ) { ConstrainOnEdge( aPosition ); }
 
-    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    /** @copydoc SCH_ITEM::HitTest(const wxPoint&,int)const */
     virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
 };
 
 
@@ -632,15 +633,18 @@ public:
     /** @copydoc SCH_ITEM::SetPosition() */
     virtual void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 
-    /** @copydoc SCH_ITEM::HitTest(wxPoint&,int) */
+    /** @copydoc SCH_ITEM::HitTest(const wxPoint&,int)const */
     virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
-    /** @copydoc SCH_ITEM::HitTest(EDA_RECT&,bool=false,int=0) */
+    /** @copydoc SCH_ITEM::HitTest(const EDA_RECT&,bool,int)const */
     virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
                           int aAccuracy = 0 ) const;
 
     /** @copydoc SCH_ITEM::Plot() */
     virtual void Plot( PLOTTER* aPlotter );
+
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
@@ -656,9 +660,6 @@ protected:
      * sheet pin is added or removed.
      */
     void renumberPins();
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 

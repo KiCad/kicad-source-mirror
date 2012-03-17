@@ -474,7 +474,7 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* TEXTE_MODULE::doClone() const
+EDA_ITEM* TEXTE_MODULE::Clone() const
 {
     return new TEXTE_MODULE( *this );
 }
