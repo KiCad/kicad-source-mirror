@@ -18,7 +18,8 @@ static int  SwigNumModules = 0;
 
 /* Add a name + initfuction to our SwigImportInittab */
 
-static void swigAddModule(const char *name, void (*initfunc)()) {
+static void swigAddModule(const char *name, void (*initfunc)()) 
+{
         SwigImportInittab[SwigNumModules].name = (char *)name;
         SwigImportInittab[SwigNumModules].initfunc = initfunc;
         SwigNumModules++;
@@ -28,7 +29,8 @@ static void swigAddModule(const char *name, void (*initfunc)()) {
 
 /* Add the builting python modules */
 
-static void swigAddBuiltin() {
+static void swigAddBuiltin() 
+{
         int i = 0;
         while (PyImport_Inittab[i].name) {
                 swigAddModule(PyImport_Inittab[i].name, PyImport_Inittab[i].initfunc);
@@ -38,26 +40,18 @@ static void swigAddBuiltin() {
 }
 static void swigAddModules()
 {
-	//swigAddModule("_kicad",init_kicad);
 	swigAddModule("_pcbnew",init_pcbnew);
+	
+	// finally it seems better to include all in just one module
+  // but in case we needed to include any other modules, 
+  // it must be done like this:
+	//    swigAddModule("_kicad",init_kicad);
+	
 }
 
 static void swigSwitchPythonBuiltin()
 {
-        PyImport_Inittab = SwigImportInittab;
-}
-
-static PCB_EDIT_FRAME *PcbEditFrame=NULL;
-
-BOARD *GetBoard()
-{
-	if (PcbEditFrame) return PcbEditFrame->GetBoard();
-	else return NULL;
-}
-
-void pythonSetPcbEditFrame(PCB_EDIT_FRAME *aPCBEdaFrame)
-{
-	PcbEditFrame = aPCBEdaFrame;
+  PyImport_Inittab = SwigImportInittab;
 }
 
 
@@ -83,8 +77,9 @@ void pcbnewInitPythonScripting()
        of kicad here */
 
     PyRun_SimpleString("import sys\n"
-		       "sys.path.append(\".\")\n"
+                       "sys.path.append(\".\")\n"
                        "import pcbnew\n");
 
 
 }
+  

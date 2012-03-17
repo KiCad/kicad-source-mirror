@@ -47,6 +47,16 @@ option(KICAD_TESTING_VERSION
        "set this option to ON to build the stable version of KICAD. mainly used to set version ID (default OFF)"
        )
 
+option(KICAD_SCRIPTING
+       "set this option ON to build the scripting support inside kicad binaries"
+       )
+
+option(KICAD_SCRIPTING_MODULES
+       "set this option ON to build kicad modules that can be used from scripting languages"
+       )
+       
+       
+
 #Set version option (stable or testing)
 
 if (KICAD_STABLE_VERSION )

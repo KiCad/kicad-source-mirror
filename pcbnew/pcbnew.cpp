@@ -49,6 +49,7 @@
 
 #include <dialogs/dialog_scripting.h>
 #include <scripting/python_scripting.h>
+#include <scripting/pcbnew_scripting_helpers.h>
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
@@ -113,8 +114,11 @@ bool EDA_APP::OnInit()
     PCB_EDIT_FRAME* frame = NULL;
 
     int i=0;
-    
+
+#ifdef KICAD_SCRIPTING    
     pcbnewInitPythonScripting();
+#endif    
+    
 
     InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
@@ -150,6 +154,11 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
     frame = new PCB_EDIT_FRAME( NULL, wxT( "Pcbnew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+
+    #ifdef KICAD_SCRIPTING    
+        ScriptingSetPcbEditFrame(frame); /* give the scripting helpers access to our frame */
+    #endif    
+    
     frame->UpdateTitle();
 
     SetTopWindow( frame );
@@ -202,7 +211,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
      */
     frame->SetFocus();
     frame->GetCanvas()->SetFocus();
-    pythonSetPcbEditFrame(frame);
+    
     DIALOG_SCRIPTING* sw = new DIALOG_SCRIPTING(frame);
     sw->Show(true);
     return true;
