@@ -1,10 +1,10 @@
 pcb = pcbnew.GetBoard()
 
-m = pcb.m_Modules.item()
+m = pcb.m_Modules
 
 while m:
 	print m.GetPosition()
-        p  = m.m_Pads.item()
+        p  = m.m_Pads
 	while p:
 		print "p=>",p.GetPosition(),p.GetPadName()
 		print p.GetPosition()

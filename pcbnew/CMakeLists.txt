@@ -1,6 +1,8 @@
 add_definitions(-DPCBNEW)
 
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+   
+  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting)
 
 	FIND_PACKAGE(SWIG REQUIRED)
 	INCLUDE(${SWIG_USE_FILE})
@@ -22,6 +24,7 @@ include_directories(
     ../polygon
     ../common/dialogs
     ./scripting
+    ../scripting
     ${INC_AFTER}
     )
 
@@ -230,9 +233,9 @@ set(PCBNEW_COMMON_SRCS
 if (KICAD_SCRIPTING)
 
 	set(PCBNEW_SCRIPTING_PYTHON_HELPERS    
-	   scripting/wx_python_helpers.cpp
+	   ../scripting/wx_python_helpers.cpp
+	   ../scripting/python_scripting.cpp
 	   scripting/pcbnew_scripting_helpers.cpp
-	   scripting/python_scripting.cpp
 	   )
 
 	set(PCBNEW_SCRIPTING_SRCS
@@ -247,7 +250,7 @@ endif()
 
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
-	set(SWIG_FLAGS -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -DDEBUG)
+	set(SWIG_FLAGS -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting -DDEBUG)
 	
 	# collect CFLAGS , and pass them to swig later 
 	
