@@ -36,12 +36,12 @@ private:
 
 public:
     DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
-            ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings );
+                                    ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings );
 };
 
 
 ZONE_EDIT_T InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent,
-                ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings )
+                                        ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings )
 {
     DIALOG_NON_COPPER_ZONES_EDITOR  dlg( aParent, aZone, aSettings );
 
@@ -54,8 +54,8 @@ ZONE_EDIT_T InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent,
 
 
 DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
-                                                        ZONE_CONTAINER* aZone,
-                                                        ZONE_SETTINGS* aSettings ) :
+                                                                ZONE_CONTAINER* aZone,
+                                                                ZONE_SETTINGS* aSettings ) :
     DialogNonCopperZonesPropertiesBase( aParent )
 {
     m_Parent = aParent;

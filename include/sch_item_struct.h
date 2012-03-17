@@ -137,8 +137,6 @@ public:
         return wxT( "SCH_ITEM" );
     }
 
-    SCH_ITEM* Clone() const { return ( SCH_ITEM* ) EDA_ITEM::Clone(); }
-
     /**
      * Function SwapData
      * swap the internal data structures \a aItem with the schematic item.
@@ -301,6 +299,7 @@ public:
      */
     bool IsConnected( const wxPoint& aPoint ) const;
 
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
     virtual bool HitTest( const wxPoint& aPosition ) { return HitTest( aPosition, 0 ); }
 
     /**

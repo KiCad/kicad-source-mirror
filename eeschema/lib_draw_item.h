@@ -227,14 +227,7 @@ public:
         return (LIB_COMPONENT *)m_Parent;
     }
 
-    /**
-     * Tests if the given point is within the bounds of this object.
-     *
-     * Derived classes should override this function.
-     *
-     * @param aPosition - The coordinates to test.
-     * @return - true if a hit, else false
-     */
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
     virtual bool HitTest( const wxPoint& aPosition )
     {
         return false;

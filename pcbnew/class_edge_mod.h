@@ -107,12 +107,12 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  show_mod_edge_xpm; }
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 #endif    // CLASS_EDGE_MOD_H_

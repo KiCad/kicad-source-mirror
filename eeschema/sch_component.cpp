@@ -231,7 +231,7 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
 }
 
 
-EDA_ITEM* SCH_COMPONENT::doClone() const
+EDA_ITEM* SCH_COMPONENT::Clone() const
 {
     return new SCH_COMPONENT( *this );
 }

@@ -237,7 +237,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
     wxCHECK_MSG( aDrawStruct != NULL, NULL,
                  wxT( "Cannot duplicate NULL schematic item!  Bad programmer." ) );
 
-    SCH_ITEM* NewDrawStruct = aDrawStruct->Clone();
+    SCH_ITEM* NewDrawStruct = (SCH_ITEM*) aDrawStruct->Clone();
 
     if( aClone )
         NewDrawStruct->SetTimeStamp( aDrawStruct->GetTimeStamp() );

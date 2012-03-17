@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -321,11 +320,11 @@ public:
      */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
-    bool HitTest( const wxPoint& aPosition );
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition );
 
-    /** @copydoc EDA_ITEM::HitTest(EDA_RECT&) */
-    bool HitTest( const EDA_RECT& aRect ) const;
+    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function GetReference
@@ -338,9 +337,10 @@ public:
 
     /**
      * Function SetReference
-     * @param const wxString& - the reference designator text.
+     * @param aReference A reference to a wxString object containing the reference designator
+     *                   text.
      */
-    void SetReference( const wxString& aReference)
+    void SetReference( const wxString& aReference )
     {
         m_Reference->m_Text = aReference;
     }
@@ -356,7 +356,7 @@ public:
 
     /**
      * Function SetValue
-     * @param const wxString& - the value text.
+     * @param aValue A reference to a wxString object containing the value text.
      */
     void SetValue( const wxString& aValue )
     {
@@ -413,12 +413,12 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  module_xpm; }
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 

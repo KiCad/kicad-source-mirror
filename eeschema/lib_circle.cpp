@@ -114,7 +114,7 @@ bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
 }
 
 
-EDA_ITEM* LIB_CIRCLE::doClone() const
+EDA_ITEM* LIB_CIRCLE::Clone() const
 {
     return new LIB_CIRCLE( *this );
 }

@@ -259,7 +259,7 @@ void SCH_SCREEN::ExtractWires( DLIST< SCH_ITEM >& aList, bool aCreateCopy )
             aList.Append( item );
 
             if( aCreateCopy )
-                m_drawList.Insert( item->Clone(), next_item );
+                m_drawList.Insert( (SCH_ITEM*) item->Clone(), next_item );
 
             break;
 

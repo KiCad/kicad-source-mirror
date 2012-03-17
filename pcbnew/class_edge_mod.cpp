@@ -273,7 +273,7 @@ wxString EDGE_MODULE::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* EDGE_MODULE::doClone() const
+EDA_ITEM* EDGE_MODULE::Clone() const
 {
     return new EDGE_MODULE( *this );
 }

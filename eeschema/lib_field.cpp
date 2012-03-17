@@ -369,7 +369,7 @@ bool LIB_FIELD::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTr
 }
 
 
-EDA_ITEM* LIB_FIELD::doClone() const
+EDA_ITEM* LIB_FIELD::Clone() const
 {
     LIB_FIELD* newfield = new LIB_FIELD( m_id );
 

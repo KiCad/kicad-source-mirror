@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -186,11 +185,11 @@ public:
      */
     virtual EDA_RECT GetBoundingBox() const;
 
-    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
-    bool HitTest( const wxPoint& aPosition );
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition );
 
-    /** @copydoc EDA_ITEM::HitTest(EDA_RECT&) */
-    bool HitTest( const EDA_RECT& aRect ) const;
+    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function GetClass
@@ -261,12 +260,12 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_dashed_line_xpm; }
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 #endif  // CLASS_DRAWSEGMENT_H_

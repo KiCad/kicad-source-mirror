@@ -149,17 +149,8 @@ public:
 
     virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    /**
-     * Function HitTest
-     * verifies that \a aRefPos within the bounds of this pin attached to \a aComponent.
-     * <p>
-     * The coordinates of the pin are calculated relative to \a aComponent if not NULL.
-     * Otherwise, the pin coordinates are relative to the library anchor position.
-     * </p>
-     * @param aRefPos A wxPoint to test
-     * @return True \a aRefPos lies within the pin bounding box else false.
-     */
-    virtual bool HitTest( const wxPoint& aRefPos );
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition );
 
     /**
      * @param aPosRef - a wxPoint to test
@@ -575,8 +566,10 @@ public:
     /** @copydoc EDA_ITEM::GetSelectMenuText() */
     virtual wxString GetSelectMenuText() const;
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 private:
-    virtual EDA_ITEM* doClone() const;
 
     /**
      * Function compare

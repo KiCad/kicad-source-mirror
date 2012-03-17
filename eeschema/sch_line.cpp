@@ -78,7 +78,7 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
 }
 
 
-EDA_ITEM* SCH_LINE::doClone() const
+EDA_ITEM* SCH_LINE::Clone() const
 {
     return new SCH_LINE( *this );
 }

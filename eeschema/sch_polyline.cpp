@@ -64,7 +64,7 @@ SCH_POLYLINE::~SCH_POLYLINE()
 }
 
 
-EDA_ITEM* SCH_POLYLINE::doClone() const
+EDA_ITEM* SCH_POLYLINE::Clone() const
 {
     return new SCH_POLYLINE( *this );
 }

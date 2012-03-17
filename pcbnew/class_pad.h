@@ -386,8 +386,8 @@ public:
      */
     bool IsOnLayer( int aLayer ) const;
 
-    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
-    bool HitTest( const wxPoint& aPosition );
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition );
 
     /**
      * Function GetClass
@@ -448,14 +448,15 @@ public:
      */
     void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
 
 
 private:
-    virtual EDA_ITEM* doClone() const;
-
     /**
      * Function boundingRadius
      * returns a calculated radius of a bounding circle for this pad.

@@ -391,7 +391,7 @@ void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
     m_undoItem = NULL;
 
     if( aItem )
-        m_undoItem = aItem->Clone();
+        m_undoItem = (SCH_ITEM*) aItem->Clone();
 
 }
 

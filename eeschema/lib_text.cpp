@@ -214,7 +214,7 @@ bool LIB_TEXT::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTra
 }
 
 
-EDA_ITEM* LIB_TEXT::doClone() const
+EDA_ITEM* LIB_TEXT::Clone() const
 {
     LIB_TEXT* newitem = new LIB_TEXT(NULL);
 

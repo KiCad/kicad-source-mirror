@@ -61,7 +61,7 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
 }
 
 
-EDA_ITEM* SCH_SHEET_PIN::doClone() const
+EDA_ITEM* SCH_SHEET_PIN::Clone() const
 {
     return new SCH_SHEET_PIN( *this );
 }

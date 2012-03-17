@@ -106,12 +106,7 @@ public:
 
     virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    /**
-     * Tests if the given wxPoint is within the bounds of this object.
-     *
-     * @param aPosition - Coordinates to test
-     * @return - True if a hit, else false
-     */
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
     virtual bool HitTest( const wxPoint& aPosition );
 
      /**
@@ -204,8 +199,10 @@ public:
     /** @copydoc EDA_ITEM::GetMenuImage() */
     virtual BITMAP_DEF GetMenuImage() const { return  add_arc_xpm; }
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 private:
-    virtual EDA_ITEM* doClone() const;
 
     /**
      * Function compare

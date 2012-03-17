@@ -54,7 +54,7 @@ SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
 }
 
 
-EDA_ITEM* SCH_NO_CONNECT::doClone() const
+EDA_ITEM* SCH_NO_CONNECT::Clone() const
 {
     return new SCH_NO_CONNECT( *this );
 }

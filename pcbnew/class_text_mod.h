@@ -167,8 +167,8 @@ public:
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
 
-    /** @copydoc EDA_ITEM::HitTest(wxPoint&) */
-    bool HitTest( const wxPoint& aPosition );
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition );
 
     /**
      * Function IsOnLayer
@@ -208,12 +208,12 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  footprint_text_xpm; }
 
+    /** @copydoc EDA_ITEM::Clone() */
+    virtual EDA_ITEM* Clone() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 #endif // TEXT_MODULE_H_

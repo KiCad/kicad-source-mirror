@@ -1670,7 +1670,7 @@ void LIB_PIN::SetPinNumFromString( wxString& buffer )
 }
 
 
-EDA_ITEM* LIB_PIN::doClone() const
+EDA_ITEM* LIB_PIN::Clone() const
 {
     return new LIB_PIN( *this );
 }

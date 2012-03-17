@@ -94,7 +94,7 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
 }
 
 
-EDA_ITEM* ZONE_CONTAINER::doClone() const
+EDA_ITEM* ZONE_CONTAINER::Clone() const
 {
     return new ZONE_CONTAINER( *this );
 }

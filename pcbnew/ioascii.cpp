@@ -872,13 +872,15 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
 /**
  * Function WriteSheetDescr
  * Save the page information (size, texts, date ..)
- * @param screen BASE_SCREEN to save
- * @param File = an open FILE to write info
+ * @param aPageSettings The page settings to write to \a aFile.
+ * @param aTitleBlock The title block information to write to \a aFile.
+ * @param aFile An open FILE to write info.
  */
-static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& aTitleBlock, FILE* File )
+static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& aTitleBlock,
+                             FILE* aFile )
 {
-    fprintf( File, "$SHEETDESCR\n" );
-    fprintf( File, "Sheet %s %d %d%s\n",
+    fprintf( aFile, "$SHEETDESCR\n" );
+    fprintf( aFile, "Sheet %s %d %d%s\n",
              TO_UTF8( aPageSettings.GetType() ),
              aPageSettings.GetWidthMils(),
              aPageSettings.GetHeightMils(),
@@ -886,16 +888,16 @@ static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& 
                 " portrait" : ""
              );
 
-    fprintf( File, "Title %s\n",        EscapedUTF8( aTitleBlock.GetTitle() ).c_str() );
-    fprintf( File, "Date %s\n",         EscapedUTF8( aTitleBlock.GetDate() ).c_str() );
-    fprintf( File, "Rev %s\n",          EscapedUTF8( aTitleBlock.GetRevision() ).c_str() );
-    fprintf( File, "Comp %s\n",         EscapedUTF8( aTitleBlock.GetCompany() ).c_str() );
-    fprintf( File, "Comment1 %s\n",     EscapedUTF8( aTitleBlock.GetComment1() ).c_str() );
-    fprintf( File, "Comment2 %s\n",     EscapedUTF8( aTitleBlock.GetComment2() ).c_str() );
-    fprintf( File, "Comment3 %s\n",     EscapedUTF8( aTitleBlock.GetComment3() ).c_str() );
-    fprintf( File, "Comment4 %s\n",     EscapedUTF8( aTitleBlock.GetComment4() ).c_str() );
+    fprintf( aFile, "Title %s\n",        EscapedUTF8( aTitleBlock.GetTitle() ).c_str() );
+    fprintf( aFile, "Date %s\n",         EscapedUTF8( aTitleBlock.GetDate() ).c_str() );
+    fprintf( aFile, "Rev %s\n",          EscapedUTF8( aTitleBlock.GetRevision() ).c_str() );
+    fprintf( aFile, "Comp %s\n",         EscapedUTF8( aTitleBlock.GetCompany() ).c_str() );
+    fprintf( aFile, "Comment1 %s\n",     EscapedUTF8( aTitleBlock.GetComment1() ).c_str() );
+    fprintf( aFile, "Comment2 %s\n",     EscapedUTF8( aTitleBlock.GetComment2() ).c_str() );
+    fprintf( aFile, "Comment3 %s\n",     EscapedUTF8( aTitleBlock.GetComment3() ).c_str() );
+    fprintf( aFile, "Comment4 %s\n",     EscapedUTF8( aTitleBlock.GetComment4() ).c_str() );
 
-    fprintf( File, "$EndSHEETDESCR\n\n" );
+    fprintf( aFile, "$EndSHEETDESCR\n\n" );
     return true;
 }
 

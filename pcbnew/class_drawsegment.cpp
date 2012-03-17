@@ -538,7 +538,7 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* DRAWSEGMENT::doClone() const
+EDA_ITEM* DRAWSEGMENT::Clone() const
 {
     return new DRAWSEGMENT( *this );
 }
