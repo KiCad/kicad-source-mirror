@@ -496,7 +496,7 @@ private:
     /**
      * m_Offset is useful only for oblong pads (it can be used for other
      * shapes, but without any interest).
-     * this is the offset between the pad hole and the pad shape (you must
+     * This is the offset between the pad hole and the pad shape (you must
      * understand here pad shape = copper area around the hole)
      * Most of cases, the hole is the center of the shape (m_Offset = 0).
      * But some board designers use oblong pads with a hole moved to one of the

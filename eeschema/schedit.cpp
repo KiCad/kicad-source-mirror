@@ -455,7 +455,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
-    int id = aEvent.GetId();
+    id_eeschema_frm id = (id_eeschema_frm) aEvent.GetId();
 
     // Stop the current command and deselect the current tool.
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
