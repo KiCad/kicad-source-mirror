@@ -113,8 +113,6 @@ bool EDA_APP::OnInit()
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
-    int i=0;
-
 #ifdef KICAD_SCRIPTING    
     pcbnewInitPythonScripting();
 #endif    
@@ -156,7 +154,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     frame = new PCB_EDIT_FRAME( NULL, wxT( "Pcbnew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
     #ifdef KICAD_SCRIPTING    
-        ScriptingSetPcbEditFrame(frame); /* give the scripting helpers access to our frame */
+    ScriptingSetPcbEditFrame(frame); /* give the scripting helpers access to our frame */
     #endif    
     
     frame->UpdateTitle();
