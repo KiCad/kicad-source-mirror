@@ -50,8 +50,9 @@
  * Function Clamp
  * limits @a value within the range @a lower <= @a value <= @a upper.  It will work
  * on temporary expressions, since they are evaluated only once, and it should work
- * on most if not all numeric types. The arguments are accepted in this order so you
- * can remember the expression as a memory aid:
+ * on most if not all numeric types, string types, or any type for which "operator < ()"
+ * is present. The arguments are accepted in this order so you can remember the
+ * expression as a memory aid:
  * <p>
  * result is:  lower <= value <= upper
  */
@@ -60,7 +61,7 @@ template <typename T> inline const T& Clamp( const T& lower, const T& value, con
     wxASSERT( lower <= upper );
     if( value < lower )
         return lower;
-    else if( value > upper )
+    else if( upper < value )
         return upper;
     return value;
 }

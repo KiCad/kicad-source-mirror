@@ -38,7 +38,35 @@
 #include <class_board.h>
 #include <class_pcb_text.h>
 
-#include <dialog_pcb_text_properties.h>
+#include <vector>
+#include <wx/wx.h>
+#include <dialog_pcb_text_properties_base.h>
+
+
+class PCB_EDIT_FRAME;
+class TEXTE_PCB;
+
+
+/// Implement DIALOG_PCB_TEXT_PROPERTIES_BASE with interposing
+/// DIALOG_PCB_TEXT_PROPERTIES_BASE_SHIM class
+DIALOG_EXTEND_WITH_SHIM( DIALOG_PCB_TEXT_PROPERTIES, DIALOG_PCB_TEXT_PROPERTIES_BASE )
+{
+public:
+    DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent, TEXTE_PCB* passedTextPCB, wxDC* DC );
+
+private:
+    PCB_EDIT_FRAME*     m_Parent;
+    wxDC*               m_DC;
+    TEXTE_PCB*          m_SelectedPCBText;
+    std::vector<int>    layerList;
+
+    void MyInit();
+
+    // Handlers for DIALOG_PCB_TEXT_PROPERTIES_BASE events.
+    void OnClose( wxCloseEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event );
+};
 
 
 /**
@@ -50,7 +78,7 @@
 
 DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
                                                         TEXTE_PCB* passedTextPCB, wxDC* DC )
-                            : DIALOG_PCB_TEXT_PROPERTIES_BASE( parent )
+                            : DIALOG_PCB_TEXT_PROPERTIES_BASE_SHIM( parent )
 {
     m_Parent = parent;
     m_DC = DC;
@@ -78,8 +106,6 @@ void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
 
 void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
 {
-    SetFocus();
-
     // Put units symbols to text labels where appropriate
     AddUnitSymbol( *m_SizeXLabel );
     AddUnitSymbol( *m_SizeYLabel );
