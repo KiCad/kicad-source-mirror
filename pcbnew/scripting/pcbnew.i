@@ -85,76 +85,7 @@
 %include <class_netinfo.h>
 %include <layers_id_colors_and_visibility.h>
 
-
-/* the IO_ERROR exception handler, not working yet... */
-%exception
-{
-  try {
-  $function
-  }
-  catch (IO_ERROR e) {
-    PyErr_SetString(PyExc_IOError,"IO error");
-    return NULL;
-  }
-}
-
-/* Cast downs from EDA_ITEM/BOARD_ITEM to childs */
-
-
-%inline
-{
-  BOARD_ITEM*   Cast_to_BOARD_ITEM(EDA_ITEM* base)    {  return dynamic_cast<BOARD_ITEM*>(base);    }
-}
-
-%extend BOARD_ITEM
-{ 
-  TEXTE_PCB*    Cast_to_TEXTE_PCB()   {  return dynamic_cast<TEXTE_PCB*>(self);     }
-  DIMENSION*    Cast_to_DIMENSION()   {  return dynamic_cast<DIMENSION*>(self);     }
-  MODULE*       Cast_to_MODULE()      {  return dynamic_cast<MODULE*>(self);        }
-  TEXTE_MODULE* Cast_to_TEXTE_MODULE(){  return dynamic_cast<TEXTE_MODULE*>(self);  }
-  DRAWSEGMENT*  Cast_to_DRAWSEGMENT() {  return dynamic_cast<DRAWSEGMENT*>(self);   }
-  MARKER_PCB*   Cast_to_MARKER_PCB()  {  return dynamic_cast<MARKER_PCB*>(self);    }
-  BOARD*        Cast_to_BOARD()       {  return dynamic_cast<BOARD*>(self);         }
-  EDGE_MODULE*  Cast_to_EDGE_MODULE() {  return dynamic_cast<EDGE_MODULE*>(self);   }
-  D_PAD*        Cast_to_D_PAD()       {  return dynamic_cast<D_PAD*>(self);         }
-  TRACK*        Cast_to_TRACK()       {  return dynamic_cast<TRACK*>(self);         }
-  SEGZONE*      Cast_to_SEGZONE()       {  return dynamic_cast<SEGZONE*>(self);       }
-  SEGVIA*       Cast_to_SEGVIA()        {  return dynamic_cast<SEGVIA*>(self);        }
-  
-
-
-  %pythoncode
-  {
-    def Cast(self):
-      ct = self.GetClass()
-      if ct=="PTEXT":
-        return self.Cast_to_TEXTE_PCB()
-      elif ct=="BOARD":
-        return self.Cast_to_BOARD()
-      elif ct=="DIMENSION":
-        return self.Cast_to_DIMENSION()
-      elif ct=="DRAWSEGMENT":
-        return self.Cast_to_DRAWSEGMENT()
-      elif ct=="MGRAPHIC":
-        return self.Cast_to_EDGE_MODULE()
-      elif ct=="MODULE":
-        return self.Cast_to_MODULE()
-      elif ct=="PAD":
-        return self.Cast_to_D_PAD()
-      elif ct=="MTEXT":
-        return self.Cast_to_TEXTE_MODULE()
-      elif ct=="ZONE":
-        return self.Cast_to_SEGZONE()
-      elif ct=="VIA":
-        return self.Cast_to_SEGVIA()
-      elif ct=="TRACK":
-        return self.Cast_to_TRACK()
-      else:
-        return None
-  }
-}
-
-
+%include "board_item.i"
 
 %include <pcbnew_scripting_helpers.h>
 
@@ -163,27 +94,7 @@
   %include <kicad_plugin.h>
 #endif
 
-/* this is to help python with the * accessor of DLIST templates */
-
-%rename(Get) operator BOARD_ITEM*; 
-%rename(Get) operator TRACK*; 
-%rename(Get) operator D_PAD*; 
-%rename(Get) operator MODULE*; 
 
 
-BOARD *GetBoard();
-
-// we must translate C++ templates to scripting languages
-
-%template(BOARD_ITEM_List) DLIST<BOARD_ITEM>;
-%template(MODULE_List)     DLIST<MODULE>;
-%template(TRACK_List)      DLIST<TRACK>;
-%template(PAD_List)        DLIST<D_PAD>;
-
- 
-
-%template(MARKER_Vector) std::vector<MARKER_PCB*>;
-%template(ZONE_CONTAINER_Vector) std::vector<ZONE_CONTAINER*>;
-%template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
-
-
+%include "board.i"
+%include "units.i"

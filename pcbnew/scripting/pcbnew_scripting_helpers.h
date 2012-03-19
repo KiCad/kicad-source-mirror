@@ -8,6 +8,7 @@
 
 #ifndef SWIG
 void ScriptingSetPcbEditFrame(PCB_EDIT_FRAME *aPCBEdaFrame);
+BOARD *GetBoard();
 #endif 
 
 BOARD* LoadBoard(wxString aFileName);

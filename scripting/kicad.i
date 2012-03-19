@@ -60,47 +60,39 @@
 	using namespace std;
 	#include <class_title_block.h>
 	#include <class_colors_design_settings.h>
+	#include <class_marker_base.h>
 
 %}
 
 /* all the wx wrappers for wxString, wxPoint, wxRect, wxChar .. */
 %include <wx.i>
 
+/* exception handling */
+
+/* the IO_ERROR exception handler, not working yet... */
+%exception
+{
+  try {
+  $function
+  }
+  catch (IO_ERROR e) {
+    PyErr_SetString(PyExc_IOError,"IO error");
+    return NULL;
+  }
+}
+
+
+
 %include <dlist.h>
 %include <base_struct.h>
 %include <common.h>
 %include <class_title_block.h>
 %include <class_colors_design_settings.h>
+%include <class_marker_base.h>
 
 
-%extend DLIST
-{
-	%pythoncode
-	{
-		class DLISTIter:
-			def __init__(self,aList):
-				self.last = aList
-		
-			def next(self):
-				if self.last is None: 
-					raise StopIteration
-				else:
-					ret = None
-					
-					# first item in list has "Get" as a DLIST
-					try:
-						ret = self.last.Get()
-					except: 
-						ret = self.last #next items just not..
-					
-					self.last = self.last.Next()
-					return ret
-	
-		def __iter__(self):
-			return self.DLISTIter(self)
-			
-	}
-}
+%include "dlist.i"
+
+/* std template mappings */
 %template(intVector) std::vector<int>;
-
 
