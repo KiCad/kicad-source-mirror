@@ -180,9 +180,10 @@ BOARD *GetBoard();
 %template(TRACK_List)      DLIST<TRACK>;
 %template(PAD_List)        DLIST<D_PAD>;
 
-/* TODO: -the std::* compilatio is broken with some swig + gcc combinations 
- *        see kicad.i for more information.
- * %template(MARKER_Vector) std::vector<MARKER_PCB*>;
- * %template(ZONE_CONTAINER_Vector) std::vector<ZONE_CONTAINER*>;
- */
+ 
+
+%template(MARKER_Vector) std::vector<MARKER_PCB*>;
+%template(ZONE_CONTAINER_Vector) std::vector<ZONE_CONTAINER*>;
+%template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
+
 
