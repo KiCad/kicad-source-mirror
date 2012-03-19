@@ -438,7 +438,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     // Type of pad selection
     m_PadType->SetSelection( 0 );
 
-    for( int ii = 0; ii < NBTYPES; ii++ )
+    for( unsigned ii = 0; ii < NBTYPES; ii++ )
     {
         if( CodeType[ii] == m_dummyPad->GetAttribute() )
         {
@@ -573,11 +573,10 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
-    long layer_mask;
-    int  ii;
+    long        layer_mask;
+    unsigned    ii = m_PadType->GetSelection();
 
-    ii = m_PadType->GetSelection();
-    if( ii < 0 || ii >= NBTYPES )
+    if( ii >= NBTYPES ) // catches < 0 also
         ii = 0;
 
     layer_mask = Std_Pad_Layers[ii];
@@ -603,11 +602,11 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
 {
-    if( ( layer_mask & ALL_CU_LAYERS )  == LAYER_FRONT )
+    if( ( layer_mask & ALL_CU_LAYERS ) == LAYER_FRONT )
         m_rbCopperLayersSel->SetSelection(0);
     else if( ( layer_mask & ALL_CU_LAYERS ) == LAYER_BACK)
         m_rbCopperLayersSel->SetSelection(1);
-    else if( ( layer_mask & ALL_CU_LAYERS )  != 0 )
+    else if( ( layer_mask & ALL_CU_LAYERS ) != 0 )
         m_rbCopperLayersSel->SetSelection(2);
     else
         m_rbCopperLayersSel->SetSelection(3);
