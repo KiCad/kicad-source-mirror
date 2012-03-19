@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
@@ -112,12 +112,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_internalUnits       = EESCHEMA_INTERNAL_UNIT;
     minsize.x             = 470;
     minsize.y             = 350 + m_MsgFrameHeight;
-
-    SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
-
-    // Make sure window has a sane minimum size.
-    if( ( size.x < minsize.x ) || ( size.y < minsize.y ) )
-        SetSize( 0, 0, minsize.x, minsize.y );
 
     // Pane sizes for status bar.
     // @todo these should be sized based on typical text content, like

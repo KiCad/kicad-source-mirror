@@ -368,7 +368,6 @@ set( BMAPS_MID
     new_cvpcb
     new_footprint
     new_library
-    new_module
     new_pcb
     new_project
     new_sch
