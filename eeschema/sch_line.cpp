@@ -285,6 +285,21 @@ void SCH_LINE::Rotate( wxPoint aPosition )
 }
 
 
+/*
+ * helper sort function, used by MergeOverlap
+ * sorts ref and test by x values, or (for same x values) by y values
+ */
+bool sort_by_ends_position(const wxPoint * ref, const wxPoint * tst )
+{
+    if( ref->x == tst->x )
+        return ref->y < tst->y;
+    return ref->x < tst->x;
+}
+
+/*
+ * MergeOverlap try to merge 2 lines that are colinear.
+ * this function expects these 2 lines have at least a common end
+ */
 bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
 {
     wxCHECK_MSG( aLine != NULL && aLine->Type() == SCH_LINE_T, false,
@@ -293,19 +308,16 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     if( this == aLine || GetLayer() != aLine->GetLayer() )
         return false;
 
-    // Search for a common end, and modify coordinates to ensure RefSegm->m_end
-    // == TstSegm->m_start
+    // Search for a common end:
     if( m_start == aLine->m_start )
     {
-        if( m_end == aLine->m_end )
+        if( m_end == aLine->m_end )     // Trivial case
             return true;
-
-        EXCHG( m_start, m_end );
     }
     else if( m_start == aLine->m_end )
     {
-        EXCHG( m_start, m_end );
-        EXCHG( aLine->m_start, aLine->m_end );
+        if( m_end == aLine->m_start )     // Trivial case
+            return true;
     }
     else if( m_end == aLine->m_end )
     {
@@ -317,21 +329,21 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
         return false;
     }
 
+    bool colinear = false;
+
     /* Test alignment: */
     if( m_start.y == m_end.y )       // Horizontal segment
     {
         if( aLine->m_start.y == aLine->m_end.y )
         {
-            m_end = aLine->m_end;
-            return true;
+            colinear = true;
         }
     }
     else if( m_start.x == m_end.x )  // Vertical segment
     {
         if( aLine->m_start.x == aLine->m_end.x )
         {
-            m_end = aLine->m_end;
-            return true;
+            colinear = true;
         }
     }
     else
@@ -340,11 +352,28 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
             == atan2( (double) ( aLine->m_start.x - aLine->m_end.x ),
                       (double) ( aLine->m_start.y - aLine->m_end.y ) ) )
         {
-            m_end = aLine->m_end;
-            return true;
+            colinear = true;
         }
     }
 
+    // Make a segment which merge the 2 segments
+    // we must find the extremums
+    // i.e. the more to the left and to the right points, or
+    // for horizontal segments the uppermost and the lowest point
+    if( colinear )
+    {
+        static std::vector <wxPoint*> candidates;
+        candidates.clear();
+        candidates.push_back( &m_start );
+        candidates.push_back( &m_end );
+        candidates.push_back( &aLine->m_start );
+        candidates.push_back( &aLine->m_end );
+        sort( candidates.begin(), candidates.end(), sort_by_ends_position );
+        wxPoint tmp = *candidates[3];
+        m_start = *candidates[0];
+        m_end = tmp;
+        return true;
+    }
     return false;
 }
 

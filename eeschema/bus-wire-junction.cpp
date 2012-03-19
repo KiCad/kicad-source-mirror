@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -107,7 +107,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     SCH_LINE* nextSegment;
     wxPoint   cursorpos = GetScreen()->GetCrossHairPosition();
 
-    // We should know id a segment is currently in progress
+    // We should know if a segment is currently in progress
     segment = (SCH_LINE*) GetScreen()->GetCurItem();
     if( segment )   // a current item exists, but not necessary a currently edited item
     {
@@ -168,7 +168,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     {
         SCH_LINE* prevSegment = (SCH_LINE*) segment->Back();
 
-        wxLogDebug( wxT( "Adding new segment after " ) + segment->GetSelectMenuText() );
+        wxLogDebug( wxT( "Adding new segment after " ) + prevSegment->GetSelectMenuText() );
 
         if( !g_HVLines )
         {
@@ -241,6 +241,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
                 item = s_wires.begin();
             else
                 item = previousSegment;
+           wxLogDebug( wxT( "Segment count after removal: %d" ), s_wires.GetCount() );
         }
 
         item = item->Next();
