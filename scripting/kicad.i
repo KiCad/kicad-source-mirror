@@ -36,8 +36,12 @@
    %include <std_vector.i>
    %include <std_string.i>
 
-%nodefaultctor EDA_ITEM;
+/* ignore some constructors of EDA_ITEM that will make the build fail */
 
+%nodefaultctor EDA_ITEM;
+%ignore EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
+%ignore EDA_ITEM::EDA_ITEM( KICAD_T idType );
+%ignore EDA_ITEM::EDA_ITEM( const EDA_ITEM& base );
 
 /* swig tries to wrap SetBack/SetNext on derived classes, but this method is
    private for most childs, so if we don't ignore it it won't compile */
