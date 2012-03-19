@@ -35,34 +35,34 @@
 
 %{ 
   #include <wx_python_helpers.h>
-	#include <class_board_item.h>
-	#include <class_board_connected_item.h>
-	#include <class_board.h>
-	#include <class_module.h>
-	#include <class_track.h>	
-	#include <class_pad.h>
-	#include <class_netinfo.h>
+  #include <class_board_item.h>
+  #include <class_board_connected_item.h>
+  #include <class_board.h>
+  #include <class_module.h>
+  #include <class_track.h>  
+  #include <class_pad.h>
+  #include <class_netinfo.h>
   #include <class_pcb_text.h>
-	#include <class_dimension.h>
-	#include <class_drawsegment.h>
-	#include <class_marker_pcb.h>
-	#include <class_text_mod.h>
-	#include <class_edge_mod.h>
-	#include <dlist.h>
-	#include <class_zone_settings.h>
-	#include <class_netclass.h>
-	#include <class_netinfo.h>
-	#include <layers_id_colors_and_visibility.h>
-	#include <pcbnew_scripting_helpers.h>
-	
+  #include <class_dimension.h>
+  #include <class_drawsegment.h>
+  #include <class_marker_pcb.h>
+  #include <class_text_mod.h>
+  #include <class_edge_mod.h>
+  #include <dlist.h>
+  #include <class_zone_settings.h>
+  #include <class_netclass.h>
+  #include <class_netinfo.h>
+  #include <layers_id_colors_and_visibility.h>
+  #include <pcbnew_scripting_helpers.h>
+  
       
-	BOARD *GetBoard(); /* get current editor board */
+  BOARD *GetBoard(); /* get current editor board */
 %}
 
 #ifdef BUILD_WITH_PLUGIN
 %{
-	#include <io_mgr.h>
-	#include <kicad_plugin.h>
+  #include <io_mgr.h>
+  #include <kicad_plugin.h>
 %}
 #endif
 
@@ -89,13 +89,13 @@
 /* the IO_ERROR exception handler, not working yet... */
 %exception
 {
-	try {
-	$function
-	}
-	catch (IO_ERROR e) {
-	 	PyErr_SetString(PyExc_IOError,"IO error");
-		return NULL;
-	}
+  try {
+  $function
+  }
+  catch (IO_ERROR e) {
+    PyErr_SetString(PyExc_IOError,"IO error");
+    return NULL;
+  }
 }
 
 /* Cast downs from EDA_ITEM/BOARD_ITEM to childs */
@@ -103,55 +103,55 @@
 
 %inline
 {
-  BOARD_ITEM*   Cast_to_BOARD_ITEM(EDA_ITEM* base)    {  return dynamic_cast<BOARD_ITEM*>(base);  	}
+  BOARD_ITEM*   Cast_to_BOARD_ITEM(EDA_ITEM* base)    {  return dynamic_cast<BOARD_ITEM*>(base);    }
 }
 
 %extend BOARD_ITEM
 { 
-	TEXTE_PCB*    Cast_to_TEXTE_PCB()   {  return dynamic_cast<TEXTE_PCB*>(self);  		}
-	DIMENSION*    Cast_to_DIMENSION()   {  return dynamic_cast<DIMENSION*>(self);  		}
-	MODULE*       Cast_to_MODULE()      {  return dynamic_cast<MODULE*>(self);  			}
-	TEXTE_MODULE* Cast_to_TEXTE_MODULE(){  return dynamic_cast<TEXTE_MODULE*>(self);  }
-	DRAWSEGMENT*  Cast_to_DRAWSEGMENT() {  return dynamic_cast<DRAWSEGMENT*>(self);  	}
-	MARKER_PCB*   Cast_to_MARKER_PCB()  {  return dynamic_cast<MARKER_PCB*>(self);  	}
-	BOARD*        Cast_to_BOARD()       {  return dynamic_cast<BOARD*>(self);  				}
-	EDGE_MODULE*  Cast_to_EDGE_MODULE() {  return dynamic_cast<EDGE_MODULE*>(self);   }
-	D_PAD*  			Cast_to_D_PAD() 			{  return dynamic_cast<D_PAD*>(self);  				}
-	TRACK*  			Cast_to_TRACK() 			{  return dynamic_cast<TRACK*>(self);  				}
-	SEGZONE*			Cast_to_SEGZONE()				{  return dynamic_cast<SEGZONE*>(self);				}
-	SEGVIA*				Cast_to_SEGVIA()				{  return dynamic_cast<SEGVIA*>(self);				}
-	
+  TEXTE_PCB*    Cast_to_TEXTE_PCB()   {  return dynamic_cast<TEXTE_PCB*>(self);     }
+  DIMENSION*    Cast_to_DIMENSION()   {  return dynamic_cast<DIMENSION*>(self);     }
+  MODULE*       Cast_to_MODULE()      {  return dynamic_cast<MODULE*>(self);        }
+  TEXTE_MODULE* Cast_to_TEXTE_MODULE(){  return dynamic_cast<TEXTE_MODULE*>(self);  }
+  DRAWSEGMENT*  Cast_to_DRAWSEGMENT() {  return dynamic_cast<DRAWSEGMENT*>(self);   }
+  MARKER_PCB*   Cast_to_MARKER_PCB()  {  return dynamic_cast<MARKER_PCB*>(self);    }
+  BOARD*        Cast_to_BOARD()       {  return dynamic_cast<BOARD*>(self);         }
+  EDGE_MODULE*  Cast_to_EDGE_MODULE() {  return dynamic_cast<EDGE_MODULE*>(self);   }
+  D_PAD*        Cast_to_D_PAD()       {  return dynamic_cast<D_PAD*>(self);         }
+  TRACK*        Cast_to_TRACK()       {  return dynamic_cast<TRACK*>(self);         }
+  SEGZONE*      Cast_to_SEGZONE()       {  return dynamic_cast<SEGZONE*>(self);       }
+  SEGVIA*       Cast_to_SEGVIA()        {  return dynamic_cast<SEGVIA*>(self);        }
+  
 
 
-	%pythoncode
-	{
-		def Cast(self):
-			ct = self.GetClass()
-			if ct=="PTEXT":
-				return self.Cast_to_TEXTE_PCB()
-			elif ct=="BOARD":
-				return self.Cast_to_BOARD()
-			elif ct=="DIMENSION":
-				return self.Cast_to_DIMENSION()
-			elif ct=="DRAWSEGMENT":
-				return self.Cast_to_DRAWSEGMENT()
-			elif ct=="MGRAPHIC":
-				return self.Cast_to_EDGE_MODULE()
-			elif ct=="MODULE":
-				return self.Cast_to_MODULE()
-			elif ct=="PAD":
-				return self.Cast_to_D_PAD()
-			elif ct=="MTEXT":
-				return self.Cast_to_TEXTE_MODULE()
-			elif ct=="ZONE":
-				return self.Cast_to_SEGZONE()
-			elif ct=="VIA":
-				return self.Cast_to_SEGVIA()
-			elif ct=="TRACK":
-				return self.Cast_to_TRACK()
-			else:
-				return None
-	}
+  %pythoncode
+  {
+    def Cast(self):
+      ct = self.GetClass()
+      if ct=="PTEXT":
+        return self.Cast_to_TEXTE_PCB()
+      elif ct=="BOARD":
+        return self.Cast_to_BOARD()
+      elif ct=="DIMENSION":
+        return self.Cast_to_DIMENSION()
+      elif ct=="DRAWSEGMENT":
+        return self.Cast_to_DRAWSEGMENT()
+      elif ct=="MGRAPHIC":
+        return self.Cast_to_EDGE_MODULE()
+      elif ct=="MODULE":
+        return self.Cast_to_MODULE()
+      elif ct=="PAD":
+        return self.Cast_to_D_PAD()
+      elif ct=="MTEXT":
+        return self.Cast_to_TEXTE_MODULE()
+      elif ct=="ZONE":
+        return self.Cast_to_SEGZONE()
+      elif ct=="VIA":
+        return self.Cast_to_SEGVIA()
+      elif ct=="TRACK":
+        return self.Cast_to_TRACK()
+      else:
+        return None
+  }
 }
 
 
