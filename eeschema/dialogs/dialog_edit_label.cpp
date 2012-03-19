@@ -38,7 +38,30 @@
 #include <confirm.h>
 #include <sch_text.h>
 
-#include <dialog_edit_label.h>
+#include <dialog_edit_label_base.h>
+#include <dialog_helpers.h>
+
+class SCH_EDIT_FRAME;
+class SCH_TEXT;
+
+
+DIALOG_EXTEND_WITH_SHIM( DialogLabelEditor, DialogLabelEditor_Base )
+{
+public:
+    DialogLabelEditor( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
+
+private:
+    void InitDialog( );
+    virtual void OnEnterKey( wxCommandEvent& aEvent );
+    virtual void OnOkClick( wxCommandEvent& aEvent );
+    virtual void OnCancelClick( wxCommandEvent& aEvent );
+    void TextPropertiesAccept( wxCommandEvent& aEvent );
+
+    SCH_EDIT_FRAME* m_Parent;
+    SCH_TEXT*       m_CurrentText;
+    wxTextCtrl*     m_textLabel;
+};
+
 
 
 /* Edit the properties of the text (Label, Global label, graphic text).. )
@@ -56,7 +79,7 @@ void SCH_EDIT_FRAME::EditSchematicText( SCH_TEXT* aTextItem )
 
 
 DialogLabelEditor::DialogLabelEditor( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
-    DialogLabelEditor_Base( aParent )
+    DialogLabelEditor_Base_SHIM( aParent )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
