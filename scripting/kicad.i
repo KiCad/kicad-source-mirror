@@ -30,10 +30,12 @@
 
 /* OFF NOW, it triggers an error with GCC 4.6 and swig-2.0.4 or trunk.. 
    http://sourceforge.net/tracker/index.php?func=detail&aid=3391906&group_id=1645&atid=101645
+*/
+
 
    %include <std_vector.i>
    %include <std_string.i>
-*/
+
 %nodefaultctor EDA_ITEM;
 
 
@@ -48,6 +50,7 @@
 %ignore GetCommandOptions;
 
 %{
+  #include <cstddef>
 	#include <dlist.h>
 	#include <base_struct.h>
 	#include <common.h>
@@ -63,7 +66,6 @@
 /* all the wx wrappers for wxString, wxPoint, wxRect, wxChar .. */
 %include <wx.i>
 
-
 %include <dlist.h>
 %include <base_struct.h>
 %include <common.h>
@@ -71,9 +73,34 @@
 %include <class_colors_design_settings.h>
 
 
-/*
-namespace std 
+%extend DLIST
 {
-	%template(intVector) vector<int>;
+	%pythoncode
+	{
+		class DLISTIter:
+			def __init__(self,aList):
+				self.last = aList
+		
+			def next(self):
+				if self.last is None: 
+					raise StopIteration
+				else:
+					ret = None
+					
+					# first item in list has "Get" as a DLIST
+					try:
+						ret = self.last.Get()
+					except: 
+						ret = self.last #next items just not..
+					
+					self.last = self.last.Next()
+					return ret
+	
+		def __iter__(self):
+			return self.DLISTIter(self)
+			
+	}
 }
-*/
+%template(intVector) std::vector<int>;
+
+
