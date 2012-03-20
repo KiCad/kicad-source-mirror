@@ -44,7 +44,7 @@
     def GetTrackWidthList(self):      return self.m_TrackWidthList
     
     def Save(self,filename):
-      return pcbnew.SaveBoard(filename,self)
+      return SaveBoard(filename,self)
   }
   
 }
