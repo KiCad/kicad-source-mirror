@@ -1,4 +1,14 @@
 
-iterator for NETCLASSES (NETCLASS) see class_netclass.h
+* Tell swig(somehow) to forget automatic object deletion after adding
+  a BOARD_ITEM to BOARD object (it will be automatically deleted by BOARD,
+  leading to Segmentation Fault when unloading our python module (double free).
+  
+* implement iterator for NETCLASSES (NETCLASS) see class_netclass.h
+
+* add MODULE::Add (see BOARD:Add), to make it more clean
+
+* add wxSize implementation to wx.i and wx helpers (D_PAD uses it)
+
+
 
 
