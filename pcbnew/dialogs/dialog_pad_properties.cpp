@@ -1,7 +1,31 @@
 /*******************************************************************/
 /* dialog_pad_properties.cpp: Pad editing functions and dialog box */
-/* see also dialog_pad_properties.xxx (built with wxFormBuilder)   */
+/* see also dialog_pad_properties_base.xxx (built with wxFormBuilder)   */
 /*******************************************************************/
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Jean-Pierre Charras
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <common.h>
@@ -19,6 +43,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <dialog_helpers.h>
 
 #include <dialog_pad_properties_base.h>
 #include <html_messagebox.h>
@@ -58,7 +83,7 @@ static long Std_Pad_Layers[] = {
  * class DIALOG_PAD_PROPERTIES, derived from DIALOG_PAD_PROPERTIES_BASE,
  * created by wxFormBuilder
  */
-class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
+DIALOG_EXTEND_WITH_SHIM( DIALOG_PAD_PROPERTIES, DIALOG_PAD_PROPERTIES_BASE )
 {
 public:
     DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad );
@@ -69,22 +94,13 @@ public:
 
 private:
     PCB_BASE_FRAME* m_Parent;
-
     D_PAD*  m_CurrentPad;            // pad currently being edited
-
     D_PAD*  m_dummyPad;              // a working copy used to show changes
-
     BOARD*  m_Board;
-
     D_PAD&  m_Pad_Master;
-
     bool    m_isFlipped;            // true if the parent footprint (therefore pads) is flipped (mirrored)
                                     // in this case, some Y coordinates values must be negated
-
     bool    m_canUpdate;
-
-    static wxPoint  prevPosition;
-    static wxSize   prevSize;
 
     void initValues();
 
@@ -116,12 +132,8 @@ private:
 };
 
 
-wxPoint DIALOG_PAD_PROPERTIES::prevPosition( -1, -1 );
-wxSize DIALOG_PAD_PROPERTIES::prevSize;
-
-
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
-    DIALOG_PAD_PROPERTIES_BASE( aParent ),
+    DIALOG_PAD_PROPERTIES_BASE_SHIM( aParent ),
     m_Pad_Master( aParent->GetBoard()->GetDesignSettings().m_Pad_Master )
 {
     m_canUpdate  = false;
@@ -139,12 +151,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
-
-    if( prevPosition.x != -1 )
-        SetSize( prevPosition.x, prevPosition.y,
-                 prevSize.x, prevSize.y );
-    else
-        Center();
 
     m_PadNumCtrl->SetFocus();
     m_canUpdate = true;
@@ -207,6 +213,13 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     GRResetPenAndBrush( &dc );
     m_dummyPad->DrawShape( NULL, &dc, drawInfo );
+
+    // Draw X and Y axis.
+    // this is particularly useful to show the reference position of pads
+    // with offset and no hole
+    int width = 0;
+    GRLine( NULL, &dc, -dim, 0, dim, 0, width, BLUE );   // X axis
+    GRLine( NULL, &dc, 0, -dim, 0, dim, width, BLUE );   // Y axis
 
     event.Skip();
 }
@@ -673,8 +686,13 @@ if you do not want this pad plotted in gerber files");
         }
     }
 
-    if(  m_dummyPad->GetSize().x / 2 <= ABS( m_dummyPad->GetOffset().x ) ||
-         m_dummyPad->GetSize().y / 2 <= ABS( m_dummyPad->GetOffset().y ) )
+    wxPoint max_size;
+    max_size.x = ABS( m_dummyPad->GetOffset().x );
+    max_size.y = ABS( m_dummyPad->GetOffset().y );
+    max_size.x += m_dummyPad->GetDrillSize().x / 2;
+    max_size.y += m_dummyPad->GetDrillSize().y / 2;
+    if( ( m_dummyPad->GetSize().x / 2 <= max_size.x ) ||
+        ( m_dummyPad->GetSize().y / 2 <= max_size.y ) )
     {
         error_msgs.Add( _( "Incorrect value for pad offset" ) );
     }
@@ -718,9 +736,6 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
     bool rastnestIsChanged = false;
     int  isign = m_isFlipped ? -1 : 1;
-
-    prevPosition = GetPosition();
-    prevSize = GetSize();
 
     TransfertDataToPad( &m_Pad_Master );
 
@@ -999,8 +1014,12 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad )
 
     case PAD_CONN:
     case PAD_SMD:
-        // Offset is a translation of border relative to hole.  SMD has no hole.
-        aPad->SetOffset( wxPoint( 0, 0 ) );
+        // SMD and PAD_CONN has no hole.
+        // basically, SMD and PAD_CONN are same type of pads
+        // PAD_CONN has just a default non technical layers that differs frm SMD
+        // and are intended to be used in virtual edge board connectors
+        // However we can accept a non null offset,
+        // mainly to allow complex pads build from a set of from basic pad shapes
         aPad->SetDrillSize( wxSize( 0, 0 ) );
         break;
 
@@ -1078,7 +1097,5 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 {
-    prevPosition = GetPosition();
-    prevSize = GetSize();
     EndModal( wxID_CANCEL );
 }
