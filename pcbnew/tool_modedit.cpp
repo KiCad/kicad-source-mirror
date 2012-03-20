@@ -180,7 +180,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
                             wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
-    m_drawToolBar->AddTool( ID_MODEDIT_DELETE_TOOL, wxEmptyString, KiBitmap( delete_body_xpm ),
+    m_drawToolBar->AddTool( ID_MODEDIT_DELETE_TOOL, wxEmptyString, KiBitmap( delete_xpm ),
                             _( "Delete items" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_MODEDIT_PLACE_GRID_COORD, wxEmptyString,

@@ -158,7 +158,6 @@ set( BMAPS_MID
     break_bus
     break_line
     browse_files
-    cancel_tool
     cancel
     change_entry_orient
     create_cmp_file
@@ -176,7 +175,6 @@ set( BMAPS_MID
     cvpcb
     dashline
     datasheet
-    delete_body
     delete_arc
     delete_association
     delete_bus

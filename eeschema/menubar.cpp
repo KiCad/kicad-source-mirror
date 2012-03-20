@@ -210,7 +210,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AppendSeparator();
     AddMenuItem( editMenu, ID_SCHEMATIC_DELETE_ITEM_BUTT,
                  _( "&Delete" ), HELP_DELETE_ITEMS,
-                 KiBitmap( delete_body_xpm ) );
+                 KiBitmap( delete_xpm ) );
 
     // Find
     editMenu->AppendSeparator();

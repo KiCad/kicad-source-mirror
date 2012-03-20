@@ -265,7 +265,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Delete
     AddMenuItem( editMenu, ID_PCB_DELETE_ITEM_BUTT,
                  _( "&Delete" ), _( "Delete items" ),
-                 KiBitmap( delete_body_xpm ) );
+                 KiBitmap( delete_xpm ) );
 
     editMenu->AppendSeparator();
 
@@ -285,7 +285,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( editMenu, ID_MENU_PCB_CLEAN,
                  _( "&Cleanup Tracks and Vias" ),
                  _( "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias" ),
-                 KiBitmap( delete_body_xpm ) );
+                 KiBitmap( delete_xpm ) );
 
     // Swap Layers
     AddMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,

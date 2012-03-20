@@ -83,7 +83,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         else
         {
             AddMenuItem( aPopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
-                         _( "End Tool" ), KiBitmap( cancel_tool_xpm ) );
+                         _( "End Tool" ), KiBitmap( cursor_xpm ) );
         }
 
         aPopMenu->AppendSeparator();
@@ -203,7 +203,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
                 if( item->GetLayer() > LAST_COPPER_LAYER )
                     AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING_LAYER,
-                                 _( "Delete All Drawing on Layer" ), KiBitmap( delete_body_xpm ) );
+                                 _( "Delete All Drawing on Layer" ), KiBitmap( delete_xpm ) );
             }
 
             break;

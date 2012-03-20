@@ -141,7 +141,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Delete items
     AddMenuItem( editMenu, ID_MODEDIT_DELETE_TOOL,
                  _( "&Delete" ), _( "Delete objects with the eraser" ),
-                 KiBitmap( delete_body_xpm ) );
+                 KiBitmap( delete_xpm ) );
 
     // Separator
     editMenu->AppendSeparator();
