@@ -203,7 +203,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                          KiBitmap( cancel_xpm ) );
         else
             AddMenuItem( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ),
-                         KiBitmap( cancel_tool_xpm ) );
+                         KiBitmap( cursor_xpm ) );
 
         PopMenu->AppendSeparator();
     }

@@ -109,7 +109,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         else
         {
             AddMenuItem( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "End Tool" ),
-                         KiBitmap( cancel_tool_xpm ) );
+                         KiBitmap( cursor_xpm ) );
         }
 
         PopMenu->AppendSeparator();
@@ -127,10 +127,11 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     if( item == NULL )
     {
         if( m_CurrentSheet->Last() != g_RootSheet )
+        {
             AddMenuItem( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, _( "Leave Sheet" ),
                          KiBitmap( leave_sheet_xpm ) );
-
-        PopMenu->AppendSeparator();
+            PopMenu->AppendSeparator();
+        }
         return true;
     }
 

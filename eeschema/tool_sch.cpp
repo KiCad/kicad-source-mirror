@@ -254,7 +254,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
                             _("Add a bitmap image"), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxEmptyString,
-                            KiBitmap( delete_body_xpm ),
+                            KiBitmap( delete_xpm ),
                             HELP_DELETE_ITEMS, wxITEM_CHECK );
 
     // set icon paddings
