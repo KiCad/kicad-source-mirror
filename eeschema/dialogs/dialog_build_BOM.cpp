@@ -427,8 +427,8 @@ void DIALOG_BUILD_BOM::CreatePartsList( const wxString& aFullFileName, bool aInc
         cmplist.RemoveSubComponentsFromList();
 
     // sort component list by value
-    cmplist.SortByValueOnly( );
-    PrintComponentsListByPart( f, cmplist,aIncludeSubComponents );
+    cmplist.SortByRefAndValue( );
+    PrintComponentsListByPart( f, cmplist, aIncludeSubComponents );
 
     fclose( f );
 }

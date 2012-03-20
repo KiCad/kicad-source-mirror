@@ -106,6 +106,25 @@ bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1,
     return ii < 0;
 }
 
+bool SCH_REFERENCE_LIST::sortByValueAndRef( const SCH_REFERENCE& item1,
+                                            const SCH_REFERENCE& item2 )
+{
+    int ii = item1.CompareValue( item2 );
+    if( ii == 0 )
+        ii = RefDesStringCompare( item1.GetRef(), item2.GetRef() );
+    if( ii == 0 )
+        ii = item1.m_Unit - item2.m_Unit;
+    if( ii == 0 )
+        ii = item1.m_SheetNum - item2.m_SheetNum;
+    if( ii == 0 )
+        ii = item1.m_CmpPos.x - item2.m_CmpPos.x;
+    if( ii == 0 )
+        ii = item1.m_CmpPos.y - item2.m_CmpPos.y;
+    if( ii == 0 )
+        ii = item1.m_TimeStamp - item2.m_TimeStamp;
+
+    return ii < 0;
+}
 
 static bool engStrToDouble( wxString aStr, double* aDouble )
 {
