@@ -48,6 +48,7 @@ set(COMMON_SRCS
     confirm.cpp
     copy_to_clipboard.cpp
     dcsvg.cpp
+    dialog_shim.cpp
     displlst.cpp
     dlist.cpp
     drawframe.cpp
