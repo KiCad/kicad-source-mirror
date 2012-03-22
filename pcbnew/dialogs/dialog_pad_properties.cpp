@@ -43,7 +43,6 @@
 
 #include <class_board.h>
 #include <class_module.h>
-#include <dialog_helpers.h>
 
 #include <dialog_pad_properties_base.h>
 #include <html_messagebox.h>
@@ -83,7 +82,7 @@ static long Std_Pad_Layers[] = {
  * class DIALOG_PAD_PROPERTIES, derived from DIALOG_PAD_PROPERTIES_BASE,
  * created by wxFormBuilder
  */
-DIALOG_EXTEND_WITH_SHIM( DIALOG_PAD_PROPERTIES, DIALOG_PAD_PROPERTIES_BASE )
+ class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 public:
     DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad );
@@ -133,7 +132,7 @@ private:
 
 
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
-    DIALOG_PAD_PROPERTIES_BASE_SHIM( aParent ),
+    DIALOG_PAD_PROPERTIES_BASE( aParent ),
     m_Pad_Master( aParent->GetBoard()->GetDesignSettings().m_Pad_Master )
 {
     m_canUpdate  = false;

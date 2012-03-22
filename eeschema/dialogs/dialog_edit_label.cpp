@@ -39,13 +39,12 @@
 #include <sch_text.h>
 
 #include <dialog_edit_label_base.h>
-#include <dialog_helpers.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
 
 
-DIALOG_EXTEND_WITH_SHIM( DialogLabelEditor, DialogLabelEditor_Base )
+class DialogLabelEditor : public DialogLabelEditor_Base
 {
 public:
     DialogLabelEditor( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
@@ -79,7 +78,7 @@ void SCH_EDIT_FRAME::EditSchematicText( SCH_TEXT* aTextItem )
 
 
 DialogLabelEditor::DialogLabelEditor( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
-    DialogLabelEditor_Base_SHIM( aParent )
+    DialogLabelEditor_Base( aParent )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;

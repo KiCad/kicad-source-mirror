@@ -33,7 +33,6 @@
 #include <wxPcbStruct.h>
 #include <drawtxt.h>
 #include <confirm.h>
-#include <dialog_helpers.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -47,9 +46,7 @@ class PCB_EDIT_FRAME;
 class TEXTE_PCB;
 
 
-/// Implement DIALOG_PCB_TEXT_PROPERTIES_BASE with interposing
-/// DIALOG_PCB_TEXT_PROPERTIES_BASE_SHIM class
-DIALOG_EXTEND_WITH_SHIM( DIALOG_PCB_TEXT_PROPERTIES, DIALOG_PCB_TEXT_PROPERTIES_BASE )
+class DIALOG_PCB_TEXT_PROPERTIES : public DIALOG_PCB_TEXT_PROPERTIES_BASE
 {
 public:
     DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent, TEXTE_PCB* passedTextPCB, wxDC* DC );
@@ -78,7 +75,7 @@ private:
 
 DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
                                                         TEXTE_PCB* passedTextPCB, wxDC* DC )
-                            : DIALOG_PCB_TEXT_PROPERTIES_BASE_SHIM( parent )
+                            : DIALOG_PCB_TEXT_PROPERTIES_BASE( parent )
 {
     m_Parent = parent;
     m_DC = DC;
