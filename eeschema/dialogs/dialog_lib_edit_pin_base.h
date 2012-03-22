@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,8 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class wxBitmapComboBox;
-
+#include "wx/bmpcbox.h"
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -34,7 +34,7 @@ class wxBitmapComboBox;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_LIB_EDIT_PIN_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog 
+class DIALOG_LIB_EDIT_PIN_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -52,7 +52,7 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 			ID_M_STATICNUMBERTEXTSIZEUNITS,
 			ID_M_STATICTEXTPINLEN,
 			ID_M_TEXTLENGTH,
-			ID_M_STATICLENGTHUNITS,
+			ID_M_STATICLENGTHUNITS
 		};
 		
 		wxStaticText* m_staticTextPinName;
@@ -93,7 +93,7 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 476,372 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIB_EDIT_PIN_BASE();
 	
 };
