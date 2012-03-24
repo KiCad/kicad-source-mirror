@@ -53,7 +53,7 @@ typedef enum {
 } CmdBlockType;
 
 
-class BLOCK_SELECTOR : public EDA_ITEM, public EDA_RECT
+class BLOCK_SELECTOR : public EDA_RECT
 {
 public:
     BlockState        m_State;                    /* State (enum BlockState)
@@ -143,10 +143,6 @@ public:
      * and clears the selected item list.
      */
     void Clear();
-
-#if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const {}   // override
-#endif
 };
 
 

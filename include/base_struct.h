@@ -279,8 +279,15 @@ public:
     /**
      * Function operator(wxRect)
      * overloads the cast operator to return a wxRect
+     * wxRect does not accept negative values for size, so ensure the
+     * wxRect size is always >= 0
      */
-    operator wxRect() const { return wxRect( m_Pos, m_Size ); }
+    operator wxRect() const
+    {
+        EDA_RECT rect( m_Pos, m_Size );
+        rect.Normalize();
+        return wxRect( rect.m_Pos, rect.m_Size );
+    }
 
     /**
      * Function Inflate

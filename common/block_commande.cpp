@@ -40,9 +40,7 @@
 #include <block_commande.h>
 
 
-BLOCK_SELECTOR::BLOCK_SELECTOR() :
-    EDA_ITEM( BLOCK_LOCATE_STRUCT_TYPE ),
-    EDA_RECT()
+BLOCK_SELECTOR::BLOCK_SELECTOR() : EDA_RECT()
 {
     m_State   = STATE_NO_BLOCK; /* State (enum BlockState) of block. */
     m_Command = BLOCK_IDLE;     /* Type (enum CmdBlockType) of operation. */
@@ -188,7 +186,6 @@ void BLOCK_SELECTOR::Clear()
 {
     if( m_Command != BLOCK_IDLE )
     {
-        m_Flags   = 0;
         m_Command = BLOCK_IDLE;
         m_State   = STATE_NO_BLOCK;
         ClearItemsList();
@@ -206,7 +203,6 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
     if( ( Block->m_Command != BLOCK_IDLE ) || ( Block->m_State != STATE_NO_BLOCK ) )
         return false;
 
-    Block->ClearFlags();
     Block->m_Command = (CmdBlockType) ReturnBlockCommand( key );
 
     if( Block->m_Command == 0 )
@@ -323,7 +319,6 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC )
             screen->m_BlockLocate.ClearItemsList();
     }
 
-    screen->m_BlockLocate.ClearFlags();
     screen->m_BlockLocate.m_State = STATE_NO_BLOCK;
     screen->m_BlockLocate.m_Command = BLOCK_ABORT;
     Panel->GetParent()->HandleBlockEnd( DC );
