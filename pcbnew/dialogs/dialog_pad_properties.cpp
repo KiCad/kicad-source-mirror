@@ -690,8 +690,8 @@ if you do not want this pad plotted in gerber files");
     max_size.y = ABS( m_dummyPad->GetOffset().y );
     max_size.x += m_dummyPad->GetDrillSize().x / 2;
     max_size.y += m_dummyPad->GetDrillSize().y / 2;
-    if( ( m_dummyPad->GetSize().x / 2 <= max_size.x ) ||
-        ( m_dummyPad->GetSize().y / 2 <= max_size.y ) )
+    if( ( m_dummyPad->GetSize().x / 2 < max_size.x ) ||
+        ( m_dummyPad->GetSize().y / 2 < max_size.y ) )
     {
         error_msgs.Add( _( "Incorrect value for pad offset" ) );
     }

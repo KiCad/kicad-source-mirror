@@ -178,7 +178,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    // clear struct.m_Flags.
+    // clear dome flags and pointers
     GetScreen()->ClearDrawingState();
     GetScreen()->ClearBlockCommand();
     GetScreen()->SetCurItem( NULL );
@@ -308,7 +308,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( ! nextcmd )
     {
-        block->ClearFlags();
         block->m_State   = STATE_NO_BLOCK;
         block->m_Command = BLOCK_IDLE;
         GetScreen()->SetCurItem( NULL );

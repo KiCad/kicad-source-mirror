@@ -747,8 +747,8 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, EDA_DRAW_MODE_T tr
 }
 
 
-/* Plot a copper layer or mask in HPGL format.
- * HPGL unit = 0.98 mils (1 mil = 1.02041 unit HPGL).
+/* Plot a copper layer or mask.
+ * Silk screen layers are not plotted here.
  */
 void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
                                           int             aLayerMask,
