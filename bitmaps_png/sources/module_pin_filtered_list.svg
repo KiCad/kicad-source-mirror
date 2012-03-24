@@ -22,6 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -36,19 +37,19 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="969"
+     inkscape:window-width="1600"
+     inkscape:window-height="841"
      id="namedview52"
      showgrid="true"
-     inkscape:zoom="19.666667"
-     inkscape:cx="11.227532"
-     inkscape:cy="11.690902"
+     inkscape:zoom="25.615385"
+     inkscape:cx="20.436413"
+     inkscape:cy="13"
      inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-y="28"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
-     inkscape:snap-to-guides="false"
-     inkscape:snap-grids="false">
+     inkscape:snap-to-guides="true"
+     inkscape:snap-grids="true">
     <inkscape:grid
        type="xygrid"
        id="grid3033"
@@ -148,28 +149,25 @@
      id="path32-0-4"
      inkscape:connector-curvature="0"
      style="fill:#ffede0;stroke:#484848;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-  <g
-     id="g3935"
-     transform="matrix(1.0069569,0,0,1,-0.09725032,0)">
-    <rect
-       style="fill:#3e3e3e"
-       id="rect42"
-       x="13.978938"
-       y="10.016949"
-       width="10.963359"
-       height="13.958503"
-       ry="0.95373797" />
-    <text
-       transform="scale(1.0200848,0.98031061)"
-       sodipodi:linespacing="125%"
-       id="text3035"
-       y="21.971481"
-       x="13.720325"
-       style="font-size:12.92301464px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
-       xml:space="preserve"><tspan
-         y="21.971481"
-         x="13.720325"
-         id="tspan3037"
-         sodipodi:role="line">#</tspan></text>
-  </g>
+  <rect
+     ry="0.95373797"
+     height="13.958503"
+     width="11.03963"
+     y="10.016949"
+     x="13.978938"
+     id="rect42"
+     style="fill:#3e3e3e" />
+  <text
+     xml:space="preserve"
+     style="font-size:13.32437897px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#fff6f6;fill-opacity:1;stroke:none;font-family:Sans"
+     x="14.758149"
+     y="20.166557"
+     id="text3035"
+     sodipodi:linespacing="125%"
+     transform="scale(0.96099942,1.0405834)"><tspan
+       sodipodi:role="line"
+       id="tspan3037"
+       x="14.758149"
+       y="20.166557"
+       style="font-weight:bold;fill:#fff6f6;fill-opacity:1;-inkscape-font-specification:Sans Bold">#</tspan></text>
 </svg>
