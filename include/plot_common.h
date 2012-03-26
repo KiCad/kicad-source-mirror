@@ -412,6 +412,8 @@ public:
 
     virtual void SetLayerPolarity( bool aPositive ) {}
 
+    void   user_to_device_coordinates( wxPoint& pos );      // overload
+
 protected:
     double plot_scale_adjX, plot_scale_adjY;
     double plot_width_adj;

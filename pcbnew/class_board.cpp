@@ -30,6 +30,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 BOARD::BOARD() :
     BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
     m_NetInfo( this ),
+    m_paper( IsGOST() ? PAGE_INFO::A4 : PAGE_INFO::A3, IsGOST() ),
     m_NetClasses( this )
 {
     // we have not loaded a board yet, assume latest until then.

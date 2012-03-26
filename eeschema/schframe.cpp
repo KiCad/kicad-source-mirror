@@ -229,9 +229,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    /* Initialize print and page setup dialog settings. */
-    m_pageSetupData.GetPrintData().SetQuality( wxPRINT_QUALITY_HIGH );
-    m_pageSetupData.GetPrintData().SetOrientation( wxLANDSCAPE );
+    // Initialize common print setup dialog settings.
+    m_pageSetupData.GetPrintData().SetPrintMode( wxPRINT_MODE_PRINTER );
+    m_pageSetupData.GetPrintData().SetQuality( wxPRINT_QUALITY_MEDIUM );
+    m_pageSetupData.GetPrintData().SetBin( wxPRINTBIN_AUTO );
+    m_pageSetupData.GetPrintData().SetNoCopies( 1 );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -529,7 +531,9 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
         filename.RemoveLast();
 #if defined(KICAD_GOST)
 #ifndef __WINDOWS__
-        filename.Remove( 0, 1 );
+        wxString newfn;
+        if( filename.StartsWith( wxT( "-" ), &newfn ) )
+            filename = newfn;
 #endif
 #endif
     }
