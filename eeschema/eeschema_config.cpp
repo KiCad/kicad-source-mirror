@@ -447,8 +447,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
     if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.push_back( new PARAM_CFG_INT( wxT( "Unite" ),
-                                                   (int*)&g_UserUnit, 0 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
+                                                   (int*)&g_UserUnit, MILLIMETRES ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
                                                         &g_LayerDescr.LayerColor[LAYER_WIRE],
                                                         GREEN ) );

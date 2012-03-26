@@ -57,6 +57,19 @@ EDA_UNITS_T    g_UserUnit;
 
 int            g_GhostColor;
 
+
+#if defined(KICAD_GOST)
+static bool s_gost = true;
+#else
+static bool s_gost = false;
+#endif
+
+bool IsGOST()
+{
+    return s_gost;
+}
+
+
 /**
  * The predefined colors used in KiCad.
  * Please: if you change a value, remember these values are carefully chosen
