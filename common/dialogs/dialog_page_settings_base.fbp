@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="10" />
+    <FileVersion major="1" minor="11" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
         <property name="disconnect_events">1</property>
         <property name="disconnect_mode">source_name</property>
+        <property name="disconnect_php_events">0</property>
         <property name="disconnect_python_events">0</property>
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
@@ -19,6 +20,7 @@
         <property name="path">.</property>
         <property name="precompiled_header"></property>
         <property name="relative_path">1</property>
+        <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
@@ -27,8 +29,11 @@
             <property name="LeftDockable">1</property>
             <property name="RightDockable">1</property>
             <property name="TopDockable">1</property>
+            <property name="aui_layer"></property>
             <property name="aui_managed">0</property>
             <property name="aui_name"></property>
+            <property name="aui_position"></property>
+            <property name="aui_row"></property>
             <property name="best_size"></property>
             <property name="bg"></property>
             <property name="caption"></property>
@@ -51,7 +56,6 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="layer"></property>
             <property name="max_size"></property>
             <property name="maximize_button">0</property>
             <property name="maximum_size"></property>
@@ -65,11 +69,9 @@
             <property name="pane_size"></property>
             <property name="pin_button">1</property>
             <property name="pos"></property>
-            <property name="position"></property>
             <property name="resize">Resizable</property>
-            <property name="row"></property>
             <property name="show">1</property>
-            <property name="size">-1,-1</property>
+            <property name="size">748,495</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">Page Settings</property>
@@ -119,7 +121,7 @@
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
             <object class="wxBoxSizer" expanded="1">
-                <property name="minimum_size"></property>
+                <property name="minimum_size">-1,-1</property>
                 <property name="name">bMainSizer</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
@@ -134,7 +136,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxFlexGridSizer" expanded="1">
                                 <property name="cols">1</property>
@@ -146,36 +148,38 @@
                                 <property name="name">LeftColumnSizer</property>
                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                 <property name="permission">none</property>
-                                <property name="rows">6</property>
+                                <property name="rows">3</property>
                                 <property name="vgap">0</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALL|wxEXPAND</property>
-                                    <property name="proportion">0</property>
+                                    <property name="flag">wxALL</property>
+                                    <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Paper Size:</property>
+                                        <property name="label">Paper</property>
                                         <property name="minimum_size"></property>
-                                        <property name="name">sbSizer9</property>
+                                        <property name="name">PaperSizer</property>
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">none</property>
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL|wxEXPAND</property>
+                                            <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxChoice" expanded="1">
+                                            <object class="wxStaticText" expanded="1">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                <property name="aui_position"></property>
+                                                <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;A4&quot; &quot;A3&quot; &quot;A2&quot; &quot;A1&quot; &quot;A0&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;USLetter&quot; &quot;USLegal&quot; &quot;USLedger&quot; &quot;User (Custom)&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -190,7 +194,94 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="layer"></property>
+                                                <property name="label">Size:</property>
+                                                <property name="max_size"></property>
+                                                <property name="maximize_button">0</property>
+                                                <property name="maximum_size"></property>
+                                                <property name="min_size"></property>
+                                                <property name="minimize_button">0</property>
+                                                <property name="minimum_size"></property>
+                                                <property name="moveable">1</property>
+                                                <property name="name">m_staticText5</property>
+                                                <property name="pane_border">1</property>
+                                                <property name="pane_position"></property>
+                                                <property name="pane_size"></property>
+                                                <property name="permission">protected</property>
+                                                <property name="pin_button">1</property>
+                                                <property name="pos"></property>
+                                                <property name="resize">Resizable</property>
+                                                <property name="show">1</property>
+                                                <property name="size"></property>
+                                                <property name="style"></property>
+                                                <property name="subclass"></property>
+                                                <property name="toolbar_pane">0</property>
+                                                <property name="tooltip"></property>
+                                                <property name="validator_data_type"></property>
+                                                <property name="validator_style">wxFILTER_NONE</property>
+                                                <property name="validator_type">wxDefaultValidator</property>
+                                                <property name="validator_variable"></property>
+                                                <property name="window_extra_style"></property>
+                                                <property name="window_name"></property>
+                                                <property name="window_style"></property>
+                                                <property name="wrap">-1</property>
+                                                <event name="OnChar"></event>
+                                                <event name="OnEnterWindow"></event>
+                                                <event name="OnEraseBackground"></event>
+                                                <event name="OnKeyDown"></event>
+                                                <event name="OnKeyUp"></event>
+                                                <event name="OnKillFocus"></event>
+                                                <event name="OnLeaveWindow"></event>
+                                                <event name="OnLeftDClick"></event>
+                                                <event name="OnLeftDown"></event>
+                                                <event name="OnLeftUp"></event>
+                                                <event name="OnMiddleDClick"></event>
+                                                <event name="OnMiddleDown"></event>
+                                                <event name="OnMiddleUp"></event>
+                                                <event name="OnMotion"></event>
+                                                <event name="OnMouseEvents"></event>
+                                                <event name="OnMouseWheel"></event>
+                                                <event name="OnPaint"></event>
+                                                <event name="OnRightDClick"></event>
+                                                <event name="OnRightDown"></event>
+                                                <event name="OnRightUp"></event>
+                                                <event name="OnSetFocus"></event>
+                                                <event name="OnSize"></event>
+                                                <event name="OnUpdateUI"></event>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem" expanded="1">
+                                            <property name="border">5</property>
+                                            <property name="flag">wxALL|wxEXPAND</property>
+                                            <property name="proportion">0</property>
+                                            <object class="wxChoice" expanded="1">
+                                                <property name="BottomDockable">1</property>
+                                                <property name="LeftDockable">1</property>
+                                                <property name="RightDockable">1</property>
+                                                <property name="TopDockable">1</property>
+                                                <property name="aui_layer"></property>
+                                                <property name="aui_name"></property>
+                                                <property name="aui_position"></property>
+                                                <property name="aui_row"></property>
+                                                <property name="best_size"></property>
+                                                <property name="bg"></property>
+                                                <property name="caption"></property>
+                                                <property name="caption_visible">1</property>
+                                                <property name="center_pane">0</property>
+                                                <property name="choices">&quot;A4 210x297mm&quot; &quot;A3 297x420mm&quot; &quot;A2 420x594mm&quot; &quot;A1 594x841mm&quot; &quot;A0 841x1189mm&quot; &quot;A 8.5x11in&quot; &quot;B 11x17in&quot; &quot;C 17x22in&quot; &quot;D 22x34in&quot; &quot;E 34x44in&quot; &quot;USLetter 8.5x11in&quot; &quot;USLegal 8.5x14in&quot; &quot;USLedger 11x17in&quot; &quot;User (Custom)&quot;</property>
+                                                <property name="close_button">1</property>
+                                                <property name="context_help"></property>
+                                                <property name="context_menu">1</property>
+                                                <property name="default_pane">0</property>
+                                                <property name="dock">Dock</property>
+                                                <property name="dock_fixed">0</property>
+                                                <property name="docking">Left</property>
+                                                <property name="enabled">1</property>
+                                                <property name="fg"></property>
+                                                <property name="floatable">1</property>
+                                                <property name="font"></property>
+                                                <property name="gripper">0</property>
+                                                <property name="hidden">0</property>
+                                                <property name="id">ID_CHICE_PAGE_SIZE</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -205,12 +296,11 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="selection">0</property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
+                                                <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
                                                 <property name="tooltip"></property>
@@ -222,7 +312,7 @@
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
                                                 <event name="OnChar"></event>
-                                                <event name="OnChoice">onPaperSizeChoice</event>
+                                                <event name="OnChoice">OnPaperSizeChoice</event>
                                                 <event name="OnEnterWindow"></event>
                                                 <event name="OnEraseBackground"></event>
                                                 <event name="OnKeyDown"></event>
@@ -247,130 +337,6 @@
                                                 <event name="OnUpdateUI"></event>
                                             </object>
                                         </object>
-                                    </object>
-                                </object>
-                                <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
-                                    <property name="flag">wxALL|wxEXPAND</property>
-                                    <property name="proportion">0</property>
-                                    <object class="wxStaticBoxSizer" expanded="1">
-                                        <property name="id">wxID_ANY</property>
-                                        <property name="label">Orientation:</property>
-                                        <property name="minimum_size"></property>
-                                        <property name="name">sbSizer8</property>
-                                        <property name="orient">wxVERTICAL</property>
-                                        <property name="permission">none</property>
-                                        <event name="OnUpdateUI"></event>
-                                        <object class="sizeritem" expanded="1">
-                                            <property name="border">5</property>
-                                            <property name="flag">wxALL|wxEXPAND</property>
-                                            <property name="proportion">0</property>
-                                            <object class="wxChoice" expanded="1">
-                                                <property name="BottomDockable">1</property>
-                                                <property name="LeftDockable">1</property>
-                                                <property name="RightDockable">1</property>
-                                                <property name="TopDockable">1</property>
-                                                <property name="aui_name"></property>
-                                                <property name="best_size"></property>
-                                                <property name="bg"></property>
-                                                <property name="caption"></property>
-                                                <property name="caption_visible">1</property>
-                                                <property name="center_pane">0</property>
-                                                <property name="choices">&quot;Landscape&quot; &quot;Portrait&quot;</property>
-                                                <property name="close_button">1</property>
-                                                <property name="context_help"></property>
-                                                <property name="context_menu">1</property>
-                                                <property name="default_pane">0</property>
-                                                <property name="dock">Dock</property>
-                                                <property name="dock_fixed">0</property>
-                                                <property name="docking">Left</property>
-                                                <property name="enabled">1</property>
-                                                <property name="fg"></property>
-                                                <property name="floatable">1</property>
-                                                <property name="font"></property>
-                                                <property name="gripper">0</property>
-                                                <property name="hidden">0</property>
-                                                <property name="id">wxID_ANY</property>
-                                                <property name="layer"></property>
-                                                <property name="max_size"></property>
-                                                <property name="maximize_button">0</property>
-                                                <property name="maximum_size"></property>
-                                                <property name="min_size"></property>
-                                                <property name="minimize_button">0</property>
-                                                <property name="minimum_size"></property>
-                                                <property name="moveable">1</property>
-                                                <property name="name">m_orientationComboBox</property>
-                                                <property name="pane_border">1</property>
-                                                <property name="pane_position"></property>
-                                                <property name="pane_size"></property>
-                                                <property name="permission">protected</property>
-                                                <property name="pin_button">1</property>
-                                                <property name="pos"></property>
-                                                <property name="position"></property>
-                                                <property name="resize">Resizable</property>
-                                                <property name="row"></property>
-                                                <property name="selection">0</property>
-                                                <property name="show">1</property>
-                                                <property name="size"></property>
-                                                <property name="subclass"></property>
-                                                <property name="toolbar_pane">0</property>
-                                                <property name="tooltip"></property>
-                                                <property name="validator_data_type"></property>
-                                                <property name="validator_style">wxFILTER_NONE</property>
-                                                <property name="validator_type">wxDefaultValidator</property>
-                                                <property name="validator_variable"></property>
-                                                <property name="window_extra_style"></property>
-                                                <property name="window_name"></property>
-                                                <property name="window_style"></property>
-                                                <event name="OnChar"></event>
-                                                <event name="OnChoice"></event>
-                                                <event name="OnEnterWindow"></event>
-                                                <event name="OnEraseBackground"></event>
-                                                <event name="OnKeyDown"></event>
-                                                <event name="OnKeyUp"></event>
-                                                <event name="OnKillFocus"></event>
-                                                <event name="OnLeaveWindow"></event>
-                                                <event name="OnLeftDClick"></event>
-                                                <event name="OnLeftDown"></event>
-                                                <event name="OnLeftUp"></event>
-                                                <event name="OnMiddleDClick"></event>
-                                                <event name="OnMiddleDown"></event>
-                                                <event name="OnMiddleUp"></event>
-                                                <event name="OnMotion"></event>
-                                                <event name="OnMouseEvents"></event>
-                                                <event name="OnMouseWheel"></event>
-                                                <event name="OnPaint"></event>
-                                                <event name="OnRightDClick"></event>
-                                                <event name="OnRightDown"></event>
-                                                <event name="OnRightUp"></event>
-                                                <event name="OnSetFocus"></event>
-                                                <event name="OnSize"></event>
-                                                <event name="OnUpdateUI"></event>
-                                            </object>
-                                        </object>
-                                    </object>
-                                </object>
-                                <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
-                                    <property name="flag">wxALL|wxEXPAND</property>
-                                    <property name="proportion">1</property>
-                                    <object class="wxStaticBoxSizer" expanded="1">
-                                        <property name="id">wxID_ANY</property>
-                                        <property name="label">Custom Page Size:</property>
-                                        <property name="minimum_size"></property>
-                                        <property name="name">sbSizer10</property>
-                                        <property name="orient">wxVERTICAL</property>
-                                        <property name="permission">none</property>
-                                        <event name="OnUpdateUI"></event>
-                                        <object class="sizeritem" expanded="1">
-                                            <property name="border">5</property>
-                                            <property name="flag">wxALIGN_TOP|wxALL|wxEXPAND</property>
-                                            <property name="proportion">1</property>
-                                            <object class="wxBoxSizer" expanded="1">
-                                                <property name="minimum_size"></property>
-                                                <property name="name">bSizerXsize</property>
-                                                <property name="orient">wxVERTICAL</property>
-                                                <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
@@ -380,7 +346,10 @@
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
                                                         <property name="TopDockable">1</property>
+                                                <property name="aui_layer"></property>
                                                         <property name="aui_name"></property>
+                                                <property name="aui_position"></property>
+                                                <property name="aui_row"></property>
                                                         <property name="best_size"></property>
                                                         <property name="bg"></property>
                                                         <property name="caption"></property>
@@ -400,8 +369,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Width:</property>
-                                                        <property name="layer"></property>
+                                                <property name="label">Orientation:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -409,16 +377,14 @@
                                                         <property name="minimize_button">0</property>
                                                         <property name="minimum_size"></property>
                                                         <property name="moveable">1</property>
-                                                        <property name="name">UserPageSizeX</property>
+                                                <property name="name">m_staticText6</property>
                                                         <property name="pane_border">1</property>
                                                         <property name="pane_position"></property>
                                                         <property name="pane_size"></property>
                                                         <property name="permission">protected</property>
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
-                                                        <property name="position"></property>
                                                         <property name="resize">Resizable</property>
-                                                        <property name="row"></property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
                                                         <property name="style"></property>
@@ -460,19 +426,23 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_LEFT|wxALIGN_TOP|wxALL|wxEXPAND</property>
+                                            <property name="flag">wxEXPAND|wxALL</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxTextCtrl" expanded="1">
+                                            <object class="wxChoice" expanded="1">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
                                                         <property name="TopDockable">1</property>
+                                                <property name="aui_layer"></property>
                                                         <property name="aui_name"></property>
+                                                <property name="aui_position"></property>
+                                                <property name="aui_row"></property>
                                                         <property name="best_size"></property>
                                                         <property name="bg"></property>
                                                         <property name="caption"></property>
                                                         <property name="caption_visible">1</property>
                                                         <property name="center_pane">0</property>
+                                                <property name="choices">&quot;Landscape&quot; &quot;Portrait&quot;</property>
                                                         <property name="close_button">1</property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -486,26 +456,23 @@
                                                         <property name="font"></property>
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
-                                                        <property name="id">ID_TEXTCTRL_USER_PAGE_SIZE_X</property>
-                                                        <property name="layer"></property>
+                                                <property name="id">ID_CHOICE_PAGE_ORIENTATION</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
-                                                        <property name="maxlength">0</property>
                                                         <property name="min_size"></property>
                                                         <property name="minimize_button">0</property>
                                                         <property name="minimum_size"></property>
                                                         <property name="moveable">1</property>
-                                                        <property name="name">m_TextUserSizeX</property>
+                                                <property name="name">m_orientationComboBox</property>
                                                         <property name="pane_border">1</property>
                                                         <property name="pane_position"></property>
                                                         <property name="pane_size"></property>
                                                         <property name="permission">protected</property>
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
-                                                        <property name="position"></property>
                                                         <property name="resize">Resizable</property>
-                                                        <property name="row"></property>
+                                                <property name="selection">0</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
                                                         <property name="style"></property>
@@ -516,11 +483,11 @@
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
                                                         <property name="validator_variable"></property>
-                                                        <property name="value"></property>
                                                         <property name="window_extra_style"></property>
                                                         <property name="window_name"></property>
                                                         <property name="window_style"></property>
                                                         <event name="OnChar"></event>
+                                                <event name="OnChoice">OnPageOrientationChoice</event>
                                                         <event name="OnEnterWindow"></event>
                                                         <event name="OnEraseBackground"></event>
                                                         <event name="OnKeyDown"></event>
@@ -542,34 +509,66 @@
                                                         <event name="OnRightUp"></event>
                                                         <event name="OnSetFocus"></event>
                                                         <event name="OnSize"></event>
-                                                        <event name="OnText">OnTextctrlUserPageSizeXTextUpdated</event>
-                                                        <event name="OnTextEnter"></event>
-                                                        <event name="OnTextMaxLen"></event>
-                                                        <event name="OnTextURL"></event>
                                                         <event name="OnUpdateUI"></event>
                                                     </object>
                                                 </object>
+                                        <object class="sizeritem" expanded="1">
+                                            <property name="border">5</property>
+                                            <property name="flag"></property>
+                                            <property name="proportion">0</property>
+                                            <object class="spacer" expanded="1">
+                                                <property name="height">10</property>
+                                                <property name="permission">protected</property>
+                                                <property name="width">0</property>
                                             </object>
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALIGN_TOP|wxALL|wxEXPAND</property>
+                                            <property name="flag">wxEXPAND</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxBoxSizer" expanded="1">
+                                            <object class="wxStaticBoxSizer" expanded="1">
+                                                <property name="id">wxID_ANY</property>
+                                                <property name="label">Custom Size</property>
                                                 <property name="minimum_size"></property>
-                                                <property name="name">bSizerYsize</property>
-                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="name">CustomPaperSizer</property>
+                                                <property name="orient">wxHORIZONTAL</property>
                                                 <property name="permission">none</property>
+                                                <event name="OnUpdateUI"></event>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_TOP|wxALL</property>
+                                                    <property name="flag">wxEXPAND</property>
+                                                    <property name="proportion">1</property>
+                                                    <object class="spacer" expanded="1">
+                                                        <property name="height">0</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="width">5</property>
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticBoxSizer" expanded="1">
+                                                        <property name="id">wxID_ANY</property>
+                                                        <property name="label">Width:</property>
+                                                <property name="minimum_size"></property>
+                                                        <property name="name">CustomPaperWidth</property>
+                                                <property name="orient">wxVERTICAL</property>
+                                                <property name="permission">none</property>
+                                                        <event name="OnUpdateUI"></event>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                            <property name="flag">wxALIGN_LEFT|wxALIGN_TOP|wxALL|wxEXPAND</property>
+                                                    <property name="proportion">0</property>
+                                                            <object class="wxTextCtrl" expanded="1">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
                                                         <property name="TopDockable">1</property>
+                                                                <property name="aui_layer"></property>
                                                         <property name="aui_name"></property>
+                                                                <property name="aui_position"></property>
+                                                                <property name="aui_row"></property>
                                                         <property name="best_size"></property>
                                                         <property name="bg"></property>
                                                         <property name="caption"></property>
@@ -588,40 +587,37 @@
                                                         <property name="font"></property>
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
-                                                        <property name="id">wxID_ANY</property>
-                                                        <property name="label">Height:</property>
-                                                        <property name="layer"></property>
+                                                                <property name="id">ID_TEXTCTRL_USER_PAGE_SIZE_X</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
+                                                                <property name="maxlength">6</property>
                                                         <property name="min_size"></property>
                                                         <property name="minimize_button">0</property>
                                                         <property name="minimum_size"></property>
                                                         <property name="moveable">1</property>
-                                                        <property name="name">UserPageSizeY</property>
+                                                                <property name="name">m_TextUserSizeX</property>
                                                         <property name="pane_border">1</property>
                                                         <property name="pane_position"></property>
                                                         <property name="pane_size"></property>
                                                         <property name="permission">protected</property>
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
-                                                        <property name="position"></property>
                                                         <property name="resize">Resizable</property>
-                                                        <property name="row"></property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
-                                                        <property name="style"></property>
+                                                                <property name="style">wxTE_LEFT</property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip"></property>
+                                                                <property name="tooltip">Custom paper width.</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
-                                                        <property name="validator_type">wxDefaultValidator</property>
+                                                                <property name="validator_type">wxTextValidator</property>
                                                         <property name="validator_variable"></property>
+                                                                <property name="value"></property>
                                                         <property name="window_extra_style"></property>
                                                         <property name="window_name"></property>
                                                         <property name="window_style"></property>
-                                                        <property name="wrap">-1</property>
                                                         <event name="OnChar"></event>
                                                         <event name="OnEnterWindow"></event>
                                                         <event name="OnEraseBackground"></event>
@@ -644,9 +640,37 @@
                                                         <event name="OnRightUp"></event>
                                                         <event name="OnSetFocus"></event>
                                                         <event name="OnSize"></event>
+                                                                <event name="OnText">OnUserPageSizeXTextUpdated</event>
+                                                                <event name="OnTextEnter"></event>
+                                                                <event name="OnTextMaxLen"></event>
+                                                                <event name="OnTextURL"></event>
                                                         <event name="OnUpdateUI"></event>
                                                     </object>
                                                 </object>
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxEXPAND</property>
+                                                    <property name="proportion">1</property>
+                                                    <object class="spacer" expanded="1">
+                                                        <property name="height">0</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="width">10</property>
+                                                    </object>
+                                                </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag">wxEXPAND</property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="wxStaticBoxSizer" expanded="1">
+                                                        <property name="id">wxID_ANY</property>
+                                                        <property name="label">Height:</property>
+                                                        <property name="minimum_size"></property>
+                                                        <property name="name">CustomPaperHeight</property>
+                                                        <property name="orient">wxVERTICAL</property>
+                                                        <property name="permission">none</property>
+                                                        <event name="OnUpdateUI"></event>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxALIGN_TOP|wxALL|wxEXPAND</property>
@@ -656,7 +680,10 @@
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
                                                         <property name="TopDockable">1</property>
+                                                                <property name="aui_layer"></property>
                                                         <property name="aui_name"></property>
+                                                                <property name="aui_position"></property>
+                                                                <property name="aui_row"></property>
                                                         <property name="best_size"></property>
                                                         <property name="bg"></property>
                                                         <property name="caption"></property>
@@ -676,11 +703,10 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">ID_TEXTCTRL_USER_PAGE_SIZE_Y</property>
-                                                        <property name="layer"></property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
-                                                        <property name="maxlength">0</property>
+                                                                <property name="maxlength">6</property>
                                                         <property name="min_size"></property>
                                                         <property name="minimize_button">0</property>
                                                         <property name="minimum_size"></property>
@@ -692,15 +718,13 @@
                                                         <property name="permission">protected</property>
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
-                                                        <property name="position"></property>
                                                         <property name="resize">Resizable</property>
-                                                        <property name="row"></property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
-                                                        <property name="style"></property>
+                                                                <property name="style">wxTE_LEFT</property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip"></property>
+                                                                <property name="tooltip">Custom paper height.</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
@@ -731,7 +755,7 @@
                                                         <event name="OnRightUp"></event>
                                                         <event name="OnSetFocus"></event>
                                                         <event name="OnSize"></event>
-                                                        <event name="OnText">OnTextctrlUserPageSizeYTextUpdated</event>
+                                                                <event name="OnText">OnUserPageSizeYTextUpdated</event>
                                                         <event name="OnTextEnter"></event>
                                                         <event name="OnTextMaxLen"></event>
                                                         <event name="OnTextURL"></event>
@@ -740,6 +764,127 @@
                                                 </object>
                                             </object>
                                         </object>
+                                                <object class="sizeritem" expanded="1">
+                                                    <property name="border">5</property>
+                                                    <property name="flag"></property>
+                                                    <property name="proportion">0</property>
+                                                    <object class="spacer" expanded="1">
+                                                        <property name="height">50</property>
+                                                        <property name="permission">protected</property>
+                                                        <property name="width">5</property>
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">5</property>
+                                    <property name="flag">wxALIGN_CENTER|wxALL|wxEXPAND</property>
+                                    <property name="proportion">0</property>
+                                    <object class="wxStaticBoxSizer" expanded="1">
+                                        <property name="id">ID_PAGE_LAYOUT_EXAMPLE_SIZER</property>
+                                        <property name="label">Layout Preview</property>
+                                        <property name="minimum_size">240,-1</property>
+                                        <property name="name">PageLayoutExampleSizer</property>
+                                        <property name="orient">wxVERTICAL</property>
+                                        <property name="permission">none</property>
+                                        <event name="OnUpdateUI"></event>
+                                        <object class="sizeritem" expanded="1">
+                                            <property name="border">5</property>
+                                            <property name="flag">wxALIGN_CENTER|wxALL</property>
+                                            <property name="proportion">0</property>
+                                            <object class="wxStaticBitmap" expanded="1">
+                                                <property name="BottomDockable">1</property>
+                                                <property name="LeftDockable">1</property>
+                                                <property name="RightDockable">1</property>
+                                                <property name="TopDockable">1</property>
+                                                <property name="aui_layer"></property>
+                                                <property name="aui_name"></property>
+                                                <property name="aui_position"></property>
+                                                <property name="aui_row"></property>
+                                                <property name="best_size"></property>
+                                                <property name="bg">wxSYS_COLOUR_WINDOW</property>
+                                                <property name="bitmap">Load From Icon Resource; </property>
+                                                <property name="caption"></property>
+                                                <property name="caption_visible">1</property>
+                                                <property name="center_pane">0</property>
+                                                <property name="close_button">1</property>
+                                                <property name="context_help"></property>
+                                                <property name="context_menu">1</property>
+                                                <property name="default_pane">0</property>
+                                                <property name="dock">Dock</property>
+                                                <property name="dock_fixed">0</property>
+                                                <property name="docking">Left</property>
+                                                <property name="enabled">1</property>
+                                                <property name="fg">wxSYS_COLOUR_WINDOW</property>
+                                                <property name="floatable">1</property>
+                                                <property name="font"></property>
+                                                <property name="gripper">0</property>
+                                                <property name="hidden">0</property>
+                                                <property name="id">wxID_ANY</property>
+                                                <property name="max_size"></property>
+                                                <property name="maximize_button">0</property>
+                                                <property name="maximum_size"></property>
+                                                <property name="min_size"></property>
+                                                <property name="minimize_button">0</property>
+                                                <property name="minimum_size">-1,-1</property>
+                                                <property name="moveable">1</property>
+                                                <property name="name">m_PageLayoutExampleBitmap</property>
+                                                <property name="pane_border">1</property>
+                                                <property name="pane_position"></property>
+                                                <property name="pane_size"></property>
+                                                <property name="permission">protected</property>
+                                                <property name="pin_button">1</property>
+                                                <property name="pos"></property>
+                                                <property name="resize">Resizable</property>
+                                                <property name="show">1</property>
+                                                <property name="size">-1,-1</property>
+                                                <property name="subclass"></property>
+                                                <property name="toolbar_pane">0</property>
+                                                <property name="tooltip"></property>
+                                                <property name="validator_data_type"></property>
+                                                <property name="validator_style">wxFILTER_NONE</property>
+                                                <property name="validator_type">wxDefaultValidator</property>
+                                                <property name="validator_variable"></property>
+                                                <property name="window_extra_style"></property>
+                                                <property name="window_name"></property>
+                                                <property name="window_style">wxFULL_REPAINT_ON_RESIZE|wxSIMPLE_BORDER</property>
+                                                <event name="OnChar"></event>
+                                                <event name="OnEnterWindow"></event>
+                                                <event name="OnEraseBackground"></event>
+                                                <event name="OnKeyDown"></event>
+                                                <event name="OnKeyUp"></event>
+                                                <event name="OnKillFocus"></event>
+                                                <event name="OnLeaveWindow"></event>
+                                                <event name="OnLeftDClick"></event>
+                                                <event name="OnLeftDown"></event>
+                                                <event name="OnLeftUp"></event>
+                                                <event name="OnMiddleDClick"></event>
+                                                <event name="OnMiddleDown"></event>
+                                                <event name="OnMiddleUp"></event>
+                                                <event name="OnMotion"></event>
+                                                <event name="OnMouseEvents"></event>
+                                                <event name="OnMouseWheel"></event>
+                                                <event name="OnPaint"></event>
+                                                <event name="OnRightDClick"></event>
+                                                <event name="OnRightDown"></event>
+                                                <event name="OnRightUp"></event>
+                                                <event name="OnSetFocus"></event>
+                                                <event name="OnSize"></event>
+                                                <event name="OnUpdateUI"></event>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                                <object class="sizeritem" expanded="1">
+                                    <property name="border">5</property>
+                                    <property name="flag">wxEXPAND</property>
+                                    <property name="proportion">1</property>
+                                    <object class="spacer" expanded="1">
+                                        <property name="height">1</property>
+                                        <property name="permission">protected</property>
+                                        <property name="width">0</property>
                                     </object>
                                 </object>
                             </object>
@@ -762,8 +907,20 @@
                                 <property name="vgap">0</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag"></property>
+                                    <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">1</property>
+                                    <object class="wxStaticBoxSizer" expanded="1">
+                                        <property name="id">wxID_ANY</property>
+                                        <property name="label">Basic Inscriptions</property>
+                                        <property name="minimum_size">-1,452</property>
+                                        <property name="name">BasicInscriptionsSizer</property>
+                                        <property name="orient">wxVERTICAL</property>
+                                        <property name="permission">none</property>
+                                        <event name="OnUpdateUI"></event>
+                                        <object class="sizeritem" expanded="1">
+                                            <property name="border">5</property>
+                                            <property name="flag"></property>
+                                            <property name="proportion">0</property>
                                     <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">SheetInfoSizer</property>
@@ -778,7 +935,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -799,7 +959,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="label">Number of sheets: %d</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -814,9 +973,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -875,7 +1032,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -896,7 +1056,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="label">Sheet number: %d</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -911,9 +1070,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -961,7 +1118,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Revision:</property>
+                                                <property name="label">Revision</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">RevisionSizer</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -976,7 +1133,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -996,7 +1156,6 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_TEXTCTRL_REVISION</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1012,9 +1171,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1051,7 +1208,7 @@
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
-                                                <event name="OnText"></event>
+                                                        <event name="OnText">OnRevisionTextUpdated</event>
                                                 <event name="OnTextEnter"></event>
                                                 <event name="OnTextMaxLen"></event>
                                                 <event name="OnTextURL"></event>
@@ -1060,14 +1217,17 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="1">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1089,7 +1249,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_CHECKBOX_REVISION</property>
                                                 <property name="label">Export to other sheets</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1104,9 +1263,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1154,7 +1311,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Title:</property>
+                                                <property name="label">Title</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">TitleSizer</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -1169,7 +1326,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1189,14 +1349,13 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_TEXTCTRL_TITLE</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="maxlength">0</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size">400,-1</property>
+                                                        <property name="minimum_size">360,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_TextTitle</property>
                                                 <property name="pane_border">1</property>
@@ -1205,9 +1364,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1244,7 +1401,7 @@
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
-                                                <event name="OnText"></event>
+                                                        <event name="OnText">OnTitleTextUpdated</event>
                                                 <event name="OnTextEnter"></event>
                                                 <event name="OnTextMaxLen"></event>
                                                 <event name="OnTextURL"></event>
@@ -1260,7 +1417,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1282,7 +1442,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="label">Export to other sheets</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1297,9 +1456,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1347,7 +1504,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Company:</property>
+                                                <property name="label">Company</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">CompanySizer</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -1362,7 +1519,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1382,14 +1542,13 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_TEXTCTRL_COMPANY</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="maxlength">0</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size">400,-1</property>
+                                                        <property name="minimum_size">360,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_TextCompany</property>
                                                 <property name="pane_border">1</property>
@@ -1398,9 +1557,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1437,7 +1594,7 @@
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
-                                                <event name="OnText"></event>
+                                                        <event name="OnText">OnCompanyTextUpdated</event>
                                                 <event name="OnTextEnter"></event>
                                                 <event name="OnTextMaxLen"></event>
                                                 <event name="OnTextURL"></event>
@@ -1453,7 +1610,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1475,7 +1635,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_CHECKBOX_COMPANY</property>
                                                 <property name="label">Export to other sheets</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1490,9 +1649,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1540,7 +1697,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Comment1:</property>
+                                                <property name="label">Comment1</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">Comment1Sizer</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -1555,7 +1712,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1575,14 +1735,13 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_TEXTCTRL_COMMENT1</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="maxlength">0</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size">400,-1</property>
+                                                        <property name="minimum_size">360,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_TextComment1</property>
                                                 <property name="pane_border">1</property>
@@ -1591,9 +1750,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1630,7 +1787,7 @@
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
-                                                <event name="OnText"></event>
+                                                        <event name="OnText">OnComment1TextUpdated</event>
                                                 <event name="OnTextEnter"></event>
                                                 <event name="OnTextMaxLen"></event>
                                                 <event name="OnTextURL"></event>
@@ -1646,7 +1803,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1668,7 +1828,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_CHECKBOX_COMMENT1</property>
                                                 <property name="label">Export to other sheets</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1683,9 +1842,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1733,7 +1890,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Comment2:</property>
+                                                <property name="label">Comment2</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">Comment2Sizer</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -1748,7 +1905,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1768,14 +1928,13 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_TEXTCTRL_COMMENT2</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="maxlength">0</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size">400,-1</property>
+                                                        <property name="minimum_size">360,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_TextComment2</property>
                                                 <property name="pane_border">1</property>
@@ -1784,9 +1943,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1823,7 +1980,7 @@
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
-                                                <event name="OnText"></event>
+                                                        <event name="OnText">OnComment2TextUpdated</event>
                                                 <event name="OnTextEnter"></event>
                                                 <event name="OnTextMaxLen"></event>
                                                 <event name="OnTextURL"></event>
@@ -1839,7 +1996,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1861,7 +2021,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_CHECKBOX_COMMENT2</property>
                                                 <property name="label">Export to other sheets</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1876,9 +2035,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -1926,7 +2083,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Comment3:</property>
+                                                <property name="label">Comment3</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">Comment3Sizer</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -1941,7 +2098,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -1961,14 +2121,13 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_TEXTCTRL_COMMENT3</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="maxlength">0</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size">400,-1</property>
+                                                        <property name="minimum_size">360,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_TextComment3</property>
                                                 <property name="pane_border">1</property>
@@ -1977,9 +2136,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -2016,7 +2173,7 @@
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
-                                                <event name="OnText"></event>
+                                                        <event name="OnText">OnComment3TextUpdated</event>
                                                 <event name="OnTextEnter"></event>
                                                 <event name="OnTextMaxLen"></event>
                                                 <event name="OnTextURL"></event>
@@ -2032,7 +2189,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -2054,7 +2214,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_CHECKBOX_COMMENT3</property>
                                                 <property name="label">Export to other sheets</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -2069,9 +2228,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -2119,7 +2276,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Comment4:</property>
+                                                <property name="label">Comment4</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">Comment4Sizer</property>
                                         <property name="orient">wxHORIZONTAL</property>
@@ -2134,7 +2291,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -2154,14 +2314,13 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_TEXTCTRL_COMMENT4</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
                                                 <property name="maxlength">0</property>
                                                 <property name="min_size"></property>
                                                 <property name="minimize_button">0</property>
-                                                <property name="minimum_size">400,-1</property>
+                                                        <property name="minimum_size">360,-1</property>
                                                 <property name="moveable">1</property>
                                                 <property name="name">m_TextComment4</property>
                                                 <property name="pane_border">1</property>
@@ -2170,9 +2329,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -2209,7 +2366,7 @@
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
-                                                <event name="OnText"></event>
+                                                        <event name="OnText">OnComment4TextUpdated</event>
                                                 <event name="OnTextEnter"></event>
                                                 <event name="OnTextMaxLen"></event>
                                                 <event name="OnTextURL"></event>
@@ -2225,7 +2382,10 @@
                                                 <property name="LeftDockable">1</property>
                                                 <property name="RightDockable">1</property>
                                                 <property name="TopDockable">1</property>
+                                                        <property name="aui_layer"></property>
                                                 <property name="aui_name"></property>
+                                                        <property name="aui_position"></property>
+                                                        <property name="aui_row"></property>
                                                 <property name="best_size"></property>
                                                 <property name="bg"></property>
                                                 <property name="caption"></property>
@@ -2247,7 +2407,6 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">ID_CHECKBOX_COMMENT4</property>
                                                 <property name="label">Export to other sheets</property>
-                                                <property name="layer"></property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -2262,9 +2421,7 @@
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
-                                                <property name="position"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="row"></property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style"></property>
@@ -2310,9 +2467,11 @@
                         </object>
                     </object>
                 </object>
+                    </object>
+                </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxALIGN_RIGHT|wxALL</property>
+                    <property name="flag">wxALIGN_RIGHT|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
                         <property name="Apply">0</property>

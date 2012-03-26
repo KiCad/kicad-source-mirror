@@ -39,6 +39,17 @@
 #include <wx/fileconf.h>
 
 
+#if !wxUSE_PRINTING_ARCHITECTURE
+#   error "You must use '--enable-printarch' in your wx library configuration."
+#endif
+
+#if defined( __WXGTK__ )
+#   if !wxUSE_LIBGNOMEPRINT && !wxUSE_GTKPRINT
+#       error "You must use '--with-gnomeprint' or '--with-gtkprint' in your wx library configuration."
+#   endif
+#endif
+
+
 class wxAboutDialogInfo;
 
 // Flag for special keys
@@ -106,6 +117,16 @@ enum pseudokeys {
 #define OFF 0
 
 
+/// Convert mm to mils.
+inline int Mm2mils( double x ) { return wxRound( x * 1000./25.4 ); }
+
+/// Convert mils to mm.
+inline int Mils2mm( double x ) { return wxRound( x * 25.4 / 1000. ); }
+
+/// Return whether GOST is in play
+bool IsGOST();
+
+
 enum EDA_UNITS_T {
     INCHES = 0,
     MILLIMETRES = 1,
@@ -131,10 +152,27 @@ class PAGE_INFO
 {
 public:
 
-    static const wxString Custom;     /// "User" defined page type
+    PAGE_INFO( const wxString& aType = PAGE_INFO::A3, bool IsPortrait = false );
 
-    PAGE_INFO( const wxString& aType = wxT( "A3" ) );
-    PAGE_INFO( const wxSize& aSizeMils, const wxString& aName );
+    // paper size names which are part of the public API, pass to SetType() or
+    // above constructor.
+
+    static const wxString A4;
+    static const wxString A3;
+    static const wxString A2;
+    static const wxString A1;
+    static const wxString A0;
+    static const wxString A;
+    static const wxString B;
+    static const wxString C;
+    static const wxString D;
+    static const wxString E;
+    static const wxString GERBER;
+    static const wxString USLetter;
+    static const wxString USLegal;
+    static const wxString USLedger;
+    static const wxString Custom;     ///< "User" defined page type
+
 
     /**
      * Function SetType
@@ -150,7 +188,7 @@ public:
      *
      * @return bool - true iff @a aStandarePageDescription was a recognized type.
      */
-    bool SetType( const wxString& aStandardPageDescriptionName );
+    bool SetType( const wxString& aStandardPageDescriptionName, bool IsPortrait = false );
     const wxString& GetType() const { return m_type; }
 
     /**
@@ -170,6 +208,19 @@ public:
      */
     void SetPortrait( bool isPortrait );
     bool IsPortrait() const { return m_portrait; }
+
+    /**
+     * Function GetWxOrientation.
+     * @return int - ws' style printing orientation.
+     */
+    int  GetWxOrientation() const { return IsPortrait() ? wxPORTRAIT : wxLANDSCAPE; }
+
+    /**
+     * Function GetPaperId
+     * @return wxPaperSize - wxPrintData's style paper id associated with
+     * page type name.
+     */
+    wxPaperSize GetPaperId() const { return m_paper_id; }
 
     void SetWidthMils(  int aWidthInMils );
     int GetWidthMils() const { return m_size.x; }
@@ -196,35 +247,90 @@ public:
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #endif
 
+    /**
+     * Function GetLeftMarginMils.
+     * @return int - logical page left margin in mils.
+     */
     int GetLeftMarginMils() const           { return m_left_margin; }
+
+    /**
+     * Function GetLeftMarginMils.
+     * @return int - logical page right margin in mils.
+     */
     int GetRightMarginMils() const          { return m_right_margin; }
+
+    /**
+     * Function GetLeftMarginMils.
+     * @return int - logical page top margin in mils.
+     */
     int GetTopMarginMils() const            { return m_top_margin; }
+
+    /**
+     * Function GetBottomMarginMils.
+     * @return int - logical page bottom margin in mils.
+     */
     int GetBottomMarginMils() const         { return m_bottom_margin; }
 
+    /**
+     * Function SetLeftMarginMils
+     * sets left page margin to @a aMargin in mils.
+     */
     void SetLeftMarginMils( int aMargin )   { m_left_margin = aMargin; }
+
+    /**
+     * Function SetRightMarginMils
+     * sets right page margin to @a aMargin in mils.
+     */
     void SetRightMarginMils( int aMargin )  { m_right_margin = aMargin; }
+
+    /**
+     * Function SetTopMarginMils
+     * sets top page margin to @a aMargin in mils.
+     */
     void SetTopMarginMils( int aMargin )    { m_top_margin = aMargin; }
+
+    /**
+     * Function SetBottomMarginMils
+     * sets bottom page margin to @a aMargin in mils.
+     */
     void SetBottomMarginMils( int aMargin ) { m_bottom_margin = aMargin; }
 
     /**
-     * Function SetUserWidthMils
-     * sets the width of type "User" page in mils, for any type "User" page
+     * Function SetCustomWidthMils
+     * sets the width of Custom page in mils, for any custom page
      * constructed or made via SetType() after making this call.
      */
-    static void SetUserWidthMils( int aWidthInMils );
+    static void SetCustomWidthMils( int aWidthInMils );
 
     /**
-     * Function SetUserHeightMils
-     * sets the height type "User" page in mils, for any type "User" page
+     * Function SetCustomHeightMils
+     * sets the height of Custom page in mils, for any custom page
      * constructed or made via SetType() after making this call.
      */
-    static void SetUserHeightMils( int aHeightInMils );
+    static void SetCustomHeightMils( int aHeightInMils );
+
+    /**
+     * Function GetCustomWidthMils.
+     * @return int - custom paper width in mils.
+     */
+    static int GetCustomWidthMils() { return s_user_width; }
+
+    /**
+     * Function GetCustomHeightMils.
+     * @return int - custom paper height in mils.
+     */
+    static int GetCustomHeightMils() { return s_user_height; }
 
     /**
      * Function GetStandardSizes
      * returns the standard page types, such as "A4", "A3", etc.
     static wxArrayString GetStandardSizes();
      */
+
+protected:
+    // only the class implementation(s) may use this constructor
+    PAGE_INFO( const wxSize& aSizeMils, const wxString& aName, wxPaperSize aPaperId );
+
 
 private:
 
@@ -252,6 +358,11 @@ private:
     wxString    m_type;             ///< paper type: A4, A3, etc.
     wxSize      m_size;             ///< mils
 
+/// Min and max page sizes for clamping.
+#define MIN_PAGE_SIZE   4000
+#define MAX_PAGE_SIZE   48000
+
+
     int         m_left_margin;
     int         m_right_margin;
     int         m_top_margin;
@@ -259,10 +370,14 @@ private:
 
     bool        m_portrait;         ///< true if portrait, false if landscape
 
+    wxPaperSize m_paper_id;         ///< wx' style paper id.
+
     static int s_user_height;
     static int s_user_width;
 
-    void updatePortrait();
+    void    updatePortrait();
+
+    void    setMargins();
 };
 
 

@@ -96,6 +96,8 @@ void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
  * Display the print dialog
  */
 {
+    const PAGE_INFO& pageInfo = GetPageSettings();
+
     if( s_PrintData == NULL )  // First print
     {
         s_PrintData = new wxPrintData();
@@ -104,14 +106,33 @@ void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
         {
             DisplayError( this, _( "Error Init Printer info" ) );
         }
-        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
+        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGH;
     }
 
-    s_PrintData->SetOrientation( GetPageSettings().IsPortrait() ? wxPORTRAIT : wxLANDSCAPE );
+    if( s_pageSetupData == NULL )
+        s_pageSetupData = new wxPageSetupDialogData( *s_PrintData );
 
-    DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
+    s_pageSetupData->SetPaperId( pageInfo.GetPaperId() );
 
-    frame->ShowModal(); frame->Destroy();
+    if( pageInfo.IsCustom() )
+    {
+        if( pageInfo.IsPortrait() )
+            s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetWidthMils() ),
+                                                   Mils2mm( pageInfo.GetHeightMils() ) ) );
+        else
+            s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetHeightMils() ),
+                                                   Mils2mm( pageInfo.GetWidthMils() ) ) );
+    }
+
+    s_pageSetupData->SetMarginTopLeft( wxPoint( 0, 0 ) );
+    s_pageSetupData->SetMarginBottomRight( wxPoint( 0, 0 ) );
+    s_pageSetupData->GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
+
+    *s_PrintData = s_pageSetupData->GetPrintData();
+
+    DIALOG_PRINT_USING_PRINTER dlg( this );
+
+    dlg.ShowModal();
 }
 
 
@@ -147,14 +168,6 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     int      layer_max = NB_LAYERS;
     wxString msg;
     BOARD*   board = m_Parent->GetBoard();
-    if( s_pageSetupData == NULL )
-    {
-        s_pageSetupData = new wxPageSetupDialogData;
-        // Set initial page margins.
-        // Margins are already set in Pcbnew, so we cans use 0
-        s_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
-        s_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
-    }
 
     s_Parameters.m_PageSetupData = s_pageSetupData;
 
@@ -202,7 +215,6 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
                 m_BoxSelectLayer[layer]->SetValue( true );
         }
     }
-
 
     // Option for excluding contents of "Edges Pcb" layer
     m_Exclude_Edges_Pcb->Show( true );
@@ -269,10 +281,10 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize, m_Parent->GetInternalUnits() ) );
 
-
     // Create scale adjust option
     msg.Printf( wxT( "%f" ), s_Parameters.m_XScaleAdjust );
     m_FineAdjustXscaleOpt->SetValue( msg );
+
     msg.Printf( wxT( "%f" ), s_Parameters.m_YScaleAdjust );
     m_FineAdjustYscaleOpt->SetValue( msg );
 
@@ -416,11 +428,10 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
 /**********************************************/
 void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
 /***********************************************/
-
-/* Get the new pen width value, and verify min et max value
- * NOTE: s_Parameters.m_PenDefaultSize is in internal units
- */
 {
+    // Get the new pen width value, and verify min et max value
+    // NOTE: s_Parameters.m_PenDefaultSize is in internal units
+
     s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->GetInternalUnits() );
 
     if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
@@ -443,6 +454,7 @@ void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
 {
     double scale = s_ScaleList[m_ScaleOption->GetSelection()];
     bool enable = (scale == 1.0);
+
     if( m_FineAdjustXscaleOpt )
         m_FineAdjustXscaleOpt->Enable(enable);
     if( m_FineAdjustYscaleOpt )
@@ -453,12 +465,7 @@ void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
 /**********************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 /**********************************************************/
-
-/* Open a dialog box for printer setup (printer options, page size ...)
- */
 {
-    *s_pageSetupData = *s_PrintData;
-
     wxPageSetupDialog pageSetupDialog(this, s_pageSetupData);
     pageSetupDialog.ShowModal();
 
@@ -470,9 +477,6 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 /************************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 /************************************************************/
-
-/* Open and display a previewer frame for printing
- */
 {
     SetPrintParameters( );
 
@@ -499,7 +503,6 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
         return;
     }
 
-
     // Uses the parent position and size.
     // @todo uses last position and size ans store them when exit in m_Config
     wxPoint         WPos  = m_Parent->GetPosition();
@@ -515,9 +518,6 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 /***************************************************************************/
 void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 /***************************************************************************/
-
-/* Called on activate Print button
- */
 {
     SetPrintParameters( );
 
@@ -536,7 +536,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     wxString          title = _( "Print" );
     BOARD_PRINTOUT_CONTROLER      printout( s_Parameters, m_Parent, title );
 
-#if !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
+    // Alexander's patch had this removed altogether, waiting for testing.
+#if 0 && !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
     wxDC*             dc = printout.GetDC();
     ( (wxPostScriptDC*) dc )->SetResolution( 600 );  // Postscript DC resolution is 600 ppi
 #endif

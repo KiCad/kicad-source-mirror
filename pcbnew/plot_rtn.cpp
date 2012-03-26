@@ -32,12 +32,6 @@ static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
 static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
                             EDA_DRAW_MODE_T trace_mode );
 
-static int doIntValueFitToBand( int aInt, int aMin, int aMax )
-{
-    if( aInt < aMin ) return aMin;
-    if( aInt > aMax ) return aMax;
-    return aInt;
-}
 
 /* Creates the plot for silkscreen layers
  */
@@ -1024,7 +1018,7 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
             diam.x = diam.y = pts->GetDrillValue();
 
         diam.x -= aPlotter->get_plot_width_adj();
-        diam.x = doIntValueFitToBand( diam.x, 1, pts->m_Width - 1 );
+        diam.x = Clamp( 1, diam.x, pts->m_Width - 1 );
         aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
     }
 
@@ -1042,9 +1036,9 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
             {
                 diam = pad->GetDrillSize();
                 diam.x -= aPlotter->get_plot_width_adj();
-                diam.x = doIntValueFitToBand( diam.x, 1, pad->GetSize().x - 1 );
+                diam.x = Clamp( 1, diam.x, pad->GetSize().x - 1 );
                 diam.y -= aPlotter->get_plot_width_adj();
-                diam.y = doIntValueFitToBand( diam.y, 1, pad->GetSize().y - 1 );
+                diam.y = Clamp( 1, diam.y, pad->GetSize().y - 1 );
                 aPlotter->flash_pad_oval( pos, diam, pad->GetOrientation(), aTraceMode );
             }
             else
@@ -1052,7 +1046,7 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
                 // It is quite possible that the real pad drill value is less then small drill value.
                 diam.x = aSmallDrillShape ? MIN( SMALL_DRILL, pad->GetDrillSize().x ) : pad->GetDrillSize().x;
                 diam.x -= aPlotter->get_plot_width_adj();
-                diam.x = doIntValueFitToBand( diam.x, 1, pad->GetSize().x - 1 );
+                diam.x = Clamp( 1, diam.x, pad->GetSize().x - 1 );
                 aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
             }
         }
