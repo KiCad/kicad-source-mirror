@@ -133,7 +133,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                       const wxPoint& offset, int DrawMode, int Color )
 {
     int            orient;
-    EDA_Colors     color;
+    EDA_COLOR_T    color;
     wxPoint        textpos;
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
     int            LineWidth = m_Thickness;
@@ -537,7 +537,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     wxCHECK_RET( parent != NULL && parent->Type() == SCH_COMPONENT_T,
                  wxT( "Cannot plot field with invalid parent." ) );
 
-    EDA_Colors color = UNSPECIFIED_COLOR;
+    EDA_COLOR_T color = UNSPECIFIED;
 
     color = ReturnLayerColor( GetLayer() );
 

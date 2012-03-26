@@ -572,7 +572,7 @@ void SCH_EDIT_FRAME::OnModify()
 
 void SCH_EDIT_FRAME::OnUpdateBlockSelected( wxUpdateUIEvent& event )
 {
-    bool enable = ( GetScreen() && GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE );
+    bool enable = ( GetScreen() && GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE );
 
     event.Enable( enable );
 }

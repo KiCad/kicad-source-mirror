@@ -64,12 +64,6 @@ public:
     void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
     const wxPoint& GetEnd0() const              { return m_End0; }
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
     int ReadDescr( LINE_READER* aReader );
@@ -82,33 +76,20 @@ public:
 
     void Draw3D( EDA_3D_CANVAS* glcanvas );
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "MGRAPHIC" );
 
         // return wxT( "EDGE" );  ?
     }
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  show_mod_edge_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  show_mod_edge_xpm; }
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload

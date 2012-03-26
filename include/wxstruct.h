@@ -688,8 +688,8 @@ public:
      */
     void TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
                            wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
-                           int aNScr, int aScr, int aLnW, EDA_Colors aClr1 = RED,
-                           EDA_Colors aClr2 = RED );
+                           int aNScr, int aScr, int aLnW, EDA_COLOR_T aClr1 = RED,
+                           EDA_COLOR_T aClr2 = RED );
 
     void  PlotWorkSheet( PLOTTER* aPlotter, BASE_SCREEN* aScreen );
 
@@ -741,13 +741,20 @@ public:
 
     /* Handlers for block commands */
     virtual void InitBlockPasteInfos();
-    virtual bool HandleBlockBegin( wxDC* DC, int cmd_type,const wxPoint& startpos );
+
+    /**
+     * Function HandleBlockBegin
+     * initializes the block command including the command type, initial position,
+     * and other variables.
+     */
+    virtual bool HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosition );
 
     /**
      * Function ReturnBlockCommand
-     * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
-     * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
-     * block command is started by dragging the mouse.
+     * Returns the block command code (BLOCK_MOVE, BLOCK_COPY...) corresponding to the
+     * keys pressed (ALT, SHIFT, SHIFT ALT ..) when block command is started by dragging
+     * the mouse.
+     *
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */

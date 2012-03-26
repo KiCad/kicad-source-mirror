@@ -187,7 +187,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 {
     BOARD_ITEM* item = GetCurItem();
     wxString    msg;
-    bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
+    bool        blockActive = !GetScreen()->m_BlockLocate.IsIdle();
 
     // Simple location of elements where possible.
     if( ( item == NULL ) || ( item->GetFlags() == 0 ) )

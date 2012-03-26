@@ -296,7 +296,7 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         text = m_Text;
 
     GRSetDrawMode( aDC, aDrawMode );
-    DrawGraphicText( aPanel, aDC, text_pos, (EDA_Colors) color, text, m_Orient, m_Size,
+    DrawGraphicText( aPanel, aDC, text_pos, (EDA_COLOR_T) color, text, m_Orient, m_Size,
                      m_HJustify, m_VJustify, linewidth, m_Italic, m_Bold );
 
     /* Set to one (1) to draw bounding box around field text to validate

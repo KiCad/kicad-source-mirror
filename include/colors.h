@@ -41,9 +41,9 @@ static inline int GetAlpha( int aColor )
 }
 
 
-enum EDA_Colors
+enum EDA_COLOR_T
 {
-    UNSPECIFIED_COLOR = -1,
+    UNSPECIFIED = -1,
     BLACK = 0,
     BLUE,
     GREEN,

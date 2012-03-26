@@ -942,7 +942,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     {
         // A block command is in progress: a left up is the end of block
         // or this is the end of a double click, already seen
-        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK && !ignoreNextLeftButtonRelease )
+        if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK && !ignoreNextLeftButtonRelease )
             GetParent()->OnLeftClick( &DC, screen->RefPos( true ) );
 
         ignoreNextLeftButtonRelease = false;
@@ -958,7 +958,8 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         ignoreNextLeftButtonRelease = false;
     }
 
-    if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK) )
+    if( event.ButtonUp( wxMOUSE_BTN_MIDDLE )
+      && (screen->m_BlockLocate.GetState() == STATE_NO_BLOCK) )
     {
         // The middle button has been released, with no block command:
         // We use it for a zoom center at cursor position command
@@ -1011,7 +1012,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
         if( event.LeftDown() || event.MiddleDown() )
         {
-            if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
+            if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
             {
                 m_requestAutoPan = false;
                 GetParent()->HandleBlockPlace( &DC );
@@ -1023,7 +1024,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 && !IsMouseCaptured() )
         {
             // Mouse is dragging: if no block in progress,  start a block command.
-            if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
+            if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
             {
                 //  Start a block command
                 int cmd_type = kbstat;
@@ -1068,7 +1069,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 ( ABS( screen->m_BlockLocate.GetWidth() ) < BLOCK_MINSIZE_LIMIT )
                 && ( ABS( screen->m_BlockLocate.GetHeight() ) < BLOCK_MINSIZE_LIMIT );
 
-            if( (screen->m_BlockLocate.m_State != STATE_NO_BLOCK) && BlockIsSmall )
+            if( (screen->m_BlockLocate.GetState() != STATE_NO_BLOCK) && BlockIsSmall )
             {
                 if( m_endMouseCaptureCallback )
                 {
@@ -1078,12 +1079,12 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
                 SetCursor( (wxStockCursor) m_currentCursor );
            }
-            else if( screen->m_BlockLocate.m_State == STATE_BLOCK_END )
+            else if( screen->m_BlockLocate.GetState() == STATE_BLOCK_END )
             {
                 m_requestAutoPan = false;
                 GetParent()->HandleBlockEnd( &DC );
                 SetCursor( (wxStockCursor) m_currentCursor );
-                if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
+                if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
                 {
                     m_requestAutoPan = true;
                     SetCursor( wxCURSOR_HAND );
@@ -1105,8 +1106,8 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 #if 0
     wxString msg_debug;
     msg_debug.Printf( " block state %d, cmd %d",
-                      screen->m_BlockLocate.m_State,
-                      screen->m_BlockLocate.m_Command );
+                      screen->m_BlockLocate.GetState(),
+                      screen->m_BlockLocate.GetCommand() );
     GetParent()->PrintMsg( msg_debug );
 #endif
 

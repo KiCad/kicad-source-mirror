@@ -17,7 +17,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
     BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;
-    bool        BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
+    bool        BlockActive = !GetScreen()->m_BlockLocate.IsIdle();
     bool        busy = DrawStruct && DrawStruct->GetFlags();
 
     // Do not initiate a start block validation on menu.

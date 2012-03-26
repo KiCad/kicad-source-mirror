@@ -116,9 +116,6 @@ class LIB_PIN : public LIB_ITEM
     int      m_numTextSize;
     int      m_nameTextSize; /* Pin num and Pin name sizes */
 
-    /**
-     * Draw the pin.
-     */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
@@ -129,7 +126,7 @@ public:
 
     ~LIB_PIN() { }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "LIB_PIN" );
     }
@@ -138,47 +135,19 @@ public:
     void Show( int nestLevel, std::ostream& os ) const;   // virtual override
 #endif
 
-    /**
-     * Write pin object to a FILE in "*.lib" format.
-     *
-     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
-     *                   pin to.
-     * @return True if success writing else false.
-     */
-    virtual bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter );
 
-    virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * @param aPosRef - a wxPoint to test
-     * @param aThreshold - max distance to this object (usually the half
-     *                     thickness of a line)
-     * @param aTransform - the transform matrix
-     * @return - true if the point aPosRef is near this object
-     */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
-    /**
-     * Function DisplayInfo
-     * displays the pin information in the message panel attached to \a aFrame.
-     */
-    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
-    /**
-     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
-     */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    /**
-     * Function GetBoundingBox
-     * @return the boundary box for the pin in schematic coordinates.
-     *
-     * Uses DefaultTransform as transform matrix
-     */
-    virtual EDA_RECT GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function ReturnPinEndPoint
@@ -191,7 +160,8 @@ public:
      * Function ReturnPinDrawOrient
      * returns the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
      * according to its orientation and the matrix transform (rot, mirror) \a aTransform
-     * @param aTransform = transform matrix
+     *
+     * @param aTransform Transform matrix
      */
     int ReturnPinDrawOrient( const TRANSFORM& aTransform ) const;
 
@@ -231,7 +201,7 @@ public:
      *
      * This will also all of the pin names marked by EnableEditMode().
      *
-     * @param aName - New pin name.
+     * @param aName New pin name.
      */
     void SetName( const wxString& aName );
 
@@ -241,7 +211,7 @@ public:
      * This will also update the text size of the name of the pins marked
      * by EnableEditMode().
      *
-     * @param aSize - The text size of the pin name in schematic units ( mils ).
+     * @param aSize The text size of the pin name in schematic units ( mils ).
      */
     void SetNameTextSize( int aSize );
 
@@ -252,7 +222,7 @@ public:
      *
      * Others pin numbers marked by EnableEditMode() are not modified
      * because each pin has its own number
-     * @param aNumber - New pin number.
+     * @param aNumber New pin number.
      */
     void SetNumber( const wxString& aNumber );
 
@@ -262,8 +232,7 @@ public:
      * This will also update the text size of the number of the pins marked
      * by EnableEditMode().
      *
-     * @param aSize - The text size of the pin number in schematic
-     *                units ( mils ).
+     * @param aSize The text size of the pin number in schematic units ( mils ).
      */
     void SetNumberTextSize( int aSize );
 
@@ -371,9 +340,9 @@ public:
      * parts or body styles in the component.  See SetCommonToAllParts()
      * and SetCommonToAllBodyStyles() for more information.
      *
-     * @param aEnable - True marks all common pins for editing mode.  False
-     *                  clears the editing mode.
-     * @param aEditPinByPin - Enables the edit pin by pin mode.
+     * @param aEnable True marks all common pins for editing mode.  False
+     *                clears the editing mode.
+     * @param aEditPinByPin Enables the edit pin by pin mode.
      */
     void EnableEditMode( bool aEnable, bool aEditPinByPin = false );
 
@@ -384,11 +353,7 @@ public:
      */
     bool IsVisible() { return ( m_attributes & PIN_INVISIBLE ) == 0; }
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize() const;
+    int GetPenSize() const;
 
     /**
      * Function DrawPinSymbol
@@ -509,84 +474,45 @@ public:
      */
     static const BITMAP_DEF* GetElectricalTypeSymbols();
 
-    /**
-     * @copydoc LIB_ITEM::SetOffset(const wxPoint&)
-     */
-    virtual void SetOffset( const wxPoint& aOffset );
+    void SetOffset( const wxPoint& aOffset );
 
-    /**
-     * @copydoc LIB_ITEM::Inside()
-     */
-    virtual bool Inside( EDA_RECT& aRect ) const;
+    bool Inside( EDA_RECT& aRect ) const;
 
-    /**
-     * @copydoc LIB_ITEM::Move()
-     */
-    virtual void Move( const wxPoint& aPosition );
+    void Move( const wxPoint& aPosition );
 
-    /**
-     * @copydoc LIB_ITEM::GetPosition()
-     */
-    virtual wxPoint GetPosition() const { return m_position; }
+    wxPoint GetPosition() const { return m_position; }
 
-    /**
-     * @copydoc LIB_ITEM::MirrorHorizontal()
-     */
-    virtual void MirrorHorizontal( const wxPoint& aCenter );
+    void MirrorHorizontal( const wxPoint& aCenter );
 
-    /**
-     * @copydoc LIB_ITEM::MirrorVertical()
-     */
-    virtual void MirrorVertical( const wxPoint& aCenter );
+    void MirrorVertical( const wxPoint& aCenter );
 
-    /**
-     * @copydoc LIB_ITEM::Rotate(const wxPoint&,bool)
-     */
-    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
 
-    /**
-     * @copydoc LIB_ITEM::Plot()
-     */
-    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                       const TRANSFORM& aTransform );
+    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+               const TRANSFORM& aTransform );
 
-    /**
-     * @copydoc LIB_ITEM::GetWidth()
-     */
-    virtual int GetWidth() const { return m_width; }
+    int GetWidth() const { return m_width; }
 
-    /**
-     * @copydoc LIB_ITEM::SetWidth()
-     */
-    virtual void SetWidth( int aWidth );
+    void SetWidth( int aWidth );
 
-    /** @copydoc EDA_ITEM::GetMenuImage() */
-    virtual BITMAP_DEF GetMenuImage() const;
+    BITMAP_DEF GetMenuImage() const;
 
-    /** @copydoc EDA_ITEM::GetSelectMenuText() */
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 private:
 
     /**
-     * Function compare
-     * provides the pin draw object specific comparison.
+     * @copydoc LIB_ITEM::compare()
      *
-     * The sort order is as follows:
+     * The pin specific sort order is as follows:
      *      - Pin number.
      *      - Pin name, case insensitive compare.
      *      - Pin horizontal (X) position.
      *      - Pin vertical (Y) position.
-     *
-     * @param aOther A reference to the other #LIB_ITEM to compare the pin against.
-     * @return An integer value less than 0 if the pin is less than \a aOther, zero
-     *         if the pin is equal to \a aOther, or greater than 0 if the pin is
-     *         greater than \a aOther.
      */
-    virtual int compare( const LIB_ITEM& aOther ) const;
+    int compare( const LIB_ITEM& aOther ) const;
 };
 
 

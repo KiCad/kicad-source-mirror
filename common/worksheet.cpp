@@ -1036,8 +1036,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
 void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
                                        wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
-                                       int aNScr, int aScr, int aLnW, EDA_Colors aClr1,
-                                       EDA_Colors aClr2 )
+                                       int aNScr, int aScr, int aLnW, EDA_COLOR_T aClr1,
+                                       EDA_COLOR_T aClr2 )
 {
     wxPoint pos;
     int refx, refy;

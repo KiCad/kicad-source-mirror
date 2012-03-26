@@ -674,14 +674,14 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
 
     PopMenu->AppendSeparator();
 
-    if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
+    if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
         AddMenuItem( PopMenu, ID_POPUP_ZOOM_BLOCK, _( "Window Zoom" ), KiBitmap( zoom_area_xpm ) );
 
     AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( apply_xpm ) );
 
     // After a block move (that is also a block selection) one can reselect
     // a block function.
-    if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
+    if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
     {
         msg = AddHotkeyName( _( "Save Block" ), s_Schematic_Hokeys_Descr,
                              HK_SAVE_BLOCK );

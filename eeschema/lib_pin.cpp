@@ -1071,14 +1071,14 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                             int             Color,
                             int             DrawMode )
 {
-    int        x, y, x1, y1;
-    wxString   StringPinNum;
-    EDA_Colors NameColor, NumColor;
+    int         x, y, x1, y1;
+    wxString    StringPinNum;
+    EDA_COLOR_T NameColor, NumColor;
 
-    wxSize     PinNameSize( m_nameTextSize, m_nameTextSize );
-    wxSize     PinNumSize( m_numTextSize, m_numTextSize );
+    wxSize      PinNameSize( m_nameTextSize, m_nameTextSize );
+    wxSize      PinNumSize( m_numTextSize, m_numTextSize );
 
-    int        nameLineWidth = GetPenSize();
+    int         nameLineWidth = GetPenSize();
 
     nameLineWidth = Clamp_Text_PenSize( nameLineWidth, m_nameTextSize, false );
     int        numLineWidth = GetPenSize();
@@ -1090,8 +1090,8 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     if( (Color < 0) && IsSelected() )
         Color = g_ItemSelectetColor;
 
-    NameColor = (EDA_Colors) ( Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color );
-    NumColor  = (EDA_Colors) ( Color == -1 ? ReturnLayerColor( LAYER_PINNUM ) : Color );
+    NameColor = (EDA_COLOR_T) ( Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color );
+    NumColor  = (EDA_COLOR_T) ( Color == -1 ? ReturnLayerColor( LAYER_PINNUM ) : Color );
 
     /* Create the pin num string */
     ReturnPinStringNum( StringPinNum );
@@ -1269,8 +1269,8 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 
 void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation )
 {
-    int        MapX1, MapY1, x1, y1;
-    EDA_Colors color = UNSPECIFIED_COLOR;
+    int         MapX1, MapY1, x1, y1;
+    EDA_COLOR_T color = UNSPECIFIED;
 
     color = ReturnLayerColor( LAYER_PIN );
 
@@ -1379,11 +1379,11 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
                             bool     DrawPinName,
                             int      aWidth )
 {
-    int        x, y, x1, y1;
-    wxString   StringPinNum;
-    EDA_Colors NameColor, NumColor;
-    wxSize     PinNameSize = wxSize( m_nameTextSize, m_nameTextSize );
-    wxSize     PinNumSize  = wxSize( m_numTextSize, m_numTextSize );
+    int         x, y, x1, y1;
+    wxString    StringPinNum;
+    EDA_COLOR_T NameColor, NumColor;
+    wxSize      PinNameSize = wxSize( m_nameTextSize, m_nameTextSize );
+    wxSize      PinNumSize  = wxSize( m_numTextSize, m_numTextSize );
 
     /* Get the num and name colors */
     NameColor = ReturnLayerColor( LAYER_PINNAM );

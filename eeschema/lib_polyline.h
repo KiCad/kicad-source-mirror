@@ -39,17 +39,9 @@ class LIB_POLYLINE : public LIB_ITEM
 
     int m_ModifyIndex;                        // Index of the polyline point to modify
 
-    /**
-     * Draw the polyline.
-     */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
-    /**
-     * Calculate the polyline attributes relative to \a aPosition while editing.
-     *
-     * @param aPosition - Edit position in drawing units.
-     */
     void calcEdit( const wxPoint& aPosition );
 
 public:
@@ -59,22 +51,15 @@ public:
 
     ~LIB_POLYLINE() { }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "LIB_POLYLINE" );
     }
 
 
-    /**
-     * Write polyline object out to a FILE in "*.lib" format.
-     *
-     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
-     *                   polyline to.
-     * @return True if success writing else false.
-     */
-    virtual bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter );
 
-    virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
     void AddPoint( const wxPoint& aPoint );
 
@@ -88,122 +73,59 @@ public:
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * @param aPosition = a wxPoint to test
-     * @param aThreshold = max distance to a segment
-     * @param aTransform = the transform matrix
-     * @return true if the point \a aPosition is near a segment
-     */
-    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
-    /**
-     * Function GetBoundingBox
-     * @return the boundary box for this, in library coordinates
-     */
-    virtual EDA_RECT GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize( ) const;
+    int GetPenSize( ) const;
 
-    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
-    /**
-     * See LIB_ITEM::BeginEdit().
-     */
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
-    /**
-     * See LIB_ITEM::ContinueEdit().
-     */
     bool ContinueEdit( const wxPoint aNextPoint );
 
-    /**
-     * See LIB_ITEM::AbortEdit().
-     */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
-    /**
-     * @copydoc LIB_ITEM::SetOffset(const wxPoint&)
-     */
-    virtual void SetOffset( const wxPoint& aOffset );
+    void SetOffset( const wxPoint& aOffset );
 
-    /**
-     * @copydoc LIB_ITEM::Inside()
-     */
-    virtual bool Inside( EDA_RECT& aRect ) const;
+    bool Inside( EDA_RECT& aRect ) const;
 
-    /**
-     * @copydoc LIB_ITEM::Move()
-     */
-    virtual void Move( const wxPoint& aPosition );
+    void Move( const wxPoint& aPosition );
 
-    /**
-     * @copydoc LIB_ITEM::GetPosition()
-     */
-    virtual wxPoint GetPosition() const { return m_PolyPoints[0]; }
+    wxPoint GetPosition() const { return m_PolyPoints[0]; }
 
-    /**
-     * @copydoc LIB_ITEM::MirrorHorizontal()
-     */
-    virtual void MirrorHorizontal( const wxPoint& aCenter );
+    void MirrorHorizontal( const wxPoint& aCenter );
 
-    /**
-     * @copydoc LIB_ITEM::MirrorVertical()
-     */
-    virtual void MirrorVertical( const wxPoint& aCenter );
+    void MirrorVertical( const wxPoint& aCenter );
 
-    /**
-     * @copydoc LIB_ITEM::Rotate(const wxPoint&,bool)
-     */
-    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
 
-    /**
-     * @copydoc LIB_ITEM::Plot()
-     */
-    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                       const TRANSFORM& aTransform );
+    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+               const TRANSFORM& aTransform );
 
-    /**
-     * @copydoc LIB_ITEM::GetWidth()
-     */
-    virtual int GetWidth() const { return m_Width; }
+    int GetWidth() const { return m_Width; }
 
-    /**
-     * @copydoc LIB_ITEM::SetWidth()
-     */
-    virtual void SetWidth( int aWidth ) { m_Width = aWidth; }
+    void SetWidth( int aWidth ) { m_Width = aWidth; }
 
-    /** @copydoc EDA_ITEM::GetSelectMenuText() */
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    /** @copydoc EDA_ITEM::GetMenuImage() */
-    virtual BITMAP_DEF GetMenuImage() const { return  add_polygon_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_polygon_xpm; }
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 private:
 
     /**
-     * Function compare
-     * provides the polyline segment draw object specific comparison.
+     * @copydoc LIB_ITEM::compare()
      *
-     * The sort order for each polyline segment point is as follows:
+     * The sort order for specific to each polyline segment point is as follows:
      *      - Line segment point horizontal (X) position.
      *      - Line segment point vertical (Y) position.
-     *
-     * @param aOther A reference to the other #LIB_ITEM to compare the polyline against.
-     * @return An integer value less than 0 if the polyline is less than \a aOther, zero
-     *         if the polyline is equal to \a aOther, or greater than 0 if the polyline
-     *         is greater than \a aOther.
      */
-    virtual int compare( const LIB_ITEM& aOther ) const;
+    int compare( const LIB_ITEM& aOther ) const;
 };
 
 

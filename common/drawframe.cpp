@@ -883,3 +883,74 @@ wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils )
 {
     return ::CoordinateToString( aValue, m_internalUnits, aConvertToMils );
 }
+
+
+bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosition )
+{
+    BLOCK_SELECTOR* Block = &GetScreen()->m_BlockLocate;
+
+    if( ( Block->GetCommand() != BLOCK_IDLE ) || ( Block->GetState() != STATE_NO_BLOCK ) )
+        return false;
+
+    Block->SetCommand( (BLOCK_COMMAND_T) ReturnBlockCommand( aKey ) );
+
+    if( Block->GetCommand() == 0 )
+        return false;
+
+    switch( Block->GetCommand() )
+    {
+    case BLOCK_IDLE:
+        break;
+
+    case BLOCK_MOVE:                /* Move */
+    case BLOCK_DRAG:                /* Drag */
+    case BLOCK_COPY:                /* Copy */
+    case BLOCK_DELETE:              /* Delete */
+    case BLOCK_SAVE:                /* Save */
+    case BLOCK_ROTATE:              /* Rotate 90 deg */
+    case BLOCK_FLIP:                /* Flip */
+    case BLOCK_ZOOM:                /* Window Zoom */
+    case BLOCK_MIRROR_X:
+    case BLOCK_MIRROR_Y:            /* mirror */
+    case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
+        Block->InitData( m_canvas, aPosition );
+        break;
+
+    case BLOCK_PASTE:
+        Block->InitData( m_canvas, aPosition );
+        Block->SetLastCursorPosition( wxPoint( 0, 0 ) );
+        InitBlockPasteInfos();
+
+        if( Block->GetCount() == 0 )      /* No data to paste */
+        {
+            DisplayError( this, wxT( "No Block to paste" ), 20 );
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
+            m_canvas->SetMouseCaptureCallback( NULL );
+            return true;
+        }
+
+        if( !m_canvas->IsMouseCaptured() )
+        {
+            Block->ClearItemsList();
+            DisplayError( this,
+                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
+            return true;
+        }
+
+        Block->SetState( STATE_BLOCK_MOVE );
+        m_canvas->CallMouseCapture( aDC, aPosition, false );
+        break;
+
+    default:
+    {
+        wxString msg;
+        msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
+        Block->GetCommand();
+        DisplayError( this, msg );
+    }
+    break;
+    }
+
+    Block->SetMessageBlock( this );
+    return true;
+}

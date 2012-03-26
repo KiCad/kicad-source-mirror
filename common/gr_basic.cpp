@@ -596,7 +596,7 @@ void GRMixedLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
  * @param aLines = a list of pair of coordinate in user space: a pair for each line.
  * @param aWidth = the width of each line.
  * @param aColor = an index into our color table of RGB colors.
- * @see EDA_Colors and colors.h
+ * @see EDA_COLOR_T and colors.h
  */
 void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
                   int aWidth, int aColor )

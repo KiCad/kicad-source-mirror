@@ -317,7 +317,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     int t1  = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
     wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + offset;
 
-    plotter->text( pos, UNSPECIFIED_COLOR, m_Text,
+    plotter->text( pos, UNSPECIFIED, m_Text,
                    t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                    m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                    GetPenSize(), m_Italic, m_Bold );
@@ -389,7 +389,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     // Calculate pos accordint to mirror/rotation.
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
-    DrawGraphicText( aPanel, aDC, txtpos, (EDA_Colors) color, m_Text, orient, m_Size,
+    DrawGraphicText( aPanel, aDC, txtpos, (EDA_COLOR_T) color, m_Text, orient, m_Size,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, GetPenSize(),
                      m_Italic, m_Bold );
 

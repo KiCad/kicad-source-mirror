@@ -66,7 +66,7 @@ public:
 
     ~SCH_FIELD();
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_FIELD" );
     }
@@ -94,7 +94,7 @@ public:
      *
      * @return a const wxString object containing the field's string.
      */
-    virtual const wxString GetText() const;
+    const wxString GetText() const;
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
@@ -111,13 +111,7 @@ public:
         return len == 0 || ( len == 1 && m_Text[0] == wxChar( '~' ) );
     }
 
-    /**
-     * Function SwapData
-     * exchanges the date between the field and \a aItem
-     *
-     * @param aItem The field to exchange data with.
-     */
-    virtual void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem );
 
     /**
      * Function ImportValues
@@ -127,10 +121,6 @@ public:
      */
     void ImportValues( const LIB_FIELD& aSource );
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
     int GetPenSize() const;
 
     /**
@@ -143,44 +133,32 @@ public:
     }
 
 
-    /**
-     * Function Draw
-     */
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                const wxPoint&  aOffset,
                int             aDrawMode,
                int             aColor = -1 );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
     // Geometric transforms (used in block operations):
 
-    /** @copydoc SCH_ITEM::Move() */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
 
-    /** @copydoc SCH_ITEM::Rotate() */
-    virtual void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition );
 
     /**
      * @copydoc SCH_ITEM::MirrorX()
      *
      * This overload does nothing.  Fields are never mirrored alone.  They are moved
      * when the parent component is mirrored.  This function is only needed by the
-     * virtual pure function of the master class.
+     * pure function of the master class.
      */
-    virtual void MirrorX( int aXaxis_position )
+    void MirrorX( int aXaxis_position )
     {
     }
 
@@ -189,52 +167,33 @@ public:
      *
      * This overload does nothing.  Fields are never mirrored alone.  They are moved
      * when the parent component is mirrored.  This function is only needed by the
-     * virtual pure function of the master class.
+     * pure function of the master class.
      */
-    virtual void MirrorY( int aYaxis_position )
+    void MirrorY( int aYaxis_position )
     {
     }
 
-    /**
-     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
-     */
-    virtual bool Matches( wxFindReplaceData& aSearchData,
-                          void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    /**
-     * @copydoc EDA_ITEM::Replace(wxFindReplaceData&,void*)
-     */
-    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL );
+    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL );
 
-    /** @copydoc EDA_ITEM::GetSelectMenuText() */
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    /** @copydoc EDA_ITEM::GetMenuImage() */
-    virtual BITMAP_DEF GetMenuImage() const;
+    BITMAP_DEF GetMenuImage() const;
 
-    /**
-     * @copydoc EDA_ITEM::IsReplaceable()
-     */
-    virtual bool IsReplaceable() const { return true; }
+    bool IsReplaceable() const { return true; }
 
-    /** @copydoc SCH_ITEM::GetPosition() */
-    virtual wxPoint GetPosition() const;
+    wxPoint GetPosition() const;
 
-    /** @copydoc SCH_ITEM::SetPosition() */
-    virtual void SetPosition( const wxPoint& aPosition );
+    void SetPosition( const wxPoint& aPosition );
 
-    /** @copydoc SCH_ITEM::HitTest(const wxPoint&,int)const */
-    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
-    /** @copydoc SCH_ITEM::HitTest(const EDA_RECT&,bool,int)const */
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
-                          int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
 
-    /** @copydoc SCH_ITEM::Plot() */
-    virtual void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter );
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override

@@ -77,37 +77,15 @@ public:
      */
     void Exchg( PCB_TARGET* aTarget );
 
-    /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
-     */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
-    /**
-     * Function Rotate
-     * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
-     */
-    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     */
-    virtual void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
     bool ReadMirePcbDescr( LINE_READER* aReader );
@@ -117,20 +95,17 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
                const wxPoint& offset = ZeroOffset );
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition );
 
-    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    bool HitTest( const EDA_RECT& aRect ) const;
 
     EDA_RECT GetBoundingBox() const;
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_mires_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_mires_xpm; }
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override

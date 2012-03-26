@@ -152,12 +152,6 @@ public:
         m_PolyPoints = aPoints;
     }
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool         Save( FILE* aFile ) const;
 
     bool         ReadDrawSegmentDescr( LINE_READER* aReader );
@@ -167,35 +161,14 @@ public:
     void         Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                        int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A PCB_BASE_FRAME in which to print status information.
-     */
     virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /**
-     * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for visible components of this
-     * object, and the units should be in the pcb or schematic coordinate system.
-     * It is OK to overestimate the size by a few counts.
-     */
     virtual EDA_RECT GetBoundingBox() const;
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
     virtual bool HitTest( const wxPoint& aPosition );
 
-    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
     virtual bool HitTest( const EDA_RECT& aRect ) const;
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
     wxString GetClass() const
     {
         return wxT( "DRAWSEGMENT" );
@@ -213,30 +186,14 @@ public:
         return hypot( double( delta.x ), double( delta.y ) );
     }
 
-    /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
-     */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Start += aMoveVector;
         m_End   += aMoveVector;
     }
 
-    /**
-     * Function Rotate
-     * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
-     */
     virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     */
     virtual void Flip( const wxPoint& aCentre );
 
     /**
@@ -260,7 +217,6 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_dashed_line_xpm; }
 
-    /** @copydoc EDA_ITEM::Clone() */
     virtual EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)

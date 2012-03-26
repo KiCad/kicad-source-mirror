@@ -104,7 +104,7 @@ void SCH_EDIT_FRAME::InitBlockPasteInfos()
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
-    block->m_ItemsSelection.CopyList( m_blockItems.m_ItemsSelection );
+    block->GetItems().CopyList( m_blockItems.GetItems() );
     m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
 }
 
@@ -122,13 +122,13 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     {
         wxString msg;
         msg.Printf( wxT( "HandleBlockPLace() error : no items to place (cmd %d, state %d)" ),
-                    block->m_Command, block->m_State );
+                    block->GetCommand(), block->GetState() );
         DisplayError( this, msg );
     }
 
-    block->m_State = STATE_BLOCK_STOP;
+    block->SetState( STATE_BLOCK_STOP );
 
-    switch( block->m_Command )
+    switch( block->GetCommand() )
     {
     case BLOCK_IDLE:
         break;
@@ -141,8 +141,8 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-        SaveCopyInUndoList( block->m_ItemsSelection, UR_MOVED, block->m_MoveVector );
-        MoveItemsInList( block->m_ItemsSelection, block->m_MoveVector );
+        SaveCopyInUndoList( block->GetItems(), UR_MOVED, block->GetMoveVector() );
+        MoveItemsInList( block->GetItems(), block->GetMoveVector() );
         block->ClearItemsList();
         break;
 
@@ -151,10 +151,10 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-        DuplicateItemsInList( GetScreen(), block->m_ItemsSelection, block->m_MoveVector );
+        DuplicateItemsInList( GetScreen(), block->GetItems(), block->GetMoveVector() );
 
-        SaveCopyInUndoList( block->m_ItemsSelection,
-                            ( block->m_Command == BLOCK_PRESELECT_MOVE ) ? UR_CHANGED : UR_NEW );
+        SaveCopyInUndoList( block->GetItems(),
+                            ( block->GetCommand() == BLOCK_PRESELECT_MOVE ) ? UR_CHANGED : UR_NEW );
 
         block->ClearItemsList();
         break;
@@ -203,23 +203,23 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( block->GetCount() )
     {
-        BlockState   state   = block->m_State;
-        CmdBlockType command = block->m_Command;
+        BLOCK_STATE_T   state   = block->GetState();
+        BLOCK_COMMAND_T command = block->GetCommand();
 
         m_canvas->CallEndMouseCapture( DC );
 
-        block->m_State   = state;
-        block->m_Command = command;
+        block->SetState( state );
+        block->SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
         GetScreen()->SetCrossHairPosition( block->GetEnd() );
 
-        if( block->m_Command != BLOCK_ABORT )
+        if( block->GetCommand() != BLOCK_ABORT )
             m_canvas->MoveCursorToCrossHair();
     }
 
     if( m_canvas->IsMouseCaptured() )
     {
-        switch( block->m_Command )
+        switch( block->GetCommand() )
         {
         case BLOCK_IDLE:
             DisplayError( this, wxT( "Error in HandleBlockPLace()" ) );
@@ -245,7 +245,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
                 m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
                 m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-                block->m_State = STATE_BLOCK_MOVE;
+                block->SetState( STATE_BLOCK_MOVE );
             }
             else
             {
@@ -260,7 +260,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
             if( block->GetCount() )
             {
-                DeleteItemsInList( m_canvas, block->m_ItemsSelection );
+                DeleteItemsInList( m_canvas, block->GetItems() );
                 OnModify();
             }
 
@@ -275,32 +275,30 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
             if( block->GetCount() )
             {
-                wxPoint move_vector = -GetScreen()->m_BlockLocate.m_BlockLastCursorPosition;
-                copyBlockItems( block->m_ItemsSelection );
-                MoveItemsInList( m_blockItems.m_ItemsSelection, move_vector );
+                wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
+                copyBlockItems( block->GetItems() );
+                MoveItemsInList( m_blockItems.GetItems(), move_vector );
              }
 
             block->ClearItemsList();
             break;
 
         case BLOCK_PASTE:
-            block->m_State = STATE_BLOCK_MOVE;
-            break;
-
-        case BLOCK_FLIP: /* Pcbnew only! */
+            block->SetState( STATE_BLOCK_MOVE );
             break;
 
         case BLOCK_ZOOM: /* Window Zoom */
             zoom_command = true;
             break;
 
+        case BLOCK_FLIP:                /* Pcbnew only! */
         case BLOCK_SELECT_ITEMS_ONLY:   /* Not used */
         case BLOCK_ABORT:               /* not executed here */
             break;
         }
     }
 
-    if( block->m_Command == BLOCK_ABORT )
+    if( block->GetCommand() == BLOCK_ABORT )
     {
         GetScreen()->ClearDrawingState();
         m_canvas->Refresh();
@@ -308,11 +306,11 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( ! nextcmd )
     {
-        block->m_State   = STATE_NO_BLOCK;
-        block->m_Command = BLOCK_IDLE;
+        block->SetState( STATE_NO_BLOCK );
+        block->SetCommand( BLOCK_IDLE );
         GetScreen()->SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
-                                    false );
+                                   false );
     }
 
     if( zoom_command )
@@ -331,20 +329,20 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     // can convert only a block move command to an other command
-    if( block->m_Command != BLOCK_MOVE )
+    if( block->GetCommand() != BLOCK_MOVE )
         return;
 
     // Useless if the new command is block move because we are already in block move.
     if( Command == BLOCK_MOVE )
         return;
 
-    block->m_Command = (CmdBlockType) Command;
+    block->SetCommand( (BLOCK_COMMAND_T) Command );
     block->SetMessageBlock( this );
 
-    switch( block->m_Command )
+    switch( block->GetCommand() )
     {
     case BLOCK_COPY:     /* move to copy */
-        block->m_State = STATE_BLOCK_MOVE;
+        block->SetState( STATE_BLOCK_MOVE );
         blockCmdFinished = false;
         break;
 
@@ -366,7 +364,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             if( m_canvas->IsMouseCaptured() )
                 m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-            block->m_State = STATE_BLOCK_MOVE;
+            block->SetState( STATE_BLOCK_MOVE );
         }
         break;
 
@@ -376,7 +374,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
         if( block->GetCount() )
         {
-            DeleteItemsInList( m_canvas, block->m_ItemsSelection );
+            DeleteItemsInList( m_canvas, block->GetItems() );
             OnModify();
         }
 
@@ -390,9 +388,9 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
         if( block->GetCount() )
         {
-            wxPoint move_vector = -GetScreen()->m_BlockLocate.m_BlockLastCursorPosition;
-            copyBlockItems( block->m_ItemsSelection );
-            MoveItemsInList( m_blockItems.m_ItemsSelection, move_vector );
+            wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
+            copyBlockItems( block->GetItems() );
+            MoveItemsInList( m_blockItems.GetItems(), move_vector );
         }
         break;
 
@@ -413,8 +411,8 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             wxPoint rotationPoint = block->Centre();
             rotationPoint = GetScreen()->GetNearestGridPosition( rotationPoint );
             GetScreen()->SetCrossHairPosition( rotationPoint );
-            SaveCopyInUndoList( block->m_ItemsSelection, UR_ROTATED, rotationPoint );
-            RotateListOfItems( block->m_ItemsSelection, rotationPoint );
+            SaveCopyInUndoList( block->GetItems(), UR_ROTATED, rotationPoint );
+            RotateListOfItems( block->GetItems(), rotationPoint );
             OnModify();
         }
 
@@ -432,10 +430,11 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             wxPoint mirrorPoint = block->Centre();
             mirrorPoint = GetScreen()->GetNearestGridPosition( mirrorPoint );
             GetScreen()->SetCrossHairPosition( mirrorPoint );
-            SaveCopyInUndoList( block->m_ItemsSelection, UR_MIRRORED_X, mirrorPoint );
-            MirrorX( block->m_ItemsSelection, mirrorPoint );
+            SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_X, mirrorPoint );
+            MirrorX( block->GetItems(), mirrorPoint );
             OnModify();
         }
+
         GetScreen()->TestDanglingEnds( m_canvas, DC );
         m_canvas->Refresh();
         break;
@@ -450,8 +449,8 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             wxPoint mirrorPoint = block->Centre();
             mirrorPoint = GetScreen()->GetNearestGridPosition( mirrorPoint );
             GetScreen()->SetCrossHairPosition( mirrorPoint );
-            SaveCopyInUndoList( block->m_ItemsSelection, UR_MIRRORED_Y, mirrorPoint );
-            MirrorY( block->m_ItemsSelection, mirrorPoint );
+            SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_Y, mirrorPoint );
+            MirrorY( block->GetItems(), mirrorPoint );
             OnModify();
         }
 
@@ -468,7 +467,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         block->Clear();
         GetScreen()->SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
-                                    false );
+                                   false );
     }
 }
 
@@ -486,23 +485,23 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     /* Erase old block contents. */
     if( aErase )
     {
-        block->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, block->m_Color );
+        block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
         for( unsigned ii = 0; ii < block->GetCount(); ii++ )
         {
-            schitem = (SCH_ITEM*) block->m_ItemsSelection.GetPickedItem( ii );
-            schitem->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, g_GhostColor );
+            schitem = (SCH_ITEM*) block->GetItem( ii );
+            schitem->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, g_GhostColor );
         }
     }
 
     /* Repaint new view. */
-    block->m_MoveVector = screen->GetCrossHairPosition() - block->m_BlockLastCursorPosition;
-    block->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, block->m_Color );
+    block->SetMoveVector( screen->GetCrossHairPosition() - block->GetLastCursorPosition() );
+    block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )
     {
-        schitem = (SCH_ITEM*) block->m_ItemsSelection.GetPickedItem( ii );
-        schitem->Draw( aPanel, aDC, block->m_MoveVector, g_XorMode, g_GhostColor );
+        schitem = (SCH_ITEM*) block->GetItem( ii );
+        schitem->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, g_GhostColor );
     }
 }
 
@@ -515,6 +514,7 @@ void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList )
     {
         // Clear m_Flag member of selected items:
         aItemsList.GetPickedItem( ii )->ClearFlags();
+
         /* Make a copy of the original picked item. */
         SCH_ITEM* copy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
         copy->SetParent( NULL );
@@ -543,7 +543,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 
     for( unsigned ii = 0; ii < m_blockItems.GetCount(); ii++ )
     {
-        Struct = DuplicateStruct( (SCH_ITEM*) m_blockItems.m_ItemsSelection.GetPickedItem( ii ) );
+        Struct = DuplicateStruct( (SCH_ITEM*) m_blockItems.GetItem( ii ) );
 
         // Creates data, and push it as new data in undo item list buffer
         ITEM_PICKER picker( Struct, UR_NEW );
@@ -563,7 +563,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 
     SaveCopyInUndoList( picklist, UR_NEW );
 
-    MoveItemsInList( picklist, GetScreen()->m_BlockLocate.m_MoveVector );
+    MoveItemsInList( picklist, GetScreen()->m_BlockLocate.GetMoveVector() );
 
     // Clear flags for all items.
     GetScreen()->ClearDrawingState();
