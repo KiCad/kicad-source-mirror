@@ -307,7 +307,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         keep_on_grid = false;
 
     /* Cursor is left off grid if no block in progress and no moving object */
-    if( GetScreen()->m_BlockLocate.m_State != STATE_NO_BLOCK )
+    if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         keep_on_grid = true;
 
     EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();

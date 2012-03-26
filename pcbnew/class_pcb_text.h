@@ -57,30 +57,14 @@ public:
         m_Pos = aPos;   // within EDA_TEXT
     }
 
-    /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
-     */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
-    /**
-     * Function Rotate
-     * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
-     */
-    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     */
-    virtual void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre );
 
     /* duplicate structure */
     void Copy( TEXTE_PCB* source );
@@ -91,41 +75,21 @@ public:
     // File Operations:
     int ReadTextePcbDescr( LINE_READER* aReader );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition )
+    bool HitTest( const wxPoint& aPosition )
     {
         return TextHitTest( aPosition );
     }
 
-    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
-    virtual bool HitTest( const EDA_RECT& aRect ) const
+    bool HitTest( const EDA_RECT& aRect ) const
     {
         return TextHitTest( aRect );
     }
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT("PTEXT");
     }
@@ -147,14 +111,13 @@ public:
                                                int                    aCircleToSegmentsCount,
                                                double                 aCorrectionFactor );
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
-    virtual EDA_RECT GetBoundingBox() const { return GetTextBox(); };
+    EDA_RECT GetBoundingBox() const { return GetTextBox(); };
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;

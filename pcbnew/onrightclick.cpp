@@ -53,7 +53,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     wxString    msg;
     int         flags = 0;
     bool        locate_track = false;
-    bool        blockActive  = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
+    bool        blockActive  = !GetScreen()->m_BlockLocate.IsIdle();
 
     wxClientDC  dc( m_canvas );
 

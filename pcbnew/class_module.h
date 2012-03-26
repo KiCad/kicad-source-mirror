@@ -156,13 +156,6 @@ public:
      */
     EDA_RECT GetFootPrintRect() const;
 
-    /**
-     * Function GetBoundingBox
-     * returns the bounding box of this
-     * footprint.  Mainly used to redraw the screen area occupied by
-     * the footprint.
-     * @return EDA_RECT - The rectangle containing the footprint and texts.
-     */
     EDA_RECT GetBoundingBox() const;
 
     void SetPosition( const wxPoint& aPos );                        // was overload
@@ -207,33 +200,12 @@ public:
     int GetAttributes() const { return m_Attributs; }
     void SetAttributes( int aAttributes ) { m_Attributs = aAttributes; }
 
-    /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
-     */
-    virtual void Move( const wxPoint& aMoveVector );
+    void Move( const wxPoint& aMoveVector );
 
-    /**
-     * Function Rotate
-     * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
-     */
-    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     */
-    virtual void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre );
 
-    /**
-     * Function IsLocked
-     * (virtual from BOARD_ITEM )
-     * @return bool - true if the MODULE is locked, else false
-     */
     bool IsLocked() const
     {
         return (m_ModuleStatus & MODULE_is_LOCKED) != 0;
@@ -266,13 +238,6 @@ public:
 
     /* Reading and writing data on files */
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
     int Write_3D_Descr( FILE* File ) const;
@@ -292,14 +257,6 @@ public:
 
     /* drawing functions */
 
-    /**
-     * Function Draw
-     * Draw the text according to the footprint pos and orient
-     * @param aPanel = draw panel, Used to know the clip box
-     * @param aDC = Current Device Context
-     * @param aDrawMode = GR_OR, GR_XOR..
-     * @param aOffset = draw offset (usually wxPoint(0,0)
-     */
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                int             aDrawMode,
@@ -312,19 +269,11 @@ public:
     void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
                     const wxPoint& offset, int dim_ancre, int draw_mode );
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition );
 
-    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function GetReference
@@ -383,38 +332,19 @@ public:
      */
     D_PAD* GetPad( const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
 
-    /**
-     * Function Visit
-     * should be re-implemented for each derived class in order to handle
-     * all the types given by its member data.  Implementations should call
-     * inspector->Inspect() on types in scanTypes[], and may use IterateForward()
-     * to do so on lists of such data.
-     * @param inspector An INSPECTOR instance to use in the inspection.
-     * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order
-     *                  is significant too, terminated by EOT.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *                         else SCAN_CONTINUE;
-     */
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "MODULE" );
     }
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  module_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  module_xpm; }
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload

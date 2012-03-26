@@ -437,8 +437,8 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 
 
 void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                     EDA_Colors aColor, int aDrawMode,
-                     EDA_DRAW_MODE_T aFillMode, EDA_Colors aAnchor_color )
+                     EDA_COLOR_T aColor, int aDrawMode,
+                     EDA_DRAW_MODE_T aFillMode, EDA_COLOR_T aAnchor_color )
 {
     if( m_MultilineAllowed )
     {
@@ -459,7 +459,7 @@ void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                                aColor,
                                aDrawMode,
                                aFillMode,
-                               i ?  UNSPECIFIED_COLOR : aAnchor_color,
+                               i ?  UNSPECIFIED : aAnchor_color,
                                txt,
                                pos );
             pos += offset;
@@ -481,9 +481,9 @@ void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
 
 
 void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                  const wxPoint& aOffset, EDA_Colors aColor,
+                                  const wxPoint& aOffset, EDA_COLOR_T aColor,
                                   int aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                                  EDA_Colors aAnchor_color,
+                                  EDA_COLOR_T aAnchor_color,
                                   wxString& aText, wxPoint aPos )
 {
     int width = m_Thickness;
@@ -495,12 +495,12 @@ void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         GRSetDrawMode( aDC, aDrawMode );
 
     /* Draw text anchor, if allowed */
-    if( aAnchor_color != UNSPECIFIED_COLOR )
+    if( aAnchor_color != UNSPECIFIED )
     {
 
         int anchor_size = aDC->DeviceToLogicalXRel( 2 );
 
-        aAnchor_color = (EDA_Colors) ( aAnchor_color & MASKCOLOR );
+        aAnchor_color = (EDA_COLOR_T) ( aAnchor_color & MASKCOLOR );
 
         int cX = aPos.x + aOffset.x;
         int cY = aPos.y + aOffset.y;

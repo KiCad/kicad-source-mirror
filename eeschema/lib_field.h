@@ -89,7 +89,7 @@ public:
 
     ~LIB_FIELD();
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "LIB_FIELD" );
     }
@@ -106,12 +106,12 @@ public:
      * names.  The user definable fields will return FieldN where N is the ID of the field
      * when the m_name member is empty.
      *
-     * @param aTranslate = true to return translated field name (default)
-     *                     false to return the english name
-     *                     (useful when the name is used as keyword in netlists ...)
+     * @param aTranslate True to return translated field name (default).  False to return
+     *                   the english name (useful when the name is used as keyword in
+     *                   netlists ...)
      * @return Name of the field.
      */
-    wxString GetName(bool aTranslate = true) const;
+    wxString GetName( bool aTranslate = true ) const;
 
     /**
      * Function SetName
@@ -130,27 +130,16 @@ public:
 
     void SetId( int aId ) { m_id = aId; }
 
-    /**
-     * Function GetPenSize virtual
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize( ) const;
+    int GetPenSize( ) const;
 
-    /**
-     * Writes field object out to a FILE in "*.lib" format.
-     *
-     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
-     *                   field to.
-     * @return True if success writing else false.
-     */
-    virtual bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter );
 
-    virtual bool Load( LINE_READER& aLineReader, wxString& errorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& errorMsg );
 
     /**
      * Copy parameters of this field to another field. Pointers are not copied.
      *
-     * @param aTarget = Target field to copy values to.
+     * @param aTarget Target field to copy values to.
      */
     void Copy( LIB_FIELD* aTarget ) const;
 
@@ -174,30 +163,13 @@ public:
         return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
     }
 
-    /**
-     * Return the bounding rectangle of the field text.
-     * @return Bounding rectangle.
-     */
-    virtual EDA_RECT GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
-    /**
-     * Displays info (type, part  convert filed name and value)
-     * in msg panel
-     * @param aFrame = main frame where the message panel info is.
-     */
-    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition );
 
-     /**
-      * @param aPosition = a wxPoint to test
-      * @param aThreshold = max distance to this object (usually the half
-      *                     thickness of a line)
-      * @param aTransform = the transform matrix
-      * @return True if the point \a aPosition is near this object
-      */
-    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
     void operator=( const LIB_FIELD& field )
     {
@@ -233,19 +205,10 @@ public:
 
     int GetDefaultColor();
 
-    /**
-     * See LIB_ITEM::BeginEdit().
-     */
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
-    /**
-     * See LIB_ITEM::ContinueEdit().
-     */
     bool ContinueEdit( const wxPoint aNextPoint );
 
-    /**
-     * See LIB_ITEM::AbortEdit().
-     */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
     void Rotate();
@@ -263,73 +226,39 @@ public:
      */
     void SetText( const wxString& aText );
 
-    /**
-     * @copydoc LIB_ITEM::SetOffset(const wxPoint&)
-     */
-    virtual void SetOffset( const wxPoint& aOffset );
+    void SetOffset( const wxPoint& aOffset );
 
-    /**
-     * @copydoc LIB_ITEM::Inside()
-     */
-    virtual bool Inside( EDA_RECT& aRect ) const;
+    bool Inside( EDA_RECT& aRect ) const;
 
-    /**
-     * @copydoc LIB_ITEM::Move()
-     */
-    virtual void Move( const wxPoint& aPosition );
+    void Move( const wxPoint& aPosition );
 
-    /**
-     * @copydoc LIB_ITEM::GetPosition()
-     */
-    virtual wxPoint GetPosition() const { return m_Pos; }
+    wxPoint GetPosition() const { return m_Pos; }
 
-    /**
-     * @copydoc LIB_ITEM::MirrorHorizontal()
-     */
-    virtual void MirrorHorizontal( const wxPoint& aCenter );
+    void MirrorHorizontal( const wxPoint& aCenter );
 
-    /**
-     * @copydoc LIB_ITEM::MirrorVertical()
-     */
-    virtual void MirrorVertical( const wxPoint& aCenter );
+    void MirrorVertical( const wxPoint& aCenter );
 
-    /**
-     * @copydoc LIB_ITEM::Rotate(const wxPoint&,bool)
-     */
-    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
 
-    /**
-     * @copydoc LIB_ITEM::Plot()
-     */
-    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                       const TRANSFORM& aTransform );
+    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+               const TRANSFORM& aTransform );
 
-    /**
-     * @copydoc LIB_ITEM::GetWidth()
-     */
-    virtual int GetWidth() const { return m_Thickness; }
+    int GetWidth() const { return m_Thickness; }
 
-    /**
-     * @copydoc LIB_ITEM::SetWidth()
-     */
-    virtual void SetWidth( int aWidth ) { m_Thickness = aWidth; }
+    void SetWidth( int aWidth ) { m_Thickness = aWidth; }
 
-    /** @copydoc EDA_ITEM::GetSelectMenuText() */
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    /** @copydoc EDA_ITEM::GetMenuImage() */
-    virtual BITMAP_DEF GetMenuImage() const { return  move_field_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  move_field_xpm; }
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 private:
 
     /**
-     * Function compare
-     * provides the field draw object specific comparison.
+     * @copydoc LIB_ITEM::compare()
      *
-     * The sort order for field is as follows:
+     * The field specific sort order is as follows:
      *
      *      - Field ID, REFERENCE, VALUE, etc.
      *      - Field string, case insensitive compare.
@@ -337,13 +266,8 @@ private:
      *      - Field vertical (Y) position.
      *      - Field width.
      *      - Field height.
-     *
-     * @param aOther A reference to the other #LIB_ITEM to compare the field against.
-     * @return An integer value less than 0 if the field is less than \a aOther, zero
-     *         if the field is equal to \a aOther, or greater than 0 if the field is
-     *         greater than \a aOther.
      */
-    virtual int compare( const LIB_ITEM& aOther ) const;
+    int compare( const LIB_ITEM& aOther ) const;
 };
 
 typedef std::vector< LIB_FIELD > LIB_FIELDS;

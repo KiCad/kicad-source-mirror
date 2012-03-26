@@ -52,7 +52,7 @@ int NegableTextLength( const wxString& aText );
  *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
- *  @param aColor (enum EDA_Colors) = text color
+ *  @param aColor (enum EDA_COLOR_T) = text color
  *  @param aText = text to draw
  *  @param aOrient = angle in 0.1 degree
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
@@ -71,7 +71,7 @@ int NegableTextLength( const wxString& aText );
 void DrawGraphicText( EDA_DRAW_PANEL * aPanel,
                       wxDC * aDC,
                       const wxPoint &aPos,
-                      enum EDA_Colors aColor,
+                      enum EDA_COLOR_T aColor,
                       const wxString &aText,
                       int aOrient,
                       const wxSize &aSize,

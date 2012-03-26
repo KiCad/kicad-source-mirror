@@ -224,9 +224,9 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         DisplayError( this, wxT( "Error in HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
 
-    GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+    GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
 
-    switch( GetScreen()->m_BlockLocate.m_Command )
+    switch( GetScreen()->m_BlockLocate.GetCommand() )
     {
     case BLOCK_IDLE:
         break;
@@ -276,7 +276,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     bool cancelCmd = false;
 
     // If coming here after cancel block, clean up and exit
-    if( GetScreen()->m_BlockLocate.m_State == STATE_NO_BLOCK )
+    if( GetScreen()->m_BlockLocate.GetState() == STATE_NO_BLOCK )
     {
         m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
                                    false );
@@ -286,7 +286,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     // Show dialog if there are no selected items and we're not zooming
     if( !GetScreen()->m_BlockLocate.GetCount()
-        && GetScreen()->m_BlockLocate.m_Command != BLOCK_ZOOM )
+      && GetScreen()->m_BlockLocate.GetCommand() != BLOCK_ZOOM )
     {
         if( InstallBlockCmdFrame( this, _( "Block Operation" ) ) == false )
         {
@@ -308,7 +308,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( !cancelCmd && m_canvas->IsMouseCaptured() )
     {
-        switch( GetScreen()->m_BlockLocate.m_Command )
+        switch( GetScreen()->m_BlockLocate.GetCommand() )
         {
         case BLOCK_IDLE:
             DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
@@ -318,7 +318,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_MOVE:            /* Move */
         case BLOCK_COPY:            /* Copy */
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list*/
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
+            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
             nextcmd = true;
             m_canvas->SetMouseCaptureCallback( drawMovingBlock );
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
@@ -326,24 +326,25 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_DELETE: /* Delete */
             m_canvas->SetMouseCaptureCallback( NULL );
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
             Block_Delete();
             break;
 
         case BLOCK_ROTATE: /* Rotation */
             m_canvas->SetMouseCaptureCallback( NULL );
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
             Block_Rotate();
             break;
 
         case BLOCK_FLIP: /* Flip */
             m_canvas->SetMouseCaptureCallback( NULL );
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
             Block_Flip();
             break;
 
         case BLOCK_SAVE: /* Save (not used, for future enhancements)*/
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
+
             if( GetScreen()->m_BlockLocate.GetCount() )
             {
                 // @todo (if useful)         Save_Block( );
@@ -383,7 +384,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
 
     GetScreen()->m_BlockLocate.Normalize();
 
-    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
     ITEM_PICKER        picker( NULL, UR_UNSPECIFIED );
 
     // Add modules
@@ -435,7 +436,9 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     {
         if( !m_Pcb->IsLayerVisible( PtStruct->GetLayer() ) && ! blockIncludeItemsOnInvisibleLayers)
             continue;
+
         bool select_me = false;
+
         switch( PtStruct->Type() )
         {
         case PCB_LINE_T:
@@ -513,7 +516,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
 
 static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset )
 {
-    PICKED_ITEMS_LIST* itemsList = &aPanel->GetScreen()->m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* itemsList = &aPanel->GetScreen()->m_BlockLocate.GetItems();
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
 
     g_Offset_Module = -aOffset;
@@ -560,29 +563,30 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 
     if( aErase )
     {
-        if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
+        if( screen->m_BlockLocate.GetMoveVector().x || screen->m_BlockLocate.GetMoveVector().y )
         {
-            screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
+            screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.GetMoveVector(),
                                         GR_XOR, BLOCK_OUTLINE_COLOR );
 
             if( blockDrawItems )
-                drawPickedItems( aPanel, aDC, screen->m_BlockLocate.m_MoveVector );
+                drawPickedItems( aPanel, aDC, screen->m_BlockLocate.GetMoveVector() );
         }
     }
 
-    if( screen->m_BlockLocate.m_State != STATE_BLOCK_STOP )
+
+    if( screen->m_BlockLocate.GetState() != STATE_BLOCK_STOP )
     {
-        screen->m_BlockLocate.m_MoveVector = screen->GetCrossHairPosition() -
-                                             screen->m_BlockLocate.m_BlockLastCursorPosition;
+        screen->m_BlockLocate.SetMoveVector( screen->GetCrossHairPosition() -
+                                             screen->m_BlockLocate.GetLastCursorPosition() );
     }
 
-    if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
+    if( screen->m_BlockLocate.GetMoveVector().x || screen->m_BlockLocate.GetMoveVector().y )
     {
-        screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
+        screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.GetMoveVector(),
                                     GR_XOR, BLOCK_OUTLINE_COLOR );
 
         if( blockDrawItems )
-            drawPickedItems( aPanel, aDC, screen->m_BlockLocate.m_MoveVector );
+            drawPickedItems( aPanel, aDC, screen->m_BlockLocate.GetMoveVector() );
     }
 }
 
@@ -592,7 +596,7 @@ void PCB_EDIT_FRAME::Block_Delete()
     OnModify();
     SetCurItem( NULL );
 
-    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
     itemsList->m_Status = UR_DELETED;
 
     /* unlink items and clear flags */
@@ -658,7 +662,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
 
     OnModify();
 
-    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
     itemsList->m_Status = UR_ROTATED;
 
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
@@ -715,7 +719,7 @@ void PCB_EDIT_FRAME::Block_Flip()
 
     OnModify();
 
-    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
     itemsList->m_Status = UR_FLIPPED;
 
     memo = GetScreen()->GetCrossHairPosition();
@@ -772,9 +776,9 @@ void PCB_EDIT_FRAME::Block_Move()
 {
     OnModify();
 
-    wxPoint            MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
+    wxPoint            MoveVector = GetScreen()->m_BlockLocate.GetMoveVector();
 
-    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
     itemsList->m_Status = UR_MOVED;
 
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
@@ -824,11 +828,11 @@ void PCB_EDIT_FRAME::Block_Move()
 
 void PCB_EDIT_FRAME::Block_Duplicate()
 {
-    wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;
+    wxPoint MoveVector = GetScreen()->m_BlockLocate.GetMoveVector();
 
     OnModify();
 
-    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.GetItems();
 
     PICKED_ITEMS_LIST newList;
     newList.m_Status = UR_NEW;

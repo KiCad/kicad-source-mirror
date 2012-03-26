@@ -78,7 +78,7 @@ public:
     }
 
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_BITMAP" );
     }
@@ -90,19 +90,11 @@ public:
      */
     wxSize GetSize() const;
 
-    /**
-     * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display
-     * purposes.  This box should be an enclosing perimeter for visible
-     * components of this object, and the units should be in the pcb or
-     * schematic coordinate system.  It is OK to overestimate the size
-     * by a few counts.
-     */
     EDA_RECT GetBoundingBox() const;
 
-    virtual void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem );
 
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                        int aDrawMode, int aColor = -1 );
 
     /**
@@ -114,67 +106,39 @@ public:
      */
     bool ReadImageFile( const wxString& aFullFilename );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Load schematic junction entry from \a aLine in a .sch file.
-     *
-     * @param aLine - Essentially this is file to read schematic junction from.
-     * @param aErrorMsg - Description of the error if an error occurs while loading the
-     *                    schematic junction.
-     * @return True if the schematic junction loaded successfully.
-     */
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /** @copydoc SCH_ITEM::Move() */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
 
-    /** @copydoc SCH_ITEM::MirrorY() */
-    virtual void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position );
 
-    /** @copydoc SCH_ITEM::MirrorX() */
-    virtual void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position );
 
-    /** @copydoc SCH_ITEM::Rotate() */
-    virtual void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition );
 
-    virtual bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect );
 
-    /** @copydoc EDA_ITEM::GetSelectMenuText() */
-    virtual wxString GetSelectMenuText() const { return wxString( _( "Image" ) ); }
+    wxString GetSelectMenuText() const { return wxString( _( "Image" ) ); }
 
-    /** @copydoc EDA_ITEM::GetMenuImage() */
-    virtual BITMAP_DEF GetMenuImage() const { return image_xpm; }
+    BITMAP_DEF GetMenuImage() const { return image_xpm; }
 
-    /** @copydoc SCH_ITEM::GetPosition() */
-    virtual wxPoint GetPosition() const { return m_Pos; }
+    wxPoint GetPosition() const { return m_Pos; }
 
-    /** @copydoc SCH_ITEM::SetPosition() */
-    virtual void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 
-    /** @copydoc SCH_ITEM::HitTest(const wxPoint&,int)const */
-    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
-    /** @copydoc SCH_ITEM::HitTest(const EDA_RECT&,bool,int)const */
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
-                          int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
 
-    /** @copydoc SCH_ITEM::Plot() */
-    virtual void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter );
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

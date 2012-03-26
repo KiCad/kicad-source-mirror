@@ -45,103 +45,65 @@ public:
 
     ~SCH_JUNCTION() { }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_JUNCTION" );
     }
 
-    virtual void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem );
 
-    /**
-     * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display
-     * purposes.  This box should be an enclosing perimeter for visible
-     * components of this object, and the units should be in the pcb or
-     * schematic coordinate system.  It is OK to overestimate the size
-     * by a few counts.
-     */
     EDA_RECT GetBoundingBox() const;
 
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                       int aDrawMode, int aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               int aDrawMode, int aColor = -1 );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Load schematic junction entry from \a aLine in a .sch file.
-     *
-     * @param aLine - Essentially this is file to read schematic junction from.
-     * @param aErrorMsg - Description of the error if an error occurs while loading the
-     *                    schematic junction.
-     * @return True if the schematic junction loaded successfully.
-     */
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /** @copydoc SCH_ITEM::Move() */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_pos += aMoveVector;
     }
 
-    /** @copydoc SCH_ITEM::MirrorY() */
-    virtual void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position );
 
-    /** @copydoc SCH_ITEM::MirrorX() */
-    virtual void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position );
 
-    /** @copydoc SCH_ITEM::Rotate() */
-    virtual void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition );
 
-    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
 
-    virtual bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect );
 
-    virtual bool IsConnectable() const { return true; }
+    bool IsConnectable() const { return true; }
 
-    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
-    /** @copydoc EDA_ITEM::GetSelectMenuText() */
-    virtual wxString GetSelectMenuText() const { return wxString( _( "Junction" ) ); }
+    wxString GetSelectMenuText() const { return wxString( _( "Junction" ) ); }
 
-    /** @copydoc EDA_ITEM::GetMenuImage() */
-    virtual BITMAP_DEF GetMenuImage() const { return  add_junction_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_junction_xpm; }
 
-    virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                 SCH_SHEET_PATH*          aSheetPath );
+    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems, SCH_SHEET_PATH* aSheetPath );
 
-    /** @copydoc SCH_ITEM::GetPosition() */
-    virtual wxPoint GetPosition() const { return m_pos; }
+    wxPoint GetPosition() const { return m_pos; }
 
-    /** @copydoc SCH_ITEM::SetPosition() */
-    virtual void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
+    void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 
-    /** @copydoc SCH_ITEM::HitTest(const wxPoint&,int)const */
-    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
-    /** @copydoc SCH_ITEM::HitTest(const EDA_RECT&,bool,int)const */
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false,
                           int aAccuracy = 0 ) const;
+    void Plot( PLOTTER* aPlotter );
 
-    /** @copydoc SCH_ITEM::Plot() */
-    virtual void Plot( PLOTTER* aPlotter );
-
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
 private:
-    /** @copydoc SCH_ITEM::doIsConnected() */
-    virtual bool doIsConnected( const wxPoint& aPosition ) const;
+    bool doIsConnected( const wxPoint& aPosition ) const;
 };
 
 

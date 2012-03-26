@@ -150,10 +150,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         /* Should not be executed, just in case */
-        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
+        if( GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE )
         {
-            GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-            GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
+            GetScreen()->m_BlockLocate.SetState( STATE_NO_BLOCK );
             GetScreen()->m_BlockLocate.ClearItemsList();
         }
 
@@ -235,39 +235,38 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
         m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_COPY );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DELETE );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_ROTATE;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ROTATE );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_FLIP_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_FLIP;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_FLIP );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;

@@ -602,7 +602,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Text = wxT( "Sheet: " ) + m_name;
     DrawGraphicText( aPanel, aDC, pos_sheetname,
-                     (EDA_Colors) txtcolor, Text, name_orientation,
+                     (EDA_COLOR_T) txtcolor, Text, name_orientation,
                      wxSize( m_sheetNameSize, m_sheetNameSize ),
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, lineWidth,
                      false, false );
@@ -615,7 +615,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Text = wxT( "File: " ) + m_fileName;
     DrawGraphicText( aPanel, aDC, pos_filename,
-                     (EDA_Colors) txtcolor, Text, name_orientation,
+                     (EDA_COLOR_T) txtcolor, Text, name_orientation,
                      wxSize( m_fileNameSize, m_fileNameSize ),
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, lineWidth,
                      false, false );
@@ -1104,12 +1104,12 @@ void SCH_SHEET::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 
 void SCH_SHEET::Plot( PLOTTER* aPlotter )
 {
-    EDA_Colors txtcolor = UNSPECIFIED_COLOR;
-    wxSize     size;
-    wxString   Text;
-    int        name_orientation;
-    wxPoint    pos_sheetname, pos_filename;
-    wxPoint    pos;
+    EDA_COLOR_T txtcolor = UNSPECIFIED;
+    wxSize      size;
+    wxString    Text;
+    int         name_orientation;
+    wxPoint     pos_sheetname, pos_filename;
+    wxPoint     pos;
 
     aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
 

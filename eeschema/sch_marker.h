@@ -61,49 +61,31 @@ public:
 
     ~SCH_MARKER();
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_MARKER" );
     }
 
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                       int aDraw_mode, int aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               int aDraw_mode, int aColor = -1 );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for visible components of this
-     * object, and the units should be in the pcb or schematic coordinate system.
-     * It is OK to overestimate the size by a few counts.
-     */
-    virtual EDA_RECT GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     // Geometric transforms (used in block operations):
 
-    /** @copydoc SCH_ITEM::Move() */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
 
-    /** @copydoc SCH_ITEM::MirrorY() */
-    virtual void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position );
 
-    /** @copydoc SCH_ITEM::MirrorX() */
-    virtual void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position );
 
-    /** @copydoc SCH_ITEM::Rotate() */
-    virtual void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition );
 
     /**
      * Compare DRC marker main and auxiliary text against search string.
@@ -112,34 +94,23 @@ public:
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if the DRC main or auxiliary text matches the search criteria.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, wxPoint * aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, wxPoint* aFindLocation );
 
-    /**
-     * Show the marker electronics rule check error on the message panel.
-     *
-     * @param aFrame - Top window that owns the message panel.
-     */
     void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
-    virtual bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect );
 
-    /** @copydoc EDA_ITEM::GetSelectMenuText() */
-    virtual wxString GetSelectMenuText() const { return wxString( _( "ERC Marker" ) ); }
+    wxString GetSelectMenuText() const { return wxString( _( "ERC Marker" ) ); }
 
-    /** @copydoc EDA_ITEM::GetMenuImage() */
-    virtual BITMAP_DEF GetMenuImage() const { return  erc_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  erc_xpm; }
 
-    /** @copydoc SCH_ITEM::GetPosition() */
-    virtual wxPoint GetPosition() const { return m_Pos; }
+    wxPoint GetPosition() const { return m_Pos; }
 
-    /** @copydoc SCH_ITEM::SetPosition() */
-    virtual void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 
-    /** @copydoc SCH_ITEM::HitTest(const wxPoint&,int)const */
-    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

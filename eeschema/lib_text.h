@@ -39,6 +39,7 @@
  * This is only a graphical text item.  Field text like the reference designator,
  * component value, etc. are not LIB_TEXT items.  See the #LIB_FIELD class for the
  * field item definition.
+ * </p>
  */
 class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
 {
@@ -46,17 +47,9 @@ class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
     bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
     bool m_updateText;            ///< Flag to indicate text change occurred while editing.
 
-    /**
-     * Draw the polyline.
-     */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
-    /**
-     * Calculate the text attributes relative to \a aPosition while editing.
-     *
-     * @param aPosition - Edit position in drawing units.
-     */
     void calcEdit( const wxPoint& aPosition );
 
 public:
@@ -66,7 +59,7 @@ public:
 
     ~LIB_TEXT() { }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "LIB_TEXT" );
     }
@@ -83,150 +76,74 @@ public:
      */
     void SetText( const wxString& aText );
 
-    /**
-     * Write text object out to a FILE in "*.lib" format.
-     *
-     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
-     *                   text to.
-     * @return True if success writing else false.
-     */
-    virtual bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter );
 
-    virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition );
+    bool HitTest( const wxPoint& aPosition );
 
-     /**
-      * @param aPosition = a wxPoint to test, in Eeschema coordinates
-      * @param aThreshold = max distance to a segment
-      * @param aTransform = the transform matrix
-      * @return true if the point \a aPosition is near a segment
-      */
-    virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
-    /**
-     * Test if the given rectangle intersects this object.
-     *
-     * For now, an ending point must be inside this rect.
-     *
-     * @param aRect - the given EDA_RECT
-     * @return - true if a hit, else false
-     */
-    virtual bool HitTest( EDA_RECT& aRect )
+    bool HitTest( EDA_RECT& aRect )
     {
         return TextHitTest( aRect );
     }
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize( ) const;
 
-    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    int GetPenSize( ) const;
 
-    /**
-     * @return the boundary box for this, in schematic coordinates
-     */
-    virtual EDA_RECT GetBoundingBox() const;
+    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+
+    EDA_RECT GetBoundingBox() const;
 
     void Rotate();
 
-    /**
-     * See LIB_ITEM::BeginEdit().
-     */
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
-    /**
-     * See LIB_ITEM::ContinueEdit().
-     */
     bool ContinueEdit( const wxPoint aNextPoint );
 
-    /**
-     * See LIB_ITEM::AbortEdit().
-     */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
-    /**
-     * @copydoc LIB_ITEM::SetOffset(const wxPoint&)
-     */
-    virtual void SetOffset( const wxPoint& aOffset );
+    void SetOffset( const wxPoint& aOffset );
 
-    /**
-     * @copydoc LIB_ITEM::Inside()
-     */
-    virtual bool Inside( EDA_RECT& aRect ) const;
+    bool Inside( EDA_RECT& aRect ) const;
 
-    /**
-     * @copydoc LIB_ITEM::Move()
-     */
-    virtual void Move( const wxPoint& aPosition );
+    void Move( const wxPoint& aPosition );
 
-    /**
-     * @copydoc LIB_ITEM::GetPosition()
-     */
-    virtual wxPoint GetPosition() const { return m_Pos; }
+    wxPoint GetPosition() const { return m_Pos; }
 
-    /**
-     * @copydoc LIB_ITEM::MirrorHorizontal()
-     */
-    virtual void MirrorHorizontal( const wxPoint& aCenter );
+    void MirrorHorizontal( const wxPoint& aCenter );
 
-    /**
-     * @copydoc LIB_ITEM::MirrorVertical()
-     */
-    virtual void MirrorVertical( const wxPoint& aCenter );
+    void MirrorVertical( const wxPoint& aCenter );
 
-    /**
-     * @copydoc LIB_ITEM::Rotate(const wxPoint&,bool)
-     */
-    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
 
-    /**
-     * @copydoc LIB_ITEM::Plot()
-     */
-    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                       const TRANSFORM& aTransform );
+    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+               const TRANSFORM& aTransform );
 
-    /**
-     * @copydoc LIB_ITEM::GetWidth()
-     */
-    virtual int GetWidth() const { return m_Thickness; }
+    int GetWidth() const { return m_Thickness; }
 
-    /**
-     * @copydoc LIB_ITEM::SetWidth()
-     */
-    virtual void SetWidth( int aWidth ) { m_Thickness = aWidth; }
+    void SetWidth( int aWidth ) { m_Thickness = aWidth; }
 
-    /** @copydoc EDA_ITEM::GetSelectMenuText() */
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    /** @copydoc EDA_ITEM::GetMenuImage() */
-    virtual BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
-    /** @copydoc EDA_ITEM::Clone() */
-    virtual EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const;
 
 private:
 
     /**
-     * Function compare
-     * provides the text draw object specific comparison.
+     * @copydoc LIB_ITEM::compare()
      *
-     * The sort order is as follows:
+     * The text specific sort order is as follows:
      *      - Text string, case insensitive compare.
      *      - Text horizontal (X) position.
      *      - Text vertical (Y) position.
      *      - Text width.
      *      - Text height.
-     *
-     * @param aOther A reference to the other #LIB_ITEM to compare the text against.
-     * @return An integer value less than 0 if the text is less than \a aOther, zero
-     *         if the text is equal to \a aOther, or greater than 0 if the text is
-     *         greater than \a aOther.
      */
-    virtual int compare( const LIB_ITEM& aOther ) const;
+    int compare( const LIB_ITEM& aOther ) const;
 };
 
 

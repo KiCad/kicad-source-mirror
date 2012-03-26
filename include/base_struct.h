@@ -95,7 +95,6 @@ enum KICAD_T {
 
     // General
     SCH_SCREEN_T,
-    BLOCK_LOCATE_STRUCT_TYPE,
 
     /*
      * Draw items in library component.
@@ -330,13 +329,13 @@ public:
 
 // These define are used for the .m_Flags and .m_UndoRedoStatus member of the
 // class EDA_ITEM
-#define IS_CHANGED     (1 << 0)   ///< Item was edited, and modified
-#define IS_LINKED      (1 << 1)   ///< Used in calculation to mark linked items (temporary use)
-#define IN_EDIT        (1 << 2)   ///< Item currently edited
-#define IS_MOVED       (1 << 3)   ///< Item being moved
-#define IS_NEW         (1 << 4)   ///< New item, just created
-#define IS_RESIZED     (1 << 5)   ///< Item being resized
-#define IS_DRAGGED     (1 << 6)   ///< Item being dragged
+#define IS_CHANGED     (1 << 0)    ///< Item was edited, and modified
+#define IS_LINKED      (1 << 1)    ///< Used in calculation to mark linked items (temporary use)
+#define IN_EDIT        (1 << 2)    ///< Item currently edited
+#define IS_MOVED       (1 << 3)    ///< Item being moved
+#define IS_NEW         (1 << 4)    ///< New item, just created
+#define IS_RESIZED     (1 << 5)    ///< Item being resized
+#define IS_DRAGGED     (1 << 6)    ///< Item being dragged
 #define IS_DELETED     (1 << 7)
 #define IS_WIRE_IMAGE  (1 << 8)
 #define STARTPOINT     (1 << 9)
@@ -881,12 +880,12 @@ public:
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
      * @param aDisplay_mode = LINE, FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
+     * @param aAnchor_color = anchor color ( UNSPECIFIED = do not draw anchor ).
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               const wxPoint& aOffset, EDA_Colors aColor,
+               const wxPoint& aOffset, EDA_COLOR_T aColor,
                int aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
-               EDA_Colors aAnchor_color = UNSPECIFIED_COLOR );
+               EDA_COLOR_T aAnchor_color = UNSPECIFIED );
 
 private:
 
@@ -900,14 +899,14 @@ private:
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
      * @param aFillMode = LINE, FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
+     * @param aAnchor_color = anchor color ( UNSPECIFIED = do not draw anchor ).
      * @param aText = the single line of text to draw.
      * @param aPos = the position of this line ).
      */
     void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                            const wxPoint& aOffset, EDA_Colors aColor,
+                            const wxPoint& aOffset, EDA_COLOR_T aColor,
                             int aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                            EDA_Colors aAnchor_color, wxString& aText,
+                            EDA_COLOR_T aAnchor_color, wxString& aText,
                             wxPoint aPos );
 
 public:

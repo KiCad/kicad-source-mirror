@@ -155,7 +155,7 @@ int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, boo
 static void DrawGraphicTextPline(
     EDA_RECT* aClipBox,
     wxDC* aDC,
-    EDA_Colors aColor,
+    EDA_COLOR_T aColor,
     int aWidth,
     bool aSketchMode,
     int point_count,
@@ -207,7 +207,7 @@ static int overbar_position( int size_v, int thickness )
  *  @param aPanel = the current m_canvas. NULL if draw within a 3D GL Canvas
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
- *  @param aColor (enum EDA_Colors) = text color
+ *  @param aColor (enum EDA_COLOR_T) = text color
  *  @param aText = text to draw
  *  @param aOrient = angle in 0.1 degree
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
@@ -226,7 +226,7 @@ static int overbar_position( int size_v, int thickness )
 void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                       wxDC* aDC,
                       const wxPoint& aPos,
-                      EDA_Colors aColor,
+                      EDA_COLOR_T aColor,
                       const wxString& aText,
                       int aOrient,
                       const wxSize& aSize,
@@ -504,7 +504,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
  * Function PlotGraphicText
  *  same as DrawGraphicText, but plot graphic text insteed of draw it
  *  @param aPos = text position (according to aH_justify, aV_justify)
- *  @param aColor (enum EDA_Colors) = text color
+ *  @param aColor (enum EDA_COLOR_T) = text color
  *  @param aText = text to draw
  *  @param aOrient = angle in 0.1 degree
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
@@ -517,7 +517,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
  *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
  */
 void PLOTTER::text( const wxPoint&              aPos,
-                    enum EDA_Colors             aColor,
+                    enum EDA_COLOR_T            aColor,
                     const wxString&             aText,
                     int                         aOrient,
                     const wxSize&               aSize,

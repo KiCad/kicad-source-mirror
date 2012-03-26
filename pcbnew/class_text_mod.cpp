@@ -309,7 +309,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
     if( m_Mirror )
         size.x = -size.x;
 
-    DrawGraphicText( panel, DC, pos, (enum EDA_Colors) color, m_Text, orient,
+    DrawGraphicText( panel, DC, pos, (enum EDA_COLOR_T) color, m_Text, orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 

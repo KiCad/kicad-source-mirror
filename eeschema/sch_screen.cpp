@@ -732,7 +732,7 @@ void SCH_SCREEN::SelectBlockItems()
 {
     SCH_ITEM*          item;
 
-    PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.GetItems();
 
     if( pickedlist->GetCount() == 0 )
         return;
@@ -750,7 +750,7 @@ void SCH_SCREEN::SelectBlockItems()
 
     // Select all the items in the screen connected to the items in the block.
     // be sure end lines that are on the block limits are seen inside this block
-    m_BlockLocate.Inflate(1);
+    m_BlockLocate.Inflate( 1 );
     unsigned last_select_id = pickedlist->GetCount();
     unsigned ii = 0;
 
@@ -789,7 +789,7 @@ void SCH_SCREEN::SelectBlockItems()
         }
     }
 
-    m_BlockLocate.Inflate(-1);
+    m_BlockLocate.Inflate( -1 );
 }
 
 
@@ -831,7 +831,7 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
         if( addinlist )
         {
             picker.SetFlags( item->GetFlags() );
-            m_BlockLocate.m_ItemsSelection.PushItem( picker );
+            m_BlockLocate.GetItems().PushItem( picker );
         }
     }
 }
@@ -841,7 +841,7 @@ int SCH_SCREEN::UpdatePickList()
 {
     ITEM_PICKER picker;
     EDA_RECT area;
-    area.SetOrigin( m_BlockLocate.GetOrigin());
+    area.SetOrigin( m_BlockLocate.GetOrigin() );
     area.SetSize( m_BlockLocate.GetSize() );
     area.Normalize();
 

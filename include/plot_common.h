@@ -179,7 +179,7 @@ public:
     }
 
     void text( const wxPoint&              aPos,
-               enum EDA_Colors             aColor,
+               enum EDA_COLOR_T            aColor,
                const wxString&             aText,
                int                         aOrient,
                const wxSize&               aSize,
