@@ -220,10 +220,12 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
         {
         case PAGE_SIZE_A:
             plotPage.SetType( wxT( "A" ) );
+            plotPage.SetPortrait( actualPage.IsPortrait() );
             break;
 
         case PAGE_SIZE_A4:
             plotPage.SetType( wxT( "A4" ) );
+            plotPage.SetPortrait( actualPage.IsPortrait() );
             break;
 
         case PAGE_SIZE_AUTO:

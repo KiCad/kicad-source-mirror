@@ -98,7 +98,7 @@ static GRID_TYPE SchematicGridList[] = {
 
 SCH_SCREEN::SCH_SCREEN() :
     BASE_SCREEN( SCH_SCREEN_T ),
-    m_paper( wxT( "A4" ) )
+    m_paper( wxT( "A4" ), IsGOST() )
 {
     size_t i;
 

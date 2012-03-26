@@ -17,6 +17,7 @@ Marco Serantoni <marco.serantoni[at]gmail-dot-com>  (OSX maintener)
 Rok Markovic <rok[at]kanardia.eu>
 Tim Hanson <sideskate[at]gmail-dot-com>
 Vesa Solonen <vesa.solonen[at]hut-dot-fi>
+Alexander Zakamaldin <zaka62[at]mail.ru>
 
 See also CHANGELOG.txt for contributors.
 

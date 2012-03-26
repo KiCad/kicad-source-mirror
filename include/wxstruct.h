@@ -447,7 +447,6 @@ protected:
      */
     virtual void unitsChangeRefresh();
 
-
 public:
     EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& title,
                     const wxPoint& pos, const wxSize& size,
@@ -667,10 +666,32 @@ public:
      * Function GetZoom
      * @return The current zoom level.
      */
-    double GetZoom( void );
+    double GetZoom();
 
-    void TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
-    void  PlotWorkSheet( PLOTTER *plotter, BASE_SCREEN* screen );
+    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth );
+
+    /**
+     * Function TraceWorkSheet is a core function for drawing of the page layout with
+     * the frame and the basic inscriptions.
+     * @param aDC The device context.
+     * @param aSz The size of the page layout.
+     * @param aLT The left top margin of the page layout.
+     * @param aRB The right bottom margin of the page layout.
+     * @param aType The paper size type (for basic inscriptions).
+     * @param aFlNm The file name (for basic inscriptions).
+     * @param aTb The block of titles (for basic inscriptions).
+     * @param aNScr The number of screens (for basic inscriptions).
+     * @param aScr The screen number (for basic inscriptions).
+     * @param aLnW The line width for drawing.
+     * @param aClr1 The color for drawing.
+     * @param aClr2 The colr for inscriptions.
+     */
+    void TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
+                           wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
+                           int aNScr, int aScr, int aLnW, EDA_Colors aClr1 = RED,
+                           EDA_Colors aClr2 = RED );
+
+    void  PlotWorkSheet( PLOTTER* aPlotter, BASE_SCREEN* aScreen );
 
     /**
      * Function GetXYSheetReferences

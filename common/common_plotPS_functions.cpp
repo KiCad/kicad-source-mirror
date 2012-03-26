@@ -604,3 +604,22 @@ void PS_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
     cornerList.push_back( cornerList[0] );
     PlotPoly( cornerList, ( aTrace_Mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
 }
+
+
+void PS_PLOTTER::user_to_device_coordinates( wxPoint& pos )
+{
+    if( pageInfo.IsPortrait() )
+    {
+        pos.y = (int) ( ( paper_size.y - ( pos.y - plot_offset.y )
+                        * plot_scale ) * device_scale );
+
+        if( plotMirror )
+            pos.x = (int) ( ( paper_size.x - ( pos.x - plot_offset.x )
+                          * plot_scale ) * device_scale );
+        else
+            pos.x = (int) ( (pos.x - plot_offset.x) * plot_scale * device_scale );
+    }
+    else
+        PLOTTER::user_to_device_coordinates( pos );
+}
+

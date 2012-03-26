@@ -111,6 +111,24 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
 {
     SCH_EDIT_FRAME* parent = GetParent();
 
+    // Initialize page specific print setup dialog settings.
+    const PAGE_INFO& pageInfo = parent->GetScreen()->GetPageSettings();
+    wxPageSetupDialogData& pageSetupDialogData = parent->GetPageSetupData();
+
+    pageSetupDialogData.SetPaperId( pageInfo.GetPaperId() );
+
+    if( pageInfo.IsCustom() )
+    {
+        if( pageInfo.IsPortrait() )
+            pageSetupDialogData.SetPaperSize( wxSize( Mils2mm( pageInfo.GetWidthMils() ),
+                                                      Mils2mm( pageInfo.GetHeightMils() ) ) );
+        else
+            pageSetupDialogData.SetPaperSize( wxSize( Mils2mm( pageInfo.GetHeightMils() ),
+                                                      Mils2mm( pageInfo.GetWidthMils() ) ) );
+    }
+
+    pageSetupDialogData.GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
+
     if ( GetSizer() )
         GetSizer()->SetSizeHints( this );
 
@@ -341,6 +359,11 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     wxLogDebug( wxT( "Fit rectangle: %d, %d, %d, %d" ),
                 fitRect.x, fitRect.y, fitRect.width, fitRect.height );
+
+    int xoffset = ( fitRect.width - pageSizeIU.x ) / 2;
+    int yoffset = ( fitRect.height - pageSizeIU.y ) / 2;
+
+    OffsetLogicalOrigin( xoffset, yoffset );
 
     GRResetPenAndBrush( dc );
 

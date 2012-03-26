@@ -25,34 +25,60 @@
 
 #include <common.h>
 
-
-const wxString PAGE_INFO::Custom( wxT( "User" ) );
-
-// Standard page sizes in mils, all constants
-
-// A4 see:  https://lists.launchpad.net/kicad-developers/msg07389.html
-#if defined(KICAD_GOST)
-const PAGE_INFO  PAGE_INFO::pageA4(     wxSize(  8268, 11693 ),  wxT( "A4" ) );
+// late arriving wxPAPER_A0, wxPAPER_A1
+#if wxABI_VERSION >= 20999
+ #define PAPER_A0   wxPAPER_A0
+ #define PAPER_A1   wxPAPER_A1
 #else
-const PAGE_INFO  PAGE_INFO::pageA4(     wxSize( 11693,  8268 ),  wxT( "A4" ) );
+ #define PAPER_A0   wxPAPER_A2
+ #define PAPER_A1   wxPAPER_A2
 #endif
 
-const PAGE_INFO  PAGE_INFO::pageA3(     wxSize( 16535, 11700 ),  wxT( "A3" ) );
-const PAGE_INFO  PAGE_INFO::pageA2(     wxSize( 23400, 16535 ),  wxT( "A2" ) );
-const PAGE_INFO  PAGE_INFO::pageA1(     wxSize( 33070, 23400 ),  wxT( "A1" ) );
-const PAGE_INFO  PAGE_INFO::pageA0(     wxSize( 46800, 33070 ),  wxT( "A0" ) );
-const PAGE_INFO  PAGE_INFO::pageA(      wxSize( 11000,  8500 ),  wxT( "A" ) );
-const PAGE_INFO  PAGE_INFO::pageB(      wxSize( 17000, 11000 ),  wxT( "B" ) );
-const PAGE_INFO  PAGE_INFO::pageC(      wxSize( 22000, 17000 ),  wxT( "C" ) );
-const PAGE_INFO  PAGE_INFO::pageD(      wxSize( 34000, 22000 ),  wxT( "D" ) );
-const PAGE_INFO  PAGE_INFO::pageE(      wxSize( 44000, 34000 ),  wxT( "E" ) );
-const PAGE_INFO  PAGE_INFO::pageGERBER( wxSize( 32000, 32000 ),  wxT( "GERBER" ) );
-const PAGE_INFO  PAGE_INFO::pageUser(   wxSize( 17000, 11000 ),  Custom );
+// Standard paper sizes nicknames.
+const wxString PAGE_INFO::A4( wxT( "A4" ) );
+const wxString PAGE_INFO::A3( wxT( "A3" ) );
+const wxString PAGE_INFO::A2( wxT( "A2" ) );
+const wxString PAGE_INFO::A1( wxT( "A1" ) );
+const wxString PAGE_INFO::A0( wxT( "A0" ) );
+const wxString PAGE_INFO::A( wxT( "A" ) );
+const wxString PAGE_INFO::B( wxT( "B" ) );
+const wxString PAGE_INFO::C( wxT( "C" ) );
+const wxString PAGE_INFO::D( wxT( "D" ) );
+const wxString PAGE_INFO::E( wxT( "E" ) );
+const wxString PAGE_INFO::GERBER( wxT( "GERBER" ) );
+const wxString PAGE_INFO::USLetter( wxT( "USLetter" ) );
+const wxString PAGE_INFO::USLegal( wxT( "USLegal" ) );
+const wxString PAGE_INFO::USLedger( wxT( "USLedger" ) );
+const wxString PAGE_INFO::Custom( wxT( "User" ) );
+
+
+// Standard page sizes in mils, all constants
+// see:  https://lists.launchpad.net/kicad-developers/msg07389.html
+// also see: wx/defs.h
+
+// local readability macro for millimeter wxSize
+#define MMsize( x, y )  wxSize( Mm2mils( x ), Mm2mils( y ) )
+
+// All MUST be defined as landscape.  If IsGOST() is true, A4 is dynamically rotated later.
+const PAGE_INFO  PAGE_INFO::pageA4(     MMsize( 297,   210 ),   wxT( "A4" ),    wxPAPER_A4 );
+const PAGE_INFO  PAGE_INFO::pageA3(     MMsize( 420,   297 ),   wxT( "A3" ),    wxPAPER_A3 );
+const PAGE_INFO  PAGE_INFO::pageA2(     MMsize( 594,   420 ),   wxT( "A2" ),    wxPAPER_A2 );
+const PAGE_INFO  PAGE_INFO::pageA1(     MMsize( 841,   594 ),   wxT( "A1" ),    PAPER_A1 );
+const PAGE_INFO  PAGE_INFO::pageA0(     MMsize( 1189,  841 ),   wxT( "A0" ),    PAPER_A0 );
+
+const PAGE_INFO  PAGE_INFO::pageA(      wxSize( 11000,  8500 ), wxT( "A" ), wxPAPER_LETTER );
+const PAGE_INFO  PAGE_INFO::pageB(      wxSize( 17000, 11000 ), wxT( "B" ), wxPAPER_TABLOID );
+const PAGE_INFO  PAGE_INFO::pageC(      wxSize( 22000, 17000 ), wxT( "C" ), wxPAPER_CSHEET );
+const PAGE_INFO  PAGE_INFO::pageD(      wxSize( 34000, 22000 ), wxT( "D" ), wxPAPER_DSHEET );
+const PAGE_INFO  PAGE_INFO::pageE(      wxSize( 44000, 34000 ), wxT( "E" ), wxPAPER_ESHEET );
+
+const PAGE_INFO  PAGE_INFO::pageGERBER( wxSize( 32000, 32000 ), wxT( "GERBER" ), wxPAPER_NONE  );
+const PAGE_INFO  PAGE_INFO::pageUser(   wxSize( 17000, 11000 ), Custom,         wxPAPER_NONE );
 
 // US paper sizes
-const PAGE_INFO  PAGE_INFO::pageUSLetter( wxSize( 11000, 8500  ),  wxT( "USLetter" ) );
-const PAGE_INFO  PAGE_INFO::pageUSLegal(  wxSize( 14000, 8500  ),  wxT( "USLegal" ) );
-const PAGE_INFO  PAGE_INFO::pageUSLedger( wxSize( 17000, 11000 ),  wxT( "USLedger" ) );
+const PAGE_INFO  PAGE_INFO::pageUSLetter( wxSize( 11000, 8500  ),  wxT( "USLetter" ), wxPAPER_LETTER );
+const PAGE_INFO  PAGE_INFO::pageUSLegal(  wxSize( 14000, 8500  ),  wxT( "USLegal" ),  wxPAPER_LEGAL );
+const PAGE_INFO  PAGE_INFO::pageUSLedger( wxSize( 17000, 11000 ),  wxT( "USLedger" ), wxPAPER_TABLOID );
 
 // Custom paper size for next instantiation of type "User"
 int PAGE_INFO::s_user_width  = 17000;
@@ -96,45 +122,52 @@ inline void PAGE_INFO::updatePortrait()
 }
 
 
+void PAGE_INFO::setMargins()
+{
+    if( IsGOST() )
+    {
+        m_left_margin   = Mm2mils( 20 );    // 20mm
+        m_right_margin  =                   // 5mm
+        m_top_margin    =                   // 5mm
+        m_bottom_margin = Mm2mils( 5 );     // 5mm
+    }
+    else
+    {
+        m_left_margin   =
+        m_right_margin  =
+        m_top_margin    =
+        m_bottom_margin = 400;
+    }
+}
 
-PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType ) :
+
+PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType, wxPaperSize aPaperId ) :
     m_type( aType ),
-    m_size( aSizeMils )
+    m_size( aSizeMils ),
+    m_paper_id( aPaperId )
 {
-
-#if defined(KICAD_GOST)
-/*
-#define GOST_LEFTMARGIN   800    // 20mm
-#define GOST_RIGHTMARGIN  200    // 5mm
-#define GOST_TOPMARGIN    200    // 5mm
-#define GOST_BOTTOMMARGIN 200    // 5mm
-*/
-
-    m_left_margin   = 800;      // 20mm
-    m_right_margin  = 200;      // 5mm
-    m_top_margin    = 200;      // 5mm
-    m_bottom_margin = 200;      // 5mm
-#else
-    m_left_margin   =
-    m_right_margin  =
-    m_top_margin    =
-    m_bottom_margin = 400;
-#endif
-
     updatePortrait();
+
+    setMargins();
+
+    // This constructor is protected, and only used by const PAGE_INFO's known
+    // only to class implementation, so no further changes to "this" object are
+    // expected.  Therefore we should also setMargin() again when copying this
+    // object in SetType() so that a runtime IsGOST() change does not break.
 }
 
 
-PAGE_INFO::PAGE_INFO( const wxString& aType )
+PAGE_INFO::PAGE_INFO( const wxString& aType, bool IsPortrait )
 {
-    SetType( aType );
+    SetType( aType, IsPortrait );
 }
 
 
-bool PAGE_INFO::SetType( const wxString& aType )
+bool PAGE_INFO::SetType( const wxString& aType, bool IsPortrait )
 {
     bool rc = true;
 
+    // all are landscape initially
     if( aType == pageA4.GetType() )
         *this = pageA4;
     else if( aType == pageA3.GetType() )
@@ -178,6 +211,15 @@ bool PAGE_INFO::SetType( const wxString& aType )
     else
         rc = false;
 
+    if( IsPortrait )
+    {
+        // all private PAGE_INFOs are landscape, must swap x and y
+        m_size = wxSize( m_size.y, m_size.x );
+        updatePortrait();
+    }
+
+    setMargins();
+
     return rc;
 }
 
@@ -218,6 +260,7 @@ static int clampWidth( int aWidthInMils )
 static int clampHeight( int aHeightInMils )
 {
 /*  was giving EESCHEMA single component SVG plotter grief
+    clamping is best done at the UI, i.e. dialog, levels
     if( aHeightInMils < 4000 )
         aHeightInMils = 4000;
     else if( aHeightInMils > 44000 )
@@ -227,13 +270,13 @@ static int clampHeight( int aHeightInMils )
 }
 
 
-void PAGE_INFO::SetUserWidthMils( int aWidthInMils )
+void PAGE_INFO::SetCustomWidthMils( int aWidthInMils )
 {
     s_user_width = clampWidth( aWidthInMils );
 }
 
 
-void PAGE_INFO::SetUserHeightMils( int aHeightInMils )
+void PAGE_INFO::SetCustomHeightMils( int aHeightInMils )
 {
     s_user_height = clampHeight( aHeightInMils );
 }
@@ -241,14 +284,28 @@ void PAGE_INFO::SetUserHeightMils( int aHeightInMils )
 
 void PAGE_INFO::SetWidthMils(  int aWidthInMils )
 {
-    m_size.x = clampWidth( aWidthInMils );
-    updatePortrait();
+    if( m_size.x != aWidthInMils )
+    {
+        m_size.x = clampWidth( aWidthInMils );
+
+        m_type = Custom;
+        m_paper_id = wxPAPER_NONE;
+
+        updatePortrait();
+    }
 }
 
 
 void PAGE_INFO::SetHeightMils( int aHeightInMils )
 {
-    m_size.y = clampHeight( aHeightInMils );
-    updatePortrait();
+    if( m_size.y != aHeightInMils )
+    {
+        m_size.y = clampHeight( aHeightInMils );
+
+        m_type = Custom;
+        m_paper_id = wxPAPER_NONE;
+
+        updatePortrait();
+    }
 }
 
