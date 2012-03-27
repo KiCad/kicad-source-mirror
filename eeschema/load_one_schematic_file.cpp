@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -305,7 +305,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* aScree
     if( !pageInfo.SetType( pagename ) )
     {
         aMsgDiag.Printf( _( "Eeschema file dimension definition error \
-line %d, \aAbort reading file.\n" ),
+line %d,\nAbort reading file.\n" ),
                          aLine->LineNumber() );
         aMsgDiag << FROM_UTF8( line );
     }

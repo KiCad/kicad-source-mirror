@@ -38,6 +38,7 @@ class DIALOG_PAGES_SETTINGS: public DIALOG_PAGES_SETTINGS_BASE
 private:
     EDA_DRAW_FRAME* m_Parent;
     BASE_SCREEN*    m_Screen;
+    wxArrayString   m_pageFmt;          /// list of page sizes (not translated)
     bool            m_initialized;
     bool            m_modified;
     bool            m_save_flag;
