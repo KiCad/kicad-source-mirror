@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  9 2012)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -34,7 +34,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_staticText5->Wrap( -1 );
 	PaperSizer->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_paperSizeComboBoxChoices[] = { _("A4 210x297mm"), _("A3 297x420mm"), _("A2 420x594mm"), _("A1 594x841mm"), _("A0 841x1189mm"), _("A 8.5x11in"), _("B 11x17in"), _("C 17x22in"), _("D 22x34in"), _("E 34x44in"), _("USLetter 8.5x11in"), _("USLegal 8.5x14in"), _("USLedger 11x17in"), _("User (Custom)") };
+	wxString m_paperSizeComboBoxChoices[] = { _("dummy text") };
 	int m_paperSizeComboBoxNChoices = sizeof( m_paperSizeComboBoxChoices ) / sizeof( wxString );
 	m_paperSizeComboBox = new wxChoice( this, ID_CHICE_PAGE_SIZE, wxDefaultPosition, wxDefaultSize, m_paperSizeComboBoxNChoices, m_paperSizeComboBoxChoices, 0 );
 	m_paperSizeComboBox->SetSelection( 0 );
@@ -252,6 +252,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	
 	bUpperSizerH->Add( RightColumnSizer, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bUpperSizerH, 1, wxEXPAND, 5 );
 	

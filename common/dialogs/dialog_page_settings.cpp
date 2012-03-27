@@ -49,6 +49,29 @@
 wxPoint DIALOG_PAGES_SETTINGS::s_LastPos( -1, -1 );
 wxSize  DIALOG_PAGES_SETTINGS::s_LastSize;
 
+// List of page formats.
+// should be statically initialized, because we need both
+// the translated and the not translated version.
+// when displayed in dialog we should explicitely call wxGetTranslation()
+// to show the translated version.
+const wxString pageFmts[] =
+{
+    _("A4 210x297mm"),
+    _("A3 297x420mm"),
+    _("A2 420x594mm"),
+    _("A1 594x841mm"),
+    _("A0 841x1189mm"),
+    _("A 8.5x11in"),
+    _("B 11x17in"),
+    _("C 17x22in"),
+    _("D 22x34in"),
+    _("E 34x44in"),
+    _("USLetter 8.5x11in"),
+    _("USLegal 8.5x14in"),
+    _("USLedger 11x17in"),
+    _("User (Custom)"),
+    wxT("")                 // end of list
+};
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 {
@@ -91,6 +114,18 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     double      customSizeY;
 
     SetFocus();
+
+    // initalize page format choice box and page format list.
+    // The first shows translated strings, the second contains not tralated strings
+    m_paperSizeComboBox->Clear();
+    for( unsigned ii = 0; ; ii++ )
+    {
+        if( pageFmts[ii].IsEmpty() )
+            break;
+        m_pageFmt.Add( pageFmts[ii] );
+        m_paperSizeComboBox->Append( wxGetTranslation( pageFmts[ii] ) );
+    }
+
 
 #ifdef EESCHEMA
     // Init display value for sheet User size
@@ -232,7 +267,10 @@ void DIALOG_PAGES_SETTINGS::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
 {
-    wxString paperType = m_paperSizeComboBox->GetStringSelection();
+    int idx = m_paperSizeComboBox->GetSelection();
+    if( idx < 0 )
+        idx = 0;
+    const wxString paperType = m_pageFmt[idx];
     if( paperType.Contains( PAGE_INFO::Custom ) )
     {
         m_orientationComboBox->Enable( false );
@@ -364,14 +402,15 @@ void DIALOG_PAGES_SETTINGS::OnComment4TextUpdated( wxCommandEvent& event )
 
 void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
 {
-    bool        retSuccess;
+    bool retSuccess = false;
 
     m_save_flag = true;
 
-    // wxFormBuilder must use "A4", "A3", etc for choices, in all languages/translations
-    const wxString paperType = m_paperSizeComboBox->GetStringSelection();
+    int idx = m_paperSizeComboBox->GetSelection();
+    if( idx < 0 )
+        idx = 0;
+    const wxString paperType = m_pageFmt[idx];
 
-    // here we assume translators will keep original paper size spellings
     if( paperType.Contains( PAGE_INFO::Custom ) )
     {
         GetCustomSizeMilsFromDialog();
@@ -506,15 +545,11 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
 
 void DIALOG_PAGES_SETTINGS::SetCurrentPageSizeSelection( const wxString& aPaperSize )
 {
-    // use wxChoice to store the sheet type in the wxChoice's choice
-    // i.e. "A4", "A3", etc, anywhere within the text of the label.
-    // D(printf("m_paperSizeComboBox->GetCount() = %d\n", (int) m_paperSizeComboBox->GetCount() );)
-
-    // search all the child wxRadioButtons for a label containing our paper type
-    for( unsigned i = 0;  i < m_paperSizeComboBox->GetCount();  ++i )
+    // search all the not translated label list containing our paper type
+    for( unsigned i = 0; i < m_pageFmt.GetCount(); ++i )
     {
         // parse each label looking for aPaperSize within it
-        wxStringTokenizer st( m_paperSizeComboBox->GetString( i ) );
+        wxStringTokenizer st( m_pageFmt[i] );
 
         while( st.HasMoreTokens() )
         {
@@ -609,8 +644,10 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
 void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 {
-    // wxFormBuilder must use "A4", "A3", etc for choices, in all languages/translations
-    const wxString paperType = m_paperSizeComboBox->GetStringSelection();
+    int idx = m_paperSizeComboBox->GetSelection();
+    if( idx < 0 )
+        idx = 0;
+    const wxString paperType = m_pageFmt[idx];
 
     // here we assume translators will keep original paper size spellings
     if( paperType.Contains( PAGE_INFO::Custom ) )
