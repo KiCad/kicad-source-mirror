@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 19 2012)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_staticTextPinName->Wrap( -1 );
 	fgSizerPins->Add( m_staticTextPinName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_textPinName = new wxTextCtrl( this, ID_M_TEXTPINNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	m_textPinName = new wxTextCtrl( this, ID_M_TEXTPINNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerPins->Add( m_textPinName, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticTextPadName = new wxStaticText( this, ID_M_STATICTEXTPADNAME, _("Pin n&umber:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -41,7 +41,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	fgSizerPins->Add( m_staticTextPadName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_textPadName = new wxTextCtrl( this, ID_M_TEXTPADNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	m_textPadName = new wxTextCtrl( this, ID_M_TEXTPADNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerPins->Add( m_textPadName, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticTextOrient = new wxStaticText( this, wxID_ANY, _("&Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
