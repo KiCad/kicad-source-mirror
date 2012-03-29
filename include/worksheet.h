@@ -16,7 +16,12 @@
 #define TEXT_VTAB_HEIGHT (SIZETEXT * 2)
 
 #if defined(KICAD_GOST)
-#define STAMP_OX    Mm2mils( 185 )
+
+// There is a page layout minor issue in GOST mode.
+// This is the rounding-off error of 1 mil exactly.
+// I hope this problem will go away when we will go
+// to nanometers (zaka62).
+#define STAMP_OX    Mm2mils( 185 ) + 1
 #define STAMP_OY    Mm2mils(  55 )
 
 #define STAMP_Y_0   0
