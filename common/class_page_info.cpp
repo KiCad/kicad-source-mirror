@@ -24,6 +24,8 @@
 
 
 #include <common.h>
+#include <macros.h>
+
 
 // late arriving wxPAPER_A0, wxPAPER_A1
 #if wxABI_VERSION >= 20999
@@ -309,3 +311,22 @@ void PAGE_INFO::SetHeightMils( int aHeightInMils )
     }
 }
 
+
+void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    // If page is A3 landscape, then it is assumed to be the default and is not written.
+    if( !IsDefault() )
+    {
+        aFormatter->Print( aNestLevel, "(page %s", TO_UTF8( GetType() ) );
+
+        // The page dimensions are only required for user defined page sizes.
+        if( GetType() == PAGE_INFO::Custom )
+            aFormatter->Print( aNestLevel, " %d %d", GetWidthMils(), GetHeightMils() );
+
+        if( IsCustom() && IsPortrait() )
+            aFormatter->Print( aNestLevel, " portrait" );
+
+        aFormatter->Print( aNestLevel, ")\n" );
+    }
+}

@@ -176,7 +176,7 @@ public:
 
     /**
      * Function GetOrientation
-     * returns the rotation angle of the pad in tenths of degress, but soon degrees.
+     * returns the rotation angle of the pad in tenths of degrees, but soon degrees.
      */
     double  GetOrientation() const { return m_Orient; }
 
@@ -397,6 +397,9 @@ public:
     void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
     EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload

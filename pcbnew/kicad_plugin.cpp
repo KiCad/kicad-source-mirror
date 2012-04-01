@@ -89,9 +89,6 @@
 #include <wx/ffile.h>
 
 
-//#define KICAD_NANOMETRE
-
-
 #define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
@@ -344,7 +341,7 @@ void KICAD_PLUGIN::loadGENERAL()
 
             if( !strcmp( data, "mm" ) )
             {
-#if defined(KICAD_NANOMETRE)
+#if defined(USE_PCBNEW_NANOMETERS)
                 diskToBiu = 1000000.0;
 #else
                 THROW_IO_ERROR( _( "May not load new *.brd file into 'PCBNew compiled for deci-mils'" ) );
@@ -2659,7 +2656,7 @@ void KICAD_PLUGIN::init( PROPERTIES* aProperties )
     m_props = aProperties;
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
-#if defined(KICAD_NANOMETRE)
+#if defined(USE_PCBNEW_NANOMETERS)
     biuToDisk = 1/1000000.0;        // BIUs are nanometers & file is mm
 #else
     biuToDisk = 1.0;                // BIUs are deci-mils
@@ -2673,7 +2670,7 @@ void KICAD_PLUGIN::init( PROPERTIES* aProperties )
     // then, during the file loading process, to start a conversion from
     // mm to nanometers.
 
-#if defined(KICAD_NANOMETRE)
+#if defined(USE_PCBNEW_NANOMETERS)
     diskToBiu = 2540.0;             // BIUs are nanometers
 #else
     diskToBiu = 1.0;                // BIUs are deci-mils
@@ -2750,7 +2747,7 @@ void KICAD_PLUGIN::saveGENERAL() const
     fprintf( m_fp, "encoding utf-8\n" );
 
     // tell folks the units used within the file, as early as possible here.
-#if defined(KICAD_NANOMETRE)
+#if defined(USE_PCBNEW_NANOMETERS)
     fprintf( m_fp, "Units mm\n" );
 #else
     fprintf( m_fp, "Units deci-mils\n" );

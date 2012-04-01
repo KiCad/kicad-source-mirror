@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
+#include <common.h>
 #include <kicad_string.h>
 #include <eeschema_id.h>
 #include <appl_wxstruct.h>
@@ -1497,3 +1498,20 @@ void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 #endif
+
+
+/**
+ * Function FormatBIU
+ * formats Eeschema internal units in mils to a string for s-expression output.
+ *
+ * @todo Move FormatBIU() where ever the common DSO/DSL code for Eeschema ends up.
+ */
+std::string FormatBIU( int aValue )
+{
+    char    buf[50];
+    int     len;
+
+    len = snprintf( buf, 49, "%d", aValue );
+
+    return std::string( buf, len );
+}

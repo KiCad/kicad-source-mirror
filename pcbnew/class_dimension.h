@@ -44,9 +44,9 @@ class DIMENSION : public BOARD_ITEM
 public:
     int        m_Width;
     wxPoint    m_Pos;
-    int        m_Shape;
+    int        m_Shape;         /// Current always 0.
     int        m_Unit;          /// 0 = inches, 1 = mm
-    int        m_Value;         /// value of  PCB dimensions.
+    int        m_Value;         /// value of PCB dimensions.
 
     TEXTE_PCB  m_Text;
     int        m_crossBarOx, m_crossBarOy, m_crossBarFx, m_crossBarFy;
@@ -137,6 +137,9 @@ public:
     BITMAP_DEF GetMenuImage() const { return  add_dimension_xpm; }
 
     EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override

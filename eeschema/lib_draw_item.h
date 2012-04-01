@@ -84,7 +84,7 @@ class LIB_ITEM : public EDA_ITEM
      * @param aColor An #EDA_COLOR_T to draw the object or -1 to draw the object in it's
      *               default color.
      * @param aDrawMode The mode used to perform the draw (#GR_OR, #GR_COPY, etc.).
-     * @param aDate A pointer to any object specific data required to perform the draw.
+     * @param aData A pointer to any object specific data required to perform the draw.
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
     virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,

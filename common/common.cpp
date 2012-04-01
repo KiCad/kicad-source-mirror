@@ -560,3 +560,15 @@ wxString& operator <<( wxString& aString, const wxPoint& aPos )
 
     return aString;
 }
+
+
+std::string FormatBIU( const wxPoint& aPoint )
+{
+    return FormatBIU( aPoint.x ) + " " + FormatBIU( aPoint.y );
+}
+
+
+std::string FormatBIU( const wxSize& aSize )
+{
+    return FormatBIU( aSize.GetWidth() ) + " " + FormatBIU( aSize.GetHeight() );
+}

@@ -36,6 +36,8 @@
 
 #include <wx/string.h>
 
+#include <richio.h>
+
 
 class LINE_READER;
 class BOARD;
@@ -212,6 +214,18 @@ public:
      */
     bool ReadDescr( LINE_READER* aReader );
 
+    /**
+     * Function Format
+     * outputs the net class to \a aFormatter in s-expression form.
+     *
+     * @param aFormatter The #OUTPUTFORMATTER object to write to.
+     * @param aNestLevel The indentation next level.
+     * @param aControlBits The control bit definition for object specific formatting.
+     * @throw IO_ERROR on write error.
+     */
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
@@ -243,7 +257,7 @@ public:
 
     /**
      * Function Clear
-     * destroys any constained NETCLASS instances except the Default one.
+     * destroys any contained NETCLASS instances except the Default one.
      */
     void Clear();
 
@@ -306,4 +320,3 @@ public:
 };
 
 #endif  // CLASS_NETCLASS_H
-

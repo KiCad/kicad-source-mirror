@@ -122,9 +122,9 @@ private:
     CPolyLine*            smoothedPoly;         // Corner-smoothed version of m_Poly
     int                   cornerSmoothingType;
     unsigned int          cornerRadius;
-    // Priority: when a zone outline is inside and other zone, if its priority is highter
+    // Priority: when a zone outline is inside and other zone, if its priority is higher
     // the other zone priority, it will be created inside.
-    // if priorities are equal, a DRC erroc is set
+    // if priorities are equal, a DRC error is set
     unsigned              m_priority;
     ZoneConnection        m_PadConnection;
 
@@ -552,8 +552,10 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
 
-    /** @copydoc EDA_ITEM::Clone() */
     virtual EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override

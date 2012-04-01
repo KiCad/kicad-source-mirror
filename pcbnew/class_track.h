@@ -40,11 +40,13 @@ class TRACK;
 class D_PAD;
 
 // Via attributes (m_Shape parameter)
-#define VIA_THROUGH             3           /* Always a through hole via */
-#define VIA_BLIND_BURIED        2           /* this via can be on internal layers */
-#define VIA_MICROVIA            1           /* this via which connect from an external layer
-                                             * to the near neighbor internal layer */
-#define VIA_NOT_DEFINED         0           /* not yet used */
+#define VIA_THROUGH                3       /* Always a through hole via */
+#define VIA_BLIND_BURIED           2       /* this via can be on internal layers */
+#define VIA_MICROVIA               1       /* this via which connect from an external layer
+                                            * to the near neighbor internal layer */
+#define VIA_NOT_DEFINED            0       /* not yet used */
+
+#define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
 
 /**
@@ -206,9 +208,9 @@ public:
 
     /**
      * Function SetDrillDefault
-     * Set the drill value for vias at default value (-1)
+     * sets the drill value for vias to the default value #UNDEFINED_DRILL_DIAMETER.
     */
-    void SetDrillDefault()      { m_Drill = -1; }
+    void SetDrillDefault()      { m_Drill = UNDEFINED_DRILL_DIAMETER; }
 
     /**
      * Function IsDrillDefault
@@ -333,6 +335,9 @@ public:
 
     virtual EDA_ITEM* Clone() const;
 
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 #if defined (DEBUG)
 
     void Show( int nestLevel, std::ostream& os ) const;     // overload
@@ -389,7 +394,7 @@ public:
      *  For a via m_Layer contains the 2 layers :
      * top layer and bottom layer used by the via.
      * The via connect all layers from top layer to bottom layer
-     * 4 bits for the first layer and 4 next bits for the secaon layer
+     * 4 bits for the first layer and 4 next bits for the second layer
      * @param top_layer = first layer connected by the via
      * @param bottom_layer = last layer connected by the via
      */

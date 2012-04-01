@@ -62,3 +62,34 @@ wxString BOARD_ITEM::GetLayerName() const
 
     return layerName;
 }
+
+
+/** @todo Move Pcbnew version of FormatBIU() where ever the common DSO/DSL code ends up. */
+std::string FormatBIU( int aValue )
+{
+#if !defined( USE_PCBNEW_NANOMETERS )
+    wxFAIL_MSG( wxT( "Cannot use FormatBIU() unless Pcbnew is build with PCBNEW_NANOMETERS=ON." ) );
+#endif
+
+    char    buf[50];
+    double  engUnits = aValue / 1000000.0;
+    int     len;
+
+    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
+    {
+        // printf( "f: " );
+        len = snprintf( buf, 49, "%.10f", engUnits );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        ++len;
+    }
+    else
+    {
+        // printf( "g: " );
+        len = snprintf( buf, 49, "%.10g", engUnits );
+    }
+
+    return std::string( buf, len );
+}

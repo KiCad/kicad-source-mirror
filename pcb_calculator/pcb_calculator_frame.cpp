@@ -243,3 +243,15 @@ void PCB_CALCULATOR_FRAME::OnPaintTranslinePanel( wxPaintEvent& event )
 
     event.Skip();
 }
+
+
+/**
+ * @copydoc
+ *
+ * This is a dummy since KiCad doesn't perform any interal unit formatting.
+ */
+/** @todo Remove FormatBIU() when the common DSO/DSL code is implemented. */
+std::string FormatBIU( int aValue )
+{
+    return "";
+}

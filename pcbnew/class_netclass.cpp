@@ -290,28 +290,55 @@ void NETCLASS::Show( int nestLevel, std::ostream& os ) const
 
 #endif
 
+
 int NETCLASS::GetTrackMinWidth() const
 {
     return m_Parent->GetDesignSettings().m_TrackMinWidth;
 }
+
 
 int NETCLASS::GetViaMinDiameter() const
 {
     return m_Parent->GetDesignSettings().m_ViasMinSize;
 }
 
+
 int NETCLASS::GetViaMinDrill() const
 {
     return m_Parent->GetDesignSettings().m_ViasMinDrill;
 }
+
 
 int NETCLASS::GetuViaMinDiameter() const
 {
     return m_Parent->GetDesignSettings().m_MicroViasMinSize;
 }
 
+
 int NETCLASS::GetuViaMinDrill() const
 {
     return m_Parent->GetDesignSettings().m_MicroViasMinDrill;
 }
 
+
+void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(net-class %s %s\n",
+                       EscapedUTF8( GetName() ).c_str(),
+                       EscapedUTF8( GetDescription() ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(clearance %d)\n", GetClearance() );
+    aFormatter->Print( aNestLevel+1, "(trace-width %d)\n", GetTrackWidth() );
+
+    aFormatter->Print( aNestLevel+1, "(via-dia %d)\n", GetViaDiameter() );
+    aFormatter->Print( aNestLevel+1, "(via-drill %d)\n", GetViaDrill() );
+
+    aFormatter->Print( aNestLevel+1, "(uvia-dia %d)\n", GetuViaDiameter() );
+    aFormatter->Print( aNestLevel+1, "(uvia-drill %d)\n", GetuViaDrill() );
+
+    for( NETCLASS::const_iterator it = begin();  it!= end();  ++it )
+        aFormatter->Print( aNestLevel+1, "(add-net %s)\n", EscapedUTF8( *it ).c_str() );
+
+    aFormatter->Print( aNestLevel, ")\n" );
+}

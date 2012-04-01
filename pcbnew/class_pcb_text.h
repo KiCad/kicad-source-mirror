@@ -91,7 +91,7 @@ public:
 
     wxString GetClass() const
     {
-        return wxT("PTEXT");
+        return wxT( "PTEXT" );
     }
 
     /**
@@ -118,6 +118,9 @@ public:
     EDA_RECT GetBoundingBox() const { return GetTextBox(); };
 
     EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;

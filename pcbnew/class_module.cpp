@@ -663,6 +663,125 @@ EDA_ITEM* MODULE::Clone() const
 }
 
 
+void MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(module %s" , EscapedUTF8( m_LibRef ).c_str() );
+
+    if( IsLocked() )
+        aFormatter->Print( aNestLevel, " locked" );
+
+    if( IsPlaced() )
+        aFormatter->Print( aNestLevel, " placed" );
+
+    aFormatter->Print( aNestLevel, " (tedit %lX) (tstamp %lX)\n",
+                       GetLastEditTime(), GetTimeStamp() );
+
+    aFormatter->Print( aNestLevel+1, "(at %s", FormatBIU( m_Pos ).c_str() );
+
+    if( m_Orient != 0.0 )
+        aFormatter->Print( aNestLevel+1, " %0.1f", m_Orient );
+
+    aFormatter->Print( aNestLevel+1, ")\n" );
+
+    if( !m_Doc.IsEmpty() )
+        aFormatter->Print( aNestLevel+1, "(descr %s)\n", EscapedUTF8( m_Doc ).c_str() );
+
+    if( !m_KeyWord.IsEmpty() )
+        aFormatter->Print( aNestLevel+1, "(tags %s)\n", EscapedUTF8( m_KeyWord ).c_str() );
+
+    if( !m_Path.IsEmpty() )
+        aFormatter->Print( aNestLevel+1, "(path %s)\n", EscapedUTF8( m_Path ).c_str() );
+
+    if( m_CntRot90 != 0 )
+        aFormatter->Print( aNestLevel+1, "(autoplace-cost90 %d)\n", m_CntRot90 );
+
+    if( m_CntRot180 != 0 )
+        aFormatter->Print( aNestLevel+1, "(autoplace-cost180 %d)\n", m_CntRot180 );
+
+    if( m_LocalSolderMaskMargin != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder-mask-margin %s)\n",
+                           FormatBIU( m_LocalSolderMaskMargin ).c_str() );
+
+    if( m_LocalSolderPasteMargin != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder-paste-margin %s)\n",
+                           FormatBIU( m_LocalSolderPasteMargin ).c_str() );
+
+    if( m_LocalSolderPasteMarginRatio != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder-paste-ratio %g)\n",
+                           m_LocalSolderPasteMarginRatio );
+
+    if( m_LocalClearance != 0 )
+        aFormatter->Print( aNestLevel+1, "(clearance %s)\n",
+                           FormatBIU( m_LocalClearance ).c_str() );
+
+    if( m_ZoneConnection != UNDEFINED_CONNECTION )
+        aFormatter->Print( aNestLevel+1, "(zone-connect %d)\n", m_ZoneConnection );
+
+    if( m_ThermalWidth != 0 )
+        aFormatter->Print( aNestLevel+1, "(thermal-width %s)\n",
+                           FormatBIU( m_ThermalWidth ).c_str() );
+
+    if( m_ThermalGap != 0 )
+        aFormatter->Print( aNestLevel+1, "(thermal-gap %s)\n",
+                           FormatBIU( m_ThermalGap ).c_str() );
+
+    // Attributes
+    if( m_Attributs != MOD_DEFAULT )
+    {
+        aFormatter->Print( aNestLevel+1, "(attr " );
+
+        if( m_Attributs & MOD_CMS )
+            aFormatter->Print( aNestLevel+1, " smd" );
+
+        if( m_Attributs & MOD_VIRTUAL )
+            aFormatter->Print( aNestLevel+1, " virtual" );
+
+        aFormatter->Print( aNestLevel+1, ")\n" );
+    }
+
+    m_Reference->Format( aFormatter, aNestLevel+1, aControlBits );
+    m_Value->Format( aFormatter, aNestLevel+1, aControlBits );
+
+    // Save drawing elements.
+    for( BOARD_ITEM* gr = m_Drawings;  gr;  gr = gr->Next() )
+        gr->Format( aFormatter+1, aNestLevel, aControlBits );
+
+    // Save pads.
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+        pad->Format( aFormatter+1, aNestLevel, aControlBits );
+
+    // Save 3D info.
+    for( S3D_MASTER* t3D = m_3D_Drawings;  t3D;  t3D = t3D->Next() )
+    {
+        if( !t3D->m_Shape3DName.IsEmpty() )
+        {
+            aFormatter->Print( aNestLevel+1, "(3d-shape %s\n",
+                               EscapedUTF8( t3D->m_Shape3DName ).c_str() );
+
+            aFormatter->Print( aNestLevel+2, "(at (xyz %.16g %.16g %.16g))\n",
+                               t3D->m_MatPosition.x,
+                               t3D->m_MatPosition.y,
+                               t3D->m_MatPosition.z );
+
+            aFormatter->Print( aNestLevel+2, "(scale (xyz %lf %lf %lf))\n",
+                               t3D->m_MatScale.x,
+                               t3D->m_MatScale.y,
+                               t3D->m_MatScale.z );
+
+            aFormatter->Print( aNestLevel+2, "(rotate (xyz %.16g %.16g %.16g))\n",
+                               t3D->m_MatRotation.x,
+                               t3D->m_MatRotation.y,
+                               t3D->m_MatRotation.z );
+
+            aFormatter->Print( aNestLevel+1, ")\n" );
+        }
+    }
+
+    aFormatter->Print( aNestLevel, ")\n" );
+}
+
+
 #if defined(DEBUG)
 
 void MODULE::Show( int nestLevel, std::ostream& os ) const
