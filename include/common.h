@@ -38,6 +38,7 @@
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 
+#include <richio.h>
 
 #if !wxUSE_PRINTING_ARCHITECTURE
 #   error "You must use '--enable-printarch' in your wx library configuration."
@@ -134,6 +135,24 @@ enum EDA_UNITS_T {
 };
 
 
+/**
+ * Function FormatBIU
+ * converts coordinate \a aValue from the application specific internal units to a string
+ * appropriate to write to an #OUTPUTFORMATTER in the s-expression file formats.
+ *
+ * @note A separate version of this function exists for Pcbnew and Eeschema.  This removes
+ *       the runtime dependency for converting coordinates to the appropriate application.
+ *       Do not add any runtime conversions to either the Pcbnew or Eeschema implementation
+ *       of this function.
+ * @param aValue The value in application specific internal units to convert.
+ * @return An s-expression appropriate string containing the converted value in millimeters.
+ */
+extern std::string FormatBIU( int aValue );
+
+extern std::string FormatBIU( const wxPoint& aPoint );
+
+extern std::string FormatBIU( const wxSize& aSize );
+
 // forward declarations:
 class LibNameList;
 
@@ -185,11 +204,18 @@ public:
      * and will be set according to <b>previous</b> calls to
      * static PAGE_INFO::SetUserWidthMils() and
      * static PAGE_INFO::SetUserHeightMils();
+     * @param IsPortrait Set to true to set page orientation to portrait mode.
      *
-     * @return bool - true iff @a aStandarePageDescription was a recognized type.
+     * @return bool - true if @a aStandarePageDescription was a recognized type.
      */
     bool SetType( const wxString& aStandardPageDescriptionName, bool IsPortrait = false );
     const wxString& GetType() const { return m_type; }
+
+    /**
+     * Function IsDefault
+     * @return True if the object has the default page settings which are A3, landscape.
+     */
+    bool IsDefault() const { return m_type == PAGE_INFO::A3 && !m_portrait; }
 
     /**
      * Function IsCustom
@@ -326,6 +352,18 @@ public:
      * returns the standard page types, such as "A4", "A3", etc.
     static wxArrayString GetStandardSizes();
      */
+
+    /**
+     * Function Format
+     * outputs the page class to \a aFormatter in s-expression form.
+     *
+     * @param aFormatter The #OUTPUTFORMATTER object to write to.
+     * @param aNestLevel The indentation next level.
+     * @param aControlBits The control bit definition for object specific formatting.
+     * @throw IO_ERROR on write error.
+     */
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 protected:
     // only the class implementation(s) may use this constructor
@@ -612,7 +650,7 @@ int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
 
 /**
  * Function GenDate
- * @return A wsString object containg the date in the format "day month year" like
+ * @return A wxString object containing the date in the format "day month year" like
  *         "23 jun 2005".
  */
 wxString GenDate();

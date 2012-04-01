@@ -12,6 +12,7 @@
 #include <confirm.h>
 #include <wxstruct.h>
 #include <appl_wxstruct.h>
+#include <kicad_string.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 
@@ -1372,7 +1373,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
     {
         if( jj < 26 )
             Line.Printf( wxT( "%c" ), jj + 'A' );
-        else    // I hope 52 identifiers are enought...
+        else    // I hope 52 identifiers are enough...
             Line.Printf( wxT( "%c" ), 'a' + jj - 26 );
 
         if( ii < yg - PAS_REF / 2 )
@@ -1626,7 +1627,7 @@ const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition )
     yg   = pageInfo.GetSizeMils().y - pageInfo.GetBottomMarginMils();
 
     // Get the Y axis identifier (A symbol A ... Z)
-    if( aPosition.y < refy || aPosition.y > yg )  // Ouside of Y limits
+    if( aPosition.y < refy || aPosition.y > yg )  // Outside of Y limits
         msg << wxT( "?" );
     else
     {
@@ -1637,7 +1638,7 @@ const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition )
     }
 
     // Get the X axis identifier (A number 1 ... n)
-    if( aPosition.x < refx || aPosition.x > xg )  // Ouside of X limits
+    if( aPosition.x < refx || aPosition.x > xg )  // Outside of X limits
         msg << wxT( "?" );
     else
     {
@@ -1659,4 +1660,43 @@ wxString EDA_DRAW_FRAME::GetScreenDesc()
     msg << GetScreen()->m_ScreenNumber << wxT( "/" )
         << GetScreen()->m_NumberOfScreen;
     return msg;
+}
+
+
+void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    // Don't write the title block information if there is nothing to write.
+    if(  !m_title.IsEmpty() || !m_date.IsEmpty() || !m_revision.IsEmpty()
+      || !m_company.IsEmpty() || !m_comment1.IsEmpty() || !m_comment2.IsEmpty()
+      || !m_comment3.IsEmpty() || !m_comment4.IsEmpty()  )
+    {
+        aFormatter->Print( aNestLevel, "(title-block\n" );
+
+        if( !m_title.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "\n(title %s)", EscapedUTF8( m_title ).c_str() );
+
+        if( !m_date.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "\n(date %s)", EscapedUTF8( m_date ).c_str() );
+
+        if( !m_revision.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "\n(rev %s)", EscapedUTF8( m_revision ).c_str() );
+
+        if( !m_company.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "\n(company %s)", EscapedUTF8( m_company ).c_str() );
+
+        if( !m_comment1.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "\n(comment1 %s)", EscapedUTF8( m_comment1 ).c_str() );
+
+        if( !m_comment2.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "\n(comment2 %s)", EscapedUTF8( m_comment2 ).c_str() );
+
+        if( !m_comment3.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "\n(comment3 %s)", EscapedUTF8( m_comment3 ).c_str() );
+
+        if( !m_comment4.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "\n(comment4 %s)", EscapedUTF8( m_comment4 ).c_str() );
+
+        aFormatter->Print( aNestLevel, "\n)\n" );
+    }
 }

@@ -67,7 +67,7 @@ static bool ShowClearance( const TRACK* aTrack )
 
 /*
  * return true if the dist between p1 and p2 < max_dist
- * Currently in test (currently rasnest algos work only if p1 == p2)
+ * Currently in test (currently ratsnest algos work only if p1 == p2)
  */
 inline bool IsNear( wxPoint& p1, wxPoint& p2, int max_dist )
 {
@@ -1556,6 +1556,47 @@ wxString TRACK::GetSelectMenuText() const
          << wxT("  ") << _("Length:") << valeur_param( GetLength(), temp );
 
     return text;
+}
+
+
+void TRACK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    if( Type() == PCB_VIA_T )
+    {
+        std::string type;
+
+        switch( m_Shape )
+        {
+        case VIA_THROUGH:       type = "thru";     break;
+        case VIA_BLIND_BURIED:  type = "blind";    break;
+        case VIA_MICROVIA:      type = "micro";    break;
+        default:
+            THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), m_Shape ) );
+        }
+
+        aFormatter->Print( aNestLevel, "(via %s (at %s) (size %s)", type.c_str(),
+                           FormatBIU( m_Start ).c_str(), FormatBIU( m_Width ).c_str() );
+
+        if( m_Drill != UNDEFINED_DRILL_DIAMETER )
+            aFormatter->Print( aNestLevel, " (drill %s)", FormatBIU( m_Drill ).c_str() );
+    }
+    else
+    {
+        aFormatter->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
+                           FormatBIU( m_Start ).c_str(), FormatBIU( m_End ).c_str(),
+                           FormatBIU( m_Width ).c_str() );
+    }
+
+    aFormatter->Print( aNestLevel, " (layer %d) (net %d)", GetLayer(), GetNet() );
+
+    if( GetTimeStamp() != 0 )
+        aFormatter->Print( aNestLevel, " (tstamp %lX)", GetTimeStamp() );
+
+    if( GetStatus() != 0 )
+        aFormatter->Print( aNestLevel, " (status %X)", GetStatus() );
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 

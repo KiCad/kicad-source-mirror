@@ -59,7 +59,7 @@
 
 #cmakedefine USE_NEW_PCBNEW_LOAD
 #cmakedefine USE_NEW_PCBNEW_SAVE
-
+#cmakedefine USE_PCBNEW_NANAMETERS
 
 /// The file format revision of the *.brd file created by this build
 #if defined(KICAD_NANOMETRE)

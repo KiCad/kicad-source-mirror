@@ -24,6 +24,8 @@ option(USE_PNG_BITMAPS "use PNG bitmaps instead of XPM (default ON)" ON)
 
 option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format" OFF)
 option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format" OFF)
+option(USE_PCBNEW_NANOMETRES
+       "Use nanometers for Pcbnew internal units instead of deci-mils (default OFF).")
 
 # Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")

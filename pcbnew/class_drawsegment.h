@@ -51,7 +51,7 @@ protected:
     int     m_Type;             ///< Used in complex associations ( Dimensions.. )
     double  m_Angle;            ///< Used only for Arcs: Arc angle in 1/10 deg
     wxPoint m_BezierC1;         ///< Bezier Control Point 1
-    wxPoint m_BezierC2;         ///< Bezier Control Point 1
+    wxPoint m_BezierC2;         ///< Bezier Control Point 2
 
     std::vector<wxPoint>    m_BezierPoints;
     std::vector<wxPoint>    m_PolyPoints;
@@ -152,13 +152,13 @@ public:
         m_PolyPoints = aPoints;
     }
 
-    bool         Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
-    bool         ReadDrawSegmentDescr( LINE_READER* aReader );
+    bool ReadDrawSegmentDescr( LINE_READER* aReader );
 
-    void         Copy( DRAWSEGMENT* source );
+    void Copy( DRAWSEGMENT* source );
 
-    void         Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                        int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
@@ -218,6 +218,9 @@ public:
     virtual BITMAP_DEF GetMenuImage() const { return  add_dashed_line_xpm; }
 
     virtual EDA_ITEM* Clone() const;
+
+    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload

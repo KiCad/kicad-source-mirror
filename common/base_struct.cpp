@@ -32,6 +32,7 @@
 #include <trigo.h>
 #include <common.h>
 #include <macros.h>
+#include <kicad_string.h>
 #include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <class_base_screen.h>
@@ -220,6 +221,14 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
     }
 
     return *this;
+}
+
+
+void EDA_ITEM::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    wxFAIL_MSG( wxString::Format( wxT( "Format method not defined for item type %s." ),
+                                  GetChars( GetClass() ) ) );
 }
 
 
@@ -543,6 +552,85 @@ wxString EDA_TEXT::GetTextStyleName()
     };
 
     return stylemsg[style];
+}
+
+
+bool EDA_TEXT::IsDefaultFormatting() const
+{
+    return (  ( m_Size.x == DEFAULT_SIZE_TEXT )
+           && ( m_Size.y == DEFAULT_SIZE_TEXT )
+           && ( m_Attributs == 0 )
+           && ( m_Mirror == false )
+           && ( m_HJustify == GR_TEXT_HJUSTIFY_CENTER )
+           && ( m_VJustify == GR_TEXT_VJUSTIFY_CENTER )
+           && ( m_Thickness == 0 )
+           && ( m_Italic == false )
+           && ( m_Bold == false )
+           && ( m_MultilineAllowed == false ) );
+}
+
+
+void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(text %s (at %s",
+                       EscapedUTF8( m_Text ).c_str(), FormatBIU( m_Pos ).c_str() );
+
+    if( m_Orient != 0.0 )
+        aFormatter->Print( aNestLevel, "%0.1f", m_Orient );
+
+    aFormatter->Print( aNestLevel, ")\n" );
+
+    if( !IsDefaultFormatting() )
+    {
+        aFormatter->Print( aNestLevel+1, "(effects\n" );
+
+        if( ( m_Size.x != DEFAULT_SIZE_TEXT ) || ( m_Size.y != DEFAULT_SIZE_TEXT ) || m_Bold
+          || m_Italic )
+        {
+            aFormatter->Print( aNestLevel+2, "(font" );
+
+            // Add font support here at some point in the future.
+
+            if( ( m_Size.x != DEFAULT_SIZE_TEXT ) || ( m_Size.y != DEFAULT_SIZE_TEXT ) )
+                aFormatter->Print( aNestLevel+2, " (size %s)", FormatBIU( m_Size ).c_str() );
+
+            if( m_Bold )
+                aFormatter->Print( aNestLevel+2, " bold" );
+
+            if( m_Bold )
+                aFormatter->Print( aNestLevel+2, " italic" );
+
+            aFormatter->Print( aNestLevel+1, ")\n");
+        }
+
+        if( m_Mirror || ( m_HJustify != GR_TEXT_HJUSTIFY_CENTER )
+          || ( m_VJustify != GR_TEXT_VJUSTIFY_CENTER ) )
+        {
+            aFormatter->Print( aNestLevel+2, "(justify");
+
+            if( m_HJustify != GR_TEXT_HJUSTIFY_CENTER )
+                aFormatter->Print( aNestLevel+2,
+                                   (m_HJustify == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
+
+            if( m_VJustify != GR_TEXT_VJUSTIFY_CENTER )
+                aFormatter->Print( aNestLevel+2,
+                                   (m_VJustify == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
+
+            if( m_Mirror )
+                aFormatter->Print( aNestLevel+2, " mirror" );
+
+            aFormatter->Print( aNestLevel+2, ")\n" );
+        }
+
+        // As of now the only place this is used is in Eeschema to hide or show the text.
+        if( m_Attributs )
+            aFormatter->Print( aNestLevel+2, "hide" );
+
+        aFormatter->Print( aNestLevel+1, "\n)\n" );
+    }
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 

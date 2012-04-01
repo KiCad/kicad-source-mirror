@@ -33,6 +33,7 @@
 
 #include <colors.h>
 #include <bitmaps.h>
+#include <richio.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -712,6 +713,18 @@ public:
      */
     virtual EDA_ITEM& operator=( const EDA_ITEM& aItem );
 
+    /**
+     * Function Format
+     * outputs the object to \a aFormatter in s-expression form.
+     *
+     * @param aFormatter The #OUTPUTFORMATTER object to write to.
+     * @param aNestLevel The indentation next level.
+     * @param aControlBits The control bit definition for object specific formatting.
+     * @throw IO_ERROR on write error.
+     */
+    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 #if defined(DEBUG)
 
     /**
@@ -812,7 +825,7 @@ public:
     double   m_Orient;                  ///< Orient in 0.1 degrees
     wxPoint  m_Pos;                     ///< XY position of anchor text.
     wxSize   m_Size;                    ///< XY size of text
-    bool     m_Mirror;                  ///< true iff mirrored
+    bool     m_Mirror;                  ///< true if mirrored
     int      m_Attributs;               ///< bit flags such as visible, etc.
     bool     m_Italic;                  ///< should be italic font (if available)
     bool     m_Bold;                    ///< should be bold font (if available)
@@ -851,6 +864,8 @@ public:
 
     void SetMirrored( bool isMirrored ) { m_Mirror = isMirrored; }
     bool IsMirrored() const { return m_Mirror; }
+
+    bool IsDefaultFormatting() const;
 
     /**
      * Function SetSize
@@ -989,6 +1004,19 @@ public:
     EDA_TEXT_VJUSTIFY_T GetVertJustify() const { return m_VJustify; };
     void SetHorizJustify( EDA_TEXT_HJUSTIFY_T aType ) { m_HJustify = aType; };
     void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType ) { m_VJustify = aType; };
+
+    /**
+     * Function Format
+     * outputs the object to \a aFormatter in s-expression form.
+     *
+     * @param aFormatter The #OUTPUTFORMATTER object to write to.
+     * @param aNestLevel The indentation next level.
+     * @param aControlBits The control bit definition for object specific formatting.
+     * @throw IO_ERROR on write error.
+     */
+    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 };
 
 #endif // BASE_STRUCT_H_

@@ -26,6 +26,10 @@
 #include <wx/string.h>
 
 
+class OUTPUTFORMATTER;
+class IO_ERROR;
+
+
 extern wxString GenDate();
 
 
@@ -80,6 +84,18 @@ public:
         m_comment3.clear();
         m_comment4.clear();
     }
+
+    /**
+     * Function Format
+     * outputs the object to \a aFormatter in s-expression form.
+     *
+     * @param aFormatter The #OUTPUTFORMATTER object to write to.
+     * @param aNestLevel The indentation next level.
+     * @param aControlBits The control bit definition for object specific formatting.
+     * @throw IO_ERROR on write error.
+     */
+    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 private:
     wxString    m_title;

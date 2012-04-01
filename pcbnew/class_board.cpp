@@ -8,6 +8,7 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <kicad_string.h>
 #include <pcbcommon.h>
 #include <wxBasePcbFrame.h>
 
@@ -207,14 +208,14 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* 
 
 void BOARD::PushHighLight()
 {
-    m_hightLightPrevious = m_hightLight;
+    m_highLightPrevious = m_highLight;
 }
 
 
 void BOARD::PopHighLight()
 {
-    m_hightLight = m_hightLightPrevious;
-    m_hightLightPrevious.Clear();
+    m_highLight = m_highLightPrevious;
+    m_highLightPrevious.Clear();
 }
 
 
@@ -1065,7 +1066,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         // So usually, connected tracks or vias are grouped in this list
         // So the algorithm (used in ratsnest computations) which computes the
         // track connectivity is faster (more than 100 time regarding to
-        // a non ordered list) because when it searches for a connexion, first
+        // a non ordered list) because when it searches for a connection, first
         // it tests the near (near in term of linked list) 50 items
         // from the current item (track or via) in test.
         // Usually, because of this sort, a connected item (if exists) is
@@ -2145,6 +2146,195 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 
     aPosition = lockPoint;
     return newTrack;
+}
+
+
+void BOARD::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(general\n" );
+    aFormatter->Print( aNestLevel+1, "(links %d)\n", GetRatsnestsCount() );
+    aFormatter->Print( aNestLevel+1, "(no-connects %d)\n", m_NbNoconnect );
+
+    // Write Bounding box info
+    aFormatter->Print( aNestLevel+1,  "(area %s %s %s %s)\n",
+                       FormatBIU( m_BoundingBox.GetX() ).c_str(),
+                       FormatBIU( m_BoundingBox.GetY() ).c_str(),
+                       FormatBIU( m_BoundingBox.GetRight() ).c_str(),
+                       FormatBIU( m_BoundingBox.GetBottom() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(thickness %s)\n",
+                       FormatBIU( GetDesignSettings().m_BoardThickness ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(drawings %d)\n", m_Drawings.GetCount() );
+    aFormatter->Print( aNestLevel+1, "(tracks %d)\n", GetNumSegmTrack() );
+    aFormatter->Print( aNestLevel+1, "(zones %d)\n", GetNumSegmZone() );
+    aFormatter->Print( aNestLevel+1, "(modules %d)\n", m_Modules.GetCount() );
+    aFormatter->Print( aNestLevel+1, "(nets %d)\n", GetNetCount() );
+    aFormatter->Print( aNestLevel, ")\n\n" );
+
+    m_paper.Format( aFormatter, aNestLevel, aControlBits );
+    m_titles.Format( aFormatter, aNestLevel, aControlBits );
+
+    // Layers.
+    aFormatter->Print( aNestLevel, "(layers %d %08X", GetCopperLayerCount(), GetEnabledLayers() );
+
+    if( GetEnabledLayers() != GetVisibleLayers() )
+        aFormatter->Print( aNestLevel+1, " %08X", GetVisibleLayers() );
+
+    unsigned layerMask = ALL_CU_LAYERS & GetEnabledLayers();
+
+    for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
+    {
+        if( layerMask & 1 )
+        {
+            aFormatter->Print( aNestLevel+1, "(layer%d %s %s\n", layer,
+                               TO_UTF8( GetLayerName( layer ) ),
+                               LAYER::ShowType( GetLayerType( layer ) ) );
+        }
+    }
+
+    aFormatter->Print( aNestLevel, ")\n\n" );
+
+    // Setup
+    aFormatter->Print( aNestLevel, "(setup\n" );
+
+    // Save current default track width, for compatibility with older Pcbnew version;
+    aFormatter->Print( aNestLevel+1, "(last-trace-width %s)\n",
+                       FormatBIU( m_TrackWidthList[m_TrackWidthSelector] ).c_str() );
+
+    // Save custom tracks width list (the first is not saved here: this is the netclass value
+    for( unsigned ii = 1; ii < m_TrackWidthList.size(); ii++ )
+        aFormatter->Print( aNestLevel+1, "(user-trace-width%d %s)\n",
+                           ii+1, FormatBIU( m_TrackWidthList[ii] ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(trace-clearance %s)\n)",
+                       FormatBIU( m_NetClasses.GetDefault()->GetClearance() ).c_str() );
+
+    // ZONE_SETTINGS
+    aFormatter->Print( aNestLevel+1, "(zone-clearance %s)\n",
+                       FormatBIU( GetZoneSettings().m_ZoneClearance ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(zone-45-only %d)\n", GetZoneSettings().m_Zone_45_Only );
+
+    aFormatter->Print( aNestLevel+1, "(trace-min %s)\n",
+                       FormatBIU( GetDesignSettings().m_TrackMinWidth ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(segment-width %s)\n",
+                       FormatBIU( GetDesignSettings().m_DrawSegmentWidth ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(edge-width %s)\n",
+                       FormatBIU( GetDesignSettings().m_EdgeSegmentWidth ).c_str() );
+
+    // Save current default via size, for compatibility with older Pcbnew version;
+    aFormatter->Print( aNestLevel+1, "(via-size %s)\n",
+                       FormatBIU( m_NetClasses.GetDefault()->GetViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via-drill %s)\n",
+                       FormatBIU( m_NetClasses.GetDefault()->GetViaDrill() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via-min-size %s)\n",
+                       FormatBIU( GetDesignSettings().m_ViasMinSize ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via_min_drill %s)\n",
+                       FormatBIU( GetDesignSettings().m_ViasMinDrill ).c_str() );
+
+    // Save custom vias diameters list (the first is not saved here: this is
+    // the netclass value
+    for( unsigned ii = 1; ii < m_ViasDimensionsList.size(); ii++ )
+        aFormatter->Print( aNestLevel+1, "(user-via%d %s %s)\n", ii,
+                           FormatBIU( m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                           FormatBIU( m_ViasDimensionsList[ii].m_Drill ).c_str() );
+
+    // for old versions compatibility:
+    aFormatter->Print( aNestLevel+1, "(uvia-size %s)\n",
+                       FormatBIU( m_NetClasses.GetDefault()->GetuViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia-drill %s)\n",
+                       FormatBIU( m_NetClasses.GetDefault()->GetuViaDrill() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvias_allow %s)\n",
+                       FormatBIU( GetDesignSettings().m_MicroViasAllowed ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia-min-size %s)\n",
+                       FormatBIU( GetDesignSettings().m_MicroViasMinSize ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia-min-drill %s)\n",
+                       FormatBIU( GetDesignSettings().m_MicroViasMinDrill ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(pcb-text-width %s)\n",
+                       FormatBIU( GetDesignSettings().m_PcbTextWidth ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(pcb-text-size %s %s)\n",
+                       FormatBIU( GetDesignSettings().m_PcbTextSize.x ).c_str(),
+                       FormatBIU( GetDesignSettings().m_PcbTextSize.y ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(mod-edge-width %s)\n",
+                       FormatBIU( GetDesignSettings().m_ModuleSegmentWidth ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(mod-text-size %s %s)\n",
+                       FormatBIU( GetDesignSettings().m_ModuleTextSize.x ).c_str(),
+                       FormatBIU( GetDesignSettings().m_ModuleTextSize.y ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(mod-text-width %s)\n",
+                       FormatBIU( GetDesignSettings().m_ModuleTextWidth ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(pad-size %s %s)\n",
+                       FormatBIU( GetDesignSettings().m_Pad_Master.GetSize().x ).c_str(),
+                       FormatBIU( GetDesignSettings().m_Pad_Master.GetSize().x ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(pad-drill %s)\n",
+                       FormatBIU( GetDesignSettings().m_Pad_Master.GetDrillSize().x ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(pad-to-mask-clearance %s)\n",
+                       FormatBIU( GetDesignSettings().m_SolderMaskMargin ).c_str() );
+
+    if( GetDesignSettings().m_SolderPasteMargin != 0 )
+        aFormatter->Print( aNestLevel+1, "(pad-to-paste-clearance %s)\n",
+                           FormatBIU( GetDesignSettings().m_SolderPasteMargin ).c_str() );
+
+    if( GetDesignSettings().m_SolderPasteMarginRatio != 0 )
+        aFormatter->Print( aNestLevel+1, "(pad-to-paste-clearance-ratio %g)\n",
+                           GetDesignSettings().m_SolderPasteMarginRatio );
+
+    aFormatter->Print( aNestLevel+1, "(aux-axis-origin %s %s)\n",
+                       FormatBIU( GetOriginAxisPosition().x ).c_str(),
+                       FormatBIU( GetOriginAxisPosition().y ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(visible-elements %X)\n",
+                       GetDesignSettings().GetVisibleElements() );
+
+    aFormatter->Print( aNestLevel, ")\n\n" );
+
+
+    int netcount = GetNetCount();
+
+    for( int i = 0;  i < netcount;  ++i )
+        aFormatter->Print( aNestLevel, "(net %d %s)\n",
+                           FindNet( i )->GetNet(),
+                           EscapedUTF8( FindNet( i )->GetNetname() ).c_str() );
+
+    // Save the default net class first.
+    m_NetClasses.GetDefault()->Format( aFormatter, aNestLevel, aControlBits );
+
+    // Save the rest of the net classes alphabetically.
+    for( NETCLASSES::const_iterator it = m_NetClasses.begin();  it != m_NetClasses.end();  ++it )
+    {
+        NETCLASS* netclass = it->second;
+        netclass->Format( aFormatter, aNestLevel, aControlBits );
+    }
+
+    // Save the modules.
+    for( MODULE* module = m_Modules;  module;  module = (MODULE*) module->Next() )
+        module->Format( aFormatter, aNestLevel, aControlBits );
+
+    // Save the graphical items on the board (not owned by a module)
+    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    {
+        item->Format( aFormatter, aNestLevel, aControlBits );
+    }
+
+    // Do not save MARKER_PCBs, they can be regenerated easily.
+
+    // Save the tracks and vias.
+    for( TRACK* track = m_Track;  track; track = track->Next() )
+        track->Format( aFormatter, aNestLevel, aControlBits );
+
+    // Save the old obsolete zones which were done by segments (tracks).
+    for( SEGZONE* zone = m_Zone;  zone;  zone = zone->Next() )
+        zone->Format( aFormatter, aNestLevel, aControlBits );
+
+    // Save the polygon (which are the newer technology) zones.
+    for( int i=0;  i < GetAreaCount();  ++i )
+        GetArea( i )->Format( aFormatter, aNestLevel, aControlBits );
+
+    aFormatter->Print( aNestLevel, "\n)\n" );
 }
 
 
