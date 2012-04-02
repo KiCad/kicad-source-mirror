@@ -37,6 +37,10 @@
 #include <colors_selection.h>
 #include <build_version.h>
 
+// Pcb_calculator data file extension:
+const wxString PcbCalcDataFileExt( wxT("pcbcalc") );
+
+
 // PCB_CALCULATOR_APP
 
 void EDA_APP::MacOpenFile(const wxString &fileName)

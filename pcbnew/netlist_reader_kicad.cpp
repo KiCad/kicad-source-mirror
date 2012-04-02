@@ -118,7 +118,7 @@ bool NETLIST_READER::ReadKicadNetList( FILE* aFile )
 {
     BOARD * brd = m_pcbframe ? m_pcbframe->GetBoard() : NULL;
 
-        // netlineReader dtor will close aFile
+    // netlineReader dtor will close aFile
     FILE_LINE_READER netlineReader( aFile, m_netlistFullName );
     NETLIST_READER_KICAD_PARSER netlist_parser( &netlineReader, this );
 

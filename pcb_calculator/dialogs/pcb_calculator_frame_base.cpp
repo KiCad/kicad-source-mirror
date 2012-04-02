@@ -1,11 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
-
-#include "UnitSelector.h"
 
 #include "pcb_calculator_frame_base.h"
 
@@ -16,6 +14,7 @@
 #include "../bitmaps/color_code_value.xpm"
 #include "../bitmaps/color_code_value_and_name.xpm"
 #include "../bitmaps/regul.xpm"
+#include "../bitmaps/regul_3pins.xpm"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -35,31 +34,47 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizerMainReg;
 	bSizerMainReg = new wxBoxSizer( wxHORIZONTAL );
 	
+	wxBoxSizer* bSizeLeftpReg;
+	bSizeLeftpReg = new wxBoxSizer( wxVERTICAL );
+	
 	wxBoxSizer* bSizerBitmapReg;
 	bSizerBitmapReg = new wxBoxSizer( wxVERTICAL );
 	
 	
 	bSizerBitmapReg->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_bitmapRegul = new wxStaticBitmap( m_panelRegulators, wxID_ANY, wxBitmap( regul_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBitmapReg->Add( m_bitmapRegul, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_bitmapRegul4pins = new wxStaticBitmap( m_panelRegulators, wxID_ANY, wxBitmap( regul_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBitmapReg->Add( m_bitmapRegul4pins, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_bitmapRegul3pins = new wxStaticBitmap( m_panelRegulators, wxID_ANY, wxBitmap( regul_3pins_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerBitmapReg->Add( m_bitmapRegul3pins, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	
+	bSizerBitmapReg->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	
+	bSizeLeftpReg->Add( bSizerBitmapReg, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizerRegFormula;
+	sbSizerRegFormula = new wxStaticBoxSizer( new wxStaticBox( m_panelRegulators, wxID_ANY, _("Formula") ), wxVERTICAL );
 	
 	m_RegulFormula = new wxStaticText( m_panelRegulators, wxID_ANY, _("Vout = Vref * (R1 + R2) / R2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RegulFormula->Wrap( -1 );
 	m_RegulFormula->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizerBitmapReg->Add( m_RegulFormula, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizerRegFormula->Add( m_RegulFormula, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
-	bSizerBitmapReg->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizeLeftpReg->Add( sbSizerRegFormula, 0, wxEXPAND, 5 );
 	
-	bSizerMainReg->Add( bSizerBitmapReg, 1, wxEXPAND, 5 );
+	
+	bSizerMainReg->Add( bSizeLeftpReg, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerRegulRight;
 	bSizerRegulRight = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerRegParams;
-	fgSizerRegParams = new wxFlexGridSizer( 2, 4, 0, 0 );
+	fgSizerRegParams = new wxFlexGridSizer( 5, 4, 0, 0 );
 	fgSizerRegParams->AddGrowableCol( 2 );
 	fgSizerRegParams->SetFlexibleDirection( wxBOTH );
 	fgSizerRegParams->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -93,20 +108,6 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_UnitRegultR1->Wrap( -1 );
 	fgSizerRegParams->Add( m_UnitRegultR1, 0, wxALL, 5 );
 	
-	
-	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_lableVRef = new wxStaticText( m_panelRegulators, wxID_ANY, _("Vref"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_lableVRef->Wrap( -1 );
-	fgSizerRegParams->Add( m_lableVRef, 0, wxALL, 5 );
-	
-	m_RegulVrefValue = new wxTextCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulVrefValue, 0, wxALL|wxEXPAND, 5 );
-	
-	m_unitsVref = new wxStaticText( m_panelRegulators, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_unitsVref->Wrap( -1 );
-	fgSizerRegParams->Add( m_unitsVref, 0, wxALL, 5 );
-	
 	m_rbRegulVout = new wxRadioButton( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_rbRegulVout, 0, wxALL, 5 );
 	
@@ -121,21 +122,107 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_unitsVout->Wrap( -1 );
 	fgSizerRegParams->Add( m_unitsVout, 0, wxALL, 5 );
 	
+	
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_labelVRef = new wxStaticText( m_panelRegulators, wxID_ANY, _("Vref"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelVRef->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelVRef, 0, wxALL, 5 );
+	
+	m_RegulVrefValue = new wxTextCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_RegulVrefValue, 0, wxALL|wxEXPAND, 5 );
+	
+	m_unitsVref = new wxStaticText( m_panelRegulators, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsVref->Wrap( -1 );
+	fgSizerRegParams->Add( m_unitsVref, 0, wxALL, 5 );
+	
+	
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_RegulIadjTitle = new wxStaticText( m_panelRegulators, wxID_ANY, _("Iadj"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RegulIadjTitle->Wrap( -1 );
+	fgSizerRegParams->Add( m_RegulIadjTitle, 0, wxALL, 5 );
+	
+	m_RegulIadjValue = new wxTextCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_RegulIadjValue, 0, wxALL|wxEXPAND, 5 );
+	
+	m_IadjUnitLabel = new wxStaticText( m_panelRegulators, wxID_ANY, _("uA"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_IadjUnitLabel->Wrap( -1 );
+	fgSizerRegParams->Add( m_IadjUnitLabel, 0, wxALL, 5 );
+	
+	
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_staticTextRegType = new wxStaticText( m_panelRegulators, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRegType->Wrap( -1 );
+	fgSizerRegParams->Add( m_staticTextRegType, 0, wxALL, 5 );
+	
+	wxString m_choiceRegTypeChoices[] = { _("Standard Type"), _("3 Terminal Type") };
+	int m_choiceRegTypeNChoices = sizeof( m_choiceRegTypeChoices ) / sizeof( wxString );
+	m_choiceRegType = new wxChoice( m_panelRegulators, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRegTypeNChoices, m_choiceRegTypeChoices, 0 );
+	m_choiceRegType->SetSelection( 0 );
+	fgSizerRegParams->Add( m_choiceRegType, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	
 	bSizerRegulRight->Add( fgSizerRegParams, 0, wxEXPAND, 5 );
 	
 	m_buttonCalculate = new wxButton( m_panelRegulators, wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRegulRight->Add( m_buttonCalculate, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
+	wxStaticBoxSizer* sbSizerRegulatorsChooser;
+	sbSizerRegulatorsChooser = new wxStaticBoxSizer( new wxStaticBox( m_panelRegulators, wxID_ANY, _("Regulator") ), wxVERTICAL );
+	
+	wxArrayString m_choiceRegulatorSelectorChoices;
+	m_choiceRegulatorSelector = new wxChoice( m_panelRegulators, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceRegulatorSelectorChoices, 0 );
+	m_choiceRegulatorSelector->SetSelection( 0 );
+	sbSizerRegulatorsChooser->Add( m_choiceRegulatorSelector, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticTextRegFile = new wxStaticText( m_panelRegulators, wxID_ANY, _("Regulators data file:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRegFile->Wrap( -1 );
+	sbSizerRegulatorsChooser->Add( m_staticTextRegFile, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_regulators_filePicker = new wxFilePickerCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, _("Select a file"), wxT("*.pcbcalc"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+	sbSizerRegulatorsChooser->Add( m_regulators_filePicker, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerReulBtn;
+	bSizerReulBtn = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_buttonEditItem = new wxButton( m_panelRegulators, wxID_ANY, _("Edit Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonEditItem->SetToolTip( _("Enter a new item in the current list of availlable regulators") );
+	
+	bSizerReulBtn->Add( m_buttonEditItem, 0, wxALL, 5 );
+	
+	m_buttonAddItem = new wxButton( m_panelRegulators, wxID_ANY, _("Add Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonAddItem->SetToolTip( _("Enter a new item in the current list of availlable regulators") );
+	
+	bSizerReulBtn->Add( m_buttonAddItem, 1, wxALL, 5 );
+	
+	m_buttonRemoveItem = new wxButton( m_panelRegulators, wxID_ANY, _("Remove Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRemoveItem->SetToolTip( _("Remove an item in the current list of availlable regulators") );
+	
+	bSizerReulBtn->Add( m_buttonRemoveItem, 1, wxALL, 5 );
+	
+	
+	sbSizerRegulatorsChooser->Add( bSizerReulBtn, 1, wxEXPAND, 5 );
+	
+	
+	bSizerRegulRight->Add( sbSizerRegulatorsChooser, 0, wxEXPAND, 5 );
+	
 	m_RegulMessage = new wxStaticText( m_panelRegulators, wxID_ANY, _("Message"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RegulMessage->Wrap( -1 );
 	bSizerRegulRight->Add( m_RegulMessage, 0, wxALL, 5 );
 	
+	
 	bSizerMainReg->Add( bSizerRegulRight, 1, wxEXPAND, 5 );
+	
 	
 	m_panelRegulators->SetSizer( bSizerMainReg );
 	m_panelRegulators->Layout();
 	bSizerMainReg->Fit( m_panelRegulators );
-	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), false );
+	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), true );
 	m_panelTrackWidth = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerTrackWidth;
 	bSizerTrackWidth = new wxBoxSizer( wxHORIZONTAL );
@@ -201,10 +288,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_TW_CuLength_choiceUnit->SetSelection( 0 );
 	fgSizerTWprms->Add( m_TW_CuLength_choiceUnit, 0, wxEXPAND|wxALL, 5 );
 	
+	
 	sbSizerTW_Prms->Add( fgSizerTWprms, 0, wxEXPAND, 5 );
 	
 	m_htmlWinFormulas = new wxHtmlWindow( m_panelTrackWidth, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_AUTO|wxSIMPLE_BORDER );
 	sbSizerTW_Prms->Add( m_htmlWinFormulas, 1, wxEXPAND|wxTOP, 5 );
+	
 	
 	bSizerTrackWidth->Add( sbSizerTW_Prms, 1, wxALL|wxEXPAND, 5 );
 	
@@ -279,7 +368,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_staticText791->Wrap( -1 );
 	fgSizerTW_Results->Add( m_staticText791, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	sbSizerTW_Result->Add( fgSizerTW_Results, 0, wxEXPAND, 5 );
+	
 	
 	bSizeRight->Add( sbSizerTW_Result, 1, wxEXPAND|wxALL, 5 );
 	
@@ -348,16 +439,20 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_staticText7911->Wrap( -1 );
 	fgSizerTW_Results1->Add( m_staticText7911, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	sbSizerTW_Result1->Add( fgSizerTW_Results1, 0, wxEXPAND, 5 );
+	
 	
 	bSizeRight->Add( sbSizerTW_Result1, 1, wxEXPAND|wxALL, 5 );
 	
+	
 	bSizerTrackWidth->Add( bSizeRight, 1, wxEXPAND, 5 );
+	
 	
 	m_panelTrackWidth->SetSizer( bSizerTrackWidth );
 	m_panelTrackWidth->Layout();
 	bSizerTrackWidth->Fit( m_panelTrackWidth );
-	m_Notebook->AddPage( m_panelTrackWidth, _("Track Width"), true );
+	m_Notebook->AddPage( m_panelTrackWidth, _("Track Width"), false );
 	m_panelElectricalSpacing = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerElectricalClearance;
 	bSizerElectricalClearance = new wxBoxSizer( wxHORIZONTAL );
@@ -382,6 +477,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_buttonElectSpacingRefresh = new wxButton( m_panelElectricalSpacing, wxID_ANY, _("Update Values"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftSizerElectricalClearance->Add( m_buttonElectSpacingRefresh, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	bSizerElectricalClearance->Add( bLeftSizerElectricalClearance, 0, wxEXPAND, 5 );
 	
@@ -442,7 +538,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_staticText88->Wrap( -1 );
 	bElectricalSpacingSizerRight->Add( m_staticText88, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bSizerElectricalClearance->Add( bElectricalSpacingSizerRight, 1, wxEXPAND, 5 );
+	
 	
 	m_panelElectricalSpacing->SetSizer( bSizerElectricalClearance );
 	m_panelElectricalSpacing->Layout();
@@ -463,6 +561,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_panelDisplayshape = new wxPanel( m_panelTransline, wxID_ANY, wxDefaultPosition, wxSize( 205,205 ), wxTAB_TRAVERSAL );
 	bLeftSizer->Add( m_panelDisplayshape, 1, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	
 	
 	bSizeTransline->Add( bLeftSizer, 0, wxEXPAND, 5 );
 	
@@ -585,7 +684,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_SubsPrm9_choiceUnit->SetSelection( 0 );
 	fgSizerSubstPrms->Add( m_SubsPrm9_choiceUnit, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	
 	sbSubstrateBoxSizer->Add( fgSizerSubstPrms, 1, wxEXPAND, 5 );
+	
 	
 	bMiddleSizer->Add( sbSubstrateBoxSizer, 0, wxEXPAND|wxBOTTOM, 5 );
 	
@@ -610,9 +711,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_choiceUnit_Frequency->SetSelection( 0 );
 	fgSizeCmpPrms->Add( m_choiceUnit_Frequency, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	
 	sbCmpPrmsSizer->Add( fgSizeCmpPrms, 0, wxEXPAND, 5 );
 	
+	
 	bMiddleSizer->Add( sbCmpPrmsSizer, 0, wxEXPAND|wxTOP, 5 );
+	
 	
 	bSizeTransline->Add( bMiddleSizer, 1, wxALL|wxEXPAND, 5 );
 	
@@ -676,9 +780,12 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	fgSizerPhysPrms->Add( 0, 0, 0, 0, 5 );
 	
+	
 	sbRightBoxizer->Add( fgSizerPhysPrms, 0, wxEXPAND, 5 );
 	
+	
 	btranslineRightSizer->Add( sbRightBoxizer, 0, wxBOTTOM|wxEXPAND, 5 );
+	
 	
 	bRightSizer->Add( btranslineRightSizer, 0, wxALL|wxEXPAND, 5 );
 	
@@ -700,7 +807,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_bitmapSynthetize = new wxStaticBitmap( m_panelTransline, wxID_ANY, wxBitmap( arrow_top_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_bitmapSynthetize, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
+	
 	btranslineButtonsSizer->Add( bSizerButtons, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	
 	
 	bRightSizer->Add( btranslineButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -749,7 +858,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_choiceUnit_ElecPrm3->SetSelection( 0 );
 	fgSizerResults->Add( m_choiceUnit_ElecPrm3, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	sbElectricalResultsSizer->Add( fgSizerResults, 0, wxEXPAND, 5 );
+	
 	
 	bRightSizer->Add( sbElectricalResultsSizer, 0, wxEXPAND, 5 );
 	
@@ -818,11 +929,15 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_Message7->Wrap( -1 );
 	fgSizerTranslResults->Add( m_Message7, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
+	
 	sbMessagesSizer->Add( fgSizerTranslResults, 1, wxEXPAND, 5 );
+	
 	
 	bRightSizer->Add( sbMessagesSizer, 1, wxEXPAND|wxTOP, 5 );
 	
+	
 	bSizeTransline->Add( bRightSizer, 1, wxEXPAND, 5 );
+	
 	
 	m_panelTransline->SetSizer( bSizeTransline );
 	m_panelTransline->Layout();
@@ -843,6 +958,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_panelDisplayAttenuator = new wxPanel( m_panelAttenuators, wxID_ANY, wxDefaultPosition, wxSize( 256,256 ), wxSIMPLE_BORDER|wxTAB_TRAVERSAL );
 	bLeftSizerAtt->Add( m_panelDisplayAttenuator, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	
 	
 	sbSizerAtt->Add( bLeftSizerAtt, 0, wxEXPAND, 5 );
 	
@@ -891,7 +1007,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_attZoutUnit->Wrap( -1 );
 	fgSizerAttPrms->Add( m_attZoutUnit, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	sbSizerAttPrms->Add( fgSizerAttPrms, 0, wxEXPAND, 5 );
+	
 	
 	bMiddleSizerAtt->Add( sbSizerAttPrms, 0, wxEXPAND, 5 );
 	
@@ -903,6 +1021,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_bitmapAnalyse1 = new wxStaticBitmap( m_panelAttenuators, wxID_ANY, wxBitmap( arrow_bottom_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerAttButt->Add( m_bitmapAnalyse1, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	bMiddleSizerAtt->Add( bSizerAttButt, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -948,7 +1067,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_attR3Unit->Wrap( -1 );
 	fgSizerAttResults->Add( m_attR3Unit, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	sbSizerAttValues->Add( fgSizerAttResults, 0, wxEXPAND, 5 );
+	
 	
 	bMiddleSizerAtt->Add( sbSizerAttValues, 0, wxEXPAND, 5 );
 	
@@ -958,6 +1079,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_Attenuator_Messages = new wxTextCtrl( m_panelAttenuators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
 	bMiddleSizerAtt->Add( m_Attenuator_Messages, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	
 	sbSizerAtt->Add( bMiddleSizerAtt, 0, wxEXPAND, 5 );
 	
@@ -969,7 +1091,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	sbRightSizerFormula->Add( m_panelAttFormula, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	sbSizerAtt->Add( sbRightSizerFormula, 1, wxEXPAND, 5 );
+	
 	
 	m_panelAttenuators->SetSizer( sbSizerAtt );
 	m_panelAttenuators->Layout();
@@ -1032,7 +1156,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_Band_tol_bitmap = new wxStaticBitmap( m_panelColorCode, wxID_ANY, wxBitmap( color_code_tolerance_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerColoCode->Add( m_Band_tol_bitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
+	
 	bSizerPanelColorCode->Add( fgSizerColoCode, 1, wxEXPAND|wxLEFT, 5 );
+	
 	
 	m_panelColorCode->SetSizer( bSizerPanelColorCode );
 	m_panelColorCode->Layout();
@@ -1097,7 +1223,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelShowClassPrms = new wxPanel( m_panelBoardClass, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	brdclsSizerRight->Add( m_panelShowClassPrms, 1, wxEXPAND | wxALL, 5 );
 	
+	
 	bSizerBoardClass->Add( brdclsSizerRight, 1, wxEXPAND, 5 );
+	
 	
 	m_panelBoardClass->SetSizer( bSizerBoardClass );
 	m_panelBoardClass->Layout();
@@ -1106,13 +1234,20 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	bmainFrameSizer->Add( m_Notebook, 1, wxEXPAND, 5 );
 	
+	
 	this->SetSizer( bmainFrameSizer );
 	this->Layout();
 	
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_choiceRegType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulTypeSelection ), NULL, this );
 	m_buttonCalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorCalcButtonClick ), NULL, this );
+	m_choiceRegulatorSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorSelection ), NULL, this );
+	m_regulators_filePicker->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( PCB_CALCULATOR_FRAME_BASE::OnDataFileSelection ), NULL, this );
+	m_buttonEditItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnEditRegulator ), NULL, this );
+	m_buttonAddItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnAddRegulator ), NULL, this );
+	m_buttonRemoveItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRemoveRegulator ), NULL, this );
 	m_buttonTW->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTWCalculateButt ), NULL, this );
 	m_ElectricalSpacingUnitsSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnElectricalSpacingUnitsSelection ), NULL, this );
 	m_buttonElectSpacingRefresh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnElectricalSpacingRefresh ), NULL, this );
@@ -1134,7 +1269,13 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 PCB_CALCULATOR_FRAME_BASE::~PCB_CALCULATOR_FRAME_BASE()
 {
 	// Disconnect Events
+	m_choiceRegType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulTypeSelection ), NULL, this );
 	m_buttonCalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorCalcButtonClick ), NULL, this );
+	m_choiceRegulatorSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorSelection ), NULL, this );
+	m_regulators_filePicker->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( PCB_CALCULATOR_FRAME_BASE::OnDataFileSelection ), NULL, this );
+	m_buttonEditItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnEditRegulator ), NULL, this );
+	m_buttonAddItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnAddRegulator ), NULL, this );
+	m_buttonRemoveItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRemoveRegulator ), NULL, this );
 	m_buttonTW->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTWCalculateButt ), NULL, this );
 	m_ElectricalSpacingUnitsSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnElectricalSpacingUnitsSelection ), NULL, this );
 	m_buttonElectSpacingRefresh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnElectricalSpacingRefresh ), NULL, this );

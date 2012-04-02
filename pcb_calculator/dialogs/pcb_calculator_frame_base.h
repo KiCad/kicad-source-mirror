@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,11 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class UNIT_SELECTOR_ANGLE;
-class UNIT_SELECTOR_FREQUENCY;
-class UNIT_SELECTOR_LEN;
-class UNIT_SELECTOR_RESISTOR;
-
+#include "UnitSelector.h"
 #include <wx/string.h>
 #include <wx/menu.h>
 #include <wx/gdicmn.h>
@@ -27,15 +23,16 @@ class UNIT_SELECTOR_RESISTOR;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/stattext.h>
 #include <wx/sizer.h>
+#include <wx/stattext.h>
+#include <wx/statbox.h>
 #include <wx/radiobut.h>
 #include <wx/textctrl.h>
-#include <wx/button.h>
-#include <wx/panel.h>
 #include <wx/choice.h>
+#include <wx/button.h>
+#include <wx/filepicker.h>
+#include <wx/panel.h>
 #include <wx/html/htmlwin.h>
-#include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/grid.h>
 #include <wx/radiobox.h>
@@ -57,7 +54,8 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 		wxStatusBar* m_statusBar;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelRegulators;
-		wxStaticBitmap* m_bitmapRegul;
+		wxStaticBitmap* m_bitmapRegul4pins;
+		wxStaticBitmap* m_bitmapRegul3pins;
 		wxStaticText* m_RegulFormula;
 		wxRadioButton* m_rbRegulR1;
 		wxStaticText* m_labelRegultR1;
@@ -67,14 +65,25 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 		wxStaticText* m_labelRegultR2;
 		wxTextCtrl* m_RegulR2Value;
 		wxStaticText* m_UnitRegultR1;
-		wxStaticText* m_lableVRef;
-		wxTextCtrl* m_RegulVrefValue;
-		wxStaticText* m_unitsVref;
 		wxRadioButton* m_rbRegulVout;
 		wxStaticText* m_labelVout;
 		wxTextCtrl* m_RegulVoutValue;
 		wxStaticText* m_unitsVout;
+		wxStaticText* m_labelVRef;
+		wxTextCtrl* m_RegulVrefValue;
+		wxStaticText* m_unitsVref;
+		wxStaticText* m_RegulIadjTitle;
+		wxTextCtrl* m_RegulIadjValue;
+		wxStaticText* m_IadjUnitLabel;
+		wxStaticText* m_staticTextRegType;
+		wxChoice* m_choiceRegType;
 		wxButton* m_buttonCalculate;
+		wxChoice* m_choiceRegulatorSelector;
+		wxStaticText* m_staticTextRegFile;
+		wxFilePickerCtrl* m_regulators_filePicker;
+		wxButton* m_buttonEditItem;
+		wxButton* m_buttonAddItem;
+		wxButton* m_buttonRemoveItem;
 		wxStaticText* m_RegulMessage;
 		wxPanel* m_panelTrackWidth;
 		wxStaticText* m_staticTextTW_WarningMessage;
@@ -250,7 +259,13 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 		wxPanel* m_panelShowClassPrms;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnRegulTypeSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRegulatorSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDataFileSelection( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnEditRegulator( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddRegulator( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTWCalculateButt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnElectricalSpacingRefresh( wxCommandEvent& event ) { event.Skip(); }
@@ -271,7 +286,7 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 	
 	public:
 		
-		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pcb Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 670,465 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL );
+		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pcb Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 670,489 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL );
 		
 		~PCB_CALCULATOR_FRAME_BASE();
 	
