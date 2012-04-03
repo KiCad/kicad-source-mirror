@@ -57,7 +57,7 @@ IMPLEMENT_APP( EDA_APP )
 bool EDA_APP::OnInit()
 {
 
-    InitEDA_Appl( wxT( "PCBcalc" ) );
+    InitEDA_Appl( wxT( "pcb_calculator" ) );
 
     wxFrame* frame = new PCB_CALCULATOR_FRAME( NULL );
     SetTopWindow( frame );

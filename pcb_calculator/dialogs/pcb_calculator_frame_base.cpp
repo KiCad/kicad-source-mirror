@@ -127,6 +127,8 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_labelVRef = new wxStaticText( m_panelRegulators, wxID_ANY, _("Vref"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelVRef->Wrap( -1 );
+	m_labelVRef->SetToolTip( _("The internal reference voltage of the regulator.\nShould not be 0.") );
+	
 	fgSizerRegParams->Add( m_labelVRef, 0, wxALL, 5 );
 	
 	m_RegulVrefValue = new wxTextCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -141,6 +143,8 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_RegulIadjTitle = new wxStaticText( m_panelRegulators, wxID_ANY, _("Iadj"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RegulIadjTitle->Wrap( -1 );
+	m_RegulIadjTitle->SetToolTip( _("For 3 terminal regulators only, the  Adjust pin current.") );
+	
 	fgSizerRegParams->Add( m_RegulIadjTitle, 0, wxALL, 5 );
 	
 	m_RegulIadjValue = new wxTextCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -155,6 +159,8 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_staticTextRegType = new wxStaticText( m_panelRegulators, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRegType->Wrap( -1 );
+	m_staticTextRegType->SetToolTip( _("Type of the regulator.\nThere are 2 types:\n- regulators which have a dedicted sense pin for the voltage regulation.\n- 3 terminal pins.") );
+	
 	fgSizerRegParams->Add( m_staticTextRegType, 0, wxALL, 5 );
 	
 	wxString m_choiceRegTypeChoices[] = { _("Standard Type"), _("3 Terminal Type") };
@@ -182,26 +188,28 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_staticTextRegFile = new wxStaticText( m_panelRegulators, wxID_ANY, _("Regulators data file:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRegFile->Wrap( -1 );
+	m_staticTextRegFile->SetToolTip( _("The name of the data file which stores known regulators parameters.") );
+	
 	sbSizerRegulatorsChooser->Add( m_staticTextRegFile, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_regulators_filePicker = new wxFilePickerCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, _("Select a file"), wxT("*.pcbcalc"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+	m_regulators_filePicker = new wxFilePickerCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, _("Select a Pcb Calculator data  file"), wxT("*.pcbcalc"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
 	sbSizerRegulatorsChooser->Add( m_regulators_filePicker, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizerReulBtn;
 	bSizerReulBtn = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_buttonEditItem = new wxButton( m_panelRegulators, wxID_ANY, _("Edit Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonEditItem->SetToolTip( _("Enter a new item in the current list of availlable regulators") );
+	m_buttonEditItem->SetToolTip( _("Edit the current selected regulator.") );
 	
 	bSizerReulBtn->Add( m_buttonEditItem, 0, wxALL, 5 );
 	
 	m_buttonAddItem = new wxButton( m_panelRegulators, wxID_ANY, _("Add Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonAddItem->SetToolTip( _("Enter a new item in the current list of availlable regulators") );
+	m_buttonAddItem->SetToolTip( _("Enter a new item to the current list of available regulators") );
 	
 	bSizerReulBtn->Add( m_buttonAddItem, 1, wxALL, 5 );
 	
 	m_buttonRemoveItem = new wxButton( m_panelRegulators, wxID_ANY, _("Remove Regulator"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonRemoveItem->SetToolTip( _("Remove an item in the current list of availlable regulators") );
+	m_buttonRemoveItem->SetToolTip( _("Remove an item from the current list of available regulators") );
 	
 	bSizerReulBtn->Add( m_buttonRemoveItem, 1, wxALL, 5 );
 	
@@ -1241,6 +1249,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PCB_CALCULATOR_FRAME_BASE::OnClosePcbCalc ) );
 	m_choiceRegType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulTypeSelection ), NULL, this );
 	m_buttonCalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorCalcButtonClick ), NULL, this );
 	m_choiceRegulatorSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorSelection ), NULL, this );
@@ -1269,6 +1278,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 PCB_CALCULATOR_FRAME_BASE::~PCB_CALCULATOR_FRAME_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( PCB_CALCULATOR_FRAME_BASE::OnClosePcbCalc ) );
 	m_choiceRegType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulTypeSelection ), NULL, this );
 	m_buttonCalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorCalcButtonClick ), NULL, this );
 	m_choiceRegulatorSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorSelection ), NULL, this );

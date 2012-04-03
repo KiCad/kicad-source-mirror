@@ -46,6 +46,8 @@ public:
 private:
 
     // Event handlers
+	void OnClosePcbCalc( wxCloseEvent& event );
+
     // These 3 functions are called by the OnPaint event, to draw
     // icons that show the current item on the specific panels
     void OnPaintTranslinePanel( wxPaintEvent& event );
@@ -62,6 +64,11 @@ private:
     const wxString GetDataFilename()
     {
         return m_regulators_filePicker->GetPath();
+    }
+
+    void SetDataFilename( const wxString & aFilename)
+    {
+        m_regulators_filePicker->SetPath( aFilename );
     }
 
     // tracks width versus current functions:

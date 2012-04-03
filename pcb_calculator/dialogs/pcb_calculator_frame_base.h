@@ -259,6 +259,7 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 		wxPanel* m_panelShowClassPrms;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnClosePcbCalc( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnRegulTypeSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorSelection( wxCommandEvent& event ) { event.Skip(); }
