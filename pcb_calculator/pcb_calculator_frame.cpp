@@ -44,10 +44,10 @@
 #define KEYWORD_REGUL_R2                        wxT( "RegulR2" )
 #define KEYWORD_REGUL_VREF                      wxT( "RegulVREF" )
 #define KEYWORD_REGUL_VOUT                      wxT( "RegulVOUT" )
-#define KEYWORD_REGUL_FILENAME                  wxT( "RegulListFilename" )
 #define KEYWORD_REGUL_SELECTED                  wxT( "RegulName" )
 #define KEYWORD_REGUL_TYPE                      wxT( "RegulType" )
 #define KEYWORD_REGUL_LAST_PARAM                wxT( "RegulLastParam" )
+#define KEYWORD_DATAFILE_FILENAME               wxT( "DataFilename" )
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow* parent ) :
     PCB_CALCULATOR_FRAME_BASE( parent )
@@ -116,10 +116,6 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
 {
     WriteConfig();
 
-    if( m_RegulatorListChanged )
-        WriteDataFile();
-
-
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         delete m_transline_list[ii];
 
@@ -134,6 +130,37 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     this->Freeze();
 }
 
+void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
+{
+    if( m_RegulatorListChanged )
+    {
+        if( GetDataFilename().IsEmpty() )
+        {
+            int opt = wxMessageBox( _("Data modified, and no data filename to save modifications\n"\
+"Do you want to exit and abandon your change?"),
+                                     _("Regulator list change"),
+                                    wxYES_NO | wxICON_QUESTION );
+            if( opt == wxNO )
+                return;
+        }
+        else
+        {
+            if( !WriteDataFile() )
+            {
+                wxString msg;
+                msg.Printf( _("Unable to write file<%s>\n"\
+"Do you want to exit and abandon your change?"), GetDataFilename() );
+
+                int opt = wxMessageBox( msg, _("Write Data File Errror"),
+                                        wxYES_NO | wxICON_QUESTION );
+                if( opt  == wxNO )
+                    return;
+            }
+        }
+    }
+
+    Destroy();
+}
 
 void PCB_CALCULATOR_FRAME::ReadConfig()
 {
@@ -166,8 +193,8 @@ void PCB_CALCULATOR_FRAME::ReadConfig()
     m_RegulVrefValue->SetValue( msg );
     m_Config->Read( KEYWORD_REGUL_VOUT, &msg, wxT( "12" ) );
     m_RegulVoutValue->SetValue( msg );
-    m_Config->Read( KEYWORD_REGUL_FILENAME, &msg, wxT( "" ) );
-    m_regulators_filePicker->SetPath( msg );
+    m_Config->Read( KEYWORD_DATAFILE_FILENAME, &msg, wxT( "" ) );
+    SetDataFilename( msg );
     m_Config->Read( KEYWORD_REGUL_SELECTED, &msg, wxT( "" ) );
     m_lastSelectedRegulatorName = msg;
     m_Config->Read( KEYWORD_REGUL_TYPE, &ltmp, 0 );
@@ -221,7 +248,7 @@ void PCB_CALCULATOR_FRAME::WriteConfig()
     m_Config->Write( KEYWORD_REGUL_R2, m_RegulR2Value->GetValue() );
     m_Config->Write( KEYWORD_REGUL_VREF, m_RegulVrefValue->GetValue() );
     m_Config->Write( KEYWORD_REGUL_VOUT, m_RegulVoutValue->GetValue() );
-    m_Config->Write( KEYWORD_REGUL_FILENAME, m_regulators_filePicker->GetPath() );
+    m_Config->Write( KEYWORD_DATAFILE_FILENAME, GetDataFilename() );
     m_Config->Write( KEYWORD_REGUL_SELECTED, m_lastSelectedRegulatorName );
     m_Config->Write( KEYWORD_REGUL_TYPE,
                      m_choiceRegType->GetSelection() );

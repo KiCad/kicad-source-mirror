@@ -47,6 +47,15 @@ public:
 
     ~DIALOG_EDITOR_DATA() {};
 
+    // Event called functions:
+	void OnOKClick( wxCommandEvent& event );
+
+    /**
+     * Function IsOK()
+     * @return true if regulator parameters are acceptable
+     */
+    bool IsOK();
+
     /**
      * Function CopyRegulatorDataToDialog
      * Transfert data from dialog to aItem
@@ -82,6 +91,33 @@ public:
     }
 };
 
+
+void DIALOG_EDITOR_DATA::OnOKClick( wxCommandEvent& event )
+{
+    if( !IsOK() )
+    {
+        wxMessageBox( _("Bad or missing parameters!") );
+        return;
+    }
+
+    EndModal( wxID_OK );
+}
+
+bool DIALOG_EDITOR_DATA::IsOK()
+{
+    bool ok = true;
+    if( m_textCtrlName->GetValue().IsEmpty() )
+        ok = false;
+    if( m_textCtrlVref->GetValue().IsEmpty() )
+        ok = false;
+    if( m_choiceRegType->GetSelection() == 1 )
+    {
+        if( m_RegulIadjValue->GetValue().IsEmpty() )
+        ok = false;
+    }
+
+    return ok;
+}
 
 void DIALOG_EDITOR_DATA::CopyRegulatorDataToDialog( REGULATOR_DATA * aItem )
 {
@@ -137,6 +173,12 @@ void PCB_CALCULATOR_FRAME::RegulatorPageUpdate()
     }
     // The new icon size must be taken in account
     m_panelRegulators->GetSizer()->Layout();
+
+    // Enable/disable buttons:
+    bool enbl = m_choiceRegulatorSelector->GetCount() > 0;
+    m_buttonEditItem->Enable( enbl );
+    m_buttonRemoveItem->Enable( enbl );
+
     m_panelRegulators->Refresh();
 }
 
@@ -158,9 +200,11 @@ void PCB_CALCULATOR_FRAME::OnRegulatorSelection( wxCommandEvent& event )
         m_RegulVrefValue->SetValue( value );
         value.Printf( wxT("%g"), item->m_Iadj );
         m_RegulIadjValue->SetValue( value );
-
-        RegulatorPageUpdate();
     }
+
+    // Call RegulatorPageUpdate to enable/sisable tools,
+    // even if no item selected
+    RegulatorPageUpdate();
 }
 
 void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxFileDirPickerEvent& event )
@@ -172,6 +216,11 @@ void PCB_CALCULATOR_FRAME::OnAddRegulator( wxCommandEvent& event )
     DIALOG_EDITOR_DATA dlg( this, wxEmptyString );
     if( dlg.ShowModal() != wxID_OK )
         return;
+    if( !dlg.IsOK() )
+    {
+        wxMessageBox( _("Bad or missing parameters!") );
+        return;
+    }
 
     REGULATOR_DATA * new_item = dlg.BuildRegulatorFromData();
 
@@ -183,6 +232,7 @@ void PCB_CALCULATOR_FRAME::OnAddRegulator( wxCommandEvent& event )
         m_RegulatorListChanged = true;
         m_choiceRegulatorSelector->Clear();
         m_choiceRegulatorSelector->Append( m_RegulatorList.GetRegList() );
+        m_lastSelectedRegulatorName = new_item->m_Name;
         SelectLastSelectedRegulator();
     }
     else
@@ -196,7 +246,11 @@ void PCB_CALCULATOR_FRAME::OnEditRegulator( wxCommandEvent& event )
 {
     wxString name = m_choiceRegulatorSelector->GetStringSelection();
     REGULATOR_DATA * item  = m_RegulatorList.GetReg( name );
+    if( item == NULL )
+        return;
+
     DIALOG_EDITOR_DATA dlg( this, name );
+
     dlg.CopyRegulatorDataToDialog( item );
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -305,7 +359,8 @@ void PCB_CALCULATOR_FRAME::RegulatorsSolve()
 
     // Calculate
     if( m_choiceRegType->GetSelection() == 1)
-    {   // 3 terminal regulator
+    {
+        // 3 terminal regulator
         txt = m_RegulIadjValue->GetValue();
         double iadj = ReturnDoubleFromString(txt);
         // iadj is given in micro amp, so convert it in amp.
@@ -318,7 +373,6 @@ void PCB_CALCULATOR_FRAME::RegulatorsSolve()
                 break;
 
             case 1:
-                // to do
                 r2 = ( vout - vref ) / ( iadj + (vref/r1) );
                 break;
 
