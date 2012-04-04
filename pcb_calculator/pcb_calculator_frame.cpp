@@ -149,7 +149,7 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
             {
                 wxString msg;
                 msg.Printf( _("Unable to write file<%s>\n"\
-"Do you want to exit and abandon your change?"), GetDataFilename() );
+"Do you want to exit and abandon your change?"), GetDataFilename().c_str() );
 
                 int opt = wxMessageBox( msg, _("Write Data File Errror"),
                                         wxYES_NO | wxICON_QUESTION );
