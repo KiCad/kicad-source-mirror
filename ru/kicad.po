@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-29 09:38+0300\n"
-"PO-Revision-Date: 2012-03-29 09:38+0300\n"
+"POT-Creation-Date: 2012-04-04 12:29+0300\n"
+"PO-Revision-Date: 2012-04-04 12:48+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -6744,7 +6744,7 @@ msgstr "Полигоны:"
 msgid "Show D codes"
 msgstr "Показать D-коды"
 
-#: common/base_struct.cpp:542
+#: common/base_struct.cpp:551
 msgid "Bold+Italic"
 msgstr "Полужирный курсив"
 
@@ -7444,7 +7444,7 @@ msgid "User (Custom)"
 msgstr "По выбору"
 
 #: common/dialogs/dialog_page_settings.cpp:285
-#: common/dialogs/dialog_page_settings.cpp:659
+#: common/dialogs/dialog_page_settings.cpp:662
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Portrait"
 msgstr "Портрет"
@@ -7466,7 +7466,7 @@ msgstr ""
 msgid "Warning!"
 msgstr "Предупреждение!"
 
-#: common/dialogs/dialog_page_settings.cpp:661
+#: common/dialogs/dialog_page_settings.cpp:664
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Landscape"
 msgstr "Ландшафт"
@@ -7822,6 +7822,162 @@ msgstr "Нет памяти для автотрассировки"
 msgid "Place Cells"
 msgstr "Разместить ячейки"
 
+#: pcbnew/class_board.cpp:56
+msgid "This is the default net class."
+msgstr "Это класс цепей по умолчанию."
+
+#: pcbnew/class_board.cpp:343
+msgid "Front"
+msgstr "Front"
+
+#: pcbnew/class_board.cpp:344
+msgid "Inner2"
+msgstr "Inner2"
+
+#: pcbnew/class_board.cpp:345
+msgid "Inner3"
+msgstr "Inner3"
+
+#: pcbnew/class_board.cpp:346
+msgid "Inner4"
+msgstr "Inner4"
+
+#: pcbnew/class_board.cpp:347
+msgid "Inner5"
+msgstr "Inner5"
+
+#: pcbnew/class_board.cpp:348
+msgid "Inner6"
+msgstr "Inner6"
+
+#: pcbnew/class_board.cpp:349
+msgid "Inner7"
+msgstr "Inner7"
+
+#: pcbnew/class_board.cpp:350
+msgid "Inner8"
+msgstr "Inner8"
+
+#: pcbnew/class_board.cpp:351
+msgid "Inner9"
+msgstr "Inner9"
+
+#: pcbnew/class_board.cpp:352
+msgid "Inner10"
+msgstr "Inner10"
+
+#: pcbnew/class_board.cpp:353
+msgid "Inner11"
+msgstr "Inner11"
+
+#: pcbnew/class_board.cpp:354
+msgid "Inner12"
+msgstr "Inner12"
+
+#: pcbnew/class_board.cpp:355
+msgid "Inner13"
+msgstr "Inner13"
+
+#: pcbnew/class_board.cpp:356
+msgid "Inner14"
+msgstr "Inner14"
+
+#: pcbnew/class_board.cpp:357
+msgid "Inner15"
+msgstr "Inner15"
+
+#: pcbnew/class_board.cpp:358
+msgid "Back"
+msgstr "Back"
+
+#: pcbnew/class_board.cpp:359
+msgid "Adhes_Back"
+msgstr "Adhes_Back"
+
+#: pcbnew/class_board.cpp:360
+msgid "Adhes_Front"
+msgstr "Adhes_Front"
+
+#: pcbnew/class_board.cpp:361
+msgid "SoldP_Back"
+msgstr "SoldP_Back"
+
+#: pcbnew/class_board.cpp:362
+msgid "SoldP_Front"
+msgstr "SoldP_Front"
+
+#: pcbnew/class_board.cpp:363
+msgid "SilkS_Back"
+msgstr "SilkS_Back"
+
+#: pcbnew/class_board.cpp:364
+msgid "SilkS_Front"
+msgstr "SilkS_Front"
+
+#: pcbnew/class_board.cpp:365
+msgid "Mask_Back"
+msgstr "Mask_Back"
+
+#: pcbnew/class_board.cpp:366
+msgid "Mask_Front"
+msgstr "Mask_Front"
+
+#: pcbnew/class_board.cpp:367
+msgid "Drawings"
+msgstr "Чертёж"
+
+#: pcbnew/class_board.cpp:368
+msgid "Comments"
+msgstr "Комментарии"
+
+#: pcbnew/class_board.cpp:369
+msgid "Eco1"
+msgstr "Eco1"
+
+#: pcbnew/class_board.cpp:370
+msgid "Eco2"
+msgstr "Eco2"
+
+#: pcbnew/class_board.cpp:371
+msgid "PCB_Edges"
+msgstr "Контур платы"
+
+#: pcbnew/class_board.cpp:372
+msgid "BAD INDEX"
+msgstr "Плохой индекс"
+
+#: pcbnew/class_board.cpp:941
+msgid "Pads"
+msgstr "Конт.пл."
+
+#: pcbnew/class_board.cpp:944
+msgid "Vias"
+msgstr "Перех.отв."
+
+#: pcbnew/class_board.cpp:947
+msgid "trackSegm"
+msgstr "Сегм"
+
+#: pcbnew/class_board.cpp:950
+msgid "Nodes"
+msgstr "Узлов"
+
+#: pcbnew/class_board.cpp:953
+msgid "Nets"
+msgstr "Цепей"
+
+#: pcbnew/class_board.cpp:961
+msgid "Links"
+msgstr "Связей"
+
+#: pcbnew/class_board.cpp:964
+msgid "Connect"
+msgstr "Соединено"
+
+#: pcbnew/class_board.cpp:967
+msgid "Unconnected"
+msgstr "Не подсоединены"
+
 #: pcbnew/controle.cpp:204
 msgid "Selection Clarification"
 msgstr "Уточнение выбора"
@@ -7900,165 +8056,25 @@ msgstr "Подсветка цепи"
 msgid "Select rats nest"
 msgstr "Отобразить связи"
 
+#: pcbnew/class_board_item.cpp:18
+msgid "Rect"
+msgstr "Прямоуг."
+
+#: pcbnew/class_board_item.cpp:21
+msgid "Bezier Curve"
+msgstr "Кривая Безье"
+
+#: pcbnew/class_board_item.cpp:22
+msgid "Polygon"
+msgstr "Полигон"
+
+#: pcbnew/class_board_item.cpp:61
+msgid "** undefined layer **"
+msgstr "** неопределенный слой **"
+
 #: pcbnew/class_dimension.cpp:599
 msgid "Dimension"
 msgstr "Размер"
-
-#: pcbnew/class_board.cpp:55
-msgid "This is the default net class."
-msgstr "Это класс цепей по умолчанию."
-
-#: pcbnew/class_board.cpp:342
-msgid "Front"
-msgstr "Front"
-
-#: pcbnew/class_board.cpp:343
-msgid "Inner2"
-msgstr "Inner2"
-
-#: pcbnew/class_board.cpp:344
-msgid "Inner3"
-msgstr "Inner3"
-
-#: pcbnew/class_board.cpp:345
-msgid "Inner4"
-msgstr "Inner4"
-
-#: pcbnew/class_board.cpp:346
-msgid "Inner5"
-msgstr "Inner5"
-
-#: pcbnew/class_board.cpp:347
-msgid "Inner6"
-msgstr "Inner6"
-
-#: pcbnew/class_board.cpp:348
-msgid "Inner7"
-msgstr "Inner7"
-
-#: pcbnew/class_board.cpp:349
-msgid "Inner8"
-msgstr "Inner8"
-
-#: pcbnew/class_board.cpp:350
-msgid "Inner9"
-msgstr "Inner9"
-
-#: pcbnew/class_board.cpp:351
-msgid "Inner10"
-msgstr "Inner10"
-
-#: pcbnew/class_board.cpp:352
-msgid "Inner11"
-msgstr "Inner11"
-
-#: pcbnew/class_board.cpp:353
-msgid "Inner12"
-msgstr "Inner12"
-
-#: pcbnew/class_board.cpp:354
-msgid "Inner13"
-msgstr "Inner13"
-
-#: pcbnew/class_board.cpp:355
-msgid "Inner14"
-msgstr "Inner14"
-
-#: pcbnew/class_board.cpp:356
-msgid "Inner15"
-msgstr "Inner15"
-
-#: pcbnew/class_board.cpp:357
-msgid "Back"
-msgstr "Back"
-
-#: pcbnew/class_board.cpp:358
-msgid "Adhes_Back"
-msgstr "Adhes_Back"
-
-#: pcbnew/class_board.cpp:359
-msgid "Adhes_Front"
-msgstr "Adhes_Front"
-
-#: pcbnew/class_board.cpp:360
-msgid "SoldP_Back"
-msgstr "SoldP_Back"
-
-#: pcbnew/class_board.cpp:361
-msgid "SoldP_Front"
-msgstr "SoldP_Front"
-
-#: pcbnew/class_board.cpp:362
-msgid "SilkS_Back"
-msgstr "SilkS_Back"
-
-#: pcbnew/class_board.cpp:363
-msgid "SilkS_Front"
-msgstr "SilkS_Front"
-
-#: pcbnew/class_board.cpp:364
-msgid "Mask_Back"
-msgstr "Mask_Back"
-
-#: pcbnew/class_board.cpp:365
-msgid "Mask_Front"
-msgstr "Mask_Front"
-
-#: pcbnew/class_board.cpp:366
-msgid "Drawings"
-msgstr "Чертёж"
-
-#: pcbnew/class_board.cpp:367
-msgid "Comments"
-msgstr "Комментарии"
-
-#: pcbnew/class_board.cpp:368
-msgid "Eco1"
-msgstr "Eco1"
-
-#: pcbnew/class_board.cpp:369
-msgid "Eco2"
-msgstr "Eco2"
-
-#: pcbnew/class_board.cpp:370
-msgid "PCB_Edges"
-msgstr "Контур платы"
-
-#: pcbnew/class_board.cpp:371
-msgid "BAD INDEX"
-msgstr "Плохой индекс"
-
-#: pcbnew/class_board.cpp:940
-msgid "Pads"
-msgstr "Конт.пл."
-
-#: pcbnew/class_board.cpp:943
-msgid "Vias"
-msgstr "Перех.отв."
-
-#: pcbnew/class_board.cpp:946
-msgid "trackSegm"
-msgstr "Сегм"
-
-#: pcbnew/class_board.cpp:949
-msgid "Nodes"
-msgstr "Узлов"
-
-#: pcbnew/class_board.cpp:952
-msgid "Nets"
-msgstr "Цепей"
-
-#: pcbnew/class_board.cpp:960
-msgid "Links"
-msgstr "Связей"
-
-#: pcbnew/class_board.cpp:963
-msgid "Connect"
-msgstr "Соединено"
-
-#: pcbnew/class_board.cpp:966
-msgid "Unconnected"
-msgstr "Не подсоединены"
 
 #: pcbnew/class_marker_pcb.cpp:74
 #: pcbnew/class_marker_pcb.cpp:111
@@ -8202,11 +8218,6 @@ msgstr "NETCLASS: '%s' - сверло микропереходного отве�
 msgid "Track clearances"
 msgstr "Зазоры дорожки"
 
-#: pcbnew/class_mire.cpp:215
-#, c-format
-msgid "Target on %s size %s"
-msgstr "Мира на %s размером %s"
-
 #: pcbnew/modedit.cpp:145
 msgid "Current footprint changes will be lost and this operation cannot be undone. Continue?"
 msgstr "Текущие изменения посадочного места будут утеряны и эту операцию нельзя откатить. Продолжить?"
@@ -8274,6 +8285,11 @@ msgstr "На плате"
 #: pcbnew/class_netinfo_item.cpp:142
 msgid "On Die"
 msgstr "в чипе"
+
+#: pcbnew/class_mire.cpp:215
+#, c-format
+msgid "Target on %s size %s"
+msgstr "Мира на %s размером %s"
 
 #: pcbnew/class_module.cpp:461
 msgid "Last Change"
@@ -8365,95 +8381,6 @@ msgstr "Новая ширина:"
 #: pcbnew/edgemod.cpp:243
 msgid "Edge Width"
 msgstr "Толщина контура"
-
-#: pcbnew/class_pad.cpp:497
-msgid "RefP"
-msgstr "Ссылка"
-
-#: pcbnew/class_pad.cpp:500
-msgid "Net"
-msgstr "Цепь"
-
-#: pcbnew/class_pad.cpp:570
-msgid "Non-copper"
-msgstr "Не медь"
-
-#: pcbnew/class_pad.cpp:578
-msgid " & int"
-msgstr " & int"
-
-#: pcbnew/class_pad.cpp:606
-msgid "internal"
-msgstr "внутренний"
-
-#: pcbnew/class_pad.cpp:615
-msgid "H Size"
-msgstr "Гориз.размер"
-
-#: pcbnew/class_pad.cpp:618
-msgid "V Size"
-msgstr "Верт.размер"
-
-#: pcbnew/class_pad.cpp:624
-msgid "Drill"
-msgstr "Отв."
-
-#: pcbnew/class_pad.cpp:632
-msgid "Drill X / Y"
-msgstr "Отв. X / Y"
-
-#: pcbnew/class_pad.cpp:647
-msgid "X Pos"
-msgstr "X позиция"
-
-#: pcbnew/class_pad.cpp:650
-msgid "Y pos"
-msgstr "Y позиция"
-
-#: pcbnew/class_pad.cpp:655
-msgid "Length on die"
-msgstr "Длина в чипе"
-
-#: pcbnew/class_pad.cpp:767
-msgid "Oval"
-msgstr "Овал"
-
-#: pcbnew/class_pad.cpp:770
-msgid "Rect"
-msgstr "Прямоуг."
-
-#: pcbnew/class_pad.cpp:773
-msgid "Trap"
-msgstr "Трап"
-
-#: pcbnew/class_pad.cpp:786
-msgid "Std"
-msgstr "Стд"
-
-#: pcbnew/class_pad.cpp:789
-msgid "Smd"
-msgstr "Смд"
-
-#: pcbnew/class_pad.cpp:792
-msgid "Conn"
-msgstr "Conn"
-
-#: pcbnew/class_pad.cpp:795
-msgid "Not Plated"
-msgstr "Без мет."
-
-#: pcbnew/class_pad.cpp:811
-msgid "all copper layers"
-msgstr "все медные слои"
-
-#: pcbnew/class_pad.cpp:817
-msgid "???"
-msgstr "???"
-
-#: pcbnew/class_pad.cpp:819
-#, c-format
-msgid "Pad [%s] (%s) of %s"
-msgstr "Контактная площадка [%s] (%s) %s"
 
 #: pcbnew/class_pcb_layer_widget.cpp:55
 msgid "Through Via"
@@ -8656,22 +8583,100 @@ msgstr "Текущая печатная плата будет утеряна и 
 msgid "Current Footprint will be lost and this operation cannot be undone. Continue ?"
 msgstr "Текущее посадочное место будет утеряно и эту операцию нельзя отменить. Продолжить?"
 
-#: pcbnew/class_pcb_text.cpp:126
-msgid "DIMENSION"
-msgstr "Размеры"
+#: pcbnew/class_pad.cpp:497
+msgid "RefP"
+msgstr "Ссылка"
 
-#: pcbnew/class_pcb_text.cpp:128
-msgid "PCB Text"
-msgstr "Текст платы"
+#: pcbnew/class_pad.cpp:500
+msgid "Net"
+msgstr "Цепь"
 
-#: pcbnew/class_pcb_text.cpp:142
-msgid "Thickness"
-msgstr "Толщина"
+#: pcbnew/class_pad.cpp:570
+msgid "Non-copper"
+msgstr "Не медь"
 
-#: pcbnew/class_pcb_text.cpp:181
+#: pcbnew/class_pad.cpp:578
+msgid " & int"
+msgstr " & int"
+
+#: pcbnew/class_pad.cpp:606
+msgid "internal"
+msgstr "внутренний"
+
+#: pcbnew/class_pad.cpp:615
+msgid "H Size"
+msgstr "Гориз.размер"
+
+#: pcbnew/class_pad.cpp:618
+msgid "V Size"
+msgstr "Верт.размер"
+
+#: pcbnew/class_pad.cpp:624
+msgid "Drill"
+msgstr "Отв."
+
+#: pcbnew/class_pad.cpp:632
+msgid "Drill X / Y"
+msgstr "Отв. X / Y"
+
+#: pcbnew/class_pad.cpp:647
+msgid "X Pos"
+msgstr "X позиция"
+
+#: pcbnew/class_pad.cpp:650
+msgid "Y pos"
+msgstr "Y позиция"
+
+#: pcbnew/class_pad.cpp:655
+msgid "Length on die"
+msgstr "Длина в чипе"
+
+#: pcbnew/class_pad.cpp:767
+msgid "Oval"
+msgstr "Овал"
+
+#: pcbnew/class_pad.cpp:773
+msgid "Trap"
+msgstr "Трап"
+
+#: pcbnew/class_pad.cpp:786
+msgid "Std"
+msgstr "Стд"
+
+#: pcbnew/class_pad.cpp:789
+msgid "Smd"
+msgstr "Смд"
+
+#: pcbnew/class_pad.cpp:792
+msgid "Conn"
+msgstr "Conn"
+
+#: pcbnew/class_pad.cpp:795
+msgid "Not Plated"
+msgstr "Без мет."
+
+#: pcbnew/class_pad.cpp:811
+msgid "all copper layers"
+msgstr "все медные слои"
+
+#: pcbnew/class_pad.cpp:817
+msgid "???"
+msgstr "???"
+
+#: pcbnew/class_pad.cpp:819
 #, c-format
-msgid "Pcb Text %s on %s"
-msgstr "Текст %s на %s"
+msgid "Pad [%s] (%s) of %s"
+msgstr "Контактная площадка [%s] (%s) %s"
+
+#: pcbnew/class_pad.cpp:845
+#, c-format
+msgid "unknown pad type: %d"
+msgstr "неизвестный тип контактной площадки; %d"
+
+#: pcbnew/class_pad.cpp:858
+#, c-format
+msgid "unknown pad attribute: %d"
+msgstr "неизвестный тип атрибута контактной площадки: %d"
 
 #: pcbnew/clean.cpp:102
 msgid "Clean vias"
@@ -9015,6 +9020,23 @@ msgstr "GenCAD 1.4 board files (.cad)|*.cad"
 msgid "Save GenCAD Board File"
 msgstr "Сохранить в формате GenCAD"
 
+#: pcbnew/class_pcb_text.cpp:126
+msgid "DIMENSION"
+msgstr "Размеры"
+
+#: pcbnew/class_pcb_text.cpp:128
+msgid "PCB Text"
+msgstr "Текст платы"
+
+#: pcbnew/class_pcb_text.cpp:142
+msgid "Thickness"
+msgstr "Толщина"
+
+#: pcbnew/class_pcb_text.cpp:181
+#, c-format
+msgid "Pcb Text %s on %s"
+msgstr "Текст %s на %s"
+
 #: pcbnew/build_BOM_from_board.cpp:36
 msgid "Comma separated value files (*.csv)|*.csv"
 msgstr "Файлы разделённых запятыми значений (*.csv)|*.csv"
@@ -9050,18 +9072,6 @@ msgstr "Номинал"
 #: pcbnew/build_BOM_from_board.cpp:95
 msgid "Supplier and ref"
 msgstr "Supplier and ref"
-
-#: pcbnew/class_text_mod.cpp:369
-msgid "Ref."
-msgstr "Поз."
-
-#: pcbnew/class_text_mod.cpp:400
-msgid " No"
-msgstr "Нет"
-
-#: pcbnew/class_text_mod.cpp:402
-msgid " Yes"
-msgstr "Да"
 
 #: pcbnew/gen_modules_placefile.cpp:225
 msgid "No modules for automated placement."
@@ -9248,6 +9258,11 @@ msgstr "Длина сегмента"
 #: pcbnew/class_track.cpp:1556
 msgid "Length:"
 msgstr "Длина:"
+
+#: pcbnew/class_track.cpp:1575
+#, c-format
+msgid "unknown via type %d"
+msgstr "неизвестный тип контактной площадки %d"
 
 #: pcbnew/librairi.cpp:43
 msgid "KiCad foot print export files (*.emp)|*.emp"
@@ -9436,89 +9451,17 @@ msgstr "Модули [%d шт.]"
 msgid "No footprint found"
 msgstr "Посадочное место не найдено"
 
-#: pcbnew/kicad_plugin.cpp:95
-#, c-format
-msgid ""
-"File '%s' is format version: %d.\n"
-"I only support format version <= %d.\n"
-"Please upgrade PCBNew to load this file."
-msgstr ""
-"Файл '%s' в формате версии %d.\n"
-"Поддерживается формат только версии <= %d.\n"
-"Обновите PCBNew для загрузки этого файла."
+#: pcbnew/class_text_mod.cpp:369
+msgid "Ref."
+msgstr "Поз."
 
-#: pcbnew/kicad_plugin.cpp:96
-#, c-format
-msgid "unknown graphic type: %d"
-msgstr "неизвестный тип графики: %d"
+#: pcbnew/class_text_mod.cpp:400
+msgid " No"
+msgstr "Нет"
 
-#: pcbnew/kicad_plugin.cpp:97
-#, c-format
-msgid "unknown pad type: %d"
-msgstr "неизвестный тип контактной площадки; %d"
-
-#: pcbnew/kicad_plugin.cpp:98
-#, c-format
-msgid "unknown pad attribute: %d"
-msgstr "неизвестный тип атрибута контактной площадки: %d"
-
-#: pcbnew/kicad_plugin.cpp:182
-#: pcbnew/kicad_plugin.cpp:2695
-#, c-format
-msgid "Unable to open file '%s'"
-msgstr "Не удалось открыть файл '%s'"
-
-#: pcbnew/kicad_plugin.cpp:350
-msgid "May not load new *.brd file into 'PCBNew compiled for deci-mils'"
-msgstr "Невозможно загрузить *.brd файл нового формата - PCBNew собрана с deci-mils"
-
-#: pcbnew/kicad_plugin.cpp:474
-#, c-format
-msgid "Unknown sheet type '%s' on line:%d"
-msgstr "Неизвестный тип листа '%s' в строке:%d"
-
-#: pcbnew/kicad_plugin.cpp:1095
-#, c-format
-msgid "Unknown padshape '%s' on line:%d"
-msgstr "Неизвестная форма контактной площадки '%s' в строке:%d"
-
-#: pcbnew/kicad_plugin.cpp:2058
-#, c-format
-msgid "duplicate NETCLASS name '%s'"
-msgstr "дубликат имена класса цепи '%s'"
-
-#: pcbnew/kicad_plugin.cpp:2603
-#: pcbnew/kicad_plugin.cpp:2636
-#, c-format
-msgid ""
-"invalid float number in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offset: %d"
-msgstr ""
-"неверное float число в\n"
-"файле: '%s'\n"
-"строка: %d\n"
-"смещение: %d"
-
-#: pcbnew/kicad_plugin.cpp:2611
-#: pcbnew/kicad_plugin.cpp:2644
-#, c-format
-msgid ""
-"missing float number in\n"
-"file: '%s'\n"
-"line: %d\n"
-"offset: %d"
-msgstr ""
-"отсутствует float число в\n"
-"файле: '%s'\n"
-"строка: %d\n"
-"смещение: %d"
-
-#: pcbnew/kicad_plugin.cpp:2721
-#, c-format
-msgid "error writing to file '%s'"
-msgstr "ошибка записи в файл '%s'"
+#: pcbnew/class_text_mod.cpp:402
+msgid " Yes"
+msgstr "Да"
 
 #: pcbnew/modview.cpp:88
 msgid "Select Current Library:"
@@ -10450,18 +10393,6 @@ msgstr "Обзор библиотеки посадочных мест"
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Просмотр модуля: 3D вид [%s]"
 
-#: pcbnew/class_board_item.cpp:21
-msgid "Bezier Curve"
-msgstr "Кривая Безье"
-
-#: pcbnew/class_board_item.cpp:22
-msgid "Polygon"
-msgstr "Полигон"
-
-#: pcbnew/class_board_item.cpp:61
-msgid "** undefined layer **"
-msgstr "** неопределенный слой **"
-
 #: pcbnew/cross-probing.cpp:63
 #, c-format
 msgid "%s found"
@@ -10712,6 +10643,11 @@ msgstr "Не на медном слое"
 #: pcbnew/class_zone.cpp:944
 msgid "** NO BOARD DEFINED **"
 msgstr "** ПЛАТА НЕ ОПРЕДЕЛЕНА **"
+
+#: pcbnew/class_zone.cpp:1015
+#, c-format
+msgid "unknown zone corner smoothing type %d"
+msgstr "неизвестный тип скругления углов зоны %d"
 
 #: pcbnew/netlist_reader_common.cpp:258
 #, c-format
@@ -11258,6 +11194,80 @@ msgstr "Компонент со значением (номиналом) \"%s\" �
 #, c-format
 msgid "Multiple components have identical reference IDs of \"%s\"."
 msgstr "Много компонентов имеют одинаковое обозначение \"%s\"."
+
+#: pcbnew/kicad_plugin.cpp:92
+#, c-format
+msgid ""
+"File '%s' is format version: %d.\n"
+"I only support format version <= %d.\n"
+"Please upgrade PCBNew to load this file."
+msgstr ""
+"Файл '%s' в формате версии %d.\n"
+"Поддерживается формат только версии <= %d.\n"
+"Обновите PCBNew для загрузки этого файла."
+
+#: pcbnew/kicad_plugin.cpp:93
+#, c-format
+msgid "unknown graphic type: %d"
+msgstr "неизвестный тип графики: %d"
+
+#: pcbnew/kicad_plugin.cpp:179
+#: pcbnew/kicad_plugin.cpp:2692
+#, c-format
+msgid "Unable to open file '%s'"
+msgstr "Не удалось открыть файл '%s'"
+
+#: pcbnew/kicad_plugin.cpp:347
+msgid "May not load new *.brd file into 'PCBNew compiled for deci-mils'"
+msgstr "Невозможно загрузить *.brd файл нового формата - PCBNew собрана с deci-mils"
+
+#: pcbnew/kicad_plugin.cpp:471
+#, c-format
+msgid "Unknown sheet type '%s' on line:%d"
+msgstr "Неизвестный тип листа '%s' в строке:%d"
+
+#: pcbnew/kicad_plugin.cpp:1092
+#, c-format
+msgid "Unknown padshape '%s' on line:%d"
+msgstr "Неизвестная форма контактной площадки '%s' в строке:%d"
+
+#: pcbnew/kicad_plugin.cpp:2055
+#, c-format
+msgid "duplicate NETCLASS name '%s'"
+msgstr "дубликат имена класса цепи '%s'"
+
+#: pcbnew/kicad_plugin.cpp:2600
+#: pcbnew/kicad_plugin.cpp:2633
+#, c-format
+msgid ""
+"invalid float number in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"неверное float число в\n"
+"файле: '%s'\n"
+"строка: %d\n"
+"смещение: %d"
+
+#: pcbnew/kicad_plugin.cpp:2608
+#: pcbnew/kicad_plugin.cpp:2641
+#, c-format
+msgid ""
+"missing float number in\n"
+"file: '%s'\n"
+"line: %d\n"
+"offset: %d"
+msgstr ""
+"отсутствует float число в\n"
+"файле: '%s'\n"
+"строка: %d\n"
+"смещение: %d"
+
+#: pcbnew/kicad_plugin.cpp:2718
+#, c-format
+msgid "error writing to file '%s'"
+msgstr "ошибка записи в файл '%s'"
 
 #: pcbnew/tool_modview.cpp:58
 msgid "Select footprint to browse"
@@ -14890,17 +14900,9 @@ msgstr ""
 "Ошибка!\n"
 "Ослабление больше чем %f dB"
 
-#: pcb_calculator/regulators_funct.cpp:76
-msgid " Vout must be greater than vref"
-msgstr " Vout должно быть больше vref"
-
-#: pcb_calculator/regulators_funct.cpp:82
-msgid " Vref set to 0 !"
-msgstr " Vref установлен в 0 !"
-
-#: pcb_calculator/regulators_funct.cpp:88
-msgid "Incorrect value for R1 R2"
-msgstr "Неверное значение для R1 R2"
+#: pcb_calculator/datafile_read_write.cpp:74
+msgid "Data file error."
+msgstr "Ошибка файла."
 
 #: pcb_calculator/tracks_width_versus_current.cpp:191
 msgid "<br><em>The formula (from IPC 2221) is:</em></br>"
@@ -14947,7 +14949,7 @@ msgid "Specific Resistance"
 msgstr "Удельное сопротивление"
 
 #: pcb_calculator/transline_ident.cpp:113
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:484
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:591
 msgid "Er"
 msgstr "Er"
 
@@ -14956,7 +14958,7 @@ msgid "Epsilon R: substrate relative dielectric constant"
 msgstr "Epsilon R: относительная диэлектрическая проницаемость подложки"
 
 #: pcb_calculator/transline_ident.cpp:116
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:494
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:601
 msgid "TanD"
 msgstr "TanD"
 
@@ -14965,7 +14967,7 @@ msgid "Tangent delta: dielectric loss factor."
 msgstr "Тангенс угла потерь в диэлектрике."
 
 #: pcb_calculator/transline_ident.cpp:121
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:504
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:611
 msgid "Rho"
 msgstr "Rho"
 
@@ -14974,7 +14976,7 @@ msgid "Electrical resistivity or specific electrical resistance of conductor (Oh
 msgstr "Электрическое сопротивление или погонное сопротивление проводника (Ом*метр)"
 
 #: pcb_calculator/transline_ident.cpp:128
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:601
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:710
 msgid "Frequency"
 msgstr "Частота"
 
@@ -15028,7 +15030,7 @@ msgstr "Глубина проникновения"
 
 #: pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:314
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:528
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:635
 msgid "H_t"
 msgstr "H_t"
 
@@ -15042,7 +15044,7 @@ msgstr "Высота до экрана"
 #: pcb_calculator/transline_ident.cpp:213
 #: pcb_calculator/transline_ident.cpp:316
 #: pcb_calculator/transline_ident.cpp:353
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:540
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:647
 msgid "T"
 msgstr "T"
 
@@ -15056,7 +15058,7 @@ msgstr "Толщина полоска"
 
 #: pcb_calculator/transline_ident.cpp:148
 #: pcb_calculator/transline_ident.cpp:318
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:552
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:659
 msgid "Rough"
 msgstr "Rough"
 
@@ -15068,7 +15070,7 @@ msgstr "Шероховатость проводника"
 #: pcb_calculator/transline_ident.cpp:150
 #: pcb_calculator/transline_ident.cpp:246
 #: pcb_calculator/transline_ident.cpp:279
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:671
 msgid "Mur"
 msgstr "Mur"
 
@@ -15084,7 +15086,7 @@ msgstr "Относительная проницаемость подложки"
 #: pcb_calculator/transline_ident.cpp:320
 #: pcb_calculator/transline_ident.cpp:355
 #: pcb_calculator/transline_ident.cpp:383
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:576
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:683
 msgid "MurC"
 msgstr "MurC"
 
@@ -15358,63 +15360,212 @@ msgid "Degree"
 msgstr "Градус"
 
 #: pcb_calculator/UnitSelector.cpp:100
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:256
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:325
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:353
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:424
 msgid "Ohm"
 msgstr "Ом"
 
 #: pcb_calculator/UnitSelector.cpp:101
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:78
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:92
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:93
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:107
 msgid "KOhm"
 msgstr "кОм"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:47
-msgid "Vout = Vref * (R1 + R2) / R2"
-msgstr "Vout = Vref * (R1 + R2) / R2"
+#: pcb_calculator/pcb_calculator_frame.cpp:139
+msgid ""
+"Data modified, and no data filename to save modifications\n"
+"Do you want to exit and abandon your change?"
+msgstr ""
+"Данный изменены, но нет имени файла для сохранения изменений\n"
+"Желаете выйти и потерять все изменения?"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:71
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:918
-msgid "R1"
-msgstr "R1"
+#: pcb_calculator/pcb_calculator_frame.cpp:141
+msgid "Regulator list change"
+msgstr "Список стабилизаторов изменен"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:85
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:929
-msgid "R2"
-msgstr "R2"
+#: pcb_calculator/pcb_calculator_frame.cpp:151
+#, c-format
+msgid ""
+"Unable to write file<%s>\n"
+"Do you want to exit and abandon your change?"
+msgstr ""
+"Не удалось записать файл<%s>\n"
+"Желаете выйти и потерять все изменения?"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:99
+#: pcb_calculator/pcb_calculator_frame.cpp:154
+msgid "Write Data File Errror"
+msgstr "Ошибка записи файла"
+
+#: pcb_calculator/regulators_funct.cpp:99
+#: pcb_calculator/regulators_funct.cpp:221
+msgid "Bad or missing parameters!"
+msgstr "Неправильный или отсутствует параметр!"
+
+#: pcb_calculator/regulators_funct.cpp:240
+msgid "This regulator is already in list. Aborted"
+msgstr "Этот стабилизатор уже есть в списке. Прервано"
+
+#: pcb_calculator/regulators_funct.cpp:268
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:211
+msgid "Remove Regulator"
+msgstr "Удалить стабилизатор"
+
+#: pcb_calculator/regulators_funct.cpp:344
+msgid " Vout must be greater than vref"
+msgstr " Vout должно быть больше vref"
+
+#: pcb_calculator/regulators_funct.cpp:350
+msgid " Vref set to 0 !"
+msgstr " Vref установлен в 0 !"
+
+#: pcb_calculator/regulators_funct.cpp:356
+msgid "Incorrect value for R1 R2"
+msgstr "Неверное значение для R1 R2"
+
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:36
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:128
 msgid "Vref"
 msgstr "Vref"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:106
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:120
-msgid "V"
-msgstr "V"
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:43
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:364
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:435
+msgid "Volt"
+msgstr "Вольт"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:113
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:51
+msgid "Separate sense pin"
+msgstr "Отдельный вывод подстройки"
+
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:51
+msgid "3 terminals regulator"
+msgstr "3-х выводной стабилизатор"
+
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:60
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:144
+msgid "Iadj"
+msgstr "Iadj"
+
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:67
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:153
+msgid "uA"
+msgstr "мкА"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:59
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1095
+msgid "Formula"
+msgstr "Формула"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:61
+msgid "Vout = Vref * (R1 + R2) / R2"
+msgstr "Vout = Vref * (R1 + R2) / R2"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:86
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1045
+msgid "R1"
+msgstr "R1"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:100
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1056
+msgid "R2"
+msgstr "R2"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:114
 msgid "Vout"
 msgstr "Vout"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:126
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:121
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:137
+msgid "V"
+msgstr "V"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:130
+msgid ""
+"The internal reference voltage of the regulator.\n"
+"Should not be 0."
+msgstr ""
+"Внутреннее опорное напряжение стабилизатора.\n"
+"Не должно быть равно 0."
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:146
+msgid "For 3 terminal regulators only, the  Adjust pin current."
+msgstr "Только для 3-х выводных стабилизаторов, ток регулирующего вывода."
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:162
+msgid ""
+"Type of the regulator.\n"
+"There are 2 types:\n"
+"- regulators which have a dedicted sense pin for the voltage regulation.\n"
+"- 3 terminal pins."
+msgstr ""
+"Тип стабилизатора.\n"
+"Имеются 2 типа:\n"
+"- стабилизатор с выделенным выводом для регулировки напряжения,\n"
+"- 3-х выводной стабилизатор."
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:166
+msgid "Standard Type"
+msgstr "Стандартный тип"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:166
+msgid "3 Terminal Type"
+msgstr "3-х выводной тип"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:178
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1027
 msgid "Calculate"
 msgstr "Расчитать"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:129
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:182
+msgid "Regulator"
+msgstr "Стабилизатор"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:189
+msgid "Regulators data file:"
+msgstr "Файл стабилизаторов:"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:191
+msgid "The name of the data file which stores known regulators parameters."
+msgstr "Имя файла для сохранения известных параметров регуляторов."
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:195
+msgid "Select a Pcb Calculator data  file"
+msgstr "Выбор файла для Pcb Calculator"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:201
+msgid "Edit Regulator"
+msgstr "Редактировать стабилизатор"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:202
+msgid "Edit the current selected regulator."
+msgstr "Редактирование выбранного стабилизатора."
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:206
+msgid "Add Regulator"
+msgstr "Добавить стабилизатор"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:207
+msgid "Enter a new item to the current list of available regulators"
+msgstr "Добавить новый элемент в текущий список доступных стабилизаторов"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:212
+msgid "Remove an item from the current list of available regulators"
+msgstr "Удалить элемент из текущего списка доступных стабилизаторов"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:222
 msgid "Message"
 msgstr "Сообщение"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:138
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:233
 msgid "Regulators"
 msgstr "Регуляторы"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:144
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:853
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:239
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:977
 msgid "Parameters:"
 msgstr "Параметры:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:146
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:241
 msgid ""
 "Valid max values:\n"
 "35A for external traces and 17.5A for internal.\n"
@@ -15426,159 +15577,154 @@ msgstr ""
 "400mil ширина.\n"
 "Максимальное превышение температуры 100 град.C."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:158
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:253
 msgid "Current"
 msgstr "Ток"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:165
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:260
 msgid "A"
 msgstr "A"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:169
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:264
 msgid "Temperature rise"
 msgstr "Превышение температуры"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:176
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:271
 msgid "deg C"
 msgstr "град.C"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:180
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:275
 msgid "Cu thickness"
 msgstr "Толщина меди"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:192
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:287
 msgid "Conductor length"
 msgstr "Длина проводника"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:218
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:315
 msgid "Tracks Caracteristics (External Layers):"
 msgstr "Характеристики проводника (внешние слои):"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:226
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:295
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:323
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:394
 msgid "Required trace width"
 msgstr "Требуемая ширина линии"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:238
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:307
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:335
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:406
 msgid "Cross-section area"
 msgstr "Площадь поперечного сечения"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:245
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:314
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:342
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:413
 msgid "mm ^ 2"
 msgstr "кв.мм."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:249
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:318
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:346
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:417
 msgid "Resistance"
 msgstr "Сопротивление"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:260
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:329
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:357
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:428
 msgid "Voltage drop"
 msgstr "Падение напряжения"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:336
-msgid "Volt"
-msgstr "Вольт"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:271
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:340
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:368
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:439
 msgid "Loss"
 msgstr "Потери"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:278
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:347
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:375
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:446
 msgid "Watt"
 msgstr "Ватт"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:287
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:386
 msgid "Tracks Caracteristics (Internal Layers):"
 msgstr "Характеристики проводника (внутренние слои):"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:376
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:479
 msgid "Voltage > 500V:"
 msgstr "Напряжение > 500В:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:383
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:486
 msgid "Update Values"
 msgstr "Обновить значения"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:391
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:495
 msgid "Note: Values are minimal values (from IPC 2221)"
 msgstr "Примечание: значения как минимальные значения (из IPC 2221)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:410
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:514
 msgid "B1"
 msgstr "B1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:411
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:515
 msgid "B2"
 msgstr "B2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:412
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:516
 msgid "B3"
 msgstr "B3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:413
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:517
 msgid "B4"
 msgstr "B4"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:414
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:518
 msgid "A5"
 msgstr "A5"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:415
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:519
 msgid "A6"
 msgstr "A6"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:416
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:520
 msgid "A7"
 msgstr "A7"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:423
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:527
 msgid "0 ... 15V"
 msgstr "0 ... 15В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:424
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:528
 msgid "16 ... 30V"
 msgstr "16 ... 30В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:425
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:529
 msgid "31 ... 50V"
 msgstr "31 ... 50В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:530
 msgid "51 ... 100V"
 msgstr "51 ... 100В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:427
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:531
 msgid "101 ... 150V"
 msgstr "101 ... 150В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:428
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:532
 msgid "151 ... 170V"
 msgstr "151 ... 170В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:429
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:533
 msgid "171 ... 250V"
 msgstr "171 ... 250В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:430
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:534
 msgid "251 ... 300V"
 msgstr "251 ... 300В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:431
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:535
 msgid "301 ... 500V"
 msgstr "301 ... 500В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:432
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:536
 msgid " > 500V"
 msgstr " > 500В"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:441
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:545
 msgid ""
 "*  B1 - Internal Conductors\n"
 "*  B2 - External Conductors, uncoated, sea level to 3050 m\n"
@@ -15596,286 +15742,282 @@ msgstr ""
 "*  A6 - Внешние компоненты пайка/выводы, без покрытия\n"
 "*  A7 - Внешние компоненты пайка/выводы, с конформным покрытием (любая высота)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:450
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:556
 msgid "Electrical Spacing"
 msgstr "Электрический зазор"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
 msgid "Microstrip Line"
 msgstr "Микрополосковые линии"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
 msgid "Coplanar wave guide"
 msgstr "Копланарный волновод"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
 msgid "Grounded Coplanar wave guide"
 msgstr "Заземленный копланарный волновод"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
 msgid "Rectangular Waveguide"
 msgstr "Прямоугольный волновод"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
 msgid "Coaxial Line"
 msgstr "Коаксиальная линия"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
 msgid "Coupled Microstrip Line"
 msgstr "Связанная микрополосковая линия"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
 msgid "Stripline"
 msgstr "Полосковая линия"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:564
 msgid "Twisted Pair"
 msgstr "Витая пара"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:460
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:566
 msgid "Transmission Line Type:"
 msgstr "Тип линии передачи:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:476
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:583
 msgid "Substrate Parameters"
 msgstr "Параметры подложки:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:506
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:613
 msgid "Specific resistance in ohms * meters"
 msgstr "Удельное сопротивления в Ом/метр"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:593
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:702
 msgid "Component Parameters:"
 msgstr "Параметры компонента:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:623
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:735
 msgid "Physical Parameters"
 msgstr "Физические параметры:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:634
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:746
 msgid "Prm1"
 msgstr "Prm1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:649
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:761
 msgid "prm2"
 msgstr "prm2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:664
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:776
 msgid "prm3"
 msgstr "prm3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:694
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:809
 msgid "Analyze"
 msgstr "Анализ"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:697
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:812
 msgid "Synthetize"
 msgstr "Синтез"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:708
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:825
 msgid "Electrical Parameters:"
 msgstr "Электрические параметры:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:716
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:728
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:833
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:845
 msgid "Z"
 msgstr "Z"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:757
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:876
 msgid "Results:"
 msgstr "Результаты:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:765
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:769
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:773
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:777
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:781
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:785
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:789
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:793
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:797
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:801
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:805
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:809
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:813
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:817
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:884
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:888
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:892
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:896
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:900
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:904
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:908
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:912
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:916
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:920
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:924
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:928
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:932
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:936
 msgid "dummy"
 msgstr "dummy"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:830
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:953
 msgid "TransLine"
 msgstr "Линия передачи"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:833
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:956
 msgid "label"
 msgstr "СВЧ аттенюаторы"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:961
 msgid "PI"
 msgstr "П-образный"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:961
 msgid "Tee"
 msgstr "Т-образный"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:961
 msgid "Bridged Tee"
 msgstr "Т-образный мост"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:961
 msgid "Resistive Splitter"
 msgstr "Резистивный делитель"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:840
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:963
 msgid "Attenuators:"
 msgstr "Аттенюаторы:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:861
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:985
 msgid "Attenuation"
 msgstr "Ослабление"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:868
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:992
 msgid "dB"
 msgstr "dB"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:872
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:996
 msgid "Zin"
 msgstr "Zin"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:879
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:890
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:925
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:936
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:947
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1003
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1014
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1052
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1063
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1074
 msgid "Ohms"
 msgstr "Ом"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:883
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1007
 msgid "Zout"
 msgstr "Zout"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:940
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1067
 msgid "R3"
 msgstr "R3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:965
-msgid "Formula"
-msgstr "Формула"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:977
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1109
 msgid "RF Attenuators"
 msgstr "СВЧ аттенюатор"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:982
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
 msgid "10%"
 msgstr "10%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:982
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
 msgid "5%"
 msgstr "5%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:982
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
 msgid "2%"
 msgstr "2%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:982
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
 msgid "1%"
 msgstr "1%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:982
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
 msgid "0.5%"
 msgstr "0.5%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:982
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
 msgid "0.25%"
 msgstr "0.25%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:982
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
 msgid "0.1%"
 msgstr "0.1%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:982
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
 msgid "0.05%"
 msgstr "0.05%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:984
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1013
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1116
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1145
 msgid "Tolerance"
 msgstr "Точность"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:993
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1125
 msgid "1st Band"
 msgstr "1-я полоска"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:997
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1129
 msgid "2nd Band"
 msgstr "2-я полоска"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1001
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1133
 msgid "3rd Band"
 msgstr "3-я полоска"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1005
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1137
 msgid "4rd Band"
 msgstr "4-я полоска"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1009
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1141
 msgid "Multiplier"
 msgstr "Множитель"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1040
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1174
 msgid "Color Code"
 msgstr "Цветовой код"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1053
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1187
 msgid "Note: Values are minimal values"
 msgstr "Примечание: значения как минимальные значения"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1072
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1206
 msgid "Class 1"
 msgstr "Класс 1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1073
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1207
 msgid "Class 2"
 msgstr "Класс 2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1074
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1208
 msgid "Class 3"
 msgstr "Класс 3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1075
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1209
 msgid "Class 4"
 msgstr "Класс 4"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1076
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1210
 msgid "Class 5"
 msgstr "Класс 5"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1077
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1211
 msgid "Class 6"
 msgstr "Класс 6"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1084
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1218
 msgid "Lines width"
 msgstr "Ширина дорожек"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1085
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1219
 msgid "Min clearance"
 msgstr "Мин зазор"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1086
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1220
 msgid "Via: (diam - drill)"
 msgstr "Перех.отв.(диам - сверло)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1087
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1221
 msgid "Plated Pad: (diam - drill)"
 msgstr "Метал.конт.пл.:(диам-сверло)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1088
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1222
 msgid "NP Pad: (diam - drill)"
 msgstr "Неметал.конт.пл.:(диам-сверло)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1105
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1241
 msgid "Board Classes"
 msgstr "Класс платы"
 
@@ -16227,7 +16369,11 @@ msgstr "Начальные координаты и пользовательск�
 msgid "Position Files:"
 msgstr "Файлы позиций модулей:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.h:274
+#: pcb_calculator/dialogs/dialog_regulator_data_base.h:62
+msgid "Regulator Parameters"
+msgstr "Параметры стабилизатора"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Калькулятор для печатных плат"
 
