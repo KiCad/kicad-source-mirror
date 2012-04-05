@@ -61,7 +61,7 @@ Dick's Peronal TODO Items  (Last Update: 20-Feb-2012)
 1) Finish removing global access requirements from KICAD_PLUGIN, so that:
    *)   a BOARD is a fully self contained document description.
    *)   plugin developers do not have to access globals, which assumes there were ever
-        only be one BOARD in RAM.  Problems remain with BASE_SCREEN and PLOT params.
+        only be one BOARD in RAM.  Problems remain with BASE_SCREEN
 
 2) Extend PLUGIN API to facillitate loading and saving of modules.
 
@@ -69,11 +69,8 @@ Dick's Peronal TODO Items  (Last Update: 20-Feb-2012)
 
 4) Check back with Vladimir about finishing the nanometer work.
 
-5) Do an s-expression PCBNEW PLUGIN at least the output side for discussion,
-   assuming Wayne does not get to this first.
-
-6) Do an EAGLE XML import PCBNEW PLUGIN, and possible add export support to it.
+5) Do an EAGLE XML import PCBNEW PLUGIN, and possible add export support to it.
    This is PLUGIN::Load() and maybe PLUGIN::Save().
 
-7) Get back to the SWEET work.
+6) Get back to the SWEET work.
 
