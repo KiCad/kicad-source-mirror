@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
@@ -37,9 +37,12 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	m_browseButton = new wxButton( this, wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerdirBrowse->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 	
+	
 	bDirSizer->Add( bSizerdirBrowse, 1, wxEXPAND, 5 );
 	
+	
 	bUpperSizer->Add( bDirSizer, 1, 0, 5 );
+	
 	
 	m_MainSizer->Add( bUpperSizer, 0, wxEXPAND, 5 );
 	
@@ -62,11 +65,12 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	
 	wxString m_radioBoxForceSmdChoices[] = { _("With INSERT attribute set"), _("Force INSERT attribute for all SMD footprints") };
 	int m_radioBoxForceSmdNChoices = sizeof( m_radioBoxForceSmdChoices ) / sizeof( wxString );
-	m_radioBoxForceSmd = new wxRadioBox( this, wxID_ANY, _("Footprints:"), wxDefaultPosition, wxDefaultSize, m_radioBoxForceSmdNChoices, m_radioBoxForceSmdChoices, 1, wxRA_SPECIFY_COLS );
+	m_radioBoxForceSmd = new wxRadioBox( this, wxID_ANY, _("Footprints Selection:"), wxDefaultPosition, wxDefaultSize, m_radioBoxForceSmdNChoices, m_radioBoxForceSmdChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxForceSmd->SetSelection( 0 );
 	m_radioBoxForceSmd->SetToolTip( _("Only footprints with option INSERT are listed in placement file.\nThis option can force this option for all footprints having only SMD pads.\nWarning: this options will modify the board.") );
 	
 	bSizerOptions->Add( m_radioBoxForceSmd, 0, wxALL, 5 );
+	
 	
 	m_MainSizer->Add( bSizerOptions, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
@@ -78,6 +82,7 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	
 	sbSizerMsg->Add( m_messagesBox, 1, wxEXPAND, 5 );
 	
+	
 	m_MainSizer->Add( sbSizerMsg, 1, wxEXPAND, 5 );
 	
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
@@ -86,10 +91,15 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	m_sdbSizerButtonsCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
+	
 	m_MainSizer->Add( m_sdbSizerButtons, 0, wxEXPAND|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
+	m_MainSizer->Fit( this );
+	
+	this->Centre( wxBOTH );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnClose ) );

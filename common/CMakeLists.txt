@@ -113,6 +113,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp
+    ../pcbnew/pcb_plot_params.cpp
     pcb_plot_params_keywords.cpp
     dialogs/dialog_page_settings.cpp
 )
@@ -142,7 +143,7 @@ make_lexer(
 # auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params.keywords
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_lexer.h
+    ${PROJECT_SOURCE_DIR}/include/pcb_plot_params_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
     PCBPLOTPARAMS_T
     )

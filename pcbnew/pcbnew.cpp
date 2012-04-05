@@ -49,10 +49,6 @@
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
-int g_DrawDefaultLineThickness = 60; /* Default line thickness in PCnew units used to draw
-                                      * or plot items having a default thickness line value
-                                      * (Frame references) (i.e. = 0 ). 0 = single pixel line
-                                      * width */
 
 bool           Drc_On = true;
 bool           g_AutoDeleteOldTrack = true;

@@ -17,7 +17,7 @@
 #include <common.h>                         // PAGE_INFO
 #include <class_title_block.h>
 #include <class_zone_settings.h>
-
+#include <pcb_plot_params.h>
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
@@ -180,6 +180,7 @@ private:
     COLORS_DESIGN_SETTINGS* m_colorsSettings;
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;               ///< text in lower right of screen and plots
+    PCB_PLOT_PARAMS         m_plotOptions;
 
     /// Position of the origin axis, which is used in exports mostly
     wxPoint             m_originAxisPosition;
@@ -542,6 +543,9 @@ public:
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
+
+    const PCB_PLOT_PARAMS& GetPlotOptions() const           { return m_plotOptions; }
+    void SetPlotOptions( const PCB_PLOT_PARAMS& aOptions )  { m_plotOptions = aOptions; }
 
     const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
     void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }

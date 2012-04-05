@@ -254,7 +254,6 @@ set(INC_AFTER
 ############
 # Binaries #
 ############
-add_subdirectory(3d-viewer)
 
 if( USE_PNG_BITMAPS )
     add_subdirectory(bitmaps_png)
@@ -262,8 +261,8 @@ else()
     add_subdirectory(bitmaps_xpm)
 endif()
 
-
 add_subdirectory(common)
+add_subdirectory(3d-viewer)
 add_subdirectory(cvpcb)
 add_subdirectory(eeschema)
 add_subdirectory(gerbview)

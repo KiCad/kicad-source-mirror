@@ -355,11 +355,12 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( strnicmp( line, "PcbPlotParams", 13 ) == 0 )
         {
+            PCB_PLOT_PARAMS plot_opts;
             PCB_PLOT_PARAMS_PARSER parser( &line[13], aReader->GetSource() );
 
             try
             {
-                g_PcbPlotOptions.Parse( &parser );
+                plot_opts.Parse( &parser );
             }
             catch( IO_ERROR& e )
             {
@@ -369,6 +370,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
                             e.errorText.GetData() );
                 wxMessageBox( msg, _( "Open Board File" ), wxOK | wxICON_ERROR );
             }
+
+            GetBoard()->SetPlotOptions( plot_opts );
 
             continue;
         }
@@ -801,7 +804,7 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
 
     STRING_FORMATTER sf;
 
-    g_PcbPlotOptions.Format( &sf, 0 );
+    aBoard->GetPlotOptions().Format( &sf, 0 );
 
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );

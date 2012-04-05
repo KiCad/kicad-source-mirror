@@ -54,8 +54,6 @@
 #include <dialog_helpers.h>
 
 
-extern int g_DrawDefaultLineThickness;
-
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth" )
 #define PCB_SHOW_FULL_RATSNET_OPT   wxT( "PcbFulRatsnest" )

@@ -116,20 +116,20 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
 
     UpdateConfig(); // set params and Save drill options
 
-    m_Parent->ClearMsgPanel();
+    m_parent->ClearMsgPanel();
 
     if( m_microViasCount || m_blindOrBuriedViasCount )
         hasBuriedVias = true;
 
     for( ; ; )
     {
-        Build_Holes_List( m_Parent->GetBoard(), s_HoleListBuffer,
+        Build_Holes_List( m_parent->GetBoard(), s_HoleListBuffer,
                           s_ToolListBuffer, layer1, layer2,
                           gen_through_holes ? false : true, gen_NPTH_holes );
 
         if( s_ToolListBuffer.size() > 0 ) //  holes?
         {
-            fn = m_Parent->GetScreen()->GetFileName();
+            fn = m_parent->GetScreen()->GetFileName();
             layer_extend.Empty();
 
             if( gen_NPTH_holes )
@@ -169,7 +169,7 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
                 return;
             }
 
-            EXCELLON_WRITER excellonWriter( m_Parent->GetBoard(),
+            EXCELLON_WRITER excellonWriter( m_parent->GetBoard(),
                                             aFile, m_FileDrillOffset,
                                             &s_HoleListBuffer, &s_ToolListBuffer );
             excellonWriter.SetFormat( !m_UnitDrillIsInch,
@@ -226,7 +226,7 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
                 layer1++;
                 layer2++;                      // use next layer pair
 
-                if( layer2 == m_Parent->GetBoard()->GetCopperLayerCount() - 1 )
+                if( layer2 == m_parent->GetBoard()->GetCopperLayerCount() - 1 )
                     layer2 = LAYER_N_FRONT;         // the last layer is always the
                                                     // component layer
             }
@@ -237,7 +237,7 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
 
     if( m_Choice_Drill_Report->GetSelection() > 0 )
     {
-        fn = m_Parent->GetScreen()->GetFileName();
+        fn = m_parent->GetScreen()->GetFileName();
         GenDrillReport( fn.GetFullName() );
     }
 
@@ -628,10 +628,10 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString           aFileName,
         return;
     }
 
-    GenDrillMapFile( m_Parent->GetBoard(),
+    GenDrillMapFile( m_parent->GetBoard(),
                      plotfile,
                      dlg.GetPath(),
-                     m_Parent->GetPageSettings(),
+                     m_parent->GetPageSettings(),
                      s_HoleListBuffer,
                      s_ToolListBuffer,
                      m_UnitDrillIsInch,
@@ -667,8 +667,8 @@ void DIALOG_GENDRILL::GenDrillReport( const wxString aFileName )
         return;
     }
 
-    GenDrillReportFile( report_dest, m_Parent->GetBoard(),
-                        m_Parent->GetScreen()->GetFileName(),
+    GenDrillReportFile( report_dest, m_parent->GetBoard(),
+                        m_parent->GetScreen()->GetFileName(),
                         m_UnitDrillIsInch,
                         s_HoleListBuffer,
                         s_ToolListBuffer );
