@@ -61,15 +61,18 @@ private:
     // R/W data files:
     bool ReadDataFile();
     bool WriteDataFile();
-    const wxString GetDataFilename()
-    {
-        return m_regulators_filePicker->GetPath();
-    }
 
-    void SetDataFilename( const wxString & aFilename)
-    {
-        m_regulators_filePicker->SetPath( aFilename );
-    }
+    /**
+     * @return the full filename of the selected pcb_calculator data file
+     */
+    const wxString GetDataFilename();
+
+    /**
+     * Initialize the full filename of the selected pcb_calculator data file
+     * force the standard extension of the file (.pcbcalc)
+     * @param aFilename = the full filename, with or without extension
+     */
+    void SetDataFilename( const wxString & aFilename);
 
     // tracks width versus current functions:
     /**
@@ -177,7 +180,7 @@ private:
     void OnRegulatorCalcButtonClick( wxCommandEvent& event );
 	void OnRegulTypeSelection( wxCommandEvent& event );
 	void OnRegulatorSelection( wxCommandEvent& event );
-	void OnDataFileSelection( wxFileDirPickerEvent& event );
+	void OnDataFileSelection( wxCommandEvent& event );
 	void OnAddRegulator( wxCommandEvent& event );
 	void OnEditRegulator( wxCommandEvent& event );
 	void OnRemoveRegulator( wxCommandEvent& event );
@@ -240,5 +243,8 @@ public:
     void BoardClassesUpdateData( double aUnitScale );
 
 };
+
+
+extern const wxString DataFileNameExt;
 
 #endif  // PCB_CALCULATOR_H

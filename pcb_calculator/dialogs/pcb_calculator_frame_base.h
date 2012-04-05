@@ -30,7 +30,6 @@
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/button.h>
-#include <wx/filepicker.h>
 #include <wx/panel.h>
 #include <wx/html/htmlwin.h>
 #include <wx/statline.h>
@@ -80,7 +79,8 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 		wxButton* m_buttonCalculate;
 		wxChoice* m_choiceRegulatorSelector;
 		wxStaticText* m_staticTextRegFile;
-		wxFilePickerCtrl* m_regulators_filePicker;
+		wxTextCtrl* m_regulators_fileNameCtrl;
+		wxButton* m_buttonDataFile;
 		wxButton* m_buttonEditItem;
 		wxButton* m_buttonAddItem;
 		wxButton* m_buttonRemoveItem;
@@ -263,7 +263,7 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 		virtual void OnRegulTypeSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDataFileSelection( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnDataFileSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveRegulator( wxCommandEvent& event ) { event.Skip(); }

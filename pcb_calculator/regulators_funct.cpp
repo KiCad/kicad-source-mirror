@@ -27,6 +27,7 @@
 #include <wx/wx.h>
 #include <wx/config.h>
 
+#include <macros.h>
 #include <pcb_calculator.h>
 #include <class_regulator_data.h>
 #include <dialog_regulator_data_base.h>
@@ -110,6 +111,12 @@ bool DIALOG_EDITOR_DATA::IsOK()
         ok = false;
     if( m_textCtrlVref->GetValue().IsEmpty() )
         ok = false;
+    else
+    {
+        double vref = ReturnDoubleFromString( m_textCtrlVref->GetValue() );
+        if( fabs(vref) < 0.01 )
+            ok = false;
+    }
     if( m_choiceRegType->GetSelection() == 1 )
     {
         if( m_RegulIadjValue->GetValue().IsEmpty() )
@@ -207,8 +214,54 @@ void PCB_CALCULATOR_FRAME::OnRegulatorSelection( wxCommandEvent& event )
     RegulatorPageUpdate();
 }
 
-void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxFileDirPickerEvent& event )
+/*
+ * Called when ckicking on button Browse:
+ * Select a new data file, and load it on request
+ */
+void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
 {
+    wxString fullfilename = GetDataFilename();
+
+    wxString wildcard;
+    wildcard.Printf( _("Pcb Calculator data  file (*.%s)|*.%s"),
+                     GetChars( DataFileNameExt ),
+                     GetChars( DataFileNameExt ) );
+
+    wxFileDialog dlg( m_panelRegulators,
+                      _("Select a Pcb Calculator data file"),
+                      wxEmptyString, fullfilename,
+                      wildcard, wxFD_OPEN );
+
+    if (dlg.ShowModal() == wxID_CANCEL)
+        return;
+
+    fullfilename = dlg.GetPath();
+
+    if( fullfilename == GetDataFilename() )
+        return;
+
+    SetDataFilename( fullfilename );
+    if( wxFileExists( fullfilename ) && m_RegulatorList.GetCount() > 0 )  // Read file
+    {
+        if( wxMessageBox( _("Do you want to load this file and replace current regulator list?" ) )
+                         != wxID_OK )
+            return;
+    }
+
+    if( ReadDataFile() )
+    {
+        m_RegulatorListChanged = false;
+        m_choiceRegulatorSelector->Clear();
+        m_choiceRegulatorSelector->Append( m_RegulatorList.GetRegList() );
+        SelectLastSelectedRegulator();
+    }
+
+    else
+    {
+        wxString msg;
+        msg.Printf( _("Unable to read data file <%s>"), GetChars( fullfilename ) );
+        wxMessageBox( msg );
+    }
 }
 
 void PCB_CALCULATOR_FRAME::OnAddRegulator( wxCommandEvent& event )
