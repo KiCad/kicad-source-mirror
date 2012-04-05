@@ -49,6 +49,9 @@
 #define KEYWORD_REGUL_LAST_PARAM                wxT( "RegulLastParam" )
 #define KEYWORD_DATAFILE_FILENAME               wxT( "DataFilename" )
 
+// extention of pcb_calculator data filename:
+const wxString DataFileNameExt( wxT("pcbcalc") );
+
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow* parent ) :
     PCB_CALCULATOR_FRAME_BASE( parent )
 {
@@ -92,7 +95,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow* parent ) :
     BoardClassesUpdateData( m_BoardClassesUnitsSelector->GetUnitScale() );
 
     ElectricalSpacingUpdateData( m_ElectricalSpacingUnitsSelector->GetUnitScale() );
-
 
     m_choiceRegulatorSelector->Append( m_RegulatorList.GetRegList() );
     SelectLastSelectedRegulator();
@@ -325,6 +327,36 @@ void PCB_CALCULATOR_FRAME::OnPaintTranslinePanel( wxPaintEvent& event )
     }
 
     event.Skip();
+}
+
+/* returns the full filename of the selected pcb_calculator data file
+ * the extention file is forced
+ */
+const wxString PCB_CALCULATOR_FRAME::GetDataFilename()
+{
+    if( m_regulators_fileNameCtrl->GetValue().IsEmpty() )
+        return wxEmptyString;
+
+    wxFileName fn( m_regulators_fileNameCtrl->GetValue() );
+    fn.SetExt( DataFileNameExt );
+    return fn.GetFullPath();
+}
+
+/* Initialize the full filename of the selected pcb_calculator data file
+ * force the standard extension of the file (.pcbcalc)
+ * aFilename = the full filename, with or without extension
+ */
+void PCB_CALCULATOR_FRAME::SetDataFilename( const wxString & aFilename)
+{
+    if( aFilename.IsEmpty() )
+        m_regulators_fileNameCtrl->SetValue( wxEmptyString );
+
+    else
+    {
+        wxFileName fn( aFilename );
+        fn.SetExt( DataFileNameExt );
+        m_regulators_fileNameCtrl->SetValue( fn.GetFullPath() );
+    }
 }
 
 

@@ -192,8 +192,17 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	sbSizerRegulatorsChooser->Add( m_staticTextRegFile, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_regulators_filePicker = new wxFilePickerCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, _("Select a Pcb Calculator data  file"), wxT("*.pcbcalc"), wxDefaultPosition, wxDefaultSize, wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
-	sbSizerRegulatorsChooser->Add( m_regulators_filePicker, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	wxBoxSizer* bSizerDataFile;
+	bSizerDataFile = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_regulators_fileNameCtrl = new wxTextCtrl( m_panelRegulators, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerDataFile->Add( m_regulators_fileNameCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_buttonDataFile = new wxButton( m_panelRegulators, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerDataFile->Add( m_buttonDataFile, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	
+	sbSizerRegulatorsChooser->Add( bSizerDataFile, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerReulBtn;
 	bSizerReulBtn = new wxBoxSizer( wxHORIZONTAL );
@@ -1253,7 +1262,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_choiceRegType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulTypeSelection ), NULL, this );
 	m_buttonCalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorCalcButtonClick ), NULL, this );
 	m_choiceRegulatorSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorSelection ), NULL, this );
-	m_regulators_filePicker->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( PCB_CALCULATOR_FRAME_BASE::OnDataFileSelection ), NULL, this );
+	m_buttonDataFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnDataFileSelection ), NULL, this );
 	m_buttonEditItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnEditRegulator ), NULL, this );
 	m_buttonAddItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnAddRegulator ), NULL, this );
 	m_buttonRemoveItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRemoveRegulator ), NULL, this );
@@ -1282,7 +1291,7 @@ PCB_CALCULATOR_FRAME_BASE::~PCB_CALCULATOR_FRAME_BASE()
 	m_choiceRegType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulTypeSelection ), NULL, this );
 	m_buttonCalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorCalcButtonClick ), NULL, this );
 	m_choiceRegulatorSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRegulatorSelection ), NULL, this );
-	m_regulators_filePicker->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( PCB_CALCULATOR_FRAME_BASE::OnDataFileSelection ), NULL, this );
+	m_buttonDataFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnDataFileSelection ), NULL, this );
 	m_buttonEditItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnEditRegulator ), NULL, this );
 	m_buttonAddItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnAddRegulator ), NULL, this );
 	m_buttonRemoveItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnRemoveRegulator ), NULL, this );
