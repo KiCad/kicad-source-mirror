@@ -28,8 +28,8 @@
  * @brief Classes used in Pcbnew, CvPcb and GerbView.
  */
 
-#ifndef  WX_BASE_PCB_FRAME_H
-#define  WX_BASE_PCB_FRAME_H
+#ifndef  WX_BASE_PCB_FRAME_H_
+#define  WX_BASE_PCB_FRAME_H_
 
 
 #include <vector>
@@ -59,6 +59,8 @@ class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class BOARD_DESIGN_SETTINGS;
 class ZONE_SETTINGS;
+class PCB_PLOT_PARAMS;
+
 
 /**
  * class PCB_BASE_FRAME
@@ -137,6 +139,14 @@ public:
 
     const ZONE_SETTINGS& GetZoneSettings() const;
     void SetZoneSettings( const ZONE_SETTINGS& aSettings );
+
+    /**
+     * Function GetPlotSettings
+     * returns the PCB_PLOT_PARAMS for the BOARD owned by this frame.
+     * Overloaded in FOOTPRINT_EDIT_FRAME.
+     */
+    virtual const PCB_PLOT_PARAMS& GetPlotSettings() const;
+    virtual void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings );
 
     /**
      * Function SetBoard
@@ -674,4 +684,4 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-#endif  /* WX_BASE_PCB_FRAME_H */
+#endif  // WX_BASE_PCB_FRAME_H_

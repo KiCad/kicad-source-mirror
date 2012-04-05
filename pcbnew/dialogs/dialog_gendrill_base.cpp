@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -49,6 +49,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_LeftBoxSizer->Add( m_Choice_Drill_Offset, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( m_LeftBoxSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleBoxSizer;
@@ -87,6 +88,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_PenNum = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	sbHPGOptionsSizer->Add( m_PenNum, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bMiddleBoxSizer->Add( sbHPGOptionsSizer, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbOptSizer;
@@ -98,7 +100,9 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_Check_Minimal = new wxCheckBox( this, wxID_ANY, _("Minimal header"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbOptSizer->Add( m_Check_Minimal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bMiddleBoxSizer->Add( sbOptSizer, 0, wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bMiddleBoxSizer, 1, wxEXPAND, 5 );
 	
@@ -114,6 +118,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_ViaDrillValue->Wrap( -1 );
 	m_DefaultViasDrillSizer->Add( m_ViaDrillValue, 0, wxALL, 5 );
 	
+	
 	sbSizerInfo->Add( m_DefaultViasDrillSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	m_MicroViasDrillSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Micro Vias Drill:") ), wxVERTICAL );
@@ -121,6 +126,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_MicroViaDrillValue = new wxStaticText( this, wxID_ANY, _("Micro Via Drill Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaDrillValue->Wrap( -1 );
 	m_MicroViasDrillSizer->Add( m_MicroViaDrillValue, 0, wxALL, 5 );
+	
 	
 	sbSizerInfo->Add( m_MicroViasDrillSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
@@ -147,7 +153,9 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_BuriedViasInfoMsg->Wrap( -1 );
 	sbSizerHoles->Add( m_BuriedViasInfoMsg, 0, wxALL, 5 );
 	
+	
 	sbSizerInfo->Add( sbSizerHoles, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	
 	
 	bRightBoxSizer->Add( sbSizerInfo, 0, wxEXPAND|wxTOP, 5 );
 	
@@ -161,10 +169,15 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_CancelButton = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightBoxSizer->Add( m_CancelButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( bRightBoxSizer, 1, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
+	
+	this->Centre( wxBOTH );
 	
 	// Connect Events
 	m_Choice_Unit->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );

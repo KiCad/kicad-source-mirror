@@ -51,7 +51,7 @@ class BOARD;
  * Enum MODULE_ATTR_T
  * is the set of attributes allowed within a MODULE, using MODULE::SetAttributes()
  * and MODULE::GetAttributes().  These are to be ORed together when calling
- * MODULE::SetAttrbute()
+ * MODULE::SetAttributes()
  */
 enum MODULE_ATTR_T
 {

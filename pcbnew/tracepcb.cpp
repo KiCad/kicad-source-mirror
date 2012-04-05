@@ -46,9 +46,6 @@
 #include <wx/overlay.h>
 
 
-extern int g_DrawDefaultLineThickness; // Default line thickness, used to draw Frame references
-
-
 // Local functions:
 /* Trace the pads of a module in sketch mode.
  * Used to display pads when when the module visibility is set to not visible

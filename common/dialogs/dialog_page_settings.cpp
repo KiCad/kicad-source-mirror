@@ -438,9 +438,9 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
 
             PAGE_INFO::SetCustomWidthMils( m_layout_size.x );
             PAGE_INFO::SetCustomHeightMils( m_layout_size.y );
+
             m_pageInfo.SetWidthMils( m_layout_size.x );
             m_pageInfo.SetHeightMils( m_layout_size.y );
-            m_pageInfo.SetPortrait( m_layout_size.x < m_layout_size.y );
         }
     }
     else

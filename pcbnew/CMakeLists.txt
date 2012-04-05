@@ -161,7 +161,6 @@ set(PCBNEW_SRCS
     netlist_reader_kicad.cpp
     onleftclick.cpp
     onrightclick.cpp
-    pcb_plot_params.cpp
     pcbnew.cpp
     pcbnew_config.cpp
     pcbplot.cpp

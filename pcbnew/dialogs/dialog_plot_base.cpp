@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
@@ -34,6 +34,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotFormatOpt->SetSelection( 0 );
 	bSizer27->Add( m_plotFormatOpt, 0, 0, 5 );
 	
+	
 	bSizer26->Add( bSizer27, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer28;
@@ -54,9 +55,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_browseButton = new wxButton( this, wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer29->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 	
+	
 	bSizer28->Add( bSizer29, 1, wxEXPAND, 5 );
 	
+	
 	bSizer26->Add( bSizer28, 1, 0, 5 );
+	
 	
 	bSizer12->Add( bSizer26, 0, wxEXPAND, 5 );
 	
@@ -68,6 +72,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxArrayString m_layerCheckListBoxChoices;
 	m_layerCheckListBox = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
 	m_LayersSizer->Add( m_layerCheckListBox, 1, wxEXPAND, 5 );
+	
 	
 	bUpperSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 3 );
 	
@@ -113,6 +118,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_plotMirrorOpt = new wxCheckBox( this, ID_MIROR_OPT, _("Mirrored plot"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotMirrorOpt, 0, wxALL, 2 );
+	
 	
 	bSizer192->Add( bSizerPlotItems, 0, wxEXPAND, 5 );
 	
@@ -160,9 +166,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizer14->Add( m_linesWidth, 0, wxBOTTOM|wxEXPAND|wxLEFT, 5 );
 	
+	
 	bSizer192->Add( bSizer14, 1, wxRIGHT|wxLEFT, 3 );
 	
+	
 	sbOptionsSizer->Add( bSizer192, 0, wxEXPAND, 5 );
+	
 	
 	m_PlotOptionsSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 3 );
 	
@@ -187,6 +196,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_useAuxOriginCheckBox->SetToolTip( _("Use auxiliary axis as coordinates origin in Gerber files.") );
 	
 	m_GerberOptionsSizer->Add( m_useAuxOriginCheckBox, 0, wxALL, 2 );
+	
 	
 	m_PlotOptionsSizer->Add( m_GerberOptionsSizer, 0, wxALL|wxEXPAND, 3 );
 	
@@ -214,6 +224,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizer20->Add( m_HPGLPenOverlayOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	
 	bSizer22->Add( bSizer20, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer21;
@@ -228,9 +239,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizer21->Add( m_HPGLPenSpeedOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	
 	bSizer22->Add( bSizer21, 1, wxEXPAND, 5 );
 	
+	
 	m_HPGLOptionsSizer->Add( bSizer22, 1, wxEXPAND, 5 );
+	
 	
 	m_PlotOptionsSizer->Add( m_HPGLOptionsSizer, 0, wxALL|wxEXPAND, 3 );
 	
@@ -251,6 +265,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizer18->Add( m_fineAdjustXscaleOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bSizer17->Add( bSizer18, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer19;
@@ -264,6 +279,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_fineAdjustYscaleOpt->SetToolTip( _("Set global Y scale adjust for exact scale postscript output.") );
 	
 	bSizer19->Add( m_fineAdjustYscaleOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	
 	bSizer17->Add( bSizer19, 1, wxEXPAND, 5 );
 	
@@ -279,7 +295,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizer191->Add( m_PSFineAdjustWidthOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
+	
 	bSizer17->Add( bSizer191, 1, wxEXPAND, 5 );
+	
 	
 	m_PSOptionsSizer->Add( bSizer17, 1, wxEXPAND, 5 );
 	
@@ -289,9 +307,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_forcePSA4OutputOpt = new wxCheckBox( this, wxID_ANY, _("Force A4 output"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxALL, 2 );
 	
+	
 	m_PlotOptionsSizer->Add( m_PSOptionsSizer, 0, wxALL|wxEXPAND, 3 );
 	
+	
 	bUpperSizer->Add( m_PlotOptionsSizer, 0, 0, 5 );
+	
 	
 	bSizer12->Add( bUpperSizer, 0, wxEXPAND, 5 );
 	
@@ -302,6 +323,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_messagesBox->SetMinSize( wxSize( -1,70 ) );
 	
 	sbSizerMsg->Add( m_messagesBox, 1, wxEXPAND, 5 );
+	
 	
 	bSizer12->Add( sbSizerMsg, 1, wxEXPAND, 5 );
 	
@@ -318,12 +340,18 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonQuit, 0, wxALL, 5 );
 	
+	
 	bSizer12->Add( bSizerButtons, 0, wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
+	
 	
 	m_MainSizer->Add( bSizer12, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
+	m_MainSizer->Fit( this );
+	
+	this->Centre( wxBOTH );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_BASE::OnClose ) );

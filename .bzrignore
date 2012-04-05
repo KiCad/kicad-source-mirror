@@ -18,7 +18,7 @@ Documentation/doxygen
 *.cmake
 *.bak
 common/pcb_plot_params_keywords.cpp
-common/pcb_plot_params_lexer.h
+include/pcb_plot_params_lexer.h
 pcbnew/specctra_keywords.cpp
 pcbnew/specctra_lexer.h
 new/html

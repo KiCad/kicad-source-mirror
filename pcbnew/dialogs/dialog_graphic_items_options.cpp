@@ -14,8 +14,6 @@
 
 #include <dialog_graphic_items_options.h>
 
-extern int g_DrawDefaultLineThickness;
-
 
 void PCB_EDIT_FRAME::OnConfigurePcbOptions( wxCommandEvent& aEvent )
 {

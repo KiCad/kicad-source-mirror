@@ -26,14 +26,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_GENDRILL_H_
-#define _DIALOG_GENDRILL_H_
+#ifndef DIALOG_GENDRILL_H_
+#define DIALOG_GENDRILL_H_
 
 #include <dialog_gendrill_base.h>
 
 class DIALOG_GENDRILL : public DIALOG_GENDRILL_BASE
 {
 public:
+    DIALOG_GENDRILL( PCB_EDIT_FRAME* parent );
+    ~DIALOG_GENDRILL();
+
     static int       m_UnitDrillIsInch;
     static int       m_ZerosFormat;
     static int       m_PrecisionFormat;
@@ -44,23 +47,21 @@ public:
     DRILL_PRECISION  m_Precision;       // Selected precision for drill files
     wxPoint          m_FileDrillOffset; // Drill offset: 0,0 for absolute coordiantes, or auxialry axis origin
 
+
 private:
-    PCB_EDIT_FRAME* m_Parent;
+    PCB_EDIT_FRAME* m_parent;
+    BOARD*          m_board;
+
     int m_platedPadsHoleCount;
     int m_notplatedPadsHoleCount;
     int m_throughViasCount;
     int m_microViasCount;
     int m_blindOrBuriedViasCount;
+
     static bool m_createRpt;           // true to create a drill file report
     static int m_createMap;            // > 0 to create a map file report
 
-public:
-    DIALOG_GENDRILL( PCB_EDIT_FRAME* parent );
-    ~DIALOG_GENDRILL();
 
-private:
-
-    // Initialises member variables
     void            initDialog();
     void            InitDisplayParams( void );
 
@@ -92,4 +93,4 @@ private:
     DRILL_PRECISION GetPrecison();
 };
 
-#endif      // _DIALOG_GENDRILL_H_
+#endif      // DIALOG_GENDRILL_H_

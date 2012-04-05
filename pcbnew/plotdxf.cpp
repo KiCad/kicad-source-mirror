@@ -20,6 +20,8 @@ bool PCB_BASE_FRAME::ExportToDxfFile( const wxString& aFullFileName, int aLayer,
 {
     LOCALE_IO   toggle;
 
+    const PCB_PLOT_PARAMS& plot_opts = GetPlotSettings();
+
     FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
 
     if( output_file == NULL )
@@ -34,7 +36,7 @@ bool PCB_BASE_FRAME::ExportToDxfFile( const wxString& aFullFileName, int aLayer,
     plotter->set_filename( aFullFileName );
     plotter->start_plot( output_file );
 
-    if( g_PcbPlotOptions.m_PlotFrameRef )
+    if( plot_opts.m_PlotFrameRef )
         PlotWorkSheet( plotter, GetScreen() );
 
     Plot_Layer( plotter, aLayer, aTraceMode );

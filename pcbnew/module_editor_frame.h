@@ -6,6 +6,7 @@
 #ifndef MODULE_EDITOR_FRAME_H_
 #define MODULE_EDITOR_FRAME_H_
 
+#include <wxBasePcbFrame.h>
 
 class FOOTPRINT_EDIT_FRAME : public PCB_BASE_FRAME
 {
@@ -20,8 +21,11 @@ public:
 
     ~FOOTPRINT_EDIT_FRAME();
 
-    BOARD_DESIGN_SETTINGS& GetDesignSettings() const;       // overload PCB_BASE_FRAME, get parent's
+    BOARD_DESIGN_SETTINGS& GetDesignSettings() const;           // overload PCB_BASE_FRAME, get parent's
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );  // overload
+
+    const PCB_PLOT_PARAMS& GetPlotSettings() const;             // overload PCB_BASE_FRAME, get parent's
+    void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings );   // overload
 
     void InstallOptionsFrame( const wxPoint& pos );
 

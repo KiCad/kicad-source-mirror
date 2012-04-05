@@ -55,6 +55,7 @@ static DRILL_PRECISION precisionListForInches[] =
 {
     DRILL_PRECISION( 2, 3 ), DRILL_PRECISION( 2, 4 )
 };
+
 static DRILL_PRECISION precisionListForMetric[] =
 {
     DRILL_PRECISION( 3, 2 ), DRILL_PRECISION( 3, 3 )
@@ -64,12 +65,12 @@ static DRILL_PRECISION precisionListForMetric[] =
 DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* parent ) :
     DIALOG_GENDRILL_BASE( parent )
 {
-    m_Parent = parent;
+    m_parent = parent;
+    m_board  = parent->GetBoard();
 
     SetReturnCode( 1 );
     initDialog();
     GetSizer()->SetSizeHints( this );
-    Centre();
 }
 
 
@@ -83,9 +84,6 @@ int DIALOG_GENDRILL:: m_PrecisionFormat = 1;
 bool DIALOG_GENDRILL::m_createRpt = false;
 int DIALOG_GENDRILL::m_createMap = 0;
 
-/*!
- * DIALOG_GENDRILL destructor
- */
 
 DIALOG_GENDRILL::~DIALOG_GENDRILL()
 {
@@ -93,13 +91,8 @@ DIALOG_GENDRILL::~DIALOG_GENDRILL()
 }
 
 
-/*!
- * Member initialisation
- */
-
 void DIALOG_GENDRILL::initDialog()
 {
-    SetFocus(); // Under wxGTK: mandatory to close dialog by the ESC key
     wxConfig* Config = wxGetApp().GetSettings();
 
     if( Config )
@@ -116,11 +109,10 @@ void DIALOG_GENDRILL::initDialog()
 }
 
 
-/* some param values initialization before display dialog window
- */
-void DIALOG_GENDRILL::InitDisplayParams( void )
+void DIALOG_GENDRILL::InitDisplayParams()
 {
     wxString msg;
+    const PCB_PLOT_PARAMS& plot_opts = m_board->GetPlotOptions();
 
     m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
     m_Choice_Precision->SetSelection( m_PrecisionFormat );
@@ -146,11 +138,11 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
     m_MicroViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
 
     msg.Empty();
-    msg << g_PcbPlotOptions.m_HPGLPenNum;
+    msg << plot_opts.m_HPGLPenNum;
     m_PenNum->SetValue( msg );
 
     msg.Empty();
-    msg << g_PcbPlotOptions.m_HPGLPenSpeed;
+    msg << plot_opts.m_HPGLPenSpeed;
     m_PenSpeed->SetValue( msg );
 
     // See if we have some buried vias or/and microvias, and display
@@ -159,7 +151,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
     m_microViasCount   = 0;
     m_blindOrBuriedViasCount = 0;
 
-    for( TRACK* track = m_Parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
+    for( TRACK* track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
     {
         if( track->Type() != PCB_VIA_T )
             continue;
@@ -178,7 +170,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
     m_platedPadsHoleCount    = 0;
     m_notplatedPadsHoleCount = 0;
 
-    for( MODULE* module = m_Parent->GetBoard()->m_Modules; module != NULL; module = module->Next() )
+    for( MODULE* module = m_parent->GetBoard()->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
@@ -228,38 +220,29 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
 }
 
 
-// Save drill options:
 void DIALOG_GENDRILL::UpdateConfig()
 {
     SetParams();
 
-    wxConfig* Config = wxGetApp().GetSettings();
+    wxConfig* config = wxGetApp().GetSettings();
 
-    if( Config )
+    if( config )
     {
-        Config->Write( ZerosFormatKey, m_ZerosFormat );
-        Config->Write( PrecisionKey, m_PrecisionFormat );
-        Config->Write( MirrorKey, m_Mirror );
-        Config->Write( MinimalHeaderKey, m_MinimalHeader );
-        Config->Write( UnitDrillInchKey, m_UnitDrillIsInch );
-        Config->Write( DrillOriginIsAuxAxisKey, m_DrillOriginIsAuxAxis );
+        config->Write( ZerosFormatKey, m_ZerosFormat );
+        config->Write( PrecisionKey, m_PrecisionFormat );
+        config->Write( MirrorKey, m_Mirror );
+        config->Write( MinimalHeaderKey, m_MinimalHeader );
+        config->Write( UnitDrillInchKey, m_UnitDrillIsInch );
+        config->Write( DrillOriginIsAuxAxisKey, m_DrillOriginIsAuxAxis );
     }
 }
 
-
-/*!
- * wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_RADIOBOX
- */
 
 void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
 {
     UpdatePrecisionOptions();
 }
 
-
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
- */
 
 void DIALOG_GENDRILL::OnOkClick( wxCommandEvent& event )
 {
@@ -268,20 +251,12 @@ void DIALOG_GENDRILL::OnOkClick( wxCommandEvent& event )
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CLOSE
- */
-
 void DIALOG_GENDRILL::OnCancelClick( wxCommandEvent& event )
 {
     UpdateConfig();                 // Save drill options:
     EndModal( wxID_CANCEL );        // Process the default cancel event (close dialog)
 }
 
-
-/*!
- * wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_SEL_ZEROS_FMT
- */
 
 void DIALOG_GENDRILL::OnSelZerosFmtSelected( wxCommandEvent& event )
 {
@@ -311,10 +286,12 @@ void DIALOG_GENDRILL::UpdatePrecisionOptions()
 }
 
 
-void DIALOG_GENDRILL::SetParams( void )
+void DIALOG_GENDRILL::SetParams()
 {
     wxString msg;
     long     ltmp;
+
+    PCB_PLOT_PARAMS plot_opts = m_board->GetPlotOptions();
 
     m_createMap = m_Choice_Drill_Map->GetSelection();
     m_createRpt = m_Choice_Drill_Report->GetSelection();
@@ -329,17 +306,17 @@ void DIALOG_GENDRILL::SetParams( void )
     msg = m_PenSpeed->GetValue();
 
     if( msg.ToLong( &ltmp ) )
-        g_PcbPlotOptions.m_HPGLPenSpeed = ltmp;
+        plot_opts.m_HPGLPenSpeed = ltmp;
 
     msg = m_PenNum->GetValue();
 
     if( msg.ToLong( &ltmp ) )
-        g_PcbPlotOptions.m_HPGLPenNum = ltmp;
+        plot_opts.m_HPGLPenNum = ltmp;
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );
     else
-        m_FileDrillOffset = m_Parent->GetOriginAxisPosition();
+        m_FileDrillOffset = m_parent->GetOriginAxisPosition();
 
     // get precision
     int idx = m_Choice_Precision->GetSelection();
@@ -348,4 +325,6 @@ void DIALOG_GENDRILL::SetParams( void )
         m_Precision = precisionListForInches[idx];
     else
         m_Precision = precisionListForMetric[idx];
+
+    m_board->SetPlotOptions( plot_opts );
 }

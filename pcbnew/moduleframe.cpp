@@ -265,6 +265,30 @@ void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSett
 }
 
 
+const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
+{
+    // get the settings from the parent editor, not our BOARD.
+
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+
+    wxASSERT( parentFrame );
+
+    return parentFrame->GetPlotSettings();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
+{
+    // set the settings into parent editor, not our BOARD.
+
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+
+    wxASSERT( parentFrame );
+
+    parentFrame->SetPlotSettings( aSettings );
+}
+
+
 void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )

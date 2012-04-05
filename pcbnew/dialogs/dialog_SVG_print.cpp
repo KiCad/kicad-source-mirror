@@ -37,8 +37,6 @@
 #define WIDTH_MAX_VALUE 500
 #define WIDTH_MIN_VALUE 1
 
-extern int g_DrawDefaultLineThickness;
-
 // Local variables:
 static PRINT_PARAMETERS  s_Parameters;
 static long s_SelectedLayers    = LAYER_BACK | LAYER_FRONT |

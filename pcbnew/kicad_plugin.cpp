@@ -573,8 +573,13 @@ void KICAD_PLUGIN::loadSETUP()
 
         if( TESTLINE( "PcbPlotParams" ) )
         {
+            PCB_PLOT_PARAMS plot_opts;
+
             PCB_PLOT_PARAMS_PARSER parser( line + SZ( "PcbPlotParams" ), m_reader->GetSource() );
-            g_PcbPlotOptions.Parse( &parser );
+
+            plot_opts.Parse( &parser );
+
+            m_board->SetPlotOptions( plot_opts );
         }
 
         else if( TESTLINE( "AuxiliaryAxisOrg" ) )
@@ -2906,11 +2911,10 @@ void KICAD_PLUGIN::saveSETUP() const
 
     fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( m_board->GetOriginAxisPosition() ).c_str() );
 
-    /* @todo no globals
     {
         STRING_FORMATTER sf;
 
-        g_PcbPlotOptions.Format( &sf, 0 );
+        m_board->GetPlotOptions().Format( &sf, 0 );
 
         wxString record = FROM_UTF8( sf.GetString().c_str() );
 
@@ -2919,7 +2923,6 @@ void KICAD_PLUGIN::saveSETUP() const
 
         fprintf( m_fp, "PcbPlotParams %s\n", TO_UTF8( record ) );
     }
-    */
 
     fprintf( m_fp, "VisibleElements %X\n", bds.GetVisibleElements() );
 
