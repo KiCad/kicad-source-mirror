@@ -7,8 +7,6 @@
 
 * add MODULE::Add (see BOARD:Add), to make it more clean
 
-* add wxSize implementation to wx.i and wx helpers (D_PAD uses it)
-
 
 
 

@@ -36,6 +36,118 @@
 void wxSetDefaultPyEncoding(const char* encoding);
 const char* wxGetDefaultPyEncoding();
 
+
+// wxRect class wrapper ///////////////////////////////////////////////////////
+
+class wxRect
+{
+public:
+    wxRect() : x(0), y(0), width(0), height(0)  { }
+    wxRect(int xx, int yy, int ww, int hh): x(xx), y(yy), width(ww), height(hh) { }
+    wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
+    wxRect(const wxPoint& pt, const wxSize& size)
+        : x(pt.x), y(pt.y), width(size.x), height(size.y) { }
+    wxRect(const wxSize& size): x(0), y(0), width(size.x), height(size.y) { }
+
+    int GetX() const { return x; }
+    void SetX(int xx) { x = xx; }
+
+    int GetY() const { return y; }
+    void SetY(int yy) { y = yy; }
+
+    int GetWidth() const { return width; }
+    void SetWidth(int w) { width = w; }
+    
+    int GetHeight() const { return height; }
+    void SetHeight(int h) { height = h; }
+
+    wxPoint GetPosition() const { return wxPoint(x, y); }
+    void SetPosition( const wxPoint &p ) { x = p.x; y = p.y; }
+    
+    int x, y, width, height;
+    
+    %extend 
+    {    
+       PyObject* Get() 
+       {
+            PyObject* res = PyTuple_New(4);
+            PyTuple_SET_ITEM(res, 0, PyInt_FromLong(self->x));
+            PyTuple_SET_ITEM(res, 1, PyInt_FromLong(self->y));
+            PyTuple_SET_ITEM(res, 2, PyInt_FromLong(self->width));
+            PyTuple_SET_ITEM(res, 3, PyInt_FromLong(self->height));
+            return res;
+        }
+    }
+    
+    
+    %pythoncode 
+    {
+    
+    def __eq__(self,other):	
+    	return self.x==other.x and self.y==other.y and self.width==other.width and self.height==other.height
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wxRect'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
+    def __setitem__(self, index, val):
+        if 	index == 0: 	self.SetX(val)
+        elif 	index == 1: 	self.SetY(val)
+        elif 	index == 2: 	self.SetWidth(val)
+        elif 	index == 3: 	self.SetHeight(val)
+        else: 			raise IndexError
+    def __nonzero__(self):               return self.Get() != (0,0,0,0)
+    __safe_for_unpickling__ = True
+   }
+
+};
+
+// wxSize class wrapper ///////////////////////////////////////////////////////
+
+class wxSize
+{
+public:
+    int x,y;
+    wxSize(int xx, int yy) : x(xx), y(yy) { }
+
+    %extend 
+    {    
+       PyObject* Get() 
+       {
+            PyObject* res = PyTuple_New(2);
+            PyTuple_SET_ITEM(res, 0, PyInt_FromLong(self->x));
+            PyTuple_SET_ITEM(res, 1, PyInt_FromLong(self->y));
+            return res;
+        }
+    }
+ 
+    ~wxSize();
+    
+    void SetWidth(int w);
+    void SetHeight(int h);
+    int GetWidth() const;
+    int GetHeight() const;
+    
+ 
+    %pythoncode 
+    {
+    def Scale(self,xscale,yscale):
+    	return wxSize(self.x*xscale,self.y*yscale)
+    def __eq__(self,other):	
+    	return self.GetWidth()==other.GetWidth() and self.GetHeight()==other.GetHeight()
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wxSize'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
+    def __getitem__(self, index):        return self.Get()[index]
+    def __setitem__(self, index, val):
+        if 	index == 0: 	self.SetWidth(val)
+        elif 	index == 1: 	self.SetHeight(val)
+        else: 			raise IndexError
+    def __nonzero__(self):               return self.Get() != (0,0)
+    __safe_for_unpickling__ = True
+    
+    }
+};
+
 // wxPoint class wrapper to (xx,yy) tuple /////////////////////////////////////
 
 class wxPoint
