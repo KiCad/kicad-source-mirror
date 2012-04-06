@@ -104,4 +104,5 @@
 
 
 %include "board.i"
+%include "module.i"
 %include "units.i"
