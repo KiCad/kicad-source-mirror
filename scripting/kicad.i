@@ -55,7 +55,7 @@
 
 %rename(getWxRect) operator wxRect; 
 %ignore operator <<;
-%ignore operator =;
+%ignore operator=;
 
 
 %{

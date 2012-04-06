@@ -1,11 +1,14 @@
+* add MODULE::Add (see BOARD:Add), to make it more clean
 
-* Tell swig(somehow) to forget automatic object deletion after adding
-  a BOARD_ITEM to BOARD object (it will be automatically deleted by BOARD,
+* Tell swig to forget automatic object deletion after adding
+  a BOARD_ITEM to MODULE object (it will be automatically deleted by MODULE,
   leading to Segmentation Fault when unloading our python module (double free).
   
-* implement iterator for NETCLASSES (NETCLASS) see class_netclass.h
-
-* add MODULE::Add (see BOARD:Add), to make it more clean
+  It seems that we must do object.thisown=0 when added, may be adding a wrapper
+  Add function.
+ 
+  
+* Implement iterator for NETCLASSES (NETCLASS) see class_netclass.h
 
 * Saving modules to library (in librairi.cpp)
  
@@ -22,5 +25,6 @@
    to kicad plugin?
    
 
-    
+     void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewModulesOnly )
+
 
