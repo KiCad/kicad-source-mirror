@@ -7,6 +7,20 @@
 
 * add MODULE::Add (see BOARD:Add), to make it more clean
 
+* Saving modules to library (in librairi.cpp)
+ 
+     see:
+        - void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewModulesOnly )
 
 
+	- bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
+                                             MODULE*         aModule,
+                                             bool            aOverwrite,
+                                             bool            aDisplayDialog )
+   
+   What do we do about this?, ask Dick, these functions should be transplanted
+   to kicad plugin?
+   
+
+    
 

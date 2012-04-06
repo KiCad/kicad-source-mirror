@@ -31,6 +31,11 @@
 %module pcbnew
 %include "kicad.i"
 
+// ignore a couple of items that generate warnings from swig built code
+
+%ignore BOARD_ITEM::ZeroOffset;
+%ignore D_PAD::m_PadSketchModePenSize;
+
 // this is what it must be included in the wrapper .cxx code to compile
 
 %{ 
