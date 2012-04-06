@@ -283,8 +283,8 @@ void MODULE::SetPosition( const wxPoint& newpos )
     wxPoint delta = newpos - m_Pos;
 
     m_Pos += delta;
-    m_Reference->m_Pos += delta;
-    m_Value->m_Pos += delta;
+    m_Reference->SetPosition( m_Reference->GetPosition() + delta );
+    m_Value->SetPosition( m_Value->GetPosition() + delta );
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
