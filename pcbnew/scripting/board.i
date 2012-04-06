@@ -45,6 +45,15 @@
     
     def Save(self,filename):
       return SaveBoard(filename,self)
+    
+    #
+    # add function, clears the thisown to avoid python from deleting
+    # the object in the garbage collector
+    #
+    
+    def Add(self,item): 
+    	item.thisown=0
+    	self.AddNative(item)
   }
   
 }
@@ -56,6 +65,7 @@
 %rename(Get) operator D_PAD*; 
 %rename(Get) operator MODULE*; 
 %rename(Get) operator SEGZONE*; 
+
 
 // we must translate C++ templates to scripting languages
 
