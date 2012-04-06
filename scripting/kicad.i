@@ -53,6 +53,11 @@
 %ignore InitKiCadAbout;
 %ignore GetCommandOptions;
 
+%rename(getWxRect) operator wxRect; 
+%ignore operator <<;
+%ignore operator =;
+
+
 %{
   #include <cstddef>
 	#include <dlist.h>
@@ -60,8 +65,10 @@
 	#include <common.h>
 	#include <wx_python_helpers.h>
 	#include <cstddef>
-  #include <vector>
+  	#include <vector>
+	
 	using namespace std;
+	
 	#include <class_title_block.h>
 	#include <class_colors_design_settings.h>
 	#include <class_marker_base.h>
