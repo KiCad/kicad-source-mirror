@@ -783,10 +783,10 @@ void KICAD_PLUGIN::loadSETUP()
 
         else if( TESTLINE( "GridOrigin" ) )
         {
+            /* @todo
             BIU gx = biuParse( line + SZ( "GridOrigin" ), &data );
             BIU gy = biuParse( data );
 
-            /* @todo
             GetScreen()->m_GridOrigin.x = Ox;
             GetScreen()->m_GridOrigin.y = Oy;
             */
