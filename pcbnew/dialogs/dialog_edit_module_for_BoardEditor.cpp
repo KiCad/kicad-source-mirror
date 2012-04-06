@@ -480,6 +480,10 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
         m_CurrentModule->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
 
+    // Init Fields (should be first, because they can be moved or/and flipped later):
+    m_CurrentModule->m_Reference->Copy( m_ReferenceCopy );
+    m_CurrentModule->m_Value->Copy( m_ValueCopy );
+
     // Initialize masks clearances
     m_CurrentModule->SetLocalClearance(
         ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, m_Parent->GetInternalUnits() ) );
@@ -548,10 +552,6 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_CurrentModule->m_CntRot90  = m_CostRot90Ctrl->GetValue();
     m_CurrentModule->m_CntRot180 = m_CostRot180Ctrl->GetValue();
-
-    // Init Fields:
-    m_CurrentModule->m_Reference->Copy( m_ReferenceCopy );
-    m_CurrentModule->m_Value->Copy( m_ValueCopy );
 
     /* Now, set orientation. must be made after others changes,
      * because rotation changes fields positions on board according to the new orientation
