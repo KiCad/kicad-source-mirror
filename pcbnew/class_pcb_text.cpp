@@ -194,12 +194,12 @@ EDA_ITEM* TEXTE_PCB::Clone() const
 void TEXTE_PCB::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
     throw( IO_ERROR )
 {
-    aFormatter->Print( aNestLevel, "(pcb-text (layer %d)", GetLayer() );
+    aFormatter->Print( aNestLevel, "(pcb_text (layer %d)", GetLayer() );
 
     if( GetTimeStamp() )
-        aFormatter->Print( aNestLevel, " (tstamp %lX)", GetTimeStamp() );
+        aFormatter->Print( 0, " (tstamp %lX)", GetTimeStamp() );
 
-    aFormatter->Print( aNestLevel, "\n" );
+    aFormatter->Print( 0, "\n" );
 
     EDA_TEXT::Format( aFormatter, aNestLevel+1, aControlBits );
 

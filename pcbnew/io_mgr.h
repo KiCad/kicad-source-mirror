@@ -47,7 +47,8 @@ public:
      */
     enum PCB_FILE_T
     {
-        KICAD,
+        LEGACY,                         //< Legacy Pcbnew file formats prior to s-expression.
+        KICAD,                          //< S-expression Pcbnew file format.
         // add your type here.
 
         // EAGLE,
@@ -85,6 +86,16 @@ public:
     static const wxString ShowType( PCB_FILE_T aFileType );
 
     /**
+     * Function GetFileExtension
+     * returns the file extension for \a aFileType.
+     *
+     * @param aFileType The #PCB_FILE_T type.
+     * @return A wxString object containing the file extension for \a aFileType or an empty
+     *         string if \a aFileType is invalid.
+     */
+    static const wxString GetFileExtension( PCB_FILE_T aFileType );
+
+    /**
      * Function Load
      * finds the requested PLUGIN and if found, calls the PLUGIN->Load(..) funtion
      * on it using the arguments passed to this function.  After the PLUGIN->Load()
@@ -106,7 +117,7 @@ public:
      *  or file cannot be loaded.
      */
     static BOARD* Load( PCB_FILE_T aFileType, const wxString& aFileName,
-            BOARD* aAppendToMe = NULL, PROPERTIES* aProperties = NULL );
+                        BOARD* aAppendToMe = NULL, PROPERTIES* aProperties = NULL );
 
     /**
      * Function Save
@@ -132,7 +143,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     static void Save( PCB_FILE_T aFileType, const wxString& aFileName,
-            BOARD* aBoard, PROPERTIES* aProperties = NULL );
+                      BOARD* aBoard, PROPERTIES* aProperties = NULL );
 };
 
 
@@ -166,7 +177,13 @@ public:
      * Function PluginName
      * returns a brief hard coded name for this PLUGIN.
      */
-    virtual const wxString& PluginName() = 0;
+    virtual const wxString& PluginName() const = 0;
+
+    /**
+     * Function GetFileExtension
+     * returns the file extension for the PLUGIN.
+     */
+    virtual const wxString& GetFileExtension() const = 0;
 
     /**
      * Function Load
@@ -195,7 +212,7 @@ public:
      *  input file if possible.
      */
     virtual BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                        PROPERTIES* aProperties = NULL );
+                         PROPERTIES* aProperties = NULL );
 
     /**
      * Function Save
@@ -218,7 +235,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     virtual void Save( const wxString& aFileName, BOARD* aBoard,
-                    PROPERTIES* aProperties = NULL );
+                       PROPERTIES* aProperties = NULL );
 
     //-----</PUBLIC PLUGIN API>------------------------------------------------
 

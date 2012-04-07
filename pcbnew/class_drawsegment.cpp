@@ -554,35 +554,35 @@ void DRAWSEGMENT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
     switch( m_Shape )
     {
     case S_SEGMENT:  // Line
-        aFormatter->Print( aNestLevel, "line (pts xy(%s) xy(%s))",
+        aFormatter->Print( 0, "line (pts xy(%s) xy(%s))",
                            FormatBIU( m_Start ).c_str(),
                            FormatBIU( m_End ).c_str() );
         break;
 
     case S_CIRCLE:  // Circle
-        aFormatter->Print( aNestLevel, "circle (center (xy %s)) (end (xy %s))",
+        aFormatter->Print( 0, "circle (center (xy %s)) (end (xy %s))",
                            FormatBIU( m_Start ).c_str(),
                            FormatBIU( m_End ).c_str() );
         break;
 
     case S_ARC:     // Arc
-        aFormatter->Print( aNestLevel, "arc (start (xy %s)) (end (xy %s)) (angle %0.1f)",
+        aFormatter->Print( 0, "arc (start (xy %s)) (end (xy %s)) (angle %0.1f)",
                            FormatBIU( m_Start ).c_str(),
                            FormatBIU( m_End ).c_str(),
                            m_Angle );
         break;
 
     case S_POLYGON: // Polygon
-        aFormatter->Print( aNestLevel, "line (pts" );
+        aFormatter->Print( 0, "line (pts" );
 
         for( i = 0;  i<m_PolyPoints.size();  ++i )
-            aFormatter->Print( aNestLevel, " (xy %s)", FormatBIU( m_PolyPoints[i] ).c_str() );
+            aFormatter->Print( 0, " (xy %s)", FormatBIU( m_PolyPoints[i] ).c_str() );
 
-        aFormatter->Print( aNestLevel, ")" );
+        aFormatter->Print( 0, ")" );
         break;
 
     case S_CURVE:   // Bezier curve
-        aFormatter->Print( aNestLevel, "curve pts(xy(%s) xy(%s) xy(%s) xy(%s))",
+        aFormatter->Print( 0, "curve pts(xy(%s) xy(%s) xy(%s) xy(%s))",
                            FormatBIU( m_Start ).c_str(),
                            FormatBIU( m_BezierC1 ).c_str(),
                            FormatBIU( m_BezierC2 ).c_str(),
@@ -593,18 +593,18 @@ void DRAWSEGMENT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
         wxFAIL_MSG( wxT( "Cannot format invalid DRAWSEGMENT type." ) );
     };
 
-    aFormatter->Print( aNestLevel, " (layer %d)", GetLayer() );
+    aFormatter->Print( 0, " (layer %d)", GetLayer() );
 
     if( m_Width != 0 )
-        aFormatter->Print( aNestLevel, " (width %s)", FormatBIU( m_Width ).c_str() );
+        aFormatter->Print( 0, " (width %s)", FormatBIU( m_Width ).c_str() );
 
     if( GetTimeStamp() )
-        aFormatter->Print( aNestLevel, " (tstamp %lX)", GetTimeStamp() );
+        aFormatter->Print( 0, " (tstamp %lX)", GetTimeStamp() );
 
     if( GetStatus() )
-        aFormatter->Print( aNestLevel, " (status %X)", GetStatus() );
+        aFormatter->Print( 0, " (status %X)", GetStatus() );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( 0, ")\n" );
 }
 
 

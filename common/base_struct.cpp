@@ -574,12 +574,12 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     throw( IO_ERROR )
 {
     aFormatter->Print( aNestLevel, "(text %s (at %s",
-                       EscapedUTF8( m_Text ).c_str(), FormatBIU( m_Pos ).c_str() );
+                       aFormatter->Quotew( m_Text ).c_str(), FormatBIU( m_Pos ).c_str() );
 
     if( m_Orient != 0.0 )
-        aFormatter->Print( aNestLevel, "%0.1f", m_Orient );
+        aFormatter->Print( 0, " %0.1f", m_Orient );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( 0, ")\n" );
 
     if( !IsDefaultFormatting() )
     {
@@ -593,15 +593,15 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             // Add font support here at some point in the future.
 
             if( ( m_Size.x != DEFAULT_SIZE_TEXT ) || ( m_Size.y != DEFAULT_SIZE_TEXT ) )
-                aFormatter->Print( aNestLevel+2, " (size %s)", FormatBIU( m_Size ).c_str() );
+                aFormatter->Print( 0, " (size %s)", FormatBIU( m_Size ).c_str() );
 
             if( m_Bold )
-                aFormatter->Print( aNestLevel+2, " bold" );
+                aFormatter->Print( 0, " bold" );
 
             if( m_Bold )
-                aFormatter->Print( aNestLevel+2, " italic" );
+                aFormatter->Print( 0, " italic" );
 
-            aFormatter->Print( aNestLevel+1, ")\n");
+            aFormatter->Print( 0, ")\n");
         }
 
         if( m_Mirror || ( m_HJustify != GR_TEXT_HJUSTIFY_CENTER )
@@ -610,24 +610,22 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             aFormatter->Print( aNestLevel+2, "(justify");
 
             if( m_HJustify != GR_TEXT_HJUSTIFY_CENTER )
-                aFormatter->Print( aNestLevel+2,
-                                   (m_HJustify == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
+                aFormatter->Print( 0, (m_HJustify == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
 
             if( m_VJustify != GR_TEXT_VJUSTIFY_CENTER )
-                aFormatter->Print( aNestLevel+2,
-                                   (m_VJustify == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
+                aFormatter->Print( 0, (m_VJustify == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
 
             if( m_Mirror )
-                aFormatter->Print( aNestLevel+2, " mirror" );
+                aFormatter->Print( 0, " mirror" );
 
-            aFormatter->Print( aNestLevel+2, ")\n" );
+            aFormatter->Print( 0, ")\n" );
         }
 
         // As of now the only place this is used is in Eeschema to hide or show the text.
         if( m_Attributs )
-            aFormatter->Print( aNestLevel+2, "hide" );
+            aFormatter->Print( aNestLevel+2, "hide\n" );
 
-        aFormatter->Print( aNestLevel+1, "\n)\n" );
+        aFormatter->Print( aNestLevel+1, ")\n" );
     }
 
     aFormatter->Print( aNestLevel, ")\n" );

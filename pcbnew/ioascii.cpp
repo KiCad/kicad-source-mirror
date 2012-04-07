@@ -1231,7 +1231,7 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
     LOCALE_IO   toggle;
 
     // Writing file header.
-    fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", BOARD_FILE_VERSION,
+    fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", LEGACY_BOARD_FILE_VERSION,
              TO_UTF8( DateAndTime() ) );
     fprintf( aFile, "# Created by Pcbnew%s\n\n", TO_UTF8( GetBuildVersion() ) );
 

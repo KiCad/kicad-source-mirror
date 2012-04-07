@@ -1671,32 +1671,32 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
       || !m_company.IsEmpty() || !m_comment1.IsEmpty() || !m_comment2.IsEmpty()
       || !m_comment3.IsEmpty() || !m_comment4.IsEmpty()  )
     {
-        aFormatter->Print( aNestLevel, "(title-block\n" );
+        aFormatter->Print( aNestLevel, "(title_block\n" );
 
         if( !m_title.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "\n(title %s)", EscapedUTF8( m_title ).c_str() );
+            aFormatter->Print( aNestLevel+1, "(title %s)\n", EscapedUTF8( m_title ).c_str() );
 
         if( !m_date.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "\n(date %s)", EscapedUTF8( m_date ).c_str() );
+            aFormatter->Print( aNestLevel+1, "(date %s)\n", EscapedUTF8( m_date ).c_str() );
 
         if( !m_revision.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "\n(rev %s)", EscapedUTF8( m_revision ).c_str() );
+            aFormatter->Print( aNestLevel+1, "(rev %s)\n", EscapedUTF8( m_revision ).c_str() );
 
         if( !m_company.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "\n(company %s)", EscapedUTF8( m_company ).c_str() );
+            aFormatter->Print( aNestLevel+1, "(company %s)\n", EscapedUTF8( m_company ).c_str() );
 
         if( !m_comment1.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "\n(comment1 %s)", EscapedUTF8( m_comment1 ).c_str() );
+            aFormatter->Print( aNestLevel+1, "(comment1 %s)\n", EscapedUTF8( m_comment1 ).c_str() );
 
         if( !m_comment2.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "\n(comment2 %s)", EscapedUTF8( m_comment2 ).c_str() );
+            aFormatter->Print( aNestLevel+1, "(comment2 %s)\n", EscapedUTF8( m_comment2 ).c_str() );
 
         if( !m_comment3.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "\n(comment3 %s)", EscapedUTF8( m_comment3 ).c_str() );
+            aFormatter->Print( aNestLevel+1, "(comment3 %s)\n", EscapedUTF8( m_comment3 ).c_str() );
 
         if( !m_comment4.IsEmpty() )
-            aFormatter->Print( aNestLevel+1, "\n(comment4 %s)", EscapedUTF8( m_comment4 ).c_str() );
+            aFormatter->Print( aNestLevel+1, "(comment4 %s)\n", EscapedUTF8( m_comment4 ).c_str() );
 
-        aFormatter->Print( aNestLevel, "\n)\n" );
+        aFormatter->Print( aNestLevel, ")\n\n" );
     }
 }
