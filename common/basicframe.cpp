@@ -517,13 +517,6 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
 
     tmp << wxT( "Options: " );
 
-    tmp << wxT( "USE_PNG_BITMAPS=" );
-#ifdef USE_PNG_BITMAPS
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
-
     tmp << wxT( "         KICAD_GOST=" );
 #ifdef KICAD_GOST
     tmp << wxT( "ON\n" );
