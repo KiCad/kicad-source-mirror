@@ -67,7 +67,7 @@ wxString BOARD_ITEM::GetLayerName() const
 /** @todo Move Pcbnew version of FormatBIU() where ever the common DSO/DSL code ends up. */
 std::string FormatBIU( int aValue )
 {
-#if !defined( USE_PCBNEW_NANOMETERS )
+#if !defined( USE_PCBNEW_NANOMETRES )
     wxFAIL_MSG( wxT( "Cannot use FormatBIU() unless Pcbnew is build with PCBNEW_NANOMETERS=ON." ) );
 #endif
 

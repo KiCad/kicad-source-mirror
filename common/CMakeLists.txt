@@ -118,8 +118,14 @@ set(PCB_COMMON_SRCS
     dialogs/dialog_page_settings.cpp
 )
 
-if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
-    set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp ../pcbnew/io_mgr.cpp ../pcbnew/kicad_plugin.cpp )
+if( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
+    set( PCB_COMMON_SRCS
+         ${PCB_COMMON_SRCS}
+         ../pcbnew/item_io.cpp
+         ../pcbnew/io_mgr.cpp
+         ../pcbnew/legacy_plugin.cpp
+         ../pcbnew/kicad_plugin.cpp
+       )
 else()
     set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp )
 endif()

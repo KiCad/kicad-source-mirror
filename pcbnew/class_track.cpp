@@ -1579,7 +1579,7 @@ void TRACK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBit
                            FormatBIU( m_Start ).c_str(), FormatBIU( m_Width ).c_str() );
 
         if( m_Drill != UNDEFINED_DRILL_DIAMETER )
-            aFormatter->Print( aNestLevel, " (drill %s)", FormatBIU( m_Drill ).c_str() );
+            aFormatter->Print( 0, " (drill %s)", FormatBIU( m_Drill ).c_str() );
     }
     else
     {
@@ -1588,15 +1588,15 @@ void TRACK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBit
                            FormatBIU( m_Width ).c_str() );
     }
 
-    aFormatter->Print( aNestLevel, " (layer %d) (net %d)", GetLayer(), GetNet() );
+    aFormatter->Print( 0, " (layer %d) (net %d)", GetLayer(), GetNet() );
 
     if( GetTimeStamp() != 0 )
-        aFormatter->Print( aNestLevel, " (tstamp %lX)", GetTimeStamp() );
+        aFormatter->Print( 0, " (tstamp %lX)", GetTimeStamp() );
 
     if( GetStatus() != 0 )
-        aFormatter->Print( aNestLevel, " (status %X)", GetStatus() );
+        aFormatter->Print( 0, " (status %X)", GetStatus() );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( 0, ")\n" );
 }
 
 

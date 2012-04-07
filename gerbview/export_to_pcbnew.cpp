@@ -239,7 +239,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
     SetLocaleTo_C_standard();
 
     // write PCB header
-    fprintf( m_file, "PCBNEW-BOARD Version %d date %s\n\n", BOARD_FILE_VERSION,
+    fprintf( m_file, "PCBNEW-BOARD Version %d date %s\n\n", LEGACY_BOARD_FILE_VERSION,
              TO_UTF8( DateAndTime() ) );
     WriteGeneralDescrPcb( );
     WriteSetup( );

@@ -960,7 +960,8 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
     throw( IO_ERROR )
 {
     aFormatter->Print( aNestLevel, "(zone (net %d %s) (layer %d) (tstamp %lX)\n",
-                       GetNet(), EscapedUTF8( m_Netname ).c_str(), GetLayer(), GetTimeStamp() );
+                       GetNet(), aFormatter->Quotew( m_Netname ).c_str(),
+                       GetLayer(), GetTimeStamp() );
 
 
     // Save the outline aux info
@@ -986,18 +987,18 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
     {
     default:
     case PAD_IN_ZONE:       padoption = "yes";          break;
-    case THERMAL_PAD:       padoption = "use-thermal";  break;
+    case THERMAL_PAD:       padoption = "use_thermal";  break;
     case PAD_NOT_IN_ZONE:   padoption = "no";           break;
     }
 
-    aFormatter->Print( aNestLevel+1, "(connect-pads %s (clearance %s))\n",
+    aFormatter->Print( aNestLevel+1, "(connect_pads %s (clearance %s))\n",
                        padoption.c_str(), FormatBIU( m_ZoneClearance ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(min-thickness %s)\n",
+    aFormatter->Print( aNestLevel+1, "(min_thickness %s)\n",
                        FormatBIU( m_ZoneMinThickness ).c_str() );
 
     aFormatter->Print( aNestLevel+1,
-                       "(fill %s (mode %s) (arc-segments %d) (thermal-gap %s) (thermal-bridge-width %s)\n",
+                       "(fill %s (mode %s) (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)\n",
                        (m_IsFilled) ? "yes" : "no",
                        (m_FillMode) ? "segment" : "polygon",
                        m_ArcToSegmentsCount,
@@ -1023,15 +1024,25 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
 
     if( cv.size() )
     {
-        aFormatter->Print( aNestLevel+1, "(polygon (pts" );
+        aFormatter->Print( aNestLevel+1, "(polygon\n");
+        aFormatter->Print( aNestLevel+2, "(pts\n" );
 
         for( std::vector< CPolyPt >::const_iterator it = cv.begin();  it != cv.end();  ++it )
         {
-            aFormatter->Print( aNestLevel+1, " (xy %s %s)",
+            aFormatter->Print( aNestLevel+3, "(xy %s %s)\n",
                                FormatBIU( it->x ).c_str(), FormatBIU( it->y ).c_str() );
 
             if( it->end_contour )
-                aFormatter->Print( aNestLevel+1, ")\n(polygon (pts" );
+            {
+                aFormatter->Print( aNestLevel+2, ")\n" );
+
+                if( it+1 != cv.end() )
+                {
+                    aFormatter->Print( aNestLevel+1, ")\n" );
+                    aFormatter->Print( aNestLevel+1, "(polygon\n" );
+                    aFormatter->Print( aNestLevel+2, "(pts\n" );
+                }
+            }
         }
 
         aFormatter->Print( aNestLevel+1, ")\n" );
@@ -1042,15 +1053,25 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
 
     if( fv.size() )
     {
-        aFormatter->Print( aNestLevel+1, "(filled-polygon (pts" );
+        aFormatter->Print( aNestLevel+1, "(filled_polygon\n" );
+        aFormatter->Print( aNestLevel+2, "(pts\n" );
 
         for( std::vector< CPolyPt >::const_iterator it = fv.begin();  it != fv.end();  ++it )
         {
-            aFormatter->Print( aNestLevel+1, " (xy %s %s)",
+            aFormatter->Print( aNestLevel+3, "(xy %s %s)\n",
                                FormatBIU( it->x ).c_str(), FormatBIU( it->y ).c_str() );
 
             if( it->end_contour )
-                aFormatter->Print( aNestLevel+1, ")\n(filled-polygon (pts" );
+            {
+                aFormatter->Print( aNestLevel+2, ")\n" );
+
+                if( it+1 != fv.end() )
+                {
+                    aFormatter->Print( aNestLevel+1, ")\n" );
+                    aFormatter->Print( aNestLevel+1, "(filled_polygon\n" );
+                    aFormatter->Print( aNestLevel+2, "(pts\n" );
+                }
+            }
         }
 
         aFormatter->Print( aNestLevel+1, ")\n" );
@@ -1061,7 +1082,7 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
 
     if( segs.size() )
     {
-        aFormatter->Print( aNestLevel+1, "(fill-segments\n" );
+        aFormatter->Print( aNestLevel+1, "(fill_segments\n" );
 
         for( std::vector< SEGMENT >::const_iterator it = segs.begin();  it != segs.end();  ++it )
         {

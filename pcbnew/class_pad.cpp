@@ -849,59 +849,60 @@ void D_PAD::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBit
 
     switch( m_Attribute )
     {
-    case PAD_STANDARD:          type = "thru-hole";      break;
+    case PAD_STANDARD:          type = "thru_hole";      break;
     case PAD_SMD:               type = "smd";            break;
     case PAD_CONN:              type = "connect";        break;
-    case PAD_HOLE_NOT_PLATED:   type = "np-thru-hole";   break;
+    case PAD_HOLE_NOT_PLATED:   type = "np_thru_hole";   break;
 
     default:
         THROW_IO_ERROR( wxString::Format( _( "unknown pad attribute: %d" ), m_Attribute ) );
     }
 
     aFormatter->Print( aNestLevel, "(pad %s %s %s (size %s)\n",
-                       EscapedUTF8( GetPadName() ).c_str(), type.c_str(), shape.c_str(),
+                       aFormatter->Quotew( GetPadName() ).c_str(), type.c_str(), shape.c_str(),
                        FormatBIU( m_Size ).c_str() );
     aFormatter->Print( aNestLevel+1, "(at %s", FormatBIU( m_Pos0 ).c_str() );
 
     if( m_Orient != 0.0 )
-        aFormatter->Print( aNestLevel+1, " %0.1f", m_Orient );
+        aFormatter->Print( 0, " %0.1f", m_Orient );
 
-    aFormatter->Print( aNestLevel+1, ")\n" );
+    aFormatter->Print( 0, ")\n" );
 
     if( (m_Drill.GetWidth() > 0) || (m_Drill.GetHeight() > 0) )
     {
         std::string drill = (m_Drill.GetHeight() > 0) ? FormatBIU( m_Drill ).c_str() :
                             FormatBIU( m_Drill.GetWidth() ).c_str();
-        aFormatter->Print( aNestLevel+1, "(drill %s\n", drill.c_str() );
+        aFormatter->Print( aNestLevel+1, "(drill %s", drill.c_str() );
 
         if( (m_Offset.x > 0) || (m_Offset.y > 0) )
         {
             std::string drillOffset = ( m_Offset.x > 0 ) ?
                                       FormatBIU( m_Offset ).c_str() :
                                       FormatBIU( m_Offset.x ).c_str();
-            aFormatter->Print( aNestLevel+1, " (offset %s)", drillOffset.c_str() );
+            aFormatter->Print( 0, " (offset %s)", drillOffset.c_str() );
         }
 
-        aFormatter->Print( aNestLevel+1, ")\n" );
+        aFormatter->Print( 0, ")\n" );
     }
 
     aFormatter->Print( aNestLevel+1, "(layers %08X)\n", GetLayerMask() );
 
-    aFormatter->Print( aNestLevel+1, "(net %d %s)\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(net %d %s)\n",
+                       GetNet(), aFormatter->Quotew( m_Netname ).c_str() );
 
     if( m_LengthDie != 0 )
-        aFormatter->Print( aNestLevel+1, "(die-length %s)\n", FormatBIU( m_LengthDie ).c_str() );
+        aFormatter->Print( aNestLevel+1, "(die_length %s)\n", FormatBIU( m_LengthDie ).c_str() );
 
     if( m_LocalSolderMaskMargin != 0 )
-        aFormatter->Print( aNestLevel+1, "(solder-mask-margin %s)\n",
+        aFormatter->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
                            FormatBIU( m_LocalSolderMaskMargin ).c_str() );
 
     if( m_LocalSolderPasteMargin != 0 )
-        aFormatter->Print( aNestLevel+1, "(solder-paste-margin %s)\n",
+        aFormatter->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
                            FormatBIU( m_LocalSolderPasteMargin ).c_str() );
 
     if( m_LocalSolderPasteMarginRatio != 0 )
-        aFormatter->Print( aNestLevel+1, "(solder-paste-margin-ratio %g)\n",
+        aFormatter->Print( aNestLevel+1, "(solder_paste_margin_ratio %g)\n",
                            m_LocalSolderPasteMarginRatio );
 
     if( m_LocalClearance != 0 )
@@ -909,14 +910,14 @@ void D_PAD::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBit
                            FormatBIU( m_LocalClearance ).c_str() );
 
     if( GetZoneConnection() != UNDEFINED_CONNECTION )
-        aFormatter->Print( aNestLevel+1, "(zone-connect %d)\n", GetZoneConnection() );
+        aFormatter->Print( aNestLevel+1, "(zone_connect %d)\n", GetZoneConnection() );
 
     if( GetThermalWidth() != 0 )
-        aFormatter->Print( aNestLevel+1, "(thermal-width %s)\n",
+        aFormatter->Print( aNestLevel+1, "(thermal_width %s)\n",
                            FormatBIU( GetThermalWidth() ).c_str() );
 
     if( GetThermalGap() != 0 )
-        aFormatter->Print( aNestLevel+1, "(thermal-gap %s)\n",
+        aFormatter->Print( aNestLevel+1, "(thermal_gap %s)\n",
                            FormatBIU( GetThermalGap() ).c_str() );
 
     aFormatter->Print( aNestLevel, ")\n" );

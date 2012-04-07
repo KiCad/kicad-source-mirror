@@ -324,21 +324,21 @@ int NETCLASS::GetuViaMinDrill() const
 void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
     throw( IO_ERROR )
 {
-    aFormatter->Print( aNestLevel, "(net-class %s %s\n",
-                       EscapedUTF8( GetName() ).c_str(),
-                       EscapedUTF8( GetDescription() ).c_str() );
+    aFormatter->Print( aNestLevel, "(net_class %s %s\n",
+                       aFormatter->Quotew( GetName() ).c_str(),
+                       aFormatter->Quotew( GetDescription() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(clearance %d)\n", GetClearance() );
-    aFormatter->Print( aNestLevel+1, "(trace-width %d)\n", GetTrackWidth() );
+    aFormatter->Print( aNestLevel+1, "(clearance %s)\n", FormatBIU( GetClearance() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(trace_width %s)\n", FormatBIU( GetTrackWidth() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(via-dia %d)\n", GetViaDiameter() );
-    aFormatter->Print( aNestLevel+1, "(via-drill %d)\n", GetViaDrill() );
+    aFormatter->Print( aNestLevel+1, "(via_dia %s)\n", FormatBIU( GetViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via_drill %s)\n", FormatBIU( GetViaDrill() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(uvia-dia %d)\n", GetuViaDiameter() );
-    aFormatter->Print( aNestLevel+1, "(uvia-drill %d)\n", GetuViaDrill() );
+    aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FormatBIU( GetuViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FormatBIU( GetuViaDrill() ).c_str() );
 
     for( NETCLASS::const_iterator it = begin();  it!= end();  ++it )
-        aFormatter->Print( aNestLevel+1, "(add-net %s)\n", EscapedUTF8( *it ).c_str() );
+        aFormatter->Print( aNestLevel+1, "(add_net %s)\n", aFormatter->Quotew( *it ).c_str() );
 
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( aNestLevel, ")\n\n" );
 }
