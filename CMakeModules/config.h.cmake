@@ -55,8 +55,6 @@
 
 #cmakedefine USE_IMAGES_IN_MENUS 1
 
-#cmakedefine USE_PNG_BITMAPS 1
-
 #cmakedefine USE_NEW_PCBNEW_LOAD
 #cmakedefine USE_NEW_PCBNEW_SAVE
 #cmakedefine USE_PCBNEW_NANAMETERS

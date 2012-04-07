@@ -1,6 +1,2 @@
-#ifdef USE_PNG_BITMAPS
 icon_cvpcb ICON "../bitmaps_png/icons/icon_cvpcb.ico"
-#else
-icon_cvpcb ICON "../bitmaps_xpm/icons/icon_cvpcb.ico"
-#endif
 #include "wx/msw/wx.rc"

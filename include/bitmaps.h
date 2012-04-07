@@ -10,8 +10,6 @@ class wxBitmap;     // only to define wxBitmap
 #include <config.h>
 
 
-#if defined(USE_PNG_BITMAPS)
-
 #define VTOOLBAR_WIDTH  29
 #define TOOL_SIZE       26
 
@@ -27,17 +25,6 @@ struct BITMAP_OPAQUE
 // declared as single element _array_, so its name assigns to pointer
 #define EXTERN_BITMAP(x) extern const BITMAP_OPAQUE x[1];
 
-#else   // XPM
-
-#define VTOOLBAR_WIDTH  26
-#define TOOL_SIZE       23
-
-// temporary during migration to KiBitmap() and KiBitmapNew().
-typedef const char*     BITMAP_OPAQUE;
-
-#define EXTERN_BITMAP(x) extern const char* x[];
-
-#endif
 
 /// a BITMAP_DEF is really a const pointer to an opaque
 /// structure.  So you should never need to use 'const' with it.
