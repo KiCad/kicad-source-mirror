@@ -20,8 +20,6 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 # reports.
 #
 
-option(USE_PNG_BITMAPS "use PNG bitmaps instead of XPM (default ON)" ON)
-
 option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format" ON)
 option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format" ON)
 option(USE_PCBNEW_NANOMETRES
@@ -86,10 +84,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
 
-    if( USE_PNG_BITMAPS )
-        #Add  -DUSE_PNG_BITMAPS to windres.exe command line
-        set(CMAKE_RC_COMPILER windres.exe -DUSE_PNG_BITMAPS)
-    endif( USE_PNG_BITMAPS )
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(wxUSE_UNICODE)
@@ -255,12 +249,7 @@ set(INC_AFTER
 # Binaries #
 ############
 
-if( USE_PNG_BITMAPS )
-    add_subdirectory(bitmaps_png)
-else()
-    add_subdirectory(bitmaps_xpm)
-endif()
-
+add_subdirectory(bitmaps_png)
 add_subdirectory(common)
 add_subdirectory(3d-viewer)
 add_subdirectory(cvpcb)
