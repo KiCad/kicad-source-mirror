@@ -33,9 +33,24 @@
 #define DIM_ANCRE_MODULE 3       /* Anchor size (footprint center) */
 #define DIM_ANCRE_TEXTE  2       /* Anchor size (Text center) */
 
-#define TEXTS_MIN_SIZE  50       // Minimum text size in Pcbnew units value (50 * 0.0001 mils)
-#define TEXTS_MAX_SIZE  10000    // Maximum text size in Pcbnew units value (1 inch) )
-#define TEXTS_MAX_WIDTH 5000     // Maximum text width in Pcbnew units value (0.5 inches)
+
+#if defined(PCBNEW)
+/// Convert deci-mils to PCBNEW internal units (iu).
+inline int DMils2iu( int dmils )
+{
+#if defined( USE_PCBNEW_NANOMETRES )
+    return int( dmils * 25.4e2 + 0.5 );
+#else
+    return dmils;
+#endif
+}
+#endif
+
+
+#define TEXTS_MIN_SIZE  DMils2iu( 50 )      ///< Minimum text size in Pcbnew units value (50 * 0.0001 mils)
+#define TEXTS_MAX_SIZE  DMils2iu( 10000 )   ///< Maximum text size in Pcbnew units value (1 inch) )
+#define TEXTS_MAX_WIDTH DMils2iu( 5000 )    ///< Maximum text width in Pcbnew units value (0.5 inches)
+
 
 /* Flag to force the SKETCH mode to display items (.m_Flags member) */
 #define FORCE_SKETCH ( IS_DRAGGED | IN_EDIT )

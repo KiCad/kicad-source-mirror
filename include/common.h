@@ -124,6 +124,7 @@ inline int Mm2mils( double x ) { return wxRound( x * 1000./25.4 ); }
 /// Convert mils to mm.
 inline int Mils2mm( double x ) { return wxRound( x * 25.4 / 1000. ); }
 
+
 /// Return whether GOST is in play
 bool IsGOST();
 
