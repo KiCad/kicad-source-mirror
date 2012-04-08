@@ -1,7 +1,8 @@
 #!/usr/bin/env python2.7
+import pcbnew
 from pcbnew import *
 
-size_0_6mm = wxSize(FromMM(0.6),FromMM(0.6))
+size_0_6mm = wxSizeMM(0.6,0.6)
 
 
 # create a blank board
