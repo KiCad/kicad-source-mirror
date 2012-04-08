@@ -1,7 +1,9 @@
 add_definitions(-DPCBNEW)
 
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
-   
+  EXECUTE_PROCESS(COMMAND python -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+  
+  SET(PYTHON_DEST "lib/python${PYTHON_VERSION}/dist-packages" )
   file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting)
 
 	FIND_PACKAGE(SWIG REQUIRED)
@@ -275,8 +277,10 @@ if (KICAD_SCRIPTING)
 	add_custom_command(
 	               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
 	               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
+	               COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
 	               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	)
+
 	
 endif(KICAD_SCRIPTING)
 
@@ -397,12 +401,31 @@ install(TARGETS pcbnew
     DESTINATION ${KICAD_BIN}
     COMPONENT binary)
 
-if (KICAD_SCRIPTING_MODULES)
+if(KICAD_SCRIPTING)
+	add_custom_target(FixSwigImportsScripting ALL
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew
+                     COMMENT "Fixing swig_import_helper"                     
+                     )                                                                                               
+                                                                                                              
+
   install(FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py
-          DESTINATION share/python)
+          DESTINATION ${PYTHON_DEST})
+endif(KICAD_SCRIPTING)
+
+if (KICAD_SCRIPTING_MODULES)
+	add_custom_target(FixSwigImportsModuleScripting ALL
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew
+                     COMMENT "Fixing swig_import_helper"                     
+                     )                                                                                               
+                                                        
+
+  install(FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py
+          DESTINATION ${PYTHON_DEST})
         
   install(FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so
-          DESTINATION share/python)
+          DESTINATION ${PYTHON_DEST})
 endif(KICAD_SCRIPTING_MODULES)
 
 
@@ -418,3 +441,4 @@ add_executable(layer_widget_test WIN32 EXCLUDE_FROM_ALL
     layer_widget.cpp
     )
 target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES})
+

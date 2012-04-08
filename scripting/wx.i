@@ -108,7 +108,7 @@ class wxSize
 public:
     int x,y;
     wxSize(int xx, int yy) : x(xx), y(yy) { }
-
+    wxSize(double xx, double yy) : x(xx), y(yy) {}
     %extend 
     {    
        PyObject* Get() 
@@ -130,20 +130,20 @@ public:
  
     %pythoncode 
     {
-    def Scale(self,xscale,yscale):
-    	return wxSize(self.x*xscale,self.y*yscale)
-    def __eq__(self,other):	
-    	return self.GetWidth()==other.GetWidth() and self.GetHeight()==other.GetHeight()
-    def __str__(self):                   return str(self.Get())
-    def __repr__(self):                  return 'wxSize'+str(self.Get())
-    def __len__(self):                   return len(self.Get())
-    def __getitem__(self, index):        return self.Get()[index]
-    def __setitem__(self, index, val):
-        if 	index == 0: 	self.SetWidth(val)
-        elif 	index == 1: 	self.SetHeight(val)
-        else: 			raise IndexError
-    def __nonzero__(self):               return self.Get() != (0,0)
-    __safe_for_unpickling__ = True
+	    def Scale(self,xscale,yscale):
+	    	return wxSize(self.x*xscale,self.y*yscale)
+	    def __eq__(self,other):	
+	    	return self.GetWidth()==other.GetWidth() and self.GetHeight()==other.GetHeight()
+	    def __str__(self):                   return str(self.Get())
+	    def __repr__(self):                  return 'wxSize'+str(self.Get())
+	    def __len__(self):                   return len(self.Get())
+	    def __getitem__(self, index):        return self.Get()[index]
+	    def __setitem__(self, index, val):
+	        if 	index == 0: 	self.SetWidth(val)
+	        elif 	index == 1: 	self.SetHeight(val)
+	        else: 			raise IndexError
+	    def __nonzero__(self):               return self.Get() != (0,0)
+	    __safe_for_unpickling__ = True
     
     }
 };
@@ -155,6 +155,7 @@ class wxPoint
 public:
     int x, y;
     wxPoint(int xx, int yy);
+    wxPoint(double xx, double yy) : x(xx), y(yy) {}
     ~wxPoint();
     %extend {
         wxPoint __add__(const wxPoint& pt) {   return *self + pt;  }
