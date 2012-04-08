@@ -8,9 +8,9 @@
 
 #ifndef SWIG
 void ScriptingSetPcbEditFrame(PCB_EDIT_FRAME *aPCBEdaFrame);
-BOARD *GetBoard();
 #endif 
 
+BOARD *GetBoard();
 BOARD* LoadBoard(wxString aFileName);
 bool SaveBoard(wxString aFileName, BOARD* aBoard);
 

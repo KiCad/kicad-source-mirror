@@ -29,6 +29,9 @@
 
 
 %module pcbnew
+
+%feature("autodoc", "1");
+
 %include "kicad.i"
 
 // ignore a couple of items that generate warnings from swig built code

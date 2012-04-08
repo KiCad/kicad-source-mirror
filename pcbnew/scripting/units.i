@@ -33,26 +33,26 @@
 %pythoncode 
 {
    def ToMM(iu): 
-      if type(iu) is int:
+      if type(iu) in [int,float]:
          return iu * 0.00254 
-      elif type(iu) is wxPoint:
+      elif type(iu) in [wxPoint,wxSize]:
          return tuple(map(ToMM,iu))
       
-   def FromMM(mm): 
-      if type(iu) is int:
+   def FromMM(iu): 
+      if type(iu) in [int,float]:
          return iu / 0.00254 
-      elif type(iu) is wxPoint:
+      elif type(iu) in [wxPoint,wxSize]:
         return tuple(map(FromMM,iu))
     
    def ToMils(iu): 
-      if type(iu) is int:
+      if type(iu) in [int,float]:
       	return iu / 10.0
-      elif type(iu) is wxPoint:
+      elif type(iu) in [wxPoint,wxSize]:
       	return tuple(map(ToMils,iu))
       	
    def FromMils(mils): 
-      if type(iu) is int:
+      if type(iu) in [int,float]:
          return mils*10.0
-      elif type(iu) is wxPoint:
+      elif type(iu) in [wxPoint,wxSize]:
       	return tuple(map(FromMils,iu))
 }
