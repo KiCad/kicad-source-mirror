@@ -1502,10 +1502,10 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     if( thickn < 1 )
         thickn = 1;
 
-    /*  this is better left to the save function, or to the accessor, since we will
-        be supporting more than one board format.
+    /*  this is better left to the dialogs UIs
     aText->SetThickness( Clamp_Text_PenSize( thickn, aText->GetSize() ) );
     */
+
     aText->SetThickness( thickn );
 
     aText->SetMirrored( mirror && *mirror == 'M' );
@@ -1514,8 +1514,6 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     aText->SetItalic( italic && *italic == 'I' );
 
-    // @todo put in accessor?
-    // Test for a reasonable layer:
     if( layer < 0 )
         layer = 0;
     if( layer > LAST_NO_COPPER_LAYER )
@@ -1614,7 +1612,6 @@ void LEGACY_PLUGIN::loadPCB_LINE()
             BIU end_y   = biuParse( data, &data );
             BIU width   = biuParse( data );
 
-            // @todo put in accessor?  why 0?
             if( width < 0 )
                 width = 0;
 
@@ -1638,7 +1635,6 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     int layer;
                     layer = intParse( data );
 
-                    // @todo: put in accessor?
                     if( layer < FIRST_NO_COPPER_LAYER )
                         layer = FIRST_NO_COPPER_LAYER;
 
@@ -3046,14 +3042,14 @@ void LEGACY_PLUGIN::saveNETCLASS( const NETCLASS* nc ) const
     fprintf( m_fp, "Name %s\n", EscapedUTF8( nc->GetName() ).c_str() );
     fprintf( m_fp, "Desc %s\n", EscapedUTF8( nc->GetDescription() ).c_str() );
 
-    fprintf( m_fp, "Clearance %d\n",    nc->GetClearance() );
-    fprintf( m_fp, "TrackWidth %d\n",   nc->GetTrackWidth() );
+    fprintf( m_fp, "Clearance %s\n",    fmtBIU( nc->GetClearance() ).c_str() );
+    fprintf( m_fp, "TrackWidth %s\n",   fmtBIU( nc->GetTrackWidth() ).c_str() );
 
-    fprintf( m_fp, "ViaDia %d\n",       nc->GetViaDiameter() );
-    fprintf( m_fp, "ViaDrill %d\n",     nc->GetViaDrill() );
+    fprintf( m_fp, "ViaDia %s\n",       fmtBIU( nc->GetViaDiameter() ).c_str() );
+    fprintf( m_fp, "ViaDrill %s\n",     fmtBIU( nc->GetViaDrill() ).c_str() );
 
-    fprintf( m_fp, "uViaDia %d\n",      nc->GetuViaDiameter() );
-    fprintf( m_fp, "uViaDrill %d\n",    nc->GetuViaDrill() );
+    fprintf( m_fp, "uViaDia %s\n",      fmtBIU( nc->GetuViaDiameter() ).c_str() );
+    fprintf( m_fp, "uViaDrill %s\n",    fmtBIU( nc->GetuViaDrill() ).c_str() );
 
     for( NETCLASS::const_iterator it = nc->begin();  it!=nc->end();  ++it )
         fprintf( m_fp, "AddNet %s\n", EscapedUTF8( *it ).c_str() );

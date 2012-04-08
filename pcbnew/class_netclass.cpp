@@ -39,9 +39,9 @@
 const wxString NETCLASS::Default = wxT("Default");
 
 // Initial values for netclass initialization
-int NETCLASS::DEFAULT_CLEARANCE  = 100;         // track to track and track to pads clearance
-int NETCLASS::DEFAULT_VIA_DRILL  = 250;         // default via drill
-int NETCLASS::DEFAULT_UVIA_DRILL = 50;          // micro via drill
+int NETCLASS::DEFAULT_CLEARANCE  = DMils2iu( 100 );     // track to track and track to pads clearance
+int NETCLASS::DEFAULT_VIA_DRILL  = DMils2iu( 250 );     // default via drill
+int NETCLASS::DEFAULT_UVIA_DRILL = DMils2iu( 50 );      // micro via drill
 
 
 NETCLASS::NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters ) :
@@ -85,7 +85,7 @@ void NETCLASS::SetParams( const NETCLASS* defaults )
 
         SetTrackWidth(  g.m_TrackMinWidth );
         SetViaDiameter( g.m_ViasMinSize );
-        SetuViaDiameter(g.m_MicroViasMinSize );
+        SetuViaDiameter( g.m_MicroViasMinSize );
 
         // Use default values for next parameters:
         SetClearance( DEFAULT_CLEARANCE );
