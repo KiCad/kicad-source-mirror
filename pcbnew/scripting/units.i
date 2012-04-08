@@ -50,9 +50,30 @@
       elif type(iu) in [wxPoint,wxSize]:
       	return tuple(map(ToMils,iu))
       	
-   def FromMils(mils): 
+   def FromMils(iu): 
       if type(iu) in [int,float]:
          return mils*10.0
       elif type(iu) in [wxPoint,wxSize]:
       	return tuple(map(FromMils,iu))
+      	
+   def wxSizeMM(mmx,mmy): return wxSize(FromMM(mmx),FromMM(mmy))
+   def wxSizeMils(mmx,mmy): return wxSize(FromMils(mmx),FromMils(mmy))
+   	
+   def wxPointMM(mmx,mmy): return wxPoint(FromMM(mmx),FromMM(mmy))
+   def wxPointMils(mmx,mmy): return wxPoint(FromMils(mmx),FromMils(mmy))
+   
+   def wxRectMM(x,y,wx,wy):
+   	x = int(FromMM(x))
+   	y = int(FromMM(y))
+   	wx = int(FromMM(wx))
+   	wy = int (FromMM(wy))
+   	return wxRect(x,y,wx,wy)
+   
+   def wxRectMils(x,y,wx,wy):
+   	x = int(FromMils(x))
+   	y = int(FromMils(y))
+   	wx = int(FromMils(wx))
+   	wy = int (FromMils(wy))
+   	return wxRect(x,y,wx,wy)
+   
 }
