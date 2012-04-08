@@ -456,8 +456,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     pcbFileName = GetScreen()->GetFileName();
 
+#if defined( USE_NEW_PCBNEW_LOAD ) || defined( USE_NEW_PCBNEW_SAVE )
     if( pcbFileName.GetExt().IsEmpty() )
         pcbFileName.SetExt( IO_MGR::GetFileExtension( (IO_MGR::PCB_FILE_T) wildcardIndex ) );
+#endif
 
     if( !IsWritable( pcbFileName ) )
         return false;
@@ -468,9 +470,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         backupFileName = pcbFileName;
         backupFileName.SetExt( pcbBackupFileExtension );
 
-        /* If an old backup file exists, delete it.  If an old board file exists, rename
-         * it to the backup file name
-         */
+        // If an old backup file exists, delete it.  If an old board file exists, rename
+        // it to the backup file name.
         if( pcbFileName.FileExists() )
         {
             // Remove the old file xxx.000 if it exists.

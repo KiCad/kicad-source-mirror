@@ -317,11 +317,15 @@ void LEGACY_PLUGIN::checkVersion()
     int ver = 1;    // if sccanf fails
     sscanf( line, "PCBNEW-BOARD Version %d", &ver );
 
+#if !defined(DEBUG)
     if( ver > LEGACY_BOARD_FILE_VERSION )
     {
-        m_error.Printf( VERSION_ERROR_FORMAT, ver );
+        // "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file."
+        m_error.Printf( VERSION_ERROR_FORMAT,
+            m_reader->GetSource().GetData(), ver, LEGACY_BOARD_FILE_VERSION );
         THROW_IO_ERROR( m_error );
     }
+#endif
 
     m_loading_format_version = ver;
 }
@@ -343,8 +347,14 @@ void LEGACY_PLUGIN::loadGENERAL()
             {
 #if defined(USE_PCBNEW_NANOMETRES)
                 diskToBiu = 1000000.0;
+
+#elif defined(DEBUG)
+                // mm to deci-mils:
+                // advanced testing of round tripping only, not supported in non DEBUG build
+                diskToBiu = 10000/25.4;
+
 #else
-                THROW_IO_ERROR( _( "May not load new *.brd file into 'PCBNew compiled for deci-mils'" ) );
+                THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'PCBNew compiled for deci-mils'" ) );
 #endif
             }
         }
@@ -1887,7 +1897,7 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         // optional 7th drill parameter (must be optional in an old format?)
         data = strtok( (char*) data, delims );
 
-        BIU drill   = data ? biuParse( data ) : -1;     // SetDefault() if -1
+        BIU drill   = data ? biuParse( data ) : -1;     // SetDefault() if < 0
 
         // Read the 2nd line to determine the exact type, one of:
         // PCB_TRACE_T, PCB_VIA_T, or PCB_ZONE_T.  The type field in 2nd line
@@ -1952,7 +1962,7 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         newTrack->SetWidth( width );
         newTrack->SetShape( shape );
 
-        if( drill <= 0 )
+        if( drill < 0 )
             newTrack->SetDrillDefault();
         else
             newTrack->SetDrill( drill );
@@ -2619,6 +2629,17 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
     if( nptrptr )
         *nptrptr = nptr;
 
+#if defined(DEBUG)
+
+    if( diskToBiu == 10000/25.4 )
+    {
+        // this is the special reverse trip mm -> deci-mils testing run,
+        // only available in DEBUG mode.
+        return BIU( wxRound( fval * diskToBiu ) );
+    }
+
+#endif
+
     // There should be no rounding issues here, since the values in the file initially
     // came from integers via biuFmt(). In fact this product should be an integer, exactly.
     return BIU( fval * diskToBiu );
@@ -2911,6 +2932,8 @@ void LEGACY_PLUGIN::saveSETUP() const
 
     fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( m_board->GetOriginAxisPosition() ).c_str() );
 
+    fprintf( m_fp, "VisibleElements %X\n", bds.GetVisibleElements() );
+
     {
         STRING_FORMATTER sf;
 
@@ -2923,8 +2946,6 @@ void LEGACY_PLUGIN::saveSETUP() const
 
         fprintf( m_fp, "PcbPlotParams %s\n", TO_UTF8( record ) );
     }
-
-    fprintf( m_fp, "VisibleElements %X\n", bds.GetVisibleElements() );
 
     fprintf( m_fp, "$EndSETUP\n\n" );
 }
@@ -3454,7 +3475,8 @@ void LEGACY_PLUGIN::saveTRACK( const TRACK* me ) const
             fmtBIUPoint( me->GetStart() ).c_str(),
             fmtBIUPoint( me->GetEnd() ).c_str(),
             fmtBIU( me->GetWidth() ).c_str(),
-            fmtBIU( me->GetDrill() ).c_str() );
+            me->GetDrill() == UNDEFINED_DRILL_DIAMETER ?
+                "-1" :  fmtBIU( me->GetDrill() ).c_str() );
 
     fprintf(m_fp, "De %d %d %d %lX %X\n",
             me->GetLayer(), type, me->GetNet(),
