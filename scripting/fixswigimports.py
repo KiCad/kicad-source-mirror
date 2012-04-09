@@ -31,6 +31,10 @@ f = open(filename,"wb")
 
 doneOk = False
 
+if (len(lines)<4000): 
+    print "still building"
+    exit(0)
+
 for l in lines:
     if l.startswith("if version_info >= (2,6,0):"):
         l = l.replace("version_info >= (2,6,0)","False")
