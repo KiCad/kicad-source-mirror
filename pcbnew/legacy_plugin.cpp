@@ -66,7 +66,6 @@
 
 #include <legacy_plugin.h>   // implement this here
 
-#include <auto_ptr.h>
 #include <kicad_string.h>
 #include <macros.h>
 #include <zones.h>
