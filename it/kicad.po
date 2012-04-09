@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-30 23:17+0100\n"
-"PO-Revision-Date: 2012-04-03 00:07+0100\n"
+"PO-Revision-Date: 2012-04-09 22:57+0100\n"
 "Last-Translator: Ciocemax <ciocemax@alice.it>\n"
 "Language-Team: Ciocemax <ciocemax@alice.it>\n"
 "MIME-Version: 1.0\n"
@@ -3611,7 +3611,7 @@ msgstr "&Dimensioni"
 
 #: pcbnew/menubar_pcbframe.cpp:406
 msgid "La&yer alignment target"
-msgstr "Inserisci ma&rcatore per allineamento strati"
+msgstr "Inserisci ma&rcatore allineamento strati"
 
 #: pcbnew/menubar_pcbframe.cpp:413
 msgid "Drill and Place O&ffset"
