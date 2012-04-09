@@ -36,9 +36,10 @@
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
-#include <protos.h>
+//#include <protos.h>
 #include <eeschema_id.h>
 #include <hotkeys.h>
+#include <menus_helpers.h>
 
 #include <help_common_strings.h>
 

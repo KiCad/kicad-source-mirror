@@ -34,6 +34,7 @@
 #include <gerbview.h>
 #include <gerbview_id.h>
 #include <hotkeys.h>
+#include <menus_helpers.h>
 
 
 void GERBVIEW_FRAME::ReCreateMenuBar( void )

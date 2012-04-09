@@ -18,6 +18,7 @@
 #include <wx/regex.h>
 #include <wx/dir.h>
 #include <wx/imaglist.h>
+#include <menus_helpers.h>
 
 
 /* Note about the tree project build process:

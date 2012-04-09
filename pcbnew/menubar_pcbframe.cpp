@@ -36,6 +36,7 @@
 #include <pcbnew_id.h>
 
 #include <help_common_strings.h>
+#include <menus_helpers.h>
 
 /**
  * Pcbnew mainframe menubar

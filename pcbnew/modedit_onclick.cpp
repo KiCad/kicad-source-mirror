@@ -14,11 +14,12 @@
 #include <class_edge_mod.h>
 
 #include <pcbnew.h>
-#include <protos.h>
+//#include <protos.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <module_editor_frame.h>
 #include <dialog_edit_module_for_Modedit.h>
+#include <menus_helpers.h>
 
 
 void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )

@@ -8,6 +8,7 @@
 #include <id.h>
 
 #include <gerbview.h>
+#include <menus_helpers.h>
 
 
 /* Prepare the right-click pullup menu.

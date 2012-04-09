@@ -12,6 +12,7 @@
 
 #include <wx/regex.h>
 #include <wx/imaglist.h>
+#include <menus_helpers.h>
 
 
 IMPLEMENT_ABSTRACT_CLASS( TREEPROJECTFILES, wxTreeCtrl )

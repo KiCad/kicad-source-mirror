@@ -28,6 +28,7 @@
 
 #include <dialog_edit_module_for_Modedit.h>
 #include <wildcards_and_files_ext.h>
+#include <menus_helpers.h>
 
 // Functions defined in block_module_editor, but used here
 // These 2 functions are used in modedit to rotate or mirror the whole footprint

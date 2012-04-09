@@ -36,6 +36,7 @@
 #include <hotkeys.h>
 
 #include <help_common_strings.h>
+#include <menus_helpers.h>
 
 /**
  * @brief (Re)Create the menubar for the component editor frame
