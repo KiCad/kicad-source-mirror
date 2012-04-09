@@ -3,12 +3,12 @@
  */
 
 
+#include <Python.h>
 #include <fctsys.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbcommon.h>
 #include <dialog_scripting.h>
-#include <Python.h>
 
 
 DIALOG_SCRIPTING::DIALOG_SCRIPTING( wxWindow* parent )

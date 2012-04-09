@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 # the purpose of this script is rewriting the swig_import_helper
 # call so it will not load _xxxxx.so/dso from inside a kicad executable
