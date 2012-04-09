@@ -51,6 +51,7 @@
 #include <dialogs/dialog_libedit_dimensions.h>
 
 #include <dialog_helpers.h>
+#include <menus_helpers.h>
 
 #include <boost/foreach.hpp>
 

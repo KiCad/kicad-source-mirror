@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
+#include <menus_helpers.h>
 
 #include <general.h>
 #include <hotkeys.h>

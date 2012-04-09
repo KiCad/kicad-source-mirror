@@ -14,6 +14,7 @@
 #include <wxstruct.h>
 #include <kicad_device_context.h>
 #include <hotkeys_basic.h>
+#include <menus_helpers.h>
 
 
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )

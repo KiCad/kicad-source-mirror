@@ -13,11 +13,11 @@
 #include <class_sch_screen.h>
 
 #include <general.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
 #include <lib_polyline.h>
+#include <menus_helpers.h>
 
 
 /* functions to add commands and submenus depending on the item */

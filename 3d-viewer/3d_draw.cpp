@@ -206,7 +206,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
     // draw axis
-    if( g_Parm_3D_Visu.m_Draw3DAxis )
+    if (g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS])
     {
         glEnable( GL_COLOR_MATERIAL );
         SetGLColor( WHITE );
@@ -223,37 +223,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     }
 
     // Draw epoxy limits (do not use, works and test in progress)
-#if 0
-    glEnable( GL_FOG );
-    GLfloat param;
-
-//	param = GL_LINEAR;
-//	glFogfv(GL_FOG_MODE, & param);
-    param = 0.2;
-    glFogfv( GL_FOG_DENSITY, &param );
-    param = g_Parm_3D_Visu.m_LayerZcoord[15];
-    glFogfv( GL_FOG_END, &param );
-    glBegin( GL_QUADS );
-    SetGLColor( g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[LAYER_N_FRONT] );
-    double sx   = DataScale3D * g_Parm_3D_Visu.m_BoardSize.x / 2;
-    double sy   = DataScale3D * g_Parm_3D_Visu.m_BoardSize.y / 2;
-    double zpos = g_Parm_3D_Visu.m_LayerZcoord[15];
-    glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
-    sx = sy = 0.5;
-    glVertex3f( -sx, -sy, zpos );
-    glVertex3f( -sx, sy, zpos );
-    glVertex3f( sx, sy, zpos );
-    glVertex3f( sx, -sy, zpos );
-    glEnd();
-    glBegin( GL_QUADS );
-    SetGLColor( g_Parm_3D_Visu.m_BoardSettings->m_LayerColor[LAYER_N_BACK] );
-    glNormal3f( 0.0, 0.0, -1.0 ); // Normal is -Z axis
-    glVertex3f( -sx, -sy, 0 );
-    glVertex3f( -sx, sy, 0 );
-    glVertex3f( sx, sy, 0 );
-    glVertex3f( sx, -sy, 0 );
-    glEnd();
-#endif
+    // TODO
 
     // move the board in order to draw it with its center at 0,0 3D coordinates
     glTranslatef( -g_Parm_3D_Visu.m_BoardPos.x * g_Parm_3D_Visu.m_BoardScale,
@@ -271,7 +241,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
             Draw3D_Track( track );
     }
 
-    if( g_Parm_3D_Visu.m_Draw3DZone )
+    if (g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE])
     {
         // Draw segments used to fill copper areas. outdated!
         for( segzone = pcb->m_Zone; segzone != NULL; segzone = segzone->Next() )
@@ -707,7 +677,7 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     S3D_MASTER* Struct3D  = m_3D_Drawings;
     bool        As3dShape = false;
 
-    if( g_Parm_3D_Visu.m_Draw3DModule )
+    if (g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE])
     {
         glPushMatrix();
 
@@ -1430,23 +1400,33 @@ void EDA_3D_CANVAS::Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double a
 
 static int Get3DLayerEnable( int act_layer )
 {
-    bool enablelayer;
+    int i = -1;
+    // see if layer needs to be shown
+    // check the flags
+    switch (act_layer)
+    {
+        case DRAW_N:
+            i=g_Parm_3D_Visu.FL_DRAWINGS;
+            break;
 
-    enablelayer = true;
+        case COMMENT_N:
+            i=g_Parm_3D_Visu.FL_COMMENTS;
+            break;
 
-    if( act_layer == DRAW_N && !g_Parm_3D_Visu.m_Draw3DDrawings )
-        enablelayer = false;
+        case ECO1_N:
+            i=g_Parm_3D_Visu.FL_ECO1;
+            break;
 
-    if( act_layer == COMMENT_N && !g_Parm_3D_Visu.m_Draw3DComments )
-        enablelayer = false;
+        case ECO2_N:
+            i=g_Parm_3D_Visu.FL_ECO2;
+            break;
+    }
+    // the layer was not a layer with a flag, so show it
+    if (i < 0)
+        return true;
 
-    if( act_layer == ECO1_N && !g_Parm_3D_Visu.m_Draw3DEco1 )
-        enablelayer = false;
-
-    if( act_layer == ECO2_N && !g_Parm_3D_Visu.m_Draw3DEco2 )
-        enablelayer = false;
-
-    return enablelayer;
+    // if the layer has a flag, return the flag
+    return g_Parm_3D_Visu.m_DrawFlags[i];
 }
 
 

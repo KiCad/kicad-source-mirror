@@ -41,6 +41,7 @@
 #include <pcbnew.h>
 #include <protos.h>
 #include <collectors.h>
+#include <menus_helpers.h>
 
 //external functions used here:
 extern bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame,

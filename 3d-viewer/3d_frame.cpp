@@ -222,8 +222,10 @@ void EDA_3D_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
 #define ROT_ANGLE 10.0
+    int id = event.GetId();
+    bool isChecked = event.IsChecked();
 
-    switch( event.GetId() )
+    switch( id )
     {
     case ID_RELOAD3D_BOARD:
         NewDisplay();
@@ -285,31 +287,38 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         return;
 
     case ID_MENU3D_AXIS_ONOFF:
-        Set3DAxisOnOff();
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_AXIS] = isChecked;
+        NewDisplay();
         return;
 
     case ID_MENU3D_MODULE_ONOFF:
-        Set3DModuleOnOff();
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] = isChecked;
+        NewDisplay();
         return;
 
     case ID_MENU3D_ZONE_ONOFF:
-        Set3DZoneOnOff();
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ZONE] = isChecked;
+        NewDisplay();
         return;
 
     case ID_MENU3D_COMMENTS_ONOFF:
-        Set3DCommentsOnOff();
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_COMMENTS] = isChecked;
+        NewDisplay();
         return;
 
     case ID_MENU3D_DRAWINGS_ONOFF:
-        Set3DDrawingsOnOff();
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_DRAWINGS] = isChecked;
+        NewDisplay();
         return;
 
     case ID_MENU3D_ECO1_ONOFF:
-        Set3DEco1OnOff();
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO1] = isChecked;
+        NewDisplay();
         return;
 
     case ID_MENU3D_ECO2_ONOFF:
-        Set3DEco2OnOff();
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_ECO2] = isChecked;
+        NewDisplay();
         return;
 
     default:
@@ -366,80 +375,4 @@ void EDA_3D_FRAME::Set3DBgColor()
         g_Parm_3D_Visu.m_BgColor.m_Blue  = (double) newcolor.Blue() / 255.0;
         NewDisplay();
     }
-}
-
-
-void EDA_3D_FRAME::Set3DAxisOnOff()
-{
-    if( g_Parm_3D_Visu.m_Draw3DAxis )
-        g_Parm_3D_Visu.m_Draw3DAxis = false;
-    else
-        g_Parm_3D_Visu.m_Draw3DAxis = true;
-
-    NewDisplay();
-}
-
-
-void EDA_3D_FRAME::Set3DModuleOnOff()
-{
-    if( g_Parm_3D_Visu.m_Draw3DModule )
-        g_Parm_3D_Visu.m_Draw3DModule = false;
-    else
-        g_Parm_3D_Visu.m_Draw3DModule = true;
-
-    NewDisplay();
-}
-
-
-void EDA_3D_FRAME::Set3DZoneOnOff()
-{
-    if( g_Parm_3D_Visu.m_Draw3DZone )
-        g_Parm_3D_Visu.m_Draw3DZone = false;
-    else
-        g_Parm_3D_Visu.m_Draw3DZone = true;
-    NewDisplay();
-}
-
-
-void EDA_3D_FRAME::Set3DCommentsOnOff()
-{
-    if( g_Parm_3D_Visu.m_Draw3DComments )
-        g_Parm_3D_Visu.m_Draw3DComments = false;
-    else
-        g_Parm_3D_Visu.m_Draw3DComments = true;
-
-    NewDisplay();
-}
-
-
-void EDA_3D_FRAME::Set3DDrawingsOnOff()
-{
-    if( g_Parm_3D_Visu.m_Draw3DDrawings )
-        g_Parm_3D_Visu.m_Draw3DDrawings = false;
-    else
-        g_Parm_3D_Visu.m_Draw3DDrawings = true;
-
-    NewDisplay();
-}
-
-
-void EDA_3D_FRAME::Set3DEco1OnOff()
-{
-    if( g_Parm_3D_Visu.m_Draw3DEco1 )
-        g_Parm_3D_Visu.m_Draw3DEco1 = false;
-    else
-        g_Parm_3D_Visu.m_Draw3DEco1 = true;
-
-    NewDisplay();
-}
-
-
-void EDA_3D_FRAME::Set3DEco2OnOff()
-{
-    if( g_Parm_3D_Visu.m_Draw3DEco2 )
-        g_Parm_3D_Visu.m_Draw3DEco2 = false;
-    else
-        g_Parm_3D_Visu.m_Draw3DEco2 = true;
-
-    NewDisplay();
 }

@@ -32,9 +32,9 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
+#include <menus_helpers.h>
 
 #include <general.h>
-#include <protos.h>
 #include <sch_bus_entry.h>
 #include <sch_text.h>
 #include <sch_marker.h>

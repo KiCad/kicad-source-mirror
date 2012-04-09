@@ -189,13 +189,9 @@ Info_3D_Visu::Info_3D_Visu()
 
     m_Layers = 1;
     m_BoardSettings  = NULL;
-    m_Draw3DAxis     = true;
-    m_Draw3DModule   = true;
-    m_Draw3DZone     = true;
-    m_Draw3DComments = true;
-    m_Draw3DDrawings = true;
-    m_Draw3DEco1     = true;
-    m_Draw3DEco2     = true;
+    // default all special item layers Visible
+    for (ii=0; ii< FL_LAST; ii++)
+        m_DrawFlags[ii]=true;
 }
 
 

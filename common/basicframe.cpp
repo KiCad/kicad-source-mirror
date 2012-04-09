@@ -42,6 +42,7 @@
 #include <eda_doc.h>
 #include <wxstruct.h>
 #include <macros.h>
+#include <menus_helpers.h>
 
 
 /// The default auto save interval is 10 minutes.
