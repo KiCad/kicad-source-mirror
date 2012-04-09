@@ -40,19 +40,19 @@
       
    def FromMM(iu): 
       if type(iu) in [int,float]:
-         return iu / 0.00254 
+         return int(iu / 0.00254)
       elif type(iu) in [wxPoint,wxSize]:
         return tuple(map(FromMM,iu))
     
    def ToMils(iu): 
       if type(iu) in [int,float]:
-      	return iu / 10.0
+      	return int(iu / 10.0)
       elif type(iu) in [wxPoint,wxSize]:
       	return tuple(map(ToMils,iu))
       	
    def FromMils(iu): 
       if type(iu) in [int,float]:
-         return mils*10.0
+         return int(iu*10.0)
       elif type(iu) in [wxPoint,wxSize]:
       	return tuple(map(FromMils,iu))
       	
