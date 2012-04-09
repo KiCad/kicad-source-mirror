@@ -1,7 +1,7 @@
 add_definitions(-DPCBNEW)
 
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
-  EXECUTE_PROCESS(COMMAND python -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+  EXECUTE_PROCESS(COMMAND python2 -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
   
   SET(PYTHON_DEST "lib/python${PYTHON_VERSION}/dist-packages" )
   file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting)
@@ -392,6 +392,7 @@ target_link_libraries(pcbnew
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
+    rt
     )
 
 ###
@@ -433,12 +434,12 @@ endif(KICAD_SCRIPTING_MODULES)
 if(NOT MSVC)
     # This one gets made only when testing.
     add_executable(specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp)
-    target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
+    target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES} rt)
 endif(NOT MSVC)
 
 # This one gets made only when testing.
 add_executable(layer_widget_test WIN32 EXCLUDE_FROM_ALL
     layer_widget.cpp
     )
-target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES})
+target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES} rt)
 

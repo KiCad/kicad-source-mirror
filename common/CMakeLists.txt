@@ -150,6 +150,6 @@ if(NOT MSVC)
     # This one gets made only when testing.
     # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp
     add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
-    target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} )
+    target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
 
 endif( NOT MSVC )
