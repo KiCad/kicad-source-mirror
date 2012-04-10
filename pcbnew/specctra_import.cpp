@@ -146,6 +146,33 @@ static int scale( double distance, UNIT_RES* aResolution )
 {
     double  resValue = aResolution->GetValue();
 
+#if defined(USE_PCBNEW_NANOMETRES)
+
+    double  factor;
+
+    switch( aResolution->GetEngUnits() )
+    {
+    default:
+    case T_inch:
+        factor = 25.4e6;        // nanometers per inch
+        break;
+    case T_mil:
+        factor = 25.4e3;        // nanometers per mil
+        break;
+    case T_cm:
+        factor = 1e7;           // nanometers per cm
+        break;
+    case T_mm:
+        factor = 1e6;           // nanometers per mm
+        break;
+    case T_um:
+        factor = 1e3;           // nanometers per um
+        break;
+    }
+
+    int ret = wxRound( factor * distance / resValue );
+
+#else
     double  factor;     // multiply this times session value to get mils for KiCad.
 
     switch( aResolution->GetEngUnits() )
@@ -173,6 +200,9 @@ static int scale( double distance, UNIT_RES* aResolution )
     factor *= 10.0;
 
     int ret = wxRound( factor * distance / resValue );
+
+#endif
+
     return ret;
 }
 

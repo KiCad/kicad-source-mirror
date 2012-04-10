@@ -15,10 +15,11 @@
 #include <polygon_test_point_inside.h>
 
 #if defined(KICAD_NANOMETRE)
-#define PCBU_PER_MIL (1000.0*25.4)
+#define PCBU_PER_MIL    (1000.0*25.4)
 #else
-#define PCBU_PER_MIL 10
+#define PCBU_PER_MIL    10
 #endif
+
 
 #define to_int( x ) wxRound( (x) )
 
@@ -115,7 +116,8 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
             side_style.clear();
             bool first = true;
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
-            {       // foreach point in the polygon
+            {
+                // foreach point in the polygon
                 int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
                 int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
                 if( first )
@@ -1406,6 +1408,7 @@ void CPolyLine::Hatch()
         spacing = 20 * PCBU_PER_MIL;
     else
         spacing = 50 * PCBU_PER_MIL;
+
     // set the "lenght" of hatch lines (the lenght on horizontal axis)
     double hatch_line_len = 20 * PCBU_PER_MIL;
 
@@ -1437,9 +1440,11 @@ void CPolyLine::Hatch()
     // loop through hatch lines
     #define MAXPTS 200      // Usually we store only few values
                             // depending on the compexity of the zone outline
+
     static std::vector <CPoint> pointbuffer;
     pointbuffer.clear();
     pointbuffer.reserve(MAXPTS+2);
+
     for( int a = min_a; a < max_a; a += spacing )
     {
         // get intersection points for this hatch line
@@ -1520,17 +1525,21 @@ void CPolyLine::Hatch()
             {
                 double dy    = pointbuffer[ip + 1].y - pointbuffer[ip].y;
                 double slope = dy / dx;
+
                 if( dx > 0 )
                     dx = hatch_line_len;
                 else
                     dx = -hatch_line_len;
+
                 double x1 = pointbuffer[ip].x + dx;
                 double x2 = pointbuffer[ip + 1].x - dx;
                 double y1 = pointbuffer[ip].y + dx * slope;
                 double y2 = pointbuffer[ip + 1].y - dx * slope;
+
                 m_HatchLines.push_back( CSegment( pointbuffer[ip].x,
                                                   pointbuffer[ip].y,
                                                   to_int( x1 ), to_int( y1 ) ) );
+
                 m_HatchLines.push_back( CSegment( pointbuffer[ip + 1].x,
                                                   pointbuffer[ip + 1].y,
                                                   to_int( x2 ), to_int( y2 ) ) );
@@ -1560,6 +1569,7 @@ bool CPolyLine::TestPointInside( int px, int py )
     {
         int istart = GetContourStart( icont );
         int iend   = GetContourEnd( icont );
+
         // Test this polygon:
         if( TestPointInsidePolygon( corner, istart, iend, px, py) )   // test point inside the current polygon
             inside = not inside;
@@ -1671,4 +1681,3 @@ void CPolyLine::AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3, int
     for( unsigned int i = 0; i < bezier_points.size() ; i++)
         AppendCorner( bezier_points[i].x, bezier_points[i].y);
 }
-
