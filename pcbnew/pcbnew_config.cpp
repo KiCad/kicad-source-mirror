@@ -89,7 +89,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case wxID_PREFERENCES:
         {
-            Dialog_GeneralOptions dlg( this );
+            DIALOG_GENERALOPTIONS dlg( this );
             dlg.ShowModal();
         }
         break;

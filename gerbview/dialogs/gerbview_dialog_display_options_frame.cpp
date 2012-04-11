@@ -31,6 +31,10 @@ private:
     void OnOKBUttonClick( wxCommandEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
     void initOptDialog( );
+    void OnMiddleBtnPanEnbl( wxCommandEvent& event )
+    {
+        m_OptMiddleButtonPanLimited->Enable( m_OptMiddleButtonPan->GetValue() );
+    }
 };
 
 
@@ -93,6 +97,10 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
     }
 
     m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( DCODES_VISIBLE ) );
+
+    m_OptMiddleButtonPan->SetValue( m_Parent->GetCanvas()->GetEnableMiddleButtonPan() );
+    m_OptMiddleButtonPanLimited->SetValue( m_Parent->GetCanvas()->GetMiddleButtonPanLimited() );
+    m_OptMiddleButtonPanLimited->Enable( m_OptMiddleButtonPan->GetValue() );
 }
 
 
@@ -137,6 +145,11 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     PAGE_INFO   pageInfo( g_GerberPageSizeList[idx] );
 
     m_Parent->SetPageSettings( pageInfo );
+
+    m_Parent->GetCanvas()->SetEnableMiddleButtonPan( m_OptMiddleButtonPan->GetValue() );
+    m_Parent->GetCanvas()->SetMiddleButtonPanLimited( m_OptMiddleButtonPanLimited->GetValue() );
+
+    m_Parent->GetCanvas()->Refresh();
 
     EndModal( 1 );
 }
