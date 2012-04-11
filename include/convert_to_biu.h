@@ -18,7 +18,8 @@
 inline int Mils2iu( int mils )
 {
 #if defined( USE_PCBNEW_NANOMETRES )
-    return int( mils * 25.4e3 + 0.5 );
+    double x = mils * 25.4e3;
+    return int( x < 0 ? x - 0.5 : x + 0.5 );
 #else
     return mils * 10;
 #endif
@@ -28,11 +29,11 @@ inline int Mils2iu( int mils )
 inline int DMils2iu( int dmils )
 {
 #if defined( USE_PCBNEW_NANOMETRES )
-    return int( dmils * 25.4e2 + 0.5 );
+    double x = dmils * 25.4e2;
+    return int( x < 0 ? x - 0.5 : x + 0.5 );
 #else
     return dmils;
 #endif
 }
 
 #endif  // #define CONVERT_TO_BIU_H
-
