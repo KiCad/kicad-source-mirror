@@ -23,6 +23,7 @@
 
 #include "transform.hpp"
 #include "detail/transform_detail.hpp"
+#include "detail/polygon_sort_adaptor.hpp"
 
 //interval
 #include "interval_data.hpp"
