@@ -255,7 +255,7 @@ BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
 
 void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 {
-    // set the BOARD_DESIGN_SETTINGS int parent editor, not our BOARD.
+    // set the BOARD_DESIGN_SETTINGS into parent editor, not our BOARD.
 
     PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
 
