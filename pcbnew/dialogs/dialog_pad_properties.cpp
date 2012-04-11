@@ -132,6 +132,7 @@ private:
     void OnValuesChanged( wxCommandEvent& event );
 
     /// Updates the different parameters for the component being edited.
+    /// Fired from the OK button click.
     void PadPropertiesAccept( wxCommandEvent& event );
 };
 
@@ -139,7 +140,7 @@ private:
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
     DIALOG_PAD_PROPERTIES_BASE( aParent ),
     // use aParent's parent, which is the original BOARD, not the dummy module editor BOARD,
-    // since FOOTPRINT_EDIT_FRAME::GetDesignSettings() is tricked out to use the PCB_EDITOR_FRAME's
+    // since FOOTPRINT_EDIT_FRAME::GetDesignSettings() is tricked out to use the PCB_EDIT_FRAME's
     // BOARD, not its own BOARD.
     m_Pad_Master( aParent->GetDesignSettings().m_Pad_Master )
 {
@@ -846,6 +847,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
     if( rastnestIsChanged )  // The net ratsnest must be recalculated
         m_Parent->GetBoard()->m_Status_Pcb = 0;
 }
+
 
 bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 {
