@@ -145,10 +145,9 @@ namespace DSN {
 static int scale( double distance, UNIT_RES* aResolution )
 {
     double  resValue = aResolution->GetValue();
+    double  factor;
 
 #if defined(USE_PCBNEW_NANOMETRES)
-
-    double  factor;
 
     switch( aResolution->GetEngUnits() )
     {
@@ -173,7 +172,6 @@ static int scale( double distance, UNIT_RES* aResolution )
     int ret = wxRound( factor * distance / resValue );
 
 #else
-    double  factor;     // multiply this times session value to get mils for KiCad.
 
     switch( aResolution->GetEngUnits() )
     {

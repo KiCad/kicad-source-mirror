@@ -170,7 +170,7 @@ static inline double scale( int kicadDist )
 {
 #if defined(USE_PCBNEW_NANOMETRES)
 
-// nanometers to um
+    // nanometers to um
     return kicadDist / 1000.0;
 
     // nanometers to mils
@@ -1037,12 +1037,14 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     {
 
 #if defined(USE_PCBNEW_NANOMETRES)
-        // tell freerouter about centi-mil
+        // tell freerouter to use "tenths of micrometers",
+        // which is 100 nm resolution.  Possibly more resolution is possible
+        // in freerouter, but it would need testing.
 
         pcb->unit->units = T_um;
         pcb->resolution->units = T_um;
-
-        pcb->resolution->value = 10;
+        pcb->resolution->value = 10;        // tenths of a um
+        // pcb->resolution->value = 1000;   // "thousandths of a um" (i.e. "nm")
 
 #else
         pcb->unit->units = T_mil;
