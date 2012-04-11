@@ -61,12 +61,19 @@ private:
     int m_scrollIncrementX;       ///< X axis scroll increment in pixels per unit.
     int m_scrollIncrementY;       ///< Y axis scroll increment in pixels per unit.
     wxPoint m_CursorStartPos;     ///< Used for testing the cursor movement.
+    wxPoint m_PanStartCenter;     ///< Initial scroll center position when pan started
+    wxPoint m_PanStartEventPosition;   ///< Initial position of mouse event when pan started
 
     /// The drawing area used to redraw the screen which is usually the visible area
     /// of the drawing in internal units.
     EDA_RECT m_ClipBox;
 
     bool m_abortRequest;          ///< Flag used to abort long commands.
+
+    bool m_enableMiddleButtonPan; ///< True to enable middle mouse button panning.
+    bool m_panScrollbarLimits;    ///< has meaning only if m_enableMiddleButtonPan = true
+                                  ///< true to limit panning to scrollbar current limits
+                                  ///< false to used unlimited pan
 
     bool m_enableAutoPan;         ///< True to enable automatic panning.
 
@@ -109,6 +116,14 @@ public:
     bool GetAbortRequest() const { return m_abortRequest; }
 
     void SetAbortRequest( bool aAbortRequest ) { m_abortRequest = aAbortRequest; }
+
+    bool GetEnableMiddleButtonPan() const { return m_enableMiddleButtonPan; }
+
+    void SetEnableMiddleButtonPan( bool aEnable ) { m_enableMiddleButtonPan = aEnable; }
+
+    bool GetMiddleButtonPanLimited() const { return m_panScrollbarLimits; }
+
+    void SetMiddleButtonPanLimited( bool aEnable ) { m_panScrollbarLimits = aEnable; }
 
     bool GetEnableAutoPan() const { return m_enableAutoPan; }
 

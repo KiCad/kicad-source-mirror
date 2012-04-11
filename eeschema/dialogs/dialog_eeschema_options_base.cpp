@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,7 @@
 
 BEGIN_EVENT_TABLE( DIALOG_EESCHEMA_OPTIONS_BASE, wxDialog )
 	EVT_CHOICE( wxID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnChooseUnits )
+	EVT_CHECKBOX( xwID_ANY, DIALOG_EESCHEMA_OPTIONS_BASE::_wxFB_OnMiddleBtnPanEnbl )
 END_EVENT_TABLE()
 
 DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -131,6 +132,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText23->Wrap( -1 );
 	fgSizer1->Add( m_staticText23, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
+	
 	bSizer3->Add( fgSizer1, 0, wxALIGN_CENTER|wxEXPAND, 0 );
 	
 	wxBoxSizer* bSizer2;
@@ -142,6 +144,12 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_checkShowHiddenPins = new wxCheckBox( m_panel1, wxID_ANY, _("Show hi&dden pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_checkShowHiddenPins, 0, wxALL|wxEXPAND, 3 );
 	
+	m_checkEnableMiddleButtonPan = new wxCheckBox( m_panel1, xwID_ANY, _("Enable middle mouse button panning"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_checkEnableMiddleButtonPan, 0, wxALL, 3 );
+	
+	m_checkMiddleButtonPanLimited = new wxCheckBox( m_panel1, wxID_ANY, _("Middle mouse button panning limited by current toolbar panning"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_checkMiddleButtonPanLimited, 0, wxALL, 3 );
+	
 	m_checkAutoPan = new wxCheckBox( m_panel1, wxID_ANY, _("Enable automatic &panning"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_checkAutoPan, 0, wxALL|wxEXPAND, 3 );
 	
@@ -151,12 +159,15 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_checkPageLimits = new wxCheckBox( m_panel1, wxID_ANY, _("Show p&age limits"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_checkPageLimits, 0, wxALL|wxEXPAND, 3 );
 	
+	
 	bSizer3->Add( bSizer2, 0, wxEXPAND, 0 );
 	
 	
 	bSizer3->Add( 0, 0, 1, wxALL|wxEXPAND, 10 );
 	
+	
 	p1mainSizer->Add( bSizer3, 1, wxALL|wxEXPAND, 12 );
+	
 	
 	m_panel1->SetSizer( p1mainSizer );
 	m_panel1->Layout();
@@ -174,6 +185,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticText211 = new wxStaticText( m_panel2, wxID_ANY, _("Please enter fieldnames which you want presented in the component fieldname (property) editors.  Names may not include (, ), or \" characters."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText211->Wrap( 400 );
 	bSizer8->Add( m_staticText211, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	
 	
 	bSizer6->Add( bSizer8, 0, wxEXPAND, 5 );
 	
@@ -242,9 +254,12 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_fieldName8 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_fieldName8, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
+	
 	bSizer7->Add( fgSizer2, 1, wxALIGN_CENTER|wxEXPAND, 5 );
 	
+	
 	bSizer6->Add( bSizer7, 1, wxALL|wxEXPAND, 12 );
+	
 	
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
@@ -259,9 +274,12 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bOptionsSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 12 );
 	
+	
 	mainSizer->Add( bOptionsSizer, 1, 0, 12 );
+	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,15 +23,16 @@
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DialogGeneralOptionsBoardEditor_base
+/// Class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DialogGeneralOptionsBoardEditor_base : public wxDialog 
+class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public wxDialog 
 {
 	private:
 	
@@ -47,8 +48,9 @@ class DialogGeneralOptionsBoardEditor_base : public wxDialog
 			wxID_TRACK_AUTODEL,
 			wxID_TRACKS45,
 			wxID_SEGMENTS45,
-			wxID_AUTOPAN,
 			wxID_MAGNETIC_TRACKS,
+			wxID_MIDDLEBUTTONPAN,
+			wxID_AUTOPAN
 		};
 		
 		wxRadioBox* m_PolarDisplay;
@@ -66,22 +68,27 @@ class DialogGeneralOptionsBoardEditor_base : public wxDialog
 		wxCheckBox* m_TrackAutodel;
 		wxCheckBox* m_Track_45_Only_Ctrl;
 		wxCheckBox* m_Segments_45_Only_Ctrl;
-		wxCheckBox* m_AutoPANOpt;
 		wxCheckBox* m_Track_DoubleSegm_Ctrl;
 		wxRadioBox* m_MagneticPadOptCtrl;
 		wxRadioBox* m_MagneticTrackOptCtrl;
-		wxButton* m_buttonOK;
-		wxButton* m_buttonCANCEL;
+		wxCheckBox* m_MiddleButtonPANOpt;
+		wxCheckBox* m_OptMiddleButtonPanLimited;
+		wxCheckBox* m_AutoPANOpt;
+		wxStaticLine* m_staticline1;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DialogGeneralOptionsBoardEditor_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,280 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DialogGeneralOptionsBoardEditor_base();
+		DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 611,346 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE();
 	
 };
 

@@ -44,20 +44,20 @@
 #include <dialog_general_options.h>
 
 
-Dialog_GeneralOptions::Dialog_GeneralOptions( PCB_EDIT_FRAME* parent ) :
-    DialogGeneralOptionsBoardEditor_base( parent )
+DIALOG_GENERALOPTIONS::DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent ) :
+    DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( parent )
 {
     init();
 
-    m_buttonOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Center();
 }
 
 
-void Dialog_GeneralOptions::init()
+void DIALOG_GENERALOPTIONS::init()
 {
     SetFocus();
+    m_sdbSizerOK->SetDefault();
 
     m_Board = GetParent()->GetBoard();
 
@@ -88,6 +88,9 @@ void Dialog_GeneralOptions::init()
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
+    m_MiddleButtonPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableMiddleButtonPan() );
+    m_OptMiddleButtonPanLimited->SetValue( GetParent()->GetCanvas()->GetMiddleButtonPanLimited() );
+    m_OptMiddleButtonPanLimited->Enable( m_MiddleButtonPANOpt->GetValue() );
     m_AutoPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableAutoPan() );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
     m_Track_DoubleSegm_Ctrl->SetValue( g_TwoSegmentTrackBuild );
@@ -97,13 +100,13 @@ void Dialog_GeneralOptions::init()
 }
 
 
-void Dialog_GeneralOptions::OnCancelClick( wxCommandEvent& event )
+void DIALOG_GENERALOPTIONS::OnCancelClick( wxCommandEvent& event )
 {
     event.Skip();
 }
 
 
-void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
+void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 {
     EDA_UNITS_T ii;
 
@@ -133,6 +136,10 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
+
+    GetParent()->GetCanvas()->SetEnableMiddleButtonPan( m_MiddleButtonPANOpt->GetValue() );
+    GetParent()->GetCanvas()->SetMiddleButtonPanLimited( m_OptMiddleButtonPanLimited->GetValue() );
+
     GetParent()->GetCanvas()->SetEnableAutoPan( m_AutoPANOpt->GetValue() );
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
     g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
