@@ -103,37 +103,45 @@ private:
 
     void initValues();
 
-    bool PadValuesOK();       ///< test if all values are acceptable for the pad
-
-    void OnPadShapeSelection( wxCommandEvent& event );
-    void OnDrillShapeSelected( wxCommandEvent& event );
-    void PadOrientEvent( wxCommandEvent& event );
-    void PadTypeSelected( wxCommandEvent& event );
-
-    /// Updates the different parameters for the component being edited.
-    void PadPropertiesAccept( wxCommandEvent& event );
+    bool padValuesOK();       ///< test if all values are acceptable for the pad
 
     /**
-     * Function SetPadLayersList
+     * Function setPadLayersList
      * updates the CheckBox states in pad layers list,
      * @param layer_mask = pad layer mask (ORed layers bit mask)
      */
-    void SetPadLayersList( long layer_mask );
+    void setPadLayersList( long layer_mask );
+
+    /// Copy values from dialog field to aPad's members
+    bool transferDataToPad( D_PAD* aPad );
+
+    // event handlers:
+
+    void OnPadShapeSelection( wxCommandEvent& event );
+    void OnDrillShapeSelected( wxCommandEvent& event );
+
+    void PadOrientEvent( wxCommandEvent& event );
+    void PadTypeSelected( wxCommandEvent& event );
 
     void OnSetLayers( wxCommandEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnPaintShowPanel( wxPaintEvent& event );
-    bool TransfertDataToPad( D_PAD* aPad );
 
     /// Called when a dimension has changed.
     /// Update the graphical pad shown in the panel.
     void OnValuesChanged( wxCommandEvent& event );
+
+    /// Updates the different parameters for the component being edited.
+    void PadPropertiesAccept( wxCommandEvent& event );
 };
 
 
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
     DIALOG_PAD_PROPERTIES_BASE( aParent ),
-    m_Pad_Master( aParent->GetBoard()->GetDesignSettings().m_Pad_Master )
+    // use aParent's parent, which is the original BOARD, not the dummy module editor BOARD,
+    // since FOOTPRINT_EDIT_FRAME::GetDesignSettings() is tricked out to use the PCB_EDITOR_FRAME's
+    // BOARD, not its own BOARD.
+    m_Pad_Master( aParent->GetDesignSettings().m_Pad_Master )
 {
     m_canUpdate  = false;
     m_Parent     = aParent;
@@ -234,8 +242,6 @@ void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
 
 void DIALOG_PAD_PROPERTIES::initValues()
 {
-    SetFocus();     // Required under wxGTK if we want to dismiss the dialog with the ESC key
-
     int         internalUnits = m_Parent->GetInternalUnits();
     wxString    msg;
     double      angle;
@@ -397,7 +403,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     NORMALIZE_ANGLE_180( angle );    // ? normalizing is in D_PAD::SetOrientation()
 
     // Set layers used by this pad: :
-    SetPadLayersList( m_dummyPad->GetLayerMask() );
+    setPadLayersList( m_dummyPad->GetLayerMask() );
 
     // Pad Orient
     switch( int( angle ) )
@@ -474,7 +480,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     // Update some dialog widgets state (Enable/disable options):
     wxCommandEvent cmd_event;
-    SetPadLayersList( m_dummyPad->GetLayerMask() );
+    setPadLayersList( m_dummyPad->GetLayerMask() );
     OnDrillShapeSelected( cmd_event );
 }
 
@@ -483,7 +489,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 {
     switch( m_PadShape->GetSelection() )
     {
-    case 0:     //CIRCLE:
+    case 0:     // CIRCLE:
         m_ShapeDelta_Ctrl->Enable( false );
         m_trapDeltaDirChoice->Enable( false );
         m_ShapeSize_Y_Ctrl->Enable( false );
@@ -491,7 +497,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_ShapeOffset_Y_Ctrl->Enable( false );
         break;
 
-    case 1:     //OVALE:
+    case 1:     // OVAL:
         m_ShapeDelta_Ctrl->Enable( false );
         m_trapDeltaDirChoice->Enable( false );
         m_ShapeSize_Y_Ctrl->Enable( true );
@@ -507,7 +513,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_ShapeOffset_Y_Ctrl->Enable( true );
         break;
 
-    case 3:     //TRAPEZE:
+    case 3:     // TRAPEZOID:
         m_ShapeDelta_Ctrl->Enable( true );
         m_trapDeltaDirChoice->Enable( true );
         m_ShapeSize_Y_Ctrl->Enable( true );
@@ -516,7 +522,7 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         break;
     }
 
-    TransfertDataToPad( m_dummyPad );
+    transferDataToPad( m_dummyPad );
     m_panelShowPad->Refresh();
 }
 
@@ -545,7 +551,7 @@ void DIALOG_PAD_PROPERTIES::OnDrillShapeSelected( wxCommandEvent& event )
         }
     }
 
-    TransfertDataToPad( m_dummyPad );
+    transferDataToPad( m_dummyPad );
     m_panelShowPad->Refresh();
 }
 
@@ -578,7 +584,7 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
     msg.Printf( wxT( "%g" ), m_dummyPad->GetOrientation() );
     m_PadOrientCtrl->SetValue( msg );
 
-    TransfertDataToPad( m_dummyPad );
+    transferDataToPad( m_dummyPad );
     m_panelShowPad->Refresh();
 }
 
@@ -592,7 +598,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
         ii = 0;
 
     layer_mask = Std_Pad_Layers[ii];
-    SetPadLayersList( layer_mask );
+    setPadLayersList( layer_mask );
 
     // Enable/disable drill dialog items:
     event.SetId( m_DrillShapeCtrl->GetSelection() );
@@ -612,7 +618,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 }
 
 
-void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
+void DIALOG_PAD_PROPERTIES::setPadLayersList( long layer_mask )
 {
     if( ( layer_mask & ALL_CU_LAYERS ) == LAYER_FRONT )
         m_rbCopperLayersSel->SetSelection(0);
@@ -645,15 +651,15 @@ void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
 // Called when select/deselect a layer.
 void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 {
-    TransfertDataToPad( m_dummyPad );
+    transferDataToPad( m_dummyPad );
     m_panelShowPad->Refresh();
 }
 
 
 // test if all values are acceptable for the pad
-bool DIALOG_PAD_PROPERTIES::PadValuesOK()
+bool DIALOG_PAD_PROPERTIES::padValuesOK()
 {
-    bool error = TransfertDataToPad( m_dummyPad );
+    bool error = transferDataToPad( m_dummyPad );
 
     wxArrayString error_msgs;
     wxString msg;
@@ -730,13 +736,13 @@ if you do not want this pad plotted in gerber files");
 
 void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 {
-    if( !PadValuesOK() )
+    if( !padValuesOK() )
         return;
 
     bool rastnestIsChanged = false;
     int  isign = m_isFlipped ? -1 : 1;
 
-    TransfertDataToPad( &m_Pad_Master );
+    transferDataToPad( &m_Pad_Master );
 
     if( m_CurrentPad )   // Set current Pad parameters
     {
@@ -841,8 +847,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_Parent->GetBoard()->m_Status_Pcb = 0;
 }
 
-// Copy values from dialog to aPad parameters.
-bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad )
+bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 {
     long        padLayerMask;
     int         internalUnits = m_Parent->GetInternalUnits();
@@ -1088,7 +1093,7 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
 {
     if( m_canUpdate )
     {
-        TransfertDataToPad( m_dummyPad );
+        transferDataToPad( m_dummyPad );
         m_panelShowPad->Refresh();
     }
 }
