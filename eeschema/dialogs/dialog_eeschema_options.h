@@ -113,7 +113,7 @@ public:
     }
     bool GetMiddleButtonPanLimited( void )
     {
-        return m_checkEnableMiddleButtonPan->GetValue();
+        return m_checkMiddleButtonPanLimited->GetValue();
     }
 
     void SetEnableAutoPan( bool enable )
