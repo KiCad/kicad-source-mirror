@@ -824,7 +824,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 }
 
 
@@ -876,7 +876,8 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_PadConnection = src->m_PadConnection;
     m_ThermalReliefGap = src->m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = src->m_ThermalReliefCopperBridge;
-    m_Poly->m_HatchStyle = src->m_Poly->GetHatchStyle();
+    m_Poly->SetHatchStyle( src->m_Poly->GetHatchStyle() );
+    m_Poly->SetHatchPitch( src->m_Poly->GetHatchPitch() );
     m_Poly->m_HatchLines = src->m_Poly->m_HatchLines;   // Copy vector <CSegment>
     m_FilledPolysList.clear();
     m_FilledPolysList = src->m_FilledPolysList;

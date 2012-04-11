@@ -1980,7 +1980,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
     }
 
     // Set hatch here, when outlines corners are read
-    m_Poly->SetHatch( outline_hatch );
+    m_Poly->SetHatch( outline_hatch, Mils2iu( m_Poly->GetDefaultHatchPitchMils() ) );
 
     return error ? 0 : 1;
 }

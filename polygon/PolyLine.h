@@ -108,8 +108,8 @@ public:
 class CPolyLine
 {
 public:
-    enum { STRAIGHT, ARC_CW, ARC_CCW };                 // side styles
-    enum { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE };    // hatch styles
+    enum side_style { STRAIGHT, ARC_CW, ARC_CCW };                 // side styles
+    enum hatch_style { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE };    // hatch styles
 
     // constructors/destructor
     CPolyLine();
@@ -180,13 +180,25 @@ public:
     int        GetUtility( int ic ) { return corner[ic].utility; };
     void       SetUtility( int ic, int utility ) { corner[ic].utility = utility; };
     int        GetSideStyle( int is );
+    int        GetHatchPitch() { return m_hatchPitch; }
+    int        GetDefaultHatchPitchMils() { return 20; }   // default hatch pitch value in mils
 
-    int        GetHatchStyle() { return m_HatchStyle; }
-    void       SetHatch( int hatch ) { m_HatchStyle = hatch; Hatch(); };
+    enum hatch_style GetHatchStyle() { return m_hatchStyle; }
+    void       SetHatch( int hatch, int pitch )
+                {
+                    SetHatchPitch( pitch );
+                    m_hatchStyle = (enum hatch_style ) hatch;
+                    Hatch();
+                }
     void       SetX( int ic, int x );
     void       SetY( int ic, int y );
     void       SetEndContour( int ic, bool end_contour );
     void       SetSideStyle( int is, int style );
+    void       SetHatchStyle( enum hatch_style style )
+                {
+                    m_hatchStyle = style;
+                }
+    void       SetHatchPitch( int pitch ) { m_hatchPitch = pitch; }
 
     int        RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine*> * pa = NULL );
 
@@ -260,15 +272,18 @@ public:
 
 
 private:
-    int m_layer;    // layer to draw on
-    int m_Width;    // lines width when drawing. Provided but not really used
+    int m_layer;        // layer to draw on
+    int m_Width;        // lines width when drawing. Provided but not really used
+    enum hatch_style m_hatchStyle;                           // hatch style, see enum above
+    int m_hatchPitch;   // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
+                        // and the len of eacvh segment
+                        // for DIAGONAL_FULL, the pitch is twice this value
     int utility;
     Bool_Engine* m_Kbool_Poly_Engine; // polygons set in kbool engine data
 
 public:
     std::vector <CPolyPt>  corner;              // array of points for corners
     std::vector <int>      side_style;          // array of styles for sides
-    int m_HatchStyle;                           // hatch style, see enum above
     std::vector <CSegment> m_HatchLines;        // hatch lines
 };
 

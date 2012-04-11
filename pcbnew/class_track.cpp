@@ -392,7 +392,7 @@ void TRACK::Flip( const wxPoint& aCentre )
     }
     else
     {
-        SetLayer( ChangeSideNumLayer( GetLayer() ) );
+        SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
     }
 }
 

@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
 
  *
@@ -82,7 +82,7 @@
 #include <3d_struct.h>
 #include <pcb_plot_params.h>
 #include <drawtxt.h>
-
+#include <convert_to_biu.h>
 #include <trigo.h>
 
 #include <wx/ffile.h>
@@ -2286,7 +2286,8 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 }
 
                 // Set hatch here, after outlines corners are read
-                zc->m_Poly->SetHatch( outline_hatch );
+                zc->m_Poly->SetHatch( outline_hatch,
+                                      Mils2iu( zc->m_Poly->GetDefaultHatchPitchMils() ) );
 
                 m_board->Add( zc.release() );
             }

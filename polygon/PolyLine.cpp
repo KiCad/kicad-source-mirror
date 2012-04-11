@@ -8,17 +8,10 @@
 #include <algorithm>
 
 #include <fctsys.h>
-#include <config.h>     // to define KICAD_NANOMETRE
 
 #include <PolyLine.h>
 #include <bezier_curves.h>
 #include <polygon_test_point_inside.h>
-
-#if defined(KICAD_NANOMETRE)
-#define PCBU_PER_MIL    (1000.0*25.4)
-#else
-#define PCBU_PER_MIL    10
-#endif
 
 
 #define to_int( x ) wxRound( (x) )
@@ -34,7 +27,8 @@
 
 CPolyLine::CPolyLine()
 {
-    m_HatchStyle = 0;
+    m_hatchStyle = NO_HATCH;
+    m_hatchPitch = 0;
     m_Width = 0;
     utility = 0;
     m_Kbool_Poly_Engine = NULL;
@@ -794,7 +788,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
 void CPolyLine::Start( int layer, int x, int y, int hatch )
 {
     m_layer      = layer;
-    m_HatchStyle = hatch;
+    SetHatchStyle( (enum hatch_style) hatch );
     CPolyPt poly_pt( x, y );
     poly_pt.end_contour = false;
 
@@ -1379,7 +1373,7 @@ void CPolyLine::Hatch()
 {
     m_HatchLines.clear();
 
-    if( m_HatchStyle == NO_HATCH )
+    if( m_hatchStyle == NO_HATCH || m_hatchPitch == 0 )
         return;
 
     if( !GetClosed() )   // If not closed, the poly is beeing created and not finalised. Not not hatch
@@ -1404,13 +1398,13 @@ void CPolyLine::Hatch()
 
     // Calculate spacing betwwen 2 hatch lines
     int    spacing;
-    if( m_HatchStyle == DIAGONAL_EDGE )
-        spacing = 20 * PCBU_PER_MIL;
+    if( m_hatchStyle == DIAGONAL_EDGE )
+        spacing = m_hatchPitch;
     else
-        spacing = 50 * PCBU_PER_MIL;
+        spacing = m_hatchPitch * 2;
 
     // set the "lenght" of hatch lines (the lenght on horizontal axis)
-    double hatch_line_len = 20 * PCBU_PER_MIL;
+    double hatch_line_len = m_hatchPitch;
 
     // To have a better look, give a slope depending on the layer
     int layer = GetLayer();
@@ -1438,7 +1432,7 @@ void CPolyLine::Hatch()
     int nc = corner.size();
 
     // loop through hatch lines
-    #define MAXPTS 200      // Usually we store only few values
+    #define MAXPTS 200      // Usually we store only few values per one hatch line
                             // depending on the compexity of the zone outline
 
     static std::vector <CPoint> pointbuffer;
@@ -1514,7 +1508,7 @@ void CPolyLine::Hatch()
             // Push only one line for diagonal hatch,
             // or for small lines < twice the line len
             // else push 2 small lines
-            if( m_HatchStyle == DIAGONAL_FULL || fabs( dx ) < 2 * hatch_line_len )
+            if( m_hatchStyle == DIAGONAL_FULL || fabs( dx ) < 2 * hatch_line_len )
             {
                 m_HatchLines.push_back( CSegment( pointbuffer[ip].x,
                                                   pointbuffer[ip].y,
@@ -1583,7 +1577,8 @@ bool CPolyLine::TestPointInside( int px, int py )
 void CPolyLine::Copy( CPolyLine* src )
 {
     UnHatch();
-    m_HatchStyle = src->m_HatchStyle;
+    m_hatchStyle = src->m_hatchStyle;
+    m_hatchPitch = src->m_hatchPitch;
     // copy corners, using vector copy
     corner = src->corner;
     // copy side styles, using vector copy

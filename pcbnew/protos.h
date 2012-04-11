@@ -6,17 +6,12 @@
 #define PROTO_H
 
 
-#include <vector>
-
-
 class wxDC;
 class wxPoint;
 class EDA_DRAW_PANEL;
 class BOARD_ITEM;
-class D_PAD;
 class TRACK;
 class MODULE;
-
 
 /**
  * Function SwapData
@@ -63,15 +58,7 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
  */
 int ChangeSideMaskLayer( int aMask );
 
-/**
- * Function ChangeSideNumLayer
- * calculates the layer number for changing cu / cmp layers for Cu / CMP.
- * (Copper, Mask, Paste, solder)
- */
-int ChangeSideNumLayer( int oldlayer );
-
 void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
-void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase );
 
 
 /****************/
