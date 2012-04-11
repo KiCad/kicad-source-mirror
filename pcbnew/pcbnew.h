@@ -8,7 +8,7 @@
 
 #include <fctsys.h>         // PCB_INTERNAL_UNIT and EESCHEMA_INTERNAL_UNIT definitions.
 #include <base_struct.h>    // IS_DRAGGED and IN_EDIT definitions.
-
+#include <convert_to_biu.h> // to define DMils2iu() conversion function
 
 #define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)
 
@@ -32,19 +32,6 @@
 
 #define DIM_ANCRE_MODULE 3       /* Anchor size (footprint center) */
 #define DIM_ANCRE_TEXTE  2       /* Anchor size (Text center) */
-
-
-#if defined(PCBNEW)
-/// Convert deci-mils to PCBNEW internal units (iu).
-inline int DMils2iu( int dmils )
-{
-#if defined( USE_PCBNEW_NANOMETRES )
-    return int( dmils * 25.4e2 + 0.5 );
-#else
-    return dmils;
-#endif
-}
-#endif
 
 
 #define TEXTS_MIN_SIZE  DMils2iu( 50 )      ///< Minimum text size in Pcbnew units value (50 * 0.0001 mils)

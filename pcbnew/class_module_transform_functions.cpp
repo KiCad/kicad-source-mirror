@@ -11,15 +11,18 @@
 #include <macros.h>
 
 #include <protos.h>
+#include <class_board.h>
 #include <class_pad.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
 
 
-/* Calculate the layer number for changing cu / cmp layers for Cu / CMP
- * (Copper, Mask, Paste, solder)
+
+/* Returns the layer number after flipping an item
+ * some layers: external copper, Mask, Paste, and solder
+ * are swapped between front and back sides
  */
-int ChangeSideNumLayer( int oldlayer )
+int BOARD::ReturnFlippedLayerNumber( int oldlayer )
 {
     int newlayer;
 
@@ -155,7 +158,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     SetPosition( finalPos );
 
     // Flip layer
-    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 
     // Reverse mirror orientation.
     NEGATE( m_Orient );
@@ -174,7 +177,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     pt_texte->m_Mirror = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
     pt_texte->SetLayer( GetLayer() );
-    pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
+    pt_texte->SetLayer( BOARD::ReturnFlippedLayerNumber( pt_texte->GetLayer() ) );
 
     if( GetLayer() == LAYER_N_BACK )
         pt_texte->SetLayer( SILKSCREEN_N_BACK );
@@ -195,7 +198,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     pt_texte->m_Mirror = false;
     NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
     pt_texte->SetLayer( GetLayer() );
-    pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
+    pt_texte->SetLayer( BOARD::ReturnFlippedLayerNumber( pt_texte->GetLayer() ) );
 
     if( GetLayer() == LAYER_N_BACK )
         pt_texte->SetLayer( SILKSCREEN_N_BACK );
@@ -236,7 +239,7 @@ void MODULE::Flip( const wxPoint& aCentre )
                     em->SetAngle( -em->GetAngle() );
                 }
 
-                em->SetLayer( ChangeSideNumLayer( em->GetLayer() ) );
+                em->SetLayer( BOARD::ReturnFlippedLayerNumber( em->GetLayer() ) );
             }
             break;
 
@@ -251,7 +254,7 @@ void MODULE::Flip( const wxPoint& aCentre )
             NEGATE_AND_NORMALIZE_ANGLE_POS( pt_texte->m_Orient );
 
             pt_texte->SetLayer( GetLayer() );
-            pt_texte->SetLayer( ChangeSideNumLayer( pt_texte->GetLayer() ) );
+            pt_texte->SetLayer( BOARD::ReturnFlippedLayerNumber( pt_texte->GetLayer() ) );
 
             if( GetLayer() == LAYER_N_BACK )
                 pt_texte->SetLayer( SILKSCREEN_N_BACK );

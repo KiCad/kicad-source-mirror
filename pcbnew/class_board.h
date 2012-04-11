@@ -273,6 +273,14 @@ public:
     static wxString GetDefaultLayerName( int aLayerNumber );
 
     /**
+     * Function ReturnFlippedLayerNumber
+     * @return the layer number after flipping an item
+     * some (not all) layers: external copper, Mask, Paste, and solder
+     * are swapped between front and back sides
+     */
+    static int ReturnFlippedLayerNumber( int oldlayer );
+
+    /**
      * Function Add
      * adds the given item to this BOARD and takes ownership of its memory.
      * @param aBoardItem The item to add to this board.

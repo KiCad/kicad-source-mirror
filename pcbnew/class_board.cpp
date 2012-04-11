@@ -71,13 +71,6 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    /*  @todo
-        NO!  this has nothing to do with a BOARD
-        Do this in the UI, not in the storage container please.
-    if( m_PcbFrame && m_PcbFrame->GetScreen() )
-        m_PcbFrame->GetScreen()->ClearUndoRedoList();
-    */
-
     while( m_ZoneDescriptorList.size() )
     {
         ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];

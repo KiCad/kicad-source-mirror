@@ -36,7 +36,6 @@
 #include <class_drawpanel.h>
 #include <colors_selection.h>
 #include <kicad_string.h>
-#include <protos.h>
 #include <richio.h>
 
 #include <class_board.h>
@@ -200,7 +199,7 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 void DIMENSION::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 }
 
 
