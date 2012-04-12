@@ -31,6 +31,7 @@
 #define CLASS_SCH_FIELD_H
 
 
+#include <eda_text.h>
 #include <sch_item_struct.h>
 #include <general.h>
 

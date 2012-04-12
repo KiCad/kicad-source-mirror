@@ -64,15 +64,16 @@ wxString BOARD_ITEM::GetLayerName() const
 }
 
 
-/** @todo Move Pcbnew version of FormatBIU() where ever the common DSO/DSL code ends up. */
-std::string FormatBIU( int aValue )
+std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 {
-#if !defined( USE_PCBNEW_NANOMETRES )
-    wxFAIL_MSG( wxT( "Cannot use FormatBIU() unless Pcbnew is build with PCBNEW_NANOMETERS=ON." ) );
+    char    buf[50];
+
+#if defined( USE_PCBNEW_NANOMETRES )
+    double  engUnits = aValue / 1000000.0;
+#else
+    double  engUnits = ( aValue * 10000.0 ) / 25.4 / 1000000.0;
 #endif
 
-    char    buf[50];
-    double  engUnits = aValue / 1000000.0;
     int     len;
 
     if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
@@ -92,4 +93,31 @@ std::string FormatBIU( int aValue )
     }
 
     return std::string( buf, len );
+}
+
+
+std::string BOARD_ITEM::FormatAngle( double aAngle )
+{
+    char temp[50];
+    int len;
+
+#if defined( USE_PCBNEW_SEXPR_FILE_FORMAT )
+    len = snprintf( temp, 49, "%.10g", aAngle / 10.0 );
+#else
+    len = snprintf( temp, 49, "%.10g", aAngle );
+#endif
+
+    return std::string( temp, len );
+}
+
+
+std::string BOARD_ITEM::FormatInternalUnits( const wxPoint& aPoint )
+{
+    return FormatInternalUnits( aPoint.x ) + " " + FormatInternalUnits( aPoint.y );
+}
+
+
+std::string BOARD_ITEM::FormatInternalUnits( const wxSize& aSize )
+{
+    return FormatInternalUnits( aSize.GetWidth() ) + " " + FormatInternalUnits( aSize.GetHeight() );
 }

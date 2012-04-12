@@ -36,6 +36,7 @@
  #define PAPER_A1   wxPAPER_A2
 #endif
 
+
 // Standard paper sizes nicknames.
 const wxString PAGE_INFO::A4( wxT( "A4" ) );
 const wxString PAGE_INFO::A3( wxT( "A3" ) );
@@ -318,11 +319,11 @@ void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aContro
     // If page is A3 landscape, then it is assumed to be the default and is not written.
     if( !IsDefault() )
     {
-        aFormatter->Print( aNestLevel, "(page %s", TO_UTF8( GetType() ) );
+        aFormatter->Print( aNestLevel, "(page %s", aFormatter->Quotew( GetType() ).c_str() );
 
         // The page dimensions are only required for user defined page sizes.
         if( GetType() == PAGE_INFO::Custom )
-            aFormatter->Print( aNestLevel, " %d %d", GetWidthMils(), GetHeightMils() );
+            aFormatter->Print( aNestLevel, " %d %d", GetWidthIU(), GetHeightIU() );
 
         if( IsCustom() && IsPortrait() )
             aFormatter->Print( aNestLevel, " portrait" );

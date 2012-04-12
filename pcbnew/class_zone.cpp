@@ -993,18 +993,18 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
     }
 
     aFormatter->Print( aNestLevel+1, "(connect_pads %s (clearance %s))\n",
-                       padoption.c_str(), FormatBIU( m_ZoneClearance ).c_str() );
+                       padoption.c_str(), FMT_IU( m_ZoneClearance ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(min_thickness %s)\n",
-                       FormatBIU( m_ZoneMinThickness ).c_str() );
+                       FMT_IU( m_ZoneMinThickness ).c_str() );
 
     aFormatter->Print( aNestLevel+1,
                        "(fill %s (mode %s) (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)\n",
                        (m_IsFilled) ? "yes" : "no",
                        (m_FillMode) ? "segment" : "polygon",
                        m_ArcToSegmentsCount,
-                       FormatBIU( m_ThermalReliefGap ).c_str(),
-                       FormatBIU( m_ThermalReliefCopperBridge ).c_str() );
+                       FMT_IU( m_ThermalReliefGap ).c_str(),
+                       FMT_IU( m_ThermalReliefCopperBridge ).c_str() );
 
     std::string smoothing;
 
@@ -1019,7 +1019,7 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
     }
 
     aFormatter->Print( aNestLevel+1, "(smoothing %s (radius %s))\n",
-                       smoothing.c_str(), FormatBIU( cornerRadius ).c_str() );
+                       smoothing.c_str(), FMT_IU( cornerRadius ).c_str() );
 
     const std::vector< CPolyPt >& cv = m_Poly->corner;
 
@@ -1031,7 +1031,7 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
         for( std::vector< CPolyPt >::const_iterator it = cv.begin();  it != cv.end();  ++it )
         {
             aFormatter->Print( aNestLevel+3, "(xy %s %s)\n",
-                               FormatBIU( it->x ).c_str(), FormatBIU( it->y ).c_str() );
+                               FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
 
             if( it->end_contour )
             {
@@ -1060,7 +1060,7 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
         for( std::vector< CPolyPt >::const_iterator it = fv.begin();  it != fv.end();  ++it )
         {
             aFormatter->Print( aNestLevel+3, "(xy %s %s)\n",
-                               FormatBIU( it->x ).c_str(), FormatBIU( it->y ).c_str() );
+                               FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
 
             if( it->end_contour )
             {
@@ -1088,8 +1088,8 @@ void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aC
         for( std::vector< SEGMENT >::const_iterator it = segs.begin();  it != segs.end();  ++it )
         {
             aFormatter->Print( aNestLevel+2, "(pts (xy %s) (xy %s))\n",
-                               FormatBIU( it->m_Start ).c_str(),
-                               FormatBIU( it->m_End ).c_str() );
+                               FMT_IU( it->m_Start ).c_str(),
+                               FMT_IU( it->m_End ).c_str() );
         }
 
         aFormatter->Print( aNestLevel+1, ")\n" );

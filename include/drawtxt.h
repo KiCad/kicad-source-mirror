@@ -8,6 +8,7 @@
 #define __INCLUDE__DRAWTXT_H__ 1
 
 #include <base_struct.h>
+#include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 
 class EDA_DRAW_PANEL;
 class PLOTTER;

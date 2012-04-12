@@ -60,6 +60,10 @@ typedef vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 #endif
 
 
+#define FMT_IU          SCH_ITEM::FormatInternalUnits
+#define FMT_ANGLE       SCH_ITEM::FormatAngle
+
+
 /// Flag to enable find and replace tracing using the WXTRACE environment variable.
 extern const wxString traceFindReplace;
 
@@ -364,6 +368,31 @@ public:
     virtual void SetPosition( const wxPoint& aPosition ) = 0;
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
+
+    /**
+     * Function FormatInternalUnits
+     * converts \a aValue from schematic internal units to a string appropriate for writing
+     * to file.
+     *
+     * @param aValue A coordinate value to convert.
+     * @return A std::string object containing the converted value.
+     */
+    static std::string FormatInternalUnits( int aValue );
+
+    /**
+     * Function FormatAngle
+     * converts \a aAngle from board units to a string appropriate for writing to file.
+     *
+     * @note Internal angles for board items can be either degrees or tenths of degree
+     *       on how KiCad is built.
+     * @param aAngle A angle value to convert.
+     * @return A std::string object containing the converted angle.
+     */
+    static std::string FormatAngle( double aAngle );
+
+    static std::string FormatInternalUnits( const wxPoint& aPoint );
+
+    static std::string FormatInternalUnits( const wxSize& aSize );
 
 private:
     /**

@@ -2151,12 +2151,12 @@ void BOARD::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBit
 
     // Write Bounding box info
     aFormatter->Print( aNestLevel+1,  "(area %s %s %s %s)\n",
-                       FormatBIU( m_BoundingBox.GetX() ).c_str(),
-                       FormatBIU( m_BoundingBox.GetY() ).c_str(),
-                       FormatBIU( m_BoundingBox.GetRight() ).c_str(),
-                       FormatBIU( m_BoundingBox.GetBottom() ).c_str() );
+                       FMT_IU( m_BoundingBox.GetX() ).c_str(),
+                       FMT_IU( m_BoundingBox.GetY() ).c_str(),
+                       FMT_IU( m_BoundingBox.GetRight() ).c_str(),
+                       FMT_IU( m_BoundingBox.GetBottom() ).c_str() );
     aFormatter->Print( aNestLevel+1, "(thickness %s)\n",
-                       FormatBIU( GetDesignSettings().m_BoardThickness ).c_str() );
+                       FMT_IU( GetDesignSettings().m_BoardThickness ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(drawings %d)\n", m_Drawings.GetCount() );
     aFormatter->Print( aNestLevel+1, "(tracks %d)\n", GetNumSegmTrack() );
@@ -2195,92 +2195,92 @@ void BOARD::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBit
 
     // Save current default track width, for compatibility with older Pcbnew version;
     aFormatter->Print( aNestLevel+1, "(last_trace_width %s)\n",
-                       FormatBIU( m_TrackWidthList[m_TrackWidthSelector] ).c_str() );
+                       FMT_IU( m_TrackWidthList[m_TrackWidthSelector] ).c_str() );
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
     for( unsigned ii = 1; ii < m_TrackWidthList.size(); ii++ )
         aFormatter->Print( aNestLevel+1, "(user_trace_width%d %s)\n",
-                           ii+1, FormatBIU( m_TrackWidthList[ii] ).c_str() );
+                           ii+1, FMT_IU( m_TrackWidthList[ii] ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(trace_clearance %s)\n",
-                       FormatBIU( m_NetClasses.GetDefault()->GetClearance() ).c_str() );
+                       FMT_IU( m_NetClasses.GetDefault()->GetClearance() ).c_str() );
 
     // ZONE_SETTINGS
     aFormatter->Print( aNestLevel+1, "(zone_clearance %s)\n",
-                       FormatBIU( GetZoneSettings().m_ZoneClearance ).c_str() );
+                       FMT_IU( GetZoneSettings().m_ZoneClearance ).c_str() );
     aFormatter->Print( aNestLevel+1, "(zone_45_only %d)\n", GetZoneSettings().m_Zone_45_Only );
 
     aFormatter->Print( aNestLevel+1, "(trace_min %s)\n",
-                       FormatBIU( GetDesignSettings().m_TrackMinWidth ).c_str() );
+                       FMT_IU( GetDesignSettings().m_TrackMinWidth ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(segment_width %s)\n",
-                       FormatBIU( GetDesignSettings().m_DrawSegmentWidth ).c_str() );
+                       FMT_IU( GetDesignSettings().m_DrawSegmentWidth ).c_str() );
     aFormatter->Print( aNestLevel+1, "(edge_width %s)\n",
-                       FormatBIU( GetDesignSettings().m_EdgeSegmentWidth ).c_str() );
+                       FMT_IU( GetDesignSettings().m_EdgeSegmentWidth ).c_str() );
 
     // Save current default via size, for compatibility with older Pcbnew version;
     aFormatter->Print( aNestLevel+1, "(via_size %s)\n",
-                       FormatBIU( m_NetClasses.GetDefault()->GetViaDiameter() ).c_str() );
+                       FMT_IU( m_NetClasses.GetDefault()->GetViaDiameter() ).c_str() );
     aFormatter->Print( aNestLevel+1, "(via_drill %s)\n",
-                       FormatBIU( m_NetClasses.GetDefault()->GetViaDrill() ).c_str() );
+                       FMT_IU( m_NetClasses.GetDefault()->GetViaDrill() ).c_str() );
     aFormatter->Print( aNestLevel+1, "(via_min_size %s)\n",
-                       FormatBIU( GetDesignSettings().m_ViasMinSize ).c_str() );
+                       FMT_IU( GetDesignSettings().m_ViasMinSize ).c_str() );
     aFormatter->Print( aNestLevel+1, "(via_min_drill %s)\n",
-                       FormatBIU( GetDesignSettings().m_ViasMinDrill ).c_str() );
+                       FMT_IU( GetDesignSettings().m_ViasMinDrill ).c_str() );
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
     for( unsigned ii = 1; ii < m_ViasDimensionsList.size(); ii++ )
         aFormatter->Print( aNestLevel+1, "(user_via%d %s %s)\n", ii,
-                           FormatBIU( m_ViasDimensionsList[ii].m_Diameter ).c_str(),
-                           FormatBIU( m_ViasDimensionsList[ii].m_Drill ).c_str() );
+                           FMT_IU( m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                           FMT_IU( m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
     aFormatter->Print( aNestLevel+1, "(uvia_size %s)\n",
-                       FormatBIU( m_NetClasses.GetDefault()->GetuViaDiameter() ).c_str() );
+                       FMT_IU( m_NetClasses.GetDefault()->GetuViaDiameter() ).c_str() );
     aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n",
-                       FormatBIU( m_NetClasses.GetDefault()->GetuViaDrill() ).c_str() );
+                       FMT_IU( m_NetClasses.GetDefault()->GetuViaDrill() ).c_str() );
     aFormatter->Print( aNestLevel+1, "(uvias_allow %s)\n",
-                       FormatBIU( GetDesignSettings().m_MicroViasAllowed ).c_str() );
+                       FMT_IU( GetDesignSettings().m_MicroViasAllowed ).c_str() );
     aFormatter->Print( aNestLevel+1, "(uvia_min_size %s)\n",
-                       FormatBIU( GetDesignSettings().m_MicroViasMinSize ).c_str() );
+                       FMT_IU( GetDesignSettings().m_MicroViasMinSize ).c_str() );
     aFormatter->Print( aNestLevel+1, "(uvia_min_drill %s)\n",
-                       FormatBIU( GetDesignSettings().m_MicroViasMinDrill ).c_str() );
+                       FMT_IU( GetDesignSettings().m_MicroViasMinDrill ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(pcb_text_width %s)\n",
-                       FormatBIU( GetDesignSettings().m_PcbTextWidth ).c_str() );
+                       FMT_IU( GetDesignSettings().m_PcbTextWidth ).c_str() );
     aFormatter->Print( aNestLevel+1, "(pcb_text_size %s %s)\n",
-                       FormatBIU( GetDesignSettings().m_PcbTextSize.x ).c_str(),
-                       FormatBIU( GetDesignSettings().m_PcbTextSize.y ).c_str() );
+                       FMT_IU( GetDesignSettings().m_PcbTextSize.x ).c_str(),
+                       FMT_IU( GetDesignSettings().m_PcbTextSize.y ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(mod_edge_width %s)\n",
-                       FormatBIU( GetDesignSettings().m_ModuleSegmentWidth ).c_str() );
+                       FMT_IU( GetDesignSettings().m_ModuleSegmentWidth ).c_str() );
     aFormatter->Print( aNestLevel+1, "(mod_text_size %s %s)\n",
-                       FormatBIU( GetDesignSettings().m_ModuleTextSize.x ).c_str(),
-                       FormatBIU( GetDesignSettings().m_ModuleTextSize.y ).c_str() );
+                       FMT_IU( GetDesignSettings().m_ModuleTextSize.x ).c_str(),
+                       FMT_IU( GetDesignSettings().m_ModuleTextSize.y ).c_str() );
     aFormatter->Print( aNestLevel+1, "(mod_text_width %s)\n",
-                       FormatBIU( GetDesignSettings().m_ModuleTextWidth ).c_str() );
+                       FMT_IU( GetDesignSettings().m_ModuleTextWidth ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(pad_size %s %s)\n",
-                       FormatBIU( GetDesignSettings().m_Pad_Master.GetSize().x ).c_str(),
-                       FormatBIU( GetDesignSettings().m_Pad_Master.GetSize().x ).c_str() );
+                       FMT_IU( GetDesignSettings().m_Pad_Master.GetSize().x ).c_str(),
+                       FMT_IU( GetDesignSettings().m_Pad_Master.GetSize().x ).c_str() );
     aFormatter->Print( aNestLevel+1, "(pad_drill %s)\n",
-                       FormatBIU( GetDesignSettings().m_Pad_Master.GetDrillSize().x ).c_str() );
+                       FMT_IU( GetDesignSettings().m_Pad_Master.GetDrillSize().x ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(pad_to_mask_clearance %s)\n",
-                       FormatBIU( GetDesignSettings().m_SolderMaskMargin ).c_str() );
+                       FMT_IU( GetDesignSettings().m_SolderMaskMargin ).c_str() );
 
     if( GetDesignSettings().m_SolderPasteMargin != 0 )
         aFormatter->Print( aNestLevel+1, "(pad_to_paste_clearance %s)\n",
-                           FormatBIU( GetDesignSettings().m_SolderPasteMargin ).c_str() );
+                           FMT_IU( GetDesignSettings().m_SolderPasteMargin ).c_str() );
 
     if( GetDesignSettings().m_SolderPasteMarginRatio != 0 )
         aFormatter->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %g)\n",
                            GetDesignSettings().m_SolderPasteMarginRatio );
 
     aFormatter->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
-                       FormatBIU( GetOriginAxisPosition().x ).c_str(),
-                       FormatBIU( GetOriginAxisPosition().y ).c_str() );
+                       FMT_IU( GetOriginAxisPosition().x ).c_str(),
+                       FMT_IU( GetOriginAxisPosition().y ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(visible_elements %X)\n",
                        GetDesignSettings().GetVisibleElements() );

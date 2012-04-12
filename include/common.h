@@ -136,24 +136,6 @@ enum EDA_UNITS_T {
 };
 
 
-/**
- * Function FormatBIU
- * converts coordinate \a aValue from the application specific internal units to a string
- * appropriate to write to an #OUTPUTFORMATTER in the s-expression file formats.
- *
- * @note A separate version of this function exists for Pcbnew and Eeschema.  This removes
- *       the runtime dependency for converting coordinates to the appropriate application.
- *       Do not add any runtime conversions to either the Pcbnew or Eeschema implementation
- *       of this function.
- * @param aValue The value in application specific internal units to convert.
- * @return An s-expression appropriate string containing the converted value in millimeters.
- */
-extern std::string FormatBIU( int aValue );
-
-extern std::string FormatBIU( const wxPoint& aPoint );
-
-extern std::string FormatBIU( const wxSize& aSize );
-
 // forward declarations:
 class LibNameList;
 

@@ -610,53 +610,53 @@ EDA_ITEM* DIMENSION::Clone() const
 void DIMENSION::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
     throw( IO_ERROR )
 {
-    aFormatter->Print( aNestLevel, "(dimension %s\n", FormatBIU( m_Value ).c_str() );
+    aFormatter->Print( aNestLevel, "(dimension %s\n", FMT_IU( m_Value ).c_str() );
     aFormatter->Print( aNestLevel+1, "(width %s)\n(layer %d)\n(tstamp %lX)\n",
-                       FormatBIU( m_Width ).c_str(), GetLayer(), GetTimeStamp() );
+                       FMT_IU( m_Width ).c_str(), GetLayer(), GetTimeStamp() );
 
     m_Text.EDA_TEXT::Format( aFormatter, aNestLevel+1, aControlBits );
 
     aFormatter->Print( aNestLevel+1, "(feature1 pts((xy %s %s) (xy %s %s)))\n",
-                       FormatBIU( m_featureLineDOx ).c_str(),
-                       FormatBIU( m_featureLineDOy ).c_str(),
-                       FormatBIU( m_featureLineDFx ).c_str(),
-                       FormatBIU( m_featureLineDFy ).c_str() );
+                       FMT_IU( m_featureLineDOx ).c_str(),
+                       FMT_IU( m_featureLineDOy ).c_str(),
+                       FMT_IU( m_featureLineDFx ).c_str(),
+                       FMT_IU( m_featureLineDFy ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(feature2 pts((xy %s %s) (xy %s %s)))\n",
-                       FormatBIU( m_featureLineGOx ).c_str(),
-                       FormatBIU( m_featureLineGOy ).c_str(),
-                       FormatBIU( m_featureLineGFx ).c_str(),
-                       FormatBIU( m_featureLineGFy ).c_str() );
+                       FMT_IU( m_featureLineGOx ).c_str(),
+                       FMT_IU( m_featureLineGOy ).c_str(),
+                       FMT_IU( m_featureLineGFx ).c_str(),
+                       FMT_IU( m_featureLineGFy ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(crossbar pts((xy %s %s) (xy %s %s)))\n",
-                       FormatBIU( m_crossBarOx ).c_str(),
-                       FormatBIU( m_crossBarOy ).c_str(),
-                       FormatBIU( m_crossBarFx ).c_str(),
-                       FormatBIU( m_crossBarFy ).c_str() );
+                       FMT_IU( m_crossBarOx ).c_str(),
+                       FMT_IU( m_crossBarOy ).c_str(),
+                       FMT_IU( m_crossBarFx ).c_str(),
+                       FMT_IU( m_crossBarFy ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(arrow1a pts((xy %s %s) (xy %s %s)))\n",
-                       FormatBIU( m_arrowD1Ox ).c_str(),
-                       FormatBIU( m_arrowD1Oy ).c_str(),
-                       FormatBIU( m_arrowD1Fx ).c_str(),
-                       FormatBIU( m_arrowD1Fy ).c_str() );
+                       FMT_IU( m_arrowD1Ox ).c_str(),
+                       FMT_IU( m_arrowD1Oy ).c_str(),
+                       FMT_IU( m_arrowD1Fx ).c_str(),
+                       FMT_IU( m_arrowD1Fy ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(arrow1b pts((xy %s %s) (xy %s %s)))\n",
-                       FormatBIU( m_arrowD2Ox ).c_str(),
-                       FormatBIU( m_arrowD2Oy ).c_str(),
-                       FormatBIU( m_arrowD2Fx ).c_str(),
-                       FormatBIU( m_arrowD2Fy ).c_str() );
+                       FMT_IU( m_arrowD2Ox ).c_str(),
+                       FMT_IU( m_arrowD2Oy ).c_str(),
+                       FMT_IU( m_arrowD2Fx ).c_str(),
+                       FMT_IU( m_arrowD2Fy ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(arrow2a pts((xy %s %s) (xy %s %s)))\n",
-                       FormatBIU( m_arrowG1Ox ).c_str(),
-                       FormatBIU( m_arrowG1Oy ).c_str(),
-                       FormatBIU( m_arrowG1Fx ).c_str(),
-                       FormatBIU( m_arrowG1Fy ).c_str() );
+                       FMT_IU( m_arrowG1Ox ).c_str(),
+                       FMT_IU( m_arrowG1Oy ).c_str(),
+                       FMT_IU( m_arrowG1Fx ).c_str(),
+                       FMT_IU( m_arrowG1Fy ).c_str() );
 
     aFormatter->Print( aNestLevel+1, "(arrow2b pts((xy %s %s) (xy %s %s)))\n",
-                       FormatBIU( m_arrowG2Ox ).c_str(),
-                       FormatBIU( m_arrowG2Oy ).c_str(),
-                       FormatBIU( m_arrowG2Fx ).c_str(),
-                       FormatBIU( m_arrowG2Fy ).c_str() );
+                       FMT_IU( m_arrowG2Ox ).c_str(),
+                       FMT_IU( m_arrowG2Oy ).c_str(),
+                       FMT_IU( m_arrowG2Fx ).c_str(),
+                       FMT_IU( m_arrowG2Fy ).c_str() );
 
     aFormatter->Print( aNestLevel, ")\n" );
 }

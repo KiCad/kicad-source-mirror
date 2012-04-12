@@ -32,6 +32,7 @@
 #define TEXT_MODULE_H_
 
 
+#include <eda_text.h>
 #include <class_board_item.h>
 
 

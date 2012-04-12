@@ -39,9 +39,9 @@
 const wxString NETCLASS::Default = wxT("Default");
 
 // Initial values for netclass initialization
-int NETCLASS::DEFAULT_CLEARANCE  = DMils2iu( 100 );     // track to track and track to pads clearance
-int NETCLASS::DEFAULT_VIA_DRILL  = DMils2iu( 250 );     // default via drill
-int NETCLASS::DEFAULT_UVIA_DRILL = DMils2iu( 50 );      // micro via drill
+int NETCLASS::DEFAULT_CLEARANCE  = DMils2iu( 100 );  // track to track and track to pads clearance
+int NETCLASS::DEFAULT_VIA_DRILL  = DMils2iu( 250 );  // default via drill
+int NETCLASS::DEFAULT_UVIA_DRILL = DMils2iu( 50 );    // micro via drill
 
 
 NETCLASS::NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters ) :
@@ -328,14 +328,14 @@ void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
                        aFormatter->Quotew( GetName() ).c_str(),
                        aFormatter->Quotew( GetDescription() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(clearance %s)\n", FormatBIU( GetClearance() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(trace_width %s)\n", FormatBIU( GetTrackWidth() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(clearance %s)\n", FMT_IU( GetClearance() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(trace_width %s)\n", FMT_IU( GetTrackWidth() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(via_dia %s)\n", FormatBIU( GetViaDiameter() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(via_drill %s)\n", FormatBIU( GetViaDrill() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via_dia %s)\n", FMT_IU( GetViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via_drill %s)\n", FMT_IU( GetViaDrill() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FormatBIU( GetuViaDiameter() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FormatBIU( GetuViaDrill() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FMT_IU( GetuViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FMT_IU( GetuViaDrill() ).c_str() );
 
     for( NETCLASS::const_iterator it = begin();  it!= end();  ++it )
         aFormatter->Print( aNestLevel+1, "(add_net %s)\n", aFormatter->Quotew( *it ).c_str() );
