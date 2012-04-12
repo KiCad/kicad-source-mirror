@@ -338,6 +338,9 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
     GetClientSize( &csizeX, &csizeY );
     GetVirtualSize( &unitsX, &unitsY );
 
+    int tmpX = x;
+    int tmpY = y;
+
     csizeX /= ppux;
     csizeY /= ppuy;
 
@@ -398,6 +401,13 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
     wxLogTrace( KICAD_TRACE_COORDS,
                 wxT( "Setting scroll bars ppuX=%d, ppuY=%d, unitsX=%d, unitsY=%d, posX=%d, posY=%d" ),
                 ppux, ppuy, unitsX, unitsY, x, y );
+
+    double scale = GetParent()->GetScreen()->GetScalingFactor();
+
+    wxPoint center = GetParent()->GetScreen()->GetScrollCenterPosition();
+    center.x += wxRound( (double) ( x - tmpX ) / scale );
+    center.y += wxRound( (double) ( y - tmpY ) / scale );
+    GetParent()->GetScreen()->SetScrollCenterPosition( center );
 
     Scroll( x, y );
     event.Skip();
@@ -1007,11 +1017,13 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         if( m_panScrollbarLimits )
         {
             int x, y;
+            int tmpX, tmpY;
             int ppux, ppuy;
             int maxX, maxY;
             int vsizeX, vsizeY;
             int csizeX, csizeY;
 
+            GetViewStart( &tmpX, &tmpY );
             GetScrollPixelsPerUnit( &ppux, &ppuy );
             GetVirtualSize( &vsizeX, &vsizeY );
             GetClientSize( &csizeX, &csizeY );
@@ -1056,6 +1068,13 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 WarpPointer( currentPosition.x, currentPosition.y );
 
             Scroll( x/ppux, y/ppuy );
+
+            double scale = GetParent()->GetScreen()->GetScalingFactor();
+
+            wxPoint center = GetParent()->GetScreen()->GetScrollCenterPosition();
+            center.x += wxRound( (double) ( x - tmpX ) / scale ) / ppux;
+            center.y += wxRound( (double) ( y - tmpY ) / scale ) / ppuy;
+            GetParent()->GetScreen()->SetScrollCenterPosition( center );
 
             Refresh();
             Update();
