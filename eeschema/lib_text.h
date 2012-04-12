@@ -29,8 +29,8 @@
 #ifndef _LIB_TEXT_H_
 #define _LIB_TEXT_H_
 
+#include <eda_text.h>
 #include <lib_draw_item.h>
-
 
 /**
  * Class LIB_TEXT

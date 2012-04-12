@@ -230,11 +230,11 @@ void PCB_TARGET::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aContr
 {
     aFormatter->Print( aNestLevel, "(target %c (pos (xy %s)) (size %s)",
                        ( m_Shape ) ? 'x' : '+',
-                       FormatBIU( m_Pos ).c_str(),
-                       FormatBIU( m_Size ).c_str() );
+                       FMT_IU( m_Pos ).c_str(),
+                       FMT_IU( m_Size ).c_str() );
 
     if( m_Width != 0 )
-        aFormatter->Print( aNestLevel, " (width %s)", FormatBIU( m_Width ).c_str() );
+        aFormatter->Print( aNestLevel, " (width %s)", FMT_IU( m_Width ).c_str() );
 
     aFormatter->Print( aNestLevel, " (layer %d)", GetLayer() );
 

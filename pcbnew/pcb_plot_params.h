@@ -25,7 +25,7 @@
 
 #include <wx/wx.h>
 #include <pcb_plot_params_lexer.h>
-#include <base_struct.h>
+#include <eda_text.h>                // EDA_DRAW_MODE_T
 
 class PCB_PLOT_PARAMS_PARSER;
 class LINE_READER;

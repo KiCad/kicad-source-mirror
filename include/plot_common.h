@@ -11,6 +11,7 @@
 #include <vector>
 #include <drawtxt.h>
 #include <common.h>         // PAGE_INFO
+#include <eda_text.h>       // FILL_T
 
 /**
  * Enum PlotFormat

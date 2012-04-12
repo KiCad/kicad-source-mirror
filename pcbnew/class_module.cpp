@@ -677,10 +677,10 @@ void MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBi
     aFormatter->Print( 0, " (tedit %lX) (tstamp %lX)\n",
                        GetLastEditTime(), GetTimeStamp() );
 
-    aFormatter->Print( aNestLevel+1, "(at %s", FormatBIU( m_Pos ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(at %s", FMT_IU( m_Pos ).c_str() );
 
     if( m_Orient != 0.0 )
-        aFormatter->Print( 0, " %0.1f", m_Orient );
+        aFormatter->Print( 0, " %s", FMT_ANGLE( m_Orient ).c_str() );
 
     aFormatter->Print( 0, ")\n" );
 
@@ -701,11 +701,11 @@ void MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBi
 
     if( m_LocalSolderMaskMargin != 0 )
         aFormatter->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
-                           FormatBIU( m_LocalSolderMaskMargin ).c_str() );
+                           FMT_IU( m_LocalSolderMaskMargin ).c_str() );
 
     if( m_LocalSolderPasteMargin != 0 )
         aFormatter->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
-                           FormatBIU( m_LocalSolderPasteMargin ).c_str() );
+                           FMT_IU( m_LocalSolderPasteMargin ).c_str() );
 
     if( m_LocalSolderPasteMarginRatio != 0 )
         aFormatter->Print( aNestLevel+1, "(solder_paste_ratio %g)\n",
@@ -713,18 +713,18 @@ void MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBi
 
     if( m_LocalClearance != 0 )
         aFormatter->Print( aNestLevel+1, "(clearance %s)\n",
-                           FormatBIU( m_LocalClearance ).c_str() );
+                           FMT_IU( m_LocalClearance ).c_str() );
 
     if( m_ZoneConnection != UNDEFINED_CONNECTION )
         aFormatter->Print( aNestLevel+1, "(zone_connect %d)\n", m_ZoneConnection );
 
     if( m_ThermalWidth != 0 )
         aFormatter->Print( aNestLevel+1, "(thermal_width %s)\n",
-                           FormatBIU( m_ThermalWidth ).c_str() );
+                           FMT_IU( m_ThermalWidth ).c_str() );
 
     if( m_ThermalGap != 0 )
         aFormatter->Print( aNestLevel+1, "(thermal_gap %s)\n",
-                           FormatBIU( m_ThermalGap ).c_str() );
+                           FMT_IU( m_ThermalGap ).c_str() );
 
     // Attributes
     if( m_Attributs != MOD_DEFAULT )

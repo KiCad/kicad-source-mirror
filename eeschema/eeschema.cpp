@@ -35,6 +35,7 @@
 #include <eda_dde.h>
 #include <id.h>
 #include <wxEeschemaStruct.h>
+#include <eda_text.h>
 
 #include <general.h>
 #include <protos.h>

@@ -299,16 +299,3 @@ void KICAD_MANAGER_FRAME::SaveSettings()
 
     cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
 }
-
-
-/**
- * Function FormatBIU
- * is a dummy function to prevent link errors since KiCad doesn't perform any interal
- * unit formatting.
- *
- * @todo Remove FormatBIU() when the common DSO/DSL code is implemented.
- */
-std::string FormatBIU( int aValue )
-{
-    return "";
-}

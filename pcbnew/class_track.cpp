@@ -1576,16 +1576,16 @@ void TRACK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBit
         }
 
         aFormatter->Print( aNestLevel, "(via %s (at %s) (size %s)", type.c_str(),
-                           FormatBIU( m_Start ).c_str(), FormatBIU( m_Width ).c_str() );
+                           FMT_IU( m_Start ).c_str(), FMT_IU( m_Width ).c_str() );
 
         if( m_Drill != UNDEFINED_DRILL_DIAMETER )
-            aFormatter->Print( 0, " (drill %s)", FormatBIU( m_Drill ).c_str() );
+            aFormatter->Print( 0, " (drill %s)", FMT_IU( m_Drill ).c_str() );
     }
     else
     {
         aFormatter->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
-                           FormatBIU( m_Start ).c_str(), FormatBIU( m_End ).c_str(),
-                           FormatBIU( m_Width ).c_str() );
+                           FMT_IU( m_Start ).c_str(), FMT_IU( m_End ).c_str(),
+                           FMT_IU( m_Width ).c_str() );
     }
 
     aFormatter->Print( 0, " (layer %d) (net %d)", GetLayer(), GetNet() );

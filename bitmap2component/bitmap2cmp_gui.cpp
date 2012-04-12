@@ -427,17 +427,3 @@ bool EDA_APP::OnInit()
 void EDA_APP::MacOpenFile(const wxString &fileName)
 {
 }
-
-
-
-
-/**
- * @copydoc
- *
- * This is a dummy since KiCad doesn't perform any interal unit formatting.
- */
-/** @todo Remove FormatBIU() when the common DSO/DSL code is implemented. */
-std::string FormatBIU( int aValue )
-{
-    return "";
-}
