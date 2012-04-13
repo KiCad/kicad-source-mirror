@@ -416,13 +416,15 @@ public:
      * Function SortByValueOnly
      * sort the list of references by value.
      * <p>
-     * Components are sorted in the following order:
+     * Components are grouped by type and are sorted in the following order:
      * <ul>
      * <li>Value of component.</li>
      * <li>Numeric value of reference designator.</li>
      * <li>Unit number when component has multiple parts.</li>
      * </ul>
      * </p>
+     * groups are made by the first letter of reference
+     * or the 2 first letters when existing
      */
     void SortByValueOnly()
     {
