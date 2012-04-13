@@ -554,67 +554,79 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
     {
         virtualSize = drawingRect.GetSize();
     }
-    else if( drawingRect.Contains( logicalClientRect ) )
-    {
-        virtualSize = drawingRect.GetSize();
-    }
     else
     {
-        int drawingCenterX = drawingRect.x + ( drawingRect.width / 2 );
-        int clientCenterX = logicalClientRect.x + ( logicalClientRect.width / 2 );
-        int drawingCenterY = drawingRect.y + ( drawingRect.height / 2 );
-        int clientCenterY = logicalClientRect.y + ( logicalClientRect.height / 2 );
-
-        if( logicalClientRect.width > drawingRect.width )
+        if( drawingRect.GetLeft() < logicalClientRect.GetLeft() && drawingRect.GetRight() > logicalClientRect.GetRight() )
         {
-            if( drawingCenterX > clientCenterX )
-                virtualSize.x = ( drawingCenterX - logicalClientRect.GetLeft() ) * 2;
-            else if( drawingCenterX < clientCenterX )
-                virtualSize.x = ( logicalClientRect.GetRight() - drawingCenterX ) * 2;
-            else
-                virtualSize.x = logicalClientRect.width;
+            virtualSize.x = drawingRect.GetSize().x;
         }
-        else if( logicalClientRect.width < drawingRect.width )
+        else
         {
-            if( drawingCenterX > clientCenterX )
-                virtualSize.x = drawingRect.width +
-                                ( (drawingRect.GetLeft() - logicalClientRect.GetLeft() ) * 2 );
-            else if( drawingCenterX < clientCenterX )
-                virtualSize.x = drawingRect.width +
-                                ( (logicalClientRect.GetRight() - drawingRect.GetRight() ) * 2 );
+            int drawingCenterX = drawingRect.x + ( drawingRect.width / 2 );
+            int clientCenterX = logicalClientRect.x + ( logicalClientRect.width / 2 );
+
+            if( logicalClientRect.width > drawingRect.width )
+            {
+                if( drawingCenterX > clientCenterX )
+                    virtualSize.x = ( drawingCenterX - logicalClientRect.GetLeft() ) * 2;
+                else if( drawingCenterX < clientCenterX )
+                    virtualSize.x = ( logicalClientRect.GetRight() - drawingCenterX ) * 2;
+                else
+                    virtualSize.x = logicalClientRect.width;
+            }
+            else if( logicalClientRect.width < drawingRect.width )
+            {
+                if( drawingCenterX > clientCenterX )
+                    virtualSize.x = drawingRect.width +
+                                    ( (drawingRect.GetLeft() - logicalClientRect.GetLeft() ) * 2 );
+                else if( drawingCenterX < clientCenterX )
+                    virtualSize.x = drawingRect.width +
+                                    ( (logicalClientRect.GetRight() - drawingRect.GetRight() ) * 2 );
+                else
+                    virtualSize.x = drawingRect.width;
+            }
             else
+            {
                 virtualSize.x = drawingRect.width;
-        }
-        else
-        {
-            virtualSize.x = drawingRect.width;
+            }
         }
 
-        if( logicalClientRect.height > drawingRect.height )
+        if( drawingRect.GetTop() < logicalClientRect.GetTop() && drawingRect.GetBottom() > logicalClientRect.GetBottom() )
         {
-            if( drawingCenterY > clientCenterY )
-                virtualSize.y = ( drawingCenterY - logicalClientRect.GetTop() ) * 2;
-            else if( drawingCenterY < clientCenterY )
-                virtualSize.y = ( logicalClientRect.GetBottom() - drawingCenterY ) * 2;
-            else
-                virtualSize.y = logicalClientRect.height;
-        }
-        else if( logicalClientRect.height < drawingRect.height )
-        {
-            if( drawingCenterY > clientCenterY )
-                virtualSize.y = drawingRect.height +
-                                ( ( drawingRect.GetTop() - logicalClientRect.GetTop() ) * 2 );
-            else if( drawingCenterY < clientCenterY )
-                virtualSize.y = drawingRect.height +
-                                ( ( logicalClientRect.GetBottom() - drawingRect.GetBottom() ) * 2 );
-            else
-                virtualSize.y = drawingRect.height;
+            virtualSize.y = drawingRect.GetSize().y;
         }
         else
         {
-            virtualSize.y = drawingRect.height;
+            int drawingCenterY = drawingRect.y + ( drawingRect.height / 2 );
+            int clientCenterY = logicalClientRect.y + ( logicalClientRect.height / 2 );
+
+            if( logicalClientRect.height > drawingRect.height )
+            {
+                if( drawingCenterY > clientCenterY )
+                    virtualSize.y = ( drawingCenterY - logicalClientRect.GetTop() ) * 2;
+                else if( drawingCenterY < clientCenterY )
+                    virtualSize.y = ( logicalClientRect.GetBottom() - drawingCenterY ) * 2;
+                else
+                    virtualSize.y = logicalClientRect.height;
+            }
+            else if( logicalClientRect.height < drawingRect.height )
+            {
+                if( drawingCenterY > clientCenterY )
+                    virtualSize.y = drawingRect.height +
+                                    ( ( drawingRect.GetTop() - logicalClientRect.GetTop() ) * 2 );
+                else if( drawingCenterY < clientCenterY )
+                    virtualSize.y = drawingRect.height +
+                                    ( ( logicalClientRect.GetBottom() - drawingRect.GetBottom() ) * 2 );
+                else
+                    virtualSize.y = drawingRect.height;
+            }
+            else
+            {
+                virtualSize.y = drawingRect.height;
+            }
         }
     }
+
 
     if( screen->m_Center )
     {

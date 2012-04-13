@@ -20,7 +20,7 @@ class DIALOG_BUILD_BOM : public DIALOG_BUILD_BOM_BASE
 private:
     EDA_DRAW_FRAME* m_Parent;
     wxConfig*       m_Config;
-    wxString        m_ListFileName;
+    wxString        m_ListFileName;     // The full filename of the file report.
 
 private:
     void    OnRadioboxSelectFormatSelected( wxCommandEvent& event );
@@ -34,17 +34,27 @@ private:
                               char  aExportSeparatorSymbol,
                               bool  aRunBrowser );
 
-    void    GenereListeOfItems( const wxString& FullFileName, bool aIncludeSubComponents );
-    void    CreateExportList( const wxString& FullFileName, bool aIncludeSubComponents );
+    void    GenereListeOfItems( bool aIncludeSubComponents );
 
     /**
-     * Function CreateParstList
+     * Function CreateExportList
      * prints a list of components, in a form which can be imported by a
      * spreadsheet.  Form is:
-     *  cmp value; number of components; \<footprint\>; \<field1\>; ...;
-     *  list of references having the same value
+     *  reference; cmp value; \<footprint\>; \<field1\>; ...;
+     * Components are sorted by reference
      */
-    void    CreatePartsList( const wxString& aFullFileName, bool aIncludeSubComponents );
+    void    CreateExportList( bool aIncludeSubComponents );
+
+    /**
+     * Function CreatePartsList
+     * prints a list of components, in a form which can be imported by a spreadsheet.
+     * components having the same value and the same footprint
+     * are grouped on the same line
+     * Form is:
+     *  value; number of components; list of references; \<footprint\>; \<field1\>; ...;
+     * list is sorted by values
+     */
+    void    CreatePartsList();
 
     int     PrintComponentsListByRef( FILE* f, SCH_REFERENCE_LIST& aList,
                                       bool CompactForm, bool aIncludeSubComponents );
@@ -55,11 +65,7 @@ private:
     int     PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aList,
                                        bool aIncludeSubComponents );
 
-#if defined(KICAD_GOST)
     wxString PrintFieldData( SCH_COMPONENT* DrawLibItem, bool CompactForm = false );
-#else
-    void    PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem, bool CompactForm = false );
-#endif
 
     bool    IsFieldChecked( int aFieldId );
 
