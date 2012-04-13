@@ -7,6 +7,7 @@
 
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 
 #include <pcbnew_id.h>
 #include <module_editor_frame.h>
@@ -58,50 +59,39 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::initValues()
 
     /* Drawings width */
     AddUnitSymbol( *m_GraphicSegmWidthTitle );
-    PutValueInLocalUnits( *m_OptPcbSegmWidth,
-                           m_brdSettings.m_DrawSegmentWidth,
-                          PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptPcbSegmWidth, m_brdSettings.m_DrawSegmentWidth );
+
     /* Edges width */
     AddUnitSymbol( *m_BoardEdgesWidthTitle );
-    PutValueInLocalUnits( *m_OptPcbEdgesWidth,
-                           m_brdSettings.m_EdgeSegmentWidth,
-                          PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptPcbEdgesWidth, m_brdSettings.m_EdgeSegmentWidth );
 
     /* Pcb Textes (Size & Width) */
     AddUnitSymbol( *m_CopperTextWidthTitle );
-    PutValueInLocalUnits( *m_OptPcbTextWidth,
-                           m_brdSettings.m_PcbTextWidth, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptPcbTextWidth, m_brdSettings.m_PcbTextWidth );
 
     AddUnitSymbol( *m_TextSizeVTitle );
-    PutValueInLocalUnits( *m_OptPcbTextVSize,
-                           m_brdSettings.m_PcbTextSize.y, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptPcbTextVSize, m_brdSettings.m_PcbTextSize.y );
 
     AddUnitSymbol( *m_TextSizeHTitle );
-    PutValueInLocalUnits( *m_OptPcbTextHSize,
-                           m_brdSettings.m_PcbTextSize.x, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptPcbTextHSize, m_brdSettings.m_PcbTextSize.x );
 
 
     /* Modules: Edges width */
     AddUnitSymbol( *m_EdgeModWidthTitle );
-    PutValueInLocalUnits( *m_OptModuleEdgesWidth,
-                          m_brdSettings.m_ModuleSegmentWidth, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptModuleEdgesWidth, m_brdSettings.m_ModuleSegmentWidth );
 
     /* Modules: Texts: Size & width */
     AddUnitSymbol( *m_TextModWidthTitle );
-    PutValueInLocalUnits( *m_OptModuleTextWidth,
-                          m_brdSettings.m_ModuleTextWidth, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptModuleTextWidth, m_brdSettings.m_ModuleTextWidth );
 
     AddUnitSymbol( *m_TextModSizeVTitle );
-    PutValueInLocalUnits( *m_OptModuleTextVSize,
-                          m_brdSettings.m_ModuleTextSize.y, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptModuleTextVSize, m_brdSettings.m_ModuleTextSize.y );
 
     AddUnitSymbol( *m_TextModSizeHTitle );
-    PutValueInLocalUnits( *m_OptModuleTextHSize,
-                          m_brdSettings.m_ModuleTextSize.x, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_OptModuleTextHSize, m_brdSettings.m_ModuleTextSize.x );
 
     AddUnitSymbol( *m_DefaultPenSizeTitle );
-    PutValueInLocalUnits( *m_DefaultPenSizeCtrl,
-                          g_DrawDefaultLineThickness, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_DefaultPenSizeCtrl, g_DrawDefaultLineThickness );
 }
 
 

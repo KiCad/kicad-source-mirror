@@ -17,6 +17,7 @@
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
 #include <module_editor_frame.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -138,23 +139,17 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
         break;
     }
 
-    PutValueInLocalUnits( *m_Center_StartXCtrl, m_item->GetStart().x,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_Center_StartXCtrl, m_item->GetStart().x );
 
-    PutValueInLocalUnits( *m_Center_StartYCtrl, m_item->GetStart().y,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_Center_StartYCtrl, m_item->GetStart().y );
 
-    PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_item->GetEnd().x,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_item->GetEnd().x );
 
-    PutValueInLocalUnits( *m_EndY_Ctrl, m_item->GetEnd().y,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_EndY_Ctrl, m_item->GetEnd().y );
 
-    PutValueInLocalUnits( *m_ThicknessCtrl, m_item->GetWidth(),
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_ThicknessCtrl, m_item->GetWidth() );
 
-    PutValueInLocalUnits( *m_DefaultThicknessCtrl, m_brdSettings.m_ModuleSegmentWidth,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_DefaultThicknessCtrl, m_brdSettings.m_ModuleSegmentWidth );
 
     m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( LAYER_N_BACK ) );
     m_layerId.push_back( LAYER_N_BACK );

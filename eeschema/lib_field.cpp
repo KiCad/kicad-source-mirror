@@ -36,6 +36,7 @@
 #include <class_drawpanel.h>
 #include <plot_common.h>
 #include <trigo.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -731,10 +732,10 @@ void LIB_FIELD::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     msg = GetTextStyleName();
     aFrame->AppendMsgPanel( _( "Style" ), msg, MAGENTA );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, true );
     aFrame->AppendMsgPanel( _( "Size X" ), msg, BLUE );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Size.y, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Size.y, true );
     aFrame->AppendMsgPanel( _( "Size Y" ), msg, BLUE );
 
     // Display field name (ref, value ...)

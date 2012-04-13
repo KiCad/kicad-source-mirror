@@ -34,6 +34,7 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -248,7 +249,7 @@ void LIB_RECTANGLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 
     LIB_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 }
@@ -324,10 +325,10 @@ bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM&
 wxString LIB_RECTANGLE::GetSelectMenuText() const
 {
     return wxString::Format( _( "Rectangle from (%s, %s) to (%s, %s)" ),
-                             GetChars( CoordinateToString( m_Pos.x, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_Pos.y, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_End.x, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_End.y, EESCHEMA_INTERNAL_UNIT ) ) );
+                             GetChars( CoordinateToString( m_Pos.x ) ),
+                             GetChars( CoordinateToString( m_Pos.y ) ),
+                             GetChars( CoordinateToString( m_End.x ) ),
+                             GetChars( CoordinateToString( m_End.y ) ) );
 }
 
 

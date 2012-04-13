@@ -10,6 +10,7 @@
 #include <class_drawpanel.h>
 #include <wxEeschemaStruct.h>
 #include <id.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -679,13 +680,13 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
         // top of each other.
     }
 
-    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x, EESCHEMA_INTERNAL_UNIT );
+    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x );
     posXTextCtrl->SetValue( coordText );
 
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing
     NEGATE( coord.y );
-    coordText = ReturnStringFromValue( g_UserUnit, coord.y, EESCHEMA_INTERNAL_UNIT );
+    coordText = ReturnStringFromValue( g_UserUnit, coord.y );
     posYTextCtrl->SetValue( coordText );
 }
 

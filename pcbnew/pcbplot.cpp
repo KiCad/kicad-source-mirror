@@ -12,6 +12,7 @@
 #include <worksheet.h>
 #include <pcbstruct.h>
 #include <macros.h>
+#include <base_units.h>
 
 #include <class_board.h>
 
@@ -120,21 +121,20 @@ void DIALOG_PLOT::Init_Dialog()
 
     // Set units and value for HPGL pen size.
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetHpglPenDiameter(), UNITS_MILS );
+    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetHpglPenDiameter() * 10 );
     m_HPGLPenSizeOpt->AppendText( msg );
 
     // Set units to cm/s for standard HPGL pen speed.
-    msg = ReturnStringFromValue( UNSCALED_UNITS, m_plotOpts.GetHpglPenSpeed(), 1 );
+    msg = ReturnStringFromValue( UNSCALED_UNITS, m_plotOpts.GetHpglPenSpeed() * 10000 );
     m_HPGLPenSpeedOpt->AppendText( msg );
 
     // Set units and value for HPGL pen overlay.
     AddUnitSymbol( *m_textPenOvr, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetHpglPenOverlay(), UNITS_MILS );
+    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetHpglPenOverlay() * 10 );
     m_HPGLPenOverlayOpt->AppendText( msg );
 
     AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetPlotLineWidth(),
-                                 PCB_INTERNAL_UNIT );
+    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetPlotLineWidth() );
     m_linesWidth->AppendText( msg );
 
     // Set units for PS global width correction.
@@ -157,7 +157,7 @@ void DIALOG_PLOT::Init_Dialog()
     if( m_PSWidthAdjust < m_WidthAdjustMinValue || m_PSWidthAdjust > m_WidthAdjustMaxValue )
         m_PSWidthAdjust = 0.;
 
-    msg.Printf( wxT( "%f" ), To_User_Unit( g_UserUnit, m_PSWidthAdjust, PCB_INTERNAL_UNIT ) );
+    msg.Printf( wxT( "%f" ), To_User_Unit( g_UserUnit, m_PSWidthAdjust ) );
     m_PSFineAdjustWidthOpt->AppendText( msg );
 
     m_plotPSNegativeOpt->SetValue( m_plotOpts.m_PlotPSNegative );
@@ -454,7 +454,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     if( !tempOptions.SetHpglPenDiameter( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenDiameter(), UNITS_MILS );
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenDiameter() * 10 );
         m_HPGLPenSizeOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen size constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -466,7 +466,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     if( !tempOptions.SetHpglPenSpeed( tmp ) )
     {
-        msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHpglPenSpeed(), 1 );
+        msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHpglPenSpeed() * 1000 );
         m_HPGLPenSpeedOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen speed constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -478,7 +478,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     if( !tempOptions.SetHpglPenOverlay( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenOverlay(), UNITS_MILS );
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenOverlay() * 10 );
         m_HPGLPenOverlayOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen overlay constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -490,8 +490,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     if( !tempOptions.SetPlotLineWidth( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetPlotLineWidth(),
-                                     PCB_INTERNAL_UNIT );
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetPlotLineWidth() );
         m_linesWidth->SetValue( msg );
         msg.Printf( _( "Default linewidth constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -532,13 +531,13 @@ void DIALOG_PLOT::applyPlotSettings()
 
     if( !setDouble( &m_PSWidthAdjust, tmpDouble, m_WidthAdjustMinValue, m_WidthAdjustMaxValue ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_PSWidthAdjust, PCB_INTERNAL_UNIT );
+        msg = ReturnStringFromValue( g_UserUnit, m_PSWidthAdjust );
         m_PSFineAdjustWidthOpt->SetValue( msg );
         msg.Printf( _( "Width correction constrained!\n"
 "The reasonable width correction value must be in a range of\n"
 " [%+f; %+f] (%s) for current design rules!\n" ),
-                    To_User_Unit( g_UserUnit, m_WidthAdjustMinValue, PCB_INTERNAL_UNIT ),
-                    To_User_Unit( g_UserUnit, m_WidthAdjustMaxValue, PCB_INTERNAL_UNIT ),
+                    To_User_Unit( g_UserUnit, m_WidthAdjustMinValue ),
+                    To_User_Unit( g_UserUnit, m_WidthAdjustMaxValue ),
                     ( g_UserUnit == INCHES )? wxT("\"") : wxT("mm") );
         m_messagesBox->AppendText( msg );
     }
@@ -610,7 +609,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         else
         {
             wxMessageBox( _( "Cannot create output directory!" ),
-                               _( "Plot" ), wxOK | wxICON_ERROR );
+                          _( "Plot" ), wxOK | wxICON_ERROR );
             return;
         }
     }

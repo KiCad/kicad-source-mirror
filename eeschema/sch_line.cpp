@@ -34,6 +34,7 @@
 #include <trigo.h>
 #include <richio.h>
 #include <plot_common.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -502,10 +503,10 @@ wxString SCH_LINE::GetSelectMenuText() const
     }
 
     menuText.Printf( txtfmt, GetChars( orient ),
-                    GetChars(CoordinateToString( m_start.x, EESCHEMA_INTERNAL_UNIT )),
-                    GetChars(CoordinateToString( m_start.y, EESCHEMA_INTERNAL_UNIT )),
-                    GetChars(CoordinateToString( m_end.x, EESCHEMA_INTERNAL_UNIT )),
-                    GetChars(CoordinateToString( m_end.y, EESCHEMA_INTERNAL_UNIT )) );
+                     GetChars( CoordinateToString( m_start.x ) ),
+                     GetChars( CoordinateToString( m_start.y ) ),
+                     GetChars( CoordinateToString( m_end.x ) ),
+                     GetChars( CoordinateToString( m_end.y ) ) );
 
     return menuText;
 }

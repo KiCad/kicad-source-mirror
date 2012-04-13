@@ -35,6 +35,7 @@
 #include <wxstruct.h>
 #include <bezier_curves.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -410,7 +411,7 @@ void LIB_BEZIER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 
     LIB_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 

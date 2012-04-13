@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <sch_base_frame.h>
@@ -52,8 +53,7 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base( )
     m_CommonConvert->Show(false);
     m_CommonUnit->Show(false);
 
-    msg = ReturnStringFromValue( g_UserUnit, m_textsize,
-                                 m_parent->GetInternalUnits() );
+    msg = ReturnStringFromValue( g_UserUnit, m_textsize );
     m_TextSize->SetValue( msg );
 
     if( m_textorient == TEXT_ORIENT_VERT )

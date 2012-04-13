@@ -37,6 +37,7 @@
 #include <macros.h>
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
+#include <base_units.h>
 
 #include <wx/dcbuffer.h>
 #include <protos.h>
@@ -243,7 +244,6 @@ void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
 
 void DIALOG_PAD_PROPERTIES::initValues()
 {
-    int         internalUnits = m_Parent->GetInternalUnits();
     wxString    msg;
     double      angle;
 
@@ -319,42 +319,38 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_ThermalGapUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     // Display current pad parameters units:
-    PutValueInLocalUnits( *m_PadPosition_X_Ctrl, m_dummyPad->GetPosition().x, internalUnits );
-    PutValueInLocalUnits( *m_PadPosition_Y_Ctrl, m_dummyPad->GetPosition().y, internalUnits );
+    PutValueInLocalUnits( *m_PadPosition_X_Ctrl, m_dummyPad->GetPosition().x );
+    PutValueInLocalUnits( *m_PadPosition_Y_Ctrl, m_dummyPad->GetPosition().y );
 
-    PutValueInLocalUnits( *m_PadDrill_X_Ctrl, m_dummyPad->GetDrillSize().x, internalUnits );
-    PutValueInLocalUnits( *m_PadDrill_Y_Ctrl, m_dummyPad->GetDrillSize().y, internalUnits );
+    PutValueInLocalUnits( *m_PadDrill_X_Ctrl, m_dummyPad->GetDrillSize().x );
+    PutValueInLocalUnits( *m_PadDrill_Y_Ctrl, m_dummyPad->GetDrillSize().y );
 
-    PutValueInLocalUnits( *m_ShapeSize_X_Ctrl, m_dummyPad->GetSize().x, internalUnits );
-    PutValueInLocalUnits( *m_ShapeSize_Y_Ctrl, m_dummyPad->GetSize().y, internalUnits );
+    PutValueInLocalUnits( *m_ShapeSize_X_Ctrl, m_dummyPad->GetSize().x );
+    PutValueInLocalUnits( *m_ShapeSize_Y_Ctrl, m_dummyPad->GetSize().y );
 
-    PutValueInLocalUnits( *m_ShapeOffset_X_Ctrl, m_dummyPad->GetOffset().x, internalUnits );
-    PutValueInLocalUnits( *m_ShapeOffset_Y_Ctrl, m_dummyPad->GetOffset().y, internalUnits );
+    PutValueInLocalUnits( *m_ShapeOffset_X_Ctrl, m_dummyPad->GetOffset().x );
+    PutValueInLocalUnits( *m_ShapeOffset_Y_Ctrl, m_dummyPad->GetOffset().y );
 
     if( m_dummyPad->GetDelta().x )
     {
-        PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->GetDelta().x, internalUnits );
+        PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->GetDelta().x );
         m_trapDeltaDirChoice->SetSelection( 0 );
     }
     else
     {
-        PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->GetDelta().y, internalUnits );
+        PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->GetDelta().y );
         m_trapDeltaDirChoice->SetSelection( 1 );
     }
 
-    PutValueInLocalUnits( *m_LengthDieCtrl, m_dummyPad->GetDieLength(), internalUnits );
+    PutValueInLocalUnits( *m_LengthDieCtrl, m_dummyPad->GetDieLength() );
 
-    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_dummyPad->GetLocalClearance(), internalUnits );
-    PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
-                          m_dummyPad->GetLocalSolderMaskMargin(),
-                          internalUnits );
-    PutValueInLocalUnits( *m_ThermalWidthCtrl, m_dummyPad->GetThermalWidth(), internalUnits );
-    PutValueInLocalUnits( *m_ThermalGapCtrl, m_dummyPad->GetThermalGap(), internalUnits );
+    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_dummyPad->GetLocalClearance() );
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_dummyPad->GetLocalSolderMaskMargin() );
+    PutValueInLocalUnits( *m_ThermalWidthCtrl, m_dummyPad->GetThermalWidth() );
+    PutValueInLocalUnits( *m_ThermalGapCtrl, m_dummyPad->GetThermalGap() );
 
     // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
-    PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
-                          m_dummyPad->GetLocalSolderPasteMargin(),
-                          internalUnits );
+    PutValueInLocalUnits( *m_SolderPasteMarginCtrl, m_dummyPad->GetLocalSolderPasteMargin() );
 
     if( m_dummyPad->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) + m_SolderPasteMarginCtrl->GetValue() );

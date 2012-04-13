@@ -28,6 +28,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
+#include <base_units.h>
 
 #include <class_board.h>
 
@@ -59,16 +60,11 @@ void DIALOG_PADS_MASK_CLEARANCE::MyInit()
     m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
-    int Internal_Unit = m_Parent->GetInternalUnits();
-    PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
-                          m_BrdSettings.m_SolderMaskMargin,
-                          Internal_Unit );
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_BrdSettings.m_SolderMaskMargin );
 
     // These 2 parameters are usually < 0, so prepare entering a negative
     // value, if current is 0
-    PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
-                          m_BrdSettings.m_SolderPasteMargin,
-                          Internal_Unit );
+    PutValueInLocalUnits( *m_SolderPasteMarginCtrl, m_BrdSettings.m_SolderPasteMargin );
 
     if(  m_BrdSettings.m_SolderPasteMargin == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) +

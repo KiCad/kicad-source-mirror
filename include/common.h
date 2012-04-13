@@ -531,20 +531,6 @@ int GetCommandOptions( const int argc, const char** argv,
 const wxString& valeur_param( int valeur, wxString& buf_texte );
 
 /**
- * Function CoordinateToString
- * is a helper to convert the integer coordinate \a aValue to a string in inches,
- * millimeters, or unscaled units according to the current user units setting.
- *
- * @param aValue The coordinate to convert.
- * @param aInternalUnits The internal units of the application.  #EESCHEMA_INTERNAL_UNIT
- *                       and #PCB_INTERNAL_UNIT are the only valid value.
- * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
- *                       the current user unit is millimeters.
- * @return The converted string for display in user interface elements.
- */
-wxString CoordinateToString( int aValue, int aInternalUnits, bool aConvertToMils = false );
-
-/**
  * Returns the units symbol.
  *
  * @param aUnits - Units type, default is current units setting.
@@ -577,34 +563,22 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit );
  */
 int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Internal_Unit );
 
-/**
- * Function ReturnStringFromValue
- * Return the string from Value, according to units (inch, mm ...) for display,
- * and the initial unit for value
- * @param aUnit = display units (INCHES, MILLIMETRE ..)
- * @param aValue = value in Internal_Unit
- * @param aInternal_Unit = units per inch for Value
- * @param aAdd_unit_symbol = true to add symbol unit to the string value
- * @return a wxString what contains value and optionally the symbol unit (like
- *         2.000 mm)
- */
-wxString        ReturnStringFromValue( EDA_UNITS_T aUnit,
-                                       int  aValue,
-                                       int  aInternal_Unit,
-                                       bool aAdd_unit_symbol = false );
-
-void            AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
-
-/* Add string "  (mm):" or " ("):" to the static text Stext.
- *  Used in dialog boxes for entering values depending on selected units */
-void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
-                                      int Internal_Unit );
+void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 /* Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
  **/
-int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
-                                         int               Internal_Unit );
+int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
+
+/**
+ * Round to the nearest precision.
+ *
+ * Try to approximate a coordinate using a given precision to prevent
+ * rounding errors when converting from inches to mm.
+ *
+ * ie round the unit value to 0 if unit is 1 or 2, or 8 or 9
+ */
+double RoundTo0( double x, double precision );
 
 /**
  * Function wxStringSplit
@@ -614,17 +588,6 @@ int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
  * @param aSplitter is the 'split' character
  */
 wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
-
-/**
- * Function To_User_Unit
- * Convert in inch or mm the variable "val" (double)given in internal units
- * @return the converted value, in double
- * @param aUnit : user unit to be converted to
- * @param val : double : the given value
-
- * @param internal_unit_value = internal units per inch
- */
-double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
 
 /**
  * Return in internal units the value "val" given in inch or mm

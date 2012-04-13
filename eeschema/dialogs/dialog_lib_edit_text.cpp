@@ -31,6 +31,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <class_drawpanel.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <libeditframe.h>
@@ -63,8 +64,7 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
 
     if ( m_graphicText )
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_graphicText->m_Size.x,
-                                     m_parent->GetInternalUnits() );
+        msg = ReturnStringFromValue( g_UserUnit, m_graphicText->m_Size.x );
         m_TextSize->SetValue( msg );
         m_TextValue->SetValue( m_graphicText->m_Text );
 
@@ -116,8 +116,7 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
     }
     else
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_parent->m_textSize,
-                                     m_parent->GetInternalUnits() );
+        msg = ReturnStringFromValue( g_UserUnit, m_parent->m_textSize );
         m_TextSize->SetValue( msg );
 
         if ( ! m_parent->m_drawSpecificUnit )

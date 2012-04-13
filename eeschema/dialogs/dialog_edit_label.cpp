@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <wx/valgen.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <class_drawpanel.h>
 #include <general.h>
@@ -196,8 +197,7 @@ void DialogLabelEditor::InitDialog()
     msg = _( "H" ) + units + _( " x W" ) + units;
     m_staticSizeUnits->SetLabel( msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->m_Size.x,
-                                 m_Parent->GetInternalUnits() );
+    msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->m_Size.x );
     m_TextSize->SetValue( msg );
 
     if( m_CurrentText->Type() != SCH_GLOBAL_LABEL_T

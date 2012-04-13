@@ -35,6 +35,7 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <lib_draw_item.h>
 #include <general.h>
@@ -413,7 +414,7 @@ void LIB_TEXT::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     LIB_ITEM::DisplayInfo( frame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Thickness, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Thickness, true );
 
     frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 }

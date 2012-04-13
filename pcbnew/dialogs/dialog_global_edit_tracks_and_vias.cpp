@@ -10,6 +10,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <class_drawpanel.h>
+#include <base_units.h>
 
 #include <class_board.h>
 
@@ -44,7 +45,6 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     wxString      msg;
 
     // Display current setup for tracks and vias
-    int           Internal_Unit = m_Parent->GetInternalUnits();
     BOARD*        board = m_Parent->GetBoard();
     NETCLASSES&   netclasses = board->m_NetClasses;
     NETINFO_ITEM* net = board->FindNet( m_Netcode );
@@ -73,56 +73,56 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
 
     // Display current values, and current netclass values:
     int value = netclass->GetTrackWidth();      // Display track width
-    msg = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+    msg = ReturnStringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 0, msg  );
     if( board->m_TrackWidthSelector )
     {
         value = board->GetCurrentTrackWidth();
-        msg   = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+        msg   = ReturnStringFromValue( g_UserUnit, value, true );
     }
     else
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 0, msg  );
 
     value = netclass->GetViaDiameter();      // Display via diameter
-    msg   = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+    msg   = ReturnStringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 1, msg  );
     if( board->m_ViaSizeSelector )
     {
         value = board->GetCurrentViaSize();
-        msg   = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+        msg   = ReturnStringFromValue( g_UserUnit, value, true );
     }
     else
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 1, msg  );
 
     value = netclass->GetViaDrill();      // Display via drill
-    msg   = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+    msg   = ReturnStringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 2, msg  );
     value = board->GetCurrentViaDrill();
     if( value >= 0 )
-        msg = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+        msg = ReturnStringFromValue( g_UserUnit, value, true );
     else
         msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 2, msg  );
 
     value = netclass->GetuViaDiameter();      // Display micro via diameter
-    msg   = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+    msg   = ReturnStringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 3, msg  );
 #if 0   // Currently we use always the default netclass value
     value = board->GetCurrentMicroViaSize();
-    msg   = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+    msg   = ReturnStringFromValue( g_UserUnit, value, true );
 #endif
     msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 3, msg  );
 
     value = netclass->GetuViaDrill();      // Display micro via drill
-    msg   = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+    msg   = ReturnStringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 4, msg  );
 #if 0   // Currently we use always the default netclass value
     value = board->GetCurrentMicroViaDrill();
     if( value >= 0 )
-        msg = ReturnStringFromValue( g_UserUnit, value, Internal_Unit, true );
+        msg = ReturnStringFromValue( g_UserUnit, value, true );
     else
 #endif
     msg = _( "Default" );
