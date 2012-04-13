@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <class_sch_screen.h>
+#include <base_units.h>
 
 #include <libeditframe.h>
 #include <eeschema_id.h>
@@ -84,14 +85,10 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
                                LIB_PIN::GetElectricalTypeSymbols() );
     dlg.SetElectricalType( pin->GetType() );
     dlg.SetName( pin->GetName() );
-    dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                pin->GetNameTextSize(),
-                                                m_internalUnits ) );
+    dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
     dlg.SetNameTextSizeUnits( units );
     dlg.SetPadName( pin->GetNumberString() );
-    dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                   pin->GetNumberTextSize(),
-                                                  m_internalUnits ) );
+    dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit, pin->GetNumberTextSize() ) );
 
     dlg.SetPadNameTextSizeUnits( units );
     dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength(), m_internalUnits ) );

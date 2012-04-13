@@ -40,6 +40,7 @@
 #include <confirm.h>
 #include <kicad_device_context.h>
 #include <dialog_helpers.h>
+#include <base_units.h>
 
 #include <wx/fontdlg.h>
 
@@ -714,41 +715,9 @@ void EDA_DRAW_FRAME::SetLanguage( wxCommandEvent& event )
 }
 
 
-/**
- * Round to the nearest precision.
- *
- * Try to approximate a coordinate using a given precision to prevent
- * rounding errors when converting from inches to mm.
- *
- * ie round the unit value to 0 if unit is 1 or 2, or 8 or 9
- */
-double RoundTo0( double x, double precision )
-{
-    assert( precision != 0 );
-
-    long long ix = wxRound( x * precision );
-
-    if ( x < 0.0 )
-        NEGATE( ix );
-
-    int remainder = ix % 10;   // remainder is in precision mm
-
-    if ( remainder <= 2 )
-        ix -= remainder;       // truncate to the near number
-    else if (remainder >= 8 )
-        ix += 10 - remainder;  // round to near number
-
-    if ( x < 0 )
-        NEGATE( ix );
-
-    return (double) ix / precision;
-}
-
-
 void EDA_DRAW_FRAME::UpdateStatusBar()
 {
     wxString        Line;
-    int             dx, dy;
     BASE_SCREEN*    screen = GetScreen();
 
     if( !screen )
@@ -759,76 +728,8 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
 
     SetStatusText( Line, 1 );
 
-    // Display absolute coordinates:
-    double dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x, m_internalUnits );
-    double dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y, m_internalUnits );
-
-    /*
-     * Converting from inches to mm can give some coordinates due to
-     * float point precision rounding errors, like 1.999 or 2.001 so
-     * round to the nearest drawing precision required by the application.
-     */
-    if ( g_UserUnit == MILLIMETRES )
-    {
-        dXpos = RoundTo0( dXpos, (double)( m_internalUnits / 10 ) );
-        dYpos = RoundTo0( dYpos, (double)( m_internalUnits / 10 ) );
-    }
-
-    // The following sadly is an if Eeschema/if Pcbnew
-    wxString absformatter;
-    wxString locformatter;
-    switch( g_UserUnit )
-    {
-    case INCHES:
-        if( m_internalUnits == EESCHEMA_INTERNAL_UNIT )
-        {
-            absformatter = wxT( "X %.3f  Y %.3f" );
-            locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
-        }
-        else
-        {
-            absformatter = wxT( "X %.4f  Y %.4f" );
-            locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
-        }
-        break;
-
-    case MILLIMETRES:
-        if( m_internalUnits == EESCHEMA_INTERNAL_UNIT )
-        {
-            absformatter = wxT( "X %.2f  Y %.2f" );
-            locformatter = wxT( "dx %.2f  dy %.2f  d %.2f" );
-        }
-        else
-        {
-            absformatter = wxT( "X %.3f  Y %.3f" );
-            locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
-        }
-        break;
-
-    case UNSCALED_UNITS:
-        absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f  d %f" );
-        break;
-    }
-
-    Line.Printf( absformatter, dXpos, dYpos );
-    SetStatusText( Line, 2 );
-
-    // Display relative coordinates:
-    dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-    dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
-    dXpos = To_User_Unit( g_UserUnit, dx, m_internalUnits );
-    dYpos = To_User_Unit( g_UserUnit, dy, m_internalUnits );
-
-    if( g_UserUnit == MILLIMETRES )
-    {
-        dXpos = RoundTo0( dXpos, (double) ( m_internalUnits / 10 ) );
-        dYpos = RoundTo0( dYpos, (double) ( m_internalUnits / 10 ) );
-    }
-
-    // We already decided the formatter above
-    Line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
-    SetStatusText( Line, 3 );
+    // Absolute and relative cursor positions are handled by overloading this function and
+    // handling the internal to user units conversion at the appropriate level.
 
     // refresh units display
     DisplayUnitsMsg();
@@ -893,7 +794,7 @@ void EDA_DRAW_FRAME::ClearMsgPanel( void )
 
 wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils )
 {
-    return ::CoordinateToString( aValue, m_internalUnits, aConvertToMils );
+    return ::CoordinateToString( aValue, aConvertToMils );
 }
 
 

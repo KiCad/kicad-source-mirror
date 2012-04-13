@@ -25,6 +25,7 @@
 #include <sch_base_frame.h>
 #include <viewlib_frame.h>
 #include <libeditframe.h>
+#include <base_units.h>
 
 SCH_BASE_FRAME::SCH_BASE_FRAME( wxWindow* aParent,
                                 id_drawframe aWindowType,
@@ -106,4 +107,70 @@ void SCH_BASE_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 {
     wxASSERT( GetScreen() );
     GetScreen()->SetTitleBlock( aTitleBlock );
+}
+
+
+void SCH_BASE_FRAME::UpdateStatusBar()
+{
+    wxString        line;
+    int             dx, dy;
+    BASE_SCREEN*    screen = GetScreen();
+
+    if( !screen )
+        return;
+
+    EDA_DRAW_FRAME::UpdateStatusBar();
+
+    // Display absolute coordinates:
+    double dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
+    double dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
+
+    if ( g_UserUnit == MILLIMETRES )
+    {
+        dXpos = RoundTo0( dXpos, 100.0 );
+        dYpos = RoundTo0( dYpos, 100.0 );
+    }
+
+    wxString absformatter;
+    wxString locformatter;
+
+    switch( g_UserUnit )
+    {
+    case INCHES:
+        absformatter = wxT( "X %.3f  Y %.3f" );
+        locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
+        break;
+
+    case MILLIMETRES:
+        absformatter = wxT( "X %.2f  Y %.2f" );
+        locformatter = wxT( "dx %.2f  dy %.2f  d %.2f" );
+        break;
+
+    case UNSCALED_UNITS:
+        absformatter = wxT( "X %f  Y %f" );
+        locformatter = wxT( "dx %f  dy %f  d %f" );
+        break;
+    }
+
+    line.Printf( absformatter, dXpos, dYpos );
+    SetStatusText( line, 2 );
+
+    // Display relative coordinates:
+    dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+    dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+    dXpos = To_User_Unit( g_UserUnit, dx );
+    dYpos = To_User_Unit( g_UserUnit, dy );
+
+    if( g_UserUnit == MILLIMETRES )
+    {
+        dXpos = RoundTo0( dXpos, 100.0 );
+        dYpos = RoundTo0( dYpos, 100.0 );
+    }
+
+    // We already decided the formatter above
+    line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+    SetStatusText( line, 3 );
+
+    // refresh units display
+    DisplayUnitsMsg();
 }

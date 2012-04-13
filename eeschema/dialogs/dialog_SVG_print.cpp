@@ -36,6 +36,8 @@
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
 #include <dcsvg.h>
+#include <base_units.h>
+
 #include <general.h>
 #include <libeditframe.h>
 #include <sch_sheet_path.h>
@@ -78,8 +80,7 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness,
-                               m_Parent->GetInternalUnits() ) );
+        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness ) );
     m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
 
     if( GetSizer() )
@@ -105,8 +106,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness,
-                               m_Parent->GetInternalUnits() ) );
+        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness ) );
 }
 
 

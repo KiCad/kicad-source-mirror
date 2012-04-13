@@ -10,6 +10,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 
 #include <printout_controler.h>
 #include <pcbnew.h>
@@ -260,7 +261,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize, m_parent->GetInternalUnits() ) );
+        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
 
     // Create scale adjust option
     msg.Printf( wxT( "%f" ), s_Parameters.m_XScaleAdjust );
@@ -399,7 +400,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
     g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize, m_parent->GetInternalUnits() ) );
+        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
 }
 
 void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
@@ -416,7 +417,7 @@ void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
 
 void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 {
-    wxPageSetupDialog pageSetupDialog(this, s_pageSetupData);
+    wxPageSetupDialog pageSetupDialog( this, s_pageSetupData );
     pageSetupDialog.ShowModal();
 
     (*s_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();

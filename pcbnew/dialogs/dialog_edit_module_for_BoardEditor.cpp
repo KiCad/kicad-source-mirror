@@ -12,6 +12,7 @@
 #include <3d_struct.h>
 #include <3d_viewer.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -62,12 +63,10 @@ DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
 /* Creation of the panel properties of the module editor. */
 void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 {
-    PutValueInLocalUnits( *m_ModPositionX,
-                          m_CurrentModule->GetPosition().x, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_ModPositionX, m_CurrentModule->GetPosition().x );
     AddUnitSymbol( *XPositionStatic, g_UserUnit );
 
-    PutValueInLocalUnits( *m_ModPositionY,
-                          m_CurrentModule->GetPosition().y, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_ModPositionY, m_CurrentModule->GetPosition().y );
     AddUnitSymbol( *YPositionStatic, g_UserUnit );
 
     m_LayerCtrl->SetSelection(
@@ -111,18 +110,13 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
-    int internalUnit = m_Parent->GetInternalUnits();
-    PutValueInLocalUnits( *m_NetClearanceValueCtrl,
-                          m_CurrentModule->m_LocalClearance, internalUnit );
-    PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
-                          m_CurrentModule->m_LocalSolderMaskMargin,
-                          internalUnit );
+    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_CurrentModule->m_LocalClearance );
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_CurrentModule->m_LocalSolderMaskMargin );
 
     // These 2 parameters are usually < 0, so prepare entering a negative
     // value, if current is 0
-    PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
-                          m_CurrentModule->GetLocalSolderPasteMargin(),
-                          internalUnit );
+    PutValueInLocalUnits( *m_SolderPasteMarginCtrl, m_CurrentModule->GetLocalSolderPasteMargin() );
+
     if( m_CurrentModule->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) +
                                            m_SolderPasteMarginCtrl->GetValue() );

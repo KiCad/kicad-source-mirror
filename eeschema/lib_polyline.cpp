@@ -34,6 +34,7 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -398,7 +399,7 @@ void LIB_POLYLINE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 
     LIB_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 
@@ -412,10 +413,8 @@ void LIB_POLYLINE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 wxString LIB_POLYLINE::GetSelectMenuText() const
 {
     return wxString::Format( _( "Polyline at (%s, %s) with %u points" ),
-                             GetChars( CoordinateToString( m_PolyPoints[0].x,
-                                                           EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_PolyPoints[0].y,
-                                                           EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_PolyPoints[0].x ) ),
+                             GetChars( CoordinateToString( m_PolyPoints[0].y ) ),
                              m_PolyPoints.size() );
 }
 

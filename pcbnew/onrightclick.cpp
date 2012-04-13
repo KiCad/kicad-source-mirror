@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <macros.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -888,8 +889,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     for( unsigned ii = 0; ii < aBoard->m_TrackWidthList.size(); ii++ )
     {
-        value = ReturnStringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii],
-                                       PCB_INTERNAL_UNIT, true );
+        value = ReturnStringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii], true );
         msg.Printf( _( "Track %s" ), GetChars( value ) );
 
         if( ii == 0 )
@@ -903,10 +903,10 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
     for( unsigned ii = 0; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
     {
         value = ReturnStringFromValue( g_UserUnit, aBoard->m_ViasDimensionsList[ii].m_Diameter,
-                                       PCB_INTERNAL_UNIT, true );
+                                       true );
         wxString drill = ReturnStringFromValue( g_UserUnit,
                                                 aBoard->m_ViasDimensionsList[ii].m_Drill,
-                                                PCB_INTERNAL_UNIT,  true );
+                                                true );
 
         if( aBoard->m_ViasDimensionsList[ii].m_Drill <= 0 )
         {

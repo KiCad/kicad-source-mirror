@@ -9,6 +9,7 @@
 #include <confirm.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <eeschema_config.h>

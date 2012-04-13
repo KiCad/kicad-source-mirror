@@ -11,6 +11,7 @@
 #include <3d_struct.h>
 #include <3d_viewer.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -148,20 +149,19 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     wxString  msg;
-    int internalUnit = m_Parent->GetInternalUnits();
-    PutValueInLocalUnits( *m_NetClearanceValueCtrl,
-                          m_CurrentModule->m_LocalClearance, internalUnit );
-    PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
-                          m_CurrentModule->m_LocalSolderMaskMargin, internalUnit );
+    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_CurrentModule->m_LocalClearance );
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_CurrentModule->m_LocalSolderMaskMargin );
     // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
-    PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
-                          m_CurrentModule->GetLocalSolderPasteMargin(), internalUnit );
+    PutValueInLocalUnits( *m_SolderPasteMarginCtrl, m_CurrentModule->GetLocalSolderPasteMargin() );
+
     if( m_CurrentModule->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT("-") + m_SolderPasteMarginCtrl->GetValue() );
+
     if( m_CurrentModule->GetLocalSolderPasteMarginRatio() == 0.0 )
         msg.Printf( wxT( "-%.1f" ), m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
     else
         msg.Printf( wxT( "%.1f" ), m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
+
     m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
     // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape

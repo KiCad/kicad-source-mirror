@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <class_sch_screen.h>
+#include <base_units.h>
 
 #include <eeschema_id.h>
 #include <general.h>
@@ -67,7 +68,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 
     dialog.SetWidthUnits( ReturnUnitSymbol( g_UserUnit ) );
 
-    wxString val = ReturnStringFromValue( g_UserUnit, m_drawLineWidth, m_internalUnits );
+    wxString val = ReturnStringFromValue( g_UserUnit, m_drawLineWidth );
     dialog.SetWidth( val );
     dialog.SetApplyToAllUnits( !m_drawSpecificUnit );
     dialog.EnableApplyToAllUnits( component && component->GetPartCount() > 1 );

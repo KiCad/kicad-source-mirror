@@ -36,6 +36,8 @@
 #include <macros.h>
 #include <build_version.h>
 #include <confirm.h>
+#include <base_units.h>
+
 #include <wx/process.h>
 
 /**
@@ -251,14 +253,6 @@ void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit )
 }
 
 
-void PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit )
-{
-    wxString msg = ReturnStringFromValue( g_UserUnit, Value, Internal_Unit );
-
-    TextCtr.SetValue( msg );
-}
-
-
 int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit )
 {
     int      value;
@@ -267,37 +261,6 @@ int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit )
     value = ReturnValueFromString( g_UserUnit, msg, Internal_Unit );
 
     return value;
-}
-
-
-wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, int aInternal_Unit,
-                                bool aAdd_unit_symbol )
-{
-    wxString StringValue;
-    double   value_to_print;
-
-    value_to_print = To_User_Unit( aUnit, aValue, aInternal_Unit );
-
-    // Yet another 'if Pcbnew' :(
-    StringValue.Printf( ( aInternal_Unit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
-                        value_to_print );
-
-    if( aAdd_unit_symbol )
-        switch( aUnit )
-        {
-        case INCHES:
-            StringValue += _( " \"" );
-            break;
-
-        case MILLIMETRES:
-            StringValue += _( " mm" );
-            break;
-
-        case UNSCALED_UNITS:
-            break;
-        }
-
-    return StringValue;
 }
 
 
@@ -383,30 +346,6 @@ wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
     }
 
     return list;
-}
-
-
-/**
- * Function To_User_Unit
- * Convert in inch or mm the variable "val" (double)given in internal units
- * @return the converted value, in double
- * @param aUnit : user measure unit
- * @param val : double : the given value
- * @param internal_unit_value = internal units per inch
- */
-double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
-{
-    switch( aUnit )
-    {
-    case MILLIMETRES:
-        return val * 25.4 / internal_unit_value;
-
-    case INCHES:
-        return val / internal_unit_value;
-
-    default:
-        return val;
-    }
 }
 
 
@@ -511,45 +450,6 @@ const wxString& valeur_param( int valeur, wxString& buf_texte )
 }
 
 
-wxString CoordinateToString( int aValue, int aInternalUnits, bool aConvertToMils )
-{
-    wxCHECK_MSG( (aInternalUnits == EESCHEMA_INTERNAL_UNIT)
-                 || (aInternalUnits == PCB_INTERNAL_UNIT),
-                 wxString( _( "*** Bad Internal Units ***" ) ),
-                 wxT( "Invalid interanl units value." ) );
-
-    wxString      text;
-    const wxChar* format;
-    double        value = To_User_Unit( g_UserUnit, aValue, aInternalUnits );
-
-    if( g_UserUnit == INCHES )
-    {
-        if( aConvertToMils )
-        {
-            format = ( aInternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.0f" ) : wxT( "%.1f" );
-            value *= 1000;
-        }
-        else
-        {
-            format = ( aInternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.3f" ) : wxT( "%.4f" );
-        }
-    }
-    else
-    {
-        format = ( aInternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.2f" ) : wxT( "%.3f" );
-    }
-
-    text.Printf( format, value );
-
-    if( g_UserUnit == INCHES )
-        text += ( aConvertToMils ) ? _( " mils" ) : _( " in" );
-    else
-        text += _( " mm" );
-
-    return text;
-}
-
-
 wxString& operator <<( wxString& aString, const wxPoint& aPos )
 {
     wxString temp;
@@ -559,4 +459,27 @@ wxString& operator <<( wxString& aString, const wxPoint& aPos )
     aString << wxT( ")" );
 
     return aString;
+}
+
+
+double RoundTo0( double x, double precision )
+{
+    assert( precision != 0 );
+
+    long long ix = wxRound( x * precision );
+
+    if ( x < 0.0 )
+        NEGATE( ix );
+
+    int remainder = ix % 10;   // remainder is in precision mm
+
+    if ( remainder <= 2 )
+        ix -= remainder;       // truncate to the near number
+    else if (remainder >= 8 )
+        ix += 10 - remainder;  // round to near number
+
+    if ( x < 0 )
+        NEGATE( ix );
+
+    return (double) ix / precision;
 }

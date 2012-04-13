@@ -36,6 +36,7 @@
 #include <plot_common.h>
 #include <wxEeschemaStruct.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -1854,7 +1855,7 @@ void LIB_PIN::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     aFrame->AppendMsgPanel( _( "Visible" ), Text, DARKGREEN );
 
     /* Display pin length */
-    Text = ReturnStringFromValue( g_UserUnit, m_length, EESCHEMA_INTERNAL_UNIT, true );
+    Text = ReturnStringFromValue( g_UserUnit, m_length, true );
     aFrame->AppendMsgPanel( _( "Length" ), Text, MAGENTA );
 
     Text = wxGetTranslation( pin_orientation_names[ GetOrientationCodeIndex( m_orientation ) ] );

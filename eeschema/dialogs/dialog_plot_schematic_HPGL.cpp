@@ -32,6 +32,7 @@
 #include <worksheet.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -148,7 +149,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::initDlg()
     // Set validators
     m_SizeOption->SetSelection( s_pageSizeSelect );
     AddUnitSymbol( *m_penWidthTitle, g_UserUnit );
-    PutValueInLocalUnits( *m_penWidthCtrl, g_HPGL_Pen_Descr. m_Pen_Diam, EESCHEMA_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_penWidthCtrl, g_HPGL_Pen_Descr. m_Pen_Diam );
     m_penSpeedCtrl->SetValue( g_HPGL_Pen_Descr. m_Pen_Speed );
     m_penNumCtrl->SetValue( g_HPGL_Pen_Descr. m_Pen_Num );
 }
@@ -179,15 +180,11 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::SetPageOffsetValue()
 
     if( s_pageSizeSelect != PAGE_DEFAULT )
     {
-        msg = ReturnStringFromValue( g_UserUnit,
-                                     s_Offset.x,
-                                     EESCHEMA_INTERNAL_UNIT );
+        msg = ReturnStringFromValue( g_UserUnit, s_Offset.x );
 
         m_PlotOrgPosition_X->SetValue( msg );
 
-        msg = ReturnStringFromValue( g_UserUnit,
-                                     s_Offset.y,
-                                     EESCHEMA_INTERNAL_UNIT );
+        msg = ReturnStringFromValue( g_UserUnit, s_Offset.y );
 
         m_PlotOrgPosition_Y->SetValue( msg );
 

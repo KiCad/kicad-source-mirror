@@ -35,6 +35,7 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -270,11 +271,11 @@ void LIB_CIRCLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 
     LIB_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Radius, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Radius, true );
     aFrame->AppendMsgPanel( _( "Radius" ), msg, RED );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
@@ -287,9 +288,9 @@ void LIB_CIRCLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 wxString LIB_CIRCLE::GetSelectMenuText() const
 {
     return wxString::Format( _( "Circle center (%s, %s), radius %s" ),
-                             GetChars( CoordinateToString( m_Pos.x, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_Pos.y, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_Radius, EESCHEMA_INTERNAL_UNIT ) ) );
+                             GetChars( CoordinateToString( m_Pos.x ) ),
+                             GetChars( CoordinateToString( m_Pos.y ) ),
+                             GetChars( CoordinateToString( m_Radius ) ) );
 }
 
 

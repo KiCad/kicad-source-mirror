@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>
+#include <base_units.h>
 #include <class_board_design_settings.h>
 
 #include <class_module.h>
@@ -55,14 +56,11 @@ void DRC::ShowDialog()
         // copy data retained in this DRC object into the m_ui DrcPanel:
 
         PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl,
-                              m_pcb->GetDesignSettings().m_TrackMinWidth,
-                              m_mainWindow->GetInternalUnits() );
+                              m_pcb->GetDesignSettings().m_TrackMinWidth );
         PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl,
-                              m_pcb->GetDesignSettings().m_ViasMinSize,
-                              m_mainWindow->GetInternalUnits() );
+                              m_pcb->GetDesignSettings().m_ViasMinSize );
         PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl,
-                              m_pcb->GetDesignSettings().m_MicroViasMinSize,
-                              m_mainWindow->GetInternalUnits() );
+                              m_pcb->GetDesignSettings().m_MicroViasMinSize );
 
         m_ui->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
         m_ui->m_RptFilenameCtrl->SetValue( m_rptFilename );
@@ -294,7 +292,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 
     const BOARD_DESIGN_SETTINGS& g = m_pcb->GetDesignSettings();
 
-#define FmtVal( x ) GetChars( ReturnStringFromValue( g_UserUnit, x, PCB_INTERNAL_UNIT ) )
+#define FmtVal( x ) GetChars( ReturnStringFromValue( g_UserUnit, x ) )
 
 #if 0   // set to 1 when (if...) BOARD_DESIGN_SETTINGS has a m_MinClearance value
     if( nc->GetClearance() < g.m_MinClearance )

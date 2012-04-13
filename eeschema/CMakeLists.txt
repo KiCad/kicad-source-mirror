@@ -162,6 +162,7 @@ set(EESCHEMA_COMMON_SRCS
     ../common/base_screen.cpp
     ../common/eda_text.cpp
     ../common/class_page_info.cpp
+    ../common/base_units.cpp
     )
 
 

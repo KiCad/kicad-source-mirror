@@ -15,6 +15,7 @@
 #include <wxPcbStruct.h>
 #include <trigo.h>
 #include <zones.h>
+#include <base_units.h>
 
 #include <class_zone_settings.h>
 #include <class_board.h>
@@ -178,15 +179,11 @@ void DIALOG_COPPER_ZONE::initDialog()
     m_FillModeCtrl->SetSelection( m_settings.m_FillMode ? 1 : 0 );
 
     AddUnitSymbol( *m_ClearanceValueTitle, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit,
-                                 m_settings.m_ZoneClearance,
-                                 m_Parent->GetInternalUnits() );
+    msg = ReturnStringFromValue( g_UserUnit, m_settings.m_ZoneClearance );
     m_ZoneClearanceCtrl->SetValue( msg );
 
     AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit,
-                                 m_settings.m_ZoneMinThickness,
-                                 m_Parent->GetInternalUnits() );
+    msg = ReturnStringFromValue( g_UserUnit, m_settings.m_ZoneMinThickness );
     m_ZoneMinThicknessCtrl->SetValue( msg );
 
     switch( m_settings.GetPadConnection() )
@@ -220,18 +217,12 @@ void DIALOG_COPPER_ZONE::initDialog()
 
     AddUnitSymbol( *m_AntipadSizeText, g_UserUnit );
     AddUnitSymbol( *m_CopperBridgeWidthText, g_UserUnit );
-    PutValueInLocalUnits( *m_AntipadSizeValue,
-                          m_settings.m_ThermalReliefGap,
-                          PCB_INTERNAL_UNIT );
-    PutValueInLocalUnits( *m_CopperWidthValue,
-                          m_settings.m_ThermalReliefCopperBridge,
-                          PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_AntipadSizeValue, m_settings.m_ThermalReliefGap );
+    PutValueInLocalUnits( *m_CopperWidthValue, m_settings.m_ThermalReliefCopperBridge );
 
     m_cornerSmoothingChoice->SetSelection( m_settings.GetCornerSmoothingType() );
 
-    PutValueInLocalUnits( *m_cornerSmoothingCtrl,
-                          m_settings.GetCornerRadius(),
-                          PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_cornerSmoothingCtrl, m_settings.GetCornerRadius() );
 
     switch( m_settings.m_Zone_HatchingStyle )
     {

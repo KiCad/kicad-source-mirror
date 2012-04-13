@@ -11,6 +11,7 @@
 #include <drawtxt.h>
 #include <dialog_helpers.h>
 #include <macros.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -91,24 +92,19 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
     m_Name->SetValue( aDimension->m_Text.m_Text );
 
     // Enter size value in dialog
-    PutValueInLocalUnits( *m_TxtSizeXCtrl, aDimension->m_Text.m_Size.x,
-                          m_Parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_TxtSizeXCtrl, aDimension->m_Text.m_Size.x );
     AddUnitSymbol( *m_staticTextSizeX );
-    PutValueInLocalUnits( *m_TxtSizeYCtrl, aDimension->m_Text.m_Size.y,
-                          m_Parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_TxtSizeYCtrl, aDimension->m_Text.m_Size.y );
     AddUnitSymbol( *m_staticTextSizeY );
 
     // Enter lines thickness value in dialog
-    PutValueInLocalUnits( *m_TxtWidthCtrl, aDimension->m_Width,
-                          m_Parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_TxtWidthCtrl, aDimension->m_Width );
     AddUnitSymbol( *m_staticTextWidth );
 
     // Enter position value in dialog
-    PutValueInLocalUnits( *m_textCtrlPosX, aDimension->m_Text.m_Pos.x,
-                          m_Parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_textCtrlPosX, aDimension->m_Text.m_Pos.x );
     AddUnitSymbol( *m_staticTextPosX );
-    PutValueInLocalUnits( *m_textCtrlPosY, aDimension->m_Text.m_Pos.y,
-                          m_Parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_textCtrlPosY, aDimension->m_Text.m_Pos.y );
     AddUnitSymbol( *m_staticTextPosY );
 
     for( int layer = FIRST_NO_COPPER_LAYER;  layer<NB_LAYERS;  layer++ )

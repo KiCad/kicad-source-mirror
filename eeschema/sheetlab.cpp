@@ -34,6 +34,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -56,9 +57,9 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
 
     dlg.SetLabelName( aSheetPin->m_Text );
-    dlg.SetTextHeight( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.y, m_internalUnits ) );
+    dlg.SetTextHeight( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.y ) );
     dlg.SetTextHeightUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.x, m_internalUnits ) );
+    dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.x ) );
     dlg.SetTextWidthUnits( GetUnitsLabel( g_UserUnit ) );
     dlg.SetConnectionType( aSheetPin->GetShape() );
 

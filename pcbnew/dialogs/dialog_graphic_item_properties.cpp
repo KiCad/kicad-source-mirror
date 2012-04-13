@@ -18,6 +18,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_drawsegment.h>
@@ -136,20 +137,15 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
         break;
     }
 
-    PutValueInLocalUnits( *m_Center_StartXCtrl, m_Item->GetStart().x,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_Center_StartXCtrl, m_Item->GetStart().x );
 
-    PutValueInLocalUnits( *m_Center_StartYCtrl, m_Item->GetStart().y,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_Center_StartYCtrl, m_Item->GetStart().y );
 
-    PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_Item->GetEnd().x,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_Item->GetEnd().x );
 
-    PutValueInLocalUnits( *m_EndY_Ctrl, m_Item->GetEnd().y,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_EndY_Ctrl, m_Item->GetEnd().y );
 
-    PutValueInLocalUnits( *m_ThicknessCtrl, m_Item->GetWidth(),
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_ThicknessCtrl, m_Item->GetWidth() );
 
     int thickness;
 
@@ -158,8 +154,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::initDlg( )
     else
         thickness =  m_brdSettings.m_DrawSegmentWidth;
 
-    PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness );
 
     for( int layer=FIRST_NO_COPPER_LAYER; layer <= LAST_NO_COPPER_LAYER;  ++layer )
     {
@@ -187,8 +182,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
     else
         thickness =  m_brdSettings.m_DrawSegmentWidth;
 
-    PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness );
 }
 
 /*******************************************************************/

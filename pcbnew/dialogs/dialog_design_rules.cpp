@@ -33,6 +33,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <macros.h>
+#include <base_units.h>
 
 #include <confirm.h>
 #include <pcbnew.h>
@@ -207,26 +208,19 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent ) :
 void DIALOG_DESIGN_RULES::PrintCurrentSettings()
 {
     wxString msg, value;
-    int      internal_units = m_Parent->GetInternalUnits();
 
     m_MessagesList->AppendToPage( _( "<b>Current general settings:</b><br>" ) );
 
     // Display min values:
-    value = ReturnStringFromValue( g_UserUnit,
-                                   m_BrdSettings.m_TrackMinWidth,
-                                   internal_units,
-                                   true );
+    value = ReturnStringFromValue( g_UserUnit, m_BrdSettings.m_TrackMinWidth, true );
     msg.Printf( _( "Minimum value for tracks width: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 
-    value = ReturnStringFromValue( g_UserUnit, m_BrdSettings.m_ViasMinSize, internal_units, true );
+    value = ReturnStringFromValue( g_UserUnit, m_BrdSettings.m_ViasMinSize, true );
     msg.Printf( _( "Minimum value for vias diameter: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 
-    value = ReturnStringFromValue( g_UserUnit,
-                                   m_BrdSettings.m_MicroViasMinSize,
-                                   internal_units,
-                                   true );
+    value = ReturnStringFromValue( g_UserUnit, m_BrdSettings.m_MicroViasMinSize, true );
     msg.Printf( _( "Minimum value for microvias diameter: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 }
@@ -290,22 +284,16 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
     AddUnitSymbol( *m_MicroViaMinDrillTitle );
     AddUnitSymbol( *m_TrackMinWidthTitle );
 
-    int Internal_Unit = m_Parent->GetInternalUnits();
-    PutValueInLocalUnits( *m_SetViasMinSizeCtrl, m_BrdSettings.m_ViasMinSize, Internal_Unit );
-    PutValueInLocalUnits( *m_SetViasMinDrillCtrl, m_BrdSettings.m_ViasMinDrill, Internal_Unit );
+    PutValueInLocalUnits( *m_SetViasMinSizeCtrl, m_BrdSettings.m_ViasMinSize );
+    PutValueInLocalUnits( *m_SetViasMinDrillCtrl, m_BrdSettings.m_ViasMinDrill );
 
     if(  m_BrdSettings.m_CurrentViaType != VIA_THROUGH )
         m_OptViaType->SetSelection( 1 );
 
     m_AllowMicroViaCtrl->SetSelection(  m_BrdSettings.m_MicroViasAllowed ? 1 : 0 );
-    PutValueInLocalUnits( *m_SetMicroViasMinSizeCtrl,
-                          m_BrdSettings.m_MicroViasMinSize,
-                          Internal_Unit );
-    PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl,
-                          m_BrdSettings.m_MicroViasMinDrill,
-                          Internal_Unit );
-
-    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, m_BrdSettings.m_TrackMinWidth, Internal_Unit );
+    PutValueInLocalUnits( *m_SetMicroViasMinSizeCtrl, m_BrdSettings.m_MicroViasMinSize );
+    PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl, m_BrdSettings.m_MicroViasMinDrill );
+    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, m_BrdSettings.m_TrackMinWidth );
 
     // Initialize Vias and Tracks sizes lists.
     // note we display only extra values, never the current netclass value.
@@ -326,7 +314,6 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
  */
 {
     wxString msg;
-    int      Internal_Unit = m_Parent->GetInternalUnits();
 
     // Compute the column widths here, after setting texts
     msg = wxT("000000.000000"); // This is a very long text to display values.
@@ -347,19 +334,17 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
 
     for( unsigned ii = 0; ii < m_TracksWidthList.size(); ii++ )
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_TracksWidthList[ii], Internal_Unit, false );
+        msg = ReturnStringFromValue( g_UserUnit, m_TracksWidthList[ii], false );
         m_gridTrackWidthList->SetCellValue( ii, 0, msg  );
     }
 
     for( unsigned ii = 0; ii < m_ViasDimensionsList.size(); ii++ )
     {
-        msg = ReturnStringFromValue( g_UserUnit, m_ViasDimensionsList[ii].m_Diameter,
-                                     Internal_Unit, false );
+        msg = ReturnStringFromValue( g_UserUnit, m_ViasDimensionsList[ii].m_Diameter, false );
         m_gridViaSizeList->SetCellValue( ii, 0, msg );
         if( m_ViasDimensionsList[ii].m_Drill > 0 )
         {
-            msg = ReturnStringFromValue( g_UserUnit, m_ViasDimensionsList[ii].m_Drill,
-                                         Internal_Unit, false );
+            msg = ReturnStringFromValue( g_UserUnit, m_ViasDimensionsList[ii].m_Drill, false );
             m_gridViaSizeList->SetCellValue( ii, 1, msg );
         }
     }
@@ -495,22 +480,22 @@ static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc, int units )
     // label is netclass name
     grid->SetRowLabelValue( row, nc->GetName() );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetClearance(), units );
+    msg = ReturnStringFromValue( g_UserUnit, nc->GetClearance() );
     grid->SetCellValue( row, GRID_CLEARANCE, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetTrackWidth(), units );
+    msg = ReturnStringFromValue( g_UserUnit, nc->GetTrackWidth() );
     grid->SetCellValue( row, GRID_TRACKSIZE, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetViaDiameter(), units );
+    msg = ReturnStringFromValue( g_UserUnit, nc->GetViaDiameter() );
     grid->SetCellValue( row, GRID_VIASIZE, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetViaDrill(), units );
+    msg = ReturnStringFromValue( g_UserUnit, nc->GetViaDrill() );
     grid->SetCellValue( row, GRID_VIADRILL, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetuViaDiameter(), units );
+    msg = ReturnStringFromValue( g_UserUnit, nc->GetuViaDiameter() );
     grid->SetCellValue( row, GRID_uVIASIZE, msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetuViaDrill(), units );
+    msg = ReturnStringFromValue( g_UserUnit, nc->GetuViaDrill() );
     grid->SetCellValue( row, GRID_uVIADRILL, msg );
 }
 

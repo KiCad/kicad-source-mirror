@@ -31,6 +31,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <sch_sheet.h>
@@ -49,14 +50,10 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
     wxString units = GetUnitsLabel( g_UserUnit );
     dlg.SetFileName( aSheet->GetFileName() );
-    dlg.SetFileNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                    aSheet->GetFileNameSize(),
-                                                    m_internalUnits ) );
+    dlg.SetFileNameTextSize( ReturnStringFromValue( g_UserUnit, aSheet->GetFileNameSize() ) );
     dlg.SetFileNameTextSizeUnits( units );
     dlg.SetSheetName( aSheet->GetName() );
-    dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                     aSheet->GetSheetNameSize(),
-                                                     m_internalUnits ) );
+    dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UserUnit, aSheet->GetSheetNameSize() ) );
     dlg.SetSheetNameTextSizeUnits( units );
 
     /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier

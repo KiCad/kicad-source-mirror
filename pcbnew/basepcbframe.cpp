@@ -35,6 +35,7 @@
 #include <dialog_helpers.h>
 #include <kicad_device_context.h>
 #include <wxBasePcbFrame.h>
+#include <base_units.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -78,7 +79,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
                                 const wxString& title,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
-                                long style) :
+                                long            style) :
     EDA_DRAW_FRAME( father, idtype, title, pos, size, style )
 {
     m_internalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
@@ -552,18 +553,24 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 {
     EDA_DRAW_FRAME::UpdateStatusBar();
 
+    PCB_SCREEN* screen = GetScreen();
+
+    if( !screen )
+        return;
+
+    int dx;
+    int dy;
+    double dXpos;
+    double dYpos;
+    wxString line;
+    wxString locformatter;
+
     if( DisplayOpt.DisplayPolarCood )  // display polar coordinates
     {
-        PCB_SCREEN* screen = GetScreen();
-
-        if( !screen )
-            return;
-
-        wxString     Line;
         double       theta, ro;
 
-        int dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        int dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
 
         if( dx==0 && dy==0 )
             theta = 0.0;
@@ -589,11 +596,62 @@ void PCB_BASE_FRAME::UpdateStatusBar()
             break;
         }
 
-        Line.Printf( formatter, To_User_Unit( g_UserUnit, ro, m_internalUnits ), theta );
+        line.Printf( formatter, To_User_Unit( g_UserUnit, ro ), theta );
 
-        // overwrite the absolute cartesian coordinates
-        SetStatusText( Line, 2 );
+        SetStatusText( line, 2 );
     }
+    else
+    {
+        // Display absolute coordinates:
+        dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
+        dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
+
+        if ( g_UserUnit == MILLIMETRES )
+        {
+            dXpos = RoundTo0( dXpos, 1000.0 );
+            dYpos = RoundTo0( dYpos, 1000.0 );
+        }
+
+        // The following sadly is an if Eeschema/if Pcbnew
+        wxString absformatter;
+
+        switch( g_UserUnit )
+        {
+        case INCHES:
+            absformatter = wxT( "X %.4f  Y %.4f" );
+            locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
+            break;
+
+        case MILLIMETRES:
+            absformatter = wxT( "X %.3f  Y %.3f" );
+            locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
+            break;
+
+        case UNSCALED_UNITS:
+            absformatter = wxT( "X %f  Y %f" );
+            locformatter = wxT( "dx %f  dy %f  d %f" );
+            break;
+        }
+
+        line.Printf( absformatter, dXpos, dYpos );
+        SetStatusText( line, 2 );
+    }
+
+    // Display relative coordinates:
+    dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+    dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+    dXpos = To_User_Unit( g_UserUnit, dx );
+    dYpos = To_User_Unit( g_UserUnit, dy );
+
+    if ( g_UserUnit == MILLIMETRES )
+    {
+        dXpos = RoundTo0( dXpos, 1000.0 );
+        dYpos = RoundTo0( dYpos, 1000.0 );
+    }
+
+    // We already decided the formatter above
+    line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+    SetStatusText( line, 3 );
 }
 
 
@@ -711,7 +769,7 @@ void PCB_BASE_FRAME::updateGridSelectBox()
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
         GRID_TYPE& grid = GetScreen()->GetGrid( i );
-        double value = To_User_Unit( g_UserUnit, grid.m_Size.x, m_internalUnits );
+        double value = To_User_Unit( g_UserUnit, grid.m_Size.x );
 
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
