@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -34,6 +34,7 @@
 #include <gr_basic.h>
 #include <bezier_curves.h>
 #include <class_drawpanel.h>
+#include <class_pcb_screen.h>
 #include <kicad_string.h>
 #include <colors_selection.h>
 #include <trigo.h>
@@ -106,7 +107,7 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
         NEGATE( m_Angle );
     }
 
-    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 }
 
 
@@ -189,6 +190,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     int l_trace;
     int color, mode;
     int radius;
+    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     BOARD * brd =  GetBoard( );
 
@@ -196,6 +198,16 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         return;
 
     color = brd->GetLayerColor( GetLayer() );
+
+    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  DisplayOpt.ContrastModeDisplay )
+    {
+        if( !IsOnLayer( curr_layer ) )
+        {
+            color &= ~MASKCOLOR;
+            color |= DARKDARKGRAY;
+        }
+    }
+
 
     GRSetDrawMode( DC, draw_mode );
     l_trace = m_Width >> 1;  /* half trace width */
@@ -272,7 +284,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         }
         break;
     case S_CURVE:
-            m_BezierPoints = Bezier2Poly(m_Start,m_BezierC1, m_BezierC2, m_End);
+            m_BezierPoints = Bezier2Poly(m_Start, m_BezierC1, m_BezierC2, m_End);
 
             for (unsigned int i=1; i < m_BezierPoints.size(); i++) {
                 if( mode == LINE )
@@ -427,10 +439,10 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 }
 
 
-bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
+bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
 {
     /* Calculate coordinates to test relative to segment origin. */
-    wxPoint relPos = aRefPos - m_Start;
+    wxPoint relPos = aPosition - m_Start;
 
     switch( m_Shape )
     {
@@ -464,13 +476,13 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
     case S_CURVE:
         for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
         {
-            if( TestSegmentHit( aRefPos,m_BezierPoints[i-1], m_BezierPoints[i-1], m_Width / 2 ) )
+            if( TestSegmentHit( aPosition, m_BezierPoints[i-1], m_BezierPoints[i-1], m_Width / 2 ) )
                 return true;
         }
         break;
 
     case S_SEGMENT:
-        if( TestSegmentHit( aRefPos, m_Start, m_End, m_Width / 2 ) )
+        if( TestSegmentHit( aPosition, m_Start, m_End, m_Width / 2 ) )
             return true;
         break;
 
@@ -482,15 +494,16 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
 }
 
 
-bool DRAWSEGMENT::HitTest( EDA_RECT& refArea )
+bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect ) const
 {
     switch( m_Shape )
     {
         case S_CIRCLE:
         {
             int radius = GetRadius();
+
             // Text if area intersects the circle:
-            EDA_RECT area = refArea;
+            EDA_RECT area = aRect;
             area.Inflate( radius );
 
             if( area.Contains( m_Start ) )
@@ -500,9 +513,10 @@ bool DRAWSEGMENT::HitTest( EDA_RECT& refArea )
 
         case S_ARC:
         case S_SEGMENT:
-            if( refArea.Contains( GetStart() ) )
+            if( aRect.Contains( GetStart() ) )
                 return true;
-            if( refArea.Contains( GetEnd() ) )
+
+            if( aRect.Contains( GetEnd() ) )
                 return true;
             break;
     }
@@ -524,9 +538,73 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* DRAWSEGMENT::doClone() const
+EDA_ITEM* DRAWSEGMENT::Clone() const
 {
     return new DRAWSEGMENT( *this );
+}
+
+
+void DRAWSEGMENT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    unsigned i;
+
+    aFormatter->Print( aNestLevel, "(draw " );
+
+    switch( m_Shape )
+    {
+    case S_SEGMENT:  // Line
+        aFormatter->Print( 0, "line (pts (xy %s) (xy %s))",
+                           FMT_IU( m_Start ).c_str(),
+                           FMT_IU( m_End ).c_str() );
+        break;
+
+    case S_CIRCLE:  // Circle
+        aFormatter->Print( 0, "circle (center (xy %s)) (end (xy %s))",
+                           FMT_IU( m_Start ).c_str(),
+                           FMT_IU( m_End ).c_str() );
+        break;
+
+    case S_ARC:     // Arc
+        aFormatter->Print( 0, "arc (start (xy %s)) (end (xy %s)) (angle %s)",
+                           FMT_IU( m_Start ).c_str(),
+                           FMT_IU( m_End ).c_str(),
+                           FMT_ANGLE( m_Angle ).c_str() );
+        break;
+
+    case S_POLYGON: // Polygon
+        aFormatter->Print( 0, "line (pts" );
+
+        for( i = 0;  i<m_PolyPoints.size();  ++i )
+            aFormatter->Print( 0, " (xy %s)", FMT_IU( m_PolyPoints[i] ).c_str() );
+
+        aFormatter->Print( 0, ")" );
+        break;
+
+    case S_CURVE:   // Bezier curve
+        aFormatter->Print( 0, "curve pts(xy(%s) xy(%s) xy(%s) xy(%s))",
+                           FMT_IU( m_Start ).c_str(),
+                           FMT_IU( m_BezierC1 ).c_str(),
+                           FMT_IU( m_BezierC2 ).c_str(),
+                           FMT_IU( m_End ).c_str() );
+        break;
+
+    default:
+        wxFAIL_MSG( wxT( "Cannot format invalid DRAWSEGMENT type." ) );
+    };
+
+    aFormatter->Print( 0, " (layer %d)", GetLayer() );
+
+    if( m_Width != 0 )
+        aFormatter->Print( 0, " (width %s)", FMT_IU( m_Width ).c_str() );
+
+    if( GetTimeStamp() )
+        aFormatter->Print( 0, " (tstamp %lX)", GetTimeStamp() );
+
+    if( GetStatus() )
+        aFormatter->Print( 0, " (status %X)", GetStatus() );
+
+    aFormatter->Print( 0, ")\n" );
 }
 
 

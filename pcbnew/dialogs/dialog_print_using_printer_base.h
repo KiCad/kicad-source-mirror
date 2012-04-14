@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -30,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PRINT_USING_PRINTER_base
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PRINT_USING_PRINTER_base : public wxDialog 
+class DIALOG_PRINT_USING_PRINTER_base : public DIALOG_SHIM
 {
 	private:
 	
@@ -41,7 +42,7 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 			wxID_PRINT_MODE,
 			wxID_PAGE_MODE,
 			wxID_PRINT_OPTIONS,
-			wxID_PRINT_ALL,
+			wxID_PRINT_ALL
 		};
 		
 		wxStaticBoxSizer* m_CopperLayersBoxSizer;
@@ -75,7 +76,7 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 	
 	public:
 		
-		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,315 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PRINT_USING_PRINTER_base();
 	
 };

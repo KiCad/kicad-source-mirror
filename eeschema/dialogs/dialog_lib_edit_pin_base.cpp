@@ -1,17 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "wx/bmpcbox.h"
-
 #include "dialog_lib_edit_pin_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -69,6 +67,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_choiceStyle = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	fgSizerPins->Add( m_choiceStyle, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
+	
 	bLeftSizer->Add( fgSizerPins, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* boarderSizer;
@@ -83,6 +82,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Shared by all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPinSharing->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
+	
 	boarderSizer->Add( sbSizerPinSharing, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizerSchematicProperties;
@@ -92,9 +92,12 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_checkShow->SetValue(true); 
 	sbSizerSchematicProperties->Add( m_checkShow, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
+	
 	boarderSizer->Add( sbSizerSchematicProperties, 0, wxEXPAND|wxALL, 5 );
 	
+	
 	bLeftSizer->Add( boarderSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
+	
 	
 	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
 	
@@ -140,6 +143,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_staticLengthUnits->Wrap( -1 );
 	fgSizerTextsSizes->Add( m_staticLengthUnits, 0, wxALL, 5 );
 	
+	
 	bRightSizer->Add( fgSizerTextsSizes, 0, wxALL|wxEXPAND, 5 );
 	
 	m_panelShowPin = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
@@ -147,7 +151,9 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	bRightSizer->Add( m_panelShowPin, 1, wxEXPAND | wxALL, 5 );
 	
+	
 	bUpperSizer->Add( bRightSizer, 1, wxEXPAND|wxRIGHT, 5 );
+	
 	
 	mainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -160,10 +166,13 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizerButtonsCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
+	
 	mainSizer->Add( m_sdbSizerButtons, 0, wxALL|wxALIGN_RIGHT, 5 );
+	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

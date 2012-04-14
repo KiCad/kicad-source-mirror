@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -195,7 +195,7 @@ again." );
         case 'T':                       // It is a text item.
             if( sscanf( sline, "%s", Name1 ) != 1 )
             {
-                MsgDiag.Printf( wxT( "Eeschema file text load error at line %d" ),
+                MsgDiag.Printf( _( "Eeschema file text load error at line %d" ),
                                 reader.LineNumber() );
                 itemLoaded = false;
             }
@@ -211,7 +211,7 @@ again." );
 
         default:
             itemLoaded = false;
-            MsgDiag.Printf( wxT( "Eeschema file undefined object at line %d, aborted" ),
+            MsgDiag.Printf( _( "Eeschema file undefined object at line %d, aborted" ),
                             reader.LineNumber() );
             MsgDiag << wxT( "\n" ) << FROM_UTF8( line );
         }
@@ -304,8 +304,8 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* aScree
 
     if( !pageInfo.SetType( pagename ) )
     {
-        aMsgDiag.Printf( wxT( "Eeschema file dimension definition error \
-line %d, \aAbort reading file.\n" ),
+        aMsgDiag.Printf( _( "Eeschema file dimension definition error \
+line %d,\nAbort reading file.\n" ),
                          aLine->LineNumber() );
         aMsgDiag << FROM_UTF8( line );
     }
@@ -322,7 +322,7 @@ line %d, \aAbort reading file.\n" ),
         }
     }
 
-    // portrait only supported in non custom sizes
+    // non custom size, set portrait if its present
     else if( orient && !strcmp( orient, "portrait" ) )
     {
         pageInfo.SetPortrait( true );

@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -36,6 +35,7 @@
 #include <wxstruct.h>
 #include <bezier_curves.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -133,13 +133,13 @@ bool LIB_BEZIER::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-EDA_ITEM* LIB_BEZIER::doClone() const
+EDA_ITEM* LIB_BEZIER::Clone() const
 {
     return new LIB_BEZIER( *this );
 }
 
 
-int LIB_BEZIER::DoCompare( const LIB_ITEM& aOther ) const
+int LIB_BEZIER::compare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_BEZIER_T );
 
@@ -161,7 +161,7 @@ int LIB_BEZIER::DoCompare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_BEZIER::DoOffset( const wxPoint& aOffset )
+void LIB_BEZIER::SetOffset( const wxPoint& aOffset )
 {
     size_t i;
 
@@ -173,7 +173,7 @@ void LIB_BEZIER::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_BEZIER::DoTestInside( EDA_RECT& aRect ) const
+bool LIB_BEZIER::Inside( EDA_RECT& aRect ) const
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {
@@ -185,13 +185,13 @@ bool LIB_BEZIER::DoTestInside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_BEZIER::DoMove( const wxPoint& aPosition )
+void LIB_BEZIER::Move( const wxPoint& aPosition )
 {
-    DoOffset( aPosition - m_PolyPoints[0] );
+    SetOffset( aPosition - m_PolyPoints[0] );
 }
 
 
-void LIB_BEZIER::DoMirrorHorizontal( const wxPoint& aCenter )
+void LIB_BEZIER::MirrorHorizontal( const wxPoint& aCenter )
 {
     size_t i, imax = m_PolyPoints.size();
 
@@ -212,7 +212,7 @@ void LIB_BEZIER::DoMirrorHorizontal( const wxPoint& aCenter )
     }
 }
 
-void LIB_BEZIER::DoMirrorVertical( const wxPoint& aCenter )
+void LIB_BEZIER::MirrorVertical( const wxPoint& aCenter )
 {
     size_t i, imax = m_PolyPoints.size();
 
@@ -233,7 +233,7 @@ void LIB_BEZIER::DoMirrorVertical( const wxPoint& aCenter )
     }
 }
 
-void LIB_BEZIER::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_BEZIER::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
@@ -253,8 +253,8 @@ void LIB_BEZIER::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_BEZIER::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform )
+void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                       const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
@@ -411,7 +411,7 @@ void LIB_BEZIER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 
     LIB_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 

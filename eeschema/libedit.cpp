@@ -250,13 +250,8 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
 }
 
 
-void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
 {
-    if( GetScreen() == NULL )
-        return;
-
-    m_canvas->DrawBackGround( DC );
-
     if( m_component )
     {
         // display reference like in schematic (a reference U is shown U? or U?A)
@@ -266,10 +261,20 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         wxString fieldText = Field->m_Text;
         wxString fieldfullText = Field->GetFullText( m_unit );
         Field->m_Text = fieldfullText;
-        m_component->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit,
+        m_component->Draw( m_canvas, aDC, aOffset, m_unit,
                            m_convert, GR_DEFAULT_DRAWMODE );
         Field->m_Text = fieldText;
     }
+}
+
+void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+{
+    if( GetScreen() == NULL )
+        return;
+
+    m_canvas->DrawBackGround( DC );
+
+    RedrawComponent( DC, wxPoint( 0, 0 ) );
 
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );

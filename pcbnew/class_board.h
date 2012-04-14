@@ -17,7 +17,7 @@
 #include <common.h>                         // PAGE_INFO
 #include <class_title_block.h>
 #include <class_zone_settings.h>
-
+#include <pcb_plot_params.h>
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
@@ -127,7 +127,7 @@ class HIGH_LIGHT_INFO
     friend class BOARD;
 protected:
     int m_netCode;           // net selected for highlight (-1 when no net selected )
-    bool m_highLightOn;     // highlight active
+    bool m_highLightOn;      // highlight active
 
 protected:
     void Clear()
@@ -165,21 +165,22 @@ private:
     ZONE_CONTAINERS     m_ZoneDescriptorList;
 
     LAYER               m_Layer[NB_COPPER_LAYERS];
-                                                        // if true m_hightLight_NetCode is used
-    HIGH_LIGHT_INFO     m_hightLight;                   // current high light data
-    HIGH_LIGHT_INFO     m_hightLightPrevious;           // a previously stored high light data
+                                                    // if true m_highLight_NetCode is used
+    HIGH_LIGHT_INFO     m_highLight;                // current high light data
+    HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
 
-    int                 m_fileFormatVersionAtLoad;      ///< the version in the *.brd header on first line
+    int                 m_fileFormatVersionAtLoad;  ///< the version in the *.brd header on first line
 
     EDA_RECT            m_BoundingBox;
 
-    NETINFO_LIST        m_NetInfo;                      ///< net info list (name, design constraints ..
+    NETINFO_LIST        m_NetInfo;                  ///< net info list (name, design constraints ..
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
     ZONE_SETTINGS           m_zoneSettings;
     COLORS_DESIGN_SETTINGS* m_colorsSettings;
     PAGE_INFO               m_paper;
-    TITLE_BLOCK             m_titles;                   ///< text in lower right of screen and plots
+    TITLE_BLOCK             m_titles;               ///< text in lower right of screen and plots
+    PCB_PLOT_PARAMS         m_plotOptions;
 
     /// Position of the origin axis, which is used in exports mostly
     wxPoint             m_originAxisPosition;
@@ -195,6 +196,9 @@ private:
      */
     void chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList );
 
+    void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,
+                         int aControlBits ) const
+        throw( IO_ERROR );
 
 public:
 
@@ -267,6 +271,14 @@ public:
      *                      is not legal
      */
     static wxString GetDefaultLayerName( int aLayerNumber );
+
+    /**
+     * Function ReturnFlippedLayerNumber
+     * @return the layer number after flipping an item
+     * some (not all) layers: external copper, Mask, Paste, and solder
+     * are swapped between front and back sides
+     */
+    static int ReturnFlippedLayerNumber( int oldlayer );
 
     /**
      * Function Add
@@ -342,15 +354,15 @@ public:
      */
     void ResetHighLight()
     {
-        m_hightLight.Clear();
-        m_hightLightPrevious.Clear();
+        m_highLight.Clear();
+        m_highLightPrevious.Clear();
     }
 
     /**
      * Function GetHighLightNetCode
      * @return netcode of net to highlight (-1 when no net selected)
      */
-    int GetHighLightNetCode() { return m_hightLight.m_netCode; }
+    int GetHighLightNetCode() { return m_highLight.m_netCode; }
 
     /**
      * Function SetHighLightNet
@@ -358,27 +370,27 @@ public:
      */
     void SetHighLightNet( int aNetCode)
     {
-        m_hightLight.m_netCode = aNetCode;
+        m_highLight.m_netCode = aNetCode;
     }
 
     /**
      * Function IsHighLightNetON
      * @return true if a net is currently highlighted
      */
-    bool IsHighLightNetON() { return m_hightLight.m_highLightOn; }
+    bool IsHighLightNetON() { return m_highLight.m_highLightOn; }
 
     /**
      * Function HighLightOFF
      * Disable highlight.
      */
-    void HighLightOFF() { m_hightLight.m_highLightOn = false; }
+    void HighLightOFF() { m_highLight.m_highLightOn = false; }
 
     /**
      * Function HighLightON
      * Enable highlight.
-     * if m_hightLight_NetCode >= 0, this net will be highlighted
+     * if m_highLight_NetCode >= 0, this net will be highlighted
      */
-    void HighLightON() { m_hightLight.m_highLightOn = true; }
+    void HighLightON() { m_highLight.m_highLightOn = true; }
 
     /**
      * Function PushHighLight
@@ -539,6 +551,9 @@ public:
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
+
+    const PCB_PLOT_PARAMS& GetPlotOptions() const           { return m_plotOptions; }
+    void SetPlotOptions( const PCB_PLOT_PARAMS& aOptions )  { m_plotOptions = aOptions; }
 
     const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
     void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
@@ -877,23 +892,15 @@ public:
 
     /***************************************************************************/
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
     wxString GetClass() const
     {
         return wxT( "BOARD" );
     }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
@@ -1192,7 +1199,7 @@ public:
 
     /**
      * Function GetPadFast
-     * return pad found at \a aPosition on \a aLayer uning the fast search method.
+     * return pad found at \a aPosition on \a aLayer using the fast search method.
      * <p>
      * The fast search method only works if the pad list has already been built.
      * </p>
@@ -1204,7 +1211,7 @@ public:
 
     /**
      * Function GetPad
-     * locates the pad connected at \a aPosition on \a aLayer starting at list postion
+     * locates the pad connected at \a aPosition on \a aLayer starting at list position
      * \a aPad
      * <p>
      * This function uses a fast search in this sorted pad list and it is faster than

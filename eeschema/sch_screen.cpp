@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
+#include <common.h>
 #include <kicad_string.h>
 #include <eeschema_id.h>
 #include <appl_wxstruct.h>
@@ -98,7 +99,7 @@ static GRID_TYPE SchematicGridList[] = {
 
 SCH_SCREEN::SCH_SCREEN() :
     BASE_SCREEN( SCH_SCREEN_T ),
-    m_paper( wxT( "A4" ) )
+    m_paper( wxT( "A4" ), IsGOST() )
 {
     size_t i;
 
@@ -259,7 +260,7 @@ void SCH_SCREEN::ExtractWires( DLIST< SCH_ITEM >& aList, bool aCreateCopy )
             aList.Append( item );
 
             if( aCreateCopy )
-                m_drawList.Insert( item->Clone(), next_item );
+                m_drawList.Insert( (SCH_ITEM*) item->Clone(), next_item );
 
             break;
 
@@ -530,7 +531,9 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     return true;
 }
 
-
+// note: SCH_SCREEN::Draw is useful only for schematic.
+// library editor and library viewer do not use a draw list, and therefore
+// SCH_SCREEN::Draw draws nothing
 void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aColor )
 {
     for( SCH_ITEM* item = m_drawList.begin(); item != NULL; item = item->Next() )
@@ -730,7 +733,7 @@ void SCH_SCREEN::SelectBlockItems()
 {
     SCH_ITEM*          item;
 
-    PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.m_ItemsSelection;
+    PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.GetItems();
 
     if( pickedlist->GetCount() == 0 )
         return;
@@ -748,7 +751,7 @@ void SCH_SCREEN::SelectBlockItems()
 
     // Select all the items in the screen connected to the items in the block.
     // be sure end lines that are on the block limits are seen inside this block
-    m_BlockLocate.Inflate(1);
+    m_BlockLocate.Inflate( 1 );
     unsigned last_select_id = pickedlist->GetCount();
     unsigned ii = 0;
 
@@ -787,7 +790,7 @@ void SCH_SCREEN::SelectBlockItems()
         }
     }
 
-    m_BlockLocate.Inflate(-1);
+    m_BlockLocate.Inflate( -1 );
 }
 
 
@@ -829,7 +832,7 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
         if( addinlist )
         {
             picker.SetFlags( item->GetFlags() );
-            m_BlockLocate.m_ItemsSelection.PushItem( picker );
+            m_BlockLocate.GetItems().PushItem( picker );
         }
     }
 }
@@ -839,7 +842,7 @@ int SCH_SCREEN::UpdatePickList()
 {
     ITEM_PICKER picker;
     EDA_RECT area;
-    area.SetOrigin( m_BlockLocate.GetOrigin());
+    area.SetOrigin( m_BlockLocate.GetOrigin() );
     area.SetSize( m_BlockLocate.GetSize() );
     area.Normalize();
 

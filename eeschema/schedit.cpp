@@ -121,7 +121,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_CUT:
-        if( screen->m_BlockLocate.m_Command != BLOCK_MOVE )
+        if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
             break;
 
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
@@ -437,7 +437,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 
     if( screen->IsBlockActive() )
     {
-        m_canvas->SetCursor( wxCursor( m_canvas->GetDefaultCursor() ) );
+        m_canvas->SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
         screen->ClearBlockCommand();
 
         // Stop the current command (if any) but keep the current tool
@@ -717,7 +717,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     if( item == NULL )
     {
         // Allows block rotate operation on hot key.
-        if( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )
+        if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         {
             HandleBlockEndByPopUp( BLOCK_ROTATE, &dc );
             return;
@@ -909,7 +909,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
         // The easiest way to handle a drag component or sheet command
         // is to simulate a block drag command
-        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
+        if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
         {
             if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
                 break;
@@ -941,7 +941,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
     if( item == NULL )
     {
         // Allows block rotate operation on hot key.
-        if( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )
+        if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         {
             if( aEvent.GetId() == ID_SCH_MIRROR_X )
                 HandleBlockEndByPopUp( BLOCK_MIRROR_X, &dc );

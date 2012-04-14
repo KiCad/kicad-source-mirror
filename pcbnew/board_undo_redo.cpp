@@ -557,10 +557,9 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
 /**
  * Function GetBoardFromUndoList
- *  Undo the last edition:
- *  - Save the current board state in Redo list
- *  - Get an old version of the board state from Undo list
- *  @return none
+ * Undo the last edition:
+ *     - Save the current board state in Redo list
+ *     - Get an old version of the board state from Undo list
  */
 void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
 {

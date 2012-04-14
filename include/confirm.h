@@ -8,6 +8,21 @@
 #ifndef __INCLUDE__CONFIRM_H__
 #define __INCLUDE__CONFIRM_H__ 1
 
+/**
+ * Function DisplayExitDialog
+ * displays a dialog with 3 buttons:
+ * Save and Exit
+ * Cancel
+ * Exit without save
+ *
+ * @param aParent = the parent window
+ * @param aMessage = the main message to put in dialog
+ * If empty, the standard message will be shown:
+ * Save the changes before closing?
+ * @return wxID_YES, wxID_CANCEL, wxID_NO.
+ */
+int DisplayExitDialog( wxWindow* aParent, const wxString& aMessage );
+
 
 /**
  * Function DisplayError

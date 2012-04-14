@@ -44,6 +44,8 @@
 #include <drag.h>
 
 
+static void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                           const wxPoint& aPosition, bool aErase );
 static void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC );
 
 

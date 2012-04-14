@@ -375,9 +375,14 @@ bool PS_PLOTTER::start_plot( FILE* fout )
     // The coordinates of the lower left corner of the boundary
     // box need to be "rounded down", but the coordinates of its
     // upper right corner need to be "rounded up" instead.
+    wxSize  psPaperSize = paper_size;
+
+    if( !pageInfo.IsPortrait() )
+        psPaperSize.Set( paper_size.y, paper_size.x );
+
     fprintf( output_file, "%%%%BoundingBox: 0 0 %d %d\n",
-            (int) ceil( paper_size.y * CONV_SCALE ),
-            (int) ceil( paper_size.x * CONV_SCALE ) );
+            (int) ceil( psPaperSize.x * CONV_SCALE ),
+            (int) ceil( psPaperSize.y * CONV_SCALE ) );
 
     // Specify the size of the sheet and the name associated with that size.
     // (If the "User size" option has been selected for the sheet size,
@@ -393,20 +398,26 @@ bool PS_PLOTTER::start_plot( FILE* fout )
     // the order in which they are specified is not wrong!)
     // Also note pageSize is given in mils, not in internal units and must be
     // converted to internal units.
-    wxSize pageSize = pageInfo.GetSizeMils();
+    wxSize psPageSize = pageInfo.GetSizeMils();
+
+    if( !pageInfo.IsPortrait() )
+        psPageSize.Set( pageInfo.GetHeightMils(), pageInfo.GetWidthMils() );
 
     if( pageInfo.IsCustom() )
         fprintf( output_file, "%%%%DocumentMedia: Custom %d %d 0 () ()\n",
-                 wxRound( pageSize.y * 10 * CONV_SCALE ),
-                 wxRound( pageSize.x * 10 * CONV_SCALE ) );
+                 wxRound( psPageSize.x * 10 * CONV_SCALE ),
+                 wxRound( psPageSize.y * 10 * CONV_SCALE ) );
 
     else  // a standard paper size
         fprintf( output_file, "%%%%DocumentMedia: %s %d %d 0 () ()\n",
                  TO_UTF8( pageInfo.GetType() ),
-                 wxRound( pageSize.y * 10 * CONV_SCALE ),
-                 wxRound( pageSize.x * 10 * CONV_SCALE ) );
+                 wxRound( psPageSize.x * 10 * CONV_SCALE ),
+                 wxRound( psPageSize.y * 10 * CONV_SCALE ) );
 
-    fprintf( output_file, "%%%%Orientation: Landscape\n" );
+    if( pageInfo.IsPortrait() )
+        fprintf( output_file, "%%%%Orientation: Portrait\n" );
+    else
+        fprintf( output_file, "%%%%Orientation: Landscape\n" );
 
     fprintf( output_file, "%%%%EndComments\n" );
 
@@ -426,7 +437,8 @@ bool PS_PLOTTER::start_plot( FILE* fout )
     // (If support for creating postscript files with a portrait orientation
     // is ever provided, determine whether it would be necessary to provide
     // an "else" command and then an appropriate "sprintf" command here.)
-    fprintf( output_file, "%d 0 translate 90 rotate\n", paper_size.y );
+    if( !pageInfo.IsPortrait() )
+        fprintf( output_file, "%d 0 translate 90 rotate\n", paper_size.y );
 
     // Apply the scale adjustments
     if( plot_scale_adjX != 1.0 || plot_scale_adjY != 1.0 )
@@ -604,3 +616,22 @@ void PS_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
     cornerList.push_back( cornerList[0] );
     PlotPoly( cornerList, ( aTrace_Mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
 }
+
+
+void PS_PLOTTER::user_to_device_coordinates( wxPoint& pos )
+{
+    if( pageInfo.IsPortrait() )
+    {
+        pos.y = (int) ( ( paper_size.y - ( pos.y - plot_offset.y )
+                        * plot_scale ) * device_scale );
+
+        if( plotMirror )
+            pos.x = (int) ( ( paper_size.x - ( pos.x - plot_offset.x )
+                          * plot_scale ) * device_scale );
+        else
+            pos.x = (int) ( (pos.x - plot_offset.x) * plot_scale * device_scale );
+    }
+    else
+        PLOTTER::user_to_device_coordinates( pos );
+}
+

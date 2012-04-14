@@ -157,16 +157,41 @@ namespace DSN {
 
 const KICAD_T SPECCTRA_DB::scanPADs[] = { PCB_PAD_T, EOT };
 
+// "specctra reported units" are what we tell the external router that our
+// exported lengths are in.
+
 
 /**
  * Function scale
- * converts a distance from KiCad units to our reported specctra dsn units:
- * 1/10000 inches (deci-mils) to mils.  So the factor of 10 comes in.
+ * converts a distance from PCBNEW internal units to the reported specctra dsn units
+ * in floating point format.
  */
 static inline double scale( int kicadDist )
 {
+#if defined(USE_PCBNEW_NANOMETRES)
+
+    // nanometers to um
+    return kicadDist / 1000.0;
+
+    // nanometers to mils
+    // return kicadDist/25400.0;
+
+#else
+    // deci-mils to mils.
     return kicadDist/10.0;
+#endif
 }
+
+/// Convert integer internal units to float um
+static inline double IU2um( int kicadDist )
+{
+#if defined(USE_PCBNEW_NANOMETRES)
+    return kicadDist / 1000.0;
+#else
+    return kicadDist * 25.4e-1;
+#endif
+}
+
 
 static inline double mapX( int x )
 {
@@ -367,8 +392,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                 circle->SetVertex( dsnOffset );
             }
 
-            snprintf( name, sizeof(name), "Round%sPad_%.6g_mil",
-                     uniqifier.c_str(), scale(aPad->GetSize().x) );
+            snprintf( name, sizeof(name), "Round%sPad_%.6g_um",
+                     uniqifier.c_str(), IU2um( aPad->GetSize().x ) );
+
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );
@@ -398,8 +424,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                 rect->SetCorners( lowerLeft, upperRight );
             }
 
-            snprintf( name, sizeof(name),  "Rect%sPad_%.6gx%.6g_mil",
-                     uniqifier.c_str(), scale(aPad->GetSize().x), scale(aPad->GetSize().y)  );
+            snprintf( name, sizeof(name),  "Rect%sPad_%.6gx%.6g_um",
+                     uniqifier.c_str(),
+                     IU2um( aPad->GetSize().x ),
+                     IU2um( aPad->GetSize().y ) );
+
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );
@@ -446,8 +475,10 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                 path->aperture_width = 2.0 * radius;
             }
 
-            snprintf( name, sizeof(name),  "Oval%sPad_%.6gx%.6g_mil",
-                     uniqifier.c_str(), scale(aPad->GetSize().x), scale(aPad->GetSize().y)  );
+            snprintf( name, sizeof(name),  "Oval%sPad_%.6gx%.6g_um",
+                     uniqifier.c_str(),
+                     IU2um( aPad->GetSize().x ),
+                     IU2um( aPad->GetSize().y ) );
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );
@@ -493,12 +524,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             D(printf( "m_DeltaSize: %d,%d\n", aPad->GetDelta().x, aPad->GetDelta().y );)
 
             // this string _must_ be unique for a given physical shape
-            snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_mil",
-                     uniqifier.c_str(), scale(aPad->GetSize().x), scale(aPad->GetSize().y),
+            snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_um",
+                     uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
                      aPad->GetDelta().x < 0 ? 'n' : 'p',
-                     abs( scale( aPad->GetDelta().x )),
+                     abs( IU2um( aPad->GetDelta().x )),
                      aPad->GetDelta().y < 0 ? 'n' : 'p',
-                     abs( scale( aPad->GetDelta().y ))
+                     abs( IU2um( aPad->GetDelta().y ) )
                      );
             name[ sizeof(name)-1 ] = 0;
 
@@ -708,10 +739,10 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
         circle->SetLayerId( layerIds[layer].c_str() );
     }
 
-    snprintf( name, sizeof(name),  "Via[%d-%d]_%.6g:%.6g_mil",
+    snprintf( name, sizeof(name),  "Via[%d-%d]_%.6g:%.6g_um",
              aTopLayer, aBotLayer, dsnDiameter,
              // encode the drill value into the name for later import
-             scale( aDrillDiameter )
+             IU2um( aDrillDiameter )
              );
 
     name[ sizeof(name)-1 ] = 0;
@@ -1004,6 +1035,18 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
     //-----<unit_descriptor> & <resolution_descriptor>--------------------
     {
+
+#if defined(USE_PCBNEW_NANOMETRES)
+        // tell freerouter to use "tenths of micrometers",
+        // which is 100 nm resolution.  Possibly more resolution is possible
+        // in freerouter, but it would need testing.
+
+        pcb->unit->units = T_um;
+        pcb->resolution->units = T_um;
+        pcb->resolution->value = 10;        // tenths of a um
+        // pcb->resolution->value = 1000;   // "thousandths of a um" (i.e. "nm")
+
+#else
         pcb->unit->units = T_mil;
         pcb->resolution->units = T_mil;
 
@@ -1013,8 +1056,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         // resolution precisely at 1/10th for now.  For more on this, see:
         // http://www.freerouting.net/usren/viewtopic.php?f=3&t=354
         pcb->resolution->value = 10;
+#endif
     }
-
 
     //-----<boundary_descriptor>------------------------------------------
     {

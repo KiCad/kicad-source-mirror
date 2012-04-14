@@ -171,7 +171,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
                             infile->GetStream()->GetSize(), zippedsize );
                 PrintMsg( msg );
                 delete infile;
-             }
+            }
             else
             {
                 PrintMsg( _(" >>Error\n") );

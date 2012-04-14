@@ -69,6 +69,8 @@ MODULE::MODULE( BOARD* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     m_ZoneConnection = UNDEFINED_CONNECTION; // Use zone setting by default
+    m_ThermalWidth = 0; // Use zone setting by default
+    m_ThermalGap = 0; // Use zone setting by default
 
     m_Reference = new TEXTE_MODULE( this, TEXT_is_REFERENCE );
 
@@ -103,6 +105,8 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_LocalSolderPasteMargin = aModule.m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio = aModule.m_LocalSolderPasteMarginRatio;
     m_ZoneConnection = aModule.m_ZoneConnection;
+    m_ThermalWidth = aModule.m_ThermalWidth;
+    m_ThermalGap = aModule.m_ThermalGap;
 
     // Copy reference and value.
     m_Reference = new TEXTE_MODULE( *aModule.m_Reference );
@@ -219,6 +223,8 @@ void MODULE::Copy( MODULE* aModule )
     m_LocalSolderPasteMargin        = aModule->m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio   = aModule->m_LocalSolderPasteMarginRatio;
     m_ZoneConnection                = aModule->m_ZoneConnection;
+    m_ThermalWidth                  = aModule->m_ThermalWidth;
+    m_ThermalGap                    = aModule->m_ThermalGap;
 
     // Copy reference and value.
     m_Reference->Copy( aModule->m_Reference );
@@ -502,27 +508,27 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-bool MODULE::HitTest( const wxPoint& aRefPos )
+bool MODULE::HitTest( const wxPoint& aPosition )
 {
-    if( m_BoundaryBox.Contains( aRefPos ) )
+    if( m_BoundaryBox.Contains( aPosition ) )
         return true;
 
     return false;
 }
 
 
-bool MODULE::HitTest( EDA_RECT& aRefArea )
+bool MODULE::HitTest( const EDA_RECT& aRect ) const
 {
-    if( m_BoundaryBox.GetX() < aRefArea.GetX() )
+    if( m_BoundaryBox.GetX() < aRect.GetX() )
         return false;
 
-    if( m_BoundaryBox.GetY() < aRefArea.GetY() )
+    if( m_BoundaryBox.GetY() < aRect.GetY() )
         return false;
 
-    if( m_BoundaryBox.GetRight() > aRefArea.GetRight() )
+    if( m_BoundaryBox.GetRight() > aRect.GetRight() )
         return false;
 
-    if( m_BoundaryBox.GetBottom() > aRefArea.GetBottom() )
+    if( m_BoundaryBox.GetBottom() > aRect.GetBottom() )
         return false;
 
     return true;
@@ -651,9 +657,128 @@ wxString MODULE::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* MODULE::doClone() const
+EDA_ITEM* MODULE::Clone() const
 {
     return new MODULE( *this );
+}
+
+
+void MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(module %s" , aFormatter->Quotew( m_LibRef ).c_str() );
+
+    if( IsLocked() )
+        aFormatter->Print( aNestLevel, " locked" );
+
+    if( IsPlaced() )
+        aFormatter->Print( aNestLevel, " placed" );
+
+    aFormatter->Print( 0, " (tedit %lX) (tstamp %lX)\n",
+                       GetLastEditTime(), GetTimeStamp() );
+
+    aFormatter->Print( aNestLevel+1, "(at %s", FMT_IU( m_Pos ).c_str() );
+
+    if( m_Orient != 0.0 )
+        aFormatter->Print( 0, " %s", FMT_ANGLE( m_Orient ).c_str() );
+
+    aFormatter->Print( 0, ")\n" );
+
+    if( !m_Doc.IsEmpty() )
+        aFormatter->Print( aNestLevel+1, "(descr %s)\n", aFormatter->Quotew( m_Doc ).c_str() );
+
+    if( !m_KeyWord.IsEmpty() )
+        aFormatter->Print( aNestLevel+1, "(tags %s)\n", aFormatter->Quotew( m_KeyWord ).c_str() );
+
+    if( !m_Path.IsEmpty() )
+        aFormatter->Print( aNestLevel+1, "(path %s)\n", aFormatter->Quotew( m_Path ).c_str() );
+
+    if( m_CntRot90 != 0 )
+        aFormatter->Print( aNestLevel+1, "(autoplace_cost90 %d)\n", m_CntRot90 );
+
+    if( m_CntRot180 != 0 )
+        aFormatter->Print( aNestLevel+1, "(autoplace_cost180 %d)\n", m_CntRot180 );
+
+    if( m_LocalSolderMaskMargin != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
+                           FMT_IU( m_LocalSolderMaskMargin ).c_str() );
+
+    if( m_LocalSolderPasteMargin != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
+                           FMT_IU( m_LocalSolderPasteMargin ).c_str() );
+
+    if( m_LocalSolderPasteMarginRatio != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder_paste_ratio %g)\n",
+                           m_LocalSolderPasteMarginRatio );
+
+    if( m_LocalClearance != 0 )
+        aFormatter->Print( aNestLevel+1, "(clearance %s)\n",
+                           FMT_IU( m_LocalClearance ).c_str() );
+
+    if( m_ZoneConnection != UNDEFINED_CONNECTION )
+        aFormatter->Print( aNestLevel+1, "(zone_connect %d)\n", m_ZoneConnection );
+
+    if( m_ThermalWidth != 0 )
+        aFormatter->Print( aNestLevel+1, "(thermal_width %s)\n",
+                           FMT_IU( m_ThermalWidth ).c_str() );
+
+    if( m_ThermalGap != 0 )
+        aFormatter->Print( aNestLevel+1, "(thermal_gap %s)\n",
+                           FMT_IU( m_ThermalGap ).c_str() );
+
+    // Attributes
+    if( m_Attributs != MOD_DEFAULT )
+    {
+        aFormatter->Print( aNestLevel+1, "(attr " );
+
+        if( m_Attributs & MOD_CMS )
+            aFormatter->Print( 0, " smd" );
+
+        if( m_Attributs & MOD_VIRTUAL )
+            aFormatter->Print( 0, " virtual" );
+
+        aFormatter->Print( 0, ")\n" );
+    }
+
+    m_Reference->Format( aFormatter, aNestLevel+1, aControlBits );
+    m_Value->Format( aFormatter, aNestLevel+1, aControlBits );
+
+    // Save drawing elements.
+    for( BOARD_ITEM* gr = m_Drawings;  gr;  gr = gr->Next() )
+        gr->Format( aFormatter, aNestLevel+1, aControlBits );
+
+    // Save pads.
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+        pad->Format( aFormatter, aNestLevel+1, aControlBits );
+
+    // Save 3D info.
+    for( S3D_MASTER* t3D = m_3D_Drawings;  t3D;  t3D = t3D->Next() )
+    {
+        if( !t3D->m_Shape3DName.IsEmpty() )
+        {
+            aFormatter->Print( aNestLevel+1, "(3d_shape %s\n",
+                               aFormatter->Quotew( t3D->m_Shape3DName ).c_str() );
+
+            aFormatter->Print( aNestLevel+2, "(at (xyz %.16g %.16g %.16g))\n",
+                               t3D->m_MatPosition.x,
+                               t3D->m_MatPosition.y,
+                               t3D->m_MatPosition.z );
+
+            aFormatter->Print( aNestLevel+2, "(scale (xyz %.16g %.16g %.16g))\n",
+                               t3D->m_MatScale.x,
+                               t3D->m_MatScale.y,
+                               t3D->m_MatScale.z );
+
+            aFormatter->Print( aNestLevel+2, "(rotate (xyz %.16g %.16g %.16g))\n",
+                               t3D->m_MatRotation.x,
+                               t3D->m_MatRotation.y,
+                               t3D->m_MatRotation.z );
+
+            aFormatter->Print( aNestLevel+1, ")\n" );
+        }
+    }
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 

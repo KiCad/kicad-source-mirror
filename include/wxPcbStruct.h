@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -133,8 +132,8 @@ protected:
 
     /**
      * Function syncLayerWidgetLayer
-     * updates the currently "selected" layer within the PCB_LAYER_WIDGET.
-     * The currently active layer is defined by the return value of getActiveLayer().
+     * updates the currently layer "selection" within the PCB_LAYER_WIDGET.
+     * The currently selected layer is defined by the return value of getActiveLayer().
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
@@ -149,6 +148,14 @@ protected:
      * immediately after loading a BOARD which may have state information in it.
      */
     void syncRenderStates();
+
+    /**
+     * Function syncLayerVisibilities
+     * updates each "Layer" checkbox in the layer widget according
+     * to each layer's current visibility determined by IsLayerVisible(), and is
+     * helpful immediately after loading a BOARD which may have state information in it.
+     */
+    void syncLayerVisibilities();
 
     virtual void unitsChangeRefresh();
 
@@ -723,7 +730,7 @@ public:
     /**
      * Function DoGenFootprintsPositionFile
      * Creates an ascii footprint position file
-     * @param aFullFilename = the full file name of the file to create
+     * @param aFullFileName = the full file name of the file to create
      * @param aUnitsMM = false to use inches, true to use mm in coordinates
      * @param aForceSmdItems = true to force all footprints with smd pads in list
      *                       = false to put only footprints with option "INSERT" in list

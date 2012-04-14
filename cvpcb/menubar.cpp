@@ -30,6 +30,7 @@
 #include <appl_wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
+#include <menus_helpers.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>

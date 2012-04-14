@@ -10,8 +10,6 @@ class wxBitmap;     // only to define wxBitmap
 #include <config.h>
 
 
-#if defined(USE_PNG_BITMAPS)
-
 #define VTOOLBAR_WIDTH  29
 #define TOOL_SIZE       26
 
@@ -27,17 +25,6 @@ struct BITMAP_OPAQUE
 // declared as single element _array_, so its name assigns to pointer
 #define EXTERN_BITMAP(x) extern const BITMAP_OPAQUE x[1];
 
-#else   // XPM
-
-#define VTOOLBAR_WIDTH  26
-#define TOOL_SIZE       23
-
-// temporary during migration to KiBitmap() and KiBitmapNew().
-typedef const char*     BITMAP_OPAQUE;
-
-#define EXTERN_BITMAP(x) extern const char* x[];
-
-#endif
 
 /// a BITMAP_DEF is really a const pointer to an opaque
 /// structure.  So you should never need to use 'const' with it.
@@ -111,7 +98,6 @@ EXTERN_BITMAP( book_xpm )
 EXTERN_BITMAP( break_bus_xpm )
 EXTERN_BITMAP( break_line_xpm )
 EXTERN_BITMAP( browse_files_xpm )
-EXTERN_BITMAP( cancel_tool_xpm )
 EXTERN_BITMAP( cancel_xpm )
 EXTERN_BITMAP( change_entry_orient_xpm )
 EXTERN_BITMAP( checked_ok_xpm )
@@ -131,7 +117,6 @@ EXTERN_BITMAP( dashedline_xpm )
 EXTERN_BITMAP( datasheet_xpm )
 EXTERN_BITMAP( delete_arc_xpm )
 EXTERN_BITMAP( delete_association_xpm )
-EXTERN_BITMAP( delete_body_xpm )
 EXTERN_BITMAP( delete_bus_xpm )
 EXTERN_BITMAP( delete_circle_xpm )
 EXTERN_BITMAP( delete_connection_xpm )
@@ -152,6 +137,7 @@ EXTERN_BITMAP( delete_sheet_xpm )
 EXTERN_BITMAP( delete_text_xpm )
 EXTERN_BITMAP( delete_track_xpm )
 EXTERN_BITMAP( delete_xpm )
+EXTERN_BITMAP( dialog_warning_xpm )
 EXTERN_BITMAP( directory_xpm )
 EXTERN_BITMAP( display_options_xpm )
 EXTERN_BITMAP( down_xpm )
@@ -293,6 +279,7 @@ EXTERN_BITMAP( mod_ratsnest_xpm )
 EXTERN_BITMAP( module_check_xpm )
 EXTERN_BITMAP( module_edit_xpm )
 EXTERN_BITMAP( module_filtered_list_xpm )
+EXTERN_BITMAP( module_pin_filtered_list_xpm )
 EXTERN_BITMAP( module_full_list_xpm )
 EXTERN_BITMAP( module_options_xpm )
 EXTERN_BITMAP( module_ratsnest_xpm )
@@ -332,7 +319,6 @@ EXTERN_BITMAP( new_cvpcb_xpm )
 EXTERN_BITMAP( new_footprint_xpm )
 EXTERN_BITMAP( new_gerb_xpm )
 EXTERN_BITMAP( new_library_xpm )
-EXTERN_BITMAP( new_module_xpm )
 EXTERN_BITMAP( new_pcb_xpm )
 EXTERN_BITMAP( new_project_xpm )
 EXTERN_BITMAP( new_python_xpm )

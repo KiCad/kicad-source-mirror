@@ -29,7 +29,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     if( !fn.FileExists() )
     {
         fn = GetScreen()->GetFileName();
-        fn.SetExt( NetExtBuffer );
+        fn.SetExt( NetlistFileExtension );
         lastNetlistName = fn.GetFullPath();
     }
 
@@ -102,7 +102,7 @@ void DIALOG_NETLIST::OnOpenNelistClick( wxCommandEvent& event )
 void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 {
     wxFileName fn = m_NetlistFilenameCtrl->GetValue();
-    fn.SetExt( NetCmpExtBuffer );
+    fn.SetExt( ComponentFileExtension );
 
     m_Parent->ReadPcbNetlist( m_NetlistFilenameCtrl->GetValue(),
                               fn.GetFullPath(), m_MessageWindow,

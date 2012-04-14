@@ -36,9 +36,10 @@
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
-#include <protos.h>
+//#include <protos.h>
 #include <eeschema_id.h>
 #include <hotkeys.h>
+#include <menus_helpers.h>
 
 #include <help_common_strings.h>
 
@@ -210,7 +211,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AppendSeparator();
     AddMenuItem( editMenu, ID_SCHEMATIC_DELETE_ITEM_BUTT,
                  _( "&Delete" ), HELP_DELETE_ITEMS,
-                 KiBitmap( delete_body_xpm ) );
+                 KiBitmap( delete_xpm ) );
 
     // Find
     editMenu->AppendSeparator();

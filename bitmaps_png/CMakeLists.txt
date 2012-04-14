@@ -158,7 +158,6 @@ set( BMAPS_MID
     break_bus
     break_line
     browse_files
-    cancel_tool
     cancel
     change_entry_orient
     create_cmp_file
@@ -176,7 +175,6 @@ set( BMAPS_MID
     cvpcb
     dashline
     datasheet
-    delete_body
     delete_arc
     delete_association
     delete_bus
@@ -332,6 +330,7 @@ set( BMAPS_MID
     module_filtered_list
     module_full_list
     module_options
+    module_pin_filtered_list
     module_ratsnest
     module
     modview_icon
@@ -367,7 +366,6 @@ set( BMAPS_MID
     new_cvpcb
     new_footprint
     new_library
-    new_module
     new_pcb
     new_project
     new_sch
@@ -510,6 +508,7 @@ set( BMAPS_MID
 
 # 48 x 48 for now
 set( BMAPS_BIG
+    dialog_warning
     icon_3d
     icon_cvpcb
     icon_eeschema

@@ -184,13 +184,7 @@ EDA_RECT TEXTE_MODULE::GetTextRect( void ) const
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPos A wxPoint to test
- * @return true if a hit, else false
- */
-bool TEXTE_MODULE::HitTest( const wxPoint& aRefPos )
+bool TEXTE_MODULE::HitTest( const wxPoint& aPosition )
 {
     wxPoint  rel_pos;
     EDA_RECT area = GetTextRect();
@@ -199,7 +193,7 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aRefPos )
      * to test if refPos is within area (which is relative to an horizontal
      * text)
      */
-    rel_pos = aRefPos;
+    rel_pos = aPosition;
     RotatePoint( &rel_pos, m_Pos, -GetDrawRotation() );
 
     if( area.Contains( rel_pos ) )
@@ -315,7 +309,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
     if( m_Mirror )
         size.x = -size.x;
 
-    DrawGraphicText( panel, DC, pos, (enum EDA_Colors) color, m_Text, orient,
+    DrawGraphicText( panel, DC, pos, (enum EDA_COLOR_T) color, m_Text, orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
@@ -480,9 +474,29 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* TEXTE_MODULE::doClone() const
+EDA_ITEM* TEXTE_MODULE::Clone() const
 {
     return new TEXTE_MODULE( *this );
+}
+
+
+void TEXTE_MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    MODULE* parent = (MODULE*) GetParent();
+    double  orient = GetOrientation();
+
+    // Due to the Pcbnew history, m_Orient is saved in screen value
+    // but it is handled as relative to its parent footprint
+    if( parent )
+        orient += parent->GetOrientation();
+
+    aFormatter->Print( aNestLevel, "(module_text %d (at %s %0.1f)%s\n", m_Type,
+                       FMT_IU( m_Pos0 ).c_str(), orient, (m_NoShow) ? "hide" : "" );
+
+    EDA_TEXT::Format( aFormatter, aNestLevel+1, aControlBits );
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 

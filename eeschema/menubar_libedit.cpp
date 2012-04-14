@@ -36,6 +36,7 @@
 #include <hotkeys.h>
 
 #include <help_common_strings.h>
+#include <menus_helpers.h>
 
 /**
  * @brief (Re)Create the menubar for the component editor frame
@@ -130,7 +131,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  ID_LIBEDIT_DELETE_ITEM_BUTT,
                  _( "&Delete" ),
                  HELP_DELETE_ITEMS,
-                 KiBitmap( delete_body_xpm ) );
+                 KiBitmap( delete_xpm ) );
 
     // Menu View:
     wxMenu* viewMenu = new wxMenu;

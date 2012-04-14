@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_plot_base__
-#define __dialog_plot_base__
+#ifndef __DIALOG_PLOT_BASE_H__
+#define __DIALOG_PLOT_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -30,7 +32,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PLOT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PLOT_BASE : public wxDialog 
+class DIALOG_PLOT_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -40,7 +42,7 @@ class DIALOG_PLOT_BASE : public wxDialog
 			ID_ALLOW_PRINT_PAD_ON_SILKSCREEN = 1000,
 			ID_PRINT_REF,
 			ID_MIROR_OPT,
-			ID_CREATE_DRILL_FILE,
+			ID_CREATE_DRILL_FILE
 		};
 		
 		wxBoxSizer* m_MainSizer;
@@ -107,9 +109,9 @@ class DIALOG_PLOT_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 474,747 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PLOT_BASE();
 	
 };
 
-#endif //__dialog_plot_base__
+#endif //__DIALOG_PLOT_BASE_H__

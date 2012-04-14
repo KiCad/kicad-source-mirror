@@ -1,7 +1,3 @@
-#ifdef USE_PNG_BITMAPS
 icon_eeschema ICON "../bitmaps_png/icons/icon_eeschema.ico"
-#else
-icon_eeschema ICON "../bitmaps_xpm/icons/icon_eeschema.ico"
-#endif
 
 #include "wx/msw/wx.rc"

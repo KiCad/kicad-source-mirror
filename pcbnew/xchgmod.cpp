@@ -16,6 +16,7 @@
 #include <pcbnew.h>
 #include <dialog_exchange_modules_base.h>
 #include <ar_protos.h>
+#include <wildcards_and_files_ext.h>
 
 static char*  quiet_gcc_4_4_3;      // GCC 4.4.3 and next ..
 
@@ -160,7 +161,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
 
     /* Build CMP file name by changing the extension of NetList filename */
     fn = m_Parent->GetScreen()->GetFileName();
-    fn.SetExt( NetCmpExtBuffer );
+    fn.SetExt( ComponentFileExtension );
 
     FichCmp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
 
@@ -598,8 +599,8 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 
     /* Calculation file name by changing the extension name to NetList */
     fn = GetScreen()->GetFileName();
-    fn.SetExt( NetCmpExtBuffer );
-    wildcard = _( "Component files (." ) + NetCmpExtBuffer + wxT( ")|*." ) + NetCmpExtBuffer;
+    fn.SetExt( ComponentFileExtension );
+    wildcard = wxGetTranslation( ComponentFileWildcard );
 
     wxFileDialog dlg( this, _( "Save Component Files" ), wxGetCwd(),
                       fn.GetFullName(), wildcard,

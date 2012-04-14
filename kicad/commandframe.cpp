@@ -7,6 +7,7 @@
 #include <macros.h>
 
 #include <kicad.h>
+#include <menus_helpers.h>
 
 
 RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :

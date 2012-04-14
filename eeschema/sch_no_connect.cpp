@@ -54,7 +54,7 @@ SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
 }
 
 
-EDA_ITEM* SCH_NO_CONNECT::doClone() const
+EDA_ITEM* SCH_NO_CONNECT::Clone() const
 {
     return new SCH_NO_CONNECT( *this );
 }
@@ -146,7 +146,7 @@ void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 }
 
 
-void SCH_NO_CONNECT::Mirror_X( int aXaxis_position )
+void SCH_NO_CONNECT::MirrorX( int aXaxis_position )
 {
     m_pos.y -= aXaxis_position;
     NEGATE(  m_pos.y );
@@ -154,7 +154,7 @@ void SCH_NO_CONNECT::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_NO_CONNECT::Mirror_Y( int aYaxis_position )
+void SCH_NO_CONNECT::MirrorY( int aYaxis_position )
 {
     m_pos.x -= aYaxis_position;
     NEGATE(  m_pos.x );
@@ -162,9 +162,9 @@ void SCH_NO_CONNECT::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_NO_CONNECT::Rotate( wxPoint rotationPoint )
+void SCH_NO_CONNECT::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_pos, rotationPoint, 900 );
+    RotatePoint( &m_pos, aPosition, 900 );
 }
 
 
@@ -207,11 +207,11 @@ bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
     return m_pos == aPosition;
 }
 
-bool SCH_NO_CONNECT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int delta = ( ( m_size.x + g_DrawDefaultLineThickness ) / 2 ) + aAccuracy;
 
-    wxPoint dist = aPoint - m_pos;
+    wxPoint dist = aPosition - m_pos;
 
     if( ( ABS( dist.x ) <= delta ) && ( ABS( dist.y ) <= delta ) )
         return true;
@@ -220,7 +220,7 @@ bool SCH_NO_CONNECT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_NO_CONNECT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_NO_CONNECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT rect = aRect;
 
@@ -233,7 +233,7 @@ bool SCH_NO_CONNECT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAcc
 }
 
 
-void SCH_NO_CONNECT::doPlot( PLOTTER* aPlotter )
+void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
 {
     int delta = m_size.x / 2;
     int pX, pY;

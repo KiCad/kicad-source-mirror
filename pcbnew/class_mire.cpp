@@ -162,24 +162,18 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wx
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
-bool PCB_TARGET::HitTest( const wxPoint& refPos )
+bool PCB_TARGET::HitTest( const wxPoint& aPosition )
 {
-    int dX    = refPos.x - m_Pos.x;
-    int dY    = refPos.y - m_Pos.y;
+    int dX = aPosition.x - m_Pos.x;
+    int dY = aPosition.y - m_Pos.y;
     int radius = m_Size / 2;
     return abs( dX ) <= radius && abs( dY ) <= radius;
 }
 
 
-bool PCB_TARGET::HitTest( EDA_RECT& refArea )
+bool PCB_TARGET::HitTest( const EDA_RECT& aRect ) const
 {
-    if( refArea.Contains( m_Pos ) )
+    if( aRect.Contains( m_Pos ) )
         return true;
 
     return false;
@@ -195,7 +189,7 @@ void PCB_TARGET::Rotate(const wxPoint& aRotCentre, double aAngle)
 void PCB_TARGET::Flip(const wxPoint& aCentre )
 {
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
-    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 }
 
 
@@ -225,7 +219,27 @@ wxString PCB_TARGET::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* PCB_TARGET::doClone() const
+EDA_ITEM* PCB_TARGET::Clone() const
 {
     return new PCB_TARGET( *this );
+}
+
+
+void PCB_TARGET::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(target %c (pos (xy %s)) (size %s)",
+                       ( m_Shape ) ? 'x' : '+',
+                       FMT_IU( m_Pos ).c_str(),
+                       FMT_IU( m_Size ).c_str() );
+
+    if( m_Width != 0 )
+        aFormatter->Print( aNestLevel, " (width %s)", FMT_IU( m_Width ).c_str() );
+
+    aFormatter->Print( aNestLevel, " (layer %d)", GetLayer() );
+
+    if( GetTimeStamp() )
+        aFormatter->Print( aNestLevel, " (tstamp %lX)", GetTimeStamp() );
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }

@@ -377,6 +377,26 @@ public:
     }
 
     /**
+     * Function SortByValueAndRef
+     * sorts the list of references by value.
+     * <p>
+     * Components are sorted in the following order:
+     * <ul>
+     * <li>Value of component.</li>
+     * <li>Numeric value of reference designator.</li>
+     * <li>Unit number when component has multiple parts.</li>
+     * <li>Sheet number.</li>
+     * <li>X coordinate position.</li>
+     * <li>Y coordinate position.</li>
+     * </ul>
+     * </p>
+     */
+    void SortByValueAndRef()
+    {
+        sort( componentFlatList.begin(), componentFlatList.end(), sortByValueAndRef );
+    }
+
+    /**
      * Function SortByReferenceOnly
      * sorts the list of references by reference.
      * <p>
@@ -396,13 +416,15 @@ public:
      * Function SortByValueOnly
      * sort the list of references by value.
      * <p>
-     * Components are sorted in the following order:
+     * Components are grouped by type and are sorted in the following order:
      * <ul>
      * <li>Value of component.</li>
      * <li>Numeric value of reference designator.</li>
      * <li>Unit number when component has multiple parts.</li>
      * </ul>
      * </p>
+     * groups are made by the first letter of reference
+     * or the 2 first letters when existing
      */
     void SortByValueOnly()
     {
@@ -453,6 +475,8 @@ private:
     */
 
     static bool sortByRefAndValue( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
+
+    static bool sortByValueAndRef( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
     static bool sortByXPosition( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 

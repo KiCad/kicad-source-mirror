@@ -98,7 +98,7 @@ SCH_SHEET::~SCH_SHEET()
 }
 
 
-EDA_ITEM* SCH_SHEET::doClone() const
+EDA_ITEM* SCH_SHEET::Clone() const
 {
     return new SCH_SHEET( *this );
 }
@@ -514,7 +514,7 @@ SCH_SHEET_PIN* SCH_SHEET::GetPin( const wxPoint& aPosition )
 {
     BOOST_FOREACH( SCH_SHEET_PIN& pin, m_pins )
     {
-        if( pin.HitTest( aPosition ) )
+        if( pin.HitTest( aPosition, 0 ) )
             return &pin;
     }
 
@@ -602,7 +602,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Text = wxT( "Sheet: " ) + m_name;
     DrawGraphicText( aPanel, aDC, pos_sheetname,
-                     (EDA_Colors) txtcolor, Text, name_orientation,
+                     (EDA_COLOR_T) txtcolor, Text, name_orientation,
                      wxSize( m_sheetNameSize, m_sheetNameSize ),
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, lineWidth,
                      false, false );
@@ -615,7 +615,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Text = wxT( "File: " ) + m_fileName;
     DrawGraphicText( aPanel, aDC, pos_filename,
-                     (EDA_Colors) txtcolor, Text, name_orientation,
+                     (EDA_COLOR_T) txtcolor, Text, name_orientation,
                      wxSize( m_fileNameSize, m_fileNameSize ),
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, lineWidth,
                      false, false );
@@ -837,9 +837,9 @@ void SCH_SHEET::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-void SCH_SHEET::Rotate(wxPoint rotationPoint)
+void SCH_SHEET::Rotate(wxPoint aPosition)
 {
-    RotatePoint( &m_pos, rotationPoint, 900 );
+    RotatePoint( &m_pos, aPosition, 900 );
     RotatePoint( &m_size.x, &m_size.y, 900 );
 
     if( m_size.x < 0 )
@@ -856,12 +856,12 @@ void SCH_SHEET::Rotate(wxPoint rotationPoint)
 
     BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
     {
-        sheetPin.Rotate( rotationPoint );
+        sheetPin.Rotate( aPosition );
     }
 }
 
 
-void SCH_SHEET::Mirror_X( int aXaxis_position )
+void SCH_SHEET::MirrorX( int aXaxis_position )
 {
     m_pos.y -= aXaxis_position;
     NEGATE( m_pos.y );
@@ -870,12 +870,12 @@ void SCH_SHEET::Mirror_X( int aXaxis_position )
 
     BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
     {
-        sheetPin.Mirror_X( aXaxis_position );
+        sheetPin.MirrorX( aXaxis_position );
     }
 }
 
 
-void SCH_SHEET::Mirror_Y( int aYaxis_position )
+void SCH_SHEET::MirrorY( int aYaxis_position )
 {
     m_pos.x -= aYaxis_position;
     NEGATE( m_pos.x );
@@ -884,7 +884,7 @@ void SCH_SHEET::Mirror_Y( int aYaxis_position )
 
     BOOST_FOREACH( SCH_SHEET_PIN& label, m_pins )
     {
-        label.Mirror_Y( aYaxis_position );
+        label.MirrorY( aYaxis_position );
     }
 }
 
@@ -1048,17 +1048,17 @@ wxString SCH_SHEET::GetSelectMenuText() const
 }
 
 
-bool SCH_SHEET::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_SHEET::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 
-    return rect.Contains( aPoint );
+    return rect.Contains( aPosition );
 }
 
 
-bool SCH_SHEET::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_SHEET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT rect = aRect;
 
@@ -1102,14 +1102,14 @@ void SCH_SHEET::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 }
 
 
-void SCH_SHEET::doPlot( PLOTTER* aPlotter )
+void SCH_SHEET::Plot( PLOTTER* aPlotter )
 {
-    EDA_Colors txtcolor = UNSPECIFIED_COLOR;
-    wxSize     size;
-    wxString   Text;
-    int        name_orientation;
-    wxPoint    pos_sheetname, pos_filename;
-    wxPoint    pos;
+    EDA_COLOR_T txtcolor = UNSPECIFIED;
+    wxSize      size;
+    wxString    Text;
+    int         name_orientation;
+    wxPoint     pos_sheetname, pos_filename;
+    wxPoint     pos;
 
     aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
 

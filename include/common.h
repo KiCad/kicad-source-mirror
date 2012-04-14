@@ -38,6 +38,18 @@
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 
+#include <richio.h>
+
+#if !wxUSE_PRINTING_ARCHITECTURE && !SWIG
+#   error "You must use '--enable-printarch' in your wx library configuration."
+#endif
+
+#if defined( __WXGTK__ )
+#   if !wxUSE_LIBGNOMEPRINT && !wxUSE_GTKPRINT && !SWIG
+#       error "You must use '--with-gnomeprint' or '--with-gtkprint' in your wx library configuration."
+#   endif
+#endif
+
 
 class wxAboutDialogInfo;
 
@@ -106,6 +118,17 @@ enum pseudokeys {
 #define OFF 0
 
 
+/// Convert mm to mils.
+inline int Mm2mils( double x ) { return wxRound( x * 1000./25.4 ); }
+
+/// Convert mils to mm.
+inline int Mils2mm( double x ) { return wxRound( x * 25.4 / 1000. ); }
+
+
+/// Return whether GOST is in play
+bool IsGOST();
+
+
 enum EDA_UNITS_T {
     INCHES = 0,
     MILLIMETRES = 1,
@@ -131,10 +154,27 @@ class PAGE_INFO
 {
 public:
 
-    static const wxString Custom;     /// "User" defined page type
+    PAGE_INFO( const wxString& aType = PAGE_INFO::A3, bool IsPortrait = false );
 
-    PAGE_INFO( const wxString& aType = wxT( "A3" ) );
-    PAGE_INFO( const wxSize& aSizeMils, const wxString& aName );
+    // paper size names which are part of the public API, pass to SetType() or
+    // above constructor.
+
+    static const wxString A4;
+    static const wxString A3;
+    static const wxString A2;
+    static const wxString A1;
+    static const wxString A0;
+    static const wxString A;
+    static const wxString B;
+    static const wxString C;
+    static const wxString D;
+    static const wxString E;
+    static const wxString GERBER;
+    static const wxString USLetter;
+    static const wxString USLegal;
+    static const wxString USLedger;
+    static const wxString Custom;     ///< "User" defined page type
+
 
     /**
      * Function SetType
@@ -147,15 +187,22 @@ public:
      * and will be set according to <b>previous</b> calls to
      * static PAGE_INFO::SetUserWidthMils() and
      * static PAGE_INFO::SetUserHeightMils();
+     * @param IsPortrait Set to true to set page orientation to portrait mode.
      *
-     * @return bool - true iff @a aStandarePageDescription was a recognized type.
+     * @return bool - true if @a aStandarePageDescription was a recognized type.
      */
-    bool SetType( const wxString& aStandardPageDescriptionName );
+    bool SetType( const wxString& aStandardPageDescriptionName, bool IsPortrait = false );
     const wxString& GetType() const { return m_type; }
 
     /**
+     * Function IsDefault
+     * @return True if the object has the default page settings which are A3, landscape.
+     */
+    bool IsDefault() const { return m_type == PAGE_INFO::A3 && !m_portrait; }
+
+    /**
      * Function IsCustom
-     * returns true if the type is "User"
+     * returns true if the type is Custom
      */
     bool IsCustom() const;
 
@@ -170,6 +217,19 @@ public:
      */
     void SetPortrait( bool isPortrait );
     bool IsPortrait() const { return m_portrait; }
+
+    /**
+     * Function GetWxOrientation.
+     * @return int - ws' style printing orientation.
+     */
+    int  GetWxOrientation() const { return IsPortrait() ? wxPORTRAIT : wxLANDSCAPE; }
+
+    /**
+     * Function GetPaperId
+     * @return wxPaperSize - wxPrintData's style paper id associated with
+     * page type name.
+     */
+    wxPaperSize GetPaperId() const { return m_paper_id; }
 
     void SetWidthMils(  int aWidthInMils );
     int GetWidthMils() const { return m_size.x; }
@@ -196,37 +256,102 @@ public:
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #endif
 
-//    wxPoint GetOffsetMils() const   { return m_Offset; }
-
+    /**
+     * Function GetLeftMarginMils.
+     * @return int - logical page left margin in mils.
+     */
     int GetLeftMarginMils() const           { return m_left_margin; }
+
+    /**
+     * Function GetLeftMarginMils.
+     * @return int - logical page right margin in mils.
+     */
     int GetRightMarginMils() const          { return m_right_margin; }
+
+    /**
+     * Function GetLeftMarginMils.
+     * @return int - logical page top margin in mils.
+     */
     int GetTopMarginMils() const            { return m_top_margin; }
+
+    /**
+     * Function GetBottomMarginMils.
+     * @return int - logical page bottom margin in mils.
+     */
     int GetBottomMarginMils() const         { return m_bottom_margin; }
 
+    /**
+     * Function SetLeftMarginMils
+     * sets left page margin to @a aMargin in mils.
+     */
     void SetLeftMarginMils( int aMargin )   { m_left_margin = aMargin; }
+
+    /**
+     * Function SetRightMarginMils
+     * sets right page margin to @a aMargin in mils.
+     */
     void SetRightMarginMils( int aMargin )  { m_right_margin = aMargin; }
+
+    /**
+     * Function SetTopMarginMils
+     * sets top page margin to @a aMargin in mils.
+     */
     void SetTopMarginMils( int aMargin )    { m_top_margin = aMargin; }
+
+    /**
+     * Function SetBottomMarginMils
+     * sets bottom page margin to @a aMargin in mils.
+     */
     void SetBottomMarginMils( int aMargin ) { m_bottom_margin = aMargin; }
 
     /**
-     * Function SetUserWidthMils
-     * sets the width of type "User" page in mils, for any type "User" page
+     * Function SetCustomWidthMils
+     * sets the width of Custom page in mils, for any custom page
      * constructed or made via SetType() after making this call.
      */
-    static void SetUserWidthMils( int aWidthInMils );
+    static void SetCustomWidthMils( int aWidthInMils );
 
     /**
-     * Function SetUserHeightMils
-     * sets the height type "User" page in mils, for any type "User" page
+     * Function SetCustomHeightMils
+     * sets the height of Custom page in mils, for any custom page
      * constructed or made via SetType() after making this call.
      */
-    static void SetUserHeightMils( int aHeightInMils );
+    static void SetCustomHeightMils( int aHeightInMils );
+
+    /**
+     * Function GetCustomWidthMils.
+     * @return int - custom paper width in mils.
+     */
+    static int GetCustomWidthMils() { return s_user_width; }
+
+    /**
+     * Function GetCustomHeightMils.
+     * @return int - custom paper height in mils.
+     */
+    static int GetCustomHeightMils() { return s_user_height; }
 
     /**
      * Function GetStandardSizes
      * returns the standard page types, such as "A4", "A3", etc.
     static wxArrayString GetStandardSizes();
      */
+
+    /**
+     * Function Format
+     * outputs the page class to \a aFormatter in s-expression form.
+     *
+     * @param aFormatter The #OUTPUTFORMATTER object to write to.
+     * @param aNestLevel The indentation next level.
+     * @param aControlBits The control bit definition for object specific formatting.
+     * @throw IO_ERROR on write error.
+     */
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
+protected:
+    // only the class implementation(s) may use this constructor
+    PAGE_INFO( const wxSize& aSizeMils, const wxString& aName, wxPaperSize aPaperId );
+
 
 private:
 
@@ -254,6 +379,11 @@ private:
     wxString    m_type;             ///< paper type: A4, A3, etc.
     wxSize      m_size;             ///< mils
 
+/// Min and max page sizes for clamping.
+#define MIN_PAGE_SIZE   4000
+#define MAX_PAGE_SIZE   48000
+
+
     int         m_left_margin;
     int         m_right_margin;
     int         m_top_margin;
@@ -261,24 +391,28 @@ private:
 
     bool        m_portrait;         ///< true if portrait, false if landscape
 
+    wxPaperSize m_paper_id;         ///< wx' style paper id.
+
     static int s_user_height;
     static int s_user_width;
 
-    void updatePortrait();
+    void    updatePortrait();
+
+    void    setMargins();
 };
 
 
-extern wxString       g_ProductName;
+extern wxString     g_ProductName;
 
 /// Default user lib path can be left void, if the standard lib path is used
-extern wxString       g_UserLibDirBuffer;
+extern wxString     g_UserLibDirBuffer;
 
-extern bool           g_ShowPageLimits;     ///< true to display the page limits
+extern bool         g_ShowPageLimits;       ///< true to display the page limits
 
 /// Name of default configuration file. (kicad.pro)
 extern wxString     g_Prj_Default_Config_FullFilename;
 
-/// Name of local configuration file. (<curr projet>.pro)
+/// Name of local configuration file. (\<curr projet\>.pro)
 extern wxString     g_Prj_Config_LocalFilename;
 
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
@@ -397,20 +531,6 @@ int GetCommandOptions( const int argc, const char** argv,
 const wxString& valeur_param( int valeur, wxString& buf_texte );
 
 /**
- * Function CoordinateToString
- * is a helper to convert the integer coordinate \a aValue to a string in inches,
- * millimeters, or unscaled units according to the current user units setting.
- *
- * @param aValue The coordinate to convert.
- * @param aInternalUnits The internal units of the application.  #EESCHEMA_INTERNAL_UNIT
- *                       and #PCB_INTERNAL_UNIT are the only valid value.
- * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
- *                       the current user unit is millimeters.
- * @return The converted string for display in user interface elements.
- */
-wxString CoordinateToString( int aValue, int aInternalUnits, bool aConvertToMils = false );
-
-/**
  * Returns the units symbol.
  *
  * @param aUnits - Units type, default is current units setting.
@@ -443,34 +563,22 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit );
  */
 int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Internal_Unit );
 
-/**
- * Function ReturnStringFromValue
- * Return the string from Value, according to units (inch, mm ...) for display,
- * and the initial unit for value
- * @param aUnit = display units (INCHES, MILLIMETRE ..)
- * @param aValue = value in Internal_Unit
- * @param aInternal_Unit = units per inch for Value
- * @param aAdd_unit_symbol = true to add symbol unit to the string value
- * @return a wxString what contains value and optionally the symbol unit (like
- *         2.000 mm)
- */
-wxString        ReturnStringFromValue( EDA_UNITS_T aUnit,
-                                       int  aValue,
-                                       int  aInternal_Unit,
-                                       bool aAdd_unit_symbol = false );
-
-void            AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
-
-/* Add string "  (mm):" or " ("):" to the static text Stext.
- *  Used in dialog boxes for entering values depending on selected units */
-void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
-                                      int Internal_Unit );
+void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 /* Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
  **/
-int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
-                                         int               Internal_Unit );
+int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
+
+/**
+ * Round to the nearest precision.
+ *
+ * Try to approximate a coordinate using a given precision to prevent
+ * rounding errors when converting from inches to mm.
+ *
+ * ie round the unit value to 0 if unit is 1 or 2, or 8 or 9
+ */
+double RoundTo0( double x, double precision );
 
 /**
  * Function wxStringSplit
@@ -482,24 +590,13 @@ int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
 wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
 
 /**
- * Function To_User_Unit
- * Convert in inch or mm the variable "val" (double)given in internal units
- * @return the converted value, in double
- * @param aUnit : user unit to be converted to
- * @param val : double : the given value
-
- * @param internal_unit_value = internal units per inch
- */
-double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
-
-/**
  * Return in internal units the value "val" given in inch or mm
  */
 int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
 
 /**
  * Function GenDate
- * @return A wsString object containg the date in the format "day month year" like
+ * @return A wxString object containing the date in the format "day month year" like
  *         "23 jun 2005".
  */
 wxString GenDate();

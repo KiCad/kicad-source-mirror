@@ -46,9 +46,6 @@
 #include <wx/overlay.h>
 
 
-extern int g_DrawDefaultLineThickness; // Default line thickness, used to draw Frame references
-
-
 // Local functions:
 /* Trace the pads of a module in sketch mode.
  * Used to display pads when when the module visibility is set to not visible
@@ -109,7 +106,7 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
-    GetBoard()->Draw( m_canvas, DC, GR_OR );
+    GetBoard()->Draw( m_canvas, DC, GR_OR | GR_ALLOW_HIGHCONTRAST);
 
     DrawGeneralRatsnest( DC );
 

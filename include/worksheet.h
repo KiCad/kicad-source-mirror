@@ -2,77 +2,84 @@
 /* worksheet.h */
 /***************/
 
-/* Values are in 1/1000 inch */
+// Values are in 1/1000 inch
 
-#ifndef __WORKSHEET_H__
-#define __WORKSHEET_H__
+#ifndef WORKSHEET_H_
+#define WORKSHEET_H_
 
-#define GRID_REF_W       70     /* height of the band reference grid */
-#define SIZETEXT         60     /* worksheet text size */
-#define SIZETEXT_REF     50     /* worksheet frame reference text size */
-#define PAS_REF          2000   /* no reference markings on worksheet frame */
-#define TEXT_VTAB_HEIGHT SIZETEXT * 2
+#include <common.h>                     // Mm2mils()
+
+#define GRID_REF_W       70             // height of the band reference grid
+#define SIZETEXT         60             // worksheet text size
+#define SIZETEXT_REF     50             // worksheet frame reference text size
+#define PAS_REF          2000           // no reference markings on worksheet frame
+#define TEXT_VTAB_HEIGHT (SIZETEXT * 2)
 
 #if defined(KICAD_GOST)
-#define STAMP_OX 185 * 10000 / 254
-#define STAMP_OY 55 * 10000 / 254
 
-#define STAMP_Y_0  0
-#define STAMP_Y_5  5 * 10000 / 254
-#define STAMP_Y_8  8 * 10000 / 254
-#define STAMP_Y_7  7 * 10000 / 254
-#define STAMP_Y_10 10 * 10000 / 254
-#define STAMP_Y_14 14 * 10000 / 254
-#define STAMP_Y_15 15 * 10000 / 254
-#define STAMP_Y_20 20 * 10000 / 254
-#define STAMP_Y_25 25 * 10000 / 254
-#define STAMP_Y_30 30 * 10000 / 254
-#define STAMP_Y_35 35 * 10000 / 254
-#define STAMP_Y_40 40 * 10000 / 254
-#define STAMP_Y_45 45 * 10000 / 254
-#define STAMP_Y_50 50 * 10000 / 254
-#define STAMP_Y_55 55 * 10000 / 254
+// There is a page layout minor issue in GOST mode.
+// This is the rounding-off error of 1 mil exactly.
+// I hope this problem will go away when we will go
+// to nanometers (zaka62).
+#define STAMP_OX    Mm2mils( 185 ) + 1
+#define STAMP_OY    Mm2mils(  55 )
+
+#define STAMP_Y_0   0
+#define STAMP_Y_5   Mm2mils(   5 )
+#define STAMP_Y_8   Mm2mils(   8 )
+#define STAMP_Y_7   Mm2mils(   7 )
+#define STAMP_Y_10  Mm2mils(  10 )
+#define STAMP_Y_14  Mm2mils(  14 )
+#define STAMP_Y_15  Mm2mils(  15 )
+#define STAMP_Y_20  Mm2mils(  20 )
+#define STAMP_Y_25  Mm2mils(  25 )
+#define STAMP_Y_30  Mm2mils(  30 )
+#define STAMP_Y_35  Mm2mils(  35 )
+#define STAMP_Y_40  Mm2mils(  40 )
+#define STAMP_Y_45  Mm2mils(  45 )
+#define STAMP_Y_50  Mm2mils(  50 )
+#define STAMP_Y_55  Mm2mils(  55 )
 
 #define STAMP_X_0   0
-#define STAMP_X_10  10 * 10000 / 254
-#define STAMP_X_14  14 * 10000 / 254
-#define STAMP_X_18  18 * 10000 / 254
-#define STAMP_X_30  30 * 10000 / 254
-#define STAMP_X_35  35 * 10000 / 254
-#define STAMP_X_40  40 * 10000 / 254
-#define STAMP_X_45  45 * 10000 / 254
-#define STAMP_X_50  50 * 10000 / 254
-#define STAMP_X_53  53 * 10000 / 254
-#define STAMP_X_65  65 * 10000 / 254
-#define STAMP_X_70  70 * 10000 / 254
-#define STAMP_X_84  84 * 10000 / 254
-#define STAMP_X_85  85 * 10000 / 254
-#define STAMP_X_120 120 * 10000 / 254
-#define STAMP_X_130 130 * 10000 / 254
-#define STAMP_X_137 137 * 10000 / 254
-#define STAMP_X_145 145 * 10000 / 254
-#define STAMP_X_168 168 * 10000 / 254
-#define STAMP_X_178 178 * 10000 / 254
-#define STAMP_X_185 185 * 10000 / 254
+#define STAMP_X_10  Mm2mils(  10 )
+#define STAMP_X_14  Mm2mils(  14 )
+#define STAMP_X_18  Mm2mils(  18 )
+#define STAMP_X_30  Mm2mils(  30 )
+#define STAMP_X_35  Mm2mils(  35 )
+#define STAMP_X_40  Mm2mils(  40 )
+#define STAMP_X_45  Mm2mils(  45 )
+#define STAMP_X_50  Mm2mils(  50 )
+#define STAMP_X_53  Mm2mils(  53 )
+#define STAMP_X_65  Mm2mils(  65 )
+#define STAMP_X_70  Mm2mils(  70 )
+#define STAMP_X_84  Mm2mils(  84 )
+#define STAMP_X_85  Mm2mils(  85 )
+#define STAMP_X_120 Mm2mils( 120 )
+#define STAMP_X_130 Mm2mils( 130 )
+#define STAMP_X_137 Mm2mils( 137 )
+#define STAMP_X_145 Mm2mils( 145 )
+#define STAMP_X_168 Mm2mils( 168 )
+#define STAMP_X_178 Mm2mils( 178 )
+#define STAMP_X_185 Mm2mils( 185 )
 
-#define STAMP_5  5 * 10000 / 254
-#define STAMP_7  7 * 10000 / 254
-#define STAMP_12 12 * 10000 / 254
+#define STAMP_5     Mm2mils(   5 )
+#define STAMP_7     Mm2mils(   7 )
+#define STAMP_12    Mm2mils(  12 )
 
-#define STAMP_145 145 * 10000 / 254
-#define STAMP_110 110 * 10000 / 254
-#define STAMP_85  85 * 10000 / 254
-#define STAMP_60  60 * 10000 / 254
-#define STAMP_25  25 * 10000 / 254
+#define STAMP_145   Mm2mils( 145 )
+#define STAMP_110   Mm2mils( 110 )
+#define STAMP_85    Mm2mils(  85 )
+#define STAMP_60    Mm2mils(  60 )
+#define STAMP_25    Mm2mils(  25 )
 
-#define STAMP_287 287 * 10000 / 254
-#define STAMP_227 227 * 10000 / 254
-#define STAMP_167 167 * 10000 / 254
+#define STAMP_287   Mm2mils( 287 )
+#define STAMP_227   Mm2mils( 227 )
+#define STAMP_167   Mm2mils( 167 )
 #endif
 
-/* The coordinates below are relative to the bottom right corner of page and
- * will be subtracted from this origin.
- */
+
+// The coordinates below are relative to the bottom right corner of page and
+// will be subtracted from this origin.
 #define BLOCK_OX                      4200
 #define BLOCK_KICAD_VERSION_X         BLOCK_OX - SIZETEXT
 #define BLOCK_KICAD_VERSION_Y         SIZETEXT
@@ -98,6 +105,7 @@
 #define BLOCK_COMMENT3_Y              (SIZETEXT * 17)
 #define BLOCK_COMMENT4_Y              (SIZETEXT * 19)
 
+
 struct Ki_WorkSheetData
 {
 public:
@@ -109,7 +117,8 @@ public:
     const wxChar*     m_Text;
 };
 
-/* Work sheet structure type definitions. */
+
+/// Work sheet structure type definitions.
 enum TypeKi_WorkSheetData {
     WS_DATE,
     WS_REV,
@@ -249,4 +258,4 @@ extern Ki_WorkSheetData WS_Segm4_LT;
 extern Ki_WorkSheetData WS_Segm5_LT;
 #endif
 
-#endif /* __WORKSHEET_H__ */
+#endif // WORKSHEET_H_

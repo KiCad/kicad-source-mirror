@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <eda_dde.h>
 #include <wxEeschemaStruct.h>
+#include <menus_helpers.h>
 
 #include <eeschema_id.h>
 #include <general.h>

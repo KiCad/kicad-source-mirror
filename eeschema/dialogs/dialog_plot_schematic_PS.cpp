@@ -32,6 +32,7 @@
 #include <plot_common.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -115,8 +116,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::initDlg()
     m_Plot_Sheet_Ref_Ctrl->SetValue( m_plot_Sheet_Ref );
 
     AddUnitSymbol( *m_defaultLineWidthTitle, g_UserUnit );
-    PutValueInLocalUnits( *m_DefaultLineSizeCtrl,
-                          g_DrawDefaultLineThickness, EESCHEMA_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_DefaultLineSizeCtrl, g_DrawDefaultLineThickness );
 }
 
 
@@ -220,10 +220,12 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
         {
         case PAGE_SIZE_A:
             plotPage.SetType( wxT( "A" ) );
+            plotPage.SetPortrait( actualPage.IsPortrait() );
             break;
 
         case PAGE_SIZE_A4:
             plotPage.SetType( wxT( "A4" ) );
+            plotPage.SetPortrait( actualPage.IsPortrait() );
             break;
 
         case PAGE_SIZE_AUTO:

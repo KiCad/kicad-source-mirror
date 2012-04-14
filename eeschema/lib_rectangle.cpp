@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -35,6 +34,7 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -89,13 +89,13 @@ bool LIB_RECTANGLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-EDA_ITEM* LIB_RECTANGLE::doClone() const
+EDA_ITEM* LIB_RECTANGLE::Clone() const
 {
     return new LIB_RECTANGLE( *this );
 }
 
 
-int LIB_RECTANGLE::DoCompare( const LIB_ITEM& aOther ) const
+int LIB_RECTANGLE::compare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_RECTANGLE_T );
 
@@ -117,20 +117,20 @@ int LIB_RECTANGLE::DoCompare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_RECTANGLE::DoOffset( const wxPoint& aOffset )
+void LIB_RECTANGLE::SetOffset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
     m_End += aOffset;
 }
 
 
-bool LIB_RECTANGLE::DoTestInside( EDA_RECT& aRect ) const
+bool LIB_RECTANGLE::Inside( EDA_RECT& aRect ) const
 {
     return aRect.Contains( m_Pos.x, -m_Pos.y ) || aRect.Contains( m_End.x, -m_End.y );
 }
 
 
-void LIB_RECTANGLE::DoMove( const wxPoint& aPosition )
+void LIB_RECTANGLE::Move( const wxPoint& aPosition )
 {
     wxPoint size = m_End - m_Pos;
     m_Pos = aPosition;
@@ -138,7 +138,7 @@ void LIB_RECTANGLE::DoMove( const wxPoint& aPosition )
 }
 
 
-void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& aCenter )
+void LIB_RECTANGLE::MirrorHorizontal( const wxPoint& aCenter )
 {
     m_Pos.x -= aCenter.x;
     m_Pos.x *= -1;
@@ -149,7 +149,7 @@ void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& aCenter )
 }
 
 
-void LIB_RECTANGLE::DoMirrorVertical( const wxPoint& aCenter )
+void LIB_RECTANGLE::MirrorVertical( const wxPoint& aCenter )
 {
     m_Pos.y -= aCenter.y;
     m_Pos.y *= -1;
@@ -160,7 +160,7 @@ void LIB_RECTANGLE::DoMirrorVertical( const wxPoint& aCenter )
 }
 
 
-void LIB_RECTANGLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_RECTANGLE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
     RotatePoint( &m_Pos, aCenter, rot_angle );
@@ -168,8 +168,8 @@ void LIB_RECTANGLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                            const TRANSFORM& aTransform )
+void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                          const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
@@ -249,7 +249,7 @@ void LIB_RECTANGLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 
     LIB_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 }
@@ -325,10 +325,10 @@ bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM&
 wxString LIB_RECTANGLE::GetSelectMenuText() const
 {
     return wxString::Format( _( "Rectangle from (%s, %s) to (%s, %s)" ),
-                             GetChars( CoordinateToString( m_Pos.x, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_Pos.y, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_End.x, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_End.y, EESCHEMA_INTERNAL_UNIT ) ) );
+                             GetChars( CoordinateToString( m_Pos.x ) ),
+                             GetChars( CoordinateToString( m_Pos.y ) ),
+                             GetChars( CoordinateToString( m_End.x ) ),
+                             GetChars( CoordinateToString( m_End.y ) ) );
 }
 
 

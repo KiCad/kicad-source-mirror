@@ -25,9 +25,11 @@
 
 #include <wx/wx.h>
 #include <pcb_plot_params_lexer.h>
-#include <base_struct.h>
+#include <eda_text.h>                // EDA_DRAW_MODE_T
 
 class PCB_PLOT_PARAMS_PARSER;
+class LINE_READER;
+
 
 /**
  * Class PCB_PLOT_PARAMS
@@ -99,7 +101,7 @@ private:
 public:
     PCB_PLOT_PARAMS();
 
-    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const throw( IO_ERROR );
+    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl=0 ) const throw( IO_ERROR );
     void        Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( IO_ERROR, PARSE_ERROR );
 
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
@@ -157,6 +159,12 @@ public:
 };
 
 
-extern PCB_PLOT_PARAMS g_PcbPlotOptions;
+/**
+ * Default line thickness in PCnew units used to draw or plot items having a
+ * default thickness line value (Frame references) (i.e. = 0 ).
+ * 0 = single pixel line width.
+ */
+extern int g_DrawDefaultLineThickness;
+
 
 #endif // PCB_PLOT_PARAMS_H_

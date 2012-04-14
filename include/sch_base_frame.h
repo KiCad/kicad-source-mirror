@@ -76,6 +76,8 @@ public:
     const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME
 
+    void UpdateStatusBar();                                     // overload EDA_DRAW_FRAME
+
 protected:
 
     /**

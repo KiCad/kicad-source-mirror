@@ -148,8 +148,8 @@ private:
     /// Flag to indicate show hidden pins.
     bool m_showAllPins;
 
-    /// The format to use when generating a net list.
-    int m_netListFormat;
+    /// The name of the format to use when generating a net list.
+    wxString m_netListFormat;
 
     /// Add X prefix to componen referencess when generating spice net lists.
     bool m_addReferencPrefix;
@@ -206,9 +206,9 @@ public:
 
     void SetShowAllPins( bool aEnable ) { m_showAllPins = aEnable; }
 
-    int GetNetListFormat() const { return m_netListFormat; }
+    const wxString GetNetListFormatName() const { return m_netListFormat; }
 
-    void SetNetListFormat( int aFormat ) { m_netListFormat = aFormat; }
+    void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
 
     bool GetAddReferencePrefix() const { return m_addReferencPrefix; }
 

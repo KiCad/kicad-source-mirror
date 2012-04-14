@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -95,7 +94,7 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
 }
 
 
-EDA_ITEM* ZONE_CONTAINER::doClone() const
+EDA_ITEM* ZONE_CONTAINER::Clone() const
 {
     return new ZONE_CONTAINER( *this );
 }
@@ -450,12 +449,30 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, in
 }
 
 
-bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
+int ZONE_CONTAINER::GetThermalReliefGap( D_PAD* aPad ) const
 {
-    if( HitTestForCorner( refPos ) )
+    if( aPad == NULL || aPad->GetThermalGap() == 0 )
+        return m_ThermalReliefGap;
+    else
+        return aPad->GetThermalGap();
+}
+
+
+int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
+{
+    if( aPad == NULL || aPad->GetThermalWidth() == 0 )
+        return m_ThermalReliefCopperBridge;
+    else
+        return aPad->GetThermalWidth();
+}
+
+
+bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition )
+{
+    if( HitTestForCorner( aPosition ) )
         return true;
 
-    if( HitTestForEdge( refPos ) )
+    if( HitTestForEdge( aPosition ) )
         return true;
 
     return false;
@@ -566,22 +583,22 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 }
 
 
-bool ZONE_CONTAINER::HitTest( EDA_RECT& refArea )
+bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect ) const
 {
     bool  is_out_of_box = false;
 
     CRect rect = m_Poly->GetCornerBounds();
 
-    if( rect.left < refArea.GetX() )
+    if( rect.left < aRect.GetX() )
         is_out_of_box = true;
 
-    if( rect.top < refArea.GetY() )
+    if( rect.top < aRect.GetY() )
         is_out_of_box = true;
 
-    if( rect.right > refArea.GetRight() )
+    if( rect.right > aRect.GetRight() )
         is_out_of_box = true;
 
-    if( rect.bottom > refArea.GetBottom() )
+    if( rect.bottom > aRect.GetBottom() )
         is_out_of_box = true;
 
     return is_out_of_box ? false : true;
@@ -615,7 +632,7 @@ int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 }
 
 
-bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
+bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 {
     unsigned indexstart = 0, indexend;
     bool     inside     = false;
@@ -807,7 +824,7 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 }
 
 
@@ -859,7 +876,8 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_PadConnection = src->m_PadConnection;
     m_ThermalReliefGap = src->m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = src->m_ThermalReliefCopperBridge;
-    m_Poly->m_HatchStyle = src->m_Poly->GetHatchStyle();
+    m_Poly->SetHatchStyle( src->m_Poly->GetHatchStyle() );
+    m_Poly->SetHatchPitch( src->m_Poly->GetHatchPitch() );
     m_Poly->m_HatchLines = src->m_Poly->m_HatchLines;   // Copy vector <CSegment>
     m_FilledPolysList.clear();
     m_FilledPolysList = src->m_FilledPolysList;
@@ -888,7 +906,6 @@ ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
         return m_PadConnection;
     else
         return aPad->GetZoneConnection();
-
 }
 
 
@@ -937,4 +954,146 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     text << _( " on " ) << GetLayerName();
 
     return text;
+}
+
+
+void ZONE_CONTAINER::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(zone (net %d %s) (layer %d) (tstamp %lX)\n",
+                       GetNet(), aFormatter->Quotew( m_Netname ).c_str(),
+                       GetLayer(), GetTimeStamp() );
+
+
+    // Save the outline aux info
+    std::string hatch;
+
+    switch( GetHatchStyle() )
+    {
+    default:
+    case CPolyLine::NO_HATCH:       hatch = "none";    break;
+    case CPolyLine::DIAGONAL_EDGE:  hatch = "edge";    break;
+    case CPolyLine::DIAGONAL_FULL:  hatch = "full";    break;
+    }
+
+    aFormatter->Print( aNestLevel+1, "(hatch %s)\n", hatch.c_str() );
+
+    if( m_priority > 0 )
+        aFormatter->Print( aNestLevel+1, "(priority %d)\n", m_priority );
+
+    // Save pad option and clearance
+    std::string padoption;
+
+    switch( GetPadConnection() )
+    {
+    default:
+    case PAD_IN_ZONE:       padoption = "yes";          break;
+    case THERMAL_PAD:       padoption = "use_thermal";  break;
+    case PAD_NOT_IN_ZONE:   padoption = "no";           break;
+    }
+
+    aFormatter->Print( aNestLevel+1, "(connect_pads %s (clearance %s))\n",
+                       padoption.c_str(), FMT_IU( m_ZoneClearance ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(min_thickness %s)\n",
+                       FMT_IU( m_ZoneMinThickness ).c_str() );
+
+    aFormatter->Print( aNestLevel+1,
+                       "(fill %s (mode %s) (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)\n",
+                       (m_IsFilled) ? "yes" : "no",
+                       (m_FillMode) ? "segment" : "polygon",
+                       m_ArcToSegmentsCount,
+                       FMT_IU( m_ThermalReliefGap ).c_str(),
+                       FMT_IU( m_ThermalReliefCopperBridge ).c_str() );
+
+    std::string smoothing;
+
+    switch( cornerSmoothingType )
+    {
+    case ZONE_SETTINGS::SMOOTHING_NONE:      smoothing = "none";      break;
+    case ZONE_SETTINGS::SMOOTHING_CHAMFER:   smoothing = "chamfer";   break;
+    case ZONE_SETTINGS::SMOOTHING_FILLET:    smoothing = "fillet";    break;
+    default:
+        THROW_IO_ERROR( wxString::Format( _( "unknown zone corner smoothing type %d"  ),
+                                          cornerSmoothingType ) );
+    }
+
+    aFormatter->Print( aNestLevel+1, "(smoothing %s (radius %s))\n",
+                       smoothing.c_str(), FMT_IU( cornerRadius ).c_str() );
+
+    const std::vector< CPolyPt >& cv = m_Poly->corner;
+
+    if( cv.size() )
+    {
+        aFormatter->Print( aNestLevel+1, "(polygon\n");
+        aFormatter->Print( aNestLevel+2, "(pts\n" );
+
+        for( std::vector< CPolyPt >::const_iterator it = cv.begin();  it != cv.end();  ++it )
+        {
+            aFormatter->Print( aNestLevel+3, "(xy %s %s)\n",
+                               FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+
+            if( it->end_contour )
+            {
+                aFormatter->Print( aNestLevel+2, ")\n" );
+
+                if( it+1 != cv.end() )
+                {
+                    aFormatter->Print( aNestLevel+1, ")\n" );
+                    aFormatter->Print( aNestLevel+1, "(polygon\n" );
+                    aFormatter->Print( aNestLevel+2, "(pts\n" );
+                }
+            }
+        }
+
+        aFormatter->Print( aNestLevel+1, ")\n" );
+    }
+
+    // Save the PolysList
+    const std::vector< CPolyPt >& fv = m_FilledPolysList;
+
+    if( fv.size() )
+    {
+        aFormatter->Print( aNestLevel+1, "(filled_polygon\n" );
+        aFormatter->Print( aNestLevel+2, "(pts\n" );
+
+        for( std::vector< CPolyPt >::const_iterator it = fv.begin();  it != fv.end();  ++it )
+        {
+            aFormatter->Print( aNestLevel+3, "(xy %s %s)\n",
+                               FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+
+            if( it->end_contour )
+            {
+                aFormatter->Print( aNestLevel+2, ")\n" );
+
+                if( it+1 != fv.end() )
+                {
+                    aFormatter->Print( aNestLevel+1, ")\n" );
+                    aFormatter->Print( aNestLevel+1, "(filled_polygon\n" );
+                    aFormatter->Print( aNestLevel+2, "(pts\n" );
+                }
+            }
+        }
+
+        aFormatter->Print( aNestLevel+1, ")\n" );
+    }
+
+    // Save the filling segments list
+    const std::vector< SEGMENT >& segs = m_FillSegmList;
+
+    if( segs.size() )
+    {
+        aFormatter->Print( aNestLevel+1, "(fill_segments\n" );
+
+        for( std::vector< SEGMENT >::const_iterator it = segs.begin();  it != segs.end();  ++it )
+        {
+            aFormatter->Print( aNestLevel+2, "(pts (xy %s) (xy %s))\n",
+                               FMT_IU( it->m_Start ).c_str(),
+                               FMT_IU( it->m_End ).c_str() );
+        }
+
+        aFormatter->Print( aNestLevel+1, ")\n" );
+    }
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }

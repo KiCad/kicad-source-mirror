@@ -43,9 +43,12 @@
     def GetViasDimensionsList(self):  return self.m_ViasDimensionsList
     def GetTrackWidthList(self):      return self.m_TrackWidthList
     
-    def Save(self,filename):
-      return SaveBoard(filename,self)
-    
+    def Save(self,filename,format = None):
+      if format is None:
+        return SaveBoard(filename,self)
+      else:
+        return SaveBoard(filename,self,format)
+        
     #
     # add function, clears the thisown to avoid python from deleting
     # the object in the garbage collector

@@ -36,6 +36,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 
 #include <module_editor_frame.h>
 #include <class_board.h>
@@ -238,8 +239,7 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
 {
     wxString buffer;
 
-    buffer = ReturnStringFromValue( g_UserUnit, GetDesignSettings().m_ModuleSegmentWidth,
-                                    GetScreen()->GetInternalUnits() );
+    buffer = ReturnStringFromValue( g_UserUnit, GetDesignSettings().m_ModuleSegmentWidth );
     wxTextEntryDialog dlg( this, _( "New Width:" ), _( "Edge Width" ), buffer );
 
     if( dlg.ShowModal() != wxID_OK )

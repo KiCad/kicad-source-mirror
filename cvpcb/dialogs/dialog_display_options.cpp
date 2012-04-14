@@ -54,6 +54,9 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
     m_TextDisplayOption->SetSelection( m_Parent->m_DisplayModText );
     m_IsShowPadFill->SetValue( m_Parent->m_DisplayPadFill );
     m_IsShowPadNum->SetValue( m_Parent->m_DisplayPadNum );
+    m_IsMiddleButtonPan->SetValue( m_Parent->GetCanvas()->GetEnableMiddleButtonPan() );
+    m_IsMiddleButtonPanLimited->SetValue( m_Parent->GetCanvas()->GetMiddleButtonPanLimited() );
+    m_IsMiddleButtonPanLimited->Enable( m_IsMiddleButtonPan->GetValue() );
 }
 
 
@@ -68,6 +71,8 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
     m_Parent->m_DisplayModText = m_TextDisplayOption->GetSelection();
     m_Parent->m_DisplayPadNum  = m_IsShowPadNum->GetValue();
     m_Parent->m_DisplayPadFill = m_IsShowPadFill->GetValue();
+    m_Parent->GetCanvas()->SetEnableMiddleButtonPan( m_IsMiddleButtonPan->GetValue() );
+    m_Parent->GetCanvas()->SetMiddleButtonPanLimited( m_IsMiddleButtonPanLimited->GetValue() );
     m_Parent->GetCanvas()->Refresh();
 }
 

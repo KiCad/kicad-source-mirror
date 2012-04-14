@@ -231,7 +231,7 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
 }
 
 
-EDA_ITEM* SCH_COMPONENT::doClone() const
+EDA_ITEM* SCH_COMPONENT::Clone() const
 {
     return new SCH_COMPONENT( *this );
 }
@@ -1453,7 +1453,13 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 
 EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 {
-    return GetBodyBoundingBox();
+    EDA_RECT bbox = GetBodyBoundingBox();
+    for( size_t i = 0; i < m_Fields.size(); i++ )
+    {
+        bbox.Merge( m_Fields[i].GetBoundingBox() );
+    }
+
+    return bbox;
 }
 
 
@@ -1496,7 +1502,7 @@ void SCH_COMPONENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-void SCH_COMPONENT::Mirror_Y( int aYaxis_position )
+void SCH_COMPONENT::MirrorY( int aYaxis_position )
 {
     int dx = m_Pos.x;
 
@@ -1515,7 +1521,7 @@ void SCH_COMPONENT::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_COMPONENT::Mirror_X( int aXaxis_position )
+void SCH_COMPONENT::MirrorX( int aXaxis_position )
 {
     int dy = m_Pos.y;
 
@@ -1534,11 +1540,11 @@ void SCH_COMPONENT::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_COMPONENT::Rotate( wxPoint rotationPoint )
+void SCH_COMPONENT::Rotate( wxPoint aPosition )
 {
     wxPoint prev = m_Pos;
 
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
 
     //SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
     SetOrientation( CMP_ROTATE_CLOCKWISE );
@@ -1831,28 +1837,31 @@ SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
 }
 
 
-bool SCH_COMPONENT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_COMPONENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT bBox = GetBodyBoundingBox();
     bBox.Inflate( aAccuracy );
 
-    if( bBox.Contains( aPoint ) )
+    if( bBox.Contains( aPosition ) )
         return true;
 
     return false;
 }
 
 
-bool SCH_COMPONENT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_COMPONENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
+    if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
+        return false;
+
     EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return rect.Contains( GetBodyBoundingBox() );
 
-    return rect.Intersects( GetBoundingBox() );
+    return rect.Intersects( GetBodyBoundingBox() );
 }
 
 
@@ -1872,7 +1881,7 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 }
 
 
-void SCH_COMPONENT::doPlot( PLOTTER* aPlotter )
+void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 {
     LIB_COMPONENT* Entry;
     TRANSFORM temp = TRANSFORM();

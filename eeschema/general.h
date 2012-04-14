@@ -139,22 +139,21 @@ extern const wxString g_SchematicBackupFileExtension;
 
 extern LayerStruct    g_LayerDescr;
 
-extern bool           g_EditPinByPinIsOn;   /* True to prevent displacing
-                                             * pins, when they are at the
-                                             * same position. */
+/// True to prevent displacing pins, when they are at the same position.
+extern bool           g_EditPinByPinIsOn;
 
-extern int            g_DrawDefaultLineThickness; /* Default line (in Eeschema
-                                                   * units) thickness used to
-                                                   * draw/plot items having a
-                                                   * default thickness line
-                                                   * value (i.e. = 0 ).
-                                                   * 0 = single pixel line width
-                                                   */
+/**
+ * Default line (in Eeschema units) thickness used to draw/plot items having a
+ * default thickness line value (i.e. = 0 ).
+ * 0 = single pixel line width.
+ */
+extern int            g_DrawDefaultLineThickness;
 
-// Color to draw selected items
+
+/// Color to draw selected items
 extern int g_ItemSelectetColor;
 
-// Color to draw items flagged invisible, in libedit (they are invisible in Eeschema
+/// Color to draw items flagged invisible, in libedit (they are invisible in Eeschema
 extern int g_InvisibleItemColor;
 
 /* Global Variables */

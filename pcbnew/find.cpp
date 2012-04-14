@@ -240,8 +240,7 @@ void WinEDA_PcbFindFrame::CreateControls()
                                                       0 );
     itemBoxSizer2->Add( itemStaticText3,
                         0,
-                        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE,
-                        5 );
+                        wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_NewText = new wxTextCtrl( itemDialog1, ID_TEXTCTRL, _T( "" ),
                                 wxDefaultPosition, wxDefaultSize, 0 );

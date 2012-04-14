@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -45,9 +44,9 @@ class DIMENSION : public BOARD_ITEM
 public:
     int        m_Width;
     wxPoint    m_Pos;
-    int        m_Shape;
+    int        m_Shape;         /// Current always 0.
     int        m_Unit;          /// 0 = inches, 1 = mm
-    int        m_Value;         /// value of  PCB dimensions.
+    int        m_Value;         /// value of PCB dimensions.
 
     TEXTE_PCB  m_Text;
     int        m_crossBarOx, m_crossBarOy, m_crossBarFx, m_crossBarFy;
@@ -74,11 +73,6 @@ public:
         m_Text.SetSize( aTextSize );
     }
 
-    /**
-     * Function SetLayer
-     * sets the layer this item is on.
-     * @param aLayer The layer number.
-     */
     void SetLayer( int aLayer );
 
     void SetShape( int aShape )         { m_Shape = aShape; }
@@ -96,12 +90,6 @@ public:
 
     bool ReadDimensionDescr( LINE_READER* aReader );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
     void SetText( const wxString& NewText );
@@ -118,20 +106,9 @@ public:
      */
     void Move( const wxPoint& offset );
 
-    /**
-     * Function Rotate
-     * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
-     */
-    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     */
-    virtual void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre );
 
     /**
      * Function Mirror
@@ -142,37 +119,12 @@ public:
      */
     void Mirror( const wxPoint& axis_pos );
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param ref_pos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& ref_pos );
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function HitTest (overlaid)
-     * tests if the given EDA_RECT intersect this object.
-     * For now, the anchor must be inside this rect.
-     * @param refArea : the given EDA_RECT
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( EDA_RECT& refArea );
+    bool HitTest( const EDA_RECT& aRect ) const;
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
     wxString GetClass() const
     {
         return wxT( "DIMENSION" );
@@ -180,16 +132,18 @@ public:
 
     EDA_RECT GetBoundingBox() const;
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_dimension_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_dimension_xpm; }
+
+    EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 #endif  // DIMENSION_H_

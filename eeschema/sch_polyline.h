@@ -46,32 +46,17 @@ public:
 
     ~SCH_POLYLINE();
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_POLYLINE" );
     }
 
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                       int aDrawMode, int aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               int aDrawMode, int aColor = -1 );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Load schematic poly line entry from \a aLine in a .sch file.
-     *
-     * @param aLine - Essentially this is file to read schematic poly line from.
-     * @param aErrorMsg - Description of the error if an error occurs while loading the
-     *                    schematic poly line.
-     * @return True if the schematic poly line loaded successfully.
-     */
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
      * Function AddPoint
@@ -106,37 +91,23 @@ public:
      */
     unsigned GetCornerCount() const { return m_points.size(); }
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize() const;
+    int GetPenSize() const;
 
-    /**
-     * Function Move
-     * moves an item to a new position by \a aMoveVector.
-     * @param aMoveVector = the displacement vector
-     */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
             m_points[ii] += aMoveVector;
     }
 
-    /**
-     * Function Mirror_Y
-     * mirrors an item relative to \a aYaxis_position.
-     * @param aYaxis_position The y axis position to mirror around.
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    void MirrorY( int aYaxis_position );
 
-    virtual void Mirror_X( int aXaxis_position );
+    void MirrorX( int aXaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    void Rotate( wxPoint aPosition );
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const;
+    BITMAP_DEF GetMenuImage() const;
 
     /**
      * Function operator[]
@@ -153,16 +124,20 @@ public:
         return m_points[ aIndex ];
     }
 
+    wxPoint GetPosition() const { return m_points[0]; }
+
+    void SetPosition( const wxPoint& aPosition );
+
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false,
+                          int aAccuracy = 0 ) const;
+
+    EDA_ITEM* Clone() const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
-
-private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
-    virtual EDA_ITEM* doClone() const;
-    virtual wxPoint doGetPosition() const { return m_points[0]; }
-    virtual void doSetPosition( const wxPoint& aPosition );
 };
 
 

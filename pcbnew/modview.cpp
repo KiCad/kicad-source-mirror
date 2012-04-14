@@ -17,6 +17,7 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <modview_frame.h>
+#include <wildcards_and_files_ext.h>
 
 
 #define NEXT_PART      1
@@ -109,7 +110,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
  */
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
-    wxString libname = m_libraryName + wxT(".") + ModuleFileExtension;
+    wxString libname = m_libraryName + wxT(".") + FootprintLibFileExtension;
     MODULE* oldmodule = GetBoard()->m_Modules;
     MODULE * module = Load_Module_From_Library( libname, false );
     if( module )
@@ -160,7 +161,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         SetCurItem( NULL );
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
-        GetModuleLibrary( m_libraryName + wxT(".") + ModuleFileExtension,
+        GetModuleLibrary( m_libraryName + wxT(".") + FootprintLibFileExtension,
                           m_footprintName, true );
         Update3D_Frame();
     }

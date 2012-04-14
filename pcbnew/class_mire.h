@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -78,37 +77,15 @@ public:
      */
     void Exchg( PCB_TARGET* aTarget );
 
-    /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
-     */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
-    /**
-     * Function Rotate
-     * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
-     */
-    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     */
-    virtual void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
     bool ReadMirePcbDescr( LINE_READER* aReader );
@@ -118,35 +95,24 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
                const wxPoint& offset = ZeroOffset );
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function HitTest (overlaid)
-     * tests if the given EDA_RECT intersect this object.
-     * For now, the anchor must be inside this rect.
-     * @param refArea : the given EDA_RECT
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( EDA_RECT& refArea );
+    bool HitTest( const EDA_RECT& aRect ) const;
 
     EDA_RECT GetBoundingBox() const;
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_mires_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_mires_xpm; }
+
+    EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 

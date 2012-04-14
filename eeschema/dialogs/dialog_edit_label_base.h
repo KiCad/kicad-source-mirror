@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_edit_label_base__
-#define __dialog_edit_label_base__
+#ifndef __DIALOG_EDIT_LABEL_BASE_H__
+#define __DIALOG_EDIT_LABEL_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -27,7 +29,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DialogLabelEditor_Base
 ///////////////////////////////////////////////////////////////////////////////
-class DialogLabelEditor_Base : public wxDialog 
+class DialogLabelEditor_Base : public DIALOG_SHIM
 {
 	private:
 	
@@ -36,7 +38,7 @@ class DialogLabelEditor_Base : public wxDialog
 		{
 			wxID_VALUESINGLE = 1000,
 			wxID_VALUEMULTI,
-			wxID_SIZE,
+			wxID_SIZE
 		};
 		
 		wxFlexGridSizer* m_textControlSizer;
@@ -61,9 +63,9 @@ class DialogLabelEditor_Base : public wxDialog
 	
 	public:
 		
-		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 359,347 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DialogLabelEditor_Base();
 	
 };
 
-#endif //__dialog_edit_label_base__
+#endif //__DIALOG_EDIT_LABEL_BASE_H__

@@ -134,19 +134,20 @@ class SEGVIA;
 /* information needed to display 3D board */
 class Info_3D_Visu
 {
+
 public:
+    enum {
+        FL_AXIS=0,        FL_MODULE,        FL_ZONE,
+        FL_COMMENTS,      FL_DRAWINGS,      FL_ECO1,          FL_ECO2,
+        FL_LAST
+    };
+
     double    m_Beginx, m_Beginy;   /* position of mouse */
     double    m_Quat[4];            /* orientation of object */
     double    m_Rot[4];             /* man rotation of object */
     double    m_Zoom;               /* field of view in degrees */
     S3D_Color m_BgColor;
-    bool      m_Draw3DAxis;
-    bool      m_Draw3DModule;
-    bool      m_Draw3DZone;
-    bool      m_Draw3DComments;
-    bool      m_Draw3DDrawings;
-    bool      m_Draw3DEco1;
-    bool      m_Draw3DEco2;
+    bool      m_DrawFlags[FL_LAST]; /* show these special items */
     wxPoint   m_BoardPos;
     wxSize    m_BoardSize;
     int       m_Layers;
@@ -320,14 +321,6 @@ public:
 
     void NewDisplay();
     void Set3DBgColor();
-    void Set3DAxisOnOff();
-    void Set3DModuleOnOff();
-    void Set3DPlaceOnOff();
-    void Set3DZoneOnOff();
-    void Set3DCommentsOnOff();
-    void Set3DDrawingsOnOff();
-    void Set3DEco1OnOff();
-    void Set3DEco2OnOff();
 
     DECLARE_EVENT_TABLE()
 };

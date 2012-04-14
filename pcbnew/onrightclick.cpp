@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2007-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <macros.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -43,6 +44,7 @@
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <collectors.h>
+#include <menus_helpers.h>
 
 
 static wxMenu* Append_Track_Width_List( BOARD* aBoard );
@@ -53,7 +55,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     wxString    msg;
     int         flags = 0;
     bool        locate_track = false;
-    bool        blockActive  = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
+    bool        blockActive  = !GetScreen()->m_BlockLocate.IsIdle();
 
     wxClientDC  dc( m_canvas );
 
@@ -83,7 +85,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         else
         {
             AddMenuItem( aPopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
-                         _( "End Tool" ), KiBitmap( cancel_tool_xpm ) );
+                         _( "End Tool" ), KiBitmap( cursor_xpm ) );
         }
 
         aPopMenu->AppendSeparator();
@@ -203,7 +205,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
                 if( item->GetLayer() > LAST_COPPER_LAYER )
                     AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING_LAYER,
-                                 _( "Delete All Drawing on Layer" ), KiBitmap( delete_body_xpm ) );
+                                 _( "Delete All Drawing on Layer" ), KiBitmap( delete_xpm ) );
             }
 
             break;
@@ -887,8 +889,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     for( unsigned ii = 0; ii < aBoard->m_TrackWidthList.size(); ii++ )
     {
-        value = ReturnStringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii],
-                                       PCB_INTERNAL_UNIT, true );
+        value = ReturnStringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii], true );
         msg.Printf( _( "Track %s" ), GetChars( value ) );
 
         if( ii == 0 )
@@ -902,10 +903,10 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
     for( unsigned ii = 0; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
     {
         value = ReturnStringFromValue( g_UserUnit, aBoard->m_ViasDimensionsList[ii].m_Diameter,
-                                       PCB_INTERNAL_UNIT, true );
+                                       true );
         wxString drill = ReturnStringFromValue( g_UserUnit,
                                                 aBoard->m_ViasDimensionsList[ii].m_Drill,
-                                                PCB_INTERNAL_UNIT,  true );
+                                                true );
 
         if( aBoard->m_ViasDimensionsList[ii].m_Drill <= 0 )
         {

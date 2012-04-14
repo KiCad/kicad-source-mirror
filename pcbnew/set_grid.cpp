@@ -7,6 +7,7 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <wxBasePcbFrame.h>
+#include <base_units.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -135,8 +136,8 @@ void DIALOG_SET_GRID::SetGridOrigin( const wxPoint& grid )
 {
     wxString msg;
 
-    PutValueInLocalUnits( *m_GridOriginXCtrl, grid.x, m_internalUnits );
-    PutValueInLocalUnits( *m_GridOriginYCtrl, grid.y, m_internalUnits );
+    PutValueInLocalUnits( *m_GridOriginXCtrl, grid.x );
+    PutValueInLocalUnits( *m_GridOriginYCtrl, grid.y );
 }
 
 void DIALOG_SET_GRID::SetGridForFastSwitching( wxArrayString aGrids, int aGrid1, int aGrid2  )

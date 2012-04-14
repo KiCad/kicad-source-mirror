@@ -27,16 +27,17 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
                                          bool aPlotOriginIsAuxAxis, EDA_DRAW_MODE_T aTraceMode )
 {
     FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
-
     if( output_file == NULL )
     {
         return false;
     }
 
+    PCB_PLOT_PARAMS plot_opts = GetPlotSettings();
+
     wxPoint offset;
 
     // Calculate scaling from Pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units
-    double scale = g_PcbPlotOptions.m_PlotScale;
+    double scale = plot_opts.m_PlotScale;
 
     if( aPlotOriginIsAuxAxis )
     {
@@ -54,7 +55,7 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
 
     // No mirror and scaling for gerbers!
     plotter->set_viewport( offset, scale, 0 );
-    plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
+    plotter->set_default_line_width( plot_opts.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-RS274X" ) );
     plotter->set_filename( aFullFileName );
 
@@ -63,16 +64,21 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
         // Skip NPTH pads on copper layers
         // ( only if hole size == pad size ):
         if( (aLayer >= LAYER_N_BACK) && (aLayer <= LAYER_N_FRONT) )
-            g_PcbPlotOptions.m_SkipNPTH_Pads = true;
+            plot_opts.m_SkipNPTH_Pads = true;
+
+        SetPlotSettings( plot_opts );
 
         // Sheet refs on gerber CAN be useful... and they're always 1:1
-        if( g_PcbPlotOptions.m_PlotFrameRef )
+        if( plot_opts.m_PlotFrameRef )
             PlotWorkSheet( plotter, GetScreen() );
 
         Plot_Layer( plotter, aLayer, aTraceMode );
+
         plotter->end_plot();
 
-        g_PcbPlotOptions.m_SkipNPTH_Pads = false;
+        plot_opts.m_SkipNPTH_Pads = false;
+
+        SetPlotSettings( plot_opts );
     }
     else    // error in start_plot( ): failed opening a temporary file
     {

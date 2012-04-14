@@ -1,7 +1,7 @@
 Compiling KiCad from Source
 ===========================
 KiCad Documentation Team
-Last revised on 31-Jan-2010 by Jerry Jacobs
+Last revised on 12-mars-2012 by jp Charras
 
 Introduction
 ------------
@@ -25,7 +25,21 @@ On linux:
 Install "mesa".  Use your package manager to install the
 development libaries.
 
-Tools in PATH
+After a fresh install you need the following packages to compile and run
+KiCad from source.
+
+CMake   - Cross-platform make
+GLUT    - The OpenGL Utility Library
+wxGTK or wxWidgets  - The wxWidgets GUI toolkit with GTK+ bindings
+
+Boost   - Collection of portable C++ source libraries
+Because boost is in the repository of kicad you don't need to install them.
+
+Useful, but not required:
+Doxygen - Documentation system for several programming languages
+
+
+Compiler and basic development tools
 -------------
 Make sure g++, make and other tools are in your path.
 If windows, then try running g++ and make from within your msys bash shell.
@@ -37,48 +51,27 @@ Install or Build wxWidgets
 WARNING:
  see wxWidgets_patch_notes.txt for patches and issues in wxWidgets.
 
-If on windows, download
+If on Windows, download
 http://sourceforge.net/projects/wxwindows/files/wxAll/2.9.3/wxWidgets-2.9.3.zip/download
 or a newer version.
-Do NOT use previous versions which all have issues for KiCad.
-Start msys so you have a bash shell.  Decide where your wxWidgets build directory
-will be.  It must be where you can access it from within the msys environment,
-such as home/<user>.   Edit your msys/1.0/etc/fstab file if needed to provide
-access to this build directory from msys.  (Note that if you want you can build
-a "debug" version of the wxWidgets library at this point, instead of the release
-version, or in addition to the the release version.)
-Unzip the wmMWS zip file into the build directory.  Change directories into
+Do NOT use previous versions which all have annoying issues for KiCad.
+Start msys so you have a bash shell.
+Note also since 2.9 versions no need to build a "debug" version of the wxWidgets library,
+the release abd the debug version are same.
+
+Unzip the wxWidgets zip file into the build directory.  Change directories into
 there, and then:
 
-    mkdir build-release
-    mkdir build-debug
-
-.Release
-----
-    cd build-release
-    ../configure --enable-unicode --enable-monolithic --disable-shared --with-msw --with-opengl
+    mkdir Release
+    cd Release
+    ../configure --enable-unicode --enable-monolithic=no --disable-shared --with-opengl
     make
-    make install
-----
 
-.Debug
-----
-    cd build-debug
-    ../configure --enable-unicode --enable-monolithic --enable-debug --enable-debug_gdb --disable-shared --with-msw --with-opengl
-    make
-    make install
-----
+    and under Linux, but not under Windows:
+    sudo make install that install wxWidgets libs and headers in /usr/local/
 
-The default install path is /usr/local.  Generally speaking MinGW likes header
-files in /mingw/include and library link files in /mingw/lib.  You can install
-path by setting --prefix=/mingw to configure above to change where "make install"
-puts everything.  We will refer to the --prefix setting as <wxInstallDir> below.
 
-Verify that wx-config is in your path.  Modify your PATH environment variable
-if need be so you can run wx-config from a command prompt.  You may have to
-restart your msys shell, depending on how you modify your PATH.
-
-If on linux, use your package manager to install shared object libraries and the
+If on linux, you can use your package manager to install the
 development versions of the wxWidgets packages which include the C++ headers. An
 alternative is to build static libaries from source. Verify that wx-config is in
 your path by running it from a command prompt. Linux users then go to next step.
@@ -100,11 +93,24 @@ command prompt.
 Obtain Sources
 --------------
 You can use the Launchpad repository or a tar file for this.  See the wiki.
+To download files from  Launchpad repository, you should install bazaar (bzr) that is a
+version control system like subversion, mercurial, git...
 
-Launchpad repository handle 2 branches:
+Launchpad repository handle 2 branches for KiCda sources:
 - a testing branch (used by developers)
 - a stable branch (a copy of the testing branch, when this testing branch is near a stable state))
 
+Testing branch:
+bzr branch lp:kicad kicad_testing
+
+Stable branch:
+bzr branch lp:kicad/stable kicad_stable
+
+Components and Footprints libraries
+bzr branch lp:~kicad-lib-committers/kicad/library kicad_libraries
+
+Documentation and translations:
+bzr branch lp:~kicad-developers/kicad/doc kicad_doc
 
 Create Makefiles with CMake
 ---------------------------
@@ -112,14 +118,14 @@ If windows, go into your msys shell.  Linux and windows users both then make
 two "out of source" build directories:
     cd <kicadSource>
     mkdir -p build/release
-    mkdir build/debug
+    mkdir build/debug   (if you want a debug version of KiCad)
     cd build/release
 
 On either cmake command line shown below, you can optionally include
     -DCMAKE_INSTALL_PREFIX=<finallInstallDir>
 
 If windows, run the following command:
-    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
+    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release  -DKICAD_TESTING_VERSION=ON -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
 
 If linux, run instead the following command:
     cmake -DCMAKE_BUILD_TYPE=Release ../../
@@ -152,7 +158,8 @@ Although normally you do not install the Debug binaries, you can debug them
 where they were built.
 
 If windows, run the following command:
-    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_USE_DEBUG=ON -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
+    cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Debug -DKICAD_TESTING_VERSION=ON -DwxWidgets_ROOT_DIR=<wxInstallDir> ../../
+where <wxInstallDir> is <wxWidgets path>/Release
 
 If linux, run instead the following command:
     cmake -DCMAKE_BUILD_TYPE=Debug -DwxWidgets_USE_DEBUG=ON ../../
@@ -177,9 +184,6 @@ One of these 2 option *must* be set to ON:
 
  CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
    Choose build type: Release/Debug.
-
- wxWidgets_USE_DEBUG ON/OFF (REQUIRED)
-   Should be set to ON only when CMAKE_BUILD_TYPE=Debug.
 
  wxWidgets_USE_STATIC ON/OFF (OPTIONAL)
 

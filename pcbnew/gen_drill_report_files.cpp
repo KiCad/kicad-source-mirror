@@ -37,6 +37,9 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     wxPoint     offset;
     wxString    msg;
     PLOTTER*    plotter = NULL;
+
+    const PCB_PLOT_PARAMS&  plot_opts = aPcb->GetPlotOptions();
+
     LOCALE_IO   toggle;         // use standard notation for float numbers
 
     // Calculate dimensions and center of PCB
@@ -58,53 +61,53 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         break;
 
     case PLOT_FORMAT_HPGL:  // Scale for HPGL format.
-    {
-        offset.x = 0;
-        offset.y = 0;
-        scale    = 1;
-        HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
-        plotter = hpgl_plotter;
-        hpgl_plotter->set_pen_number( g_PcbPlotOptions.m_HPGLPenNum );
-        hpgl_plotter->set_pen_speed( g_PcbPlotOptions.m_HPGLPenSpeed );
-        hpgl_plotter->set_pen_overlap( 0 );
-        plotter->SetPageSettings( aSheet );
-        plotter->set_viewport( offset, scale, 0 );
-    }
-    break;
+        {
+            offset.x = 0;
+            offset.y = 0;
+            scale    = 1;
+            HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
+            plotter = hpgl_plotter;
+            hpgl_plotter->set_pen_number( plot_opts.m_HPGLPenNum );
+            hpgl_plotter->set_pen_speed( plot_opts.m_HPGLPenSpeed );
+            hpgl_plotter->set_pen_overlap( 0 );
+            plotter->SetPageSettings( aSheet );
+            plotter->set_viewport( offset, scale, 0 );
+        }
+        break;
 
     case PLOT_FORMAT_POST:
-    {
-        PAGE_INFO   pageA4( wxT( "A4" ) );
-        wxSize      pageSizeIU = pageA4.GetSizeIU();
+        {
+            PAGE_INFO   pageA4( wxT( "A4" ) );
+            wxSize      pageSizeIU = pageA4.GetSizeIU();
 
-        // Keep size for drill legend
-        double Xscale = (double) ( pageSizeIU.x * 0.8 ) / dX;
-        double Yscale = (double) ( pageSizeIU.y * 0.6 ) / dY;
+            // Keep size for drill legend
+            double Xscale = (double) ( pageSizeIU.x * 0.8 ) / dX;
+            double Yscale = (double) ( pageSizeIU.y * 0.6 ) / dY;
 
-        scale = MIN( Xscale, Yscale );
+            scale = MIN( Xscale, Yscale );
 
-        offset.x  = (int) ( (double) BoardCentre.x - ( (double) pageSizeIU.x / 2.0 ) / scale );
-        offset.y  = (int) ( (double) BoardCentre.y - ( (double) pageSizeIU.y / 2.0 ) / scale );
+            offset.x  = (int) ( (double) BoardCentre.x - ( (double) pageSizeIU.x / 2.0 ) / scale );
+            offset.y  = (int) ( (double) BoardCentre.y - ( (double) pageSizeIU.y / 2.0 ) / scale );
 
-        offset.y += pageSizeIU.y / 8;      // offset to legend
-        PS_PLOTTER* ps_plotter = new PS_PLOTTER;
-        plotter = ps_plotter;
-        ps_plotter->SetPageSettings( pageA4 );
-        plotter->set_viewport( offset, scale, 0 );
+            offset.y += pageSizeIU.y / 8;      // offset to legend
+            PS_PLOTTER* ps_plotter = new PS_PLOTTER;
+            plotter = ps_plotter;
+            ps_plotter->SetPageSettings( pageA4 );
+            plotter->set_viewport( offset, scale, 0 );
+        }
         break;
-    }
 
     case PLOT_FORMAT_DXF:
-    {
-        offset.x = 0;
-        offset.y = 0;
-        scale    = 1;
-        DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
-        plotter = dxf_plotter;
-        plotter->SetPageSettings( aSheet );
-        plotter->set_viewport( offset, scale, 0 );
+        {
+            offset.x = 0;
+            offset.y = 0;
+            scale    = 1;
+            DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
+            plotter = dxf_plotter;
+            plotter->SetPageSettings( aSheet );
+            plotter->set_viewport( offset, scale, 0 );
+        }
         break;
-    }
 
     default:
         wxASSERT( false );
@@ -122,19 +125,19 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         switch( PtStruct->Type() )
         {
         case PCB_LINE_T:
-            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, EDGE_LAYER, FILLED );
+            PlotDrawSegment( plotter, plot_opts, (DRAWSEGMENT*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
         case PCB_TEXT_T:
-            PlotTextePcb( plotter, (TEXTE_PCB*) PtStruct, EDGE_LAYER, FILLED );
+            PlotTextePcb( plotter, plot_opts, (TEXTE_PCB*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
         case PCB_DIMENSION_T:
-            PlotDimension( plotter, (DIMENSION*) PtStruct, EDGE_LAYER, FILLED );
+            PlotDimension( plotter, plot_opts, (DIMENSION*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
         case PCB_TARGET_T:
-            PlotPcbTarget( plotter, (PCB_TARGET*) PtStruct, EDGE_LAYER, FILLED );
+            PlotPcbTarget( plotter, plot_opts, (PCB_TARGET*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
         case PCB_MARKER_T:     // do not draw
@@ -182,7 +185,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
         plotY += intervalle;
 
-        plot_diam = (int) ( aToolListBuffer[ii].m_Diameter );
+        plot_diam = (int) aToolListBuffer[ii].m_Diameter;
         x = (int) ( (double) plotX - 200.0 * CharScale - (double)plot_diam / 2.0 );
         y = (int) ( (double) plotY + (double) CharSize * CharScale );
         plotter->marker( wxPoint( x, y ), plot_diam, ii );

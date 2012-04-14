@@ -42,7 +42,6 @@
 #include <wx/aui/aui.h>
 #include <wx/docview.h>
 
-#include <bitmaps.h>
 #include <colors.h>
 #include <common.h>
 
@@ -447,7 +446,6 @@ protected:
      */
     virtual void unitsChangeRefresh();
 
-
 public:
     EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& title,
                     const wxPoint& pos, const wxSize& size,
@@ -667,10 +665,32 @@ public:
      * Function GetZoom
      * @return The current zoom level.
      */
-    double GetZoom( void );
+    double GetZoom();
 
-    void TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
-    void  PlotWorkSheet( PLOTTER *plotter, BASE_SCREEN* screen );
+    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth );
+
+    /**
+     * Function TraceWorkSheet is a core function for drawing of the page layout with
+     * the frame and the basic inscriptions.
+     * @param aDC The device context.
+     * @param aSz The size of the page layout.
+     * @param aLT The left top margin of the page layout.
+     * @param aRB The right bottom margin of the page layout.
+     * @param aType The paper size type (for basic inscriptions).
+     * @param aFlNm The file name (for basic inscriptions).
+     * @param aTb The block of titles (for basic inscriptions).
+     * @param aNScr The number of screens (for basic inscriptions).
+     * @param aScr The screen number (for basic inscriptions).
+     * @param aLnW The line width for drawing.
+     * @param aClr1 The color for drawing.
+     * @param aClr2 The colr for inscriptions.
+     */
+    void TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
+                           wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
+                           int aNScr, int aScr, int aLnW, EDA_COLOR_T aClr1 = RED,
+                           EDA_COLOR_T aClr2 = RED );
+
+    void  PlotWorkSheet( PLOTTER* aPlotter, BASE_SCREEN* aScreen );
 
     /**
      * Function GetXYSheetReferences
@@ -720,13 +740,20 @@ public:
 
     /* Handlers for block commands */
     virtual void InitBlockPasteInfos();
-    virtual bool HandleBlockBegin( wxDC* DC, int cmd_type,const wxPoint& startpos );
+
+    /**
+     * Function HandleBlockBegin
+     * initializes the block command including the command type, initial position,
+     * and other variables.
+     */
+    virtual bool HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosition );
 
     /**
      * Function ReturnBlockCommand
-     * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
-     * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
-     * block command is started by dragging the mouse.
+     * Returns the block command code (BLOCK_MOVE, BLOCK_COPY...) corresponding to the
+     * keys pressed (ALT, SHIFT, SHIFT ALT ..) when block command is started by dragging
+     * the mouse.
+     *
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
@@ -932,148 +959,6 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-
-/**
- * Function AddMenuItem
- * is an inline helper function to create and insert a menu item with an image
- * into \a aMenu
- *
- * @param aMenu is the menu to add the new item.
- * @param aId is the command ID for the new menu item.
- * @param aText is the string for the new menu item.
- * @param aImage is the image to add to the new menu item.
- */
-static inline void AddMenuItem( wxMenu*         aMenu,
-                                int             aId,
-                                const wxString& aText,
-                                const wxBitmap& aImage )
-{
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText );
-
-#if defined( USE_IMAGES_IN_MENUS )
-    item->SetBitmap( aImage );
-#endif
-
-    aMenu->Append( item );
-}
-
-
-/**
- * Function AddMenuItem
- * is an inline helper function to create and insert a menu item with an image
- * and a help message string into \a aMenu
- *
- * @param aMenu is the menu to add the new item.
- * @param aId is the command ID for the new menu item.
- * @param aText is the string for the new menu item.
- * @param aHelpText is the help message string for the new menu item.
- * @param aImage is the image to add to the new menu item.
- */
-static inline void AddMenuItem( wxMenu*         aMenu,
-                                int             aId,
-                                const wxString& aText,
-                                const wxString& aHelpText,
-                                const wxBitmap& aImage )
-{
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText, aHelpText );
-
-#if defined( USE_IMAGES_IN_MENUS )
-    item->SetBitmap( aImage );
-#endif
-
-    aMenu->Append( item );
-}
-
-
-/**
- * Function AddMenuItem
- * is an inline helper function to create and insert a menu item with an image
- * into \a aSubMenu in \a aMenu
- *
- * @param aMenu is the menu to add the new submenu item.
- * @param aSubMenu is the submenu to add the new menu.
- * @param aId is the command ID for the new menu item.
- * @param aText is the string for the new menu item.
- * @param aImage is the image to add to the new menu item.
- */
-static inline void AddMenuItem( wxMenu*         aMenu,
-                                wxMenu*         aSubMenu,
-                                int             aId,
-                                const wxString& aText,
-                                const wxBitmap& aImage )
-{
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText );
-    item->SetSubMenu( aSubMenu );
-
-#if defined( USE_IMAGES_IN_MENUS )
-    item->SetBitmap( aImage );
-#endif
-
-    aMenu->Append( item );
-};
-
-
-/**
- * Function AddMenuItem
- * is an inline helper function to create and insert a menu item with an image
- * and a help message string into \a aSubMenu in \a aMenu
- *
- * @param aMenu is the menu to add the new submenu item.
- * @param aSubMenu is the submenu to add the new menu.
- * @param aId is the command ID for the new menu item.
- * @param aText is the string for the new menu item.
- * @param aHelpText is the help message string for the new menu item.
- * @param aImage is the image to add to the new menu item.
- */
-static inline void AddMenuItem( wxMenu*         aMenu,
-                                wxMenu*         aSubMenu,
-                                int             aId,
-                                const wxString& aText,
-                                const wxString& aHelpText,
-                                const wxBitmap& aImage )
-{
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText, aHelpText );
-    item->SetSubMenu( aSubMenu );
-
-#if defined( USE_IMAGES_IN_MENUS )
-    item->SetBitmap( aImage );
-#endif
-
-    aMenu->Append( item );
-};
-
-
-/**
- * Definition SETBITMAPS
- * is a macro use to add a bitmaps to check menu item.
- * @note Do not use with normal menu items or any platform other than Windows.
- * @param aImage is the image to add the menu item.
- */
-#if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
-#  define SETBITMAPS( aImage ) item->SetBitmaps( KiBitmap( apply_xpm ), KiBitmap( aImage ) )
-#else
-#  define SETBITMAPS( aImage )
-#endif
-
-/**
- * Definition SETBITMAP
- * is a macro use to add a bitmap to a menu items.
- * @note Do not use with checked menu items.
- * @param aImage is the image to add the menu item.
- */
-#if !defined( USE_IMAGES_IN_MENUS )
-#  define SET_BITMAP( aImage )
-#else
-#  define SET_BITMAP( aImage ) item->SetBitmap( aImage )
-#endif
 
 
 /**

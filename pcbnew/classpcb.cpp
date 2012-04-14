@@ -9,6 +9,8 @@
 #include <macros.h>
 #include <trigo.h>
 #include <class_pcb_screen.h>
+#include <eda_text.h>                // FILLED
+
 #include <pcbnew.h>
 #include <class_board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>

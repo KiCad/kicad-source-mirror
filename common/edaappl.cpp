@@ -51,6 +51,7 @@
 #include <hotkeys_basic.h>
 #include <online_help.h>
 #include <gestfich.h>
+#include <menus_helpers.h>
 
 
 static const wxChar* CommonConfigPath = wxT( "kicad_common" );
@@ -839,12 +840,9 @@ void EDA_APP::AddMenuLanguageList( wxMenu* MasterMenu )
         else
             label = wxGetTranslation( s_Language_List[ii].m_Lang_Label );
 
-        item = new wxMenuItem( menu,
-                               s_Language_List[ii].m_KI_Lang_Identifier,
-                               label, wxEmptyString, wxITEM_CHECK );
-
-        SETBITMAPS( s_Language_List[ii].m_Lang_Icon );
-        menu->Append( item );
+        AddMenuItem( menu, s_Language_List[ii].m_KI_Lang_Identifier,
+                     label, KiBitmap(s_Language_List[ii].m_Lang_Icon ),
+                     wxITEM_CHECK );
     }
 
     AddMenuItem( MasterMenu, menu,

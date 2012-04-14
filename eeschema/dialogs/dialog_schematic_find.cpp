@@ -78,6 +78,7 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
     // Adjust the height of the dialog to prevent controls from being hidden when
     // switching between the find and find/replace modes of the dialog.  This ignores
     // the users preferred height if any of the controls would be hidden.
+    GetSizer()->SetSizeHints( this );
     wxSize size = aSize;
 
     if( aSize != wxDefaultSize )

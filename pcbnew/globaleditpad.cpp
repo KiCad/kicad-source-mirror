@@ -335,7 +335,11 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
             }
 
             if( pad->GetShape() == PAD_CIRCLE )
-                pad->SetY( pad->GetSize().x );
+            {
+                // Ensure pad size.y = pad size.x
+                int size = pad->GetSize().x;
+                pad->SetSize( wxSize( size, size ) );
+            }
 
             switch( pad->GetAttribute() )
             {

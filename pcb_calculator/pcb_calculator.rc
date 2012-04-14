@@ -1,7 +1,3 @@
-#ifdef USE_PNG_BITMAPS
 icon_pcbcalculator ICON "../bitmaps_png/icons/icon_pcbcalculator.ico"
-#else
-icon_pcbcalculator ICON "../bitmaps_xpm/icons/icon_pcbcalculator.ico"
-#endif
 
 #include "wx/msw/wx.rc"

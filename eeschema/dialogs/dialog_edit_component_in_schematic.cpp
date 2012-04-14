@@ -11,6 +11,7 @@
 #include <confirm.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <class_library.h>
@@ -655,10 +656,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
         // top of each other.
     }
 
-    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x, EESCHEMA_INTERNAL_UNIT );
+    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x );
     posXTextCtrl->SetValue( coordText );
 
-    coordText = ReturnStringFromValue( g_UserUnit, coord.y, EESCHEMA_INTERNAL_UNIT );
+    coordText = ReturnStringFromValue( g_UserUnit, coord.y );
     posYTextCtrl->SetValue( coordText );
 }
 

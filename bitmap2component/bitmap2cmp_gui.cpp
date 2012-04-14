@@ -38,6 +38,7 @@
 
 #include <colors_selection.h>
 #include <build_version.h>
+#include <menus_helpers.h>
 
 #define KEYWORD_FRAME_POSX wxT( "Bmconverter_Pos_x" )
 #define KEYWORD_FRAME_POSY wxT( "Bmconverter_Pos_y" )

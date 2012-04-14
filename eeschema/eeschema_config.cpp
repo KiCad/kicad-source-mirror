@@ -215,6 +215,8 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_showAllPins );
+    dlg.SetEnableMiddleButtonPan( m_canvas->GetEnableMiddleButtonPan() );
+    dlg.SetMiddleButtonPanLimited( m_canvas->GetMiddleButtonPanLimited() );
     dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
     dlg.SetEnableHVBusOrientation( g_HVLines );
     dlg.SetShowPageLimits( g_ShowPageLimits );
@@ -246,6 +248,8 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
     SetGridVisibility( dlg.GetShowGrid() );
     m_showAllPins = dlg.GetShowHiddenPins();
+    m_canvas->SetEnableMiddleButtonPan( dlg.GetEnableMiddleButtonPan() );
+    m_canvas->SetMiddleButtonPanLimited( dlg.GetMiddleButtonPanLimited() );
     m_canvas->SetEnableAutoPan( dlg.GetEnableAutoPan() );
     g_HVLines = dlg.GetEnableHVBusOrientation();
     g_ShowPageLimits = dlg.GetShowPageLimits();
@@ -285,11 +289,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
                                                                &m_componentLibFiles,
                                                                GROUPLIB ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "NetFmt" ),
-                                                      &m_netListFormat,
-                                                      NET_TYPE_PCBNEW,
-                                                      NET_TYPE_PCBNEW,
-                                                      NET_TYPE_CUSTOM_MAX ) );
+    m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
+                                                         &m_netListFormat) );
 
     // NOTE: Left as global until supporting code  can be fixed.
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLSpd" ),
@@ -450,8 +451,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
     if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.push_back( new PARAM_CFG_INT( wxT( "Unite" ),
-                                                   (int*)&g_UserUnit, 0 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
+                                                   (int*)&g_UserUnit, MILLIMETRES ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
                                                         &g_LayerDescr.LayerColor[LAYER_WIRE],
                                                         GREEN ) );

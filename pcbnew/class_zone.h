@@ -122,9 +122,9 @@ private:
     CPolyLine*            smoothedPoly;         // Corner-smoothed version of m_Poly
     int                   cornerSmoothingType;
     unsigned int          cornerRadius;
-    // Priority: when a zone outline is inside and other zone, if its priority is highter
+    // Priority: when a zone outline is inside and other zone, if its priority is higher
     // the other zone priority, it will be created inside.
-    // if priorities are equal, a DRC erroc is set
+    // if priorities are equal, a DRC error is set
     unsigned              m_priority;
     ZoneConnection        m_PadConnection;
 
@@ -274,13 +274,13 @@ public:
     int GetFillMode() const { return m_FillMode; }
 
     void SetThermalReliefGap( int aThermalReliefGap ) { m_ThermalReliefGap = aThermalReliefGap; }
-    int GetThermalReliefGap() const { return m_ThermalReliefGap; }
+    int GetThermalReliefGap( D_PAD* aPad = NULL ) const;
 
     void SetThermalReliefCopperBridge( int aThermalReliefCopperBridge )
     {
         m_ThermalReliefCopperBridge = aThermalReliefCopperBridge;
     }
-    int GetThermalReliefCopperBridge() const { return m_ThermalReliefCopperBridge; }
+    int GetThermalReliefCopperBridge( D_PAD* aPad = NULL ) const;
 
     void SetArcSegCount( int aArcSegCount ) { m_ArcToSegmentsCount = aArcSegCount; }
     int GetArcSegCount() const { return m_ArcToSegmentsCount; }
@@ -297,14 +297,8 @@ public:
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness ) { m_ZoneMinThickness = aMinThickness; }
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * For zones, this means near an outline segment
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& refPos );
+    /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
+    virtual bool HitTest( const wxPoint& aPosition );
 
     /**
      * Function HitTestFilledArea
@@ -312,7 +306,7 @@ public:
      * @param aRefPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTestFilledArea( const wxPoint& aRefPos );
+    bool HitTestFilledArea( const wxPoint& aRefPos ) const;
 
     /**
      * Function BuildFilledPolysListData
@@ -377,13 +371,8 @@ public:
      */
     bool HitTestForEdge( const wxPoint& refPos );
 
-    /**
-     * Function HitTest (overloaded)
-     * tests if the given EDA_RECT contains the bounds of this object.
-     * @param refArea : the given EDA_RECT
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( EDA_RECT& refArea );
+    /** @copydoc EDA_ITEM::HitTest(const EDA_RECT&)const */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function Fill_Zone
@@ -563,12 +552,14 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
 
+    virtual EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,12 +9,15 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizerUpper;
+	bSizerUpper = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
@@ -43,7 +46,8 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	bLeftSizer->Add( m_CursorShape, 0, wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
+	
+	bSizerUpper->Add( bLeftSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleLeftSizer;
 	bMiddleLeftSizer = new wxBoxSizer( wxVERTICAL );
@@ -78,7 +82,8 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	bMiddleLeftSizer->Add( m_RotationAngle, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	bMainSizer->Add( bMiddleLeftSizer, 1, wxEXPAND, 5 );
+	
+	bSizerUpper->Add( bMiddleLeftSizer, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* bMiddleRightBoxSizer;
 	bMiddleRightBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
@@ -114,17 +119,13 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	bMiddleRightBoxSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
 	
-	m_AutoPANOpt = new wxCheckBox( this, wxID_AUTOPAN, _("Auto PAN"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AutoPANOpt->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
-	
-	bMiddleRightBoxSizer->Add( m_AutoPANOpt, 0, wxALL, 5 );
-	
 	m_Track_DoubleSegm_Ctrl = new wxCheckBox( this, wxID_ANY, _("Double Segm Track"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Track_DoubleSegm_Ctrl->SetToolTip( _("If enabled, uses two track segments, with 45 degrees angle between them when creating a new track ") );
 	
 	bMiddleRightBoxSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxALL, 5 );
 	
-	bMainSizer->Add( bMiddleRightBoxSizer, 1, 0, 5 );
+	
+	bSizerUpper->Add( bMiddleRightBoxSizer, 1, 0, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -145,27 +146,60 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	bRightSizer->Add( m_MagneticTrackOptCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonOK = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetDefault(); 
-	bRightSizer->Add( m_buttonOK, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	wxStaticBoxSizer* sbSizer2PAN;
+	sbSizer2PAN = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
 	
-	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizer->Add( m_buttonCANCEL, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_MiddleButtonPANOpt = new wxCheckBox( this, wxID_MIDDLEBUTTONPAN, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MiddleButtonPANOpt->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
 	
-	bMainSizer->Add( bRightSizer, 1, wxEXPAND, 5 );
+	sbSizer2PAN->Add( m_MiddleButtonPANOpt, 0, wxALL, 5 );
+	
+	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_MIDDLEBUTTONPAN, _("Middle Button PAN Limited"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptMiddleButtonPanLimited->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
+	
+	sbSizer2PAN->Add( m_OptMiddleButtonPanLimited, 0, wxALL, 5 );
+	
+	m_AutoPANOpt = new wxCheckBox( this, wxID_AUTOPAN, _("Auto PAN"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AutoPANOpt->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
+	
+	sbSizer2PAN->Add( m_AutoPANOpt, 0, wxALL, 5 );
+	
+	
+	bRightSizer->Add( sbSizer2PAN, 1, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	
+	
+	bSizerUpper->Add( bRightSizer, 1, wxEXPAND, 5 );
+	
+	
+	bMainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
+	
+	bMainSizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	
 	// Connect Events
-	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGeneralOptionsBoardEditor_base::OnOkClick ), NULL, this );
-	m_buttonCANCEL->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGeneralOptionsBoardEditor_base::OnCancelClick ), NULL, this );
+	m_MiddleButtonPANOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnMiddleBtnPanEnbl ), NULL, this );
+	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnCancelClick ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnOkClick ), NULL, this );
 }
 
-DialogGeneralOptionsBoardEditor_base::~DialogGeneralOptionsBoardEditor_base()
+DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::~DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE()
 {
 	// Disconnect Events
-	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGeneralOptionsBoardEditor_base::OnOkClick ), NULL, this );
-	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGeneralOptionsBoardEditor_base::OnCancelClick ), NULL, this );
+	m_MiddleButtonPANOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnMiddleBtnPanEnbl ), NULL, this );
+	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnCancelClick ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::OnOkClick ), NULL, this );
 	
 }

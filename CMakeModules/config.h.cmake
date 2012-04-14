@@ -55,17 +55,16 @@
 
 #cmakedefine USE_IMAGES_IN_MENUS 1
 
-#cmakedefine USE_PNG_BITMAPS 1
-
 #cmakedefine USE_NEW_PCBNEW_LOAD
 #cmakedefine USE_NEW_PCBNEW_SAVE
+#cmakedefine USE_PCBNEW_NANOMETRES
+#cmakedefine USE_PCBNEW_SEXPR_FILE_FORMAT
 
-
-/// The file format revision of the *.brd file created by this build
-#if defined(KICAD_NANOMETRE)
-#define BOARD_FILE_VERSION          2
+/// The legacy file format revision of the *.brd file created by this build
+#if defined(USE_PCBNEW_NANOMETRES)
+#define LEGACY_BOARD_FILE_VERSION          2
 #else
-#define BOARD_FILE_VERSION          1
+#define LEGACY_BOARD_FILE_VERSION          1
 #endif
 
 #endif  // CONFIG_H_

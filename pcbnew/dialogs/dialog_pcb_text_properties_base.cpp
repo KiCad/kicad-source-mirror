@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
@@ -56,6 +56,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeft->Add( m_ThicknessCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
+	
 	bSizerLower->Add( bSizerLeft, 1, 0, 5 );
 	
 	wxBoxSizer* bSizerRight;
@@ -86,6 +87,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	
 	bSizerRight->Add( m_LayerSelectionCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bSizerLower->Add( bSizerRight, 1, 0, 5 );
 	
 	wxBoxSizer* bSizer5;
@@ -110,6 +112,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_StyleCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_StyleCtrlNChoices, m_StyleCtrlChoices, 0 );
 	m_StyleCtrl->SetSelection( 0 );
 	bSizer5->Add( m_StyleCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
 	
 	bSizerLower->Add( bSizer5, 0, wxEXPAND, 5 );
 	
@@ -136,7 +139,9 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_justifyChoice->SetSelection( 0 );
 	bSizer6->Add( m_justifyChoice, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
+	
 	bSizerLower->Add( bSizer6, 0, wxEXPAND, 5 );
+	
 	
 	bSizer9->Add( bSizerLower, 0, wxEXPAND, 5 );
 	
@@ -146,9 +151,12 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_StandardSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_StandardSizer->AddButton( m_StandardSizerCancel );
 	m_StandardSizer->Realize();
+	
 	bSizer9->Add( m_StandardSizer, 0, wxALIGN_BOTTOM|wxALIGN_RIGHT|wxALL, 5 );
 	
+	
 	bMainSizer->Add( bSizer9, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

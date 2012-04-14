@@ -111,7 +111,7 @@ public:
 
     ~SCH_COMPONENT() { }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_COMPONENT" );
     }
@@ -142,22 +142,9 @@ public:
      */
     int GetPartCount() const;
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Load schematic component from \a aLine in a .sch file.
-     *
-     * @param aLine Essentially this is file to read the component from.
-     * @param aErrorMsg Description of the error if an error occurs while loading the component.
-     * @return True if the component loaded successfully.
-     */
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
      * Function SetOrientation
@@ -210,14 +197,6 @@ public:
      */
     void SetTimeStamp( long aNewTimeStamp );
 
-    /**
-     * Function GetBoundingBox
-     * returns the bounding box of this object for display purposes. This box should be an
-     * enclosing perimeter for visible components of this object, and the units should be
-     * in the pcb or schematic coordinate system.  It is OK to overestimate the size by a
-     * few counts.
-     * @return The bounding rectangle of the component.
-     */
     EDA_RECT GetBoundingBox() const;
 
     //-----<Fields>-----------------------------------------------------------
@@ -267,11 +246,11 @@ public:
      */
     LIB_PIN* GetPin( const wxString& number );
 
-    virtual void Draw( EDA_DRAW_PANEL* panel,
-                       wxDC*           DC,
-                       const wxPoint&  offset,
-                       int             draw_mode,
-                       int             Color = -1 )
+    void Draw( EDA_DRAW_PANEL* panel,
+               wxDC*           DC,
+               const wxPoint&  offset,
+               int             draw_mode,
+               int             Color = -1 )
     {
         Draw( panel, DC, offset, draw_mode, Color, true );
     }
@@ -283,7 +262,7 @@ public:
                int             Color,
                bool            DrawPinText );
 
-    virtual void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem );
 
     // returns a unique ID, in the form of a path.
     wxString GetPath( const SCH_SHEET_PATH* sheet ) const;
@@ -329,12 +308,7 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    /**
-     * Function Move
-     * moves item to a new position by \a aMoveVector.
-     * @param aMoveVector The displacement to move the component
-     */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         if( aMoveVector == wxPoint( 0, 0 ) )
             return;
@@ -347,38 +321,25 @@ public:
         SetModified();
     }
 
-    /**
-     * Function Mirror_Y
-     * mirrors the component relative to an Y axis about the \a aYaxis_position.
-     * @param aYaxis_position The y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    void MirrorY( int aYaxis_position );
 
-    /**
-     * Function Mirror_X (virtual)
-     * mirrors item relative to an X axis about the \a aXaxis_position.
-     * @param aXaxis_position The x axis position
-     */
-    virtual void Mirror_X( int aXaxis_position );
+    void MirrorX( int aXaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    void Rotate( wxPoint aPosition );
 
-    /**
-     * @copydoc EDA_ITEM::Matches()
-     */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
 
     wxPoint GetPinPhysicalPosition( LIB_PIN* Pin );
 
-    virtual bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect );
 
-    virtual bool IsConnectable() const { return true; }
+    bool IsConnectable() const { return true; }
 
-    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
-    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
+    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                                  const KICAD_T scanTypes[] );
 
     /**
@@ -391,37 +352,40 @@ public:
      */
     LIB_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_component_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_component_xpm; }
 
-    virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
+    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
                                  SCH_SHEET_PATH*          aSheetPath );
 
-    virtual bool operator <( const SCH_ITEM& aItem ) const;
+    bool operator <( const SCH_ITEM& aItem ) const;
 
     bool operator==( const SCH_COMPONENT& aComponent) const;
     bool operator!=( const SCH_COMPONENT& aComponent) const;
 
     SCH_ITEM& operator=( const SCH_ITEM& aItem );
 
-    /**
-     * @copydoc EDA_ITEM::IsReplaceable()
-     */
-    virtual bool IsReplaceable() const { return true; }
+    bool IsReplaceable() const { return true; }
+
+    wxPoint GetPosition() const { return m_Pos; }
+
+    void SetPosition( const wxPoint& aPosition ) { Move( aPosition - m_Pos ); }
+
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+
+    void Plot( PLOTTER* aPlotter );
+
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
-    virtual bool doIsConnected( const wxPoint& aPosition ) const;
-    virtual EDA_ITEM* doClone() const;
-    virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { Move( aPosition - m_Pos ); }
+    bool doIsConnected( const wxPoint& aPosition ) const;
 };
 
 

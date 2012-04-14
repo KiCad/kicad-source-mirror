@@ -55,7 +55,7 @@ void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, in
 /***********************************/
 /* dialogs/dialog_color_config.cpp */
 /***********************************/
-EDA_Colors ReturnLayerColor( int Layer );
+EDA_COLOR_T ReturnLayerColor( int Layer );
 
 
 /***************/

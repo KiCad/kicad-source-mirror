@@ -61,7 +61,7 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
 }
 
 
-EDA_ITEM* SCH_SHEET_PIN::doClone() const
+EDA_ITEM* SCH_SHEET_PIN::Clone() const
 {
     return new SCH_SHEET_PIN( *this );
 }
@@ -378,7 +378,7 @@ bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
 }
 
 
-void SCH_SHEET_PIN::Mirror_X( int aXaxis_position )
+void SCH_SHEET_PIN::MirrorX( int aXaxis_position )
 {
     int p = m_Pos.y - aXaxis_position;
 
@@ -397,7 +397,7 @@ void SCH_SHEET_PIN::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_SHEET_PIN::Mirror_Y( int aYaxis_position )
+void SCH_SHEET_PIN::MirrorY( int aYaxis_position )
 {
     int p = m_Pos.x - aYaxis_position;
 
@@ -416,9 +416,9 @@ void SCH_SHEET_PIN::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_SHEET_PIN::Rotate( wxPoint rotationPoint )
+void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
 
     switch( m_edge )
     {
@@ -484,7 +484,7 @@ wxString SCH_SHEET_PIN::GetSelectMenuText() const
 }
 
 
-bool SCH_SHEET_PIN::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_SHEET_PIN::HitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
 

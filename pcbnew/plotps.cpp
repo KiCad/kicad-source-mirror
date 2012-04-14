@@ -25,6 +25,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
                                              bool aUseA4, EDA_DRAW_MODE_T aTraceMode )
 {
     const PAGE_INFO&    pageInfo = GetPageSettings();
+    PCB_PLOT_PARAMS     plotOpts = GetPlotSettings();
 
     wxSize      paperSizeIU;
     wxSize      boardSize;
@@ -45,7 +46,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
         return false;
     }
 
-    if( g_PcbPlotOptions.m_PlotScale != 1.0 || g_PcbPlotOptions.m_AutoScale )
+    if( plotOpts.m_PlotScale != 1.0 || plotOpts.m_AutoScale )
     {
         // when scale != 1.0 we must calculate the position in page
         // because actual position has no meaning
@@ -53,8 +54,8 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     }
 
     // Set default line width
-    if( g_PcbPlotOptions.m_PlotLineWidth < 1 )
-        g_PcbPlotOptions.m_PlotLineWidth = 1;
+    if( plotOpts.m_PlotLineWidth < 1 )
+        plotOpts.m_PlotLineWidth = 1;
 
     wxSize pageSizeIU = GetPageSizeIU();
 
@@ -76,7 +77,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     boardSize   = bbbox.GetSize();
     boardCenter = bbbox.Centre();
 
-    if( g_PcbPlotOptions.m_AutoScale )       // Optimum scale
+    if( plotOpts.m_AutoScale )       // Optimum scale
     {
         // Fit to 80% of the page
         double Xscale = (paperSizeIU.x * 0.8) / boardSize.x;
@@ -86,7 +87,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     }
     else
     {
-        scale = g_PcbPlotOptions.m_PlotScale * paperscale;
+        scale = plotOpts.m_PlotScale * paperscale;
     }
 
     if( center )
@@ -104,23 +105,26 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
 
     plotter->SetPageSettings( *sheetPS );
 
-    plotter->set_scale_adjust( g_PcbPlotOptions.m_FineScaleAdjustX,
-                               g_PcbPlotOptions.m_FineScaleAdjustY );
-    plotter->set_plot_width_adj( g_PcbPlotOptions.m_FineWidthAdjust );
-    plotter->set_viewport( offset, scale, g_PcbPlotOptions.m_PlotMirror );
-    plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
+    // why did we have to change these settings?
+    SetPlotSettings( plotOpts );
+
+    plotter->set_scale_adjust( plotOpts.m_FineScaleAdjustX,
+                               plotOpts.m_FineScaleAdjustY );
+    plotter->set_plot_width_adj( plotOpts.m_FineWidthAdjust );
+    plotter->set_viewport( offset, scale, plotOpts.m_PlotMirror );
+    plotter->set_default_line_width( plotOpts.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-PS" ) );
     plotter->set_filename( aFullFileName );
     plotter->start_plot( output_file );
 
     /* The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway */
-    if( g_PcbPlotOptions.m_PlotFrameRef && !center )
+    if( plotOpts.m_PlotFrameRef && !center )
         PlotWorkSheet( plotter, GetScreen() );
 
     // If plot a negative board:
     // Draw a black rectangle (background for plot board in white)
     // and switch the current color to WHITE
-    if( g_PcbPlotOptions.m_PlotPSNegative )
+    if( plotOpts.m_PlotPSNegative )
     {
         int margin = 500;              // Add a 0.5 inch margin around the board
         plotter->set_negative( true );

@@ -89,7 +89,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_LIBEDIT_EXPORT_BODY_BUTT, wxEmptyString, KiBitmap( export_xpm ),
                             _( "Export current drawing" ), wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_body_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_xpm ),
                             HELP_DELETE_ITEMS, wxITEM_CHECK  );
 
     m_drawToolBar->Realize();

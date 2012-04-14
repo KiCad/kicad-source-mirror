@@ -79,9 +79,9 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
 {
     wxASSERT( m_canvas->IsMouseCaptured() );
 
-    GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+    GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
 
-    switch( GetScreen()->m_BlockLocate.m_Command )
+    switch( GetScreen()->m_BlockLocate.GetCommand() )
     {
     case BLOCK_MOVE:                /* Move */
         if( m_canvas->IsMouseCaptured() )
@@ -133,11 +133,11 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( m_canvas->IsMouseCaptured() )
 
-        switch( GetScreen()->m_BlockLocate.m_Command )
+        switch( GetScreen()->m_BlockLocate.GetCommand() )
         {
         case BLOCK_MOVE:            /* Move */
         case BLOCK_COPY:            /* Copy */
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
+            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
             nextcmd = true;
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
@@ -145,7 +145,7 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
             break;
 
         case BLOCK_DELETE: /* Delete */
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             Block_Delete( DC );
             break;
@@ -197,31 +197,31 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     {
         screen->m_BlockLocate.Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, Color );
 
-        if( screen->m_BlockLocate.m_MoveVector.x|| screen->m_BlockLocate.m_MoveVector.y )
+        if( screen->m_BlockLocate.GetMoveVector().x|| screen->m_BlockLocate.GetMoveVector().y )
         {
             screen->m_BlockLocate.Draw( aPanel,
                                         aDC,
-                                        screen->m_BlockLocate.m_MoveVector,
+                                        screen->m_BlockLocate.GetMoveVector(),
                                         g_XorMode,
                                         Color );
         }
     }
 
-    if( screen->m_BlockLocate.m_State != STATE_BLOCK_STOP )
+    if( screen->m_BlockLocate.GetState() != STATE_BLOCK_STOP )
     {
-        screen->m_BlockLocate.m_MoveVector.x = screen->GetCrossHairPosition().x -
-                                               screen->m_BlockLocate.GetRight();
-        screen->m_BlockLocate.m_MoveVector.y = screen->GetCrossHairPosition().y -
-                                               screen->m_BlockLocate.GetBottom();
+        screen->m_BlockLocate.SetMoveVector( wxPoint( screen->GetCrossHairPosition().x -
+                                                      screen->m_BlockLocate.GetRight(),
+                                                      screen->GetCrossHairPosition().y -
+                                                      screen->m_BlockLocate.GetBottom() ) );
     }
 
     screen->m_BlockLocate.Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, Color );
 
-    if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
+    if( screen->m_BlockLocate.GetMoveVector().x || screen->m_BlockLocate.GetMoveVector().y )
     {
         screen->m_BlockLocate.Draw( aPanel,
                                     aDC,
-                                    screen->m_BlockLocate.m_MoveVector,
+                                    screen->m_BlockLocate.GetMoveVector(),
                                     g_XorMode,
                                     Color );
     }
@@ -239,10 +239,12 @@ void GERBVIEW_FRAME::Block_Delete( wxDC* DC )
 
     BOARD_ITEM* item = GetBoard()->m_Drawings;
     BOARD_ITEM* nextitem;
+
     for( ; item; item = nextitem )
     {
         nextitem = item->Next();
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+
         if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
             gerb_item->DeleteStructure();
     }
@@ -265,13 +267,15 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
     GetScreen()->m_BlockLocate.Normalize();
 
     /* Calculate displacement vectors. */
-    delta = GetScreen()->m_BlockLocate.m_MoveVector;
+    delta = GetScreen()->m_BlockLocate.GetMoveVector();
 
     /* Move items in block */
     BOARD_ITEM* item = GetBoard()->m_Drawings;
+
     for( ; item; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+
         if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
             gerb_item->MoveAB( delta );
     }
@@ -293,7 +297,7 @@ void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
     GetScreen()->SetModify();
     GetScreen()->m_BlockLocate.Normalize();
 
-    delta = GetScreen()->m_BlockLocate.m_MoveVector;
+    delta = GetScreen()->m_BlockLocate.GetMoveVector();
 
     /* Copy items in block */
     BOARD_ITEM* item = GetBoard()->m_Drawings;

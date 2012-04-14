@@ -36,6 +36,8 @@
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
 #include <dcsvg.h>
+#include <base_units.h>
+
 #include <general.h>
 #include <libeditframe.h>
 #include <sch_sheet_path.h>
@@ -78,8 +80,7 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness,
-                               m_Parent->GetInternalUnits() ) );
+        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness ) );
     m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
 
     if( GetSizer() )
@@ -105,8 +106,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
     }
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness,
-                               m_Parent->GetInternalUnits() ) );
+        ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness ) );
 }
 
 
@@ -217,7 +217,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
     LOCALE_IO   toggle;
 
     float       dpi = (float) frame->GetInternalUnits();
-    wxSVGFileDC dc( FullFileName, sheetSize.x, sheetSize.y, dpi );
+    KicadSVGFileDC dc( FullFileName, sheetSize.x, sheetSize.y, dpi );
 
     EDA_RECT    tmp = *panel->GetClipBox();
     GRResetPenAndBrush( &dc );
@@ -228,7 +228,13 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
                                  wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     screen->m_IsPrinting = true;
-    screen->Draw( panel, &dc, GR_COPY );
+    if( frame->IsType( SCHEMATIC_FRAME ) )
+        screen->Draw( panel, &dc, GR_COPY );
+
+    if( frame->IsType( LIBEDITOR_FRAME ) )
+        ((LIB_EDIT_FRAME*)frame)->RedrawComponent( &dc,
+                                                   wxPoint(sheetSize.x/2,
+                                                   sheetSize.y/2) );
 
     if( aPrint_Sheet_Ref )
         frame->TraceWorkSheet( &dc, screen, g_DrawDefaultLineThickness );

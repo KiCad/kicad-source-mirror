@@ -6,6 +6,7 @@
 #include <appl_wxstruct.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_zone.h>
@@ -36,12 +37,12 @@ private:
 
 public:
     DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
-            ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings );
+                                    ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings );
 };
 
 
 ZONE_EDIT_T InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent,
-                ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings )
+                                        ZONE_CONTAINER* aZone, ZONE_SETTINGS* aSettings )
 {
     DIALOG_NON_COPPER_ZONES_EDITOR  dlg( aParent, aZone, aSettings );
 
@@ -54,8 +55,8 @@ ZONE_EDIT_T InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent,
 
 
 DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent,
-                                                        ZONE_CONTAINER* aZone,
-                                                        ZONE_SETTINGS* aSettings ) :
+                                                                ZONE_CONTAINER* aZone,
+                                                                ZONE_SETTINGS* aSettings ) :
     DialogNonCopperZonesPropertiesBase( aParent )
 {
     m_Parent = aParent;
@@ -79,9 +80,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
     m_FillModeCtrl->SetSelection( m_settings.m_FillMode ? 1 : 0 );
 
     AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
-    wxString msg = ReturnStringFromValue( g_UserUnit,
-                                          m_settings.m_ZoneMinThickness,
-                                          m_Parent->GetInternalUnits() );
+    wxString msg = ReturnStringFromValue( g_UserUnit, m_settings.m_ZoneMinThickness );
     m_ZoneMinThicknessCtrl->SetValue( msg );
 
     if( m_settings.m_Zone_45_Only )

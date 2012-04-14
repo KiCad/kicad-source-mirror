@@ -299,7 +299,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     if( (event.GetId() == ID_ADD_LIB) || (event.GetId() == ID_INSERT_LIB) )
     {
         list = m_ListLibr;
-        wildcard = ModuleFileWildcard;
+        wildcard = FootprintLibFileWildcard;
     }
 
     wxArrayInt selections;

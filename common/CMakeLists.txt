@@ -15,6 +15,7 @@ set(COMMON_ABOUT_DLG_SRCS
     dialog_about/dialog_about.cpp
     dialog_about/dialog_about_base.cpp
     dialogs/dialog_display_info_HTML_base.cpp
+    dialogs/dialog_exit_base.cpp
     dialogs/dialog_image_editor.cpp
     dialogs/dialog_image_editor_base.cpp
     dialogs/dialog_get_component.cpp
@@ -35,7 +36,6 @@ set(COMMON_SRCS
     class_bitmap_base.cpp
     class_colors_design_settings.cpp
     class_marker_base.cpp
-    class_page_info.cpp
     class_plotter.cpp
     class_undoredo_container.cpp
     common.cpp
@@ -47,6 +47,7 @@ set(COMMON_SRCS
     confirm.cpp
     copy_to_clipboard.cpp
     dcsvg.cpp
+    dialog_shim.cpp
     displlst.cpp
     dlist.cpp
     drawframe.cpp
@@ -82,6 +83,9 @@ add_library(common STATIC ${COMMON_SRCS})
 
 set(PCB_COMMON_SRCS
     base_screen.cpp
+    base_units.cpp
+    eda_text.cpp
+    class_page_info.cpp
     pcbcommon.cpp
     footprint_info.cpp
     class_layer_box_selector.cpp
@@ -111,12 +115,19 @@ set(PCB_COMMON_SRCS
     ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp
+    ../pcbnew/pcb_plot_params.cpp
     pcb_plot_params_keywords.cpp
     dialogs/dialog_page_settings.cpp
 )
 
-if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
-    set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp ../pcbnew/io_mgr.cpp ../pcbnew/kicad_plugin.cpp )
+if( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
+    set( PCB_COMMON_SRCS
+         ${PCB_COMMON_SRCS}
+         ../pcbnew/item_io.cpp
+         ../pcbnew/io_mgr.cpp
+         ../pcbnew/legacy_plugin.cpp
+         ../pcbnew/kicad_plugin.cpp
+       )
 else()
     set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp )
 endif()
@@ -140,7 +151,7 @@ make_lexer(
 # auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params.keywords
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_lexer.h
+    ${PROJECT_SOURCE_DIR}/include/pcb_plot_params_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
     PCBPLOTPARAMS_T
     )

@@ -33,12 +33,38 @@
 #include <wxPcbStruct.h>
 #include <drawtxt.h>
 #include <confirm.h>
-#include <dialog_helpers.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
 
-#include <dialog_pcb_text_properties.h>
+#include <vector>
+#include <wx/wx.h>
+#include <dialog_pcb_text_properties_base.h>
+
+
+class PCB_EDIT_FRAME;
+class TEXTE_PCB;
+
+
+class DIALOG_PCB_TEXT_PROPERTIES : public DIALOG_PCB_TEXT_PROPERTIES_BASE
+{
+public:
+    DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent, TEXTE_PCB* passedTextPCB, wxDC* DC );
+
+private:
+    PCB_EDIT_FRAME*     m_Parent;
+    wxDC*               m_DC;
+    TEXTE_PCB*          m_SelectedPCBText;
+    std::vector<int>    layerList;
+
+    void MyInit();
+
+    // Handlers for DIALOG_PCB_TEXT_PROPERTIES_BASE events.
+    void OnClose( wxCloseEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event );
+};
 
 
 /**
@@ -78,8 +104,6 @@ void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
 
 void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
 {
-    SetFocus();
-
     // Put units symbols to text labels where appropriate
     AddUnitSymbol( *m_SizeXLabel );
     AddUnitSymbol( *m_SizeYLabel );
@@ -90,16 +114,11 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     // Fill fields with current values
     *m_TextContentCtrl << m_SelectedPCBText->m_Text;
 
-    PutValueInLocalUnits( *m_SizeXCtrl, m_SelectedPCBText->m_Size.x,
-        m_Parent->GetInternalUnits() );
-    PutValueInLocalUnits( *m_SizeYCtrl, m_SelectedPCBText->m_Size.y,
-        m_Parent->GetInternalUnits() );
-    PutValueInLocalUnits( *m_ThicknessCtrl, m_SelectedPCBText->m_Thickness,
-        m_Parent->GetInternalUnits() );
-    PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->m_Pos.x,
-        m_Parent->GetInternalUnits() );
-    PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->m_Pos.y,
-        m_Parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_SizeXCtrl, m_SelectedPCBText->m_Size.x );
+    PutValueInLocalUnits( *m_SizeYCtrl, m_SelectedPCBText->m_Size.y );
+    PutValueInLocalUnits( *m_ThicknessCtrl, m_SelectedPCBText->m_Thickness );
+    PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->m_Pos.x );
+    PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->m_Pos.y );
 
     int enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
 

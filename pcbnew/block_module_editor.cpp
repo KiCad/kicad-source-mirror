@@ -124,18 +124,18 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( GetScreen()->m_BlockLocate.GetCount() )
     {
-        BlockState   state   = GetScreen()->m_BlockLocate.m_State;
-        CmdBlockType command = GetScreen()->m_BlockLocate.m_Command;
+        BLOCK_STATE_T   state   = GetScreen()->m_BlockLocate.GetState();
+        BLOCK_COMMAND_T command = GetScreen()->m_BlockLocate.GetCommand();
         m_canvas->CallEndMouseCapture( DC );
-        GetScreen()->m_BlockLocate.m_State   = state;
-        GetScreen()->m_BlockLocate.m_Command = command;
+        GetScreen()->m_BlockLocate.SetState( state );
+        GetScreen()->m_BlockLocate.SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
         GetScreen()->SetCrossHairPosition( wxPoint(  GetScreen()->m_BlockLocate.GetRight(),
                                                      GetScreen()->m_BlockLocate.GetBottom() ) );
         m_canvas->MoveCursorToCrossHair();
     }
 
-    switch( GetScreen()->m_BlockLocate.m_Command )
+    switch( GetScreen()->m_BlockLocate.GetCommand() )
     {
     case  BLOCK_IDLE:
         DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
@@ -157,15 +157,16 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
                 m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             }
 
-            GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
+            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
             m_canvas->Refresh( true );
         }
+
         break;
 
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
         nextcmd = true;
         m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
-        GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
+        GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
         break;
 
     case BLOCK_DELETE:     /* Delete */
@@ -215,7 +216,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( !nextcmd )
     {
-        if( GetScreen()->m_BlockLocate.m_Command  != BLOCK_SELECT_ITEMS_ONLY )
+        if( GetScreen()->m_BlockLocate.GetCommand() != BLOCK_SELECT_ITEMS_ONLY )
         {
             ClearMarkItems( currentModule );
         }
@@ -223,7 +224,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         GetScreen()->ClearBlockCommand();
         SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
-                                    false );
+                                   false );
         m_canvas->Refresh( true );
     }
 
@@ -240,9 +241,9 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
 
-    GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
+    GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
 
-    switch( GetScreen()->m_BlockLocate.m_Command )
+    switch( GetScreen()->m_BlockLocate.GetCommand() )
     {
     case  BLOCK_IDLE:
         break;
@@ -252,14 +253,14 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
-        MoveMarkedItems( currentModule, GetScreen()->m_BlockLocate.m_MoveVector );
+        MoveMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector() );
         m_canvas->Refresh( true );
         break;
 
     case BLOCK_COPY:     /* Copy */
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
-        CopyMarkedItems( currentModule, GetScreen()->m_BlockLocate.m_MoveVector );
+        CopyMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector() );
         break;
 
     case BLOCK_PASTE:     /* Paste */
@@ -288,9 +289,8 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    GetScreen()->m_BlockLocate.ClearFlags();
-    GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
-    GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
+    GetScreen()->m_BlockLocate.SetState( STATE_NO_BLOCK );
+    GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
     SetCurItem( NULL );
     m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
     m_canvas->Refresh( true );
@@ -303,24 +303,24 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase )
 {
-    BLOCK_SELECTOR*  PtBlock;
+    BLOCK_SELECTOR*  block;
     BASE_SCREEN*     screen = aPanel->GetScreen();
     BOARD_ITEM*      item;
     wxPoint          move_offset;
     MODULE*          currentModule =
         ( (PCB_BASE_FRAME*) wxGetApp().GetTopWindow() )->m_ModuleEditFrame->GetBoard()->m_Modules;
 
-    PtBlock = &screen->m_BlockLocate;
+    block = &screen->m_BlockLocate;
     GRSetDrawMode( aDC, g_XorMode );
 
     if( aErase )
     {
-        PtBlock->Draw( aPanel, aDC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
+        block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
         if( currentModule )
         {
-            move_offset.x = -PtBlock->m_MoveVector.x;
-            move_offset.y = -PtBlock->m_MoveVector.y;
+            move_offset.x = -block->GetMoveVector().x;
+            move_offset.y = -block->GetMoveVector().y;
             item = currentModule->m_Drawings;
 
             for( ; item != NULL; item = item->Next() )
@@ -353,14 +353,14 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     }
 
     /* Repaint new view. */
-    PtBlock->m_MoveVector = screen->GetCrossHairPosition() - PtBlock->m_BlockLastCursorPosition;
+    block->SetMoveVector( screen->GetCrossHairPosition() - block->GetLastCursorPosition() );
 
-    PtBlock->Draw( aPanel, aDC, PtBlock->m_MoveVector, g_XorMode, PtBlock->m_Color );
+    block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
     if( currentModule )
     {
         item = currentModule->m_Drawings;
-        move_offset = - PtBlock->m_MoveVector;
+        move_offset = - block->GetMoveVector();
 
         for( ; item != NULL; item = item->Next() )
         {

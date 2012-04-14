@@ -71,6 +71,8 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
     m_ZoneConnection = UNDEFINED_CONNECTION; // Use parent setting by default
+    m_ThermalWidth = 0; // Use parent setting by default
+    m_ThermalGap = 0; // Use parent setting by default
 
     // set layers mask to default for a standard pad
     m_layerMask = PAD_STANDARD_DEFAULT_LAYERS;
@@ -98,7 +100,7 @@ int D_PAD::boundingRadius() const
 
     case PAD_RECT:
         radius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
-                                   + (double) m_Size.x * m_Size.x ) / 2 );
+                                 + (double) m_Size.x * m_Size.x ) / 2 );
         break;
 
     case PAD_TRAPEZOID:
@@ -173,7 +175,7 @@ void D_PAD::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
 
 // Returns the position of the pad.
-const wxPoint D_PAD::ReturnShapePos()
+const wxPoint D_PAD::ReturnShapePos() const
 {
     if( m_Offset.x == 0 && m_Offset.y == 0 )
         return m_Pos;
@@ -305,6 +307,8 @@ void D_PAD::Copy( D_PAD* source )
     m_LocalSolderPasteMargin = source->m_LocalSolderPasteMargin;
     m_LocalSolderPasteMarginRatio = source->m_LocalSolderPasteMarginRatio;
     m_ZoneConnection = source->m_ZoneConnection;
+    m_ThermalWidth = source->m_ThermalWidth;
+    m_ThermalGap = source->m_ThermalGap;
 
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
@@ -450,6 +454,28 @@ ZoneConnection D_PAD::GetZoneConnection() const
         return module->GetZoneConnection();
     else
         return m_ZoneConnection;
+}
+
+
+int D_PAD::GetThermalWidth() const
+{
+    MODULE* module = (MODULE*) GetParent();
+
+    if( m_ThermalWidth == 0 && module )
+        return module->GetThermalWidth();
+    else
+        return m_ThermalWidth;
+}
+
+
+int D_PAD::GetThermalGap() const
+{
+    MODULE* module = (MODULE*) GetParent();
+
+    if( m_ThermalGap == 0 && module )
+        return module->GetThermalGap();
+    else
+        return m_ThermalGap;
 }
 
 
@@ -638,14 +664,14 @@ bool D_PAD::IsOnLayer( int aLayer ) const
 }
 
 
-bool D_PAD::HitTest( const wxPoint& refPos )
+bool D_PAD::HitTest( const wxPoint& aPosition )
 {
     int     dx, dy;
     double  dist;
 
     wxPoint shape_pos = ReturnShapePos();
 
-    wxPoint delta = refPos - shape_pos;
+    wxPoint delta = aPosition - shape_pos;
 
     // first test: a test point must be inside a minimum sized bounding circle.
     int radius = GetBoundingRadius();
@@ -797,9 +823,104 @@ wxString D_PAD::GetSelectMenuText() const
     return text;
 }
 
-EDA_ITEM* D_PAD::doClone() const
+EDA_ITEM* D_PAD::Clone() const
 {
     return new D_PAD( *this );
+}
+
+
+void D_PAD::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    std::string shape;
+
+    switch( m_PadShape )
+    {
+    case PAD_CIRCLE:    shape = "circle";     break;
+    case PAD_RECT:      shape = "rectangle";  break;
+    case PAD_OVAL:      shape = "oval";       break;
+    case PAD_TRAPEZOID: shape = "trapezoid";  break;
+
+    default:
+        THROW_IO_ERROR( wxString::Format( _( "unknown pad type: %d"), m_PadShape ) );
+    }
+
+    std::string type;
+
+    switch( m_Attribute )
+    {
+    case PAD_STANDARD:          type = "thru_hole";      break;
+    case PAD_SMD:               type = "smd";            break;
+    case PAD_CONN:              type = "connect";        break;
+    case PAD_HOLE_NOT_PLATED:   type = "np_thru_hole";   break;
+
+    default:
+        THROW_IO_ERROR( wxString::Format( _( "unknown pad attribute: %d" ), m_Attribute ) );
+    }
+
+    aFormatter->Print( aNestLevel, "(pad %s %s %s (size %s)\n",
+                       aFormatter->Quotew( GetPadName() ).c_str(), type.c_str(), shape.c_str(),
+                       FMT_IU( m_Size ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(at %s", FMT_IU( m_Pos0 ).c_str() );
+
+    if( m_Orient != 0.0 )
+        aFormatter->Print( 0, " %s", FMT_ANGLE( m_Orient ).c_str() );
+
+    aFormatter->Print( 0, ")\n" );
+
+    if( (m_Drill.GetWidth() > 0) || (m_Drill.GetHeight() > 0) )
+    {
+        std::string drill = (m_Drill.GetHeight() > 0) ? FMT_IU( m_Drill ).c_str() :
+                            FMT_IU( m_Drill.GetWidth() ).c_str();
+        aFormatter->Print( aNestLevel+1, "(drill %s", drill.c_str() );
+
+        if( (m_Offset.x > 0) || (m_Offset.y > 0) )
+        {
+            std::string drillOffset = ( m_Offset.x > 0 ) ?
+                                      FMT_IU( m_Offset ).c_str() :
+                                      FMT_IU( m_Offset.x ).c_str();
+            aFormatter->Print( 0, " (offset %s)", drillOffset.c_str() );
+        }
+
+        aFormatter->Print( 0, ")\n" );
+    }
+
+    aFormatter->Print( aNestLevel+1, "(layers %08X)\n", GetLayerMask() );
+
+    aFormatter->Print( aNestLevel+1, "(net %d %s)\n",
+                       GetNet(), aFormatter->Quotew( m_Netname ).c_str() );
+
+    if( m_LengthDie != 0 )
+        aFormatter->Print( aNestLevel+1, "(die_length %s)\n", FMT_IU( m_LengthDie ).c_str() );
+
+    if( m_LocalSolderMaskMargin != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
+                           FMT_IU( m_LocalSolderMaskMargin ).c_str() );
+
+    if( m_LocalSolderPasteMargin != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
+                           FMT_IU( m_LocalSolderPasteMargin ).c_str() );
+
+    if( m_LocalSolderPasteMarginRatio != 0 )
+        aFormatter->Print( aNestLevel+1, "(solder_paste_margin_ratio %g)\n",
+                           m_LocalSolderPasteMarginRatio );
+
+    if( m_LocalClearance != 0 )
+        aFormatter->Print( aNestLevel+1, "(clearance %s)\n",
+                           FMT_IU( m_LocalClearance ).c_str() );
+
+    if( GetZoneConnection() != UNDEFINED_CONNECTION )
+        aFormatter->Print( aNestLevel+1, "(zone_connect %d)\n", GetZoneConnection() );
+
+    if( GetThermalWidth() != 0 )
+        aFormatter->Print( aNestLevel+1, "(thermal_width %s)\n",
+                           FMT_IU( GetThermalWidth() ).c_str() );
+
+    if( GetThermalGap() != 0 )
+        aFormatter->Print( aNestLevel+1, "(thermal_gap %s)\n",
+                           FMT_IU( GetThermalGap() ).c_str() );
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 

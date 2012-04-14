@@ -36,7 +36,6 @@
 #include <class_drawpanel.h>
 #include <colors_selection.h>
 #include <kicad_string.h>
-#include <protos.h>
 #include <richio.h>
 
 #include <class_board.h>
@@ -200,7 +199,7 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 void DIMENSION::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
-    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 }
 
 
@@ -445,12 +444,12 @@ void DIMENSION::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-bool DIMENSION::HitTest( const wxPoint& aPoint )
+bool DIMENSION::HitTest( const wxPoint& aPosition )
 {
     int ux0, uy0;
     int dx, dy, spot_cX, spot_cY;
 
-    if( m_Text.TextHitTest( aPoint ) )
+    if( m_Text.TextHitTest( aPosition ) )
         return true;
 
     // Locate SEGMENTS?
@@ -461,8 +460,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_crossBarFx - ux0;
     dy = m_crossBarFy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -473,8 +472,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_featureLineGFx - ux0;
     dy = m_featureLineGFy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -485,8 +484,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_featureLineDFx - ux0;
     dy = m_featureLineDFy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -497,8 +496,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_arrowD1Fx - ux0;
     dy = m_arrowD1Fy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -509,8 +508,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_arrowD2Fx - ux0;
     dy = m_arrowD2Fy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -521,8 +520,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_arrowG1Fx - ux0;
     dy = m_arrowG1Fy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -533,8 +532,8 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     dx = m_arrowG2Fx - ux0;
     dy = m_arrowG2Fy - uy0;
 
-    spot_cX = aPoint.x - ux0;
-    spot_cY = aPoint.y - uy0;
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -543,9 +542,9 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
 }
 
 
-bool DIMENSION::HitTest( EDA_RECT& refArea )
+bool DIMENSION::HitTest( const EDA_RECT& aRect ) const
 {
-    if( refArea.Contains( m_Pos ) )
+    if( aRect.Contains( m_Pos ) )
         return true;
 
     return false;
@@ -602,7 +601,62 @@ wxString DIMENSION::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* DIMENSION::doClone() const
+EDA_ITEM* DIMENSION::Clone() const
 {
     return new DIMENSION( *this );
+}
+
+
+void DIMENSION::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(dimension %s\n", FMT_IU( m_Value ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(width %s)\n(layer %d)\n(tstamp %lX)\n",
+                       FMT_IU( m_Width ).c_str(), GetLayer(), GetTimeStamp() );
+
+    m_Text.EDA_TEXT::Format( aFormatter, aNestLevel+1, aControlBits );
+
+    aFormatter->Print( aNestLevel+1, "(feature1 pts((xy %s %s) (xy %s %s)))\n",
+                       FMT_IU( m_featureLineDOx ).c_str(),
+                       FMT_IU( m_featureLineDOy ).c_str(),
+                       FMT_IU( m_featureLineDFx ).c_str(),
+                       FMT_IU( m_featureLineDFy ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(feature2 pts((xy %s %s) (xy %s %s)))\n",
+                       FMT_IU( m_featureLineGOx ).c_str(),
+                       FMT_IU( m_featureLineGOy ).c_str(),
+                       FMT_IU( m_featureLineGFx ).c_str(),
+                       FMT_IU( m_featureLineGFy ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(crossbar pts((xy %s %s) (xy %s %s)))\n",
+                       FMT_IU( m_crossBarOx ).c_str(),
+                       FMT_IU( m_crossBarOy ).c_str(),
+                       FMT_IU( m_crossBarFx ).c_str(),
+                       FMT_IU( m_crossBarFy ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(arrow1a pts((xy %s %s) (xy %s %s)))\n",
+                       FMT_IU( m_arrowD1Ox ).c_str(),
+                       FMT_IU( m_arrowD1Oy ).c_str(),
+                       FMT_IU( m_arrowD1Fx ).c_str(),
+                       FMT_IU( m_arrowD1Fy ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(arrow1b pts((xy %s %s) (xy %s %s)))\n",
+                       FMT_IU( m_arrowD2Ox ).c_str(),
+                       FMT_IU( m_arrowD2Oy ).c_str(),
+                       FMT_IU( m_arrowD2Fx ).c_str(),
+                       FMT_IU( m_arrowD2Fy ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(arrow2a pts((xy %s %s) (xy %s %s)))\n",
+                       FMT_IU( m_arrowG1Ox ).c_str(),
+                       FMT_IU( m_arrowG1Oy ).c_str(),
+                       FMT_IU( m_arrowG1Fx ).c_str(),
+                       FMT_IU( m_arrowG1Fy ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(arrow2b pts((xy %s %s) (xy %s %s)))\n",
+                       FMT_IU( m_arrowG2Ox ).c_str(),
+                       FMT_IU( m_arrowG2Oy ).c_str(),
+                       FMT_IU( m_arrowG2Fx ).c_str(),
+                       FMT_IU( m_arrowG2Fy ).c_str() );
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }

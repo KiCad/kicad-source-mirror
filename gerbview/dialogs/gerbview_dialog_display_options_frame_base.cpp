@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -40,6 +40,11 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_CursorShape->SetSelection( 1 );
 	bLeftSizer->Add( m_CursorShape, 0, wxALL|wxEXPAND, 5 );
 	
+	m_OptDisplayDCodes = new wxCheckBox( this, wxID_ANY, _("Show D codes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptDisplayDCodes->SetValue(true); 
+	bLeftSizer->Add( m_OptDisplayDCodes, 0, wxALL, 5 );
+	
+	
 	bUpperSizer->Add( bLeftSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleSizer;
@@ -63,6 +68,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_OptDisplayPolygons->SetSelection( 1 );
 	bMiddleSizer->Add( m_OptDisplayPolygons, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bUpperSizer->Add( bMiddleSizer, 0, wxEXPAND, 5 );
 	
 	
@@ -77,14 +83,21 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_ShowPageLimits->SetSelection( 0 );
 	bRightSizer->Add( m_ShowPageLimits, 0, wxALL|wxEXPAND, 5 );
 	
+	wxStaticBoxSizer* bLeftBottomSizer;
+	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
 	
-	bRightSizer->Add( 20, 20, 0, 0, 5 );
+	m_OptMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftBottomSizer->Add( m_OptMiddleButtonPan, 0, wxALL, 5 );
 	
-	m_OptDisplayDCodes = new wxCheckBox( this, wxID_ANY, _("Show D codes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptDisplayDCodes->SetValue(true); 
-	bRightSizer->Add( m_OptDisplayDCodes, 0, wxALL, 5 );
+	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Limited"), wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftBottomSizer->Add( m_OptMiddleButtonPanLimited, 0, wxALL, 5 );
+	
+	
+	bRightSizer->Add( bLeftBottomSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
 	
 	bUpperSizer->Add( bRightSizer, 1, wxEXPAND, 5 );
+	
 	
 	bDialogSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -97,12 +110,15 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bDialogSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
+	
 	
 	this->SetSizer( bDialogSizer );
 	this->Layout();
 	
 	// Connect Events
+	m_OptMiddleButtonPan->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnMiddleBtnPanEnbl ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnOKBUttonClick ), NULL, this );
 }
@@ -110,6 +126,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 DIALOG_DISPLAY_OPTIONS_BASE::~DIALOG_DISPLAY_OPTIONS_BASE()
 {
 	// Disconnect Events
+	m_OptMiddleButtonPan->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnMiddleBtnPanEnbl ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnOKBUttonClick ), NULL, this );
 	

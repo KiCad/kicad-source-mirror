@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -43,9 +42,6 @@ class LIB_BEZIER : public LIB_ITEM
     std::vector<wxPoint> m_BezierPoints;   // list of parameter (3|4)
     std::vector<wxPoint> m_PolyPoints;     // list of points (>= 2)
 
-    /**
-     * Draw the bezier curve.
-     */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
@@ -56,83 +52,66 @@ public:
 
     ~LIB_BEZIER() { }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "LIB_BEZIER" );
     }
 
 
-    /**
-     * Write bezier curve object out to a FILE in "*.lib" format.
-     *
-     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
-     *                   bezier curve to.
-     * @return True if success writing else false.
-     */
-    virtual bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter );
 
-    virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    void         AddPoint( const wxPoint& aPoint );
+    void AddPoint( const wxPoint& aPoint );
+
+    void SetOffset( const wxPoint& aOffset );
 
     /**
      * @return the number of corners
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
+    bool HitTest( const wxPoint& aPosition );
+
+    bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+
+    EDA_RECT GetBoundingBox() const;
+
+    bool Inside( EDA_RECT& aRect ) const;
+
+    void Move( const wxPoint& aPosition );
+
+    wxPoint GetPosition() const { return m_PolyPoints[0]; }
+
+    void MirrorHorizontal( const wxPoint& aCenter );
+
+    void MirrorVertical( const wxPoint& aCenter );
+
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+
+    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+               const TRANSFORM& aTransform );
+
+    int GetWidth() const { return m_Width; }
+
+    void SetWidth( int aWidth ) { m_Width = aWidth; }
+
+    int GetPenSize( ) const;
+
+    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+
+    EDA_ITEM* Clone() const;
+
+private:
+
     /**
-     * Test if the given point is within the bounds of this object.
+     * @copydoc LIB_ITEM::compare()
      *
-     * @param aRefPos - A wxPoint to test
-     * @return true if a hit, else false
+     * The bezier curve specific sort order for each curve segment point is as follows:
+     *      - Bezier horizontal (X) point position.
+     *      - Bezier vertical (Y) point position.
      */
-    virtual bool HitTest( const wxPoint& aRefPos );
-
-    /**
-     * @param aPosRef = a wxPoint to test
-     * @param aThreshold = max distance to a segment
-     * @param aTransform = the transform matrix
-     * @return true if the point aPosRef is near a segment
-     */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
-
-    /**
-     * Function GetBoundingBox
-     * @return the boundary box for this, in library coordinates
-     */
-    virtual EDA_RECT GetBoundingBox() const;
-
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize( ) const;
-
-    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
-
-protected:
-    virtual EDA_ITEM* doClone() const;
-
-    /**
-     * Provide the bezier curve draw object specific comparison.
-     *
-     * The sort order for each bezier curve segment point is as follows:
-     *      - Bezier point horizontal (X) point position.
-     *      - Bezier point vertical (Y) point position.
-     */
-    virtual int DoCompare( const LIB_ITEM& aOther ) const;
-
-    virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_RECT& aRect ) const;
-    virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() const { return m_PolyPoints[0]; }
-    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
-    virtual void DoMirrorVertical( const wxPoint& aCenter );
-    virtual void DoRotate( const wxPoint& aCenter, bool aRotateCCW = true );
-    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform );
-    virtual int DoGetWidth() const { return m_Width; }
-    virtual void DoSetWidth( int aWidth ) { m_Width = aWidth; }
+    int compare( const LIB_ITEM& aOther ) const;
 };
 
 

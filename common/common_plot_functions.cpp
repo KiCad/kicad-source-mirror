@@ -28,7 +28,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     int                 xg, yg;
 
     wxPoint             pos, ref;
-    EDA_Colors          color;
+    EDA_COLOR_T         color;
 
     // paper is sized in mils.  Here is a conversion factor to
     // scale mils to internal units.
