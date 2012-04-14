@@ -65,7 +65,7 @@ bool SCH_JUNCTION::Save( FILE* aFile ) const
 }
 
 
-EDA_ITEM* SCH_JUNCTION::doClone() const
+EDA_ITEM* SCH_JUNCTION::Clone() const
 {
     return new SCH_JUNCTION( *this );
 }
@@ -130,7 +130,7 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
 }
 
 
-void SCH_JUNCTION::Mirror_X( int aXaxis_position )
+void SCH_JUNCTION::MirrorX( int aXaxis_position )
 {
     m_pos.y -= aXaxis_position;
     NEGATE( m_pos.y );
@@ -138,7 +138,7 @@ void SCH_JUNCTION::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_JUNCTION::Mirror_Y( int aYaxis_position )
+void SCH_JUNCTION::MirrorY( int aYaxis_position )
 {
     m_pos.x -= aYaxis_position;
     NEGATE( m_pos.x );
@@ -146,9 +146,9 @@ void SCH_JUNCTION::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_JUNCTION::Rotate( wxPoint rotationPoint )
+void SCH_JUNCTION::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_pos, rotationPoint, 900 );
+    RotatePoint( &m_pos, aPosition, 900 );
 }
 
 
@@ -204,18 +204,21 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-bool SCH_JUNCTION::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_JUNCTION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 
-    return rect.Contains( aPoint );
+    return rect.Contains( aPosition );
 }
 
 
-bool SCH_JUNCTION::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_JUNCTION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
+    if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
+        return false;
+
     EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
@@ -233,7 +236,7 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 }
 
 
-void SCH_JUNCTION::doPlot( PLOTTER* aPlotter )
+void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
     aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
     aPlotter->circle( m_pos, m_size.x, FILLED_SHAPE );

@@ -37,6 +37,10 @@
 #include <colors_selection.h>
 #include <build_version.h>
 
+// Pcb_calculator data file extension:
+const wxString PcbCalcDataFileExt( wxT("pcbcalc") );
+
+
 // PCB_CALCULATOR_APP
 
 void EDA_APP::MacOpenFile(const wxString &fileName)
@@ -53,7 +57,7 @@ IMPLEMENT_APP( EDA_APP )
 bool EDA_APP::OnInit()
 {
 
-    InitEDA_Appl( wxT( "PCBcalc" ) );
+    InitEDA_Appl( wxT( "pcb_calculator" ) );
 
     wxFrame* frame = new PCB_CALCULATOR_FRAME( NULL );
     SetTopWindow( frame );

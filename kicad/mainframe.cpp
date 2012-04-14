@@ -36,6 +36,7 @@
 #include <kicad.h>
 #include <tree_project_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <menus_helpers.h>
 
 
 static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );

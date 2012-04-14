@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -36,6 +35,7 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -115,13 +115,13 @@ bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
 }
 
 
-EDA_ITEM* LIB_CIRCLE::doClone() const
+EDA_ITEM* LIB_CIRCLE::Clone() const
 {
     return new LIB_CIRCLE( *this );
 }
 
 
-int LIB_CIRCLE::DoCompare( const LIB_ITEM& aOther ) const
+int LIB_CIRCLE::compare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_CIRCLE_T );
 
@@ -140,13 +140,13 @@ int LIB_CIRCLE::DoCompare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_CIRCLE::DoOffset( const wxPoint& aOffset )
+void LIB_CIRCLE::SetOffset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
 }
 
 
-bool LIB_CIRCLE::DoTestInside( EDA_RECT& aRect ) const
+bool LIB_CIRCLE::Inside( EDA_RECT& aRect ) const
 {
     /*
      * FIXME: This fails to take into account the radius around the center
@@ -156,13 +156,13 @@ bool LIB_CIRCLE::DoTestInside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_CIRCLE::DoMove( const wxPoint& aPosition )
+void LIB_CIRCLE::Move( const wxPoint& aPosition )
 {
     m_Pos = aPosition;
 }
 
 
-void LIB_CIRCLE::DoMirrorHorizontal( const wxPoint& aCenter )
+void LIB_CIRCLE::MirrorHorizontal( const wxPoint& aCenter )
 {
     m_Pos.x -= aCenter.x;
     m_Pos.x *= -1;
@@ -170,7 +170,7 @@ void LIB_CIRCLE::DoMirrorHorizontal( const wxPoint& aCenter )
 }
 
 
-void LIB_CIRCLE::DoMirrorVertical( const wxPoint& aCenter )
+void LIB_CIRCLE::MirrorVertical( const wxPoint& aCenter )
 {
     m_Pos.y -= aCenter.y;
     m_Pos.y *= -1;
@@ -178,7 +178,7 @@ void LIB_CIRCLE::DoMirrorVertical( const wxPoint& aCenter )
 }
 
 
-void LIB_CIRCLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_CIRCLE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
@@ -186,8 +186,8 @@ void LIB_CIRCLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform )
+void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                       const TRANSFORM& aTransform )
 {
     wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 
@@ -271,11 +271,11 @@ void LIB_CIRCLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 
     LIB_ITEM::DisplayInfo( aFrame );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
     aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Radius, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Radius, true );
     aFrame->AppendMsgPanel( _( "Radius" ), msg, RED );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
@@ -288,9 +288,9 @@ void LIB_CIRCLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 wxString LIB_CIRCLE::GetSelectMenuText() const
 {
     return wxString::Format( _( "Circle center (%s, %s), radius %s" ),
-                             GetChars( CoordinateToString( m_Pos.x, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_Pos.y, EESCHEMA_INTERNAL_UNIT ) ),
-                             GetChars( CoordinateToString( m_Radius, EESCHEMA_INTERNAL_UNIT ) ) );
+                             GetChars( CoordinateToString( m_Pos.x ) ),
+                             GetChars( CoordinateToString( m_Pos.y ) ),
+                             GetChars( CoordinateToString( m_Radius ) ) );
 }
 
 

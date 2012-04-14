@@ -41,6 +41,7 @@ class EDA_RECT;
 #define GR_AND  0x04000000
 #define GR_NXOR 0x08000000
 #define GR_INVERT 0x10000000
+#define GR_ALLOW_HIGHCONTRAST 0x20000000
 
 #define GR_HIGHLIGHT 0x80000000
 
@@ -165,7 +166,7 @@ void GRClosedPoly( EDA_RECT* ClipBox,
  * @param y The y coordinate in user space of the center of the circle.
  * @param aRadius is the radius of the circle.
  * @param aColor is an index into our color table of RGB colors.
- * @see EDA_Colors and colors.h
+ * @see EDA_COLOR_T and colors.h
  */
 void GRCircle( EDA_RECT* ClipBox, wxDC* aDC, int x, int y, int aRadius, int aColor );
 void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int r, int  width, int Color );
@@ -226,7 +227,7 @@ void GRSFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1,
  * @param aLines = a list of pair of coordinate in user space: a pair for each line.
  * @param aWidth = the width of each line.
  * @param aColor = an index into our color table of RGB colors.
- * @see EDA_Colors and colors.h
+ * @see EDA_COLOR_T and colors.h
  */
 void GRLineArray(  EDA_RECT* aClipBox, wxDC* aDC,std::vector<wxPoint>& aLines,
                    int aWidth, int aColor );

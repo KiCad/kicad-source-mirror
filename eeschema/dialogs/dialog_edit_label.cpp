@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <wx/valgen.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <class_drawpanel.h>
 #include <general.h>
@@ -38,7 +39,29 @@
 #include <confirm.h>
 #include <sch_text.h>
 
-#include <dialog_edit_label.h>
+#include <dialog_edit_label_base.h>
+
+class SCH_EDIT_FRAME;
+class SCH_TEXT;
+
+
+class DialogLabelEditor : public DialogLabelEditor_Base
+{
+public:
+    DialogLabelEditor( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
+
+private:
+    void InitDialog( );
+    virtual void OnEnterKey( wxCommandEvent& aEvent );
+    virtual void OnOkClick( wxCommandEvent& aEvent );
+    virtual void OnCancelClick( wxCommandEvent& aEvent );
+    void TextPropertiesAccept( wxCommandEvent& aEvent );
+
+    SCH_EDIT_FRAME* m_Parent;
+    SCH_TEXT*       m_CurrentText;
+    wxTextCtrl*     m_textLabel;
+};
+
 
 
 /* Edit the properties of the text (Label, Global label, graphic text).. )
@@ -174,8 +197,7 @@ void DialogLabelEditor::InitDialog()
     msg = _( "H" ) + units + _( " x W" ) + units;
     m_staticSizeUnits->SetLabel( msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->m_Size.x,
-                                 m_Parent->GetInternalUnits() );
+    msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->m_Size.x );
     m_TextSize->SetValue( msg );
 
     if( m_CurrentText->Type() != SCH_GLOBAL_LABEL_T

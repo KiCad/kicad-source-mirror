@@ -40,6 +40,7 @@
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -95,10 +96,8 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 
         wxString path = sheetFoundIn->Path();
         wxString units = GetAbbreviatedUnitsLabel();
-        double x = To_User_Unit( g_UserUnit, (double) lastMarker->GetPosition().x,
-                                 m_internalUnits );
-        double y = To_User_Unit( g_UserUnit, (double) lastMarker->GetPosition().y,
-                                 m_internalUnits );
+        double x = To_User_Unit( g_UserUnit, (double) lastMarker->GetPosition().x );
+        double y = To_User_Unit( g_UserUnit, (double) lastMarker->GetPosition().y );
         msg.Printf( _( "Design rule check marker found in sheet %s at %0.3f%s, %0.3f%s" ),
                     GetChars( path ), x, GetChars( units ), y, GetChars( units) );
         SetStatusText( msg );

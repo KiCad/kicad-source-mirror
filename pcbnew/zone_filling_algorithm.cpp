@@ -14,7 +14,6 @@
 
 #include <pcbnew.h>
 #include <zones.h>
-#include <protos.h>
 
 /* Local functions */
 

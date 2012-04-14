@@ -39,9 +39,9 @@
 const wxString NETCLASS::Default = wxT("Default");
 
 // Initial values for netclass initialization
-int NETCLASS::DEFAULT_CLEARANCE  = 100;         // track to track and track to pads clearance
-int NETCLASS::DEFAULT_VIA_DRILL  = 250;         // default via drill
-int NETCLASS::DEFAULT_UVIA_DRILL = 50;          // micro via drill
+int NETCLASS::DEFAULT_CLEARANCE  = DMils2iu( 100 );  // track to track and track to pads clearance
+int NETCLASS::DEFAULT_VIA_DRILL  = DMils2iu( 250 );  // default via drill
+int NETCLASS::DEFAULT_UVIA_DRILL = DMils2iu( 50 );    // micro via drill
 
 
 NETCLASS::NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters ) :
@@ -85,7 +85,7 @@ void NETCLASS::SetParams( const NETCLASS* defaults )
 
         SetTrackWidth(  g.m_TrackMinWidth );
         SetViaDiameter( g.m_ViasMinSize );
-        SetuViaDiameter(g.m_MicroViasMinSize );
+        SetuViaDiameter( g.m_MicroViasMinSize );
 
         // Use default values for next parameters:
         SetClearance( DEFAULT_CLEARANCE );
@@ -290,28 +290,55 @@ void NETCLASS::Show( int nestLevel, std::ostream& os ) const
 
 #endif
 
+
 int NETCLASS::GetTrackMinWidth() const
 {
     return m_Parent->GetDesignSettings().m_TrackMinWidth;
 }
+
 
 int NETCLASS::GetViaMinDiameter() const
 {
     return m_Parent->GetDesignSettings().m_ViasMinSize;
 }
 
+
 int NETCLASS::GetViaMinDrill() const
 {
     return m_Parent->GetDesignSettings().m_ViasMinDrill;
 }
+
 
 int NETCLASS::GetuViaMinDiameter() const
 {
     return m_Parent->GetDesignSettings().m_MicroViasMinSize;
 }
 
+
 int NETCLASS::GetuViaMinDrill() const
 {
     return m_Parent->GetDesignSettings().m_MicroViasMinDrill;
 }
 
+
+void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(net_class %s %s\n",
+                       aFormatter->Quotew( GetName() ).c_str(),
+                       aFormatter->Quotew( GetDescription() ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(clearance %s)\n", FMT_IU( GetClearance() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(trace_width %s)\n", FMT_IU( GetTrackWidth() ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(via_dia %s)\n", FMT_IU( GetViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via_drill %s)\n", FMT_IU( GetViaDrill() ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FMT_IU( GetuViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FMT_IU( GetuViaDrill() ).c_str() );
+
+    for( NETCLASS::const_iterator it = begin();  it!= end();  ++it )
+        aFormatter->Print( aNestLevel+1, "(add_net %s)\n", aFormatter->Quotew( *it ).c_str() );
+
+    aFormatter->Print( aNestLevel, ")\n\n" );
+}

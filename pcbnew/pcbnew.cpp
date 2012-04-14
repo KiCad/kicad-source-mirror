@@ -53,10 +53,6 @@
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
-int g_DrawDefaultLineThickness = 60; /* Default line thickness in PCnew units used to draw
-                                      * or plot items having a default thickness line value
-                                      * (Frame references) (i.e. = 0 ). 0 = single pixel line
-                                      * width */
 
 bool           Drc_On = true;
 bool           g_AutoDeleteOldTrack = true;
@@ -76,9 +72,6 @@ int            g_MagneticPadOption   = capture_cursor_in_track_tool;
 int            g_MagneticTrackOption = capture_cursor_in_track_tool;
 
 wxPoint        g_Offset_Module;     /* Distance to offset module trace when moving. */
-
-// Wildcard for footprint libraries filesnames
-const wxString g_FootprintLibFileWildcard( _( "KiCad footprint library file (*.mod)|*.mod" ) );
 
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
@@ -169,6 +162,10 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
 
     frame->Zoom_Automatique( true );
 
+    // Load config and default values before loading a board file
+    // Some will be overwritten after loading the board file
+    frame->LoadProjectSettings( fn.GetFullPath() );
+
     /* Load file specified in the command line. */
     if( fn.IsOk() )
     {
@@ -193,8 +190,6 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
             wxMessageBox( msg );
         }
     }
-
-    frame->LoadProjectSettings( fn.GetFullPath() );
 
     // update the layer names in the listbox
     frame->ReCreateLayerBox( NULL );

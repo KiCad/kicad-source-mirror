@@ -217,9 +217,22 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
             data = strtok( NULL, delims );
             sscanf( data, "%X", &enabledLayers );
 
-            // Setup layer visibility
+            // layer usage
             GetBoard()->SetEnabledLayers( enabledLayers );
+
+            // layer visibility equals layer usage, unless overridden later via "VisibleLayers"
             GetBoard()->SetVisibleLayers( enabledLayers );
+            continue;
+        }
+
+        if( stricmp( data, "VisibleLayers" ) == 0 )
+        {
+            int visibleLayers = -1;
+
+            data = strtok( NULL, delims );
+            sscanf( data, "%X", &visibleLayers );
+
+            GetBoard()->SetVisibleLayers( visibleLayers );
             continue;
         }
 
@@ -342,11 +355,12 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( strnicmp( line, "PcbPlotParams", 13 ) == 0 )
         {
+            PCB_PLOT_PARAMS plot_opts;
             PCB_PLOT_PARAMS_PARSER parser( &line[13], aReader->GetSource() );
 
             try
             {
-                g_PcbPlotOptions.Parse( &parser );
+                plot_opts.Parse( &parser );
             }
             catch( IO_ERROR& e )
             {
@@ -356,6 +370,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
                             e.errorText.GetData() );
                 wxMessageBox( msg, _( "Open Board File" ), wxOK | wxICON_ERROR );
             }
+
+            GetBoard()->SetPlotOptions( plot_opts );
 
             continue;
         }
@@ -381,6 +397,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             //        file instead so they are there to start new board
             //        projects.
             GetBoard()->m_NetClasses.GetDefault()->SetParams();
+
+            GetBoard()->SetDesignSettings( bds );
 
             GetBoard()->SetZoneSettings( zoneInfo );
 
@@ -632,7 +650,13 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
             GetScreen()->m_GridOrigin.x = Ox;
             GetScreen()->m_GridOrigin.y = Oy;
+            continue;
+        }
 
+        if( stricmp( line, "VisibleElements" ) == 0 )
+        {
+            int visibleElements = strtoul( data, 0, 16 );
+            bds.SetVisibleElements( visibleElements );
             continue;
         }
 #endif
@@ -776,9 +800,11 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
              aFrame->GetOriginAxisPosition().x,
              aFrame->GetOriginAxisPosition().y );
 
+    fprintf( aFile, "VisibleElements %X\n", bds.GetVisibleElements() );
+
     STRING_FORMATTER sf;
 
-    g_PcbPlotOptions.Format( &sf, 0 );
+    aBoard->GetPlotOptions().Format( &sf, 0 );
 
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );
@@ -808,7 +834,12 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
     fprintf( File,
              "Ly %8X\n",
              g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS );
+
     fprintf( File, "EnabledLayers %08X\n", GetBoard()->GetEnabledLayers() );
+
+    if( GetBoard()->GetEnabledLayers() != GetBoard()->GetVisibleLayers() )
+        fprintf( File, "VisibleLayers %08X\n", GetBoard()->GetVisibleLayers() );
+
     fprintf( File, "Links %d\n", GetBoard()->GetRatsnestsCount() );
     fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 
@@ -844,13 +875,15 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
 /**
  * Function WriteSheetDescr
  * Save the page information (size, texts, date ..)
- * @param screen BASE_SCREEN to save
- * @param File = an open FILE to write info
+ * @param aPageSettings The page settings to write to \a aFile.
+ * @param aTitleBlock The title block information to write to \a aFile.
+ * @param aFile An open FILE to write info.
  */
-static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& aTitleBlock, FILE* File )
+static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& aTitleBlock,
+                             FILE* aFile )
 {
-    fprintf( File, "$SHEETDESCR\n" );
-    fprintf( File, "Sheet %s %d %d%s\n",
+    fprintf( aFile, "$SHEETDESCR\n" );
+    fprintf( aFile, "Sheet %s %d %d%s\n",
              TO_UTF8( aPageSettings.GetType() ),
              aPageSettings.GetWidthMils(),
              aPageSettings.GetHeightMils(),
@@ -858,16 +891,16 @@ static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& 
                 " portrait" : ""
              );
 
-    fprintf( File, "Title %s\n",        EscapedUTF8( aTitleBlock.GetTitle() ).c_str() );
-    fprintf( File, "Date %s\n",         EscapedUTF8( aTitleBlock.GetDate() ).c_str() );
-    fprintf( File, "Rev %s\n",          EscapedUTF8( aTitleBlock.GetRevision() ).c_str() );
-    fprintf( File, "Comp %s\n",         EscapedUTF8( aTitleBlock.GetCompany() ).c_str() );
-    fprintf( File, "Comment1 %s\n",     EscapedUTF8( aTitleBlock.GetComment1() ).c_str() );
-    fprintf( File, "Comment2 %s\n",     EscapedUTF8( aTitleBlock.GetComment2() ).c_str() );
-    fprintf( File, "Comment3 %s\n",     EscapedUTF8( aTitleBlock.GetComment3() ).c_str() );
-    fprintf( File, "Comment4 %s\n",     EscapedUTF8( aTitleBlock.GetComment4() ).c_str() );
+    fprintf( aFile, "Title %s\n",        EscapedUTF8( aTitleBlock.GetTitle() ).c_str() );
+    fprintf( aFile, "Date %s\n",         EscapedUTF8( aTitleBlock.GetDate() ).c_str() );
+    fprintf( aFile, "Rev %s\n",          EscapedUTF8( aTitleBlock.GetRevision() ).c_str() );
+    fprintf( aFile, "Comp %s\n",         EscapedUTF8( aTitleBlock.GetCompany() ).c_str() );
+    fprintf( aFile, "Comment1 %s\n",     EscapedUTF8( aTitleBlock.GetComment1() ).c_str() );
+    fprintf( aFile, "Comment2 %s\n",     EscapedUTF8( aTitleBlock.GetComment2() ).c_str() );
+    fprintf( aFile, "Comment3 %s\n",     EscapedUTF8( aTitleBlock.GetComment3() ).c_str() );
+    fprintf( aFile, "Comment4 %s\n",     EscapedUTF8( aTitleBlock.GetComment4() ).c_str() );
 
-    fprintf( File, "$EndSHEETDESCR\n\n" );
+    fprintf( aFile, "$EndSHEETDESCR\n\n" );
     return true;
 }
 
@@ -1198,7 +1231,7 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
     LOCALE_IO   toggle;
 
     // Writing file header.
-    fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", BOARD_FILE_VERSION,
+    fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", LEGACY_BOARD_FILE_VERSION,
              TO_UTF8( DateAndTime() ) );
     fprintf( aFile, "# Created by Pcbnew%s\n\n", TO_UTF8( GetBuildVersion() ) );
 

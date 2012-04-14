@@ -54,8 +54,6 @@
 #include <dialog_helpers.h>
 
 
-extern int g_DrawDefaultLineThickness;
-
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth" )
 #define PCB_SHOW_FULL_RATSNET_OPT   wxT( "PcbFulRatsnest" )
@@ -461,13 +459,11 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( GetScreen()->IsModify() )
     {
-        unsigned        ii;
-        wxMessageDialog dialog( this, _( "Board modified, Save before exit ?" ),
-                                _( "Confirmation" ),
-                                wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxYES_DEFAULT );
+        wxString msg;
+        msg.Printf( _("Save the changes in\n<%s>\nbefore closing?"),
+                    GetChars( GetScreen()->GetFileName() ) );
 
-        ii = dialog.ShowModal();
-
+        int ii = DisplayExitDialog( this, msg );
         switch( ii )
         {
         case wxID_CANCEL:
@@ -652,6 +648,12 @@ void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 void PCB_EDIT_FRAME::syncRenderStates()
 {
     m_Layers->SyncRenderStates();
+}
+
+
+void PCB_EDIT_FRAME::syncLayerVisibilities()
+{
+    m_Layers->SyncLayerVisibilities();
 }
 
 

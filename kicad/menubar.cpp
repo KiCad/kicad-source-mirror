@@ -30,6 +30,7 @@
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <kicad.h>
+#include <menus_helpers.h>
 
 
 /* Menubar and toolbar event table */

@@ -8,7 +8,35 @@
 #include <wx/wx.h>
 #include <wx/html/htmlwin.h>
 #include <html_messagebox.h>
+#include <dialog_exit_base.h>
+#include <bitmaps.h>
 
+class DIALOG_EXIT: public DIALOG_EXIT_BASE
+{
+public:
+    DIALOG_EXIT( wxWindow * parent, const wxString& aMessage ) :
+        DIALOG_EXIT_BASE( parent )
+    {
+        m_bitmap->SetBitmap( KiBitmap( dialog_warning_xpm ) );
+        if( ! aMessage.IsEmpty() )
+            m_TextInfo->SetLabel( aMessage );
+        GetSizer()->Fit( this );
+        GetSizer()->SetSizeHints( this );
+    };
+
+private:
+	void OnSaveAndExit( wxCommandEvent& event ) { EndModal( wxID_OK ); }
+	void OnCancel( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
+	void OnExitNoSave( wxCommandEvent& event ) { EndModal( wxID_NO ); }
+};
+
+int DisplayExitDialog( wxWindow* parent, const wxString& aMessage )
+{
+    DIALOG_EXIT dlg( parent, aMessage );
+
+    int ret = dlg.ShowModal();
+    return ret;
+}
 
 void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
 {

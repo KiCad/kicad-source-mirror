@@ -65,23 +65,23 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
                            const wxPoint aMoveVector  );
 
 
-void MirrorListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
+void MirrorY( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
-        item->Mirror_Y( aMirrorPoint.x );      // Place it in its new position.
+        item->MirrorY( aMirrorPoint.x );      // Place it in its new position.
         item->ClearFlags();
     }
 }
 
 
-void Mirror_X_ListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
+void MirrorX( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
-        item->Mirror_X( aMirrorPoint.y );      // Place it in its new position.
+        item->MirrorX( aMirrorPoint.y );      // Place it in its new position.
         item->ClearFlags();
     }
 }
@@ -237,7 +237,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
     wxCHECK_MSG( aDrawStruct != NULL, NULL,
                  wxT( "Cannot duplicate NULL schematic item!  Bad programmer." ) );
 
-    SCH_ITEM* NewDrawStruct = aDrawStruct->Clone();
+    SCH_ITEM* NewDrawStruct = (SCH_ITEM*) aDrawStruct->Clone();
 
     if( aClone )
         NewDrawStruct->SetTimeStamp( aDrawStruct->GetTimeStamp() );

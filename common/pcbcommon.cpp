@@ -81,15 +81,6 @@ int g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
 
 DISPLAY_OPTIONS DisplayOpt;      /* Display options for board items */
 
-/* PCB file name extension definitions. */
-wxString NetExtBuffer( wxT( "net" ) );
-wxString NetCmpExtBuffer( wxT( "cmp" ) );
-wxString g_Shapes3DExtBuffer( wxT( "wrl" ) );
-const wxString ModuleFileExtension( wxT( "mod" ) );
-
-/* PCB file name wild card definitions. */
-const wxString ModuleFileWildcard( _( "KiCad footprint library files (*.mod)|*.mod" ) );
-
 int    g_RotationAngle;
 
 int    g_AnchorColor        = BLUE;

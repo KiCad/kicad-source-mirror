@@ -20,10 +20,13 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 # reports.
 #
 
-option(USE_PNG_BITMAPS "use PNG bitmaps instead of XPM (default ON)" ON)
+option(USE_PCBNEW_SEXPR_FILE_FORMAT
+       "Use s-expression Pcbnew file format support (default OFF)." )
 
-option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format" OFF)
-option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format" OFF)
+option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format" ON)
+option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format" ON)
+option(USE_PCBNEW_NANOMETRES
+       "Use nanometers for Pcbnew internal units instead of deci-mils (default OFF).")
 
 # Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
@@ -78,7 +81,12 @@ else (KICAD_STABLE_VERSION )
     endif(KICAD_TESTING_VERSION )
 endif(KICAD_STABLE_VERSION )
 
-
+# Nanometers must be enabled when USE_PCBNEW_SEXPR_FILE_FORMAT=ON.
+if( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
+    set( TMP "The Pcbnew s-expression file format requires nano-meter internal units to be " )
+    set( TMP "${TMP} enabled using -DUSE_PCBNEW_NANOMETRES=ON." )
+    message( FATAL_ERROR ${TMP} )
+endif( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
 
 #================================================
 # Set flags for GCC.
@@ -94,10 +102,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -fPIC")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -fPIC")
 
-    if( USE_PNG_BITMAPS )
-        #Add  -DUSE_PNG_BITMAPS to windres.exe command line
-        set(CMAKE_RC_COMPILER windres.exe -DUSE_PNG_BITMAPS)
-    endif( USE_PNG_BITMAPS )
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(wxUSE_UNICODE)
@@ -262,16 +266,10 @@ set(INC_AFTER
 ############
 # Binaries #
 ############
-add_subdirectory(3d-viewer)
 
-if( USE_PNG_BITMAPS )
-    add_subdirectory(bitmaps_png)
-else()
-    add_subdirectory(bitmaps_xpm)
-endif()
-
-
+add_subdirectory(bitmaps_png)
 add_subdirectory(common)
+add_subdirectory(3d-viewer)
 add_subdirectory(cvpcb)
 add_subdirectory(eeschema)
 add_subdirectory(gerbview)

@@ -12,6 +12,7 @@
 #include <confirm.h>
 #include <wxstruct.h>
 #include <appl_wxstruct.h>
+#include <kicad_string.h>
 #include <worksheet.h>
 #include <class_title_block.h>
 
@@ -1010,69 +1011,62 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     const PAGE_INFO&  pageInfo = GetPageSettings();
     wxSize  pageSize = pageInfo.GetSizeMils();
 
-    int ii, jj, xg, yg, ipas, gxpas, gypas;
+    // if not printing, draw the page limits:
+    if( !screen->m_IsPrinting && g_ShowPageLimits )
+    {
+        int scale = m_internalUnits / 1000;
+        GRSetDrawMode( DC, GR_COPY );
+        GRRect( m_canvas->GetClipBox(), DC, 0, 0,
+                pageSize.x * scale, pageSize.y * scale, line_width,
+                g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
+    }
+
+    wxPoint margin_left_top( pageInfo.GetLeftMarginMils(), pageInfo.GetTopMarginMils() );
+    wxPoint margin_right_bottom( pageInfo.GetRightMarginMils(), pageInfo.GetBottomMarginMils() );
+    wxString paper = pageInfo.GetType();
+    wxString file = screen->GetFileName();
+    TITLE_BLOCK t_block = GetTitleBlock();
+    int number_of_screens = screen->m_NumberOfScreen;
+    int screen_to_draw = screen->m_ScreenNumber;
+
+    TraceWorkSheet( ( wxDC* )DC, pageSize, margin_left_top, margin_right_bottom,
+                      paper, file, t_block, number_of_screens, screen_to_draw,
+                      ( int )line_width );
+}
+
+
+void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
+                                       wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
+                                       int aNScr, int aScr, int aLnW, EDA_COLOR_T aClr1,
+                                       EDA_COLOR_T aClr2 )
+{
     wxPoint pos;
     int refx, refy;
-    EDA_Colors Color;
     wxString Line;
     Ki_WorkSheetData* WsItem;
     int scale = m_internalUnits / 1000;
     wxSize size( SIZETEXT * scale, SIZETEXT * scale );
-#if defined(KICAD_GOST)
-    wxSize size2( SIZETEXT * scale * 2, SIZETEXT * scale * 2);
-    wxSize size3( SIZETEXT * scale * 3, SIZETEXT * scale * 3);
-    wxSize size1_5( SIZETEXT * scale * 1.5, SIZETEXT * scale * 1.5);
-#endif
     wxSize size_ref( SIZETEXT_REF * scale, SIZETEXT_REF * scale );
-
     wxString msg;
-    int UpperLimit = VARIABLE_BLOCK_START_POSITION;
-    int width = line_width;
 
-    Color = RED;
-
-    // if not printing, draw the page limits:
-    if( !screen->m_IsPrinting && g_ShowPageLimits )
-    {
-        GRSetDrawMode( DC, GR_COPY );
-        GRRect( m_canvas->GetClipBox(), DC, 0, 0,
-                pageSize.x * scale, pageSize.y * scale, width,
-                g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
-    }
-
-    GRSetDrawMode( DC, GR_COPY );
-
-    // Draw the border.
+    GRSetDrawMode( aDC, GR_COPY );
 
     // Upper left corner
-    refx = pageInfo.GetLeftMarginMils();
-    refy = pageInfo.GetTopMarginMils();
+    refx = aLT.x;
+    refy = aLT.y;
 
     // lower right corner
-    xg   = pageSize.x - pageInfo.GetRightMarginMils();
-    yg   = pageSize.y - pageInfo.GetBottomMarginMils();
+    int xg, yg;
+    xg   = aSz.x - aRB.x;
+    yg   = aSz.y - aRB.y;
 
 #if defined(KICAD_GOST)
-    GRRect( m_canvas->GetClipBox(), DC, refx * scale, refy * scale,
-            xg * scale, yg * scale, width, Color );
+    // Draw the border.
+    GRRect( m_canvas->GetClipBox(), aDC, refx * scale, refy * scale,
+            xg * scale, yg * scale, aLnW, aClr1 );
 
-#else
-    for( ii = 0; ii < 2; ii++ )
-    {
-        GRRect( m_canvas->GetClipBox(), DC, refx * scale, refy * scale,
-                xg * scale, yg * scale, width, Color );
-
-        refx += GRID_REF_W; refy += GRID_REF_W;
-        xg   -= GRID_REF_W; yg -= GRID_REF_W;
-    }
-
-#endif
-
-    // Draw the reference legends.
-    refx = pageInfo.GetLeftMarginMils();
-
-#if defined(KICAD_GOST)
-    refy = pageSize.y - pageInfo.GetBottomMarginMils(); // Lower left corner
+    refx = aLT.x;
+    refy = aSz.y - aRB.y; // Lower left corner
     for( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
     {
         pos.x = ( refx - WsItem->m_Posx ) * scale;
@@ -1086,22 +1080,22 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_PODPIS_LU:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            DrawGraphicText( m_canvas, DC, pos, Color,
+            DrawGraphicText( m_canvas, aDC, pos, aClr1,
                              msg, TEXT_ORIENT_VERT, size,
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
-                             width, false, false );
+                             aLnW, false, false );
             break;
 
         case WS_SEGMENT_LU:
-            xg = pageInfo.GetLeftMarginMils() - WsItem->m_Endx;
-            yg = pageSize.y - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-            GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
-                    xg * scale, yg * scale, width, Color );
+            xg = aLT.x - WsItem->m_Endx;
+            yg = aSz.y - aRB.y - WsItem->m_Endy;
+            GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
+                    xg * scale, yg * scale, aLnW, aClr1 );
             break;
         }
     }
 
-    refy = pageInfo.GetBottomMarginMils(); // Left Top corner
+    refy = aRB.y; // Left Top corner
     for( WsItem = &WS_Segm1_LT; WsItem != NULL; WsItem = WsItem->Pnext )
     {
         pos.x = ( refx + WsItem->m_Posx ) * scale;
@@ -1110,98 +1104,22 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         switch( WsItem->m_Type )
         {
         case WS_SEGMENT_LT:
-            xg = pageInfo.GetLeftMarginMils() + WsItem->m_Endx;
-            yg = pageInfo.GetBottomMarginMils() + WsItem->m_Endy;
-            GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
-                    xg * scale, yg * scale, width, Color );
+            xg = aLT.x + WsItem->m_Endx;
+            yg = aRB.y + WsItem->m_Endy;
+            GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
+                    xg * scale, yg * scale, aLnW, aClr1 );
             break;
         }
     }
 
-#else
-
-    // Upper left corner
-    refy = pageInfo.GetTopMarginMils();
-
+    wxSize size2( SIZETEXT * scale * 2, SIZETEXT * scale * 2);
+    wxSize size3( SIZETEXT * scale * 3, SIZETEXT * scale * 3);
+    wxSize size1_5( SIZETEXT * scale * 1.5, SIZETEXT * scale * 1.5);
     // lower right corner
-    xg   = pageSize.x - pageInfo.GetRightMarginMils();
-    yg   = pageSize.y - pageInfo.GetBottomMarginMils();
+    refx = aSz.x - aRB.x;
+    refy = aSz.y - aRB.y;
 
-    ipas  = ( xg - refx ) / PAS_REF;
-    gxpas = ( xg - refx ) / ipas;
-    for( ii = refx + gxpas, jj = 1; ipas > 0; ii += gxpas, jj++, ipas-- )
-    {
-        Line.Printf( wxT( "%d" ), jj );
-
-        if( ii < xg - PAS_REF / 2 )
-        {
-            GRLine( m_canvas->GetClipBox(), DC, ii * scale, refy * scale,
-                    ii * scale, ( refy + GRID_REF_W ) * scale, width, Color );
-        }
-        DrawGraphicText( m_canvas, DC,
-                         wxPoint( ( ii - gxpas / 2 ) * scale,
-                                  ( refy + GRID_REF_W / 2 ) * scale ),
-                         Color, Line, TEXT_ORIENT_HORIZ, size_ref,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         width, false, false );
-
-        if( ii < xg - PAS_REF / 2 )
-        {
-            GRLine( m_canvas->GetClipBox(), DC, ii * scale, yg * scale,
-                    ii * scale, ( yg - GRID_REF_W ) * scale, width, Color );
-        }
-        DrawGraphicText( m_canvas, DC,
-                         wxPoint( ( ii - gxpas / 2 ) * scale,
-                                  ( yg - GRID_REF_W / 2) * scale ),
-                         Color, Line, TEXT_ORIENT_HORIZ, size_ref,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         width, false, false );
-    }
-
-    ipas  = ( yg - refy ) / PAS_REF;
-    gypas = ( yg - refy ) / ipas;
-
-    for( ii = refy + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
-    {
-        if( jj < 26 )
-            Line.Printf( wxT( "%c" ), jj + 'A' );
-        else    // I hope 52 identifiers are enought...
-            Line.Printf( wxT( "%c" ), 'a' + jj - 26 );
-
-        if( ii < yg - PAS_REF / 2 )
-        {
-            GRLine( m_canvas->GetClipBox(), DC, refx * scale, ii * scale,
-                    ( refx + GRID_REF_W ) * scale, ii * scale, width, Color );
-        }
-
-        DrawGraphicText( m_canvas, DC,
-                         wxPoint( ( refx + GRID_REF_W / 2 ) * scale,
-                                  ( ii - gypas / 2 ) * scale ),
-                         Color, Line, TEXT_ORIENT_HORIZ, size_ref,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         width, false, false );
-
-        if( ii < yg - PAS_REF / 2 )
-        {
-            GRLine( m_canvas->GetClipBox(), DC, xg * scale, ii * scale,
-                    ( xg - GRID_REF_W ) * scale, ii * scale, width, Color );
-        }
-        DrawGraphicText( m_canvas, DC,
-                         wxPoint( ( xg - GRID_REF_W / 2 ) * scale,
-                                  ( ii - gxpas / 2 ) * scale ),
-                         Color, Line, TEXT_ORIENT_HORIZ, size_ref,
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         width, false, false );
-    }
-
-#endif
-
-#if defined(KICAD_GOST)
-    // lower right corner
-    refx = pageSize.x - pageInfo.GetRightMarginMils();
-    refy = pageSize.y - pageInfo.GetBottomMarginMils();
-
-    if( screen->m_ScreenNumber == 1 )
+    if( aScr == 1 )
     {
         for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
         {
@@ -1222,10 +1140,10 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             case WS_PODPIS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                DrawGraphicText( m_canvas, DC, pos, Color,
+                DrawGraphicText( m_canvas, aDC, pos, aClr1,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width, false, false );
+                                 aLnW, false, false );
                 break;
 
             case WS_SIZESHEET:
@@ -1234,95 +1152,91 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             case WS_IDENTSHEET:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                if( screen->m_NumberOfScreen > 1 )
-                    msg << screen->m_ScreenNumber;
-                DrawGraphicText( m_canvas, DC, pos, Color, msg,
+                if( aNScr > 1 )
+                    msg << aScr;
+                DrawGraphicText( m_canvas, aDC, pos, aClr1, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER, width, false, false );
+                                 GR_TEXT_VJUSTIFY_CENTER, aLnW, false, false );
                 break;
 
             case WS_SHEETS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                msg << screen->m_NumberOfScreen;
-                DrawGraphicText( m_canvas, DC, pos, Color, msg,
+                msg << aNScr;
+                DrawGraphicText( m_canvas, aDC, pos, aClr1, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER, width, false, false );
+                                 GR_TEXT_VJUSTIFY_CENTER, aLnW, false, false );
                 break;
 
             case WS_COMPANY_NAME:
-            msg = GetTitleBlock().GetCompany();
+            msg = aTb.GetCompany();
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, TEXT_ORIENT_HORIZ, size1_5,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     width,
-                                     false, false );
+                                     aLnW, false, false );
                 }
                 break;
 
             case WS_TITLE:
-            msg = GetTitleBlock().GetTitle();
+            msg = aTb.GetTitle();
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, TEXT_ORIENT_HORIZ, size1_5,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     width,
-                                     false, false );
+                                     aLnW, false, false );
                 }
                 break;
 
             case WS_COMMENT1:
-            msg = GetTitleBlock().GetComment1();
+            msg = aTb.GetComment1();
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, TEXT_ORIENT_HORIZ, size3,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     width,
-                                     false, false );
-                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * scale;
-                    pos.y = (pageInfo.GetTopMarginMils() + 270) * scale;
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                                     aLnW, false, false );
+                    pos.x = (aLT.x + 1260) * scale;
+                    pos.y = (aLT.y + 270) * scale;
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, 1800, size2,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     width,
-                                     false, false );
+                                     aLnW, false, false );
                 }
                 break;
 
             case WS_COMMENT2:
-            msg = GetTitleBlock().GetComment2();
+            msg = aTb.GetComment2();
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, TEXT_ORIENT_HORIZ, size,
                                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                     width, false, false );
+                                     aLnW, false, false );
                 }
                 break;
 
             case WS_COMMENT3:
-            msg = GetTitleBlock().GetComment3();
+            msg = aTb.GetComment3();
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, TEXT_ORIENT_HORIZ, size,
                                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                     width, false, false );
+                                     aLnW, false, false );
                 }
                 break;
 
             case WS_COMMENT4:
-            msg = GetTitleBlock().GetComment4();
+            msg = aTb.GetComment4();
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, TEXT_ORIENT_HORIZ, size,
                                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                     width, false, false );
+                                     aLnW, false, false );
                 }
                 break;
 
@@ -1333,12 +1247,10 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 pos.y = ( refy - WsItem->m_Posy ) * scale;
 
             case WS_SEGMENT:
-                xg = pageSize.x -
-                     pageInfo.GetRightMarginMils() - WsItem->m_Endx;
-                yg = pageSize.y -
-                     pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-                GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
-                        xg * scale, yg * scale, width, Color );
+                xg = aSz.x - aRB.x - WsItem->m_Endx;
+                yg = aSz.y - aRB.y - WsItem->m_Endy;
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
+                        xg * scale, yg * scale, aLnW, aClr1 );
                 break;
             }
         }
@@ -1355,63 +1267,144 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             {
             case WS_CADRE:
             // Begin list number > 1
-            msg = GetTitleBlock().GetComment1();
+            msg = aTb.GetComment1();
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, TEXT_ORIENT_HORIZ, size3,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     width,
-                                     false, false );
-                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * scale;
-                    pos.y = (pageInfo.GetTopMarginMils() + 270) * scale;
-                    DrawGraphicText( m_canvas, DC, pos, Color,
+                                     aLnW, false, false );
+                    pos.x = (aLT.x + 1260) * scale;
+                    pos.y = (aLT.y + 270) * scale;
+                    DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, 1800, size2,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                     width,
-                                     false, false );
+                                     aLnW, false, false );
                 }
                 break;
 
             case WS_PODPIS_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                DrawGraphicText( m_canvas, DC, pos, Color,
+                DrawGraphicText( m_canvas, aDC, pos, aClr1,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width,
-                                 false, false );
+                                 aLnW, false, false );
                 break;
 
             case WS_IDENTSHEET_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                msg << screen->m_ScreenNumber;
-                DrawGraphicText( m_canvas, DC, pos, Color,
+                msg << aScr;
+                DrawGraphicText( m_canvas, aDC, pos, aClr1,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width, false, false );
+                                 aLnW, false, false );
                 break;
 
             case WS_LEFT_SEGMENT_D:
                 pos.y = ( refy - WsItem->m_Posy ) * scale;
 
             case WS_SEGMENT_D:
-                xg = pageSize.x -
-                     pageInfo.GetRightMarginMils() - WsItem->m_Endx;
-                yg = pageSize.y -
-                     pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-                GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
-                        xg * scale, yg * scale, width, Color );
+                xg = aSz.x - aRB.x - WsItem->m_Endx;
+                yg = aSz.y - aRB.y - WsItem->m_Endy;
+                GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
+                        xg * scale, yg * scale, aLnW, aClr1 );
                 break;
             }
         }
     }
 
 #else
+    // Draw the border.
+    int ii, jj, ipas, gxpas, gypas;
+    for( ii = 0; ii < 2; ii++ )
+    {
+        GRRect( m_canvas->GetClipBox(), aDC, refx * scale, refy * scale,
+                xg * scale, yg * scale, aLnW, aClr1 );
 
-    refx = pageSize.x - pageInfo.GetRightMarginMils()  - GRID_REF_W;
-    refy = pageSize.y - pageInfo.GetBottomMarginMils() - GRID_REF_W;
+        refx += GRID_REF_W; refy += GRID_REF_W;
+        xg   -= GRID_REF_W; yg -= GRID_REF_W;
+    }
+
+    // Upper left corner
+    refx = aLT.x;
+    refy = aLT.y;
+
+    // lower right corner
+    xg   = aSz.x - aRB.x;
+    yg   = aSz.y - aRB.y;
+
+    ipas  = ( xg - refx ) / PAS_REF;
+    gxpas = ( xg - refx ) / ipas;
+    for( ii = refx + gxpas, jj = 1; ipas > 0; ii += gxpas, jj++, ipas-- )
+    {
+        Line.Printf( wxT( "%d" ), jj );
+
+        if( ii < xg - PAS_REF / 2 )
+        {
+            GRLine( m_canvas->GetClipBox(), aDC, ii * scale, refy * scale,
+                    ii * scale, ( refy + GRID_REF_W ) * scale, aLnW, aClr1 );
+        }
+        DrawGraphicText( m_canvas, aDC,
+                         wxPoint( ( ii - gxpas / 2 ) * scale,
+                                  ( refy + GRID_REF_W / 2 ) * scale ),
+                         aClr1, Line, TEXT_ORIENT_HORIZ, size_ref,
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                         aLnW, false, false );
+
+        if( ii < xg - PAS_REF / 2 )
+        {
+            GRLine( m_canvas->GetClipBox(), aDC, ii * scale, yg * scale,
+                    ii * scale, ( yg - GRID_REF_W ) * scale, aLnW, aClr1 );
+        }
+        DrawGraphicText( m_canvas, aDC,
+                         wxPoint( ( ii - gxpas / 2 ) * scale,
+                                  ( yg - GRID_REF_W / 2) * scale ),
+                         aClr1, Line, TEXT_ORIENT_HORIZ, size_ref,
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                         aLnW, false, false );
+    }
+
+    ipas  = ( yg - refy ) / PAS_REF;
+    gypas = ( yg - refy ) / ipas;
+
+    for( ii = refy + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
+    {
+        if( jj < 26 )
+            Line.Printf( wxT( "%c" ), jj + 'A' );
+        else    // I hope 52 identifiers are enough...
+            Line.Printf( wxT( "%c" ), 'a' + jj - 26 );
+
+        if( ii < yg - PAS_REF / 2 )
+        {
+            GRLine( m_canvas->GetClipBox(), aDC, refx * scale, ii * scale,
+                    ( refx + GRID_REF_W ) * scale, ii * scale, aLnW, aClr1 );
+        }
+
+        DrawGraphicText( m_canvas, aDC,
+                         wxPoint( ( refx + GRID_REF_W / 2 ) * scale,
+                                  ( ii - gypas / 2 ) * scale ),
+                         aClr1, Line, TEXT_ORIENT_HORIZ, size_ref,
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                         aLnW, false, false );
+
+        if( ii < yg - PAS_REF / 2 )
+        {
+            GRLine( m_canvas->GetClipBox(), aDC, xg * scale, ii * scale,
+                    ( xg - GRID_REF_W ) * scale, ii * scale, aLnW, aClr1 );
+        }
+        DrawGraphicText( m_canvas, aDC,
+                         wxPoint( ( xg - GRID_REF_W / 2 ) * scale,
+                                  ( ii - gxpas / 2 ) * scale ),
+                         aClr1, Line, TEXT_ORIENT_HORIZ, size_ref,
+                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                         aLnW, false, false );
+    }
+
+    int UpperLimit = VARIABLE_BLOCK_START_POSITION;
+    refx = aSz.x - aRB.x  - GRID_REF_W;
+    refy = aSz.y - aRB.y - GRID_REF_W;
 
     for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
     {
@@ -1424,22 +1417,26 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_DATE:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += GetTitleBlock().GetDate();
-            DrawGraphicText( m_canvas, DC, pos, Color,
+            msg += aTb.GetDate();
+            DrawGraphicText( m_canvas, aDC, pos, aClr1,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             width, false, true );
+                             aLnW, false, true );
             break;
 
         case WS_REV:
             if( WsItem->m_Legende )
+            {
                 msg = WsItem->m_Legende;
-            msg += GetTitleBlock().GetRevision();
-            DrawGraphicText( m_canvas, DC, pos, Color,
-                             msg, TEXT_ORIENT_HORIZ, size,
+                DrawGraphicText( m_canvas, aDC, pos, aClr1, msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             GetPenSizeForBold( MIN( size.x, size.y ) ),
-                             false, true );
+                                 GetPenSizeForBold( MIN( size.x, size.y ) ), false, true );
+                pos.x += ReturnGraphicTextWidth( msg, size.x, false, false );
+             }
+            msg = aTb.GetRevision();
+            DrawGraphicText( m_canvas, aDC, pos, aClr2, msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                             GetPenSizeForBold( MIN( size.x, size.y ) ), false, true );
             break;
 
         case WS_KICAD_VERSION:
@@ -1447,67 +1444,67 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = WsItem->m_Legende;
             msg += g_ProductName + wxGetApp().GetAppName();
             msg += wxT( " " ) + GetBuildVersion();
-            DrawGraphicText( m_canvas, DC, pos, Color,
+            DrawGraphicText( m_canvas, aDC, pos, aClr1,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             width, false, false );
+                             aLnW, false, false );
             break;
 
         case WS_SIZESHEET:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += pageInfo.GetType();
-            DrawGraphicText( m_canvas, DC, pos, Color,
+            msg += aType;
+            DrawGraphicText( m_canvas, aDC, pos, aClr1,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             width, false, false );
+                             aLnW, false, false );
             break;
 
 
         case WS_IDENTSHEET:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg << screen->m_ScreenNumber << wxT( "/" ) << screen->m_NumberOfScreen;
-            DrawGraphicText( m_canvas, DC, pos, Color,
+            msg << aScr << wxT( "/" ) << aNScr;
+            DrawGraphicText( m_canvas, aDC, pos, aClr1,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             width, false, false );
+                             aLnW, false, false );
             break;
 
         case WS_FILENAME:
-        {
-            wxString fname, fext;
-            wxFileName::SplitPath( screen->GetFileName(), (wxString*) NULL, &fname, &fext );
+            {
+                wxString fname, fext;
+                wxFileName::SplitPath( aFlNm, (wxString*) NULL, &fname, &fext );
 
-            if( WsItem->m_Legende )
-                msg = WsItem->m_Legende;
+                if( WsItem->m_Legende )
+                    msg = WsItem->m_Legende;
 
-            msg << fname << wxT( "." ) << fext;
-            DrawGraphicText( m_canvas, DC, pos, Color,
-                             msg, TEXT_ORIENT_HORIZ, size,
-                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             width, false, false );
-        }
-        break;
+                msg << fname << wxT( "." ) << fext;
+                DrawGraphicText( m_canvas, aDC, pos, aClr1,
+                                 msg, TEXT_ORIENT_HORIZ, size,
+                                 GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                                 aLnW, false, false );
+            }
+            break;
 
         case WS_FULLSHEETNAME:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
             msg += GetScreenDesc();
-            DrawGraphicText( m_canvas, DC, pos, Color,
+            DrawGraphicText( m_canvas, aDC, pos, aClr1,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             width, false, false );
+                             aLnW, false, false );
             break;
 
 
         case WS_COMPANY_NAME:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += GetTitleBlock().GetCompany();
+            msg += aTb.GetCompany();
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( m_canvas, DC, pos, Color,
+                DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  GetPenSizeForBold( MIN( size.x, size.y ) ),
@@ -1518,25 +1515,29 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         case WS_TITLE:
             if( WsItem->m_Legende )
+            {
                 msg = WsItem->m_Legende;
-            msg += GetTitleBlock().GetTitle();
-            DrawGraphicText( m_canvas, DC, pos, Color,
-                             msg, TEXT_ORIENT_HORIZ, size,
+                DrawGraphicText( m_canvas, aDC, pos, aClr1, msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             GetPenSizeForBold( MIN( size.x, size.y ) ),
-                             false, true );
+                                 GetPenSizeForBold( MIN( size.x, size.y ) ), false, true );
+                pos.x += ReturnGraphicTextWidth( msg, size.x, false, false );
+            }
+            msg = aTb.GetTitle();
+            DrawGraphicText( m_canvas, aDC, pos, aClr2, msg, TEXT_ORIENT_HORIZ, size,
+                             GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
+                             GetPenSizeForBold( MIN( size.x, size.y ) ), false, true );
             break;
 
         case WS_COMMENT1:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += GetTitleBlock().GetComment1();
+            msg += aTb.GetComment1();
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( m_canvas, DC, pos, Color,
+                DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width, false, false );
+                                 aLnW, false, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -1544,13 +1545,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_COMMENT2:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += GetTitleBlock().GetComment2();
+            msg += aTb.GetComment2();
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( m_canvas, DC, pos, Color,
+                DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width, false, false );
+                                 aLnW, false, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -1558,13 +1559,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_COMMENT3:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += GetTitleBlock().GetComment3();
+            msg += aTb.GetComment3();
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( m_canvas, DC, pos, Color,
+                DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width, false, false );
+                                 aLnW, false, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -1572,13 +1573,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_COMMENT4:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += GetTitleBlock().GetComment4();
+            msg += aTb.GetComment4();
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( m_canvas, DC, pos, Color,
+                DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width, false, false );
+                                 aLnW, false, false );
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
@@ -1594,12 +1595,10 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             pos.y = (refy - WsItem->m_Posy) * scale;
 
         case WS_SEGMENT:
-            xg = pageSize.x -
-                 GRID_REF_W - pageInfo.GetRightMarginMils() - WsItem->m_Endx;
-            yg = pageSize.y -
-                 GRID_REF_W - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-            GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
-                    xg * scale, yg * scale, width, Color );
+            xg = aSz.x - GRID_REF_W - aRB.x - WsItem->m_Endx;
+            yg = aSz.y - GRID_REF_W - aRB.y - WsItem->m_Endy;
+            GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
+                    xg * scale, yg * scale, aLnW, aClr1 );
             break;
         }
     }
@@ -1628,7 +1627,7 @@ const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition )
     yg   = pageInfo.GetSizeMils().y - pageInfo.GetBottomMarginMils();
 
     // Get the Y axis identifier (A symbol A ... Z)
-    if( aPosition.y < refy || aPosition.y > yg )  // Ouside of Y limits
+    if( aPosition.y < refy || aPosition.y > yg )  // Outside of Y limits
         msg << wxT( "?" );
     else
     {
@@ -1639,7 +1638,7 @@ const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition )
     }
 
     // Get the X axis identifier (A number 1 ... n)
-    if( aPosition.x < refx || aPosition.x > xg )  // Ouside of X limits
+    if( aPosition.x < refx || aPosition.x > xg )  // Outside of X limits
         msg << wxT( "?" );
     else
     {
@@ -1661,4 +1660,43 @@ wxString EDA_DRAW_FRAME::GetScreenDesc()
     msg << GetScreen()->m_ScreenNumber << wxT( "/" )
         << GetScreen()->m_NumberOfScreen;
     return msg;
+}
+
+
+void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    // Don't write the title block information if there is nothing to write.
+    if(  !m_title.IsEmpty() || !m_date.IsEmpty() || !m_revision.IsEmpty()
+      || !m_company.IsEmpty() || !m_comment1.IsEmpty() || !m_comment2.IsEmpty()
+      || !m_comment3.IsEmpty() || !m_comment4.IsEmpty()  )
+    {
+        aFormatter->Print( aNestLevel, "(title_block\n" );
+
+        if( !m_title.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "(title %s)\n", EscapedUTF8( m_title ).c_str() );
+
+        if( !m_date.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "(date %s)\n", EscapedUTF8( m_date ).c_str() );
+
+        if( !m_revision.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "(rev %s)\n", EscapedUTF8( m_revision ).c_str() );
+
+        if( !m_company.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "(company %s)\n", EscapedUTF8( m_company ).c_str() );
+
+        if( !m_comment1.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "(comment1 %s)\n", EscapedUTF8( m_comment1 ).c_str() );
+
+        if( !m_comment2.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "(comment2 %s)\n", EscapedUTF8( m_comment2 ).c_str() );
+
+        if( !m_comment3.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "(comment3 %s)\n", EscapedUTF8( m_comment3 ).c_str() );
+
+        if( !m_comment4.IsEmpty() )
+            aFormatter->Print( aNestLevel+1, "(comment4 %s)\n", EscapedUTF8( m_comment4 ).c_str() );
+
+        aFormatter->Print( aNestLevel, ")\n\n" );
+    }
 }

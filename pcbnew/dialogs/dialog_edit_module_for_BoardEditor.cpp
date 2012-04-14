@@ -12,11 +12,13 @@
 #include <3d_struct.h>
 #include <3d_viewer.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
 
 #include <dialog_edit_module_for_BoardEditor.h>
+#include <wildcards_and_files_ext.h>
 
 
 DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,
@@ -61,12 +63,10 @@ DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
 /* Creation of the panel properties of the module editor. */
 void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 {
-    PutValueInLocalUnits( *m_ModPositionX,
-                          m_CurrentModule->GetPosition().x, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_ModPositionX, m_CurrentModule->GetPosition().x );
     AddUnitSymbol( *XPositionStatic, g_UserUnit );
 
-    PutValueInLocalUnits( *m_ModPositionY,
-                          m_CurrentModule->GetPosition().y, PCB_INTERNAL_UNIT );
+    PutValueInLocalUnits( *m_ModPositionY, m_CurrentModule->GetPosition().y );
     AddUnitSymbol( *YPositionStatic, g_UserUnit );
 
     m_LayerCtrl->SetSelection(
@@ -110,18 +110,13 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
-    int internalUnit = m_Parent->GetInternalUnits();
-    PutValueInLocalUnits( *m_NetClearanceValueCtrl,
-                          m_CurrentModule->m_LocalClearance, internalUnit );
-    PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
-                          m_CurrentModule->m_LocalSolderMaskMargin,
-                          internalUnit );
+    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_CurrentModule->m_LocalClearance );
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_CurrentModule->m_LocalSolderMaskMargin );
 
     // These 2 parameters are usually < 0, so prepare entering a negative
     // value, if current is 0
-    PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
-                          m_CurrentModule->GetLocalSolderPasteMargin(),
-                          internalUnit );
+    PutValueInLocalUnits( *m_SolderPasteMarginCtrl, m_CurrentModule->GetLocalSolderPasteMargin() );
+
     if( m_CurrentModule->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) +
                                            m_SolderPasteMarginCtrl->GetValue() );
@@ -404,18 +399,16 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
 {
     wxString fullfilename, shortfilename;
     wxString fullpath;
-    wxString mask = wxT( "*" );
 
     fullpath = wxGetApp().ReturnLastVisitedLibraryPath( LIB3D_PATH );
-    mask    += g_Shapes3DExtBuffer;
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
     fullfilename = EDA_FileSelector( _( "3D Shape:" ),
                                      fullpath,
                                      wxEmptyString,
-                                     g_Shapes3DExtBuffer,
-                                     mask,
+                                     VrmlFileExtension,
+                                     wxGetTranslation( VrmlFileWildcard ),
                                      this,
                                      wxFD_OPEN,
                                      true
@@ -480,6 +473,10 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
         m_Parent->GetCanvas()->CrossHairOff( m_DC );
         m_CurrentModule->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
+
+    // Init Fields (should be first, because they can be moved or/and flipped later):
+    m_CurrentModule->m_Reference->Copy( m_ReferenceCopy );
+    m_CurrentModule->m_Value->Copy( m_ValueCopy );
 
     // Initialize masks clearances
     m_CurrentModule->SetLocalClearance(
@@ -549,10 +546,6 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_CurrentModule->m_CntRot90  = m_CostRot90Ctrl->GetValue();
     m_CurrentModule->m_CntRot180 = m_CostRot180Ctrl->GetValue();
-
-    // Init Fields:
-    m_CurrentModule->m_Reference->Copy( m_ReferenceCopy );
-    m_CurrentModule->m_Value->Copy( m_ValueCopy );
 
     /* Now, set orientation. must be made after others changes,
      * because rotation changes fields positions on board according to the new orientation

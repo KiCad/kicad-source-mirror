@@ -2,10 +2,10 @@
  * @file pcbnew/pcbplot.h
  */
 
-#ifndef PCBPLOT_H
-#define PCBPLOT_H
+#ifndef PCBPLOT_H_
+#define PCBPLOT_H_
 
-#include "pcb_plot_params.h"
+#include <pcb_plot_params.h>
 
 
 class PLOTTER;
@@ -29,36 +29,34 @@ class ZONE_CONTAINER;
 
 // Conversion unit constants.
 // Convert pcb dimension of 0.1 mil to PS units of inches.
-#define SCALE_PS .0001
+#define SCALE_PS    .0001
+
 // Convert dimension 0.1 mil -> HPGL units:
-#define SCALE_HPGL 0.102041
+#define SCALE_HPGL  0.102041
 
 // Small drill marks diameter value (in internal value = 1/10000 inch)
 #define SMALL_DRILL 150
 
 
-void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
+void PlotTextePcb( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PCB* pt_texte, int masque_layer,
                    EDA_DRAW_MODE_T trace_mode );
 
-/* Plat PCB text type, ie other than text on modules
- * prepare the plot settings of text */
-void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* PtSegm, int masque_layer,
+void PlotDrawSegment( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, DRAWSEGMENT* PtSegm, int masque_layer,
                       EDA_DRAW_MODE_T trace_mode );
 
-void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int masque_layer,
+void PlotDimension( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, DIMENSION* Dimension, int masque_layer,
                     EDA_DRAW_MODE_T trace_mode );
 
-void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* PtMire, int masque_layer,
+void PlotPcbTarget( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, PCB_TARGET* PtMire, int masque_layer,
                     EDA_DRAW_MODE_T trace_mode );
 
-void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
+void Plot_1_EdgeModule( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, EDGE_MODULE* PtEdge,
                         EDA_DRAW_MODE_T trace_mode, int masque_layer );
 
-void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
+void PlotFilledAreas( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_CONTAINER* aZone,
                       EDA_DRAW_MODE_T trace_mode );
 
 // PLOTGERB.CPP
 void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );
 
-
-#endif // #define PCBPLOT_H
+#endif // PCBPLOT_H_

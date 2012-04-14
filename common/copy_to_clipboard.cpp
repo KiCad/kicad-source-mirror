@@ -46,7 +46,7 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
     if( event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
     {
         if( GetScreen()->IsBlockActive() )
-            m_canvas->SetCursor( wxCursor( m_canvas->GetDefaultCursor() ) );
+            m_canvas->SetCursor( wxCursor( (wxStockCursor) m_canvas->GetDefaultCursor() ) );
 
         m_canvas->EndMouseCapture();
     }

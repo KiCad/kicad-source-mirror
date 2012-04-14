@@ -67,7 +67,7 @@ static bool ShowClearance( const TRACK* aTrack )
 
 /*
  * return true if the dist between p1 and p2 < max_dist
- * Currently in test (currently rasnest algos work only if p1 == p2)
+ * Currently in test (currently ratsnest algos work only if p1 == p2)
  */
 inline bool IsNear( wxPoint& p1, wxPoint& p2, int max_dist )
 {
@@ -130,7 +130,7 @@ TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
 }
 
 
-EDA_ITEM* TRACK::doClone() const
+EDA_ITEM* TRACK::Clone() const
 {
     return new TRACK( *this );
 }
@@ -152,7 +152,7 @@ SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
 }
 
 
-EDA_ITEM* SEGZONE::doClone() const
+EDA_ITEM* SEGZONE::Clone() const
 {
     return new SEGZONE( *this );
 }
@@ -190,7 +190,7 @@ SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
 }
 
 
-EDA_ITEM* SEGVIA::doClone() const
+EDA_ITEM* SEGVIA::Clone() const
 {
     return new SEGVIA( *this );
 }
@@ -392,7 +392,7 @@ void TRACK::Flip( const wxPoint& aCentre )
     }
     else
     {
-        SetLayer( ChangeSideNumLayer( GetLayer() ) );
+        SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
     }
 }
 
@@ -604,7 +604,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
       return;
 #endif
 
-    if( DisplayOpt.ContrastModeDisplay )
+    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) && DisplayOpt.ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
         {
@@ -1179,7 +1179,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 }
 
 
-bool TRACK::HitTest( const wxPoint& refPos )
+bool TRACK::HitTest( const wxPoint& aPosition )
 {
     int radius = m_Width >> 1;
 
@@ -1188,8 +1188,8 @@ bool TRACK::HitTest( const wxPoint& refPos )
     int dy = m_End.y - m_Start.y;
 
     // (spot_cX, spot_cY) is a vector from m_Start to ref_pos (an origin of m_Start)
-    int spot_cX = refPos.x - m_Start.x;
-    int spot_cY = refPos.y - m_Start.y;
+    int spot_cX = aPosition.x - m_Start.x;
+    int spot_cY = aPosition.y - m_Start.y;
 
     if( Type() == PCB_VIA_T )
     {
@@ -1205,12 +1205,12 @@ bool TRACK::HitTest( const wxPoint& refPos )
 }
 
 
-bool TRACK::HitTest( EDA_RECT& refArea )
+bool TRACK::HitTest( const EDA_RECT& aRect ) const
 {
-    if( refArea.Contains( m_Start ) )
+    if( aRect.Contains( m_Start ) )
         return true;
 
-    if( refArea.Contains( m_End ) )
+    if( aRect.Contains( m_End ) )
         return true;
 
     return false;
@@ -1556,6 +1556,47 @@ wxString TRACK::GetSelectMenuText() const
          << wxT("  ") << _("Length:") << valeur_param( GetLength(), temp );
 
     return text;
+}
+
+
+void TRACK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    if( Type() == PCB_VIA_T )
+    {
+        std::string type;
+
+        switch( m_Shape )
+        {
+        case VIA_THROUGH:       type = "thru";     break;
+        case VIA_BLIND_BURIED:  type = "blind";    break;
+        case VIA_MICROVIA:      type = "micro";    break;
+        default:
+            THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), m_Shape ) );
+        }
+
+        aFormatter->Print( aNestLevel, "(via %s (at %s) (size %s)", type.c_str(),
+                           FMT_IU( m_Start ).c_str(), FMT_IU( m_Width ).c_str() );
+
+        if( m_Drill != UNDEFINED_DRILL_DIAMETER )
+            aFormatter->Print( 0, " (drill %s)", FMT_IU( m_Drill ).c_str() );
+    }
+    else
+    {
+        aFormatter->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
+                           FMT_IU( m_Start ).c_str(), FMT_IU( m_End ).c_str(),
+                           FMT_IU( m_Width ).c_str() );
+    }
+
+    aFormatter->Print( 0, " (layer %d) (net %d)", GetLayer(), GetNet() );
+
+    if( GetTimeStamp() != 0 )
+        aFormatter->Print( 0, " (tstamp %lX)", GetTimeStamp() );
+
+    if( GetStatus() != 0 )
+        aFormatter->Print( 0, " (status %X)", GetStatus() );
+
+    aFormatter->Print( 0, ")\n" );
 }
 
 

@@ -200,6 +200,7 @@ wxBitmap LAYER_WIDGET::makeBitmap( int aColor )
     return bitmap;
 }
 
+
 wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, int aColor, int aID )
 {
     // dynamically make a wxBitMap and brush it with the appropriate color,
@@ -217,6 +218,7 @@ wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, int aColor, in
     ret->SetName( makeColorTxt( aColor ) );
     return ret;
 }
+
 
 void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 {
@@ -324,6 +326,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
     }
     passOnFocus();
 }
+
 
 void LAYER_WIDGET::OnRenderCheckBox( wxCommandEvent& event )
 {
@@ -457,7 +460,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     else    // == -1, no color selection wanted
     {
         // need a place holder within the sizer to keep grid full.
-        wxPanel* invisible = new wxPanel( m_RenderScrolledWindow );
+        wxPanel* invisible = new wxPanel( m_RenderScrolledWindow, encodeId( col, aSpec.id ) );
         m_RenderFlexGridSizer->wxSizer::Insert( index+col, invisible, 0, flags );
     }
 

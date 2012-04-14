@@ -41,9 +41,14 @@
 #define HPGL_PEN_OVERLAY_MIN      0
 #define HPGL_PEN_OVERLAY_MAX      0x100
 
-extern int g_DrawDefaultLineThickness;
 
-PCB_PLOT_PARAMS g_PcbPlotOptions;
+/**
+ * Default line thickness in PCnew units used to draw or plot items having a
+ * default thickness line value (Frame references) (i.e. = 0 ).
+ * 0 = single pixel line width.
+ */
+int g_DrawDefaultLineThickness = 60;
+
 
 using namespace PCBPLOTPARAMS_T;
 
@@ -109,7 +114,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
 
 void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
-                              int aNestLevel ) const throw( IO_ERROR )
+                              int aNestLevel, int aControl ) const throw( IO_ERROR )
 {
     const char* falseStr = getTokenName( T_false );
     const char* trueStr = getTokenName( T_true );

@@ -78,10 +78,6 @@ private:
      */
     int m_edge;
 
-    virtual EDA_ITEM* doClone() const;
-
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
                    const wxPoint& pos = wxPoint( 0, 0 ),
@@ -91,18 +87,18 @@ public:
 
     ~SCH_SHEET_PIN() { }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_SHEET_PIN" );
     }
 
     bool operator ==( const SCH_SHEET_PIN* aPin ) const;
 
-    virtual void Draw( EDA_DRAW_PANEL* aPanel,
-                       wxDC*           aDC,
-                       const wxPoint&  aOffset,
-                       int             aDraw_mode,
-                       int             aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aPanel,
+               wxDC*           aDC,
+               const wxPoint&  aOffset,
+               int             aDraw_mode,
+               int             aColor = -1 );
 
     /**
      * Function CreateGraphicShape (virtual)
@@ -110,9 +106,11 @@ public:
      * @param aPoints = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    virtual void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos );
+    void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos );
 
-    virtual void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem );
+
+    int GetPenSize() const;
 
     /**
      * Get the sheet label number.
@@ -147,87 +145,49 @@ public:
      */
     SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Load schematic sheet hierarchical label from \a aLine in a .sch file.
-     *
-     * @param aLine - Essentially this is file to read the sheet hierarchical label  from.
-     * @param aErrorMsg - Description of the error if an error occurs while loading the sheet
-     *                    hierarchical label.
-     * @return True if the sheet hierarchical label loaded successfully.
-     */
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize() const;
-
     // Geometric transforms (used in block operations):
 
-    /** virtual function Move
-     * move item to a new position.
-     * @param aMoveVector = the displacement vector
-     */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    void MirrorY( int aYaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    void Rotate( wxPoint aPosition );
 
-    virtual void Mirror_X( int aXaxis_position );
+    void MirrorX( int aXaxis_position );
 
-    /**
-     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
-     */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    /**
-     * @copydoc EDA_ITEM::Replace(wxFindReplaceData&,void*)
-     */
-    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL )
+    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL )
     {
         return EDA_ITEM::Replace( aSearchData, m_Text );
     }
 
-    /**
-     * @copydoc EDA_ITEM::IsReplaceable()
-     */
-    virtual bool IsReplaceable() const { return true; }
+    bool IsReplaceable() const { return true; }
 
-    virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
+    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
 
-    virtual bool IsConnectable() const { return true; }
+    bool IsConnectable() const { return true; }
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_hierar_pin_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_hierar_pin_xpm; }
 
-private:
-    virtual void doSetPosition( const wxPoint& aPosition )
-    {
-        ConstrainOnEdge( aPosition );
-    }
+    void SetPosition( const wxPoint& aPosition ) { ConstrainOnEdge( aPosition ); }
+
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    EDA_ITEM* Clone() const;
 };
 
 
@@ -281,7 +241,7 @@ public:
 
     ~SCH_SHEET();
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_SHEET" );
     }
@@ -326,23 +286,9 @@ public:
      */
     int GetScreenCount() const;
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Load schematic sheet from \a aLine in a .sch file.
-     *
-     * @param aLine - Essentially this is file to read the component from.
-     * @param aErrorMsg - Description of the error if an error occurs while loading the sheet.
-     * @return True if the sheet loaded successfully.
-     */
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
@@ -443,32 +389,14 @@ public:
      */
     int GetMinHeight() const;
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize() const;
+    int GetPenSize() const;
 
-    /**
-     * Function Draw
-     *  Draw the hierarchical sheet shape
-     *  @param aPanel = the current DrawPanel
-     *  @param aDC = the current Device Context
-     *  @param aOffset = draw offset (usually wxPoint(0,0))
-     *  @param aDrawMode = draw mode
-     *  @param aColor = color used to draw sheet. Usually -1 to use the normal
-     * color for sheet items
-     */
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                const wxPoint&  aOffset,
                int             aDrawMode,
                int             aColor = -1 );
 
-    /**
-     * Function GetBoundingBox
-     *  @return an EDA_RECT giving the bounding box of the sheet
-     */
     EDA_RECT GetBoundingBox() const;
 
     /**
@@ -479,7 +407,7 @@ public:
      */
     wxPoint GetResizePosition() const;
 
-    virtual void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem );
 
     /**
      * Function ComponentCount
@@ -551,11 +479,7 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    /** virtual function Move
-     * move item to a new position.
-     * @param aMoveVector = the displacement vector
-     */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_pos += aMoveVector;
 
@@ -565,28 +489,17 @@ public:
         }
     }
 
-    /** virtual function Mirror_Y
-     * mirror item relative to an Y axis
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
-    virtual void Mirror_X( int aXaxis_position );
-    virtual void Rotate( wxPoint rotationPoint );
+    void MirrorY( int aYaxis_position );
 
-    /**
-     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
-     */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    void MirrorX( int aXaxis_position );
 
-    /**
-     * @copydoc EDA_ITEM::Replace(wxFindReplaceData&,void*)
-     */
-    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL );
+    void Rotate( wxPoint aPosition );
 
-    /**
-     * @copydoc EDA_ITEM::IsReplaceable()
-     */
-    virtual bool IsReplaceable() const { return true; }
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+
+    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL );
+
+    bool IsReplaceable() const { return true; }
 
     /**
      * Resize this sheet to aSize and adjust all of the labels accordingly.
@@ -607,29 +520,41 @@ public:
      */
     wxPoint GetFileNamePosition();
 
-    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
 
-    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
+    bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
 
-    virtual bool IsDangling() const;
+    bool IsDangling() const;
 
-    virtual bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect );
 
-    virtual bool IsConnectable() const { return true; }
+    bool IsConnectable() const { return true; }
 
-    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
-    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
+    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                                  const KICAD_T scanTypes[] );
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return add_hierarchical_subsheet_xpm; }
+    BITMAP_DEF GetMenuImage() const { return add_hierarchical_subsheet_xpm; }
 
-    virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
+    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
                                  SCH_SHEET_PATH*          aSheetPath );
 
     SCH_ITEM& operator=( const SCH_ITEM& aSheet );
+
+    wxPoint GetPosition() const { return m_pos; }
+
+    void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
+
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+
+    void Plot( PLOTTER* aPlotter );
+
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
@@ -645,14 +570,6 @@ protected:
      * sheet pin is added or removed.
      */
     void renumberPins();
-
-private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
-    virtual EDA_ITEM* doClone() const;
-    virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 };
 
 

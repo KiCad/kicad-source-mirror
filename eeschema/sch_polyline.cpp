@@ -64,7 +64,7 @@ SCH_POLYLINE::~SCH_POLYLINE()
 }
 
 
-EDA_ITEM* SCH_POLYLINE::doClone() const
+EDA_ITEM* SCH_POLYLINE::Clone() const
 {
     return new SCH_POLYLINE( *this );
 }
@@ -190,7 +190,7 @@ void SCH_POLYLINE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
 }
 
 
-void SCH_POLYLINE::Mirror_X( int aXaxis_position )
+void SCH_POLYLINE::MirrorX( int aXaxis_position )
 {
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
@@ -201,7 +201,7 @@ void SCH_POLYLINE::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_POLYLINE::Mirror_Y( int aYaxis_position )
+void SCH_POLYLINE::MirrorY( int aYaxis_position )
 {
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
@@ -212,11 +212,11 @@ void SCH_POLYLINE::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_POLYLINE::Rotate( wxPoint rotationPoint )
+void SCH_POLYLINE::Rotate( wxPoint aPosition )
 {
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
-        RotatePoint( &m_points[ii], rotationPoint, 900 );
+        RotatePoint( &m_points[ii], aPosition, 900 );
     }
 }
 
@@ -260,11 +260,11 @@ BITMAP_DEF SCH_POLYLINE::GetMenuImage() const
 }
 
 
-bool SCH_POLYLINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_POLYLINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     for( size_t i = 0;  i < m_points.size() - 1;  i++ )
     {
-        if( TestSegmentHit( aPoint, m_points[i], m_points[i + 1], aAccuracy ) )
+        if( TestSegmentHit( aPosition, m_points[i], m_points[i + 1], aAccuracy ) )
             return true;
     }
 
@@ -272,7 +272,7 @@ bool SCH_POLYLINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_POLYLINE::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_POLYLINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT rect = aRect;
 
@@ -285,7 +285,7 @@ bool SCH_POLYLINE::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 }
 
 
-void SCH_POLYLINE::doSetPosition( const wxPoint& aPosition )
+void SCH_POLYLINE::SetPosition( const wxPoint& aPosition )
 {
     wxPoint offset = m_points[0] - aPosition;
 

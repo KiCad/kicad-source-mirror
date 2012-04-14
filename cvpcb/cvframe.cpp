@@ -84,6 +84,8 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
     EVT_TOOL( ID_PCB_DISPLAY_FOOTPRINT_DOC, CVPCB_MAINFRAME::DisplayDocFile )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
+    EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
+              CVPCB_MAINFRAME::OnSelectFilteringFootprint )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
 
@@ -189,7 +191,15 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 
     if( config )
     {
-        int state = m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST );
+        int state = 0;
+        if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
+        {
+            state = 1;
+        }
+        else if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ) )
+        {
+            state = 2;
+        }
         config->Write( wxT( FILTERFOOTPRINTKEY ), state );
     }
 
@@ -240,13 +250,8 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
     if( m_modified )
     {
-        unsigned        ii;
-        wxMessageDialog dialog( this,
-                                _( "Component to Footprint links modified.\nSave before exit ?" ),
-                                _( "Confirmation" ),
-                                wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxYES_DEFAULT );
-
-        ii = dialog.ShowModal();
+        wxString msg = _( "Component to Footprint links modified.\nSave before exit ?" );
+        int ii = DisplayExitDialog( this, msg );
 
         switch( ii )
         {
@@ -511,7 +516,8 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     #define SELECT_FULL_LIST true
     int selection = -1;
 
-    if( !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
+    if( !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST )
+        && !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ))
         m_FootprintList->SetActiveFootprintList( SELECT_FULL_LIST, REDRAW_LIST );
 
     else
@@ -526,8 +532,18 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
             if( &m_components[ selection ] == NULL )
                 m_FootprintList->SetActiveFootprintList( SELECT_FULL_LIST, REDRAW_LIST );
             else
-                m_FootprintList->SetFootprintFilteredList( &m_components[ selection ],
-                                                           m_footprints );
+            {
+                if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ) )
+                {
+                    m_FootprintList->SetFootprintFilteredByPinCount( &m_components[ selection ],
+                                                                     m_footprints );
+                }
+                else
+                {
+                    m_FootprintList->SetFootprintFilteredList( &m_components[ selection ],
+                                                               m_footprints );
+                }
+            }
         }
     }
 
@@ -577,12 +593,19 @@ void CVPCB_MAINFRAME::OnSelectFilteringFootprint( wxCommandEvent& event )
 {
     switch( event.GetId() )
     {
+    case ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST:
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
+        break;
+
     case ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST:
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, false );
         break;
 
     case ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST:
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, false );
         break;
 
     default:

@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -37,6 +36,7 @@
 #include <plot_common.h>
 #include <wxEeschemaStruct.h>
 #include <richio.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -1072,14 +1072,14 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                             int             Color,
                             int             DrawMode )
 {
-    int        x, y, x1, y1;
-    wxString   StringPinNum;
-    EDA_Colors NameColor, NumColor;
+    int         x, y, x1, y1;
+    wxString    StringPinNum;
+    EDA_COLOR_T NameColor, NumColor;
 
-    wxSize     PinNameSize( m_nameTextSize, m_nameTextSize );
-    wxSize     PinNumSize( m_numTextSize, m_numTextSize );
+    wxSize      PinNameSize( m_nameTextSize, m_nameTextSize );
+    wxSize      PinNumSize( m_numTextSize, m_numTextSize );
 
-    int        nameLineWidth = GetPenSize();
+    int         nameLineWidth = GetPenSize();
 
     nameLineWidth = Clamp_Text_PenSize( nameLineWidth, m_nameTextSize, false );
     int        numLineWidth = GetPenSize();
@@ -1091,8 +1091,8 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     if( (Color < 0) && IsSelected() )
         Color = g_ItemSelectetColor;
 
-    NameColor = (EDA_Colors) ( Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color );
-    NumColor  = (EDA_Colors) ( Color == -1 ? ReturnLayerColor( LAYER_PINNUM ) : Color );
+    NameColor = (EDA_COLOR_T) ( Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color );
+    NumColor  = (EDA_COLOR_T) ( Color == -1 ? ReturnLayerColor( LAYER_PINNUM ) : Color );
 
     /* Create the pin num string */
     ReturnPinStringNum( StringPinNum );
@@ -1270,8 +1270,8 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 
 void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation )
 {
-    int        MapX1, MapY1, x1, y1;
-    EDA_Colors color = UNSPECIFIED_COLOR;
+    int         MapX1, MapY1, x1, y1;
+    EDA_COLOR_T color = UNSPECIFIED;
 
     color = ReturnLayerColor( LAYER_PIN );
 
@@ -1380,11 +1380,11 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
                             bool     DrawPinName,
                             int      aWidth )
 {
-    int        x, y, x1, y1;
-    wxString   StringPinNum;
-    EDA_Colors NameColor, NumColor;
-    wxSize     PinNameSize = wxSize( m_nameTextSize, m_nameTextSize );
-    wxSize     PinNumSize  = wxSize( m_numTextSize, m_numTextSize );
+    int         x, y, x1, y1;
+    wxString    StringPinNum;
+    EDA_COLOR_T NameColor, NumColor;
+    wxSize      PinNameSize = wxSize( m_nameTextSize, m_nameTextSize );
+    wxSize      PinNumSize  = wxSize( m_numTextSize, m_numTextSize );
 
     /* Get the num and name colors */
     NameColor = ReturnLayerColor( LAYER_PINNAM );
@@ -1671,13 +1671,13 @@ void LIB_PIN::SetPinNumFromString( wxString& buffer )
 }
 
 
-EDA_ITEM* LIB_PIN::doClone() const
+EDA_ITEM* LIB_PIN::Clone() const
 {
     return new LIB_PIN( *this );
 }
 
 
-int LIB_PIN::DoCompare( const LIB_ITEM& other ) const
+int LIB_PIN::compare( const LIB_ITEM& other ) const
 {
     wxASSERT( other.Type() == LIB_PIN_T );
 
@@ -1701,13 +1701,13 @@ int LIB_PIN::DoCompare( const LIB_ITEM& other ) const
 }
 
 
-void LIB_PIN::DoOffset( const wxPoint& offset )
+void LIB_PIN::SetOffset( const wxPoint& aOffset )
 {
-    m_position += offset;
+    m_position += aOffset;
 }
 
 
-bool LIB_PIN::DoTestInside( EDA_RECT& rect ) const
+bool LIB_PIN::Inside( EDA_RECT& rect ) const
 {
     wxPoint end = ReturnPinEndPoint();
 
@@ -1715,7 +1715,7 @@ bool LIB_PIN::DoTestInside( EDA_RECT& rect ) const
 }
 
 
-void LIB_PIN::DoMove( const wxPoint& newPosition )
+void LIB_PIN::Move( const wxPoint& newPosition )
 {
     if( m_position != newPosition )
     {
@@ -1725,7 +1725,7 @@ void LIB_PIN::DoMove( const wxPoint& newPosition )
 }
 
 
-void LIB_PIN::DoMirrorHorizontal( const wxPoint& center )
+void LIB_PIN::MirrorHorizontal( const wxPoint& center )
 {
     m_position.x -= center.x;
     m_position.x *= -1;
@@ -1737,7 +1737,7 @@ void LIB_PIN::DoMirrorHorizontal( const wxPoint& center )
         m_orientation = PIN_RIGHT;
 }
 
-void LIB_PIN::DoMirrorVertical( const wxPoint& center )
+void LIB_PIN::MirrorVertical( const wxPoint& center )
 {
     m_position.y -= center.y;
     m_position.y *= -1;
@@ -1749,7 +1749,7 @@ void LIB_PIN::DoMirrorVertical( const wxPoint& center )
         m_orientation = PIN_UP;
 }
 
-void LIB_PIN::DoRotate( const wxPoint& center, bool aRotateCCW )
+void LIB_PIN::Rotate( const wxPoint& center, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
@@ -1798,8 +1798,8 @@ void LIB_PIN::DoRotate( const wxPoint& center, bool aRotateCCW )
 }
 
 
-void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                      const TRANSFORM& aTransform )
+void LIB_PIN::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                    const TRANSFORM& aTransform )
 {
     if( ! IsVisible() )
         return;
@@ -1816,7 +1816,7 @@ void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-void LIB_PIN::DoSetWidth( int aWidth )
+void LIB_PIN::SetWidth( int aWidth )
 {
     if( m_width != aWidth )
     {
@@ -1855,7 +1855,7 @@ void LIB_PIN::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     aFrame->AppendMsgPanel( _( "Visible" ), Text, DARKGREEN );
 
     /* Display pin length */
-    Text = ReturnStringFromValue( g_UserUnit, m_length, EESCHEMA_INTERNAL_UNIT, true );
+    Text = ReturnStringFromValue( g_UserUnit, m_length, true );
     aFrame->AppendMsgPanel( _( "Length" ), Text, MAGENTA );
 
     Text = wxGetTranslation( pin_orientation_names[ GetOrientationCodeIndex( m_orientation ) ] );

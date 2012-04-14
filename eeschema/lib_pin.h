@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -117,9 +116,6 @@ class LIB_PIN : public LIB_ITEM
     int      m_numTextSize;
     int      m_nameTextSize; /* Pin num and Pin name sizes */
 
-    /**
-     * Draw the pin.
-     */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
@@ -130,7 +126,7 @@ public:
 
     ~LIB_PIN() { }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "LIB_PIN" );
     }
@@ -139,56 +135,19 @@ public:
     void Show( int nestLevel, std::ostream& os ) const;   // virtual override
 #endif
 
-    /**
-     * Write pin object to a FILE in "*.lib" format.
-     *
-     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
-     *                   pin to.
-     * @return True if success writing else false.
-     */
-    virtual bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter );
 
-    virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    /**
-     * Function HitTest
-     * verifies that \a aRefPos within the bounds of this pin attached to \a aComponent.
-     * <p>
-     * The coordinates of the pin are calculated relative to \a aComponent if not NULL.
-     * Otherwise, the pin coordinates are relative to the library anchor position.
-     * </p>
-     * @param aRefPos A wxPoint to test
-     * @return True \a aRefPos lies within the pin bounding box else false.
-     */
-    virtual bool HitTest( const wxPoint& aRefPos );
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * @param aPosRef - a wxPoint to test
-     * @param aThreshold - max distance to this object (usually the half
-     *                     thickness of a line)
-     * @param aTransform - the transform matrix
-     * @return - true if the point aPosRef is near this object
-     */
-    virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
+    bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
-    /**
-     * Function DisplayInfo
-     * displays the pin information in the message panel attached to \a aFrame.
-     */
-    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
-    /**
-     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
-     */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
-    /**
-     * Function GetBoundingBox
-     * @return the boundary box for the pin in schematic coordinates.
-     *
-     * Uses DefaultTransform as transform matrix
-     */
-    virtual EDA_RECT GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function ReturnPinEndPoint
@@ -201,7 +160,8 @@ public:
      * Function ReturnPinDrawOrient
      * returns the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
      * according to its orientation and the matrix transform (rot, mirror) \a aTransform
-     * @param aTransform = transform matrix
+     *
+     * @param aTransform Transform matrix
      */
     int ReturnPinDrawOrient( const TRANSFORM& aTransform ) const;
 
@@ -241,7 +201,7 @@ public:
      *
      * This will also all of the pin names marked by EnableEditMode().
      *
-     * @param aName - New pin name.
+     * @param aName New pin name.
      */
     void SetName( const wxString& aName );
 
@@ -251,7 +211,7 @@ public:
      * This will also update the text size of the name of the pins marked
      * by EnableEditMode().
      *
-     * @param aSize - The text size of the pin name in schematic units ( mils ).
+     * @param aSize The text size of the pin name in schematic units ( mils ).
      */
     void SetNameTextSize( int aSize );
 
@@ -262,7 +222,7 @@ public:
      *
      * Others pin numbers marked by EnableEditMode() are not modified
      * because each pin has its own number
-     * @param aNumber - New pin number.
+     * @param aNumber New pin number.
      */
     void SetNumber( const wxString& aNumber );
 
@@ -272,8 +232,7 @@ public:
      * This will also update the text size of the number of the pins marked
      * by EnableEditMode().
      *
-     * @param aSize - The text size of the pin number in schematic
-     *                units ( mils ).
+     * @param aSize The text size of the pin number in schematic units ( mils ).
      */
     void SetNumberTextSize( int aSize );
 
@@ -381,9 +340,9 @@ public:
      * parts or body styles in the component.  See SetCommonToAllParts()
      * and SetCommonToAllBodyStyles() for more information.
      *
-     * @param aEnable - True marks all common pins for editing mode.  False
-     *                  clears the editing mode.
-     * @param aEditPinByPin - Enables the edit pin by pin mode.
+     * @param aEnable True marks all common pins for editing mode.  False
+     *                clears the editing mode.
+     * @param aEditPinByPin Enables the edit pin by pin mode.
      */
     void EnableEditMode( bool aEnable, bool aEditPinByPin = false );
 
@@ -394,11 +353,7 @@ public:
      */
     bool IsVisible() { return ( m_attributes & PIN_INVISIBLE ) == 0; }
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize() const;
+    int GetPenSize() const;
 
     /**
      * Function DrawPinSymbol
@@ -519,34 +474,45 @@ public:
      */
     static const BITMAP_DEF* GetElectricalTypeSymbols();
 
-    virtual BITMAP_DEF GetMenuImage() const;
+    void SetOffset( const wxPoint& aOffset );
 
-    virtual wxString GetSelectMenuText() const;
+    bool Inside( EDA_RECT& aRect ) const;
 
-protected:
-    virtual EDA_ITEM* doClone() const;
+    void Move( const wxPoint& aPosition );
+
+    wxPoint GetPosition() const { return m_position; }
+
+    void MirrorHorizontal( const wxPoint& aCenter );
+
+    void MirrorVertical( const wxPoint& aCenter );
+
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+
+    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+               const TRANSFORM& aTransform );
+
+    int GetWidth() const { return m_width; }
+
+    void SetWidth( int aWidth );
+
+    BITMAP_DEF GetMenuImage() const;
+
+    wxString GetSelectMenuText() const;
+
+    EDA_ITEM* Clone() const;
+
+private:
 
     /**
-     * Provide the pin draw object specific comparison.
+     * @copydoc LIB_ITEM::compare()
      *
-     * The sort order is as follows:
+     * The pin specific sort order is as follows:
      *      - Pin number.
      *      - Pin name, case insensitive compare.
      *      - Pin horizontal (X) position.
      *      - Pin vertical (Y) position.
      */
-    virtual int DoCompare( const LIB_ITEM& aOther ) const;
-    virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_RECT& aRect ) const;
-    virtual void DoMove( const wxPoint& aPosition );
-    virtual wxPoint DoGetPosition() const { return m_position; }
-    virtual void DoMirrorHorizontal( const wxPoint& aCenter );
-    virtual void DoMirrorVertical( const wxPoint& aCenter );
-    virtual void DoRotate( const wxPoint& aCenter, bool aRotateCCW = true );
-    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform );
-    virtual int DoGetWidth() const { return m_width; }
-    virtual void DoSetWidth( int aWidth );
+    int compare( const LIB_ITEM& aOther ) const;
 };
 
 

@@ -67,6 +67,14 @@ public:
     void SyncRenderStates();
 
     /**
+     * Function SyncLayerVisibilities
+     * updates each "Layer" checkbox in this layer widget according
+     * to each layer's current visibility determined by IsLayerVisible(), and is
+     * helpful immediately after loading a BOARD which may have state information in it.
+     */
+    void SyncLayerVisibilities();
+
+    /**
      * Function SetLayersManagerTabsText
      * Update the layer manager tabs labels
      * Useful when changing Language or to set labels to a non default value

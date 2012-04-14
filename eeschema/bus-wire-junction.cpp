@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -107,7 +107,21 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     SCH_LINE* nextSegment;
     wxPoint   cursorpos = GetScreen()->GetCrossHairPosition();
 
+    // We should know if a segment is currently in progress
     segment = (SCH_LINE*) GetScreen()->GetCurItem();
+    if( segment )   // a current item exists, but not necessary a currently edited item
+    {
+        if( !segment->GetFlags() || ( segment->Type() != SCH_LINE_T ) )
+        {
+            if( segment->GetFlags() )
+            {
+                wxLogDebug( wxT( "BeginSegment: item->GetFlags()== %X" ),
+                    segment->GetFlags() );
+            }
+            // no wire, bus or graphic line in progress
+            segment = NULL;
+        }
+    }
 
     if( !segment )  /* first point : Create first wire or bus */
     {
@@ -154,7 +168,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     {
         SCH_LINE* prevSegment = (SCH_LINE*) segment->Back();
 
-        wxLogDebug( wxT( "Adding new segment after " ) + segment->GetSelectMenuText() );
+        wxLogDebug( wxT( "Adding new segment after " ) + prevSegment->GetSelectMenuText() );
 
         if( !g_HVLines )
         {
@@ -227,6 +241,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
                 item = s_wires.begin();
             else
                 item = previousSegment;
+           wxLogDebug( wxT( "Segment count after removal: %d" ), s_wires.GetCount() );
         }
 
         item = item->Next();
@@ -250,7 +265,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     screen->Append( tmp );
 
     // Correct and remove segments that need merged.
-    screen->SchematicCleanUp( m_canvas, DC );
+    screen->SchematicCleanUp( NULL, DC );
 
     // A junction may be needed to connect the last segment.  If the last segment was
     // removed by a cleanup, a junction may be needed to connect the segment's end point
@@ -276,7 +291,8 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     // Now add the new wires and any required junctions to the schematic item list.
     screen->Append( s_wires );
 
-    screen->SchematicCleanUp( m_canvas, DC );
+    screen->SchematicCleanUp( NULL, DC );
+    m_canvas->Refresh();
 
     // Put the snap shot of the previous wire, buses, and junctions in the undo/redo list.
     PICKED_ITEMS_LIST oldItems;
@@ -461,7 +477,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     if( m_itemToRepeat == NULL )
         return;
 
-    m_itemToRepeat = m_itemToRepeat->Clone();
+    m_itemToRepeat = (SCH_ITEM*) m_itemToRepeat->Clone();
 
     if( m_itemToRepeat->Type() == SCH_COMPONENT_T ) // If repeat component then put in move mode
     {

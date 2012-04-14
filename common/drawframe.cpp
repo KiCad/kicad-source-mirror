@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
@@ -40,6 +40,7 @@
 #include <confirm.h>
 #include <kicad_device_context.h>
 #include <dialog_helpers.h>
+#include <base_units.h>
 
 #include <wx/fontdlg.h>
 
@@ -113,12 +114,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     minsize.x             = 470;
     minsize.y             = 350 + m_MsgFrameHeight;
 
-    SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
-
-    // Make sure window has a sane minimum size.
-    if( ( size.x < minsize.x ) || ( size.y < minsize.y ) )
-        SetSize( 0, 0, minsize.x, minsize.y );
-
     // Pane sizes for status bar.
     // @todo these should be sized based on typical text content, like
     // "dx -10.123 -10.123 dy -10.123 -10.123" using the system font which is
@@ -127,7 +122,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     // system font specific sizing in the future.
     #define ZOOM_DISPLAY_SIZE       60
     #define COORD_DISPLAY_SIZE      165
-    #define DELTA_DISPLAY_SIZE      190
+    #define DELTA_DISPLAY_SIZE      245
     #define UNITS_DISPLAY_SIZE      65
     #define FUNCTION_DISPLAY_SIZE   110
     static const int dims[6] = { -1, ZOOM_DISPLAY_SIZE,
@@ -560,67 +555,79 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
     {
         virtualSize = drawingRect.GetSize();
     }
-    else if( drawingRect.Contains( logicalClientRect ) )
-    {
-        virtualSize = drawingRect.GetSize();
-    }
     else
     {
-        int drawingCenterX = drawingRect.x + ( drawingRect.width / 2 );
-        int clientCenterX = logicalClientRect.x + ( logicalClientRect.width / 2 );
-        int drawingCenterY = drawingRect.y + ( drawingRect.height / 2 );
-        int clientCenterY = logicalClientRect.y + ( logicalClientRect.height / 2 );
-
-        if( logicalClientRect.width > drawingRect.width )
+        if( drawingRect.GetLeft() < logicalClientRect.GetLeft() && drawingRect.GetRight() > logicalClientRect.GetRight() )
         {
-            if( drawingCenterX > clientCenterX )
-                virtualSize.x = ( drawingCenterX - logicalClientRect.GetLeft() ) * 2;
-            else if( drawingCenterX < clientCenterX )
-                virtualSize.x = ( logicalClientRect.GetRight() - drawingCenterX ) * 2;
-            else
-                virtualSize.x = logicalClientRect.width;
+            virtualSize.x = drawingRect.GetSize().x;
         }
-        else if( logicalClientRect.width < drawingRect.width )
+        else
         {
-            if( drawingCenterX > clientCenterX )
-                virtualSize.x = drawingRect.width +
-                                ( (drawingRect.GetLeft() - logicalClientRect.GetLeft() ) * 2 );
-            else if( drawingCenterX < clientCenterX )
-                virtualSize.x = drawingRect.width +
-                                ( (logicalClientRect.GetRight() - drawingRect.GetRight() ) * 2 );
+            int drawingCenterX = drawingRect.x + ( drawingRect.width / 2 );
+            int clientCenterX = logicalClientRect.x + ( logicalClientRect.width / 2 );
+
+            if( logicalClientRect.width > drawingRect.width )
+            {
+                if( drawingCenterX > clientCenterX )
+                    virtualSize.x = ( drawingCenterX - logicalClientRect.GetLeft() ) * 2;
+                else if( drawingCenterX < clientCenterX )
+                    virtualSize.x = ( logicalClientRect.GetRight() - drawingCenterX ) * 2;
+                else
+                    virtualSize.x = logicalClientRect.width;
+            }
+            else if( logicalClientRect.width < drawingRect.width )
+            {
+                if( drawingCenterX > clientCenterX )
+                    virtualSize.x = drawingRect.width +
+                                    ( (drawingRect.GetLeft() - logicalClientRect.GetLeft() ) * 2 );
+                else if( drawingCenterX < clientCenterX )
+                    virtualSize.x = drawingRect.width +
+                                    ( (logicalClientRect.GetRight() - drawingRect.GetRight() ) * 2 );
+                else
+                    virtualSize.x = drawingRect.width;
+            }
             else
+            {
                 virtualSize.x = drawingRect.width;
-        }
-        else
-        {
-            virtualSize.x = drawingRect.width;
+            }
         }
 
-        if( logicalClientRect.height > drawingRect.height )
+        if( drawingRect.GetTop() < logicalClientRect.GetTop() && drawingRect.GetBottom() > logicalClientRect.GetBottom() )
         {
-            if( drawingCenterY > clientCenterY )
-                virtualSize.y = ( drawingCenterY - logicalClientRect.GetTop() ) * 2;
-            else if( drawingCenterY < clientCenterY )
-                virtualSize.y = ( logicalClientRect.GetBottom() - drawingCenterY ) * 2;
-            else
-                virtualSize.y = logicalClientRect.height;
-        }
-        else if( logicalClientRect.height < drawingRect.height )
-        {
-            if( drawingCenterY > clientCenterY )
-                virtualSize.y = drawingRect.height +
-                                ( ( drawingRect.GetTop() - logicalClientRect.GetTop() ) * 2 );
-            else if( drawingCenterY < clientCenterY )
-                virtualSize.y = drawingRect.height +
-                                ( ( logicalClientRect.GetBottom() - drawingRect.GetBottom() ) * 2 );
-            else
-                virtualSize.y = drawingRect.height;
+            virtualSize.y = drawingRect.GetSize().y;
         }
         else
         {
-            virtualSize.y = drawingRect.height;
+            int drawingCenterY = drawingRect.y + ( drawingRect.height / 2 );
+            int clientCenterY = logicalClientRect.y + ( logicalClientRect.height / 2 );
+
+            if( logicalClientRect.height > drawingRect.height )
+            {
+                if( drawingCenterY > clientCenterY )
+                    virtualSize.y = ( drawingCenterY - logicalClientRect.GetTop() ) * 2;
+                else if( drawingCenterY < clientCenterY )
+                    virtualSize.y = ( logicalClientRect.GetBottom() - drawingCenterY ) * 2;
+                else
+                    virtualSize.y = logicalClientRect.height;
+            }
+            else if( logicalClientRect.height < drawingRect.height )
+            {
+                if( drawingCenterY > clientCenterY )
+                    virtualSize.y = drawingRect.height +
+                                    ( ( drawingRect.GetTop() - logicalClientRect.GetTop() ) * 2 );
+                else if( drawingCenterY < clientCenterY )
+                    virtualSize.y = drawingRect.height +
+                                    ( ( logicalClientRect.GetBottom() - drawingRect.GetBottom() ) * 2 );
+                else
+                    virtualSize.y = drawingRect.height;
+            }
+            else
+            {
+                virtualSize.y = drawingRect.height;
+            }
         }
     }
+
 
     if( screen->m_Center )
     {
@@ -708,41 +715,9 @@ void EDA_DRAW_FRAME::SetLanguage( wxCommandEvent& event )
 }
 
 
-/**
- * Round to the nearest precision.
- *
- * Try to approximate a coordinate using a given precision to prevent
- * rounding errors when converting from inches to mm.
- *
- * ie round the unit value to 0 if unit is 1 or 2, or 8 or 9
- */
-double RoundTo0( double x, double precision )
-{
-    assert( precision != 0 );
-
-    long long ix = wxRound( x * precision );
-
-    if ( x < 0.0 )
-        NEGATE( ix );
-
-    int remainder = ix % 10;   // remainder is in precision mm
-
-    if ( remainder <= 2 )
-        ix -= remainder;       // truncate to the near number
-    else if (remainder >= 8 )
-        ix += 10 - remainder;  // round to near number
-
-    if ( x < 0 )
-        NEGATE( ix );
-
-    return (double) ix / precision;
-}
-
-
 void EDA_DRAW_FRAME::UpdateStatusBar()
 {
     wxString        Line;
-    int             dx, dy;
     BASE_SCREEN*    screen = GetScreen();
 
     if( !screen )
@@ -753,76 +728,8 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
 
     SetStatusText( Line, 1 );
 
-    // Display absolute coordinates:
-    double dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x, m_internalUnits );
-    double dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y, m_internalUnits );
-
-    /*
-     * Converting from inches to mm can give some coordinates due to
-     * float point precision rounding errors, like 1.999 or 2.001 so
-     * round to the nearest drawing precision required by the application.
-     */
-    if ( g_UserUnit == MILLIMETRES )
-    {
-        dXpos = RoundTo0( dXpos, (double)( m_internalUnits / 10 ) );
-        dYpos = RoundTo0( dYpos, (double)( m_internalUnits / 10 ) );
-    }
-
-    // The following sadly is an if Eeschema/if Pcbnew
-    wxString absformatter;
-    wxString locformatter;
-    switch( g_UserUnit )
-    {
-    case INCHES:
-        if( m_internalUnits == EESCHEMA_INTERNAL_UNIT )
-        {
-            absformatter = wxT( "X %.3f  Y %.3f" );
-            locformatter = wxT( "dx %.3f  dy %.3f" );
-        }
-        else
-        {
-            absformatter = wxT( "X %.4f  Y %.4f" );
-            locformatter = wxT( "dx %.4f  dy %.4f" );
-        }
-        break;
-
-    case MILLIMETRES:
-        if( m_internalUnits == EESCHEMA_INTERNAL_UNIT )
-        {
-            absformatter = wxT( "X %.2f  Y %.2f" );
-            locformatter = wxT( "dx %.2f  dy %.2f" );
-        }
-        else
-        {
-            absformatter = wxT( "X %.3f  Y %.3f" );
-            locformatter = wxT( "dx %.3f  dy %.3f" );
-        }
-        break;
-
-    case UNSCALED_UNITS:
-        absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f" );
-        break;
-    }
-
-    Line.Printf( absformatter, dXpos, dYpos );
-    SetStatusText( Line, 2 );
-
-    // Display relative coordinates:
-    dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-    dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
-    dXpos = To_User_Unit( g_UserUnit, dx, m_internalUnits );
-    dYpos = To_User_Unit( g_UserUnit, dy, m_internalUnits );
-
-    if( g_UserUnit == MILLIMETRES )
-    {
-        dXpos = RoundTo0( dXpos, (double) ( m_internalUnits / 10 ) );
-        dYpos = RoundTo0( dYpos, (double) ( m_internalUnits / 10 ) );
-    }
-
-    // We already decided the formatter above
-    Line.Printf( locformatter, dXpos, dYpos );
-    SetStatusText( Line, 3 );
+    // Absolute and relative cursor positions are handled by overloading this function and
+    // handling the internal to user units conversion at the appropriate level.
 
     // refresh units display
     DisplayUnitsMsg();
@@ -887,5 +794,76 @@ void EDA_DRAW_FRAME::ClearMsgPanel( void )
 
 wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils )
 {
-    return ::CoordinateToString( aValue, m_internalUnits, aConvertToMils );
+    return ::CoordinateToString( aValue, aConvertToMils );
+}
+
+
+bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosition )
+{
+    BLOCK_SELECTOR* Block = &GetScreen()->m_BlockLocate;
+
+    if( ( Block->GetCommand() != BLOCK_IDLE ) || ( Block->GetState() != STATE_NO_BLOCK ) )
+        return false;
+
+    Block->SetCommand( (BLOCK_COMMAND_T) ReturnBlockCommand( aKey ) );
+
+    if( Block->GetCommand() == 0 )
+        return false;
+
+    switch( Block->GetCommand() )
+    {
+    case BLOCK_IDLE:
+        break;
+
+    case BLOCK_MOVE:                /* Move */
+    case BLOCK_DRAG:                /* Drag */
+    case BLOCK_COPY:                /* Copy */
+    case BLOCK_DELETE:              /* Delete */
+    case BLOCK_SAVE:                /* Save */
+    case BLOCK_ROTATE:              /* Rotate 90 deg */
+    case BLOCK_FLIP:                /* Flip */
+    case BLOCK_ZOOM:                /* Window Zoom */
+    case BLOCK_MIRROR_X:
+    case BLOCK_MIRROR_Y:            /* mirror */
+    case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
+        Block->InitData( m_canvas, aPosition );
+        break;
+
+    case BLOCK_PASTE:
+        Block->InitData( m_canvas, aPosition );
+        Block->SetLastCursorPosition( wxPoint( 0, 0 ) );
+        InitBlockPasteInfos();
+
+        if( Block->GetCount() == 0 )      /* No data to paste */
+        {
+            DisplayError( this, wxT( "No Block to paste" ), 20 );
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
+            m_canvas->SetMouseCaptureCallback( NULL );
+            return true;
+        }
+
+        if( !m_canvas->IsMouseCaptured() )
+        {
+            Block->ClearItemsList();
+            DisplayError( this,
+                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
+            return true;
+        }
+
+        Block->SetState( STATE_BLOCK_MOVE );
+        m_canvas->CallMouseCapture( aDC, aPosition, false );
+        break;
+
+    default:
+    {
+        wxString msg;
+        msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
+        Block->GetCommand();
+        DisplayError( this, msg );
+    }
+    break;
+    }
+
+    Block->SetMessageBlock( this );
+    return true;
 }

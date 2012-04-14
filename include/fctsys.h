@@ -1,8 +1,8 @@
 /********************/
 /* System includes. */
 /********************/
-#ifndef FCTSYS_H
-#define FCTSYS_H
+#ifndef FCTSYS_H_
+#define FCTSYS_H_
 
 // For compilers that support precompilation, includes "wx.h".
 #include <wx/wxprec.h>
@@ -46,6 +46,26 @@
 #define D(x)        // nothing
 #endif
 
+/**
+ * Function Clamp
+ * limits @a value within the range @a lower <= @a value <= @a upper.  It will work
+ * on temporary expressions, since they are evaluated only once, and it should work
+ * on most if not all numeric types, string types, or any type for which "operator < ()"
+ * is present. The arguments are accepted in this order so you can remember the
+ * expression as a memory aid:
+ * <p>
+ * result is:  lower <= value <= upper
+ */
+template <typename T> inline const T& Clamp( const T& lower, const T& value, const T& upper )
+{
+    wxASSERT( lower <= upper );
+    if( value < lower )
+        return lower;
+    else if( upper < value )
+        return upper;
+    return value;
+}
+
 #define UNIX_STRING_DIR_SEP wxT( "/" )
 #define WIN_STRING_DIR_SEP  wxT( "\\" )
 
@@ -64,4 +84,4 @@
 
 #include <config.h>
 
-#endif /* FCTSYS_H */
+#endif // FCTSYS_H__

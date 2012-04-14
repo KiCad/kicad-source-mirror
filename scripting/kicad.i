@@ -59,7 +59,7 @@
 
 
 %{
-  #include <cstddef>
+        #include <cstddef>
 	#include <dlist.h>
 	#include <base_struct.h>
 	#include <common.h>
@@ -72,6 +72,7 @@
 	#include <class_title_block.h>
 	#include <class_colors_design_settings.h>
 	#include <class_marker_base.h>
+        #include <eda_text.h>
 
 %}
 
@@ -100,6 +101,7 @@
 %include <class_title_block.h>
 %include <class_colors_design_settings.h>
 %include <class_marker_base.h>
+%include <eda_text.h>
 
 
 %include "dlist.i"

@@ -161,10 +161,10 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             m_BoxSelectLayer[ii]->SetValue( true );
         if( ii < 16 )
             m_leftLayersBoxSizer->Add( m_BoxSelectLayer[ii],
-                                         wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
+                                         wxGROW | wxLEFT | wxRIGHT | wxTOP );
         else
             m_rightLayersBoxSizer->Add( m_BoxSelectLayer[ii],
-                                            wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
+                                            wxGROW | wxLEFT | wxRIGHT | wxTOP );
     }
 
 

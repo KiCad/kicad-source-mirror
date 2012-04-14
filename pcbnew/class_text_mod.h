@@ -32,6 +32,7 @@
 #define TEXT_MODULE_H_
 
 
+#include <eda_text.h>
 #include <class_board_item.h>
 
 
@@ -109,24 +110,12 @@ public:
      */
     EDA_RECT GetTextRect( void ) const;
 
-    /**
-     * Function GetBoundingBox
-     * returns the bounding box of this Text (according to text and footprint
-     * orientation)
-     */
     EDA_RECT GetBoundingBox() const;
 
     void SetDrawCoord();        // Set absolute coordinates.
 
     void SetLocalCoord();       // Set relative coordinates.
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
     /**
@@ -157,33 +146,10 @@ public:
                         int             aDrawMode,
                         const wxPoint&  aOffset = ZeroOffset );
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status
-     * information about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& aRefPos );
-
-    /**
-     * Function IsOnLayer
-     * tests to see if this object is on the given layer.  Is virtual so
-     * objects like D_PAD, which reside on multiple layers can do their own
-     * form of testing.
-     * virtual inheritance from BOARD_ITEM.
-     * @param aLayer The layer to test for.
-     * @return bool - true if on given layer, else false.
-     */
     bool IsOnLayer( int aLayer ) const;
 
     /*
@@ -198,27 +164,24 @@ public:
      */
 
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString = "MTEXT"
-     */
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "MTEXT" );
     }
 
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  footprint_text_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  footprint_text_xpm; }
+
+    EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 #endif // TEXT_MODULE_H_

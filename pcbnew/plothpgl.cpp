@@ -26,7 +26,6 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     double      scale;
     wxPoint     offset;
     LOCALE_IO   toggle;
-
     FILE*       output_file = wxFopen( aFullFileName, wxT( "wt" ) );
 
     if( output_file == NULL )
@@ -34,24 +33,26 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
         return false;
     }
 
+    PCB_PLOT_PARAMS plot_opts = GetPlotSettings();
+
     // Compute pen_dim (from g_m_HPGLPenDiam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diameter is always g_m_HPGLPenDiam
     // so apparent pen diam is real pen diam / Scale
-    int pen_diam = wxRound( (g_PcbPlotOptions.m_HPGLPenDiam * U_PCB) /
-                            g_PcbPlotOptions.m_PlotScale );
+    int pen_diam = wxRound( (plot_opts.m_HPGLPenDiam * U_PCB) /
+                            plot_opts.m_PlotScale );
 
     // compute pen_overlay (from g_m_HPGLPenOvr in mils) with plot scale
-    if( g_PcbPlotOptions.m_HPGLPenOvr < 0 )
-        g_PcbPlotOptions.m_HPGLPenOvr = 0;
+    if( plot_opts.m_HPGLPenOvr < 0 )
+        plot_opts.m_HPGLPenOvr = 0;
 
-    if( g_PcbPlotOptions.m_HPGLPenOvr >= g_PcbPlotOptions.m_HPGLPenDiam )
-        g_PcbPlotOptions.m_HPGLPenOvr = g_PcbPlotOptions.m_HPGLPenDiam - 1;
+    if( plot_opts.m_HPGLPenOvr >= plot_opts.m_HPGLPenDiam )
+        plot_opts.m_HPGLPenOvr = plot_opts.m_HPGLPenDiam - 1;
 
-    int   pen_overlay = wxRound( g_PcbPlotOptions.m_HPGLPenOvr * 10.0 /
-                                 g_PcbPlotOptions.m_PlotScale );
+    int   pen_overlay = wxRound( plot_opts.m_HPGLPenOvr * 10.0 /
+                                 plot_opts.m_PlotScale );
 
 
-    if( g_PcbPlotOptions.m_PlotScale != 1.0 || g_PcbPlotOptions.m_AutoScale )
+    if( plot_opts.m_PlotScale != 1.0 || plot_opts.m_AutoScale )
     {
         // when scale != 1.0 we must calculate the position in page
         // because actual position has no meaning
@@ -66,7 +67,7 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     boardSize   = bbbox.GetSize();
     boardCenter = bbbox.Centre();
 
-    if( g_PcbPlotOptions.m_AutoScale )       // Optimum scale
+    if( plot_opts.m_AutoScale )       // Optimum scale
     {
         // Fit to 80% of the page
         double Xscale = ( ( pageSizeIU.x * 0.8 ) / boardSize.x );
@@ -75,7 +76,7 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     }
     else
     {
-        scale = g_PcbPlotOptions.m_PlotScale;
+        scale = plot_opts.m_PlotScale;
     }
 
     // Calculate the page size offset.
@@ -96,18 +97,21 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
 
     plotter->SetPageSettings( GetPageSettings() );
 
-    plotter->set_viewport( offset, scale, g_PcbPlotOptions.m_PlotMirror );
-    plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
+    // why did we have to change these settings above?
+    SetPlotSettings( plot_opts );
+
+    plotter->set_viewport( offset, scale, plot_opts.m_PlotMirror );
+    plotter->set_default_line_width( plot_opts.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-HPGL" ) );
     plotter->set_filename( aFullFileName );
-    plotter->set_pen_speed( g_PcbPlotOptions.m_HPGLPenSpeed );
-    plotter->set_pen_number( g_PcbPlotOptions.m_HPGLPenNum );
+    plotter->set_pen_speed( plot_opts.m_HPGLPenSpeed );
+    plotter->set_pen_number( plot_opts.m_HPGLPenNum );
     plotter->set_pen_overlap( pen_overlay );
     plotter->set_pen_diameter( pen_diam );
     plotter->start_plot( output_file );
 
     // The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway
-    if( g_PcbPlotOptions.m_PlotFrameRef && !center )
+    if( plot_opts.m_PlotFrameRef && !center )
         PlotWorkSheet( plotter, GetScreen() );
 
     Plot_Layer( plotter, aLayer, aTraceMode );

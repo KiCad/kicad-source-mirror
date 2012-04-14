@@ -96,6 +96,26 @@ public:
         return m_checkShowHiddenPins->GetValue();
     }
 
+    void SetEnableMiddleButtonPan( bool enable )
+    {
+        m_checkEnableMiddleButtonPan->SetValue( enable );
+        m_checkMiddleButtonPanLimited->Enable( enable );
+    }
+
+    bool GetEnableMiddleButtonPan( void )
+    {
+        return m_checkEnableMiddleButtonPan->GetValue();
+    }
+
+    void SetMiddleButtonPanLimited( bool enable )
+    {
+        m_checkMiddleButtonPanLimited->SetValue( enable );
+    }
+    bool GetMiddleButtonPanLimited( void )
+    {
+        return m_checkMiddleButtonPanLimited->GetValue();
+    }
+
     void SetEnableAutoPan( bool enable )
     {
         m_checkAutoPan->SetValue( enable );
@@ -126,6 +146,12 @@ public:
 
     /** Get the field \a aNdx name from the fields textctrl */
     wxString GetFieldName( int aNdx );
+
+private:
+    void OnMiddleBtnPanEnbl( wxCommandEvent& event )
+    {
+        m_checkMiddleButtonPanLimited->Enable( GetEnableMiddleButtonPan() );
+    }
 };
 
 #endif // __dialog_eeschema_options__

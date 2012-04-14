@@ -14,7 +14,7 @@ public:
 protected:
     std::vector <wxPoint> m_Corners;             ///< Corner list for shape definition (a polygon)
     int                   m_MarkerType;          ///< Can be used as a flag
-    EDA_Colors            m_Color;               ///< color
+    EDA_COLOR_T           m_Color;               ///< color
     EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
                                                  ///< to the position of the shape, used for Hit
                                                  ///< Tests
@@ -80,7 +80,7 @@ public:
      * Function SetColor
      * Set the color of this marker
      */
-    void SetColor( EDA_Colors aColor )
+    void SetColor( EDA_COLOR_T aColor )
     {
         m_Color = aColor;
     }

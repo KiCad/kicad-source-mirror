@@ -103,6 +103,13 @@ used by Eeschema to fill the footprint field of components)" ) );
                             _( "Display the filtered footprint list for the current component" ),
                             wxEmptyString );
 
+    m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
+                            KiBitmap( module_pin_filtered_list_xpm ),
+                            wxNullBitmap,
+                            true, NULL,
+                            _( "Display the filtered footprint list by pin count for the current component" ),
+                            wxEmptyString );
+
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST,
                             KiBitmap( module_full_list_xpm ),
                             wxNullBitmap, true, NULL,
@@ -113,8 +120,9 @@ used by Eeschema to fill the footprint field of components)" ) );
     {
         wxString key = wxT( FILTERFOOTPRINTKEY );
         int      opt = config->Read( key, (long) 1 );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, opt );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, !opt );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, opt == 2 );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, opt == 1 );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, opt == 0 );
     }
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes

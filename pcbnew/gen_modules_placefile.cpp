@@ -59,32 +59,35 @@ public:
     int           m_Layer;          // its side (LAYER_N_BACK, or LAYER_N_FRONT)
 };
 
-/*
+
+/**
  * The dialog to create footprint position files,
  * and choose options (one or 2 files, units and force all SMD footprints in list)
  */
 class DIALOG_GEN_MODULE_POSITION : public DIALOG_GEN_MODULE_POSITION_BASE
 {
-private:
-    PCB_EDIT_FRAME* m_parent;
-	static int m_unitsOpt;
-	static int m_fileOpt;
-
 public:
-    DIALOG_GEN_MODULE_POSITION( PCB_EDIT_FRAME * parent):
-        DIALOG_GEN_MODULE_POSITION_BASE( parent )
+    DIALOG_GEN_MODULE_POSITION( PCB_EDIT_FRAME * aParent ):
+        DIALOG_GEN_MODULE_POSITION_BASE( aParent ),
+        m_parent( aParent ),
+        m_plotOpts( aParent->GetPlotSettings() )
     {
-        m_parent = parent;
     }
 
 private:
-	void OnInitDialog( wxInitDialogEvent& event );
-	void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
-	void OnCancelButton( wxCommandEvent& event )
+    PCB_EDIT_FRAME* m_parent;
+    PCB_PLOT_PARAMS m_plotOpts;
+
+    static int m_unitsOpt;
+    static int m_fileOpt;
+
+    void OnInitDialog( wxInitDialogEvent& event );
+    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
+    void OnCancelButton( wxCommandEvent& event )
     {
         EndModal( wxID_CANCEL );
     }
-	void OnOKButton( wxCommandEvent& event );
+    void OnOKButton( wxCommandEvent& event );
 
     bool CreateFiles();
 
@@ -115,6 +118,7 @@ private:
     }
 };
 
+
 // Static members to remember choices
 int DIALOG_GEN_MODULE_POSITION::m_unitsOpt = 0;
 int DIALOG_GEN_MODULE_POSITION::m_fileOpt = 0;
@@ -122,7 +126,7 @@ int DIALOG_GEN_MODULE_POSITION::m_fileOpt = 0;
 void DIALOG_GEN_MODULE_POSITION::OnInitDialog( wxInitDialogEvent& event )
 {
     // Output directory
-    m_outputDirectoryName->SetValue( g_PcbPlotOptions.GetOutputDirectory() );
+    m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
     m_radioBoxUnits->SetSelection( m_unitsOpt );
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
 
@@ -176,10 +180,14 @@ void DIALOG_GEN_MODULE_POSITION::OnOKButton( wxCommandEvent& event )
     wxString dirStr;
     dirStr = m_outputDirectoryName->GetValue();
     dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
-    g_PcbPlotOptions.SetOutputDirectory( dirStr );
+
+    m_plotOpts.SetOutputDirectory( dirStr );
+
+    m_parent->SetPlotSettings( m_plotOpts );
 
     CreateFiles();
 }
+
 
 bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 {

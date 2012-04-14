@@ -95,12 +95,13 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( DisplayOpt.DisplayDrawItems == SKETCH )
         fillmode = SKETCH;
 
-    int anchor_color = UNSPECIFIED_COLOR;
+    int anchor_color = UNSPECIFIED;
+
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
         anchor_color = brd->GetVisibleElementColor( ANCHOR_VISIBLE );
 
-    EDA_TEXT::Draw( panel, DC, offset, (EDA_Colors) color,
-                    DrawMode, fillmode, (EDA_Colors) anchor_color );
+    EDA_TEXT::Draw( panel, DC, offset, (EDA_COLOR_T) color,
+                    DrawMode, fillmode, (EDA_COLOR_T) anchor_color );
 }
 
 
@@ -164,7 +165,7 @@ void TEXTE_PCB::Flip(const wxPoint& aCentre )
     {
         m_Mirror = not m_Mirror;      /* inverse mirror */
     }
-    SetLayer( ChangeSideNumLayer( GetLayer() ) );
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 }
 
 
@@ -184,9 +185,25 @@ wxString TEXTE_PCB::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* TEXTE_PCB::doClone() const
+EDA_ITEM* TEXTE_PCB::Clone() const
 {
     return new TEXTE_PCB( *this );
+}
+
+
+void TEXTE_PCB::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(pcb_text (layer %d)", GetLayer() );
+
+    if( GetTimeStamp() )
+        aFormatter->Print( 0, " (tstamp %lX)", GetTimeStamp() );
+
+    aFormatter->Print( 0, "\n" );
+
+    EDA_TEXT::Format( aFormatter, aNestLevel+1, aControlBits );
+
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 

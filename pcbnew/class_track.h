@@ -40,11 +40,13 @@ class TRACK;
 class D_PAD;
 
 // Via attributes (m_Shape parameter)
-#define VIA_THROUGH             3           /* Always a through hole via */
-#define VIA_BLIND_BURIED        2           /* this via can be on internal layers */
-#define VIA_MICROVIA            1           /* this via which connect from an external layer
-                                             * to the near neighbor internal layer */
-#define VIA_NOT_DEFINED         0           /* not yet used */
+#define VIA_THROUGH                3       /* Always a through hole via */
+#define VIA_BLIND_BURIED           2       /* this via can be on internal layers */
+#define VIA_MICROVIA               1       /* this via which connect from an external layer
+                                            * to the near neighbor internal layer */
+#define VIA_NOT_DEFINED            0       /* not yet used */
+
+#define UNDEFINED_DRILL_DIAMETER  -1       //< Undefined via drill diameter.
 
 
 /**
@@ -99,30 +101,14 @@ public:
     TRACK* Next() const { return (TRACK*) Pnext; }
     TRACK* Back() const { return (TRACK*) Pback; }
 
-    /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
-     */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Start += aMoveVector;
         m_End   += aMoveVector;
     }
 
-    /**
-     * Function Rotate
-     * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
-     */
     virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     */
     virtual void Flip( const wxPoint& aCentre );
 
     void SetPosition( const wxPoint& aPos )     { m_Start = aPos; }     // was overload
@@ -139,12 +125,6 @@ public:
 
     EDA_RECT GetBoundingBox() const;
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
     /**
@@ -228,9 +208,9 @@ public:
 
     /**
      * Function SetDrillDefault
-     * Set the drill value for vias at default value (-1)
+     * sets the drill value for vias to the default value #UNDEFINED_DRILL_DIAMETER.
     */
-    void SetDrillDefault()      { m_Drill = -1; }
+    void SetDrillDefault()      { m_Drill = UNDEFINED_DRILL_DIAMETER; }
 
     /**
      * Function IsDrillDefault
@@ -261,14 +241,6 @@ public:
      */
     bool IsNull();
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * Display info about the track segment and the full track length
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
@@ -286,39 +258,13 @@ public:
      */
     wxString ShowWidth() const;
 
-    /**
-     * Function Visit
-     * is re-implemented here because TRACKs and SEGVIAs are in the same list
-     * within BOARD.  If that were not true, then we could inherit the
-     * version from EDA_ITEM.  This one does not iterate through scanTypes
-     * but only looks at the first item in the list.
-     * @param inspector An INSPECTOR instance to use in the inspection.
-     * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order
-     *  is significant too, terminated by EOT.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *  else SCAN_CONTINUE, and determined by the inspector.
-     */
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
 
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& refPos );
+    virtual bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function HitTest (overlaid)
-     * tests if the given wxRect intersect this object.
-     * For now, an ending point must be inside this rect.
-     * @param refArea an EDA_RECT to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( EDA_RECT& refArea );
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * Function GetVia
@@ -367,11 +313,6 @@ public:
      */
     int GetEndSegments( int NbSegm, TRACK** StartTrack, TRACK** EndTrack );
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
     wxString GetClass() const
     {
         return wxT( "TRACK" );
@@ -392,6 +333,11 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  showtrack_xpm; }
 
+    virtual EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 #if defined (DEBUG)
 
     void Show( int nestLevel, std::ostream& os ) const;     // overload
@@ -404,9 +350,6 @@ public:
     static wxString ShowState( int stateBits );
 
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 
@@ -417,11 +360,6 @@ public:
 
     // Do not create a copy constructor.  The one generated by the compiler is adequate.
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
     wxString GetClass() const
     {
         return wxT( "ZONE" );
@@ -430,12 +368,11 @@ public:
 
     SEGZONE* Next() const { return (SEGZONE*) Pnext; }
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
 
-private:
-    virtual EDA_ITEM* doClone() const;
+    EDA_ITEM* Clone() const;
 };
 
 
@@ -449,13 +386,6 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
                const wxPoint& aOffset = ZeroOffset );
 
-    /**
-     * Function IsOnLayer
-     * tests to see if this object is on the given layer.  Is virtual
-     * from BOARD_ITEM.  Tests the starting and ending range of layers for the via.
-     * @param aLayer the layer to test for.
-     * @return bool - true if on given layer, else false.
-     */
     bool IsOnLayer( int aLayer ) const;
 
     /**
@@ -464,7 +394,7 @@ public:
      *  For a via m_Layer contains the 2 layers :
      * top layer and bottom layer used by the via.
      * The via connect all layers from top layer to bottom layer
-     * 4 bits for the first layer and 4 next bits for the secaon layer
+     * 4 bits for the first layer and 4 next bits for the second layer
      * @param top_layer = first layer connected by the via
      * @param bottom_layer = last layer connected by the via
      */
@@ -482,26 +412,20 @@ public:
     const wxPoint& GetPosition() const  {  return m_Start; }       // was overload
     void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // was overload
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
     wxString GetClass() const
     {
         return wxT( "VIA" );
     }
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  via_sketch_xpm; }
+    BITMAP_DEF GetMenuImage() const { return  via_sketch_xpm; }
+
+    EDA_ITEM* Clone() const;
 
 #if defined (DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2007-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -42,6 +42,11 @@
 #define CURSOR_SIZE 12           // Cursor size in pixels
 
 #define CLIP_BOX_PADDING 2
+
+// keys to store options in config:
+#define ENBL_MIDDLE_BUTT_PAN_KEY wxT( "MiddleButtonPAN" )
+#define MIDDLE_BUTT_PAN_LIMITED_KEY wxT( "MiddleBtnPANLimited" )
+#define ENBL_AUTO_PAN_KEY wxT( "AutoPAN" )
 
 /* Definitions for enabling and disabling debugging features in drawpanel.cpp.
  * Please don't forget to turn these off before making any commits to Launchpad.
@@ -96,6 +101,8 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_ClipBox.SetY( 0 );
     m_canStartBlock = -1;       // Command block can start if >= 0
     m_abortRequest = false;
+    m_enableMiddleButtonPan = false;
+    m_panScrollbarLimits = false;
     m_enableAutoPan = true;
     m_ignoreMouseEvents = false;
 
@@ -103,7 +110,11 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_endMouseCaptureCallback = NULL;
 
     if( wxGetApp().GetSettings() )
-        wxGetApp().GetSettings()->Read( wxT( "AutoPAN" ), &m_enableAutoPan, true );
+    {
+        wxGetApp().GetSettings()->Read( ENBL_MIDDLE_BUTT_PAN_KEY, &m_enableMiddleButtonPan, false );
+        wxGetApp().GetSettings()->Read( MIDDLE_BUTT_PAN_LIMITED_KEY, &m_panScrollbarLimits, false );
+        wxGetApp().GetSettings()->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
+    }
 
     m_requestAutoPan = false;
     m_enableBlockCommands = false;
@@ -123,9 +134,10 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
 EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 {
-    wxGetApp().GetSettings()->Write( wxT( "AutoPAN" ), m_enableAutoPan );
+    wxGetApp().GetSettings()->Write( ENBL_MIDDLE_BUTT_PAN_KEY, m_enableMiddleButtonPan );
+    wxGetApp().GetSettings()->Write( MIDDLE_BUTT_PAN_LIMITED_KEY, m_panScrollbarLimits );
+    wxGetApp().GetSettings()->Write( ENBL_AUTO_PAN_KEY, m_enableAutoPan );
 }
-
 
 EDA_DRAW_FRAME* EDA_DRAW_PANEL::GetParent()
 {
@@ -317,17 +329,26 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
     int dir;
     int x, y;
     int ppux, ppuy;
+    int csizeX, csizeY;
     int unitsX, unitsY;
     int maxX, maxY;
 
     GetViewStart( &x, &y );
     GetScrollPixelsPerUnit( &ppux, &ppuy );
+    GetClientSize( &csizeX, &csizeY );
     GetVirtualSize( &unitsX, &unitsY );
-    maxX = unitsX;
-    maxY = unitsY;
+
+    int tmpX = x;
+    int tmpY = y;
+
+    csizeX /= ppux;
+    csizeY /= ppuy;
 
     unitsX /= ppux;
     unitsY /= ppuy;
+
+    maxX = unitsX - csizeX;
+    maxY = unitsY - csizeY;
 
     dir = event.GetOrientation();   // wxHORIZONTAL or wxVERTICAL
 
@@ -381,7 +402,14 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
                 wxT( "Setting scroll bars ppuX=%d, ppuY=%d, unitsX=%d, unitsY=%d, posX=%d, posY=%d" ),
                 ppux, ppuy, unitsX, unitsY, x, y );
 
-    Scroll( x/ppux, y/ppuy );
+    double scale = GetParent()->GetScreen()->GetScalingFactor();
+
+    wxPoint center = GetParent()->GetScreen()->GetScrollCenterPosition();
+    center.x += wxRound( (double) ( x - tmpX ) / scale );
+    center.y += wxRound( (double) ( y - tmpY ) / scale );
+    GetParent()->GetScreen()->SetScrollCenterPosition( center );
+
+    Scroll( x, y );
     event.Skip();
 }
 
@@ -942,7 +970,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     {
         // A block command is in progress: a left up is the end of block
         // or this is the end of a double click, already seen
-        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK && !ignoreNextLeftButtonRelease )
+        if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK && !ignoreNextLeftButtonRelease )
             GetParent()->OnLeftClick( &DC, screen->RefPos( true ) );
 
         ignoreNextLeftButtonRelease = false;
@@ -958,7 +986,113 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         ignoreNextLeftButtonRelease = false;
     }
 
-    if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK) )
+    if( event.ButtonDown( wxMOUSE_BTN_MIDDLE ) && m_enableMiddleButtonPan )
+    {
+        if( m_panScrollbarLimits )
+        {
+            int ppux, ppuy;
+            GetScrollPixelsPerUnit( &ppux, &ppuy );
+            GetViewStart( &m_PanStartCenter.x, &m_PanStartCenter.y );
+            m_PanStartCenter.x *= ppux;
+            m_PanStartCenter.y *= ppuy;
+        }
+        else
+            m_PanStartCenter = GetParent()->GetScreen()->GetScrollCenterPosition();
+
+        m_PanStartEventPosition = event.GetPosition();
+
+        INSTALL_UNBUFFERED_DC( dc, this );
+        CrossHairOff( &dc );
+    }
+
+    if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) && m_enableMiddleButtonPan )
+    {
+        INSTALL_UNBUFFERED_DC( dc, this );
+        CrossHairOn( &dc );
+    }
+
+    if( event.MiddleIsDown() && m_enableMiddleButtonPan )
+    {
+        wxPoint currentPosition = event.GetPosition();
+        if( m_panScrollbarLimits )
+        {
+            int x, y;
+            int tmpX, tmpY;
+            int ppux, ppuy;
+            int maxX, maxY;
+            int vsizeX, vsizeY;
+            int csizeX, csizeY;
+
+            GetViewStart( &tmpX, &tmpY );
+            GetScrollPixelsPerUnit( &ppux, &ppuy );
+            GetVirtualSize( &vsizeX, &vsizeY );
+            GetClientSize( &csizeX, &csizeY );
+
+            maxX = vsizeX - csizeX;
+            maxY = vsizeY - csizeY;
+
+            x = m_PanStartCenter.x + m_PanStartEventPosition.x - currentPosition.x;
+            y = m_PanStartCenter.y + m_PanStartEventPosition.y - currentPosition.y;
+
+            bool shouldMoveCursor = false;
+
+            if( x < 0 )
+            {
+                currentPosition.x += x;
+                x = 0;
+                shouldMoveCursor = true;
+            }
+
+            if( y < 0 )
+            {
+                currentPosition.y += y;
+                y = 0;
+                shouldMoveCursor = true;
+            }
+
+            if( x > maxX )
+            {
+                currentPosition.x += ( x - maxX );
+                x = maxX;
+                shouldMoveCursor = true;
+            }
+
+            if( y > maxY )
+            {
+                currentPosition.y += ( y - maxY );
+                y = maxY;
+                shouldMoveCursor = true;
+            }
+
+            if ( shouldMoveCursor )
+                WarpPointer( currentPosition.x, currentPosition.y );
+
+            Scroll( x/ppux, y/ppuy );
+
+            double scale = GetParent()->GetScreen()->GetScalingFactor();
+
+            wxPoint center = GetParent()->GetScreen()->GetScrollCenterPosition();
+            center.x += wxRound( (double) ( x - tmpX ) / scale ) / ppux;
+            center.y += wxRound( (double) ( y - tmpY ) / scale ) / ppuy;
+            GetParent()->GetScreen()->SetScrollCenterPosition( center );
+
+            Refresh();
+            Update();
+        }
+        else
+        {
+            double scale = GetParent()->GetScreen()->GetScalingFactor();
+            int x = m_PanStartCenter.x +
+                    wxRound( (double) ( m_PanStartEventPosition.x - currentPosition.x ) / scale );
+            int y = m_PanStartCenter.y +
+                    wxRound( (double) ( m_PanStartEventPosition.y - currentPosition.y ) / scale );
+
+            GetParent()->RedrawScreen( wxPoint( x, y ), false );
+        }
+    }
+
+    if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) && !m_enableMiddleButtonPan &&
+        (screen->m_BlockLocate.GetState() == STATE_NO_BLOCK) )
     {
         // The middle button has been released, with no block command:
         // We use it for a zoom center at cursor position command
@@ -1009,9 +1143,9 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
             screen->m_BlockLocate.SetOrigin( m_CursorStartPos );
         }
 
-        if( event.LeftDown() || event.MiddleDown() )
+        if( event.LeftDown() || ( !m_enableMiddleButtonPan && event.MiddleDown() ) )
         {
-            if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
+            if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
             {
                 m_requestAutoPan = false;
                 GetParent()->HandleBlockPlace( &DC );
@@ -1019,16 +1153,16 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
             }
         }
         else if( ( m_canStartBlock >= 0 )
-                && ( event.LeftIsDown() || event.MiddleIsDown() )
+                && ( event.LeftIsDown() || ( !m_enableMiddleButtonPan && event.MiddleIsDown() ) )
                 && !IsMouseCaptured() )
         {
             // Mouse is dragging: if no block in progress,  start a block command.
-            if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
+            if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
             {
                 //  Start a block command
                 int cmd_type = kbstat;
 
-                if( event.MiddleIsDown() )
+                if( !m_enableMiddleButtonPan && event.MiddleIsDown() )
                     cmd_type |= MOUSE_MIDDLE;
 
                 /* A block command is started if the drag is enough.  A small
@@ -1054,7 +1188,8 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
             }
         }
 
-        if( event.ButtonUp( wxMOUSE_BTN_LEFT ) || event.ButtonUp( wxMOUSE_BTN_MIDDLE ) )
+        if( event.ButtonUp( wxMOUSE_BTN_LEFT ) ||
+            ( !m_enableMiddleButtonPan && event.ButtonUp( wxMOUSE_BTN_MIDDLE ) ) )
         {
             /* Release the mouse button: end of block.
              * The command can finish (DELETE) or have a next command (MOVE,
@@ -1068,7 +1203,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 ( ABS( screen->m_BlockLocate.GetWidth() ) < BLOCK_MINSIZE_LIMIT )
                 && ( ABS( screen->m_BlockLocate.GetHeight() ) < BLOCK_MINSIZE_LIMIT );
 
-            if( (screen->m_BlockLocate.m_State != STATE_NO_BLOCK) && BlockIsSmall )
+            if( (screen->m_BlockLocate.GetState() != STATE_NO_BLOCK) && BlockIsSmall )
             {
                 if( m_endMouseCaptureCallback )
                 {
@@ -1078,12 +1213,12 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
                 SetCursor( (wxStockCursor) m_currentCursor );
            }
-            else if( screen->m_BlockLocate.m_State == STATE_BLOCK_END )
+            else if( screen->m_BlockLocate.GetState() == STATE_BLOCK_END )
             {
                 m_requestAutoPan = false;
                 GetParent()->HandleBlockEnd( &DC );
                 SetCursor( (wxStockCursor) m_currentCursor );
-                if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
+                if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
                 {
                     m_requestAutoPan = true;
                     SetCursor( wxCURSOR_HAND );
@@ -1105,8 +1240,8 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 #if 0
     wxString msg_debug;
     msg_debug.Printf( " block state %d, cmd %d",
-                      screen->m_BlockLocate.m_State,
-                      screen->m_BlockLocate.m_Command );
+                      screen->m_BlockLocate.GetState(),
+                      screen->m_BlockLocate.GetCommand() );
     GetParent()->PrintMsg( msg_debug );
 #endif
 

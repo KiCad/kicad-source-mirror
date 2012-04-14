@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -52,7 +51,7 @@ protected:
     int     m_Type;             ///< Used in complex associations ( Dimensions.. )
     double  m_Angle;            ///< Used only for Arcs: Arc angle in 1/10 deg
     wxPoint m_BezierC1;         ///< Bezier Control Point 1
-    wxPoint m_BezierC2;         ///< Bezier Control Point 1
+    wxPoint m_BezierC2;         ///< Bezier Control Point 2
 
     std::vector<wxPoint>    m_BezierPoints;
     std::vector<wxPoint>    m_PolyPoints;
@@ -153,61 +152,23 @@ public:
         m_PolyPoints = aPoints;
     }
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool         Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
-    bool         ReadDrawSegmentDescr( LINE_READER* aReader );
+    bool ReadDrawSegmentDescr( LINE_READER* aReader );
 
-    void         Copy( DRAWSEGMENT* source );
+    void Copy( DRAWSEGMENT* source );
 
-    void         Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                        int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A PCB_BASE_FRAME in which to print status information.
-     */
     virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /**
-     * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for visible components of this
-     * object, and the units should be in the pcb or schematic coordinate system.
-     * It is OK to overestimate the size by a few counts.
-     */
     virtual EDA_RECT GetBoundingBox() const;
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param aRefPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool         HitTest( const wxPoint& aRefPos );
+    virtual bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function HitTest (overlayed)
-     * tests if the given EDA_RECT intersect this object.
-     * For now, an ending point must be inside this rect.
-     * @param refArea the given EDA_RECT to test
-     * @return bool - true if a hit, else false
-     */
-    bool         HitTest( EDA_RECT& refArea );
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
     wxString GetClass() const
     {
         return wxT( "DRAWSEGMENT" );
@@ -225,30 +186,14 @@ public:
         return hypot( double( delta.x ), double( delta.y ) );
     }
 
-    /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
-     */
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Start += aMoveVector;
         m_End   += aMoveVector;
     }
 
-    /**
-     * Function Rotate
-     * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
-     */
     virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     */
     virtual void Flip( const wxPoint& aCentre );
 
     /**
@@ -272,12 +217,14 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_dashed_line_xpm; }
 
+    virtual EDA_ITEM* Clone() const;
+
+    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
-
-private:
-    virtual EDA_ITEM* doClone() const;
 };
 
 #endif  // CLASS_DRAWSEGMENT_H_

@@ -38,6 +38,7 @@
 #include <wxstruct.h>
 #include <macros.h>
 #include <dialog_hotkeys_editor.h>
+#include <menus_helpers.h>
 
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>

@@ -31,8 +31,8 @@
 /**
  * Class DRC_ITEM
  * is a holder for a DRC (in Pcbnew) or ERC (in Eeschema) error item.
- *  It is generated when two objects are too close (DRC)
- * or two connected objects (pins) have incompatibleelectrical type (ERC).
+ * It is generated when two objects are too close (DRC)
+ * or two connected objects (pins) have incompatible electrical types (ERC).
  * There are holders for information on two items.  The
  * information held is the board coordinate and the MenuText for each item.
  * Also held is the type of error by number and the location of the MARKER.
@@ -151,26 +151,26 @@ public:
         {
             // omit the coordinate, a NETCLASS has no location
             ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s </li></ul>" ),
-                       m_ErrorCode,
-                       GetChars( GetErrorText() ),
-                       GetChars( m_MainText ) );
+                        m_ErrorCode,
+                        GetChars( GetErrorText() ),
+                        GetChars( m_MainText ) );
         }
         else if( m_hasSecondItem )
         {
             // an html fragment for the entire message in the listbox.  feel free
             // to add color if you want:
             ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>" ),
-                       m_ErrorCode,
-                       GetChars( GetErrorText() ),
-                       GetChars( ShowCoord( m_MainPosition )), GetChars( m_MainText ),
-                       GetChars( ShowCoord( m_AuxiliaryPosition )), GetChars( m_AuxiliaryText ) );
+                        m_ErrorCode,
+                        GetChars( GetErrorText() ),
+                        GetChars( ShowCoord( m_MainPosition )), GetChars( m_MainText ),
+                        GetChars( ShowCoord( m_AuxiliaryPosition )), GetChars( m_AuxiliaryText ) );
         }
         else
         {
             ret.Printf( _( "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>" ),
-                       m_ErrorCode,
-                       GetChars( GetErrorText() ),
-                       GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
+                        m_ErrorCode,
+                        GetChars( GetErrorText() ),
+                        GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
         }
 
         return ret;
@@ -190,17 +190,17 @@ public:
         if( m_hasSecondItem )
         {
             ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n    %s: %s\n" ),
-                       m_ErrorCode,
-                       GetChars( GetErrorText() ),
-                       GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ),
-                       GetChars( ShowCoord( m_AuxiliaryPosition ) ), GetChars( m_AuxiliaryText ) );
+                        m_ErrorCode,
+                        GetChars( GetErrorText() ),
+                        GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ),
+                        GetChars( ShowCoord( m_AuxiliaryPosition ) ), GetChars( m_AuxiliaryText ) );
         }
         else
         {
             ret.Printf( wxT( "ErrType(%d): %s\n    %s: %s\n" ),
-                       m_ErrorCode,
-                       GetChars( GetErrorText() ),
-                       GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
+                        m_ErrorCode,
+                        GetChars( GetErrorText() ),
+                        GetChars( ShowCoord( m_MainPosition ) ), GetChars( m_MainText ) );
         }
 
         return ret;
@@ -219,8 +219,8 @@ public:
     /**
      * Function GetErrorText
      * returns the string form of a drc error code.
-    */
-     wxString GetErrorText() const;
+     */
+    wxString GetErrorText() const;
 
     const wxString& GetTextA() const
     {

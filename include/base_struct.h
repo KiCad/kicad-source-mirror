@@ -33,6 +33,7 @@
 
 #include <colors.h>
 #include <bitmaps.h>
+#include <richio.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -95,7 +96,6 @@ enum KICAD_T {
 
     // General
     SCH_SCREEN_T,
-    BLOCK_LOCATE_STRUCT_TYPE,
 
     /*
      * Draw items in library component.
@@ -128,6 +128,22 @@ enum KICAD_T {
 
     // End value
     MAX_STRUCT_TYPE_ID
+};
+
+
+/**
+ * Enum FILL_T
+ * is the set of fill types used in plotting or drawing enclosed areas.
+ */
+enum FILL_T {
+    NO_FILL,                     // Poly, Square, Circle, Arc = option No Fill
+    FILLED_SHAPE,                /* Poly, Square, Circle, Arc = option Fill
+                                  * with current color ("Solid shape") */
+    FILLED_WITH_BG_BODYCOLOR     /* Poly, Square, Circle, Arc = option Fill
+                                  * with background body color, translucent
+                                  * (texts inside this shape can be seen)
+                                  * not filled in B&W mode when plotting or
+                                  * printing */
 };
 
 
@@ -279,8 +295,15 @@ public:
     /**
      * Function operator(wxRect)
      * overloads the cast operator to return a wxRect
+     * wxRect does not accept negative values for size, so ensure the
+     * wxRect size is always >= 0
      */
-    operator wxRect() const { return wxRect( m_Pos, m_Size ); }
+    operator wxRect() const
+    {
+        EDA_RECT rect( m_Pos, m_Size );
+        rect.Normalize();
+        return wxRect( rect.m_Pos, rect.m_Size );
+    }
 
     /**
      * Function Inflate
@@ -323,13 +346,13 @@ public:
 
 // These define are used for the .m_Flags and .m_UndoRedoStatus member of the
 // class EDA_ITEM
-#define IS_CHANGED     (1 << 0)   ///< Item was edited, and modified
-#define IS_LINKED      (1 << 1)   ///< Used in calculation to mark linked items (temporary use)
-#define IN_EDIT        (1 << 2)   ///< Item currently edited
-#define IS_MOVED       (1 << 3)   ///< Item being moved
-#define IS_NEW         (1 << 4)   ///< New item, just created
-#define IS_RESIZED     (1 << 5)   ///< Item being resized
-#define IS_DRAGGED     (1 << 6)   ///< Item being dragged
+#define IS_CHANGED     (1 << 0)    ///< Item was edited, and modified
+#define IS_LINKED      (1 << 1)    ///< Used in calculation to mark linked items (temporary use)
+#define IN_EDIT        (1 << 2)    ///< Item currently edited
+#define IS_MOVED       (1 << 3)    ///< Item being moved
+#define IS_NEW         (1 << 4)    ///< New item, just created
+#define IS_RESIZED     (1 << 5)    ///< Item being resized
+#define IS_DRAGGED     (1 << 6)    ///< Item being dragged
 #define IS_DELETED     (1 << 7)
 #define IS_WIRE_IMAGE  (1 << 8)
 #define STARTPOINT     (1 << 9)
@@ -389,22 +412,8 @@ protected:
     EDA_ITEM*     m_Image;
 
 private:
-    void InitVars();
 
-    /**
-     * Function doClone
-     * is used by the derived class to actually implement the cloning.
-     *
-     * The default version will return NULL in release builds and likely crash the
-     * program.  In debug builds, an warning message indicating the derived class
-     * has not implemented cloning.  This really should be a pure virtual function.
-     * Due to the fact that there are so many objects derived from EDA_ITEM, the
-     * decision was made to return NULL until all the objects derived from EDA_ITEM
-     * implement cloning.  Once that happens, this function should be made pure.
-     *
-     * @return A clone of the item.
-     */
-    virtual EDA_ITEM* doClone() const;
+    void InitVars();
 
 public:
 
@@ -490,23 +499,29 @@ public:
 
     /**
      * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
+     * tests if \a aPosition is contained within or on the bounding area of an item.
+     *
+     * @note This function cannot be const because some of the derive objects perform
+     *       intermediate calculations which change object members.  Make sure derived
+     *       objects do not declare this as const.
+     *
+     * @param aPosition A reference to a wxPoint object containing the coordinates to test.
+     * @return True if \a aPosition is within or on the item bounding area.
      */
-    virtual bool HitTest( const wxPoint& refPos )
+    virtual bool HitTest( const wxPoint& aPosition )
     {
         return false;   // derived classes should override this function
     }
 
     /**
-     * Function HitTest (overlaid)
-     * tests if the given EDA_RECT intersect this object.
-     * For now, an ending point must be inside this rect.
-     * @param refArea : the given EDA_RECT
-     * @return bool - true if a hit, else false
+     * Function HitTest
+     * tests if the \a aRect intersects this object.
+     * For now, an ending point must be inside \a aRect.
+     *
+     * @param aRect A reference to an EDA_RECT object containg the area to test.
+     * @return True if \a aRect intersects the object, otherwise false.
      */
-    virtual bool HitTest( EDA_RECT& refArea )
+    virtual bool HitTest( const EDA_RECT& aRect ) const
     {
         return false;   // derived classes should override this function
     }
@@ -536,14 +551,16 @@ public:
      * Function Clone
      * creates a duplicate of this item with linked list members set to NULL.
      *
-     * The Clone() function only calls the private virtual doClone() which actually
-     * does the cloning for the derived object.
-     *
-     * @todo: use this instead of Copy() everywhere, then kill Copy().
+     * The default version will return NULL in release builds and likely crash the
+     * program.  In debug builds, a warning message indicating the derived class
+     * has not implemented cloning.  This really should be a pure virtual function.
+     * Due to the fact that there are so many objects derived from EDA_ITEM, the
+     * decision was made to return NULL until all the objects derived from EDA_ITEM
+     * implement cloning.  Once that happens, this function should be made pure.
      *
      * @return A clone of the item.
      */
-    EDA_ITEM* Clone() const;    // should not be inline, to save the ~ 6 bytes per call site.
+    virtual EDA_ITEM* Clone() const; // should not be inline, to save the ~ 6 bytes per call site.
 
     /**
      * Function IterateForward
@@ -712,6 +729,18 @@ public:
      */
     virtual EDA_ITEM& operator=( const EDA_ITEM& aItem );
 
+    /**
+     * Function Format
+     * outputs the object to \a aFormatter in s-expression form.
+     *
+     * @param aFormatter The #OUTPUTFORMATTER object to write to.
+     * @param aNestLevel The indentation next level.
+     * @param aControlBits The control bit definition for object specific formatting.
+     * @throw IO_ERROR on write error.
+     */
+    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 #if defined(DEBUG)
 
     /**
@@ -757,238 +786,5 @@ inline EDA_ITEM* new_clone( const EDA_ITEM& aItem ) { return aItem.Clone(); }
  */
 typedef std::vector< EDA_ITEM* > EDA_ITEMS;
 
-
-// Graphic Text justify:
-// Values -1,0,1 are used in computations, do not change them
-enum EDA_TEXT_HJUSTIFY_T {
-    GR_TEXT_HJUSTIFY_LEFT   = -1,
-    GR_TEXT_HJUSTIFY_CENTER = 0,
-    GR_TEXT_HJUSTIFY_RIGHT  = 1
-};
-
-
-enum EDA_TEXT_VJUSTIFY_T {
-    GR_TEXT_VJUSTIFY_TOP    = -1,
-    GR_TEXT_VJUSTIFY_CENTER = 0,
-    GR_TEXT_VJUSTIFY_BOTTOM = 1
-};
-
-/* Options to show solid segments (segments, texts...) */
-enum EDA_DRAW_MODE_T {
-    LINE = 0,           // segments are drawn as lines
-    FILLED,             // normal mode: segments have thickness
-    SKETCH              // sketch mode: segments have thickness, but are not filled
-};
-
-/**
- * Enum FILL_T
- * is the set of fill types used in plotting or drawing enclosed areas.
- */
-enum FILL_T {
-    NO_FILL,                     // Poly, Square, Circle, Arc = option No Fill
-    FILLED_SHAPE,                /* Poly, Square, Circle, Arc = option Fill
-                                  * with current color ("Solid shape") */
-    FILLED_WITH_BG_BODYCOLOR    /* Poly, Square, Circle, Arc = option Fill
-                                  * with background body color, translucent
-                                  * (texts inside this shape can be seen)
-                                  * not filled in B&W mode when plotting or
-                                  * printing */
-};
-
-
-#define DEFAULT_SIZE_TEXT 60    /* default text height (in mils or 1/1000") */
-
-/**
- * Class EDA_TEXT
- * is a basic class to handle texts (labels, texts on components or footprints
- * ..) not used directly. The "used" text classes are derived from EDA_ITEM and
- * EDA_TEXT using multiple inheritance.
- */
-class EDA_TEXT
-{
-public:
-    wxString m_Text;
-    int      m_Thickness;               ///< pen size used to draw this text
-    double   m_Orient;                  ///< Orient in 0.1 degrees
-    wxPoint  m_Pos;                     ///< XY position of anchor text.
-    wxSize   m_Size;                    ///< XY size of text
-    bool     m_Mirror;                  ///< true iff mirrored
-    int      m_Attributs;               ///< bit flags such as visible, etc.
-    bool     m_Italic;                  ///< should be italic font (if available)
-    bool     m_Bold;                    ///< should be bold font (if available)
-    EDA_TEXT_HJUSTIFY_T m_HJustify;     ///< horizontal justification
-    EDA_TEXT_VJUSTIFY_T m_VJustify;     ///< vertical justification
-
-    bool     m_MultilineAllowed;        /**< true to use multiline option, false
-                                         * to use only single line text
-                                         * Single line is faster in
-                                         * calculations than multiline */
-
-public:
-    EDA_TEXT( const wxString& text = wxEmptyString );
-    EDA_TEXT( const EDA_TEXT& aText );
-    virtual ~EDA_TEXT();
-
-    /**
-     * Function SetThickness
-     * sets text thickness.
-     * @param aNewThickness is the new text thickness.
-     */
-    void SetThickness( int aNewThickness ) { m_Thickness = aNewThickness; };
-
-    /**
-     * Function GetThickness
-     * returns text thickness.
-     * @return int - text thickness.
-     */
-    int GetThickness() const { return m_Thickness; };
-
-    void SetOrientation( double aOrientation ) { m_Orient = aOrientation; }
-    double GetOrientation() const { return m_Orient; }
-
-    void SetItalic( bool isItalic ) { m_Italic = isItalic; }
-    bool IsItalic() const { return m_Italic; }
-
-    void SetMirrored( bool isMirrored ) { m_Mirror = isMirrored; }
-    bool IsMirrored() const { return m_Mirror; }
-
-    /**
-     * Function SetSize
-     * sets text size.
-     * @param aNewSize is the new text size.
-     */
-    void SetSize( const wxSize& aNewSize ) { m_Size = aNewSize; };
-
-    /**
-     * Function GetSize
-     * returns text size.
-     * @return wxSize - text size.
-     */
-    const wxSize GetSize() const { return m_Size; };
-
-    /// named differently than the ones using multiple inheritance and including this class
-    void SetPos( const wxPoint& aPoint ) { m_Pos = aPoint; }
-    const wxPoint GetPos() const { return m_Pos; }
-
-    int GetLength() const { return m_Text.Length(); };
-
-    /**
-     * Function Draw
-     * @param aPanel = the current DrawPanel
-     * @param aDC = the current Device Context
-     * @param aOffset = draw offset (usually (0,0))
-     * @param aColor = text color
-     * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     * @param aDisplay_mode = LINE, FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
-     */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               const wxPoint& aOffset, EDA_Colors aColor,
-               int aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
-               EDA_Colors aAnchor_color = UNSPECIFIED_COLOR );
-
-private:
-
-    /**
-     * Function DrawOneLineOfText
-     * Draw a single text line.
-     * Used to draw each line of this EDA_TEXT, that can be multiline
-     * @param aPanel = the current DrawPanel
-     * @param aDC = the current Device Context
-     * @param aOffset = draw offset (usually (0,0))
-     * @param aColor = text color
-     * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     * @param aFillMode = LINE, FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
-     * @param aText = the single line of text to draw.
-     * @param aPos = the position of this line ).
-     */
-    void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                            const wxPoint& aOffset, EDA_Colors aColor,
-                            int aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                            EDA_Colors aAnchor_color, wxString& aText,
-                            wxPoint aPos );
-
-public:
-
-    /**
-     * Function TextHitTest
-     * Test if \a aPoint is within the bounds of this object.
-     * @param aPoint- A wxPoint to test
-     * @param aAccuracy - Amount to inflate the bounding box.
-     * @return bool - true if a hit, else false
-     */
-    bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const;
-
-    /**
-     * Function TextHitTest (overloaded)
-     * Tests if object bounding box is contained within or intersects \a aRect.
-     *
-     * @param aRect - Rect to test against.
-     * @param aContains - Test for containment instead of intersection if true.
-     * @param aAccuracy - Amount to inflate the bounding box.
-     * @return bool - true if a hit, else false
-     */
-    bool TextHitTest( const EDA_RECT& aRect, bool aContains = false, int aAccuracy = 0 ) const;
-
-    /**
-     * Function LenSize
-     * @return the text length in internal units
-     * @param aLine : the line of text to consider.
-     * For single line text, this parameter is always m_Text
-     */
-    int LenSize( const wxString& aLine ) const;
-
-    /**
-     * Function GetTextBox
-     * useful in multiline texts to calculate the full text or a line area (for
-     * zones filling, locate functions....)
-     * @return the rect containing the line of text (i.e. the position and the
-     *         size of one line) this rectangle is calculated for 0 orient text.
-     *         If orientation is not 0 the rect must be rotated to match the
-     *         physical area
-     * @param aLine The line of text to consider.
-     * for single line text, aLine is unused
-     * If aLine == -1, the full area (considering all lines) is returned
-     * @param aThickness Overrides the current thickness when greater than 0.
-     * @param aInvertY Invert the Y axis when calculating bounding box.
-     */
-    EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
-
-    /**
-     * Function GetInterline
-     * return the distance between 2 text lines
-     * has meaning only for multiline texts
-     */
-    int GetInterline() const
-    {
-        return (( m_Size.y * 14 ) / 10) + m_Thickness;
-    }
-
-    /**
-     * Function GetTextStyleName
-     * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic)
-     */
-    wxString GetTextStyleName();
-
-    void SetText( const wxString& aText ) { m_Text = aText; }
-
-    /**
-     * Function GetText
-     * returns the string associated with the text object.
-     * <p>
-     * This function is virtual to allow derived classes to override getting the
-     * string to provide a way for modifying the base string by adding a suffix or
-     * prefix to the base string.
-     * </p>
-     * @return a const wxString object containing the string of the item.
-     */
-    virtual const wxString GetText() const { return m_Text; }
-
-    EDA_TEXT_HJUSTIFY_T GetHorizJustify() const { return m_HJustify; };
-    EDA_TEXT_VJUSTIFY_T GetVertJustify() const { return m_VJustify; };
-    void SetHorizJustify( EDA_TEXT_HJUSTIFY_T aType ) { m_HJustify = aType; };
-    void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType ) { m_VJustify = aType; };
-};
 
 #endif // BASE_STRUCT_H_

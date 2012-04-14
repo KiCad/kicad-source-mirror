@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -37,6 +36,7 @@
 #include <class_drawpanel.h>
 #include <plot_common.h>
 #include <trigo.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -297,7 +297,7 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         text = m_Text;
 
     GRSetDrawMode( aDC, aDrawMode );
-    DrawGraphicText( aPanel, aDC, text_pos, (EDA_Colors) color, text, m_Orient, m_Size,
+    DrawGraphicText( aPanel, aDC, text_pos, (EDA_COLOR_T) color, text, m_Orient, m_Size,
                      m_HJustify, m_VJustify, linewidth, m_Italic, m_Bold );
 
     /* Set to one (1) to draw bounding box around field text to validate
@@ -370,7 +370,7 @@ bool LIB_FIELD::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTr
 }
 
 
-EDA_ITEM* LIB_FIELD::doClone() const
+EDA_ITEM* LIB_FIELD::Clone() const
 {
     LIB_FIELD* newfield = new LIB_FIELD( m_id );
 
@@ -397,7 +397,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 }
 
 
-int LIB_FIELD::DoCompare( const LIB_ITEM& other ) const
+int LIB_FIELD::compare( const LIB_ITEM& other ) const
 {
     wxASSERT( other.Type() == LIB_FIELD_T );
 
@@ -427,13 +427,13 @@ int LIB_FIELD::DoCompare( const LIB_ITEM& other ) const
 }
 
 
-void LIB_FIELD::DoOffset( const wxPoint& offset )
+void LIB_FIELD::SetOffset( const wxPoint& aOffset )
 {
-    m_Pos += offset;
+    m_Pos += aOffset;
 }
 
 
-bool LIB_FIELD::DoTestInside( EDA_RECT& rect ) const
+bool LIB_FIELD::Inside( EDA_RECT& rect ) const
 {
     /*
      * FIXME: This fails to take into account the size and/or orientation of
@@ -443,27 +443,27 @@ bool LIB_FIELD::DoTestInside( EDA_RECT& rect ) const
 }
 
 
-void LIB_FIELD::DoMove( const wxPoint& newPosition )
+void LIB_FIELD::Move( const wxPoint& newPosition )
 {
     m_Pos = newPosition;
 }
 
 
-void LIB_FIELD::DoMirrorHorizontal( const wxPoint& center )
+void LIB_FIELD::MirrorHorizontal( const wxPoint& center )
 {
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
     m_Pos.x += center.x;
 }
 
-void LIB_FIELD::DoMirrorVertical( const wxPoint& center )
+void LIB_FIELD::MirrorVertical( const wxPoint& center )
 {
     m_Pos.y -= center.y;
     m_Pos.y *= -1;
     m_Pos.y += center.y;
 }
 
-void LIB_FIELD::DoRotate( const wxPoint& center, bool aRotateCCW )
+void LIB_FIELD::Rotate( const wxPoint& center, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
     RotatePoint( &m_Pos, center, rot_angle );
@@ -471,8 +471,8 @@ void LIB_FIELD::DoRotate( const wxPoint& center, bool aRotateCCW )
 }
 
 
-void LIB_FIELD::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
-                        const TRANSFORM& aTransform )
+void LIB_FIELD::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
+                      const TRANSFORM& aTransform )
 {
 }
 
@@ -732,10 +732,10 @@ void LIB_FIELD::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     msg = GetTextStyleName();
     aFrame->AppendMsgPanel( _( "Style" ), msg, MAGENTA );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, true );
     aFrame->AppendMsgPanel( _( "Size X" ), msg, BLUE );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_Size.y, EESCHEMA_INTERNAL_UNIT, true );
+    msg = ReturnStringFromValue( g_UserUnit, m_Size.y, true );
     aFrame->AppendMsgPanel( _( "Size Y" ), msg, BLUE );
 
     // Display field name (ref, value ...)

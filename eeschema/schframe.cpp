@@ -31,6 +31,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <gestfich.h>
+#include <confirm.h>
 
 #include <general.h>
 #include <protos.h>
@@ -228,9 +229,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    /* Initialize print and page setup dialog settings. */
-    m_pageSetupData.GetPrintData().SetQuality( wxPRINT_QUALITY_HIGH );
-    m_pageSetupData.GetPrintData().SetOrientation( wxLANDSCAPE );
+    // Initialize common print setup dialog settings.
+    m_pageSetupData.GetPrintData().SetPrintMode( wxPRINT_MODE_PRINTER );
+    m_pageSetupData.GetPrintData().SetQuality( wxPRINT_QUALITY_MEDIUM );
+    m_pageSetupData.GetPrintData().SetBin( wxPRINTBIN_AUTO );
+    m_pageSetupData.GetPrintData().SetNoCopies( 1 );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -390,7 +393,7 @@ void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
     m_undoItem = NULL;
 
     if( aItem )
-        m_undoItem = aItem->Clone();
+        m_undoItem = (SCH_ITEM*) aItem->Clone();
 
 }
 
@@ -422,12 +425,13 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     if( SheetList.IsModified() )
     {
-        wxMessageDialog dialog( this,
-                                _( "Schematic modified, Save before exit?" ),
-                                _( "Confirmation" ), wxYES_NO | wxCANCEL |
-                                wxICON_EXCLAMATION | wxYES_DEFAULT );
+        wxString msg;
+        msg.Printf( _("Save the changes in\n<%s>\nbefore closing?"),
+                    GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
 
-        switch( dialog.ShowModal() )
+        int ii = DisplayExitDialog( this, msg );
+
+        switch( ii )
         {
         case wxID_CANCEL:
             aEvent.Veto();
@@ -527,7 +531,9 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
         filename.RemoveLast();
 #if defined(KICAD_GOST)
 #ifndef __WINDOWS__
-        filename.Remove( 0, 1 );
+        wxString newfn;
+        if( filename.StartsWith( wxT( "-" ), &newfn ) )
+            filename = newfn;
 #endif
 #endif
     }
@@ -566,7 +572,7 @@ void SCH_EDIT_FRAME::OnModify()
 
 void SCH_EDIT_FRAME::OnUpdateBlockSelected( wxUpdateUIEvent& event )
 {
-    bool enable = ( GetScreen() && GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE );
+    bool enable = ( GetScreen() && GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE );
 
     event.Enable( enable );
 }
@@ -620,9 +626,6 @@ void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 {
     int i;
-
-    if( m_netListFormat <  NET_TYPE_PCBNEW )
-        m_netListFormat = NET_TYPE_PCBNEW;
 
     do
     {

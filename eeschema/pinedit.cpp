@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <class_sch_screen.h>
+#include <base_units.h>
 
 #include <libeditframe.h>
 #include <eeschema_id.h>
@@ -84,14 +85,10 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
                                LIB_PIN::GetElectricalTypeSymbols() );
     dlg.SetElectricalType( pin->GetType() );
     dlg.SetName( pin->GetName() );
-    dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                pin->GetNameTextSize(),
-                                                m_internalUnits ) );
+    dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
     dlg.SetNameTextSizeUnits( units );
     dlg.SetPadName( pin->GetNumberString() );
-    dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                   pin->GetNumberTextSize(),
-                                                  m_internalUnits ) );
+    dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit, pin->GetNumberTextSize() ) );
 
     dlg.SetPadNameTextSizeUnits( units );
     dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength(), m_internalUnits ) );
@@ -109,7 +106,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.Layout();
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
-    dlg.SetLastSizeAndPosition();
+    // dlg.SetLastSizeAndPosition();    // done in DIALOG_SHIM::Show()
 
     if( dlg.ShowModal() == wxID_CANCEL )
     {
@@ -121,7 +118,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         return;
     }
 
-    /* Save the pin properties to use for the next new pin. */
+    // Save the pin properties to use for the next new pin.
     LastPinNameSize = ReturnValueFromString( g_UserUnit, dlg.GetNameTextSize(), m_internalUnits );
     LastPinNumSize = ReturnValueFromString( g_UserUnit, dlg.GetPadNameTextSize(), m_internalUnits );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
@@ -185,7 +182,7 @@ static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC )
     else
         parent->RestoreComponent();
 
-    /* clear edit flags */
+    // clear edit flags
     parent->SetDrawItem( NULL );
     parent->SetLastDrawItem( NULL );
     Panel->Refresh( true );
@@ -258,7 +255,7 @@ another pin. Continue?" ) );
         m_component->AddDrawItem( m_drawItem );
     }
 
-    /* Put linked pins in new position, and clear flags */
+    // Put linked pins in new position, and clear flags
     for( Pin = m_component->GetNextPin(); Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
     {
         if( Pin->GetFlags() == 0 )
@@ -292,7 +289,7 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 
     TempCopyComponent();
 
-    /* Mark pins for moving. */
+    // Mark pins for moving.
     Pin = m_component->GetNextPin();
 
     for( ; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
@@ -341,7 +338,7 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     wxPoint pinpos = CurrentPin->GetPosition();
     bool    showPinText = true;
 
-    /* Erase pin in old position */
+    // Erase pin in old position
     if( aErase )
     {
         CurrentPin->SetPosition( PinPreviousPos );
@@ -349,7 +346,7 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
                           &showPinText, DefaultTransform );
     }
 
-    /* Redraw pin in new position */
+    // Redraw pin in new position
     CurrentPin->SetPosition( aPanel->GetScreen()->GetCrossHairPosition( true ) );
     CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
 
@@ -383,7 +380,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetUnit( m_unit );
     pin->SetConvert( m_convert );
 
-    /* Flag pins to consider */
+    // Flag pins to consider
     if( SynchronizePins() )
         pin->SetFlags( IS_LINKED );
 
@@ -430,7 +427,7 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
     if( !SynchronizePins() )
         return;
 
-    /* Create "convert" pin at the current position. */
+    // Create "convert" pin at the current position.
     if( aDeMorgan && ( aPin->GetConvert() != 0 ) )
     {
         NewPin = (LIB_PIN*) aPin->Clone();
@@ -446,7 +443,7 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
     for( ii = 1; ii <= aPin->GetParent()->GetPartCount(); ii++ )
     {
         if( ii == aUnit || aPin->GetUnit() == 0 )
-            continue;                       /* Pin common to all units. */
+            continue;                       // Pin common to all units.
 
         NewPin = (LIB_PIN*) aPin->Clone();
 
@@ -526,7 +523,7 @@ void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
 }
 
 
-/* Create a new pin based on the previous pin with an incremented pin number. */
+// Create a new pin based on the previous pin with an incremented pin number.
 void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 {
     LIB_PIN* Pin;
@@ -570,7 +567,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 }
 
 
-/* helper function to sort pins by pin num */
+// helper function to sort pins by pin num
 bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 {
     int test = ref->GetNumber() - tst->GetNumber();

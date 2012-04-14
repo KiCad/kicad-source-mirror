@@ -27,6 +27,8 @@
 #include <collectors.h>
 
 #include <dialog_edit_module_for_Modedit.h>
+#include <wildcards_and_files_ext.h>
+#include <menus_helpers.h>
 
 // Functions defined in block_module_editor, but used here
 // These 2 functions are used in modedit to rotate or mirror the whole footprint
@@ -247,7 +249,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_DELETE_PART:
     {
-        wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+        wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
         wxString   full_libraryfilename = wxGetApp().FindLibraryPath( fn );
 
         if( wxFileName::FileExists( full_libraryfilename ) )
@@ -287,7 +289,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
     {
         wxFileName fn;
-        fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+        fn = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
         wxString   full_filename = wxGetApp().FindLibraryPath( fn );
         Save_Module_In_Library( full_filename, GetBoard()->m_Modules, true, true );
         GetScreen()->ClrModify();
@@ -415,7 +417,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( !m_CurrentLib.IsEmpty() )
         {
-            wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+            wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
             full_libraryfilename = wxGetApp().FindLibraryPath( fn );
         }
 
@@ -681,38 +683,38 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
         m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_COPY );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DELETE );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_ROTATE;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ROTATE );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_MIRROR_X_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_X;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;

@@ -14,11 +14,12 @@
 #include <class_edge_mod.h>
 
 #include <pcbnew.h>
-#include <protos.h>
+//#include <protos.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <module_editor_frame.h>
 #include <dialog_edit_module_for_Modedit.h>
+#include <menus_helpers.h>
 
 
 void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
@@ -187,7 +188,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 {
     BOARD_ITEM* item = GetCurItem();
     wxString    msg;
-    bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
+    bool        blockActive = !GetScreen()->m_BlockLocate.IsIdle();
 
     // Simple location of elements where possible.
     if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
@@ -203,7 +204,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                          KiBitmap( cancel_xpm ) );
         else
             AddMenuItem( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ),
-                         KiBitmap( cancel_tool_xpm ) );
+                         KiBitmap( cursor_xpm ) );
 
         PopMenu->AppendSeparator();
     }

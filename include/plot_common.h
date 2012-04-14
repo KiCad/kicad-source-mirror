@@ -11,6 +11,7 @@
 #include <vector>
 #include <drawtxt.h>
 #include <common.h>         // PAGE_INFO
+#include <eda_text.h>       // FILL_T
 
 /**
  * Enum PlotFormat
@@ -179,7 +180,7 @@ public:
     }
 
     void text( const wxPoint&              aPos,
-               enum EDA_Colors             aColor,
+               enum EDA_COLOR_T            aColor,
                const wxString&             aText,
                int                         aOrient,
                const wxSize&               aSize,
@@ -411,6 +412,8 @@ public:
                                    int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
     virtual void SetLayerPolarity( bool aPositive ) {}
+
+    void   user_to_device_coordinates( wxPoint& pos );      // overload
 
 protected:
     double plot_scale_adjX, plot_scale_adjY;

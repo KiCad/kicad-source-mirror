@@ -9,14 +9,10 @@
 #include <dlist.h>
 #include <layers_id_colors_and_visibility.h>  // LAYER_COUNT and NB_COPPER_LAYERS definitions.
 
-//#include <wx/string.h>                        // wxString class.
-//#include <wx/arrstr.h>                        // wxArrayString class.
-
 
 #define MIN_DRAW_WIDTH      1               ///< Minimum trace drawing width.
 
 
-//class PCB_SCREEN;
 class D_PAD;
 class TRACK;
 class BOARD;
@@ -34,12 +30,6 @@ int GetLayerMask( int aLayerNumber );
 extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 
 extern DISPLAY_OPTIONS DisplayOpt;
-
-extern wxString NetExtBuffer;
-extern wxString NetCmpExtBuffer;
-extern const wxString ModuleFileExtension;
-
-extern const wxString ModuleFileWildcard;
 
 extern int g_CurrentVersionPCB;
 

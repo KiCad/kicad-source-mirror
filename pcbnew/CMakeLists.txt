@@ -178,7 +178,6 @@ set(PCBNEW_CLASS_SRCS
     netlist_reader_kicad.cpp
     onleftclick.cpp
     onrightclick.cpp
-    pcb_plot_params.cpp
     pcbnew.cpp
     pcbnew_config.cpp
     pcbplot.cpp
@@ -224,9 +223,7 @@ set(PCBNEW_SRCS ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS})
 ###
 # We need some extra sources from common
 ###
-set(PCBNEW_COMMON_SRCS
-    ../common/dialogs/dialog_page_settings.cpp
-)
+#set(PCBNEW_COMMON_SRCS ../common/dialogs/dialog_page_settings.cpp )
 
 ##
 # Scripting sources
@@ -276,6 +273,16 @@ if (KICAD_SCRIPTING)
 		
 	add_custom_command(
 	               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
+                       DEPENDS scripting/pcbnew.i
+                       DEPENDS scripting/board.i
+                       DEPENDS scripting/board_item.i
+                       DEPENDS scripting/module.i
+                       DEPENDS scripting/units.i
+                       DEPENDS ../scripting/dlist.i
+                       DEPENDS ../scripting/kicad.i
+                       DEPENDS ../scripting/wx.i
+                      # DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew
+                       
 	               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
 	               COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
 	               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}

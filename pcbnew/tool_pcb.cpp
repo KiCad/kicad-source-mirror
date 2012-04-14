@@ -448,7 +448,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
                             _( "Add layer alignment target" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
-    m_drawToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_body_xpm ),
+    m_drawToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_xpm ),
                             _( "Delete items" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();

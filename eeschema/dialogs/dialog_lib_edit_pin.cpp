@@ -7,11 +7,6 @@
 
 #include <dialog_lib_edit_pin.h>
 
-// dialog should remember its previous screen position and size
-// Not also if the defaut size is > s_LastSize, default size is used
-wxPoint DIALOG_LIB_EDIT_PIN::s_LastPos( -1, -1 );
-wxSize  DIALOG_LIB_EDIT_PIN::s_LastSize;
-
 DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent )
 {
@@ -25,31 +20,17 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
 
     m_panelShowPin->SetBackgroundColour( MakeColour( g_DrawBgColor ) );
 
-    /* Required to make escape key work correctly in wxGTK. */
-    SetFocus();
     // Set tab order
-    m_textPadName-> MoveAfterInTabOrder(m_textPinName);
+    m_textPadName->MoveAfterInTabOrder(m_textPinName);
     m_sdbSizerButtonsOK->SetDefault();
 }
+
 
 DIALOG_LIB_EDIT_PIN::~DIALOG_LIB_EDIT_PIN()
 {
     delete m_dummyPin;
 }
 
-void DIALOG_LIB_EDIT_PIN::SetLastSizeAndPosition()
-{
-    if( s_LastPos.x != -1 )
-    {
-        wxSize defaultSize = GetSize();
-        if(  s_LastSize.x < defaultSize.x )
-            s_LastSize.x = defaultSize.x;
-        SetSize( s_LastSize );
-        SetPosition( s_LastPos );
-    }
-    else
-        Center();
-}
 
 /*
  * Draw (on m_panelShowPin) the pin currently edited
@@ -92,25 +73,16 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
 
 void DIALOG_LIB_EDIT_PIN::OnCloseDialog( wxCloseEvent& event )
 {
-    // Save the dialog's position
-    s_LastPos  = GetPosition();
-    s_LastSize = GetSize();
     EndModal( wxID_CANCEL );
 }
 
 void DIALOG_LIB_EDIT_PIN::OnCancelButtonClick( wxCommandEvent& event )
 {
-    // Save the dialog's position
-    s_LastPos  = GetPosition();
-    s_LastSize = GetSize();
     EndModal( wxID_CANCEL );
 }
 
 void DIALOG_LIB_EDIT_PIN::OnOKButtonClick( wxCommandEvent& event )
 {
-    // Save the dialog's position
-    s_LastPos  = GetPosition();
-    s_LastSize = GetSize();
     EndModal( wxID_OK );
 }
 

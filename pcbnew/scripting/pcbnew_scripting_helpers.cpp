@@ -49,12 +49,16 @@ void ScriptingSetPcbEditFrame(PCB_EDIT_FRAME *aPCBEdaFrame)
 	PcbEditFrame = aPCBEdaFrame;
 }
 
+BOARD* LoadBoard(wxString& aFileName)
+{
+    return LoadBoard(aFileName,IO_MGR::KICAD);
+}
 
-BOARD* LoadBoard(wxString aFileName)
+BOARD* LoadBoard(wxString& aFileName,IO_MGR::PCB_FILE_T aFormat)
 {
 #ifdef USE_NEW_PCBNEW_LOAD
 	try{
-	   return IO_MGR::Load(IO_MGR::KICAD,aFileName);	
+	   return IO_MGR::Load(aFormat,aFileName);	
 	} catch (IO_ERROR)
 	{
 		return NULL;
@@ -65,26 +69,36 @@ BOARD* LoadBoard(wxString aFileName)
 #endif
 }
 
-bool SaveBoard(wxString aFileName, BOARD* aBoard)
+bool SaveBoard(wxString& aFilename, BOARD* aBoard)
+{
+    return SaveBoard(aFilename,aBoard,IO_MGR::KICAD);
+}
+
+bool SaveBoard(wxString& aFileName, BOARD* aBoard,
+                IO_MGR::PCB_FILE_T aFormat)
 {
 
 #ifdef USE_NEW_PCBNEW_LOAD
-	aBoard->m_Status_Pcb &= ~CONNEXION_OK;
+  aBoard->m_Status_Pcb &= ~CONNEXION_OK;
   aBoard->SynchronizeNetsAndNetClasses();
   aBoard->SetCurrentNetClass( aBoard->m_NetClasses.GetDefault()->GetName() );
 
-  wxString header = wxString::Format(
-                            wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s\n\n" ),
-                            BOARD_FILE_VERSION, DateAndTime().GetData(),
-                            GetBuildVersion().GetData() );
-
+  wxString header;
   PROPERTIES   props;
+  
+  if (aFormat==IO_MGR::LEGACY)
+  {
+      header = wxString::Format(
+                            wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s scripting\n\n" ),
+                            LEGACY_BOARD_FILE_VERSION, DateAndTime().GetData(),
+                            GetBuildVersion().GetData() );
+      props["header"] = header;
+  }
+  
 
-  props["header"] = header;
-
-	try 
-	{
-     IO_MGR::Save( IO_MGR::KICAD, aFileName, aBoard, &props );
+  try 
+  {
+     IO_MGR::Save( aFormat, aFileName, aBoard, &props );
      return true;
   } 
   catch (IO_ERROR)

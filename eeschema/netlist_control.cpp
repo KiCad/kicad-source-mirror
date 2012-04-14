@@ -117,17 +117,34 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
                                           const wxString& title,
                                           int             id_NetType,
                                           int             idCheckBox,
-                                          int             idCreateFile,
-                                          bool            selected ) :
+                                          int             idCreateFile ) :
     wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxBORDER_SUNKEN )
 {
     m_IdNetType = id_NetType;
+    m_pageNetFmtName = title;
     m_CommandStringCtrl = NULL;
     m_TitleStringCtrl   = NULL;
     m_IsCurrentFormat   = NULL;
     m_AddSubPrefix = NULL;
     m_ButtonCancel = NULL;
     m_NetOption = NULL;
+    wxString netfmtName = ((NETLIST_DIALOG*)parent->GetParent())->m_NetFmtName;
+    int fmtOption = 0;
+
+    bool selected = m_pageNetFmtName == netfmtName;
+
+    // PCBNEW Format is a special type:
+    if( id_NetType == NET_TYPE_PCBNEW )
+    {
+        if( netfmtName.IsEmpty() )
+            selected = true;
+        if( netfmtName == wxT("PcbnewAdvanced" ) )
+        {
+            selected = true;
+            fmtOption = 1;
+        }
+    }
+
 
     parent->AddPage( this, title, selected );
 
@@ -162,6 +179,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
                                       wxDefaultPosition, wxDefaultSize,
                                       2, netlist_opt, 1,
                                       wxRA_SPECIFY_COLS );
+        m_NetOption->SetSelection( fmtOption );
         m_LeftBoxSizer->Add( m_NetOption, 0, wxGROW | wxALL, 5 );
     }
 
@@ -199,6 +217,19 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     }
 }
 
+const wxString NETLIST_PAGE_DIALOG::GetPageNetFmtName()
+{
+    // PCBNEW Format is a special type:
+    if( m_IdNetType == NET_TYPE_PCBNEW )
+    {
+        if( m_NetOption->GetSelection() )
+            return wxT( "PcbnewAdvanced" );
+        else
+            return wxT( "Pcbnew" );
+    }
+    return m_pageNetFmtName;
+}
+
 
 NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     wxDialog( parent, -1, _( "Netlist" ), wxDefaultPosition,
@@ -207,6 +238,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     int ii;
 
     m_Parent = parent;
+    m_NetFmtName = m_Parent->GetNetListFormatName();
 
     for( ii = 0; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ii++ )
     {
@@ -230,8 +262,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
                                  wxT( "Pcbnew" ),
                                  NET_TYPE_PCBNEW,
                                  ID_CURRENT_FORMAT_IS_DEFAULT,
-                                 ID_CREATE_NETLIST,
-                                 m_Parent->GetNetListFormat() == NET_TYPE_PCBNEW );
+                                 ID_CREATE_NETLIST );
 
     // Add Panel FORMAT ORCADPCB2
     m_PanelNetType[PANELORCADPCB2] =
@@ -239,8 +270,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
                                  wxT( "OrcadPCB2" ),
                                  NET_TYPE_ORCADPCB2,
                                  ID_CURRENT_FORMAT_IS_DEFAULT,
-                                 ID_CREATE_NETLIST,
-                                 m_Parent->GetNetListFormat() == NET_TYPE_ORCADPCB2 );
+                                 ID_CREATE_NETLIST );
 
     // Add Panel FORMAT CADSTAR
     m_PanelNetType[PANELCADSTAR] =
@@ -248,8 +278,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
                                  wxT( "CadStar" ),
                                  NET_TYPE_CADSTAR,
                                  ID_CURRENT_FORMAT_IS_DEFAULT,
-                                 ID_CREATE_NETLIST,
-                                 m_Parent->GetNetListFormat() == NET_TYPE_CADSTAR );
+                                 ID_CREATE_NETLIST );
 
     // Add Panel spice
     InstallPageSpice();
@@ -268,17 +297,17 @@ void NETLIST_DIALOG::InstallPageSpice()
 {
     wxButton* Button;
     NETLIST_PAGE_DIALOG* page;
+    wxString title = wxT( "Spice" );
 
     page = m_PanelNetType[PANELSPICE] =
         new NETLIST_PAGE_DIALOG( m_NoteBook,
-                                 wxT( "Spice" ),
+                                 title,
                                  NET_TYPE_SPICE,
-                                 0, 0,
-                                 m_Parent->GetNetListFormat() == NET_TYPE_SPICE );
+                                 0, 0 );
 
     page->m_IsCurrentFormat = new wxCheckBox( page, ID_CURRENT_FORMAT_IS_DEFAULT,
                                               _( "Default format" ) );
-    page->m_IsCurrentFormat->SetValue( m_Parent->GetNetListFormat() == NET_TYPE_SPICE );
+    page->m_IsCurrentFormat->SetValue( m_NetFmtName == title );
     page->m_LeftBoxSizer->Add( page->m_IsCurrentFormat, 1, wxGROW | wxALL, 5 );
 
     page->m_AddSubPrefix = new wxCheckBox( page, ID_ADD_SUBCIRCUIT_PREFIX,
@@ -299,7 +328,7 @@ void NETLIST_DIALOG::InstallPageSpice()
     page->m_LeftBoxSizer->Add( page->m_NetOption, 0, wxGROW | wxALL, 5 );
 
     page->m_LowBoxSizer->Add( new wxStaticText( page, -1, _( "Simulator command:" ) ), 0,
-                              wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                              wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     page->m_CommandStringCtrl = new wxTextCtrl( page, -1, m_Parent->GetSimulatorCommand(),
                                                 wxDefaultPosition, wxDefaultSize );
@@ -327,7 +356,6 @@ void NETLIST_DIALOG::InstallPageSpice()
  */
 void NETLIST_DIALOG::InstallCustomPages()
 {
-    bool              selected;
     int               ii, CustomCount;
     wxString          title, previoustitle, msg;
     NETLIST_PAGE_DIALOG* CurrPage;
@@ -342,8 +370,6 @@ void NETLIST_DIALOG::InstallCustomPages()
         if( title.IsEmpty() && previoustitle.IsEmpty() )
             break; // No more panel to install
 
-        selected = m_Parent->GetNetListFormat() == ( NET_TYPE_CUSTOM1 + ii );
-
         /* Install the panel "Add Plugin" after
          * the last initialized panel */
 
@@ -356,8 +382,7 @@ void NETLIST_DIALOG::InstallCustomPages()
                                              _( "Add Plugin" ),
                                              NET_TYPE_CUSTOM1 + ii,
                                              ID_CURRENT_FORMAT_IS_DEFAULT,
-                                             ID_SETUP_PLUGIN,
-                                             selected );
+                                             ID_SETUP_PLUGIN );
         else  /* Install a plugin panel */
             CurrPage =
                 m_PanelNetType[PANELCUSTOMBASE + ii] =
@@ -365,8 +390,7 @@ void NETLIST_DIALOG::InstallCustomPages()
                                              title,
                                              NET_TYPE_CUSTOM1 + ii,
                                              ID_CURRENT_FORMAT_IS_DEFAULT,
-                                             ID_CREATE_NETLIST,
-                                             selected );
+                                             ID_CREATE_NETLIST );
 
         msg = CUSTOM_NETLIST_COMMAND;
         msg << ii + 1;
@@ -374,7 +398,7 @@ void NETLIST_DIALOG::InstallCustomPages()
 
         CurrPage->m_LowBoxSizer->Add( new wxStaticText( CurrPage,
                                                         -1, _( "Netlist command:" ) ), 0,
-                                      wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                                      wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
         CurrPage->m_CommandStringCtrl = new wxTextCtrl( CurrPage, -1, Command,
                                                         wxDefaultPosition, wxDefaultSize );
@@ -387,7 +411,7 @@ void NETLIST_DIALOG::InstallCustomPages()
 
         CurrPage->m_LowBoxSizer->Add( new wxStaticText( CurrPage,
                                                         -1, _( "Title:" ) ), 0,
-                                      wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+                                      wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
         CurrPage->m_TitleStringCtrl = new wxTextCtrl( CurrPage, -1, title,
                                                       wxDefaultPosition, wxDefaultSize );
@@ -462,14 +486,14 @@ void NETLIST_DIALOG::SelectNetlistType( wxCommandEvent& event )
 
     for( ii = 0; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ii++ )
         if( m_PanelNetType[ii] )
-            m_PanelNetType[ii]->m_IsCurrentFormat->SetValue( 	false );
+            m_PanelNetType[ii]->m_IsCurrentFormat->SetValue( false );
 
     CurrPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
     if( CurrPage == NULL )
         return;
 
-    m_Parent->SetNetListFormat( CurrPage->m_IdNetType );
+    m_Parent->SetNetListFormatName( CurrPage->GetPageNetFmtName() );
     CurrPage->m_IsCurrentFormat->SetValue( true );
 }
 
@@ -496,7 +520,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
     int ii;
 
     m_Parent->SetSimulatorCommand( m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue() );
-    m_Parent->SetNetListFormat( NET_TYPE_PCBNEW );
+    m_Parent->SetNetListFormatName( wxEmptyString );
 
     for( ii = 0; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ii++ )
     {
@@ -504,7 +528,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
             break;
 
         if( m_PanelNetType[ii]->m_IsCurrentFormat->GetValue() == true )
-            m_Parent->SetNetListFormat( m_PanelNetType[ii]->m_IdNetType );
+            m_Parent->SetNetListFormatName( m_PanelNetType[ii]->GetPageNetFmtName() );
     }
 
     g_OptNetListUseNames = true; // Used for pspice, gnucap
@@ -712,6 +736,7 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup( void )
         if( CurrPage->m_TitleStringCtrl )
         {
             wxString title = CurrPage->m_TitleStringCtrl->GetValue();
+            CurrPage->SetPageNetFmtName( title );
 
             if( msg != title ) // Title has changed, Update config
             {

@@ -44,6 +44,7 @@
 #include <footprint_info.h>
 
 #include <hotkeys.h>
+#include <wildcards_and_files_ext.h>
 
 
 /**
@@ -188,7 +189,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( wxWindow* parent, wxSemaphore* s
 
     // If a footprint was previsiously loaded, reload it
     if( !m_libraryName.IsEmpty() && !m_footprintName.IsEmpty() )
-        GetModuleLibrary( m_libraryName + wxT(".") + ModuleFileExtension,
+        GetModuleLibrary( m_libraryName + wxT(".") + FootprintLibFileExtension,
                       m_footprintName, false );
 
 
@@ -436,7 +437,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         SetCurItem( NULL );
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
-        GetModuleLibrary( m_libraryName + wxT(".") + ModuleFileExtension,
+        GetModuleLibrary( m_libraryName + wxT(".") + FootprintLibFileExtension,
                           m_footprintName, true );
         DisplayLibInfos();
         Zoom_Automatique( false );

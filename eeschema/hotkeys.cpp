@@ -316,7 +316,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     // notBusy == true means no item currently edited and no other command in progress
     // We can change active tool and ask for editing a new item
-    bool notBusy = (!itemInEdit) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK);
+    bool notBusy = (!itemInEdit) && (screen->m_BlockLocate.GetState() == STATE_NO_BLOCK);
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */

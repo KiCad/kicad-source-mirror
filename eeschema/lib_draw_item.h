@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -67,19 +66,26 @@ typedef boost::ptr_vector< LIB_ITEM > LIB_ITEMS;
 typedef std::vector< LIB_PIN* > LIB_PINS;
 
 
-/****************************************************************************/
-/* Classes for handle the body items of a component: pins add graphic items */
-/****************************************************************************/
-
-
 /**
- * Base class for drawable items used in library components.
- *  (graphic shapes, texts, fields, pins)
+ * Class LIB_ITEM
+ * is the base class for drawable items used by schematic library components.
  */
 class LIB_ITEM : public EDA_ITEM
 {
     /**
-     * Draws the item.
+     * Function drawGraphic
+     *
+     * draws the item on \a aPanel.
+     *
+     * @param aPanel A pointer to the panel to draw the object upon.
+     * @param aDC A pointer to the device context used to draw the object.
+     * @param aOffset A reference to a wxPoint object containing the offset where to draw
+     *                from the object's current position.
+     * @param aColor An #EDA_COLOR_T to draw the object or -1 to draw the object in it's
+     *               default color.
+     * @param aDrawMode The mode used to perform the draw (#GR_OR, #GR_COPY, etc.).
+     * @param aData A pointer to any object specific data required to perform the draw.
+     * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
     virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                               const wxPoint& aOffset, int aColor,
@@ -88,20 +94,20 @@ class LIB_ITEM : public EDA_ITEM
     /**
      * Draw any editing specific graphics when the item is being edited.
      *
-     * @param aClipBox - Clip box of the current device context.
-     * @param aDC - The device context to draw on.
-     * @param aColor - The index of the color to draw.
+     * @param aClipBox Clip box of the current device context.
+     * @param aDC The device context to draw on.
+     * @param aColor The index of the color to draw.
      */
     virtual void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, int aColor ) {}
 
     /**
-     * Calculates the attributes of an item  at \a aPosition when it is being edited.
+     * Calculates the attributes of an item at \a aPosition when it is being edited.
      *
      * This method gets called by the Draw() method when the item is being edited.  This
      * probably should be a pure virtual method but bezier curves are not yet editable in
      * the component library editor.  Therefore, the default method does nothing.
      *
-     * @param aPosition - The current mouse position in drawing coordinates.
+     * @param aPosition The current mouse position in drawing coordinates.
      */
     virtual void calcEdit( const wxPoint& aPosition ) {}
 
@@ -135,6 +141,9 @@ protected:
     wxPoint  m_initialPos;        ///< Temporary position when moving an existing item.
     wxPoint  m_initialCursorPos;  ///< Initial cursor position at the beginning of a move.
 
+    /** Flag to indicate if draw item is fillable.  Default is false. */
+    bool m_isFillable;
+
 public:
 
     LIB_ITEM( KICAD_T        aType,
@@ -158,11 +167,11 @@ public:
      * allows the draw item to maintain it's own internal state while it is being
      * edited. Call AbortEdit() to quit the editing mode.
      *
-     * @param aEditMode - The editing mode being performed.  See base_struct.h for a list
-     *                    of mode flags.
-     * @param aPosition - The position in drawing coordinates where the editing mode was
-     *                    started.  This may or may not be required depending on the item
-     *                    being edited and the edit mode.
+     * @param aEditMode The editing mode being performed.  See base_struct.h for a list
+     *                  of mode flags.
+     * @param aPosition The position in drawing coordinates where the editing mode was
+     *                  started.  This may or may not be required depending on the item
+     *                  being edited and the edit mode.
      */
     virtual void BeginEdit( int aEditMode, const wxPoint aPosition = wxPoint( 0, 0 ) ) {}
 
@@ -173,7 +182,7 @@ public:
      * called for each additional left click when the mouse is captured while the item
      * is being edited.
      *
-     * @param aPosition - The position of the mouse left click in drawing coordinates.
+     * @param aPosition The position of the mouse left click in drawing coordinates.
      * @return True if additional mouse clicks are required to complete the edit in progress.
      */
     virtual bool ContinueEdit( const wxPoint aPosition ) { return false; }
@@ -183,32 +192,31 @@ public:
      *
      * This is used to end or abort an edit action in progress initiated by BeginEdit().
      *
-     * @param aPosition - The position of the last edit event in drawing coordinates.
-     * @param aAbort - Set to true to abort the current edit in progress.
+     * @param aPosition The position of the last edit event in drawing coordinates.
+     * @param aAbort Set to true to abort the current edit in progress.
      */
     virtual void EndEdit( const wxPoint& aPosition, bool aAbort = false ) { m_Flags = 0; }
 
     /**
      * Draw an item
      *
-     * @param aPanel - DrawPanel to use (can be null) mainly used for clipping
-     *                 purposes
-     * @param aDC - Device Context (can be null)
-     * @param aOffset - offset to draw
-     * @param aColor - -1 to use the normal body item color, or use this color
-     *                 if >= 0
-     * @param aDrawMode - GR_OR, GR_XOR, ...
-     * @param aData - value or pointer used to pass others parameters,
-     *                depending on body items. used for some items to force
-     *                to force no fill mode ( has meaning only for items what
-     *                can be filled ). used in printing or moving objects mode
-     *                or to pass reference to the lib component for pins
-     * @param aTransform - Transform Matrix (rotation, mirror ..)
+     * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
+     * @param aDC Device Context (can be null)
+     * @param aOffset Offset to draw
+     * @param aColor -1 to use the normal body item color, or use this color if >= 0
+     * @param aDrawMode GR_OR, GR_XOR, ...
+     * @param aData Value or pointer used to pass others parameters, depending on body items.
+     *              Used for some items to force to force no fill mode ( has meaning only for
+     *              items what can be filled ). used in printing or moving objects mode or to
+     *              pass reference to the lib component for pins.
+     * @param aTransform Transform Matrix (rotation, mirror ..)
      */
     virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset, int aColor,
                        int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
     /**
+     * Function GetPenSize
+     *
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize() const = 0;
@@ -217,7 +225,7 @@ public:
      * Function Save
      * writes draw item object to \a aFormatter in component library "*.lib" format.
      *
-     * @param aFormatter A referenct to an #OUTPUTFORMATTER object to write the
+     * @param aFormatter A reference to an #OUTPUTFORMATTER object to write the
      *                   component library item to.
      * @return True if success writing else false.
      */
@@ -230,28 +238,18 @@ public:
         return (LIB_COMPONENT *)m_Parent;
     }
 
-    /**
-     * Tests if the given point is within the bounds of this object.
-     *
-     * Derived classes should override this function.
-     *
-     * @param aPosition - The coordinates to test.
-     * @return - true if a hit, else false
-     */
     virtual bool HitTest( const wxPoint& aPosition )
     {
-        return false;
+        return EDA_ITEM::HitTest( aPosition );
     }
 
     /**
-     * @param aPosition - a wxPoint to test
-     * @param aThreshold - max distance to this object (usually the half
-     *                     thickness of a line)
-     *                   if < 0, it will be automatically set to half
-     *                     pen size when locating lines or arcs
-     *                      and set to 0 for other items
-     * @param aTransform - the transform matrix
-     * @return - true if the point \a aPosition is near this object
+     * @param aPosition A wxPoint to test.
+     * @param aThreshold Maximum distance to this object (usually the half thickness of a line)
+     *                   if < 0, it will be automatically set to half pen size when locating
+     *                   lines or arcs and set to 0 for other items.
+     * @param aTransform The transform matrix.
+     * @return True if the point \a aPosition is near this object
      */
     virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform ) = 0;
 
@@ -276,8 +274,8 @@ public:
     /**
      * Test LIB_ITEM objects for equivalence.
      *
-     * @param aOther - Object to test against.
-     * @return - True if object is identical to this object.
+     * @param aOther Object to test against.
+     * @return True if object is identical to this object.
      */
     bool operator==( const LIB_ITEM& aOther ) const;
     bool operator==( const LIB_ITEM* aOther ) const
@@ -294,68 +292,64 @@ public:
     bool operator<( const LIB_ITEM& aOther) const;
 
     /**
-     * Set drawing object offset from the current position.
+     * Function Offset
+     * sets the drawing object by \a aOffset from the current position.
      *
-     * @param aOffset - Coordinates to offset position.
+     * @param aOffset Coordinates to offset the item position.
      */
-    void SetOffset( const wxPoint& aOffset ) { DoOffset( aOffset ); }
+    virtual void SetOffset( const wxPoint& aOffset ) = 0;
 
     /**
-     * Test if any part of the draw object is inside rectangle bounds.
+     * Function Inside
+     * tests if any part of the draw object is inside rectangle bounds of \a aRect.
      *
-     * This is used for block selection.  The real work is done by the
-     * DoTestInside method for each derived object type.
-     *
-     * @param aRect - Rectangle to check against.
-     * @return - True if object is inside rectangle.
+     * @param aRect Rectangle to check against.
+     * @return True if object is inside rectangle.
      */
-    bool Inside( EDA_RECT& aRect ) const { return DoTestInside( aRect ); }
+    virtual bool Inside( EDA_RECT& aRect ) const = 0;
 
     /**
-     * Move a draw object to a new \a aPosition.
+     * Function Move
+     * moves a draw object to \a aPosition.
      *
-     * The real work is done by the DoMove method for each derived object type.
-     *
-     * @param aPosition - Position to move draw item to.
+     * @param aPosition Position to move draw item to.
      */
-    void Move( const wxPoint& aPosition ) { DoMove( aPosition ); }
+    virtual void Move( const wxPoint& aPosition ) = 0;
 
     /**
-     * Return the current draw object start position.
+     * Function GetPosition
+     * returns the current draw object position.
+     *
+     * @return A wxPoint object containing the position of the object.
      */
-    wxPoint GetPosition() const { return DoGetPosition(); }
+    virtual wxPoint GetPosition() const = 0;
 
-    void SetPosition( const wxPoint& aPosition ) { DoMove( aPosition ); }
+    void SetPosition( const wxPoint& aPosition ) { Move( aPosition ); }
 
     /**
-     * Mirror the draw object along the horizontal (X) axis about a point.
+     * Function MirrorHorizontal
+     * mirrors the draw object along the horizontal (X) axis about \a aCenter point.
      *
-     * @param aCenter - Point to mirror around.
+     * @param aCenter Point to mirror around.
      */
-    void MirrorHorizontal( const wxPoint& aCenter )
-    {
-        DoMirrorHorizontal( aCenter );
-    }
+    virtual void MirrorHorizontal( const wxPoint& aCenter ) = 0;
 
     /**
-     * Mirror the draw object along the MirrorVertical (Y) axis about a point.
+     * Function MirrorVertical
+     * mirrors the draw object along the MirrorVertical (Y) axis about \a aCenter point.
      *
-     * @param aCenter - Point to mirror around.
+     * @param aCenter Point to mirror around.
      */
-    void MirrorVertical( const wxPoint& aCenter )
-    {
-        DoMirrorVertical( aCenter );
-    }
+    virtual void MirrorVertical( const wxPoint& aCenter ) = 0;
 
     /**
-     * Rotate about a point.
+     * Function Rotate
+     * rotates the object about \a aCenter point.
      *
-     * @param aCenter - Point to rotate around.
+     * @param aCenter Point to rotate around.
+     * @param aRotateCCW True to rotate counter clockwise.  False to rotate clockwise.
      */
-    void Rotate( const wxPoint& aCenter )
-    {
-        DoRotate( aCenter );
-    }
+    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) = 0;
 
     /**
      * Rotate the draw item.
@@ -365,23 +359,27 @@ public:
     /**
      * Plot the draw item using the plot object.
      *
-     * @param aPlotter - The plot object to plot to.
-     * @param aOffset - Plot offset position.
-     * @param aFill - Flag to indicate whether or not the object is filled.
-     * @param aTransform - The plot transform.
+     * @param aPlotter The plot object to plot to.
+     * @param aOffset Plot offset position.
+     * @param aFill Flag to indicate whether or not the object is filled.
+     * @param aTransform The plot transform.
      */
-    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill, const TRANSFORM& aTransform )
-    {
-        DoPlot( aPlotter, aOffset, aFill, aTransform );
-    }
+    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+                       const TRANSFORM& aTransform ) = 0;
 
     /**
-     * Return the width of the draw item.
+     * Function GetWidth
+     * return the width of the draw item.
      *
      * @return Width of draw object.
      */
-    int GetWidth() const { return DoGetWidth(); }
-    void SetWidth( int aWidth ) { DoSetWidth( aWidth ); }
+    virtual int GetWidth() const = 0;
+
+    /**
+     * Function SetWidth
+     * sets the width of the draw item to \a aWidth.
+     */
+    virtual void SetWidth( int aWidth ) = 0;
 
     /**
      * Check if draw object can be filled.
@@ -389,14 +387,14 @@ public:
      * The default setting is false.  If the derived object support filling,
      * set the m_isFillable member to true.
      *
-     * @return - True if draw object can be fill.  Default is false.
+     * @return True if draw object can be filled.  Default is false.
      */
     bool IsFillable() const { return m_isFillable; }
 
     /**
      * Return the draw item editing mode status.
      *
-     * @return - True if the item is being edited.
+     * @return True if the item is being edited.
      */
     bool InEditMode() const { return ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0; }
 
@@ -420,34 +418,25 @@ public:
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
-protected:
+private:
 
     /**
-     * Provide the draw object specific comparison.
+     * Function compare
+     * provides the draw object specific comparison called by the == and < operators.
      *
-     * This is called by the == and < operators.
-     *
-     * The sort order is as follows:
+     * The base object sort order which always proceeds the derived object sort order
+     * is as follows:
      *      - Component alternate part (DeMorgan) number.
      *      - Component part number.
      *      - KICAD_T enum value.
      *      - Result of derived classes comparison.
+     *
+     * @param aOther A reference to the other #LIB_ITEM to compare the arc against.
+     * @return An integer value less than 0 if the object is less than \a aOther ojbect,
+     *         zero if the object is equal to \a aOther object, or greater than 0 if the
+     *         object is greater than \a aOther object.
      */
-    virtual int DoCompare( const LIB_ITEM& aOther ) const = 0;
-    virtual void DoOffset( const wxPoint& aOffset ) = 0;
-    virtual bool DoTestInside( EDA_RECT& aRect ) const = 0;
-    virtual void DoMove( const wxPoint& aPosition ) = 0;
-    virtual wxPoint DoGetPosition() const = 0;
-    virtual void DoMirrorHorizontal( const wxPoint& aCenter ) = 0;
-    virtual void DoMirrorVertical( const wxPoint& aCenter ) = 0;
-    virtual void DoRotate( const wxPoint& aCenter, bool aRotateCCW = true ) = 0;
-    virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-                         const TRANSFORM& aTransform ) = 0;
-    virtual int DoGetWidth() const = 0;
-    virtual void DoSetWidth( int aWidth ) = 0;
-
-    /** Flag to indicate if draw item is fillable.  Default is false. */
-    bool m_isFillable;
+    virtual int compare( const LIB_ITEM& aOther ) const = 0;
 };
 
 

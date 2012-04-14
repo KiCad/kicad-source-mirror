@@ -122,7 +122,7 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
 }
 
 
-EDA_ITEM* SCH_TEXT::doClone() const
+EDA_ITEM* SCH_TEXT::Clone() const
 {
     return new SCH_TEXT( *this );
 }
@@ -182,7 +182,7 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
 }
 
 
-void SCH_TEXT::Mirror_Y( int aYaxis_position )
+void SCH_TEXT::MirrorY( int aYaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
     // which is the closest position for a true mirrored text
@@ -223,7 +223,7 @@ void SCH_TEXT::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_TEXT::Mirror_X( int aXaxis_position )
+void SCH_TEXT::MirrorX( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
     // which is the closest position for a true mirrored text
@@ -264,11 +264,11 @@ void SCH_TEXT::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_TEXT::Rotate( wxPoint rotationPoint )
+void SCH_TEXT::Rotate( wxPoint aPosition )
 {
     int dy;
 
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     SetOrientation( (GetOrientation() + 1) % 4 );
 
     switch( GetOrientation() )
@@ -372,13 +372,13 @@ int SCH_TEXT::GetPenSize() const
 void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
                      int DrawMode, int Color )
 {
-    EDA_Colors color;
-    int        linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
+    EDA_COLOR_T color;
+    int         linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     if( Color >= 0 )
-        color = (EDA_Colors) Color;
+        color = (EDA_COLOR_T) Color;
     else
         color = ReturnLayerColor( m_Layer );
 
@@ -386,7 +386,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     if( m_isDangling )
@@ -671,25 +671,25 @@ void SCH_TEXT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 }
 
 
-bool SCH_TEXT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPoint, aAccuracy );
+    return TextHitTest( aPosition, aAccuracy );
 }
 
 
-bool SCH_TEXT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     return TextHitTest( aRect, aContained, aAccuracy );
 }
 
 
-void SCH_TEXT::doPlot( PLOTTER* aPlotter )
+void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector <wxPoint> Poly;
 
-    EDA_Colors color = ReturnLayerColor( GetLayer() );
-    wxPoint    textpos   = m_Pos + GetSchematicTextOffset();
-    int        thickness = GetPenSize();
+    EDA_COLOR_T color = ReturnLayerColor( GetLayer() );
+    wxPoint     textpos   = m_Pos + GetSchematicTextOffset();
+    int         thickness = GetPenSize();
 
     aPlotter->set_current_line_width( thickness );
 
@@ -758,7 +758,7 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-EDA_ITEM* SCH_LABEL::doClone() const
+EDA_ITEM* SCH_LABEL::Clone() const
 {
     return new SCH_LABEL( *this );
 }
@@ -776,7 +776,7 @@ void SCH_LABEL::SetOrientation( int aOrientation )
 }
 
 
-void SCH_LABEL::Mirror_X( int aXaxis_position )
+void SCH_LABEL::MirrorX( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
     // which is the closest position for a true mirrored text
@@ -791,9 +791,9 @@ void SCH_LABEL::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_LABEL::Rotate( wxPoint rotationPoint )
+void SCH_LABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     SetOrientation( (GetOrientation() + 1) % 4 );
 }
 
@@ -944,9 +944,9 @@ wxString SCH_LABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_LABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_LABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPoint, aAccuracy );
+    return TextHitTest( aPosition, aAccuracy );
 }
 
 
@@ -960,7 +960,7 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-EDA_ITEM* SCH_GLOBALLABEL::doClone() const
+EDA_ITEM* SCH_GLOBALLABEL::Clone() const
 {
     return new SCH_GLOBALLABEL( *this );
 }
@@ -1055,7 +1055,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
+void SCH_GLOBALLABEL::MirrorY( int aYaxis_position )
 {
     /* The global label is NOT really mirrored.
      *  for an horizontal label, the schematic orientation is changed.
@@ -1079,7 +1079,7 @@ void SCH_GLOBALLABEL::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_GLOBALLABEL::Mirror_X( int aXaxis_position )
+void SCH_GLOBALLABEL::MirrorX( int aXaxis_position )
 {
     switch( GetOrientation() )
     {
@@ -1098,9 +1098,9 @@ void SCH_GLOBALLABEL::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
+void SCH_GLOBALLABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     SetOrientation( (GetOrientation() + 3) % 4 );
 }
 
@@ -1195,11 +1195,11 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
                             int             Color )
 {
     static std::vector <wxPoint> Poly;
-    EDA_Colors color;
-    wxPoint    text_offset = aOffset + GetSchematicTextOffset();
+    EDA_COLOR_T color;
+    wxPoint     text_offset = aOffset + GetSchematicTextOffset();
 
     if( Color >= 0 )
-        color = (EDA_Colors) Color;
+        color = (EDA_COLOR_T) Color;
     else
         color = ReturnLayerColor( m_Layer );
 
@@ -1208,7 +1208,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     int linewidth = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + aOffset );
@@ -1373,9 +1373,9 @@ wxString SCH_GLOBALLABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_GLOBALLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPoint, aAccuracy );
+    return TextHitTest( aPosition, aAccuracy );
 }
 
 
@@ -1389,7 +1389,7 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
 }
 
 
-EDA_ITEM* SCH_HIERLABEL::doClone() const
+EDA_ITEM* SCH_HIERLABEL::Clone() const
 {
     return new SCH_HIERLABEL( *this );
 }
@@ -1525,13 +1525,13 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
                           int             Color )
 {
     static std::vector <wxPoint> Poly;
-    EDA_Colors color;
-    int        linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
+    EDA_COLOR_T color;
+    int         linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     if( Color >= 0 )
-        color = (EDA_Colors) Color;
+        color = (EDA_COLOR_T) Color;
     else
         color = ReturnLayerColor( m_Layer );
 
@@ -1539,7 +1539,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
     wxPoint text_offset = offset + GetSchematicTextOffset();
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + offset );
@@ -1663,7 +1663,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 }
 
 
-void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
+void SCH_HIERLABEL::MirrorY( int aYaxis_position )
 {
     /* The hierarchical label is NOT really mirrored for an horizontal label, the schematic
      * orientation is changed.  For a vertical label, the schematic orientation is not changed
@@ -1687,7 +1687,7 @@ void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
 }
 
 
-void SCH_HIERLABEL::Mirror_X( int aXaxis_position )
+void SCH_HIERLABEL::MirrorX( int aXaxis_position )
 {
     switch( GetOrientation() )
     {
@@ -1706,9 +1706,9 @@ void SCH_HIERLABEL::Mirror_X( int aXaxis_position )
 }
 
 
-void SCH_HIERLABEL::Rotate( wxPoint rotationPoint )
+void SCH_HIERLABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, rotationPoint, 900 );
+    RotatePoint( &m_Pos, aPosition, 900 );
     SetOrientation( (GetOrientation() + 3) % 4 );
 }
 
@@ -1723,7 +1723,7 @@ wxString SCH_HIERLABEL::GetSelectMenuText() const
 }
 
 
-bool SCH_HIERLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_HIERLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TextHitTest( aPoint, aAccuracy );
+    return TextHitTest( aPosition, aAccuracy );
 }

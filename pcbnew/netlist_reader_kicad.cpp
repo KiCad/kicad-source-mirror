@@ -118,7 +118,7 @@ bool NETLIST_READER::ReadKicadNetList( FILE* aFile )
 {
     BOARD * brd = m_pcbframe ? m_pcbframe->GetBoard() : NULL;
 
-        // netlineReader dtor will close aFile
+    // netlineReader dtor will close aFile
     FILE_LINE_READER netlineReader( aFile, m_netlistFullName );
     NETLIST_READER_KICAD_PARSER netlist_parser( &netlineReader, this );
 
@@ -245,8 +245,9 @@ void NETLIST_READER_KICAD_PARSER::ParseNet( BOARD * aBrd )
     wxString name;
     wxString cmpref;
     wxString pin;
-    D_PAD * pad = NULL;
     int nodecount = 0;
+    std::vector<D_PAD*> padList;
+
     // The token net was read, so the next data is (code <number>)
     while( (token = NextTok()) != T_RIGHT )
     {
@@ -292,7 +293,7 @@ void NETLIST_READER_KICAD_PARSER::ParseNet( BOARD * aBrd )
                     break;
                 }
             }
-            pad = netlist_reader->SetPadNetName( cmpref, pin, name );
+            netlist_reader->SetPadsNetName( cmpref, pin, name, padList );
             nodecount++;
             break;
 
@@ -303,8 +304,11 @@ void NETLIST_READER_KICAD_PARSER::ParseNet( BOARD * aBrd )
     }
 
     // When there is only one item in net, clear pad netname
-    if( nodecount < 2 && pad )
-        pad->SetNetname( wxEmptyString );
+    // Remember one can have more than one pad in list, because a footprint
+    // can have many pads with the same pad name
+    if( nodecount < 2 )
+        for( unsigned ii = 0; ii < padList.size(); ii++ )
+            padList[ii]->SetNetname( wxEmptyString );
 }
 
 

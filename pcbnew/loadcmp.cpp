@@ -49,6 +49,7 @@
 #include <class_footprint_library.h>
 #include <dialog_get_component.h>
 #include <modview_frame.h>
+#include <wildcards_and_files_ext.h>
 
 
 static void DisplayCmpDoc( wxString& Name );
@@ -272,7 +273,7 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
         if( one_lib )
             fn = aLibraryFullFilename;
         else
-            fn = wxFileName( wxEmptyString, g_LibraryNames[ii], ModuleFileExtension );
+            fn = wxFileName( wxEmptyString, g_LibraryNames[ii], FootprintLibFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( fn );
 

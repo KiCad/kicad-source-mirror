@@ -45,6 +45,7 @@
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <module_editor_frame.h>
+#include <wildcards_and_files_ext.h>
 
 
 static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
@@ -254,13 +255,37 @@ BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
 
 void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 {
-    // set the BOARD_DESIGN_SETTINGS int parent editor, not our BOARD.
+    // set the BOARD_DESIGN_SETTINGS into parent editor, not our BOARD.
 
     PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
 
     wxASSERT( parentFrame );
 
     parentFrame->SetDesignSettings( aSettings );
+}
+
+
+const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
+{
+    // get the settings from the parent editor, not our BOARD.
+
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+
+    wxASSERT( parentFrame );
+
+    return parentFrame->GetPlotSettings();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
+{
+    // set the settings into parent editor, not our BOARD.
+
+    PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) GetParent();
+
+    wxASSERT( parentFrame );
+
+    parentFrame->SetPlotSettings( aSettings );
 }
 
 
@@ -492,7 +517,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
     }
     else
     {
-        wxFileName fileName = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+        wxFileName fileName = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
         fileName = wxGetApp().FindLibraryPath( fileName );
 
         if( !fileName.IsOk() || !fileName.FileExists() )

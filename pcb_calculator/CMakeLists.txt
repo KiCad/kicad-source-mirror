@@ -18,10 +18,12 @@ set(PCB_CALCULATOR_SRCS
     params_read_write.cpp
     pcb_calculator.cpp
     pcb_calculator_frame.cpp
+    datafile_read_write.cpp
     regulators_funct.cpp
     tracks_width_versus_current.cpp
     transline_ident.cpp
     UnitSelector.cpp
+    pcb_calculator_datafile_keywords.cpp
     transline/transline.cpp
     transline/c_microstrip.cpp
     transline/microstrip.cpp
@@ -33,6 +35,7 @@ set(PCB_CALCULATOR_SRCS
     transline_dlg_funct.cpp
     attenuators/attenuator_classes.cpp
     dialogs/pcb_calculator_frame_base.cpp
+    dialogs/dialog_regulator_data_base.cpp
     )
 
 if(WIN32)
@@ -54,6 +57,14 @@ if(APPLE)
     set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
+# auto-generate pcb_calculator_datafile.h and pcb_calculator_datafile_keywords.cpp
+# for the storage data file format.
+make_lexer(
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile.keywords
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
+   PCBCALC_DATA_T
+   )
 
 
 add_executable(pcb_calculator WIN32 MACOSX_BUNDLE

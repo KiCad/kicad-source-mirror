@@ -164,14 +164,6 @@ public:
     void SetOffset( const wxPoint& aOffset )    { m_Offset = aOffset; }
     const wxPoint& GetOffset() const            { return m_Offset; }
 
-    /**
-     * Function Flip
-     * flips this pad to the other outter most copper layer, back to front or
-     * vice versa, and does this vertically, so the x coordinate is not affected.
-     *
-     * @param aTranslationY is the contribution of my 'y' position provided by
-     *  my parent module.
-     */
     void Flip( int aTranslationY );
 
     /**
@@ -184,7 +176,7 @@ public:
 
     /**
      * Function GetOrientation
-     * returns the rotation angle of the pad in tenths of degress, but soon degrees.
+     * returns the rotation angle of the pad in tenths of degrees, but soon degrees.
      */
     double  GetOrientation() const { return m_Orient; }
 
@@ -239,7 +231,7 @@ public:
      * @param aItem is another BOARD_CONNECTED_ITEM or NULL
      * @return int - the clearance in internal units.
      */
-    virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
+    int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
 
    // Mask margins handling:
 
@@ -269,26 +261,19 @@ public:
     void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
     ZoneConnection GetZoneConnection() const;
 
+    void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
+    int GetThermalWidth() const;
+
+    void SetThermalGap( int aGap ) { m_ThermalGap = aGap; }
+    int GetThermalGap() const;
+
     /* Reading and writing data on files */
     int ReadDescr( LINE_READER* aReader );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
 
     /* drawing functions */
-    /**
-     * Draw a pad:
-     * @param aPanel = the EDA_DRAW_PANEL panel
-     * @param aDC = the current device context
-     * @param aDrawMode = mode: GR_OR, GR_XOR, GR_AND...
-     * @param aOffset = draw offset
-     */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
@@ -347,10 +332,11 @@ public:
         {
             m_boundingRadius = boundingRadius();
         }
+
         return m_boundingRadius;
     }
 
-    const wxPoint ReturnShapePos();
+    const wxPoint ReturnShapePos() const;
 
     /**
      * Function GetSubRatsnest
@@ -360,48 +346,17 @@ public:
     void SetSubRatsnest( int aSubRatsnest ) { m_SubRatsnest = aSubRatsnest; }
 
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    /**
-     * Function IsOnLayer
-     * tests to see if this object is on the given layer.  Is virtual so
-     * objects like D_PAD, which reside on multiple layers can do their own
-     * form of testing.
-     * @param aLayer The layer to test for.
-     * @return bool - true if on given layer, else false.
-     */
     bool IsOnLayer( int aLayer ) const;
 
-    /**
-     * Function HitTest
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& aPosition );
 
-    /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
-     */
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "PAD" );
     }
 
-    /**
-     * Function GetBoundingBox
-     * returns the bounding box of this pad
-     * Mainly used to redraw the screen area occupied by the pad
-     */
     EDA_RECT GetBoundingBox() const;
 
     /**
@@ -411,20 +366,15 @@ public:
      */
     static int Compare( const D_PAD* padref, const D_PAD* padcmp );
 
-    /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
-     */
-    virtual void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
 
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const { return pad_xpm; }
+    BITMAP_DEF GetMenuImage() const { return pad_xpm; }
 
     /**
      * Function ShowPadShape
@@ -446,14 +396,17 @@ public:
      */
     void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
+    EDA_ITEM* Clone() const;
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
 
 
 private:
-    virtual EDA_ITEM* doClone() const;
-
     /**
      * Function boundingRadius
      * returns a calculated radius of a bounding circle for this pad.
@@ -494,7 +447,7 @@ private:
     /**
      * m_Offset is useful only for oblong pads (it can be used for other
      * shapes, but without any interest).
-     * this is the offset between the pad hole and the pad shape (you must
+     * This is the offset between the pad hole and the pad shape (you must
      * understand here pad shape = copper area around the hole)
      * Most of cases, the hole is the center of the shape (m_Offset = 0).
      * But some board designers use oblong pads with a hole moved to one of the
@@ -534,6 +487,7 @@ private:
     double      m_LocalSolderPasteMarginRatio;  ///< Local solder mask margin ratio value of pad size
                                                 ///< The final margin is the sum of these 2 values
     ZoneConnection m_ZoneConnection;
+    int m_ThermalWidth, m_ThermalGap;
 };
 
 #endif  // PAD_H_

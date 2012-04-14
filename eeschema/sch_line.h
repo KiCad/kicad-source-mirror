@@ -56,7 +56,7 @@ public:
     SCH_LINE* Next() const { return (SCH_LINE*) Pnext; }
     SCH_LINE* Back() const { return (SCH_LINE*) Pback; }
 
-    virtual wxString GetClass() const
+    wxString GetClass() const
     {
         return wxT( "SCH_LINE" );
     }
@@ -76,13 +76,6 @@ public:
 
     void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
 
-    /**
-     * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display purposes.
-     * This box should be an enclosing perimeter for visible components of this
-     * object, and the units should be in the pcb or schematic coordinate system.
-     * It is OK to overestimate the size by a few counts.
-     */
     EDA_RECT GetBoundingBox() const;
 
     /**
@@ -91,50 +84,22 @@ public:
      */
     double GetLength() const;
 
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                       int aDrawMode, int aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+               int aDrawMode, int aColor = -1 );
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
     bool Save( FILE* aFile ) const;
 
-    /**
-     * Load schematic line from \a aLine in a .sch file.
-     *
-     * @param aLine - Essentially this is file to read schematic line from.
-     * @param aErrorMsg - Description of the error if an error occurs while loading the
-     *                    schematic line.
-     * @return True if the schematic line loaded successfully.
-     */
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    /**
-     * Function GetPenSize
-     * @return the size of the "pen" that be used to draw or plot this item
-     */
-    virtual int GetPenSize() const;
+    int GetPenSize() const;
 
-    /**
-     * Function Move
-     * moves the item by \a aMoveVector.
-     * @param aMoveVector The displacement vector
-     */
-    virtual void Move( const wxPoint& aMoveVector );
+    void Move( const wxPoint& aMoveVector );
 
-    virtual void Mirror_X( int aXaxis_position );
+    void MirrorX( int aXaxis_position );
 
-    /**
-     * Function Mirror_Y
-     * mirrors the item relative to \a aYaxis_position.
-     * @param aYaxis_position = the y axis position
-     */
-    virtual void Mirror_Y( int aYaxis_position );
+    void MirrorY( int aYaxis_position );
 
-    virtual void Rotate( wxPoint rotationPoint );
+    void Rotate( wxPoint aPosition );
 
     /**
      * Check line against \a aLine to see if it overlaps and merge if it does.
@@ -148,43 +113,44 @@ public:
      */
     bool MergeOverlap( SCH_LINE* aLine );
 
-    virtual void GetEndPoints( vector <DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( vector <DANGLING_END_ITEM>& aItemList );
 
-    virtual bool IsDanglingStateChanged( vector< DANGLING_END_ITEM >& aItemList );
+    bool IsDanglingStateChanged( vector< DANGLING_END_ITEM >& aItemList );
 
-    virtual bool IsDangling() const { return m_startIsDangling || m_endIsDangling; }
+    bool IsDangling() const { return m_startIsDangling || m_endIsDangling; }
 
-    virtual bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect );
 
-    /**
-     * Function IsConnectable
-     * returns true if the schematic item can connect to another schematic item.
-     */
-    virtual bool IsConnectable() const;
+    bool IsConnectable() const;
 
-    virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
-    virtual wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const;
 
-    virtual BITMAP_DEF GetMenuImage() const;
+    BITMAP_DEF GetMenuImage() const;
 
-    virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
-                                 SCH_SHEET_PATH*          aSheetPath );
+    void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems, SCH_SHEET_PATH* aSheetPath );
 
-    virtual bool operator <( const SCH_ITEM& aItem ) const;
+    bool operator <( const SCH_ITEM& aItem ) const;
+
+    wxPoint GetPosition() const { return m_start; }
+
+    void SetPosition( const wxPoint& aPosition );
+
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+
+    void Plot( PLOTTER* aPlotter );
+
+    EDA_ITEM* Clone() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const; // override
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
-    virtual bool doIsConnected( const wxPoint& aPosition ) const;
-    virtual EDA_ITEM* doClone() const;
-    virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_start; }
-    virtual void doSetPosition( const wxPoint& aPosition );
+    bool doIsConnected( const wxPoint& aPosition ) const;
 };
 
 

@@ -14,6 +14,7 @@
 #include <drawtxt.h>
 #include <confirm.h>
 #include <wxBasePcbFrame.h>
+#include <base_units.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -118,24 +119,19 @@ void DialogEditModuleText::initDlg( )
     m_Style->SetSelection( m_currentText->m_Italic ? 1 : 0 );
 
     AddUnitSymbol( *m_SizeXTitle );
-    PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->m_Size.x,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->m_Size.x );
 
     AddUnitSymbol( *m_SizeYTitle );
-    PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->m_Size.y,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->m_Size.y );
 
     AddUnitSymbol( *m_PosXTitle );
-    PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x );
 
     AddUnitSymbol( *m_PosYTitle );
-    PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->GetPos0().y,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->GetPos0().y );
 
     AddUnitSymbol( *m_WidthTitle );
-    PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->m_Thickness,
-        m_parent->GetInternalUnits() );
+    PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->m_Thickness );
 
     int text_orient = m_currentText->m_Orient;
     NORMALIZE_ANGLE_90(text_orient)

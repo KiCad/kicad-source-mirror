@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
+#include <menus_helpers.h>
 
 #include <general.h>
 #include <hotkeys.h>
@@ -109,7 +110,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         else
         {
             AddMenuItem( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "End Tool" ),
-                         KiBitmap( cancel_tool_xpm ) );
+                         KiBitmap( cursor_xpm ) );
         }
 
         PopMenu->AppendSeparator();
@@ -127,10 +128,11 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     if( item == NULL )
     {
         if( m_CurrentSheet->Last() != g_RootSheet )
+        {
             AddMenuItem( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, _( "Leave Sheet" ),
                          KiBitmap( leave_sheet_xpm ) );
-
-        PopMenu->AppendSeparator();
+            PopMenu->AppendSeparator();
+        }
         return true;
     }
 
@@ -673,14 +675,14 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
 
     PopMenu->AppendSeparator();
 
-    if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
+    if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
         AddMenuItem( PopMenu, ID_POPUP_ZOOM_BLOCK, _( "Window Zoom" ), KiBitmap( zoom_area_xpm ) );
 
     AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( apply_xpm ) );
 
     // After a block move (that is also a block selection) one can reselect
     // a block function.
-    if( frame->GetScreen()->m_BlockLocate.m_Command == BLOCK_MOVE )
+    if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
     {
         msg = AddHotkeyName( _( "Save Block" ), s_Schematic_Hokeys_Descr,
                              HK_SAVE_BLOCK );

@@ -33,6 +33,7 @@
 #include <wxstruct.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
+#include <class_pcb_screen.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <colors_selection.h>
@@ -45,6 +46,7 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 
+#include <stdio.h>
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent, STROKE_T aShape ) :
     DRAWSEGMENT( parent, PCB_MODULE_EDGE_T )
@@ -97,11 +99,13 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     int             ux0, uy0, dx, dy, radius, StAngle, EndAngle;
     int             color, type_trace;
     int             typeaff;
+    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     PCB_BASE_FRAME* frame;
     MODULE* module = (MODULE*) m_Parent;
 
     if( module == NULL )
         return;
+
 
     BOARD * brd = GetBoard( );
 
@@ -109,6 +113,16 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         return;
 
     color = brd->GetLayerColor( m_Layer );
+
+    if(( draw_mode & GR_ALLOW_HIGHCONTRAST ) && DisplayOpt.ContrastModeDisplay )
+    {
+        if( !IsOnLayer( curr_layer ) )
+        {
+            color &= ~MASKCOLOR;
+            color |= DARKDARKGRAY;
+        }
+    }
+
 
     frame = (PCB_BASE_FRAME*) panel->GetParent();
 
@@ -259,9 +273,19 @@ wxString EDGE_MODULE::GetSelectMenuText() const
 }
 
 
-EDA_ITEM* EDGE_MODULE::doClone() const
+EDA_ITEM* EDGE_MODULE::Clone() const
 {
     return new EDGE_MODULE( *this );
+}
+
+
+void EDGE_MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+    throw( IO_ERROR )
+{
+    aFormatter->Print( aNestLevel, "(edge (start (xy %s)) (end (xy %s))\n",
+                       FMT_IU( m_Start0 ).c_str(), FMT_IU( m_End0 ).c_str() );
+    DRAWSEGMENT::Format( aFormatter, aNestLevel+1, aControlBits );
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 

@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file wxwineda.cpp
  */
@@ -5,6 +29,7 @@
 #include <fctsys.h>
 #include <wxstruct.h>
 #include <dialog_helpers.h>
+#include <base_units.h>
 
 
 /*******************************************************/
@@ -72,7 +97,7 @@ wxString EDA_GRAPHIC_TEXT_CTRL::FormatSize( int internalUnit, EDA_UNITS_T aUnit,
         textSize = 3000;
 
     value.Printf( ( internalUnit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
-                  To_User_Unit( aUnit, textSize, internalUnit ) );
+                  To_User_Unit( aUnit, textSize ) );
 
     return value;
 }
@@ -220,11 +245,11 @@ void EDA_POSITION_CTRL::SetValue( int x_value, int y_value )
     m_Pos_To_Edit.x = x_value;
     m_Pos_To_Edit.y = y_value;
 
-    msg = ReturnStringFromValue( m_UserUnit, m_Pos_To_Edit.x, m_Internal_Unit );
+    msg = ReturnStringFromValue( m_UserUnit, m_Pos_To_Edit.x );
     m_FramePosX->Clear();
     m_FramePosX->SetValue( msg );
 
-    msg = ReturnStringFromValue( m_UserUnit, m_Pos_To_Edit.y, m_Internal_Unit );
+    msg = ReturnStringFromValue( m_UserUnit, m_Pos_To_Edit.y );
     m_FramePosY->Clear();
     m_FramePosY->SetValue( msg );
 }
@@ -274,8 +299,7 @@ EDA_VALUE_CTRL::EDA_VALUE_CTRL( wxWindow* parent, const wxString& title,
     BoxSizer->Add( m_Text, 0,
                    wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    wxString stringvalue = ReturnStringFromValue( m_UserUnit, m_Value,
-                                                  m_Internal_Unit );
+    wxString stringvalue = ReturnStringFromValue( m_UserUnit, m_Value );
     m_ValueCtrl = new   wxTextCtrl( parent, -1, stringvalue );
 
     BoxSizer->Add( m_ValueCtrl,
@@ -308,7 +332,7 @@ void EDA_VALUE_CTRL::SetValue( int new_value )
 
     m_Value = new_value;
 
-    buffer = ReturnStringFromValue( m_UserUnit, m_Value, m_Internal_Unit );
+    buffer = ReturnStringFromValue( m_UserUnit, m_Value );
     m_ValueCtrl->SetValue( buffer );
 }
 

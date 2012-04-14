@@ -15,6 +15,7 @@
 #include <wxBasePcbFrame.h>
 #include <class_pcb_screen.h>
 #include <macros.h>
+#include <base_units.h>
 
 #include <pcbnew.h>
 #include <pcbplot.h>
@@ -36,8 +37,6 @@
 // reasonnable values for default pen width (in 1/10000 inch)
 #define WIDTH_MAX_VALUE 500
 #define WIDTH_MIN_VALUE 1
-
-extern int g_DrawDefaultLineThickness;
 
 // Local variables:
 static PRINT_PARAMETERS  s_Parameters;
@@ -72,8 +71,7 @@ void DIALOG_SVG_PRINT::initDialog( )
     s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize,
-                               m_Parent->GetInternalUnits() ) );
+        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
 
     m_Print_Frame_Ref_Ctrl->SetValue( s_Parameters.m_Print_Sheet_Ref );
 
@@ -152,8 +150,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
 
     g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize,
-                               m_Parent->GetInternalUnits() ) );
+        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
 }
 
 
@@ -250,7 +247,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     // paper pageSize is in internal units, either nanometers or deci-mils
     wxSize  pageSize = m_Parent->GetPageSizeIU();
 
-    wxSVGFileDC       dc( FullFileName, pageSize.x, pageSize.y, dpi );
+    KicadSVGFileDC       dc( FullFileName, pageSize.x, pageSize.y, dpi );
 
     EDA_RECT          tmp = *panel->GetClipBox();
     GRResetPenAndBrush( &dc );

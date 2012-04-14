@@ -24,6 +24,7 @@
 
 
 #include <io_mgr.h>
+#include <legacy_plugin.h>
 #include <kicad_plugin.h>
 
 
@@ -39,7 +40,7 @@
 // plugins coexisting.
 
 
-// static KICAD_PLUGIN kicad_plugin;       // a secret
+// static LEGACY_PLUGIN kicad_plugin;       // a secret
 //static EAGLE_PLUGIN eagle_plugin;
 
 PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
@@ -49,9 +50,11 @@ PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 
     switch( aFileType )
     {
+    case LEGACY:
+        return new LEGACY_PLUGIN();
+
     case KICAD:
         return new KICAD_PLUGIN();
-
 
 /*
     case EAGLE:
@@ -80,14 +83,32 @@ const wxString IO_MGR::ShowType( PCB_FILE_T aFileType )
     default:
         return wxString::Format( _( "Unknown PCB_FILE_T value: %d" ), aFileType );
 
+    case LEGACY:
+        return wxString( wxT( "KiCad Legacy" ) );
+
     case KICAD:
         return wxString( wxT( "KiCad" ) );
     }
 }
 
 
+const wxString IO_MGR::GetFileExtension( PCB_FILE_T aFileType )
+{
+    wxString ext = wxEmptyString;
+    PLUGIN* plugin = PluginFind( aFileType );
+
+    if( plugin != NULL )
+    {
+        ext = plugin->GetFileExtension();
+        PluginRelease( plugin );
+    }
+
+    return ext;
+}
+
+
 BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
-                    BOARD* aAppendToMe, PROPERTIES* aProperties )
+                     BOARD* aAppendToMe, PROPERTIES* aProperties )
 {
     // release the PLUGIN even if an exception is thrown.
     PLUGIN::RELEASER pi = PluginFind( aFileType );

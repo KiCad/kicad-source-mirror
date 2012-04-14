@@ -129,18 +129,18 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         m_canvas->EndMouseCapture();
 
-        if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
+        if( GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE )
         {
             /* Should not be executed, except bug */
-            GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-            GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
+            GetScreen()->m_BlockLocate.SetState( STATE_NO_BLOCK );
             GetScreen()->m_BlockLocate.ClearItemsList();
         }
 
         if( GetToolId() == ID_NO_TOOL_SELECTED )
             SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         else
-            m_canvas->SetCursor( m_canvas->GetCurrentCursor() );
+            m_canvas->SetCursor( (wxStockCursor) m_canvas->GetCurrentCursor() );
         break;
 
     default:
@@ -182,19 +182,19 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
         m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DELETE );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;

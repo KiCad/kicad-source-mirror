@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Mar 19 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
@@ -25,6 +25,7 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	m_ScaleOption->SetSelection( 3 );
 	bmiddleLeftSizer->Add( m_ScaleOption, 0, wxALL, 5 );
 	
+	
 	bMainSizer->Add( bmiddleLeftSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bmiddleRightSizer;
@@ -37,6 +38,7 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
 	
 	bmiddleRightSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bmiddleRightSizer, 1, 0, 5 );
 	
@@ -55,10 +57,15 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( bbuttonsSizer, 0, 0, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
+	
+	this->Centre( wxBOTH );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnCloseWindow ) );

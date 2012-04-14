@@ -299,15 +299,19 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
     m_canvas->CrossHairOff( &dc );
 
     if( component->GetFlags() )
-        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
     else
+    {
+        component->SetFlags( IS_MOVED );    // do not redraw the component
         m_canvas->RefreshDrawingRect( component->GetBoundingBox() );
+        component->ClearFlags( IS_MOVED );
+    }
 
     component->SetOrientation( aOrientation );
 
     /* Redraw the component in the new position. */
     if( component->GetFlags() )
-        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
     else
         component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 

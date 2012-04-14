@@ -32,6 +32,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <module_editor_frame.h>
+#include <menus_helpers.h>
 
 #include <protos.h>
 #include <pcbnew_id.h>
@@ -141,7 +142,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Delete items
     AddMenuItem( editMenu, ID_MODEDIT_DELETE_TOOL,
                  _( "&Delete" ), _( "Delete objects with the eraser" ),
-                 KiBitmap( delete_body_xpm ) );
+                 KiBitmap( delete_xpm ) );
 
     // Separator
     editMenu->AppendSeparator();

@@ -41,6 +41,7 @@
 #include <gr_basic.h>
 #include <pcbcommon.h>
 #include <macros.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -197,7 +198,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     Mself.lng = min_len;
 
     // Enter the desired length.
-    msg = ReturnStringFromValue( g_UserUnit, Mself.lng, GetScreen()->GetInternalUnits() );
+    msg = ReturnStringFromValue( g_UserUnit, Mself.lng );
     wxTextEntryDialog dlg( this, _( "Length:" ), _( "Length" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -610,8 +611,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         break;
     }
 
-    wxString          value = ReturnStringFromValue( g_UserUnit, gap_size,
-                                                     GetScreen()->GetInternalUnits() );
+    wxString          value = ReturnStringFromValue( g_UserUnit, gap_size );
     wxTextEntryDialog dlg( this, msg, _( "Create microwave module" ), value );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -1087,7 +1087,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
     gap_size = next_pad->GetPos0().x - pad->GetPos0().x - pad->GetSize().x;
 
     // Entrer the desired length of the gap.
-    msg = ReturnStringFromValue( g_UserUnit, gap_size, GetScreen()->GetInternalUnits() );
+    msg = ReturnStringFromValue( g_UserUnit, gap_size );
     wxTextEntryDialog dlg( this, _( "Gap:" ), _( "Create Microwave Gap" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
