@@ -150,12 +150,12 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	sbSizer2PAN = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
 	
 	m_MiddleButtonPANOpt = new wxCheckBox( this, wxID_MIDDLEBUTTONPAN, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MiddleButtonPANOpt->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
+	m_MiddleButtonPANOpt->SetToolTip( _("Use middle mouse button dragging to pan") );
 	
 	sbSizer2PAN->Add( m_MiddleButtonPANOpt, 0, wxALL, 5 );
 	
 	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_MIDDLEBUTTONPAN, _("Middle Button PAN Limited"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptMiddleButtonPanLimited->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
+	m_OptMiddleButtonPanLimited->SetToolTip( _("Middle mouse button panning limited by current scrollbar size") );
 	
 	sbSizer2PAN->Add( m_OptMiddleButtonPanLimited, 0, wxALL, 5 );
 	

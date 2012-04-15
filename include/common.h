@@ -220,9 +220,13 @@ public:
 
     /**
      * Function GetWxOrientation.
-     * @return int - ws' style printing orientation.
+     * @return ws' style printing orientation (wxPORTRAIT or wxLANDSCAPE).
      */
+#if wxCHECK_VERSION( 2, 9, 0  )
+    wxPrintOrientation  GetWxOrientation() const { return IsPortrait() ? wxPORTRAIT : wxLANDSCAPE; }
+#else
     int  GetWxOrientation() const { return IsPortrait() ? wxPORTRAIT : wxLANDSCAPE; }
+#endif
 
     /**
      * Function GetPaperId
