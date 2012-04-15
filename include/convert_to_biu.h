@@ -14,6 +14,7 @@
  * depending on compil option
  */
 
+#if defined(PCBNEW) || defined(CVPCB)
 /// Convert mils to PCBNEW internal units (iu).
 inline int Mils2iu( int mils )
 {
@@ -35,5 +36,12 @@ inline int DMils2iu( int dmils )
     return dmils;
 #endif
 }
+
+#elif defined(EESCHEMA)
+inline int Mils2iu( int mils )
+{
+    return mils;
+}
+#endif
 
 #endif  // #define CONVERT_TO_BIU_H

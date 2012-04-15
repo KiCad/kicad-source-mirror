@@ -91,7 +91,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit, pin->GetNumberTextSize() ) );
 
     dlg.SetPadNameTextSizeUnits( units );
-    dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength(), m_internalUnits ) );
+    dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength() ) );
     dlg.SetLengthUnits( units );
     dlg.SetAddToAllParts( pin->GetUnit() == 0 );
     dlg.SetAddToAllBodyStyles( pin->GetConvert() == 0 );

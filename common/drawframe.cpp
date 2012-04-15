@@ -575,7 +575,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                 else
                     virtualSize.x = logicalClientRect.width;
             }
-            else if( logicalClientRect.width < drawingRect.width )
+            else
             {
                 if( drawingCenterX > clientCenterX )
                     virtualSize.x = drawingRect.width +
@@ -585,10 +585,6 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                                     ( (logicalClientRect.GetRight() - drawingRect.GetRight() ) * 2 );
                 else
                     virtualSize.x = drawingRect.width;
-            }
-            else
-            {
-                virtualSize.x = drawingRect.width;
             }
         }
 
@@ -610,7 +606,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                 else
                     virtualSize.y = logicalClientRect.height;
             }
-            else if( logicalClientRect.height < drawingRect.height )
+            else
             {
                 if( drawingCenterY > clientCenterY )
                     virtualSize.y = drawingRect.height +
@@ -620,10 +616,6 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                                     ( ( logicalClientRect.GetBottom() - drawingRect.GetBottom() ) * 2 );
                 else
                     virtualSize.y = drawingRect.height;
-            }
-            else
-            {
-                virtualSize.y = drawingRect.height;
             }
         }
     }

@@ -145,9 +145,13 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	bSizer2->Add( m_checkShowHiddenPins, 0, wxALL|wxEXPAND, 3 );
 	
 	m_checkEnableMiddleButtonPan = new wxCheckBox( m_panel1, xwID_ANY, _("Enable middle mouse button panning"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkEnableMiddleButtonPan->SetToolTip( _("Use middle mouse button dragging to pan") );
+	
 	bSizer2->Add( m_checkEnableMiddleButtonPan, 0, wxALL, 3 );
 	
-	m_checkMiddleButtonPanLimited = new wxCheckBox( m_panel1, wxID_ANY, _("Middle mouse button panning limited by current toolbar panning"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkMiddleButtonPanLimited = new wxCheckBox( m_panel1, wxID_ANY, _("Middle mouse button panning limited"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkMiddleButtonPanLimited->SetToolTip( _("Middle mouse button panning limited by current scrollbar size") );
+	
 	bSizer2->Add( m_checkMiddleButtonPanLimited, 0, wxALL, 3 );
 	
 	m_checkAutoPan = new wxCheckBox( m_panel1, wxID_ANY, _("Enable automatic &panning"), wxDefaultPosition, wxDefaultSize, 0 );
