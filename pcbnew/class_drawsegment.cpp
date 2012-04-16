@@ -386,55 +386,55 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 
     switch( m_Shape )
     {
-    case S_SEGMENT:
-        bbox.SetEnd( m_End );
-        bbox.Inflate( (m_Width / 2) + 1 );
-        break;
+        case S_SEGMENT:
+            bbox.SetEnd( m_End );
+            break;
 
-    case S_CIRCLE:
-        bbox.Inflate( GetRadius() + 1 );
-        break;
+        case S_CIRCLE:
+            bbox.Inflate( GetRadius() );
+            break;
 
-    case S_ARC:
-    {
-        bbox.Merge( m_End );
-        wxPoint end = m_End;
-        RotatePoint( &end, m_Start, -m_Angle );
-        bbox.Merge( end );
-    }
-    break;
-
-    case S_POLYGON:
-    {
-        wxPoint p_end;
-        MODULE* module = GetParentModule();
-
-        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+        case S_ARC:
         {
-            wxPoint pt = m_PolyPoints[ii];
+            bbox.Merge( m_End );
+            wxPoint end = m_End;
+            RotatePoint( &end, m_Start, -m_Angle );
+            bbox.Merge( end );
+        }
+        break;
 
-            if( module ) // Transform, if we belong to a module
+        case S_POLYGON:
+        {
+            wxPoint p_end;
+            MODULE* module = GetParentModule();
+
+            for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
             {
-                RotatePoint( &pt, module->GetOrientation() );
-                pt += module->m_Pos;
+                wxPoint pt = m_PolyPoints[ii];
+
+                if( module ) // Transform, if we belong to a module
+                {
+                    RotatePoint( &pt, module->GetOrientation() );
+                    pt += module->m_Pos;
+                }
+
+                if( ii == 0 )
+                    p_end = pt;
+
+                bbox.SetX( MIN( bbox.GetX(), pt.x ) );
+                bbox.SetY( MIN( bbox.GetY(), pt.y ) );
+                p_end.x   = MAX( p_end.x, pt.x );
+                p_end.y   = MAX( p_end.y, pt.y );
             }
 
-            if( ii == 0 )
-                p_end = pt;
-
-            bbox.SetX( MIN( bbox.GetX(), pt.x ) );
-            bbox.SetY( MIN( bbox.GetY(), pt.y ) );
-            p_end.x   = MAX( p_end.x, pt.x );
-            p_end.y   = MAX( p_end.y, pt.y );
+            bbox.SetEnd( p_end );
+            break;
         }
-
-        bbox.SetEnd( p_end );
-        bbox.Inflate( 1 );
-        break;
-    }
     }
 
-    bbox.Inflate( (m_Width+1) / 2 );
+    bbox.Inflate( ((m_Width+1) / 2) + 1 );
+    bbox.Normalize();
+
     return bbox;
 }
 
