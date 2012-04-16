@@ -344,11 +344,11 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
     // calculate the left common area coordinate:
     int  left   = MAX( me.m_Pos.x, rect.m_Pos.x );
     // calculate the right common area coordinate:
-    int  right  = MIN( me.m_Pos.x + m_Size.x, rect.m_Pos.x + rect.m_Size.x );
+    int  right  = MIN( me.m_Pos.x + me.m_Size.x, rect.m_Pos.x + rect.m_Size.x );
     // calculate the upper common area coordinate:
     int  top    = MAX( me.m_Pos.y, aRect.m_Pos.y );
     // calculate the lower common area coordinate:
-    int  bottom = MIN( me.m_Pos.y + m_Size.y, rect.m_Pos.y + rect.m_Size.y );
+    int  bottom = MIN( me.m_Pos.y + me.m_Size.y, rect.m_Pos.y + rect.m_Size.y );
 
     // if a common area exists, it must have a positive (null accepted) size
     if( left <= right && top <= bottom )

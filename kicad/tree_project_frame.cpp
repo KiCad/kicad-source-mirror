@@ -8,6 +8,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <appl_wxstruct.h>
+#include <macros.h>
 
 #include <kicad.h>
 #include <tree_project_frame.h>
@@ -20,6 +21,8 @@
 #include <wx/imaglist.h>
 #include <menus_helpers.h>
 
+// TODO: use the wxString defined in wildcards_and_files_ext.h, when exists
+const wxString PcbSexpFileExtension( wxT("kicad_brd") );
 
 /* Note about the tree project build process:
  * Building the tree project can be *very* long if there are a lot of subdirectories
@@ -39,7 +42,8 @@ const wxChar* s_AllowedExtensionsToList[] =
 {
     wxT( "^.*\\.pro$" ),
     wxT( "^.*\\.pdf$" ),
-    wxT( "^[^$].*\\.brd$" ),        // Pcbnew files
+    wxT( "^[^$].*\\.brd$" ),        // Legacy Pcbnew files
+    wxT( "^[^$].*\\.kicad_brd$" ),  // S format Pcbnew files
     wxT( "^.*\\.net$" ),
     wxT( "^.*\\.txt$" ),
     wxT( "^.*\\.pho$" ),            // Gerber file (Kicad extension)
@@ -89,7 +93,7 @@ BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
     EVT_TREE_BEGIN_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragStart )
     EVT_TREE_END_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragEnd )
     EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnTxtEdit )
-    EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnNewDirectory )
+    EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnCreateNewDirectory )
     EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
     EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
 END_EVENT_TABLE()
@@ -155,12 +159,11 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
         menu = m_ContextMenus[i];
 
         // ID_PROJECT_RENAME
-        item = new wxMenuItem( menu,
-                               ID_PROJECT_RENAME,
+        item = new wxMenuItem( menu, ID_PROJECT_RENAME,
                                TREE_DIRECTORY != i ? _( "&Rename file" ) :
                                _( "&Rename directory" ),
                                TREE_DIRECTORY != i ? _( "Rename file" ) :
-                               _( "&Rename directory" ) );
+                               _( "Rename directory" ) );
         item->SetBitmap( KiBitmap( right_xpm ) );
         menu->Append( item );
 
@@ -182,7 +185,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
                                TREE_DIRECTORY != i ? _( "&Delete File" ) :
                                _( "&Delete Directory" ),
                                TREE_DIRECTORY != i ? _( "Delete the File" ) :
-                               _( "&Delete the Directory and its content" ) );
+                               _( "Delete the Directory and its content" ) );
         item->SetBitmap( KiBitmap( delete_xpm ) );
         menu->Append( item );
     }
@@ -321,48 +324,15 @@ wxMenu* TREE_PROJECT_FRAME::GetContextMenu( int type )
 
 
 /**
- * @brief TODO
+ * Called by the popup menu in the tree frame
+    * Creates a new subdirectory inside the current kicad project directory
+ * the user is prompted to enter a directory name
  */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::OnNewDirectory( wxCommandEvent& event )
-/*****************************************************************************/
+void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
 {
-    NewFile( TREE_DIRECTORY );
-}
-
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::NewFile( TreeFileType type )
-/*****************************************************************************/
-{
-    wxString         mask = GetFileExt( type );
-    wxString         wildcard = GetFileWildcard( type );
-
-    // Get the directory:
-    wxString         dir;
-    wxString         title;
-
-    TREEPROJECT_ITEM* treeData;
-
-    title = ( TREE_DIRECTORY != type ) ? _( "Create New File" ) :
-        _( "Create New Directory" );
-
-    treeData = GetSelectedData();
+    // Get the root directory name:
+    TREEPROJECT_ITEM* treeData = GetSelectedData();
     if( !treeData )
-        return;
-
-    dir = wxGetCwd() + wxFileName().GetPathSeparator() + treeData->GetDir();
-
-    // Ask for the new file name
-    wxString nameless_prj = NAMELESS_PROJECT;
-    nameless_prj += wxT(".") + mask;
-    wxFileDialog dlg( this, title, dir, nameless_prj,
-                      wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     TreeFileType rootType = treeData->GetType();
@@ -375,34 +345,31 @@ void TREE_PROJECT_FRAME::NewFile( TreeFileType type )
     else
     {
         root = m_TreeProject->GetItemParent( m_TreeProject->GetSelection() );
-
         if( !root.IsOk() )
             root = m_TreeProject->GetSelection();
     }
 
-    NewFile( dlg.GetPath(), type, root );
-}
+    // Ask for the new sub directory name
+    wxString curr_dir = treeData->GetDir();
 
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::NewFile( const wxString& name,
-                               TreeFileType    type,
-                               wxTreeItemId&   root )
-/*****************************************************************************/
-{
-    if( TREE_DIRECTORY != type )
+    // Make the current subdir relative to the current path:
+    if( !curr_dir.IsEmpty() )   // A subdir is selected
     {
-        wxFile( name, wxFile::write );
+        curr_dir += wxFileName::GetPathSeparator();
+        curr_dir += wxT("dummy");
+        wxFileName fn(curr_dir);
+        fn.MakeRelativeTo();
+        curr_dir = fn.GetPath() + wxFileName::GetPathSeparator();
     }
-    else
-    {
-        wxMkdir( name );
-    }
+    wxString msg;
+    msg.Printf( wxT("Current working directory:\n%s"), GetChars( wxGetCwd() ) );
+    wxString subdir = wxGetTextFromUser( msg, _( "Create New Directory" ), curr_dir );
 
-    AddFile( name, root );
+    if( subdir.IsEmpty() )
+        return;
+
+    if( wxMkdir( subdir ) )
+        AddFileToTree( subdir, root );
 }
 
 
@@ -425,8 +392,12 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
         ext = SchematicFileExtension;
         break;
 
-    case TREE_PCB:
+    case TREE_LEGACY_PCB:
         ext = PcbFileExtension;
+        break;
+
+    case TREE_SEXP_PCB:
+        ext = PcbSexpFileExtension;
         break;
 
     case TREE_GERBER:
@@ -485,7 +456,8 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
         ext = SchematicFileWildcard;
         break;
 
-    case TREE_PCB:
+    case TREE_LEGACY_PCB:
+    case TREE_SEXP_PCB:
         ext = PcbFileWildcard;
         break;
 
@@ -530,7 +502,7 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 
 
 /**
- * Function AddFile
+ * Function AddFileToTree
  * @brief  Add filename "name" to the tree \n
  *         if name is a directory, add the sub directory file names
  * @param aName = the filename or the dirctory name to add
@@ -539,7 +511,7 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
  *                   false to stop file add.
  * @return true if the file (or directory) is added.
  */
-bool TREE_PROJECT_FRAME::AddFile( const wxString& aName,
+bool TREE_PROJECT_FRAME::AddFileToTree( const wxString& aName,
                                    wxTreeItemId& aRoot, bool aRecurse )
 {
     wxTreeItemId cellule;
@@ -681,7 +653,7 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& aName,
         {
             do  // Add name in tree, but do not recurse
             {
-                AddFile( aName + sep + dir_filename, cellule, false );
+                AddFileToTree( aName + sep + dir_filename, cellule, false );
             } while( dir.GetNext( &dir_filename ) );
         }
 
@@ -743,7 +715,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
         while( cont )
         {
             if( filename != fn.GetFullName() )
-                AddFile( dir.GetName() + wxFileName::GetPathSeparator() +
+                AddFileToTree( dir.GetName() + wxFileName::GetPathSeparator() +
                          filename, m_root );
 
             cont = dir.GetNext( &filename );
@@ -980,7 +952,7 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
         {
             do  // Add name to tree item, but do not recurse in subdirs:
             {
-                AddFile( fileName + sep + dir_filename, kid, false );
+                AddFileToTree( fileName + sep + dir_filename, kid, false );
             } while( dir.GetNext( &dir_filename ) );
         }
         itemData->m_WasPopulated = true;       // set state to populated
