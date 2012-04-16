@@ -133,7 +133,7 @@ void DIALOG_EDIT_ONE_FIELD::TransfertDataToField()
 {
     m_textorient = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
     wxString msg = m_TextSize->GetValue();
-    m_textsize = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    m_textsize = ReturnValueFromString( g_UserUnit, msg );
 
     switch( m_TextHJustificationOpt->GetSelection() )
     {

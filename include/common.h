@@ -557,22 +557,7 @@ wxString ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
 wxString GetUnitsLabel( EDA_UNITS_T aUnits );
 wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit );
 
-/**
- * Function ReturnValueFromeString
- * @return The string from Value, according to units (inch, mm ...) for display,
- *  and the initial unit for value
- *  Unit = display units (INCH, MM ..)
- *  Value = text
- *  Internal_Unit = units per inch for computed value
- */
-int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Internal_Unit );
-
 void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
-
-/* Convert the number Value in a string according to the internal units
- *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
- **/
-int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
 
 /**
  * Round to the nearest precision.
@@ -592,11 +577,6 @@ double RoundTo0( double x, double precision );
  * @param aSplitter is the 'split' character
  */
 wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
-
-/**
- * Return in internal units the value "val" given in inch or mm
- */
-int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
 
 /**
  * Function GenDate

@@ -450,7 +450,7 @@ void DIALOG_PLOT::applyPlotSettings()
     // since the values may have been constrained by the setters.
     // HPLG pen size
     wxString msg = m_HPGLPenSizeOpt->GetValue();
-    int      tmp = ReturnValueFromString( g_UserUnit, msg, UNITS_MILS );
+    int      tmp = ReturnValueFromString( g_UserUnit, msg );
 
     if( !tempOptions.SetHpglPenDiameter( tmp ) )
     {
@@ -462,7 +462,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // HPGL pen speed
     msg = m_HPGLPenSpeedOpt->GetValue();
-    tmp = ReturnValueFromString( UNSCALED_UNITS, msg, 1 );
+    tmp = ReturnValueFromString( UNSCALED_UNITS, msg );
 
     if( !tempOptions.SetHpglPenSpeed( tmp ) )
     {
@@ -474,7 +474,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // HPGL pen overlay
     msg = m_HPGLPenOverlayOpt->GetValue();
-    tmp = ReturnValueFromString( g_UserUnit, msg, UNITS_MILS );
+    tmp = ReturnValueFromString( g_UserUnit, msg );
 
     if( !tempOptions.SetHpglPenOverlay( tmp ) )
     {
@@ -486,7 +486,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Default linewidth
     msg = m_linesWidth->GetValue();
-    tmp = ReturnValueFromString( g_UserUnit, msg, PCB_INTERNAL_UNIT );
+    tmp = ReturnValueFromString( g_UserUnit, msg );
 
     if( !tempOptions.SetPlotLineWidth( tmp ) )
     {
@@ -527,7 +527,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // PS Width correction
     msg = m_PSFineAdjustWidthOpt->GetValue();
-    tmpDouble = ReturnValueFromString( g_UserUnit, msg, PCB_INTERNAL_UNIT );
+    tmpDouble = ReturnValueFromString( g_UserUnit, msg );
 
     if( !setDouble( &m_PSWidthAdjust, tmpDouble, m_WidthAdjustMinValue, m_WidthAdjustMaxValue ) )
     {

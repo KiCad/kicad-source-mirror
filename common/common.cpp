@@ -253,76 +253,6 @@ void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit )
 }
 
 
-int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit )
-{
-    int      value;
-    wxString msg = TextCtr.GetValue();
-
-    value = ReturnValueFromString( g_UserUnit, msg, Internal_Unit );
-
-    return value;
-}
-
-
-int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Internal_Unit )
-{
-    int    Value;
-    double dtmp = 0;
-
-    // Acquire the 'right' decimal point separator
-    const struct lconv* lc = localeconv();
-    wxChar decimal_point = lc->decimal_point[0];
-    wxString            buf( TextValue.Strip( wxString::both ) );
-
-    // Convert the period in decimal point
-    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
-
-    // An ugly fix needed by WxWidgets 2.9.1 that sometimes
-    // back to a point as separator, although the separator is the comma
-    // TODO: remove this line if WxWidgets 2.9.2 fixes this issue
-    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
-
-    // Find the end of the numeric part
-    unsigned brk_point = 0;
-
-    while( brk_point < buf.Len() )
-    {
-        wxChar ch = buf[brk_point];
-
-        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
-        {
-            break;
-        }
-
-        ++brk_point;
-    }
-
-    // Extract the numeric part
-    buf.Left( brk_point ).ToDouble( &dtmp );
-
-    // Check the optional unit designator (2 ch significant)
-    wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
-
-    if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
-    {
-        aUnit = INCHES;
-    }
-    else if( unit == wxT( "mm" ) )
-    {
-        aUnit = MILLIMETRES;
-    }
-    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) // Mils or thous
-    {
-        aUnit = INCHES;
-        dtmp /= 1000;
-    }
-
-    Value = From_User_Unit( aUnit, dtmp, Internal_Unit );
-
-    return Value;
-}
-
-
 wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
 {
     wxArrayString* list = new wxArrayString();
@@ -346,33 +276,6 @@ wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
     }
 
     return list;
-}
-
-
-/*
- * Return in internal units the value "val" given in inch or mm
- */
-int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
-{
-    double value;
-
-    switch( aUnit )
-    {
-    case MILLIMETRES:
-        value = val * internal_unit_value / 25.4;
-        break;
-
-    case INCHES:
-        value = val * internal_unit_value;
-        break;
-
-    default:
-    case UNSCALED_UNITS:
-
-        value = val;
-    }
-
-    return wxRound( value );
 }
 
 

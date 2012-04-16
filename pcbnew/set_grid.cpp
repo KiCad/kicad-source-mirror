@@ -125,8 +125,8 @@ wxPoint DIALOG_SET_GRID::GetGridOrigin()
     wxPoint grid;
 
     /* TODO: Some error checking here would be a good thing. */
-    grid.x = ReturnValueFromTextCtrl( *m_GridOriginXCtrl, m_internalUnits );
-    grid.y = ReturnValueFromTextCtrl( *m_GridOriginYCtrl, m_internalUnits );
+    grid.x = ReturnValueFromTextCtrl( *m_GridOriginXCtrl );
+    grid.y = ReturnValueFromTextCtrl( *m_GridOriginYCtrl );
 
     return grid;
 }

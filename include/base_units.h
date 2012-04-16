@@ -93,4 +93,25 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymb
  */
 void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue );
 
+/**
+ * Return in internal units the value "val" given in inch or mm
+ */
+int From_User_Unit( EDA_UNITS_T aUnit, double aValue );
+
+/**
+ * Function ReturnValueFromeString
+ * converts \a aTextValue in \a aUnits to internal units used by the application.
+ *
+ * @param aUnits The units of \a aTextValue.
+ * @param aTextValue A reference to a wxString object containing the string to convert.
+ * @return The string from Value, according to units (inch, mm ...) for display,
+ */
+int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue );
+
+/**
+ * Convert the number Value in a string according to the internal units
+ *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
+ */
+int ReturnValueFromTextCtrl( const wxTextCtrl& aTextCtr );
+
 #endif   // _BASE_UNITS_H_

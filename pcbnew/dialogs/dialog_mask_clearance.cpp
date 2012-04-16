@@ -83,11 +83,9 @@ void DIALOG_PADS_MASK_CLEARANCE::MyInit()
 
 void DIALOG_PADS_MASK_CLEARANCE::OnButtonOkClick( wxCommandEvent& event )
 {
-    m_BrdSettings.m_SolderMaskMargin =
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->GetInternalUnits() );
+    m_BrdSettings.m_SolderMaskMargin = ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl );
 
-    m_BrdSettings.m_SolderPasteMargin =
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->GetInternalUnits() );
+    m_BrdSettings.m_SolderPasteMargin = ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl );
 
     double      dtmp    = 0;
     wxString    msg     = m_SolderPasteMarginRatioCtrl->GetValue();

@@ -367,16 +367,11 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->m_Value->Copy(m_ValueCopy );
 
     // Initialize masks clearances
-    int internalUnit = m_Parent->GetInternalUnits();
+    m_CurrentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
 
-    m_CurrentModule->SetLocalClearance(
-        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, internalUnit ) );
+    m_CurrentModule->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
 
-    m_CurrentModule->SetLocalSolderMaskMargin(
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, internalUnit ) );
-
-    m_CurrentModule->SetLocalSolderPasteMargin(
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, internalUnit ) );
+    m_CurrentModule->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
     double   dtmp;
     wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );

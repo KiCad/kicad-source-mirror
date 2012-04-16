@@ -205,7 +205,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
         return NULL; // canceled by user
 
     msg = dlg.GetValue();
-    Mself.lng = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
+    Mself.lng = ReturnValueFromString( g_UserUnit, msg );
 
     // Control values (ii = minimum length)
     if( Mself.lng < min_len )
@@ -621,7 +621,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     }
 
     value    = dlg.GetValue();
-    gap_size = ReturnValueFromString( g_UserUnit, value, GetScreen()->GetInternalUnits() );
+    gap_size = ReturnValueFromString( g_UserUnit, value );
 
     bool abort = false;
 
@@ -821,9 +821,7 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
                                         wxRA_SPECIFY_COLS );
     LeftBoxSizer->Add( m_ShapeOptionCtrl, 0, wxGROW | wxALL, 5 );
 
-    m_SizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ), ShapeSize,
-                                    g_UserUnit, LeftBoxSizer,
-                                    PCB_INTERNAL_UNIT );
+    m_SizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ), ShapeSize, g_UserUnit, LeftBoxSizer );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -1094,7 +1092,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
         return; // cancelled by user
 
     msg = dlg.GetValue();
-    gap_size = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
+    gap_size = ReturnValueFromString( g_UserUnit, msg );
 
     // Updating sizes of pads forming the gap.
     int tw = GetBoard()->GetCurrentTrackWidth();

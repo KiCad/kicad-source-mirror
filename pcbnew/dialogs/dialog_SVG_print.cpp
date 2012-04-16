@@ -135,8 +135,7 @@ void DIALOG_SVG_PRINT::initDialog( )
 
 void DIALOG_SVG_PRINT::SetPenWidth()
 {
-    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth,
-                                                  m_Parent->GetInternalUnits() );
+    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth );
 
     if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
     {

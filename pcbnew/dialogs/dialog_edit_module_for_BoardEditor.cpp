@@ -479,12 +479,9 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->m_Value->Copy( m_ValueCopy );
 
     // Initialize masks clearances
-    m_CurrentModule->SetLocalClearance(
-        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, m_Parent->GetInternalUnits() ) );
-    m_CurrentModule->SetLocalSolderMaskMargin(
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->GetInternalUnits() ) );
-    m_CurrentModule->SetLocalSolderPasteMargin(
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->GetInternalUnits() ) );
+    m_CurrentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    m_CurrentModule->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
+    m_CurrentModule->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
 
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
@@ -520,8 +517,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     }
 
     // Set Module Position
-    modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX, PCB_INTERNAL_UNIT );
-    modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY, PCB_INTERNAL_UNIT );
+    modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX );
+    modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY );
     m_CurrentModule->SetPosition( modpos );
 
     if( m_AutoPlaceCtrl->GetSelection() == 1 )

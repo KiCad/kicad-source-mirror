@@ -70,7 +70,6 @@ class EDA_GRAPHIC_TEXT_CTRL
 {
 public:
     EDA_UNITS_T   m_UserUnit;
-    int           m_Internal_Unit;
 
     wxTextCtrl*   m_FrameText;
     wxTextCtrl*   m_FrameSize;
@@ -80,8 +79,7 @@ private:
 public:
     EDA_GRAPHIC_TEXT_CTRL( wxWindow* parent, const wxString& Title,
                            const wxString& TextToEdit, int textsize,
-                           EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer, int framelen = 200,
-                           int internal_unit = EESCHEMA_INTERNAL_UNIT );
+                           EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer, int framelen = 200 );
 
     ~EDA_GRAPHIC_TEXT_CTRL();
 
@@ -90,7 +88,7 @@ public:
     void            Enable( bool state );
     void            SetTitle( const wxString& title );
 
-    void SetFocus() { m_FrameText->SetFocus(); }
+    void            SetFocus() { m_FrameText->SetFocus(); }
     void            SetValue( const wxString& value );
     void            SetValue( int value );
 
@@ -98,10 +96,9 @@ public:
      * Function FormatSize
      * formats a string containing the size in the desired units.
      */
-    static wxString FormatSize( int internalUnit, EDA_UNITS_T user_unit, int textSize );
+    static wxString FormatSize( EDA_UNITS_T user_unit, int textSize );
 
-    static int      ParseSize( const wxString& sizeText, int internalUnit,
-                               EDA_UNITS_T user_unit );
+    static int      ParseSize( const wxString& sizeText, EDA_UNITS_T user_unit );
 };
 
 
@@ -113,7 +110,6 @@ class EDA_POSITION_CTRL
 {
 public:
     EDA_UNITS_T   m_UserUnit;
-    int           m_Internal_Unit;
     wxPoint       m_Pos_To_Edit;
 
     wxTextCtrl*   m_FramePosX;
@@ -123,9 +119,7 @@ private:
 
 public:
     EDA_POSITION_CTRL( wxWindow* parent, const wxString& title,
-                         const wxPoint& pos_to_edit,
-                         EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
-                         int internal_unit = EESCHEMA_INTERNAL_UNIT );
+                       const wxPoint& pos_to_edit, EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_POSITION_CTRL();
 
@@ -143,9 +137,7 @@ class EDA_SIZE_CTRL : public EDA_POSITION_CTRL
 {
 public:
     EDA_SIZE_CTRL( wxWindow* parent, const wxString& title,
-                   const wxSize& size_to_edit,
-                   EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
-                   int internal_unit = EESCHEMA_INTERNAL_UNIT );
+                   const wxSize& size_to_edit, EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_SIZE_CTRL() { }
     wxSize GetValue();
@@ -162,13 +154,11 @@ public:
     int           m_Value;
     wxTextCtrl*   m_ValueCtrl;
 private:
-    int           m_Internal_Unit;
     wxStaticText* m_Text;
 
 public:
     EDA_VALUE_CTRL( wxWindow* parent, const wxString& title, int value,
-                    EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
-                    int internal_unit = EESCHEMA_INTERNAL_UNIT );
+                    EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_VALUE_CTRL();
 
