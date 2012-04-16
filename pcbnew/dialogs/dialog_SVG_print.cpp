@@ -239,7 +239,14 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
     screen->SetScalingFactor( 1.0 );
-    float dpi = (float)m_Parent->GetInternalUnits();
+
+    float dpi;
+
+#if defined( USE_PCBNEW_NANOMETRES )
+    dpi = 25.4e6;
+#else
+    dpi = 10000.0;
+#endif
 
     EDA_DRAW_PANEL* panel = m_Parent->GetCanvas();
 

@@ -167,7 +167,7 @@ void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue )
 }
 
 
-int From_User_Unit( EDA_UNITS_T aUnit, double aValue )
+double From_User_Unit( EDA_UNITS_T aUnit, double aValue )
 {
     double value;
 
@@ -187,7 +187,7 @@ int From_User_Unit( EDA_UNITS_T aUnit, double aValue )
         value = aValue;
     }
 
-    return wxRound( value );
+    return value;
 }
 
 

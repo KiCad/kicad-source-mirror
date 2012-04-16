@@ -33,6 +33,7 @@
 #include <base_struct.h>
 #include <class_base_screen.h>
 #include <id.h>
+#include <base_units.h>
 
 
 #define CURSOR_SIZE     12      /// size of the cross cursor.
@@ -83,12 +84,6 @@ void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
     }
 
     m_O_Curseur.x = m_O_Curseur.y = 0;
-}
-
-
-int BASE_SCREEN::GetInternalUnits( void )
-{
-    return EESCHEMA_INTERNAL_UNIT;
 }
 
 
@@ -320,30 +315,14 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int id )
 
 void BASE_SCREEN::AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id )
 {
-    double x, y;
     wxRealPoint new_size;
     GRID_TYPE new_grid;
 
-    switch( aUnit )
-    {
-    case MILLIMETRES:
-        x = size.x / 25.4;
-        y = size.y / 25.4;
-        break;
-
-    default:
-    case INCHES:
-    case UNSCALED_UNITS:
-        x = size.x;
-        y = size.y;
-        break;
-    }
-
-    new_size.x = x * GetInternalUnits();
-    new_size.y = y * GetInternalUnits();
-
+    new_size.x = From_User_Unit( aUnit, size.x );
+    new_size.y = From_User_Unit( aUnit, size.y );
     new_grid.m_Id = id;
     new_grid.m_Size = new_size;
+
     AddGrid( new_grid );
 }
 

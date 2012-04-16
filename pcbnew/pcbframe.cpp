@@ -315,8 +315,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
     SetIcon( icon );
 
-    m_internalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
-
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     // PCB drawings start in the upper left corner.
