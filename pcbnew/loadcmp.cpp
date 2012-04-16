@@ -153,7 +153,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     static wxArrayString HistoryList;
     static wxString      lastComponentName;
 
-    /* Ask for a component name or key words */
+    // Ask for a component name or key words
     DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
                           _( "Load Module" ), aUseFootprintViewer );
 
@@ -171,7 +171,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         moduleName = dlg.GetComponentName();
     }
 
-    if( moduleName.IsEmpty() )  /* Cancel command */
+    if( moduleName.IsEmpty() )  // Cancel command
     {
         m_canvas->MoveCursorToCrossHair();
         return NULL;
@@ -185,7 +185,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         keys = moduleName;
         moduleName = Select_1_Module_From_List( this, aLibrary, wxEmptyString, keys );
 
-        if( moduleName.IsEmpty() )  /* Cancel command */
+        if( moduleName.IsEmpty() )  // Cancel command
         {
             m_canvas->MoveCursorToCrossHair();
             return NULL;
@@ -200,13 +200,13 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         if( moduleName.IsEmpty() )
         {
             m_canvas->MoveCursorToCrossHair();
-            return NULL;    /* Cancel command. */
+            return NULL;    // Cancel command.
         }
     }
 
     module = GetModuleLibrary( aLibrary, moduleName, false );
 
-    if( ( module == NULL ) && AllowWildSeach )    /* Search with wild card */
+    if( ( module == NULL ) && AllowWildSeach )    // Search with wild card
     {
         AllowWildSeach = false;
         wxString wildname = wxChar( '*' ) + moduleName + wxChar( '*' );
@@ -216,7 +216,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         if( moduleName.IsEmpty() )
         {
             m_canvas->MoveCursorToCrossHair();
-            return NULL;    /* Cancel command. */
+            return NULL;    // Cancel command.
         }
         else
         {
@@ -376,7 +376,7 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
                                                     const wxString& aMask,
                                                     const wxString& aKeyWord )
 {
-    static wxString OldName;    /* Save the name of the last module loaded. */
+    static wxString OldName;    // Save the name of the last module loaded.
     wxString        CmpName;
     wxString        msg;
     wxArrayString   libnames_list;
@@ -386,7 +386,7 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
     else
         libnames_list.Add( aLibraryFullFilename );
 
-    /* Find modules in libraries. */
+    // Find modules in libraries.
     MList.ReadFootprintFiles( libnames_list );
 
     wxArrayString footprint_names_list;
@@ -461,7 +461,7 @@ static void DisplayCmpDoc( wxString& Name )
 MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
 {
     MODULE*         module;
-    static wxString OldName;       /* Save name of last module selected. */
+    static wxString OldName;       // Save name of last module selected.
     wxString        CmpName, msg;
 
     wxArrayString listnames;

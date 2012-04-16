@@ -369,7 +369,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     else
     {
         id--;
-        int selectedZoom = GetScreen()->m_ZoomList[id];
+        double selectedZoom = GetScreen()->m_ZoomList[id];
 
         if( GetScreen()->GetZoom() == selectedZoom )
             return;

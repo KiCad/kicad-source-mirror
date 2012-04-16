@@ -11,15 +11,16 @@ class FOOTPRINT_LIBRARY
 public:
     wxArrayString m_List;       // list of footprints, used to read/write INDEX section
     wxString m_LibraryName;     // the full library name
-    int m_LineNum;              // the line count
 
 private:
     FILTER_READER * m_reader;   // FILTER_READER to read file. If NULL, use m_file
     FILE * m_file;              // footprint file to read/write.
+    int m_LineNum;              // the line count
 
 public:
+
     /**
-     * ctor
+     * Constructor FOOTPRINT_LIBRARY
      * @param aFile = a FILE * pointer used for write operations,
      * and read operations when aReader = NULL
      * @param aReader = a FILTER_READER pointer used for read operations
@@ -27,7 +28,11 @@ public:
      */
     FOOTPRINT_LIBRARY( FILE * aFile, FILTER_READER * aReader = NULL );
 
-    ~FOOTPRINT_LIBRARY() { }
+    FOOTPRINT_LIBRARY() :
+        m_reader( 0 ),
+        m_file( 0 ),
+        m_LineNum( 0 )
+    {}
 
     /**
      * function IsLibrary

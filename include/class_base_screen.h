@@ -296,13 +296,6 @@ public:
      */
     bool SetZoom( double coeff );
 
-    /**
-     * Function SetZoomList
-     * sets the list of zoom factors.
-     * @param aZoomList An array of zoom factors in ascending order, zero terminated
-     */
-    void SetZoomList( const wxArrayDouble& aZoomList );
-
     bool SetNextZoom();
     bool SetPreviousZoom();
     bool SetFirstZoom();

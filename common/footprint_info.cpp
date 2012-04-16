@@ -19,6 +19,7 @@
 #include <richio.h>
 #include <filter_reader.h>
 #include <footprint_info.h>
+#include <io_mgr.h>
 
 #include <class_pad.h>
 #include <class_module.h>
@@ -39,9 +40,8 @@
  *   ...... other data (pads, outlines ..)
  *   $Endmodule
  */
-bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
+bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 {
-    FILE*       file;
     wxFileName  filename;
     wxString    libname;
 
@@ -50,7 +50,9 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
     m_filesInvalid.Empty();
     m_List.clear();
 
-    /* Parse Libraries Listed */
+    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+    // Parse Libraries Listed
     for( unsigned ii = 0; ii < aFootprintsLibNames.GetCount(); ii++ )
     {
         filename = aFootprintsLibNames[ii];
@@ -64,82 +66,28 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
             continue;
         }
 
-        /* Open library file */
-        file = wxFopen( libname, wxT( "rt" ) );
-
-        if( file == NULL )
+        try
         {
-            m_filesInvalid << libname <<  _(" (file cannot be opened)") << wxT("\n");
-            continue;
-        }
+            wxArrayString fpnames = pi->FootprintEnumerate( libname );
 
-        FILE_LINE_READER    fileReader( file, libname );
-        FILTER_READER       reader( fileReader );
-
-        /* Read header. */
-        reader.ReadLine();
-        char * line = reader.Line();
-        StrPurge( line );
-
-        if( strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
-        {
-            wxString msg;
-            msg.Printf( _( "<%s> is not a valid KiCad PCB footprint library." ),
-                        GetChars( libname ) );
-            m_filesInvalid << msg << wxT("\n");
-            continue;
-        }
-
-        // Read library
-        bool end = false;
-        while( !end && reader.ReadLine() )
-        {
-            line = reader.Line();
-            StrPurge( line );
-            if( strnicmp( line, "$EndLIBRARY", 11 ) == 0 )
+            for( unsigned i=0; i<fpnames.GetCount();  ++i )
             {
-                end = true;
-                break;
-            }
-            if( strnicmp( line, "$MODULE", 7 ) == 0 )
-            {
+                std::auto_ptr<MODULE> m( pi->FootprintLoad( libname, fpnames[i] ) );
 
-                line += 7;
-                FOOTPRINT_INFO*  ItemLib = new FOOTPRINT_INFO();
-                ItemLib->m_Module = FROM_UTF8( StrPurge( line ) );
-                ItemLib->m_LibName = libname;
-                AddItem( ItemLib );
+                FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
 
-                while( reader.ReadLine() )
-                {
-                    line = reader.Line();
-                    StrPurge( line );
-                    if( strnicmp( line, "$EndMODULE", 10 ) == 0 )
-                        break;
+                fpinfo->m_Module   = fpnames[i];
+                fpinfo->m_LibName  = libname;
+                fpinfo->m_padCount = m->GetPadCount();
+                fpinfo->m_KeyWord  = m->GetKeywords();
+                fpinfo->m_Doc      = m->GetDescription();
 
-                    if( strnicmp( line, "$PAD", 4 ) == 0 )
-                        ItemLib->m_padCount++;
-
-                    int id = ((line[0] & 0xFF) << 8) + (line[1] & 0xFF);
-                    switch( id )
-                    {
-                    /* KeyWords */
-                    case (('K'<<8) + 'w'):
-                        ItemLib->m_KeyWord = FROM_UTF8( StrPurge( line + 3 ) );
-                    break;
-
-                    /* Doc */
-                    case (('C'<<8) + 'd'):
-                        ItemLib->m_Doc = FROM_UTF8( StrPurge( line + 3 ) );
-                    break;
-                    }
-                }
+                AddItem( fpinfo );
             }
         }
-
-        if( !end )
+        catch( IO_ERROR ioe )
         {
-            m_filesInvalid << libname << _(" (Unexpected end of file)") << wxT("\n");
+            m_filesInvalid << ioe.errorText << wxT("\n");
         }
     }
 
@@ -147,3 +95,4 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
 
     return true;
 }
+

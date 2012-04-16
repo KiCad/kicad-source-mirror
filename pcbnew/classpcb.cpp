@@ -18,22 +18,39 @@
 #include <pcbnew_id.h>
 
 
-/* Default Pcbnew zoom values.
- * Limited to 19 values to keep a decent size to menus
- * 15 it better but does not allow a sufficient number of values
- * roughtly a 1.5 progression.
- * The last 2 values is  handy when somebody uses a library import of a module
- * (or foreign data) which has a bad coordinate
- * Also useful in GerbView for this reason.
- * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
- * functions )
- */
+/**
+    Default Pcbnew zoom values.
+    Limited to 19 values to keep a decent size to menus.
+    Roughly a 1.5 progression.
+    The last 2 values are handy when somebody uses a library import of a module
+    (or foreign data) which has a bad coordinate.
+    Also useful in GerbView for this reason.
+    Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
+    functions )
+*/
 static const double pcbZoomList[] =
 {
-    0.5,    1.0,   1.5,   2.0,   3.0, 4.5, 7.0,
-    10.0, 15.0, 22.0, 35.0, 50.0, 80.0, 120.0,
-    200.0, 350.0, 500.0, 1000.0, 2000.0
+    0.5,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    4.5,
+    7.0,
+    10.0,
+    15.0,
+    22.0,
+    35.0,
+    50.0,
+    80.0,
+    120.0,
+    200.0,
+    350.0,
+    500.0,
+    1000.0,
+    2000.0
 };
+
 
 #define MM_TO_PCB_UNITS     (10000.0 / 25.4)
 
@@ -63,9 +80,9 @@ static GRID_TYPE pcbGridList[] =
     { ID_POPUP_GRID_LEVEL_0_25MM,   wxRealPoint( MM_TO_PCB_UNITS * 0.25,  MM_TO_PCB_UNITS * 0.25 )    },
     { ID_POPUP_GRID_LEVEL_0_2MM,    wxRealPoint( MM_TO_PCB_UNITS * 0.2,   MM_TO_PCB_UNITS * 0.2 )     },
     { ID_POPUP_GRID_LEVEL_0_1MM,    wxRealPoint( MM_TO_PCB_UNITS * 0.1,   MM_TO_PCB_UNITS * 0.1 )     },
-    { ID_POPUP_GRID_LEVEL_0_0_5MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.05,  MM_TO_PCB_UNITS * 0.05 )     },
-    { ID_POPUP_GRID_LEVEL_0_0_25MM, wxRealPoint( MM_TO_PCB_UNITS * 0.025, MM_TO_PCB_UNITS * 0.025 )     },
-    { ID_POPUP_GRID_LEVEL_0_0_1MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.01,  MM_TO_PCB_UNITS * 0.01 )     }
+    { ID_POPUP_GRID_LEVEL_0_0_5MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.05,  MM_TO_PCB_UNITS * 0.05 )    },
+    { ID_POPUP_GRID_LEVEL_0_0_25MM, wxRealPoint( MM_TO_PCB_UNITS * 0.025, MM_TO_PCB_UNITS * 0.025 )   },
+    { ID_POPUP_GRID_LEVEL_0_0_1MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.01,  MM_TO_PCB_UNITS * 0.01 )    }
 };
 
 

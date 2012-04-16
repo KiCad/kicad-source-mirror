@@ -106,7 +106,7 @@
 
 
 #if 1
-#define READLINE()     m_reader->ReadLine()
+#define READLINE( rdr )     rdr->ReadLine()
 
 #else
 /// The function and macro which follow comprise a shim which can be a
@@ -128,7 +128,7 @@ static inline unsigned ReadLine( LINE_READER* rdr, const char* caller )
 
     return ret;
 }
-#define READLINE()     ReadLine( m_reader, __FUNCTION__ )
+#define READLINE( rdr )     ReadLine( rdr, __FUNCTION__ )
 #endif
 
 static const char delims[] = " \t\r\n";
@@ -167,12 +167,14 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPE
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
+    init( aProperties );
+
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
     // delete on exception, iff I own m_board, according to aAppendToMe
     auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
-    FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
+    FILE* fp = wxFopen( aFileName, wxT( "r" ) );
     if( !fp )
     {
         m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
@@ -183,8 +185,6 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPE
     FILE_LINE_READER    reader( fp, aFileName );
 
     m_reader = &reader;          // member function accessibility
-
-    init( aProperties );
 
     checkVersion();
 
@@ -205,7 +205,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
     // Then follows $EQUIPOT and all the rest
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char* line = m_reader->Line();
 
@@ -213,7 +213,8 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         if( TESTLINE( "$MODULE" ) )
         {
-            loadMODULE();
+            MODULE* m = LoadMODULE();
+            m_board->Add( m, ADD_APPEND );
         }
 
         else if( TESTLINE( "$DRAWSEGMENT" ) )
@@ -281,7 +282,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             }
             else
             {
-                while( READLINE() )
+                while( READLINE( m_reader ) )
                 {
                     line = m_reader->Line();     // gobble until $EndSetup
 
@@ -332,7 +333,7 @@ void LEGACY_PLUGIN::checkVersion()
 
 void LEGACY_PLUGIN::loadGENERAL()
 {
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char*       line = m_reader->Line();
         const char* data;
@@ -460,7 +461,7 @@ void LEGACY_PLUGIN::loadSHEET()
     char        buf[260];
     TITLE_BLOCK tb;
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char* line = m_reader->Line();
 
@@ -575,7 +576,7 @@ void LEGACY_PLUGIN::loadSETUP()
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
     ZONE_SETTINGS           zs  = m_board->GetZoneSettings();
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -863,14 +864,15 @@ void LEGACY_PLUGIN::loadSETUP()
 }
 
 
-void LEGACY_PLUGIN::loadMODULE()
+MODULE* LEGACY_PLUGIN::LoadMODULE()
 {
     auto_ptr<MODULE> module( new MODULE( m_board ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
-        const char* data;
         char* line = m_reader->Line();
+
+        const char* data;
 
         // most frequently encountered ones at the top
 
@@ -1053,9 +1055,7 @@ void LEGACY_PLUGIN::loadMODULE()
         {
             module->CalculateBoundingBox();
 
-            m_board->Add( module.release(), ADD_APPEND );
-
-            return;     // preferred exit
+            return module.release();     // preferred exit
         }
     }
 
@@ -1067,7 +1067,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 {
     auto_ptr<D_PAD> pad( new D_PAD( aModule ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -1288,8 +1288,8 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
 void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 {
-    STROKE_T shape;
-    char* line = m_reader->Line();     // obtain current (old) line
+    STROKE_T    shape;
+    char*       line = m_reader->Line();     // obtain current (old) line
 
     switch( line[1] )
     {
@@ -1371,7 +1371,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
             for( int ii = 0;  ii<ptCount;  ++ii )
             {
-                if( !READLINE() )
+                if( !READLINE( m_reader ) )
                 {
                     THROW_IO_ERROR( "S_POLGON point count mismatch." );
                 }
@@ -1542,7 +1542,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
         t3D = n3D;
     }
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char* line = m_reader->Line();
 
@@ -1596,7 +1596,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
 
     auto_ptr<DRAWSEGMENT> dseg( new DRAWSEGMENT( m_board ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line  = m_reader->Line();
@@ -1704,7 +1704,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
     NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
     m_board->AppendNet( net );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -1756,7 +1756,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
     TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
     m_board->Add( pcbtxt, ADD_APPEND );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -1866,7 +1866,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
 void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
 {
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         // read two lines per loop iteration, each loop is one TRACK or VIA
         // example first line:
@@ -1899,7 +1899,7 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         // differentiates between PCB_TRACE_T and PCB_VIA_T.  With virtual
         // functions in use, it is critical to instantiate the PCB_VIA_T
         // exactly.
-        READLINE();
+        READLINE( m_reader );
 
         line = m_reader->Line();
 
@@ -1989,7 +1989,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
     // just before returning.
     auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char* line = m_reader->Line();
 
@@ -2082,7 +2082,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
     bool    sawCorner = false;
     char    buf[1024];
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -2233,7 +2233,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             // Read the PolysList (polygons used for fill areas in the zone)
 
-            while( READLINE() )
+            while( READLINE( m_reader ) )
             {
                 line = m_reader->Line();
 
@@ -2253,7 +2253,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "$FILLSEGMENTS" ) )
         {
-            while( READLINE() )
+            while( READLINE( m_reader ) )
             {
                 line = m_reader->Line();
 
@@ -2304,7 +2304,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
 {
     auto_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char*  data;
         char* line = m_reader->Line();
@@ -2498,7 +2498,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
 void LEGACY_PLUGIN::loadPCB_TARGET()
 {
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -2675,6 +2675,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
 void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 {
+    m_board = NULL;
     m_props = aProperties;
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
@@ -2706,9 +2707,11 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
+    init( aProperties );
+
     m_board = aBoard;
 
-    FILE* fp = wxFopen( aFileName, wxT( "wt" ) );
+    FILE* fp = wxFopen( aFileName, wxT( "w" ) );
     if( !fp )
     {
         m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
@@ -2721,8 +2724,6 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
     wxFFile wxf( fp );
 
     m_fp = fp;          // member function accessibility
-
-    init( aProperties );
 
     if( m_props )
     {
@@ -2751,8 +2752,6 @@ do { \
 
 void LEGACY_PLUGIN::saveAllSections() const
 {
-
-
     saveGENERAL();
 
     saveSHEET();
@@ -3698,3 +3697,371 @@ void LEGACY_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
 
     fprintf( m_fp, "$EndTEXTPCB\n" );
 }
+
+
+//-----<FOOTPRINT LIBRARY FUNCTIONS>--------------------------------------------
+
+/*
+
+    The legacy file format is being obsoleted and this code will have a short
+    lifetime, so it only needs to be good enough for a short duration of time.
+    Caching all the MODULEs is a bit memory intensive, but it is a considerably
+    faster way of fulfilling the API contract. Otherwise, without the cache, you
+    would have to re-read the file when searching for any MODULE, and this would
+    be very problematic filling a FOOTPRINT_LIST via this PLUGIN API. If memory
+    becomes a concern, consider the cache lifetime policy, which determines the
+    time that a FPL_CACHE is in RAM. Note PLUGIN lifetime also plays a role in
+    cache lifetime.
+
+*/
+
+
+#include <boost/ptr_container/ptr_map.hpp>
+
+typedef boost::ptr_map< wxString, MODULE >      MODULE_MAP;
+typedef MODULE_MAP::iterator                    MODULE_ITER;
+typedef MODULE_MAP::const_iterator              MODULE_CITER;
+
+#define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
+
+
+/**
+ * Class FPL_CACHE
+ * assists only for the footprint portion of the PLUGIN API, and only for the
+ * LEGACY_PLUGIN, so therefore is private to this implementation file, i.e. not placed
+ * into a header.
+ */
+struct FPL_CACHE
+{
+    LEGACY_PLUGIN*  m_owner;        // my owner, I need its LEGACY_PLUGIN::LoadMODULE()
+    wxString        m_lib_name;
+    wxDateTime      m_mod_time;
+    MODULE_MAP      m_modules;      // tuple of footprint name vs. MODULE*
+    bool            m_writable;
+
+    FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath );
+
+    // Most all functions in this class throw IO_ERROR exceptions.  There is no
+    // error codes nor user interface calls from here.
+    // Catch these exceptions higher up please.
+
+    /// save the entire legacy library to m_lib_name;
+    void Save();
+
+    void SaveHeader( FILE* aFile );
+
+    void SaveIndex( FILE* aFile );
+
+    void SaveModules( FILE* aFile );
+
+    void SaveEndOfFile( FILE* aFile );
+
+    void Load( LINE_READER* aReader );
+
+    void ReadAndVerifyHeader( LINE_READER* aReader );
+
+    void SkipIndex( LINE_READER* aReader );
+
+    void LoadModules( LINE_READER* aReader );
+
+    wxDateTime  GetLibModificationTime();
+};
+
+
+FPL_CACHE::FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
+    m_owner( aOwner ),
+    m_lib_name( aLibraryPath ),
+    m_writable( false )
+{
+    FILE* fp = wxFopen( aLibraryPath, wxT( "r" ) );
+    if( !fp )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "Unable to open legacy library file '%s'" ), aLibraryPath.GetData() ) );
+    }
+
+    // reader now owns fp, will close on exception or return
+    FILE_LINE_READER    reader( fp, aLibraryPath );
+
+    Load( &reader );
+}
+
+
+wxDateTime FPL_CACHE::GetLibModificationTime()
+{
+    wxFileName  fn( m_lib_name );
+
+    m_writable = fn.IsFileWritable();
+
+    return fn.GetModificationTime();
+}
+
+
+void FPL_CACHE::Load( LINE_READER* aReader )
+{
+    ReadAndVerifyHeader( aReader );
+    SkipIndex( aReader );
+    LoadModules( aReader );
+
+    // Remember the file modification time of library file when the
+    // cache snapshot was made, so that in a networked environment we will
+    // reload the cache as needed.
+    m_mod_time = GetLibModificationTime();
+}
+
+
+void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
+{
+    if( !aReader->ReadLine() )
+    {
+    L_not_library:
+        THROW_IO_ERROR( wxString::Format( _( "File %s is empty or is not a legacy library" ),
+            m_lib_name.GetData() ) );
+    }
+
+    char* line = aReader->Line();
+
+    if( !TESTLINE( "PCBNEW-LibModule-V1" ) )
+        goto L_not_library;
+}
+
+
+void FPL_CACHE::SkipIndex( LINE_READER* aReader )
+{
+    // Some broken INDEX sections have more than one section, due to prior bugs.
+    // So we must read the next line after $EndINDEX tag,
+    // to see if this is not a new $INDEX tag.
+    bool exit = false;
+
+    while( aReader->ReadLine() )
+    {
+        char* line = aReader->Line();
+
+        if( TESTLINE( "$INDEX" ) )
+        {
+            exit = false;
+
+            while( aReader->ReadLine() )
+            {
+                line = aReader->Line();
+
+                if( TESTLINE( "$EndINDEX" ) )
+                {
+                    exit = true;
+                    break;
+                }
+            }
+        }
+        else if( exit )
+            break;
+    }
+}
+
+
+void FPL_CACHE::LoadModules( LINE_READER* aReader )
+{
+    m_owner->SetReader( aReader );
+
+    do
+    {
+        // test first for the $MODULE, even before reading because of INDEX bug.
+        char* line = aReader->Line();
+
+        if( TESTLINE( "$MODULE" ) )
+        {
+            MODULE* m = m_owner->LoadMODULE();
+
+            wxString reference = m->GetReference();
+
+            MODULE_CITER it = m_modules.find( reference );
+
+            if( it != m_modules.end() )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                    _( "library %s has a duplicate footprint named %s" ),
+                    m_lib_name.GetData(), reference.GetData() ) );
+            }
+            m_modules.insert( reference, m );
+        }
+
+    } while( aReader->ReadLine() );
+}
+
+
+void FPL_CACHE::Save()
+{
+    if( !m_writable )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "Legacy library file '%s' is read only" ), m_lib_name.GetData() ) );
+    }
+
+    wxString tempFileName = wxFileName::CreateTempFileName( m_lib_name );
+
+    wxLogDebug( "tempFileName:'%s'\n", TO_UTF8( tempFileName ) );
+
+    FILE* fp = wxFopen( tempFileName, wxT( "w" ) );
+    if( !fp )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "Unable to open legacy library file '%s'" ), m_lib_name.GetData() ) );
+    }
+
+    // wxf now owns fp, will close on exception or return
+    wxFFile wxf( fp );
+
+    SaveHeader( fp );
+    SaveIndex(  fp );
+    SaveModules( fp );
+    SaveEndOfFile( fp );
+
+    wxRemoveFile( m_lib_name );
+    wxRenameFile( tempFileName, m_lib_name );
+}
+
+
+void FPL_CACHE::SaveHeader( FILE* aFile )
+{
+    fprintf( aFile, "%s  %s\n", FOOTPRINT_LIBRARY_HEADER, TO_UTF8( DateAndTime() ) );
+    fprintf( aFile, "# encoding utf-8\n" );
+}
+
+
+void FPL_CACHE::SaveIndex( FILE* aFile )
+{
+    fprintf( aFile, "$INDEX\n" );
+
+    for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
+    {
+        fprintf( aFile, "%s\n", TO_UTF8( it->first ) );
+    }
+
+    fprintf( aFile, "$EndINDEX\n" );
+}
+
+
+void FPL_CACHE::SaveModules( FILE* aFile )
+{
+}
+
+
+void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
+{
+    if( !m_cache || m_cache->m_lib_name != aLibraryPath ||
+        m_cache->m_mod_time != m_cache->GetLibModificationTime() )
+    {
+        // a spectacular episode in memory management.
+        delete m_cache;
+        m_cache = new FPL_CACHE( this, aLibraryPath );
+    }
+}
+
+
+wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    wxArrayString   ret;
+
+    init( aProperties );
+
+    cacheLib( aLibraryPath );
+
+    const MODULE_MAP&   mods = m_cache->m_modules;
+
+    for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
+    {
+        ret.Add( it->first );
+    }
+
+    return ret;
+}
+
+
+MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                    PROPERTIES* aProperties )
+{
+    init( aProperties );
+
+    cacheLib( aLibraryPath );
+
+    const MODULE_MAP&   mods = m_cache->m_modules;
+
+    MODULE_CITER it = mods.find( aFootprintName );
+
+    if( it == mods.end() )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "No '%s' footprint in library '%s'" ),
+            aFootprintName.GetData(), aLibraryPath.GetData() ) );
+    }
+
+    // copy constructor to clone the already loaded MODULE
+    return new MODULE( *it->second );
+}
+
+
+void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, MODULE* aFootprint, PROPERTIES* aProperties )
+{
+    init( aProperties );
+
+    cacheLib( aLibraryPath );
+
+    if( !m_cache->m_writable )
+    {
+    }
+
+    wxString reference = aFootprint->GetReference();
+
+    MODULE_MAP&  mods = m_cache->m_modules;
+
+    // quietly overwrite any by same name.
+    MODULE_CITER it = mods.find( reference );
+    if( it != mods.end() )
+    {
+        mods.erase( reference );
+    }
+
+    aFootprint->SetParent( 0 );
+
+    mods.insert( reference, aFootprint );
+
+    m_cache->Save();
+}
+
+
+void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
+{
+    init( NULL );
+
+    cacheLib( aLibraryPath );
+
+    if( !m_cache->m_writable )
+    {
+    }
+
+    size_t erasedCount = m_cache->m_modules.erase( aFootprintName );
+
+    if( erasedCount != 1 )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "library '%s' has no footprint '%s' to delete" ),
+            aLibraryPath.GetData(), aFootprintName.GetData() ) );
+    }
+
+    m_cache->Save();
+}
+
+
+bool LEGACY_PLUGIN::IsLibraryWritable( const wxString& aLibraryPath )
+{
+    init( NULL );
+
+    cacheLib( aLibraryPath );
+
+    return m_cache->m_writable;
+}
+
+
+LEGACY_PLUGIN::~LEGACY_PLUGIN()
+{
+    delete m_cache;
+}
+
