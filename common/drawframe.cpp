@@ -110,7 +110,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_snapToGrid          = true;
 
     // Internal units per inch: = 1000 for schema, = 10000 for PCB
-    m_internalUnits       = EESCHEMA_INTERNAL_UNIT;
     minsize.x             = 470;
     minsize.y             = 350 + m_MsgFrameHeight;
 

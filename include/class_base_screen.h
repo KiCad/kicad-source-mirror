@@ -158,14 +158,14 @@ public:
     wxString GetFileName() const { return m_fileName; }
 
     /**
-     * Function GetInternalUnits
-     * @return the screen units scalar.
+     * Function MilsToIuScalar
+     * returns the scalar required to convert mils to internal units.
      *
-     * Default implementation returns scalar used for schematic screen.  The
-     * internal units used by the schematic screen is 1 mil (0.001").  Override
-     * this in derived classes that require internal units other than 1 mil.
+     * @note This is a temporary hack until the derived objects SCH_SCREEN and PCB_SCREEN
+     *       no longer need to be derived from BASE_SCREEN.  I does allow removal of the
+     *       obsolete GetInternalUnits function.
      */
-    virtual int GetInternalUnits( void );
+    virtual int MilsToIuScalar() { return 1; }
 
     /**
      * Function GetCrossHairPosition

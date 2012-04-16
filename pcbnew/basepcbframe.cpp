@@ -82,7 +82,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
                                 long            style) :
     EDA_DRAW_FRAME( father, idtype, title, pos, size, style )
 {
-    m_internalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
     m_Pcb                 = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads

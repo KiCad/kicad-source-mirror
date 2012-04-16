@@ -387,10 +387,6 @@ protected:
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
 
-    /// Internal units count that is equivalent to 1 inch.  Set to 1000 (0.001") for
-    /// schematic drawing and 10000 (0.0001") for PCB drawing.
-    int m_internalUnits;
-
     /// Tool ID of previously active draw tool bar button.
     int m_lastDrawToolId;
 
@@ -476,8 +472,6 @@ public:
     bool GetShowBorderAndTitleBlock() const { return m_showBorderAndTitleBlock; }
 
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
-
-    int GetInternalUnits() const { return m_internalUnits; }
 
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
 

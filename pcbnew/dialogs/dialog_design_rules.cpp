@@ -473,7 +473,7 @@ void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
 /* Initialize the rules list from board
  */
 
-static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc, int units )
+static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc )
 {
     wxString msg;
 
@@ -515,7 +515,7 @@ void DIALOG_DESIGN_RULES::InitRulesList()
     }
 
     // enter the Default NETCLASS.
-    class2gridRow( m_grid, 0, netclasses.GetDefault(), m_Parent->GetInternalUnits() );
+    class2gridRow( m_grid, 0, netclasses.GetDefault() );
 
     // enter others netclasses
     int row = 1;
@@ -523,12 +523,12 @@ void DIALOG_DESIGN_RULES::InitRulesList()
     {
         NETCLASS* netclass = i->second;
 
-        class2gridRow( m_grid, row, netclass, m_Parent->GetInternalUnits() );
+        class2gridRow( m_grid, row, netclass );
     }
 }
 
 
-static void gridRow2class( wxGrid* grid, int row, NETCLASS* nc, int units )
+static void gridRow2class( wxGrid* grid, int row, NETCLASS* nc )
 {
 #define MYCELL( col )   \
     ReturnValueFromString( g_UserUnit, grid->GetCellValue( row, col ) )
@@ -552,7 +552,7 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
     netclasses.Clear();
 
     // Copy the default NetClass:
-    gridRow2class( m_grid, 0, netclasses.GetDefault(), m_Parent->GetInternalUnits() );
+    gridRow2class( m_grid, 0, netclasses.GetDefault() );
 
     // Copy other NetClasses :
     for( int row = 1; row < m_grid->GetNumberRows();  ++row )
@@ -565,13 +565,13 @@ void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
             // Should not occur because OnAddNetclassClick() tests for existing NetClass names
             wxString msg;
             msg.Printf( wxT( "CopyRulesListToBoard(): The NetClass \"%s\" already exists. Skip" ),
-                       GetChars( m_grid->GetRowLabelValue( row ) ) );
+                        GetChars( m_grid->GetRowLabelValue( row ) ) );
             wxMessageBox( msg );
             delete nc;
             continue;
         }
 
-        gridRow2class( m_grid, row, nc, m_Parent->GetInternalUnits() );
+        gridRow2class( m_grid, row, nc );
     }
 
     // Now read all nets and push them in the corresponding netclass net buffer

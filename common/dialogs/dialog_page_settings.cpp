@@ -26,7 +26,7 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>         // DIM()
+#include <macros.h>              // DIM()
 #include <common.h>
 #include <gr_basic.h>
 #include <base_struct.h>
@@ -34,6 +34,7 @@
 #include <class_title_block.h>
 #include <wxstruct.h>
 #include <class_base_screen.h>
+#include <base_units.h>          // MILS_TO_IU_SCALAR
 
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
@@ -118,10 +119,12 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     // initalize page format choice box and page format list.
     // The first shows translated strings, the second contains not tralated strings
     m_paperSizeComboBox->Clear();
+
     for( unsigned ii = 0; ; ii++ )
     {
         if( pageFmts[ii].IsEmpty() )
             break;
+
         m_pageFmt.Add( pageFmts[ii] );
         m_paperSizeComboBox->Append( wxGetTranslation( pageFmts[ii] ) );
     }
@@ -137,8 +140,8 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     msg.Printf( format, m_Screen->m_ScreenNumber );
     m_TextSheetNumber->SetLabel( msg );
 #else
-    m_TextSheetCount->Show(false);
-    m_TextSheetNumber->Show(false);
+    m_TextSheetCount->Show( false );
+    m_TextSheetNumber->Show( false );
 #endif
 
     m_pageInfo = m_Parent->GetPageSettings();
@@ -251,10 +254,11 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 {
     m_save_flag = false;
     SavePageSettings( event );
+
     if( m_save_flag )
     {
-    m_modified = true;
-    Close( true );
+        m_modified = true;
+        Close( true );
     }
 }
 
@@ -268,9 +272,12 @@ void DIALOG_PAGES_SETTINGS::OnCancelClick( wxCommandEvent& event )
 void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
 {
     int idx = m_paperSizeComboBox->GetSelection();
+
     if( idx < 0 )
         idx = 0;
+
     const wxString paperType = m_pageFmt[idx];
+
     if( paperType.Contains( PAGE_INFO::Custom ) )
     {
         m_orientationComboBox->Enable( false );
@@ -280,14 +287,17 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
     else
     {
         m_orientationComboBox->Enable( true );
+
         if( paperType.Contains( wxT( "A4" ) ) && IsGOST() )
         {
             m_orientationComboBox->SetStringSelection( _( "Portrait" ) );
             m_orientationComboBox->Enable( false );
-    }
+        }
+
         m_TextUserSizeX->Enable( false );
         m_TextUserSizeY->Enable( false );
     }
+
     GetPageLayoutInfoFromDialog();
     UpdatePageLayoutExample();
 }
@@ -407,8 +417,10 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     m_save_flag = true;
 
     int idx = m_paperSizeComboBox->GetSelection();
+
     if( idx < 0 )
         idx = 0;
+
     const wxString paperType = m_pageFmt[idx];
 
     if( paperType.Contains( PAGE_INFO::Custom ) )
@@ -416,6 +428,7 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
         GetCustomSizeMilsFromDialog();
 
         retSuccess = m_pageInfo.SetType( PAGE_INFO::Custom );
+
         if( retSuccess )
         {
             if( m_layout_size.x < MIN_PAGE_SIZE || m_layout_size.y < MIN_PAGE_SIZE ||
@@ -432,6 +445,7 @@ limits\n%.1f - %.1f %s!\nSelect another custom paper size?" ),
                     m_save_flag = false;
                     return;
                 }
+
                 m_layout_size.x = Clamp( MIN_PAGE_SIZE, m_layout_size.x, MAX_PAGE_SIZE );
                 m_layout_size.y = Clamp( MIN_PAGE_SIZE, m_layout_size.y, MAX_PAGE_SIZE );
             }
@@ -595,6 +609,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
     }
 
     m_page_bitmap = new wxBitmap( lyWidth + 1, lyHeight + 1 );
+
     if( m_page_bitmap->IsOk() )
     {
         // Save current clip box and temporary expand it.
@@ -602,7 +617,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         m_Parent->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ),
                                                      wxSize( INT_MAX / 2, INT_MAX / 2 ) ) );
         // Calculate layout preview scale.
-        int appScale = m_Parent->GetInternalUnits() / 1000;
+        int appScale = MILS_TO_IU_SCALAR;
+
         double scaleW = (double) lyWidth  / clamped_layout_size.x / appScale;
         double scaleH = (double) lyHeight / clamped_layout_size.y / appScale;
 
@@ -630,7 +646,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
         m_Parent->TraceWorkSheet( (wxDC*) &memDC, dummySize, pointLeftTop, pointRightBottom,
                                   emptyString, emptyString, m_tb, m_Screen->m_NumberOfScreen,
-                                  m_Screen->m_ScreenNumber, 1, LIGHTGRAY, RED );
+                                  m_Screen->m_ScreenNumber, 1, appScale, LIGHTGRAY, RED );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );
@@ -648,14 +664,17 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 {
     int idx = m_paperSizeComboBox->GetSelection();
+
     if( idx < 0 )
         idx = 0;
+
     const wxString paperType = m_pageFmt[idx];
 
     // here we assume translators will keep original paper size spellings
     if( paperType.Contains( PAGE_INFO::Custom ) )
     {
         GetCustomSizeMilsFromDialog();
+
         if( m_layout_size.x && m_layout_size.y )
         {
             if( m_layout_size.x < m_layout_size.y )
@@ -687,6 +706,7 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
         };
 
         unsigned i;
+
         for( i=0;  i < DIM( papers );  ++i )
         {
             if( paperType.Contains( *papers[i] ) )

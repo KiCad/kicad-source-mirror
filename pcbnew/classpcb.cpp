@@ -125,9 +125,13 @@ PCB_SCREEN::~PCB_SCREEN()
 }
 
 
-int PCB_SCREEN::GetInternalUnits()
+int PCB_SCREEN::MilsToIuScalar()
 {
-    return PCB_INTERNAL_UNIT;
+#if defined( USE_PCBNEW_NANOMETRES )
+    return 25400;
+#else
+    return 10;
+#endif
 }
 
 

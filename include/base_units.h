@@ -96,7 +96,7 @@ void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue );
 /**
  * Return in internal units the value "val" given in inch or mm
  */
-int From_User_Unit( EDA_UNITS_T aUnit, double aValue );
+double From_User_Unit( EDA_UNITS_T aUnit, double aValue );
 
 /**
  * Function ReturnValueFromeString

@@ -215,7 +215,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
 
     LOCALE_IO   toggle;
 
-    float       dpi = (float) frame->GetInternalUnits();
+    float       dpi = 1000.0;
     KicadSVGFileDC dc( FullFileName, sheetSize.x, sheetSize.y, dpi );
 
     EDA_RECT    tmp = *panel->GetClipBox();
@@ -227,6 +227,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
                                  wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     screen->m_IsPrinting = true;
+
     if( frame->IsType( SCHEMATIC_FRAME ) )
         screen->Draw( panel, &dc, GR_COPY );
 
