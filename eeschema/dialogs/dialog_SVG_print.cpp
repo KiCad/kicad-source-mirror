@@ -92,8 +92,7 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 
 void DIALOG_SVG_PRINT::SetPenWidth()
 {
-    g_DrawDefaultLineThickness =
-    ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->GetInternalUnits() );
+    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DialogPenWidth );
 
     if( g_DrawDefaultLineThickness > WIDTH_MAX_VALUE )
     {
@@ -118,7 +117,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
     SetPenWidth();
 
     g_DrawDefaultLineThickness =
-    ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->GetInternalUnits() );
+    ReturnValueFromTextCtrl( *m_DialogPenWidth );
 
     SCH_SCREEN* screen = (SCH_SCREEN*) m_Parent->GetScreen();
 

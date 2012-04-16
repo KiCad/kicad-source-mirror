@@ -44,13 +44,19 @@
 #if defined( USE_PCBNEW_NANOMETRES )
 #define IU_TO_MM( x )       ( x * 1e-6 )
 #define IU_TO_IN( x )       ( ( x * 1e-6 ) / 25.4 )
+#define MM_TO_IU( x )       ( x * 1e6 )
+#define IN_TO_IU( x )       ( ( x * 25.4 ) * 1e6 )
 #else
 #define IU_TO_MM( x )       ( ( x * 0.0001 ) * 25.4 )
 #define IU_TO_IN( x )       ( x * 0.0001 )
+#define MM_TO_IU( x )       ( ( x / 25.4 ) * 10000.0 )
+#define IN_TO_IU( x )       ( x * 10000.0 )
 #endif
 #elif defined( EESCHEMA )
 #define IU_TO_MM( x )       ( ( x * 0.001 ) * 25.4 )
 #define IU_TO_IN( x )       ( x * 0.001 )
+#define MM_TO_IU( x )       ( ( x / 25.4 ) * 1000.0 )
+#define IN_TO_IU( x )       ( x * 1000.0 )
 #else
 #error "Cannot resolve internal units due to no definition of EESCHEMA or PCBNEW."
 #endif
@@ -158,4 +164,100 @@ void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue )
     wxString msg = ReturnStringFromValue( g_UserUnit, aValue );
 
     aTextCtr.SetValue( msg );
+}
+
+
+int From_User_Unit( EDA_UNITS_T aUnit, double aValue )
+{
+    double value;
+
+    switch( aUnit )
+    {
+    case MILLIMETRES:
+        value = MM_TO_IU( aValue );
+        break;
+
+    case INCHES:
+        value = IN_TO_IU( aValue );
+        break;
+
+    default:
+    case UNSCALED_UNITS:
+
+        value = aValue;
+    }
+
+    return wxRound( value );
+}
+
+
+
+
+int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
+{
+    int    Value;
+    double dtmp = 0;
+
+    // Acquire the 'right' decimal point separator
+    const struct lconv* lc = localeconv();
+    wxChar decimal_point = lc->decimal_point[0];
+    wxString            buf( aTextValue.Strip( wxString::both ) );
+
+    // Convert the period in decimal point
+    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+
+    // An ugly fix needed by WxWidgets 2.9.1 that sometimes
+    // back to a point as separator, although the separator is the comma
+    // TODO: remove this line if WxWidgets 2.9.2 fixes this issue
+    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
+
+    // Find the end of the numeric part
+    unsigned brk_point = 0;
+
+    while( brk_point < buf.Len() )
+    {
+        wxChar ch = buf[brk_point];
+
+        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point) || (ch == '-') || (ch == '+') ) )
+        {
+            break;
+        }
+
+        ++brk_point;
+    }
+
+    // Extract the numeric part
+    buf.Left( brk_point ).ToDouble( &dtmp );
+
+    // Check the optional unit designator (2 ch significant)
+    wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
+
+    if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
+    {
+        aUnits = INCHES;
+    }
+    else if( unit == wxT( "mm" ) )
+    {
+        aUnits = MILLIMETRES;
+    }
+    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) // Mils or thous
+    {
+        aUnits = INCHES;
+        dtmp /= 1000;
+    }
+
+    Value = From_User_Unit( aUnits, dtmp );
+
+    return Value;
+}
+
+
+int ReturnValueFromTextCtrl( const wxTextCtrl& aTextCtr )
+{
+    int      value;
+    wxString msg = aTextCtr.GetValue();
+
+    value = ReturnValueFromString( g_UserUnit, msg );
+
+    return value;
 }

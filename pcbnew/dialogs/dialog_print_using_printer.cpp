@@ -385,7 +385,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
     // Get the new pen width value, and verify min et max value
     // NOTE: s_Parameters.m_PenDefaultSize is in internal units
 
-    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_parent->GetInternalUnits() );
+    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth );
 
     if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
     {

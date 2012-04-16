@@ -213,24 +213,24 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     wxPoint coord;
 
     msg = m_Center_StartXCtrl->GetValue();
-    coord.x = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    coord.x = ReturnValueFromString( g_UserUnit, msg );
     msg = m_Center_StartYCtrl->GetValue();
-    coord.y = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    coord.y = ReturnValueFromString( g_UserUnit, msg );
     m_item->SetStart( coord );
     m_item->SetStart0( coord );
 
     msg = m_EndX_Radius_Ctrl->GetValue();
-    coord.x = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    coord.x = ReturnValueFromString( g_UserUnit, msg );
     msg = m_EndY_Ctrl->GetValue();
-    coord.y = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    coord.y = ReturnValueFromString( g_UserUnit, msg );
     m_item->SetEnd( coord );
     m_item->SetEnd0( coord );
 
     msg = m_ThicknessCtrl->GetValue();
-    m_item->SetWidth( ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() ));
+    m_item->SetWidth( ReturnValueFromString( g_UserUnit, msg ) );
 
     msg = m_DefaultThicknessCtrl->GetValue();
-    int thickness = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    int thickness = ReturnValueFromString( g_UserUnit, msg );
     m_brdSettings.m_ModuleSegmentWidth = thickness;
     m_parent->SetDesignSettings( m_brdSettings );
 

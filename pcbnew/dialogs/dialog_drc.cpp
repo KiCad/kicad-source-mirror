@@ -29,6 +29,7 @@
 #include <fctsys.h>
 #include <dialog_drc.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 #include <class_board_design_settings.h>
 
 
@@ -130,12 +131,9 @@ void DIALOG_DRC_CONTROL::InitValues()
 */
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
-     m_BrdSettings.m_TrackMinWidth =
-        ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->GetInternalUnits() );
-     m_BrdSettings.m_ViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->GetInternalUnits() );
-     m_BrdSettings.m_MicroViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->GetInternalUnits() );
+     m_BrdSettings.m_TrackMinWidth = ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
+     m_BrdSettings.m_ViasMinSize = ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl );
+     m_BrdSettings.m_MicroViasMinSize = ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl );
 
      m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
 }

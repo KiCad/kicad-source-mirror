@@ -1,6 +1,8 @@
 #include <fctsys.h>
 #include <macros.h>
 #include <gr_basic.h>
+#include <base_units.h>
+
 #include <libeditframe.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
@@ -91,11 +93,11 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
 {
     if( ! IsShown() )   // do nothing at init time
         return;
-    int units = ((LIB_EDIT_FRAME*)GetParent())->GetInternalUnits();
-    int pinNameSize = ReturnValueFromString( g_UserUnit, GetNameTextSize(), units );
-    int pinNumSize = ReturnValueFromString( g_UserUnit, GetPadNameTextSize(), units);
+
+    int pinNameSize = ReturnValueFromString( g_UserUnit, GetNameTextSize() );
+    int pinNumSize = ReturnValueFromString( g_UserUnit, GetPadNameTextSize());
     int pinOrient = LIB_PIN::GetOrientationCode( GetOrientation() );
-    int pinLength = ReturnValueFromString( g_UserUnit, GetLength(), units );
+    int pinLength = ReturnValueFromString( g_UserUnit, GetLength() );
     int pinShape = LIB_PIN::GetStyleCode( GetStyle() );
     int pinType = GetElectricalType();
 
