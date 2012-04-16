@@ -1003,7 +1003,8 @@ Ki_WorkSheetData WS_Segm5_LT =
 };
 
 
-void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width )
+void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
+                                     double aScalar )
 {
     if( !m_showBorderAndTitleBlock )
         return;
@@ -1012,41 +1013,39 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     wxSize  pageSize = pageInfo.GetSizeMils();
 
     // if not printing, draw the page limits:
-    if( !screen->m_IsPrinting && g_ShowPageLimits )
+    if( !aScreen->m_IsPrinting && g_ShowPageLimits )
     {
-        int scale = m_internalUnits / 1000;
-        GRSetDrawMode( DC, GR_COPY );
-        GRRect( m_canvas->GetClipBox(), DC, 0, 0,
-                pageSize.x * scale, pageSize.y * scale, line_width,
+        GRSetDrawMode( aDC, GR_COPY );
+        GRRect( m_canvas->GetClipBox(), aDC, 0, 0,
+                pageSize.x * aScalar, pageSize.y * aScalar, aLineWidth,
                 g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
 
     wxPoint margin_left_top( pageInfo.GetLeftMarginMils(), pageInfo.GetTopMarginMils() );
     wxPoint margin_right_bottom( pageInfo.GetRightMarginMils(), pageInfo.GetBottomMarginMils() );
     wxString paper = pageInfo.GetType();
-    wxString file = screen->GetFileName();
+    wxString file = aScreen->GetFileName();
     TITLE_BLOCK t_block = GetTitleBlock();
-    int number_of_screens = screen->m_NumberOfScreen;
-    int screen_to_draw = screen->m_ScreenNumber;
+    int number_of_screens = aScreen->m_NumberOfScreen;
+    int screen_to_draw = aScreen->m_ScreenNumber;
 
-    TraceWorkSheet( ( wxDC* )DC, pageSize, margin_left_top, margin_right_bottom,
-                      paper, file, t_block, number_of_screens, screen_to_draw,
-                      ( int )line_width );
+    TraceWorkSheet( aDC, pageSize, margin_left_top, margin_right_bottom,
+                    paper, file, t_block, number_of_screens, screen_to_draw,
+                    aLineWidth, aScalar );
 }
 
 
 void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
-                                       wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
-                                       int aNScr, int aScr, int aLnW, EDA_COLOR_T aClr1,
-                                       EDA_COLOR_T aClr2 )
+                                     wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
+                                     int aNScr, int aScr, int aLnW, double aScalar,
+                                     EDA_COLOR_T aClr1, EDA_COLOR_T aClr2 )
 {
     wxPoint pos;
     int refx, refy;
     wxString Line;
     Ki_WorkSheetData* WsItem;
-    int scale = m_internalUnits / 1000;
-    wxSize size( SIZETEXT * scale, SIZETEXT * scale );
-    wxSize size_ref( SIZETEXT_REF * scale, SIZETEXT_REF * scale );
+    wxSize size( SIZETEXT * aScalar, SIZETEXT * aScalar );
+    wxSize size_ref( SIZETEXT_REF * aScalar, SIZETEXT_REF * aScalar );
     wxString msg;
 
     GRSetDrawMode( aDC, GR_COPY );
@@ -1062,15 +1061,15 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
 
 #if defined(KICAD_GOST)
     // Draw the border.
-    GRRect( m_canvas->GetClipBox(), aDC, refx * scale, refy * scale,
-            xg * scale, yg * scale, aLnW, aClr1 );
+    GRRect( m_canvas->GetClipBox(), aDC, refx * aScalar, refy * aScalar,
+            xg * aScalar, yg * aScalar, aLnW, aClr1 );
 
     refx = aLT.x;
     refy = aSz.y - aRB.y; // Lower left corner
     for( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
     {
-        pos.x = ( refx - WsItem->m_Posx ) * scale;
-        pos.y = ( refy - WsItem->m_Posy ) * scale;
+        pos.x = ( refx - WsItem->m_Posx ) * aScalar;
+        pos.y = ( refy - WsItem->m_Posy ) * aScalar;
         msg.Empty();
         switch( WsItem->m_Type )
         {
@@ -1090,7 +1089,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
             xg = aLT.x - WsItem->m_Endx;
             yg = aSz.y - aRB.y - WsItem->m_Endy;
             GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                    xg * scale, yg * scale, aLnW, aClr1 );
+                    xg * aScalar, yg * aScalar, aLnW, aClr1 );
             break;
         }
     }
@@ -1098,8 +1097,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
     refy = aRB.y; // Left Top corner
     for( WsItem = &WS_Segm1_LT; WsItem != NULL; WsItem = WsItem->Pnext )
     {
-        pos.x = ( refx + WsItem->m_Posx ) * scale;
-        pos.y = ( refy + WsItem->m_Posy ) * scale;
+        pos.x = ( refx + WsItem->m_Posx ) * aScalar;
+        pos.y = ( refy + WsItem->m_Posy ) * aScalar;
         msg.Empty();
         switch( WsItem->m_Type )
         {
@@ -1107,14 +1106,14 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
             xg = aLT.x + WsItem->m_Endx;
             yg = aRB.y + WsItem->m_Endy;
             GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                    xg * scale, yg * scale, aLnW, aClr1 );
+                    xg * aScalar, yg * aScalar, aLnW, aClr1 );
             break;
         }
     }
 
-    wxSize size2( SIZETEXT * scale * 2, SIZETEXT * scale * 2);
-    wxSize size3( SIZETEXT * scale * 3, SIZETEXT * scale * 3);
-    wxSize size1_5( SIZETEXT * scale * 1.5, SIZETEXT * scale * 1.5);
+    wxSize size2( SIZETEXT * aScalar * 2, SIZETEXT * aScalar * 2);
+    wxSize size3( SIZETEXT * aScalar * 3, SIZETEXT * aScalar * 3);
+    wxSize size1_5( SIZETEXT * aScalar * 1.5, SIZETEXT * aScalar * 1.5);
     // lower right corner
     refx = aSz.x - aRB.x;
     refy = aSz.y - aRB.y;
@@ -1123,8 +1122,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
     {
         for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
         {
-            pos.x = (refx - WsItem->m_Posx) * scale;
-            pos.y = (refy - WsItem->m_Posy) * scale;
+            pos.x = (refx - WsItem->m_Posx) * aScalar;
+            pos.y = (refy - WsItem->m_Posy) * aScalar;
             msg.Empty();
             switch( WsItem->m_Type )
             {
@@ -1198,8 +1197,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                                      msg, TEXT_ORIENT_HORIZ, size3,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      aLnW, false, false );
-                    pos.x = (aLT.x + 1260) * scale;
-                    pos.y = (aLT.y + 270) * scale;
+                    pos.x = (aLT.x + 1260) * aScalar;
+                    pos.y = (aLT.y + 270) * aScalar;
                     DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, 1800, size2,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
@@ -1244,13 +1243,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
             case WS_LEFT_SEGMENT:
                 WS_MostUpperLine.m_Posy = WS_MostUpperLine.m_Endy =
                     WS_MostLeftLine.m_Posy = STAMP_OY;
-                pos.y = ( refy - WsItem->m_Posy ) * scale;
+                pos.y = ( refy - WsItem->m_Posy ) * aScalar;
 
             case WS_SEGMENT:
                 xg = aSz.x - aRB.x - WsItem->m_Endx;
                 yg = aSz.y - aRB.y - WsItem->m_Endy;
                 GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                        xg * scale, yg * scale, aLnW, aClr1 );
+                        xg * aScalar, yg * aScalar, aLnW, aClr1 );
                 break;
             }
         }
@@ -1259,8 +1258,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
     {
         for( WsItem = &WS_CADRE_D; WsItem != NULL; WsItem = WsItem->Pnext )
         {
-            pos.x = ( refx - WsItem->m_Posx ) * scale;
-            pos.y = ( refy - WsItem->m_Posy ) * scale;
+            pos.x = ( refx - WsItem->m_Posx ) * aScalar;
+            pos.y = ( refy - WsItem->m_Posy ) * aScalar;
             msg.Empty();
 
             switch( WsItem->m_Type )
@@ -1274,8 +1273,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                                      msg, TEXT_ORIENT_HORIZ, size3,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      aLnW, false, false );
-                    pos.x = (aLT.x + 1260) * scale;
-                    pos.y = (aLT.y + 270) * scale;
+                    pos.x = (aLT.x + 1260) * aScalar;
+                    pos.y = (aLT.y + 270) * aScalar;
                     DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                      msg, 1800, size2,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
@@ -1303,13 +1302,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                 break;
 
             case WS_LEFT_SEGMENT_D:
-                pos.y = ( refy - WsItem->m_Posy ) * scale;
+                pos.y = ( refy - WsItem->m_Posy ) * aScalar;
 
             case WS_SEGMENT_D:
                 xg = aSz.x - aRB.x - WsItem->m_Endx;
                 yg = aSz.y - aRB.y - WsItem->m_Endy;
                 GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                        xg * scale, yg * scale, aLnW, aClr1 );
+                        xg * aScalar, yg * aScalar, aLnW, aClr1 );
                 break;
             }
         }
@@ -1320,8 +1319,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
     int ii, jj, ipas, gxpas, gypas;
     for( ii = 0; ii < 2; ii++ )
     {
-        GRRect( m_canvas->GetClipBox(), aDC, refx * scale, refy * scale,
-                xg * scale, yg * scale, aLnW, aClr1 );
+        GRRect( m_canvas->GetClipBox(), aDC, refx * aScalar, refy * aScalar,
+                xg * aScalar, yg * aScalar, aLnW, aClr1 );
 
         refx += GRID_REF_W; refy += GRID_REF_W;
         xg   -= GRID_REF_W; yg -= GRID_REF_W;
@@ -1343,24 +1342,24 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
 
         if( ii < xg - PAS_REF / 2 )
         {
-            GRLine( m_canvas->GetClipBox(), aDC, ii * scale, refy * scale,
-                    ii * scale, ( refy + GRID_REF_W ) * scale, aLnW, aClr1 );
+            GRLine( m_canvas->GetClipBox(), aDC, ii * aScalar, refy * aScalar,
+                    ii * aScalar, ( refy + GRID_REF_W ) * aScalar, aLnW, aClr1 );
         }
         DrawGraphicText( m_canvas, aDC,
-                         wxPoint( ( ii - gxpas / 2 ) * scale,
-                                  ( refy + GRID_REF_W / 2 ) * scale ),
+                         wxPoint( ( ii - gxpas / 2 ) * aScalar,
+                                  ( refy + GRID_REF_W / 2 ) * aScalar ),
                          aClr1, Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                          aLnW, false, false );
 
         if( ii < xg - PAS_REF / 2 )
         {
-            GRLine( m_canvas->GetClipBox(), aDC, ii * scale, yg * scale,
-                    ii * scale, ( yg - GRID_REF_W ) * scale, aLnW, aClr1 );
+            GRLine( m_canvas->GetClipBox(), aDC, ii * aScalar, yg * aScalar,
+                    ii * aScalar, ( yg - GRID_REF_W ) * aScalar, aLnW, aClr1 );
         }
         DrawGraphicText( m_canvas, aDC,
-                         wxPoint( ( ii - gxpas / 2 ) * scale,
-                                  ( yg - GRID_REF_W / 2) * scale ),
+                         wxPoint( ( ii - gxpas / 2 ) * aScalar,
+                                  ( yg - GRID_REF_W / 2) * aScalar ),
                          aClr1, Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                          aLnW, false, false );
@@ -1378,25 +1377,25 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
 
         if( ii < yg - PAS_REF / 2 )
         {
-            GRLine( m_canvas->GetClipBox(), aDC, refx * scale, ii * scale,
-                    ( refx + GRID_REF_W ) * scale, ii * scale, aLnW, aClr1 );
+            GRLine( m_canvas->GetClipBox(), aDC, refx * aScalar, ii * aScalar,
+                    ( refx + GRID_REF_W ) * aScalar, ii * aScalar, aLnW, aClr1 );
         }
 
         DrawGraphicText( m_canvas, aDC,
-                         wxPoint( ( refx + GRID_REF_W / 2 ) * scale,
-                                  ( ii - gypas / 2 ) * scale ),
+                         wxPoint( ( refx + GRID_REF_W / 2 ) * aScalar,
+                                  ( ii - gypas / 2 ) * aScalar ),
                          aClr1, Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                          aLnW, false, false );
 
         if( ii < yg - PAS_REF / 2 )
         {
-            GRLine( m_canvas->GetClipBox(), aDC, xg * scale, ii * scale,
-                    ( xg - GRID_REF_W ) * scale, ii * scale, aLnW, aClr1 );
+            GRLine( m_canvas->GetClipBox(), aDC, xg * aScalar, ii * aScalar,
+                    ( xg - GRID_REF_W ) * aScalar, ii * aScalar, aLnW, aClr1 );
         }
         DrawGraphicText( m_canvas, aDC,
-                         wxPoint( ( xg - GRID_REF_W / 2 ) * scale,
-                                  ( ii - gxpas / 2 ) * scale ),
+                         wxPoint( ( xg - GRID_REF_W / 2 ) * aScalar,
+                                  ( ii - gxpas / 2 ) * aScalar ),
                          aClr1, Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                          aLnW, false, false );
@@ -1408,8 +1407,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
 
     for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
     {
-        pos.x = (refx - WsItem->m_Posx) * scale;
-        pos.y = (refy - WsItem->m_Posy) * scale;
+        pos.x = (refx - WsItem->m_Posx) * aScalar;
+        pos.y = (refy - WsItem->m_Posy) * aScalar;
         msg.Empty();
 
         switch( WsItem->m_Type )
@@ -1592,13 +1591,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
             WS_MostUpperLine.m_Posy =
                 WS_MostUpperLine.m_Endy    =
                     WS_MostLeftLine.m_Posy = UpperLimit;
-            pos.y = (refy - WsItem->m_Posy) * scale;
+            pos.y = (refy - WsItem->m_Posy) * aScalar;
 
         case WS_SEGMENT:
             xg = aSz.x - GRID_REF_W - aRB.x - WsItem->m_Endx;
             yg = aSz.y - GRID_REF_W - aRB.y - WsItem->m_Endy;
             GRLine( m_canvas->GetClipBox(), aDC, pos.x, pos.y,
-                    xg * scale, yg * scale, aLnW, aClr1 );
+                    xg * aScalar, yg * aScalar, aLnW, aClr1 );
             break;
         }
     }

@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <gestfich.h>
 #include <confirm.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -862,7 +863,7 @@ void SCH_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData )
 {
     GetScreen()->Draw( m_canvas, aDC, GR_DEFAULT_DRAWMODE );
-    TraceWorkSheet( aDC, GetScreen(), g_DrawDefaultLineThickness );
+    TraceWorkSheet( aDC, GetScreen(), g_DrawDefaultLineThickness, MILS_TO_IU_SCALAR );
 }
 
 

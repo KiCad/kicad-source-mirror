@@ -10,12 +10,26 @@
 #include <trigo.h>
 #include <class_pcb_screen.h>
 #include <eda_text.h>                // FILLED
+#include <base_units.h>
 
 #include <pcbnew.h>
 #include <class_board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <pcbnew_id.h>
+
+
+#if defined( USE_PCBNEW_NANOMETRES )
+#define ZOOM_FACTOR( x )       ( x * 25.4e2 )
+#define DMIL_GRID( x )         wxRealPoint( x * 25.4e2, x * 25.4e2 )
+#define MM_GRID( x )           wxRealPoint( x * 1e6, x * 1e6 )
+#else
+#define ZOOM_FACTOR( x )       x
+#define DMIL_GRID( x )         wxRealPoint( x ,  x )
+#define MM_GRID( x )           wxRealPoint( x * 1e4 / 25.4, x * 1e4 / 25.4 )
+#endif
+
+
 
 
 /* Default Pcbnew zoom values.
@@ -30,42 +44,56 @@
  */
 static const double pcbZoomList[] =
 {
-    0.5,    1.0,   1.5,   2.0,   3.0, 4.5, 7.0,
-    10.0, 15.0, 22.0, 35.0, 50.0, 80.0, 120.0,
-    200.0, 350.0, 500.0, 1000.0, 2000.0
+    ZOOM_FACTOR( 0.5 ),
+    ZOOM_FACTOR( 1.0 ),
+    ZOOM_FACTOR( 1.5 ),
+    ZOOM_FACTOR( 2.0 ),
+    ZOOM_FACTOR( 3.0 ),
+    ZOOM_FACTOR( 4.5 ),
+    ZOOM_FACTOR( 7.0 ),
+    ZOOM_FACTOR( 10.0 ),
+    ZOOM_FACTOR( 15.0 ),
+    ZOOM_FACTOR( 22.0 ),
+    ZOOM_FACTOR( 35.0 ),
+    ZOOM_FACTOR( 50.0 ),
+    ZOOM_FACTOR( 80.0 ),
+    ZOOM_FACTOR( 120.0 ),
+    ZOOM_FACTOR( 200.0 ),
+    ZOOM_FACTOR( 350.0 ),
+    ZOOM_FACTOR( 500.0 ),
+    ZOOM_FACTOR( 1000.0 ),
+    ZOOM_FACTOR( 2000.0 )
 };
-
-#define MM_TO_PCB_UNITS     (10000.0 / 25.4)
 
 
 // Default grid sizes for PCB editor screens.
 static GRID_TYPE pcbGridList[] =
 {
     // predefined grid list in 0.0001 inches
-    { ID_POPUP_GRID_LEVEL_1000,     wxRealPoint( 1000,                    1000 )                      },
-    { ID_POPUP_GRID_LEVEL_500,      wxRealPoint( 500,                     500 )                       },
-    { ID_POPUP_GRID_LEVEL_250,      wxRealPoint( 250,                     250 )                       },
-    { ID_POPUP_GRID_LEVEL_200,      wxRealPoint( 200,                     200 )                       },
-    { ID_POPUP_GRID_LEVEL_100,      wxRealPoint( 100,                     100 )                       },
-    { ID_POPUP_GRID_LEVEL_50,       wxRealPoint( 50,                      50 )                        },
-    { ID_POPUP_GRID_LEVEL_25,       wxRealPoint( 25,                      25 )                        },
-    { ID_POPUP_GRID_LEVEL_20,       wxRealPoint( 20,                      20 )                        },
-    { ID_POPUP_GRID_LEVEL_10,       wxRealPoint( 10,                      10 )                        },
-    { ID_POPUP_GRID_LEVEL_5,        wxRealPoint( 5,                       5 )                         },
-    { ID_POPUP_GRID_LEVEL_2,        wxRealPoint( 2,                       2 )                         },
-    { ID_POPUP_GRID_LEVEL_1,        wxRealPoint( 1,                       1 )                         },
+    { ID_POPUP_GRID_LEVEL_1000,     DMIL_GRID( 1000 )  },
+    { ID_POPUP_GRID_LEVEL_500,      DMIL_GRID( 500 )   },
+    { ID_POPUP_GRID_LEVEL_250,      DMIL_GRID( 250 )   },
+    { ID_POPUP_GRID_LEVEL_200,      DMIL_GRID( 200 )   },
+    { ID_POPUP_GRID_LEVEL_100,      DMIL_GRID( 100 )   },
+    { ID_POPUP_GRID_LEVEL_50,       DMIL_GRID( 50 )    },
+    { ID_POPUP_GRID_LEVEL_25,       DMIL_GRID( 25 )    },
+    { ID_POPUP_GRID_LEVEL_20,       DMIL_GRID( 20 )    },
+    { ID_POPUP_GRID_LEVEL_10,       DMIL_GRID( 10 )    },
+    { ID_POPUP_GRID_LEVEL_5,        DMIL_GRID( 5 )     },
+    { ID_POPUP_GRID_LEVEL_2,        DMIL_GRID( 2 )     },
+    { ID_POPUP_GRID_LEVEL_1,        DMIL_GRID( 1 )     },
 
     // predefined grid list in mm
-    { ID_POPUP_GRID_LEVEL_5MM,      wxRealPoint( MM_TO_PCB_UNITS * 5.0,   MM_TO_PCB_UNITS * 5.0 )     },
-    { ID_POPUP_GRID_LEVEL_2_5MM,    wxRealPoint( MM_TO_PCB_UNITS * 2.5,   MM_TO_PCB_UNITS * 2.5 )     },
-    { ID_POPUP_GRID_LEVEL_1MM,      wxRealPoint( MM_TO_PCB_UNITS,         MM_TO_PCB_UNITS )           },
-    { ID_POPUP_GRID_LEVEL_0_5MM,    wxRealPoint( MM_TO_PCB_UNITS * 0.5,   MM_TO_PCB_UNITS * 0.5 )     },
-    { ID_POPUP_GRID_LEVEL_0_25MM,   wxRealPoint( MM_TO_PCB_UNITS * 0.25,  MM_TO_PCB_UNITS * 0.25 )    },
-    { ID_POPUP_GRID_LEVEL_0_2MM,    wxRealPoint( MM_TO_PCB_UNITS * 0.2,   MM_TO_PCB_UNITS * 0.2 )     },
-    { ID_POPUP_GRID_LEVEL_0_1MM,    wxRealPoint( MM_TO_PCB_UNITS * 0.1,   MM_TO_PCB_UNITS * 0.1 )     },
-    { ID_POPUP_GRID_LEVEL_0_0_5MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.05,  MM_TO_PCB_UNITS * 0.05 )     },
-    { ID_POPUP_GRID_LEVEL_0_0_25MM, wxRealPoint( MM_TO_PCB_UNITS * 0.025, MM_TO_PCB_UNITS * 0.025 )     },
-    { ID_POPUP_GRID_LEVEL_0_0_1MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.01,  MM_TO_PCB_UNITS * 0.01 )     }
+    { ID_POPUP_GRID_LEVEL_5MM,      MM_GRID( 5.0 )     },
+    { ID_POPUP_GRID_LEVEL_2_5MM,    MM_GRID( 2.5 )     },
+    { ID_POPUP_GRID_LEVEL_1MM,      MM_GRID( 1.0 )     },
+    { ID_POPUP_GRID_LEVEL_0_5MM,    MM_GRID( 0.5 )     },
+    { ID_POPUP_GRID_LEVEL_0_25MM,   MM_GRID( 0.25 )    },
+    { ID_POPUP_GRID_LEVEL_0_2MM,    MM_GRID( 0.2 )     },
+    { ID_POPUP_GRID_LEVEL_0_1MM,    MM_GRID( 0.1 )     },
+    { ID_POPUP_GRID_LEVEL_0_0_5MM,  MM_GRID( 0.05 )    },
+    { ID_POPUP_GRID_LEVEL_0_0_25MM, MM_GRID( 0.025 )   },
+    { ID_POPUP_GRID_LEVEL_0_0_1MM,  MM_GRID( 0.01 )    }
 };
 
 
@@ -79,13 +107,13 @@ PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
         AddGrid( pcbGridList[i] );
 
     // Set the working grid size to a reasonnable value (in 1/10000 inch)
-    SetGrid( wxRealPoint( 500, 500 ) );
+    SetGrid( DMIL_GRID( 500 ) );
 
     m_Active_Layer       = LAYER_N_BACK;      // default active layer = bottom layer
     m_Route_Layer_TOP    = LAYER_N_FRONT;     // default layers pair for vias (bottom to top)
     m_Route_Layer_BOTTOM = LAYER_N_BACK;
 
-    SetZoom( 150 );                           // a default value for zoom
+    SetZoom( ZOOM_FACTOR( 150 ) );            // a default value for zoom
 
     InitDataPoints( aPageSizeIU );
 }
