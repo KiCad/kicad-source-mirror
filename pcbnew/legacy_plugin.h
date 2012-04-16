@@ -44,6 +44,8 @@ class EDGE_MODULE;
 class TRACK;
 class SEGZONE;
 class D_PAD;
+class FPL_CACHE;
+
 
 /**
  * Class LEGACY_PLUGIN
@@ -55,7 +57,7 @@ class LEGACY_PLUGIN : public PLUGIN
 
 public:
 
-    //-----<PLUGIN>-------------------------------------------------------------
+    //-----<PLUGIN IMPLEMENTATION>----------------------------------------------
 
     const wxString& PluginName() const
     {
@@ -73,7 +75,35 @@ public:
 
     void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );          // overload
 
-    //-----</PLUGIN>------------------------------------------------------------
+    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
+
+    MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                    PROPERTIES* aProperties = NULL );
+
+    void FootprintSave( const wxString& aLibraryPath, MODULE* aFootprint,
+                                    PROPERTIES* aProperties = NULL );
+
+    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName );
+
+    bool IsLibraryWritable( const wxString& aLibraryPath );
+
+    //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
+
+    LEGACY_PLUGIN() :
+        m_board( 0 ),
+        m_props( 0 ),
+        m_reader( 0 ),
+        m_fp( 0 ),
+        m_cache( 0 )
+    {}
+
+    ~LEGACY_PLUGIN();
+
+    void SetReader( LINE_READER* aReader )      { m_reader = aReader; }
+    void SetFilePtr( FILE* aFile )              { m_fp = aFile; }
+
+    MODULE* LoadMODULE();
+
 
 protected:
 
@@ -87,6 +117,8 @@ protected:
 
     wxString        m_field;        ///< reused to stuff MODULE fields.
     int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
+    FPL_CACHE*      m_cache;
+
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
@@ -131,11 +163,11 @@ protected:
 
     void loadAllSections( bool doAppend );
 
+
     void loadGENERAL();
     void loadSETUP();
     void loadSHEET();
 
-    void loadMODULE();
     void load3D( MODULE* aModule );
     void loadPAD( MODULE* aModule );
     void loadMODULE_TEXT( TEXTE_MODULE* aText );
@@ -235,6 +267,8 @@ protected:
 
     //-----</save functions>----------------------------------------------------
 
+    /// we only cache one footprint library for now, this determines which one.
+    void cacheLib( const wxString& aLibraryPath );
 };
 
 #endif  // LEGACY_PLUGIN_H_

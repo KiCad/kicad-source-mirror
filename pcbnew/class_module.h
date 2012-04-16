@@ -332,6 +332,12 @@ public:
      */
     D_PAD* GetPad( const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
 
+    /**
+     * GetPadCount
+     * returns the number of pads.
+     */
+    unsigned GetPadCount() const            { return m_Pads.GetCount() ; }
+
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
 

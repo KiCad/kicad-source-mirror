@@ -3,13 +3,8 @@
  * @brief Classes and definitions used in Pcbnew.
  */
 
-#ifndef PCBSTRUCT_H
-#define PCBSTRUCT_H
-
-
-// Definitions relatives aux libraries
-#define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
-#define FOOTPRINT_LIBRARY_HEADER_CNT   18
+#ifndef PCBSTRUCT_H_
+#define PCBSTRUCT_H_
 
 
 /// Values for m_DisplayViaMode member:
@@ -83,4 +78,4 @@ public:
     DISPLAY_OPTIONS();
 };
 
-#endif // PCBSTRUCT_H
+#endif // PCBSTRUCT_H_

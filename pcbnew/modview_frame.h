@@ -35,7 +35,6 @@
 class wxSashLayoutWindow;
 class wxListBox;
 class wxSemaphore;
-class FOOTPRINT_LIBRARY;
 
 
 /**

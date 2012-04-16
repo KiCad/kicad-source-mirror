@@ -96,7 +96,7 @@ set(PCBNEW_SRCS
     block.cpp
     block_module_editor.cpp
     build_BOM_from_board.cpp
-    class_footprint_library.cpp
+#    class_footprint_library.cpp
     class_pcb_layer_widget.cpp
     clean.cpp
     connect.cpp

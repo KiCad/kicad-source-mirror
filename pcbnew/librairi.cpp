@@ -20,7 +20,6 @@
 #include <class_module.h>
 
 #include <pcbnew.h>
-#include <class_footprint_library.h>
 #include <module_editor_frame.h>
 #include <wildcards_and_files_ext.h>
 
@@ -225,122 +224,15 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
     if( !IsOK( this, msg ) )
         return;
 
-    oldFileName = aLibname;
-
-    if( ( lib_module = wxFopen( oldFileName.GetFullPath(), wxT( "rt" ) ) )  == NULL )
+    try
     {
-        wxString msg;
-        msg.Printf( _( "Library <%s> not found" ), GetChars(oldFileName.GetFullPath() ) );
-        DisplayError( NULL, msg );
-        return;
+        PLUGIN::HOLDER  pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+        pi->FootprintDelete( aLibname, CmpName );
     }
-
-
-    FOOTPRINT_LIBRARY input_lib( lib_module );
-
-    // Read header.
-    if( ! input_lib.IsLibrary() )
+    catch( IO_ERROR ioe )
     {
-        fclose( lib_module );
-        wxString msg;
-        msg.Printf( _( "<%s> is not a valid footprint library file" ),
-                    GetChars( oldFileName.GetFullPath() ) );
-        DisplayError( NULL, msg );
-        return;
-    }
-
-    // Read module names.
-    input_lib.RebuildIndex();
-    bool found = input_lib.FindInList( CmpName );
-
-    if( !found )
-    {
-        fclose( lib_module );
-        msg.Printf( _( "Module [%s] not found" ), GetChars( CmpName ) );
-        DisplayError( NULL, msg );
-        return;
-    }
-
-    // Create new library.
-    newFileName = oldFileName;
-    newFileName.SetExt( FILETMP_EXT );
-
-    if( ( out_file = wxFopen( newFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
-    {
-        fclose( lib_module );
-        msg.Printf( _( "Unable to create %s" ), GetChars( newFileName.GetFullPath() ) );
-        DisplayError( NULL, msg );
-        return;
-    }
-
-    wxBeginBusyCursor();
-
-    FOOTPRINT_LIBRARY output_lib( out_file );
-    output_lib.m_List = input_lib.m_List;
-
-    output_lib.WriteHeader();
-    output_lib.RemoveFromList( CmpName );
-    output_lib.SortList();
-    output_lib.WriteSectionIndex();
-
-    // Copy modules.
-    rewind( lib_module );
-    LineNum = input_lib.m_LineNum;
-
-    bool copylines = false;
-    while( GetLine( lib_module, Line, &LineNum ) )
-    {
-        StrPurge( Line );
-
-        if( strnicmp( Line, "$MODULE", 7 ) == 0 )
-        {
-            copylines = true;
-            sscanf( Line + 7, " %s", Name );
-            msg = FROM_UTF8( Name );
-
-            if( msg.CmpNoCase( CmpName ) == 0 )
-            {
-                // Delete old module (i.e. do not copy description to out_file).
-                while( GetLine( lib_module, Line, &LineNum ) )
-                {
-                    if( strnicmp( Line, "$EndMODULE", 9 ) == 0 )
-                        break;
-                }
-
-                continue;
-            }
-        }
-
-        if( copylines )
-            fprintf( out_file, "%s\n", Line );
-    }
-
-    fclose( lib_module );
-    fclose( out_file );
-
-    wxEndBusyCursor();
-
-    // The old library file is renamed .bak
-    wxFileName backupFileName = oldFileName;
-    backupFileName.SetExt( BACKUP_EXT );
-
-    if( backupFileName.FileExists() )
-        wxRemoveFile( backupFileName.GetFullPath() );
-
-    if( !wxRenameFile( oldFileName.GetFullPath(), backupFileName.GetFullPath() ) )
-    {
-        msg.Printf( _( "Could not create library back up file <%s>." ),
-                    GetChars( backupFileName.GetFullName() ) );
-        DisplayError( this, msg );
-        return;
-    }
-
-    // The temporary file is renamed as the previous library.
-    if( !wxRenameFile( newFileName.GetFullPath(), oldFileName.GetFullPath() ) )
-    {
-        msg.Printf( _("Could not create temporary library file <%s>."),
-                    GetChars( oldFileName.GetFullName() ) );
-        DisplayError( this, msg );
+        DisplayError( NULL, ioe.errorText );
         return;
     }
 

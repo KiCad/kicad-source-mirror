@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -47,7 +48,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public wxDialog 
+class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -106,7 +107,7 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Lib Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 465,384 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Lib Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE();
 	
 };
