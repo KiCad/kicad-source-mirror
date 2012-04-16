@@ -667,7 +667,7 @@ public:
      */
     double GetZoom();
 
-    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth );
+    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth, double aScalar );
 
     /**
      * Function TraceWorkSheet is a core function for drawing of the page layout with
@@ -682,13 +682,14 @@ public:
      * @param aNScr The number of screens (for basic inscriptions).
      * @param aScr The screen number (for basic inscriptions).
      * @param aLnW The line width for drawing.
+     * @param aScalar Scalar to convert from mils to internal units.
      * @param aClr1 The color for drawing.
      * @param aClr2 The colr for inscriptions.
      */
     void TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
-                           wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
-                           int aNScr, int aScr, int aLnW, EDA_COLOR_T aClr1 = RED,
-                           EDA_COLOR_T aClr2 = RED );
+                         wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
+                         int aNScr, int aScr, int aLnW, double aScalar,
+                         EDA_COLOR_T aClr1 = RED, EDA_COLOR_T aClr2 = RED );
 
     void  PlotWorkSheet( PLOTTER* aPlotter, BASE_SCREEN* aScreen );
 

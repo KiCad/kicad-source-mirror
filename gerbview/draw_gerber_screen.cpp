@@ -33,6 +33,7 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <drawtxt.h>
+#include <base_units.h>
 
 #include <gerbview.h>
 #include <class_board_design_settings.h>
@@ -106,7 +107,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( IsElementVisible( DCODES_VISIBLE ) )
         DrawItemsDCodeID( DC, GR_COPY );
 
-    TraceWorkSheet( DC, screen, 0 );
+    TraceWorkSheet( DC, screen, 0, MILS_TO_IU_SCALAR );
 
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
