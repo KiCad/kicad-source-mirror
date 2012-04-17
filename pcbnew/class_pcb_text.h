@@ -73,11 +73,6 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
                const wxPoint& offset = ZeroOffset );
 
-    // File Operations:
-    int ReadTextePcbDescr( LINE_READER* aReader );
-
-    bool Save( FILE* aFile ) const;
-
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     bool HitTest( const wxPoint& aPosition )

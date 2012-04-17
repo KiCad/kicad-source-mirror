@@ -88,10 +88,6 @@ public:
      */
     void AdjustDimensionDetails( bool aDoNotChangeText = false );
 
-    bool ReadDimensionDescr( LINE_READER* aReader );
-
-    bool Save( FILE* aFile ) const;
-
     void SetText( const wxString& NewText );
     const wxString GetText() const;
 

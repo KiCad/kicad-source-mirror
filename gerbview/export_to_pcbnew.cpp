@@ -15,6 +15,7 @@
 #include <../pcbnew/class_track.h>
 #include <../pcbnew/class_drawsegment.h>
 
+#include <io_mgr.h>
 #include <gerbview.h>
 #include <class_board_design_settings.h>
 #include <class_gerber_draw_item.h>
@@ -26,32 +27,35 @@
 */
 class GBR_TO_PCB_EXPORTER
 {
-    GERBVIEW_FRAME* m_gerbview_frame;   // the maint gerber frame
-    FILE * m_file;      // .brd file to write to
-    BOARD* m_pcb;       // the board to populate and export
-
 public:
-    GBR_TO_PCB_EXPORTER(GERBVIEW_FRAME * aFrame, FILE * aFile );
+    GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName );
     ~GBR_TO_PCB_EXPORTER();
+
+    /**
+     * Function ExportPcb
+     * saves a board from a gerber load.
+     */
     bool ExportPcb( int* LayerLookUpTable );
     BOARD* GetBoard() { return m_pcb; }
 
 private:
-    bool WriteSetup( );  // Write the SETUP section data file
-    bool WriteGeneralDescrPcb( );
     void export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
     void export_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
     void export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
     void export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
     void export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
     void cleanBoard();
+
+    GERBVIEW_FRAME* m_gerbview_frame;   // the maint gerber frame
+    wxString        m_file_name;        // BOARD file to write to
+    BOARD*          m_pcb;              // the board to populate and export
 };
 
 
-GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME * aFrame, FILE * aFile )
+GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName )
 {
     m_gerbview_frame = aFrame;
-    m_file = aFile;
+    m_file_name = aFileName;
     m_pcb = new BOARD();
 }
 
@@ -84,12 +88,12 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
         return;
     }
 
-    wxString FullFileName, msg;
+    wxString fileName, msg;
 
     wxString PcbExt( wxT( ".brd" ) );
 
     msg = wxT( "*" ) + PcbExt;
-    FullFileName = EDA_FileSelector( _( "Board file name:" ),
+    fileName = EDA_FileSelector( _( "Board file name:" ),
                                      wxEmptyString,
                                      wxEmptyString,
                                      PcbExt,
@@ -98,7 +102,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
                                      wxFD_SAVE,
                                      false
                                      );
-    if( FullFileName == wxEmptyString )
+    if( fileName == wxEmptyString )
         return;
 
     /* Install a dialog frame to choose the mapping
@@ -111,24 +115,15 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     if( ok != wxID_OK )
         return;
 
-    if( wxFileExists( FullFileName ) )
+    if( wxFileExists( fileName ) )
     {
         if( !IsOK( this, _( "Ok to change the existing file ?" ) ) )
             return;
     }
 
-    FILE * file = wxFopen( FullFileName, wxT( "wt" ) );
+    GBR_TO_PCB_EXPORTER     gbr_exporter( this, fileName );
 
-    if( file == NULL )
-    {
-        msg = _( "Unable to create " ) + FullFileName;
-        DisplayError( this, msg );
-        return;
-    }
-
-    GBR_TO_PCB_EXPORTER gbr_exporter( this, file );
     gbr_exporter.ExportPcb( dlg->GetLayersLookUpTable() );
-    fclose( file );
 }
 
 
@@ -162,54 +157,6 @@ void GBR_TO_PCB_EXPORTER::cleanBoard()
 }
 
 
-bool GBR_TO_PCB_EXPORTER::WriteSetup( )
-{
-    fprintf( m_file, "$SETUP\n" );
-    fprintf( m_file, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
-
-    fprintf( m_file, "Layers %d\n", m_pcb->GetCopperLayerCount() );
-
-    fprintf( m_file, "$EndSETUP\n\n" );
-    return true;
-}
-
-
-bool GBR_TO_PCB_EXPORTER::WriteGeneralDescrPcb( )
-{
-    int nbLayers;
-
-    // Print the copper layer count
-    nbLayers = m_pcb->GetCopperLayerCount();
-
-    if( nbLayers <= 1 )  // Minimal layers count in Pcbnew is 2
-    {
-        nbLayers = 2;
-        m_pcb->SetCopperLayerCount(2);
-    }
-
-    fprintf( m_file, "$GENERAL\n" );
-    fprintf( m_file, "encoding utf-8\n");
-    fprintf( m_file, "LayerCount %d\n", nbLayers );
-
-    // Compute and print the board bounding box
-    EDA_RECT bbbox = m_pcb->ComputeBoundingBox();
-
-    fprintf( m_file, "Di %d %d %d %d\n",
-            bbbox.GetX(), bbbox.GetY(),
-            bbbox.GetRight(),
-            bbbox.GetBottom() );
-
-    fprintf( m_file, "$EndGENERAL\n\n" );
-    return true;
-}
-
-
-/* Routine to save the board
- * @param frame = pointer to the main frame
- * @param File = FILE * pointer to an already opened file
- * @param LayerLookUpTable = look up table: Pcbnew layer for each gerber layer
- * @return 1 if OK, 0 if fail
- */
 bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
 {
     BOARD* gerberPcb = m_gerbview_frame->GetBoard();
@@ -235,21 +182,20 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
     cleanBoard();
     m_pcb->SetCopperLayerCount( LayerLookUpTable[32] );
 
-    // Switch the locale to standard C (needed to print floating point numbers)
-    SetLocaleTo_C_standard();
+    try
+    {
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+        pi->Save( m_file_name, m_pcb );
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( m_gerbview_frame, ioe.errorText );
+        return false;
+    }
 
-    // write PCB header
-    fprintf( m_file, "PCBNEW-BOARD Version %d date %s\n\n", LEGACY_BOARD_FILE_VERSION,
-             TO_UTF8( DateAndTime() ) );
-    WriteGeneralDescrPcb( );
-    WriteSetup( );
-
-    // write items on file
-    m_pcb->Save( m_file );
-
-    SetLocaleTo_Default();       // revert to the current locale
     return true;
 }
+
 
 void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {

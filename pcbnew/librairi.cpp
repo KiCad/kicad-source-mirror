@@ -20,9 +20,9 @@
 #include <class_module.h>
 
 #include <pcbnew.h>
-#include <class_footprint_library.h>
 #include <module_editor_frame.h>
 #include <wildcards_and_files_ext.h>
+#include <legacy_plugin.h>              // temporarily, for LoadMODULE()
 
 
 /*
@@ -46,26 +46,24 @@ static const wxString ModImportFileWildcard( _( "GPcb foot print files (*)|*" ) 
 
 MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 {
-    char*     Line;
-    FILE*     file;
-    MODULE*   module = NULL;
-    bool      Footprint_Is_GPCB_Format = false;
+    // use the clipboard for this in the future?
 
-    wxString  LastOpenedPathForLoading;
-    wxConfig* Config = wxGetApp().GetSettings();
+    wxString  lastOpenedPathForLoading;
+    wxConfig* config = wxGetApp().GetSettings();
 
-    if( Config )
-        Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &LastOpenedPathForLoading );
+    if( config )
+        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
 
     wxString importWildCard = ModExportFileWildcard + wxT("|") + ModImportFileWildcard;
+
     wxFileDialog dlg( this, _( "Import Footprint Module" ),
-                      LastOpenedPathForLoading, wxEmptyString,
+                      lastOpenedPathForLoading, wxEmptyString,
                       importWildCard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return NULL;
 
-    file = wxFopen( dlg.GetPath(), wxT( "rt" ) );
+    FILE* file = wxFopen( dlg.GetPath(), wxT( "rt" ) );
 
     if( file == NULL )
     {
@@ -75,28 +73,29 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
         return NULL;
     }
 
+    if( config )    // Save file path
+    {
+        lastOpenedPathForLoading = wxPathOnly( dlg.GetPath() );
+        config->Write( EXPORT_IMPORT_LASTPATH_KEY, lastOpenedPathForLoading );
+    }
+
+    LOCALE_IO   toggle;
+
     FILE_LINE_READER fileReader( file, dlg.GetPath() );
 
     FILTER_READER reader( fileReader );
 
-    if( Config )    // Save file path
-    {
-        LastOpenedPathForLoading = wxPathOnly( dlg.GetPath() );
-        Config->Write( EXPORT_IMPORT_LASTPATH_KEY, LastOpenedPathForLoading );
-    }
-
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    SetLocaleTo_C_standard();
-
     // Read header and test file type
     reader.ReadLine();
-    Line = reader.Line();
+    char* line = reader.Line();
 
-    if( strnicmp( Line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
+    bool      footprint_Is_GPCB_Format = false;
+
+    if( strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
     {
-        if( strnicmp( Line, "Element", 7 ) == 0 )
+        if( strnicmp( line, "Element", 7 ) == 0 )
         {
-            Footprint_Is_GPCB_Format = true;
+            footprint_Is_GPCB_Format = true;
         }
         else
         {
@@ -106,27 +105,41 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     }
 
     // Read file: Search the description starting line (skip lib header)
-    if( !Footprint_Is_GPCB_Format )
+    if( !footprint_Is_GPCB_Format )
     {
         while( reader.ReadLine() )
         {
-            if( strnicmp( Line, "$MODULE", 7 ) == 0 )
+            if( strnicmp( line, "$MODULE", 7 ) == 0 )
                 break;
         }
     }
 
-    module = new MODULE( GetBoard() );
+    MODULE*   module;
 
-    if( Footprint_Is_GPCB_Format )
+    if( footprint_Is_GPCB_Format )
     {
+        // @todo GEDA plugin
+        module = new MODULE( GetBoard() );
         module->Read_GPCB_Descr( dlg.GetPath() );
     }
     else
     {
-        module->ReadDescr( &reader );
-    }
+        try
+        {
+            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-    SetLocaleTo_Default();       // revert to the current locale
+            LEGACY_PLUGIN*  lp = (LEGACY_PLUGIN*)(PLUGIN*)pi;
+
+            lp->SetReader( &reader );
+
+            module = lp->LoadMODULE();
+        }
+        catch( IO_ERROR ioe )
+        {
+            DisplayError( this, ioe.errorText );
+            return NULL;
+        }
+    }
 
     // Insert footprint in list
     GetBoard()->Add( module );
@@ -144,9 +157,8 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
 {
     wxFileName fn;
-    FILE*      file;
     wxString   msg, path, title, wildcard;
-    wxConfig*  Config = wxGetApp().GetSettings();
+    wxConfig*  config = wxGetApp().GetSettings();
 
     if( aModule == NULL )
         return;
@@ -156,12 +168,14 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
 
     if( aCreateSysLib )
         path = wxGetApp().ReturnLastVisitedLibraryPath();
-    else if( Config )
-        Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
+    else if( config )
+        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
 
-    fn.SetPath( path );
     title    = aCreateSysLib ? _( "Create New Library" ) : _( "Export Module" );
     wildcard = aCreateSysLib ?  FootprintLibFileWildcard : ModExportFileWildcard;
+
+    fn.SetPath( path );
+
     wxFileDialog dlg( this, msg, fn.GetPath(), fn.GetFullName(),
                       wxGetTranslation( wildcard ),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -172,180 +186,63 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
     fn = dlg.GetPath();
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    if( ( file = wxFopen( fn.GetFullPath(), wxT( "wt" ) ) ) == NULL )
+    if( !aCreateSysLib && config )  // Save file path
     {
-        msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
-        DisplayError( this, msg );
+        config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
+    }
+
+    wxString libName = fn.GetFullPath();
+
+    try
+    {
+        // @todo : hard code this as IO_MGR::KICAD plugin, what would be the reason to "export"
+        // any other single footprint type, with clipboard support coming?
+        // Use IO_MGR::LEGACY for now, until the IO_MGR::KICAD plugin is ready.
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+        pi->FootprintLibCreate( libName );
+        pi->FootprintSave( libName, aModule );
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( this, ioe.errorText );
         return;
     }
 
-    if( !aCreateSysLib && Config )  // Save file path
-    {
-        Config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
-    }
-
-    // Switch the locale to standard C (needed to read/write floating point numbers like 1.3)
-    SetLocaleTo_C_standard();
-
-    FOOTPRINT_LIBRARY libexport( file );
-    libexport.WriteHeader();
-    libexport.m_List.Add(aModule->m_LibRef);
-    libexport.WriteSectionIndex();
-
-    GetBoard()->m_Modules->Save( file );
-
-    libexport.WriteEndOfFile();
-    fclose( file );
-
-    SetLocaleTo_Default();       // revert to the current locale
-
-    msg.Printf( _( "Module exported in file <%s>" ), GetChars( fn.GetFullPath() ) );
+    msg.Printf( _( "Module exported in file <%s>" ), libName.GetData() );
     DisplayInfoMessage( this, msg );
 }
 
 
-void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
+void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibName )
 {
-    wxFileName newFileName;
-    wxFileName oldFileName;
-    int        LineNum = 0;
-    char       Line[1024], Name[256];
-    FILE*      out_file, * lib_module;
-    wxString   CmpName, msg;
+    wxString footprintName = Select_1_Module_From_List( this, aLibName, wxEmptyString, wxEmptyString );
 
-    CmpName = Select_1_Module_From_List( this, aLibname, wxEmptyString, wxEmptyString );
-
-    if( CmpName == wxEmptyString )
+    if( footprintName == wxEmptyString )
         return;
 
     // Confirmation
-    msg.Printf( _( "Ok to delete module %s in library %s" ),
-                GetChars( CmpName ), GetChars( aLibname ) );
+    wxString msg = wxString::Format( _( "Ok to delete module '%s' in library '%s'" ),
+                        footprintName.GetData(), aLibName.GetData() );
 
     if( !IsOK( this, msg ) )
         return;
 
-    oldFileName = aLibname;
-
-    if( ( lib_module = wxFopen( oldFileName.GetFullPath(), wxT( "rt" ) ) )  == NULL )
+    try
     {
-        wxString msg;
-        msg.Printf( _( "Library <%s> not found" ), GetChars(oldFileName.GetFullPath() ) );
-        DisplayError( NULL, msg );
+        PLUGIN::RELEASER  pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+        pi->FootprintDelete( aLibName, footprintName );
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( NULL, ioe.errorText );
         return;
     }
 
+    msg.Printf( _( "Component '%s' deleted from library '%s'" ),
+                footprintName.GetData(), aLibName.GetData() );
 
-    FOOTPRINT_LIBRARY input_lib( lib_module );
-
-    // Read header.
-    if( ! input_lib.IsLibrary() )
-    {
-        fclose( lib_module );
-        wxString msg;
-        msg.Printf( _( "<%s> is not a valid footprint library file" ),
-                    GetChars( oldFileName.GetFullPath() ) );
-        DisplayError( NULL, msg );
-        return;
-    }
-
-    // Read module names.
-    input_lib.RebuildIndex();
-    bool found = input_lib.FindInList( CmpName );
-
-    if( !found )
-    {
-        fclose( lib_module );
-        msg.Printf( _( "Module [%s] not found" ), GetChars( CmpName ) );
-        DisplayError( NULL, msg );
-        return;
-    }
-
-    // Create new library.
-    newFileName = oldFileName;
-    newFileName.SetExt( FILETMP_EXT );
-
-    if( ( out_file = wxFopen( newFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
-    {
-        fclose( lib_module );
-        msg.Printf( _( "Unable to create %s" ), GetChars( newFileName.GetFullPath() ) );
-        DisplayError( NULL, msg );
-        return;
-    }
-
-    wxBeginBusyCursor();
-
-    FOOTPRINT_LIBRARY output_lib( out_file );
-    output_lib.m_List = input_lib.m_List;
-
-    output_lib.WriteHeader();
-    output_lib.RemoveFromList( CmpName );
-    output_lib.SortList();
-    output_lib.WriteSectionIndex();
-
-    // Copy modules.
-    rewind( lib_module );
-    LineNum = input_lib.m_LineNum;
-
-    bool copylines = false;
-    while( GetLine( lib_module, Line, &LineNum ) )
-    {
-        StrPurge( Line );
-
-        if( strnicmp( Line, "$MODULE", 7 ) == 0 )
-        {
-            copylines = true;
-            sscanf( Line + 7, " %s", Name );
-            msg = FROM_UTF8( Name );
-
-            if( msg.CmpNoCase( CmpName ) == 0 )
-            {
-                // Delete old module (i.e. do not copy description to out_file).
-                while( GetLine( lib_module, Line, &LineNum ) )
-                {
-                    if( strnicmp( Line, "$EndMODULE", 9 ) == 0 )
-                        break;
-                }
-
-                continue;
-            }
-        }
-
-        if( copylines )
-            fprintf( out_file, "%s\n", Line );
-    }
-
-    fclose( lib_module );
-    fclose( out_file );
-
-    wxEndBusyCursor();
-
-    // The old library file is renamed .bak
-    wxFileName backupFileName = oldFileName;
-    backupFileName.SetExt( BACKUP_EXT );
-
-    if( backupFileName.FileExists() )
-        wxRemoveFile( backupFileName.GetFullPath() );
-
-    if( !wxRenameFile( oldFileName.GetFullPath(), backupFileName.GetFullPath() ) )
-    {
-        msg.Printf( _( "Could not create library back up file <%s>." ),
-                    GetChars( backupFileName.GetFullName() ) );
-        DisplayError( this, msg );
-        return;
-    }
-
-    // The temporary file is renamed as the previous library.
-    if( !wxRenameFile( newFileName.GetFullPath(), oldFileName.GetFullPath() ) )
-    {
-        msg.Printf( _("Could not create temporary library file <%s>."),
-                    GetChars( oldFileName.GetFullName() ) );
-        DisplayError( this, msg );
-        return;
-    }
-
-    msg.Printf( _( "Component %s deleted in library %s" ), GetChars( CmpName ),
-                GetChars( oldFileName.GetFullPath() ) );
     SetStatusText( msg );
 }
 
@@ -368,7 +265,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewM
 
     path = wxGetApp().ReturnLastVisitedLibraryPath();
 
-    if( aLibName.IsEmpty() )
+    if( !aLibName )
     {
         wxFileDialog dlg( this, _( "Library" ), path,
                           wxEmptyString,
@@ -383,12 +280,12 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewM
 
     wxFileName fn( fileName );
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
-    bool       file_exists = wxFileExists( fileName );
+    bool       lib_exists = wxFileExists( fileName );
 
-    if( !aNewModulesOnly && file_exists )
+    if( !aNewModulesOnly && lib_exists )
     {
         wxString msg;
-        msg.Printf( _( "File %s exists, OK to replace ?" ), GetChars( fileName ) );
+        msg.Printf( _( "Library %s exists, OK to replace ?" ), GetChars( fileName ) );
 
         if( !IsOK( this, msg ) )
             return;
@@ -396,51 +293,46 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewM
 
     m_canvas->SetAbortRequest( false );
 
-    // Create a new, empty library if no old lib, or if archive all modules
-    if( !aNewModulesOnly || !file_exists )
+    try
     {
-        FILE* lib_module;
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-        if( ( lib_module = wxFopen( fileName, wxT( "w+t" ) ) )  == NULL )
+        // Delete old library if we're replacing it entirely.
+        if( lib_exists && !aNewModulesOnly )
         {
-            wxString msg;
-            msg.Printf( _( "Unable to create <%s>" ), GetChars(fileName) );
-            DisplayError( this, msg );
-            return;
+            pi->FootprintLibDelete( fileName );
+            lib_exists = false;
         }
 
-        FOOTPRINT_LIBRARY new_lib( lib_module );
-        new_lib.WriteHeader();
-        new_lib.WriteSectionIndex();
-        new_lib.WriteEndOfFile();
-        fclose( lib_module );
+        if( !lib_exists )
+        {
+            pi->FootprintLibCreate( fileName );
+        }
+
+        if( !aNewModulesOnly )
+        {
+            for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
+            {
+                pi->FootprintSave( fileName, m );
+            }
+        }
+        else
+        {
+            for( MODULE* m = GetBoard()->m_Modules;  m;  m = m->Next() )
+            {
+                if( !Save_Module_In_Library( fileName, m, false, false ) )
+                    break;
+
+                // Check for request to stop backup (ESCAPE key actuated)
+                if( m_canvas->GetAbortRequest() )
+                    break;
+            }
+        }
     }
-
-    MODULE*  module = (MODULE*) GetBoard()->m_Modules;
-    for( int ii = 1; module != NULL; ii++, module = module->Next() )
+    catch( IO_ERROR ioe )
     {
-        // Save footprints in default orientation (0.0) and default layer (FRONT layer)
-        int orient = module->GetOrientation();
-        if ( orient != 0 )
-            module->SetOrientation( 0 );
-        int layer = module->GetLayer();
-        if(layer != LAYER_N_FRONT )
-            module->Flip( module->m_Pos );
-
-        bool success = Save_Module_In_Library( fileName, module,
-                                    aNewModulesOnly ? false : true, false );
-        // Restore previous orientation and/or side
-        if(layer != module->GetLayer() )
-            module->Flip( module->m_Pos );
-        if ( orient != 0 )
-            module->SetOrientation( orient );
-
-        if( !success )
-            break;
-
-        // Check for request to stop backup (ESCAPE key actuated)
-        if( m_canvas->GetAbortRequest() )
-            break;
+        DisplayError( this, ioe.errorText );
+        return;
     }
 }
 
@@ -450,202 +342,84 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
                                              bool            aOverwrite,
                                              bool            aDisplayDialog )
 {
-    wxFileName oldFileName;
-    wxFileName newFileName;
-    int        LineNum = 0, tmp;
-    char       Name[256], Line[1024];
-    wxString   Name_Cmp;
-    wxString   msg;
-    FILE*      lib_module, * dest;
-
     if( aModule == NULL )
         return false;
 
     aModule->DisplayInfo( this );
 
-    newFileName = aLibName;
-
-    if( !newFileName.FileExists( aLibName ) )
+    if( !wxFileExists( aLibName ) )
     {
-        msg.Printf( _( "Library <%s> not found." ), GetChars( aLibName ) );
+        wxString msg = wxString::Format( _( "Library <%s> not found." ),
+                            aLibName.GetData() );
         DisplayError( this, msg );
         return false;
     }
 
-    if( !IsWritable( newFileName ) )
+    if( !IsWritable( aLibName ) )
         return false;
 
-    // Ask for the footprint name in lib
-    Name_Cmp = aModule->m_LibRef;
+    // Ask what to use as the footprint name in the library
+    wxString footprintName = aModule->GetLibRef();
 
     if( aDisplayDialog )
     {
-        wxTextEntryDialog dlg( this, _( "Name:" ), _( "Save module" ), Name_Cmp );
+        wxTextEntryDialog dlg( this, _( "Name:" ), _( "Save Module" ), footprintName );
 
         if( dlg.ShowModal() != wxID_OK )
-            return false; // canceled by user
+            return false;                   // canceled by user
 
-        Name_Cmp = dlg.GetValue();
-        Name_Cmp.Trim( true );
-        Name_Cmp.Trim( false );
+        footprintName = dlg.GetValue();
+        footprintName.Trim( true );
+        footprintName.Trim( false );
 
-        if( Name_Cmp.IsEmpty() )
+        if( footprintName.IsEmpty() )
             return false;
 
-        aModule->m_LibRef = Name_Cmp;
+        aModule->SetLibRef( footprintName );
     }
 
     // Ensure this footprint has a libname
-    if( Name_Cmp.IsEmpty() )
+    if( footprintName.IsEmpty() )
     {
-        Name_Cmp = wxT("noname");
-        aModule->m_LibRef = Name_Cmp;
+        footprintName = wxT("noname");
+        aModule->SetLibRef( footprintName );
     }
 
-    if( ( lib_module = wxFopen( aLibName, wxT( "rt" ) ) ) == NULL )
+    MODULE*  module_exists = NULL;
+
+    try
     {
-        msg.Printf( _( "Unable to open <%s>" ), GetChars( aLibName ) );
-        DisplayError( this, msg );
-        return false;
-    }
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-    // Read library file
-    FOOTPRINT_LIBRARY input_lib( lib_module );
+        module_exists = pi->FootprintLoad( aLibName, footprintName );
 
-    if( ! input_lib.IsLibrary() )
-    {
-        fclose( lib_module );
-        msg.Printf( _( "File <%s> is not an Eeschema library" ), GetChars( aLibName ) );
-        DisplayError( this, msg );
-        return false;
-    }
-
-    // Read footprints in lib: - search for an existing footprint
-    input_lib.RebuildIndex();
-    bool module_exists = input_lib.FindInList( Name_Cmp );
-
-    if( module_exists )
-    {
-        // an existing footprint is found in current lib
-        if( aDisplayDialog )
+        if( module_exists )
         {
-            msg = _( "Module exists\n Line: " );
-            msg << LineNum;
-            SetStatusText( msg );
-        }
+            delete module_exists;
 
-        if( !aOverwrite )    // Do not save the given footprint: an old one exists
-        {
-            fclose( lib_module );
-            return true;
-        }
-    }
-
-    // Creates the new library
-
-    newFileName.SetExt( FILETMP_EXT );
-
-    if( ( dest = wxFopen( newFileName.GetFullPath(), wxT( "w+t" ) ) )  == NULL )
-    {
-        fclose( lib_module );
-        msg.Printf( _( "Unable to create <%s>" ), GetChars( newFileName.GetFullPath() ) );
-        DisplayError( this, msg );
-        return false;
-    }
-
-    wxBeginBusyCursor();
-
-    // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-    SetLocaleTo_C_standard();
-
-    FOOTPRINT_LIBRARY output_lib( dest );
-    output_lib.m_List = input_lib.m_List;
-
-    if( ! module_exists )
-        output_lib.m_List.Add( Name_Cmp );
-
-    output_lib.SortList();
-
-    // Create the library header with a new date
-    output_lib.WriteHeader();
-    output_lib.WriteSectionIndex();
-
-    LineNum = 0;
-    rewind( lib_module);
-
-    // Copy footprints, until the old footprint to delete
-    bool skip_header = true;
-
-    while( GetLine( lib_module, Line, &LineNum ) )
-    {
-        StrPurge( Line );
-        if( strnicmp( Line, "$EndLIBRARY", 8 ) == 0 )
-            continue;
-
-        // Search for the beginning of module section:
-        if( skip_header )
-        {
-            if(  strnicmp( Line, "$MODULE", 7 ) == 0 )
-                skip_header = false;
-            else
-                continue;
-        }
-
-        if( strnicmp( Line, "$MODULE", 7 ) == 0 )
-        {
-            sscanf( Line + 7, " %s", Name );
-            msg = FROM_UTF8( Name );
-
-            if( msg.CmpNoCase( Name_Cmp ) == 0 )
+            // an existing footprint is found in current lib
+            if( aDisplayDialog )
             {
-                // skip old footprint descr (delete from the lib)
-                while( GetLine( lib_module, Line, &LineNum ) )
-                {
-                    if( strnicmp( Line, "$EndMODULE", 9 ) == 0 )
-                        break;
-                }
+                wxString msg = wxString::Format(
+                    _( "Footprint '%s' already exists in library '%s'" ),
+                    footprintName.GetData(), aLibName.GetData() );
 
-                continue;
+                SetStatusText( msg );
+            }
+
+            if( !aOverwrite )
+            {
+                // Do not save the given footprint: an old one exists
+                return true;
             }
         }
 
-        fprintf( dest, "%s\n", Line );
+        // this always overwrites any existing footprint
+        pi->FootprintSave( aLibName, aModule );
     }
-
-    // Write the new footprint ( append it to the list of footprint )
-    tmp = aModule->GetTimeStamp();
-    aModule->SetTimeStamp( 0 );
-    aModule->Save( dest );
-    aModule->SetTimeStamp( tmp );
-
-    output_lib.WriteEndOfFile();
-
-    fclose( dest );
-    fclose( lib_module );
-    SetLocaleTo_Default();       // revert to the current locale
-
-    wxEndBusyCursor();
-
-    // The old library file is renamed .bak
-    oldFileName = aLibName;
-    oldFileName.SetExt( BACKUP_EXT );
-
-    if( oldFileName.FileExists() )
-        wxRemoveFile( oldFileName.GetFullPath() );
-
-    if( !wxRenameFile( aLibName, oldFileName.GetFullPath() ) )
+    catch( IO_ERROR ioe )
     {
-        msg.Printf( _( "Could not create library back up file <%s>." ),
-                      GetChars( oldFileName.GetFullName() ) );
-        DisplayError( this, msg );
-    }
-
-    // The new library file is renamed
-    if( !wxRenameFile( newFileName.GetFullPath(), aLibName ) )
-    {
-        msg.Printf( _( "Could not create temporary library file <%s>." ),
-                      GetChars( aLibName ) );
-        DisplayError( this, msg );
+        DisplayError( this, ioe.errorText );
         return false;
     }
 
@@ -654,7 +428,8 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         wxString fmt = module_exists ?
             _( "Component [%s] replaced in <%s>" ) :
             _( "Component [%s] added in  <%s>" );
-        msg.Printf( fmt, GetChars( Name_Cmp ), GetChars( aLibName ) );
+
+        wxString msg = wxString::Format( fmt, footprintName.GetData(), aLibName.GetData() );
         SetStatusText( msg );
     }
 
@@ -755,13 +530,14 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 
 int FOOTPRINT_EDIT_FRAME::CreateLibrary( const wxString& aLibName )
 {
-    FILE*    lib_module;
-    wxString msg;
     wxFileName fileName = aLibName;
 
     if( fileName.FileExists() )
     {
-        msg.Printf( _( "Library <%s> already exists." ), GetChars( fileName.GetFullPath() ) );
+        wxString msg = wxString::Format(
+            _( "Library <%s> already exists." ),
+            aLibName.GetData() );
+
         DisplayError( this, msg );
         return 0;
     }
@@ -769,18 +545,18 @@ int FOOTPRINT_EDIT_FRAME::CreateLibrary( const wxString& aLibName )
     if( !IsWritable( fileName ) )
         return 0;
 
-    if( ( lib_module = wxFopen( fileName.GetFullPath(), wxT( "wt" ) ) )  == NULL )
+    try
     {
-        msg.Printf( _( "Unable to create library <%s>" ), GetChars( fileName.GetFullPath() ) );
-        DisplayError( this, msg );
-        return -1;
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+        pi->FootprintLibCreate( aLibName );
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( this, ioe.errorText );
+        return 0;
     }
 
-    FOOTPRINT_LIBRARY new_lib( lib_module );
-    new_lib.WriteHeader();
-    new_lib.WriteSectionIndex();
-    new_lib.WriteEndOfFile();
-    fclose( lib_module );
-
-    return 1;
+    return 1;       // remember how many times we succeeded
 }
+

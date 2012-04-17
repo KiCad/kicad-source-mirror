@@ -30,6 +30,7 @@
 
 class BOARD;
 class PLUGIN;
+class MODULE;
 
 
 /**
@@ -152,7 +153,9 @@ public:
  * is a base class that BOARD loading and saving plugins should derive from.
  * Implementations can provide either Load() or Save() functions, or both.
  * PLUGINs throw exceptions, so it is best that you wrap your calls to these
- * functions in a try catch block.
+ * functions in a try catch block.  Plugins throw exceptions because it is illegal
+ * for them to have any user interface calls in them whatsoever, i.e. no windowing
+ * or screen printing at all.
  *
  * <pre>
  *   try
@@ -187,9 +190,9 @@ public:
 
     /**
      * Function Load
-     * loads a board file, or a portion of one, from some input file format
-     * that this PLUGIN implementation knows about. This may be used to load an
-     * entire new BOARD, or to augment an existing one if \a aAppendToMe is not NULL.
+     * loads information from some input file format that this PLUGIN implementation
+     * knows about, into either a new BOARD or an existing one. This may be used to load an
+     * entire new BOARD, or to augment an existing one if @a aAppendToMe is not NULL.
      *
      * @param aFileName is the name of the file to use as input and may be foreign in
      *  nature or native in nature.
@@ -216,7 +219,7 @@ public:
 
     /**
      * Function Save
-     * will write a full aBoard to a storage file in a format that this
+     * will write @a aBoard to a storage file in a format that this
      * PLUGIN implementation knows about, or it can be used to write a portion of
      * aBoard to a special kind of export file.
      *
@@ -237,13 +240,138 @@ public:
     virtual void Save( const wxString& aFileName, BOARD* aBoard,
                        PROPERTIES* aProperties = NULL );
 
+    /**
+     * Function FootprintEnumerate
+     * returns a list of footprint names contained within the library at @a aLibraryPath.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory
+     *   or file containing several footprints.
+     *
+     * @param aProperties is an associative array that can be used to tell the
+     *  plugin how to access the library.
+     *  The caller continues to own this object (plugin may not delete it), and
+     *  plugins should expect it to be optionally NULL.
+     *
+     * @return wxArrayString - is the array of available footprint names inside
+     *   a library
+     *
+     * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
+     */
+    virtual wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
+
+    /**
+     * Function FootprintLoad
+     * loads a MODULE having @a aFootprintName from the @a aLibraryPath containing
+     * a library format that this PLUGIN knows about.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory
+     *   or file containing several footprints.
+     *
+     * @param aFootprintName is the name of the footprint to load.
+     *
+     * @param aProperties is an associative array that can be used to tell the
+     *  saver how to save the file, because it can take any number of
+     *  additional named tuning arguments that the plugin is known to support.
+     *  The caller continues to own this object (plugin may not delete it), and
+     *  plugins should expect it to be optionally NULL.
+     *
+     * @return  MODULE* - if found caller owns it, else NULL if not found.
+     *
+     * @throw   IO_ERROR if the library cannot be found or read.  No exception
+     *          is thrown in the case where aFootprintName cannot be found.
+     */
+    virtual MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                    PROPERTIES* aProperties = NULL );
+
+    /**
+     * Function FootprintSave
+     * will write @a aModule to an existing library located at @a aLibraryPath.
+     * If a footprint by the same name already exists, it is replaced.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory
+     *      or file containing several footprints. This is where the footprint is
+     *      to be stored.
+     *
+     * @param aFootprint is what to store in the library.
+     *   The caller continues to own the footprint.
+     *
+     * @param aProperties is an associative array that can be used to tell the
+     *  saver how to save the file, because it can take any number of
+     *  additional named tuning arguments that the plugin is known to support.
+     *  The caller continues to own this object (plugin may not delete it), and
+     *  plugins should expect it to be optionally NULL.
+     *
+     * @throw IO_ERROR if there is a problem saving.
+     */
+    virtual void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
+                                    PROPERTIES* aProperties = NULL );
+
+    /**
+     * Function FootprintDelete
+     * deletes the @a aFootprintName from the library at @a aLibraryPath.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory
+     *   or file containing several footprints.
+     *
+     * @param aFootprintName is the name of a footprint to delete from the specificed library.
+     *
+     * @throw IO_ERROR if there is a problem finding the footprint or the library, or deleting it.
+     */
+    virtual void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName );
+
+    /**
+     * Function FootprintLibCreate
+     * creates a new empty footprint library at @a aLibraryPath empty.  It is an
+     * error to attempt to create an existing library or to attempt to create
+     * on a "read only" location.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory
+     *   or file which will contain footprints.
+     *
+     * @param aProperties is an associative array that can be used to tell the
+     *  library create function anything special, because it can take any number of
+     *  additional named tuning arguments that the plugin is known to support.
+     *  The caller continues to own this object (plugin may not delete it), and
+     *  plugins should expect it to be optionally NULL.
+     *
+     * @throw IO_ERROR if there is a problem finding the library, or creating it.
+     */
+    virtual void FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+
+    /**
+     * Function FootprintLibDelete
+     * deletes an existing footprint library, or complains if it cannot delete it or if it
+     * does not exist.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory
+     *   or file which will contain footprints.
+     *
+     * @param aProperties is an associative array that can be used to tell the
+     *  library create function anything special, because it can take any number of
+     *  additional named tuning arguments that the plugin is known to support.
+     *  The caller continues to own this object (plugin may not delete it), and
+     *  plugins should expect it to be optionally NULL.
+     *
+     * @throw IO_ERROR if there is a problem finding the library, or deleting it.
+     */
+    virtual void FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+
+    /**
+     * Function IsFootprintLibWritable
+     * returns true iff the library at @a aLibraryPath is writable.  (Often
+     * system libraries are read only because of where they are installed.)
+     */
+    virtual bool IsFootprintLibWritable( const wxString& aLibraryPath );
+
     //-----</PUBLIC PLUGIN API>------------------------------------------------
+
 
     /*  The compiler writes the "zero argument" constructor for a PLUGIN
         automatically if you do not provide one. If you decide you need to
         provide a zero argument constructor of your own design, that is allowed.
         It must be public, and it is what the IO_MGR uses.  Parameters may be
-        passed into a PLUGIN via the PROPERTIES variable for either Save() and Load().
+        passed into a PLUGIN via the PROPERTIES variable for any of the public
+        API functions which take one.
     */
 
     virtual ~PLUGIN() {}

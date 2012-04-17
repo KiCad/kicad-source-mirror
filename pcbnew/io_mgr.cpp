@@ -28,6 +28,10 @@
 #include <kicad_plugin.h>
 
 
+#define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
+#define FMT_NOTFOUND        _( "Plugin type '%s' is not found." )
+
+
 // Some day plugins might be in separate DLL/DSOs, simply because of numbers of them
 // and code size.  Until then, use the simplest method:
 
@@ -40,8 +44,8 @@
 // plugins coexisting.
 
 
-// static LEGACY_PLUGIN kicad_plugin;       // a secret
-//static EAGLE_PLUGIN eagle_plugin;
+// static LEGACY_PLUGIN kicad_plugin;
+// static EAGLE_PLUGIN eagle_plugin;
 
 PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 {
@@ -118,7 +122,7 @@ BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
         return pi->Load( aFileName, aAppendToMe, aProperties );  // virtual
     }
 
-    THROW_IO_ERROR( wxString::Format( _( "Plugin type '%s' is not found." ), ShowType( aFileType ).GetData() ) );
+    THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
 }
 
 
@@ -133,25 +137,70 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
         return;
     }
 
-    THROW_IO_ERROR( wxString::Format( _( "Plugin type '%s' is not found." ), ShowType( aFileType ).GetData() ) );
+    THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
 }
 
 
 BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
 {
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface,
-    // e.g. Load() or Save() but not both.
-
-    THROW_IO_ERROR( wxString::Format(
-        _( "Plugin %s does not implement the BOARD Load() function." ), PluginName().GetData() ) );
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData(), __FUNCTION__ ) );
 }
 
 
 void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
 {
-    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface,
-    // e.g. Load() or Save() but not both.
-
-    THROW_IO_ERROR( wxString::Format(
-        _( "Plugin %s does not implement the BOARD Save() function." ), PluginName().GetData() ) );
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData(), __FUNCTION__ ) );
 }
+
+
+wxArrayString PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+
+
+MODULE* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                    PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+
+
+void PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+
+
+void PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+
+
+void PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+
+
+void PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+
+
+bool PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+

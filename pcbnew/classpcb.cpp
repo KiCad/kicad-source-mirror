@@ -30,18 +30,16 @@
 #endif
 
 
-
-
-/* Default Pcbnew zoom values.
- * Limited to 19 values to keep a decent size to menus
- * 15 it better but does not allow a sufficient number of values
- * roughtly a 1.5 progression.
- * The last 2 values is  handy when somebody uses a library import of a module
- * (or foreign data) which has a bad coordinate
- * Also useful in GerbView for this reason.
- * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
- * functions )
- */
+/**
+    Default Pcbnew zoom values.
+    Limited to 19 values to keep a decent size to menus.
+    Roughly a 1.5 progression.
+    The last 2 values are handy when somebody uses a library import of a module
+    (or foreign data) which has a bad coordinate.
+    Also useful in GerbView for this reason.
+    Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
+    functions )
+*/
 static const double pcbZoomList[] =
 {
     ZOOM_FACTOR( 0.5 ),

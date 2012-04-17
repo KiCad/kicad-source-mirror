@@ -111,15 +111,6 @@ void BASE_SCREEN::SetScalingFactor(double aScale )
 }
 
 
-void BASE_SCREEN::SetZoomList( const wxArrayDouble& zoomlist )
-{
-    if( !m_ZoomList.IsEmpty() )
-        m_ZoomList.Empty();
-
-    m_ZoomList = zoomlist;
-}
-
-
 bool BASE_SCREEN::SetFirstZoom()
 {
     if( m_ZoomList.IsEmpty() )

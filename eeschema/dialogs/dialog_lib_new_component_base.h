@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_lib_new_component_base__
-#define __dialog_lib_new_component_base__
+#ifndef __DIALOG_LIB_NEW_COMPONENT_BASE_H__
+#define __DIALOG_LIB_NEW_COMPONENT_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -28,55 +30,37 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_LIB_NEW_COMPONENT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_LIB_NEW_COMPONENT_BASE : public wxDialog 
+class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 {
 	private:
 	
 	protected:
 		wxStaticText* m_staticText6;
-		
 		wxStaticText* m_staticText2;
-		
 		wxTextCtrl* m_textName;
-		
-		
 		wxStaticText* m_staticText3;
-		
 		wxTextCtrl* m_textReference;
-		
-		
 		wxStaticText* m_staticText4;
-		
 		wxSpinCtrl* m_spinPartCount;
-		
-		
 		wxCheckBox* m_checkHasConversion;
-		
 		wxCheckBox* m_checkIsPowerSymbol;
-		
 		wxCheckBox* m_checkLockItems;
-		
 		wxStaticText* m_staticText7;
-		
 		wxStaticText* m_staticText41;
-		
 		wxSpinCtrl* m_spinPinTextPosition;
 		wxStaticText* m_staticText5;
-		
 		wxCheckBox* m_checkShowPinNumber;
-		
 		wxCheckBox* m_checkShowPinName;
-		
 		wxCheckBox* m_checkShowPinNameInside;
-		
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 	
 	public:
-		DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIB_NEW_COMPONENT_BASE();
 	
 };
 
-#endif //__dialog_lib_new_component_base__
+#endif //__DIALOG_LIB_NEW_COMPONENT_BASE_H__

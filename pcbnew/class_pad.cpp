@@ -332,9 +332,10 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
     int clearance = m_LocalClearance;
 
     if( clearance == 0 )
-    {   // If local clearance is 0, use the parent footprint clearance value
-        if( GetParent() && ( (MODULE*) GetParent() )->m_LocalClearance )
-            clearance = ( (MODULE*) GetParent() )->m_LocalClearance;
+    {
+        // If local clearance is 0, use the parent footprint clearance value
+        if( GetParent() && GetParent()->GetLocalClearance() )
+            clearance = GetParent()->GetLocalClearance();
     }
 
     if( clearance == 0 )   // If the parent footprint clearance value = 0, use NETCLASS value
@@ -367,14 +368,14 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 int D_PAD::GetSolderMaskMargin()
 {
     int     margin = m_LocalSolderMaskMargin;
-    MODULE* module = (MODULE*) GetParent();
+    MODULE* module = GetParent();
 
     if( module )
     {
         if( margin == 0 )
         {
-            if( module->m_LocalSolderMaskMargin )
-                margin = module->m_LocalSolderMaskMargin;
+            if( module->GetLocalSolderMaskMargin() )
+                margin = module->GetLocalSolderMaskMargin();
         }
 
         if( margin == 0 )
@@ -408,26 +409,26 @@ int D_PAD::GetSolderMaskMargin()
  */
 wxSize D_PAD::GetSolderPasteMargin()
 {
-    int margin = m_LocalSolderPasteMargin;
-    double mratio = m_LocalSolderPasteMarginRatio;
-    MODULE * module = (MODULE*) GetParent();
+    int     margin = m_LocalSolderPasteMargin;
+    double  mratio = m_LocalSolderPasteMarginRatio;
+    MODULE* module = GetParent();
 
     if( module )
     {
-        if( margin == 0  )
-            margin = module->m_LocalSolderPasteMargin;
+        if( margin == 0 )
+            margin = module->GetLocalSolderPasteMargin();
 
         BOARD * brd = GetBoard();
 
-        if( margin == 0  )
+        if( margin == 0 )
             margin = brd->GetDesignSettings().m_SolderPasteMargin;
 
         if( mratio == 0.0 )
-            mratio = module->m_LocalSolderPasteMarginRatio;
+            mratio = module->GetLocalSolderPasteMarginRatio();
 
         if( mratio == 0.0 )
         {
-           mratio = brd->GetDesignSettings().m_SolderPasteMarginRatio;
+            mratio = brd->GetDesignSettings().m_SolderPasteMarginRatio;
         }
     }
 
