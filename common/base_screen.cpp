@@ -94,7 +94,7 @@ double BASE_SCREEN::GetScalingFactor() const
 }
 
 
-void BASE_SCREEN::SetScalingFactor(double aScale )
+void BASE_SCREEN::SetScalingFactor( double aScale )
 {
     double zoom = aScale;
 
@@ -150,12 +150,10 @@ bool BASE_SCREEN::SetZoom( double coeff )
 
 bool BASE_SCREEN::SetNextZoom()
 {
-    size_t i;
-
     if( m_ZoomList.IsEmpty() || m_Zoom >= m_ZoomList.Last() )
         return false;
 
-    for( i = 0; i < m_ZoomList.GetCount(); i++ )
+    for( unsigned i = 0; i < m_ZoomList.GetCount(); i++ )
     {
         if( m_Zoom < m_ZoomList[i] )
         {
