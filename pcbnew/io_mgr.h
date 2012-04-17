@@ -4,7 +4,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -48,8 +48,9 @@ public:
      */
     enum PCB_FILE_T
     {
-        LEGACY,                         //< Legacy Pcbnew file formats prior to s-expression.
-        KICAD,                          //< S-expression Pcbnew file format.
+        LEGACY,             //< Legacy Pcbnew file formats prior to s-expression.
+        KICAD,              //< S-expression Pcbnew file format.
+
         // add your type here.
 
         // EAGLE,
@@ -261,7 +262,7 @@ public:
 
     /**
      * Function FootprintLoad
-     * loads a MODULE having @a aFootprintName from the @a aLibraryPath containing
+     * loads a footprint having @a aFootprintName from the @a aLibraryPath containing
      * a library format that this PLUGIN knows about.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory
@@ -270,7 +271,7 @@ public:
      * @param aFootprintName is the name of the footprint to load.
      *
      * @param aProperties is an associative array that can be used to tell the
-     *  saver how to save the file, because it can take any number of
+     *  loader implementation to do something special, because it can take any number of
      *  additional named tuning arguments that the plugin is known to support.
      *  The caller continues to own this object (plugin may not delete it), and
      *  plugins should expect it to be optionally NULL.
@@ -292,11 +293,11 @@ public:
      *      or file containing several footprints. This is where the footprint is
      *      to be stored.
      *
-     * @param aFootprint is what to store in the library.
-     *   The caller continues to own the footprint.
+     * @param aFootprint is what to store in the library. The caller continues
+     *    to own the footprint after this call.
      *
      * @param aProperties is an associative array that can be used to tell the
-     *  saver how to save the file, because it can take any number of
+     *  saver how to save the footprint, because it can take any number of
      *  additional named tuning arguments that the plugin is known to support.
      *  The caller continues to own this object (plugin may not delete it), and
      *  plugins should expect it to be optionally NULL.
@@ -313,7 +314,7 @@ public:
      * @param aLibraryPath is a locator for the "library", usually a directory
      *   or file containing several footprints.
      *
-     * @param aFootprintName is the name of a footprint to delete from the specificed library.
+     * @param aFootprintName is the name of a footprint to delete from the specified library.
      *
      * @throw IO_ERROR if there is a problem finding the footprint or the library, or deleting it.
      */
@@ -340,19 +341,19 @@ public:
 
     /**
      * Function FootprintLibDelete
-     * deletes an existing footprint library, or complains if it cannot delete it or if it
-     * does not exist.
+     * deletes an existing footprint library, or complains if it cannot delete it
+     * or if it does not exist.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory
      *   or file which will contain footprints.
      *
      * @param aProperties is an associative array that can be used to tell the
-     *  library create function anything special, because it can take any number of
-     *  additional named tuning arguments that the plugin is known to support.
-     *  The caller continues to own this object (plugin may not delete it), and
-     *  plugins should expect it to be optionally NULL.
+     *  library delete implementation function anything special, because it can
+     *  take any number of additional named tuning arguments that the plugin is
+     *  known to support. The caller continues to own this object (plugin may
+     *  not delete it), and plugins should expect it to be optionally NULL.
      *
-     * @throw IO_ERROR if there is a problem finding the library, or deleting it.
+     * @throw IO_ERROR if there is a problem finding the library or deleting it.
      */
     virtual void FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
 
@@ -408,47 +409,5 @@ public:
         }
     };
 };
-
-
-
-#if 0
-    //-----<SCHEMATIC STUFF>------------------------------------------------
-    // Should split into schematic specific PLUGIN base type
-
-class SCHEMATIC;
-
-    /**
-     * Function Load
-     * loads a file from some special input file format that
-     * only this implementation knows about.
-     * @param aFileName is the name of the file to load and may be foreign in nature or native in nature.
-     * @param aAppendToMe is an existing SCHEMATIC to append to but may be NULL.
-     */
-    virtual SCHEMATIC*  Load( const wxString& aFileName, SCHEMATIC* aAppendToMe,
-                            PROPERTIES* aProperties = NULL )
-    {
-        // not pure virtual so that plugins only have to implement
-        // Load() or Save() but not both.
-    }
-
-    /**
-     * Function Save
-     * will write aSchematic to a storage file in a format that only this
-     * implementation knows about.
-     *
-     * @param aFileName is the name of a file to save to on disk.
-     *
-     * @param aBoard is the SCHEMATIC document (ram data tree) to save or export to disk.
-     */
-    virtual void Save( const wxString* aFileName, SCHEMATIC* aSchematic,
-                    PROPERTIES* aProperties = NULL )
-    {
-        // not pure virtual so that plugins only have to implement
-        // Load() or Save() but not both.
-    }
-
-    //-----</SCHEMATIC STUFF>----------------------------------------------
-#endif
-
 
 #endif // IO_MGR_H_
