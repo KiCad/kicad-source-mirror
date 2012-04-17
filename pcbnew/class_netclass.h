@@ -199,22 +199,6 @@ public:
     void    SetParams( const NETCLASS* defaults = NULL );
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool Save( FILE* aFile ) const;
-
-    /**
-     * Function ReadDescr
-     * reads the data structures for this object from a LINE_READER in "*.brd" format.
-     * @param aReader is a pointer to a LINE_READER to read from.
-     * @return bool - true if success reading else false.
-     */
-    bool ReadDescr( LINE_READER* aReader );
-
-    /**
      * Function Format
      * outputs the net class to \a aFormatter in s-expression form.
      *

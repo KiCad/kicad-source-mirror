@@ -267,12 +267,6 @@ public:
     void SetThermalGap( int aGap ) { m_ThermalGap = aGap; }
     int GetThermalGap() const;
 
-    /* Reading and writing data on files */
-    int ReadDescr( LINE_READER* aReader );
-
-    bool Save( FILE* aFile ) const;
-
-
     /* drawing functions */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                int aDrawMode, const wxPoint& aOffset = ZeroOffset );

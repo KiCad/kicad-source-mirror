@@ -342,18 +342,6 @@ public:
 
 #endif
 
-    /* Reading and writing data on files */
-    int  ReadDescr( LINE_READER* aReader );
-
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool Save( FILE* aFile ) const;
-
     /**
      * Function Draw
      * @todo we actually could show a NET, simply show all the tracks and

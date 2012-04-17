@@ -42,11 +42,11 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <io_mgr.h>
 
 #include <pcbnew.h>
 #include <module_editor_frame.h>
 #include <footprint_info.h>
-#include <class_footprint_library.h>
 #include <dialog_get_component.h>
 #include <modview_frame.h>
 #include <wildcards_and_files_ext.h>
@@ -141,6 +141,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
     return fpname;
 }
 
+
 MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
                                                   bool aUseFootprintViewer,
                                                   wxDC* aDC )
@@ -148,7 +149,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     MODULE*     module;
     wxPoint     curspos = GetScreen()->GetCrossHairPosition();
     wxString    moduleName, keys;
-    bool        AllowWildSeach = true;
+    bool        allowWildSeach = true;
 
     static wxArrayString HistoryList;
     static wxString      lastComponentName;
@@ -181,7 +182,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
 
     if( dlg.IsKeyword() )   // Selection by keywords
     {
-        AllowWildSeach = false;
+        allowWildSeach = false;
         keys = moduleName;
         moduleName = Select_1_Module_From_List( this, aLibrary, wxEmptyString, keys );
 
@@ -194,7 +195,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     else if( ( moduleName.Contains( wxT( "?" ) ) )
             || ( moduleName.Contains( wxT( "*" ) ) ) )  // Selection wild card
     {
-        AllowWildSeach = false;
+        allowWildSeach = false;
         moduleName     = Select_1_Module_From_List( this, aLibrary, moduleName, wxEmptyString );
 
         if( moduleName.IsEmpty() )
@@ -206,11 +207,13 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
 
     module = GetModuleLibrary( aLibrary, moduleName, false );
 
-    if( ( module == NULL ) && AllowWildSeach )    // Search with wild card
+    if( !module && allowWildSeach )    // Search with wild card
     {
-        AllowWildSeach = false;
+        allowWildSeach = false;
+
         wxString wildname = wxChar( '*' ) + moduleName + wxChar( '*' );
         moduleName = wildname;
+
         moduleName = Select_1_Module_From_List( this, aLibrary, moduleName, wxEmptyString );
 
         if( moduleName.IsEmpty() )
@@ -233,14 +236,18 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         AddHistoryComponentName( HistoryList, moduleName );
 
         module->SetFlags( IS_NEW );
-        module->m_Link      = 0;
+        module->m_Link = 0;
+
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
+
         module->SetPosition( curspos );
+
         // Put it on FRONT layer,
         // (Can be stored on BACK layer if the lib is an archive built from a board)
         if( module->GetLayer() != LAYER_N_FRONT )
             module->Flip( module->m_Pos );
+
         // Put in in orientation 0,
         // even if it is not saved with with orientation 0 in lib
         // (Can happen if the lib is an archive built from a board)
@@ -256,117 +263,102 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
 }
 
 
-MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
-                                          const wxString& aModuleName,
-                                          bool            aDisplayMessageError )
+MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
+            const wxString& aFootprintName, bool aDisplayError )
 {
-    wxFileName fn;
-    wxString   msg, tmp;
-    MODULE*    newModule;
-    FILE*      file = NULL;
-    bool       error_set = false;
-
-    bool       one_lib = aLibraryFullFilename.IsEmpty() ? false : true;
-
-    for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
+    try
     {
-        if( one_lib )
-            fn = aLibraryFullFilename;
-        else
-            fn = wxFileName( wxEmptyString, g_LibraryNames[ii], FootprintLibFileExtension );
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-        tmp = wxGetApp().FindLibraryPath( fn );
+        wxString libPath = wxGetApp().FindLibraryPath( aLibraryPath );
 
-        if( !tmp )
+        MODULE* footprint = pi->FootprintLoad( libPath, aFootprintName );
+
+        if( !footprint )
         {
-            if( aDisplayMessageError && !error_set )
+            if( aDisplayError )
             {
-                msg.Printf( _( "PCB footprint library file <%s> not found in search paths." ),
-                            GetChars( fn.GetFullName() ) );
-                wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
-                error_set = true;
+                wxString msg = wxString::Format(
+                    _( "Footprint '%s' not found in library '%s'" ),
+                    aFootprintName.GetData(),
+                    libPath.GetData() );
+
+                DisplayError( NULL, msg );
             }
 
-            continue;
-        }
-
-        file = wxFopen( tmp, wxT( "rt" ) );
-
-        if( file == NULL )
-        {
-            msg.Printf( _( "Could not open PCB footprint library file <%s>." ),
-                        GetChars( tmp ) );
-            wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
-            continue;
-        }
-
-        FILE_LINE_READER fileReader( file, tmp );
-
-        FILTER_READER reader( fileReader );
-
-        msg.Printf( _( "Scan Lib: %s" ), GetChars( tmp ) );
-        SetStatusText( msg );
-
-        FOOTPRINT_LIBRARY curr_lib( file, &reader );
-
-        if( !curr_lib.IsLibrary() )
-        {
-            msg.Printf( _( "<%s> is not a valid KiCad PCB footprint library file." ),
-                        GetChars( tmp ) );
-            wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
             return NULL;
         }
 
-        // Reading the list of modules in the library.
-        curr_lib.ReadSectionIndex();
-        bool found = curr_lib.FindInList( aModuleName );
+        GetBoard()->Add( footprint, ADD_APPEND );
+        SetStatusText( wxEmptyString );
+        return footprint;
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( this, ioe.errorText );
+        return NULL;
+    }
+}
 
-        // Read library.
-        if( found  )
+
+MODULE* PCB_BASE_FRAME::loadFootprintFromLibraries(
+        const wxString& aFootprintName, bool aDisplayError )
+{
+    bool    showed_error = false;
+    MODULE* footprint = NULL;
+
+    try
+    {
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
+
+        for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
         {
-            wxString   name;
+            wxFileName fn = wxFileName( wxEmptyString, g_LibraryNames[ii], FootprintLibFileExtension );
 
-            fileReader.Rewind();
+            wxString libPath = wxGetApp().FindLibraryPath( fn );
 
-            while( reader.ReadLine() )
+            if( !libPath )
             {
-                char* line = reader.Line();
-
-                StrPurge( line + 8 );
-
-                if( strnicmp( line, "$MODULE", 7 ) != 0 )
-                    continue;
-
-                // Read module name.
-                name = FROM_UTF8( line + 8 );
-
-                if( name.CmpNoCase( aModuleName ) == 0 )
+                if( aDisplayError && !showed_error )
                 {
-                    newModule = new MODULE( GetBoard() );
+                    wxString msg = wxString::Format(
+                        _( "PCB footprint library file <%s> not found in search paths." ),
+                        fn.GetFullName().GetData() );
 
-                    // Temporarily switch the locale to standard C (needed to print
-                    // floating point numbers like 1.3)
-                    LOCALE_IO   toggle;
-
-                    newModule->ReadDescr( &reader );
-
-                    GetBoard()->Add( newModule, ADD_APPEND );
-                    SetStatusText( wxEmptyString );
-                    return newModule;
+                    DisplayError( this, msg );
+                    showed_error = true;
                 }
+                continue;
+            }
+
+            footprint = pi->FootprintLoad( libPath, aFootprintName );
+
+            if( footprint )
+            {
+                GetBoard()->Add( footprint, ADD_APPEND );
+                SetStatusText( wxEmptyString );
+                return footprint;
             }
         }
 
-        if( one_lib )
-            break;
-    }
+        if( !footprint )
+        {
+            if( aDisplayError )
+            {
+                wxString msg = wxString::Format(
+                    _( "Footprint '%s' not found in any library" ),
+                    aFootprintName.GetData() );
 
-    if( aDisplayMessageError )
+                DisplayError( NULL, msg );
+            }
+
+            return NULL;
+        }
+    }
+    catch( IO_ERROR ioe )
     {
-        msg.Printf( _( "Module <%s> not found" ), GetChars( aModuleName ) );
-        DisplayError( NULL, msg );
+        DisplayError( this, ioe.errorText );
     }
-
     return NULL;
 }
 

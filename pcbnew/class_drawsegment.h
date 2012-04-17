@@ -152,10 +152,6 @@ public:
         m_PolyPoints = aPoints;
     }
 
-    bool Save( FILE* aFile ) const;
-
-    bool ReadDrawSegmentDescr( LINE_READER* aReader );
-
     void Copy( DRAWSEGMENT* source );
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,

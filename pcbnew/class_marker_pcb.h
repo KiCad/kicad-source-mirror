@@ -70,13 +70,6 @@ public:
 
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    bool Save( FILE* aFile ) const
-    {
-        // not implemented, this is here to satisfy BOARD_ITEM::Save()
-        // "pure" virtual-ness
-        return true;
-    }
-
     wxString GetSelectMenuText() const;
 
     BITMAP_DEF GetMenuImage() const { return  drc_xpm; }

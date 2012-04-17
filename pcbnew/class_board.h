@@ -892,8 +892,6 @@ public:
 
     /***************************************************************************/
 
-    bool Save( FILE* aFile ) const;
-
     wxString GetClass() const
     {
         return wxT( "BOARD" );
