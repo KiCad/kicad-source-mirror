@@ -4186,6 +4186,17 @@ bool LEGACY_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 }
 
 
+LEGACY_PLUGIN::LEGACY_PLUGIN() :
+    m_board( 0 ),
+    m_props( 0 ),
+    m_reader( 0 ),
+    m_fp( 0 ),
+    m_cache( 0 )
+{
+    init( NULL );
+}
+
+
 LEGACY_PLUGIN::~LEGACY_PLUGIN()
 {
     delete m_cache;

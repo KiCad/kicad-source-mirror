@@ -16,8 +16,6 @@
 
 #include <pcbcommon.h>
 #include <pcbstruct.h>
-#include <richio.h>
-#include <filter_reader.h>
 #include <footprint_info.h>
 #include <io_mgr.h>
 
@@ -42,57 +40,68 @@
  */
 bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 {
-    wxFileName  filename;
-    wxString    libname;
-
     // Clear data before reading files
     m_filesNotFound.Empty();
     m_filesInvalid.Empty();
     m_List.clear();
 
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
-
-    // Parse Libraries Listed
-    for( unsigned ii = 0; ii < aFootprintsLibNames.GetCount(); ii++ )
+    // try
     {
-        filename = aFootprintsLibNames[ii];
-        filename.SetExt( FootprintLibFileExtension );
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-        libname = wxGetApp().FindLibraryPath( filename );
-
-        if( libname.IsEmpty() )
+        // Parse Libraries Listed
+        for( unsigned ii = 0; ii < aFootprintsLibNames.GetCount(); ii++ )
         {
-            m_filesNotFound << filename.GetFullName() << wxT("\n");
-            continue;
-        }
+            wxFileName filename = aFootprintsLibNames[ii];
 
-        try
-        {
-            wxArrayString fpnames = pi->FootprintEnumerate( libname );
+            filename.SetExt( FootprintLibFileExtension );
 
-            for( unsigned i=0; i<fpnames.GetCount();  ++i )
+            wxString libPath = wxGetApp().FindLibraryPath( filename );
+
+            if( !libPath )
             {
-                std::auto_ptr<MODULE> m( pi->FootprintLoad( libname, fpnames[i] ) );
+                m_filesNotFound << filename.GetFullName() << wxT("\n");
+                continue;
+            }
 
-                FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
+            try
+            {
+                wxArrayString fpnames = pi->FootprintEnumerate( libPath );
 
-                fpinfo->m_Module   = fpnames[i];
-                fpinfo->m_LibName  = libname;
-                fpinfo->m_padCount = m->GetPadCount();
-                fpinfo->m_KeyWord  = m->GetKeywords();
-                fpinfo->m_Doc      = m->GetDescription();
+                for( unsigned i=0; i<fpnames.GetCount();  ++i )
+                {
+                    auto_ptr<MODULE> m( pi->FootprintLoad( libPath, fpnames[i] ) );
 
-                AddItem( fpinfo );
+                    // we're loading what we enumerated, all must be there.
+                    wxASSERT( m.get() );
+
+                    FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO();
+
+                    fpinfo->m_Module   = fpnames[i];
+                    fpinfo->m_LibName  = libPath;
+                    fpinfo->m_padCount = m->GetPadCount();
+                    fpinfo->m_KeyWord  = m->GetKeywords();
+                    fpinfo->m_Doc      = m->GetDescription();
+
+                    AddItem( fpinfo );
+                }
+            }
+            catch( IO_ERROR ioe )
+            {
+                m_filesInvalid << ioe.errorText << wxT("\n");
             }
         }
-        catch( IO_ERROR ioe )
-        {
-            m_filesInvalid << ioe.errorText << wxT("\n");
-        }
     }
+
+    /*  caller should catch this, UI seems not wanted here.
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( NULL, ioe.errorText );
+        return false;
+    }
+    */
 
     m_List.sort();
 
     return true;
 }
-
