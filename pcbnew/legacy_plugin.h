@@ -4,7 +4,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,8 +60,6 @@ struct FPL_CACHE;
  */
 class LEGACY_PLUGIN : public PLUGIN
 {
-    friend struct FPL_CACHE;
-
 public:
 
     //-----<PLUGIN IMPLEMENTATION>----------------------------------------------
@@ -272,6 +271,8 @@ protected:
 
     /// we only cache one footprint library for now, this determines which one.
     void cacheLib( const wxString& aLibraryPath );
+
+    friend struct FPL_CACHE;
 };
 
 #endif  // LEGACY_PLUGIN_H_
