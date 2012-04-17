@@ -27,6 +27,10 @@
 #include <io_mgr.h>
 #include <string>
 
+
+#define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
+#define FOOTPRINT_LIBRARY_HEADER_CNT   18
+
 typedef int     BIU;
 
 class PCB_TARGET;
@@ -44,7 +48,7 @@ class EDGE_MODULE;
 class TRACK;
 class SEGZONE;
 class D_PAD;
-class FPL_CACHE;
+struct FPL_CACHE;
 
 
 /**
@@ -54,6 +58,7 @@ class FPL_CACHE;
  */
 class LEGACY_PLUGIN : public PLUGIN
 {
+    friend struct FPL_CACHE;
 
 public:
 
@@ -80,12 +85,16 @@ public:
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                     PROPERTIES* aProperties = NULL );
 
-    void FootprintSave( const wxString& aLibraryPath, MODULE* aFootprint,
+    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
                                     PROPERTIES* aProperties = NULL );
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName );
 
-    bool IsLibraryWritable( const wxString& aLibraryPath );
+    void FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+
+    void FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+
+    bool IsFootprintLibWritable( const wxString& aLibraryPath );
 
     //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
 
@@ -103,7 +112,8 @@ public:
     void SetFilePtr( FILE* aFile )              { m_fp = aFile; }
 
     MODULE* LoadMODULE();
-
+    void    SaveMODULE( const MODULE* aModule ) const;
+    void    SaveModule3D( const MODULE* aModule ) const;
 
 protected:
 
@@ -243,11 +253,9 @@ protected:
     void saveSETUP() const;
     void saveBOARD() const;
 
-    void saveMODULE( const MODULE* aModule ) const;
     void saveMODULE_TEXT( const TEXTE_MODULE* aText ) const;
     void saveMODULE_EDGE( const EDGE_MODULE* aGraphic ) const;
     void savePAD( const D_PAD* aPad ) const;
-    void save3D( const MODULE* aModule ) const;
 
     void saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const;
     void saveNETCLASSES() const;

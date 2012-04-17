@@ -42,6 +42,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_drawsegment.h>
+#include <legacy_plugin.h>
 
 #include <pcbnew.h>
 #include <pcb_plot_params.h>
@@ -532,7 +533,6 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
  */
 bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM )
 {
-    MODULE*  Module;
     D_PAD*   pad;
     char     line[1024];
     wxString fnFront, msg;
@@ -550,9 +550,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
     double conv_unit = aUnitsMM ? conv_unit_mm : conv_unit_inch;
     const char *unit_text = aUnitsMM ? unit_text_mm : unit_text_inch;
 
-    // Switch the locale to standard C (needed to print floating point
-    // numbers like 1.3)
-    SetLocaleTo_C_standard();
+    LOCALE_IO   toggle;
 
     // Generate header file comments.)
     sprintf( line, "## Module report - date %s\n", TO_UTF8( DateAndTime() ) );
@@ -584,103 +582,114 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 
     fputs( "$EndBOARD\n\n", rptfile );
 
-    Module = (MODULE*) GetBoard()->m_Modules;
-
-    for( ; Module != NULL; Module = Module->Next() )
+    try
     {
-        sprintf( line, "$MODULE %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
-        fputs( line, rptfile );
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-        sprintf( line, "reference %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
-        fputs( line, rptfile );
-        sprintf( line, "value %s\n", EscapedUTF8( Module->m_Value->m_Text ).c_str() );
-        fputs( line, rptfile );
-        sprintf( line, "footprint %s\n", EscapedUTF8( Module->m_LibRef ).c_str() );
-        fputs( line, rptfile );
+        LEGACY_PLUGIN* legacy = (LEGACY_PLUGIN*) (PLUGIN*) pi;
 
-        msg = wxT( "attribut" );
+        legacy->SetFilePtr( rptfile );
 
-        if( Module->m_Attributs & MOD_VIRTUAL )
-            msg += wxT( " virtual" );
-
-        if( Module->m_Attributs & MOD_CMS )
-            msg += wxT( " smd" );
-
-        if( ( Module->m_Attributs & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
-            msg += wxT( " none" );
-
-        msg += wxT( "\n" );
-        fputs( TO_UTF8( msg ), rptfile );
-
-        module_pos    = Module->m_Pos;
-        module_pos.x -= File_Place_Offset.x;
-        module_pos.y -= File_Place_Offset.y;
-
-        sprintf( line, "position %9.6f %9.6f\n",
-                 module_pos.x * conv_unit,
-                 module_pos.y * conv_unit );
-        fputs( line, rptfile );
-
-        sprintf( line, "orientation  %.2f\n", (double) Module->m_Orient / 10 );
-
-        if( Module->GetLayer() == LAYER_N_FRONT )
-            strcat( line, "layer component\n" );
-        else if( Module->GetLayer() == LAYER_N_BACK )
-            strcat( line, "layer copper\n" );
-        else
-            strcat( line, "layer other\n" );
-
-        fputs( line, rptfile );
-
-        Module->Write_3D_Descr( rptfile );
-
-        for( pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( MODULE* Module = GetBoard()->m_Modules;  Module;  Module = Module->Next() )
         {
-            fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
+            sprintf( line, "$MODULE %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
+            fputs( line, rptfile );
+
+            sprintf( line, "reference %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
+            fputs( line, rptfile );
+            sprintf( line, "value %s\n", EscapedUTF8( Module->m_Value->m_Text ).c_str() );
+            fputs( line, rptfile );
+            sprintf( line, "footprint %s\n", EscapedUTF8( Module->m_LibRef ).c_str() );
+            fputs( line, rptfile );
+
+            msg = wxT( "attribut" );
+
+            if( Module->m_Attributs & MOD_VIRTUAL )
+                msg += wxT( " virtual" );
+
+            if( Module->m_Attributs & MOD_CMS )
+                msg += wxT( " smd" );
+
+            if( ( Module->m_Attributs & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
+                msg += wxT( " none" );
+
+            msg += wxT( "\n" );
+            fputs( TO_UTF8( msg ), rptfile );
+
+            module_pos    = Module->m_Pos;
+            module_pos.x -= File_Place_Offset.x;
+            module_pos.y -= File_Place_Offset.y;
+
             sprintf( line, "position %9.6f %9.6f\n",
-                     pad->GetPos0().x * conv_unit,
-                     pad->GetPos0().y * conv_unit );
+                     module_pos.x * conv_unit,
+                     module_pos.y * conv_unit );
             fputs( line, rptfile );
 
-            sprintf( line, "size %9.6f %9.6f\n",
-                     pad->GetSize().x * conv_unit,
-                     pad->GetSize().y * conv_unit );
+            sprintf( line, "orientation  %.2f\n", (double) Module->m_Orient / 10 );
+
+            if( Module->GetLayer() == LAYER_N_FRONT )
+                strcat( line, "layer component\n" );
+            else if( Module->GetLayer() == LAYER_N_BACK )
+                strcat( line, "layer copper\n" );
+            else
+                strcat( line, "layer other\n" );
+
             fputs( line, rptfile );
 
-            sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
-            fputs( line, rptfile );
+            legacy->SaveModule3D( Module );
 
-            sprintf( line, "shape_offset %9.6f %9.6f\n",
-                     pad->GetOffset().x * conv_unit,
-                     pad->GetOffset().y * conv_unit );
-            fputs( line, rptfile );
+            for( pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
+            {
+                fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
+                sprintf( line, "position %9.6f %9.6f\n",
+                         pad->GetPos0().x * conv_unit,
+                         pad->GetPos0().y * conv_unit );
+                fputs( line, rptfile );
 
-            sprintf( line, "orientation  %.2f\n",
-                     double(pad->GetOrientation() - Module->GetOrientation()) / 10 );
-            fputs( line, rptfile );
+                sprintf( line, "size %9.6f %9.6f\n",
+                         pad->GetSize().x * conv_unit,
+                         pad->GetSize().y * conv_unit );
+                fputs( line, rptfile );
 
-            static const char* shape_name[6] = { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
+                sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
+                fputs( line, rptfile );
 
-            sprintf( line, "Shape  %s\n", shape_name[pad->GetShape()] );
-            fputs( line, rptfile );
+                sprintf( line, "shape_offset %9.6f %9.6f\n",
+                         pad->GetOffset().x * conv_unit,
+                         pad->GetOffset().y * conv_unit );
+                fputs( line, rptfile );
 
-            int layer = 0;
+                sprintf( line, "orientation  %.2f\n",
+                         double(pad->GetOrientation() - Module->GetOrientation()) / 10 );
+                fputs( line, rptfile );
 
-            if( pad->GetLayerMask() & LAYER_BACK )
-                layer = 1;
+                static const char* shape_name[6] = { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
 
-            if( pad->GetLayerMask() & LAYER_FRONT )
-                layer |= 2;
+                sprintf( line, "Shape  %s\n", shape_name[pad->GetShape()] );
+                fputs( line, rptfile );
 
-            static const char* layer_name[4] = { "??? ", "copper", "component", "all" };
+                int layer = 0;
 
-            sprintf( line, "Layer  %s\n", layer_name[layer] );
-            fputs( line, rptfile );
-            fprintf( rptfile, "$EndPAD\n" );
+                if( pad->GetLayerMask() & LAYER_BACK )
+                    layer = 1;
+
+                if( pad->GetLayerMask() & LAYER_FRONT )
+                    layer |= 2;
+
+                static const char* layer_name[4] = { "??? ", "copper", "component", "all" };
+
+                sprintf( line, "Layer  %s\n", layer_name[layer] );
+                fputs( line, rptfile );
+                fprintf( rptfile, "$EndPAD\n" );
+            }
+
+            fprintf( rptfile, "$EndMODULE  %s\n\n",
+                     TO_UTF8(Module->m_Reference->m_Text ) );
         }
-
-        fprintf( rptfile, "$EndMODULE  %s\n\n",
-                 TO_UTF8(Module->m_Reference->m_Text ) );
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( NULL, ioe.errorText );
     }
 
     // Write board Edges
@@ -700,7 +709,6 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
     // Generate EOF.
     fputs( "$EndDESCRIPTION\n", rptfile );
     fclose( rptfile );
-    SetLocaleTo_Default( );      // revert to the current locale
 
     return true;
 }

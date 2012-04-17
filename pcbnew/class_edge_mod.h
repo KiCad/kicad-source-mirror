@@ -64,10 +64,6 @@ public:
     void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
     const wxPoint& GetEnd0() const              { return m_End0; }
 
-    bool Save( FILE* aFile ) const;
-
-    int ReadDescr( LINE_READER* aReader );
-
     void SetDrawCoord();
 
     /* drawing functions */

@@ -170,7 +170,7 @@ MODULE* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
 }
 
 
-void PLUGIN::FootprintSave( const wxString& aLibraryPath, MODULE* aFootprint, PROPERTIES* aProperties )
+void PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
@@ -184,7 +184,21 @@ void PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-bool PLUGIN::IsLibraryWritable( const wxString& aLibraryPath )
+void PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+
+
+void PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
+    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );
+}
+
+
+bool PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );

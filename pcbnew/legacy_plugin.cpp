@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
 
@@ -97,6 +97,8 @@
 /// Get the length of a string constant, at compile time
 #define SZ( x )         (sizeof(x)-1)
 
+
+//-----<BOARD Load Functions>---------------------------------------------------
 
 /// C string compare test for a specific length of characters.
 #define TESTLINE( x )   ( !strnicmp( line, x, SZ( x ) ) && isspace( line[SZ( x )] ) )
@@ -345,7 +347,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 
             if( !strcmp( data, "mm" ) )
             {
-#if defined(USE_PCBNEW_NANOMETRES)
+#if defined( USE_PCBNEW_NANOMETRES )
                 diskToBiu = 1000000.0;
 
 #elif defined(DEBUG)
@@ -940,7 +942,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 
         else if( TESTLINE( "Li" ) )         // Library name of footprint
         {
-            module->m_LibRef = FROM_UTF8( StrPurge( line + SZ( "Li" ) ) );
+            module->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
 
         else if( TESTLINE( "Sc" ) )         // timestamp
@@ -2679,12 +2681,11 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     m_props = aProperties;
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
-#if defined(USE_PCBNEW_NANOMETRES)
+#if defined( USE_PCBNEW_NANOMETRES )
     biuToDisk = 1/1000000.0;        // BIUs are nanometers & file is mm
 #else
     biuToDisk = 1.0;                // BIUs are deci-mils
 #endif
-
 
     // conversion factor for loading KICAD legacy file format into BIUs in RAM
 
@@ -2693,7 +2694,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     // then, during the file loading process, to start a conversion from
     // mm to nanometers.
 
-#if defined(USE_PCBNEW_NANOMETRES)
+#if defined( USE_PCBNEW_NANOMETRES )
     diskToBiu = 2540.0;             // BIUs are nanometers
 #else
     diskToBiu = 1.0;                // BIUs are deci-mils
@@ -2701,7 +2702,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 }
 
 
-//-----<Save() Functions>-------------------------------------------------------
+//-----<BOARD Save Functions>---------------------------------------------------
 
 void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
 {
@@ -2768,7 +2769,7 @@ void LEGACY_PLUGIN::saveGENERAL() const
     fprintf( m_fp, "encoding utf-8\n" );
 
     // tell folks the units used within the file, as early as possible here.
-#if defined(USE_PCBNEW_NANOMETRES)
+#if defined( USE_PCBNEW_NANOMETRES )
     fprintf( m_fp, "Units mm\n" );
 #else
     fprintf( m_fp, "Units deci-mils\n" );
@@ -2958,7 +2959,7 @@ void LEGACY_PLUGIN::saveBOARD() const
 
     // save the modules
     for( MODULE* m = m_board->m_Modules;  m;  m = (MODULE*) m->Next() )
-        saveMODULE( m );
+        SaveMODULE( m );
 
     // save the graphics owned by the board (not owned by a module)
     for( BOARD_ITEM* gr = m_board->m_Drawings;  gr;  gr = gr->Next() )
@@ -3231,8 +3232,9 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
     if( me->GetLocalSolderPasteMargin() != 0 )
         fprintf( m_fp, ".SolderPaste %s\n", fmtBIU( me->GetLocalSolderPasteMargin() ).c_str() );
 
-    if( me->GetLocalSolderPasteMarginRatio() != 0 )
-        fprintf( m_fp, ".SolderPasteRatio %g\n", me->GetLocalSolderPasteMarginRatio() );
+    double ratio = me->GetLocalSolderPasteMarginRatio();
+    if( ratio != 0.0 )
+        fprintf( m_fp, ".SolderPasteRatio %g\n", ratio );
 
     if( me->GetLocalClearance() != 0 )
         fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
@@ -3252,7 +3254,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
 }
 
 
-void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
+void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
 {
     char        statusTxt[3];
     double      orient = me->GetOrientation();
@@ -3293,8 +3295,9 @@ void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
     if( me->GetLocalSolderPasteMargin() != 0 )
         fprintf( m_fp, ".SolderPaste %s\n", fmtBIU( me->GetLocalSolderPasteMargin() ).c_str() );
 
-    if( me->GetLocalSolderPasteMarginRatio() != 0 )
-        fprintf( m_fp, ".SolderPasteRatio %g\n", me->GetLocalSolderPasteMarginRatio() );
+    double ratio = me->GetLocalSolderPasteMarginRatio();
+    if( ratio != 0.0 )
+        fprintf( m_fp, ".SolderPasteRatio %g\n", ratio );
 
     if( me->GetLocalClearance() != 0 )
         fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
@@ -3345,7 +3348,7 @@ void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
     for( D_PAD* pad = me->m_Pads;  pad;  pad = pad->Next() )
         savePAD( pad );
 
-    save3D( me );
+    SaveModule3D( me );
 
     fprintf( m_fp, "$EndMODULE %s\n", TO_UTF8( me->GetLibRef() ) );
 
@@ -3353,7 +3356,7 @@ void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
 }
 
 
-void LEGACY_PLUGIN::save3D( const MODULE* me ) const
+void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 {
     for( S3D_MASTER* t3D = me->m_3D_Drawings;  t3D;  t3D = t3D->Next() )
     {
@@ -3722,8 +3725,6 @@ typedef boost::ptr_map< wxString, MODULE >      MODULE_MAP;
 typedef MODULE_MAP::iterator                    MODULE_ITER;
 typedef MODULE_MAP::const_iterator              MODULE_CITER;
 
-#define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
-
 
 /**
  * Class FPL_CACHE
@@ -3736,13 +3737,13 @@ struct FPL_CACHE
     LEGACY_PLUGIN*  m_owner;        // my owner, I need its LEGACY_PLUGIN::LoadMODULE()
     wxString        m_lib_name;
     wxDateTime      m_mod_time;
-    MODULE_MAP      m_modules;      // tuple of footprint name vs. MODULE*
+    MODULE_MAP      m_modules;      // map or tuple of footprint_name vs. MODULE*
     bool            m_writable;
 
     FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath );
 
-    // Most all functions in this class throw IO_ERROR exceptions.  There is no
-    // error codes nor user interface calls from here.
+    // Most all functions in this class throw IO_ERROR exceptions.  There are no
+    // error codes nor user interface calls from here, nor in any PLUGIN.
     // Catch these exceptions higher up please.
 
     /// save the entire legacy library to m_lib_name;
@@ -3754,9 +3755,12 @@ struct FPL_CACHE
 
     void SaveModules( FILE* aFile );
 
-    void SaveEndOfFile( FILE* aFile );
+    void SaveEndOfFile( FILE* aFile )
+    {
+        fprintf( aFile, "$EndLIBRARY\n" );
+    }
 
-    void Load( LINE_READER* aReader );
+    void Load();
 
     void ReadAndVerifyHeader( LINE_READER* aReader );
 
@@ -3771,19 +3775,8 @@ struct FPL_CACHE
 FPL_CACHE::FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
     m_owner( aOwner ),
     m_lib_name( aLibraryPath ),
-    m_writable( false )
+    m_writable( true )
 {
-    FILE* fp = wxFopen( aLibraryPath, wxT( "r" ) );
-    if( !fp )
-    {
-        THROW_IO_ERROR( wxString::Format(
-            _( "Unable to open legacy library file '%s'" ), aLibraryPath.GetData() ) );
-    }
-
-    // reader now owns fp, will close on exception or return
-    FILE_LINE_READER    reader( fp, aLibraryPath );
-
-    Load( &reader );
 }
 
 
@@ -3791,17 +3784,29 @@ wxDateTime FPL_CACHE::GetLibModificationTime()
 {
     wxFileName  fn( m_lib_name );
 
+    // update the writable flag while we have a wxFileName, in a network this
+    // is possibly quite dynamic anyway.
     m_writable = fn.IsFileWritable();
 
     return fn.GetModificationTime();
 }
 
 
-void FPL_CACHE::Load( LINE_READER* aReader )
+void FPL_CACHE::Load()
 {
-    ReadAndVerifyHeader( aReader );
-    SkipIndex( aReader );
-    LoadModules( aReader );
+    FILE* fp = wxFopen( m_lib_name, wxT( "r" ) );
+    if( !fp )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "Unable to open legacy library file '%s'" ), m_lib_name.GetData() ) );
+    }
+
+    // reader now owns fp, will close on exception or return
+    FILE_LINE_READER    reader( fp, m_lib_name );
+
+    ReadAndVerifyHeader( &reader );
+    SkipIndex( &reader );
+    LoadModules( &reader );
 
     // Remember the file modification time of library file when the
     // cache snapshot was made, so that in a networked environment we will
@@ -3812,17 +3817,45 @@ void FPL_CACHE::Load( LINE_READER* aReader )
 
 void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
 {
+    char* line;
+
     if( !aReader->ReadLine() )
+        goto L_bad_library;
+
+    line = aReader->Line();
+    if( !TESTLINE( "PCBNEW-LibModule-V1" ) )
+        goto L_bad_library;
+
+    while( aReader->ReadLine() )
     {
-    L_not_library:
-        THROW_IO_ERROR( wxString::Format( _( "File %s is empty or is not a legacy library" ),
-            m_lib_name.GetData() ) );
+        line = aReader->Line();
+        if( TESTLINE( "Units" ) )
+        {
+            const char* units = strtok( line + SZ( "Units" ), delims );
+
+            if( !strcmp( units, "mm" ) )
+            {
+#if defined( USE_PCBNEW_NANOMETRES )
+                m_owner->diskToBiu = 1000000.0;
+
+#elif defined(DEBUG)
+                // mm to deci-mils:
+                // advanced testing of round tripping only, not supported in non DEBUG build
+                m_owner->diskToBiu = 10000/25.4;
+
+#else
+                THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'PCBNew compiled for deci-mils'" ) );
+#endif
+            }
+
+        }
+        else if( TESTLINE( "$INDEX" ) )
+            return;
     }
 
-    char* line = aReader->Line();
-
-    if( !TESTLINE( "PCBNEW-LibModule-V1" ) )
-        goto L_not_library;
+L_bad_library:
+    THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty or is not a legacy library" ),
+        m_lib_name.GetData() ) );
 }
 
 
@@ -3833,7 +3866,7 @@ void FPL_CACHE::SkipIndex( LINE_READER* aReader )
     // to see if this is not a new $INDEX tag.
     bool exit = false;
 
-    while( aReader->ReadLine() )
+    do
     {
         char* line = aReader->Line();
 
@@ -3854,7 +3887,7 @@ void FPL_CACHE::SkipIndex( LINE_READER* aReader )
         }
         else if( exit )
             break;
-    }
+    } while( aReader->ReadLine() );
 }
 
 
@@ -3871,17 +3904,20 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
         {
             MODULE* m = m_owner->LoadMODULE();
 
-            wxString reference = m->GetReference();
+            // wxString footprintName = m->GetReference();
+            wxString footprintName = m->GetLibRef();
 
-            MODULE_CITER it = m_modules.find( reference );
+            std::pair<MODULE_ITER, bool> r = m_modules.insert( footprintName, m );
 
-            if( it != m_modules.end() )
+            // m's module is gone here, both on success or failure of insertion.
+            // no memory leak, container deleted m on failure.
+
+            if( !r.second )
             {
                 THROW_IO_ERROR( wxString::Format(
-                    _( "library %s has a duplicate footprint named %s" ),
-                    m_lib_name.GetData(), reference.GetData() ) );
+                    _( "library '%s' has a duplicate footprint named '%s'" ),
+                    m_lib_name.GetData(), footprintName.GetData() ) );
             }
-            m_modules.insert( reference, m );
         }
 
     } while( aReader->ReadLine() );
@@ -3904,7 +3940,8 @@ void FPL_CACHE::Save()
     if( !fp )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Unable to open legacy library file '%s'" ), m_lib_name.GetData() ) );
+            _( "Unable to open or create legacy library file '%s'" ),
+            m_lib_name.GetData() ) );
     }
 
     // wxf now owns fp, will close on exception or return
@@ -3915,8 +3952,15 @@ void FPL_CACHE::Save()
     SaveModules( fp );
     SaveEndOfFile( fp );
 
-    wxRemoveFile( m_lib_name );
-    wxRenameFile( tempFileName, m_lib_name );
+    wxRemove( m_lib_name );     // it is not an error if this does not exist
+
+    if( wxRename( tempFileName, m_lib_name ) )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "Unable to rename tempfile '%s' to to library file '%s'" ),
+            tempFileName.GetData(),
+            m_lib_name.GetData() ) );
+    }
 }
 
 
@@ -3924,6 +3968,11 @@ void FPL_CACHE::SaveHeader( FILE* aFile )
 {
     fprintf( aFile, "%s  %s\n", FOOTPRINT_LIBRARY_HEADER, TO_UTF8( DateAndTime() ) );
     fprintf( aFile, "# encoding utf-8\n" );
+#if defined( USE_PCBNEW_NANOMETRES )
+    fprintf( aFile, "Units mm\n" );
+#else
+    fprintf( aFile, "Units deci-mils\n" );
+#endif
 }
 
 
@@ -3942,30 +3991,40 @@ void FPL_CACHE::SaveIndex( FILE* aFile )
 
 void FPL_CACHE::SaveModules( FILE* aFile )
 {
+    m_owner->SetFilePtr( aFile );
+
+    for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
+    {
+        m_owner->SaveMODULE( it->second );
+    }
 }
 
 
 void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
 {
     if( !m_cache || m_cache->m_lib_name != aLibraryPath ||
+        // somebody else on a network touched the library:
         m_cache->m_mod_time != m_cache->GetLibModificationTime() )
     {
-        // a spectacular episode in memory management.
+        // a spectacular episode in memory management:
         delete m_cache;
         m_cache = new FPL_CACHE( this, aLibraryPath );
+        m_cache->Load();
     }
 }
 
 
 wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
 {
-    wxArrayString   ret;
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     init( aProperties );
 
     cacheLib( aLibraryPath );
 
     const MODULE_MAP&   mods = m_cache->m_modules;
+
+    wxArrayString   ret;
 
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
@@ -3979,6 +4038,8 @@ wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, P
 MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                     PROPERTIES* aProperties )
 {
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
     init( aProperties );
 
     cacheLib( aLibraryPath );
@@ -3989,8 +4050,12 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStri
 
     if( it == mods.end() )
     {
+        /*
         THROW_IO_ERROR( wxString::Format( _( "No '%s' footprint in library '%s'" ),
             aFootprintName.GetData(), aLibraryPath.GetData() ) );
+        */
+
+        return NULL;
     }
 
     // copy constructor to clone the already loaded MODULE
@@ -3998,30 +4063,45 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStri
 }
 
 
-void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, MODULE* aFootprint, PROPERTIES* aProperties )
+void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties )
 {
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
     init( aProperties );
 
     cacheLib( aLibraryPath );
 
     if( !m_cache->m_writable )
     {
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
-    wxString reference = aFootprint->GetReference();
+    wxString footprintName = aFootprint->GetLibRef();
 
     MODULE_MAP&  mods = m_cache->m_modules;
 
     // quietly overwrite any by same name.
-    MODULE_CITER it = mods.find( reference );
+    MODULE_CITER it = mods.find( footprintName );
     if( it != mods.end() )
     {
-        mods.erase( reference );
+        mods.erase( footprintName );
     }
 
-    aFootprint->SetParent( 0 );
+    // I need my own copy for the cache
+    MODULE* my_module = new MODULE( *aFootprint );
 
-    mods.insert( reference, aFootprint );
+    // and it's time stamp must be 0, it should have no parent, orientation should
+    // be zero, and it should be on the front layer.
+
+    my_module->SetTimeStamp( 0 );
+    my_module->SetParent( 0 );
+
+    my_module->SetOrientation( 0 );
+
+    if( my_module->GetLayer() != LAYER_N_FRONT )
+        my_module->Flip( my_module->GetPosition() );
+
+    mods.insert( footprintName, my_module );
 
     m_cache->Save();
 }
@@ -4029,12 +4109,15 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, MODULE* aFootpr
 
 void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
 {
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
     init( NULL );
 
     cacheLib( aLibraryPath );
 
     if( !m_cache->m_writable )
     {
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
     size_t erasedCount = m_cache->m_modules.erase( aFootprintName );
@@ -4050,8 +4133,52 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
 }
 
 
-bool LEGACY_PLUGIN::IsLibraryWritable( const wxString& aLibraryPath )
+void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
 {
+    if( wxFileExists( aLibraryPath ) )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "library '%s' already exists, will not create anew" ),
+            aLibraryPath.GetData() ) );
+    }
+
+    LOCALE_IO   toggle;
+
+    init( NULL );
+
+    delete m_cache;
+    m_cache = new FPL_CACHE( this, aLibraryPath );
+    m_cache->Save();
+    m_cache->Load();    // update m_writable and m_mod_time
+}
+
+
+void LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    wxFileName fn = aLibraryPath;
+
+    if( !fn.FileExists() )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "library '%s' does not exist, cannot be deleted" ),
+            aLibraryPath.GetData() ) );
+    }
+
+    // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
+    // we don't want that.  we want bare metal portability with no UI here.
+    if( wxRemove( aLibraryPath ) )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "library '%s' cannot be deleted" ),
+            aLibraryPath.GetData() ) );
+    }
+}
+
+
+bool LEGACY_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
+{
+    LOCALE_IO   toggle;
+
     init( NULL );
 
     cacheLib( aLibraryPath );
