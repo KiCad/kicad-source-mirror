@@ -55,7 +55,7 @@ struct FPL_CACHE;
 /**
  * Class LEGACY_PLUGIN
  * is a PLUGIN derivation which could possibly be put into a DLL/DSO.
- * It is not thread safe, but it is re-entrant multiple times in sequence.
+ * As with any PLUGIN, there is no UI, i.e. windowing calls allowed.
  */
 class LEGACY_PLUGIN : public PLUGIN
 {
@@ -99,14 +99,7 @@ public:
 
     //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
 
-    LEGACY_PLUGIN() :
-        m_board( 0 ),
-        m_props( 0 ),
-        m_reader( 0 ),
-        m_fp( 0 ),
-        m_cache( 0 )
-    {}
-
+    LEGACY_PLUGIN();
     ~LEGACY_PLUGIN();
 
     void SetReader( LINE_READER* aReader )      { m_reader = aReader; }

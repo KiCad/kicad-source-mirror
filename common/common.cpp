@@ -120,15 +120,17 @@ StructColors ColorRefs[NBCOLOR] =
 bool g_DisableFloatingPointLocalNotation = false;
 
 
-void SetLocaleTo_C_standard( void )
+int LOCALE_IO::C_count;
+
+
+void SetLocaleTo_C_standard()
 {
     setlocale( LC_NUMERIC, "C" );    // Switch the locale to standard C
 }
 
-
-void SetLocaleTo_Default( void )
+void SetLocaleTo_Default()
 {
-    if( ! g_DisableFloatingPointLocalNotation )
+    if( !g_DisableFloatingPointLocalNotation )
         setlocale( LC_NUMERIC, "" );      // revert to the current locale
 }
 

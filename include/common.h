@@ -454,6 +454,7 @@ void SetLocaleTo_C_standard();
  */
 void SetLocaleTo_Default();
 
+
 /**
  * Class LOCALE_IO
  * is a class that can be instantiated within a scope in which you are expecting
@@ -464,9 +465,22 @@ void SetLocaleTo_Default();
 class LOCALE_IO
 {
 public:
-    LOCALE_IO()     { SetLocaleTo_C_standard(); }
-    ~LOCALE_IO()    { SetLocaleTo_Default(); }
+    LOCALE_IO()
+    {
+        if( C_count++ == 0 )
+            SetLocaleTo_C_standard();
+    }
+
+    ~LOCALE_IO()
+    {
+        if( --C_count == 0 )
+            SetLocaleTo_Default();
+    }
+
+private:
+    static int C_count;     // allow for nesting of LOCALE_IO instantiations
 };
+
 
 /**
  * Function EnsureTextCtrlWidth
