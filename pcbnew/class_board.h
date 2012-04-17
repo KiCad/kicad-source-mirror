@@ -848,7 +848,7 @@ public:
      * ( using the default netclass value or a preset value )
      * the default netclass is always in m_TrackWidthList[0]
      */
-    int GetCurrentTrackWidth()
+    int GetCurrentTrackWidth() const
     {
         return m_TrackWidthList[m_TrackWidthSelector];
     }
