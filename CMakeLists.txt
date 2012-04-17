@@ -23,8 +23,6 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 option(USE_PCBNEW_SEXPR_FILE_FORMAT
        "Use s-expression Pcbnew file format support (default OFF)." )
 
-option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format" ON)
-option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format" ON)
 option(USE_PCBNEW_NANOMETRES
        "Use nanometers for Pcbnew internal units instead of deci-mils (default OFF).")
 

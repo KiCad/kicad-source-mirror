@@ -55,8 +55,6 @@
 
 #cmakedefine USE_IMAGES_IN_MENUS 1
 
-#cmakedefine USE_NEW_PCBNEW_LOAD
-#cmakedefine USE_NEW_PCBNEW_SAVE
 #cmakedefine USE_PCBNEW_NANOMETRES
 #cmakedefine USE_PCBNEW_SEXPR_FILE_FORMAT
 

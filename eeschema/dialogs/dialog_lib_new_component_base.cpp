@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -46,6 +46,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	bSizer2->Add( 30, 0, 0, wxEXPAND, 3 );
 	
+	
 	bSizer5->Add( bSizer2, 0, wxALL|wxEXPAND, 0 );
 	
 	wxBoxSizer* bSizer3;
@@ -68,6 +69,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	
 	bSizer3->Add( 30, 0, 0, wxEXPAND, 5 );
+	
 	
 	bSizer5->Add( bSizer3, 0, wxALL|wxEXPAND, 0 );
 	
@@ -92,6 +94,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	bSizer4->Add( 30, 0, 0, wxEXPAND, 3 );
 	
+	
 	bSizer5->Add( bSizer4, 0, wxALL|wxEXPAND, 0 );
 	
 	wxBoxSizer* bSizer7;
@@ -101,10 +104,10 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer7->Add( 12, 0, 0, wxEXPAND, 3 );
 	
 	m_checkHasConversion = new wxCheckBox( this, wxID_ANY, _("Create component with &alternate body style (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_checkHasConversion->SetToolTip( _("Check this option for components that have a De Morgan representation.\nThis is usual for gates.") );
 	
 	bSizer7->Add( m_checkHasConversion, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	bSizer5->Add( bSizer7, 0, wxALL|wxEXPAND, 0 );
 	
@@ -115,10 +118,10 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer8->Add( 12, 0, 0, wxEXPAND, 3 );
 	
 	m_checkIsPowerSymbol = new wxCheckBox( this, wxID_ANY, _("Create component as power &symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_checkIsPowerSymbol->SetToolTip( _("Check this option for power symbols.\nPower symbols have specific properties for Eeschema:\n- Value cannot be edited (to avoid mistakes) because this is the pin name that is important for a power symbol\n- Reference is updated automatically when a netlist is created (no need to run Annotate)") );
 	
 	bSizer8->Add( m_checkIsPowerSymbol, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	bSizer5->Add( bSizer8, 0, wxALL|wxEXPAND, 0 );
 	
@@ -129,10 +132,10 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer9->Add( 12, 0, 0, wxEXPAND, 3 );
 	
 	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Parts in package locked (cannot be swapped)"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_checkLockItems->SetToolTip( _("Check this option if Eeschema cannot change parts selections inside a given package\nThis happens when parts are different in this package.\nWhen this option is not checked, Eeschema automatically choose the parts in packages to minimize packages count") );
 	
 	bSizer9->Add( m_checkLockItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	bSizer5->Add( bSizer9, 0, wxALL|wxEXPAND, 0 );
 	
@@ -167,6 +170,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	m_staticText5->Wrap( -1 );
 	bSizer6->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL, 3 );
 	
+	
 	bSizer5->Add( bSizer6, 1, wxALL|wxEXPAND, 0 );
 	
 	wxBoxSizer* bSizer10;
@@ -176,9 +180,9 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer10->Add( 12, 0, 0, wxEXPAND, 3 );
 	
 	m_checkShowPinNumber = new wxCheckBox( this, wxID_ANY, _("Show pin n&umber text"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkShowPinNumber->SetValue(true);
-	
+	m_checkShowPinNumber->SetValue(true); 
 	bSizer10->Add( m_checkShowPinNumber, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	bSizer5->Add( bSizer10, 0, wxALL|wxEXPAND, 0 );
 	
@@ -189,9 +193,9 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer12->Add( 12, 0, 0, wxEXPAND, 3 );
 	
 	m_checkShowPinName = new wxCheckBox( this, wxID_ANY, _("Show pin name te&xt"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkShowPinName->SetValue(true);
-	
+	m_checkShowPinName->SetValue(true); 
 	bSizer12->Add( m_checkShowPinName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	bSizer5->Add( bSizer12, 0, wxALL|wxEXPAND, 0 );
 	
@@ -202,9 +206,9 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer121->Add( 12, 0, 0, wxEXPAND, 3 );
 	
 	m_checkShowPinNameInside = new wxCheckBox( this, wxID_ANY, _("Pin name &inside"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkShowPinNameInside->SetValue(true);
-	
+	m_checkShowPinNameInside->SetValue(true); 
 	bSizer121->Add( m_checkShowPinNameInside, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	
 	bSizer5->Add( bSizer121, 1, wxEXPAND, 5 );
 	
@@ -217,9 +221,12 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
+	
 	bSizer5->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 0 );
 	
+	
 	mainSizer->Add( bSizer5, 1, wxALL|wxEXPAND, 12 );
+	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();

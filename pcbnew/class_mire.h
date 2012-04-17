@@ -86,10 +86,6 @@ public:
 
     void Flip( const wxPoint& aCentre );
 
-    bool Save( FILE* aFile ) const;
-
-    bool ReadMirePcbDescr( LINE_READER* aReader );
-
     void Copy( PCB_TARGET* source );
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,

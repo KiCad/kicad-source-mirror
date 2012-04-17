@@ -373,20 +373,45 @@ public:
     // loading footprints
 
     /**
-     * Function GetModuleLibrary
+     * Function loadFootprintFromLibrary
+     * loads @a aFootprintName from @a aLibraryPath.
+     * If found add the module is also added to the BOARD, just for good measure.
      *
-     *  Read active libraries or one library to find and load a given module
-     *  If found the module is linked to the tail of linked list of modules
      *  @param aLibraryFullFilename - the full filename of the library to read. If empty,
      *                   all active libraries are read
-     *  @param aModuleName = module name to load
-     *  @param aDisplayMessageError = true to display an error message if any.
+     *
+     *  @param aFootprintName is the footprint to load
+     *
+     *  @param aDisplayError = true to display an error message if any.
+     *
+     *  @return MODULE* - new module, or NULL
+     */
+    MODULE* loadFootprintFromLibrary( const wxString& aLibraryPath,
+              const wxString& aFootprintName, bool aDisplayError );
+
+    MODULE* loadFootprintFromLibraries( const wxString& aFootprintName,
+                              bool            aDisplayError );
+
+    /**
+     * Function GetModuleLibrary
+     * scans active libraries to find and load @a aFootprintName.
+     * If found add the module is also added to the BOARD, just for good measure.
+     *
+     *  @param aFootprintName is the footprint to load
+     *
+     *  @param aDisplayError = true to display an error message if any.
+     *
      *  @return a pointer to the new module, or NULL
      *
      */
-    MODULE* GetModuleLibrary( const wxString& aLibraryFullFilename,
-                              const wxString& aModuleName,
-                              bool            aDisplayMessageError );
+    MODULE* GetModuleLibrary( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              bool aDisplayError )
+    {
+        if( !aLibraryPath )
+            return loadFootprintFromLibraries( aFootprintName, aDisplayError );
+        else
+            return loadFootprintFromLibrary( aLibraryPath, aFootprintName, aDisplayError );
+    }
 
     /**
      * Function Select_1_Module_From_List
@@ -409,7 +434,8 @@ public:
 
     /**
      * Function Load_Module_From_Library
-     * Open a dialog to select a footprint, and load in in current board
+     * opens a dialog to select a footprint, and loads it into current board.
+     *
      * @param aLibrary = the library name to use, or empty string to search
      * in all loaded libraries
      * @param aUseFootprintViewer = true to show the option

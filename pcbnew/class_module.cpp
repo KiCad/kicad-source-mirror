@@ -111,6 +111,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     // Copy reference and value.
     m_Reference = new TEXTE_MODULE( *aModule.m_Reference );
     m_Reference->SetParent( this );
+
     m_Value = new TEXTE_MODULE( *aModule.m_Value );
     m_Value->SetParent( this );
 

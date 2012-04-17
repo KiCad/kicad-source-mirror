@@ -27,6 +27,10 @@
 #include <io_mgr.h>
 #include <string>
 
+
+#define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
+#define FOOTPRINT_LIBRARY_HEADER_CNT   18
+
 typedef int     BIU;
 
 class PCB_TARGET;
@@ -36,6 +40,7 @@ class NETINFO;
 class TEXTE_PCB;
 class TRACK;
 class NETCLASS;
+class NETCLASSES;
 class ZONE_CONTAINER;
 class DIMENSION;
 class NETINFO_ITEM;
@@ -44,6 +49,8 @@ class EDGE_MODULE;
 class TRACK;
 class SEGZONE;
 class D_PAD;
+struct FPL_CACHE;
+
 
 /**
  * Class LEGACY_PLUGIN
@@ -52,10 +59,11 @@ class D_PAD;
  */
 class LEGACY_PLUGIN : public PLUGIN
 {
+    friend struct FPL_CACHE;
 
 public:
 
-    //-----<PLUGIN>-------------------------------------------------------------
+    //-----<PLUGIN IMPLEMENTATION>----------------------------------------------
 
     const wxString& PluginName() const
     {
@@ -73,7 +81,42 @@ public:
 
     void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );          // overload
 
-    //-----</PLUGIN>------------------------------------------------------------
+    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
+
+    MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                    PROPERTIES* aProperties = NULL );
+
+    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
+                                    PROPERTIES* aProperties = NULL );
+
+    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName );
+
+    void FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+
+    void FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+
+    bool IsFootprintLibWritable( const wxString& aLibraryPath );
+
+    //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
+
+    LEGACY_PLUGIN() :
+        m_board( 0 ),
+        m_props( 0 ),
+        m_reader( 0 ),
+        m_fp( 0 ),
+        m_cache( 0 )
+    {}
+
+    ~LEGACY_PLUGIN();
+
+    void SetReader( LINE_READER* aReader )      { m_reader = aReader; }
+    void SetFilePtr( FILE* aFile )              { m_fp = aFile; }
+
+    MODULE* LoadMODULE();
+    void    SaveMODULE( const MODULE* aModule ) const;
+    void    SaveModule3D( const MODULE* aModule ) const;
+    void    SaveBOARD( const BOARD* aBoard ) const;
+
 
 protected:
 
@@ -87,6 +130,8 @@ protected:
 
     wxString        m_field;        ///< reused to stuff MODULE fields.
     int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
+    FPL_CACHE*      m_cache;
+
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
@@ -131,11 +176,11 @@ protected:
 
     void loadAllSections( bool doAppend );
 
+
     void loadGENERAL();
     void loadSETUP();
     void loadSHEET();
 
-    void loadMODULE();
     void load3D( MODULE* aModule );
     void loadPAD( MODULE* aModule );
     void loadMODULE_TEXT( TEXTE_MODULE* aText );
@@ -205,20 +250,17 @@ protected:
      */
     std::string fmtDEG( double aAngle ) const;
 
-    void saveAllSections() const;
-    void saveGENERAL() const;
-    void saveSHEET() const;
-    void saveSETUP() const;
-    void saveBOARD() const;
+    void saveGENERAL( const BOARD* aBoard ) const;
+    void saveSHEET( const BOARD* aBoard ) const;
+    void saveSETUP( const BOARD* aBoard ) const;
+    void saveBOARD_ITEMS( const BOARD* aBoard ) const;
 
-    void saveMODULE( const MODULE* aModule ) const;
     void saveMODULE_TEXT( const TEXTE_MODULE* aText ) const;
     void saveMODULE_EDGE( const EDGE_MODULE* aGraphic ) const;
     void savePAD( const D_PAD* aPad ) const;
-    void save3D( const MODULE* aModule ) const;
 
     void saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const;
-    void saveNETCLASSES() const;
+    void saveNETCLASSES( const NETCLASSES* aNetClasses ) const;
     void saveNETCLASS( const NETCLASS* aNetclass ) const;
 
     void savePCB_TEXT( const TEXTE_PCB* aText ) const;
@@ -235,6 +277,8 @@ protected:
 
     //-----</save functions>----------------------------------------------------
 
+    /// we only cache one footprint library for now, this determines which one.
+    void cacheLib( const wxString& aLibraryPath );
 };
 
 #endif  // LEGACY_PLUGIN_H_
