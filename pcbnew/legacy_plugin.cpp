@@ -2710,8 +2710,6 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 
     init( aProperties );
 
-    m_board = aBoard;
-
     FILE* fp = wxFopen( aFileName, wxT( "w" ) );
     if( !fp )
     {
@@ -2728,12 +2726,13 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 
     if( m_props )
     {
+        // @todo move the header production into this source file.
         wxString header = (*m_props)["header"];
         // save a file header, if caller provided one (with trailing \n hopefully).
         fprintf( m_fp, "%s", TO_UTF8( header ) );
     }
 
-    saveAllSections();
+    SaveBOARD( aBoard );
 }
 
 
@@ -2751,19 +2750,19 @@ do { \
 } while(0)
 
 
-void LEGACY_PLUGIN::saveAllSections() const
+void LEGACY_PLUGIN::SaveBOARD( const BOARD* aBoard ) const
 {
-    saveGENERAL();
+    saveGENERAL( aBoard );
 
-    saveSHEET();
+    saveSHEET( aBoard );
 
-    saveSETUP();
+    saveSETUP( aBoard );
 
-    saveBOARD();
+    saveBOARD_ITEMS( aBoard );
 }
 
 
-void LEGACY_PLUGIN::saveGENERAL() const
+void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
 {
     fprintf( m_fp, "$GENERAL\n" );
     fprintf( m_fp, "encoding utf-8\n" );
@@ -2776,7 +2775,7 @@ void LEGACY_PLUGIN::saveGENERAL() const
 #endif
 
     // Write copper layer count
-    fprintf( m_fp, "LayerCount %d\n", m_board->GetCopperLayerCount() );
+    fprintf( m_fp, "LayerCount %d\n", aBoard->GetCopperLayerCount() );
 
     /*  No, EnabledLayers has this information, plus g_TabAllCopperLayerMask is
         global and globals are not allowed in a plugin.
@@ -2785,34 +2784,35 @@ void LEGACY_PLUGIN::saveGENERAL() const
              g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS );
     */
 
-    fprintf( m_fp, "EnabledLayers %08X\n",  m_board->GetEnabledLayers() );
+    fprintf( m_fp, "EnabledLayers %08X\n",  aBoard->GetEnabledLayers() );
 
-    if( m_board->GetEnabledLayers() != m_board->GetVisibleLayers() )
-        fprintf( m_fp, "VisibleLayers %08X\n", m_board->GetVisibleLayers() );
+    if( aBoard->GetEnabledLayers() != aBoard->GetVisibleLayers() )
+        fprintf( m_fp, "VisibleLayers %08X\n", aBoard->GetVisibleLayers() );
 
-    fprintf( m_fp, "Links %d\n",            m_board->GetRatsnestsCount() );
-    fprintf( m_fp, "NoConn %d\n",           m_board->m_NbNoconnect );
+    fprintf( m_fp, "Links %d\n",            aBoard->GetRatsnestsCount() );
+    fprintf( m_fp, "NoConn %d\n",           aBoard->m_NbNoconnect );
 
     // Write Bounding box info
-    EDA_RECT bbbox = m_board->ComputeBoundingBox();
+    EDA_RECT bbbox = ((BOARD*)aBoard)->ComputeBoundingBox();
+
     fprintf( m_fp,  "Di %s %s\n",
                     fmtBIUPair( bbbox.GetX(), bbbox.GetY() ).c_str(),
                     fmtBIUPair( bbbox.GetRight(), bbbox.GetBottom() ).c_str() );
 
-    fprintf( m_fp, "Ndraw %d\n",            m_board->m_Drawings.GetCount() );
-    fprintf( m_fp, "Ntrack %d\n",           m_board->GetNumSegmTrack() );
-    fprintf( m_fp, "Nzone %d\n",            m_board->GetNumSegmZone() );
-    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( m_board->GetDesignSettings().m_BoardThickness ).c_str() );
-    fprintf( m_fp, "Nmodule %d\n",          m_board->m_Modules.GetCount() );
-    fprintf( m_fp, "Nnets %d\n",            m_board->GetNetCount() );
+    fprintf( m_fp, "Ndraw %d\n",            aBoard->m_Drawings.GetCount() );
+    fprintf( m_fp, "Ntrack %d\n",           aBoard->GetNumSegmTrack() );
+    fprintf( m_fp, "Nzone %d\n",            aBoard->GetNumSegmZone() );
+    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().m_BoardThickness ).c_str() );
+    fprintf( m_fp, "Nmodule %d\n",          aBoard->m_Modules.GetCount() );
+    fprintf( m_fp, "Nnets %d\n",            aBoard->GetNetCount() );
     fprintf( m_fp, "$EndGENERAL\n\n" );
 }
 
 
-void LEGACY_PLUGIN::saveSHEET() const
+void LEGACY_PLUGIN::saveSHEET( const BOARD* aBoard ) const
 {
-    const PAGE_INFO&    pageInfo = m_board->GetPageSettings();
-    const TITLE_BLOCK&  tb = m_board->GetTitleBlock();
+    const PAGE_INFO&    pageInfo = aBoard->GetPageSettings();
+    const TITLE_BLOCK&  tb = ((BOARD*)aBoard)->GetTitleBlock();
 
     fprintf( m_fp, "$SHEETDESCR\n" );
 
@@ -2837,10 +2837,10 @@ void LEGACY_PLUGIN::saveSHEET() const
 }
 
 
-void LEGACY_PLUGIN::saveSETUP() const
+void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 {
-    NETCLASS* netclass_default       = m_board->m_NetClasses.GetDefault();
-    const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    NETCLASS* netclass_default       = aBoard->m_NetClasses.GetDefault();
+    const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
     fprintf( m_fp, "$SETUP\n" );
 
@@ -2849,32 +2849,32 @@ void LEGACY_PLUGIN::saveSETUP() const
     fprintf( m_fp,, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
     */
 
-    fprintf( m_fp, "Layers %d\n", m_board->GetCopperLayerCount() );
+    fprintf( m_fp, "Layers %d\n", aBoard->GetCopperLayerCount() );
 
-    unsigned layerMask = ALL_CU_LAYERS & m_board->GetEnabledLayers();
+    unsigned layerMask = ALL_CU_LAYERS & aBoard->GetEnabledLayers();
 
     for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
     {
         if( layerMask & 1 )
         {
             fprintf( m_fp, "Layer[%d] %s %s\n", layer,
-                     TO_UTF8( m_board->GetLayerName( layer ) ),
-                     LAYER::ShowType( m_board->GetLayerType( layer ) ) );
+                     TO_UTF8( aBoard->GetLayerName( layer ) ),
+                     LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
         }
     }
 
     // Save current default track width, for compatibility with older Pcbnew version;
-    fprintf( m_fp, "TrackWidth %s\n",  fmtBIU( m_board->GetCurrentTrackWidth() ).c_str() );
+    fprintf( m_fp, "TrackWidth %s\n",  fmtBIU( aBoard->GetCurrentTrackWidth() ).c_str() );
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
-    for( unsigned ii = 1; ii < m_board->m_TrackWidthList.size(); ii++ )
-        fprintf( m_fp, "TrackWidthList %s\n", fmtBIU( m_board->m_TrackWidthList[ii] ).c_str() );
+    for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
+        fprintf( m_fp, "TrackWidthList %s\n", fmtBIU( aBoard->m_TrackWidthList[ii] ).c_str() );
 
     fprintf( m_fp, "TrackClearence %s\n",  fmtBIU( netclass_default->GetClearance() ).c_str() );
 
     // ZONE_SETTINGS
-    fprintf( m_fp, "ZoneClearence %s\n", fmtBIU( m_board->GetZoneSettings().m_ZoneClearance ).c_str() );
-    fprintf( m_fp, "Zone_45_Only %d\n", m_board->GetZoneSettings().m_Zone_45_Only );
+    fprintf( m_fp, "ZoneClearence %s\n", fmtBIU( aBoard->GetZoneSettings().m_ZoneClearance ).c_str() );
+    fprintf( m_fp, "Zone_45_Only %d\n", aBoard->GetZoneSettings().m_Zone_45_Only );
 
     fprintf( m_fp, "TrackMinWidth %s\n", fmtBIU( bds.m_TrackMinWidth ).c_str() );
 
@@ -2889,10 +2889,10 @@ void LEGACY_PLUGIN::saveSETUP() const
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
-    for( unsigned ii = 1; ii < m_board->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
         fprintf( m_fp, "ViaSizeList %s %s\n",
-                 fmtBIU( m_board->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
-                 fmtBIU( m_board->m_ViasDimensionsList[ii].m_Drill ).c_str() );
+                 fmtBIU( aBoard->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                 fmtBIU( aBoard->m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
     fprintf( m_fp, "MicroViaSize %s\n", fmtBIU( netclass_default->GetuViaDiameter() ).c_str() );
@@ -2926,14 +2926,14 @@ void LEGACY_PLUGIN::saveSETUP() const
     }
     */
 
-    fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( m_board->GetOriginAxisPosition() ).c_str() );
+    fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( aBoard->GetOriginAxisPosition() ).c_str() );
 
     fprintf( m_fp, "VisibleElements %X\n", bds.GetVisibleElements() );
 
     {
         STRING_FORMATTER sf;
 
-        m_board->GetPlotOptions().Format( &sf, 0 );
+        aBoard->GetPlotOptions().Format( &sf, 0 );
 
         wxString record = FROM_UTF8( sf.GetString().c_str() );
 
@@ -2947,22 +2947,22 @@ void LEGACY_PLUGIN::saveSETUP() const
 }
 
 
-void LEGACY_PLUGIN::saveBOARD() const
+void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 {
     // save the nets
-    int netcount = m_board->GetNetCount();
+    int netcount = aBoard->GetNetCount();
     for( int i = 0; i < netcount;  ++i )
-        saveNETINFO_ITEM( m_board->FindNet( i ) );
+        saveNETINFO_ITEM( aBoard->FindNet( i ) );
 
     // Saved nets do not include netclass names, so save netclasses after nets.
-    saveNETCLASSES();
+    saveNETCLASSES( &aBoard->m_NetClasses );
 
     // save the modules
-    for( MODULE* m = m_board->m_Modules;  m;  m = (MODULE*) m->Next() )
+    for( MODULE* m = aBoard->m_Modules;  m;  m = (MODULE*) m->Next() )
         SaveMODULE( m );
 
     // save the graphics owned by the board (not owned by a module)
-    for( BOARD_ITEM* gr = m_board->m_Drawings;  gr;  gr = gr->Next() )
+    for( BOARD_ITEM* gr = aBoard->m_Drawings;  gr;  gr = gr->Next() )
     {
         switch( gr->Type() )
         {
@@ -2987,19 +2987,19 @@ void LEGACY_PLUGIN::saveBOARD() const
 
     // save the tracks & vias
     fprintf( m_fp, "$TRACK\n" );
-    for( TRACK* track = m_board->m_Track;  track; track = track->Next() )
+    for( TRACK* track = aBoard->m_Track;  track; track = track->Next() )
         saveTRACK( track );
     fprintf( m_fp, "$EndTRACK\n" );
 
     // save the old obsolete zones which were done by segments (tracks)
     fprintf( m_fp, "$ZONE\n" );
-    for( SEGZONE* zone = m_board->m_Zone;  zone;  zone = zone->Next() )
+    for( SEGZONE* zone = aBoard->m_Zone;  zone;  zone = zone->Next() )
         saveTRACK( zone );
     fprintf( m_fp, "$EndZONE\n" );
 
     // save the polygon (which are the newer technology) zones
-    for( int i=0;  i < m_board->GetAreaCount();  ++i )
-        saveZONE_CONTAINER( m_board->GetArea( i ) );
+    for( int i=0;  i < aBoard->GetAreaCount();  ++i )
+        saveZONE_CONTAINER( aBoard->GetArea( i ) );
 
     fprintf( m_fp, "$EndBOARD\n" );
 
@@ -3018,15 +3018,13 @@ void LEGACY_PLUGIN::saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const
 }
 
 
-void LEGACY_PLUGIN::saveNETCLASSES() const
+void LEGACY_PLUGIN::saveNETCLASSES( const NETCLASSES* aNetClasses ) const
 {
-    const NETCLASSES& nc = m_board->m_NetClasses;
-
     // save the default first.
-    saveNETCLASS( nc.GetDefault() );
+    saveNETCLASS( aNetClasses->GetDefault() );
 
     // the rest will be alphabetical in the *.brd file.
-    for( NETCLASSES::const_iterator it = nc.begin();  it != nc.end();  ++it )
+    for( NETCLASSES::const_iterator it = aNetClasses->begin();  it != aNetClasses->end();  ++it )
     {
         NETCLASS*   netclass = it->second;
         saveNETCLASS( netclass );
