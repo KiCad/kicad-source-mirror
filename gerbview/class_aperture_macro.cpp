@@ -39,10 +39,10 @@
 
 
 /**
- * Function scale
- * converts a distance given in floating point to our deci-mils
+ * Function scaletoIU
+ * converts a distance given in floating point to our internal units
  */
-extern int     scale( double aCoord, bool isMetric );       // defined it rs274d.cpp
+extern int scaletoIU( double aCoord, bool isMetric );       // defined it rs274d_read_XY_and_IJ_coordiantes.cpp
 
 /**
  * Function mapPt
@@ -52,7 +52,7 @@ extern int     scale( double aCoord, bool isMetric );       // defined it rs274d
  */
 static wxPoint mapPt( double x, double y, bool isMetric )
 {
-    wxPoint ret( scale( x, isMetric ), scale( y, isMetric ) );
+    wxPoint ret( scaletoIU( x, isMetric ), scaletoIU( y, isMetric ) );
 
     return ret;
 }
@@ -157,7 +157,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
          */
         curPos += mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), m_GerbMetric );
         curPos = aParent->GetABPosition( curPos );
-        int radius = scale( params[1].GetValue( tool ), m_GerbMetric ) / 2;
+        int radius = scaletoIU( params[1].GetValue( tool ), m_GerbMetric ) / 2;
         if( !aFilledShape )
             GRCircle( aClipBox, aDC, curPos, radius, 0, aColor );
         else
@@ -300,9 +300,9 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
          * type(6), pos.x, pos.y, diam, penwidth, gap, circlecount, crosshair thickness, crosshaire len, rotation
          * type is not stored in parameters list, so the first parameter is pos.x
          */
-        int outerDiam    = scale( params[2].GetValue( tool ), m_GerbMetric );
-        int penThickness = scale( params[3].GetValue( tool ), m_GerbMetric );
-        int gap = scale( params[4].GetValue( tool ), m_GerbMetric );
+        int outerDiam    = scaletoIU( params[2].GetValue( tool ), m_GerbMetric );
+        int penThickness = scaletoIU( params[3].GetValue( tool ), m_GerbMetric );
+        int gap = scaletoIU( params[4].GetValue( tool ), m_GerbMetric );
         int numCircles = wxRound( params[5].GetValue( tool ) );
 
         // Draw circles:
@@ -358,8 +358,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         for( int i = 0; i<numPoints + 1; ++i )
         {
             int jj = i * 2 + 2;
-            pos.x = scale( params[jj].GetValue( tool ), m_GerbMetric );
-            pos.y = scale( params[jj + 1].GetValue( tool ), m_GerbMetric );
+            pos.x = scaletoIU( params[jj].GetValue( tool ), m_GerbMetric );
+            pos.y = scaletoIU( params[jj + 1].GetValue( tool ), m_GerbMetric );
             polybuffer.push_back(pos);
         }
         // rotate polygon and move it to the actual position
@@ -438,7 +438,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
     case AMP_LINE2:
     case AMP_LINE20:        // Line with rectangle ends. (Width, start and end pos + rotation)
     {
-        int     width = scale( params[1].GetValue( tool ), m_GerbMetric );
+        int     width = scaletoIU( params[1].GetValue( tool ), m_GerbMetric );
         wxPoint start = mapPt( params[2].GetValue( tool ),
                                params[3].GetValue( tool ), m_GerbMetric );
         wxPoint end = mapPt( params[4].GetValue( tool ),
@@ -509,9 +509,9 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         // Only 1/4 of the full shape is built, because the other 3 shapes will be draw from this first
         // rotated by 90, 180 and 270 deg.
         // params = center.x (unused here), center.y (unused here), outside diam, inside diam, crosshair thickness
-        int outerRadius   = scale( params[2].GetValue( tool ), m_GerbMetric ) / 2;
-        int innerRadius   = scale( params[3].GetValue( tool ), m_GerbMetric ) / 2;
-        int halfthickness = scale( params[4].GetValue( tool ), m_GerbMetric ) / 2;
+        int outerRadius   = scaletoIU( params[2].GetValue( tool ), m_GerbMetric ) / 2;
+        int innerRadius   = scaletoIU( params[3].GetValue( tool ), m_GerbMetric ) / 2;
+        int halfthickness = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
         int angle_start   = wxRound( asin(
                                          (double) halfthickness / innerRadius ) * 1800 / M_PI );
 
@@ -560,8 +560,8 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
     case AMP_MOIRE:     // A cross hair with n concentric circles. Only the cros is build as polygon
                         // because circles can be drawn easily
     {
-        int crossHairThickness = scale( params[6].GetValue( tool ), m_GerbMetric );
-        int crossHairLength    = scale( params[7].GetValue( tool ), m_GerbMetric );
+        int crossHairThickness = scaletoIU( params[6].GetValue( tool ), m_GerbMetric );
+        int crossHairLength    = scaletoIU( params[7].GetValue( tool ), m_GerbMetric );
 
         // Create cross. First create 1/4 of the shape.
         // Others point are the same, totated by 90, 180 and 270 deg
@@ -594,7 +594,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
     case AMP_POLYGON:   // Creates a regular polygon
     {
         int vertexcount = wxRound( params[1].GetValue( tool ) );
-        int radius    = scale( params[4].GetValue( tool ), m_GerbMetric ) / 2;
+        int radius    = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
         // rs274x said: vertex count = 3 ... 10, and the first corner is on the X axis
         if( vertexcount < 3 )
             vertexcount = 3;
@@ -635,12 +635,12 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
     {
     case AMP_CIRCLE:
         // params = exposure, diameter, pos.x, pos.y
-        dim = scale( params[1].GetValue( tool ), m_GerbMetric );     // Diameter
+        dim = scaletoIU( params[1].GetValue( tool ), m_GerbMetric );     // Diameter
         break;
 
     case AMP_LINE2:
     case AMP_LINE20:        // Line with rectangle ends. (Width, start and end pos + rotation)
-        dim  = scale( params[1].GetValue( tool ), m_GerbMetric );   // linne width
+        dim  = scaletoIU( params[1].GetValue( tool ), m_GerbMetric );   // linne width
     break;
 
     case AMP_LINE_CENTER:
@@ -662,12 +662,12 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
         // Only 1/4 of the full shape is built, because the other 3 shapes will be draw from this first
         // rotated by 90, 180 and 270 deg.
         // params = center.x (unused here), center.y (unused here), outside diam, inside diam, crosshair thickness
-        dim   = scale( params[2].GetValue( tool ), m_GerbMetric ) / 2;  // Outer diam
+        dim   = scaletoIU( params[2].GetValue( tool ), m_GerbMetric ) / 2;  // Outer diam
     }
     break;
 
     case AMP_MOIRE:     // A cross hair with n concentric circles.
-        dim = scale( params[7].GetValue( tool ), m_GerbMetric );    // = cross hair len
+        dim = scaletoIU( params[7].GetValue( tool ), m_GerbMetric );    // = cross hair len
         break;
 
     case AMP_OUTLINE:   // a free polygon :
@@ -681,8 +681,8 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
         for( int i = 0; i<numPoints + 1; ++i )
         {
             int jj = i * 2 + 2;
-            pos.x = scale( params[jj].GetValue( tool ), m_GerbMetric );
-            pos.y = scale( params[jj + 1].GetValue( tool ), m_GerbMetric );
+            pos.x = scaletoIU( params[jj].GetValue( tool ), m_GerbMetric );
+            pos.y = scaletoIU( params[jj + 1].GetValue( tool ), m_GerbMetric );
             if( i == 0 )
                 pos_min = pos_max = pos;
             else
@@ -708,7 +708,7 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
         break;
 
     case AMP_POLYGON:   // Regular polygon
-        dim = scale( params[4].GetValue( tool ), m_GerbMetric ) / 2;      // Radius
+        dim = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;      // Radius
         break;
 
     case AMP_COMMENT:

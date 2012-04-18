@@ -543,23 +543,6 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
 }
 
 
-/**
- * Function scale
- * converts a distance given in floating point to our deci-mils
- */
-int scale( double aCoord, bool isMetric )
-{
-    int ret;
-
-    if( isMetric )
-        ret = wxRound( aCoord / 0.00254 );
-    else
-        ret = wxRound( aCoord * PCB_INTERNAL_UNIT );
-
-    return ret;
-}
-
-
 bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 {
     wxSize            size( 15, 15 );

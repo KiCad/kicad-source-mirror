@@ -5,6 +5,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <macros.h>
+#include <base_units.h>
 
 #include <gerbview.h>
 #include <class_GERBER.h>
@@ -157,7 +158,11 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     char     line[GERBER_BUFZ];
     wxString msg;
     double   fcoord;
-    double   conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
+
+    // conv_scale = scaling factor from inch to Internal Unit
+    double   conv_scale = MILS_TO_IU_SCALAR*1000;
+    if( m_GerbMetric )
+        conv_scale /= 25.4;
 
 //    D( printf( "%22s: Command <%c%c>\n", __func__, (command >> 8) & 0xFF, command & 0xFF ); )
 
