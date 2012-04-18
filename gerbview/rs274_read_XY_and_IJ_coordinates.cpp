@@ -8,11 +8,50 @@
 #include <gerbview.h>
 #include <macros.h>
 #include <class_GERBER.h>
+#include <base_units.h>
 
 
 /* These routines read the text string point from Text.
  * On exit, Text points the beginning of the sequence unread
  */
+
+// convertion scale from gerber file units to Gerbview internal units
+// depending on the gerber file format
+// this scale list assumes gerber units are imperial.
+// for metric gerber units, the imperial to metric conversion is made in read functions
+static double scale_list[10] =
+{
+    1000.0 * MILS_TO_IU_SCALAR,
+    100.0 * MILS_TO_IU_SCALAR,
+    10.0 * MILS_TO_IU_SCALAR,
+    1.0 * MILS_TO_IU_SCALAR,
+    0.1 * MILS_TO_IU_SCALAR,
+    0.01 * MILS_TO_IU_SCALAR,
+    0.001 * MILS_TO_IU_SCALAR,
+    0.0001 * MILS_TO_IU_SCALAR,
+    0.00001 * MILS_TO_IU_SCALAR,
+    0.000001 * MILS_TO_IU_SCALAR
+};
+
+
+/**
+ * Function scale
+ * converts a distance given in floating point to our internal units
+ * (deci-mils or nano units)
+ */
+int scaletoIU( double aCoord, bool isMetric )
+{
+    int ret;
+
+    if( isMetric )
+        ret = wxRound( aCoord * MILS_TO_IU_SCALAR / 0.00254 );
+    else
+        ret = wxRound( aCoord * MILS_TO_IU_SCALAR );
+
+    return ret;
+}
+
+
 wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
 {
     wxPoint pos;
@@ -53,10 +92,11 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
             *text = 0;
             if( is_float )
             {
-                if( m_GerbMetric )
-                    current_coord = wxRound( atof( line ) / 0.00254 );
-                else
-                    current_coord = wxRound( atof( line ) * PCB_INTERNAL_UNIT );
+                // When X or Y values are float numbers, they are given in mm or inches
+                if( m_GerbMetric )  // units are mm
+                    current_coord = wxRound( atof( line ) * MILS_TO_IU_SCALAR / 0.0254 );
+                else    // units are inches
+                    current_coord = wxRound( atof( line ) * MILS_TO_IU_SCALAR * 1000 );
             }
             else
             {
@@ -74,14 +114,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
                     *text = 0;
                 }
                 current_coord = atoi( line );
-                double real_scale     = 1.0;
-                double scale_list[10] =
-                {
-                    10000.0, 1000.0, 100.0, 10.0,
-                    1,
-                    0.1,     0.01,   0.001, 0.0001,0.00001
-                };
-                real_scale = scale_list[fmt_scale];
+                double real_scale = scale_list[fmt_scale];
 
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
@@ -150,10 +183,11 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
             *text = 0;
             if( is_float )
             {
-                if( m_GerbMetric )
-                    current_coord = wxRound( atof( line ) / 0.00254 );
-                else
-                    current_coord = wxRound( atof( line ) * PCB_INTERNAL_UNIT );
+                // When X or Y values are float numbers, they are given in mm or inches
+                if( m_GerbMetric )  // units are mm
+                    current_coord = wxRound( atof( line ) * MILS_TO_IU_SCALAR / 0.0254 );
+                else    // units are inches
+                    current_coord = wxRound( atof( line ) * MILS_TO_IU_SCALAR * 1000 );
             }
             else
             {
@@ -172,18 +206,11 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
                     *text = 0;
                 }
                 current_coord = atoi( line );
-                double real_scale = 1.0;
+
                 if( fmt_scale < 0 || fmt_scale > 9 )
                     fmt_scale = 4;      // select scale 1.0
 
-                double scale_list[10] =
-                {
-                    10000.0, 1000.0, 100.0, 10.0,
-                    1,
-                    0.1,     0.01,   0.001, 0.0001,0.00001
-                };
-                real_scale = scale_list[fmt_scale];
-
+                double real_scale = scale_list[fmt_scale];
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
                 current_coord = wxRound( current_coord * real_scale );

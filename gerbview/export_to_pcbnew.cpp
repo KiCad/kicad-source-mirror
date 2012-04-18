@@ -20,7 +20,8 @@
 #include <class_board_design_settings.h>
 #include <class_gerber_draw_item.h>
 #include <select_layers_to_pcb.h>
-#include <build_version.h>          // BOARD_FILE_VERSION
+#include <build_version.h>
+#include <wildcards_and_files_ext.h>
 
 
 /* A helper class to export a Gerber set of files to Pcbnew
@@ -88,29 +89,24 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
         return;
     }
 
-    wxString fileName, msg;
+    wxString fileName;
+    wxString path = wxGetCwd();;
 
-    wxString PcbExt( wxT( ".brd" ) );
+    wxFileDialog filedlg( this, _( "Board file name:" ),
+                      path, fileName, LegacyPcbFileWildcard,
+                      wxFD_OPEN );
 
-    msg = wxT( "*" ) + PcbExt;
-    fileName = EDA_FileSelector( _( "Board file name:" ),
-                                     wxEmptyString,
-                                     wxEmptyString,
-                                     PcbExt,
-                                     msg,
-                                     this,
-                                     wxFD_SAVE,
-                                     false
-                                     );
-    if( fileName == wxEmptyString )
+    if( filedlg.ShowModal() == wxID_CANCEL )
         return;
+
+    fileName = filedlg.GetPath();
 
     /* Install a dialog frame to choose the mapping
      * between gerber layers and Pcbnew layers
      */
-    LAYERS_MAP_DIALOG* dlg = new LAYERS_MAP_DIALOG( this );
-    int ok = dlg->ShowModal();
-    dlg->Destroy();
+    LAYERS_MAP_DIALOG* layerdlg = new LAYERS_MAP_DIALOG( this );
+    int ok = layerdlg->ShowModal();
+    layerdlg->Destroy();
 
     if( ok != wxID_OK )
         return;
@@ -123,7 +119,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 
     GBR_TO_PCB_EXPORTER     gbr_exporter( this, fileName );
 
-    gbr_exporter.ExportPcb( dlg->GetLayersLookUpTable() );
+    gbr_exporter.ExportPcb( layerdlg->GetLayersLookUpTable() );
 }
 
 
@@ -184,8 +180,18 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
 
     try
     {
+        wxFileName  pcbFileName( m_file_name );
+        PROPERTIES props;
+
+        wxString header = wxString::Format(
+            wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by GerbView%s\n\n" ),
+            LEGACY_BOARD_FILE_VERSION, DateAndTime().GetData(),
+            GetBuildVersion().GetData() );
+
+        props["header"] = header;
+
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
-        pi->Save( m_file_name, m_pcb );
+        pi->Save( m_file_name, m_pcb, &props );
     }
     catch( IO_ERROR ioe )
     {

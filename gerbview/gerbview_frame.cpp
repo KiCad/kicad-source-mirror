@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <build_version.h>
 #include <macros.h>
+#include <base_units.h>
 #include <class_layer_box_selector.h>
 
 #include <gerbview.h>
@@ -407,7 +408,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     D_CODE*           pt_D_code;
     wxString          Line;
     wxArrayString     list;
-    int               scale = 10000;
+    double            scale = MILS_TO_IU_SCALAR * 1000;
     int               curr_layer = getActiveLayer();
 
     for( int layer = 0; layer < 32; layer++ )
