@@ -3933,23 +3933,30 @@ void FPL_CACHE::Save()
 
     wxString tempFileName = wxFileName::CreateTempFileName( m_lib_name );
 
-    wxLogDebug( "tempFileName:'%s'\n", TO_UTF8( tempFileName ) );
+    // wxLogDebug( "tempFileName:'%s'\n", TO_UTF8( tempFileName ) );
 
-    FILE* fp = wxFopen( tempFileName, wxT( "w" ) );
-    if( !fp )
+    // a block {} scope to fire wxFFile wxf()'s destructor
     {
-        THROW_IO_ERROR( wxString::Format(
-            _( "Unable to open or create legacy library file '%s'" ),
-            m_lib_name.GetData() ) );
+        FILE* fp = wxFopen( tempFileName, wxT( "w" ) );
+        if( !fp )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                _( "Unable to open or create legacy library file '%s'" ),
+                m_lib_name.GetData() ) );
+        }
+
+        // wxf now owns fp, will close on exception or exit from
+        // this block {} scope
+        wxFFile wxf( fp );
+
+        SaveHeader( fp );
+        SaveIndex(  fp );
+        SaveModules( fp );
+        SaveEndOfFile( fp );
     }
 
-    // wxf now owns fp, will close on exception or return
-    wxFFile wxf( fp );
-
-    SaveHeader( fp );
-    SaveIndex(  fp );
-    SaveModules( fp );
-    SaveEndOfFile( fp );
+    // fp is now closed here, and that seems proper before trying to rename
+    // the temporary file to m_lib_name.
 
     wxRemove( m_lib_name );     // it is not an error if this does not exist
 
