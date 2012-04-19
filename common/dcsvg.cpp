@@ -24,6 +24,7 @@
 #include <wx/filename.h>
 #include <wx/image.h>
 #include <macros.h>
+#include <common.h>
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 
