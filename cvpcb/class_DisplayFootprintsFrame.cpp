@@ -380,25 +380,25 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
 
     case WXK_NUMPAD8:       /* cursor moved up */
     case WXK_UP:
-        pos.y -= wxRound( gridSize.y );
+        pos.y -= KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:       /* cursor moved down */
     case WXK_DOWN:
-        pos.y += wxRound( gridSize.y );
+        pos.y += KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:       /*  cursor moved left */
     case WXK_LEFT:
-        pos.x -= wxRound( gridSize.x );
+        pos.x -= KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:      /*  cursor moved right */
     case WXK_RIGHT:
-        pos.x += wxRound( gridSize.x );
+        pos.x += KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
     }

@@ -953,17 +953,17 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
                 {
                     int coord[8] =
                     {
-                        wxRound(-pad_w - pad_dy), wxRound(+pad_h + pad_dx),
-                        wxRound(-pad_w + pad_dy), wxRound(-pad_h - pad_dx),
-                        wxRound(+pad_w - pad_dy), wxRound(+pad_h - pad_dx),
-                        wxRound(+pad_w + pad_dy), wxRound(-pad_h + pad_dx),
+                        KiROUND(-pad_w - pad_dy), KiROUND(+pad_h + pad_dx),
+                        KiROUND(-pad_w + pad_dy), KiROUND(-pad_h - pad_dx),
+                        KiROUND(+pad_w - pad_dy), KiROUND(+pad_h - pad_dx),
+                        KiROUND(+pad_w + pad_dy), KiROUND(-pad_h + pad_dx),
                     };
 
                     for( int i = 0; i < 4; i++ )
                     {
                         RotatePoint( &coord[i * 2], &coord[i * 2 + 1], aPad->GetOrientation() );
-                        coord[i * 2]     += wxRound( pad_x );
-                        coord[i * 2 + 1] += wxRound( pad_y );
+                        coord[i * 2]     += KiROUND( pad_x );
+                        coord[i * 2 + 1] += KiROUND( pad_y );
                     }
 
                     bag_flat_quad( layer, coord[0], coord[1],
@@ -1123,8 +1123,8 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
 
         // adjust 3D shape offset position (offset is given inch)
         #define UNITS_3D_TO_PCB_UNITS PCB_INTERNAL_UNIT
-        int offsetx = wxRound( vrmlm->m_MatPosition.x * UNITS_3D_TO_PCB_UNITS );
-        int offsety = wxRound( vrmlm->m_MatPosition.y * UNITS_3D_TO_PCB_UNITS );
+        int offsetx = KiROUND( vrmlm->m_MatPosition.x * UNITS_3D_TO_PCB_UNITS );
+        int offsety = KiROUND( vrmlm->m_MatPosition.y * UNITS_3D_TO_PCB_UNITS );
         double offsetz = vrmlm->m_MatPosition.z * UNITS_3D_TO_PCB_UNITS;
 
         if ( isFlipped )

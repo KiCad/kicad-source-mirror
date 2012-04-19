@@ -309,7 +309,7 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
         return false;
     }
 
-    int segm_step_45 = wxRound( GetScreen()->GetGridSize().x / 2 );
+    int segm_step_45 = KiROUND( GetScreen()->GetGridSize().x / 2 );
 
     if( segm_step_45 < ( curTrack->m_Width * 2 ) )
         segm_step_45 = curTrack->m_Width * 2;
@@ -643,8 +643,8 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
     }
 
     f   = dist / hypot( double(n.x), double(n.y) );
-    n.x = wxRound( f * n.x );
-    n.y = wxRound( f * n.y );
+    n.x = KiROUND( f * n.x );
+    n.y = KiROUND( f * n.y );
 
     Project( &track->m_End, cursor, other );
     track->m_End += n;
@@ -789,13 +789,13 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
         trackLen += track->GetLength();
 
-    valeur_param( wxRound( trackLen ), msg );
+    valeur_param( KiROUND( trackLen ), msg );
     frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
 
     if( lenDie != 0 )      // display the track len on board and the actual track len
     {
         frame->AppendMsgPanel( _( "Full Len" ), msg, DARKCYAN );
-        valeur_param( wxRound( trackLen+lenDie ), msg );
+        valeur_param( KiROUND( trackLen+lenDie ), msg );
         frame->AppendMsgPanel( _( "On Die" ), msg, DARKCYAN );
     }
 

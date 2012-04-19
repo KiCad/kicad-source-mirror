@@ -215,9 +215,9 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
             sscanf( line, "%d,%d,%d,%d,%d,%d,%d", &ii,
                     &dimH, &dimV, &drill, &dummy, &dummy, &type_outil );
 
-            dimH  = wxRound( dimH * dcode_scale );
-            dimV  = wxRound( dimV * dcode_scale );
-            drill = wxRound( drill * dcode_scale );
+            dimH  = KiROUND( dimH * dcode_scale );
+            dimV  = KiROUND( dimV * dcode_scale );
+            drill = KiROUND( drill * dcode_scale );
 
             if( ii < 1 )
                 ii = 1;
@@ -245,9 +245,9 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
                 }
             }
 
-            dimH  = wxRound( fdimH * dcode_scale * 1000 );
-            dimV  = wxRound( fdimV * dcode_scale * 1000 );
-            drill = wxRound( fdrill * dcode_scale * 1000 );
+            dimH  = KiROUND( fdimH * dcode_scale * 1000 );
+            dimV  = KiROUND( fdimV * dcode_scale * 1000 );
+            drill = KiROUND( fdrill * dcode_scale * 1000 );
 
             if( strchr( "CLROP", c_type_outil[0] ) )
             {
@@ -600,7 +600,7 @@ void D_CODE::ConvertShapeToPolygon()
 
         if( m_Rotation )                   // vertical oval, rotate polygon.
         {
-            int angle = wxRound( m_Rotation * 10 );
+            int angle = KiROUND( m_Rotation * 10 );
 
             for( unsigned jj = 0; jj < m_PolyCorners.size(); jj++ )
             {

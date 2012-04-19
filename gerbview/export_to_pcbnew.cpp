@@ -220,7 +220,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, in
                            (double)( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
 
         drawitem->SetShape( S_ARC );
-        drawitem->SetAngle( wxRound( (a - b) / M_PI * 1800.0 ) );
+        drawitem->SetAngle( KiROUND( (a - b) / M_PI * 1800.0 ) );
         drawitem->SetStart( aGbrItem->m_ArcCentre );
 
         if( drawitem->GetAngle() < 0 )

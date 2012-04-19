@@ -473,10 +473,10 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
     if( update )
     {
         s_LastPos = Pos;
-        Track->m_Start.x = wxRound( xi1 );
-        Track->m_Start.y = wxRound( yi1 );
-        Track->m_End.x   = wxRound( xi2 );
-        Track->m_End.y   = wxRound( yi2 );
+        Track->m_Start.x = KiROUND( xi1 );
+        Track->m_Start.y = KiROUND( yi1 );
+        Track->m_End.x   = KiROUND( xi2 );
+        Track->m_End.y   = KiROUND( yi2 );
 
         if( tSegmentToEnd )
         {

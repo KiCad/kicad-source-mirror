@@ -103,8 +103,8 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     wxPoint poly[5];
     wxPoint pt    = Mself.m_End - Mself.m_Start;
-    int     angle = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
-    int     len   = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    int     angle = -KiROUND( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
+    int     len   = KiROUND( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
 
     // calculate corners
     pt.x = 0; pt.y = len / 4;
@@ -124,8 +124,8 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Mself.m_End = aPanel->GetScreen()->GetCrossHairPosition();
     pt    = Mself.m_End - Mself.m_Start;
-    angle = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
-    len   = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    angle = -KiROUND( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
+    len   = KiROUND( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
 
     // calculate new corners
     pt.x = 0; pt.y = len / 4;
@@ -194,7 +194,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     Mself.m_End = GetScreen()->GetCrossHairPosition();
 
     wxPoint pt = Mself.m_End - Mself.m_Start;
-    int     min_len = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    int     min_len = KiROUND( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
     Mself.lng = min_len;
 
     // Enter the desired length.
@@ -330,8 +330,8 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
         wxPoint currpt;
 
         // Rotate current point:
-        currpt.x = wxRound( ( first_point.x * fcos + first_point.y * fsin ) );
-        currpt.y = wxRound( ( first_point.y * fcos - first_point.x * fsin ) );
+        currpt.x = KiROUND( ( first_point.x * fcos + first_point.y * fsin ) );
+        currpt.y = KiROUND( ( first_point.y * fcos - first_point.x * fsin ) );
 
         wxPoint corner = aCenter + currpt;
         aBuffer.push_back( corner );
@@ -394,8 +394,8 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     #define ADJUST_SIZE 0.988
 
     wxPoint pt       = aEndPoint - aStartPoint;
-    int     angle    = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
-    int     min_len  = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
+    int     angle    = -KiROUND( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
+    int     min_len  = KiROUND( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
     int     segm_len = 0;           // length of segments
     int     full_len;               // full len of shape (sum of lenght of all segments + arcs)
 
@@ -437,7 +437,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
         segm_len  = size.x - ( radius * 2 );
         full_len  = 2 * stubs_len;               // Length of coil connections.
         full_len += segm_len * segm_count;       // Length of full length segments.
-        full_len += wxRound( ( segm_count + 2 ) * M_PI * ADJUST_SIZE * radius );    // Ard arcs len
+        full_len += KiROUND( ( segm_count + 2 ) * M_PI * ADJUST_SIZE * radius );    // Ard arcs len
         full_len += segm_len - (2 * radius);     // Length of first and last segments
                                                  // (half size segments len = segm_len/2 - radius).
 
@@ -646,7 +646,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
             abort = true;
         }
 
-        angle = ABS( wxRound( fval * fcoeff ) );
+        angle = ABS( KiROUND( fval * fcoeff ) );
 
         if( angle > 1800 )
             angle = 1800;
@@ -955,8 +955,8 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     if( PolyShapeType == 2 )  // mirrored
         ShapeScaleY = -ShapeScaleY;
 
-    ShapeSize.x = wxRound( ShapeScaleX );
-    ShapeSize.y = wxRound( ShapeScaleY );
+    ShapeSize.x = KiROUND( ShapeScaleX );
+    ShapeSize.y = KiROUND( ShapeScaleY );
 
     if( ( ShapeSize.x ) == 0 || ( ShapeSize.y == 0 ) )
     {
@@ -999,8 +999,8 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     for( unsigned ii = 0; ii < PolyEdges.size(); ii++ )  // Copy points
     {
-        last_coordinate.x = wxRound( PolyEdges[ii] * ShapeScaleX ) + pad1->GetPos0().x;
-        last_coordinate.y = -wxRound( PolyEdges[ii] * ShapeScaleY );
+        last_coordinate.x = KiROUND( PolyEdges[ii] * ShapeScaleX ) + pad1->GetPos0().x;
+        last_coordinate.y = -KiROUND( PolyEdges[ii] * ShapeScaleY );
         polyPoints.push_back( last_coordinate );
     }
 

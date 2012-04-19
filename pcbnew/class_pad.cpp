@@ -433,8 +433,8 @@ wxSize D_PAD::GetSolderPasteMargin()
     }
 
     wxSize pad_margin;
-    pad_margin.x = margin + wxRound( m_Size.x * mratio );
-    pad_margin.y = margin + wxRound( m_Size.y * mratio );
+    pad_margin.x = margin + KiROUND( m_Size.x * mratio );
+    pad_margin.y = margin + KiROUND( m_Size.y * mratio );
 
     // ensure mask have a size always >= 0
     if( pad_margin.x < -m_Size.x / 2 )
@@ -688,7 +688,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition )
     case PAD_CIRCLE:
         dist = hypot( delta.x, delta.y );
 
-        if( wxRound( dist ) <= dx )
+        if( KiROUND( dist ) <= dx )
             return true;
 
         break;

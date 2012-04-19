@@ -176,7 +176,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = wxRound( params[6].GetValue( tool ) * 10.0 );
+        rotation = KiROUND( params[6].GetValue( tool ) * 10.0 );
         if( rotation )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
@@ -205,7 +205,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = wxRound( params[5].GetValue( tool ) * 10.0 );
+        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
         if( rotation )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
@@ -234,7 +234,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = wxRound( params[5].GetValue( tool ) * 10.0 );
+        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
         if( rotation )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
@@ -264,7 +264,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = wxRound( params[5].GetValue( tool ) * 10.0 );
+        rotation = KiROUND( params[5].GetValue( tool ) * 10.0 );
 
         // Because a thermal shape has 4 identical sub-shapes, only one is created in polybuffer.
         // We must draw 4 sub-shapes rotated by 90 deg
@@ -303,7 +303,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         int outerDiam    = scaletoIU( params[2].GetValue( tool ), m_GerbMetric );
         int penThickness = scaletoIU( params[3].GetValue( tool ), m_GerbMetric );
         int gap = scaletoIU( params[4].GetValue( tool ), m_GerbMetric );
-        int numCircles = wxRound( params[5].GetValue( tool ) );
+        int numCircles = KiROUND( params[5].GetValue( tool ) );
 
         // Draw circles:
         wxPoint center = aParent->GetABPosition( curPos );
@@ -329,7 +329,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         // Draw the cross:
         ConvertShapeToPolygon( aParent, polybuffer );
 
-        rotation = wxRound( params[8].GetValue( tool ) * 10.0 );
+        rotation = KiROUND( params[8].GetValue( tool ) * 10.0 );
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             // shape rotation:
@@ -352,7 +352,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
          * type is not stored in parameters list, so the first parameter is exposure
          */
         int numPoints = (int) params[1].GetValue( tool );
-        rotation  = wxRound( params[numPoints * 2 + 4].GetValue( tool ) * 10.0 );
+        rotation  = KiROUND( params[numPoints * 2 + 4].GetValue( tool ) * 10.0 );
         wxPoint pos;
         // Read points. numPoints does not include the starting point, so add 1.
         for( int i = 0; i<numPoints + 1; ++i )
@@ -392,7 +392,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // rotate polygon and move it to the actual position
-        rotation  = wxRound( params[5].GetValue( tool ) * 10.0 );
+        rotation  = KiROUND( params[5].GetValue( tool ) * 10.0 );
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             RotatePoint( &polybuffer[ii], -rotation );
@@ -444,7 +444,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         wxPoint end = mapPt( params[4].GetValue( tool ),
                              params[5].GetValue( tool ), m_GerbMetric );
         wxPoint delta = end - start;
-        int     len   = wxRound( hypot( delta.x, delta.y ) );
+        int     len   = KiROUND( hypot( delta.x, delta.y ) );
 
         // To build the polygon, we must create a horizonta polygon starting to "start"
         // and rotate it to have it end point to "end"
@@ -459,7 +459,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         aBuffer.push_back( currpt );
 
         // Rotate rectangle and move it to the actual start point
-        int angle = wxRound( atan2( (double) delta.y, (double) delta.x ) * 1800.0 / M_PI );
+        int angle = KiROUND( atan2( (double) delta.y, (double) delta.x ) * 1800.0 / M_PI );
 
         for( unsigned ii = 0; ii < 4; ii++ )
         {
@@ -512,7 +512,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         int outerRadius   = scaletoIU( params[2].GetValue( tool ), m_GerbMetric ) / 2;
         int innerRadius   = scaletoIU( params[3].GetValue( tool ), m_GerbMetric ) / 2;
         int halfthickness = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
-        int angle_start   = wxRound( asin(
+        int angle_start   = KiROUND( asin(
                                          (double) halfthickness / innerRadius ) * 1800 / M_PI );
 
         // Draw shape in the first cadrant (X and Y > 0)
@@ -537,7 +537,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
         // outer arc
         startpos.x  = outerRadius;
         startpos.y  = 0;
-        angle_start = wxRound( asin( (double) halfthickness / outerRadius ) * 1800 / M_PI );
+        angle_start = KiROUND( asin( (double) halfthickness / outerRadius ) * 1800 / M_PI );
         angle_end   = 900 - angle_start;
 
         // First point, near Y axis, outer arc
@@ -593,7 +593,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
 
     case AMP_POLYGON:   // Creates a regular polygon
     {
-        int vertexcount = wxRound( params[1].GetValue( tool ) );
+        int vertexcount = KiROUND( params[1].GetValue( tool ) );
         int radius    = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
         // rs274x said: vertex count = 3 ... 10, and the first corner is on the X axis
         if( vertexcount < 3 )

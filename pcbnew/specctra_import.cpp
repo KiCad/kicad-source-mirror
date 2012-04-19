@@ -169,7 +169,7 @@ static int scale( double distance, UNIT_RES* aResolution )
         break;
     }
 
-    int ret = wxRound( factor * distance / resValue );
+    int ret = KiROUND( factor * distance / resValue );
 
 #else
 
@@ -197,7 +197,7 @@ static int scale( double distance, UNIT_RES* aResolution )
     // used within KiCad.
     factor *= 10.0;
 
-    int ret = wxRound( factor * distance / resValue );
+    int ret = KiROUND( factor * distance / resValue );
 
 #endif
 

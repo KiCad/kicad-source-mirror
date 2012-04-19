@@ -35,7 +35,7 @@ double s_HerscheyScaleFactor = HERSHEY_SCALE_FACTOR;
  */
 int GetPenSizeForBold( int aTextSize )
 {
-    return wxRound( aTextSize / 5.0 );
+    return KiROUND( aTextSize / 5.0 );
 }
 
 
@@ -55,7 +55,7 @@ int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold )
 {
     int    penSize  = aPenSize;
     double scale    = aBold ? 4.0 : 6.0;
-    int    maxWidth = wxRound( ABS( aSize ) / scale );
+    int    maxWidth = KiROUND( ABS( aSize ) / scale );
 
     if( penSize > maxWidth )
         penSize = maxWidth;
@@ -138,13 +138,13 @@ int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, boo
         /* Get metrics */
         int         xsta = *ptcar++ - 'R';
         int         xsto = *ptcar++ - 'R';
-        tally += wxRound( aXSize * (xsto - xsta) * s_HerscheyScaleFactor );
+        tally += KiROUND( aXSize * (xsto - xsta) * s_HerscheyScaleFactor );
     }
 
     /* Italic correction, 1/8em */
     if( aItalic )
     {
-        tally += wxRound( aXSize * 0.125 );
+        tally += KiROUND( aXSize * 0.125 );
     }
     return tally;
 }
@@ -196,7 +196,7 @@ static void DrawGraphicTextPline(
  */
 static int overbar_position( int size_v, int thickness )
 {
-    return wxRound( ( (double) size_v * 26 * s_HerscheyScaleFactor ) + ( (double) thickness * 1.5 ) );
+    return KiROUND( ( (double) size_v * 26 * s_HerscheyScaleFactor ) + ( (double) thickness * 1.5 ) );
 }
 
 
@@ -460,12 +460,12 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             {
                 wxPoint currpoint;
                 hc1 -= xsta; hc2 -= 11; /* Align the midpoint */
-                hc1  = wxRound( hc1 * size_h * s_HerscheyScaleFactor );
-                hc2  = wxRound( hc2 * size_v * s_HerscheyScaleFactor );
+                hc1  = KiROUND( hc1 * size_h * s_HerscheyScaleFactor );
+                hc2  = KiROUND( hc2 * size_v * s_HerscheyScaleFactor );
 
                 // To simulate an italic font, add a x offset depending on the y offset
                 if( aItalic )
-                    hc1 -= wxRound( italic_reverse ? -hc2 / 8.0 : hc2 / 8.0 );
+                    hc1 -= KiROUND( italic_reverse ? -hc2 / 8.0 : hc2 / 8.0 );
                 currpoint.x = hc1 + current_char_pos.x;
                 currpoint.y = hc2 + current_char_pos.y;
 
@@ -481,7 +481,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         ptr++;
 
         // Apply the advance width
-        current_char_pos.x += wxRound( size_h * (xsto - xsta) * s_HerscheyScaleFactor );
+        current_char_pos.x += KiROUND( size_h * (xsto - xsta) * s_HerscheyScaleFactor );
     }
 
     if( overbars % 2 )

@@ -362,9 +362,9 @@ void EDA_3D_FRAME::Set3DBgColor()
     S3D_Color color;
     wxColour  newcolor, oldcolor;
 
-    oldcolor.Set( wxRound( g_Parm_3D_Visu.m_BgColor.m_Red * 255 ),
-                  wxRound( g_Parm_3D_Visu.m_BgColor.m_Green * 255 ),
-                  wxRound( g_Parm_3D_Visu.m_BgColor.m_Blue * 255 ) );
+    oldcolor.Set( KiROUND( g_Parm_3D_Visu.m_BgColor.m_Red * 255 ),
+                  KiROUND( g_Parm_3D_Visu.m_BgColor.m_Green * 255 ),
+                  KiROUND( g_Parm_3D_Visu.m_BgColor.m_Blue * 255 ) );
 
     newcolor = wxGetColourFromUser( this, oldcolor );
 

@@ -38,7 +38,7 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     // Compute pen_dim (from g_m_HPGLPenDiam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diameter is always g_m_HPGLPenDiam
     // so apparent pen diam is real pen diam / Scale
-    int pen_diam = wxRound( (plot_opts.m_HPGLPenDiam * U_PCB) /
+    int pen_diam = KiROUND( (plot_opts.m_HPGLPenDiam * U_PCB) /
                             plot_opts.m_PlotScale );
 
     // compute pen_overlay (from g_m_HPGLPenOvr in mils) with plot scale
@@ -48,7 +48,7 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     if( plot_opts.m_HPGLPenOvr >= plot_opts.m_HPGLPenDiam )
         plot_opts.m_HPGLPenOvr = plot_opts.m_HPGLPenDiam - 1;
 
-    int   pen_overlay = wxRound( plot_opts.m_HPGLPenOvr * 10.0 /
+    int   pen_overlay = KiROUND( plot_opts.m_HPGLPenOvr * 10.0 /
                                  plot_opts.m_PlotScale );
 
 
@@ -82,9 +82,9 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     // Calculate the page size offset.
     if( center )
     {
-        offset.x = wxRound( (double) boardCenter.x -
+        offset.x = KiROUND( (double) boardCenter.x -
                             ( (double) pageSizeIU.x / 2.0 ) / scale );
-        offset.y = wxRound( (double) boardCenter.y -
+        offset.y = KiROUND( (double) boardCenter.y -
                             ( (double) pageSizeIU.y / 2.0 ) / scale );
     }
     else
