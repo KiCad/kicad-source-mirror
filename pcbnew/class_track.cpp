@@ -1173,7 +1173,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     // Display segment length
     if( Type() != PCB_VIA_T )      // Display Diam and Drill values
     {
-        msg = frame->CoordinateToString( wxRound( GetLength() ) );
+        msg = frame->CoordinateToString( KiROUND( GetLength() ) );
         frame->AppendMsgPanel( _( "Segment Length" ), msg, DARKCYAN );
     }
 }

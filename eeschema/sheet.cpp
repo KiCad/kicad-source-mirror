@@ -231,8 +231,8 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
         if( sheet->HasPins() )
         {
-            int gridSizeX = wxRound( screen->GetGridSize().x );
-            int gridSizeY = wxRound( screen->GetGridSize().y );
+            int gridSizeX = KiROUND( screen->GetGridSize().x );
+            int gridSizeY = KiROUND( screen->GetGridSize().y );
 
             // If the sheet has pins, use the pin positions to clamp the minimum height.
             height = ( height < sheet->GetMinHeight() + gridSizeY ) ?

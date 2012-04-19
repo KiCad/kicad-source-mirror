@@ -1889,7 +1889,7 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
     int numberTextLength = showNum ? m_numTextSize * GetNumberString().Len() : 0;
 
     // Actual text height is bigger than text size
-    int numberTextHeight  = showNum ? wxRound( m_numTextSize * 1.1 ) : 0;
+    int numberTextHeight  = showNum ? KiROUND( m_numTextSize * 1.1 ) : 0;
 
     if( m_shape & INVERT )
         minsizeV = MAX( TARGET_PIN_RADIUS, INVERT_PIN_RADIUS );
@@ -1914,7 +1914,7 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
         nameTextLength = ( m_nameTextSize * length ) + nameTextOffset;
 
         // Actual text height are bigger than text size
-        nameTextHeight = wxRound( m_nameTextSize * 1.1 ) + TXTMARGE;
+        nameTextHeight = KiROUND( m_nameTextSize * 1.1 ) + TXTMARGE;
     }
 
     if( nameTextOffset )        // for values > 0, pin name is inside the body

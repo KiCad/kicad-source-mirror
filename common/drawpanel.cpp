@@ -405,8 +405,8 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
     double scale = GetParent()->GetScreen()->GetScalingFactor();
 
     wxPoint center = GetParent()->GetScreen()->GetScrollCenterPosition();
-    center.x += wxRound( (double) ( x - tmpX ) / scale );
-    center.y += wxRound( (double) ( y - tmpY ) / scale );
+    center.x += KiROUND( (double) ( x - tmpX ) / scale );
+    center.y += KiROUND( (double) ( y - tmpY ) / scale );
     GetParent()->GetScreen()->SetScrollCenterPosition( center );
 
     Scroll( x, y );
@@ -432,8 +432,8 @@ void EDA_DRAW_PANEL::SetClipBox( wxDC& aDC, const wxRect* aRect )
         int scrollX, scrollY;
 
         double scalar = Screen->GetScalingFactor();
-        scrollX = wxRound( Screen->GetGridSize().x * scalar );
-        scrollY = wxRound( Screen->GetGridSize().y * scalar );
+        scrollX = KiROUND( Screen->GetGridSize().x * scalar );
+        scrollY = KiROUND( Screen->GetGridSize().y * scalar );
 
         m_scrollIncrementX = MAX( GetClientSize().x / 8, scrollX );
         m_scrollIncrementY = MAX( GetClientSize().y / 8, scrollY );
@@ -599,8 +599,8 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     screen->m_StartVisu = CalcUnscrolledPosition( wxPoint( 0, 0 ) );
     screenSize = GetClientSize();
 
-    screenGridSize.x = aDC->LogicalToDeviceXRel( wxRound( gridSize.x ) );
-    screenGridSize.y = aDC->LogicalToDeviceYRel( wxRound( gridSize.y ) );
+    screenGridSize.x = aDC->LogicalToDeviceXRel( KiROUND( gridSize.x ) );
+    screenGridSize.y = aDC->LogicalToDeviceYRel( KiROUND( gridSize.y ) );
 
     org = m_ClipBox.GetPosition();
 
@@ -621,10 +621,10 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     // Incrementing the start point by one grid step should prevent drawing grid points
     // outside the clip box.
     if( org.x < m_ClipBox.GetX() )
-        org.x += wxRound( gridSize.x );
+        org.x += KiROUND( gridSize.x );
 
     if( org.y < m_ClipBox.GetY() )
-        org.y += wxRound( gridSize.y );
+        org.y += KiROUND( gridSize.y );
 
 #if ( defined( __WXMAC__ ) || 1 )
     // Use a pixel based draw to display grid.  There are a lot of calls, so the cost is
@@ -643,11 +643,11 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
 
     for( double x = (double) org.x; x <= right; x += gridSize.x )
     {
-        xpos = wxRound( x );
+        xpos = KiROUND( x );
 
         for( double y = (double) org.y; y <= bottom; y += gridSize.y )
         {
-            aDC->DrawPoint( xpos, wxRound( y )  );
+            aDC->DrawPoint( xpos, KiROUND( y )  );
         }
     }
 #else
@@ -684,7 +684,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     // Draw a column of grid points.
     for( double y = (double) org.y; y <= bottom; y += gridSize.y )
     {
-        tmpDC.DrawPoint( 0, scaleDC.LogicalToDeviceY( wxRound( y ) ) );
+        tmpDC.DrawPoint( 0, scaleDC.LogicalToDeviceY( KiROUND( y ) ) );
     }
 
     // Reset the device context scale and origin and restore on exit.
@@ -700,7 +700,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     // Blit the column for each row of the damaged region.
     for( double x = (double) org.x; x <= right; x += gridSize.x )
     {
-        aDC->Blit( scaleDC.LogicalToDeviceX( wxRound( x ) ),
+        aDC->Blit( scaleDC.LogicalToDeviceX( KiROUND( x ) ),
                    scaleDC.LogicalToDeviceY( m_ClipBox.GetY() ),
                    1, tmpBM.GetHeight(), &tmpDC, 0, 0, wxCOPY, true );
     }
@@ -1072,8 +1072,8 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
             double scale = GetParent()->GetScreen()->GetScalingFactor();
 
             wxPoint center = GetParent()->GetScreen()->GetScrollCenterPosition();
-            center.x += wxRound( (double) ( x - tmpX ) / scale ) / ppux;
-            center.y += wxRound( (double) ( y - tmpY ) / scale ) / ppuy;
+            center.x += KiROUND( (double) ( x - tmpX ) / scale ) / ppux;
+            center.y += KiROUND( (double) ( y - tmpY ) / scale ) / ppuy;
             GetParent()->GetScreen()->SetScrollCenterPosition( center );
 
             Refresh();
@@ -1083,9 +1083,9 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         {
             double scale = GetParent()->GetScreen()->GetScalingFactor();
             int x = m_PanStartCenter.x +
-                    wxRound( (double) ( m_PanStartEventPosition.x - currentPosition.x ) / scale );
+                    KiROUND( (double) ( m_PanStartEventPosition.x - currentPosition.x ) / scale );
             int y = m_PanStartCenter.y +
-                    wxRound( (double) ( m_PanStartEventPosition.y - currentPosition.y ) / scale );
+                    KiROUND( (double) ( m_PanStartEventPosition.y - currentPosition.y ) / scale );
 
             GetParent()->RedrawScreen( wxPoint( x, y ), false );
         }

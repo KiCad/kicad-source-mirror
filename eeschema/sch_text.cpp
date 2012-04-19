@@ -1242,7 +1242,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     int x = symb_len + linewidth + 3;
 
     // 50% more for negation bar
-    int y = wxRound( (double) HalfSize * 1.5 + (double) linewidth + 3.0 );
+    int y = KiROUND( (double) HalfSize * 1.5 + (double) linewidth + 3.0 );
 
     // Starting point(anchor)
     aPoints.push_back( wxPoint( 0, 0 ) );

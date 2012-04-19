@@ -92,8 +92,8 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
 
     if( center )
     {
-        offset.x = wxRound( (double) boardCenter.x - ( (double) paperSizeIU.x / 2.0 ) / scale );
-        offset.y = wxRound( (double) boardCenter.y - ( (double) paperSizeIU.y / 2.0 ) / scale );
+        offset.x = KiROUND( (double) boardCenter.x - ( (double) paperSizeIU.x / 2.0 ) / scale );
+        offset.y = KiROUND( (double) boardCenter.y - ( (double) paperSizeIU.y / 2.0 ) / scale );
     }
     else
     {

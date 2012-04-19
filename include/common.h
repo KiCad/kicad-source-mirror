@@ -118,11 +118,52 @@ enum pseudokeys {
 #define OFF 0
 
 
+//-----<KiROUND KIT>------------------------------------------------------------
+
+/**
+ * KiROUND
+ * rounds a floating point number to an int using
+ * "round halfway cases away from zero".
+ * In Debug build an assert fires if will not fit into an int.
+ */
+
+#if defined( DEBUG )
+
+// DEBUG: a macro to capture line and file, then calls this inline
+
+static inline int KiRound( double v, int line, const char* filename )
+{
+    v = v < 0 ? v - 0.5 : v + 0.5;
+    if( v > INT_MAX + 0.5 )
+    {
+        printf( "%s: in file %s on line %d, val: %.16g too ' > 0 ' for int\n", __FUNCTION__, filename, line, v );
+    }
+    else if( v < INT_MIN - 0.5 )
+    {
+        printf( "%s: in file %s on line %d, val: %.16g too ' < 0 ' for int\n", __FUNCTION__, filename, line, v );
+    }
+    return int( v );
+}
+
+#define KiROUND( v )    KiRound( v, __LINE__, __FILE__ )
+
+#else
+
+// RELEASE: a macro so compile can pre-compute constants.
+
+#define KiROUND( v )  int( (v) < 0 ? (v) - 0.5 : (v) + 0.5 )
+
+#endif
+
+//-----</KiROUND KIT>-----------------------------------------------------------
+
+
+
 /// Convert mm to mils.
-inline int Mm2mils( double x ) { return wxRound( x * 1000./25.4 ); }
+inline int Mm2mils( double x ) { return KiROUND( x * 1000./25.4 ); }
 
 /// Convert mils to mm.
-inline int Mils2mm( double x ) { return wxRound( x * 25.4 / 1000. ); }
+inline int Mils2mm( double x ) { return KiROUND( x * 25.4 / 1000. ); }
 
 
 /// Return whether GOST is in play

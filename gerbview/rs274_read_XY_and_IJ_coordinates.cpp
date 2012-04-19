@@ -44,9 +44,9 @@ int scaletoIU( double aCoord, bool isMetric )
     int ret;
 
     if( isMetric )
-        ret = wxRound( aCoord * MILS_TO_IU_SCALAR / 0.00254 );
+        ret = KiROUND( aCoord * MILS_TO_IU_SCALAR / 0.00254 );
     else
-        ret = wxRound( aCoord * MILS_TO_IU_SCALAR );
+        ret = KiROUND( aCoord * MILS_TO_IU_SCALAR );
 
     return ret;
 }
@@ -94,9 +94,9 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
             {
                 // When X or Y values are float numbers, they are given in mm or inches
                 if( m_GerbMetric )  // units are mm
-                    current_coord = wxRound( atof( line ) * MILS_TO_IU_SCALAR / 0.0254 );
+                    current_coord = KiROUND( atof( line ) * MILS_TO_IU_SCALAR / 0.0254 );
                 else    // units are inches
-                    current_coord = wxRound( atof( line ) * MILS_TO_IU_SCALAR * 1000 );
+                    current_coord = KiROUND( atof( line ) * MILS_TO_IU_SCALAR * 1000 );
             }
             else
             {
@@ -119,7 +119,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
 
-                current_coord = wxRound( current_coord * real_scale );
+                current_coord = KiROUND( current_coord * real_scale );
             }
 
             if( type_coord == 'X' )
@@ -185,9 +185,9 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
             {
                 // When X or Y values are float numbers, they are given in mm or inches
                 if( m_GerbMetric )  // units are mm
-                    current_coord = wxRound( atof( line ) * MILS_TO_IU_SCALAR / 0.0254 );
+                    current_coord = KiROUND( atof( line ) * MILS_TO_IU_SCALAR / 0.0254 );
                 else    // units are inches
-                    current_coord = wxRound( atof( line ) * MILS_TO_IU_SCALAR * 1000 );
+                    current_coord = KiROUND( atof( line ) * MILS_TO_IU_SCALAR * 1000 );
             }
             else
             {
@@ -213,7 +213,7 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
                 double real_scale = scale_list[fmt_scale];
                 if( m_GerbMetric )
                     real_scale = real_scale / 25.4;
-                current_coord = wxRound( current_coord * real_scale );
+                current_coord = KiROUND( current_coord * real_scale );
             }
             if( type_coord == 'I' )
                 pos.x = current_coord;

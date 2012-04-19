@@ -186,15 +186,15 @@ KicadSVGFileDCImpl::~KicadSVGFileDCImpl()
 void KicadSVGFileDCImpl::DoGetSizeMM( int *width, int *height ) const
 {
     if (width)
-        *width = wxRound( (double)m_width / m_mm_to_pix_x );
+        *width = KiROUND( (double)m_width / m_mm_to_pix_x );
 
     if (height)
-        *height = wxRound( (double)m_height / m_mm_to_pix_y );
+        *height = KiROUND( (double)m_height / m_mm_to_pix_y );
 }
 
 wxSize KicadSVGFileDCImpl::GetPPI() const
 {
-    return wxSize( wxRound(m_dpi), wxRound(m_dpi) );
+    return wxSize( KiROUND(m_dpi), KiROUND(m_dpi) );
 }
 
 void KicadSVGFileDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)

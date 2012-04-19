@@ -115,9 +115,9 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
         EXCHG( abPos.x, abPos.y );
 
     abPos  += m_layerOffset + m_imageParams->m_ImageOffset;
-    abPos.x = wxRound( abPos.x * m_drawScale.x );
-    abPos.y = wxRound( abPos.y * m_drawScale.y );
-    int rotation = wxRound(m_lyrRotation*10) + (m_imageParams->m_ImageRotation*10);
+    abPos.x = KiROUND( abPos.x * m_drawScale.x );
+    abPos.y = KiROUND( abPos.y * m_drawScale.y );
+    int rotation = KiROUND(m_lyrRotation*10) + (m_imageParams->m_ImageRotation*10);
 
     if( rotation )
         RotatePoint( &abPos, -rotation );
@@ -144,13 +144,13 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition )
     if( !m_mirrorB )
         NEGATE( xyPos.y );
 
-    int rotation = wxRound(m_lyrRotation*10) + (m_imageParams->m_ImageRotation*10);
+    int rotation = KiROUND(m_lyrRotation*10) + (m_imageParams->m_ImageRotation*10);
 
     if( rotation )
         RotatePoint( &xyPos, rotation );
 
-    xyPos.x = wxRound( xyPos.x / m_drawScale.x );
-    xyPos.y = wxRound( xyPos.y / m_drawScale.y );
+    xyPos.x = KiROUND( xyPos.x / m_drawScale.x );
+    xyPos.y = KiROUND( xyPos.y / m_drawScale.y );
     xyPos  -= m_layerOffset + m_imageParams->m_ImageOffset;
 
     if( m_swapAxis )
@@ -368,7 +368,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
         break;
 
     case GBR_CIRCLE:
-        radius = wxRound(hypot( (double) ( m_End.x - m_Start.x ),
+        radius = KiROUND(hypot( (double) ( m_End.x - m_Start.x ),
                                 (double) ( m_End.y - m_Start.y ) ));
 
         halfPenWidth = m_Size.x >> 1;

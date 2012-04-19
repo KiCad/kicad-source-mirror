@@ -8,13 +8,14 @@
 #include <algorithm>
 
 #include <fctsys.h>
+#include <common.h>     // KiROUND
 
 #include <PolyLine.h>
 #include <bezier_curves.h>
 #include <polygon_test_point_inside.h>
 
 
-#define to_int( x ) wxRound( (x) )
+#define to_int( x ) KiROUND( (x) )
 
 #ifndef MIN
 #define MIN( x1, x2 ) ( (x1) > (x2) ? (x2) : (x1) )

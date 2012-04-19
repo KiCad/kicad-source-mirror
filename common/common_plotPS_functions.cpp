@@ -160,7 +160,7 @@ void PS_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
 
     // Calculate start point.
     user_to_device_coordinates( centre );
-    radius = wxRound( user_to_device_size( radius ) );
+    radius = KiROUND( user_to_device_size( radius ) );
     if( plotMirror )
         fprintf( output_file, "%d %d %d %g %g arc%d\n", centre.x, centre.y,
                  radius, (double) -EndAngle / 10, (double) -StAngle / 10,
@@ -216,8 +216,8 @@ void PS_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor 
     pix_size.x = aImage.GetWidth();
     pix_size.y = aImage.GetHeight();
     wxSize drawsize;                // requested size of image
-    drawsize.x = wxRound( aScaleFactor * pix_size.x );
-    drawsize.y = wxRound( aScaleFactor * pix_size.y );
+    drawsize.x = KiROUND( aScaleFactor * pix_size.x );
+    drawsize.y = KiROUND( aScaleFactor * pix_size.y );
 
     // calculate the bottom left corner position of bitmap
     wxPoint start = aPos;
@@ -405,14 +405,14 @@ bool PS_PLOTTER::start_plot( FILE* fout )
 
     if( pageInfo.IsCustom() )
         fprintf( output_file, "%%%%DocumentMedia: Custom %d %d 0 () ()\n",
-                 wxRound( psPageSize.x * 10 * CONV_SCALE ),
-                 wxRound( psPageSize.y * 10 * CONV_SCALE ) );
+                 KiROUND( psPageSize.x * 10 * CONV_SCALE ),
+                 KiROUND( psPageSize.y * 10 * CONV_SCALE ) );
 
     else  // a standard paper size
         fprintf( output_file, "%%%%DocumentMedia: %s %d %d 0 () ()\n",
                  TO_UTF8( pageInfo.GetType() ),
-                 wxRound( psPageSize.x * 10 * CONV_SCALE ),
-                 wxRound( psPageSize.y * 10 * CONV_SCALE ) );
+                 KiROUND( psPageSize.x * 10 * CONV_SCALE ),
+                 KiROUND( psPageSize.y * 10 * CONV_SCALE ) );
 
     if( pageInfo.IsPortrait() )
         fprintf( output_file, "%%%%Orientation: Portrait\n" );

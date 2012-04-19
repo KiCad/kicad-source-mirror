@@ -2633,7 +2633,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
     {
         // this is the special reverse trip mm -> deci-mils testing run,
         // only available in DEBUG mode.
-        return BIU( wxRound( fval * diskToBiu ) );
+        return BIU( KiROUND( fval * diskToBiu ) );
     }
 
 #endif

@@ -594,12 +594,12 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
     if( clamped_layout_size.x < clamped_layout_size.y )
     {
         lyHeight = MAX_PAGE_EXAMPLE_SIZE;
-        lyWidth = wxRound( (double) lyHeight / lyRatio );
+        lyWidth = KiROUND( (double) lyHeight / lyRatio );
     }
     else
     {
         lyWidth = MAX_PAGE_EXAMPLE_SIZE;
-        lyHeight = wxRound( (double) lyWidth / lyRatio );
+        lyHeight = KiROUND( (double) lyWidth / lyRatio );
     }
 
     if( m_page_bitmap )
@@ -760,5 +760,5 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
     // Prepare to painless double -> int conversion.
     customSizeX = Clamp( double( INT_MIN ), customSizeX, double( INT_MAX ) );
     customSizeY = Clamp( double( INT_MIN ), customSizeY, double( INT_MAX ) );
-    m_layout_size = wxSize( wxRound( customSizeX ), wxRound( customSizeY ) );
+    m_layout_size = wxSize( KiROUND( customSizeX ), KiROUND( customSizeY ) );
 }

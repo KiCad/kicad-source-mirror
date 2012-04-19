@@ -284,7 +284,7 @@ void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T aFill, int a
     double    radius = aDiameter / 2;
     const int delta  = 3600 / 32; /* increment (in 0.1 degrees) to draw circles */
 
-    start.x = aCentre.x + wxRound( radius );
+    start.x = aCentre.x + KiROUND( radius );
     start.y = aCentre.y;
     set_current_line_width( aWidth );
     move_to( start );
@@ -351,8 +351,8 @@ void GERBER_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFac
     size.x = aImage.GetWidth();
     size.y = aImage.GetHeight();
 
-    size.x = wxRound( size.x * aScaleFactor );
-    size.y = wxRound( size.y * aScaleFactor );
+    size.x = KiROUND( size.x * aScaleFactor );
+    size.y = KiROUND( size.y * aScaleFactor );
 
     wxPoint start = aPos;
     start.x -= size.x / 2;

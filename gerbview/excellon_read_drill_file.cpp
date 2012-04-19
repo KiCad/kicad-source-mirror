@@ -436,7 +436,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         if( m_GerbMetric )
             conv_scale /= 25.4;
 
-        dcode->m_Size.x = dcode->m_Size.y = wxRound( dprm * conv_scale );
+        dcode->m_Size.x = dcode->m_Size.y = KiROUND( dprm * conv_scale );
         dcode->m_Shape  = APT_CIRCLE;
         break;
     }

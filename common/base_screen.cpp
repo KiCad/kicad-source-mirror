@@ -362,12 +362,12 @@ wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoi
     wxPoint gridOrigin = m_GridOrigin;
 
     double offset = fmod( gridOrigin.x, gridSize.x );
-    int x = wxRound( (aPosition.x - offset) / gridSize.x );
-    pt.x = wxRound( x * gridSize.x + offset );
+    int x = KiROUND( (aPosition.x - offset) / gridSize.x );
+    pt.x = KiROUND( x * gridSize.x + offset );
 
     offset = fmod( gridOrigin.y, gridSize.y );
-    int y = wxRound( (aPosition.y - offset) / gridSize.y );
-    pt.y = wxRound ( y * gridSize.y + offset );
+    int y = KiROUND( (aPosition.y - offset) / gridSize.y );
+    pt.y = KiROUND ( y * gridSize.y + offset );
 
     return pt;
 }
@@ -387,8 +387,8 @@ wxPoint BASE_SCREEN::GetCrossHairScreenPosition() const
     wxPoint pos = m_crossHairPosition - m_DrawOrg;
     double scalar = GetScalingFactor();
 
-    pos.x = wxRound( (double) pos.x * scalar );
-    pos.y = wxRound( (double) pos.y * scalar );
+    pos.x = KiROUND( (double) pos.x * scalar );
+    pos.y = KiROUND( (double) pos.y * scalar );
 
     return pos;
 }

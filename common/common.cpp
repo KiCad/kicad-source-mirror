@@ -371,7 +371,7 @@ double RoundTo0( double x, double precision )
 {
     assert( precision != 0 );
 
-    long long ix = wxRound( x * precision );
+    long long ix = KiROUND( x * precision );
 
     if ( x < 0.0 )
         NEGATE( ix );
