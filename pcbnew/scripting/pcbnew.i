@@ -39,6 +39,9 @@
 %ignore BOARD_ITEM::ZeroOffset;
 %ignore D_PAD::m_PadSketchModePenSize;
 
+// rename the Add method of classes to Add native, so we will handle
+// the Add method in python 
+
 %rename(AddNative) *::Add;
 
 // this is what it must be included in the wrapper .cxx code to compile
@@ -102,6 +105,8 @@
 %include <pcbnew_scripting_helpers.h>
 
 #ifdef BUILD_WITH_PLUGIN
+  // ignore RELEASER as nested classes are still unsupported by swig
+  %ignore IO_MGR::RELEASER;
   %include <io_mgr.h>
   %include <kicad_plugin.h>
 #endif
