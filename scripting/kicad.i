@@ -82,6 +82,7 @@
 /* exception handling */
 
 /* the IO_ERROR exception handler, not working yet... */
+/*
 %exception
 {
   try {
@@ -92,7 +93,7 @@
     return NULL;
   }
 }
-
+*/
 
 
 %include <dlist.h>

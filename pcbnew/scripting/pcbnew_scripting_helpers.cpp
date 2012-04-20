@@ -27,6 +27,7 @@
  * @brief Scripting helper functions for pcbnew functionality
  */
 
+#include <Python.h>
 
 #include <pcbnew_scripting_helpers.h>
 #include <pcbnew.h>
@@ -35,6 +36,8 @@
 #include <class_board.h>
 #include <kicad_string.h>
 #include <io_mgr.h>
+#include <macros.h>
+#include <stdlib.h>
 
 static PCB_EDIT_FRAME *PcbEditFrame=NULL;
 
@@ -56,16 +59,19 @@ BOARD* LoadBoard(wxString& aFileName)
 
 BOARD* LoadBoard(wxString& aFileName,IO_MGR::PCB_FILE_T aFormat)
 {
+	static char ExceptionError[256];
 #ifdef USE_NEW_PCBNEW_LOAD
 	try{
 	   return IO_MGR::Load(aFormat,aFileName);	
-	} catch (IO_ERROR)
+	} catch (IO_ERROR e)
 	{
+		sprintf(ExceptionError, "%s\n", TO_UTF8(e.errorText) );
+		PyErr_SetString(PyExc_IOError,ExceptionError);
 		return NULL;
 	}
 #else
   fprintf(stderr,"Warning, LoadBoard not implemented without USE_NEW_PCBNEW_LOAD\n");
-	return NULL;
+   return NULL;
 #endif
 }
 
@@ -77,7 +83,7 @@ bool SaveBoard(wxString& aFilename, BOARD* aBoard)
 bool SaveBoard(wxString& aFileName, BOARD* aBoard,
                 IO_MGR::PCB_FILE_T aFormat)
 {
-
+  static char ExceptionError[256];
 #ifdef USE_NEW_PCBNEW_LOAD
   aBoard->m_Status_Pcb &= ~CONNEXION_OK;
   aBoard->SynchronizeNetsAndNetClasses();
@@ -101,9 +107,12 @@ bool SaveBoard(wxString& aFileName, BOARD* aBoard,
      IO_MGR::Save( aFormat, aFileName, aBoard, &props );
      return true;
   } 
-  catch (IO_ERROR)
+  catch (IO_ERROR e)
   {
-  	 return false;
+	sprintf(ExceptionError, "%s\n", TO_UTF8(e.errorText) );
+	PyErr_SetString(PyExc_IOError,ExceptionError);
+
+        return false;
   }
 
 #else
