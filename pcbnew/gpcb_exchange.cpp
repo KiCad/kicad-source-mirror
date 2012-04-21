@@ -247,8 +247,8 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         }
     }
     wxPoint pos;
-    pos.x  = wxRound( ibuf[idx] * conv_unit );
-    pos.y  = wxRound( ibuf[idx+1] * conv_unit );
+    pos.x  = KiROUND( ibuf[idx] * conv_unit );
+    pos.y  = KiROUND( ibuf[idx+1] * conv_unit );
     m_Reference->SetPos( pos );
     m_Reference->SetPos0( pos );
     m_Reference->SetOrientation( ibuf[idx+2] ? 900 : 0 );
@@ -301,7 +301,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                 if( ii < (params.GetCount() - 2) )
                 {
                     if( params[ii + 2].ToLong( &dim ) )
-                        *list[ii] = wxRound( dim * conv_unit );
+                        *list[ii] = KiROUND( dim * conv_unit );
                 }
             }
 
@@ -347,8 +347,8 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             int     radius = (ibuf[2] + ibuf[3]) / 4;
 
             wxPoint centre;
-            centre.x = wxRound( ibuf[0] * conv_unit );
-            centre.y = wxRound( ibuf[1] * conv_unit );
+            centre.x = KiROUND( ibuf[0] * conv_unit );
+            centre.y = KiROUND( ibuf[1] * conv_unit );
 
             drawSeg->SetStart0( centre );
 
@@ -357,14 +357,14 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
             drawSeg->SetAngle( ibuf[5] * 10 ); // Angle value is clockwise in gpcb and Pcbnew
 
-            drawSeg->SetEnd0( wxPoint( wxRound( radius * conv_unit ), 0 ) );
+            drawSeg->SetEnd0( wxPoint( KiROUND( radius * conv_unit ), 0 ) );
 
             // Calculate start point coordinate of arc
             wxPoint arcStart( drawSeg->GetEnd0() );
             RotatePoint( &arcStart, -start_angle );
             drawSeg->SetEnd0( centre + arcStart );
 
-            drawSeg->SetWidth( wxRound( ibuf[6] * conv_unit ) );
+            drawSeg->SetWidth( KiROUND( ibuf[6] * conv_unit ) );
             drawSeg->SetDrawCoord();
             continue;
         }
@@ -389,7 +389,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                     long dim;
 
                     if( params[ii + 2].ToLong( &dim ) )
-                        ibuf[ii] = wxRound( dim * conv_unit );
+                        ibuf[ii] = KiROUND( dim * conv_unit );
                 }
                 else
                 {
@@ -425,12 +425,12 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
             // Negate angle (due to Y reversed axis) and convert it to internal units
             angle = - angle * 1800.0 / M_PI;
-            pad->SetOrientation( wxRound( angle ) );
+            pad->SetOrientation( KiROUND( angle ) );
 
             wxPoint padPos( (ibuf[0] + ibuf[2]) / 2, (ibuf[1] + ibuf[3]) / 2 );
 
             pad->SetSize( wxSize(
-                    wxRound( hypot( (double)delta.x, (double)delta.y ) ) + ibuf[4],
+                    KiROUND( hypot( (double)delta.x, (double)delta.y ) ) + ibuf[4],
                     ibuf[4] ) );
 
             padPos += m_Pos;
@@ -471,7 +471,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                 {
                     long dim;
                     if( params[ii + 2].ToLong( &dim ) )
-                        ibuf[ii] = wxRound( dim * conv_unit );
+                        ibuf[ii] = KiROUND( dim * conv_unit );
                 }
                 else
                 {

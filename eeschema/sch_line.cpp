@@ -214,7 +214,7 @@ int SCH_LINE::GetPenSize() const
 
     if( m_Layer == LAYER_BUS && m_width == 0 )
     {
-        pensize = wxRound( g_DrawDefaultLineThickness * BUS_WIDTH_EXPAND );
+        pensize = KiROUND( g_DrawDefaultLineThickness * BUS_WIDTH_EXPAND );
         pensize = MAX( pensize, 3 );
     }
 

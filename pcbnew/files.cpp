@@ -202,70 +202,6 @@ the changes?" ) ) )
 
     GetScreen()->SetFileName( fileName.GetFullPath() );
 
-#if !defined(USE_NEW_PCBNEW_LOAD)
-
-    // Start read PCB file
-    FILE* source = wxFopen( GetScreen()->GetFileName(), wxT( "rt" ) );
-
-    if( source == NULL )
-    {
-        msg.Printf( _( "File <%s> not found" ), GetChars( GetScreen()->GetFileName() ) );
-        DisplayError( this, msg );
-        return false;
-    }
-
-    FILE_LINE_READER fileReader( source, GetScreen()->GetFileName() );
-
-    FILTER_READER reader( fileReader );
-
-    // Read header and TEST if it is a PCB file format
-    reader.ReadLine();
-
-    if( strncmp( reader.Line(), "PCBNEW-BOARD", 12 ) != 0 )
-    {
-        DisplayError( this, wxT( "Unknown file type" ) );
-        return false;
-    }
-
-    int ver;
-    sscanf( reader.Line() , "PCBNEW-BOARD Version %d date", &ver );
-
-    if ( ver > LEGACY_BOARD_FILE_VERSION )
-    {
-        DisplayInfoMessage( this, _( "This file was created by a more recent \
-version of Pcbnew and may not load correctly. Please consider updating!" ) );
-    }
-    else if ( ver < LEGACY_BOARD_FILE_VERSION )
-    {
-        DisplayInfoMessage( this, _( "This file was created by an older \
-version of Pcbnew. It will be stored in the new file format when you save \
-this file again." ) );
-    }
-
-    // Reload the corresponding configuration file:
-    wxSetWorkingDirectory( wxPathOnly( GetScreen()->GetFileName() ) );
-
-    if( aAppend )
-    {
-        ReadPcbFile( &reader, true );
-    }
-    else
-    {
-        // Update the option toolbar
-        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-        m_DisplayModText = DisplayOpt.DisplayModText;
-        m_DisplayModEdge = DisplayOpt.DisplayModEdge;
-        m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-        m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-
-        // load project settings before BOARD, in case BOARD file has overrides.
-        LoadProjectSettings( GetScreen()->GetFileName() );
-
-        ReadPcbFile( &reader, false );
-    }
-
-#else
-
     if( !aAppend )
     {
         // Update the option toolbar
@@ -320,8 +256,6 @@ this file again." ) );
         SetStatusText( wxEmptyString );
         BestZoom();
     }
-
-#endif
 
     GetScreen()->ClrModify();
 
@@ -456,10 +390,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     pcbFileName = GetScreen()->GetFileName();
 
-#if defined( USE_NEW_PCBNEW_LOAD ) || defined( USE_NEW_PCBNEW_SAVE )
     if( pcbFileName.GetExt().IsEmpty() )
         pcbFileName.SetExt( IO_MGR::GetFileExtension( (IO_MGR::PCB_FILE_T) wildcardIndex ) );
-#endif
 
     if( !IsWritable( pcbFileName ) )
         return false;
@@ -492,8 +424,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
             saveok = false;
         }
     }
-
-#if defined(USE_NEW_PCBNEW_SAVE)
 
     GetBoard()->m_Status_Pcb &= ~CONNEXION_OK;
 
@@ -534,29 +464,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         GetScreen()->SetFileName( pcbFileName.GetFullPath() );
         UpdateTitle();
     }
-
-#else
-    // Create the file
-    FILE* dest;
-    dest = wxFopen( pcbFileName.GetFullPath(), wxT( "wt" ) );
-
-    if( dest == 0 )
-    {
-        msg = _( "Unable to create " ) + pcbFileName.GetFullPath();
-        DisplayError( this, msg );
-        saveok = false;
-    }
-
-    if( dest )
-    {
-        GetScreen()->SetFileName( pcbFileName.GetFullPath() );
-        UpdateTitle();
-
-        SavePcbFormatAscii( dest );
-        fclose( dest );
-    }
-
-#endif
 
     // Display the file names:
     m_messagePanel->EraseMsgBox();

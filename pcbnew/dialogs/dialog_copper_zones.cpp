@@ -382,8 +382,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     m_settings.m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? 0 : 1;
 
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
-    m_settings.m_ZoneClearance =
-        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() );
+    m_settings.m_ZoneClearance = ReturnValueFromString( g_UserUnit, txtvalue );
 
     // Test if this is a reasonnable value for this parameter
     // A too large value can hang Pcbnew
@@ -395,18 +394,18 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     }
 
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
-    m_settings.m_ZoneMinThickness =
-        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() );
+    m_settings.m_ZoneMinThickness = ReturnValueFromString( g_UserUnit, txtvalue );
+
     if( m_settings.m_ZoneMinThickness < 10 )
     {
         DisplayError( this,
-                     _( "Minimum width must be larger than 0.001\" / 0.0254 mm." ) );
+                      _( "Minimum width must be larger than 0.001\" / 0.0254 mm." ) );
         return false;
     }
 
     m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
     txtvalue = m_cornerSmoothingCtrl->GetValue();
-    m_settings.SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() ) );
+    m_settings.SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue ) );
 
     m_settings.m_ZonePriority = m_PriorityLevelCtrl->GetValue();
 
@@ -415,11 +414,9 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     else
         m_settings.m_Zone_45_Only = true;
 
-    m_settings.m_ThermalReliefGap = ReturnValueFromTextCtrl( *m_AntipadSizeValue, PCB_INTERNAL_UNIT );
+    m_settings.m_ThermalReliefGap = ReturnValueFromTextCtrl( *m_AntipadSizeValue );
 
-    m_settings.m_ThermalReliefCopperBridge = ReturnValueFromTextCtrl(
-        *m_CopperWidthValue,
-        PCB_INTERNAL_UNIT );
+    m_settings.m_ThermalReliefCopperBridge = ReturnValueFromTextCtrl( *m_CopperWidthValue );
 
     m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, (long) m_settings.m_ThermalReliefGap );
 

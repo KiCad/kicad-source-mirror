@@ -234,8 +234,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     }
 
     // if PAD_SMD pad and high contrast mode
-    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) && 
-        ( GetAttribute() == PAD_SMD || GetAttribute() == PAD_CONN ) && 
+    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
+        ( GetAttribute() == PAD_SMD || GetAttribute() == PAD_CONN ) &&
         DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks
@@ -303,7 +303,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     // if Contrast mode is ON and a technical layer active, show pads on this
     // layer so we can see pads on paste or solder layer and the size of the
     // mask
-    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) && 
+    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
         DisplayOpt.ContrastModeDisplay && screen->m_Active_Layer > LAST_COPPER_LAYER )
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
@@ -376,7 +376,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
 
     // Display net names is restricted to pads that are on the active layer
     // in hight contrast mode display
-    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) && 
+    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
         !IsOnLayer( screen->m_Active_Layer ) && DisplayOpt.ContrastModeDisplay )
         drawInfo.m_Display_netname = false;
 
@@ -771,8 +771,8 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
             // left and right sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the horizontal axis
             // that is delta.x +- corr.x depending on the corner
-            corr.x  = wxRound( tan( angle ) * aInflateValue.x );
-            delta.x = wxRound( aInflateValue.x / cos( angle ) );
+            corr.x  = KiROUND( tan( angle ) * aInflateValue.x );
+            delta.x = KiROUND( aInflateValue.x / cos( angle ) );
 
             // Horizontal sides are moved up and down by aInflateValue.y
             delta.y = aInflateValue.y;
@@ -787,8 +787,8 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
             // lower and upper sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the vertical axis
             // that is delta.y +- corr.y depending on the corner
-            corr.y  = wxRound( tan( angle ) * aInflateValue.y );
-            delta.y = wxRound( aInflateValue.y / cos( angle ) );
+            corr.y  = KiROUND( tan( angle ) * aInflateValue.y );
+            delta.y = KiROUND( aInflateValue.y / cos( angle ) );
 
             // Vertical sides are moved left and right by aInflateValue.x
             delta.x = aInflateValue.x;

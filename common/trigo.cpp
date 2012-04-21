@@ -6,7 +6,7 @@
 #include <fctsys.h>
 #include <macros.h>
 #include <trigo.h>
-
+#include <common.h>
 
 bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist )
 {
@@ -140,7 +140,7 @@ bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY )
          */
         int angle;
 
-        angle = wxRound( ( atan2( (double) segY, (double) segX ) * 1800.0 / M_PI ) );
+        angle = KiROUND( ( atan2( (double) segY, (double) segX ) * 1800.0 / M_PI ) );
         cXrot = pointX;
         cYrot = pointY;
 
@@ -211,7 +211,7 @@ int ArcTangente( int dy, int dx )
     }
 
     fangle = atan2( (double) dy, (double) dx ) / M_PI * 1800;
-    return wxRound( fangle );
+    return KiROUND( fangle );
 }
 
 
@@ -253,8 +253,8 @@ void RotatePoint( int* pX, int* pY, double angle )
         double cosinus = cos( fangle );
         double fpx = (*pY * sinus ) + (*pX * cosinus );
         double fpy = (*pY * cosinus ) - (*pX * sinus );
-        *pX = wxRound( fpx );
-        *pY = wxRound( fpy );
+        *pX = KiROUND( fpx );
+        *pY = KiROUND( fpy );
     }
 }
 

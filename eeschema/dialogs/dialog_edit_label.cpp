@@ -261,7 +261,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     m_CurrentText->SetOrientation( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
-    value = ReturnValueFromString( g_UserUnit, text, m_Parent->GetInternalUnits() );
+    value = ReturnValueFromString( g_UserUnit, text );
     m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
 
     if( m_TextShape )

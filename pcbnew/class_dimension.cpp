@@ -258,7 +258,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     deltay = m_featureLineDOy - m_featureLineGOy;
 
     // Calculate dimension value
-    mesure = wxRound( hypot( (double) deltax, (double) deltay ) );
+    mesure = KiROUND( hypot( (double) deltax, (double) deltay ) );
 
     if( deltax || deltay )
         angle = atan2( (double) deltay, (double) deltax );

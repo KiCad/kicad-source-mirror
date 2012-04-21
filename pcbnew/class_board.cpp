@@ -1954,10 +1954,10 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
     }
 
     if( aTraceLength )
-        *aTraceLength = wxRound( full_len );
+        *aTraceLength = KiROUND( full_len );
 
     if( aDieLength )
-        *aDieLength = wxRound( lenDie );
+        *aDieLength = KiROUND( lenDie );
 
     if( aCount )
         *aCount = NbSegmBusy;
@@ -2092,7 +2092,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     if( delta.x == 0 )
         lockPoint.x = 0;         /* horizontal segment*/
     else
-        lockPoint.y = wxRound( ( (double)lockPoint.x * delta.y ) / delta.x );
+        lockPoint.y = KiROUND( ( (double)lockPoint.x * delta.y ) / delta.x );
 
     /* Create the intermediate point (that is to say creation of a new
      * segment, beginning at the intermediate point.

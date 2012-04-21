@@ -47,9 +47,7 @@ private:
 
 protected:
     wxMenu*          GetContextMenu( int type );
-    void             NewFile( TreeFileType type );
-    void             NewFile( const wxString& name, TreeFileType type,
-                              wxTreeItemId& root );
+
     /**
      * Function GetSelectedData
      * return the item data from item currently selected (highlighted)
@@ -91,63 +89,28 @@ public:
     void                         OnDeleteFile( wxCommandEvent& event );
     void                         OnRenameFile( wxCommandEvent& event );
 
-    void                         OnNewDirectory( wxCommandEvent& event );
-    void                         OnNewPyFile( wxCommandEvent& event );
+    /**
+     * Function OnCreateNewDirectory
+     * Creates a new subdirectory inside the current kicad project directory
+     * the user is prompted to enter a directory name
+     */
+    void                         OnCreateNewDirectory( wxCommandEvent& event );
 
     void                         ClearFilters();
 
     const std::vector<wxString>& GetFilters();
     void                         RemoveFilter( const wxString& filter );
 
-#ifdef KICAD_PYTHON
-    boost::python::object        ToWx();
-
-    TREE_PROJECT_FRAME()
-    {
-    }
-
-
-    TREE_PROJECT_FRAME( const TREE_PROJECT_FRAME& )
-    {
-    }
-
-
-    void OnRunPy( wxCommandEvent& event );
-
-    boost::python::object GetMenuPy( TreeFileType );
-
-    boost::python::object GetFtExPy( TreeFileType ) const;
-
-    void                  RemoveFilterPy( const boost::python::str& filter );
-    void                  AddFilter( const boost::python::str& filter );
-
-    boost::python::object GetTreeCtrl();
-    TREEPROJECT_ITEM*      GetItemData( const boost::python::object& item );
-
-    void                  AddFilePy( const boost::python::str& name,
-                                     boost::python::object&    root );
-    void                  NewFilePy( const boost::python::str& name,
-                                     TreeFileType              type,
-                                     boost::python::object&    root );
-
-    TREEPROJECT_ITEM*      FindItemData( const boost::python::str& name );
-
-    boost::python::object GetCurrentMenu();
-    int                   AddStatePy( boost::python::object& bitmap );
-
-#endif
-
    /**
-     * Function AddFile
-     * @brief  Add filename "name" to the tree \n
-     *         if name is a directory, add the sub directory file names
-     * @param aName = the filename or the dirctory name to add
+     * Function AddFileToTree
+     * @brief  Add the file or directory aName to the project tree
+     * @param aName = the filename or the directory name to add in tree
      * @param aRoot = the wxTreeItemId item where to add sub tree items
      * @param aRecurse = true to filenames or sub dir names to the current tree item
      *                   false to stop file add.
      * @return true if the file (or directory) is added.
      */
-     bool                  AddFile( const wxString& aName,
+     bool                  AddFileToTree( const wxString& aName,
                                    wxTreeItemId& aRoot, bool aRecurse = true);
 
     DECLARE_EVENT_TABLE()

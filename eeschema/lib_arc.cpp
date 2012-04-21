@@ -188,7 +188,7 @@ bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTran
 
     NEGATE( relativePosition.y );       // reverse Y axis
 
-    int distance = wxRound( EuclideanNorm( TwoPointVector( m_Pos, relativePosition ) ) );
+    int distance = KiROUND( EuclideanNorm( TwoPointVector( m_Pos, relativePosition ) ) );
 
     if( abs( distance - m_Radius ) > aThreshold )
         return false;
@@ -738,7 +738,7 @@ void LIB_ARC::calcRadiusAngles()
     wxPoint centerStartVector = TwoPointVector( m_Pos, m_ArcStart );
     wxPoint centerEndVector   = TwoPointVector( m_Pos, m_ArcEnd );
 
-    m_Radius = wxRound( EuclideanNorm( centerStartVector ) );
+    m_Radius = KiROUND( EuclideanNorm( centerStartVector ) );
 
     m_t1 = (int) ( atan2( (double) centerStartVector.y,
                           (double) centerStartVector.x ) * 1800 / M_PI );

@@ -108,16 +108,6 @@ public:
     wxString      m_Doc;                // Module Description (info for users)
     wxString      m_KeyWord;            // Keywords to select the module in lib
 
-    // Local tolerances. When zero, this means the corresponding netclass value
-    // is used. Usually theses local tolerances zero, in deference to the
-    // corresponding netclass values.
-    int           m_LocalClearance;
-    int           m_LocalSolderMaskMargin;         ///< Solder mask margin
-    int           m_LocalSolderPasteMargin;        ///< Solder paste margin
-                                                   ///< absolute value
-
-    double        m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
-                                                   ///< value of pad size
     // The final margin is the sum of these 2 values
 
     ZoneConnection m_ZoneConnection;
@@ -236,14 +226,6 @@ public:
     void SetLastEditTime( long aTime ) { m_LastEdit_Time = aTime; }
     long GetLastEditTime() const { return m_LastEdit_Time; }
 
-    /* Reading and writing data on files */
-
-    bool Save( FILE* aFile ) const;
-
-    int Write_3D_Descr( FILE* File ) const;
-
-    int ReadDescr( LINE_READER* aReader );
-
     /**
      * Function Read_GPCB_Descr
      * reads a footprint description in GPCB format (newlib version)
@@ -332,6 +314,12 @@ public:
      */
     D_PAD* GetPad( const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
 
+    /**
+     * GetPadCount
+     * returns the number of pads.
+     */
+    unsigned GetPadCount() const            { return m_Pads.GetCount() ; }
+
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
 
@@ -352,7 +340,18 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
-};
 
+private:
+    // Local tolerances. When zero, this means the corresponding netclass value
+    // is used. Usually theses local tolerances zero, in deference to the
+    // corresponding netclass values.
+    int           m_LocalClearance;
+    int           m_LocalSolderMaskMargin;         ///< Solder mask margin
+    int           m_LocalSolderPasteMargin;        ///< Solder paste margin
+                                                   ///< absolute value
+
+    double        m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
+                                                   ///< value of pad size
+};
 
 #endif     // MODULE_H_

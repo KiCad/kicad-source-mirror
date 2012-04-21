@@ -257,7 +257,7 @@ public:
     virtual void set_current_line_width( int width )
     {
         // Handy override
-        current_pen_width = wxRound( pen_diameter );
+        current_pen_width = KiROUND( pen_diameter );
     }
 
     virtual void set_default_line_width( int width ) {};

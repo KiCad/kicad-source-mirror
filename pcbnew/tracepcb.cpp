@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -66,7 +67,7 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GRSetDrawMode( DC, GR_COPY );
 
     m_canvas->DrawBackGround( DC );
-    TraceWorkSheet( DC, screen, 0 );
+    TraceWorkSheet( DC, screen, 0, MILS_TO_IU_SCALAR );
 
     // Redraw the footprints
     for( MODULE* module = GetBoard()->m_Modules;  module;  module = module->Next() )
@@ -104,7 +105,7 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     m_canvas->DrawBackGround( DC );
 
-    TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
+    TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness, MILS_TO_IU_SCALAR );
 
     GetBoard()->Draw( m_canvas, DC, GR_OR | GR_ALLOW_HIGHCONTRAST);
 

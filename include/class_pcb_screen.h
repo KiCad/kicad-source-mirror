@@ -37,7 +37,7 @@ public:
     void        SetPreviousZoom();
     void        SetLastZoom();
 
-    virtual int GetInternalUnits();
+    virtual int MilsToIuScalar();
 
     /**
      * Function GetCurItem
@@ -56,7 +56,6 @@ public:
      * @param aItem Any object derived from BOARD_ITEM
      */
     void SetCurItem( BOARD_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*)aItem ); }
-
 
     /* full undo redo management : */
 

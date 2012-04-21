@@ -35,9 +35,9 @@
 #include <wxBasePcbFrame.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
+#include <base_units.h>
 
 #include <class_board.h>
-
 #include <pcbnew.h>
 #include <protos.h>
 
@@ -278,7 +278,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     int bg_color = g_DrawBgColor;
 
     if( m_PrintParams.m_Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize );
+        m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize, MILS_TO_IU_SCALAR );
 
     if( printMirror )
     {

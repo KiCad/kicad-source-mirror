@@ -85,8 +85,8 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     }
 
     aSheetPin->m_Text = dlg.GetLabelName();
-    aSheetPin->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight(), m_internalUnits );
-    aSheetPin->m_Size.x = ReturnValueFromString( g_UserUnit, dlg.GetTextWidth(), m_internalUnits );
+    aSheetPin->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight() );
+    aSheetPin->m_Size.x = ReturnValueFromString( g_UserUnit, dlg.GetTextWidth() );
     aSheetPin->SetShape( dlg.GetConnectionType() );
 
     if( aDC )

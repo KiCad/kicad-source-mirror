@@ -208,25 +208,25 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     case WXK_NUMPAD8:
     case WXK_UP:
-        pos.y -= wxRound( gridSize.y );
+        pos.y -= KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
-        pos.y += wxRound( gridSize.y );
+        pos.y += KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
-        pos.x -= wxRound( gridSize.x );
+        pos.x -= KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
-        pos.x += wxRound( gridSize.x );
+        pos.x += KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 
@@ -293,25 +293,25 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     case WXK_NUMPAD8:
     case WXK_UP:
-        pos.y -= wxRound( gridSize.y );
+        pos.y -= KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
-        pos.y += wxRound( gridSize.y );
+        pos.y += KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
-        pos.x -= wxRound( gridSize.x );
+        pos.x -= KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
-        pos.x += wxRound( gridSize.x );
+        pos.x += KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 
@@ -375,25 +375,25 @@ void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     case WXK_NUMPAD8:
     case WXK_UP:
-        pos.y -= wxRound( gridSize.y );
+        pos.y -= KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
-        pos.y += wxRound( gridSize.y );
+        pos.y += KiROUND( gridSize.y );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
-        pos.x -= wxRound( gridSize.x );
+        pos.x -= KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
-        pos.x += wxRound( gridSize.x );
+        pos.x += KiROUND( gridSize.x );
         m_canvas->MoveCursor( pos );
         break;
 

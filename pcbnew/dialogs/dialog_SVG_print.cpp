@@ -135,8 +135,7 @@ void DIALOG_SVG_PRINT::initDialog( )
 
 void DIALOG_SVG_PRINT::SetPenWidth()
 {
-    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth,
-                                                  m_Parent->GetInternalUnits() );
+    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth );
 
     if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
     {
@@ -240,7 +239,14 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
     screen->SetScalingFactor( 1.0 );
-    float dpi = (float)m_Parent->GetInternalUnits();
+
+    float dpi;
+
+#if defined( USE_PCBNEW_NANOMETRES )
+    dpi = 25.4e6;
+#else
+    dpi = 10000.0;
+#endif
 
     EDA_DRAW_PANEL* panel = m_Parent->GetCanvas();
 
@@ -265,7 +271,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     g_DrawBgColor = WHITE;
 
     if( aPrint_Frame_Ref )
-        m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize );
+        m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize, MILS_TO_IU_SCALAR );
 
     m_Parent->PrintPage( &dc, m_PrintMaskLayer, false, &s_Parameters);
     g_DrawBgColor = bg_color;

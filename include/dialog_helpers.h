@@ -70,7 +70,6 @@ class EDA_GRAPHIC_TEXT_CTRL
 {
 public:
     EDA_UNITS_T   m_UserUnit;
-    int           m_Internal_Unit;
 
     wxTextCtrl*   m_FrameText;
     wxTextCtrl*   m_FrameSize;
@@ -80,8 +79,7 @@ private:
 public:
     EDA_GRAPHIC_TEXT_CTRL( wxWindow* parent, const wxString& Title,
                            const wxString& TextToEdit, int textsize,
-                           EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer, int framelen = 200,
-                           int internal_unit = EESCHEMA_INTERNAL_UNIT );
+                           EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer, int framelen = 200 );
 
     ~EDA_GRAPHIC_TEXT_CTRL();
 
@@ -90,7 +88,7 @@ public:
     void            Enable( bool state );
     void            SetTitle( const wxString& title );
 
-    void SetFocus() { m_FrameText->SetFocus(); }
+    void            SetFocus() { m_FrameText->SetFocus(); }
     void            SetValue( const wxString& value );
     void            SetValue( int value );
 
@@ -98,10 +96,9 @@ public:
      * Function FormatSize
      * formats a string containing the size in the desired units.
      */
-    static wxString FormatSize( int internalUnit, EDA_UNITS_T user_unit, int textSize );
+    static wxString FormatSize( EDA_UNITS_T user_unit, int textSize );
 
-    static int      ParseSize( const wxString& sizeText, int internalUnit,
-                               EDA_UNITS_T user_unit );
+    static int      ParseSize( const wxString& sizeText, EDA_UNITS_T user_unit );
 };
 
 
@@ -113,7 +110,6 @@ class EDA_POSITION_CTRL
 {
 public:
     EDA_UNITS_T   m_UserUnit;
-    int           m_Internal_Unit;
     wxPoint       m_Pos_To_Edit;
 
     wxTextCtrl*   m_FramePosX;
@@ -123,9 +119,7 @@ private:
 
 public:
     EDA_POSITION_CTRL( wxWindow* parent, const wxString& title,
-                         const wxPoint& pos_to_edit,
-                         EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
-                         int internal_unit = EESCHEMA_INTERNAL_UNIT );
+                       const wxPoint& pos_to_edit, EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_POSITION_CTRL();
 
@@ -143,9 +137,7 @@ class EDA_SIZE_CTRL : public EDA_POSITION_CTRL
 {
 public:
     EDA_SIZE_CTRL( wxWindow* parent, const wxString& title,
-                   const wxSize& size_to_edit,
-                   EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
-                   int internal_unit = EESCHEMA_INTERNAL_UNIT );
+                   const wxSize& size_to_edit, EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_SIZE_CTRL() { }
     wxSize GetValue();
@@ -162,13 +154,11 @@ public:
     int           m_Value;
     wxTextCtrl*   m_ValueCtrl;
 private:
-    int           m_Internal_Unit;
     wxStaticText* m_Text;
 
 public:
     EDA_VALUE_CTRL( wxWindow* parent, const wxString& title, int value,
-                    EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
-                    int internal_unit = EESCHEMA_INTERNAL_UNIT );
+                    EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer );
 
     ~EDA_VALUE_CTRL();
 
@@ -181,73 +171,5 @@ public:
         m_ValueCtrl->SetToolTip( text );
     }
 };
-
-
-/**
- * Template DIALOG_SHIM
- * is a way to have a common way of handling KiCad dialog windows:
- * <ul>
- * <li>class specific: static s_LastPos and static s_LastSize for retentative
- *     dialog window positioning, per class.
- * <li> invocation of SetFocus() to allow ESC key to work on Linux.
- * <li> future others...
- * </ul>
- * by wedging in a class (a SHIM) between the wxFormbuilder coded base class and
- * our derived dialog classes.  Use it via the macro named DIALOG_EXTEND_WITH_SHIM
- * and be sure to code your constructor to invoke *_SHIM() base class constructor,
- * not the one from wxFormbuilder.
- * @author Dick Hollenbeck
- */
-template <class T>
-class DIALOG_SHIM : public T
-{
-public:
-
-    DIALOG_SHIM( wxFrame* aParent ) :
-        T( aParent )
-    {
-        wxDialog::SetFocus();
-    }
-
-    // overload wxDialog::Show
-    bool Show( bool show )
-    {
-        bool ret;
-
-        if( show )
-        {
-            ret = wxDialog::Show( show );
-            if( s_LastPos.x != -1 )
-                wxDialog::SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
-        }
-        else
-        {
-            // Save the dialog's position before hiding
-            s_LastPos  = wxDialog::GetPosition();
-            s_LastSize = wxDialog::GetSize();
-            ret = wxDialog::Show( show );
-        }
-        return ret;
-    }
-
-private:
-    static  wxPoint     s_LastPos;
-    static  wxSize      s_LastSize;
-};
-
-template<class T>
-wxPoint DIALOG_SHIM<T>::s_LastPos( -1, -1 );
-
-template<class T>
-wxSize DIALOG_SHIM<T>::s_LastSize( 0, 0 );
-
-/**
- * Macro DIALOG_EXTEND_WITH_SHIM
- * instantiates the template DIALOG_SHIM<> and thereby declares a shim class.
- * @author Dick Hollenbeck
- */
-#define DIALOG_EXTEND_WITH_SHIM( DERRIVED, BASE ) \
- typedef DIALOG_SHIM<BASE>  BASE##_SHIM; \
- class DERRIVED : public BASE##_SHIM
 
 #endif    // DIALOG_HELPERS_H_

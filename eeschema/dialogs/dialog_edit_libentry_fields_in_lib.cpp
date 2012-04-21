@@ -658,8 +658,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     fieldValueTextCtrl->SetValue( field.m_Text );
 
-    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( EESCHEMA_INTERNAL_UNIT,
-                                                                   g_UserUnit, field.m_Size.x ) );
+    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.m_Size.x ) );
 
     wxPoint coord = field.m_Pos;
     wxPoint zero;
@@ -745,8 +744,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
-    field.m_Size.x = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(),
-                                                       EESCHEMA_INTERNAL_UNIT, g_UserUnit );
+    field.m_Size.x = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(), g_UserUnit );
 
     field.m_Size.y = field.m_Size.x;
 
@@ -761,10 +759,8 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     else
         field.m_Bold = false;
 
-    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue(),
-            EESCHEMA_INTERNAL_UNIT );
-    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue(),
-            EESCHEMA_INTERNAL_UNIT );
+    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() );
+    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() );
 
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing

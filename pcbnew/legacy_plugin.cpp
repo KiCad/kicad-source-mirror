@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
 
@@ -98,6 +98,8 @@
 #define SZ( x )         (sizeof(x)-1)
 
 
+//-----<BOARD Load Functions>---------------------------------------------------
+
 /// C string compare test for a specific length of characters.
 #define TESTLINE( x )   ( !strnicmp( line, x, SZ( x ) ) && isspace( line[SZ( x )] ) )
 
@@ -106,7 +108,7 @@
 
 
 #if 1
-#define READLINE()     m_reader->ReadLine()
+#define READLINE( rdr )     rdr->ReadLine()
 
 #else
 /// The function and macro which follow comprise a shim which can be a
@@ -128,7 +130,7 @@ static inline unsigned ReadLine( LINE_READER* rdr, const char* caller )
 
     return ret;
 }
-#define READLINE()     ReadLine( m_reader, __FUNCTION__ )
+#define READLINE( rdr )     ReadLine( rdr, __FUNCTION__ )
 #endif
 
 static const char delims[] = " \t\r\n";
@@ -167,12 +169,14 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPE
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
+    init( aProperties );
+
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
     // delete on exception, iff I own m_board, according to aAppendToMe
     auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
-    FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
+    FILE* fp = wxFopen( aFileName, wxT( "r" ) );
     if( !fp )
     {
         m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
@@ -183,8 +187,6 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPE
     FILE_LINE_READER    reader( fp, aFileName );
 
     m_reader = &reader;          // member function accessibility
-
-    init( aProperties );
 
     checkVersion();
 
@@ -205,7 +207,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
     // Then follows $EQUIPOT and all the rest
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char* line = m_reader->Line();
 
@@ -213,7 +215,8 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         if( TESTLINE( "$MODULE" ) )
         {
-            loadMODULE();
+            MODULE* m = LoadMODULE();
+            m_board->Add( m, ADD_APPEND );
         }
 
         else if( TESTLINE( "$DRAWSEGMENT" ) )
@@ -281,7 +284,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             }
             else
             {
-                while( READLINE() )
+                while( READLINE( m_reader ) )
                 {
                     line = m_reader->Line();     // gobble until $EndSetup
 
@@ -332,7 +335,7 @@ void LEGACY_PLUGIN::checkVersion()
 
 void LEGACY_PLUGIN::loadGENERAL()
 {
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char*       line = m_reader->Line();
         const char* data;
@@ -344,7 +347,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 
             if( !strcmp( data, "mm" ) )
             {
-#if defined(USE_PCBNEW_NANOMETRES)
+#if defined( USE_PCBNEW_NANOMETRES )
                 diskToBiu = 1000000.0;
 
 #elif defined(DEBUG)
@@ -460,7 +463,7 @@ void LEGACY_PLUGIN::loadSHEET()
     char        buf[260];
     TITLE_BLOCK tb;
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char* line = m_reader->Line();
 
@@ -575,7 +578,7 @@ void LEGACY_PLUGIN::loadSETUP()
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
     ZONE_SETTINGS           zs  = m_board->GetZoneSettings();
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -863,14 +866,15 @@ void LEGACY_PLUGIN::loadSETUP()
 }
 
 
-void LEGACY_PLUGIN::loadMODULE()
+MODULE* LEGACY_PLUGIN::LoadMODULE()
 {
     auto_ptr<MODULE> module( new MODULE( m_board ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
-        const char* data;
         char* line = m_reader->Line();
+
+        const char* data;
 
         // most frequently encountered ones at the top
 
@@ -938,7 +942,7 @@ void LEGACY_PLUGIN::loadMODULE()
 
         else if( TESTLINE( "Li" ) )         // Library name of footprint
         {
-            module->m_LibRef = FROM_UTF8( StrPurge( line + SZ( "Li" ) ) );
+            module->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
 
         else if( TESTLINE( "Sc" ) )         // timestamp
@@ -1053,9 +1057,7 @@ void LEGACY_PLUGIN::loadMODULE()
         {
             module->CalculateBoundingBox();
 
-            m_board->Add( module.release(), ADD_APPEND );
-
-            return;     // preferred exit
+            return module.release();     // preferred exit
         }
     }
 
@@ -1067,7 +1069,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 {
     auto_ptr<D_PAD> pad( new D_PAD( aModule ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -1288,8 +1290,8 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
 void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 {
-    STROKE_T shape;
-    char* line = m_reader->Line();     // obtain current (old) line
+    STROKE_T    shape;
+    char*       line = m_reader->Line();     // obtain current (old) line
 
     switch( line[1] )
     {
@@ -1371,7 +1373,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
             for( int ii = 0;  ii<ptCount;  ++ii )
             {
-                if( !READLINE() )
+                if( !READLINE( m_reader ) )
                 {
                     THROW_IO_ERROR( "S_POLGON point count mismatch." );
                 }
@@ -1542,7 +1544,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
         t3D = n3D;
     }
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char* line = m_reader->Line();
 
@@ -1596,7 +1598,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
 
     auto_ptr<DRAWSEGMENT> dseg( new DRAWSEGMENT( m_board ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line  = m_reader->Line();
@@ -1704,7 +1706,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
     NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
     m_board->AppendNet( net );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -1756,7 +1758,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
     TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
     m_board->Add( pcbtxt, ADD_APPEND );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -1866,7 +1868,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
 void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
 {
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         // read two lines per loop iteration, each loop is one TRACK or VIA
         // example first line:
@@ -1899,7 +1901,7 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         // differentiates between PCB_TRACE_T and PCB_VIA_T.  With virtual
         // functions in use, it is critical to instantiate the PCB_VIA_T
         // exactly.
-        READLINE();
+        READLINE( m_reader );
 
         line = m_reader->Line();
 
@@ -1989,7 +1991,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
     // just before returning.
     auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         char* line = m_reader->Line();
 
@@ -2082,7 +2084,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
     bool    sawCorner = false;
     char    buf[1024];
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -2233,7 +2235,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             // Read the PolysList (polygons used for fill areas in the zone)
 
-            while( READLINE() )
+            while( READLINE( m_reader ) )
             {
                 line = m_reader->Line();
 
@@ -2253,7 +2255,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "$FILLSEGMENTS" ) )
         {
-            while( READLINE() )
+            while( READLINE( m_reader ) )
             {
                 line = m_reader->Line();
 
@@ -2304,7 +2306,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
 {
     auto_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
 
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char*  data;
         char* line = m_reader->Line();
@@ -2498,7 +2500,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
 void LEGACY_PLUGIN::loadPCB_TARGET()
 {
-    while( READLINE() )
+    while( READLINE( m_reader ) )
     {
         const char* data;
         char* line = m_reader->Line();
@@ -2631,7 +2633,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
     {
         // this is the special reverse trip mm -> deci-mils testing run,
         // only available in DEBUG mode.
-        return BIU( wxRound( fval * diskToBiu ) );
+        return BIU( KiROUND( fval * diskToBiu ) );
     }
 
 #endif
@@ -2675,15 +2677,15 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
 void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 {
+    m_board = NULL;
     m_props = aProperties;
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
-#if defined(USE_PCBNEW_NANOMETRES)
+#if defined( USE_PCBNEW_NANOMETRES )
     biuToDisk = 1/1000000.0;        // BIUs are nanometers & file is mm
 #else
     biuToDisk = 1.0;                // BIUs are deci-mils
 #endif
-
 
     // conversion factor for loading KICAD legacy file format into BIUs in RAM
 
@@ -2692,7 +2694,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     // then, during the file loading process, to start a conversion from
     // mm to nanometers.
 
-#if defined(USE_PCBNEW_NANOMETRES)
+#if defined( USE_PCBNEW_NANOMETRES )
     diskToBiu = 2540.0;             // BIUs are nanometers
 #else
     diskToBiu = 1.0;                // BIUs are deci-mils
@@ -2700,15 +2702,15 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 }
 
 
-//-----<Save() Functions>-------------------------------------------------------
+//-----<BOARD Save Functions>---------------------------------------------------
 
 void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    m_board = aBoard;
+    init( aProperties );
 
-    FILE* fp = wxFopen( aFileName, wxT( "wt" ) );
+    FILE* fp = wxFopen( aFileName, wxT( "w" ) );
     if( !fp )
     {
         m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
@@ -2722,16 +2724,15 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 
     m_fp = fp;          // member function accessibility
 
-    init( aProperties );
-
     if( m_props )
     {
+        // @todo move the header production into this source file.
         wxString header = (*m_props)["header"];
         // save a file header, if caller provided one (with trailing \n hopefully).
         fprintf( m_fp, "%s", TO_UTF8( header ) );
     }
 
-    saveAllSections();
+    SaveBOARD( aBoard );
 }
 
 
@@ -2749,34 +2750,32 @@ do { \
 } while(0)
 
 
-void LEGACY_PLUGIN::saveAllSections() const
+void LEGACY_PLUGIN::SaveBOARD( const BOARD* aBoard ) const
 {
+    saveGENERAL( aBoard );
 
+    saveSHEET( aBoard );
 
-    saveGENERAL();
+    saveSETUP( aBoard );
 
-    saveSHEET();
-
-    saveSETUP();
-
-    saveBOARD();
+    saveBOARD_ITEMS( aBoard );
 }
 
 
-void LEGACY_PLUGIN::saveGENERAL() const
+void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
 {
     fprintf( m_fp, "$GENERAL\n" );
     fprintf( m_fp, "encoding utf-8\n" );
 
     // tell folks the units used within the file, as early as possible here.
-#if defined(USE_PCBNEW_NANOMETRES)
+#if defined( USE_PCBNEW_NANOMETRES )
     fprintf( m_fp, "Units mm\n" );
 #else
     fprintf( m_fp, "Units deci-mils\n" );
 #endif
 
     // Write copper layer count
-    fprintf( m_fp, "LayerCount %d\n", m_board->GetCopperLayerCount() );
+    fprintf( m_fp, "LayerCount %d\n", aBoard->GetCopperLayerCount() );
 
     /*  No, EnabledLayers has this information, plus g_TabAllCopperLayerMask is
         global and globals are not allowed in a plugin.
@@ -2785,34 +2784,35 @@ void LEGACY_PLUGIN::saveGENERAL() const
              g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS );
     */
 
-    fprintf( m_fp, "EnabledLayers %08X\n",  m_board->GetEnabledLayers() );
+    fprintf( m_fp, "EnabledLayers %08X\n",  aBoard->GetEnabledLayers() );
 
-    if( m_board->GetEnabledLayers() != m_board->GetVisibleLayers() )
-        fprintf( m_fp, "VisibleLayers %08X\n", m_board->GetVisibleLayers() );
+    if( aBoard->GetEnabledLayers() != aBoard->GetVisibleLayers() )
+        fprintf( m_fp, "VisibleLayers %08X\n", aBoard->GetVisibleLayers() );
 
-    fprintf( m_fp, "Links %d\n",            m_board->GetRatsnestsCount() );
-    fprintf( m_fp, "NoConn %d\n",           m_board->m_NbNoconnect );
+    fprintf( m_fp, "Links %d\n",            aBoard->GetRatsnestsCount() );
+    fprintf( m_fp, "NoConn %d\n",           aBoard->m_NbNoconnect );
 
     // Write Bounding box info
-    EDA_RECT bbbox = m_board->ComputeBoundingBox();
+    EDA_RECT bbbox = ((BOARD*)aBoard)->ComputeBoundingBox();
+
     fprintf( m_fp,  "Di %s %s\n",
                     fmtBIUPair( bbbox.GetX(), bbbox.GetY() ).c_str(),
                     fmtBIUPair( bbbox.GetRight(), bbbox.GetBottom() ).c_str() );
 
-    fprintf( m_fp, "Ndraw %d\n",            m_board->m_Drawings.GetCount() );
-    fprintf( m_fp, "Ntrack %d\n",           m_board->GetNumSegmTrack() );
-    fprintf( m_fp, "Nzone %d\n",            m_board->GetNumSegmZone() );
-    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( m_board->GetDesignSettings().m_BoardThickness ).c_str() );
-    fprintf( m_fp, "Nmodule %d\n",          m_board->m_Modules.GetCount() );
-    fprintf( m_fp, "Nnets %d\n",            m_board->GetNetCount() );
+    fprintf( m_fp, "Ndraw %d\n",            aBoard->m_Drawings.GetCount() );
+    fprintf( m_fp, "Ntrack %d\n",           aBoard->GetNumSegmTrack() );
+    fprintf( m_fp, "Nzone %d\n",            aBoard->GetNumSegmZone() );
+    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().m_BoardThickness ).c_str() );
+    fprintf( m_fp, "Nmodule %d\n",          aBoard->m_Modules.GetCount() );
+    fprintf( m_fp, "Nnets %d\n",            aBoard->GetNetCount() );
     fprintf( m_fp, "$EndGENERAL\n\n" );
 }
 
 
-void LEGACY_PLUGIN::saveSHEET() const
+void LEGACY_PLUGIN::saveSHEET( const BOARD* aBoard ) const
 {
-    const PAGE_INFO&    pageInfo = m_board->GetPageSettings();
-    const TITLE_BLOCK&  tb = m_board->GetTitleBlock();
+    const PAGE_INFO&    pageInfo = aBoard->GetPageSettings();
+    const TITLE_BLOCK&  tb = ((BOARD*)aBoard)->GetTitleBlock();
 
     fprintf( m_fp, "$SHEETDESCR\n" );
 
@@ -2837,10 +2837,10 @@ void LEGACY_PLUGIN::saveSHEET() const
 }
 
 
-void LEGACY_PLUGIN::saveSETUP() const
+void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 {
-    NETCLASS* netclass_default       = m_board->m_NetClasses.GetDefault();
-    const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    NETCLASS* netclass_default       = aBoard->m_NetClasses.GetDefault();
+    const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
     fprintf( m_fp, "$SETUP\n" );
 
@@ -2849,32 +2849,32 @@ void LEGACY_PLUGIN::saveSETUP() const
     fprintf( m_fp,, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
     */
 
-    fprintf( m_fp, "Layers %d\n", m_board->GetCopperLayerCount() );
+    fprintf( m_fp, "Layers %d\n", aBoard->GetCopperLayerCount() );
 
-    unsigned layerMask = ALL_CU_LAYERS & m_board->GetEnabledLayers();
+    unsigned layerMask = ALL_CU_LAYERS & aBoard->GetEnabledLayers();
 
     for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
     {
         if( layerMask & 1 )
         {
             fprintf( m_fp, "Layer[%d] %s %s\n", layer,
-                     TO_UTF8( m_board->GetLayerName( layer ) ),
-                     LAYER::ShowType( m_board->GetLayerType( layer ) ) );
+                     TO_UTF8( aBoard->GetLayerName( layer ) ),
+                     LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
         }
     }
 
     // Save current default track width, for compatibility with older Pcbnew version;
-    fprintf( m_fp, "TrackWidth %s\n",  fmtBIU( m_board->GetCurrentTrackWidth() ).c_str() );
+    fprintf( m_fp, "TrackWidth %s\n",  fmtBIU( aBoard->GetCurrentTrackWidth() ).c_str() );
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
-    for( unsigned ii = 1; ii < m_board->m_TrackWidthList.size(); ii++ )
-        fprintf( m_fp, "TrackWidthList %s\n", fmtBIU( m_board->m_TrackWidthList[ii] ).c_str() );
+    for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
+        fprintf( m_fp, "TrackWidthList %s\n", fmtBIU( aBoard->m_TrackWidthList[ii] ).c_str() );
 
     fprintf( m_fp, "TrackClearence %s\n",  fmtBIU( netclass_default->GetClearance() ).c_str() );
 
     // ZONE_SETTINGS
-    fprintf( m_fp, "ZoneClearence %s\n", fmtBIU( m_board->GetZoneSettings().m_ZoneClearance ).c_str() );
-    fprintf( m_fp, "Zone_45_Only %d\n", m_board->GetZoneSettings().m_Zone_45_Only );
+    fprintf( m_fp, "ZoneClearence %s\n", fmtBIU( aBoard->GetZoneSettings().m_ZoneClearance ).c_str() );
+    fprintf( m_fp, "Zone_45_Only %d\n", aBoard->GetZoneSettings().m_Zone_45_Only );
 
     fprintf( m_fp, "TrackMinWidth %s\n", fmtBIU( bds.m_TrackMinWidth ).c_str() );
 
@@ -2889,10 +2889,10 @@ void LEGACY_PLUGIN::saveSETUP() const
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
-    for( unsigned ii = 1; ii < m_board->m_ViasDimensionsList.size(); ii++ )
+    for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
         fprintf( m_fp, "ViaSizeList %s %s\n",
-                 fmtBIU( m_board->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
-                 fmtBIU( m_board->m_ViasDimensionsList[ii].m_Drill ).c_str() );
+                 fmtBIU( aBoard->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                 fmtBIU( aBoard->m_ViasDimensionsList[ii].m_Drill ).c_str() );
 
     // for old versions compatibility:
     fprintf( m_fp, "MicroViaSize %s\n", fmtBIU( netclass_default->GetuViaDiameter() ).c_str() );
@@ -2926,14 +2926,14 @@ void LEGACY_PLUGIN::saveSETUP() const
     }
     */
 
-    fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( m_board->GetOriginAxisPosition() ).c_str() );
+    fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( aBoard->GetOriginAxisPosition() ).c_str() );
 
     fprintf( m_fp, "VisibleElements %X\n", bds.GetVisibleElements() );
 
     {
         STRING_FORMATTER sf;
 
-        m_board->GetPlotOptions().Format( &sf, 0 );
+        aBoard->GetPlotOptions().Format( &sf, 0 );
 
         wxString record = FROM_UTF8( sf.GetString().c_str() );
 
@@ -2947,22 +2947,22 @@ void LEGACY_PLUGIN::saveSETUP() const
 }
 
 
-void LEGACY_PLUGIN::saveBOARD() const
+void LEGACY_PLUGIN::saveBOARD_ITEMS( const BOARD* aBoard ) const
 {
     // save the nets
-    int netcount = m_board->GetNetCount();
+    int netcount = aBoard->GetNetCount();
     for( int i = 0; i < netcount;  ++i )
-        saveNETINFO_ITEM( m_board->FindNet( i ) );
+        saveNETINFO_ITEM( aBoard->FindNet( i ) );
 
     // Saved nets do not include netclass names, so save netclasses after nets.
-    saveNETCLASSES();
+    saveNETCLASSES( &aBoard->m_NetClasses );
 
     // save the modules
-    for( MODULE* m = m_board->m_Modules;  m;  m = (MODULE*) m->Next() )
-        saveMODULE( m );
+    for( MODULE* m = aBoard->m_Modules;  m;  m = (MODULE*) m->Next() )
+        SaveMODULE( m );
 
     // save the graphics owned by the board (not owned by a module)
-    for( BOARD_ITEM* gr = m_board->m_Drawings;  gr;  gr = gr->Next() )
+    for( BOARD_ITEM* gr = aBoard->m_Drawings;  gr;  gr = gr->Next() )
     {
         switch( gr->Type() )
         {
@@ -2987,19 +2987,19 @@ void LEGACY_PLUGIN::saveBOARD() const
 
     // save the tracks & vias
     fprintf( m_fp, "$TRACK\n" );
-    for( TRACK* track = m_board->m_Track;  track; track = track->Next() )
+    for( TRACK* track = aBoard->m_Track;  track; track = track->Next() )
         saveTRACK( track );
     fprintf( m_fp, "$EndTRACK\n" );
 
     // save the old obsolete zones which were done by segments (tracks)
     fprintf( m_fp, "$ZONE\n" );
-    for( SEGZONE* zone = m_board->m_Zone;  zone;  zone = zone->Next() )
+    for( SEGZONE* zone = aBoard->m_Zone;  zone;  zone = zone->Next() )
         saveTRACK( zone );
     fprintf( m_fp, "$EndZONE\n" );
 
     // save the polygon (which are the newer technology) zones
-    for( int i=0;  i < m_board->GetAreaCount();  ++i )
-        saveZONE_CONTAINER( m_board->GetArea( i ) );
+    for( int i=0;  i < aBoard->GetAreaCount();  ++i )
+        saveZONE_CONTAINER( aBoard->GetArea( i ) );
 
     fprintf( m_fp, "$EndBOARD\n" );
 
@@ -3018,15 +3018,13 @@ void LEGACY_PLUGIN::saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const
 }
 
 
-void LEGACY_PLUGIN::saveNETCLASSES() const
+void LEGACY_PLUGIN::saveNETCLASSES( const NETCLASSES* aNetClasses ) const
 {
-    const NETCLASSES& nc = m_board->m_NetClasses;
-
     // save the default first.
-    saveNETCLASS( nc.GetDefault() );
+    saveNETCLASS( aNetClasses->GetDefault() );
 
     // the rest will be alphabetical in the *.brd file.
-    for( NETCLASSES::const_iterator it = nc.begin();  it != nc.end();  ++it )
+    for( NETCLASSES::const_iterator it = aNetClasses->begin();  it != aNetClasses->end();  ++it )
     {
         NETCLASS*   netclass = it->second;
         saveNETCLASS( netclass );
@@ -3232,8 +3230,9 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
     if( me->GetLocalSolderPasteMargin() != 0 )
         fprintf( m_fp, ".SolderPaste %s\n", fmtBIU( me->GetLocalSolderPasteMargin() ).c_str() );
 
-    if( me->GetLocalSolderPasteMarginRatio() != 0 )
-        fprintf( m_fp, ".SolderPasteRatio %g\n", me->GetLocalSolderPasteMarginRatio() );
+    double ratio = me->GetLocalSolderPasteMarginRatio();
+    if( ratio != 0.0 )
+        fprintf( m_fp, ".SolderPasteRatio %g\n", ratio );
 
     if( me->GetLocalClearance() != 0 )
         fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
@@ -3253,7 +3252,7 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
 }
 
 
-void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
+void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
 {
     char        statusTxt[3];
     double      orient = me->GetOrientation();
@@ -3294,8 +3293,9 @@ void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
     if( me->GetLocalSolderPasteMargin() != 0 )
         fprintf( m_fp, ".SolderPaste %s\n", fmtBIU( me->GetLocalSolderPasteMargin() ).c_str() );
 
-    if( me->GetLocalSolderPasteMarginRatio() != 0 )
-        fprintf( m_fp, ".SolderPasteRatio %g\n", me->GetLocalSolderPasteMarginRatio() );
+    double ratio = me->GetLocalSolderPasteMarginRatio();
+    if( ratio != 0.0 )
+        fprintf( m_fp, ".SolderPasteRatio %g\n", ratio );
 
     if( me->GetLocalClearance() != 0 )
         fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
@@ -3346,7 +3346,7 @@ void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
     for( D_PAD* pad = me->m_Pads;  pad;  pad = pad->Next() )
         savePAD( pad );
 
-    save3D( me );
+    SaveModule3D( me );
 
     fprintf( m_fp, "$EndMODULE %s\n", TO_UTF8( me->GetLibRef() ) );
 
@@ -3354,7 +3354,7 @@ void LEGACY_PLUGIN::saveMODULE( const MODULE* me ) const
 }
 
 
-void LEGACY_PLUGIN::save3D( const MODULE* me ) const
+void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 {
     for( S3D_MASTER* t3D = me->m_3D_Drawings;  t3D;  t3D = t3D->Next() )
     {
@@ -3698,3 +3698,514 @@ void LEGACY_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
 
     fprintf( m_fp, "$EndTEXTPCB\n" );
 }
+
+
+//-----<FOOTPRINT LIBRARY FUNCTIONS>--------------------------------------------
+
+/*
+
+    The legacy file format is being obsoleted and this code will have a short
+    lifetime, so it only needs to be good enough for a short duration of time.
+    Caching all the MODULEs is a bit memory intensive, but it is a considerably
+    faster way of fulfilling the API contract. Otherwise, without the cache, you
+    would have to re-read the file when searching for any MODULE, and this would
+    be very problematic filling a FOOTPRINT_LIST via this PLUGIN API. If memory
+    becomes a concern, consider the cache lifetime policy, which determines the
+    time that a FPL_CACHE is in RAM. Note PLUGIN lifetime also plays a role in
+    cache lifetime.
+
+*/
+
+
+#include <boost/ptr_container/ptr_map.hpp>
+#include <wx/filename.h>
+
+typedef boost::ptr_map< wxString, MODULE >      MODULE_MAP;
+typedef MODULE_MAP::iterator                    MODULE_ITER;
+typedef MODULE_MAP::const_iterator              MODULE_CITER;
+
+
+/**
+ * Class FPL_CACHE
+ * assists only for the footprint portion of the PLUGIN API, and only for the
+ * LEGACY_PLUGIN, so therefore is private to this implementation file, i.e. not placed
+ * into a header.
+ */
+struct FPL_CACHE
+{
+    LEGACY_PLUGIN*  m_owner;        // my owner, I need its LEGACY_PLUGIN::LoadMODULE()
+    wxString        m_lib_name;
+    wxDateTime      m_mod_time;
+    MODULE_MAP      m_modules;      // map or tuple of footprint_name vs. MODULE*
+    bool            m_writable;
+
+    FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath );
+
+    // Most all functions in this class throw IO_ERROR exceptions.  There are no
+    // error codes nor user interface calls from here, nor in any PLUGIN.
+    // Catch these exceptions higher up please.
+
+    /// save the entire legacy library to m_lib_name;
+    void Save();
+
+    void SaveHeader( FILE* aFile );
+
+    void SaveIndex( FILE* aFile );
+
+    void SaveModules( FILE* aFile );
+
+    void SaveEndOfFile( FILE* aFile )
+    {
+        fprintf( aFile, "$EndLIBRARY\n" );
+    }
+
+    void Load();
+
+    void ReadAndVerifyHeader( LINE_READER* aReader );
+
+    void SkipIndex( LINE_READER* aReader );
+
+    void LoadModules( LINE_READER* aReader );
+
+    wxDateTime  GetLibModificationTime();
+};
+
+
+FPL_CACHE::FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
+    m_owner( aOwner ),
+    m_lib_name( aLibraryPath ),
+    m_writable( true )
+{
+}
+
+
+wxDateTime FPL_CACHE::GetLibModificationTime()
+{
+    wxFileName  fn( m_lib_name );
+
+    // update the writable flag while we have a wxFileName, in a network this
+    // is possibly quite dynamic anyway.
+    m_writable = fn.IsFileWritable();
+
+    return fn.GetModificationTime();
+}
+
+
+void FPL_CACHE::Load()
+{
+    FILE* fp = wxFopen( m_lib_name, wxT( "r" ) );
+    if( !fp )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "Unable to open legacy library file '%s'" ), m_lib_name.GetData() ) );
+    }
+
+    // reader now owns fp, will close on exception or return
+    FILE_LINE_READER    reader( fp, m_lib_name );
+
+    ReadAndVerifyHeader( &reader );
+    SkipIndex( &reader );
+    LoadModules( &reader );
+
+    // Remember the file modification time of library file when the
+    // cache snapshot was made, so that in a networked environment we will
+    // reload the cache as needed.
+    m_mod_time = GetLibModificationTime();
+}
+
+
+void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
+{
+    char* line;
+
+    if( !aReader->ReadLine() )
+        goto L_bad_library;
+
+    line = aReader->Line();
+    if( !TESTLINE( "PCBNEW-LibModule-V1" ) )
+        goto L_bad_library;
+
+    while( aReader->ReadLine() )
+    {
+        line = aReader->Line();
+        if( TESTLINE( "Units" ) )
+        {
+            const char* units = strtok( line + SZ( "Units" ), delims );
+
+            if( !strcmp( units, "mm" ) )
+            {
+#if defined( USE_PCBNEW_NANOMETRES )
+                m_owner->diskToBiu = 1000000.0;
+
+#elif defined(DEBUG)
+                // mm to deci-mils:
+                // advanced testing of round tripping only, not supported in non DEBUG build
+                m_owner->diskToBiu = 10000/25.4;
+
+#else
+                THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'PCBNew compiled for deci-mils'" ) );
+#endif
+            }
+
+        }
+        else if( TESTLINE( "$INDEX" ) )
+            return;
+    }
+
+L_bad_library:
+    THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty or is not a legacy library" ),
+        m_lib_name.GetData() ) );
+}
+
+
+void FPL_CACHE::SkipIndex( LINE_READER* aReader )
+{
+    // Some broken INDEX sections have more than one section, due to prior bugs.
+    // So we must read the next line after $EndINDEX tag,
+    // to see if this is not a new $INDEX tag.
+    bool exit = false;
+
+    do
+    {
+        char* line = aReader->Line();
+
+        if( TESTLINE( "$INDEX" ) )
+        {
+            exit = false;
+
+            while( aReader->ReadLine() )
+            {
+                line = aReader->Line();
+
+                if( TESTLINE( "$EndINDEX" ) )
+                {
+                    exit = true;
+                    break;
+                }
+            }
+        }
+        else if( exit )
+            break;
+    } while( aReader->ReadLine() );
+}
+
+
+void FPL_CACHE::LoadModules( LINE_READER* aReader )
+{
+    m_owner->SetReader( aReader );
+
+    do
+    {
+        // test first for the $MODULE, even before reading because of INDEX bug.
+        char* line = aReader->Line();
+
+        if( TESTLINE( "$MODULE" ) )
+        {
+            MODULE* m = m_owner->LoadMODULE();
+
+            // wxString footprintName = m->GetReference();
+            wxString footprintName = m->GetLibRef();
+
+            std::pair<MODULE_ITER, bool> r = m_modules.insert( footprintName, m );
+
+            // m's module is gone here, both on success or failure of insertion.
+            // no memory leak, container deleted m on failure.
+
+            if( !r.second )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                    _( "library '%s' has a duplicate footprint named '%s'" ),
+                    m_lib_name.GetData(), footprintName.GetData() ) );
+            }
+        }
+
+    } while( aReader->ReadLine() );
+}
+
+
+void FPL_CACHE::Save()
+{
+    if( !m_writable )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "Legacy library file '%s' is read only" ), m_lib_name.GetData() ) );
+    }
+
+    wxString tempFileName = wxFileName::CreateTempFileName( m_lib_name );
+
+    // wxLogDebug( "tempFileName:'%s'\n", TO_UTF8( tempFileName ) );
+
+    // a block {} scope to fire wxFFile wxf()'s destructor
+    {
+        FILE* fp = wxFopen( tempFileName, wxT( "w" ) );
+        if( !fp )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                _( "Unable to open or create legacy library file '%s'" ),
+                m_lib_name.GetData() ) );
+        }
+
+        // wxf now owns fp, will close on exception or exit from
+        // this block {} scope
+        wxFFile wxf( fp );
+
+        SaveHeader( fp );
+        SaveIndex(  fp );
+        SaveModules( fp );
+        SaveEndOfFile( fp );
+    }
+
+    // fp is now closed here, and that seems proper before trying to rename
+    // the temporary file to m_lib_name.
+
+    wxRemove( m_lib_name );     // it is not an error if this does not exist
+
+    if( wxRename( tempFileName, m_lib_name ) )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "Unable to rename tempfile '%s' to to library file '%s'" ),
+            tempFileName.GetData(),
+            m_lib_name.GetData() ) );
+    }
+}
+
+
+void FPL_CACHE::SaveHeader( FILE* aFile )
+{
+    fprintf( aFile, "%s  %s\n", FOOTPRINT_LIBRARY_HEADER, TO_UTF8( DateAndTime() ) );
+    fprintf( aFile, "# encoding utf-8\n" );
+#if defined( USE_PCBNEW_NANOMETRES )
+    fprintf( aFile, "Units mm\n" );
+#else
+    fprintf( aFile, "Units deci-mils\n" );
+#endif
+}
+
+
+void FPL_CACHE::SaveIndex( FILE* aFile )
+{
+    fprintf( aFile, "$INDEX\n" );
+
+    for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
+    {
+        fprintf( aFile, "%s\n", TO_UTF8( it->first ) );
+    }
+
+    fprintf( aFile, "$EndINDEX\n" );
+}
+
+
+void FPL_CACHE::SaveModules( FILE* aFile )
+{
+    m_owner->SetFilePtr( aFile );
+
+    for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
+    {
+        m_owner->SaveMODULE( it->second );
+    }
+}
+
+
+void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
+{
+    if( !m_cache || m_cache->m_lib_name != aLibraryPath ||
+        // somebody else on a network touched the library:
+        m_cache->m_mod_time != m_cache->GetLibModificationTime() )
+    {
+        // a spectacular episode in memory management:
+        delete m_cache;
+        m_cache = new FPL_CACHE( this, aLibraryPath );
+        m_cache->Load();
+    }
+}
+
+
+wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
+    init( aProperties );
+
+    cacheLib( aLibraryPath );
+
+    const MODULE_MAP&   mods = m_cache->m_modules;
+
+    wxArrayString   ret;
+
+    for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
+    {
+        ret.Add( it->first );
+    }
+
+    return ret;
+}
+
+
+MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                    PROPERTIES* aProperties )
+{
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
+    init( aProperties );
+
+    cacheLib( aLibraryPath );
+
+    const MODULE_MAP&   mods = m_cache->m_modules;
+
+    MODULE_CITER it = mods.find( aFootprintName );
+
+    if( it == mods.end() )
+    {
+        /*
+        THROW_IO_ERROR( wxString::Format( _( "No '%s' footprint in library '%s'" ),
+            aFootprintName.GetData(), aLibraryPath.GetData() ) );
+        */
+
+        return NULL;
+    }
+
+    // copy constructor to clone the already loaded MODULE
+    return new MODULE( *it->second );
+}
+
+
+void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties )
+{
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
+    init( aProperties );
+
+    cacheLib( aLibraryPath );
+
+    if( !m_cache->m_writable )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
+    }
+
+    wxString footprintName = aFootprint->GetLibRef();
+
+    MODULE_MAP&  mods = m_cache->m_modules;
+
+    // quietly overwrite any by same name.
+    MODULE_CITER it = mods.find( footprintName );
+    if( it != mods.end() )
+    {
+        mods.erase( footprintName );
+    }
+
+    // I need my own copy for the cache
+    MODULE* my_module = new MODULE( *aFootprint );
+
+    // and it's time stamp must be 0, it should have no parent, orientation should
+    // be zero, and it should be on the front layer.
+
+    my_module->SetTimeStamp( 0 );
+    my_module->SetParent( 0 );
+
+    my_module->SetOrientation( 0 );
+
+    if( my_module->GetLayer() != LAYER_N_FRONT )
+        my_module->Flip( my_module->GetPosition() );
+
+    mods.insert( footprintName, my_module );
+
+    m_cache->Save();
+}
+
+
+void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName )
+{
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
+    init( NULL );
+
+    cacheLib( aLibraryPath );
+
+    if( !m_cache->m_writable )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
+    }
+
+    size_t erasedCount = m_cache->m_modules.erase( aFootprintName );
+
+    if( erasedCount != 1 )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "library '%s' has no footprint '%s' to delete" ),
+            aLibraryPath.GetData(), aFootprintName.GetData() ) );
+    }
+
+    m_cache->Save();
+}
+
+
+void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    if( wxFileExists( aLibraryPath ) )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "library '%s' already exists, will not create anew" ),
+            aLibraryPath.GetData() ) );
+    }
+
+    LOCALE_IO   toggle;
+
+    init( NULL );
+
+    delete m_cache;
+    m_cache = new FPL_CACHE( this, aLibraryPath );
+    m_cache->Save();
+    m_cache->Load();    // update m_writable and m_mod_time
+}
+
+
+void LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+{
+    wxFileName fn = aLibraryPath;
+
+    if( !fn.FileExists() )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "library '%s' does not exist, cannot be deleted" ),
+            aLibraryPath.GetData() ) );
+    }
+
+    // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
+    // we don't want that.  we want bare metal portability with no UI here.
+    if( wxRemove( aLibraryPath ) )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "library '%s' cannot be deleted" ),
+            aLibraryPath.GetData() ) );
+    }
+}
+
+
+bool LEGACY_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
+{
+    LOCALE_IO   toggle;
+
+    init( NULL );
+
+    cacheLib( aLibraryPath );
+
+    return m_cache->m_writable;
+}
+
+
+LEGACY_PLUGIN::LEGACY_PLUGIN() :
+    m_board( 0 ),
+    m_props( 0 ),
+    m_reader( 0 ),
+    m_fp( 0 ),
+    m_cache( 0 )
+{
+    init( NULL );
+}
+
+
+LEGACY_PLUGIN::~LEGACY_PLUGIN()
+{
+    delete m_cache;
+}
+

@@ -246,8 +246,7 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
         return; // canceled by user
 
     buffer = dlg.GetValue( );
-    GetDesignSettings().m_ModuleSegmentWidth =
-            ReturnValueFromString( g_UserUnit, buffer, GetScreen()->GetInternalUnits() );
+    GetDesignSettings().m_ModuleSegmentWidth = ReturnValueFromString( g_UserUnit, buffer );
 
     if( aEdge )
     {

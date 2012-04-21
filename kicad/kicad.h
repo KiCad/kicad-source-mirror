@@ -157,7 +157,8 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
 enum TreeFileType {
     TREE_PROJECT = 1,
     TREE_SCHEMA,        // Schematic file (.sch)
-    TREE_PCB,           // board file (.brd)
+    TREE_LEGACY_PCB,    // board file (.brd) legacy format
+    TREE_SEXP_PCB,      // board file (.kicad_brd) new s expression format
     TREE_GERBER,        // Gerber  file (.pho, .g*)
     TREE_PDF,           // PDF file (.pdf)
     TREE_TXT,           // ascii text file (.txt)

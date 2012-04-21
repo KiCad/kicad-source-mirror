@@ -98,7 +98,7 @@ double PLOTTER::user_to_device_size( double size )
 
 void PLOTTER::center_square( const wxPoint& position, int diametre, FILL_T fill )
 {
-    int radius     = wxRound( diametre / 2.8284 );
+    int radius     = KiROUND( diametre / 2.8284 );
     static std::vector< wxPoint > corner_list;
     corner_list.clear();
     wxPoint corner;

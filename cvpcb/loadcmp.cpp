@@ -17,8 +17,7 @@
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <class_DisplayFootprintsFrame.h>
-#include <richio.h>
-#include <filter_reader.h>
+#include <io_mgr.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -29,122 +28,50 @@
  * @param CmpName - Module name
  * @return - a pointer to the loaded module or NULL.
  */
-MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& CmpName )
+MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 {
-    int        Found = 0;
-    unsigned   ii;
-    char*      Line;
-    char       Name[255];
-    wxString   tmp, msg;
-    wxFileName fn;
-    MODULE*    Module = NULL;
     CVPCB_MAINFRAME* parent = ( CVPCB_MAINFRAME* ) GetParent();
 
-    for( ii = 0; ii < parent->m_ModuleLibNames.GetCount(); ii++ )
+    try
     {
-        fn = parent->m_ModuleLibNames[ii];
-        fn.SetExt( FootprintLibFileExtension );
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-        tmp = wxGetApp().FindLibraryPath( fn );
-
-        if( !tmp )
+        for( unsigned i = 0; i < parent->m_ModuleLibNames.GetCount();  ++i )
         {
-            msg.Printf( _( "PCB foot print library file <%s> could not be \
-found in the default search paths." ),
-                        GetChars( fn.GetFullName() ) );
-            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
-            continue;
-        }
+            wxFileName fn = parent->m_ModuleLibNames[i];
 
-        FILE* file = wxFopen( tmp, wxT( "rt" ) );
+            fn.SetExt( FootprintLibFileExtension );
 
-        if( file == NULL )
-        {
-            msg.Printf( _( "Could not open PCB foot print library file <%s>." ),
-                        GetChars( tmp ) );
-            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
-            continue;
-        }
+            wxString libPath = wxGetApp().FindLibraryPath( fn );
 
-        FILE_LINE_READER fileReader( file, tmp );
-
-        FILTER_READER reader( fileReader );
-
-        /* Read header. */
-        reader.ReadLine();
-        Line = reader.Line();
-        StrPurge( Line );
-
-        if( strnicmp( Line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
-        {
-            msg.Printf( _( "<%s> is not a valid KiCad PCB foot print library." ),
-                        GetChars( tmp ) );
-            wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
-            fclose( file );
-            return NULL;
-        }
-
-        Found = 0;
-
-        while( !Found && reader.ReadLine() )
-        {
-            Line = reader.Line();
-            if( strncmp( Line, "$MODULE", 6 ) == 0 )
-                break;
-
-            if( strnicmp( Line, "$INDEX", 6 ) == 0 )
+            if( !libPath )
             {
-                while( reader.ReadLine() )
-                {
-                    Line = reader.Line();
+                wxString msg = wxString::Format(
+                    _("PCB foot print library file <%s> could not be found in the default search paths." ),
+                    fn.GetFullName().GetData() );
 
-                    if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
-                        break;
+                // @todo we should not be using wxMessageBox directly.
+                wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
+                continue;
+            }
 
-                    StrPurge( Line );
+            MODULE* footprint = pi->FootprintLoad( libPath, aFootprintName );
 
-                    if( stricmp( Line, TO_UTF8( CmpName ) ) == 0 )
-                    {
-                        Found = 1;
-                        break;
-                    }
-                }
+            if( footprint )
+            {
+                footprint->SetPosition( wxPoint( 0, 0 ) );
+                return footprint;
             }
         }
-
-        while( Found && reader.ReadLine() )
-        {
-            Line = reader.Line();
-            if( Line[0] != '$' )
-                continue;
-
-            if( Line[1] != 'M' )
-                continue;
-
-            if( strnicmp( Line, "$MODULE", 7 ) != 0 )
-                continue;
-
-            /* Read component name. */
-            sscanf( Line + 7, " %s", Name );
-
-            if( stricmp( Name, TO_UTF8( CmpName ) ) == 0 )
-            {
-                Module = new MODULE( GetBoard() );
-
-                // Switch the locale to standard C (needed to print floating
-                // point numbers like 1.3)
-                SetLocaleTo_C_standard();
-                Module->ReadDescr( &reader );
-                SetLocaleTo_Default();       // revert to the current locale
-                Module->SetPosition( wxPoint( 0, 0 ) );
-                return Module;
-            }
-        }
-
-        file = NULL;
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( this, ioe.errorText );
+        return NULL;
     }
 
-    msg.Printf( _( "Module %s not found" ), CmpName.GetData() );
+    wxString msg = wxString::Format( _( "Footprint '%s' not found" ), aFootprintName.GetData() );
     DisplayError( this, msg );
     return NULL;
 }
+

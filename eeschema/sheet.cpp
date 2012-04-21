@@ -189,13 +189,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     else if( loadFromFile )
         aSheet->Load( this );
 
-    aSheet->SetFileNameSize( ReturnValueFromString( g_UserUnit,
-                                                    dlg.GetFileNameTextSize(),
-                                                    m_internalUnits ) );
+    aSheet->SetFileNameSize( ReturnValueFromString( g_UserUnit, dlg.GetFileNameTextSize() ) );
     aSheet->SetName( dlg.GetSheetName() );
-    aSheet->SetSheetNameSize( ReturnValueFromString( g_UserUnit,
-                                                     dlg.GetSheetNameTextSize(),
-                                                     m_internalUnits ) );
+    aSheet->SetSheetNameSize( ReturnValueFromString( g_UserUnit, dlg.GetSheetNameTextSize() ) );
 
     if( aSheet->GetName().IsEmpty() )
         aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() ) );
@@ -235,8 +231,8 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
         if( sheet->HasPins() )
         {
-            int gridSizeX = wxRound( screen->GetGridSize().x );
-            int gridSizeY = wxRound( screen->GetGridSize().y );
+            int gridSizeX = KiROUND( screen->GetGridSize().x );
+            int gridSizeY = KiROUND( screen->GetGridSize().y );
 
             // If the sheet has pins, use the pin positions to clamp the minimum height.
             height = ( height < sheet->GetMinHeight() + gridSizeY ) ?

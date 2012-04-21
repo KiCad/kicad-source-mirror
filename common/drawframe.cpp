@@ -110,7 +110,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_snapToGrid          = true;
 
     // Internal units per inch: = 1000 for schema, = 10000 for PCB
-    m_internalUnits       = EESCHEMA_INTERNAL_UNIT;
     minsize.x             = 470;
     minsize.y             = 350 + m_MsgFrameHeight;
 
@@ -369,7 +368,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     else
     {
         id--;
-        int selectedZoom = GetScreen()->m_ZoomList[id];
+        double selectedZoom = GetScreen()->m_ZoomList[id];
 
         if( GetScreen()->GetZoom() == selectedZoom )
             return;
@@ -516,8 +515,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
     clientSize = m_canvas->GetClientSize();
 
     // The logical size of the client window.
-    logicalClientSize.x = wxRound( (double) clientSize.x / scalar );
-    logicalClientSize.y = wxRound( (double) clientSize.y / scalar );
+    logicalClientSize.x = KiROUND( (double) clientSize.x / scalar );
+    logicalClientSize.y = KiROUND( (double) clientSize.y / scalar );
 
     // A corner of the drawing in internal units.
     wxSize corner = GetPageSizeIU();
@@ -532,14 +531,14 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                 drawingRect.GetTop(), drawingRect.GetBottom() );
 
     // The size of the client rectangle in logical units.
-    int x = wxRound( (double) aCenterPosition.x - ( (double) logicalClientSize.x / 2.0 ) );
-    int y = wxRound( (double) aCenterPosition.y - ( (double) logicalClientSize.y / 2.0 ) );
+    int x = KiROUND( (double) aCenterPosition.x - ( (double) logicalClientSize.x / 2.0 ) );
+    int y = KiROUND( (double) aCenterPosition.y - ( (double) logicalClientSize.y / 2.0 ) );
 
     // If drawn around the center, adjust the client rectangle accordingly.
     if( screen->m_Center )
     {
-        x += wxRound( (double) drawingRect.width / 2.0 );
-        y += wxRound( (double) drawingRect.height / 2.0 );
+        x += KiROUND( (double) drawingRect.width / 2.0 );
+        y += KiROUND( (double) drawingRect.height / 2.0 );
     }
 
     wxRect logicalClientRect( wxPoint( x, y ), logicalClientSize );
@@ -575,7 +574,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                 else
                     virtualSize.x = logicalClientRect.width;
             }
-            else if( logicalClientRect.width < drawingRect.width )
+            else
             {
                 if( drawingCenterX > clientCenterX )
                     virtualSize.x = drawingRect.width +
@@ -585,10 +584,6 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                                     ( (logicalClientRect.GetRight() - drawingRect.GetRight() ) * 2 );
                 else
                     virtualSize.x = drawingRect.width;
-            }
-            else
-            {
-                virtualSize.x = drawingRect.width;
             }
         }
 
@@ -610,7 +605,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                 else
                     virtualSize.y = logicalClientRect.height;
             }
-            else if( logicalClientRect.height < drawingRect.height )
+            else
             {
                 if( drawingCenterY > clientCenterY )
                     virtualSize.y = drawingRect.height +
@@ -621,23 +616,19 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
                 else
                     virtualSize.y = drawingRect.height;
             }
-            else
-            {
-                virtualSize.y = drawingRect.height;
-            }
         }
     }
 
 
     if( screen->m_Center )
     {
-        screen->m_DrawOrg.x = -( wxRound( (double) virtualSize.x / 2.0 ) );
-        screen->m_DrawOrg.y = -( wxRound( (double) virtualSize.y / 2.0 ) );
+        screen->m_DrawOrg.x = -( KiROUND( (double) virtualSize.x / 2.0 ) );
+        screen->m_DrawOrg.y = -( KiROUND( (double) virtualSize.y / 2.0 ) );
     }
     else
     {
-        screen->m_DrawOrg.x = -( wxRound( (double) (virtualSize.x - drawingRect.width) / 2.0 ) );
-        screen->m_DrawOrg.y = -( wxRound( (double) (virtualSize.y - drawingRect.height) / 2.0 ) );
+        screen->m_DrawOrg.x = -( KiROUND( (double) (virtualSize.x - drawingRect.width) / 2.0 ) );
+        screen->m_DrawOrg.y = -( KiROUND( (double) (virtualSize.y - drawingRect.height) / 2.0 ) );
     }
 
     /* Always set scrollbar pixels per unit to 1 unless you want the zoom
@@ -649,20 +640,20 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
     screen->m_ScrollPixelsPerUnitX = screen->m_ScrollPixelsPerUnitY = 1;
 
     // Calculate the number of scroll bar units for the given zoom level in device units.
-    unitsX = wxRound( (double) virtualSize.x * scalar );
-    unitsY = wxRound( (double) virtualSize.y * scalar );
+    unitsX = KiROUND( (double) virtualSize.x * scalar );
+    unitsY = KiROUND( (double) virtualSize.y * scalar );
 
     // Calculate the scroll bar position in logical units to place the center position at
     // the center of client rectangle.
     screen->SetScrollCenterPosition( aCenterPosition );
-    posX = aCenterPosition.x - wxRound( (double) logicalClientRect.width / 2.0 ) -
+    posX = aCenterPosition.x - KiROUND( (double) logicalClientRect.width / 2.0 ) -
            screen->m_DrawOrg.x;
-    posY = aCenterPosition.y - wxRound( (double) logicalClientRect.height / 2.0 ) -
+    posY = aCenterPosition.y - KiROUND( (double) logicalClientRect.height / 2.0 ) -
            screen->m_DrawOrg.y;
 
     // Convert scroll bar position to device units.
-    posX = wxRound( (double) posX * scalar );
-    posY = wxRound( (double) posY * scalar );
+    posX = KiROUND( (double) posX * scalar );
+    posY = KiROUND( (double) posY * scalar );
 
     if( posX < 0 )
     {
