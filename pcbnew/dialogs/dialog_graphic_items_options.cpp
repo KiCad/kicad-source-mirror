@@ -97,30 +97,20 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::initValues()
 
 void DIALOG_GRAPHIC_ITEMS_OPTIONS::OnOkClick( wxCommandEvent& event )
 {
-    m_brdSettings.m_DrawSegmentWidth =
-        ReturnValueFromTextCtrl( *m_OptPcbSegmWidth, PCB_INTERNAL_UNIT );
-    m_brdSettings.m_EdgeSegmentWidth =
-        ReturnValueFromTextCtrl( *m_OptPcbEdgesWidth, PCB_INTERNAL_UNIT );
-    m_brdSettings.m_PcbTextWidth =
-        ReturnValueFromTextCtrl( *m_OptPcbTextWidth, PCB_INTERNAL_UNIT );
-    m_brdSettings.m_PcbTextSize.y =
-        ReturnValueFromTextCtrl( *m_OptPcbTextVSize, PCB_INTERNAL_UNIT );
-    m_brdSettings.m_PcbTextSize.x =
-        ReturnValueFromTextCtrl( *m_OptPcbTextHSize, PCB_INTERNAL_UNIT );
+    m_brdSettings.m_DrawSegmentWidth = ReturnValueFromTextCtrl( *m_OptPcbSegmWidth );
+    m_brdSettings.m_EdgeSegmentWidth = ReturnValueFromTextCtrl( *m_OptPcbEdgesWidth );
+    m_brdSettings.m_PcbTextWidth = ReturnValueFromTextCtrl( *m_OptPcbTextWidth );
+    m_brdSettings.m_PcbTextSize.y = ReturnValueFromTextCtrl( *m_OptPcbTextVSize );
+    m_brdSettings.m_PcbTextSize.x = ReturnValueFromTextCtrl( *m_OptPcbTextHSize );
 
     m_parent->GetBoard()->SetDesignSettings( m_brdSettings );
 
-    m_brdSettings.m_ModuleSegmentWidth =
-        ReturnValueFromTextCtrl( *m_OptModuleEdgesWidth, PCB_INTERNAL_UNIT );
-    m_brdSettings.m_ModuleTextWidth =
-        ReturnValueFromTextCtrl( *m_OptModuleTextWidth, PCB_INTERNAL_UNIT );
-    m_brdSettings.m_ModuleTextSize.y =
-        ReturnValueFromTextCtrl( *m_OptModuleTextVSize, PCB_INTERNAL_UNIT );
-    m_brdSettings.m_ModuleTextSize.x =
-        ReturnValueFromTextCtrl( *m_OptModuleTextHSize, PCB_INTERNAL_UNIT );
+    m_brdSettings.m_ModuleSegmentWidth = ReturnValueFromTextCtrl( *m_OptModuleEdgesWidth );
+    m_brdSettings.m_ModuleTextWidth = ReturnValueFromTextCtrl( *m_OptModuleTextWidth );
+    m_brdSettings.m_ModuleTextSize.y = ReturnValueFromTextCtrl( *m_OptModuleTextVSize );
+    m_brdSettings.m_ModuleTextSize.x = ReturnValueFromTextCtrl( *m_OptModuleTextHSize );
 
-    g_DrawDefaultLineThickness =
-        ReturnValueFromTextCtrl( *m_DefaultPenSizeCtrl, PCB_INTERNAL_UNIT );
+    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DefaultPenSizeCtrl );
 
     if( g_DrawDefaultLineThickness < 0 )
         g_DrawDefaultLineThickness = 0;

@@ -148,7 +148,7 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
     Line = m_TextValue->GetValue();
     m_parent->m_textOrientation = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
     wxString msg = m_TextSize->GetValue();
-    m_parent->m_textSize = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    m_parent->m_textSize = ReturnValueFromString( g_UserUnit, msg );
     m_parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
     m_parent->m_drawSpecificUnit = m_CommonUnit->GetValue() ? false : true;
 

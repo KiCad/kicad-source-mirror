@@ -1410,7 +1410,7 @@ void ClipAndDrawFilledPoly( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPoints[], in
 
     for( cpointIterator cit = outputPolygon.begin(); cit != outputPolygon.end(); ++cit )
     {
-        clippedPolygon.push_back( wxPoint( wxRound( cit->X ), wxRound( cit->Y ) ) );
+        clippedPolygon.push_back( wxPoint( KiROUND( cit->X ), KiROUND( cit->Y ) ) );
     }
 
     if( clippedPolygon.size() )

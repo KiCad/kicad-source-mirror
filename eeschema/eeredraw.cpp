@@ -31,6 +31,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <wxEeschemaStruct.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <class_library.h>
@@ -70,7 +71,7 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GetScreen()->Draw( m_canvas, DC, GR_DEFAULT_DRAWMODE );
 
-    TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
+    TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness, MILS_TO_IU_SCALAR );
 
 #ifdef USE_WX_OVERLAY
     if( IsShown() )

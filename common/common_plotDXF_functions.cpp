@@ -155,8 +155,8 @@ void DXF_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor
     size.x = aImage.GetWidth();
     size.y = aImage.GetHeight();
 
-    size.x = wxRound( size.x * aScaleFactor );
-    size.y = wxRound( size.y * aScaleFactor );
+    size.x = KiROUND( size.x * aScaleFactor );
+    size.y = KiROUND( size.y * aScaleFactor );
 
     wxPoint start = aPos;
     start.x -= size.x / 2;
@@ -241,7 +241,7 @@ void DXF_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
         return;
 
     user_to_device_coordinates( centre );
-    radius = wxRound( user_to_device_size( radius ) );
+    radius = KiROUND( user_to_device_size( radius ) );
 
     /* DXF ARC */
     wxString cname = ColorRefs[current_color].m_Name;

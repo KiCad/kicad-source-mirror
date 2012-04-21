@@ -33,6 +33,7 @@
 #include <base_struct.h>
 #include <class_base_screen.h>
 #include <id.h>
+#include <base_units.h>
 
 
 #define CURSOR_SIZE     12      /// size of the cross cursor.
@@ -86,12 +87,6 @@ void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
 }
 
 
-int BASE_SCREEN::GetInternalUnits( void )
-{
-    return EESCHEMA_INTERNAL_UNIT;
-}
-
-
 double BASE_SCREEN::GetScalingFactor() const
 {
     double scale = 1.0 / GetZoom();
@@ -99,7 +94,7 @@ double BASE_SCREEN::GetScalingFactor() const
 }
 
 
-void BASE_SCREEN::SetScalingFactor(double aScale )
+void BASE_SCREEN::SetScalingFactor( double aScale )
 {
     double zoom = aScale;
 
@@ -113,15 +108,6 @@ void BASE_SCREEN::SetScalingFactor(double aScale )
         zoom = m_ZoomList[idxmax];
 
     SetZoom( zoom );
-}
-
-
-void BASE_SCREEN::SetZoomList( const wxArrayDouble& zoomlist )
-{
-    if( !m_ZoomList.IsEmpty() )
-        m_ZoomList.Empty();
-
-    m_ZoomList = zoomlist;
 }
 
 
@@ -164,12 +150,10 @@ bool BASE_SCREEN::SetZoom( double coeff )
 
 bool BASE_SCREEN::SetNextZoom()
 {
-    size_t i;
-
     if( m_ZoomList.IsEmpty() || m_Zoom >= m_ZoomList.Last() )
         return false;
 
-    for( i = 0; i < m_ZoomList.GetCount(); i++ )
+    for( unsigned i = 0; i < m_ZoomList.GetCount(); i++ )
     {
         if( m_Zoom < m_ZoomList[i] )
         {
@@ -320,30 +304,14 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int id )
 
 void BASE_SCREEN::AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id )
 {
-    double x, y;
     wxRealPoint new_size;
     GRID_TYPE new_grid;
 
-    switch( aUnit )
-    {
-    case MILLIMETRES:
-        x = size.x / 25.4;
-        y = size.y / 25.4;
-        break;
-
-    default:
-    case INCHES:
-    case UNSCALED_UNITS:
-        x = size.x;
-        y = size.y;
-        break;
-    }
-
-    new_size.x = x * GetInternalUnits();
-    new_size.y = y * GetInternalUnits();
-
+    new_size.x = From_User_Unit( aUnit, size.x );
+    new_size.y = From_User_Unit( aUnit, size.y );
     new_grid.m_Id = id;
     new_grid.m_Size = new_size;
+
     AddGrid( new_grid );
 }
 
@@ -394,12 +362,12 @@ wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoi
     wxPoint gridOrigin = m_GridOrigin;
 
     double offset = fmod( gridOrigin.x, gridSize.x );
-    int x = wxRound( (aPosition.x - offset) / gridSize.x );
-    pt.x = wxRound( x * gridSize.x + offset );
+    int x = KiROUND( (aPosition.x - offset) / gridSize.x );
+    pt.x = KiROUND( x * gridSize.x + offset );
 
     offset = fmod( gridOrigin.y, gridSize.y );
-    int y = wxRound( (aPosition.y - offset) / gridSize.y );
-    pt.y = wxRound ( y * gridSize.y + offset );
+    int y = KiROUND( (aPosition.y - offset) / gridSize.y );
+    pt.y = KiROUND ( y * gridSize.y + offset );
 
     return pt;
 }
@@ -419,8 +387,8 @@ wxPoint BASE_SCREEN::GetCrossHairScreenPosition() const
     wxPoint pos = m_crossHairPosition - m_DrawOrg;
     double scalar = GetScalingFactor();
 
-    pos.x = wxRound( (double) pos.x * scalar );
-    pos.y = wxRound( (double) pos.y * scalar );
+    pos.x = KiROUND( (double) pos.x * scalar );
+    pos.y = KiROUND( (double) pos.y * scalar );
 
     return pos;
 }

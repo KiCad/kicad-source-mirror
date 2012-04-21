@@ -161,7 +161,7 @@ void DIALOG_ORIENT_FOOTPRINTS::OnOkClick( wxCommandEvent& event )
         return;
     }
 
-    newOrientation = wxRound(d_orient * 10);
+    newOrientation = KiROUND(d_orient * 10);
     NORMALIZE_ANGLE_180( newOrientation );
     EndModal( wxID_OK );
 }

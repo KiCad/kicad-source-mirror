@@ -110,8 +110,8 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
-    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_CurrentModule->m_LocalClearance );
-    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_CurrentModule->m_LocalSolderMaskMargin );
+    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_CurrentModule->GetLocalClearance() );
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_CurrentModule->GetLocalSolderMaskMargin() );
 
     // These 2 parameters are usually < 0, so prepare entering a negative
     // value, if current is 0
@@ -479,12 +479,9 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->m_Value->Copy( m_ValueCopy );
 
     // Initialize masks clearances
-    m_CurrentModule->SetLocalClearance(
-        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, m_Parent->GetInternalUnits() ) );
-    m_CurrentModule->SetLocalSolderMaskMargin(
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->GetInternalUnits() ) );
-    m_CurrentModule->SetLocalSolderPasteMargin(
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->GetInternalUnits() ) );
+    m_CurrentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
+    m_CurrentModule->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
+    m_CurrentModule->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
 
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
@@ -520,8 +517,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     }
 
     // Set Module Position
-    modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX, PCB_INTERNAL_UNIT );
-    modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY, PCB_INTERNAL_UNIT );
+    modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX );
+    modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY );
     m_CurrentModule->SetPosition( modpos );
 
     if( m_AutoPlaceCtrl->GetSelection() == 1 )

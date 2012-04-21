@@ -39,7 +39,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
 */
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::initDlg()
 {
-    SetFocus();
     m_AliasLocation = -1;
 
     LIB_COMPONENT* component = m_Parent->GetComponent();

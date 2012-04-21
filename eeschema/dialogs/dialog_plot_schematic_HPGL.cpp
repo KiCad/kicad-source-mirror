@@ -207,19 +207,19 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::AcceptPlotOffset( wxCommandEvent& event )
     {
         wxString msg = m_PlotOrgPosition_X->GetValue();
 
-        s_Offset.x = ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
+        s_Offset.x = ReturnValueFromString( g_UserUnit, msg );
 
         msg = m_PlotOrgPosition_Y->GetValue();
 
-        s_Offset.y = ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
+        s_Offset.y = ReturnValueFromString( g_UserUnit, msg );
     }
 }
 
 
 void DIALOG_PLOT_SCHEMATIC_HPGL::SetPenWidth( )
 {
-    g_HPGL_Pen_Descr.m_Pen_Diam = ReturnValueFromTextCtrl( *m_penWidthCtrl,
-                                                           EESCHEMA_INTERNAL_UNIT);
+    g_HPGL_Pen_Descr.m_Pen_Diam = ReturnValueFromTextCtrl( *m_penWidthCtrl );
+
     if( g_HPGL_Pen_Descr.m_Pen_Diam > 100 )
         g_HPGL_Pen_Descr.m_Pen_Diam = 100;
 
@@ -262,11 +262,11 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::HPGL_Plot( bool aPlotAll )
     {
         wxString msg = m_PlotOrgPosition_X->GetValue();
 
-        s_Offset.x = ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
+        s_Offset.x = ReturnValueFromString( g_UserUnit, msg );
 
         msg = m_PlotOrgPosition_Y->GetValue();
 
-        s_Offset.y = ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
+        s_Offset.y = ReturnValueFromString( g_UserUnit, msg );
     }
 
     Plot_Schematic_HPGL( aPlotAll );

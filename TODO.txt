@@ -62,16 +62,11 @@ Dick's Peronal TODO Items  (Last Update: 5-April-2012)
    *)   a BOARD is a fully self contained document description.
    *)   plugin developers do not have to access globals, since a plugin could
         very well be a dynamically loaded DLL/DSO.
-        A problem remain with BASE_SCREEN
+   One final problem remains with BASE_SCREEN's grid origin, easy solution is to
+   move just that one field into the BOARD.
 
-2) Extend PLUGIN API to facillitate loading and saving of modules.
-
-3) Switch to PLUGIN, kill off ioascii.cpp and item_io.cpp, deleting them.
-
-4) Check back with Vladimir about finishing the nanometer work.
-
-5) Do an EAGLE XML import PCBNEW PLUGIN, and possibly add export support to it.
+2) Do an EAGLE XML import PCBNEW PLUGIN, and possibly add export support to it.
    This is PLUGIN::Load() and maybe PLUGIN::Save().
 
-6) Get back to the SWEET work.
+3) Get back to the SWEET work.
 

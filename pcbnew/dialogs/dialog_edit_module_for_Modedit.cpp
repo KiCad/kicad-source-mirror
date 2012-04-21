@@ -149,8 +149,9 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     wxString  msg;
-    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_CurrentModule->m_LocalClearance );
-    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_CurrentModule->m_LocalSolderMaskMargin );
+    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_CurrentModule->GetLocalClearance() );
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_CurrentModule->GetLocalSolderMaskMargin() );
+
     // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
     PutValueInLocalUnits( *m_SolderPasteMarginCtrl, m_CurrentModule->GetLocalSolderPasteMargin() );
 
@@ -367,16 +368,11 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->m_Value->Copy(m_ValueCopy );
 
     // Initialize masks clearances
-    int internalUnit = m_Parent->GetInternalUnits();
+    m_CurrentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
 
-    m_CurrentModule->SetLocalClearance(
-        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, internalUnit ) );
+    m_CurrentModule->SetLocalSolderMaskMargin( ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl ) );
 
-    m_CurrentModule->SetLocalSolderMaskMargin(
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, internalUnit ) );
-
-    m_CurrentModule->SetLocalSolderPasteMargin(
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, internalUnit ) );
+    m_CurrentModule->SetLocalSolderPasteMargin( ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl ) );
     double   dtmp;
     wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );

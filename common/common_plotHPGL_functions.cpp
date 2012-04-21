@@ -112,8 +112,8 @@ void HPGL_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFacto
     size.x = aImage.GetWidth();
     size.y = aImage.GetHeight();
 
-    size.x = wxRound( size.x * aScaleFactor );
-    size.y = wxRound( size.y * aScaleFactor );
+    size.x = KiROUND( size.x * aScaleFactor );
+    size.y = KiROUND( size.y * aScaleFactor );
 
     wxPoint start = aPos;
     start.x -= size.x / 2;
@@ -285,7 +285,7 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 
     if( trace_mode == FILLED )
     {
-        flash_pad_rect( pos, wxSize( size.x, deltaxy + wxRound( pen_diameter ) ),
+        flash_pad_rect( pos, wxSize( size.x, deltaxy + KiROUND( pen_diameter ) ),
                         orient, trace_mode );
         cx = 0; cy = deltaxy / 2;
         RotatePoint( &cx, &cy, orient );
@@ -298,7 +298,7 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
     }
     else    // Plot in SKETCH mode.
     {
-        sketch_oval( pos, size, orient, wxRound( pen_diameter ) );
+        sketch_oval( pos, size, orient, KiROUND( pen_diameter ) );
     }
 }
 
@@ -313,12 +313,12 @@ void HPGL_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
 
     user_to_device_coordinates( pos );
 
-    delta = wxRound( pen_diameter - pen_overlap );
+    delta = KiROUND( pen_diameter - pen_overlap );
     rayon = diametre / 2;
 
     if( trace_mode != LINE )
     {
-        rayon = ( diametre - wxRound( pen_diameter ) ) / 2;
+        rayon = ( diametre - KiROUND( pen_diameter ) ) / 2;
     }
 
     if( rayon < 0 )
@@ -483,7 +483,7 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
     wxPoint coord[4];           // absolute coordinates of corners (coordinates in plotter space)
     int     move;
 
-    move = wxRound( pen_diameter );
+    move = KiROUND( pen_diameter );
 
     for( int ii = 0; ii < 4; ii++ )
         polygone[ii] = aCorners[ii];
@@ -512,7 +512,7 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
         // TODO: replace this par the HPGL plot polygon.
         int jj;
         // Fill the shape
-        move = wxRound( pen_diameter - pen_overlap );
+        move = KiROUND( pen_diameter - pen_overlap );
         // Calculate fill height.
 
         if( polygone[0].y == polygone[3].y ) // Horizontal

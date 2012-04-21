@@ -114,7 +114,7 @@ set(PCBNEW_CLASS_SRCS
     block.cpp
     block_module_editor.cpp
     build_BOM_from_board.cpp
-    class_footprint_library.cpp
+#    class_footprint_library.cpp
     class_pcb_layer_widget.cpp
     clean.cpp
     connect.cpp
@@ -153,7 +153,6 @@ set(PCBNEW_CLASS_SRCS
     hotkeys_board_editor.cpp
     hotkeys_module_editor.cpp
     initpcb.cpp
-    ioascii.cpp
     layer_widget.cpp
     librairi.cpp
     loadcmp.cpp

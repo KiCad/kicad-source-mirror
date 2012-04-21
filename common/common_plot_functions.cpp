@@ -30,9 +30,8 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     wxPoint             pos, ref;
     EDA_COLOR_T         color;
 
-    // paper is sized in mils.  Here is a conversion factor to
-    // scale mils to internal units.
-    int      conv_unit = screen->GetInternalUnits() / 1000;
+    // Paper is sized in mils.  Here is a conversion factor to scale mils to internal units.
+    int      conv_unit = screen->MilsToIuScalar();
 
     wxString msg;
     wxSize   text_size;

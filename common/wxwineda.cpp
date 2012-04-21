@@ -41,17 +41,14 @@ EDA_GRAPHIC_TEXT_CTRL::EDA_GRAPHIC_TEXT_CTRL( wxWindow*       parent,
                                               int             textsize,
                                               EDA_UNITS_T     user_unit,
                                               wxBoxSizer*     BoxSizer,
-                                              int             framelen,
-                                              int             internal_unit )
+                                              int             framelen )
 {
     m_UserUnit = user_unit;
-    m_Internal_Unit = internal_unit;
     m_Title = NULL;
 
     m_Title = new wxStaticText( parent, -1, Title );
 
-    BoxSizer->Add( m_Title, 0,
-                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+    BoxSizer->Add( m_Title, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_FrameText = new wxTextCtrl( parent, -1, TextToEdit );
 
@@ -62,14 +59,12 @@ EDA_GRAPHIC_TEXT_CTRL::EDA_GRAPHIC_TEXT_CTRL( wxWindow*       parent,
         wxString      msg = _( "Size" ) + ReturnUnitSymbol( m_UserUnit );
         wxStaticText* text = new wxStaticText( parent, -1, msg );
 
-        BoxSizer->Add( text, 0,
-                       wxGROW | wxLEFT | wxRIGHT, 5 );
+        BoxSizer->Add( text, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
     }
 
-    wxString value = FormatSize( m_Internal_Unit, m_UserUnit, textsize );
+    wxString value = FormatSize( m_UserUnit, textsize );
 
-    m_FrameSize = new wxTextCtrl( parent, -1, value, wxDefaultPosition,
-                                  wxSize( 70, -1 ) );
+    m_FrameSize = new wxTextCtrl( parent, -1, value, wxDefaultPosition, wxSize( 70, -1 ) );
 
     BoxSizer->Add( m_FrameSize, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 }
@@ -84,11 +79,8 @@ EDA_GRAPHIC_TEXT_CTRL::~EDA_GRAPHIC_TEXT_CTRL()
 }
 
 
-wxString EDA_GRAPHIC_TEXT_CTRL::FormatSize( int internalUnit, EDA_UNITS_T aUnit,
-                                            int textSize )
+wxString EDA_GRAPHIC_TEXT_CTRL::FormatSize( EDA_UNITS_T aUnit, int textSize )
 {
-    wxString value;
-
     // Limiting the size of the text of reasonable values.
     if( textSize < 10 )
         textSize = 10;
@@ -96,10 +88,7 @@ wxString EDA_GRAPHIC_TEXT_CTRL::FormatSize( int internalUnit, EDA_UNITS_T aUnit,
     if( textSize > 3000 )
         textSize = 3000;
 
-    value.Printf( ( internalUnit > 1000 ) ? wxT( "%.4f" ) : wxT( "%.3f" ),
-                  To_User_Unit( aUnit, textSize ) );
-
-    return value;
+    return ReturnStringFromValue( aUnit, textSize );
 }
 
 
@@ -117,7 +106,7 @@ void EDA_GRAPHIC_TEXT_CTRL::SetValue( const wxString& value )
 
 void EDA_GRAPHIC_TEXT_CTRL::SetValue( int textSize )
 {
-    wxString value = FormatSize( m_Internal_Unit, m_UserUnit, textSize );
+    wxString value = FormatSize( m_UserUnit, textSize );
     m_FrameSize->SetValue( value );
 }
 
@@ -129,12 +118,11 @@ const wxString EDA_GRAPHIC_TEXT_CTRL::GetText() const
 }
 
 
-int EDA_GRAPHIC_TEXT_CTRL::ParseSize( const wxString& sizeText,
-                                      int internalUnit, EDA_UNITS_T aUnit )
+int EDA_GRAPHIC_TEXT_CTRL::ParseSize( const wxString& sizeText, EDA_UNITS_T aUnit )
 {
     int    textsize;
 
-    textsize = ReturnValueFromString( aUnit, sizeText, internalUnit );
+    textsize = ReturnValueFromString( aUnit, sizeText );
 
     // Limit to reasonable size
     if( textsize < 10 )
@@ -149,7 +137,7 @@ int EDA_GRAPHIC_TEXT_CTRL::ParseSize( const wxString& sizeText,
 
 int EDA_GRAPHIC_TEXT_CTRL::GetTextSize()
 {
-    return ParseSize( m_FrameSize->GetValue(), m_Internal_Unit, m_UserUnit );
+    return ParseSize( m_FrameSize->GetValue(), m_UserUnit );
 }
 
 
@@ -166,13 +154,11 @@ EDA_POSITION_CTRL::EDA_POSITION_CTRL( wxWindow*       parent,
                                       const wxString& title,
                                       const wxPoint&  pos_to_edit,
                                       EDA_UNITS_T     user_unit,
-                                      wxBoxSizer*     BoxSizer,
-                                      int             internal_unit )
+                                      wxBoxSizer*     BoxSizer )
 {
     wxString text;
 
     m_UserUnit = user_unit;
-    m_Internal_Unit = internal_unit;
 
     if( title.IsEmpty() )
         text = _( "Pos " );
@@ -182,10 +168,8 @@ EDA_POSITION_CTRL::EDA_POSITION_CTRL( wxWindow*       parent,
     text   += _( "X" ) + ReturnUnitSymbol( m_UserUnit );
     m_TextX = new wxStaticText( parent, -1, text );
 
-    BoxSizer->Add( m_TextX, 0,
-                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-    m_FramePosX = new wxTextCtrl( parent, -1, wxEmptyString,
-                                  wxDefaultPosition );
+    BoxSizer->Add( m_TextX, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+    m_FramePosX = new wxTextCtrl( parent, -1, wxEmptyString, wxDefaultPosition );
 
     BoxSizer->Add( m_FramePosX, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
@@ -198,8 +182,7 @@ EDA_POSITION_CTRL::EDA_POSITION_CTRL( wxWindow*       parent,
 
     m_TextY = new wxStaticText( parent, -1, text );
 
-    BoxSizer->Add( m_TextY, 0,
-                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+    BoxSizer->Add( m_TextY, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     m_FramePosY = new wxTextCtrl( parent, -1, wxEmptyString );
 
@@ -224,8 +207,8 @@ wxPoint EDA_POSITION_CTRL::GetValue()
 {
     wxPoint coord;
 
-    coord.x = ReturnValueFromString( m_UserUnit, m_FramePosX->GetValue(), m_Internal_Unit );
-    coord.y = ReturnValueFromString( m_UserUnit, m_FramePosY->GetValue(), m_Internal_Unit );
+    coord.x = ReturnValueFromString( m_UserUnit, m_FramePosX->GetValue() );
+    coord.y = ReturnValueFromString( m_UserUnit, m_FramePosY->GetValue() );
 
     return coord;
 }
@@ -259,12 +242,10 @@ void EDA_POSITION_CTRL::SetValue( int x_value, int y_value )
 /* EDA_SIZE_CTRL */
 /*******************/
 EDA_SIZE_CTRL::EDA_SIZE_CTRL( wxWindow* parent, const wxString& title,
-                              const wxSize& size_to_edit,
-                              EDA_UNITS_T aUnit, wxBoxSizer* aBoxSizer,
-                              int internal_unit ) :
-    EDA_POSITION_CTRL( parent, title,
-                       wxPoint( size_to_edit.x, size_to_edit.y ),
-                       aUnit, aBoxSizer, internal_unit )
+                              const wxSize& size_to_edit, EDA_UNITS_T aUnit,
+                              wxBoxSizer* aBoxSizer ) :
+    EDA_POSITION_CTRL( parent, title, wxPoint( size_to_edit.x, size_to_edit.y ),
+                       aUnit, aBoxSizer )
 {
 }
 
@@ -284,23 +265,20 @@ wxSize EDA_SIZE_CTRL::GetValue()
 /* Class to display and edit a dimension INCHES, MM, or other */
 /**************************************************************/
 EDA_VALUE_CTRL::EDA_VALUE_CTRL( wxWindow* parent, const wxString& title,
-                                int value, EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
-                                int internal_unit )
+                                int value, EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer )
 {
     wxString label = title;
 
     m_UserUnit = user_unit;
-    m_Internal_Unit = internal_unit;
     m_Value = value;
     label  += ReturnUnitSymbol( m_UserUnit );
 
     m_Text = new wxStaticText( parent, -1, label );
 
-    BoxSizer->Add( m_Text, 0,
-                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+    BoxSizer->Add( m_Text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     wxString stringvalue = ReturnStringFromValue( m_UserUnit, m_Value );
-    m_ValueCtrl = new   wxTextCtrl( parent, -1, stringvalue );
+    m_ValueCtrl = new wxTextCtrl( parent, -1, stringvalue );
 
     BoxSizer->Add( m_ValueCtrl,
                    0,
@@ -321,7 +299,7 @@ int EDA_VALUE_CTRL::GetValue()
     int      coord;
     wxString txtvalue = m_ValueCtrl->GetValue();
 
-    coord = ReturnValueFromString( m_UserUnit, txtvalue, m_Internal_Unit );
+    coord = ReturnValueFromString( m_UserUnit, txtvalue );
     return coord;
 }
 

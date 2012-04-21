@@ -387,10 +387,6 @@ protected:
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
 
-    /// Internal units count that is equivalent to 1 inch.  Set to 1000 (0.001") for
-    /// schematic drawing and 10000 (0.0001") for PCB drawing.
-    int m_internalUnits;
-
     /// Tool ID of previously active draw tool bar button.
     int m_lastDrawToolId;
 
@@ -476,8 +472,6 @@ public:
     bool GetShowBorderAndTitleBlock() const { return m_showBorderAndTitleBlock; }
 
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
-
-    int GetInternalUnits() const { return m_internalUnits; }
 
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
 
@@ -667,7 +661,7 @@ public:
      */
     double GetZoom();
 
-    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth );
+    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth, double aScalar );
 
     /**
      * Function TraceWorkSheet is a core function for drawing of the page layout with
@@ -682,13 +676,14 @@ public:
      * @param aNScr The number of screens (for basic inscriptions).
      * @param aScr The screen number (for basic inscriptions).
      * @param aLnW The line width for drawing.
+     * @param aScalar Scalar to convert from mils to internal units.
      * @param aClr1 The color for drawing.
      * @param aClr2 The colr for inscriptions.
      */
     void TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoint& aRB,
-                           wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
-                           int aNScr, int aScr, int aLnW, EDA_COLOR_T aClr1 = RED,
-                           EDA_COLOR_T aClr2 = RED );
+                         wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
+                         int aNScr, int aScr, int aLnW, double aScalar,
+                         EDA_COLOR_T aClr1 = RED, EDA_COLOR_T aClr2 = RED );
 
     void  PlotWorkSheet( PLOTTER* aPlotter, BASE_SCREEN* aScreen );
 

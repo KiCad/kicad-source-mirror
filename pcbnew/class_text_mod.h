@@ -116,16 +116,6 @@ public:
 
     void SetLocalCoord();       // Set relative coordinates.
 
-    bool Save( FILE* aFile ) const;
-
-    /**
-     * Function ReadDescr
-     * Read description from a given line in "*.brd" format.
-     * @param aReader is a pointer to a LINE_READER to read from.
-     * @return int - > 0 if success reading else 0.
-     */
-    int ReadDescr( LINE_READER* aReader );
-
     /* drawing functions */
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,

@@ -543,7 +543,6 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
 
 /// data type used to ensure unique-ness of pin names, holding (wxString and int)
-//typedef std::map<wxString, int, wxString_less_than> PINMAP;
 typedef std::map<wxString, int> PINMAP;
 
 

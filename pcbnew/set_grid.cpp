@@ -17,9 +17,6 @@
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
 public:
-    int m_internalUnits;
-
-public:
     DIALOG_SET_GRID( wxWindow* parent, const wxPoint& pos );
     ~DIALOG_SET_GRID() { }
     void        SetGridSize( const wxRealPoint& grid );
@@ -41,7 +38,6 @@ void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
 {
     DIALOG_SET_GRID dlg( this, pos );
 
-    dlg.m_internalUnits = m_internalUnits;
     dlg.SetGridUnits( m_UserGridUnit );
     dlg.SetGridSize( m_UserGridSize );
     dlg.SetGridOrigin( GetScreen()->m_GridOrigin );
@@ -125,8 +121,8 @@ wxPoint DIALOG_SET_GRID::GetGridOrigin()
     wxPoint grid;
 
     /* TODO: Some error checking here would be a good thing. */
-    grid.x = ReturnValueFromTextCtrl( *m_GridOriginXCtrl, m_internalUnits );
-    grid.y = ReturnValueFromTextCtrl( *m_GridOriginYCtrl, m_internalUnits );
+    grid.x = ReturnValueFromTextCtrl( *m_GridOriginXCtrl );
+    grid.y = ReturnValueFromTextCtrl( *m_GridOriginYCtrl );
 
     return grid;
 }

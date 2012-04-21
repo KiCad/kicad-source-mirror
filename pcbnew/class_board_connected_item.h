@@ -135,13 +135,7 @@ public:
         */
     }
 
-    bool Save( FILE* aFile ) const
-    {
-        return true;
-    }
-
     //-----</ satisfy some virtual functions >-----------------------------
-
 
     /**
      * Function GetCount

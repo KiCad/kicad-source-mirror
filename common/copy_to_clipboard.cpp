@@ -72,7 +72,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     BASE_SCREEN* screen = aFrame->GetCanvas()->GetScreen();
 
     /* scale is the ratio resolution/internal units */
-    float   scale = 82.0 / aFrame->GetInternalUnits();
+    float   scale = 82.0 / 1000.0 / (double) screen->MilsToIuScalar();
 
     if( screen->IsBlockActive() )
     {

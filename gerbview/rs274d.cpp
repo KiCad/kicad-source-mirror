@@ -345,8 +345,8 @@ static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
      * angle is trigonometrical (counter-clockwise),
      * and axis is the X,Y gerber coordinates
      */
-    int start_angle = wxRound(atan2( (double) start.y, (double) start.x ) * 1800 / M_PI);
-    int end_angle = wxRound(atan2( (double) end.y, (double) end.x ) * 1800 / M_PI);
+    int start_angle = KiROUND(atan2( (double) start.y, (double) start.x ) * 1800 / M_PI);
+    int end_angle = KiROUND(atan2( (double) end.y, (double) end.x ) * 1800 / M_PI);
 
     // dummyTrack has right geometric parameters, but
     // fillArcGBRITEM calculates arc parameters for a draw function that expects
@@ -540,23 +540,6 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
 
 
     return true;
-}
-
-
-/**
- * Function scale
- * converts a distance given in floating point to our deci-mils
- */
-int scale( double aCoord, bool isMetric )
-{
-    int ret;
-
-    if( isMetric )
-        ret = wxRound( aCoord / 0.00254 );
-    else
-        ret = wxRound( aCoord * PCB_INTERNAL_UNIT );
-
-    return ret;
 }
 
 

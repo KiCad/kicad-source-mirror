@@ -103,14 +103,12 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
     // Size:
     m_MireSizeCtrl = new EDA_VALUE_CTRL( this, _( "Size" ),
                                          m_Target->GetSize(),
-                                         g_UserUnit, LeftBoxSizer,
-                                         m_Parent->GetInternalUnits() );
+                                         g_UserUnit, LeftBoxSizer );
 
     // Width:
     m_MireWidthCtrl = new EDA_VALUE_CTRL( this, _( "Width" ),
                                           m_Target->GetWidth(),
-                                          g_UserUnit, LeftBoxSizer,
-                                          m_Parent->GetInternalUnits() );
+                                          g_UserUnit, LeftBoxSizer );
 
     // Shape
     wxString shape_list[2] = { _( "shape +" ), _( "shape X" ) };

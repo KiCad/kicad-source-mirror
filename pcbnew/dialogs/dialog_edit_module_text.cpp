@@ -163,19 +163,17 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     wxPoint tmp;
 
     msg = m_TxtPosCtrlX->GetValue();
-    tmp.x = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    tmp.x = ReturnValueFromString( g_UserUnit, msg );
 
     msg = m_TxtPosCtrlY->GetValue();
-    tmp.y = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    tmp.y = ReturnValueFromString( g_UserUnit, msg );
 
     m_currentText->SetPos0( tmp );
 
     msg = m_TxtSizeCtrlX->GetValue();
-    m_currentText->m_Size.x = ReturnValueFromString( g_UserUnit, msg,
-        m_parent->GetInternalUnits() );
+    m_currentText->m_Size.x = ReturnValueFromString( g_UserUnit, msg );
     msg = m_TxtSizeCtrlY->GetValue();
-    m_currentText->m_Size.y = ReturnValueFromString( g_UserUnit, msg,
-        m_parent->GetInternalUnits() );
+    m_currentText->m_Size.y = ReturnValueFromString( g_UserUnit, msg );
 
     // Test for a reasonnable size:
     if( m_currentText->m_Size.x< TEXTS_MIN_SIZE )
@@ -184,7 +182,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
         m_currentText->m_Size.y = TEXTS_MIN_SIZE;
 
     msg = m_TxtWidthCtlr->GetValue();
-    int width = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
+    int width = ReturnValueFromString( g_UserUnit, msg );
 
     // Test for a reasonnable width:
     if( width <= 1 )

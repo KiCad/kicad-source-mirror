@@ -440,7 +440,7 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
             aCoordX *= 10; aCoordY *= 10;
         }
 
-        sprintf( aLine, "X%dY%d\n", wxRound( aCoordX ), wxRound( aCoordY ) );
+        sprintf( aLine, "X%dY%d\n", KiROUND( aCoordX ), KiROUND( aCoordY ) );
         break;
 
     case SUPPRESS_TRAILING:
@@ -456,8 +456,8 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
         if( aCoordY < 0 )
             ypad++;
 
-        xs.Printf( wxT( "%0*d" ), xpad, wxRound( aCoordX ) );
-        ys.Printf( wxT( "%0*d" ), ypad, wxRound( aCoordY ) );
+        xs.Printf( wxT( "%0*d" ), xpad, KiROUND( aCoordX ) );
+        ys.Printf( wxT( "%0*d" ), ypad, KiROUND( aCoordY ) );
 
         size_t j = xs.Len() - 1;
         while( xs[j] == '0' && j )
@@ -481,8 +481,8 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
             xpad++;
         if( aCoordY < 0 )
             ypad++;
-        xs.Printf( wxT( "%0*d" ), xpad, wxRound( aCoordX ) );
-        ys.Printf( wxT( "%0*d" ), ypad, wxRound( aCoordY ) );
+        xs.Printf( wxT( "%0*d" ), xpad, KiROUND( aCoordX ) );
+        ys.Printf( wxT( "%0*d" ), ypad, KiROUND( aCoordY ) );
         sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
     }

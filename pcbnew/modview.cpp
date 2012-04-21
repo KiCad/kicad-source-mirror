@@ -12,7 +12,6 @@
 
 #include <class_board.h>
 #include <class_module.h>
-#include <class_footprint_library.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>

@@ -651,8 +651,8 @@ EDA_RECT SCH_SHEET::GetBoundingBox() const
     end += m_pos;
 
     // Move upper and lower limits to include texts:
-    box.SetY( box.GetY() - ( wxRound( m_sheetNameSize * 1.3 ) + 8 ) );
-    end.y += wxRound( m_fileNameSize * 1.3 ) + 8;
+    box.SetY( box.GetY() - ( KiROUND( m_sheetNameSize * 1.3 ) + 8 ) );
+    end.y += KiROUND( m_fileNameSize * 1.3 ) + 8;
 
     box.SetEnd( end );
     box.Inflate( lineWidth / 2 );

@@ -125,8 +125,6 @@ public:
 
     EDA_RECT GetBoundingBox() const;
 
-    bool Save( FILE* aFile ) const;
-
     /**
      * Function GetBestInsertPoint
      * searches the "best" insertion point within the track linked list.

@@ -116,21 +116,13 @@ set(PCB_COMMON_SRCS
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp
     ../pcbnew/pcb_plot_params.cpp
+    ../pcbnew/io_mgr.cpp
+    ../pcbnew/legacy_plugin.cpp
+    ../pcbnew/kicad_plugin.cpp
     pcb_plot_params_keywords.cpp
     dialogs/dialog_page_settings.cpp
 )
 
-if( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
-    set( PCB_COMMON_SRCS
-         ${PCB_COMMON_SRCS}
-         ../pcbnew/item_io.cpp
-         ../pcbnew/io_mgr.cpp
-         ../pcbnew/legacy_plugin.cpp
-         ../pcbnew/kicad_plugin.cpp
-       )
-else()
-    set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp )
-endif()
 
 # add -DPCBNEW to compilation of these PCBNEW sources
 set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES

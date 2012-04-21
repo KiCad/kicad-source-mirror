@@ -164,8 +164,8 @@ void DIALOG_PLOT_SCHEMATIC_PS::initOptVars()
     m_plot_Sheet_Ref = m_Plot_Sheet_Ref_Ctrl->GetValue();
     m_plotColorOpt   = m_PlotPSColorOption->GetSelection();
     m_pageSizeSelect = m_SizeOption->GetSelection();
-    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DefaultLineSizeCtrl,
-                                                          EESCHEMA_INTERNAL_UNIT );
+    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DefaultLineSizeCtrl );
+
     if( g_DrawDefaultLineThickness < 1 )
         g_DrawDefaultLineThickness = 1;
 }

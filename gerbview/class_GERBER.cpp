@@ -38,10 +38,10 @@
 
 
 /**
- * Function scale
- * converts a distance given in floating point to our deci-mils
+ * Function scaletoIU
+ * converts a distance given in floating point to our internal units
  */
-extern int scale( double aCoord, bool isMetric );       // defined it rs274d.cpp
+extern int scaletoIU( double aCoord, bool isMetric );       // defined it rs274d_read_XY_and_IJ_coordiantes.cpp
 
 /* Format Gerber: NOTES:
  * Tools and D_CODES
@@ -301,9 +301,9 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
                 continue;
             GERBER_DRAW_ITEM* dupItem = new GERBER_DRAW_ITEM( aItem );
             wxPoint           move_vector;
-            move_vector.x = scale( ii * GetLayerParams().m_StepForRepeat.x,
+            move_vector.x = scaletoIU( ii * GetLayerParams().m_StepForRepeat.x,
                                    GetLayerParams().m_StepForRepeatMetric );
-            move_vector.y = scale( jj * GetLayerParams().m_StepForRepeat.y,
+            move_vector.y = scaletoIU( jj * GetLayerParams().m_StepForRepeat.y,
                                    GetLayerParams().m_StepForRepeatMetric );
             dupItem->MoveXY( move_vector );
             m_Parent->GetBoard()->m_Drawings.Append( dupItem );

@@ -135,16 +135,6 @@ public:
 
     ~ZONE_CONTAINER();
 
-    bool Save( FILE* aFile ) const;
-
-     /**
-     * Function ReadDescr
-     * reads the data structures for this object from a LINE_READER in "*.brd" format.
-     * @param aReader is a pointer to a LINE_READER to read from.
-     * @return int - 1 if success, 0 if not.
-     */
-    int ReadDescr( LINE_READER* aReader );
-
     /**
      * Function GetPosition
      * @return a wxPoint, position of the first point of the outline

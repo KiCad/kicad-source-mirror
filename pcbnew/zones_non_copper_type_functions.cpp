@@ -128,8 +128,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnOkClick( wxCommandEvent& event )
 {
     wxString txtvalue = m_ZoneMinThicknessCtrl->GetValue();
 
-    m_settings.m_ZoneMinThickness =
-        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() );
+    m_settings.m_ZoneMinThickness = ReturnValueFromString( g_UserUnit, txtvalue );
 
     if( m_settings.m_ZoneMinThickness < 10 )
     {

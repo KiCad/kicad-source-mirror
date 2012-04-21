@@ -128,7 +128,7 @@ public:
     int GetRadius() const
     {
         double radius = hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
-        return wxRound( radius );
+        return KiROUND( radius );
     }
 
     /**
@@ -151,10 +151,6 @@ public:
     {
         m_PolyPoints = aPoints;
     }
-
-    bool Save( FILE* aFile ) const;
-
-    bool ReadDrawSegmentDescr( LINE_READER* aReader );
 
     void Copy( DRAWSEGMENT* source );
 

@@ -92,8 +92,7 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 
 void DIALOG_SVG_PRINT::SetPenWidth()
 {
-    g_DrawDefaultLineThickness =
-    ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->GetInternalUnits() );
+    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DialogPenWidth );
 
     if( g_DrawDefaultLineThickness > WIDTH_MAX_VALUE )
     {
@@ -118,7 +117,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
     SetPenWidth();
 
     g_DrawDefaultLineThickness =
-    ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->GetInternalUnits() );
+    ReturnValueFromTextCtrl( *m_DialogPenWidth );
 
     SCH_SCREEN* screen = (SCH_SCREEN*) m_Parent->GetScreen();
 
@@ -216,7 +215,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
 
     LOCALE_IO   toggle;
 
-    float       dpi = (float) frame->GetInternalUnits();
+    float       dpi = 1000.0;
     KicadSVGFileDC dc( FullFileName, sheetSize.x, sheetSize.y, dpi );
 
     EDA_RECT    tmp = *panel->GetClipBox();
@@ -228,6 +227,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
                                  wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     screen->m_IsPrinting = true;
+
     if( frame->IsType( SCHEMATIC_FRAME ) )
         screen->Draw( panel, &dc, GR_COPY );
 
@@ -237,7 +237,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
                                                    sheetSize.y/2) );
 
     if( aPrint_Sheet_Ref )
-        frame->TraceWorkSheet( &dc, screen, g_DrawDefaultLineThickness );
+        frame->TraceWorkSheet( &dc, screen, g_DrawDefaultLineThickness, MILS_TO_IU_SCALAR );
 
     screen->m_IsPrinting   = false;
     panel->SetClipBox( tmp );

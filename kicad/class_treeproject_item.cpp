@@ -7,6 +7,7 @@
 
 #include <fctsys.h>
 #include <gestfich.h>
+#include <macros.h>
 
 #include <kicad.h>
 #include <tree_project_frame.h>
@@ -214,8 +215,9 @@ bool TREEPROJECT_ITEM::Delete( bool check )
 /*******************************************/
 /* delete a file */
 {
-    wxMessageDialog dialog( m_Parent,
-                            _ ("Do you really want to delete ") + GetFileName(),
+    wxString msg;
+    msg.Printf( _("Do you really want to delete '%s'"), GetChars(GetFileName() ) );
+    wxMessageDialog dialog( m_Parent, msg,
                             _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
 
     if( !check || wxID_YES == dialog.ShowModal() )
@@ -264,7 +266,8 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         ExecuteFile( m_Parent, EESCHEMA_EXE, FullFileName );
         break;
 
-    case TREE_PCB:
+    case TREE_LEGACY_PCB:
+    case TREE_SEXP_PCB:
         ExecuteFile( m_Parent, PCBNEW_EXE, FullFileName );
         break;
 

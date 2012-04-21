@@ -35,6 +35,7 @@
 #include <macros.h>
 #include <trigo.h>
 #include <gr_basic.h>
+#include <base_units.h>
 
 #include <gerbview.h>
 #include <class_gerber_draw_item.h>
@@ -155,7 +156,7 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 
 int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName )
 {
-    int      current_Dcode, ii, dcode_scale;
+    int      current_Dcode, ii;
     char*    ptcar;
     int      dimH, dimV, drill, dummy;
     float    fdimH, fdimV, fdrill;
@@ -174,8 +175,7 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
 
 
     /* Updating gerber scale: */
-    dcode_scale   = 10; /* By uniting dCode = mil, internal unit = 0.1 mil
-                         * -> 1 unite dcode = 10 unit PCB */
+    double dcode_scale = MILS_TO_IU_SCALAR; // By uniting dCode = mil, internal unit = MILS_TO_IU_SCALAR
     current_Dcode = 0;
 
     if( D_Code_FullFileName.IsEmpty() )
@@ -215,9 +215,9 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
             sscanf( line, "%d,%d,%d,%d,%d,%d,%d", &ii,
                     &dimH, &dimV, &drill, &dummy, &dummy, &type_outil );
 
-            dimH  = wxRound( dimH * dcode_scale );
-            dimV  = wxRound( dimV * dcode_scale );
-            drill = wxRound( drill * dcode_scale );
+            dimH  = KiROUND( dimH * dcode_scale );
+            dimV  = KiROUND( dimV * dcode_scale );
+            drill = KiROUND( drill * dcode_scale );
 
             if( ii < 1 )
                 ii = 1;
@@ -245,9 +245,9 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
                 }
             }
 
-            dimH  = wxRound( fdimH * dcode_scale * 1000 );
-            dimV  = wxRound( fdimV * dcode_scale * 1000 );
-            drill = wxRound( fdrill * dcode_scale * 1000 );
+            dimH  = KiROUND( fdimH * dcode_scale * 1000 );
+            dimV  = KiROUND( fdimV * dcode_scale * 1000 );
+            drill = KiROUND( fdrill * dcode_scale * 1000 );
 
             if( strchr( "CLROP", c_type_outil[0] ) )
             {
@@ -600,7 +600,7 @@ void D_CODE::ConvertShapeToPolygon()
 
         if( m_Rotation )                   // vertical oval, rotate polygon.
         {
-            int angle = wxRound( m_Rotation * 10 );
+            int angle = KiROUND( m_Rotation * 10 );
 
             for( unsigned jj = 0; jj < m_PolyCorners.size(); jj++ )
             {

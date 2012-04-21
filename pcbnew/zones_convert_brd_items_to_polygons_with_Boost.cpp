@@ -302,7 +302,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
     // Add graphic items (copper texts) and board edges
-    for( BOARD_ITEM* item = aPcb->m_Drawings;  item;  item = item->Next() )
+    for( BOARD_ITEM* item = aPcb->m_Drawings; item; item = item->Next() )
     {
         if( item->GetLayer() != GetLayer() && item->GetLayer() != EDGE_N )
             continue;

@@ -98,26 +98,6 @@ public:
     BOARD_ITEM* Back() const { return (BOARD_ITEM*) Pback; }
     BOARD_ITEM* GetParent() const { return (BOARD_ITEM*) m_Parent; }
 
-#if 0
-    // DICK: there is no value in having a polymorphic {Get,Set}Position().  We never
-    // call GetPosition() using a generic pointer, and the virtual is slower and
-    // can never be inlined.
-
-    /**
-     * Function GetPosition
-     * returns the position of this object.
-     * @return const wxPoint - The position of this object
-     */
-    virtual const wxPoint GetPosition() const = 0;
-
-     /**
-      * Function SetPosition
-      * sets the position of this object.
-      * @param aPos is the new position of this object
-      */
-    virtual void SetPosition( const wxPoint& aPos ) = 0;
-#endif
-
     /**
      * Function GetLayer
      * returns the layer this item is on.
@@ -173,7 +153,6 @@ public:
         return false;   // only MODULEs can be locked at this time.
     }
 
-
     /**
      * Function UnLink
      * detaches this object from its owner.  This base class implementation
@@ -191,20 +170,11 @@ public:
         delete this;
     }
 
-
     /**
      * Function ShowShape
      * converts the enum STROKE_T integer value to a wxString.
      */
     static wxString ShowShape( STROKE_T aShape );
-
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    virtual bool Save( FILE* aFile ) const = 0;
 
     // Some geometric transforms, that must be rewritten for derived classes
     /**

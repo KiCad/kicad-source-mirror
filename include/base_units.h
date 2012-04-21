@@ -37,6 +37,19 @@
 #include <common.h>
 
 
+
+/// Scalar to convert mils to internal units.
+#if defined( PCBNEW )
+#if defined( USE_PCBNEW_NANOMETRES )
+#define MILS_TO_IU_SCALAR   25.4e3         // Pcbnew in nanometers.
+#else
+#define MILS_TO_IU_SCALAR   10.0           // Pcbnew in deci-mils.
+#endif
+#else
+#define MILS_TO_IU_SCALAR   1.0            // Eeschema and anything else.
+#endif
+
+
 /**
  * Function To_User_Unit
  * convert \a aValue in internal units to the appropriate user units defined by \a aUnit.
@@ -79,5 +92,26 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymb
  * This function is used in dialog boxes for entering values depending on selected units.
  */
 void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue );
+
+/**
+ * Return in internal units the value "val" given in inch or mm
+ */
+double From_User_Unit( EDA_UNITS_T aUnit, double aValue );
+
+/**
+ * Function ReturnValueFromeString
+ * converts \a aTextValue in \a aUnits to internal units used by the application.
+ *
+ * @param aUnits The units of \a aTextValue.
+ * @param aTextValue A reference to a wxString object containing the string to convert.
+ * @return The string from Value, according to units (inch, mm ...) for display,
+ */
+int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue );
+
+/**
+ * Convert the number Value in a string according to the internal units
+ *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
+ */
+int ReturnValueFromTextCtrl( const wxTextCtrl& aTextCtr );
 
 #endif   // _BASE_UNITS_H_

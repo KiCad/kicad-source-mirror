@@ -63,6 +63,7 @@
 #include <gerbview.h>
 #include <trigo.h>
 #include <macros.h>
+#include <base_units.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 #include <class_excellon.h>
@@ -430,8 +431,12 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         dcode = GetDCODE( iprm + FIRST_DCODE );     // Remember: dcodes are >= FIRST_DCODE
         if( dcode == NULL )
             break;
-        double conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
-        dcode->m_Size.x = dcode->m_Size.y = wxRound( dprm * conv_scale );
+        // conv_scale = scaling factor from inch to Internal Unit
+        double   conv_scale = MILS_TO_IU_SCALAR*1000;
+        if( m_GerbMetric )
+            conv_scale /= 25.4;
+
+        dcode->m_Size.x = dcode->m_Size.y = KiROUND( dprm * conv_scale );
         dcode->m_Shape  = APT_CIRCLE;
         break;
     }
