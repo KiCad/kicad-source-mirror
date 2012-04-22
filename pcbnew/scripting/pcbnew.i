@@ -73,12 +73,11 @@
   BOARD *GetBoard(); /* get current editor board */
 %}
 
-#ifdef BUILD_WITH_PLUGIN
+
 %{
   #include <io_mgr.h>
   #include <kicad_plugin.h>
 %}
-#endif
 
 %include <class_board_item.h>
 %include <class_board_connected_item.h>
@@ -104,15 +103,14 @@
 
 %include <pcbnew_scripting_helpers.h>
 
-#ifdef BUILD_WITH_PLUGIN
-  // ignore RELEASER as nested classes are still unsupported by swig
-  %ignore IO_MGR::RELEASER;
-  %include <io_mgr.h>
-  %include <kicad_plugin.h>
-#endif
 
+// ignore RELEASER as nested classes are still unsupported by swig
+%ignore IO_MGR::RELEASER;
+%include <io_mgr.h>
+%include <kicad_plugin.h>
 
 
 %include "board.i"
 %include "module.i"
 %include "units.i"
+

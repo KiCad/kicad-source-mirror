@@ -45,9 +45,12 @@
     
     def Save(self,filename,format = None):
       if format is None:
-        return SaveBoard(filename,self)
-      else:
-        return SaveBoard(filename,self,format)
+        str_filename = str(filename)
+        if str_filename.endswith(".brd"):
+          format = IO_MGR.LEGACY
+        if str_filename.endswith(".kicad_brd"):
+          format = IO_MGR.KICAD	  
+      return SaveBoard(filename,self,format)
         
     #
     # add function, clears the thisown to avoid python from deleting

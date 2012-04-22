@@ -294,13 +294,6 @@ public:
      */
     NETCLASS* Find( const wxString& aName ) const;
 
-    /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool Save( FILE* aFile ) const;
 };
 
 #endif  // CLASS_NETCLASS_H

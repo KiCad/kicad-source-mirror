@@ -54,13 +54,20 @@ void ScriptingSetPcbEditFrame(PCB_EDIT_FRAME *aPCBEdaFrame)
 
 BOARD* LoadBoard(wxString& aFileName)
 {
-    return LoadBoard(aFileName,IO_MGR::KICAD);
+
+    if (aFileName.EndsWith(wxT(".kicad_brd"))) 
+        return LoadBoard(aFileName,IO_MGR::KICAD);
+    else if (aFileName.EndsWith(wxT(".brd")))  
+        return LoadBoard(aFileName,IO_MGR::LEGACY);
+	
+    // as fall back for any other kind use the legacy format
+    return LoadBoard(aFileName,IO_MGR::LEGACY);
+     
 }
 
 BOARD* LoadBoard(wxString& aFileName,IO_MGR::PCB_FILE_T aFormat)
 {
 	static char ExceptionError[256];
-#ifdef USE_NEW_PCBNEW_LOAD
 	try{
 	   return IO_MGR::Load(aFormat,aFileName);	
 	} catch (IO_ERROR e)
@@ -69,10 +76,7 @@ BOARD* LoadBoard(wxString& aFileName,IO_MGR::PCB_FILE_T aFormat)
 		PyErr_SetString(PyExc_IOError,ExceptionError);
 		return NULL;
 	}
-#else
-  fprintf(stderr,"Warning, LoadBoard not implemented without USE_NEW_PCBNEW_LOAD\n");
-   return NULL;
-#endif
+
 }
 
 bool SaveBoard(wxString& aFilename, BOARD* aBoard)
@@ -84,7 +88,6 @@ bool SaveBoard(wxString& aFileName, BOARD* aBoard,
                 IO_MGR::PCB_FILE_T aFormat)
 {
   static char ExceptionError[256];
-#ifdef USE_NEW_PCBNEW_LOAD
   aBoard->m_Status_Pcb &= ~CONNEXION_OK;
   aBoard->SynchronizeNetsAndNetClasses();
   aBoard->SetCurrentNetClass( aBoard->m_NetClasses.GetDefault()->GetName() );
@@ -115,11 +118,6 @@ bool SaveBoard(wxString& aFileName, BOARD* aBoard,
         return false;
   }
 
-#else
-	fprintf(stderr,"Warning, SaveBoard not implemented without USE_NEW_PCBNEW_LOAD\n");
-	return false;
-#endif
-	
 }
 
 
