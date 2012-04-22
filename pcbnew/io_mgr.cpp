@@ -58,7 +58,7 @@ PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
         return new LEGACY_PLUGIN();
 
     case KICAD:
-        return new KICAD_PLUGIN();
+        return new PCB_IO();
 
 /*
     case EAGLE:

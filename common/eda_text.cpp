@@ -346,14 +346,6 @@ bool EDA_TEXT::IsDefaultFormatting() const
 void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
     throw( IO_ERROR )
 {
-    aFormatter->Print( aNestLevel, "(text %s (at %s",
-                       aFormatter->Quotew( m_Text ).c_str(), FMT_IU( m_Pos ).c_str() );
-
-    if( m_Orient != 0.0 )
-        aFormatter->Print( 0, " %s", FMT_ANGLE( m_Orient ).c_str() );
-
-    aFormatter->Print( 0, ")\n" );
-
     if( !IsDefaultFormatting() )
     {
         aFormatter->Print( aNestLevel+1, "(effects\n" );
@@ -400,6 +392,4 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
         aFormatter->Print( aNestLevel+1, ")\n" );
     }
-
-    aFormatter->Print( aNestLevel, ")\n" );
 }

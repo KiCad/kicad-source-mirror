@@ -279,16 +279,6 @@ EDA_ITEM* EDGE_MODULE::Clone() const
 }
 
 
-void EDGE_MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-    throw( IO_ERROR )
-{
-    aFormatter->Print( aNestLevel, "(edge (start (xy %s)) (end (xy %s))\n",
-                       FMT_IU( m_Start0 ).c_str(), FMT_IU( m_End0 ).c_str() );
-    DRAWSEGMENT::Format( aFormatter, aNestLevel+1, aControlBits );
-    aFormatter->Print( aNestLevel, ")\n" );
-}
-
-
 #if defined(DEBUG)
 
 void EDGE_MODULE::Show( int nestLevel, std::ostream& os ) const
