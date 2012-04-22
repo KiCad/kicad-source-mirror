@@ -34,9 +34,9 @@ for y in range (0,10):
 
 # save the PCB to disk
 pcb.Save("/tmp/my2.kicad_brd")
-pcb.Save("/tmp/my2.brd",IO_MGR.LEGACY)
+pcb.Save("/tmp/my2.brd")
 
-pcb = LoadBoard("/tmp/my2.brd",IO_MGR.LEGACY)
+pcb = LoadBoard("/tmp/my2.brd")
 
 print map( lambda x: x.GetReference() , list(pcb.GetModules()))
 
