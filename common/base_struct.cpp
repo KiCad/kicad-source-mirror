@@ -222,14 +222,6 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 }
 
 
-void EDA_ITEM::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-    throw( IO_ERROR )
-{
-    wxFAIL_MSG( wxString::Format( wxT( "Format method not defined for item type %s." ),
-                                  GetChars( GetClass() ) ) );
-}
-
-
 #if defined(DEBUG)
 
 // A function that should have been in wxWidgets
