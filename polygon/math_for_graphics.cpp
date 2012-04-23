@@ -12,6 +12,14 @@
 
 #define NM_PER_MIL 25400
 
+double Distance( double x1, double y1, double x2, double y2 )
+{
+    double dx = x1 - x2;
+    double dy = y1 - y2;
+    double d  = sqrt( dx * dx + dy * dy );
+    return d;
+}
+
 
 /**
  * Function TestLineHit
@@ -1031,7 +1039,7 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
                     y2 = el2.Center.Y + el2.yrad*   sin( s2 );
                 }
 
-                double d = Distance( (int) x, (int) y, (int) x2, (int) y2 );
+                double d = Distance( x, y, x2, y2 );
 
                 if( d < dmin )
                 {
@@ -1101,7 +1109,7 @@ double GetPointToLineDistance( double a, double b, int x, int y, double* xpp, do
     }
 
     // find distance
-    return Distance( x, y, (int) xp, (int) yp );
+    return Distance( x, y, xp, yp );
 }
 
 
@@ -1151,7 +1159,7 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
 
         // find distance
         if( InRange( xp, xi, xf ) && InRange( yp, yi, yf ) )
-            return Distance( x, y, (int) xp, (int) yp );
+            return Distance( x, y, xp, yp );
         else
             return min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
     }
@@ -1174,26 +1182,6 @@ bool InRange( double x, double xi, double xf )
     }
 
     return false;
-}
-
-
-// Get distance between 2 points
-//
-double Distance( int x1, int y1, int x2, int y2 )
-{
-    double dx = x1 - x2;
-    double dy = y1 - y2;
-
-    double d  = sqrt( dx * dx + dy * dy );
-
-    if( d > INT_MAX || d < INT_MIN )
-    {
-        wxASSERT( 0 );
-    }
-
-    // wxASSERT( d <= INT_MAX && d >= INT_MIN );
-
-    return int( d );
 }
 
 
@@ -1368,7 +1356,7 @@ double GetArcClearance( EllipseKH* el1, EllipseKH* el2,
 
                 double  x2 = el2->Center.X + el2->xrad * cos( theta2 );
                 double  y2 = el2->Center.Y + el2->yrad * sin( theta2 );
-                double  d = Distance( (int) x, (int) y, (int) x2, (int) y2 );
+                double  d = Distance( x,  y, x2, y2 );
 
                 if( d < dmin )
                 {

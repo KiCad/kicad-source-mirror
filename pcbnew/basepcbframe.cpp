@@ -810,8 +810,12 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
     {
         msg = _( "Zoom " );
 
-        wxString value;
-        value.Printf( wxT( "%g" ), GetScreen()->m_ZoomList[i]);
+        wxString value = wxString::Format( wxT( "%g" ),
+
+                                // @todo could do scaling here and show a "percentage"
+                                GetScreen()->m_ZoomList[i]
+                                );
+
         msg += value;
 
         m_zoomSelectBox->Append( msg );
@@ -820,6 +824,7 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
             m_zoomSelectBox->SetSelection( i + 1 );
     }
 }
+
 
 /* Function GetActiveViewerFrame
  * return a reference to the current Module Viewer Frame if exists

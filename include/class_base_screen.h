@@ -276,16 +276,22 @@ public:
 
     /**
      * Function SetScalingFactor
-     * @param aScale = the the current scale used to draw items on screen
-     * draw coordinates are user coordinates * GetScalingFactor()
+     * sets the scaling factor of "device units per logical unit".
+     * If the output device is a screen, then "device units" are pixels.  The
+     * "logical unit" is wx terminology, and corresponds to KiCad's "Internal Unit (IU)".
+     *
+     * Another way of thinking of scaling factor, when applied to a screen,
+     * is "pixelsPerIU".
+
+     * @param aScale = the the current scale used to draw items onto the device context wxDC.
+     *   device coordinates (pixels) = IU coordinates * GetScalingFactor()
      */
     void SetScalingFactor( double aScale );
 
     /**
      * Function GetZoom
+     * returns the
      * @return the current zoom factor
-     * Note: the zoom factor is NOT the scaling factor
-     *       the scaling factor is m_ZoomScalar * GetZoom()
      */
     double GetZoom() const;
 
@@ -420,7 +426,7 @@ public:
 
     void ClearBlockCommand() { m_BlockLocate.Clear(); }
 
-    wxPoint GetScrollCenterPosition() const { return m_scrollCenter; }
+    const wxPoint& GetScrollCenterPosition() const { return m_scrollCenter; }
     void SetScrollCenterPosition( const wxPoint& aCenterPosition )
     {
         m_scrollCenter = aCenterPosition;

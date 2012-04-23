@@ -52,15 +52,13 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 
     m_canvas->Refresh();
     m_canvas->Update();
- }
+}
 
 
-/** Redraw the screen with best zoom level and the best centering
- * that shows all the page or the board
- */
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
-    BASE_SCREEN * screen = GetScreen();
+    BASE_SCREEN* screen = GetScreen();
+
     screen->SetZoom( BestZoom() ); // Set the best zoom and get center point.
 
     if( screen->m_FirstRedraw )
@@ -76,16 +74,15 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
  */
 void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
 {
-    double scalex, bestscale;
-    wxSize size;
-
-    /* Compute the best zoom */
+    // Compute the best zoom
     Rect.Normalize();
-    size = m_canvas->GetClientSize();
+
+    wxSize size = m_canvas->GetClientSize();
 
     // Use ceil to at least show the full rect
-    scalex    = (double) Rect.GetSize().x / size.x;
-    bestscale = (double) Rect.GetSize().y / size.y;
+    double scalex    = (double) Rect.GetSize().x / size.x;
+    double bestscale = (double) Rect.GetSize().y / size.y;
+
     bestscale = MAX( bestscale, scalex );
 
     GetScreen()->SetScalingFactor( bestscale );
@@ -102,7 +99,6 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     if( m_canvas == NULL )
         return;
 
-    int          i;
     int          id = event.GetId();
     bool         zoom_at_cursor = false;
     BASE_SCREEN* screen = GetScreen();
@@ -151,9 +147,11 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     default:
+        unsigned i;
+
         i = id - ID_POPUP_ZOOM_LEVEL_START;
 
-        if( ( i < 0 ) || ( (size_t) i >= screen->m_ZoomList.GetCount() ) )
+        if( i >= screen->m_ZoomList.GetCount() )
         {
             wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
                         __TFILE__, __LINE__, i );
@@ -175,7 +173,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     int         maxZoomIds;
     int         zoom;
     wxString    msg;
-    BASE_SCREEN * screen = m_canvas->GetScreen();
+    BASE_SCREEN* screen = m_canvas->GetScreen();
 
     msg = AddHotkeyName( _( "Center" ), m_HotkeysZoomAndGridList, HK_ZOOM_CENTER );
     AddMenuItem( MasterMenu, ID_POPUP_ZOOM_CENTER, msg, KiBitmap( zoom_center_on_screen_xpm ) );
@@ -199,7 +197,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.GetCount() ) ?
                  maxZoomIds : screen->m_ZoomList.GetCount();
 
-    /* Populate zoom submenu. */
+    // Populate zoom submenu.
     for( int i = 0; i < maxZoomIds; i++ )
     {
         msg.Printf( wxT( "%g" ), screen->m_ZoomList[i] );
@@ -210,7 +208,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
             zoom_choice->Check( ID_POPUP_ZOOM_LEVEL_START + i, true );
     }
 
-    /* Create grid submenu as required. */
+    // Create grid submenu as required.
     if( screen->GetGridCount() )
     {
         wxMenu* gridMenu = new wxMenu;

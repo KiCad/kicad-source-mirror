@@ -647,6 +647,11 @@ public:
      */
     void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
+    /**
+     * Function Zoom_Automatique
+     * redraws the screen with best zoom level and the best centering
+     * that shows all the page or the board
+     */
     void Zoom_Automatique( bool aWarpPointer );
 
     /* Set the zoom level to show the area Rect */
