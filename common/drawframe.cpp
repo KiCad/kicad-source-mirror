@@ -41,6 +41,7 @@
 #include <kicad_device_context.h>
 #include <dialog_helpers.h>
 #include <base_units.h>
+#include <vector2d.h>
 
 #include <wx/fontdlg.h>
 
@@ -495,211 +496,6 @@ bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
 }
 
 
-void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
-{
-    int     unitsX, unitsY, posX, posY;
-    wxSize  clientSize, logicalClientSize, virtualSize;
-    BASE_SCREEN* screen = GetScreen();
-    bool noRefresh = true;
-
-    if( screen == NULL || m_canvas == NULL )
-        return;
-
-    double scalar = screen->GetScalingFactor();
-
-    wxLogTrace( traceScrollSettings, wxT( "Center Position = ( %d, %d ), scalar = %0.5f." ),
-                aCenterPosition.x, aCenterPosition.y, scalar );
-
-    // Calculate the portion of the drawing that can be displayed in the
-    // client area at the current zoom level.
-    clientSize = m_canvas->GetClientSize();
-
-    // The logical size of the client window.
-    logicalClientSize.x = KiROUND( (double) clientSize.x / scalar );
-    logicalClientSize.y = KiROUND( (double) clientSize.y / scalar );
-
-    // A corner of the drawing in internal units.
-    wxSize corner = GetPageSizeIU();
-
-    // The drawing rectangle logical units
-    wxRect drawingRect( wxPoint( 0, 0 ),  corner );
-
-    wxLogTrace( traceScrollSettings, wxT( "Logical drawing rect = ( %d, %d, %d, %d )." ),
-                drawingRect.x, drawingRect.y, drawingRect.width, drawingRect.height );
-    wxLogTrace( traceScrollSettings, wxT( "   left %d, right %d, top %d, bottome %d" ),
-                drawingRect.GetLeft(), drawingRect.GetRight(),
-                drawingRect.GetTop(), drawingRect.GetBottom() );
-
-    // The size of the client rectangle in logical units.
-    int x = KiROUND( (double) aCenterPosition.x - ( (double) logicalClientSize.x / 2.0 ) );
-    int y = KiROUND( (double) aCenterPosition.y - ( (double) logicalClientSize.y / 2.0 ) );
-
-    // If drawn around the center, adjust the client rectangle accordingly.
-    if( screen->m_Center )
-    {
-        x += KiROUND( (double) drawingRect.width / 2.0 );
-        y += KiROUND( (double) drawingRect.height / 2.0 );
-    }
-
-    wxRect logicalClientRect( wxPoint( x, y ), logicalClientSize );
-
-    wxLogTrace( traceScrollSettings, wxT( "Logical client rect = ( %d, %d, %d, %d )." ),
-                logicalClientRect.x, logicalClientRect.y,
-                logicalClientRect.width, logicalClientRect.height );
-    wxLogTrace( traceScrollSettings, wxT( "   left %d, right %d, top %d, bottome %d" ),
-                logicalClientRect.GetLeft(), logicalClientRect.GetRight(),
-                logicalClientRect.GetTop(), logicalClientRect.GetBottom() );
-
-    if( drawingRect == logicalClientRect )
-    {
-        virtualSize = drawingRect.GetSize();
-    }
-    else
-    {
-        if( drawingRect.GetLeft() < logicalClientRect.GetLeft() && drawingRect.GetRight() > logicalClientRect.GetRight() )
-        {
-            virtualSize.x = drawingRect.GetSize().x;
-        }
-        else
-        {
-            int drawingCenterX = drawingRect.x + ( drawingRect.width / 2 );
-            int clientCenterX = logicalClientRect.x + ( logicalClientRect.width / 2 );
-
-            if( logicalClientRect.width > drawingRect.width )
-            {
-                if( drawingCenterX > clientCenterX )
-                    virtualSize.x = ( drawingCenterX - logicalClientRect.GetLeft() ) * 2;
-                else if( drawingCenterX < clientCenterX )
-                    virtualSize.x = ( logicalClientRect.GetRight() - drawingCenterX ) * 2;
-                else
-                    virtualSize.x = logicalClientRect.width;
-            }
-            else
-            {
-                if( drawingCenterX > clientCenterX )
-                    virtualSize.x = drawingRect.width +
-                                    ( (drawingRect.GetLeft() - logicalClientRect.GetLeft() ) * 2 );
-                else if( drawingCenterX < clientCenterX )
-                    virtualSize.x = drawingRect.width +
-                                    ( (logicalClientRect.GetRight() - drawingRect.GetRight() ) * 2 );
-                else
-                    virtualSize.x = drawingRect.width;
-            }
-        }
-
-        if( drawingRect.GetTop() < logicalClientRect.GetTop() && drawingRect.GetBottom() > logicalClientRect.GetBottom() )
-        {
-            virtualSize.y = drawingRect.GetSize().y;
-        }
-        else
-        {
-            int drawingCenterY = drawingRect.y + ( drawingRect.height / 2 );
-            int clientCenterY = logicalClientRect.y + ( logicalClientRect.height / 2 );
-
-            if( logicalClientRect.height > drawingRect.height )
-            {
-                if( drawingCenterY > clientCenterY )
-                    virtualSize.y = ( drawingCenterY - logicalClientRect.GetTop() ) * 2;
-                else if( drawingCenterY < clientCenterY )
-                    virtualSize.y = ( logicalClientRect.GetBottom() - drawingCenterY ) * 2;
-                else
-                    virtualSize.y = logicalClientRect.height;
-            }
-            else
-            {
-                if( drawingCenterY > clientCenterY )
-                    virtualSize.y = drawingRect.height +
-                                    ( ( drawingRect.GetTop() - logicalClientRect.GetTop() ) * 2 );
-                else if( drawingCenterY < clientCenterY )
-                    virtualSize.y = drawingRect.height +
-                                    ( ( logicalClientRect.GetBottom() - drawingRect.GetBottom() ) * 2 );
-                else
-                    virtualSize.y = drawingRect.height;
-            }
-        }
-    }
-
-
-    if( screen->m_Center )
-    {
-        screen->m_DrawOrg.x = -( KiROUND( (double) virtualSize.x / 2.0 ) );
-        screen->m_DrawOrg.y = -( KiROUND( (double) virtualSize.y / 2.0 ) );
-    }
-    else
-    {
-        screen->m_DrawOrg.x = -( KiROUND( (double) (virtualSize.x - drawingRect.width) / 2.0 ) );
-        screen->m_DrawOrg.y = -( KiROUND( (double) (virtualSize.y - drawingRect.height) / 2.0 ) );
-    }
-
-    /* Always set scrollbar pixels per unit to 1 unless you want the zoom
-     * around cursor to jump around.  This reported problem occurs when the
-     * zoom point is not on a pixel per unit increment.  If you set the
-     * pixels per unit to 10, you have potential for the zoom point to
-     * jump around +/-5 pixels from the nearest grid point.
-     */
-    screen->m_ScrollPixelsPerUnitX = screen->m_ScrollPixelsPerUnitY = 1;
-
-    // Calculate the number of scroll bar units for the given zoom level in device units.
-    unitsX = KiROUND( (double) virtualSize.x * scalar );
-    unitsY = KiROUND( (double) virtualSize.y * scalar );
-
-    // Calculate the scroll bar position in logical units to place the center position at
-    // the center of client rectangle.
-    screen->SetScrollCenterPosition( aCenterPosition );
-    posX = aCenterPosition.x - KiROUND( (double) logicalClientRect.width / 2.0 ) -
-           screen->m_DrawOrg.x;
-    posY = aCenterPosition.y - KiROUND( (double) logicalClientRect.height / 2.0 ) -
-           screen->m_DrawOrg.y;
-
-    // Convert scroll bar position to device units.
-    posX = KiROUND( (double) posX * scalar );
-    posY = KiROUND( (double) posY * scalar );
-
-    if( posX < 0 )
-    {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
-        posX = 0;
-    }
-
-    if( posX > unitsX )
-    {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
-        posX = unitsX;
-    }
-
-    if( posY < 0 )
-    {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
-        posY = 0;
-    }
-
-    if( posY > unitsY )
-    {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
-        posY = unitsY;
-    }
-
-    screen->m_ScrollbarPos = wxPoint( posX, posY );
-    screen->m_ScrollbarNumber = wxSize( unitsX, unitsY );
-
-    wxLogTrace( traceScrollSettings,
-                wxT( "Drawing = (%d, %d), Client = (%d, %d), Offset = (%d, %d), \
-SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
-                virtualSize.x, virtualSize.y, logicalClientSize.x, logicalClientSize.y,
-                screen->m_DrawOrg.x, screen->m_DrawOrg.y,
-                screen->m_ScrollPixelsPerUnitX, screen->m_ScrollPixelsPerUnitY,
-                screen->m_ScrollbarNumber.x, screen->m_ScrollbarNumber.y,
-                screen->m_ScrollbarPos.x, screen->m_ScrollbarPos.y );
-
-    m_canvas->SetScrollbars( screen->m_ScrollPixelsPerUnitX,
-                             screen->m_ScrollPixelsPerUnitY,
-                             screen->m_ScrollbarNumber.x,
-                             screen->m_ScrollbarNumber.y,
-                             screen->m_ScrollbarPos.x,
-                             screen->m_ScrollbarPos.y, noRefresh );
-}
-
-
 void EDA_DRAW_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_BASE_FRAME::SetLanguage( event );
@@ -858,3 +654,188 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
     Block->SetMessageBlock( this );
     return true;
 }
+
+
+void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
+{
+    BASE_SCREEN* screen = GetScreen();
+
+    if( screen == NULL || m_canvas == NULL )
+        return;
+
+    // There are no safety limits on these calculations, so in NANOMETRES build it
+    // still blows up.  This is incomplete work.
+
+    double scale = screen->GetScalingFactor();
+
+    wxLogTrace( traceScrollSettings, wxT( "Center Position = ( %d, %d ), scale = %.16g" ),
+                aCenterPositionIU.x, aCenterPositionIU.y, scale );
+
+    // Calculate the portion of the drawing that can be displayed in the
+    // client area at the current zoom level.
+
+    // visible viewport in device units ~ pixels
+    wxSize clientSizeDU = m_canvas->GetClientSize();
+
+    // Size of the client window in IU
+    DSIZE clientSizeIU( clientSizeDU.x / scale, clientSizeDU.y / scale );
+
+    // Full drawing or "page" rectangle in internal units
+    DRECT pageRectIU( 0, 0, GetPageSizeIU().x, GetPageSizeIU().y );
+
+    // The upper left corner of the client rectangle in internal units.
+    double xIU = aCenterPositionIU.x - clientSizeIU.x / 2.0;
+    double yIU = aCenterPositionIU.y - clientSizeIU.y / 2.0;
+
+    // If drawn around the center, adjust the client rectangle accordingly.
+    if( screen->m_Center )
+    {
+        // half page offset.
+        xIU += pageRectIU.width  / 2.0;
+        yIU += pageRectIU.height / 2.0;
+    }
+
+    DRECT clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
+    DSIZE virtualSizeIU;
+
+    if( pageRectIU.GetLeft() < clientRectIU.GetLeft() && pageRectIU.GetRight() > clientRectIU.GetRight() )
+    {
+        virtualSizeIU.x = pageRectIU.GetSize().x;
+    }
+    else
+    {
+        double drawingCenterX = pageRectIU.x   + ( pageRectIU.width / 2 );
+        double clientCenterX  = clientRectIU.x + ( clientRectIU.width / 2 );
+
+        if( clientRectIU.width > pageRectIU.width )
+        {
+            if( drawingCenterX > clientCenterX )
+                virtualSizeIU.x = ( drawingCenterX - clientRectIU.GetLeft() ) * 2;
+            else if( drawingCenterX < clientCenterX )
+                virtualSizeIU.x = ( clientRectIU.GetRight() - drawingCenterX ) * 2;
+            else
+                virtualSizeIU.x = clientRectIU.width;
+        }
+        else
+        {
+            if( drawingCenterX > clientCenterX )
+                virtualSizeIU.x = pageRectIU.width +
+                                ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
+            else if( drawingCenterX < clientCenterX )
+                virtualSizeIU.x = pageRectIU.width +
+                                ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
+            else
+                virtualSizeIU.x = pageRectIU.width;
+        }
+    }
+
+    if( pageRectIU.GetTop() < clientRectIU.GetTop() && pageRectIU.GetBottom() > clientRectIU.GetBottom() )
+    {
+        virtualSizeIU.y = pageRectIU.GetSize().y;
+    }
+    else
+    {
+        int drawingCenterY = pageRectIU.y   + ( pageRectIU.height / 2 );
+        int clientCenterY  = clientRectIU.y + ( clientRectIU.height / 2 );
+
+        if( clientRectIU.height > pageRectIU.height )
+        {
+            if( drawingCenterY > clientCenterY )
+                virtualSizeIU.y = ( drawingCenterY - clientRectIU.GetTop() ) * 2;
+            else if( drawingCenterY < clientCenterY )
+                virtualSizeIU.y = ( clientRectIU.GetBottom() - drawingCenterY ) * 2;
+            else
+                virtualSizeIU.y = clientRectIU.height;
+        }
+        else
+        {
+            if( drawingCenterY > clientCenterY )
+                virtualSizeIU.y = pageRectIU.height +
+                                ( ( pageRectIU.GetTop() - clientRectIU.GetTop() ) * 2 );
+            else if( drawingCenterY < clientCenterY )
+                virtualSizeIU.y = pageRectIU.height +
+                                ( ( clientRectIU.GetBottom() - pageRectIU.GetBottom() ) * 2 );
+            else
+                virtualSizeIU.y = pageRectIU.height;
+        }
+    }
+
+    if( screen->m_Center )
+    {
+        screen->m_DrawOrg.x = -KiROUND( virtualSizeIU.x / 2.0 );
+        screen->m_DrawOrg.y = -KiROUND( virtualSizeIU.y / 2.0 );
+    }
+    else
+    {
+        screen->m_DrawOrg.x = -KiROUND( ( virtualSizeIU.x - pageRectIU.width )  / 2.0 );
+        screen->m_DrawOrg.y = -KiROUND( ( virtualSizeIU.y - pageRectIU.height ) / 2.0 );
+    }
+
+    /* Always set scrollbar pixels per unit to 1 unless you want the zoom
+     * around cursor to jump around.  This reported problem occurs when the
+     * zoom point is not on a pixel per unit increment.  If you set the
+     * pixels per unit to 10, you have potential for the zoom point to
+     * jump around +/-5 pixels from the nearest grid point.
+     */
+    screen->m_ScrollPixelsPerUnitX = screen->m_ScrollPixelsPerUnitY = 1;
+
+    // Number of scroll bar units for the given zoom level in device units.
+    double unitsX = virtualSizeIU.x * scale;
+    double unitsY = virtualSizeIU.y * scale;
+
+    // Calculate the scroll bar position in internal units to place the
+    // center position at the center of client rectangle.
+    screen->SetScrollCenterPosition( aCenterPositionIU );
+
+    double posX = aCenterPositionIU.x - clientRectIU.width /2.0 - screen->m_DrawOrg.x;
+    double posY = aCenterPositionIU.y - clientRectIU.height/2.0 - screen->m_DrawOrg.y;
+
+    // Convert scroll bar position to device units.
+    posX = KiROUND( posX * scale );
+    posY = KiROUND( posY * scale );
+
+    if( posX < 0 )
+    {
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
+        posX = 0;
+    }
+
+    if( posX > unitsX )
+    {
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
+        posX = unitsX;
+    }
+
+    if( posY < 0 )
+    {
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
+        posY = 0;
+    }
+
+    if( posY > unitsY )
+    {
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
+        posY = unitsY;
+    }
+
+    screen->m_ScrollbarPos    = wxPoint( KiROUND( posX ),  KiROUND( posY ) );
+    screen->m_ScrollbarNumber = wxSize( KiROUND( unitsX ), KiROUND( unitsY ) );
+
+    wxLogTrace( traceScrollSettings,
+                wxT( "Drawing = (%.16g, %.16g), Client = (%.16g, %.16g), Offset = (%d, %d), SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
+                virtualSizeIU.x, virtualSizeIU.y, clientSizeIU.x, clientSizeIU.y,
+                screen->m_DrawOrg.x, screen->m_DrawOrg.y,
+                screen->m_ScrollPixelsPerUnitX, screen->m_ScrollPixelsPerUnitY,
+                screen->m_ScrollbarNumber.x, screen->m_ScrollbarNumber.y,
+                screen->m_ScrollbarPos.x, screen->m_ScrollbarPos.y );
+
+    bool            noRefresh = true;
+
+    m_canvas->SetScrollbars( screen->m_ScrollPixelsPerUnitX,
+                             screen->m_ScrollPixelsPerUnitY,
+                             screen->m_ScrollbarNumber.x,
+                             screen->m_ScrollbarNumber.y,
+                             screen->m_ScrollbarPos.x,
+                             screen->m_ScrollbarPos.y, noRefresh );
+}
+

@@ -42,6 +42,12 @@
 */
 static const double pcbZoomList[] =
 {
+#if defined( USE_PCBNEW_NANOMETRES )
+    ZOOM_FACTOR( 0.1 ),
+    ZOOM_FACTOR( 0.2 ),
+    ZOOM_FACTOR( 0.3 ),
+#endif
+
     ZOOM_FACTOR( 0.5 ),
     ZOOM_FACTOR( 1.0 ),
     ZOOM_FACTOR( 1.5 ),
@@ -57,10 +63,14 @@ static const double pcbZoomList[] =
     ZOOM_FACTOR( 80.0 ),
     ZOOM_FACTOR( 120.0 ),
     ZOOM_FACTOR( 200.0 ),
-    ZOOM_FACTOR( 350.0 ),
+    ZOOM_FACTOR( 300.0 ),
+
+
+#if !defined( USE_PCBNEW_NANOMETRES )
     ZOOM_FACTOR( 500.0 ),
     ZOOM_FACTOR( 1000.0 ),
     ZOOM_FACTOR( 2000.0 )
+#endif
 };
 
 
@@ -98,6 +108,9 @@ static GRID_TYPE pcbGridList[] =
 PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
+    wxSize displayz = wxGetDisplaySize();
+
+
     for( unsigned i = 0; i < DIM( pcbZoomList );  ++i )
         m_ZoomList.Add( pcbZoomList[i] );
 
