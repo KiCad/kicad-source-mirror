@@ -480,26 +480,6 @@ EDA_ITEM* TEXTE_MODULE::Clone() const
 }
 
 
-void TEXTE_MODULE::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-    throw( IO_ERROR )
-{
-    MODULE* parent = (MODULE*) GetParent();
-    double  orient = GetOrientation();
-
-    // Due to the Pcbnew history, m_Orient is saved in screen value
-    // but it is handled as relative to its parent footprint
-    if( parent )
-        orient += parent->GetOrientation();
-
-    aFormatter->Print( aNestLevel, "(module_text %d (at %s %0.1f)%s\n", m_Type,
-                       FMT_IU( m_Pos0 ).c_str(), orient, (m_NoShow) ? "hide" : "" );
-
-    EDA_TEXT::Format( aFormatter, aNestLevel+1, aControlBits );
-
-    aFormatter->Print( aNestLevel, ")\n" );
-}
-
-
 #if defined(DEBUG)
 
 void TEXTE_MODULE::Show( int nestLevel, std::ostream& os ) const

@@ -209,7 +209,8 @@ public:
 
 %apply wxString& { wxString* }
 
-%typemap(out) wxString {
+%typemap(out) wxString 
+{
 %#if wxUSE_UNICODE
     $result = PyUnicode_FromWideChar($1.c_str(), $1.Len());
 %#else
@@ -217,7 +218,8 @@ public:
 %#endif
 }
 
-%typemap(varout) wxString {
+%typemap(varout) wxString 
+{
 %#if wxUSE_UNICODE
     $result = PyUnicode_FromWideChar($1.c_str(), $1.Len());
 %#else
@@ -251,6 +253,44 @@ public:
 }
 
 
+// wxArrayString wrappers //////////////////////////////////////////////////////
+%typemap(in) wxArrayString& (bool temp=false) {
+    if (!PySequence_Check($input)) 
+    {
+        PyErr_SetString(PyExc_TypeError, "Not a sequence of strings");
+        SWIG_fail;
+    }
+    
+    $1 = new wxArrayString;
+    temp = true;
+    int last=PySequence_Length($input);
+    for (int i=0; i<last; i++) 
+    {
+        PyObject* pyStr = PySequence_GetItem($input, i);
+        wxString* wxS = newWxStringFromPy(pyStr);
+        if (PyErr_Occurred())  
+            SWIG_fail;
+        $1->Add(*wxS);
+        delete wxS;
+        Py_DECREF(pyStr);
+    }
+}
+
+%typemap(freearg) wxArrayString& 
+{
+    if (temp$argnum) 
+        delete $1;
+}
+
+%typemap(out) wxArrayString& 
+{
+    $result = wxArrayString2PyList(*$1);
+}
+
+%typemap(out) wxArrayString 
+{
+    $result = wxArrayString2PyList($1);
+}
 
 
 

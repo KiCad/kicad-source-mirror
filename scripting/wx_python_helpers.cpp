@@ -30,10 +30,35 @@
 #include <Python.h>
 #include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/arrstr.h>
+
+
 
 #define WX_DEFAULTENCODING_SIZE 64
 
 static char wxPythonEncoding[WX_DEFAULTENCODING_SIZE] = "ascii";
+
+
+PyObject* wxArrayString2PyList(const wxArrayString& lst)
+{
+    PyObject* list = PyList_New(0);
+    for (size_t i=0; i < lst.GetCount(); i++) {
+#if wxUSE_UNICODE
+        PyObject* pyStr = PyUnicode_FromWideChar(lst[i].c_str(), 
+                                                 lst[i].Len()
+                                                );
+#else
+        PyObject* pyStr = PyString_FromStringAndSize(lst[i].c_str(), 
+                                                     lst[i].Len()
+                                                    );
+#endif
+        PyList_Append(list, pyStr);
+        Py_DECREF(pyStr);
+    }
+    return list;
+}
+
+
 
 wxString* newWxStringFromPy(PyObject* src) {
 
