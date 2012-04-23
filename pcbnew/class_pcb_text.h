@@ -115,9 +115,6 @@ public:
 
     EDA_ITEM* Clone() const;
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
-
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;
 #endif

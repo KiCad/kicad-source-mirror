@@ -55,7 +55,7 @@ const wxString SchematicFileWildcard( _( "KiCad schematic files (*.sch)|*.sch" )
 const wxString NetlistFileWildcard( _( "KiCad netlist files (*.net)|*.net" ) );
 const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
 const wxString LegacyPcbFileWildcard( _( "KiCad printed circuit board files (*.brd)|*.brd" ) );
-const wxString PcbFileWildcard( _( "KiCad s-expr printed circuit board files (*.kicad_brd)|*.kicad_brd" ) );
+const wxString PcbFileWildcard( _( "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb" ) );
 const wxString FootprintLibFileWildcard( _( "KiCad footprint library file (*.mod)|*.mod" ) );
 const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
 const wxString MacrosFileWildcard( _( "KiCad recorded macros (*.mcr)|*.mcr" ) );

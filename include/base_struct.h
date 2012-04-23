@@ -729,18 +729,6 @@ public:
      */
     virtual EDA_ITEM& operator=( const EDA_ITEM& aItem );
 
-    /**
-     * Function Format
-     * outputs the object to \a aFormatter in s-expression form.
-     *
-     * @param aFormatter The #OUTPUTFORMATTER object to write to.
-     * @param aNestLevel The indentation next level.
-     * @param aControlBits The control bit definition for object specific formatting.
-     * @throw IO_ERROR on write error.
-     */
-    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
-
 #if defined(DEBUG)
 
     /**

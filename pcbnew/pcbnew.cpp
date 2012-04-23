@@ -26,7 +26,7 @@
  * @file pcbnew.cpp
  * @brief Pcbnew main program.
  */
-
+#include <pcbnew_scripting_helpers.h>
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <confirm.h>
@@ -49,7 +49,7 @@
 
 #include <dialogs/dialog_scripting.h>
 #include <python_scripting.h>
-#include <pcbnew_scripting_helpers.h>
+
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;

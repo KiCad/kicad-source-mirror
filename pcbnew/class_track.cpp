@@ -1559,47 +1559,6 @@ wxString TRACK::GetSelectMenuText() const
 }
 
 
-void TRACK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-    throw( IO_ERROR )
-{
-    if( Type() == PCB_VIA_T )
-    {
-        std::string type;
-
-        switch( m_Shape )
-        {
-        case VIA_THROUGH:       type = "thru";     break;
-        case VIA_BLIND_BURIED:  type = "blind";    break;
-        case VIA_MICROVIA:      type = "micro";    break;
-        default:
-            THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), m_Shape ) );
-        }
-
-        aFormatter->Print( aNestLevel, "(via %s (at %s) (size %s)", type.c_str(),
-                           FMT_IU( m_Start ).c_str(), FMT_IU( m_Width ).c_str() );
-
-        if( m_Drill != UNDEFINED_DRILL_DIAMETER )
-            aFormatter->Print( 0, " (drill %s)", FMT_IU( m_Drill ).c_str() );
-    }
-    else
-    {
-        aFormatter->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
-                           FMT_IU( m_Start ).c_str(), FMT_IU( m_End ).c_str(),
-                           FMT_IU( m_Width ).c_str() );
-    }
-
-    aFormatter->Print( 0, " (layer %d) (net %d)", GetLayer(), GetNet() );
-
-    if( GetTimeStamp() != 0 )
-        aFormatter->Print( 0, " (tstamp %lX)", GetTimeStamp() );
-
-    if( GetStatus() != 0 )
-        aFormatter->Print( 0, " (status %X)", GetStatus() );
-
-    aFormatter->Print( 0, ")\n" );
-}
-
-
 #if defined(DEBUG)
 
 void TRACK::Show( int nestLevel, std::ostream& os ) const
