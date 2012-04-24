@@ -327,21 +327,21 @@ template<class T> bool const VECTOR2<T>::operator!=( VECTOR2<T> const& aVector )
 
 
 /**
- * Class RECT
- * is a description of a rectangle in cartesion coordinate system.
+ * Class BOX2
+ * is a description of a rectangle in a cartesion coordinate system.
  */
-template<class T> class RECT
+template<class T> class BOX2
 {
 public:
-    RECT() : x(0), y(0), width(0), height(0) {}
+    BOX2() : x(0), y(0), width(0), height(0) {}
 
-    RECT( T aX, T aY, T aWidth, T aHeight ):
+    BOX2( T aX, T aY, T aWidth, T aHeight ):
         x( aX ), y( aY ), width( aWidth ), height( aHeight )
     {}
 
 
     /// Copy constructor
-    RECT( const RECT<T>& aRect ) :
+    BOX2( const BOX2<T>& aRect ) :
         x( aRect.x ), y( aRect.y ), width( aRect.width ), height( aRect.height )
     {}
 
@@ -393,7 +393,7 @@ public:
 typedef VECTOR2<double>     DPOINT;
 typedef DPOINT              DSIZE;
 
-typedef RECT<double>        DRECT;
+typedef BOX2<double>        DBOX;
 
 
 #endif // VECTOR2D_H_

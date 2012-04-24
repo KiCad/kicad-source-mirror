@@ -675,13 +675,13 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     // client area at the current zoom level.
 
     // visible viewport in device units ~ pixels
-    wxSize clientSizeDU = m_canvas->GetClientSize();
+    wxSize  clientSizeDU = m_canvas->GetClientSize();
 
     // Size of the client window in IU
-    DSIZE clientSizeIU( clientSizeDU.x / scale, clientSizeDU.y / scale );
+    DSIZE   clientSizeIU( clientSizeDU.x / scale, clientSizeDU.y / scale );
 
     // Full drawing or "page" rectangle in internal units
-    DRECT pageRectIU( 0, 0, GetPageSizeIU().x, GetPageSizeIU().y );
+    DBOX    pageRectIU( 0, 0, GetPageSizeIU().x, GetPageSizeIU().y );
 
     // The upper left corner of the client rectangle in internal units.
     double xIU = aCenterPositionIU.x - clientSizeIU.x / 2.0;
@@ -695,8 +695,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
         yIU += pageRectIU.height / 2.0;
     }
 
-    DRECT clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
-    DSIZE virtualSizeIU;
+    DBOX    clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
+    DSIZE   virtualSizeIU;
 
     if( pageRectIU.GetLeft() < clientRectIU.GetLeft() && pageRectIU.GetRight() > clientRectIU.GetRight() )
     {
