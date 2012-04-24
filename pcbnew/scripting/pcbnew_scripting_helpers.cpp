@@ -67,16 +67,8 @@ BOARD* LoadBoard(wxString& aFileName)
 
 BOARD* LoadBoard(wxString& aFileName,IO_MGR::PCB_FILE_T aFormat)
 {
-	static char ExceptionError[256];
-	try{
-	   return IO_MGR::Load(aFormat,aFileName);	
-	} catch (IO_ERROR e)
-	{
-		sprintf(ExceptionError, "%s\n", TO_UTF8(e.errorText) );
-		PyErr_SetString(PyExc_IOError,ExceptionError);
-		return NULL;
-	}
-
+	return IO_MGR::Load(aFormat,aFileName);	
+	
 }
 
 bool SaveBoard(wxString& aFilename, BOARD* aBoard)
@@ -87,7 +79,6 @@ bool SaveBoard(wxString& aFilename, BOARD* aBoard)
 bool SaveBoard(wxString& aFileName, BOARD* aBoard,
                 IO_MGR::PCB_FILE_T aFormat)
 {
-  static char ExceptionError[256];
   aBoard->m_Status_Pcb &= ~CONNEXION_OK;
   aBoard->SynchronizeNetsAndNetClasses();
   aBoard->SetCurrentNetClass( aBoard->m_NetClasses.GetDefault()->GetName() );
@@ -105,19 +96,10 @@ bool SaveBoard(wxString& aFileName, BOARD* aBoard,
   }
   
 
-  try 
-  {
-     IO_MGR::Save( aFormat, aFileName, aBoard, &props );
-     return true;
-  } 
-  catch (IO_ERROR e)
-  {
-	sprintf(ExceptionError, "%s\n", TO_UTF8(e.errorText) );
-	PyErr_SetString(PyExc_IOError,ExceptionError);
-
-        return false;
-  }
-
+ 
+  IO_MGR::Save( aFormat, aFileName, aBoard, &props );
+  return true;
+ 
 }
 
 
