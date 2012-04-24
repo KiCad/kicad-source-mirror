@@ -44,6 +44,25 @@
 
 %rename(AddNative) *::Add;
 
+%exception {
+    try{
+        $action
+    }
+    catch( IO_ERROR e )
+    {
+        char ExceptionError[256];
+        sprintf(ExceptionError, "%s\n", TO_UTF8(e.errorText) );
+	PyErr_SetString(PyExc_IOError,ExceptionError);
+	return NULL;
+    }
+    catch( ... )
+    {
+        SWIG_fail;
+    }
+}
+%include exception.i
+
+
 // this is what it must be included in the wrapper .cxx code to compile
 
 %{ 
