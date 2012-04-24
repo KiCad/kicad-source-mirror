@@ -52,21 +52,33 @@ PCBNew
   See the @todos in class_zone.cpp
 
 
-Dick's Peronal TODO Items  (Last Update: 5-April-2012)
+Dick's Peronal TODO Items  (Last Update: 24-April-2012)
 -----------------------------------------------------
-0)  Check that the new load visibility BOARD settings is properly setting the toolbar
+
+1)  Work through some scroll, pan, zoom overflows in PCBNEW's nanometer build mode.
+    It is thought that if we can constrain the virtual IU space to within
+    INT_MIN to INT_MAX then a whole host of other problems will go away.  Most
+    of the evil is in EDA_DRAW_FRAME::AdjustScrollBars() which assumes the
+    virtual IU space is infinite.  This function triggers a movement of the
+    viewport within the virtual IU space and also a change in size of the virtual
+    IU space.  Once this happens, you can end up thinking there are problems in
+    functions like EDA_DRAW_PANE::DrawCrossHair(), but this may be an artifact
+    of having travelled outside a limited virtual IU space.
+
+
+2)  Check that the new load visibility BOARD settings is properly setting the toolbar
     buttons like show grid or ratsnest.  Add PCB_EDIT_FRAME::SetVisibleElements() so
     toolbar crap is not known to a BOARD.
 
-1) Finish removing global access requirements from KICAD_PLUGIN, so that:
-   *)   a BOARD is a fully self contained document description.
-   *)   plugin developers do not have to access globals, since a plugin could
+3)  Finish removing global access requirements from KICAD_PLUGIN, so that:
+    *)  a BOARD is a fully self contained document description.
+    *)  plugin developers do not have to access globals, since a plugin could
         very well be a dynamically loaded DLL/DSO.
-   One final problem remains with BASE_SCREEN's grid origin, easy solution is to
-   move just that one field into the BOARD.
+        One final problem remains with BASE_SCREEN's grid origin, easy solution is to
+        move just that one field into the BOARD.
 
-2) Do an EAGLE XML import PCBNEW PLUGIN, and possibly add export support to it.
+4) Do an EAGLE XML import PCBNEW PLUGIN, and possibly add export support to it.
    This is PLUGIN::Load() and maybe PLUGIN::Save().
 
-3) Get back to the SWEET work.
+5) Get back to the SWEET work.
 
