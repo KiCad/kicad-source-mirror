@@ -127,11 +127,24 @@ enum pseudokeys {
  * In Debug build an assert fires if will not fit into an int.
  */
 
-#if defined( DEBUG )
+#if !defined( DEBUG )
 
-// DEBUG: a macro to capture line and file, then calls this inline
+/// KiROUND: a function so v is not evaluated twice.  Unfortunately, compiler
+/// is unable to pre-compute constants using this.
+static inline int KiROUND( double v )
+{
+    return int( v < 0 ? v - 0.5 : v + 0.5 );
+}
 
-static inline int KiRound( double v, int line, const char* filename )
+/// KIROUND: a macro so compiler can pre-compute constants.  Use this with compile
+/// time constants rather than the inline function above.
+#define KIROUND( v )    int( (v) < 0 ? (v) - 0.5 : (v) + 0.5 )
+
+#else
+
+// DEBUG: KiROUND() is a macro to capture line and file, then calls this inline
+
+static inline int kiRound_( double v, int line, const char* filename )
 {
     v = v < 0 ? v - 0.5 : v + 0.5;
     if( v > INT_MAX + 0.5 )
@@ -145,13 +158,10 @@ static inline int KiRound( double v, int line, const char* filename )
     return int( v );
 }
 
-#define KiROUND( v )    KiRound( v, __LINE__, __FILE__ )
+#define KiROUND( v )    kiRound_( v, __LINE__, __FILE__ )
 
-#else
-
-// RELEASE: a macro so compile can pre-compute constants.
-
-#define KiROUND( v )  int( (v) < 0 ? (v) - 0.5 : (v) + 0.5 )
+// in Debug build, use the overflow catcher since code size is immaterial
+#define KIROUND( v )    KiROUND( v )
 
 #endif
 

@@ -63,7 +63,7 @@ Dick's Peronal TODO Items  (Last Update: 24-April-2012)
     viewport within the virtual IU space and also a change in size of the virtual
     IU space.  Once this happens, you can end up thinking there are problems in
     functions like EDA_DRAW_PANE::DrawCrossHair(), but this may be an artifact
-    of having travelled outside a limited virtual IU space.
+    of having traveled outside a limited virtual IU space.
 
 
 2)  Check that the new load visibility BOARD settings is properly setting the toolbar
