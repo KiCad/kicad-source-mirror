@@ -39,6 +39,7 @@
 #include <wx/fileconf.h>
 
 #include <richio.h>
+#include <convert_to_biu.h>
 
 #if !wxUSE_PRINTING_ARCHITECTURE
 #   error "You must use '--enable-printarch' in your wx library configuration."
@@ -296,18 +297,9 @@ public:
 
     // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
     // and either deci-mils or nanometers in PCBNew.
-#if defined(PCBNEW)
-# if defined(KICAD_NANOMETRE)
-    int GetWidthIU() const  { return 25400 * GetWidthMils();  }
-    int GetHeightIU() const { return 25400 * GetHeightMils(); }
-# else
-    int GetWidthIU() const  { return 10 * GetWidthMils();  }
-    int GetHeightIU() const { return 10 * GetHeightMils(); }
-# endif
-    const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
-#elif defined(EESCHEMA)
-    int GetWidthIU() const  { return GetWidthMils();  }
-    int GetHeightIU() const { return GetHeightMils(); }
+#if defined(PCBNEW) || defined(EESCHEMA) || defined(GERBVIEW)
+    int GetWidthIU() const  { return MILS_TO_IU_SCALING_FACTOR * GetWidthMils();  }
+    int GetHeightIU() const { return MILS_TO_IU_SCALING_FACTOR * GetHeightMils(); }
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #endif
 

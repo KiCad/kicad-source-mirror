@@ -36,28 +36,20 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     {
     case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
         if( state )
-        {
-            DisplayOpt.DisplayPadFill = m_DisplayPadFill = false;
-        }
+            DisplayOpt.DisplayPadFill = false;
         else
-        {
-            DisplayOpt.DisplayPadFill = m_DisplayPadFill = true;
-        }
+            DisplayOpt.DisplayPadFill = true;
+        m_DisplayPadFill = DisplayOpt.DisplayPadFill;
 
         m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
         if(state )
-        {
-            m_DisplayPcbTrackFill = false;
             DisplayOpt.DisplayPcbTrackFill = false;
-        }
         else
-        {
-            m_DisplayPcbTrackFill = true;
             DisplayOpt.DisplayPcbTrackFill = true;
-        }
+        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
 
         m_canvas->Refresh( true );
         break;

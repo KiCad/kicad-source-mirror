@@ -37,11 +37,7 @@
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
 #include <class_board_item.h>
-#if defined( USE_PCBNEW_NANOMETRES )
-#define MILS_TO_IU( x )     ( x * 25400 );
-#else
-#define MILS_TO_IU( x )     ( x * 10 )
-#endif
+#define MILS_TO_IU( x )     ( x * MILS_TO_IU_SCALING_FACTOR );
 #elif defined( EESCHEMA )
 #include <sch_item_struct.h>
 #define MILS_TO_IU( x )     ( x )

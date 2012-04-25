@@ -33,6 +33,7 @@ set(GERBVIEW_SRCS
     class_am_param.cpp
     class_aperture_macro.cpp
     class_DCodeSelectionbox.cpp
+    class_gbr_screen.cpp
     class_GERBER.cpp
     class_gerber_draw_item.cpp
     class_gerbview_layer_widget.cpp
@@ -63,9 +64,10 @@ set(GERBVIEW_SRCS
     )
 
 ###
-# We need some extra sources from pcbnew
+# We need some extra sources from common and pcbnew
 ###
 set(GERBVIEW_EXTRA_SRCS
+    ../common/base_units.cpp
     ../pcbnew/layer_widget.cpp
     ../pcbnew/printout_controler.cpp
     ../pcbnew/class_drc_item.cpp

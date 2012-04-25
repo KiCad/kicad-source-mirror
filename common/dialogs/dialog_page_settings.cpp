@@ -34,7 +34,6 @@
 #include <class_title_block.h>
 #include <wxstruct.h>
 #include <class_base_screen.h>
-#include <base_units.h>          // MILS_TO_IU_SCALAR
 
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
@@ -617,7 +616,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         m_Parent->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ),
                                                      wxSize( INT_MAX / 2, INT_MAX / 2 ) ) );
         // Calculate layout preview scale.
-        int appScale = MILS_TO_IU_SCALAR;
+        int appScale = m_Screen->MilsToIuScalar();
 
         double scaleW = (double) lyWidth  / clamped_layout_size.x / appScale;
         double scaleH = (double) lyHeight / clamped_layout_size.y / appScale;

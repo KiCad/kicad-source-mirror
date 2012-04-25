@@ -21,7 +21,7 @@
  */
 void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
-    BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
+    EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
@@ -36,7 +36,7 @@ void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         else
         {
             DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
-            GetScreen()->SetCurItem( DrawStruct );
+            GetScreen()->SetCurItem( (BOARD_ITEM*)DrawStruct );
             if( DrawStruct == NULL )
             {
                 GERBER_IMAGE* gerber = g_GERBER_List[getActiveLayer() ];

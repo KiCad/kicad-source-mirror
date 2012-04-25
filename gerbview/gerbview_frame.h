@@ -35,6 +35,7 @@
 #include <wxBasePcbFrame.h>
 
 #include <../pcbnew/class_board.h>
+#include <class_gbr_screen.h>
 
 
 class DCODE_SELECTION_BOX;
@@ -53,7 +54,6 @@ class GERBER_DRAW_ITEM;
 
 class GERBVIEW_FRAME : public PCB_BASE_FRAME
 {
-    friend class PCB_LAYER_WIDGET;
 
 protected:
     GERBER_LAYER_WIDGET*  m_LayersManager;
@@ -62,7 +62,7 @@ protected:
     wxFileHistory         m_drillFileHistory;
 
 public:
-    LAYER_BOX_SELECTOR* m_SelLayerBox;
+    LAYER_BOX_SELECTOR*   m_SelLayerBox;
     DCODE_SELECTION_BOX*  m_DCodeSelector;  // a list box to select the dcode Id to highlight.
     wxTextCtrl*           m_TextInfo;       // a wxTextCtrl used to display some info about
                                             // gerber data (format..)
@@ -84,7 +84,7 @@ private:
 
     bool          m_show_layer_manager_tools;
 
-    // An array sting to store warning messages when reaging a gerber file.
+    // An array string to store warning messages when reading a gerber file.
     wxArrayString m_Messages;
 
 public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
@@ -226,7 +226,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      */
     void setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true )
     {
-        ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+        ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
         if( doLayerWidgetUpdate )
             syncLayerWidget();
@@ -239,7 +239,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      */
     int getActiveLayer()
     {
-        return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+        return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
     }
 
 
@@ -439,8 +439,6 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @param DC A device context to draw on.
      */
     void Block_Duplicate( wxDC* DC );
-
-    void ToPostProcess( wxCommandEvent& event );
 
     /**
      * Function ToPlotter

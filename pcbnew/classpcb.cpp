@@ -19,15 +19,11 @@
 #include <pcbnew_id.h>
 
 
-#if defined( USE_PCBNEW_NANOMETRES )
-#define ZOOM_FACTOR( x )       ( x * 25.4e2 )
-#define DMIL_GRID( x )         wxRealPoint( x * 25.4e2, x * 25.4e2 )
-#define MM_GRID( x )           wxRealPoint( x * 1e6, x * 1e6 )
-#else
-#define ZOOM_FACTOR( x )       x
-#define DMIL_GRID( x )         wxRealPoint( x ,  x )
-#define MM_GRID( x )           wxRealPoint( x * 1e4 / 25.4, x * 1e4 / 25.4 )
-#endif
+#define ZOOM_FACTOR( x )       ( x * DECIMILS_TO_IU_SCALING_FACTOR )
+#define DMIL_GRID( x )         wxRealPoint( x * DECIMILS_TO_IU_SCALING_FACTOR,\
+                                            x * DECIMILS_TO_IU_SCALING_FACTOR )
+#define MM_GRID( x )           wxRealPoint( x * MM_TO_IU_SCALING_FACTOR,\
+                                            x * MM_TO_IU_SCALING_FACTOR )
 
 
 /**
@@ -110,7 +106,6 @@ PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
 {
     wxSize displayz = wxGetDisplaySize();
 
-
     for( unsigned i = 0; i < DIM( pcbZoomList );  ++i )
         m_ZoomList.Add( pcbZoomList[i] );
 
@@ -124,7 +119,7 @@ PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     m_Route_Layer_TOP    = LAYER_N_FRONT;     // default layers pair for vias (bottom to top)
     m_Route_Layer_BOTTOM = LAYER_N_BACK;
 
-    SetZoom( ZOOM_FACTOR( 150 ) );            // a default value for zoom
+    SetZoom( ZOOM_FACTOR( 120 ) );             // a default value for zoom
 
     InitDataPoints( aPageSizeIU );
 }
@@ -138,11 +133,7 @@ PCB_SCREEN::~PCB_SCREEN()
 
 int PCB_SCREEN::MilsToIuScalar()
 {
-#if defined( USE_PCBNEW_NANOMETRES )
-    return 25400;
-#else
-    return 10;
-#endif
+    return (int)MILS_TO_IU_SCALING_FACTOR;
 }
 
 
