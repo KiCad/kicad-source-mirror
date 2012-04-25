@@ -35,19 +35,7 @@
 
 
 #include <common.h>
-
-
-
-/// Scalar to convert mils to internal units.
-#if defined( PCBNEW )
-#if defined( USE_PCBNEW_NANOMETRES )
-#define MILS_TO_IU_SCALAR   25.4e3         // Pcbnew in nanometers.
-#else
-#define MILS_TO_IU_SCALAR   10.0           // Pcbnew in deci-mils.
-#endif
-#else
-#define MILS_TO_IU_SCALAR   1.0            // Eeschema and anything else.
-#endif
+#include <convert_to_biu.h>
 
 
 /**

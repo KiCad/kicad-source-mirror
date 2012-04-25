@@ -77,8 +77,7 @@ public:
 class CArc
 {
 public:
-    enum { MAX_STEP = 50 * 25400 };     // max step is 20 mils
-    enum { MIN_STEPS = 18 };            // min step is 5 degrees
+    enum { ARC_STEPS = 16 };    // arc approximation step is 16 segm / 90 degres
     int  style;
     int  xi, yi, xf, yf;
     int  n_steps;   // number of straight-line segments in gpc_poly

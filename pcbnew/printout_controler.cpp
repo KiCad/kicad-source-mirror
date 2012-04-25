@@ -180,12 +180,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     if( userscale == 0 )                //  fit in page
     {
-        // Margin = 0.4 inch
-#if defined(KICAD_NANOMETRE)
-        int extra_margin = int( 0.4 * 25400 );      // nanometers
-#else
-        int extra_margin = int( 0.4 * 1000 );       // deci-mils
-#endif
+        // Margin = 10mm
+        int extra_margin = int( 10 * MM_TO_IU_SCALING_FACTOR );   // deci-mils
 
         pageSizeIU.x = bbbox.GetWidth()  + extra_margin * 2;
         pageSizeIU.y = bbbox.GetHeight() + extra_margin * 2;
@@ -278,7 +274,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     int bg_color = g_DrawBgColor;
 
     if( m_PrintParams.m_Print_Sheet_Ref )
-        m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize, MILS_TO_IU_SCALAR );
+        m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
+                                  MILS_TO_IU_SCALING_FACTOR );
 
     if( printMirror )
     {
