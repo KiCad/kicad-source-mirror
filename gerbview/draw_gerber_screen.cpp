@@ -107,7 +107,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( IsElementVisible( DCODES_VISIBLE ) )
         DrawItemsDCodeID( DC, GR_COPY );
 
-    TraceWorkSheet( DC, screen, 0, MILS_TO_IU_SCALING_FACTOR );
+    TraceWorkSheet( DC, screen, 0, MILS_PER_IU );
 
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );

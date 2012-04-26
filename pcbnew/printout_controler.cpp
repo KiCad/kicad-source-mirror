@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -181,7 +181,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( userscale == 0 )                //  fit in page
     {
         // Margin = 10mm
-        int extra_margin = int( 10 * MM_TO_IU_SCALING_FACTOR );   // deci-mils
+        int extra_margin = int( 10 * MM_PER_IU );   // deci-mils
 
         pageSizeIU.x = bbbox.GetWidth()  + extra_margin * 2;
         pageSizeIU.y = bbbox.GetHeight() + extra_margin * 2;
@@ -275,7 +275,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     if( m_PrintParams.m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
-                                  MILS_TO_IU_SCALING_FACTOR );
+                                  MILS_PER_IU );
 
     if( printMirror )
     {

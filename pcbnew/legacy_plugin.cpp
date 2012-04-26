@@ -2682,7 +2682,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
 #if defined( USE_PCBNEW_NANOMETRES )
-    biuToDisk = 1/MM_TO_IU_SCALING_FACTOR;        // BIUs are nanometers & file is mm
+    biuToDisk = 1/MM_PER_IU;        // BIUs are nanometers & file is mm
 #else
     biuToDisk = 1.0;                // BIUs are deci-mils
 #endif
@@ -2694,7 +2694,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     // then, during the file loading process, to start a conversion from
     // mm to nanometers.
 
-    diskToBiu = DECIMILS_TO_IU_SCALING_FACTOR;  // BIUs are nanometers if USE_PCBNEW_NANOMETRES
+    diskToBiu = DECIMILS_PER_IU;  // BIUs are nanometers if USE_PCBNEW_NANOMETRES
                                                 // or BIUs are deci-mils
 }
 

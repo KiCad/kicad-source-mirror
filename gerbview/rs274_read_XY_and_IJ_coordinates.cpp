@@ -21,16 +21,16 @@
 // for metric gerber units, the imperial to metric conversion is made in read functions
 static double scale_list[10] =
 {
-    1000.0 * MILS_TO_IU_SCALING_FACTOR,
-    100.0 * MILS_TO_IU_SCALING_FACTOR,
-    10.0 * MILS_TO_IU_SCALING_FACTOR,
-    1.0 * MILS_TO_IU_SCALING_FACTOR,
-    0.1 * MILS_TO_IU_SCALING_FACTOR,
-    0.01 * MILS_TO_IU_SCALING_FACTOR,
-    0.001 * MILS_TO_IU_SCALING_FACTOR,
-    0.0001 * MILS_TO_IU_SCALING_FACTOR,
-    0.00001 * MILS_TO_IU_SCALING_FACTOR,
-    0.000001 * MILS_TO_IU_SCALING_FACTOR
+    1000.0 * MILS_PER_IU,
+    100.0 * MILS_PER_IU,
+    10.0 * MILS_PER_IU,
+    1.0 * MILS_PER_IU,
+    0.1 * MILS_PER_IU,
+    0.01 * MILS_PER_IU,
+    0.001 * MILS_PER_IU,
+    0.0001 * MILS_PER_IU,
+    0.00001 * MILS_PER_IU,
+    0.000001 * MILS_PER_IU
 };
 
 
@@ -44,9 +44,9 @@ int scaletoIU( double aCoord, bool isMetric )
     int ret;
 
     if( isMetric )
-        ret = KiROUND( aCoord * MILS_TO_IU_SCALING_FACTOR / 0.00254 );
+        ret = KiROUND( aCoord * MILS_PER_IU / 0.00254 );
     else
-        ret = KiROUND( aCoord * MILS_TO_IU_SCALING_FACTOR );
+        ret = KiROUND( aCoord * MILS_PER_IU );
 
     return ret;
 }
@@ -94,9 +94,9 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
             {
                 // When X or Y values are float numbers, they are given in mm or inches
                 if( m_GerbMetric )  // units are mm
-                    current_coord = KiROUND( atof( line ) * MILS_TO_IU_SCALING_FACTOR / 0.0254 );
+                    current_coord = KiROUND( atof( line ) * MILS_PER_IU / 0.0254 );
                 else    // units are inches
-                    current_coord = KiROUND( atof( line ) * MILS_TO_IU_SCALING_FACTOR * 1000 );
+                    current_coord = KiROUND( atof( line ) * MILS_PER_IU * 1000 );
             }
             else
             {
@@ -185,9 +185,9 @@ wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
             {
                 // When X or Y values are float numbers, they are given in mm or inches
                 if( m_GerbMetric )  // units are mm
-                    current_coord = KiROUND( atof( line ) * MILS_TO_IU_SCALING_FACTOR / 0.0254 );
+                    current_coord = KiROUND( atof( line ) * MILS_PER_IU / 0.0254 );
                 else    // units are inches
-                    current_coord = KiROUND( atof( line ) * MILS_TO_IU_SCALING_FACTOR * 1000 );
+                    current_coord = KiROUND( atof( line ) * MILS_PER_IU * 1000 );
             }
             else
             {

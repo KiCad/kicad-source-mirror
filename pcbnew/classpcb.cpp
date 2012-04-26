@@ -19,11 +19,11 @@
 #include <pcbnew_id.h>
 
 
-#define ZOOM_FACTOR( x )       ( x * DECIMILS_TO_IU_SCALING_FACTOR )
-#define DMIL_GRID( x )         wxRealPoint( x * DECIMILS_TO_IU_SCALING_FACTOR,\
-                                            x * DECIMILS_TO_IU_SCALING_FACTOR )
-#define MM_GRID( x )           wxRealPoint( x * MM_TO_IU_SCALING_FACTOR,\
-                                            x * MM_TO_IU_SCALING_FACTOR )
+#define ZOOM_FACTOR( x )       ( x * DECIMILS_PER_IU )
+#define DMIL_GRID( x )         wxRealPoint( x * DECIMILS_PER_IU,\
+                                            x * DECIMILS_PER_IU )
+#define MM_GRID( x )           wxRealPoint( x * MM_PER_IU,\
+                                            x * MM_PER_IU )
 
 
 /**
@@ -133,7 +133,7 @@ PCB_SCREEN::~PCB_SCREEN()
 
 int PCB_SCREEN::MilsToIuScalar()
 {
-    return (int)MILS_TO_IU_SCALING_FACTOR;
+    return (int)MILS_PER_IU;
 }
 
 

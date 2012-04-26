@@ -37,7 +37,7 @@
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
 #include <class_board_item.h>
-#define MILS_TO_IU( x )     ( x * MILS_TO_IU_SCALING_FACTOR );
+#define MILS_TO_IU( x )     ( x * MILS_PER_IU );
 #elif defined( EESCHEMA )
 #include <sch_item_struct.h>
 #define MILS_TO_IU( x )     ( x )
