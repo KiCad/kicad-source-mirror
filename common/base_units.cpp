@@ -41,10 +41,10 @@
 
 
 #if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA )
-#define IU_TO_MM( x )       ( x / MM_TO_IU_SCALING_FACTOR )
-#define IU_TO_IN( x )       ( x / MILS_TO_IU_SCALING_FACTOR / 1000 )
-#define MM_TO_IU( x )       ( x * MM_TO_IU_SCALING_FACTOR )
-#define IN_TO_IU( x )       ( x * MILS_TO_IU_SCALING_FACTOR * 1000 )
+#define IU_TO_MM( x )       ( x / IU_PER_MM )
+#define IU_TO_IN( x )       ( x / IU_PER_MILS / 1000 )
+#define MM_TO_IU( x )       ( x * IU_PER_MM )
+#define IN_TO_IU( x )       ( x * IU_PER_MILS * 1000 )
 #else
 #error "Cannot resolve internal units due to no definition of EESCHEMA, CVPCB or PCBNEW."
 #endif

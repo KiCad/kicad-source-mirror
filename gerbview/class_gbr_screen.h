@@ -9,7 +9,7 @@
 #include <base_units.h>
 #include <class_pcb_screen.h>
 
-#define ZOOM_FACTOR( x )       ( x * DECIMILS_TO_IU_SCALING_FACTOR )
+#define ZOOM_FACTOR( x )       ( x * IU_PER_DECIMILS )
 
 
 /* Handle info to display a board */

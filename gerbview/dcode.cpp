@@ -175,8 +175,8 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
 
 
     /* Updating gerber scale: */
-    double dcode_scale = MILS_TO_IU_SCALING_FACTOR; // By uniting dCode = mil,
-                                                    // internal unit = MILS_TO_IU_SCALING_FACTOR
+    double dcode_scale = IU_PER_MILS; // By uniting dCode = mil,
+                                                    // internal unit = IU_PER_MILS
     current_Dcode = 0;
 
     if( D_Code_FullFileName.IsEmpty() )

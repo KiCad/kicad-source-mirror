@@ -99,7 +99,7 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
     wxString        errorText;
 
     BASE_SCREEN*    screen = GetScreen();
-    bool            wasModified = screen->IsModify() && !screen->IsSave();
+    bool            wasModified = screen->IsModify();
 
     db.SetPCB( SPECCTRA_DB::MakePCB() );
 
@@ -171,10 +171,10 @@ static inline double scale( int kicadDist )
 #if defined(USE_PCBNEW_NANOMETRES)
 
     // nanometers to um
-    return kicadDist / ( MM_TO_IU_SCALING_FACTOR / 1000.0 );
+    return kicadDist / ( IU_PER_MM / 1000.0 );
 
     // nanometers to mils
-    // return kicadDist/MILS_TO_IU_SCALING_FACTOR;
+    // return kicadDist/IU_PER_MILS;
 
 #else
     // deci-mils to mils.
@@ -185,7 +185,7 @@ static inline double scale( int kicadDist )
 /// Convert integer internal units to float um
 static inline double IU2um( int kicadDist )
 {
-    return kicadDist  * (1000.0 / MM_TO_IU_SCALING_FACTOR);
+    return kicadDist  * (1000.0 / IU_PER_MM);
 }
 
 

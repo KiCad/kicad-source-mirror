@@ -298,8 +298,8 @@ public:
     // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
     // and either deci-mils or nanometers in PCBNew.
 #if defined(PCBNEW) || defined(EESCHEMA) || defined(GERBVIEW)
-    int GetWidthIU() const  { return MILS_TO_IU_SCALING_FACTOR * GetWidthMils();  }
-    int GetHeightIU() const { return MILS_TO_IU_SCALING_FACTOR * GetHeightMils(); }
+    int GetWidthIU() const  { return IU_PER_MILS * GetWidthMils();  }
+    int GetHeightIU() const { return IU_PER_MILS * GetHeightMils(); }
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #endif
 

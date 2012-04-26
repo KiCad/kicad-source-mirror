@@ -17,10 +17,10 @@
 #include <pcbnew_id.h>
 
 
-#define DMIL_GRID( x ) wxRealPoint( x * DECIMILS_TO_IU_SCALING_FACTOR,\
-                                    x * DECIMILS_TO_IU_SCALING_FACTOR )
-#define MM_GRID( x )   wxRealPoint( x * MM_TO_IU_SCALING_FACTOR,\
-                                    x * MM_TO_IU_SCALING_FACTOR )
+#define DMIL_GRID( x ) wxRealPoint( x * IU_PER_DECIMILS,\
+                                    x * IU_PER_DECIMILS )
+#define MM_GRID( x )   wxRealPoint( x * IU_PER_MM,\
+                                    x * IU_PER_MM )
 
 
 /**
@@ -118,5 +118,5 @@ GBR_SCREEN::~GBR_SCREEN()
 // virtual function
 int GBR_SCREEN::MilsToIuScalar()
 {
-    return (int)MILS_TO_IU_SCALING_FACTOR;
+    return (int)IU_PER_MILS;
 }
