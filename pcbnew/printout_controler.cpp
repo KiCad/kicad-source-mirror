@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -181,7 +181,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( userscale == 0 )                //  fit in page
     {
         // Margin = 10mm
-        int extra_margin = int( 10 * MM_TO_IU_SCALING_FACTOR );   // deci-mils
+        int extra_margin = int( 10 * IU_PER_MM );   // deci-mils
 
         pageSizeIU.x = bbbox.GetWidth()  + extra_margin * 2;
         pageSizeIU.y = bbbox.GetHeight() + extra_margin * 2;
@@ -212,8 +212,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
         MapScreenSizeToPaper();
         int w, h;
         GetPPIPrinter( &w, &h );
-        double accurate_Xscale = ( (double) ( DrawZoom * w ) ) / (double) PCB_INTERNAL_UNIT;
-        double accurate_Yscale = ( (double) ( DrawZoom * h ) ) / (double) PCB_INTERNAL_UNIT;
+        double accurate_Xscale = ( (double) ( DrawZoom * w ) ) / (IU_PER_MILS*1000);
+        double accurate_Yscale = ( (double) ( DrawZoom * h ) ) / (IU_PER_MILS*1000);
 
         if( IsPreview() )  // Scale must take in account the DC size in Preview
         {
@@ -275,7 +275,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     if( m_PrintParams.m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
-                                  MILS_TO_IU_SCALING_FACTOR );
+                                  IU_PER_MILS );
 
     if( printMirror )
     {
@@ -317,7 +317,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     /* when printing in color mode, we use the graphic OR mode that gives the same look as the screen
      * But because the background is white when printing, we must use a trick:
      * In order to plot on a white background in OR mode we must:
-     * 1 - Plot all items in black, this creates a local black backgroud
+     * 1 - Plot all items in black, this creates a local black background
      * 2 - Plot in OR mode on black "local" background
      */
     if( !m_PrintParams.m_Print_Black_and_White )
