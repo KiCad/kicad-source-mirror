@@ -432,7 +432,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         if( dcode == NULL )
             break;
         // conv_scale = scaling factor from inch to Internal Unit
-        double conv_scale = MILS_TO_IU_SCALING_FACTOR * 1000;
+        double conv_scale = MILS_PER_IU * 1000;
         if( m_GerbMetric )
             conv_scale /= 25.4;
 

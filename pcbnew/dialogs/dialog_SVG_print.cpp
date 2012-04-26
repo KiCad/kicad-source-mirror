@@ -271,7 +271,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     g_DrawBgColor = WHITE;
 
     if( aPrint_Frame_Ref )
-        m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize, MILS_TO_IU_SCALING_FACTOR );
+        m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize, MILS_PER_IU );
 
     m_Parent->PrintPage( &dc, m_PrintMaskLayer, false, &s_Parameters);
     g_DrawBgColor = bg_color;
