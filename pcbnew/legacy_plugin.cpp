@@ -2682,7 +2682,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
 #if defined( USE_PCBNEW_NANOMETRES )
-    biuToDisk = 1/MM_PER_IU;        // BIUs are nanometers & file is mm
+    biuToDisk = 1/IU_PER_MM;        // BIUs are nanometers & file is mm
 #else
     biuToDisk = 1.0;                // BIUs are deci-mils
 #endif
