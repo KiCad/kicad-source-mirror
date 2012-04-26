@@ -411,7 +411,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     D_CODE*           pt_D_code;
     wxString          Line;
     wxArrayString     list;
-    double            scale = MILS_PER_IU * 1000;
+    double            scale = IU_PER_MILS * 1000;
     int               curr_layer = getActiveLayer();
 
     for( int layer = 0; layer < 32; layer++ )

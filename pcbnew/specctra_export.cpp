@@ -171,10 +171,10 @@ static inline double scale( int kicadDist )
 #if defined(USE_PCBNEW_NANOMETRES)
 
     // nanometers to um
-    return kicadDist / ( MM_PER_IU / 1000.0 );
+    return kicadDist / ( IU_PER_MM / 1000.0 );
 
     // nanometers to mils
-    // return kicadDist/MILS_PER_IU;
+    // return kicadDist/IU_PER_MILS;
 
 #else
     // deci-mils to mils.
@@ -185,7 +185,7 @@ static inline double scale( int kicadDist )
 /// Convert integer internal units to float um
 static inline double IU2um( int kicadDist )
 {
-    return kicadDist  * (1000.0 / MM_PER_IU);
+    return kicadDist  * (1000.0 / IU_PER_MM);
 }
 
 
