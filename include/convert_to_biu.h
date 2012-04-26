@@ -20,26 +20,26 @@
 #if defined(PCBNEW) || defined(CVPCB) || defined(GERBVIEW)
     #if defined( USE_PCBNEW_NANOMETRES )
     #if defined(GERBVIEW)
-        #define MM_PER_IU   1e5         // Gerbview uses 10 micrometer.
+        #define IU_PER_MM   1e5         // Gerbview uses 10 micrometer.
     #else
-        #define MM_PER_IU   1e6         // Pcbnew uses nanometers.
+        #define IU_PER_MM   1e6         // Pcbnew uses nanometers.
     #endif
-    #define MILS_PER_IU ( MM_PER_IU * 0.0254 )
-    #define DECIMILS_PER_IU (MM_PER_IU * 0.00254 )
+    #define IU_PER_MILS ( IU_PER_MM * 0.0254 )
+    #define IU_PER_DECIMILS (IU_PER_MM * 0.00254 )
     #else              // Pcbnew in deci-mils.
-        #define DECIMILS_PER_IU  1
-        #define MILS_PER_IU   10.0
-        #define MM_PER_IU   (1e4 / 25.4)
+        #define IU_PER_DECIMILS  1
+        #define IU_PER_MILS   10.0
+        #define IU_PER_MM   (1e4 / 25.4)
     #endif
 
 /// Convert mils to PCBNEW internal units (iu).
 inline int Mils2iu( int mils )
 {
 #if defined( USE_PCBNEW_NANOMETRES )
-    double x = mils * MILS_PER_IU;
+    double x = mils * IU_PER_MILS;
     return int( x < 0 ? x - 0.5 : x + 0.5 );
 #else
-    return mils * MILS_PER_IU;
+    return mils * IU_PER_MILS;
 #endif
 }
 
@@ -47,7 +47,7 @@ inline int Mils2iu( int mils )
 inline int DMils2iu( int dmils )
 {
 #if defined( USE_PCBNEW_NANOMETRES )
-    double x = dmils * DECIMILS_PER_IU;
+    double x = dmils * IU_PER_DECIMILS;
     return int( x < 0 ? x - 0.5 : x + 0.5 );
 #else
     return dmils;
@@ -55,8 +55,8 @@ inline int DMils2iu( int dmils )
 }
 
 #else            // Eeschema and anything else.
-#define MILS_PER_IU   1.0
-#define MM_PER_IU   (MILS_PER_IU / 0.0254)
+#define IU_PER_MILS   1.0
+#define IU_PER_MM   (IU_PER_MILS / 0.0254)
 
 inline int Mils2iu( int mils )
 {

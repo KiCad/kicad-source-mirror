@@ -2694,7 +2694,7 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     // then, during the file loading process, to start a conversion from
     // mm to nanometers.
 
-    diskToBiu = DECIMILS_PER_IU;  // BIUs are nanometers if USE_PCBNEW_NANOMETRES
+    diskToBiu = IU_PER_DECIMILS;  // BIUs are nanometers if USE_PCBNEW_NANOMETRES
                                                 // or BIUs are deci-mils
 }
 

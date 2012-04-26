@@ -237,7 +237,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
                                                    sheetSize.y/2) );
 
     if( aPrint_Sheet_Ref )
-        frame->TraceWorkSheet( &dc, screen, g_DrawDefaultLineThickness, MILS_PER_IU );
+        frame->TraceWorkSheet( &dc, screen, g_DrawDefaultLineThickness, IU_PER_MILS );
 
     screen->m_IsPrinting   = false;
     panel->SetClipBox( tmp );
