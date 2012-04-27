@@ -789,13 +789,13 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
         trackLen += track->GetLength();
 
-    valeur_param( KiROUND( trackLen ), msg );
+    msg = frame->LengthDoubleToString( trackLen );
     frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
 
     if( lenDie != 0 )      // display the track len on board and the actual track len
     {
         frame->AppendMsgPanel( _( "Full Len" ), msg, DARKCYAN );
-        valeur_param( KiROUND( trackLen+lenDie ), msg );
+        msg = frame->LengthDoubleToString( trackLen+lenDie );
         frame->AppendMsgPanel( _( "On Die" ), msg, DARKCYAN );
     }
 

@@ -255,7 +255,7 @@ void EDGE_MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
     frame->AppendMsgPanel( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED );
 
-    valeur_param( m_Width, msg );
+    msg = frame->CoordinateToString( m_Width );
     frame->AppendMsgPanel( _( "Width" ), msg, BLUE );
 }
 
