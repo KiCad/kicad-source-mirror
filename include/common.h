@@ -542,17 +542,6 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
 
 
 /**
- * Operator << overload
- * outputs a point to the argument string in a format resembling
- * "@ (x,y)
- * @param aString Where to put the text describing the point value
- * @param aPoint  The point to output.
- * @return wxString& - the input string
- */
-wxString& operator <<( wxString& aString, const wxPoint& aPoint );
-
-
-/**
  * Function ProcessExecute
  * runs a child process.
  * @param aCommandLine The process and any arguments to it all in a single
@@ -582,14 +571,6 @@ int DisplayColorFrame( wxWindow* parent, int OldColor );
 int GetCommandOptions( const int argc, const char** argv,
                        const char* stringtst, const char** optarg,
                        int* optind );
-
-
-/* Returns to display the value of a parameter, by type of units selected
- * Input: value in mils, buffer text
- * Returns to buffer: text: value expressed in inches or millimeters
- * Followed by " or mm
- */
-const wxString& valeur_param( int valeur, wxString& buf_texte );
 
 /**
  * Returns the units symbol.

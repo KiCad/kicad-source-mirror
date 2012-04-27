@@ -47,6 +47,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_drawsegment.h>
+#include <base_units.h>
 
 
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
@@ -373,7 +374,7 @@ void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->AppendMsgPanel( _( "Layer" ), board->GetLayerName( m_Layer ), DARKBROWN );
 
-    valeur_param( (unsigned) m_Width, msg );
+    msg = frame->CoordinateToString( m_Width );
     frame->AppendMsgPanel( _( "Width" ), msg, DARKCYAN );
 }
 
@@ -527,12 +528,11 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect ) const
 wxString DRAWSEGMENT::GetSelectMenuText() const
 {
     wxString text;
-    wxString temp;
+    wxString temp = ::LengthDoubleToString( GetLength() );
 
     text.Printf( _( "Pcb Graphic: %s length: %s on %s" ),
                  GetChars( ShowShape( (STROKE_T) m_Shape ) ),
-                 GetChars( valeur_param( GetLength(), temp ) ),
-                 GetChars( GetLayerName() ) );
+                 GetChars( temp ), GetChars( GetLayerName() ) );
 
     return text;
 }

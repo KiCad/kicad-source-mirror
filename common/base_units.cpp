@@ -68,6 +68,11 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue )
 
 wxString CoordinateToString( int aValue, bool aConvertToMils )
 {
+    return LengthDoubleToString( (double) aValue, aConvertToMils );
+}
+
+wxString LengthDoubleToString( double aValue, bool aConvertToMils )
+{
     wxString      text;
     const wxChar* format;
     double        value = To_User_Unit( g_UserUnit, aValue );
@@ -249,3 +254,14 @@ int ReturnValueFromTextCtrl( const wxTextCtrl& aTextCtr )
 
     return value;
 }
+
+
+wxString& operator <<( wxString& aString, const wxPoint& aPos )
+{
+    aString << wxT( "@ (" ) << CoordinateToString( aPos.x );
+    aString << wxT( "," ) << CoordinateToString( aPos.y );
+    aString << wxT( ")" );
+
+    return aString;
+}
+

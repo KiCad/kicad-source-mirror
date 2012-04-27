@@ -46,6 +46,7 @@
 
 #include <pcbnew.h>
 #include <protos.h>
+#include <base_units.h>
 
 /**
  * Function ShowClearance
@@ -138,10 +139,7 @@ EDA_ITEM* TRACK::Clone() const
 
 wxString TRACK::ShowWidth() const
 {
-    wxString msg;
-
-    valeur_param( m_Width, msg );
-
+    wxString msg = ::CoordinateToString( m_Width );
     return msg;
 }
 
@@ -1173,7 +1171,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     // Display segment length
     if( Type() != PCB_VIA_T )      // Display Diam and Drill values
     {
-        msg = frame->CoordinateToString( KiROUND( GetLength() ) );
+        msg = frame->LengthDoubleToString( GetLength() );
         frame->AppendMsgPanel( _( "Segment Length" ), msg, DARKCYAN );
     }
 }
@@ -1553,7 +1551,7 @@ wxString TRACK::GetSelectMenuText() const
     }
 
     text << _( " on " ) << GetLayerName() << wxT("  ") << _("Net:") << GetNet()
-         << wxT("  ") << _("Length:") << valeur_param( GetLength(), temp );
+         << wxT("  ") << _("Length:") << ::LengthDoubleToString( GetLength() );
 
     return text;
 }
