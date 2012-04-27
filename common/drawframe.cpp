@@ -584,6 +584,11 @@ wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils )
     return ::CoordinateToString( aValue, aConvertToMils );
 }
 
+wxString EDA_DRAW_FRAME::LengthDoubleToString( double aValue, bool aConvertToMils )
+{
+    return ::LengthDoubleToString( aValue, aConvertToMils );
+}
+
 
 bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosition )
 {

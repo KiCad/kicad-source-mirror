@@ -50,16 +50,27 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue );
 
 /**
  * Function CoordinateToString
- * is a helper to convert the integer coordinate \a aValue to a string in inches,
+ * is a helper to convert the \a integer coordinate \a aValue to a string in inches,
  * millimeters, or unscaled units according to the current user units setting.
  *
- * @param aValue The coordinate to convert.
+ * @param aValue The integer coordinate to convert.
  * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
  *                       the current user unit is millimeters.
  * @return The converted string for display in user interface elements.
  */
 wxString CoordinateToString( int aValue, bool aConvertToMils = false );
 
+/**
+ * Function LenghtDoubleToString
+ * is a helper to convert the \a double length \a aValue to a string in inches,
+ * millimeters, or unscaled units according to the current user units setting.
+ *
+ * @param aValue The double value to convert.
+ * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
+ *                       the current user unit is millimeters.
+ * @return The converted string for display in user interface elements.
+ */
+wxString LengthDoubleToString( double aValue, bool aConvertToMils = false );
 
 /**
  * Function ReturnStringFromValue
@@ -71,6 +82,16 @@ wxString CoordinateToString( int aValue, bool aConvertToMils = false );
  * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
  */
 wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol = false );
+
+/**
+ * Operator << overload
+ * outputs a point to the argument string in a format resembling
+ * "@ (x,y)
+ * @param aString Where to put the text describing the point value
+ * @param aPoint  The point to output.
+ * @return wxString& - the input string
+ */
+wxString& operator <<( wxString& aString, const wxPoint& aPoint );
 
 /**
  * Function PutValueInLocalUnits

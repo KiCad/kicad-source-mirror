@@ -41,6 +41,7 @@
 #include <class_board.h>
 #include <class_pcb_text.h>
 #include <class_dimension.h>
+#include <base_units.h>
 
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
@@ -344,7 +345,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     if( !aDoNotChangeText )
     {
         m_Value = mesure;
-        valeur_param( m_Value, msg );
+        msg = ::CoordinateToString( m_Value );
         SetText( msg );
     }
 }

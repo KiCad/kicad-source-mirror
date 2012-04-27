@@ -48,6 +48,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
+#include <base_units.h>
 
 #include <collectors.h>
 
