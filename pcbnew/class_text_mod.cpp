@@ -405,13 +405,13 @@ void TEXTE_MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
     frame->AppendMsgPanel( _( "Orient" ), msg, DARKGREEN );
 
-    valeur_param( m_Thickness, msg );
+    msg = frame->CoordinateToString( m_Thickness );
     frame->AppendMsgPanel( _( "Thickness" ), msg, DARKGREEN );
 
-    valeur_param( m_Size.x, msg );
+    msg = frame->CoordinateToString( m_Size.x );
     frame->AppendMsgPanel( _( "H Size" ), msg, RED );
 
-    valeur_param( m_Size.y, msg );
+    msg = frame->CoordinateToString( m_Size.y );
     frame->AppendMsgPanel( _( "V Size" ), msg, RED );
 }
 
