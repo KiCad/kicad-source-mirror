@@ -138,13 +138,13 @@ void TEXTE_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
     frame->AppendMsgPanel( _( "Orientation" ), msg, DARKGREEN );
 
-    valeur_param( m_Thickness, msg );
+    msg = frame->CoordinateToString( m_Thickness );
     frame->AppendMsgPanel( _( "Thickness" ), msg, MAGENTA );
 
-    valeur_param( m_Size.x, msg );
+    msg = frame->CoordinateToString( m_Size.x );
     frame->AppendMsgPanel( _( "Size X" ), msg, RED );
 
-    valeur_param( m_Size.y, msg );
+    msg = frame->CoordinateToString( m_Size.y );
     frame->AppendMsgPanel( _( "Size Y" ), msg, RED );
 }
 
