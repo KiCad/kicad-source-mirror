@@ -339,8 +339,6 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         for( int ic = ic_st; ic<=ic_end; ic++ )
         {
             int style = side_style[ic];
-            int x1    = corner[ic].x;
-            int y1    = corner[ic].y;
             int x2, y2;
             if( ic < ic_end )
             {
