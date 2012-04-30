@@ -268,7 +268,7 @@ add_subdirectory(polygon/kbool/src)
 add_subdirectory(potrace)
 add_subdirectory(bitmap2component)
 add_subdirectory(pcb_calculator)
-#add_subdirectory(tools)
+add_subdirectory(tools)
 #add_subdirectory(new)
 
 
