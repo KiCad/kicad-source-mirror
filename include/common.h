@@ -39,6 +39,7 @@
 #include <wx/fileconf.h>
 
 #include <richio.h>
+#include <convert_to_biu.h>
 
 #if !wxUSE_PRINTING_ARCHITECTURE && !SWIG
 #   error "You must use '--enable-printarch' in your wx library configuration."
@@ -127,11 +128,24 @@ enum pseudokeys {
  * In Debug build an assert fires if will not fit into an int.
  */
 
-#if defined( DEBUG )
+#if !defined( DEBUG )
 
-// DEBUG: a macro to capture line and file, then calls this inline
+/// KiROUND: a function so v is not evaluated twice.  Unfortunately, compiler
+/// is unable to pre-compute constants using this.
+static inline int KiROUND( double v )
+{
+    return int( v < 0 ? v - 0.5 : v + 0.5 );
+}
 
-static inline int KiRound( double v, int line, const char* filename )
+/// KIROUND: a macro so compiler can pre-compute constants.  Use this with compile
+/// time constants rather than the inline function above.
+#define KIROUND( v )    int( (v) < 0 ? (v) - 0.5 : (v) + 0.5 )
+
+#else
+
+// DEBUG: KiROUND() is a macro to capture line and file, then calls this inline
+
+static inline int kiRound_( double v, int line, const char* filename )
 {
     v = v < 0 ? v - 0.5 : v + 0.5;
     if( v > INT_MAX + 0.5 )
@@ -145,13 +159,10 @@ static inline int KiRound( double v, int line, const char* filename )
     return int( v );
 }
 
-#define KiROUND( v )    KiRound( v, __LINE__, __FILE__ )
+#define KiROUND( v )    kiRound_( v, __LINE__, __FILE__ )
 
-#else
-
-// RELEASE: a macro so compile can pre-compute constants.
-
-#define KiROUND( v )  int( (v) < 0 ? (v) - 0.5 : (v) + 0.5 )
+// in Debug build, use the overflow catcher since code size is immaterial
+#define KIROUND( v )    KiROUND( v )
 
 #endif
 
@@ -286,18 +297,9 @@ public:
 
     // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
     // and either deci-mils or nanometers in PCBNew.
-#if defined(PCBNEW)
-# if defined(KICAD_NANOMETRE)
-    int GetWidthIU() const  { return 25400 * GetWidthMils();  }
-    int GetHeightIU() const { return 25400 * GetHeightMils(); }
-# else
-    int GetWidthIU() const  { return 10 * GetWidthMils();  }
-    int GetHeightIU() const { return 10 * GetHeightMils(); }
-# endif
-    const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
-#elif defined(EESCHEMA)
-    int GetWidthIU() const  { return GetWidthMils();  }
-    int GetHeightIU() const { return GetHeightMils(); }
+#if defined(PCBNEW) || defined(EESCHEMA) || defined(GERBVIEW)
+    int GetWidthIU() const  { return IU_PER_MILS * GetWidthMils();  }
+    int GetHeightIU() const { return IU_PER_MILS * GetHeightMils(); }
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #endif
 
@@ -540,17 +542,6 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
 
 
 /**
- * Operator << overload
- * outputs a point to the argument string in a format resembling
- * "@ (x,y)
- * @param aString Where to put the text describing the point value
- * @param aPoint  The point to output.
- * @return wxString& - the input string
- */
-wxString& operator <<( wxString& aString, const wxPoint& aPoint );
-
-
-/**
  * Function ProcessExecute
  * runs a child process.
  * @param aCommandLine The process and any arguments to it all in a single
@@ -580,14 +571,6 @@ int DisplayColorFrame( wxWindow* parent, int OldColor );
 int GetCommandOptions( const int argc, const char** argv,
                        const char* stringtst, const char** optarg,
                        int* optind );
-
-
-/* Returns to display the value of a parameter, by type of units selected
- * Input: value in mils, buffer text
- * Returns to buffer: text: value expressed in inches or millimeters
- * Followed by " or mm
- */
-const wxString& valeur_param( int valeur, wxString& buf_texte );
 
 /**
  * Returns the units symbol.

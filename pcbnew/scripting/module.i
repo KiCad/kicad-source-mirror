@@ -52,7 +52,7 @@
     	if type(itemC) is D_PAD:
     		item.thisown=0
     		self.m_Pads.PushBack(itemC)
-    	elif type(itemC) in [ TEXTE_PCB, DIMENSION, TEXTE_MODULE, DRAWSEGMENT]:
+    	elif type(itemC) in [ TEXTE_PCB, DIMENSION, TEXTE_MODULE, DRAWSEGMENT,EDGE_MODULE]:
     		item.thisown = 0
     		self.m_Drawings.PushBack(item)
   }

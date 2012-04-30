@@ -83,7 +83,6 @@ add_library(common STATIC ${COMMON_SRCS})
 
 set(PCB_COMMON_SRCS
     base_screen.cpp
-    base_units.cpp
     eda_text.cpp
     class_page_info.cpp
     pcbcommon.cpp
@@ -120,7 +119,6 @@ set(PCB_COMMON_SRCS
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/kicad_plugin.cpp
     pcb_plot_params_keywords.cpp
-    dialogs/dialog_page_settings.cpp
 )
 
 
