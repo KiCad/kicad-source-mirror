@@ -42,6 +42,7 @@
 
 #include <class_board.h>
 #include <class_mire.h>
+#include <base_units.h>
 
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
@@ -210,7 +211,7 @@ wxString PCB_TARGET::GetSelectMenuText() const
     wxString text;
     wxString msg;
 
-    valeur_param( m_Size, msg );
+    msg = ::CoordinateToString( m_Size );
 
     text.Printf( _( "Target on %s size %s" ),
                  GetChars( GetLayerName() ), GetChars( msg ) );

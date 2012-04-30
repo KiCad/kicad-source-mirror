@@ -73,7 +73,9 @@
   #include <class_board.h>
   #include <class_module.h>
   #include <class_track.h>  
+  #include <layers_id_colors_and_visibility.h>
   #include <class_pad.h>
+  #include <pad_shapes.h>
   #include <class_netinfo.h>
   #include <class_pcb_text.h>
   #include <class_dimension.h>
@@ -85,7 +87,6 @@
   #include <class_zone_settings.h>
   #include <class_netclass.h>
   #include <class_netinfo.h>
-  #include <layers_id_colors_and_visibility.h>
   #include <pcbnew_scripting_helpers.h>
   
       
@@ -104,7 +105,9 @@
 %include <class_board.h>
 %include <class_module.h>
 %include <class_track.h>
+%include <layers_id_colors_and_visibility.h>
 %include <class_pad.h>
+%include <pad_shapes.h>
 %include <class_netinfo.h>
 %include <class_pcb_text.h>
 %include <class_dimension.h>
@@ -116,7 +119,6 @@
 %include <class_zone_settings.h>
 %include <class_netclass.h>
 %include <class_netinfo.h>
-%include <layers_id_colors_and_visibility.h>
 
 %include "board_item.i"
 

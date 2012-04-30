@@ -71,7 +71,9 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
 
 double GetPointToLineDistance( double a, double b, int x, int y, double * xp=NULL, double * yp=NULL );
 bool InRange( double x, double xi, double xf );
-double Distance( int x1, int y1, int x2, int y2 );
+
+double Distance( double x1, double y1, double x2, double y2 );
+
 int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
                         double * x1=NULL, double * y1=NULL,
                         double * x2=NULL, double * y2=NULL );

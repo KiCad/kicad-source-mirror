@@ -70,17 +70,19 @@ void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
 {
     if( m_Center )
     {
-        m_crossHairPosition.x = m_crossHairPosition.y = 0;
+        m_crossHairPosition.x = 0;
+        m_crossHairPosition.y = 0;
 
         m_DrawOrg.x = -aPageSizeIU.x / 2;
         m_DrawOrg.y = -aPageSizeIU.y / 2;
     }
     else
     {
-        m_DrawOrg.x = m_DrawOrg.y = 0;
-
         m_crossHairPosition.x = aPageSizeIU.x / 2;
         m_crossHairPosition.y = aPageSizeIU.y / 2;
+
+        m_DrawOrg.x = 0;
+        m_DrawOrg.y = 0;
     }
 
     m_O_Curseur.x = m_O_Curseur.y = 0;
@@ -142,6 +144,8 @@ bool BASE_SCREEN::SetZoom( double coeff )
     if( coeff == m_Zoom )
         return false;
 
+    wxLogDebug( "Zoom:%16g  1/Zoom:%16g", coeff, 1/coeff );
+
     m_Zoom = coeff;
 
     return true;
@@ -168,12 +172,10 @@ bool BASE_SCREEN::SetNextZoom()
 
 bool BASE_SCREEN::SetPreviousZoom()
 {
-    size_t i;
-
     if( m_ZoomList.IsEmpty() || m_Zoom <= m_ZoomList[0] )
         return false;
 
-    for( i = m_ZoomList.GetCount(); i != 0; i-- )
+    for( unsigned i = m_ZoomList.GetCount(); i != 0; i-- )
     {
         if( m_Zoom > m_ZoomList[i - 1] )
         {
@@ -191,8 +193,7 @@ bool BASE_SCREEN::SetLastZoom()
     if( m_ZoomList.IsEmpty() || m_Zoom == m_ZoomList.Last() )
         return false;
 
-    SetZoom( m_ZoomList.Last() );
-    return true;
+    return SetZoom( m_ZoomList.Last() );
 }
 
 
@@ -216,11 +217,9 @@ void BASE_SCREEN::SetGrid( const wxRealPoint& size )
 {
     wxASSERT( !m_grids.empty() );
 
-    size_t i;
-
     GRID_TYPE nearest_grid = m_grids[0];
 
-    for( i = 0; i < m_grids.size(); i++ )
+    for( unsigned i = 0; i < m_grids.size(); i++ )
     {
         if( m_grids[i].m_Size == size )
         {
@@ -228,7 +227,7 @@ void BASE_SCREEN::SetGrid( const wxRealPoint& size )
             return;
         }
 
-        // keep trace of the nearest grill size, if the exact size is not found
+        // keep track of the nearest larger grid size, if the exact size is not found
         if ( size.x < m_grids[i].m_Size.x )
             nearest_grid = m_grids[i];
     }
@@ -245,9 +244,7 @@ void BASE_SCREEN::SetGrid( int id  )
 {
     wxASSERT( !m_grids.empty() );
 
-    size_t i;
-
-    for( i = 0; i < m_grids.size(); i++ )
+    for( unsigned i = 0; i < m_grids.size(); i++ )
     {
         if( m_grids[i].m_Id == id )
         {
@@ -266,9 +263,7 @@ void BASE_SCREEN::SetGrid( int id  )
 
 void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
 {
-    size_t i;
-
-    for( i = 0; i < m_grids.size(); i++ )
+    for( unsigned i = 0; i < m_grids.size(); i++ )
     {
         if( m_grids[i].m_Size == grid.m_Size && grid.m_Id != ID_POPUP_GRID_USER )
         {

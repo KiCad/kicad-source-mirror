@@ -160,7 +160,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     double   fcoord;
 
     // conv_scale = scaling factor from inch to Internal Unit
-    double   conv_scale = MILS_TO_IU_SCALAR*1000;
+    double   conv_scale = IU_PER_MILS * 1000;
     if( m_GerbMetric )
         conv_scale /= 25.4;
 
@@ -294,7 +294,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
             m_GerbMetric = false;
         else if( code == MILLIMETER )
             m_GerbMetric = true;
-        conv_scale = m_GerbMetric ? PCB_INTERNAL_UNIT / 25.4 : PCB_INTERNAL_UNIT;
+        conv_scale = m_GerbMetric ? IU_PER_MILS / 25.4 : IU_PER_MILS;
         break;
 
     case OFFSET:        // command: OFAnnBnn (nn = float number) = layer Offset
@@ -579,8 +579,8 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 
             text += 2;              // skip "C," for example
 
-            dcode->m_Size.x = dcode->m_Size.y =
-                                  KiROUND( ReadDouble( text ) * conv_scale );
+            dcode->m_Size.x = KiROUND( ReadDouble( text ) * conv_scale );
+            dcode->m_Size.y = dcode->m_Size.x;
 
             switch( stdAperture )   // Aperture desceiption has optional parameters. Read them
             {
@@ -631,8 +631,8 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 if( *text == 'X' )
                 {
                     text++;
-                    dcode->m_Drill.x = dcode->m_Drill.y =
-                                           KiROUND( ReadDouble( text ) * conv_scale );
+                    dcode->m_Drill.x = KiROUND( ReadDouble( text ) * conv_scale );
+                    dcode->m_Drill.y = dcode->m_Drill.x;
                     dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
                 }
 
@@ -679,8 +679,8 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 if( *text == 'X' )
                 {
                     text++;
-                    dcode->m_Drill.x = dcode->m_Drill.y =
-                                           KiROUND( ReadDouble( text ) * conv_scale );
+                    dcode->m_Drill.x = KiROUND( ReadDouble( text ) * conv_scale );
+                    dcode->m_Drill.y = dcode->m_Drill.x =
                     dcode->m_DrillShape = APT_DEF_ROUND_HOLE;
                 }
 
@@ -690,8 +690,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 if( *text == 'X' )
                 {
                     text++;
-                    dcode->m_Drill.y =
-                        KiROUND( ReadDouble( text ) * conv_scale );
+                    dcode->m_Drill.y = KiROUND( ReadDouble( text ) * conv_scale );
                     dcode->m_DrillShape = APT_DEF_RECT_HOLE;
                 }
                 dcode->m_Defined = true;

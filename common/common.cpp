@@ -334,39 +334,6 @@ unsigned long GetNewTimeStamp()
 }
 
 
-const wxString& valeur_param( int valeur, wxString& buf_texte )
-{
-    switch( g_UserUnit )
-    {
-    case MILLIMETRES:
-        buf_texte.Printf( _( "%3.3f mm" ), valeur * 0.00254 );
-        break;
-
-    case INCHES:
-        buf_texte.Printf( wxT( "%2.4f \"" ), valeur * 0.0001 );
-        break;
-
-    case UNSCALED_UNITS:
-        buf_texte.Printf( wxT( "%d" ), valeur );
-        break;
-    }
-
-    return buf_texte;
-}
-
-
-wxString& operator <<( wxString& aString, const wxPoint& aPos )
-{
-    wxString temp;
-
-    aString << wxT( "@ (" ) << valeur_param( aPos.x, temp );
-    aString << wxT( "," ) << valeur_param( aPos.y, temp );
-    aString << wxT( ")" );
-
-    return aString;
-}
-
-
 double RoundTo0( double x, double precision )
 {
     assert( precision != 0 );

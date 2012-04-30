@@ -44,6 +44,7 @@
 #include <dialog_helpers.h>
 #include <class_DCodeSelectionbox.h>
 #include <class_gerbview_layer_widget.h>
+#include <class_gbr_screen.h>
 
 
 
@@ -93,7 +94,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     PAGE_INFO   pageInfo( wxT( "GERBER" ) );
     GetBoard()->SetPageSettings( pageInfo );
 
-    SetScreen( new PCB_SCREEN( pageInfo.GetSizeIU() ) );
+    SetScreen( new GBR_SCREEN( pageInfo.GetSizeIU() ) );
 
    // Create the PCB_LAYER_WIDGET *after* SetBoard():
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -179,7 +180,7 @@ double GERBVIEW_FRAME::BestZoom()
 {
     // gives a minimal value to zoom, if no item in list
     if( GetBoard()->m_Drawings == NULL  )
-        return 160.0;
+        return ZOOM_FACTOR( 160.0 );
 
     EDA_RECT    bbox;
     BOARD_ITEM* item = GetBoard()->m_Drawings;
@@ -210,7 +211,8 @@ void GERBVIEW_FRAME::LoadSettings()
     if( config == NULL )
         return;
 
-    PCB_BASE_FRAME::LoadSettings();
+//    PCB_BASE_FRAME::LoadSettings();
+    EDA_DRAW_FRAME::LoadSettings();
 
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
@@ -255,7 +257,8 @@ void GERBVIEW_FRAME::SaveSettings()
     if( config == NULL )
         return;
 
-    PCB_BASE_FRAME::SaveSettings();
+//    PCB_BASE_FRAME::SaveSettings();
+    EDA_DRAW_FRAME::SaveSettings();
 
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
@@ -408,7 +411,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     D_CODE*           pt_D_code;
     wxString          Line;
     wxArrayString     list;
-    double            scale = MILS_TO_IU_SCALAR * 1000;
+    double            scale = IU_PER_MILS * 1000;
     int               curr_layer = getActiveLayer();
 
     for( int layer = 0; layer < 32; layer++ )

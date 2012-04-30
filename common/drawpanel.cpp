@@ -158,28 +158,34 @@ void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, int aColor )
     if( m_cursorLevel != 0 || aDC == NULL || !m_showCrossHair )
         return;
 
-    wxPoint Cursor = GetScreen()->GetCrossHairPosition();
+    wxPoint cursor = GetScreen()->GetCrossHairPosition();
 
     GRSetDrawMode( aDC, GR_XOR );
 
-    if( GetParent()->m_cursorShape != 0 )    /* Draws full screen crosshair. */
+    if( GetParent()->m_cursorShape != 0 )    // Draws full screen crosshair.
     {
-        wxSize clientSize = GetClientSize();
-        wxPoint lineStart = wxPoint( Cursor.x, aDC->DeviceToLogicalY( 0 ) );
-        wxPoint lineEnd = wxPoint( Cursor.x, aDC->DeviceToLogicalY( clientSize.y ) );
-        GRLine( &m_ClipBox, aDC, lineStart, lineEnd, 0, aColor );  // Y axis
-        lineStart = wxPoint( aDC->DeviceToLogicalX( 0 ), Cursor.y );
-        lineEnd = wxPoint( aDC->DeviceToLogicalX( clientSize.x ), Cursor.y );
-        GRLine( &m_ClipBox, aDC, lineStart, lineEnd, 0, aColor );  // X axis
+        wxSize  clientSize = GetClientSize();
+
+        // Y axis
+        wxPoint lineStart( cursor.x, aDC->DeviceToLogicalY( 0 ) );
+        wxPoint lineEnd(   cursor.x, aDC->DeviceToLogicalY( clientSize.y ) );
+
+        GRLine( &m_ClipBox, aDC, lineStart, lineEnd, 0, aColor );
+
+        // X axis
+        lineStart = wxPoint( aDC->DeviceToLogicalX( 0 ), cursor.y );
+        lineEnd   = wxPoint( aDC->DeviceToLogicalX( clientSize.x ), cursor.y );
+
+        GRLine( &m_ClipBox, aDC, lineStart, lineEnd, 0, aColor );
     }
     else
     {
         int len = aDC->DeviceToLogicalXRel( CURSOR_SIZE );
 
-        GRLine( &m_ClipBox, aDC, Cursor.x - len, Cursor.y,
-                Cursor.x + len, Cursor.y, 0, aColor );
-        GRLine( &m_ClipBox, aDC, Cursor.x, Cursor.y - len,
-                Cursor.x, Cursor.y + len, 0, aColor );
+        GRLine( &m_ClipBox, aDC, cursor.x - len, cursor.y,
+                cursor.x + len, cursor.y, 0, aColor );
+        GRLine( &m_ClipBox, aDC, cursor.x, cursor.y - len,
+                cursor.x, cursor.y + len, 0, aColor );
     }
 }
 
@@ -469,7 +475,7 @@ void EDA_DRAW_PANEL::EraseScreen( wxDC* DC )
                    m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
                    0, g_DrawBgColor, g_DrawBgColor );
 
-    /* Set to one (1) to draw bounding box validate bounding box calculation. */
+    // Set to one (1) to draw bounding box validate bounding box calculation.
 #if DEBUG_SHOW_CLIP_RECT
     EDA_RECT bBox = m_ClipBox;
     GRRect( NULL, DC, bBox.GetOrigin().x, bBox.GetOrigin().y,
@@ -823,7 +829,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 
     wxRect rect = wxRect( wxPoint( 0, 0 ), GetClientSize() );
 
-    /* Ignore scroll events if the cursor is outside the drawing area. */
+    // Ignore scroll events if the cursor is outside the drawing area.
     if( event.GetWheelRotation() == 0 || !GetParent()->IsEnabled()
        || !rect.Contains( event.GetPosition() ) )
     {
@@ -937,12 +943,12 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( event.MiddleDown() )
         localbutt = GR_M_MIDDLE_DOWN;
 
-    localrealbutt |= localbutt;     /* compensation default wxGTK */
+    localrealbutt |= localbutt;     // compensation default wxGTK
 
     INSTALL_UNBUFFERED_DC( DC, this );
     DC.SetBackground( *wxBLACK_BRUSH );
 
-    /* Compute the cursor position in drawing (logical) units. */
+    // Compute the cursor position in drawing (logical) units.
     screen->SetMousePosition( event.GetLogicalPosition( DC ) );
 
     int kbstat = 0;
@@ -1101,7 +1107,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         GetEventHandler()->ProcessEvent( cmd );
     }
 
-    /* Calling the general function on mouse changes (and pseudo key commands) */
+    // Calling the general function on mouse changes (and pseudo key commands)
     GetParent()->GeneralControl( &DC, event.GetLogicalPosition( DC ), 0 );
 
     /*******************************/
@@ -1165,17 +1171,16 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 if( !m_enableMiddleButtonPan && event.MiddleIsDown() )
                     cmd_type |= MOUSE_MIDDLE;
 
-                /* A block command is started if the drag is enough.  A small
-                 * drag is ignored (it is certainly a little mouse move when
-                 * clicking) not really a drag mouse
-                 */
+                // A block command is started if the drag is enough.  A small
+                // drag is ignored (it is certainly a little mouse move when
+                // clicking) not really a drag mouse
                 if( MinDragEventCount < MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND )
                     MinDragEventCount++;
                 else
                 {
                     if( !GetParent()->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos ) )
                     {
-                        // should not occurs: error
+                        // should not occur: error
                         GetParent()->DisplayToolMsg(
                             wxT( "EDA_DRAW_PANEL::OnMouseEvent() Block Error" ) );
                     }
@@ -1264,8 +1269,8 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     switch( localkey )
     {
-        default:
-            break;
+    default:
+        break;
 
     case WXK_ESCAPE:
         m_abortRequest = true;

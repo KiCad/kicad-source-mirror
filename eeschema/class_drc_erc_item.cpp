@@ -30,6 +30,7 @@
 
 #include <class_drc_item.h>
 #include <erc.h>
+#include <base_units.h>
 
 wxString DRC_ITEM::GetErrorText() const
 {
@@ -57,14 +58,9 @@ wxString DRC_ITEM::GetErrorText() const
     }
 }
 
-
 wxString DRC_ITEM::ShowCoord( const wxPoint& aPos )
 {
     wxString ret;
-    wxPoint pos_in_pcb_units = aPos;
-    pos_in_pcb_units.x *= 10;
-    pos_in_pcb_units.y *= 10;
-    ret << pos_in_pcb_units;
+    ret << aPos;
     return ret;
 }
-

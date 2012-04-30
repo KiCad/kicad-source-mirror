@@ -647,6 +647,11 @@ public:
      */
     void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
+    /**
+     * Function Zoom_Automatique
+     * redraws the screen with best zoom level and the best centering
+     * that shows all the page or the board
+     */
     void Zoom_Automatique( bool aWarpPointer );
 
     /* Set the zoom level to show the area Rect */
@@ -836,7 +841,7 @@ public:
 
     /**
      * Function CoordinateToString
-     * is a helper to convert the integer coordinate \a aValue to a string in inches or mm
+     * is a helper to convert the \a integer coordinate \a aValue to a string in inches or mm
      * according to the current user units setting.
      * @param aValue The coordinate to convert.
      * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
@@ -844,6 +849,17 @@ public:
      * @return The converted string for display in user interface elements.
      */
     wxString CoordinateToString( int aValue, bool aConvertToMils = false );
+
+    /**
+     * Function LengthDoubleToString
+     * is a helper to convert the \a double value \a aValue to a string in inches or mm
+     * according to the current user units setting.
+     * @param aValue The coordinate to convert.
+     * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
+     *                       the current user unit is millimeters.
+     * @return The converted string for display in user interface elements.
+     */
+    wxString LengthDoubleToString( double aValue, bool aConvertToMils = false );
 
     DECLARE_EVENT_TABLE()
 };

@@ -222,7 +222,10 @@ set(PCBNEW_SRCS ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS})
 ###
 # We need some extra sources from common
 ###
-#set(PCBNEW_COMMON_SRCS ../common/dialogs/dialog_page_settings.cpp )
+set(PCBNEW_COMMON_SRCS
+    ../common/dialogs/dialog_page_settings.cpp
+    ../common/base_units.cpp
+    )
 
 ##
 # Scripting sources
@@ -299,7 +302,7 @@ if (KICAD_SCRIPTING_MODULES)
 
   SET(CMAKE_SWIG_FLAGS ${SWIG_FLAGS})
   SET_SOURCE_FILES_PROPERTIES(scripting/pcbnew.i PROPERTIES CPLUSPLUS ON)
-  SWIG_ADD_MODULE(pcbnew python scripting/pcbnew.i ${PCBNEW_SCRIPTING_PYTHON_HELPERS} ${PCBNEW_SRCS})
+  SWIG_ADD_MODULE(pcbnew python scripting/pcbnew.i ${PCBNEW_SCRIPTING_PYTHON_HELPERS} ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS})
   SWIG_LINK_LIBRARIES(pcbnew 
       3d-viewer
       pcbcommon

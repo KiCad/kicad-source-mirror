@@ -612,13 +612,13 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->AppendMsgPanel( ShowPadShape(), ShowPadAttr(), DARKGREEN );
 
-    valeur_param( m_Size.x, Line );
+    Line = frame->CoordinateToString( m_Size.x );
     frame->AppendMsgPanel( _( "H Size" ), Line, RED );
 
-    valeur_param( m_Size.y, Line );
+    Line = frame->CoordinateToString( m_Size.y );
     frame->AppendMsgPanel( _( "V Size" ), Line, RED );
 
-    valeur_param( (unsigned) m_Drill.x, Line );
+    Line = frame->CoordinateToString( (unsigned) m_Drill.x );
 
     if( m_DrillShape == PAD_CIRCLE )
     {
@@ -626,9 +626,9 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     }
     else
     {
-        valeur_param( (unsigned) m_Drill.x, Line );
+        Line = frame->CoordinateToString( (unsigned) m_Drill.x );
         wxString msg;
-        valeur_param( (unsigned) m_Drill.y, msg );
+        Line = frame->CoordinateToString( (unsigned) m_Drill.y );
         Line += wxT( " / " ) + msg;
         frame->AppendMsgPanel( _( "Drill X / Y" ), Line, RED );
     }
@@ -644,15 +644,15 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->AppendMsgPanel( _( "Orient" ), Line, LIGHTBLUE );
 
-    valeur_param( m_Pos.x, Line );
+    Line = frame->CoordinateToString( m_Pos.x );
     frame->AppendMsgPanel( _( "X Pos" ), Line, LIGHTBLUE );
 
-    valeur_param( m_Pos.y, Line );
+    Line = frame->CoordinateToString( m_Pos.y );
     frame->AppendMsgPanel( _( "Y pos" ), Line, LIGHTBLUE );
 
     if( GetDieLength() )
     {
-        valeur_param( GetDieLength(), Line );
+        Line = frame->CoordinateToString( GetDieLength() );
         frame->AppendMsgPanel( _( "Length on die" ), Line, CYAN );
     }
 }

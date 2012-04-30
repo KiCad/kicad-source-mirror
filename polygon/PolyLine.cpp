@@ -357,9 +357,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
             else
             {
                 // style is ARC_CW or ARC_CCW
-                int n;                          // number of steps for arcs
-                n = ( abs( x2 - x1 ) + abs( y2 - y1 ) ) / (CArc::MAX_STEP);
-                n = MAX( n, CArc::MIN_STEPS );  // or at most 5 degrees of arc
+                int n = CArc::ARC_STEPS;
                 n_vertices += n;
                 n_arcs++;
             }
@@ -392,8 +390,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
             {
                 // style is arc_cw or arc_ccw
                 int    n;                       // number of steps for arcs
-                n = ( abs( x2 - x1 ) + abs( y2 - y1 ) ) / (CArc::MAX_STEP);
-                n = MAX( n, CArc::MIN_STEPS );  // or at most 5 degrees of arc
+                n = CArc::ARC_STEPS;
                 double xo, yo, theta1, theta2, a, b;
                 a = fabs( (double) (x1 - x2) );
                 b = fabs( (double) (y1 - y2) );

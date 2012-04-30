@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -175,7 +175,8 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
 
 
     /* Updating gerber scale: */
-    double dcode_scale = MILS_TO_IU_SCALAR; // By uniting dCode = mil, internal unit = MILS_TO_IU_SCALAR
+    double dcode_scale = IU_PER_MILS; // By uniting dCode = mil,
+                                                    // internal unit = IU_PER_MILS
     current_Dcode = 0;
 
     if( D_Code_FullFileName.IsEmpty() )

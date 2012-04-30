@@ -16,7 +16,7 @@
  */
 bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
-    BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
+    EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;
     bool        BlockActive = !GetScreen()->m_BlockLocate.IsIdle();
     bool        busy = DrawStruct && DrawStruct->GetFlags();
@@ -71,7 +71,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         return true;
 
     if( DrawStruct )
-        GetScreen()->SetCurItem( DrawStruct );
+        GetScreen()->SetCurItem( (BOARD_ITEM*)DrawStruct );
 
     return true;
 }

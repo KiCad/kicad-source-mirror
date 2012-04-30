@@ -40,25 +40,13 @@
 #include <base_units.h>
 
 
-#if defined( PCBNEW )
-#if defined( USE_PCBNEW_NANOMETRES )
-#define IU_TO_MM( x )       ( x * 1e-6 )
-#define IU_TO_IN( x )       ( ( x * 1e-6 ) / 25.4 )
-#define MM_TO_IU( x )       ( x * 1e6 )
-#define IN_TO_IU( x )       ( ( x * 25.4 ) * 1e6 )
+#if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA )
+#define IU_TO_MM( x )       ( x / IU_PER_MM )
+#define IU_TO_IN( x )       ( x / IU_PER_MILS / 1000 )
+#define MM_TO_IU( x )       ( x * IU_PER_MM )
+#define IN_TO_IU( x )       ( x * IU_PER_MILS * 1000 )
 #else
-#define IU_TO_MM( x )       ( ( x * 0.0001 ) * 25.4 )
-#define IU_TO_IN( x )       ( x * 0.0001 )
-#define MM_TO_IU( x )       ( ( x / 25.4 ) * 10000.0 )
-#define IN_TO_IU( x )       ( x * 10000.0 )
-#endif
-#elif defined( EESCHEMA )
-#define IU_TO_MM( x )       ( ( x * 0.001 ) * 25.4 )
-#define IU_TO_IN( x )       ( x * 0.001 )
-#define MM_TO_IU( x )       ( ( x / 25.4 ) * 1000.0 )
-#define IN_TO_IU( x )       ( x * 1000.0 )
-#else
-#error "Cannot resolve internal units due to no definition of EESCHEMA or PCBNEW."
+#error "Cannot resolve internal units due to no definition of EESCHEMA, CVPCB or PCBNEW."
 #endif
 
 
@@ -79,6 +67,11 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue )
 
 
 wxString CoordinateToString( int aValue, bool aConvertToMils )
+{
+    return LengthDoubleToString( (double) aValue, aConvertToMils );
+}
+
+wxString LengthDoubleToString( double aValue, bool aConvertToMils )
 {
     wxString      text;
     const wxChar* format;
@@ -261,3 +254,14 @@ int ReturnValueFromTextCtrl( const wxTextCtrl& aTextCtr )
 
     return value;
 }
+
+
+wxString& operator <<( wxString& aString, const wxPoint& aPos )
+{
+    aString << wxT( "@ (" ) << CoordinateToString( aPos.x );
+    aString << wxT( "," ) << CoordinateToString( aPos.y );
+    aString << wxT( ")" );
+
+    return aString;
+}
+

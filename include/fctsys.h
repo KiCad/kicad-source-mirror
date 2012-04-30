@@ -29,9 +29,6 @@
 #define M_PI 3.141592653
 #endif
 
-#define PCB_INTERNAL_UNIT      10000    //  PCBNEW internal unit = 1/10000 inch
-#define EESCHEMA_INTERNAL_UNIT 1000     //  EESCHEMA internal unit = 1/1000 inch
-
 #ifdef __WINDOWS__
 #define DIR_SEP        '\\'
 #define STRING_DIR_SEP wxT( "\\" )

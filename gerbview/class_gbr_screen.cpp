@@ -7,9 +7,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <macros.h>
-#include <trigo.h>
-#include <class_pcb_screen.h>
-#include <eda_text.h>                // FILLED
+#include <class_gbr_screen.h>
 #include <base_units.h>
 
 #include <pcbnew.h>
@@ -19,11 +17,10 @@
 #include <pcbnew_id.h>
 
 
-#define ZOOM_FACTOR( x )       ( x * IU_PER_DECIMILS )
-#define DMIL_GRID( x )         wxRealPoint( x * IU_PER_DECIMILS,\
-                                            x * IU_PER_DECIMILS )
-#define MM_GRID( x )           wxRealPoint( x * IU_PER_MM,\
-                                            x * IU_PER_MM )
+#define DMIL_GRID( x ) wxRealPoint( x * IU_PER_DECIMILS,\
+                                    x * IU_PER_DECIMILS )
+#define MM_GRID( x )   wxRealPoint( x * IU_PER_MM,\
+                                    x * IU_PER_MM )
 
 
 /**
@@ -36,14 +33,8 @@
     Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
     functions )
 */
-static const double pcbZoomList[] =
+static const double gbrZoomList[] =
 {
-#if defined( USE_PCBNEW_NANOMETRES )
-    ZOOM_FACTOR( 0.1 ),
-    ZOOM_FACTOR( 0.2 ),
-    ZOOM_FACTOR( 0.3 ),
-#endif
-
     ZOOM_FACTOR( 0.5 ),
     ZOOM_FACTOR( 1.0 ),
     ZOOM_FACTOR( 1.5 ),
@@ -59,19 +50,15 @@ static const double pcbZoomList[] =
     ZOOM_FACTOR( 80.0 ),
     ZOOM_FACTOR( 120.0 ),
     ZOOM_FACTOR( 200.0 ),
-    ZOOM_FACTOR( 300.0 ),
-
-
-#if !defined( USE_PCBNEW_NANOMETRES )
+    ZOOM_FACTOR( 350.0 ),
     ZOOM_FACTOR( 500.0 ),
     ZOOM_FACTOR( 1000.0 ),
     ZOOM_FACTOR( 2000.0 )
-#endif
 };
 
 
 // Default grid sizes for PCB editor screens.
-static GRID_TYPE pcbGridList[] =
+static GRID_TYPE gbrGridList[] =
 {
     // predefined grid list in 0.0001 inches
     { ID_POPUP_GRID_LEVEL_1000,     DMIL_GRID( 1000 )  },
@@ -101,64 +88,35 @@ static GRID_TYPE pcbGridList[] =
 };
 
 
-PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
-    BASE_SCREEN( SCREEN_T )
+GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
+    PCB_SCREEN( aPageSizeIU )
 {
-    wxSize displayz = wxGetDisplaySize();
+    // Replace zoom and grid lists already set by PCB_SCREEN ctor
+    m_ZoomList.Clear();
+    for( unsigned i = 0; i < DIM( gbrZoomList );  ++i )
+        m_ZoomList.Add( gbrZoomList[i] );
 
-    for( unsigned i = 0; i < DIM( pcbZoomList );  ++i )
-        m_ZoomList.Add( pcbZoomList[i] );
-
-    for( unsigned i = 0; i < DIM( pcbGridList );  ++i )
-        AddGrid( pcbGridList[i] );
+    GRIDS gridlist;
+    for( unsigned i = 0; i < DIM( gbrGridList );  ++i )
+        gridlist.push_back( gbrGridList[i] );
+    SetGridList( gridlist );
 
     // Set the working grid size to a reasonnable value (in 1/10000 inch)
     SetGrid( DMIL_GRID( 500 ) );
 
     m_Active_Layer       = LAYER_N_BACK;      // default active layer = bottom layer
-    m_Route_Layer_TOP    = LAYER_N_FRONT;     // default layers pair for vias (bottom to top)
-    m_Route_Layer_BOTTOM = LAYER_N_BACK;
 
-    SetZoom( ZOOM_FACTOR( 120 ) );             // a default value for zoom
-
-    InitDataPoints( aPageSizeIU );
+    SetZoom( ZOOM_FACTOR( 350 ) );            // a default value for zoom
 }
 
 
-PCB_SCREEN::~PCB_SCREEN()
+GBR_SCREEN::~GBR_SCREEN()
 {
-    ClearUndoRedoList();
 }
 
 
-int PCB_SCREEN::MilsToIuScalar()
+// virtual function
+int GBR_SCREEN::MilsToIuScalar()
 {
     return (int)IU_PER_MILS;
-}
-
-
-DISPLAY_OPTIONS::DISPLAY_OPTIONS()
-{
-    DisplayPadFill          = FILLED;
-    DisplayViaFill          = FILLED;
-    DisplayPadNum           = true;
-    DisplayPadIsol          = true;
-
-    DisplayModEdge          = true;
-    DisplayModText          = true;
-    DisplayPcbTrackFill     = true;  // false = sketch , true = filled
-    ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
-    m_DisplayViaMode        = VIA_HOLE_NOT_SHOW;
-
-    DisplayPolarCood        = false; /* false = display absolute coordinates,
-                                      * true = display polar cordinates */
-    DisplayZonesMode        = 0;     /* 0 = Show filled areas outlines in zones,
-                                      * 1 = do not show filled areas outlines
-                                      * 2 = show outlines of filled areas */
-    DisplayNetNamesMode     = 3;     /* 0 do not show netnames,
-                                      * 1 show netnames on pads
-                                      * 2 show netnames on tracks
-                                      * 3 show netnames on tracks and pads */
-    DisplayDrawItems        = true;
-    ContrastModeDisplay     = false;
 }
