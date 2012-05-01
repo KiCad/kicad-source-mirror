@@ -59,3 +59,39 @@
   
 }
 
+%pythoncode 
+{
+    
+def GetPluginForPath(lpath):
+        return IO_MGR.PluginFind(IO_MGR.LEGACY)
+	
+def FootprintEnumerate(lpath):
+        plug = GetPluginForPath(lpath)
+        return plug.FootprintEnumerate(lpath)
+	
+def FootprintLoad(lpath,name):
+        plug = GetPluginForPath(lpath)
+        return plug.FootprintLoad(lpath,name)
+	
+def FootprintSave(lpath,module):
+	plug = GetPluginForPath(lpath)
+        return plug.FootprintSave(lpath,module)
+	
+def FootprintDelete(lpath,name):
+        plug = GetPluginForPath(lpath)
+        plug.FootprintDelete(lpath,name)
+	
+def FootprintLibCreate(lpath):
+        plug = GetPluginForPath(lpath)
+        plug.FootprintLibCreate(lpath)
+	
+def FootprintLibDelete(lpath):
+        plug = GetPluginForPath(lpath)
+        plug.FootprintLibDelete(lpath)
+	
+def FootprintIsWritable(lpath):
+        plug = GetPluginForPath(lpath)
+        plug.FootprintLibIsWritable(lpath)
+  
+    
+}
