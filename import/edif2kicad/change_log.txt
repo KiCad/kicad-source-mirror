@@ -1,0 +1,133 @@
+FILE: change_log.txt
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2012-Apr-27 fwb
+	-EDIF added OrCad test/openrd.edf & test/OPENRD_16-00050-02.pdf files
+		-See OpenRD.org - Open Reference Designs
+		-Marvel Sheeva 88F6281 ARM SOC, USB, DDR2, PCIe, SATA
+		-multiple sheet symbol (netlister gives warning for
+			multiple U1 - sheet 2,3,4,6) need to fix EEschema netlister
+	-sheet ref [1,2,3] -> {1,2,3} (not bus members)
+ 	-bus range DDR2[15:0] ->DDR2[15..0]
+	-pickup footprint, manufacture and MFG part number
+TODO fixme
+	-PARTSVALUE coordinates are wild
+	-get rid of all the ANNOTATION "COMMENT" OutText
+	-PORT LEFT,RIGHT,BOTH oxy s/b 0,0 not PWR symbols
+testing
+	$make
+	$cd test
+	$../e2sch openrd.edf
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Apr-28 fwb
+	fix sig segv for eample/X375D_VER72.EDF
+        some bug with ARCS position??
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Apr-1  fwb
+	match top.sch sheet names with sch files
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Mar-31 fwb
+	cleanup module, pin names
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Mar-28 fwb
+	generate a top.sch if # pages >1
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Mar-26 fwb
+	first attempt to write multi-page schematics
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Mar-3  fwb
+  	Ref Desig, value location move with symbol
+	netlist improved
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Feb-13 fwb
+	Reference and value move with Instance
+	added symbol text
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Feb-10 fwb
+ 	Improved Instance reference, value positions
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Feb-7  fwb
+	1) OrCad version 10 doesn't xmit PIN_32_NUMBER_32_IS_32_VISIBLE
+	   so for now all pins are visable
+	2) Verion 10 uses portInstance to display PIN name/number but
+	the coordinates are messed and without 1) no pin hotspots are shown
+	3) added PCB_FOOTPRINT Instance property
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2008-Feb-6  fwb
+	improved text scaling
+ 	automatically compute pin lenght and orientation
+	Instances were getting confused with CellDefs
+	Circles & Rectangles seem to be correct now
+	Design can now include CellDefs
+	e2sch works with OrCad version 9 , EDIF from ver 10 has problems
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-dec-3  fwb
+	demote symbols (*XTIE* or *JUNCTION*) to connections
+	improving netlist quality
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-nov-21 fwb
+	fixed property property integer
+	multi segment WIRE - OrCad ver 10
+	text size per FigGrp
+	pick up Instance Ref Designator
+   TODO
+	remove XTIEs form netlist
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-nov-16 fwb
+	removed strndup from edif.y
+	added OutPro function to generate a .pro file with libs listed
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-oct-30 fwb 
+	fixed CAPSYM.lib - power syms
+	better netlist - caps have VCC & GND
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-oct-23 fwb - clean up, fix core crash, pin visability
+	TODO:
+		o fix Power connections
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-oct-17 fwb - Schematic is useable, not perfect
+	eyespy works, PS10 doesn't
+	need to hand edit 
+	o library for PinUP, PinDown
+	o OrCad mistakes (couple Cap positions)
+	TODO:
+	 	o debug/fix PS10
+		o add TIE points
+		o try to generate a netlist from EEschema
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-Oct-12 fwb - multiple libs, fixed ARC, DESIGNATOR/VALUE 
+	position Demorgan convert & pin name renames
+	Looks good enough to start schematic
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-Oct-10 fwb - major rewrite, cleanup
+       	produces separate libs, KiCad style
+       	symbol pins are close
+       	but not quite ready for primetime
+       	ARC needs some work
+       	Note:OrCad puts out multiple Instance designators
+	    Program warnings only
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-oct-06 fwb - fewer errors on lib browse
+  	symbls are recognizable
+	need to work on text orientation	
+	e2net broken
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-oct-05 fwb - produces almost readable eyespy.lib
+	need to fix:
+	   DRAW
+	   P 0 0 0 0
+	after this error, ok, library browse
+	draws some stuff.
+	need to add curve/arc
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-oct-03 fwb - initial ci e2lib.c
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+20071003 fwb - split main out of edif. Now have e2net, e2sch
+	this also might keep the parser clean, which will 
+	just build the structs
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-oct-02 fwb - added a pretty print edif program (ppedif.c) and 
+	updated makefile
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2007-sep-19 fwb - Original release
+

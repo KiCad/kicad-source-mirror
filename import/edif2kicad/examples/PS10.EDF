@@ -1,0 +1,2509 @@
+(EDIF(rename PS10 "PS10")(EDIFVersion 2 0 0)(EDIFLevel 0)(keywordMap(
+keywordLevel 0))(status(written(timeStamp 2007 9 17 0 46 31)(dataOrigin "OrCAD C
+apture on WIN32 EDX ID 0")(program "cap2edi - Engineering DataXpress, Inc."(
+version "2.9 - OrCAD Capture Version 9.20"))))(library(rename INDEXD "INDEXD")(
+EDIFLevel 0)(technology(numberDefinition(scale 1(e 254 -9)(unit DISTANCE)))(
+figureGroup BODY(pathWidth 1000)(textHeight 10000))(figureGroup COMMENT(
+pathWidth 1000)(textHeight 9000)(property(rename FONT "font")(string "Courier Ne
+w")))(figureGroup PINNAME(pathWidth 1000)(textHeight 9000)(property(rename FONT
+"font")(string "Arial")))(figureGroup PINNUMBER(pathWidth 1000)(textHeight 9000)
+(property(rename FONT "font")(string "Arial")))(figureGroup PORT(pathWidth 1000)
+(textHeight 9000)(property(rename FONT "font")(string "Arial")))(figureGroup
+PROPERTY(pathWidth 1000)(textHeight 9000)(property(rename FONT "font")(string "A
+rial")))(userData GRIDRESOLUTION(integer 10000 10000)))(cell(rename R "R")(
+cellType GENERIC)(view(rename NORMAL "Normal")(viewType SCHEMATIC)(interface(
+designator "R")(port(rename &1 "1")(property(rename PORTTYPE "PORTTYPE")(string
+"nonLogical")(owner "Schematic_TSC"))(designator "1")(property(rename PIN_SHARED
+"Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order"
+)(string "0")(owner "OrCAD"))(property(rename LONG "Long")(string "False")(owner
+"OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(
+property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &2 "2")(
+property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC")
+)(designator "2")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner
+"DataXpress"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(property(rename VALUE "Value")(string "")(owner "OrCAD
+"))(property(rename IMPLEMENTATION_32_PATH "Implementation Path")(string "")(
+owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(
+string "<none>")(owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation"
+)(string "")(owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numb
+ers Visible")(string "True")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "False")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner
+"OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt 0 10000)(pt 20000
+-40000)))(portImplementation &1(connectLocation(figure PORT(dot(pt 10000 10000))
+))(figure BODY(path(pointList(pt 10000 10000)(pt 10000 0))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify UPPERLEFT)(orientation R90)(origin(pt 11000
+7000)))))(portImplementation &2(connectLocation(figure PORT(dot(pt 10000 -40000)
+)))(figure BODY(path(pointList(pt 10000 -40000)(pt 10000 -30000))))(
+keywordDisplay DESIGNATOR(display PINNUMBER(justify UPPERRIGHT)(orientation R90)
+(origin(pt 11000 -37000)))))(figure BODY(path(pointList(pt 10000 0)(pt 13000
+-3000)))(path(pointList(pt 13000 -3000)(pt 7000 -9000)))(path(pointList(pt 7000
+-9000)(pt 13000 -15000)))(path(pointList(pt 13000 -15000)(pt 7000 -21000)))(path
+(pointList(pt 7000 -21000)(pt 13000 -27000)))(path(pointList(pt 13000 -27000)(pt
+10000 -30000))))(keywordDisplay DESIGNATOR(display PROPERTY(justify UPPERLEFT)(
+origin(pt 29000 0))))(propertyDisplay VALUE(display PROPERTY(justify UPPERLEFT)(
+origin(pt 29000 -9000))))))))(cell(rename XFORM_32_EFD20B "XFORM EFD20B")(
+cellType GENERIC)(view(rename NORMAL "Normal")(viewType SCHEMATIC)(interface(
+designator "T")(port(rename &1 "1")(property(rename PORTTYPE "PORTTYPE")(string
+"nonLogical")(owner "Schematic_TSC"))(designator "1")(property(rename PIN_SHARED
+"Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order"
+)(string "0")(owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner
+"OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(
+property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &2 "2")(
+property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC")
+)(designator "2")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner
+"DataXpress"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename &3 "3")(property(rename PORTTYPE "PORTTYPE
+")(string "nonLogical")(owner "Schematic_TSC"))(designator "3")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "2")(owner "OrCAD"))(property(rename LONG "Long")(string "
+True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrC
+AD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &4
+"4")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_
+TSC"))(designator "4")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(
+owner "DataXpress"))(property(rename ORDER "Order")(string "3")(owner "OrCAD"))(
+property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename &5 "5")(property(rename PORTTYPE "PORTTYPE
+")(string "nonLogical")(owner "Schematic_TSC"))(designator "5")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "4")(owner "OrCAD"))(property(rename LONG "Long")(string "
+True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrC
+AD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &6
+"6")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_
+TSC"))(designator "6")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(
+owner "DataXpress"))(property(rename ORDER "Order")(string "5")(owner "OrCAD"))(
+property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename &7 "7")(property(rename PORTTYPE "PORTTYPE
+")(string "nonLogical")(owner "Schematic_TSC"))(designator "7")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "6")(owner "OrCAD"))(property(rename LONG "Long")(string "
+True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrC
+AD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &8
+"8")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_
+TSC"))(designator "8")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(
+owner "DataXpress"))(property(rename ORDER "Order")(string "7")(owner "OrCAD"))(
+property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename &9 "9")(property(rename PORTTYPE "PORTTYPE
+")(string "nonLogical")(owner "Schematic_TSC"))(designator "9")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "8")(owner "OrCAD"))(property(rename LONG "Long")(string "
+True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrC
+AD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename
+&10 "10")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schem
+atic_TSC"))(designator "10")(property(rename PIN_SHARED "Pin_Shared")(string "FA
+LSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "9")(owner "OrC
+AD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(
+rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")
+(string "False")(owner "OrCAD")))(property(rename VALUE "Value")(string "XFORM C
+MODE CHOKE")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_PATH "Implementat
+ion Path")(string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Im
+plementation Type")(string "<none>")(owner "OrCAD"))(property(rename
+IMPLEMENTATION "Implementation")(string "")(owner "OrCAD"))(property(rename
+PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")(string "True")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "False")(
+owner "OrCAD"))(property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(
+string "True")(owner "OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt
+-30000 0)(pt 110000 -170000)))(portImplementation &1(connectLocation(figure PORT
+(dot(pt -30000 -20000))))(figure BODY(path(pointList(pt -30000 -20000)(pt 0
+-20000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(
+origin(pt -7000 -19000)))))(portImplementation &2(connectLocation(figure PORT(
+dot(pt -30000 -50000))))(figure BODY(path(pointList(pt -30000 -50000)(pt 0
+-50000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(
+origin(pt -7000 -49000)))))(portImplementation &3(connectLocation(figure PORT(
+dot(pt -30000 -80000))))(figure BODY(path(pointList(pt -30000 -80000)(pt 0
+-80000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(
+origin(pt -7000 -79000)))))(portImplementation &4(connectLocation(figure PORT(
+dot(pt -30000 -110000))))(figure BODY(path(pointList(pt -30000 -110000)(pt 0
+-110000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(
+origin(pt -7000 -109000)))))(portImplementation &5(connectLocation(figure PORT(
+dot(pt -30000 -140000))))(figure BODY(path(pointList(pt -30000 -140000)(pt 0
+-140000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(
+origin(pt -7000 -139000)))))(portImplementation &6(connectLocation(figure PORT(
+dot(pt 110000 -20000))))(figure BODY(path(pointList(pt 110000 -20000)(pt 80000
+-20000))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 87000 -19000)))
+))(portImplementation &7(connectLocation(figure PORT(dot(pt 110000 -50000))))(
+figure BODY(path(pointList(pt 110000 -50000)(pt 80000 -50000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(origin(pt 87000 -49000)))))(portImplementation &8(
+connectLocation(figure PORT(dot(pt 110000 -80000))))(figure BODY(path(pointList(
+pt 110000 -80000)(pt 80000 -80000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 87000 -79000)))))(portImplementation &9(connectLocation(
+figure PORT(dot(pt 110000 -110000))))(figure BODY(path(pointList(pt 110000
+-110000)(pt 80000 -110000))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin
+(pt 87000 -109000)))))(portImplementation &10(connectLocation(figure PORT(dot(pt
+110000 -140000))))(figure BODY(path(pointList(pt 110000 -140000)(pt 80000
+-140000))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 87000 -139000)
+))))(figure BODY(openShape(curve(arc(pt 30000 -20000)(pt 20000 -30000)(pt 10000
+-20000))))(openShape(curve(arc(pt 50000 -20000)(pt 40000 -30000)(pt 30000 -20000
+))))(openShape(curve(arc(pt 70000 -20000)(pt 60000 -30000)(pt 50000 -20000))))(
+path(pointList(pt 70000 -20000)(pt 80000 -20000)))(path(pointList(pt 10000
+-20000)(pt 0 -20000)))(path(pointList(pt 70000 -50000)(pt 80000 -50000)))(
+openShape(curve(arc(pt 70000 -50000)(pt 60000 -60000)(pt 50000 -50000))))(
+openShape(curve(arc(pt 50000 -50000)(pt 40000 -60000)(pt 30000 -50000))))(path(
+pointList(pt 10000 -50000)(pt 0 -50000)))(openShape(curve(arc(pt 30000 -50000)(
+pt 20000 -60000)(pt 10000 -50000))))(path(pointList(pt 70000 -80000)(pt 80000
+-80000)))(openShape(curve(arc(pt 70000 -80000)(pt 60000 -90000)(pt 50000 -80000)
+)))(openShape(curve(arc(pt 50000 -80000)(pt 40000 -90000)(pt 30000 -80000))))(
+path(pointList(pt 10000 -80000)(pt 0 -80000)))(openShape(curve(arc(pt 30000
+-80000)(pt 20000 -90000)(pt 10000 -80000))))(path(pointList(pt 70000 -110000)(pt
+80000 -110000)))(openShape(curve(arc(pt 70000 -110000)(pt 60000 -120000)(pt
+50000 -110000))))(openShape(curve(arc(pt 50000 -110000)(pt 40000 -120000)(pt
+30000 -110000))))(path(pointList(pt 10000 -110000)(pt 0 -110000)))(openShape(
+curve(arc(pt 30000 -110000)(pt 20000 -120000)(pt 10000 -110000))))(path(
+pointList(pt 70000 -140000)(pt 80000 -140000)))(openShape(curve(arc(pt 70000
+-140000)(pt 60000 -150000)(pt 50000 -140000))))(openShape(curve(arc(pt 50000
+-140000)(pt 40000 -150000)(pt 30000 -140000))))(path(pointList(pt 10000 -140000)
+(pt 0 -140000)))(openShape(curve(arc(pt 30000 -140000)(pt 20000 -150000)(pt
+10000 -140000))))(path(pointList(pt 80000 -170000)(pt 80000 0)))(path(pointList(
+pt 80000 0)(pt 0 0)))(path(pointList(pt 0 0)(pt 0 -170000)))(path(pointList(pt 0
+-170000)(pt 80000 -170000))))(keywordDisplay DESIGNATOR(display PROPERTY(justify
+UPPERLEFT)(origin(pt 10000 14000))))(propertyDisplay VALUE(display PROPERTY(
+justify UPPERLEFT)(origin(pt 10000 -174000))))))))(cell(rename LT1072C "LT1072C"
+)(cellType GENERIC)(view(rename NORMAL "Normal")(viewType SCHEMATIC)(interface(
+designator "U")(port(rename VIN "VIN")(property(rename PORTTYPE "PORTTYPE")(
+string "nonLogical")(owner "Schematic_TSC"))(designator "5")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename LONG "Long")(string "
+True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrC
+AD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename VC
+"VC")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic
+_TSC"))(designator "1")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")
+(owner "DataXpress"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))
+(property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename GND "GND")(property(rename PORTTYPE "PORTT
+YPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "3")(property(
+rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(
+rename ORDER "Order")(string "2")(owner "OrCAD"))(property(rename LONG "Long")(
+string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(
+owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port
+(rename GND_3 "GND_3")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")
+(owner "Schematic_TSC"))(property(rename ORIGINALPINNAME "OriginalPinName")(
+string "GND")(owner "DataXpress"))(designator "6")(property(rename PIN_SHARED "P
+in_Shared")(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(
+string "3")(owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "O
+rCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(
+rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename FB "FB")(property
+(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(
+designator "2")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "
+DataXpress"))(property(rename ORDER "Order")(string "4")(owner "OrCAD"))(
+property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename VSW "VSW")(property(rename PORTTYPE "PORTT
+YPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "4")(property(
+rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(
+rename ORDER "Order")(string "5")(owner "OrCAD"))(property(rename LONG "Long")(
+string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(
+owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(
+property(rename VALUE "Value")(string "")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_PATH "Implementation Path")(string "")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation")(string "")(
+owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+(string "True")(owner "OrCAD"))(property(rename PIN_32_NAMES_32_VISIBLE "Pin Nam
+es Visible")(string "True")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner "OrCAD"))(symbol
+(commentGraphics)(boundingBox(rectangle(pt -30000 0)(pt 100000 -100000)))(
+portImplementation(name VIN(display PINNAME(justify CENTERLEFT)(origin(pt 7000
+-20000))))(connectLocation(figure PORT(dot(pt -30000 -20000))))(figure BODY(path
+(pointList(pt -30000 -20000)(pt 0 -20000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -19000)))))(portImplementation(
+name VC(display PINNAME(justify CENTERLEFT)(origin(pt 7000 -50000))))(
+connectLocation(figure PORT(dot(pt -30000 -50000))))(figure BODY(path(pointList(
+pt -30000 -50000)(pt 0 -50000))))(keywordDisplay DESIGNATOR(display PINNUMBER(
+justify LOWERRIGHT)(origin(pt -7000 -49000)))))(portImplementation(name GND(
+display PINNAME(justify CENTERLEFT)(origin(pt 7000 -80000))))(connectLocation(
+figure PORT(dot(pt -30000 -80000))))(figure BODY(path(pointList(pt -30000 -80000
+)(pt 0 -80000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT
+)(origin(pt -7000 -79000)))))(portImplementation GND_3(connectLocation(figure
+PORT(dot(pt 100000 -80000))))(figure BODY(path(pointList(pt 100000 -80000)(pt
+70000 -80000))))(propertyDisplay ORIGINALPINNAME(display PINNAME(justify
+CENTERRIGHT)(origin(pt 63000 -80000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 77000 -79000)))))(portImplementation(name FB(display PINNAME
+(justify CENTERRIGHT)(origin(pt 63000 -50000))))(connectLocation(figure PORT(dot
+(pt 100000 -50000))))(figure BODY(path(pointList(pt 100000 -50000)(pt 70000
+-50000))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 77000 -49000)))
+))(portImplementation(name VSW(display PINNAME(justify CENTERRIGHT)(origin(pt
+63000 -20000))))(connectLocation(figure PORT(dot(pt 100000 -20000))))(figure
+BODY(path(pointList(pt 100000 -20000)(pt 70000 -20000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(origin(pt 77000 -19000)))))(figure BODY(rectangle(
+pt 0 0)(pt 70000 -100000)))(keywordDisplay DESIGNATOR(display PROPERTY(justify
+UPPERLEFT)(origin(pt 5000 9000))))(propertyDisplay VALUE(display PROPERTY(
+justify UPPERLEFT)(origin(pt 5000 -101000))))))))(cell(rename CHOKE_32_CMODE "CH
+OKE CMODE")(cellType GENERIC)(view(rename NORMAL "Normal")(viewType SCHEMATIC)(
+interface(designator "T")(port(rename &8 "8")(property(rename PORTTYPE "PORTTYPE
+")(string "nonLogical")(owner "Schematic_TSC"))(designator "8")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename LONG "Long")(string "
+True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrC
+AD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &1
+"1")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_
+TSC"))(designator "1")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(
+owner "DataXpress"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename &5 "5")(property(rename PORTTYPE "PORTTYPE
+")(string "nonLogical")(owner "Schematic_TSC"))(designator "5")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "2")(owner "OrCAD"))(property(rename LONG "Long")(string "
+True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrC
+AD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &4
+"4")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_
+TSC"))(designator "4")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(
+owner "DataXpress"))(property(rename ORDER "Order")(string "3")(owner "OrCAD"))(
+property(rename LONG "Long")(string "True")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(property(rename VALUE "Value")(string "CHOKE-CMODE")(
+owner "OrCAD"))(property(rename IMPLEMENTATION_32_PATH "Implementation Path")(
+string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementatio
+n Type")(string "<none>")(owner "OrCAD"))(property(rename IMPLEMENTATION "Implem
+entation")(string "")(owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE
+"Pin Numbers Visible")(string "True")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "False")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner
+"OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt -30000 0)(pt 110000
+-80000)))(portImplementation &8(connectLocation(figure PORT(dot(pt -30000 -20000
+))))(figure BODY(path(pointList(pt -30000 -20000)(pt 0 -20000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -19000)))))(
+portImplementation &1(connectLocation(figure PORT(dot(pt -30000 -50000))))(
+figure BODY(path(pointList(pt -30000 -50000)(pt 0 -50000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -49000)))))(
+portImplementation &5(connectLocation(figure PORT(dot(pt 110000 -20000))))(
+figure BODY(path(pointList(pt 110000 -20000)(pt 80000 -20000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(origin(pt 87000 -19000)))))(portImplementation &4(
+connectLocation(figure PORT(dot(pt 110000 -50000))))(figure BODY(path(pointList(
+pt 110000 -50000)(pt 80000 -50000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 87000 -49000)))))(figure BODY(openShape(curve(arc(pt 30000
+-20000)(pt 20000 -30000)(pt 10000 -20000))))(openShape(curve(arc(pt 50000 -20000
+)(pt 40000 -30000)(pt 30000 -20000))))(openShape(curve(arc(pt 70000 -20000)(pt
+60000 -30000)(pt 50000 -20000))))(path(pointList(pt 70000 -20000)(pt 80000
+-20000)))(path(pointList(pt 10000 -20000)(pt 0 -20000)))(path(pointList(pt 70000
+-50000)(pt 80000 -50000)))(openShape(curve(arc(pt 70000 -50000)(pt 60000 -60000)
+(pt 50000 -50000))))(openShape(curve(arc(pt 50000 -50000)(pt 40000 -60000)(pt
+30000 -50000))))(path(pointList(pt 10000 -50000)(pt 0 -50000)))(openShape(curve(
+arc(pt 30000 -50000)(pt 20000 -60000)(pt 10000 -50000))))(path(pointList(pt
+80000 -80000)(pt 80000 0)))(path(pointList(pt 80000 0)(pt 0 0)))(path(pointList(
+pt 0 0)(pt 0 -80000)))(path(pointList(pt 0 -80000)(pt 80000 -80000))))(
+keywordDisplay DESIGNATOR(display PROPERTY(justify UPPERLEFT)(origin(pt 10000
+14000))))(propertyDisplay VALUE(display PROPERTY(justify UPPERLEFT)(origin(pt
+-20000 -90000))))))))(cell(rename POST_45_2 "POST-2")(cellType GENERIC)(view(
+rename NORMAL "Normal")(viewType SCHEMATIC)(interface(designator "JP")(port(
+rename &1 "1")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "
+Schematic_TSC"))(designator "1")(property(rename PIN_SHARED "Pin_Shared")(string
+"FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "0")(owner "
+OrCAD"))(property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(
+rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")
+(string "False")(owner "OrCAD")))(port(rename &2 "2")(property(rename PORTTYPE "
+PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "2")(property
+(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(
+rename ORDER "Order")(string "1")(owner "OrCAD"))(property(rename LONG "Long")(
+string "False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(
+owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(
+property(rename VALUE "Value")(string "")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_PATH "Implementation Path")(string "")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation")(string "")(
+owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+(string "True")(owner "OrCAD"))(property(rename PIN_32_NAMES_32_VISIBLE "Pin Nam
+es Visible")(string "False")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner "OrCAD"))(symbol
+(commentGraphics)(boundingBox(rectangle(pt 0 0)(pt 20000 -30000)))(
+portImplementation &1(connectLocation(figure PORT(dot(pt 20000 -10000))))(figure
+BODY(path(pointList(pt 20000 -10000)(pt 10000 -10000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(origin(pt 17000 -9000)))))(portImplementation &2(
+connectLocation(figure PORT(dot(pt 20000 -20000))))(figure BODY(path(pointList(
+pt 20000 -20000)(pt 10000 -20000))))(keywordDisplay DESIGNATOR(display PINNUMBER
+(origin(pt 17000 -19000)))))(figure BODY(path(pointList(pt 10000 -5000)(pt 0
+-5000)))(path(pointList(pt 0 -5000)(pt 0 -25000)))(path(pointList(pt 0 -25000)(
+pt 10000 -25000)))(path(pointList(pt 10000 -25000)(pt 10000 -5000))))(
+keywordDisplay DESIGNATOR(display PROPERTY(justify UPPERLEFT)(origin(pt 5000
+9000))))(propertyDisplay VALUE(display PROPERTY(justify UPPERLEFT)(origin(pt
+5000 -31000))))))))(cell(rename CON_45_3_32_PHONO "CON-3 PHONO")(cellType
+GENERIC)(view(rename NORMAL "Normal")(viewType SCHEMATIC)(interface(designator "
+J")(port(rename &1 "1")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical"
+)(owner "Schematic_TSC"))(designator "1")(property(rename PIN_SHARED "Pin_Shared
+")(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "0
+")(owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &2 "2")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "2"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "1")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &3 "3")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "3")(property(rename PIN_SHARED "Pin_Shared")
+(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "2")
+(owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(property(rename VALUE "Value")(
+string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_PATH "Implementatio
+n Path")(string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Impl
+ementation Type")(string "<none>")(owner "OrCAD"))(property(rename
+IMPLEMENTATION "Implementation")(string "")(owner "OrCAD"))(property(rename
+PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")(string "True")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "False")(
+owner "OrCAD"))(property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(
+string "True")(owner "OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt
+-30000 30000)(pt 60000 -70000)))(portImplementation &1(connectLocation(figure
+PORT(dot(pt -30000 -20000))))(figure BODY(path(pointList(pt -30000 -20000)(pt 0
+-20000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(
+origin(pt -7000 -19000)))))(portImplementation &2(connectLocation(figure PORT(
+dot(pt 40000 -70000))))(figure BODY(path(pointList(pt 40000 -70000)(pt 40000
+-40000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify UPPERRIGHT)(
+orientation R90)(origin(pt 41000 -47000)))))(portImplementation &3(
+connectLocation(figure PORT(dot(pt 20000 30000))))(figure BODY(path(pointList(pt
+20000 30000)(pt 20000 0))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify
+UPPERLEFT)(orientation R90)(origin(pt 21000 7000)))))(figure BODY(path(pointList
+(pt 60000 -34000)(pt 57000 -34000)))(path(pointList(pt 57000 -34000)(pt 57000
+-31000)))(path(pointList(pt 57000 -31000)(pt 54000 -31000)))(path(pointList(pt
+54000 -31000)(pt 54000 -34000)))(path(pointList(pt 54000 -34000)(pt 5000 -34000)
+))(path(pointList(pt 5000 -34000)(pt 5000 -6000)))(path(pointList(pt 5000 -6000)
+(pt 54000 -6000)))(path(pointList(pt 54000 -6000)(pt 54000 -9000)))(path(
+pointList(pt 54000 -9000)(pt 57000 -9000)))(path(pointList(pt 57000 -9000)(pt
+57000 -6000)))(path(pointList(pt 57000 -6000)(pt 60000 -6000)))(path(pointList(
+pt 60000 -6000)(pt 60000 -34000)))(path(pointList(pt 51000 -34000)(pt 51000
+-6000)))(path(pointList(pt 50000 -6000)(pt 50000 -34000)))(path(pointList(pt
+5000 -13000)(pt 4000 -13000)))(path(pointList(pt 4000 -13000)(pt 4000 -27000)))(
+path(pointList(pt 4000 -27000)(pt 5000 -27000)))(path(pointList(pt 4000 -17000)(
+pt 3000 -17000)))(path(pointList(pt 3000 -17000)(pt 3000 -23000)))(path(
+pointList(pt 3000 -23000)(pt 4000 -23000)))(path(pointList(pt 10000 -6000)(pt
+10000 -5000)))(path(pointList(pt 10000 -5000)(pt 24000 -5000)))(path(pointList(
+pt 24000 -5000)(pt 24000 -6000)))(path(pointList(pt 20000 0)(pt 20000 -5000)))(
+path(pointList(pt 0 -20000)(pt 3000 -20000)))(path(pointList(pt 40000 -40000)(pt
+40000 -28000)))(path(pointList(pt 39000 -28000)(pt 41000 -28000)))(path(
+pointList(pt 41000 -28000)(pt 41000 -14000)))(path(pointList(pt 41000 -14000)(pt
+39000 -14000)))(path(pointList(pt 39000 -14000)(pt 39000 -28000)))(path(
+pointList(pt 8000 -20000)(pt 12000 -20000)))(path(pointList(pt 10000 -18000)(pt
+10000 -22000)))(path(pointList(pt 36000 -20000)(pt 32000 -20000))))(
+keywordDisplay DESIGNATOR(display PROPERTY(justify UPPERLEFT)(origin(pt 60000
+-42000))))(propertyDisplay NAME(display PROPERTY(justify UPPERLEFT)(origin(pt
+60000 -54000))))))))(cell(rename &1N4148 "1N4148")(cellType GENERIC)(view(rename
+NORMAL "Normal")(viewType SCHEMATIC)(interface(designator "D")(port(rename ANODE
+"ANODE")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schema
+tic_TSC"))(designator "2")(property(rename PIN_SHARED "Pin_Shared")(string "FALS
+E")(owner "DataXpress"))(property(rename ORDER "Order")(string "0")(owner "OrCAD
+"))(property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename CATHODE "CATHODE")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "1"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "1")(owner "OrCAD"))(property(rename LONG
+"Long")(string "False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "F
+alse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")
+))(property(rename VALUE "Value")(string "")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_PATH "Implementation Path")(string "")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation")(string "")(
+owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+(string "True")(owner "OrCAD"))(property(rename PIN_32_NAMES_32_VISIBLE "Pin Nam
+es Visible")(string "False")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner "OrCAD"))(symbol
+(commentGraphics)(boundingBox(rectangle(pt -10000 0)(pt 40000 -20000)))(
+portImplementation ANODE(connectLocation(figure PORT(dot(pt -10000 -10000))))(
+figure BODY(path(pointList(pt -10000 -10000)(pt 0 -10000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -9000)))))(
+portImplementation CATHODE(connectLocation(figure PORT(dot(pt 40000 -10000))))(
+figure BODY(path(pointList(pt 40000 -10000)(pt 30000 -10000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(origin(pt 37000 -9000)))))(figure BODY(path(
+pointList(pt 10000 0)(pt 10000 -20000)))(path(pointList(pt 10000 -20000)(pt
+20000 -10000)))(path(pointList(pt 20000 -10000)(pt 10000 0)))(path(pointList(pt
+20000 0)(pt 20000 -20000)))(path(pointList(pt 0 -10000)(pt 10000 -10000)))(path(
+pointList(pt 20000 -10000)(pt 30000 -10000))))(keywordDisplay DESIGNATOR(display
+PROPERTY(justify UPPERLEFT)(origin(pt 5000 9000))))(propertyDisplay VALUE(
+display PROPERTY(justify UPPERLEFT)(origin(pt 5000 -21000))))))))(cell(rename
+CON_45_8 "CON-8")(cellType GENERIC)(view(rename NORMAL "Normal")(viewType
+SCHEMATIC)(interface(designator "J")(port(rename &1 "1")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "")
+(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &2 "2")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "")(property(rename PIN_SHARED "Pin_Shared")(
+string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "1")(
+owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &3 "3")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "")
+(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "2")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &4 "4")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "")(property(rename PIN_SHARED "Pin_Shared")(
+string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "3")(
+owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &5 "5")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "")
+(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "4")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &6 "6")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "")(property(rename PIN_SHARED "Pin_Shared")(
+string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "5")(
+owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &7 "7")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "")
+(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "6")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &8 "8")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "")(property(rename PIN_SHARED "Pin_Shared")(
+string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "7")(
+owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(property(rename VALUE "Value")(
+string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_PATH "Implementatio
+n Path")(string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Impl
+ementation Type")(string "<none>")(owner "OrCAD"))(property(rename
+IMPLEMENTATION "Implementation")(string "")(owner "OrCAD"))(property(rename
+PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")(string "True")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "True")(
+owner "OrCAD"))(property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(
+string "True")(owner "OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt
+0 0)(pt 60000 -90000)))(portImplementation(name &1(display PINNAME(justify
+CENTERRIGHT)(origin(pt 23000 -10000))))(connectLocation(figure PORT(dot(pt 60000
+-10000))))(figure BODY(path(pointList(pt 60000 -10000)(pt 30000 -10000))))(
+keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 37000 -9000)))))(
+portImplementation(name &2(display PINNAME(justify CENTERRIGHT)(origin(pt 23000
+-20000))))(connectLocation(figure PORT(dot(pt 60000 -20000))))(figure BODY(path(
+pointList(pt 60000 -20000)(pt 30000 -20000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 37000 -19000)))))(portImplementation(name &3(display PINNAME
+(justify CENTERRIGHT)(origin(pt 23000 -30000))))(connectLocation(figure PORT(dot
+(pt 60000 -30000))))(figure BODY(path(pointList(pt 60000 -30000)(pt 30000 -30000
+))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 37000 -29000)))))(
+portImplementation(name &4(display PINNAME(justify CENTERRIGHT)(origin(pt 23000
+-40000))))(connectLocation(figure PORT(dot(pt 60000 -40000))))(figure BODY(path(
+pointList(pt 60000 -40000)(pt 30000 -40000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 37000 -39000)))))(portImplementation(name &5(display PINNAME
+(justify CENTERRIGHT)(origin(pt 23000 -50000))))(connectLocation(figure PORT(dot
+(pt 60000 -50000))))(figure BODY(path(pointList(pt 60000 -50000)(pt 30000 -50000
+))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 37000 -49000)))))(
+portImplementation(name &6(display PINNAME(justify CENTERRIGHT)(origin(pt 23000
+-60000))))(connectLocation(figure PORT(dot(pt 60000 -60000))))(figure BODY(path(
+pointList(pt 60000 -60000)(pt 30000 -60000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 37000 -59000)))))(portImplementation(name &7(display PINNAME
+(justify CENTERRIGHT)(origin(pt 23000 -70000))))(connectLocation(figure PORT(dot
+(pt 60000 -70000))))(figure BODY(path(pointList(pt 60000 -70000)(pt 30000 -70000
+))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 37000 -69000)))))(
+portImplementation(name &8(display PINNAME(justify CENTERRIGHT)(origin(pt 23000
+-80000))))(connectLocation(figure PORT(dot(pt 60000 -80000))))(figure BODY(path(
+pointList(pt 60000 -80000)(pt 30000 -80000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 37000 -79000)))))(figure BODY(rectangle(pt 0 0)(pt 30000
+-90000)))(keywordDisplay DESIGNATOR(display PROPERTY(justify UPPERLEFT)(origin(
+pt 5000 9000))))(propertyDisplay VALUE(display PROPERTY(justify UPPERLEFT)(
+origin(pt 5000 -91000))))))))(cell(rename &2N7002 "2N7002")(cellType GENERIC)(
+view(rename NORMAL "Normal")(viewType SCHEMATIC)(interface(designator "Q")(port(
+rename &2 "2")(direction INPUT)(designator "2")(property(rename PIN_SHARED "Pin_
+Shared")(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(
+string "0")(owner "OrCAD"))(property(rename LONG "Long")(string "False")(owner "
+OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property
+(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &3 "3")(
+direction INPUT)(designator "3")(property(rename PIN_SHARED "Pin_Shared")(string
+"FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "1")(owner "
+OrCAD"))(property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(
+rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")
+(string "False")(owner "OrCAD")))(port(rename &1 "1")(direction INPUT)(
+designator "1")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "
+DataXpress"))(property(rename ORDER "Order")(string "2")(owner "OrCAD"))(
+property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(property(rename VALUE "Value")(string "")(owner "OrCAD
+"))(property(rename IMPLEMENTATION_32_PATH "Implementation Path")(string "")(
+owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(
+string "<none>")(owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation"
+)(string "")(owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numb
+ers Visible")(string "True")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "False")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner
+"OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt -10000 10000)(pt
+30000 -30000)))(portImplementation &2(connectLocation(figure PORT(dot(pt -10000
+-20000))))(figure BODY(path(pointList(pt -10000 -20000)(pt 0 -20000))))(
+keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000
+-19000)))))(portImplementation &3(connectLocation(figure PORT(dot(pt 20000 10000
+))))(figure BODY(path(pointList(pt 20000 10000)(pt 20000 0))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify UPPERLEFT)(orientation R90)(origin(pt 21000
+7000)))))(portImplementation &1(connectLocation(figure PORT(dot(pt 20000 -30000)
+)))(figure BODY(path(pointList(pt 20000 -30000)(pt 20000 -20000))))(
+keywordDisplay DESIGNATOR(display PINNUMBER(justify UPPERRIGHT)(orientation R90)
+(origin(pt 21000 -27000)))))(figure BODY(path(pointList(pt 9000 -10000)(pt 14000
+-5000)))(path(pointList(pt 14000 -5000)(pt 14000 -15000)))(path(pointList(pt
+14000 -15000)(pt 9000 -10000)))(path(pointList(pt 9000 -10000)(pt 9000 -10000)))
+(path(pointList(pt 9000 0)(pt 9000 -20000)))(path(pointList(pt 20000 0)(pt 20000
+-2000)))(path(pointList(pt 20000 -2000)(pt 10000 -2000)))(path(pointList(pt
+16000 -10000)(pt 20000 -10000)))(path(pointList(pt 20000 -10000)(pt 20000 -20000
+)))(path(pointList(pt 10000 -18000)(pt 19000 -18000)))(path(pointList(pt 20000 0
+)(pt 20000 -2000)))(path(pointList(pt 20000 -2000)(pt 9000 -2000)))(path(
+pointList(pt 9000 0)(pt 9000 -20000)))(path(pointList(pt 9000 -18000)(pt 20000
+-18000)))(path(pointList(pt 14000 -10000)(pt 20000 -10000)))(path(pointList(pt
+20000 -10000)(pt 20000 -20000)))(path(pointList(pt 0 -20000)(pt 5000 -20000)))(
+path(pointList(pt 5000 -20000)(pt 5000 0))))(keywordDisplay DESIGNATOR(display
+PROPERTY(justify UPPERLEFT)(origin(pt 39000 0))))(propertyDisplay VALUE(display
+PROPERTY(justify UPPERLEFT)(origin(pt 39000 -9000))))))))(cell(rename
+&2N5460_32_SMT "2N5460 SMT")(cellType GENERIC)(view(rename NORMAL "Normal")(
+viewType SCHEMATIC)(interface(designator "Q")(port(rename BASE "BASE")(direction
+INPUT)(designator "3")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(
+owner "DataXpress"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename EMITTER "EMITTER")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "1"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "1")(owner "OrCAD"))(property(rename LONG
+"Long")(string "False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "F
+alse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")
+))(port(rename COLLECTOR "COLLECTOR")(property(rename PORTTYPE "PORTTYPE")(
+string "nonLogical")(owner "Schematic_TSC"))(designator "2")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "2")(owner "OrCAD"))(property(rename LONG "Long")(string "
+False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "Or
+CAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(property(
+rename VALUE "Value")(string "")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_PATH "Implementation Path")(string "")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation")(string "")(
+owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+(string "True")(owner "OrCAD"))(property(rename PIN_32_NAMES_32_VISIBLE "Pin Nam
+es Visible")(string "False")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner "OrCAD"))(symbol
+(commentGraphics)(boundingBox(rectangle(pt -10000 0)(pt 20000 -20000)))(
+portImplementation BASE(connectLocation(figure PORT(dot(pt -10000 -10000))))(
+figure BODY(path(pointList(pt -10000 -10000)(pt 0 -10000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -9000)))))(
+portImplementation EMITTER(connectLocation(figure PORT(dot(pt 20000 -30000))))(
+figure BODY(path(pointList(pt 20000 -30000)(pt 20000 -20000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(origin(pt 27000 -29000)))))(portImplementation
+COLLECTOR(connectLocation(figure PORT(dot(pt 20000 10000))))(figure BODY(path(
+pointList(pt 20000 10000)(pt 20000 0))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 27000 11000)))))(figure BODY(path(pointList(pt 0 -10000)(pt
+5000 -5000)))(path(pointList(pt 5000 -5000)(pt 5000 -15000)))(path(pointList(pt
+5000 -15000)(pt 0 -10000)))(path(pointList(pt 0 -10000)(pt 0 -10000)))(path(
+pointList(pt 10000 0)(pt 10000 -20000)))(path(pointList(pt 5000 -10000)(pt 10000
+-10000)))(path(pointList(pt 20000 0)(pt 20000 -4000)))(path(pointList(pt 20000
+-4000)(pt 10000 -4000)))(path(pointList(pt 10000 -17000)(pt 20000 -17000)))(path
+(pointList(pt 20000 -17000)(pt 20000 -20000))))(keywordDisplay DESIGNATOR(
+display PROPERTY(justify UPPERLEFT)(origin(pt 29000 0))))(propertyDisplay VALUE(
+display PROPERTY(justify UPPERLEFT)(origin(pt 29000 -9000))))))))(cell(rename
+R_32_VARIABLE "R VARIABLE")(cellType GENERIC)(view(rename NORMAL "Normal")(
+viewType SCHEMATIC)(interface(designator "VR")(port(rename &1 "1")(property(
+rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(
+designator "1")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "
+DataXpress"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename &2 "2")(property(rename PORTTYPE "PORTTYPE
+")(string "nonLogical")(owner "Schematic_TSC"))(designator "3")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "1")(owner "OrCAD"))(property(rename LONG "Long")(string "
+False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "Or
+CAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename
+&2_2 "2_2")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Sch
+ematic_TSC"))(property(rename ORIGINALPINNAME "OriginalPinName")(string "2")(
+owner "DataXpress"))(designator "2")(property(rename PIN_SHARED "Pin_Shared")(
+string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "2")(
+owner "OrCAD"))(property(rename LONG "Long")(string "False")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(property(rename VALUE "Value")(
+string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_PATH "Implementatio
+n Path")(string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Impl
+ementation Type")(string "<none>")(owner "OrCAD"))(property(rename
+IMPLEMENTATION "Implementation")(string "")(owner "OrCAD"))(property(rename
+PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")(string "True")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "False")(
+owner "OrCAD"))(property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(
+string "True")(owner "OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt
+0 10000)(pt 40000 -40000)))(portImplementation &1(connectLocation(figure PORT(
+dot(pt 10000 10000))))(figure BODY(path(pointList(pt 10000 10000)(pt 10000 0))))
+(keywordDisplay DESIGNATOR(display PINNUMBER(justify UPPERLEFT)(orientation R90)
+(origin(pt 11000 7000)))))(portImplementation &2(connectLocation(figure PORT(dot
+(pt 10000 -40000))))(figure BODY(path(pointList(pt 10000 -40000)(pt 10000 -30000
+))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify UPPERRIGHT)(orientation
+R90)(origin(pt 11000 -37000)))))(portImplementation &2_2(connectLocation(figure
+PORT(dot(pt 40000 -10000))))(figure BODY(path(pointList(pt 40000 -10000)(pt
+30000 -10000))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 37000
+-9000)))))(figure BODY(path(pointList(pt 10000 0)(pt 13000 -3000)))(path(
+pointList(pt 13000 -3000)(pt 7000 -9000)))(path(pointList(pt 7000 -9000)(pt
+13000 -15000)))(path(pointList(pt 13000 -15000)(pt 7000 -21000)))(path(pointList
+(pt 7000 -21000)(pt 13000 -27000)))(path(pointList(pt 13000 -27000)(pt 10000
+-30000)))(path(pointList(pt 20000 -10000)(pt 30000 -10000)))(path(pointList(pt
+14000 -10000)(pt 20000 -7000)))(path(pointList(pt 20000 -7000)(pt 20000 -13000))
+)(path(pointList(pt 20000 -13000)(pt 14000 -10000))))(keywordDisplay DESIGNATOR(
+display PROPERTY(justify UPPERLEFT)(origin(pt 39000 19000))))(propertyDisplay
+VALUE(display PROPERTY(justify UPPERLEFT)(origin(pt 39000 -30000))))))))(cell(
+rename XFORM_32_FLBK_32_EFD20A "XFORM FLBK EFD20A")(cellType GENERIC)(view(
+rename NORMAL "Normal")(viewType SCHEMATIC)(interface(designator "T")(port(
+rename &10 "10")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner
+"Schematic_TSC"))(designator "10")(property(rename PIN_SHARED "Pin_Shared")(
+string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "0")(
+owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &1 "1")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "1"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "1")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &2 "2")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "2")(property(rename PIN_SHARED "Pin_Shared")
+(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "2")
+(owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &3 "3")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "3"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "3")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &9 "9")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "9")(property(rename PIN_SHARED "Pin_Shared")
+(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "4")
+(owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &4 "4")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "4"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "5")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &7 "7")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "7")(property(rename PIN_SHARED "Pin_Shared")
+(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "6")
+(owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &5 "5")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "5"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "7")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(port(rename &6 "6")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(
+owner "Schematic_TSC"))(designator "6")(property(rename PIN_SHARED "Pin_Shared")
+(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "8")
+(owner "OrCAD"))(property(rename LONG "Long")(string "True")(owner "OrCAD"))(
+property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(port(rename &8 "8")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "8"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "9")(owner "OrCAD"))(property(rename LONG
+"Long")(string "True")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "Fa
+lse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD"))
+)(property(rename VALUE "Value")(string "")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_PATH "Implementation Path")(string "")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation")(string "")(
+owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+(string "True")(owner "OrCAD"))(property(rename PIN_32_NAMES_32_VISIBLE "Pin Nam
+es Visible")(string "False")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner "OrCAD"))(symbol
+(commentGraphics)(boundingBox(rectangle(pt -30000 0)(pt 100000 -170000)))(
+portImplementation &10(connectLocation(figure PORT(dot(pt -30000 -30000))))(
+figure BODY(path(pointList(pt -30000 -30000)(pt 0 -30000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -29000)))))(
+portImplementation &1(connectLocation(figure PORT(dot(pt -30000 -50000))))(
+figure BODY(path(pointList(pt -30000 -50000)(pt 0 -50000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -49000)))))(
+portImplementation &2(connectLocation(figure PORT(dot(pt 100000 -30000))))(
+figure BODY(path(pointList(pt 100000 -30000)(pt 70000 -30000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(origin(pt 77000 -29000)))))(portImplementation &3(
+connectLocation(figure PORT(dot(pt 100000 -60000))))(figure BODY(path(pointList(
+pt 100000 -60000)(pt 70000 -60000))))(keywordDisplay DESIGNATOR(display
+PINNUMBER(origin(pt 77000 -59000)))))(portImplementation &9(connectLocation(
+figure PORT(dot(pt 100000 -80000))))(figure BODY(path(pointList(pt 100000 -80000
+)(pt 70000 -80000))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt
+77000 -79000)))))(portImplementation &4(connectLocation(figure PORT(dot(pt
+100000 -90000))))(figure BODY(path(pointList(pt 100000 -90000)(pt 70000 -90000))
+))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 77000 -89000)))))(
+portImplementation &7(connectLocation(figure PORT(dot(pt 100000 -110000))))(
+figure BODY(path(pointList(pt 100000 -110000)(pt 70000 -110000))))(
+keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 77000 -109000)))))(
+portImplementation &5(connectLocation(figure PORT(dot(pt 100000 -130000))))(
+figure BODY(path(pointList(pt 100000 -130000)(pt 70000 -130000))))(
+keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 77000 -129000)))))(
+portImplementation &6(connectLocation(figure PORT(dot(pt 100000 -150000))))(
+figure BODY(path(pointList(pt 100000 -150000)(pt 70000 -150000))))(
+keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 77000 -149000)))))(
+portImplementation &8(connectLocation(figure PORT(dot(pt -30000 -100000))))(
+figure BODY(path(pointList(pt -30000 -100000)(pt 0 -100000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -99000)))))(
+figure BODY(path(pointList(pt 20000 -30000)(pt 0 -30000)))(path(pointList(pt 0
+-50000)(pt 20000 -50000)))(path(pointList(pt 70000 -30000)(pt 50000 -30000)))(
+path(pointList(pt 40000 -30000)(pt 30000 -30000)))(path(pointList(pt 70000
+-10000)(pt 0 -10000)))(path(pointList(pt 70000 -10000)(pt 70000 -110000)))(path(
+pointList(pt 0 -110000)(pt 0 -10000)))(openShape(curve(arc(pt 20000 -30000)(pt
+23536 -31464)(pt 25000 -35000))))(openShape(curve(arc(pt 25000 -35000)(pt 23536
+-38535)(pt 20000 -40000))))(openShape(curve(arc(pt 20000 -40000)(pt 23536 -41464
+)(pt 25000 -45000))))(openShape(curve(arc(pt 25000 -45000)(pt 23536 -48535)(pt
+20000 -50000))))(openShape(curve(arc(pt 45000 -35000)(pt 46464 -31464)(pt 50000
+-30000))))(openShape(curve(arc(pt 50000 -40000)(pt 46464 -38535)(pt 45000 -35000
+))))(openShape(curve(arc(pt 45000 -45000)(pt 46464 -41464)(pt 50000 -40000))))(
+circle(pt 13000 -25000)(pt 17000 -25000))(openShape(curve(arc(pt 25000 -75000)(
+pt 15000 -75000)(pt 25000 -75000))))(path(pointList(pt 0 -110000)(pt 0 -146000))
+)(path(pointList(pt 70000 -146000)(pt 70000 -110000)))(path(pointList(pt 0
+-146000)(pt 0 -150000)))(path(pointList(pt 70000 -150000)(pt 70000 -146000)))(
+path(pointList(pt 40000 -30000)(pt 40000 -150000)))(path(pointList(pt 40000
+-150000)(pt 30000 -150000)))(path(pointList(pt 30000 -150000)(pt 30000 -30000)))
+(path(pointList(pt 70000 -130000)(pt 50000 -130000)))(path(pointList(pt 50000
+-110000)(pt 70000 -110000)))(path(pointList(pt 70000 -150000)(pt 70000 -170000))
+)(path(pointList(pt 70000 -170000)(pt 0 -170000)))(path(pointList(pt 0 -170000)(
+pt 0 -150000)))(openShape(curve(arc(pt 50000 -50000)(pt 46464 -48535)(pt 45000
+-45000))))(path(pointList(pt 50000 -60000)(pt 70000 -60000)))(path(pointList(pt
+70000 -80000)(pt 50000 -80000)))(path(pointList(pt 50000 -90000)(pt 70000 -90000
+)))(path(pointList(pt 70000 -150000)(pt 50000 -150000)))(openShape(curve(arc(pt
+50000 -150000)(pt 46464 -148535)(pt 45000 -145000))))(openShape(curve(arc(pt
+45000 -145000)(pt 46464 -141464)(pt 50000 -140000))))(openShape(curve(arc(pt
+50000 -140000)(pt 46464 -138535)(pt 45000 -135000))))(openShape(curve(arc(pt
+45000 -135000)(pt 46464 -131464)(pt 50000 -130000))))(openShape(curve(arc(pt
+50000 -110000)(pt 46464 -108535)(pt 45000 -105000))))(openShape(curve(arc(pt
+45000 -105000)(pt 46464 -101464)(pt 50000 -100000))))(openShape(curve(arc(pt
+50000 -100000)(pt 46464 -98535)(pt 45000 -95000))))(openShape(curve(arc(pt 45000
+-95000)(pt 46464 -91464)(pt 50000 -90000))))(openShape(curve(arc(pt 50000 -80000
+)(pt 46464 -78535)(pt 45000 -75000))))(openShape(curve(arc(pt 45000 -75000)(pt
+46464 -71464)(pt 50000 -70000))))(openShape(curve(arc(pt 50000 -70000)(pt 46464
+-68535)(pt 45000 -65000))))(openShape(curve(arc(pt 45000 -65000)(pt 46464 -61464
+)(pt 50000 -60000))))(circle(pt 53000 -46000)(pt 57000 -46000))(circle(pt 53000
+-76000)(pt 57000 -76000))(circle(pt 53000 -146000)(pt 57000 -146000))(path(
+pointList(pt 50000 -50000)(pt 55000 -50000)))(path(pointList(pt 55000 -50000)(pt
+55000 -60000)))(circle(pt 54000 -60000)(pt 56000 -60000))(circle(pt 53000
+-106000)(pt 57000 -106000)))(annotate(stringDisplay "10V"(display COMMENT(
+justify UPPERLEFT)(origin(pt 5000 -52000)))))(annotate(stringDisplay "2V"(
+display COMMENT(justify UPPERLEFT)(origin(pt 53000 -33000)))))(annotate(
+stringDisplay "3V"(display COMMENT(justify UPPERLEFT)(origin(pt 53000 -63000))))
+)(annotate(stringDisplay "12"(display COMMENT(justify UPPERLEFT)(origin(pt 53000
+-95000)))))(annotate(stringDisplay "12"(display COMMENT(justify UPPERLEFT)(
+origin(pt 53000 -133000)))))(keywordDisplay DESIGNATOR(display PROPERTY(justify
+UPPERLEFT)(origin(pt 5000 9000))))(propertyDisplay VALUE(display PROPERTY(
+justify UPPERLEFT)(origin(pt 5000 -171000)))))))))(library(rename PWR "PWR")(
+EDIFLevel 0)(technology(numberDefinition(scale 1(e 254 -9)(unit DISTANCE)))(
+figureGroup BODY(pathWidth 1000)(textHeight 10000))(figureGroup COMMENT(
+pathWidth 1000)(textHeight 9000)(property(rename FONT "font")(string "Courier Ne
+w")))(figureGroup PINNAME(pathWidth 1000)(textHeight 9000)(property(rename FONT
+"font")(string "Arial")))(figureGroup PINNUMBER(pathWidth 1000)(textHeight 9000)
+(property(rename FONT "font")(string "Arial")))(figureGroup PORT(pathWidth 1000)
+(textHeight 9000)(property(rename FONT "font")(string "Arial")))(figureGroup
+PROPERTY(pathWidth 1000)(textHeight 9000)(property(rename FONT "font")(string "A
+rial")))(userData GRIDRESOLUTION(integer 10000 10000)))(cell(rename C_32_POL "C 
+POL")(cellType GENERIC)(view(rename NORMAL "Normal")(viewType SCHEMATIC)(
+interface(designator "C")(port(rename &1 "1")(property(rename PORTTYPE "PORTTYPE
+")(string "nonLogical")(owner "Schematic_TSC"))(designator "1")(property(rename
+PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename LONG "Long")(string "
+False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(owner "Or
+CAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port(rename
+&2 "2")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schemat
+ic_TSC"))(designator "2")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE
+")(owner "DataXpress"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"
+))(property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(property(rename VALUE "Value")(string "")(owner "OrCAD
+"))(property(rename IMPLEMENTATION_32_PATH "Implementation Path")(string "")(
+owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(
+string "<none>")(owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation"
+)(string "")(owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numb
+ers Visible")(string "True")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "False")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner
+"OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt 0 10000)(pt 20000
+-30000)))(portImplementation &1(connectLocation(figure PORT(dot(pt 10000 10000))
+))(figure BODY(path(pointList(pt 10000 10000)(pt 10000 0))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify UPPERLEFT)(orientation R90)(origin(pt 11000
+7000)))))(portImplementation &2(connectLocation(figure PORT(dot(pt 10000 -30000)
+)))(figure BODY(path(pointList(pt 10000 -30000)(pt 10000 -20000))))(
+keywordDisplay DESIGNATOR(display PINNUMBER(justify UPPERRIGHT)(orientation R90)
+(origin(pt 11000 -27000)))))(figure BODY(path(pointList(pt 10000 -14000)(pt
+10000 -20000)))(path(pointList(pt 0 -10000)(pt 20000 -10000)))(path(pointList(pt
+10000 0)(pt 10000 -10000)))(openShape(curve(arc(pt 10000 -14000)(pt 15152 -14852
+)(pt 20000 -17000))))(openShape(curve(arc(pt 0 -17000)(pt 4848 -14852)(pt 10000
+-14000)))))(annotate(stringDisplay "+"(display COMMENT(justify UPPERLEFT)(origin
+(pt 13000 -2000)))))(keywordDisplay DESIGNATOR(display PROPERTY(justify
+UPPERLEFT)(origin(pt 29000 0))))(propertyDisplay VALUE(display PROPERTY(justify
+UPPERLEFT)(origin(pt 29000 -9000))))))))(cell(rename C "C")(cellType GENERIC)(
+view(rename NORMAL "Normal")(viewType SCHEMATIC)(interface(designator "C")(port(
+rename &1 "1")(property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "
+Schematic_TSC"))(designator "1")(property(rename PIN_SHARED "Pin_Shared")(string
+"FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string "0")(owner "
+OrCAD"))(property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(
+rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")
+(string "False")(owner "OrCAD")))(port(rename &2 "2")(property(rename PORTTYPE "
+PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "2")(property
+(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(
+rename ORDER "Order")(string "1")(owner "OrCAD"))(property(rename LONG "Long")(
+string "False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(
+owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(
+property(rename VALUE "Value")(string "")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_PATH "Implementation Path")(string "")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation")(string "")(
+owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+(string "True")(owner "OrCAD"))(property(rename PIN_32_NAMES_32_VISIBLE "Pin Nam
+es Visible")(string "False")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner "OrCAD"))(symbol
+(commentGraphics)(boundingBox(rectangle(pt 0 10000)(pt 20000 -20000)))(
+portImplementation &1(connectLocation(figure PORT(dot(pt 10000 10000))))(figure
+BODY(path(pointList(pt 10000 10000)(pt 10000 0))))(keywordDisplay DESIGNATOR(
+display PINNUMBER(justify UPPERLEFT)(orientation R90)(origin(pt 11000 7000)))))(
+portImplementation &2(connectLocation(figure PORT(dot(pt 10000 -20000))))(figure
+BODY(path(pointList(pt 10000 -20000)(pt 10000 -10000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify UPPERRIGHT)(orientation R90)(origin(pt
+11000 -17000)))))(figure BODY(path(pointList(pt 0 0)(pt 20000 0)))(path(
+pointList(pt 10000 -4000)(pt 10000 -10000)))(openShape(curve(arc(pt 10000 -4000)
+(pt 15152 -4852)(pt 20000 -7000))))(openShape(curve(arc(pt 0 -7000)(pt 4848
+-4852)(pt 10000 -4000)))))(keywordDisplay DESIGNATOR(display PROPERTY(justify
+UPPERLEFT)(origin(pt 29000 0))))(propertyDisplay VALUE(display PROPERTY(justify
+UPPERLEFT)(origin(pt 29000 -9000))))))))(cell(rename DIODE_32_SCHOTTKY "DIODE SC
+HOTTKY")(cellType GENERIC)(view(rename NORMAL "Normal")(viewType SCHEMATIC)(
+interface(designator "D")(port(rename ANODE "ANODE")(property(rename PORTTYPE "P
+ORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "2")(property(
+rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(property(
+rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename LONG "Long")(
+string "False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "False")(
+owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")))(port
+(rename CATHODE "CATHODE")(property(rename PORTTYPE "PORTTYPE")(string "nonLogic
+al")(owner "Schematic_TSC"))(designator "1")(property(rename PIN_SHARED "Pin_Sha
+red")(string "FALSE")(owner "DataXpress"))(property(rename ORDER "Order")(string
+"1")(owner "OrCAD"))(property(rename LONG "Long")(string "False")(owner "OrCAD")
+)(property(rename CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename
+DOT "Dot")(string "False")(owner "OrCAD")))(property(rename VALUE "Value")(
+string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_PATH "Implementatio
+n Path")(string "")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Impl
+ementation Type")(string "<none>")(owner "OrCAD"))(property(rename
+IMPLEMENTATION "Implementation")(string "")(owner "OrCAD"))(property(rename
+PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")(string "True")(owner "OrCAD"))(
+property(rename PIN_32_NAMES_32_VISIBLE "Pin Names Visible")(string "False")(
+owner "OrCAD"))(property(rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(
+string "True")(owner "OrCAD"))(symbol(commentGraphics)(boundingBox(rectangle(pt
+-10000 0)(pt 40000 -20000)))(portImplementation ANODE(connectLocation(figure
+PORT(dot(pt -10000 -10000))))(figure BODY(path(pointList(pt -10000 -10000)(pt 0
+-10000))))(keywordDisplay DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(
+origin(pt -7000 -9000)))))(portImplementation CATHODE(connectLocation(figure
+PORT(dot(pt 40000 -10000))))(figure BODY(path(pointList(pt 40000 -10000)(pt
+30000 -10000))))(keywordDisplay DESIGNATOR(display PINNUMBER(origin(pt 37000
+-9000)))))(figure BODY(path(pointList(pt 10000 0)(pt 10000 -20000)))(path(
+pointList(pt 10000 -20000)(pt 20000 -10000)))(path(pointList(pt 20000 -10000)(pt
+10000 0)))(path(pointList(pt 20000 0)(pt 20000 -20000)))(path(pointList(pt 0
+-10000)(pt 10000 -10000)))(path(pointList(pt 20000 -10000)(pt 30000 -10000)))(
+path(pointList(pt 20000 0)(pt 15000 0)))(path(pointList(pt 15000 0)(pt 15000
+-2000)))(path(pointList(pt 20000 -20000)(pt 25000 -20000)))(path(pointList(pt
+25000 -20000)(pt 25000 -18000))))(keywordDisplay DESIGNATOR(display PROPERTY(
+justify UPPERLEFT)(origin(pt 5000 9000))))(propertyDisplay VALUE(display
+PROPERTY(justify UPPERLEFT)(origin(pt 5000 -21000))))))))(cell(rename
+DIODE_32_ZENER "DIODE ZENER")(cellType GENERIC)(view(rename NORMAL "Normal")(
+viewType SCHEMATIC)(interface(designator "D")(port(rename ANODE "ANODE")(
+property(rename PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC")
+)(designator "2")(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner
+"DataXpress"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename LONG "Long")(string "False")(owner "OrCAD"))(property(rename
+CLOCK "Clock")(string "False")(owner "OrCAD"))(property(rename DOT "Dot")(string
+"False")(owner "OrCAD")))(port(rename CATHODE "CATHODE")(property(rename
+PORTTYPE "PORTTYPE")(string "nonLogical")(owner "Schematic_TSC"))(designator "1"
+)(property(rename PIN_SHARED "Pin_Shared")(string "FALSE")(owner "DataXpress"))(
+property(rename ORDER "Order")(string "1")(owner "OrCAD"))(property(rename LONG
+"Long")(string "False")(owner "OrCAD"))(property(rename CLOCK "Clock")(string "F
+alse")(owner "OrCAD"))(property(rename DOT "Dot")(string "False")(owner "OrCAD")
+))(property(rename VALUE "Value")(string "")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_PATH "Implementation Path")(string "")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename IMPLEMENTATION "Implementation")(string "")(
+owner "OrCAD"))(property(rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+(string "True")(owner "OrCAD"))(property(rename PIN_32_NAMES_32_VISIBLE "Pin Nam
+es Visible")(string "False")(owner "OrCAD"))(property(rename
+PIN_32_NAMES_32_ROTATE "Pin Names Rotate")(string "True")(owner "OrCAD"))(symbol
+(commentGraphics)(boundingBox(rectangle(pt -10000 0)(pt 40000 -20000)))(
+portImplementation ANODE(connectLocation(figure PORT(dot(pt -10000 -10000))))(
+figure BODY(path(pointList(pt -10000 -10000)(pt 0 -10000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(justify LOWERRIGHT)(origin(pt -7000 -9000)))))(
+portImplementation CATHODE(connectLocation(figure PORT(dot(pt 40000 -10000))))(
+figure BODY(path(pointList(pt 40000 -10000)(pt 30000 -10000))))(keywordDisplay
+DESIGNATOR(display PINNUMBER(origin(pt 37000 -9000)))))(figure BODY(path(
+pointList(pt 10000 0)(pt 10000 -20000)))(path(pointList(pt 10000 -20000)(pt
+20000 -10000)))(path(pointList(pt 20000 -10000)(pt 10000 0)))(path(pointList(pt
+0 -10000)(pt 10000 -10000)))(path(pointList(pt 20000 -10000)(pt 30000 -10000)))(
+path(pointList(pt 15000 0)(pt 20000 0)))(path(pointList(pt 20000 0)(pt 20000
+-20000)))(path(pointList(pt 20000 -20000)(pt 25000 -20000))))(keywordDisplay
+DESIGNATOR(display PROPERTY(justify UPPERLEFT)(origin(pt 5000 9000))))(
+propertyDisplay VALUE(display PROPERTY(justify UPPERLEFT)(origin(pt 5000 -21000)
+))))))))(library(rename CAPSYM "CAPSYM")(EDIFLevel 0)(technology(
+numberDefinition(scale 1(e 254 -9)(unit DISTANCE)))(figureGroup BODY(pathWidth
+1000)(textHeight 10000))(figureGroup COMMENT(pathWidth 1000)(textHeight 9000)(
+property(rename FONT "font")(string "Courier New")))(userData GRIDRESOLUTION(
+integer 10000 10000)))(cell(rename GND_SIGNAL "GND_SIGNAL")(cellType GENERIC)(
+view(rename NORMAL "Normal")(viewType GRAPHIC)(interface(property(rename
+EDIFHOTSPOT "EDIFhotspot")(string "(pt 10000 0)")(owner "DataXpress"))(property(
+rename SDTSOURCELIBNAME "SDTSourceLibName")(string "C:\rd\ui\CLK2-95.LIB"))(
+property(rename ORCADVIEWTYPE "OrCADviewType")(string "GLOBAL_SYMBOL")(owner "Da
+taXpress"))(property(rename NAME "Name")(string "GND_SIGNAL")(owner "OrCAD")))(
+contents(commentGraphics)(figure BODY(path(pointList(pt 0 0)(pt 20000 0)))(path(
+pointList(pt 20000 0)(pt 10000 -10000)))(path(pointList(pt 10000 -10000)(pt 0 0)
+))))))(cell(rename TITLEBLOCK4 "TitleBlock4")(cellType GENERIC)(view(rename
+NORMAL "Normal")(viewType GRAPHIC)(interface(property(rename
+PAGE_32_CREATE_32_DATE "Page Create Date")(string "    March  8, 1995"))(
+property(rename DOC "Doc")(string ""))(property(rename REVCODE "RevCode")(string
+""))(property(rename TITLE "Title")(string ""))(property(rename ORGNAME "OrgName
+")(string ""))(property(rename ORGADDR1 "OrgAddr1")(string ""))(property(rename
+ORGADDR2 "OrgAddr2")(string ""))(property(rename ORGADDR3 "OrgAddr3")(string "")
+)(property(rename PAGE_32_SIZE "Page Size")(string "A"))(property(rename
+PAGE_32_NUMBER "Page Number")(string "1"))(property(rename PAGE_32_COUNT "Page C
+ount")(string "1"))(property(rename ORCADVIEWTYPE "OrCADviewType")(string "Title
+block_Symbol")(owner "DataXpress")))(contents(commentGraphics(annotate(
+stringDisplay "Title"(display COMMENT(justify UPPERLEFT)(origin(pt 0 -60000)))))
+(annotate(stringDisplay "Size"(display COMMENT(justify UPPERLEFT)(origin(pt 0
+-90000)))))(annotate(stringDisplay "Document Number"(display COMMENT(justify
+UPPERLEFT)(origin(pt 40000 -90000)))))(annotate(stringDisplay "Rev"(display
+COMMENT(justify UPPERLEFT)(origin(pt 330000 -90000)))))(annotate(stringDisplay "
+Date:"(display COMMENT(justify UPPERLEFT)(origin(pt 0 -120000)))))(annotate(
+stringDisplay "Sheet"(display COMMENT(justify UPPERLEFT)(origin(pt 200000
+-120000)))))(annotate(stringDisplay "of"(display COMMENT(justify UPPERLEFT)(
+origin(pt 280000 -120000))))))(figure BODY(rectangle(pt 0 0)(pt 360000 -60000))(
+rectangle(pt 0 -60000)(pt 360000 -90000))(rectangle(pt 0 -90000)(pt 30000
+-120000))(rectangle(pt 30000 -90000)(pt 330000 -120000))(rectangle(pt 330000
+-90000)(pt 360000 -120000))(rectangle(pt 0 -120000)(pt 200000 -130000))(
+rectangle(pt 200000 -120000)(pt 360000 -130000)))))))(library(rename
+RIPPER_LIBRARY "RIPPER_LIBRARY")(EDIFLevel 0)(technology(numberDefinition(scale
+1(e 254 -9)(unit DISTANCE)))(figureGroup PORT)(figureGroup WIRE(pathWidth 1000)(
+textHeight 10000))(userData GRIDRESOLUTION(integer 10000 10000)))(cell(rename
+XTIE0A2Y2 "XTIE0A2Y2")(cellType TIE)(view(rename XTIE0A2Y2 "XTIE0A2Y2")(viewType
+SCHEMATIC)(interface(port(rename &1 "1"))(symbol(portImplementation &1(
+connectLocation(figure PORT(dot(pt 0 0)))))(figure WIRE(circle(pt -2000 0)(pt
+2000 0))))))))(library(rename PS10 "PS10")(EDIFLevel 0)(technology(
+numberDefinition(scale 1(e 254 -9)(unit DISTANCE)))(figureGroup ALIAS(pathWidth
+1000)(textHeight 9000)(property(rename FONT "font")(string "Arial")))(
+figureGroup BODY(pathWidth 1000)(textHeight 10000))(figureGroup COMMENT(
+pathWidth 1000)(textHeight 9000)(property(rename FONT "font")(string "Courier Ne
+w")))(figureGroup PARTREFERENCE(pathWidth 1000)(textHeight 9000)(property(rename
+FONT "font")(string "Arial")))(figureGroup PARTVALUE(pathWidth 1000)(textHeight
+9000)(property(rename FONT "font")(string "Arial")))(figureGroup PORT(pathWidth
+1000)(textHeight 9000)(property(rename FONT "font")(string "Arial")))(
+figureGroup TITLEBLOCK(pathWidth 1000)(textHeight 9000)(property(rename FONT "fo
+nt")(string "Arial")))(figureGroup WIRE(pathWidth 1000)(textHeight 10000))(
+userData GRIDRESOLUTION(integer 10000 10000)))(cell(rename PS10 "PS10")(cellType
+GENERIC)(view(rename &1 "1")(viewType SCHEMATIC)(interface(port(rename GND "GND"
+)(property(rename PORTTYPE "PORTTYPE")(string "supply")(owner "Schematic_TSC"))(
+property(rename SUPPLYTYPE "SUPPLYTYPE")(string "generalGround")(owner "Schemati
+c_TSC"))(property(rename IMPLICITPORTCLASS "IMPLICITPORTCLASS")(string "GND")(
+owner "Schematic_TSC"))))(contents(page(rename PS10_46_SCH "ps10.SCH")(pageSize(
+rectangle(pt 0 0)(pt 970000 -720000)))(commentGraphics(property(rename
+VERTICAL_LABEL_WIDTH "Vertical_Label_Width")(string "10")(owner "DataXpress"))(
+property(rename HORIZONTAL_LABEL_WIDTH "Horizontal_Label_Width")(string "10")(
+owner "DataXpress"))(property(rename METRIC "Metric")(string "0")(owner "DataXpr
+ess"))(property(rename BORDER_DISPLAYED "Border_Displayed")(string "1")(owner "D
+ataXpress"))(property(rename BORDER_PRINTED "Border_Printed")(string "1")(owner
+"DataXpress"))(property(rename GRIDREF_DISPLAYED "GridRef_Displayed")(string "1"
+)(owner "DataXpress"))(property(rename GRIDREF_PRINTED "GridRef_Printed")(string
+"1")(owner "DataXpress"))(property(rename TITLEBLOCK_DISPLAYED "TitleBlock_Displ
+ayed")(string "1")(owner "DataXpress"))(property(rename TITLEBLOCK_PRINTED "Titl
+eBlock_Printed")(string "1")(owner "DataXpress"))(property(rename ANSIGRIDREFS "
+ANSIGridRefs")(string "1")(owner "DataXpress"))(property(rename PAGE_32_NUMBER "
+Page Number")(string "1")(owner "OrCAD"))(property(rename CREATE_32_TIME "Create
+ Time")(string "Tuesday, August 18, 1998")(owner "OrCAD"))(property(rename
+MODIFY_32_TIME "Modify Time")(string "Monday, July 24, 2000")(owner "OrCAD"))(
+property(rename SIZE "Size")(string "A")(owner "OrCAD"))(property(rename
+X_45_COORDINATE_32_SIZE "X-Coordinate Size")(string "9700")(owner "OrCAD"))(
+property(rename Y_45_COORDINATE_32_SIZE "Y-Coordinate Size")(string "7200")(
+owner "OrCAD"))(property(rename
+OUTER_32_BORDER_32_MARGIN_32_X_45_COORDINATE_32_SIZE "Outer Border Margin X-Coor
+dinate Size")(string "0")(owner "OrCAD"))(property(rename
+OUTER_32_BORDER_32_MARGIN_32_Y_45_COORDINATE_32_SIZE "Outer Border Margin Y-Coor
+dinate Size")(string "0")(owner "OrCAD"))(property(rename
+OUTER_32_BORDER_32_LINE_32_STYLE "Outer Border Line Style")(string "Solid")(
+owner "OrCAD"))(property(rename OUTER_32_BORDER_32_LINE_32_WIDTH "Outer Border L
+ine Width")(string "Thin")(owner "OrCAD"))(property(rename
+OUTER_32_BORDER_32_IS_32_VISIBLE "Outer Border Is Visible")(string "True")(owner
+"OrCAD"))(property(rename INNER_32_BORDER_32_MARGIN_32_X_45_COORDINATE "Inner Bo
+rder Margin X-Coordinate")(string "100")(owner "OrCAD"))(property(rename
+INNER_32_BORDER_32_MARGIN_32_Y_45_COORDINATE "Inner Border Margin Y-Coordinate")
+(string "100")(owner "OrCAD"))(property(rename INNER_32_BORDER_32_LINE_32_STYLE
+"Inner Border Line Style")(string "Solid")(owner "OrCAD"))(property(rename
+INNER_32_BORDER_32_LINE_32_WIDTH "Inner Border Line Width")(string "Thin")(owner
+"OrCAD"))(property(rename INNER_32_BORDER_32_IS_32_VISIBLE "Inner Border Is Visi
+ble")(string "False")(owner "OrCAD"))(property(rename COLOR "Color")(string "Def
+ault")(owner "OrCAD"))(property(rename LABEL_32_COLOR "Label Color")(string "Def
+ault")(owner "OrCAD"))(property(rename HORIZONTAL_32_LABEL_32_COUNT "Horizontal 
+Label Count")(string "4")(owner "OrCAD"))(property(rename
+HORIZONTAL_32_LABELS_32_ARE_32_CHARACTER "Horizontal Labels are character")(
+string "False")(owner "OrCAD"))(property(rename
+HORIZONTAL_32_LABELS_32_ARE_32_VISIBLE "Horizontal Labels are visible")(string "
+False")(owner "OrCAD"))(property(rename
+HORIZONTAL_32_LABELS_32_IN_32_ASCENDING_32_ORDER "Horizontal Labels in ascending
+ order")(string "False")(owner "OrCAD"))(property(rename
+LINE_32_STYLE_32_OF_32_HORIZONTAL_32_LABEL_32_SEPARATORS "Line Style of horizont
+al label separators")(string "Solid")(owner "OrCAD"))(property(rename
+LINE_32_WIDTH_32_OF_32_HORIZONTAL_32_LABEL_32_SEPARATORS "Line Width of horizont
+al label separators")(string "Thin")(owner "OrCAD"))(property(rename
+VERTICAL_32_LABEL_32_COUNT "Vertical Label Count")(string "4")(owner "OrCAD"))(
+property(rename VERTICAL_32_LABELS_32_ARE_32_CHARACTER "Vertical Labels are char
+acter")(string "True")(owner "OrCAD"))(property(rename
+VERTICAL_32_LABELS_32_ARE_32_VISIBLE "Vertical Labels are visible")(string "Fals
+e")(owner "OrCAD"))(property(rename VERTICAL_32_LABEL_32_IS_32_ASCENDING "Vertic
+al Label Is Ascending")(string "False")(owner "OrCAD"))(property(rename
+LINE_32_STYLE_32_OF_32_VERTICAL_32_LABEL_32_SEPARATORS "Line style of vertical l
+abel separators")(string "Solid")(owner "OrCAD"))(property(rename
+LINEWIDTH_32_OF_32_VERTICAL_32_LABEL_32_SEPARATORS "LineWidth of vertical label 
+separators")(string "Thin")(owner "OrCAD"))(annotate(stringDisplay "www.indexdes
+igns.com"(display(figureGroupOverride COMMENT(textHeight 16000)(property(rename
+FONT "font")(string "Arial")))(justify UPPERLEFT)(origin(pt 720000 -590000)))))(
+annotate(stringDisplay "Copyright (c) 1999 by Robert Kondner"(display(
+figureGroupOverride COMMENT(textHeight 16000))(justify UPPERLEFT)(origin(pt
+580000 -550000)))))(instance(rename TITLEBLOCK "TitleBlock")(viewRef NORMAL(
+cellRef TITLEBLOCK4(libraryRef CAPSYM)))(transform(origin(pt 590000 -570000)))(
+property(rename DESIGN_32_NAME "Design Name")(string "C:\SCH\INDEX\PS10.DSN")(
+owner "OrCAD"))(property(rename DESIGN_32_FILE_32_NAME "Design File Name")(
+string "C:\SCH\INDEX\PS10.DSN")(owner "OrCAD"))(property(rename
+DESIGN_32_CREATE_32_DATE "Design Create Date")(string "Tuesday, August 18, 1998"
+)(owner "OrCAD"))(property(rename DESIGN_32_MODIFY_32_DATE "Design Modify Date")
+(string "Monday, July 24, 2000")(owner "OrCAD"))(property(rename
+DESIGN_32_CREATE_32_TIME "Design Create Time")(string "03:59:28")(owner "OrCAD")
+)(property(rename DESIGN_32_MODIFY_32_TIME "Design Modify Time")(string "17:55:1
+5")(owner "OrCAD"))(property(rename SCHEMATIC_32_NAME "Schematic Name")(string "
+PS10")(owner "OrCAD"))(property(rename SCHEMATIC_32_CREATE_32_DATE "Schematic Cr
+eate Date")(string "Tuesday, November 30, 1999")(owner "OrCAD"))(property(rename
+SCHEMATIC_32_MODIFY_32_DATE "Schematic Modify Date")(string "Monday, July 24, 20
+00")(owner "OrCAD"))(property(rename SCHEMATIC_32_CREATE_32_TIME "Schematic Crea
+te Time")(string "01:57:24")(owner "OrCAD"))(property(rename
+SCHEMATIC_32_MODIFY_32_TIME "Schematic Modify Time")(string "16:55:16")(owner "O
+rCAD"))(property(rename SCHEMATIC_32_PAGE_32_COUNT "Schematic Page Count")(
+string "0")(owner "OrCAD"))(property(rename SCHEMATIC_32_PAGE_32_NUMBER "Schemat
+ic Page Number")(string "0")(owner "OrCAD"))(property(rename PAGE_32_SIZE "Page 
+Size")(string(stringDisplay "A"(display TITLEBLOCK(justify UPPERLEFT)(origin(pt
+600000 -670000)))))(owner "OrCAD"))(property(rename PAGE_32_CREATE_32_DATE "Page
+ Create Date")(string "Tuesday, August 18, 1998")(owner "OrCAD"))(property(
+rename PAGE_32_MODIFY_32_DATE "Page Modify Date")(string(stringDisplay "Monday, 
+July 24, 2000"(display TITLEBLOCK(justify UPPERLEFT)(origin(pt 630000 -690000)))
+))(owner "OrCAD"))(property(rename PAGE_32_CREATE_32_TIME "Page Create Time")(
+string "03:59:29")(owner "OrCAD"))(property(rename PAGE_32_MODIFY_32_TIME "Page 
+Modify Time")(string "17:55:15")(owner "OrCAD"))(property(rename COLOR "Color")(
+string "Default")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Libr
+ary")(string "C:\ORCADWIN\CAPTURE\LIBRARY\CAPSYM.OLB")(owner "OrCAD"))(property(
+rename SOURCE_32_SYMBOL "Source Symbol")(string "TitleBlock4")(owner "OrCAD"))(
+property(rename REVCODE "RevCode")(string(stringDisplay "A"(display TITLEBLOCK(
+justify UPPERLEFT)(origin(pt 930000 -670000))))))(property(rename TITLE "Title")
+(string(stringDisplay "%34%Quick Convert%34%  Quad Output  10 Watt  DC DC Conver
+ter"(display(figureGroupOverride TITLEBLOCK(textHeight 13000))(justify UPPERLEFT
+)(origin(pt 610000 -640000))))))(property(rename ORGADDR3 "OrgAddr3")(string(
+stringDisplay "1-410-821-1315"(display TITLEBLOCK(justify UPPERLEFT)(origin(pt
+600000 -610000))))))(property(rename ORGADDR2 "OrgAddr2")(string(stringDisplay "
+TOWSON MD 21286"(display TITLEBLOCK(justify UPPERLEFT)(origin(pt 600000 -600000)
+)))))(property(rename ORGADDR1 "OrgAddr1")(string(stringDisplay "635 COVENTRY"(
+display TITLEBLOCK(justify UPPERLEFT)(origin(pt 600000 -590000))))))(property(
+rename ORGNAME "OrgName")(string(stringDisplay "INDEX DESIGNS"(display
+TITLEBLOCK(justify UPPERLEFT)(origin(pt 600000 -580000))))))(property(rename
+PAGE_32_NUMBER "Page Number")(string(stringDisplay "1"(display TITLEBLOCK(
+justify UPPERLEFT)(origin(pt 840000 -690000))))))(property(rename PAGE_32_COUNT
+"Page Count")(string(stringDisplay "1"(display TITLEBLOCK(justify UPPERLEFT)(
+origin(pt 900000 -690000))))))(property(rename DOC "Doc")(string(stringDisplay "
+"(display(figureGroupOverride TITLEBLOCK(visible(false)))(origin(pt 630000
+-670000))))))(property(rename TITLEBLOCK "titleblock")(string "TRUE")(owner "Dat
+aXpress"))))(instance(rename I80699 "I80699")(viewRef NORMAL(cellRef R(
+libraryRef INDEXD)))(transform(origin(pt 510000 -70000)))(designator(
+stringDisplay "R1"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 530000
+-70000)))))(property(rename VALUE "Value")(string(stringDisplay "240"(display
+PARTVALUE(justify UPPERLEFT)(origin(pt 530000 -80000)))))(owner "OrCAD"))(
+property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "R.Normal"
+)(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "R"
+)(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")
+(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "R.No
+rmal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string
+""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+5"
+)(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "COM
+MON")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD"))))(instance(rename I78983 "I78983")(viewRef NORMAL(cellRef XFORM_32_EFD20B(
+libraryRef INDEXD)))(transform(origin(pt 770000 -300000)))(designator(
+stringDisplay "T3"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 780000
+-286000)))))(property(rename VALUE "Value")(string(stringDisplay "XFORM CMODE CH
+OKE"(display PARTVALUE(justify UPPERLEFT)(origin(pt 770000 -480000)))))(owner "O
+rCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))
+(property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "XFORM EFD
+20B.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")
+(string "XFORM EFD20B")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE
+"Power Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "G
+raphic")(string "XFORM EFD20B.Normal")(owner "OrCAD"))(property(rename
+PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(designator "1")(
+property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &10(designator "10
+")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "-13")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "9")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &2(designator "2")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "+5S")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &3(designator "3")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "+3.3S")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "2")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &4(designator "4")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "N79332")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "3")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &5(designator "5")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "N79368")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "4")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &6(designator "6")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "COMMON")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "5")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &7(designator "7")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "+5")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "6")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &8(designator "8")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "+3.3")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "7")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &9(designator "9")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "+13")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "8")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD"))))(instance(rename I80701 "I80701
+")(viewRef NORMAL(cellRef R(libraryRef INDEXD)))(transform(origin(pt 630000
+-70000)))(designator(stringDisplay "R2"(display PARTREFERENCE(justify UPPERLEFT)
+(origin(pt 650000 -70000)))))(property(rename VALUE "Value")(string(
+stringDisplay "240"(display PARTVALUE(justify UPPERLEFT)(origin(pt 650000 -90000
+)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(
+owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(
+string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Default"
+)(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:
+\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(
+string "R.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Pac
+kage")(string "R")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Pow
+er Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graph
+ic")(string "R.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Fo
+otprint")(string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID
+"Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "+3.3")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner
+"OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(
+owner "OrCAD")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swa
+p Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "COMMON")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(
+owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "Fal
+se")(owner "OrCAD"))))(instance(rename I78985 "I78985")(viewRef NORMAL(cellRef
+LT1072C(libraryRef INDEXD)))(transform(origin(pt 150000 -410000)))(designator(
+stringDisplay "U1"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 155000
+-401000)))))(property(rename VALUE "Value")(string(stringDisplay "LT1170CT"(
+display PARTVALUE(justify UPPERLEFT)(origin(pt 155000 -511000)))))(owner "OrCAD"
+))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "LT1072C.N
+ormal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "LT1072C")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Powe
+r Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphi
+c")(string "LT1072C.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "P
+CB Footprint")(string ""))(portInstance FB(designator "2")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "N84443")(owner "OrCAD"))(property(rename ORDER "Order")(
+string "4")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")
+(string "False")(owner "OrCAD")))(portInstance GND(designator "3")(property(
+rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename
+NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(property(rename ORDER "Ord
+er")(string "2")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Conn
+ect")(string "False")(owner "OrCAD")))(portInstance GND_3(designator "6")(
+property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "3")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance VC(designator "1")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "N79868")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance VIN(designator "5"
+)(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "VPLUS")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance VSW(designator "4"
+)(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "N79094")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "5")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD"))))(instance(rename I81207 "I81207
+")(viewRef NORMAL(cellRef R(libraryRef INDEXD)))(transform(orientation R90)(
+origin(pt 390000 -680000)))(designator(stringDisplay "R11"(display PARTREFERENCE
+(justify UPPERLEFT)(origin(pt 390000 -650000)))))(property(rename VALUE "Value")
+(string(stringDisplay "10K"(display PARTVALUE(justify UPPERLEFT)(origin(pt
+410000 -650000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(
+string "DEFAULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implem
+entation Type")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(
+string "Default")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Libr
+ary")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART
+"Source Part")(string "R.Normal")(owner "OrCAD"))(property(rename
+SOURCE_32_PACKAGE "Source Package")(string "R")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "R.Normal")(owner "OrCAD"))(property(
+rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(designator
+"1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property
+(rename NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &2(designator "2")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "SHUTDOWN")(owner "OrCAD"))(property(
+rename ORDER "Order")(string "1")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD"))))(instance(
+rename I78987 "I78987")(viewRef NORMAL(cellRef CHOKE_32_CMODE(libraryRef INDEXD)
+))(transform(origin(pt 220000 -90000)))(designator(stringDisplay "T1"(display
+PARTREFERENCE(justify UPPERLEFT)(origin(pt 230000 -76000)))))(property(rename
+VALUE "Value")(string(stringDisplay "CHOKE-CMODE"(display PARTVALUE(justify
+UPPERLEFT)(origin(pt 200000 -180000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(
+property(rename SOURCE_32_PART "Source Part")(string "CHOKE CMODE.Normal")(owner
+"OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "CHOKE CMOD
+E")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible
+")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "CH
+OKE CMODE.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footpri
+nt")(string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swa
+p Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "VIN2")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner
+"OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(
+owner "OrCAD")))(portInstance &4(designator "4")(property(rename SWAP_32_ID "Swa
+p Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "GND")(owner "OrCAD"))(property(rename ORDER "Order")(string "3")(owner "
+OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(
+owner "OrCAD")))(portInstance &5(designator "5")(property(rename SWAP_32_ID "Swa
+p Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "VPLUS")(owner "OrCAD"))(property(rename ORDER "Order")(string "2")(owner
+"OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(
+owner "OrCAD")))(portInstance &8(designator "8")(property(rename SWAP_32_ID "Swa
+p Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "VIN1")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner
+"OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(
+owner "OrCAD"))))(instance(rename I81109 "I81109")(viewRef NORMAL(cellRef
+POST_45_2(libraryRef INDEXD)))(transform(orientation R90)(origin(pt 440000
+-510000)))(designator(stringDisplay "JP1"(display PARTREFERENCE(justify
+UPPERLEFT)(origin(pt 440000 -510000)))))(property(rename VALUE "Value")(string(
+stringDisplay "POST-2"(display PARTVALUE(justify UPPERLEFT)(origin(pt 460000
+-510000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFA
+ULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Typ
+e")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Defa
+ult")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string
+"C:\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part
+")(string "POST-2.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "So
+urce Package")(string "POST-2")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "POST-2.Normal")(owner "OrCAD"))(
+property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(
+designator "1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"
+))(property(rename NET_32_NAME "Net Name")(string "N81111")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+3.3S")(owner
+"OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(property(
+rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD"))))(
+instance(rename I80705 "I80705")(viewRef NORMAL(cellRef R(libraryRef INDEXD)))(
+transform(origin(pt 510000 -170000)))(designator(stringDisplay "R3"(display
+PARTREFERENCE(justify UPPERLEFT)(origin(pt 530000 -170000)))))(property(rename
+VALUE "Value")(string(stringDisplay "1.5K"(display PARTVALUE(justify UPPERLEFT)(
+origin(pt 530000 -180000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primiti
+ve")(string "DEFAULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "I
+mplementation Type")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Col
+or")(string "Default")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source
+ Library")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename
+SOURCE_32_PART "Source Part")(string "R.Normal")(owner "OrCAD"))(property(rename
+SOURCE_32_PACKAGE "Source Package")(string "R")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "R.Normal")(owner "OrCAD"))(property(
+rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(designator
+"1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property
+(rename NET_32_NAME "Net Name")(string "+13")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &2(designator "2")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "COMMON")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD"))))(instance(rename I78991 "I78991
+")(viewRef NORMAL(cellRef CON_45_3_32_PHONO(libraryRef INDEXD)))(transform(
+orientation MY)(origin(pt 110000 -90000)))(designator(stringDisplay "J1"(display
+PARTREFERENCE(justify UPPERLEFT)(origin(pt 115000 -64000)))))(property(rename
+VALUE "Value")(string(stringDisplay "CON-3 PHONO"(display PARTVALUE(justify
+UPPERLEFT)(origin(pt 80000 -140000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(
+property(rename SOURCE_32_PART "Source Part")(string "CON-3 PHONO.Normal")(owner
+"OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "CON-3 PHON
+O")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible
+")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "CO
+N-3 PHONO.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footpri
+nt")(string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swa
+p Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "VIN1")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner
+"OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(
+owner "OrCAD")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swa
+p Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "VIN2")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner
+"OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "True")(
+owner "OrCAD")))(portInstance &3(designator "3")(property(rename SWAP_32_ID "Swa
+p Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(
+string "")(owner "OrCAD"))(property(rename ORDER "Order")(string "2")(owner "OrC
+AD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "True")(owner
+"OrCAD"))))(instance(rename I80709 "I80709")(viewRef NORMAL(cellRef R(libraryRef
+INDEXD)))(transform(origin(pt 630000 -170000)))(designator(stringDisplay "R4"(
+display PARTREFERENCE(justify UPPERLEFT)(origin(pt 650000 -170000)))))(property(
+rename VALUE "Value")(string(stringDisplay "1.5K"(display PARTVALUE(justify
+UPPERLEFT)(origin(pt 650000 -180000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(
+property(rename SOURCE_32_PART "Source Part")(string "R.Normal")(owner "OrCAD"))
+(property(rename SOURCE_32_PACKAGE "Source Package")(string "R")(owner "OrCAD"))
+(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(
+owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "R.Normal")(owner "OrC
+AD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance
+&1(designator "1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrC
+AD"))(property(rename NET_32_NAME "Net Name")(string "-13")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "COMMON")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I84244 "I84244")(viewRef NORMAL(cellRef R(libraryRef
+INDEXD)))(transform(orientation R90)(origin(pt 380000 -490000)))(designator(
+stringDisplay "R12"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 370000
+-460000)))))(property(rename VALUE "Value")(string(stringDisplay "9.1K"(display
+PARTVALUE(justify UPPERLEFT)(origin(pt 390000 -460000)))))(owner "OrCAD"))(
+property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "R.Normal"
+)(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "R"
+)(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")
+(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "R.No
+rmal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string
+""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N84
+443")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N81
+111")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD"))))(instance(rename I82326 "I82326")(viewRef NORMAL(cellRef C_32_POL(
+libraryRef PWR)))(transform(origin(pt 450000 -170000)))(designator(stringDisplay
+"C4"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 479000 -170000)))))(
+property(rename VALUE "Value")(string(stringDisplay "150UF"(display PARTVALUE(
+justify UPPERLEFT)(origin(pt 479000 -179000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"
+))(property(rename SOURCE_32_PART "Source Part")(string "C POL.Normal")(owner "O
+rCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "C POL")(
+owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(
+string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "C POL
+.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(
+string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id"
+)(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+
+13")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "COM
+MON")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD"))))(instance(rename I78993 "I78993")(viewRef NORMAL(cellRef R(libraryRef
+INDEXD)))(transform(origin(pt 200000 -250000)))(designator(stringDisplay "R5"(
+display PARTREFERENCE(justify UPPERLEFT)(origin(pt 220000 -250000)))))(property(
+rename VALUE "Value")(string(stringDisplay "3.9 1W"(display PARTVALUE(justify
+UPPERLEFT)(origin(pt 220000 -260000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(
+property(rename SOURCE_32_PART "Source Part")(string "R.Normal")(owner "OrCAD"))
+(property(rename SOURCE_32_PACKAGE "Source Package")(string "R")(owner "OrCAD"))
+(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(
+owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "R.Normal")(owner "OrC
+AD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance
+&1(designator "1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrC
+AD"))(property(rename NET_32_NAME "Net Name")(string "VPLUS")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79112")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I78995 "I78995")(viewRef NORMAL(cellRef C(libraryRef PWR)
+))(transform(origin(pt 200000 -320000)))(designator(stringDisplay "C10"(display
+PARTREFERENCE(justify UPPERLEFT)(origin(pt 180000 -310000)))))(property(rename
+VALUE "Value")(string(stringDisplay "4700PF"(display PARTVALUE(justify UPPERLEFT
+)(origin(pt 160000 -320000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primi
+tive")(string "DEFAULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE
+"Implementation Type")(string "<none>")(owner "OrCAD"))(property(rename COLOR "C
+olor")(string "Default")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Sour
+ce Library")(string "C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"))(property(rename
+SOURCE_32_PART "Source Part")(string "C.Normal")(owner "OrCAD"))(property(rename
+SOURCE_32_PACKAGE "Source Package")(string "C")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "C.Normal")(owner "OrCAD"))(property(
+rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(designator
+"1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property
+(rename NET_32_NAME "Net Name")(string "N79112")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &2(designator "2")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "N79094")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD"))))(instance(rename I78997 "I78997
+")(viewRef NORMAL(cellRef DIODE_32_SCHOTTKY(libraryRef PWR)))(transform(origin(
+pt 470000 -250000)))(designator(stringDisplay "D1"(display PARTREFERENCE(justify
+UPPERLEFT)(origin(pt 460000 -240000)))))(property(rename VALUE "Value")(string(
+stringDisplay "1N5822"(display PARTVALUE(justify UPPERLEFT)(origin(pt 480000
+-240000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFA
+ULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Typ
+e")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Defa
+ult")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string
+"C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source P
+art")(string "DIODE SCHOTTKY.Normal")(owner "OrCAD"))(property(rename
+SOURCE_32_PACKAGE "Source Package")(string "DIODE SCHOTTKY")(owner "OrCAD"))(
+property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(
+owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "DIODE SCHOTTKY.Normal
+")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))
+(portInstance ANODE(designator "2")(property(rename SWAP_32_ID "Swap Id")(string
+"-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79128")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance CATHODE(designator "1")(property(rename SWAP_32_ID "Swap Id")
+(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+5
+S")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I79906 "I79906")(viewRef NORMAL(cellRef DIODE_32_ZENER(
+libraryRef PWR)))(transform(orientation R90)(origin(pt 60000 -520000)))(
+designator(stringDisplay "D5"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt
+30000 -490000)))))(property(rename VALUE "Value")(string(stringDisplay "1N5231"(
+display PARTVALUE(justify UPPERLEFT)(origin(pt 20000 -500000)))))(owner "OrCAD")
+)(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OL
+B")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "DIODE 
+ZENER.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package
+")(string "DIODE ZENER")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "DIODE ZENER.Normal")(owner "OrCAD"))(
+property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance ANODE
+(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD
+"))(property(rename NET_32_NAME "Net Name")(string "N80336")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance CATHODE(designator "1")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "VPL
+US")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I82330 "I82330")(viewRef NORMAL(cellRef C_32_POL(
+libraryRef PWR)))(transform(orientation R180)(origin(pt 590000 -190000)))(
+designator(stringDisplay "C5"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt
+600000 -170000)))))(property(rename VALUE "Value")(string(stringDisplay "150UF"(
+display PARTVALUE(justify UPPERLEFT)(origin(pt 600000 -180000)))))(owner "OrCAD"
+))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OL
+B")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "C POL.
+Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "C POL")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power 
+Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic"
+)(string "C POL.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB F
+ootprint")(string ""))(portInstance &1(designator "1")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "COMMON")(owner "OrCAD"))(property(rename ORDER "Order")(
+string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")
+(string "False")(owner "OrCAD")))(portInstance &2(designator "2")(property(
+rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename
+NET_32_NAME "Net Name")(string "-13")(owner "OrCAD"))(property(rename ORDER "Ord
+er")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Conn
+ect")(string "False")(owner "OrCAD"))))(instance(rename I78999 "I78999")(viewRef
+NORMAL(cellRef DIODE_32_SCHOTTKY(libraryRef PWR)))(transform(origin(pt 470000
+-300000)))(designator(stringDisplay "D2"(display PARTREFERENCE(justify UPPERLEFT
+)(origin(pt 460000 -290000)))))(property(rename VALUE "Value")(string(
+stringDisplay "1N5822"(display PARTVALUE(justify UPPERLEFT)(origin(pt 480000
+-290000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFA
+ULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Typ
+e")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Defa
+ult")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string
+"C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source P
+art")(string "DIODE SCHOTTKY.Normal")(owner "OrCAD"))(property(rename
+SOURCE_32_PACKAGE "Source Package")(string "DIODE SCHOTTKY")(owner "OrCAD"))(
+property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(
+owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "DIODE SCHOTTKY.Normal
+")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))
+(portInstance ANODE(designator "2")(property(rename SWAP_32_ID "Swap Id")(string
+"-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79140")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance CATHODE(designator "1")(property(rename SWAP_32_ID "Swap Id")
+(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+3
+.3S")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD"))))(instance(rename I79001 "I79001")(viewRef NORMAL(cellRef &1N4148(
+libraryRef INDEXD)))(transform(origin(pt 470000 -360000)))(designator(
+stringDisplay "D3"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 460000
+-350000)))))(property(rename VALUE "Value")(string(stringDisplay "1N4937"(
+display PARTVALUE(justify UPPERLEFT)(origin(pt 480000 -350000)))))(owner "OrCAD"
+))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "1N4148.No
+rmal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "1N4148")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power
+ Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic
+")(string "1N4148.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB
+ Footprint")(string ""))(portInstance ANODE(designator "2")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "N79173")(owner "OrCAD"))(property(rename ORDER "Order")(
+string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")
+(string "False")(owner "OrCAD")))(portInstance CATHODE(designator "1")(property(
+rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename
+NET_32_NAME "Net Name")(string "N79332")(owner "OrCAD"))(property(rename ORDER "
+Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No C
+onnect")(string "False")(owner "OrCAD"))))(instance(rename I79003 "I79003")(
+viewRef NORMAL(cellRef &1N4148(libraryRef INDEXD)))(transform(orientation R180)(
+origin(pt 500000 -430000)))(designator(stringDisplay "D4"(display PARTREFERENCE(
+justify UPPERLEFT)(origin(pt 460000 -400000)))))(property(rename VALUE "Value")(
+string(stringDisplay "1N4937"(display PARTVALUE(justify UPPERLEFT)(origin(pt
+480000 -400000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(
+string "DEFAULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implem
+entation Type")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(
+string "Default")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Libr
+ary")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART
+"Source Part")(string "1N4148.Normal")(owner "OrCAD"))(property(rename
+SOURCE_32_PACKAGE "Source Package")(string "1N4148")(owner "OrCAD"))(property(
+rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrC
+AD"))(property(rename GRAPHIC "Graphic")(string "1N4148.Normal")(owner "OrCAD"))
+(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance
+ANODE(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "
+OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79368")(owner "OrCAD")
+)(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance CATHODE(designator "1")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79
+192")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD"))))(instance(rename I79007 "I79007")(viewRef NORMAL(cellRef R(libraryRef
+INDEXD)))(transform(orientation R90)(origin(pt 390000 -650000)))(designator(
+stringDisplay "R10"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 390000
+-620000)))))(property(rename VALUE "Value")(string(stringDisplay "10K"(display
+PARTVALUE(justify UPPERLEFT)(origin(pt 410000 -620000)))))(owner "OrCAD"))(
+property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "R.Normal"
+)(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "R"
+)(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")
+(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "R.No
+rmal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string
+""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79
+691")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "SHU
+TDOWN")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"
+))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "O
+rCAD"))))(instance(rename I79009 "I79009")(viewRef NORMAL(cellRef CON_45_8(
+libraryRef INDEXD)))(transform(orientation MY)(origin(pt 890000 -90000)))(
+designator(stringDisplay "J2"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt
+860000 -77000)))))(property(rename VALUE "Value")(string(stringDisplay "CON-8"(
+display PARTVALUE(justify UPPERLEFT)(origin(pt 860000 -190000)))))(owner "OrCAD"
+))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "CON-8.Nor
+mal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string
+"CON-8")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Vi
+sible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(
+string "CON-8.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Foo
+tprint")(string "")))(instance(rename I80033 "I80033")(viewRef NORMAL(cellRef
+C_32_POL(libraryRef PWR)))(transform(origin(pt 160000 -630000)))(designator(
+stringDisplay "C16"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 140000
+-630000)))))(property(rename VALUE "Value")(string(stringDisplay "1.0UF"(display
+PARTVALUE(justify UPPERLEFT)(origin(pt 130000 -640000)))))(owner "OrCAD"))(
+property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OL
+B")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "C POL.
+Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "C POL")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power 
+Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic"
+)(string "C POL.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB F
+ootprint")(string ""))(portInstance &1(designator "1")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "N80145")(owner "OrCAD"))(property(rename ORDER "Order")(
+string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")
+(string "False")(owner "OrCAD")))(portInstance &2(designator "2")(property(
+rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename
+NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(property(rename ORDER "Ord
+er")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Conn
+ect")(string "False")(owner "OrCAD"))))(instance(rename I84174 "I84174")(viewRef
+NORMAL(cellRef C(libraryRef PWR)))(transform(origin(pt 40000 -350000)))(
+designator(stringDisplay "C13"(display PARTREFERENCE(justify UPPERLEFT)(origin(
+pt 70000 -340000)))))(property(rename VALUE "Value")(string(stringDisplay "0.1UF
+"(display PARTVALUE(justify UPPERLEFT)(origin(pt 70000 -350000)))))(owner "OrCAD
+"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OL
+B")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "C.Norm
+al")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string
+"C")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visibl
+e")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "C
+.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(
+string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id"
+)(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "V
+PLUS")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD")
+)(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "Or
+CAD")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND
+")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I80035 "I80035")(viewRef NORMAL(cellRef R(libraryRef
+INDEXD)))(transform(origin(pt 60000 -620000)))(designator(stringDisplay "R9"(
+display PARTREFERENCE(justify UPPERLEFT)(origin(pt 50000 -620000)))))(property(
+rename VALUE "Value")(string(stringDisplay "10K"(display PARTVALUE(justify
+UPPERLEFT)(origin(pt 50000 -630000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(
+property(rename SOURCE_32_PART "Source Part")(string "R.Normal")(owner "OrCAD"))
+(property(rename SOURCE_32_PACKAGE "Source Package")(string "R")(owner "OrCAD"))
+(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(
+owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "R.Normal")(owner "OrC
+AD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance
+&1(designator "1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrC
+AD"))(property(rename NET_32_NAME "Net Name")(string "N80336")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND")(owner "
+OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(property(
+rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD"))))(
+instance(rename I82267 "I82267")(viewRef NORMAL(cellRef C_32_POL(libraryRef PWR)
+))(transform(origin(pt 450000 -80000)))(designator(stringDisplay "C2"(display
+PARTREFERENCE(justify UPPERLEFT)(origin(pt 479000 -80000)))))(property(rename
+VALUE "Value")(string(stringDisplay "680UF"(display PARTVALUE(justify UPPERLEFT)
+(origin(pt 479000 -89000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primiti
+ve")(string "DEFAULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "I
+mplementation Type")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Col
+or")(string "Default")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source
+ Library")(string "C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"))(property(rename
+SOURCE_32_PART "Source Part")(string "C POL.Normal")(owner "OrCAD"))(property(
+rename SOURCE_32_PACKAGE "Source Package")(string "C POL")(owner "OrCAD"))(
+property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(
+owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "C POL.Normal")(owner
+"OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(
+portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+5")(owner "O
+rCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(
+rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "COMMON")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I81967 "I81967")(viewRef NORMAL(cellRef C_32_POL(
+libraryRef PWR)))(transform(origin(pt 600000 -280000)))(designator(stringDisplay
+"C9"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 629000 -280000)))))(
+property(rename VALUE "Value")(string(stringDisplay "680UF"(display PARTVALUE(
+justify UPPERLEFT)(origin(pt 629000 -289000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"
+))(property(rename SOURCE_32_PART "Source Part")(string "C POL.Normal")(owner "O
+rCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "C POL")(
+owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(
+string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "C POL
+.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(
+string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id"
+)(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+
+5S")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND
+")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I82271 "I82271")(viewRef NORMAL(cellRef C_32_POL(
+libraryRef PWR)))(transform(origin(pt 570000 -80000)))(designator(stringDisplay
+"C3"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 599000 -80000)))))(
+property(rename VALUE "Value")(string(stringDisplay "680UF"(display PARTVALUE(
+justify UPPERLEFT)(origin(pt 599000 -89000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"
+))(property(rename SOURCE_32_PART "Source Part")(string "C POL.Normal")(owner "O
+rCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "C POL")(
+owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(
+string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "C POL
+.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(
+string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id"
+)(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+
+3.3")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "COM
+MON")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD"))))(instance(rename I81059 "I81059")(viewRef NORMAL(cellRef R(libraryRef
+INDEXD)))(transform(origin(pt 350000 -510000)))(designator(stringDisplay "R6"(
+display PARTREFERENCE(justify UPPERLEFT)(origin(pt 370000 -510000)))))(property(
+rename VALUE "Value")(string(stringDisplay "5.1K"(display PARTVALUE(justify
+UPPERLEFT)(origin(pt 370000 -520000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(
+property(rename SOURCE_32_PART "Source Part")(string "R.Normal")(owner "OrCAD"))
+(property(rename SOURCE_32_PACKAGE "Source Package")(string "R")(owner "OrCAD"))
+(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(
+owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "R.Normal")(owner "OrC
+AD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance
+&1(designator "1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrC
+AD"))(property(rename NET_32_NAME "Net Name")(string "N84443")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N81061")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I80051 "I80051")(viewRef NORMAL(cellRef &2N7002(
+libraryRef INDEXD)))(transform(orientation MY)(origin(pt 340000 -620000)))(
+designator(stringDisplay "Q2"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt
+350000 -600000)))))(property(rename VALUE "Value")(string(stringDisplay "2N7002"
+(display PARTVALUE(justify UPPERLEFT)(origin(pt 340000 -610000)))))(owner "OrCAD
+"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "2N7002.No
+rmal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "2N7002")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power
+ Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic
+")(string "2N7002.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB
+ Footprint")(string ""))(portInstance &1(designator "1")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "GND")(owner "OrCAD"))(property(rename ORDER "Order")(string "
+2")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string
+"False")(owner "OrCAD")))(portInstance &2(designator "2")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "N79691")(owner "OrCAD"))(property(rename ORDER "Order")(
+string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")
+(string "False")(owner "OrCAD")))(portInstance &3(designator "3")(property(
+rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename
+NET_32_NAME "Net Name")(string "N79868")(owner "OrCAD"))(property(rename ORDER "
+Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No C
+onnect")(string "False")(owner "OrCAD"))))(instance(rename I81971 "I81971")(
+viewRef NORMAL(cellRef C_32_POL(libraryRef PWR)))(transform(origin(pt 600000
+-350000)))(designator(stringDisplay "C12"(display PARTREFERENCE(justify
+UPPERLEFT)(origin(pt 629000 -350000)))))(property(rename VALUE "Value")(string(
+stringDisplay "680UF"(display PARTVALUE(justify UPPERLEFT)(origin(pt 629000
+-359000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFA
+ULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Typ
+e")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Defa
+ult")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string
+"C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source P
+art")(string "C POL.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "
+Source Package")(string "C POL")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "C POL.Normal")(owner "OrCAD"))(
+property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(
+designator "1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"
+))(property(rename NET_32_NAME "Net Name")(string "+3.3S")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND")(owner "
+OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(property(
+rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD"))))(
+instance(rename I81066 "I81066")(viewRef NORMAL(cellRef R(libraryRef INDEXD)))(
+transform(origin(pt 420000 -540000)))(designator(stringDisplay "R7"(display
+PARTREFERENCE(justify UPPERLEFT)(origin(pt 440000 -540000)))))(property(rename
+VALUE "Value")(string(stringDisplay "7.5K"(display PARTVALUE(justify UPPERLEFT)(
+origin(pt 440000 -550000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primiti
+ve")(string "DEFAULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "I
+mplementation Type")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Col
+or")(string "Default")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source
+ Library")(string "C:\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename
+SOURCE_32_PART "Source Part")(string "R.Normal")(owner "OrCAD"))(property(rename
+SOURCE_32_PACKAGE "Source Package")(string "R")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "True")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "R.Normal")(owner "OrCAD"))(property(
+rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(designator
+"1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property
+(rename NET_32_NAME "Net Name")(string "N81111")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &2(designator "2")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "+5S")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD"))))(instance(rename I79756 "I79756
+")(viewRef NORMAL(cellRef &2N5460_32_SMT(libraryRef INDEXD)))(transform(origin(
+pt 220000 -620000)))(designator(stringDisplay "Q1"(display PARTREFERENCE(justify
+UPPERLEFT)(origin(pt 260000 -610000)))))(property(rename VALUE "Value")(string(
+stringDisplay "2N5460"(display PARTVALUE(justify UPPERLEFT)(origin(pt 250000
+-620000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFA
+ULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Typ
+e")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Defa
+ult")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string
+"C:\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part
+")(string "2N5460 SMT.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE
+"Source Package")(string "2N5460 SMT")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "2N5460 SMT.Normal")(owner "OrCAD"))(
+property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance BASE(
+designator "3")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"
+))(property(rename NET_32_NAME "Net Name")(string "N80336")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance COLLECTOR(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79
+868")(owner "OrCAD"))(property(rename ORDER "Order")(string "2")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance EMITTER(designator "1")(property(rename SWAP_32_ID "Swap Id"
+)(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "G
+ND")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I80976 "I80976")(viewRef NORMAL(cellRef R_32_VARIABLE(
+libraryRef INDEXD)))(transform(orientation MY)(origin(pt 330000 -510000)))(
+designator(stringDisplay "VR1"(display PARTREFERENCE(justify UPPERLEFT)(origin(
+pt 330000 -510000)))))(property(rename VALUE "Value")(string(stringDisplay "1.0K
+"(display PARTVALUE(justify UPPERLEFT)(origin(pt 330000 -520000)))))(owner "OrCA
+D"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\SCH\INDEXD.OLB")
+(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "R VARIABL
+E.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "R VARIABLE")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "P
+ower Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Gra
+phic")(string "R VARIABLE.Normal")(owner "OrCAD"))(property(rename
+PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(designator "1")(
+property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &2(designator "3")
+(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "N81061")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD")))(portInstance &2_2(designator "2
+")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(
+rename NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(property(rename
+ORDER "Order")(string "2")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "
+Is No Connect")(string "False")(owner "OrCAD"))))(instance(rename I80877 "I80877
+")(viewRef NORMAL(cellRef C(libraryRef PWR)))(transform(origin(pt 160000 -40000)
+))(designator(stringDisplay "C1"(display PARTREFERENCE(justify UPPERLEFT)(origin
+(pt 190000 -30000)))))(property(rename VALUE "Value")(string(stringDisplay "0.1U
+F"(display PARTVALUE(justify UPPERLEFT)(origin(pt 190000 -40000)))))(owner "OrCA
+D"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OL
+B")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "C.Norm
+al")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string
+"C")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visibl
+e")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "C
+.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(
+string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id"
+)(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "V
+IN1")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "VIN
+2")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I78969 "I78969")(viewRef NORMAL(cellRef
+XFORM_32_FLBK_32_EFD20A(libraryRef INDEXD)))(transform(origin(pt 310000 -250000)
+))(designator(stringDisplay "T2"(display PARTREFERENCE(justify UPPERLEFT)(origin
+(pt 315000 -241000)))))(property(rename VALUE "Value")(string(stringDisplay "XFO
+RM FLBK EFD20A"(display PARTVALUE(justify UPPERLEFT)(origin(pt 315000 -421000)))
+))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(
+owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(
+string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Default"
+)(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:
+\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(
+string "XFORM FLBK EFD20A.Normal")(owner "OrCAD"))(property(rename
+SOURCE_32_PACKAGE "Source Package")(string "XFORM FLBK EFD20A")(owner "OrCAD"))(
+property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(
+owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "XFORM FLBK EFD20A.Nor
+mal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(string "
+"))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id")(string
+"-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79094")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance &10(designator "10")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "VPL
+US")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79
+128")(owner "OrCAD"))(property(rename ORDER "Order")(string "2")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance &3(designator "3")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79
+140")(owner "OrCAD"))(property(rename ORDER "Order")(string "3")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance &4(designator "4")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79
+173")(owner "OrCAD"))(property(rename ORDER "Order")(string "5")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance &5(designator "5")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND
+")(owner "OrCAD"))(property(rename ORDER "Order")(string "7")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance &6(designator "6")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79
+192")(owner "OrCAD"))(property(rename ORDER "Order")(string "8")(owner "OrCAD"))
+(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrC
+AD")))(portInstance &7(designator "7")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND
+")(owner "OrCAD"))(property(rename ORDER "Order")(string "6")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance &8(designator "8")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "9")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "True")(owner "OrCAD
+")))(portInstance &9(designator "9")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND
+")(owner "OrCAD"))(property(rename ORDER "Order")(string "4")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I78971 "I78971")(viewRef NORMAL(cellRef C_32_POL(
+libraryRef PWR)))(transform(origin(pt 40000 -250000)))(designator(stringDisplay
+"C6"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 69000 -250000)))))(
+property(rename VALUE "Value")(string(stringDisplay "150UF 35V"(display
+PARTVALUE(justify UPPERLEFT)(origin(pt 69000 -259000)))))(owner "OrCAD"))(
+property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OL
+B")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "C POL.
+Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "C POL")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power 
+Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic"
+)(string "C POL.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB F
+ootprint")(string ""))(portInstance &1(designator "1")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "VPLUS")(owner "OrCAD"))(property(rename ORDER "Order")(string
+"0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string
+"False")(owner "OrCAD")))(portInstance &2(designator "2")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "GND")(owner "OrCAD"))(property(rename ORDER "Order")(string "
+1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string
+"False")(owner "OrCAD"))))(instance(rename I78973 "I78973")(viewRef NORMAL(
+cellRef C_32_POL(libraryRef PWR)))(transform(origin(pt 130000 -250000)))(
+designator(stringDisplay "C7"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt
+160000 -250000)))))(property(rename VALUE "Value")(string(stringDisplay "150UF 3
+5V"(display PARTVALUE(justify UPPERLEFT)(origin(pt 160000 -260000)))))(owner "Or
+CAD"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OL
+B")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "C POL.
+Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "C POL")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power 
+Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic"
+)(string "C POL.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB F
+ootprint")(string ""))(portInstance &1(designator "1")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "VPLUS")(owner "OrCAD"))(property(rename ORDER "Order")(string
+"0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string
+"False")(owner "OrCAD")))(portInstance &2(designator "2")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "GND")(owner "OrCAD"))(property(rename ORDER "Order")(string "
+1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string
+"False")(owner "OrCAD"))))(instance(rename I78975 "I78975")(viewRef NORMAL(
+cellRef C_32_POL(libraryRef PWR)))(transform(origin(pt 560000 -420000)))(
+designator(stringDisplay "C14"(display PARTREFERENCE(justify UPPERLEFT)(origin(
+pt 589000 -420000)))))(property(rename VALUE "Value")(string(stringDisplay "150U
+F"(display PARTVALUE(justify UPPERLEFT)(origin(pt 589000 -429000)))))(owner "OrC
+AD"))(property(rename PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(
+property(rename IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(
+owner "OrCAD"))(property(rename COLOR "Color")(string "Default")(owner "OrCAD"))
+(property(rename SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OL
+B")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part")(string "C POL.
+Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(
+string "C POL")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power 
+Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic"
+)(string "C POL.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB F
+ootprint")(string ""))(portInstance &1(designator "1")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "N79332")(owner "OrCAD"))(property(rename ORDER "Order")(
+string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")
+(string "False")(owner "OrCAD")))(portInstance &2(designator "2")(property(
+rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename
+NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(property(rename ORDER "Ord
+er")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Conn
+ect")(string "False")(owner "OrCAD"))))(instance(rename I79885 "I79885")(viewRef
+NORMAL(cellRef R(libraryRef INDEXD)))(transform(orientation R90)(origin(pt
+120000 -610000)))(designator(stringDisplay "R8"(display PARTREFERENCE(justify
+UPPERLEFT)(origin(pt 120000 -580000)))))(property(rename VALUE "Value")(string(
+stringDisplay "1.5K"(display PARTVALUE(justify UPPERLEFT)(origin(pt 142000
+-580000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFA
+ULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Typ
+e")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Defa
+ult")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string
+"C:\SCH\INDEXD.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source Part
+")(string "R.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "Source 
+Package")(string "R")(owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "
+Power Pins Visible")(string "False")(owner "OrCAD"))(property(rename GRAPHIC "Gr
+aphic")(string "R.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB
+ Footprint")(string ""))(portInstance &1(designator "1")(property(rename
+SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "
+Net Name")(string "N79868")(owner "OrCAD"))(property(rename ORDER "Order")(
+string "0")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No Connect")
+(string "False")(owner "OrCAD")))(portInstance &2(designator "2")(property(
+rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"))(property(rename
+NET_32_NAME "Net Name")(string "N80145")(owner "OrCAD"))(property(rename ORDER "
+Order")(string "1")(owner "OrCAD"))(property(rename IS_32_NO_32_CONNECT "Is No C
+onnect")(string "False")(owner "OrCAD"))))(instance(rename I78977 "I78977")(
+viewRef NORMAL(cellRef C_32_POL(libraryRef PWR)))(transform(origin(pt 560000
+-490000)))(designator(stringDisplay "C15"(display PARTREFERENCE(justify
+UPPERLEFT)(origin(pt 589000 -490000)))))(property(rename VALUE "Value")(string(
+stringDisplay "150UF"(display PARTVALUE(justify UPPERLEFT)(origin(pt 590000
+-500000)))))(owner "OrCAD"))(property(rename PRIMITIVE "Primitive")(string "DEFA
+ULT")(owner "OrCAD"))(property(rename IMPLEMENTATION_32_TYPE "Implementation Typ
+e")(string "<none>")(owner "OrCAD"))(property(rename COLOR "Color")(string "Defa
+ult")(owner "OrCAD"))(property(rename SOURCE_32_LIBRARY "Source Library")(string
+"C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"))(property(rename SOURCE_32_PART "Source P
+art")(string "C POL.Normal")(owner "OrCAD"))(property(rename SOURCE_32_PACKAGE "
+Source Package")(string "C POL")(owner "OrCAD"))(property(rename
+POWER_32_PINS_32_VISIBLE "Power Pins Visible")(string "False")(owner "OrCAD"))(
+property(rename GRAPHIC "Graphic")(string "C POL.Normal")(owner "OrCAD"))(
+property(rename PCB_32_FOOTPRINT "PCB Footprint")(string ""))(portInstance &1(
+designator "1")(property(rename SWAP_32_ID "Swap Id")(string "-1")(owner "OrCAD"
+))(property(rename NET_32_NAME "Net Name")(string "GND")(owner "OrCAD"))(
+property(rename ORDER "Order")(string "0")(owner "OrCAD"))(property(rename
+IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCAD")))(
+portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(string "-1
+")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "N79368")(
+owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I78979 "I78979")(viewRef NORMAL(cellRef C_32_POL(
+libraryRef PWR)))(transform(origin(pt 540000 -280000)))(designator(stringDisplay
+"C8"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 569000 -280000)))))(
+property(rename VALUE "Value")(string(stringDisplay "680UF"(display PARTVALUE(
+justify UPPERLEFT)(origin(pt 569000 -289000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"
+))(property(rename SOURCE_32_PART "Source Part")(string "C POL.Normal")(owner "O
+rCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "C POL")(
+owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(
+string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "C POL
+.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(
+string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id"
+)(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+
+5S")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND
+")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(instance(rename I78981 "I78981")(viewRef NORMAL(cellRef C_32_POL(
+libraryRef PWR)))(transform(origin(pt 540000 -350000)))(designator(stringDisplay
+"C11"(display PARTREFERENCE(justify UPPERLEFT)(origin(pt 569000 -350000)))))(
+property(rename VALUE "Value")(string(stringDisplay "680UF"(display PARTVALUE(
+justify UPPERLEFT)(origin(pt 569000 -359000)))))(owner "OrCAD"))(property(rename
+PRIMITIVE "Primitive")(string "DEFAULT")(owner "OrCAD"))(property(rename
+IMPLEMENTATION_32_TYPE "Implementation Type")(string "<none>")(owner "OrCAD"))(
+property(rename COLOR "Color")(string "Default")(owner "OrCAD"))(property(rename
+SOURCE_32_LIBRARY "Source Library")(string "C:\ORCAD\PWR\PWR.OLB")(owner "OrCAD"
+))(property(rename SOURCE_32_PART "Source Part")(string "C POL.Normal")(owner "O
+rCAD"))(property(rename SOURCE_32_PACKAGE "Source Package")(string "C POL")(
+owner "OrCAD"))(property(rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")(
+string "False")(owner "OrCAD"))(property(rename GRAPHIC "Graphic")(string "C POL
+.Normal")(owner "OrCAD"))(property(rename PCB_32_FOOTPRINT "PCB Footprint")(
+string ""))(portInstance &1(designator "1")(property(rename SWAP_32_ID "Swap Id"
+)(string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "+
+3.3S")(owner "OrCAD"))(property(rename ORDER "Order")(string "0")(owner "OrCAD")
+)(property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "Or
+CAD")))(portInstance &2(designator "2")(property(rename SWAP_32_ID "Swap Id")(
+string "-1")(owner "OrCAD"))(property(rename NET_32_NAME "Net Name")(string "GND
+")(owner "OrCAD"))(property(rename ORDER "Order")(string "1")(owner "OrCAD"))(
+property(rename IS_32_NO_32_CONNECT "Is No Connect")(string "False")(owner "OrCA
+D"))))(portImplementation GND(connectLocation(figure PORT(dot(pt 340000 -160000)
+)))(instance(rename XGRINST1 "XGRINST1")(viewRef NORMAL(cellRef GND_SIGNAL(
+libraryRef CAPSYM)))(transform(origin(pt 330000 -160000)))))(portImplementation
+GND(connectLocation(figure PORT(dot(pt 140000 -310000))))(instance(rename
+XGRINST2 "XGRINST2")(viewRef NORMAL(cellRef GND_SIGNAL(libraryRef CAPSYM)))(
+transform(origin(pt 130000 -310000)))))(portImplementation GND(connectLocation(
+figure PORT(dot(pt 340000 -680000))))(instance(rename XGRINST3 "XGRINST3")(
+viewRef NORMAL(cellRef GND_SIGNAL(libraryRef CAPSYM)))(transform(origin(pt
+330000 -680000)))))(portImplementation GND(connectLocation(figure PORT(dot(pt
+50000 -400000))))(instance(rename XGRINST4 "XGRINST4")(viewRef NORMAL(cellRef
+GND_SIGNAL(libraryRef CAPSYM)))(transform(origin(pt 40000 -400000)))))(
+portImplementation GND(connectLocation(figure PORT(dot(pt 270000 -550000))))(
+instance(rename XGRINST5 "XGRINST5")(viewRef NORMAL(cellRef GND_SIGNAL(
+libraryRef CAPSYM)))(transform(origin(pt 260000 -550000)))))(portImplementation
+GND(connectLocation(figure PORT(dot(pt 430000 -450000))))(instance(rename
+XGRINST6 "XGRINST6")(viewRef NORMAL(cellRef GND_SIGNAL(libraryRef CAPSYM)))(
+transform(origin(pt 420000 -450000)))))(net(rename N79140 "N79140")(joined(
+portRef &3(instanceRef I78969))(portRef ANODE(instanceRef I78999)))(figure WIRE(
+path(pointList(pt 410000 -310000)(pt 460000 -310000)))))(net(rename N79173 "N791
+73")(joined(portRef &4(instanceRef I78969))(portRef ANODE(instanceRef I79001)))(
+figure WIRE(path(pointList(pt 410000 -340000)(pt 440000 -340000)))(path(
+pointList(pt 440000 -340000)(pt 440000 -370000)))(path(pointList(pt 440000
+-370000)(pt 460000 -370000)))))(net(rename N79128 "N79128")(joined(portRef &2(
+instanceRef I78969))(portRef ANODE(instanceRef I78997)))(figure WIRE(path(
+pointList(pt 410000 -280000)(pt 430000 -280000)))(path(pointList(pt 430000
+-280000)(pt 430000 -260000)))(path(pointList(pt 430000 -260000)(pt 460000
+-260000)))))(net(rename N79332 "N79332")(joined(portRef CATHODE(instanceRef
+I79001))(portRef &1(instanceRef I78975))(portRef &4(instanceRef I78983)))(figure
+WIRE(path(pointList(pt 510000 -370000)(pt 530000 -370000)))(path(pointList(pt
+530000 -370000)(pt 530000 -400000)))(path(pointList(pt 530000 -400000)(pt 570000
+-400000)))(path(pointList(pt 570000 -410000)(pt 570000 -400000)))(path(pointList
+(pt 570000 -400000)(pt 720000 -400000)))(path(pointList(pt 720000 -400000)(pt
+720000 -410000)))(path(pointList(pt 720000 -410000)(pt 740000 -410000))))(
+instance(rename TIE1 "TIE1")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 570000 -400000)))))(net(rename N79192 "N79
+192")(joined(portRef &6(instanceRef I78969))(portRef CATHODE(instanceRef I79003)
+))(figure WIRE(path(pointList(pt 440000 -400000)(pt 410000 -400000)))(path(
+pointList(pt 440000 -420000)(pt 460000 -420000)))(path(pointList(pt 440000
+-400000)(pt 440000 -420000)))))(net(rename N79094 "N79094")(joined(portRef &1(
+instanceRef I78969))(portRef &2(instanceRef I78995))(portRef VSW(instanceRef
+I78985)))(figure WIRE(path(pointList(pt 260000 -300000)(pt 280000 -300000)))(
+path(pointList(pt 210000 -340000)(pt 210000 -360000)))(path(pointList(pt 260000
+-430000)(pt 250000 -430000)))(path(pointList(pt 260000 -360000)(pt 210000
+-360000)))(path(pointList(pt 260000 -300000)(pt 260000 -360000)))(path(pointList
+(pt 260000 -360000)(pt 260000 -430000))))(instance(rename TIE2 "TIE2")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+260000 -360000)))))(net(rename &_43_3_46_3S(stringDisplay "+3.3S"(display ALIAS(
+origin(pt 700000 -380000)))(display ALIAS(origin(pt 480000 -480000)))))(joined(
+portRef &3(instanceRef I78983))(portRef CATHODE(instanceRef I78999))(portRef &1(
+instanceRef I78981))(portRef &1(instanceRef I81971))(portRef &2(instanceRef
+I81109)))(figure WIRE(path(pointList(pt 690000 -330000)(pt 690000 -380000)))(
+path(pointList(pt 690000 -380000)(pt 740000 -380000)))(path(pointList(pt 530000
+-330000)(pt 530000 -310000)))(path(pointList(pt 530000 -310000)(pt 510000
+-310000)))(path(pointList(pt 550000 -340000)(pt 550000 -330000)))(path(pointList
+(pt 530000 -330000)(pt 550000 -330000)))(path(pointList(pt 550000 -330000)(pt
+610000 -330000)))(path(pointList(pt 610000 -330000)(pt 610000 -340000)))(path(
+pointList(pt 610000 -330000)(pt 690000 -330000)))(path(pointList(pt 460000
+-480000)(pt 500000 -480000)))(path(pointList(pt 460000 -490000)(pt 460000
+-480000))))(instance(rename TIE3 "TIE3")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(
+libraryRef RIPPER_LIBRARY)))(transform(origin(pt 550000 -330000))))(instance(
+rename TIE4 "TIE4")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 610000 -330000)))))(net(rename N79368 "N79
+368")(joined(portRef &2(instanceRef I78977))(portRef &5(instanceRef I78983))(
+portRef ANODE(instanceRef I79003)))(figure WIRE(path(pointList(pt 570000 -520000
+)(pt 570000 -530000)))(path(pointList(pt 530000 -420000)(pt 530000 -530000)))(
+path(pointList(pt 690000 -440000)(pt 740000 -440000)))(path(pointList(pt 510000
+-420000)(pt 530000 -420000)))(path(pointList(pt 690000 -530000)(pt 690000
+-440000)))(path(pointList(pt 530000 -530000)(pt 570000 -530000)))(path(pointList
+(pt 570000 -530000)(pt 690000 -530000))))(instance(rename TIE5 "TIE5")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+570000 -530000)))))(net(rename VIN2(stringDisplay "VIN2"(display ALIAS(origin(pt
+797000 -110000)))))(joined(portRef &2(instanceRef I78991))(portRef &2(
+instanceRef I79009))(portRef &1(instanceRef I78987))(portRef &2(instanceRef
+I80877)))(figure WIRE(path(pointList(pt 70000 -160000)(pt 70000 -180000)))(path(
+pointList(pt 70000 -180000)(pt 170000 -180000)))(path(pointList(pt 710000 -20000
+)(pt 710000 -110000)))(path(pointList(pt 710000 -110000)(pt 830000 -110000)))(
+path(pointList(pt 170000 -140000)(pt 190000 -140000)))(path(pointList(pt 170000
+-180000)(pt 170000 -140000)))(path(pointList(pt 170000 -70000)(pt 230000 -70000)
+))(path(pointList(pt 230000 -70000)(pt 230000 -20000)))(path(pointList(pt 230000
+-20000)(pt 710000 -20000)))(path(pointList(pt 170000 -70000)(pt 170000 -60000)))
+(path(pointList(pt 170000 -140000)(pt 170000 -70000))))(instance(rename TIE6 "TI
+E6")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(
+origin(pt 170000 -140000))))(instance(rename TIE7 "TIE7")(viewRef XTIE0A2Y2(
+cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 170000 -70000
+)))))(net(rename VIN1(stringDisplay "VIN1"(display ALIAS(origin(pt 793000
+-100000)))))(joined(portRef &1(instanceRef I79009))(portRef &1(instanceRef
+I78991))(portRef &1(instanceRef I80877))(portRef &8(instanceRef I78987)))(figure
+WIRE(path(pointList(pt 830000 -100000)(pt 720000 -100000)))(path(pointList(pt
+720000 -100000)(pt 720000 -10000)))(path(pointList(pt 150000 -10000)(pt 150000
+-110000)))(path(pointList(pt 140000 -110000)(pt 150000 -110000)))(path(pointList
+(pt 170000 -30000)(pt 170000 -10000)))(path(pointList(pt 150000 -110000)(pt
+190000 -110000)))(path(pointList(pt 720000 -10000)(pt 170000 -10000)))(path(
+pointList(pt 170000 -10000)(pt 150000 -10000))))(instance(rename TIE8 "TIE8")(
+viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(
+origin(pt 150000 -110000))))(instance(rename TIE9 "TIE9")(viewRef XTIE0A2Y2(
+cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 170000 -10000
+)))))(net(rename &_43_5(stringDisplay "+5"(display ALIAS(origin(pt 807000
+-140000)))(display ALIAS(origin(pt 540000 -50000)))))(joined(portRef &7(
+instanceRef I78983))(portRef &5(instanceRef I79009))(portRef &1(instanceRef
+I82267))(portRef &1(instanceRef I80699)))(figure WIRE(path(pointList(pt 880000
+-350000)(pt 890000 -350000)))(path(pointList(pt 890000 -350000)(pt 890000
+-260000)))(path(pointList(pt 890000 -260000)(pt 760000 -260000)))(path(pointList
+(pt 760000 -260000)(pt 760000 -140000)))(path(pointList(pt 760000 -140000)(pt
+830000 -140000)))(path(pointList(pt 460000 -70000)(pt 460000 -50000)))(path(
+pointList(pt 520000 -60000)(pt 520000 -50000)))(path(pointList(pt 520000 -50000)
+(pt 460000 -50000)))(path(pointList(pt 520000 -50000)(pt 550000 -50000))))(
+instance(rename TIE10 "TIE10")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 520000 -50000)))))(net(rename N79691 "N796
+91")(joined(portRef &2(instanceRef I80051))(portRef &1(instanceRef I79007)))(
+figure WIRE(path(pointList(pt 350000 -640000)(pt 380000 -640000)))))(net(rename
+SHUTDOWN(stringDisplay "SHUTDOWN"(display ALIAS(origin(pt 766000 -120000)))))(
+joined(portRef &3(instanceRef I79009))(portRef &2(instanceRef I79007))(portRef
+&2(instanceRef I81207)))(figure WIRE(path(pointList(pt 560000 -640000)(pt 560000
+-540000)))(path(pointList(pt 560000 -540000)(pt 940000 -540000)))(path(pointList
+(pt 940000 -540000)(pt 940000 -40000)))(path(pointList(pt 940000 -40000)(pt
+740000 -40000)))(path(pointList(pt 740000 -40000)(pt 740000 -120000)))(path(
+pointList(pt 740000 -120000)(pt 830000 -120000)))(path(pointList(pt 430000
+-640000)(pt 450000 -640000)))(path(pointList(pt 430000 -670000)(pt 450000
+-670000)))(path(pointList(pt 450000 -670000)(pt 450000 -640000)))(path(pointList
+(pt 450000 -640000)(pt 560000 -640000))))(instance(rename TIE11 "TIE11")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+450000 -640000)))))(net(rename &_43_3_46_3(stringDisplay "+3.3"(display ALIAS(
+origin(pt 806000 -150000)))(display ALIAS(origin(pt 650000 -50000)))))(joined(
+portRef &8(instanceRef I78983))(portRef &1(instanceRef I82271))(portRef &6(
+instanceRef I79009))(portRef &1(instanceRef I80701)))(figure WIRE(path(pointList
+(pt 900000 -380000)(pt 900000 -250000)))(path(pointList(pt 880000 -380000)(pt
+900000 -380000)))(path(pointList(pt 770000 -250000)(pt 770000 -150000)))(path(
+pointList(pt 580000 -70000)(pt 580000 -50000)))(path(pointList(pt 900000 -250000
+)(pt 770000 -250000)))(path(pointList(pt 580000 -50000)(pt 640000 -50000)))(path
+(pointList(pt 770000 -150000)(pt 830000 -150000)))(path(pointList(pt 640000
+-50000)(pt 640000 -60000)))(path(pointList(pt 640000 -50000)(pt 670000 -50000)))
+)(instance(rename TIE12 "TIE12")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 640000 -50000)))))(net(rename N80336 "N803
+36")(joined(portRef ANODE(instanceRef I79906))(portRef BASE(instanceRef I79756))
+(portRef &1(instanceRef I80035)))(figure WIRE(path(pointList(pt 70000 -530000)(
+pt 70000 -590000)))(path(pointList(pt 210000 -630000)(pt 200000 -630000)))(path(
+pointList(pt 200000 -630000)(pt 200000 -690000)))(path(pointList(pt 200000
+-690000)(pt 30000 -690000)))(path(pointList(pt 30000 -690000)(pt 30000 -590000))
+)(path(pointList(pt 30000 -590000)(pt 70000 -590000)))(path(pointList(pt 70000
+-590000)(pt 70000 -610000))))(instance(rename TIE13 "TIE13")(viewRef XTIE0A2Y2(
+cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 70000 -590000
+)))))(net(rename GND "GND")(joined(portRef &9(instanceRef I78969))(portRef &5(
+instanceRef I78969))(portRef &7(instanceRef I78969))(portRef &1(instanceRef
+I78977))(portRef &2(instanceRef I78979))(portRef &2(instanceRef I78975))(portRef
+&4(instanceRef I78987))(portRef GND(instanceRef I78985))(portRef GND(instanceRef
+I78985))(portRef &1(instanceRef I80051))(portRef EMITTER(instanceRef I79756))(
+portRef &2(instanceRef I80033))(portRef &2(instanceRef I78971))(portRef &2(
+instanceRef I80035))(portRef &1(instanceRef I80976))(portRef &2(instanceRef
+I80976))(portRef &1(instanceRef I81207))(portRef &2(instanceRef I81967))(portRef
+&1(instanceRef I78983))(portRef &2(instanceRef I78981))(portRef &2(instanceRef
+I81971))(portRef &2(instanceRef I78973))(portRef &2(instanceRef I84174))(portRef
+GND))(figure WIRE(path(pointList(pt 410000 -330000)(pt 430000 -330000)))(path(
+pointList(pt 430000 -330000)(pt 430000 -360000)))(path(pointList(pt 430000
+-380000)(pt 410000 -380000)))(path(pointList(pt 410000 -360000)(pt 430000
+-360000)))(path(pointList(pt 430000 -360000)(pt 430000 -380000)))(path(pointList
+(pt 570000 -480000)(pt 570000 -470000)))(path(pointList(pt 550000 -310000)(pt
+550000 -320000)))(path(pointList(pt 550000 -470000)(pt 570000 -470000)))(path(
+pointList(pt 570000 -470000)(pt 570000 -450000)))(path(pointList(pt 330000
+-140000)(pt 340000 -140000)))(path(pointList(pt 340000 -140000)(pt 340000
+-160000)))(path(pointList(pt 270000 -540000)(pt 110000 -540000)))(path(pointList
+(pt 110000 -490000)(pt 120000 -490000)))(path(pointList(pt 110000 -540000)(pt
+110000 -490000)))(path(pointList(pt 340000 -680000)(pt 340000 -670000)))(path(
+pointList(pt 250000 -490000)(pt 270000 -490000)))(path(pointList(pt 270000
+-540000)(pt 270000 -550000)))(path(pointList(pt 320000 -670000)(pt 320000
+-650000)))(path(pointList(pt 240000 -670000)(pt 240000 -650000)))(path(pointList
+(pt 170000 -670000)(pt 170000 -660000)))(path(pointList(pt 50000 -280000)(pt
+50000 -300000)))(path(pointList(pt 50000 -300000)(pt 140000 -300000)))(path(
+pointList(pt 140000 -310000)(pt 140000 -300000)))(path(pointList(pt 70000
+-660000)(pt 70000 -670000)))(path(pointList(pt 70000 -670000)(pt 170000 -670000)
+))(path(pointList(pt 170000 -670000)(pt 240000 -670000)))(path(pointList(pt
+430000 -440000)(pt 430000 -380000)))(path(pointList(pt 320000 -500000)(pt 320000
+-490000)))(path(pointList(pt 320000 -490000)(pt 270000 -490000)))(path(pointList
+(pt 290000 -520000)(pt 270000 -520000)))(path(pointList(pt 270000 -520000)(pt
+270000 -540000)))(path(pointList(pt 270000 -520000)(pt 270000 -490000)))(path(
+pointList(pt 240000 -670000)(pt 320000 -670000)))(path(pointList(pt 320000
+-670000)(pt 340000 -670000)))(path(pointList(pt 380000 -670000)(pt 340000
+-670000)))(path(pointList(pt 550000 -320000)(pt 610000 -320000)))(path(pointList
+(pt 610000 -310000)(pt 610000 -320000)))(path(pointList(pt 610000 -320000)(pt
+670000 -320000)))(path(pointList(pt 670000 -320000)(pt 670000 -390000)))(path(
+pointList(pt 670000 -320000)(pt 740000 -320000)))(path(pointList(pt 670000
+-390000)(pt 610000 -390000)))(path(pointList(pt 550000 -390000)(pt 550000
+-380000)))(path(pointList(pt 610000 -380000)(pt 610000 -390000)))(path(pointList
+(pt 610000 -390000)(pt 550000 -390000)))(path(pointList(pt 550000 -470000)(pt
+550000 -390000)))(path(pointList(pt 140000 -300000)(pt 140000 -280000)))(path(
+pointList(pt 50000 -370000)(pt 50000 -400000)))(path(pointList(pt 550000 -470000
+)(pt 520000 -470000)))(path(pointList(pt 520000 -470000)(pt 520000 -440000)))(
+path(pointList(pt 520000 -440000)(pt 430000 -440000)))(path(pointList(pt 430000
+-450000)(pt 430000 -440000))))(instance(rename TIE14 "TIE14")(viewRef XTIE0A2Y2(
+cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 430000
+-360000))))(instance(rename TIE15 "TIE15")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(
+libraryRef RIPPER_LIBRARY)))(transform(origin(pt 570000 -470000))))(instance(
+rename TIE16 "TIE16")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 270000 -540000))))(instance(rename TIE17 "
+TIE17")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(
+transform(origin(pt 140000 -300000))))(instance(rename TIE18 "TIE18")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+170000 -670000))))(instance(rename TIE19 "TIE19")(viewRef XTIE0A2Y2(cellRef
+XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 430000 -380000))))(
+instance(rename TIE20 "TIE20")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 270000 -520000))))(instance(rename TIE21 "
+TIE21")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(
+transform(origin(pt 270000 -490000))))(instance(rename TIE22 "TIE22")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+240000 -670000))))(instance(rename TIE23 "TIE23")(viewRef XTIE0A2Y2(cellRef
+XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 320000 -670000))))(
+instance(rename TIE24 "TIE24")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 340000 -670000))))(instance(rename TIE25 "
+TIE25")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(
+transform(origin(pt 610000 -320000))))(instance(rename TIE26 "TIE26")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+670000 -320000))))(instance(rename TIE27 "TIE27")(viewRef XTIE0A2Y2(cellRef
+XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 610000 -390000))))(
+instance(rename TIE28 "TIE28")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 550000 -470000))))(instance(rename TIE29 "
+TIE29")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(
+transform(origin(pt 550000 -390000))))(instance(rename TIE30 "TIE30")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+430000 -440000)))))(net(rename &_43_5S(stringDisplay "+5S"(display ALIAS(origin(
+pt 473000 -600000)))(display ALIAS(origin(pt 570000 -260000)))))(joined(portRef
+CATHODE(instanceRef I78997))(portRef &1(instanceRef I78979))(portRef &2(
+instanceRef I81066))(portRef &2(instanceRef I78983))(portRef &1(instanceRef
+I81967)))(figure WIRE(path(pointList(pt 510000 -260000)(pt 550000 -260000)))(
+path(pointList(pt 550000 -260000)(pt 550000 -270000)))(path(pointList(pt 430000
+-580000)(pt 430000 -600000)))(path(pointList(pt 430000 -600000)(pt 490000
+-600000)))(path(pointList(pt 550000 -260000)(pt 610000 -260000)))(path(pointList
+(pt 670000 -260000)(pt 670000 -300000)))(path(pointList(pt 670000 -300000)(pt
+720000 -300000)))(path(pointList(pt 720000 -300000)(pt 720000 -350000)))(path(
+pointList(pt 720000 -350000)(pt 740000 -350000)))(path(pointList(pt 610000
+-260000)(pt 610000 -270000)))(path(pointList(pt 610000 -260000)(pt 670000
+-260000))))(instance(rename TIE31 "TIE31")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(
+libraryRef RIPPER_LIBRARY)))(transform(origin(pt 550000 -260000))))(instance(
+rename TIE32 "TIE32")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 610000 -260000)))))(net(rename N84443 "N84
+443")(joined(portRef FB(instanceRef I78985))(portRef &1(instanceRef I84244))(
+portRef &1(instanceRef I81059)))(figure WIRE(path(pointList(pt 360000 -460000)(
+pt 250000 -460000)))(path(pointList(pt 360000 -460000)(pt 360000 -480000)))(path
+(pointList(pt 370000 -480000)(pt 360000 -480000)))(path(pointList(pt 360000
+-480000)(pt 360000 -500000))))(instance(rename TIE33 "TIE33")(viewRef XTIE0A2Y2(
+cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 360000
+-480000)))))(net(rename &_43_13(stringDisplay "+13"(display ALIAS(origin(pt
+805000 -160000)))(display ALIAS(origin(pt 530000 -140000)))))(joined(portRef &9(
+instanceRef I78983))(portRef &7(instanceRef I79009))(portRef &1(instanceRef
+I82326))(portRef &1(instanceRef I80705)))(figure WIRE(path(pointList(pt 880000
+-410000)(pt 910000 -410000)))(path(pointList(pt 910000 -410000)(pt 910000
+-240000)))(path(pointList(pt 910000 -240000)(pt 780000 -240000)))(path(pointList
+(pt 780000 -240000)(pt 780000 -160000)))(path(pointList(pt 780000 -160000)(pt
+830000 -160000)))(path(pointList(pt 460000 -160000)(pt 460000 -140000)))(path(
+pointList(pt 460000 -140000)(pt 520000 -140000)))(path(pointList(pt 520000
+-140000)(pt 520000 -160000)))(path(pointList(pt 520000 -140000)(pt 550000
+-140000))))(instance(rename TIE34 "TIE34")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(
+libraryRef RIPPER_LIBRARY)))(transform(origin(pt 520000 -140000)))))(net(rename
+VPLUS(stringDisplay "VPLUS"(display ALIAS(origin(pt 336000 -110000)))))(joined(
+portRef &10(instanceRef I78969))(portRef &1(instanceRef I78971))(portRef &1(
+instanceRef I78973))(portRef &1(instanceRef I78993))(portRef CATHODE(instanceRef
+I79906))(portRef VIN(instanceRef I78985))(portRef &5(instanceRef I78987))(
+portRef &1(instanceRef I84174)))(figure WIRE(path(pointList(pt 280000 -280000)(
+pt 270000 -280000)))(path(pointList(pt 270000 -280000)(pt 270000 -220000)))(path
+(pointList(pt 50000 -220000)(pt 50000 -240000)))(path(pointList(pt 140000
+-240000)(pt 140000 -220000)))(path(pointList(pt 140000 -220000)(pt 50000 -220000
+)))(path(pointList(pt 210000 -240000)(pt 210000 -220000)))(path(pointList(pt
+210000 -220000)(pt 140000 -220000)))(path(pointList(pt 20000 -220000)(pt 20000
+-320000)))(path(pointList(pt 20000 -430000)(pt 70000 -430000)))(path(pointList(
+pt 70000 -430000)(pt 70000 -480000)))(path(pointList(pt 70000 -430000)(pt 120000
+-430000)))(path(pointList(pt 330000 -110000)(pt 370000 -110000)))(path(pointList
+(pt 370000 -110000)(pt 370000 -220000)))(path(pointList(pt 370000 -220000)(pt
+270000 -220000)))(path(pointList(pt 50000 -340000)(pt 50000 -320000)))(path(
+pointList(pt 50000 -320000)(pt 20000 -320000)))(path(pointList(pt 210000 -220000
+)(pt 270000 -220000)))(path(pointList(pt 50000 -220000)(pt 20000 -220000)))(path
+(pointList(pt 20000 -320000)(pt 20000 -430000))))(instance(rename TIE35 "TIE35")
+(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(
+origin(pt 50000 -220000))))(instance(rename TIE36 "TIE36")(viewRef XTIE0A2Y2(
+cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 210000
+-220000))))(instance(rename TIE37 "TIE37")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(
+libraryRef RIPPER_LIBRARY)))(transform(origin(pt 140000 -220000))))(instance(
+rename TIE38 "TIE38")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 20000 -320000))))(instance(rename TIE39 "T
+IE39")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(
+transform(origin(pt 70000 -430000))))(instance(rename TIE40 "TIE40")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+270000 -220000)))))(net(rename COMMON(stringDisplay "COMMON"(display ALIAS(
+origin(pt 784000 -130000)))))(joined(portRef &4(instanceRef I79009))(portRef &6(
+instanceRef I78983))(portRef &2(instanceRef I82326))(portRef &2(instanceRef
+I82267))(portRef &2(instanceRef I80701))(portRef &2(instanceRef I82271))(portRef
+&2(instanceRef I80699))(portRef &2(instanceRef I80705))(portRef &1(instanceRef
+I82330))(portRef &2(instanceRef I80709)))(figure WIRE(path(pointList(pt 880000
+-270000)(pt 750000 -270000)))(path(pointList(pt 430000 -120000)(pt 460000
+-120000)))(path(pointList(pt 750000 -130000)(pt 830000 -130000)))(path(pointList
+(pt 880000 -320000)(pt 880000 -270000)))(path(pointList(pt 430000 -220000)(pt
+430000 -120000)))(path(pointList(pt 460000 -200000)(pt 460000 -220000)))(path(
+pointList(pt 750000 -270000)(pt 750000 -220000)))(path(pointList(pt 460000
+-110000)(pt 460000 -120000)))(path(pointList(pt 430000 -220000)(pt 460000
+-220000)))(path(pointList(pt 460000 -220000)(pt 520000 -220000)))(path(pointList
+(pt 640000 -110000)(pt 640000 -120000)))(path(pointList(pt 640000 -120000)(pt
+580000 -120000)))(path(pointList(pt 580000 -110000)(pt 580000 -120000)))(path(
+pointList(pt 580000 -120000)(pt 520000 -120000)))(path(pointList(pt 520000
+-110000)(pt 520000 -120000)))(path(pointList(pt 520000 -120000)(pt 460000
+-120000)))(path(pointList(pt 520000 -210000)(pt 520000 -220000)))(path(pointList
+(pt 520000 -220000)(pt 580000 -220000)))(path(pointList(pt 580000 -200000)(pt
+580000 -220000)))(path(pointList(pt 580000 -220000)(pt 640000 -220000)))(path(
+pointList(pt 640000 -210000)(pt 640000 -220000)))(path(pointList(pt 640000
+-220000)(pt 750000 -220000)))(path(pointList(pt 750000 -220000)(pt 750000
+-130000))))(instance(rename TIE41 "TIE41")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(
+libraryRef RIPPER_LIBRARY)))(transform(origin(pt 460000 -120000))))(instance(
+rename TIE42 "TIE42")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 460000 -220000))))(instance(rename TIE43 "
+TIE43")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(
+transform(origin(pt 520000 -220000))))(instance(rename TIE44 "TIE44")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+580000 -120000))))(instance(rename TIE45 "TIE45")(viewRef XTIE0A2Y2(cellRef
+XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt 520000 -120000))))(
+instance(rename TIE46 "TIE46")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 580000 -220000))))(instance(rename TIE47 "
+TIE47")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(
+transform(origin(pt 640000 -220000))))(instance(rename TIE48 "TIE48")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+750000 -220000)))))(net(rename &_45_13(stringDisplay "-13"(display ALIAS(origin(
+pt 803000 -170000)))(display ALIAS(origin(pt 650000 -140000)))))(joined(portRef
+&10(instanceRef I78983))(portRef &8(instanceRef I79009))(portRef &2(instanceRef
+I82330))(portRef &1(instanceRef I80709)))(figure WIRE(path(pointList(pt 880000
+-440000)(pt 920000 -440000)))(path(pointList(pt 920000 -440000)(pt 920000
+-230000)))(path(pointList(pt 920000 -230000)(pt 790000 -230000)))(path(pointList
+(pt 790000 -230000)(pt 790000 -170000)))(path(pointList(pt 790000 -170000)(pt
+830000 -170000)))(path(pointList(pt 580000 -140000)(pt 580000 -160000)))(path(
+pointList(pt 580000 -140000)(pt 640000 -140000)))(path(pointList(pt 640000
+-140000)(pt 640000 -160000)))(path(pointList(pt 640000 -140000)(pt 670000
+-140000))))(instance(rename TIE49 "TIE49")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(
+libraryRef RIPPER_LIBRARY)))(transform(origin(pt 640000 -140000)))))(net(rename
+N81111 "N81111")(joined(portRef &2(instanceRef I84244))(portRef &1(instanceRef
+I81109))(portRef &1(instanceRef I81066)))(figure WIRE(path(pointList(pt 420000
+-480000)(pt 430000 -480000)))(path(pointList(pt 450000 -480000)(pt 450000
+-490000)))(path(pointList(pt 430000 -530000)(pt 430000 -480000)))(path(pointList
+(pt 430000 -480000)(pt 450000 -480000))))(instance(rename TIE50 "TIE50")(viewRef
+XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(transform(origin(pt
+430000 -480000)))))(net(rename N79112 "N79112")(joined(portRef &1(instanceRef
+I78995))(portRef &2(instanceRef I78993)))(figure WIRE(path(pointList(pt 210000
+-310000)(pt 210000 -290000)))))(net(rename N81061 "N81061")(joined(portRef &2(
+instanceRef I81059))(portRef &2(instanceRef I80976)))(figure WIRE(path(pointList
+(pt 320000 -560000)(pt 360000 -560000)))(path(pointList(pt 360000 -550000)(pt
+360000 -560000)))(path(pointList(pt 320000 -550000)(pt 320000 -560000)))))(net(
+rename N80145 "N80145")(joined(portRef &1(instanceRef I80033))(portRef &2(
+instanceRef I79885)))(figure WIRE(path(pointList(pt 170000 -600000)(pt 170000
+-620000)))(path(pointList(pt 160000 -600000)(pt 170000 -600000)))))(net(rename
+N79868 "N79868")(joined(portRef COLLECTOR(instanceRef I79756))(portRef VC(
+instanceRef I78985))(portRef &3(instanceRef I80051))(portRef &1(instanceRef
+I79885)))(figure WIRE(path(pointList(pt 240000 -570000)(pt 240000 -610000)))(
+path(pointList(pt 100000 -460000)(pt 120000 -460000)))(path(pointList(pt 320000
+-610000)(pt 320000 -570000)))(path(pointList(pt 320000 -570000)(pt 240000
+-570000)))(path(pointList(pt 100000 -600000)(pt 100000 -570000)))(path(pointList
+(pt 100000 -570000)(pt 100000 -460000)))(path(pointList(pt 240000 -570000)(pt
+100000 -570000)))(path(pointList(pt 110000 -600000)(pt 100000 -600000))))(
+instance(rename TIE51 "TIE51")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef
+RIPPER_LIBRARY)))(transform(origin(pt 240000 -570000))))(instance(rename TIE52 "
+TIE52")(viewRef XTIE0A2Y2(cellRef XTIE0A2Y2(libraryRef RIPPER_LIBRARY)))(
+transform(origin(pt 100000 -570000))))))))))(design(rename PS10 "PS10")(cellRef
+PS10(libraryRef PS10))))

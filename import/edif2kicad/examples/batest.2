@@ -1,0 +1,171 @@
+(EDIF GSL_MODEL
+  (EDIFVersion 2 0 0)
+  (EDIFLevel 0)
+  (keywordMap
+     (keywordLevel 0))
+  (status
+    (written
+       (timeStamp 0 0 0 0 0 0)
+       (comment "Need to fix timeStamp")
+       (author "Silicon Compiler Systems")
+       (program "qfcx"
+          (version "1.0"))))
+  (external PRIM_LIB (ediflevel 0) (technology (numberDefinition)))
+  (library GSL_LIB
+    (ediflevel 0) (technology (numberDefinition))
+    (cell NMOS (cellType generic)
+      (view NMOS (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port ENABLE (direction INPUT))
+           (port OUTPUT (direction OUTPUT)))))
+    (cell PMOS (cellType generic)
+      (view PMOS (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port ENABLE (direction INPUT))
+           (port OUTPUT (direction OUTPUT)))))
+    (cell TRI (cellType generic)
+      (view TRI (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port ENABLE (direction INPUT))
+           (port OUTPUT (direction OUTPUT)))))
+    (cell RES (cellType generic)
+      (view RES (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port ENABLE (direction INPUT))
+           (port OUTPUT (direction OUTPUT)))))
+    (cell WBUF (cellType generic)
+      (view WBUF (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port OUTPUT (direction OUTPUT))))))
+  (library COMP_LIB
+    (ediflevel 0) (technology (numberDefinition))
+    (cell BILLTEMP (cellType GENERIC)
+      (view SIM_MODEL (viewType NETLIST)
+        (interface
+          (port SEL0 (direction INPUT))
+          (port SEL1 (direction INPUT))
+          (port IN0 (direction INPUT))
+          (port IN1 (direction INPUT))
+          (port IN2 (direction INPUT))
+          (port OUT (direction OUTPUT)))
+        (contents
+          (instance AND_24 (viewRef SIM_MODEL (cellRef AND_2)))
+          (instance AND_26 (viewRef SIM_MODEL (cellRef AND_2)))
+          (instance INV_16 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "1 1")))
+          (instance INV_19 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "1 1")))
+          (instance INV_21 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "1 1")))
+          (instance OR_28 (viewRef SIM_MODEL (cellRef OR_2)))
+          (instance OR_30 (viewRef SIM_MODEL (cellRef OR_2)))
+          (instance INV_23 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "2 2")))
+          (instance INV_25 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "1 1")))
+          (instance INV_27 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "2 2")))
+          (instance INV_29 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "1 1")))
+          (instance INV_31 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "2 2")))
+          (instance NMOS_17 (viewRef SIM_MODEL (cellRef NMOS (libraryRef GSL_LIB)))
+            (parameterAssign DT (string "4 4")))
+          (instance NMOS_18 (viewRef SIM_MODEL (cellRef NMOS (libraryRef GSL_LIB)))
+            (parameterAssign DT (string "5 5")))
+          (instance NMOS_20 (viewRef SIM_MODEL (cellRef NMOS (libraryRef GSL_LIB)))
+            (parameterAssign DT (string "3 3")))
+          (instance NMOS_22 (viewRef SIM_MODEL (cellRef NMOS (libraryRef GSL_LIB)))
+            (parameterAssign DT (string "4 4")))
+          (net N1
+            (joined 
+              (portRef INPUT0 (instanceRef OR_30))
+              (portRef INPUT0 (instanceRef AND_24))
+              (portRef INPUT (instanceRef NMOS_17))
+              (portRef OUTPUT (instanceRef INV_16))))
+          (net N2
+            (joined 
+              (portRef OUTPUT (instanceRef AND_26))
+              (portRef INPUT (instanceRef NMOS_18))))
+          (net N3
+            (joined 
+              (portRef INPUT (instanceRef NMOS_20))
+              (portRef OUTPUT (instanceRef INV_19))))
+          (net N4
+            (joined 
+              (portRef INPUT (instanceRef INV_31))
+              (portRef OUTPUT (instanceRef NMOS_20))
+              (portRef OUTPUT (instanceRef NMOS_18))))
+          (net N5
+            (joined 
+              (portRef INPUT1 (instanceRef OR_30))
+              (portRef INPUT1 (instanceRef AND_24))
+              (portRef INPUT (instanceRef NMOS_22))
+              (portRef OUTPUT (instanceRef INV_21))))
+          (net N6
+            (joined 
+              (portRef INPUT (instanceRef INV_29))
+              (portRef OUTPUT (instanceRef INV_23))
+              (portRef ENABLE (instanceRef NMOS_18))))
+          (net N7
+            (joined 
+              (portRef OUTPUT (instanceRef INV_25))
+              (portRef ENABLE (instanceRef NMOS_22))))
+          (net N8
+            (joined 
+              (portRef OUTPUT (instanceRef INV_27))
+              (portRef INPUT (instanceRef INV_25))
+              (portRef ENABLE (instanceRef NMOS_17))))
+          (net N9
+            (joined 
+              (portRef OUTPUT (instanceRef INV_29))
+              (portRef ENABLE (instanceRef NMOS_20))))
+          (net N20z
+            (joined 
+              (portRef OUTPUT (instanceRef OR_28))
+              (portRef INPUT1 (instanceRef AND_26))))
+          (net N21z
+            (joined 
+              (portRef INPUT1 (instanceRef OR_28))
+              (portRef OUTPUT (instanceRef NMOS_22))
+              (portRef OUTPUT (instanceRef NMOS_17))))
+          (net N18z
+            (joined 
+              (portRef INPUT0 (instanceRef OR_28))
+              (portRef OUTPUT (instanceRef AND_24))))
+          (net N19z
+            (joined 
+              (portRef OUTPUT (instanceRef OR_30))
+              (portRef INPUT0 (instanceRef AND_26))))
+          (net IN0
+            (joined 
+              (portRef IN0)
+              (portRef INPUT (instanceRef INV_16))))
+          (net IN1
+            (joined 
+              (portRef IN1)
+              (portRef INPUT (instanceRef INV_21))))
+          (net IN2
+            (joined 
+              (portRef IN2)
+              (portRef INPUT (instanceRef INV_19))))
+          (net OUT
+            (joined 
+              (portRef OUT)
+              (portRef OUTPUT (instanceRef INV_31))))
+          (net SEL0
+            (joined 
+              (portRef SEL0)
+              (portRef INPUT (instanceRef INV_27))))
+          (net SEL1
+            (joined 
+              (portRef SEL1)
+              (portRef INPUT (instanceRef INV_23)))))))
+  )
+)
+

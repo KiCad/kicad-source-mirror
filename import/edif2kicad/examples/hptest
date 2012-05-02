@@ -1,0 +1,2575 @@
+(Edif hp74200_EDIF_Schematic_Out
+ (EdifVersion 2 0 0)(EdifLevel 0)
+ (KeywordMap (KeywordLevel 0))
+ (Status
+  (Written
+   (Timestamp 1987 11 11 11 23 07)
+   (Author "Hewlett-Packard, Logic Design Operation")
+  ))
+ (Library (Rename remote_45_control "remote-control")
+  (EdifLevel 0)
+  (Technology
+   (NumberDefinition
+    (Scale 1 (E 254 -9) (Unit DISTANCE))
+   )
+   (UserData ConnectGrid (E 625 -2))
+   (FigureGroup hp74200_Default
+    (PathWidth 0)
+    (BorderWidth 1)
+    (Color 0 0 0)
+    (FillPattern 1 1 (Boolean (True) (True)))
+    (BorderPattern 1 0 (Boolean (True)))
+    (TextHeight 20000)
+    (Comment "These are the default settings for the hp74200
+    Electronic Capture System Graphics Package")
+   )
+  )
+  (Cell sw (CellType Generic)
+   (View Graphic_Schematic (ViewType SCHEMATIC)
+    (Interface
+     (Port n 
+      (Designator "1"))
+     (Port m 
+      (Designator "2"))
+     (Symbol
+      (PortImplementation 
+       (Name n(Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880))
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt 25500 36750))))
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 21250 51250))))
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 6250 43750))))
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 6250 43750)
+          (Pt 31250 43750)))
+       ))
+      (PortImplementation 
+       (Name m(Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 75500 37750))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Bug
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 75750 51250))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 93750 43750))))
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 93750 43750)
+          (Pt 68750 43750)))
+       ))
+      (Figure hp74200_Default
+       (Comment "Line")
+       (Path
+        (PointList
+         (Pt 34375 43750)
+         (Pt 65625 53125)))
+      )
+      (Figure hp74200_Default
+       (Circle
+        (Pt 65625 43750)
+        (Pt 71875 43750)))
+      (Figure hp74200_Default
+       (Circle
+        (Pt 28125 43750)
+        (Pt 34375 43750)))
+      (Figure
+       (FigureGroupOverride hp74200_Default
+        (FillPattern 1 1 (Boolean (True) (True)))
+       )
+       (Shape (Curve
+         (Pt 65625 53125)
+         (Pt 56250 53125)
+         (Pt 59375 46875)))
+      )
+     )
+    )
+   )
+  )
+  (Cell MC145030
+   (CellType Generic)
+   (View Graphic_Schematic (ViewType SCHEMATIC)
+    (Interface
+     (Port A0 
+      (Direction Input)
+      (Designator "1")
+     )
+     (Port A1 
+      (Direction Input)
+      (Designator "2")
+     )
+     (Port A2 
+      (Direction Input)
+      (Designator "3")
+     )
+     (Port A3 
+      (Direction Input)
+      (Designator "4")
+     )
+     (Port A4 
+      (Direction Input)
+      (Designator "5")
+     )
+     (Port A5 
+      (Direction Input)
+      (Designator "6")
+     )
+     (Port A6 
+      (Direction Input)
+      (Designator "7")
+     )
+     (Port A7 
+      (Direction Input)
+      (Designator "8")
+     )
+     (Port A8 
+      (Direction Input)
+      (Designator "9")
+     )
+     (Port STATUS 
+      (Direction Output)
+      (Designator "10")
+     )
+     (Port (Rename DEC_32_IN "DEC IN") 
+      (Direction Input)
+      (Designator "11")
+     )
+     (Port (Rename DEC_32_OUT "DEC OUT") 
+      (Direction Output)
+      (Designator "12")
+     )
+     (Port (Rename DEC_32_RST "DEC RST") 
+      (Direction Input)
+      (Designator "13")
+     )
+     (Port (Rename ENC_32_ENB "ENC ENB") 
+      (Direction Input)
+      (Designator "14")
+     )
+     (Port (Rename ENC_32_OUT "ENC OUT") 
+      (Direction Output)
+      (Designator "15")
+     )
+     (Symbol
+      (PortImplementation 
+       (Name A0
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 125000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 132500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 125000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 125000)
+          (Pt -62500 125000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name A1
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 100000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 107500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 100000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 100000)
+          (Pt -62500 100000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name A2
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 75000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 82500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 75000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 75000)
+          (Pt -62500 75000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name A3
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 50000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 57500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 50000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 50000)
+          (Pt -62500 50000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name A4
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 25000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 32500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 25000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 25000)
+          (Pt -62500 25000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name A5
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 0))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 7500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 0))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 0)
+          (Pt -62500 0)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name A6
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 -25000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 -17500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 -25000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 -25000)
+          (Pt -62500 -25000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name A7
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 -50000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 -42500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 -50000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 -50000)
+          (Pt -62500 -50000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name A8
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -56250 -75000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -72500 -67500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -87500 -75000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -87500 -75000)
+          (Pt -62500 -75000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name STATUS
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 93750 62500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 110000 70000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 125000 62500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 125000 62500)
+          (Pt 100000 62500)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name DEC_32_IN
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 93750 -31250))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 110000 -23750))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 125000 -31250))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 125000 -31250)
+          (Pt 100000 -31250)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name DEC_32_OUT
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R90)
+         (Origin (Pt 75000 -93750))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 88750 -122500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 75000 -125000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 75000 -125000)
+          (Pt 75000 -100000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name DEC_32_RST
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R90)
+         (Origin (Pt 37500 -93750))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 51250 -122500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 37500 -125000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 37500 -125000)
+          (Pt 37500 -100000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name ENC_32_ENB
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R90)
+         (Origin (Pt -18750 -93750))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -5000 -122500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -18750 -125000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -18750 -125000)
+          (Pt -18750 -100000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name ENC_32_OUT
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 93750 112500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 110000 120000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 125000 112500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 125000 112500)
+          (Pt 100000 112500)
+         )
+        )
+       )
+      )
+      (Figure hp74200_Default
+       (Rectangle
+        (Pt -62500 -100000)
+        (Pt 100000 150000)
+       )
+      )
+      (Figure hp74200_Default
+       (Comment "Signal In")
+       (Shape
+        (Curve
+         (Pt 37500 -100000)
+         (Pt 31250 -118750)
+         (Pt 43750 -118750)
+        )
+       )
+      )
+      (Figure hp74200_Default
+       (Comment "Signal In")
+       (Shape
+        (Curve
+         (Pt -18750 -100000)
+         (Pt -25000 -118750)
+         (Pt -12500 -118750)
+        )
+       )
+      )
+      (Annotate 
+       (StringDisplay "@REF%010%@NAME%010%@LABEL"
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify LOWERLEFT)
+         (Orientation R0)
+         (Origin (Pt -7500 52083))
+        )
+       )
+      )
+     )
+    )
+   )
+  )
+  (Cell driver
+   (CellType Generic)
+   (View Graphic_Schematic (ViewType SCHEMATIC)
+    (Interface
+     (Port x 
+      (Designator "1")
+     )
+     (Port y 
+      (Designator "2")
+     )
+     (Port in 
+      (Designator "3")
+     )
+     (Port z 
+      (Designator "4")
+     )
+     (Symbol
+      (PortImplementation 
+       (Name x
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 25000 75000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 91250 82500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 106250 75000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Long Pin")
+        (Path
+         (PointList
+          (Pt 106250 75000)
+          (Pt 31250 75000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name y
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 25000 37500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 91250 45000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 106250 37500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Long Pin")
+        (Path
+         (PointList
+          (Pt 106250 37500)
+          (Pt 31250 37500)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name in
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R90)
+         (Origin (Pt 6500 25250))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 26250 -47500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 12500 -50000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Long Pin")
+        (Path
+         (PointList
+          (Pt 12500 -50000)
+          (Pt 12500 25000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name z
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt 6250 56250))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -10000 63750))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -25000 56250))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -25000 56250)
+          (Pt 0 56250)
+         )
+        )
+       )
+      )
+      (Figure hp74200_Default
+       (Comment "Signal In")
+       (Shape
+        (Curve
+         (Pt 12500 25000)
+         (Pt 6250 6250)
+         (Pt 18750 6250)
+        )
+       )
+      )
+      (Figure hp74200_Default
+       (Comment "Ansi Buffer")
+       (Shape
+        (Curve
+         (Pt 0 18750)
+         (Pt 62500 56250)
+         (Pt 0 93750)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
+  (Cell receiver
+   (CellType Generic)
+   (View Graphic_Schematic (ViewType SCHEMATIC)
+    (Interface
+     (Port x1 
+      (Designator "1")
+     )
+     (Port z1 
+      (Designator "2")
+     )
+     (Port y1 
+      (Designator "3")
+     )
+     (Symbol
+      (PortImplementation 
+       (Name x1
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -25000 -43750))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -41250 -36250))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -56250 -43750))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -56250 -43750)
+          (Pt -31250 -43750)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name z1
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 25000 -25000))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 41250 -17500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 56250 -25000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 56250 -25000)
+          (Pt 31250 -25000)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name y1
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 25000 -62500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 41250 -55000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 56250 -62500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 56250 -62500)
+          (Pt 31250 -62500)
+         )
+        )
+       )
+      )
+      (Figure hp74200_Default
+       (Comment "Ansi Buffer")
+       (Shape
+        (Curve
+         (Pt 31250 -6250)
+         (Pt -31250 -43750)
+         (Pt 31250 -81250)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
+  (Cell cap
+   (CellType Generic)
+   (View Graphic_Schematic (ViewType SCHEMATIC)
+    (Interface
+     (Port i 
+      (Designator "1")
+     )
+     (Port o 
+      (Designator "2")
+     )
+     (Symbol
+      (PortImplementation 
+       (Name i
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -6000 43500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -16250 45000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -31250 37500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -31250 37500)
+          (Pt -6250 37500)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name o
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 18500 43500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 28750 45000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 43750 37500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 43750 37500)
+          (Pt 18750 37500)
+         )
+        )
+       )
+      )
+      (Figure hp74200_Default
+       (Comment "Ansi Capacitor")
+       (Path
+        (PointList
+         (Pt 0 18750)
+         (Pt 0 56250)
+        )
+       )
+       (Path
+        (PointList
+         (Pt -6250 37500)
+         (Pt 0 37500)
+        )
+       )
+       (Path
+        (PointList
+         (Pt 18750 37500)
+         (Pt 9380 37500)
+        )
+       )
+       (OpenShape
+        (Curve
+         (Arc
+          (Pt 15620 18750)
+          (Pt 9380 37500)
+          (Pt 15620 56250)
+         )
+        )
+       )
+      )
+     )
+    )
+   )
+  )
+  (Cell res
+   (CellType Generic)
+   (View Graphic_Schematic (ViewType SCHEMATIC)
+    (Interface
+     (Port q 
+      (Designator "1")
+     )
+     (Port t 
+      (Designator "2")
+     )
+     (Symbol
+      (PortImplementation 
+       (Name q
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt -18750 37500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -35000 45000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -50000 37500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -50000 37500)
+          (Pt -25000 37500)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name t
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt 25000 37500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 41250 45000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 56250 37500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 56250 37500)
+          (Pt 31250 37500)
+         )
+        )
+       )
+      )
+      (Figure hp74200_Default
+       (Comment "Ansi Resistor")
+       (Path
+        (PointList
+         (Pt -25000 40630)
+         (Pt -20320 50000)
+         (Pt -10940 31250)
+         (Pt -1560 50000)
+         (Pt 7810 31250)
+         (Pt 17190 50000)
+         (Pt 26560 31250)
+         (Pt 31250 40630)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
+  (Cell diode
+   (CellType Generic)
+   (View Graphic_Schematic (ViewType SCHEMATIC)
+    (Interface
+     (Port o 
+      (Designator "1")
+     )
+     (Port i 
+      (Designator "2")
+     )
+     (Symbol
+      (PortImplementation 
+       (Name o
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERLEFT)
+         (Orientation R0)
+         (Origin (Pt 18000 43500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt -16250 45000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt -31250 37500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt -31250 37500)
+          (Pt -6250 37500)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name i
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 13880)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt -6750 43500))
+        )
+       )
+       (KeywordDisplay Designator
+        (Display hp74200_Default
+         (Justify LOWERCENTER)
+         (Orientation R0)
+         (Origin (Pt 22500 45000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default
+         (Dot (Pt 37500 37500))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Short Pin")
+        (Path
+         (PointList
+          (Pt 37500 37500)
+          (Pt 12500 37500)
+         )
+        )
+       )
+      )
+      (Figure hp74200_Default
+       (Comment "Ansi Diode")
+       (Shape
+        (Curve
+         (Pt -6250 28130)
+         (Pt -6250 46870)
+         (Pt 12500 37500)
+        )
+       )
+       (Path
+        (PointList
+         (Pt 12500 37500)
+         (Pt 15630 37500)
+        )
+       )
+       (Path
+        (PointList
+         (Pt 12500 50000)
+         (Pt 12500 25000)
+        )
+       )
+      )
+     )
+    )
+   )
+  )
+  (Cell DESIGN
+   (CellType Generic)
+   (View Graphic_Schematic (ViewType SCHEMATIC)
+    (Interface
+     (Port GROUND 
+      (Direction INOUT)
+     )
+     (Port acknowledge 
+      (Direction OUTPUT)
+     )
+     (Port execute 
+      (Direction OUTPUT)
+     )
+    )
+    (Contents
+     (Page &0
+      (CommentGraphics
+       (Annotate 
+        (StringDisplay "to/from%010%other stations"
+         (Display           
+          (FigureGroupOverride hp74200_Default
+           (TextHeight 20000)
+          )
+          (Justify LOWERLEFT)
+          (Orientation R0)
+          (Origin (Pt -96950 -78250))
+         )
+        )
+       )
+       (Annotate 
+        (StringDisplay "(feedback)"
+         (Display           
+          (FigureGroupOverride hp74200_Default
+           (TextHeight 20000)
+          )
+          (Justify LOWERLEFT)
+          (Orientation R0)
+          (Origin (Pt -759450 -47000))
+         )
+        )
+       )
+      )
+      (Instance CMP31
+       (ViewRef Graphic_Schematic
+        (CellRef cap )
+       )
+       (Transform
+        (Orientation R180)
+        (Origin (Pt 331250 25000))
+       )
+      )
+      (Instance CMP30
+       (ViewRef Graphic_Schematic
+        (CellRef cap )
+       )
+       (Transform
+        (Orientation R180)
+        (Origin (Pt 331250 381250))
+       )
+      )
+      (Instance CMP28
+       (ViewRef Graphic_Schematic
+        (CellRef res )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt 150000 43750))
+       )
+      )
+      (Instance CMP26
+       (ViewRef Graphic_Schematic
+        (CellRef diode )
+       )
+       (Transform
+        (Orientation R180)
+        (Origin (Pt 318750 118750))
+       )
+      )
+      (Instance CMP25
+       (ViewRef Graphic_Schematic
+        (CellRef diode )
+       )
+       (Transform
+        (Orientation R180)
+        (Origin (Pt 318750 475000))
+       )
+      )
+      (Instance CMP24
+       (ViewRef Graphic_Schematic
+        (CellRef MC145030 )
+       )
+       (Transform
+        (Orientation MY)
+        (Origin (Pt 500000 18750))
+       )
+      )
+      (Instance CMP23
+       (ViewRef Graphic_Schematic
+        (CellRef res )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -506250 125000))
+       )
+      )
+      (Instance CMP22
+       (ViewRef Graphic_Schematic
+        (CellRef receiver )
+       )
+       (Transform
+        (Orientation R180)
+        (Origin (Pt 100000 275000))
+       )
+      )
+      (Instance CMP21
+       (ViewRef Graphic_Schematic
+        (CellRef driver )
+       )
+       (Transform
+        (Orientation MY)
+        (Origin (Pt 150000 431250))
+       )
+      )
+      (Instance CMP19
+       (ViewRef Graphic_Schematic
+        (CellRef cap )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -368750 318750))
+       )
+      )
+      (Instance CMP18
+       (ViewRef Graphic_Schematic
+        (CellRef receiver )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -237500 400000))
+       )
+      )
+      (Instance CMP17
+       (ViewRef Graphic_Schematic
+        (CellRef driver )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -325000 443750))
+       )
+      )
+      (Instance CMP13
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 268750))
+       )
+      )
+      (Instance CMP12
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 293750))
+       )
+      )
+      (Instance CMP11
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 318750))
+       )
+      )
+      (Instance CMP10
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 343750))
+       )
+      )
+      (Instance CMP9
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 368750))
+       )
+      )
+      (Instance CMP8
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 393750))
+       )
+      )
+      (Instance CMP7
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 418750))
+       )
+      )
+      (Instance CMP6
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 443750))
+       )
+      )
+      (Instance CMP5
+       (ViewRef Graphic_Schematic
+        (CellRef sw )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -743750 468750))
+       )
+      )
+      (Instance CMP4
+       (ViewRef Graphic_Schematic
+        (CellRef MC145030 )
+       )
+       (Transform
+        (Orientation MY)
+        (Origin (Pt 500000 375000))
+       )
+      )
+      (Instance CMP1
+       (ViewRef Graphic_Schematic
+        (CellRef MC145030 )
+       )
+       (Transform
+        (Orientation R0)
+        (Origin (Pt -537500 387500))
+       )
+      )
+      (Net        
+       (Name GROUND
+       )
+       (Joined 
+        (PortRef A0 (InstanceRef CMP4))
+        (PortRef A1 (InstanceRef CMP4))
+        (PortRef A2 (InstanceRef CMP4))
+        (PortRef A3 (InstanceRef CMP4))
+        (PortRef A4 (InstanceRef CMP4))
+        (PortRef A5 (InstanceRef CMP4))
+        (PortRef A6 (InstanceRef CMP4))
+        (PortRef A7 (InstanceRef CMP4))
+        (PortRef A8 (InstanceRef CMP4))
+        (PortRef A0 (InstanceRef CMP24))
+        (PortRef A1 (InstanceRef CMP24))
+        (PortRef A2 (InstanceRef CMP24))
+        (PortRef A3 (InstanceRef CMP24))
+        (PortRef A4 (InstanceRef CMP24))
+        (PortRef A5 (InstanceRef CMP24))
+        (PortRef A6 (InstanceRef CMP24))
+        (PortRef A7 (InstanceRef CMP24))
+        (PortRef n (InstanceRef CMP5))
+        (PortRef n (InstanceRef CMP6))
+        (PortRef n (InstanceRef CMP7))
+        (PortRef n (InstanceRef CMP8))
+        (PortRef n (InstanceRef CMP9))
+        (PortRef n (InstanceRef CMP10))
+        (PortRef n (InstanceRef CMP11))
+        (PortRef n (InstanceRef CMP12))
+        (PortRef n (InstanceRef CMP13))
+        (PortRef t (InstanceRef CMP23))
+        (PortRef q (InstanceRef CMP28))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt 618750 -193750)
+          (Pt 100000 -193750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 618750 -193750)
+          (Pt 687500 -193750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 618750 -193750)
+          (Pt 618750 -300000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 100000 -193750)
+          (Pt 100000 81250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 100000 81250)
+          (Pt 100000 143750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 100000 143750)
+          (Pt -450000 143750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -450000 143750)
+          (Pt -450000 162500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -450000 143750)
+          (Pt -737500 143750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 143750)
+          (Pt -737500 312500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 312500)
+          (Pt -737500 337500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 337500)
+          (Pt -737500 362500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 362500)
+          (Pt -737500 387500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 387500)
+          (Pt -737500 412500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 412500)
+          (Pt -737500 437500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 437500)
+          (Pt -737500 462500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 462500)
+          (Pt -737500 487500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -737500 487500)
+          (Pt -737500 512500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 687500 -193750)
+          (Pt 687500 -31250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 687500 -31250)
+          (Pt 587500 -31250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 -31250)
+          (Pt 587500 -6250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 -6250)
+          (Pt 587500 18750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 18750)
+          (Pt 587500 43750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 43750)
+          (Pt 587500 68750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 68750)
+          (Pt 587500 93750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 93750)
+          (Pt 587500 118750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 118750)
+          (Pt 587500 143750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 143750)
+          (Pt 587500 300000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 300000)
+          (Pt 587500 325000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 325000)
+          (Pt 587500 350000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 350000)
+          (Pt 587500 375000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 375000)
+          (Pt 587500 400000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 400000)
+          (Pt 587500 425000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 425000)
+          (Pt 587500 450000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 450000)
+          (Pt 587500 475000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 587500 475000)
+          (Pt 587500 500000)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00001
+        )
+        "%37%NET00001"
+       )
+       (Joined 
+        (PortRef A0 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP5))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 512500)
+          (Pt -625000 512500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00002
+        )
+        "%37%NET00002"
+       )
+       (Joined 
+        (PortRef A1 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP6))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 487500)
+          (Pt -625000 487500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00003
+        )
+        "%37%NET00003"
+       )
+       (Joined 
+        (PortRef A2 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP7))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 462500)
+          (Pt -625000 462500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00004
+        )
+        "%37%NET00004"
+       )
+       (Joined 
+        (PortRef A3 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP8))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 437500)
+          (Pt -625000 437500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00005
+        )
+        "%37%NET00005"
+       )
+       (Joined 
+        (PortRef A4 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP9))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 412500)
+          (Pt -625000 412500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00006
+        )
+        "%37%NET00006"
+       )
+       (Joined 
+        (PortRef A5 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP10))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 387500)
+          (Pt -625000 387500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00007
+        )
+        "%37%NET00007"
+       )
+       (Joined 
+        (PortRef A6 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP11))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 362500)
+          (Pt -625000 362500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00008
+        )
+        "%37%NET00008"
+       )
+       (Joined 
+        (PortRef A7 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP12))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 337500)
+          (Pt -625000 337500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00009
+        )
+        "%37%NET00009"
+       )
+       (Joined 
+        (PortRef A8 (InstanceRef CMP1))
+        (PortRef m (InstanceRef CMP13))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -650000 312500)
+          (Pt -625000 312500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00016
+        )
+        "%37%NET00016"
+       )
+       (Joined 
+        (PortRef STATUS (InstanceRef CMP1))
+        (PortRef in (InstanceRef CMP17))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -312500 393750)
+          (Pt -350000 393750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -350000 393750)
+          (Pt -350000 450000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -350000 450000)
+          (Pt -412500 450000)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00017
+        )
+        "%37%NET00017"
+       )
+       (Joined 
+        (PortRef ENC_32_OUT (InstanceRef CMP1))
+        (PortRef z (InstanceRef CMP17))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -350000 500000)
+          (Pt -412500 500000)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00020
+        )
+        "%37%NET00020"
+       )
+       (Joined 
+        (PortRef DEC_32_IN (InstanceRef CMP1))
+        (PortRef i (InstanceRef CMP19))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -400000 356250)
+          (Pt -412500 356250)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00021
+        )
+        "%37%NET00021"
+       )
+       (Joined 
+        (PortRef o (InstanceRef CMP19))
+        (PortRef x1 (InstanceRef CMP18))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -293750 356250)
+          (Pt -325000 356250)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00024
+        )
+        "%37%NET00024"
+       )
+       (Joined 
+        (PortRef y1 (InstanceRef CMP18))
+        (PortRef y (InstanceRef CMP17))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -131250 481250)
+          (Pt -218750 481250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -131250 481250)
+          (Pt -56250 481250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -131250 481250)
+          (Pt -131250 337500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -56250 481250)
+          (Pt -56250 -56250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -131250 337500)
+          (Pt -181250 337500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00033
+        )
+        "%37%NET00033"
+       )
+       (Joined 
+        (PortRef z1 (InstanceRef CMP18))
+        (PortRef x (InstanceRef CMP17))
+        (PortRef x (InstanceRef CMP21))
+        (PortRef y1 (InstanceRef CMP22))
+        (PortRef y (InstanceRef CMP21))
+        (PortRef z1 (InstanceRef CMP22))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -81250 300000)
+          (Pt 6250 300000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -81250 300000)
+          (Pt -81250 -56250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -81250 300000)
+          (Pt -81250 337500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 6250 300000)
+          (Pt 6250 468750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 6250 300000)
+          (Pt 43750 300000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 6250 468750)
+          (Pt 43750 468750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -81250 337500)
+          (Pt 31250 337500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -81250 337500)
+          (Pt -81250 518750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 31250 337500)
+          (Pt 31250 506250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 31250 337500)
+          (Pt 43750 337500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 31250 506250)
+          (Pt 43750 506250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -81250 518750)
+          (Pt -150000 518750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -150000 518750)
+          (Pt -150000 375000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -150000 518750)
+          (Pt -218750 518750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -150000 375000)
+          (Pt -181250 375000)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00044
+        )
+        "%37%NET00044"
+       )
+       (Joined 
+        (PortRef STATUS (InstanceRef CMP4))
+        (PortRef o (InstanceRef CMP25))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt 350000 437500)
+          (Pt 375000 437500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename (Name &_37_NET00046) "%37%NET00046")
+       (Joined 
+        (PortRef STATUS (InstanceRef CMP24))
+        (PortRef o (InstanceRef CMP26))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt 350000 81250)
+          (Pt 375000 81250)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename (Name &_37_NET00055) "%37%NET00055")
+       (Joined 
+        (PortRef ENC_32_OUT (InstanceRef CMP24))
+        (PortRef ENC_32_OUT (InstanceRef CMP4))
+        (PortRef z (InstanceRef CMP21))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt 212500 487500)
+          (Pt 212500 131250)))
+        (Path 
+         (PointList
+          (Pt 212500 487500)
+          (Pt 175000 487500)))
+        (Path 
+         (PointList
+          (Pt 212500 487500)
+          (Pt 375000 487500)))
+        (Path 
+         (PointList
+          (Pt 212500 131250)
+          (Pt 375000 131250)))
+       )
+      )
+      (Net        
+       (Rename (Name &_37_NET00059) "%37%NET00059")
+       (Joined 
+        (PortRef i (InstanceRef CMP30))
+        (PortRef DEC_32_IN (InstanceRef CMP4))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt 375000 343750)
+          (Pt 362500 343750)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00060
+        )
+        "%37%NET00060"
+       )
+       (Joined 
+        (PortRef i (InstanceRef CMP31))
+        (PortRef DEC_32_IN (InstanceRef CMP24))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt 375000 -12500)
+          (Pt 362500 -12500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00067
+        )
+        "%37%NET00067"
+       )
+       (Joined 
+        (PortRef in (InstanceRef CMP21))
+        (PortRef i (InstanceRef CMP25))
+        (PortRef i (InstanceRef CMP26))
+        (PortRef t (InstanceRef CMP28))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt 206250 81250)
+          (Pt 281250 81250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 281250 81250)
+          (Pt 281250 381250)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 281250 381250)
+          (Pt 281250 437500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 281250 381250)
+          (Pt 137500 381250)
+         )
+        )
+       )
+      )
+      (Net        
+       (Rename
+        (Name &_37_NET00068
+        )
+        "%37%NET00068"
+       )
+       (Joined 
+        (PortRef o (InstanceRef CMP31))
+        (PortRef o (InstanceRef CMP30))
+        (PortRef x1 (InstanceRef CMP22))
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt 243750 318750)
+          (Pt 243750 343750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 243750 318750)
+          (Pt 156250 318750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 243750 318750)
+          (Pt 243750 -12500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 243750 343750)
+          (Pt 287500 343750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt 243750 -12500)
+          (Pt 287500 -12500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Name acknowledge
+       )
+       (Joined 
+        (PortRef DEC_32_OUT (InstanceRef CMP1))
+        (PortRef acknowledge)
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -618750 -25000)
+          (Pt -387500 -25000)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -387500 -25000)
+          (Pt -387500 262500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -387500 262500)
+          (Pt -462500 262500)
+         )
+        )
+       )
+      )
+      (Net        
+       (Name execute
+       )
+       (Joined 
+        (PortRef ENC_32_ENB (InstanceRef CMP1))
+        (PortRef DEC_32_RST (InstanceRef CMP1))
+        (PortRef q (InstanceRef CMP23))
+        (PortRef execute)
+       )
+       (Figure hp74200_Default
+        (Path 
+         (PointList
+          (Pt -556250 218750)
+          (Pt -556250 262500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -556250 218750)
+          (Pt -556250 162500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -556250 218750)
+          (Pt -500000 218750)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -556250 162500)
+          (Pt -556250 37500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -556250 37500)
+          (Pt -618750 37500)
+         )
+        )
+        (Path 
+         (PointList
+          (Pt -500000 218750)
+          (Pt -500000 262500)
+         )
+        )
+       )
+      )
+      (PortImplementation 
+       (Name GROUND
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 20830)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R90)
+         (Origin (Pt 618750 -350000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default 
+         (Dot (Pt 618750 -300000))
+        )
+       )
+       (Figure hp74200_Default
+        (Comment "Ansi Digital Ground Connector")
+        (Path
+         (PointList
+          (Pt 618750 -300000)
+          (Pt 618750 -325000)))
+        (Path
+         (PointList
+          (Pt 600000 -325000)
+          (Pt 637500 -325000)))
+        (Path
+         (PointList
+          (Pt 606250 -334380)
+          (Pt 631250 -334380)))
+        (Path
+         (PointList
+          (Pt 612500 -343750)
+          (Pt 625000 -343750)))
+       ))
+      (PortImplementation 
+       (Name acknowledge
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 20830)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt -650000 -25000))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default 
+         (Dot (Pt -618750 -25000))))
+       (Figure hp74200_Default
+        (Comment "Connector-Out Connector")
+        (Path
+         (PointList
+          (Pt -618750 -25000)
+          (Pt -643750 -25000)))
+        (Path
+         (PointList
+          (Pt -631250 -29680)
+          (Pt -643750 -25000)
+          (Pt -631250 -20320)))
+       )
+      )
+      (PortImplementation 
+       (Name execute
+        (Display          
+         (FigureGroupOverride hp74200_Default
+          (TextHeight 20830)
+         )
+         (Justify CENTERRIGHT)
+         (Orientation R0)
+         (Origin (Pt -650000 37500))
+        )
+       )
+       (ConnectLocation 
+        (Figure hp74200_Default 
+         (Dot (Pt -618750 37500))))
+       (Figure hp74200_Default
+        (Comment "Connector-Out Connector")
+        (Path
+         (PointList
+          (Pt -618750 37500)
+          (Pt -643750 37500)))
+        (Path
+         (PointList
+          (Pt -631250 32820)
+          (Pt -643750 37500)
+          (Pt -631250 42180)))
+       )
+      )
+     )
+    )
+   )
+  )
+ )
+)
