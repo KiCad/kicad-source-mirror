@@ -1,0 +1,366 @@
+( { netlist created  13/9/2007-18:11:44 }
+ ( 84DFBB8F $noname I00005 (null)  {Lib=(null)}
+  (   CT N04503 )
+  (   RT N04515 )
+  (   VR VR )
+  (  FB1 N03927 )
+  (  FB2 N04268 )
+  (  GND GND_SIGNAL )
+  (  LH1 N00181 )
+  (  LH2 N00250 )
+  (  LL1 N00195 )
+  (  LL2 N00260 )
+  (  VCC N04495 )
+  ( COMP N05988 )
+  ( INV1 N03902 )
+  ( INV2 N04246 )
+  ( SKIP N06666 )
+  (OUT1D N00716 )
+  (OUT1U N00901 )
+  (OUT2D N00489 )
+  (OUT2U N00266 )
+  (STBY1 N04518 )
+  (STBY2 PSON_42_ )
+  (TRIP1 N00221 )
+  (TRIP2 N00219 )
+  (VREF5 N00276 )
+  (SFTST1 N04507 )
+  (SFTST2 N04491 )
+  (OUTGND1 GND_SIGNAL )
+  (OUTGND2 GND_SIGNAL )
+  (REG5V_IN &_43_5V )
+  (VCC_CNTP N00247 )
+ )
+ ( 84DFBB8F $noname I00015 (null)  {Lib=(null)}
+  (   &1 &_43_3_46_3V )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00017 (null)  {Lib=(null)}
+  (   &1 &_43_3_46_3V )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00019 (null)  {Lib=(null)}
+  (   &1 &_43_3_46_3V )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00021 (null)  {Lib=(null)}
+  (   &1 &_43_VB )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00023 (null)  {Lib=(null)}
+  (   &1 &_43_VB )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00025 (null)  {Lib=(null)}
+  (   &1 &_43_VB )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00027 (null)  {Lib=(null)}
+  (   &1 &_43_5V )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00029 (null)  {Lib=(null)}
+  (   &1 &_43_5V )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00031 (null)  {Lib=(null)}
+  (   &1 &_43_5V )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00033 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 &_43_3_46_3V )
+ )
+ ( 84DFBB8F $noname I00035 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 &_43_VB )
+ )
+ ( 84DFBB8F $noname I00037 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 &_43_5V )
+ )
+ ( 84DFBB8F $noname I00039 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N03902 )
+ )
+ ( 84DFBB8F $noname I00041 (null)  {Lib=(null)}
+  (   &1 N03902 )
+  (   &2 N03924 )
+ )
+ ( 84DFBB8F $noname I00043 (null)  {Lib=(null)}
+  (   &1 N03902 )
+  (   &2 N03888 )
+ )
+ ( 84DFBB8F $noname I00045 (null)  {Lib=(null)}
+  (   &1 N00195 )
+  (   &2 N02117 )
+ )
+ ( 84DFBB8F $noname I00047 (null)  {Lib=(null)}
+  (   &1 N00670 )
+  (   &2 N00260 )
+ )
+ ( 84DFBB8F $noname I00057 (null)  {Lib=(null)}
+  (    D N00247 )
+  (    D N00247 )
+  (    D N00247 )
+  (    D N00247 )
+  (    G N00911 )
+  (    S N00195 )
+  (    S N00195 )
+  (    S N00195 )
+ )
+ ( 84DFBB8F $noname I00059 (null)  {Lib=(null)}
+  (    D N00195 )
+  (    D N00195 )
+  (    D N00195 )
+  (    D N00195 )
+  (    G N00716 )
+  (    S GND_SIGNAL )
+  (    S GND_SIGNAL )
+  (    S GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00061 (null)  {Lib=(null)}
+  (    D N00260 )
+  (    D N00260 )
+  (    D N00260 )
+  (    D N00260 )
+  (    G N00489 )
+  (    S GND_SIGNAL )
+  (    S GND_SIGNAL )
+  (    S GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00063 (null)  {Lib=(null)}
+  (    D N00247 )
+  (    D N00247 )
+  (    D N00247 )
+  (    D N00247 )
+  (    G N00318 )
+  (    S N00260 )
+  (    S N00260 )
+  (    S N00260 )
+ )
+ ( 84DFBB8F $noname I00069 (null)  {Lib=(null)}
+  (ANODE GND_SIGNAL )
+  (CATHODE N00195 )
+ )
+ ( 84DFBB8F $noname I00071 (null)  {Lib=(null)}
+  (ANODE GND_SIGNAL )
+  (CATHODE N00260 )
+ )
+ ( 84DFBB8F $noname I00073 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N02117 )
+ )
+ ( 84DFBB8F $noname I00075 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N00670 )
+ )
+ ( 84DFBB8F $noname I00077 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N00247 )
+ )
+ ( 84DFBB8F $noname I00081 (null)  {Lib=(null)}
+  (   &1 N02117 )
+  (   &2 GND_SIGNAL )
+  (   &3 &_43_3_46_3V )
+ )
+ ( 84DFBB8F $noname I00083 (null)  {Lib=(null)}
+  (   &1 N00247 )
+  (   &2 GND_SIGNAL )
+  (   &3 &_43_VB )
+ )
+ ( 84DFBB8F $noname I00085 (null)  {Lib=(null)}
+  (   &1 N00670 )
+  (   &2 GND_SIGNAL )
+  (   &3 &_43_5V )
+ )
+ ( 84DFBB8F $noname I00099 (null)  {Lib=(null)}
+  (ANODE N00276 )
+  (CATHODE N00181 )
+ )
+ ( 84DFBB8F $noname I00101 (null)  {Lib=(null)}
+  (ANODE N00276 )
+  (CATHODE N00250 )
+ )
+ ( 84DFBB8F $noname I00103 (null)  {Lib=(null)}
+  (ANODE &_43_5VSB )
+  (CATHODE &_43_VB )
+ )
+ ( 84DFBB8F $noname I00105 (null)  {Lib=(null)}
+  (  GND GND_SIGNAL )
+  (  VIN &_43_VB )
+  ( VOUT &_43_5VSB )
+ )
+ ( 84DFBB8F $noname I00107 (null)  {Lib=(null)}
+  (   &1 N00266 )
+  (   &2 N00318 )
+ )
+ ( 84DFBB8F $noname I00109 (null)  {Lib=(null)}
+  (   &1 N00219 )
+  (   &2 N00247 )
+ )
+ ( 84DFBB8F $noname I00111 (null)  {Lib=(null)}
+  (   &1 N00221 )
+  (   &2 N00247 )
+ )
+ ( 84DFBB8F $noname I00113 (null)  {Lib=(null)}
+  (   &1 N00901 )
+  (   &2 N00911 )
+ )
+ ( 84DFBB8F $noname I00115 (null)  {Lib=(null)}
+  (   &1 N03902 )
+  (   &2 &_43_3_46_3V )
+ )
+ ( 84DFBB8F $noname I00117 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N04515 )
+ )
+ ( 84DFBB8F $noname I00119 (null)  {Lib=(null)}
+  (   &1 PSON_42_ )
+  (   &2 N04518 )
+ )
+ ( 84DFBB8F $noname I00121 (null)  {Lib=(null)}
+  (   &2 PSON_42_ )
+  (&_43_VB &_43_VB )
+ )
+ ( 84DFBB8F $noname I00125 (null)  {Lib=(null)}
+  (   &1 PSON_42_ )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00127 (null)  {Lib=(null)}
+  (   &1 &_43_VB )
+  (   &2 N05988 )
+ )
+ ( 84DFBB8F $noname I00129 (null)  {Lib=(null)}
+  (   &1 N05988 )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00131 (null)  {Lib=(null)}
+  (   &1 N04265 )
+  (   &2 N04246 )
+ )
+ ( 84DFBB8F $noname I00133 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N04246 )
+ )
+ ( 84DFBB8F $noname I00135 (null)  {Lib=(null)}
+  (   &1 N04246 )
+  (   &2 N04243 )
+ )
+ ( 84DFBB8F $noname I00137 (null)  {Lib=(null)}
+  (   &1 N04246 )
+  (   &2 &_43_5V )
+ )
+ ( 84DFBB8F $noname I00139 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N00247 )
+ )
+ ( 84DFBB8F $noname I00141 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N00247 )
+ )
+ ( 84DFBB8F $noname I00143 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 &_43_5VSB )
+ )
+ ( 84DFBB8F $noname I00145 (null)  {Lib=(null)}
+  (   &1 N00221 )
+  (   &2 N00247 )
+ )
+ ( 84DFBB8F $noname I00147 (null)  {Lib=(null)}
+  (   &1 N00219 )
+  (   &2 N00247 )
+ )
+ ( 84DFBB8F $noname I00149 (null)  {Lib=(null)}
+  (   &1 N00250 )
+  (   &2 N00260 )
+ )
+ ( 84DFBB8F $noname I00151 (null)  {Lib=(null)}
+  (   &1 N00181 )
+  (   &2 N00195 )
+ )
+ ( 84DFBB8F $noname I00153 (null)  {Lib=(null)}
+  (   &1 N00276 )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00155 (null)  {Lib=(null)}
+  (   &1 N04243 )
+  (   &2 &_43_5V )
+ )
+ ( 84DFBB8F $noname I00157 (null)  {Lib=(null)}
+  (   &1 N04268 )
+  (   &2 N04265 )
+ )
+ ( 84DFBB8F $noname I00159 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N04491 )
+ )
+ ( 84DFBB8F $noname I00161 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N04495 )
+ )
+ ( 84DFBB8F $noname I00163 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 VR )
+ )
+ ( 84DFBB8F $noname I00165 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N04503 )
+ )
+ ( 84DFBB8F $noname I00167 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N04507 )
+ )
+ ( 84DFBB8F $noname I00169 (null)  {Lib=(null)}
+  (   &1 N03924 )
+  (   &2 N03927 )
+ )
+ ( 84DFBB8F $noname I00171 (null)  {Lib=(null)}
+  (   &1 N03902 )
+  (   &2 N03927 )
+ )
+ ( 84DFBB8F $noname I00173 (null)  {Lib=(null)}
+  (   &1 N03888 )
+  (   &2 &_43_3_46_3V )
+ )
+ ( 84DFBB8F $noname I00175 (null)  {Lib=(null)}
+  (   &1 N05988 )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00177 (null)  {Lib=(null)}
+  (   &1 &_43_VB )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I00179 (null)  {Lib=(null)}
+  (   &1 &_43_5VSB )
+  (   &2 GND_SIGNAL )
+ )
+ ( 84DFBB8F $noname I04226 (null)  {Lib=(null)}
+  (   &1 N04268 )
+  (   &2 N04246 )
+ )
+ ( 84DFBB8F $noname I07258 (null)  {Lib=(null)}
+  (   &1 GND_SIGNAL )
+  (   &2 N06666 )
+ )
+ ( 84DFBB8F $noname I07341 (null)  {Lib=(null)}
+  (   &2 &_43_3_46_3V )
+  (   &3 GND_SIGNAL )
+  (   &4 &_43_5V )
+  (   &5 GND_SIGNAL )
+  (   &6 &_43_5V )
+  (   &7 GND_SIGNAL )
+  (   &8 &_43_5V )
+  (  &11 &_43_3_46_3V )
+  (  &15 GND_SIGNAL )
+  (  &16 GND_SIGNAL )
+  (  &17 GND_SIGNAL )
+  (  &20 &_43_5V )
+  (&_43_5V &_43_5V )
+  (&_43_12V &_43_12V )
+  (PSON_42_ PSON_42_ )
+  (&_43_5VSB &_43_5VSB )
+  (GND_SIGNAL GND_SIGNAL )
+  (&_43_3_46_3V &_43_3_46_3V )
+ )
+)

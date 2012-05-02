@@ -1,0 +1,27 @@
+This a utility to convert a PCB123 netlist
+to a kicad netlist. 
+
+created by Frank Bennett Thu Sep 13 16:33:01 MDT 200
+
+No guarantees at all... You use pcb2kicad at your own risk.
+
+This directory contains:
+  makefile  
+  netL.l  
+  netY.y  
+  test.net
+  out.net  
+
+To Build on a Linux box:
+  make
+
+To run a test:
+  pcb2kicad < pcb123.net >out.net
+
+out.net can be edited to add actual part types or schematic symbol 
+references.  KiCad netlist editor can also be used to select actual 
+footprints.
+
+Note: Beware KiCad currently limits PinNames to 4 characters.
+These name should probably be truncated to make KiCad happy.
+EDIF import uses the Rename directive if present.

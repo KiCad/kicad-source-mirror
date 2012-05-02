@@ -1,0 +1,118 @@
+(EDIF GSL_MODEL
+  (EDIFVersion 2 0 0)
+  (EDIFLevel 0)
+  (keywordMap
+     (keywordLevel 0))
+  (status
+    (written
+       (timeStamp 0 0 0 0 0 0)
+       (comment "Need to fix timeStamp")
+       (author "Silicon Compiler Systems")
+       (program "qfcx"
+          (version "1.0"))))
+  (external PRIM_LIB (ediflevel 0) (technology (numberDefinition)))
+  (library GSL_LIB
+    (ediflevel 0) (technology (numberDefinition))
+    (cell NMOS (cellType generic)
+      (view NMOS (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port ENABLE (direction INPUT))
+           (port OUTPUT (direction OUTPUT)))))
+    (cell PMOS (cellType generic)
+      (view PMOS (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port ENABLE (direction INPUT))
+           (port OUTPUT (direction OUTPUT)))))
+    (cell TRI (cellType generic)
+      (view TRI (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port ENABLE (direction INPUT))
+           (port OUTPUT (direction OUTPUT)))))
+    (cell RES (cellType generic)
+      (view RES (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port ENABLE (direction INPUT))
+           (port OUTPUT (direction OUTPUT)))))
+    (cell WBUF (cellType generic)
+      (view WBUF (viewType netlist)
+         (interface
+           (port INPUT (direction INPUT))
+           (port OUTPUT (direction OUTPUT))))))
+  (library COMP_LIB
+    (ediflevel 0) (technology (numberDefinition))
+    (cell DVALID (cellType GENERIC)
+      (view SIM_MODEL (viewType NETLIST)
+        (interface
+          (port DVALIDE (direction INPUT))
+          (port PHASE_B (direction INPUT))
+          (port VDD (direction INPUT))
+          (port VSS (direction INPUT))
+          (port DVALID (direction OUTPUT)))
+        (contents
+          (instance BUF_8 (viewRef SIM_MODEL (cellRef BUF))
+            (parameterAssign DT (string "20 20")))
+          (instance INV_13 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "4 4")))
+          (instance WBUF_15 (viewRef SIM_MODEL (cellRef WBUF))
+            (parameterAssign DT (string "1 1")))
+          (instance INV_14 (viewRef SIM_MODEL (cellRef INV))
+            (parameterAssign DT (string "1 1")))
+          (instance NMOS_9 (viewRef SIM_MODEL (cellRef NMOS (libraryRef GSL_LIB))))
+          (instance NMOS_10 (viewRef SIM_MODEL (cellRef NMOS (libraryRef GSL_LIB)))
+            (parameterAssign DT (string "10 10")))
+          (instance PMOS_11 (viewRef SIM_MODEL (cellRef PMOS (libraryRef GSL_LIB)))
+            (parameterAssign DT (string "1 1")))
+          (instance PMOS_12 (viewRef SIM_MODEL (cellRef PMOS (libraryRef GSL_LIB)))
+            (parameterAssign DT (string "19 19")))
+          (net N3
+            (joined 
+              (portRef INPUT (instanceRef NMOS_10))
+              (portRef OUTPUT (instanceRef NMOS_9))))
+          (net N4
+            (joined 
+              (portRef INPUT (instanceRef WBUF_15))
+              (portRef OUTPUT (instanceRef WBUF_15))
+              (portRef INPUT (instanceRef INV_14))
+              (portRef OUTPUT (instanceRef PMOS_12))
+              (portRef OUTPUT (instanceRef NMOS_10))))
+          (net N5
+            (joined 
+              (portRef INPUT (instanceRef PMOS_12))
+              (portRef OUTPUT (instanceRef PMOS_11))))
+          (net N6
+            (joined 
+              (portRef OUTPUT (instanceRef INV_13))
+              (portRef ENABLE (instanceRef PMOS_12))))
+          (net N7
+            (joined 
+              (portRef ENABLE (instanceRef PMOS_11))
+              (portRef ENABLE (instanceRef NMOS_9))
+              (portRef OUTPUT (instanceRef BUF_8))))
+          (net VDD
+            (joined 
+              (portRef VDD)
+              (portRef INPUT (instanceRef PMOS_11))))
+          (net VSS
+            (joined 
+              (portRef VSS)
+              (portRef INPUT (instanceRef NMOS_9))))
+          (net DVALID
+            (joined 
+              (portRef DVALID)
+              (portRef OUTPUT (instanceRef INV_14))))
+          (net DVALIDE
+            (joined 
+              (portRef DVALIDE)
+              (portRef INPUT (instanceRef BUF_8))))
+          (net PHASE_B
+            (joined 
+              (portRef PHASE_B)
+              (portRef INPUT (instanceRef INV_13))
+              (portRef ENABLE (instanceRef NMOS_10)))))))
+  )
+)
+

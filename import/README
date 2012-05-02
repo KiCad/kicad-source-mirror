@@ -1,0 +1,21 @@
+File: README 
+	Wed May  2 13:26:24 MDT 2012 fwb
+
+This import directory contains tools for importing
+to Kicad from other EDA tools.
+
+  edif2kicad 		/ EDIF to EEschema schematic import
+	Tools with EDIF out writer:
+       o OrCad
+       o DataXpress
+       o Viewlogic
+       o IntuSoft ICAP
+       o Protel nVisage
+       o PADS ?
+       o P-CAD ?
+       o EDIF viewer (www.cimmetry.com)
+       o EDIF translator (www.elgris.com/content/edif_overview.html)
+
+  pcb123net2kicad	/ converts a pcb123 netlist to Kicad default format
+
+

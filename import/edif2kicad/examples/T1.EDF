@@ -1,0 +1,1532 @@
+
+(EDIF T1
+  (EDIFVersion 2 0 0)
+  (EDIFLevel 0)
+  (keywordMap
+    (keywordLevel 0))
+  (status
+    (written
+      (timeStamp 2008 3 9 23 12 3)
+      (dataOrigin "OrCAD Capture on WIN32 EDX ID 0")
+      (program "cap2edi - Engineering DataXpress, Inc."
+        (version "2.5 - OrCAD Capture Version 7.20"))))
+  (library
+    (rename DISCRETE "DISCRETE")
+    (EDIFLevel 0)
+    (technology
+      (numberDefinition
+        (scale 1
+          (e 254 -7)
+          (unit DISTANCE)))
+      (figureGroup BODY
+        (pathWidth 10)
+        (textHeight 100))
+      (figureGroup PINNAME
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup PINNUMBER
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup PORT
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup PROPERTY
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (userData GRIDRESOLUTION
+        (integer 100 100)))
+    (cell
+      (rename &1N4755 "1N4755")
+      (cellType GENERIC)
+      (view
+        (rename NORMAL "Normal")
+        (viewType SCHEMATIC)
+        (interface
+          (designator "D")
+          (port
+            (rename A "A")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "nonLogical")
+              (owner "Schematic_TSC"))
+            (designator "")
+            (property
+              (rename PIN_32_SHARED "Pin shared")
+              (string "FALSE"))
+            (property
+              (rename TYPE "Type")
+              (string "Passive"))
+            (property
+              (rename ORDER "Order")
+              (string "0"))
+            (property
+              (rename LONG "Long")
+              (string "False"))
+            (property
+              (rename CLOCK "Clock")
+              (string "False"))
+            (property
+              (rename DOT "Dot")
+              (string "False"))
+            (property
+              (rename PIN_32_NUMBER_32_IS_32_VISIBLE "Pin Number Is Visible")
+              (string "True")))
+          (port
+            (rename C "C")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "nonLogical")
+              (owner "Schematic_TSC"))
+            (designator "")
+            (property
+              (rename PIN_32_SHARED "Pin shared")
+              (string "FALSE"))
+            (property
+              (rename TYPE "Type")
+              (string "Passive"))
+            (property
+              (rename ORDER "Order")
+              (string "1"))
+            (property
+              (rename LONG "Long")
+              (string "False"))
+            (property
+              (rename CLOCK "Clock")
+              (string "False"))
+            (property
+              (rename DOT "Dot")
+              (string "False"))
+            (property
+              (rename PIN_32_NUMBER_32_IS_32_VISIBLE "Pin Number Is Visible")
+              (string "True")))
+          (property
+            (rename NAME "Name")
+            (string "1N4755.Normal"))
+          (property
+            (rename VALUE "Value")
+            (string ""))
+          (property
+            (rename IMPLEMENTATION_32_PATH "Implementation Path")
+            (string ""))
+          (property
+            (rename IMPLEMENTATION_32_TYPE "Implementation Type")
+            (string "<none>"))
+          (property
+            (rename IMPLEMENTATION "Implementation")
+            (string ""))
+          (property
+            (rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+            (string "True"))
+          (property
+            (rename PIN_32_NAMES_32_VISIBLE "Pin Names Visible")
+            (string "False"))
+          (property
+            (rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")
+            (string "True"))
+          (symbol
+            (commentGraphics)
+            (boundingBox
+              (rectangle
+                (pt -100 0)
+                (pt 400 -200)))
+            (portImplementation A
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt -100 -100))))
+              (figure BODY
+                (path
+                  (pointList
+                    (pt -100 -100)
+                    (pt 0 -100))))
+              (keywordDisplay DESIGNATOR
+                (display PINNUMBER
+                  (justify LOWERRIGHT)
+                  (origin
+                    (pt -70 -90)))))
+            (portImplementation C
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 400 -100))))
+              (figure BODY
+                (path
+                  (pointList
+                    (pt 400 -100)
+                    (pt 300 -100))))
+              (keywordDisplay DESIGNATOR
+                (display PINNUMBER
+                  (origin
+                    (pt 370 -90)))))
+            (figure BODY
+              (path
+                (pointList
+                  (pt 100 0)
+                  (pt 100 -200)))
+              (path
+                (pointList
+                  (pt 100 -200)
+                  (pt 200 -100)))
+              (path
+                (pointList
+                  (pt 200 -100)
+                  (pt 100 0)))
+              (path
+                (pointList
+                  (pt 100 0)
+                  (pt 100 0)))
+              (path
+                (pointList
+                  (pt 0 -100)
+                  (pt 100 -100)))
+              (path
+                (pointList
+                  (pt 200 -100)
+                  (pt 300 -100)))
+              (path
+                (pointList
+                  (pt 150 0)
+                  (pt 200 -50)))
+              (path
+                (pointList
+                  (pt 200 -50)
+                  (pt 200 -150)))
+              (path
+                (pointList
+                  (pt 200 -150)
+                  (pt 250 -200))))
+            (keywordDisplay DESIGNATOR
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 50 90))))
+            (propertyDisplay VALUE
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 50 -210))))))))
+    (cell
+      (rename CAPACITOR_32_NON_45_POL "CAPACITOR NON-POL")
+      (cellType GENERIC)
+      (view
+        (rename NORMAL "Normal")
+        (viewType SCHEMATIC)
+        (interface
+          (designator "C")
+          (port
+            (rename &1 "1")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "nonLogical")
+              (owner "Schematic_TSC"))
+            (designator "1")
+            (property
+              (rename PIN_32_SHARED "Pin shared")
+              (string "FALSE"))
+            (property
+              (rename TYPE "Type")
+              (string "Passive"))
+            (property
+              (rename ORDER "Order")
+              (string "0"))
+            (property
+              (rename LONG "Long")
+              (string "False"))
+            (property
+              (rename CLOCK "Clock")
+              (string "False"))
+            (property
+              (rename DOT "Dot")
+              (string "False"))
+            (property
+              (rename PIN_32_NUMBER_32_IS_32_VISIBLE "Pin Number Is Visible")
+              (string "True")))
+          (port
+            (rename &2 "2")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "nonLogical")
+              (owner "Schematic_TSC"))
+            (designator "2")
+            (property
+              (rename PIN_32_SHARED "Pin shared")
+              (string "FALSE"))
+            (property
+              (rename TYPE "Type")
+              (string "Passive"))
+            (property
+              (rename ORDER "Order")
+              (string "1"))
+            (property
+              (rename LONG "Long")
+              (string "False"))
+            (property
+              (rename CLOCK "Clock")
+              (string "False"))
+            (property
+              (rename DOT "Dot")
+              (string "False"))
+            (property
+              (rename PIN_32_NUMBER_32_IS_32_VISIBLE "Pin Number Is Visible")
+              (string "True")))
+          (property
+            (rename NAME "Name")
+            (string "CAPACITOR NON-POL.Normal"))
+          (property
+            (rename VALUE "Value")
+            (string ""))
+          (property
+            (rename IMPLEMENTATION_32_PATH "Implementation Path")
+            (string ""))
+          (property
+            (rename IMPLEMENTATION_32_TYPE "Implementation Type")
+            (string "<none>"))
+          (property
+            (rename IMPLEMENTATION "Implementation")
+            (string ""))
+          (property
+            (rename PIN_32_NUMBERS_32_VISIBLE "Pin Numbers Visible")
+            (string "False"))
+          (property
+            (rename PIN_32_NAMES_32_VISIBLE "Pin Names Visible")
+            (string "False"))
+          (property
+            (rename PIN_32_NAMES_32_ROTATE "Pin Names Rotate")
+            (string "True"))
+          (symbol
+            (commentGraphics)
+            (boundingBox
+              (rectangle
+                (pt 0 100)
+                (pt 200 -200)))
+            (portImplementation &1
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 100 100))))
+              (figure BODY
+                (path
+                  (pointList
+                    (pt 100 100)
+                    (pt 100 0)))))
+            (portImplementation &2
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 100 -200))))
+              (figure BODY
+                (path
+                  (pointList
+                    (pt 100 -200)
+                    (pt 100 -100)))))
+            (figure BODY
+              (path
+                (pointList
+                  (pt 100 0)
+                  (pt 100 -20)))
+              (path
+                (pointList
+                  (pt 10 -70)
+                  (pt 190 -70)))
+              (path
+                (pointList
+                  (pt 10 -20)
+                  (pt 190 -20)))
+              (path
+                (pointList
+                  (pt 100 -100)
+                  (pt 100 -70))))
+            (keywordDisplay DESIGNATOR
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 290 0))))
+            (propertyDisplay VALUE
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 290 -90)))))))))
+  (library
+    (rename CAPSYM "CAPSYM")
+    (EDIFLevel 0)
+    (technology
+      (numberDefinition
+        (scale 1
+          (e 254 -7)
+          (unit DISTANCE)))
+      (figureGroup BODY
+        (pathWidth 10)
+        (textHeight 100))
+      (figureGroup COMMENT
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Courier New")))
+      (figureGroup PORT
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup PROPERTY
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (userData GRIDRESOLUTION
+        (integer 100 100)))
+    (cell
+      (rename GND "GND")
+      (cellType GENERIC)
+      (view
+        (rename &1 "1")
+        (viewType SCHEMATIC)
+        (interface
+          (port
+            (rename PORT "PORT")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "supply")
+              (owner "Schematic_TSC"))
+            (property
+              (rename SUPPLYTYPE "SUPPLYTYPE")
+              (string "power")
+              (owner "Schematic_TSC"))
+            (property
+              (rename IMPLICITPORTCLASS "IMPLICITPORTCLASS")
+              (string "PORT")
+              (owner "Schematic_TSC")))
+          (property
+            (rename SDTSOURCELIBNAME "SDTSourceLibName")
+            (string "C:\rd\ui\DEVICE.LIB"))
+          (property
+            (rename ORCADVIEWTYPE "OrCADviewType")
+            (string "GLOBAL_SYMBOL"))
+          (property
+            (rename NAME "Name")
+            (string "GND"))
+          (symbol
+            (commentGraphics)
+            (portImplementation PORT
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 100 0))))
+              (figure BODY
+                (path
+                  (pointList
+                    (pt 100 0)
+                    (pt 100 0)))))
+            (figure BODY
+              (path
+                (pointList
+                  (pt 0 0)
+                  (pt 200 0)))
+              (path
+                (pointList
+                  (pt 30 -30)
+                  (pt 170 -30)))
+              (path
+                (pointList
+                  (pt 140 -60)
+                  (pt 60 -60)))
+              (path
+                (pointList
+                  (pt 90 -90)
+                  (pt 110 -90))))))))
+    (cell
+      (rename VCC "VCC")
+      (cellType GENERIC)
+      (view
+        (rename &1 "1")
+        (viewType SCHEMATIC)
+        (interface
+          (port
+            (rename PORT "PORT")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "supply")
+              (owner "Schematic_TSC"))
+            (property
+              (rename SUPPLYTYPE "SUPPLYTYPE")
+              (string "power")
+              (owner "Schematic_TSC"))
+            (property
+              (rename IMPLICITPORTCLASS "IMPLICITPORTCLASS")
+              (string "PORT")
+              (owner "Schematic_TSC")))
+          (property
+            (rename ORCADVIEWTYPE "OrCADviewType")
+            (string "GLOBAL_SYMBOL"))
+          (property
+            (rename NAME "Name")
+            (string "VCC"))
+          (symbol
+            (commentGraphics)
+            (portImplementation PORT
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 100 -100))))
+              (figure BODY
+                (path
+                  (pointList
+                    (pt 100 -100)
+                    (pt 100 -100)))))
+            (figure BODY
+              (path
+                (pointList
+                  (pt 100 -60)
+                  (pt 100 -100)))
+              (circle
+                (pt 70 -30)
+                (pt 130 -30)))
+            (propertyDisplay NAME
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 0 100))))))))
+    (cell
+      (rename OFFPAGELEFT_45_L "OFFPAGELEFT-L")
+      (cellType GENERIC)
+      (view
+        (rename &1 "1")
+        (viewType SCHEMATIC)
+        (interface
+          (port
+            (rename PORT "PORT")
+            (direction INPUT))
+          (property
+            (rename ORCADVIEWTYPE "OrCADviewType")
+            (string "OFF_PAGE_SYMBOL"))
+          (property
+            (rename NAME "Name")
+            (string "OFFPAGELEFT-L"))
+          (symbol
+            (commentGraphics)
+            (portImplementation PORT
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 0 -100))))
+              (figure BODY
+                (path
+                  (pointList
+                    (pt 0 -100)
+                    (pt 0 -100)))))
+            (figure BODY
+              (path
+                (pointList
+                  (pt 0 -100)
+                  (pt 50 -50)))
+              (path
+                (pointList
+                  (pt 0 -100)
+                  (pt 50 -150)))
+              (path
+                (pointList
+                  (pt 50 -100)
+                  (pt 100 -150)))
+              (path
+                (pointList
+                  (pt 50 -100)
+                  (pt 100 -50))))
+            (propertyDisplay NAME
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 120 -50))))))))
+    (cell
+      (rename TITLEBLOCK0 "TitleBlock0")
+      (cellType GENERIC)
+      (view
+        (rename &1 "1")
+        (viewType SCHEMATIC)
+        (interface
+          (property
+            (rename PAGE_32_CREATE_32_DATE "Page Create Date")
+            (string "    March  8, 1995"))
+          (property
+            (rename DOC "Doc")
+            (string ""))
+          (property
+            (rename REVCODE "RevCode")
+            (string "?"))
+          (property
+            (rename TITLE "Title")
+            (string ""))
+          (property
+            (rename PAGE_32_SIZE "Page Size")
+            (string "A"))
+          (property
+            (rename PAGE_32_NUMBER "Page Number")
+            (string "1"))
+          (property
+            (rename PAGE_32_COUNT "Page Count")
+            (string "1"))
+          (property
+            (rename ORCADVIEWTYPE "OrCADviewType")
+            (string "Titleblock_Symbol"))
+          (property
+            (rename PAGE_32_MODIFY_32_DATE "Page Modify Date")
+            (string ""))
+          (property
+            (rename NAME "Name")
+            (string "TitleBlock0"))
+          (symbol
+            (commentGraphics)
+            (figure BODY
+              (rectangle
+                (pt 0 0)
+                (pt 3600 -200))
+              (rectangle
+                (pt 0 -200)
+                (pt 3600 -500))
+              (rectangle
+                (pt 0 -500)
+                (pt 300 -800))
+              (rectangle
+                (pt 300 -500)
+                (pt 3300 -800))
+              (rectangle
+                (pt 3300 -500)
+                (pt 3600 -800))
+              (rectangle
+                (pt 0 -800)
+                (pt 2000 -900))
+              (rectangle
+                (pt 2000 -800)
+                (pt 3600 -900)))
+            (annotate
+              (stringDisplay "Title"
+                (display COMMENT
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 0 -200)))))
+            (annotate
+              (stringDisplay "Size"
+                (display COMMENT
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 0 -500)))))
+            (annotate
+              (stringDisplay "Document Number"
+                (display COMMENT
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 400 -500)))))
+            (annotate
+              (stringDisplay "Rev"
+                (display COMMENT
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 3300 -500)))))
+            (annotate
+              (stringDisplay "Date:"
+                (display COMMENT
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 0 -800)))))
+            (annotate
+              (stringDisplay "Sheet"
+                (display COMMENT
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 2000 -800)))))
+            (annotate
+              (stringDisplay "of"
+                (display COMMENT
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 2800 -800)))))
+            (propertyDisplay DOC
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 400 -600))))
+            (propertyDisplay REVCODE
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 3400 -600))))
+            (propertyDisplay TITLE
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 400 -300))))
+            (propertyDisplay PAGE_32_SIZE
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 100 -600))))
+            (propertyDisplay PAGE_32_NUMBER
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 2500 -800))))
+            (propertyDisplay PAGE_32_COUNT
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 3100 -800))))
+            (propertyDisplay PAGE_32_MODIFY_32_DATE
+              (display PROPERTY
+                (justify UPPERLEFT)
+                (origin
+                  (pt 520 -800)))))))))
+  (library
+    (rename RIPPER_LIBRARY "RIPPER_LIBRARY")
+    (EDIFLevel 0)
+    (technology
+      (numberDefinition
+        (scale 1
+          (e 254 -7)
+          (unit DISTANCE)))
+      (figureGroup PORT)
+      (figureGroup WIRE
+        (pathWidth 10)
+        (textHeight 100))
+      (userData GRIDRESOLUTION
+        (integer 100 100)))
+    (cell
+      (rename XTIE0A2Y2 "XTIE0A2Y2")
+      (cellType TIE)
+      (view
+        (rename XTIE0A2Y2 "XTIE0A2Y2")
+        (viewType SCHEMATIC)
+        (interface
+          (port
+            (rename &1 "1"))
+          (symbol
+            (portImplementation &1
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 0 0)))))
+            (figure WIRE
+              (circle
+                (pt -20 0)
+                (pt 20 0))))))))
+  (library
+    (rename T1 "T1")
+    (EDIFLevel 0)
+    (technology
+      (numberDefinition
+        (scale 1
+          (e 254 -7)
+          (unit DISTANCE)))
+      (figureGroup OFFPAGECONNECTOR
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup PARTREFERENCE
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup PARTVALUE
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup PORT
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup POWER
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup PROPERTY
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup TITLEBLOCK
+        (pathWidth 10)
+        (textHeight 90)
+        (property
+          (rename FONT "font")
+          (string "Arial")))
+      (figureGroup WIRE
+        (pathWidth 10)
+        (textHeight 100))
+      (userData GRIDRESOLUTION
+        (integer 100 100)))
+    (cell
+      (rename SCHEMATIC1 "SCHEMATIC1")
+      (cellType GENERIC)
+      (view
+        (rename &1 "1")
+        (viewType SCHEMATIC)
+        (interface
+          (port
+            (rename GND "GND")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "supply")
+              (owner "Schematic_TSC"))
+            (property
+              (rename SUPPLYTYPE "SUPPLYTYPE")
+              (string "generalGround")
+              (owner "Schematic_TSC"))
+            (property
+              (rename IMPLICITPORTCLASS "IMPLICITPORTCLASS")
+              (string "GND")
+              (owner "Schematic_TSC")))
+          (port
+            (rename &_43_12V "+12V")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "supply")
+              (owner "Schematic_TSC"))
+            (property
+              (rename SUPPLYTYPE "SUPPLYTYPE")
+              (string "power")
+              (owner "Schematic_TSC"))
+            (property
+              (rename IMPLICITPORTCLASS "IMPLICITPORTCLASS")
+              (string "+12V")
+              (owner "Schematic_TSC")))
+          (port
+            (rename &_43_5V "+5V")
+            (property
+              (rename PORTTYPE "PORTTYPE")
+              (string "supply")
+              (owner "Schematic_TSC"))
+            (property
+              (rename SUPPLYTYPE "SUPPLYTYPE")
+              (string "power")
+              (owner "Schematic_TSC"))
+            (property
+              (rename IMPLICITPORTCLASS "IMPLICITPORTCLASS")
+              (string "+5V")
+              (owner "Schematic_TSC"))))
+        (contents
+          (offPageConnector
+            (rename SIG "Sig"))
+          (page
+            (rename PAGE1 "PAGE1")
+            (pageSize
+              (rectangle
+                (pt 0 0)
+                (pt 9700 -7200)))
+            (commentGraphics
+              (property
+                (rename VERTICAL_LABEL_WIDTH "Vertical_Label_Width")
+                (string "10"))
+              (property
+                (rename HORIZONTAL_LABEL_WIDTH "Horizontal_Label_Width")
+                (string "10"))
+              (property
+                (rename METRIC "Metric")
+                (string "0"))
+              (property
+                (rename BORDER_DISPLAYED "Border_Displayed")
+                (string "1"))
+              (property
+                (rename BORDER_PRINTED "Border_Printed")
+                (string "1"))
+              (property
+                (rename GRIDREF_DISPLAYED "GridRef_Displayed")
+                (string "1"))
+              (property
+                (rename GRIDREF_PRINTED "GridRef_Printed")
+                (string "1"))
+              (property
+                (rename TITLEBLOCK_DISPLAYED "TitleBlock_Displayed")
+                (string "1"))
+              (property
+                (rename TITLEBLOCK_PRINTED "TitleBlock_Printed")
+                (string "1"))
+              (property
+                (rename ANSIGRIDREFS "ANSIGridRefs")
+                (string "1"))
+              (property
+                (rename NAME "Name")
+                (string "PAGE1"))
+              (property
+                (rename PAGE_32_NUMBER "Page Number")
+                (string "1"))
+              (property
+                (rename CREATE_32_TIME "Create Time")
+                (string "Friday, March 07, 2008"))
+              (property
+                (rename MODIFY_32_TIME "Modify Time")
+                (string "Sunday, March 09, 2008"))
+              (property
+                (rename SIZE "Size")
+                (string "A"))
+              (property
+                (rename X_45_COORDINATE_32_SIZE "X-Coordinate Size")
+                (string "9700"))
+              (property
+                (rename Y_45_COORDINATE_32_SIZE "Y-Coordinate Size")
+                (string "7200"))
+              (property
+                (rename OUTER_32_BORDER_32_MARGIN_32_X_45_COORDINATE_32_SIZE "Outer Border Margin X-Coordinate Size")
+                (string "0"))
+              (property
+                (rename OUTER_32_BORDER_32_MARGIN_32_Y_45_COORDINATE_32_SIZE "Outer Border Margin Y-Coordinate Size")
+                (string "0"))
+              (property
+                (rename OUTER_32_BORDER_32_LINE_32_STYLE "Outer Border Line Style")
+                (string "Solid"))
+              (property
+                (rename OUTER_32_BORDER_32_LINE_32_WIDTH "Outer Border Line Width")
+                (string "Thin"))
+              (property
+                (rename OUTER_32_BORDER_32_IS_32_VISIBLE "Outer Border Is Visible")
+                (string "True"))
+              (property
+                (rename INNER_32_BORDER_32_MARGIN_32_X_45_COORDINATE "Inner Border Margin X-Coordinate")
+                (string "0"))
+              (property
+                (rename INNER_32_BORDER_32_MARGIN_32_Y_45_COORDINATE "Inner Border Margin Y-Coordinate")
+                (string "0"))
+              (property
+                (rename INNER_32_BORDER_32_LINE_32_STYLE "Inner Border Line Style")
+                (string "Solid"))
+              (property
+                (rename INNER_32_BORDER_32_LINE_32_WIDTH "Inner Border Line Width")
+                (string "Thin"))
+              (property
+                (rename INNER_32_BORDER_32_IS_32_VISIBLE "Inner Border Is Visible")
+                (string "False"))
+              (property
+                (rename COLOR "Color")
+                (string "Default"))
+              (property
+                (rename LABEL_32_COLOR "Label Color")
+                (string "Default"))
+              (property
+                (rename HORIZONTAL_32_LABEL_32_COUNT "Horizontal Label Count")
+                (string "5"))
+              (property
+                (rename HORIZONTAL_32_LABELS_32_ARE_32_CHARACTER "Horizontal Labels are character")
+                (string "False"))
+              (property
+                (rename HORIZONTAL_32_LABELS_32_ARE_32_VISIBLE "Horizontal Labels are visible")
+                (string "False"))
+              (property
+                (rename HORIZONTAL_32_LABELS_32_IN_32_ASCENDING_32_ORDER "Horizontal Labels in ascending order")
+                (string "False"))
+              (property
+                (rename LINE_32_STYLE_32_OF_32_HORIZONTAL_32_LABEL_32_SEPARATORS "Line Style of horizontal label separators")
+                (string "Solid"))
+              (property
+                (rename LINE_32_WIDTH_32_OF_32_HORIZONTAL_32_LABEL_32_SEPARATORS "Line Width of horizontal label separators")
+                (string "Thin"))
+              (property
+                (rename VERTICAL_32_LABEL_32_COUNT "Vertical Label Count")
+                (string "4"))
+              (property
+                (rename VERTICAL_32_LABELS_32_ARE_32_CHARACTER "Vertical Labels are character")
+                (string "True"))
+              (property
+                (rename VERTICAL_32_LABELS_32_ARE_32_VISIBLE "Vertical Labels are visible")
+                (string "False"))
+              (property
+                (rename VERTICAL_32_LABEL_32_IS_32_ASCENDING "Vertical Label Is Ascending")
+                (string "False"))
+              (property
+                (rename LINE_32_STYLE_32_OF_32_VERTICAL_32_LABEL_32_SEPARATORS "Line style of vertical label separators")
+                (string "Solid"))
+              (property
+                (rename LINEWIDTH_32_OF_32_VERTICAL_32_LABEL_32_SEPARATORS "LineWidth of vertical label separators")
+                (string "Thin"))
+              (instance
+                (rename TITLEBLOCK0 "TitleBlock0")
+                (viewRef &1
+                  (cellRef TITLEBLOCK0
+                    (libraryRef CAPSYM)))
+                (transform
+                  (origin
+                    (pt 5900 -6100)))
+                (property
+                  (rename NAME "Name")
+                  (string "TitleBlock0"))
+                (property
+                  (rename DESIGN_32_NAME "Design Name")
+                  (string "C:\PROGRAM FILES\ORCAD\CAPTURE\T1.DSN"))
+                (property
+                  (rename DESIGN_32_FILE_32_NAME "Design File Name")
+                  (string "C:\PROGRAM FILES\ORCAD\CAPTURE\T1.DSN"))
+                (property
+                  (rename DESIGN_32_CREATE_32_DATE "Design Create Date")
+                  (string "Friday, March 07, 2008"))
+                (property
+                  (rename DESIGN_32_MODIFY_32_DATE "Design Modify Date")
+                  (string "Sunday, March 09, 2008"))
+                (property
+                  (rename DESIGN_32_CREATE_32_TIME "Design Create Time")
+                  (string "22:07:38"))
+                (property
+                  (rename DESIGN_32_MODIFY_32_TIME "Design Modify Time")
+                  (string "21:43:53"))
+                (property
+                  (rename SCHEMATIC_32_NAME "Schematic Name")
+                  (string "SCHEMATIC1"))
+                (property
+                  (rename SCHEMATIC_32_CREATE_32_DATE "Schematic Create Date")
+                  (string "Friday, March 07, 2008"))
+                (property
+                  (rename SCHEMATIC_32_MODIFY_32_DATE "Schematic Modify Date")
+                  (string "Sunday, March 09, 2008"))
+                (property
+                  (rename SCHEMATIC_32_CREATE_32_TIME "Schematic Create Time")
+                  (string "22:07:40"))
+                (property
+                  (rename SCHEMATIC_32_MODIFY_32_TIME "Schematic Modify Time")
+                  (string "21:43:56"))
+                (property
+                  (rename SCHEMATIC_32_PAGE_32_COUNT "Schematic Page Count")
+                  (string "0"))
+                (property
+                  (rename SCHEMATIC_32_PAGE_32_NUMBER "Schematic Page Number")
+                  (string "0"))
+                (property
+                  (rename PAGE_32_SIZE "Page Size")
+                  (string
+                    (stringDisplay "A"
+                      (display TITLEBLOCK
+                        (justify UPPERLEFT)
+                        (origin
+                          (pt 6000 -6700))))))
+                (property
+                  (rename PAGE_32_CREATE_32_DATE "Page Create Date")
+                  (string "Friday, March 07, 2008"))
+                (property
+                  (rename PAGE_32_MODIFY_32_DATE "Page Modify Date")
+                  (string
+                    (stringDisplay "Sunday, March 09, 2008"
+                      (display TITLEBLOCK
+                        (justify UPPERLEFT)
+                        (origin
+                          (pt 6420 -6900))))))
+                (property
+                  (rename PAGE_32_CREATE_32_TIME "Page Create Time")
+                  (string "22:07:38"))
+                (property
+                  (rename PAGE_32_MODIFY_32_TIME "Page Modify Time")
+                  (string "21:43:53"))
+                (property
+                  (rename SOURCE_32_LIBRARY "Source Library")
+                  (string "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\CAPSYM.OLB"))
+                (property
+                  (rename SOURCE_32_SYMBOL "Source Symbol")
+                  (string "TitleBlock0"))
+                (property
+                  (rename ORGADDR4 "OrgAddr4")
+                  (string ""))
+                (property
+                  (rename ORGADDR3 "OrgAddr3")
+                  (string ""))
+                (property
+                  (rename ORGADDR2 "OrgAddr2")
+                  (string ""))
+                (property
+                  (rename ORGADDR1 "OrgAddr1")
+                  (string ""))
+                (property
+                  (rename ORGNAME "OrgName")
+                  (string ""))
+                (property
+                  (rename CAGE_32_CODE "Cage Code")
+                  (string ""))
+                (property
+                  (rename REVCODE "RevCode")
+                  (string
+                    (stringDisplay ""
+                      (display TITLEBLOCK
+                        (justify UPPERLEFT)
+                        (origin
+                          (pt 9300 -6700))))))
+                (property
+                  (rename DOC "Doc")
+                  (string
+                    (stringDisplay ""
+                      (display TITLEBLOCK
+                        (justify UPPERLEFT)
+                        (origin
+                          (pt 6300 -6700))))))
+                (property
+                  (rename TITLE "Title")
+                  (string
+                    (stringDisplay ""
+                      (display TITLEBLOCK
+                        (justify UPPERLEFT)
+                        (origin
+                          (pt 6300 -6400))))))
+                (property
+                  (rename PAGE_32_NUMBER "Page Number")
+                  (string
+                    (stringDisplay "1"
+                      (display TITLEBLOCK
+                        (justify UPPERLEFT)
+                        (origin
+                          (pt 8400 -6900))))))
+                (property
+                  (rename PAGE_32_COUNT "Page Count")
+                  (string
+                    (stringDisplay "1"
+                      (display TITLEBLOCK
+                        (justify UPPERLEFT)
+                        (origin
+                          (pt 9000 -6900))))))
+                (property
+                  (rename TITLEBLOCK "titleblock")
+                  (string "TRUE"))))
+            (instance
+              (rename I00003 "I00003")
+              (viewRef NORMAL
+                (cellRef &1N4755
+                  (libraryRef DISCRETE)))
+              (transform
+                (orientation R90)
+                (origin
+                  (pt 400 -800)))
+              (property
+                (rename NAME "Name")
+                (string "I00003"))
+              (designator
+                (stringDisplay "D1"
+                  (display PROPERTY
+                    (justify UPPERLEFT)
+                    (origin
+                      (pt 650 -500)))))
+              (designator
+                (stringDisplay "D1"
+                  (display PARTREFERENCE
+                    (justify UPPERLEFT)
+                    (origin
+                      (pt 650 -500)))))
+              (property
+                (rename VALUE "Value")
+                (string
+                  (stringDisplay "1N4755"
+                    (display PARTVALUE
+                      (justify UPPERLEFT)
+                      (origin
+                        (pt 700 -660))))))
+              (property
+                (rename PRIMITIVE "Primitive")
+                (string "DEFAULT"))
+              (property
+                (rename IMPLEMENTATION_32_TYPE "Implementation Type")
+                (string "<none>"))
+              (property
+                (rename COLOR "Color")
+                (string "Default"))
+              (property
+                (rename SOURCE_32_LIBRARY "Source Library")
+                (string "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB"))
+              (property
+                (rename SOURCE_32_PACKAGE "Source Package")
+                (string "1N4755"))
+              (property
+                (rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")
+                (string "False"))
+              (property
+                (rename GRAPHIC "Graphic")
+                (string "1N4755.Normal"))
+              (property
+                (rename PCB_32_FOOTPRINT "PCB Footprint")
+                (string "")))
+            (instance
+              (rename I00005 "I00005")
+              (viewRef NORMAL
+                (cellRef &1N4755
+                  (libraryRef DISCRETE)))
+              (transform
+                (orientation R90)
+                (origin
+                  (pt 1200 -800)))
+              (property
+                (rename NAME "Name")
+                (string "I00005"))
+              (designator
+                (stringDisplay "D2"
+                  (display PROPERTY
+                    (justify UPPERLEFT)
+                    (origin
+                      (pt 1450 -500)))))
+              (designator
+                (stringDisplay "D2"
+                  (display PARTREFERENCE
+                    (justify UPPERLEFT)
+                    (origin
+                      (pt 1450 -500)))))
+              (property
+                (rename VALUE "Value")
+                (string
+                  (stringDisplay "1N4755"
+                    (display PARTVALUE
+                      (justify UPPERLEFT)
+                      (origin
+                        (pt 1500 -660))))))
+              (property
+                (rename PRIMITIVE "Primitive")
+                (string "DEFAULT"))
+              (property
+                (rename IMPLEMENTATION_32_TYPE "Implementation Type")
+                (string "<none>"))
+              (property
+                (rename COLOR "Color")
+                (string "Default"))
+              (property
+                (rename SOURCE_32_LIBRARY "Source Library")
+                (string "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB"))
+              (property
+                (rename SOURCE_32_PACKAGE "Source Package")
+                (string "1N4755"))
+              (property
+                (rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")
+                (string "False"))
+              (property
+                (rename GRAPHIC "Graphic")
+                (string "1N4755.Normal"))
+              (property
+                (rename PCB_32_FOOTPRINT "PCB Footprint")
+                (string "")))
+            (instance
+              (rename I00064 "I00064")
+              (viewRef NORMAL
+                (cellRef &1N4755
+                  (libraryRef DISCRETE)))
+              (transform
+                (orientation R90)
+                (origin
+                  (pt 1900 -800)))
+              (property
+                (rename NAME "Name")
+                (string "I00064"))
+              (designator
+                (stringDisplay "D3"
+                  (display PROPERTY
+                    (justify UPPERLEFT)
+                    (origin
+                      (pt 2150 -500)))))
+              (designator
+                (stringDisplay "D3"
+                  (display PARTREFERENCE
+                    (justify UPPERLEFT)
+                    (origin
+                      (pt 2150 -500)))))
+              (property
+                (rename VALUE "Value")
+                (string
+                  (stringDisplay "1N4755"
+                    (display PARTVALUE
+                      (justify UPPERLEFT)
+                      (origin
+                        (pt 2200 -660))))))
+              (property
+                (rename PRIMITIVE "Primitive")
+                (string "DEFAULT"))
+              (property
+                (rename IMPLEMENTATION_32_TYPE "Implementation Type")
+                (string "<none>"))
+              (property
+                (rename COLOR "Color")
+                (string "Default"))
+              (property
+                (rename SOURCE_32_LIBRARY "Source Library")
+                (string "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB"))
+              (property
+                (rename SOURCE_32_PACKAGE "Source Package")
+                (string "1N4755"))
+              (property
+                (rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")
+                (string "False"))
+              (property
+                (rename GRAPHIC "Graphic")
+                (string "1N4755.Normal"))
+              (property
+                (rename PCB_32_FOOTPRINT "PCB Footprint")
+                (string "")))
+            (instance
+              (rename I00093 "I00093")
+              (viewRef NORMAL
+                (cellRef CAPACITOR_32_NON_45_POL
+                  (libraryRef DISCRETE)))
+              (transform
+                (origin
+                  (pt 1200 -1300)))
+              (property
+                (rename NAME "Name")
+                (string "I00093"))
+              (designator
+                (stringDisplay "C1"
+                  (display PROPERTY
+                    (justify UPPERLEFT)
+                    (origin
+                      (pt 1490 -1300)))))
+              (designator
+                (stringDisplay "C1"
+                  (display PARTREFERENCE
+                    (justify UPPERLEFT)
+                    (origin
+                      (pt 1490 -1300)))))
+              (property
+                (rename VALUE "Value")
+                (string
+                  (stringDisplay "CAPACITOR NON-POL"
+                    (display PARTVALUE
+                      (justify UPPERLEFT)
+                      (origin
+                        (pt 1490 -1390))))))
+              (property
+                (rename PRIMITIVE "Primitive")
+                (string "DEFAULT"))
+              (property
+                (rename IMPLEMENTATION_32_TYPE "Implementation Type")
+                (string "<none>"))
+              (property
+                (rename COLOR "Color")
+                (string "Default"))
+              (property
+                (rename SOURCE_32_LIBRARY "Source Library")
+                (string "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB"))
+              (property
+                (rename SOURCE_32_PACKAGE "Source Package")
+                (string "CAPACITOR NON-POL"))
+              (property
+                (rename POWER_32_PINS_32_VISIBLE "Power Pins Visible")
+                (string "False"))
+              (property
+                (rename GRAPHIC "Graphic")
+                (string "CAPACITOR NON-POL.Normal"))
+              (property
+                (rename PCB_32_FOOTPRINT "PCB Footprint")
+                (string ""))
+              (portInstance &1
+                (designator "1")
+                (property
+                  (rename NAME "Name")
+                  (string "1"))
+                (property
+                  (rename SWAP_32_ID "Swap Id")
+                  (string "-1"))
+                (property
+                  (rename TYPE "Type")
+                  (string "Passive"))
+                (property
+                  (rename NET_32_NAME "Net Name")
+                  (string "Sig"))
+                (property
+                  (rename ORDER "Order")
+                  (string "0"))
+                (property
+                  (rename IS_32_NO_32_CONNECT "Is No Connect")
+                  (string "False")))
+              (portInstance &2
+                (designator "2")
+                (property
+                  (rename NAME "Name")
+                  (string "2"))
+                (property
+                  (rename SWAP_32_ID "Swap Id")
+                  (string "-1"))
+                (property
+                  (rename TYPE "Type")
+                  (string "Passive"))
+                (property
+                  (rename NET_32_NAME "Net Name")
+                  (string "GND"))
+                (property
+                  (rename ORDER "Order")
+                  (string "1"))
+                (property
+                  (rename IS_32_NO_32_CONNECT "Is No Connect")
+                  (string "False"))))
+            (portImplementation GND
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 1300 -2000))))
+              (instance
+                (rename XGRINST1 "XGRINST1")
+                (viewRef &1
+                  (cellRef GND
+                    (libraryRef CAPSYM)))
+                (transform
+                  (origin
+                    (pt 1200 -2000)))))
+            (portImplementation
+              (name &_43_12V
+                (display POWER
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 400 -200))))
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 500 -400))))
+              (instance
+                (rename XGRINST2 "XGRINST2")
+                (viewRef &1
+                  (cellRef VCC
+                    (libraryRef CAPSYM)))
+                (transform
+                  (origin
+                    (pt 400 -300)))))
+            (portImplementation
+              (name &_43_5V
+                (display POWER
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 1200 -100))))
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 1300 -300))))
+              (instance
+                (rename XGRINST3 "XGRINST3")
+                (viewRef &1
+                  (cellRef VCC
+                    (libraryRef CAPSYM)))
+                (transform
+                  (origin
+                    (pt 1200 -200)))))
+            (portImplementation
+              (name SIG
+                (display OFFPAGECONNECTOR
+                  (justify UPPERLEFT)
+                  (origin
+                    (pt 2320 -850))))
+              (connectLocation
+                (figure PORT
+                  (dot
+                    (pt 2200 -900))))
+              (instance
+                (rename XGRINST4 "XGRINST4")
+                (viewRef &1
+                  (cellRef OFFPAGELEFT_45_L
+                    (libraryRef CAPSYM)))
+                (transform
+                  (origin
+                    (pt 2200 -800)))))
+            (net
+              (rename &_43_12V "+12V")
+              (joined
+                (portRef C
+                  (instanceRef I00003))
+                (portRef &_43_12V))
+              (figure WIRE
+                (path
+                  (pointList
+                    (pt 500 -400)
+                    (pt 500 -400)))
+                (path
+                  (pointList
+                    (pt 500 -400)
+                    (pt 500 -400)))))
+            (net
+              (rename &_43_5V "+5V")
+              (joined
+                (portRef C
+                  (instanceRef I00005))
+                (portRef C
+                  (instanceRef I00064))
+                (portRef &_43_5V))
+              (figure WIRE
+                (path
+                  (pointList
+                    (pt 1300 -400)
+                    (pt 2000 -400)))
+                (path
+                  (pointList
+                    (pt 1300 -300)
+                    (pt 1300 -400))))
+              (instance
+                (rename TIE1 "TIE1")
+                (viewRef XTIE0A2Y2
+                  (cellRef XTIE0A2Y2
+                    (libraryRef RIPPER_LIBRARY)))
+                (transform
+                  (origin
+                    (pt 1300 -400)))))
+            (net
+              (rename SIG "Sig")
+              (joined
+                (portRef A
+                  (instanceRef I00003))
+                (portRef A
+                  (instanceRef I00005))
+                (portRef &1
+                  (instanceRef I00093))
+                (portRef A
+                  (instanceRef I00064))
+                (portRef SIG))
+              (figure WIRE
+                (path
+                  (pointList
+                    (pt 500 -900)
+                    (pt 1300 -900)))
+                (path
+                  (pointList
+                    (pt 1300 -1200)
+                    (pt 1300 -900)))
+                (path
+                  (pointList
+                    (pt 1300 -900)
+                    (pt 2000 -900)))
+                (path
+                  (pointList
+                    (pt 2000 -900)
+                    (pt 2200 -900))))
+              (instance
+                (rename TIE2 "TIE2")
+                (viewRef XTIE0A2Y2
+                  (cellRef XTIE0A2Y2
+                    (libraryRef RIPPER_LIBRARY)))
+                (transform
+                  (origin
+                    (pt 1300 -900))))
+              (instance
+                (rename TIE3 "TIE3")
+                (viewRef XTIE0A2Y2
+                  (cellRef XTIE0A2Y2
+                    (libraryRef RIPPER_LIBRARY)))
+                (transform
+                  (origin
+                    (pt 2000 -900)))))
+            (net
+              (rename GND "GND")
+              (joined
+                (portRef &2
+                  (instanceRef I00093))
+                (portRef GND))
+              (figure WIRE
+                (path
+                  (pointList
+                    (pt 1300 -2000)
+                    (pt 1300 -1500))))))))))
+  (design
+    (rename SCHEMATIC1 "SCHEMATIC1")
+    (cellRef SCHEMATIC1
+      (libraryRef T1))))
