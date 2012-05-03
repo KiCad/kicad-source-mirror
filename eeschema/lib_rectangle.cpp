@@ -178,13 +178,13 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        aPlotter->rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
+        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->Rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-    aPlotter->rect( pos, end, already_filled ? NO_FILL : m_Fill, GetPenSize() );
+    aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
+    aPlotter->Rect( pos, end, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
 

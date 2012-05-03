@@ -31,16 +31,16 @@ bool PCB_BASE_FRAME::ExportToDxfFile( const wxString& aFullFileName, int aLayer,
 
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
     plotter->SetPageSettings( GetPageSettings() );
-    plotter->set_viewport( wxPoint( 0, 0 ), 1, 0 );
-    plotter->set_creator( wxT( "PCBNEW-DXF" ) );
-    plotter->set_filename( aFullFileName );
-    plotter->start_plot( output_file );
+    plotter->SetViewport( wxPoint( 0, 0 ), IU_PER_DECIMILS, 1, 0 );
+    plotter->SetCreator( wxT( "PCBNEW-DXF" ) );
+    plotter->SetFilename( aFullFileName );
+    plotter->StartPlot( output_file );
 
     if( plot_opts.m_PlotFrameRef )
         PlotWorkSheet( plotter, GetScreen() );
 
     Plot_Layer( plotter, aLayer, aTraceMode );
-    plotter->end_plot();
+    plotter->EndPlot();
     delete plotter;
     return true;
 }

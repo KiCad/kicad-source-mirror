@@ -238,6 +238,6 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
-    aPlotter->circle( m_pos, m_size.x, FILLED_SHAPE );
+    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->Circle( m_pos, m_size.x, FILLED_SHAPE );
 }

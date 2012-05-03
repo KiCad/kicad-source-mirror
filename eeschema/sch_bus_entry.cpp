@@ -281,10 +281,10 @@ bool SCH_BUS_ENTRY::HitTest( const EDA_RECT& aRect, bool aContained, int aAccura
 
 void SCH_BUS_ENTRY::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->set_current_line_width( GetPenSize() );
-    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
-    aPlotter->move_to( m_pos );
-    aPlotter->finish_to( m_End() );
+    aPlotter->SetCurrentLineWidth( GetPenSize() );
+    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->MoveTo( m_pos );
+    aPlotter->FinishTo( m_End() );
 }
 
 /* SetBusEntryShape:

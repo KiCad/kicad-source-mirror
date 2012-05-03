@@ -31,9 +31,9 @@
 
 
 #define PLOT_LINEWIDTH_MIN        0
-#define PLOT_LINEWIDTH_MAX        200
+#define PLOT_LINEWIDTH_MAX        (200*IU_PER_DECIMILS)
 #define HPGL_PEN_DIAMETER_MIN     0
-#define HPGL_PEN_DIAMETER_MAX     100
+#define HPGL_PEN_DIAMETER_MAX     (100*IU_PER_DECIMILS)
 #define HPGL_PEN_SPEED_MIN        0
 #define HPGL_PEN_SPEED_MAX        1000
 #define HPGL_PEN_NUMBER_MIN       1

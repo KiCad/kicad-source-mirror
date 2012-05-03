@@ -330,7 +330,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll )
         // Calculation of conversion scales.
 
         // 10x because Eeschema works in mils, not deci-mils
-        double plot_scale = 10 * (double) plotPage.GetWidthMils() / curPage.GetWidthMils();
+        double plot_scale = (double) plotPage.GetWidthMils() / curPage.GetWidthMils();
 
         // Calculate offsets
         plotOffset.x = -s_Offset.x;
@@ -380,26 +380,26 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString&  FileName,
 
     plotter->SetPageSettings( pageInfo );
 
-    plotter->set_viewport( offset, plot_scale, 0 );
-    plotter->set_default_line_width( g_DrawDefaultLineThickness );
+    plotter->SetViewport( offset, IU_PER_DECIMILS, plot_scale, 0 );
+    plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
 
     // Init :
-    plotter->set_creator( wxT( "Eeschema-HPGL" ) );
-    plotter->set_filename( FileName );
-    plotter->set_pen_speed( g_HPGL_Pen_Descr.m_Pen_Speed );
-    plotter->set_pen_number( g_HPGL_Pen_Descr.m_Pen_Num );
-    plotter->set_pen_diameter( g_HPGL_Pen_Descr.m_Pen_Diam );
-    plotter->set_pen_overlap( g_HPGL_Pen_Descr.m_Pen_Diam / 2 );
-    plotter->start_plot( output_file );
+    plotter->SetCreator( wxT( "Eeschema-HPGL" ) );
+    plotter->SetFilename( FileName );
+    plotter->SetPenSpeed( g_HPGL_Pen_Descr.m_Pen_Speed );
+    plotter->SetPenNumber( g_HPGL_Pen_Descr.m_Pen_Num );
+    plotter->SetPenDiameter( g_HPGL_Pen_Descr.m_Pen_Diam );
+    plotter->SetPenOverlap( g_HPGL_Pen_Descr.m_Pen_Diam / 2 );
+    plotter->StartPlot( output_file );
 
-    plotter->set_color( BLACK );
+    plotter->SetColor( BLACK );
 
     if( s_plot_Sheet_Ref )
         m_Parent->PlotWorkSheet( plotter, screen );
 
     screen->Plot( plotter );
 
-    plotter->end_plot();
+    plotter->EndPlot();
     delete plotter;
 
     m_MsgBox->AppendText( wxT( "Ok\n" ) );

@@ -270,12 +270,12 @@ void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->PlotPoly( cornerList, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
+    aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
     aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 

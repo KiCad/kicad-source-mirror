@@ -98,24 +98,27 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* aPlotter, int aLayerMask, EDA_DRAW
                 switch( pad->GetShape() )
                 {
                 case PAD_CIRCLE:
-                    aPlotter->flash_pad_circle( shape_pos, pad->GetSize().x, LINE );
+                    aPlotter->FlashPadCircle( shape_pos, pad->GetSize().x, LINE );
                     break;
 
                 case PAD_OVAL:
-                    aPlotter->flash_pad_oval( shape_pos, pad->GetSize(), pad->GetOrientation(), LINE );
+                    aPlotter->FlashPadOval( shape_pos, pad->GetSize(), 
+		                            pad->GetOrientation(), LINE );
                     break;
 
                 case PAD_TRAPEZOID:
                     {
                         wxPoint coord[4];
                         pad->BuildPadPolygon( coord, wxSize(0,0), 0 );
-                        aPlotter->flash_pad_trapez( shape_pos, coord, pad->GetOrientation(), LINE );
+                        aPlotter->FlashPadTrapez( shape_pos, coord, 
+			                          pad->GetOrientation(), LINE );
                     }
                     break;
 
                 case PAD_RECT:
                 default:
-                    aPlotter->flash_pad_rect( shape_pos, pad->GetSize(), pad->GetOrientation(), LINE );
+                    aPlotter->FlashPadRect( shape_pos, pad->GetSize(), 
+		                            pad->GetOrientation(), LINE );
                     break;
                 }
             }
@@ -228,7 +231,7 @@ for module\n %s's \"module text\" text of %s." ),
         if( ( ( 1 << seg->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
-        aPlotter->thick_segment( seg->m_Start, seg->m_End, seg->m_Width, trace_mode );
+        aPlotter->ThickSegment( seg->m_Start, seg->m_End, seg->m_Width, trace_mode );
     }
 }
 
@@ -259,7 +262,7 @@ static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte, EDA_DRAW_
     // So we set bold flag to true
     bool allow_bold = pt_texte->m_Bold || thickness;
 
-    aPlotter->text( pos, BLACK,
+    aPlotter->Text( pos, BLACK,
                    pt_texte->m_Text,
                    orient, size,
                    pt_texte->m_HJustify, pt_texte->m_VJustify,
@@ -396,13 +399,13 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
     switch( type_trace )
     {
     case S_SEGMENT:
-        aPlotter->thick_segment( pos, end, thickness, trace_mode );
+        aPlotter->ThickSegment( pos, end, thickness, trace_mode );
         break;
 
     case S_CIRCLE:
         radius = (int) hypot( (double) ( end.x - pos.x ),
                               (double) ( end.y - pos.y ) );
-        aPlotter->thick_circle( pos, radius * 2, thickness, trace_mode );
+        aPlotter->ThickCircle( pos, radius * 2, thickness, trace_mode );
         break;
 
     case S_ARC:
@@ -416,19 +419,11 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
             if ( ( aPlotOpts.GetPlotFormat() == PLOT_FORMAT_DXF ) &&
                ( masque_layer & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
-                aPlotter->thick_arc( pos,
-                                -startAngle,
-                                -endAngle,
-                                radius,
-                                thickness,
-                                trace_mode );
+                aPlotter->ThickArc( pos, -startAngle, -endAngle, radius,
+                                thickness, trace_mode );
             else
-                aPlotter->thick_arc( pos,
-                                -endAngle,
-                                -startAngle,
-                                radius,
-                                thickness,
-                                trace_mode );
+                aPlotter->ThickArc( pos, -endAngle, -startAngle, radius,
+                                thickness, trace_mode );
         }
         break;
 
@@ -507,9 +502,7 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
         for( unsigned i = 0; i < list->Count(); i++ )
         {
             wxString txt = list->Item( i );
-            aPlotter->text( pos, BLACK,
-                           txt,
-                           orient, size,
+            aPlotter->Text( pos, BLACK, txt, orient, size,
                            pt_texte->m_HJustify, pt_texte->m_VJustify,
                            thickness, pt_texte->m_Italic, allow_bold );
             pos += offset;
@@ -519,9 +512,7 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
     }
     else
     {
-        aPlotter->text( pos, BLACK,
-                       pt_texte->m_Text,
-                       orient, size,
+        aPlotter->Text( pos, BLACK, pt_texte->m_Text, orient, size,
                        pt_texte->m_HJustify, pt_texte->m_VJustify,
                        thickness, pt_texte->m_Italic, allow_bold );
     }
@@ -574,8 +565,7 @@ void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_
                     {
                         wxPoint start = aZone->m_FillSegmList[iseg].m_Start;
                         wxPoint end   = aZone->m_FillSegmList[iseg].m_End;
-                        aPlotter->thick_segment( start,
-                                                end,
+                        aPlotter->ThickSegment( start, end,
                                                 aZone->m_ZoneMinThickness,
                                                 trace_mode );
                     }
@@ -590,12 +580,12 @@ void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_
                 if( aZone->m_ZoneMinThickness > 0 )
                 {
                     for( unsigned jj = 1; jj<cornerList.size(); jj++ )
-                        aPlotter->thick_segment( cornerList[jj -1], cornerList[jj],
+                        aPlotter->ThickSegment( cornerList[jj -1], cornerList[jj],
                                                 ( trace_mode == LINE ) ? -1 : aZone->m_ZoneMinThickness,
                                                 trace_mode );
                 }
 
-                aPlotter->set_current_line_width( -1 );
+                aPlotter->SetCurrentLineWidth( -1 );
             }
 
             cornerList.clear();
@@ -623,14 +613,14 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, DRAWS
     wxPoint start( aSeg->GetStart() );
     wxPoint end(   aSeg->GetEnd() );
 
-    aPlotter->set_current_line_width( thickness );
+    aPlotter->SetCurrentLineWidth( thickness );
 
     switch( aSeg->GetShape() )
     {
     case S_CIRCLE:
         radius = (int) hypot( (double) ( end.x - start.x ),
                               (double) ( end.y - start.y ) );
-        aPlotter->thick_circle( start, radius * 2, thickness, trace_mode );
+        aPlotter->ThickCircle( start, radius * 2, thickness, trace_mode );
         break;
 
     case S_ARC:
@@ -638,7 +628,7 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, DRAWS
                               (double) ( end.y - start.y ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + aSeg->GetAngle();
-        aPlotter->thick_arc( start, -EndAngle, -StAngle, radius, thickness, trace_mode );
+        aPlotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, trace_mode );
         break;
 
     case S_CURVE:
@@ -646,7 +636,7 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, DRAWS
             const std::vector<wxPoint>& bezierPoints = aSeg->GetBezierPoints();
 
             for( unsigned i = 1; i < bezierPoints.size(); i++ )
-                aPlotter->thick_segment( bezierPoints[i - 1],
+                aPlotter->ThickSegment( bezierPoints[i - 1],
                                         bezierPoints[i],
                                         thickness,
                                         trace_mode );
@@ -654,7 +644,7 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, DRAWS
         break;
 
     default:
-        aPlotter->thick_segment( start, end, thickness, trace_mode );
+        aPlotter->ThickSegment( start, end, thickness, trace_mode );
     }
 }
 
@@ -827,7 +817,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
 
             if( aLayerMask & ALL_CU_LAYERS )
             {
-                width_adj =  aPlotter->get_plot_width_adj();
+                width_adj =  aPlotter->GetPlotWidthAdj();
             }
 
             switch( aLayerMask &
@@ -863,7 +853,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
                     (pad->GetAttribute() == PAD_HOLE_NOT_PLATED) )
                     break;
 
-                aPlotter->flash_pad_circle( pos, size.x, aPlotMode );
+                aPlotter->FlashPadCircle( pos, size.x, aPlotMode );
                 break;
 
             case PAD_OVAL:
@@ -872,20 +862,20 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
                     (pad->GetAttribute() == PAD_HOLE_NOT_PLATED) )
                     break;
 
-                aPlotter->flash_pad_oval( pos, size, pad->GetOrientation(), aPlotMode );
+                aPlotter->FlashPadOval( pos, size, pad->GetOrientation(), aPlotMode );
                 break;
 
             case PAD_TRAPEZOID:
             {
                 wxPoint coord[4];
                 pad->BuildPadPolygon( coord, margin, 0 );
-                aPlotter->flash_pad_trapez( pos, coord, pad->GetOrientation(), aPlotMode );
+                aPlotter->FlashPadTrapez( pos, coord, pad->GetOrientation(), aPlotMode );
             }
             break;
 
             case PAD_RECT:
             default:
-                aPlotter->flash_pad_rect( pos, size, pad->GetOrientation(), aPlotMode );
+                aPlotter->FlashPadRect( pos, size, pad->GetOrientation(), aPlotMode );
                 break;
             }
         }
@@ -925,7 +915,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
 
             if( aLayerMask & ALL_CU_LAYERS )
             {
-                width_adj =  aPlotter->get_plot_width_adj();
+                width_adj =  aPlotter->GetPlotWidthAdj();
             }
 
             pos    = Via->m_Start;
@@ -935,7 +925,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
             if( size.x <= 0 )
                 continue;
 
-            aPlotter->flash_pad_circle( pos, size.x, aPlotMode );
+            aPlotter->FlashPadCircle( pos, size.x, aPlotMode );
         }
     }
 
@@ -950,11 +940,11 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
-        size.x = size.y = track->m_Width + aPlotter->get_plot_width_adj();
+        size.x = size.y = track->m_Width + aPlotter->GetPlotWidthAdj();
         pos    = track->m_Start;
         end    = track->m_End;
 
-        aPlotter->thick_segment( pos, end, size.x, aPlotMode );
+        aPlotter->ThickSegment( pos, end, size.x, aPlotMode );
     }
 
     // Plot zones (outdated, for old boards compatibility):
@@ -965,11 +955,11 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
-        size.x = size.y = track->m_Width + aPlotter->get_plot_width_adj();
+        size.x = size.y = track->m_Width + aPlotter->GetPlotWidthAdj();
         pos    = track->m_Start;
         end    = track->m_End;
 
-        aPlotter->thick_segment( pos, end, size.x, aPlotMode );
+        aPlotter->ThickSegment( pos, end, size.x, aPlotMode );
     }
 
     // Plot filled ares
@@ -1010,7 +1000,7 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
 
     if( aTraceMode == FILLED )
     {
-        aPlotter->set_color( WHITE );
+        aPlotter->SetColor( WHITE );
     }
 
     for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
@@ -1026,9 +1016,9 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
         else
             diam.x = diam.y = pts->GetDrillValue();
 
-        diam.x -= aPlotter->get_plot_width_adj();
+        diam.x -= aPlotter->GetPlotWidthAdj();
         diam.x = Clamp( 1, diam.x, pts->m_Width - 1 );
-        aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
+        aPlotter->FlashPadCircle( pos, diam.x, aTraceMode );
     }
 
     for( Module = m_Pcb->m_Modules; Module != NULL; Module = Module->Next() )
@@ -1044,25 +1034,25 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
             if( pad->GetDrillShape() == PAD_OVAL )
             {
                 diam = pad->GetDrillSize();
-                diam.x -= aPlotter->get_plot_width_adj();
+                diam.x -= aPlotter->GetPlotWidthAdj();
                 diam.x = Clamp( 1, diam.x, pad->GetSize().x - 1 );
-                diam.y -= aPlotter->get_plot_width_adj();
+                diam.y -= aPlotter->GetPlotWidthAdj();
                 diam.y = Clamp( 1, diam.y, pad->GetSize().y - 1 );
-                aPlotter->flash_pad_oval( pos, diam, pad->GetOrientation(), aTraceMode );
+                aPlotter->FlashPadOval( pos, diam, pad->GetOrientation(), aTraceMode );
             }
             else
             {
                 // It is quite possible that the real pad drill value is less then small drill value.
                 diam.x = aSmallDrillShape ? MIN( SMALL_DRILL, pad->GetDrillSize().x ) : pad->GetDrillSize().x;
-                diam.x -= aPlotter->get_plot_width_adj();
+                diam.x -= aPlotter->GetPlotWidthAdj();
                 diam.x = Clamp( 1, diam.x, pad->GetSize().x - 1 );
-                aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
+                aPlotter->FlashPadCircle( pos, diam.x, aTraceMode );
             }
         }
     }
 
     if( aTraceMode == FILLED )
     {
-        aPlotter->set_color( BLACK );
+        aPlotter->SetColor( BLACK );
     }
 }
