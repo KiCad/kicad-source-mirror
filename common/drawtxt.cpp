@@ -164,13 +164,13 @@ static void DrawGraphicTextPline(
 {
     if( aPlotter )
     {
-        aPlotter->move_to( coord[0] );
+        aPlotter->MoveTo( coord[0] );
         for( int ik = 1; ik < point_count; ik++ )
         {
-            aPlotter->line_to( coord[ik] );
+            aPlotter->LineTo( coord[ik] );
         }
 
-        aPlotter->pen_finish();
+        aPlotter->PenFinish();
     }
     else if( aCallback )
     {
@@ -357,8 +357,8 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
 
         if( aPlotter )
         {
-            aPlotter->move_to( current_char_pos );
-            aPlotter->finish_to( end );
+            aPlotter->MoveTo( current_char_pos );
+            aPlotter->FinishTo( end );
         }
         else if( aCallback )
         {
@@ -515,7 +515,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
  */
-void PLOTTER::text( const wxPoint&              aPos,
+void PLOTTER::Text( const wxPoint&              aPos,
                     enum EDA_COLOR_T            aColor,
                     const wxString&             aText,
                     int                         aOrient,
@@ -534,11 +534,11 @@ void PLOTTER::text( const wxPoint&              aPos,
     else
         aWidth = -Clamp_Text_PenSize( -aWidth, aSize, aBold );
 
-    set_current_line_width( aWidth );
+    SetCurrentLineWidth( aWidth );
 
 
     if( aColor >= 0 )
-        set_color( aColor );
+        SetColor( aColor );
 
     DrawGraphicText( NULL, NULL, aPos, aColor, aText,
                      aOrient, aSize,

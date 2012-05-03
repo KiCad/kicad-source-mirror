@@ -38,7 +38,7 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     // Compute pen_dim (from g_m_HPGLPenDiam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diameter is always g_m_HPGLPenDiam
     // so apparent pen diam is real pen diam / Scale
-    int pen_diam = KiROUND( (plot_opts.m_HPGLPenDiam * U_PCB) /
+    int pen_diam = KiROUND( plot_opts.m_HPGLPenDiam /
                             plot_opts.m_PlotScale );
 
     // compute pen_overlay (from g_m_HPGLPenOvr in mils) with plot scale
@@ -100,22 +100,23 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     // why did we have to change these settings above?
     SetPlotSettings( plot_opts );
 
-    plotter->set_viewport( offset, scale, plot_opts.m_PlotMirror );
-    plotter->set_default_line_width( plot_opts.m_PlotLineWidth );
-    plotter->set_creator( wxT( "PCBNEW-HPGL" ) );
-    plotter->set_filename( aFullFileName );
-    plotter->set_pen_speed( plot_opts.m_HPGLPenSpeed );
-    plotter->set_pen_number( plot_opts.m_HPGLPenNum );
-    plotter->set_pen_overlap( pen_overlay );
-    plotter->set_pen_diameter( pen_diam );
-    plotter->start_plot( output_file );
+    plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 
+	                  plot_opts.m_PlotMirror );
+    plotter->SetDefaultLineWidth( plot_opts.m_PlotLineWidth );
+    plotter->SetCreator( wxT( "PCBNEW-HPGL" ) );
+    plotter->SetFilename( aFullFileName );
+    plotter->SetPenSpeed( plot_opts.m_HPGLPenSpeed );
+    plotter->SetPenNumber( plot_opts.m_HPGLPenNum );
+    plotter->SetPenOverlap( pen_overlay );
+    plotter->SetPenDiameter( pen_diam );
+    plotter->StartPlot( output_file );
 
     // The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway
     if( plot_opts.m_PlotFrameRef && !center )
         PlotWorkSheet( plotter, GetScreen() );
 
     Plot_Layer( plotter, aLayer, aTraceMode );
-    plotter->end_plot();
+    plotter->EndPlot();
     delete plotter;
 
     return true;

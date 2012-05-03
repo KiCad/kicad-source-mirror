@@ -257,6 +257,7 @@ set(INC_AFTER
 
 add_subdirectory(bitmaps_png)
 add_subdirectory(common)
+add_subdirectory(zlib)
 add_subdirectory(3d-viewer)
 add_subdirectory(cvpcb)
 add_subdirectory(eeschema)
