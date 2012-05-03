@@ -1,6 +1,6 @@
 /**
  * @file common_plot_functions.cpp
- * @brief Kicad: Common plot Postscript Routines
+ * @brief Kicad: Common plotting Routines
  */
 
 #include <fctsys.h>
@@ -31,7 +31,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     EDA_COLOR_T         color;
 
     // Paper is sized in mils.  Here is a conversion factor to scale mils to internal units.
-    int      conv_unit = screen->MilsToIuScalar();
+    int      iusPerMil = screen->MilsToIuScalar();
 
     wxString msg;
     wxSize   text_size;
@@ -49,59 +49,59 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     bool     thickness = 0;      //@todo : use current pen
 
     color = BLACK;
-    plotter->set_color( color );
+    plotter->SetColor( color );
 
     // Plot edge.
-    ref.x = pageInfo.GetLeftMarginMils() * conv_unit;
-    ref.y = pageInfo.GetTopMarginMils()  * conv_unit;
+    ref.x = pageInfo.GetLeftMarginMils() * iusPerMil;
+    ref.y = pageInfo.GetTopMarginMils()  * iusPerMil;
 
-    xg    = ( pageSize.x - pageInfo.GetRightMarginMils() )  * conv_unit;
-    yg    = ( pageSize.y - pageInfo.GetBottomMarginMils() ) * conv_unit;
+    xg    = ( pageSize.x - pageInfo.GetRightMarginMils() )  * iusPerMil;
+    yg    = ( pageSize.y - pageInfo.GetBottomMarginMils() ) * iusPerMil;
 
 #if defined(KICAD_GOST)
-    plotter->move_to( ref );
+    plotter->MoveTo( ref );
     pos.x = xg;
     pos.y = ref.y;
-    plotter->line_to( pos );
+    plotter->LineTo( pos );
     pos.x = xg;
     pos.y = yg;
-    plotter->line_to( pos );
+    plotter->LineTo( pos );
     pos.x = ref.x;
     pos.y = yg;
-    plotter->line_to( pos );
-    plotter->finish_to( ref );
+    plotter->LineTo( pos );
+    plotter->FinishTo( ref );
 
 #else
 
     for( unsigned ii = 0; ii < 2; ii++ )
     {
-        plotter->move_to( ref );
+        plotter->MoveTo( ref );
 
         pos.x = xg;
         pos.y = ref.y;
-        plotter->line_to( pos );
+        plotter->LineTo( pos );
 
         pos.x = xg;
         pos.y = yg;
-        plotter->line_to( pos );
+        plotter->LineTo( pos );
 
         pos.x = ref.x;
         pos.y = yg;
-        plotter->line_to( pos );
+        plotter->LineTo( pos );
 
-        plotter->finish_to( ref );
+        plotter->FinishTo( ref );
 
-        ref.x += GRID_REF_W * conv_unit;
-        ref.y += GRID_REF_W * conv_unit;
+        ref.x += GRID_REF_W * iusPerMil;
+        ref.y += GRID_REF_W * iusPerMil;
 
-        xg    -= GRID_REF_W * conv_unit;
-        yg    -= GRID_REF_W * conv_unit;
+        xg    -= GRID_REF_W * iusPerMil;
+        yg    -= GRID_REF_W * iusPerMil;
     }
 
 #endif
 
-    text_size.x = WSTEXTSIZE * conv_unit;
-    text_size.y = WSTEXTSIZE * conv_unit;
+    text_size.x = WSTEXTSIZE * iusPerMil;
+    text_size.y = WSTEXTSIZE * iusPerMil;
 
     // upper left corner in mils
     ref.x = pageInfo.GetLeftMarginMils();
@@ -116,8 +116,8 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
          WsItem != NULL;
          WsItem = WsItem->Pnext )
     {
-        pos.x = ( ref.x - WsItem->m_Posx ) * conv_unit;
-        pos.y = ( yg - WsItem->m_Posy ) * conv_unit;
+        pos.x = ( ref.x - WsItem->m_Posx ) * iusPerMil;
+        pos.y = ( yg - WsItem->m_Posy ) * iusPerMil;
         msg.Empty();
         switch( WsItem->m_Type )
         {
@@ -127,17 +127,17 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
         case WS_PODPIS_LU:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            plotter->text( pos, color,
+            plotter->Text( pos, color,
                            msg, TEXT_ORIENT_VERT, text_size,
                            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
                            thickness, italic, false );
             break;
 
         case WS_SEGMENT_LU:
-            plotter->move_to( pos );
-            pos.x = ( ref.x - WsItem->m_Endx ) * conv_unit;
-            pos.y = ( yg - WsItem->m_Endy ) * conv_unit;
-            plotter->finish_to( pos );
+            plotter->MoveTo( pos );
+            pos.x = ( ref.x - WsItem->m_Endx ) * iusPerMil;
+            pos.y = ( yg - WsItem->m_Endy ) * iusPerMil;
+            plotter->FinishTo( pos );
             break;
         }
     }
@@ -146,16 +146,16 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
          WsItem != NULL;
          WsItem = WsItem->Pnext )
     {
-        pos.x = ( ref.x + WsItem->m_Posx ) * conv_unit;
-        pos.y = ( ref.y + WsItem->m_Posy ) * conv_unit;
+        pos.x = ( ref.x + WsItem->m_Posx ) * iusPerMil;
+        pos.y = ( ref.y + WsItem->m_Posy ) * iusPerMil;
         msg.Empty();
         switch( WsItem->m_Type )
         {
         case WS_SEGMENT_LT:
-            plotter->move_to( pos );
-            pos.x = ( ref.x + WsItem->m_Endx ) * conv_unit;
-            pos.y = ( ref.y + WsItem->m_Endy ) * conv_unit;
-            plotter->finish_to( pos );
+            plotter->MoveTo( pos );
+            pos.x = ( ref.x + WsItem->m_Endx ) * iusPerMil;
+            pos.y = ( ref.y + WsItem->m_Endy ) * iusPerMil;
+            plotter->FinishTo( pos );
             break;
         }
     }
@@ -172,33 +172,33 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 
         if( ii < xg - PAS_REF / 2 )
         {
-            pos.x = ii * conv_unit;
-            pos.y = ref.y * conv_unit;
-            plotter->move_to( pos );
-            pos.x = ii * conv_unit;
-            pos.y = ( ref.y + GRID_REF_W ) * conv_unit;
-            plotter->finish_to( pos );
+            pos.x = ii * iusPerMil;
+            pos.y = ref.y * iusPerMil;
+            plotter->MoveTo( pos );
+            pos.x = ii * iusPerMil;
+            pos.y = ( ref.y + GRID_REF_W ) * iusPerMil;
+            plotter->FinishTo( pos );
         }
 
-        pos.x = ( ii - gxpas / 2 ) * conv_unit;
-        pos.y = ( ref.y + GRID_REF_W / 2 ) * conv_unit;
-        plotter->text( pos, color,
+        pos.x = ( ii - gxpas / 2 ) * iusPerMil;
+        pos.y = ( ref.y + GRID_REF_W / 2 ) * iusPerMil;
+        plotter->Text( pos, color,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                        thickness, italic, false );
 
         if( ii < xg - PAS_REF / 2 )
         {
-            pos.x = ii * conv_unit;
-            pos.y = yg * conv_unit;
-            plotter->move_to( pos );
-            pos.x = ii * conv_unit;
-            pos.y = (yg - GRID_REF_W) * conv_unit;
-            plotter->finish_to( pos );
+            pos.x = ii * iusPerMil;
+            pos.y = yg * iusPerMil;
+            plotter->MoveTo( pos );
+            pos.x = ii * iusPerMil;
+            pos.y = (yg - GRID_REF_W) * iusPerMil;
+            plotter->FinishTo( pos );
         }
-        pos.x = ( ii - gxpas / 2 ) * conv_unit;
-        pos.y = ( yg - GRID_REF_W / 2 ) * conv_unit;
-        plotter->text( pos, color,
+        pos.x = ( ii - gxpas / 2 ) * iusPerMil;
+        pos.y = ( yg - GRID_REF_W / 2 ) * iusPerMil;
+        plotter->Text( pos, color,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                        thickness, italic, false );
@@ -215,33 +215,33 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             msg.Printf( wxT( "%c" ), 'a' + jj - 26 );
         if( ii < yg - PAS_REF / 2 )
         {
-            pos.x = ref.x * conv_unit;
-            pos.y = ii * conv_unit;
-            plotter->move_to( pos );
-            pos.x = ( ref.x + GRID_REF_W ) * conv_unit;
-            pos.y = ii * conv_unit;
-            plotter->finish_to( pos );
+            pos.x = ref.x * iusPerMil;
+            pos.y = ii * iusPerMil;
+            plotter->MoveTo( pos );
+            pos.x = ( ref.x + GRID_REF_W ) * iusPerMil;
+            pos.y = ii * iusPerMil;
+            plotter->FinishTo( pos );
         }
-        pos.x = ( ref.x + GRID_REF_W / 2 ) * conv_unit;
-        pos.y = ( ii - gypas / 2 ) * conv_unit;
-        plotter->text( pos, color,
+        pos.x = ( ref.x + GRID_REF_W / 2 ) * iusPerMil;
+        pos.y = ( ii - gypas / 2 ) * iusPerMil;
+        plotter->Text( pos, color,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                        thickness, italic, false );
 
         if( ii < yg - PAS_REF / 2 )
         {
-            pos.x = xg * conv_unit;
-            pos.y = ii * conv_unit;
-            plotter->move_to( pos );
-            pos.x = ( xg - GRID_REF_W ) * conv_unit;
-            pos.y = ii * conv_unit;
-            plotter->finish_to( pos );
+            pos.x = xg * iusPerMil;
+            pos.y = ii * iusPerMil;
+            plotter->MoveTo( pos );
+            pos.x = ( xg - GRID_REF_W ) * iusPerMil;
+            pos.y = ii * iusPerMil;
+            plotter->FinishTo( pos );
         }
 
-        pos.x = ( xg - GRID_REF_W / 2 ) * conv_unit;
-        pos.y = ( ii - gypas / 2 ) * conv_unit;
-        plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+        pos.x = ( xg - GRID_REF_W / 2 ) * iusPerMil;
+        pos.y = ( ii - gypas / 2 ) * iusPerMil;
+        plotter->Text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                        thickness, italic, false );
     }
@@ -249,16 +249,16 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 #endif
 
     // Plot the worksheet.
-    text_size.x = SIZETEXT * conv_unit;
-    text_size.y = SIZETEXT * conv_unit;
+    text_size.x = SIZETEXT * iusPerMil;
+    text_size.y = SIZETEXT * iusPerMil;
 
 #if defined(KICAD_GOST)
-    text_size2.x = SIZETEXT * conv_unit * 2;
-    text_size2.y = SIZETEXT * conv_unit * 2;
-    text_size3.x = SIZETEXT * conv_unit * 3;
-    text_size3.y = SIZETEXT * conv_unit * 3;
-    text_size1_5.x = SIZETEXT * conv_unit * 1.5;
-    text_size1_5.y = SIZETEXT * conv_unit * 1.5;
+    text_size2.x = SIZETEXT * iusPerMil * 2;
+    text_size2.y = SIZETEXT * iusPerMil * 2;
+    text_size3.x = SIZETEXT * iusPerMil * 3;
+    text_size3.y = SIZETEXT * iusPerMil * 3;
+    text_size1_5.x = SIZETEXT * iusPerMil * 1.5;
+    text_size1_5.y = SIZETEXT * iusPerMil * 1.5;
 
     ref.x = pageSize.x - pageInfo.GetRightMarginMils();
     ref.y = pageSize.y - pageInfo.GetBottomMarginMils();
@@ -269,8 +269,8 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
              WsItem != NULL;
              WsItem = WsItem->Pnext )
         {
-            pos.x = ( ref.x - WsItem->m_Posx ) * conv_unit;
-            pos.y = ( ref.y - WsItem->m_Posy ) * conv_unit;
+            pos.x = ( ref.x - WsItem->m_Posx ) * iusPerMil;
+            pos.y = ( ref.y - WsItem->m_Posy ) * iusPerMil;
             msg.Empty();
 
             switch( WsItem->m_Type )
@@ -287,7 +287,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             case WS_PODPIS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                plotter->text( pos, color,
+                plotter->Text( pos, color,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
@@ -301,7 +301,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                     msg = WsItem->m_Legende;
                 if( screen->m_NumberOfScreen > 1 )
                     msg << screen->m_ScreenNumber;
-                plotter->text( pos, color,
+                plotter->Text( pos, color,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
@@ -311,7 +311,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
             msg << screen->m_NumberOfScreen;
-                plotter->text( pos, color,
+                plotter->Text( pos, color,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
@@ -321,7 +321,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             msg = GetTitleBlock().GetCompany();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->text( pos, color,
+                    plotter->Text( pos, color,
                                    msg, TEXT_ORIENT_HORIZ, text_size1_5,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
@@ -332,7 +332,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             msg = GetTitleBlock().GetTitle();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->text( pos, color,
+                    plotter->Text( pos, color,
                                    msg, TEXT_ORIENT_HORIZ, text_size1_5,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
@@ -343,13 +343,13 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             msg = GetTitleBlock().GetComment1();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->text( pos, color,
+                    plotter->Text( pos, color,
                                    msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
-                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * conv_unit;
-                    pos.y = (pageInfo.GetTopMarginMils() + 270) * conv_unit;
-                    plotter->text( pos, color,
+                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * iusPerMil;
+                    pos.y = (pageInfo.GetTopMarginMils() + 270) * iusPerMil;
+                    plotter->Text( pos, color,
                                    msg.GetData(), 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
@@ -360,7 +360,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             msg = GetTitleBlock().GetComment2();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->text( pos, color,
+                    plotter->Text( pos, color,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
@@ -371,7 +371,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             msg = GetTitleBlock().GetComment3();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->text( pos, color,
+                    plotter->Text( pos, color,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
@@ -382,7 +382,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             msg = GetTitleBlock().GetComment4();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->text( pos, color,
+                    plotter->Text( pos, color,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
@@ -392,10 +392,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             case WS_UPPER_SEGMENT:
             case WS_LEFT_SEGMENT:
             case WS_SEGMENT:
-                plotter->move_to( pos );
-                pos.x = ( ref.x - WsItem->m_Endx ) * conv_unit;
-                pos.y = ( ref.y - WsItem->m_Endy ) * conv_unit;
-                plotter->finish_to( pos );
+                plotter->MoveTo( pos );
+                pos.x = ( ref.x - WsItem->m_Endx ) * iusPerMil;
+                pos.y = ( ref.y - WsItem->m_Endy ) * iusPerMil;
+                plotter->FinishTo( pos );
                 break;
             }
         }
@@ -406,8 +406,8 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
              WsItem != NULL;
              WsItem = WsItem->Pnext )
         {
-            pos.x = ( ref.x - WsItem->m_Posx ) * conv_unit;
-            pos.y = ( ref.y - WsItem->m_Posy ) * conv_unit;
+            pos.x = ( ref.x - WsItem->m_Posx ) * iusPerMil;
+            pos.y = ( ref.y - WsItem->m_Posy ) * iusPerMil;
             msg.Empty();
 
             switch( WsItem->m_Type )
@@ -417,13 +417,13 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             msg = GetTitleBlock().GetComment1();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->text( pos, color,
+                    plotter->Text( pos, color,
                                    msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
-                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * conv_unit;
-                    pos.y = (pageInfo.GetTopMarginMils() + 270) * conv_unit;
-                    plotter->text( pos, color,
+                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * iusPerMil;
+                    pos.y = (pageInfo.GetTopMarginMils() + 270) * iusPerMil;
+                    plotter->Text( pos, color,
                                    msg, 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
@@ -433,7 +433,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             case WS_PODPIS_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+                plotter->Text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
                 break;
@@ -442,17 +442,17 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 msg << screen->m_ScreenNumber;
-                plotter->text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+                plotter->Text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                thickness, italic, false );
                 break;
 
             case WS_LEFT_SEGMENT_D:
             case WS_SEGMENT_D:
-                plotter->move_to( pos );
-                pos.x = ( ref.x - WsItem->m_Endx ) * conv_unit;
-                pos.y = ( ref.y - WsItem->m_Endy ) * conv_unit;
-                plotter->finish_to( pos );
+                plotter->MoveTo( pos );
+                pos.x = ( ref.x - WsItem->m_Endx ) * iusPerMil;
+                pos.y = ( ref.y - WsItem->m_Endy ) * iusPerMil;
+                plotter->FinishTo( pos );
                 break;
             }
         }
@@ -467,8 +467,8 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
          WsItem != NULL;
          WsItem = WsItem->Pnext )
     {
-        pos.x = ( ref.x - WsItem->m_Posx ) * conv_unit;
-        pos.y = ( ref.y - WsItem->m_Posy ) * conv_unit;
+        pos.x = ( ref.x - WsItem->m_Posx ) * iusPerMil;
+        pos.y = ( ref.y - WsItem->m_Posy ) * iusPerMil;
         bold  = false;
         if( WsItem->m_Legende )
             msg = WsItem->m_Legende;
@@ -558,22 +558,22 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
         case WS_LEFT_SEGMENT:
             WS_MostUpperLine.m_Posy = WS_MostUpperLine.m_Endy
                 = WS_MostLeftLine.m_Posy = UpperLimit;
-            pos.y = (ref.y - WsItem->m_Posy) * conv_unit;
+            pos.y = (ref.y - WsItem->m_Posy) * iusPerMil;
 
         case WS_SEGMENT:
         {
             wxPoint auxpos;
-            auxpos.x = ( ref.x - WsItem->m_Endx ) * conv_unit;
-            auxpos.y = ( ref.y - WsItem->m_Endy ) * conv_unit;
-            plotter->move_to( pos );
-            plotter->finish_to( auxpos );
+            auxpos.x = ( ref.x - WsItem->m_Endx ) * iusPerMil;
+            auxpos.y = ( ref.y - WsItem->m_Endy ) * iusPerMil;
+            plotter->MoveTo( pos );
+            plotter->FinishTo( auxpos );
         }
         break;
         }
 
         if( !msg.IsEmpty() )
         {
-            plotter->text( pos, color,
+            plotter->Text( pos, color,
                            msg, TEXT_ORIENT_HORIZ, text_size,
                            GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                            thickness, italic, bold );

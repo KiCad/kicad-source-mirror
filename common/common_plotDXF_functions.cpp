@@ -12,252 +12,394 @@
 #include <macros.h>
 #include <kicad_string.h>
 
-
-/* Set the plot offset for the current plotting
+/**
+ * Oblique angle for DXF native text 
+ * (I don't remember if 15 degrees is the ISO value... it looks nice anyway)
  */
-void DXF_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
+static const double DXF_OBLIQUE_ANGLE = 15;
+
+/**
+ * Set the scale/position for the DXF plot
+ * The DXF engine doesn't support line widths and mirroring. The output
+ * coordinate system is in the first quadrant (in mm)
+ */
+void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+                               double aScale, bool aMirror )
 {
-    wxASSERT( !output_file );
-    plot_offset  = aOffset;
-    plot_scale   = aScale;
-    device_scale = 1;
-    set_default_line_width( 0 );    /* No line width on DXF */
-    plotMirror = false;             /* No mirroring on DXF */
-    current_color = BLACK;
+    wxASSERT( !outputFile );
+    plotOffset  = aOffset;
+    plotScale   = aScale;
+    // XXX Need to think about this: what is the 'native' unit used for DXF? 
+    iuPerDeviceUnit = 1.0 / aIusPerDecimil; // Gives a DXF in decimils
+    iuPerDeviceUnit *= 0.00254;             // DXF in mm (I like it best)
+    // Compute the paper size in IUs 
+    paperSize = pageInfo.GetSizeMils();
+    paperSize.x *= 10.0 * aIusPerDecimil;
+    paperSize.y *= 10.0 * aIusPerDecimil;
+    SetDefaultLineWidth( 0 );    // No line width on DXF
+    plotMirror = false;             // No mirroring on DXF 
+    currentColor = BLACK;
 }
 
-
-bool DXF_PLOTTER::start_plot( FILE* fout )
+/**
+ * Opens the DXF plot with a skeleton header
+ */
+bool DXF_PLOTTER::StartPlot( FILE* fout )
 {
-    wxASSERT( !output_file );
-    output_file = fout;
-    /* DXF HEADER - Boilerplate */
-    fputs( "0\nSECTION\n2\nHEADER\n9\n$ANGBASE\n50\n0.0\n9\n$ANGDIR\n70\n0\n0\nENDSEC\n0\nSECTION\n2\nTABLES\n0\nTABLE\n2\nLTYPE\n70\n1\n0\nLTYPE\n2\nCONTINUOUS\n70\n0\n3\nSolid line\n72\n65\n73\n0\n40\n0.0\n0\nENDTAB\n",
-           output_file );
-    /* Layer table - one layer per color */
-    fprintf( output_file, "0\nTABLE\n2\nLAYER\n70\n%d\n", NBCOLOR );
-    for( int i = 0; i<NBCOLOR; i++ )
+    wxASSERT( !outputFile );
+    outputFile = fout;
+
+    // DXF HEADER - Boilerplate 
+    // Defines the minimum for drawing i.e. the angle system and the
+    // continuous linetype
+    fputs( "  0\n"
+           "SECTION\n"
+           "  2\n"
+           "HEADER\n"
+           "  9\n"
+           "$ANGBASE\n"
+           "  50\n"
+           "0.0\n"
+           "  9\n"
+           "$ANGDIR\n"
+           "  70\n"
+           "0\n"
+           "  0\n"
+           "ENDSEC\n"
+           "  0\n"
+           "SECTION\n"
+           "  2\n"
+           "TABLES\n"
+           "  0\n"
+           "TABLE\n"
+           "  2\n"
+           "LTYPE\n"
+           "  70\n"
+           "1\n"
+           "  0\n"
+           "LTYPE\n"
+           "  2\n"
+           "CONTINUOUS\n"
+           "  70\n"
+           "0\n"
+           "  3\n"
+           "Solid line\n"
+           "  72\n"
+           "65\n"
+           "  73\n"
+           "0\n"
+           "  40\n"
+           "0.0\n"
+           "  0\n"
+           "ENDTAB\n",
+            outputFile );
+
+    // Text styles table 
+    // Defines 4 text styles, one for each bold/italic combination
+    fputs( "  0\n"
+           "TABLE\n"
+           "  2\n"
+           "STYLE\n"
+           "  70\n"
+           "4\n", outputFile );
+
+    static const char *style_name[4] = {"KICAD", "KICADB", "KICADI", "KICADBI"};
+    for(int i = 0; i < 4; i++ ) 
+    {
+        fprintf( outputFile,
+                 "  0\n"
+                 "STYLE\n"
+                 "  2\n"        
+                 "%s\n"         // Style name
+                 "  70\n"       
+                 "0\n"          // Standard flags
+                 "  40\n"       
+                 "0\n"          // Non-fixed height text
+                 "  41\n"
+                 "1\n"          // Width factor (base)
+                 "  42\n"
+                 "1\n"          // Last height (mandatory)
+                 "  50\n"
+                 "%g\n"         // Oblique angle
+                 "  71\n"
+                 "0\n"          // Generation flags (default)
+                 "  3\n"
+                 // The standard ISO font (when kicad is build with it
+                 // the dxf text in acad matches *perfectly*)
+                 "isocp.shx\n", // Font name (when not bigfont)
+                 // Apply a 15 degree angle to italic text
+                 style_name[i], i < 2 ? 0 : DXF_OBLIQUE_ANGLE );
+    }
+
+
+    // Layer table - one layer per color 
+    fprintf( outputFile, 
+             "  0\n"
+             "ENDTAB\n"
+             "  0\n"
+             "TABLE\n"
+             "  2\n"
+             "LAYER\n"
+             "  70\n"
+             "%d\n", NBCOLOR );
+
+    /* The layer/colors palette. The acad/DXF palette is divided in 3 zones:
+
+       - The primary colors (1 - 9)
+       - An HSV zone (10-250, 5 values x 2 saturations x 10 hues
+       - Greys (251 - 255)
+
+       The is *no* black... the white does it on paper, usually, and 
+       anyway it depends on the plotter configuration, since DXF colors
+       are meant to be logical only (they represent *both* line color and
+       width); later version with plot styles only complicate the matter!
+
+       As usual, brown and magenta/purple are difficult to place since
+       they are actually variations of other colors.
+     */
+    static const struct {
+        const char *name;
+        int color;
+    } dxf_layer[NBCOLOR] = {
+        { "Black",              250 },
+        { "Blue",               5 },
+        { "Green",              3 },
+        { "Cyan",               4 },
+        { "Red",                1 },
+        { "Magenta",            6 },
+        { "Brown",              54 },
+        { "LightGray",          9 },
+        { "DarkGray",           8 },
+        { "LightBlue",          171 },
+        { "LightGreen",         91 },
+        { "LightCyan",          131 },
+        { "LightRed",           11 },
+        { "LightMagenta",       221 },
+        { "Yellow",             2 },
+        { "White",              7 },
+        { "DarkDarkGray",       251 },
+        { "DarkBlue",           178 },
+        { "DarkGreen",          98 },
+        { "DarkCyan",           138 },
+        { "DarkRed",            18 },
+        { "DarkMagenta",        228 },
+        { "DarkBrown",          58 },
+        { "LightYellow",        51 },
+    };
+
+    for( int i = 0; i < NBCOLOR; i++ )
     {
         wxString cname = ColorRefs[i].m_Name;
-        fprintf( output_file, "0\nLAYER\n2\n%s\n70\n0\n62\n%d\n6\nCONTINUOUS\n",
-                 TO_UTF8( cname ), i + 1 );
+        fprintf( outputFile, 
+                 "  0\n"
+                 "LAYER\n"
+                 "  2\n"
+                 "%s\n"         // Layer name
+                 "  70\n"
+                 "0\n"          // Standard flags
+                 "  62\n"       
+                 "%d\n"         // Color number
+                 "  6\n"
+                 "CONTINUOUS\n",// Linetype name
+                 dxf_layer[i].name, dxf_layer[i].color );
     }
 
-    /* End of layer table, begin entities */
-    fputs( "0\nENDTAB\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n", output_file );
+    // End of layer table, begin entities
+    fputs( "  0\n"
+           "ENDTAB\n"
+           "  0\n"
+           "ENDSEC\n"
+           "  0\n"
+           "SECTION\n"
+           "  2\n"
+           "ENTITIES\n", outputFile );
 
     return true;
 }
 
 
-bool DXF_PLOTTER::end_plot()
+bool DXF_PLOTTER::EndPlot()
 {
-    wxASSERT( output_file );
-    /* DXF FOOTER */
-    fputs( "0\nENDSEC\n0\nEOF\n", output_file );
-    fclose( output_file );
-    output_file = NULL;
+    wxASSERT( outputFile );
+
+    // DXF FOOTER 
+    fputs( "  0\n"
+           "ENDSEC\n"
+           "  0\n"
+           "EOF\n", outputFile );
+    fclose( outputFile );
+    outputFile = NULL;
 
     return true;
-}
-
-
-/*
- * color = color index in ColorRefs[]
- */
-void DXF_PLOTTER::set_color( int color )
-{
-    wxASSERT( output_file );
-    if( ( color >= 0 && color_mode )
-       || ( color == BLACK )
-       || ( color == WHITE ) )
-    {
-        current_color = color;
-    }
-}
-
-
-void DXF_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
-{
-    wxASSERT( output_file );
-    move_to( p1 );
-    line_to( wxPoint( p1.x, p2.y ) );
-    line_to( wxPoint( p2.x, p2.y ) );
-    line_to( wxPoint( p2.x, p1.y ) );
-    finish_to( wxPoint( p1.x, p1.y ) );
-}
-
-
-void DXF_PLOTTER::circle( wxPoint centre, int diameter, FILL_T fill, int width )
-{
-    wxASSERT( output_file );
-    double radius = user_to_device_size( diameter / 2 );
-    user_to_device_coordinates( centre );
-    if( radius > 0 )
-    {
-        wxString cname = ColorRefs[current_color].m_Name;
-        if (!fill) {
-          fprintf( output_file, "0\nCIRCLE\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%g\n",
-                  TO_UTF8( cname ),
-                  centre.x, centre.y, radius );
-        }
-        if (fill == FILLED_SHAPE) {
-            int r = (int)(radius*0.5);
-            fprintf( output_file, "0\nPOLYLINE\n");
-            fprintf( output_file, "8\n%s\n66\n1\n70\n1\n", TO_UTF8( cname ));
-            fprintf( output_file, "40\n%g\n41\n%g\n", radius,radius);
-            fprintf( output_file, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
-            fprintf( output_file, "10\n%d.0\n 20\n%d.0\n42\n1.0\n", centre.x-r,centre.y);
-            fprintf( output_file, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
-            fprintf( output_file, "10\n%d.0\n 20\n%d.0\n42\n1.0\n", centre.x+r,centre.y);
-            fprintf( output_file, "0\nSEQEND\n");
-    }
-     }
-}
-
-
-/* Draw a polygon (closed if filled) in DXF format
- * nb = number of coord (coord 1 = 2 elements: X and Y table)
- * aFill: if != 0 filled polygon
- */
-void DXF_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth)
-{
-    if( aCornerList.size() <= 1 )
-        return;
-
-    move_to( aCornerList[0] );
-    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
-        line_to( aCornerList[ii] );
-
-    /* Close polygon. */
-    if( aFill )
-    {
-        unsigned ii = aCornerList.size() - 1;
-        if( aCornerList[ii] != aCornerList[0] )
-            line_to( aCornerList[0] );
-    }
-    pen_finish();
-}
-
-/*
- * Function PlotImage
- * Only Postscript plotters can plot bitmaps
- * for plotters that cannot plot a bitmap, a rectangle is plotted
- * For DXF_PLOTTER, currently: draws a rectangle
- * param aImage = the bitmap
- * param aPos = position of the center of the bitmap
- * param aScaleFactor = the scale factor to apply to the bitmap size
- *                      (this is not the plot scale factor)
- */
-void DXF_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor )
-{
-    wxSize size;
-    size.x = aImage.GetWidth();
-    size.y = aImage.GetHeight();
-
-    size.x = KiROUND( size.x * aScaleFactor );
-    size.y = KiROUND( size.y * aScaleFactor );
-
-    wxPoint start = aPos;
-    start.x -= size.x / 2;
-    start.y -= size.y / 2;
-
-    wxPoint end = start;
-    end.x += size.x;
-    end.y += size.y;
-
-    rect( start, end, NO_FILL );
-
-}
-
-
-
-/*
- * Move the pen up (pen = 'U') or down (feather = 'D') at position x, y
- * Unit to unit DRAWING
- * If pen = 'Z' without lifting pen displacement
- */
-void DXF_PLOTTER::pen_to( wxPoint pos, char plume )
-{
-    wxASSERT( output_file );
-    if( plume == 'Z' )
-    {
-        return;
-    }
-    user_to_device_coordinates( pos );
-
-    if( pen_lastpos != pos && plume == 'D' )
-    {
-        /* DXF LINE */
-        wxString cname = ColorRefs[current_color].m_Name;
-        fprintf( output_file, "0\nLINE\n8\n%s\n10\n%d.0\n20\n%d.0\n11\n%d.0\n21\n%d.0\n",
-                 TO_UTF8( cname ),
-                 pen_lastpos.x, pen_lastpos.y, pos.x, pos.y );
-    }
-    pen_lastpos = pos;
-}
-
-
-void DXF_PLOTTER::set_dash( bool dashed )
-{
-    /* NOP for now */
 }
 
 
 /**
- * Function thick_segment
- * Plot a filled segment (track)
- * @param aStart = starting point
- * @param aEnd = ending point
- * @param aWidth = segment width (thickness)
- * @param aPlotMode = FILLED, SKETCH ..
+ * The DXF exporter handles 'colors' as layers...
  */
-void DXF_PLOTTER::thick_segment( wxPoint aStart, wxPoint aEnd, int aWidth,
-                                 EDA_DRAW_MODE_T aPlotMode )
+void DXF_PLOTTER::SetColor( EDA_COLOR_T color )
 {
-    if( aPlotMode == LINE )  /* just a line is Ok */
+    wxASSERT( outputFile );
+    if( ( color >= 0 && colorMode )
+       || ( color == BLACK )
+       || ( color == WHITE ) )
     {
-        move_to( aStart );
-        finish_to( aEnd );
+        currentColor = color;
     }
-    else
+}
+
+/**
+ * DXF rectangle: fill not supported
+ */
+void DXF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+{
+    wxASSERT( outputFile );
+    MoveTo( p1 );
+    LineTo( wxPoint( p1.x, p2.y ) );
+    LineTo( wxPoint( p2.x, p2.y ) );
+    LineTo( wxPoint( p2.x, p1.y ) );
+    FinishTo( wxPoint( p1.x, p1.y ) );
+}
+
+
+/** 
+ * DXF circle: full functionality; it even does 'fills' drawing a 
+ * circle with a dual-arc polyline wide as the radius.
+ *
+ * I could use this trick to do other filled primitives
+ */
+void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int width )
+{
+    wxASSERT( outputFile );
+    double radius = userToDeviceSize( diameter / 2 );
+    DPOINT centre_dev = userToDeviceCoordinates( centre );
+    if( radius > 0 )
     {
-        segment_as_oval( aStart, aEnd, aWidth, aPlotMode );
+        wxString cname = ColorRefs[currentColor].m_Name;
+        if (!fill) 
+        {
+            fprintf( outputFile, "0\nCIRCLE\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n",
+                    TO_UTF8( cname ),
+                    centre_dev.x, centre_dev.y, radius );
+        }
+        if (fill == FILLED_SHAPE) 
+        {
+            double r = radius*0.5;
+            fprintf( outputFile, "0\nPOLYLINE\n");
+            fprintf( outputFile, "8\n%s\n66\n1\n70\n1\n", TO_UTF8( cname ));
+            fprintf( outputFile, "40\n%g\n41\n%g\n", radius, radius);
+            fprintf( outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
+            fprintf( outputFile, "10\n%g\n 20\n%g\n42\n1.0\n", 
+                    centre_dev.x-r, centre_dev.y );
+            fprintf( outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
+            fprintf( outputFile, "10\n%g\n 20\n%g\n42\n1.0\n", 
+                    centre_dev.x+r, centre_dev.y );
+            fprintf( outputFile, "0\nSEQEND\n");
+        }
     }
 }
 
 
-/* Plot an arc in DXF format.
- * center = center coord
- * StAngle, EndAngle = angle of beginning and end
- * Radius = radius of the arc
+/** 
+ * DXF polygon: doesn't fill it but at least it close the filled ones
  */
-void DXF_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
+void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, 
+                            FILL_T aFill, int aWidth)
+{
+    if( aCornerList.size() <= 1 )
+        return;
+
+    MoveTo( aCornerList[0] );
+    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+        LineTo( aCornerList[ii] );
+
+    // Close polygon if 'fill' requested
+    if( aFill )
+    {
+        unsigned ii = aCornerList.size() - 1;
+        if( aCornerList[ii] != aCornerList[0] )
+            LineTo( aCornerList[0] );
+    }
+    PenFinish();
+}
+
+
+void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
+{
+    wxASSERT( outputFile );
+    if( plume == 'Z' )
+    {
+        return;
+    }
+    DPOINT pos_dev = userToDeviceCoordinates( pos );
+    DPOINT pen_lastpos_dev = userToDeviceCoordinates( penLastpos );
+
+    if( penLastpos != pos && plume == 'D' )
+    {
+        // DXF LINE 
+        wxString cname = ColorRefs[currentColor].m_Name;
+        fprintf( outputFile, "0\nLINE\n8\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
+                 TO_UTF8( cname ),
+                 pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );
+    }
+    penLastpos = pos;
+}
+
+
+/**
+ * Dashed lines are not (yet) supported by DXF_PLOTTER
+ */
+void DXF_PLOTTER::SetDash( bool dashed )
+{
+    // NOP for now
+}
+
+
+void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
+                                EDA_DRAW_MODE_T aPlotMode )
+{
+    if( aPlotMode == LINE )  // In line mode, just a line is OK
+    {
+        MoveTo( aStart );
+        FinishTo( aEnd );
+    }
+    else
+    {
+        segmentAsOval( aStart, aEnd, aWidth, aPlotMode );
+    }
+}
+
+/** Plot an arc in DXF format
+ * Filling is not supported
+ */
+void DXF_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
                        FILL_T fill, int width )
 {
-    wxASSERT( output_file );
+    wxASSERT( outputFile );
 
     if( radius <= 0 )
         return;
 
-    user_to_device_coordinates( centre );
-    radius = KiROUND( user_to_device_size( radius ) );
+    DPOINT centre_dev = userToDeviceCoordinates( centre );
+    double radius_dev = userToDeviceSize( radius );
 
-    /* DXF ARC */
-    wxString cname = ColorRefs[current_color].m_Name;
-    fprintf( output_file,
-             "0\nARC\n8\n%s\n10\n%d.0\n20\n%d.0\n40\n%d.0\n50\n%d.0\n51\n%d.0\n",
+    // Emit a DXF ARC entity
+    wxString cname = ColorRefs[currentColor].m_Name;
+    fprintf( outputFile,
+             "0\nARC\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n50\n%g\n51\n%g\n",
              TO_UTF8( cname ),
-             centre.x, centre.y, radius,
-             StAngle / 10, EndAngle / 10 );
+             centre_dev.x, centre_dev.y, radius_dev,
+             StAngle / 10.0, EndAngle / 10.0 );
 }
 
-
-/* Plot oval pad at position. */
-void DXF_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                  EDA_DRAW_MODE_T trace_mode )
+/** 
+ * DXF oval pad: always done in sketch mode
+ */
+void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int orient,
+                                EDA_DRAW_MODE_T trace_mode )
 {
-    wxASSERT( output_file );
+    wxASSERT( outputFile );
+    wxSize size( aSize );
 
     /* The chip is reduced to an oval tablet with size.y > size.x
      * (Oval vertical orientation 0) */
@@ -268,37 +410,41 @@ void DXF_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
         if( orient >= 3600 )
             orient -= 3600;
     }
-    sketch_oval( pos, size, orient, -1 );
+    sketchOval( pos, size, orient, -1 );
 }
 
 
-/* Plot round pad or via. */
-void DXF_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
+/** 
+ * DXF round pad: always done in sketch mode; it could be filled but it isn't
+ * pretty if other kinds of pad aren't...
+ */
+void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
                                     EDA_DRAW_MODE_T trace_mode )
 {
-    wxASSERT( output_file );
-    circle( pos, diametre, NO_FILL );
+    wxASSERT( outputFile );
+    Circle( pos, diametre, NO_FILL );
 }
 
 
-/*
- * Plot rectangular pad vertical or horizontal (rectangular Pad)
+/**
+ * DXF rectangular pad: alwayd done in sketch mode
  */
-void DXF_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
-                                  int orient, EDA_DRAW_MODE_T trace_mode )
+void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
+                                int orient, EDA_DRAW_MODE_T trace_mode )
 {
-    wxASSERT( output_file );
+    wxASSERT( outputFile );
     wxSize size;
     int    ox, oy, fx, fy;
 
-    size.x = padsize.x / 2;  size.y = padsize.y / 2;
+    size.x = padsize.x / 2;  
+    size.y = padsize.y / 2;
 
     if( size.x < 0 )
         size.x = 0;
     if( size.y < 0 )
         size.y = 0;
 
-    /* If a dimension is zero, the trace is reduced to 1 line. */
+    // If a dimension is zero, the trace is reduced to 1 line
     if( size.x == 0 )
     {
         ox = pos.x;
@@ -307,8 +453,8 @@ void DXF_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
         fx = pos.x;
         fy = pos.y + size.y;
         RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        move_to( wxPoint( ox, oy ) );
-        finish_to( wxPoint( fx, fy ) );
+        MoveTo( wxPoint( ox, oy ) );
+        FinishTo( wxPoint( fx, fy ) );
         return;
     }
     if( size.y == 0 )
@@ -319,45 +465,42 @@ void DXF_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
         fx = pos.x + size.x;
         fy = pos.y;
         RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        move_to( wxPoint( ox, oy ) );
-        finish_to( wxPoint( fx, fy ) );
+        MoveTo( wxPoint( ox, oy ) );
+        FinishTo( wxPoint( fx, fy ) );
         return;
     }
 
     ox = pos.x - size.x;
     oy = pos.y - size.y;
     RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-    move_to( wxPoint( ox, oy ) );
+    MoveTo( wxPoint( ox, oy ) );
 
     fx = pos.x - size.x;
     fy = pos.y + size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    line_to( wxPoint( fx, fy ) );
+    LineTo( wxPoint( fx, fy ) );
 
     fx = pos.x + size.x;
     fy = pos.y + size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    line_to( wxPoint( fx, fy ) );
+    LineTo( wxPoint( fx, fy ) );
 
     fx = pos.x + size.x;
     fy = pos.y - size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    line_to( wxPoint( fx, fy ) );
+    LineTo( wxPoint( fx, fy ) );
 
-    finish_to( wxPoint( ox, oy ) );
+    FinishTo( wxPoint( ox, oy ) );
 }
 
 
-/*
- * Plot trapezoidal pad.
- * aPadPos is pad position, aCorners the corners position of the basic shape
- * Orientation aPadOrient in 0.1 degrees
- * Plot mode = FILLED, SKETCH (unused)
+/**
+ * DXF trapezoidal pad: only sketch mode is supported
  */
-void DXF_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                    int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
+                                  int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
-    wxASSERT( output_file );
+    wxASSERT( outputFile );
     wxPoint coord[4];       /* coord actual corners of a trapezoidal trace */
 
     for( int ii = 0; ii < 4; ii++ )
@@ -368,9 +511,158 @@ void DXF_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
     }
 
     // Plot edge:
-    move_to( coord[0] );
-    line_to( coord[1] );
-    line_to( coord[2] );
-    line_to( coord[3] );
-    finish_to( coord[0] );
+    MoveTo( coord[0] );
+    LineTo( coord[1] );
+    LineTo( coord[2] );
+    LineTo( coord[3] );
+    FinishTo( coord[0] );
 }
+
+void DXF_PLOTTER::Text( const wxPoint&              aPos,
+                        enum EDA_COLOR_T            aColor,
+                        const wxString&             aText,
+                        int                         aOrient,
+                        const wxSize&               aSize,
+                        enum EDA_TEXT_HJUSTIFY_T    aH_justify,
+                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                        int                         aWidth,
+                        bool                        aItalic,
+                        bool                        aBold )
+{
+    if( textAsLines )
+        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
+                aWidth, aItalic, aBold );
+    else 
+    {
+        /* Emit text as a text entity. This loses formatting and shape but it's
+           more useful as a CAD object */
+        DPOINT origin_dev = userToDeviceCoordinates( aPos );
+        if( aColor >= 0 )
+            currentColor = aColor;
+        wxString cname = ColorRefs[currentColor].m_Name;
+        DPOINT size_dev = userToDeviceSize( aSize );
+        int h_code = 0, v_code = 0;
+        switch( aH_justify ) 
+        {
+        case GR_TEXT_HJUSTIFY_LEFT:
+            h_code = 0;
+            break;
+        case GR_TEXT_HJUSTIFY_CENTER:
+            h_code = 1;
+            break;
+        case GR_TEXT_HJUSTIFY_RIGHT:
+            h_code = 2;
+            break;
+        }
+        switch( aV_justify ) 
+        {
+        case GR_TEXT_VJUSTIFY_TOP:
+            v_code = 3;
+            break;
+        case GR_TEXT_VJUSTIFY_CENTER:
+            v_code = 2;
+            break;
+        case GR_TEXT_VJUSTIFY_BOTTOM:
+            v_code = 1;
+            break;
+        }
+
+        // Position, size, rotation and alignment 
+        // The two alignment point usages is somewhat idiot (see the DXF ref)
+        // Anyway since we don't use the fit/aligned options, they're the same
+        fprintf( outputFile,
+                "  0\n"
+                "TEXT\n"
+                "  7\n"
+                "%s\n"          // Text style
+                "  8\n"
+                "%s\n"          // Layer name
+                "  10\n"
+                "%g\n"          // First point X
+                "  11\n"
+                "%g\n"          // Second point X
+                "  20\n"
+                "%g\n"          // First point Y
+                "  21\n"
+                "%g\n"          // Second point Y
+                "  40\n"
+                "%g\n"          // Text height
+                "  41\n"
+                "%g\n"          // Width factor
+                "  50\n"
+                "%g\n"          // Rotation
+                "  51\n"
+                "%g\n"          // Oblique angle
+                "  71\n"
+                "%d\n"          // Mirror flags
+                "  72\n"
+                "%d\n"          // H alignment
+                "  73\n"
+                "%d\n",         // V alignment
+                aBold ? (aItalic ? "KICADBI" : "KICADB")
+                      : (aItalic ? "KICADI" : "KICAD"),
+                TO_UTF8( cname ),
+                origin_dev.x, origin_dev.x,
+                origin_dev.y, origin_dev.y, 
+                size_dev.y, fabs( size_dev.y / size_dev.x ),
+                aOrient / 10.0, 
+                aItalic ? DXF_OBLIQUE_ANGLE : 0,
+                size_dev.x < 0 ? 2 : 0, // X mirror flag
+                h_code, v_code );
+
+        /* There are two issue in emitting the text:
+           - Our overline character (~) must be converted to the appropriate
+           control sequence %%O or %%o
+           - Text encoding in DXF is more or less unspecified since depends on
+           the DXF declared version, the acad version reading it *and* some
+           system variables to be put in the header handled only by newer acads
+           Also before R15 unicode simply is not supported (you need to use
+           bigfonts which are a massive PITA). Common denominator solution:
+           use Latin1 (and however someone could choke on it, anyway). Sorry
+           for the extended latin people. If somewant want to try fixing this
+           recent version seems to use UTF-8 (and not UCS2 like the rest of 
+           Windows)
+
+           XXX Actually there is a *third* issue: older DXF formats are limited
+           to 255 bytes records (it was later raised to 2048); since I'm lazy
+           and text so long is not probable I just don't implement this rule.
+           If someone is interested in fixing this, you have to emit the first
+           partial lines with group code 3 (max 250 bytes each) and then finish
+           with a group code 1 (less than 250 bytes). The DXF refs explains it
+           in no more details...
+         */
+
+        bool overlining = false;
+        fputs( "  1\n", outputFile );
+        for( unsigned i = 0; i < aText.length(); i++ )
+        {
+            /* Here I do a bad thing: writing the output one byte at a time!
+               but today I'm lazy and I have no idea on how to coerce a Unicode
+               wxString to spit out latin1 encoded text ... 
+
+               Atleast stdio is *supposed* to do output buffering, so there is
+               hope is not too slow */
+            wchar_t ch = aText[i];
+            if( ch > 255 ) 
+            {
+                // I can't encode this...
+                putc( '?', outputFile );
+            }
+            else 
+            {
+                if( ch == '~' )
+                {
+                    // Handle the overline toggle
+                    fputs( overlining ? "%%o" : "%%O", outputFile );
+                    overlining = !overlining;
+                }
+                else
+                {
+                    putc( ch, outputFile );
+                }
+            }
+        }
+        putc( '\n', outputFile );
+    }
+}
+

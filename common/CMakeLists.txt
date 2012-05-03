@@ -7,6 +7,7 @@ include_directories(
     ../3d-viewer
     ../pcbnew
     ../polygon
+    ../zlib
     ${INC_AFTER}
     )
 
@@ -42,6 +43,7 @@ set(COMMON_SRCS
     common_plot_functions.cpp
     common_plotHPGL_functions.cpp
     common_plotPS_functions.cpp
+    common_plotPDF_functions.cpp
     common_plotGERBER_functions.cpp
     common_plotDXF_functions.cpp
     confirm.cpp

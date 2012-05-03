@@ -212,10 +212,10 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     if( singleFile )
     {
         side = 2;
-        fn.SetName( fn.GetName() + wxT( "_" ) + wxT("all") );
+        fn.SetName( fn.GetName() + wxT( "-" ) + wxT("all") );
     }
      else
-        fn.SetName( fn.GetName() + wxT( "_" ) + frontLayerName );
+        fn.SetName( fn.GetName() + wxT( "-" ) + frontLayerName );
 
     fn.SetExt( FootprintPlaceFileExtension );
 
@@ -252,7 +252,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     side = 0;
     fn = screen->GetFileName();
     fn.SetPath( GetOutputDirectory() );
-    fn.SetName( fn.GetName() + wxT( "_" ) + backLayerName );
+    fn.SetName( fn.GetName() + wxT( "-" ) + backLayerName );
     fn.SetExt( wxT( "pos" ) );
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
@@ -286,10 +286,10 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 }
 
 // Defined values to write coordinates using inches or mm:
-static const double conv_unit_inch = 0.0001;      // units = INCHES
+static const double conv_unit_inch = 0.001 / IU_PER_MILS ;      // units = INCHES
 static const char unit_text_inch[] = "## Unit = inches, Angle = deg.\n";
 
-static const double conv_unit_mm = 0.00254;    // units = mm
+static const double conv_unit_mm = 1.0 / IU_PER_MM;    // units = mm
 static const char unit_text_mm[] = "## Unit = mm, Angle = deg.\n";
 
 static wxPoint File_Place_Offset;  // Offset coordinates for generated file.
@@ -451,23 +451,27 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     fputs( line, file );
 
     sprintf( line,
-             "# Ref    Val                  PosX       PosY        Rot     Side\n" );
+             "# Ref    Val                  Package         PosX       PosY        Rot     Side\n" );
     fputs( line, file );
 
     for( int ii = 0; ii < moduleCount; ii++ )
     {
         wxPoint  module_pos;
-        wxString ref = list[ii].m_Reference;
-        wxString val = list[ii].m_Value;
-        sprintf( line, "%-8.8s %-16.16s ", TO_UTF8( ref ), TO_UTF8( val ) );
+        const wxString& ref = list[ii].m_Reference;
+        const wxString& val = list[ii].m_Value;
+        const wxString& pkg = list[ii].m_Module->m_LibRef;
+        sprintf( line, "%-8.8s %-16.16s %-16.16s", 
+	         TO_UTF8( ref ), TO_UTF8( val ), TO_UTF8( pkg ) );
 
         module_pos    = list[ii].m_Module->m_Pos;
         module_pos -= File_Place_Offset;
 
         char* text = line + strlen( line );
+        /* Keep the coordinates in the first quadrant, like the gerbers
+         * (i.e. change sign to y) */
         sprintf( text, " %9.4f  %9.4f  %8.1f    ",
                  module_pos.x * conv_unit,
-                 module_pos.y * conv_unit,
+                 -module_pos.y * conv_unit,
                  double(list[ii].m_Module->m_Orient) / 10 );
 
         int layer = list[ii].m_Module->GetLayer();
