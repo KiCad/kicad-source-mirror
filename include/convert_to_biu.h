@@ -55,6 +55,7 @@ inline int DMils2iu( int dmils )
 }
 
 #else            // Eeschema and anything else.
+#define IU_PER_DECIMILS  0.1
 #define IU_PER_MILS   1.0
 #define IU_PER_MM   (IU_PER_MILS / 0.0254)
 

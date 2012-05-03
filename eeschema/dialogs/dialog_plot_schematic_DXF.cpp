@@ -185,14 +185,12 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
             sheetpath = SheetList.GetNext();
         }
 
-        double scale = 10;
-
         plot_offset.x = 0;
         plot_offset.y = 0;
 
         plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".dxf" );
 
-        PlotOneSheetDXF( plotFileName, screen, plot_offset, scale );
+        PlotOneSheetDXF( plotFileName, screen, plot_offset, 1 );
 
         if( !m_select_PlotAll )
             break;
@@ -232,24 +230,24 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
     const PAGE_INFO&   pageInfo = screen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
 
-    plotter->set_viewport( plot_offset, scale, 0 );
-    plotter->set_color_mode( m_plotColorOpt );
+    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, 0 );
+    plotter->SetColorMode( m_plotColorOpt );
 
     // Init :
-    plotter->set_creator( wxT( "Eeschema-DXF" ) );
-    plotter->set_filename( FileName );
-    plotter->start_plot( output_file );
+    plotter->SetCreator( wxT( "Eeschema-DXF" ) );
+    plotter->SetFilename( FileName );
+    plotter->StartPlot( output_file );
 
     if( m_plot_Sheet_Ref )
     {
-        plotter->set_color( BLACK );
+        plotter->SetColor( BLACK );
         m_Parent->PlotWorkSheet( plotter, screen );
     }
 
     screen->Plot( plotter );
 
     // finish
-    plotter->end_plot();
+    plotter->EndPlot();
     delete plotter;
 
     m_MsgBox->AppendText( wxT( "Ok\n" ) );

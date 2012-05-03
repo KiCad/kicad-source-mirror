@@ -603,17 +603,17 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_LINE::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
-    aPlotter->set_current_line_width( GetPenSize() );
+    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetCurrentLineWidth( GetPenSize() );
 
     if( m_Layer == LAYER_NOTES )
-        aPlotter->set_dash( true );
+        aPlotter->SetDash( true );
 
-    aPlotter->move_to( m_start );
-    aPlotter->finish_to( m_end );
+    aPlotter->MoveTo( m_start );
+    aPlotter->FinishTo( m_end );
 
     if( m_Layer == LAYER_NOTES )
-        aPlotter->set_dash( false );
+        aPlotter->SetDash( false );
 }
 
 

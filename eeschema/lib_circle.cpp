@@ -193,13 +193,13 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        aPlotter->circle( pos, m_Radius * 2, FILLED_SHAPE, 0 );
+        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->Circle( pos, m_Radius * 2, FILLED_SHAPE, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-    aPlotter->circle( pos, m_Radius * 2, already_filled ? NO_FILL : m_Fill, GetPenSize() );
+    aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
+    aPlotter->Circle( pos, m_Radius * 2, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
 

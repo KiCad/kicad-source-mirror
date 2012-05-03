@@ -10,8 +10,6 @@
 #include <base_struct.h>    // IS_DRAGGED and IN_EDIT definitions.
 #include <convert_to_biu.h> // to define DMils2iu() conversion function
 
-#define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)
-
 // Arcs are approximated by segments: define the number of segments per 360 deg (KiCad uses 0.1
 // deg approximation).  Be aware 3600 / ARC_APPROX_SEGMENTS_COUNT_LOW_DEF is an integer.
 #define ARC_APPROX_SEGMENTS_COUNT_LOW_DEF 16

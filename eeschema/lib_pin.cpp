@@ -1275,7 +1275,7 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
     color = ReturnLayerColor( LAYER_PIN );
 
-    aPlotter->set_color( color );
+    aPlotter->SetColor( color );
 
     MapX1 = MapY1 = 0;
     x1 = aPosition.x; y1 = aPosition.y;
@@ -1305,35 +1305,35 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
     if( m_shape & INVERT )
     {
-        aPlotter->circle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
+        aPlotter->Circle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
                                    MapY1 * INVERT_PIN_RADIUS + y1 ),
                           INVERT_PIN_RADIUS * 2, // diameter
                           NO_FILL,               // fill
                           -1 );                  // width
 
-        aPlotter->move_to( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
+        aPlotter->MoveTo( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
                                     MapY1 * INVERT_PIN_RADIUS * 2 + y1 ) );
-        aPlotter->finish_to( aPosition );
+        aPlotter->FinishTo( aPosition );
     }
     else
     {
-        aPlotter->move_to( wxPoint( x1, y1 ) );
-        aPlotter->finish_to( aPosition );
+        aPlotter->MoveTo( wxPoint( x1, y1 ) );
+        aPlotter->FinishTo( aPosition );
     }
 
     if( m_shape & CLOCK )
     {
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
-            aPlotter->move_to( wxPoint( x1, y1 + CLOCK_PIN_DIM ) );
-            aPlotter->line_to( wxPoint( x1 - MapX1 * CLOCK_PIN_DIM, y1 ) );
-            aPlotter->finish_to( wxPoint( x1, y1 - CLOCK_PIN_DIM ) );
+            aPlotter->MoveTo( wxPoint( x1, y1 + CLOCK_PIN_DIM ) );
+            aPlotter->LineTo( wxPoint( x1 - MapX1 * CLOCK_PIN_DIM, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 - CLOCK_PIN_DIM ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->move_to( wxPoint( x1 + CLOCK_PIN_DIM, y1 ) );
-            aPlotter->line_to( wxPoint( x1, y1 - MapY1 * CLOCK_PIN_DIM ) );
-            aPlotter->finish_to( wxPoint( x1 - CLOCK_PIN_DIM, y1 ) );
+            aPlotter->MoveTo( wxPoint( x1 + CLOCK_PIN_DIM, y1 ) );
+            aPlotter->LineTo( wxPoint( x1, y1 - MapY1 * CLOCK_PIN_DIM ) );
+            aPlotter->FinishTo( wxPoint( x1 - CLOCK_PIN_DIM, y1 ) );
         }
     }
 
@@ -1341,17 +1341,17 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     {
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
-            aPlotter->move_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
-            aPlotter->line_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
+            aPlotter->MoveTo( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
+            aPlotter->LineTo( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
                                         y1 - IEEE_SYMBOL_PIN_DIM ) );
-            aPlotter->finish_to( wxPoint( x1, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->move_to( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
-            aPlotter->line_to( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM,
+            aPlotter->MoveTo( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+            aPlotter->LineTo( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM,
                                         y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
-            aPlotter->finish_to( wxPoint( x1, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 ) );
         }
     }
 
@@ -1360,13 +1360,13 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     {
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
-            aPlotter->move_to( wxPoint( x1, y1 - IEEE_SYMBOL_PIN_DIM ) );
-            aPlotter->finish_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
+            aPlotter->MoveTo( wxPoint( x1, y1 - IEEE_SYMBOL_PIN_DIM ) );
+            aPlotter->FinishTo( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->move_to( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM, y1 ) );
-            aPlotter->finish_to( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+            aPlotter->MoveTo( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
         }
     }
 }
@@ -1427,7 +1427,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
                 if( orient == PIN_RIGHT )
                 {
                     x = x1 + TextInside;
-                    plotter->text( wxPoint( x, y1 ), NameColor,
+                    plotter->Text( wxPoint( x, y1 ), NameColor,
                                    m_name,
                                    TEXT_ORIENT_HORIZ,
                                    PinNameSize,
@@ -1440,7 +1440,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
                     x = x1 - TextInside;
 
                     if( DrawPinName )
-                        plotter->text( wxPoint( x, y1 ),
+                        plotter->Text( wxPoint( x, y1 ),
                                        NameColor, m_name, TEXT_ORIENT_HORIZ,
                                        PinNameSize,
                                        GR_TEXT_HJUSTIFY_RIGHT,
@@ -1450,7 +1450,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
             }
             if( DrawPinNum )
             {
-                plotter->text( wxPoint( (x1 + pin_pos.x) / 2, y1 - TXTMARGE ),
+                plotter->Text( wxPoint( (x1 + pin_pos.x) / 2, y1 - TXTMARGE ),
                                NumColor, StringPinNum,
                                TEXT_ORIENT_HORIZ, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
@@ -1465,7 +1465,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
                 y = y1 + TextInside;
 
                 if( DrawPinName )
-                    plotter->text( wxPoint( x1, y ), NameColor,
+                    plotter->Text( wxPoint( x1, y ), NameColor,
                                    m_name,
                                    TEXT_ORIENT_VERT, PinNameSize,
                                    GR_TEXT_HJUSTIFY_RIGHT,
@@ -1474,7 +1474,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
 
                 if( DrawPinNum )
                 {
-                    plotter->text( wxPoint( x1 - TXTMARGE, (y1 + pin_pos.y) / 2 ),
+                    plotter->Text( wxPoint( x1 - TXTMARGE, (y1 + pin_pos.y) / 2 ),
                                    NumColor, StringPinNum,
                                    TEXT_ORIENT_VERT, PinNumSize,
                                    GR_TEXT_HJUSTIFY_CENTER,
@@ -1487,7 +1487,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
                 y = y1 - TextInside;
 
                 if( DrawPinName )
-                    plotter->text( wxPoint( x1, y ), NameColor,
+                    plotter->Text( wxPoint( x1, y ), NameColor,
                                    m_name,
                                    TEXT_ORIENT_VERT, PinNameSize,
                                    GR_TEXT_HJUSTIFY_LEFT,
@@ -1496,7 +1496,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
 
                 if( DrawPinNum )
                 {
-                    plotter->text( wxPoint( x1 - TXTMARGE, (y1 + pin_pos.y) / 2 ),
+                    plotter->Text( wxPoint( x1 - TXTMARGE, (y1 + pin_pos.y) / 2 ),
                                    NumColor, StringPinNum,
                                    TEXT_ORIENT_VERT, PinNumSize,
                                    GR_TEXT_HJUSTIFY_CENTER,
@@ -1514,7 +1514,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
             if( DrawPinName )
             {
                 x = (x1 + pin_pos.x) / 2;
-                plotter->text( wxPoint( x, y1 - TXTMARGE ),
+                plotter->Text( wxPoint( x, y1 - TXTMARGE ),
                                NameColor, m_name,
                                TEXT_ORIENT_HORIZ, PinNameSize,
                                GR_TEXT_HJUSTIFY_CENTER,
@@ -1525,7 +1525,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
             if( DrawPinNum )
             {
                 x = ( x1 + pin_pos.x ) / 2;
-                plotter->text( wxPoint( x, y1 + TXTMARGE ),
+                plotter->Text( wxPoint( x, y1 + TXTMARGE ),
                                NumColor, StringPinNum,
                                TEXT_ORIENT_HORIZ, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
@@ -1538,7 +1538,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
             if( DrawPinName )
             {
                 y = ( y1 + pin_pos.y ) / 2;
-                plotter->text( wxPoint( x1 - TXTMARGE, y ),
+                plotter->Text( wxPoint( x1 - TXTMARGE, y ),
                                NameColor, m_name,
                                TEXT_ORIENT_VERT, PinNameSize,
                                GR_TEXT_HJUSTIFY_CENTER,
@@ -1548,7 +1548,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
 
             if( DrawPinNum )
             {
-                plotter->text( wxPoint( x1 + TXTMARGE, ( y1 + pin_pos.y ) / 2 ),
+                plotter->Text( wxPoint( x1 + TXTMARGE, ( y1 + pin_pos.y ) / 2 ),
                                NumColor, StringPinNum,
                                TEXT_ORIENT_VERT, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
@@ -1808,7 +1808,7 @@ void LIB_PIN::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 
     wxPoint pos = aTransform.TransformCoordinate( m_position ) + offset;
 
-    plotter->set_current_line_width( GetPenSize() );
+    plotter->SetCurrentLineWidth( GetPenSize() );
     PlotSymbol( plotter, pos, orient );
     PlotPinTexts( plotter, pos, orient, GetParent()->GetPinNameOffset(),
                   GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames(),

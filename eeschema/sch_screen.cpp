@@ -554,7 +554,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
     for( SCH_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
     {
-        aPlotter->set_current_line_width( item->GetPenSize() );
+        aPlotter->SetCurrentLineWidth( item->GetPenSize() );
         item->Plot( aPlotter );
     }
 }

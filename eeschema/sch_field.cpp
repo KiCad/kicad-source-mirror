@@ -579,7 +579,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
 
     if( (parent->GetPartCount() <= 1) || (m_id != REFERENCE) )
     {
-        aPlotter->text( textpos, color, m_Text, orient, m_Size, hjustify, vjustify,
+        aPlotter->Text( textpos, color, m_Text, orient, m_Size, hjustify, vjustify,
                         thickness, m_Italic, m_Bold );
     }
     else    /* We plot the reference, for a multiple parts per package */
@@ -587,7 +587,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
         /* Adding A, B ... to the reference */
         wxString Text = m_Text + LIB_COMPONENT::ReturnSubReference( parent->GetUnit() );
 
-        aPlotter->text( textpos, color, Text, orient, m_Size, hjustify, vjustify,
+        aPlotter->Text( textpos, color, Text, orient, m_Size, hjustify, vjustify,
                         thickness, m_Italic, m_Bold );
     }
 }
