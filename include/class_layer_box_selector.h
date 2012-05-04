@@ -14,9 +14,14 @@ class wxAuiToolBar;
 
 class LAYER_BOX_SELECTOR : public wxBitmapComboBox
 {
-private:
+protected:
     bool m_layerhotkeys;
     bool m_layerorder;
+
+public:
+    // Hotkey Info
+    struct EDA_HOTKEY_CONFIG* m_hotkeys;
+
 public:
     LAYER_BOX_SELECTOR( wxAuiToolBar* parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition,
@@ -27,7 +32,19 @@ public:
                         const wxPoint& pos, const wxSize& size,
                         const wxArrayString& choices );
 
-    // Get Current Item #
+    // Returns a color index from the layer id
+    // Virtual function because GerbView uses its own functions in a derived class
+    virtual int GetLayerColor( int aLayerIndex ) = 0;
+
+    // Returns the name of the layer id
+    // Virtual pure function because GerbView uses its own functions in a derived class
+    virtual const wxString GetLayerName( int aLayerIndex ) = 0;
+
+    // Returns true if the layer id is enabled (i.e. is it should be displayed)
+    // Virtual function pure because GerbView uses its own functions in a derived class
+    virtual bool IsLayerEnabled( int aLayerIndex ) = 0;
+
+   // Get Current Item #
     int GetChoice();
 
     // Get Current Layer
@@ -37,13 +54,18 @@ public:
     int SetLayerSelection(int layer);
 
     // Reload the Layers
-    void Resync();
+    // Virtual pure function because GerbView uses its own functions in a derived class
+    virtual void Resync() = 0;
+
+    // Reload the Layers bitmaps colors
     void ResyncBitmapOnly();
 
     bool SetLayersOrdered(bool value);
     bool SetLayersHotkeys(bool value);
-    // Hotkey Info
-    struct EDA_HOTKEY_CONFIG* m_hotkeys;
+
+protected:
+   // Fills the layer bitmap aLayerbmp with the layer color
+    void SetBitmapLayer( wxBitmap& aLayerbmp, int aLayerIndex );
 };
 
 #define DECLARE_LAYERS_HOTKEY(list) int list[LAYER_COUNT] = \
@@ -65,5 +87,4 @@ public:
             HK_SWITCH_LAYER_TO_INNER14,  \
             HK_SWITCH_LAYER_TO_COMPONENT \
         };
-
 #endif //CLASS_LAYER_BOX_SELECTOR_H

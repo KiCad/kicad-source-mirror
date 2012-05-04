@@ -46,13 +46,10 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
     int layer = getActiveLayer();
 
     // Search first on active layer
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
-    GERBER_DRAW_ITEM* gerb_item = NULL;
+    GERBER_DRAW_ITEM* gerb_item = GetItemsList();
 
-    for( ; item; item = item->Next() )
+    for( ; gerb_item; gerb_item = gerb_item->Next() )
     {
-        gerb_item = (GERBER_DRAW_ITEM*) item;
-
         if( gerb_item->GetLayer()!= layer )
             continue;
 
@@ -65,12 +62,8 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
 
     if( !found ) // Search on all layers
     {
-        item = GetBoard()->m_Drawings;
-
-        for( ; item; item = item->Next() )
+        for( gerb_item = GetItemsList(); gerb_item; gerb_item = gerb_item->Next() )
         {
-            gerb_item = (GERBER_DRAW_ITEM*) item;
-
             if( gerb_item->HitTest( ref ) )
             {
                 found = true;

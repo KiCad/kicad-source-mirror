@@ -1,7 +1,3 @@
-/*******************************************************/
-/* Dialog frame to choose gerber layers and pcb layers */
-/*******************************************************/
-
 /**
  * @file select_layers_to_pcb.h
  */
@@ -9,23 +5,23 @@
 #ifndef _SELECT_LAYERS_TO_PCB_H_
 #define _SELECT_LAYERS_TO_PCB_H_
 
-#include <wx/statline.h>
-
 #include <dialogs/dialog_layers_select_to_pcb_base.h>
+#include <layers_id_colors_and_visibility.h>
 
-#define LAYER_UNSELECTED NB_LAYERS
+#define BOARD_LAYERS_MAX_COUNT NB_LAYERS
+#define BOARD_COPPER_LAYERS_MAX_COUNT NB_COPPER_LAYERS
+#define LAYER_UNSELECTED BOARD_LAYERS_MAX_COUNT
 
 /*
- * This dialog shows the gerber files loaded, and allows user to choose:
- *   what gerber file and what board layer are used
- *   the number of copper layers
+ * This dialog shows the gerber files loaded, and allows user to choose
+ * equivalence tbetween gerber layers and pcb layers
  */
 class LAYERS_MAP_DIALOG : public LAYERS_MAP_DIALOG_BASE
 {
 private:
     GERBVIEW_FRAME* m_Parent;
     int m_itemsCount;
-    int m_exportBoardCopperLayersCount;
+    static int m_exportBoardCopperLayersCount;
     wxFlexGridSizer* m_flexRightColumnBoxSizer;     // An extra wxFlexGridSizer used
                                                     // when we have more than 16 gerber files loaded
     int    m_layersLookUpTable[32+1];               // Indexes Gerber layers to PCB file layers

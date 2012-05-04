@@ -32,7 +32,6 @@
 
 #include <wxBasePcbFrame.h>
 #include <param_config.h>
-#include <class_layer_box_selector.h>
 #include <class_macros_record.h>
 #include <class_undoredo_container.h>
 #include <zones.h>
@@ -63,6 +62,7 @@ class GENERAL_COLLECTORS_GUIDE;
 class PCB_LAYER_WIDGET;
 class MARKER_PCB;
 class BOARD_ITEM;
+class PCB_LAYER_BOX_SELECTOR;
 
 
 /**
@@ -201,7 +201,7 @@ protected:
     int propagate();
 
 public:
-    LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
+    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
     wxComboBox* m_SelViaSizeBox;        // a combo box to display and select current via diameter
 
@@ -495,7 +495,7 @@ public:
     void ReCreateMicrowaveVToolbar();
     void ReCreateOptToolbar();
     void ReCreateMenuBar();
-    LAYER_BOX_SELECTOR* ReCreateLayerBox( wxAuiToolBar* parent );
+    PCB_LAYER_BOX_SELECTOR* ReCreateLayerBox( wxAuiToolBar* parent );
 
     /**
      * Function OnModify
