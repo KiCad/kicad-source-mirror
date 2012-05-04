@@ -95,8 +95,6 @@ GERBER_IMAGE::GERBER_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
 
     for( unsigned ii = 0; ii < DIM( m_Aperture_List ); ii++ )
         m_Aperture_List[ii] = 0;
-
-    m_Pcb = aParent->GetBoard();
 }
 
 
@@ -108,10 +106,16 @@ GERBER_IMAGE::~GERBER_IMAGE()
 
         // m_Aperture_List[ii] = NULL;
     }
-
-    delete m_Pcb;
 }
 
+/*
+ * Function GetItemsList
+ * returns the first GERBER_DRAW_ITEM * item of the items list
+ */
+GERBER_DRAW_ITEM * GERBER_IMAGE::GetItemsList()
+{
+    return m_Parent->GetItemsList();
+}
 
 D_CODE* GERBER_IMAGE::GetDCODE( int aDCODE, bool create )
 {
@@ -206,18 +210,16 @@ bool GERBER_IMAGE::HasNegativeItems()
         else
         {
             m_hasNegativeItems = 0;
-            for( BOARD_ITEM* item = m_Pcb->m_Drawings; item; item = item->Next() )
+            for( GERBER_DRAW_ITEM* item = GetItemsList(); item; item = item->Next() )
             {
-                GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-                if( gerb_item->GetLayer() != m_GraphicLayer )
+                if( item->GetLayer() != m_GraphicLayer )
                     continue;
-                if( gerb_item->HasNegativeItems() )
+                if( item->HasNegativeItems() )
                 {
                     m_hasNegativeItems = 1;
                     break;
                 }
             }
-             // TODO search for items in list
         }
     }
     return m_hasNegativeItems == 1;
@@ -306,7 +308,7 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
             move_vector.y = scaletoIU( jj * GetLayerParams().m_StepForRepeat.y,
                                    GetLayerParams().m_StepForRepeatMetric );
             dupItem->MoveXY( move_vector );
-            m_Parent->GetBoard()->m_Drawings.Append( dupItem );
+            m_Parent->GetLayout()->m_Drawings.Append( dupItem );
         }
     }
 }

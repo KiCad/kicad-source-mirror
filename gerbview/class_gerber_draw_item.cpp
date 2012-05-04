@@ -32,18 +32,15 @@
 #include <common.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
-#include <drawtxt.h>
 #include <macros.h>
 
 #include <gerbview.h>
-#include <class_board_design_settings.h>
-#include <colors_selection.h>
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 
 
-GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberparams ) :
-    BOARD_ITEM( aParent, TYPE_GERBER_DRAW_ITEM )
+GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_IMAGE* aGerberparams ) :
+    EDA_ITEM( (EDA_ITEM*)aParent, TYPE_GERBER_DRAW_ITEM )
 {
     m_imageParams = aGerberparams;
     m_Layer         = 0;
@@ -64,7 +61,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberpa
 
 // Copy constructor
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
-    BOARD_ITEM( aSource )
+    EDA_ITEM( aSource )
 {
     m_imageParams = aSource.m_imageParams;
     m_Shape = aSource.m_Shape;
@@ -316,16 +313,16 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
     int           radius;
     int           halfPenWidth;
     static bool   show_err;
-    BOARD*        brd = GetBoard();
     D_CODE*       d_codeDescr = GetDcodeDescr();
+    GERBVIEW_FRAME* gerbFrame = (GERBVIEW_FRAME*) aPanel->GetParent();
 
     if( d_codeDescr == NULL )
         d_codeDescr = &dummyD_CODE;
 
-    if( brd->IsLayerVisible( GetLayer() ) == false )
+    if( gerbFrame->IsLayerVisible( GetLayer() ) == false )
         return;
 
-    color = brd->GetLayerColor( GetLayer() );
+    color = gerbFrame->GetLayerColor( GetLayer() );
 
     if( aDrawMode & GR_HIGHLIGHT )
     {
@@ -354,12 +351,12 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    isFilled = DisplayOpt.DisplayPcbTrackFill ? true : false;
+    isFilled = gerbFrame->m_DisplayOptions.m_DisplayLinesFill;
 
     switch( m_Shape )
     {
     case GBR_POLYGON:
-        isFilled = (g_DisplayPolygonsModeSketch == false);
+        isFilled = gerbFrame->m_DisplayOptions.m_DisplayPolygonsFill;
 
         if( !isDark )
             isFilled = true;
@@ -419,7 +416,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
-        isFilled = DisplayOpt.DisplayPadFill ? true : false;
+        isFilled = gerbFrame->m_DisplayOptions.m_DisplayFlashedItemsFill;
         d_codeDescr->DrawFlashedShape( this, aPanel->GetClipBox(), aDC, color, alt_color,
                                        m_Start, isFilled );
         break;

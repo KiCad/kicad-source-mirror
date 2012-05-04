@@ -32,15 +32,19 @@
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <gr_basic.h>
-#include <wxBasePcbFrame.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <base_units.h>
-
-#include <class_board.h>
-#include <pcbnew.h>
-#include <protos.h>
-
+#ifdef PCBNEW
+    #include <wxBasePcbFrame.h>
+    #include <class_board.h>
+    #include <pcbnew.h>
+#else
+    #include <wxstruct.h>
+    #include <class_base_screen.h>
+    #include <layers_id_colors_and_visibility.h>
+    #include <gerbview_frame.h>
+#endif
 #include <printout_controler.h>
 
 // This class is an helper to pass print parameters to print functions
@@ -76,10 +80,11 @@ BOARD_PRINTOUT_CONTROLER::BOARD_PRINTOUT_CONTROLER( const PRINT_PARAMETERS& prin
 
 bool BOARD_PRINTOUT_CONTROLER::OnPrintPage( int page )
 {
+#ifdef PCBNEW
     int layers_count = NB_LAYERS;
-
-    if( m_Parent->IsType( GERBER_FRAME ) )
-        layers_count = 32;
+#else
+    int layers_count = LAYER_COUNT;
+#endif
 
     int mask_layer = m_PrintParams.m_PrintMaskLayer;
 
@@ -106,9 +111,11 @@ bool BOARD_PRINTOUT_CONTROLER::OnPrintPage( int page )
     if( m_PrintParams.m_PrintMaskLayer == 0 )
         return false;
 
+#ifdef PCBNEW
     // In Pcbnew we can want the layer EDGE always printed
     if( m_PrintParams.m_Flags == 1 )
         m_PrintParams.m_PrintMaskLayer |= EDGE_LAYER;
+#endif
 
     DrawPage();
 
@@ -147,7 +154,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     double       userscale;
     double       DrawZoom = 1;
     wxDC*        dc = GetDC();
-    PCB_SCREEN*  screen = (PCB_SCREEN*) m_Parent->GetScreen();
+    BASE_SCREEN*  screen = m_Parent->GetScreen();
     bool         printMirror = m_PrintParams.m_PrintMirror;
 
     wxBusyCursor dummy;
@@ -162,10 +169,13 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
-    PCB_BASE_FRAME* pcbframe = (PCB_BASE_FRAME*) m_Parent;
+#ifdef PCBNEW
+    EDA_RECT bbbox= ((PCB_BASE_FRAME*) m_Parent)->GetBoard()->ComputeBoundingBox();
+#else
+    EDA_RECT bbbox = ((GERBVIEW_FRAME*) m_Parent)->GetLayoutBoundingBox();
+#endif
 
-    wxSize  pageSizeIU = pcbframe->GetPageSizeIU();  // internal units
-    EDA_RECT bbbox     = pcbframe->GetBoard()->ComputeBoundingBox();
+    wxSize  pageSizeIU = m_Parent->GetPageSizeIU();  // internal units
 
     // In module editor, the module is located at 0,0 but for printing
     // it is moved to pageSizeIU.x/2, pageSizeIU.y/2.
@@ -181,7 +191,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( userscale == 0 )                //  fit in page
     {
         // Margin = 10mm
-        int extra_margin = int( 10 * IU_PER_MM );   // deci-mils
+        int extra_margin = int( 10 * IU_PER_MM );
 
         pageSizeIU.x = bbbox.GetWidth()  + extra_margin * 2;
         pageSizeIU.y = bbbox.GetHeight() + extra_margin * 2;

@@ -1,19 +1,13 @@
 #include <common.h>
-#include <pcbnew.h>
-#include <wxPcbStruct.h>
-#include <class_board_design_settings.h>
 #include <colors_selection.h>
 #include <layers_id_colors_and_visibility.h>
 #include <bitmaps.h>
-#include <hotkeys.h>
-#include <help_common_strings.h>
+#include <colors.h>
 
-#include <class_board.h>
-
+#include <wx/wx.h>
 #include <wx/ownerdrw.h>
 #include <wx/menuitem.h>
-#include <wx/bmpcbox.h>
-#include <wx/wx.h>
+#include <wx/aui/aui.h>
 
 #include <class_layer_box_selector.h>
 
@@ -101,79 +95,30 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
     return -1;
 }
 
-
-// Reload the Layers
-void LAYER_BOX_SELECTOR::Resync()
-{
-    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
-    BOARD* board = pcbFrame->GetBoard();
-
-    wxASSERT( board != NULL );
-
-    Clear();
-
-    static DECLARE_LAYERS_ORDER_LIST( layertranscode );
-    static DECLARE_LAYERS_HOTKEY( layerhk );
-
-    for( int i = 0; i < LAYER_COUNT; i++ )
-    {
-        wxBitmap   layerbmp( 14, 14 );
-        wxMemoryDC bmpDC;
-        wxBrush    brush;
-        wxString   layername;
-        int        layerid = i;
-
-        if( m_layerorder )
-            layerid = layertranscode[i];
-
-        if( !board->IsLayerEnabled( layerid ) )
-            continue;
-
-        // Prepare Bitmap
-        bmpDC.SelectObject( layerbmp );
-        brush.SetColour( MakeColour( board->GetLayerColor( layerid ) ) );
-        brush.SetStyle( wxSOLID );
-
-        bmpDC.SetBrush( brush );
-        bmpDC.DrawRectangle( 0, 0, layerbmp.GetWidth(), layerbmp.GetHeight() );
-        bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
-        bmpDC.SetPen( *wxBLACK_PEN );
-        bmpDC.DrawRectangle( 0, 0, layerbmp.GetWidth(), layerbmp.GetHeight() );
-
-        layername = board->GetLayerName( layerid );
-
-        if( m_layerhotkeys && m_hotkeys != NULL )
-            layername = AddHotkeyName( layername, m_hotkeys, layerhk[layerid], IS_COMMENT );
-
-        Append( layername, layerbmp, (void*) layerid );
-    }
-}
-
 void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 {
-    PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
-    BOARD* board = pcbFrame->GetBoard();
-
     int elements = GetCount();
     for( int i = 0; i < elements; i++ )
     {
-        wxBitmap   layerbmp( 14, 14 );
-        wxMemoryDC bmpDC;
-        wxBrush    brush;
-        wxString   layername;
-        int        layerid = i;
-
-        // Prepare Bitmap
-        bmpDC.SelectObject( layerbmp );
-        brush.SetColour( MakeColour( board->GetLayerColor( layerid ) ) );
-        brush.SetStyle( wxSOLID );
-
-        bmpDC.SetBrush( brush );
-        bmpDC.DrawRectangle( 0, 0, layerbmp.GetWidth(), layerbmp.GetHeight() );
-        bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
-        bmpDC.SetPen( *wxBLACK_PEN );
-        bmpDC.DrawRectangle( 0, 0, layerbmp.GetWidth(), layerbmp.GetHeight() );
-
-        SetItemBitmap(i, layerbmp);
+        wxBitmap layerbmp( 14, 14 );
+        SetBitmapLayer( layerbmp, i );
     }
+}
+
+
+void LAYER_BOX_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, int aLayerIndex )
+{
+    wxMemoryDC bmpDC;
+    wxBrush    brush;
+
+    // Prepare Bitmap
+    bmpDC.SelectObject( aLayerbmp );
+    brush.SetColour( MakeColour( GetLayerColor( aLayerIndex ) ) );
+    brush.SetStyle( wxSOLID );
+
+    bmpDC.SetBrush( brush );
+    bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
+    bmpDC.SetBrush( *wxTRANSPARENT_BRUSH );
+    bmpDC.SetPen( *wxBLACK_PEN );
+    bmpDC.DrawRectangle( 0, 0, aLayerbmp.GetWidth(), aLayerbmp.GetHeight() );
 }

@@ -30,10 +30,12 @@
 #define CLASS_GERBER_DRAW_ITEM_H
 
 #include <base_struct.h>
-#include <class_board_item.h>
+#include <dlist.h>
 
 
 class GERBER_IMAGE;
+class GBR_LAYOUT;
+class D_CODE;
 
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
@@ -52,7 +54,7 @@ enum Gbr_Basic_Shapes {
 
 /***/
 
-class GERBER_DRAW_ITEM : public BOARD_ITEM
+class GERBER_DRAW_ITEM : public EDA_ITEM
 {
     // make SetNext() and SetBack() private so that they may not be called from anywhere.
     // list management is done on GERBER_DRAW_ITEMs using DLIST<GERBER_DRAW_ITEM> only.
@@ -86,6 +88,8 @@ public:
                                              * redundancy for these parameters
                                              */
 private:
+    int m_Layer;
+
     // These values are used to draw this item, according to gerber layers parameters
     // Because they can change inside a gerber image, they are stored here
     // for each item
@@ -98,7 +102,7 @@ private:
     double      m_lyrRotation;              // Fine rotation, from OR parameter, in degrees
 
 public:
-    GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberparams );
+    GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_IMAGE* aGerberparams );
     GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource );
     ~GERBER_DRAW_ITEM();
 
@@ -112,6 +116,21 @@ public:
 
     GERBER_DRAW_ITEM* Next() const { return (GERBER_DRAW_ITEM*) Pnext; }
     GERBER_DRAW_ITEM* Back() const { return (GERBER_DRAW_ITEM*) Pback; }
+
+    /**
+     * Function GetLayer
+     * returns the layer this item is on.
+     */
+    int GetLayer() const { return m_Layer; }
+
+    /**
+     * Function SetLayer
+     * sets the layer this item is on.
+     * @param aLayer The layer number.
+     * is virtual because some items (in fact: class DIMENSION)
+     * have a slightly different initialization
+     */
+    void SetLayer( int aLayer )  { m_Layer = aLayer; }
 
     int ReturnMaskLayer()
     {
@@ -203,7 +222,7 @@ public:
     void Draw( EDA_DRAW_PANEL*         aPanel,
                wxDC*                   aDC,
                int                     aDrawMode,
-               const wxPoint&aOffset = ZeroOffset );
+               const wxPoint&aOffset );
 
     /**
      * Function ConvertSegmentToPolygon
@@ -270,6 +289,28 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
+    /**
+     * Function UnLink
+     * detaches this object from its owner.
+     */
+    void UnLink()
+    {
+        DLIST<GERBER_DRAW_ITEM>* list = (DLIST<GERBER_DRAW_ITEM>*) GetList();
+        wxASSERT( list );
+
+        if( list )
+            list->Remove( this );
+    }
+
+    /**
+     * Function DeleteStructure
+     * deletes this object after UnLink()ing it from its owner.
+     */
+    void DeleteStructure()
+    {
+        UnLink();
+        delete this;
+    }
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;  // override
 #endif

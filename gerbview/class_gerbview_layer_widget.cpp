@@ -34,7 +34,7 @@
 #include <class_drawpanel.h>
 #include <pcbstruct.h>
 #include <macros.h>
-#include <class_layer_box_selector.h>
+#include <class_gbr_layer_box_selector.h>
 
 #include <gerbview.h>
 #include <class_GERBER.h>
@@ -91,7 +91,6 @@ void GERBER_LAYER_WIDGET::SetLayersManagerTabsText( )
  */
 void GERBER_LAYER_WIDGET::ReFillRender()
 {
-    BOARD*  board = myframe->GetBoard();
     ClearRenderRows();
 
     // Fixed "Rendering" tab rows within the LAYER_WIDGET, only the initial color
@@ -111,10 +110,9 @@ void GERBER_LAYER_WIDGET::ReFillRender()
     {
         if( renderRows[row].color != -1 )       // does this row show a color?
         {
-            // this window frame must have an established BOARD, i.e. after SetBoard()
-            renderRows[row].color = board->GetVisibleElementColor( renderRows[row].id );
+            renderRows[row].color = myframe->GetVisibleElementColor( renderRows[row].id );
         }
-        renderRows[row].state = board->IsElementVisible( renderRows[row].id );
+        renderRows[row].state = myframe->IsElementVisible( renderRows[row].id );
     }
 
     AppendRenderRows( renderRows, DIM(renderRows) );
@@ -184,7 +182,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
                 visibleLayers &= ~(1 << row);
         }
 
-        myframe->GetBoard()->SetVisibleLayers( visibleLayers );
+        myframe->SetVisibleLayers( visibleLayers );
         myframe->GetCanvas()->Refresh();
         break;
     }
@@ -194,16 +192,15 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
 void GERBER_LAYER_WIDGET::ReFill()
 {
-    BOARD*  brd = myframe->GetBoard();
     int     layer;
     ClearLayerRows();
 
-    for( layer = 0; layer < LAYER_COUNT; layer++ )
+    for( layer = 0; layer < GERBVIEW_LAYER_COUNT; layer++ )
     {
         wxString msg;
         msg.Printf( _("Layer %d"), layer+1 );
         AppendLayerRow( LAYER_WIDGET::ROW( msg, layer,
-                        brd->GetLayerColor( layer ), wxEmptyString, true ) );
+                        myframe->GetLayerColor( layer ), wxEmptyString, true ) );
     }
 
     installRightLayerClickHandler();
@@ -213,7 +210,7 @@ void GERBER_LAYER_WIDGET::ReFill()
 
 void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, int aColor )
 {
-    myframe->GetBoard()->SetLayerColor( aLayer, aColor );
+    myframe->SetLayerColor( aLayer, aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
     myframe->GetCanvas()->Refresh();
 }
@@ -234,15 +231,14 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
 
 void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
 {
-    BOARD* brd = myframe->GetBoard();
-    int visibleLayers = brd->GetVisibleLayers();
+    int visibleLayers = myframe->GetVisibleLayers();
 
     if( isVisible )
         visibleLayers |= (1 << aLayer);
     else
         visibleLayers &= ~(1 << aLayer);
 
-    brd->SetVisibleLayers( visibleLayers );
+    myframe->SetVisibleLayers( visibleLayers );
 
     if( isFinal )
         myframe->GetCanvas()->Refresh();
@@ -250,15 +246,13 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
 
 void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, int aColor )
 {
-    myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
+    myframe->SetVisibleElementColor( aId, aColor );
     myframe->GetCanvas()->Refresh();
 }
 
 void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
-    BOARD*  brd = myframe->GetBoard();
-        brd->SetElementVisibility( aId, isEnabled );
-
+    myframe->SetElementVisibility( aId, isEnabled );
     myframe->GetCanvas()->Refresh();
 }
 

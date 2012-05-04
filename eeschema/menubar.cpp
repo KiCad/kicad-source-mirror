@@ -151,7 +151,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_PDF,
                  _( "Plot PDF" ),
                  _( "Plot schematic sheet in PDF format" ),
-                 KiBitmap( plot_ps_xpm ) );
+                 KiBitmap( plot_pdf_xpm ) );
 
     // Plot HPGL
     AddMenuItem( choice_plot_fmt,
