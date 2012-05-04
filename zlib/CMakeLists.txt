@@ -1,4 +1,5 @@
 set(ZLIB_SRCS
+    adler32.c
     compress.c
     crc32.c
     deflate.c

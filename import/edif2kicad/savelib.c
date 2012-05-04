@@ -13,12 +13,10 @@
 FILE *FileEdf, *FileNet, *FileEESchema, *FileKiPro ;
 extern char FileNameKiPro[], FileNameEESchema[], FileNameLib[];
 extern float scale;
-char *cwd;
 
 OutPro(LibraryStruct * Libs)
 {
   int i;
-  cwd = (char *)get_current_dir_name();
 
   sprintf(FileNameKiPro,"%s.pro", schName);
   if( (FileKiPro = fopen( FileNameKiPro, "wt" )) == NULL ) {
@@ -29,7 +27,6 @@ OutPro(LibraryStruct * Libs)
   fprintf(FileKiPro,"last_client=eeschema\n");
   fprintf(FileKiPro,"[eeschema]\n");
   fprintf(FileKiPro,"version=1\n");
-  //fprintf(FileKiPro,"LibDir=%s\n", cwd ); //"."
   fprintf(FileKiPro,"LibDir=\n"); //"."
   fprintf(FileKiPro,"NetFmt=1\n");
   fprintf(FileKiPro,"HPGLSpd=20\n");
@@ -62,7 +59,7 @@ OutPro(LibraryStruct * Libs)
 OutHead(LibraryStruct *Libs)
 {
   OutEnd(); // close if previous open
-	
+
   sprintf(FileNameEESchema,"%s.sch", schName);
   if( (FileEESchema = fopen( FileNameEESchema, "wt" )) == NULL ) {
        fprintf(stderr, " %s impossible to create\n", FileNameEESchema);
@@ -143,7 +140,7 @@ int   g, x,y;
   // modify bus range
   for( st=s ;  ; s++,t++ ){
 	if(*s == ':'){
-		*t++ = '.'; *t = '.'; 
+		*t++ = '.'; *t = '.';
 	}else
 		*t = *s;
 	if(*s == '\0')
@@ -154,7 +151,7 @@ int   g, x,y;
 	st[0] = '{';
 	for( t=st; *t ; t++){
 	  if( *t == ']' )
-		*t = '}'; 
+		*t = '}';
     }
   }
   fx = OFF + scale * (float)x; fy = OFF + scale * (float)y;
@@ -287,7 +284,7 @@ LibraryEntryStruct *LibEntry;
 int ii;
 
 	LibEntry = (LibraryEntryStruct *) CurrentLib->Entries;
-	ii = CurrentLib->NumOfParts ; 
+	ii = CurrentLib->NumOfParts ;
 	fprintf(stderr, "%03d #parts %s\n", ii, CurrentLib->Name);
 	for(  ; ii > 0; ii-- ) {
 		if(LibEntry != NULL) {
@@ -343,8 +340,8 @@ int x1,y1,x2,y2,r;
 		LibEntry->NumOfUnits, UNUSED, 'N');
 
 	/* Position / orientation / visibilite des champs */
-        x1 = scale*(float)LibEntry->PrefixPosX; 
-        y1 = scale*(float)LibEntry->PrefixPosY; 
+        x1 = scale*(float)LibEntry->PrefixPosX;
+        y1 = scale*(float)LibEntry->PrefixPosY;
 	fprintf(ExportFile,"F0 \"%s\" %d %d %d %c %c\n",
 				LibEntry->Prefix,
 				x1, y1,
@@ -352,8 +349,8 @@ int x1,y1,x2,y2,r;
 				LibEntry->PrefixOrient == 0 ? 'H' : 'V',
 				LibEntry->DrawPrefix ? 'V' : 'I' );
 
-    x1 = scale*(float)LibEntry->NamePosX; 
-    y1 = scale*(float)LibEntry->NamePosY; 
+    x1 = scale*(float)LibEntry->NamePosX;
+    y1 = scale*(float)LibEntry->NamePosY;
 	fprintf(ExportFile,"F1 \"%s\" %d %d %d %c %c\n",
 				LibEntry->Name,
 				x1, y1,

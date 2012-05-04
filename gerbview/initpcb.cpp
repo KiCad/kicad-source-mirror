@@ -35,13 +35,13 @@
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 #include <class_gerbview_layer_widget.h>
-
+#include <class_gbr_layout.h>
 
 bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 {
     int layer;
 
-    if( GetBoard() == NULL )
+    if( GetLayout() == NULL )
         return false;
 
     if( query && GetScreen()->IsModify() )
@@ -50,10 +50,9 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
             return false;
     }
 
-    SetCurItem( NULL );
-    GetBoard()->m_Drawings.DeleteAll();
+    GetLayout()->m_Drawings.DeleteAll();
 
-    for( layer = 0; layer < LAYER_COUNT; layer++ )
+    for( layer = 0; layer < GERBVIEW_LAYER_COUNT; layer++ )
     {
         if( g_GERBER_List[layer] )
         {
@@ -62,15 +61,11 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
         }
     }
 
-    GetBoard()->SetBoundingBox( EDA_RECT() );
+    GetLayout()->SetBoundingBox( EDA_RECT() );
 
-    GetBoard()->m_Status_Pcb  = 0;
-    GetBoard()->m_NbNodes     = 0;
-    GetBoard()->m_NbNoconnect = 0;
+    SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
-    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
-
-    setActiveLayer(FIRST_COPPER_LAYER);
+    setActiveLayer(0);
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
     return true;
@@ -89,18 +84,17 @@ void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
 
     SetCurItem( NULL );
 
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
-    BOARD_ITEM * next;
+    GERBER_DRAW_ITEM* item = GetLayout()->m_Drawings;
+    GERBER_DRAW_ITEM * next;
 
     for( ; item; item = next )
     {
         next = item->Next();
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
 
-        if( gerb_item->GetLayer() != layer )
+        if( item->GetLayer() != layer )
             continue;
 
-        gerb_item->DeleteStructure();
+        item->DeleteStructure();
     }
 
     if( g_GERBER_List[layer] )

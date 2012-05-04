@@ -88,18 +88,13 @@ static GRID_TYPE gbrGridList[] =
 };
 
 
-GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
-    PCB_SCREEN( aPageSizeIU )
+GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) : BASE_SCREEN( SCREEN_T )
 {
-    // Replace zoom and grid lists already set by PCB_SCREEN ctor
-    m_ZoomList.Clear();
     for( unsigned i = 0; i < DIM( gbrZoomList );  ++i )
         m_ZoomList.Add( gbrZoomList[i] );
 
-    GRIDS gridlist;
     for( unsigned i = 0; i < DIM( gbrGridList );  ++i )
-        gridlist.push_back( gbrGridList[i] );
-    SetGridList( gridlist );
+        AddGrid( gbrGridList[i] );
 
     // Set the working grid size to a reasonnable value (in 1/10000 inch)
     SetGrid( DMIL_GRID( 500 ) );
@@ -107,11 +102,14 @@ GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
     m_Active_Layer       = LAYER_N_BACK;      // default active layer = bottom layer
 
     SetZoom( ZOOM_FACTOR( 350 ) );            // a default value for zoom
+
+    InitDataPoints( aPageSizeIU );
 }
 
 
 GBR_SCREEN::~GBR_SCREEN()
 {
+    ClearUndoRedoList();
 }
 
 
@@ -119,4 +117,14 @@ GBR_SCREEN::~GBR_SCREEN()
 int GBR_SCREEN::MilsToIuScalar()
 {
     return (int)IU_PER_MILS;
+}
+
+
+/* Virtual function needed by classes derived from BASE_SCREEN
+ * this is a virtual pure function in BASE_SCREEN
+ * do nothing in GerbView
+ * could be removed later
+ */
+void GBR_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
+{
 }

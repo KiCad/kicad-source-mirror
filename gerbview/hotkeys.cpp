@@ -136,8 +136,7 @@ void GERBVIEW_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
         break;
 
     case HK_SWITCH_GBR_ITEMS_DISPLAY_MODE:
-        DisplayOpt.DisplayPcbTrackFill ^= 1;
-        DisplayOpt.DisplayPcbTrackFill &= 1;
+        m_DisplayOptions.m_DisplayLinesFill = not m_DisplayOptions.m_DisplayLinesFill;
         m_canvas->Refresh();
         break;
 

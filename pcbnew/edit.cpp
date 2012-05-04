@@ -48,6 +48,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <modview_frame.h>
+#include <class_pcb_layer_box_selector.h>
 
 #include <dialog_drc.h>
 

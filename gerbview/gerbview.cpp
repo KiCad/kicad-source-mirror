@@ -31,14 +31,10 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <gr_basic.h>
+//#include <gr_basic.h>
 
 #include <gerbview.h>
 #include <gerbview_id.h>
-#include <pcbplot.h>
-#include <zones.h>
-#include <class_board_design_settings.h>
-#include <colors_selection.h>
 #include <hotkeys.h>
 
 #include <build_version.h>
@@ -48,9 +44,8 @@
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
-
-int      g_Default_GERBER_Format;
-int      g_DisplayPolygonsModeSketch;
+extern int g_DrawBgColor;
+int g_Default_GERBER_Format;
 
 
 const wxChar* g_GerberPageSizeList[] = {
@@ -114,12 +109,6 @@ bool EDA_APP::OnInit()
     /* Gerbview mainframe title */
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
 
-    // Initialize some display options
-    DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
-
-    // Track and via clearance has no meaning here.
-    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-
     SetTopWindow( frame );                  // Set GerbView mainframe on top
     frame->Show( true );                    // Show GerbView mainframe
     frame->Zoom_Automatique( true );        // Zoom fit in frame
@@ -139,7 +128,7 @@ bool EDA_APP::OnInit()
         // Load all files specified on the command line.
         int jj = 0;
 
-        for( int ii = 1; ii < argc && ii <= LAYER_COUNT; ++ii )
+        for( int ii = 1; ii < argc && ii <= GERBVIEW_LAYER_COUNT; ++ii )
         {
             fn = wxFileName( argv[ii] );
 

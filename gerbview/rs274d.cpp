@@ -303,7 +303,6 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
  * <li> absolute angle 180 to 270 (quadrant 3) or
  * <li> absolute angle 270 to 0 (quadrant 4)
  * </ul><p>
- * @param aPcb is the board.
  * @param aGbrItem is the GBRITEM to fill in.
  * @param aStart is the starting point
  * @param aEnd is the ending point
@@ -316,7 +315,7 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
  *                      false when arc is inside one quadrant
  * @param aLayerNegative = true if the current layer is negative
  */
-static void fillArcPOLY(  BOARD* aPcb, GERBER_DRAW_ITEM* aGbrItem,
+static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
                           const wxPoint& aStart, const wxPoint& aEnd,
                           const wxPoint& rel_center,
                           bool aClockwise, bool aMultiquadrant,
@@ -517,10 +516,9 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
         break;
 
     case GC_TURN_OFF_POLY_FILL:
-        if( m_Exposure && m_Parent->GetBoard()->m_Drawings )    // End of polygon
+        if( m_Exposure && m_Parent->GetLayout()->m_Drawings )    // End of polygon
         {
-            GERBER_DRAW_ITEM * gbritem =
-                (GERBER_DRAW_ITEM*)( m_Parent->GetBoard()->m_Drawings.GetLast() );
+            GERBER_DRAW_ITEM * gbritem = m_Parent->GetLayout()->m_Drawings.GetLast();
             StepAndRepeatItem( *gbritem );
         }
         m_Exposure = false;
@@ -549,7 +547,7 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
     APERTURE_T        aperture = APT_CIRCLE;
     GERBER_DRAW_ITEM* gbritem;
-    BOARD*            pcb = m_Parent->GetBoard();
+    GBR_LAYOUT*       layout = m_Parent->GetLayout();
 
     int      activeLayer = m_Parent->getActiveLayer();
 
@@ -587,8 +585,8 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             if( !m_Exposure )
             {
                 m_Exposure = true;
-                gbritem    = new GERBER_DRAW_ITEM( pcb, this );
-                pcb->m_Drawings.Append( gbritem );
+                gbritem    = new GERBER_DRAW_ITEM( layout, this );
+                layout->m_Drawings.Append( gbritem );
                 gbritem->m_Shape = GBR_POLYGON;
                 gbritem->SetLayer( activeLayer );
                 gbritem->m_Flashed = false;
@@ -598,20 +596,20 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             {
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
-                gbritem = (GERBER_DRAW_ITEM*)( pcb->m_Drawings.GetLast() );
+                gbritem = layout->m_Drawings.GetLast();
 
                 //               D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
                 //                          m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
                 //                          m_CurrentPos.y, m_PolygonFillModeState,
 //                           m_Iterpolation, m_360Arc_enbl ); )
-                fillArcPOLY( pcb, gbritem, m_PreviousPos,
+                fillArcPOLY( gbritem, m_PreviousPos,
                              m_CurrentPos, m_IJPos,
                              ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ? false : true,
                              m_360Arc_enbl, GetLayerParams().m_LayerNegative );
                 break;
 
             default:
-                gbritem = (GERBER_DRAW_ITEM*)( pcb->m_Drawings.GetLast() );
+                gbritem = layout->m_Drawings.GetLast();
 
 //                D( printf( "Add poly edge %d,%d to %d,%d fill %d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y,
@@ -631,9 +629,9 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             break;
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
-            if( m_Exposure && pcb->m_Drawings )    // End of polygon
+            if( m_Exposure && layout->m_Drawings )    // End of polygon
             {
-                gbritem = (GERBER_DRAW_ITEM*)( pcb->m_Drawings.GetLast() );
+                gbritem = layout->m_Drawings.GetLast();
                 StepAndRepeatItem( *gbritem );
             }
             m_Exposure    = false;
@@ -663,8 +661,8 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             switch( m_Iterpolation )
             {
             case GERB_INTERPOL_LINEAR_1X:
-                gbritem = new GERBER_DRAW_ITEM( pcb, this );
-                pcb->m_Drawings.Append( gbritem );
+                gbritem = new GERBER_DRAW_ITEM( layout, this );
+                layout->m_Drawings.Append( gbritem );
 
 //                D( printf( "Add line %d,%d to %d,%d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y,
@@ -682,8 +680,8 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
-                gbritem = new GERBER_DRAW_ITEM( pcb, this );
-                pcb->m_Drawings.Append( gbritem );
+                gbritem = new GERBER_DRAW_ITEM( layout, this );
+                layout->m_Drawings.Append( gbritem );
 
 //                D( printf( "Add arc %d,%d to %d,%d center %d, %d interpol %d 360_enb %d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
@@ -720,8 +718,8 @@ bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 aperture = tool->m_Shape;
             }
 
-            gbritem = new GERBER_DRAW_ITEM( pcb, this );
-            pcb->m_Drawings.Append( gbritem );
+            gbritem = new GERBER_DRAW_ITEM( layout, this );
+            layout->m_Drawings.Append( gbritem );
             fillFlashedGBRITEM( gbritem, aperture,
                                 dcode, activeLayer, m_CurrentPos,
                                 size, GetLayerParams().m_LayerNegative );

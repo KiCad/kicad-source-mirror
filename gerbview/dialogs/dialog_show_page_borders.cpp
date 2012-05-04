@@ -72,9 +72,6 @@ void DIALOG_PAGE_SHOW_PAGE_BORDERS::OnCancelButtonClick( wxCommandEvent& event )
 
 void DIALOG_PAGE_SHOW_PAGE_BORDERS::OnOKBUttonClick( wxCommandEvent& event )
 {
-    m_Parent->m_DisplayPadFill = m_Parent->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-
     int idx = m_ShowPageLimits->GetSelection();
 
     m_Parent->SetShowBorderAndTitleBlock( idx > 0 ? true : false );

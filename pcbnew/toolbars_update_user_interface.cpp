@@ -41,6 +41,7 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <drc_stuff.h>
+#include <class_pcb_layer_box_selector.h>
 
 
 void PCB_EDIT_FRAME::OnUpdateLayerPair( wxUpdateUIEvent& aEvent )
