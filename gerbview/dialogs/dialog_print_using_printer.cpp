@@ -134,7 +134,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 /************************************************************************/
 {
     SetFocus();
-    int      layer_max = NB_LAYERS;
+    int      layer_max = GERBVIEW_LAYER_COUNT;
     wxString msg;
 
     if( g_pageSetupData == NULL )
@@ -204,17 +204,6 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         }
     }
 
-    // Disable checkboxes if the corresponding layer is not enabled
-    BOARD* board = ((PCB_BASE_FRAME*)m_Parent)->GetBoard();
-    for( int layer = 0; layer<NB_LAYERS; layer++, mask <<= 1 )
-    {
-       if( ! board->IsLayerEnabled( layer ) )
-        {
-            m_BoxSelectLayer[layer]->Enable( false );
-            m_BoxSelectLayer[layer]->SetValue( false );
-        }
-    }
-
     m_ScaleOption->SetSelection( scale_idx );
     scale_idx = m_ScaleOption->GetSelection();
     s_Parameters.m_PrintScale =  s_ScaleList[scale_idx];
@@ -274,7 +263,7 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
     int page_count;
     s_Parameters.m_PrintMaskLayer = 0;
     int ii;
-    for( ii = 0, page_count = 0; ii < LAYER_COUNT; ii++ )
+    for( ii = 0, page_count = 0; ii < GERBVIEW_LAYER_COUNT; ii++ )
     {
         if( m_BoxSelectLayer[ii]->IsChecked() )
         {
@@ -303,7 +292,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_Config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
         m_Config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
         wxString layerKey;
-        for( int layer = 0;  layer < LAYER_COUNT;  ++layer )
+        for( int layer = 0;  layer < GERBVIEW_LAYER_COUNT;  ++layer )
         {
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
             m_Config->Write( layerKey, m_BoxSelectLayer[layer]->IsChecked() );

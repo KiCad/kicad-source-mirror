@@ -412,6 +412,7 @@ set( BMAPS_MID
     pin_to
     pin
     plot_hpg
+    plot_pdf
     plot_ps
     plot
     polar_coord

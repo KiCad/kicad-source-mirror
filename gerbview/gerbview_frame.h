@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2007 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -32,19 +32,43 @@
 
 
 #include <param_config.h>
-#include <wxBasePcbFrame.h>
+#include <wxstruct.h>
 
-#include <../pcbnew/class_board.h>
+#include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
 
+#define NO_AVAILABLE_LAYERS -1
 
 class DCODE_SELECTION_BOX;
 class GERBER_LAYER_WIDGET;
-class LAYER_BOX_SELECTOR;
+class GBR_LAYER_BOX_SELECTOR;
 class GERBER_DRAW_ITEM;
 
 
-#define NO_AVAILABLE_LAYERS -1
+/**
+ * Class GBR_DISPLAY_OPTIONS
+ * A helper class to handle display options.
+ */
+class GBR_DISPLAY_OPTIONS
+{
+public:
+    bool    m_DisplayFlashedItemsFill;
+    bool    m_DisplayLinesFill;
+    bool    m_DisplayPolygonsFill;
+    bool    m_DisplayPolarCood;
+    bool    m_DisplayDCodes;
+    bool    m_IsPrinting;
+public:
+    GBR_DISPLAY_OPTIONS()
+    {
+        m_DisplayFlashedItemsFill = true;
+        m_DisplayLinesFill      = true;
+        m_DisplayPolygonsFill   = true;
+        m_DisplayPolarCood      = false;
+        m_DisplayDCodes = true;
+        m_IsPrinting = false;
+    }
+};
 
 
 /**
@@ -52,52 +76,129 @@ class GERBER_DRAW_ITEM;
  * is the main window used in GerbView.
  */
 
-class GERBVIEW_FRAME : public PCB_BASE_FRAME
+class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
 {
+    GBR_LAYOUT*         m_Layout;
+public:
+    GBR_DISPLAY_OPTIONS m_DisplayOptions;
+
+    /**
+     * Function SetLayout
+     * sets the m_Layout member in such as way as to ensure deleting any previous
+     * GBR_LAYOUT.
+     * @param aLayout The GBR_LAYOUT to put into the frame.
+     */
+    void SetLayout( GBR_LAYOUT* aLayout )
+    {
+        delete m_Layout;
+        m_Layout = aLayout;
+    }
+
+    GBR_LAYOUT* GetLayout() const
+    {
+        wxASSERT( m_Layout );
+        return m_Layout;
+    }
+
+    /**
+     * Function GetItemsList
+     * @return the first GERBER_DRAW_ITEM * item of the items list
+     */
+    GERBER_DRAW_ITEM* GetItemsList()
+    {
+        GERBER_DRAW_ITEM* item = GetLayout()->m_Drawings;
+
+        return (GERBER_DRAW_ITEM*) item;
+    }
+
+    /**
+     * Function GetLayoutBoundingBox
+     * calculates the bounding box containing all gerber items.
+     * @return EDA_RECT - the items bounding box
+     */
+    EDA_RECT            GetLayoutBoundingBox();
+
+    void                SetPageSettings( const PAGE_INFO& aPageSettings );  // overload
+    const PAGE_INFO&    GetPageSettings() const;                            // overload
+    const wxSize        GetPageSizeIU() const;                              // overload
+
+    const wxPoint&      GetOriginAxisPosition() const;                      // overload
+    void                SetOriginAxisPosition( const wxPoint& aPosition );  // overload
+
+    const TITLE_BLOCK&  GetTitleBlock() const;                              // overload
+    void                SetTitleBlock( const TITLE_BLOCK& aTitleBlock );    // overload
+
+    /**
+     * Function SetCurItem
+     * sets the currently selected item and displays it in the MsgPanel.
+     * If the given item is NULL then the MsgPanel is erased and there is no
+     * currently selected item. This function is intended to make the process
+     * of "selecting" an item more formal, and to indivisibly tie the operation
+     * of selecting an item to displaying it using GERBER_DRAW_ITEM::Display_Infos().
+     * @param aItem The GERBER_DRAW_ITEM to make the selected item or NULL if none.
+     * @param aDisplayInfo = true to display item info, false if not (default = true)
+     */
+    void                SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo = true );
+
+    /** Install the dialog box for layer selection
+     * @param aDefaultLayer = Preselection (NB_LAYERS for "(Deselect)" layer)
+     * @param aCopperLayerCount = number of copper layers
+     * @param aShowDeselectOption = display a "(Deselect)" radiobutton (when set to true)
+     * @return new layer value (NB_LAYERS when "(Deselect)" radiobutton selected),
+     *                         or -1 if canceled
+     *
+     * Providing the option to also display a "(Deselect)" radiobutton makes the
+     *  GerbView's "Export to Pcbnew" command) more "user friendly",
+     * by permitting any layer to be "deselected" immediately after its
+     * corresponding radiobutton has been clicked on. (It would otherwise be
+     * necessary to first cancel the "Select Layer:" dialog box (invoked after a
+     * different radiobutton is clicked on) prior to then clicking on the "Deselect"
+     * button provided within the "Layer selection:" dialog box).
+     */
+    int SelectPCBLayer( int aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
 
 protected:
-    GERBER_LAYER_WIDGET*  m_LayersManager;
+    GERBER_LAYER_WIDGET*    m_LayersManager;
 
     // Auxiliary file history used to store drill files history.
-    wxFileHistory         m_drillFileHistory;
-
+    wxFileHistory           m_drillFileHistory;
 public:
-    LAYER_BOX_SELECTOR*   m_SelLayerBox;
-    DCODE_SELECTION_BOX*  m_DCodeSelector;  // a list box to select the dcode Id to highlight.
-    wxTextCtrl*           m_TextInfo;       // a wxTextCtrl used to display some info about
-                                            // gerber data (format..)
-    wxArrayString         m_DCodesList;     // an array string containing all decodes Id (10 to 999)
-
+    GBR_LAYER_BOX_SELECTOR* m_SelLayerBox;
+    DCODE_SELECTION_BOX*    m_DCodeSelector;    // a list box to select the dcode Id to highlight.
+    wxTextCtrl*             m_TextInfo;         // a wxTextCtrl used to display some info about
+                                                // gerber data (format..)
+    wxArrayString           m_DCodesList;       // an array string containing all decodes Id (10 to 999)
 private:
     // list of PARAM_CFG_xxx to read/write parameters saved in config
-    PARAM_CFG_ARRAY       m_configSettings;
+    PARAM_CFG_ARRAY         m_configSettings;
+    COLORS_DESIGN_SETTINGS* m_colorsSettings;
 
     int m_displayMode;                  // Gerber images ("layers" in Gerbview) can be drawn:
-                                        //  - in fast mode (write mode) but if there are negative
+                                        // - in fast mode (write mode) but if there are negative
                                         // items only the last image is correctly drawn (no
                                         // problem to see only one image or when no negative items)
-                                        //  - in "exact" mode (but slower) in write mode:
-                                        //                last image covers previous images
-                                        //  - in "exact" mode (also slower) in OR mode
-                                        //                (transparency mode)
+                                        // - in "exact" mode (but slower) in write mode:
+                                        // last image covers previous images
+                                        // - in "exact" mode (also slower) in OR mode
+                                        // (transparency mode)
                                         // m_displayMode = 0, 1 or 2
 
-    bool          m_show_layer_manager_tools;
+    bool            m_show_layer_manager_tools;
 
-    // An array string to store warning messages when reading a gerber file.
-    wxArrayString m_Messages;
-
-public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
-                        const wxPoint& pos, const wxSize& size,
-                        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    // An array sting to store warning messages when reaging a gerber file.
+    wxArrayString   m_Messages;
+public:
+    GERBVIEW_FRAME( wxWindow* father, const wxString& title,
+                    const wxPoint& pos, const wxSize& size,
+                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~GERBVIEW_FRAME();
 
-    void OnCloseWindow( wxCloseEvent& Event );
+    void    OnCloseWindow( wxCloseEvent& Event );
 
     // Virtual basic functions:
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void ReCreateHToolbar();
+    void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void    ReCreateHToolbar();
 
     /**
      * Function ReCreateVToolbar
@@ -105,18 +206,19 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *
      * @note This is currently not used.
      */
-    void ReCreateVToolbar();
+    void    ReCreateVToolbar();
 
     /**
      * Create or update the left vertical toolbar (option toolbar
      */
-    void ReCreateOptToolbar();
+    void    ReCreateOptToolbar();
 
-    void ReCreateMenuBar();
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    double BestZoom();
+    void    ReCreateMenuBar();
+    void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
+    void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    double  BestZoom();
+    void    UpdateStatusBar();
 
     /**
      * Function ReportMessage
@@ -129,7 +231,6 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
         m_Messages.Add( aMessage );
     }
 
-
     /**
      * Function ClearMessageList
      * Clear the message list
@@ -139,7 +240,6 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     {
         m_Messages.Clear();
     }
-
 
     /**
      * Function GetDisplayMode
@@ -158,32 +258,6 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     void SetDisplayMode( int aMode ) { m_displayMode = aMode; }
 
     /**
-     * Function IsGridVisible() , virtual
-     * @return true if the grid must be shown
-     */
-    virtual bool IsGridVisible();
-
-    /**
-     * Function SetGridVisibility() , virtual
-     * It may be overloaded by derived classes
-     * if you want to store/retrieve the grid visibility in configuration.
-     * @param aVisible = true if the grid must be shown
-     */
-    virtual void SetGridVisibility( bool aVisible );
-
-    /**
-     * Function GetGridColor() , virtual
-     * @return the color of the grid
-     */
-    virtual int GetGridColor();
-
-    /**
-     * Function SetGridColor() , virtual
-     * @param aColor = the new color of the grid
-     */
-    virtual void SetGridColor( int aColor );
-
-    /**
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
@@ -191,11 +265,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @return bool - true if the element is visible.
      * @see enum PCB_VISIBLE
      */
-    bool IsElementVisible( int aGERBER_VISIBLE )
-    {
-        return GetBoard()->IsElementVisible( aGERBER_VISIBLE );
-    }
-
+    bool    IsElementVisible( int aGERBER_VISIBLE );
 
     /**
      * Function SetElementVisibility
@@ -204,44 +274,85 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @param aNewState = The new visibility state of the element category
      * @see enum PCB_VISIBLE
      */
-    void SetElementVisibility( int aGERBER_VISIBLE, bool aNewState );
+    void    SetElementVisibility( int aGERBER_VISIBLE, bool aNewState );
 
     /**
      * Function SetVisibleAlls
      * Set the status of all visible element categories and layers to VISIBLE
      */
-    void SetVisibleAlls();
+    void    SetVisibleAlls();
+
+    /**
+     * Function SetGridVisibility(), virtual from EDA_DRAW_FRAME
+     * It may be overloaded by derived classes
+     * @param aVisible = true if the grid must be shown
+     */
+    void    SetGridVisibility( bool aVisible );
+
+    /**
+     * Function GetVisibleLayers
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * Returns a bit-mask of all the layers that are visible
+     * @return int - the visible layers in bit-mapped form.
+     */
+    int     GetVisibleLayers() const;
+
+    /**
+     * Function SetVisibleLayers
+     * is a proxy function that calls the correspondent function in m_BoardSettings
+     * changes the bit-mask of visible layers
+     * @param aLayerMask = The new bit-mask of visible layers
+     */
+    void    SetVisibleLayers( int aLayerMask );
+
+    /**
+     * Function IsLayerVisible
+     * tests whether a given layer is visible
+     * @param aLayerIndex = The index of the layer to be tested
+     * @return bool - true if the layer is visible.
+     */
+    bool    IsLayerVisible( int aLayerIndex ) const;
+
+    /**
+     * Function GetVisibleElementColor
+     * returns the color of a pcb visible element.
+     * @see enum PCB_VISIBLE
+     */
+    int     GetVisibleElementColor( int aItemIdVisible );
+
+    void    SetVisibleElementColor( int aItemIdVisible, int aColor );
+
+    /**
+     * Function GetLayerColor
+     * gets a layer color for any valid layer, including non-copper ones.
+     */
+    int     GetLayerColor( int aLayer );
+
+    /**
+     * Function SetLayerColor
+     * changes a layer color for any valid layer, including non-copper ones.
+     */
+    void    SetLayerColor( int aLayer, int aColor );
 
     /**
      * Function ReFillLayerWidget
      * changes out all the layers in m_Layers and may be called upon
      * loading a new BOARD.
      */
-    void ReFillLayerWidget();
+    void    ReFillLayerWidget();
 
     /**
      * Function setActiveLayer
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true )
-    {
-        ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
-
-        if( doLayerWidgetUpdate )
-            syncLayerWidget();
-    }
-
+    void    setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
 
     /**
      * Function getActiveLayer
      * returns the active layer
      */
-    int getActiveLayer()
-    {
-        return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
-    }
-
+    int     getActiveLayer();
 
     /**
      * Function getNextAvailableLayer
@@ -250,9 +361,12 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @param aLayer The first layer to search.
      * @return The first empty layer found or NO_AVAILABLE_LAYERS.
      */
-    int getNextAvailableLayer( int aLayer = 0 ) const;
+    int     getNextAvailableLayer( int aLayer = 0 ) const;
 
-    bool hasAvailableLayers() const { return getNextAvailableLayer() != NO_AVAILABLE_LAYERS; }
+    bool hasAvailableLayers() const
+    {
+        return getNextAvailableLayer() != NO_AVAILABLE_LAYERS;
+    }
 
     /**
      * Function syncLayerWidget
@@ -262,7 +376,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
      */
-    void syncLayerWidget();
+    void                syncLayerWidget();
 
     /**
      * Function syncLayerBox
@@ -270,7 +384,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * The currently active layer, as defined by the return value of
      * getActiveLayer().  And updates the colored icon in the toolbar.
      */
-    void syncLayerBox();
+    void                syncLayerBox();
 
     /**
      * Function UpdateTitleAndInfo
@@ -281,7 +395,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *    Name of the Image (found in the gerber file: IN &ltname&gt command) in the status bar
      *    and other data in toolbar
      */
-    void UpdateTitleAndInfo();
+    void                UpdateTitleAndInfo();
 
     /**
      * Function GetConfigurationSettings
@@ -292,7 +406,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * GerbView source code (mainly in dialogs).  If you need to define a configuration
      * setting that need to be loaded at run time, this is the place to define it.
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings( void );
+    PARAM_CFG_ARRAY&    GetConfigurationSettings( void );
 
     /**
      * Load applications settings specific to the Pcbnew.
@@ -303,7 +417,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * drawing frames.  Please put your application settings for Pcbnew here
      * to avoid having application settings loaded all over the place.
      */
-    virtual void LoadSettings();
+    virtual void        LoadSettings();
 
     /**
      * Save applications settings common to PCB draw frame objects.
@@ -314,23 +428,23 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * drawing frames.  Please put your application settings for Pcbnew here
      * to avoid having application settings saved all over the place.
      */
-    virtual void SaveSettings();
+    virtual void        SaveSettings();
 
     /**
      * Function SetLanguage
      * called on a language menu selection
      */
-    virtual void SetLanguage( wxCommandEvent& event );
+    virtual void        SetLanguage( wxCommandEvent& event );
 
-    void Process_Special_Functions( wxCommandEvent& event );
-    void OnSelectOptionToolbar( wxCommandEvent& event );
+    void                Process_Special_Functions( wxCommandEvent& event );
+    void                OnSelectOptionToolbar( wxCommandEvent& event );
 
     /**
      * Function OnSelectActiveDCode
      * Selects the active DCode for the current active layer.
      * Items using this DCode are highlighted.
      */
-    void OnSelectActiveDCode( wxCommandEvent& event );
+    void                OnSelectActiveDCode( wxCommandEvent& event );
 
     /**
      * Function OnSelectActiveLayer
@@ -338,14 +452,14 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *  - if a file is loaded, it is loaded in this layer
      *  _ this layer is displayed on top of other layers
      */
-    void OnSelectActiveLayer( wxCommandEvent& event );
+    void                OnSelectActiveLayer( wxCommandEvent& event );
 
     /**
      * Function OnShowGerberSourceFile
      * Call the preferred editor to show (and edit) the gerber source file
      * loaded in the active layer
      */
-    void OnShowGerberSourceFile( wxCommandEvent& event );
+    void                OnShowGerberSourceFile( wxCommandEvent& event );
 
     /**
      * Function OnSelectDisplayMode
@@ -353,48 +467,49 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * Mode selection can be fast display,
      * or exact mode with stacked images or with transparency
      */
-    void OnSelectDisplayMode( wxCommandEvent& event );
+    void                OnSelectDisplayMode( wxCommandEvent& event );
 
     /**
      * Function OnQuit
      * called on request of application quit
      */
-    void OnQuit( wxCommandEvent& event );
+    void                OnQuit( wxCommandEvent& event );
 
     /**
      * Function OnHotKey
      * called when on hotkey trigger
      */
-    void OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
+    void                OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
-    GERBER_DRAW_ITEM* GerberGeneralLocateAndDisplay();
-    GERBER_DRAW_ITEM* Locate( const wxPoint& aPosition, int typeloc );
+    GERBER_DRAW_ITEM*   GerberGeneralLocateAndDisplay();
+    GERBER_DRAW_ITEM*   Locate( const wxPoint& aPosition, int typeloc );
 
-    void Process_Settings( wxCommandEvent& event );
-    void Process_Config( wxCommandEvent& event );
-    void InstallGerberOptionsDialog( wxCommandEvent& event );
+    void                Process_Settings( wxCommandEvent& event );
+    void                Process_Config( wxCommandEvent& event );
+    void                InstallGerberOptionsDialog( wxCommandEvent& event );
 
-    void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateLinesDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowDCodes( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
-    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
+    void                OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
+    void                OnUpdateCoordType( wxUpdateUIEvent& aEvent );
+    void                OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent );
+    void                OnUpdateLinesDrawMode( wxUpdateUIEvent& aEvent );
+    void                OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent );
+    void                OnUpdateShowDCodes( wxUpdateUIEvent& aEvent );
+    void                OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
+    void                OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
+    void                OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
     /**
      * Function ReturnBlockCommand
      * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
      * the \a aKey (ALT, SHIFT ALT ..)
      */
-    virtual int ReturnBlockCommand( int key );
+    virtual int         ReturnBlockCommand( int key );
 
     /**
      * Function HandleBlockPlace
      * handles the block place command.
      */
-    virtual void HandleBlockPlace( wxDC* DC );
+    virtual void        HandleBlockPlace( wxDC* DC );
 
     /**
      * Function HandleBlockEnd( )
@@ -407,16 +522,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @return false if no item selected, or command finished,
      *         true if some items found and HandleBlockPlace must be called later.
      */
-    virtual bool HandleBlockEnd( wxDC* DC );
-
-    /**
-     * Function Block_Delete
-     * deletes all tracks and segments within the selected block.
-     * Defined separately in Pcbnew and GerbView
-     *
-     * @param DC A device context to draw on.
-     */
-    void Block_Delete( wxDC* DC );
+    virtual bool        HandleBlockEnd( wxDC* DC );
 
     /**
      * Function Block_Move
@@ -427,58 +533,47 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *
      * @param DC A device context to draw on.
      */
-    void Block_Move( wxDC* DC );
-
-    /**
-     * Function Block_Duplicate
-     * copies-and-moves all tracks and segments within the selected block.
-     * New location is determined by the current offset from the selected
-     * block's original location.
-     * Defined separately in Pcbnew and GerbView
-     *
-     * @param DC A device context to draw on.
-     */
-    void Block_Duplicate( wxDC* DC );
+    void                Block_Move( wxDC* DC );
 
     /**
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files
      * relative to the current board
      */
-    void ToPlotter( wxCommandEvent& event );
+    void                ToPlotter( wxCommandEvent& event );
 
     /**
      * Function ToPrinter
      * Open a dialog frame to print layers
      */
-    void ToPrinter( wxCommandEvent& event );
+    void                ToPrinter( wxCommandEvent& event );
 
-    void Genere_HPGL( const wxString& FullFileName, int Layers );
-    void Genere_GERBER( const wxString& FullFileName, int Layers );
-    void Genere_PS( const wxString& FullFileName, int Layers );
-    void Plot_Layer_HPGL( FILE* File, int masque_layer,int garde, bool trace_via,
-                          EDA_DRAW_MODE_T trace_mode );
-    void Plot_Layer_GERBER( FILE* File, int masque_layer, int garde, bool trace_via,
-                            EDA_DRAW_MODE_T trace_mode );
-    int Gen_D_CODE_File( const wxString& Name_File );
-    void Plot_Layer_PS( FILE* File, int masque_layer, int garde, bool trace_via,
-                        EDA_DRAW_MODE_T trace_mode );
-
-    void Files_io( wxCommandEvent& event );
+/*    void                Genere_HPGL( const wxString& FullFileName, int Layers );
+ *   void                Genere_GERBER( const wxString& FullFileName, int Layers );
+ *   void                Genere_PS( const wxString& FullFileName, int Layers );
+ *   void                Plot_Layer_HPGL( FILE* File, int masque_layer, int garde, bool trace_via,
+ *                                        EDA_DRAW_MODE_T trace_mode );
+ *   void                Plot_Layer_GERBER( FILE* File, int masque_layer, int garde, bool trace_via,
+ *                                          EDA_DRAW_MODE_T trace_mode );
+ *   int                 Gen_D_CODE_File( const wxString& Name_File );
+ *   void                Plot_Layer_PS( FILE* File, int masque_layer, int garde, bool trace_via,
+ *                                      EDA_DRAW_MODE_T trace_mode );
+ */
+    void                Files_io( wxCommandEvent& event );
 
     /**
      * Function OnGbrFileHistory
      * deletes the current data and loads a Gerber file selected from history list on
      * current layer.
      */
-    void OnGbrFileHistory( wxCommandEvent& event );
+    void                OnGbrFileHistory( wxCommandEvent& event );
 
     /**
      * Function OnDrlFileHistory
      * deletes the current data and load a drill file in Excellon format selected from
      * history list on current layer.
      */
-    void OnDrlFileHistory( wxCommandEvent& event );
+    void                OnDrlFileHistory( wxCommandEvent& event );
 
     /**
      * function LoadGerberFiles
@@ -488,10 +583,10 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *                    if void string: user will be prompted for filename(s)
      * @return true if file was opened successfully.
      */
-    bool LoadGerberFiles( const wxString& aFileName );
-    int ReadGerberFile( FILE* File, bool Append );
-    bool Read_GERBER_File( const wxString& GERBER_FullFileName,
-                           const wxString& D_Code_FullFileName );
+    bool                LoadGerberFiles( const wxString& aFileName );
+    int                 ReadGerberFile( FILE* File, bool Append );
+    bool                Read_GERBER_File( const wxString&   GERBER_FullFileName,
+                                          const wxString&   D_Code_FullFileName );
 
     /**
      * function LoadDrllFiles
@@ -501,10 +596,10 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *                    if void string: user will be prompted for filename(s)
      * @return true if file was opened successfully.
      */
-    bool LoadExcellonFiles( const wxString& aFileName );
-    bool Read_EXCELLON_File( const wxString& aFullFileName );
+    bool                LoadExcellonFiles( const wxString& aFileName );
+    bool                Read_EXCELLON_File( const wxString& aFullFileName );
 
-    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    void                GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
      * Read a DCode file (not used with RX274X files , just with RS274D old files).
@@ -515,7 +610,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @ aparm aFullFileName = name of file to load.
      *  if empty, or if the file does not exist, a file dialog is opened
      */
-    bool LoadDCodeFile( const wxString& aFullFileName );
+    bool                LoadDCodeFile( const wxString& aFullFileName );
 
     /**
      * Function ReadDCodeDefinitionFile
@@ -540,28 +635,27 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *                      g_GERBER_List[]<br>
      *                  1 = read OK<br>
      */
-    int ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName );
+    int                 ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName );
 
     /**
      * Set Size Items (Lines, Flashes) from DCodes List
      */
-    void CopyDCodesSizeToItems();
-    void Liste_D_Codes();
+    void                CopyDCodesSizeToItems();
+    void                Liste_D_Codes();
 
     // PCB handling
-    bool Clear_Pcb( bool query );
-    void Erase_Current_Layer( bool query );
+    bool                Clear_Pcb( bool query );
+    void                Erase_Current_Layer( bool query );
 
     // Conversion function
-    void ExportDataInPcbnewFormat( wxCommandEvent& event );
+    void                ExportDataInPcbnewFormat( wxCommandEvent& event );
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in GerbView.
-     * but must be defined because it is a pure virtual in PCB_BASE_FRAME
      */
-    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
-                                     UNDO_REDO_T aTypeCommand = UR_UNSPECIFIED,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) { }
+    void SaveCopyInUndoList( GERBER_DRAW_ITEM* aItemToCopy,
+                             UNDO_REDO_T aTypeCommand = UR_UNSPECIFIED,
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) { }
 
     /**
      * Function SaveCopyInUndoList (overloaded).
@@ -572,9 +666,9 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
-    virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                     UNDO_REDO_T aTypeCommand,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
+    void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
+                             UNDO_REDO_T aTypeCommand,
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
     {
         // currently: do nothing in GerbView.
     }
@@ -586,8 +680,8 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, int aPrintMasklayer, bool aPrintMirrorMode,
-                            void* aData = NULL );
+    virtual void    PrintPage( wxDC* aDC, int aPrintMasklayer, bool aPrintMirrorMode,
+                               void* aData = NULL );
 
     /**
      * Function DrawItemsDCodeID
@@ -596,9 +690,9 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * @param aDC = the current device context
      * @param aDrawMode = GR_COPY, GR_OR ...
      */
-    void DrawItemsDCodeID( wxDC* aDC, int aDrawMode );
+    void            DrawItemsDCodeID( wxDC* aDC, int aDrawMode );
 
     DECLARE_EVENT_TABLE()
 };
 
-#endif  /* WX_GERBER_STRUCT_H */
+#endif /* WX_GERBER_STRUCT_H */

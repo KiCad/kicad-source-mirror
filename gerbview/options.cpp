@@ -35,31 +35,17 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
-        if( state )
-            DisplayOpt.DisplayPadFill = false;
-        else
-            DisplayOpt.DisplayPadFill = true;
-        m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-
+        m_DisplayOptions.m_DisplayFlashedItemsFill = not state;
         m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
-        if(state )
-            DisplayOpt.DisplayPcbTrackFill = false;
-        else
-            DisplayOpt.DisplayPcbTrackFill = true;
-        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-
+        m_DisplayOptions.m_DisplayLinesFill = not state;
         m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
-        if( state )      // Polygons filled asked
-            g_DisplayPolygonsModeSketch = 1;
-        else
-            g_DisplayPolygonsModeSketch = 0;
-
+        m_DisplayOptions.m_DisplayPolygonsFill = not state;
         m_canvas->Refresh( true );
         break;
 
@@ -79,7 +65,7 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     default:
-        wxMessageBox( wxT( "WinEDA_PcbFrame::OnSelectOptionToolbar error" ) );
+        wxMessageBox( wxT( "GERBVIEW_FRAME::OnSelectOptionToolbar error" ) );
         break;
     }
 }

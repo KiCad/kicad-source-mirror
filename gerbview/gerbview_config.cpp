@@ -34,13 +34,11 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <gestfich.h>
-#include <pcbcommon.h>
 #include <param_config.h>
 #include <colors_selection.h>
 
 #include <gerbview.h>
 #include <hotkeys.h>
-#include <class_board_design_settings.h>
 #include <dialog_hotkeys_editor.h>
 
 
@@ -100,7 +98,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
 
     m_configSettings.push_back( new PARAM_CFG_BOOL( true,
                                                     wxT( "DisplayPolarCoordinates" ),
-                                                    &DisplayOpt.DisplayPolarCood,
+                                                    &m_DisplayOptions.m_DisplayPolarCood,
                                                     false ) );
 
     // Default colors for layers 0 to 31

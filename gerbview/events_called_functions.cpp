@@ -22,7 +22,7 @@
 
 // Event table:
 
-BEGIN_EVENT_TABLE( GERBVIEW_FRAME, PCB_BASE_FRAME )
+BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( GERBVIEW_FRAME::OnCloseWindow )
     EVT_SIZE( GERBVIEW_FRAME::OnSize )
 
@@ -85,6 +85,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, PCB_BASE_FRAME )
                     GERBVIEW_FRAME::Process_Special_Functions )
 
     // Option toolbar
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
@@ -94,6 +95,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, PCB_BASE_FRAME )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
                     GERBVIEW_FRAME::OnSelectDisplayMode )
 
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnUpdateCoordType )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
                    GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnUpdateLinesDrawMode )
@@ -310,3 +312,66 @@ void GERBVIEW_FRAME::SetLanguage( wxCommandEvent& event )
 
     ReFillLayerWidget();
 }
+
+/**
+ * Function OnSelectOptionToolbar
+ *  called to validate current choices
+ */
+void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
+{
+    int id = event.GetId();
+    bool state;
+    switch( id )
+    {
+        case ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG:
+            state = ! m_show_layer_manager_tools;
+            id = ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR;
+            break;
+
+        default:
+            state = m_optionsToolBar->GetToolToggled( id );
+            break;
+    }
+
+    switch( id )
+    {
+    case ID_TB_OPTIONS_SHOW_POLAR_COORD:
+        m_DisplayOptions.m_DisplayPolarCood = state;
+        break;
+
+    case ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH:
+        m_DisplayOptions.m_DisplayFlashedItemsFill = not state;
+        m_canvas->Refresh( true );
+        break;
+
+    case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
+        m_DisplayOptions.m_DisplayLinesFill = not state;
+        m_canvas->Refresh( true );
+        break;
+
+    case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
+        m_DisplayOptions.m_DisplayPolygonsFill = not state;
+        m_canvas->Refresh( true );
+        break;
+
+    case ID_TB_OPTIONS_SHOW_DCODES:
+        SetElementVisibility( DCODES_VISIBLE, state );
+        m_canvas->Refresh( true );
+        break;
+
+    case ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR:
+        // show/hide auxiliary Vertical layers and visibility manager toolbar
+        m_show_layer_manager_tools = state;
+        m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
+        m_auimgr.Update();
+        GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                m_show_layer_manager_tools ?
+                                _("Hide &Layers Manager" ) : _("Show &Layers Manager" ));
+        break;
+
+    default:
+        wxMessageBox( wxT( "GERBVIEW_FRAME::OnSelectOptionToolbar error" ) );
+        break;
+    }
+}
+

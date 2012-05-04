@@ -597,50 +597,12 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
         line.Printf( formatter, To_User_Unit( g_UserUnit, ro ), theta );
 
-        SetStatusText( line, 2 );
-    }
-    else
-    {
-        // Display absolute coordinates:
-        dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
-        dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
-
-        if ( g_UserUnit == MILLIMETRES )
-        {
-            dXpos = RoundTo0( dXpos, 1000.0 );
-            dYpos = RoundTo0( dYpos, 1000.0 );
-        }
-
-        // The following sadly is an if Eeschema/if Pcbnew
-        wxString absformatter;
-
-        switch( g_UserUnit )
-        {
-        case INCHES:
-            absformatter = wxT( "X %.4f  Y %.4f" );
-            locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
-            break;
-
-        case MILLIMETRES:
-            absformatter = wxT( "X %.3f  Y %.3f" );
-            locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
-            break;
-
-        case UNSCALED_UNITS:
-            absformatter = wxT( "X %f  Y %f" );
-            locformatter = wxT( "dx %f  dy %f  d %f" );
-            break;
-        }
-
-        line.Printf( absformatter, dXpos, dYpos );
-        SetStatusText( line, 2 );
+        SetStatusText( line, 3 );
     }
 
-    // Display relative coordinates:
-    dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-    dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
-    dXpos = To_User_Unit( g_UserUnit, dx );
-    dYpos = To_User_Unit( g_UserUnit, dy );
+    // Display absolute coordinates:
+    dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
+    dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
 
     if ( g_UserUnit == MILLIMETRES )
     {
@@ -648,9 +610,48 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         dYpos = RoundTo0( dYpos, 1000.0 );
     }
 
-    // We already decided the formatter above
-    line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
-    SetStatusText( line, 3 );
+    // The following sadly is an if Eeschema/if Pcbnew
+    wxString absformatter;
+
+    switch( g_UserUnit )
+    {
+    case INCHES:
+        absformatter = wxT( "X %.4f  Y %.4f" );
+        locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
+        break;
+
+    case MILLIMETRES:
+        absformatter = wxT( "X %.3f  Y %.3f" );
+        locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
+        break;
+
+    case UNSCALED_UNITS:
+        absformatter = wxT( "X %f  Y %f" );
+        locformatter = wxT( "dx %f  dy %f  d %f" );
+        break;
+    }
+
+    line.Printf( absformatter, dXpos, dYpos );
+    SetStatusText( line, 2 );
+
+    if( !DisplayOpt.DisplayPolarCood )  // display relative cartesian coordinates
+    {
+        // Display relative coordinates:
+        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        dXpos = To_User_Unit( g_UserUnit, dx );
+        dYpos = To_User_Unit( g_UserUnit, dy );
+
+        if ( g_UserUnit == MILLIMETRES )
+        {
+            dXpos = RoundTo0( dXpos, 1000.0 );
+            dYpos = RoundTo0( dYpos, 1000.0 );
+        }
+
+        // We already decided the formatter above
+        line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+        SetStatusText( line, 3 );
+    }
 }
 
 

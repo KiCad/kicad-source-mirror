@@ -69,16 +69,16 @@ void DIALOG_DISPLAY_OPTIONS::OnCancelButtonClick( wxCommandEvent& event )
 
 void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 {
-    m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
+    m_PolarDisplay->SetSelection( m_Parent->m_DisplayOptions.m_DisplayPolarCood ? 1 : 0 );
     m_BoxUnits->SetSelection( g_UserUnit ? 1 : 0 );
     m_CursorShape->SetSelection( m_Parent->GetCursorShape() ? 1 : 0 );
 
     // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
-    m_OptDisplayLines->SetSelection( DisplayOpt.DisplayPcbTrackFill ? 1 : 0 );
-    m_OptDisplayFlashedItems->SetSelection( DisplayOpt.DisplayPadFill ? 1 : 0);
+    m_OptDisplayLines->SetSelection( m_Parent->m_DisplayOptions.m_DisplayLinesFill ? 1 : 0 );
+    m_OptDisplayFlashedItems->SetSelection( m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill ? 1 : 0);
 
     // Show Option Draw polygons
-    m_OptDisplayPolygons->SetSelection( g_DisplayPolygonsModeSketch ? 0 : 1 );
+    m_OptDisplayPolygons->SetSelection( m_Parent->m_DisplayOptions.m_DisplayPolygonsFill ? 1 : 0 );
 
     m_ShowPageLimits->SetSelection(0);
 
@@ -106,37 +106,32 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 
 void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 {
-    DisplayOpt.DisplayPolarCood =
+    m_Parent->m_DisplayOptions.m_DisplayPolarCood =
         (m_PolarDisplay->GetSelection() == 0) ? false : true;
     g_UserUnit  = (m_BoxUnits->GetSelection() == 0) ? INCHES : MILLIMETRES;
     m_Parent->SetCursorShape( m_CursorShape->GetSelection() );
 
     if( m_OptDisplayLines->GetSelection() == 1 )
-        DisplayOpt.DisplayPcbTrackFill = true;
+        m_Parent->m_DisplayOptions.m_DisplayLinesFill = true;
     else
-        DisplayOpt.DisplayPcbTrackFill = false;
+        m_Parent->m_DisplayOptions.m_DisplayLinesFill = false;
 
     if( m_OptDisplayFlashedItems->GetSelection() == 1 )
     {
-        DisplayOpt.DisplayPadFill = true;
-        DisplayOpt.DisplayViaFill = true;
+        m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill = true;
     }
     else
     {
-        DisplayOpt.DisplayViaFill = false;
-        DisplayOpt.DisplayPadFill = false;
+        m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill = false;
     }
 
 
     if( m_OptDisplayPolygons->GetSelection() == 0 )
-        g_DisplayPolygonsModeSketch = 1;
+        m_Parent->m_DisplayOptions.m_DisplayPolygonsFill = false;
     else
-        g_DisplayPolygonsModeSketch = 0;
+        m_Parent->m_DisplayOptions.m_DisplayPolygonsFill = true;
 
     m_Parent->SetElementVisibility( DCODES_VISIBLE, m_OptDisplayDCodes->GetValue() );
-
-    m_Parent->m_DisplayPadFill =  m_Parent->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
 
     int idx = m_ShowPageLimits->GetSelection();
 

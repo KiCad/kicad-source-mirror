@@ -17,7 +17,6 @@
                        || ( (x) == '-' ) || ( (x) == '+' )  || ( (x) == '.' ) )
 
 class GERBVIEW_FRAME;
-class BOARD;
 class D_CODE;
 
 /* gerber files have different parameters to define units and how items must be plotted.
@@ -74,10 +73,9 @@ private:
  */
 class GERBER_IMAGE
 {
-    GERBVIEW_FRAME* m_Parent;                               // the parent GERBVIEW_FRAME (used to display messages...)
+    GERBVIEW_FRAME*    m_Parent;                            // the parent GERBVIEW_FRAME (used to display messages...)
     D_CODE*            m_Aperture_List[TOOLS_MAX_COUNT];    ///< Dcode (Aperture) List for this layer (max 999)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
-    BOARD*             m_Pcb;
 
     GERBER_LAYER       m_GBRLayerParams; // hold params for the current gerber layer
 
@@ -154,6 +152,12 @@ public:
     {
         return m_Parent;
     }
+
+    /**
+     * Function GetItemsList
+     * @return the first GERBER_DRAW_ITEM * item of the items list
+     */
+    GERBER_DRAW_ITEM * GetItemsList();
 
     /**
      * Function GetLayerParams
