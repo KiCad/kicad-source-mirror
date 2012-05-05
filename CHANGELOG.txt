@@ -4,6 +4,14 @@ KiCad ChangeLog 2012
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2012-May-5  UPDATE Jerry Jacobs <jerry@xor-gate.org>
+================================================================================
+++ common
+ * Update about dialog to more native size so the notebook is not squeezed
+ * Increment copyright year to 2012
+ * Fix mousezoom jumping to center for Mac OS X and other platforms
+ * Remove lowercase application name because Mac OS X menubar was inconsitent 
+
 2012-Mar-11 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++pcbnew

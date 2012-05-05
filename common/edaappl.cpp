@@ -335,7 +335,7 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
 
     /* Init parameters for configuration */
     SetVendorName( wxT( "KiCad" ) );
-    SetAppName( aName.Lower() );
+    SetAppName( aName );
     SetTitle( aName );
     m_settings = new wxConfig();
     wxASSERT( m_settings != NULL );
