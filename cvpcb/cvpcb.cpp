@@ -73,7 +73,7 @@ bool EDA_APP::OnInit()
     wxString         message;
     CVPCB_MAINFRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "CvPcb" ), APP_CVPCB_T );
+    InitEDA_Appl( wxT( "CvPCB" ), APP_CVPCB_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

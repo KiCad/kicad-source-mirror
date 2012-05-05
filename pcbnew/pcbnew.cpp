@@ -102,7 +102,7 @@ bool EDA_APP::OnInit()
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
+    InitEDA_Appl( wxT( "PCBNew" ), APP_PCBNEW_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
