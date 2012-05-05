@@ -124,7 +124,7 @@ bool EDA_APP::OnInit()
     wxFileName      filename;
     SCH_EDIT_FRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "Eeschema" ), APP_EESCHEMA_T );
+    InitEDA_Appl( wxT( "EESchema" ), APP_EESCHEMA_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

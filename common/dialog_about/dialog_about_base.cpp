@@ -58,7 +58,7 @@ dialog_about_base::dialog_about_base( wxWindow* parent, wxWindowID id, const wxS
 	bSizer1->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	m_auiNotebook = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_SCROLL_BUTTONS|wxAUI_NB_TAB_FIXED_WIDTH );
-	m_auiNotebook->SetMinSize( wxSize( 550,300 ) );
+	m_auiNotebook->SetMinSize( wxSize( 750,350 ) );
 	
 	
 	bSizer1->Add( m_auiNotebook, 2, wxEXPAND | wxALL, 5 );
