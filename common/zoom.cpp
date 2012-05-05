@@ -103,27 +103,47 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     bool         zoom_at_cursor = false;
     BASE_SCREEN* screen = GetScreen();
     wxPoint      center = screen->GetScrollCenterPosition();
+    wxPoint      zoom_center = center;
+    double	 zoom = screen->GetZoom();
 
     switch( id )
     {
     case ID_POPUP_ZOOM_IN:
         zoom_at_cursor = true;
-        center = screen->GetCrossHairPosition();
+        zoom_center = screen->GetCrossHairPosition();
 
     // fall thru
     case ID_ZOOM_IN:
-        if( screen->SetPreviousZoom() )
-            RedrawScreen( center, zoom_at_cursor );
+        if( screen->SetPreviousZoom() ) {
+	    if( zoom_at_cursor ) {
+		double new_zoom = screen->GetZoom();
+		double factor = new_zoom / zoom;
+		wxPoint delta = center - zoom_center;
+		center = wxPoint(
+		    zoom_center.x + delta.x * factor,
+		    zoom_center.y + delta.y * factor);
+	    }
+            RedrawScreen( center, false );
+	}
         break;
 
     case ID_POPUP_ZOOM_OUT:
         zoom_at_cursor = true;
-        center = screen->GetCrossHairPosition();
+        zoom_center = screen->GetCrossHairPosition();
 
     // fall thru
     case ID_ZOOM_OUT:
-        if( screen->SetNextZoom() )
-            RedrawScreen( center, zoom_at_cursor );
+        if( screen->SetNextZoom() ) {
+	    if( zoom_at_cursor ) {
+		double new_zoom = screen->GetZoom();
+		double factor = new_zoom / zoom;
+		wxPoint delta = center - zoom_center;
+		center = wxPoint(
+		    zoom_center.x + delta.x * factor,
+		    zoom_center.y + delta.y * factor);
+	    }
+            RedrawScreen( center, false );
+	}
         break;
 
     case ID_ZOOM_REDRAW:
