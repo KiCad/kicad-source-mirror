@@ -292,7 +292,6 @@ target_link_libraries(pcbnew
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
-    zlib
     )
 
 ###

@@ -4175,6 +4175,12 @@ void LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES
             _( "library '%s' cannot be deleted" ),
             aLibraryPath.GetData() ) );
     }
+
+    if( m_cache && m_cache->m_lib_name == aLibraryPath )
+    {
+        delete m_cache;
+        m_cache = 0;
+    }
 }
 
 

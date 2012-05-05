@@ -12,7 +12,8 @@
 #include <plot_common.h>
 #include <macros.h>
 #include <kicad_string.h>
-#include <zlib.h>
+#include <wx/zstream.h>
+#include <wx/mstream.h>
 
 void PDF_PLOTTER::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
@@ -424,41 +425,36 @@ void PDF_PLOTTER::closePdfStream()
     workFile = 0;
     ::wxRemoveFile( workFilename );
 
-    z_stream zstrm;
-    zstrm.zalloc = NULL;
-    zstrm.zfree = NULL;
-    zstrm.opaque = NULL;
+    wxMemoryOutputStream    memos;
 
-    /* Somewhat standard parameters to compress in FLATE. The PDF spec is
-       misleading, it says it wants a FLATE stream but it really want a ZLIB
-       stream! (a FLATE stream would be generated with -15 instead of 15) */
-    rc = deflateInit2( &zstrm, Z_BEST_COMPRESSION, Z_DEFLATED, 15,
-                           8, Z_DEFAULT_STRATEGY );
-    wxASSERT( rc == Z_OK );
-    zstrm.avail_in = stream_len;
-    zstrm.next_in = inbuf;
+    {
+        /* Somewhat standard parameters to compress in DEFLATE. The PDF spec is
+           misleading, it says it wants a FLATE stream but it really want a ZLIB
+           stream! (a DEFLATE stream would be generated with -15 instead of 15)
+        rc = deflateInit2( &zstrm, Z_BEST_COMPRESSION, Z_DEFLATED, 15,
+                               8, Z_DEFAULT_STRATEGY );
+        */
 
-    // PDF streams are very compactable, we trust it doesn't expand
-    unsigned char *outbuf = new unsigned char[stream_len];
-    zstrm.avail_out = stream_len;
-    zstrm.next_out = outbuf;
+        wxZlibOutputStream      zos( memos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
 
-    // Do a full in-memory compaction
-    rc = deflate( &zstrm, Z_FINISH );
-    wxASSERT( rc == Z_STREAM_END );
+        zos.Write( inbuf, stream_len );
 
-    // Now write the packed stream on the main file and free memory
-    stream_len -= zstrm.avail_out;
-    fwrite( outbuf, 1, stream_len, outputFile );
+    }   // flush the zip stream using destructor
+
+    wxStreamBuffer* sb = memos.GetOutputStreamBuffer();
+
+    unsigned out_count = sb->Tell();
+
+    fwrite( sb->GetBufferStart(), 1, out_count, outputFile );
 
     delete[] inbuf;
-    delete[] outbuf;
+
     fputs( "endstream\n", outputFile );
     closePdfObject();
 
     // Writing the deferred length as an indirect object
     startPdfObject( streamLengthHandle );
-    fprintf( outputFile, "%d\n", stream_len );
+    fprintf( outputFile, "%u\n", out_count );
     closePdfObject();
 }
 
