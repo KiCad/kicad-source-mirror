@@ -386,6 +386,25 @@ public:
     void SetCentre( const VECTOR2<T>& pt ) { MoveCentreTo( pt ); }
     void MoveCentreTo( const VECTOR2<T>& pt ) { x += pt.x - (x + width/2), y += pt.y - (y + height/2); }
 
+    /**
+     * Function Normalize
+     * ensures that the height ant width are positive.
+     */
+    void Normalize()
+    {
+        if( height < 0 )
+        {
+            height = -height;
+            y -= height;
+        }
+
+        if( width < 0 )
+        {
+            width = -width;
+            x -= width;
+        }
+    }
+
     T   x, y, width, height;
 };
 

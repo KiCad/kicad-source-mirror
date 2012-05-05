@@ -661,6 +661,10 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
 }
 
 
+#define VIRT_MIN    double(INT_MIN+100)
+#define VIRT_MAX    double(INT_MAX-100)
+
+
 void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 {
     BASE_SCREEN* screen = GetScreen();
@@ -701,6 +705,23 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
 
     DBOX    clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
+    wxPoint centerPositionIU;
+
+    // put "int" limits on the clientRect
+    {
+        if( clientRectIU.GetLeft() < VIRT_MIN )
+            clientRectIU.MoveLeftTo( VIRT_MIN );
+        if( clientRectIU.GetTop() < VIRT_MIN )
+            clientRectIU.MoveTopTo( VIRT_MIN );
+        if( clientRectIU.GetRight() > VIRT_MAX )
+            clientRectIU.MoveRightTo( VIRT_MAX );
+        if( clientRectIU.GetBottom() > VIRT_MAX )
+            clientRectIU.MoveBottomTo( VIRT_MAX );
+
+        centerPositionIU.x = KiROUND( clientRectIU.x + clientRectIU.width/2 );
+        centerPositionIU.y = KiROUND( clientRectIU.y + clientRectIU.height/2 );
+    }
+
     DSIZE   virtualSizeIU;
 
     if( pageRectIU.GetLeft() < clientRectIU.GetLeft() && pageRectIU.GetRight() > clientRectIU.GetRight() )
@@ -709,26 +730,24 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        double drawingCenterX = pageRectIU.x   + ( pageRectIU.width / 2 );
+        double pageCenterX    = pageRectIU.x   + ( pageRectIU.width / 2 );
         double clientCenterX  = clientRectIU.x + ( clientRectIU.width / 2 );
 
         if( clientRectIU.width > pageRectIU.width )
         {
-            if( drawingCenterX > clientCenterX )
-                virtualSizeIU.x = ( drawingCenterX - clientRectIU.GetLeft() ) * 2;
-            else if( drawingCenterX < clientCenterX )
-                virtualSizeIU.x = ( clientRectIU.GetRight() - drawingCenterX ) * 2;
+            if( pageCenterX > clientCenterX )
+                virtualSizeIU.x = ( pageCenterX - clientRectIU.GetLeft() ) * 2;
+            else if( pageCenterX < clientCenterX )
+                virtualSizeIU.x = ( clientRectIU.GetRight() - pageCenterX ) * 2;
             else
                 virtualSizeIU.x = clientRectIU.width;
         }
         else
         {
-            if( drawingCenterX > clientCenterX )
-                virtualSizeIU.x = pageRectIU.width +
-                                ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
-            else if( drawingCenterX < clientCenterX )
-                virtualSizeIU.x = pageRectIU.width +
-                                ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
+            if( pageCenterX > clientCenterX )
+                virtualSizeIU.x = pageRectIU.width + ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
+            else if( pageCenterX < clientCenterX )
+                virtualSizeIU.x = pageRectIU.width + ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
             else
                 virtualSizeIU.x = pageRectIU.width;
         }
@@ -740,24 +759,24 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        int drawingCenterY = pageRectIU.y   + ( pageRectIU.height / 2 );
-        int clientCenterY  = clientRectIU.y + ( clientRectIU.height / 2 );
+        double pageCenterY   = pageRectIU.y   + ( pageRectIU.height / 2 );
+        double clientCenterY = clientRectIU.y + ( clientRectIU.height / 2 );
 
         if( clientRectIU.height > pageRectIU.height )
         {
-            if( drawingCenterY > clientCenterY )
-                virtualSizeIU.y = ( drawingCenterY - clientRectIU.GetTop() ) * 2;
-            else if( drawingCenterY < clientCenterY )
-                virtualSizeIU.y = ( clientRectIU.GetBottom() - drawingCenterY ) * 2;
+            if( pageCenterY > clientCenterY )
+                virtualSizeIU.y = ( pageCenterY - clientRectIU.GetTop() ) * 2;
+            else if( pageCenterY < clientCenterY )
+                virtualSizeIU.y = ( clientRectIU.GetBottom() - pageCenterY ) * 2;
             else
                 virtualSizeIU.y = clientRectIU.height;
         }
         else
         {
-            if( drawingCenterY > clientCenterY )
+            if( pageCenterY > clientCenterY )
                 virtualSizeIU.y = pageRectIU.height +
                                 ( ( pageRectIU.GetTop() - clientRectIU.GetTop() ) * 2 );
-            else if( drawingCenterY < clientCenterY )
+            else if( pageCenterY < clientCenterY )
                 virtualSizeIU.y = pageRectIU.height +
                                 ( ( clientRectIU.GetBottom() - pageRectIU.GetBottom() ) * 2 );
             else
@@ -767,11 +786,17 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     if( screen->m_Center )
     {
+        virtualSizeIU.x = std::min( virtualSizeIU.x, VIRT_MAX );
+        virtualSizeIU.y = std::min( virtualSizeIU.y, VIRT_MAX );
+
         screen->m_DrawOrg.x = -KiROUND( virtualSizeIU.x / 2.0 );
         screen->m_DrawOrg.y = -KiROUND( virtualSizeIU.y / 2.0 );
     }
     else
     {
+        virtualSizeIU.x = std::min( virtualSizeIU.x, VIRT_MAX );
+        virtualSizeIU.y = std::min( virtualSizeIU.y, VIRT_MAX );
+
         screen->m_DrawOrg.x = -KiROUND( ( virtualSizeIU.x - pageRectIU.width )  / 2.0 );
         screen->m_DrawOrg.y = -KiROUND( ( virtualSizeIU.y - pageRectIU.height ) / 2.0 );
     }
@@ -790,10 +815,10 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     // Calculate the scroll bar position in internal units to place the
     // center position at the center of client rectangle.
-    screen->SetScrollCenterPosition( aCenterPositionIU );
+    screen->SetScrollCenterPosition( centerPositionIU );
 
-    double posX = aCenterPositionIU.x - clientRectIU.width /2.0 - screen->m_DrawOrg.x;
-    double posY = aCenterPositionIU.y - clientRectIU.height/2.0 - screen->m_DrawOrg.y;
+    double posX = centerPositionIU.x - clientRectIU.width /2.0 - screen->m_DrawOrg.x;
+    double posY = centerPositionIU.y - clientRectIU.height/2.0 - screen->m_DrawOrg.y;
 
     // Convert scroll bar position to device units.
     posX = KiROUND( posX * scale );
@@ -801,25 +826,25 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     if( posX < 0 )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.16g" ), posX );
         posX = 0;
     }
 
     if( posX > unitsX )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.16g" ), posX );
         posX = unitsX;
     }
 
     if( posY < 0 )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.16g" ), posY );
         posY = 0;
     }
 
     if( posY > unitsY )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.16g" ), posY );
         posY = unitsY;
     }
 

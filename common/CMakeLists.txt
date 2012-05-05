@@ -7,7 +7,6 @@ include_directories(
     ../3d-viewer
     ../pcbnew
     ../polygon
-    ../zlib
     ${INC_AFTER}
     )
 

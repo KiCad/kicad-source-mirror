@@ -220,7 +220,6 @@ target_link_libraries(eeschema
     kbool
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
-    zlib
     )
 
 install(TARGETS eeschema
