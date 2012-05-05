@@ -133,5 +133,7 @@
 
 %include "board.i"
 %include "module.i"
+%include "plugins.i"
 %include "units.i"
 
+        

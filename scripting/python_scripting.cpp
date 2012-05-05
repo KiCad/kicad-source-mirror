@@ -90,15 +90,6 @@ void pcbnewInitPythonScripting()
     swigAddModules();
     swigSwitchPythonBuiltin();
     
-#if 0
-    /* print the list of modules available from python */
-    while(PyImport_Inittab[i].name)
-    {
-	printf("name[%d]=>%s\n",i,PyImport_Inittab[i].name);
-	i++;
-    }
-#endif
-
     Py_Initialize();
 
     /* setup the scripting path, we may need to add the installation path 
@@ -106,7 +97,9 @@ void pcbnewInitPythonScripting()
 
     PyRun_SimpleString("import sys\n"
                        "sys.path.append(\".\")\n"
-                       "import pcbnew\n");
+                       "import pcbnew\n"
+                       "pcbnew.LoadPlugins()"
+                        );
 
 
 }

@@ -231,13 +231,14 @@ set(PCBNEW_COMMON_SRCS
 # Scripting sources
 ##
 
-if (KICAD_SCRIPTING)
-
-	set(PCBNEW_SCRIPTING_PYTHON_HELPERS    
+set(PCBNEW_SCRIPTING_PYTHON_HELPERS    
 	   ../scripting/wx_python_helpers.cpp
 	   ../scripting/python_scripting.cpp
 	   scripting/pcbnew_scripting_helpers.cpp
+           scripting/pcbnew_footprint_wizards.cpp
 	   )
+
+if (KICAD_SCRIPTING)
 
 	set(PCBNEW_SCRIPTING_SRCS
     	pcbnew_wrap.cxx
@@ -279,6 +280,7 @@ if (KICAD_SCRIPTING)
                        DEPENDS scripting/board.i
                        DEPENDS scripting/board_item.i
                        DEPENDS scripting/module.i
+                       DEPENDS scripting/plugins.i
                        DEPENDS scripting/units.i
                        DEPENDS ../scripting/dlist.i
                        DEPENDS ../scripting/kicad.i
