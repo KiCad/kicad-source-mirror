@@ -110,3 +110,4 @@
 /* std template mappings */
 %template(intVector) std::vector<int>;
 
+%include "kicadplugins.i"
