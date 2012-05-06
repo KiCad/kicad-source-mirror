@@ -111,7 +111,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_1000 )
         m_LastGridSizeId = m_LastGridSizeId;
     if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_0_0_1MM )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM;
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     ReCreateMenuBar();
