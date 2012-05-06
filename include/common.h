@@ -526,6 +526,13 @@ private:
 
 
 /**
+ * Function GetTextSize
+ * returns the size of @a aSingleLine of text when it is rendered in @a aWindow
+ * using whatever font is currently set in that window.
+ */
+wxSize GetTextSize( const wxString& aSingleLine, wxWindow* aWindow );
+
+/**
  * Function EnsureTextCtrlWidth
  * sets the minimum pixel width on a text control in order to make a text
  * string be fully visible within it. The current font within the text

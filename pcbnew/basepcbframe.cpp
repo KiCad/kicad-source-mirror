@@ -568,6 +568,15 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         wxString formatter;
         switch( g_UserUnit )
         {
+#if defined( USE_PCBNEW_NANOMETRE )
+        case INCHES:
+            formatter = wxT( "Ro %.6f Th %.1f" );
+            break;
+
+        case MILLIMETRES:
+            formatter = wxT( "Ro %.6f Th %.1f" );
+            break;
+#else
         case INCHES:
             formatter = wxT( "Ro %.4f Th %.1f" );
             break;
@@ -575,6 +584,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         case MILLIMETRES:
             formatter = wxT( "Ro %.3f Th %.1f" );
             break;
+#endif
 
         case UNSCALED_UNITS:
             formatter = wxT( "Ro %f Th %f" );
@@ -601,6 +611,17 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
     switch( g_UserUnit )
     {
+#if defined( USE_PCBNEW_NANOMETRES )
+    case INCHES:
+        absformatter = wxT( "X %.6f  Y %.6f" );
+        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        break;
+
+    case MILLIMETRES:
+        absformatter = wxT( "X %.6f  Y %.6f" );
+        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        break;
+#else
     case INCHES:
         absformatter = wxT( "X %.4f  Y %.4f" );
         locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
@@ -610,6 +631,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         absformatter = wxT( "X %.3f  Y %.3f" );
         locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
         break;
+#endif
 
     case UNSCALED_UNITS:
         absformatter = wxT( "X %f  Y %f" );
