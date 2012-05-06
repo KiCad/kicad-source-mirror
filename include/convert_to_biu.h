@@ -1,5 +1,5 @@
-#ifndef CONVERT_TO_BIU_H
-#define CONVERT_TO_BIU_H
+#ifndef CONVERT_TO_BIU_H_
+#define CONVERT_TO_BIU_H_
 
 #include <config.h>     // USE_PCBNEW_NANOMETRES is defined here
 
@@ -10,27 +10,28 @@
 
 /**
  * @brief some define and functions to convert a value in mils, decimils or mm
- * to the internal unit used in pcbnew, cvpcb or gerbview (nanometer or decimil)
- * depending on compil option
+ * to the internal unit used in pcbnew, cvpcb or gerbview (nanometer or deci-mil)
+ * depending on compile time option
  */
 
 
 
 /// Scaling factor to convert mils to internal units.
 #if defined(PCBNEW) || defined(CVPCB) || defined(GERBVIEW)
-    #if defined( USE_PCBNEW_NANOMETRES )
-    #if defined(GERBVIEW)
-        #define IU_PER_MM   1e5         // Gerbview uses 10 micrometer.
-    #else
-        #define IU_PER_MM   1e6         // Pcbnew uses nanometers.
-    #endif
-    #define IU_PER_MILS ( IU_PER_MM * 0.0254 )
-    #define IU_PER_DECIMILS (IU_PER_MM * 0.00254 )
-    #else              // Pcbnew in deci-mils.
-        #define IU_PER_DECIMILS  1
-        #define IU_PER_MILS   10.0
-        #define IU_PER_MM   (1e4 / 25.4)
-    #endif
+ #if defined( USE_PCBNEW_NANOMETRES )
+  #if defined(GERBVIEW)
+   #define IU_PER_MM        1e5     // Gerbview uses 10 micrometer.
+  #else
+   #define IU_PER_MM        1e6     // Pcbnew uses nanometers.
+  #endif
+  #define IU_PER_MILS       (IU_PER_MM * 0.0254)
+  #define IU_PER_DECIMILS   (IU_PER_MM * 0.00254)
+
+ #else                              // Pcbnew compiled for deci-mils.
+  #define IU_PER_DECIMILS   1
+  #define IU_PER_MILS       10.0
+  #define IU_PER_MM         (1e4 / 25.4)
+ #endif
 
 /// Convert mils to PCBNEW internal units (iu).
 inline int Mils2iu( int mils )
@@ -55,9 +56,10 @@ inline int DMils2iu( int dmils )
 }
 
 #else            // Eeschema and anything else.
-#define IU_PER_DECIMILS  0.1
-#define IU_PER_MILS   1.0
-#define IU_PER_MM   (IU_PER_MILS / 0.0254)
+
+#define IU_PER_DECIMILS     0.1
+#define IU_PER_MILS         1.0
+#define IU_PER_MM           (IU_PER_MILS / 0.0254)
 
 inline int Mils2iu( int mils )
 {
@@ -65,4 +67,4 @@ inline int Mils2iu( int mils )
 }
 #endif
 
-#endif  // #define CONVERT_TO_BIU_H
+#endif  // CONVERT_TO_BIU_H_

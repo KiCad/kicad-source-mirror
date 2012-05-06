@@ -59,7 +59,10 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     BASE_SCREEN* screen = GetScreen();
 
-    screen->SetZoom( BestZoom() ); // Set the best zoom and get center point.
+    // Set the best zoom and get center point.
+    double bestzoom = BestZoom();
+
+    screen->SetScalingFactor( bestzoom );
 
     if( screen->m_FirstRedraw )
         screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
@@ -103,47 +106,27 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     bool         zoom_at_cursor = false;
     BASE_SCREEN* screen = GetScreen();
     wxPoint      center = screen->GetScrollCenterPosition();
-    wxPoint      zoom_center = center;
-    double	 zoom = screen->GetZoom();
 
     switch( id )
     {
     case ID_POPUP_ZOOM_IN:
         zoom_at_cursor = true;
-        zoom_center = screen->GetCrossHairPosition();
+        center = screen->GetCrossHairPosition();
 
     // fall thru
     case ID_ZOOM_IN:
-        if( screen->SetPreviousZoom() ) {
-	    if( zoom_at_cursor ) {
-		double new_zoom = screen->GetZoom();
-		double factor = new_zoom / zoom;
-		wxPoint delta = center - zoom_center;
-		center = wxPoint(
-		    zoom_center.x + delta.x * factor,
-		    zoom_center.y + delta.y * factor);
-	    }
-            RedrawScreen( center, false );
-	}
+        if( screen->SetPreviousZoom() )
+            RedrawScreen( center, zoom_at_cursor );
         break;
 
     case ID_POPUP_ZOOM_OUT:
         zoom_at_cursor = true;
-        zoom_center = screen->GetCrossHairPosition();
+        center = screen->GetCrossHairPosition();
 
     // fall thru
     case ID_ZOOM_OUT:
-        if( screen->SetNextZoom() ) {
-	    if( zoom_at_cursor ) {
-		double new_zoom = screen->GetZoom();
-		double factor = new_zoom / zoom;
-		wxPoint delta = center - zoom_center;
-		center = wxPoint(
-		    zoom_center.x + delta.x * factor,
-		    zoom_center.y + delta.y * factor);
-	    }
-            RedrawScreen( center, false );
-	}
+        if( screen->SetNextZoom() )
+            RedrawScreen( center, zoom_at_cursor );
         break;
 
     case ID_ZOOM_REDRAW:
@@ -171,7 +154,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 
         i = id - ID_POPUP_ZOOM_LEVEL_START;
 
-        if( i >= screen->m_ZoomList.GetCount() )
+        if( i >= screen->m_ZoomList.size() )
         {
             wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
                         __TFILE__, __LINE__, i );
@@ -214,8 +197,8 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 
     zoom = screen->GetZoom();
     maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
-    maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.GetCount() ) ?
-                 maxZoomIds : screen->m_ZoomList.GetCount();
+    maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.size() ) ?
+                 maxZoomIds : screen->m_ZoomList.size();
 
     // Populate zoom submenu.
     for( int i = 0; i < maxZoomIds; i++ )

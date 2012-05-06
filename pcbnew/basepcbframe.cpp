@@ -43,6 +43,7 @@
 
 #include <collectors.h>
 #include <class_drawpanel.h>
+#include <vector2d.h>
 
 
 // Configuration entry names.
@@ -247,36 +248,21 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 
 double PCB_BASE_FRAME::BestZoom()
 {
-    int    dx, dy;
-
-    double ii, jj;
-    wxSize size;
-
     if( m_Pcb == NULL )
-        return 32.0;
+        return 1.0;
 
-    EDA_RECT bbbox = GetBoardBoundingBox();
+    EDA_RECT    ibbbox  = GetBoardBoundingBox();
+    DSIZE       clientz = m_canvas->GetClientSize();
+    DSIZE       boardz( ibbbox.GetWidth(), ibbbox.GetHeight() );
 
-    dx = bbbox.GetWidth();
-    dy = bbbox.GetHeight();
+    double iu_per_du_X = clientz.x ? boardz.x / clientz.x : 1.0;
+    double iu_per_du_Y = clientz.y ? boardz.y / clientz.y : 1.0;
 
-    size = m_canvas->GetClientSize();
+    double bestzoom = std::max( iu_per_du_X, iu_per_du_Y );
 
-    if( size.x )
-        ii = (double)(dx + ( size.x / 2) ) / (double) size.x;
-    else
-        ii = 32.0;
+    GetScreen()->SetScrollCenterPosition( ibbbox.Centre() );
 
-    if ( size.y )
-        jj = (double)( dy + (size.y / 2) ) / (double) size.y;
-    else
-        jj = 32.0;
-
-    double bestzoom = max( ii, jj );
-
-    GetScreen()->SetScrollCenterPosition( bbbox.Centre() );
-
-    return bestzoom ;
+    return bestzoom;
 }
 
 
@@ -432,7 +418,7 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
     int current = 0;
 
-    for( size_t i = 0; i < GetScreen()->m_ZoomList.GetCount(); i++ )
+    for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {
         if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
         {
@@ -807,7 +793,7 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
     m_zoomSelectBox->Append( _( "Auto" ) );
     m_zoomSelectBox->SetSelection( 0 );
 
-    for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
+    for( unsigned i = 0;  i < GetScreen()->m_ZoomList.size();  ++i )
     {
         msg = _( "Zoom " );
 
