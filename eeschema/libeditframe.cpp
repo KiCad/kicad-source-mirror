@@ -204,6 +204,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
+    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
     wxIcon icon;
 
@@ -219,12 +220,10 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     LoadSettings();
 
-    // Initialize grid id to a default value if not found in config or bad:
-    if( (m_LastGridSizeId <= 0)
-       || ( m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000) ) )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
-
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
+    // Initialize grid id to the default value 50 mils:
+    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     if( m_canvas )
