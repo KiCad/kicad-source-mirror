@@ -106,7 +106,7 @@ SCH_SCREEN::SCH_SCREEN() :
     SetZoom( 32 );
 
     for( i = 0; i < SCHEMATIC_ZOOM_LIST_CNT; i++ )
-        m_ZoomList.Add( SchematicZoomList[i] );
+        m_ZoomList.push_back( SchematicZoomList[i] );
 
     for( i = 0; i < SCHEMATIC_GRID_LIST_CNT; i++ )
         AddGrid( SchematicGridList[i] );

@@ -88,15 +88,16 @@ static GRID_TYPE gbrGridList[] =
 };
 
 
-GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) : BASE_SCREEN( SCREEN_T )
+GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
+    BASE_SCREEN( SCREEN_T )
 {
     for( unsigned i = 0; i < DIM( gbrZoomList );  ++i )
-        m_ZoomList.Add( gbrZoomList[i] );
+        m_ZoomList.push_back( gbrZoomList[i] );
 
     for( unsigned i = 0; i < DIM( gbrGridList );  ++i )
         AddGrid( gbrGridList[i] );
 
-    // Set the working grid size to a reasonnable value (in 1/10000 inch)
+    // Set the working grid size to a reasonable value (in 1/10000 inch)
     SetGrid( DMIL_GRID( 500 ) );
 
     m_Active_Layer       = LAYER_N_BACK;      // default active layer = bottom layer

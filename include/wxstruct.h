@@ -657,7 +657,7 @@ public:
     /* Set the zoom level to show the area Rect */
     void Window_Zoom( EDA_RECT& Rect );
 
-    /* Return the zoom level which displays the full page on screen */
+    /** Return the zoom level which displays the full page on screen */
     virtual double BestZoom() = 0;
 
     /**

@@ -660,9 +660,13 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
     return true;
 }
 
+#define SAFETY_MARGIN   100
 
-#define VIRT_MIN    double(INT_MIN+100)
-#define VIRT_MAX    double(INT_MAX-100)
+// see comment in classpcb.cpp near line 66
+static const double MAX_AXIS = 1518500251 - SAFETY_MARGIN;
+
+#define VIRT_MIN    (-MAX_AXIS/2.0)     ///< min X or Y coordinate in virtual space
+#define VIRT_MAX    (MAX_AXIS/2.0)      ///< max X or Y coordinate in virtual space
 
 
 void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
@@ -707,20 +711,20 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     DBOX    clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
     wxPoint centerPositionIU;
 
+#if 1 || defined( USE_PCBNEW_NANOMETRES )
     // put "int" limits on the clientRect
-    {
-        if( clientRectIU.GetLeft() < VIRT_MIN )
-            clientRectIU.MoveLeftTo( VIRT_MIN );
-        if( clientRectIU.GetTop() < VIRT_MIN )
-            clientRectIU.MoveTopTo( VIRT_MIN );
-        if( clientRectIU.GetRight() > VIRT_MAX )
-            clientRectIU.MoveRightTo( VIRT_MAX );
-        if( clientRectIU.GetBottom() > VIRT_MAX )
-            clientRectIU.MoveBottomTo( VIRT_MAX );
+    if( clientRectIU.GetLeft() < VIRT_MIN )
+        clientRectIU.MoveLeftTo( VIRT_MIN );
+    if( clientRectIU.GetTop() < VIRT_MIN )
+        clientRectIU.MoveTopTo( VIRT_MIN );
+    if( clientRectIU.GetRight() > VIRT_MAX )
+        clientRectIU.MoveRightTo( VIRT_MAX );
+    if( clientRectIU.GetBottom() > VIRT_MAX )
+        clientRectIU.MoveBottomTo( VIRT_MAX );
+#endif
 
-        centerPositionIU.x = KiROUND( clientRectIU.x + clientRectIU.width/2 );
-        centerPositionIU.y = KiROUND( clientRectIU.y + clientRectIU.height/2 );
-    }
+    centerPositionIU.x = KiROUND( clientRectIU.x + clientRectIU.width/2 );
+    centerPositionIU.y = KiROUND( clientRectIU.y + clientRectIU.height/2 );
 
     DSIZE   virtualSizeIU;
 
@@ -784,19 +788,19 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
         }
     }
 
+#if 1 || defined( USE_PCBNEW_NANOMETRES )
+    // put "int" limits on the virtualSizeIU
+    virtualSizeIU.x = std::min( virtualSizeIU.x, MAX_AXIS );
+    virtualSizeIU.y = std::min( virtualSizeIU.y, MAX_AXIS );
+#endif
+
     if( screen->m_Center )
     {
-        virtualSizeIU.x = std::min( virtualSizeIU.x, VIRT_MAX );
-        virtualSizeIU.y = std::min( virtualSizeIU.y, VIRT_MAX );
-
         screen->m_DrawOrg.x = -KiROUND( virtualSizeIU.x / 2.0 );
         screen->m_DrawOrg.y = -KiROUND( virtualSizeIU.y / 2.0 );
     }
     else
     {
-        virtualSizeIU.x = std::min( virtualSizeIU.x, VIRT_MAX );
-        virtualSizeIU.y = std::min( virtualSizeIU.y, VIRT_MAX );
-
         screen->m_DrawOrg.x = -KiROUND( ( virtualSizeIU.x - pageRectIU.width )  / 2.0 );
         screen->m_DrawOrg.y = -KiROUND( ( virtualSizeIU.y - pageRectIU.height ) / 2.0 );
     }
@@ -868,4 +872,3 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
                              screen->m_ScrollbarPos.x,
                              screen->m_ScrollbarPos.y, noRefresh );
 }
-

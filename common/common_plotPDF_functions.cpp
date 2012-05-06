@@ -425,7 +425,8 @@ void PDF_PLOTTER::closePdfStream()
     workFile = 0;
     ::wxRemoveFile( workFilename );
 
-    wxMemoryOutputStream    memos;
+    // NULL means memos owns the memory, but provide a hint on optimum size needed.
+    wxMemoryOutputStream    memos( NULL, std::max( 2000, stream_len ) ) ;
 
     {
         /* Somewhat standard parameters to compress in DEFLATE. The PDF spec is
