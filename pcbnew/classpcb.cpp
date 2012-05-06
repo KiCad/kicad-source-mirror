@@ -62,7 +62,6 @@ static const double pcbZoomList[] =
     ZOOM_FACTOR( 300.0 ),
 
 /*
-
     The largest distance that wx can support is INT_MAX, since it represents
     distance often in a wxCoord or wxSize. As a scalar, a distance is always
     positive. On most machines which run KiCad, int is 32 bits and INT_MAX is
@@ -148,10 +147,8 @@ static GRID_TYPE pcbGridList[] =
 PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
-    wxSize displayz = wxGetDisplaySize();
-
-    D(printf( "displayz x:%d y:%d lastZoomFactor: %.16g\n", displayz.x, displayz.y, pcbZoomList[DIM(pcbZoomList)-1] );)
-
+    // D(wxSize displayz = wxGetDisplaySize();)
+    // D(printf( "displayz x:%d y:%d lastZoomFactor: %.16g\n", displayz.x, displayz.y, pcbZoomList[DIM(pcbZoomList)-1] );)
 
     for( unsigned i = 0; i < DIM( pcbZoomList );  ++i )
         m_ZoomList.push_back( pcbZoomList[i] );

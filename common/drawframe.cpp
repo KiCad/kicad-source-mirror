@@ -88,8 +88,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
                                 const wxPoint& pos, const wxSize& size, long style ) :
     EDA_BASE_FRAME( father, idtype, title, pos, size, style )
 {
-    wxSize minsize;
-
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
     m_gridSelectBox       = NULL;
@@ -110,27 +108,43 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_GridColor           = DARKGRAY;   // Grid color
     m_snapToGrid          = true;
 
-    // Internal units per inch: = 1000 for schema, = 10000 for PCB
-    minsize.x             = 470;
-    minsize.y             = 350 + m_MsgFrameHeight;
-
-    // Pane sizes for status bar.
-    // @todo these should be sized based on typical text content, like
-    // "dx -10.123 -10.123 dy -10.123 -10.123" using the system font which is
-    // in play on a particular platform, and should not be constants.
-    // Please do not reduce these constant values, and please use dynamic
-    // system font specific sizing in the future.
-    #define ZOOM_DISPLAY_SIZE       60
-    #define COORD_DISPLAY_SIZE      165
-    #define DELTA_DISPLAY_SIZE      245
-    #define UNITS_DISPLAY_SIZE      65
+    //#define ZOOM_DISPLAY_SIZE       60
+    //#define COORD_DISPLAY_SIZE      165
+    //#define DELTA_DISPLAY_SIZE      245
+    //#define UNITS_DISPLAY_SIZE      65
     #define FUNCTION_DISPLAY_SIZE   110
-    static const int dims[6] = { -1, ZOOM_DISPLAY_SIZE,
-        COORD_DISPLAY_SIZE, DELTA_DISPLAY_SIZE,
-        UNITS_DISPLAY_SIZE, FUNCTION_DISPLAY_SIZE };
 
     CreateStatusBar( 6 );
-    SetStatusWidths( 6, dims );
+
+    // set the size of the status bar subwindows:
+
+    wxWindow* stsbar = GetStatusBar();
+
+
+    int dims[] = {
+
+        // balance of status bar on far left is set to a default or whatever is left over.
+        -1,
+
+        // When using GetTextSize() remember the width of '1' is not the same
+        // as the width of '0' unless the font is fixed width, and it usually won't be.
+
+        // zoom:
+        GetTextSize( wxT( "Z 762000" ), stsbar ).x + 10,
+
+        // cursor coords
+        GetTextSize( wxT( "X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
+
+        // delta distances
+        GetTextSize( wxT( "dx 0234.567890  dx 0234.567890  d 0234.567890" ), stsbar ).x + 10,
+
+        // units display, Inches is bigger than mm
+        GetTextSize( wxT( "Inches" ), stsbar ).x + 10,
+
+        FUNCTION_DISPLAY_SIZE,
+    };
+
+    SetStatusWidths( DIM( dims ), dims );
 
     // Create child subwindows.
     GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
@@ -660,10 +674,12 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
     return true;
 }
 
-#define SAFETY_MARGIN   100
 
-// see comment in classpcb.cpp near line 66
-static const double MAX_AXIS = 1518500251 - SAFETY_MARGIN;
+// See comment in classpcb.cpp near line 66
+//static const double MAX_AXIS = 1518500251;
+
+// However I am not seeing a problem with this size yet:
+static const double MAX_AXIS = INT_MAX - 100;
 
 #define VIRT_MIN    (-MAX_AXIS/2.0)     ///< min X or Y coordinate in virtual space
 #define VIRT_MAX    (MAX_AXIS/2.0)      ///< max X or Y coordinate in virtual space
