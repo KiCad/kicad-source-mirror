@@ -60,8 +60,11 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     BASE_SCREEN* screen = GetScreen();
 
     // Set the best zoom and get center point.
-    double bestzoom = BestZoom();
 
+    // BestZoom() can compute an illegal zoom if the client window size
+    // is small, say because frame is not maximized.  So use the clamping form
+    // of SetZoom():
+    double bestzoom = BestZoom();
     screen->SetScalingFactor( bestzoom );
 
     if( screen->m_FirstRedraw )
