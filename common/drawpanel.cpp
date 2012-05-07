@@ -207,13 +207,13 @@ void EDA_DRAW_PANEL::CrossHairOn( wxDC* DC )
 }
 
 
-int EDA_DRAW_PANEL::GetZoom()
+double EDA_DRAW_PANEL::GetZoom()
 {
     return GetScreen()->GetZoom();
 }
 
 
-void EDA_DRAW_PANEL::SetZoom( int zoom )
+void EDA_DRAW_PANEL::SetZoom( double zoom )
 {
     GetScreen()->SetZoom( zoom );
 }
