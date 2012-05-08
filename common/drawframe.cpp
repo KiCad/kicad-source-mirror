@@ -394,7 +394,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 }
 
 
-double EDA_DRAW_FRAME::GetZoom( void )
+double EDA_DRAW_FRAME::GetZoom()
 {
     return GetScreen()->GetZoom();
 }
@@ -697,7 +697,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     double scale = screen->GetScalingFactor();
 
-    wxLogTrace( traceScrollSettings, wxT( "Center Position = ( %d, %d ), scale = %.16g" ),
+    wxLogTrace( traceScrollSettings, wxT( "Center Position = ( %d, %d ), scale = %.10g" ),
                 aCenterPositionIU.x, aCenterPositionIU.y, scale );
 
     // Calculate the portion of the drawing that can be displayed in the
@@ -741,6 +741,12 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     centerPositionIU.x = KiROUND( clientRectIU.x + clientRectIU.width/2 );
     centerPositionIU.y = KiROUND( clientRectIU.y + clientRectIU.height/2 );
+
+    if( screen->m_Center )
+    {
+        centerPositionIU.x -= KiROUND( pageRectIU.width  / 2.0 );
+        centerPositionIU.y -= KiROUND( pageRectIU.height  / 2.0 );
+    }
 
     DSIZE   virtualSizeIU;
 
@@ -846,25 +852,25 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     if( posX < 0 )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.16g" ), posX );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.10g" ), posX );
         posX = 0;
     }
 
     if( posX > unitsX )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.16g" ), posX );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.10g" ), posX );
         posX = unitsX;
     }
 
     if( posY < 0 )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.16g" ), posY );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.10g" ), posY );
         posY = 0;
     }
 
     if( posY > unitsY )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.16g" ), posY );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.10g" ), posY );
         posY = unitsY;
     }
 
@@ -872,7 +878,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     screen->m_ScrollbarNumber = wxSize( KiROUND( unitsX ), KiROUND( unitsY ) );
 
     wxLogTrace( traceScrollSettings,
-                wxT( "Drawing = (%.16g, %.16g), Client = (%.16g, %.16g), Offset = (%d, %d), SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
+                wxT( "Drawing = (%.10g, %.10g), Client = (%.10g, %.10g), Offset = (%d, %d), SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
                 virtualSizeIU.x, virtualSizeIU.y, clientSizeIU.x, clientSizeIU.y,
                 screen->m_DrawOrg.x, screen->m_DrawOrg.y,
                 screen->m_ScrollPixelsPerUnitX, screen->m_ScrollPixelsPerUnitY,
