@@ -1,28 +1,28 @@
 /**
  * @file  pcbnew_footprint_wizards.cpp
- * @brief Class PCBNEW_FOOTPRINT_WIZARDS
+ * @brief Class PCBNEW_PYTHON_FOOTPRINT_WIZARDS
  */
 
 #include "pcbnew_footprint_wizards.h"
 #include <stdio.h>
 
-FOOTPRINT_WIZARD::FOOTPRINT_WIZARD(PyObject *aWizard)
+PYTHON_FOOTPRINT_WIZARD::PYTHON_FOOTPRINT_WIZARD(PyObject *aWizard)
 {
-    this->py_wizard = aWizard;
+    this->m_PyWizard= aWizard;
     Py_XINCREF(aWizard);    
 }
 
-FOOTPRINT_WIZARD::~FOOTPRINT_WIZARD()
+PYTHON_FOOTPRINT_WIZARD::~PYTHON_FOOTPRINT_WIZARD()
 {
-    Py_XDECREF(this->py_wizard);
+    Py_XDECREF(this->m_PyWizard);
 }
 
-PyObject* FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aArglist)
+PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aArglist)
 {
      PyObject *pFunc;
     
     /* pFunc is a new reference to the desired method */
-    pFunc = PyObject_GetAttrString(this->py_wizard, aMethod);
+    pFunc = PyObject_GetAttrString(this->m_PyWizard, aMethod);
     
     if (pFunc && PyCallable_Check(pFunc)) 
     {
@@ -38,7 +38,6 @@ PyObject* FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aArglist)
             printf ("Exception: %s\n",PyString_AsString(PyObject_Str(v)));
             printf ("         : %s\n",PyString_AsString(PyObject_Str(b)));
         }
-        
         
         if (result)
         {
@@ -57,7 +56,7 @@ PyObject* FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aArglist)
     return NULL;
 }
 
-wxString FOOTPRINT_WIZARD::CallRetStrMethod(const char* aMethod, PyObject *aArglist)
+wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod(const char* aMethod, PyObject *aArglist)
 {
     wxString ret;
     PyObject *result = CallMethod(aMethod,aArglist);
@@ -74,22 +73,22 @@ wxString FOOTPRINT_WIZARD::CallRetStrMethod(const char* aMethod, PyObject *aArgl
     
     return ret;
 }
-wxString FOOTPRINT_WIZARD::GetName()
+wxString PYTHON_FOOTPRINT_WIZARD::GetName()
 {
     return CallRetStrMethod("GetName");
 }
 
-wxString FOOTPRINT_WIZARD::GetImage()
+wxString PYTHON_FOOTPRINT_WIZARD::GetImage()
 {
     return CallRetStrMethod("GetImage");
 }
 
-wxString FOOTPRINT_WIZARD::GetDescription()
+wxString PYTHON_FOOTPRINT_WIZARD::GetDescription()
 {
     return CallRetStrMethod("GetDescription");
 }
 
-int FOOTPRINT_WIZARD::GetNumParameterPages()
+int PYTHON_FOOTPRINT_WIZARD::GetNumParameterPages()
 {
     int ret;
     PyObject *result;
@@ -106,7 +105,7 @@ int FOOTPRINT_WIZARD::GetNumParameterPages()
     return ret;
 }
 
-wxString FOOTPRINT_WIZARD::GetParameterPageName(int aPage)
+wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName(int aPage)
 {
     wxString ret;
     PyObject *arglist;
@@ -126,41 +125,48 @@ wxString FOOTPRINT_WIZARD::GetParameterPageName(int aPage)
     return ret;
 }
 
-wxArrayString FOOTPRINT_WIZARD::GetParameterNames(int aPage)
+wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames(int aPage)
 {
     wxArrayString a;
     return a;
 }
 
-wxArrayString FOOTPRINT_WIZARD::GetParameterValues(int aPage)
+wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues(int aPage)
 {
     wxArrayString a;
     return a;
 }
 
-wxString FOOTPRINT_WIZARD::SetParameterValues(int aPage,wxArrayString& aValues)
+wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues(int aPage,wxArrayString& aValues)
 {
     wxString ret;
     return ret;
 }
 
-MODULE FOOTPRINT_WIZARD::*GetModule()
+MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
 {
     return NULL;
 }
 
-std::vector<FOOTPRINT_WIZARD*>  FOOTPRINT_WIZARDS::m_FootprintWizards;
 
-void FOOTPRINT_WIZARDS::register_wizard(PyObject* wizard)
+void PYTHON_FOOTPRINT_WIZARDS::register_wizard(PyObject* aPyWizard)
 {
-    FOOTPRINT_WIZARD *fw;
+    PYTHON_FOOTPRINT_WIZARD *fw;
     
-    fw = new FOOTPRINT_WIZARD(wizard);
-    m_FootprintWizards.push_back(fw);
+    fw = new PYTHON_FOOTPRINT_WIZARD(aPyWizard);
     
     printf("Registered python footprint wizard '%s'\n",
-            (const char*)fw->GetName().mb_str());
+            (const char*)fw->GetName().mb_str()
+            );
     
+    // this get the wizard registered in the common
+    // FOOTPRINT_WIZARDS class
+    
+    fw->register_wizard(); 
+                           
+
+#if 0 
+    /* just to test if it works correctly */
     int pages = fw->GetNumParameterPages();
     printf("             %d pages\n",pages);
     
@@ -169,7 +175,7 @@ void FOOTPRINT_WIZARDS::register_wizard(PyObject* wizard)
         printf("                      page %d->'%s'\n",n,
             (const char*)fw->GetParameterPageName(n).mb_str());
     }
-    
+#endif    
     
     
 }

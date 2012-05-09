@@ -29,6 +29,8 @@
 #include <dialog_edit_module_for_Modedit.h>
 #include <wildcards_and_files_ext.h>
 #include <menus_helpers.h>
+#include <footprint_wizard_frame.h>
+
 
 // Functions defined in block_module_editor, but used here
 // These 2 functions are used in modedit to rotate or mirror the whole footprint
@@ -267,6 +269,36 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         MODULE* module = Create_1_Module( wxEmptyString );
 
+        if( module )        // i.e. if create module command not aborted
+        {
+            // Initialize data relative to nets and netclasses (for a new
+            // module the defaults are used)
+            // This is mandatory to handle and draw pads
+            GetBoard()->BuildListOfNets();
+            redraw = true;
+            module->SetPosition( wxPoint( 0, 0 ) );
+
+            if( GetBoard()->m_Modules )
+                GetBoard()->m_Modules->ClearFlags();
+
+            Zoom_Automatique( false );
+        }
+        break;
+    }
+    
+     case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
+    {
+        Clear_Pcb( true );
+        GetScreen()->ClearUndoRedoList();
+        SetCurItem( NULL );
+        GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
+
+        MODULE* module = NULL;
+        
+        FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME(this,NULL);
+        wizard->Show( true );
+        wizard->Zoom_Automatique( false );
+        
         if( module )        // i.e. if create module command not aborted
         {
             // Initialize data relative to nets and netclasses (for a new

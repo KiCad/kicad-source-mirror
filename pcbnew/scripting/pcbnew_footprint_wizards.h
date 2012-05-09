@@ -7,17 +7,17 @@
 #define	PCBNEW_FOOTPRINT_WIZARDS_H
 #include <Python.h>
 #include <vector>
-#include <wxPcbStruct.h>
+#include <class_footprint_wizard.h>
 
-class FOOTPRINT_WIZARD
+class PYTHON_FOOTPRINT_WIZARD: public FOOTPRINT_WIZARD
 {
 
-    PyObject *py_wizard;
+    PyObject *m_PyWizard;
     PyObject *CallMethod(const char *aMethod, PyObject *aArglist=NULL);
     wxString CallRetStrMethod(const char *aMethod, PyObject *aArglist=NULL);
 public:
-    FOOTPRINT_WIZARD(PyObject *wizard);
-    ~FOOTPRINT_WIZARD();
+    PYTHON_FOOTPRINT_WIZARD(PyObject *wizard);
+    ~PYTHON_FOOTPRINT_WIZARD();
     wxString      GetName();
     wxString      GetImage();  
     wxString      GetDescription();
@@ -31,13 +31,10 @@ public:
 };
 
 
-class FOOTPRINT_WIZARDS 
+class PYTHON_FOOTPRINT_WIZARDS 
 {
-private:
-    static    std::vector<FOOTPRINT_WIZARD*>  m_FootprintWizards;
-
 public:
-    static void register_wizard(PyObject *wizard);
+    static void register_wizard(PyObject *aPyWizard);
 
 };
 

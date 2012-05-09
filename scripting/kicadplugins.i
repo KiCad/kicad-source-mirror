@@ -35,7 +35,7 @@ class KiCadPlugin:
         if isinstance(self,FilePlugin):
             pass # register to file plugins in C++
         if isinstance(self,FootprintWizardPlugin):
-            FOOTPRINT_WIZARDS.register_wizard(self)
+            PYTHON_FOOTPRINT_WIZARDS.register_wizard(self)
             return
         
         if isinstance(self,ActionPlugin):

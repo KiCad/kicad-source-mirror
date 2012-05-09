@@ -97,8 +97,11 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_scripting_base.cpp
     dialogs/dialog_scripting.cpp
+    footprint_wizard.cpp
+    footprint_wizard_frame.cpp
     )
 
+# some of the files here may be going to the dialog srcs in fact.... 
 set(PCBNEW_CLASS_SRCS
     tool_modview.cpp
     modview.cpp
@@ -114,7 +117,6 @@ set(PCBNEW_CLASS_SRCS
     block.cpp
     block_module_editor.cpp
     build_BOM_from_board.cpp
-#    class_footprint_library.cpp
     class_pcb_layer_widget.cpp
     clean.cpp
     connect.cpp
@@ -215,6 +217,7 @@ set(PCBNEW_CLASS_SRCS
     zones_polygons_insulated_copper_islands.cpp
     zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp
+    class_footprint_wizard.cpp
     )
 
 set(PCBNEW_SRCS ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS})
