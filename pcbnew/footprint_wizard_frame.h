@@ -32,7 +32,7 @@
 
 
 #include <wx/gdicmn.h>
-
+#include <class_footprint_wizard.h>
 class wxSashLayoutWindow;
 class wxListBox;
 class wxSemaphore;
@@ -57,6 +57,8 @@ private:
     // Flags
     wxSemaphore*        m_Semaphore;        // != NULL if the frame must emulate a modal dialog
     wxString            m_configPath;       // subpath for configuration
+    
+    FOOTPRINT_WIZARD* m_FootprintWizard;
 
 protected:
     wxString m_wizardName;          //< name of the current wizard     
@@ -89,6 +91,8 @@ private:
      */
     void ReCreatePageList();
     void ReCreateParameterList();
+    void SelectFootprintWizard();
+    
     
     void Process_Special_Functions( wxCommandEvent& event );
     void DisplayWizardInfos();

@@ -73,6 +73,13 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod(const char* aMethod, PyObject
     
     return ret;
 }
+
+wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
+                        (const char *aMethod, PyObject *aArglist)
+{
+
+}
+
 wxString PYTHON_FOOTPRINT_WIZARD::GetName()
 {
     return CallRetStrMethod("GetName");
@@ -128,6 +135,23 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName(int aPage)
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames(int aPage)
 {
     wxArrayString a;
+     wxString ret;
+    PyObject *arglist;
+    PyObject *result;
+    
+    /* Time to call the callback */
+    arglist = Py_BuildValue("(i)", aPage);
+    result = CallMethod("GetParameterPageNames",arglist);
+    Py_DECREF(arglist);
+    
+    if (result)
+    {
+        
+        // TODO GET ITEMS IN LIST
+         const char *str_res = PyString_AsString(result);
+         ret  = wxString::FromUTF8(str_res);
+         Py_DECREF(result);    
+    }
     return a;
 }
 

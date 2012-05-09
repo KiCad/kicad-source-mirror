@@ -13,6 +13,32 @@ void FOOTPRINT_WIZARD::register_wizard()
 
 std::vector<FOOTPRINT_WIZARD*>  FOOTPRINT_WIZARDS::m_FootprintWizards;
 
+
+FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard(int aIndex)
+{
+    return m_FootprintWizards[aIndex];
+}
+
+FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard(wxString aName)
+{
+    int max = GetSize();
+    
+    for(int i=0; i<max;i++)
+    {
+        FOOTPRINT_WIZARD *wizard =  GetWizard(i);
+        wxString name = wizard->GetName();
+        if (name.Cmp(aName))
+                return wizard;     
+    }
+   
+    return NULL;
+}
+
+int FOOTPRINT_WIZARDS::GetSize()
+{
+    return m_FootprintWizards.size();
+}
+
 void FOOTPRINT_WIZARDS::register_wizard(FOOTPRINT_WIZARD *aWizard)
 {
     

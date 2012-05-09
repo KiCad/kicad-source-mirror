@@ -15,6 +15,9 @@ class PYTHON_FOOTPRINT_WIZARD: public FOOTPRINT_WIZARD
     PyObject *m_PyWizard;
     PyObject *CallMethod(const char *aMethod, PyObject *aArglist=NULL);
     wxString CallRetStrMethod(const char *aMethod, PyObject *aArglist=NULL);
+    wxArrayString CallRetArrayStrMethod(const char *aMethod, 
+                                          PyObject *aArglist=NULL);
+
 public:
     PYTHON_FOOTPRINT_WIZARD(PyObject *wizard);
     ~PYTHON_FOOTPRINT_WIZARD();

@@ -58,8 +58,12 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
     EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PARAMETERS, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
 
     /* Toolbar events */
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
+              FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard)
+
     EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT,
               FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
+
     EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS,
               FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
 /*    EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
@@ -111,6 +115,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( wxWindow* parent, wxSemaphore* s
     SetIcon( icon );
 
     m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
+    m_FootprintWizard = NULL;
     m_PageList= NULL;
     m_ParameterList = NULL;
     m_PageListWindow = NULL;
@@ -238,7 +243,10 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( wxWindow* parent, wxSemaphore* s
     Zoom_Automatique( false );
 #endif
 
+    
     Show( true );
+    
+    this->SelectFootprintWizard();
 }
 
 
@@ -321,37 +329,21 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
 {
     if( m_PageList == NULL )
         return;
+    
+    if (m_FootprintWizard == NULL)
+        return;
 
     m_PageList->Clear();
-    
-    m_PageList->Append(wxT("Pads"));
-    m_PageList->Append(wxT("Shield"));
-    
+    int max_page = m_FootprintWizard->GetNumParameterPages();
+    for (int i=0;i<max_page;i++)
+    {
+        wxString name = m_FootprintWizard->GetParameterPageName(i);
+        m_PageList->Append(name);
+    }
+        
     m_PageList->SetSelection( 0, true );
     
-    /*for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
-    {
-        m_PageList->Append( g_LibraryNames[ii] );
-    }*/
-    
-#if 0    
-    // Search for a previous selection:
-
-    int index =  m_PageList->FindString( m_libraryName );
-
-    if( index != wxNOT_FOUND )
-    {
-        m_PageList->SetSelection( index, true );
-    }
-    else
-    {
-        /* If not found, clear current library selection because it can be
-         * deleted after a config change. */
-        m_libraryName = wxEmptyString;
-        m_footprintName = wxEmptyString;
-    }
-#endif
-    
+    ReCreateParameterList();
     ReCreateHToolbar();
     DisplayWizardInfos();
     m_canvas->Refresh();
@@ -362,19 +354,23 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 {
     if( m_ParameterList == NULL )
         return;
+    
+    if (m_FootprintWizard == NULL )
+        return;
+    
+    int page = m_PageList->GetSelection();
+    
+    if (page<0)
+        return;
 
     m_ParameterList->Clear();
 
-    wxArrayString fpList;
+    wxArrayString fpList = m_FootprintWizard->GetParameterNames(page);
     
     m_ParameterList->Append( fpList );
-    m_ParameterList->Append(wxT("N"));
-    m_ParameterList->Append(wxT("pitch"));
-    m_ParameterList->Append(wxT("width"));
-    m_ParameterList->Append(wxT("height"));
     m_ParameterList->SetSelection( 0, true );
 
-    //m_ParameterList->SetSelection( index, true );
+
 }
 
 
@@ -383,11 +379,7 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
     int ii = m_PageList->GetSelection();
 
     if( ii < 0 )
-        return;
-
-    wxString name = m_PageList->GetString( ii );
-    
-    printf("page=%d\n",ii);
+        return;    
     
     ReCreateParameterList();
     m_canvas->Refresh();
