@@ -122,7 +122,7 @@ bool BASE_SCREEN::SetZoom( double iu_per_du )
     if( iu_per_du == m_Zoom )
         return false;
 
-    wxLogDebug( "Zoom:%16g  1/Zoom:%16g", iu_per_du, 1/iu_per_du );
+    wxLogDebug( "Zoom:%.16g  1/Zoom:%.16g", iu_per_du, 1/iu_per_du );
 
     if( iu_per_du < GetMinAllowedZoom() )
         return false;
