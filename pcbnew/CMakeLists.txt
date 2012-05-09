@@ -99,6 +99,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_scripting.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
+    dialogs/dialog_footprint_wizard_list_base.cpp
+    dialogs/dialog_footprint_wizard_list.cpp
     )
 
 # some of the files here may be going to the dialog srcs in fact.... 

@@ -17,7 +17,7 @@
 #include <pcbnew_id.h>
 #include "footprint_wizard_frame.h"
 #include <wildcards_and_files_ext.h>
-
+#include <dialogs/dialog_footprint_wizard_list.h>
 
 #define NEXT_PART      1
 #define NEW_PART       0
@@ -77,28 +77,31 @@ void FOOTPRINT_WIZARD_FRAME::DisplayWizardInfos()
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
+void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 {
-    wxString msg;
+    DIALOG_FOOTPRINT_WIZARD_LIST *selectWizard =  
+            new DIALOG_FOOTPRINT_WIZARD_LIST(this);
+    
+    selectWizard->ShowModal();
+    
+    m_FootprintWizard = selectWizard->GetWizard();
 
-    if( g_LibraryNames.GetCount() == 0 )
-        return;
-
-    EDA_LIST_DIALOG dlg( this, _( "Select Current Wizard:" ),
-                         g_LibraryNames, m_wizardName );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    if( m_wizardName == dlg.GetTextSelection() )
-        return;
-
-    m_wizardName = dlg.GetTextSelection();
+    if (m_FootprintWizard)
+    {
+        m_wizardName = m_FootprintWizard->GetName();
+        m_wizardDescription = m_FootprintWizard->GetDescription();
+    }
 
     DisplayWizardInfos();
     ReCreatePageList();
     ReCreateParameterList();
 
+}
+
+void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
+{
+    
+    SelectFootprintWizard();
     
 }
 

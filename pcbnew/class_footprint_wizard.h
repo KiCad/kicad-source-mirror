@@ -37,6 +37,9 @@ private:
 
 public:
     static void register_wizard(FOOTPRINT_WIZARD *wizard);
+    static FOOTPRINT_WIZARD* GetWizard(wxString aName);
+    static FOOTPRINT_WIZARD* GetWizard(int aIndex);
+    static int GetSize();
 
 };
 
