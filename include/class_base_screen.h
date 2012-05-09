@@ -123,12 +123,12 @@ public:
     bool    m_FirstRedraw;
 
     // Undo/redo list of commands
-    UNDO_REDO_CONTAINER m_UndoList;          ///< Objects list for the undo command (old data)
-    UNDO_REDO_CONTAINER m_RedoList;          ///< Objects list for the redo command (old data)
-    unsigned            m_UndoRedoCountMax;  ///< undo/Redo command Max depth
+    UNDO_REDO_CONTAINER m_UndoList;         ///< Objects list for the undo command (old data)
+    UNDO_REDO_CONTAINER m_RedoList;         ///< Objects list for the redo command (old data)
+    unsigned            m_UndoRedoCountMax; ///< undo/Redo command Max depth
 
     // block control
-    BLOCK_SELECTOR      m_BlockLocate;       ///< Block description for block commands
+    BLOCK_SELECTOR      m_BlockLocate;      ///< Block description for block commands
 
     int                 m_ScreenNumber;
     int                 m_NumberOfScreen;
@@ -304,25 +304,29 @@ public:
     double GetMinAllowedZoom() const    { return m_ZoomList.size() ? *m_ZoomList.begin() : 1.0; }
 
     /**
-     * Function GetScalingFactor
-     * returns the the current scale used to draw items on screen
-     * draw coordinates are user coordinates * GetScalingFactor()
-     */
-    double GetScalingFactor() const;
-
-    /**
      * Function SetScalingFactor
-     * sets the scaling factor of "device units per internal unit".
+     * sets the scaling factor of "internal unit per device unit".
      * If the output device is a screen, then "device units" are pixels.  The
      * "logical unit" is wx terminology, and corresponds to KiCad's "Internal Unit (IU)".
-     *
-     * Another way of thinking of scaling factor, when applied to a screen,
-     * is "pixelsPerIU"
+     * <p>
+     * This scaling factor is "internal units per device unit".  This function is
+     * the same thing currently as SetZoom(), but clamps the argument within a
+     * legal range.
 
-     * @param aScale = the the current scale used to draw items onto the device context wxDC.
-     *   device coordinates (pixels) = IU coordinates * GetScalingFactor()
+     * @param iu_per_du is the current scale used to draw items onto the device
+     *   context wxDC.
      */
-    void SetScalingFactor( double aScale );
+    void SetScalingFactor( double iu_per_du );
+
+    /**
+     * Function GetScalingFactor
+     * returns the inverse of the current scale used to draw items on screen.
+     * <p>
+     * This function somehow got designed to be the inverse of SetScalingFactor().
+     * <p>
+     * device coordinates = user coordinates * GetScalingFactor()
+     */
+    double GetScalingFactor() const;
 
 
     //----<grid stuff>----------------------------------------------------------

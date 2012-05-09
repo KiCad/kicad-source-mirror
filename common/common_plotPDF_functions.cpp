@@ -410,17 +410,17 @@ void PDF_PLOTTER::closePdfStream()
 {
     wxASSERT( workFile );
 
-    // Ask for the stream length
     int stream_len = ftell( workFile );
 
-    // Now we do a trick: rewind the file, read in the page stream and FLATE it
+    // Rewind the file, read in the page stream and DEFLATE it
     fseek( workFile, 0, SEEK_SET );
     unsigned char *inbuf = new unsigned char[stream_len];
 
     int rc = fread( inbuf, 1, stream_len, workFile );
     wxASSERT( rc == stream_len );
+    (void) rc;
 
-    // We have done with the temporary file, junk it
+    // We are done with the temporary file, junk it
     fclose( workFile );
     workFile = 0;
     ::wxRemoveFile( workFilename );
@@ -430,7 +430,7 @@ void PDF_PLOTTER::closePdfStream()
 
     {
         /* Somewhat standard parameters to compress in DEFLATE. The PDF spec is
-           misleading, it says it wants a FLATE stream but it really want a ZLIB
+           misleading, it says it wants a DEFLATE stream but it really want a ZLIB
            stream! (a DEFLATE stream would be generated with -15 instead of 15)
         rc = deflateInit2( &zstrm, Z_BEST_COMPRESSION, Z_DEFLATED, 15,
                                8, Z_DEFAULT_STRATEGY );
@@ -440,15 +440,15 @@ void PDF_PLOTTER::closePdfStream()
 
         zos.Write( inbuf, stream_len );
 
-    }   // flush the zip stream using destructor
+        delete[] inbuf;
+
+    }   // flush the zip stream using zos destructor
 
     wxStreamBuffer* sb = memos.GetOutputStreamBuffer();
 
     unsigned out_count = sb->Tell();
 
     fwrite( sb->GetBufferStart(), 1, out_count, outputFile );
-
-    delete[] inbuf;
 
     fputs( "endstream\n", outputFile );
     closePdfObject();

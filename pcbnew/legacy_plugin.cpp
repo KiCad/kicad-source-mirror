@@ -942,6 +942,8 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 
         else if( TESTLINE( "Li" ) )         // Library name of footprint
         {
+            // There can be whitespace in the footprint name on some old libraries.
+            // Grab everything after "Li" up to end of line:
             module->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
 
@@ -3903,16 +3905,54 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
             // wxString footprintName = m->GetReference();
             wxString footprintName = m->GetLibRef();
 
-            std::pair<MODULE_ITER, bool> r = m_modules.insert( footprintName, m );
+            /*
 
-            // m's module is gone here, both on success or failure of insertion.
-            // no memory leak, container deleted m on failure.
+            There was a bug in old legacy library management code
+            (pre-LEGACY_PLUGIN) which was introducing duplicate footprint names
+            in legacy libraries without notification. To best recover from such
+            bad libraries, and use them to their fullest, there are a few
+            strategies that could be used. (Note: footprints must have unique
+            names to be accepted into this cache.) The strategy used here is to
+            append a differentiating version counter to the end of the name as:
+            _v2, _v3, etc.
 
-            if( !r.second )
+            */
+
+            MODULE_CITER it = m_modules.find( footprintName );
+
+            if( it == m_modules.end() )  // footprintName is not present in cache yet.
             {
-                THROW_IO_ERROR( wxString::Format(
-                    _( "library '%s' has a duplicate footprint named '%s'" ),
-                    m_lib_name.GetData(), footprintName.GetData() ) );
+                std::pair<MODULE_ITER, bool> r = m_modules.insert( footprintName, m );
+
+                wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
+                (void) r;
+            }
+
+            // Bad library has a duplicate of this footprintName, generate a
+            // unique footprint name and load it anyway.
+            else
+            {
+                bool    nameOK = false;
+                int     version = 2;
+
+                while( !nameOK )
+                {
+                    wxString newName = footprintName;
+                    newName << wxT( "_v" ) << version++;
+
+                    it = m_modules.find( newName );
+
+                    if( it == m_modules.end() )
+                    {
+                        nameOK = true;
+
+                        m->SetLibRef( newName );
+                        std::pair<MODULE_ITER, bool> r = m_modules.insert( newName, m );
+
+                        wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
+                        (void) r;
+                    }
+                }
             }
         }
 
