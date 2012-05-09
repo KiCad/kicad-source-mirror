@@ -327,6 +327,7 @@ set( BMAPS_MID
     modratsnest
     module_check
     module_edit
+    module_wizard
     module_filtered_list
     module_full_list
     module_options
