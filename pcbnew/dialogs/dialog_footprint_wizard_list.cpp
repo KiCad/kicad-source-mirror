@@ -55,7 +55,7 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellWizardClick( wxGridEvent& event )
 {
     int click_row = event.GetRow();
     m_FootprintWizard = FOOTPRINT_WIZARDS::GetWizard(click_row);
-    
+    m_footprintWizardsGrid->SelectRow(event.GetRow(),false);
 }
 
 FOOTPRINT_WIZARD* DIALOG_FOOTPRINT_WIZARD_LIST::GetWizard()

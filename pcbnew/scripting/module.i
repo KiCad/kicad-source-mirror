@@ -95,3 +95,22 @@ def FootprintIsWritable(lpath):
   
     
 }
+
+%{
+    MODULE *PyModule_to_MODULE(PyObject *obj0) 
+    {
+        void *argp;
+        int res1 = SWIG_ConvertPtr(obj0, &argp,SWIGTYPE_p_MODULE, 0 |  0 );
+        if (!SWIG_IsOK(res1)) 
+        {
+            SWIG_exception_fail(SWIG_ArgError(res1), "Converting object to MODULE*"); 
+        }
+        
+        return (MODULE*)argp;
+        
+        fail:
+        return NULL;
+
+    }
+
+%}
