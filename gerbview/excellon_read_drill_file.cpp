@@ -390,7 +390,19 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         break;
 
     case DRILL_INCREMENTALHEADER:
-        m_Relative = true;
+        if( *text != ',' )
+        {
+            ReportMessage( _( "ICI command has no parameter" ) );
+            break;
+        }
+        text++;     // skip separator
+        // Parameter should be ON or OFF
+        if( strnicmp( text, "OFF", 3 ) == 0 )
+            m_Relative = false;
+        else if( strnicmp( text, "ON", 2 ) == 0 )
+            m_Relative = true;
+        else
+            ReportMessage( _( "ICI command has incorrect parameter" ) );
         break;
 
     case DRILL_TOOL_CHANGE_STOP:
