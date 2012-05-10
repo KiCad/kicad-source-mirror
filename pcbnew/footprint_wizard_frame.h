@@ -36,6 +36,7 @@
 class wxSashLayoutWindow;
 class wxListBox;
 class wxSemaphore;
+class wxGrid;
 
 
 /**
@@ -50,9 +51,9 @@ private:
     wxSize              m_PageListSize;      // size of the window
 
     // List of components in the selected library
-    wxSashLayoutWindow* m_ParameterListWindow;
-    wxListBox*          m_ParameterList;          // The list of parameters
-    wxSize              m_ParameterListSize;      // size of the window
+    wxSashLayoutWindow* m_ParameterGridWindow;
+    wxGrid*             m_ParameterGrid;          // The list of parameters
+    wxSize              m_ParameterGridSize;      // size of the window
 
     // Flags
     wxSemaphore*        m_Semaphore;        // != NULL if the frame must emulate a modal dialog
@@ -103,7 +104,7 @@ private:
     void ReCreateVToolbar();
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void ClickOnPageList( wxCommandEvent& event );
-    void ClickOnParameterList( wxCommandEvent& event );
+    void ClickOnParameterGrid( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );

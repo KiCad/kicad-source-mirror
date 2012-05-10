@@ -84,14 +84,11 @@ class FootprintWizardPlugin(KiCadPlugin):
     def GetParameterNames(self,page_n):
         name = self.GetParameterPageName(page_n)
         return self.parameters[name].keys()
-    
-    def GetParameterValues(self,page_n):
-        name = self.GetParameterPageName(page_n)
-        return self.parameters[name].keys()
         
     def GetParameterValues(self,page_n):
         name = self.GetParameterPageName(page_n)
-        return self.parameters[name].values()
+        values = self.parameters[name].values()
+        return map( lambda x: str(x) , values)
         
             
     def SetParameterValues(self,page_n,values):

@@ -27,6 +27,7 @@
 void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     wxString   msg;
+    int page;
 
     switch( event.GetId() )
     {
@@ -35,7 +36,7 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_FOOTPRINT_WIZARD_PREVIOUS:
-        int page = m_PageList->GetSelection()-1;
+        page = m_PageList->GetSelection()-1;
         if (page<0) page=0;
         m_PageList->SetSelection(page,true);
         break;
