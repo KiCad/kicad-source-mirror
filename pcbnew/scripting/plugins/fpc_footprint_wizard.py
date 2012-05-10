@@ -16,11 +16,13 @@ class FPCFootprintWizard(FootprintWizardPlugin):
   
     def smdRectPad(self,module,size,pos,name):
             pad = D_PAD(module)
+	    # print "smdRectPad( size=",size,"pos=",pos,"name=",name,")"
             pad.SetSize(size)
             pad.SetShape(PAD_RECT)
             pad.SetAttribute(PAD_SMD)
             pad.SetLayerMask(PAD_SMD_DEFAULT_LAYERS)
             pad.SetPos0(pos)
+	    pad.SetPosition(pos)
             pad.SetPadName(name)
             return pad
         
@@ -43,7 +45,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         module = MODULE(None)
         module.SetReference("FPC"+str(pads))   # give it a reference name
         module.m_Reference.SetPos0(wxPointMM(-1,-1))
-
+	module.m_Reference.SetPosition(wxPointMM(-1,-1))
         # create a pad array and add it to the module
 
         for n in range (0,pads):
@@ -75,6 +77,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         module.SetLibRef("FPC"+str(pads))
                 
         self.module = module
+	# print "Module built and set:", module
 
 # create our footprint wizard
 fpc_wizard = FPCFootprintWizard() 
