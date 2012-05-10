@@ -31,11 +31,13 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
     switch( event.GetId() )
     {
     case ID_FOOTPRINT_WIZARD_NEXT:
-        //SelectAndViewFootprint( NEXT_PART );
+        m_PageList->SetSelection(m_PageList->GetSelection()+1,true);
         break;
 
     case ID_FOOTPRINT_WIZARD_PREVIOUS:
-        //SelectAndViewFootprint( PREVIOUS_PART );
+        int page = m_PageList->GetSelection()-1;
+        if (page<0) page=0;
+        m_PageList->SetSelection(page,true);
         break;
 
     default:
@@ -76,10 +78,30 @@ void FOOTPRINT_WIZARD_FRAME::DisplayWizardInfos()
     SetTitle( msg );
 }
 
+void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
+{
+    SetCurItem( NULL );
+    // Delete the current footprint
+    GetBoard()->m_Modules.DeleteAll();
+    MODULE *m = m_FootprintWizard->GetModule();
+    if (m)
+    {
+        /* Here we should make a copy of the object before adding to board*/
+        m->SetParent((EDA_ITEM*)GetBoard());
+        GetBoard()->m_Modules.Append(m);
+        wxPoint p(0,0);
+        m->SetPosition(p);
+    }
+    else
+    {
+        printf ("m_FootprintWizard->GetModule() returns NULL\n");
+    }
+    m_canvas->Refresh();
+}
 
 void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 {
-    DIALOG_FOOTPRINT_WIZARD_LIST *selectWizard =  
+    DIALOG_FOOTPRINT_WIZARD_LIST         *selectWizard =  
             new DIALOG_FOOTPRINT_WIZARD_LIST(this);
     
     selectWizard->ShowModal();
@@ -92,6 +114,8 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
         m_wizardDescription = m_FootprintWizard->GetDescription();
     }
 
+    ReloadFootprint();
+    Zoom_Automatique(false);
     DisplayWizardInfos();
     ReCreatePageList();
     ReCreateParameterList();
