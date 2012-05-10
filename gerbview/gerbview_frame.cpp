@@ -451,7 +451,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
     // Display the gerber filename
     if( gerber == NULL )
     {
-        text = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+        text.Printf( wxT( "GerbView %s" ), GetChars( GetBuildVersion() ) );
         SetTitle( text );
         SetStatusText( wxEmptyString, 0 );
         text.Printf( _( "Layer %d not in use" ), getActiveLayer() + 1 );
