@@ -977,9 +977,8 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
     if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )
     {
-        wxString msg = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-        title.Printf( wxT( "%s [%s]" ), GetChars( msg), GetChars( GetScreen()->GetFileName() ) );
-        SetTitle( title );
+        title.Printf( wxT( "Eeschema %s [%s]" ), GetChars( GetBuildVersion() ),
+                            GetChars( GetScreen()->GetFileName() ) );
     }
     else
     {
@@ -989,12 +988,10 @@ void SCH_EDIT_FRAME::UpdateTitle()
         // passed to LoadOneEEFile() which omits the path on non-root schematics.
         // Making the path absolute solves this problem.
         fn.MakeAbsolute();
-        title = wxChar( '[' );
-        title << fn.GetName() << wxChar( ' ' );
-        title << m_CurrentSheet->PathHumanReadable() << wxChar( ']' );
-
-        title << wxChar( ' ' );
-        title << wxChar( '(' ) << fn.GetPath() << wxChar( ')' );
+        title.Printf( wxT( "[ %s %s] (%s)" ),
+                      GetChars( fn.GetName() ),
+                      GetChars( m_CurrentSheet->PathHumanReadable() ),
+                      GetChars( fn.GetPath() ) );
 
         if( fn.FileExists() )
         {
@@ -1004,6 +1001,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
         else
             title << _( " [no file]" );
 
-        SetTitle( title );
     }
+
+    SetTitle( title );
 }
