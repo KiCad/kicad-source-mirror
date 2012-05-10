@@ -92,6 +92,7 @@ private:
     void ReCreatePageList();
     void ReCreateParameterList();
     void SelectFootprintWizard();
+    void ReloadFootprint();
     
     
     void Process_Special_Functions( wxCommandEvent& event );

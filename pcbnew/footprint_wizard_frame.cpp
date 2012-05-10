@@ -396,24 +396,11 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnParameterList( wxCommandEvent& event )
 
     wxString name = m_ParameterList->GetString( ii );
 
-    SetCurItem( NULL );
-    // Delete the current footprint
-    GetBoard()->m_Modules.DeleteAll();
-    MODULE *m = m_FootprintWizard->GetModule();
-    if (m)
-    {
-        /* Here we should make a copy of the object before adding to board*/
-        m->SetParent(GetBoard());
-        GetBoard()->m_Modules.Append(m);
-    }
-    else
-    {
-        printf ("m_FootprintWizard->GetModule() returns NULL\n");
-    }
     
+    
+    ReloadFootprint();
     DisplayWizardInfos();
-    Zoom_Automatique( false );
-    m_canvas->Refresh();
+    
 }
 
 

@@ -94,3 +94,19 @@
 			return self.ShowShape(self.GetShape())
 	}
 }
+
+%extend BOARD_ITEM
+{
+        %pythoncode
+        {
+		def SetPos(self,p):
+			self.SetPosition(p)
+			self.SetPos0(p)
+                
+		def SetStartEnd(self,start,end):
+			self.SetStart(start)
+			self.SetStart0(start)
+			self.SetEnd(end)
+			self.SetEnd0(end)
+        }
+}
