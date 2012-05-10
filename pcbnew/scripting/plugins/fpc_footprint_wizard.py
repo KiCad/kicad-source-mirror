@@ -17,6 +17,14 @@ class FPCFootprintWizard(FootprintWizardPlugin):
                 
         }
   
+    def GetParameterValues(self,page_n):
+        name = self.GetParameterPageName(page_n)
+        values = self.parameters[name].values()
+        str_values = map( lambda x: str(x) , values)
+        
+        print values,str_values
+        return str_values
+    
     def smdRectPad(self,module,size,pos,name):
             pad = D_PAD(module)
             # print "smdRectPad( size=",size,"pos=",pos,"name=",name,")"
@@ -70,10 +78,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         module.Add(pad_s1)
 
         e = EDGE_MODULE(module)
-        e.SetStart0(wxPointMM(-1,0))
-        e.SetStart(wxPointMM(-1,0))
-        e.SetEnd0(wxPointMM(0,0))
-        e.SetEnd(wxPointMM(0,0))
+        e.SetStartEnd(wxPointMM(-1,0),wxPointMM(0,0))
         e.SetWidth(FromMM(0.2))
         e.SetLayer(EDGE_LAYER)
         e.SetShape(S_SEGMENT)
