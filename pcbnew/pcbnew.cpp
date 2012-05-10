@@ -204,8 +204,9 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
      */
     frame->SetFocus();
     frame->GetCanvas()->SetFocus();
-    
+#if 0
     DIALOG_SCRIPTING* sw = new DIALOG_SCRIPTING(frame);
     sw->Show(true);
+#endif
     return true;
 }

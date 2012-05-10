@@ -59,6 +59,8 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aAr
 wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod(const char* aMethod, PyObject *aArglist)
 {
     wxString ret;
+    
+    ret.Clear();
     PyObject *result = CallMethod(aMethod,aArglist);
     if (result)
     {
@@ -66,18 +68,45 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod(const char* aMethod, PyObject
          ret  = wxString::FromUTF8(str_res);
          Py_DECREF(result);    
     }
-    else
-    {
-        printf("method not found, or not callable: %s\n",aMethod);
-    }
-    
     return ret;
 }
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
                         (const char *aMethod, PyObject *aArglist)
 {
+    PyObject *result, *element;
+    wxArrayString ret;
+    wxString str_item;
+    
+    result = CallMethod(aMethod,aArglist);
+    
+    if (result)
+    {
+         if (!PyList_Check(result))
+         {
+             Py_DECREF(result);
+             ret.Add(wxT("PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod, "
+                        "result is not a list"),1);
+             return ret;
+         }
+         int list_size = PyList_Size(result);
+         
+         for (int n=0;n<list_size;n++)
+         {
+            element = PyList_GetItem(result,n);
 
+            const char *str_res = PyString_AsString(element);
+            str_item  = wxString::FromUTF8(str_res);
+            ret.Add(str_item,1);
+         }
+         
+         Py_DECREF(result);    
+    }
+    
+    
+    
+    return ret;
+   
 }
 
 wxString PYTHON_FOOTPRINT_WIZARD::GetName()
@@ -134,25 +163,15 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName(int aPage)
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames(int aPage)
 {
-    wxArrayString a;
-     wxString ret;
+  
     PyObject *arglist;
-    PyObject *result;
+    wxArrayString ret;
     
-    /* Time to call the callback */
     arglist = Py_BuildValue("(i)", aPage);
-    result = CallMethod("GetParameterPageNames",arglist);
+    ret = CallRetArrayStrMethod("GetParameterNames",arglist);
     Py_DECREF(arglist);
     
-    if (result)
-    {
-        
-        // TODO GET ITEMS IN LIST
-         const char *str_res = PyString_AsString(result);
-         ret  = wxString::FromUTF8(str_res);
-         Py_DECREF(result);    
-    }
-    return a;
+    return ret;
 }
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues(int aPage)
