@@ -197,7 +197,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         plotY += intervalle;
 
         plot_diam = (int) aToolListBuffer[ii].m_Diameter;
-        x = (int) ( (double) plotX - 20.0 * IU_PER_MILS * CharScale 
+        x = (int) ( (double) plotX - 20.0 * IU_PER_MILS * CharScale
                 - (double)plot_diam / 2.0 );
         y = (int) ( (double) plotY + (double) CharSize * CharScale );
         plotter->Marker( wxPoint( x, y ), plot_diam, ii );
@@ -268,7 +268,8 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* aPlotter,
     if( aToolListBuffer.size() > PLOTTER::MARKER_COUNT )
     {
         DisplayInfoMessage( NULL,
-                            _( " Drill map: Too many diameter values to draw to draw one symbol per drill value\nPlot will use circle shape for some drill values" ),
+                            _( " Drill map: Too many diameter values to draw one symbol per drill value\n"
+"Plot will use circle shape for some drill values" ),
                             10 );
     }
 

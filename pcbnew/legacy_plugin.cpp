@@ -93,6 +93,8 @@
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
 
+// Old internal units definition (UI = decimil)
+#define PCB_LEGACY_INTERNAL_UNIT 10000
 
 /// Get the length of a string constant, at compile time
 #define SZ( x )         (sizeof(x)-1)
@@ -2845,7 +2847,7 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 
     /*  Internal units are nobody's business, they are internal.
         Units used in the file are now in the "Units" attribute of $GENERAL.
-    fprintf( m_fp,, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
+    fprintf( m_fp,, "InternalUnit %f INCH\n", 1.0 / PCB_LEGACY_INTERNAL_UNIT );
     */
 
     fprintf( m_fp, "Layers %d\n", aBoard->GetCopperLayerCount() );

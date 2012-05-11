@@ -67,7 +67,7 @@ protected:
 
     STRINGSET   m_Members;              ///< names of NET members of this class
 
-    /// The units on these parameters is 1/10000 of an inch, see define #PCB_INTERNAL_UNIT
+    /// The units on these parameters is Internal Units (1 decimil or 1 nm)
 
     int         m_Clearance;            ///< clearance when routing
 

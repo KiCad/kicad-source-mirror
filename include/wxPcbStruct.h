@@ -36,10 +36,6 @@
 #include <class_undoredo_container.h>
 #include <zones.h>
 
-#ifndef PCB_INTERNAL_UNIT
-#define PCB_INTERNAL_UNIT 10000
-#endif
-
 
 /*  Forward declarations of classes. */
 class PCB_SCREEN;
