@@ -41,11 +41,6 @@
 #include <class_pcb_screen.h>
 
 
-#ifndef PCB_INTERNAL_UNIT
-#define PCB_INTERNAL_UNIT 10000
-#endif
-
-
 /* Forward declarations of classes. */
 class FOOTPRINT_EDIT_FRAME;
 class FOOTPRINT_VIEWER_FRAME;
