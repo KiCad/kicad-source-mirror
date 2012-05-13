@@ -271,7 +271,8 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             SaveCopyInUndoList( m_component );
 
         pt = GetScreen()->m_BlockLocate.Centre();
-        pt.y *= -1;
+        pt = GetScreen()->GetNearestGridPosition( pt );
+        NEGATE( pt.y );
 
         if ( m_component )
         {
