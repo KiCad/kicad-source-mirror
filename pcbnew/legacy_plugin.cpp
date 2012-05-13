@@ -88,7 +88,7 @@
 #include <wx/ffile.h>
 
 
-#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file." )
+#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
@@ -324,7 +324,7 @@ void LEGACY_PLUGIN::checkVersion()
 #if !defined(DEBUG)
     if( ver > LEGACY_BOARD_FILE_VERSION )
     {
-        // "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file."
+        // "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file."
         m_error.Printf( VERSION_ERROR_FORMAT,
             m_reader->GetSource().GetData(), ver, LEGACY_BOARD_FILE_VERSION );
         THROW_IO_ERROR( m_error );
@@ -358,7 +358,7 @@ void LEGACY_PLUGIN::loadGENERAL()
                 diskToBiu = 10000/25.4;
 
 #else
-                THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'PCBNew compiled for deci-mils'" ) );
+                THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'" ) );
 #endif
             }
         }
@@ -3844,7 +3844,7 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
                 m_owner->diskToBiu = 10000/25.4;
 
 #else
-                THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'PCBNew compiled for deci-mils'" ) );
+                THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'Pcbnew compiled for deci-mils'" ) );
 #endif
             }
 
