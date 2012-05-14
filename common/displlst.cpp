@@ -44,7 +44,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
                                wxSize( 300, 200 ), 0, NULL,
                                wxLB_NEEDED_SB | wxLB_SINGLE | wxLB_HSCROLL );
 
-    GeneralBoxSizer->Add( m_listBox, 0, wxGROW | wxALL, 5 );
+    GeneralBoxSizer->Add( m_listBox, 2, wxGROW | wxALL, 5 );
 
     InsertItems( aItemList, 0 );
 
@@ -54,7 +54,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
                                      wxDefaultPosition, wxSize( -1, 60 ),
                                      wxTE_READONLY | wxTE_MULTILINE );
 
-        GeneralBoxSizer->Add( m_messages, 0, wxGROW | wxALL, 5 );
+        GeneralBoxSizer->Add( m_messages, 1, wxGROW | wxALL, 5 );
     }
 
     wxSizer* buttonSizer = CreateButtonSizer( wxOK | wxCANCEL );
