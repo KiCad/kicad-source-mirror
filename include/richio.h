@@ -140,7 +140,7 @@ struct PARSE_ERROR : public IO_ERROR
     // wxString errorText is still public from IO_ERROR
 
     int         lineNumber;     ///< at which line number, 1 based index.
-    int         byteIndex;      ///< at which character position within the line, 1 based index
+    int         byteIndex;      ///< at which byte offset within the line, 1 based index
 
     /// problem line of input [say, from a LINE_READER].
     /// this is brought up in original byte format rather than wxString form, incase
