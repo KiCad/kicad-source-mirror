@@ -9,6 +9,8 @@ DST_BOOST="$KICAD_BASE/include/boost"
 
 # control the subset of boost libs used:
 BOOST_DIRS="\
+    archive \
+    bind \
     concept \
     config \
     detail \
@@ -19,12 +21,15 @@ BOOST_DIRS="\
     iterator \
     move \
     mpl \
+    multi_index \
+    optional \
     polygon \
     preprocessor \
     property_tree \
     ptr_container \
     range \
     regex \
+    serialization \
     smart_ptr \
     tuple \
     typeof \

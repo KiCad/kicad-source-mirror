@@ -96,7 +96,6 @@ set(PCBNEW_SRCS
     block.cpp
     block_module_editor.cpp
     build_BOM_from_board.cpp
-#    class_footprint_library.cpp
     class_pcb_layer_box_selector.cpp
     class_pcb_layer_widget.cpp
     clean.cpp
@@ -111,6 +110,7 @@ set(PCBNEW_SRCS
     drc.cpp
     drc_clearance_test_functions.cpp
     drc_marker_functions.cpp
+    eagle_plugin.cpp
     edgemod.cpp
     edit.cpp
     editedge.cpp
