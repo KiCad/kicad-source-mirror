@@ -61,6 +61,7 @@ class FootprintWizardPlugin(KiCadPlugin):
     def defaults(self):
         self.module = None
         self.parameters = {}
+        self.parameter_errors={}
         self.name = "Undefined Footprint Wizard plugin"
         self.description = ""
         self.image = ""
@@ -88,16 +89,50 @@ class FootprintWizardPlugin(KiCadPlugin):
     def GetParameterValues(self,page_n):
         name = self.GetParameterPageName(page_n)
         values = self.parameters[name].values()
-        return map( lambda x: str(x) , values)
+        return map( lambda x: str(x) , values) # list elements as strings
+    
+    def GetParameterErrors(self,page_n):
+        self.CheckParameters()
+        name = self.GetParameterPageName(page_n)
+        values = self.parameter_errors[name].values()
+        return map( lambda x: str(x) , values) # list elements as strings
         
-            
+    def CheckParameters(self):
+        return ""
+    
+    def TryConvertToFloat(self,value):
+        v = value
+        try:
+            v = float(value)
+        except:
+            pass
+        
+        return v
+    
     def SetParameterValues(self,page_n,values):
-        name = self.GetParameterPageName(pagen_n)
-        keys = self.parameters[name].values()
+        name = self.GetParameterPageName(page_n)
+        keys = self.parameters[name].keys()
         n=0
         for key in keys:
-            self.parameters[name][key] = values[n]
+            val = self.TryConvertToFloat(values[n])
+            self.parameters[name][key] = val
+            print "[%s][%s]<="%(name,key),val
             n+=1
+        
+    # copies the parameter list on parameter_errors but empty
+    def ClearErrors(self):
+        errs={}
+        
+        for page in self.parameters.keys():
+            page_dict = self.parameters[page]
+            page_params = {}
+            for param in page_dict.keys():
+                page_params[param]=""
+                
+            errs[page]=page_params
+            
+        self.parameter_errors = errs    
+        
     
     def GetModule(self):
         self.BuildFootprint()

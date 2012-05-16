@@ -290,6 +290,7 @@ if (KICAD_SCRIPTING)
                        DEPENDS ../scripting/dlist.i
                        DEPENDS ../scripting/kicad.i
                        DEPENDS ../scripting/wx.i
+                       DEPENDS ../scripting/kicadplugins.i
                       # DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew
                        
 	               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i

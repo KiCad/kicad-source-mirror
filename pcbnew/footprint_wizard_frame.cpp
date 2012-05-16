@@ -74,7 +74,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 
     /* listbox events */
     EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
-    EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PARAMETER_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnParameterGrid )
+    EVT_GRID_CMD_CELL_CHANGE( ID_FOOTPRINT_WIZARD_PARAMETER_LIST, FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
 
     EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
@@ -411,21 +411,6 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
     DisplayWizardInfos();
 }
 
-
-void FOOTPRINT_WIZARD_FRAME::ClickOnParameterGrid( wxCommandEvent& event )
-{
-    int n=m_ParameterGrid->GetNumberRows();
-    
-    for (int i=0;i<n;i++)
-    {
-        // Get values, send them to the object..
-    }
-    
-    
-    ReloadFootprint();
-    DisplayWizardInfos();
-    
-}
 
 
 #define PARTLIST_WIDTH_KEY wxT( "Partlist_width" )

@@ -186,10 +186,42 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues(int aPage)
     return ret;
 }
 
+wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterErrors(int aPage)
+{
+    PyObject *arglist;
+    wxArrayString ret;
+    
+    arglist = Py_BuildValue("(i)", aPage);
+    ret = CallRetArrayStrMethod("GetParameterErrors",arglist);
+    Py_DECREF(arglist);
+    
+    return ret;
+}
+
 wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues(int aPage,wxArrayString& aValues)
 {
-    wxString ret;
-    return ret;
+    
+    int len = aValues.size();
+    PyObject *py_list;
+    
+    py_list = PyList_New(len);
+    
+    for (int i=0;i<len;i++)
+    {
+        wxString str = aValues[i];
+        PyObject *py_str = PyString_FromString((const char*)str.mb_str());
+        PyList_SetItem(py_list, i, py_str);
+    }
+    
+    PyObject *arglist;
+    
+    arglist = Py_BuildValue("(i,O)", aPage,py_list);
+    wxString res = CallRetStrMethod("SetParameterValues",arglist);
+    Py_DECREF(arglist);
+    
+    
+    
+    return res;
 }
 
 /* this is a SWIG function declaration -from module.i*/
@@ -201,14 +233,18 @@ MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
     result = CallMethod("GetModule",NULL);
     if (!result) return NULL;
     
+   
     obj = PyObject_GetAttrString(result, "this");
        if (PyErr_Occurred())
         {
+            /*
             PyObject *t, *v, *b;
             PyErr_Fetch(&t, &v, &b);
             printf ("calling GetModule()\n");
             printf ("Exception: %s\n",PyString_AsString(PyObject_Str(v)));
             printf ("         : %s\n",PyString_AsString(PyObject_Str(b)));
+            */
+            PyErr_Print();
         }
      
     
