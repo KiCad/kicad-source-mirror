@@ -16,6 +16,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
                  "width":FromMM(1.5),"height":FromMM(2)},
                 
         }
+        self.ClearErrors()
   
     def GetParameterValues(self,page_n):
         name = self.GetParameterPageName(page_n)
@@ -37,10 +38,40 @@ class FPCFootprintWizard(FootprintWizardPlugin):
             pad.SetPadName(name)
             return pad
         
+    def CheckParameters(self):
+        p = self.parameters        
+        pads            = p["Pads"]["n"]        
+        errors = ""
+        if (pads<1):
+            self.parameter_errors["Pads"]["n"]="Must be positive"
+            errors +="Pads/n has wrong value, "
+        p["Pads"]["n"] = int(pads)  # make sure it stays as int (default is float)       
+                    
+        pad_width       = p["Pads"]["width"]
+        pad_height      = p["Pads"]["height"]
+        pad_pitch       = p["Pads"]["pitch"]
+        shl_width       = p["Shield"]["width"]
+        shl_height      = p["Shield"]["height"]
+        shl_to_pad      = p["Shield"]["shield_to_pad"]
+        shl_from_top    = p["Shield"]["from_top"]
+        
+        return errors 
+    
+    def SetParameterValues(self,page,values):
+        print "SetParameterValues("+str(page)+","+str(values)+")"
+        FootprintWizardPlugin.SetParameterValues(self,page,values)
+        
     def BuildFootprint(self):
         
+        print "parameters:",self.parameters
+        #self.ClearErrors()
+        #print "errors:",self.parameter_errors
+        
+        module = MODULE(None) # create a new module
+        self.module = module
+        
         p = self.parameters
-        pads            = p["Pads"]["n"]
+        pads            = int(p["Pads"]["n"])        
         pad_width       = p["Pads"]["width"]
         pad_height      = p["Pads"]["height"]
         pad_pitch       = p["Pads"]["pitch"]
@@ -52,9 +83,6 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         size_pad = wxSize(pad_width,pad_height)
         size_shld = wxSize(shl_width,shl_height)
        
-
-        # create a new module
-        module = MODULE(None)
         module.SetReference("FPC"+str(pads))   # give it a reference name
         module.m_Reference.SetPos0(wxPointMM(-1,-2))
         module.m_Reference.SetPosition(wxPointMM(-1,-2))
@@ -84,11 +112,9 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         e.SetShape(S_SEGMENT)
         module.Add(e)
 
-        # save the PCB to disk
         module.SetLibRef("FPC"+str(pads))
                 
-        self.module = module
-        # print "Module built and set:", module
+
 
 # create our footprint wizard
 fpc_wizard = FPCFootprintWizard() 

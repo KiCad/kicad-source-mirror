@@ -37,6 +37,7 @@ class wxSashLayoutWindow;
 class wxListBox;
 class wxSemaphore;
 class wxGrid;
+class wxGridEvent;
 
 
 /**
@@ -104,7 +105,6 @@ private:
     void ReCreateVToolbar();
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void ClickOnPageList( wxCommandEvent& event );
-    void ClickOnParameterGrid( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
@@ -137,7 +137,7 @@ private:
 
     void SelectCurrentWizard( wxCommandEvent& event );
 
-    void ParametersUpdated( wxCommandEvent& event );
+    void ParametersUpdated( wxGridEvent& event );
 
 
 

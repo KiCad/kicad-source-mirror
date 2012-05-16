@@ -28,6 +28,9 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         m_FootprintWizard = FOOTPRINT_WIZARDS::GetWizard(0);
     
     // Choose selection mode and insert the needed rows
+        
+    m_footprintWizardsGrid->SetColSize( 0, 0 ); // hide the preview for now
+    
     m_footprintWizardsGrid->SetSelectionMode(wxGrid::wxGridSelectRows);
     m_footprintWizardsGrid->InsertRows(0,n_wizards,true);
         

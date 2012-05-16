@@ -23,6 +23,7 @@ public:
     virtual wxString      GetParameterPageName(int aPage)=0;
     virtual wxArrayString GetParameterNames(int aPage)=0;
     virtual wxArrayString GetParameterValues(int aPage)=0;
+    virtual wxArrayString GetParameterErrors(int aPage)=0;
     virtual wxString      SetParameterValues(int aPage,wxArrayString& aValues)=0;
     virtual MODULE       *GetModule()=0;
     void register_wizard();

@@ -36,7 +36,8 @@
     def GetPads(self):		      return self.m_Pads
     def GetDrawings(self):            return self.m_Drawings
     def GetReferenceObj(self):	      return self.m_Reference
-    
+    def GetValueObj(self):	      return self.m_Value
+     
     #def SaveToLibrary(self,filename):
     #  return SaveModuleToLibrary(filename,self)
     

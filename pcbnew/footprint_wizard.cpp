@@ -134,31 +134,28 @@ void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
  * Function SelectCurrentFootprint
  * Selects the current footprint name and display it
  */
-void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxCommandEvent& event )
+void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 {
-    /*
-    // will pick it from the wizard
-    MODULE * module = new MODULE(NULL);
-    if( module )
-    {
-        module->SetPosition( wxPoint( 0, 0 ) );
-
-        // Only one fotprint allowed: remove the previous footprint (if exists)
-        if( oldmodule )
-        {
-            GetBoard()->Remove( oldmodule );
-            delete oldmodule;
-        }
-        m_footprintName = module->GetLibRef();
-        module->ClearFlags();
-        SetCurItem( NULL );
-
-        Zoom_Automatique( false );
-        m_canvas->Refresh( );
-        Update3D_Frame();
-        m_FootprintList->SetStringSelection( m_footprintName );
-   }
-     * */
+    
+    int page = m_PageList->GetSelection();
+    
+    if (page<0)
+        return;
+    
+    int n=m_ParameterGrid->GetNumberRows();
+    wxArrayString arr;
+    
+    for (int i=0;i<n;i++)
+    {    
+        wxString val = m_ParameterGrid->GetCellValue(i,1);
+        arr.Add(val);
+    }
+    
+    wxString res = m_FootprintWizard->SetParameterValues(page,arr);
+    
+    ReloadFootprint();
+    DisplayWizardInfos();
+    
 }
 
 

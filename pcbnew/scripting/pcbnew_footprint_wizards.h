@@ -30,9 +30,9 @@ public:
     wxString      GetParameterPageName(int aPage);
     wxArrayString GetParameterNames(int aPage);
     wxArrayString GetParameterValues(int aPage);
-    wxString      SetParameterValues(int aPage,wxArrayString& aValues);
+    wxArrayString GetParameterErrors(int aPage);
+    wxString      SetParameterValues(int aPage,wxArrayString& aValues); //< must return "OK" or error description
     MODULE       *GetModule();
-        
 };
 
 
