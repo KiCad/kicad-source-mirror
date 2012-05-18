@@ -120,10 +120,14 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     if( m_CurrentModule->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) +
                                            m_SolderPasteMarginCtrl->GetValue() );
+
+    // Add solder paste margin ration in per cent
+    // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
     msg.Printf( wxT( "%.1f" ),
                     m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
+
     if( m_CurrentModule->GetLocalSolderPasteMarginRatio() == 0.0 &&
-        msg[0] == '0')  // Sometimes Printf add a sign if the value is small
+        msg[0] == '0')  // Sometimes Printf adds a sign if the value is very small (0.0)
         m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
     else
         m_SolderPasteMarginRatioCtrl->SetValue( msg );
@@ -487,12 +491,13 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
 
-    // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50%
-    if( dtmp < -50 )
-        dtmp = -50;
-
-    if( dtmp > +100 )
-        dtmp = +100;
+    // A -50% margin ratio means no paste on a pad, the ratio must be >= -50%
+    if( dtmp < -50.0 )
+        dtmp = -50.0;
+    // A margin ratio is always <= 0
+    // 0 means use full pad copper area
+    if( dtmp > 0.0 )
+        dtmp = 0.0;
 
     m_CurrentModule->SetLocalSolderPasteMarginRatio( dtmp / 100 );
 

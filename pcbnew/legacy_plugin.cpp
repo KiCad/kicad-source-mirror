@@ -1018,6 +1018,14 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
         else if( TESTLINE( ".SolderPasteRatio" ) )
         {
             double tmp = atof( line + SZ( ".SolderPasteRatio" ) );
+            // Due to a bug in dialog editor in Modedit, fixed in BZR version 3565
+            // this parameter can be broken.
+            // It should be >= -50% (no solder paste) and <= 0% (full area of the pad)
+
+            if( tmp < -0.50 )
+                tmp = -0.50;
+            if( tmp > 0.0 )
+                tmp = 0.0;
             module->SetLocalSolderPasteMarginRatio( tmp );
         }
 

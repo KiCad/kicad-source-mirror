@@ -1,7 +1,5 @@
 /**
- * @file classpcb.cpp
- * @brief Member functions of classes used in Pcbnew (see pcbstruct.h)
- *        except for tracks (see class_track.cpp).
+ * @file class_gbr_screen.cpp
  */
 
 #include <fctsys.h>
@@ -24,14 +22,9 @@
 
 
 /**
-    Default Pcbnew zoom values.
+    Default GerbView zoom values.
     Limited to 19 values to keep a decent size to menus.
     Roughly a 1.5 progression.
-    The last 2 values are handy when somebody uses a library import of a module
-    (or foreign data) which has a bad coordinate.
-    Also useful in GerbView for this reason.
-    Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
-    functions )
 */
 static const double gbrZoomList[] =
 {
