@@ -476,10 +476,15 @@ public:
     void                OnQuit( wxCommandEvent& event );
 
     /**
-     * Function OnHotKey
-     * called when on hotkey trigger
+     * Function OnHotKey.
+     *  ** Commands are case insensitive **
+     *  Some commands are relatives to the item under the mouse cursor
+     * @param aDC = current device context
+     * @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
+     * @param aPosition The cursor position in logical (drawing) units.
+     * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
      */
-    void                OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
+    void OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     GERBER_DRAW_ITEM*   GerberGeneralLocateAndDisplay();
     GERBER_DRAW_ITEM*   Locate( const wxPoint& aPosition, int typeloc );
@@ -548,17 +553,6 @@ public:
      */
     void                ToPrinter( wxCommandEvent& event );
 
-/*    void                Genere_HPGL( const wxString& FullFileName, int Layers );
- *   void                Genere_GERBER( const wxString& FullFileName, int Layers );
- *   void                Genere_PS( const wxString& FullFileName, int Layers );
- *   void                Plot_Layer_HPGL( FILE* File, int masque_layer, int garde, bool trace_via,
- *                                        EDA_DRAW_MODE_T trace_mode );
- *   void                Plot_Layer_GERBER( FILE* File, int masque_layer, int garde, bool trace_via,
- *                                          EDA_DRAW_MODE_T trace_mode );
- *   int                 Gen_D_CODE_File( const wxString& Name_File );
- *   void                Plot_Layer_PS( FILE* File, int masque_layer, int garde, bool trace_via,
- *                                      EDA_DRAW_MODE_T trace_mode );
- */
     void                Files_io( wxCommandEvent& event );
 
     /**
