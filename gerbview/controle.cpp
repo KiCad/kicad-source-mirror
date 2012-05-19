@@ -104,7 +104,7 @@ void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     if( aHotKey )
     {
-        OnHotKey( aDC, aHotKey, NULL );
+        OnHotKey( aDC, aHotKey, aPosition );
     }
 
     UpdateStatusBar();
