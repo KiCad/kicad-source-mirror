@@ -44,7 +44,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
 int LIB_EDIT_FRAME::ReturnBlockCommand( int key )
 {
-    int cmd;
+    int cmd = BLOCK_IDLE;
 
     switch( key )
     {
@@ -60,9 +60,12 @@ int LIB_EDIT_FRAME::ReturnBlockCommand( int key )
         cmd = BLOCK_MOVE;
         break;
 
-    case GR_KB_ALT:
     case GR_KB_SHIFT:
         cmd = BLOCK_COPY;
+        break;
+
+    case GR_KB_ALT:
+        cmd = BLOCK_ROTATE;
         break;
 
     case GR_KB_SHIFTCTRL:
@@ -168,7 +171,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             SaveCopyInUndoList( m_component );
 
         pt = GetScreen()->m_BlockLocate.Centre();
-        pt.y *= -1;
+        pt = GetScreen()->GetNearestGridPosition( pt );
+        NEGATE( pt.y );
 
         if ( m_component )
         {
@@ -253,7 +257,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             SaveCopyInUndoList( m_component );
 
         pt = GetScreen()->m_BlockLocate.GetMoveVector();
-        pt.y *= -1;
+        NEGATE( pt.y );
 
         if ( m_component )
             m_component->CopySelectedItems( pt );
