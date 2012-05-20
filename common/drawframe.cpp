@@ -139,7 +139,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
         GetTextSize( wxT( "dx 0234.567890  dx 0234.567890  d 0234.567890" ), stsbar ).x + 10,
 
         // units display, Inches is bigger than mm
-        GetTextSize( wxT( "Inches" ), stsbar ).x + 10,
+        GetTextSize( _( "Inches" ), stsbar ).x + 10,
 
         FUNCTION_DISPLAY_SIZE,
     };
@@ -428,11 +428,11 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
         break;
 
     case MILLIMETRES:
-        msg += _( "mm" );
+        msg = _( "mm" );
         break;
 
     default:
-        msg += _( "Units" );
+        msg = _( "Units" );
         break;
     }
 
