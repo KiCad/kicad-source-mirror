@@ -110,7 +110,6 @@ set(PCBNEW_SRCS
     drc.cpp
     drc_clearance_test_functions.cpp
     drc_marker_functions.cpp
-    eagle_plugin.cpp
     edgemod.cpp
     edit.cpp
     editedge.cpp

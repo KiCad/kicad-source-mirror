@@ -117,6 +117,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/sel_layer.cpp
     ../pcbnew/pcb_plot_params.cpp
     ../pcbnew/io_mgr.cpp
+    ../pcbnew/eagle_plugin.cpp
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/kicad_plugin.cpp
     pcb_plot_params_keywords.cpp
