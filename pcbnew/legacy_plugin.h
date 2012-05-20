@@ -32,7 +32,6 @@
 #define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
 #define FOOTPRINT_LIBRARY_HEADER_CNT   18
 
-typedef int     BIU;
 
 class PCB_TARGET;
 class MODULE;
@@ -61,6 +60,7 @@ struct FPL_CACHE;
 class LEGACY_PLUGIN : public PLUGIN
 {
 public:
+
 
     //-----<PLUGIN IMPLEMENTATION>----------------------------------------------
 
@@ -97,6 +97,8 @@ public:
     bool IsFootprintLibWritable( const wxString& aLibraryPath );
 
     //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
+
+    typedef int     BIU;
 
     LEGACY_PLUGIN();
     ~LEGACY_PLUGIN();

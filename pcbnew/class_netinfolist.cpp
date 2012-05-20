@@ -82,7 +82,7 @@ void NETINFO_LIST::buildListOfNets()
 
     // Create and add the "unconnected net", always existing,
     // used to handle pads and tracks that are not member of a "real" net
-    net_item = new NETINFO_ITEM( (BOARD_ITEM*) m_Parent );
+    net_item = new NETINFO_ITEM( m_Parent );
     AppendNet( net_item );
 
     // Build the PAD list, sorted by net
@@ -108,15 +108,15 @@ void NETINFO_LIST::buildListOfNets()
         if( last_pad == NULL || ( pad->GetNetname() != last_pad->GetNetname() ) )
         {
             netcode++;
-            net_item = new NETINFO_ITEM( (BOARD_ITEM*)m_Parent );
-            net_item->SetNet( netcode );
-            net_item->SetNetname( pad->GetNetname() );
+            net_item = new NETINFO_ITEM( m_Parent, pad->GetNetname(), netcode );
             AppendNet( net_item );
         }
 
         pad->SetNet( netcode );
         net_item->m_PadInNetList.push_back( pad );
-        nodes_count ++;
+
+        nodes_count++;
+
         last_pad = pad;
     }
 

@@ -88,10 +88,16 @@
 #include <wx/ffile.h>
 
 
+typedef LEGACY_PLUGIN::BIU      BIU;
+
+
 #define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
+
+
+
 
 // Old internal units definition (UI = decimil)
 #define PCB_LEGACY_INTERNAL_UNIT 10000
@@ -3729,7 +3735,7 @@ void LEGACY_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
 #include <boost/ptr_container/ptr_map.hpp>
 #include <wx/filename.h>
 
-typedef boost::ptr_map< wxString, MODULE >      MODULE_MAP;
+typedef boost::ptr_map< std::string, MODULE >   MODULE_MAP;
 typedef MODULE_MAP::iterator                    MODULE_ITER;
 typedef MODULE_MAP::const_iterator              MODULE_CITER;
 
@@ -3912,8 +3918,7 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
         {
             MODULE* m = m_owner->LoadMODULE();
 
-            // wxString footprintName = m->GetReference();
-            wxString footprintName = m->GetLibRef();
+            std::string footprintName = TO_UTF8( m->GetLibRef() );
 
             /*
 
@@ -3944,11 +3949,15 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
             {
                 bool    nameOK = false;
                 int     version = 2;
+                char    buf[48];
 
                 while( !nameOK )
                 {
-                    wxString newName = footprintName;
-                    newName << wxT( "_v" ) << version++;
+                    std::string newName = footprintName;
+
+                    newName += "_v";
+                    sprintf( buf, "%d", version++ );
+                    newName += buf;
 
                     it = m_modules.find( newName );
 
@@ -3956,7 +3965,7 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
                     {
                         nameOK = true;
 
-                        m->SetLibRef( newName );
+                        m->SetLibRef( FROM_UTF8( newName.c_str() ) );
                         std::pair<MODULE_ITER, bool> r = m_modules.insert( newName, m );
 
                         wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
@@ -4035,7 +4044,7 @@ void FPL_CACHE::SaveIndex( FILE* aFile )
 
     for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
     {
-        fprintf( aFile, "%s\n", TO_UTF8( it->first ) );
+        fprintf( aFile, "%s\n", it->first.c_str() );
     }
 
     fprintf( aFile, "$EndINDEX\n" );
@@ -4081,7 +4090,7 @@ wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, P
 
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
-        ret.Add( it->first );
+        ret.Add( FROM_UTF8( it->first.c_str() ) );
     }
 
     return ret;
@@ -4099,7 +4108,7 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStri
 
     const MODULE_MAP&   mods = m_cache->m_modules;
 
-    MODULE_CITER it = mods.find( aFootprintName );
+    MODULE_CITER it = mods.find( TO_UTF8( aFootprintName ) );
 
     if( it == mods.end() )
     {
@@ -4129,7 +4138,7 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* a
         THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
-    wxString footprintName = aFootprint->GetLibRef();
+    std::string footprintName = TO_UTF8( aFootprint->GetLibRef() );
 
     MODULE_MAP&  mods = m_cache->m_modules;
 
@@ -4173,7 +4182,9 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
         THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
-    size_t erasedCount = m_cache->m_modules.erase( aFootprintName );
+    std::string footprintName = TO_UTF8( aFootprintName );
+
+    size_t erasedCount = m_cache->m_modules.erase( footprintName );
 
     if( erasedCount != 1 )
     {

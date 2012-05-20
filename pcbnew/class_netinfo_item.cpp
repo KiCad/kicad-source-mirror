@@ -22,9 +22,9 @@
 /* class NETINFO_ITEM: handle data relative to a given net */
 /*********************************************************/
 
-NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
+NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int aNetCode )
 {
-    SetNet( 0 );
+    SetNet( aNetCode );
     m_NbNodes  = 0;
     m_NbLink   = 0;
     m_NbNoconn = 0;
@@ -33,7 +33,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
                                 // general buffer of ratsnest
     m_RatsnestEndIdx   = 0;     // Ending point of ratsnests of this net
 
-    m_NetClassName = NETCLASS::Default;
+    m_NetClassName = aNetName;
 
     m_NetClass = 0;
 }
