@@ -232,7 +232,7 @@ public:
     unsigned m_RatsnestEndIdx;         // Ending point of ratsnests of this net
                                        // (excluded) in this buffer
 
-    NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName = NETCLASS::Default, int aNetCode = 0 );
+    NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName = wxEmptyString, int aNetCode = 0 );
     ~NETINFO_ITEM();
 
     /**
