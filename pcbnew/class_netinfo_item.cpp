@@ -25,6 +25,10 @@
 NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int aNetCode )
 {
     SetNet( aNetCode );
+
+    if( aNetName.size() )
+        SetNetname( aNetName );
+
     m_NbNodes  = 0;
     m_NbLink   = 0;
     m_NbNoconn = 0;
@@ -33,7 +37,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int a
                                 // general buffer of ratsnest
     m_RatsnestEndIdx   = 0;     // Ending point of ratsnests of this net
 
-    m_NetClassName = aNetName;
+    m_NetClassName = NETCLASS::Default;
 
     m_NetClass = 0;
 }
