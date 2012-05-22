@@ -310,7 +310,7 @@ static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
                                                       wxDC*        DC,
-                                                      int          type_edge )
+                                                      STROKE_T     type_edge )
 {
     MODULE* module = GetBoard()->m_Modules;
     int     angle  = 0;

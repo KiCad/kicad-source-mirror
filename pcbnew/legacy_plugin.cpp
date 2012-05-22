@@ -1238,7 +1238,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             pos.y = biuParse( data );
 
             pad->SetPos0( pos );
-            pad->SetPosition( pos );
+            // pad->SetPosition( pos ); set at function return
         }
 
         else if( TESTLINE( "Le" ) )
@@ -1291,7 +1291,10 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
         else if( TESTLINE( "$EndPAD" ) )
         {
-            wxPoint padpos = pad->GetPosition();
+            // pad's "Position" is not relative to the module's,
+            // whereas Pos0 is relative to the module's but is the unrotated coordinate.
+
+            wxPoint padpos = pad->GetPos0();
 
             RotatePoint( &padpos, aModule->GetOrientation() );
 
@@ -1634,7 +1637,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
             if( width < 0 )
                 width = 0;
 
-            dseg->SetShape( shape );
+            dseg->SetShape( STROKE_T( shape ) );
             dseg->SetWidth( width );
             dseg->SetStart( wxPoint( start_x, start_y ) );
             dseg->SetEnd( wxPoint( end_x, end_y ) );

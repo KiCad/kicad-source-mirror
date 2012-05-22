@@ -229,37 +229,37 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_PCB_CIRCLE_BUTT:
     case ID_PCB_ARC_BUTT:
     case ID_PCB_ADD_LINE_BUTT:
-    {
-        int shape = S_SEGMENT;
-
-        if( GetToolId() == ID_PCB_CIRCLE_BUTT )
-            shape = S_CIRCLE;
-
-        if( GetToolId() == ID_PCB_ARC_BUTT )
-            shape = S_ARC;
-
-        if( getActiveLayer() <= LAST_COPPER_LAYER )
         {
-            DisplayError( this, _( "Graphic not authorized on Copper layers" ) );
-            break;
-        }
+            STROKE_T shape = S_SEGMENT;
 
-        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
-        {
-            DrawStruct = (BOARD_ITEM*) Begin_DrawSegment( NULL, shape, aDC );
-            SetCurItem( DrawStruct );
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else if( DrawStruct
-               && (DrawStruct->Type() == PCB_LINE_T)
-               && DrawStruct->IsNew() )
-        {
-            DrawStruct = (BOARD_ITEM*) Begin_DrawSegment( (DRAWSEGMENT*) DrawStruct, shape, aDC );
-            SetCurItem( DrawStruct );
-            m_canvas->SetAutoPanRequest( true );
+            if( GetToolId() == ID_PCB_CIRCLE_BUTT )
+                shape = S_CIRCLE;
+
+            if( GetToolId() == ID_PCB_ARC_BUTT )
+                shape = S_ARC;
+
+            if( getActiveLayer() <= LAST_COPPER_LAYER )
+            {
+                DisplayError( this, _( "Graphic not authorized on Copper layers" ) );
+                break;
+            }
+
+            if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
+            {
+                DrawStruct = (BOARD_ITEM*) Begin_DrawSegment( NULL, shape, aDC );
+                SetCurItem( DrawStruct );
+                m_canvas->SetAutoPanRequest( true );
+            }
+            else if( DrawStruct
+                   && (DrawStruct->Type() == PCB_LINE_T)
+                   && DrawStruct->IsNew() )
+            {
+                DrawStruct = (BOARD_ITEM*) Begin_DrawSegment( (DRAWSEGMENT*) DrawStruct, shape, aDC );
+                SetCurItem( DrawStruct );
+                m_canvas->SetAutoPanRequest( true );
+            }
         }
         break;
-    }
 
     case ID_TRACK_BUTT:
         if( getActiveLayer() > LAST_COPPER_LAYER )

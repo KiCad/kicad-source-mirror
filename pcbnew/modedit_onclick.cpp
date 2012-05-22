@@ -81,7 +81,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_MODEDIT_LINE_TOOL:
         if( !item || item->GetFlags() == 0 )
         {
-            int shape = S_SEGMENT;
+            STROKE_T shape = S_SEGMENT;
 
             if( GetToolId() == ID_MODEDIT_CIRCLE_TOOL )
                 shape = S_CIRCLE;
@@ -107,7 +107,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
             else if( ( (EDGE_MODULE*) item )->GetShape() == S_SEGMENT )
             {
-                SetCurItem( Begin_Edge_Module( (EDGE_MODULE*) item, DC, 0 ) );
+                SetCurItem( Begin_Edge_Module( (EDGE_MODULE*) item, DC, S_SEGMENT ) );
             }
             else
             {

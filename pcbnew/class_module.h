@@ -294,6 +294,11 @@ public:
         m_Value->m_Text = aValue;
     }
 
+    /// read/write accessors:
+    TEXTE_MODULE& Value()       { return *m_Value; }
+    TEXTE_MODULE& Reference()   { return *m_Reference; }
+
+
     /**
      * Function FindPadByName
      * returns a D_PAD* with a matching name.  Note that names may not be
