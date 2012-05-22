@@ -1340,7 +1340,7 @@ public:
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
 
     // Graphic segments type DRAWSEGMENT handling:
-    DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );
+    DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC );
     void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Drawings_All_Layer( int aLayer );

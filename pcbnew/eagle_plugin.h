@@ -55,15 +55,10 @@ namespace boost {
 typedef boost::property_tree::ptree     PTREE;
 typedef const PTREE                     CPTREE;
 
-struct EWIRE                ///< Eagle wire
-{
-    double  x1;
-    double  y1;
-    double  x2;
-    double  y2;
-    double  width;
-    int     layer;
-};
+struct EWIRE;
+struct EROT;
+struct EATTR;
+struct ECIRCLE;
 
 
 /**
@@ -104,26 +99,26 @@ public:
     EAGLE_PLUGIN();
     ~EAGLE_PLUGIN();
 
-
 private:
 
-    MODULE_MAP      m_modules;  ///< is a factory by use of MODULE copy constructor,
-                                ///< lookup is based on libname.packagename
+    MODULE_MAP      m_templates;    ///< is part of a MODULE factory that operates
+                                    ///< using copy construction.
+                                    ///< lookup key is libname.packagename
 
-    PROPERTIES*     m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
+    PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
 
-    BOARD*  m_board;            ///< which BOARD, no ownership here
-    double  mm_per_biu;         ///< how many mm in each BIU
-    double  biu_per_mm;         ///< how many bius in a mm
+    BOARD*  m_board;                ///< which BOARD, no ownership here
+    double  mm_per_biu;             ///< how many mm in each BIU
+    double  biu_per_mm;             ///< how many bius in a mm
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
 
     int     kicad( double d ) const;
-    int     kicad_y( double y ) const       { return kicad( y ); }
+    int     kicad_y( double y ) const       { return -kicad( y ); }
     int     kicad_x( double x ) const       { return kicad( x ); }
 
-    int     kicad_layer( int aLayer ) const;
+    static int kicad_layer( int aLayer );
 
     double  eagle( BIU d ) const            { return mm_per_biu * d; }
     double  eagle_x( BIU x ) const          { return eagle( x ); }
@@ -202,16 +197,32 @@ private:
 
     void loadAllSections( CPTREE& aEagleBoard, const std::string& aXpath, bool aAppendToMe );
 
+    void loadPlain( CPTREE& aPlain, const std::string& aXpath );
+
     void loadNetsAndTracks( CPTREE& aSignals, const std::string& aXpath );
 
-    void loadModules( CPTREE& aLibs, const std::string& aXpath );
+    void loadLibraries( CPTREE& aLibs, const std::string& aXpath );
+
+    void loadElements( CPTREE& aElements, const std::string& aXpath );
 
     /**
-     * Function wire
+     * Function ewire
      * converts a <wire>'s xml attributes to binary without additional conversion.
-     * @return EWIRE - an Eagle <wire> object in binary.
+     * @param aResult is an EWIRE to fill in with the <wire> data converted to binary.
      */
-    EWIRE   wire( CPTREE aWire ) const;
+    EWIRE   ewire( CPTREE& aWire ) const;
+
+    ECIRCLE ecircle( CPTREE& aCircle ) const;
+
+    EROT    erot( const std::string& aRot ) const;
+
+    /**
+     * Function eattr
+     * parses an Eagle "attribute" element.  Note that an attribute element
+     * is different than an XML element attribute.  The attribute element is a
+     * full XML node in and of itself, and has attributes of its own.  Blame Eagle.
+     */
+    EATTR eattr( CPTREE& aAttribute ) const;
 
     /**
      * Function fmtDEG
