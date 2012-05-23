@@ -986,6 +986,11 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
     int      minUViaDia = ReturnValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
     int      minUViaDrill = ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
     int      minTrackWidth = ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
+#if defined( USE_PCBNEW_NANOMETRES )
+    int      maxval = 25400000;
+#else
+    int      maxval = 10000;
+#endif
 
 
     for( int row = 0; row < m_grid->GetNumberRows(); row++ )
@@ -1086,7 +1091,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
 
             m_MessagesList->AppendToPage( msg );
         }
-        if( tracksize > 10000 )
+        if( tracksize > maxval )
         {
             result = false;
             msg.Printf( _( "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>" ),
@@ -1129,7 +1134,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
         }
 
         // Test for a reasonnable via size:
-        if( viadia > 10000 )    // 1 inch!
+        if( viadia > maxval )    // 1 inch!
         {
             result = false;
             msg.Printf( _( "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>" ),
