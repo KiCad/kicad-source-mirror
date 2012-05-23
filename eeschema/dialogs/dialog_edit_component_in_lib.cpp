@@ -236,25 +236,27 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocToAlias( wxCommandEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::CopyDocFromRootToAlias( wxCommandEvent& event )
 {
     if( m_Parent == NULL )
         return;
 
-    LIB_ALIAS* alias;
+    LIB_ALIAS* parent_alias;
     LIB_COMPONENT* component = m_Parent->GetComponent();
 
     if( component == NULL )
         return;
 
-    alias = component->GetAlias( m_Parent->GetAliasName() );
+    // search for the main alias: this is the first alias in alias list
+    // something like the main component
+    parent_alias = component->GetAlias( 0 );
 
-    if( alias == NULL )
+    if( parent_alias == NULL )  // Should never occur (bug)
         return;
 
-    m_DocCtrl->SetValue( alias->GetDescription() );
-    m_DocfileCtrl->SetValue( alias->GetDocFileName() );
-    m_KeywordsCtrl->SetValue( alias->GetKeyWords() );
+    m_DocCtrl->SetValue( parent_alias->GetDescription() );
+    m_DocfileCtrl->SetValue( parent_alias->GetDocFileName() );
+    m_KeywordsCtrl->SetValue( parent_alias->GetKeyWords() );
 }
 
 

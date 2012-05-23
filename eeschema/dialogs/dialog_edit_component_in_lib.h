@@ -34,7 +34,7 @@ private:
     void AddAliasOfPart(wxCommandEvent& event);
     bool ChangeNbUnitsPerPackage(int newUnit);
     bool SetUnsetConvert();
-    void CopyDocToAlias(wxCommandEvent& event);
+    void CopyDocFromRootToAlias(wxCommandEvent& event);
     void BrowseAndSelectDocFile(wxCommandEvent& event);
 
     void DeleteAllFootprintFilter(wxCommandEvent& event);
