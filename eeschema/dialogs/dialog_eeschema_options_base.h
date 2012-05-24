@@ -59,6 +59,9 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public wxDialog
 		wxStaticText* m_staticText3;
 		wxChoice* m_choiceGridSize;
 		wxStaticText* m_staticGridUnits;
+		wxStaticText* m_staticText51;
+		wxSpinCtrl* m_spinBusWidth;
+		wxStaticText* m_staticBusWidthUnits;
 		wxStaticText* m_staticText5;
 		wxSpinCtrl* m_spinLineWidth;
 		wxStaticText* m_staticLineWidthUnits;

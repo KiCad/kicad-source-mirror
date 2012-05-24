@@ -67,11 +67,22 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticGridUnits->Wrap( -1 );
 	fgSizer1->Add( m_staticGridUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
+	m_staticText51 = new wxStaticText( m_panel1, wxID_ANY, _("Default &bus width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText51->Wrap( -1 );
+	fgSizer1->Add( m_staticText51, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
+	m_spinBusWidth = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 1, 100, 1 );
+	fgSizer1->Add( m_spinBusWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	
+	m_staticBusWidthUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticBusWidthUnits->Wrap( -1 );
+	fgSizer1->Add( m_staticBusWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	
 	m_staticText5 = new wxStaticText( m_panel1, wxID_ANY, _("Default &line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
 	fgSizer1->Add( m_staticText5, 1, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_spinLineWidth = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 100, 0 );
+	m_spinLineWidth = new wxSpinCtrl( m_panel1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 1, 100, 1 );
 	fgSizer1->Add( m_spinLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticLineWidthUnits = new wxStaticText( m_panel1, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
