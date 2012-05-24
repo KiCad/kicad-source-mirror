@@ -1786,14 +1786,14 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
         if( TESTLINE( "Te" ) )          // Text line (or first line for multi line texts)
         {
-            ReadDelimitedText( text, line + 2, sizeof(text) );
+            ReadDelimitedText( text, line + SZ( "Te" ), sizeof(text) );
             pcbtxt->SetText( FROM_UTF8( text ) );
         }
 
         else if( TESTLINE( "nl" ) )     // next line of the current text
         {
             ReadDelimitedText( text, line + SZ( "nl" ), sizeof(text) );
-            pcbtxt->SetText( pcbtxt->GetText() + '\n' +  FROM_UTF8( text ) );
+            pcbtxt->SetText( pcbtxt->GetText() + wxChar( '\n' ) +  FROM_UTF8( text ) );
         }
 
         else if( TESTLINE( "Po" ) )
@@ -1874,7 +1874,6 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
                 layer = LAST_NO_COPPER_LAYER;
 
             pcbtxt->SetLayer( layer );
-
         }
 
         else if( TESTLINE( "$EndTEXTPCB" ) )
