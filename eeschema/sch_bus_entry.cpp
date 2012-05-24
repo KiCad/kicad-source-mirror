@@ -36,6 +36,7 @@
 #include <richio.h>
 #include <plot_common.h>
 
+#include <eeschema_config.h>
 #include <general.h>
 #include <protos.h>
 #include <sch_bus_entry.h>
@@ -167,10 +168,9 @@ int SCH_BUS_ENTRY::GetPenSize() const
 {
     int pensize = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
 
-    if( m_Layer == LAYER_BUS && m_width == 0 )
+    if( m_Layer == LAYER_BUS )
     {
-        pensize = KiROUND( g_DrawDefaultLineThickness * BUS_WIDTH_EXPAND );
-        pensize = MAX( pensize, 3 );
+        pensize = ( m_width == 0 ) ? g_DefaultBusWidth : m_width;
     }
 
     return pensize;

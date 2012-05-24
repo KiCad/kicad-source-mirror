@@ -8,7 +8,17 @@
 #define GROUPCOMMON wxT( "/common" )
 #define GROUPLIB    wxT( "libraries" )
 
-extern int g_PenMinWidth;
+/**
+ * The width given to bus drawings that do not have a specific width
+ */
+extern int g_DefaultBusWidth;
+
+#if defined(KICAD_GOST)
+
+/** In a GOST build, the bus width is set and cannot be changed */
+#define GOST_BUS_WIDTH      22
+
+#endif
 
 /* saving parameters option : */
 #define INSETUP true    /* used when the parameter is saved in general config

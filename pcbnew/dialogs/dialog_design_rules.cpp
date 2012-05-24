@@ -986,11 +986,8 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
     int      minUViaDia = ReturnValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
     int      minUViaDrill = ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
     int      minTrackWidth = ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
-#if defined( USE_PCBNEW_NANOMETRES )
-    int      maxval = 25400000;
-#else
-    int      maxval = 10000;
-#endif
+    int      maxval = 1000 * IU_PER_MILS;   // a max value for tracks and vias sizes (1 inch)
+
 
 
     for( int row = 0; row < m_grid->GetNumberRows(); row++ )

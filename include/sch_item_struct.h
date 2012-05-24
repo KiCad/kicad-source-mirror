@@ -50,16 +50,6 @@ typedef SCH_ITEMS::iterator SCH_ITEMS_ITR;
 typedef vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 
 
-/* used to calculate the pen size from default value
- * the actual pen size is default value * BUS_WIDTH_EXPAND
- */
-#if defined(KICAD_GOST)
-#define BUS_WIDTH_EXPAND 3.6
-#else
-#define BUS_WIDTH_EXPAND 1.4
-#endif
-
-
 #define FMT_IU          SCH_ITEM::FormatInternalUnits
 #define FMT_ANGLE       SCH_ITEM::FormatAngle
 

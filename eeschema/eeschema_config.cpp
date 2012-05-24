@@ -55,6 +55,7 @@
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
+int g_DefaultBusWidth = 9;
 
 void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
@@ -207,6 +208,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     dlg.SetUnits( units, g_UserUnit );
     dlg.SetGridSizes( grid_list, GetScreen()->GetGridId() );
+    dlg.SetBusWidth( g_DefaultBusWidth );
     dlg.SetLineWidth( g_DrawDefaultLineThickness );
     dlg.SetTextSize( g_DefaultTextLabelSize );
     dlg.SetRepeatHorizontal( g_RepeatStep.x );
@@ -240,6 +242,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     GetScreen()->SetGrid( grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
 
+    g_DefaultBusWidth = dlg.GetBusWidth();
     g_DrawDefaultLineThickness = dlg.GetLineWidth();
     g_DefaultTextLabelSize = dlg.GetTextSize();
     g_RepeatStep.x = dlg.GetRepeatHorizontal();
@@ -420,7 +423,7 @@ void SCH_EDIT_FRAME::SaveProjectFile()
     wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
 }
 
-
+static const wxString DefaultBusWidthEntry( wxT( "DefaultBusWidth" ) );
 static const wxString DefaultDrawLineWidthEntry( wxT( "DefaultDrawLineWidth" ) );
 static const wxString ShowHiddenPinsEntry( wxT( "ShowHiddenPins" ) );
 static const wxString HorzVertLinesOnlyEntry( wxT( "HorizVertLinesOnly" ) );
@@ -553,6 +556,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     // This is required until someone gets rid of the global variable g_LayerDescription().
     m_GridColor = g_LayerDescr.LayerColor[LAYER_GRID];
 
+    g_DefaultBusWidth = cfg->Read( DefaultBusWidthEntry, (long) 8 );
     g_DrawDefaultLineThickness = cfg->Read( DefaultDrawLineWidthEntry,(long) 6 );
     cfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     cfg->Read( HorzVertLinesOnlyEntry, &g_HVLines, true );
@@ -644,6 +648,7 @@ void SCH_EDIT_FRAME::SaveSettings()
 
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
+    cfg->Write( DefaultBusWidthEntry, (long) g_DefaultBusWidth );
     cfg->Write( DefaultDrawLineWidthEntry, (long) g_DrawDefaultLineThickness );
     cfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     cfg->Write( HorzVertLinesOnlyEntry, g_HVLines );
