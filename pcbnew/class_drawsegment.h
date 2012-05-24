@@ -140,14 +140,14 @@ public:
     MODULE* GetParentModule() const;
 
     const std::vector<wxPoint>& GetBezierPoints() const { return m_BezierPoints; };
-    const std::vector<wxPoint>& GetPolyPoints() const { return m_PolyPoints; };
+    const std::vector<wxPoint>& GetPolyPoints() const   { return m_PolyPoints; };
 
-    void SetBezierPoints( std::vector<wxPoint>& aPoints )
+    void SetBezierPoints( const std::vector<wxPoint>& aPoints )
     {
         m_BezierPoints = aPoints;
     }
 
-    void SetPolyPoints( std::vector<wxPoint>& aPoints )
+    void SetPolyPoints( const std::vector<wxPoint>& aPoints )
     {
         m_PolyPoints = aPoints;
     }

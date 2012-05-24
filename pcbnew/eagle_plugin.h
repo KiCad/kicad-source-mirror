@@ -34,6 +34,8 @@
 
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <time.h>
+
 
 class MODULE;
 typedef boost::ptr_map< std::string, MODULE >   MODULE_MAP;
@@ -56,9 +58,12 @@ typedef boost::property_tree::ptree     PTREE;
 typedef const PTREE                     CPTREE;
 
 struct EWIRE;
+struct EVIA;
 struct EROT;
 struct EATTR;
 struct ECIRCLE;
+struct ETEXT;
+struct ERECT;
 
 
 /**
@@ -117,6 +122,8 @@ private:
     int     kicad( double d ) const;
     int     kicad_y( double y ) const       { return -kicad( y ); }
     int     kicad_x( double x ) const       { return kicad( x ); }
+    wxSize  kicad_fontz( double d ) const;
+
 
     static int kicad_layer( int aLayer );
 
@@ -126,49 +133,6 @@ private:
 
 
 #if 0
-    /**
-     * Function dblParse
-     * parses an ASCII decimal floating point value and reports any error by throwing
-     * an exception using the xpath in the error message text.
-     *
-     * @param aValue is the ASCII value in C locale form with possible leading whitespace
-     *
-     * @param aXpath tells where the value is within the XML document.
-     *
-     * @return double - aValue in binary, not scaled.
-     */
-    static double dblParse( const char* aValue, const std::string& aXpath );
-
-    /**
-     * Function biuParse
-     * parses an ASCII decimal floating point value and scales it into a BIU
-     * according to the current mm_per_biu.  This fuction is the complement of
-     * fmtBIU().  One has to know what the other is doing.
-     *
-     * @param aValue is the ASCII value in C locale form with possible leading whitespace
-     *
-     * @param aXpath tells where the value is within the XML document.
-     *
-     * @return BIU - the converted Board Internal Unit.
-     */
-    BIU biuParse( const char* aValue, const std::string& aXpath );
-
-    /**
-     * Function degParse
-     * parses an ASCII decimal floating point value which is certainly an angle.  This
-     * is a dedicated function for encapsulating support for the migration from
-     * tenths of degrees to degrees in floating point.  This function is the complement of
-     * fmtDEG().  One has to know what the other is doing.
-     *
-     * @param aValue is the ASCII value in C locale form with possible leading whitespace
-     *
-     * @param nptrptr may be NULL, but if not, then it tells where to put a
-     *  pointer to the next unconsumed input text. See "man strtod" for more information.
-     *
-     * @return double - the string converted to a primitive double type
-     */
-    double degParse( const char* aValue, const char** nptrptr = NULL );
-
     /// encapsulate the BIU formatting tricks in one place.
     int biuSprintf( char* buf, BIU aValue ) const;
 
@@ -199,7 +163,7 @@ private:
 
     void loadPlain( CPTREE& aPlain, const std::string& aXpath );
 
-    void loadNetsAndTracks( CPTREE& aSignals, const std::string& aXpath );
+    void loadSignals( CPTREE& aSignals, const std::string& aXpath );
 
     void loadLibraries( CPTREE& aLibs, const std::string& aXpath );
 
@@ -212,7 +176,11 @@ private:
      */
     EWIRE   ewire( CPTREE& aWire ) const;
 
+    EVIA    evia( CPTREE& aVia ) const;
+
     ECIRCLE ecircle( CPTREE& aCircle ) const;
+    ETEXT   etext( CPTREE& aText )  const;
+    ERECT   erect( CPTREE& aRect ) const;
 
     EROT    erot( const std::string& aRot ) const;
 
@@ -238,14 +206,14 @@ private:
      */
     MODULE* makeModule( CPTREE& aPackage, const std::string& aPkgName ) const;
 
-    void packageWire( MODULE* aModule, CPTREE aTree ) const;
-    void packagePad( MODULE* aModule, CPTREE aTree ) const;
-    void packageText( MODULE* aModule, CPTREE aTree ) const;
-    void packageRectangle( MODULE* aModule, CPTREE aTree ) const;
-    void packagePolygon( MODULE* aModule, CPTREE aTree ) const;
-    void packageCircle( MODULE* aModule, CPTREE aTree ) const;
-    void packageHole( MODULE* aModule, CPTREE aTree ) const;
-    void packageSMD( MODULE* aModule, CPTREE aTree ) const;
+    void packageWire( MODULE* aModule, CPTREE& aTree ) const;
+    void packagePad( MODULE* aModule, CPTREE& aTree ) const;
+    void packageText( MODULE* aModule, CPTREE& aTree ) const;
+    void packageRectangle( MODULE* aModule, CPTREE& aTree ) const;
+    void packagePolygon( MODULE* aModule, CPTREE& aTree ) const;
+    void packageCircle( MODULE* aModule, CPTREE& aTree ) const;
+    void packageHole( MODULE* aModule, CPTREE& aTree ) const;
+    void packageSMD( MODULE* aModule, CPTREE& aTree ) const;
 
 };
 

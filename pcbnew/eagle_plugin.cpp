@@ -46,6 +46,16 @@ reporting.
 User can load the source XML file into firefox or other xml browser and follow
 our error message.
 
+Load() TODO's
+
+*) finish xpath support
+*) set layer counts, types and names into BOARD
+*) fix text twisting and final location issues.
+*) net info
+*) netclass info?
+*) code factoring, for polygon at least
+
+
 */
 
 #include <errno.h>
@@ -65,9 +75,11 @@ our error message.
 #include <class_module.h>
 #include <class_track.h>
 #include <class_edge_mod.h>
-
+#include <class_zone.h>
+#include <class_pcb_text.h>
 
 using namespace boost::property_tree;
+
 
 typedef EAGLE_PLUGIN::BIU                   BIU;
 typedef PTREE::const_assoc_iterator         CA_ITER;
@@ -93,6 +105,18 @@ struct EWIRE
     int     layer;
 };
 
+/// Eagle via
+struct EVIA
+{
+    double      x;
+    double      y;
+    int         layer_start;        /// < extent
+    int         layer_end;          /// < inclusive
+    double      drill;
+    opt_double  diam;
+    opt_string  shape;
+};
+
 /// Eagle circle
 struct ECIRCLE
 {
@@ -102,6 +126,18 @@ struct ECIRCLE
     double  width;
     int     layer;
 };
+
+
+/// Eagle XML rectangle in binary
+struct ERECT
+{
+    double  x1;
+    double  y1;
+    double  x2;
+    double  y2;
+    int     layer;
+};
+
 
 /// Eagle rotation
 struct EROT
@@ -135,6 +171,34 @@ struct EATTR
     };
 };
 
+/// Eagle text element
+struct ETEXT
+{
+    std::string text;
+    double      x;
+    double      y;
+    double      size;
+    int         layer;
+    opt_string  font;
+    opt_double  ratio;
+    opt_erot    erot;
+    opt_int     align;
+
+    enum {
+        CENTER,
+        CENTER_LEFT,
+        TOP_CENTER,
+        TOP_LEFT,
+        TOP_RIGHT,
+
+        // opposites are -1 * above:
+        CENTER_RIGHT  = -CENTER_LEFT,
+        BOTTOM_CENTER = -TOP_CENTER,
+        BOTTOM_LEFT   = -TOP_RIGHT,
+        BOTTOM_RIGHT  = -TOP_LEFT,
+    };
+};
+
 
 /// Assemble a MODULE factory key as a simple concatonation of library name and
 /// package name, using '\x02' as a separator.
@@ -142,6 +206,12 @@ static inline std::string makePkgKey( const std::string& aLibName, const std::st
 {
     std::string key = aLibName + '\x02' +  aPkgName;
     return key;
+}
+
+/// Make a unique time stamp, in this case from a unique tree memory location
+static inline unsigned long timeStamp( CPTREE& aTree )
+{
+    return (unsigned long)(void*) &aTree;
 }
 
 
@@ -173,6 +243,14 @@ const wxString& EAGLE_PLUGIN::GetFileExtension() const
 int inline EAGLE_PLUGIN::kicad( double d ) const
 {
     return KiROUND( biu_per_mm * d );
+}
+
+
+wxSize inline EAGLE_PLUGIN::kicad_fontz( double d ) const
+{
+    // texts seem to better match eagle when scaled down by 0.95
+    int kz = kicad( d ) * 95 / 100;
+    return wxSize( kz, kz );
 }
 
 
@@ -267,43 +345,6 @@ std::string EAGLE_PLUGIN::fmtBIU( BIU aValue ) const
     return std::string( temp, len );
 }
 
-
-double EAGLE_PLUGIN::dblParse( const char* aValue, const std::string& aXpath )
-{
-    char*   nptr;
-
-    errno = 0;
-
-    double fval = strtod( aValue, &nptr );
-
-    if( errno )
-    {
-        wxString emsg = wxString::Format(
-            _( "invalid float number:'%s' in XML document at '%s'" ),
-            aValue, aXpath.c_str() );
-
-        THROW_IO_ERROR( emsg );
-    }
-
-    if( aValue == nptr )
-    {
-        wxString emsg = wxString::Format(
-            _( "missing float number:'%s' in XML document at '%s'" ),
-            aValue, aXpath.c_str() );
-
-        THROW_IO_ERROR( emsg );
-    }
-
-    return fval;
-}
-
-
-BIU EAGLE_PLUGIN::biuParse( const char* aValue, const std::string& aXpath )
-{
-    double mm = dblParse( aValue, aXpath );
-    return BIU( KiROUND( mm * biu_per_mm ) );
-}
-
 */
 
 void EAGLE_PLUGIN::loadAllSections( CPTREE& aEagleBoard, const std::string& aXpath, bool aAppendToMe )
@@ -331,17 +372,13 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aEagleBoard, const std::string& aXpa
     {
         xpath = aXpath + '.' + "signals";
         CPTREE&  signals = aEagleBoard.get_child( "signals" );
-        loadNetsAndTracks( signals, xpath );
+        loadSignals( signals, xpath );
     }
-
-    ;
 }
 
 
 void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
 {
-    time_t now = time( NULL );
-
     // (polygon | wire | text | circle | rectangle | frame | hole)*
     for( CITER gr = aGraphics.begin();  gr != aGraphics.end();  ++gr )
     {
@@ -352,7 +389,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
             DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
             m_board->Add( dseg, ADD_APPEND );
 
-            dseg->SetTimeStamp( now );
+            dseg->SetTimeStamp( timeStamp( gr->second ) );
             dseg->SetLayer( kicad_layer( w.layer ) );
             dseg->SetStart( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
             dseg->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
@@ -360,6 +397,90 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
         }
         else if( !gr->first.compare( "text" ) )
         {
+            double  ratio = 6;
+            int     sign = 1;
+
+#if defined(DEBUG)
+            if( !gr->second.data().compare( "designed by" ) )
+            {
+                int breakhere = 1;
+                (void) breakhere;
+            }
+#endif
+
+            ETEXT   t = etext( gr->second );
+
+            TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
+            m_board->Add( pcbtxt, ADD_APPEND );
+
+            pcbtxt->SetTimeStamp( timeStamp( gr->second ) );
+            pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
+            pcbtxt->SetPosition( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
+            pcbtxt->SetLayer( kicad_layer( t.layer ) );
+
+            pcbtxt->SetSize( kicad_fontz( t.size ) );
+
+            if( t.ratio )
+                ratio = *t.ratio;
+
+            pcbtxt->SetThickness( kicad( t.size * ratio / 100 ) );
+
+            if( t.erot )
+            {
+                // eagles does not rotate text spun to 180 degrees unless spin is set.
+                if( t.erot->spin || t.erot->degrees != 180 )
+                    pcbtxt->SetOrientation( t.erot->degrees * 10 );
+
+                else    // 180 degree no spin text, flip the justification to opposite
+                    sign = -1;
+
+                pcbtxt->SetMirrored( t.erot->mirror );
+            }
+
+            int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
+
+            switch( align * sign )  // if negative, opposite is chosen
+            {
+            case ETEXT::CENTER:
+                // this was the default in pcbtxt's constructor
+                break;
+
+            case ETEXT::CENTER_LEFT:
+                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                break;
+
+            case ETEXT::CENTER_RIGHT:
+                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                break;
+
+            case ETEXT::TOP_CENTER:
+                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                break;
+
+            case ETEXT::TOP_LEFT:
+                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                break;
+
+            case ETEXT::TOP_RIGHT:
+                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                break;
+
+            case ETEXT::BOTTOM_CENTER:
+                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                break;
+
+            case ETEXT::BOTTOM_LEFT:
+                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                break;
+
+            case ETEXT::BOTTOM_RIGHT:
+                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                break;
+            }
         }
         else if( !gr->first.compare( "circle" ) )
         {
@@ -369,14 +490,51 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
             m_board->Add( dseg, ADD_APPEND );
 
             dseg->SetShape( S_CIRCLE );
-            dseg->SetTimeStamp( now );
+            dseg->SetTimeStamp( timeStamp( gr->second ) );
             dseg->SetLayer( kicad_layer( c.layer ) );
             dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
             dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
             dseg->SetWidth( kicad( c.width ) );
         }
+
+        // This seems to be a simplified rectangular [copper] zone, cannot find any
+        // net related info on it from the DTD.
         else if( !gr->first.compare( "rectangle" ) )
         {
+#if 0
+            ERECT   r = erect( gr->second );
+            int     layer = kicad_layer( r.layer );
+
+            // hope the angle of rotation is zero.
+
+
+            // might be better off making this into a ZONE:
+
+            if( IsValidCopperLayerIndex( layer ) )
+            {
+                auto_ptr<DRAWSEGMENT> dseg = new DRAWSEGMENT( m_board );
+
+                dseg->SetTimeStamp( timeStamp( gr->second ) );
+                dseg->SetLayer( layer );
+                dseg->SetShape( S_POLYGON );
+                dseg->SetWidth( Mils2iu( 12 ) );
+
+                std::vector<wxPoint>    pts;
+
+                pts.push_back( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
+                pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
+                pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
+                pts.push_back( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+                dseg->SetPolyPoints( pts );
+
+                m_board->Add( dseg.release(), ADD_APPEND );
+            }
+#elif 0
+            auto_ptr<ZONE_CONTAINER> zone = new ZONE_CONTAINER( m_board );
+
+            ;
+            m_board->Add( zone.release(), ADD_APPEND );
+#endif
         }
         else if( !gr->first.compare( "hole" ) )
         {
@@ -407,6 +565,14 @@ void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs, const std::string& aXpath )
         for( CITER package = packages.begin();  package != packages.end();  ++package )
         {
             const std::string& pack_name = package->second.get<std::string>( "<xmlattr>.name" );
+
+#if defined(DEBUG)
+            if( !pack_name.compare( "TO220H" ) )
+            {
+                int breakhere = 1;
+                (void) breakhere;
+            }
+#endif
 
             std::string key = makePkgKey( lib_name, pack_name );
 
@@ -439,7 +605,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
         if( it->first.compare( "element" ) )
             continue;
 
-        CPTREE&     attrs = it->second.get_child( "<xmlattr>" );
+        CPTREE& attrs = it->second.get_child( "<xmlattr>" );
 
         /*
 
@@ -464,6 +630,14 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
         std::string package = attrs.get<std::string>( "package" );
         std::string value   = attrs.get<std::string>( "value" );
 
+#if 1 && defined(DEBUG)
+        if( !name.compare( "GROUND" ) )
+        {
+            int breakhere = 1;
+            (void) breakhere;
+        }
+#endif
+
         double x = attrs.get<double>( "x" );
         double y = attrs.get<double>( "y" );
 
@@ -483,11 +657,24 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
 
         // copy constructor to clone the template
         MODULE* m = new MODULE( *mi->second );
+        m_board->Add( m, ADD_APPEND );
 
         m->SetPosition( wxPoint( kicad_x( x ), kicad_y( y ) ) );
         m->SetReference( FROM_UTF8( name.c_str() ) );
         m->SetValue( FROM_UTF8( value.c_str() ) );
         // m->Value().SetVisible( false );
+
+        if( rot )
+        {
+            EROT r = erot( *rot );
+
+            m->SetOrientation( r.degrees * 10 );
+
+            if( r.mirror )
+            {
+                m->Flip( m->GetPosition() );
+            }
+        }
 
         // VALUE and NAME can have something like our text "effects" overrides
         // in SWEET and new schematic.  Eagle calls these XML elements "attribute".
@@ -498,16 +685,16 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
             double  ratio = 6;
             EATTR   a = eattr( ait->second );
 
-            TEXTE_MODULE*   t;
+            TEXTE_MODULE*   txt;
 
             if( !a.name.compare( "NAME" ) )
-                t = &m->Reference();
+                txt = &m->Reference();
             else    // "VALUE" or else our understanding of file format is incomplete.
-                t = &m->Value();
+                txt = &m->Value();
 
             if( a.value )
             {
-                t->SetText( FROM_UTF8( a.value->c_str() ) );
+                txt->SetText( FROM_UTF8( a.value->c_str() ) );
             }
 
             if( a.x && a.y )    // boost::optional
@@ -515,8 +702,8 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
                 wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
                 wxPoint pos0 = pos - m->GetPosition();
 
-                t->SetPosition( pos );
-                t->SetPos0( pos0 );
+                txt->SetPosition( pos );
+                txt->SetPos0( pos0 );
             }
 
             if( a.ratio )
@@ -524,42 +711,37 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
 
             if( a.size )
             {
-                double  z = *a.size;
-                int     h  = kicad( z );
-                int     w  = (h * 8)/10;
-                int     lw = int( h * ratio / 100.0 );
+                wxSize  fontz = kicad_fontz( *a.size );
+                txt->SetSize( fontz );
 
-                t->SetSize( wxSize( w, h ) );
-                t->SetThickness( lw );
+                int     lw = int( fontz.y * ratio / 100.0 );
+                txt->SetThickness( lw );
             }
 
             if( a.erot )
             {
-                t->SetOrientation( a.erot->degrees * 10 );
+                double angle = a.erot->degrees * 10;
+
+                if( angle != 1800 )
+                {
+                    angle -= m->GetOrientation();   // subtract module's angle
+                    txt->SetOrientation( angle );
+                }
+                else
+                {
+                    txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                    txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                }
             }
         }
-
-        if( rot )
-        {
-            EROT r = erot( *rot );
-
-            m->SetOrientation( r.degrees * 10 );
-
-            if( r.mirror )
-            {
-                // m->Flip();
-            }
-        }
-
-        m_board->Add( m );
     }
 }
 
 
 EWIRE EAGLE_PLUGIN::ewire( CPTREE& aWire ) const
 {
-    CPTREE& attribs = aWire.get_child( "<xmlattr>" );
     EWIRE   w;
+    CPTREE& attribs = aWire.get_child( "<xmlattr>" );
 
     w.x1    = attribs.get<double>( "x1" );
     w.y1    = attribs.get<double>( "y1" );
@@ -571,10 +753,42 @@ EWIRE EAGLE_PLUGIN::ewire( CPTREE& aWire ) const
 }
 
 
+EVIA EAGLE_PLUGIN::evia( CPTREE& aVia ) const
+{
+    EVIA    v;
+    CPTREE& attribs = aVia.get_child( "<xmlattr>" );
+
+    /*
+    <!ELEMENT via EMPTY>
+    <!ATTLIST via
+          x             %Coord;        #REQUIRED
+          y             %Coord;        #REQUIRED
+          extent        %Extent;       #REQUIRED
+          drill         %Dimension;    #REQUIRED
+          diameter      %Dimension;    "0"
+          shape         %ViaShape;     "round"
+          alwaysstop    %Bool;         "no"
+          >
+    */
+
+    v.x     = attribs.get<double>( "x" );
+    v.y     = attribs.get<double>( "y" );
+
+    std::string ext = attribs.get<std::string>( "extent" );
+
+    sscanf( ext.c_str(), "%u-%u", &v.layer_start, &v.layer_end );
+
+    v.drill = attribs.get<double>( "drill" );
+    v.diam  = attribs.get_optional<double>( "diameter" );
+    v.shape = attribs.get_optional<std::string>( "shape" );
+    return v;
+}
+
+
 ECIRCLE EAGLE_PLUGIN::ecircle( CPTREE& aCircle ) const
 {
-    CPTREE& attribs = aCircle.get_child( "<xmlattr>" );
     ECIRCLE c;
+    CPTREE& attribs = aCircle.get_child( "<xmlattr>" );
 
     c.x      = attribs.get<double>( "x" );
     c.y      = attribs.get<double>( "y" );
@@ -585,12 +799,104 @@ ECIRCLE EAGLE_PLUGIN::ecircle( CPTREE& aCircle ) const
 }
 
 
+ERECT EAGLE_PLUGIN::erect( CPTREE& aRect ) const
+{
+    ERECT   r;
+    CPTREE& attribs = aRect.get_child( "<xmlattr>" );
+
+    /*
+    <!ELEMENT rectangle EMPTY>
+    <!ATTLIST rectangle
+          x1            %Coord;        #REQUIRED
+          y1            %Coord;        #REQUIRED
+          x2            %Coord;        #REQUIRED
+          y2            %Coord;        #REQUIRED
+          layer         %Layer;        #REQUIRED
+          rot           %Rotation;     "R0"
+          >
+    */
+
+    r.x1     = attribs.get<double>( "x1" );
+    r.y1     = attribs.get<double>( "y1" );
+    r.x2     = attribs.get<double>( "x2" );
+    r.y2     = attribs.get<double>( "y2" );
+    r.layer  = attribs.get<int>( "layer" );
+
+    // @todo: hoping that rot is not used
+
+    return r;
+}
+
+
+ETEXT EAGLE_PLUGIN::etext( CPTREE& aText ) const
+{
+    ETEXT   t;
+    CPTREE& attribs = aText.get_child( "<xmlattr>" );
+
+    /*
+    <!ELEMENT text (#PCDATA)>
+    <!ATTLIST text
+          x             %Coord;        #REQUIRED
+          y             %Coord;        #REQUIRED
+          size          %Dimension;    #REQUIRED
+          layer         %Layer;        #REQUIRED
+          font          %TextFont;     "proportional"
+          ratio         %Int;          "8"
+          rot           %Rotation;     "R0"
+          align         %Align;        "bottom-left"
+          >
+    */
+
+    t.text   = aText.data();
+    t.x      = attribs.get<double>( "x" );
+    t.y      = attribs.get<double>( "y" );
+    t.size   = attribs.get<double>( "size" );
+    t.layer  = attribs.get<int>( "layer" );
+
+    t.font   = attribs.get_optional<std::string>( "font" );
+    t.ratio  = attribs.get_optional<double>( "ratio" );
+
+    opt_string rot = attribs.get_optional<std::string>( "rot" );
+    if( rot )
+    {
+        t.erot = erot( *rot );
+    }
+
+    opt_string align = attribs.get_optional<std::string>( "align" );
+    if( align )
+    {
+        // (bottom-left | bottom-center | bottom-right | center-left |
+        //   center | center-right | top-left | top-center | top-right)
+        if( !align->compare( "center" ) )
+            *t.align = ETEXT::CENTER;
+        else if( !align->compare( "center-right" ) )
+            *t.align = ETEXT::CENTER_RIGHT;
+        else if( !align->compare( "top-left" ) )
+            *t.align = ETEXT::TOP_LEFT;
+        else if( !align->compare( "top-center" ) )
+            *t.align = ETEXT::TOP_CENTER;
+        else if( !align->compare( "top-right" ) )
+            *t.align = ETEXT::TOP_RIGHT;
+        else if( !align->compare( "bottom-left" ) )
+            *t.align = ETEXT::BOTTOM_LEFT;
+        else if( !align->compare( "bottom-center" ) )
+            *t.align = ETEXT::BOTTOM_CENTER;
+        else if( !align->compare( "bottom-right" ) )
+            *t.align = ETEXT::BOTTOM_RIGHT;
+        else if( !align->compare( "center-left" ) )
+            *t.align = ETEXT::CENTER_LEFT;
+    }
+
+    return t;
+}
+
+
 EROT EAGLE_PLUGIN::erot( const std::string& aRot ) const
 {
     EROT    rot;
 
-    rot.spin    = aRot[0] == 'S';
-    rot.mirror  = aRot[0] == 'M';
+    rot.spin    = aRot.find( 'S' ) != aRot.npos;
+    rot.mirror  = aRot.find( 'M' ) != aRot.npos;
     rot.degrees = strtod( aRot.c_str() + 1 + int( rot.spin || rot.mirror ), NULL );
 
     return rot;
@@ -599,8 +905,8 @@ EROT EAGLE_PLUGIN::erot( const std::string& aRot ) const
 
 EATTR EAGLE_PLUGIN::eattr( CPTREE& aAttribute ) const
 {
-    CPTREE& attribs = aAttribute.get_child( "<xmlattr>" );
     EATTR   a;
+    CPTREE& attribs = aAttribute.get_child( "<xmlattr>" );
 
     /*
     <!ELEMENT attribute EMPTY>
@@ -669,7 +975,7 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName 
     {
         CPTREE& t = it->second;
 
-        if( !it->first.compare( "wire " ) )
+        if( it->first.compare( "wire" ) == 0 )
             packageWire( m.get(), t );
 
         else if( !it->first.compare( "pad" ) )
@@ -698,29 +1004,32 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName 
 }
 
 
-void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE aTree ) const
+void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
 {
-    EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_SEGMENT );
-    aModule->m_Drawings.PushBack( dwg );
-
-    EWIRE w = ewire( aTree );
-
-    wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
-    wxPoint end(   kicad_x( w.x2 ), kicad_y( w.x2 ) );
+    EWIRE   w = ewire( aTree );
     int     layer = kicad_layer( w.layer );
-    int     width = kicad( w.width );
 
-    dwg->SetStart0( start );
-    dwg->SetEnd0( end );
-    dwg->SetLayer( layer );
-    dwg->SetWidth( width );
+    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper package wires
+    {
+        wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
+        wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
+        int     width = kicad( w.width );
+
+        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_SEGMENT );
+        aModule->m_Drawings.PushBack( dwg );
+
+        dwg->SetStart0( start );
+        dwg->SetEnd0( end );
+        dwg->SetLayer( layer );
+        dwg->SetWidth( width );
+    }
 }
 
 
-void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE aTree ) const
+void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 {
     // pay for this tree traversal only once
-    CPTREE  attrs = aTree.get_child( "<xmlattr>" );
+    CPTREE& attrs = aTree.get_child( "<xmlattr>" );
 
     /* from <ealge>/doc/eagle.dtd
 
@@ -794,6 +1103,10 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE aTree ) const
         else if( !shape->compare( "long" ) )
         {
             pad->SetShape( PAD_OVAL );
+
+            wxSize z = pad->GetSize();
+            z.x *= 2;
+            pad->SetSize( z );
         }
         else if( !shape->compare( "square" ) )
         {
@@ -811,43 +1124,130 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE aTree ) const
+void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 {
-    CPTREE  attrs = aTree.get_child( "<xmlattr>" );
+    int     sign  = 1;
+    double  ratio = 6;
+    ETEXT   t = etext( aTree );
+
+    TEXTE_MODULE* txt;
+
+    if( !t.text.compare( ">NAME" ) )
+        txt = &aModule->Reference();
+    else if( !t.text.compare( ">VALUE" ) )
+        txt = &aModule->Value();
+    else
+        return;
+
+    txt->SetTimeStamp( timeStamp( aTree ) );
+    txt->SetText( FROM_UTF8( t.text.c_str() ) );
+
+    wxPoint pos( kicad_x( t.x ), kicad_y( t.y ) );
+
+    txt->SetPosition( pos );
+    txt->SetPos0( pos - aModule->GetPosition() );
+
+    txt->SetLayer( kicad_layer( t.layer ) );
+
+    txt->SetSize( kicad_fontz( t.size ) );
+
+    if( t.ratio )
+        ratio = *t.ratio;
+
+    txt->SetThickness( kicad( t.size * ratio / 100 ) );
+
+    if( t.erot )
+    {
+        if( t.erot->spin || t.erot->degrees != 180 )
+            txt->SetOrientation( t.erot->degrees * 10 );
+
+        else    // 180 degrees, reverse justification below, don't spin
+        {
+            sign = -1;
+        }
+
+        txt->SetMirrored( t.erot->mirror );
+    }
+
+    int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
+
+    switch( align * sign )  // when negative, opposites are chosen
+    {
+    case ETEXT::CENTER:
+        // this was the default in pcbtxt's constructor
+        break;
+
+    case ETEXT::CENTER_LEFT:
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ETEXT::CENTER_RIGHT:
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    case ETEXT::TOP_CENTER:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::TOP_LEFT:
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::TOP_RIGHT:
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::BOTTOM_CENTER:
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    case ETEXT::BOTTOM_LEFT:
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    case ETEXT::BOTTOM_RIGHT:
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+    }
 }
 
 
-void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE aTree ) const
+void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 {
-    CPTREE  attrs = aTree.get_child( "<xmlattr>" );
+    /*
+    ERECT r = erect( aTree );
+    */
 }
 
 
-void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE aTree ) const
+void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 {
-    CPTREE  attrs = aTree.get_child( "<xmlattr>" );
+    // CPTREE& attrs = aTree.get_child( "<xmlattr>" );
 }
 
 
-void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE aTree ) const
+void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
 {
-    CPTREE  attrs = aTree.get_child( "<xmlattr>" );
+    // CPTREE& attrs = aTree.get_child( "<xmlattr>" );
 }
 
 
-void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE aTree ) const
+void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
 {
-    CPTREE  attrs = aTree.get_child( "<xmlattr>" );
+    // CPTREE& attrs = aTree.get_child( "<xmlattr>" );
 }
 
 
-void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE aTree ) const
+void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 {
     // pay for this tree traversal only once
-    CPTREE  attrs = aTree.get_child( "<xmlattr>" );
+    CPTREE& attrs = aTree.get_child( "<xmlattr>" );
 
-    /* from <ealge>/doc/eagle.dtd
-
+    /*
     <!ATTLIST smd
           name          %String;       #REQUIRED
           x             %Coord;        #REQUIRED
@@ -892,9 +1292,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE aTree ) const
     pad->SetLayer( kicad_layer( layer ) );
     pad->SetLayerMask( 0x00888000 );
 
-    // these are optional according to DTD, and the weak XML parser does not
-    // provide defaults from a DTD.
-
+    // Optional according to DTD
     opt_double roundness = attrs.get_optional<double>( "roundness" );
     opt_string rot       = attrs.get_optional<std::string>( "rot" );
     opt_string stop      = attrs.get_optional<std::string>( "stop" );
@@ -922,80 +1320,80 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE aTree ) const
 }
 
 
-/*
-             <package name="2X03">
-              <description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
-              <wire x1="-3.81" y1="-1.905" x2="-3.175" y2="-2.54" width="0.1524" layer="21"/>
-              <wire x1="-1.905" y1="-2.54" x2="-1.27" y2="-1.905" width="0.1524" layer="21"/>
-              <wire x1="-1.27" y1="-1.905" x2="-0.635" y2="-2.54" width="0.1524" layer="21"/>
-              <wire x1="0.635" y1="-2.54" x2="1.27" y2="-1.905" width="0.1524" layer="21"/>
-              <wire x1="-3.81" y1="-1.905" x2="-3.81" y2="1.905" width="0.1524" layer="21"/>
-              <wire x1="-3.81" y1="1.905" x2="-3.175" y2="2.54" width="0.1524" layer="21"/>
-              <wire x1="-3.175" y1="2.54" x2="-1.905" y2="2.54" width="0.1524" layer="21"/>
-              <wire x1="-1.905" y1="2.54" x2="-1.27" y2="1.905" width="0.1524" layer="21"/>
-              <wire x1="-1.27" y1="1.905" x2="-0.635" y2="2.54" width="0.1524" layer="21"/>
-              <wire x1="-0.635" y1="2.54" x2="0.635" y2="2.54" width="0.1524" layer="21"/>
-              <wire x1="0.635" y1="2.54" x2="1.27" y2="1.905" width="0.1524" layer="21"/>
-              <wire x1="-1.27" y1="1.905" x2="-1.27" y2="-1.905" width="0.1524" layer="21"/>
-              <wire x1="1.27" y1="1.905" x2="1.27" y2="-1.905" width="0.1524" layer="21"/>
-              <wire x1="-0.635" y1="-2.54" x2="0.635" y2="-2.54" width="0.1524" layer="21"/>
-              <wire x1="-3.175" y1="-2.54" x2="-1.905" y2="-2.54" width="0.1524" layer="21"/>
-              <wire x1="1.27" y1="-1.905" x2="1.905" y2="-2.54" width="0.1524" layer="21"/>
-              <wire x1="3.175" y1="-2.54" x2="3.81" y2="-1.905" width="0.1524" layer="21"/>
-              <wire x1="1.27" y1="1.905" x2="1.905" y2="2.54" width="0.1524" layer="21"/>
-              <wire x1="1.905" y1="2.54" x2="3.175" y2="2.54" width="0.1524" layer="21"/>
-              <wire x1="3.175" y1="2.54" x2="3.81" y2="1.905" width="0.1524" layer="21"/>
-              <wire x1="3.81" y1="1.905" x2="3.81" y2="-1.905" width="0.1524" layer="21"/>
-              <wire x1="1.905" y1="-2.54" x2="3.175" y2="-2.54" width="0.1524" layer="21"/>
-              <pad name="1" x="-2.54" y="-1.27" drill="1.016" shape="octagon"/>
-              <pad name="2" x="-2.54" y="1.27" drill="1.016" shape="octagon"/>
-              <pad name="3" x="0" y="-1.27" drill="1.016" shape="octagon"/>
-              <pad name="4" x="0" y="1.27" drill="1.016" shape="octagon"/>
-              <pad name="5" x="2.54" y="-1.27" drill="1.016" shape="octagon"/>
-              <pad name="6" x="2.54" y="1.27" drill="1.016" shape="octagon"/>
-              <text x="-3.81" y="3.175" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-              <text x="-3.81" y="-4.445" size="1.27" layer="27">&gt;VALUE</text>
-              <rectangle x1="-2.794" y1="-1.524" x2="-2.286" y2="-1.016" layer="51"/>
-              <rectangle x1="-2.794" y1="1.016" x2="-2.286" y2="1.524" layer="51"/>
-              <rectangle x1="-0.254" y1="1.016" x2="0.254" y2="1.524" layer="51"/>
-              <rectangle x1="-0.254" y1="-1.524" x2="0.254" y2="-1.016" layer="51"/>
-              <rectangle x1="2.286" y1="1.016" x2="2.794" y2="1.524" layer="51"/>
-              <rectangle x1="2.286" y1="-1.524" x2="2.794" y2="-1.016" layer="51"/>
-            </package>
-*/
-
-
-void EAGLE_PLUGIN::loadNetsAndTracks( CPTREE& aSignals, const std::string& aXpath )
+void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
 {
     int netCode = 1;
 
-    time_t  now = time( NULL );
-
-    for( CITER nit = aSignals.begin();  nit != aSignals.end();  ++nit, ++netCode )
+    for( CITER net = aSignals.begin();  net != aSignals.end();  ++net, ++netCode )
     {
-        wxString netName = FROM_UTF8( nit->second.get<std::string>( "<xmlattr>.name" ).c_str() );
+        wxString netName = FROM_UTF8( net->second.get<std::string>( "<xmlattr>.name" ).c_str() );
 
         m_board->AppendNet( new NETINFO_ITEM( m_board, netName, netCode ) );
 
-        CA_ITER_RANGE wires = nit->second.equal_range( "wire" );
-        for( CA_ITER wit = wires.first;  wit != wires.second;  ++wit )
+        // (contactref | polygon | wire | via)*
+        for( CITER it = net->second.begin();  it != net->second.end();  ++it )
         {
-            EWIRE w = ewire( wit->second );
+            if( !it->first.compare( "wire" ) )
+            {
+                EWIRE   w = ewire( it->second );
+                TRACK*  t = new TRACK( m_board );
 
-            TRACK* t = new TRACK( m_board );
+                t->SetTimeStamp( timeStamp( it->second ));
 
-            t->SetTimeStamp( now );
+                t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
+                t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
 
-            t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
-            t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
+                t->SetWidth( kicad( w.width ) );
+                t->SetLayer( kicad_layer( w.layer ) );
+                t->SetNet( netCode );
 
-            t->SetWidth( kicad( w.width ) );
-            t->SetLayer( kicad_layer( w.layer ) );
-            t->SetNet( netCode );
+                m_board->m_Track.Insert( t, NULL );
+            }
 
-            m_board->m_Track.Insert( t, NULL );
+            else if( !it->first.compare( "via" ) )
+            {
+                EVIA    v = evia( it->second );
 
-            D(printf("wire:%s\n", wit->first.c_str() );)
+                int layer_start = kicad_layer( v.layer_start );
+                int layer_end   = kicad_layer( v.layer_end );
+                int drill       = kicad( v.drill );
+
+                SEGVIA* via = new SEGVIA( m_board );
+
+                via->SetLayerPair( layer_start, layer_end );
+
+                if( v.diam )
+                {
+                    int kidiam = kicad( *v.diam );
+                    via->SetWidth( kidiam );
+                }
+
+                via->SetDrill( drill );
+
+                via->SetTimeStamp( timeStamp( it->second ) );
+
+                wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
+
+                via->SetPosition( pos  );
+                via->SetEnd( pos );
+
+                // via->SetWidth( width );
+                // via->SetShape( shape );
+                via->SetNet( netCode );
+                // via->SetState( flags, ON );
+
+                via->SetShape( S_SEGMENT );
+
+                m_board->m_Track.Insert( via, NULL );
+            }
+
+            else if( !it->first.compare( "contactref" ) )
+            {
+            }
+
+            else if( !it->first.compare( "polygon" ) )
+            {
+            }
         }
     }
 }
