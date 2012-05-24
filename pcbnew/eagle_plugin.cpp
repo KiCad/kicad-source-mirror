@@ -50,11 +50,11 @@ Load() TODO's
 
 *) finish xpath support
 *) set layer counts, types and names into BOARD
+*) footprint placement on board back
+*) eagle "mirroring" does not mean put on board back
 *) fix text twisting and final location issues.
-*) net info
 *) netclass info?
 *) code factoring, for polygon at least
-
 
 */
 
@@ -127,7 +127,6 @@ struct ECIRCLE
     int     layer;
 };
 
-
 /// Eagle XML rectangle in binary
 struct ERECT
 {
@@ -138,7 +137,6 @@ struct ERECT
     int     layer;
 };
 
-
 /// Eagle rotation
 struct EROT
 {
@@ -148,7 +146,6 @@ struct EROT
 };
 
 typedef boost::optional<EROT>   opt_erot;
-
 
 /// Eagle "attribute" XML element, no foolin'.
 struct EATTR
@@ -191,7 +188,7 @@ struct ETEXT
         TOP_LEFT,
         TOP_RIGHT,
 
-        // opposites are -1 * above:
+        // opposites are -1 x above, used by code tricks in here
         CENTER_RIGHT  = -CENTER_LEFT,
         BOTTOM_CENTER = -TOP_CENTER,
         BOTTOM_LEFT   = -TOP_RIGHT,
@@ -200,11 +197,11 @@ struct ETEXT
 };
 
 
-/// Assemble a MODULE factory key as a simple concatonation of library name and
-/// package name, using '\x02' as a separator.
-static inline std::string makePkgKey( const std::string& aLibName, const std::string& aPkgName )
+/// Assemble a two part key as a simple concatonation of aFirst and aSecond parts,
+/// using '\x02' as a separator.
+static inline std::string makeKey( const std::string& aFirst, const std::string& aSecond )
 {
-    std::string key = aLibName + '\x02' +  aPkgName;
+    std::string key = aFirst + '\x02' +  aSecond;
     return key;
 }
 
@@ -295,13 +292,9 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
 }
 
 
-void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
-{
-}
-
-
 void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 {
+    m_pads_to_nets.clear();
     m_templates.clear();
 
     m_board = NULL;
@@ -311,41 +304,6 @@ void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
     biu_per_mm = IU_PER_MM;
 }
 
-/*
-int EAGLE_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
-{
-    double  engUnits = mm_per_biu * aValue;
-    int     len;
-
-    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
-    {
-        // printf( "f: " );
-        len = sprintf( buf, "%.10f", engUnits );
-
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
-
-        ++len;
-    }
-    else
-    {
-        // printf( "g: " );
-        len = sprintf( buf, "%.10g", engUnits );
-    }
-    return len;
-}
-
-
-std::string EAGLE_PLUGIN::fmtBIU( BIU aValue ) const
-{
-    char    temp[50];
-
-    int len = biuSprintf( temp, aValue );
-
-    return std::string( temp, len );
-}
-
-*/
 
 void EAGLE_PLUGIN::loadAllSections( CPTREE& aEagleBoard, const std::string& aXpath, bool aAppendToMe )
 {
@@ -358,6 +316,12 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aEagleBoard, const std::string& aXpa
     }
 
     {
+        xpath = aXpath + '.' + "signals";
+        CPTREE&  signals = aEagleBoard.get_child( "signals" );
+        loadSignals( signals, xpath );
+    }
+
+    {
         xpath = aXpath + '.' + "libraries";
         CPTREE&  libs = aEagleBoard.get_child( "libraries" );
         loadLibraries( libs, xpath );
@@ -367,12 +331,6 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aEagleBoard, const std::string& aXpa
         xpath = aXpath + '.' + "elements";
         CPTREE& elems = aEagleBoard.get_child( "elements" );
         loadElements( elems, xpath );
-    }
-
-    {
-        xpath = aXpath + '.' + "signals";
-        CPTREE&  signals = aEagleBoard.get_child( "signals" );
-        loadSignals( signals, xpath );
     }
 }
 
@@ -507,7 +465,6 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
 
             // hope the angle of rotation is zero.
 
-
             // might be better off making this into a ZONE:
 
             if( IsValidCopperLayerIndex( layer ) )
@@ -530,6 +487,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
                 m_board->Add( dseg.release(), ADD_APPEND );
             }
 #elif 0
+            // use a "netcode = 0" type ZONE:
             auto_ptr<ZONE_CONTAINER> zone = new ZONE_CONTAINER( m_board );
 
             ;
@@ -538,12 +496,15 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
         }
         else if( !gr->first.compare( "hole" ) )
         {
+            // there's a hole here
         }
         else if( !gr->first.compare( "frame" ) )
         {
+            // picture this
         }
         else if( !gr->first.compare( "polygon" ) )
         {
+            // step up, be a man
         }
     }
 }
@@ -574,7 +535,7 @@ void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs, const std::string& aXpath )
             }
 #endif
 
-            std::string key = makePkgKey( lib_name, pack_name );
+            std::string key = makeKey( lib_name, pack_name );
 
             MODULE* m = makeModule( package->second, pack_name );
 
@@ -643,7 +604,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
 
         opt_string rot = attrs.get_optional<std::string>( "rot" );
 
-        std::string key = makePkgKey( library, package );
+        std::string key = makeKey( library, package );
 
         MODULE_CITER mi = m_templates.find( key );
 
@@ -655,9 +616,34 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
             THROW_IO_ERROR( emsg );
         }
 
+#if defined(DEBUG)
+        if( !name.compare( "IC3" ) )
+        {
+            int breakhere = 1;
+            (void) breakhere;
+        }
+#endif
+
         // copy constructor to clone the template
         MODULE* m = new MODULE( *mi->second );
         m_board->Add( m, ADD_APPEND );
+
+        for( D_PAD* pad = m->m_Pads;  pad;  pad = pad->Next() )
+        {
+            const ENET& enet = m_pads_to_nets[ makeKey( name, TO_UTF8( pad->GetPadName())) ];
+
+            D(printf( "refname:'%s'  pad:'%s'  netcode:%d  netname:'%s'\n",
+                name.c_str(), TO_UTF8( pad->GetPadName() ),
+                enet.netcode,
+                enet.netname.c_str()
+                );)
+
+            if( enet.netname.size() )
+            {
+                pad->SetNetname( FROM_UTF8( enet.netname.c_str() ) );
+                pad->SetNet( enet.netcode );
+            }
+        }
 
         m->SetPosition( wxPoint( kicad_x( x ), kicad_y( y ) ) );
         m->SetReference( FROM_UTF8( name.c_str() ) );
@@ -1052,12 +1038,16 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
     aModule->m_Pads.PushBack( pad );
 
     // the DTD says these must be present, throw exception if not found
+    const std::string& name = attrs.get<std::string>( "name" );
+
     double x = attrs.get<double>( "x" );
     double y = attrs.get<double>( "y" );
     double drill = attrs.get<double>( "drill" );
 
     // pad's "Position" is not relative to the module's,
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
+
+    pad->SetPadName( FROM_UTF8( name.c_str() ) );
 
     wxPoint padpos( kicad_x( x ), kicad_y( y ) );
 
@@ -1075,9 +1065,11 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
     opt_double diameter = attrs.get_optional<double>( "diameter" );
     opt_string shape    = attrs.get_optional<std::string>( "shape" );
     opt_string rot      = attrs.get_optional<std::string>( "rot" );
+    /*
     opt_string stop     = attrs.get_optional<std::string>( "stop" );
     opt_string thermals = attrs.get_optional<std::string>( "thermals" );
     opt_string first    = attrs.get_optional<std::string>( "first" );
+    */
 
     if( diameter )
     {
@@ -1263,18 +1255,26 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
           >
     */
 
-    D_PAD*  pad = new D_PAD( aModule );
-    aModule->m_Pads.PushBack( pad );
-
-    pad->SetShape( PAD_RECT );
-    pad->SetAttribute( PAD_SMD );
-
     // the DTD says these must be present, throw exception if not found
+    const std::string& name = attrs.get<std::string>( "name" );
     double x  = attrs.get<double>( "x" );
     double y  = attrs.get<double>( "y" );
     double dx = attrs.get<double>( "dx" );
     double dy = attrs.get<double>( "dy" );
     int layer = attrs.get<int>( "layer" );
+
+    if( !IsValidCopperLayerIndex( layer ) )
+    {
+        return;
+    }
+
+    D_PAD*  pad = new D_PAD( aModule );
+    aModule->m_Pads.PushBack( pad );
+
+
+    pad->SetPadName( FROM_UTF8( name.c_str() ) );
+    pad->SetShape( PAD_RECT );
+    pad->SetAttribute( PAD_SMD );
 
     // pad's "Position" is not relative to the module's,
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
@@ -1326,7 +1326,8 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
 
     for( CITER net = aSignals.begin();  net != aSignals.end();  ++net, ++netCode )
     {
-        wxString netName = FROM_UTF8( net->second.get<std::string>( "<xmlattr>.name" ).c_str() );
+        const std::string& nname = net->second.get<std::string>( "<xmlattr>.name" );
+        wxString netName = FROM_UTF8( nname.c_str() );
 
         m_board->AppendNet( new NETINFO_ITEM( m_board, netName, netCode ) );
 
@@ -1336,18 +1337,27 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
             if( !it->first.compare( "wire" ) )
             {
                 EWIRE   w = ewire( it->second );
-                TRACK*  t = new TRACK( m_board );
+                int     layer = kicad_layer( w.layer );
 
-                t->SetTimeStamp( timeStamp( it->second ));
+                if( IsValidCopperLayerIndex( layer ) )
+                {
+                    TRACK*  t = new TRACK( m_board );
 
-                t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
-                t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
+                    t->SetTimeStamp( timeStamp( it->second ) );
 
-                t->SetWidth( kicad( w.width ) );
-                t->SetLayer( kicad_layer( w.layer ) );
-                t->SetNet( netCode );
+                    t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
+                    t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
 
-                m_board->m_Track.Insert( t, NULL );
+                    t->SetWidth( kicad( w.width ) );
+                    t->SetLayer( layer );
+                    t->SetNet( netCode );
+
+                    m_board->m_Track.Insert( t, NULL );
+                }
+                else
+                {
+                    // put non copper wires where the sun don't shine.
+                }
             }
 
             else if( !it->first.compare( "via" ) )
@@ -1356,39 +1366,57 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
 
                 int layer_start = kicad_layer( v.layer_start );
                 int layer_end   = kicad_layer( v.layer_end );
-                int drill       = kicad( v.drill );
 
-                SEGVIA* via = new SEGVIA( m_board );
-
-                via->SetLayerPair( layer_start, layer_end );
-
-                if( v.diam )
+                if( IsValidCopperLayerIndex( layer_start ) &&
+                    IsValidCopperLayerIndex( layer_end ) )
                 {
-                    int kidiam = kicad( *v.diam );
-                    via->SetWidth( kidiam );
+                    int     drill = kicad( v.drill );
+
+                    SEGVIA* via   = new SEGVIA( m_board );
+
+                    via->SetLayerPair( layer_start, layer_end );
+
+                    // via diameters are externally controllable, not usually in a board:
+                    // http://www.eaglecentral.ca/forums/index.php/mv/msg/34704/119478/
+                    if( v.diam )
+                    {
+                        int kidiam = kicad( *v.diam );
+                        via->SetWidth( kidiam );
+                    }
+                    else
+                        via->SetWidth( drill * 3 );
+
+                    via->SetDrill( drill );
+
+                    via->SetTimeStamp( timeStamp( it->second ) );
+
+                    wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
+
+                    via->SetPosition( pos  );
+                    via->SetEnd( pos );
+
+                    via->SetNet( netCode );
+
+                    via->SetShape( S_CIRCLE );      // @todo should be in SEGVIA constructor
+
+                    m_board->m_Track.Insert( via, NULL );
                 }
-
-                via->SetDrill( drill );
-
-                via->SetTimeStamp( timeStamp( it->second ) );
-
-                wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
-
-                via->SetPosition( pos  );
-                via->SetEnd( pos );
-
-                // via->SetWidth( width );
-                // via->SetShape( shape );
-                via->SetNet( netCode );
-                // via->SetState( flags, ON );
-
-                via->SetShape( S_SEGMENT );
-
-                m_board->m_Track.Insert( via, NULL );
             }
 
             else if( !it->first.compare( "contactref" ) )
             {
+                // <contactref element="RN1" pad="7"/>
+                CPTREE& attribs = it->second.get_child( "<xmlattr>" );
+
+                const std::string& reference = attribs.get<std::string>( "element" );
+                const std::string& pad       = attribs.get<std::string>( "pad" );
+
+                std::string key = makeKey( reference, pad ) ;
+
+                D(printf( "adding refname:'%s' pad:'%s' netcode:%d netname:'%s'\n",
+                    reference.c_str(), pad.c_str(), netCode, nname.c_str() );)
+
+                m_pads_to_nets[ key ] = ENET( netCode, nname );
             }
 
             else if( !it->first.compare( "polygon" ) )
@@ -1399,49 +1427,178 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
 }
 
 
-int EAGLE_PLUGIN::kicad_layer( int aLayer )
+int EAGLE_PLUGIN::kicad_layer( int aEagleLayer )
 {
-    int ret;
+    /* will assume this is a valid mapping for all eagle boards until I get paid more:
 
-    switch( aLayer )    // translate eagle layer to pcbnew layer
+    <layers>
+    <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+    <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
+    <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
+    <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
+    <layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
+    <layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
+    <layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
+    <layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
+    <layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
+    <layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
+    <layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
+    <layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
+    <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
+    <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
+    <layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
+    <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+    <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+    <layer number="18" name="Vias" color="14" fill="1" visible="yes" active="yes"/>
+    <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+    <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+    <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+    <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+    <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+    <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+    <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+    <layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+    <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+    <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+    <layer number="29" name="tStop" color="2" fill="3" visible="no" active="yes"/>
+    <layer number="30" name="bStop" color="5" fill="6" visible="no" active="yes"/>
+    <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+    <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+    <layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+    <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+    <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+    <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+    <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+    <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+    <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
+    <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+    <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
+    <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+    <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
+    <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+    <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+    <layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+    <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+    <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
+    <layer number="49" name="ReferenceLC" color="13" fill="1" visible="yes" active="yes"/>
+    <layer number="50" name="ReferenceLS" color="12" fill="1" visible="yes" active="yes"/>
+    <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+    <layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+    <layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
+    <layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
+    <layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
+    <layer number="94" name="Symbols" color="4" fill="1" visible="no" active="no"/>
+    <layer number="95" name="Names" color="7" fill="1" visible="no" active="no"/>
+    <layer number="96" name="Values" color="7" fill="1" visible="no" active="no"/>
+    <layer number="97" name="Info" color="7" fill="1" visible="no" active="no"/>
+    <layer number="98" name="Guide" color="6" fill="1" visible="no" active="no"/>
+    </layers>
+
+    */
+
+
+    int kiLayer;
+
+    // eagle copper layer:
+    if( aEagleLayer >=1 && aEagleLayer <= 16 )
     {
-    case 1:     ret = 15;       break;  // Top copper
-    case 2:     ret = 14;       break;
-    case 3:     ret = 13;       break;
-    case 4:     ret = 12;       break;
-    case 5:     ret = 11;       break;
-    case 6:     ret = 10;       break;
-    case 7:     ret = 9;        break;
-    case 8:     ret = 8;        break;
-    case 9:     ret = 7;        break;
-    case 10:    ret = 6;        break;
-    case 11:    ret = 5;        break;
-    case 12:    ret = 4;        break;
-    case 13:    ret = 3;        break;
-    case 14:    ret = 2;        break;
-    case 15:    ret = 1;        break;
-    case 16:    ret = 0;        break;  // Bottom Copper
-    case 20:    ret = 28;       break;  // Edge Layer
-    case 21:    ret = 21;       break;  // Top Silk Screen
-    case 22:    ret = 20;       break;  // Bottom Silk Screen
-    case 25:    ret = 25;       break;  // Misc Comment Layers
-    case 26:    ret = 25;       break;
-    case 27:    ret = 26;       break;
-    case 28:    ret = 26;       break;
-    case 29:    ret = 23;       break;
-    case 30:    ret = 22;       break;
-    case 31:    ret = 19;       break;
-    case 32:    ret = 18;       break;
-    case 35:    ret = 17;       break;
-    case 36:    ret = 16;       break;
-    case 51:    ret = 26;       break;
-    case 52:    ret = 27;       break;
-    case 95:    ret = 26;       break;
-    case 96:    ret = 27;       break;
-    default:    ret = -1;       break;  // our eagle understanding is incomplete
+        kiLayer = LAYER_N_FRONT - ( aEagleLayer - 1 );
     }
 
-    return ret;
+    else
+    {
+/*
+#define FIRST_NO_COPPER_LAYER   16
+#define ADHESIVE_N_BACK         16
+#define ADHESIVE_N_FRONT        17
+#define SOLDERPASTE_N_BACK      18
+#define SOLDERPASTE_N_FRONT     19
+#define SILKSCREEN_N_BACK       20
+#define SILKSCREEN_N_FRONT      21
+#define SOLDERMASK_N_BACK       22
+#define SOLDERMASK_N_FRONT      23
+#define DRAW_N                  24
+#define COMMENT_N               25
+#define ECO1_N                  26
+#define ECO2_N                  27
+#define EDGE_N                  28
+#define LAST_NO_COPPER_LAYER    28
+#define UNUSED_LAYER_29         29
+#define UNUSED_LAYER_30         30
+#define UNUSED_LAYER_31         31
+*/
+        // translate non-copper eagle layer to pcbnew layer
+        switch( aEagleLayer )
+        {
+        case 20:    kiLayer = EDGE_N;               break;  // eagle says "Dimension" layer, but it's for board perimeter
+        case 21:    kiLayer = SILKSCREEN_N_FRONT;   break;
+        case 22:    kiLayer = SILKSCREEN_N_BACK;    break;
+        case 25:    kiLayer = SILKSCREEN_N_FRONT;   break;
+        case 26:    kiLayer = SILKSCREEN_N_BACK;    break;
+        case 27:    kiLayer = SILKSCREEN_N_FRONT;   break;
+        case 28:    kiLayer = SILKSCREEN_N_BACK;    break;
+        case 29:    kiLayer = SOLDERMASK_N_FRONT;   break;
+        case 30:    kiLayer = SOLDERMASK_N_BACK;    break;
+        case 31:    kiLayer = SOLDERPASTE_N_FRONT;  break;
+        case 32:    kiLayer = SOLDERPASTE_N_BACK;   break;
+        case 33:    kiLayer = SOLDERMASK_N_FRONT;   break;
+        case 34:    kiLayer = SOLDERMASK_N_BACK;    break;
+        case 35:    kiLayer = ADHESIVE_N_FRONT;     break;
+        case 36:    kiLayer = ADHESIVE_N_BACK;      break;
+        case 49:    kiLayer = COMMENT_N;            break;
+        case 50:    kiLayer = COMMENT_N;            break;
+        case 51:    kiLayer = ECO1_N;               break;
+        case 52:    kiLayer = ECO2_N;               break;
+        case 95:    kiLayer = ECO1_N;               break;
+        case 96:    kiLayer = ECO2_N;               break;
+        default:
+            D( printf( "unexpected eagle layer: %d\n", aEagleLayer );)
+            kiLayer = -1;       break;  // our eagle understanding is incomplete
+        }
+    }
+
+    return kiLayer;
+}
+
+
+/*
+void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+{
+    // Eagle lovers apply here.
+}
+
+
+int EAGLE_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
+{
+    double  engUnits = mm_per_biu * aValue;
+    int     len;
+
+    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
+    {
+        // printf( "f: " );
+        len = sprintf( buf, "%.10f", engUnits );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        ++len;
+    }
+    else
+    {
+        // printf( "g: " );
+        len = sprintf( buf, "%.10g", engUnits );
+    }
+    return len;
+}
+
+
+std::string EAGLE_PLUGIN::fmtBIU( BIU aValue ) const
+{
+    char    temp[50];
+
+    int len = biuSprintf( temp, aValue );
+
+    return std::string( temp, len );
 }
 
 
@@ -1482,3 +1639,4 @@ bool EAGLE_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
     return true;
 }
 
+*/

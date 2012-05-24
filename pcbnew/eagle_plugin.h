@@ -34,12 +34,29 @@
 
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <time.h>
+#include <map>
 
 
 class MODULE;
 typedef boost::ptr_map< std::string, MODULE >   MODULE_MAP;
 
+
+struct ENET
+{
+    int         netcode;
+    std::string netname;
+
+    ENET( int aNetCode, const std::string& aNetName ) :
+        netcode( aNetCode ),
+        netname( aNetName )
+    {}
+
+    ENET() :
+        netcode( 0 )
+    {}
+};
+
+typedef std::map< std::string, ENET >           NET_MAP;
 
 /*
 #include
@@ -79,6 +96,9 @@ public:
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPERTIES* aProperties = NULL );
 
+    const wxString& GetFileExtension() const;
+
+/*
     void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );
 
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
@@ -94,8 +114,7 @@ public:
     void FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath );
-
-    const wxString& GetFileExtension() const;
+*/
 
     //-----</PUBLIC PLUGIN API>-------------------------------------------------
 
@@ -105,6 +124,8 @@ public:
     ~EAGLE_PLUGIN();
 
 private:
+
+    NET_MAP         m_pads_to_nets;
 
     MODULE_MAP      m_templates;    ///< is part of a MODULE factory that operates
                                     ///< using copy construction.
