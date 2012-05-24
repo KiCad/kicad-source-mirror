@@ -1892,7 +1892,8 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
     {
         // read two lines per loop iteration, each loop is one TRACK or VIA
         // example first line:
-        // "Po 0 23994 28800 24400 28800 150 -1\r\n"
+        // e.g. "Po 0 23994 28800 24400 28800 150 -1"  for a track
+        // e.g. "Po 3 21086 17586 21086 17586 180 -1"  for a via (uses sames start and end)
 
         const char* data;
         char* line = m_reader->Line();
@@ -1943,6 +1944,7 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         int         layer, type, flags, net_code;
 
         // parse the 2nd line to determine the type of object
+        // e.g. "De 15 1 7 0 0"   for a via
         sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer, &type, &net_code, &timeStamp, &flags );
 
         if( aStructType==PCB_TRACE_T && type==1 )
