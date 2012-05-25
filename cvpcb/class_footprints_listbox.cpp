@@ -280,7 +280,8 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
     wxASSERT(Module);
     if( GetParent()->m_DisplayFootprintFrame )
     {
-        GetParent()->CreateScreenCmp(); /* refresh general */
+        // Refresh current selected footprint view:
+        GetParent()->CreateScreenCmp();
     }
 
     if( Module )

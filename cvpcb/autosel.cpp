@@ -66,7 +66,8 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
     {
         fn = m_AliasLibNames[ii];
 
-        if( !fn.HasExt() ) {
+        if( !fn.HasExt() )
+        {
             fn.SetExt( FootprintAliasFileExtension );
             // above fails if filename have more than one point
         }
@@ -124,8 +125,8 @@ found in the default search paths." ),
     msg.Printf( _( "%d footprint aliases found." ), aliases.size() );
     SetStatusText( msg, 0 );
 
+    m_skipComponentSelect = true;
     ii = 0;
-
     BOOST_FOREACH( COMPONENT_INFO& component, m_components )
     {
         bool found = false;
@@ -180,4 +181,5 @@ any of the project footprint libraries." ),
             }
         }
     }
+    m_skipComponentSelect = false;
 }
