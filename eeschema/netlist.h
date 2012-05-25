@@ -73,7 +73,7 @@ private:
     SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
     bool           m_IsNew;             ///< True if not yet annotated.
     int            m_SheetNum;          ///< The sheet number for the reference.
-    unsigned long  m_TimeStamp;         ///< The time stamp for the reference.
+    time_t         m_TimeStamp;         ///< The time stamp for the reference.
     wxString*      m_Value;             ///< The component value of the refernce.  It is the
                                         ///< same for all instances.
     int            m_NumRef;            ///< The numeric part of the reference designator.

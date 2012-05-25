@@ -572,7 +572,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info );
 /**
  * @return an unique time stamp that changes after each call
  */
-unsigned long GetNewTimeStamp();
+time_t GetNewTimeStamp();
 
 int DisplayColorFrame( wxWindow* parent, int OldColor );
 int GetCommandOptions( const int argc, const char** argv,
