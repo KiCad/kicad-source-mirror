@@ -930,7 +930,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             int layer  = intParse( data, &data );
 
             long edittime  = hexParse( data, &data );
-            long timestamp = hexParse( data, &data );
+            time_t timestamp = hexParse( data, &data );
 
             data = strtok( (char*) data+1, delims );
 
@@ -957,7 +957,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
-            long timestamp = hexParse( line + SZ( "Sc" ) );
+            time_t timestamp = hexParse( line + SZ( "Sc" ) );
             module->SetTimeStamp( timestamp );
         }
 
@@ -1676,7 +1676,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     dseg->SetAngle( angle );    // m_Angle
                     break;
                 case 3:
-                    long timestamp;
+                    time_t timestamp;
                     timestamp = hexParse( data );
                     dseg->SetTimeStamp( timestamp );
                     break;
@@ -1841,7 +1841,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
             int     layer       = intParse( line + SZ( "De" ), &data );
             int     notMirrored = intParse( data, &data );
-            long    timestamp   = hexParse( data, &data );
+            time_t  timestamp   = hexParse( data, &data );
             char*   style       = strtok( (char*) data, delims );
             char*   hJustify    = strtok( NULL, delims );
 
@@ -1940,7 +1940,7 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
 #endif
 
         int         makeType;
-        long        timeStamp;
+        time_t      timeStamp;
         int         layer, type, flags, net_code;
 
         // parse the 2nd line to determine the type of object
@@ -2132,7 +2132,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZInfo" ) )      // general info found
         {
             // e.g. 'ZInfo 479194B1 310 "COMMON"'
-            long    timestamp = hexParse( line + SZ( "ZInfo" ), &data );
+            time_t  timestamp = hexParse( line + SZ( "ZInfo" ), &data );
             int     netcode   = intParse( data, &data );
 
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
@@ -2348,7 +2348,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
         else if( TESTLINE( "Ge" ) )
         {
             int     layer;
-            long    timestamp;
+            time_t  timestamp;
             int     shape;
 
             sscanf( line + SZ( "Ge" ), " %d %d %lX", &shape, &layer, &timestamp );
@@ -2542,7 +2542,7 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
             BIU pos_y = biuParse( data, &data );
             BIU size  = biuParse( data, &data );
             BIU width = biuParse( data, &data );
-            long timestamp = hexParse( data );
+            time_t timestamp = hexParse( data );
 
             if( layer < FIRST_NO_COPPER_LAYER )
                 layer = FIRST_NO_COPPER_LAYER;

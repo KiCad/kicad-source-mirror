@@ -53,10 +53,10 @@
  * @param aZone = zone segment within the zone to delete. Can be NULL
  * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
  */
-void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp )
+void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, time_t aTimestamp )
 {
     bool          modify  = false;
-    unsigned long TimeStamp;
+    time_t        TimeStamp;
 
     if( aZone == NULL )
         TimeStamp = aTimestamp;

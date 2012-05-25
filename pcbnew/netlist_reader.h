@@ -78,6 +78,7 @@ public:
     wxString m_Footprint;               // the footprint name found in netlist, the in .cmp file
     wxString m_Reference;               // the schematic reference found in netlist
     wxString m_Value;                   // the schematic value found in netlist
+    // ZZZ This timestamp is string, not time_t
     wxString m_TimeStamp;               // the schematic full time stamp found in netlist
     wxString m_Libpart;                 // the schematic libpart found in netlist
     wxArrayString m_FootprintFilter;    // a footprint filters list found in old format netlist

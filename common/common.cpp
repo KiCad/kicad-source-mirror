@@ -325,10 +325,10 @@ bool ProcessExecute( const wxString& aCommandLine, int aFlags )
 }
 
 
-unsigned long GetNewTimeStamp()
+time_t GetNewTimeStamp()
 {
-    static unsigned long oldTimeStamp;
-    unsigned long newTimeStamp;
+    static time_t oldTimeStamp;
+    time_t newTimeStamp;
 
     newTimeStamp = time( NULL );
 
