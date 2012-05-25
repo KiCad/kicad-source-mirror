@@ -13,13 +13,6 @@
  */
 extern int g_DefaultBusWidth;
 
-#if defined(KICAD_GOST)
-
-/** In a GOST build, the bus width is set and cannot be changed */
-#define GOST_BUS_WIDTH      22
-
-#endif
-
 /* saving parameters option : */
 #define INSETUP true    /* used when the parameter is saved in general config
                          * if not used, the parameter is saved in the local

@@ -37,15 +37,6 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
 {
     m_choiceUnits->SetFocus();
     m_sdbSizer1OK->SetDefault();
-
-#if defined (KICAD_GOST)
-
-    /* The GOST standard pre-defines certain schematic attributes that cannot be changed */
-
-    m_spinBusWidth->Enable(false);
-
-#endif
-
 }
 
 

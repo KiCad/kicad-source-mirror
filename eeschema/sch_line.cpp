@@ -214,11 +214,7 @@ int SCH_LINE::GetPenSize() const
 
     if( m_Layer == LAYER_BUS )
     {
-#if defined(KICAD_GOST)
-        pensize = GOST_BUS_WIDTH;
-#else
         pensize = ( m_width == 0 ) ? g_DefaultBusWidth : m_width;
-#endif
     }
 
     return pensize;

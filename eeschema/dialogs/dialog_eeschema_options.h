@@ -47,20 +47,12 @@ public:
 
     void SetBusWidth( int aWidth )
     {
-#if defined( KICAD_GOST )
-        m_spinBusWidth->SetValue( GOST_BUS_WIDTH );
-#else
         m_spinBusWidth->SetValue( aWidth );
-#endif
     }
 
     int GetBusWidth( void )
     {
-#if defined( KICAD_GOST )
-        return GOST_BUS_WIDTH;
-#else
         return m_spinBusWidth->GetValue();
-#endif
     }
 
     void SetLineWidth( int aWidth ) { m_spinLineWidth->SetValue( aWidth ); }
