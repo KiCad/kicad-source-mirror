@@ -935,10 +935,11 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             data = strtok( (char*) data+1, delims );
 
             // data is now a two character long string
-            if( data[0] == 'F' )
+            // Note: some old files do not have this field
+            if( data && data[0] == 'F' )
                 module->SetLocked( true );
 
-            if( data[1] == 'P' )
+            if( data && data[1] == 'P' )
                 module->SetIsPlaced( true );
 
             module->SetPosition( wxPoint( pos_x, pos_y ) );
@@ -1321,7 +1322,8 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     case 'A':   shape = S_ARC;       break;
     case 'P':   shape = S_POLYGON;   break;
     default:
-        m_error.Printf( wxT( "Unknown EDGE_MODULE type '%s'" ), FROM_UTF8( line ).GetData() );
+        m_error.Printf( wxT( "Unknown EDGE_MODULE type '%s' line %d" ),
+                        FROM_UTF8( line ).GetData(), m_reader->LineNumber() );
         THROW_IO_ERROR( m_error );
     }
 

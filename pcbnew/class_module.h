@@ -98,10 +98,10 @@ public:
     int           m_CntRot180;          ///< Automatic placement : cost ( 0..10 )
                                         ///< for 180 degrees rotation (UP <->Down)
 
-    wxSize        m_Ext;                /* Automatic placement margin around the module */
+    wxSize        m_Ext;                // Margin around the module, in automatic placement
     double        m_Surface;            // Bounding box area
 
-    unsigned long m_Link;               /* Temporary variable ( used in editions, ...) */
+    time_t        m_Link;               // Temporary logical link used in edition
     long          m_LastEdit_Time;
     wxString      m_Path;
 

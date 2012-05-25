@@ -46,6 +46,8 @@ protected:
     int             m_undefinedComponentCnt;
     bool            m_modified;
     bool            m_isEESchemaNetlist;
+    bool            m_skipComponentSelect;      // true to skip OnSelectComponent event
+                                                // (in automatic selection/deletion of associations)
     PARAM_CFG_ARRAY m_projectFileParams;
 
 public:
