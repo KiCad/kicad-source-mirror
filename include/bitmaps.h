@@ -10,10 +10,6 @@ class wxBitmap;     // only to define wxBitmap
 #include <config.h>
 
 
-#define VTOOLBAR_WIDTH  29
-#define TOOL_SIZE       26
-
-
 /// PNG memory record (file in memory).
 struct BITMAP_OPAQUE
 {
