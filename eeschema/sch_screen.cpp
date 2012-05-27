@@ -146,8 +146,8 @@ void SCH_SCREEN::Clear()
 {
     FreeDrawList();
 
-    /* Clear the project settings. */
-    m_ScreenNumber = m_NumberOfScreen = 1;
+    // Clear the project settings
+    m_ScreenNumber = m_NumberOfScreens = 1;
 
     m_titles.Clear();
     m_titles.SetDate();
@@ -507,7 +507,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
                     " portrait" : ""
                  ) < 0
         || fprintf( aFile, "encoding utf-8\n") < 0
-        || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen ) < 0
+        || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreens ) < 0
         || fprintf( aFile, "Title %s\n",    EscapedUTF8( tb.GetTitle() ).c_str() ) < 0
         || fprintf( aFile, "Date %s\n",     EscapedUTF8( tb.GetDate() ).c_str() ) < 0
         || fprintf( aFile, "Rev %s\n",      EscapedUTF8( tb.GetRevision() ).c_str() ) < 0

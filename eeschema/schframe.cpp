@@ -313,7 +313,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 
     for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
     {
-        screen->m_NumberOfScreen = sheet_count;
+        screen->m_NumberOfScreens = sheet_count;
     }
 
     GetScreen()->m_ScreenNumber = SheetNumber;
