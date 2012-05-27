@@ -347,7 +347,7 @@ line %d,\nAbort reading file.\n" ),
 
         if( strnicmp( line, "Sheet", 2 ) == 0 )
             sscanf( line + 5, " %d %d",
-                    &aScreen->m_ScreenNumber, &aScreen->m_NumberOfScreen );
+                    &aScreen->m_ScreenNumber, &aScreen->m_NumberOfScreens );
 
         if( strnicmp( line, "Title", 2 ) == 0 )
         {

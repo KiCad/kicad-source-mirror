@@ -560,7 +560,7 @@ public:
 
     /**
      * Function SetSheetNumberAndCount
-     * Set the m_ScreenNumber and m_NumberOfScreen members for screens
+     * Set the m_ScreenNumber and m_NumberOfScreens members for screens
      * must be called after a delete or add sheet command, and when entering
      * a sheet
      */

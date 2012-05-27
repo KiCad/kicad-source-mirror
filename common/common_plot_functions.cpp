@@ -299,7 +299,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             case WS_IDENTSHEET:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                if( screen->m_NumberOfScreen > 1 )
+                if( screen->m_NumberOfScreens > 1 )
                     msg << screen->m_ScreenNumber;
                 plotter->Text( pos, color,
                                msg, TEXT_ORIENT_HORIZ, text_size,
@@ -310,7 +310,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             case WS_SHEETS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-            msg << screen->m_NumberOfScreen;
+            msg << screen->m_NumberOfScreens;
                 plotter->Text( pos, color,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -497,7 +497,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 
         case WS_IDENTSHEET:
             msg << screen->m_ScreenNumber << wxT( "/" ) <<
-                screen->m_NumberOfScreen;
+                screen->m_NumberOfScreens;
             break;
 
         case WS_FILENAME:

@@ -39,7 +39,7 @@
 
 #include <kicad_device_context.h>
 
-#define CURSOR_SIZE 12           // Cursor size in pixels
+static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 
 #define CLIP_BOX_PADDING 2
 

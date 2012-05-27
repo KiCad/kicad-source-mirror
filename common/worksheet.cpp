@@ -1026,7 +1026,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineW
     wxString paper = pageInfo.GetType();
     wxString file = aScreen->GetFileName();
     TITLE_BLOCK t_block = GetTitleBlock();
-    int number_of_screens = aScreen->m_NumberOfScreen;
+    int number_of_screens = aScreen->m_NumberOfScreens;
     int screen_to_draw = aScreen->m_ScreenNumber;
 
     TraceWorkSheet( aDC, pageSize, margin_left_top, margin_right_bottom,
@@ -1657,7 +1657,7 @@ wxString EDA_DRAW_FRAME::GetScreenDesc()
     wxString msg;
 
     msg << GetScreen()->m_ScreenNumber << wxT( "/" )
-        << GetScreen()->m_NumberOfScreen;
+        << GetScreen()->m_NumberOfScreens;
     return msg;
 }
 

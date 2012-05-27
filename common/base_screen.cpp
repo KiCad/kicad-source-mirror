@@ -35,17 +35,13 @@
 #include <id.h>
 #include <base_units.h>
 
-
-#define CURSOR_SIZE     12      /// size of the cross cursor.
-
-
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
     EDA_ITEM( aType )
 {
     m_UndoRedoCountMax = 10;     // undo/Redo command Max depth, 10 is a reasonable value
     m_FirstRedraw      = true;
     m_ScreenNumber     = 1;
-    m_NumberOfScreen   = 1;      // Hierarchy: Root: ScreenNumber = 1
+    m_NumberOfScreens  = 1;      // Hierarchy: Root: ScreenNumber = 1
     m_Zoom             = 32.0;
     m_Grid.m_Size      = wxRealPoint( 50, 50 );   // Default grid size
     m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
@@ -289,31 +285,8 @@ GRID_TYPE& BASE_SCREEN::GetGrid( size_t aIndex )
 }
 
 
-GRID_TYPE BASE_SCREEN::GetGrid()
-{
-    return m_Grid;
-}
-
-
-const wxPoint& BASE_SCREEN::GetGridOrigin()
-{
-    return m_GridOrigin;
-}
-
-
-wxRealPoint BASE_SCREEN::GetGridSize()
-{
-    return m_Grid.m_Size;
-}
-
-
-int BASE_SCREEN::GetGridId()
-{
-    return m_Grid.m_Id;
-}
-
-
-wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize )
+wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, 
+                                             wxRealPoint* aGridSize ) const
 {
     wxPoint pt;
     wxRealPoint gridSize;
@@ -337,7 +310,7 @@ wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoi
 }
 
 
-wxPoint BASE_SCREEN::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize )
+wxPoint BASE_SCREEN::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize ) const
 {
     if( aOnGrid )
         return GetNearestGridPosition( m_crossHairPosition, aGridSize );
