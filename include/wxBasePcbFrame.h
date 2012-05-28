@@ -238,9 +238,10 @@ public:
      * Function CursorGoto
      * positions the cursor at a given coordinate and reframes the drawing if the
      * requested point is out of view.
-     * @param aPos The point to go to.
+     * @param aPos is the point to go to.
+     * @param aWarp is true if the pointer should be warped to the new position.
      */
-    void CursorGoto( const wxPoint& aPos );
+    void CursorGoto( const wxPoint& aPos, bool aWarp = true );
 
     /**
      * Function Save_Module_In_Library

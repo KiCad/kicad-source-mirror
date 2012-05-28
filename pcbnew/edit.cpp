@@ -286,7 +286,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_FIND_ITEMS:
-        InstallFindFrame( pos, &dc );
+        InstallFindFrame();
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
