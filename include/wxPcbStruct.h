@@ -1488,7 +1488,7 @@ public:
 
     void Clean_Pcb( wxDC* DC );
 
-    void InstallFindFrame( const wxPoint& pos, wxDC* DC );
+    void InstallFindFrame();
 
     /**
      * Function SendMessageToEESCHEMA
