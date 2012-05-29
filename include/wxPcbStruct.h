@@ -481,6 +481,13 @@ public:
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
     void OnSelectTool( wxCommandEvent& aEvent );
 
+    /**
+     * Function OnResetModuleTextSizes
+     * resets text size and width of all module text fields of given field
+     * type to current settings in Preferences
+     */
+    void OnResetModuleTextSizes( wxCommandEvent& event );
+
     void ProcessMuWaveFunctions( wxCommandEvent& event );
     void MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
 

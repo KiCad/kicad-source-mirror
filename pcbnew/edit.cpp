@@ -1078,14 +1078,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Swap_Layers( event );
         break;
 
-    case ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES:
-        ResetModuleTextSizes( TEXT_is_REFERENCE, &dc );
-        break;
-
-    case ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES:
-        ResetModuleTextSizes( TEXT_is_VALUE, &dc );
-        break;
-
     case ID_PCB_USER_GRID_SETUP:
         InstallGridFrame( pos );
         break;
