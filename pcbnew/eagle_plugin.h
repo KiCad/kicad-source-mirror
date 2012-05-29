@@ -57,6 +57,7 @@ struct ENET
 };
 
 typedef std::map< std::string, ENET >           NET_MAP;
+typedef NET_MAP::const_iterator                 NET_MAP_CITER;
 
 /*
 #include
@@ -81,7 +82,10 @@ struct EATTR;
 struct ECIRCLE;
 struct ETEXT;
 struct ERECT;
-
+struct EPAD;
+struct ESMD;
+struct EVERTEX;
+struct EPOLYGON;
 
 /**
  * Class EAGLE_PLUGIN
@@ -190,20 +194,26 @@ private:
 
     void loadElements( CPTREE& aElements, const std::string& aXpath );
 
+    // none of the 'e'funcs do any "to KiCad" conversion, they merely read the XML into binary:
+
     /**
      * Function ewire
      * converts a <wire>'s xml attributes to binary without additional conversion.
      * @param aResult is an EWIRE to fill in with the <wire> data converted to binary.
      */
-    EWIRE   ewire( CPTREE& aWire ) const;
+    EWIRE       ewire( CPTREE& aWire ) const;
 
-    EVIA    evia( CPTREE& aVia ) const;
+    EVIA        evia( CPTREE& aVia ) const;
 
-    ECIRCLE ecircle( CPTREE& aCircle ) const;
-    ETEXT   etext( CPTREE& aText )  const;
-    ERECT   erect( CPTREE& aRect ) const;
+    ECIRCLE     ecircle( CPTREE& aCircle ) const;
+    ETEXT       etext( CPTREE& aText )  const;
+    ERECT       erect( CPTREE& aRect ) const;
 
-    EROT    erot( const std::string& aRot ) const;
+    EROT        erot( const std::string& aRot ) const;
+    EPAD        epad( CPTREE& aPad ) const;
+    ESMD        esmd( CPTREE& aSMD ) const;
+    EVERTEX     evertex( CPTREE& aVertex ) const;
+    EPOLYGON    epolygon( CPTREE& aPolygon ) const;
 
     /**
      * Function eattr

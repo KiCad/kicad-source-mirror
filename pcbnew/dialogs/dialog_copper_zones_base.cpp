@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_COPPER_ZONE_BASE, wxDialog )
+BEGIN_EVENT_TABLE( DIALOG_COPPER_ZONE_BASE, DIALOG_SHIM )
 	EVT_CLOSE( DIALOG_COPPER_ZONE_BASE::_wxFB_OnClose )
 	EVT_SIZE( DIALOG_COPPER_ZONE_BASE::_wxFB_OnSize )
 	EVT_CHOICE( ID_M_NETDISPLAYOPTION, DIALOG_COPPER_ZONE_BASE::_wxFB_OnNetSortingOptionSelected )
@@ -23,7 +23,7 @@ BEGIN_EVENT_TABLE( DIALOG_COPPER_ZONE_BASE, wxDialog )
 	EVT_BUTTON( wxID_CANCEL, DIALOG_COPPER_ZONE_BASE::_wxFB_OnButtonCancelClick )
 END_EVENT_TABLE()
 
-DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -38,6 +38,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_staticText17->Wrap( -1 );
 	m_layerSizer->Add( m_staticText17, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
+	
 	m_OptionsBoxSizer->Add( m_layerSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer7;
@@ -49,6 +50,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_ListNetNameSelection = new wxListBox( this, ID_NETNAME_SELECTION, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	bSizer7->Add( m_ListNetNameSelection, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	
 	m_OptionsBoxSizer->Add( bSizer7, 1, wxEXPAND, 5 );
 	
@@ -86,7 +88,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_buttonRunFilter = new wxButton( this, wxID_APPLY_FILTERS, _("Apply Filters"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_NetSortOptSizer->Add( m_buttonRunFilter, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	m_OptionsBoxSizer->Add( m_NetSortOptSizer, 0, wxALL, 5 );
+	
 	
 	m_MainBoxSizer->Add( m_OptionsBoxSizer, 1, wxALL|wxEXPAND, 5 );
 	
@@ -129,6 +133,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_cornerSmoothingCtrl = new wxTextCtrl( this, ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_cornerSmoothingCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
+	
 	m_ExportableSetupSizer->Add( bSizer9, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* m_LeftBox;
@@ -165,7 +170,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_ThermalShapesParamsSizer->Add( m_CopperWidthValue, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
+	
 	m_LeftBox->Add( m_ThermalShapesParamsSizer, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	m_ExportableSetupSizer->Add( m_LeftBox, 0, wxEXPAND, 5 );
 	
@@ -201,6 +208,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_ArcApproximationOpt->SetSelection( 0 );
 	m_MiddleBox->Add( m_ArcApproximationOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
+	
 	m_ExportableSetupSizer->Add( m_MiddleBox, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer81;
@@ -226,7 +234,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_OutlineAppearanceCtrl->SetSelection( 0 );
 	bSizer81->Add( m_OutlineAppearanceCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
+	
 	m_ExportableSetupSizer->Add( bSizer81, 0, wxEXPAND, 5 );
+	
 	
 	m_MainBoxSizer->Add( m_ExportableSetupSizer, 1, wxALL|wxEXPAND, 5 );
 	
@@ -245,7 +255,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_ButtonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer10->Add( m_ButtonCancel, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	m_MainBoxSizer->Add( bSizer10, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
 	
 	this->SetSizer( m_MainBoxSizer );
 	this->Layout();

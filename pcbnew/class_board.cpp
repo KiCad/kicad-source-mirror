@@ -1468,7 +1468,7 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
 
         if( GetArea( ii )->GetNet() != 0 )      // i.e. if this zone is connected to a net
         {
-            const NETINFO_ITEM* net = FindNet( GetArea( ii )->m_Netname );
+            const NETINFO_ITEM* net = FindNet( GetArea( ii )->GetNetName() );
 
             if( net )
             {

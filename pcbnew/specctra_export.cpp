@@ -1152,7 +1152,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             PATH*           mainPolygon = new PATH( plane, T_polygon );
             plane->SetShape( mainPolygon );
 
-            plane->name = TO_UTF8( item->m_Netname );
+            plane->name = TO_UTF8( item->GetNetName() );
 
             if( plane->name.size() == 0 )
             {

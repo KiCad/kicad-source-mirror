@@ -800,7 +800,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_NetcodeSelection );
 
     if( net )   // net == NULL should not occur
-        aZone->m_Netname = net->GetNetname();
+        aZone->SetNetName( net->GetNetname() );
 
     // Combine zones if possible
     GetBoard()->AreaPolygonModified( &_AuxiliaryList, aZone, true, s_Verbose );

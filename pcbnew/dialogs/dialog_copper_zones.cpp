@@ -56,9 +56,6 @@ private:
 
     wxListView*     m_LayerSelectionCtrl;
 
-    static wxPoint  prevPosition;           ///< Dialog position & size
-    static wxSize   prevSize;
-
     /**
      * Function initDialog
      * fills in the dialog controls using the current settings.
@@ -108,8 +105,6 @@ private:
 
 // Initialize static member variables
 wxString DIALOG_COPPER_ZONE::m_netNameShowFilter( wxT( "*" ) );
-wxPoint DIALOG_COPPER_ZONE::prevPosition( -1, -1 );
-wxSize DIALOG_COPPER_ZONE::prevSize;
 
 
 ZONE_EDIT_T InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
@@ -157,19 +152,13 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
     GetSizer()->SetSizeHints( this );
 
-    if( prevPosition.x != -1 )
-        SetSize( prevPosition.x, prevPosition.y,
-                 prevSize.x, prevSize.y );
-    else
-        Center();
+    Center();
 }
 
 
 void DIALOG_COPPER_ZONE::initDialog()
 {
     BOARD* board = m_Parent->GetBoard();
-
-    SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
     wxString msg;
 
@@ -297,8 +286,6 @@ void DIALOG_COPPER_ZONE::OnButtonCancelClick( wxCommandEvent& event )
 void DIALOG_COPPER_ZONE::OnButtonOkClick( wxCommandEvent& event )
 {
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
-    prevPosition = GetPosition();
-    prevSize = GetSize();
 
     if( AcceptOptions( true ) )
     {
@@ -311,9 +298,6 @@ void DIALOG_COPPER_ZONE::OnButtonOkClick( wxCommandEvent& event )
 // called on system close button
 void DIALOG_COPPER_ZONE::OnClose( wxCloseEvent& event )
 {
-    prevPosition = GetPosition();
-    prevSize = GetSize();
-
     if( m_OnExitCode != ZONE_ABORT )
         *m_ptr = m_settings;
 
@@ -384,7 +368,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
     m_settings.m_ZoneClearance = ReturnValueFromString( g_UserUnit, txtvalue );
 
-    // Test if this is a reasonnable value for this parameter
+    // Test if this is a reasonable value for this parameter
     // A too large value can hang Pcbnew
     #define CLEARANCE_MAX_VALUE 5000    // in 1/10000 inch
     if( m_settings.m_ZoneClearance > CLEARANCE_MAX_VALUE )
@@ -519,9 +503,6 @@ void DIALOG_COPPER_ZONE::OnNetSortingOptionSelected( wxCommandEvent& event )
 
 void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
 {
-    prevPosition = GetPosition();
-    prevSize = GetSize();
-
     if( !AcceptOptions( true, true ) )
         return;
 
