@@ -50,6 +50,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_general_options_BoardEditor_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
+    dialogs/dialog_global_modules_fields_edition.cpp
+    dialogs/dialog_global_modules_fields_edition_base.cpp
     dialogs/dialog_global_pads_edition_base.cpp
     dialogs/dialog_graphic_items_options.cpp
     dialogs/dialog_graphic_items_options_base.cpp
