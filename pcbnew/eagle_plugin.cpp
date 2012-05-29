@@ -55,6 +55,8 @@ Load() TODO's
 *) fix text twisting and final location issues.
 *) netclass info?
 *) code factoring, for polygon at least
+*) zone fill clearances
+*) package rectangles
 
 */
 
@@ -92,7 +94,9 @@ typedef MODULE_MAP::const_iterator          MODULE_CITER;
 typedef boost::optional<std::string>        opt_string;
 typedef boost::optional<int>                opt_int;
 typedef boost::optional<double>             opt_double;
-typedef boost::optional<CPTREE&>            opt_cptree;
+typedef boost::optional<bool>               opt_bool;
+//typedef boost::optional<CPTREE&>            opt_cptree;
+
 
 /// Eagle wire
 struct EWIRE
@@ -179,9 +183,8 @@ struct ETEXT
     opt_string  font;
     opt_double  ratio;
     opt_erot    erot;
-    opt_int     align;
 
-    enum {
+    enum {          // for align
         CENTER,
         CENTER_LEFT,
         TOP_CENTER,
@@ -194,6 +197,78 @@ struct ETEXT
         BOTTOM_LEFT   = -TOP_RIGHT,
         BOTTOM_RIGHT  = -TOP_LEFT,
     };
+
+    opt_int     align;
+};
+
+/// Eagle thru hol pad
+struct EPAD
+{
+    std::string name;
+    double      x;
+    double      y;
+    double      drill;
+    opt_double  diameter;
+
+    // for shape: (square | round | octagon | long | offset)
+    enum {
+        SQUARE,
+        ROUND,
+        OCTAGON,
+        LONG,
+        OFFSET,
+    };
+
+    opt_int     shape;
+
+    opt_erot    erot;
+
+    opt_bool    stop;
+    opt_bool    thermals;
+    opt_bool    first;
+};
+
+
+/// Eagle SMD pad
+struct ESMD
+{
+    std::string name;
+    double      x;
+    double      y;
+    double      dx;
+    double      dy;
+    int         layer;
+    opt_int     roundness;
+    opt_erot    erot;
+    opt_bool    stop;
+    opt_bool    thermals;
+    opt_bool    cream;
+};
+
+struct EVERTEX
+{
+    double      x;
+    double      y;
+};
+
+// Eagle polygon, without vertices which are parsed as needed
+struct EPOLYGON
+{
+    double      width;
+    int         layer;
+    opt_double  spacing;
+
+    enum {      // for pour
+        SOLID,
+        HATCH,
+        CUTOUT,
+    };
+
+    opt_int     pour;
+    opt_double  isolate;
+    opt_bool    orphans;
+    opt_bool    thermals;
+    opt_int     rank;
 };
 
 
@@ -209,6 +284,18 @@ static inline std::string makeKey( const std::string& aFirst, const std::string&
 static inline unsigned long timeStamp( CPTREE& aTree )
 {
     return (unsigned long)(void*) &aTree;
+}
+
+
+static opt_bool parseOptionalBool( CPTREE& attribs, const char* aName )
+{
+    opt_bool    ret;
+    opt_string  stemp = attribs.get_optional<std::string>( aName );
+
+    if( stemp )
+        ret = !stemp->compare( "yes" );
+
+    return ret;
 }
 
 
@@ -459,40 +546,31 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
         // net related info on it from the DTD.
         else if( !gr->first.compare( "rectangle" ) )
         {
-#if 0
             ERECT   r = erect( gr->second );
             int     layer = kicad_layer( r.layer );
 
-            // hope the angle of rotation is zero.
-
-            // might be better off making this into a ZONE:
-
             if( IsValidCopperLayerIndex( layer ) )
             {
-                auto_ptr<DRAWSEGMENT> dseg = new DRAWSEGMENT( m_board );
+                // use a "netcode = 0" type ZONE:
+                ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+                m_board->Add( zone, ADD_APPEND );
 
-                dseg->SetTimeStamp( timeStamp( gr->second ) );
-                dseg->SetLayer( layer );
-                dseg->SetShape( S_POLYGON );
-                dseg->SetWidth( Mils2iu( 12 ) );
+                zone->SetTimeStamp( timeStamp( gr->second ) );
+                zone->SetLayer( layer );
+                zone->SetNet( 0 );
 
-                std::vector<wxPoint>    pts;
+                int outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
-                pts.push_back( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
-                pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
-                pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
-                pts.push_back( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
-                dseg->SetPolyPoints( pts );
+                zone->m_Poly->Start( layer, kicad_x( r.x1 ), kicad_y( r.y1 ), outline_hatch );
+                zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
+                zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
+                zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+                zone->m_Poly->Close();
 
-                m_board->Add( dseg.release(), ADD_APPEND );
+                // this is not my fault:
+                zone->m_Poly->SetHatch( outline_hatch,
+                                      Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ) );
             }
-#elif 0
-            // use a "netcode = 0" type ZONE:
-            auto_ptr<ZONE_CONTAINER> zone = new ZONE_CONTAINER( m_board );
-
-            ;
-            m_board->Add( zone.release(), ADD_APPEND );
-#endif
         }
         else if( !gr->first.compare( "hole" ) )
         {
@@ -630,18 +708,13 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
 
         for( D_PAD* pad = m->m_Pads;  pad;  pad = pad->Next() )
         {
-            const ENET& enet = m_pads_to_nets[ makeKey( name, TO_UTF8( pad->GetPadName())) ];
+            std::string key  = makeKey( name, TO_UTF8( pad->GetPadName() ) );
 
-            D(printf( "refname:'%s'  pad:'%s'  netcode:%d  netname:'%s'\n",
-                name.c_str(), TO_UTF8( pad->GetPadName() ),
-                enet.netcode,
-                enet.netname.c_str()
-                );)
-
-            if( enet.netname.size() )
+            NET_MAP_CITER ni = m_pads_to_nets.find( key );
+            if( ni != m_pads_to_nets.end() )
             {
-                pad->SetNetname( FROM_UTF8( enet.netname.c_str() ) );
-                pad->SetNet( enet.netcode );
+                pad->SetNetname( FROM_UTF8( ni->second.netname.c_str() ) );
+                pad->SetNet( ni->second.netcode );
             }
         }
 
@@ -808,7 +881,7 @@ ERECT EAGLE_PLUGIN::erect( CPTREE& aRect ) const
     r.y2     = attribs.get<double>( "y2" );
     r.layer  = attribs.get<int>( "layer" );
 
-    // @todo: hoping that rot is not used
+    // @todo: stop hoping that rot is not used
 
     return r;
 }
@@ -883,7 +956,11 @@ EROT EAGLE_PLUGIN::erot( const std::string& aRot ) const
 
     rot.spin    = aRot.find( 'S' ) != aRot.npos;
     rot.mirror  = aRot.find( 'M' ) != aRot.npos;
-    rot.degrees = strtod( aRot.c_str() + 1 + int( rot.spin || rot.mirror ), NULL );
+    rot.degrees = strtod( aRot.c_str()
+                        + 1                     // skip leading 'R'
+                        + int( rot.spin )       // skip optional leading 'S'
+                        + int( rot.mirror ),    // skip optional leading 'M'
+                        NULL );
 
     return rot;
 }
@@ -944,6 +1021,173 @@ EATTR EAGLE_PLUGIN::eattr( CPTREE& aAttribute ) const
     }
 
     return a;
+}
+
+
+EPAD EAGLE_PLUGIN::epad( CPTREE& aPad ) const
+{
+    EPAD    p;
+    CPTREE& attribs = aPad.get_child( "<xmlattr>" );
+
+    /*
+    <!ELEMENT pad EMPTY>
+    <!ATTLIST pad
+          name          %String;       #REQUIRED
+          x             %Coord;        #REQUIRED
+          y             %Coord;        #REQUIRED
+          drill         %Dimension;    #REQUIRED
+          diameter      %Dimension;    "0"
+          shape         %PadShape;     "round"
+          rot           %Rotation;     "R0"
+          stop          %Bool;         "yes"
+          thermals      %Bool;         "yes"
+          first         %Bool;         "no"
+          >
+    */
+
+    // the DTD says these must be present, throw exception if not found
+    p.name  = attribs.get<std::string>( "name" );
+    p.x     = attribs.get<double>( "x" );
+    p.y     = attribs.get<double>( "y" );
+    p.drill = attribs.get<double>( "drill" );
+
+    p.diameter = attribs.get_optional<double>( "diameter" );
+
+    opt_string s = attribs.get_optional<std::string>( "shape" );
+    if( s )
+    {
+        // (square | round | octagon | long | offset)
+        if( !s->compare( "square" ) )
+            p.shape = EPAD::SQUARE;
+        else if( !s->compare( "round" ) )
+            p.shape = EPAD::ROUND;
+        else if( !s->compare( "octagon" ) )
+            p.shape = EPAD::OCTAGON;
+        else if( !s->compare( "long" ) )
+            p.shape = EPAD::LONG;
+        else if( !s->compare( "offset" ) )
+            p.shape = EPAD::OFFSET;
+    }
+
+    opt_string rot = attribs.get_optional<std::string>( "rot" );
+    if( rot )
+    {
+        p.erot = erot( *rot );
+    }
+
+    p.stop     = parseOptionalBool( attribs, "stop" );
+    p.thermals = parseOptionalBool( attribs, "thermals" );
+    p.first    = parseOptionalBool( attribs, "first" );
+
+    return p;
+}
+
+
+ESMD EAGLE_PLUGIN::esmd( CPTREE& aSMD ) const
+{
+    ESMD    s;
+    CPTREE& attribs = aSMD.get_child( "<xmlattr>" );
+
+    /*
+    <!ATTLIST smd
+          name          %String;       #REQUIRED
+          x             %Coord;        #REQUIRED
+          y             %Coord;        #REQUIRED
+          dx            %Dimension;    #REQUIRED
+          dy            %Dimension;    #REQUIRED
+          layer         %Layer;        #REQUIRED
+          roundness     %Int;          "0"
+          rot           %Rotation;     "R0"
+          stop          %Bool;         "yes"
+          thermals      %Bool;         "yes"
+          cream         %Bool;         "yes"
+          >
+    */
+
+    // the DTD says these must be present, throw exception if not found
+    s.name  = attribs.get<std::string>( "name" );
+    s.x     = attribs.get<double>( "x" );
+    s.y     = attribs.get<double>( "y" );
+    s.dx    = attribs.get<double>( "dx" );
+    s.dy    = attribs.get<double>( "dy" );
+    s.layer = attribs.get<int>( "layer" );
+
+    opt_string rot = attribs.get_optional<std::string>( "rot" );
+    if( rot )
+    {
+        s.erot = erot( *rot );
+    }
+
+    s.roundness = attribs.get_optional<int>( "roundness" );
+    s.thermals  = parseOptionalBool( attribs, "thermals" );
+    s.stop      = parseOptionalBool( attribs, "stop" );
+    s.thermals  = parseOptionalBool( attribs, "thermals" );
+    s.cream     = parseOptionalBool( attribs, "cream" );
+
+    return s;
+}
+
+
+EVERTEX EAGLE_PLUGIN::evertex( CPTREE& aVertex ) const
+{
+    EVERTEX     v;
+    CPTREE&     attribs = aVertex.get_child( "<xmlattr>" );
+
+    /*
+    <!ELEMENT vertex EMPTY>
+    <!ATTLIST vertex
+          x             %Coord;        #REQUIRED
+          y             %Coord;        #REQUIRED
+          curve         %WireCurve;    "0" -- the curvature from this vertex to the next one --
+          >
+    */
+
+    v.x = attribs.get<double>( "x" );
+    v.y = attribs.get<double>( "y" );
+
+    return v;
+}
+
+
+EPOLYGON EAGLE_PLUGIN::epolygon( CPTREE& aPolygon ) const
+{
+    EPOLYGON    p;
+    CPTREE&     attribs = aPolygon.get_child( "<xmlattr>" );
+
+    /*
+    <!ATTLIST polygon
+          width         %Dimension;    #REQUIRED
+          layer         %Layer;        #REQUIRED
+          spacing       %Dimension;    #IMPLIED
+          pour          %PolygonPour;  "solid"
+          isolate       %Dimension;    #IMPLIED -- only in <signal> or <package> context --
+          orphans       %Bool;         "no"  -- only in <signal> context --
+          thermals      %Bool;         "yes" -- only in <signal> context --
+          rank          %Int;          "0"   -- 1..6 in <signal> context, 0 or 7 in <package> context --
+          >
+    */
+
+    p.width   = attribs.get<double>( "width" );
+    p.layer   = attribs.get<int>( "layer" );
+    p.spacing = attribs.get_optional<double>( "spacing" );
+
+    opt_string s = attribs.get_optional<std::string>( "pour" );
+    if( s )
+    {
+        // (solid | hatch | cutout)
+        if( !s->compare( "hatch" ) )
+            p.pour = EPOLYGON::HATCH;
+        else if( !s->compare( "cutout" ) )
+            p.pour = EPOLYGON::CUTOUT;
+        else
+            p.pour = EPOLYGON::SOLID;
+    }
+
+    p.orphans  = parseOptionalBool( attribs, "orphans" );
+    p.thermals = parseOptionalBool( attribs, "thermals" );
+    p.rank     = attribs.get_optional<int>( "rank" );
+
+    return p;
 }
 
 
@@ -1014,11 +1258,10 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 {
-    // pay for this tree traversal only once
-    CPTREE& attrs = aTree.get_child( "<xmlattr>" );
+    // this is thru hole technology here, no SMDs
+    EPAD e = epad( aTree );
 
     /* from <ealge>/doc/eagle.dtd
-
     <!ELEMENT pad EMPTY>
     <!ATTLIST pad
           name          %String;       #REQUIRED
@@ -1037,19 +1280,12 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
     D_PAD*  pad = new D_PAD( aModule );
     aModule->m_Pads.PushBack( pad );
 
-    // the DTD says these must be present, throw exception if not found
-    const std::string& name = attrs.get<std::string>( "name" );
-
-    double x = attrs.get<double>( "x" );
-    double y = attrs.get<double>( "y" );
-    double drill = attrs.get<double>( "drill" );
+    pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
 
     // pad's "Position" is not relative to the module's,
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
 
-    pad->SetPadName( FROM_UTF8( name.c_str() ) );
-
-    wxPoint padpos( kicad_x( x ), kicad_y( y ) );
+    wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
 
     pad->SetPos0( padpos );
 
@@ -1057,34 +1293,31 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 
     pad->SetPosition( padpos + aModule->GetPosition() );
 
-    pad->SetDrillSize( wxSize( kicad( drill ), kicad( drill ) ) );
+    pad->SetDrillSize( wxSize( kicad( e.drill ), kicad( e.drill ) ) );
 
-    pad->SetLayerMask( 0x00C0FFFF );    // should tell it to go through all layers
+    pad->SetLayerMask( ALL_CU_LAYERS | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT );
 
-    // Optional according to DTD.
-    opt_double diameter = attrs.get_optional<double>( "diameter" );
-    opt_string shape    = attrs.get_optional<std::string>( "shape" );
-    opt_string rot      = attrs.get_optional<std::string>( "rot" );
-    /*
-    opt_string stop     = attrs.get_optional<std::string>( "stop" );
-    opt_string thermals = attrs.get_optional<std::string>( "thermals" );
-    opt_string first    = attrs.get_optional<std::string>( "first" );
-    */
-
-    if( diameter )
+    if( e.diameter )
     {
-        int kidiam = kicad( *diameter );
-        pad->SetSize( wxSize( kidiam, kidiam ) );
+        int diameter = kicad( *e.diameter );
+        pad->SetSize( wxSize( diameter, diameter ) );
+    }
+    else
+    {
+        // the pad size is optional in the eagle DTD, supply something here that is a
+        // 6 mil copper surround as a minimum.
+        int drillz = pad->GetDrillSize().x;
+        int diameter = std::max( drillz + 2 * Mils2iu( 6 ), int( drillz * 1.2 ) );
+        pad->SetSize( wxSize( diameter, diameter ) );
     }
 
-    if( shape ) // if not shape, our default is circle and that matches their default "round"
+    if( e.shape ) // if not shape, our default is circle and that matches their default "round"
     {
         // <!ENTITY % PadShape "(square | round | octagon | long | offset)">
-
-        if( !shape->compare( "round" ) )
+        if( *e.shape == EPAD::ROUND )
             wxASSERT( pad->GetShape()==PAD_CIRCLE );    // verify set in D_PAD constructor
 
-        else if( !shape->compare( "octagon" ) )
+        else if( *e.shape == EPAD::OCTAGON )
         {
             wxASSERT( pad->GetShape()==PAD_CIRCLE );    // verify set in D_PAD constructor
 
@@ -1092,7 +1325,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
             // pad->SetShape( PAD_OCTAGON );
         }
 
-        else if( !shape->compare( "long" ) )
+        else if( *e.shape == EPAD::LONG )
         {
             pad->SetShape( PAD_OVAL );
 
@@ -1100,19 +1333,18 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
             z.x *= 2;
             pad->SetSize( z );
         }
-        else if( !shape->compare( "square" ) )
+        else if( *e.shape == EPAD::SQUARE )
         {
             pad->SetShape( PAD_RECT );
         }
     }
 
-    if( rot )
+    if( e.erot )
     {
-        EROT r = erot( *rot );
-        pad->SetOrientation( r.degrees * 10 );
+        pad->SetOrientation( e.erot->degrees * 10 );
     }
 
-    // don't know what stop and thermals should look like now.
+    // @todo: handle stop and thermal
 }
 
 
@@ -1236,32 +1468,8 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 {
-    // pay for this tree traversal only once
-    CPTREE& attrs = aTree.get_child( "<xmlattr>" );
-
-    /*
-    <!ATTLIST smd
-          name          %String;       #REQUIRED
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          dx            %Dimension;    #REQUIRED
-          dy            %Dimension;    #REQUIRED
-          layer         %Layer;        #REQUIRED
-          roundness     %Int;          "0"
-          rot           %Rotation;     "R0"
-          stop          %Bool;         "yes"
-          thermals      %Bool;         "yes"
-          cream         %Bool;         "yes"
-          >
-    */
-
-    // the DTD says these must be present, throw exception if not found
-    const std::string& name = attrs.get<std::string>( "name" );
-    double x  = attrs.get<double>( "x" );
-    double y  = attrs.get<double>( "y" );
-    double dx = attrs.get<double>( "dx" );
-    double dy = attrs.get<double>( "dy" );
-    int layer = attrs.get<int>( "layer" );
+    ESMD    e     = esmd( aTree );
+    int     layer = kicad_layer( e.layer );
 
     if( !IsValidCopperLayerIndex( layer ) )
     {
@@ -1271,15 +1479,14 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
     D_PAD*  pad = new D_PAD( aModule );
     aModule->m_Pads.PushBack( pad );
 
-
-    pad->SetPadName( FROM_UTF8( name.c_str() ) );
+    pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
     pad->SetShape( PAD_RECT );
     pad->SetAttribute( PAD_SMD );
 
     // pad's "Position" is not relative to the module's,
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
 
-    wxPoint padpos( kicad_x( x ), kicad_y( y ) );
+    wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
 
     pad->SetPos0( padpos );
 
@@ -1287,33 +1494,26 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 
     pad->SetPosition( padpos + aModule->GetPosition() );
 
-    pad->SetSize( wxSize( kicad( dx ), kicad( dy ) ) );
+    pad->SetSize( wxSize( kicad( e.dx ), kicad( e.dy ) ) );
 
-    pad->SetLayer( kicad_layer( layer ) );
-    pad->SetLayerMask( 0x00888000 );
+    pad->SetLayer( layer );
+    pad->SetLayerMask( LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT );
 
     // Optional according to DTD
-    opt_double roundness = attrs.get_optional<double>( "roundness" );
-    opt_string rot       = attrs.get_optional<std::string>( "rot" );
-    opt_string stop      = attrs.get_optional<std::string>( "stop" );
-    opt_string thermals  = attrs.get_optional<std::string>( "thermals" );
-    opt_string cream     = attrs.get_optional<std::string>( "cream" );
-
-    if( roundness ) // set set shape to PAD_RECT above, in case roundness is not present
+    if( e.roundness )    // set set shape to PAD_RECT above, in case roundness is not present
     {
-        if( *roundness >= 75 )       // roundness goes from 0-100%
+        if( *e.roundness >= 75 )       // roundness goes from 0-100% as integer
         {
-            if( dy == dx )
+            if( e.dy == e.dx )
                 pad->SetShape( PAD_ROUND );
             else
                 pad->SetShape( PAD_OVAL );
         }
     }
 
-    if( rot )
+    if( e.erot )
     {
-        EROT r = erot( *rot );
-        pad->SetOrientation( r.degrees * 10 );
+        pad->SetOrientation( e.erot->degrees * 10 );
     }
 
     // don't know what stop, thermals, and cream should look like now.
@@ -1413,14 +1613,54 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
 
                 std::string key = makeKey( reference, pad ) ;
 
-                D(printf( "adding refname:'%s' pad:'%s' netcode:%d netname:'%s'\n",
-                    reference.c_str(), pad.c_str(), netCode, nname.c_str() );)
+                // D(printf( "adding refname:'%s' pad:'%s' netcode:%d netname:'%s'\n", reference.c_str(), pad.c_str(), netCode, nname.c_str() );)
 
                 m_pads_to_nets[ key ] = ENET( netCode, nname );
             }
 
             else if( !it->first.compare( "polygon" ) )
             {
+                EPOLYGON p = epolygon( it->second );
+                int      layer = kicad_layer( p.layer );
+
+                if( IsValidCopperLayerIndex( layer ) )
+                {
+                    // use a "netcode = 0" type ZONE:
+                    ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
+                    m_board->Add( zone, ADD_APPEND );
+
+                    zone->SetTimeStamp( timeStamp( it->second ) );
+                    zone->SetLayer( layer );
+                    zone->SetNet( netCode );
+                    zone->SetNetName( netName );
+
+
+
+                    int outline_hatch = CPolyLine::DIAGONAL_EDGE;
+
+                    bool first = true;
+                    for( CITER vi = it->second.begin();  vi != it->second.end();  ++vi )
+                    {
+                        if( vi->first.compare( "vertex" ) ) // skip <xmlattr> node
+                            continue;
+
+                        EVERTEX v = evertex( vi->second );
+
+                        // the ZONE_CONTAINER API needs work, as you can see:
+                        if( first )
+                        {
+                            zone->m_Poly->Start( layer,  kicad_x( v.x ), kicad_y( v.y ), outline_hatch );
+                            first = false;
+                        }
+                        else
+                            zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+                    }
+
+                    zone->m_Poly->Close();
+
+                    zone->m_Poly->SetHatch( outline_hatch,
+                                          Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ) );
+                }
             }
         }
     }

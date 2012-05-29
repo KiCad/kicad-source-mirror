@@ -74,6 +74,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
 
     // For corner moving, corner index to drag, or -1 if no selection
     m_CornerSelection = -1;
+    m_IsFilled = aZone.m_IsFilled;
     m_ZoneClearance = aZone.m_ZoneClearance;     // clearance value
     m_ZoneMinThickness = aZone.m_ZoneMinThickness;
     m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
@@ -84,6 +85,11 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
     m_FilledPolysList = aZone.m_FilledPolysList;
     m_FillSegmList = aZone.m_FillSegmList;
+
+    cornerSmoothingType = aZone.cornerSmoothingType;
+    cornerRadius = aZone.cornerRadius;
+    utility    = aZone.utility;
+    utility2   = aZone.utility;
 }
 
 
@@ -717,7 +723,7 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Corners" ), msg, BLUE );
 
     if( m_FillMode )
-        msg.Printf( _( "Segments" ), m_FillMode );
+        msg = _( "Segments" );
     else
         msg = _( "Polygons" );
 

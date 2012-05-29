@@ -42,6 +42,14 @@ Dialogs:
     leaving them all bundled tightly together.  The dialog box should look
     nice at any size large enough to show all the components.
 
+    When using wxFormBuilder, please add the following settings to the
+    "Dialog" node:
+        subclass.name   <- DIALOG_SHIM
+        subclass.header <- dialog_shim.h
+
+    This will provide for an override of the Show( bool ) wxWindow() function
+    and provide retentitive size and position for the session.
+
     Use tooltips to explain the functionality of each non-obvious control.
     This is important because the help files and the wiki often lag behind
     the source code.

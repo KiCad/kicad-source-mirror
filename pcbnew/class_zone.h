@@ -77,58 +77,7 @@ struct SEGMENT
 class ZONE_CONTAINER : public BOARD_CONNECTED_ITEM
 {
 public:
-    wxString              m_Netname;                        // Net Name
-    CPolyLine*            m_Poly;                           // outlines
 
-    // For corner moving, corner index to drag, or -1 if no selection.
-    int                   m_CornerSelection;
-    int                   m_ZoneClearance;                  // clearance value
-    int                   m_ZoneMinThickness;               // Min thickness value in filled areas
-
-    // How to fill areas: 0 = use filled polygons, != 0 fill with segments.
-    int                   m_FillMode;
-
-    // number of segments to convert a circle to a polygon (uses
-    //ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
-    int                   m_ArcToSegmentsCount;
-
-    // thickness of the gap in thermal reliefs.
-    int                   m_ThermalReliefGap;
-
-    // thickness of the copper bridge in thermal reliefs
-    int                   m_ThermalReliefCopperBridge;
-    int                   utility, utility2;                // flags used in polygon calculations
-
-    // true when a zone was filled, false after deleting the filled areas
-    bool                  m_IsFilled;
-
-    /* set of filled polygons used to draw a zone as a filled area.
-     * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
-     * (they are* all in one piece)  In very simple cases m_FilledPolysList is same
-     * as m_Poly.  In less simple cases (when m_Poly has holes) m_FilledPolysList is
-     * a polygon equivalent to m_Poly, without holes but with extra outline segment
-     * connecting "holes" with external main outline.  In complex cases an outline
-     * described by m_Poly can have many filled areas
-     */
-    std::vector <CPolyPt> m_FilledPolysList;
-
-    /* set of segments used to fill area, when fill zone by segment is used.
-     *  ( m_FillMode == 1 )
-     *  in this case segments have m_ZoneMinThickness width
-     */
-    std::vector <SEGMENT> m_FillSegmList;
-
-private:
-    CPolyLine*            smoothedPoly;         // Corner-smoothed version of m_Poly
-    int                   cornerSmoothingType;
-    unsigned int          cornerRadius;
-    // Priority: when a zone outline is inside and other zone, if its priority is higher
-    // the other zone priority, it will be created inside.
-    // if priorities are equal, a DRC error is set
-    unsigned              m_priority;
-    ZoneConnection        m_PadConnection;
-
-public:
     ZONE_CONTAINER( BOARD* parent );
 
     ZONE_CONTAINER( const ZONE_CONTAINER& aZone );
@@ -257,13 +206,13 @@ public:
      * returns the net name.
      * @return const wxString& - The net name.
      */
-    const wxString& GetNetName() const { return m_Netname; };
-    void SetNetName( const wxString& aName ) { m_Netname = aName; }
+    const wxString& GetNetName() const                  { return m_Netname; };
+    void SetNetName( const wxString& aName )            { m_Netname = aName; }
 
-    void SetFillMode( int aFillMode ) { m_FillMode = aFillMode; }
-    int GetFillMode() const { return m_FillMode; }
+    void SetFillMode( int aFillMode )                   { m_FillMode = aFillMode; }
+    int GetFillMode() const                             { return m_FillMode; }
 
-    void SetThermalReliefGap( int aThermalReliefGap ) { m_ThermalReliefGap = aThermalReliefGap; }
+    void SetThermalReliefGap( int aThermalReliefGap )   { m_ThermalReliefGap = aThermalReliefGap; }
     int GetThermalReliefGap( D_PAD* aPad = NULL ) const;
 
     void SetThermalReliefCopperBridge( int aThermalReliefCopperBridge )
@@ -547,6 +496,59 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
+
+
+    CPolyLine*            m_Poly;                           // outlines
+
+    // For corner moving, corner index to drag, or -1 if no selection.
+    int                   m_CornerSelection;
+    int                   m_ZoneClearance;                  // clearance value
+    int                   m_ZoneMinThickness;               // Min thickness value in filled areas
+
+    // How to fill areas: 0 = use filled polygons, != 0 fill with segments.
+    int                   m_FillMode;
+
+    // number of segments to convert a circle to a polygon (uses
+    //ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
+    int                   m_ArcToSegmentsCount;
+
+    // thickness of the gap in thermal reliefs.
+    int                   m_ThermalReliefGap;
+
+    // thickness of the copper bridge in thermal reliefs
+    int                   m_ThermalReliefCopperBridge;
+    int                   utility, utility2;                // flags used in polygon calculations
+
+    // true when a zone was filled, false after deleting the filled areas
+    bool                  m_IsFilled;
+
+    /* set of filled polygons used to draw a zone as a filled area.
+     * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
+     * (they are* all in one piece)  In very simple cases m_FilledPolysList is same
+     * as m_Poly.  In less simple cases (when m_Poly has holes) m_FilledPolysList is
+     * a polygon equivalent to m_Poly, without holes but with extra outline segment
+     * connecting "holes" with external main outline.  In complex cases an outline
+     * described by m_Poly can have many filled areas
+     */
+    std::vector <CPolyPt> m_FilledPolysList;
+
+    /* set of segments used to fill area, when fill zone by segment is used.
+     *  ( m_FillMode == 1 )
+     *  in this case segments have m_ZoneMinThickness width
+     */
+    std::vector <SEGMENT> m_FillSegmList;
+
+
+private:
+    wxString              m_Netname;                        // Net Name
+    CPolyLine*            smoothedPoly;         // Corner-smoothed version of m_Poly
+    int                   cornerSmoothingType;
+    unsigned int          cornerRadius;
+    // Priority: when a zone outline is inside and other zone, if its priority is higher
+    // the other zone priority, it will be created inside.
+    // if priorities are equal, a DRC error is set
+    unsigned              m_priority;
+    ZoneConnection        m_PadConnection;
 };
 
 
