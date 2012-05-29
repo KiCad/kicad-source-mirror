@@ -69,9 +69,9 @@
             <property name="resize">Resizable</property>
             <property name="row"></property>
             <property name="show">1</property>
-            <property name="size">350,150</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
-            <property name="subclass"></property>
+            <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Find</property>
             <property name="toolbar_pane">0</property>
             <property name="tooltip"></property>
@@ -614,7 +614,7 @@
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_ANY</property>
+                                <property name="id">wxID_CANCEL</property>
                                 <property name="label">Close</property>
                                 <property name="layer"></property>
                                 <property name="max_size"></property>
