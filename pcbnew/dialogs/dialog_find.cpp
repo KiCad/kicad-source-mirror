@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 Marco Mattila <marcom99@gmail.com>
+ * Copyright (C) 2012 Marco Mattila <marcom99@gmail.com>
+ * Copyright (C) 2006 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 1992-2012 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -51,9 +52,6 @@ private:
     static wxString prevSearchString;
     static bool warpMouse;
 
-    static wxPoint prevPosition;
-    static wxSize prevSize;
-
     void onButtonFindItemClick( wxCommandEvent& event );
     void onButtonFindMarkerClick( wxCommandEvent& event );
     void onButtonCloseClick( wxCommandEvent& event );
@@ -62,8 +60,6 @@ private:
 
 
 // Initialize static member variables
-wxPoint DIALOG_FIND::prevPosition( -1, -1 );
-wxSize DIALOG_FIND::prevSize;
 wxString DIALOG_FIND::prevSearchString;
 bool DIALOG_FIND::warpMouse = true;
 
@@ -79,11 +75,7 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent 
 
     itemCount = markerCount = 0;
 
-    if( prevPosition.x != -1 )
-        SetSize( prevPosition.x, prevPosition.y,
-                 prevSize.x, prevSize.y );
-    else
-        Center();
+    Center();
 }
 
 
@@ -196,8 +188,6 @@ void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
 
 void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
 {
-    prevPosition = GetPosition();
-    prevSize = GetSize();
     warpMouse = !m_NoMouseWarpCheckBox->IsChecked();
 
     EndModal( 1 );
