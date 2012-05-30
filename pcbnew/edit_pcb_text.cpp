@@ -216,7 +216,6 @@ TEXTE_PCB* PCB_EDIT_FRAME::Create_Texte_Pcb( wxDC* DC )
 void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
     int angle    = 900;
-    int drawmode = GR_XOR;
 
     if( TextePcb == NULL )
         return;
@@ -228,13 +227,34 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     NORMALIZE_ANGLE_POS( TextePcb->m_Orient );
 
     /* Redraw text in new position. */
-    TextePcb->Draw( m_canvas, DC, drawmode );
+    TextePcb->Draw( m_canvas, DC, GR_XOR );
     TextePcb->DisplayInfo( this );
 
     if( TextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
-        SaveCopyInUndoList( TextePcb, UR_ROTATED, TextePcb->m_Pos );
+        SaveCopyInUndoList( TextePcb, UR_ROTATED, TextePcb->GetPosition() );
     else                 // set flag edit, to show it was a complex command
         TextePcb->SetFlags( IN_EDIT );
+
+    OnModify();
+}
+
+
+void PCB_EDIT_FRAME::FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC )
+{
+    if( aTextePcb == NULL )
+        return;
+
+    aTextePcb->Draw( m_canvas, aDC, GR_XOR );
+
+    aTextePcb->Flip( aTextePcb->GetPosition() );
+
+    aTextePcb->Draw( m_canvas, aDC, GR_XOR );
+    aTextePcb->DisplayInfo( this );
+
+    if( aTextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
+        SaveCopyInUndoList( aTextePcb, UR_FLIPPED, aTextePcb->GetPosition() );
+    else                 // set flag edit, to show it was a complex command
+        aTextePcb->SetFlags( IN_EDIT );
 
     OnModify();
 }

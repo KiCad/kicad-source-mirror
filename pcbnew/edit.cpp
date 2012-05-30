@@ -81,6 +81,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_ROTATE_TEXTEPCB:
+    case ID_POPUP_PCB_FLIP_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_MIRE:
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
@@ -927,6 +928,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_ROTATE_TEXTEPCB:
         Rotate_Texte_Pcb( (TEXTE_PCB*) GetCurItem(), &dc );
+        m_canvas->MoveCursorToCrossHair();
+        break;
+
+    case ID_POPUP_PCB_FLIP_TEXTEPCB:
+        FlipTextePcb( (TEXTE_PCB*) GetCurItem(), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 
