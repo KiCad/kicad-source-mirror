@@ -174,7 +174,7 @@ the changes?" ) ) )
 
     // This is a subset of all PLUGINs which are trusted to be able to
     // load a BOARD.  Order is subject to change as KICAD plugin matures.
-    // User may occasionally use the wrong pluging to load a *.brd file,
+    // User may occasionally use the wrong plugin to load a *.brd file,
     // but eventually *.kicad_pcb will be more common than legacy *.brd files.
     static const struct {
         const wxString&     filter;
