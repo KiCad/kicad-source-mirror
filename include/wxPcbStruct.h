@@ -928,6 +928,7 @@ public:
 
     // Handling texts on the board
     void Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
+    void FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC );
     TEXTE_PCB* Create_Texte_Pcb( wxDC* DC );
     void Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     void StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC );

@@ -624,9 +624,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         OnHotkeyRotateItem( HK_ROTATE_ITEM );
         break;
 
-    case HK_FLIP_FOOTPRINT:     // move to other side
-        OnHotkeyRotateItem( HK_FLIP_FOOTPRINT );
+    case HK_FLIP_ITEM:
+        OnHotkeyRotateItem( HK_FLIP_ITEM );
         break;
+
     case HK_SWITCH_HIGHCONTRAST_MODE: // switch to high contrast mode and refresh the canvas
         DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
         m_canvas->Refresh();
@@ -1002,7 +1003,7 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
 
-        if( aIdCommand == HK_FLIP_FOOTPRINT )                   // move to other side
+        if( aIdCommand == HK_FLIP_ITEM )                   // move to other side
             evt_type = ID_POPUP_PCB_CHANGE_SIDE_MODULE;
     }
         break;
@@ -1010,6 +1011,8 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
     case PCB_TEXT_T:
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
+        else if( aIdCommand == HK_FLIP_ITEM )
+            evt_type = ID_POPUP_PCB_FLIP_TEXTEPCB;
 
         break;
 

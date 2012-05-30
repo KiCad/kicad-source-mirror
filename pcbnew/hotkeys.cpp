@@ -67,7 +67,7 @@ static EDA_HOTKEY HkPlaceItem( wxT( "Place Item" ), HK_PLACE_ITEM, 'P' );
 static EDA_HOTKEY HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
 static EDA_HOTKEY HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
 static EDA_HOTKEY HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
-static EDA_HOTKEY HkFlipFootprint( wxT( "Flip Footprint" ), HK_FLIP_FOOTPRINT, 'F' );
+static EDA_HOTKEY HkFlipItem( wxT( "Flip Item" ), HK_FLIP_ITEM, 'F' );
 static EDA_HOTKEY HkRotateItem( wxT( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
 static EDA_HOTKEY HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M' );
 static EDA_HOTKEY HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_ITEM, 'G' );
@@ -78,7 +78,7 @@ static EDA_HOTKEY HkLock_Unlock_Footprint( wxT( "Lock/Unlock Footprint" ),
 static EDA_HOTKEY HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
 static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                      HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"), 
+static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"),
 					    HK_SWITCH_HIGHCONTRAST_MODE,'H');
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
@@ -210,8 +210,8 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkSwitchTrackPosture,
     &HkDragTrackKeepSlope,
     &HkPlaceItem,
-    &HkEndTrack,               &HkMoveItem,
-    &HkFlipFootprint,          &HkRotateItem,                &HkDragFootprint,
+    &HkEndTrack,               &HkMoveItem,                  &HkFlipItem,
+    &HkRotateItem,             &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
     &HkLoadfile,               &HkFindItem,                  &HkEditBoardItem,
     &HkSwitch2CopperLayer,     &HkSwitch2InnerLayer1,

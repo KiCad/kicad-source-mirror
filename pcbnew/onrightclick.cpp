@@ -685,7 +685,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
                  msg, KiBitmap( rotate_module_pos_xpm ) );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
                  _( "Rotate -" ), KiBitmap( rotate_module_neg_xpm ) );
-    msg = AddHotkeyName( _( "Flip" ), g_Board_Editor_Hokeys_Descr, HK_FLIP_FOOTPRINT );
+    msg = AddHotkeyName( _( "Flip" ), g_Board_Editor_Hokeys_Descr, HK_FLIP_ITEM );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_CHANGE_SIDE_MODULE,
                  msg, KiBitmap( invert_module_xpm ) );
 
@@ -839,6 +839,8 @@ void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 
     msg = AddHotkeyName( _( "Rotate" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     AddMenuItem( sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB, msg, KiBitmap( rotate_ccw_xpm ) );
+    msg = AddHotkeyName( _( "Flip" ), g_Board_Editor_Hokeys_Descr, HK_FLIP_ITEM );
+    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_FLIP_TEXTEPCB, msg, KiBitmap( invert_module_xpm ) );
     msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
     AddMenuItem( sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB, msg, KiBitmap( edit_text_xpm ) );
     AddMenuItem( sub_menu_Text, ID_POPUP_PCB_RESET_TEXT_SIZE,
