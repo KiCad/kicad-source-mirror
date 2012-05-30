@@ -172,6 +172,10 @@ the changes?" ) ) )
 
     IO_MGR::PCB_FILE_T  pluginType = IO_MGR::LEGACY;
 
+    // This is a subset of all PLUGINs which are trusted to be able to
+    // load a BOARD.  Order is subject to change as KICAD plugin matures.
+    // User may occasionally use the wrong pluging to load a *.brd file,
+    // but eventually *.kicad_pcb will be more common than legacy *.brd files.
     static const struct {
         const wxString&     filter;
         IO_MGR::PCB_FILE_T  pluginType;
@@ -187,12 +191,12 @@ the changes?" ) ) )
         wxString path = wxGetCwd();
         wxString fileFilters;
 
-        for( unsigned i = 0; i<DIM( loaders );  ++i )
+        for( unsigned i=0;  i<DIM( loaders );  ++i )
         {
             if( i > 0 )
                 fileFilters += wxChar( '|' );
 
-            fileFilters += loaders[i].filter;
+            fileFilters += wxGetTranslation( loaders[i].filter );
         }
 
         if( aForceFileDialog && fileName.FileExists() )
