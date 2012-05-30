@@ -75,18 +75,6 @@ namespace boost {
 typedef boost::property_tree::ptree     PTREE;
 typedef const PTREE                     CPTREE;
 
-struct EWIRE;
-struct EVIA;
-struct EROT;
-struct EATTR;
-struct ECIRCLE;
-struct ETEXT;
-struct ERECT;
-struct EPAD;
-struct ESMD;
-struct EVERTEX;
-struct EPOLYGON;
-
 /**
  * Class EAGLE_PLUGIN
  * works with Eagle 6.x XML board files and footprints.
@@ -193,35 +181,6 @@ private:
     void loadLibraries( CPTREE& aLibs, const std::string& aXpath );
 
     void loadElements( CPTREE& aElements, const std::string& aXpath );
-
-    // none of the 'e'funcs do any "to KiCad" conversion, they merely read the XML into binary:
-
-    /**
-     * Function ewire
-     * converts a <wire>'s xml attributes to binary without additional conversion.
-     * @param aResult is an EWIRE to fill in with the <wire> data converted to binary.
-     */
-    EWIRE       ewire( CPTREE& aWire ) const;
-
-    EVIA        evia( CPTREE& aVia ) const;
-
-    ECIRCLE     ecircle( CPTREE& aCircle ) const;
-    ETEXT       etext( CPTREE& aText )  const;
-    ERECT       erect( CPTREE& aRect ) const;
-
-    EROT        erot( const std::string& aRot ) const;
-    EPAD        epad( CPTREE& aPad ) const;
-    ESMD        esmd( CPTREE& aSMD ) const;
-    EVERTEX     evertex( CPTREE& aVertex ) const;
-    EPOLYGON    epolygon( CPTREE& aPolygon ) const;
-
-    /**
-     * Function eattr
-     * parses an Eagle "attribute" element.  Note that an attribute element
-     * is different than an XML element attribute.  The attribute element is a
-     * full XML node in and of itself, and has attributes of its own.  Blame Eagle.
-     */
-    EATTR eattr( CPTREE& aAttribute ) const;
 
     /**
      * Function fmtDEG
