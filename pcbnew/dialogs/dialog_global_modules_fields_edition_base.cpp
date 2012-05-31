@@ -26,13 +26,13 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields:") ), wxVERTICAL );
 	
 	m_ReferenceOpt = new wxCheckBox( this, wxID_ANY, _("Modify reference"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_ReferenceOpt, 0, wxALL, 5 );
+	sbSizer1->Add( m_ReferenceOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ValueOpt = new wxCheckBox( this, wxID_ANY, _("Modify value"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_ValueOpt, 0, wxALL, 5 );
+	sbSizer1->Add( m_ValueOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	m_OtherFields = new wxCheckBox( this, wxID_ANY, _("Modify other fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_OtherFields, 0, wxALL, 5 );
+	sbSizer1->Add( m_OtherFields, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bLeftSizer->Add( sbSizer1, 1, wxEXPAND|wxRIGHT, 5 );
@@ -44,9 +44,9 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	bLeftSizer->Add( m_staticTextFilter, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ModuleFilter = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_ModuleFilter->SetMinSize( wxSize( 150,-1 ) );
+	m_ModuleFilter->SetMinSize( wxSize( 180,-1 ) );
 	
-	bLeftSizer->Add( m_ModuleFilter, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftSizer->Add( m_ModuleFilter, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	bSizerUpper->Add( bLeftSizer, 1, wxEXPAND, 5 );
@@ -59,6 +59,7 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	
 	wxFlexGridSizer* fgSizerCurrSettings;
 	fgSizerCurrSettings = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgSizerCurrSettings->AddGrowableCol( 1 );
 	fgSizerCurrSettings->SetFlexibleDirection( wxBOTH );
 	fgSizerCurrSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -99,7 +100,7 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	sbSizerSettings->Add( fgSizerCurrSettings, 1, wxEXPAND, 5 );
 	
 	
-	bRightSizer->Add( sbSizerSettings, 1, wxEXPAND|wxLEFT, 5 );
+	bRightSizer->Add( sbSizerSettings, 0, wxEXPAND|wxLEFT, 5 );
 	
 	
 	bSizerUpper->Add( bRightSizer, 0, wxEXPAND, 5 );

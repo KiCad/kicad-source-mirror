@@ -42,7 +42,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE</property>
             <property name="pos"></property>
-            <property name="size">482,199</property>
+            <property name="size">409,199</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Global Module Fields Edition</property>
@@ -123,7 +123,7 @@
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -211,7 +211,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -299,7 +299,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -472,7 +472,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -508,7 +508,7 @@
                                         <property name="maxlength">0</property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">150,-1</property>
+                                        <property name="minimum_size">180,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_ModuleFilter</property>
                                         <property name="pane_border">1</property>
@@ -575,7 +575,7 @@
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND|wxLEFT</property>
-                                    <property name="proportion">1</property>
+                                    <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Current Design Settings:</property>
@@ -591,7 +591,7 @@
                                             <object class="wxFlexGridSizer" expanded="1">
                                                 <property name="cols">3</property>
                                                 <property name="flexible_direction">wxBOTH</property>
-                                                <property name="growablecols"></property>
+                                                <property name="growablecols">1</property>
                                                 <property name="growablerows"></property>
                                                 <property name="hgap">0</property>
                                                 <property name="minimum_size"></property>
