@@ -45,8 +45,8 @@
 
 // The dialog to set options for global fields edition:
 // optionas are:
-// edited fields (ref, value, others
-// the footprint filter, for selective edition
+// - edited fields (ref, value, others
+// - the footprint filter, for selective edition
 class DIALOG_GLOBAL_MODULES_FIELDS_EDITION : public DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE
 {
     PCB_EDIT_FRAME* m_parent;
@@ -64,7 +64,6 @@ public:
     {
         m_parent = parent;
         initDialog();
-        GetSizer()->SetSizeHints( this );
     }
 
 private:
@@ -85,7 +84,7 @@ wxString DIALOG_GLOBAL_MODULES_FIELDS_EDITION::m_filterString;
 
 void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::initDialog()
 {
-    SetFocus();
+    m_sdbSizerButtonsOK->SetDefault();
 
     m_brdSettings = &m_parent->GetDesignSettings();
 
@@ -102,6 +101,10 @@ void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::initDialog()
         ReturnStringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextSize.y ) );
     m_TicknessValue->SetValue(
         ReturnStringFromValue( g_UserUnit, m_brdSettings->m_ModuleTextWidth) );
+
+    Layout();
+    GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 

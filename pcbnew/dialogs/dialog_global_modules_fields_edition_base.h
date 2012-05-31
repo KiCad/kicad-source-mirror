@@ -63,7 +63,7 @@ class DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Global Module Fields Edition"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 482,199 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Global Module Fields Edition"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 409,199 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE();
 	
 };
