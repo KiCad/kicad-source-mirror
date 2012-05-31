@@ -117,6 +117,8 @@ public:
 
 private:
 
+    int             m_hole_count;   ///< generates unique module names from eagle "hole"s.
+
     NET_MAP         m_pads_to_nets;
 
     MODULE_MAP      m_templates;    ///< is part of a MODULE factory that operates
