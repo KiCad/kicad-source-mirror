@@ -35,6 +35,14 @@ public:
     void OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent );
 
     /**
+     * Function InitDisplay
+     * Refresh the full display for this frame:
+     * Set the title, the status line and redraw the canvas
+     * Must be called after the footprint to display is modifed
+     */
+    void InitDisplay();
+
+    /**
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
