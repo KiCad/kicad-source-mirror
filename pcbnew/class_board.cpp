@@ -89,6 +89,12 @@ BOARD::~BOARD()
 }
 
 
+void BOARD::Move( const wxPoint& aMoveVector )        // overload
+{
+
+}
+
+
 void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList )
 {
     TRACK* segment;             // The current segment being analyzed.

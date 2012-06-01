@@ -250,8 +250,13 @@ the changes?" ) ) )
 
     try
     {
+        PROPERTIES  props;
+
+        props["page_width"]  = wxString::Format( wxT( "%d" ), GetPageSizeIU().x );
+        props["page_height"] = wxString::Format( wxT( "%d" ), GetPageSizeIU().y );
+
         // load or append either:
-        loadedBoard = pi->Load( GetScreen()->GetFileName(), aAppend ? GetBoard() : NULL, NULL );
+        loadedBoard = pi->Load( GetScreen()->GetFileName(), aAppend ? GetBoard() : NULL, &props );
 
         if( !aAppend )
         {

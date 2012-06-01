@@ -174,15 +174,12 @@ private:
 
     // all these loadXXX() throw IO_ERROR or ptree_error exceptions:
 
-    void loadAllSections( CPTREE& aEagleBoard, const std::string& aXpath, bool aAppendToMe );
-
-    void loadPlain( CPTREE& aPlain, const std::string& aXpath );
-
-    void loadSignals( CPTREE& aSignals, const std::string& aXpath );
-
-    void loadLibraries( CPTREE& aLibs, const std::string& aXpath );
-
-    void loadElements( CPTREE& aElements, const std::string& aXpath );
+    void loadAllSections( CPTREE& aDocument, bool aAppendToMe );
+    void loadLayerDefs( CPTREE& aLayers );
+    void loadPlain( CPTREE& aPlain );
+    void loadSignals( CPTREE& aSignals );
+    void loadLibraries( CPTREE& aLibs );
+    void loadElements( CPTREE& aElements );
 
     /**
      * Function fmtDEG
