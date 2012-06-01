@@ -49,13 +49,10 @@ our error message.
 Load() TODO's
 
 *) finish xpath support
-*) set layer counts, types and names into BOARD
-*) footprint placement on board back
-*) eagle "mirroring" does not mean put on board back
+*) test footprint placement on board back
 *) netclass info?
-*) code factoring, for polygon at least
-*) zone fill clearances
-*) package rectangles
+*) verify zone fill clearances are correct
+*) write BOARD::Move() and reposition to center of page?
 
 */
 
@@ -122,7 +119,10 @@ struct EROT
     bool    mirror;
     bool    spin;
     double  degrees;
+
+    EROT() : mirror( false ), spin( false ), degrees( 0 ) {}
 };
+
 typedef boost::optional<EROT>   opt_erot;
 
 static EROT erot( const std::string& aRot )
@@ -184,8 +184,8 @@ struct EVIA
 {
     double      x;
     double      y;
-    int         layer_start;        /// < extent
-    int         layer_end;          /// < inclusive
+    int         layer_front_most;   /// < extent
+    int         layer_back_most;    /// < inclusive
     double      drill;
     opt_double  diam;
     opt_string  shape;
@@ -214,7 +214,7 @@ EVIA::EVIA( CPTREE& aVia )
 
     std::string ext = attribs.get<std::string>( "extent" );
 
-    sscanf( ext.c_str(), "%u-%u", &layer_start, &layer_end );
+    sscanf( ext.c_str(), "%u-%u", &layer_front_most, &layer_back_most );
 
     drill = attribs.get<double>( "drill" );
     diam  = attribs.get_optional<double>( "diameter" );
@@ -265,7 +265,7 @@ struct ERECT
     double      x2;
     double      y2;
     int         layer;
-    opt_erot    erot;
+    opt_erot    rot;
 
     ERECT( CPTREE& aRect );
 };
@@ -286,12 +286,12 @@ ERECT::ERECT( CPTREE& aRect )
           >
     */
 
-    x1     = attribs.get<double>( "x1" );
-    y1     = attribs.get<double>( "y1" );
-    x2     = attribs.get<double>( "x2" );
-    y2     = attribs.get<double>( "y2" );
-    layer  = attribs.get<int>( "layer" );
-    erot   = parseOptionalEROT( attribs );
+    x1    = attribs.get<double>( "x1" );
+    y1    = attribs.get<double>( "y1" );
+    x2    = attribs.get<double>( "x2" );
+    y2    = attribs.get<double>( "y2" );
+    layer = attribs.get<int>( "layer" );
+    rot   = parseOptionalEROT( attribs );
 }
 
 
@@ -305,7 +305,7 @@ struct EATTR
     opt_double  size;
     opt_int     layer;
     opt_double  ratio;
-    opt_erot    erot;
+    opt_erot    rot;
     opt_int     display;
 
     enum {  // for 'display' field above
@@ -357,7 +357,7 @@ EATTR::EATTR( CPTREE& aAttribute )
     layer   = attribs.get_optional<int>( "layer" );
 
     ratio   = attribs.get_optional<double>( "ratio" );
-    erot    = parseOptionalEROT( attribs );
+    rot     = parseOptionalEROT( attribs );
 
     opt_string stemp = attribs.get_optional<std::string>( "display" );
     if( stemp )
@@ -385,7 +385,7 @@ struct ETEXT
     int         layer;
     opt_string  font;
     opt_double  ratio;
-    opt_erot    erot;
+    opt_erot    rot;
 
     enum {          // for align
         CENTER,
@@ -432,7 +432,7 @@ ETEXT::ETEXT( CPTREE& aText )
 
     font   = attribs.get_optional<std::string>( "font" );
     ratio  = attribs.get_optional<double>( "ratio" );
-    erot   = parseOptionalEROT( attribs );
+    rot    = parseOptionalEROT( attribs );
 
     opt_string stemp = attribs.get_optional<std::string>( "align" );
     if( stemp )
@@ -760,6 +760,42 @@ EELEMENT::EELEMENT( CPTREE& aElement )
 }
 
 
+struct ELAYER
+{
+    int         number;
+    std::string name;
+    int         color;
+    int         fill;
+    opt_bool    visible;
+    opt_bool    active;
+
+    ELAYER( CPTREE& aLayer );
+};
+
+ELAYER::ELAYER( CPTREE& aLayer )
+{
+    CPTREE& attribs = aLayer.get_child( "<xmlattr>" );
+
+    /*
+    <!ELEMENT layer EMPTY>
+    <!ATTLIST layer
+          number        %Layer;        #REQUIRED
+          name          %String;       #REQUIRED
+          color         %Int;          #REQUIRED
+          fill          %Int;          #REQUIRED
+          visible       %Bool;         "yes"
+          active        %Bool;         "yes"
+          >
+    */
+
+    number = attribs.get<int>( "number" );
+    name   = attribs.get<std::string>( "name" );
+    color  = attribs.get<int>( "color" );
+    visible = parseOptionalBool( attribs, "visible" );
+    active  = parseOptionalBool( attribs, "active" );
+}
+
+
 /// Assemble a two part key as a simple concatonation of aFirst and aSecond parts,
 /// using a separator.
 static inline std::string makeKey( const std::string& aFirst, const std::string& aSecond )
@@ -834,10 +870,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
 
         read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
 
-        std::string xpath = "eagle.drawing.board";
-        CPTREE&     brd   = doc.get_child( xpath );
-
-        loadAllSections( brd, xpath, bool( aAppendToMe ) );
+        loadAllSections( doc, bool( aAppendToMe ) );
     }
 
     // Class ptree_error is a base class for xml_parser_error & file_parser_error,
@@ -850,6 +883,23 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
     }
 
     // IO_ERROR exceptions are left uncaught, they pass upwards from here.
+
+    /*
+    if( aProperties )
+    {
+        const wxString& pageWidth  = (*aProperties)["page_width"];
+        const wxString& pageHeight = (*aProperties)["page_height"];
+
+        if( pageWidth.size() && pageHeight.size() )
+        {
+            EDA_RECT bbbox = m_board->GetBoundingBox();
+            int w = wxAtoi( pageWidth );
+            int h = wxAtoi( pageHeight );
+
+            m_board->Move( );
+        }
+    }
+    */
 
     deleter.release();
     return m_board;
@@ -870,37 +920,71 @@ void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 }
 
 
-void EAGLE_PLUGIN::loadAllSections( CPTREE& aEagleBoard, const std::string& aXpath, bool aAppendToMe )
+void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc, bool aAppendToMe )
 {
-    std::string xpath;
+    CPTREE& drawing = aDoc.get_child( "eagle.drawing" );
+    CPTREE& board   = drawing.get_child( "board" );
 
     {
-        xpath = aXpath + '.' + "plain";
-        CPTREE& plain = aEagleBoard.get_child( "plain" );
-        loadPlain( plain, xpath );
+        CPTREE& layers = drawing.get_child( "layers" );
+        loadLayerDefs( layers );
     }
 
     {
-        xpath = aXpath + '.' + "signals";
-        CPTREE&  signals = aEagleBoard.get_child( "signals" );
-        loadSignals( signals, xpath );
+        CPTREE& plain = board.get_child( "plain" );
+        loadPlain( plain );
     }
 
     {
-        xpath = aXpath + '.' + "libraries";
-        CPTREE&  libs = aEagleBoard.get_child( "libraries" );
-        loadLibraries( libs, xpath );
+        CPTREE&  signals = board.get_child( "signals" );
+        loadSignals( signals );
     }
 
     {
-        xpath = aXpath + '.' + "elements";
-        CPTREE& elems = aEagleBoard.get_child( "elements" );
-        loadElements( elems, xpath );
+        CPTREE&  libs = board.get_child( "libraries" );
+        loadLibraries( libs );
+    }
+
+    {
+        CPTREE& elems = board.get_child( "elements" );
+        loadElements( elems );
     }
 }
 
 
-void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
+void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
+{
+    typedef std::vector<ELAYER>     ELAYERS;
+    typedef ELAYERS::const_iterator EITER;
+
+    ELAYERS     cu;  // copper layers
+
+    // find the subset of layers that are copper, and active
+    for( CITER layer = aLayers.begin();  layer != aLayers.end();  ++layer )
+    {
+        ELAYER  elayer( layer->second );
+
+        if( elayer.number >= 1 && elayer.number <= 16 && ( !elayer.active || *elayer.active ) )
+        {
+            cu.push_back( elayer );
+        }
+    }
+
+    m_board->SetCopperLayerCount( cu.size() );
+
+    for( EITER it = cu.begin();  it != cu.end();  ++it )
+    {
+        int layer = kicad_layer( it->number );
+
+        m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
+        m_board->SetLayerType( layer, LT_SIGNAL );
+
+        // could map the colors here
+    }
+}
+
+
+void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 {
     // (polygon | wire | text | circle | rectangle | frame | hole)*
     for( CITER gr = aGraphics.begin();  gr != aGraphics.end();  ++gr )
@@ -932,38 +1016,46 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
             ETEXT   t( gr->second );
             int     layer = kicad_layer( t.layer );
 
-            double  ratio = 6;
             int     sign = 1;
 
             TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
             m_board->Add( pcbtxt, ADD_APPEND );
 
+            pcbtxt->SetLayer( layer );
             pcbtxt->SetTimeStamp( timeStamp( gr->second ) );
             pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
             pcbtxt->SetPosition( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
-            pcbtxt->SetLayer( layer );
 
             pcbtxt->SetSize( kicad_fontz( t.size ) );
 
-            if( t.ratio )
-                ratio = *t.ratio;
+            double  ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
 
             pcbtxt->SetThickness( kicad( t.size * ratio / 100 ) );
 
-            if( t.erot )
+            if( t.rot )
             {
                 // eagles does not rotate text spun to 180 degrees unless spin is set.
-                if( t.erot->spin || t.erot->degrees != 180 )
-                    pcbtxt->SetOrientation( t.erot->degrees * 10 );
+#if 0
+                if( t.rot->spin || ( t.rot->degrees != 180 && t.rot->degrees != 270 ) )
+                    pcbtxt->SetOrientation( t.rot->degrees * 10 );
+
+                else
+                    // flip the justification to opposite
+                    sign = -1;
+#else
+                // eagles does not rotate text spun to 180 degrees unless spin is set.
+                if( t.rot->spin || t.rot->degrees != 180 )
+                    pcbtxt->SetOrientation( t.rot->degrees * 10 );
 
                 else
                     // flip the justification to opposite
                     sign = -1;
 
-                if( t.erot->degrees == 270 )
+                if( t.rot->degrees == 270 )
                     sign = -1;
+#endif
+                pcbtxt->SetMirrored( t.rot->mirror );
 
-                pcbtxt->SetMirrored( t.erot->mirror );
             }
 
             int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
@@ -1111,7 +1203,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics, const std::string& aXpath )
 }
 
 
-void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs, const std::string& aXpath )
+void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs )
 {
     for( CITER library = aLibs.begin();  library != aLibs.end();  ++library )
     {
@@ -1160,7 +1252,7 @@ void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs, const std::string& aXpath )
 }
 
 
-void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
+void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 {
     for( CITER it = aElements.begin();  it != aElements.end();  ++it )
     {
@@ -1169,8 +1261,8 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
 
         EELEMENT    e( it->second );
 
-#if 0 && defined(DEBUG)
-        if( !e.name.compare( "GROUND" ) )
+#if 1 && defined(DEBUG)
+        if( !e.value.compare( "LP2985-33DBVR" ) )
         {
             int breakhere = 1;
             (void) breakhere;
@@ -1232,7 +1324,10 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
 
         // VALUE and NAME can have something like our text "effects" overrides
         // in SWEET and new schematic.  Eagle calls these XML elements "attribute".
-        // There can be one for NAME and/or VALUE both.
+        // There can be one for NAME and/or VALUE both.  Features present in the
+        // EATTR override the ones established in the package only if they are
+        // present here.  So the logic is a bit different than in packageText()
+        // and in plain text.
         for( CITER ait = it->second.begin();  ait != it->second.end();  ++ait )
         {
             if( ait->first.compare( "attribute" ) )
@@ -1266,36 +1361,48 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements, const std::string& aXpath )
                 txt->SetPos0( pos0 );
             }
 
-            double ratio = 6;
-            if( a.ratio )
-                ratio = *a.ratio;
+            // Even though size and ratio are both optional, I am not seeing
+            // a case where ratio is present but size is not.
 
             if( a.size )
             {
                 wxSize  fontz = kicad_fontz( *a.size );
                 txt->SetSize( fontz );
 
-                int     lw = int( fontz.y * ratio / 100.0 );
-                txt->SetThickness( lw );
+                if( a.ratio )
+                {
+                    double  ratio = *a.ratio;
+                    int     lw = int( fontz.y * ratio / 100.0 );
+                    txt->SetThickness( lw );
+                }
             }
 
-            double angle = 0;
-            if( a.erot )
-                angle = a.erot->degrees * 10;
+            // The "rot" in a EATTR seems to be assumed to be zero if it is not
+            // present, and this becomes an override to the package's text field
+            EROT rot;
 
-            if( angle != 1800 )
+            if( a.rot )
+                rot = *a.rot;
+
+            if( rot.spin || (rot.degrees != 180 && rot.degrees != 270) )
             {
+                double angle = rot.degrees * 10;
                 angle -= m->GetOrientation();   // subtract module's angle
                 txt->SetOrientation( angle );
             }
+
             else
             {
+                // ETEXT::TOP_RIGHT:
                 txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
                 txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
             }
+
+            txt->SetMirrored( rot.mirror );
         }
     }
 }
+
 
 MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName ) const
 {
@@ -1356,12 +1463,6 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
 
         dwg->SetStart0( start );
         dwg->SetEnd0( end );
-
-        switch( layer )
-        {
-        case ECO1_N:    layer = SILKSCREEN_N_FRONT; break;
-        case ECO2_N:    layer = SILKSCREEN_N_BACK;  break;
-        }
 
         dwg->SetLayer( layer );
         dwg->SetWidth( width );
@@ -1490,34 +1591,36 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
     txt->SetPosition( pos );
     txt->SetPos0( pos - aModule->GetPosition() );
 
+    /*
     switch( layer )
     {
-    case ECO1_N:    layer = SILKSCREEN_N_FRONT; break;
-    case ECO2_N:    layer = SILKSCREEN_N_BACK;  break;
+    case COMMENT_N: layer = SILKSCREEN_N_FRONT; break;
     }
+    */
 
     txt->SetLayer( layer );
 
     txt->SetSize( kicad_fontz( t.size ) );
 
-    double ratio = 6;
-    if( t.ratio )
-        ratio = *t.ratio;
+    double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
 
     txt->SetThickness( kicad( t.size * ratio / 100 ) );
 
+    double angle = t.rot ? t.rot->degrees * 10 : 0;
+
+    // An eagle package is never rotated, the DTD does not allow it.
+    // angle -= aModule->GetOrienation();
+
     int sign = 1;
-    if( t.erot )
+    if( t.rot )
     {
-        if( t.erot->spin || t.erot->degrees != 180 )
-            txt->SetOrientation( t.erot->degrees * 10 );
+        if( t.rot->spin || (angle != 1800 && angle != 2700) )
+            txt->SetOrientation( angle );
 
-        else    // 180 degrees, reverse justification below, don't spin
-        {
+        else    // 180 or 270 degrees, reverse justification below, don't spin
             sign = -1;
-        }
 
-        txt->SetMirrored( t.erot->mirror );
+        txt->SetMirrored( t.rot->mirror );
     }
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
@@ -1569,13 +1672,83 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 {
-    // ERECT r( aTree );
+    ERECT   r( aTree );
+    int     layer = kicad_layer( r.layer );
+
+    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper "package.rectangle"s
+    {
+        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+        aModule->m_Drawings.PushBack( dwg );
+
+        dwg->SetLayer( layer );
+        dwg->SetWidth( 0 );
+
+        dwg->SetTimeStamp( timeStamp( aTree ) );
+
+        std::vector<wxPoint> pts;
+
+        wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
+        wxPoint end(   wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+
+        pts.push_back( start );
+        pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
+        pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
+        pts.push_back( end );
+
+        dwg->SetPolyPoints( pts );
+
+        dwg->SetStart0( start );
+        dwg->SetEnd0( end );
+    }
 }
 
 
 void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 {
-    // EPOLYGON p( aTree );
+    EPOLYGON    p( aTree );
+    int         layer = kicad_layer( p.layer );
+
+    if( IsValidNonCopperLayerIndex( layer ) )  // skip copper "package.rectangle"s
+    {
+        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+        aModule->m_Drawings.PushBack( dwg );
+
+        dwg->SetWidth( 0 );     // it's filled, no need for boundary width
+
+        /*
+        switch( layer )
+        {
+        case ECO1_N:    layer = SILKSCREEN_N_FRONT; break;
+        case ECO2_N:    layer = SILKSCREEN_N_BACK;  break;
+
+        // all MODULE templates (created from eagle packages) are on front layer
+        // until cloned.
+        case COMMENT_N: layer = SILKSCREEN_N_FRONT; break;
+        }
+        */
+
+        dwg->SetLayer( layer );
+
+        dwg->SetTimeStamp( timeStamp( aTree ) );
+
+        std::vector<wxPoint> pts;
+        pts.reserve( aTree.size() );
+
+        for( CITER vi = aTree.begin();  vi != aTree.end();  ++vi )
+        {
+            if( vi->first.compare( "vertex" ) ) // skip <xmlattr> node
+                continue;
+
+            EVERTEX v( vi->second );
+
+            pts.push_back( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+        }
+
+        dwg->SetPolyPoints( pts );
+
+        dwg->SetStart0( *pts.begin() );
+        dwg->SetEnd0( pts.back() );
+    }
 }
 
 
@@ -1589,11 +1762,13 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
 
     gr->SetWidth( kicad( e.width ) );
 
+    /*
     switch( layer )
     {
     case ECO1_N:    layer = SILKSCREEN_N_FRONT; break;
     case ECO2_N:    layer = SILKSCREEN_N_BACK;  break;
     }
+    */
 
     gr->SetLayer( layer );
     gr->SetTimeStamp( timeStamp( aTree ) );
@@ -1688,7 +1863,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 }
 
 
-void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
+void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 {
     int netCode = 1;
 
@@ -1732,17 +1907,17 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
             {
                 EVIA    v( it->second );
 
-                int layer_start = kicad_layer( v.layer_start );
-                int layer_end   = kicad_layer( v.layer_end );
+                int layer_front_most = kicad_layer( v.layer_front_most );
+                int layer_back_most  = kicad_layer( v.layer_back_most );
 
-                if( IsValidCopperLayerIndex( layer_start ) &&
-                    IsValidCopperLayerIndex( layer_end ) )
+                if( IsValidCopperLayerIndex( layer_front_most ) &&
+                    IsValidCopperLayerIndex( layer_back_most ) )
                 {
                     int     drillz = kicad( v.drill );
                     SEGVIA* via = new SEGVIA( m_board );
                     m_board->m_Track.Insert( via, NULL );
 
-                    via->SetLayerPair( layer_start, layer_end );
+                    via->SetLayerPair( layer_front_most, layer_back_most );
 
                     // via diameters are externally controllable, not usually in a board:
                     // http://www.eaglecentral.ca/forums/index.php/mv/msg/34704/119478/
@@ -1758,6 +1933,13 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
                     }
 
                     via->SetDrill( drillz );
+
+                    if( layer_front_most == LAYER_N_FRONT && layer_back_most == LAYER_N_BACK )
+                        via->SetShape( VIA_THROUGH );
+                    else if( layer_front_most == LAYER_N_FRONT || layer_back_most == LAYER_N_BACK )
+                        via->SetShape( VIA_MICROVIA );
+                    else
+                        via->SetShape( VIA_BLIND_BURIED );
 
                     via->SetTimeStamp( timeStamp( it->second ) );
 
@@ -1803,8 +1985,6 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
                     zone->SetNet( netCode );
                     zone->SetNetName( netName );
 
-
-
                     int outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
                     bool first = true;
@@ -1829,6 +2009,23 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals, const std::string& aXpath )
 
                     zone->m_Poly->SetHatch( outline_hatch,
                                           Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ) );
+
+                    // clearances, etc.
+                    zone->SetArcSegCount( 32 );     // @todo: should be a constructor default?
+                    zone->SetMinThickness( kicad( p.width ) );
+
+                    if( p.spacing )
+                        zone->SetZoneClearance( kicad( *p.spacing ) );
+
+                    if( p.rank )
+                        zone->SetPriority( *p.rank );
+
+                    // missing == yes per DTD.
+                    bool thermals = !p.thermals || *p.thermals;
+                    zone->SetPadConnection( thermals ? THERMAL_PAD : PAD_IN_ZONE );
+
+                    int rank = p.rank ? *p.rank : 0;
+                    zone->SetPriority( rank );
                 }
             }
         }
@@ -1956,8 +2153,13 @@ int EAGLE_PLUGIN::kicad_layer( int aEagleLayer )
         case 36:    kiLayer = ADHESIVE_N_BACK;      break;
         case 49:    kiLayer = COMMENT_N;            break;
         case 50:    kiLayer = COMMENT_N;            break;
-        case 51:    kiLayer = ECO1_N;               break;
-        case 52:    kiLayer = ECO2_N;               break;
+
+        // Packages show the future chip pins on SMD parts using layer 51.
+        // This is an area slightly smaller than the PAD/SMD copper area.
+        // Carry those visual aids into the MODULE on the drawing layer, not silkscreen.
+        case 51:    kiLayer = DRAW_N;               break;
+        case 52:    kiLayer = DRAW_N;               break;
+
         case 95:    kiLayer = ECO1_N;               break;
         case 96:    kiLayer = ECO2_N;               break;
         default:
