@@ -48,11 +48,10 @@ our error message.
 
 Load() TODO's
 
-*) finish xpath support
 *) test footprint placement on board back
 *) netclass info?
 *) verify zone fill clearances are correct
-*) write BOARD::Move() and reposition to center of page?
+*) write BOARD::Move() and reposition to center of page from centerBoard()
 
 */
 
@@ -78,6 +77,88 @@ Load() TODO's
 
 using namespace boost::property_tree;
 
+/// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
+struct TRIPLET
+{
+    const char* element;
+    const char* attribute;
+    const char* value;
+
+    TRIPLET( const char* aElement, const char* aAttribute = "", const char* aValue = "" ) :
+        element( aElement ),
+        attribute( aAttribute ),
+        value( aValue )
+    {}
+};
+
+
+/**
+ * Class XPATH
+ * keeps track of what we are working on within a PTREE.
+ * Then if an exception is thrown, the place within the tree that gave us
+ * grief can be reported almost accurately.  To minimally impact
+ * speed, merely assign const char* pointers during the tree walking
+ * expedition.  The const char* pointers must be to C strings residing either in
+ * the data or code segment (i.e. "compiled in") or within the XML document, but
+ * not on the stack, since the stack is unwound during the throwing of the
+ * exception.  The XML document will not immediately vanish since we capture
+ * the xpath (using function Contents()) before the XML document tree (PTREE)
+ * is destroyed.
+ */
+class XPATH
+{
+    std::vector<TRIPLET>    p;
+
+public:
+    void push( const char* aPathSegment, const char* aAttribute="" )
+    {
+        p.push_back( TRIPLET( aPathSegment, aAttribute ) );
+    }
+
+    void clear()    { p.clear(); }
+
+    void pop()      { p.pop_back(); }
+
+    /// modify the last path node's value
+    void Value( const char* aValue )
+    {
+        p.back().value = aValue;
+    }
+
+    /// modify the last path node's attribute
+    void Attribute( const char* aAttribute )
+    {
+        p.back().attribute = aAttribute;
+    }
+
+    /// return the contents of the XPATH as a single string
+    std::string Contents()
+    {
+        typedef std::vector<TRIPLET>::const_iterator CITER;
+
+        std::string ret;
+
+        for( CITER it = p.begin();  it != p.end();  ++it )
+        {
+            if( it != p.begin() )
+                ret += '.';
+
+            ret += it->element;
+
+            if( it->attribute[0] && it->value[0] )
+            {
+                ret += '[';
+                ret += it->attribute;
+                ret += '=';
+                ret += it->value;
+                ret += ']';
+            }
+        }
+
+        return ret;
+    }
+};
+
 
 typedef EAGLE_PLUGIN::BIU                   BIU;
 typedef PTREE::const_assoc_iterator         CA_ITER;
@@ -91,9 +172,13 @@ typedef boost::optional<std::string>        opt_string;
 typedef boost::optional<int>                opt_int;
 typedef boost::optional<double>             opt_double;
 typedef boost::optional<bool>               opt_bool;
-//typedef boost::optional<CPTREE&>            opt_cptree;
 
 
+/**
+ * Function parseOptionalBool
+ * returns an opt_bool and sets it true or false according to the presence
+ * and value of an attribute within the CPTREE element.
+ */
 static opt_bool parseOptionalBool( CPTREE& attribs, const char* aName )
 {
     opt_bool    ret;
@@ -125,6 +210,8 @@ struct EROT
 
 typedef boost::optional<EROT>   opt_erot;
 
+/// parse an Eagle XML "rot" field.  Unfortunately the DTD seems not to explain
+/// this format very well.  R[S][M]<degrees>.   Examples: "R90", "MR180", "SR180"
 static EROT erot( const std::string& aRot )
 {
     EROT    rot;
@@ -136,10 +223,10 @@ static EROT erot( const std::string& aRot )
                         + int( rot.spin )       // skip optional leading 'S'
                         + int( rot.mirror ),    // skip optional leading 'M'
                         NULL );
-
     return rot;
 }
 
+/// Eagle "rot" fields are optional, handle that by returning opt_erot.
 static opt_erot parseOptionalEROT( CPTREE& attribs )
 {
     opt_erot    ret;
@@ -164,11 +251,27 @@ struct EWIRE
 /**
  * Constructor EWIRE
  * converts a <wire>'s xml attributes to binary without additional conversion.
- * @param aResult is an EWIRE to fill in with the <wire> data converted to binary.
+ * This result is an EWIRE with the <wire> textual data merely converted to binary.
  */
 EWIRE::EWIRE( CPTREE& aWire )
 {
     CPTREE& attribs = aWire.get_child( "<xmlattr>" );
+
+    /*
+    <!ELEMENT wire EMPTY>
+    <!ATTLIST wire
+          x1            %Coord;        #REQUIRED
+          y1            %Coord;        #REQUIRED
+          x2            %Coord;        #REQUIRED
+          y2            %Coord;        #REQUIRED
+          width         %Dimension;    #REQUIRED
+          layer         %Layer;        #REQUIRED
+          extent        %Extent;       #IMPLIED  -- only applicable for airwires --
+          style         %WireStyle;    "continuous"
+          curve         %WireCurve;    "0"
+          cap           %WireCap;      "round"   -- only applicable if 'curve' is not zero --
+          >
+    */
 
     x1    = attribs.get<double>( "x1" );
     y1    = attribs.get<double>( "y1" );
@@ -176,6 +279,8 @@ EWIRE::EWIRE( CPTREE& aWire )
     y2    = attribs.get<double>( "y2" );
     width = attribs.get<double>( "width" );
     layer = attribs.get<int>( "layer" );
+
+    // ignoring extent, style, curve and cap
 }
 
 
@@ -331,18 +436,18 @@ EATTR::EATTR( CPTREE& aAttribute )
     /*
     <!ELEMENT attribute EMPTY>
     <!ATTLIST attribute
-      name          %String;       #REQUIRED
-      value         %String;       #IMPLIED
-      x             %Coord;        #IMPLIED
-      y             %Coord;        #IMPLIED
-      size          %Dimension;    #IMPLIED
-      layer         %Layer;        #IMPLIED
-      font          %TextFont;     #IMPLIED
-      ratio         %Int;          #IMPLIED
-      rot           %Rotation;     "R0"
-      display       %AttributeDisplay; "value" -- only in <element> or <instance> context --
-      constant      %Bool;         "no"     -- only in <device> context --
-      >
+        name          %String;       #REQUIRED
+        value         %String;       #IMPLIED
+        x             %Coord;        #IMPLIED
+        y             %Coord;        #IMPLIED
+        size          %Dimension;    #IMPLIED
+        layer         %Layer;        #IMPLIED
+        font          %TextFont;     #IMPLIED
+        ratio         %Int;          #IMPLIED
+        rot           %Rotation;     "R0"
+        display       %AttributeDisplay; "value" -- only in <element> or <instance> context --
+        constant      %Bool;         "no"     -- only in <device> context --
+        >
     */
 
     name    = attribs.get<std::string>( "name" );                    // #REQUIRED
@@ -478,11 +583,8 @@ struct EPAD
         LONG,
         OFFSET,
     };
-
     opt_int     shape;
-
     opt_erot    rot;
-
     opt_bool    stop;
     opt_bool    thermals;
     opt_bool    first;
@@ -579,7 +681,7 @@ ESMD::ESMD( CPTREE& aSMD )
           >
     */
 
-    // the DTD says these must be present, throw exception if not found
+    // DTD #REQUIRED, throw exception if not found
     name  = attribs.get<std::string>( "name" );
     x     = attribs.get<double>( "x" );
     y     = attribs.get<double>( "y" );
@@ -622,7 +724,7 @@ EVERTEX::EVERTEX( CPTREE& aVertex )
 }
 
 
-// Eagle polygon, without vertices which are parsed as needed
+/// Eagle polygon, without vertices which are parsed as needed
 struct EPOLYGON
 {
     double      width;
@@ -634,7 +736,6 @@ struct EPOLYGON
         HATCH,
         CUTOUT,
     };
-
     opt_int     pour;
     opt_double  isolate;
     opt_bool    orphans;
@@ -682,6 +783,7 @@ EPOLYGON::EPOLYGON( CPTREE& aPolygon )
     rank     = attribs.get_optional<int>( "rank" );
 }
 
+/// Eagle hole element
 struct EHOLE
 {
     double      x;
@@ -710,6 +812,8 @@ EHOLE::EHOLE( CPTREE& aHole )
     drill = attribs.get<double>( "drill" );
 }
 
+
+/// Eagle element element
 struct EELEMENT
 {
     std::string name;
@@ -805,14 +909,16 @@ static inline std::string makeKey( const std::string& aFirst, const std::string&
 }
 
 
-/// Make a unique time stamp, in this case from a unique tree memory location
+/// Make a unique time stamp
 static inline unsigned long timeStamp( CPTREE& aTree )
 {
+    // in this case from a unique tree memory location
     return (unsigned long)(void*) &aTree;
 }
 
 
-EAGLE_PLUGIN::EAGLE_PLUGIN()
+EAGLE_PLUGIN::EAGLE_PLUGIN() :
+    m_xpath( new XPATH() )
 {
     init( NULL );
 }
@@ -820,6 +926,7 @@ EAGLE_PLUGIN::EAGLE_PLUGIN()
 
 EAGLE_PLUGIN::~EAGLE_PLUGIN()
 {
+    delete m_xpath;
 }
 
 
@@ -865,41 +972,41 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
 
     try
     {
-        // 8 bit filename should be encoded in current locale, not necessarily utf8.
+        // 8 bit "filename" should be encoded according to disk filename encoding,
+        // (maybe this is current locale, maybe not, its a filesystem issue),
+        // and is not necessarily utf8.
         std::string filename = (const char*) aFileName.fn_str();
 
         read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
 
-        loadAllSections( doc, bool( aAppendToMe ) );
+        loadAllSections( doc );
+
+        // should be empty, else missing m_xpath->pop()
+        wxASSERT( m_xpath->Contents().size() == 0 );
+    }
+
+    catch( file_parser_error fpe )
+    {
+        // for xml_parser_error, what() has the line number in it,
+        // but no byte offset.  That should be an adequate error message.
+        THROW_IO_ERROR( fpe.what() );
     }
 
     // Class ptree_error is a base class for xml_parser_error & file_parser_error,
     // so one catch should be OK for all errors.
     catch( ptree_error pte )
     {
-        // for xml_parser_error, what() has the line number in it,
-        // but no byte offset.  That should be an adequate error message.
-        THROW_IO_ERROR( pte.what() );
+        std::string errmsg = pte.what();
+
+        errmsg += " @\n";
+        errmsg += m_xpath->Contents();
+
+        THROW_IO_ERROR( errmsg );
     }
 
     // IO_ERROR exceptions are left uncaught, they pass upwards from here.
 
-    /*
-    if( aProperties )
-    {
-        const wxString& pageWidth  = (*aProperties)["page_width"];
-        const wxString& pageHeight = (*aProperties)["page_height"];
-
-        if( pageWidth.size() && pageHeight.size() )
-        {
-            EDA_RECT bbbox = m_board->GetBoundingBox();
-            int w = wxAtoi( pageWidth );
-            int h = wxAtoi( pageHeight );
-
-            m_board->Move( );
-        }
-    }
-    */
+    centerBoard();
 
     deleter.release();
     return m_board;
@@ -909,6 +1016,8 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
 void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 {
     m_hole_count = 0;
+
+    m_xpath->clear();
     m_pads_to_nets.clear();
     m_templates.clear();
 
@@ -920,10 +1029,10 @@ void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 }
 
 
-void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc, bool aAppendToMe )
+void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
 {
     CPTREE& drawing = aDoc.get_child( "eagle.drawing" );
-    CPTREE& board   = drawing.get_child( "board" );
+    m_xpath->push( "eagle.drawing" );
 
     {
         CPTREE& layers = drawing.get_child( "layers" );
@@ -931,29 +1040,32 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc, bool aAppendToMe )
     }
 
     {
+        CPTREE& board = drawing.get_child( "board" );
+        m_xpath->push( "board" );
+
         CPTREE& plain = board.get_child( "plain" );
         loadPlain( plain );
-    }
 
-    {
         CPTREE&  signals = board.get_child( "signals" );
         loadSignals( signals );
-    }
 
-    {
         CPTREE&  libs = board.get_child( "libraries" );
         loadLibraries( libs );
-    }
 
-    {
         CPTREE& elems = board.get_child( "elements" );
         loadElements( elems );
+
+        m_xpath->pop();     // "board"
     }
+
+    m_xpath->pop();     // "eagle.drawing"
 }
 
 
 void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 {
+    m_xpath->push( "layers.layer" );
+
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
@@ -981,16 +1093,21 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 
         // could map the colors here
     }
+
+    m_xpath->pop();
 }
 
 
 void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 {
+    m_xpath->push( "plain" );
+
     // (polygon | wire | text | circle | rectangle | frame | hole)*
     for( CITER gr = aGraphics.begin();  gr != aGraphics.end();  ++gr )
     {
         if( !gr->first.compare( "wire" ) )
         {
+            m_xpath->push( "wire" );
             EWIRE w( gr->second );
 
             DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
@@ -1001,6 +1118,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             dseg->SetStart( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
             dseg->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
             dseg->SetWidth( kicad( w.width ) );
+            m_xpath->pop();
         }
 
         else if( !gr->first.compare( "text" ) )
@@ -1012,7 +1130,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 (void) breakhere;
             }
 #endif
-
+            m_xpath->push( "text" );
             ETEXT   t( gr->second );
             int     layer = kicad_layer( t.layer );
 
@@ -1034,7 +1152,6 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
             if( t.rot )
             {
-                // eagles does not rotate text spun to 180 degrees unless spin is set.
 #if 0
                 if( t.rot->spin || ( t.rot->degrees != 180 && t.rot->degrees != 270 ) )
                     pcbtxt->SetOrientation( t.rot->degrees * 10 );
@@ -1102,10 +1219,12 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
                 break;
             }
+            m_xpath->pop();
         }
 
         else if( !gr->first.compare( "circle" ) )
         {
+            m_xpath->push( "circle" );
             ECIRCLE c( gr->second );
 
             DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
@@ -1117,12 +1236,14 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
             dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
             dseg->SetWidth( kicad( c.width ) );
+            m_xpath->pop();
         }
 
         // This seems to be a simplified rectangular [copper] zone, cannot find any
         // net related info on it from the DTD.
         else if( !gr->first.compare( "rectangle" ) )
         {
+            m_xpath->push( "rectangle" );
             ERECT   r( gr->second );
             int     layer = kicad_layer( r.layer );
 
@@ -1148,10 +1269,12 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 zone->m_Poly->SetHatch( outline_hatch,
                                       Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ) );
             }
+            m_xpath->pop();
         }
 
         else if( !gr->first.compare( "hole" ) )
         {
+            m_xpath->push( "hole" );
             EHOLE   e( gr->second );
 
             // Fabricate a MODULE with a single PAD_HOLE_NOT_PLATED pad.
@@ -1189,6 +1312,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             pad->SetSize( sz );
 
             pad->SetLayerMask( ALL_CU_LAYERS /* | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT */ );
+            m_xpath->pop();
         }
 
         else if( !gr->first.compare( "frame" ) )
@@ -1197,69 +1321,91 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         }
         else if( !gr->first.compare( "polygon" ) )
         {
-            // step up, be a man
+            // could be on a copper layer, could be on another layer.
+            // copper layer would be done using netCode=0 type of ZONE_CONTAINER.
         }
     }
+    m_xpath->pop();
 }
 
 
 void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs )
 {
+    m_xpath->push( "libraries.library", "name" );
+
     for( CITER library = aLibs.begin();  library != aLibs.end();  ++library )
     {
         const std::string& lib_name = library->second.get<std::string>( "<xmlattr>.name" );
 
-        // library will have <xmlattr> node, skip that and get the packages node
-        CPTREE& packages = library->second.get_child( "packages" );
+        m_xpath->Value( lib_name.c_str() );
 
-        // Create a MODULE for all the eagle packages, for use later via a copy constructor
-        // to instantiate needed MODULES in our BOARD.  Save the MODULE templates in
-        // a MODULE_MAP using a single lookup key consisting of libname+pkgname.
-
-        for( CITER package = packages.begin();  package != packages.end();  ++package )
         {
-            const std::string& pack_name = package->second.get<std::string>( "<xmlattr>.name" );
+            m_xpath->push( "packages" );
 
-#if defined(DEBUG)
-            if( !pack_name.compare( "TO220H" ) )
+            // library will have <xmlattr> node, skip that and get the single packages node
+            CPTREE& packages = library->second.get_child( "packages" );
+
+            // Create a MODULE for all the eagle packages, for use later via a copy constructor
+            // to instantiate needed MODULES in our BOARD.  Save the MODULE templates in
+            // a MODULE_MAP using a single lookup key consisting of libname+pkgname.
+
+            for( CITER package = packages.begin();  package != packages.end();  ++package )
             {
-                int breakhere = 1;
-                (void) breakhere;
+                m_xpath->push( "package", "name" );
+                const std::string& pack_name = package->second.get<std::string>( "<xmlattr>.name" );
+
+    #if defined(DEBUG)
+                if( !pack_name.compare( "TO220H" ) )
+                {
+                    int breakhere = 1;
+                    (void) breakhere;
+                }
+    #endif
+                m_xpath->Value( pack_name.c_str() );
+
+                std::string key = makeKey( lib_name, pack_name );
+
+                MODULE* m = makeModule( package->second, pack_name );
+
+                // add the templating MODULE to the MODULE template factory "m_templates"
+                std::pair<MODULE_ITER, bool> r = m_templates.insert( key, m );
+
+                if( !r.second )
+                {
+                    wxString lib = FROM_UTF8( lib_name.c_str() );
+                    wxString pkg = FROM_UTF8( pack_name.c_str() );
+
+                    wxString emsg = wxString::Format(
+                        _( "<package> name:'%s' duplicated in eagle <library>:'%s'" ),
+                        GetChars( pkg ),
+                        GetChars( lib )
+                        );
+                    THROW_IO_ERROR( emsg );
+                }
+
+                m_xpath->pop();
             }
-#endif
 
-            std::string key = makeKey( lib_name, pack_name );
-
-            MODULE* m = makeModule( package->second, pack_name );
-
-            // add the templating MODULE to the MODULE template factory "m_templates"
-            std::pair<MODULE_ITER, bool> r = m_templates.insert( key, m );
-
-            if( !r.second )
-            {
-                wxString lib = FROM_UTF8( lib_name.c_str() );
-                wxString pkg = FROM_UTF8( pack_name.c_str() );
-
-                wxString emsg = wxString::Format(
-                    _( "<package> name:'%s' duplicated in eagle <library>:'%s'" ),
-                    GetChars( pkg ),
-                    GetChars( lib )
-                    );
-                THROW_IO_ERROR( emsg );
-            }
+            m_xpath->pop();     // "packages"
         }
     }
+
+    m_xpath->pop();
 }
 
 
 void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 {
+    m_xpath->push( "elements.element", "name" );
+
     for( CITER it = aElements.begin();  it != aElements.end();  ++it )
     {
         if( it->first.compare( "element" ) )
             continue;
 
         EELEMENT    e( it->second );
+
+        m_xpath->Value( e.name.c_str() );
 
 #if 1 && defined(DEBUG)
         if( !e.value.compare( "LP2985-33DBVR" ) )
@@ -1322,12 +1468,14 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             }
         }
 
+        m_xpath->push( "attribute", "name" );
+
         // VALUE and NAME can have something like our text "effects" overrides
         // in SWEET and new schematic.  Eagle calls these XML elements "attribute".
         // There can be one for NAME and/or VALUE both.  Features present in the
         // EATTR override the ones established in the package only if they are
-        // present here.  So the logic is a bit different than in packageText()
-        // and in plain text.
+        // present here (except for rot, which if not present means angle zero).
+        // So the logic is a bit different than in packageText() and in plain text.
         for( CITER ait = it->second.begin();  ait != it->second.end();  ++ait )
         {
             if( ait->first.compare( "attribute" ) )
@@ -1346,6 +1494,8 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
                   // our understanding of file format is incomplete?
                   continue;
             }
+
+            m_xpath->Value( a.name.c_str() );
 
             if( a.value )
             {
@@ -1378,7 +1528,9 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             }
 
             // The "rot" in a EATTR seems to be assumed to be zero if it is not
-            // present, and this becomes an override to the package's text field
+            // present, and this zero rotation becomes an override to the
+            // package's text field.  If they did not want zero, they specify
+            // what they want explicitly.
             EROT rot;
 
             if( a.rot )
@@ -1390,7 +1542,6 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
                 angle -= m->GetOrientation();   // subtract module's angle
                 txt->SetOrientation( angle );
             }
-
             else
             {
                 // ETEXT::TOP_RIGHT:
@@ -1400,7 +1551,11 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
             txt->SetMirrored( rot.mirror );
         }
+
+        m_xpath->pop();     // "attribute"
     }
+
+    m_xpath->pop();     // "elements.element"
 }
 
 
@@ -1865,12 +2020,16 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 {
+    m_xpath->push( "signals.signal", "name" );
+
     int netCode = 1;
 
     for( CITER net = aSignals.begin();  net != aSignals.end();  ++net, ++netCode )
     {
         const std::string& nname = net->second.get<std::string>( "<xmlattr>.name" );
         wxString netName = FROM_UTF8( nname.c_str() );
+
+        m_xpath->Value( nname.c_str() );
 
         m_board->AppendNet( new NETINFO_ITEM( m_board, netName, netCode ) );
 
@@ -1879,6 +2038,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
         {
             if( !it->first.compare( "wire" ) )
             {
+                m_xpath->push( "wire" );
                 EWIRE   w( it->second );
                 int     layer = kicad_layer( w.layer );
 
@@ -1901,10 +2061,13 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 {
                     // put non copper wires where the sun don't shine.
                 }
+
+                m_xpath->pop();
             }
 
             else if( !it->first.compare( "via" ) )
             {
+                m_xpath->push( "via" );
                 EVIA    v( it->second );
 
                 int layer_front_most = kicad_layer( v.layer_front_most );
@@ -1952,10 +2115,12 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                     via->SetShape( S_CIRCLE );  // @todo should be in SEGVIA constructor
                 }
+                m_xpath->pop();
             }
 
             else if( !it->first.compare( "contactref" ) )
             {
+                m_xpath->push( "contactref" );
                 // <contactref element="RN1" pad="7"/>
                 CPTREE& attribs = it->second.get_child( "<xmlattr>" );
 
@@ -1967,10 +2132,13 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 // D(printf( "adding refname:'%s' pad:'%s' netcode:%d netname:'%s'\n", reference.c_str(), pad.c_str(), netCode, nname.c_str() );)
 
                 m_pads_to_nets[ key ] = ENET( netCode, nname );
+
+                m_xpath->pop();
             }
 
             else if( !it->first.compare( "polygon" ) )
             {
+                m_xpath->push( "polygon" );
                 EPOLYGON p( it->second );
                 int      layer = kicad_layer( p.layer );
 
@@ -2027,9 +2195,13 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     int rank = p.rank ? *p.rank : 0;
                     zone->SetPriority( rank );
                 }
+
+                m_xpath->pop();     // "polygon"
             }
         }
     }
+
+    m_xpath->pop();     // "signals.signal"
 }
 
 
@@ -2163,12 +2335,33 @@ int EAGLE_PLUGIN::kicad_layer( int aEagleLayer )
         case 95:    kiLayer = ECO1_N;               break;
         case 96:    kiLayer = ECO2_N;               break;
         default:
-            D( printf( "unexpected eagle layer: %d\n", aEagleLayer );)
-            kiLayer = -1;       break;  // our eagle understanding is incomplete
+            D( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
+            kiLayer = -1;       break;  // some layers do not map to KiCad
         }
     }
 
     return kiLayer;
+}
+
+
+void EAGLE_PLUGIN::centerBoard()
+{
+    /*
+    if( m_props )
+    {
+        const wxString& pageWidth  = (*m_props)["page_width"];
+        const wxString& pageHeight = (*m_props)["page_height"];
+
+        if( pageWidth.size() && pageHeight.size() )
+        {
+            EDA_RECT bbbox = m_board->GetBoundingBox();
+            int w = wxAtoi( pageWidth );
+            int h = wxAtoi( pageHeight );
+
+            m_board->Move( );
+        }
+    }
+    */
 }
 
 
