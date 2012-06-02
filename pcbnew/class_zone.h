@@ -457,6 +457,34 @@ public:
      */
     bool IsSame( const ZONE_CONTAINER &aZoneToCompare );
 
+   /**
+     * Function ClearFilledPolysList
+     * clears the list of filled polygons.
+     */
+    void ClearFilledPolysList()
+    {
+        m_FilledPolysList.clear();
+    }
+
+   /**
+     * Function GetFilledPolysList
+     * returns a reference to the list of filled polygons.
+     * @return Reference to the list of filled polygons.
+     */
+    const std::vector<CPolyPt>& GetFilledPolysList() const
+    {
+        return m_FilledPolysList;
+    }
+
+   /**
+     * Function AddFilledPolysList
+     * sets the list of filled polygons.
+     */
+    void AddFilledPolysList( std::vector<CPolyPt>& aPolysList )
+    {
+        m_FilledPolysList = aPolysList;
+    }
+
     /**
      * Function GetSmoothedPoly
      * returns a pointer to the corner-smoothed version of
@@ -522,16 +550,6 @@ public:
     // true when a zone was filled, false after deleting the filled areas
     bool                  m_IsFilled;
 
-    /* set of filled polygons used to draw a zone as a filled area.
-     * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
-     * (they are* all in one piece)  In very simple cases m_FilledPolysList is same
-     * as m_Poly.  In less simple cases (when m_Poly has holes) m_FilledPolysList is
-     * a polygon equivalent to m_Poly, without holes but with extra outline segment
-     * connecting "holes" with external main outline.  In complex cases an outline
-     * described by m_Poly can have many filled areas
-     */
-    std::vector <CPolyPt> m_FilledPolysList;
-
     /* set of segments used to fill area, when fill zone by segment is used.
      *  ( m_FillMode == 1 )
      *  in this case segments have m_ZoneMinThickness width
@@ -549,6 +567,16 @@ private:
     // if priorities are equal, a DRC error is set
     unsigned              m_priority;
     ZoneConnection        m_PadConnection;
+
+    /* set of filled polygons used to draw a zone as a filled area.
+     * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
+     * (they are* all in one piece)  In very simple cases m_FilledPolysList is same
+     * as m_Poly.  In less simple cases (when m_Poly has holes) m_FilledPolysList is
+     * a polygon equivalent to m_Poly, without holes but with extra outline segment
+     * connecting "holes" with external main outline.  In complex cases an outline
+     * described by m_Poly can have many filled areas
+     */
+    std::vector <CPolyPt> m_FilledPolysList;
 };
 
 

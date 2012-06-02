@@ -970,7 +970,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, OUTPUTFORMATTER* aFormatter, int aNe
     }
 
     // Save the PolysList
-    const std::vector< CPolyPt >& fv = aZone->m_FilledPolysList;
+    const std::vector< CPolyPt >& fv = aZone->GetFilledPolysList();
 
     if( fv.size() )
     {
