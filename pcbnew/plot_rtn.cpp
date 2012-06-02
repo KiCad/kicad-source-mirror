@@ -523,7 +523,8 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
  */
 void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_CONTAINER* aZone, EDA_DRAW_MODE_T trace_mode )
 {
-    unsigned        imax = aZone->m_FilledPolysList.size();
+    std::vector<CPolyPt> polysList = aZone->GetFilledPolysList();
+    unsigned imax = polysList.size();
 
     if( imax == 0 )  // Nothing to draw
         return;
@@ -540,7 +541,7 @@ void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_
      */
     for( unsigned ic = 0; ic < imax; ic++ )
     {
-        CPolyPt* corner = &aZone->m_FilledPolysList[ic];
+        CPolyPt* corner = &polysList[ic];
         cornerList.push_back( wxPoint( corner->x, corner->y) );
 
         if( corner->end_contour )   // Plot the current filled area outline

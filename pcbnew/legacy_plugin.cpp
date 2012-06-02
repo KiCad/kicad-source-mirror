@@ -2258,6 +2258,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "$POLYSCORNERS" ) )
         {
             // Read the PolysList (polygons used for fill areas in the zone)
+            std::vector<CPolyPt> polysList;
 
             while( READLINE( m_reader ) )
             {
@@ -2273,8 +2274,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 bool    end_contour = intParse( data, &data );  // end_countour was a bool when file saved, so '0' or '1' here
                 int     utility     = intParse( data );
 
-                zc->m_FilledPolysList.push_back( CPolyPt( x, y, end_contour, utility ) );
+               polysList.push_back( CPolyPt( x, y, end_contour, utility ) );
             }
+            zc->AddFilledPolysList( polysList );
         }
 
         else if( TESTLINE( "$FILLSEGMENTS" ) )
@@ -3569,7 +3571,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     }
 
     // Save the PolysList
-    const CPOLY_PTS& fv = me->m_FilledPolysList;
+    const CPOLY_PTS& fv = me->GetFilledPolysList();
     if( fv.size() )
     {
         fprintf( m_fp, "$POLYSCORNERS\n" );
