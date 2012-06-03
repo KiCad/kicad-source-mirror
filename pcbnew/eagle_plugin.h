@@ -56,36 +56,18 @@ struct ENET
     {}
 };
 
-typedef std::map< std::string, ENET >           NET_MAP;
-
-/*
-#include
-namespace boost {
-    namespace property_tree
-    {
-        template < class Key, class Data, class KeyCompare = std::less<Key> >
-            class basic_ptree;
-
-        typedef basic_ptree< std::string, std::string > ptree;
-    }
-}
-*/
+typedef std::map< std::string, ENET >   NET_MAP;
+typedef NET_MAP::const_iterator         NET_MAP_CITER;
 
 typedef boost::property_tree::ptree     PTREE;
 typedef const PTREE                     CPTREE;
 
-struct EWIRE;
-struct EVIA;
-struct EROT;
-struct EATTR;
-struct ECIRCLE;
-struct ETEXT;
-struct ERECT;
-
+class XPATH;
 
 /**
  * Class EAGLE_PLUGIN
- * works with Eagle 6.x XML board files and footprints.
+ * works with Eagle 6.x XML board files and footprints to implement the
+ * Pcbnew PLUGIN API, or a portion of it.
  */
 class EAGLE_PLUGIN : public PLUGIN
 {
@@ -118,36 +100,46 @@ public:
 
     //-----</PUBLIC PLUGIN API>-------------------------------------------------
 
-    typedef int     BIU;
+    typedef int BIU;
 
     EAGLE_PLUGIN();
     ~EAGLE_PLUGIN();
 
 private:
 
-    NET_MAP         m_pads_to_nets;
+    XPATH*      m_xpath;            ///< keeps track of what we are working on within
+                                    ///< XML document during a Load().
 
-    MODULE_MAP      m_templates;    ///< is part of a MODULE factory that operates
+    std::string m_err_path;         ///< snapshot m_xpath contentx into here on exception
+
+    int         m_hole_count;       ///< generates unique module names from eagle "hole"s.
+
+    NET_MAP     m_pads_to_nets;     ///< net list
+
+    MODULE_MAP  m_templates;        ///< is part of a MODULE factory that operates
                                     ///< using copy construction.
                                     ///< lookup key is libname.packagename
 
-    PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
-
-    BOARD*  m_board;                ///< which BOARD, no ownership here
-    double  mm_per_biu;             ///< how many mm in each BIU
-    double  biu_per_mm;             ///< how many bius in a mm
+    PROPERTIES* m_props;            ///< passed via Save() or Load(), no ownership, may be NULL.
+    BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
+    double      mm_per_biu;         ///< how many mm in each BIU
+    double      biu_per_mm;         ///< how many bius in a mm
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
 
+    /// Convert an Eagle distance to a KiCad distance.
     int     kicad( double d ) const;
     int     kicad_y( double y ) const       { return -kicad( y ); }
     int     kicad_x( double x ) const       { return kicad( x ); }
+
+    /// create a font size (fontz) from an eagle font size scalar
     wxSize  kicad_fontz( double d ) const;
 
-
+    /// Convert an Eagle layer to a KiCad layer.
     static int kicad_layer( int aLayer );
 
+    /// Convert a KiCad distance to an Eagle distance.
     double  eagle( BIU d ) const            { return mm_per_biu * d; }
     double  eagle_x( BIU x ) const          { return eagle( x ); }
     double  eagle_y( BIU y ) const          { return eagle( y ); }
@@ -180,38 +172,15 @@ private:
 
     // all these loadXXX() throw IO_ERROR or ptree_error exceptions:
 
-    void loadAllSections( CPTREE& aEagleBoard, const std::string& aXpath, bool aAppendToMe );
+    void loadAllSections( CPTREE& aDocument );
+    void loadLayerDefs( CPTREE& aLayers );
+    void loadPlain( CPTREE& aPlain );
+    void loadSignals( CPTREE& aSignals );
+    void loadLibraries( CPTREE& aLibs );
+    void loadElements( CPTREE& aElements );
 
-    void loadPlain( CPTREE& aPlain, const std::string& aXpath );
-
-    void loadSignals( CPTREE& aSignals, const std::string& aXpath );
-
-    void loadLibraries( CPTREE& aLibs, const std::string& aXpath );
-
-    void loadElements( CPTREE& aElements, const std::string& aXpath );
-
-    /**
-     * Function ewire
-     * converts a <wire>'s xml attributes to binary without additional conversion.
-     * @param aResult is an EWIRE to fill in with the <wire> data converted to binary.
-     */
-    EWIRE   ewire( CPTREE& aWire ) const;
-
-    EVIA    evia( CPTREE& aVia ) const;
-
-    ECIRCLE ecircle( CPTREE& aCircle ) const;
-    ETEXT   etext( CPTREE& aText )  const;
-    ERECT   erect( CPTREE& aRect ) const;
-
-    EROT    erot( const std::string& aRot ) const;
-
-    /**
-     * Function eattr
-     * parses an Eagle "attribute" element.  Note that an attribute element
-     * is different than an XML element attribute.  The attribute element is a
-     * full XML node in and of itself, and has attributes of its own.  Blame Eagle.
-     */
-    EATTR eattr( CPTREE& aAttribute ) const;
+    /// move the BOARD into the center of the page
+    void centerBoard();
 
     /**
      * Function fmtDEG
@@ -235,7 +204,6 @@ private:
     void packageCircle( MODULE* aModule, CPTREE& aTree ) const;
     void packageHole( MODULE* aModule, CPTREE& aTree ) const;
     void packageSMD( MODULE* aModule, CPTREE& aTree ) const;
-
 };
 
 #endif  // EAGLE_PLUGIN_H_

@@ -321,7 +321,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEven
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
         return;
 
-    if( fieldNdx <= VALUE )
+    if( fieldNdx < MANDATORY_FIELDS )
     {
         wxBell();
         return;
@@ -360,7 +360,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB:: moveUpButtonHandler( wxCommandEvent& e
     if( fieldNdx >= m_FieldsBuf.size() )    // traps the -1 case too
         return;
 
-    if( fieldNdx <= MANDATORY_FIELDS )
+    if( fieldNdx < MANDATORY_FIELDS )
     {
         wxBell();
         return;
@@ -651,10 +651,10 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     // only user defined fields may be moved, and not the top most user defined
     // field since it would be moving up into the fixed fields, > not >=
-    moveUpButton->Enable( fieldNdx > MANDATORY_FIELDS );
+    moveUpButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
     // if fieldNdx == REFERENCE, VALUE, then disable delete button
-    deleteFieldButton->Enable( fieldNdx > VALUE );
+    deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
     fieldValueTextCtrl->SetValue( field.m_Text );
 

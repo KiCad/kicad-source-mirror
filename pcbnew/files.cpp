@@ -90,39 +90,39 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 
     case ID_MENU_READ_LAST_SAVED_VERSION_BOARD:
     case ID_MENU_RECOVER_BOARD:
-    {
-        wxFileName fn;
+        {
+            wxFileName fn;
 
-        if( id == ID_MENU_RECOVER_BOARD )
-        {
-            fn = wxFileName( wxEmptyString, saveFileName, PcbFileExtension );
-        }
-        else
-        {
-            fn = GetScreen()->GetFileName();
-            fn.SetExt( pcbBackupFileExtension );
-        }
+            if( id == ID_MENU_RECOVER_BOARD )
+            {
+                fn = wxFileName( wxEmptyString, saveFileName, PcbFileExtension );
+            }
+            else
+            {
+                fn = GetScreen()->GetFileName();
+                fn.SetExt( pcbBackupFileExtension );
+            }
 
-        if( !fn.FileExists() )
-        {
-            msg = _( "Recovery file " ) + fn.GetFullPath() + _( " not found." );
-            DisplayInfoMessage( this, msg );
-            break;
-        }
-        else
-        {
-            msg = _( "OK to load recovery file " ) + fn.GetFullPath();
-
-            if( !IsOK( this, msg ) )
+            if( !fn.FileExists() )
+            {
+                msg = _( "Recovery file " ) + fn.GetFullPath() + _( " not found." );
+                DisplayInfoMessage( this, msg );
                 break;
-        }
+            }
+            else
+            {
+                msg = _( "OK to load recovery file " ) + fn.GetFullPath();
 
-        LoadOnePcbFile( fn.GetFullPath(), false );
-        fn.SetExt( PcbFileExtension );
-        GetScreen()->SetFileName( fn.GetFullPath() );
-        UpdateTitle();
+                if( !IsOK( this, msg ) )
+                    break;
+            }
+
+            LoadOnePcbFile( fn.GetFullPath(), false );
+            fn.SetExt( PcbFileExtension );
+            GetScreen()->SetFileName( fn.GetFullPath() );
+            UpdateTitle();
+        }
         break;
-    }
 
     case ID_APPEND_FILE:
         LoadOnePcbFile( wxEmptyString, true );
@@ -154,8 +154,6 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
                                      bool aForceFileDialog )
 {
-    wxString msg;
-
     if( GetScreen()->IsModify() && !aAppend )
     {
         if( !IsOK( this, _( "The current board has been modified.  Do you wish to discard \
@@ -170,12 +168,36 @@ the changes?" ) ) )
         GetBoard()->m_Status_Pcb = 0;
     }
 
-    wxFileName fileName = aFileName;
+    wxFileName  fileName = aFileName;
+
+    IO_MGR::PCB_FILE_T  pluginType = IO_MGR::LEGACY;
+
+    // This is a subset of all PLUGINs which are trusted to be able to
+    // load a BOARD.  Order is subject to change as KICAD plugin matures.
+    // User may occasionally use the wrong plugin to load a *.brd file,
+    // but eventually *.kicad_pcb will be more common than legacy *.brd files.
+    static const struct {
+        const wxString&     filter;
+        IO_MGR::PCB_FILE_T  pluginType;
+    } loaders[] = {
+        { LegacyPcbFileWildcard,    IO_MGR::LEGACY },
+        { PcbFileWildcard,          IO_MGR::KICAD },
+        { EaglePcbFileWildcard,     IO_MGR::EAGLE },
+    };
 
     if( !fileName.IsOk() || !fileName.FileExists() || aForceFileDialog )
     {
         wxString name;
         wxString path = wxGetCwd();
+        wxString fileFilters;
+
+        for( unsigned i=0;  i<DIM( loaders );  ++i )
+        {
+            if( i > 0 )
+                fileFilters += wxChar( '|' );
+
+            fileFilters += wxGetTranslation( loaders[i].filter );
+        }
 
         if( aForceFileDialog && fileName.FileExists() )
         {
@@ -183,7 +205,7 @@ the changes?" ) ) )
             name = fileName.GetFullName();
         }
 
-        wxFileDialog dlg( this, _( "Open Board File" ), path, name, LegacyPcbFileWildcard,
+        wxFileDialog dlg( this, _( "Open Board File" ), path, name, fileFilters,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -191,9 +213,14 @@ the changes?" ) ) )
 
         fileName = dlg.GetPath();
 
-        if( !fileName.HasExt() )
-            fileName.SetExt( PcbFileExtension );
+        int chosenFilter = dlg.GetFilterIndex();
+        pluginType = loaders[chosenFilter].pluginType;
     }
+
+    PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
+
+    if( !fileName.HasExt() )
+        fileName.SetExt( pi->GetFileExtension() );
 
     if( !aAppend )
         Clear_Pcb( false );     // pass false since we prompted above for a modified board
@@ -223,14 +250,18 @@ the changes?" ) ) )
 
     try
     {
+        PROPERTIES  props;
+
+        props["page_width"]  = wxString::Format( wxT( "%d" ), GetPageSizeIU().x );
+        props["page_height"] = wxString::Format( wxT( "%d" ), GetPageSizeIU().y );
+
         // load or append either:
-        loadedBoard = IO_MGR::Load( IO_MGR::LEGACY, GetScreen()->GetFileName(),
-                                    aAppend ? GetBoard() : NULL,
-                                    NULL );
+        loadedBoard = pi->Load( GetScreen()->GetFileName(), aAppend ? GetBoard() : NULL, &props );
 
         if( !aAppend )
         {
-            if( loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION )
+            if( pluginType == IO_MGR::LEGACY &&
+                loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION )
             {
                 DisplayInfoMessage( this, _( "This file was created by an older \
 version of Pcbnew. It will be stored in the new file format when you save \

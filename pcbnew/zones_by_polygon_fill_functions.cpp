@@ -105,7 +105,7 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
-    aZone->m_FilledPolysList.clear();
+    aZone->ClearFilledPolysList();
     aZone->UnFill();
     aZone->BuildFilledPolysListData( GetBoard() );
 

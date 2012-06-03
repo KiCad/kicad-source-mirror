@@ -81,6 +81,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_ROTATE_TEXTEPCB:
+    case ID_POPUP_PCB_FLIP_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_MIRE:
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
@@ -286,7 +287,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_FIND_ITEMS:
-        InstallFindFrame( pos, &dc );
+        InstallFindFrame();
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
@@ -578,7 +579,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             // Remove filled areas in zone
             ZONE_CONTAINER* zone_container = GetBoard()->GetArea( ii );
-            zone_container->m_FilledPolysList.clear();
+            zone_container->ClearFilledPolysList();
         }
 
         SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
@@ -930,6 +931,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         break;
 
+    case ID_POPUP_PCB_FLIP_TEXTEPCB:
+        FlipTextePcb( (TEXTE_PCB*) GetCurItem(), &dc );
+        m_canvas->MoveCursorToCrossHair();
+        break;
+
     case ID_POPUP_PCB_DELETE_TEXTEPCB:
         Delete_Texte_Pcb( (TEXTE_PCB*) GetCurItem(), &dc );
         m_canvas->MoveCursorToCrossHair();
@@ -1076,14 +1082,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU_PCB_SWAP_LAYERS:
         Swap_Layers( event );
-        break;
-
-    case ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES:
-        ResetModuleTextSizes( TEXT_is_REFERENCE, &dc );
-        break;
-
-    case ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES:
-        ResetModuleTextSizes( TEXT_is_VALUE, &dc );
         break;
 
     case ID_PCB_USER_GRID_SETUP:

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -31,7 +32,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_COPPER_ZONE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_COPPER_ZONE_BASE : public wxDialog 
+class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -66,7 +67,7 @@ class DIALOG_COPPER_ZONE_BASE : public wxDialog
 			ID_M_ARCAPPROXIMATIONOPT,
 			ID_M_ORIENTEDGESOPT,
 			ID_M_OUTLINEAPPEARANCECTRL,
-			wxID_BUTTON_EXPORT,
+			wxID_BUTTON_EXPORT
 		};
 		
 		wxBoxSizer* m_MainBoxSizer;

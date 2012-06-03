@@ -282,7 +282,7 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
         {
             wxString str;
             str.Printf( wxT( "Area %08lX of net \"%s\" has arcs intersecting other sides.\n" ),
-                        aCurrArea->GetTimeStamp(), GetChars( aCurrArea->m_Netname ) );
+                        aCurrArea->GetTimeStamp(), GetChars( aCurrArea->GetNetName() ) );
             str += wxT( "This may cause problems with other editing operations,\n" );
             str += wxT( "such as adding cutouts. It can't be fixed automatically.\n" );
             str += wxT( "Manual correction is recommended." );
@@ -305,7 +305,7 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
         {
             wxString str;
             str.Printf( wxT( "Area %08lX of net \"%s\" is self-intersecting and will be clipped.\n" ),
-                        aCurrArea->GetTimeStamp(), GetChars( aCurrArea->m_Netname ) );
+                        aCurrArea->GetTimeStamp(), GetChars( aCurrArea->GetNetName() ) );
             str += wxT( "This may result in splitting the area.\n" );
             str += wxT( "If the area is complex, this may take a few seconds." );
             wxMessageBox( str );
@@ -482,7 +482,7 @@ int BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
                                 str.Printf( wxT( "Areas %d and %d of net \"%s\" intersect, but some of the intersecting sides are arcs.\n" ),
                                             ia1 + 1,
                                             ia2 + 1,
-                                            GetChars( curr_area->m_Netname ) );
+                                            GetChars( curr_area->GetNetName() ) );
                                 str += wxT( "Therefore, these areas can't be combined." );
                                 wxMessageBox( str );
                             }

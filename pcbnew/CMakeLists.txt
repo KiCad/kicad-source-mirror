@@ -55,6 +55,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_edit_module_text_base.cpp
     dialogs/dialog_exchange_modules_base.cpp
     dialogs/dialog_export_3Dfiles_base.cpp
+    dialogs/dialog_find_base.cpp
+    dialogs/dialog_find.cpp
     dialogs/dialog_freeroute_exchange.cpp
     dialogs/dialog_freeroute_exchange_base.cpp
     dialogs/dialog_gendrill.cpp
@@ -64,6 +66,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_general_options_BoardEditor_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
+    dialogs/dialog_global_modules_fields_edition.cpp
+    dialogs/dialog_global_modules_fields_edition_base.cpp
     dialogs/dialog_global_pads_edition_base.cpp
     dialogs/dialog_graphic_items_options.cpp
     dialogs/dialog_graphic_items_options_base.cpp
@@ -144,7 +148,6 @@ set(PCBNEW_CLASS_SRCS
     export_gencad.cpp
     export_vrml.cpp
     files.cpp
-    find.cpp
     gen_drill_report_files.cpp
     gen_holes_and_tools_lists_for_drill.cpp
     gen_modules_placefile.cpp
