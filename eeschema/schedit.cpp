@@ -811,15 +811,15 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         switch( aEvent.GetId() )
         {
         case ID_SCH_EDIT_COMPONENT_REFERENCE:
-            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( REFERENCE ), &dc );
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( REFERENCE ) );
             break;
 
         case ID_SCH_EDIT_COMPONENT_VALUE:
-            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( VALUE ), &dc );
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( VALUE ) );
             break;
 
         case ID_SCH_EDIT_COMPONENT_FOOTPRINT:
-            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( FOOTPRINT ), &dc );
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( FOOTPRINT ) );
             break;
 
         case ID_SCH_EDIT_ITEM:
@@ -850,7 +850,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         break;
 
     case SCH_FIELD_T:
-        EditComponentFieldText( (SCH_FIELD*) item, &dc );
+        EditComponentFieldText( (SCH_FIELD*) item );
         break;
 
     case SCH_BITMAP_T:
