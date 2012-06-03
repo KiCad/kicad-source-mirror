@@ -3,8 +3,8 @@
  * @brief Class BOARD to handle a board.
  */
 
-#ifndef CLASS_BOARD_H
-#define CLASS_BOARD_H
+#ifndef CLASS_BOARD_H_
+#define CLASS_BOARD_H_
 
 
 #include <dlist.h>
@@ -255,9 +255,10 @@ public:
     BOARD();
     ~BOARD();
 
+    void Move( const wxPoint& aMoveVector );        // overload
+
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
-
 
     /**
      * Function GetDefaultLayerName
@@ -1327,4 +1328,4 @@ public:
     TRACK* CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS_LIST* aList );
 };
 
-#endif      // #ifndef CLASS_BOARD_H
+#endif      // CLASS_BOARD_H_

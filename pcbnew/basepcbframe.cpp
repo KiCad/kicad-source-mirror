@@ -266,28 +266,31 @@ double PCB_BASE_FRAME::BestZoom()
 }
 
 
-void PCB_BASE_FRAME::CursorGoto( const wxPoint& aPos )
+void PCB_BASE_FRAME::CursorGoto( const wxPoint& aPos, bool aWarp )
 {
     // factored out of pcbnew/find.cpp
 
     PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
-    wxClientDC dc( m_canvas );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     // There may be need to reframe the drawing.
     if( !m_canvas->IsPointOnDisplay( aPos ) )
     {
         screen->SetCrossHairPosition( aPos );
-        RedrawScreen( aPos, true );
+        RedrawScreen( aPos, aWarp );
     }
     else
     {
         // Put cursor on item position
         m_canvas->CrossHairOff( &dc );
         screen->SetCrossHairPosition( aPos );
-        m_canvas->MoveCursorToCrossHair();
-        m_canvas->CrossHairOn( &dc );
+
+        if( aWarp )
+            m_canvas->MoveCursorToCrossHair();
     }
+    m_canvas->CrossHairOn( &dc );
+    m_canvas->CrossHairOn( &dc );
 }
 
 

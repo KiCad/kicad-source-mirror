@@ -63,6 +63,7 @@ extern const wxString NetlistFileWildcard;
 extern const wxString GerberFileWildcard;
 extern const wxString LegacyPcbFileWildcard;
 extern const wxString PcbFileWildcard;
+extern const wxString EaglePcbFileWildcard;
 extern const wxString PdfFileWildcard;
 extern const wxString MacrosFileWildcard;
 extern const wxString AllFilesWildcard;

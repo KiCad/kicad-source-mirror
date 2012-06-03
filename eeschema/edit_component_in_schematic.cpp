@@ -35,14 +35,13 @@
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
-#include <protos.h>
 #include <class_library.h>
 #include <sch_component.h>
 
 #include <dialog_edit_one_field.h>
 
 
-void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC )
+void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 {
     wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T,
                  wxT( "Cannot edit invalid schematic field." ) );
@@ -81,7 +80,6 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     wxString title;
     title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
 
-//    wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
     if( aField->GetText().IsEmpty() )  // Means the field was not already in use
     {
         aField->m_Pos = component->GetPosition();
@@ -104,7 +102,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     {
         if( fieldNdx == REFERENCE )
         {
-            // Test is reference is acceptable:
+            // Test if the reference string is valid:
             if( SCH_COMPONENT::IsReferenceStringValid( newtext ) )
             {
                 component->SetRef( m_CurrentSheet, newtext );
@@ -136,10 +134,9 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
 
     if( can_update )
     {
-        aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
         dlg.TransfertDataToField();
-        aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
         OnModify();
+        m_canvas->Refresh();
     }
 
     component->DisplayInfo( this );

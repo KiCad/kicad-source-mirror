@@ -50,7 +50,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     BOARD_ITEM( parent, PCB_MODULE_TEXT_T ),
     EDA_TEXT()
 {
-    MODULE* Module = (MODULE*) m_Parent;
+    MODULE* module = (MODULE*) m_Parent;
 
     m_Type = text_type;         /* Reference */
 
@@ -63,11 +63,11 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
 
     SetLayer( SILKSCREEN_N_FRONT );
 
-    if( Module && ( Module->Type() == PCB_MODULE_T ) )
+    if( module && ( module->Type() == PCB_MODULE_T ) )
     {
-        m_Pos = Module->m_Pos;
+        m_Pos = module->m_Pos;
 
-        int moduleLayer = Module->GetLayer();
+        int moduleLayer = module->GetLayer();
 
         if( moduleLayer == LAYER_N_BACK )
             SetLayer( SILKSCREEN_N_BACK );
@@ -120,18 +120,18 @@ int TEXTE_MODULE::GetLength() const
 // Update draw coordinates
 void TEXTE_MODULE::SetDrawCoord()
 {
-    MODULE* Module = (MODULE*) m_Parent;
+    MODULE* module = (MODULE*) m_Parent;
 
     m_Pos = m_Pos0;
 
-    if( Module == NULL )
+    if( module == NULL )
         return;
 
-    int angle = Module->m_Orient;
+    double angle = module->GetOrientation();
     NORMALIZE_ANGLE_POS( angle );
 
     RotatePoint( &m_Pos.x, &m_Pos.y, angle );
-    m_Pos += Module->m_Pos;
+    m_Pos += module->GetPosition();
 }
 
 
@@ -139,17 +139,17 @@ void TEXTE_MODULE::SetDrawCoord()
 //  anchor point)
 void TEXTE_MODULE::SetLocalCoord()
 {
-    MODULE* Module = (MODULE*) m_Parent;
+    MODULE* module = (MODULE*) m_Parent;
 
-    if( Module == NULL )
+    if( module == NULL )
     {
         m_Pos0 = m_Pos;
         return;
     }
 
-    m_Pos0 = m_Pos - Module->m_Pos;
+    m_Pos0 = m_Pos - module->m_Pos;
 
-    int angle = Module->m_Orient;
+    int angle = module->m_Orient;
     NORMALIZE_ANGLE_POS( angle );
 
     RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
@@ -242,7 +242,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
     wxSize          size;
     wxPoint         pos;      // Center of text
     PCB_BASE_FRAME* frame;
-    MODULE*         Module = (MODULE*) m_Parent;   /* parent must *not* be null
+    MODULE*         module = (MODULE*) m_Parent;   /* parent must *not* be null
                                                     *  (a module text without a footprint
                                                     * parent has no sense) */
 
@@ -282,16 +282,16 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
                 pos.x, pos.y + anchor_size, 0, color );
     }
 
-    color = brd->GetLayerColor(Module->GetLayer());
+    color = brd->GetLayerColor(module->GetLayer());
 
 
-    if( Module->GetLayer() == LAYER_N_BACK )
+    if( module->GetLayer() == LAYER_N_BACK )
     {
         if( brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) == false )
             return;
         color = brd->GetVisibleElementColor(MOD_TEXT_BK_VISIBLE);
     }
-    else if( Module->GetLayer() == LAYER_N_FRONT )
+    else if( module->GetLayer() == LAYER_N_FRONT )
     {
         if( brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) == false )
             return;
@@ -336,12 +336,12 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
 int TEXTE_MODULE::GetDrawRotation() const
 {
     int     rotation;
-    MODULE* Module = (MODULE*) m_Parent;
+    MODULE* module = (MODULE*) m_Parent;
 
     rotation = m_Orient;
 
-    if( Module )
-        rotation += Module->m_Orient;
+    if( module )
+        rotation += module->m_Orient;
 
     NORMALIZE_ANGLE_POS( rotation );
 

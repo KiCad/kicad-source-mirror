@@ -25,8 +25,6 @@
 #include "detail/transform_detail.hpp"
 #include "detail/polygon_sort_adaptor.hpp"
 
-#include "detail/polygon_sort_adaptor.hpp"
-
 //interval
 #include "interval_data.hpp"
 #include "interval_traits.hpp"

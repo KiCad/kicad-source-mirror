@@ -161,7 +161,10 @@ void TEXTE_PCB::Flip(const wxPoint& aCentre )
 {
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
 //    NEGATE( m_Orient );   not needed: m_Mirror handles this
-    if( ( GetLayer() == LAYER_N_BACK ) || ( GetLayer() == LAYER_N_FRONT ) )
+    if( GetLayer() == LAYER_N_BACK
+        || GetLayer() == LAYER_N_FRONT
+        || GetLayer() == SILKSCREEN_N_BACK
+        || GetLayer() == SILKSCREEN_N_FRONT )
     {
         m_Mirror = not m_Mirror;      /* inverse mirror */
     }

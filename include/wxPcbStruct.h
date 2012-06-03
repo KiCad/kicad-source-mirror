@@ -481,6 +481,13 @@ public:
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
     void OnSelectTool( wxCommandEvent& aEvent );
 
+    /**
+     * Function OnResetModuleTextSizes
+     * resets text size and width of all module text fields of given field
+     * type to current settings in Preferences
+     */
+    void OnResetModuleTextSizes( wxCommandEvent& event );
+
     void ProcessMuWaveFunctions( wxCommandEvent& event );
     void MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
 
@@ -921,6 +928,7 @@ public:
 
     // Handling texts on the board
     void Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
+    void FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC );
     TEXTE_PCB* Create_Texte_Pcb( wxDC* DC );
     void Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     void StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC );
@@ -1488,7 +1496,7 @@ public:
 
     void Clean_Pcb( wxDC* DC );
 
-    void InstallFindFrame( const wxPoint& pos, wxDC* DC );
+    void InstallFindFrame();
 
     /**
      * Function SendMessageToEESCHEMA

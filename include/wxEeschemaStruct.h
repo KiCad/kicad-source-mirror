@@ -963,7 +963,14 @@ private:
     void ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
     void SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
 
-    void EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC );
+    /**
+     * Function EditComponentFieldText
+     * displays the edit field dialog to edit the parameters of \a aField.
+     *
+     * @param aField is a pointer to the SCH_FIELD object to be edited.
+     */
+    void EditComponentFieldText( SCH_FIELD* aField );
+
     void RotateField( SCH_FIELD* aField, wxDC* aDC );
 
     /**

@@ -206,7 +206,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
 
     if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  DisplayOpt.ContrastModeDisplay )
     {
-        if( !IsOnLayer( curr_layer ) )
+        if( !IsOnLayer( curr_layer ) && !IsOnLayer( EDGE_N ) )
         {
             color &= ~MASKCOLOR;
             color |= DARKDARKGRAY;

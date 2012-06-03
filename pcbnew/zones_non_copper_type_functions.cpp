@@ -74,7 +74,6 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
 
 void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
 {
-    SetFocus();
     SetReturnCode( ZONE_ABORT );  // Will be changed on button click
 
     m_FillModeCtrl->SetSelection( m_settings.m_FillMode ? 1 : 0 );

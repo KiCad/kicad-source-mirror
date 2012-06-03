@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,12 +9,12 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DialogNonCopperZonesPropertiesBase, wxDialog )
+BEGIN_EVENT_TABLE( DialogNonCopperZonesPropertiesBase, DIALOG_SHIM )
 	EVT_BUTTON( wxID_OK, DialogNonCopperZonesPropertiesBase::_wxFB_OnOkClick )
 	EVT_BUTTON( wxID_CANCEL, DialogNonCopperZonesPropertiesBase::_wxFB_OnCancelClick )
 END_EVENT_TABLE()
 
-DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -40,6 +40,7 @@ DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow
 	m_ZoneMinThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	sbLeftSizer_->Add( m_ZoneMinThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	m_UpperSizer->Add( sbLeftSizer_, 0, 0, 5 );
 	
 	wxStaticBoxSizer* m_OutilinesBoxOpt;
@@ -57,6 +58,7 @@ DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow
 	m_OutlineAppearanceCtrl->SetSelection( 1 );
 	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	m_UpperSizer->Add( m_OutilinesBoxOpt, 0, 0, 5 );
 	
 	wxBoxSizer* m_ButtonsSizer;
@@ -69,7 +71,9 @@ DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ButtonsSizer->Add( m_buttonCancel, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
+	
 	m_UpperSizer->Add( m_ButtonsSizer, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	m_MainSizer->Add( m_UpperSizer, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -79,6 +83,7 @@ DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow
 	
 	m_LayerSelectionCtrl = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	m_MainSizer->Add( m_LayerSelectionCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();

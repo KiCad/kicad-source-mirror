@@ -471,6 +471,7 @@ int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
                                                    KPolygonSet&    aKPolyList )
 {
     int count = 0;
+    std::vector<CPolyPt> polysList;
 
     for( unsigned ii = 0; ii < aKPolyList.size(); ii++ )
     {
@@ -487,14 +488,15 @@ int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
             // Flag this corner if starting a hole connection segment:
             // This is used by draw functions to draw only useful segments (and not extra segments)
             // corner.utility = (aBoolengine->GetPolygonPointEdgeType() == KB_FALSE_EDGE) ? 1 : 0;
-            aZone->m_FilledPolysList.push_back( corner );
+            polysList.push_back( corner );
             count++;
         }
 
         corner.end_contour = true;
-        aZone->m_FilledPolysList.pop_back();
-        aZone->m_FilledPolysList.push_back( corner );
+        polysList.pop_back();
+        polysList.push_back( corner );
     }
+    aZone->AddFilledPolysList( polysList );
 
     return count;
 }
@@ -503,7 +505,8 @@ int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
 int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
                                                     KPolygonSet&    aKPolyList )
 {
-    unsigned corners_count = aZone->m_FilledPolysList.size();
+    std::vector<CPolyPt> polysList = aZone->GetFilledPolysList();
+    unsigned corners_count = polysList.size();
     int      count = 0;
     unsigned ic    = 0;
 
@@ -511,7 +514,7 @@ int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
 
     for( unsigned ii = 0; ii < corners_count; ii++ )
     {
-        CPolyPt* corner = &aZone->m_FilledPolysList[ic];
+        CPolyPt* corner = &polysList[ic];
 
         if( corner->end_contour )
             polycount++;
@@ -527,7 +530,7 @@ int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
         {
             for( ; ic < corners_count; ic++ )
             {
-                CPolyPt* corner = &aZone->m_FilledPolysList[ic];
+                CPolyPt* corner = &polysList[ic];
                 cornerslist.push_back( KPolyPoint( corner->x, corner->y ) );
                 count++;
 

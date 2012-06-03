@@ -135,10 +135,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_GLOBAL_DELETE, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_CLEAN, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES,
-              PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES,
-              PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
+              PCB_EDIT_FRAME::OnResetModuleTextSizes )
 
     // Menu Help
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )

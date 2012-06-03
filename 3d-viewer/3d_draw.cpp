@@ -258,7 +258,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
             if( curr_zone->m_FillMode == 0 )
             {
                 // solid polygons only are used to fill areas
-                if( curr_zone->m_FilledPolysList.size() > 3 )
+                if( curr_zone->GetFilledPolysList().size() > 3 )
                 {
                     Draw3D_SolidPolygonsInZones( curr_zone );
                 }
@@ -286,14 +286,16 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
         {
             ZONE_CONTAINER* zone = pcb->GetArea( ii );
 
-            if( zone->m_FilledPolysList.size() == 0 )
+            std::vector<CPolyPt> polysList = zone->GetFilledPolysList();
+
+            if( polysList.size() == 0 )
                 continue;
 
             if( zone->m_ZoneMinThickness <= 1 )
                 continue;
 
-            int      imax = zone->m_FilledPolysList.size() - 1;
-            CPolyPt* firstcorner = &zone->m_FilledPolysList[0];
+            int      imax = polysList.size() - 1;
+            CPolyPt* firstcorner = &polysList[0];
             CPolyPt* begincorner = firstcorner;
             SEGZONE  dummysegment( pcb );
             dummysegment.SetLayer( zone->GetLayer() );
@@ -301,7 +303,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 
             for( int ic = 1; ic <= imax; ic++ )
             {
-                CPolyPt* endcorner = &zone->m_FilledPolysList[ic];
+                CPolyPt* endcorner = &polysList[ic];
 
                 if( begincorner->utility == 0 )
                 {
@@ -330,7 +332,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
                     ic++;
 
                     if( ic < imax - 1 )
-                        begincorner = firstcorner = &zone->m_FilledPolysList[ic];
+                        begincorner = firstcorner = &polysList[ic];
                 }
                 else
                 {
@@ -440,7 +442,8 @@ void EDA_3D_CANVAS::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
     // Draw solid areas contained in this zone
     int StartContour = 1;
 
-    for( unsigned ii = 0; ii < aZone->m_FilledPolysList.size(); ii++ )
+    std::vector<CPolyPt> polysList = aZone->GetFilledPolysList();
+    for( unsigned ii = 0; ii < polysList.size(); ii++ )
     {
         if( StartContour == 1 )
         {
@@ -449,11 +452,11 @@ void EDA_3D_CANVAS::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
             StartContour = 0;
         }
 
-        v_data[0] = aZone->m_FilledPolysList[ii].x * g_Parm_3D_Visu.m_BoardScale;
-        v_data[1] = -aZone->m_FilledPolysList[ii].y * g_Parm_3D_Visu.m_BoardScale;
-        gluTessVertex( tess, v_data, &aZone->m_FilledPolysList[ii] );
+        v_data[0] = polysList[ii].x * g_Parm_3D_Visu.m_BoardScale;
+        v_data[1] = -polysList[ii].y * g_Parm_3D_Visu.m_BoardScale;
+        gluTessVertex( tess, v_data, &polysList[ii] );
 
-        if( aZone->m_FilledPolysList[ii].end_contour == 1 )
+        if( polysList[ii].end_contour == 1 )
         {
             gluTessEndContour( tess );
             gluTessEndPolygon( tess );

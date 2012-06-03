@@ -363,7 +363,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             break;
 
         case SCH_FIELD_T:
-            EditComponentFieldText( (SCH_FIELD*) item, aDC );
+            EditComponentFieldText( (SCH_FIELD*) item );
             m_canvas->MoveCursorToCrossHair();
             break;
 

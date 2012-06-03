@@ -295,15 +295,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( swap_layer_xpm ) );
 
     // Reset module reference sizes
-    AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES,
-                 _( "Reset Module &Reference Sizes" ),
-                 _( "Reset text size and width of all module references to current defaults" ),
-                 KiBitmap( reset_text_xpm ) );
-
-    // Reset module value sizes
-    AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES,
-                 _( "Reset Module &Value Sizes" ),
-                 _( "Reset text size and width of all module values to current defaults" ),
+    AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
+                 _( "&Reset Module Field Sizes" ),
+                 _( "Reset text size and width of all module fields to current defaults" ),
                  KiBitmap( reset_text_xpm ) );
 
     /** Create View menu **/

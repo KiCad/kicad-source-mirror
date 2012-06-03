@@ -238,9 +238,10 @@ public:
      * Function CursorGoto
      * positions the cursor at a given coordinate and reframes the drawing if the
      * requested point is out of view.
-     * @param aPos The point to go to.
+     * @param aPos is the point to go to.
+     * @param aWarp is true if the pointer should be warped to the new position.
      */
-    void CursorGoto( const wxPoint& aPos );
+    void CursorGoto( const wxPoint& aPos, bool aWarp = true );
 
     /**
      * Function Save_Module_In_Library
@@ -319,10 +320,14 @@ public:
      * Function ResetModuleTextSizes
      * resets text size and width of all module text fields of given field
      * type to current settings in Preferences->Dimensions->Texts and Drawings.
-     * @param aType is the field type (TEXT_is_REFERENCE, TEXT_is_VALUE, or TEXT_is_DIVERS).
-     * @param aDC is the drawing context.
+     * @param aFilter is a filter: footprint names must match this filter.
+     *        an empty filter, or "*" do not filter anything.
+     * @param aRef = true to modify the reference of footprints.
+     * @param aValue = true to modify the value of footprints.
+     * @param aOthers = true to modify the other fields of footprints.
      */
-    void ResetModuleTextSizes( int aType, wxDC* aDC );
+    void ResetModuleTextSizes( const wxString & aFilter, bool aRef,
+                               bool aValue, bool aOthers );
 
     void InstallPadOptionsFrame( D_PAD*         pad );
     void InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC );
