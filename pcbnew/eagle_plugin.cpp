@@ -975,7 +975,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
         // 8 bit "filename" should be encoded according to disk filename encoding,
         // (maybe this is current locale, maybe not, its a filesystem issue),
         // and is not necessarily utf8.
-        std::string filename = (const char*) aFileName.fn_str();
+        std::string filename = (const char*) aFileName.char_str( wxConvFile );
 
         read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
 
