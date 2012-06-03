@@ -39,7 +39,7 @@
 
 #include <kicad_device_context.h>
 
-#define CURSOR_SIZE 12           // Cursor size in pixels
+static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 
 #define CLIP_BOX_PADDING 2
 
@@ -207,13 +207,13 @@ void EDA_DRAW_PANEL::CrossHairOn( wxDC* DC )
 }
 
 
-int EDA_DRAW_PANEL::GetZoom()
+double EDA_DRAW_PANEL::GetZoom()
 {
     return GetScreen()->GetZoom();
 }
 
 
-void EDA_DRAW_PANEL::SetZoom( int zoom )
+void EDA_DRAW_PANEL::SetZoom( double zoom )
 {
     GetScreen()->SetZoom( zoom );
 }

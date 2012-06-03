@@ -251,18 +251,18 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 }
 
 
-void BITMAP_BASE::PlotImage( PLOTTER* aPlotter,
-                             wxPoint  aPos,
-                             int      aDefaultColor,
-                             int      aDefaultPensize )
+void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter,
+                             const wxPoint& aPos,
+                             EDA_COLOR_T    aDefaultColor,
+                             int            aDefaultPensize )
 {
     if( m_image == NULL )
         return;
 
     // These 2 lines are useful only fot plotters that cannot plot a bitmap
     // and plot arectangle instead of.
-    aPlotter->set_color( aDefaultColor );
-    aPlotter->set_current_line_width( aDefaultPensize );
+    aPlotter->SetColor( aDefaultColor );
+    aPlotter->SetCurrentLineWidth( aDefaultPensize );
 
     aPlotter->PlotImage( *m_image, aPos, GetScalingFactor() );
 }

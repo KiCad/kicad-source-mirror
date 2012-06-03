@@ -40,10 +40,6 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
 #include <base_struct.h>        // EDA_RECT
 #include <typeinfo>
 
-
-/// hashtable with key: C string and value: EDA_RECT.
-/// The key is the classname of the derived wxformbuilder dialog
-WX_DECLARE_HASH_MAP( char*, EDA_RECT, wxStringHash, wxStringEqual, RECT_MAP );
 static RECT_MAP class_map;
 
 bool DIALOG_SHIM::Show( bool show )

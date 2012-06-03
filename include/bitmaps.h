@@ -10,10 +10,6 @@ class wxBitmap;     // only to define wxBitmap
 #include <config.h>
 
 
-#define VTOOLBAR_WIDTH  29
-#define TOOL_SIZE       26
-
-
 /// PNG memory record (file in memory).
 struct BITMAP_OPAQUE
 {
@@ -390,6 +386,7 @@ EXTERN_BITMAP( pintype_noconnect_xpm )
 EXTERN_BITMAP( pin_to_xpm )
 EXTERN_BITMAP( pin_xpm )
 EXTERN_BITMAP( plot_hpg_xpm )
+EXTERN_BITMAP( plot_pdf_xpm )
 EXTERN_BITMAP( plot_ps_xpm )
 EXTERN_BITMAP( plot_xpm )
 EXTERN_BITMAP( polar_coord_xpm )

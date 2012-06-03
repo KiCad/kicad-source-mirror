@@ -36,6 +36,7 @@
 #include <richio.h>
 #include <plot_common.h>
 
+#include <eeschema_config.h>
 #include <general.h>
 #include <protos.h>
 #include <sch_bus_entry.h>
@@ -167,10 +168,9 @@ int SCH_BUS_ENTRY::GetPenSize() const
 {
     int pensize = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
 
-    if( m_Layer == LAYER_BUS && m_width == 0 )
+    if( m_Layer == LAYER_BUS )
     {
-        pensize = KiROUND( g_DrawDefaultLineThickness * BUS_WIDTH_EXPAND );
-        pensize = MAX( pensize, 3 );
+        pensize = ( m_width == 0 ) ? g_DefaultBusWidth : m_width;
     }
 
     return pensize;
@@ -281,10 +281,10 @@ bool SCH_BUS_ENTRY::HitTest( const EDA_RECT& aRect, bool aContained, int aAccura
 
 void SCH_BUS_ENTRY::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->set_current_line_width( GetPenSize() );
-    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
-    aPlotter->move_to( m_pos );
-    aPlotter->finish_to( m_End() );
+    aPlotter->SetCurrentLineWidth( GetPenSize() );
+    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->MoveTo( m_pos );
+    aPlotter->FinishTo( m_End() );
 }
 
 /* SetBusEntryShape:

@@ -40,7 +40,7 @@
 #include <base_units.h>
 
 
-#if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA )
+#if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW )
 #define IU_TO_MM( x )       ( x / IU_PER_MM )
 #define IU_TO_IN( x )       ( x / IU_PER_MILS / 1000 )
 #define MM_TO_IU( x )       ( x * IU_PER_MM )

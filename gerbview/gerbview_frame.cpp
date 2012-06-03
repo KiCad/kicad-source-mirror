@@ -33,7 +33,8 @@
 #include <build_version.h>
 #include <macros.h>
 #include <base_units.h>
-#include <class_layer_box_selector.h>
+#include <colors_selection.h>
+#include <class_gbr_layer_box_selector.h>
 
 #include <gerbview.h>
 #include <class_gerber_draw_item.h>
@@ -47,31 +48,32 @@
 #include <class_gbr_screen.h>
 
 
-
 // Config keywords
-static const wxString cfgShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
-static const wxString cfgShowDCodes( wxT( "ShowDCodesOpt" ) );
-static const wxString cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
+static const wxString   cfgShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
+static const wxString   cfgShowDCodes( wxT( "ShowDCodesOpt" ) );
+static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
 
 
 /*************************************/
 /* class GERBVIEW_FRAME for GerbView */
 /*************************************/
 
-
 GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
                                 const wxString& title,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    PCB_BASE_FRAME( father, GERBER_FRAME, title, pos, size, style )
+    EDA_DRAW_FRAME( father, GERBER_FRAME, title, pos, size, style )
 {
+    m_colorsSettings = &g_ColorsSettings;
+    m_Layout = NULL;
+
     m_FrameName = wxT( "GerberFrame" );
     m_show_layer_manager_tools = true;
 
     m_showAxis = true;                      // true to show X and Y axis on screen
-    m_showBorderAndTitleBlock = false;      // true for reference drawings.
-    m_HotkeysZoomAndGridList = s_Gerbview_Hokeys_Descr;
+    m_showBorderAndTitleBlock   = false;    // true for reference drawings.
+    m_HotkeysZoomAndGridList    = s_Gerbview_Hokeys_Descr;
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
     m_displayMode   = 0;
@@ -85,21 +87,16 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     icon.CopyFromBitmap( KiBitmap( icon_gerbview_xpm ) );
     SetIcon( icon );
 
-    SetBoard( new BOARD() );
+    SetLayout( new GBR_LAYOUT() );
 
-    GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
-    GetBoard()->SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
+    SetVisibleLayers( -1 );     // All 32 layers visible.
 
-    // BOARD was constructed with "A3", change to "GERBER"
-    PAGE_INFO   pageInfo( wxT( "GERBER" ) );
-    GetBoard()->SetPageSettings( pageInfo );
+    SetScreen( new GBR_SCREEN( GetLayout()->GetPageSettings().GetSizeIU() ) );
 
-    SetScreen( new GBR_SCREEN( pageInfo.GetSizeIU() ) );
-
-   // Create the PCB_LAYER_WIDGET *after* SetBoard():
-    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    int    pointSize    = font.GetPointSize();
-    int    screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+    // Create the PCB_LAYER_WIDGET *after* SetLayout():
+    wxFont  font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    int     pointSize       = font.GetPointSize();
+    int     screenHeight    = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
 
     if( screenHeight <= 900 )
         pointSize = (pointSize * 8) / 10;
@@ -110,6 +107,11 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     // initialize parameters in m_LayersManager
     LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
+    if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_1000 )
+        m_LastGridSizeId = m_LastGridSizeId;
+    if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_0_0_1MM )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM;
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     ReCreateMenuBar();
@@ -118,16 +120,16 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
 
     m_auimgr.SetManagedWindow( this );
 
-    EDA_PANEINFO horiz;
+    EDA_PANEINFO    horiz;
     horiz.HorizontalToolbarPane();
 
-    EDA_PANEINFO vert;
+    EDA_PANEINFO    vert;
     vert.VerticalToolbarPane();
 
-    EDA_PANEINFO mesg;
+    EDA_PANEINFO    mesg;
     mesg.MessageToolbarPane();
 
-    EDA_PANEINFO   lyrs;
+    EDA_PANEINFO    lyrs;
     lyrs.LayersToolbarPane();
     lyrs.MinSize( m_LayersManager->GetBestSize() );
     lyrs.BestSize( m_LayersManager->GetBestSize() );
@@ -155,7 +157,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
 
     if( m_messagePanel )
         m_auimgr.AddPane( m_messagePanel,
-                          wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
+                          wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer( 10 ) );
 
     ReFillLayerWidget();                // this is near end because contents establish size
     m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
@@ -178,28 +180,21 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 double GERBVIEW_FRAME::BestZoom()
 {
+    GERBER_DRAW_ITEM* item = GetLayout()->m_Drawings;
+
     // gives a minimal value to zoom, if no item in list
-    if( GetBoard()->m_Drawings == NULL  )
-        return ZOOM_FACTOR( 160.0 );
+    if( item == NULL  )
+        return ZOOM_FACTOR( 350.0 );
 
-    EDA_RECT    bbox;
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
+    EDA_RECT bbox = GetLayout()->ComputeBoundingBox();
 
-    bbox = ( (GERBER_DRAW_ITEM*) item )->GetBoundingBox();
+    wxSize  size = m_canvas->GetClientSize();
 
-    for( ; item; item = item->Next() )
-    {
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        bbox.Merge( gerb_item->GetBoundingBox() );
-    }
-
-    wxSize size = m_canvas->GetClientSize();
-
-    double x = (double) bbox.GetWidth() / (double) size.x;
-    double y = (double) bbox.GetHeight() / (double) size.y;
+    double  x   = (double) bbox.GetWidth() / (double) size.x;
+    double  y   = (double) bbox.GetHeight() / (double) size.y;
     GetScreen()->SetScrollCenterPosition( bbox.Centre() );
 
-    double best_zoom = MAX( x, y );
+    double  best_zoom = MAX( x, y );
     return best_zoom;
 }
 
@@ -211,18 +206,17 @@ void GERBVIEW_FRAME::LoadSettings()
     if( config == NULL )
         return;
 
-//    PCB_BASE_FRAME::LoadSettings();
     EDA_DRAW_FRAME::LoadSettings();
 
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
-    PAGE_INFO   pageInfo( wxT( "GERBER" ) );
+    PAGE_INFO pageInfo( wxT( "GERBER" ) );
 
     config->Read( cfgShowBorderAndTitleBlock, &m_showBorderAndTitleBlock, false );
 
     if( m_showBorderAndTitleBlock )
     {
-        wxString    pageType;
+        wxString pageType;
 
         config->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
 
@@ -239,14 +233,14 @@ void GERBVIEW_FRAME::LoadSettings()
 
     // because we have 2 file historues, we must read this one
     // using a specific path
-    config->SetPath( wxT("drl_files") );
+    config->SetPath( wxT( "drl_files" ) );
     m_drillFileHistory.Load( *config );
-    config->SetPath( wxT("..") );
+    config->SetPath( wxT( ".." ) );
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
     // when reading doubles in config,
     // but forget to back to current locale. So we call SetLocaleTo_Default
-    SetLocaleTo_Default( );
+    SetLocaleTo_Default();
 }
 
 
@@ -257,7 +251,6 @@ void GERBVIEW_FRAME::SaveSettings()
     if( config == NULL )
         return;
 
-//    PCB_BASE_FRAME::SaveSettings();
     EDA_DRAW_FRAME::SaveSettings();
 
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
@@ -269,9 +262,9 @@ void GERBVIEW_FRAME::SaveSettings()
     // Save the drill file history list.
     // Because we have 2 file histories, we must save this one
     // in a specific path
-    config->SetPath(wxT("drl_files") );
+    config->SetPath( wxT( "drl_files" ) );
     m_drillFileHistory.Save( *config );
-    config->SetPath( wxT("..") );
+    config->SetPath( wxT( ".." ) );
 }
 
 
@@ -279,9 +272,9 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
 {
     m_LayersManager->ReFill();
 
-    wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_LayersManager );
+    wxAuiPaneInfo&  lyrs = m_auimgr.GetPane( m_LayersManager );
 
-    wxSize         bestz = m_LayersManager->GetBestSize();
+    wxSize          bestz = m_LayersManager->GetBestSize();
 
     lyrs.MinSize( bestz );
     lyrs.BestSize( bestz );
@@ -295,60 +288,29 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
     syncLayerWidget();
 }
 
-
-/**
- * Function IsGridVisible() , virtual
- * @return true if the grid must be shown
- */
-bool GERBVIEW_FRAME::IsGridVisible()
-{
-    return IsElementVisible( GERBER_GRID_VISIBLE );
-}
-
-
-/**
- * Function SetGridVisibility() , virtual
- * It may be overloaded by derived classes
- * if you want to store/retrieve the grid visiblity in configuration.
- * @param aVisible = true if the grid must be shown
- */
-void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
-{
-    SetElementVisibility( GERBER_GRID_VISIBLE, aVisible );
-}
-
-
-/**
- * Function GetGridColor() , virtual
- * @return the color of the grid
- */
-int GERBVIEW_FRAME::GetGridColor()
-{
-    return GetBoard()->GetVisibleElementColor( GERBER_GRID_VISIBLE );
-}
-
-
-/**
- * Function SetGridColor() , virtual
- * @param aColor = the new color of the grid
- */
-void GERBVIEW_FRAME::SetGridColor( int aColor )
-{
-    GetBoard()->SetVisibleElementColor( GERBER_GRID_VISIBLE, aColor );
-}
-
-
 /**
  * Function SetElementVisibility
  * changes the visibility of an element category
- * @param aGERBER_VISIBLE is from the enum by the same name
+ * @param aItemIdVisible is from the enum by the same name
  * @param aNewState = The new visibility state of the element category
  * @see enum aGERBER_VISIBLE
  */
-void GERBVIEW_FRAME::SetElementVisibility( int aGERBER_VISIBLE, bool aNewState )
+void GERBVIEW_FRAME::SetElementVisibility( int aItemIdVisible, bool aNewState )
 {
-    GetBoard()->SetElementVisibility( aGERBER_VISIBLE, aNewState );
-    m_LayersManager->SetRenderState( aGERBER_VISIBLE, aNewState );
+    switch( aItemIdVisible )
+    {
+    case DCODES_VISIBLE:
+        m_DisplayOptions.m_DisplayDCodes = aNewState;
+        break;
+
+    case GERBER_GRID_VISIBLE:
+        SetGridVisibility( aNewState );
+        break;
+
+    default:
+        wxLogDebug( wxT( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d" ), aItemIdVisible );
+    }
+    m_LayersManager->SetRenderState( aItemIdVisible, aNewState );
 }
 
 
@@ -356,7 +318,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 {
     int layer = aLayer;
 
-    for( int i = 0;  i < LAYER_COUNT;  i++ )
+    for( int i = 0; i < GERBVIEW_LAYER_COUNT; i++ )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[ layer ];
 
@@ -365,7 +327,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 
         layer++;
 
-        if( layer >= LAYER_COUNT )
+        if( layer >= GERBVIEW_LAYER_COUNT )
             layer = 0;
     }
 
@@ -389,8 +351,8 @@ void GERBVIEW_FRAME::syncLayerWidget()
 void GERBVIEW_FRAME::syncLayerBox()
 {
     m_SelLayerBox->SetSelection( getActiveLayer() );
-    int dcodeSelected = -1;
-    GERBER_IMAGE* gerber = g_GERBER_List[getActiveLayer()];
+    int             dcodeSelected = -1;
+    GERBER_IMAGE*   gerber = g_GERBER_List[getActiveLayer()];
 
     if( gerber )
         dcodeSelected = gerber->m_Selected_Tool;
@@ -407,12 +369,12 @@ void GERBVIEW_FRAME::syncLayerBox()
 
 void GERBVIEW_FRAME::Liste_D_Codes()
 {
-    int ii, jj;
-    D_CODE*           pt_D_code;
-    wxString          Line;
-    wxArrayString     list;
-    double            scale = IU_PER_MILS * 1000;
-    int               curr_layer = getActiveLayer();
+    int             ii, jj;
+    D_CODE*         pt_D_code;
+    wxString        Line;
+    wxArrayString   list;
+    double          scale = IU_PER_MILS * 1000;
+    int             curr_layer = getActiveLayer();
 
     for( int layer = 0; layer < 32; layer++ )
     {
@@ -461,11 +423,11 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     }
 
 #if wxCHECK_VERSION( 2, 9, 4 )
-    wxSingleChoiceDialog dlg( this, wxEmptyString, _( "D Codes" ), list, (void**)NULL,
-                              wxCHOICEDLG_STYLE & ~wxCANCEL );
+    wxSingleChoiceDialog    dlg( this, wxEmptyString, _( "D Codes" ), list, (void**) NULL,
+                                 wxCHOICEDLG_STYLE & ~wxCANCEL );
 #else
-    wxSingleChoiceDialog dlg( this, wxEmptyString, _( "D Codes" ), list, (char**)NULL,
-                              wxCHOICEDLG_STYLE & ~wxCANCEL );
+    wxSingleChoiceDialog    dlg( this, wxEmptyString, _( "D Codes" ), list, (char**) NULL,
+                                 wxCHOICEDLG_STYLE & ~wxCANCEL );
 #endif
 
     dlg.ShowModal();
@@ -483,13 +445,13 @@ void GERBVIEW_FRAME::Liste_D_Codes()
  */
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
-    GERBER_IMAGE* gerber = g_GERBER_List[ getActiveLayer() ];
-    wxString      text;
+    GERBER_IMAGE*   gerber = g_GERBER_List[ getActiveLayer() ];
+    wxString        text;
 
     // Display the gerber filename
     if( gerber == NULL )
     {
-        text = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+        text.Printf( wxT( "GerbView %s" ), GetChars( GetBuildVersion() ) );
         SetTitle( text );
         SetStatusText( wxEmptyString, 0 );
         text.Printf( _( "Layer %d not in use" ), getActiveLayer() + 1 );
@@ -518,5 +480,367 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
                  gerber->m_NoTrailingZeros ? 'T' : 'L' );
 
     m_TextInfo->SetValue( text );
+}
+
+
+/*
+ * Function IsElementVisible
+ * tests whether a given element category is visible. Keep this as an
+ * inline function.
+ * @param aGERBER_VISIBLE is from the enum by the same name
+ * @return bool - true if the element is visible.
+ * @see enum PCB_VISIBLE
+ */
+bool GERBVIEW_FRAME::IsElementVisible( int aItemIdVisible )
+{
+    switch( aItemIdVisible )
+    {
+    case DCODES_VISIBLE:
+        return m_DisplayOptions.m_DisplayDCodes;
+        break;
+
+    case GERBER_GRID_VISIBLE:
+        return IsGridVisible();
+        break;
+
+    default:
+        wxLogDebug( wxT( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d" ), aItemIdVisible );
+    }
+
+    return true;
+}
+
+
+/**
+ * Function SetVisibleAlls
+ * Set the status of all layers to VISIBLE
+ */
+void GERBVIEW_FRAME::SetVisibleAlls()
+{
+}
+
+/**
+ * Function GetVisibleLayers
+ * is a proxy function that calls the correspondent function in m_BoardSettings
+ * Returns a bit-mask of all the layers that are visible
+ * @return int - the visible layers in bit-mapped form.
+ */
+int GERBVIEW_FRAME::GetVisibleLayers() const
+{
+    return -1;    // TODO
+}
+
+
+/**
+ * Function SetVisibleLayers
+ * is a proxy function that calls the correspondent function in m_BoardSettings
+ * changes the bit-mask of visible layers
+ * @param aLayerMask = The new bit-mask of visible layers
+ */
+void GERBVIEW_FRAME::SetVisibleLayers( int aLayerMask )
+{
+    GetLayout()->SetVisibleLayers( aLayerMask );
+}
+
+
+/**
+ * Function IsLayerVisible
+ * tests whether a given layer is visible
+ * @param aLayerIndex = The index of the layer to be tested
+ * @return bool - true if the layer is visible.
+ */
+bool GERBVIEW_FRAME::IsLayerVisible( int aLayerIndex ) const
+{
+    if( ! m_DisplayOptions.m_IsPrinting )
+        return m_LayersManager->IsLayerVisible( aLayerIndex );
+    else
+        return GetLayout()->IsLayerVisible( aLayerIndex );
+}
+
+
+/**
+ * Function GetVisibleElementColor
+ * returns the color of a pcb visible element.
+ * @see enum PCB_VISIBLE
+ */
+int GERBVIEW_FRAME::GetVisibleElementColor( int aItemIdVisible )
+{
+    int color = -1;
+
+    switch( aItemIdVisible )
+    {
+    case DCODES_VISIBLE:
+        color = m_colorsSettings->GetItemColor( aItemIdVisible );
+        break;
+
+    case GERBER_GRID_VISIBLE:
+        color = GetGridColor();
+        break;
+
+    default:
+        wxLogDebug( wxT( "GERBVIEW_FRAME::GetVisibleElementColor(): bad arg %d" ), aItemIdVisible );
+    }
+
+    return color;
+}
+
+/*
+ * Virtual from EDA_DRAW_FRAME
+ */
+void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
+{
+    EDA_DRAW_FRAME::SetGridVisibility( aVisible );
+    m_LayersManager->SetRenderState( GERBER_GRID_VISIBLE, aVisible );
+}
+
+
+void GERBVIEW_FRAME::SetVisibleElementColor( int aItemIdVisible, int aColor )
+{
+    switch( aItemIdVisible )
+    {
+    case DCODES_VISIBLE:
+        m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
+        break;
+
+    case GERBER_GRID_VISIBLE:
+        SetGridColor( aColor );
+        m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
+        break;
+
+    default:
+        wxLogDebug( wxT( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d" ), aItemIdVisible );
+    }
+}
+
+
+/**
+ * Function GetLayerColor
+ * gets a layer color for any valid layer, including non-copper ones.
+ */
+int GERBVIEW_FRAME::GetLayerColor( int aLayer )
+{
+    return m_colorsSettings->GetLayerColor( aLayer );
+}
+
+
+/**
+ * Function SetLayerColor
+ * changes a layer color for any valid layer, including non-copper ones.
+ */
+void GERBVIEW_FRAME::SetLayerColor( int aLayer, int aColor )
+{
+    m_colorsSettings->SetLayerColor( aLayer, aColor );
+}
+
+
+/**
+ * Function getActiveLayer
+ * returns the active layer
+ */
+int GERBVIEW_FRAME::getActiveLayer()
+{
+    return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
+}
+
+
+/**
+ * Function setActiveLayer
+ * will change the currently active layer to \a aLayer and also
+ * update the PCB_LAYER_WIDGET.
+ */
+void GERBVIEW_FRAME::setActiveLayer( int aLayer, bool doLayerWidgetUpdate )
+{
+    ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
+
+    if( doLayerWidgetUpdate )
+        m_LayersManager->SelectLayer( getActiveLayer() );
+}
+
+
+void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
+{
+    wxASSERT( m_Layout );
+    m_Layout->SetPageSettings( aPageSettings );
+
+    if( GetScreen() )
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
+}
+
+
+const PAGE_INFO& GERBVIEW_FRAME::GetPageSettings() const
+{
+    wxASSERT( m_Layout );
+    return m_Layout->GetPageSettings();
+}
+
+
+const wxSize GERBVIEW_FRAME::GetPageSizeIU() const
+{
+    wxASSERT( m_Layout );
+
+    // this function is only needed because EDA_DRAW_FRAME is not compiled
+    // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
+    // into an application specific source file.
+    return m_Layout->GetPageSettings().GetSizeIU();
+}
+
+
+const TITLE_BLOCK& GERBVIEW_FRAME::GetTitleBlock() const
+{
+    wxASSERT( m_Layout );
+    return m_Layout->GetTitleBlock();
+}
+
+
+void GERBVIEW_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
+{
+    wxASSERT( m_Layout );
+    m_Layout->SetTitleBlock( aTitleBlock );
+}
+
+
+const wxPoint& GERBVIEW_FRAME::GetOriginAxisPosition() const
+{
+    wxASSERT( m_Layout );
+    return m_Layout->GetOriginAxisPosition();
+}
+
+
+void GERBVIEW_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+{
+    wxASSERT( m_Layout );
+    m_Layout->SetOriginAxisPosition( aPosition );
+}
+
+void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
+{
+    GetScreen()->SetCurItem( aItem );
+
+    if( aItem )
+    {
+        if( aDisplayInfo )
+            aItem->DisplayInfo( this );
+    }
+    else
+        EraseMsgBox();
+}
+
+/*
+ * Function GetLayoutBoundingBox
+ * returns the bounding box containing all gerber items.
+ */
+EDA_RECT GERBVIEW_FRAME::GetLayoutBoundingBox()
+{
+    GetLayout()->ComputeBoundingBox();
+    return GetLayout()->GetBoundingBox();
+}
+
+/*
+ * Update the status bar information.
+ */
+void GERBVIEW_FRAME::UpdateStatusBar()
+{
+    EDA_DRAW_FRAME::UpdateStatusBar();
+
+    GBR_SCREEN* screen = (GBR_SCREEN*) GetScreen();
+
+    if( !screen )
+        return;
+
+    int dx;
+    int dy;
+    double dXpos;
+    double dYpos;
+    wxString line;
+    wxString locformatter;
+
+    if( m_DisplayOptions.m_DisplayPolarCood )  // display relative polar coordinates
+    {
+        double       theta, ro;
+
+        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+
+        if( dx==0 && dy==0 )
+            theta = 0.0;
+        else
+            theta = atan2( (double) -dy, (double) dx );
+
+        theta = theta * 180.0 / M_PI;
+
+        ro = sqrt( ( (double) dx * dx ) + ( (double) dy * dy ) );
+        wxString formatter;
+        switch( g_UserUnit )
+        {
+        case INCHES:
+            formatter = wxT( "Ro %.4f Th %.1f" );
+            break;
+
+        case MILLIMETRES:
+            formatter = wxT( "Ro %.3f Th %.1f" );
+            break;
+
+        case UNSCALED_UNITS:
+            formatter = wxT( "Ro %f Th %f" );
+            break;
+        }
+
+        line.Printf( formatter, To_User_Unit( g_UserUnit, ro ), theta );
+
+        SetStatusText( line, 3 );
+    }
+
+    // Display absolute coordinates:
+    dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
+    dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
+
+    if ( g_UserUnit == MILLIMETRES )
+    {
+        dXpos = RoundTo0( dXpos, 1000.0 );
+        dYpos = RoundTo0( dYpos, 1000.0 );
+    }
+
+    // The following sadly is an if Eeschema/if Pcbnew
+    wxString absformatter;
+
+    switch( g_UserUnit )
+    {
+    case INCHES:
+        absformatter = wxT( "X %.4f  Y %.4f" );
+        locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
+        break;
+
+    case MILLIMETRES:
+        absformatter = wxT( "X %.3f  Y %.3f" );
+        locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
+        break;
+
+    case UNSCALED_UNITS:
+        absformatter = wxT( "X %f  Y %f" );
+        locformatter = wxT( "dx %f  dy %f  d %f" );
+        break;
+    }
+
+    line.Printf( absformatter, dXpos, dYpos );
+    SetStatusText( line, 2 );
+
+    if( !m_DisplayOptions.m_DisplayPolarCood )  // display relative cartesian coordinates
+    {
+        // Display relative coordinates:
+        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        dXpos = To_User_Unit( g_UserUnit, dx );
+        dYpos = To_User_Unit( g_UserUnit, dy );
+
+        if ( g_UserUnit == MILLIMETRES )
+        {
+            dXpos = RoundTo0( dXpos, 1000.0 );
+            dYpos = RoundTo0( dYpos, 1000.0 );
+        }
+
+        // We already decided the formatter above
+        line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+        SetStatusText( line, 3 );
+    }
 }
 

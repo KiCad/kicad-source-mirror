@@ -405,9 +405,9 @@ void EXCELLON_WRITER::SetFormat( bool      aMetric,
 
     /* Set conversion scale depending on drill file units */
     if( m_unitsDecimal )
-        m_conversionUnits = 0.00254;        // EXCELLON units = mm
+        m_conversionUnits = 1.0 / IU_PER_MM; // EXCELLON units = mm
     else
-        m_conversionUnits = 0.0001;         // EXCELLON units = INCHES
+        m_conversionUnits = 0.001 / IU_PER_MILS; // EXCELLON units = INCHES
 
     m_precision.m_lhs = aLeftDigits;
     m_precision.m_rhs = aRightDigits;

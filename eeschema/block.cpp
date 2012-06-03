@@ -66,7 +66,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
 int SCH_EDIT_FRAME::ReturnBlockCommand( int key )
 {
-    int cmd;
+    int cmd = BLOCK_IDLE;
 
     switch( key )
     {
@@ -78,9 +78,12 @@ int SCH_EDIT_FRAME::ReturnBlockCommand( int key )
         cmd = BLOCK_MOVE;
         break;
 
-    case GR_KB_ALT:
     case GR_KB_SHIFT:
         cmd = BLOCK_COPY;
+        break;
+
+    case GR_KB_ALT:
+        cmd = BLOCK_ROTATE;
         break;
 
     case GR_KB_CTRL:
@@ -130,12 +133,6 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     switch( block->GetCommand() )
     {
-    case BLOCK_IDLE:
-        break;
-
-    case BLOCK_ROTATE:
-    case BLOCK_MIRROR_X:
-    case BLOCK_MIRROR_Y:
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
         if( m_canvas->IsMouseCaptured() )
@@ -167,13 +164,8 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         block->ClearItemsList();
         break;
 
-    case BLOCK_ZOOM:        // Handled by HandleBlockEnd()
-    case BLOCK_DELETE:
-    case BLOCK_SAVE:
-    case BLOCK_FLIP:
-    case BLOCK_ABORT:
-    case BLOCK_SELECT_ITEMS_ONLY:
-        break;
+    default:        // others are handled by HandleBlockEnd()
+       break;
     }
 
     OnModify();
@@ -225,15 +217,31 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             DisplayError( this, wxT( "Error in HandleBlockPLace()" ) );
             break;
 
+        case BLOCK_ROTATE:
+            GetScreen()->UpdatePickList();
+            DrawAndSizingBlockOutlines( m_canvas, DC, wxDefaultPosition, false );
+
+            if( block->GetCount() )
+            {
+                // Compute the rotation center and put it on grid:
+                wxPoint rotationPoint = block->Centre();
+                rotationPoint = GetScreen()->GetNearestGridPosition( rotationPoint );
+                GetScreen()->SetCrossHairPosition( rotationPoint );
+                SaveCopyInUndoList( block->GetItems(), UR_ROTATED, rotationPoint );
+                RotateListOfItems( block->GetItems(), rotationPoint );
+                OnModify();
+            }
+            block->ClearItemsList();
+            GetScreen()->TestDanglingEnds( m_canvas, DC );
+            m_canvas->Refresh();
+            break;
+
         case BLOCK_DRAG:    /* Drag */
             GetScreen()->BreakSegmentsOnJunctions();
             // fall through
 
-        case BLOCK_ROTATE:
-        case BLOCK_MIRROR_X:
-        case BLOCK_MIRROR_Y:
-        case BLOCK_MOVE:    /* Move */
-        case BLOCK_COPY:    /* Copy */
+        case BLOCK_MOVE:
+        case BLOCK_COPY:
             GetScreen()->UpdatePickList();
             // fall through
 
@@ -263,7 +271,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
                 DeleteItemsInList( m_canvas, block->GetItems() );
                 OnModify();
             }
-
             block->ClearItemsList();
             GetScreen()->TestDanglingEnds( m_canvas, DC );
             m_canvas->Refresh();
@@ -291,9 +298,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             zoom_command = true;
             break;
 
-        case BLOCK_FLIP:                /* Pcbnew only! */
-        case BLOCK_SELECT_ITEMS_ONLY:   /* Not used */
-        case BLOCK_ABORT:               /* not executed here */
+        default:
             break;
         }
     }

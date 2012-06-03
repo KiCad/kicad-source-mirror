@@ -88,11 +88,19 @@
 #include <wx/ffile.h>
 
 
-#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file." )
+typedef LEGACY_PLUGIN::BIU      BIU;
+
+
+#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
 
+
+
+
+// Old internal units definition (UI = decimil)
+#define PCB_LEGACY_INTERNAL_UNIT 10000
 
 /// Get the length of a string constant, at compile time
 #define SZ( x )         (sizeof(x)-1)
@@ -322,7 +330,7 @@ void LEGACY_PLUGIN::checkVersion()
 #if !defined(DEBUG)
     if( ver > LEGACY_BOARD_FILE_VERSION )
     {
-        // "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file."
+        // "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file."
         m_error.Printf( VERSION_ERROR_FORMAT,
             m_reader->GetSource().GetData(), ver, LEGACY_BOARD_FILE_VERSION );
         THROW_IO_ERROR( m_error );
@@ -356,7 +364,7 @@ void LEGACY_PLUGIN::loadGENERAL()
                 diskToBiu = 10000/25.4;
 
 #else
-                THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'PCBNew compiled for deci-mils'" ) );
+                THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'" ) );
 #endif
             }
         }
@@ -922,15 +930,16 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             int layer  = intParse( data, &data );
 
             long edittime  = hexParse( data, &data );
-            long timestamp = hexParse( data, &data );
+            time_t timestamp = hexParse( data, &data );
 
             data = strtok( (char*) data+1, delims );
 
             // data is now a two character long string
-            if( data[0] == 'F' )
+            // Note: some old files do not have this field
+            if( data && data[0] == 'F' )
                 module->SetLocked( true );
 
-            if( data[1] == 'P' )
+            if( data && data[1] == 'P' )
                 module->SetIsPlaced( true );
 
             module->SetPosition( wxPoint( pos_x, pos_y ) );
@@ -942,12 +951,14 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 
         else if( TESTLINE( "Li" ) )         // Library name of footprint
         {
+            // There can be whitespace in the footprint name on some old libraries.
+            // Grab everything after "Li" up to end of line:
             module->SetLibRef( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
 
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
-            long timestamp = hexParse( line + SZ( "Sc" ) );
+            time_t timestamp = hexParse( line + SZ( "Sc" ) );
             module->SetTimeStamp( timestamp );
         }
 
@@ -1014,6 +1025,14 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
         else if( TESTLINE( ".SolderPasteRatio" ) )
         {
             double tmp = atof( line + SZ( ".SolderPasteRatio" ) );
+            // Due to a bug in dialog editor in Modedit, fixed in BZR version 3565
+            // this parameter can be broken.
+            // It should be >= -50% (no solder paste) and <= 0% (full area of the pad)
+
+            if( tmp < -0.50 )
+                tmp = -0.50;
+            if( tmp > 0.0 )
+                tmp = 0.0;
             module->SetLocalSolderPasteMarginRatio( tmp );
         }
 
@@ -1220,7 +1239,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             pos.y = biuParse( data );
 
             pad->SetPos0( pos );
-            pad->SetPosition( pos );
+            // pad->SetPosition( pos ); set at function return
         }
 
         else if( TESTLINE( "Le" ) )
@@ -1273,7 +1292,10 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
         else if( TESTLINE( "$EndPAD" ) )
         {
-            wxPoint padpos = pad->GetPosition();
+            // pad's "Position" is not relative to the module's,
+            // whereas Pos0 is relative to the module's but is the unrotated coordinate.
+
+            wxPoint padpos = pad->GetPos0();
 
             RotatePoint( &padpos, aModule->GetOrientation() );
 
@@ -1300,7 +1322,8 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     case 'A':   shape = S_ARC;       break;
     case 'P':   shape = S_POLYGON;   break;
     default:
-        m_error.Printf( wxT( "Unknown EDGE_MODULE type '%s'" ), FROM_UTF8( line ).GetData() );
+        m_error.Printf( wxT( "Unknown EDGE_MODULE type '%s' line %d" ),
+                        FROM_UTF8( line ).GetData(), m_reader->LineNumber() );
         THROW_IO_ERROR( m_error );
     }
 
@@ -1616,7 +1639,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
             if( width < 0 )
                 width = 0;
 
-            dseg->SetShape( shape );
+            dseg->SetShape( STROKE_T( shape ) );
             dseg->SetWidth( width );
             dseg->SetStart( wxPoint( start_x, start_y ) );
             dseg->SetEnd( wxPoint( end_x, end_y ) );
@@ -1655,7 +1678,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     dseg->SetAngle( angle );    // m_Angle
                     break;
                 case 3:
-                    long timestamp;
+                    time_t timestamp;
                     timestamp = hexParse( data );
                     dseg->SetTimeStamp( timestamp );
                     break;
@@ -1765,14 +1788,14 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
         if( TESTLINE( "Te" ) )          // Text line (or first line for multi line texts)
         {
-            ReadDelimitedText( text, line + 2, sizeof(text) );
+            ReadDelimitedText( text, line + SZ( "Te" ), sizeof(text) );
             pcbtxt->SetText( FROM_UTF8( text ) );
         }
 
         else if( TESTLINE( "nl" ) )     // next line of the current text
         {
             ReadDelimitedText( text, line + SZ( "nl" ), sizeof(text) );
-            pcbtxt->SetText( pcbtxt->GetText() + '\n' +  FROM_UTF8( text ) );
+            pcbtxt->SetText( pcbtxt->GetText() + wxChar( '\n' ) +  FROM_UTF8( text ) );
         }
 
         else if( TESTLINE( "Po" ) )
@@ -1820,7 +1843,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
             int     layer       = intParse( line + SZ( "De" ), &data );
             int     notMirrored = intParse( data, &data );
-            long    timestamp   = hexParse( data, &data );
+            time_t  timestamp   = hexParse( data, &data );
             char*   style       = strtok( (char*) data, delims );
             char*   hJustify    = strtok( NULL, delims );
 
@@ -1853,7 +1876,6 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
                 layer = LAST_NO_COPPER_LAYER;
 
             pcbtxt->SetLayer( layer );
-
         }
 
         else if( TESTLINE( "$EndTEXTPCB" ) )
@@ -1872,7 +1894,8 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
     {
         // read two lines per loop iteration, each loop is one TRACK or VIA
         // example first line:
-        // "Po 0 23994 28800 24400 28800 150 -1\r\n"
+        // e.g. "Po 0 23994 28800 24400 28800 150 -1"  for a track
+        // e.g. "Po 3 21086 17586 21086 17586 180 -1"  for a via (uses sames start and end)
 
         const char* data;
         char* line = m_reader->Line();
@@ -1919,10 +1942,11 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
 #endif
 
         int         makeType;
-        long        timeStamp;
+        time_t      timeStamp;
         int         layer, type, flags, net_code;
 
         // parse the 2nd line to determine the type of object
+        // e.g. "De 15 1 7 0 0"   for a via
         sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer, &type, &net_code, &timeStamp, &flags );
 
         if( aStructType==PCB_TRACE_T && type==1 )
@@ -2110,7 +2134,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZInfo" ) )      // general info found
         {
             // e.g. 'ZInfo 479194B1 310 "COMMON"'
-            long    timestamp = hexParse( line + SZ( "ZInfo" ), &data );
+            time_t  timestamp = hexParse( line + SZ( "ZInfo" ), &data );
             int     netcode   = intParse( data, &data );
 
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
@@ -2326,7 +2350,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
         else if( TESTLINE( "Ge" ) )
         {
             int     layer;
-            long    timestamp;
+            time_t  timestamp;
             int     shape;
 
             sscanf( line + SZ( "Ge" ), " %d %d %lX", &shape, &layer, &timestamp );
@@ -2520,7 +2544,7 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
             BIU pos_y = biuParse( data, &data );
             BIU size  = biuParse( data, &data );
             BIU width = biuParse( data, &data );
-            long timestamp = hexParse( data );
+            time_t timestamp = hexParse( data );
 
             if( layer < FIRST_NO_COPPER_LAYER )
                 layer = FIRST_NO_COPPER_LAYER;
@@ -2843,7 +2867,7 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 
     /*  Internal units are nobody's business, they are internal.
         Units used in the file are now in the "Units" attribute of $GENERAL.
-    fprintf( m_fp,, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
+    fprintf( m_fp,, "InternalUnit %f INCH\n", 1.0 / PCB_LEGACY_INTERNAL_UNIT );
     */
 
     fprintf( m_fp, "Layers %d\n", aBoard->GetCopperLayerCount() );
@@ -3717,7 +3741,7 @@ void LEGACY_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
 #include <boost/ptr_container/ptr_map.hpp>
 #include <wx/filename.h>
 
-typedef boost::ptr_map< wxString, MODULE >      MODULE_MAP;
+typedef boost::ptr_map< std::string, MODULE >   MODULE_MAP;
 typedef MODULE_MAP::iterator                    MODULE_ITER;
 typedef MODULE_MAP::const_iterator              MODULE_CITER;
 
@@ -3840,7 +3864,7 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
                 m_owner->diskToBiu = 10000/25.4;
 
 #else
-                THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'PCBNew compiled for deci-mils'" ) );
+                THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'Pcbnew compiled for deci-mils'" ) );
 #endif
             }
 
@@ -3900,19 +3924,60 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
         {
             MODULE* m = m_owner->LoadMODULE();
 
-            // wxString footprintName = m->GetReference();
-            wxString footprintName = m->GetLibRef();
+            std::string footprintName = TO_UTF8( m->GetLibRef() );
 
-            std::pair<MODULE_ITER, bool> r = m_modules.insert( footprintName, m );
+            /*
 
-            // m's module is gone here, both on success or failure of insertion.
-            // no memory leak, container deleted m on failure.
+            There was a bug in old legacy library management code
+            (pre-LEGACY_PLUGIN) which was introducing duplicate footprint names
+            in legacy libraries without notification. To best recover from such
+            bad libraries, and use them to their fullest, there are a few
+            strategies that could be used. (Note: footprints must have unique
+            names to be accepted into this cache.) The strategy used here is to
+            append a differentiating version counter to the end of the name as:
+            _v2, _v3, etc.
 
-            if( !r.second )
+            */
+
+            MODULE_CITER it = m_modules.find( footprintName );
+
+            if( it == m_modules.end() )  // footprintName is not present in cache yet.
             {
-                THROW_IO_ERROR( wxString::Format(
-                    _( "library '%s' has a duplicate footprint named '%s'" ),
-                    m_lib_name.GetData(), footprintName.GetData() ) );
+                std::pair<MODULE_ITER, bool> r = m_modules.insert( footprintName, m );
+
+                wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
+                (void) r;
+            }
+
+            // Bad library has a duplicate of this footprintName, generate a
+            // unique footprint name and load it anyway.
+            else
+            {
+                bool    nameOK = false;
+                int     version = 2;
+                char    buf[48];
+
+                while( !nameOK )
+                {
+                    std::string newName = footprintName;
+
+                    newName += "_v";
+                    sprintf( buf, "%d", version++ );
+                    newName += buf;
+
+                    it = m_modules.find( newName );
+
+                    if( it == m_modules.end() )
+                    {
+                        nameOK = true;
+
+                        m->SetLibRef( FROM_UTF8( newName.c_str() ) );
+                        std::pair<MODULE_ITER, bool> r = m_modules.insert( newName, m );
+
+                        wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
+                        (void) r;
+                    }
+                }
             }
         }
 
@@ -3985,7 +4050,7 @@ void FPL_CACHE::SaveIndex( FILE* aFile )
 
     for( MODULE_CITER it = m_modules.begin();  it != m_modules.end();  ++it )
     {
-        fprintf( aFile, "%s\n", TO_UTF8( it->first ) );
+        fprintf( aFile, "%s\n", it->first.c_str() );
     }
 
     fprintf( aFile, "$EndINDEX\n" );
@@ -4031,7 +4096,7 @@ wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, P
 
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
-        ret.Add( it->first );
+        ret.Add( FROM_UTF8( it->first.c_str() ) );
     }
 
     return ret;
@@ -4049,7 +4114,7 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStri
 
     const MODULE_MAP&   mods = m_cache->m_modules;
 
-    MODULE_CITER it = mods.find( aFootprintName );
+    MODULE_CITER it = mods.find( TO_UTF8( aFootprintName ) );
 
     if( it == mods.end() )
     {
@@ -4079,7 +4144,7 @@ void LEGACY_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* a
         THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
-    wxString footprintName = aFootprint->GetLibRef();
+    std::string footprintName = TO_UTF8( aFootprint->GetLibRef() );
 
     MODULE_MAP&  mods = m_cache->m_modules;
 
@@ -4123,7 +4188,9 @@ void LEGACY_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
         THROW_IO_ERROR( wxString::Format( _( "Library '%s' is read only" ), aLibraryPath.GetData() ) );
     }
 
-    size_t erasedCount = m_cache->m_modules.erase( aFootprintName );
+    std::string footprintName = TO_UTF8( aFootprintName );
+
+    size_t erasedCount = m_cache->m_modules.erase( footprintName );
 
     if( erasedCount != 1 )
     {
@@ -4174,6 +4241,12 @@ void LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES
         THROW_IO_ERROR( wxString::Format(
             _( "library '%s' cannot be deleted" ),
             aLibraryPath.GetData() ) );
+    }
+
+    if( m_cache && m_cache->m_lib_name == aLibraryPath )
+    {
+        delete m_cache;
+        m_cache = 0;
     }
 }
 

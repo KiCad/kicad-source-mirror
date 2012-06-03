@@ -390,7 +390,19 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         break;
 
     case DRILL_INCREMENTALHEADER:
-        m_Relative = true;
+        if( *text != ',' )
+        {
+            ReportMessage( _( "ICI command has no parameter" ) );
+            break;
+        }
+        text++;     // skip separator
+        // Parameter should be ON or OFF
+        if( strnicmp( text, "OFF", 3 ) == 0 )
+            m_Relative = false;
+        else if( strnicmp( text, "ON", 2 ) == 0 )
+            m_Relative = true;
+        else
+            ReportMessage( _( "ICI command has incorrect parameter" ) );
         break;
 
     case DRILL_TOOL_CHANGE_STOP:
@@ -475,8 +487,8 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                     ReportMessage( msg );
                     return false;
                 }
-                gbritem = new GERBER_DRAW_ITEM( GetParent()->GetBoard(), this );
-                GetParent()->GetBoard()->m_Drawings.Append( gbritem );
+                gbritem = new GERBER_DRAW_ITEM( GetParent()->GetLayout(), this );
+                GetParent()->GetLayout()->m_Drawings.Append( gbritem );
                 if( m_SlotOn )  // Oval hole
                 {
                     fillLineGBRITEM( gbritem,

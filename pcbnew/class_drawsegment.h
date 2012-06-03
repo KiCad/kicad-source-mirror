@@ -43,15 +43,15 @@ class MODULE;
 class DRAWSEGMENT : public BOARD_ITEM
 {
 protected:
-    int     m_Width;            ///< thickness of lines ...
-    wxPoint m_Start;            ///< Line start point or Circle and Arc center
-    wxPoint m_End;              ///< Line end point or circle and arc start point
+    int         m_Width;        ///< thickness of lines ...
+    wxPoint     m_Start;        ///< Line start point or Circle and Arc center
+    wxPoint     m_End;          ///< Line end point or circle and arc start point
 
-    int     m_Shape;            ///< Shape: line, Circle, Arc
-    int     m_Type;             ///< Used in complex associations ( Dimensions.. )
-    double  m_Angle;            ///< Used only for Arcs: Arc angle in 1/10 deg
-    wxPoint m_BezierC1;         ///< Bezier Control Point 1
-    wxPoint m_BezierC2;         ///< Bezier Control Point 2
+    STROKE_T    m_Shape;        ///< Shape: line, Circle, Arc
+    int         m_Type;         ///< Used in complex associations ( Dimensions.. )
+    double      m_Angle;        ///< Used only for Arcs: Arc angle in 1/10 deg
+    wxPoint     m_BezierC1;     ///< Bezier Control Point 1
+    wxPoint     m_BezierC2;     ///< Bezier Control Point 2
 
     std::vector<wxPoint>    m_BezierPoints;
     std::vector<wxPoint>    m_PolyPoints;
@@ -80,11 +80,11 @@ public:
     void SetAngle( double aAngle );     // encapsulates the transition to degrees
     double GetAngle() const { return m_Angle; }
 
-    void SetType( int aType )               { m_Type = aType; }
-    int GetType() const                     { return m_Type; }
+    void SetType( int aType )                       { m_Type = aType; }
+    int GetType() const                             { return m_Type; }
 
-    void SetShape( int aShape )             { m_Shape = aShape; }
-    int GetShape() const                    { return m_Shape; }
+    void SetShape( STROKE_T aShape )                { m_Shape = aShape; }
+    STROKE_T GetShape() const                       { return m_Shape; }
 
     void SetBezControl1( const wxPoint& aPoint )    { m_BezierC1 = aPoint; }
     const wxPoint& GetBezControl1() const           { return m_BezierC1; }
@@ -92,8 +92,8 @@ public:
     void SetBezControl2( const wxPoint& aPoint )    { m_BezierC2 = aPoint; }
     const wxPoint& GetBezControl2() const           { return m_BezierC2; }
 
-    void SetPosition( const wxPoint& aPos ) { m_Start = aPos; }     // override
-    const wxPoint& GetPosition() const      { return m_Start; }     // override
+    void SetPosition( const wxPoint& aPos )         { m_Start = aPos; }     // override
+    const wxPoint& GetPosition() const              { return m_Start; }     // override
 
     /**
      * Function GetStart
@@ -140,14 +140,14 @@ public:
     MODULE* GetParentModule() const;
 
     const std::vector<wxPoint>& GetBezierPoints() const { return m_BezierPoints; };
-    const std::vector<wxPoint>& GetPolyPoints() const { return m_PolyPoints; };
+    const std::vector<wxPoint>& GetPolyPoints() const   { return m_PolyPoints; };
 
-    void SetBezierPoints( std::vector<wxPoint>& aPoints )
+    void SetBezierPoints( const std::vector<wxPoint>& aPoints )
     {
         m_BezierPoints = aPoints;
     }
 
-    void SetPolyPoints( std::vector<wxPoint>& aPoints )
+    void SetPolyPoints( const std::vector<wxPoint>& aPoints )
     {
         m_PolyPoints = aPoints;
     }

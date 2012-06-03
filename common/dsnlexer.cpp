@@ -51,7 +51,9 @@ static int compare( const void* a1, const void* a2 )
 
 void DSNLEXER::init()
 {
-    curTok = DSN_NONE;
+    curTok  = DSN_NONE;
+    prevTok = DSN_NONE;
+
     stringDelimiter = '"';
 
     specctraMode = false;
@@ -433,6 +435,22 @@ L_read:
         if( cur >= limit )
             goto L_read;
 
+        if( *cur == '(' )
+        {
+            curText = *cur;
+            curTok = DSN_LEFT;
+            head = cur+1;
+            goto exit;
+        }
+
+        if( *cur == ')' )
+        {
+            curText = *cur;
+            curTok = DSN_RIGHT;
+            head = cur+1;
+            goto exit;
+        }
+
         // switching the string_quote character
         if( prevTok == DSN_STRING_QUOTE )
         {
@@ -459,22 +477,6 @@ L_read:
             }
 
             curTok = DSN_QUOTE_DEF;
-            goto exit;
-        }
-
-        if( *cur == '(' )
-        {
-            curText = *cur;
-            curTok = DSN_LEFT;
-            head = cur+1;
-            goto exit;
-        }
-
-        if( *cur == ')' )
-        {
-            curText = *cur;
-            curTok = DSN_RIGHT;
-            head = cur+1;
             goto exit;
         }
 

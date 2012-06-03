@@ -36,6 +36,8 @@ set(EESCHEMA_SRCS
     dialogs/dialog_plot_schematic_HPGL_base.cpp
     dialogs/dialog_plot_schematic_PS.cpp
     dialogs/dialog_plot_schematic_PS_base.cpp
+    dialogs/dialog_plot_schematic_PDF.cpp
+    dialogs/dialog_plot_schematic_PDF_base.cpp
     dialogs/annotate_dialog.cpp
     dialogs/dialog_annotate_base.cpp
     dialogs/dialog_lib_edit_text.cpp

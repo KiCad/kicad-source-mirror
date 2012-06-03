@@ -108,14 +108,16 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     // why did we have to change these settings?
     SetPlotSettings( plotOpts );
 
-    plotter->set_scale_adjust( plotOpts.m_FineScaleAdjustX,
+    plotter->SetScaleAdjust( plotOpts.m_FineScaleAdjustX,
                                plotOpts.m_FineScaleAdjustY );
-    plotter->set_plot_width_adj( plotOpts.m_FineWidthAdjust );
-    plotter->set_viewport( offset, scale, plotOpts.m_PlotMirror );
-    plotter->set_default_line_width( plotOpts.m_PlotLineWidth );
-    plotter->set_creator( wxT( "PCBNEW-PS" ) );
-    plotter->set_filename( aFullFileName );
-    plotter->start_plot( output_file );
+    plotter->SetPlotWidthAdj( plotOpts.m_FineWidthAdjust );
+    plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 
+	                  plotOpts.m_PlotMirror );
+    plotter->SetDefaultLineWidth( plotOpts.m_PlotLineWidth );
+    plotter->SetCreator( wxT( "PCBNEW-PS" ) );
+    plotter->SetFilename( aFullFileName );
+    plotter->SetPsTextMode( PSTEXTMODE_PHANTOM );
+    plotter->StartPlot( output_file );
 
     /* The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway */
     if( plotOpts.m_PlotFrameRef && !center )
@@ -127,18 +129,18 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     if( plotOpts.m_PlotPSNegative )
     {
         int margin = 500;              // Add a 0.5 inch margin around the board
-        plotter->set_negative( true );
-        plotter->set_color( WHITE );   // Which will be plotted as black
-        plotter->rect( wxPoint( bbbox.GetX() - margin,
+        plotter->SetNegative( true );
+        plotter->SetColor( WHITE );   // Which will be plotted as black
+        plotter->Rect( wxPoint( bbbox.GetX() - margin,
                                 bbbox.GetY() - margin ),
                        wxPoint( bbbox.GetRight() + margin,
                                 bbbox.GetBottom() + margin ),
                        FILLED_SHAPE );
-        plotter->set_color( BLACK );
+        plotter->SetColor( BLACK );
     }
 
     Plot_Layer( plotter, aLayer, aTraceMode );
-    plotter->end_plot();
+    plotter->EndPlot();
     delete plotter;
 
     return true;

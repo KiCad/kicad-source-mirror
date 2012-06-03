@@ -400,7 +400,7 @@ protected:
 
     EDA_ITEM*     m_Parent;       /* Linked list: Link (parent struct) */
     EDA_ITEM*     m_Son;          /* Linked list: Link (son struct) */
-    unsigned long m_TimeStamp;    ///< Time stamp used for logical links
+    time_t        m_TimeStamp;    ///< Time stamp used for logical links
 
     /// Set to true to override the visibility setting of the item.
     bool          m_forceVisible;
@@ -430,8 +430,8 @@ public:
      */
     KICAD_T Type()  const { return m_StructType; }
 
-    void SetTimeStamp( unsigned long aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
-    unsigned long GetTimeStamp() const { return m_TimeStamp; }
+    void SetTimeStamp( time_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
+    time_t GetTimeStamp() const { return m_TimeStamp; }
 
     EDA_ITEM* Next() const { return (EDA_ITEM*) Pnext; }
     EDA_ITEM* Back() const { return (EDA_ITEM*) Pback; }

@@ -91,27 +91,7 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
-    case BLOCK_COPY:     /* Copy */
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-        Block_Duplicate( DC );
-        GetScreen()->m_BlockLocate.ClearItemsList();
-        break;
-
-    case BLOCK_PASTE:
-    case BLOCK_DRAG:
-    case BLOCK_PRESELECT_MOVE:
-    case BLOCK_ZOOM:
-    case BLOCK_ROTATE:
-    case BLOCK_FLIP:
-    case BLOCK_DELETE:
-    case BLOCK_SAVE:
-    case BLOCK_ABORT:
-    case BLOCK_SELECT_ITEMS_ONLY:
-    case BLOCK_MIRROR_X:
-    case BLOCK_MIRROR_Y:
-    case BLOCK_IDLE:
+    default:
         wxFAIL_MSG( wxT("HandleBlockPlace: Unexpected block command") );
         break;
     }
@@ -136,7 +116,6 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
         switch( GetScreen()->m_BlockLocate.GetCommand() )
         {
         case BLOCK_MOVE:            /* Move */
-        case BLOCK_COPY:            /* Copy */
             GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
             nextcmd = true;
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
@@ -144,27 +123,11 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             break;
 
-        case BLOCK_DELETE: /* Delete */
-            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
-            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-            Block_Delete( DC );
-            break;
-
         case BLOCK_ZOOM: /* Window Zoom */
             zoom_command = true;
             break;
 
-        case BLOCK_PRESELECT_MOVE:  /* Move with preselection list */
-        case BLOCK_DRAG:
-        case BLOCK_IDLE:
-        case BLOCK_MIRROR_X:    /* Mirror, unused*/
-        case BLOCK_ROTATE:      /* Unused */
-        case BLOCK_FLIP:        /* Flip, unused */
-        case BLOCK_SAVE:        /* Save (not used)*/
-        case BLOCK_PASTE:
-        case BLOCK_ABORT:
-        case BLOCK_SELECT_ITEMS_ONLY:
-        case BLOCK_MIRROR_Y:
+        default:
             wxFAIL_MSG( wxT("HandleBlockEnd: Unexpected block command") );
             break;
         }
@@ -228,31 +191,6 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 }
 
 
-void GERBVIEW_FRAME::Block_Delete( wxDC* DC )
-{
-    if( !IsOK( this, _( "Ok to delete block ?" ) ) )
-        return;
-
-    GetScreen()->SetModify();
-    GetScreen()->m_BlockLocate.Normalize();
-    GetScreen()->SetCurItem( NULL );
-
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
-    BOARD_ITEM* nextitem;
-
-    for( ; item; item = nextitem )
-    {
-        nextitem = item->Next();
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-
-        if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
-            gerb_item->DeleteStructure();
-    }
-
-    Refresh();
-}
-
-
 void GERBVIEW_FRAME::Block_Move( wxDC* DC )
 {
     wxPoint delta;
@@ -270,9 +208,7 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
     delta = GetScreen()->m_BlockLocate.GetMoveVector();
 
     /* Move items in block */
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
-
-    for( ; item; item = item->Next() )
+    for( GERBER_DRAW_ITEM* item = GetItemsList(); item; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
 
@@ -281,39 +217,4 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
     }
 
     m_canvas->Refresh( true );
-}
-
-
-void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
-{
-    wxPoint delta;
-    wxPoint oldpos;
-
-    oldpos = GetScreen()->GetCrossHairPosition();
-    m_canvas->SetMouseCaptureCallback( NULL );
-
-    GetScreen()->SetCrossHairPosition( oldpos );
-    m_canvas->MoveCursorToCrossHair();
-    GetScreen()->SetModify();
-    GetScreen()->m_BlockLocate.Normalize();
-
-    delta = GetScreen()->m_BlockLocate.GetMoveVector();
-
-    /* Copy items in block */
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
-
-    for( ; item; item = item->Next() )
-    {
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-
-        if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
-        {
-            /* this item must be duplicated */
-            GERBER_DRAW_ITEM* new_item = gerb_item->Copy();
-            new_item->MoveAB( delta );
-            GetBoard()->m_Drawings.PushFront( new_item );
-        }
-    }
-
-    m_canvas->Refresh();
 }

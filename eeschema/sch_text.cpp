@@ -691,7 +691,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     wxPoint     textpos   = m_Pos + GetSchematicTextOffset();
     int         thickness = GetPenSize();
 
-    aPlotter->set_current_line_width( thickness );
+    aPlotter->SetCurrentLineWidth( thickness );
 
     if( m_MultilineAllowed )
     {
@@ -706,7 +706,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
-            aPlotter->text( pos, color, txt, m_Orient, m_Size, m_HJustify,
+            aPlotter->Text( pos, color, txt, m_Orient, m_Size, m_HJustify,
                             m_VJustify, thickness, m_Italic, m_Bold );
             pos += offset;
         }
@@ -715,14 +715,14 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     }
     else
     {
-        aPlotter->text( textpos, color, m_Text, m_Orient, m_Size, m_HJustify,
+        aPlotter->Text( textpos, color, m_Text, m_Orient, m_Size, m_HJustify,
                         m_VJustify, thickness, m_Italic, m_Bold );
     }
 
     /* Draw graphic symbol for global or hierarchical labels */
     CreateGraphicShape( Poly, m_Pos );
 
-    aPlotter->set_current_line_width( GetPenSize() );
+    aPlotter->SetCurrentLineWidth( GetPenSize() );
 
     if( Poly.size() )
         aPlotter->PlotPoly( Poly, NO_FILL );

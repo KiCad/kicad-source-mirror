@@ -25,15 +25,6 @@
 #include <legacy_plugin.h>              // temporarily, for LoadMODULE()
 
 
-/*
- * Module library header format:
- * Array LIBRARY HEADER-datetime
- * $INDEX
- * List of modules names (1 name per line)
- * $EndIndex
- * List of descriptions of Modules
- * $EndLIBRARY
- */
 #define BACKUP_EXT                 wxT( "bak" )
 #define FILETMP_EXT                wxT( "$$$" )
 #define EXPORT_IMPORT_LASTPATH_KEY wxT( "import_last_path" )
@@ -191,7 +182,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
         config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
     }
 
-    wxString libName = fn.GetFullPath();
+    wxString libPath = fn.GetFullPath();
 
     try
     {
@@ -200,8 +191,20 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
         // Use IO_MGR::LEGACY for now, until the IO_MGR::KICAD plugin is ready.
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-        pi->FootprintLibCreate( libName );
-        pi->FootprintSave( libName, aModule );
+        try
+        {
+            // try to delete the library whether it exists or not, quietly.
+            pi->FootprintLibDelete( libPath );
+        }
+        catch( IO_ERROR ioe )
+        {
+            // Ignore this, it will often happen and is not an error because
+            // the library may not exist.  If library was in a read only directory,
+            // it will still exist as we get to the FootprintLibCreate() below.
+        }
+
+        pi->FootprintLibCreate( libPath );
+        pi->FootprintSave( libPath, aModule );
     }
     catch( IO_ERROR ioe )
     {
@@ -209,7 +212,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
         return;
     }
 
-    msg.Printf( _( "Module exported in file <%s>" ), libName.GetData() );
+    msg.Printf( _( "Module exported in file <%s>" ), libPath.GetData() );
     DisplayInfoMessage( this, msg );
 }
 

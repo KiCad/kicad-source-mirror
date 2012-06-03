@@ -59,7 +59,13 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     BASE_SCREEN* screen = GetScreen();
 
-    screen->SetZoom( BestZoom() ); // Set the best zoom and get center point.
+    // Set the best zoom and get center point.
+
+    // BestZoom() can compute an illegal zoom if the client window size
+    // is small, say because frame is not maximized.  So use the clamping form
+    // of SetZoom():
+    double bestzoom = BestZoom();
+    screen->SetScalingFactor( bestzoom );
 
     if( screen->m_FirstRedraw )
         screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
@@ -151,7 +157,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 
         i = id - ID_POPUP_ZOOM_LEVEL_START;
 
-        if( i >= screen->m_ZoomList.GetCount() )
+        if( i >= screen->m_ZoomList.size() )
         {
             wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
                         __TFILE__, __LINE__, i );
@@ -194,8 +200,8 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 
     zoom = screen->GetZoom();
     maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
-    maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.GetCount() ) ?
-                 maxZoomIds : screen->m_ZoomList.GetCount();
+    maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.size() ) ?
+                 maxZoomIds : screen->m_ZoomList.size();
 
     // Populate zoom submenu.
     for( int i = 0; i < maxZoomIds; i++ )

@@ -88,8 +88,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
                                 const wxPoint& pos, const wxSize& size, long style ) :
     EDA_BASE_FRAME( father, idtype, title, pos, size, style )
 {
-    wxSize minsize;
-
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
     m_gridSelectBox       = NULL;
@@ -110,27 +108,43 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_GridColor           = DARKGRAY;   // Grid color
     m_snapToGrid          = true;
 
-    // Internal units per inch: = 1000 for schema, = 10000 for PCB
-    minsize.x             = 470;
-    minsize.y             = 350 + m_MsgFrameHeight;
-
-    // Pane sizes for status bar.
-    // @todo these should be sized based on typical text content, like
-    // "dx -10.123 -10.123 dy -10.123 -10.123" using the system font which is
-    // in play on a particular platform, and should not be constants.
-    // Please do not reduce these constant values, and please use dynamic
-    // system font specific sizing in the future.
-    #define ZOOM_DISPLAY_SIZE       60
-    #define COORD_DISPLAY_SIZE      165
-    #define DELTA_DISPLAY_SIZE      245
-    #define UNITS_DISPLAY_SIZE      65
+    //#define ZOOM_DISPLAY_SIZE       60
+    //#define COORD_DISPLAY_SIZE      165
+    //#define DELTA_DISPLAY_SIZE      245
+    //#define UNITS_DISPLAY_SIZE      65
     #define FUNCTION_DISPLAY_SIZE   110
-    static const int dims[6] = { -1, ZOOM_DISPLAY_SIZE,
-        COORD_DISPLAY_SIZE, DELTA_DISPLAY_SIZE,
-        UNITS_DISPLAY_SIZE, FUNCTION_DISPLAY_SIZE };
 
     CreateStatusBar( 6 );
-    SetStatusWidths( 6, dims );
+
+    // set the size of the status bar subwindows:
+
+    wxWindow* stsbar = GetStatusBar();
+
+
+    int dims[] = {
+
+        // balance of status bar on far left is set to a default or whatever is left over.
+        -1,
+
+        // When using GetTextSize() remember the width of '1' is not the same
+        // as the width of '0' unless the font is fixed width, and it usually won't be.
+
+        // zoom:
+        GetTextSize( wxT( "Z 762000" ), stsbar ).x + 10,
+
+        // cursor coords
+        GetTextSize( wxT( "X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
+
+        // delta distances
+        GetTextSize( wxT( "dx 0234.567890  dx 0234.567890  d 0234.567890" ), stsbar ).x + 10,
+
+        // units display, Inches is bigger than mm
+        GetTextSize( _( "Inches" ), stsbar ).x + 10,
+
+        FUNCTION_DISPLAY_SIZE,
+    };
+
+    SetStatusWidths( DIM( dims ), dims );
 
     // Create child subwindows.
     GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
@@ -380,7 +394,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 }
 
 
-double EDA_DRAW_FRAME::GetZoom( void )
+double EDA_DRAW_FRAME::GetZoom()
 {
     return GetScreen()->GetZoom();
 }
@@ -414,11 +428,11 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
         break;
 
     case MILLIMETRES:
-        msg += _( "mm" );
+        msg = _( "mm" );
         break;
 
     default:
-        msg += _( "Units" );
+        msg = _( "Units" );
         break;
     }
 
@@ -661,6 +675,16 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, int aKey, const wxPoint& aPosi
 }
 
 
+// See comment in classpcb.cpp near line 66
+//static const double MAX_AXIS = 1518500251;
+
+// However I am not seeing a problem with this size yet:
+static const double MAX_AXIS = INT_MAX - 100;
+
+#define VIRT_MIN    (-MAX_AXIS/2.0)     ///< min X or Y coordinate in virtual space
+#define VIRT_MAX    (MAX_AXIS/2.0)      ///< max X or Y coordinate in virtual space
+
+
 void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 {
     BASE_SCREEN* screen = GetScreen();
@@ -673,7 +697,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     double scale = screen->GetScalingFactor();
 
-    wxLogTrace( traceScrollSettings, wxT( "Center Position = ( %d, %d ), scale = %.16g" ),
+    wxLogTrace( traceScrollSettings, wxT( "Center Position = ( %d, %d ), scale = %.10g" ),
                 aCenterPositionIU.x, aCenterPositionIU.y, scale );
 
     // Calculate the portion of the drawing that can be displayed in the
@@ -701,6 +725,29 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
 
     DBOX    clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
+    wxPoint centerPositionIU;
+
+#if 1 || defined( USE_PCBNEW_NANOMETRES )
+    // put "int" limits on the clientRect
+    if( clientRectIU.GetLeft() < VIRT_MIN )
+        clientRectIU.MoveLeftTo( VIRT_MIN );
+    if( clientRectIU.GetTop() < VIRT_MIN )
+        clientRectIU.MoveTopTo( VIRT_MIN );
+    if( clientRectIU.GetRight() > VIRT_MAX )
+        clientRectIU.MoveRightTo( VIRT_MAX );
+    if( clientRectIU.GetBottom() > VIRT_MAX )
+        clientRectIU.MoveBottomTo( VIRT_MAX );
+#endif
+
+    centerPositionIU.x = KiROUND( clientRectIU.x + clientRectIU.width/2 );
+    centerPositionIU.y = KiROUND( clientRectIU.y + clientRectIU.height/2 );
+
+    if( screen->m_Center )
+    {
+        centerPositionIU.x -= KiROUND( pageRectIU.width  / 2.0 );
+        centerPositionIU.y -= KiROUND( pageRectIU.height  / 2.0 );
+    }
+
     DSIZE   virtualSizeIU;
 
     if( pageRectIU.GetLeft() < clientRectIU.GetLeft() && pageRectIU.GetRight() > clientRectIU.GetRight() )
@@ -709,26 +756,24 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        double drawingCenterX = pageRectIU.x   + ( pageRectIU.width / 2 );
+        double pageCenterX    = pageRectIU.x   + ( pageRectIU.width / 2 );
         double clientCenterX  = clientRectIU.x + ( clientRectIU.width / 2 );
 
         if( clientRectIU.width > pageRectIU.width )
         {
-            if( drawingCenterX > clientCenterX )
-                virtualSizeIU.x = ( drawingCenterX - clientRectIU.GetLeft() ) * 2;
-            else if( drawingCenterX < clientCenterX )
-                virtualSizeIU.x = ( clientRectIU.GetRight() - drawingCenterX ) * 2;
+            if( pageCenterX > clientCenterX )
+                virtualSizeIU.x = ( pageCenterX - clientRectIU.GetLeft() ) * 2;
+            else if( pageCenterX < clientCenterX )
+                virtualSizeIU.x = ( clientRectIU.GetRight() - pageCenterX ) * 2;
             else
                 virtualSizeIU.x = clientRectIU.width;
         }
         else
         {
-            if( drawingCenterX > clientCenterX )
-                virtualSizeIU.x = pageRectIU.width +
-                                ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
-            else if( drawingCenterX < clientCenterX )
-                virtualSizeIU.x = pageRectIU.width +
-                                ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
+            if( pageCenterX > clientCenterX )
+                virtualSizeIU.x = pageRectIU.width + ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
+            else if( pageCenterX < clientCenterX )
+                virtualSizeIU.x = pageRectIU.width + ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
             else
                 virtualSizeIU.x = pageRectIU.width;
         }
@@ -740,30 +785,36 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        int drawingCenterY = pageRectIU.y   + ( pageRectIU.height / 2 );
-        int clientCenterY  = clientRectIU.y + ( clientRectIU.height / 2 );
+        double pageCenterY   = pageRectIU.y   + ( pageRectIU.height / 2 );
+        double clientCenterY = clientRectIU.y + ( clientRectIU.height / 2 );
 
         if( clientRectIU.height > pageRectIU.height )
         {
-            if( drawingCenterY > clientCenterY )
-                virtualSizeIU.y = ( drawingCenterY - clientRectIU.GetTop() ) * 2;
-            else if( drawingCenterY < clientCenterY )
-                virtualSizeIU.y = ( clientRectIU.GetBottom() - drawingCenterY ) * 2;
+            if( pageCenterY > clientCenterY )
+                virtualSizeIU.y = ( pageCenterY - clientRectIU.GetTop() ) * 2;
+            else if( pageCenterY < clientCenterY )
+                virtualSizeIU.y = ( clientRectIU.GetBottom() - pageCenterY ) * 2;
             else
                 virtualSizeIU.y = clientRectIU.height;
         }
         else
         {
-            if( drawingCenterY > clientCenterY )
+            if( pageCenterY > clientCenterY )
                 virtualSizeIU.y = pageRectIU.height +
                                 ( ( pageRectIU.GetTop() - clientRectIU.GetTop() ) * 2 );
-            else if( drawingCenterY < clientCenterY )
+            else if( pageCenterY < clientCenterY )
                 virtualSizeIU.y = pageRectIU.height +
                                 ( ( clientRectIU.GetBottom() - pageRectIU.GetBottom() ) * 2 );
             else
                 virtualSizeIU.y = pageRectIU.height;
         }
     }
+
+#if 1 || defined( USE_PCBNEW_NANOMETRES )
+    // put "int" limits on the virtualSizeIU
+    virtualSizeIU.x = std::min( virtualSizeIU.x, MAX_AXIS );
+    virtualSizeIU.y = std::min( virtualSizeIU.y, MAX_AXIS );
+#endif
 
     if( screen->m_Center )
     {
@@ -790,10 +841,10 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     // Calculate the scroll bar position in internal units to place the
     // center position at the center of client rectangle.
-    screen->SetScrollCenterPosition( aCenterPositionIU );
+    screen->SetScrollCenterPosition( centerPositionIU );
 
-    double posX = aCenterPositionIU.x - clientRectIU.width /2.0 - screen->m_DrawOrg.x;
-    double posY = aCenterPositionIU.y - clientRectIU.height/2.0 - screen->m_DrawOrg.y;
+    double posX = centerPositionIU.x - clientRectIU.width /2.0 - screen->m_DrawOrg.x;
+    double posY = centerPositionIU.y - clientRectIU.height/2.0 - screen->m_DrawOrg.y;
 
     // Convert scroll bar position to device units.
     posX = KiROUND( posX * scale );
@@ -801,25 +852,25 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     if( posX < 0 )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.10g" ), posX );
         posX = 0;
     }
 
     if( posX > unitsX )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.10g" ), posX );
         posX = unitsX;
     }
 
     if( posY < 0 )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.10g" ), posY );
         posY = 0;
     }
 
     if( posY > unitsY )
     {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.10g" ), posY );
         posY = unitsY;
     }
 
@@ -827,7 +878,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     screen->m_ScrollbarNumber = wxSize( KiROUND( unitsX ), KiROUND( unitsY ) );
 
     wxLogTrace( traceScrollSettings,
-                wxT( "Drawing = (%.16g, %.16g), Client = (%.16g, %.16g), Offset = (%d, %d), SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
+                wxT( "Drawing = (%.10g, %.10g), Client = (%.10g, %.10g), Offset = (%d, %d), SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
                 virtualSizeIU.x, virtualSizeIU.y, clientSizeIU.x, clientSizeIU.y,
                 screen->m_DrawOrg.x, screen->m_DrawOrg.y,
                 screen->m_ScrollPixelsPerUnitX, screen->m_ScrollPixelsPerUnitY,
@@ -843,4 +894,3 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
                              screen->m_ScrollbarPos.x,
                              screen->m_ScrollbarPos.y, noRefresh );
 }
-

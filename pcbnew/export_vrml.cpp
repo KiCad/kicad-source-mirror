@@ -1121,8 +1121,8 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                  vrmlm->m_MatScale.y * aScalingFactor,
                  vrmlm->m_MatScale.z * aScalingFactor );
 
-        // adjust 3D shape offset position (offset is given inch)
-        #define UNITS_3D_TO_PCB_UNITS PCB_INTERNAL_UNIT
+        // adjust 3D shape offset position (offset is given in inch)
+        #define UNITS_3D_TO_PCB_UNITS (IU_PER_MILS*1000)
         int offsetx = KiROUND( vrmlm->m_MatPosition.x * UNITS_3D_TO_PCB_UNITS );
         int offsety = KiROUND( vrmlm->m_MatPosition.y * UNITS_3D_TO_PCB_UNITS );
         double offsetz = vrmlm->m_MatPosition.z * UNITS_3D_TO_PCB_UNITS;

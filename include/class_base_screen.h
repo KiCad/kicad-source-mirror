@@ -74,9 +74,9 @@ typedef std::vector< GRID_TYPE > GRIDS;
  */
 class BASE_SCREEN : public EDA_ITEM
 {
+private:
     GRIDS       m_grids;          ///< List of valid grid sizes.
     wxString    m_fileName;       ///< File used to load the screen.
-    char        m_FlagRefreshReq; ///< Indicates that the screen should be redrawn.
     bool        m_FlagModified;   ///< Indicates current drawing has been modified.
     bool        m_FlagSave;       ///< Indicates automatic file save.
     EDA_ITEM*   m_CurrentItem;    ///< Currently selected object
@@ -123,20 +123,20 @@ public:
     bool    m_FirstRedraw;
 
     // Undo/redo list of commands
-    UNDO_REDO_CONTAINER m_UndoList;          ///< Objects list for the undo command (old data)
-    UNDO_REDO_CONTAINER m_RedoList;          ///< Objects list for the redo command (old data)
-    unsigned            m_UndoRedoCountMax;  ///< undo/Redo command Max depth
+    UNDO_REDO_CONTAINER m_UndoList;         ///< Objects list for the undo command (old data)
+    UNDO_REDO_CONTAINER m_RedoList;         ///< Objects list for the redo command (old data)
+    unsigned            m_UndoRedoCountMax; ///< undo/Redo command Max depth
 
     // block control
-    BLOCK_SELECTOR      m_BlockLocate;       ///< Block description for block commands
+    BLOCK_SELECTOR      m_BlockLocate;      ///< Block description for block commands
 
-    int             m_ScreenNumber;
-    int             m_NumberOfScreen;
+    int                 m_ScreenNumber;
+    int                 m_NumberOfScreens;
 
-    wxPoint	        m_GridOrigin;
+    wxPoint             m_GridOrigin;
 
-    wxArrayDouble m_ZoomList;       ///< Array of standard zoom (i.e. scale) coefficients.
-    bool       m_IsPrinting;
+    std::vector<double> m_ZoomList;         ///< standard zoom (i.e. scale) coefficients.
+    bool                m_IsPrinting;
 
 public:
     BASE_SCREEN( KICAD_T aType = SCREEN_T );
@@ -245,13 +245,13 @@ public:
      */
     virtual PICKED_ITEMS_LIST* PopCommandFromRedoList();
 
-    int GetUndoCommandCount()
+    int GetUndoCommandCount() const
     {
         return m_UndoList.m_CommandsList.size();
     }
 
 
-    int GetRedoCommandCount()
+    int GetRedoCommandCount() const
     {
         return m_RedoList.m_CommandsList.size();
     }
@@ -261,51 +261,73 @@ public:
     void ClrModify() { m_FlagModified = false;; }
     void SetSave() { m_FlagSave = true; }
     void ClrSave() { m_FlagSave = false; }
-    int IsModify() { return m_FlagModified;  }
-    int IsSave() { return m_FlagSave;  }
+    bool IsModify() const { return m_FlagModified;  }
+    bool IsSave() const { return m_FlagSave;  }
 
 
     //----<zoom stuff>---------------------------------------------------------
 
     /**
-     * Function GetScalingFactor
-     * @return the the current scale used to draw items on screen
-     * draw coordinates are user coordinates * GetScalingFactor()
-     */
-    double GetScalingFactor() const;
-
-    /**
-     * Function SetScalingFactor
-     * sets the scaling factor of "device units per logical unit".
-     * If the output device is a screen, then "device units" are pixels.  The
-     * "logical unit" is wx terminology, and corresponds to KiCad's "Internal Unit (IU)".
-     *
-     * Another way of thinking of scaling factor, when applied to a screen,
-     * is "pixelsPerIU".
-
-     * @param aScale = the the current scale used to draw items onto the device context wxDC.
-     *   device coordinates (pixels) = IU coordinates * GetScalingFactor()
-     */
-    void SetScalingFactor( double aScale );
-
-    /**
      * Function GetZoom
-     * returns the
-     * @return the current zoom factor
+     * returns the current "zoom factor", which is a measure of
+     * "internal units per device unit", or "world units per device unit".
+     * A device unit is typically a pixel.
      */
-    double GetZoom() const;
+    double GetZoom() const      { return m_Zoom; }
 
     /**
      * Function SetZoom
-     * adjusts the current zoom factor
-     * @param coeff - Zoom coefficient.
+     * adjusts the current zoom factor.
+     *
+     * @param iu_per_du is the number of internal units (world units) per
+     *   device units (pixels typically).
      */
-    bool SetZoom( double coeff );
+    bool SetZoom( double iu_per_du );
 
     bool SetNextZoom();
     bool SetPreviousZoom();
     bool SetFirstZoom();
     bool SetLastZoom();
+
+    /**
+     * Function GetMaxAllowedZoom
+     * returns the maximum allowed zoom factor, which was established as the last entry
+     * in m_ZoomList.
+     */
+    double GetMaxAllowedZoom() const    { return m_ZoomList.size() ? *m_ZoomList.rbegin() : 1.0; }
+
+    /**
+     * Function GetMinAllowedZoom
+     * returns the minimum allowed zoom factor, which was established as the first entry
+     * in m_ZoomList.
+     */
+    double GetMinAllowedZoom() const    { return m_ZoomList.size() ? *m_ZoomList.begin() : 1.0; }
+
+    /**
+     * Function SetScalingFactor
+     * sets the scaling factor of "internal unit per device unit".
+     * If the output device is a screen, then "device units" are pixels.  The
+     * "logical unit" is wx terminology, and corresponds to KiCad's "Internal Unit (IU)".
+     * <p>
+     * This scaling factor is "internal units per device unit".  This function is
+     * the same thing currently as SetZoom(), but clamps the argument within a
+     * legal range.
+
+     * @param iu_per_du is the current scale used to draw items onto the device
+     *   context wxDC.
+     */
+    void SetScalingFactor( double iu_per_du );
+
+    /**
+     * Function GetScalingFactor
+     * returns the inverse of the current scale used to draw items on screen.
+     * <p>
+     * This function somehow got designed to be the inverse of SetScalingFactor().
+     * <p>
+     * device coordinates = user coordinates * GetScalingFactor()
+     */
+    double GetScalingFactor() const;
+
 
     //----<grid stuff>----------------------------------------------------------
 
@@ -314,23 +336,24 @@ public:
      *
      * @return int - Currently selected grid command ID.
      */
-    int GetGridId();
+    int GetGridId() const { return m_Grid.m_Id; }
 
     /**
      * Return the grid size of the currently selected grid.
      *
      * @return wxRealPoint - The currently selected grid size.
      */
-    wxRealPoint GetGridSize();
+    const wxRealPoint& GetGridSize() const { return m_Grid.m_Size; }
 
     /**
      * Return the grid object of the currently selected grid.
      *
      * @return GRID_TYPE - The currently selected grid.
      */
-    GRID_TYPE GetGrid();
+    const GRID_TYPE& GetGrid() const { return m_Grid; }
 
-    const wxPoint& GetGridOrigin();
+    const wxPoint& GetGridOrigin() const { return m_GridOrigin; }
+
     void SetGrid( const wxRealPoint& size );
 
     /**
@@ -380,7 +403,7 @@ public:
      * @return wxPoint - The reference point, either the mouse position or
      *                   the cursor position.
      */
-    wxPoint RefPos( bool useMouse )
+    wxPoint RefPos( bool useMouse ) const
     {
         return useMouse ? m_MousePosition : m_crossHairPosition;
     }
@@ -393,7 +416,7 @@ public:
      *        if \a aOnGrid is true.
      * @return The current cursor position.
      */
-    wxPoint GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize = NULL );
+    wxPoint GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize = NULL ) const;
 
     /**
      * Function GetCursorScreenPosition
@@ -410,7 +433,8 @@ public:
      *                  grid size is used.
      * @return The nearst grid position.
      */
-    wxPoint GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize = NULL );
+    wxPoint GetNearestGridPosition( const wxPoint& aPosition,
+                                    wxRealPoint* aGridSize = NULL ) const;
 
     /**
      * Function GetClass

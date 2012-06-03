@@ -43,6 +43,7 @@
 
 #include <collectors.h>
 #include <class_drawpanel.h>
+#include <vector2d.h>
 
 
 // Configuration entry names.
@@ -247,36 +248,21 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 
 double PCB_BASE_FRAME::BestZoom()
 {
-    int    dx, dy;
-
-    double ii, jj;
-    wxSize size;
-
     if( m_Pcb == NULL )
-        return 32.0;
+        return 1.0;
 
-    EDA_RECT bbbox = GetBoardBoundingBox();
+    EDA_RECT    ibbbox  = GetBoardBoundingBox();
+    DSIZE       clientz = m_canvas->GetClientSize();
+    DSIZE       boardz( ibbbox.GetWidth(), ibbbox.GetHeight() );
 
-    dx = bbbox.GetWidth();
-    dy = bbbox.GetHeight();
+    double iu_per_du_X = clientz.x ? boardz.x / clientz.x : 1.0;
+    double iu_per_du_Y = clientz.y ? boardz.y / clientz.y : 1.0;
 
-    size = m_canvas->GetClientSize();
+    double bestzoom = std::max( iu_per_du_X, iu_per_du_Y );
 
-    if( size.x )
-        ii = (double)(dx + ( size.x / 2) ) / (double) size.x;
-    else
-        ii = 32.0;
+    GetScreen()->SetScrollCenterPosition( ibbbox.Centre() );
 
-    if ( size.y )
-        jj = (double)( dy + (size.y / 2) ) / (double) size.y;
-    else
-        jj = 32.0;
-
-    double bestzoom = max( ii, jj );
-
-    GetScreen()->SetScrollCenterPosition( bbbox.Centre() );
-
-    return bestzoom ;
+    return bestzoom;
 }
 
 
@@ -432,7 +418,7 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
     int current = 0;
 
-    for( size_t i = 0; i < GetScreen()->m_ZoomList.GetCount(); i++ )
+    for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {
         if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
         {
@@ -582,6 +568,15 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         wxString formatter;
         switch( g_UserUnit )
         {
+#if defined( USE_PCBNEW_NANOMETRE )
+        case INCHES:
+            formatter = wxT( "Ro %.6f Th %.1f" );
+            break;
+
+        case MILLIMETRES:
+            formatter = wxT( "Ro %.6f Th %.1f" );
+            break;
+#else
         case INCHES:
             formatter = wxT( "Ro %.4f Th %.1f" );
             break;
@@ -589,6 +584,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         case MILLIMETRES:
             formatter = wxT( "Ro %.3f Th %.1f" );
             break;
+#endif
 
         case UNSCALED_UNITS:
             formatter = wxT( "Ro %f Th %f" );
@@ -597,50 +593,12 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
         line.Printf( formatter, To_User_Unit( g_UserUnit, ro ), theta );
 
-        SetStatusText( line, 2 );
-    }
-    else
-    {
-        // Display absolute coordinates:
-        dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
-        dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
-
-        if ( g_UserUnit == MILLIMETRES )
-        {
-            dXpos = RoundTo0( dXpos, 1000.0 );
-            dYpos = RoundTo0( dYpos, 1000.0 );
-        }
-
-        // The following sadly is an if Eeschema/if Pcbnew
-        wxString absformatter;
-
-        switch( g_UserUnit )
-        {
-        case INCHES:
-            absformatter = wxT( "X %.4f  Y %.4f" );
-            locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
-            break;
-
-        case MILLIMETRES:
-            absformatter = wxT( "X %.3f  Y %.3f" );
-            locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
-            break;
-
-        case UNSCALED_UNITS:
-            absformatter = wxT( "X %f  Y %f" );
-            locformatter = wxT( "dx %f  dy %f  d %f" );
-            break;
-        }
-
-        line.Printf( absformatter, dXpos, dYpos );
-        SetStatusText( line, 2 );
+        SetStatusText( line, 3 );
     }
 
-    // Display relative coordinates:
-    dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
-    dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
-    dXpos = To_User_Unit( g_UserUnit, dx );
-    dYpos = To_User_Unit( g_UserUnit, dy );
+    // Display absolute coordinates:
+    dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
+    dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
 
     if ( g_UserUnit == MILLIMETRES )
     {
@@ -648,9 +606,60 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         dYpos = RoundTo0( dYpos, 1000.0 );
     }
 
-    // We already decided the formatter above
-    line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
-    SetStatusText( line, 3 );
+    // The following sadly is an if Eeschema/if Pcbnew
+    wxString absformatter;
+
+    switch( g_UserUnit )
+    {
+#if defined( USE_PCBNEW_NANOMETRES )
+    case INCHES:
+        absformatter = wxT( "X %.6f  Y %.6f" );
+        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        break;
+
+    case MILLIMETRES:
+        absformatter = wxT( "X %.6f  Y %.6f" );
+        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
+        break;
+#else
+    case INCHES:
+        absformatter = wxT( "X %.4f  Y %.4f" );
+        locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
+        break;
+
+    case MILLIMETRES:
+        absformatter = wxT( "X %.3f  Y %.3f" );
+        locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
+        break;
+#endif
+
+    case UNSCALED_UNITS:
+        absformatter = wxT( "X %f  Y %f" );
+        locformatter = wxT( "dx %f  dy %f  d %f" );
+        break;
+    }
+
+    line.Printf( absformatter, dXpos, dYpos );
+    SetStatusText( line, 2 );
+
+    if( !DisplayOpt.DisplayPolarCood )  // display relative cartesian coordinates
+    {
+        // Display relative coordinates:
+        dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
+        dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        dXpos = To_User_Unit( g_UserUnit, dx );
+        dYpos = To_User_Unit( g_UserUnit, dy );
+
+        if ( g_UserUnit == MILLIMETRES )
+        {
+            dXpos = RoundTo0( dXpos, 1000.0 );
+            dYpos = RoundTo0( dYpos, 1000.0 );
+        }
+
+        // We already decided the formatter above
+        line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
+        SetStatusText( line, 3 );
+    }
 }
 
 
@@ -806,7 +815,7 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
     m_zoomSelectBox->Append( _( "Auto" ) );
     m_zoomSelectBox->SetSelection( 0 );
 
-    for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
+    for( unsigned i = 0;  i < GetScreen()->m_ZoomList.size();  ++i )
     {
         msg = _( "Zoom " );
 

@@ -237,7 +237,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
         double scalex = (double) plotPage.GetWidthMils()  / actualPage.GetWidthMils();
         double scaley = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
 
-        double scale  = 10 * MIN( scalex, scaley );
+        double scale  = MIN( scalex, scaley );
 
         plot_offset.x = 0;
         plot_offset.y = 0;
@@ -281,24 +281,25 @@ void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString&  FileName,
 
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetPageSettings( pageInfo );
-    plotter->set_viewport( plot_offset, scale, 0 );
-    plotter->set_default_line_width( g_DrawDefaultLineThickness );
-    plotter->set_color_mode( m_plotColorOpt );
+    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, 0 );
+    plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
+    plotter->SetColorMode( m_plotColorOpt );
+    plotter->SetPsTextMode( PSTEXTMODE_STROKE );
 
     // Init :
-    plotter->set_creator( wxT( "Eeschema-PS" ) );
-    plotter->set_filename( FileName );
-    plotter->start_plot( output_file );
+    plotter->SetCreator( wxT( "Eeschema-PS" ) );
+    plotter->SetFilename( FileName );
+    plotter->StartPlot( output_file );
 
     if( m_plot_Sheet_Ref )
     {
-        plotter->set_color( BLACK );
+        plotter->SetColor( BLACK );
         m_Parent->PlotWorkSheet( plotter, screen );
     }
 
     screen->Plot( plotter );
 
-    plotter->end_plot();
+    plotter->EndPlot();
     delete plotter;
     SetLocaleTo_Default();
 

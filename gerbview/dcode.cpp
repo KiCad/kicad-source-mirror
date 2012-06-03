@@ -286,11 +286,9 @@ void GERBVIEW_FRAME::CopyDCodesSizeToItems()
 {
     static D_CODE dummy( 999 );   //Used if D_CODE not found in list
 
-    BOARD_ITEM*   item = GetBoard()->m_Drawings;
-
-    for( ; item; item = item->Next() )
+    GERBER_DRAW_ITEM* gerb_item = GetItemsList();
+    for( ; gerb_item; gerb_item = gerb_item->Next() )
     {
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
         D_CODE*           dcode     = gerb_item->GetDcodeDescr();
         wxASSERT( dcode );
         if( dcode == NULL )

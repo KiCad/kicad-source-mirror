@@ -32,14 +32,9 @@
 
 #include <wxBasePcbFrame.h>
 #include <param_config.h>
-#include <class_layer_box_selector.h>
 #include <class_macros_record.h>
 #include <class_undoredo_container.h>
 #include <zones.h>
-
-#ifndef PCB_INTERNAL_UNIT
-#define PCB_INTERNAL_UNIT 10000
-#endif
 
 
 /*  Forward declarations of classes. */
@@ -63,6 +58,7 @@ class GENERAL_COLLECTORS_GUIDE;
 class PCB_LAYER_WIDGET;
 class MARKER_PCB;
 class BOARD_ITEM;
+class PCB_LAYER_BOX_SELECTOR;
 
 
 /**
@@ -201,7 +197,7 @@ protected:
     int propagate();
 
 public:
-    LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
+    PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
     wxComboBox* m_SelViaSizeBox;        // a combo box to display and select current via diameter
 
@@ -495,7 +491,7 @@ public:
     void ReCreateMicrowaveVToolbar();
     void ReCreateOptToolbar();
     void ReCreateMenuBar();
-    LAYER_BOX_SELECTOR* ReCreateLayerBox( wxAuiToolBar* parent );
+    PCB_LAYER_BOX_SELECTOR* ReCreateLayerBox( wxAuiToolBar* parent );
 
     /**
      * Function OnModify
@@ -1206,7 +1202,7 @@ public:
      * @param aTimestamp = Timestamp for the zone to delete, used if aZone ==
      *                     NULL
      */
-    void Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp = 0 );
+    void Delete_OldZone_Fill( SEGZONE* aZone, time_t aTimestamp = 0 );
 
     /**
      * Function Delete_LastCreatedCorner
@@ -1344,7 +1340,7 @@ public:
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
 
     // Graphic segments type DRAWSEGMENT handling:
-    DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );
+    DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC );
     void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Drawings_All_Layer( int aLayer );

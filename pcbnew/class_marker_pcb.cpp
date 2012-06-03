@@ -15,7 +15,8 @@
 #include <layers_id_colors_and_visibility.h>
 
 
-#define SCALING_FACTOR 30       // Adjust the actual size of markers, when using default shape
+/// Adjust the actual size of markers, when using default shape
+#define SCALING_FACTOR      DMils2iu( 30 )
 
 
 MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :

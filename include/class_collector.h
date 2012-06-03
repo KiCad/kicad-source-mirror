@@ -68,7 +68,7 @@ protected:
     EDA_RECT m_RefBox;
 
     /// The time at which the collection was made.
-    int m_TimeAtCollection;
+    time_t m_TimeAtCollection;
 
 
 public:
@@ -205,7 +205,7 @@ public:
     }
 
 
-    int GetTime()
+    time_t GetTime()
     {
         return m_TimeAtCollection;
     }
@@ -229,7 +229,7 @@ public:
     bool IsSimilarPointAndTime( const wxPoint& aRefPos )
     {
         const int distMax = 2;      // adjust these here
-        const int timeMax = 3;      // seconds, I think
+        const time_t timeMax = 3;   // seconds
 
         int dx = abs( aRefPos.x - m_RefPos.x );
         int dy = abs( aRefPos.y - m_RefPos.y );

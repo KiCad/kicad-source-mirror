@@ -132,7 +132,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 #ifdef EESCHEMA
     // Init display value for sheet User size
     wxString format = m_TextSheetCount->GetLabel();
-    msg.Printf( format, m_Screen->m_NumberOfScreen );
+    msg.Printf( format, m_Screen->m_NumberOfScreens );
     m_TextSheetCount->SetLabel( msg );
 
     format = m_TextSheetNumber->GetLabel();
@@ -644,7 +644,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         GRResetPenAndBrush( ( wxDC* ) &memDC );
 
         m_Parent->TraceWorkSheet( (wxDC*) &memDC, dummySize, pointLeftTop, pointRightBottom,
-                                  emptyString, emptyString, m_tb, m_Screen->m_NumberOfScreen,
+                                  emptyString, emptyString, m_tb, m_Screen->m_NumberOfScreens,
                                   m_Screen->m_ScreenNumber, 1, appScale, LIGHTGRAY, RED );
 
         memDC.SelectObject( wxNullBitmap );

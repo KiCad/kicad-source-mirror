@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,13 +46,10 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
     int layer = getActiveLayer();
 
     // Search first on active layer
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
-    GERBER_DRAW_ITEM* gerb_item = NULL;
+    GERBER_DRAW_ITEM* gerb_item = GetItemsList();
 
-    for( ; item; item = item->Next() )
+    for( ; gerb_item; gerb_item = gerb_item->Next() )
     {
-        gerb_item = (GERBER_DRAW_ITEM*) item;
-
         if( gerb_item->GetLayer()!= layer )
             continue;
 
@@ -65,12 +62,8 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
 
     if( !found ) // Search on all layers
     {
-        item = GetBoard()->m_Drawings;
-
-        for( ; item; item = item->Next() )
+        for( gerb_item = GetItemsList(); gerb_item; gerb_item = gerb_item->Next() )
         {
-            gerb_item = (GERBER_DRAW_ITEM*) item;
-
             if( gerb_item->HitTest( ref ) )
             {
                 found = true;

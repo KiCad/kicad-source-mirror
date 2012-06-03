@@ -88,14 +88,14 @@ public:
     }
 
     /// @deprecated it seems
-    void SetType( int aType )   { m_Type = aType; }
-    int GetType() const { return m_Type; }
+    void SetType( int aType )           { m_Type = aType; }
+    int GetType() const                 { return m_Type; }
 
     void SetVisible( bool isVisible )   { m_NoShow = !isVisible; }
-    bool IsVisible() const { return !m_NoShow; }
+    bool IsVisible() const              { return !m_NoShow; }
 
-    void SetPos0( const wxPoint& aPos )  { m_Pos0 = aPos; }
-    const wxPoint& GetPos0() const { return m_Pos0; }
+    void SetPos0( const wxPoint& aPos ) { m_Pos0 = aPos; }
+    const wxPoint& GetPos0() const      { return m_Pos0; }
 
     void Copy( TEXTE_MODULE* source ); // copy structure
 

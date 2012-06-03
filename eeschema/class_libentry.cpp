@@ -391,8 +391,8 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-        bool fill = aPlotter->get_color_mode();
+        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
+        bool fill = aPlotter->GetColorMode();
 
         item.Plot( aPlotter, aOffset, fill, aTransform );
     }
@@ -968,8 +968,10 @@ EDA_RECT LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
-    BOOST_FOREACH( const LIB_ITEM& item, drawings )
+    for( unsigned ii = 0; ii < drawings.size(); ii++  )
     {
+        const LIB_ITEM& item = drawings[ii];
+
         if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
             continue;
@@ -991,8 +993,10 @@ EDA_RECT LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
-    BOOST_FOREACH( const LIB_ITEM& item, drawings )
+    for( unsigned ii = 0; ii < drawings.size(); ii++  )
     {
+        const LIB_ITEM& item = drawings[ii];
+
         if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
             continue;
@@ -1187,8 +1191,9 @@ void LIB_COMPONENT::RemoveDuplicateDrawItems()
 
 bool LIB_COMPONENT::HasConversion() const
 {
-    BOOST_FOREACH( const LIB_ITEM& item, drawings )
+    for( unsigned ii = 0; ii < drawings.size(); ii++  )
     {
+        const LIB_ITEM& item = drawings[ii];
         if( item.m_Convert > 1 )
             return true;
     }

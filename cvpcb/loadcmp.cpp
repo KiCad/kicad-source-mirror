@@ -59,6 +59,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 
             if( footprint )
             {
+                footprint->SetParent( GetBoard() );
                 footprint->SetPosition( wxPoint( 0, 0 ) );
                 return footprint;
             }

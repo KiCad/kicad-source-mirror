@@ -13,6 +13,23 @@
 //typedef std::deque<EDA_ITEM*>        EDA_ITEMV;
 typedef boost::ptr_vector<EDA_ITEM>  EDA_ITEMV;
 
+class MY_ITEM : public  EDA_ITEM
+{
+public:
+
+    MY_ITEM( KICAD_T id ) :
+        EDA_ITEM( id )
+    {}
+
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const
+    {
+        ShowDummy( os );
+    }
+#endif
+};
+
 
 void heap_warm_up();
 
@@ -37,7 +54,7 @@ int main( int argc, char** argv )
 
     for( int i=0;  i<TEST_NODES;  ++i )
     {
-        v.push_back( new EDA_ITEM( NOT_USED ) );
+        v.push_back( new MY_ITEM( NOT_USED ) );
     }
 
     vAllocStop = GetRunningMicroSecs();
@@ -68,7 +85,7 @@ int main( int argc, char** argv )
 
     for( int i=0;  i<TEST_NODES;  ++i )
     {
-        dlist.PushBack( new EDA_ITEM( NOT_USED ) );
+        dlist.PushBack( new MY_ITEM( NOT_USED ) );
     }
 
     dAllocStop = GetRunningMicroSecs();
@@ -103,7 +120,7 @@ void heap_warm_up()
 
     for( int i=0; i<TEST_NODES;  ++i )
     {
-        vec.push_back( new EDA_ITEM( NOT_USED ) );
+        vec.push_back( new MY_ITEM( NOT_USED ) );
     }
 
     for( int i=0; i<TEST_NODES;  ++i )

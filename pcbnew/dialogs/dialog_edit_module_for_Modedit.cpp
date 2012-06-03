@@ -1,6 +1,8 @@
-/*******************************************************************************************/
-/* Dialog box for editing module	properties and carateristics in module editor (modedit)*/
-/*******************************************************************************************/
+/**
+ * @file dialod_edit_module_for_Modedit.cpp
+ *
+ * @brief Dialog for editing a module properties in module editor (modedit)
+ */
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
@@ -89,7 +91,6 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     m_ValueCtrl->SetValue( m_ValueCopy->m_Text );
     m_FootprintNameCtrl->SetValue( m_CurrentModule->m_LibRef );
 
-#if wxCHECK_VERSION( 2, 8, 0 )
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non smd components" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
                                     _(
@@ -97,7 +98,6 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     m_AttributsCtrl->SetItemToolTip( 2,
                                     _(
                                         "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)" ) );
-#endif
 
     // Controls on right side of the dialog
     switch( m_CurrentModule->m_Attributs & 255 )
@@ -121,10 +121,9 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
 
     m_AutoPlaceCtrl->SetSelection(
         (m_CurrentModule->m_ModuleStatus & MODULE_is_LOCKED) ? 1 : 0 );
-#if wxCHECK_VERSION( 2, 8, 0 )
     m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Enable hotkey move commands and Auto Placement" ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Disable hotkey move commands and Auto Placement" ) );
-#endif
+
     m_CostRot90Ctrl->SetValue( m_CurrentModule->m_CntRot90 );
 
     m_CostRot180Ctrl->SetValue( m_CurrentModule->m_CntRot180 );
@@ -164,6 +163,17 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
         msg.Printf( wxT( "%.1f" ), m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
 
     m_SolderPasteMarginRatioCtrl->SetValue( msg );
+
+    // Add solder paste margin ration in per cent
+    // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
+    msg.Printf( wxT( "%.1f" ),
+                    m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
+
+    if( m_CurrentModule->GetLocalSolderPasteMarginRatio() == 0.0 &&
+        msg[0] == '0')  // Sometimes Printf adds a sign if the value is very small (0.0)
+        m_SolderPasteMarginRatioCtrl->SetValue( wxT("-") + msg );
+    else
+        m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
     // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape
     if( m_3D_ShapeNameListBox->GetCount() > 0 )
@@ -377,9 +387,12 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
 
-    // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50 %
-    if( dtmp < -50 )
-        dtmp = -50;
+    // A  -50% margin ratio means no paste on a pad, the ratio must be >= -50 %
+    if( dtmp < -50.0 )
+        dtmp = -50.0;
+    // A margin ratio is always <= 0
+    if( dtmp > 0.0 )
+        dtmp = 0.0;
 
     m_CurrentModule->SetLocalSolderPasteMarginRatio( dtmp / 100 );
 

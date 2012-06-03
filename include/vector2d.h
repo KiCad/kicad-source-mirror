@@ -31,12 +31,8 @@
 
 
 /// Forward declaration for template friends
-template<class T> class VECTOR2;
+//template<class T> class VECTOR2;
 
-/*
-#include <iostream>
-template<class T> ostream& operator<<( ostream &stream, const VECTOR2<T>& vector );
-*/
 
 /**
  * Class VECTOR2
@@ -55,9 +51,6 @@ public:
 
     /// Construct a 2D-vector with x, y = 0
     VECTOR2();
-
-    /// Copy constructor
-    VECTOR2( const VECTOR2<T>& aVector );
 
     /// Constructor with a wxPoint as argument
     VECTOR2( const wxPoint& aPoint );
@@ -150,11 +143,6 @@ public:
 // --- Implementation ---
 // ----------------------
 
-template<class T> VECTOR2<T>::VECTOR2( VECTOR2<T> const& aVector ) :
-    x( aVector.x ), y( aVector.y )
-{
-}
-
 template<class T> VECTOR2<T>::VECTOR2()
 {
     x = y = 0.0;
@@ -194,7 +182,8 @@ template<class T> T VECTOR2<T>::Angle()
     return atan2(y, x);
 }
 
-template<class T> VECTOR2<T> VECTOR2<T>::Perpendicular(){
+template<class T> VECTOR2<T> VECTOR2<T>::Perpendicular()
+{
     VECTOR2<T> perpendicular(-y, x);
     return perpendicular;
 }
@@ -291,28 +280,27 @@ template<class T> T VECTOR2<T>::operator^( const VECTOR2<T>& aVector )
     return x * aVector.y - y * aVector.x;
 }
 
-template<class T> bool VECTOR2<T>::operator<( const VECTOR2<T>& o )
+template<class T> bool VECTOR2<T>::operator<( const VECTOR2<T>& aVector )
 {
     // VECTOR2<T> vector( aVector );
-    return (double( x ) * x + double( y ) * y) < (double( o.x ) * o.x + double( o.y ) * y);
+    // need a specialization for T = int because of overflow:
+    // return (double( x ) * x + double( y ) * y) < (double( o.x ) * o.x + double( o.y ) * y);
+    return ( *this * *this ) < ( aVector * aVector );
 }
 
 template<class T> bool VECTOR2<T>::operator<=( const VECTOR2<T>& aVector )
 {
-    VECTOR2<T> vector( aVector );
-    return ( *this * *this ) <= ( vector * vector );
+    return ( *this * *this ) <= ( aVector * aVector );
 }
 
 template<class T> bool VECTOR2<T>::operator>( const VECTOR2<T>& aVector )
 {
-    VECTOR2<T> vector( aVector );
-    return ( *this * *this ) > ( vector * vector );
+    return ( *this * *this ) > ( aVector * aVector );
 }
 
 template<class T> bool VECTOR2<T>::operator>=( const VECTOR2<T>& aVector )
 {
-    VECTOR2<T> vector( aVector );
-    return ( *this * *this ) >= ( vector * vector );
+    return ( *this * *this ) >= ( aVector * aVector );
 }
 
 template<class T> bool const VECTOR2<T>::operator==( VECTOR2<T> const& aVector )
@@ -339,11 +327,19 @@ public:
         x( aX ), y( aY ), width( aWidth ), height( aHeight )
     {}
 
+    BOX2( const VECTOR2<T>& aPos, const VECTOR2<T>& aSize ) :
+        x( aPos.x ), y( aPos.y ), width( aSize.x ), height( aSize.y )
+    {}
 
-    /// Copy constructor
-    BOX2( const BOX2<T>& aRect ) :
+    BOX2( const wxPoint& aPos, const wxSize& aSize ) :
+        x( aPos.x ), y( aPos.y ), width( aSize.x ), height( aSize.y )
+    {}
+
+    /*
+    BOX2( const EDA_RECT& aRect ):
         x( aRect.x ), y( aRect.y ), width( aRect.width ), height( aRect.height )
     {}
+    */
 
     /// Constructor with a wxPoint as argument?
 
@@ -385,6 +381,25 @@ public:
     VECTOR2<T> GetCentre() const { return VECTOR2<T>( x + width/2, y + height/2 ); }
     void SetCentre( const VECTOR2<T>& pt ) { MoveCentreTo( pt ); }
     void MoveCentreTo( const VECTOR2<T>& pt ) { x += pt.x - (x + width/2), y += pt.y - (y + height/2); }
+
+    /**
+     * Function Normalize
+     * ensures that the height ant width are positive.
+     */
+    void Normalize()
+    {
+        if( height < 0 )
+        {
+            height = -height;
+            y -= height;
+        }
+
+        if( width < 0 )
+        {
+            width = -width;
+            x -= width;
+        }
+    }
 
     T   x, y, width, height;
 };

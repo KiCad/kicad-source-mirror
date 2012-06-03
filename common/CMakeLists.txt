@@ -35,6 +35,7 @@ set(COMMON_SRCS
     build_version.cpp
     class_bitmap_base.cpp
     class_colors_design_settings.cpp
+    class_layer_box_selector.cpp
     class_marker_base.cpp
     class_plotter.cpp
     class_undoredo_container.cpp
@@ -42,6 +43,7 @@ set(COMMON_SRCS
     common_plot_functions.cpp
     common_plotHPGL_functions.cpp
     common_plotPS_functions.cpp
+    common_plotPDF_functions.cpp
     common_plotGERBER_functions.cpp
     common_plotDXF_functions.cpp
     confirm.cpp
@@ -87,7 +89,6 @@ set(PCB_COMMON_SRCS
     class_page_info.cpp
     pcbcommon.cpp
     footprint_info.cpp
-    class_layer_box_selector.cpp
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_board_connected_item.cpp
@@ -116,6 +117,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/sel_layer.cpp
     ../pcbnew/pcb_plot_params.cpp
     ../pcbnew/io_mgr.cpp
+    ../pcbnew/eagle_plugin.cpp
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/kicad_plugin.cpp
     pcb_plot_params_keywords.cpp

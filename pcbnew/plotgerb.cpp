@@ -54,12 +54,12 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
     PLOTTER* plotter = new GERBER_PLOTTER();
 
     // No mirror and scaling for gerbers!
-    plotter->set_viewport( offset, scale, 0 );
-    plotter->set_default_line_width( plot_opts.m_PlotLineWidth );
-    plotter->set_creator( wxT( "PCBNEW-RS274X" ) );
-    plotter->set_filename( aFullFileName );
+    plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+    plotter->SetDefaultLineWidth( plot_opts.m_PlotLineWidth );
+    plotter->SetCreator( wxT( "PCBNEW-RS274X" ) );
+    plotter->SetFilename( aFullFileName );
 
-    if( plotter->start_plot( output_file ) )
+    if( plotter->StartPlot( output_file ) )
     {
         // Skip NPTH pads on copper layers
         // ( only if hole size == pad size ):
@@ -74,7 +74,7 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
 
         Plot_Layer( plotter, aLayer, aTraceMode );
 
-        plotter->end_plot();
+        plotter->EndPlot();
 
         plot_opts.m_SkipNPTH_Pads = false;
 
