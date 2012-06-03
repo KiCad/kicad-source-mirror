@@ -153,7 +153,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     /* Remove redundancies: sometime, zones are found twice,
      * because zones can be filled by overlapping segments (this is a fill option)
      */
-    unsigned long timestampzone = 0;
+    time_t timestampzone = 0;
 
     for( int ii = 0;  ii < m_Collector->GetCount(); ii++ )
     {

@@ -124,6 +124,10 @@ const wxPoint DRAWSEGMENT::GetArcEnd() const
         // m_Start is the arc centre
         endPoint  = m_End;         // m_End = start point of arc
         RotatePoint( &endPoint, m_Start, -m_Angle );
+        break;
+
+    default:
+        ;
     }
 
     return endPoint;   // after rotation, the end of the arc.
@@ -387,15 +391,15 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 
     switch( m_Shape )
     {
-        case S_SEGMENT:
-            bbox.SetEnd( m_End );
-            break;
+    case S_SEGMENT:
+        bbox.SetEnd( m_End );
+        break;
 
-        case S_CIRCLE:
-            bbox.Inflate( GetRadius() );
-            break;
+    case S_CIRCLE:
+        bbox.Inflate( GetRadius() );
+        break;
 
-        case S_ARC:
+    case S_ARC:
         {
             bbox.Merge( m_End );
             wxPoint end = m_End;
@@ -404,7 +408,7 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         }
         break;
 
-        case S_POLYGON:
+    case S_POLYGON:
         {
             wxPoint p_end;
             MODULE* module = GetParentModule();
@@ -429,8 +433,11 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
             }
 
             bbox.SetEnd( p_end );
-            break;
         }
+        break;
+
+    default:
+        ;
     }
 
     bbox.Inflate( ((m_Width+1) / 2) + 1 );
@@ -449,30 +456,30 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
     {
     case S_CIRCLE:
     case S_ARC:
-    {
-        int radius = GetRadius();
-        int dist  = (int) hypot( (double) relPos.x, (double) relPos.y );
-
-        if( abs( radius - dist ) <= ( m_Width / 2 ) )
         {
-            if( m_Shape == S_CIRCLE )
+            int radius = GetRadius();
+            int dist  = (int) hypot( (double) relPos.x, (double) relPos.y );
+
+            if( abs( radius - dist ) <= ( m_Width / 2 ) )
+            {
+                if( m_Shape == S_CIRCLE )
+                    return true;
+
+                wxPoint startVec = wxPoint( m_End.x - m_Start.x, m_End.y - m_Start.y );
+                wxPoint endVec = m_End - m_Start;
+                RotatePoint( &endVec, -m_Angle );
+
+                // Check dot products
+                if( (long long)relPos.x*startVec.x + (long long)relPos.y*startVec.y < 0 )
+                    return false;
+
+                if( (long long)relPos.x*endVec.x + (long long)relPos.y*endVec.y < 0 )
+                    return false;
+
                 return true;
-
-            wxPoint startVec = wxPoint( m_End.x - m_Start.x, m_End.y - m_Start.y );
-            wxPoint endVec = m_End - m_Start;
-            RotatePoint( &endVec, -m_Angle );
-
-            // Check dot products
-            if( (long long)relPos.x*startVec.x + (long long)relPos.y*startVec.y < 0 )
-                return false;
-
-            if( (long long)relPos.x*endVec.x + (long long)relPos.y*endVec.y < 0 )
-                return false;
-
-            return true;
+            }
         }
-    }
-    break;
+        break;
 
     case S_CURVE:
         for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
@@ -499,7 +506,7 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect ) const
 {
     switch( m_Shape )
     {
-        case S_CIRCLE:
+    case S_CIRCLE:
         {
             int radius = GetRadius();
 
@@ -512,14 +519,17 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect ) const
         }
         break;
 
-        case S_ARC:
-        case S_SEGMENT:
-            if( aRect.Contains( GetStart() ) )
-                return true;
+    case S_ARC:
+    case S_SEGMENT:
+        if( aRect.Contains( GetStart() ) )
+            return true;
 
-            if( aRect.Contains( GetEnd() ) )
-                return true;
-            break;
+        if( aRect.Contains( GetEnd() ) )
+            return true;
+        break;
+
+    default:
+        ;
     }
     return false;
 }

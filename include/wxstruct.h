@@ -54,10 +54,6 @@
 #define SAFE_DELETE( p ) delete (p); (p) = NULL;
 #endif
 
-#ifndef EESCHEMA_INTERNAL_UNIT
-#define EESCHEMA_INTERNAL_UNIT 1000
-#endif
-
 // Option for dialog boxes
 #define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
 
@@ -657,7 +653,7 @@ public:
     /* Set the zoom level to show the area Rect */
     void Window_Zoom( EDA_RECT& Rect );
 
-    /* Return the zoom level which displays the full page on screen */
+    /** Return the zoom level which displays the full page on screen */
     virtual double BestZoom() = 0;
 
     /**

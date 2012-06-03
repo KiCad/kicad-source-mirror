@@ -91,6 +91,7 @@ class CMP_LIBRARY
 {
     int                type;            ///< Library type indicator.
     wxFileName         fileName;        ///< Library file name.
+    // ZZZ why this a wxDateTime where others are time_t?
     wxDateTime         timeStamp;       ///< Library save time and date.
     int                versionMajor;    ///< Library major version number.
     int                versionMinor;    ///< Library minor version number.

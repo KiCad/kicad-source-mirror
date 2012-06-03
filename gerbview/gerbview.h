@@ -16,10 +16,15 @@
 #define CURSEUR_OFF_GRILLE 1
 
 class GERBVIEW_FRAME;
-//class BOARD;
-
 class GERBER_IMAGE;
 class PAGE_INFO;
+/**
+* size of single line of a text from a gerber file.
+* warning: some files can have very long lines, so the buffer must be large.
+*/
+#define GERBER_BUFZ     4000
+
+#define GERBVIEW_LAYER_COUNT 32     // Number of different layers shown by GerbView
 
 /// List of page sizes
 extern const wxChar* g_GerberPageSizeList[8];
@@ -29,14 +34,14 @@ extern const wxChar* g_GerberPageSizeList[8];
 #define GERB_STOP_DRAW   2      // Extinguish light (lift pen)
 #define GERB_FLASH       3      // Flash
 
-
+/*
 enum PlotFormat
 {
     FORMAT_HPGL,
     FORMAT_GERBER,
     FORMAT_POST
 };
-
+*/
 
 /**
  * Enum ITEM_VISIBLE
@@ -48,14 +53,6 @@ enum GERBER_VISIBLE
     GERBER_GRID_VISIBLE,
     END_GERBER_VISIBLE_LIST  // sentinel
 };
-
-/**
-* size of single line of a text from a gerber file.
-* warning: some files can have very long lines, so the buffer must be large.
-*/
-#define GERBER_BUFZ     4000
-
-extern int     g_DisplayPolygonsModeSketch;
 
 extern const wxString GerbviewProjectFileExt;
 extern const wxString GerbviewProjectFileWildcard;
@@ -110,7 +107,6 @@ enum Gerb_Analyse_Cmd
 bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
 extern GERBER_IMAGE* g_GERBER_List[32];
 
-#include <pcbcommon.h>
 #include <gerbview_frame.h>
 
 #endif  // ifndef GERBVIEW_H

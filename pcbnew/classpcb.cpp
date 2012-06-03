@@ -61,6 +61,49 @@ static const double pcbZoomList[] =
     ZOOM_FACTOR( 200.0 ),
     ZOOM_FACTOR( 300.0 ),
 
+/*
+    The largest distance that wx can support is INT_MAX, since it represents
+    distance often in a wxCoord or wxSize. As a scalar, a distance is always
+    positive. On most machines which run KiCad, int is 32 bits and INT_MAX is
+    2147483647. The most difficult distance for a virtual (world) cartesian
+    space is the hypotenuse, or diagonal measurement at a 45 degree angle. This
+    puts the most stress on the distance magnitude within the bounded virtual
+    space. So if we allow this distance to be our constraint of <= INT_MAX, this
+    constraint then propagates to the maximum distance in X and in Y that can be
+    supported on each axis. Remember that the hypotenuse of a 1x1 square is
+    sqrt( 1x1 + 1x1 ) = sqrt(2) = 1.41421356.
+
+    hypotenuse of any square = sqrt(2) * deltaX;
+
+    Let maximum supported hypotenuse be INT_MAX, then:
+
+    MAX_AXIS = INT_MAX / sqrt(2) = 2147483647 / 1.41421356 = 1518500251
+
+    This maximum distance is imposed by wxWidgets, not by KiCad. The imposition
+    comes in the form of the data structures used in the graphics API at the
+    wxDC level. Obviously when we are not interacting with wx we can use double
+    to compute distances larger than this. For example the computation of the
+    total length of a net, can and should be done in double, since it might
+    actually be longer than a single diagonal line.
+
+    The next choice is what to use for internal units (IU), sometimes called
+    world units.  If nanometers, then the virtual space must be limited to
+    about 1.5 x 1.5 meters square.  This is 1518500251 divided by 1e9 nm/meter.
+
+    The maximum zoom factor then depends on the client window size.  If we ask
+    wx to handle something outside INT_MIN to INT_MAX, there are unreported
+    problems in the non-Debug build because wxRound() goes silent.
+
+    Let:
+    const double MAX_AXIS = 1518500251;
+
+    Then a maximum zoom factor for a screen of 1920 pixels wide is
+        1518500251 / 1920 = 790885.
+
+    The largest ZOOM_FACTOR in above table is ZOOM_FACTOR( 300 ), which computes
+    out to 762000 just below 790885.
+*/
+
 
 #if !defined( USE_PCBNEW_NANOMETRES )
     ZOOM_FACTOR( 500.0 ),
@@ -104,15 +147,16 @@ static GRID_TYPE pcbGridList[] =
 PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
-    wxSize displayz = wxGetDisplaySize();
+    // D(wxSize displayz = wxGetDisplaySize();)
+    // D(printf( "displayz x:%d y:%d lastZoomFactor: %.16g\n", displayz.x, displayz.y, pcbZoomList[DIM(pcbZoomList)-1] );)
 
     for( unsigned i = 0; i < DIM( pcbZoomList );  ++i )
-        m_ZoomList.Add( pcbZoomList[i] );
+        m_ZoomList.push_back( pcbZoomList[i] );
 
     for( unsigned i = 0; i < DIM( pcbGridList );  ++i )
         AddGrid( pcbGridList[i] );
 
-    // Set the working grid size to a reasonnable value (in 1/10000 inch)
+    // Set the working grid size to a reasonable value (in 1/10000 inch)
     SetGrid( DMIL_GRID( 500 ) );
 
     m_Active_Layer       = LAYER_N_BACK;      // default active layer = bottom layer

@@ -243,8 +243,9 @@ public:
     void OnScrollWin( wxCommandEvent& event );
     void OnScroll( wxScrollWinEvent& event );
 
-    void SetZoom( int mode );
-    int GetZoom();
+    void SetZoom( double mode );
+    double GetZoom();
+
     void SetGrid( const wxRealPoint& size );
     wxRealPoint GetGrid();
 

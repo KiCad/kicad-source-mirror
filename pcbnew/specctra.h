@@ -45,7 +45,7 @@ class BOARD;
 class TRACK;
 class SEGVIA;
 class NETCLASS;
-
+class MODULE;
 
 typedef DSN::T            DSN_T;
 using namespace DSN;

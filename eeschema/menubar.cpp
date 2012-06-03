@@ -147,6 +147,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Plot schematic sheet in PostScript format" ),
                  KiBitmap( plot_ps_xpm ) );
 
+    // Plot PDF
+    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_PDF,
+                 _( "Plot PDF" ),
+                 _( "Plot schematic sheet in PDF format" ),
+                 KiBitmap( plot_pdf_xpm ) );
+
     // Plot HPGL
     AddMenuItem( choice_plot_fmt,
                  ID_GEN_PLOT_HPGL,

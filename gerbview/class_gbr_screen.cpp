@@ -1,7 +1,5 @@
 /**
- * @file classpcb.cpp
- * @brief Member functions of classes used in Pcbnew (see pcbstruct.h)
- *        except for tracks (see class_track.cpp).
+ * @file class_gbr_screen.cpp
  */
 
 #include <fctsys.h>
@@ -24,14 +22,9 @@
 
 
 /**
-    Default Pcbnew zoom values.
+    Default GerbView zoom values.
     Limited to 19 values to keep a decent size to menus.
     Roughly a 1.5 progression.
-    The last 2 values are handy when somebody uses a library import of a module
-    (or foreign data) which has a bad coordinate.
-    Also useful in GerbView for this reason.
-    Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
-    functions )
 */
 static const double gbrZoomList[] =
 {
@@ -89,29 +82,28 @@ static GRID_TYPE gbrGridList[] =
 
 
 GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
-    PCB_SCREEN( aPageSizeIU )
+    BASE_SCREEN( SCREEN_T )
 {
-    // Replace zoom and grid lists already set by PCB_SCREEN ctor
-    m_ZoomList.Clear();
     for( unsigned i = 0; i < DIM( gbrZoomList );  ++i )
-        m_ZoomList.Add( gbrZoomList[i] );
+        m_ZoomList.push_back( gbrZoomList[i] );
 
-    GRIDS gridlist;
     for( unsigned i = 0; i < DIM( gbrGridList );  ++i )
-        gridlist.push_back( gbrGridList[i] );
-    SetGridList( gridlist );
+        AddGrid( gbrGridList[i] );
 
-    // Set the working grid size to a reasonnable value (in 1/10000 inch)
+    // Set the working grid size to a reasonable value (in 1/10000 inch)
     SetGrid( DMIL_GRID( 500 ) );
 
     m_Active_Layer       = LAYER_N_BACK;      // default active layer = bottom layer
 
     SetZoom( ZOOM_FACTOR( 350 ) );            // a default value for zoom
+
+    InitDataPoints( aPageSizeIU );
 }
 
 
 GBR_SCREEN::~GBR_SCREEN()
 {
+    ClearUndoRedoList();
 }
 
 
@@ -119,4 +111,14 @@ GBR_SCREEN::~GBR_SCREEN()
 int GBR_SCREEN::MilsToIuScalar()
 {
     return (int)IU_PER_MILS;
+}
+
+
+/* Virtual function needed by classes derived from BASE_SCREEN
+ * this is a virtual pure function in BASE_SCREEN
+ * do nothing in GerbView
+ * could be removed later
+ */
+void GBR_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
+{
 }

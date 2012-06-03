@@ -86,6 +86,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_GEN_PLOT_HPGL, SCH_EDIT_FRAME::ToPlot_HPGL )
     EVT_MENU( ID_GEN_PLOT_SVG, SCH_EDIT_FRAME::SVG_Print )
     EVT_MENU( ID_GEN_PLOT_DXF, SCH_EDIT_FRAME::ToPlot_DXF )
+    EVT_MENU( ID_GEN_PLOT_PDF, SCH_EDIT_FRAME::ToPlot_PDF )
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
 
@@ -215,11 +216,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     /* Get config */
     LoadSettings();
 
-    // Initialize grid id to a default value if not found in config or bad:
-    if( (m_LastGridSizeId <= 0)
-       || ( m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000) ) )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
-
+    // Initialize grid id to the default value (50 mils):
+    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_canvas )
@@ -315,7 +313,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 
     for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
     {
-        screen->m_NumberOfScreen = sheet_count;
+        screen->m_NumberOfScreens = sheet_count;
     }
 
     GetScreen()->m_ScreenNumber = SheetNumber;
@@ -979,9 +977,8 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
     if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )
     {
-        wxString msg = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-        title.Printf( wxT( "%s [%s]" ), GetChars( msg), GetChars( GetScreen()->GetFileName() ) );
-        SetTitle( title );
+        title.Printf( wxT( "Eeschema %s [%s]" ), GetChars( GetBuildVersion() ),
+                            GetChars( GetScreen()->GetFileName() ) );
     }
     else
     {
@@ -991,12 +988,10 @@ void SCH_EDIT_FRAME::UpdateTitle()
         // passed to LoadOneEEFile() which omits the path on non-root schematics.
         // Making the path absolute solves this problem.
         fn.MakeAbsolute();
-        title = wxChar( '[' );
-        title << fn.GetName() << wxChar( ' ' );
-        title << m_CurrentSheet->PathHumanReadable() << wxChar( ']' );
-
-        title << wxChar( ' ' );
-        title << wxChar( '(' ) << fn.GetPath() << wxChar( ')' );
+        title.Printf( wxT( "[ %s %s] (%s)" ),
+                      GetChars( fn.GetName() ),
+                      GetChars( m_CurrentSheet->PathHumanReadable() ),
+                      GetChars( fn.GetPath() ) );
 
         if( fn.FileExists() )
         {
@@ -1006,6 +1001,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
         else
             title << _( " [no file]" );
 
-        SetTitle( title );
     }
+
+    SetTitle( title );
 }

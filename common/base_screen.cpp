@@ -35,17 +35,13 @@
 #include <id.h>
 #include <base_units.h>
 
-
-#define CURSOR_SIZE     12      /// size of the cross cursor.
-
-
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
     EDA_ITEM( aType )
 {
     m_UndoRedoCountMax = 10;     // undo/Redo command Max depth, 10 is a reasonable value
     m_FirstRedraw      = true;
     m_ScreenNumber     = 1;
-    m_NumberOfScreen   = 1;      // Hierarchy: Root: ScreenNumber = 1
+    m_NumberOfScreens  = 1;      // Hierarchy: Root: ScreenNumber = 1
     m_Zoom             = 32.0;
     m_Grid.m_Size      = wxRealPoint( 50, 50 );   // Default grid size
     m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
@@ -98,16 +94,8 @@ double BASE_SCREEN::GetScalingFactor() const
 
 void BASE_SCREEN::SetScalingFactor( double aScale )
 {
-    double zoom = aScale;
-
     // Limit zoom to max and min allowed values:
-    if( zoom < m_ZoomList[0] )
-        zoom = m_ZoomList[0];
-
-    int idxmax = m_ZoomList.GetCount() - 1;
-
-    if( zoom > m_ZoomList[idxmax] )
-        zoom = m_ZoomList[idxmax];
+    double zoom = Clamp( GetMinAllowedZoom(), aScale, GetMaxAllowedZoom() );
 
     SetZoom( zoom );
 }
@@ -115,38 +103,30 @@ void BASE_SCREEN::SetScalingFactor( double aScale )
 
 bool BASE_SCREEN::SetFirstZoom()
 {
-    if( m_ZoomList.IsEmpty() )
-    {
-        if( m_Zoom != 1.0 )
-        {
-            SetZoom( 1.0 );
-            return true;
-        }
-    }
-    else if( m_Zoom != m_ZoomList[0] )
-    {
-        SetZoom( m_ZoomList[0] );
-        return true;
-    }
-
-    return false;
+    return SetZoom( GetMinAllowedZoom() );
 }
 
 
-double BASE_SCREEN::GetZoom() const
+bool BASE_SCREEN::SetLastZoom()
 {
-    return m_Zoom;
+    return SetZoom( GetMaxAllowedZoom() );
 }
 
 
-bool BASE_SCREEN::SetZoom( double coeff )
+bool BASE_SCREEN::SetZoom( double iu_per_du )
 {
-    if( coeff == m_Zoom )
+    if( iu_per_du == m_Zoom )
         return false;
 
-    wxLogDebug( "Zoom:%16g  1/Zoom:%16g", coeff, 1/coeff );
+    wxLogDebug( "Zoom:%.16g  1/Zoom:%.16g", iu_per_du, 1/iu_per_du );
 
-    m_Zoom = coeff;
+    if( iu_per_du < GetMinAllowedZoom() )
+        return false;
+
+    if( iu_per_du > GetMaxAllowedZoom() )
+        return false;
+
+    m_Zoom = iu_per_du;
 
     return true;
 }
@@ -154,10 +134,7 @@ bool BASE_SCREEN::SetZoom( double coeff )
 
 bool BASE_SCREEN::SetNextZoom()
 {
-    if( m_ZoomList.IsEmpty() || m_Zoom >= m_ZoomList.Last() )
-        return false;
-
-    for( unsigned i = 0; i < m_ZoomList.GetCount(); i++ )
+    for( unsigned i=0; i < m_ZoomList.size();  ++i )
     {
         if( m_Zoom < m_ZoomList[i] )
         {
@@ -172,10 +149,7 @@ bool BASE_SCREEN::SetNextZoom()
 
 bool BASE_SCREEN::SetPreviousZoom()
 {
-    if( m_ZoomList.IsEmpty() || m_Zoom <= m_ZoomList[0] )
-        return false;
-
-    for( unsigned i = m_ZoomList.GetCount(); i != 0; i-- )
+    for( unsigned i = m_ZoomList.size(); i != 0;  --i )
     {
         if( m_Zoom > m_ZoomList[i - 1] )
         {
@@ -185,15 +159,6 @@ bool BASE_SCREEN::SetPreviousZoom()
     }
 
     return false;
-}
-
-
-bool BASE_SCREEN::SetLastZoom()
-{
-    if( m_ZoomList.IsEmpty() || m_Zoom == m_ZoomList.Last() )
-        return false;
-
-    return SetZoom( m_ZoomList.Last() );
 }
 
 
@@ -320,31 +285,8 @@ GRID_TYPE& BASE_SCREEN::GetGrid( size_t aIndex )
 }
 
 
-GRID_TYPE BASE_SCREEN::GetGrid()
-{
-    return m_Grid;
-}
-
-
-const wxPoint& BASE_SCREEN::GetGridOrigin()
-{
-    return m_GridOrigin;
-}
-
-
-wxRealPoint BASE_SCREEN::GetGridSize()
-{
-    return m_Grid.m_Size;
-}
-
-
-int BASE_SCREEN::GetGridId()
-{
-    return m_Grid.m_Id;
-}
-
-
-wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize )
+wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, 
+                                             wxRealPoint* aGridSize ) const
 {
     wxPoint pt;
     wxRealPoint gridSize;
@@ -368,7 +310,7 @@ wxPoint BASE_SCREEN::GetNearestGridPosition( const wxPoint& aPosition, wxRealPoi
 }
 
 
-wxPoint BASE_SCREEN::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize )
+wxPoint BASE_SCREEN::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize ) const
 {
     if( aOnGrid )
         return GetNearestGridPosition( m_crossHairPosition, aGridSize );

@@ -319,7 +319,7 @@ public:
      * @param type_edge = S_SEGMENT,S_ARC ..
      * @return the new created edge.
      */
-    EDGE_MODULE* Begin_Edge_Module( EDGE_MODULE* Edge, wxDC* DC, int type_edge );
+    EDGE_MODULE* Begin_Edge_Module( EDGE_MODULE* Edge, wxDC* DC, STROKE_T type_edge );
 
     /**
      * Function End_Edge_Module

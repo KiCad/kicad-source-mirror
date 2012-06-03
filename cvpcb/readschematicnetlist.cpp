@@ -68,7 +68,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
     netList_Reader.m_UseCmpFile = false;
     netList_Reader.SetFilesnames( m_NetlistFileName.GetFullPath(), wxEmptyString );
 
-    // True to read footprint filters section: true for CvPcb, false pro Pcbnew
+    // True to read footprint filters section: true for CvPcb, false for Pcbnew
     netList_Reader.ReadLibpartSectionSetOpt( true );
 
     bool success = netList_Reader.ReadNetList( netfile );
@@ -79,9 +79,15 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
     }
 
     // Now copy footprints info into Cvpcb list:
+    // We also remove footprint name if it is "$noname"
+    // because this is a dummy name,, not an actual name
     COMPONENT_INFO_LIST& cmpInfo = netList_Reader.GetComponentInfoList();
     for( unsigned ii = 0; ii < cmpInfo.size(); ii++ )
+    {
         m_components.push_back( cmpInfo[ii] );
+        if( cmpInfo[ii]->m_Footprint == wxT( "$noname" ) )
+            cmpInfo[ii]->m_Footprint.Empty();
+    }
     cmpInfo.clear();    // cmpInfo is no more owner of the list.
 
     // Sort components by reference:

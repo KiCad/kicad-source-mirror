@@ -231,7 +231,7 @@ static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 /* Initialize the drawing of a segment of type other than trace.
  */
-DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC )
+DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC )
 {
     int          s_large;
     DRAWSEGMENT* DrawItem;

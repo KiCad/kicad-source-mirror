@@ -40,6 +40,7 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
+#include <class_pcb_layer_box_selector.h>
 
 #include <wx/wupdlock.h>
 
@@ -273,7 +274,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
 
     if( m_SelLayerBox == NULL )
-        m_SelLayerBox = new LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
+        m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
 
     ReCreateLayerBox( m_mainToolBar );
     m_mainToolBar->AddControl( m_SelLayerBox );
@@ -644,7 +645,7 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 }
 
 
-LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( wxAuiToolBar* parent )
+PCB_LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( wxAuiToolBar* parent )
 {
     if( m_SelLayerBox == NULL )
         return NULL;

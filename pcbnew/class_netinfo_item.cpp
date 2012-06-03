@@ -22,9 +22,13 @@
 /* class NETINFO_ITEM: handle data relative to a given net */
 /*********************************************************/
 
-NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent )
+NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int aNetCode )
 {
-    SetNet( 0 );
+    SetNet( aNetCode );
+
+    if( aNetName.size() )
+        SetNetname( aNetName );
+
     m_NbNodes  = 0;
     m_NbLink   = 0;
     m_NbNoconn = 0;

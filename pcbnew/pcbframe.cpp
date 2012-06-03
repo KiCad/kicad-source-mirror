@@ -752,16 +752,16 @@ void PCB_EDIT_FRAME::UpdateTitle()
 
     if( fileName.IsOk() && fileName.FileExists() )
     {
-        title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-                wxT( " " ) + fileName.GetFullPath();
+        title.Printf( wxT( "Pcbnew %s %s" ), GetChars( GetBuildVersion() ),
+                      GetChars( fileName.GetFullPath() ) );
 
         if( !fileName.IsFileWritable() )
             title += _( " [Read Only]" );
     }
     else
     {
-        title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-                wxT( " " ) + _( " [no file]" );
+        title.Printf( wxT( "Pcbnew %s  " ), GetChars( GetBuildVersion() ) );
+        title << _( " [no file]" );
     }
 
     SetTitle( title );

@@ -35,7 +35,7 @@
 #include <richio.h>
 #include <plot_common.h>
 #include <base_units.h>
-
+#include <eeschema_config.h>
 #include <general.h>
 #include <protos.h>
 #include <sch_line.h>
@@ -212,10 +212,9 @@ int SCH_LINE::GetPenSize() const
 {
     int pensize = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
 
-    if( m_Layer == LAYER_BUS && m_width == 0 )
+    if( m_Layer == LAYER_BUS )
     {
-        pensize = KiROUND( g_DrawDefaultLineThickness * BUS_WIDTH_EXPAND );
-        pensize = MAX( pensize, 3 );
+        pensize = ( m_width == 0 ) ? g_DefaultBusWidth : m_width;
     }
 
     return pensize;
@@ -603,17 +602,17 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_LINE::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
-    aPlotter->set_current_line_width( GetPenSize() );
+    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetCurrentLineWidth( GetPenSize() );
 
     if( m_Layer == LAYER_NOTES )
-        aPlotter->set_dash( true );
+        aPlotter->SetDash( true );
 
-    aPlotter->move_to( m_start );
-    aPlotter->finish_to( m_end );
+    aPlotter->MoveTo( m_start );
+    aPlotter->FinishTo( m_end );
 
     if( m_Layer == LAYER_NOTES )
-        aPlotter->set_dash( false );
+        aPlotter->SetDash( false );
 }
 
 

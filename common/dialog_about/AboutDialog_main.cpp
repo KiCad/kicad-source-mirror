@@ -59,7 +59,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.SetAppName( wxT( ".: " ) + wxGetApp().GetTitle() + wxT( " :." ) );
 
     /* Copyright information */
-    info.SetCopyright( wxT( "(C) 1992-2011 KiCad Developers Team" ) );
+    info.SetCopyright( wxT( "(C) 1992-2012 KiCad Developers Team" ) );
 
     /* KiCad build version */
     wxString version;
@@ -147,8 +147,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     HtmlHyperlink( wxT( "https://launchpad.net/kicad" ), _( "Project on Launchpad" ) ) << wxT(
         "</li>" );
     description << wxT( "<li>" ) <<
-    HtmlHyperlink( wxT( "http://kicad.sourceforge.net" ),
-                  _( "Wiki on Sourceforge with many information" ) ) << wxT( "</li>" );
+    HtmlHyperlink( wxT( "http://www.kicad-pcb.org" ),
+                  _( "The new KiCad site" ) ) << wxT( "</li>" );
     description << wxT( "<li>" ) <<
     HtmlHyperlink( wxT( "http://www.kicadlib.org" ),
                   _( "Repository with additional component libraries" ) ) << wxT( "</li>" );

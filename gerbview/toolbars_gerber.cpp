@@ -37,7 +37,7 @@
 #include <gerbview_id.h>
 #include <hotkeys.h>
 #include <class_GERBER.h>
-#include <class_layer_box_selector.h>
+#include <class_gbr_layer_box_selector.h>
 #include <class_DCodeSelectionbox.h>
 #include <dialog_helpers.h>
 
@@ -87,16 +87,10 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 
     m_mainToolBar->AddSeparator();
 
-    wxArrayString choices;
+    m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
+                                            wxDefaultPosition, wxSize( 150, -1 ), 0,NULL);
+    m_SelLayerBox->Resync();
 
-    for( ii = 0; ii < 32; ii++ )
-    {
-        msg.Printf( _( "Layer %d" ), ii + 1 );
-        choices.Add( msg );
-    }
-
-    m_SelLayerBox = new LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
-                                            wxDefaultPosition, wxSize( 150, -1 ), choices );
     m_mainToolBar->AddControl( m_SelLayerBox );
 
     m_mainToolBar->AddSeparator();
@@ -241,21 +235,26 @@ void GERBVIEW_FRAME::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
 }
 
 
+void GERBVIEW_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( m_DisplayOptions.m_DisplayPolarCood );
+}
+
 void GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( !m_DisplayPadFill );
+    aEvent.Check( !m_DisplayOptions.m_DisplayFlashedItemsFill );
 }
 
 
 void GERBVIEW_FRAME::OnUpdateLinesDrawMode( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( !m_DisplayPcbTrackFill );
+    aEvent.Check( !m_DisplayOptions.m_DisplayLinesFill );
 }
 
 
 void GERBVIEW_FRAME::OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( g_DisplayPolygonsModeSketch != 0 );
+    aEvent.Check( !m_DisplayOptions.m_DisplayPolygonsFill );
 }
 
 

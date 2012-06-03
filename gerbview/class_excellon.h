@@ -53,7 +53,7 @@ enum drill_G_code_t {
 // Helper struct to analyse Excellon commands
 struct EXCELLON_CMD
 {
-    string m_Name;      // key string
+    std::string m_Name;      // key string
     int    m_Code;      // internal code, used as id in functions
     int    m_asParams;  // 0 = no param, -1 = skip params, 1 = read params
 };

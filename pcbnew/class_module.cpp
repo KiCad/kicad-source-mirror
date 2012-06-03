@@ -84,8 +84,6 @@ MODULE::MODULE( BOARD* parent ) :
 MODULE::MODULE( const MODULE& aModule ) :
     BOARD_ITEM( aModule )
 {
-    BOARD_ITEM* newItem;
-
     m_Pos = aModule.m_Pos;
     m_LibRef = aModule.m_LibRef;
     m_Layer  = aModule.m_Layer;
@@ -116,7 +114,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_Value->SetParent( this );
 
     // Copy auxiliary data: Pads
-    m_Pads.DeleteAll();
+    // m_Pads.DeleteAll();
 
     for( D_PAD* pad = aModule.m_Pads;  pad;  pad = pad->Next() )
     {
@@ -126,10 +124,12 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy auxiliary data: Drawings
-    m_Drawings.DeleteAll();
+    // m_Drawings.DeleteAll();
 
     for( BOARD_ITEM* item = aModule.m_Drawings;  item;  item = item->Next() )
     {
+        BOARD_ITEM* newItem;
+
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
@@ -146,7 +146,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy auxiliary data: 3D_Drawings info
-    m_3D_Drawings.DeleteAll();
+    // m_3D_Drawings.DeleteAll();
 
     for( S3D_MASTER* item = aModule.m_3D_Drawings;  item;  item = item->Next() )
     {

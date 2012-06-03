@@ -135,6 +135,21 @@ void SetLocaleTo_Default()
 }
 
 
+wxSize GetTextSize( const wxString& aSingleLine, wxWindow* aWindow )
+{
+    wxCoord width;
+    wxCoord height;
+
+    {
+        wxClientDC dc( aWindow );
+        dc.SetFont( aWindow->GetFont() );
+        dc.GetTextExtent( aSingleLine, &width, &height );
+    }
+
+    return wxSize( width, height );
+}
+
+
 bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
 {
     wxWindow* window = aCtrl->GetParent();
@@ -150,21 +165,13 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
         aString  = &ctrlText;
     }
 
-    wxCoord width;
-    wxCoord height;
+    wxSize  textz = GetTextSize( *aString, window );
+    wxSize  ctrlz = aCtrl->GetSize();
 
+    if( ctrlz.GetWidth() < textz.GetWidth() + 10 )
     {
-        wxClientDC dc( window );
-        dc.SetFont( aCtrl->GetFont() );
-        dc.GetTextExtent( *aString, &width, &height );
-    }
-
-    wxSize size = aCtrl->GetSize();
-
-    if( size.GetWidth() < width + 10 )
-    {
-        size.SetWidth( width + 10 );
-        aCtrl->SetSizeHints( size );
+        ctrlz.SetWidth( textz.GetWidth() + 10 );
+        aCtrl->SetSizeHints( ctrlz );
         return true;
     }
 
@@ -318,10 +325,10 @@ bool ProcessExecute( const wxString& aCommandLine, int aFlags )
 }
 
 
-unsigned long GetNewTimeStamp()
+time_t GetNewTimeStamp()
 {
-    static unsigned long oldTimeStamp;
-    unsigned long newTimeStamp;
+    static time_t oldTimeStamp;
+    time_t newTimeStamp;
 
     newTimeStamp = time( NULL );
 

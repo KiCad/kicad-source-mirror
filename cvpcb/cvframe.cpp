@@ -116,6 +116,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     m_isEESchemaNetlist     = false;
     m_KeepCvpcbOpen         = false;
     m_undefinedComponentCnt = 0;
+    m_skipComponentSelect   = false;
 
     /* Name of the document footprint list
      * usually located in share/modules/footprints_doc
@@ -406,6 +407,7 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
 
     if( IsOK( this, _( "Delete selections" ) ) )
     {
+        m_skipComponentSelect = true;
         m_ListCmp->SetSelection( 0 );
 
         BOOST_FOREACH( COMPONENT_INFO & component, m_components )
@@ -414,6 +416,7 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
             SetNewPkg( wxEmptyString );
         }
 
+        m_skipComponentSelect = false;
         m_ListCmp->SetSelection( 0 );
         m_undefinedComponentCnt = m_components.size();
     }
@@ -506,18 +509,22 @@ void CVPCB_MAINFRAME::OnLeftDClick( wxListEvent& event )
 
 
 /* Called when clicking on a component in component list window
- * * Updates the filtered foorprint list, if the filtered list option is selected
+ * * Updates the filtered footprint list, if the filtered list option is selected
  * * Updates the current selected footprint in footprint list
  * * Updates the footprint shown in footprint display window (if opened)
  */
 void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 {
+    if( m_skipComponentSelect )
+        return;
+
     #define REDRAW_LIST true
     #define SELECT_FULL_LIST true
     int selection = -1;
 
     if( !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST )
-        && !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ))
+        && !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST )
+        )
         m_FootprintList->SetActiveFootprintList( SELECT_FULL_LIST, REDRAW_LIST );
 
     else
@@ -553,36 +560,41 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
         return;
 
     // Preview of the already assigned footprint.
-    // Find the footprint that was already choosen for this component and select it.
-    wxString module = *(&m_components[ selection ].m_Footprint);
+    // Find the footprint that was already choosen for this component and select it,
+    // but only if the selection is made from the component list.
+    // If the selection is made from the footprint list, do not change the current selected footprint.
 
-    bool found = false;
-    for( int ii = 0; ii < m_FootprintList->GetCount(); ii++ )
+    if( FindFocus() ==  m_ListCmp )
     {
-        wxString footprintName;
-        wxString msg = (*m_FootprintList->m_ActiveFootprintList)[ii];
-        msg.Trim( true );
-        msg.Trim( false );
-        footprintName = msg.AfterFirst( wxChar( ' ' ) );
+        wxString module = *(&m_components[ selection ].m_Footprint);
 
-        if( module.Cmp( footprintName ) == 0 )
+        bool found = false;
+        for( int ii = 0; ii < m_FootprintList->GetCount(); ii++ )
         {
-            m_FootprintList->SetSelection( ii, true );
-            found = true;
-            break;
+            wxString footprintName;
+            wxString msg = (*m_FootprintList->m_ActiveFootprintList)[ii];
+            msg.Trim( true );
+            msg.Trim( false );
+            footprintName = msg.AfterFirst( wxChar( ' ' ) );
+
+            if( module.Cmp( footprintName ) == 0 )
+            {
+                m_FootprintList->SetSelection( ii, true );
+                found = true;
+                break;
+            }
+        }
+        if( ! found )
+        {
+            int ii = m_FootprintList->GetSelection();
+            if ( ii >= 0 )
+                m_FootprintList->SetSelection( ii, false );
+            if( m_DisplayFootprintFrame )
+            {
+                CreateScreenCmp();
+            }
         }
     }
-    if( ! found )
-    {
-        int ii = m_FootprintList->GetSelection();
-        if ( ii >= 0 )
-            m_FootprintList->SetSelection( ii, false );
-        if( m_DisplayFootprintFrame )
-        {
-            CreateScreenCmp();
-        }
-    }
-
 
     SendMessageToEESCHEMA();
     DisplayStatus();

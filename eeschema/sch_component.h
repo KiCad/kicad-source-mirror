@@ -195,7 +195,7 @@ public:
      * @see m_PathsAndReferences
      * @param aNewTimeStamp = new time stamp
      */
-    void SetTimeStamp( long aNewTimeStamp );
+    void SetTimeStamp( time_t aNewTimeStamp );
 
     EDA_RECT GetBoundingBox() const;
 

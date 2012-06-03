@@ -1111,24 +1111,24 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     wxPoint     pos_sheetname, pos_filename;
     wxPoint     pos;
 
-    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
 
     int thickness = GetPenSize();
-    aPlotter->set_current_line_width( thickness );
+    aPlotter->SetCurrentLineWidth( thickness );
 
-    aPlotter->move_to( m_pos );
+    aPlotter->MoveTo( m_pos );
     pos = m_pos;
     pos.x += m_size.x;
 
-    aPlotter->line_to( pos );
+    aPlotter->LineTo( pos );
     pos.y += m_size.y;
 
-    aPlotter->line_to( pos );
+    aPlotter->LineTo( pos );
     pos = m_pos;
     pos.y += m_size.y;
 
-    aPlotter->line_to( pos );
-    aPlotter->finish_to( m_pos );
+    aPlotter->LineTo( pos );
+    aPlotter->FinishTo( m_pos );
 
     if( IsVerticalOrientation() )
     {
@@ -1151,10 +1151,10 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     thickness = g_DrawDefaultLineThickness;
     thickness = Clamp_Text_PenSize( thickness, size, false );
 
-    aPlotter->set_color( ReturnLayerColor( LAYER_SHEETNAME ) );
+    aPlotter->SetColor( ReturnLayerColor( LAYER_SHEETNAME ) );
 
     bool italic = false;
-    aPlotter->text( pos_sheetname, txtcolor, Text, name_orientation, size,
+    aPlotter->Text( pos_sheetname, txtcolor, Text, name_orientation, size,
                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
                     thickness, italic, false );
 
@@ -1164,13 +1164,13 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     thickness = g_DrawDefaultLineThickness;
     thickness = Clamp_Text_PenSize( thickness, size, false );
 
-    aPlotter->set_color( ReturnLayerColor( LAYER_SHEETFILENAME ) );
+    aPlotter->SetColor( ReturnLayerColor( LAYER_SHEETFILENAME ) );
 
-    aPlotter->text( pos_filename, txtcolor, Text, name_orientation, size,
+    aPlotter->Text( pos_filename, txtcolor, Text, name_orientation, size,
                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                     thickness, italic, false );
 
-    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
 
     /* Draw texts : SheetLabel */
     for( size_t i = 0; i < m_pins.size(); i++ )

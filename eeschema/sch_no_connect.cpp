@@ -241,10 +241,11 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
     pX = m_pos.x;
     pY = m_pos.y;
 
-    aPlotter->set_current_line_width( GetPenSize() );
-    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
-    aPlotter->move_to( wxPoint( pX - delta, pY - delta ) );
-    aPlotter->finish_to( wxPoint( pX + delta, pY + delta ) );
-    aPlotter->move_to( wxPoint( pX + delta, pY - delta ) );
-    aPlotter->finish_to( wxPoint( pX - delta, pY + delta ) );
+    aPlotter->SetCurrentLineWidth( GetPenSize() );
+    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->MoveTo( wxPoint( pX - delta, pY - delta ) );
+    aPlotter->FinishTo( wxPoint( pX + delta, pY + delta ) );
+    aPlotter->MoveTo( wxPoint( pX + delta, pY - delta ) );
+    aPlotter->FinishTo( wxPoint( pX - delta, pY + delta ) );
 }
+

@@ -339,19 +339,6 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         for( int ic = ic_st; ic<=ic_end; ic++ )
         {
             int style = side_style[ic];
-            int x1    = corner[ic].x;
-            int y1    = corner[ic].y;
-            int x2, y2;
-            if( ic < ic_end )
-            {
-                x2 = corner[ic + 1].x;
-                y2 = corner[ic + 1].y;
-            }
-            else
-            {
-                x2 = corner[ic_st].x;
-                y2 = corner[ic_st].y;
-            }
             if( style == STRAIGHT )
                 n_vertices++;
             else

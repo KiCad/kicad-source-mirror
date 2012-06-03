@@ -1,5 +1,5 @@
-#ifndef _XATTR_H_
-#define _XATTR_H_
+#ifndef XATTR_H_
+#define XATTR_H_
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
@@ -108,4 +108,4 @@ public:
 #endif
 };
 
-#endif  // _XATTR_H_
+#endif  // XATTR_H_
