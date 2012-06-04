@@ -621,6 +621,9 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
         }
 
         zones_menu->AppendSeparator();
+        AddMenuItem( zones_menu, ID_POPUP_PCB_ZONE_DUPLICATE,
+                     _( "Duplicate Zone" ), KiBitmap( add_zone_xpm ) );
+
         AddMenuItem( zones_menu, ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE,
                      _( "Add Similar Zone" ), KiBitmap( add_zone_xpm ) );
 
