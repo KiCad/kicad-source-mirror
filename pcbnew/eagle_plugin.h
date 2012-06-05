@@ -63,6 +63,8 @@ typedef boost::property_tree::ptree     PTREE;
 typedef const PTREE                     CPTREE;
 
 class XPATH;
+struct ERULES;
+
 
 /**
  * Class EAGLE_PLUGIN
@@ -107,6 +109,7 @@ public:
 
 private:
 
+    ERULES*     m_rules;            ///< Eagle design rules.
     XPATH*      m_xpath;            ///< keeps track of what we are working on within
                                     ///< XML document during a Load().
 
@@ -173,6 +176,7 @@ private:
     // all these loadXXX() throw IO_ERROR or ptree_error exceptions:
 
     void loadAllSections( CPTREE& aDocument );
+    void loadDesignRules( CPTREE& aDesignRules );
     void loadLayerDefs( CPTREE& aLayers );
     void loadPlain( CPTREE& aPlain );
     void loadSignals( CPTREE& aSignals );
