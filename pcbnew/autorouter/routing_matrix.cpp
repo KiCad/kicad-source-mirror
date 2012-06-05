@@ -34,7 +34,7 @@
 
 #include <pcbnew.h>
 #include <cell.h>
-#include <ar_protos.h>
+#include <autorout.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -342,7 +342,7 @@ int Build_Work( BOARD* Pcb )
     D_PAD*          pt_pad;
     int             r1, r2, c1, c2, current_net_code;
     RATSNEST_ITEM*  pt_ch;
-    int             demi_pas = Board.m_GridRouting / 2;
+    int             demi_pas = RoutingMatrix.m_GridRouting / 2;
     wxString        msg;
 
     EDA_RECT        bbbox = Pcb->GetBoundingBox();
@@ -371,7 +371,7 @@ int Build_Work( BOARD* Pcb )
         current_net_code = pt_pad->GetNet();
         pt_ch = pt_rats;
 
-        r1 = ( pt_pad->GetPosition().y - bbbox.GetY() + demi_pas ) / Board.m_GridRouting;
+        r1 = ( pt_pad->GetPosition().y - bbbox.GetY() + demi_pas ) / RoutingMatrix.m_GridRouting;
 
         if( r1 < 0 || r1 >= Nrows )
         {
@@ -381,7 +381,7 @@ int Build_Work( BOARD* Pcb )
             return 0;
         }
 
-        c1 = ( pt_pad->GetPosition().x - bbbox.GetX() + demi_pas ) / Board.m_GridRouting;
+        c1 = ( pt_pad->GetPosition().x - bbbox.GetX() + demi_pas ) / RoutingMatrix.m_GridRouting;
 
         if( c1 < 0 || c1 >= Ncols )
         {
@@ -394,7 +394,7 @@ int Build_Work( BOARD* Pcb )
         pt_pad = pt_rats->m_PadEnd;
 
         r2 = ( pt_pad->GetPosition().y - bbbox.GetY()
-               + demi_pas ) / Board.m_GridRouting;
+               + demi_pas ) / RoutingMatrix.m_GridRouting;
 
         if( r2 < 0 || r2 >= Nrows )
         {
@@ -404,7 +404,7 @@ int Build_Work( BOARD* Pcb )
             return 0;
         }
 
-        c2 = ( pt_pad->GetPosition().x - bbbox.GetX() + demi_pas ) / Board.m_GridRouting;
+        c2 = ( pt_pad->GetPosition().x - bbbox.GetX() + demi_pas ) / RoutingMatrix.m_GridRouting;
 
         if( c2 < 0 || c2 >= Ncols )
         {
@@ -429,7 +429,7 @@ MATRIX_CELL GetCell( int aRow, int aCol, int aSide )
 {
     MATRIX_CELL* p;
 
-    p = Board.m_BoardSide[aSide];
+    p = RoutingMatrix.m_BoardSide[aSide];
     return p[aRow * Ncols + aCol];
 }
 
@@ -440,7 +440,7 @@ void SetCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
-    p = Board.m_BoardSide[aSide];
+    p = RoutingMatrix.m_BoardSide[aSide];
     p[aRow * Ncols + aCol] = x;
 }
 
@@ -451,7 +451,7 @@ void OrCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
-    p = Board.m_BoardSide[aSide];
+    p = RoutingMatrix.m_BoardSide[aSide];
     p[aRow * Ncols + aCol] |= x;
 }
 
@@ -462,7 +462,7 @@ void XorCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
-    p = Board.m_BoardSide[aSide];
+    p = RoutingMatrix.m_BoardSide[aSide];
     p[aRow * Ncols + aCol] ^= x;
 }
 
@@ -473,7 +473,7 @@ void AndCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
-    p = Board.m_BoardSide[aSide];
+    p = RoutingMatrix.m_BoardSide[aSide];
     p[aRow * Ncols + aCol] &= x;
 }
 
@@ -484,7 +484,7 @@ void AddCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
-    p = Board.m_BoardSide[aSide];
+    p = RoutingMatrix.m_BoardSide[aSide];
     p[aRow * Ncols + aCol] += x;
 }
 
@@ -494,7 +494,7 @@ DIST_CELL GetDist( int aRow, int aCol, int aSide ) /* fetch distance cell */
 {
     DIST_CELL* p;
 
-    p = Board.m_DistSide[aSide];
+    p = RoutingMatrix.m_DistSide[aSide];
     return p[aRow * Ncols + aCol];
 }
 
@@ -504,7 +504,7 @@ void SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
 {
     DIST_CELL* p;
 
-    p = Board.m_DistSide[aSide];
+    p = RoutingMatrix.m_DistSide[aSide];
     p[aRow * Ncols + aCol] = x;
 }
 
@@ -514,7 +514,7 @@ int GetDir( int aRow, int aCol, int aSide )
 {
     DIR_CELL* p;
 
-    p = Board.m_DirSide[aSide];
+    p = RoutingMatrix.m_DirSide[aSide];
     return (int) (p[aRow * Ncols + aCol]);
 }
 
@@ -524,6 +524,6 @@ void SetDir( int aRow, int aCol, int aSide, int x )
 {
     DIR_CELL* p;
 
-    p = Board.m_DirSide[aSide];
+    p = RoutingMatrix.m_DirSide[aSide];
     p[aRow * Ncols + aCol] = (char) x;
 }
