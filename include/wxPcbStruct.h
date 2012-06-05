@@ -196,6 +196,14 @@ protected:
      */
     int propagate();
 
+    /**
+     * Function duplicateZone
+     * duplicates the given zone.
+     * @param aDC is the current Device Context.
+     * @param aZone is the zone to duplicate
+     */
+    void duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone );
+
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
