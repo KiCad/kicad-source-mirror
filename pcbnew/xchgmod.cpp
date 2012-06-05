@@ -15,7 +15,6 @@
 
 #include <pcbnew.h>
 #include <dialog_exchange_modules_base.h>
-#include <ar_protos.h>
 #include <wildcards_and_files_ext.h>
 
 static char*  quiet_gcc_4_4_3;      // GCC 4.4.3 and next ..
