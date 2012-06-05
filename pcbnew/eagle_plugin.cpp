@@ -77,6 +77,20 @@ Load() TODO's
 
 using namespace boost::property_tree;
 
+typedef EAGLE_PLUGIN::BIU                   BIU;
+typedef PTREE::const_assoc_iterator         CA_ITER;
+typedef PTREE::const_iterator               CITER;
+typedef std::pair<CA_ITER, CA_ITER>         CA_ITER_RANGE;
+
+typedef MODULE_MAP::iterator                MODULE_ITER;
+typedef MODULE_MAP::const_iterator          MODULE_CITER;
+
+typedef boost::optional<std::string>        opt_string;
+typedef boost::optional<int>                opt_int;
+typedef boost::optional<double>             opt_double;
+typedef boost::optional<bool>               opt_bool;
+
+
 /// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
 struct TRIPLET
 {
@@ -160,20 +174,6 @@ public:
 };
 
 
-typedef EAGLE_PLUGIN::BIU                   BIU;
-typedef PTREE::const_assoc_iterator         CA_ITER;
-typedef PTREE::const_iterator               CITER;
-typedef std::pair<CA_ITER, CA_ITER>         CA_ITER_RANGE;
-
-typedef MODULE_MAP::iterator                MODULE_ITER;
-typedef MODULE_MAP::const_iterator          MODULE_CITER;
-
-typedef boost::optional<std::string>        opt_string;
-typedef boost::optional<int>                opt_int;
-typedef boost::optional<double>             opt_double;
-typedef boost::optional<bool>               opt_bool;
-
-
 /**
  * Function parseOptionalBool
  * returns an opt_bool and sets it true or false according to the presence
@@ -205,13 +205,23 @@ struct EROT
     bool    spin;
     double  degrees;
 
-    EROT() : mirror( false ), spin( false ), degrees( 0 ) {}
+    EROT() :
+        mirror( false ),
+        spin( false ),
+        degrees( 0 )
+    {}
+
+    EROT( double aDegrees ) :
+        mirror( false ),
+        spin( false ),
+        degrees( aDegrees )
+    {}
 };
 
 typedef boost::optional<EROT>   opt_erot;
 
 /// parse an Eagle XML "rot" field.  Unfortunately the DTD seems not to explain
-/// this format very well.  R[S][M]<degrees>.   Examples: "R90", "MR180", "SR180"
+/// this format very well.  [S][M]R<degrees>.   Examples: "R90", "MR180", "SR180"
 static EROT erot( const std::string& aRot )
 {
     EROT    rot;
@@ -239,12 +249,30 @@ static opt_erot parseOptionalEROT( CPTREE& attribs )
 /// Eagle wire
 struct EWIRE
 {
-    double  x1;
-    double  y1;
-    double  x2;
-    double  y2;
-    double  width;
-    int     layer;
+    double      x1;
+    double      y1;
+    double      x2;
+    double      y2;
+    double      width;
+    int         layer;
+
+    // for style: (continuous | longdash | shortdash | dashdot)
+    enum {
+        CONTINUOUS,
+        LONGDASH,
+        SHORTDASH,
+        DASHDOT,
+    };
+    opt_int     style;
+    opt_double  curve;      ///< range is -359.9..359.9
+
+    // for cap: (flat | round)
+    enum {
+        FLAT,
+        ROUND,
+    };
+    opt_int     cap;
+
     EWIRE( CPTREE& aWire );
 };
 
@@ -280,7 +308,30 @@ EWIRE::EWIRE( CPTREE& aWire )
     width = attribs.get<double>( "width" );
     layer = attribs.get<int>( "layer" );
 
-    // ignoring extent, style, curve and cap
+    curve = attribs.get_optional<double>( "curve" );
+
+    opt_string s = attribs.get_optional<std::string>( "style" );
+    if( s )
+    {
+        if( !s->compare( "continuous" ) )
+            style = EWIRE::CONTINUOUS;
+        else if( !s->compare( "longdash" ) )
+            style = EWIRE::LONGDASH;
+        else if( !s->compare( "shortdash" ) )
+            style = EWIRE::SHORTDASH;
+        else if( !s->compare( "dashdot" ) )
+            style = EWIRE::DASHDOT;
+    }
+
+    s = attribs.get_optional<std::string>( "cap" );
+    if( s )
+    {
+        if( !s->compare( "round" ) )
+            cap = EWIRE::ROUND;
+        else if( !s->compare( "flat" ) )
+            cap = EWIRE::FLAT;
+    }
+    // ignoring extent
 }
 
 
@@ -421,6 +472,11 @@ struct EATTR
     };
 
     EATTR( CPTREE& aTree );
+
+    EATTR( const opt_erot& aOptRot, double childAngle ) :
+        rot( aOptRot )
+    {
+    }
 };
 
 /**
@@ -900,6 +956,85 @@ ELAYER::ELAYER( CPTREE& aLayer )
 }
 
 
+/// parse an eagle distance which is either straight mm or mils if there is "mil" suffix.
+static double parseEagle( const std::string& aDistance )
+{
+    double ret = strtod( aDistance.c_str(), NULL );
+    if( aDistance.npos != aDistance.find( "mil" ) )
+        ret = IU_PER_MILS * ret;
+    else
+        ret = IU_PER_MM * ret;
+
+    return ret;
+}
+
+
+/// subset of eagle.drawing.board.designrules in the XML document
+struct ERULES
+{
+    int         psElongationLong;   ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
+                                    ///< Goes into making a scaling factor for "long" pads.
+
+    int         psElongationOffset; ///< the offset of the hole within the "long" pad.
+
+    double      rvPadTop;           ///< top pad size as percent of drill size
+    // double   rvPadBottom;        ///< bottom pad size as percent of drill size
+
+    double      rlMinPadTop;        ///< minimum copper annulus on through hole pads
+    double      rlMaxPadTop;        ///< maximum copper annulus on through hole pads
+
+    double      rvViaOuter;         ///< copper annulus is this percent of via hole
+    double      rlMinViaOuter;      ///< minimum copper annulus on via
+    double      rlMaxViaOuter;      ///< maximum copper annulus on via
+
+
+    ERULES() :
+        psElongationLong    ( 100 ),
+        rvPadTop            ( 0.25 ),
+        // rvPadBottom      ( 0.25 ),
+        rlMinPadTop         ( Mils2iu( 10 ) ),
+        rlMaxPadTop         ( Mils2iu( 20 ) ),
+
+        rvViaOuter          ( 0.25 ),
+        rlMinViaOuter       ( Mils2iu( 10 ) ),
+        rlMaxViaOuter       ( Mils2iu( 20 ) )
+    {}
+
+    void parse( CPTREE& aRules );
+};
+
+void ERULES::parse( CPTREE& aRules )
+{
+    for( CITER it = aRules.begin();  it != aRules.end();  ++it )
+    {
+        if( it->first.compare( "param" ) )
+            continue;
+
+        CPTREE& attribs = it->second.get_child( "<xmlattr>" );
+
+        const std::string& name = attribs.get<std::string>( "name" );
+
+        if( !name.compare( "psElongationLong" ) )
+            psElongationLong = attribs.get<int>( "value" );
+        else if( !name.compare( "psElongationOffset" ) )
+            psElongationOffset = attribs.get<int>( "value" );
+        else if( !name.compare( "rvPadTop" ) )
+            rvPadTop = attribs.get<double>( "value" );
+        else if( !name.compare( "rlMinPadTop" ) )
+            rlMinPadTop = parseEagle( attribs.get<std::string>( "value" ) );
+        else if( !name.compare( "rlMaxPadTop" ) )
+            rlMaxPadTop = parseEagle( attribs.get<std::string>( "value" ) );
+
+        else if( !name.compare( "rvViaOuter" ) )
+            rvViaOuter = attribs.get<double>( "value" );
+        else if( !name.compare( "rlMinViaOuter" ) )
+            rlMinViaOuter = parseEagle( attribs.get<std::string>( "value" ) );
+        else if( !name.compare( "rlMaxViaOuter" ) )
+            rlMaxViaOuter = parseEagle( attribs.get<std::string>( "value" ) );
+    }
+}
+
+
 /// Assemble a two part key as a simple concatonation of aFirst and aSecond parts,
 /// using a separator.
 static inline std::string makeKey( const std::string& aFirst, const std::string& aSecond )
@@ -918,6 +1053,7 @@ static inline unsigned long timeStamp( CPTREE& aTree )
 
 
 EAGLE_PLUGIN::EAGLE_PLUGIN() :
+    m_rules( new ERULES() ),
     m_xpath( new XPATH() )
 {
     init( NULL );
@@ -926,6 +1062,7 @@ EAGLE_PLUGIN::EAGLE_PLUGIN() :
 
 EAGLE_PLUGIN::~EAGLE_PLUGIN()
 {
+    delete m_rules;
     delete m_xpath;
 }
 
@@ -1026,13 +1163,27 @@ void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 
     mm_per_biu = 1/IU_PER_MM;
     biu_per_mm = IU_PER_MM;
+
+    delete m_rules;
+    m_rules = new ERULES();
 }
 
 
 void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
 {
     CPTREE& drawing = aDoc.get_child( "eagle.drawing" );
+    CPTREE& board   = drawing.get_child( "board" );
+
     m_xpath->push( "eagle.drawing" );
+
+    {
+        m_xpath->push( "board" );
+
+        CPTREE& designrules = board.get_child( "designrules" );
+        loadDesignRules( designrules );
+
+        m_xpath->pop();
+    }
 
     {
         CPTREE& layers = drawing.get_child( "layers" );
@@ -1040,7 +1191,6 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
     }
 
     {
-        CPTREE& board = drawing.get_child( "board" );
         m_xpath->push( "board" );
 
         CPTREE& plain = board.get_child( "plain" );
@@ -1059,6 +1209,14 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
     }
 
     m_xpath->pop();     // "eagle.drawing"
+}
+
+
+void EAGLE_PLUGIN::loadDesignRules( CPTREE& aDesignRules )
+{
+    m_xpath->push( "designrules" );
+    m_rules->parse( aDesignRules );
+    m_xpath->pop();     // "designrules"
 }
 
 
@@ -1428,7 +1586,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         }
 
 #if defined(DEBUG)
-        if( !e.name.compare( "ATMEGA328" ) )
+        if( !e.name.compare( "IC2" ) )
         {
             int breakhere = 1;
             (void) breakhere;
@@ -1460,13 +1618,16 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
         if( e.rot )
         {
-            m->SetOrientation( e.rot->degrees * 10 );
-
             if( e.rot->mirror )
             {
                 m->Flip( m->GetPosition() );
             }
+            m->SetOrientation( e.rot->degrees * 10 );
         }
+
+        // initalize these to default values incase the <attribute> elements are not present.
+        EATTR   reference( e.rot, m->Reference().GetOrientation()/10 );
+        EATTR   value( e.rot, m->Value().GetOrientation()/10 );
 
         m_xpath->push( "attribute", "name" );
 
@@ -1483,19 +1644,20 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
             EATTR   a( ait->second );
 
-            TEXTE_MODULE*   txt;
-
             if( !a.name.compare( "NAME" ) )
-                txt = &m->Reference();
+                reference = a;
             else if( !a.name.compare( "VALUE" ) )
-                txt = &m->Value();
-            else
-            {
-                  // our understanding of file format is incomplete?
-                  continue;
-            }
+                value = a;
+        }
 
-            m_xpath->Value( a.name.c_str() );
+        m_xpath->pop();     // "attribute"
+
+        for( int i=0; i<2; ++i )
+        {
+            const EATTR&    a   = i ? reference: value;
+            TEXTE_MODULE*   txt = i ? &m->Reference() : &m->Value();
+
+            m_xpath->Value( a.name.c_str() );   // breadcrum: element[name=*]
 
             if( a.value )
             {
@@ -1531,10 +1693,14 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             // present, and this zero rotation becomes an override to the
             // package's text field.  If they did not want zero, they specify
             // what they want explicitly.
-            EROT rot;
+
+            EROT rot;   // initialize degrees to zero here
 
             if( a.rot )
+            {
                 rot = *a.rot;
+                txt->SetMirrored( rot.mirror );
+            }
 
             if( rot.spin || (rot.degrees != 180 && rot.degrees != 270) )
             {
@@ -1548,11 +1714,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
                 txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
                 txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
             }
-
-            txt->SetMirrored( rot.mirror );
         }
-
-        m_xpath->pop();     // "attribute"
     }
 
     m_xpath->pop();     // "elements.element"
@@ -1684,6 +1846,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
     }
     else
     {
+#if 0
         // The pad size is optional in the eagle DTD, so we must guess.
         // Supply something here that is a minimum copper surround, or otherwise
         // 120% of drillz whichever is greater.  But for PAD_OVAL, we can use
@@ -1702,13 +1865,22 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
         int diameter = std::max( drillz + 2 * min_copper, int( drillz * 1.2 ) );
 
         pad->SetSize( wxSize( diameter, diameter ) );
+
+#else
+        double drillz  = pad->GetDrillSize().x;
+        double annulus = drillz * m_rules->rvPadTop;   // copper annulus, eagle "restring"
+        annulus = Clamp( m_rules->rlMinPadTop, annulus, m_rules->rlMaxPadTop );
+        int diameter = KiROUND( drillz + 2 * annulus );
+        pad->SetSize( wxSize( KiROUND( diameter ), KiROUND( diameter ) ) );
+#endif
     }
 
     if( pad->GetShape() == PAD_OVAL )
     {
-        // The Eagle "long" pad seems to be tall, "width = height x 4/3" apparently.
+        // The Eagle "long" pad is wider than it is tall,
+        // m_elongation is percent elongation
         wxSize sz = pad->GetSize();
-        sz.x = (sz.x * 4)/3;
+        sz.x = ( sz.x * ( 100 + m_rules->psElongationLong ) ) / 100;
         pad->SetSize( sz );
     }
 
@@ -1995,7 +2167,11 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
     pad->SetSize( wxSize( kicad( e.dx ), kicad( e.dy ) ) );
 
     pad->SetLayer( layer );
-    pad->SetLayerMask( LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT );
+
+    if( layer == LAYER_N_FRONT )
+        pad->SetLayerMask( LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT );
+    else if( layer == LAYER_N_BACK )
+        pad->SetLayerMask( LAYER_BACK | SOLDERPASTE_LAYER_BACK | SOLDERMASK_LAYER_BACK );
 
     // Optional according to DTD
     if( e.roundness )    // set set shape to PAD_RECT above, in case roundness is not present
@@ -2082,8 +2258,6 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                     via->SetLayerPair( layer_front_most, layer_back_most );
 
-                    // via diameters are externally controllable, not usually in a board:
-                    // http://www.eaglecentral.ca/forums/index.php/mv/msg/34704/119478/
                     if( v.diam )
                     {
                         int kidiam = kicad( *v.diam );
@@ -2091,7 +2265,9 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     }
                     else
                     {
-                        int diameter = std::max( drillz + 2 * Mils2iu( 6 ), int( drillz * 2.0 ) );
+                        double annulus = drillz * m_rules->rvViaOuter;  // eagle "restring"
+                        annulus = Clamp( m_rules->rlMinViaOuter, annulus, m_rules->rlMaxViaOuter );
+                        int diameter = KiROUND( drillz + 2 * annulus );
                         via->SetWidth( diameter );
                     }
 
