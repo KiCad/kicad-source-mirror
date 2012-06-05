@@ -38,7 +38,7 @@
 #include <pcbcommon.h>
 
 #include <protos.h>
-#include <ar_protos.h>
+#include <autorout.h>
 #include <cell.h>
 #include <colors_selection.h>
 
@@ -46,6 +46,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_drawsegment.h>
+#include <convert_to_biu.h>
 
 
 #define GAIN            16
@@ -150,11 +151,11 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     lay_tmp_BOTTOM = Route_Layer_BOTTOM;
     lay_tmp_TOP    = Route_Layer_TOP;
 
-    Board.m_GridRouting = (int) GetScreen()->GetGridSize().x;
+    RoutingMatrix.m_GridRouting = (int) GetScreen()->GetGridSize().x;
 
     // Ensure Board.m_GridRouting has a reasonable value:
-    if( Board.m_GridRouting < 10 )
-        Board.m_GridRouting = 10;                      // Min value = 1/1000 inch
+    if( RoutingMatrix.m_GridRouting < 10*IU_PER_MILS )
+        RoutingMatrix.m_GridRouting = 10*IU_PER_MILS;   // Min value = 1/1000 inch
 
     /* Compute module parameters used in auto place */
     Module = GetBoard()->m_Modules;
@@ -371,7 +372,7 @@ end_of_tst:
 
     CurrPosition = memopos;
 
-    Board.UnInitBoard();
+    RoutingMatrix.UnInitBoard();
 
     Route_Layer_TOP    = lay_tmp_TOP;
     Route_Layer_BOTTOM = lay_tmp_BOTTOM;
@@ -397,13 +398,13 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 
     GRSetDrawMode( DC, GR_COPY );
 
-    for( ii = 0; ii < Board.m_Nrows; ii++ )
+    for( ii = 0; ii < RoutingMatrix.m_Nrows; ii++ )
     {
-        oy = bbbox.GetY() + ( ii * Board.m_GridRouting );
+        oy = bbbox.GetY() + ( ii * RoutingMatrix.m_GridRouting );
 
-        for( jj = 0; jj < Board.m_Ncols; jj++ )
+        for( jj = 0; jj < RoutingMatrix.m_Ncols; jj++ )
         {
-            ox = bbbox.GetX() + (jj * Board.m_GridRouting);
+            ox = bbbox.GetX() + (jj * RoutingMatrix.m_GridRouting);
             color = BLACK;
 
             top_state    = GetCell( ii, jj, TOP );
@@ -438,7 +439,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     EDA_ITEM* PtStruct;
     wxString  msg;
 
-    Board.UnInitBoard();
+    RoutingMatrix.UnInitBoard();
 
     bbbox = GetBoard()->ComputeBoundingBox( true );
 
@@ -449,19 +450,19 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     }
 
     /* The boundary box must have its start point on placing grid: */
-    bbbox.SetX( bbbox.GetX() - ( bbbox.GetX() % Board.m_GridRouting ) );
-    bbbox.SetY( bbbox.GetY() - ( bbbox.GetY() % Board.m_GridRouting ) );
+    bbbox.SetX( bbbox.GetX() - ( bbbox.GetX() % RoutingMatrix.m_GridRouting ) );
+    bbbox.SetY( bbbox.GetY() - ( bbbox.GetY() % RoutingMatrix.m_GridRouting ) );
 
     /* The boundary box must have its end point on placing grid: */
     wxPoint end = bbbox.GetEnd();
-    end.x -= end.x % Board.m_GridRouting;
-    end.x += Board.m_GridRouting;
-    end.y -= end.y % Board.m_GridRouting;
-    end.y += Board.m_GridRouting;
+    end.x -= end.x % RoutingMatrix.m_GridRouting;
+    end.x += RoutingMatrix.m_GridRouting;
+    end.y -= end.y % RoutingMatrix.m_GridRouting;
+    end.y += RoutingMatrix.m_GridRouting;
     bbbox.SetEnd( end );
 
-    Nrows = bbbox.GetHeight() / Board.m_GridRouting;
-    Ncols = bbbox.GetWidth() / Board.m_GridRouting;
+    Nrows = bbbox.GetHeight() / RoutingMatrix.m_GridRouting;
+    Ncols = bbbox.GetWidth() / RoutingMatrix.m_GridRouting;
     /* get a small margin for memory allocation: */
     Ncols  += 2; Nrows += 2;
     NbCells = Ncols * Nrows;
@@ -480,10 +481,10 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     m_messagePanel->SetMessage( 22, wxT( "S" ),
                                 ( Nb_Sides == TWO_SIDES ) ? wxT( "2" ) : wxT( "1" ), WHITE );
 
-    Board.InitBoard();
+    RoutingMatrix.InitBoard();
 
     /* Display memory usage. */
-    msg.Printf( wxT( "%d" ), Board.m_MemSize / 1024 );
+    msg.Printf( wxT( "%d" ), RoutingMatrix.m_MemSize / 1024 );
     m_messagePanel->SetMessage( 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
     Route_Layer_BOTTOM = LAYER_N_FRONT;
@@ -499,7 +500,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
     TmpSegm.SetLayer( -1 );
     TmpSegm.SetNet( -1 );
-    TmpSegm.m_Width = Board.m_GridRouting / 2;
+    TmpSegm.m_Width = RoutingMatrix.m_GridRouting / 2;
 
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -519,7 +520,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
             TmpSegm.m_Param = DrawSegm->GetAngle();
 
             TraceSegmentPcb( GetBoard(), &TmpSegm, HOLE | CELL_is_EDGE,
-                             Board.m_GridRouting, WRITE_CELL );
+                             RoutingMatrix.m_GridRouting, WRITE_CELL );
             break;
 
         case PCB_TEXT_T:
@@ -543,8 +544,8 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     }
 
     /* Initialize top layer. */
-    if( Board.m_BoardSide[TOP] )
-        memcpy( Board.m_BoardSide[TOP], Board.m_BoardSide[BOTTOM],
+    if( RoutingMatrix.m_BoardSide[TOP] )
+        memcpy( RoutingMatrix.m_BoardSide[TOP], RoutingMatrix.m_BoardSide[BOTTOM],
                 NbCells * sizeof(MATRIX_CELL) );
 
     return 1;
@@ -556,7 +557,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 {
     int    ox, oy, fx, fy;
-    int    marge = Board.m_GridRouting / 2;
+    int    marge = RoutingMatrix.m_GridRouting / 2;
     int    layerMask;
     D_PAD* Pad;
 
@@ -612,7 +613,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     }
 
     /* Trace clearance. */
-    marge   = ( Board.m_GridRouting * Module->m_PadNum ) / GAIN;
+    marge   = ( RoutingMatrix.m_GridRouting * Module->m_PadNum ) / GAIN;
     CreateKeepOutRectangle( GetBoard(), ox, oy, fx, fy, marge, KEEP_OUT_MARGIN, layerMask );
 }
 
@@ -643,8 +644,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     CurrPosition.y = bbbox.GetY() - oy;
 
     /* Module placement on grid. */
-    CurrPosition.x -= CurrPosition.x % Board.m_GridRouting;
-    CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
+    CurrPosition.x -= CurrPosition.x % RoutingMatrix.m_GridRouting;
+    CurrPosition.y -= CurrPosition.y % RoutingMatrix.m_GridRouting;
 
     g_Offset_Module.x = cx - CurrPosition.x;
     g_Offset_Module.y = cy - CurrPosition.y;
@@ -680,7 +681,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     SetStatusText( wxT( "Score ??, pos ??" ) );
 
     for( ; CurrPosition.x < bbbox.GetRight() - fx;
-         CurrPosition.x += Board.m_GridRouting )
+         CurrPosition.x += RoutingMatrix.m_GridRouting )
     {
         wxYield();
 
@@ -702,12 +703,12 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         CurrPosition.y    = bbbox.GetY() - oy;
 
         /* Placement on grid. */
-        CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
+        CurrPosition.y -= CurrPosition.y % RoutingMatrix.m_GridRouting;
 
         DrawModuleOutlines( m_canvas, aDC, aModule );
 
         for( ; CurrPosition.y < bbbox.GetBottom() - fy;
-             CurrPosition.y += Board.m_GridRouting )
+             CurrPosition.y += RoutingMatrix.m_GridRouting )
         {
             /* Erase traces. */
             DrawModuleOutlines( m_canvas, aDC, aModule );
@@ -785,16 +786,16 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
     ux1 -= Pcb->GetBoundingBox().GetX();
     uy1 -= Pcb->GetBoundingBox().GetY();
 
-    row_max = uy1 / Board.m_GridRouting;
-    col_max = ux1 / Board.m_GridRouting;
-    row_min = uy0 / Board.m_GridRouting;
+    row_max = uy1 / RoutingMatrix.m_GridRouting;
+    col_max = ux1 / RoutingMatrix.m_GridRouting;
+    row_min = uy0 / RoutingMatrix.m_GridRouting;
 
-    if( uy0 > row_min * Board.m_GridRouting )
+    if( uy0 > row_min * RoutingMatrix.m_GridRouting )
         row_min++;
 
-    col_min = ux0 / Board.m_GridRouting;
+    col_min = ux0 / RoutingMatrix.m_GridRouting;
 
-    if( ux0 > col_min * Board.m_GridRouting )
+    if( ux0 > col_min * RoutingMatrix.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
@@ -842,16 +843,16 @@ unsigned int CalculateKeepOutArea( BOARD* Pcb, int ux0, int uy0, int ux1, int uy
     ux1 -= Pcb->GetBoundingBox().GetX();
     uy1 -= Pcb->GetBoundingBox().GetY();
 
-    row_max = uy1 / Board.m_GridRouting;
-    col_max = ux1 / Board.m_GridRouting;
-    row_min = uy0 / Board.m_GridRouting;
+    row_max = uy1 / RoutingMatrix.m_GridRouting;
+    col_max = ux1 / RoutingMatrix.m_GridRouting;
+    row_min = uy0 / RoutingMatrix.m_GridRouting;
 
-    if( uy0 > row_min * Board.m_GridRouting )
+    if( uy0 > row_min * RoutingMatrix.m_GridRouting )
         row_min++;
 
-    col_min = ux0 / Board.m_GridRouting;
+    col_min = ux0 / RoutingMatrix.m_GridRouting;
 
-    if( ux0 > col_min * Board.m_GridRouting )
+    if( ux0 > col_min * RoutingMatrix.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
@@ -914,7 +915,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
             return error;
     }
 
-    marge = ( Board.m_GridRouting * Module->m_PadNum ) / GAIN;
+    marge = ( RoutingMatrix.m_GridRouting * Module->m_PadNum ) / GAIN;
 
     return CalculateKeepOutArea( Pcb, ox - marge, oy - marge, fx + marge, fy + marge, side );
 }
@@ -1019,22 +1020,22 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
     ux0 -= marge; ux1 += marge;
     uy0 -= marge; uy1 += marge;
 
-    pmarge = marge / Board.m_GridRouting;
+    pmarge = marge / RoutingMatrix.m_GridRouting;
 
     if( pmarge < 1 )
         pmarge = 1;
 
     /* Calculate the coordinate limits of the rectangle. */
-    row_max = uy1 / Board.m_GridRouting;
-    col_max = ux1 / Board.m_GridRouting;
-    row_min = uy0 / Board.m_GridRouting;
+    row_max = uy1 / RoutingMatrix.m_GridRouting;
+    col_max = ux1 / RoutingMatrix.m_GridRouting;
+    row_min = uy0 / RoutingMatrix.m_GridRouting;
 
-    if( uy0 > row_min * Board.m_GridRouting )
+    if( uy0 > row_min * RoutingMatrix.m_GridRouting )
         row_min++;
 
-    col_min = ux0 / Board.m_GridRouting;
+    col_min = ux0 / RoutingMatrix.m_GridRouting;
 
-    if( ux0 > col_min * Board.m_GridRouting )
+    if( ux0 > col_min * RoutingMatrix.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )

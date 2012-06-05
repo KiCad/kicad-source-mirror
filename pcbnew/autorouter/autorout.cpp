@@ -11,14 +11,15 @@
 #include <pcbnew.h>
 #include <cell.h>
 #include <zones.h>
-#include <ar_protos.h>
 
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
+#include <convert_to_biu.h>
+
+#include <autorout.h>
 
 
-int E_scale;         /* Scaling factor of distance tables. */
 int Nb_Sides;        /* Number of layer for autorouting (0 or 1) */
 int Nrows = ILLEGAL;
 int Ncols = ILLEGAL;
@@ -28,8 +29,7 @@ int ClosNodes;       /* total number of nodes closed */
 int MoveNodes;       /* total number of nodes moved */
 int MaxNodes;        /* maximum number of nodes opened at one time */
 
-MATRIX_ROUTING_HEAD Board;     /* 2-sided board */
-
+MATRIX_ROUTING_HEAD RoutingMatrix;     // routing matrix (grid) to route 2-sided boards
 
 /* init board, route traces*/
 void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
@@ -139,18 +139,14 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     start = time( NULL );
 
     /* Calculation of no fixed routing to 5 mils and more. */
-    Board.m_GridRouting = (int)GetScreen()->GetGridSize().x;
+    RoutingMatrix.m_GridRouting = (int)GetScreen()->GetGridSize().x;
 
-    if( Board.m_GridRouting < 50 )
-        Board.m_GridRouting = 50;
+    if( RoutingMatrix.m_GridRouting < (5*IU_PER_MILS) )
+        RoutingMatrix.m_GridRouting = 5*IU_PER_MILS;
 
-    E_scale = Board.m_GridRouting / 50;
-
-    if( E_scale < 1 )
-        E_scale = 1;
 
     /* Calculated ncol and nrow, matrix size for routing. */
-    Board.ComputeMatrixSize( GetBoard() );
+    RoutingMatrix.ComputeMatrixSize( GetBoard() );
 
     m_messagePanel->EraseMsgBox();
 
@@ -160,10 +156,10 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     if( Route_Layer_TOP != Route_Layer_BOTTOM )
         Nb_Sides = TWO_SIDES;
 
-    if( Board.InitBoard() < 0 )
+    if( RoutingMatrix.InitBoard() < 0 )
     {
         wxMessageBox( _( "No memory for autorouting" ) );
-        Board.UnInitBoard();  /* Free memory. */
+        RoutingMatrix.UnInitBoard();  /* Free memory. */
         return;
     }
 
@@ -173,7 +169,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     /* Construction of the track list for router. */
     Build_Work( GetBoard() );
 
-    // DisplayBoard(m_canvas, DC);
+    // DisplayRoutingMatrix( m_canvas, DC );
 
     if( Nb_Sides == TWO_SIDES )
         Solve( DC, TWO_SIDES ); /* double face */
@@ -183,7 +179,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     /* Free memory. */
     FreeQueue();
     InitWork();             /* Free memory for the list of router connections. */
-    Board.UnInitBoard();
+    RoutingMatrix.UnInitBoard();
     stop = time( NULL ) - start;
     msg.Printf( wxT( "time = %d second%s" ), stop, ( stop == 1 ) ? wxT( "" ) : wxT( "s" ) );
     SetStatusText( msg );
@@ -207,13 +203,11 @@ void PCB_EDIT_FRAME::Reset_Noroutable( wxDC* DC )
 
 
 /* DEBUG Function: displays the routing matrix */
-void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
+void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
-    int row, col, i, j;
     int dcell0, dcell1 = 0, color;
-    int maxi;
 
-    maxi = 600 / Ncols;
+    int maxi = 600 / Ncols;
     maxi = ( maxi * 3 ) / 4;
 
     if( !maxi )
@@ -221,9 +215,9 @@ void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
 
     GRSetDrawMode( DC, GR_COPY );
 
-    for( col = 0; col < Ncols; col++ )
+    for( int col = 0; col < Ncols; col++ )
     {
-        for( row = 0; row < Nrows; row++ )
+        for( int row = 0; row < Nrows; row++ )
         {
             color  = 0;
             dcell0 = GetCell( row, col, BOTTOM );
@@ -251,8 +245,8 @@ void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
             #define DRAW_OFFSET_Y 20
 //            if( color )
             {
-                for( i = 0; i < maxi; i++ )
-                    for( j = 0; j < maxi; j++ )
+                for( int i = 0; i < maxi; i++ )
+                    for( int j = 0; j < maxi; j++ )
                         GRPutPixel( panel->GetClipBox(), DC,
                                     ( col * maxi ) + i + DRAW_OFFSET_X,
                                     ( row * maxi ) + j + DRAW_OFFSET_Y, color );
