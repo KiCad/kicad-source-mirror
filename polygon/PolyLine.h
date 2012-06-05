@@ -159,6 +159,7 @@ public:
     void       AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 
     // access functions
+    void       SetLayer( int aLayer ) { m_layer = aLayer; }
     int        GetLayer() { return m_layer; }
     int        GetNumCorners();
     int        GetNumSides();

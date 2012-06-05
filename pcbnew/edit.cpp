@@ -470,18 +470,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ZONE_DUPLICATE:
     {
         ZONE_CONTAINER* zone = (ZONE_CONTAINER*) GetCurItem();
-        ZONE_CONTAINER* newZone = new ZONE_CONTAINER( m_Pcb );
-        newZone->Copy( zone );
-        ZONE_SETTINGS zoneSettings;
-        zoneSettings << *zone;
-        if( InvokeCopperZonesEditor( this, &zoneSettings ) )
-        {
-            zoneSettings.ExportSetting( *newZone );
-            m_Pcb->Add( newZone );
-            newZone->Draw( m_canvas, &dc, GR_OR );
-        }
-        else
-            delete newZone;
+        duplicateZone( &dc, zone );
     }
     break;
 

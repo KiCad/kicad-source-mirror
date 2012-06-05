@@ -86,5 +86,6 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
         aTarget.SetPriority( m_ZonePriority );
         aTarget.SetNet( m_NetcodeSelection );
         aTarget.SetLayer( m_CurrentZone_Layer );
+        aTarget.m_Poly->SetLayer( m_CurrentZone_Layer );
     }
 }
