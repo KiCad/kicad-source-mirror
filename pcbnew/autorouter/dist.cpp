@@ -3,20 +3,17 @@
  * @brief Routines to calculate PCB editor auto routing distances.
  */
 
-#include <fctsys.h>
-#include <macros.h>
-#include <common.h>
-#include <pcbnew.h>
 #include <autorout.h>
 #include <cell.h>
 
 
-/* The tables of distances and keep out areas are established on the basis of not
- * routing of 50 units (the pitch between the cells is 50 units)  The true distance
- * is computed by a scaling factor
+/* The tables of distances and keep out areas are established on the basis of a
+ * 50 units grid size (the pitch between the cells is 50 units).
+ * The actual distance could be computed by a scaling factor, but this is
+ * not needed, we can use only reduced values
  */
 
- /* calculate approximate distance
+ /* calculate approximate distance (manhattan distance)
  */
 int GetApxDist( int r1, int c1, int r2, int c2 )
 {
@@ -28,27 +25,13 @@ int GetApxDist( int r1, int c1, int r2, int c2 )
     if( ( d2 = c1 - c2 ) < 0 ) /* get absolute column delta */
         d2 = -d2;
 
-    return ( d1+d2 ) * 50 * E_scale;
-
-    if( !d1 ) /* in same row? */
-        return d2 * 50 * E_scale;   /* 50 mils per cell */
-
-    if( !d2 ) /* in same column? */
-        return d1 *50 * E_scale; /* 50 mils per cell */
-
-    if( d1 > d2 ) /* get smaller into d1 */
-    {
-        EXCHG(d1,d2);
-    }
-
-    d2 -= d1; /* get non-diagonal part of approximate "route" */
-
-    return ( ( ( d1 * 71 ) + ( d2 * 50 ) ) * E_scale ); /* 71 mils diagonally per cell */
+    return ( d1+d2 ) * 50;
 }
 
 
 /* distance to go thru a cell (en mils) */
-static int dist[10][10] = { /* OT=Otherside, OR=Origin (source) cell */
+static const int dist[10][10] =
+{ /* OT=Otherside, OR=Origin (source) cell */
 /*..........N, NE,  E, SE,  S, SW,  W, NW,   OT, OR */
 /* N  */ { 50, 60, 35, 60, 99, 60, 35, 60,   12, 12 },
 /* NE */ { 60, 71, 60, 71, 60, 99, 60, 71,   23, 23 },
@@ -61,10 +44,11 @@ static int dist[10][10] = { /* OT=Otherside, OR=Origin (source) cell */
 
 /* OT */ { 12, 23, 12, 23, 12, 23, 12, 23,   99, 99 },
 /* OR */ { 99, 99, 99, 99, 99, 99, 99, 99,   99, 99 }
-    };
+};
 
 /* penalty for extraneous holes and corners, scaled by sharpness of turn */
-static int penalty[10][10] = { /* OT=Otherside, OR=Origin (source) cell */
+static const int penalty[10][10] =
+{ /* OT=Otherside, OR=Origin (source) cell */
 /*......... N, NE,  E, SE,  S, SW,  W, NW,   OT, OR */
 /* N  */ {  0,  5, 10, 15, 20, 15, 10,  5,   50, 0 },
 /* NE */ {  5,  0,  5, 10, 15, 20, 15, 10,   50, 0 },
@@ -77,11 +61,12 @@ static int penalty[10][10] = { /* OT=Otherside, OR=Origin (source) cell */
 
 /* OT */ { 50, 50, 50, 50, 50, 50, 50, 50,  100, 0 },
 /* OR */ {  0,  0,  0,  0,  0,  0,  0,  0,    0, 0 }
-    };
+};
 
 /* penalty pour directions preferencielles */
 #define PN 20
-static int dir_penalty_TOP[10][10] = {
+static const int dir_penalty_TOP[10][10] =
+{
 /* OT=Otherside, OR=Origin (source) cell */
 /*......... N, NE,  E, SE,  S, SW,  W, NW,   OT, OR */
 /* N  */ { PN,  0,  0,  0, PN,  0,  0,  0,    0, 0 },
@@ -95,9 +80,10 @@ static int dir_penalty_TOP[10][10] = {
 
 /* OT */ { PN,  0,  0,  0, PN,  0,  0,  0,    0, 0 },
 /* OR */ { PN,  0,  0,  0, PN,  0,  0,  0,    0, 0 }
-    };
+};
 
-static int dir_penalty_BOTTOM[10][10] = {
+static int dir_penalty_BOTTOM[10][10] =
+{
 /* OT=Otherside, OR=Origin (source) cell */
 /*......... N, NE,  E, SE,  S, SW,  W, NW,   OT, OR */
 /* N  */ {  0,  0, PN,  0,  0,  0, PN,  0,    0, 0 },
@@ -111,7 +97,7 @@ static int dir_penalty_BOTTOM[10][10] = {
 
 /* OT */ {  0,  0, PN,  0,  0,  0, PN,  0,    0, 0 },
 /* OR */ {  0,  0, PN,  0,  0,  0, PN,  0,    0, 0 }
-    };
+};
 
 /*
 ** x is the direction to enter the cell of interest.
@@ -122,11 +108,9 @@ static int dir_penalty_BOTTOM[10][10] = {
 ** the calculation is driven by the tables above.
 */
 
-/************************************/
-/* int CalcDist(int x,int y,int z ) */
-/************************************/
 
- /* calculate distance of a trace through a cell */
+/* calculate distance (with penalty) of a trace through a cell
+*/
 int CalcDist(int x,int y,int z ,int side )
 {
     int adjust, ldist;

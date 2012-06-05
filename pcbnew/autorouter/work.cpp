@@ -32,8 +32,8 @@
 #include <common.h>
 
 #include <pcbnew.h>
+#include <autorout.h>
 #include <cell.h>
-#include <ar_protos.h>
 
 
 struct CWORK /* a unit of work is a hole-pair to connect */
@@ -56,12 +56,6 @@ static CWORK* Head    = NULL;
 static CWORK* Tail    = NULL;
 static CWORK* Current = NULL;
 
-
-void InitWork();
-void ReInitWork();
-int  SetWork( int, int, int, int, int, RATSNEST_ITEM*, int );
-void GetWork( int*, int*, int*, int*, int*, RATSNEST_ITEM** );
-void SortWork();
 
 
 /* initialize the work list */
@@ -220,14 +214,14 @@ void SortWork()
 }
 
 
-/* Calculate the cost of a net:
+/* Calculate the cost of a ratsnest:
  *   cost = (| dx | + | dy |) * disability
  *   disability = 1 if dx or dy = 0, max if | dx | # | dy |
  */
 static int GetCost( int r1, int c1, int r2, int c2 )
 {
     int   dx, dy, mx, my;
-    float incl;
+    double incl;
 
     dx   = abs( c2 - c1 );
     dy   = abs( r2 - r1 );
@@ -241,7 +235,7 @@ static int GetCost( int r1, int c1, int r2, int c2 )
     }
 
     if( mx )
-        incl += (2 * (float) my / mx);
+        incl += (2 * (double) my / mx);
 
     return (int) ( ( dx + dy ) * incl );
 }
