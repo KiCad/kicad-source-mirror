@@ -462,21 +462,17 @@ struct EATTR
     opt_int     layer;
     opt_double  ratio;
     opt_erot    rot;
-    opt_int     display;
 
-    enum {  // for 'display' field above
+    enum {  // for 'display'
         Off,
         VALUE,
         NAME,
         BOTH,
     };
+    opt_int     display;
 
     EATTR( CPTREE& aTree );
-
-    EATTR( const opt_erot& aOptRot, double childAngle ) :
-        rot( aOptRot )
-    {
-    }
+    EATTR() {}
 };
 
 /**
@@ -1292,8 +1288,6 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             ETEXT   t( gr->second );
             int     layer = kicad_layer( t.layer );
 
-            int     sign = 1;
-
             TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
             m_board->Add( pcbtxt, ADD_APPEND );
 
@@ -1308,34 +1302,29 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
             pcbtxt->SetThickness( kicad( t.size * ratio / 100 ) );
 
-            if( t.rot )
-            {
-#if 0
-                if( t.rot->spin || ( t.rot->degrees != 180 && t.rot->degrees != 270 ) )
-                    pcbtxt->SetOrientation( t.rot->degrees * 10 );
-
-                else
-                    // flip the justification to opposite
-                    sign = -1;
-#else
-                // eagles does not rotate text spun to 180 degrees unless spin is set.
-                if( t.rot->spin || t.rot->degrees != 180 )
-                    pcbtxt->SetOrientation( t.rot->degrees * 10 );
-
-                else
-                    // flip the justification to opposite
-                    sign = -1;
-
-                if( t.rot->degrees == 270 )
-                    sign = -1;
-#endif
-                pcbtxt->SetMirrored( t.rot->mirror );
-
-            }
-
             int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
 
-            switch( align * sign )  // if negative, opposite is chosen
+            if( t.rot )
+            {
+                int sign = t.rot->mirror ? -1 : 1;
+                pcbtxt->SetMirrored( t.rot->mirror );
+
+                double degrees = t.rot->degrees;
+
+                if( degrees == 90 || t.rot->spin )
+                    pcbtxt->SetOrientation( sign * t.rot->degrees * 10 );
+
+                else if( degrees == 180 )
+                    align = ETEXT::TOP_RIGHT;
+
+                else if( degrees == 270 )
+                {
+                    pcbtxt->SetOrientation( sign * 90 * 10 );
+                    align = ETEXT::TOP_RIGHT;
+                }
+            }
+
+            switch( align )
             {
             case ETEXT::CENTER:
                 // this was the default in pcbtxt's constructor
@@ -1556,12 +1545,19 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 {
     m_xpath->push( "elements.element", "name" );
 
+    EATTR   name;
+    EATTR   value;
+
     for( CITER it = aElements.begin();  it != aElements.end();  ++it )
     {
         if( it->first.compare( "element" ) )
             continue;
 
         EELEMENT    e( it->second );
+
+        // use "NULL-ness" as an indiation of presence of the attribute:
+        EATTR*      nameAttr  = 0;
+        EATTR*      valueAttr = 0;
 
         m_xpath->Value( e.name.c_str() );
 
@@ -1586,13 +1582,12 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         }
 
 #if defined(DEBUG)
-        if( !e.name.compare( "IC2" ) )
+        if( !e.name.compare( "IC3" ) )
         {
             int breakhere = 1;
             (void) breakhere;
         }
 #endif
-
         // copy constructor to clone the template
         MODULE* m = new MODULE( *mi->second );
         m_board->Add( m, ADD_APPEND );
@@ -1616,19 +1611,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         m->SetValue( FROM_UTF8( e.value.c_str() ) );
         // m->Value().SetVisible( false );
 
-        if( e.rot )
-        {
-            if( e.rot->mirror )
-            {
-                m->Flip( m->GetPosition() );
-            }
-            m->SetOrientation( e.rot->degrees * 10 );
-        }
-
         // initalize these to default values incase the <attribute> elements are not present.
-        EATTR   reference( e.rot, m->Reference().GetOrientation()/10 );
-        EATTR   value( e.rot, m->Value().GetOrientation()/10 );
-
         m_xpath->push( "attribute", "name" );
 
         // VALUE and NAME can have something like our text "effects" overrides
@@ -1645,79 +1628,150 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             EATTR   a( ait->second );
 
             if( !a.name.compare( "NAME" ) )
-                reference = a;
+            {
+                name = a;
+                nameAttr = &name;
+            }
             else if( !a.name.compare( "VALUE" ) )
+            {
                 value = a;
+                valueAttr = &value;
+            }
         }
 
         m_xpath->pop();     // "attribute"
 
-        for( int i=0; i<2; ++i )
-        {
-            const EATTR&    a   = i ? reference: value;
-            TEXTE_MODULE*   txt = i ? &m->Reference() : &m->Value();
-
-            m_xpath->Value( a.name.c_str() );   // breadcrum: element[name=*]
-
-            if( a.value )
-            {
-                txt->SetText( FROM_UTF8( a.value->c_str() ) );
-            }
-
-            if( a.x && a.y )    // boost::optional
-            {
-                wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
-                wxPoint pos0 = pos - m->GetPosition();
-
-                txt->SetPosition( pos );
-                txt->SetPos0( pos0 );
-            }
-
-            // Even though size and ratio are both optional, I am not seeing
-            // a case where ratio is present but size is not.
-
-            if( a.size )
-            {
-                wxSize  fontz = kicad_fontz( *a.size );
-                txt->SetSize( fontz );
-
-                if( a.ratio )
-                {
-                    double  ratio = *a.ratio;
-                    int     lw = int( fontz.y * ratio / 100.0 );
-                    txt->SetThickness( lw );
-                }
-            }
-
-            // The "rot" in a EATTR seems to be assumed to be zero if it is not
-            // present, and this zero rotation becomes an override to the
-            // package's text field.  If they did not want zero, they specify
-            // what they want explicitly.
-
-            EROT rot;   // initialize degrees to zero here
-
-            if( a.rot )
-            {
-                rot = *a.rot;
-                txt->SetMirrored( rot.mirror );
-            }
-
-            if( rot.spin || (rot.degrees != 180 && rot.degrees != 270) )
-            {
-                double angle = rot.degrees * 10;
-                angle -= m->GetOrientation();   // subtract module's angle
-                txt->SetOrientation( angle );
-            }
-            else
-            {
-                // ETEXT::TOP_RIGHT:
-                txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-                txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-            }
-        }
+        orientModuleAndText( m, e, nameAttr, valueAttr );
     }
 
     m_xpath->pop();     // "elements.element"
+}
+
+
+void EAGLE_PLUGIN::orientModuleAndText( MODULE* m, const EELEMENT& e,
+                    const EATTR* nameAttr, const EATTR* valueAttr )
+{
+    if( e.rot )
+    {
+        if( e.rot->mirror )
+        {
+            m->Flip( m->GetPosition() );
+        }
+        m->SetOrientation( e.rot->degrees * 10 );
+    }
+
+    orientModuleText( m, e, &m->Reference(), nameAttr );
+    orientModuleText( m, e, &m->Value(), valueAttr );
+}
+
+
+void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
+                            TEXTE_MODULE* txt, const EATTR* aAttr )
+{
+    if( aAttr )
+    {
+        const EATTR& a = *aAttr;
+
+        if( a.value )
+        {
+            txt->SetText( FROM_UTF8( a.value->c_str() ) );
+        }
+
+        if( a.x && a.y )    // boost::optional
+        {
+            wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
+            wxPoint pos0 = pos - m->GetPosition();
+
+            txt->SetPosition( pos );
+            txt->SetPos0( pos0 );
+        }
+
+        // Even though size and ratio are both optional, I am not seeing
+        // a case where ratio is present but size is not.
+        double  ratio = 8;
+        wxSize  fontz = txt->GetSize();
+
+        if( a.size )
+        {
+            fontz = kicad_fontz( *a.size );
+            txt->SetSize( fontz );
+
+            if( a.ratio )
+                ratio = *a.ratio;
+        }
+
+        int  lw = int( fontz.y * ratio / 100.0 );
+        txt->SetThickness( lw );
+
+        int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
+
+        // The "rot" in a EATTR seems to be assumed to be zero if it is not
+        // present, and this zero rotation becomes an override to the
+        // package's text field.  If they did not want zero, they specify
+        // what they want explicitly.
+        double  degrees  = a.rot ? a.rot->degrees : 0;
+        double  orient;      // relative to parent
+
+        int     sign = 1;
+        bool    spin = false;
+
+        if( a.rot )
+        {
+            spin = a.rot->spin;
+            sign = a.rot->mirror ? -1 : 1;
+            txt->SetMirrored( a.rot->mirror );
+        }
+
+        if( degrees == 90 || degrees == 0 || spin )
+        {
+            orient = degrees - m->GetOrientation() / 10;
+            txt->SetOrientation( sign * orient * 10 );
+        }
+
+        else if( degrees == 180 )
+        {
+            orient = 0 - m->GetOrientation() / 10;
+            txt->SetOrientation( sign * orient * 10 );
+            align = ETEXT::TOP_RIGHT;
+        }
+
+        else if( degrees == 270 )
+        {
+            orient = 90 - m->GetOrientation() / 10;
+            align = ETEXT::TOP_RIGHT;
+            txt->SetOrientation( sign * orient * 10 );
+        }
+
+        switch( align )
+        {
+        case ETEXT::TOP_RIGHT:
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            break;
+
+        case ETEXT::BOTTOM_LEFT:
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            break;
+
+        default:
+            ;
+        }
+    }
+
+    else    // the text is per the original package, sans <attribute>
+    {
+        double degrees = ( txt->GetOrientation() + m->GetOrientation() ) / 10;
+
+        // @todo there are a few more cases than theses to contend with:
+        if( (!txt->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ))
+         || ( txt->IsMirrored() && ( degrees == 360 ) ) )
+        {
+            // ETEXT::TOP_RIGHT:
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        }
+    }
 }
 
 
@@ -1846,33 +1900,11 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
     }
     else
     {
-#if 0
-        // The pad size is optional in the eagle DTD, so we must guess.
-        // Supply something here that is a minimum copper surround, or otherwise
-        // 120% of drillz whichever is greater.  But for PAD_OVAL, we can use
-        // a smaller minimum than for a round pad, since there is a larger copper
-        // body on the elongated ends.
-
-        int min_copper;
-
-        if( pad->GetShape() == PAD_OVAL )
-            min_copper = Mils2iu( 4 );
-        else
-            min_copper = Mils2iu( 6 );
-
-        // minz copper surround as a minimum, otherwise 110% of drillz.
-        int drillz   = pad->GetDrillSize().x;
-        int diameter = std::max( drillz + 2 * min_copper, int( drillz * 1.2 ) );
-
-        pad->SetSize( wxSize( diameter, diameter ) );
-
-#else
         double drillz  = pad->GetDrillSize().x;
         double annulus = drillz * m_rules->rvPadTop;   // copper annulus, eagle "restring"
         annulus = Clamp( m_rules->rlMinPadTop, annulus, m_rules->rlMaxPadTop );
         int diameter = KiROUND( drillz + 2 * annulus );
         pad->SetSize( wxSize( KiROUND( diameter ), KiROUND( diameter ) ) );
-#endif
     }
 
     if( pad->GetShape() == PAD_OVAL )
@@ -1918,13 +1950,6 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
     txt->SetPosition( pos );
     txt->SetPos0( pos - aModule->GetPosition() );
 
-    /*
-    switch( layer )
-    {
-    case COMMENT_N: layer = SILKSCREEN_N_FRONT; break;
-    }
-    */
-
     txt->SetLayer( layer );
 
     txt->SetSize( kicad_fontz( t.size ) );
@@ -1933,26 +1958,32 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 
     txt->SetThickness( kicad( t.size * ratio / 100 ) );
 
-    double angle = t.rot ? t.rot->degrees * 10 : 0;
+    int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
     // An eagle package is never rotated, the DTD does not allow it.
     // angle -= aModule->GetOrienation();
 
-    int sign = 1;
     if( t.rot )
     {
-        if( t.rot->spin || (angle != 1800 && angle != 2700) )
-            txt->SetOrientation( angle );
-
-        else    // 180 or 270 degrees, reverse justification below, don't spin
-            sign = -1;
-
+        int sign = t.rot->mirror ? -1 : 1;
         txt->SetMirrored( t.rot->mirror );
+
+        double degrees = t.rot->degrees;
+
+        if( degrees == 90 || t.rot->spin )
+            txt->SetOrientation( sign * degrees * 10 );
+
+        else if( degrees == 180 )
+            align = ETEXT::TOP_RIGHT;
+
+        else if( degrees == 270 )
+        {
+            align = ETEXT::TOP_RIGHT;
+            txt->SetOrientation( sign * 90 * 10 );
+        }
     }
 
-    int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
-
-    switch( align * sign )  // when negative, opposites are chosen
+    switch( align )
     {
     case ETEXT::CENTER:
         // this was the default in pcbtxt's constructor

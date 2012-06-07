@@ -62,8 +62,11 @@ typedef NET_MAP::const_iterator         NET_MAP_CITER;
 typedef boost::property_tree::ptree     PTREE;
 typedef const PTREE                     CPTREE;
 
+class EELEMENT;
 class XPATH;
 struct ERULES;
+struct EATTR;
+class TEXTE_MODULE;
 
 
 /**
@@ -182,6 +185,10 @@ private:
     void loadSignals( CPTREE& aSignals );
     void loadLibraries( CPTREE& aLibs );
     void loadElements( CPTREE& aElements );
+
+    void orientModuleAndText( MODULE* m, const EELEMENT& e, const EATTR* nameAttr, const EATTR* valueAttr );
+    void orientModuleText( MODULE* m, const EELEMENT& e, TEXTE_MODULE* txt, const EATTR* a );
+
 
     /// move the BOARD into the center of the page
     void centerBoard();
