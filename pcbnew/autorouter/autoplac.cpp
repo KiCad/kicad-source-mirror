@@ -1,9 +1,16 @@
+/**
+ * @file autoplac.cpp
+ * @brief Routiness to automatically place MODULES on a board.
+ */
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +28,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file autoplac.cpp
- * @brief Routiness to automatically place MODULES on a board.
  */
 
 #include <fctsys.h>
@@ -77,8 +79,6 @@ static const float OrientPenality[11] =
 #define OCCUPED_By_MODULE -1
 
 
-static EDA_RECT bbbox;              // boards bounding box
-
 static wxPoint CurrPosition; // Current position of the current module placement
 static bool    AutoPlaceShowAll = true;
 
@@ -86,28 +86,18 @@ float          MinCout;
 
 static int  TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
 
-static void CreateKeepOutRectangle( BOARD* Pcb,
-                                    int    ux0,
-                                    int    uy0,
-                                    int    ux1,
-                                    int    uy1,
-                                    int    marge,
-                                    int    aKeepOut,
-                                    int    aLayerMask );
+static void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
+                                    int marge, int aKeepOut, int aLayerMask );
 
 static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
-
+static int propagate();
 
 void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 {
-    int      ii, activ;
-    MODULE*  ThisModule = NULL;
+    MODULE*  currModule = NULL;
     wxPoint  PosOK;
     wxPoint  memopos;
     int      error;
-    int      NbModules = 0;
-    int      NbTotalModules = 0;
-    float    Pas;
     int      lay_tmp_TOP, lay_tmp_BOTTOM;
 
     // Undo: init list
@@ -122,27 +112,27 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 
     switch( place_mode )
     {
-    case PLACE_1_MODULE:
-        ThisModule = Module;
+        case PLACE_1_MODULE:
+            currModule = Module;
 
-        if( ThisModule == NULL )
-            return;
+            if( currModule == NULL )
+                return;
 
-        ThisModule->m_ModuleStatus &= ~(MODULE_is_PLACED | MODULE_to_PLACE);
-        break;
+            currModule->m_ModuleStatus &= ~(MODULE_is_PLACED | MODULE_to_PLACE);
+            break;
 
-    case PLACE_OUT_OF_BOARD:
-        break;
+        case PLACE_OUT_OF_BOARD:
+            break;
 
-    case PLACE_ALL:
-        if( !IsOK( this, _( "Footprints NOT LOCKED will be moved" ) ) )
-            return;
+        case PLACE_ALL:
+            if( !IsOK( this, _( "Footprints NOT LOCKED will be moved" ) ) )
+                return;
 
-        break;
+            break;
 
-    case PLACE_INCREMENTAL:
-        if( !IsOK( this, _( "Footprints NOT PLACED will be moved" ) ) )
-            return;
+        case PLACE_INCREMENTAL:
+            if( !IsOK( this, _( "Footprints NOT PLACED will be moved" ) ) )
+                return;
 
         break;
     }
@@ -158,18 +148,10 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         RoutingMatrix.m_GridRouting = 10*IU_PER_MILS;   // Min value = 1/1000 inch
 
     /* Compute module parameters used in auto place */
-    Module = GetBoard()->m_Modules;
-    NbTotalModules = 0;
-
-    for( ; Module != NULL; Module = Module->Next() )
-    {
-        Module->CalculateBoundingBox();
-        NbTotalModules ++;
-    }
-
     if( GenPlaceBoard() == 0 )
         return;
 
+    int moduleCount = 0;
     Module = GetBoard()->m_Modules;
 
     for( ; Module != NULL; Module = Module->Next() )
@@ -179,10 +161,10 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         switch( place_mode )
         {
         case PLACE_1_MODULE:
-            if( ThisModule == Module )
+            if( currModule == Module )
             {
                 // Module will be placed, add to undo.
-                picker.SetItem( ThisModule );
+                picker.SetItem( currModule );
                 newList.PushItem( picker );
 
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
@@ -191,12 +173,12 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             break;
 
         case PLACE_OUT_OF_BOARD:
-            Module->m_ModuleStatus &= ~MODULE_is_PLACED;
+            Module->SetIsPlaced( false );
 
-            if( Module->m_ModuleStatus & MODULE_is_LOCKED )
+            if( Module->IsLocked() )
                 break;
 
-            if( !bbbox.Contains( Module->m_Pos ) )
+            if( !RoutingMatrix.m_BrdBox.Contains( Module->m_Pos ) )
             {
                 // Module will be placed, add to undo.
                 picker.SetItem( Module );
@@ -208,9 +190,9 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             break;
 
         case PLACE_ALL:
-            Module->m_ModuleStatus &= ~MODULE_is_PLACED;
+            Module->SetIsPlaced( false );
 
-            if( Module->m_ModuleStatus & MODULE_is_LOCKED )
+            if( Module->IsLocked() )
                 break;
 
             // Module will be placed, add to undo.
@@ -221,9 +203,9 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             break;
 
         case PLACE_INCREMENTAL:
-            if( Module->m_ModuleStatus & MODULE_is_LOCKED )
+            if( Module->IsLocked() )
             {
-                Module->m_ModuleStatus &= ~MODULE_is_PLACED;
+                Module->SetIsPlaced( false );
                 break;
             }
 
@@ -242,7 +224,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 
         if( Module->m_ModuleStatus & MODULE_to_PLACE )  // Erase from screen
         {
-            NbModules++;
+            moduleCount++;
             Module->Draw( m_canvas, DC, GR_XOR );
         }
         else
@@ -251,26 +233,25 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         }
     }
 
-    // Undo: commit
+    // Undo command: commit list
     if( newList.GetCount() )
         SaveCopyInUndoList( newList, UR_CHANGED );
 
-    activ = 0;
-    Pas   = 100.0;
-
-    if( NbModules )
-        Pas = 100.0 / (float) NbModules;
+    int cnt = 0;
+    int ii;
+    wxString msg;
 
     while( ( Module = PickModule( this, DC ) ) != NULL )
     {
-        float BestScore;
-        DisplayActivity( (int) (activ * Pas), wxEmptyString ); activ++;
+        // Display some info about activity, module placement can take a while:
+        msg.Printf( _("Place module %d of %d"), cnt, moduleCount );
+        SetStatusText( msg );
 
         /* Display fill area of interest, barriers, penalties. */
         DrawInfoPlace( DC );
 
         error     = GetOptimalModulePlacement( Module, DC );
-        BestScore = MinCout;
+        float BestScore = MinCout;
         PosOK     = CurrPosition;
 
         if( error == ESC )
@@ -366,13 +347,13 @@ end_of_tst:
         Module->CalculateBoundingBox();
 
         GenModuleOnBoard( Module );
-        Module->m_ModuleStatus |= MODULE_is_PLACED;
+        Module->SetIsPlaced( true );
         Module->m_ModuleStatus &= ~MODULE_to_PLACE;
     }
 
     CurrPosition = memopos;
 
-    RoutingMatrix.UnInitBoard();
+    RoutingMatrix.UnInitRoutingMatrix();
 
     Route_Layer_TOP    = lay_tmp_TOP;
     Route_Layer_BOTTOM = lay_tmp_BOTTOM;
@@ -400,11 +381,11 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 
     for( ii = 0; ii < RoutingMatrix.m_Nrows; ii++ )
     {
-        oy = bbbox.GetY() + ( ii * RoutingMatrix.m_GridRouting );
+        oy = RoutingMatrix.m_BrdBox.GetY() + ( ii * RoutingMatrix.m_GridRouting );
 
         for( jj = 0; jj < RoutingMatrix.m_Ncols; jj++ )
         {
-            ox = bbbox.GetX() + (jj * RoutingMatrix.m_GridRouting);
+            ox = RoutingMatrix.m_BrdBox.GetX() + (jj * RoutingMatrix.m_GridRouting);
             color = BLACK;
 
             top_state    = GetCell( ii, jj, TOP );
@@ -434,37 +415,20 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 
 int PCB_EDIT_FRAME::GenPlaceBoard()
 {
-    int       jj, ii;
     int       NbCells;
-    EDA_ITEM* PtStruct;
     wxString  msg;
 
-    RoutingMatrix.UnInitBoard();
+    RoutingMatrix.UnInitRoutingMatrix();
 
-    bbbox = GetBoard()->ComputeBoundingBox( true );
+    EDA_RECT bbox = GetBoard()->ComputeBoundingBox( true );
 
-    if( bbbox.GetWidth() == 0 && bbbox.GetHeight() == 0 )
+    if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
     {
         DisplayError( this, _( "No PCB edge found, unknown board size!" ) );
         return 0;
     }
 
-    /* The boundary box must have its start point on placing grid: */
-    bbbox.SetX( bbbox.GetX() - ( bbbox.GetX() % RoutingMatrix.m_GridRouting ) );
-    bbbox.SetY( bbbox.GetY() - ( bbbox.GetY() % RoutingMatrix.m_GridRouting ) );
-
-    /* The boundary box must have its end point on placing grid: */
-    wxPoint end = bbbox.GetEnd();
-    end.x -= end.x % RoutingMatrix.m_GridRouting;
-    end.x += RoutingMatrix.m_GridRouting;
-    end.y -= end.y % RoutingMatrix.m_GridRouting;
-    end.y += RoutingMatrix.m_GridRouting;
-    bbbox.SetEnd( end );
-
-    Nrows = bbbox.GetHeight() / RoutingMatrix.m_GridRouting;
-    Ncols = bbbox.GetWidth() / RoutingMatrix.m_GridRouting;
-    /* get a small margin for memory allocation: */
-    Ncols  += 2; Nrows += 2;
+    RoutingMatrix.ComputeMatrixSize( GetBoard(), true );
     NbCells = Ncols * Nrows;
 
     m_messagePanel->EraseMsgBox();
@@ -478,10 +442,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     /* Choose the number of board sides. */
     Nb_Sides = TWO_SIDES;
 
-    m_messagePanel->SetMessage( 22, wxT( "S" ),
-                                ( Nb_Sides == TWO_SIDES ) ? wxT( "2" ) : wxT( "1" ), WHITE );
-
-    RoutingMatrix.InitBoard();
+    RoutingMatrix.InitRoutingMatrix();
 
     /* Display memory usage. */
     msg.Printf( wxT( "%d" ), RoutingMatrix.m_MemSize / 1024 );
@@ -495,12 +456,13 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     Route_Layer_TOP = LAYER_N_FRONT;
 
     /* Place the edge layer segments */
-    PtStruct = GetBoard()->m_Drawings;
     TRACK TmpSegm( NULL );
 
     TmpSegm.SetLayer( -1 );
     TmpSegm.SetNet( -1 );
     TmpSegm.m_Width = RoutingMatrix.m_GridRouting / 2;
+
+    EDA_ITEM* PtStruct = GetBoard()->m_Drawings;
 
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -529,21 +491,16 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
         }
     }
 
-    /* Init the point of attachment to the area. */
+    // Mark cells of the routing matrix to CELL_is_ZONE
+    // (i.e. availlable cell to place a module )
+    // Init a starting point of attachment to the area.
     OrCell( Nrows / 2, Ncols / 2, BOTTOM, CELL_is_ZONE );
 
-    /* Fill bottom layer zones. */
-    ii = 1;
-    jj = 1;
-
-    while( ii )
-    {
-        msg.Printf( wxT( "%d" ), jj++ );
-        m_messagePanel->SetMessage(  50, _( "Loop" ), msg, CYAN );
+    // find and mark all other availlable cells:
+    for( int ii = 1; ii != 0; )
         ii = propagate();
-    }
 
-    /* Initialize top layer. */
+    // Initialize top layer. to the same value as the bottom layer
     if( RoutingMatrix.m_BoardSide[TOP] )
         memcpy( RoutingMatrix.m_BoardSide[TOP], RoutingMatrix.m_BoardSide[BOTTOM],
                 NbCells * sizeof(MATRIX_CELL) );
@@ -566,29 +523,29 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     oy = Module->m_BoundaryBox.GetY() - marge;
     fy = Module->m_BoundaryBox.GetBottom() + marge;
 
-    if( ox < bbbox.GetX() )
-        ox = bbbox.GetX();
+    if( ox < RoutingMatrix.m_BrdBox.GetX() )
+        ox = RoutingMatrix.m_BrdBox.GetX();
 
-    if( ox > bbbox.GetRight() )
-        ox = bbbox.GetRight();
+    if( ox > RoutingMatrix.m_BrdBox.GetRight() )
+        ox = RoutingMatrix.m_BrdBox.GetRight();
 
-    if( fx < bbbox.GetX() )
-        fx = bbbox.GetX();
+    if( fx < RoutingMatrix.m_BrdBox.GetX() )
+        fx = RoutingMatrix.m_BrdBox.GetX();
 
-    if( fx > bbbox.GetRight() )
-        fx = bbbox.GetRight();
+    if( fx > RoutingMatrix.m_BrdBox.GetRight() )
+        fx = RoutingMatrix.m_BrdBox.GetRight();
 
-    if( oy < bbbox.GetY() )
-        oy = bbbox.GetY();
+    if( oy < RoutingMatrix.m_BrdBox.GetY() )
+        oy = RoutingMatrix.m_BrdBox.GetY();
 
-    if( oy > bbbox.GetBottom() )
-        oy = bbbox.GetBottom();
+    if( oy > RoutingMatrix.m_BrdBox.GetBottom() )
+        oy = RoutingMatrix.m_BrdBox.GetBottom();
 
-    if( fy < bbbox.GetY() )
-        fy = bbbox.GetY();
+    if( fy < RoutingMatrix.m_BrdBox.GetY() )
+        fy = RoutingMatrix.m_BrdBox.GetY();
 
-    if( fy > bbbox.GetBottom() )
-        fy = bbbox.GetBottom();
+    if( fy > RoutingMatrix.m_BrdBox.GetBottom() )
+        fy = RoutingMatrix.m_BrdBox.GetBottom();
 
     layerMask = 0;
 
@@ -614,7 +571,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 
     /* Trace clearance. */
     marge   = ( RoutingMatrix.m_GridRouting * Module->m_PadNum ) / GAIN;
-    CreateKeepOutRectangle( GetBoard(), ox, oy, fx, fy, marge, KEEP_OUT_MARGIN, layerMask );
+    CreateKeepOutRectangle( ox, oy, fx, fy, marge, KEEP_OUT_MARGIN, layerMask );
 }
 
 
@@ -625,14 +582,17 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     int     error = 1;
     int     showRat = 0;
     wxPoint LastPosOK;
-    float   mincout, cout, Score;
+    double  mincout, cout, Score;
     int     keepOut;
     bool    TstOtherSide;
+    bool    showRats = g_Show_Module_Ratsnest;
+
+    g_Show_Module_Ratsnest = false;
 
     aModule->DisplayInfo( this );
 
-    LastPosOK.x = bbbox.GetX();
-    LastPosOK.y = bbbox.GetY();
+    LastPosOK.x = RoutingMatrix.m_BrdBox.GetX();
+    LastPosOK.y = RoutingMatrix.m_BrdBox.GetY();
 
     cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
     ox = aModule->m_BoundaryBox.GetX() - cx;
@@ -640,8 +600,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     oy = aModule->m_BoundaryBox.GetY() - cy;
     fy = aModule->m_BoundaryBox.GetHeight() + oy;
 
-    CurrPosition.x = bbbox.GetX() - ox;
-    CurrPosition.y = bbbox.GetY() - oy;
+    CurrPosition.x = RoutingMatrix.m_BrdBox.GetX() - ox;
+    CurrPosition.y = RoutingMatrix.m_BrdBox.GetY() - oy;
 
     /* Module placement on grid. */
     CurrPosition.x -= CurrPosition.x % RoutingMatrix.m_GridRouting;
@@ -680,7 +640,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     mincout = -1.0;
     SetStatusText( wxT( "Score ??, pos ??" ) );
 
-    for( ; CurrPosition.x < bbbox.GetRight() - fx;
+    for( ; CurrPosition.x < RoutingMatrix.m_BrdBox.GetRight() - fx;
          CurrPosition.x += RoutingMatrix.m_GridRouting )
     {
         wxYield();
@@ -700,14 +660,14 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         DrawModuleOutlines( m_canvas, aDC, aModule );
 
         g_Offset_Module.x = cx - CurrPosition.x;
-        CurrPosition.y    = bbbox.GetY() - oy;
+        CurrPosition.y    = RoutingMatrix.m_BrdBox.GetY() - oy;
 
         /* Placement on grid. */
         CurrPosition.y -= CurrPosition.y % RoutingMatrix.m_GridRouting;
 
         DrawModuleOutlines( m_canvas, aDC, aModule );
 
-        for( ; CurrPosition.y < bbbox.GetBottom() - fy;
+        for( ; CurrPosition.y < RoutingMatrix.m_BrdBox.GetBottom() - fy;
              CurrPosition.y += RoutingMatrix.m_GridRouting )
         {
             /* Erase traces. */
@@ -724,21 +684,21 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
             DrawModuleOutlines( m_canvas, aDC, aModule );
             keepOut = TstModuleOnBoard( GetBoard(), aModule, TstOtherSide );
 
-            if( keepOut >= 0 ) /* c a d if the module can be placed. */
+            if( keepOut >= 0 ) // i.e. if the module can be put here
             {
                 error = 0;
                 build_ratsnest_module( aModule );
                 cout = Compute_Ratsnest_PlaceModule( aDC );
                 showRat = 1;
-                Score = cout + (float) keepOut;
+                Score = cout + keepOut;
 
                 if( (mincout >= Score ) || (mincout < 0 ) )
                 {
                     LastPosOK = CurrPosition;
                     mincout   = Score;
                     wxString msg;
-                    msg.Printf( wxT( "Score %d, pos %3.4f, %3.4f" ),
-                                (int) mincout,
+                    msg.Printf( wxT( "Score %g, pos %3.4f, %3.4f" ),
+                                mincout,
                                 (float) LastPosOK.x / 10000,
                                 (float) LastPosOK.y / 10000 );
                     SetStatusText( msg );
@@ -753,6 +713,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     }
 
     DrawModuleOutlines( m_canvas, aDC, aModule );  /* erasing the last traces */
+
+    g_Show_Module_Ratsnest = showRats;
 
     if( showRat )
         Compute_Ratsnest_PlaceModule( aDC );
@@ -832,16 +794,16 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
  * (ux, ux .. y0, y1):
  * (Sum of cells in terms of distance)
  */
-unsigned int CalculateKeepOutArea( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
+unsigned int CalculateKeepOutArea( int ux0, int uy0, int ux1, int uy1, int side )
 {
     int          row, col;
     int          row_min, row_max, col_min, col_max;
     unsigned int keepOut;
 
-    ux0 -= Pcb->GetBoundingBox().GetX();
-    uy0 -= Pcb->GetBoundingBox().GetY();
-    ux1 -= Pcb->GetBoundingBox().GetX();
-    uy1 -= Pcb->GetBoundingBox().GetY();
+    ux0 -= RoutingMatrix.m_BrdBox.GetX();
+    uy0 -= RoutingMatrix.m_BrdBox.GetY();
+    ux1 -= RoutingMatrix.m_BrdBox.GetX();
+    uy1 -= RoutingMatrix.m_BrdBox.GetY();
 
     row_max = uy1 / RoutingMatrix.m_GridRouting;
     col_max = ux1 / RoutingMatrix.m_GridRouting;
@@ -917,15 +879,15 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
 
     marge = ( RoutingMatrix.m_GridRouting * Module->m_PadNum ) / GAIN;
 
-    return CalculateKeepOutArea( Pcb, ox - marge, oy - marge, fx + marge, fy + marge, side );
+    return CalculateKeepOutArea( ox - marge, oy - marge, fx + marge, fy + marge, side );
 }
 
 
-float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
+double PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 {
     double cout, icout;
-    int    ox, oy;
-    int    fx, fy;
+    wxPoint start;      // start point of a ratsnest
+    wxPoint end;        // end point of a ratsnest
     int    dx, dy;
 
     if( ( GetBoard()->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK ) == 0 )
@@ -942,60 +904,58 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
     {
         RATSNEST_ITEM* pt_local_rats_nest = &GetBoard()->m_LocalRatsnest[ii];
 
-        if( !( pt_local_rats_nest->m_Status & LOCAL_RATSNEST_ITEM ) )
+        if( ( pt_local_rats_nest->m_Status & LOCAL_RATSNEST_ITEM ) )
+            continue;   // Skip ratsnest between 2 pads of the current module
+
+        // Skip modules not inside the board area
+        MODULE * module = pt_local_rats_nest->m_PadEnd->GetParent();
+        if( !RoutingMatrix.m_BrdBox.Contains( module->GetPosition() ) )
+            continue;
+
+        start = pt_local_rats_nest->m_PadStart->GetPosition() - g_Offset_Module;
+        end = pt_local_rats_nest->m_PadEnd->GetPosition();
+
+        if( AutoPlaceShowAll )
         {
-            ox = pt_local_rats_nest->m_PadStart->GetPosition().x - g_Offset_Module.x;
-            oy = pt_local_rats_nest->m_PadStart->GetPosition().y - g_Offset_Module.y;
-            fx = pt_local_rats_nest->m_PadEnd->GetPosition().x;
-            fy = pt_local_rats_nest->m_PadEnd->GetPosition().y;
-
-            if( AutoPlaceShowAll )
-            {
-                GRLine( m_canvas->GetClipBox(), DC, ox, oy, fx, fy, 0, color );
-            }
-
-            /* Cost of the ratsnest. */
-            dx = fx - ox;
-            dy = fy - oy;
-
-            dx = abs( dx );
-            dy = abs( dy );
-
-            if( dx < dy )
-                EXCHG( dx, dy );  /* dx >= dy */
-
-            /* Cost of the longest connection. */
-            icout = (float) dx * dx;
-
-            /* Cost of inclination. */
-            icout += 3 * (float) dy * dy;
-            icout  = sqrt( icout );
-            cout  += icout; /* Total cost = sum of costs of each connection. */
+            GRLine( m_canvas->GetClipBox(), DC, start, end, 0, color );
         }
+
+        /* Cost of the ratsnest. */
+        dx = end.x - start.x;
+        dy = end.y - start.y;
+
+        dx = abs( dx );
+        dy = abs( dy );
+
+        // ttry to have always dx >= dy to calculate the cost of the rastsnet
+        if( dx < dy )
+            EXCHG( dx, dy );
+
+        // Cost of the connection = lenght + penalty due to the slope
+        // dx is the biggest lenght relative to the X or Y axis
+        // the penalty is max for 45 degrees ratsnests,
+        // and 0 for horizontal or vertical ratsnests.
+        // For Horizontal and Vertical ratsnests, dy = 0;
+        icout  = hypot( (double) dx, (double) dy * 2.0 );
+        cout  += icout; /* Total cost = sum of costs of each connection. */
     }
 
-    return (float) cout;
+    return cout;
 }
 
 
 /**
  * Function CreateKeepOutRectangle
- * builds the cost map.
- * Cells ( in Dist mao ) inside the rect x0,y0 a x1,y1 are
+ * builds the cost map:
+ * Cells ( in Dist map ) inside the rect x0,y0 a x1,y1 are
  *  incremented by value aKeepOut
  *  Cell outside this rectangle, but inside the rectangle
- *  x0,y0 -marge to x1,y1 + marge sont incrementede by a decreasing value
+ *  x0,y0 -marge to x1,y1 + marge are incremented by a decreasing value
  *  (aKeepOut ... 0). The decreasing value de pends on the distance to the first rectangle
  *  Therefore the cost is high in rect x0,y0 a x1,y1, and decrease outside this rectangle
  */
-static void CreateKeepOutRectangle( BOARD* Pcb,
-                                    int    ux0,
-                                    int    uy0,
-                                    int    ux1,
-                                    int    uy1,
-                                    int    marge,
-                                    int    aKeepOut,
-                                    int    aLayerMask )
+void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
+                             int marge, int aKeepOut, int aLayerMask )
 {
     int      row, col;
     int      row_min, row_max, col_min, col_max, pmarge;
@@ -1012,10 +972,10 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
     if( trace == 0 )
         return;
 
-    ux0 -= Pcb->GetBoundingBox().GetX();
-    uy0 -= Pcb->GetBoundingBox().GetY();
-    ux1 -= Pcb->GetBoundingBox().GetX();
-    uy1 -= Pcb->GetBoundingBox().GetY();
+    ux0 -= RoutingMatrix.m_BrdBox.GetX();
+    uy0 -= RoutingMatrix.m_BrdBox.GetY();
+    ux1 -= RoutingMatrix.m_BrdBox.GetX();
+    uy1 -= RoutingMatrix.m_BrdBox.GetY();
 
     ux0 -= marge; ux1 += marge;
     uy0 -= marge; uy1 += marge;
@@ -1187,7 +1147,31 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 }
 
 
-int PCB_EDIT_FRAME::propagate()
+/**
+ * Function propagate
+ * Used only in autoplace calculations
+ * Uses the routing matrix to fill the cells within the zone
+ * Search and mark cells within the zone, and agree with DRC options.
+ * Requirements:
+ * Start from an initial point, to fill zone
+ * The zone must have no "copper island"
+ *  Algorithm:
+ *  If the current cell has a neighbor flagged as "cell in the zone", it
+ *  become a cell in the zone
+ *  The first point in the zone is the starting point
+ *  4 searches within the matrix are made:
+ *          1 - Left to right and top to bottom
+ *          2 - Right to left and top to bottom
+ *          3 - bottom to top and Right to left
+ *          4 - bottom to top and Left to right
+ *  Given the current cell, for each search, we consider the 2 neighbor cells
+ *  the previous cell on the same line and the previous cell on the same column.
+ *
+ *  This function can request some iterations
+ *  Iterations are made until no cell is added to the zone.
+ *  @return: added cells count (i.e. which the attribute CELL_is_ZONE is set)
+ */
+int propagate()
 {
     int       row, col;
     long      current_cell, old_cell_H;
@@ -1195,10 +1179,6 @@ int PCB_EDIT_FRAME::propagate()
     int       nbpoints = 0;
 
 #define NO_CELL_ZONE (HOLE | CELL_is_EDGE | CELL_is_ZONE)
-    wxString  msg;
-
-    m_messagePanel->SetMessage( 57, wxT( "Detect" ), msg, CYAN );
-    m_messagePanel->SetMessage( -1, wxEmptyString, wxT( "1" ), CYAN );
 
     pt_cell_V.reserve( MAX( Nrows, Ncols ) );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
@@ -1227,7 +1207,6 @@ int PCB_EDIT_FRAME::propagate()
     }
 
     // Search from right to left and top to bottom/
-    m_messagePanel->SetMessage( -1, wxEmptyString, wxT( "2" ), CYAN );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( row = 0; row < Nrows; row++ )
@@ -1253,7 +1232,6 @@ int PCB_EDIT_FRAME::propagate()
     }
 
     // Search from bottom to top and right to left.
-    m_messagePanel->SetMessage( -1, wxEmptyString, wxT( "3" ), CYAN );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( col = Ncols - 1; col >= 0; col-- )
@@ -1279,7 +1257,6 @@ int PCB_EDIT_FRAME::propagate()
     }
 
     // Search from bottom to top and left to right.
-    m_messagePanel->SetMessage( -1, wxEmptyString, wxT( "4" ), CYAN );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( col = 0; col < Ncols; col++ )

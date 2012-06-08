@@ -1,9 +1,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +97,7 @@ public:
                                                  * cells */
     DIR_CELL*    m_DirSide[MAX_SIDES_COUNT];    /* header of blocks of chars:pointers back to
                                                  * source */
-    bool         m_InitBoardDone;
+    bool         m_InitMatrixDone;
     int          m_Layers;
     int          m_GridRouting;                 // Size of grid for autoplace/autoroute
     EDA_RECT     m_BrdBox;                      // Actual board bounding box
@@ -110,8 +112,11 @@ public:
      * Function ComputeMatrixSize
      * calculates the number of rows and columns of dimensions of \a aPcb for routing and
      * automatic calculation of area.
+     * @param aPcb = the physical board
+     * @param aUseBoardEdgesOnly = true to use board edges only,
+     *                           = false to use the full board bounding box (default)
      */
-    bool ComputeMatrixSize( BOARD* aPcb );
+    bool ComputeMatrixSize( BOARD* aPcb, bool aUseBoardEdgesOnly = false );
 
     /**
      * Function InitBoard
@@ -119,9 +124,9 @@ public:
      *
      * @return the amount of memory used or -1 if default.
      */
-    int InitBoard();
+    int InitRoutingMatrix();
 
-    void UnInitBoard();
+    void UnInitRoutingMatrix();
 };
 
 extern MATRIX_ROUTING_HEAD RoutingMatrix;        /* 2-sided board */
@@ -142,8 +147,6 @@ class D_PAD;
 class RATSNEST_ITEM;
 class TRACK;
 
-
-int Propagation( PCB_EDIT_FRAME* frame );
 
 /* Initialize a color value, the cells included in the board edge of the
  * pad surface by pt_pad, with the margin reserved for isolation and the

@@ -1,9 +1,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,14 +46,15 @@
 #include <class_pcb_text.h>
 
 
-bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb )
+bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb, bool aUseBoardEdgesOnly )
 {
-    aPcb->ComputeBoundingBox();
+    aPcb->ComputeBoundingBox( aUseBoardEdgesOnly );
 
     // The boundary box must have its start point on routing grid:
     m_BrdBox = aPcb->GetBoundingBox();
 
-    m_BrdBox.Offset( -(m_BrdBox.GetX() % m_GridRouting), -(m_BrdBox.GetY() % m_GridRouting) );
+    m_BrdBox.SetX( m_BrdBox.GetX() - ( m_BrdBox.GetX() % m_GridRouting ) );
+    m_BrdBox.SetY( m_BrdBox.GetY() - ( m_BrdBox.GetY() % m_GridRouting ) );
 
     // The boundary box must have its end point on routing grid:
     wxPoint end = m_BrdBox.GetEnd();
@@ -71,7 +74,9 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb )
 
     /* get a small margin for memory allocation: */
     Ncols += 1;
+    m_Nrows = Nrows;
     Nrows += 1;
+    m_Ncols = Ncols;
 
     return true;
 }
@@ -79,10 +84,10 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb )
 
 MATRIX_ROUTING_HEAD::MATRIX_ROUTING_HEAD()
 {
-    m_BoardSide[0]  = m_BoardSide[1] = NULL;
-    m_DistSide[0]   = m_DistSide[1] = NULL;
-    m_DirSide[0]    = m_DirSide[1] = NULL;
-    m_InitBoardDone = false;
+    m_BoardSide[0]   = m_BoardSide[1] = NULL;
+    m_DistSide[0]    = m_DistSide[1] = NULL;
+    m_DirSide[0]     = m_DirSide[1] = NULL;
+    m_InitMatrixDone = false;
     m_Layers  = MAX_SIDES_COUNT;
     m_Nrows   = m_Ncols = 0;
     m_MemSize = 0;
@@ -94,7 +99,7 @@ MATRIX_ROUTING_HEAD::~MATRIX_ROUTING_HEAD()
 }
 
 
-int MATRIX_ROUTING_HEAD::InitBoard()
+int MATRIX_ROUTING_HEAD::InitRoutingMatrix()
 {
     int ii, kk;
 
@@ -103,9 +108,10 @@ int MATRIX_ROUTING_HEAD::InitBoard()
     m_Nrows = Nrows;
     m_Ncols = Ncols;
 
-    m_InitBoardDone = true; /* we have been called */
+    m_InitMatrixDone = true;     // we have been called
 
-    ii = (Nrows + 1) * (Ncols + 1);
+    // give a small margin for memory allocation:
+   ii = (Nrows + 1) * (Ncols + 1);
 
     for( kk = 0; kk < m_Layers; kk++ )
     {
@@ -113,21 +119,21 @@ int MATRIX_ROUTING_HEAD::InitBoard()
         m_DistSide[kk]  = NULL;
         m_DirSide[kk]   = NULL;
 
-        /* allocate Board & initialize everything to empty */
+        /* allocate matrix & initialize everything to empty */
         m_BoardSide[kk] = (MATRIX_CELL*) operator new( ii * sizeof(MATRIX_CELL) );
         memset( m_BoardSide[kk], 0, ii * sizeof(MATRIX_CELL) );
 
         if( m_BoardSide[kk] == NULL )
             return -1;
 
-        /***** allocate Distances *****/
+        // allocate Distances
         m_DistSide[kk] = (DIST_CELL*) operator new( ii * sizeof(DIST_CELL) );
         memset( m_DistSide[kk], 0, ii * sizeof(DIST_CELL) );
 
         if( m_DistSide[kk] == NULL )
             return -1;
 
-        /***** allocate Dir (chars) *****/
+        // allocate Dir (chars)
         m_DirSide[kk] = (char*) operator new( ii );
         memset( m_DirSide[kk], 0, ii );
 
@@ -141,29 +147,29 @@ int MATRIX_ROUTING_HEAD::InitBoard()
 }
 
 
-void MATRIX_ROUTING_HEAD::UnInitBoard()
+void MATRIX_ROUTING_HEAD::UnInitRoutingMatrix()
 {
     int ii;
 
-    m_InitBoardDone = false;
+    m_InitMatrixDone = false;
 
     for( ii = 0; ii < MAX_SIDES_COUNT; ii++ )
     {
-        /***** de-allocate Dir matrix *****/
+        // de-allocate Dir matrix
         if( m_DirSide[ii] )
         {
             delete m_DirSide[ii];
             m_DirSide[ii] = NULL;
         }
 
-        /***** de-allocate Distances matrix *****/
+        // de-allocate Distances matrix
         if( m_DistSide[ii] )
         {
             delete m_DistSide[ii];
             m_DistSide[ii] = NULL;
         }
 
-        /**** de-allocate cells matrix *****/
+        // de-allocate cells matrix
         if( m_BoardSide[ii] )
         {
             delete m_BoardSide[ii];
