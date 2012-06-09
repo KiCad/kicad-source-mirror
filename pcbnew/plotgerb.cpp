@@ -70,7 +70,7 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
 
         // Sheet refs on gerber CAN be useful... and they're always 1:1
         if( plot_opts.m_PlotFrameRef )
-            PlotWorkSheet( plotter, GetScreen() );
+            PlotWorkSheet( plotter, GetScreen(), plot_opts.GetPlotLineWidth() );
 
         Plot_Layer( plotter, aLayer, aTraceMode );
 

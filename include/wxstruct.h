@@ -686,7 +686,7 @@ public:
                          int aNScr, int aScr, int aLnW, double aScalar,
                          EDA_COLOR_T aClr1 = RED, EDA_COLOR_T aClr2 = RED );
 
-    void  PlotWorkSheet( PLOTTER* aPlotter, BASE_SCREEN* aScreen );
+    void  PlotWorkSheet( PLOTTER* aPlotter, BASE_SCREEN* aScreen, int aLineWidth );
 
     /**
      * Function GetXYSheetReferences

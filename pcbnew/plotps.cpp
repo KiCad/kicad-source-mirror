@@ -111,7 +111,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     plotter->SetScaleAdjust( plotOpts.m_FineScaleAdjustX,
                                plotOpts.m_FineScaleAdjustY );
     plotter->SetPlotWidthAdj( plotOpts.m_FineWidthAdjust );
-    plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 
+    plotter->SetViewport( offset, IU_PER_DECIMILS, scale,
 	                  plotOpts.m_PlotMirror );
     plotter->SetDefaultLineWidth( plotOpts.m_PlotLineWidth );
     plotter->SetCreator( wxT( "PCBNEW-PS" ) );
@@ -121,7 +121,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
 
     /* The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway */
     if( plotOpts.m_PlotFrameRef && !center )
-        PlotWorkSheet( plotter, GetScreen() );
+        PlotWorkSheet( plotter, GetScreen(), plotOpts.GetPlotLineWidth() );
 
     // If plot a negative board:
     // Draw a black rectangle (background for plot board in white)
