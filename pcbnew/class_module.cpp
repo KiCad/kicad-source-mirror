@@ -572,6 +572,20 @@ D_PAD* MODULE::GetPad( const wxPoint& aPosition, int aLayerMask )
 }
 
 
+void MODULE::Add3DModel( S3D_MASTER* a3DModel )
+{
+    a3DModel->SetParent( this );
+    m_3D_Drawings.PushBack( a3DModel );
+}
+
+
+void MODULE::AddPad( D_PAD* aPad )
+{
+    aPad->SetParent( this );
+    m_Pads.PushBack( aPad );
+}
+
+
 // see class_module.h
 SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
                              const KICAD_T scanTypes[] )

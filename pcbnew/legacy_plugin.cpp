@@ -403,7 +403,7 @@ void LEGACY_PLUGIN::loadGENERAL()
         else if( TESTLINE( "BoardThickness" ) )
         {
             BIU thickn = biuParse( line + SZ( "BoardThickness" ) );
-            m_board->GetDesignSettings().m_BoardThickness = thickn;
+            m_board->GetDesignSettings().SetBoardThickness( thickn );
         }
 
         /*
@@ -2215,7 +2215,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 arcsegcount = 32;
 
             zc->SetArcSegCount( arcsegcount );
-            zc->SetIsFilled( fillstate == 'S' ? true : false );
+            zc->SetIsFilled( fillstate == 'F' ? true : false );
             zc->SetThermalReliefGap( thermalReliefGap );
             zc->SetThermalReliefCopperBridge( thermalReliefCopperBridge );
         }
@@ -2825,7 +2825,7 @@ void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
     fprintf( m_fp, "Ndraw %d\n",            aBoard->m_Drawings.GetCount() );
     fprintf( m_fp, "Ntrack %d\n",           aBoard->GetNumSegmTrack() );
     fprintf( m_fp, "Nzone %d\n",            aBoard->GetNumSegmZone() );
-    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().m_BoardThickness ).c_str() );
+    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().GetBoardThickness() ).c_str() );
     fprintf( m_fp, "Nmodule %d\n",          aBoard->m_Modules.GetCount() );
     fprintf( m_fp, "Nnets %d\n",            aBoard->GetNetCount() );
     fprintf( m_fp, "$EndGENERAL\n\n" );

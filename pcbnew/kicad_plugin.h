@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) CERN.
+ * Copyright (C) 2012 CERN.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,9 @@ class PCB_IO : public PLUGIN
 {
 
 public:
+
+    //-----<PLUGIN API>---------------------------------------------------------
+
     const wxString& PluginName() const
     {
         static const wxString name = wxT( "KiCad" );
@@ -63,19 +66,32 @@ public:
     void Save( const wxString& aFileName, BOARD* aBoard,
                PROPERTIES* aProperties = NULL );          // overload
 
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties = NULL );
+
+    //-----</PLUGIN API>--------------------------------------------------------
+
+    PCB_IO();
+
     /**
      * Function Format
      * outputs \a aItem to \a aFormatter in s-expression format.
      *
      * @param aItem A pointer the an #BOARD_ITEM object to format.
-     * @param aFormatter The #OUTPUTFORMATTER object to write to.
      * @param aNestLevel The indentation nest level.
-     * @param aControlBits The control bit definition for object specific formatting.
      * @throw IO_ERROR on write error.
      */
-    void Format( BOARD_ITEM* aItem, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void Format( BOARD_ITEM* aItem, int aNestLevel = 0 ) const
         throw( IO_ERROR );
+
+    std::string GetStringOutput( bool doClear )
+    {
+        std::string ret = m_sf.GetString();
+        if( doClear )
+            m_sf.Clear();
+
+        return ret;
+    }
+
 
 protected:
 
@@ -88,50 +104,46 @@ protected:
 
     int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
 
+    STRING_FORMATTER    m_sf;
+    OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
+    int                 m_ctl;
+
+
 private:
-    void format( BOARD* aBoard, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( BOARD* aBoard, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( DIMENSION* aDimension, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( DIMENSION* aDimension, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( EDGE_MODULE* aModuleDrawing, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( EDGE_MODULE* aModuleDrawing, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( DRAWSEGMENT* aSegment, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( DRAWSEGMENT* aSegment, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( PCB_TARGET* aTarget, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                         int aControlBits ) const
+    void format( PCB_TARGET* aTarget, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( MODULE* aModule, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( MODULE* aModule, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( D_PAD* aPad, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( D_PAD* aPad, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( TEXTE_PCB* aText, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( TEXTE_PCB* aText, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( TEXTE_MODULE* aText, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( TEXTE_MODULE* aText, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( TRACK* aTrack, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( TRACK* aTrack, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
-    void format( ZONE_CONTAINER* aZone, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                 int aControlBits ) const
+    void format( ZONE_CONTAINER* aZone, int aNestLevel = 0 ) const
         throw( IO_ERROR );
+
+    void formatLayer( const BOARD_ITEM* aItem ) const;
 };
 
 #endif  // KICAD_PLUGIN_H_

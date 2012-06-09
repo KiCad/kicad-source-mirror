@@ -177,7 +177,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     // because all boards thickness no not match with this setup:
     // double epoxy_width = 1.6;    // epoxy width in mm
 
-    g_Parm_3D_Visu.m_Epoxy_Width = pcb->GetDesignSettings().m_BoardThickness
+    g_Parm_3D_Visu.m_Epoxy_Width = pcb->GetDesignSettings().GetBoardThickness()
                                    * g_Parm_3D_Visu.m_BoardScale;
 
     // calculate z position for each layer

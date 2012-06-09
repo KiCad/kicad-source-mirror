@@ -339,6 +339,18 @@ int BOARD::GetCurrentMicroViaDrill()
 }
 
 
+bool BOARD::SetLayer( int aIndex, const LAYER& aLayer )
+{
+    if( aIndex < NB_COPPER_LAYERS )
+    {
+        m_Layer[ aIndex ] = aLayer;
+        return true;
+    }
+
+    return false;
+}
+
+
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
     if( !IsValidLayerIndex( aLayerIndex ) )
@@ -407,7 +419,7 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
     if( !IsValidCopperLayerIndex( aLayerIndex ) )
         return false;
 
-    if( aLayerName == wxEmptyString  || aLayerName.Len() > 20 )
+    if( aLayerName == wxEmptyString || aLayerName.Len() > 20 )
         return false;
 
     // no quote chars in the name allowed
@@ -506,13 +518,64 @@ LAYER_T LAYER::ParseType( const char* aType )
     else if( strcmp( aType, "jumper" ) == 0 )
         return LT_JUMPER;
     else
-        return LAYER_T( -1 );
+        return LT_UNDEFINED;
 }
+
+
+int LAYER::GetDefaultIndex( const wxString& aName )
+{
+    static LAYER_INDEX_HASH_MAP layerIndices;
+
+    if( layerIndices.empty() )
+    {
+        // These are only default layer names.  The copper names may be over-ridden in
+        // the BOARD (*.brd) file.
+
+        layerIndices[ _( "Front" ) ] = LAYER_N_FRONT;
+        layerIndices[ _( "Inner2" ) ] = LAYER_N_2;
+        layerIndices[ _( "Inner3" ) ] = LAYER_N_3;
+        layerIndices[ _( "Inner4" ) ] = LAYER_N_4;
+        layerIndices[ _( "Inner5" ) ] = LAYER_N_5;
+        layerIndices[ _( "Inner6" ) ] = LAYER_N_6;
+        layerIndices[ _( "Inner7" ) ] = LAYER_N_7;
+        layerIndices[ _( "Inner8" ) ] = LAYER_N_8;
+        layerIndices[ _( "Inner9" ) ] = LAYER_N_9;
+        layerIndices[ _( "Inner10" ) ] = LAYER_N_10;
+        layerIndices[ _( "Inner11" ) ] = LAYER_N_11;
+        layerIndices[ _( "Inner12" ) ] = LAYER_N_12;
+        layerIndices[ _( "Inner13" ) ] = LAYER_N_13;
+        layerIndices[ _( "Inner14" ) ] = LAYER_N_14;
+        layerIndices[ _( "Inner15" ) ] = LAYER_N_15;
+        layerIndices[ _( "Back" ) ] = LAYER_N_BACK;
+        layerIndices[ _( "Adhes_Back" ) ] = ADHESIVE_N_BACK;
+        layerIndices[ _( "Adhes_Front" ) ] = ADHESIVE_N_FRONT;
+        layerIndices[ _( "SoldP_Back" ) ] = SOLDERPASTE_N_BACK;
+        layerIndices[ _( "SoldP_Front" ) ] = SOLDERPASTE_N_FRONT;
+        layerIndices[ _( "SilkS_Back" ) ] = SILKSCREEN_N_BACK;
+        layerIndices[ _( "SilkS_Front" ) ] = SILKSCREEN_N_FRONT;
+        layerIndices[ _( "Mask_Back" ) ] = SOLDERMASK_N_BACK;
+        layerIndices[ _( "Mask_Front" ) ] = SOLDERMASK_N_FRONT;
+        layerIndices[ _( "Drawings" ) ] = DRAW_N;
+        layerIndices[ _( "Comments" ) ] = COMMENT_N;
+        layerIndices[ _( "Eco1" ) ] = ECO1_N;
+        layerIndices[ _( "Eco2" ) ] = ECO2_N;
+        layerIndices[ _( "PCB_Edges" ) ] = EDGE_N;
+    }
+
+    const LAYER_INDEX_HASH_MAP::iterator it = layerIndices.find( aName );
+
+    if( it == layerIndices.end() )
+        return UNDEFINED_LAYER;
+
+    return layerIndices[ aName ];
+}
+
 
 int BOARD::GetCopperLayerCount() const
 {
     return m_designSettings.GetCopperLayerCount();
 }
+
 
 void BOARD::SetCopperLayerCount( int aCount )
 {
