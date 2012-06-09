@@ -37,7 +37,7 @@ bool PCB_BASE_FRAME::ExportToDxfFile( const wxString& aFullFileName, int aLayer,
     plotter->StartPlot( output_file );
 
     if( plot_opts.m_PlotFrameRef )
-        PlotWorkSheet( plotter, GetScreen() );
+        PlotWorkSheet( plotter, GetScreen(), plot_opts.GetPlotLineWidth() );
 
     Plot_Layer( plotter, aLayer, aTraceMode );
     plotter->EndPlot();

@@ -19,7 +19,7 @@
 /* Plot sheet references
  * margin is in mils (1/1000 inch)
  */
-void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
+void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int aLineWidth )
 {
 #define WSTEXTSIZE      50   // Text size in mils
 
@@ -46,10 +46,11 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 #endif
 
     bool     italic    = false;
-    bool     thickness = 0;      //@todo : use current pen
+    int      thickness = aLineWidth;
 
     color = BLACK;
     plotter->SetColor( color );
+    plotter->SetCurrentLineWidth( thickness );
 
     // Plot edge.
     ref.x = pageInfo.GetLeftMarginMils() * iusPerMil;

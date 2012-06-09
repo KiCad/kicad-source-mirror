@@ -2,6 +2,31 @@
  * @file pcbnew/pcbplot.cpp
  */
 
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <plot_common.h>
@@ -119,18 +144,20 @@ void DIALOG_PLOT::Init_Dialog()
 
     m_plotFormatOpt->SetSelection( m_plotOpts.GetPlotFormat() );
 
-    // Set units and value for HPGL pen size.
+    // Set units and value for HPGL pen size (this param in in mils).
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetHpglPenDiameter() * 10 );
+    msg = ReturnStringFromValue( g_UserUnit,
+                                 m_plotOpts.GetHpglPenDiameter() * IU_PER_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
-    // Set units to cm/s for standard HPGL pen speed.
-    msg = ReturnStringFromValue( UNSCALED_UNITS, m_plotOpts.GetHpglPenSpeed() * 10000 );
+    // Units are *always* cm/s for HPGL pen speed, from 1 to 99.
+    msg = ReturnStringFromValue( UNSCALED_UNITS, m_plotOpts.GetHpglPenSpeed() );
     m_HPGLPenSpeedOpt->AppendText( msg );
 
-    // Set units and value for HPGL pen overlay.
+    // Set units and value for HPGL pen overlay (this param in in mils).
     AddUnitSymbol( *m_textPenOvr, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetHpglPenOverlay() * 10 );
+    msg = ReturnStringFromValue( g_UserUnit,
+                                 m_plotOpts.GetHpglPenOverlay() * IU_PER_MILS );
     m_HPGLPenOverlayOpt->AppendText( msg );
 
     AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
@@ -448,37 +475,39 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.
-    // HPLG pen size
+
+    // read HPLG pen size (this param is stored in mils)
     wxString msg = m_HPGLPenSizeOpt->GetValue();
-    int      tmp = ReturnValueFromString( g_UserUnit, msg );
+    int      tmp = ReturnValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
 
     if( !tempOptions.SetHpglPenDiameter( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenDiameter() * 10 );
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenDiameter() * IU_PER_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen size constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
-    // HPGL pen speed
+    // read HPGL pen speed (this param is stored in cm/s)
     msg = m_HPGLPenSpeedOpt->GetValue();
     tmp = ReturnValueFromString( UNSCALED_UNITS, msg );
 
     if( !tempOptions.SetHpglPenSpeed( tmp ) )
     {
-        msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHpglPenSpeed() * 1000 );
+        msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHpglPenSpeed() );
         m_HPGLPenSpeedOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen speed constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
-    // HPGL pen overlay
+    // Read HPGL pen overlay (this param is stored in mils)
     msg = m_HPGLPenOverlayOpt->GetValue();
-    tmp = ReturnValueFromString( g_UserUnit, msg );
+    tmp = ReturnValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
 
     if( !tempOptions.SetHpglPenOverlay( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenOverlay() * 10 );
+        msg = ReturnStringFromValue( g_UserUnit,
+                                     tempOptions.GetHpglPenOverlay() * IU_PER_MILS );
         m_HPGLPenOverlayOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen overlay constrained!\n" ) );
         m_messagesBox->AppendText( msg );
