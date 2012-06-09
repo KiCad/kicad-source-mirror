@@ -354,7 +354,11 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             // Add font support here at some point in the future.
 
             if( ( m_Size.x != DEFAULT_SIZE_TEXT ) || ( m_Size.y != DEFAULT_SIZE_TEXT ) )
-                aFormatter->Print( 0, " (size %s)", FMT_IU( m_Size ).c_str() );
+                aFormatter->Print( 0, " (size %s %s)", FMT_IU( m_Size.GetHeight() ).c_str(),
+                                   FMT_IU( m_Size.GetWidth() ).c_str() );
+
+            if( m_Thickness != 0 )
+                aFormatter->Print( 0, " (thickness %s)", FMT_IU( m_Thickness ).c_str() );
 
             if( m_Bold )
                 aFormatter->Print( 0, " bold" );

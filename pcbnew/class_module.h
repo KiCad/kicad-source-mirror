@@ -325,6 +325,22 @@ public:
      */
     unsigned GetPadCount() const            { return m_Pads.GetCount() ; }
 
+    /**
+     * Function Add3DModel
+     * adds \a a3DModel definition to the end of the 3D model list.
+     *
+     * @param a3DModel A pointer to a #S3D_MASTER to add to the list.
+     */
+    void Add3DModel( S3D_MASTER* a3DModel );
+
+    /**
+     * Function AddPad
+     * adds \a aPad to the end of the pad list.
+     *
+     * @param aPad A pointer to a #D_PAD to add to the list.
+     */
+    void AddPad( D_PAD* aPad );
+
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
 

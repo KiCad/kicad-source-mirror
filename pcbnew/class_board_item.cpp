@@ -91,31 +91,15 @@ wxString BOARD_ITEM::GetLayerName() const
 
 std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 {
-    char    buf[50];
+    char buf[50];
 
 #if defined( USE_PCBNEW_NANOMETRES )
-    double  engUnits = aValue / 1000000.0;
+    int nm = aValue;
 #else
-    double  engUnits = ( aValue * 10000.0 ) / 25.4 / 1000000.0;
+    int nm = KIROUND( ( aValue / 10000.0 ) * 25.4 * 1e6 );
 #endif
 
-    int     len;
-
-    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
-    {
-        // printf( "f: " );
-        len = snprintf( buf, 49, "%.10f", engUnits );
-
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
-
-        ++len;
-    }
-    else
-    {
-        // printf( "g: " );
-        len = snprintf( buf, 49, "%.10g", engUnits );
-    }
+    int len = snprintf( buf, 49, "%g", nm / 1e6 );
 
     return std::string( buf, len );
 }

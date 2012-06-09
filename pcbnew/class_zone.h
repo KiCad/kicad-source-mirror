@@ -429,6 +429,11 @@ public:
         return m_Poly->GetHatchStyle();
     }
 
+    void SetHatchStyle( CPolyLine::hatch_style aStyle )
+    {
+        m_Poly->SetHatchStyle( aStyle );
+    }
+
      /**
      * Function TransformShapeWithClearanceToPolygon
      * Convert the track shape to a closed polygon
@@ -514,6 +519,18 @@ public:
     };
 
     unsigned int GetCornerRadius() const { return cornerRadius; };
+
+    void AddPolygon( std::vector< wxPoint >& aPolygon );
+
+    void AddFilledPolygon( std::vector< CPolyPt >& aPolygon )
+    {
+        m_FilledPolysList.insert( m_FilledPolysList.end(), aPolygon.begin(), aPolygon.end() );
+    }
+
+    void AddFillSegments( std::vector< SEGMENT >& aSegments )
+    {
+        m_FillSegmList.insert( m_FillSegmList.end(), aSegments.begin(), aSegments.end() );
+    }
 
     virtual wxString GetSelectMenuText() const;
 

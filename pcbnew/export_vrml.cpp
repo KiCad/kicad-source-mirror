@@ -369,7 +369,7 @@ static void compute_layer_Zs( BOARD* pcb ) //{{{
     int    copper_layers = pcb->GetCopperLayerCount( );
 
     // We call it 'layer' thickness, but it's the whole board thickness!
-    double board_thickness = pcb->GetDesignSettings().m_BoardThickness;
+    double board_thickness = pcb->GetDesignSettings().GetBoardThickness();
     double half_thickness  = board_thickness / 2;
 
     // Compute each layer's Z value, more or less like the 3d view

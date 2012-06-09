@@ -916,6 +916,24 @@ ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
 }
 
 
+void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
+{
+    if( aPolygon.empty() )
+        return;
+
+    for( unsigned i = 0;  i < aPolygon.size();  i++ )
+    {
+        if( i == 0 )
+            m_Poly->Start( GetLayer(), aPolygon[i].x, aPolygon[i].y, GetHatchStyle() );
+        else
+            AppendCorner( aPolygon[i] );
+    }
+
+    m_Poly->Close();
+}
+
+
+
 wxString ZONE_CONTAINER::GetSelectMenuText() const
 {
     wxString text;
