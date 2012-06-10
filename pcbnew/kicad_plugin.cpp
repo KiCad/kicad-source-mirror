@@ -1093,11 +1093,11 @@ PCB_IO::PCB_IO()
 
 BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
 {
-    wxFFile file( aFileName, "r" );
+    wxFFile file( aFileName, wxT("r") );
 
     if( !file.IsOpened() )
     {
-        THROW_IO_ERROR( _( "Unable to read file \"" ) + GetChars( aFileName ) + wxT( "\"" ) );
+        THROW_IO_ERROR( _( "Unable to read file \"" ) + aFileName + wxT( "\"" ) );
     }
 
     PCB_PARSER parser( new FILE_LINE_READER( file.fp(), aFileName ), aAppendToMe );

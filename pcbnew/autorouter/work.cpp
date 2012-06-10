@@ -92,13 +92,10 @@ void ReInitWork()
  */
 static int GetCost( int r1, int c1, int r2, int c2 );
 
-int SetWork( int            r1,
-             int            c1,
+int SetWork( int            r1, int            c1,
              int            n_c,
-             int            r2,
-             int            c2,
-             RATSNEST_ITEM* pt_ch,
-             int            pri )
+             int            r2, int            c2,
+             RATSNEST_ITEM* pt_ch, int            pri )
 {
     CWORK* p;
 
@@ -226,11 +223,10 @@ void SortWork()
 static int GetCost( int r1, int c1, int r2, int c2 )
 {
     int   dx, dy, mx, my;
-    double incl;
+    double incl = 1.0;
 
     dx   = abs( c2 - c1 );
     dy   = abs( r2 - r1 );
-    incl = 1.0;
     mx   = dx;
     my   = dy;
 
