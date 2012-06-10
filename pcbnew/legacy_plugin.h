@@ -189,13 +189,10 @@ protected:
      * Function loadTrackList
      * reads a list of segments (Tracks and Vias, or Segzones)
      *
-     * @param aInsertBeforeMe may be either NULL indicating append, or it may
-     *  be an insertion point before which all the segments are inserted.
-     *
      * @param aStructType is either PCB_TRACE_T to indicate tracks and vias, or
      *        PCB_ZONE_T to indicate oldschool zone segments (before polygons came to be).
      */
-    void loadTrackList( TRACK* aInsertBeforeMe, int aStructType );
+    void loadTrackList( int aStructType );
 
     void loadZONE_CONTAINER();      // "$CZONE_OUTLINE"
     void loadDIMENSION();           // "$COTATION"

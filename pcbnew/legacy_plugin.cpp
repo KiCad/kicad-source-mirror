@@ -244,8 +244,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         else if( TESTLINE( "$TRACK" ) )
         {
-            TRACK* insertBeforeMe = doAppend ? NULL : m_board->m_Track.GetFirst();
-            loadTrackList( insertBeforeMe, PCB_TRACE_T );
+            loadTrackList( PCB_TRACE_T );
         }
 
         else if( TESTLINE( "$NCLASS" ) )
@@ -270,8 +269,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         else if( TESTLINE( "$ZONE" ) )
         {
-            SEGZONE* insertBeforeMe = doAppend ? NULL : m_board->m_Zone.GetFirst();
-            loadTrackList( insertBeforeMe, PCB_ZONE_T );
+            loadTrackList( PCB_ZONE_T );
         }
 
         else if( TESTLINE( "$GENERAL" ) )
@@ -1888,7 +1886,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 }
 
 
-void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
+void LEGACY_PLUGIN::loadTrackList( int aStructType )
 {
     while( READLINE( m_reader ) )
     {
@@ -1961,17 +1959,17 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         default:
         case PCB_TRACE_T:
             newTrack = new TRACK( m_board );
-            m_board->m_Track.Insert( newTrack, aInsertBeforeMe );
+            m_board->m_Track.Append( newTrack );
             break;
 
         case PCB_VIA_T:
             newTrack = new SEGVIA( m_board );
-            m_board->m_Track.Insert( newTrack, aInsertBeforeMe );
+            m_board->m_Track.Append( newTrack );
             break;
 
         case PCB_ZONE_T:     // this is now deprecated, but exist in old boards
             newTrack = new SEGZONE( m_board );
-            m_board->m_Zone.Insert( (SEGZONE*) newTrack, (SEGZONE*) aInsertBeforeMe );
+            m_board->m_Zone.Append( (SEGZONE*) newTrack );
             break;
         }
 
@@ -2215,7 +2213,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 arcsegcount = 32;
 
             zc->SetArcSegCount( arcsegcount );
-            zc->SetIsFilled( fillstate == 'F' ? true : false );
+            zc->SetIsFilled( fillstate == 'S' ? true : false );
             zc->SetThermalReliefGap( thermalReliefGap );
             zc->SetThermalReliefCopperBridge( thermalReliefCopperBridge );
         }
@@ -3393,7 +3391,7 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
                     // using "diff", then switch to more concise form for release builds.
                     "Sc %lf %lf %lf\n",
 #else
-                    "Sc %.16g %.16g %.16g\n",
+                    "Sc %.10g %.10g %.10g\n",
 #endif
                     t3D->m_MatScale.x,
                     t3D->m_MatScale.y,
@@ -3403,7 +3401,7 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 #if defined(DEBUG)
                     "Of %lf %lf %lf\n",
 #else
-                    "Of %.16g %.16g %.16g\n",
+                    "Of %.10g %.10g %.10g\n",
 #endif
                     t3D->m_MatPosition.x,
                     t3D->m_MatPosition.y,
@@ -3413,7 +3411,7 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 #if defined(DEBUG)
                     "Ro %lf %lf %lf\n",
 #else
-                    "Ro %.16g %.16g %.16g\n",
+                    "Ro %.10g %.10g %.10g\n",
 #endif
                     t3D->m_MatRotation.x,
                     t3D->m_MatRotation.y,
