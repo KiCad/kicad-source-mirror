@@ -29,6 +29,7 @@
 #include <common.h>
 #include <macros.h>
 #include <convert_from_iu.h>
+#include <errno.h>
 #include <trigo.h>
 #include <3d_struct.h>
 #include <class_title_block.h>
@@ -610,7 +611,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     T token;
     wxString name;
     wxString type;
-    bool isVisible;
+    bool isVisible = true;
     int visibleLayers = 0;
     int enabledLayers = 0;
     std::vector< LAYER > layers;
@@ -645,7 +646,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             Expecting( "hide or )" );
         }
 
-        layers.push_back( LAYER( name, LAYER::ParseType( type.c_str() ), isVisible ) );
+        layers.push_back( LAYER( name, LAYER::ParseType( TO_UTF8( type ) ), isVisible ) );
     }
 
     int copperLayerCount = 0;
@@ -691,7 +692,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             {
                 wxString error;
                 error.Printf( _( "Cannot determine fixed layer list index of layer name \"%s\"" ),
-                              layers[i].m_Name );
+                              layers[i].m_Name.GetData() );
                 THROW_IO_ERROR( error );
             }
         }
@@ -1055,7 +1056,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 
         wxString error;
         error.Printf( _( "duplicate NETCLASS name '%s' in file %s at line %d, offset %d" ),
-                      nc->GetName().GetData(), CurSource(), CurLineNumber(), CurOffset() );
+                      nc->GetName().GetData(), CurSource().GetData(), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
 }
