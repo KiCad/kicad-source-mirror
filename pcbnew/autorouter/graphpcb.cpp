@@ -71,17 +71,17 @@ static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     {                                                                   \
         if( layer < 0 )                                                 \
         {                                                               \
-            WriteCell( dy, dx, BOTTOM, color );                         \
+            RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );           \
             if( Nb_Sides )                                              \
-                WriteCell( dy, dx, TOP, color );                        \
+                RoutingMatrix.WriteCell( dy, dx, TOP, color );                        \
         }                                                               \
         else                                                            \
         {                                                               \
             if( layer == Route_Layer_BOTTOM )                           \
-                WriteCell( dy, dx, BOTTOM, color );                     \
+                RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );       \
             if( Nb_Sides )                                              \
                 if( layer == Route_Layer_TOP )                          \
-                    WriteCell( dy, dx, TOP, color );                    \
+                    RoutingMatrix.WriteCell( dy, dx, TOP, color );      \
         }                                                               \
     }
 
@@ -151,8 +151,6 @@ void TraceFilledCircle( BOARD* aPcb,
     int   row_max, col_max, row_min, col_min;
     int   trace = 0;
     double fdistmin, fdistx, fdisty;
-
-    void  (* WriteCell)( int, int, int, MATRIX_CELL );
     int   tstwrite = 0;
     int   distmin;
 
@@ -166,29 +164,7 @@ void TraceFilledCircle( BOARD* aPcb,
     if( trace == 0 )
         return;
 
-    switch( op_logic )
-    {
-    default:
-    case WRITE_CELL:
-        WriteCell = SetCell;
-        break;
-
-    case WRITE_OR_CELL:
-        WriteCell = OrCell;
-        break;
-
-    case WRITE_XOR_CELL:
-        WriteCell = XorCell;
-        break;
-
-    case WRITE_AND_CELL:
-        WriteCell = AndCell;
-        break;
-
-    case WRITE_ADD_CELL:
-        WriteCell = AddCell;
-        break;
-    }
+    RoutingMatrix.SetCellOperation( op_logic );
 
     cx -= aPcb->GetBoundingBox().GetX();
     cy -= aPcb->GetBoundingBox().GetY();
@@ -210,14 +186,14 @@ void TraceFilledCircle( BOARD* aPcb,
     if( row_min < 0 )
         row_min = 0;
 
-    if( row_max >= (Nrows - 1) )
-        row_max = Nrows - 1;
+    if( row_max >= (RoutingMatrix.m_Nrows - 1) )
+        row_max = RoutingMatrix.m_Nrows - 1;
 
     if( col_min < 0 )
         col_min = 0;
 
-    if( col_max >= (Ncols - 1) )
-        col_max = Ncols - 1;
+    if( col_max >= (RoutingMatrix.m_Ncols - 1) )
+        col_max = RoutingMatrix.m_Ncols - 1;
 
     // Calculate coordinate limits of cell belonging to the rectangle.
     if( row_min > row_max )
@@ -242,10 +218,10 @@ void TraceFilledCircle( BOARD* aPcb,
                 continue;
 
             if( trace & 1 )
-                WriteCell( row, col, BOTTOM, color );
+                RoutingMatrix.WriteCell( row, col, BOTTOM, color );
 
             if( trace & 2 )
-                WriteCell( row, col, TOP, color );
+                RoutingMatrix.WriteCell( row, col, TOP, color );
 
             tstwrite = 1;
         }
@@ -274,10 +250,10 @@ void TraceFilledCircle( BOARD* aPcb,
                 continue;
 
             if( trace & 1 )
-                WriteCell( row, col, BOTTOM, color );
+                RoutingMatrix.WriteCell( row, col, BOTTOM, color );
 
             if( trace & 2 )
-                WriteCell( row, col, TOP, color );
+                RoutingMatrix.WriteCell( row, col, TOP, color );
         }
     }
 }
@@ -359,26 +335,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
     int  dx, dy, lim;
     int  cumul, inc, il, delta;
 
-    void (* WriteCell)( int, int, int, MATRIX_CELL );
-
-    switch( op_logic )
-    {
-    default:
-    case WRITE_CELL:
-        WriteCell = SetCell; break;
-
-    case WRITE_OR_CELL:
-        WriteCell = OrCell; break;
-
-    case WRITE_XOR_CELL:
-        WriteCell = XorCell; break;
-
-    case WRITE_AND_CELL:
-        WriteCell = AndCell; break;
-
-    case WRITE_ADD_CELL:
-        WriteCell = AddCell; break;
-    }
+    RoutingMatrix.SetCellOperation( op_logic );
 
     if( x0 == x1 )  // Vertical.
     {
@@ -390,14 +347,14 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
         dx  = x0 / RoutingMatrix.m_GridRouting;
 
         // Clipping limits of board.
-        if( ( dx < 0 ) || ( dx >= Ncols ) )
+        if( ( dx < 0 ) || ( dx >= RoutingMatrix.m_Ncols ) )
             return;
 
         if( dy < 0 )
             dy = 0;
 
-        if( lim >= Nrows )
-            lim = Nrows - 1;
+        if( lim >= RoutingMatrix.m_Nrows )
+            lim = RoutingMatrix.m_Nrows - 1;
 
         for( ; dy <= lim; dy++ )
         {
@@ -417,14 +374,14 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
         dy  = y0 / RoutingMatrix.m_GridRouting;
 
         // Clipping limits of board.
-        if( ( dy < 0 ) || ( dy >= Nrows ) )
+        if( ( dy < 0 ) || ( dy >= RoutingMatrix.m_Nrows ) )
             return;
 
         if( dx < 0 )
             dx = 0;
 
-        if( lim >= Ncols )
-            lim = Ncols - 1;
+        if( lim >= RoutingMatrix.m_Ncols )
+            lim = RoutingMatrix.m_Ncols - 1;
 
         for( ; dx <= lim; dx++ )
         {
@@ -455,7 +412,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
 
         for( ; dx <= lim; )
         {
-            if( ( dx >= 0 ) && ( dy >= 0 ) && ( dx < Ncols ) && ( dy < Nrows ) )
+            if( ( dx >= 0 ) && ( dy >= 0 ) && ( dx < RoutingMatrix.m_Ncols ) && ( dy < RoutingMatrix.m_Nrows ) )
             {
                 OP_CELL( layer, dy, dx );
             }
@@ -492,7 +449,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
 
         for( ; dy <= lim; )
         {
-            if( ( dx >= 0 ) && ( dy >= 0 ) && ( dx < Ncols ) && ( dy < Nrows ) )
+            if( ( dx >= 0 ) && ( dy >= 0 ) && ( dx < RoutingMatrix.m_Ncols ) && ( dy < RoutingMatrix.m_Nrows ) )
             {
                 OP_CELL( layer, dy, dx );
             }
@@ -517,8 +474,6 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
     int  row_min, row_max, col_min, col_max;
     int  trace = 0;
 
-    void (* WriteCell)( int, int, int, MATRIX_CELL );
-
     if( ( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) ) )
         trace = 1;     // Trace on BOTTOM
 
@@ -528,29 +483,7 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
     if( trace == 0 )
         return;
 
-    switch( op_logic )
-    {
-    default:
-    case WRITE_CELL:
-        WriteCell = SetCell;
-        break;
-
-    case WRITE_OR_CELL:
-        WriteCell = OrCell;
-        break;
-
-    case WRITE_XOR_CELL:
-        WriteCell = XorCell;
-        break;
-
-    case WRITE_AND_CELL:
-        WriteCell = AndCell;
-        break;
-
-    case WRITE_ADD_CELL:
-        WriteCell = AddCell;
-        break;
-    }
+    RoutingMatrix.SetCellOperation( op_logic );
 
     ux0 -= aPcb->GetBoundingBox().GetX();
     uy0 -= aPcb->GetBoundingBox().GetY();
@@ -573,24 +506,24 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
     if( row_min < 0 )
         row_min = 0;
 
-    if( row_max >= ( Nrows - 1 ) )
-        row_max = Nrows - 1;
+    if( row_max >= ( RoutingMatrix.m_Nrows - 1 ) )
+        row_max = RoutingMatrix.m_Nrows - 1;
 
     if( col_min < 0 )
         col_min = 0;
 
-    if( col_max >= ( Ncols - 1 ) )
-        col_max = Ncols - 1;
+    if( col_max >= ( RoutingMatrix.m_Ncols - 1 ) )
+        col_max = RoutingMatrix.m_Ncols - 1;
 
     for( row = row_min; row <= row_max; row++ )
     {
         for( col = col_min; col <= col_max; col++ )
         {
             if( trace & 1 )
-                WriteCell( row, col, BOTTOM, color );
+                RoutingMatrix.WriteCell( row, col, BOTTOM, color );
 
             if( trace & 2 )
-                WriteCell( row, col, TOP, color );
+                RoutingMatrix.WriteCell( row, col, TOP, color );
         }
     }
 }
@@ -606,8 +539,6 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
     int  rotrow, rotcol;
     int  trace = 0;
 
-    void (* WriteCell)( int, int, int, MATRIX_CELL );
-
     if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
         trace = 1;     // Trace on BOTTOM
 
@@ -620,29 +551,7 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
     if( trace == 0 )
         return;
 
-    switch( op_logic )
-    {
-    default:
-    case WRITE_CELL:
-        WriteCell = SetCell;
-        break;
-
-    case WRITE_OR_CELL:
-        WriteCell = OrCell;
-        break;
-
-    case WRITE_XOR_CELL:
-        WriteCell = XorCell;
-        break;
-
-    case WRITE_AND_CELL:
-        WriteCell = AndCell;
-        break;
-
-    case WRITE_ADD_CELL:
-        WriteCell = AddCell;
-        break;
-    }
+    RoutingMatrix.SetCellOperation( op_logic );
 
     ux0 -= aPcb->GetBoundingBox().GetX();
     uy0 -= aPcb->GetBoundingBox().GetY();
@@ -670,14 +579,14 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
     if( row_min < 0 )
         row_min = 0;
 
-    if( row_max >= ( Nrows - 1 ) )
-        row_max = Nrows - 1;
+    if( row_max >= ( RoutingMatrix.m_Nrows - 1 ) )
+        row_max = RoutingMatrix.m_Nrows - 1;
 
     if( col_min < 0 )
         col_min = 0;
 
-    if( col_max >= ( Ncols - 1 ) )
-        col_max = Ncols - 1;
+    if( col_max >= ( RoutingMatrix.m_Ncols - 1 ) )
+        col_max = RoutingMatrix.m_Ncols - 1;
 
     for( row = row_min; row <= row_max; row++ )
     {
@@ -700,10 +609,10 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
                 continue;
 
             if( trace & 1 )
-                WriteCell( row, col, BOTTOM, color );
+                RoutingMatrix.WriteCell( row, col, BOTTOM, color );
 
             if( trace & 2 )
-                WriteCell( row, col, TOP, color );
+                RoutingMatrix.WriteCell( row, col, TOP, color );
         }
     }
 }
@@ -721,33 +630,10 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     int  row_max, col_max, row_min, col_min;
     int  demi_pas;
 
-    void (* WriteCell)( int, int, int, MATRIX_CELL );
     int  angle;
     int  cx, cy, dx, dy;
 
-    switch( op_logic )
-    {
-    default:
-    case WRITE_CELL:
-        WriteCell = SetCell;
-        break;
-
-    case WRITE_OR_CELL:
-        WriteCell = OrCell;
-        break;
-
-    case WRITE_XOR_CELL:
-        WriteCell = XorCell;
-        break;
-
-    case WRITE_AND_CELL:
-        WriteCell = AndCell;
-        break;
-
-    case WRITE_ADD_CELL:
-        WriteCell = AddCell;
-        break;
-    }
+    RoutingMatrix.SetCellOperation( op_logic );
 
     // Make coordinate ux1 tj > ux0 to simplify calculations
     if( ux1 < ux0 )
@@ -771,8 +657,8 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
 
     col_max = ( ux1 + lg + demi_pas ) / RoutingMatrix.m_GridRouting;
 
-    if( col_max > ( Ncols - 1 ) )
-        col_max = Ncols - 1;
+    if( col_max > ( RoutingMatrix.m_Ncols - 1 ) )
+        col_max = RoutingMatrix.m_Ncols - 1;
 
     if( inc > 0 )
     {
@@ -788,14 +674,14 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
     if( row_min < 0 )
         row_min = 0;
 
-    if( row_min > ( Nrows - 1 ) )
-        row_min = Nrows - 1;
+    if( row_min > ( RoutingMatrix.m_Nrows - 1 ) )
+        row_min = RoutingMatrix.m_Nrows - 1;
 
     if( row_max < 0 )
         row_max = 0;
 
-    if( row_max > ( Nrows - 1 ) )
-        row_max = Nrows - 1;
+    if( row_max > ( RoutingMatrix.m_Nrows - 1 ) )
+        row_max = RoutingMatrix.m_Nrows - 1;
 
     dx = ux1 - ux0;
     dy = uy1 - uy0;

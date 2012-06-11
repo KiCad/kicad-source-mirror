@@ -69,14 +69,12 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb, bool aUseBoardEdgesOnl
 
     aPcb->SetBoundingBox( m_BrdBox );
 
-    m_Nrows = Nrows = m_BrdBox.GetHeight() / m_GridRouting;
-    m_Ncols = Ncols = m_BrdBox.GetWidth() / m_GridRouting;
+    m_Nrows = m_BrdBox.GetHeight() / m_GridRouting;
+    m_Ncols = m_BrdBox.GetWidth() / m_GridRouting;
 
-    /* get a small margin for memory allocation: */
-    Ncols += 1;
-    m_Nrows = Nrows;
-    Nrows += 1;
-    m_Ncols = Ncols;
+    // gives a small margin
+    m_Ncols += 1;
+    m_Nrows += 1;
 
     return true;
 }
@@ -103,15 +101,13 @@ int MATRIX_ROUTING_HEAD::InitRoutingMatrix()
 {
     int ii, kk;
 
-    if( Nrows <= 0 || Ncols <= 0 )
+    if( m_Nrows <= 0 || m_Ncols <= 0 )
         return 0;
-    m_Nrows = Nrows;
-    m_Ncols = Ncols;
 
     m_InitMatrixDone = true;     // we have been called
 
     // give a small margin for memory allocation:
-   ii = (Nrows + 1) * (Ncols + 1);
+   ii = (RoutingMatrix.m_Nrows + 1) * (RoutingMatrix.m_Ncols + 1);
 
     for( kk = 0; kk < m_Layers; kk++ )
     {
@@ -354,7 +350,7 @@ int Build_Work( BOARD* Pcb )
     EDA_RECT        bbbox = Pcb->GetBoundingBox();
 
     InitWork(); /* clear work list */
-    Ntotal = 0;
+    int cellCount = 0;
 
     for( unsigned ii = 0; ii < Pcb->GetRatsnestsCount(); ii++ )
     {
@@ -379,7 +375,7 @@ int Build_Work( BOARD* Pcb )
 
         r1 = ( pt_pad->GetPosition().y - bbbox.GetY() + demi_pas ) / RoutingMatrix.m_GridRouting;
 
-        if( r1 < 0 || r1 >= Nrows )
+        if( r1 < 0 || r1 >= RoutingMatrix.m_Nrows )
         {
             msg.Printf( wxT( "error : row = %d ( padY %d pcbY %d) " ), r1,
                         pt_pad->GetPosition().y, bbbox.GetY() );
@@ -389,7 +385,7 @@ int Build_Work( BOARD* Pcb )
 
         c1 = ( pt_pad->GetPosition().x - bbbox.GetX() + demi_pas ) / RoutingMatrix.m_GridRouting;
 
-        if( c1 < 0 || c1 >= Ncols )
+        if( c1 < 0 || c1 >= RoutingMatrix.m_Ncols )
         {
             msg.Printf( wxT( "error : col = %d ( padX %d pcbX %d) " ), c1,
                         pt_pad->GetPosition().x, bbbox.GetX() );
@@ -402,7 +398,7 @@ int Build_Work( BOARD* Pcb )
         r2 = ( pt_pad->GetPosition().y - bbbox.GetY()
                + demi_pas ) / RoutingMatrix.m_GridRouting;
 
-        if( r2 < 0 || r2 >= Nrows )
+        if( r2 < 0 || r2 >= RoutingMatrix.m_Nrows )
         {
             msg.Printf( wxT( "error : row = %d ( padY %d pcbY %d) " ), r2,
                         pt_pad->GetPosition().y, bbbox.GetY() );
@@ -412,7 +408,7 @@ int Build_Work( BOARD* Pcb )
 
         c2 = ( pt_pad->GetPosition().x - bbbox.GetX() + demi_pas ) / RoutingMatrix.m_GridRouting;
 
-        if( c2 < 0 || c2 >= Ncols )
+        if( c2 < 0 || c2 >= RoutingMatrix.m_Ncols )
         {
             msg.Printf( wxT( "error : col = %d ( padX %d pcbX %d) " ), c2,
                         pt_pad->GetPosition().x, bbbox.GetX() );
@@ -421,115 +417,143 @@ int Build_Work( BOARD* Pcb )
         }
 
         SetWork( r1, c1, current_net_code, r2, c2, pt_ch, 0 );
-        Ntotal++;
+        cellCount++;
     }
 
     SortWork();
-    return Ntotal;
+    return cellCount;
+}
+
+// Initialize WriteCell to make the aLogicOp
+void MATRIX_ROUTING_HEAD::SetCellOperation( int aLogicOp )
+{
+    switch( aLogicOp )
+    {
+    default:
+    case WRITE_CELL:
+        m_opWriteCell = &MATRIX_ROUTING_HEAD::SetCell;
+        break;
+
+    case WRITE_OR_CELL:
+        m_opWriteCell = &MATRIX_ROUTING_HEAD::OrCell;
+        break;
+
+    case WRITE_XOR_CELL:
+        m_opWriteCell = &MATRIX_ROUTING_HEAD::XorCell;
+        break;
+
+    case WRITE_AND_CELL:
+        m_opWriteCell = &MATRIX_ROUTING_HEAD::AndCell;
+        break;
+
+    case WRITE_ADD_CELL:
+        m_opWriteCell = &MATRIX_ROUTING_HEAD::AddCell;
+        break;
+    }
 }
 
 
 /* return the value stored in a cell
  */
-MATRIX_CELL GetCell( int aRow, int aCol, int aSide )
+MATRIX_CELL MATRIX_ROUTING_HEAD::GetCell( int aRow, int aCol, int aSide )
 {
     MATRIX_CELL* p;
 
     p = RoutingMatrix.m_BoardSide[aSide];
-    return p[aRow * Ncols + aCol];
+    return p[aRow * m_Ncols + aCol];
 }
 
 
 /* basic cell operation : WRITE operation
  */
-void SetCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
+void MATRIX_ROUTING_HEAD::SetCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
     p = RoutingMatrix.m_BoardSide[aSide];
-    p[aRow * Ncols + aCol] = x;
+    p[aRow * m_Ncols + aCol] = x;
 }
 
 
 /* basic cell operation : OR operation
  */
-void OrCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
+void MATRIX_ROUTING_HEAD::OrCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
     p = RoutingMatrix.m_BoardSide[aSide];
-    p[aRow * Ncols + aCol] |= x;
+    p[aRow * m_Ncols + aCol] |= x;
 }
 
 
 /* basic cell operation : XOR operation
  */
-void XorCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
+void MATRIX_ROUTING_HEAD::XorCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
     p = RoutingMatrix.m_BoardSide[aSide];
-    p[aRow * Ncols + aCol] ^= x;
+    p[aRow * m_Ncols + aCol] ^= x;
 }
 
 
 /* basic cell operation : AND operation
  */
-void AndCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
+void MATRIX_ROUTING_HEAD::AndCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
     p = RoutingMatrix.m_BoardSide[aSide];
-    p[aRow * Ncols + aCol] &= x;
+    p[aRow * m_Ncols + aCol] &= x;
 }
 
 
 /* basic cell operation : ADD operation
  */
-void AddCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
+void MATRIX_ROUTING_HEAD::AddCell( int aRow, int aCol, int aSide, MATRIX_CELL x )
 {
     MATRIX_CELL* p;
 
     p = RoutingMatrix.m_BoardSide[aSide];
-    p[aRow * Ncols + aCol] += x;
+    p[aRow * m_Ncols + aCol] += x;
 }
 
 
 /* fetch distance cell */
-DIST_CELL GetDist( int aRow, int aCol, int aSide ) /* fetch distance cell */
+DIST_CELL MATRIX_ROUTING_HEAD::GetDist( int aRow, int aCol, int aSide ) /* fetch distance cell */
 {
     DIST_CELL* p;
 
     p = RoutingMatrix.m_DistSide[aSide];
-    return p[aRow * Ncols + aCol];
+    return p[aRow * m_Ncols + aCol];
 }
 
 
 /* store distance cell */
-void SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
+void MATRIX_ROUTING_HEAD::SetDist( int aRow, int aCol, int aSide, DIST_CELL x )
 {
     DIST_CELL* p;
 
     p = RoutingMatrix.m_DistSide[aSide];
-    p[aRow * Ncols + aCol] = x;
+    p[aRow * m_Ncols + aCol] = x;
 }
 
 
 /* fetch direction cell */
-int GetDir( int aRow, int aCol, int aSide )
+int MATRIX_ROUTING_HEAD::GetDir( int aRow, int aCol, int aSide )
 {
     DIR_CELL* p;
 
     p = RoutingMatrix.m_DirSide[aSide];
-    return (int) (p[aRow * Ncols + aCol]);
+    return (int) (p[aRow * m_Ncols + aCol]);
 }
 
 
 /* store direction cell */
-void SetDir( int aRow, int aCol, int aSide, int x )
+void MATRIX_ROUTING_HEAD::SetDir( int aRow, int aCol, int aSide, int x )
 {
     DIR_CELL* p;
 
     p = RoutingMatrix.m_DirSide[aSide];
-    p[aRow * Ncols + aCol] = (char) x;
+    p[aRow * m_Ncols + aCol] = (char) x;
 }
