@@ -48,9 +48,6 @@
 
 
 int Nb_Sides;        /* Number of layer for autorouting (0 or 1) */
-int Nrows = ILLEGAL;
-int Ncols = ILLEGAL;
-int Ntotal;
 int OpenNodes;       /* total number of nodes opened */
 int ClosNodes;       /* total number of nodes closed */
 int MoveNodes;       /* total number of nodes moved */
@@ -194,7 +191,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     PlaceCells( GetBoard(), -1, FORCE_PADS );
 
     /* Construction of the track list for router. */
-    Build_Work( GetBoard() );
+    RoutingMatrix.m_RouteCount = Build_Work( GetBoard() );
 
     // DisplayRoutingMatrix( m_canvas, DC );
 
@@ -234,7 +231,7 @@ void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
     int dcell0, dcell1 = 0, color;
 
-    int maxi = 600 / Ncols;
+    int maxi = 600 / RoutingMatrix.m_Ncols;
     maxi = ( maxi * 3 ) / 4;
 
     if( !maxi )
@@ -242,12 +239,12 @@ void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
 
     GRSetDrawMode( DC, GR_COPY );
 
-    for( int col = 0; col < Ncols; col++ )
+    for( int col = 0; col < RoutingMatrix.m_Ncols; col++ )
     {
-        for( int row = 0; row < Nrows; row++ )
+        for( int row = 0; row < RoutingMatrix.m_Nrows; row++ )
         {
             color  = 0;
-            dcell0 = GetCell( row, col, BOTTOM );
+            dcell0 = RoutingMatrix.GetCell( row, col, BOTTOM );
 
             if( dcell0 & HOLE )
                 color = GREEN;

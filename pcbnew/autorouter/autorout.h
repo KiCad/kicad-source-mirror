@@ -68,11 +68,6 @@ extern int Nb_Sides;    /* Number of layers for autorouting (0 or 1) */
 
 #define FORCE_PADS 1  /* Force placement of pads for any Netcode */
 
-/* board dimensions */
-extern int Nrows;
-extern int Ncols;
-extern int Ntotal;
-
 /* search statistics */
 extern int OpenNodes;   /* total number of nodes opened */
 extern int ClosNodes;   /* total number of nodes closed */
@@ -88,25 +83,34 @@ typedef char DIR_CELL;
 
 /**
  * class MATRIX_ROUTING_HEAD
+ * handle the matrix routing that describes the actual board
  */
-class MATRIX_ROUTING_HEAD  /* header of blocks of MATRIX_CELL */
+class MATRIX_ROUTING_HEAD
 {
 public:
-    MATRIX_CELL* m_BoardSide[MAX_SIDES_COUNT];  /* ptr to block of memory: 2-sided board */
-    DIST_CELL*   m_DistSide[MAX_SIDES_COUNT];   /* ptr to block of memory: path distance to
-                                                 * cells */
-    DIR_CELL*    m_DirSide[MAX_SIDES_COUNT];    /* header of blocks of chars:pointers back to
-                                                 * source */
+    MATRIX_CELL* m_BoardSide[MAX_SIDES_COUNT];  // the image map of 2 board sides
+    DIST_CELL*   m_DistSide[MAX_SIDES_COUNT];   // the image map of 2 board sides: distance to
+                                                // cells
+    DIR_CELL*    m_DirSide[MAX_SIDES_COUNT];    // the image map of 2 board sides: pointers back to
+                                                // source
     bool         m_InitMatrixDone;
-    int          m_Layers;
+    int          m_Layers;                      // Layer count (1 2 )
     int          m_GridRouting;                 // Size of grid for autoplace/autoroute
     EDA_RECT     m_BrdBox;                      // Actual board bounding box
-    int          m_Nrows, m_Ncols;
-    int          m_MemSize;
+    int          m_Nrows, m_Ncols;              // Matrix size
+    int          m_MemSize;                     // Memory requirement, just for statistics
+    int          m_RouteCount;                  // Number of routes
+private:
+    void        (MATRIX_ROUTING_HEAD::* m_opWriteCell)( int aRow, int aCol, int aSide, MATRIX_CELL aCell);  // a pointeur to the current selected cell op
 
 public:
     MATRIX_ROUTING_HEAD();
     ~MATRIX_ROUTING_HEAD();
+
+    void WriteCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell)
+    {
+        (*this.*m_opWriteCell)( aRow, aCol, aSide, aCell );
+    }
 
     /**
      * Function ComputeMatrixSize
@@ -127,6 +131,21 @@ public:
     int InitRoutingMatrix();
 
     void UnInitRoutingMatrix();
+
+    // Initialize WriteCell to make the aLogicOp
+    void SetCellOperation( int aLogicOp );
+
+    // functions to read/write one cell ( point on grid routing matrix:
+    MATRIX_CELL GetCell( int aRow, int aCol, int aSide);
+    void SetCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+    void OrCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+    void XorCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+    void AndCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+    void AddCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
+    DIST_CELL GetDist( int aRow, int aCol, int aSide );
+    void SetDist( int aRow, int aCol, int aSide, DIST_CELL );
+    int GetDir( int aRow, int aCol, int aSide );
+    void SetDir( int aRow, int aCol, int aSide, int aDir);
 };
 
 extern MATRIX_ROUTING_HEAD RoutingMatrix;        /* 2-sided board */
@@ -195,20 +214,9 @@ void SortWork(); /* order the work items; shortest first */
 int GetApxDist( int r1, int c1, int r2, int c2 );
 int CalcDist(int x,int y,int z ,int side );
 
-/* BOARD.CPP */
+/* routing_matrix.cpp */
 int Build_Work( BOARD * Pcb );
 void PlaceCells( BOARD * Pcb, int net_code, int flag = 0 );
-
-MATRIX_CELL GetCell( int aRow, int aCol, int aSide);
-void SetCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
-void OrCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
-void XorCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
-void AndCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
-void AddCell( int aRow, int aCol, int aSide, MATRIX_CELL aCell);
-DIST_CELL GetDist( int aRow, int aCol, int aSide );
-void SetDist( int aRow, int aCol, int aSide, DIST_CELL );
-int GetDir( int aRow, int aCol, int aSide );
-void SetDir( int aRow, int aCol, int aSide, int aDir);
 
 
 #endif  // AUTOROUT_H

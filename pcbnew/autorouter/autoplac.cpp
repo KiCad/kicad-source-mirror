@@ -59,7 +59,7 @@
  * graduated from 0 (rotation allowed) to 10 (rotation count null)
  * the count is increased.
  */
-static const float OrientPenality[11] =
+static const double OrientPenality[11] =
 {
     2.0f,       /* CntRot = 0 rotation prohibited */
     1.9f,       /* CntRot = 1 */
@@ -82,7 +82,7 @@ static const float OrientPenality[11] =
 static wxPoint CurrPosition; // Current position of the current module placement
 static bool    AutoPlaceShowAll = true;
 
-float          MinCout;
+double          MinCout;
 
 static int  TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
 
@@ -251,7 +251,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         DrawInfoPlace( DC );
 
         error     = GetOptimalModulePlacement( Module, DC );
-        float BestScore = MinCout;
+        double BestScore = MinCout;
         PosOK     = CurrPosition;
 
         if( error == ESC )
@@ -388,8 +388,8 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
             ox = RoutingMatrix.m_BrdBox.GetX() + (jj * RoutingMatrix.m_GridRouting);
             color = BLACK;
 
-            top_state    = GetCell( ii, jj, TOP );
-            bottom_state = GetCell( ii, jj, BOTTOM );
+            top_state    = RoutingMatrix.GetCell( ii, jj, TOP );
+            bottom_state = RoutingMatrix.GetCell( ii, jj, BOTTOM );
 
             if( top_state & CELL_is_ZONE )
                 color = BLUE;
@@ -403,7 +403,8 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
                 color = LIGHTGREEN;
             else /* Display the filling and keep out regions. */
             {
-                if( GetDist( ii, jj, TOP ) || GetDist( ii, jj, BOTTOM ) )
+                if( RoutingMatrix.GetDist( ii, jj, TOP ) ||
+                    RoutingMatrix.GetDist( ii, jj, BOTTOM ) )
                     color = DARKGRAY;
             }
 
@@ -415,7 +416,6 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 
 int PCB_EDIT_FRAME::GenPlaceBoard()
 {
-    int       NbCells;
     wxString  msg;
 
     RoutingMatrix.UnInitRoutingMatrix();
@@ -429,14 +429,14 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     }
 
     RoutingMatrix.ComputeMatrixSize( GetBoard(), true );
-    NbCells = Ncols * Nrows;
+    int nbCells = RoutingMatrix.m_Ncols * RoutingMatrix.m_Nrows;
 
     m_messagePanel->EraseMsgBox();
-    msg.Printf( wxT( "%d" ), Ncols );
+    msg.Printf( wxT( "%d" ), RoutingMatrix.m_Ncols );
     m_messagePanel->SetMessage( 1, _( "Cols" ), msg, GREEN );
-    msg.Printf( wxT( "%d" ), Nrows );
+    msg.Printf( wxT( "%d" ), RoutingMatrix.m_Nrows );
     m_messagePanel->SetMessage( 7, _( "Lines" ), msg, GREEN );
-    msg.Printf( wxT( "%d" ), NbCells );
+    msg.Printf( wxT( "%d" ), nbCells );
     m_messagePanel->SetMessage( 14, _( "Cells." ), msg, YELLOW );
 
     /* Choose the number of board sides. */
@@ -494,7 +494,8 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     // Mark cells of the routing matrix to CELL_is_ZONE
     // (i.e. availlable cell to place a module )
     // Init a starting point of attachment to the area.
-    OrCell( Nrows / 2, Ncols / 2, BOTTOM, CELL_is_ZONE );
+    RoutingMatrix.OrCell( RoutingMatrix.m_Nrows / 2, RoutingMatrix.m_Ncols / 2,
+                          BOTTOM, CELL_is_ZONE );
 
     // find and mark all other availlable cells:
     for( int ii = 1; ii != 0; )
@@ -503,7 +504,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     // Initialize top layer. to the same value as the bottom layer
     if( RoutingMatrix.m_BoardSide[TOP] )
         memcpy( RoutingMatrix.m_BoardSide[TOP], RoutingMatrix.m_BoardSide[BOTTOM],
-                NbCells * sizeof(MATRIX_CELL) );
+                nbCells * sizeof(MATRIX_CELL) );
 
     return 1;
 }
@@ -697,10 +698,10 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
                     LastPosOK = CurrPosition;
                     mincout   = Score;
                     wxString msg;
-                    msg.Printf( wxT( "Score %g, pos %3.4f, %3.4f" ),
+                    msg.Printf( wxT( "Score %g, pos %3.4g, %3.4g" ),
                                 mincout,
-                                (float) LastPosOK.x / 10000,
-                                (float) LastPosOK.y / 10000 );
+                                (double) LastPosOK.x / 10000,
+                                (double) LastPosOK.y / 10000 );
                     SetStatusText( msg );
                 }
             }
@@ -763,20 +764,20 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
     if( row_min < 0 )
         row_min = 0;
 
-    if( row_max >= ( Nrows - 1 ) )
-        row_max = Nrows - 1;
+    if( row_max >= ( RoutingMatrix.m_Nrows - 1 ) )
+        row_max = RoutingMatrix.m_Nrows - 1;
 
     if( col_min < 0 )
         col_min = 0;
 
-    if( col_max >= ( Ncols - 1 ) )
-        col_max = Ncols - 1;
+    if( col_max >= ( RoutingMatrix.m_Ncols - 1 ) )
+        col_max = RoutingMatrix.m_Ncols - 1;
 
     for( row = row_min; row <= row_max; row++ )
     {
         for( col = col_min; col <= col_max; col++ )
         {
-            data = GetCell( row, col, side );
+            data = RoutingMatrix.GetCell( row, col, side );
 
             if( ( data & CELL_is_ZONE ) == 0 )
                 return OUT_OF_BOARD;
@@ -820,14 +821,14 @@ unsigned int CalculateKeepOutArea( int ux0, int uy0, int ux1, int uy1, int side 
     if( row_min < 0 )
         row_min = 0;
 
-    if( row_max >= ( Nrows - 1 ) )
-        row_max = Nrows - 1;
+    if( row_max >= ( RoutingMatrix.m_Nrows - 1 ) )
+        row_max = RoutingMatrix.m_Nrows - 1;
 
     if( col_min < 0 )
         col_min = 0;
 
-    if( col_max >= ( Ncols - 1 ) )
-        col_max = Ncols - 1;
+    if( col_max >= ( RoutingMatrix.m_Ncols - 1 ) )
+        col_max = RoutingMatrix.m_Ncols - 1;
 
     keepOut = 0;
 
@@ -835,7 +836,7 @@ unsigned int CalculateKeepOutArea( int ux0, int uy0, int ux1, int uy1, int side 
     {
         for( col = col_min; col <= col_max; col++ )
         {
-            keepOut += (int) GetDist( row, col, side );
+            keepOut += RoutingMatrix.GetDist( row, col, side );
         }
     }
 
@@ -1001,14 +1002,14 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
     if( row_min < 0 )
         row_min = 0;
 
-    if( row_max >= (Nrows - 1) )
-        row_max = Nrows - 1;
+    if( row_max >= (RoutingMatrix.m_Nrows - 1) )
+        row_max = RoutingMatrix.m_Nrows - 1;
 
     if( col_min < 0 )
         col_min = 0;
 
-    if( col_max >= (Ncols - 1) )
-        col_max = Ncols - 1;
+    if( col_max >= (RoutingMatrix.m_Ncols - 1) )
+        col_max = RoutingMatrix.m_Ncols - 1;
 
     for( row = row_min; row <= row_max; row++ )
     {
@@ -1036,15 +1037,15 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
 
             if( trace & 1 )
             {
-                data = GetDist( row, col, BOTTOM ) + LocalKeepOut;
-                SetDist( row, col, BOTTOM, data );
+                data = RoutingMatrix.GetDist( row, col, BOTTOM ) + LocalKeepOut;
+                RoutingMatrix.SetDist( row, col, BOTTOM, data );
             }
 
             if( trace & 2 )
             {
-                data = GetDist( row, col, TOP );
+                data = RoutingMatrix.GetDist( row, col, TOP );
                 data = MAX( data, LocalKeepOut );
-                SetDist( row, col, TOP, data );
+                RoutingMatrix.SetDist( row, col, TOP, data );
             }
         }
     }
@@ -1180,23 +1181,23 @@ int propagate()
 
 #define NO_CELL_ZONE (HOLE | CELL_is_EDGE | CELL_is_ZONE)
 
-    pt_cell_V.reserve( MAX( Nrows, Ncols ) );
+    pt_cell_V.reserve( MAX( RoutingMatrix.m_Nrows, RoutingMatrix.m_Ncols ) );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     // Search from left to right and top to bottom.
-    for( row = 0; row < Nrows; row++ )
+    for( row = 0; row < RoutingMatrix.m_Nrows; row++ )
     {
         old_cell_H = 0;
 
-        for( col = 0; col < Ncols; col++ )
+        for( col = 0; col < RoutingMatrix.m_Ncols; col++ )
         {
-            current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+            current_cell = RoutingMatrix.GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
 
             if( current_cell == 0 )  /* a free cell is found */
             {
                 if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[col] & CELL_is_ZONE) )
                 {
-                    OrCell( row, col, BOTTOM, CELL_is_ZONE );
+                    RoutingMatrix.OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
                     nbpoints++;
                 }
@@ -1209,19 +1210,19 @@ int propagate()
     // Search from right to left and top to bottom/
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
-    for( row = 0; row < Nrows; row++ )
+    for( row = 0; row < RoutingMatrix.m_Nrows; row++ )
     {
         old_cell_H = 0;
 
-        for( col = Ncols - 1; col >= 0; col-- )
+        for( col = RoutingMatrix.m_Ncols - 1; col >= 0; col-- )
         {
-            current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+            current_cell = RoutingMatrix.GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
 
             if( current_cell == 0 )  /* a free cell is found */
             {
                 if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[col] & CELL_is_ZONE) )
                 {
-                    OrCell( row, col, BOTTOM, CELL_is_ZONE );
+                    RoutingMatrix.OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
                     nbpoints++;
                 }
@@ -1234,19 +1235,19 @@ int propagate()
     // Search from bottom to top and right to left.
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
-    for( col = Ncols - 1; col >= 0; col-- )
+    for( col = RoutingMatrix.m_Ncols - 1; col >= 0; col-- )
     {
         old_cell_H = 0;
 
-        for( row = Nrows - 1; row >= 0; row-- )
+        for( row = RoutingMatrix.m_Nrows - 1; row >= 0; row-- )
         {
-            current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+            current_cell = RoutingMatrix.GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
 
             if( current_cell == 0 )  /* a free cell is found */
             {
                 if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[row] & CELL_is_ZONE) )
                 {
-                    OrCell( row, col, BOTTOM, CELL_is_ZONE );
+                    RoutingMatrix.OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
                     nbpoints++;
                 }
@@ -1259,19 +1260,19 @@ int propagate()
     // Search from bottom to top and left to right.
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
-    for( col = 0; col < Ncols; col++ )
+    for( col = 0; col < RoutingMatrix.m_Ncols; col++ )
     {
         old_cell_H = 0;
 
-        for( row = Nrows - 1; row >= 0; row-- )
+        for( row = RoutingMatrix.m_Nrows - 1; row >= 0; row-- )
         {
-            current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+            current_cell = RoutingMatrix.GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
 
             if( current_cell == 0 )  /* a free cell is found */
             {
                 if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[row] & CELL_is_ZONE) )
                 {
-                    OrCell( row, col, BOTTOM, CELL_is_ZONE );
+                    RoutingMatrix.OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
                     nbpoints++;
                 }

@@ -620,7 +620,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     T token;
     wxString name;
     wxString type;
-    bool isVisible;
+    bool isVisible = true;
     int visibleLayers = 0;
     int enabledLayers = 0;
     std::vector< LAYER > layers;
@@ -655,7 +655,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             Expecting( "hide or )" );
         }
 
-        layers.push_back( LAYER( name, LAYER::ParseType( type.c_str() ), isVisible ) );
+        layers.push_back( LAYER( name, LAYER::ParseType( TO_UTF8( type ) ), isVisible ) );
     }
 
     int copperLayerCount = 0;
@@ -701,7 +701,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             {
                 wxString error;
                 error.Printf( _( "Cannot determine fixed layer list index of layer name \"%s\"" ),
-                              layers[i].m_Name );
+                              GetChars( layers[i].m_Name ) );
                 THROW_IO_ERROR( error );
             }
         }
@@ -1110,7 +1110,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 
         wxString error;
         error.Printf( _( "duplicate NETCLASS name '%s' in file %s at line %d, offset %d" ),
-                      nc->GetName().GetData(), CurSource(), CurLineNumber(), CurOffset() );
+                      nc->GetName().GetData(), CurSource().GetData(), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
 }
@@ -2268,8 +2268,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    int     hatchStyle;
-    int     hatchPitch;
+    int     hatchStyle = CPolyLine::NO_HATCH;   // Fix compil warning
+    int     hatchPitch = 0;                     // Fix compil warning
     wxPoint pt;
     T       token;
 
