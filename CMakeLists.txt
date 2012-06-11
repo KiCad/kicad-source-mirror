@@ -70,11 +70,11 @@ else (KICAD_STABLE_VERSION )
 endif(KICAD_STABLE_VERSION )
 
 # Nanometers must be enabled when USE_PCBNEW_SEXPR_FILE_FORMAT=ON.
-if( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
-    set( TMP "The Pcbnew s-expression file format requires nano-meter internal units to be " )
-    set( TMP "${TMP} enabled using -DUSE_PCBNEW_NANOMETRES=ON." )
-    message( FATAL_ERROR ${TMP} )
-endif( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
+#if( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
+#    set( TMP "The Pcbnew s-expression file format requires nano-meter internal units to be " )
+#    set( TMP "${TMP} enabled using -DUSE_PCBNEW_NANOMETRES=ON." )
+#    message( FATAL_ERROR ${TMP} )
+#endif( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
 
 #================================================
 # Set flags for GCC.

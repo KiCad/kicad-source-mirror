@@ -120,6 +120,7 @@ page
 path
 pcb_text_size
 pcb_text_width
+pcbplotparams
 placed
 plus
 polygon

@@ -40,6 +40,8 @@ using namespace PCB;
 class BOARD;
 class BOARD_ITEM;
 class D_PAD;
+class DIMENSION;
+class DRAWSEGMENT;
 class EDGE_MODULE;
 class TEXTE_MODULE;
 class TEXTE_PCB;
@@ -73,10 +75,10 @@ class PCB_PARSER : public PCB_LEXER
     void parseSetup() throw( IO_ERROR, PARSE_ERROR );
     void parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR );
     void parseNETCLASS() throw( IO_ERROR, PARSE_ERROR );
-    void parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR );
-    void parseTEXTE_PCB( TEXTE_PCB* aText = NULL ) throw( IO_ERROR, PARSE_ERROR );
-    void parseDIMENSION() throw( IO_ERROR, PARSE_ERROR );
-    void parseMODULE() throw( IO_ERROR, PARSE_ERROR );
+    DRAWSEGMENT* parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR );
+    TEXTE_PCB* parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR );
+    DIMENSION* parseDIMENSION() throw( IO_ERROR, PARSE_ERROR );
+    MODULE* parseMODULE() throw( IO_ERROR, PARSE_ERROR );
     TEXTE_MODULE* parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR );
     EDGE_MODULE* parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR );
     D_PAD* parseD_PAD() throw( IO_ERROR, PARSE_ERROR );
@@ -168,12 +170,12 @@ class PCB_PARSER : public PCB_LEXER
     {
         // There should be no rounding issues here, since the values in the file are in mm
         // and get converted to nano-meters.  This product should be an integer, exactly.
-        return int( parseDouble() * 1e6 );
+        return int( parseDouble() * IU_PER_MM );
     }
 
     inline int parseBoardUnits( const char* aExpected ) throw( PARSE_ERROR )
     {
-        return KIROUND( parseDouble( aExpected ) * 1e6 );
+        return KIROUND( parseDouble( aExpected ) * IU_PER_MM );
     }
 
     inline int parseBoardUnits( T aToken ) throw( PARSE_ERROR )

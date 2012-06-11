@@ -120,7 +120,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     const char* falseStr = getTokenName( T_false );
     const char* trueStr = getTokenName( T_true );
 
-    aFormatter->Print( aNestLevel, "(%s", getTokenName( T_pcbplotparams ) );
+    aFormatter->Print( aNestLevel, "(%s\n", getTokenName( T_pcbplotparams ) );
     aFormatter->Print( aNestLevel+1, "(%s %ld)\n", getTokenName( T_layerselection ),
                        layerSelection );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
@@ -173,7 +173,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        scaleSelection );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_outputdirectory ),
                        aFormatter->Quotew( outputDirectory ).c_str() );
-    aFormatter->Print( 0, ")\n" );
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 
