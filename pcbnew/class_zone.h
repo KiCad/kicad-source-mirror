@@ -209,6 +209,7 @@ public:
     const wxString& GetNetName() const                  { return m_Netname; };
     void SetNetName( const wxString& aName )            { m_Netname = aName; }
 
+    /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.
     void SetFillMode( int aFillMode )                   { m_FillMode = aFillMode; }
     int GetFillMode() const                             { return m_FillMode; }
 
@@ -550,7 +551,7 @@ public:
     int                   m_ZoneClearance;                  // clearance value
     int                   m_ZoneMinThickness;               // Min thickness value in filled areas
 
-    // How to fill areas: 0 = use filled polygons, != 0 fill with segments.
+    /// How to fill areas: 0 => use filled polygons, 1 => fill with segments.
     int                   m_FillMode;
 
     // number of segments to convert a circle to a polygon (uses

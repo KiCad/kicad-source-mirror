@@ -358,7 +358,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
                                    FMT_IU( m_Size.GetWidth() ).c_str() );
 
             if( m_Thickness != 0 )
-                aFormatter->Print( 0, " (thickness %s)", FMT_IU( m_Thickness ).c_str() );
+                aFormatter->Print( 0, " (thickness %s)", FMT_IU( GetThickness() ).c_str() );
 
             if( m_Bold )
                 aFormatter->Print( 0, " bold" );

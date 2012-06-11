@@ -39,6 +39,7 @@
 #include <class_drawsegment.h>
 #include <class_mire.h>
 #include <class_edge_mod.h>
+#include <pcb_plot_params.h>
 #include <zones.h>
 #include <kicad_plugin.h>
 #include <pcb_parser.h>
@@ -324,6 +325,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
                   aBoard->GetDesignSettings().GetVisibleElements() );
 
+//    aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
+
     m_out->Print( aNestLevel, ")\n\n" );
 
 
@@ -448,9 +451,10 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
     switch( aSegment->GetShape() )
     {
     case S_SEGMENT:  // Line
-        m_out->Print( aNestLevel, "(gr_line (pts (xy %s) (xy %s))",
+        m_out->Print( aNestLevel, "(gr_line (pts (xy %s) (xy %s)) (angle %s)",
                       FMT_IU( aSegment->GetStart() ).c_str(),
-                      FMT_IU( aSegment->GetEnd() ).c_str() );
+                      FMT_IU( aSegment->GetEnd() ).c_str(),
+                      FMT_ANGLE( aSegment->GetAngle() ).c_str() );
         break;
 
     case S_CIRCLE:  // Circle
@@ -863,11 +867,17 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     if( parent )
         orient += parent->GetOrientation();
 
-    m_out->Print( aNestLevel, "(fp_text %s %s (at %s %s)%s\n",
+    m_out->Print( aNestLevel, "(fp_text %s %s (at %s %s)",
                   m_out->Quotew( type ).c_str(),
                   m_out->Quotew( aText->GetText() ).c_str(),
-                  FMT_IU( aText->GetPos0() ).c_str(), FMT_ANGLE( orient ).c_str(),
-                  (!aText->IsVisible()) ? " hide" : "" );
+                  FMT_IU( aText->GetPos0() ).c_str(), FMT_ANGLE( orient ).c_str() );
+
+    formatLayer( aText );
+
+    if( !aText->IsVisible() )
+        m_out->Print( 0, " hide" );
+
+    m_out->Print( 0, "\n" );
 
     aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl );
 

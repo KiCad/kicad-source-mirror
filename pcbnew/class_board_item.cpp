@@ -93,13 +93,23 @@ std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 {
     char buf[50];
 
-#if defined( USE_PCBNEW_NANOMETRES )
-    int nm = aValue;
-#else
-    int nm = KIROUND( ( aValue / 10000.0 ) * 25.4 * 1e6 );
-#endif
+    double  mm = aValue / IU_PER_MM;
 
-    int len = snprintf( buf, 49, "%g", nm / 1e6 );
+    int     len;
+
+    if( mm != 0.0 && fabs( mm ) <= 0.0001 )
+    {
+        len = sprintf( buf, "%.10f", mm );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        ++len;
+    }
+    else
+    {
+        len = sprintf( buf, "%.10g", mm );
+    }
 
     return std::string( buf, len );
 }
