@@ -2190,8 +2190,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    int hatchStyle;
-    int hatchPitch;
+    int hatchStyle = CPolyLine::NO_HATCH;
+    int hatchPitch = 0;
     wxPoint pt;
     T token;
 
