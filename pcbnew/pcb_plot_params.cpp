@@ -171,9 +171,9 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_DrillShapeOpt );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_scaleselection ),
                        scaleSelection );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_outputdirectory ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)", getTokenName( T_outputdirectory ),
                        aFormatter->Quotew( outputDirectory ).c_str() );
-    aFormatter->Print( aNestLevel, ")\n" );
+    aFormatter->Print( 0, ")\n" );
 }
 
 

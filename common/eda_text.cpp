@@ -363,7 +363,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             if( m_Bold )
                 aFormatter->Print( 0, " bold" );
 
-            if( m_Bold )
+            if( IsItalic() )
                 aFormatter->Print( 0, " italic" );
 
             aFormatter->Print( 0, ")\n");

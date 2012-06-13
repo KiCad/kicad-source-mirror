@@ -54,8 +54,8 @@ class ZONE_CONTAINER;
 WX_DECLARE_STRING_HASH_MAP( int, LAYER_HASH_MAP );
 
 
-#define USE_LAYER_NAMES 1   // Set to 0 to format and parse layers by index number.
-
+#define USE_LAYER_NAMES      1   // Set to 0 to format and parse layers by index number.
+#define SAVE_PCB_PLOT_PARAMS 0   // Set to 1 to save and load the PCB plot dialog data.
 
 /**
  * Class PCB_PARSER
@@ -194,10 +194,10 @@ class PCB_PARSER : public PCB_LEXER
         return parseInt();
     }
 
-    inline int parseHex() throw( PARSE_ERROR )
+    inline long parseHex() throw( PARSE_ERROR )
     {
-        NeedSYMBOLorNUMBER();
-        return (int)strtol( CurText(), NULL, 16 );
+        NextTok();
+        return strtol( CurText(), NULL, 16 );
     }
 
     bool parseBool() throw( PARSE_ERROR );

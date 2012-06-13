@@ -325,7 +325,9 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
                   aBoard->GetDesignSettings().GetVisibleElements() );
 
-//    aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
+#if SAVE_PCB_PLOT_PARAMS
+    aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
+#endif
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -351,18 +353,19 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         netclass->Format( m_out, aNestLevel, m_ctl );
     }
 
-    // Save the graphical items on the board (not owned by a module)
-    for( BOARD_ITEM* item = aBoard->m_Drawings;  item;  item = item->Next() )
-        Format( item, aNestLevel );
-
-    m_out->Print( 0, "\n" );
-
     // Save the modules.
     for( MODULE* module = aBoard->m_Modules;  module;  module = (MODULE*) module->Next() )
     {
         Format( module, aNestLevel );
         m_out->Print( 0, "\n" );
     }
+
+    // Save the graphical items on the board (not owned by a module)
+    for( BOARD_ITEM* item = aBoard->m_Drawings;  item;  item = item->Next() )
+        Format( item, aNestLevel );
+
+    m_out->Print( 0, "\n" );
+    m_out->Print( 0, "\n" );
 
     // Do not save MARKER_PCBs, they can be regenerated easily.
 
@@ -576,14 +579,14 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
                   FMT_IU( aTarget->GetSize() ).c_str() );
 
     if( aTarget->GetWidth() != 0 )
-        m_out->Print( aNestLevel, " (width %s)", FMT_IU( aTarget->GetWidth() ).c_str() );
+        m_out->Print( 0, " (width %s)", FMT_IU( aTarget->GetWidth() ).c_str() );
 
     formatLayer( aTarget );
 
     if( aTarget->GetTimeStamp() )
-        m_out->Print( aNestLevel, " (tstamp %lX)", aTarget->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)", aTarget->GetTimeStamp() );
 
-    m_out->Print( aNestLevel, ")\n" );
+    m_out->Print( 0, ")\n" );
 }
 
 
@@ -741,31 +744,36 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                                           aPad->GetAttribute() ) );
     }
 
-    m_out->Print( aNestLevel, "(pad %s %s %s (size %s)\n",
+    m_out->Print( aNestLevel, "(pad %s %s %s (size %s)",
                   m_out->Quotew( aPad->GetPadName() ).c_str(),
                   type.c_str(), shape.c_str(),
                   FMT_IU( aPad->GetSize() ).c_str() );
-    m_out->Print( aNestLevel+1, "(at %s", FMT_IU( aPad->GetPos0() ).c_str() );
+    m_out->Print( aNestLevel+1, " (at %s", FMT_IU( aPad->GetPos0() ).c_str() );
 
     if( aPad->GetOrientation() != 0.0 )
         m_out->Print( 0, " %s", FMT_ANGLE( aPad->GetOrientation() ).c_str() );
 
-    m_out->Print( 0, ")\n" );
+    m_out->Print( 0, ")" );
 
-    if( (aPad->GetDrillSize().GetWidth() > 0) || (aPad->GetDrillSize().GetHeight() > 0) )
+    if( (aPad->GetDelta().GetWidth()) != 0 || (aPad->GetDelta().GetHeight() != 0 ) )
+        m_out->Print( 0, " (rect_delta %s )", FMT_IU( aPad->GetDelta() ).c_str() );
+
+    m_out->Print( 0, "\n" );
+
+    wxSize sz = aPad->GetDrillSize();
+
+    if( (sz.GetWidth() > 0) || (sz.GetHeight() > 0) )
     {
-        std::string drill = (aPad->GetDrillSize().GetHeight() > 0) ?
-                            FMT_IU( aPad->GetDrillSize() ).c_str() :
-                            FMT_IU( aPad->GetDrillSize().GetWidth() ).c_str();
-        m_out->Print( aNestLevel+1, "(drill %s", drill.c_str() );
+        m_out->Print( aNestLevel+1, "(drill" );
 
-        if( (aPad->GetOffset().x > 0) || (aPad->GetOffset().y > 0) )
-        {
-            std::string drillOffset = ( aPad->GetOffset().x > 0 ) ?
-                                      FMT_IU( aPad->GetOffset() ).c_str() :
-                                      FMT_IU( aPad->GetOffset().x ).c_str();
-            m_out->Print( 0, " (offset %s)", drillOffset.c_str() );
-        }
+        if( aPad->GetDrillShape() == PAD_OVAL )
+            m_out->Print( 0, " oval" );
+
+        m_out->Print( 0,  " (size %s)", (sz.GetHeight() != sz.GetWidth()) ? FMT_IU( sz ).c_str() :
+                      FMT_IU( sz.GetWidth() ).c_str() );
+
+        if( (aPad->GetOffset().x != 0) || (aPad->GetOffset().y != 0) )
+            m_out->Print( 0, " (offset %s)", FMT_IU( aPad->GetOffset() ).c_str() );
 
         m_out->Print( 0, ")\n" );
     }
