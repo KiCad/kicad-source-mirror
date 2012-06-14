@@ -40,6 +40,7 @@
 #include <class_edge_mod.h>
 
 #include <pcbnew.h>
+#include <convert_to_biu.h>
 
 
 /* read parameters from a line, and return all params in a wxArrayString
@@ -179,9 +180,9 @@ static bool TestFlags( const wxString& flg_string, long flg_mask, const wxChar* 
  */
 bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 {
-    #define TEXT_DEFAULT_SIZE  400
-    #define OLD_GPCB_UNIT_CONV 10
-    #define NEW_GPCB_UNIT_CONV 0.1
+    #define TEXT_DEFAULT_SIZE  (40*IU_PER_MILS)
+    #define OLD_GPCB_UNIT_CONV IU_PER_MILS
+    #define NEW_GPCB_UNIT_CONV (0.01*IU_PER_MILS)
 
     FILE*         cmpfile;
     double        conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
@@ -277,7 +278,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     m_Reference->SetPos0( pos );
     m_Reference->SetOrientation( ibuf[idx+2] ? 900 : 0 );
 
-    // Calculate size: default is 40 mils (400 pcb units)
+    // Calculate size: default is 40 mils
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
     int tsize = ( ibuf[idx+3] * TEXT_DEFAULT_SIZE ) / 100;
     int thickness = m_Reference->m_Size.x / 6;
