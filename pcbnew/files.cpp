@@ -176,10 +176,12 @@ the changes?" ) ) )
     // load a BOARD.  Order is subject to change as KICAD plugin matures.
     // User may occasionally use the wrong plugin to load a *.brd file,
     // but eventually *.kicad_pcb will be more common than legacy *.brd files.
-    static const struct {
+    static const struct
+    {
         const wxString&     filter;
         IO_MGR::PCB_FILE_T  pluginType;
-    } loaders[] = {
+    } loaders[] =
+    {
         { LegacyPcbFileWildcard,    IO_MGR::LEGACY },
         { PcbFileWildcard,          IO_MGR::KICAD },
         { EaglePcbFileWildcard,     IO_MGR::EAGLE },
@@ -215,6 +217,12 @@ the changes?" ) ) )
 
         int chosenFilter = dlg.GetFilterIndex();
         pluginType = loaders[chosenFilter].pluginType;
+    }
+    else    // if a filename is given, force IO_MGR::KICAD if the file est is kicad_pcb
+            // for instance if the filename comes from file history
+    {
+        if( fileName.GetExt() == IO_MGR::GetFileExtension( IO_MGR::KICAD ) )
+            pluginType = IO_MGR::KICAD;
     }
 
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
