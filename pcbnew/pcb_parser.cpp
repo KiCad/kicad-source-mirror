@@ -744,7 +744,7 @@ int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
     if( !m_board->IsLayerEnabled( layerIndex ) )
     {
         wxString error;
-        error.Printf( _( "Layer index %d in file <%s> at line, offset %d was not defined in the layers section" ),
+        error.Printf( _( "Layer index %d in file <%s> at line %d, offset %d was not defined in the layers section" ),
                       layerIndex, GetChars( CurSource() ), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
