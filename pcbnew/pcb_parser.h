@@ -175,7 +175,10 @@ class PCB_PARSER : public PCB_LEXER
 
     inline int parseBoardUnits( const char* aExpected ) throw( PARSE_ERROR )
     {
-        return KIROUND( parseDouble( aExpected ) * IU_PER_MM );
+        // Use here KiROUND, not KIROUND (see comments about them)
+        // when having a function as argument, because it will be called twice
+        // with KIROUND
+        return KiROUND( parseDouble( aExpected ) * IU_PER_MM );
     }
 
     inline int parseBoardUnits( T aToken ) throw( PARSE_ERROR )

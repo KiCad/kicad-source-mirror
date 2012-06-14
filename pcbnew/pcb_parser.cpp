@@ -729,7 +729,7 @@ int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
     if( it == m_layerMap.end() )
     {
         wxString error;
-        error.Printf( _( "Layer %s in file <%s> at line %d, position %d was not defined in the layers section" ),
+        error.Printf( _( "Layer '%s' in file <%s> at line %d, position %d was not defined in the layers section" ),
                       GetChars( name ), GetChars( CurSource() ), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
@@ -2583,7 +2583,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         default:
-            Expecting( "x, plus, at, size, width, or tstamp" );
+            Expecting( "x, plus, at, size, width, layer or tstamp" );
         }
     }
 
