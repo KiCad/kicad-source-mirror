@@ -301,6 +301,7 @@ BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
     BOARD_ITEM* item;
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     token = NextTok();
 
@@ -617,19 +618,18 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     T token;
     wxString name;
     wxString type;
+    int layerIndex;
     bool isVisible = true;
     int visibleLayers = 0;
     int enabledLayers = 0;
-    std::vector< LAYER > layers;
+    int copperLayerCount = 0;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );
 
-#if !USE_LAYER_NAMES
-        NeedNUMBER( "layer index" );
-#endif
+        layerIndex = parseInt( "layer index" );
 
         NeedSYMBOL();
         name = FromUTF8();
@@ -652,14 +652,20 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             Expecting( "hide or )" );
         }
 
-        layers.push_back( LAYER( name, LAYER::ParseType( TO_UTF8( type ) ), isVisible ) );
-    }
+        enabledLayers |= 1 << layerIndex;
 
-    int copperLayerCount = 0;
+        if( isVisible )
+            visibleLayers |= 1 << layerIndex;
 
-    for( unsigned i = 0;  i < layers.size();  i++ )
-    {
-        if( layers[i].m_Type != LT_UNDEFINED )
+        enum LAYER_T layerType = LAYER::ParseType( TO_UTF8( type ) );
+        LAYER layer( name, layerType, isVisible );
+        layer.SetFixedListIndex( layerIndex );
+        m_board->SetLayer( layerIndex, layer );
+        m_layerMap[ name ] = layerIndex;
+        wxLogDebug( wxT( "Mapping layer %s index index %d" ),
+                    GetChars( name ), layerIndex );
+
+        if( layerType != LT_UNDEFINED )
             copperLayerCount++;
     }
 
@@ -667,54 +673,11 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     if( (copperLayerCount < 2) || ((copperLayerCount % 2) != 0) )
     {
         wxString err;
-        err.Printf( _( "%d is not a valid layer count" ), layers.size() );
+        err.Printf( _( "%d is not a valid layer count" ), copperLayerCount );
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
     m_board->SetCopperLayerCount( copperLayerCount );
-
-    // Copper layers are sequential from front to back in the file but the current layer
-    // design uses sequential layers from back to front except for the front layer which
-    // is always vector index 15.
-    for( unsigned i = 0;  i < layers.size();  i++ )
-    {
-        int layerIndex = i;
-
-        // The copper layers can have different names but they always are at the beginning
-        // and have a valid layer type.  Non-copper layer name cannot be changed so the
-        // list index can be looked up by name.
-        if( layers[i].m_Type != LT_UNDEFINED )
-        {
-            if( i == 0 )
-                layerIndex = LAYER_N_FRONT;
-            else
-                layerIndex = copperLayerCount - 1 - i;
-        }
-        else
-        {
-            layerIndex = LAYER::GetDefaultIndex( layers[i].m_Name );
-
-            if( layerIndex == UNDEFINED_LAYER )
-            {
-                wxString error;
-                error.Printf( _( "Cannot determine fixed layer list index of layer name \"%s\"" ),
-                              GetChars( layers[i].m_Name ) );
-                THROW_IO_ERROR( error );
-            }
-        }
-
-        enabledLayers |= 1 << layerIndex;
-
-        if( layers[i].IsVisible() )
-            visibleLayers |= 1 << layerIndex;
-
-        layers[i].SetFixedListIndex( layerIndex );
-        m_board->SetLayer( layerIndex, layers[i] );
-        m_layerMap[ layers[i].m_Name ] = layerIndex;
-        wxLogDebug( wxT( "Mapping layer %s index index %d" ),
-                    GetChars( layers[i].m_Name ), layerIndex );
-    }
-
     m_board->SetVisibleLayers( visibleLayers );
     m_board->SetEnabledLayers( enabledLayers );
 }
@@ -1119,7 +1082,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as DRAWSEGMENT." ) );
 
     T token;
-
+    wxPoint pt;
     auto_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
 
     switch( CurTok() )
@@ -1132,7 +1095,9 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
         if( token != T_start )
             Expecting( T_start );
 
-        segment->SetStart( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetStart( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -1140,14 +1105,9 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
         if( token != T_end )
             Expecting( T_end );
 
-        segment->SetEnd( parseXY() );
-        NeedRIGHT();
-        token = NextTok();
-
-        if( token != T_angle )
-            Expecting( T_angle );
-
-        segment->SetAngle( parseDouble( "segment angle" ) );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetEnd( pt );
         NeedRIGHT();
         break;
 
@@ -1159,15 +1119,20 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
         if( token != T_center )
             Expecting( T_center );
 
-        segment->SetStart( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetStart( pt );
         NeedRIGHT();
         NeedLEFT();
 
         token = NextTok();
+
         if( token != T_end )
             Expecting( T_end );
 
-        segment->SetEnd( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetEnd( pt );
         NeedRIGHT();
         break;
 
@@ -1191,19 +1156,22 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
         NeedLEFT();
         token = NextTok();
 
-        if( token != T_pts )
-            Expecting( T_pts );
+        if( token != T_start )
+            Expecting( T_start );
 
-        segment->SetStart( parseXY() );
-        segment->SetEnd( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetStart( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
 
-        if( token != T_angle )
-            Expecting( T_angle );
+        if( token != T_end )
+            Expecting( T_end );
 
-        segment->SetAngle( parseDouble( "segment angle" ) * 10.0 );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetEnd( pt );
         NeedRIGHT();
         break;
 
@@ -1238,6 +1206,10 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
 
         switch( token )
         {
+        case T_angle:
+            segment->SetAngle( parseDouble( "segment angle" ) * 10.0 );
+            break;
+
         case T_layer:
             segment->SetLayer( parseBoardItemLayer() );
             break;
@@ -1287,8 +1259,19 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
     pt.x = parseBoardUnits( "X coordinate" );
     pt.y = parseBoardUnits( "Y coordinate" );
     text->SetPosition( pt );
-    text->SetOrientation( parseDouble( "angle" ) * 10.0 );
-    NeedRIGHT();
+
+    // If there is no orientation defined, then it is the default value of 0 degrees.
+    token = NextTok();
+
+    if( token == T_NUMBER )
+    {
+        text->SetOrientation( parseDouble() * 10.0 );
+        NeedRIGHT();
+    }
+    else if( token != T_RIGHT )
+    {
+        Unexpected( CurText() );
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -1725,8 +1708,18 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     pt.x = parseBoardUnits( "X coordinate" );
     pt.y = parseBoardUnits( "Y coordinate" );
     text->SetPos0( pt );
-    text->SetOrientation( parseDouble( "angle" ) * 10.0 );
-    NeedRIGHT();
+    token = NextTok();
+
+    // If there is no orientation defined, then it is the default value of 0 degrees.
+    if( token == T_NUMBER )
+    {
+        text->SetOrientation( parseDouble() * 10.0 );
+        NeedRIGHT();
+    }
+    else if( token != T_RIGHT )
+    {
+        Unexpected( CurText() );
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -1763,6 +1756,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
                  CurTok() == T_fp_line || CurTok() == T_fp_poly, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDGE_MODULE." ) );
 
+    wxPoint pt;
     T token;
 
     auto_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
@@ -1777,15 +1771,20 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
         if( token != T_start )
             Expecting( T_start );
 
-        segment->SetStart0( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetStart0( pt );
         NeedRIGHT();
         token = NextTok();
 
         if( token != T_end )
             Expecting( T_end );
 
-        segment->SetEnd0( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetEnd0( pt );
         NeedRIGHT();
+        NeedLEFT();
         token = NextTok();
 
         if( token != T_angle )
@@ -1803,7 +1802,9 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
         if( token != T_center )
             Expecting( T_center );
 
-        segment->SetStart0( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetStart0( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
@@ -1811,7 +1812,9 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
         if( token != T_end )
             Expecting( T_end );
 
-        segment->SetEnd0( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetEnd0( pt );
         NeedRIGHT();
         break;
 
@@ -1835,11 +1838,23 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
         NeedLEFT();
         token = NextTok();
 
-        if( token != T_pts )
-            Expecting( T_pts );
+        if( token != T_start )
+            Expecting( T_start );
 
-        segment->SetStart0( parseXY() );
-        segment->SetEnd0( parseXY() );
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetStart0( pt );
+
+        NeedRIGHT();
+        NeedLEFT();
+        token = NextTok();
+
+        if( token != T_end )
+            Expecting( T_end );
+
+        pt.x = parseBoardUnits( "X coordinate" );
+        pt.y = parseBoardUnits( "Y coordinate" );
+        segment->SetEnd0( pt );
         NeedRIGHT();
         break;
 
@@ -1945,7 +1960,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
         pad->SetShape( PAD_CIRCLE );
         break;
 
-    case T_rectangle:
+    case T_rect:
         pad->SetShape( PAD_RECT );
         break;
 
@@ -2203,10 +2218,6 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
 
         switch( token )
         {
-        case T_thru:
-            via->SetShape( VIA_THROUGH );
-            break;
-
         case T_blind:
             via->SetShape( VIA_BLIND_BURIED );
             break;
@@ -2261,7 +2272,7 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         default:
-            Expecting( "at, size, drill, layers, net, tstamp, or status" );
+            Expecting( "blind, micro, at, size, drill, layers, net, tstamp, or status" );
         }
     }
 
@@ -2339,25 +2350,31 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_connect_pads:
-            token = NextTok();
-
-            switch( token )
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
-            case T_yes:           zone->SetPadConnection( PAD_IN_ZONE );       break;
-            case T_use_thermal:   zone->SetPadConnection( THERMAL_PAD );       break;
-            case T_no:            zone->SetPadConnection( PAD_NOT_IN_ZONE );   break;
-            default:              Expecting( "yes, no, or use_thermal" );
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                switch( token )
+                {
+                case T_yes:
+                    zone->SetPadConnection( PAD_IN_ZONE );
+                    break;
+
+                case T_no:
+                    zone->SetPadConnection( PAD_NOT_IN_ZONE );
+                    break;
+
+                case T_clearance:
+                    zone->SetZoneClearance( parseBoardUnits( "zone clearance" ) );
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    Expecting( "yes, no, or clearance" );
+                }
             }
 
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_clearance )
-                Expecting( T_clearance );
-
-            zone->SetZoneClearance( parseBoardUnits( "zone clearance" ) );
-            NeedRIGHT();
-            NeedRIGHT();
             break;
 
         case T_min_thickness:
@@ -2366,22 +2383,17 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_fill:
-            token = NextTok();
-
-            if( token != T_yes && token != T_no )
-                Expecting( "yes or no" );
-
-            zone->SetIsFilled( token == T_yes );
-
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
-                if( token != T_LEFT )
-                    Expecting( T_LEFT );
-
-                token = NextTok();
+                if( token == T_LEFT )
+                    token = NextTok();
 
                 switch( token )
                 {
+                case T_yes:
+                    zone->SetIsFilled( true );
+                    break;
+
                 case T_mode:
                     token = NextTok();
 

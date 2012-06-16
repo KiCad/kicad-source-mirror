@@ -74,10 +74,14 @@ BOARD::BOARD() :
 
     BuildListOfNets();                      // prepare pad and netlist containers.
 
-    for( int layer = 0; layer < NB_COPPER_LAYERS; ++layer )
+    for( int layer = 0; layer < LAYER_COUNT; ++layer )
     {
         m_Layer[layer].m_Name = GetDefaultLayerName( layer );
-        m_Layer[layer].m_Type = LT_SIGNAL;
+
+        if( layer <= LAST_COPPER_LAYER )
+            m_Layer[layer].m_Type = LT_SIGNAL;
+        else
+            m_Layer[layer].m_Type = LT_UNDEFINED;
     }
 
     m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
@@ -356,8 +360,8 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
     if( !IsValidLayerIndex( aLayerIndex ) )
         return wxEmptyString;
 
-    // copper layer names are stored in the BOARD.
-    if( IsValidCopperLayerIndex( aLayerIndex ) && IsLayerEnabled( aLayerIndex ) )
+    // All layer names are stored in the BOARD.
+    if( IsLayerEnabled( aLayerIndex ) )
     {
         // default names were set in BOARD::BOARD() but they may be
         // over-ridden by BOARD::SetLayerName()

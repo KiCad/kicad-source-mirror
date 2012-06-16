@@ -199,7 +199,7 @@ private:
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS     m_ZoneDescriptorList;
 
-    LAYER               m_Layer[NB_COPPER_LAYERS];
+    LAYER               m_Layer[LAYER_COUNT];
                                                     // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO     m_highLight;                // current high light data
     HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data

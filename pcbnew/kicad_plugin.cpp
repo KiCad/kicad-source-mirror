@@ -134,7 +134,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
 
 void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
-#if USE_LAYER_NAMES
+#if 1
     m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
 #else
     m_out->Print( 0, " (layer %d)", aItem->GetLayer() );
@@ -182,7 +182,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         if( mask & aBoard->GetEnabledLayers() )
         {
 #if USE_LAYER_NAMES
-            m_out->Print( aNestLevel+1, "(%s %s",
+            m_out->Print( aNestLevel+1, "(%d %s %s", layer,
                           m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
                           LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
 #else
@@ -210,7 +210,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         if( mask & aBoard->GetEnabledLayers() )
         {
 #if USE_LAYER_NAMES
-            m_out->Print( aNestLevel+1, "(%s user",
+            m_out->Print( aNestLevel+1, "(%d %s user", layer,
                           m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
 #else
             m_out->Print( aNestLevel+1, "(%d %s user", layer,
@@ -454,20 +454,23 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
     switch( aSegment->GetShape() )
     {
     case S_SEGMENT:  // Line
-        m_out->Print( aNestLevel, "(gr_line (pts (xy %s) (xy %s)) (angle %s)",
+        m_out->Print( aNestLevel, "(gr_line (start %s) (end %s)",
                       FMT_IU( aSegment->GetStart() ).c_str(),
-                      FMT_IU( aSegment->GetEnd() ).c_str(),
-                      FMT_ANGLE( aSegment->GetAngle() ).c_str() );
+                      FMT_IU( aSegment->GetEnd() ).c_str() );
+
+        if( aSegment->GetAngle() != 0.0 )
+            m_out->Print( 0, " (angle %s)", FMT_ANGLE( aSegment->GetAngle() ).c_str() );
+
         break;
 
     case S_CIRCLE:  // Circle
-        m_out->Print( aNestLevel, "(gr_circle (center (xy %s)) (end (xy %s))",
+        m_out->Print( aNestLevel, "(gr_circle (center %s) (end %s)",
                       FMT_IU( aSegment->GetStart() ).c_str(),
                       FMT_IU( aSegment->GetEnd() ).c_str() );
         break;
 
     case S_ARC:     // Arc
-        m_out->Print( aNestLevel, "(gr_arc (start (xy %s)) (end (xy %s)) (angle %s)",
+        m_out->Print( aNestLevel, "(gr_arc (start %s) (end %s) (angle %s)",
                       FMT_IU( aSegment->GetStart() ).c_str(),
                       FMT_IU( aSegment->GetEnd() ).c_str(),
                       FMT_ANGLE( aSegment->GetAngle() ).c_str() );
@@ -515,19 +518,19 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
     switch( aModuleDrawing->GetShape() )
     {
     case S_SEGMENT:  // Line
-        m_out->Print( aNestLevel, "(fp_line (pts (xy %s) (xy %s))",
+        m_out->Print( aNestLevel, "(fp_line (start %s) (end %s)",
                       FMT_IU( aModuleDrawing->GetStart0() ).c_str(),
                       FMT_IU( aModuleDrawing->GetEnd0() ).c_str() );
         break;
 
     case S_CIRCLE:  // Circle
-        m_out->Print( aNestLevel, "(fp_circle (center (xy %s)) (end (xy %s))",
+        m_out->Print( aNestLevel, "(fp_circle (center %s) (end %s)",
                       FMT_IU( aModuleDrawing->GetStart0() ).c_str(),
                       FMT_IU( aModuleDrawing->GetEnd0() ).c_str() );
         break;
 
     case S_ARC:     // Arc
-        m_out->Print( aNestLevel, "(fp_arc (start (xy %s)) (end (xy %s)) (angle %s)",
+        m_out->Print( aNestLevel, "(fp_arc (start %s) (end %s) (angle %s)",
                       FMT_IU( aModuleDrawing->GetStart0() ).c_str(),
                       FMT_IU( aModuleDrawing->GetEnd0() ).c_str(),
                       FMT_ANGLE( aModuleDrawing->GetAngle() ).c_str() );
@@ -722,7 +725,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     switch( aPad->GetShape() )
     {
     case PAD_CIRCLE:    shape = "circle";     break;
-    case PAD_RECT:      shape = "rectangle";  break;
+    case PAD_RECT:      shape = "rect";  break;
     case PAD_OVAL:      shape = "oval";       break;
     case PAD_TRAPEZOID: shape = "trapezoid";  break;
 
@@ -744,27 +747,25 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                                           aPad->GetAttribute() ) );
     }
 
-    m_out->Print( aNestLevel, "(pad %s %s %s (size %s)",
+    m_out->Print( aNestLevel, "(pad %s %s %s",
                   m_out->Quotew( aPad->GetPadName() ).c_str(),
-                  type.c_str(), shape.c_str(),
-                  FMT_IU( aPad->GetSize() ).c_str() );
-    m_out->Print( aNestLevel+1, " (at %s", FMT_IU( aPad->GetPos0() ).c_str() );
+                  type.c_str(), shape.c_str() );
+    m_out->Print( 0, " (at %s", FMT_IU( aPad->GetPos0() ).c_str() );
 
     if( aPad->GetOrientation() != 0.0 )
         m_out->Print( 0, " %s", FMT_ANGLE( aPad->GetOrientation() ).c_str() );
 
     m_out->Print( 0, ")" );
+    m_out->Print( 0, " (size %s)", FMT_IU( aPad->GetSize() ).c_str() );
 
     if( (aPad->GetDelta().GetWidth()) != 0 || (aPad->GetDelta().GetHeight() != 0 ) )
         m_out->Print( 0, " (rect_delta %s )", FMT_IU( aPad->GetDelta() ).c_str() );
-
-    m_out->Print( 0, "\n" );
 
     wxSize sz = aPad->GetDrillSize();
 
     if( (sz.GetWidth() > 0) || (sz.GetHeight() > 0) )
     {
-        m_out->Print( aNestLevel+1, "(drill" );
+        m_out->Print( 0, " (drill" );
 
         if( aPad->GetDrillShape() == PAD_OVAL )
             m_out->Print( 0, " oval" );
@@ -775,9 +776,10 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         if( (aPad->GetOffset().x != 0) || (aPad->GetOffset().y != 0) )
             m_out->Print( 0, " (offset %s)", FMT_IU( aPad->GetOffset() ).c_str() );
 
-        m_out->Print( 0, ")\n" );
+        m_out->Print( 0, ")" );
     }
 
+    m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel+1, "(layers" );
 
@@ -787,7 +789,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     {
         if( layerMask & 1 )
         {
-#if USE_LAYER_NAMES
+#if 1
             m_out->Print( 0, " %s", m_out->Quotew( m_board->GetLayerName( layer ) ).c_str() );
 #else
             m_out->Print( 0, " %d", layer );
@@ -838,10 +840,14 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
     throw( IO_ERROR )
 {
-    m_out->Print( aNestLevel, "(gr_text %s (at %s %s)",
+    m_out->Print( aNestLevel, "(gr_text %s (at %s",
                   m_out->Quotew( aText->GetText() ).c_str(),
-                  FMT_IU( aText->GetPosition() ).c_str(),
-                  FMT_ANGLE( aText->GetOrientation() ).c_str() );
+                  FMT_IU( aText->GetPosition() ).c_str() );
+
+    if( aText->GetOrientation() != 0.0 )
+        m_out->Print( 0, " %s", FMT_ANGLE( aText->GetOrientation() ).c_str() );
+
+    m_out->Print( 0, ")" );
 
     formatLayer( aText );
 
@@ -875,11 +881,15 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     if( parent )
         orient += parent->GetOrientation();
 
-    m_out->Print( aNestLevel, "(fp_text %s %s (at %s %s)",
+    m_out->Print( aNestLevel, "(fp_text %s %s (at %s",
                   m_out->Quotew( type ).c_str(),
                   m_out->Quotew( aText->GetText() ).c_str(),
-                  FMT_IU( aText->GetPos0() ).c_str(), FMT_ANGLE( orient ).c_str() );
+                  FMT_IU( aText->GetPos0() ).c_str() );
 
+    if( orient != 0.0 )
+        m_out->Print( 0, " %s", FMT_ANGLE( orient ).c_str() );
+
+    m_out->Print( 0, ")" );
     formatLayer( aText );
 
     if( !aText->IsVisible() )
@@ -898,7 +908,6 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
-        std::string type;
         int layer1, layer2;
 
         SEGVIA* via = (SEGVIA*) aTrack;
@@ -907,25 +916,35 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText() +
                      wxT( " has no parent." ) );
 
+        m_out->Print( aNestLevel, "(via" );
+
         via->ReturnLayerPair( &layer1, &layer2 );
 
         switch( aTrack->GetShape() )
         {
-        case VIA_THROUGH:       type = "thru";     break;
-        case VIA_BLIND_BURIED:  type = "blind";    break;
-        case VIA_MICROVIA:      type = "micro";    break;
+        case VIA_THROUGH:           //  Default shape not saved.
+            break;
+
+        case VIA_BLIND_BURIED:
+            m_out->Print( 0, " blind" );
+            break;
+
+        case VIA_MICROVIA:
+            m_out->Print( 0, " micro" );
+            break;
+
         default:
             THROW_IO_ERROR( wxString::Format( _( "unknown via type %d"  ), aTrack->GetShape() ) );
         }
 
-        m_out->Print( aNestLevel, "(via %s (at %s) (size %s)", type.c_str(),
+        m_out->Print( 0, " (at %s) (size %s)",
                       FMT_IU( aTrack->GetStart() ).c_str(),
                       FMT_IU( aTrack->GetWidth() ).c_str() );
 
         if( aTrack->GetDrill() != UNDEFINED_DRILL_DIAMETER )
             m_out->Print( 0, " (drill %s)", FMT_IU( aTrack->GetDrill() ).c_str() );
 
-#if USE_LAYER_NAMES
+#if 1
         m_out->Print( 0, " (layers %s %s)",
                       m_out->Quotew( m_board->GetLayerName( layer1 ) ).c_str(),
                       m_out->Quotew( m_board->GetLayerName( layer2 ) ).c_str() );
@@ -939,7 +958,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
                       FMT_IU( aTrack->GetStart() ).c_str(), FMT_IU( aTrack->GetEnd() ).c_str(),
                       FMT_IU( aTrack->GetWidth() ).c_str() );
 
-#if USE_LAYER_NAMES
+#if 1
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
 #else
         m_out->Print( 0, " (layer %d)", aTrack->GetLayer() );
@@ -985,47 +1004,72 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     if( aZone->GetPriority() > 0 )
         m_out->Print( aNestLevel+1, " (priority %d)\n", aZone->GetPriority() );
 
-    // Save pad option and clearance
-    std::string padoption;
+    m_out->Print( aNestLevel+1, "(connect_pads" );
 
     switch( aZone->GetPadConnection() )
     {
     default:
-    case PAD_IN_ZONE:       padoption = "yes";          break;
-    case THERMAL_PAD:       padoption = "use_thermal";  break;
-    case PAD_NOT_IN_ZONE:   padoption = "no";           break;
+    case THERMAL_PAD:       // Default option not saved or loaded.
+        break;
+
+    case PAD_IN_ZONE:
+        m_out->Print( 0, " yes" );
+        break;
+
+    case PAD_NOT_IN_ZONE:
+        m_out->Print( 0, " no" );
+        break;
     }
 
-    m_out->Print( aNestLevel+1, "(connect_pads %s (clearance %s))\n",
-                  padoption.c_str(), FMT_IU( aZone->GetZoneClearance() ).c_str() );
+    m_out->Print( 0, " (clearance %s))\n",
+                  FMT_IU( aZone->GetZoneClearance() ).c_str() );
 
     m_out->Print( aNestLevel+1, "(min_thickness %s)\n",
                   FMT_IU( aZone->GetMinThickness() ).c_str() );
 
-    m_out->Print( aNestLevel+1,
-                  "(fill %s (mode %s) (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)\n",
-                  (aZone->IsFilled()) ? "yes" : "no",
-                  (aZone->GetFillMode()) ? "segment" : "polygon",
+    m_out->Print( aNestLevel+1, "(fill" );
+
+    // Default is not filled.
+    if( aZone->IsFilled() )
+        m_out->Print( 0, " yes" );
+
+    // Default is polygon filled.
+    if( aZone->GetFillMode() )
+        m_out->Print( 0, " (mode polygon)" );
+
+    m_out->Print( 0, " (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)\n",
                   aZone->GetArcSegCount(),
                   FMT_IU( aZone->GetThermalReliefGap() ).c_str(),
                   FMT_IU( aZone->GetThermalReliefCopperBridge() ).c_str() );
 
-    std::string smoothing;
-
-    switch( aZone->GetCornerSmoothingType() )
+    if( aZone->GetCornerSmoothingType() != ZONE_SETTINGS::SMOOTHING_NONE )
     {
-    case ZONE_SETTINGS::SMOOTHING_NONE:      smoothing = "none";      break;
-    case ZONE_SETTINGS::SMOOTHING_CHAMFER:   smoothing = "chamfer";   break;
-    case ZONE_SETTINGS::SMOOTHING_FILLET:    smoothing = "fillet";    break;
-    default:
-        THROW_IO_ERROR( wxString::Format( _( "unknown zone corner smoothing type %d"  ),
-                                          aZone->GetCornerSmoothingType() ) );
+        m_out->Print( aNestLevel+1, "(smoothing" );
+
+        switch( aZone->GetCornerSmoothingType() )
+        {
+        case ZONE_SETTINGS::SMOOTHING_CHAMFER:
+            m_out->Print( 0, " chamfer" );
+            break;
+
+        case ZONE_SETTINGS::SMOOTHING_FILLET:
+            m_out->Print( 0,  " fillet" );
+            break;
+
+        default:
+            THROW_IO_ERROR( wxString::Format( _( "unknown zone corner smoothing type %d"  ),
+                                              aZone->GetCornerSmoothingType() ) );
+        }
+
+        if( aZone->GetCornerRadius() != 0 )
+            m_out->Print( aNestLevel+1, " (radius %s))\n",
+                          FMT_IU( aZone->GetCornerRadius() ).c_str() );
     }
 
-    m_out->Print( aNestLevel+1, "(smoothing %s) (radius %s))\n",
-                  smoothing.c_str(), FMT_IU( aZone->GetCornerRadius() ).c_str() );
+    m_out->Print( 0, ")\n" );
 
     const std::vector< CPolyPt >& cv = aZone->m_Poly->corner;
+    int newLine = 0;
 
     if( cv.size() )
     {
@@ -1034,18 +1078,36 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
         for( std::vector< CPolyPt >::const_iterator it = cv.begin();  it != cv.end();  ++it )
         {
-            m_out->Print( aNestLevel+3, "(xy %s %s)\n",
-                          FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+            if( newLine == 0 )
+                m_out->Print( aNestLevel+3, "(xy %s %s)",
+                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+            else
+                m_out->Print( 0, " (xy %s %s)",
+                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+
+            if( newLine < 4 )
+            {
+                newLine += 1;
+            }
+            else
+            {
+                newLine = 0;
+                m_out->Print( 0, "\n" );
+            }
 
             if( it->end_contour )
             {
+                if( newLine != 0 )
+                    m_out->Print( 0, "\n" );
+
                 m_out->Print( aNestLevel+2, ")\n" );
 
                 if( it+1 != cv.end() )
                 {
+                    newLine = 0;
                     m_out->Print( aNestLevel+1, ")\n" );
                     m_out->Print( aNestLevel+1, "(polygon\n" );
-                    m_out->Print( aNestLevel+2, "(pts\n" );
+                    m_out->Print( aNestLevel+2, "(pts" );
                 }
             }
         }
@@ -1055,6 +1117,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     // Save the PolysList
     const std::vector< CPolyPt >& fv = aZone->GetFilledPolysList();
+    newLine = 0;
 
     if( fv.size() )
     {
@@ -1063,15 +1126,33 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
         for( std::vector< CPolyPt >::const_iterator it = fv.begin();  it != fv.end();  ++it )
         {
-            m_out->Print( aNestLevel+3, "(xy %s %s)\n",
-                          FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+            if( newLine == 0 )
+                m_out->Print( aNestLevel+3, "(xy %s %s)",
+                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+            else
+                m_out->Print( 0, " (xy %s %s)",
+                              FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
+
+            if( newLine < 4 )
+            {
+                newLine += 1;
+            }
+            else
+            {
+                newLine = 0;
+                m_out->Print( 0, "\n" );
+            }
 
             if( it->end_contour )
             {
+                if( newLine != 0 )
+                    m_out->Print( 0, "\n" );
+
                 m_out->Print( aNestLevel+2, ")\n" );
 
                 if( it+1 != fv.end() )
                 {
+                    newLine = 0;
                     m_out->Print( aNestLevel+1, ")\n" );
                     m_out->Print( aNestLevel+1, "(filled_polygon\n" );
                     m_out->Print( aNestLevel+2, "(pts\n" );
