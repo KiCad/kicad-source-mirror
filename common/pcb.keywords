@@ -129,8 +129,8 @@ priority
 pts
 radius
 rev
+rect
 rect_delta
-rectangle
 reference
 right
 rotate
@@ -165,7 +165,6 @@ trapezoid
 thru
 thru_hole
 tstamp
-use_thermal
 user
 user_trace_width
 user_via

@@ -186,6 +186,7 @@ wxString SEGZONE::GetSelectMenuText() const
 SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_VIA_T )
 {
+    SetShape( VIA_THROUGH );
 }
 
 
