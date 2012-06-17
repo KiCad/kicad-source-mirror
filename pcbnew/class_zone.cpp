@@ -489,9 +489,6 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition )
 // we must have a default distance between the test point
 // and a corner or a zone edge:
 #define MIN_DIST_IN_MILS 10
-// if we know the scaling factor, a dist in pixel can be used:
-#define HIT_TEST_USE_PIXELS 1   // Set to 0 to used only a fixed default distance
-#define MIN_DIST_IN_PIXELS 10
 
 bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 {
@@ -499,15 +496,6 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 
     // distance (in internal units) to detect a corner in a zone outline.
     int min_dist = MIN_DIST_IN_MILS*IU_PER_MILS;
-
-#if HIT_TEST_USE_PIXELS
-    // If possible, use a fixed number of pixels.
-    if( GetBoard() && GetBoard()->GetParent() )
-    {
-        double scale = ((PCB_BASE_FRAME*)GetBoard()->GetParent())->GetScreen()->GetScalingFactor();
-        min_dist = KiROUND( MIN_DIST_IN_PIXELS / scale);
-    }
-#endif
 
     wxPoint delta;
     unsigned lim = m_Poly->corner.size();
@@ -539,15 +527,6 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 
     // distance (in internal units) to detect a zone outline
     int min_dist = MIN_DIST_IN_MILS*IU_PER_MILS;
-
-#if HIT_TEST_USE_PIXELS
-    // If possible, use a fixed number of pixels.
-    if( GetBoard() && GetBoard()->GetParent() )
-    {
-        double scale = ((PCB_BASE_FRAME*)GetBoard()->GetParent())->GetScreen()->GetScalingFactor();
-        min_dist = KiROUND( MIN_DIST_IN_PIXELS / scale);
-    }
-#endif
 
     unsigned first_corner_pos = 0;
 

@@ -12,7 +12,7 @@
 class ZONE_CONTAINER;
 
 
-#define MAX_ZONE_CORNER_RADIUS 4000
+#define MAX_ZONE_CORNER_RADIUS_MILS 400
 
 
 /**
@@ -83,8 +83,8 @@ public:
 
     void SetCornerRadius( int aRadius )
     {
-        if( aRadius > MAX_ZONE_CORNER_RADIUS )
-            cornerRadius = MAX_ZONE_CORNER_RADIUS;
+        if( aRadius > Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS ) )
+            cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
         else if( aRadius < 0 )
             cornerRadius = 0;
         else

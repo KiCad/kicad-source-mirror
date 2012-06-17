@@ -511,12 +511,9 @@ public:
 
     void SetCornerRadius( unsigned int aRadius )
     {
-        if( aRadius > MAX_ZONE_CORNER_RADIUS )
-            cornerRadius = MAX_ZONE_CORNER_RADIUS;
-        else if( aRadius < 0 )
-            cornerRadius = 0;
-        else
-            cornerRadius = aRadius;
+        cornerRadius = aRadius;
+        if( cornerRadius > (unsigned int) Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS ) )
+            cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
     };
 
     unsigned int GetCornerRadius() const { return cornerRadius; };
