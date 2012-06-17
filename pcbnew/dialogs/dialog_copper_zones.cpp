@@ -370,7 +370,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     // Test if this is a reasonable value for this parameter
     // A too large value can hang Pcbnew
-    #define CLEARANCE_MAX_VALUE 5000    // in 1/10000 inch
+    #define CLEARANCE_MAX_VALUE 100*IU_PER_MILS
     if( m_settings.m_ZoneClearance > CLEARANCE_MAX_VALUE )
     {
         DisplayError( this, _( "Clearance must be smaller than 0.5\" / 12.7 mm." ) );
@@ -380,7 +380,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_settings.m_ZoneMinThickness = ReturnValueFromString( g_UserUnit, txtvalue );
 
-    if( m_settings.m_ZoneMinThickness < 10 )
+    if( m_settings.m_ZoneMinThickness < (1*IU_PER_MILS) )
     {
         DisplayError( this,
                       _( "Minimum width must be larger than 0.001\" / 0.0254 mm." ) );

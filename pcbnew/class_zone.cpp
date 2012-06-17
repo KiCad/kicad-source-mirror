@@ -485,26 +485,27 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition )
     return false;
 }
 
+// Zones outlines have no thickness, so it Hit Test functions
+// we must have a default distance between the test point
+// and a corner or a zone edge:
+#define MIN_DIST_IN_MILS 10
+// if we know the scaling factor, a dist in pixel can be used:
+#define HIT_TEST_USE_PIXELS 1   // Set to 0 to used only a fixed default distance
+#define MIN_DIST_IN_PIXELS 10
 
 bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 {
     m_CornerSelection = -1;         // Set to not found
 
     // distance (in internal units) to detect a corner in a zone outline.
-    // @todo use a scaling factor here of actual screen coordinates, so that
-    // when nanometers come, it still works.
-    #define CORNER_MIN_DIST 100
+    int min_dist = MIN_DIST_IN_MILS*IU_PER_MILS;
 
-    int min_dist = CORNER_MIN_DIST + 1;
-
-#if 0
-    // Dick: I don't see this as reasonable.  The mouse distance from the zone is
-    // not a function of the grid, it is a fixed number of pixels, regardless of zoom.
-    if( GetBoard() && GetBoard()->m_PcbFrame )
+#if HIT_TEST_USE_PIXELS
+    // If possible, use a fixed number of pixels.
+    if( GetBoard() && GetBoard()->GetParent() )
     {
-        // Use grid size because it is known
-        wxRealPoint grid = GetBoard()->m_PcbFrame->GetCanvas()->GetGrid();
-        min_dist = KiROUND( MIN( grid.x, grid.y ) );
+        double scale = ((PCB_BASE_FRAME*)GetBoard()->GetParent())->GetScreen()->GetScalingFactor();
+        min_dist = KiROUND( MIN_DIST_IN_PIXELS / scale);
     }
 #endif
 
@@ -536,21 +537,15 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 
     m_CornerSelection = -1;     // Set to not found
 
-    // @todo use a scaling factor here of actual screen coordinates, so that
-    // when nanometers come, it still works.  This should be done in screen coordinates
-    // not internal units.
-    #define EDGE_MIN_DIST 200   // distance (in internal units) to detect a zone outline
-    int min_dist = EDGE_MIN_DIST+1;
+    // distance (in internal units) to detect a zone outline
+    int min_dist = MIN_DIST_IN_MILS*IU_PER_MILS;
 
-
-#if 0
-    // Dick: I don't see this as reasonable.  The mouse distance from the zone is
-    // not a function of the grid, it is a fixed number of pixels, regardless of zoom.
-    if( GetBoard() && GetBoard()->m_PcbFrame )
+#if HIT_TEST_USE_PIXELS
+    // If possible, use a fixed number of pixels.
+    if( GetBoard() && GetBoard()->GetParent() )
     {
-        // Use grid size because it is known
-        wxRealPoint grid = GetBoard()->m_PcbFrame->GetCanvas()->GetGrid();
-        min_dist = KiROUND( MIN( grid.x, grid.y ) );
+        double scale = ((PCB_BASE_FRAME*)GetBoard()->GetParent())->GetScreen()->GetScalingFactor();
+        min_dist = KiROUND( MIN_DIST_IN_PIXELS / scale);
     }
 #endif
 

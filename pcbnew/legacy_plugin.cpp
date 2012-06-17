@@ -3856,12 +3856,12 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
             if( !strcmp( units, "mm" ) )
             {
 #if defined( USE_PCBNEW_NANOMETRES )
-                m_owner->diskToBiu = 1000000.0;
+                m_owner->diskToBiu = IU_PER_MM;
 
 #elif defined(DEBUG)
                 // mm to deci-mils:
                 // advanced testing of round tripping only, not supported in non DEBUG build
-                m_owner->diskToBiu = 10000/25.4;
+                m_owner->diskToBiu = IU_PER_MM;
 
 #else
                 THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'Pcbnew compiled for deci-mils'" ) );

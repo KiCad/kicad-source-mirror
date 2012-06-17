@@ -57,8 +57,7 @@ static void DrawSegmentQcq( int ux0, int uy0,
                             int lg, int layer, int color,
                             int op_logic );
 
-static void TraceFilledCircle( BOARD* aPcb,
-                               int    cx, int cy, int radius,
+static void TraceFilledCircle( int    cx, int cy, int radius,
                                int    aLayerMask,
                                int    color,
                                int    op_logic );
@@ -85,7 +84,7 @@ static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
         }                                                               \
     }
 
-void PlacePad( BOARD* aPcb, D_PAD* aPad, int color, int marge, int op_logic )
+void PlacePad( D_PAD* aPad, int color, int marge, int op_logic )
 {
     int     dx, dy;
     wxPoint shape_pos = aPad->ReturnShapePos();
@@ -95,7 +94,7 @@ void PlacePad( BOARD* aPcb, D_PAD* aPad, int color, int marge, int op_logic )
 
     if( aPad->GetShape() == PAD_CIRCLE )
     {
-        TraceFilledCircle( aPcb, shape_pos.x, shape_pos.y, dx,
+        TraceFilledCircle( shape_pos.x, shape_pos.y, dx,
                            aPad->GetLayerMask(), color, op_logic );
         return;
     }
@@ -118,13 +117,13 @@ void PlacePad( BOARD* aPcb, D_PAD* aPad, int color, int marge, int op_logic )
             EXCHG( dx, dy );
         }
 
-        TraceFilledRectangle( aPcb, shape_pos.x - dx, shape_pos.y - dy,
+        TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
                               aPad->GetLayerMask(), color, op_logic );
     }
     else
     {
-        TraceFilledRectangle( aPcb, shape_pos.x - dx, shape_pos.y - dy,
+        TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
                               (int) aPad->GetOrientation(),
                               aPad->GetLayerMask(), color, op_logic );
@@ -140,8 +139,7 @@ void PlacePad( BOARD* aPcb, D_PAD* aPad, int color, int marge, int op_logic )
  * color: mask write in cells
  * op_logic: type of writing in the cell (WRITE, OR)
  */
-void TraceFilledCircle( BOARD* aPcb,
-                        int    cx, int cy, int radius,
+void TraceFilledCircle( int    cx, int cy, int radius,
                         int    aLayerMask,
                         int    color,
                         int    op_logic )
@@ -166,8 +164,8 @@ void TraceFilledCircle( BOARD* aPcb,
 
     RoutingMatrix.SetCellOperation( op_logic );
 
-    cx -= aPcb->GetBoundingBox().GetX();
-    cy -= aPcb->GetBoundingBox().GetY();
+    cx -= RoutingMatrix.GetBrdCoordOrigin().x;
+    cy -= RoutingMatrix.GetBrdCoordOrigin().y;
 
     distmin = radius;
 
@@ -259,7 +257,7 @@ void TraceFilledCircle( BOARD* aPcb,
 }
 
 
-void TraceSegmentPcb( BOARD* aPcb, TRACK* pt_segm, int color, int marge, int op_logic )
+void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
 {
     int half_width;
     int ux0, uy0, ux1, uy1;
@@ -267,10 +265,10 @@ void TraceSegmentPcb( BOARD* aPcb, TRACK* pt_segm, int color, int marge, int op_
     half_width = ( pt_segm->m_Width / 2 ) + marge;
 
     // Calculate the bounding rectangle of the segment (if H, V or Via)
-    ux0 = pt_segm->m_Start.x - aPcb->GetBoundingBox().GetX();
-    uy0 = pt_segm->m_Start.y - aPcb->GetBoundingBox().GetY();
-    ux1 = pt_segm->m_End.x - aPcb->GetBoundingBox().GetX();
-    uy1 = pt_segm->m_End.y - aPcb->GetBoundingBox().GetY();
+    ux0 = pt_segm->m_Start.x - RoutingMatrix.GetBrdCoordOrigin().x;
+    uy0 = pt_segm->m_Start.y - RoutingMatrix.GetBrdCoordOrigin().y;
+    ux1 = pt_segm->m_End.x - RoutingMatrix.GetBrdCoordOrigin().x;
+    uy1 = pt_segm->m_End.y - RoutingMatrix.GetBrdCoordOrigin().y;
 
     // Test if VIA (filled circle was drawn)
     if( pt_segm->Type() == PCB_VIA_T )
@@ -292,7 +290,7 @@ void TraceSegmentPcb( BOARD* aPcb, TRACK* pt_segm, int color, int marge, int op_
             mask_layer = -1;
 
         if( mask_layer )
-            TraceFilledCircle( aPcb, pt_segm->m_Start.x, pt_segm->m_Start.y,
+            TraceFilledCircle( pt_segm->m_Start.x, pt_segm->m_Start.y,
                                half_width, mask_layer, color, op_logic );
         return;
     }
@@ -467,7 +465,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
 }
 
 
-void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
+void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
                            int aLayerMask, int color, int op_logic )
 {
     int  row, col;
@@ -485,10 +483,10 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
 
     RoutingMatrix.SetCellOperation( op_logic );
 
-    ux0 -= aPcb->GetBoundingBox().GetX();
-    uy0 -= aPcb->GetBoundingBox().GetY();
-    ux1 -= aPcb->GetBoundingBox().GetX();
-    uy1 -= aPcb->GetBoundingBox().GetY();
+    ux0 -= RoutingMatrix.GetBrdCoordOrigin().x;
+    uy0 -= RoutingMatrix.GetBrdCoordOrigin().y;
+    ux1 -= RoutingMatrix.GetBrdCoordOrigin().x;
+    uy1 -= RoutingMatrix.GetBrdCoordOrigin().y;
 
     // Calculating limits coord cells belonging to the rectangle.
     row_max = uy1 / RoutingMatrix.m_GridRouting;
@@ -529,7 +527,7 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
 }
 
 
-void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
+void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
                            int angle, int aLayerMask, int color, int op_logic )
 {
     int  row, col;
@@ -553,10 +551,10 @@ void TraceFilledRectangle( BOARD* aPcb, int ux0, int uy0, int ux1, int uy1,
 
     RoutingMatrix.SetCellOperation( op_logic );
 
-    ux0 -= aPcb->GetBoundingBox().GetX();
-    uy0 -= aPcb->GetBoundingBox().GetY();
-    ux1 -= aPcb->GetBoundingBox().GetX();
-    uy1 -= aPcb->GetBoundingBox().GetY();
+    ux0 -= RoutingMatrix.GetBrdCoordOrigin().x;
+    uy0 -= RoutingMatrix.GetBrdCoordOrigin().y;
+    ux1 -= RoutingMatrix.GetBrdCoordOrigin().x;
+    uy1 -= RoutingMatrix.GetBrdCoordOrigin().y;
 
     cx    = (ux0 + ux1) / 2;
     cy    = (uy0 + uy1) / 2;

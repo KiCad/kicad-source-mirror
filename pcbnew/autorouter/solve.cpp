@@ -504,8 +504,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     /* Placing the bit to remove obstacles on 2 pads to a link. */
     pcbframe->SetStatusText( wxT( "Gen Cells" ) );
 
-    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadStart, CURRENT_PAD, marge, WRITE_OR_CELL );
-    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadEnd, CURRENT_PAD, marge, WRITE_OR_CELL );
+    PlacePad( pt_cur_ch->m_PadStart, CURRENT_PAD, marge, WRITE_OR_CELL );
+    PlacePad( pt_cur_ch->m_PadEnd, CURRENT_PAD, marge, WRITE_OR_CELL );
 
     /* Regenerates the remaining barriers (which may encroach on the placement bits precedent)
      */
@@ -517,7 +517,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
         if( ( pt_cur_ch->m_PadStart != ptr ) && ( pt_cur_ch->m_PadEnd != ptr ) )
         {
-            PlacePad( pcbframe->GetBoard(), ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+            PlacePad( ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
         }
     }
 
@@ -811,8 +811,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     }
 
 end_of_route:
-    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadStart, ~CURRENT_PAD, marge, WRITE_AND_CELL );
-    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadEnd, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    PlacePad( pt_cur_ch->m_PadStart, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    PlacePad( pt_cur_ch->m_PadEnd, ~CURRENT_PAD, marge, WRITE_AND_CELL );
 
     msg.Printf( wxT( "Activity: Open %d   Closed %d   Moved %d"),
                 OpenNodes, ClosNodes, MoveNodes );
@@ -1310,9 +1310,8 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     /* Out the new track on the matrix board */
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
     {
-        TraceSegmentPcb( pcbframe->GetBoard(), track, HOLE, marge, WRITE_CELL );
-        TraceSegmentPcb( pcbframe->GetBoard(), track, VIA_IMPOSSIBLE,
-                         via_marge, WRITE_OR_CELL );
+        TraceSegmentPcb( track, HOLE, marge, WRITE_CELL );
+        TraceSegmentPcb( track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
     // Insert new segments in  real board
