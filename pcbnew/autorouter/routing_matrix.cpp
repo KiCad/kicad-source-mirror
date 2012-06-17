@@ -211,10 +211,10 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
         if( net_code != pad->GetNet() || (flag & FORCE_PADS) )
         {
-            ::PlacePad( aPcb, pad, HOLE, marge, WRITE_CELL );
+            ::PlacePad( pad, HOLE, marge, WRITE_CELL );
         }
 
-        ::PlacePad( aPcb, pad, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+        ::PlacePad( pad, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
     // Place outlines of modules on matrix routing, if they are on a copper layer
@@ -243,8 +243,8 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                 tmpSegm.m_Param = edge->GetAngle();
                 tmpSegm.SetNet( -1 );
 
-                TraceSegmentPcb( aPcb, &tmpSegm, HOLE, marge, WRITE_CELL );
-                TraceSegmentPcb( aPcb, &tmpSegm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+                TraceSegmentPcb( &tmpSegm, HOLE, marge, WRITE_CELL );
+                TraceSegmentPcb( &tmpSegm, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
             }
             break;
 
@@ -280,7 +280,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             tmpSegm.m_Param = DrawSegm->GetAngle();
             tmpSegm.SetNet( -1 );
 
-            TraceSegmentPcb( aPcb, &tmpSegm, type_cell, marge, WRITE_CELL );
+            TraceSegmentPcb( &tmpSegm, type_cell, marge, WRITE_CELL );
         }
         break;
 
@@ -310,11 +310,11 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
             layerMask = GetLayerMask( PtText->GetLayer() );
 
-            TraceFilledRectangle( aPcb, ux0 - marge, uy0 - marge, ux1 + marge,
+            TraceFilledRectangle( ux0 - marge, uy0 - marge, ux1 + marge,
                                   uy1 + marge, (int) (PtText->m_Orient),
                                   layerMask, HOLE, WRITE_CELL );
 
-            TraceFilledRectangle( aPcb, ux0 - via_marge, uy0 - via_marge,
+            TraceFilledRectangle( ux0 - via_marge, uy0 - via_marge,
                                   ux1 + via_marge, uy1 + via_marge,
                                   (int) (PtText->m_Orient),
                                   layerMask, VIA_IMPOSSIBLE, WRITE_OR_CELL );
@@ -332,8 +332,8 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
         if( net_code == track->GetNet() )
             continue;
 
-        TraceSegmentPcb( aPcb, track, HOLE, marge, WRITE_CELL );
-        TraceSegmentPcb( aPcb, track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+        TraceSegmentPcb( track, HOLE, marge, WRITE_CELL );
+        TraceSegmentPcb( track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 }
 

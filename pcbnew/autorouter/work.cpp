@@ -41,36 +41,35 @@
 #include <cell.h>
 
 
-struct CWORK /* a unit of work is a hole-pair to connect */
+struct CWORK    // a unit of work is a source-target (a ratsnet item) to connect
 {
-    struct CWORK*  Next;
-    int            FromRow;     /* source row       */
-    int            FromCol;     /* source column    */
-    int            net_code;    /* net_code         */
-    int            ToRow;       /* target row       */
-    int            ToCol;       /* target column    */
-    RATSNEST_ITEM* pt_rats;     /* Corresponding ratsnest */
-    int            ApxDist;     /* approximate distance */
-    int            Cost;        /* cost for sort by length */
-    int            Priority;    /* route priority */
+    struct CWORK*   m_Next;
+    int             m_FromRow;      // source row
+    int             m_FromCol;      // source column
+    int             m_ToRow;        // target row
+    int             m_ToCol;        // target column
+    RATSNEST_ITEM*  m_Ratsnest;     // Corresponding ratsnest
+    int             m_NetCode;      // m_NetCode
+    int             m_ApxDist;      // approximate distance
+    int             m_Cost;         // cost for sort by length
+    int             m_Priority;     // route priority
 };
 
 
-/* pointers to the first and last item of work to do */
-static CWORK* Head    = NULL;
-static CWORK* Tail    = NULL;
-static CWORK* Current = NULL;
+// pointers to the first and last item of work to do
+static CWORK*   Head    = NULL;
+static CWORK*   Tail    = NULL;
+static CWORK*   Current = NULL;
 
 
-
-/* initialize the work list */
+// initialize the work list
 void InitWork()
 {
     CWORK* ptr;
 
     while( ( ptr = Head ) != NULL )
     {
-        Head = ptr->Next;
+        Head = ptr->m_Next;
         delete ptr;
     }
 
@@ -78,7 +77,7 @@ void InitWork()
 }
 
 
-/* initialize the work list */
+// initialize the work list
 void ReInitWork()
 {
     Current = Head;
@@ -92,36 +91,35 @@ void ReInitWork()
  */
 static int GetCost( int r1, int c1, int r2, int c2 );
 
-int SetWork( int            r1, int            c1,
-             int            n_c,
-             int            r2, int            c2,
-             RATSNEST_ITEM* pt_ch, int            pri )
+int SetWork( int r1, int c1,
+             int n_c,
+             int r2, int c2,
+             RATSNEST_ITEM* pt_ch, int pri )
 {
     CWORK* p;
 
     if( ( p = (CWORK*) operator new( sizeof(CWORK), std::nothrow ) ) != NULL )
     {
-        p->FromRow  = r1;
-        p->FromCol  = c1;
-        p->net_code = n_c;
-        p->ToRow    = r2;
-        p->ToCol    = c2;
-        p->pt_rats  = pt_ch;
-        p->ApxDist  = GetApxDist( r1, c1, r2, c2 );
-        p->Cost     = GetCost( r1, c1, r2, c2 );
-        p->Priority = pri;
-        p->Next     = NULL;
+        p->m_FromRow    = r1;
+        p->m_FromCol    = c1;
+        p->m_NetCode    = n_c;
+        p->m_ToRow      = r2;
+        p->m_ToCol      = c2;
+        p->m_Ratsnest   = pt_ch;
+        p->m_ApxDist    = GetApxDist( r1, c1, r2, c2 );
+        p->m_Cost       = GetCost( r1, c1, r2, c2 );
+        p->m_Priority   = pri;
+        p->m_Next       = NULL;
 
         if( Head )  /* attach at end */
-
-            Tail->Next = p;
+            Tail->m_Next = p;
         else        /* first in list */
             Head = Current = p;
 
         Tail = p;
         return 1;
     }
-    else /* can't get any more memory */
+    else    /* can't get any more memory */
     {
         return 0;
     }
@@ -129,28 +127,26 @@ int SetWork( int            r1, int            c1,
 
 
 /* fetch a unit of work from the work list */
-void GetWork( int*            r1,
-              int*            c1,
-              int*            n_c,
-              int*            r2,
-              int*            c2,
+void GetWork( int* r1, int* c1,
+              int* n_c,
+              int* r2, int* c2,
               RATSNEST_ITEM** pt_ch )
 {
     if( Current )
     {
-        *r1     = Current->FromRow;
-        *c1     = Current->FromCol;
-        *n_c    = Current->net_code;
-        *r2     = Current->ToRow;
-        *c2     = Current->ToCol;
-        *pt_ch  = Current->pt_rats;
-        Current = Current->Next;
+        *r1     = Current->m_FromRow;
+        *c1     = Current->m_FromCol;
+        *n_c    = Current->m_NetCode;
+        *r2     = Current->m_ToRow;
+        *c2     = Current->m_ToCol;
+        *pt_ch  = Current->m_Ratsnest;
+        Current = Current->m_Next;
     }
-    else   /* none left */
+    else    /* none left */
     {
-        *r1    = *c1 = *r2 = *c2 = ILLEGAL;
-        *n_c   = 0;
-        *pt_ch = NULL;
+        *r1     = *c1 = *r2 = *c2 = ILLEGAL;
+        *n_c    = 0;
+        *pt_ch  = NULL;
     }
 }
 
@@ -158,60 +154,60 @@ void GetWork( int*            r1,
 /* order the work items; shortest (low cost) first */
 void SortWork()
 {
-    CWORK* p;
-    CWORK* q0;  /* put PRIORITY PAD_CONNECTs in q0 */
-    CWORK* q1;  /* sort other PAD_CONNECTs in q1 */
-    CWORK* r;
+    CWORK*  p;
+    CWORK*  q0; /* put PRIORITY PAD_CONNECTs in q0 */
+    CWORK*  q1; /* sort other PAD_CONNECTs in q1 */
+    CWORK*  r;
 
     q0 = q1 = NULL;
 
-    while( (p = Head) != NULL ) /* prioritize each work item */
+    while( (p = Head) != NULL )    /* prioritize each work item */
     {
-        Head = Head->Next;
+        Head = Head->m_Next;
 
-        if( p->Priority ) /* put at end of priority list */
+        if( p->m_Priority )    /* put at end of priority list */
         {
-            p->Next = NULL;
+            p->m_Next = NULL;
 
-            if( (r = q0) == NULL )  /* empty list? */
+            if( (r = q0) == NULL )    /* empty list? */
             {
                 q0 = p;
             }
             else                    /* attach at end */
             {
-                while( r->Next )    /* search for end */
-                    r = r->Next;
+                while( r->m_Next )  /* search for end */
+                    r = r->m_Next;
 
-                r->Next = p; /* attach */
+                r->m_Next = p;    /* attach */
             }
         }
-        else if( ( ( r = q1 ) == NULL ) || ( p->Cost < q1->Cost ) )
+        else if( ( ( r = q1 ) == NULL ) || ( p->m_Cost < q1->m_Cost ) )
         {
-            p->Next = q1;
+            p->m_Next = q1;
             q1 = p;
         }
-        else   /* find proper position in list */
+        else    /* find proper position in list */
         {
-            while( r->Next && p->Cost >= r->Next->Cost )
-                r = r->Next;
+            while( r->m_Next && p->m_Cost >= r->m_Next->m_Cost )
+                r = r->m_Next;
 
-            p->Next = r->Next;
-            r->Next = p;
+            p->m_Next   = r->m_Next;
+            r->m_Next   = p;
         }
     }
 
-    if( (p = q0) != NULL ) /* any priority PAD_CONNECTs? */
+    if( (p = q0) != NULL )    /* any priority PAD_CONNECTs? */
     {
-        while( q0->Next )
-            q0 = q0->Next;
+        while( q0->m_Next )
+            q0 = q0->m_Next;
 
-        q0->Next = q1;
+        q0->m_Next = q1;
     }
     else
         p = q1;
 
     /* reposition Head and Tail */
-    for( Head = Current = Tail = p; Tail && Tail->Next; Tail = Tail->Next )
+    for( Head = Current = Tail = p; Tail && Tail->m_Next; Tail = Tail->m_Next )
         ;
 }
 
@@ -222,13 +218,13 @@ void SortWork()
  */
 static int GetCost( int r1, int c1, int r2, int c2 )
 {
-    int   dx, dy, mx, my;
-    double incl = 1.0;
+    int     dx, dy, mx, my;
+    double  incl = 1.0;
 
-    dx   = abs( c2 - c1 );
-    dy   = abs( r2 - r1 );
-    mx   = dx;
-    my   = dy;
+    dx  = abs( c2 - c1 );
+    dy  = abs( r2 - r1 );
+    mx  = dx;
+    my  = dy;
 
     if( mx < my )
     {

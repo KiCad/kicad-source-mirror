@@ -113,6 +113,16 @@ public:
     }
 
     /**
+     * function GetBrdCoordOrigin
+     * @returns the board coordinate corresponding to the
+     * routing matrix origin ( board coordinate offset )
+     */
+    wxPoint GetBrdCoordOrigin()
+    {
+        return m_BrdBox.GetOrigin();
+    }
+
+    /**
      * Function ComputeMatrixSize
      * calculates the number of rows and columns of dimensions of \a aPcb for routing and
      * automatic calculation of area.
@@ -176,10 +186,10 @@ class TRACK;
  * margin: add a value to the radius or half the score pad
  * op_logic: type of writing in the cell (WRITE, OR)
  */
-void PlacePad( BOARD* Pcb, D_PAD* pt_pad, int type, int marge, int op_logic );
+void PlacePad( D_PAD* pt_pad, int type, int marge, int op_logic );
 
 /* Draws a segment of track on the board. */
-void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int type, int marge, int op_logic );
+void TraceSegmentPcb( TRACK* pt_segm, int type, int marge, int op_logic );
 
 /* Uses the color value of all cells included in the board
  * coord of the rectangle ux0, uy0 (top right corner)
@@ -188,12 +198,12 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int type, int marge, int op_lo
  * masque_layer = mask layers;
  * op_logic = WRITE_CELL, WRITE_OR_CELL, WRITE_XOR_CELL, WRITE_AND_CELL
  */
-void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
+void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
                            int side, int color, int op_logic);
 
 
 /* Same as above, but the rectangle is inclined angle angle. */
-void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
+void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
                            int angle, int masque_layer, int color, int op_logic );
 
 /* QUEUE.CPP */

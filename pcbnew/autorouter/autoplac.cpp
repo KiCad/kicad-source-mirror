@@ -481,7 +481,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
             TmpSegm.SetShape( DrawSegm->GetShape() );
             TmpSegm.m_Param = DrawSegm->GetAngle();
 
-            TraceSegmentPcb( GetBoard(), &TmpSegm, HOLE | CELL_is_EDGE,
+            TraceSegmentPcb( &TmpSegm, HOLE | CELL_is_EDGE,
                              RoutingMatrix.m_GridRouting, WRITE_CELL );
             break;
 
@@ -556,7 +556,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     if( Module->GetLayer() == LAYER_N_BACK )
         layerMask = LAYER_BACK;
 
-    TraceFilledRectangle( GetBoard(), ox, oy, fx, fy, layerMask,
+    TraceFilledRectangle( ox, oy, fx, fy, layerMask,
                           CELL_is_MODULE, WRITE_OR_CELL );
 
     int trackWidth = GetBoard()->m_NetClasses.GetDefault()->GetTrackWidth();
@@ -567,7 +567,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 
     for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
     {
-        ::PlacePad( GetBoard(), Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
+        ::PlacePad( Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
     }
 
     /* Trace clearance. */
