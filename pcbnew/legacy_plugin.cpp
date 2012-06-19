@@ -354,12 +354,12 @@ void LEGACY_PLUGIN::loadGENERAL()
             if( !strcmp( data, "mm" ) )
             {
 #if defined( USE_PCBNEW_NANOMETRES )
-                diskToBiu = 1000000.0;
+                diskToBiu = IU_PER_MM;
 
 #elif defined(DEBUG)
                 // mm to deci-mils:
                 // advanced testing of round tripping only, not supported in non DEBUG build
-                diskToBiu = 10000/25.4;
+                diskToBiu = IU_PER_MM;
 
 #else
                 THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'" ) );
@@ -2718,8 +2718,8 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     // then, during the file loading process, to start a conversion from
     // mm to nanometers.
 
-    diskToBiu = IU_PER_DECIMILS;  // BIUs are nanometers if USE_PCBNEW_NANOMETRES
-                                                // or BIUs are deci-mils
+    diskToBiu = IU_PER_DECIMILS;    // BIUs are nanometers if USE_PCBNEW_NANOMETRES
+                                    // or BIUs are deci-mils
 }
 
 
