@@ -3617,7 +3617,7 @@ void LEGACY_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
 
     fprintf( m_fp, "Ge %d %d %lX\n", me->GetShape(), me->GetLayer(), me->GetTimeStamp() );
 
-    fprintf( m_fp, "Va %d\n", me->m_Value );
+    fprintf( m_fp, "Va %s\n", fmtBIU( me->m_Value ).c_str() );
 
     if( !me->m_Text.GetText().IsEmpty() )
         fprintf( m_fp, "Te %s\n", EscapedUTF8( me->m_Text.GetText() ).c_str() );

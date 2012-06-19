@@ -240,14 +240,14 @@ void DIMENSION::Mirror( const wxPoint& axis_pos )
 
 void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 {
-    #define ARROW_SIZE 500    //size of arrows
-    int      ii;
-    int      mesure, deltax, deltay;            //  value of the measure on X and Y axes
-    int      arrow_up_X = 0, arrow_up_Y = 0;    //  coordinates of arrow line /
-    int      arrow_dw_X = 0, arrow_dw_Y = 0;    //  coordinates of arrow line '\'
-    int      hx, hy;                            //  dimension line interval
-    double   angle, angle_f;
-    wxString msg;
+    const int   arrowz = DMils2iu( 500 );           // size of arrows
+    int         ii;
+    int         measure, deltax, deltay;            //  value of the measure on X and Y axes
+    int         arrow_up_X = 0, arrow_up_Y = 0;     //  coordinates of arrow line /
+    int         arrow_dw_X = 0, arrow_dw_Y = 0;     //  coordinates of arrow line '\'
+    int         hx, hy;                             //  dimension line interval
+    double      angle, angle_f;
+    wxString    msg;
 
     // Init layer :
     m_Text.SetLayer( GetLayer() );
@@ -260,7 +260,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     deltay = m_featureLineDOy - m_featureLineGOy;
 
     // Calculate dimension value
-    mesure = KiROUND( hypot( (double) deltax, (double) deltay ) );
+    measure = KiROUND( hypot( (double) deltax, (double) deltay ) );
 
     if( deltax || deltay )
         angle = atan2( (double) deltay, (double) deltax );
@@ -271,10 +271,10 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     hx = hy = ii;
 
     // Taking into account the slope of the side lines.
-    if( mesure )
+    if( measure )
     {
-        hx = (abs) ( (int) ( ( (double) deltay * hx ) / mesure ) );
-        hy = (abs) ( (int) ( ( (double) deltax * hy ) / mesure ) );
+        hx = (abs) ( (int) ( ( (double) deltay * hx ) / measure ) );
+        hy = (abs) ( (int) ( ( (double) deltax * hy ) / measure ) );
 
         if( m_featureLineGOx > m_crossBarOx )
             hx = -hx;
@@ -289,13 +289,12 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
             hy = 0;
 
         angle_f     = angle + (M_PI * 27.5 / 180);
-        arrow_up_X = (int) ( ARROW_SIZE * cos( angle_f ) );
-        arrow_up_Y = (int) ( ARROW_SIZE * sin( angle_f ) );
+        arrow_up_X = (int) ( arrowz * cos( angle_f ) );
+        arrow_up_Y = (int) ( arrowz * sin( angle_f ) );
         angle_f     = angle - (M_PI * 27.5 / 180);
-        arrow_dw_X = (int) ( ARROW_SIZE * cos( angle_f ) );
-        arrow_dw_Y = (int) ( ARROW_SIZE * sin( angle_f ) );
+        arrow_dw_X = (int) ( arrowz * cos( angle_f ) );
+        arrow_dw_Y = (int) ( arrowz * sin( angle_f ) );
     }
-
 
     m_arrowG1Ox = m_crossBarOx;
     m_arrowG1Oy = m_crossBarOy;
@@ -345,7 +344,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 
     if( !aDoNotChangeText )
     {
-        m_Value = mesure;
+        m_Value = measure;
         msg = ::CoordinateToString( m_Value );
         SetText( msg );
     }
