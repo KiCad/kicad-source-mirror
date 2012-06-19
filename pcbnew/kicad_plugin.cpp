@@ -1037,13 +1037,14 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     if( aZone->GetFillMode() )
         m_out->Print( 0, " (mode polygon)" );
 
-    m_out->Print( 0, " (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)\n",
+    m_out->Print( 0, " (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)",
                   aZone->GetArcSegCount(),
                   FMT_IU( aZone->GetThermalReliefGap() ).c_str(),
                   FMT_IU( aZone->GetThermalReliefCopperBridge() ).c_str() );
 
     if( aZone->GetCornerSmoothingType() != ZONE_SETTINGS::SMOOTHING_NONE )
     {
+        m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel+1, "(smoothing" );
 
         switch( aZone->GetCornerSmoothingType() )
@@ -1060,9 +1061,10 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
             THROW_IO_ERROR( wxString::Format( _( "unknown zone corner smoothing type %d"  ),
                                               aZone->GetCornerSmoothingType() ) );
         }
+        m_out->Print( 0, ")" );
 
         if( aZone->GetCornerRadius() != 0 )
-            m_out->Print( aNestLevel+1, " (radius %s))\n",
+            m_out->Print( 0, " (radius %s)",
                           FMT_IU( aZone->GetCornerRadius() ).c_str() );
     }
 
