@@ -86,6 +86,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick error.  Item type <" ) +
                             item->GetClass() + wxT( "> is already being edited." ) );
                 item->ClearFlags();
+                break;
             }
         }
         else
@@ -124,9 +125,12 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_NOCONN_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            m_itemToRepeat = AddNoConnect( aDC, gridPosition );
-            GetScreen()->SetCurItem( m_itemToRepeat );
-            m_canvas->SetAutoPanRequest( true );
+            if( false == GetScreen()->GetItem( gridPosition, 0, SCH_NO_CONNECT_T ) )
+            {
+                m_itemToRepeat = AddNoConnect( aDC, gridPosition );
+                GetScreen()->SetCurItem( m_itemToRepeat );
+                m_canvas->SetAutoPanRequest( true );
+            }
         }
         else
         {
@@ -138,9 +142,12 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_JUNCTION_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            m_itemToRepeat = AddJunction( aDC, gridPosition, true );
-            GetScreen()->SetCurItem( m_itemToRepeat );
-            m_canvas->SetAutoPanRequest( true );
+            if( false == GetScreen()->GetItem( gridPosition, 0, SCH_JUNCTION_T ) )
+            {
+                m_itemToRepeat = AddJunction( aDC, gridPosition, true );
+                GetScreen()->SetCurItem( m_itemToRepeat );
+                m_canvas->SetAutoPanRequest( true );
+            }
         }
         else
         {

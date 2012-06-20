@@ -255,14 +255,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     screen->SetCurItem( NULL );
     m_canvas->EndMouseCapture( -1, -1, wxEmptyString, false );
 
-    DLIST< SCH_ITEM > tmp;
-
-    for( item = s_wires.begin();  item != NULL;  item = item->Next() )
-        tmp.PushBack( (SCH_ITEM*) item->Clone() );
-
-    // Temporarily add the new segments to the schematic item list to test if any
-    // junctions are required.
-    screen->Append( tmp );
+    screen->Append( s_wires );
 
     // Correct and remove segments that need merged.
     screen->SchematicCleanUp( NULL, DC );
@@ -271,27 +264,15 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     // removed by a cleanup, a junction may be needed to connect the segment's end point
     // which is also the same as the previous segment's start point.
     if( screen->IsJunctionNeeded( segment->GetEndPoint() ) )
-        s_wires.Append( AddJunction( DC, segment->GetEndPoint() ) );
+        screen->Append( AddJunction( DC, segment->GetEndPoint() ) );
     else if( screen->IsJunctionNeeded( segment->GetStartPoint() ) )
-        s_wires.Append( AddJunction( DC, segment->GetStartPoint() ) );
+        screen->Append( AddJunction( DC, segment->GetStartPoint() ) );
 
     // Automatically place a junction on the start point if necessary because the cleanup
     // can suppress intermediate points by merging wire segments.
     if( screen->IsJunctionNeeded( s_startPoint ) )
-        s_wires.Append( AddJunction( DC, s_startPoint ) );
+        screen->Append( AddJunction( DC, s_startPoint ) );
 
-    // Make a copy of the original wires, buses, and junctions.
-    for( item = s_oldWires.begin();  item != NULL;  item = item->Next() )
-        tmp.PushBack( (SCH_ITEM*) item->Clone() );
-
-    // Restore the old wires.
-    if( tmp.GetCount() != 0 )
-        screen->ReplaceWires( tmp );
-
-    // Now add the new wires and any required junctions to the schematic item list.
-    screen->Append( s_wires );
-
-    screen->SchematicCleanUp( NULL, DC );
     m_canvas->Refresh();
 
     // Put the snap shot of the previous wire, buses, and junctions in the undo/redo list.
