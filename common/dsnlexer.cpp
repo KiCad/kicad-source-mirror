@@ -374,8 +374,13 @@ int DSNLEXER::NeedNUMBER( const char* aExpectation ) throw( IO_ERROR )
  */
 static inline bool isSpace( int cc )
 {
-    // make sure int passed to ::isspace() is 0-255
-    return ::isspace( cc & 0xff );
+    // Warning: we are using UTF8 char, so values are coded from 0x01 to 0xFF
+    // isspace( int value ) works fine under Linux,
+    // but seems use only a 7 bits value under mingw, in comparisons.
+    // (for instance 0xA0 is seen as 0x20)
+    // So we need to test if the value is ASCII ( <= 127) and a space ( ' ', \t, \n ... )
+    // and not just a space:
+    return  ( (unsigned) cc <= 127 ) && ::isspace( cc );
 }
 
 
