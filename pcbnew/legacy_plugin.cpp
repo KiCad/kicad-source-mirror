@@ -2563,15 +2563,19 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
 }
 
 
+#define SPBUFZ  50      // wire all usages of this together.
+
 int LEGACY_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
 {
-    double  engUnits = biuToDisk * aValue;
-    int     len;
+    long double engUnits = biuToDisk * aValue;
+    int         len;
 
-    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
+    if( engUnits != 0.0 && fabsl( engUnits ) <= 0.0001 )
     {
-        // printf( "f: " );
-        len = sprintf( buf, "%.10f", engUnits );
+        // Windows printf and sprintf do not support long double, but MinGW replaces
+        // snprintf and vsnprintf only with versions that do.
+        // http://gcc.gnu.org/ml/libstdc++/2008-02/msg00081.html
+        len = snprintf( buf, SPBUFZ, "%.10Lf", engUnits );
 
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
@@ -2580,8 +2584,9 @@ int LEGACY_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
     }
     else
     {
-        // printf( "g: " );
-        len = sprintf( buf, "%.10g", engUnits );
+        // Windows printf and sprintf do not support long double, but MinGW replaces
+        // snprintf and vsnprintf only with versions that do.
+        len = snprintf( buf, SPBUFZ, "%.10Lg", engUnits );
     }
     return len;
 }
@@ -2589,7 +2594,7 @@ int LEGACY_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
 
 std::string LEGACY_PLUGIN::fmtBIU( BIU aValue ) const
 {
-    char    temp[50];
+    char    temp[SPBUFZ];
 
     int len = biuSprintf( temp, aValue );
 
@@ -2603,7 +2608,8 @@ std::string LEGACY_PLUGIN::fmtDEG( double aAngle ) const
 
     // @todo a hook site to convert from tenths degrees to degrees for BOARD_FORMAT_VERSION 2.
 
-    int len = sprintf( temp, "%.10g", aAngle );
+    // MINGW: snprintf() comes from gcc folks, sprintf() comes from Microsoft.
+    int len = snprintf( temp, sizeof( temp ), "%.10g", aAngle );
 
     return std::string( temp, len );
 }
@@ -2611,7 +2617,7 @@ std::string LEGACY_PLUGIN::fmtDEG( double aAngle ) const
 
 std::string LEGACY_PLUGIN::fmtBIUPair( BIU first, BIU second ) const
 {
-    char    temp[100];
+    char    temp[2*SPBUFZ+2];
     char*   cp = temp;
 
     cp += biuSprintf( cp, first );
@@ -2630,7 +2636,12 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     errno = 0;
 
-    double fval = strtod( aValue, &nptr );
+    // The strategy in this function, which utilizes "long double" was verified using
+    // tools/test-nm-biu-to-ascii-mm-round-tripping.cpp.  For it to work "long double" must
+    // have more precision than double.  gcc has this, and its all we care about.
+
+    // MINGW does have a working strtold()
+    long double fval = strtold( aValue, &nptr );
 
     if( errno )
     {
@@ -2651,20 +2662,11 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
     if( nptrptr )
         *nptrptr = nptr;
 
-#if defined(DEBUG)
+    fval *= diskToBiu;
 
-    if( diskToBiu == 10000/25.4 )
-    {
-        // this is the special reverse trip mm -> deci-mils testing run,
-        // only available in DEBUG mode.
-        return BIU( KiROUND( fval * diskToBiu ) );
-    }
-
-#endif
-
-    // There should be no rounding issues here, since the values in the file initially
-    // came from integers via biuFmt(). In fact this product should be an integer, exactly.
-    return BIU( fval * diskToBiu );
+    // fval is up into the whole number realm here, and should be bounded
+    // within INT_MIN to INT_MAX since BIU's are nanometers.
+    return BIU( KiROUND( double( fval ) ) );
 }
 
 
@@ -2706,9 +2708,9 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
 #if defined( USE_PCBNEW_NANOMETRES )
-    biuToDisk = 1/IU_PER_MM;        // BIUs are nanometers & file is mm
+    biuToDisk = 1.0L/IU_PER_MM;     // BIUs are nanometers & file is mm
 #else
-    biuToDisk = 1.0;                // BIUs are deci-mils
+    biuToDisk = 1.0L;               // BIUs are deci-mils
 #endif
 
     // conversion factor for loading KICAD legacy file format into BIUs in RAM
