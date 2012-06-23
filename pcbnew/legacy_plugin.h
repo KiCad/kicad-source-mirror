@@ -130,8 +130,13 @@ protected:
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
 
-    double  biuToDisk;      ///< convert from BIUs to disk engineering units with this scale factor
-    double  diskToBiu;      ///< convert from disk engineering units to BIUs with this scale factor
+    // Use of long double might affect MSVC++'s ability to make KiCad.
+
+    long double  biuToDisk;         ///< convert from BIUs to disk engineering units
+                                    ///< with this scale factor
+
+    long double  diskToBiu;         ///< convert from disk engineering units to BIUs
+                                    ///< with this scale factor
 
     /**
      * Function biuParse
