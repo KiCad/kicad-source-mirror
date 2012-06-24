@@ -27,25 +27,23 @@ static inline int KiROUND( double v )
 
 typedef int             BIU;
 
-#define BIU_PER_MM      1e6L
+#define BIU_PER_MM      1e6
 
 
 //double  scale = BIU_PER_MM;
 //double  scale = UM_PER_BIU;
-long double scale = 1.0L/BIU_PER_MM;
+double scale = 1.0/BIU_PER_MM;
 
 
 std::string biuFmt( BIU aValue )
 {
-    long double engUnits = aValue * scale;
-    char        temp[48];
-    int         len;
+    double  engUnits = aValue * scale;
+    char    temp[48];
+    int     len;
 
     if( engUnits != 0.0 && fabsl( engUnits ) <= 0.0001 )
     {
-        snprintf( temp, sizeof(temp), "%.10Lf", engUnits );
-
-        len = strlen( temp );
+        len = snprintf( temp, sizeof( temp ), "%.16f", engUnits );
 
         while( --len > 0 && temp[len] == '0' )
             temp[len] = '\0';
@@ -54,7 +52,7 @@ std::string biuFmt( BIU aValue )
     }
     else
     {
-        len = snprintf( temp, sizeof(temp), "%.10Lg", engUnits );
+        len = snprintf( temp, sizeof( temp ), "%.16g", engUnits );
     }
 
     return std::string( temp, len );;
@@ -63,8 +61,9 @@ std::string biuFmt( BIU aValue )
 
 int parseBIU( const char* s )
 {
-    long double d = strtold( s, NULL );
+    double d = strtod( s, NULL );
     return KiROUND( double( d * BIU_PER_MM ) );
+//    return int( d * BIU_PER_MM );
 }
 
 
@@ -84,7 +83,7 @@ int main( int argc, char** argv )
 
         printf( "%s: s:%s\n", __func__, s.c_str() );
 
-        exit(1);
+        exit(0);
     }
 
     // printf( "sizeof(long double): %zd\n", sizeof( long double ) );

@@ -355,12 +355,6 @@ void LEGACY_PLUGIN::loadGENERAL()
             {
 #if defined( USE_PCBNEW_NANOMETRES )
                 diskToBiu = IU_PER_MM;
-
-#elif defined(DEBUG)
-                // mm to deci-mils:
-                // advanced testing of round tripping only, not supported in non DEBUG build
-                diskToBiu = IU_PER_MM;
-
 #else
                 THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'" ) );
 #endif
@@ -2567,15 +2561,12 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
 
 int LEGACY_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
 {
-    long double engUnits = biuToDisk * aValue;
-    int         len;
+    double  engUnits = biuToDisk * aValue;
+    int     len;
 
     if( engUnits != 0.0 && fabsl( engUnits ) <= 0.0001 )
     {
-        // Windows printf and sprintf do not support long double, but MinGW replaces
-        // snprintf and vsnprintf only with versions that do.
-        // http://gcc.gnu.org/ml/libstdc++/2008-02/msg00081.html
-        len = snprintf( buf, SPBUFZ, "%.10Lf", engUnits );
+        len = snprintf( buf, SPBUFZ, "%.10f", engUnits );
 
         while( --len > 0 && buf[len] == '0' )
             buf[len] = '\0';
@@ -2584,9 +2575,16 @@ int LEGACY_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
     }
     else
     {
-        // Windows printf and sprintf do not support long double, but MinGW replaces
-        // snprintf and vsnprintf only with versions that do.
-        len = snprintf( buf, SPBUFZ, "%.10Lg", engUnits );
+        // The %.10g is about optimal since we are dealing with a bounded
+        // range on aValue, and we can be sure that there will never
+        // be a reason to have more than 6 digits to the right of the
+        // decimal point because we are converting from integer
+        // (signed whole numbers) nanometers to mm.  A value of
+        // 0.000001 is one nanometer, the smallest positive nonzero value
+        // that we can ever have here.  If you ever see a board file with
+        // more digits to the right of the decimal point than 6, this is a
+        // possibly a bug in a formatting string nearby.
+        len = snprintf( buf, SPBUFZ, "%.10g", engUnits );
     }
     return len;
 }
@@ -2636,12 +2634,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     errno = 0;
 
-    // The strategy in this function, which utilizes "long double" was verified using
-    // tools/test-nm-biu-to-ascii-mm-round-tripping.cpp.  For it to work "long double" must
-    // have more precision than double.  gcc has this, and its all we care about.
-
-    // MINGW does have a working strtold()
-    long double fval = strtold( aValue, &nptr );
+    double fval = strtod( aValue, &nptr );
 
     if( errno )
     {
@@ -2708,20 +2701,20 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
 #if defined( USE_PCBNEW_NANOMETRES )
-    biuToDisk = 1.0L/IU_PER_MM;     // BIUs are nanometers & file is mm
+    biuToDisk = 1.0/IU_PER_MM;      // BIUs are nanometers & file is mm
 #else
-    biuToDisk = 1.0L;               // BIUs are deci-mils
+    biuToDisk = 1.0;                // BIUs are deci-mils
 #endif
 
-    // conversion factor for loading KICAD legacy file format into BIUs in RAM
-
+    // Conversion factor for loading KICAD legacy file format into BIUs in RAM
     // Start by assuming the *.brd file is in deci-mils.
-    // if we see "Units mm" in the $GENERAL section, set diskToBiu to 1000000.0
+    // If we see "Units mm" in the $GENERAL section, set diskToBiu to 1000000.0
     // then, during the file loading process, to start a conversion from
-    // mm to nanometers.
+    // mm to nanometers.  The deci-mil legacy files have no such "Units" marker
+    // so we must assume the file is in deci-mils until told otherwise.
 
-    diskToBiu = IU_PER_DECIMILS;    // BIUs are nanometers if USE_PCBNEW_NANOMETRES
-                                    // or BIUs are deci-mils
+    diskToBiu = IU_PER_DECIMILS;    // BIUs are nanometers if defined(USE_PCBNEW_NANOMETRES)
+                                    // else are deci-mils
 }
 
 
@@ -3859,12 +3852,6 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
             {
 #if defined( USE_PCBNEW_NANOMETRES )
                 m_owner->diskToBiu = IU_PER_MM;
-
-#elif defined(DEBUG)
-                // mm to deci-mils:
-                // advanced testing of round tripping only, not supported in non DEBUG build
-                m_owner->diskToBiu = IU_PER_MM;
-
 #else
                 THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'Pcbnew compiled for deci-mils'" ) );
 #endif

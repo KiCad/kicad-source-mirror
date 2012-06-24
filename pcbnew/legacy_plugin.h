@@ -126,16 +126,13 @@ protected:
     int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
     FPL_CACHE*      m_cache;
 
-
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
 
-    // Use of long double might affect MSVC++'s ability to make KiCad.
-
-    long double  biuToDisk;         ///< convert from BIUs to disk engineering units
+    double  biuToDisk;              ///< convert from BIUs to disk engineering units
                                     ///< with this scale factor
 
-    long double  diskToBiu;         ///< convert from disk engineering units to BIUs
+    double  diskToBiu;              ///< convert from disk engineering units to BIUs
                                     ///< with this scale factor
 
     /**
