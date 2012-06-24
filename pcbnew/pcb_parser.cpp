@@ -2022,6 +2022,9 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
         case T_drill:
         {
+            bool haveWidth = false;
+            wxSize drillSize = pad->GetDrillSize();
+
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
                 if( token == T_LEFT )
@@ -2033,23 +2036,21 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
                     pad->SetDrillShape( PAD_OVAL );
                     break;
 
-                case T_size:
+                case T_NUMBER:
                 {
-                    int width = parseBoardUnits( "drill width" );
-                    int height = width;
-                    token = NextTok();
-
-                    if( token == T_NUMBER )
+                    if( !haveWidth )
                     {
-                        height = parseBoardUnits();
-                        NeedRIGHT();
+                        drillSize.SetWidth( parseBoardUnits() );
+
+                        // If height is not defined the width and height are the same.
+                        drillSize.SetHeight( drillSize.GetWidth() );
+                        haveWidth = true;
                     }
-                    else if( token != T_RIGHT )
+                    else
                     {
-                        Expecting( ") or number" );
+                        drillSize.SetHeight( parseBoardUnits() );
                     }
 
-                    pad->SetDrillSize( wxSize( width, height ) );
                     break;
                 }
 
@@ -2064,6 +2065,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
                 }
             }
 
+            pad->SetDrillSize( drillSize );
             break;
         }
 
