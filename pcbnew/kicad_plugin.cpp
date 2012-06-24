@@ -770,8 +770,11 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         if( aPad->GetDrillShape() == PAD_OVAL )
             m_out->Print( 0, " oval" );
 
-        m_out->Print( 0,  " (size %s)", (sz.GetHeight() != sz.GetWidth()) ? FMT_IU( sz ).c_str() :
-                      FMT_IU( sz.GetWidth() ).c_str() );
+        if( sz.GetWidth() > 0 )
+            m_out->Print( 0,  " %s", FMT_IU( sz.GetWidth() ).c_str() );
+
+        if( sz.GetHeight() > 0  && sz.GetWidth() != sz.GetHeight() )
+            m_out->Print( 0,  " %s", FMT_IU( sz.GetHeight() ).c_str() );
 
         if( (aPad->GetOffset().x != 0) || (aPad->GetOffset().y != 0) )
             m_out->Print( 0, " (offset %s)", FMT_IU( aPad->GetOffset() ).c_str() );
@@ -799,8 +802,12 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     m_out->Print( 0, ")\n" );
 
-    m_out->Print( aNestLevel+1, "(net %d %s)\n",
-                  aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
+    // Unconnected pad is default net so don't save it.
+    if( aPad->GetNet() != 0 )
+    {
+        m_out->Print( aNestLevel+1, "(net %d %s)\n",
+                      aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
+    }
 
     if( aPad->GetDieLength() != 0 )
         m_out->Print( aNestLevel+1, "(die_length %s)\n",

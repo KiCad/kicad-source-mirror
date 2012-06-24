@@ -344,12 +344,12 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 {
     if( !IsDefaultFormatting() )
     {
-        aFormatter->Print( aNestLevel+1, "(effects\n" );
+        aFormatter->Print( aNestLevel+1, "(effects" );
 
         if( ( m_Size.x != DEFAULT_SIZE_TEXT ) || ( m_Size.y != DEFAULT_SIZE_TEXT ) || m_Bold
           || m_Italic )
         {
-            aFormatter->Print( aNestLevel+2, "(font" );
+            aFormatter->Print( 0, " (font" );
 
             // Add font support here at some point in the future.
 
@@ -366,13 +366,13 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             if( IsItalic() )
                 aFormatter->Print( 0, " italic" );
 
-            aFormatter->Print( 0, ")\n");
+            aFormatter->Print( 0, ")");
         }
 
         if( m_Mirror || ( m_HJustify != GR_TEXT_HJUSTIFY_CENTER )
           || ( m_VJustify != GR_TEXT_VJUSTIFY_CENTER ) )
         {
-            aFormatter->Print( aNestLevel+2, "(justify");
+            aFormatter->Print( 0, " (justify");
 
             if( m_HJustify != GR_TEXT_HJUSTIFY_CENTER )
                 aFormatter->Print( 0, (m_HJustify == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
@@ -383,13 +383,13 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             if( m_Mirror )
                 aFormatter->Print( 0, " mirror" );
 
-            aFormatter->Print( 0, ")\n" );
+            aFormatter->Print( 0, ")" );
         }
 
         // As of now the only place this is used is in Eeschema to hide or show the text.
         if( m_Attributs )
-            aFormatter->Print( aNestLevel+2, "hide\n" );
+            aFormatter->Print( 0, " hide" );
 
-        aFormatter->Print( aNestLevel+1, ")\n" );
+        aFormatter->Print( 0, ")\n" );
     }
 }
