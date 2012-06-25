@@ -431,7 +431,7 @@ void PCB_PARSER::parseHeader() throw( IO_ERROR, PARSE_ERROR )
         Expecting( GetTokenText( T_version ) );
 
     // Get the file version.
-    m_board->SetFileFormatVersionAtLoad( NeedNUMBER( GetTokenText( T_version ) ) );
+    m_board->SetFileFormatVersionAtLoad( parseInt( GetTokenText( T_version ) ) );
 
     // Skip the host name and host build version information.
     NeedRIGHT();
@@ -489,37 +489,50 @@ void PCB_PARSER::parsePAGE_INFO() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a PAGE_INFO." ) );
 
     T token;
-    bool isPortrait = false;
+    PAGE_INFO pageInfo;
 
     NeedSYMBOL();
 
     wxString pageType = FromUTF8();
 
+    if( !pageInfo.SetType( pageType ) )
+    {
+        wxString err;
+        err.Printf( _( "page type \"%s\" is not valid " ), GetChars( FromUTF8() ) );
+        THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
+
     if( pageType == PAGE_INFO::Custom )
     {
-        PAGE_INFO::SetCustomWidthMils( Iu2Mils( NeedNUMBER( "width" ) ) );
-        PAGE_INFO::SetCustomHeightMils( Iu2Mils( NeedNUMBER( "height" ) ) );
+        double width = parseDouble( "width" );      // width in mm
+
+        // Perform some controls to avoid crashes if the size is edited by hands
+        if( width < 100.0 )
+            width = 100.0;
+        else if( width > 1200.0 )
+            width = 1200.0;
+
+        double height = parseDouble( "height" );    // height in mm
+
+        if( height < 100.0 )
+            height = 100.0;
+        else if( height > 1200.0 )
+            height = 1200.0;
+
+        pageInfo.SetWidthMils( Mm2mils( width ) );
+        pageInfo.SetHeightMils( Mm2mils( height ) );
     }
 
     token = NextTok();
 
     if( token == T_portrait )
     {
-        isPortrait = true;
+        pageInfo.SetPortrait( true );
         NeedRIGHT();
     }
     else if( token != T_RIGHT )
     {
         Expecting( "portrait|)" );
-    }
-
-    PAGE_INFO pageInfo;
-
-    if( !pageInfo.SetType( pageType, isPortrait ) )
-    {
-        wxString err;
-        err.Printf( _( "page type \"%s\" is not valid " ), GetChars( FromUTF8() ) );
-        THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
     m_board->SetPageSettings( pageInfo );
@@ -566,7 +579,7 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
 
         case T_comment:
         {
-            int commentNumber = NeedNUMBER( "comment" );
+            int commentNumber = parseInt( "comment" );
 
             switch( commentNumber )
             {

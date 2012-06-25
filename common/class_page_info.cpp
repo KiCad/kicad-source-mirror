@@ -250,12 +250,14 @@ void PAGE_INFO::SetPortrait( bool isPortrait )
 static int clampWidth( int aWidthInMils )
 {
 /*  was giving EESCHEMA single component SVG plotter grief
+    However a minimal test is made to avoid values that crashes Kicad
     if( aWidthInMils < 4000 )       // 4" is about a baseball card
         aWidthInMils = 4000;
-
     else if( aWidthInMils > 44000 ) //44" is plotter size
         aWidthInMils = 44000;
 */
+    if( aWidthInMils < 10 )
+        aWidthInMils = 10;
     return aWidthInMils;
 }
 
@@ -264,11 +266,14 @@ static int clampHeight( int aHeightInMils )
 {
 /*  was giving EESCHEMA single component SVG plotter grief
     clamping is best done at the UI, i.e. dialog, levels
+    However a minimal test is made to avoid values that crashes Kicad
     if( aHeightInMils < 4000 )
         aHeightInMils = 4000;
     else if( aHeightInMils > 44000 )
         aHeightInMils = 44000;
 */
+    if( aHeightInMils < 10 )
+        aHeightInMils = 10;
     return aHeightInMils;
 }
 
@@ -316,18 +321,17 @@ void PAGE_INFO::SetHeightMils( int aHeightInMils )
 void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
     throw( IO_ERROR )
 {
-    // If page is A3 landscape, then it is assumed to be the default and is not written.
-    if( !IsDefault() )
-    {
-        aFormatter->Print( aNestLevel, "(page %s", aFormatter->Quotew( GetType() ).c_str() );
+    aFormatter->Print( aNestLevel, "(page %s", aFormatter->Quotew( GetType() ).c_str() );
 
-        // The page dimensions are only required for user defined page sizes.
-        if( GetType() == PAGE_INFO::Custom )
-            aFormatter->Print( aNestLevel, " %d %d", GetWidthIU(), GetHeightIU() );
+    // The page dimensions are only required for user defined page sizes.
+    // Internally, the page size is in mils
+    if( GetType() == PAGE_INFO::Custom )
+        aFormatter->Print( 0, " %g %g",
+                           GetCustomWidthMils() * 25.4 / 1000.0,
+                           GetCustomHeightMils() * 25.4 / 1000.0 );
 
-        if( IsCustom() && IsPortrait() )
-            aFormatter->Print( aNestLevel, " portrait" );
+    if( IsCustom() && IsPortrait() )
+        aFormatter->Print( 0, " portrait" );
 
-        aFormatter->Print( aNestLevel, ")\n" );
-    }
+    aFormatter->Print( 0, ")\n" );
 }
