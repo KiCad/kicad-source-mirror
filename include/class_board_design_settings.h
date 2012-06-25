@@ -37,7 +37,6 @@ public:
     int     m_SolderPasteMargin;            ///< Solder paste margin absolute value
     double  m_SolderPasteMarginRatio;       ///< Solder pask margin ratio value of pad size
                                             ///< The final margin is the sum of these 2 values
-    int     m_BoardThickness;               ///< Board Thickness for 3D viewer
 
     // Variables used in footprint handling
     wxSize  m_ModuleTextSize;               ///< Default footprint texts size
@@ -188,11 +187,15 @@ public:
      */
     void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
+    int GetBoardThickness() const { return m_boardThickness; }
+    void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
+
 private:
     int     m_CopperLayerCount;     ///< Number of copper layers for this design
     int     m_EnabledLayers;        ///< Bit-mask for layer enabling
     int     m_VisibleLayers;        ///< Bit-mask for layer visibility
     int     m_VisibleElements;      ///< Bit-mask for element category visibility
+    int     m_boardThickness;       ///< Board thickness for 3D viewer
 };
 
 #endif  // BOARD_DESIGN_SETTINGS_H_

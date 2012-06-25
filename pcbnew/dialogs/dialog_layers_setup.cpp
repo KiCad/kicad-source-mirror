@@ -660,8 +660,8 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
         // 3) cannot have " chars
         // 4) cannot be 'signal'
         // 5) must be unique.
-
-        static const wxString badchars( wxT("%$\" ") );
+        // 6) cannot have illegal chars in filenames ( some filenames are built from layer names )
+        static const wxString badchars( wxT("%$\" /\\.") );
 
         if( name == wxEmptyString )
         {

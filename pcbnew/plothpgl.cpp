@@ -2,19 +2,39 @@
  * @file plothpgl.cpp
  */
 
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 Dick Hollenbeck, dick@softplc.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+
 #include <fctsys.h>
 #include <common.h>
 #include <plot_common.h>
-#include <confirm.h>
-#include <trigo.h>
 #include <wxBasePcbFrame.h>
-#include <macros.h>
-
 #include <class_board.h>
-
 #include <pcbnew.h>
-#include <protos.h>
 #include <pcbplot.h>
+#include <convert_to_biu.h>
 
 
 bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer,
@@ -35,20 +55,21 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
 
     PCB_PLOT_PARAMS plot_opts = GetPlotSettings();
 
-    // Compute pen_dim (from g_m_HPGLPenDiam in mils) in pcb units,
-    // with plot scale (if Scale is 2, pen diameter is always g_m_HPGLPenDiam
+    // Compute pen_dim (from m_HPGLPenDiam in mils) in pcb units,
+    // with plot scale (if Scale is 2, pen diameter value is always m_HPGLPenDiam
     // so apparent pen diam is real pen diam / Scale
-    int pen_diam = KiROUND( plot_opts.m_HPGLPenDiam /
+    int pen_diam = KiROUND( plot_opts.m_HPGLPenDiam * IU_PER_MILS /
                             plot_opts.m_PlotScale );
 
-    // compute pen_overlay (from g_m_HPGLPenOvr in mils) with plot scale
+    // compute pen_overlay (from m_HPGLPenOvr in mils) in pcb units
+    // with plot scale
     if( plot_opts.m_HPGLPenOvr < 0 )
         plot_opts.m_HPGLPenOvr = 0;
 
     if( plot_opts.m_HPGLPenOvr >= plot_opts.m_HPGLPenDiam )
         plot_opts.m_HPGLPenOvr = plot_opts.m_HPGLPenDiam - 1;
 
-    int   pen_overlay = KiROUND( plot_opts.m_HPGLPenOvr * 10.0 /
+    int   pen_overlay = KiROUND( plot_opts.m_HPGLPenOvr * IU_PER_MILS /
                                  plot_opts.m_PlotScale );
 
 
@@ -72,7 +93,7 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
         // Fit to 80% of the page
         double Xscale = ( ( pageSizeIU.x * 0.8 ) / boardSize.x );
         double Yscale = ( ( pageSizeIU.y * 0.8 ) / boardSize.y );
-        scale  = MIN( Xscale, Yscale );
+        scale  = std::min( Xscale, Yscale );
     }
     else
     {
@@ -100,7 +121,7 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     // why did we have to change these settings above?
     SetPlotSettings( plot_opts );
 
-    plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 
+    plotter->SetViewport( offset, IU_PER_DECIMILS, scale,
 	                  plot_opts.m_PlotMirror );
     plotter->SetDefaultLineWidth( plot_opts.m_PlotLineWidth );
     plotter->SetCreator( wxT( "PCBNEW-HPGL" ) );
@@ -113,7 +134,7 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
 
     // The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway
     if( plot_opts.m_PlotFrameRef && !center )
-        PlotWorkSheet( plotter, GetScreen() );
+        PlotWorkSheet( plotter, GetScreen(), plot_opts.GetPlotLineWidth() );
 
     Plot_Layer( plotter, aLayer, aTraceMode );
     plotter->EndPlot();

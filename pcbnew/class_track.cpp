@@ -1,9 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,6 +186,7 @@ wxString SEGZONE::GetSelectMenuText() const
 SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_VIA_T )
 {
+    SetShape( VIA_THROUGH );
 }
 
 
@@ -873,8 +875,10 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
         }
     }
 
-    if( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
+    if( ShowClearance( this ) )
+    {
         GRCircle( panel->GetClipBox(), DC, m_Start + aOffset, radius + GetClearance(), 0, color );
+    }
 
     // for Micro Vias, draw a partial cross : X on component layer, or + on copper layer
     // (so we can see 2 superimposed microvias ):

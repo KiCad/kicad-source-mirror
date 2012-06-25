@@ -2,6 +2,33 @@
  * Functions to draw and plot text on screen
  * @file drawtxt.cpp
  */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
@@ -526,15 +553,17 @@ void PLOTTER::Text( const wxPoint&              aPos,
                     bool                        aItalic,
                     bool                        aBold )
 {
-    if( aWidth == 0 && aBold )      // Use default values if aWidth == 0
-        aWidth = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );
+    int textPensize = aWidth;
 
-    if( aWidth >= 0 )
-        aWidth = Clamp_Text_PenSize( aWidth, aSize, aBold );
+    if( textPensize == 0 && aBold )      // Use default values if aWidth == 0
+        textPensize = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );
+
+    if( textPensize >= 0 )
+        textPensize = Clamp_Text_PenSize( aWidth, aSize, aBold );
     else
-        aWidth = -Clamp_Text_PenSize( -aWidth, aSize, aBold );
+        textPensize = -Clamp_Text_PenSize( -aWidth, aSize, aBold );
 
-    SetCurrentLineWidth( aWidth );
+    SetCurrentLineWidth( textPensize );
 
 
     if( aColor >= 0 )
@@ -543,8 +572,11 @@ void PLOTTER::Text( const wxPoint&              aPos,
     DrawGraphicText( NULL, NULL, aPos, aColor, aText,
                      aOrient, aSize,
                      aH_justify, aV_justify,
-                     aWidth, aItalic,
+                     textPensize, aItalic,
                      aBold,
                      NULL,
                      this );
+
+    if( aWidth != textPensize )
+        SetCurrentLineWidth( aWidth );
 }

@@ -209,6 +209,7 @@ public:
     const wxString& GetNetName() const                  { return m_Netname; };
     void SetNetName( const wxString& aName )            { m_Netname = aName; }
 
+    /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.
     void SetFillMode( int aFillMode )                   { m_FillMode = aFillMode; }
     int GetFillMode() const                             { return m_FillMode; }
 
@@ -429,6 +430,11 @@ public:
         return m_Poly->GetHatchStyle();
     }
 
+    void SetHatchStyle( CPolyLine::hatch_style aStyle )
+    {
+        m_Poly->SetHatchStyle( aStyle );
+    }
+
      /**
      * Function TransformShapeWithClearanceToPolygon
      * Convert the track shape to a closed polygon
@@ -505,15 +511,24 @@ public:
 
     void SetCornerRadius( unsigned int aRadius )
     {
-        if( aRadius > MAX_ZONE_CORNER_RADIUS )
-            cornerRadius = MAX_ZONE_CORNER_RADIUS;
-        else if( aRadius < 0 )
-            cornerRadius = 0;
-        else
-            cornerRadius = aRadius;
+        cornerRadius = aRadius;
+        if( cornerRadius > (unsigned int) Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS ) )
+            cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
     };
 
     unsigned int GetCornerRadius() const { return cornerRadius; };
+
+    void AddPolygon( std::vector< wxPoint >& aPolygon );
+
+    void AddFilledPolygon( std::vector< CPolyPt >& aPolygon )
+    {
+        m_FilledPolysList.insert( m_FilledPolysList.end(), aPolygon.begin(), aPolygon.end() );
+    }
+
+    void AddFillSegments( std::vector< SEGMENT >& aSegments )
+    {
+        m_FillSegmList.insert( m_FillSegmList.end(), aSegments.begin(), aSegments.end() );
+    }
 
     virtual wxString GetSelectMenuText() const;
 
@@ -533,7 +548,7 @@ public:
     int                   m_ZoneClearance;                  // clearance value
     int                   m_ZoneMinThickness;               // Min thickness value in filled areas
 
-    // How to fill areas: 0 = use filled polygons, != 0 fill with segments.
+    /// How to fill areas: 0 => use filled polygons, 1 => fill with segments.
     int                   m_FillMode;
 
     // number of segments to convert a circle to a polygon (uses

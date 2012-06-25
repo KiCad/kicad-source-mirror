@@ -434,18 +434,33 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 
     for( ; item != NULL; item = item->Next() )
     {
-        if( item->Type() != SCH_LINE_T )
+        if( ( item->Type() != SCH_LINE_T ) && ( item->Type() != SCH_JUNCTION_T ) )
             continue;
 
         testItem = item->Next();
 
         while( testItem )
         {
-            if( testItem->Type() == SCH_LINE_T )
+            if( ( item->Type() == SCH_LINE_T ) && ( testItem->Type() == SCH_LINE_T ) )
             {
                 SCH_LINE* line = (SCH_LINE*) item;
 
                 if( line->MergeOverlap( (SCH_LINE*) testItem ) )
+                {
+                    // Keep the current flags, because the deleted segment can be flagged.
+                    item->SetFlags( testItem->GetFlags() );
+                    DeleteItem( testItem );
+                    testItem = m_drawList.begin();
+                    modified = true;
+                }
+                else
+                {
+                    testItem = testItem->Next();
+                }
+            }
+            else if ( ( ( item->Type() == SCH_JUNCTION_T ) && ( testItem->Type() == SCH_JUNCTION_T ) ) && ( testItem != item ) )
+            {
+                if ( testItem->HitTest( item->GetPosition() ) )
                 {
                     // Keep the current flags, because the deleted segment can be flagged.
                     item->SetFlags( testItem->GetFlags() );

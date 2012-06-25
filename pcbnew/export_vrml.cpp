@@ -1,7 +1,5 @@
 #include <fctsys.h>
-#include <confirm.h>
 #include <kicad_string.h>
-#include <gestfich.h>
 #include <wxPcbStruct.h>
 #include <drawtxt.h>
 #include <trigo.h>
@@ -20,6 +18,8 @@
 #include <vector>
 #include <cmath>
 
+
+#define SEGM_COUNT_PER_360 32   // Number of segments to approximate a circle per segments
 
 /* helper function:
  * some characters cannot be used in names,
@@ -43,8 +43,9 @@ private:
     wxConfig* m_config;
     int m_unitsOpt;          // to remember last option
     int m_3DFilesOpt;        // to remember last option
-    virtual void OnCancelClick( wxCommandEvent& event ){ EndModal( wxID_CANCEL ); }
-    virtual void OnOkClick( wxCommandEvent& event ){ EndModal( wxID_OK ); }
+
+    void OnCancelClick( wxCommandEvent& event ){ EndModal( wxID_CANCEL ); }
+    void OnOkClick( wxCommandEvent& event ){ EndModal( wxID_OK ); }
 
 public:
     DIALOG_EXPORT_3DFILE( PCB_EDIT_FRAME* parent ) :
@@ -104,8 +105,9 @@ struct VRMLPt
 };
 struct FlatPt
 {
-    FlatPt( double _x = 0, double _y = 0 ) : x( _x ), y( _y ) { }
-    double                                   x, y;
+    FlatPt( double _x = 0, double _y = 0 ) : x( _x ), y( _y )
+    { }
+    double x, y;
 };
 struct Triangle
 {
@@ -277,7 +279,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, //{{{
         "            }\n",
         "          }\n",
         "          geometry IndexedFaceSet {\n",
-        "            solid true\n",
+        "            solid TRUE\n",
         "            coord Coordinate {\n",
         "              point [\n",
         0,                                          // Coordinates marker
@@ -369,7 +371,7 @@ static void compute_layer_Zs( BOARD* pcb ) //{{{
     int    copper_layers = pcb->GetCopperLayerCount( );
 
     // We call it 'layer' thickness, but it's the whole board thickness!
-    double board_thickness = pcb->GetDesignSettings().m_BoardThickness;
+    double board_thickness = pcb->GetDesignSettings().GetBoardThickness();
     double half_thickness  = board_thickness / 2;
 
     // Compute each layer's Z value, more or less like the 3d view
@@ -383,7 +385,7 @@ static void compute_layer_Zs( BOARD* pcb ) //{{{
 
     /* To avoid rounding interference, we apply an epsilon to each
      * successive layer */
-    const double epsilon_z = 10; // That's 1 mils, about 1/50 mm
+    const double epsilon_z = 1 * IU_PER_MILS; // That's 1 mils, about 1/50 mm
     layer_z[SOLDERPASTE_N_BACK]  = -half_thickness - epsilon_z * 4;
     layer_z[ADHESIVE_N_BACK]     = -half_thickness - epsilon_z * 3;
     layer_z[SILKSCREEN_N_BACK]   = -half_thickness - epsilon_z * 2;
@@ -429,8 +431,8 @@ static void export_vrml_line( int layer, double startx, double starty, //{{{
 }
 
 
-static void export_vrml_circle( int layer, double startx, double starty, //{{{
-                                double endx, double endy, double width, int divisions )
+static void export_vrml_circle( int layer, double startx, double starty,
+                                double endx, double endy, double width )
 {
     double   hole, radius;
     FlatRing ring;
@@ -438,7 +440,7 @@ static void export_vrml_circle( int layer, double startx, double starty, //{{{
     radius = hypot( startx - endx, starty - endy ) + ( width / 2);
     hole  = radius - width;
 
-    for( double alpha = 0; alpha < M_PI * 2; alpha += M_PI * 2 / divisions )
+    for( double alpha = 0; alpha < M_PI * 2; alpha += M_PI * 2 / SEGM_COUNT_PER_360 )
     {
         ring.add_inner( startx + hole * cos( alpha ), starty + hole * sin( alpha ) );
         ring.add_outer( startx + radius * cos( alpha ), starty + radius * sin( alpha ) );
@@ -450,10 +452,11 @@ static void export_vrml_circle( int layer, double startx, double starty, //{{{
 
 static void export_vrml_slot( TriangleBag& triangles, //{{{
                               int top_layer, int bottom_layer, double xc, double yc,
-                              double dx, double dy, int orient, int divisions )
+                              double dx, double dy, int orient )
 {
     double capx, capy; // Cap center
     VLoop  loop;
+    int divisions = SEGM_COUNT_PER_360 / 2;
 
     loop.z_top    = layer_z[top_layer];
     loop.z_bottom = layer_z[bottom_layer];
@@ -491,45 +494,23 @@ static void export_vrml_slot( TriangleBag& triangles, //{{{
 }
 
 
-static void export_vrml_hole( TriangleBag& triangles, //{{{
-                              int top_layer, int bottom_layer, double xc, double yc, double hole,
-                              int divisions )
+static void export_vrml_hole( TriangleBag& triangles, int top_layer, int bottom_layer,
+                              double xc, double yc, double hole )
 {
     VLoop loop;
 
     loop.z_top    = layer_z[top_layer];
     loop.z_bottom = layer_z[bottom_layer];
 
-    for( double alpha = 0; alpha < M_PI * 2; alpha += M_PI * 2 / divisions )
+    for( double alpha = 0; alpha < M_PI * 2; alpha += M_PI * 2 / SEGM_COUNT_PER_360 )
         loop.add( xc + cos( alpha ) * hole, yc + sin( alpha ) * hole );
 
     loop.bag( triangles );
 }
 
 
-static void export_vrml_varc( TriangleBag& triangles, //{{{
-                              int top_layer, int bottom_layer, double startx, double starty,
-                              double endx, double endy, int divisions )
-{
-    VLoop loop;
-
-    loop.z_top    = layer_z[top_layer];
-    loop.z_bottom = layer_z[bottom_layer];
-    double angle = atan2( endx - startx, endy - starty );
-    double radius = hypot( startx - endx, starty - endy );
-
-    for( double alpha = angle; alpha < angle + PI2; alpha += PI2 / divisions )
-    {
-        loop.add( startx + cos( alpha ) * radius, starty + sin( alpha ) * radius );
-    }
-
-    loop.bag( triangles );
-}
-
-
-static void export_vrml_oval_pad( int layer, //{{{
-                                  double xc, double yc,
-                                  double dx, double dy, int orient, int divisions )
+static void export_vrml_oval_pad( int layer, double xc, double yc,
+                                  double dx, double dy, int orient )
 {
     double  capx, capy; // Cap center
     FlatFan fan;
@@ -537,6 +518,7 @@ static void export_vrml_oval_pad( int layer, //{{{
     fan.c.x = xc;
     fan.c.y = yc;
     double angle = orient / 1800.0 * M_PI;
+    int divisions = SEGM_COUNT_PER_360 / 2;
 
     if( dy > dx )
     {
@@ -570,23 +552,66 @@ static void export_vrml_oval_pad( int layer, //{{{
 }
 
 
-static void export_vrml_arc( int layer, double startx, double starty, //{{{
-                             double endx, double endy, double width, int divisions )
+static void export_vrml_arc( int layer, double centerx, double centery,
+                             double arc_startx, double arc_starty,
+                             double width, double arc_angle )
 {
     FlatRing ring;
-    double   hole, radius;
-    double   angle = atan2( endx - startx, endy - starty );
+    double   start_angle = atan2( arc_starty - centery, arc_startx - centerx );
 
-    radius = hypot( startx - endx, starty - endy ) + ( width / 2);
-    hole  = radius - width;
+    int count = KiROUND( arc_angle / 360.0 * SEGM_COUNT_PER_360 );
+    if( count < 0 )
+        count = -count;
+    if( count == 0 )
+        count = 1;
+    double divisions = arc_angle*M_PI/180.0 / count;
 
-    for( double alpha = angle; alpha < angle + PI2; alpha += PI2 / divisions )
+    double outer_radius = hypot( arc_starty - centery, arc_startx - centerx )
+                          + ( width / 2);
+    double inner_radius  = outer_radius - width;
+
+    double alpha = 0;
+    for( int ii = 0; ii <= count; alpha += divisions, ii++ )
     {
-        ring.add_inner( startx + cos( alpha ) * hole, starty + sin( alpha ) * hole );
-        ring.add_outer( startx + cos( alpha ) * radius, starty + sin( alpha ) * radius );
+        double angle_rot = start_angle + alpha;
+        ring.add_inner( centerx + cos( angle_rot ) * inner_radius,
+                        centery + sin( angle_rot ) * inner_radius );
+        ring.add_outer( centerx + cos( angle_rot ) * outer_radius,
+                        centery + sin( angle_rot ) * outer_radius );
     }
 
     ring.bag( layer, false );
+}
+
+static void export_vrml_varc( TriangleBag& triangles,
+                              int top_layer, int bottom_layer,
+                              double centerx, double centery,
+                              double arc_startx, double arc_starty,
+                              double arc_angle )
+{
+    VLoop loop;
+
+    loop.z_top    = layer_z[top_layer];
+    loop.z_bottom = layer_z[bottom_layer];
+
+    double start_angle = atan2( arc_starty - centery, arc_startx - centerx );
+    double radius = hypot( arc_starty - centery, arc_startx - centerx );
+
+    int count = KiROUND( arc_angle / 360.0 * SEGM_COUNT_PER_360 );
+    if( count < 0 )
+        count = -count;
+    if( count == 0 )
+        count = 1;
+    double divisions = arc_angle*M_PI/180.0 / count;
+
+    double alpha = 0;
+    for( int ii = 0; ii <= count; alpha += divisions, ii++ )
+    {
+        double angle_rot = start_angle + alpha;
+        loop.add( centerx + cos( angle_rot ) * radius, centery + sin( angle_rot ) * radius );
+    }
+
+    loop.bag( triangles );
 }
 
 
@@ -608,14 +633,14 @@ static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) //{{{
         case S_ARC:
             export_vrml_varc( layer_triangles[layer],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER,
-                              x, y, xf, yf, 4 );
+                              x, y, xf, yf, drawseg->GetAngle()/10 );
             break;
 
         // Circles on edge are usually important holes
         case S_CIRCLE:
             export_vrml_hole( layer_triangles[layer],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER, x, y,
-                              hypot( xf - x, yf - y ) / 2, 12 );
+                              hypot( xf - x, yf - y ) / 2 );
             break;
 
         default:
@@ -633,11 +658,16 @@ static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) //{{{
         switch( drawseg->GetShape() )
         {
         case S_ARC:
-            export_vrml_arc( layer, x, y, xf, yf, w, 3 );
+            export_vrml_arc( layer,
+                             (double) drawseg->GetCenter().x,
+                             (double) drawseg->GetCenter().y,
+                             (double) drawseg->GetArcStart().x,
+                             (double) drawseg->GetArcStart().y,
+                             w, drawseg->GetAngle()/10 );
             break;
 
         case S_CIRCLE:
-            export_vrml_circle( layer, x, y, xf, yf, w, 12 );
+            export_vrml_circle( layer, x, y, xf, yf, w );
             break;
 
         default:
@@ -727,7 +757,7 @@ static void export_vrml_drawings( BOARD* pcb ) //{{{
 
 
 static void export_round_padstack( BOARD* pcb, double x, double y, double r, //{{{
-                                   int bottom_layer, int top_layer, int divisions )
+                                   int bottom_layer, int top_layer )
 {
     int copper_layers = pcb->GetCopperLayerCount( );
 
@@ -738,7 +768,7 @@ static void export_round_padstack( BOARD* pcb, double x, double y, double r, //{
             layer = LAST_COPPER_LAYER;
 
         if( layer <= top_layer )
-            export_vrml_circle( layer, x, y, x + r / 2, y, r, divisions );
+            export_vrml_circle( layer, x, y, x + r / 2, y, r );
     }
 }
 
@@ -755,10 +785,10 @@ static void export_vrml_via( BOARD* pcb, SEGVIA* via ) //{{{
     via->ReturnLayerPair( &top_layer, &bottom_layer );
 
     // Export the via padstack
-    export_round_padstack( pcb, x, y, r, bottom_layer, top_layer, 8 );
+    export_round_padstack( pcb, x, y, r, bottom_layer, top_layer );
 
-    // Drill a rough hole
-    export_vrml_hole( via_triangles[via->m_Shape], top_layer, bottom_layer, x, y, hole, 8 );
+    // Drill a hole
+    export_vrml_hole( via_triangles[via->m_Shape], top_layer, bottom_layer, x, y, hole );
 }
 
 
@@ -853,23 +883,23 @@ static void export_vrml_text_module( TEXTE_MODULE* module ) //{{{
 }
 
 
-static void export_vrml_edge_module( EDGE_MODULE* module ) //{{{
+static void export_vrml_edge_module( EDGE_MODULE* aOutline ) //{{{
 {
-    int    layer = module->GetLayer();
-    double x     = module->GetStart().x;
-    double y     = module->GetStart().y;
-    double xf    = module->GetEnd().x;
-    double yf    = module->GetEnd().y;
-    double w     = module->GetWidth();
+    int    layer = aOutline->GetLayer();
+    double x     = aOutline->GetStart().x;
+    double y     = aOutline->GetStart().y;
+    double xf    = aOutline->GetEnd().x;
+    double yf    = aOutline->GetEnd().y;
+    double w     = aOutline->GetWidth();
 
-    switch( module->GetShape() )
+    switch( aOutline->GetShape() )
     {
     case S_ARC:
-        export_vrml_arc( layer, x, y, xf, yf, w, 3 );
+        export_vrml_arc( layer, x, y, xf, yf, w, aOutline->GetAngle()/10 );
         break;
 
     case S_CIRCLE:
-        export_vrml_circle( layer, x, y, xf, yf, w, 12 );
+        export_vrml_circle( layer, x, y, xf, yf, w );
         break;
 
     default:
@@ -895,14 +925,14 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
             // Oblong hole (slot)
             export_vrml_slot( layer_triangles[EDGE_N],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER,
-                              hole_x, hole_y, hole_drill_w, hole_drill_h, aPad->GetOrientation(), 6 );
+                              hole_x, hole_y, hole_drill_w, hole_drill_h, aPad->GetOrientation() );
         }
         else
         {
             // Drill a round hole
             export_vrml_hole( layer_triangles[EDGE_N],
                               FIRST_COPPER_LAYER, LAST_COPPER_LAYER,
-                              hole_x, hole_y, hole_drill, 12 );
+                              hole_x, hole_y, hole_drill );
         }
     }
 
@@ -935,13 +965,12 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
             {
             case PAD_CIRCLE:
                 export_vrml_circle( layer, pad_x, pad_y,
-                                    pad_x + pad_w / 2, pad_y, pad_w, 12 );
+                                    pad_x + pad_w / 2, pad_y, pad_w );
                 break;
 
             case PAD_OVAL:
-                export_vrml_oval_pad( layer,
-                                      pad_x, pad_y,
-                                      pad_w * 2, pad_h * 2, aPad->GetOrientation(), 4 );
+                export_vrml_oval_pad( layer, pad_x, pad_y,
+                                      pad_w * 2, pad_h * 2, aPad->GetOrientation() );
                 break;
 
             case PAD_RECT:
@@ -1192,7 +1221,7 @@ wxBusyCursor dummy;
     if( ! ExportVRML_File( fullFilename, scale, export3DFiles, subDirFor3Dshapes ) )
     {
         wxString msg = _( "Unable to create " ) + fullFilename;
-        DisplayError( this, msg );
+        wxMessageBox( msg );
         return;
     }
 }

@@ -53,7 +53,6 @@ extern bool Drc_On;
 extern bool g_AutoDeleteOldTrack;
 extern bool g_Drag_Pistes_On;
 extern bool g_Show_Module_Ratsnest;
-extern bool g_Show_Pads_Module_in_Move;
 extern bool g_Raccord_45_Auto;
 extern bool        g_Track_45_Only_Allowed;
 extern bool        g_Alternate_Track_Posture;

@@ -47,10 +47,10 @@ public:
                                         ///< (ie protected by mask)
     EDA_DRAW_MODE_T m_PlotMode;         ///< LINE, FILLED or SKETCH: select how to plot filled objects.
                                         ///< depending on plot format or layers, all options are not always allowed
-    int         m_HPGLPenNum;
-    int         m_HPGLPenSpeed;
-    int         m_HPGLPenDiam;
-    int         m_HPGLPenOvr;
+    int         m_HPGLPenNum;           ///< HPGL only: pen number selection(1 to 9)
+    int         m_HPGLPenSpeed;         ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
+    int         m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, usefull to fill areas
+    int         m_HPGLPenOvr;           ///< HPGL only: pen overlay in MILS, usefull only to fill areas
     int         m_PlotPSColorOpt;       ///< True for color Postscript output
     bool        m_PlotPSNegative;       ///< True to create a  negative board ps plot
 

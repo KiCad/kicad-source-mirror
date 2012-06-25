@@ -539,7 +539,10 @@ bool TREE_PROJECT_FRAME::AddFileToTree( const wxString& aName,
         bool    addFile     = false;
         for( unsigned i = 0; i < m_Filters.size(); i++ )
         {
-            reg.Compile( m_Filters[i], wxRE_ICASE );
+            wxCHECK2_MSG( reg.Compile( m_Filters[i], wxRE_ICASE ), continue,
+                          wxT( "Regular expression " ) + m_Filters[i] +
+                          wxT( " failed to compile." ) );
+
             if( reg.Matches( aName ) )
             {
                 addFile = true;

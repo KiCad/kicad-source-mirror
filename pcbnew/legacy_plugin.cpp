@@ -244,8 +244,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         else if( TESTLINE( "$TRACK" ) )
         {
-            TRACK* insertBeforeMe = doAppend ? NULL : m_board->m_Track.GetFirst();
-            loadTrackList( insertBeforeMe, PCB_TRACE_T );
+            loadTrackList( PCB_TRACE_T );
         }
 
         else if( TESTLINE( "$NCLASS" ) )
@@ -270,8 +269,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         else if( TESTLINE( "$ZONE" ) )
         {
-            SEGZONE* insertBeforeMe = doAppend ? NULL : m_board->m_Zone.GetFirst();
-            loadTrackList( insertBeforeMe, PCB_ZONE_T );
+            loadTrackList( PCB_ZONE_T );
         }
 
         else if( TESTLINE( "$GENERAL" ) )
@@ -356,12 +354,12 @@ void LEGACY_PLUGIN::loadGENERAL()
             if( !strcmp( data, "mm" ) )
             {
 #if defined( USE_PCBNEW_NANOMETRES )
-                diskToBiu = 1000000.0;
+                diskToBiu = IU_PER_MM;
 
 #elif defined(DEBUG)
                 // mm to deci-mils:
                 // advanced testing of round tripping only, not supported in non DEBUG build
-                diskToBiu = 10000/25.4;
+                diskToBiu = IU_PER_MM;
 
 #else
                 THROW_IO_ERROR( _( "May not load millimeter *.brd file into 'Pcbnew compiled for deci-mils'" ) );
@@ -403,7 +401,7 @@ void LEGACY_PLUGIN::loadGENERAL()
         else if( TESTLINE( "BoardThickness" ) )
         {
             BIU thickn = biuParse( line + SZ( "BoardThickness" ) );
-            m_board->GetDesignSettings().m_BoardThickness = thickn;
+            m_board->GetDesignSettings().SetBoardThickness( thickn );
         }
 
         /*
@@ -1888,7 +1886,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 }
 
 
-void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
+void LEGACY_PLUGIN::loadTrackList( int aStructType )
 {
     while( READLINE( m_reader ) )
     {
@@ -1961,17 +1959,17 @@ void LEGACY_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         default:
         case PCB_TRACE_T:
             newTrack = new TRACK( m_board );
-            m_board->m_Track.Insert( newTrack, aInsertBeforeMe );
+            m_board->m_Track.Append( newTrack );
             break;
 
         case PCB_VIA_T:
             newTrack = new SEGVIA( m_board );
-            m_board->m_Track.Insert( newTrack, aInsertBeforeMe );
+            m_board->m_Track.Append( newTrack );
             break;
 
         case PCB_ZONE_T:     // this is now deprecated, but exist in old boards
             newTrack = new SEGZONE( m_board );
-            m_board->m_Zone.Insert( (SEGZONE*) newTrack, (SEGZONE*) aInsertBeforeMe );
+            m_board->m_Zone.Append( (SEGZONE*) newTrack );
             break;
         }
 
@@ -2720,8 +2718,8 @@ void LEGACY_PLUGIN::init( PROPERTIES* aProperties )
     // then, during the file loading process, to start a conversion from
     // mm to nanometers.
 
-    diskToBiu = IU_PER_DECIMILS;  // BIUs are nanometers if USE_PCBNEW_NANOMETRES
-                                                // or BIUs are deci-mils
+    diskToBiu = IU_PER_DECIMILS;    // BIUs are nanometers if USE_PCBNEW_NANOMETRES
+                                    // or BIUs are deci-mils
 }
 
 
@@ -2825,7 +2823,7 @@ void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
     fprintf( m_fp, "Ndraw %d\n",            aBoard->m_Drawings.GetCount() );
     fprintf( m_fp, "Ntrack %d\n",           aBoard->GetNumSegmTrack() );
     fprintf( m_fp, "Nzone %d\n",            aBoard->GetNumSegmZone() );
-    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().m_BoardThickness ).c_str() );
+    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( aBoard->GetDesignSettings().GetBoardThickness() ).c_str() );
     fprintf( m_fp, "Nmodule %d\n",          aBoard->m_Modules.GetCount() );
     fprintf( m_fp, "Nnets %d\n",            aBoard->GetNetCount() );
     fprintf( m_fp, "$EndGENERAL\n\n" );
@@ -3393,7 +3391,7 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
                     // using "diff", then switch to more concise form for release builds.
                     "Sc %lf %lf %lf\n",
 #else
-                    "Sc %.16g %.16g %.16g\n",
+                    "Sc %.10g %.10g %.10g\n",
 #endif
                     t3D->m_MatScale.x,
                     t3D->m_MatScale.y,
@@ -3403,7 +3401,7 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 #if defined(DEBUG)
                     "Of %lf %lf %lf\n",
 #else
-                    "Of %.16g %.16g %.16g\n",
+                    "Of %.10g %.10g %.10g\n",
 #endif
                     t3D->m_MatPosition.x,
                     t3D->m_MatPosition.y,
@@ -3413,7 +3411,7 @@ void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 #if defined(DEBUG)
                     "Ro %lf %lf %lf\n",
 #else
-                    "Ro %.16g %.16g %.16g\n",
+                    "Ro %.10g %.10g %.10g\n",
 #endif
                     t3D->m_MatRotation.x,
                     t3D->m_MatRotation.y,
@@ -3619,7 +3617,7 @@ void LEGACY_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
 
     fprintf( m_fp, "Ge %d %d %lX\n", me->GetShape(), me->GetLayer(), me->GetTimeStamp() );
 
-    fprintf( m_fp, "Va %d\n", me->m_Value );
+    fprintf( m_fp, "Va %s\n", fmtBIU( me->m_Value ).c_str() );
 
     if( !me->m_Text.GetText().IsEmpty() )
         fprintf( m_fp, "Te %s\n", EscapedUTF8( me->m_Text.GetText() ).c_str() );
@@ -3858,12 +3856,12 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
             if( !strcmp( units, "mm" ) )
             {
 #if defined( USE_PCBNEW_NANOMETRES )
-                m_owner->diskToBiu = 1000000.0;
+                m_owner->diskToBiu = IU_PER_MM;
 
 #elif defined(DEBUG)
                 // mm to deci-mils:
                 // advanced testing of round tripping only, not supported in non DEBUG build
-                m_owner->diskToBiu = 10000/25.4;
+                m_owner->diskToBiu = IU_PER_MM;
 
 #else
                 THROW_IO_ERROR( _( "May not load millimeter legacy library file into 'Pcbnew compiled for deci-mils'" ) );

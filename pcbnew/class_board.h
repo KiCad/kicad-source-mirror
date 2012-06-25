@@ -19,6 +19,9 @@
 #include <class_zone_settings.h>
 #include <pcb_plot_params.h>
 
+#include <wx/hashmap.h>
+
+
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
 class PICKED_ITEMS_LIST;
@@ -43,6 +46,7 @@ typedef std::vector< TRACK* > TRACK_PTRS;
  */
 enum LAYER_T
 {
+    LT_UNDEFINED = -1,
     LT_SIGNAL,
     LT_POWER,
     LT_MIXED,
@@ -51,11 +55,27 @@ enum LAYER_T
 
 
 /**
- * Struct LAYER
+ * Class LAYER
  * holds information pertinent to a layer of a BOARD.
  */
-struct LAYER
+class LAYER
 {
+public:
+    LAYER( const wxString& aName = wxEmptyString, LAYER_T aType = LT_SIGNAL,
+           bool aVisible = true ) :
+        m_Name( aName ),
+        m_Type( aType ),
+        m_visible( aVisible ),
+        m_fixedListIndex( UNDEFINED_LAYER )
+    {
+    }
+
+    void SetVisible( bool aEnable ) { m_visible = aEnable; }
+    bool IsVisible() const { return m_visible; }
+
+    void SetFixedListIndex( int aIndex ) { m_fixedListIndex = aIndex; }
+    int GetFixedListIndex() const { return m_fixedListIndex; }
+
     /** The name of the layer, there should be no spaces in this name. */
     wxString m_Name;
 
@@ -63,7 +83,6 @@ struct LAYER
     LAYER_T m_Type;
 
 //    int         m_Color;
-//    bool        m_Visible;      // ? use flags in m_Color instead ?
 
     /**
      * Function ShowType
@@ -81,7 +100,23 @@ struct LAYER
      *   LAYER_T(-1) if the string is invalid
      */
     static LAYER_T     ParseType( const char* aType );
+
+    /**
+     * Function GetDefaultIndex
+     * returns the layer index of the layer \a aName.
+     *
+     * @param aName A reference to a wxString object containing the default layer name.
+     * @return The index of the layer \a aName if found otherwise #UNDEFINED_LAYER_INDEX.
+     */
+    static int         GetDefaultIndex( const wxString& aName );
+
+private:
+    bool m_visible;
+    int m_fixedListIndex;
 };
+
+
+WX_DECLARE_STRING_HASH_MAP( int, LAYER_INDEX_HASH_MAP );
 
 
 /**
@@ -164,7 +199,7 @@ private:
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS     m_ZoneDescriptorList;
 
-    LAYER               m_Layer[NB_COPPER_LAYERS];
+    LAYER               m_Layer[LAYER_COUNT];
                                                     // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO     m_highLight;                // current high light data
     HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
@@ -599,6 +634,8 @@ public:
      *   layer names at other layer indices and aLayerIndex was within range, else false.
      */
     bool SetLayerName( int aLayerIndex, const wxString& aLayerName );
+
+    bool SetLayer( int aIndex, const LAYER& aLayer );
 
     /**
      * Function GetLayerType
