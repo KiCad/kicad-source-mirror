@@ -11,6 +11,17 @@
 #define ZONE_NET_FILTER_STRING_KEY                  wxT( "Zone_Filter_Opt" )
 #define ZONE_THERMAL_RELIEF_GAP_STRING_KEY          wxT( "Zone_TH_Gap" )
 #define ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY wxT( "Zone_TH_Copper_Width" )
+#define ZONE_CLEARANCE_WIDTH_STRING_KEY             wxT( "Zone_Clearance" )
+#define ZONE_MIN_THICKNESS_WIDTH_STRING_KEY         wxT( "Zone_Thickness" )
+
+// Default values in mils for parameters in ZONE_CONTAINER
+#define ZONE_THERMAL_RELIEF_GAP_MIL 20     // default value for ZONE_SETTINGS::m_ThermalReliefGap
+#define ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL 20 // default value for ZONE_SETTINGS::m_ThermalReliefCopperBridge
+#define ZONE_THICKNESS_MIL 10               // default value for ZONE_SETTINGS::m_ZoneMinThickness
+#define ZONE_THICKNESS_MIN_VALUE_MIL 1      // minimum acceptable value for ZONE_SETTINGS::m_ZoneMinThickness
+#define ZONE_CLEARANCE_MIL 20               // default value for ZONE_SETTINGS::m_ZoneClearance
+#define ZONE_CLEARANCE_MAX_VALUE_MIL 500    // maximum acceptable value for ZONE_SETTINGS::m_ZoneClearance
+
 
 /// Exit codes for zone editing dialogs
 enum ZONE_EDIT_T {

@@ -1,19 +1,39 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_copper_zones.cpp
-// Author:      jean-pierre Charras
-// Created:     09/oct/2008
-// Licence:     GNU License
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_copper_zones.cpp
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <wx/wx.h>
-#include <wx/imaglist.h>
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <confirm.h>
 #include <PolyLine.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
-#include <trigo.h>
 #include <zones.h>
 #include <base_units.h>
 
@@ -370,20 +390,25 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     // Test if this is a reasonable value for this parameter
     // A too large value can hang Pcbnew
-    #define CLEARANCE_MAX_VALUE 100*IU_PER_MILS
+    #define CLEARANCE_MAX_VALUE ZONE_CLEARANCE_MAX_VALUE_MIL*IU_PER_MILS
     if( m_settings.m_ZoneClearance > CLEARANCE_MAX_VALUE )
     {
-        DisplayError( this, _( "Clearance must be smaller than 0.5\" / 12.7 mm." ) );
+        wxString msg;
+        msg.Printf( _( "Clearance must be smaller than %f\" / %f mm." ),
+            ZONE_CLEARANCE_MAX_VALUE_MIL / 1000.0, ZONE_CLEARANCE_MAX_VALUE_MIL * 0.0254 );
+        DisplayError( this, msg );
         return false;
     }
 
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_settings.m_ZoneMinThickness = ReturnValueFromString( g_UserUnit, txtvalue );
 
-    if( m_settings.m_ZoneMinThickness < (1*IU_PER_MILS) )
+    if( m_settings.m_ZoneMinThickness < (ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS) )
     {
-        DisplayError( this,
-                      _( "Minimum width must be larger than 0.001\" / 0.0254 mm." ) );
+        wxString msg;
+        msg.Printf( _( "Minimum width must be larger than %f\" / %f mm." ),
+            ZONE_THICKNESS_MIN_VALUE_MIL / 1000.0, ZONE_THICKNESS_MIN_VALUE_MIL * 0.0254 );
+        DisplayError( this, msg );
         return false;
     }
 
@@ -402,9 +427,20 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     m_settings.m_ThermalReliefCopperBridge = ReturnValueFromTextCtrl( *m_CopperWidthValue );
 
-    m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, (long) m_settings.m_ThermalReliefGap );
+    if( m_Config )
+    {
+        m_Config->Write( ZONE_CLEARANCE_WIDTH_STRING_KEY,
+            (double) m_settings.m_ZoneClearance / IU_PER_MILS );
 
-    m_Config->Write( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY, (long) m_settings.m_ThermalReliefCopperBridge );
+        m_Config->Write( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
+            (double) m_settings.m_ZoneMinThickness / IU_PER_MILS );
+
+        m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
+            (double) m_settings.m_ThermalReliefGap / IU_PER_MILS );
+
+        m_Config->Write( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
+            (double) m_settings.m_ThermalReliefCopperBridge / IU_PER_MILS );
+    }
 
     if( m_settings.m_ThermalReliefCopperBridge <= m_settings.m_ZoneMinThickness )
     {

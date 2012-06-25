@@ -48,7 +48,6 @@ class PCB_EDIT_FRAME;
 class BOARD;
 class ZONE_CONTAINER;
 
-
 /**
  * Struct SEGMENT
  * is a simple container used when filling areas with segments
