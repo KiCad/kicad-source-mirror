@@ -1,9 +1,12 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ *
+ * First copyright (C) Randy Nevin, 1989 (see PCBCA package)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +26,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/* see "Autorouting With the A* Algorithm" (Dr.Dobbs journal)
+*/
+
 /**
  * @file solve.cpp
  */
@@ -40,7 +46,7 @@
 
 #include <pcbnew.h>
 #include <protos.h>
-#include <ar_protos.h>
+#include <autorout.h>
 #include <cell.h>
 
 
@@ -76,7 +82,6 @@ static int            segm_oX, segm_oY;
 static int            segm_fX, segm_fY; /* Origin and position of the current
                                          * trace segment. */
 static RATSNEST_ITEM* pt_cur_ch;
-static int            Ncurrent;     /* measures of progress */
 static int            s_Clearance;  // Clearance value used in autorouter
 
 static PICKED_ITEMS_LIST s_ItemsListPicker;
@@ -104,7 +109,7 @@ static PICKED_ITEMS_LIST s_ItemsListPicker;
  * [] [0] = row [] (1] = col was added to the coord of the midpoint for
  * Get the coord of the 8 neighboring points.
  */
-static int delta[8][2] =
+static const int delta[8][2] =
 {
     {  1, -1 },     /* northwest    */
     {  1, 0  },     /* north        */
@@ -116,7 +121,7 @@ static int delta[8][2] =
     { -1, 1  }      /* southeast    */
 };
 
-static int ndir[8] =
+static const int ndir[8] =
 {
     /* for building paths back to source */
     FROM_SOUTHEAST, FROM_SOUTH,     FROM_SOUTHWEST,
@@ -266,12 +271,11 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     NETINFO_ITEM* net;
     bool          stop = false;
     wxString      msg;
+    int           routedCount = 0;      // routed ratsnest count
 
     m_canvas->SetAbortRequest( false );
 
     s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
-
-    Ncurrent = 0;
 
     // Prepare the undo command info
     s_ItemsListPicker.ClearListAndDeleteItems();  // Should not be necessary, but...
@@ -304,43 +308,33 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
 
         EraseMsgBox();
 
-        Ncurrent++;
+        routedCount++;
         net = GetBoard()->FindNet( current_net_code );
 
         if( net )
         {
             msg.Printf( wxT( "[%8.8s]" ), GetChars( net->GetNetname() ) );
             AppendMsgPanel( wxT( "Net route" ), msg, BROWN );
-            msg.Printf( wxT( "%d / %d" ), Ncurrent, Ntotal );
+            msg.Printf( wxT( "%d / %d" ), routedCount, RoutingMatrix.m_RouteCount );
             AppendMsgPanel( wxT( "Activity" ), msg, BROWN );
         }
 
         pt_cur_ch = pt_cur_ch;
-        segm_oX = GetBoard()->GetBoundingBox().GetX() + (Board.m_GridRouting * col_source);
-        segm_oY = GetBoard()->GetBoundingBox().GetY() + (Board.m_GridRouting * row_source);
-        segm_fX = GetBoard()->GetBoundingBox().GetX() + (Board.m_GridRouting * col_target);
-        segm_fY = GetBoard()->GetBoundingBox().GetY() + (Board.m_GridRouting * row_target);
+        segm_oX = GetBoard()->GetBoundingBox().GetX() + (RoutingMatrix.m_GridRouting * col_source);
+        segm_oY = GetBoard()->GetBoundingBox().GetY() + (RoutingMatrix.m_GridRouting * row_source);
+        segm_fX = GetBoard()->GetBoundingBox().GetX() + (RoutingMatrix.m_GridRouting * col_target);
+        segm_fY = GetBoard()->GetBoundingBox().GetY() + (RoutingMatrix.m_GridRouting * row_target);
 
         /* Draw segment. */
-        GRLine( m_canvas->GetClipBox(),
-                DC,
-                segm_oX,
-                segm_oY,
-                segm_fX,
-                segm_fY,
-                0,
-                WHITE | GR_XOR );
+        GRLine( m_canvas->GetClipBox(), DC,
+                segm_oX, segm_oY, segm_fX, segm_fY,
+                0, WHITE | GR_XOR );
         pt_cur_ch->m_PadStart->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
         pt_cur_ch->m_PadEnd->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
 
-        success = Autoroute_One_Track( this,
-                                       DC,
-                                       two_sides,
-                                       row_source,
-                                       col_source,
-                                       row_target,
-                                       col_target,
-                                       pt_cur_ch );
+        success = Autoroute_One_Track( this, DC,
+                                       two_sides, row_source, col_source,
+                                       row_target, col_target, pt_cur_ch );
 
         switch( success )
         {
@@ -433,9 +427,9 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
 
     /* clear direction flags */
-    i = Nrows * Ncols * sizeof(DIR_CELL);
-    memset( Board.m_DirSide[TOP], FROM_NOWHERE, i );
-    memset( Board.m_DirSide[BOTTOM], FROM_NOWHERE, i );
+    i = RoutingMatrix.m_Nrows * RoutingMatrix.m_Ncols * sizeof(DIR_CELL);
+    memset( RoutingMatrix.m_DirSide[TOP], FROM_NOWHERE, i );
+    memset( RoutingMatrix.m_DirSide[BOTTOM], FROM_NOWHERE, i );
 
     lastopen = lastclos = lastmove = 0;
 
@@ -467,9 +461,9 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
      * On the routing grid (1 grid point must be in the pad)
      */
     {
-        int cX = ( Board.m_GridRouting * col_source )
+        int cX = ( RoutingMatrix.m_GridRouting * col_source )
                  + pcbframe->GetBoard()->GetBoundingBox().GetX();
-        int cY = ( Board.m_GridRouting * row_source )
+        int cY = ( RoutingMatrix.m_GridRouting * row_source )
                  + pcbframe->GetBoard()->GetBoundingBox().GetY();
         int dx = pt_cur_ch->m_PadStart->GetSize().x / 2;
         int dy = pt_cur_ch->m_PadStart->GetSize().y / 2;
@@ -482,9 +476,9 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
             goto end_of_route;
 
-        cX = ( Board.m_GridRouting * col_target )
+        cX = ( RoutingMatrix.m_GridRouting * col_target )
              + pcbframe->GetBoard()->GetBoundingBox().GetX();
-        cY = ( Board.m_GridRouting * row_target )
+        cY = ( RoutingMatrix.m_GridRouting * row_target )
              + pcbframe->GetBoard()->GetBoundingBox().GetY();
         dx = pt_cur_ch->m_PadEnd->GetSize().x / 2;
         dy = pt_cur_ch->m_PadEnd->GetSize().y / 2;
@@ -510,8 +504,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     /* Placing the bit to remove obstacles on 2 pads to a link. */
     pcbframe->SetStatusText( wxT( "Gen Cells" ) );
 
-    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadStart, CURRENT_PAD, marge, WRITE_OR_CELL );
-    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadEnd, CURRENT_PAD, marge, WRITE_OR_CELL );
+    PlacePad( pt_cur_ch->m_PadStart, CURRENT_PAD, marge, WRITE_OR_CELL );
+    PlacePad( pt_cur_ch->m_PadEnd, CURRENT_PAD, marge, WRITE_OR_CELL );
 
     /* Regenerates the remaining barriers (which may encroach on the placement bits precedent)
      */
@@ -523,7 +517,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
         if( ( pt_cur_ch->m_PadStart != ptr ) && ( pt_cur_ch->m_PadEnd != ptr ) )
         {
-            PlacePad( pcbframe->GetBoard(), ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+            PlacePad( ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
         }
     }
 
@@ -597,7 +591,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
     for( ; r != ILLEGAL; GetQueue( &r, &c, &side, &d, &apx_dist ) )
     {
-        curcell = GetCell( r, c, side );
+        curcell = RoutingMatrix.GetCell( r, c, side );
 
         if( curcell & CURRENT_PAD )
             curcell &= ~HOLE;
@@ -669,13 +663,14 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             nc = c + delta[i][1];
 
             /* off the edge? */
-            if( nr < 0 || nr >= Nrows || nc < 0 || nc >= Ncols )
+            if( nr < 0 || nr >= RoutingMatrix.m_Nrows ||
+                nc < 0 || nc >= RoutingMatrix.m_Ncols )
                 continue;  /* off the edge */
 
             if( _self == 5 && selfok2[i].present )
                 continue;
 
-            newcell = GetCell( nr, nc, side );
+            newcell = RoutingMatrix.GetCell( nr, nc, side );
 
             if( newcell & CURRENT_PAD )
                 newcell &= ~HOLE;
@@ -696,7 +691,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             if( delta[i][0] && delta[i][1] )
             {
                 /* check first buddy */
-                buddy = GetCell( r + blocking[i].r1, c + blocking[i].c1, side );
+                buddy = RoutingMatrix.GetCell( r + blocking[i].r1, c + blocking[i].c1, side );
 
                 if( buddy & CURRENT_PAD )
                     buddy &= ~HOLE;
@@ -706,7 +701,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
 //              if (buddy & (blocking[i].b1)) continue;
                 /* check second buddy */
-                buddy = GetCell( r + blocking[i].r2, c + blocking[i].c2, side );
+                buddy = RoutingMatrix.GetCell( r + blocking[i].r2, c + blocking[i].c2, side );
 
                 if( buddy & CURRENT_PAD )
                     buddy &= ~HOLE;
@@ -717,17 +712,17 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 //              if (buddy & (blocking[i].b2)) continue;
             }
 
-            olddir  = GetDir( r, c, side );
+            olddir  = RoutingMatrix.GetDir( r, c, side );
             newdist = d + CalcDist( ndir[i], olddir,
                                     ( olddir == FROM_OTHERSIDE ) ?
-                                    GetDir( r, c, 1 - side ) : 0, side );
+                                    RoutingMatrix.GetDir( r, c, 1 - side ) : 0, side );
 
             /* if (a) not visited yet, or (b) we have */
             /* found a better path, add it to queue */
-            if( !GetDir( nr, nc, side ) )
+            if( !RoutingMatrix.GetDir( nr, nc, side ) )
             {
-                SetDir( nr, nc, side, ndir[i] );
-                SetDist( nr, nc, side, newdist );
+                RoutingMatrix.SetDir( nr, nc, side, ndir[i] );
+                RoutingMatrix.SetDist( nr, nc, side, newdist );
 
                 if( SetQueue( nr, nc, side, newdist,
                               GetApxDist( nr, nc, row_target, col_target ),
@@ -736,10 +731,10 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                     return ERR_MEMORY;
                 }
             }
-            else if( newdist < GetDist( nr, nc, side ) )
+            else if( newdist < RoutingMatrix.GetDist( nr, nc, side ) )
             {
-                SetDir( nr, nc, side, ndir[i] );
-                SetDist( nr, nc, side, newdist );
+                RoutingMatrix.SetDir( nr, nc, side, ndir[i] );
+                RoutingMatrix.SetDist( nr, nc, side, newdist );
                 ReSetQueue( nr, nc, side, newdist,
                             GetApxDist( nr, nc, row_target, col_target ),
                             row_target, col_target );
@@ -749,7 +744,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         /** Test the other layer. **/
         if( two_sides )
         {
-            olddir = GetDir( r, c, side );
+            olddir = RoutingMatrix.GetDir( r, c, side );
 
             if( olddir == FROM_OTHERSIDE )
                 continue;   /* useless move, so don't bother */
@@ -758,7 +753,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                 continue;
 
             /* check for holes or traces on other side */
-            if( ( newcell = GetCell( r, c, 1 - side ) ) != 0 )
+            if( ( newcell = RoutingMatrix.GetCell( r, c, 1 - side ) ) != 0 )
                 continue;
 
             /* check for nearby holes or traces on both sides */
@@ -766,16 +761,17 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             {
                 nr = r + delta[i][0]; nc = c + delta[i][1];
 
-                if( nr < 0 || nr >= Nrows || nc < 0 || nc >= Ncols )
+                if( nr < 0 || nr >= RoutingMatrix.m_Nrows ||
+                    nc < 0 || nc >= RoutingMatrix.m_Ncols )
                     continue;  /* off the edge !! */
 
-                if( GetCell( nr, nc, side ) /* & blocking2[i]*/ )
+                if( RoutingMatrix.GetCell( nr, nc, side ) /* & blocking2[i]*/ )
                 {
                     skip = 1; /* can't drill via here */
                     break;
                 }
 
-                if( GetCell( nr, nc, 1 - side ) /* & blocking2[i]*/ )
+                if( RoutingMatrix.GetCell( nr, nc, 1 - side ) /* & blocking2[i]*/ )
                 {
                     skip = 1; /* can't drill via here */
                     break;
@@ -790,22 +786,21 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             /*  if (a) not visited yet,
              *  or (b) we have found a better path,
              *  add it to queue */
-            if( !GetDir( r, c, 1 - side ) )
+            if( !RoutingMatrix.GetDir( r, c, 1 - side ) )
             {
-                SetDir( r, c, 1 - side, FROM_OTHERSIDE );
-                SetDist( r, c, 1 - side, newdist );
+                RoutingMatrix.SetDir( r, c, 1 - side, FROM_OTHERSIDE );
+                RoutingMatrix.SetDist( r, c, 1 - side, newdist );
 
                 if( SetQueue( r, c, 1 - side, newdist, apx_dist, row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
             }
-            else if( newdist < GetDist( r, c, 1 - side ) )
+            else if( newdist < RoutingMatrix.GetDist( r, c, 1 - side ) )
             {
-                SetDir( r, c, 1 - side, FROM_OTHERSIDE );
-                SetDist( r, c, 1 - side, newdist );
-                ReSetQueue( r,
-                            c,
+                RoutingMatrix.SetDir( r, c, 1 - side, FROM_OTHERSIDE );
+                RoutingMatrix.SetDist( r, c, 1 - side, newdist );
+                ReSetQueue( r, c,
                             1 - side,
                             newdist,
                             apx_dist,
@@ -816,8 +811,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     }
 
 end_of_route:
-    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadStart, ~CURRENT_PAD, marge, WRITE_AND_CELL );
-    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadEnd, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    PlacePad( pt_cur_ch->m_PadStart, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    PlacePad( pt_cur_ch->m_PadEnd, ~CURRENT_PAD, marge, WRITE_AND_CELL );
 
     msg.Printf( wxT( "Activity: Open %d   Closed %d   Moved %d"),
                 OpenNodes, ClosNodes, MoveNodes );
@@ -966,7 +961,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
     {
         /* find where we came from to get here */
         r2 = r1; c2 = c1; s2 = s1;
-        x  = GetDir( r1, c1, s1 );
+        x  = RoutingMatrix.GetDir( r1, c1, s1 );
 
         switch( x )
         {
@@ -1011,12 +1006,12 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
             break;
 
         default:
-            DisplayError( pcbframe, wxT( "Retrace: internal error: no way back" ) );
+            wxMessageBox( wxT( "Retrace: internal error: no way back" ) );
             return 0;
         }
 
         if( r0 != ILLEGAL )
-            y = GetDir( r0, c0, s0 );
+            y = RoutingMatrix.GetDir( r0, c0, s0 );
 
         /* see if target or hole */
         if( ( ( r1 == row_target ) && ( c1 == col_target ) ) || ( s1 != s0 ) )
@@ -1085,7 +1080,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
             }
             else
             {
-                DisplayError( pcbframe, wxT( "Retrace: error 2" ) );
+                wxMessageBox( wxT( "Retrace: error 2" ) );
                 return 0;
             }
         }
@@ -1130,7 +1125,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
 
             case FROM_OTHERSIDE:
             default:
-                DisplayError( pcbframe, wxT( "Retrace: error 3" ) );
+                wxMessageBox( wxT( "Retrace: error 3" ) );
                 return 0;
             }
 
@@ -1171,11 +1166,11 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
         g_CurrentTrackSegment->m_Start.x   =
             g_CurrentTrackSegment->m_End.x = pcb->GetBoundingBox().GetX() +
-                                             ( Board.m_GridRouting * row );
+                                             ( RoutingMatrix.m_GridRouting * row );
 
         g_CurrentTrackSegment->m_Start.y   =
             g_CurrentTrackSegment->m_End.y = pcb->GetBoundingBox().GetY() +
-                                             ( Board.m_GridRouting * col );
+                                             ( RoutingMatrix.m_GridRouting * col );
 
         g_CurrentTrackSegment->m_Width = pcb->GetCurrentViaSize();
         g_CurrentTrackSegment->m_Shape = pcb->GetDesignSettings().m_CurrentViaType;
@@ -1195,9 +1190,9 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
         g_CurrentTrackSegment->SetState( TRACK_AR, ON );
         g_CurrentTrackSegment->m_End.x = pcb->GetBoundingBox().GetX() +
-                                         ( Board.m_GridRouting * row );
+                                         ( RoutingMatrix.m_GridRouting * row );
         g_CurrentTrackSegment->m_End.y = pcb->GetBoundingBox().GetY() +
-                                         ( Board.m_GridRouting * col );
+                                         ( RoutingMatrix.m_GridRouting * col );
         g_CurrentTrackSegment->SetNet( current_net_code );
 
         if( g_CurrentTrackSegment->Back() == NULL ) /* Start trace. */
@@ -1315,9 +1310,8 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     /* Out the new track on the matrix board */
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
     {
-        TraceSegmentPcb( pcbframe->GetBoard(), track, HOLE, marge, WRITE_CELL );
-        TraceSegmentPcb( pcbframe->GetBoard(), track, VIA_IMPOSSIBLE,
-                         via_marge, WRITE_OR_CELL );
+        TraceSegmentPcb( track, HOLE, marge, WRITE_CELL );
+        TraceSegmentPcb( track, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
     // Insert new segments in  real board

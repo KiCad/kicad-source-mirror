@@ -3,6 +3,33 @@
  * @brief Autorouting command and control.
  */
 
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
@@ -11,25 +38,22 @@
 #include <pcbnew.h>
 #include <cell.h>
 #include <zones.h>
-#include <ar_protos.h>
 
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
+#include <convert_to_biu.h>
+
+#include <autorout.h>
 
 
-int E_scale;         /* Scaling factor of distance tables. */
 int Nb_Sides;        /* Number of layer for autorouting (0 or 1) */
-int Nrows = ILLEGAL;
-int Ncols = ILLEGAL;
-int Ntotal;
 int OpenNodes;       /* total number of nodes opened */
 int ClosNodes;       /* total number of nodes closed */
 int MoveNodes;       /* total number of nodes moved */
 int MaxNodes;        /* maximum number of nodes opened at one time */
 
-MATRIX_ROUTING_HEAD Board;     /* 2-sided board */
-
+MATRIX_ROUTING_HEAD RoutingMatrix;     // routing matrix (grid) to route 2-sided boards
 
 /* init board, route traces*/
 void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
@@ -139,18 +163,14 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     start = time( NULL );
 
     /* Calculation of no fixed routing to 5 mils and more. */
-    Board.m_GridRouting = (int)GetScreen()->GetGridSize().x;
+    RoutingMatrix.m_GridRouting = (int)GetScreen()->GetGridSize().x;
 
-    if( Board.m_GridRouting < 50 )
-        Board.m_GridRouting = 50;
+    if( RoutingMatrix.m_GridRouting < (5*IU_PER_MILS) )
+        RoutingMatrix.m_GridRouting = 5*IU_PER_MILS;
 
-    E_scale = Board.m_GridRouting / 50;
-
-    if( E_scale < 1 )
-        E_scale = 1;
 
     /* Calculated ncol and nrow, matrix size for routing. */
-    Board.ComputeMatrixSize( GetBoard() );
+    RoutingMatrix.ComputeMatrixSize( GetBoard() );
 
     m_messagePanel->EraseMsgBox();
 
@@ -160,10 +180,10 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     if( Route_Layer_TOP != Route_Layer_BOTTOM )
         Nb_Sides = TWO_SIDES;
 
-    if( Board.InitBoard() < 0 )
+    if( RoutingMatrix.InitRoutingMatrix() < 0 )
     {
         wxMessageBox( _( "No memory for autorouting" ) );
-        Board.UnInitBoard();  /* Free memory. */
+        RoutingMatrix.UnInitRoutingMatrix();  /* Free memory. */
         return;
     }
 
@@ -171,9 +191,9 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     PlaceCells( GetBoard(), -1, FORCE_PADS );
 
     /* Construction of the track list for router. */
-    Build_Work( GetBoard() );
+    RoutingMatrix.m_RouteCount = Build_Work( GetBoard() );
 
-    // DisplayBoard(m_canvas, DC);
+    // DisplayRoutingMatrix( m_canvas, DC );
 
     if( Nb_Sides == TWO_SIDES )
         Solve( DC, TWO_SIDES ); /* double face */
@@ -183,7 +203,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     /* Free memory. */
     FreeQueue();
     InitWork();             /* Free memory for the list of router connections. */
-    Board.UnInitBoard();
+    RoutingMatrix.UnInitRoutingMatrix();
     stop = time( NULL ) - start;
     msg.Printf( wxT( "time = %d second%s" ), stop, ( stop == 1 ) ? wxT( "" ) : wxT( "s" ) );
     SetStatusText( msg );
@@ -207,13 +227,11 @@ void PCB_EDIT_FRAME::Reset_Noroutable( wxDC* DC )
 
 
 /* DEBUG Function: displays the routing matrix */
-void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
+void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
-    int row, col, i, j;
     int dcell0, dcell1 = 0, color;
-    int maxi;
 
-    maxi = 600 / Ncols;
+    int maxi = 600 / RoutingMatrix.m_Ncols;
     maxi = ( maxi * 3 ) / 4;
 
     if( !maxi )
@@ -221,12 +239,12 @@ void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
 
     GRSetDrawMode( DC, GR_COPY );
 
-    for( col = 0; col < Ncols; col++ )
+    for( int col = 0; col < RoutingMatrix.m_Ncols; col++ )
     {
-        for( row = 0; row < Nrows; row++ )
+        for( int row = 0; row < RoutingMatrix.m_Nrows; row++ )
         {
             color  = 0;
-            dcell0 = GetCell( row, col, BOTTOM );
+            dcell0 = RoutingMatrix.GetCell( row, col, BOTTOM );
 
             if( dcell0 & HOLE )
                 color = GREEN;
@@ -251,8 +269,8 @@ void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
             #define DRAW_OFFSET_Y 20
 //            if( color )
             {
-                for( i = 0; i < maxi; i++ )
-                    for( j = 0; j < maxi; j++ )
+                for( int i = 0; i < maxi; i++ )
+                    for( int j = 0; j < maxi; j++ )
                         GRPutPixel( panel->GetClipBox(), DC,
                                     ( col * maxi ) + i + DRAW_OFFSET_X,
                                     ( row * maxi ) + j + DRAW_OFFSET_Y, color );

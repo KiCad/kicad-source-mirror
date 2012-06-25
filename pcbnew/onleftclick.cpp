@@ -298,7 +298,8 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
          */
         if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
-            // there is no current item, try to find something under mouse
+#if 0       // Set to 1 to automatically edit a zone found under the mouse
+            // there is no current item, try to find something under the mouse cursor
             DrawStruct = PcbGeneralLocateAndDisplay();
             bool hit_on_corner = false;
 
@@ -319,7 +320,9 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 m_canvas->SetAutoPanRequest( true );
                 Start_Move_Zone_Corner( aDC, zone_cont, zone_cont->m_CornerSelection, false );
             }
-            else if( Begin_Zone( aDC ) )
+            else
+#endif
+            if( Begin_Zone( aDC ) )
             {
                 m_canvas->SetAutoPanRequest( true );
                 DrawStruct = GetBoard()->m_CurrentZoneContour;

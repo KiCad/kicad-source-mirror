@@ -28,18 +28,19 @@
 #include <layers_id_colors_and_visibility.h>
 #include <plot_common.h>
 #include <macros.h>
+#include <convert_to_biu.h>
 
 
 #define PLOT_LINEWIDTH_MIN        0
-#define PLOT_LINEWIDTH_MAX        (200*IU_PER_DECIMILS)
+#define PLOT_LINEWIDTH_MAX        (200*IU_PER_MILS)
 #define HPGL_PEN_DIAMETER_MIN     0
-#define HPGL_PEN_DIAMETER_MAX     (100*IU_PER_DECIMILS)
-#define HPGL_PEN_SPEED_MIN        0
-#define HPGL_PEN_SPEED_MAX        1000
+#define HPGL_PEN_DIAMETER_MAX     100       // Unit = mil
+#define HPGL_PEN_SPEED_MIN        1         // this param is always in cm/s
+#define HPGL_PEN_SPEED_MAX        99        // this param is always in cm/s
 #define HPGL_PEN_NUMBER_MIN       1
 #define HPGL_PEN_NUMBER_MAX       16
-#define HPGL_PEN_OVERLAY_MIN      0
-#define HPGL_PEN_OVERLAY_MAX      0x100
+#define HPGL_PEN_OVERLAP_MIN      0
+#define HPGL_PEN_OVERLAP_MAX      50       // Unit = mil
 
 
 /**
@@ -47,7 +48,7 @@
  * default thickness line value (Frame references) (i.e. = 0 ).
  * 0 = single pixel line width.
  */
-int g_DrawDefaultLineThickness = 60;
+int g_DrawDefaultLineThickness = 6*IU_PER_MILS;
 
 
 using namespace PCBPLOTPARAMS_T;
@@ -88,9 +89,9 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_PlotMode             = FILLED;
     useAuxOrigin           = false;
     m_HPGLPenNum           = 1;
-    m_HPGLPenSpeed         = 20;
-    m_HPGLPenDiam          = 15;
-    m_HPGLPenOvr           = 2;
+    m_HPGLPenSpeed         = 20;        // this param is always in cm/s
+    m_HPGLPenDiam          = 15;        // in mils
+    m_HPGLPenOvr           = 2;         // in mils
     m_PlotPSColorOpt       = true;
     m_PlotPSNegative       = false;
     psA4Output             = false;
@@ -119,7 +120,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     const char* falseStr = getTokenName( T_false );
     const char* trueStr = getTokenName( T_true );
 
-    aFormatter->Print( aNestLevel, "(%s", getTokenName( T_pcbplotparams ) );
+    aFormatter->Print( aNestLevel, "(%s\n", getTokenName( T_pcbplotparams ) );
     aFormatter->Print( aNestLevel+1, "(%s %ld)\n", getTokenName( T_layerselection ),
                        layerSelection );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
@@ -170,7 +171,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_DrillShapeOpt );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_scaleselection ),
                        scaleSelection );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_outputdirectory ),
+    aFormatter->Print( aNestLevel+1, "(%s %s)", getTokenName( T_outputdirectory ),
                        aFormatter->Quotew( outputDirectory ).c_str() );
     aFormatter->Print( 0, ")\n" );
 }
@@ -260,7 +261,7 @@ bool PCB_PLOT_PARAMS::SetHpglPenSpeed( int aValue )
 
 bool PCB_PLOT_PARAMS::SetHpglPenOverlay( int aValue )
 {
-    return setInt( &m_HPGLPenOvr, aValue, HPGL_PEN_OVERLAY_MIN, HPGL_PEN_OVERLAY_MAX );
+    return setInt( &m_HPGLPenOvr, aValue, HPGL_PEN_OVERLAP_MIN, HPGL_PEN_OVERLAP_MAX );
 }
 
 
@@ -344,8 +345,8 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
                                                       HPGL_PEN_DIAMETER_MAX );
             break;
         case T_hpglpenoverlay:
-            aPcbPlotParams->m_HPGLPenOvr = ParseInt( HPGL_PEN_OVERLAY_MIN,
-                                                     HPGL_PEN_OVERLAY_MIN );
+            aPcbPlotParams->m_HPGLPenOvr = ParseInt( HPGL_PEN_OVERLAP_MIN,
+                                                     HPGL_PEN_OVERLAP_MAX );
             break;
         case T_pscolor:
             aPcbPlotParams->m_PlotPSColorOpt = ParseBool();

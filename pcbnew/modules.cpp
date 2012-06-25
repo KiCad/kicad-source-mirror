@@ -1,9 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -515,20 +516,16 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
 
     module->DrawEdgesOnly( panel, DC, g_Offset_Module, GR_XOR );
 
-    if( g_Show_Pads_Module_in_Move )
-    {
-        pad_fill_tmp = DisplayOpt.DisplayPadFill;
-        DisplayOpt.DisplayPadFill = true;
+    // Show pads in sketch mode to speedu up drawings
+    pad_fill_tmp = DisplayOpt.DisplayPadFill;
+    DisplayOpt.DisplayPadFill = true;
 
-        pt_pad = module->m_Pads;
+    pt_pad = module->m_Pads;
 
-        for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
-        {
-            pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
-        }
+    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
+        pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );
 
-        DisplayOpt.DisplayPadFill = pad_fill_tmp;
-    }
+    DisplayOpt.DisplayPadFill = pad_fill_tmp;
 
     if( g_Show_Module_Ratsnest && panel )
     {

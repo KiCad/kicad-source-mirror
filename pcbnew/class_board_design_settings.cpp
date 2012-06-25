@@ -62,7 +62,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_ModuleSegmentWidth = DMils2iu( 100 );
 
     // Layer thickness for 3D viewer
-    m_BoardThickness = DMils2iu( DEFAULT_BOARD_THICKNESS_DMILS );
+    m_boardThickness = DMils2iu( DEFAULT_BOARD_THICKNESS_DMILS );
 }
 
 
@@ -70,7 +70,7 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 {
     m_Pad_Master.AppendConfigs( aResult );
 
-    aResult->push_back( new PARAM_CFG_INT( wxT( "BoardThickness" ), &m_BoardThickness,
+    aResult->push_back( new PARAM_CFG_INT( wxT( "BoardThickness" ), &m_boardThickness,
                     DMils2iu( DEFAULT_BOARD_THICKNESS_DMILS ), 0, 0xFFFF ) );
 
     aResult->push_back( new PARAM_CFG_INT( wxT( "TxtPcbV" ), &m_PcbTextSize.y,

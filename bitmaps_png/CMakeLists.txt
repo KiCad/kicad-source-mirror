@@ -496,6 +496,7 @@ set( BMAPS_MID
     window_close
     zip_tool
     zip
+    zone_duplicate
     zone_unfill
     zoom
     zoom_area

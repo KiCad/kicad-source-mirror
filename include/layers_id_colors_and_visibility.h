@@ -7,6 +7,7 @@
 #define _LAYERS_ID_AND_VISIBILITY_H_
 
 /* Layer identification (layer number) */
+#define UNDEFINED_LAYER         -1
 #define FIRST_COPPER_LAYER      0
 #define LAYER_N_BACK            0
 #define LAYER_N_2               1

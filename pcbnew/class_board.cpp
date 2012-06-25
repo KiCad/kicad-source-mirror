@@ -3,6 +3,33 @@
  * @brief  BOARD class functions.
  */
 
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include <limits.h>
 #include <algorithm>
 
@@ -47,10 +74,14 @@ BOARD::BOARD() :
 
     BuildListOfNets();                      // prepare pad and netlist containers.
 
-    for( int layer = 0; layer < NB_COPPER_LAYERS; ++layer )
+    for( int layer = 0; layer < LAYER_COUNT; ++layer )
     {
         m_Layer[layer].m_Name = GetDefaultLayerName( layer );
-        m_Layer[layer].m_Type = LT_SIGNAL;
+
+        if( layer <= LAST_COPPER_LAYER )
+            m_Layer[layer].m_Type = LT_SIGNAL;
+        else
+            m_Layer[layer].m_Type = LT_UNDEFINED;
     }
 
     m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
@@ -312,13 +343,25 @@ int BOARD::GetCurrentMicroViaDrill()
 }
 
 
+bool BOARD::SetLayer( int aIndex, const LAYER& aLayer )
+{
+    if( aIndex < NB_COPPER_LAYERS )
+    {
+        m_Layer[ aIndex ] = aLayer;
+        return true;
+    }
+
+    return false;
+}
+
+
 wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
     if( !IsValidLayerIndex( aLayerIndex ) )
         return wxEmptyString;
 
-    // copper layer names are stored in the BOARD.
-    if( IsValidCopperLayerIndex( aLayerIndex ) && IsLayerEnabled( aLayerIndex ) )
+    // All layer names are stored in the BOARD.
+    if( IsLayerEnabled( aLayerIndex ) )
     {
         // default names were set in BOARD::BOARD() but they may be
         // over-ridden by BOARD::SetLayerName()
@@ -380,7 +423,7 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
     if( !IsValidCopperLayerIndex( aLayerIndex ) )
         return false;
 
-    if( aLayerName == wxEmptyString  || aLayerName.Len() > 20 )
+    if( aLayerName == wxEmptyString || aLayerName.Len() > 20 )
         return false;
 
     // no quote chars in the name allowed
@@ -479,13 +522,64 @@ LAYER_T LAYER::ParseType( const char* aType )
     else if( strcmp( aType, "jumper" ) == 0 )
         return LT_JUMPER;
     else
-        return LAYER_T( -1 );
+        return LT_UNDEFINED;
 }
+
+
+int LAYER::GetDefaultIndex( const wxString& aName )
+{
+    static LAYER_INDEX_HASH_MAP layerIndices;
+
+    if( layerIndices.empty() )
+    {
+        // These are only default layer names.  The copper names may be over-ridden in
+        // the BOARD (*.brd) file.
+
+        layerIndices[ _( "Front" ) ] = LAYER_N_FRONT;
+        layerIndices[ _( "Inner2" ) ] = LAYER_N_2;
+        layerIndices[ _( "Inner3" ) ] = LAYER_N_3;
+        layerIndices[ _( "Inner4" ) ] = LAYER_N_4;
+        layerIndices[ _( "Inner5" ) ] = LAYER_N_5;
+        layerIndices[ _( "Inner6" ) ] = LAYER_N_6;
+        layerIndices[ _( "Inner7" ) ] = LAYER_N_7;
+        layerIndices[ _( "Inner8" ) ] = LAYER_N_8;
+        layerIndices[ _( "Inner9" ) ] = LAYER_N_9;
+        layerIndices[ _( "Inner10" ) ] = LAYER_N_10;
+        layerIndices[ _( "Inner11" ) ] = LAYER_N_11;
+        layerIndices[ _( "Inner12" ) ] = LAYER_N_12;
+        layerIndices[ _( "Inner13" ) ] = LAYER_N_13;
+        layerIndices[ _( "Inner14" ) ] = LAYER_N_14;
+        layerIndices[ _( "Inner15" ) ] = LAYER_N_15;
+        layerIndices[ _( "Back" ) ] = LAYER_N_BACK;
+        layerIndices[ _( "Adhes_Back" ) ] = ADHESIVE_N_BACK;
+        layerIndices[ _( "Adhes_Front" ) ] = ADHESIVE_N_FRONT;
+        layerIndices[ _( "SoldP_Back" ) ] = SOLDERPASTE_N_BACK;
+        layerIndices[ _( "SoldP_Front" ) ] = SOLDERPASTE_N_FRONT;
+        layerIndices[ _( "SilkS_Back" ) ] = SILKSCREEN_N_BACK;
+        layerIndices[ _( "SilkS_Front" ) ] = SILKSCREEN_N_FRONT;
+        layerIndices[ _( "Mask_Back" ) ] = SOLDERMASK_N_BACK;
+        layerIndices[ _( "Mask_Front" ) ] = SOLDERMASK_N_FRONT;
+        layerIndices[ _( "Drawings" ) ] = DRAW_N;
+        layerIndices[ _( "Comments" ) ] = COMMENT_N;
+        layerIndices[ _( "Eco1" ) ] = ECO1_N;
+        layerIndices[ _( "Eco2" ) ] = ECO2_N;
+        layerIndices[ _( "PCB_Edges" ) ] = EDGE_N;
+    }
+
+    const LAYER_INDEX_HASH_MAP::iterator it = layerIndices.find( aName );
+
+    if( it == layerIndices.end() )
+        return UNDEFINED_LAYER;
+
+    return layerIndices[ aName ];
+}
+
 
 int BOARD::GetCopperLayerCount() const
 {
     return m_designSettings.GetCopperLayerCount();
 }
+
 
 void BOARD::SetCopperLayerCount( int aCount )
 {

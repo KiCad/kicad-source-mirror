@@ -1,9 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,6 +105,53 @@ void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* aZone )
     wxCommandEvent evt;
     evt.SetId( ID_PCB_ZONES_BUTT );
     OnSelectTool( evt );
+}
+
+
+void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
+{
+    ZONE_CONTAINER* newZone = new ZONE_CONTAINER( GetBoard() );
+    newZone->Copy( aZone );
+    newZone->UnFill();
+    ZONE_SETTINGS zoneSettings;
+    zoneSettings << *aZone;
+
+    if( InvokeCopperZonesEditor( this, &zoneSettings ) )
+    {
+        zoneSettings.ExportSetting( *newZone );
+        newZone->m_Poly->Hatch();
+
+        _AuxiliaryList.ClearListAndDeleteItems();
+        s_PickedList.ClearListAndDeleteItems();
+        SaveCopyOfZones( s_PickedList, GetBoard(), newZone->GetNet(), newZone->GetLayer() );
+        GetBoard()->Add( newZone );
+
+        ITEM_PICKER picker( newZone, UR_NEW );
+        s_PickedList.PushItem( picker );
+
+        GetScreen()->SetCurItem( NULL );       // This outline may be deleted when merging outlines
+
+        // Combine zones if possible
+        GetBoard()->AreaPolygonModified( &_AuxiliaryList, newZone, true, s_Verbose );
+
+        // Redraw zones
+        GetBoard()->RedrawAreasOutlines( m_canvas, aDC, GR_OR, newZone->GetLayer() );
+        GetBoard()->RedrawFilledAreas( m_canvas, aDC, GR_OR, newZone->GetLayer() );
+
+        if( GetBoard()->GetAreaIndex( newZone ) >= 0
+           && GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( newZone, true ) )
+        {
+            DisplayError( this, _( "Duplicate Zone: The outline of the duplicated zone fails DRC check!" ) );
+        }
+
+        UpdateCopyOfZonesList( s_PickedList, _AuxiliaryList, GetBoard() );
+        SaveCopyInUndoList( s_PickedList, UR_UNSPECIFIED );
+        s_PickedList.ClearItemsList();
+
+        OnModify();
+    }
+    else
+        delete newZone;
 }
 
 

@@ -395,7 +395,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString&  FileName,
     plotter->SetColor( BLACK );
 
     if( s_plot_Sheet_Ref )
-        m_Parent->PlotWorkSheet( plotter, screen );
+        m_Parent->PlotWorkSheet( plotter, screen, g_DrawDefaultLineThickness );
 
     screen->Plot( plotter );
 

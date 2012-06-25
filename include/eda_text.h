@@ -57,7 +57,10 @@ enum EDA_DRAW_MODE_T {
     SKETCH              // sketch mode: segments have thickness, but are not filled
 };
 
+
 #define DEFAULT_SIZE_TEXT 60    /* default text height (in mils or 1/1000") */
+#define TEXT_NO_VISIBLE   1     //< EDA_TEXT::m_Attribut(e?) visibility flag.
+
 
 /**
  * Class EDA_TEXT
@@ -109,6 +112,15 @@ public:
 
     void SetItalic( bool isItalic ) { m_Italic = isItalic; }
     bool IsItalic() const { return m_Italic; }
+
+    void SetBold( bool aBold ) { m_Bold = aBold; }
+    bool IsBold() const { return m_Bold; }
+
+    void SetVisible( bool aVisible )
+    {
+        ( aVisible ) ? m_Attributs &= ~TEXT_NO_VISIBLE : m_Attributs |= TEXT_NO_VISIBLE;
+    }
+    bool IsVisible() const { return !( m_Attributs & TEXT_NO_VISIBLE ); }
 
     void SetMirrored( bool isMirrored ) { m_Mirror = isMirrored; }
     bool IsMirrored() const { return m_Mirror; }

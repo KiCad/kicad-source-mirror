@@ -300,7 +300,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
             if( drawItem.m_Flags & IS_MOVED )
                 continue;
 
-            /* Do not draw items not attached to the current part */
+            // Do not draw items not attached to the current part
             if( aMulti && drawItem.m_Unit && ( drawItem.m_Unit != aMulti ) )
                 continue;
 
@@ -330,7 +330,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
         if( drawItem.m_Flags & IS_MOVED )
             continue;
 
-        /* Do not draw items not attached to the current part */
+        // Do not draw items not attached to the current part
         if( aMulti && drawItem.m_Unit && ( drawItem.m_Unit != aMulti ) )
             continue;
 
@@ -358,7 +358,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
 
     }
 
-    /* Enable this to draw the anchor of the component. */
+    // Enable this to draw the anchor of the component.
 #if 0
     int len = aDc->DeviceToLogicalXRel( 3 );
 
@@ -534,10 +534,10 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
     size_t      i;
     LIB_FIELD&  value = GetValueField();
 
-    /* First line: it s a comment (component name for readers) */
+    // First line: it s a comment (component name for readers)
     aFormatter.Print( 0, "#\n# %s\n#\n", TO_UTF8( value.m_Text ) );
 
-    /* Save data */
+    // Save data
     aFormatter.Print( 0, "DEF" );
 
     if( value.IsVisible() )
@@ -618,7 +618,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
         aFormatter.Print( 0, "\n" );
     }
 
-    /* Write the footprint filter list */
+    // Write the footprint filter list
     if( m_FootprintList.GetCount() != 0 )
     {
         aFormatter.Print( 0, "$FPLIST\n" );
@@ -631,7 +631,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
         aFormatter.Print( 0, "$ENDFPLIST\n" );
     }
 
-    /* Save graphics items (including pins) */
+    // Save graphics items (including pins)
     if( !drawings.empty() )
     {
         /* we sort the draw items, in order to have an edition more easy,
@@ -680,21 +680,21 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         return false;
     }
 
-    /* Read DEF line: */
+    // Read DEF line:
     char drawnum = 0;
     char drawname = 0;
 
-    if( ( componentName = strtok( NULL, " \t\n" ) ) == NULL  /* Part name: */
-        || ( prefix = strtok( NULL, " \t\n" ) ) == NULL      /* Prefix name: */
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* NumOfPins: */
+    if( ( componentName = strtok( NULL, " \t\n" ) ) == NULL  // Part name:
+        || ( prefix = strtok( NULL, " \t\n" ) ) == NULL      // Prefix name:
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           // NumOfPins:
         || sscanf( p, "%d", &unused ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* TextInside: */
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           // TextInside:
         || sscanf( p, "%d", &m_pinNameOffset ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* DrawNums: */
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           // DrawNums:
         || sscanf( p, "%c", &drawnum ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* DrawNums: */
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           // DrawNums:
         || sscanf( p, "%c", &drawname ) != 1
-        || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* m_unitCount: */
+        || ( p = strtok( NULL, " \t\n" ) ) == NULL           // m_unitCount:
         || sscanf( p, "%d", &m_unitCount ) != 1 )
     {
         aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
@@ -720,7 +720,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     m_showPinNumbers = ( drawnum == 'N' ) ? false : true;
     m_showPinNames = ( drawname == 'N' ) ? false : true;
 
-    /* Copy part name and prefix. */
+    // Copy part name and prefix.
     LIB_FIELD& value = GetValueField();
 
     if( componentName[0] != '~' )
@@ -763,7 +763,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
         p = strtok( line, " \t\r\n" );
 
-        /* This is the error flag ( if an error occurs, Res = false) */
+        // This is the error flag ( if an error occurs, Res = false)
         Res = true;
 
         if( *line == '#' )      // a comment
@@ -785,7 +785,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         else if( strncmp( p, "$FPLIST", 5 ) == 0 )
             Res = LoadFootprints( aLineReader, Msg );
 
-        /* End line or block analysis: test for an error */
+        // End line or block analysis: test for an error
         if( !Res )
         {
             if( Msg.IsEmpty() )
@@ -798,7 +798,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         }
     }
 
-    /* If we are here, this part is O.k. - put it in: */
+    // If we are here, this part is O.k. - put it in:
     drawings.sort();
 
     return true;
@@ -827,33 +827,36 @@ bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorM
 
         switch( line[0] )
         {
-        case 'A':    /* Arc */
+        case 'A':    // Arc
             newEntry = ( LIB_ITEM* ) new LIB_ARC( this );
             break;
 
-        case 'C':    /* Circle */
+        case 'C':    // Circle
             newEntry = ( LIB_ITEM* ) new LIB_CIRCLE( this );
             break;
 
-        case 'T':    /* Text */
+        case 'T':    // Text
             newEntry = ( LIB_ITEM* ) new LIB_TEXT( this );
             break;
 
-        case 'S':    /* Square */
+        case 'S':    // Square
             newEntry = ( LIB_ITEM* ) new LIB_RECTANGLE( this );
             break;
 
-        case 'X':    /* Pin Description */
+        case 'X':    // Pin Description
             newEntry = ( LIB_ITEM* ) new LIB_PIN( this );
             break;
 
-        case 'P':    /* Polyline */
+        case 'P':    // Polyline
             newEntry = ( LIB_ITEM* ) new LIB_POLYLINE( this );
             break;
 
-        case 'B':    /* Bezier Curves */
+        case 'B':    // Bezier Curves
             newEntry = ( LIB_ITEM* ) new LIB_BEZIER( this );
             break;
+
+    case '#':    // Comment
+            continue;
 
         default:
             aErrorMsg.Printf( wxT( "undefined DRAW command %c" ), line[0] );
@@ -866,7 +869,7 @@ bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorM
                               GetChars( aErrorMsg ), line[0] );
             SAFE_DELETE( newEntry );
 
-            /* Flush till end of draw section */
+            // Flush till end of draw section
             do
             {
                 if( !aLineReader.ReadLine() )
@@ -1469,7 +1472,7 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
     {
         BOOST_FOREACH( LIB_ITEM& item, drawings )
         {
-            /* Only pins are duplicated. */
+            // Only pins are duplicated.
             if( item.Type() != LIB_PIN_T )
                 continue;
 
@@ -1548,7 +1551,7 @@ void LIB_COMPONENT::SetAliases( const wxArrayString& aAliasList )
         m_aliases.push_back( new LIB_ALIAS( aAliasList[ i ], this ) );
     }
 
-    /* Remove names in the current component that are not in the new alias list. */
+    // Remove names in the current component that are not in the new alias list.
     LIB_ALIASES::iterator it;
 
     for( it = m_aliases.begin(); it < m_aliases.end(); it++ )

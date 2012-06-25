@@ -88,8 +88,20 @@ public:
 class CPolyPt : public wxPoint
 {
 public:
-    CPolyPt( int qx = 0, int qy = 0, bool qf = false, int aUtility = 0 )
-    { x = qx; y = qy; end_contour = qf; utility = aUtility; };
+    CPolyPt( int aX = 0, int aY = 0, bool aEnd = false, int aUtility = 0 ) :
+        wxPoint( aX, aY ), end_contour( aEnd ), utility( aUtility )
+    {}
+
+    /// Pure copy constructor is here to dis-ambiguate from the
+    /// specialized CPolyPt( const wxPoint& ) constructor version below.
+    CPolyPt( const CPolyPt& aPt ) :
+        wxPoint( aPt.x, aPt.y ), end_contour( aPt.end_contour ), utility( aPt.utility )
+    {}
+
+    CPolyPt( const wxPoint& aPoint ) :
+        wxPoint( aPoint ), end_contour( false ), utility( 0 )
+    {}
+
 
     bool end_contour;
     int  utility;
@@ -159,6 +171,7 @@ public:
     void       AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 
     // access functions
+    void       SetLayer( int aLayer ) { m_layer = aLayer; }
     int        GetLayer() { return m_layer; }
     int        GetNumCorners();
     int        GetNumSides();

@@ -121,6 +121,8 @@ set(PCB_COMMON_SRCS
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/kicad_plugin.cpp
     pcb_plot_params_keywords.cpp
+    pcb_keywords.cpp
+    ../pcbnew/pcb_parser.cpp
 )
 
 
@@ -147,6 +149,14 @@ make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
     PCBPLOTPARAMS_T
     )
+
+# auto-generate pcbnew_sexpr.h and pcbnew_sexpr.cpp
+make_lexer( ${CMAKE_CURRENT_SOURCE_DIR}/pcb.keywords
+            ${PROJECT_SOURCE_DIR}/include/pcb_lexer.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/pcb_keywords.cpp
+            PCB
+          )
+
 
 # The dsntest may not build properly using MS Visual Studio.
 if(NOT MSVC)

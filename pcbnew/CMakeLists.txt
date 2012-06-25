@@ -20,6 +20,7 @@ endif()
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ./dialogs
+    ./autorouter
     ../3d-viewer
     ../common
     ${Boost_INCLUDE_DIR}
@@ -107,30 +108,38 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_footprint_wizard_list.cpp
     )
 
-# some of the files here may be going to the dialog srcs in fact.... 
+set(PCBNEW_AUTOROUTER_SRCS
+    autorouter/automove.cpp
+    autorouter/autoplac.cpp
+    autorouter/autorout.cpp
+    autorouter/routing_matrix.cpp
+    autorouter/dist.cpp
+    autorouter/queue.cpp
+    autorouter/solve.cpp
+    autorouter/graphpcb.cpp
+    autorouter/work.cpp
+    )
+
 set(PCBNEW_CLASS_SRCS
     tool_modview.cpp
     modview.cpp
     modview_frame.cpp
     pcbframe.cpp
     attribut.cpp
-    automove.cpp
-    autoplac.cpp
-    autorout.cpp
-    board.cpp
     board_items_to_polygon_shape_transform.cpp
     board_undo_redo.cpp
     block.cpp
     block_module_editor.cpp
     build_BOM_from_board.cpp
     class_pcb_layer_widget.cpp
+    class_pcb_layer_box_selector.cpp
     clean.cpp
     connect.cpp
     controle.cpp
     dimension.cpp
     cross-probing.cpp
     deltrack.cpp
-    dist.cpp
+    ${PCBNEW_DIALOGS}
     dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
@@ -154,7 +163,6 @@ set(PCBNEW_CLASS_SRCS
     gendrill.cpp
     globaleditpad.cpp
     gpcb_exchange.cpp
-    graphpcb.cpp
     highlight.cpp
     hotkeys.cpp
     hotkeys_board_editor.cpp
@@ -194,10 +202,8 @@ set(PCBNEW_CLASS_SRCS
     plot_rtn.cpp
     print_board_functions.cpp
     printout_controler.cpp
-    queue.cpp
     ratsnest.cpp
     set_grid.cpp
-    solve.cpp
     specctra.cpp
     specctra_export.cpp
     specctra_import.cpp
@@ -210,7 +216,6 @@ set(PCBNEW_CLASS_SRCS
     tracepcb.cpp
     tr_modif.cpp
     trpiste.cpp
-    work.cpp
     xchgmod.cpp
     zones_convert_brd_items_to_polygons_with_Boost.cpp
     zones_convert_to_polygons_aux_functions.cpp
@@ -225,7 +230,7 @@ set(PCBNEW_CLASS_SRCS
     class_footprint_wizard.cpp
     )
 
-set(PCBNEW_SRCS ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS})
+set(PCBNEW_SRCS ${PCBNEW_AUTOROUTER_SRCS} ${PCBNEW_CLASS_SRCS} ${PCBNEW_DIALOGS})
 
 ###
 # We need some extra sources from common

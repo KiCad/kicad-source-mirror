@@ -62,7 +62,12 @@ typedef NET_MAP::const_iterator         NET_MAP_CITER;
 typedef boost::property_tree::ptree     PTREE;
 typedef const PTREE                     CPTREE;
 
+class EELEMENT;
 class XPATH;
+struct ERULES;
+struct EATTR;
+class TEXTE_MODULE;
+
 
 /**
  * Class EAGLE_PLUGIN
@@ -107,6 +112,7 @@ public:
 
 private:
 
+    ERULES*     m_rules;            ///< Eagle design rules.
     XPATH*      m_xpath;            ///< keeps track of what we are working on within
                                     ///< XML document during a Load().
 
@@ -173,11 +179,16 @@ private:
     // all these loadXXX() throw IO_ERROR or ptree_error exceptions:
 
     void loadAllSections( CPTREE& aDocument );
+    void loadDesignRules( CPTREE& aDesignRules );
     void loadLayerDefs( CPTREE& aLayers );
     void loadPlain( CPTREE& aPlain );
     void loadSignals( CPTREE& aSignals );
     void loadLibraries( CPTREE& aLibs );
     void loadElements( CPTREE& aElements );
+
+    void orientModuleAndText( MODULE* m, const EELEMENT& e, const EATTR* nameAttr, const EATTR* valueAttr );
+    void orientModuleText( MODULE* m, const EELEMENT& e, TEXTE_MODULE* txt, const EATTR* a );
+
 
     /// move the BOARD into the center of the page
     void centerBoard();

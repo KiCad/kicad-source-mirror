@@ -220,7 +220,7 @@ void DIALOG_PLOT_SCHEMATIC_PDF::createPDFFile()
 
 	if( first_page ) {
 	    wxString msg;
-	    wxString plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() 
+	    wxString plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet()
 		                    + wxT( ".pdf" );
 	    msg.Printf( _( "Plot: %s " ), GetChars( plotFileName ) );
 	    m_MsgBox->AppendText( msg );
@@ -241,8 +241,8 @@ void DIALOG_PLOT_SCHEMATIC_PDF::createPDFFile()
 	    plotSetupPage( plotter, screen );
 	    plotter->StartPlot( output_file );
 	    first_page = false;
-	} 
-	else 
+	}
+	else
 	{
 	    /* For the following pages you need to close the (finished) page,
 	       reconfigure, and then start a new one */
@@ -301,7 +301,7 @@ void DIALOG_PLOT_SCHEMATIC_PDF::plotOneSheet( PDF_PLOTTER*   plotter,
     if( m_plot_Sheet_Ref )
     {
 	plotter->SetColor( BLACK );
-	m_Parent->PlotWorkSheet( plotter, screen );
+	m_Parent->PlotWorkSheet( plotter, screen, g_DrawDefaultLineThickness );
     }
 
     screen->Plot( plotter );
