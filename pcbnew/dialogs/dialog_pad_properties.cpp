@@ -479,6 +479,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     wxCommandEvent cmd_event;
     setPadLayersList( m_dummyPad->GetLayerMask() );
     OnDrillShapeSelected( cmd_event );
+    OnPadShapeSelection( cmd_event );
 }
 
 

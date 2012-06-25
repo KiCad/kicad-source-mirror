@@ -125,30 +125,6 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int
 
 
 /**
- * Function CompleteArea
- * complete copper area contour by adding a line from last to first corner
- * if there is only 1 or 2 corners, remove (delete) the area
- * @param area_to_complete = area to complete or remove
- * @param style = style of last corner
- * @return 1 if Ok, 0 if area removed
- */
-int BOARD::CompleteArea( ZONE_CONTAINER* area_to_complete, int style )
-{
-    if( area_to_complete->m_Poly->GetNumCorners() > 2 )
-    {
-        area_to_complete->m_Poly->Close( style );
-        return 1;
-    }
-    else
-    {
-        Delete( area_to_complete );
-    }
-
-    return 0;
-}
-
-
-/**
  * Function TestAreaPolygon
  * Test an area for self-intersection.
  *
