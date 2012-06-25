@@ -2659,7 +2659,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     // fval is up into the whole number realm here, and should be bounded
     // within INT_MIN to INT_MAX since BIU's are nanometers.
-    return BIU( KiROUND( double( fval ) ) );
+    return KiROUND( fval );
 }
 
 

@@ -43,7 +43,7 @@ std::string biuFmt( BIU aValue )
 
     if( engUnits != 0.0 && fabsl( engUnits ) <= 0.0001 )
     {
-        len = snprintf( temp, sizeof( temp ), "%.16f", engUnits );
+        len = snprintf( temp, sizeof( temp ), "%.10f", engUnits );
 
         while( --len > 0 && temp[len] == '0' )
             temp[len] = '\0';
@@ -52,7 +52,7 @@ std::string biuFmt( BIU aValue )
     }
     else
     {
-        len = snprintf( temp, sizeof( temp ), "%.16g", engUnits );
+        len = snprintf( temp, sizeof( temp ), "%.10g", engUnits );
     }
 
     return std::string( temp, len );;
