@@ -71,14 +71,14 @@ static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
         if( layer < 0 )                                                 \
         {                                                               \
             RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );           \
-            if( Nb_Sides )                                              \
+            if( RoutingMatrix.m_RoutingLayersCount > 1 )                                              \
                 RoutingMatrix.WriteCell( dy, dx, TOP, color );                        \
         }                                                               \
         else                                                            \
         {                                                               \
             if( layer == Route_Layer_BOTTOM )                           \
                 RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );       \
-            if( Nb_Sides )                                              \
+            if( RoutingMatrix.m_RoutingLayersCount > 1 )                                              \
                 if( layer == Route_Layer_TOP )                          \
                     RoutingMatrix.WriteCell( dy, dx, TOP, color );      \
         }                                                               \
@@ -156,7 +156,7 @@ void TraceFilledCircle( int    cx, int cy, int radius,
         trace = 1;       // Trace on BOTTOM
 
     if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
-        if( Nb_Sides )
+        if( RoutingMatrix.m_RoutingLayersCount > 1 )
             trace |= 2;  // Trace on TOP
 
     if( trace == 0 )
@@ -475,7 +475,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
     if( ( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) ) )
         trace = 1;     // Trace on BOTTOM
 
-    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && Nb_Sides )
+    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && RoutingMatrix.m_RoutingLayersCount > 1 )
         trace |= 2;    // Trace on TOP
 
     if( trace == 0 )
@@ -542,7 +542,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
 
     if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
     {
-        if( Nb_Sides )
+        if( RoutingMatrix.m_RoutingLayersCount > 1 )
             trace |= 2;  // Trace on TOP
     }
 

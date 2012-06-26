@@ -47,12 +47,6 @@
 #include <autorout.h>
 
 
-int Nb_Sides;        /* Number of layer for autorouting (0 or 1) */
-int OpenNodes;       /* total number of nodes opened */
-int ClosNodes;       /* total number of nodes closed */
-int MoveNodes;       /* total number of nodes moved */
-int MaxNodes;        /* maximum number of nodes opened at one time */
-
 MATRIX_ROUTING_HEAD RoutingMatrix;     // routing matrix (grid) to route 2-sided boards
 
 /* init board, route traces*/
@@ -175,10 +169,10 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     m_messagePanel->EraseMsgBox();
 
     /* Map the board */
-    Nb_Sides = ONE_SIDE;
+    RoutingMatrix.m_RoutingLayersCount = 1;
 
     if( Route_Layer_TOP != Route_Layer_BOTTOM )
-        Nb_Sides = TWO_SIDES;
+        RoutingMatrix.m_RoutingLayersCount = 2;
 
     if( RoutingMatrix.InitRoutingMatrix() < 0 )
     {
@@ -195,10 +189,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     // DisplayRoutingMatrix( m_canvas, DC );
 
-    if( Nb_Sides == TWO_SIDES )
-        Solve( DC, TWO_SIDES ); /* double face */
-    else
-        Solve( DC, ONE_SIDE );  /* simple face */
+    Solve( DC, RoutingMatrix.m_RoutingLayersCount );
 
     /* Free memory. */
     FreeQueue();
@@ -249,7 +240,7 @@ void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
             if( dcell0 & HOLE )
                 color = GREEN;
 
-//            if( Nb_Sides )
+//            if( RoutingMatrix.m_RoutingLayersCount )
 //                dcell1 = GetCell( row, col, TOP );
 
             if( dcell1 & HOLE )
