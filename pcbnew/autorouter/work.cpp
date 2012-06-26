@@ -41,9 +41,9 @@
 #include <cell.h>
 
 
-struct CWORK    // a unit of work is a source-target (a ratsnet item) to connect
+struct CWORK    // a unit of work is a source-target to connect
+                // this is a ratsnest item in the routing matrix world
 {
-    struct CWORK*   m_Next;
     int             m_FromRow;      // source row
     int             m_FromCol;      // source column
     int             m_ToRow;        // target row
@@ -53,34 +53,22 @@ struct CWORK    // a unit of work is a source-target (a ratsnet item) to connect
     int             m_ApxDist;      // approximate distance
     int             m_Cost;         // cost for sort by length
     int             m_Priority;     // route priority
+
+    // the function that calculates the cost of this ratsnest:
+    void CalculateCost();
 };
 
 
-// pointers to the first and last item of work to do
-static CWORK*   Head    = NULL;
-static CWORK*   Tail    = NULL;
-static CWORK*   Current = NULL;
+// the list of ratsnests
+static std::vector <CWORK> WorkList;
+static unsigned Current = 0;
 
 
 // initialize the work list
 void InitWork()
 {
-    CWORK* ptr;
-
-    while( ( ptr = Head ) != NULL )
-    {
-        Head = ptr->m_Next;
-        delete ptr;
-    }
-
-    Tail = Current = NULL;
-}
-
-
-// initialize the work list
-void ReInitWork()
-{
-    Current = Head;
+    WorkList.clear();
+    Current = 0;
 }
 
 
@@ -89,40 +77,24 @@ void ReInitWork()
  *  1 if OK
  *  0 if memory allocation failed
  */
-static int GetCost( int r1, int c1, int r2, int c2 );
 
 int SetWork( int r1, int c1,
              int n_c,
              int r2, int c2,
              RATSNEST_ITEM* pt_ch, int pri )
 {
-    CWORK* p;
-
-    if( ( p = (CWORK*) operator new( sizeof(CWORK), std::nothrow ) ) != NULL )
-    {
-        p->m_FromRow    = r1;
-        p->m_FromCol    = c1;
-        p->m_NetCode    = n_c;
-        p->m_ToRow      = r2;
-        p->m_ToCol      = c2;
-        p->m_Ratsnest   = pt_ch;
-        p->m_ApxDist    = GetApxDist( r1, c1, r2, c2 );
-        p->m_Cost       = GetCost( r1, c1, r2, c2 );
-        p->m_Priority   = pri;
-        p->m_Next       = NULL;
-
-        if( Head )  /* attach at end */
-            Tail->m_Next = p;
-        else        /* first in list */
-            Head = Current = p;
-
-        Tail = p;
-        return 1;
-    }
-    else    /* can't get any more memory */
-    {
-        return 0;
-    }
+    CWORK item;
+    item.m_FromRow    = r1;
+    item.m_FromCol    = c1;
+    item.m_NetCode    = n_c;
+    item.m_ToRow      = r2;
+    item.m_ToCol      = c2;
+    item.m_Ratsnest   = pt_ch;
+    item.m_ApxDist    = RoutingMatrix.GetApxDist( r1, c1, r2, c2 );
+    item.CalculateCost();
+    item.m_Priority   = pri;
+    WorkList.push_back( item );
+    return 1;
 }
 
 
@@ -132,15 +104,15 @@ void GetWork( int* r1, int* c1,
               int* r2, int* c2,
               RATSNEST_ITEM** pt_ch )
 {
-    if( Current )
+    if( Current < WorkList.size() )
     {
-        *r1     = Current->m_FromRow;
-        *c1     = Current->m_FromCol;
-        *n_c    = Current->m_NetCode;
-        *r2     = Current->m_ToRow;
-        *c2     = Current->m_ToCol;
-        *pt_ch  = Current->m_Ratsnest;
-        Current = Current->m_Next;
+        *r1     = WorkList[Current].m_FromRow;
+        *c1     = WorkList[Current].m_FromCol;
+        *n_c    = WorkList[Current].m_NetCode;
+        *r2     = WorkList[Current].m_ToRow;
+        *c2     = WorkList[Current].m_ToCol;
+        *pt_ch  = WorkList[Current].m_Ratsnest;
+        Current++;
     }
     else    /* none left */
     {
@@ -151,64 +123,18 @@ void GetWork( int* r1, int* c1,
 }
 
 
-/* order the work items; shortest (low cost) first */
+// order the work items; shortest (low cost) first:
+bool sort_by_cost( const CWORK& ref, const CWORK& item )
+{
+    if( ref.m_Priority == item.m_Priority )
+        return ref.m_Cost < item.m_Cost;
+
+    return ref.m_Priority >= item.m_Priority;
+}
+
 void SortWork()
 {
-    CWORK*  p;
-    CWORK*  q0; /* put PRIORITY PAD_CONNECTs in q0 */
-    CWORK*  q1; /* sort other PAD_CONNECTs in q1 */
-    CWORK*  r;
-
-    q0 = q1 = NULL;
-
-    while( (p = Head) != NULL )    /* prioritize each work item */
-    {
-        Head = Head->m_Next;
-
-        if( p->m_Priority )    /* put at end of priority list */
-        {
-            p->m_Next = NULL;
-
-            if( (r = q0) == NULL )    /* empty list? */
-            {
-                q0 = p;
-            }
-            else                    /* attach at end */
-            {
-                while( r->m_Next )  /* search for end */
-                    r = r->m_Next;
-
-                r->m_Next = p;    /* attach */
-            }
-        }
-        else if( ( ( r = q1 ) == NULL ) || ( p->m_Cost < q1->m_Cost ) )
-        {
-            p->m_Next = q1;
-            q1 = p;
-        }
-        else    /* find proper position in list */
-        {
-            while( r->m_Next && p->m_Cost >= r->m_Next->m_Cost )
-                r = r->m_Next;
-
-            p->m_Next   = r->m_Next;
-            r->m_Next   = p;
-        }
-    }
-
-    if( (p = q0) != NULL )    /* any priority PAD_CONNECTs? */
-    {
-        while( q0->m_Next )
-            q0 = q0->m_Next;
-
-        q0->m_Next = q1;
-    }
-    else
-        p = q1;
-
-    /* reposition Head and Tail */
-    for( Head = Current = Tail = p; Tail && Tail->m_Next; Tail = Tail->m_Next )
-        ;
+    sort( WorkList.begin(), WorkList.end(), sort_by_cost );
 }
 
 
@@ -216,13 +142,13 @@ void SortWork()
  *   cost = (| dx | + | dy |) * disability
  *   disability = 1 if dx or dy = 0, max if | dx | # | dy |
  */
-static int GetCost( int r1, int c1, int r2, int c2 )
+void CWORK::CalculateCost()
 {
     int     dx, dy, mx, my;
     double  incl = 1.0;
 
-    dx  = abs( c2 - c1 );
-    dy  = abs( r2 - r1 );
+    dx  = abs( m_ToCol - m_FromCol );
+    dy  = abs( m_ToRow - m_FromRow );
     mx  = dx;
     my  = dy;
 
@@ -234,5 +160,5 @@ static int GetCost( int r1, int c1, int r2, int c2 )
     if( mx )
         incl += (2 * (double) my / mx);
 
-    return (int) ( ( dx + dy ) * incl );
+    m_Cost = (int) ( ( dx + dy ) * incl );
 }

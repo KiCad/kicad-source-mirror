@@ -46,7 +46,8 @@ class BOARD;
 
 
 /* Autorouter commands. */
-enum CommandOpt {
+enum AUTOPLACEROUTE_OPTIONS
+{
     PLACE_ALL,
     PLACE_OUT_OF_BOARD,
     PLACE_INCREMENTAL,
@@ -58,13 +59,7 @@ enum CommandOpt {
     ROUTE_PAD
 };
 
-
-#define ONE_SIDE  0
-#define TWO_SIDES 1
-
-#define MAX_SIDES_COUNT 2
-
-extern int Nb_Sides;    /* Number of layers for autorouting (0 or 1) */
+#define MAX_ROUTING_LAYERS_COUNT 2
 
 #define FORCE_PADS 1  /* Force placement of pads for any Netcode */
 
@@ -88,20 +83,23 @@ typedef char DIR_CELL;
 class MATRIX_ROUTING_HEAD
 {
 public:
-    MATRIX_CELL* m_BoardSide[MAX_SIDES_COUNT];  // the image map of 2 board sides
-    DIST_CELL*   m_DistSide[MAX_SIDES_COUNT];   // the image map of 2 board sides: distance to
-                                                // cells
-    DIR_CELL*    m_DirSide[MAX_SIDES_COUNT];    // the image map of 2 board sides: pointers back to
-                                                // source
+    MATRIX_CELL* m_BoardSide[MAX_ROUTING_LAYERS_COUNT]; // the image map of 2 board sides
+    DIST_CELL*   m_DistSide[MAX_ROUTING_LAYERS_COUNT];  // the image map of 2 board sides:
+                                                        // distance to cells
+    DIR_CELL*    m_DirSide[MAX_ROUTING_LAYERS_COUNT];   // the image map of 2 board sides:
+                                                        // pointers back to source
     bool         m_InitMatrixDone;
-    int          m_Layers;                      // Layer count (1 2 )
+    int          m_RoutingLayersCount;          // Number of layers for autorouting (0 or 1)
     int          m_GridRouting;                 // Size of grid for autoplace/autoroute
     EDA_RECT     m_BrdBox;                      // Actual board bounding box
     int          m_Nrows, m_Ncols;              // Matrix size
     int          m_MemSize;                     // Memory requirement, just for statistics
     int          m_RouteCount;                  // Number of routes
+
 private:
-    void        (MATRIX_ROUTING_HEAD::* m_opWriteCell)( int aRow, int aCol, int aSide, MATRIX_CELL aCell);  // a pointeur to the current selected cell op
+    // a pointer to the current selected cell operation
+    void        (MATRIX_ROUTING_HEAD::* m_opWriteCell)( int aRow, int aCol,
+                                                        int aSide, MATRIX_CELL aCell);
 
 public:
     MATRIX_ROUTING_HEAD();
@@ -114,7 +112,7 @@ public:
 
     /**
      * function GetBrdCoordOrigin
-     * @returns the board coordinate corresponding to the
+     * @return the board coordinate corresponding to the
      * routing matrix origin ( board coordinate offset )
      */
     wxPoint GetBrdCoordOrigin()
@@ -156,6 +154,12 @@ public:
     void SetDist( int aRow, int aCol, int aSide, DIST_CELL );
     int GetDir( int aRow, int aCol, int aSide );
     void SetDir( int aRow, int aCol, int aSide, int aDir);
+
+    // calculate distance (with penalty) of a trace through a cell
+    int CalcDist(int x,int y,int z ,int side );
+
+    // calculate approximate distance (manhattan distance)
+    int GetApxDist( int r1, int c1, int r2, int c2 );
 };
 
 extern MATRIX_ROUTING_HEAD RoutingMatrix;        /* 2-sided board */
@@ -219,10 +223,6 @@ void ReInitWork();
 int SetWork( int, int, int , int, int, RATSNEST_ITEM *, int );
 void GetWork( int *, int *, int *, int *, int *, RATSNEST_ITEM ** );
 void SortWork(); /* order the work items; shortest first */
-
-/* DIST.CPP */
-int GetApxDist( int r1, int c1, int r2, int c2 );
-int CalcDist(int x,int y,int z ,int side );
 
 /* routing_matrix.cpp */
 int Build_Work( BOARD * Pcb );
