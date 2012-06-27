@@ -3,6 +3,10 @@
 
 #include <Python.h>
 
-void pcbnewInitPythonScripting(void);
+/* Function pcbnewInitPythonScripting
+ * Initializes the Python engine inside pcbnew 
+ */
+
+void pcbnewInitPythonScripting( void );
 
 #endif

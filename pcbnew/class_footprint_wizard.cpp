@@ -46,18 +46,6 @@ void FOOTPRINT_WIZARDS::register_wizard(FOOTPRINT_WIZARD *aWizard)
     m_FootprintWizards.push_back(aWizard);
     
     printf("Registered footprint wizard '%s'\n",(const char*)name.mb_str() );
-
-#if 0 
-    /* just to test if it works correctly */
-    int pages = fw->GetNumParameterPages();
-    printf("             %d pages\n",pages);
-    
-    for (int n=0; n<pages; n++)
-    {
-        printf("                      page %d->'%s'\n",n,
-            (const char*)fw->GetParameterPageName(n).mb_str());
-    }
-#endif    
     
     
 }
