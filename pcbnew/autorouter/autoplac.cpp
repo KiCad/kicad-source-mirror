@@ -440,7 +440,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     m_messagePanel->SetMessage( 14, _( "Cells." ), msg, YELLOW );
 
     /* Choose the number of board sides. */
-    Nb_Sides = TWO_SIDES;
+    RoutingMatrix.m_RoutingLayersCount = 2;
 
     RoutingMatrix.InitRoutingMatrix();
 
@@ -450,7 +450,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
     Route_Layer_BOTTOM = LAYER_N_FRONT;
 
-    if( Nb_Sides == TWO_SIDES )
+    if( RoutingMatrix.m_RoutingLayersCount > 1 )
         Route_Layer_BOTTOM = LAYER_N_BACK;
 
     Route_Layer_TOP = LAYER_N_FRONT;
@@ -618,7 +618,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
      */
     TstOtherSide = false;
 
-    if( Nb_Sides == TWO_SIDES )
+    if( RoutingMatrix.m_RoutingLayersCount > 1 )
     {
         D_PAD* Pad;
         int otherLayerMask = LAYER_BACK;
@@ -967,7 +967,7 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
     if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
         trace = 1;     /* Trace on bottom layer. */
 
-    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && Nb_Sides )
+    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && RoutingMatrix.m_RoutingLayersCount )
         trace |= 2;    /* Trace on top layer. */
 
     if( trace == 0 )
