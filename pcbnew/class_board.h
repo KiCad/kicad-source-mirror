@@ -303,10 +303,12 @@ public:
      * be different than the default if the user has renamed any copper layers.
      *
      * @param  aLayerNumber is the layer number to fetch
+     * @param  aTranslate = true to return the translated version
+     *                    = false to get the native version
      * @return wxString - containing the layer name or "BAD INDEX" if aLayerNumber
      *                      is not legal
      */
-    static wxString GetDefaultLayerName( int aLayerNumber );
+    static wxString GetDefaultLayerName( int aLayerNumber, bool aTranslate );
 
     /**
      * Function ReturnFlippedLayerNumber
@@ -619,10 +621,13 @@ public:
      * Function GetLayerName
      * returns the name of the layer given by aLayerIndex.
      *
-     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
+     * @param aLayerIndex = A layer index, like LAYER_N_BACK, etc.
+     * @param  aTranslate = true to return the translated version (default)
+     *                    = false to get the native English name
+     *                   (Useful to build filenames from layer names)
      * @return wxString - the layer name.
      */
-    wxString GetLayerName( int aLayerIndex ) const;
+    wxString GetLayerName( int aLayerIndex, bool aTranslate = true ) const;
 
     /**
      * Function SetLayerName
