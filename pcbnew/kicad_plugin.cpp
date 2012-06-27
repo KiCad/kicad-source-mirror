@@ -192,7 +192,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 #endif
 
             if( !( aBoard->GetVisibleLayers() & mask ) )
-                m_out->Print( 0, "hide" );
+                m_out->Print( 0, " hide" );
 
             m_out->Print( 0, ")\n" );
         }
@@ -218,7 +218,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 #endif
 
             if( !( aBoard->GetVisibleLayers() & mask ) )
-                m_out->Print( 0, "hide" );
+                m_out->Print( 0, " hide" );
 
             m_out->Print( 0, ")\n" );
         }

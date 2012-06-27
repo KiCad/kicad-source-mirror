@@ -111,7 +111,7 @@ private:
 };
 
 
-const int UNITS_MILS = 1000;
+//const int UNITS_MILS = 1000;
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ),
@@ -725,9 +725,10 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             fn = m_parent->GetScreen()->GetFileName();
             fn.SetPath( outputDir.GetPath() );
 
-            // Create file name.
-            wxString layername = m_board->GetLayerName( layer );
-            layername.Trim( true ); layername.Trim( false );    // remove leading and trailing spaces if any
+            // Create file name (from the English layer name for non copper layers).
+            wxString layername = m_board->GetLayerName( layer, false );
+            // remove leading and trailing spaces if any
+            layername.Trim( true ); layername.Trim( false );
             fn.SetName( fn.GetName() + wxT( "-" ) + layername );
 
             // Use Gerber Extensions based on layer number
