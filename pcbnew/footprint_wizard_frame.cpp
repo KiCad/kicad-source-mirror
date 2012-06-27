@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
- *
+ * 
+ * Copyright (C) 2012 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
  * Copyright (C) 2012 Jean-Pierre Charras, jaen-pierre.charras
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
@@ -99,7 +100,10 @@ static wxAcceleratorEntry accels[] =
 
 #define EXTRA_BORDER_SIZE 2
 
-
+/* Function FOOTPRINT_WIZARD_FRAME
+ * it's the constructor for the footprint wizard frame, it creates everything inside
+ * 
+ */
 FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( wxWindow* parent, wxSemaphore* semaphore ) :
     PCB_BASE_FRAME( parent, MODULE_VIEWER_FRAME, _( "Footprint Wizard" ),
                     wxDefaultPosition, wxDefaultSize )
@@ -259,6 +263,10 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
 }
 
 
+/* Function OnCloseWindow
+ * Handles the close event, saving settings an destroying or releasing a semaphore from caller
+ * 
+ */
 void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     SaveSettings();
@@ -277,6 +285,9 @@ void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
+/* Function OnSashDrag
+ * handles the horizontal separator (sash) drag, updating the pagelist or parameter list 
+ */
 void FOOTPRINT_WIZARD_FRAME::OnSashDrag( wxSashEvent& event )
 {
     if( event.GetDragStatus() == wxSASH_STATUS_OUT_OF_RANGE )
@@ -309,6 +320,10 @@ void FOOTPRINT_WIZARD_FRAME::OnSashDrag( wxSashEvent& event )
 }
 
 
+/* Function OnSize
+ * It handles a dialog resize event, asking for an update 
+ * 
+ */
 void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
 {
     if( m_auimgr.GetManagedWindow() )
@@ -317,14 +332,20 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
     SizeEv.Skip();
 }
 
-
+/* Function OnSetRelativeOffset
+ * Updates the cursor position and the status bar 
+ * 
+ */
 void FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 {
     GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
     UpdateStatusBar();
 }
 
-
+/* Function ReCreatePageList
+ * It recreates the list of pages for a new loaded wizard
+ * 
+ */
 void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
 {
     if( m_PageList == NULL )
@@ -349,6 +370,10 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
     m_canvas->Refresh();
 }
 
+/* Function ReCreateParameterList
+ * It creates the parameter grid for a certain wizard page of the current wizard
+ * 
+ */
 
 void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 {

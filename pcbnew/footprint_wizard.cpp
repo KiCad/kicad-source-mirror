@@ -1,5 +1,5 @@
 /**
- * @file footprint wizard.cpp
+ * @file footprint_wizard.cpp
  */
 
 #include <fctsys.h>
@@ -49,12 +49,18 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 }
 
-
+/* Function OnLeftClick
+ * Captures a left click event in the dialog
+ * 
+ */
 void FOOTPRINT_WIZARD_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
 }
 
-
+/* Function OnRightClick
+ * Captures a right click event in the dialog 
+ * 
+ */
 bool FOOTPRINT_WIZARD_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     return true;
@@ -163,6 +169,7 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
  * Function RedrawActiveWindow
  * Display the current selected component.
  * If the component is an alias, the ROOT component is displayed
+ * 
 */
 void FOOTPRINT_WIZARD_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {

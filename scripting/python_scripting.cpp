@@ -28,79 +28,104 @@
  */
 
 #include <python_scripting.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* init functions defined by swig */
 
-extern "C" void init_kicad(void);
-extern "C" void init_pcbnew(void);
+extern "C" void init_kicad( void );
+
+extern "C" void init_pcbnew( void );
+
+#define EXTRA_PYTHON_MODULES 2  // this is the number of python
+                                // modules that we want to add into the list
 
 
-/* python inittab that links module names to module init functions 
+/* python inittab that links module names to module init functions
  * we will rebuild it to include the original python modules plus
- * our own ones 
+ * our own ones
  */
 
-struct _inittab SwigImportInittab[1000];
-static int  SwigNumModules = 0;
+struct _inittab *SwigImportInittab;
+static int      SwigNumModules = 0;
 
 
 /* Add a name + initfuction to our SwigImportInittab */
 
-static void swigAddModule(const char *name, void (*initfunc)()) 
+static void swigAddModule( const char* name, void (* initfunc)() )
 {
-        SwigImportInittab[SwigNumModules].name = (char *)name;
-        SwigImportInittab[SwigNumModules].initfunc = initfunc;
-        SwigNumModules++;
-        SwigImportInittab[SwigNumModules].name = (char *) 0;
-        SwigImportInittab[SwigNumModules].initfunc = 0;
+    SwigImportInittab[SwigNumModules].name     = (char*) name;
+    SwigImportInittab[SwigNumModules].initfunc = initfunc;
+    SwigNumModules++;
+    SwigImportInittab[SwigNumModules].name     = (char*) 0;
+    SwigImportInittab[SwigNumModules].initfunc = 0;
 }
+
 
 /* Add the builting python modules */
 
-static void swigAddBuiltin() 
+static void swigAddBuiltin()
 {
-        int i = 0;
-        while (PyImport_Inittab[i].name) {
-                swigAddModule(PyImport_Inittab[i].name, PyImport_Inittab[i].initfunc);
-                i++;
-        }
+    int i = 0;
 
+    while( PyImport_Inittab[i].name )
+    {
+            i++;
+    }
+    
+    SwigImportInittab = (struct _inittab*)  malloc(
+                        sizeof(struct _inittab)*(i+EXTRA_PYTHON_MODULES));
+    
+    while( PyImport_Inittab[i].name )
+    {
+        swigAddModule( PyImport_Inittab[i].name, PyImport_Inittab[i].initfunc );
+        i++;
+    }
 }
+
+/* Function swigAddModules 
+ * adds the internal modules we offer to the python scripting, so they will be
+ * available to the scripts we run.
+ * 
+ */
+
 static void swigAddModules()
 {
-	swigAddModule("_pcbnew",init_pcbnew);
-	
-	// finally it seems better to include all in just one module
-  // but in case we needed to include any other modules, 
-  // it must be done like this:
-	//    swigAddModule("_kicad",init_kicad);
-	
+    swigAddModule( "_pcbnew", init_pcbnew );
+
+    // finally it seems better to include all in just one module
+    // but in case we needed to include any other modules,
+    // it must be done like this:
+    // swigAddModule("_kicad",init_kicad);
 }
+
+/* Function swigSwitchPythonBuiltin
+ * switches python module table to our built one .
+ * 
+ */
 
 static void swigSwitchPythonBuiltin()
 {
-  PyImport_Inittab = SwigImportInittab;
+    PyImport_Inittab = SwigImportInittab;
 }
 
-
-
+/* Function pcbnewInitPythonScripting
+ * Initializes all the python environment and publish our interface inside it 
+ * 
+ */
 void pcbnewInitPythonScripting()
 {
-    swigAddBuiltin();
-    swigAddModules();
-    swigSwitchPythonBuiltin();
-    
-    Py_Initialize();
+    swigAddBuiltin();           // add builtin functions
+    swigAddModules();           // add our own modules
+    swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
 
-    /* setup the scripting path, we may need to add the installation path 
-       of kicad here */
+    Py_Initialize();    // call the python library to get it initialized
 
-    PyRun_SimpleString("import sys\n"
-                       "sys.path.append(\".\")\n"
-                       "import pcbnew\n"
-                       "pcbnew.LoadPlugins()"
+    // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
+
+    PyRun_SimpleString( "import sys\n"
+                        "sys.path.append(\".\")\n"
+                        "import pcbnew\n"
+                        "pcbnew.LoadPlugins()"
                         );
-
-
 }
-  
