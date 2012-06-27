@@ -319,7 +319,7 @@ BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
 
     default:
         wxString err;
-        err.Printf( _( "unknown token \"%s\" " ), GetChars( FromUTF8() ) );
+        err.Printf( _( "unknown token \"%s\"" ), GetChars( FromUTF8() ) );
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
@@ -1528,13 +1528,13 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_descr:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();   // some symbols can be 0508, so a number is also a symbol here
             module->SetDescription( FromUTF8() );
             NeedRIGHT();
             break;
 
         case T_tags:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();   // some symbols can be 0508, so a number is also a symbol here
             module->SetKeywords( FromUTF8() );
             NeedRIGHT();
             break;
@@ -1788,6 +1788,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
         pt.y = parseBoardUnits( "Y coordinate" );
         segment->SetStart0( pt );
         NeedRIGHT();
+        NeedLEFT();
         token = NextTok();
 
         if( token != T_end )

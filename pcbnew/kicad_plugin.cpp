@@ -192,7 +192,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 #endif
 
             if( !( aBoard->GetVisibleLayers() & mask ) )
-                m_out->Print( 0, "hide" );
+                m_out->Print( 0, " hide" );
 
             m_out->Print( 0, ")\n" );
         }
@@ -218,7 +218,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 #endif
 
             if( !( aBoard->GetVisibleLayers() & mask ) )
-                m_out->Print( 0, "hide" );
+                m_out->Print( 0, " hide" );
 
             m_out->Print( 0, ")\n" );
         }
@@ -1204,7 +1204,9 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
 
     if( !file.IsOpened() )
     {
-        THROW_IO_ERROR( _( "Unable to read file \"" ) + aFileName + wxT( "\"" ) );
+        wxString msg;
+        msg.Printf( _( "Unable to read file \"%s\"" ), GetChars( aFileName ) );
+        THROW_IO_ERROR( msg );
     }
 
     PCB_PARSER parser( new FILE_LINE_READER( file.fp(), aFileName ), aAppendToMe );

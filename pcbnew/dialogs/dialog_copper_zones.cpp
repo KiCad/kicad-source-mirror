@@ -40,6 +40,8 @@
 #include <class_zone_settings.h>
 #include <class_board.h>
 #include <dialog_copper_zones_base.h>
+
+#include <wx/imaglist.h>    // needed for wx/listctrl.h, in wxGTK 2.8.12
 #include <wx/listctrl.h>
 
 
