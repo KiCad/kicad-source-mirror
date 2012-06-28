@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-26 09:08+0100\n"
-"PO-Revision-Date: 2012-06-26 10:08+0100\n"
+"POT-Creation-Date: 2012-06-28 17:18+0100\n"
+"PO-Revision-Date: 2012-06-28 17:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: Benno Achermann <bennoachermann@bluewin.ch>\n"
 "MIME-Version: 1.0\n"
@@ -317,7 +317,7 @@ msgstr "Gruppe einfügen"
 
 #: common/block_commande.cpp:91
 msgid "Win Zoom"
-msgstr "Win Zoom"
+msgstr "Fensterzoom"
 
 #: common/block_commande.cpp:95
 msgid "Block Rotate"
@@ -7068,185 +7068,184 @@ msgstr "Anbieter und Ref"
 msgid "This is the default net class."
 msgstr "Dies ist die voreingestellte Netzklasse."
 
-#: pcbnew/class_board.cpp:385
-#: pcbnew/class_board.cpp:538
+#: pcbnew/class_board.cpp:382
+#: pcbnew/class_board.cpp:585
 msgid "Front"
 msgstr "Vorderseite"
 
-#: pcbnew/class_board.cpp:386
-#: pcbnew/class_board.cpp:539
+#: pcbnew/class_board.cpp:383
+msgid "Inner1"
+msgstr "Innen1"
+
+#: pcbnew/class_board.cpp:384
+#: pcbnew/class_board.cpp:586
 msgid "Inner2"
 msgstr "Innen2"
 
-#: pcbnew/class_board.cpp:387
-#: pcbnew/class_board.cpp:540
+#: pcbnew/class_board.cpp:385
+#: pcbnew/class_board.cpp:587
 msgid "Inner3"
 msgstr "Innen3"
 
-#: pcbnew/class_board.cpp:388
-#: pcbnew/class_board.cpp:541
+#: pcbnew/class_board.cpp:386
+#: pcbnew/class_board.cpp:588
 msgid "Inner4"
 msgstr "Innen4"
 
-#: pcbnew/class_board.cpp:389
-#: pcbnew/class_board.cpp:542
+#: pcbnew/class_board.cpp:387
+#: pcbnew/class_board.cpp:589
 msgid "Inner5"
 msgstr "Innen5"
 
-#: pcbnew/class_board.cpp:390
-#: pcbnew/class_board.cpp:543
+#: pcbnew/class_board.cpp:388
+#: pcbnew/class_board.cpp:590
 msgid "Inner6"
 msgstr "Innen6"
 
-#: pcbnew/class_board.cpp:391
-#: pcbnew/class_board.cpp:544
+#: pcbnew/class_board.cpp:389
+#: pcbnew/class_board.cpp:591
 msgid "Inner7"
 msgstr "Innen7"
 
-#: pcbnew/class_board.cpp:392
-#: pcbnew/class_board.cpp:545
+#: pcbnew/class_board.cpp:390
+#: pcbnew/class_board.cpp:592
 msgid "Inner8"
 msgstr "Innen8"
 
-#: pcbnew/class_board.cpp:393
-#: pcbnew/class_board.cpp:546
+#: pcbnew/class_board.cpp:391
+#: pcbnew/class_board.cpp:593
 msgid "Inner9"
 msgstr "Innen9"
 
-#: pcbnew/class_board.cpp:394
-#: pcbnew/class_board.cpp:547
+#: pcbnew/class_board.cpp:392
+#: pcbnew/class_board.cpp:594
 msgid "Inner10"
 msgstr "Innen10"
 
-#: pcbnew/class_board.cpp:395
-#: pcbnew/class_board.cpp:548
+#: pcbnew/class_board.cpp:393
+#: pcbnew/class_board.cpp:595
 msgid "Inner11"
 msgstr "Innen11"
 
-#: pcbnew/class_board.cpp:396
-#: pcbnew/class_board.cpp:549
+#: pcbnew/class_board.cpp:394
+#: pcbnew/class_board.cpp:596
 msgid "Inner12"
 msgstr "Innen12"
 
-#: pcbnew/class_board.cpp:397
-#: pcbnew/class_board.cpp:550
+#: pcbnew/class_board.cpp:395
+#: pcbnew/class_board.cpp:597
 msgid "Inner13"
 msgstr "Innen13"
 
-#: pcbnew/class_board.cpp:398
-#: pcbnew/class_board.cpp:551
+#: pcbnew/class_board.cpp:396
+#: pcbnew/class_board.cpp:598
 msgid "Inner14"
 msgstr "Innen14"
 
-#: pcbnew/class_board.cpp:399
-#: pcbnew/class_board.cpp:552
-msgid "Inner15"
-msgstr "Innen5"
-
-#: pcbnew/class_board.cpp:400
-#: pcbnew/class_board.cpp:553
+#: pcbnew/class_board.cpp:397
+#: pcbnew/class_board.cpp:600
 msgid "Back"
 msgstr "Rückseite"
 
-#: pcbnew/class_board.cpp:401
-#: pcbnew/class_board.cpp:554
+#: pcbnew/class_board.cpp:398
+#: pcbnew/class_board.cpp:601
 msgid "Adhes_Back"
 msgstr "Kleber - rückseitig"
 
-#: pcbnew/class_board.cpp:402
-#: pcbnew/class_board.cpp:555
+#: pcbnew/class_board.cpp:399
+#: pcbnew/class_board.cpp:602
 msgid "Adhes_Front"
 msgstr "Kleber - vorderseitig"
 
-#: pcbnew/class_board.cpp:403
-#: pcbnew/class_board.cpp:556
+#: pcbnew/class_board.cpp:400
+#: pcbnew/class_board.cpp:603
 msgid "SoldP_Back"
 msgstr "Lötpaste - rückseitig"
 
-#: pcbnew/class_board.cpp:404
-#: pcbnew/class_board.cpp:557
+#: pcbnew/class_board.cpp:401
+#: pcbnew/class_board.cpp:604
 msgid "SoldP_Front"
 msgstr "Lötpaste - vorderseitig"
 
-#: pcbnew/class_board.cpp:405
-#: pcbnew/class_board.cpp:558
+#: pcbnew/class_board.cpp:402
+#: pcbnew/class_board.cpp:605
 msgid "SilkS_Back"
 msgstr "Siebdruck - rückseitig"
 
-#: pcbnew/class_board.cpp:406
-#: pcbnew/class_board.cpp:559
+#: pcbnew/class_board.cpp:403
+#: pcbnew/class_board.cpp:606
 msgid "SilkS_Front"
 msgstr "Siebdruck - vorderseitig"
 
-#: pcbnew/class_board.cpp:407
-#: pcbnew/class_board.cpp:560
+#: pcbnew/class_board.cpp:404
+#: pcbnew/class_board.cpp:607
 msgid "Mask_Back"
 msgstr "Lötstoppmaske - rückseitig"
 
-#: pcbnew/class_board.cpp:408
-#: pcbnew/class_board.cpp:561
+#: pcbnew/class_board.cpp:405
+#: pcbnew/class_board.cpp:608
 msgid "Mask_Front"
 msgstr "Lötstoppmaske - vorderseitig"
 
-#: pcbnew/class_board.cpp:409
-#: pcbnew/class_board.cpp:562
+#: pcbnew/class_board.cpp:406
+#: pcbnew/class_board.cpp:609
 msgid "Drawings"
 msgstr "Zeichnungen"
 
-#: pcbnew/class_board.cpp:410
-#: pcbnew/class_board.cpp:563
+#: pcbnew/class_board.cpp:407
+#: pcbnew/class_board.cpp:610
 msgid "Comments"
 msgstr "Kommentare"
 
-#: pcbnew/class_board.cpp:411
-#: pcbnew/class_board.cpp:564
+#: pcbnew/class_board.cpp:408
+#: pcbnew/class_board.cpp:611
 msgid "Eco1"
 msgstr "E.C.O.1"
 
-#: pcbnew/class_board.cpp:412
-#: pcbnew/class_board.cpp:565
+#: pcbnew/class_board.cpp:409
+#: pcbnew/class_board.cpp:612
 msgid "Eco2"
 msgstr "E.C.O.2"
 
-#: pcbnew/class_board.cpp:413
-#: pcbnew/class_board.cpp:566
+#: pcbnew/class_board.cpp:410
+#: pcbnew/class_board.cpp:613
 msgid "PCB_Edges"
 msgstr "Platinenumrisse"
 
-#: pcbnew/class_board.cpp:414
-msgid "BAD INDEX"
-msgstr "FALSCHER INDEX"
+#: pcbnew/class_board.cpp:599
+msgid "Inner15"
+msgstr "Innen5"
 
-#: pcbnew/class_board.cpp:1034
+#: pcbnew/class_board.cpp:1081
 #: pcbnew/class_module.cpp:483
 msgid "Pads"
 msgstr "Pads"
 
-#: pcbnew/class_board.cpp:1037
+#: pcbnew/class_board.cpp:1084
 msgid "Vias"
 msgstr "Durchkontakt."
 
-#: pcbnew/class_board.cpp:1040
+#: pcbnew/class_board.cpp:1087
 msgid "trackSegm"
 msgstr "Leiterb.seg"
 
-#: pcbnew/class_board.cpp:1043
+#: pcbnew/class_board.cpp:1090
 msgid "Nodes"
 msgstr "Knoten"
 
-#: pcbnew/class_board.cpp:1046
+#: pcbnew/class_board.cpp:1093
 msgid "Nets"
 msgstr "Netze"
 
-#: pcbnew/class_board.cpp:1054
+#: pcbnew/class_board.cpp:1101
 msgid "Links"
 msgstr "Verbindungen"
 
-#: pcbnew/class_board.cpp:1057
+#: pcbnew/class_board.cpp:1104
 msgid "Connect"
 msgstr "verbunden"
 
-#: pcbnew/class_board.cpp:1060
+#: pcbnew/class_board.cpp:1107
 msgid "Unconnected"
 msgstr "Nicht verbunden"
 
@@ -8513,9 +8512,10 @@ msgstr "Unbekannter Durchkontaktierungstyp %d"
 msgid "unknown zone corner smoothing type %d"
 msgstr "Unbekannter Glättungsyp für Eckflächen %d"
 
-#: pcbnew/kicad_plugin.cpp:1207
-msgid "Unable to read file \""
-msgstr "Konnte Datei nicht lesen \""
+#: pcbnew/kicad_plugin.cpp:1208
+#, c-format
+msgid "Unable to read file \"%s\""
+msgstr "Konnte Datei \"%s\" nicht lesen."
 
 #: pcbnew/layer_widget.cpp:420
 msgid "Left click to select, middle click for color change, right click for menu"
@@ -9142,7 +9142,7 @@ msgstr "Eine VRML Platinendarstellung exportieren"
 
 #: pcbnew/menubar_pcbframe.cpp:201
 msgid "E&xport"
-msgstr "E&xport"
+msgstr "E&xportieren"
 
 #: pcbnew/menubar_pcbframe.cpp:202
 msgid "Export board"
@@ -10408,12 +10408,12 @@ msgstr "Warnung: Skalierungsoption ist auf einen sehr kleinen Wert gesetzt"
 msgid "Warning: Scale option set to a very large value"
 msgstr "Warnung: Skalierungsoption ist auf einen sehr kleinen Wert gesetzt"
 
-#: pcbnew/pcbplot.cpp:845
+#: pcbnew/pcbplot.cpp:846
 #, c-format
 msgid "Plot file <%s> created"
 msgstr "Plotdatei <%s> erstellt"
 
-#: pcbnew/pcbplot.cpp:857
+#: pcbnew/pcbplot.cpp:858
 msgid "No layer selected"
 msgstr "Keine Lage gewählt"
 
@@ -10444,46 +10444,42 @@ msgstr ""
 "Offset: %d"
 
 #: pcbnew/pcb_parser.cpp:322
-#, c-format
-msgid "unknown token \"%s\" "
-msgstr "Unbekanntes Vorkommnis \"%s\" "
-
 #: pcbnew/pcb_parser.cpp:411
 #, c-format
 msgid "unknown token \"%s\""
 msgstr "Unbekanntes Vorkommnis \"%s\""
 
-#: pcbnew/pcb_parser.cpp:521
+#: pcbnew/pcb_parser.cpp:501
 #, c-format
 msgid "page type \"%s\" is not valid "
 msgstr "Ungültiger Seitentyp \"%s\""
 
-#: pcbnew/pcb_parser.cpp:595
+#: pcbnew/pcb_parser.cpp:608
 #, c-format
 msgid "%d is not a valid title block comment number"
 msgstr "%d ist keine gültige Nummer für einen Kommentarblock eines Titels"
 
-#: pcbnew/pcb_parser.cpp:676
+#: pcbnew/pcb_parser.cpp:689
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d ist keine gültige Lagenanzahl"
 
-#: pcbnew/pcb_parser.cpp:695
+#: pcbnew/pcb_parser.cpp:708
 #, c-format
 msgid "Layer '%s' in file <%s> at line %d, position %d was not defined in the layers section"
 msgstr "Lage '%s' in Datei <%s>, Zeile %d an Position %d wurde nicht in der Lagensektion definiert."
 
-#: pcbnew/pcb_parser.cpp:710
+#: pcbnew/pcb_parser.cpp:723
 #, c-format
 msgid "Layer index %d in file <%s> at line %d, offset %d was not defined in the layers section"
 msgstr "Lagenindex %d in Datei <%s>, Zeile %d bei Offset %d wurde nicht in der Lagensektion definiert."
 
-#: pcbnew/pcb_parser.cpp:1071
+#: pcbnew/pcb_parser.cpp:1084
 #, c-format
 msgid "duplicate NETCLASS name '%s' in file %s at line %d, offset %d"
 msgstr "NETCLASS Namensduplikat '%s' in Datei <%s>, Zeile %d bei Offset %d."
 
-#: pcbnew/pcb_parser.cpp:1693
+#: pcbnew/pcb_parser.cpp:1706
 #, c-format
 msgid "cannot handle module text type %s"
 msgstr "Kann den Bauteiletexttyp %s nicht verarbeiten."
@@ -10989,15 +10985,15 @@ msgstr "Duplizierte Fläche: Der Umriss der duplizierten Zone hat die DRC Überp
 
 #: pcbnew/zones_by_polygon.cpp:345
 #: pcbnew/zones_by_polygon.cpp:404
-#: pcbnew/zones_by_polygon.cpp:745
+#: pcbnew/zones_by_polygon.cpp:757
 msgid "Area: DRC outline error"
 msgstr "Bereich: DRC Fehler"
 
-#: pcbnew/zones_by_polygon.cpp:628
+#: pcbnew/zones_by_polygon.cpp:640
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr "DRC Fehler: Der Anfangspunkt ist innerhalb einer anderen Fläche oder dieser zu nahe"
 
-#: pcbnew/zones_by_polygon.cpp:679
+#: pcbnew/zones_by_polygon.cpp:691
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "DRC Fehler: Der Abschluß dieser Fläche erzeugt einen DRC Fehler gegenüber einer anderen Fläche"
 
@@ -11075,27 +11071,27 @@ msgstr "Zellen"
 msgid "Ok to abort?"
 msgstr "Abbrechen?"
 
-#: pcbnew/autorouter/autorout.cpp:95
+#: pcbnew/autorouter/autorout.cpp:89
 msgid "Net not selected"
 msgstr "Kein Netz ausgewählt"
 
-#: pcbnew/autorouter/autorout.cpp:103
+#: pcbnew/autorouter/autorout.cpp:97
 msgid "Module not selected"
 msgstr "Kein Bauteil ausgewählt"
 
-#: pcbnew/autorouter/autorout.cpp:113
+#: pcbnew/autorouter/autorout.cpp:107
 msgid "Pad not selected"
 msgstr "Kein Pad ausgewählt"
 
-#: pcbnew/autorouter/autorout.cpp:185
+#: pcbnew/autorouter/autorout.cpp:179
 msgid "No memory for autorouting"
 msgstr "Nicht genügend Speicher frei für AutoRouter"
 
-#: pcbnew/autorouter/autorout.cpp:190
+#: pcbnew/autorouter/autorout.cpp:184
 msgid "Place Cells"
 msgstr "Zellen platzieren"
 
-#: pcbnew/autorouter/solve.cpp:297
+#: pcbnew/autorouter/solve.cpp:302
 msgid "Abort routing?"
 msgstr "Routing abbrechen?"
 
@@ -11165,35 +11161,37 @@ msgstr ""
 "Verlängere baumelnde Leiterbahnen welche ein Pad oder eine Durchkontaktierung nur\n"
 "teilweise bedecken für die gesamte Strecke bis Pad- oder Durchkontaktierungsmitte."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:376
-msgid "Clearance must be smaller than 0.5\" / 12.7 mm."
-msgstr "Abstandsfläche muss kleiner sein als 0.5\" / 12.7 mm."
+#: pcbnew/dialogs/dialog_copper_zones.cpp:399
+#, c-format
+msgid "Clearance must be smaller than %f\" / %f mm."
+msgstr "Abstandsfläche muss kleiner sein als %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:386
-msgid "Minimum width must be larger than 0.001\" / 0.0254 mm."
-msgstr "Mindestbreite muss grösser sein als 0.001\" / 0.0254 mm."
+#: pcbnew/dialogs/dialog_copper_zones.cpp:411
+#, c-format
+msgid "Minimum width must be larger than %f\" / %f mm."
+msgstr "Mindestbreite muss grösser sein als %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:412
+#: pcbnew/dialogs/dialog_copper_zones.cpp:450
 msgid "Thermal relief spoke width is larger than the minimum width."
 msgstr "Breite der Wärmeabführungsspeiche ist grösser als die Mindestbreite."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:425
+#: pcbnew/dialogs/dialog_copper_zones.cpp:463
 msgid "No layer selected."
 msgstr "Keine Lage ausgewählt."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:436
+#: pcbnew/dialogs/dialog_copper_zones.cpp:474
 msgid "No net selected."
 msgstr "Kein Netz ausgewählt."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:443
+#: pcbnew/dialogs/dialog_copper_zones.cpp:481
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
 msgstr "Die \"nicht verbunden\" Option wurde ausgewählt. Dies erzeugt isolierte Kupferinseln. Sind Sie sich sicher?"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:476
+#: pcbnew/dialogs/dialog_copper_zones.cpp:514
 msgid "Chamfer distance"
 msgstr "Abfasungsabstand"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:482
+#: pcbnew/dialogs/dialog_copper_zones.cpp:520
 msgid "Fillet radius"
 msgstr "Auskehlungsradius"
 
@@ -13809,19 +13807,19 @@ msgstr "Erzwinge Änderung von gesperrten Footprints"
 msgid "Back side (footprint is mirrored)"
 msgstr "Rückseite (Footprint ist gespiegelt)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:668
+#: pcbnew/dialogs/dialog_pad_properties.cpp:669
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr "Inkorrekter Wert für Pad Bohrdurchmesser. Bohrdurchmesser ist grösser als Pad."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:673
+#: pcbnew/dialogs/dialog_pad_properties.cpp:674
 msgid "Error: pad has no layer and is not a mechanical pad"
 msgstr "Fehler: Pad besitzt keine Lage und ist kein mechanisches Pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:680
+#: pcbnew/dialogs/dialog_pad_properties.cpp:681
 msgid "Error: pad is not on a copper layer and has a hole"
 msgstr "Fehler: Pad befindet sich nicht auf einer Kupferlage und besitzt ein Bohrung"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:684
+#: pcbnew/dialogs/dialog_pad_properties.cpp:685
 msgid ""
 "For NPTH pad, set pad drill value to pad size value,\n"
 "if you do not want this pad plotted in gerber files"
@@ -13829,27 +13827,27 @@ msgstr ""
 "Setze für ein NPTH-Pad den Bohrdurchmesser auf die Padgrösse,\n"
 "wenn dieses Pad nicht in Gerberdateien geplottet werden soll."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:699
+#: pcbnew/dialogs/dialog_pad_properties.cpp:700
 msgid "Incorrect value for pad offset"
 msgstr "Inkorrekter Wert für Padoffset"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:704
+#: pcbnew/dialogs/dialog_pad_properties.cpp:705
 msgid "Too large value for pad delta size"
 msgstr "Zu großer Wert für das Pad-Delta"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:711
+#: pcbnew/dialogs/dialog_pad_properties.cpp:712
 msgid "Incorrect value for pad drill (too small value)"
 msgstr "Inkorrekter Wert für Pad-Bohrdurchmesser (Wert ist zu klein)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:717
+#: pcbnew/dialogs/dialog_pad_properties.cpp:718
 msgid "Error: only one copper layer allowed for this pad"
 msgstr "Fehler: Für dieses Pad ist nur eine Kupferlage zulässig"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:726
+#: pcbnew/dialogs/dialog_pad_properties.cpp:727
 msgid "Pad setup errors list"
 msgstr "Fehlerliste der Padeinstellungen"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:821
+#: pcbnew/dialogs/dialog_pad_properties.cpp:822
 msgid "Unknown netname, netname not changed"
 msgstr "Unbekannter Netzname. Keine Änderung durchgeführt."
 
@@ -15088,10 +15086,6 @@ msgstr "Auswahl laden"
 msgid "Choose if you want to print sheets in color, or force the black and white mode."
 msgstr "Wähle, ob der Schaltplan in farbe oder schwarz weiss gedruckt werden soll."
 
-#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:192
-msgid "Inner1"
-msgstr "Innen1"
-
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
 msgid "Full size. Do not show page limits"
@@ -15504,6 +15498,12 @@ msgstr "Seitenbegrenzung"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:61
 msgid "Gerbview Options"
 msgstr "GerbView Optionen"
+
+#~ msgid "BAD INDEX"
+#~ msgstr "FALSCHER INDEX"
+
+#~ msgid "unknown token \"%s\" "
+#~ msgstr "Unbekanntes Vorkommnis \"%s\" "
 
 #~ msgid "Loop"
 #~ msgstr "Schleife"
