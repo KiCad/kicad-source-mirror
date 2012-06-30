@@ -605,7 +605,7 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
 
             default:
                 wxString err;
-                err.Printf( _( "%d is not a valid title block comment number" ), commentNumber );
+                err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
                 THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
@@ -705,7 +705,7 @@ int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
     if( it == m_layerMap.end() )
     {
         wxString error;
-        error.Printf( _( "Layer '%s' in file <%s> at line %d, position %d was not defined in the layers section" ),
+        error.Printf( wxT( "Layer '%s' in file <%s> at line %d, position %d was not defined in the layers section" ),
                       GetChars( name ), GetChars( CurSource() ), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
@@ -720,7 +720,7 @@ int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
     if( !m_board->IsLayerEnabled( layerIndex ) )
     {
         wxString error;
-        error.Printf( _( "Layer index %d in file <%s> at line %d, offset %d was not defined in the layers section" ),
+        error.Printf( wxT( "Layer index %d in file <%s> at line %d, offset %d was not defined in the layers section" ),
                       layerIndex, GetChars( CurSource() ), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
@@ -1003,10 +1003,16 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
     wxString name = FromUTF8();
     NeedRIGHT();
 
-    NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
-    net->SetNet( number );
-    net->SetNetname( name );
-    m_board->AppendNet( net );
+    // net 0 should be already in list, so store this net
+    // if it is not the net 0, or if the net 0 does not exists.
+    // (TODO: a better test.)
+    if( number > 0 || m_board->FindNet( 0 ) == NULL )
+    {
+        NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
+        net->SetNet( number );
+        net->SetNetname( name );
+        m_board->AppendNet( net );
+    }
 }
 
 
@@ -2322,7 +2328,10 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         switch( token )
         {
         case T_net:
-            zone->SetNet( parseInt( "net number" ) );
+            // Init the net code only, not the netname, to be sure
+            // the zone net name is the name read in file.
+            // (When mismatch, the user will be prompted in DRC, to fix the actual name)
+            zone->BOARD_CONNECTED_ITEM::SetNet( parseInt( "net number" ) );
             NeedRIGHT();
             break;
 

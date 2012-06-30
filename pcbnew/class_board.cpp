@@ -1381,13 +1381,10 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     NETINFO_ITEM* net = m_NetInfo.GetNetItem( aNetcode );
 
 #if defined(DEBUG)
-    if( net )     // item can be NULL if anetcode is not valid
+    if( net && aNetcode != net->GetNet())     // item can be NULL if anetcode is not valid
     {
-        if( aNetcode != net->GetNet() )
-        {
-            printf( "FindNet() anetcode %d != GetNet() %d (net: %s)\n",
-                    aNetcode, net->GetNet(), TO_UTF8( net->GetNetname() ) );
-        }
+        wxLogError( wxT( "FindNet() anetcode %d != GetNet() %d (net: %s)\n" ),
+                      aNetcode, net->GetNet(), TO_UTF8( net->GetNetname() ) );
     }
 #endif
 
@@ -1440,7 +1437,7 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
         if( item == NULL )
             return NULL;
 
-        int           icmp = item->GetNetname().Cmp( aNetname );
+        int icmp = item->GetNetname().Cmp( aNetname );
 
         if( icmp == 0 ) // found !
         {
