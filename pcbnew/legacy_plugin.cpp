@@ -1713,13 +1713,11 @@ void LEGACY_PLUGIN::loadPCB_LINE()
     THROW_IO_ERROR( "Missing '$EndDRAWSEGMENT'" );
 }
 
-
 void LEGACY_PLUGIN::loadNETINFO_ITEM()
 {
     char  buf[1024];
 
     NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
-    m_board->AppendNet( net );
 
     while( READLINE( m_reader ) )
     {
@@ -1738,7 +1736,15 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         }
 
         else if( TESTLINE( "$EndEQUIPOT" ) )
+        {
+            // net 0 should be already in list, so store this net
+            // if it is not the net 0, or if the net 0 does not exists.
+            if( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL )
+                m_board->AppendNet( net );
+            else
+                delete net;
             return;     // preferred exit
+        }
     }
 
     THROW_IO_ERROR( "Missing '$EndEQUIPOT'" );
@@ -2135,8 +2141,11 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             }
 
             zc->SetTimeStamp( timestamp );
-            zc->SetNet( netcode );
-            zc->SetNetName( FROM_UTF8( buf ) );
+            // Init the net code only, not the netname, to be sure
+            // the zone net name is the name read in file.
+            // (When mismatch, the user will be prompted in DRC, to fix the actual name)
+            zc->BOARD_CONNECTED_ITEM::SetNet( netcode );
+            zc->SetNetName( FROM_UTF8( buf ) );     // init the net name here
         }
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
