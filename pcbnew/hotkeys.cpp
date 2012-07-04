@@ -70,6 +70,7 @@ static EDA_HOTKEY HkEditBoardItem( wxT( "Edit Item" ), HK_EDIT_ITEM, 'E' );
 static EDA_HOTKEY HkFlipItem( wxT( "Flip Item" ), HK_FLIP_ITEM, 'F' );
 static EDA_HOTKEY HkRotateItem( wxT( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
 static EDA_HOTKEY HkMoveItem( wxT( "Move Item" ), HK_MOVE_ITEM, 'M' );
+static EDA_HOTKEY HkCopyItem( wxT( "Copy Item" ), HK_COPY_ITEM, 'C' );
 static EDA_HOTKEY HkDragFootprint( wxT( "Drag Footprint" ), HK_DRAG_ITEM, 'G' );
 static EDA_HOTKEY HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ),
                                          HK_GET_AND_MOVE_FOOTPRINT, 'T' );
@@ -209,7 +210,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkAddNewTrack,            &HkAddVia,                    &HkAddMicroVia,
     &HkSwitchTrackPosture,
     &HkDragTrackKeepSlope,
-    &HkPlaceItem,
+    &HkPlaceItem,              &HkCopyItem,
     &HkEndTrack,               &HkMoveItem,                  &HkFlipItem,
     &HkRotateItem,             &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
