@@ -346,7 +346,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_PCB_ADD_TEXT_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
-            SetCurItem( Create_Texte_Pcb( aDC ) );
+            SetCurItem( CreateTextePcb( aDC ) );
             m_canvas->MoveCursorToCrossHair();
             m_canvas->SetAutoPanRequest( true );
         }

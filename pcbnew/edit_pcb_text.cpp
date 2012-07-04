@@ -76,7 +76,7 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
 
 
-    SwapData(TextePcb, &s_TextCopy);
+    SwapData( TextePcb, &s_TextCopy );
     TextePcb->ClearFlags();
     TextePcb->Draw( Panel, DC, GR_OR );
 }
@@ -110,10 +110,10 @@ void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     else
     {
         // Restore initial params
-        SwapData( TextePcb, &s_TextCopy);
+        SwapData( TextePcb, &s_TextCopy );
         // Prepare undo command
         SaveCopyInUndoList( TextePcb, UR_CHANGED );
-        SwapData( TextePcb, &s_TextCopy);
+        SwapData( TextePcb, &s_TextCopy );
         // Restore current params
     }
 
@@ -121,27 +121,24 @@ void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 }
 
 
-/* Initialize parameters to move a pcb text
- */
-void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
+void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aErase )
 {
-    if( TextePcb == NULL )
+    if( aTextePcb == NULL )
         return;
 
     // if it is an existing item: prepare a copy to undo/abort command
-    if( !TextePcb->IsNew() )
-        s_TextCopy.Copy( TextePcb );
+    if( !aTextePcb->IsNew() )
+        s_TextCopy.Copy( aTextePcb );
 
-    TextePcb->Draw( m_canvas, DC, GR_XOR );
-    TextePcb->SetFlags( IS_MOVED );
-    TextePcb->DisplayInfo( this );
+    aTextePcb->SetFlags( IS_MOVED );
+    aTextePcb->DisplayInfo( this );
 
-    GetScreen()->SetCrossHairPosition( TextePcb->GetPosition() );
+    GetScreen()->SetCrossHairPosition( aTextePcb->GetPosition() );
     m_canvas->MoveCursorToCrossHair();
 
     m_canvas->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
-    SetCurItem( TextePcb );
-    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+    SetCurItem( aTextePcb );
+    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, aErase );
 }
 
 
@@ -157,7 +154,7 @@ static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aP
     if( aErase )
         TextePcb->Draw( aPanel, aDC, GR_XOR );
 
-    TextePcb->m_Pos = aPanel->GetScreen()->GetCrossHairPosition();
+    TextePcb->SetPosition( aPanel->GetScreen()->GetCrossHairPosition() );
 
     TextePcb->Draw( aPanel, aDC, GR_XOR );
 }
@@ -177,40 +174,46 @@ void PCB_EDIT_FRAME::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 }
 
 
-TEXTE_PCB* PCB_EDIT_FRAME::Create_Texte_Pcb( wxDC* DC )
+TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
 {
-    TEXTE_PCB* TextePcb;
+    TEXTE_PCB* textePcb = new TEXTE_PCB( GetBoard() );
 
-    TextePcb = new TEXTE_PCB( GetBoard() );
-
-    /* Add text to the board item list. */
-    GetBoard()->Add( TextePcb );
-
-    /* Update text properties. */
-    TextePcb->SetFlags( IS_NEW );
-    TextePcb->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
-    TextePcb->m_Mirror = false;
-
-    if( TextePcb->GetLayer() == LAYER_N_BACK )
-        TextePcb->m_Mirror = true;
-
-    TextePcb->m_Size  = GetBoard()->GetDesignSettings().m_PcbTextSize;
-    TextePcb->m_Pos   = GetScreen()->GetCrossHairPosition();
-    TextePcb->m_Thickness = GetBoard()->GetDesignSettings().m_PcbTextWidth;
-
-    InstallTextPCBOptionsFrame( TextePcb, DC );
-
-    if( TextePcb->m_Text.IsEmpty() )
+    if( aText )
     {
-        TextePcb->DeleteStructure();
-        TextePcb = NULL;
+        textePcb->Copy( aText );
+        GetBoard()->Add( textePcb );
+        textePcb->SetFlags( IS_NEW );
+        StartMoveTextePcb( textePcb, aDC, false ); // Don't erase aText when copying
     }
     else
     {
-        StartMoveTextePcb( TextePcb, DC );
+        GetBoard()->Add( textePcb );
+        textePcb->SetFlags( IS_NEW );
+        int layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+        textePcb->SetLayer( layer );
+
+        if( layer == LAYER_N_BACK
+            || layer == SILKSCREEN_N_BACK )
+            textePcb->SetMirrored( true );
+
+        textePcb->SetSize( GetBoard()->GetDesignSettings().m_PcbTextSize );
+        textePcb->SetPosition( GetScreen()->GetCrossHairPosition() );
+        textePcb->SetThickness( GetBoard()->GetDesignSettings().m_PcbTextWidth );
+
+        InstallTextPCBOptionsFrame( textePcb, aDC );
+
+        if( textePcb->GetText().IsEmpty() )
+        {
+            textePcb->DeleteStructure();
+            textePcb = NULL;
+        }
+        else
+        {
+            StartMoveTextePcb( textePcb, aDC );
+        }
     }
 
-    return TextePcb;
+    return textePcb;
 }
 
 
