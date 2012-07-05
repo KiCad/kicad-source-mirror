@@ -121,6 +121,12 @@ public:
     const wxPoint GetArcEnd() const;
 
     /**
+     * function GetArcAngleStart()
+     * @return the angle of the stating point of this arc, between 0 and 3600 in 0.1 deg
+     */
+    const double GetArcAngleStart() const;
+
+    /**
      * Function GetRadius
      * returns the radius of this item
      * Has meaning only for arc and circle
