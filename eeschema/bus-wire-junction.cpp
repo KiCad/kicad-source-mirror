@@ -50,10 +50,10 @@
 static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos );
 
-static DLIST< SCH_ITEM > s_wires;
-static DLIST< SCH_ITEM > s_oldWires;
-
-static wxPoint s_startPoint;
+static DLIST< SCH_ITEM > s_wires;       // when creating a new set of wires,
+                                        // stores here the new wires.
+static DLIST< SCH_ITEM > s_oldWires;    // when creating a new set of wires,
+                                        // stores here the old wires (for undo command)
 
 
 /**
@@ -125,7 +125,6 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 
     if( !segment )  /* first point : Create first wire or bus */
     {
-        s_startPoint = cursorpos;
         GetScreen()->ExtractWires( s_oldWires, true );
         GetScreen()->SchematicCleanUp( m_canvas );
 
@@ -228,50 +227,40 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         wxCHECK_RET( item->Type() == SCH_LINE_T, wxT( "Unexpected object type in wire list." ) );
 
         segment = (SCH_LINE*) item;
+        item = item->Next();
 
         if( segment->IsNull() )
-        {
-            wxLogDebug( wxT( "Removing null segment: " ) + segment->GetSelectMenuText() );
-
-            SCH_ITEM* previousSegment = item->Back();
-
-            delete s_wires.Remove( item );
-
-            if( previousSegment == NULL )
-                item = s_wires.begin();
-            else
-                item = previousSegment;
-           wxLogDebug( wxT( "Segment count after removal: %d" ), s_wires.GetCount() );
-        }
-
-        item = item->Next();
+            delete s_wires.Remove( segment );
     }
 
     if( s_wires.GetCount() == 0 )
         return;
 
-    // Get the last non-null wire.
+    // Get the last non-null wire (this is the last created segment).
     m_itemToRepeat = segment = (SCH_LINE*) s_wires.GetLast();
     screen->SetCurItem( NULL );
     m_canvas->EndMouseCapture( -1, -1, wxEmptyString, false );
 
+    // store the terminal point of this last segment: a junction could be needed
+    // (the last wire could be merged/deleted/modified, and lost)
+    wxPoint endpoint = segment->GetEndPoint();
+
+    // store the starting point of this first segment: a junction could be needed
+    SCH_LINE* firstsegment = (SCH_LINE*) s_wires.GetFirst();
+    wxPoint startPoint = firstsegment->GetStartPoint();
+
     screen->Append( s_wires );
 
-    // Correct and remove segments that need merged.
+    // Correct and remove segments that need to be merged.
     screen->SchematicCleanUp( NULL, DC );
 
-    // A junction may be needed to connect the last segment.  If the last segment was
-    // removed by a cleanup, a junction may be needed to connect the segment's end point
-    // which is also the same as the previous segment's start point.
-    if( screen->IsJunctionNeeded( segment->GetEndPoint() ) )
-        screen->Append( AddJunction( DC, segment->GetEndPoint() ) );
-    else if( screen->IsJunctionNeeded( segment->GetStartPoint() ) )
-        screen->Append( AddJunction( DC, segment->GetStartPoint() ) );
+    // A junction could be needed to connect the end point of the last created segment.
+    if( screen->IsJunctionNeeded( endpoint ) )
+        screen->Append( AddJunction( DC, endpoint ) );
 
-    // Automatically place a junction on the start point if necessary because the cleanup
-    // can suppress intermediate points by merging wire segments.
-    if( screen->IsJunctionNeeded( s_startPoint ) )
-        screen->Append( AddJunction( DC, s_startPoint ) );
+    // A junction could be needed to connect the start point of the set of new created wires
+    if( screen->IsJunctionNeeded( startPoint ) )
+        screen->Append( AddJunction( DC, startPoint ) );
 
     m_canvas->Refresh();
 
