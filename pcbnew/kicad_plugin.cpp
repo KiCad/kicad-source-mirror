@@ -134,11 +134,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
 
 void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
-#if 1
     m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
-#else
-    m_out->Print( 0, " (layer %d)", aItem->GetLayer() );
-#endif
 }
 
 
@@ -181,15 +177,9 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     {
         if( mask & aBoard->GetEnabledLayers() )
         {
-#if USE_LAYER_NAMES
             m_out->Print( aNestLevel+1, "(%d %s %s", layer,
                           m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
                           LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
-#else
-            m_out->Print( aNestLevel+1, "(%d %s %s", layer,
-                          m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
-                          LAYER::ShowType( aBoard->GetLayerType( layer ) ) );
-#endif
 
             if( !( aBoard->GetVisibleLayers() & mask ) )
                 m_out->Print( 0, " hide" );
@@ -209,13 +199,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     {
         if( mask & aBoard->GetEnabledLayers() )
         {
-#if USE_LAYER_NAMES
             m_out->Print( aNestLevel+1, "(%d %s user", layer,
                           m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
-#else
-            m_out->Print( aNestLevel+1, "(%d %s user", layer,
-                          m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
-#endif
 
             if( !( aBoard->GetVisibleLayers() & mask ) )
                 m_out->Print( 0, " hide" );
@@ -325,9 +310,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(visible_elements %X)\n",
                   aBoard->GetDesignSettings().GetVisibleElements() );
 
-#if SAVE_PCB_PLOT_PARAMS
     aBoard->GetPlotOptions().Format( m_out, aNestLevel+1 );
-#endif
 
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -792,11 +775,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     {
         if( layerMask & 1 )
         {
-#if 1
             m_out->Print( 0, " %s", m_out->Quotew( m_board->GetLayerName( layer ) ).c_str() );
-#else
-            m_out->Print( 0, " %d", layer );
-#endif
         }
     }
 
@@ -951,13 +930,9 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
         if( aTrack->GetDrill() != UNDEFINED_DRILL_DIAMETER )
             m_out->Print( 0, " (drill %s)", FMT_IU( aTrack->GetDrill() ).c_str() );
 
-#if 1
         m_out->Print( 0, " (layers %s %s)",
                       m_out->Quotew( m_board->GetLayerName( layer1 ) ).c_str(),
                       m_out->Quotew( m_board->GetLayerName( layer2 ) ).c_str() );
-#else
-        m_out->Print( 0, " (layers %d %d)", layer1, layer2 );
-#endif
     }
     else
     {
@@ -965,11 +940,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
                       FMT_IU( aTrack->GetStart() ).c_str(), FMT_IU( aTrack->GetEnd() ).c_str(),
                       FMT_IU( aTrack->GetWidth() ).c_str() );
 
-#if 1
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
-#else
-        m_out->Print( 0, " (layer %d)", aTrack->GetLayer() );
-#endif
     }
 
     m_out->Print( 0, " (net %d)", aTrack->GetNet() );

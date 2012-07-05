@@ -54,12 +54,9 @@ class ZONE_CONTAINER;
 WX_DECLARE_STRING_HASH_MAP( int, LAYER_HASH_MAP );
 
 
-#define USE_LAYER_NAMES      1   // Set to 0 to format and parse layers by index number.
-#define SAVE_PCB_PLOT_PARAMS 0   // Set to 1 to save and load the PCB plot dialog data.
-
 /**
  * Class PCB_PARSER
- * reads a Pcbnew s-expression fromatted #LINE_READER object and returns the appropriate
+ * reads a Pcbnew s-expression formatted #LINE_READER object and returns the appropriate
  * #BOARD_ITEM object.
  */
 class PCB_PARSER : public PCB_LEXER
@@ -124,7 +121,7 @@ class PCB_PARSER : public PCB_LEXER
      * parses a coordinate pair (xy X Y) in board units (mm).
      *
      * The parser checks if the previous token was T_LEFT and parses the remainder of
-     * the token syntax.  This is used when parsing a list of coorinate points.  This
+     * the token syntax.  This is used when parsing a list of coordinate points.  This
      * way the parser can be used in either case.
      *
      * @throw PARSE_ERROR if the coordinate pair syntax is incorrect.
