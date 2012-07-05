@@ -698,7 +698,6 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 
 int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
 {
-#if USE_LAYER_NAMES
     wxString name = FromUTF8();
     const LAYER_HASH_MAP::iterator it = m_layerMap.find( name );
 
@@ -711,22 +710,6 @@ int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
     }
 
     return m_layerMap[ name ];
-#else
-    if( CurTok() != T_NUMBER )
-        Expecting( T_NUMBER );
-
-    int layerIndex = parseInt();
-
-    if( !m_board->IsLayerEnabled( layerIndex ) )
-    {
-        wxString error;
-        error.Printf( wxT( "Layer index %d in file <%s> at line %d, offset %d was not defined in the layers section" ),
-                      layerIndex, GetChars( CurSource() ), CurLineNumber(), CurOffset() );
-        THROW_IO_ERROR( error );
-    }
-
-    return layerIndex;
-#endif
 }
 
 
@@ -941,8 +924,8 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
         case T_aux_axis_origin:
         {
-            int x = parseBoardUnits( "auxilary origin X" );
-            int y = parseBoardUnits( "auxilary origin Y" );
+            int x = parseBoardUnits( "auxiliary origin X" );
+            int y = parseBoardUnits( "auxiliary origin Y" );
             // x, y are not evaluated left to right, since they are push on stack right to left
             m_board->SetOriginAxisPosition( wxPoint( x, y ) );
             NeedRIGHT();
@@ -954,7 +937,6 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             NeedRIGHT();
             break;
 
-#if SAVE_PCB_PLOT_PARAMS
         case T_pcbplotparams:
         {
             PCB_PLOT_PARAMS plotParams;
@@ -962,9 +944,11 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
             plotParams.Parse( &parser );
             m_board->SetPlotOptions( plotParams );
+
+            // I don't know why but this seems to fix a problem in PCB_PLOT_PARAMS::Parse().
+            NextTok();
             break;
         }
-#endif
 
         default:
             Unexpected( CurText() );
@@ -2308,12 +2292,12 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    int     hatchStyle = CPolyLine::NO_HATCH;   // Fix compil warning
-    int     hatchPitch = 0;                     // Fix compil warning
+    int     hatchStyle = CPolyLine::NO_HATCH;   // Fix compile warning
+    int     hatchPitch = 0;                     // Fix compile warning
     wxPoint pt;
     T       token;
 
-    // bigger scope since each filled_polygon is concatonated in here
+    // bigger scope since each filled_polygon is concatenated in here
     std::vector< CPolyPt > pts;
 
     auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
