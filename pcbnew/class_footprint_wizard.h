@@ -8,7 +8,9 @@
 #include <vector>
 #include <wxPcbStruct.h>
 
-/* This is the parent class from where any footprint wiizard class must 
+/**
+ * Class FOOTPRINT_WIZARD
+ * This is the parent class from where any footprint wizard class must 
  * derive */
 class FOOTPRINT_WIZARD
 {
