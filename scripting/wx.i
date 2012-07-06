@@ -25,6 +25,9 @@
 /**
  * @file wx.i
  * @brief wx wrappers for basic things, wxString, wxPoint, wxRect, etc..
+ *        all the wx objects are very complex, and we don't want to pull
+ *        and swig all depending objects, so we just define the methods
+ *        we want to wrap.
  */
 
 %{
@@ -67,7 +70,8 @@ public:
     int x, y, width, height;
     
     %extend 
-    {    
+    {  
+       /* extend the wxRect object so it can be converted into a tuple */
        PyObject* Get() 
        {
             PyObject* res = PyTuple_New(4);
@@ -191,7 +195,9 @@ public:
 };
 
 
-// wxChar wrappers ///////////////////////////////////////////////////////////
+// wxChar typemaps ///////////////////////////////////////////////////////////
+
+/* they handle the conversion from/to strings */
 
 %typemap(in) wxChar {   wxString str = Py2wxString($input); $1 = str[0];   }
 %typemap(out) wxChar {  wxString str($1);      $result = wx2PyString(str); }

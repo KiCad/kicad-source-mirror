@@ -22,8 +22,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+ /**
+  * This file builds the base classes for all kind of python plugins that
+  * can be included into kicad.
+  * they provide generic code to all the classes:
+  *
+  * KiCadPlugin
+  *  /|\
+  *   |
+  *   |\-FilePlugin
+  *   |\-FootprintWizardPlugin
+  *   |\-ActionPlugin 
+  *
+  * It defines the LoadPlugins() function that loads all the plugins
+  * available in the system
+  *
+  */
 %pythoncode 
 {
+
+def LoadPlugins():  
+    import os
+    import sys
+
+    plugins_dir = os.environ['HOME']+'/.kicad_plugins/'
+
+    sys.path.append(plugins_dir)
+
+    for module in os.listdir(plugins_dir):
+        if os.path.isdir(plugins_dir+module):
+            __import__(module, locals(), globals())
+
+        if module == '__init__.py' or module[-3:] != '.py':
+            continue
+        __import__(module[:-3], locals(), globals())
 
 
 # KiCadPlugin base class will register any plugin into the right place
@@ -158,22 +190,6 @@ class ActionPlugin(KiCadPlugin):
     def __init__(self):
         KiCadPlugin.__init__(self)
 
-
-def LoadPlugins():  
-    import os
-    import sys
-
-    plugins_dir = os.environ['HOME']+'/.kicad_plugins/'
-
-    sys.path.append(plugins_dir)
-
-    for module in os.listdir(plugins_dir):
-        if os.path.isdir(plugins_dir+module):
-            __import__(module, locals(), globals())
-
-        if module == '__init__.py' or module[-3:] != '.py':
-            continue
-        __import__(module[:-3], locals(), globals())
 
 
 }

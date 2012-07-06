@@ -27,7 +27,6 @@ f = open(filename,"rb")
 lines = f.readlines()
 f.close()
 
-f = open(filename,"wb")
 
 doneOk = False
 
@@ -35,14 +34,18 @@ if (len(lines)<4000):
     print "still building"
     exit(0)
 
+txt = ""
+    
 for l in lines:
     if l.startswith("if version_info >= (2,6,0):"):
         l = l.replace("version_info >= (2,6,0)","False")
         doneOk = True
     elif l.startswith("if False:"):  # it was already patched?
         doneOk = True
-    f.write(l)
+    txt = txt + l
 
+f = open(filename,"wb")
+f.write(txt)
 f.close()
 
 if doneOk:

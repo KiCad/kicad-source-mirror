@@ -46,19 +46,19 @@ class wxGridEvent;
 class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_FRAME
 {
 private:
-    // List of libraries (for selection )
-    wxSashLayoutWindow* m_PageListWindow;
-    wxListBox*          m_PageList;          // The list of pages
-    wxSize              m_PageListSize;      // size of the window
+    
+    wxSashLayoutWindow* m_PageListWindow;    //< List of libraries (for selection )
+    wxListBox*          m_PageList;          //< The list of pages
+    wxSize              m_PageListSize;      //< size of the window
 
-    // List of components in the selected library
-    wxSashLayoutWindow* m_ParameterGridWindow;
-    wxGrid*             m_ParameterGrid;          // The list of parameters
-    wxSize              m_ParameterGridSize;      // size of the window
+    
+    wxSashLayoutWindow* m_ParameterGridWindow;  //< List of components in the selected library  
+    wxGrid*             m_ParameterGrid;        //< The list of parameters
+    wxSize              m_ParameterGridSize;    //< size of the window
 
     // Flags
-    wxSemaphore*        m_Semaphore;        // != NULL if the frame must emulate a modal dialog
-    wxString            m_configPath;       // subpath for configuration
+    wxSemaphore*        m_Semaphore;        //< != NULL if the frame must emulate a modal dialog
+    wxString            m_configPath;       //< subpath for configuration
     
     FOOTPRINT_WIZARD* m_FootprintWizard;
 
@@ -86,19 +86,40 @@ private:
     void OnSashDrag( wxSashEvent& event );
 
     /**
-     * Function ReCreateLibraryList
-     *
-     * Creates or recreates the list of current loaded libraries.
-     * This list is sorted, with the library cache always at end of the list
+     * Function ReCreatePageList
+     * Creates or recreates the list of parameter pages for the current wizard.
+     * This list is sorted
      */
     void ReCreatePageList();
+    
+    /**
+     * Function ReCreateParameterList
+     * Creates the list of parameters for the current page
+     */
     void ReCreateParameterList();
+    
+    /**
+     * Function SelectFootprintWizard
+     * Shows the list of footprint wizards available into the system
+     */
     void SelectFootprintWizard();
+    
+    /**
+     * Function ReloadFootprint
+     * Reloads the current footprint
+     */
     void ReloadFootprint();
     
     
     void Process_Special_Functions( wxCommandEvent& event );
+    
+    /**
+     * Function DisplayWizardInfos
+     * Shows all the details about the current wizard 
+     */
     void DisplayWizardInfos();
+    
+    
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void OnCloseWindow( wxCloseEvent& Event );
     void ReCreateHToolbar();

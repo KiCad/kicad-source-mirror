@@ -27,14 +27,8 @@
  * @brief General wrappers for kicad / wx structures and classes
  */
 
-
-/* OFF NOW, it triggers an error with GCC 4.6 and swig-2.0.4 or trunk.. 
-   http://sourceforge.net/tracker/index.php?func=detail&aid=3391906&group_id=1645&atid=101645
-*/
-
-
-   %include <std_vector.i>
-   %include <std_string.i>
+%include <std_vector.i>
+%include <std_string.i>
 
 /* ignore some constructors of EDA_ITEM that will make the build fail */
 
@@ -44,11 +38,12 @@
 %ignore EDA_ITEM::EDA_ITEM( const EDA_ITEM& base );
 
 /* swig tries to wrap SetBack/SetNext on derived classes, but this method is
-   private for most childs, so if we don't ignore it it won't compile */
+   private for most childs, so if we don't ignore it won't compile */
 
 %ignore EDA_ITEM::SetBack;
 %ignore EDA_ITEM::SetNext;
 
+/* ignore other functions that cause trouble */
 
 %ignore InitKiCadAbout;
 %ignore GetCommandOptions;
@@ -57,9 +52,10 @@
 %ignore operator <<;
 %ignore operator=;
 
+/* headers/imports that must be included in the _wrapper.cpp at top */
 
 %{
-        #include <cstddef>
+    #include <cstddef>
 	#include <dlist.h>
 	#include <base_struct.h>
 	#include <common.h>
@@ -72,7 +68,7 @@
 	#include <class_title_block.h>
 	#include <class_colors_design_settings.h>
 	#include <class_marker_base.h>
-        #include <eda_text.h>
+    #include <eda_text.h>
 
 %}
 
@@ -95,6 +91,7 @@
 }
 */
 
+/* header files that must be wrapped */
 
 %include <dlist.h>
 %include <base_struct.h>
@@ -104,10 +101,12 @@
 %include <class_marker_base.h>
 %include <eda_text.h>
 
-
+/* special iteration wrapper for DLIST objects */
 %include "dlist.i"
 
 /* std template mappings */
 %template(intVector) std::vector<int>;
 
+/* KiCad plugin handling */
 %include "kicadplugins.i"
+

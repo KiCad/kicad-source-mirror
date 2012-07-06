@@ -6,9 +6,9 @@
 	{
 		class DLISTIter:
 			def __init__(self,aList):
-				self.last = aList
+				self.last = aList   # last item is the start of list
 		
-			def next(self):
+			def next(self):         # get the next item
 			
 				item = self.last
 				try:
@@ -16,7 +16,7 @@
 				except:
 				  pass
 				     
-				if item is None: 
+				if item is None:    # if the item is None, then finish the iteration
 					raise StopIteration
 				else:
 					ret = None
@@ -25,11 +25,12 @@
 					try:
 						ret = self.last.Get()
 					except: 
-						ret = self.last #next items just not..
+						ret = self.last # next items do not..
 					
 					self.last = self.last.Next()
 					
 					# when the iterated object can be casted down in inheritance, just do it..
+					
 					if 'Cast' in dir(ret):
 						ret = ret.Cast()
 						
