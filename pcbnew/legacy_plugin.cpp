@@ -106,10 +106,16 @@ typedef LEGACY_PLUGIN::BIU      BIU;
 #define SZ( x )         (sizeof(x)-1)
 
 
+static const char delims[] = " \t\r\n";
+
+
+static bool inline isSpace( int c ) { return strchr( delims, c ) != 0; }
+
+
 //-----<BOARD Load Functions>---------------------------------------------------
 
 /// C string compare test for a specific length of characters.
-#define TESTLINE( x )   ( !strnicmp( line, x, SZ( x ) ) && isspace( line[SZ( x )] ) )
+#define TESTLINE( x )   ( !strnicmp( line, x, SZ( x ) ) && isSpace( line[SZ( x )] ) )
 
 /// C sub-string compare test for a specific length of characters.
 #define TESTSUBSTR( x ) ( !strnicmp( line, x, SZ( x ) ) )
@@ -141,7 +147,6 @@ static inline unsigned ReadLine( LINE_READER* rdr, const char* caller )
 #define READLINE( rdr )     ReadLine( rdr, __FUNCTION__ )
 #endif
 
-static const char delims[] = " \t\r\n";
 
 using namespace std;    // auto_ptr
 
@@ -1101,8 +1106,10 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             data = data + ReadDelimitedText( mypadname, data, sizeof(mypadname) ) + 1;  // +1 trailing whitespace
 
             // sscanf( PtLine, " %s %d %d %d %d %d", BufCar, &m_Size.x, &m_Size.y, &m_DeltaSize.x, &m_DeltaSize.y, &m_Orient );
-
+            while( isSpace( *data ) )
+                ++data;
             int     padshape = *data++;
+
             BIU     size_x   = biuParse( data, &data );
             BIU     size_y   = biuParse( data, &data );
             BIU     delta_x  = biuParse( data, &data );
