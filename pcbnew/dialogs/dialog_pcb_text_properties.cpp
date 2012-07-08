@@ -135,27 +135,9 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
         }
     }
 
-    switch( (int) m_SelectedPCBText->GetOrientation() )
-    {
-    default:
-        m_OrientationCtrl->SetSelection( 0 );
-        break;
-
-    case 900:
-    case -2700:
-        m_OrientationCtrl->SetSelection( 1 );
-        break;
-
-    case 1800:
-    case -1800:
-        m_OrientationCtrl->SetSelection( 2 );
-        break;
-
-    case 2700:
-    case -900:
-        m_OrientationCtrl->SetSelection( 3 );
-        break;
-    }
+    wxString orientationStr;
+    orientationStr << m_SelectedPCBText->GetOrientation();
+    m_OrientationCtrl->SetValue( orientationStr );
 
     if( m_SelectedPCBText->m_Mirror )
         m_DisplayCtrl->SetSelection( 1 );
@@ -263,7 +245,10 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_SelectedPCBText->m_Mirror = (m_DisplayCtrl->GetSelection() == 1) ? true : false;
 
     // Set the text orientation
-    m_SelectedPCBText->m_Orient = m_OrientationCtrl->GetSelection() * 900;
+    long orientation;
+    m_OrientationCtrl->GetValue().ToLong( &orientation );
+    orientation = orientation % 3600;
+    m_SelectedPCBText->SetOrientation( orientation );
 
     // Set whether the PCB text is slanted (it is not italics, as italics has additional curves in style)
     m_SelectedPCBText->m_Italic = m_StyleCtrl->GetSelection() ? 1 : 0;
