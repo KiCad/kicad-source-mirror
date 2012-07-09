@@ -78,7 +78,13 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
-            if( aZone->GetPadConnection( pad ) != THERMAL_PAD )
+            // Rejects non-standard pads with tht-only thermal reliefs
+            if( aZone->GetPadConnection( pad ) == THT_THERMAL
+             && pad->GetAttribute() != PAD_STANDARD )
+                continue;
+
+            if( aZone->GetPadConnection( pad ) != THERMAL_PAD 
+             && aZone->GetPadConnection( pad ) != THT_THERMAL )
                 continue;
 
             // check

@@ -2374,6 +2374,10 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                     zone->SetPadConnection( PAD_NOT_IN_ZONE );
                     break;
 
+                case T_thru_hole_only:
+                    zone->SetPadConnection( THT_THERMAL );
+                    break;
+
                 case T_clearance:
                     zone->SetZoneClearance( parseBoardUnits( "zone clearance" ) );
                     NeedRIGHT();

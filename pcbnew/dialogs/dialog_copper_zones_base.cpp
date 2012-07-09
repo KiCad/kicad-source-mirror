@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -143,7 +143,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_staticText13->Wrap( -1 );
 	m_LeftBox->Add( m_staticText13, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	wxString m_PadInZoneOptChoices[] = { _("Solid"), _("Thermal relief"), _("None") };
+	wxString m_PadInZoneOptChoices[] = { _("Solid"), _("Thermal relief"), _("THT Thermal"), _("None") };
 	int m_PadInZoneOptNChoices = sizeof( m_PadInZoneOptChoices ) / sizeof( wxString );
 	m_PadInZoneOpt = new wxChoice( this, ID_M_PADINZONEOPT, wxDefaultPosition, wxDefaultSize, m_PadInZoneOptNChoices, m_PadInZoneOptChoices, 0 );
 	m_PadInZoneOpt->SetSelection( 0 );

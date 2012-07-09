@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,16 +19,22 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxBoxSizer* bleftSizer;
 	bleftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_checkReference = new wxCheckBox( this, wxID_ANY, _("Print sheet &reference and title block"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkReference->SetValue(true);
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Print options:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	m_staticText1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
+	bleftSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT, 5 );
+	
+	m_checkReference = new wxCheckBox( this, wxID_ANY, _("Print sheet &reference and title block"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkReference->SetValue(true); 
 	m_checkReference->SetToolTip( _("Print (or not) the Frame references.") );
 	
-	bleftSizer->Add( m_checkReference, 0, wxALL, 5 );
+	bleftSizer->Add( m_checkReference, 0, wxALL, 10 );
 	
 	m_checkMonochrome = new wxCheckBox( this, wxID_ANY, _("Print in &black and white only"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkMonochrome->SetValue(true); 
+	bleftSizer->Add( m_checkMonochrome, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
-	bleftSizer->Add( m_checkMonochrome, 0, wxALL, 5 );
 	
 	bMainSizer->Add( bleftSizer, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 12 );
 	
@@ -47,11 +53,12 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( bbuttonsSizer, 0, wxALL, 12 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnCloseWindow ) );
@@ -71,4 +78,5 @@ DIALOG_PRINT_USING_PRINTER_BASE::~DIALOG_PRINT_USING_PRINTER_BASE()
 	m_buttonPreview->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPrintButtonClick ), NULL, this );
 	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnButtonCancelClick ), NULL, this );
+	
 }
