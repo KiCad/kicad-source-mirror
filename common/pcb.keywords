@@ -164,6 +164,7 @@ trace_clearance
 trapezoid
 thru
 thru_hole
+thru_hole_only
 tstamp
 user
 user_trace_width

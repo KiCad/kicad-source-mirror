@@ -149,6 +149,14 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
     m_buttonPrint->SetDefault();
 }
 
+void DIALOG_PRINT_USING_PRINTER::GetPrintOptions()
+{
+    SCH_EDIT_FRAME* parent = GetParent();
+
+    parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
+    parent->SetPrintSheetReference( m_checkReference->IsChecked() );
+}
+
 
 void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 {
@@ -160,8 +168,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         parent->SetPrintDialogSize( GetSize() );
     }
 
-    parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
-    parent->SetPrintSheetReference( m_checkReference->IsChecked() );
+    GetPrintOptions();
 
     EndDialog( wxID_CANCEL );
 }
@@ -187,8 +194,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
     SCH_EDIT_FRAME* parent = GetParent();
 
-    parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
-    parent->SetPrintSheetReference( m_checkReference->IsChecked() );
+    GetPrintOptions();
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
@@ -216,8 +222,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 {
     SCH_EDIT_FRAME* parent = GetParent();
 
-    parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
-    parent->SetPrintSheetReference( m_checkReference->IsChecked() );
+    GetPrintOptions();
 
     wxPrintDialogData printDialogData( parent->GetPageSetupData().GetPrintData() );
     printDialogData.SetMaxPage( g_RootSheet->CountSheets() );

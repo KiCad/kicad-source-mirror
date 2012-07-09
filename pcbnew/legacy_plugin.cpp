@@ -2239,6 +2239,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             {
             case 'I':   popt = PAD_IN_ZONE;        break;
             case 'T':   popt = THERMAL_PAD;        break;
+            case 'H':   popt = THT_THERMAL;        break;
             case 'X':   popt = PAD_NOT_IN_ZONE;    break;
 
             default:
@@ -3548,6 +3549,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     default:
     case PAD_IN_ZONE:       padoption = 'I';  break;
     case THERMAL_PAD:       padoption = 'T';  break;
+    case THT_THERMAL:       padoption = 'H';  break; // H is for 'hole' since it reliefs holes only
     case PAD_NOT_IN_ZONE:   padoption = 'X';  break;
     }
 

@@ -199,8 +199,12 @@ void DIALOG_COPPER_ZONE::initDialog()
 
     switch( m_settings.GetPadConnection() )
     {
-    case PAD_NOT_IN_ZONE:           // Pads are not covered
+    case THT_THERMAL:               // Thermals only for THT pads
         m_PadInZoneOpt->SetSelection( 2 );
+        break;
+
+    case PAD_NOT_IN_ZONE:           // Pads are not covered
+        m_PadInZoneOpt->SetSelection( 3 );
         break;
 
     default:
@@ -213,7 +217,9 @@ void DIALOG_COPPER_ZONE::initDialog()
         break;
     }
 
-    if( m_settings.GetPadConnection() != THERMAL_PAD )
+    // Antipad and spokes are significant only for thermals
+    if( m_settings.GetPadConnection() != THERMAL_PAD &&
+        m_settings.GetPadConnection() != THT_THERMAL )
     {
         m_AntipadSizeValue->Enable( false );
         m_CopperWidthValue->Enable( false );
@@ -341,9 +347,14 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 {
     switch( m_PadInZoneOpt->GetSelection() )
     {
-    case 2:
+    case 3:
         // Pads are not covered
         m_settings.SetPadConnection( PAD_NOT_IN_ZONE );
+        break;
+
+    case 2:
+        // Use thermal relief for THT pads
+        m_settings.SetPadConnection( THT_THERMAL );
         break;
 
     case 1:
@@ -566,6 +577,7 @@ void DIALOG_COPPER_ZONE::OnPadsInZoneClick( wxCommandEvent& event )
         m_CopperWidthValue->Enable( false );
         break;
 
+    case 2:
     case 1:
         m_AntipadSizeValue->Enable( true );
         m_CopperWidthValue->Enable( true );

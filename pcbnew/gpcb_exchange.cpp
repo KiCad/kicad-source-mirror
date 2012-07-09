@@ -399,6 +399,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             //  format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
             pad = new D_PAD( this );
             pad->SetShape( PAD_RECT );
+            pad->SetAttribute( PAD_SMD );
             pad->SetLayerMask( LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT );
 
             // Set shape from flags

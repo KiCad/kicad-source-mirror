@@ -26,6 +26,8 @@ private:
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event ){ Close(); }
+
+    void GetPrintOptions();
 };
 
 

@@ -385,7 +385,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
-            if( GetPadConnection( pad ) != THERMAL_PAD )
+            // Rejects non-standard pads with tht-only thermal reliefs
+            if( GetPadConnection( pad ) == THT_THERMAL
+             && pad->GetAttribute() != PAD_STANDARD )
+                continue;
+
+            if( GetPadConnection( pad ) != THERMAL_PAD
+             && GetPadConnection( pad ) != THT_THERMAL )
                 continue;
 
             if( !pad->IsOnLayer( GetLayer() ) )

@@ -990,6 +990,10 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     case THERMAL_PAD:       // Default option not saved or loaded.
         break;
 
+    case THT_THERMAL:
+        m_out->Print( 0, " thru_hole_only" );
+        break;
+
     case PAD_IN_ZONE:
         m_out->Print( 0, " yes" );
         break;
