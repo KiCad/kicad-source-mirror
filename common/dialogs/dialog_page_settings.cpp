@@ -624,8 +624,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         // Prepare DC.
         wxSize example_size( lyWidth, lyHeight );
         wxMemoryDC memDC;
-        memDC.SetClippingRegion( wxPoint( 0, 0 ), example_size );
         memDC.SelectObject( *m_page_bitmap );
+        memDC.SetClippingRegion( wxPoint( 0, 0 ), example_size );
         memDC.Clear();
         memDC.SetUserScale( scaleW, scaleH );
 
