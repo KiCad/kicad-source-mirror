@@ -87,8 +87,8 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     // Make an image list containing small icons
     // All icons are expected having the same size.
     wxBitmap tree_nosel_bm( KiBitmap( tree_nosel_xpm ) );
-    imageList = new wxImageList( tree_nosel_bm.GetSize().x,
-                                 tree_nosel_bm.GetSize().y, true, 2 );
+    imageList = new wxImageList( tree_nosel_bm.GetWidth(),
+                                 tree_nosel_bm.GetHeight(), true, 2 );
 
     imageList->Add( tree_nosel_bm );
     imageList->Add( KiBitmap( tree_sel_xpm ) );
