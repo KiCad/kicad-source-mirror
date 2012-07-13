@@ -980,7 +980,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                   FMT_IU( aZone->m_Poly->GetHatchPitch() ).c_str() );
 
     if( aZone->GetPriority() > 0 )
-        m_out->Print( aNestLevel+1, " (priority %d)\n", aZone->GetPriority() );
+        m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetPriority() );
 
     m_out->Print( aNestLevel+1, "(connect_pads" );
 
@@ -1008,6 +1008,14 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     m_out->Print( aNestLevel+1, "(min_thickness %s)\n",
                   FMT_IU( aZone->GetMinThickness() ).c_str() );
+
+    if( aZone->GetIsKeepout() )
+    {
+        m_out->Print( aNestLevel+1, "(keepout (tracks %s) (vias %s) (pads %s))\n",
+                      aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
+                      aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed" );
+    }
 
     m_out->Print( aNestLevel+1, "(fill" );
 

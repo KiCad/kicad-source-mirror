@@ -136,6 +136,14 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
         return BAD_DRC;
     }
 
+    if( !doTrackKeepoutDrc( aRefSegm ) )
+    {
+        wxASSERT( m_currentMarker );
+
+        m_currentMarker->DisplayInfo( m_mainWindow );
+        return BAD_DRC;
+    }
+
     return OK_DRC;
 }
 
@@ -250,6 +258,18 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         }
 
         testUnconnected();
+    }
+
+    // find and gather vias, tracks, pads inside keepout areas.
+    if( m_doKeepoutTest )
+    {
+        if( aMessages )
+        {
+            aMessages->AppendText( _( "Keepout areas ...\n" ) );
+            aMessages->Refresh();
+        }
+
+        testKeepoutAreas();
     }
 
     // update the m_ui listboxes
@@ -553,6 +573,107 @@ void DRC::testZones()
 
     // Test copper areas outlines, and create markers when needed
     m_pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( NULL, true );
+}
+
+
+void DRC::testKeepoutAreas()
+{
+    // Test keepout areas for vias, tracks and pads inside keepout areas
+    for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* area = m_pcb->GetArea( ii );
+
+        if( !area->GetIsKeepout() )
+            continue;
+
+        for( TRACK* segm = m_pcb->m_Track; segm != NULL; segm = segm->Next() )
+        {
+            if( segm->Type() == PCB_TRACE_T )
+            {
+                if( ! area->GetDoNotAllowTracks()  )
+                    continue;
+
+                if( segm->GetLayer() != area->GetLayer() )
+                    continue;
+
+                if( area->m_Poly->Distance( segm->GetStart(), segm->GetEnd(), segm->GetWidth() ) == 0 )
+                {
+                    m_currentMarker = fillMarker( segm, NULL,
+                                                  DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker );
+                    m_pcb->Add( m_currentMarker );
+                    m_currentMarker = 0;
+                }
+            }
+            else if( segm->Type() == PCB_VIA_T )
+            {
+                if( ! area->GetDoNotAllowVias()  )
+                    continue;
+
+                if( ! ((SEGVIA*)segm)->IsOnLayer( area->GetLayer() ) )
+                    continue;
+
+                if( area->m_Poly->Distance( segm->GetPosition() ) < segm->GetWidth()/2 )
+                {
+                    m_currentMarker = fillMarker( segm, NULL,
+                                                  DRCE_VIA_INSIDE_KEEPOUT, m_currentMarker );
+                    m_pcb->Add( m_currentMarker );
+                    m_currentMarker = 0;
+                }
+            }
+        }
+        // Test pads: TODO
+    }
+}
+
+/*
+ * Function doTrackKeepoutDrc
+ * tests the current segment or via.
+ * aRefSeg is the segment to test
+ * return true if no DRC err
+ */
+bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
+{
+    // Test keepout areas for vias, tracks and pads inside keepout areas
+    for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* area = m_pcb->GetArea( ii );
+
+        if( !area->GetIsKeepout() )
+            continue;
+
+        if( aRefSeg->Type() == PCB_TRACE_T )
+        {
+            if( ! area->GetDoNotAllowTracks()  )
+                continue;
+
+            if( aRefSeg->GetLayer() != area->GetLayer() )
+                continue;
+
+            if( area->m_Poly->Distance( aRefSeg->GetStart(), aRefSeg->GetEnd(), aRefSeg->GetWidth() ) == 0 )
+            {
+                m_currentMarker = fillMarker( aRefSeg, NULL,
+                                              DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker );
+                return false;
+            }
+        }
+        else if( aRefSeg->Type() == PCB_VIA_T )
+        {
+            if( ! area->GetDoNotAllowVias()  )
+                continue;
+
+            if( ! ((SEGVIA*)aRefSeg)->IsOnLayer( area->GetLayer() ) )
+                continue;
+
+            if( area->m_Poly->Distance( aRefSeg->GetPosition() ) < aRefSeg->GetWidth()/2 )
+            {
+                m_currentMarker = fillMarker( aRefSeg, NULL,
+                                              DRCE_VIA_INSIDE_KEEPOUT, m_currentMarker );
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 

@@ -60,8 +60,13 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 
     m_Zone_45_Only = false;
 
-    cornerSmoothingType = SMOOTHING_NONE;
-    cornerRadius = 0;
+    m_cornerSmoothingType = SMOOTHING_NONE;
+    m_cornerRadius = 0;
+
+    SetIsKeepout( false );
+    SetDoNotAllowPads( false );
+    SetDoNotAllowVias( true );
+    SetDoNotAllowTracks( true );
 }
 
 
@@ -78,8 +83,12 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_ThermalReliefGap = aSource.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aSource.m_ThermalReliefCopperBridge;
     m_PadConnection = aSource.GetPadConnection();
-    cornerSmoothingType = aSource.GetCornerSmoothingType();
-    cornerRadius = aSource.GetCornerRadius();
+    m_cornerSmoothingType = aSource.GetCornerSmoothingType();
+    m_cornerRadius = aSource.GetCornerRadius();
+    m_isKeepout = aSource.GetIsKeepout();
+    m_keepoutDoNotAllowPads = aSource.GetDoNotAllowPads();
+    m_keepoutDoNotAllowVias = aSource.GetDoNotAllowVias();
+    m_keepoutDoNotAllowTracks = aSource.GetDoNotAllowTracks();
 
     return *this;
 }
@@ -95,8 +104,12 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.m_ThermalReliefGap = m_ThermalReliefGap;
     aTarget.m_ThermalReliefCopperBridge = m_ThermalReliefCopperBridge;
     aTarget.SetPadConnection( m_PadConnection );
-    aTarget.SetCornerSmoothingType( cornerSmoothingType );
-    aTarget.SetCornerRadius( cornerRadius );
+    aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
+    aTarget.SetCornerRadius( m_cornerRadius );
+    aTarget.SetIsKeepout( GetIsKeepout() );
+    aTarget.SetDoNotAllowPads( GetDoNotAllowPads() );
+    aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
+    aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
 
     if( aFullExport )
     {

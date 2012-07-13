@@ -18,6 +18,8 @@ class ZONE_CONTAINER;
 /**
  * Class ZONE_SETTINGS
  * handles zones parameters.
+ * Because a zone can be on copper or non copper layers, and can be also
+ * a keepout area, some parameters are irrelevant depending on the type of zone
  */
 class ZONE_SETTINGS
 {
@@ -51,9 +53,22 @@ public:
     bool m_Zone_45_Only;
 
 private:
-    int  cornerSmoothingType;           ///< Corner smoothing type
-    unsigned int  cornerRadius;         ///< Corner chamfer distance / fillet radius
+    int  m_cornerSmoothingType;           ///< Corner smoothing type
+    unsigned int  m_cornerRadius;         ///< Corner chamfer distance / fillet radius
     ZoneConnection m_PadConnection;
+
+    /* A zone outline can be a keepout zone.
+     * It will be never filled, and DRC should test for pads, tracks and vias
+     */
+    bool                  m_isKeepout;
+
+    /* For keepout zones only:
+     * what is not allowed inside the keepout ( pads, tracks and vias )
+     */
+    bool m_keepoutDoNotAllowPads;
+    bool m_keepoutDoNotAllowVias;
+    bool m_keepoutDoNotAllowTracks;
+
 
 public:
     ZONE_SETTINGS();
@@ -77,25 +92,37 @@ public:
      */
     void ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport = true ) const;
 
-    void SetCornerSmoothingType( int aType) { cornerSmoothingType = aType; }
+    void SetCornerSmoothingType( int aType) { m_cornerSmoothingType = aType; }
 
-    int GetCornerSmoothingType() const { return cornerSmoothingType; }
+    int GetCornerSmoothingType() const { return m_cornerSmoothingType; }
 
     void SetCornerRadius( int aRadius )
     {
         if( aRadius > Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS ) )
-            cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
+            m_cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
         else if( aRadius < 0 )
-            cornerRadius = 0;
+            m_cornerRadius = 0;
         else
-            cornerRadius = aRadius;
+            m_cornerRadius = aRadius;
     };
 
-    unsigned int GetCornerRadius() const { return cornerRadius; }
+    unsigned int GetCornerRadius() const { return m_cornerRadius; }
 
     ZoneConnection GetPadConnection() const { return m_PadConnection; }
     void SetPadConnection( ZoneConnection aPadConnection ) { m_PadConnection = aPadConnection; }
 
+    /**
+     * Accessors to parameters used in Keepout zones:
+     */
+    const bool GetIsKeepout() const { return m_isKeepout; }
+    const bool GetDoNotAllowPads() const { return m_keepoutDoNotAllowPads; }
+    const bool GetDoNotAllowVias() const { return m_keepoutDoNotAllowVias; }
+    const bool GetDoNotAllowTracks() const { return m_keepoutDoNotAllowTracks; }
+
+    void SetIsKeepout( bool aEnable ) { m_isKeepout = aEnable; }
+    void SetDoNotAllowPads( bool aEnable ) { m_keepoutDoNotAllowPads = aEnable; }
+    void SetDoNotAllowVias( bool aEnable ) { m_keepoutDoNotAllowVias = aEnable; }
+    void SetDoNotAllowTracks( bool aEnable ) { m_keepoutDoNotAllowTracks = aEnable; }
 };
 
 

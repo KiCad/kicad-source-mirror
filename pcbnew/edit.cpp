@@ -1343,6 +1343,10 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
         break;
 
+    case ID_PCB_KEEPOUT_AREA_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add keepout" ) );
+        break;
+
     case ID_PCB_MIRE_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
         break;

@@ -29,7 +29,7 @@ private:
     PCB_BASE_FRAME* m_Parent;
     ZONE_CONTAINER* m_zone;
     ZONE_SETTINGS*  m_ptr;
-    ZONE_SETTINGS   m_settings;
+    ZONE_SETTINGS   m_settings;     // working copy of zone settings
 
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
@@ -75,8 +75,6 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
 void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
 {
     SetReturnCode( ZONE_ABORT );  // Will be changed on button click
-
-    m_FillModeCtrl->SetSelection( m_settings.m_FillMode ? 1 : 0 );
 
     AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
     wxString msg = ReturnStringFromValue( g_UserUnit, m_settings.m_ZoneMinThickness );
@@ -125,18 +123,18 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
 
 void DIALOG_NON_COPPER_ZONES_EDITOR::OnOkClick( wxCommandEvent& event )
 {
-    wxString txtvalue = m_ZoneMinThicknessCtrl->GetValue();
+   wxString txtvalue = m_ZoneMinThicknessCtrl->GetValue();
 
     m_settings.m_ZoneMinThickness = ReturnValueFromString( g_UserUnit, txtvalue );
 
     if( m_settings.m_ZoneMinThickness < 10 )
     {
         DisplayError( this,
-                      _( "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)" ) );
+                      _( "Error :\nyou must choose a min thickness value bigger than 0.001 inch (or 0.0254 mm)" ) );
         return;
     }
 
-    m_settings.m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? 0 : 1;
+    m_settings.m_FillMode = 0;  // Use always polygon fill mode
 
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {

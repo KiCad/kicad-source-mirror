@@ -14,18 +14,6 @@
 #include <bezier_curves.h>
 #include <polygon_test_point_inside.h>
 
-
-#define to_int( x ) KiROUND( (x) )
-
-#ifndef MIN
-#define MIN( x1, x2 ) ( (x1) > (x2) ? (x2) : (x1) )
-#endif
-#ifndef MAX
-#define MAX( x1, x2 ) ( (x1) > (x2) ? (x1) : (x2) )
-#endif
-
-#define pi M_PI
-
 CPolyLine::CPolyLine()
 {
     m_hatchStyle = NO_HATCH;
@@ -282,7 +270,10 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         delete m_Kbool_Poly_Engine;
         m_Kbool_Poly_Engine = NULL;
     }
-    if( !GetClosed() && (aStart_contour == (GetNumContours() - 1) || aStart_contour == -1) )
+
+    int polycount = GetNumContours();
+
+    if( !GetClosed() && (aStart_contour == (polycount - 1) || aStart_contour == -1) )
         return 1; // error
 
     int n_arcs = 0;
@@ -292,11 +283,11 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
     if( aStart_contour == -1 )
     {
         first_contour = 0;
-        last_contour  = GetNumContours() - 1;
+        last_contour  = polycount - 1;
     }
     if( aEnd_contour == -1 )
     {
-        last_contour = GetNumContours() - 1;
+        last_contour = polycount - 1;
     }
     if( arc_array )
         arc_array->clear();
@@ -389,30 +380,30 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
                         // first quadrant, draw second quadrant of ellipse
                         xo     = x2;
                         yo     = y1;
-                        theta1 = pi;
-                        theta2 = pi / 2.0;
+                        theta1 = M_PI;
+                        theta2 = M_PI / 2.0;
                     }
                     else if( x2 < x1 && y2 > y1 )
                     {
                         // second quadrant, draw third quadrant of ellipse
                         xo     = x1;
                         yo     = y2;
-                        theta1 = 3.0 * pi / 2.0;
-                        theta2 = pi;
+                        theta1 = 3.0 * M_PI / 2.0;
+                        theta2 = M_PI;
                     }
                     else if( x2 < x1 && y2 < y1 )
                     {
                         // third quadrant, draw fourth quadrant of ellipse
                         xo     = x2;
                         yo     = y1;
-                        theta1 = 2.0 * pi;
-                        theta2 = 3.0 * pi / 2.0;
+                        theta1 = 2.0 * M_PI;
+                        theta2 = 3.0 * M_PI / 2.0;
                     }
                     else
                     {
                         xo     = x1; // fourth quadrant, draw first quadrant of ellipse
                         yo     = y2;
-                        theta1 = pi / 2.0;
+                        theta1 = M_PI / 2.0;
                         theta2 = 0.0;
                     }
                 }
@@ -423,29 +414,29 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
                     {
                         xo     = x1; // first quadrant, draw fourth quadrant of ellipse
                         yo     = y2;
-                        theta1 = 3.0 * pi / 2.0;
-                        theta2 = 2.0 * pi;
+                        theta1 = 3.0 * M_PI / 2.0;
+                        theta2 = 2.0 * M_PI;
                     }
                     else if( x2 < x1 && y2 > y1 )
                     {
                         xo     = x2; // second quadrant
                         yo     = y1;
                         theta1 = 0.0;
-                        theta2 = pi / 2.0;
+                        theta2 = M_PI / 2.0;
                     }
                     else if( x2 < x1 && y2 < y1 )
                     {
                         xo     = x1; // third quadrant
                         yo     = y2;
-                        theta1 = pi / 2.0;
-                        theta2 = pi;
+                        theta1 = M_PI / 2.0;
+                        theta2 = M_PI;
                     }
                     else
                     {
                         xo     = x2; // fourth quadrant
                         yo     = y1;
-                        theta1 = pi;
-                        theta2 = 3.0 * pi / 2.0;
+                        theta1 = M_PI;
+                        theta2 = 3.0 * M_PI / 2.0;
                     }
                 }
 
@@ -658,7 +649,8 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
                 poly = this;
             else
                 poly = (*pa)[ip - 1];
-            for( int icont = 0; icont<poly->GetNumContours(); icont++ )
+            int polycount = poly->GetNumContours();
+            for( int icont = 0; icont < polycount; icont++ )
             {
                 int ic_start = poly->GetContourStart( icont );
                 int ic_end   = poly->GetContourEnd( icont );
@@ -877,12 +869,13 @@ void CPolyLine::RemoveContour( int icont )
     int istart = GetContourStart( icont );
     int iend   = GetContourEnd( icont );
 
-    if( icont == 0 && GetNumContours() == 1 )
+    int polycount = GetNumContours();
+    if( icont == 0 && polycount == 1 )
     {
         // remove the only contour
         wxASSERT( 0 );
     }
-    else if( icont == GetNumContours() - 1 )
+    else if( icont == polycount - 1 )
     {
         // remove last contour
         corner.erase( corner.begin() + istart, corner.end() );
@@ -911,7 +904,8 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
         return newPoly;
     }
 
-    for( int contour = 0; contour < GetNumContours(); contour++ )
+    int polycount = GetNumContours();
+    for( int contour = 0; contour < polycount; contour++ )
     {
         unsigned int startIndex = GetContourStart( contour );
         unsigned int endIndex = GetContourEnd( contour );
@@ -986,7 +980,8 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
         return newPoly;
     }
 
-    for( int contour = 0; contour < GetNumContours(); contour++ )
+    int polycount = GetNumContours();
+    for( int contour = 0; contour < polycount; contour++ )
     {
         unsigned int startIndex = GetContourStart( contour );
         unsigned int endIndex = GetContourEnd( contour );
@@ -1199,10 +1194,10 @@ CRect CPolyLine::GetCornerBounds( int icont )
     int iend   = GetContourEnd( icont );
     for( int i = istart; i<=iend; i++ )
     {
-        r.left   = MIN( r.left, corner[i].x );
-        r.right  = MAX( r.right, corner[i].x );
-        r.bottom = MIN( r.bottom, corner[i].y );
-        r.top    = MAX( r.top, corner[i].y );
+        r.left   = min( r.left, corner[i].x );
+        r.right  = max( r.right, corner[i].x );
+        r.bottom = min( r.bottom, corner[i].y );
+        r.top    = max( r.top, corner[i].y );
     }
 
     return r;
@@ -1309,7 +1304,7 @@ int CPolyLine::GetContourSize( int icont )
 void CPolyLine::SetSideStyle( int is, int style )
 {
     UnHatch();
-    CPoint p1, p2;
+    wxPoint p1, p2;
     if( is == (int) (corner.size() - 1) )
     {
         p1.x = corner[corner.size() - 1].x;
@@ -1349,8 +1344,8 @@ int CPolyLine::GetClosed()
 
 // Creates hatch lines inside the outline of the complex polygon
 //
-// sort function used in ::Hatch to sort points by descending CPoint.x values
-bool sort_ends_by_descending_X( const CPoint& ref,  const CPoint& tst )
+// sort function used in ::Hatch to sort points by descending wxPoint.x values
+bool sort_ends_by_descending_X( const wxPoint& ref,  const wxPoint& tst )
 {
     return tst.x < ref.x;
 }
@@ -1420,7 +1415,7 @@ void CPolyLine::Hatch()
     #define MAXPTS 200      // Usually we store only few values per one hatch line
                             // depending on the compexity of the zone outline
 
-    static std::vector <CPoint> pointbuffer;
+    static std::vector <wxPoint> pointbuffer;
     pointbuffer.clear();
     pointbuffer.reserve(MAXPTS+2);
 
@@ -1458,12 +1453,12 @@ void CPolyLine::Hatch()
             }
             if( ok )
             {
-                CPoint point( (int) x, (int) y);
+                wxPoint point( (int) x, (int) y);
                 pointbuffer.push_back( point );
             }
             if( ok == 2 )
             {
-                CPoint point( (int) x2, (int) y2);
+                wxPoint point( (int) x2, (int) y2);
                 pointbuffer.push_back( point );
             }
             if( pointbuffer.size() >= MAXPTS )    // overflow
@@ -1495,10 +1490,7 @@ void CPolyLine::Hatch()
             // else push 2 small lines
             if( m_hatchStyle == DIAGONAL_FULL || fabs( dx ) < 2 * hatch_line_len )
             {
-                m_HatchLines.push_back( CSegment( pointbuffer[ip].x,
-                                                  pointbuffer[ip].y,
-                                                  pointbuffer[ip + 1].x,
-                                                  pointbuffer[ip + 1].y ) );
+                m_HatchLines.push_back( CSegment( pointbuffer[ip], pointbuffer[ip + 1] ) );
             }
             else
             {
@@ -1517,11 +1509,11 @@ void CPolyLine::Hatch()
 
                 m_HatchLines.push_back( CSegment( pointbuffer[ip].x,
                                                   pointbuffer[ip].y,
-                                                  to_int( x1 ), to_int( y1 ) ) );
+                                                  KiROUND( x1 ), KiROUND( y1 ) ) );
 
                 m_HatchLines.push_back( CSegment( pointbuffer[ip + 1].x,
                                                   pointbuffer[ip + 1].y,
-                                                  to_int( x2 ), to_int( y2 ) ) );
+                                                  KiROUND( x2 ), KiROUND( y2 ) ) );
             }
         }
     }
@@ -1538,7 +1530,7 @@ bool CPolyLine::TestPointInside( int px, int py )
     }
 
     // Test all polygons.
-    // Since the first is the main outline, and other are hole,
+    // Since the first is the main outline, and other are holes,
     // if the tested point is inside only one contour, it is inside the whole polygon
     // (in fact inside the main outline, and outside all holes).
     // if inside 2 contours (the main outline + an hole), it is outside the poly.
@@ -1636,8 +1628,8 @@ void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int n
     // generate arc
     for( int ic = 0; ic<num; ic++ )
     {
-        int x = to_int( xc + r * cos( theta ) );
-        int y = to_int( yc + r * sin( theta ) );
+        int x = KiROUND( xc + r * cos( theta ) );
+        int y = KiROUND( yc + r * sin( theta ) );
         AppendCorner( x, y, STRAIGHT, 0 );
         theta += th_d;
     }
@@ -1646,7 +1638,8 @@ void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int n
 }
 
 // Bezier Support
-void CPolyLine::AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3) {
+void CPolyLine::AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3)
+{
     std::vector<wxPoint> bezier_points;
 
     bezier_points = Bezier2Poly(x1,y1,x2,y2,x3,y3);
@@ -1654,10 +1647,128 @@ void CPolyLine::AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3) {
         AppendCorner( bezier_points[i].x, bezier_points[i].y);
 }
 
-void CPolyLine::AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
+void CPolyLine::AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+{
     std::vector<wxPoint> bezier_points;
 
     bezier_points = Bezier2Poly(x1,y1,x2,y2,x3,y3,x4,y4);
     for( unsigned int i = 0; i < bezier_points.size() ; i++)
         AppendCorner( bezier_points[i].x, bezier_points[i].y);
+}
+
+
+/*
+ * Function Distance
+ * Calculates the distance between a segment and a polygon (with holes):
+ * param aStart is the starting point of the segment.
+ * param aEnd is the ending point of the segment.
+ * param aWidth is the width of the segment.
+ * return distance between the segment and outline.
+ *               0 if segment intersects or is inside
+ */
+int CPolyLine::Distance( wxPoint aStart, wxPoint aEnd, int aWidth )
+{
+    // We calculate the min dist between the segment and each outline segment
+    // However, if the segment to test is inside the outline, and does not cross
+    // any edge, it can be seen outside the polygon.
+    // Therefore test if a segment end is inside ( testing only one end is enough )
+    if( TestPointInside( aStart.x, aStart.y ) )
+        return 0;
+
+    int distance = INT_MAX;
+    int polycount = GetNumContours();
+
+    for( int icont = 0; icont < polycount; icont++ )
+    {
+        int ic_start = GetContourStart( icont );
+        int ic_end   = GetContourEnd( icont );
+
+        // now test spacing between area outline and segment
+        for( int ic2 = ic_start; ic2 <= ic_end; ic2++ )
+        {
+            int bx1 = GetX( ic2 );
+            int by1 = GetY( ic2 );
+            int bx2, by2;
+
+            if( ic2 == ic_end )
+            {
+                bx2 = GetX( ic_start );
+                by2 = GetY( ic_start );
+            }
+            else
+            {
+                bx2 = GetX( ic2 + 1 );
+                by2 = GetY( ic2 + 1 );
+            }
+
+            int bstyle = GetSideStyle( ic2 );
+            int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, bstyle, 0,
+                                                 aStart.x, aStart.y, aEnd.x, aEnd.y,
+                                                 CPolyLine::STRAIGHT, aWidth,
+                                                 1, // min clearance, should be > 0
+                                                 NULL, NULL );
+            if( distance > d )
+                distance = d;
+            if( distance <= 0 )
+                return 0;
+        }
+    }
+
+    return distance;
+}
+
+/*
+ * Function Distance
+ * Calculates the distance between a point and polygon (with holes):
+ * param aPoint is the coordinate of the point.
+ * return distance between the point and outline.
+ *               0 if the point is inside
+ */
+int CPolyLine::Distance( const wxPoint& aPoint )
+{
+    // We calculate the dist between the point and each outline segment
+    // If the point is inside the outline, the dist is 0.
+    if( TestPointInside( aPoint.x, aPoint.y ) )
+        return 0;
+
+    int distance = INT_MAX;
+    int polycount = GetNumContours();
+
+    for( int icont = 0; icont < polycount; icont++ )
+    {
+        int ic_start = GetContourStart( icont );
+        int ic_end   = GetContourEnd( icont );
+
+        // now test spacing between area outline and segment
+        for( int ic2 = ic_start; ic2 <= ic_end; ic2++ )
+        {
+            int bx1 = GetX( ic2 );
+            int by1 = GetY( ic2 );
+            int bx2, by2;
+
+            if( ic2 == ic_end )
+            {
+                bx2 = GetX( ic_start );
+                by2 = GetY( ic_start );
+            }
+            else
+            {
+                bx2 = GetX( ic2 + 1 );
+                by2 = GetY( ic2 + 1 );
+            }
+
+            // Here we expect only straight lines for vertices
+            // (no arcs, not yet supported in Pcbnew)
+            int d = KiROUND( GetPointToLineSegmentDistance( aPoint.x, aPoint.y,
+                                                      bx1, by1, bx2, by2 ) );
+
+
+            if( distance > d )
+                distance = d;
+            if( distance <= 0 )
+                return 0;
+        }
+    }
+
+    return distance;
 }

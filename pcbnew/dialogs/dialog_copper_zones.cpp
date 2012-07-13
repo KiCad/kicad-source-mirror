@@ -76,8 +76,6 @@ private:
     static wxString m_netNameShowFilter;    ///< the filter to show nets (default * "*").
                                             ///< static to keep this pattern for an entire pcbnew session
 
-    wxListView*     m_LayerSelectionCtrl;
-
     /**
      * Function initDialog
      * fills in the dialog controls using the current settings.
@@ -155,16 +153,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
     SetReturnCode( ZONE_ABORT );        // Will be changed on buttons click
 
-    m_LayerSelectionCtrl = new wxListView( this, wxID_ANY,
-                                           wxDefaultPosition, wxDefaultSize,
-                                           wxLC_NO_HEADER | wxLC_REPORT
-                                           | wxLC_SINGLE_SEL | wxRAISED_BORDER );
-    wxListItem col0;
-    col0.SetId( 0 );
-    m_LayerSelectionCtrl->InsertColumn( 0, col0 );
-    m_layerSizer->Add( m_LayerSelectionCtrl, 1,
-                       wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-
     // Fix static text widget minimum width to a suitable value so that
     // resizing the dialog is not necessary when changing the corner smoothing type.
     // Depends on the default text in the widget.
@@ -173,8 +161,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     initDialog();
 
     GetSizer()->SetSizeHints( this );
-
-    Center();
 }
 
 
@@ -259,6 +245,10 @@ void DIALOG_COPPER_ZONE::initDialog()
     m_ArcApproximationOpt->SetSelection(
         m_settings.m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF ? 1 : 0 );
 
+    // Create one column in m_LayerSelectionCtrl
+    wxListItem col0;
+    col0.SetId( 0 );
+    m_LayerSelectionCtrl->InsertColumn( 0, col0 );
     // Build copper layer list and append to layer widget
     int layerCount = board->GetCopperLayerCount();
     int layerNumber, itemIndex, layerColor;

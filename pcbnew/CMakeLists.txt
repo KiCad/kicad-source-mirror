@@ -61,6 +61,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_graphic_item_properties_for_Modedit.cpp
     dialogs/dialog_global_deletion.cpp
     dialogs/dialog_global_deletion_base.cpp
+    dialogs/dialog_keepout_area_properties.cpp
+    dialogs/dialog_keepout_area_properties_base.cpp
     dialogs/dialog_layers_setup.cpp
     dialogs/dialog_layers_setup_base.cpp
     dialogs/dialog_netlist.cpp

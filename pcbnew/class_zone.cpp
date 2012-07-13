@@ -56,9 +56,13 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
     m_priority = 0;
-    smoothedPoly = NULL;
-    cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
-    cornerRadius = 0;
+    m_smoothedPoly = NULL;
+    m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
+    m_isKeepout = false;
+    m_doNotAllowPads = true;                    // has meaning only if m_isKeepout == true
+    m_doNotAllowVias = true;                    // has meaning only if m_isKeepout == true
+    m_doNotAllowTracks = true;                  // has meaning only if m_isKeepout == true
+    m_cornerRadius = 0;
     utility    = 0;                             // flags used in polygon calculations
     utility2   = 0;                             // flags used in polygon calculations
     m_Poly     = new CPolyLine();               // Outlines
@@ -87,8 +91,15 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_FilledPolysList = aZone.m_FilledPolysList;
     m_FillSegmList = aZone.m_FillSegmList;
 
-    cornerSmoothingType = aZone.cornerSmoothingType;
-    cornerRadius = aZone.cornerRadius;
+    m_isKeepout = aZone.m_isKeepout;
+    m_doNotAllowPads = aZone.m_doNotAllowPads;
+    m_doNotAllowVias = aZone.m_doNotAllowVias;
+    m_doNotAllowTracks = aZone.m_doNotAllowTracks;
+
+    m_cornerSmoothingType = aZone.m_cornerSmoothingType;
+    m_cornerRadius = aZone.m_cornerRadius;
+
+
     utility    = aZone.utility;
     utility2   = aZone.utility;
 }
@@ -221,10 +232,8 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const
 
     for( unsigned ic = 0; ic < m_Poly->m_HatchLines.size(); ic++ )
     {
-        seg_start.x = m_Poly->m_HatchLines[ic].xi + offset.x;
-        seg_start.y = m_Poly->m_HatchLines[ic].yi + offset.y;
-        seg_end.x   = m_Poly->m_HatchLines[ic].xf + offset.x;
-        seg_end.y   = m_Poly->m_HatchLines[ic].yf + offset.y;
+        seg_start = m_Poly->m_HatchLines[ic].m_Start + offset;
+        seg_end   = m_Poly->m_HatchLines[ic].m_End + offset;
         lines.push_back( seg_start );
         lines.push_back( seg_end );
     }

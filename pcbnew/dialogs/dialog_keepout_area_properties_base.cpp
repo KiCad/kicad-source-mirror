@@ -5,16 +5,16 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_non_copper_zones_properties_base.h"
+#include "dialog_keepout_area_properties_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DialogNonCopperZonesPropertiesBase, DIALOG_SHIM )
-	EVT_BUTTON( wxID_CANCEL, DialogNonCopperZonesPropertiesBase::_wxFB_OnCancelClick )
-	EVT_BUTTON( wxID_OK, DialogNonCopperZonesPropertiesBase::_wxFB_OnOkClick )
+BEGIN_EVENT_TABLE( DIALOG_KEEPOUT_AREA_PROPERTIES_BASE, DIALOG_SHIM )
+	EVT_BUTTON( wxID_CANCEL, DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::_wxFB_OnCancelClick )
+	EVT_BUTTON( wxID_OK, DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::_wxFB_OnOkClick )
 END_EVENT_TABLE()
 
-DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -24,18 +24,18 @@ DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow
 	wxBoxSizer* m_UpperSizer;
 	m_UpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizerLeft;
-	bSizerLeft = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* m_layersListSizer;
+	m_layersListSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticTextLayerSelection = new wxStaticText( this, wxID_ANY, _("Layer selection:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLayerSelection->Wrap( -1 );
-	bSizerLeft->Add( m_staticTextLayerSelection, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_layersListSizer->Add( m_staticTextLayerSelection, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_LayerSelectionCtrl = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	bSizerLeft->Add( m_LayerSelectionCtrl, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_LayerSelectionCtrl = new wxListView( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ALIGN_LEFT|wxLC_ICON|wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_SMALL_ICON );
+	m_layersListSizer->Add( m_LayerSelectionCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	m_UpperSizer->Add( bSizerLeft, 1, wxEXPAND, 5 );
+	m_UpperSizer->Add( m_layersListSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -58,12 +58,20 @@ DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow
 	
 	bSizerRight->Add( m_OutilinesBoxOpt, 0, wxEXPAND|wxALL, 5 );
 	
-	m_MinThicknessValueTitle = new wxStaticText( this, wxID_ANY, _("Zone min thickness value"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MinThicknessValueTitle->Wrap( -1 );
-	bSizerRight->Add( m_MinThicknessValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	wxStaticBoxSizer* sbSizerCutoutOpts;
+	sbSizerCutoutOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Keepout Options:") ), wxVERTICAL );
 	
-	m_ZoneMinThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_ZoneMinThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_cbTracksCtrl = new wxCheckBox( this, wxID_ANY, _("No Tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerCutoutOpts->Add( m_cbTracksCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_cbViasCtrl = new wxCheckBox( this, wxID_ANY, _("No Vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerCutoutOpts->Add( m_cbViasCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
+	m_cbPadsCtrl = new wxCheckBox( this, wxID_ANY, _("No Pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerCutoutOpts->Add( m_cbPadsCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizerRight->Add( sbSizerCutoutOpts, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	m_UpperSizer->Add( bSizerRight, 0, wxEXPAND, 5 );
@@ -90,6 +98,6 @@ DialogNonCopperZonesPropertiesBase::DialogNonCopperZonesPropertiesBase( wxWindow
 	this->Centre( wxBOTH );
 }
 
-DialogNonCopperZonesPropertiesBase::~DialogNonCopperZonesPropertiesBase()
+DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::~DIALOG_KEEPOUT_AREA_PROPERTIES_BASE()
 {
 }
