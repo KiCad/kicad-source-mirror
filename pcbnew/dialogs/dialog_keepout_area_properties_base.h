@@ -5,8 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_NON_COPPER_ZONES_PROPERTIES_BASE_H__
-#define __DIALOG_NON_COPPER_ZONES_PROPERTIES_BASE_H__
+#ifndef __DIALOG_KEEPOUT_AREA_PROPERTIES_BASE_H__
+#define __DIALOG_KEEPOUT_AREA_PROPERTIES_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -18,11 +18,11 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/listbox.h>
+#include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
 #include <wx/statbox.h>
-#include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -30,9 +30,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DialogNonCopperZonesPropertiesBase
+/// Class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DialogNonCopperZonesPropertiesBase : public DIALOG_SHIM
+class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -44,11 +44,12 @@ class DialogNonCopperZonesPropertiesBase : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_staticTextLayerSelection;
-		wxListBox* m_LayerSelectionCtrl;
+		wxListView* m_LayerSelectionCtrl;
 		wxRadioBox* m_OrientEdgesOpt;
 		wxRadioBox* m_OutlineAppearanceCtrl;
-		wxStaticText* m_MinThicknessValueTitle;
-		wxTextCtrl* m_ZoneMinThicknessCtrl;
+		wxCheckBox* m_cbTracksCtrl;
+		wxCheckBox* m_cbViasCtrl;
+		wxCheckBox* m_cbPadsCtrl;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
@@ -61,9 +62,9 @@ class DialogNonCopperZonesPropertiesBase : public DIALOG_SHIM
 	
 	public:
 		
-		DialogNonCopperZonesPropertiesBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Non Copper Zones Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 369,317 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER ); 
-		~DialogNonCopperZonesPropertiesBase();
+		DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Keepout Area Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 308,355 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER ); 
+		~DIALOG_KEEPOUT_AREA_PROPERTIES_BASE();
 	
 };
 
-#endif //__DIALOG_NON_COPPER_ZONES_PROPERTIES_BASE_H__
+#endif //__DIALOG_KEEPOUT_AREA_PROPERTIES_BASE_H__

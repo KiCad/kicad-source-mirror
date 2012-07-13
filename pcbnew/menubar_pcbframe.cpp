@@ -370,6 +370,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( placeMenu, ID_PCB_ZONES_BUTT,
                  _( "&Zone" ), _( "Add filled zones" ), KiBitmap( add_zone_xpm ) );
 
+    // Keepout areas
+    AddMenuItem( placeMenu, ID_PCB_KEEPOUT_AREA_BUTT,
+                 _( "&Zone" ), _( "Add keepout areas" ), KiBitmap( add_keepout_area_xpm ) );
+
     // Text
     AddMenuItem( placeMenu, ID_PCB_ADD_TEXT_BUTT,
                   _( "Te&xt" ), _( "Add text on copper layers or graphic text" ),

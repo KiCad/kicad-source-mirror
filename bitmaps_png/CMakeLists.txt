@@ -129,6 +129,7 @@ set( BMAPS_MID
     add_hierar_pin
     add_hierarchical_subsheet
     add_junction
+    add_keepout_area
     add_line2bus
     add_line_label
     add_line

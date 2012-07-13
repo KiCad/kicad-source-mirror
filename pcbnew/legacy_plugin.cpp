@@ -3,8 +3,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004 Jean-Pierre Charras, jp.charras@wanadoo.fr
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
 
  *
  * This program is free software; you can redistribute it and/or
@@ -2205,6 +2205,34 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             zc->SetCornerRadius( cornerRadius );
         }
 
+        else if( TESTLINE( "ZKeepout" ) )
+        {
+            zc->SetIsKeepout( true );
+            // e.g. "ZKeepout tracks N vias N pads Y"
+           data = strtok( line + SZ( "ZKeepout" ), delims );
+
+            while( data )
+            {
+                if( !strcmp( data, "tracks" ) )
+                {
+                    data = strtok( NULL, delims );
+                    zc->SetDoNotAllowTracks( data && *data == 'N' );
+                }
+                else if( !strcmp( data, "vias" ) )
+                {
+                    data = strtok( NULL, delims );
+                    zc->SetDoNotAllowVias( data && *data == 'N' );
+                }
+                else if( !strcmp( data, "pads" ) )
+                {
+                    data = strtok( NULL, delims );
+                    zc->SetDoNotAllowPads( data && *data == 'N' );
+                }
+
+                data = strtok( NULL, delims );
+            }
+        }
+
         else if( TESTLINE( "ZOptions" ) )
         {
             // e.g. "ZOptions 0 32 F 200 200"
@@ -3565,6 +3593,14 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
                     me->IsFilled() ? 'S' : 'F',
                     fmtBIU( me->GetThermalReliefGap() ).c_str(),
                     fmtBIU( me->GetThermalReliefCopperBridge() ).c_str() );
+
+    if( me->GetIsKeepout() )
+    {
+        fprintf( m_fp,  "ZKeepout tracks %c vias %c pads %c\n",
+                        me->GetDoNotAllowTracks() ? 'N' : 'Y',
+                        me->GetDoNotAllowVias() ? 'N' : 'Y',
+                        me->GetDoNotAllowPads() ? 'N' : 'Y' );
+    }
 
     fprintf( m_fp,  "ZSmoothing %d %s\n",
                     me->GetCornerSmoothingType(),

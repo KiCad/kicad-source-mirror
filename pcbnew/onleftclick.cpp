@@ -291,37 +291,13 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_ZONES_BUTT:
-
-        /* ZONE Tool is selected. Determine action for a left click:
+    case ID_PCB_KEEPOUT_AREA_BUTT:
+        /* ZONE or KEEPOUT Tool is selected. Determine action for a left click:
          *  this can be start a new zone or select and move an existing zone outline corner
          *  if found near the mouse cursor
          */
         if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
-#if 0       // Set to 1 to automatically edit a zone found under the mouse
-            // there is no current item, try to find something under the mouse cursor
-            DrawStruct = PcbGeneralLocateAndDisplay();
-            bool hit_on_corner = false;
-
-            if( DrawStruct && (DrawStruct->Type() == PCB_ZONE_AREA_T) )
-            {
-                // We have a hit under mouse (a zone outline corner or segment)
-                // test for a corner only because want to move corners only.
-                ZONE_CONTAINER* edge_zone = (ZONE_CONTAINER*) DrawStruct;
-
-                if( edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) ) // corner located!
-                    hit_on_corner = true;
-            }
-
-            if( hit_on_corner )
-            {
-                m_canvas->MoveCursorToCrossHair();
-                ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-                m_canvas->SetAutoPanRequest( true );
-                Start_Move_Zone_Corner( aDC, zone_cont, zone_cont->m_CornerSelection, false );
-            }
-            else
-#endif
             if( Begin_Zone( aDC ) )
             {
                 m_canvas->SetAutoPanRequest( true );
@@ -521,6 +497,7 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_ZONES_BUTT:
+    case ID_PCB_KEEPOUT_AREA_BUTT:
         if( End_Zone( aDC ) )
         {
             m_canvas->SetAutoPanRequest( false );

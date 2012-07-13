@@ -429,6 +429,10 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_PCB_ZONES_BUTT, wxEmptyString, KiBitmap( add_zone_xpm ),
                             _( "Add filled zones" ), wxITEM_CHECK );
 
+    m_drawToolBar->AddTool( ID_PCB_KEEPOUT_AREA_BUTT, wxEmptyString,
+                            KiBitmap( add_keepout_area_xpm ),
+                            _( "Add keepout areas" ), wxITEM_CHECK );
+
     m_drawToolBar->AddSeparator();
     m_drawToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString, KiBitmap( add_dashed_line_xpm ),
                             _( "Add graphic line or polygon" ), wxITEM_CHECK );

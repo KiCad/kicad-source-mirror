@@ -32,7 +32,6 @@
 
 #include <vector>
 
-
 #define OK_DRC  0
 #define BAD_DRC 1
 
@@ -73,6 +72,9 @@
 #define DRCE_NETCLASS_VIADRILLSIZE             33   ///< netclass has ViaDrillSize < board.m_designSettings->m_ViasMinDrill
 #define DRCE_NETCLASS_uVIASIZE                 34   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize
 #define DRCE_NETCLASS_uVIADRILLSIZE            35   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
+#define DRCE_VIA_INSIDE_KEEPOUT                36   ///< Via in inside a keepout area
+#define DRCE_TRACK_INSIDE_KEEPOUT              37   ///< Track in inside a keepout area
+#define DRCE_PAD_INSIDE_KEEPOUT                38   ///< Pad in inside a keepout area
 
 
 class EDA_DRAW_PANEL;
@@ -155,15 +157,14 @@ private:
     bool     m_doPad2PadTest;
     bool     m_doUnconnectedTest;
     bool     m_doZonesTest;
+    bool     m_doKeepoutTest;
     bool     m_doCreateRptFile;
 
     wxString m_rptFilename;
 
-    // int              m_errorCount;
-
     MARKER_PCB* m_currentMarker;
 
-    bool        m_aboartDRC;
+    bool        m_abortDRC;
     bool        m_drcInProgress;
 
     /* In DRC functions, many calculations are using coordinates relative
@@ -182,7 +183,7 @@ private:
     int m_segmLength;       // length of the reference segment
 
     /* variables used in checkLine to test DRC segm to segm:
-     * define the area relative to the ref segment that does not contains anu other segment
+     * define the area relative to the ref segment that does not contains any other segment
      */
     int                 m_xcliplo;
     int                 m_ycliplo;
@@ -278,6 +279,7 @@ private:
 
     void testZones();
 
+    void testKeepoutAreas();
 
     //-----<single "item" tests>-----------------------------------------
 
@@ -304,6 +306,15 @@ private:
      *          filled in with the problem information.
      */
     bool doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool doPads = true );
+
+    /**
+     * Function doTrackKeepoutDrc
+     * tests the current segment or via.
+     * @param aRefSeg The segment to test
+     * @return bool - true if no poblems, else false and m_currentMarker is
+     *          filled in with the problem information.
+     */
+    bool doTrackKeepoutDrc( TRACK* aRefSeg );
 
 
     /**
@@ -412,7 +423,10 @@ public:
     {
         updatePointers();
 
-        return doTrackDrc( aRefSeg, aList ) ? OK_DRC : BAD_DRC;
+        if( ! doTrackDrc( aRefSeg, aList ) )
+            return BAD_DRC;
+
+        return doTrackKeepoutDrc( aRefSeg ) ? OK_DRC : BAD_DRC;
     }
 
 
@@ -443,11 +457,13 @@ public:
      * @param aSaveReport A boolean telling whether to generate disk file report.
      */
     void SetSettings( bool aPad2PadTest, bool aUnconnectedTest,
-                      bool aZonesTest, const wxString& aReportName, bool aSaveReport )
+                      bool aZonesTest, bool aKeepoutTest,
+                      const wxString& aReportName, bool aSaveReport )
     {
         m_doPad2PadTest     = aPad2PadTest;
         m_doUnconnectedTest = aUnconnectedTest;
         m_doZonesTest       = aZonesTest;
+        m_doKeepoutTest     = aKeepoutTest;
         m_rptFilename       = aReportName;
         m_doCreateRptFile   = aSaveReport;
     }

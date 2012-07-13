@@ -133,6 +133,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             break;
 
         case ID_PCB_ZONES_BUTT:
+        case ID_PCB_KEEPOUT_AREA_BUTT:
             scanList = GENERAL_COLLECTOR::Zones;
             break;
 

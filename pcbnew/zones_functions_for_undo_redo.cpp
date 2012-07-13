@@ -70,7 +70,28 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if( m_Netname != aZoneToCompare.m_Netname )
         return false;
 
-    // Compare zone specfic parameters
+    if(  GetPriority() != aZoneToCompare.GetPriority() )
+        return false;
+
+    // Compare zone specific parameters
+    if(  GetIsKeepout() != aZoneToCompare.GetIsKeepout() )
+        return false;
+
+    if(  GetIsKeepout() )
+    {
+        if(  GetDoNotAllowPads() != aZoneToCompare.GetDoNotAllowPads() )
+            return false;
+
+        if(  GetDoNotAllowVias() != aZoneToCompare.GetDoNotAllowVias() )
+            return false;
+
+        if(  GetDoNotAllowTracks() != aZoneToCompare.GetDoNotAllowTracks() )
+            return false;
+    }
+
+    if(  m_ArcToSegmentsCount != aZoneToCompare.m_ArcToSegmentsCount )
+        return false;
+
     if(  m_ZoneClearance != aZoneToCompare.m_ZoneClearance )
         return false;
 
@@ -78,9 +99,6 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
         return false;
 
     if(  m_FillMode != aZoneToCompare.m_FillMode )
-        return false;
-
-    if(  m_ArcToSegmentsCount != aZoneToCompare.m_ArcToSegmentsCount )
         return false;
 
     if(  m_PadConnection != aZoneToCompare.m_PadConnection )
@@ -92,8 +110,6 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if(  m_ThermalReliefCopperBridge != aZoneToCompare.m_ThermalReliefCopperBridge )
         return false;
 
-    if(  GetPriority() != aZoneToCompare.GetPriority() )
-        return false;
 
     // Compare outlines
     wxASSERT( m_Poly );                                      // m_Poly == NULL Should never happen

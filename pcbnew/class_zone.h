@@ -498,24 +498,24 @@ public:
      */
     CPolyLine* GetSmoothedPoly() const
     {
-        if( smoothedPoly )
-            return smoothedPoly;
+        if( m_smoothedPoly )
+            return m_smoothedPoly;
         else
             return m_Poly;
     };
 
-    void SetCornerSmoothingType( int aType ) { cornerSmoothingType = aType; };
+    void SetCornerSmoothingType( int aType ) { m_cornerSmoothingType = aType; };
 
-    int  GetCornerSmoothingType() const { return cornerSmoothingType; };
+    int  GetCornerSmoothingType() const { return m_cornerSmoothingType; };
 
     void SetCornerRadius( unsigned int aRadius )
     {
-        cornerRadius = aRadius;
-        if( cornerRadius > (unsigned int) Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS ) )
-            cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
+        m_cornerRadius = aRadius;
+        if( m_cornerRadius > (unsigned int) Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS ) )
+            m_cornerRadius = Mils2iu( MAX_ZONE_CORNER_RADIUS_MILS );
     };
 
-    unsigned int GetCornerRadius() const { return cornerRadius; };
+    unsigned int GetCornerRadius() const { return m_cornerRadius; };
 
     void AddPolygon( std::vector< wxPoint >& aPolygon );
 
@@ -534,6 +534,20 @@ public:
     virtual BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
 
     virtual EDA_ITEM* Clone() const;
+
+    /**
+     * Accessors to parameters used in Keepout zones:
+     */
+    bool GetIsKeepout() const { return m_isKeepout; }
+    bool GetDoNotAllowPads() const { return m_doNotAllowPads; }
+    bool GetDoNotAllowVias() const { return m_doNotAllowVias; }
+    bool GetDoNotAllowTracks() const { return m_doNotAllowTracks; }
+
+    void SetIsKeepout( bool aEnable ) { m_isKeepout = aEnable; }
+    void SetDoNotAllowPads( bool aEnable ) { m_doNotAllowPads = aEnable; }
+    void SetDoNotAllowVias( bool aEnable ) { m_doNotAllowVias = aEnable; }
+    void SetDoNotAllowTracks( bool aEnable ) { m_doNotAllowTracks = aEnable; }
+
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
@@ -572,14 +586,29 @@ public:
 
 
 private:
-    wxString              m_Netname;                        // Net Name
-    CPolyLine*            smoothedPoly;         // Corner-smoothed version of m_Poly
-    int                   cornerSmoothingType;
-    unsigned int          cornerRadius;
-    // Priority: when a zone outline is inside and other zone, if its priority is higher
-    // the other zone priority, it will be created inside.
-    // if priorities are equal, a DRC error is set
+    wxString              m_Netname;            // Net Name
+    CPolyLine*            m_smoothedPoly;       // Corner-smoothed version of m_Poly
+    int                   m_cornerSmoothingType;
+    unsigned int          m_cornerRadius;
+
+    /* Priority: when a zone outline is inside and other zone, if its priority is higher
+     * the other zone priority, it will be created inside.
+     * if priorities are equal, a DRC error is set
+     */
     unsigned              m_priority;
+
+    /* A zone outline can be a keepout zone.
+     * It will be never filled, and DRC should test for pads, tracks and vias
+     */
+    bool                  m_isKeepout;
+
+    /* For keepout zones only:
+     * what is not allowed inside the keepout ( pads, tracks and vias )
+     */
+    bool                  m_doNotAllowPads;
+    bool                  m_doNotAllowVias;
+    bool                  m_doNotAllowTracks;
+
     ZoneConnection        m_PadConnection;
 
     /* set of filled polygons used to draw a zone as a filled area.

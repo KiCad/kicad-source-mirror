@@ -83,7 +83,7 @@ void PCB_EDIT_FRAME::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* aZone )
 
     // Use the general event handler to set others params (like toolbar)
     wxCommandEvent evt;
-    evt.SetId( ID_PCB_ZONES_BUTT );
+    evt.SetId( aZone->GetIsKeepout() ? ID_PCB_KEEPOUT_AREA_BUTT : ID_PCB_ZONES_BUTT );
     OnSelectTool( evt );
 }
 
@@ -103,7 +103,7 @@ void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* aZone )
 
     // Use the general event handle to set others params (like toolbar)
     wxCommandEvent evt;
-    evt.SetId( ID_PCB_ZONES_BUTT );
+    evt.SetId( aZone->GetIsKeepout() ? ID_PCB_KEEPOUT_AREA_BUTT : ID_PCB_ZONES_BUTT );
     OnSelectTool( evt );
 }
 
@@ -116,7 +116,16 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
     ZONE_SETTINGS zoneSettings;
     zoneSettings << *aZone;
 
-    if( InvokeCopperZonesEditor( this, &zoneSettings ) )
+    bool success;
+
+    if( aZone->GetIsKeepout() )
+        success = InvokeKeepoutAreaEditor( this, &zoneSettings );
+    else if( aZone->IsOnCopperLayer() )
+        success = InvokeCopperZonesEditor( this, &zoneSettings );
+    else
+        success = InvokeNonCopperZonesEditor( this, aZone, &zoneSettings );
+
+    if( success )
     {
         zoneSettings.ExportSetting( *newZone );
         newZone->m_Poly->Hatch();
@@ -510,7 +519,17 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
 
     // If no zone contour in progress, a new zone is being created:
     if( !GetBoard()->m_CurrentZoneContour )
-        GetBoard()->m_CurrentZoneContour = new ZONE_CONTAINER( GetBoard() );
+    {
+        if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT &&
+            getActiveLayer() >= FIRST_NON_COPPER_LAYER )
+        {
+            DisplayError( this,
+                          _( "Error: a keepout area is allowed only on copper layers" ) );
+            return 0;
+        }
+        else
+            GetBoard()->m_CurrentZoneContour = new ZONE_CONTAINER( GetBoard() );
+    }
 
     ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
 
@@ -557,12 +576,17 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
 
                 zoneInfo.m_CurrentZone_Layer = zone->GetLayer();
 
-                edited = InvokeCopperZonesEditor( this, &zoneInfo );
+                if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT )
+                {
+                    zoneInfo.SetIsKeepout( true );
+                    edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
+                }
+                else
+                    edited = InvokeCopperZonesEditor( this, &zoneInfo );
             }
             else   // Put a zone on a non copper layer (technical layer)
             {
                 zoneInfo.m_NetcodeSelection = 0;     // No net for non copper zones
-
                 edited = InvokeNonCopperZonesEditor( this, zone, &zoneInfo );
             }
 
@@ -591,7 +615,8 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         }
 
         // Show the Net for zones on copper layers
-        if( zoneInfo.m_CurrentZone_Layer < FIRST_NO_COPPER_LAYER )
+        if( zoneInfo.m_CurrentZone_Layer < FIRST_NO_COPPER_LAYER &&
+            ! zoneInfo.GetIsKeepout() )
         {
             if( s_CurrentZone )
             {
@@ -815,7 +840,13 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     s_PickedList.ClearListAndDeleteItems();
     SaveCopyOfZones(s_PickedList, GetBoard(), -1, -1 );
 
-    if( aZone->GetLayer() < FIRST_NO_COPPER_LAYER )
+    if( aZone->GetIsKeepout() )
+    {
+        // edit a keepout area on a copper layer
+        zoneInfo << *aZone;
+        edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
+    }
+    else if( aZone->GetLayer() < FIRST_NO_COPPER_LAYER )
     {
         // edit a zone on a copper layer
 

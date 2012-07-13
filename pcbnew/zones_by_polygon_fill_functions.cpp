@@ -87,6 +87,13 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, time_t aTimestamp )
 
 int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 {
+    aZone->ClearFilledPolysList();
+    aZone->UnFill();
+
+    // Cannot fill keepout zones:
+    if( aZone->GetIsKeepout() )
+        return 1;
+
     wxString msg;
 
     ClearMsgPanel();
@@ -105,8 +112,6 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
-    aZone->ClearFilledPolysList();
-    aZone->UnFill();
     aZone->BuildFilledPolysListData( GetBoard() );
 
     OnModify();
@@ -142,6 +147,9 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
     for( ii = 0; ii < areaCount; ii++ )
     {
         ZONE_CONTAINER* zoneContainer = GetBoard()->GetArea( ii );
+        if( zoneContainer->GetIsKeepout() )
+            continue;
+
         msg.Printf( FORMAT_STRING, ii+1, areaCount, GetChars( zoneContainer->GetNetName() ) );
 
         if( progressDialog )

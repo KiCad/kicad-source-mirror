@@ -329,6 +329,12 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         aPopMenu->AppendSeparator();
         break;
 
+    case ID_PCB_KEEPOUT_AREA_BUTT:
+        AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
+                     _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
+        aPopMenu->AppendSeparator();
+        break;
+
     case ID_TRACK_BUTT:
         if ( ! locate_track )   // This menu is already added when a track is located
             AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
@@ -601,7 +607,9 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
     {
         wxMenu* zones_menu = new wxMenu();
 
-        AddMenuItem( aPopMenu, zones_menu, -1, _( "Zones" ), KiBitmap( add_zone_xpm ) );
+        AddMenuItem( aPopMenu, zones_menu, -1,
+                    edge_zone->GetIsKeepout() ? _("Keepout Area") : _( "Zones" ),
+                    KiBitmap( add_zone_xpm ) );
 
         if( edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) )
         {
@@ -632,8 +640,9 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
 
         zones_menu->AppendSeparator();
 
-        AddMenuItem( zones_menu, ID_POPUP_PCB_FILL_ZONE, _( "Fill Zone" ),
-                     KiBitmap( fill_zone_xpm ) );
+        if( ! edge_zone->GetIsKeepout() )
+            AddMenuItem( zones_menu, ID_POPUP_PCB_FILL_ZONE, _( "Fill Zone" ),
+                         KiBitmap( fill_zone_xpm ) );
 
         if( edge_zone->GetFilledPolysList().size() > 0 )
         {

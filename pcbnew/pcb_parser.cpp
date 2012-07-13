@@ -2464,6 +2464,49 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
             break;
 
+        case T_keepout:
+            zone->SetIsKeepout( true );
+
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                switch( token )
+                {
+                case T_tracks:
+                    token = NextTok();
+
+                    if( token != T_allowed && token != T_not_allowed )
+                        Expecting( "allowed or not_allowed" );
+                    zone->SetDoNotAllowTracks( token == T_not_allowed );
+                    break;
+
+                case T_vias:
+                    token = NextTok();
+
+                    if( token != T_allowed && token != T_not_allowed )
+                        Expecting( "allowed or not_allowed" );
+                    zone->SetDoNotAllowVias( token == T_not_allowed );
+                    break;
+
+                case T_pads:
+                    token = NextTok();
+
+                    if( token != T_allowed && token != T_not_allowed )
+                        Expecting( "allowed or not_allowed" );
+                    zone->SetDoNotAllowPads( token == T_not_allowed );
+                    break;
+
+                default:
+                    Expecting( "tracks, vias or pads" );
+                }
+
+                NeedRIGHT();
+            }
+
+            break;
+
         case T_polygon:
         {
             std::vector< wxPoint > corners;
