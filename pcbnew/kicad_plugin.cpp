@@ -1011,10 +1011,10 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     if( aZone->GetIsKeepout() )
     {
-        m_out->Print( aNestLevel+1, "(keepout (tracks %s) (vias %s) (pads %s))\n",
+        m_out->Print( aNestLevel+1, "(keepout (tracks %s) (vias %s) (copperpour %s))\n",
                       aZone->GetDoNotAllowTracks() ? "not_allowed" : "allowed",
                       aZone->GetDoNotAllowVias() ? "not_allowed" : "allowed",
-                      aZone->GetDoNotAllowPads() ? "not_allowed" : "allowed" );
+                      aZone->GetDoNotAllowCopperPour() ? "not_allowed" : "allowed" );
     }
 
     m_out->Print( aNestLevel+1, "(fill" );

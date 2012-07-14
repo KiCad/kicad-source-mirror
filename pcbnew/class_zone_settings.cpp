@@ -64,7 +64,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_cornerRadius = 0;
 
     SetIsKeepout( false );
-    SetDoNotAllowPads( false );
+    SetDoNotAllowCopperPour( false );
     SetDoNotAllowVias( true );
     SetDoNotAllowTracks( true );
 }
@@ -86,7 +86,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_cornerSmoothingType = aSource.GetCornerSmoothingType();
     m_cornerRadius = aSource.GetCornerRadius();
     m_isKeepout = aSource.GetIsKeepout();
-    m_keepoutDoNotAllowPads = aSource.GetDoNotAllowPads();
+    m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
     m_keepoutDoNotAllowVias = aSource.GetDoNotAllowVias();
     m_keepoutDoNotAllowTracks = aSource.GetDoNotAllowTracks();
 
@@ -107,7 +107,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
     aTarget.SetCornerRadius( m_cornerRadius );
     aTarget.SetIsKeepout( GetIsKeepout() );
-    aTarget.SetDoNotAllowPads( GetDoNotAllowPads() );
+    aTarget.SetDoNotAllowCopperPour( GetDoNotAllowCopperPour() );
     aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
     aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
 

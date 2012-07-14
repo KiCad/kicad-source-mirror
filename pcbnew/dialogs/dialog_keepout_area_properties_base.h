@@ -49,7 +49,7 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxRadioBox* m_OutlineAppearanceCtrl;
 		wxCheckBox* m_cbTracksCtrl;
 		wxCheckBox* m_cbViasCtrl;
-		wxCheckBox* m_cbPadsCtrl;
+		wxCheckBox* m_cbCopperPourCtrl;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;

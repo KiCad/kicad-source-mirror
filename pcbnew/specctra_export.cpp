@@ -1135,7 +1135,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     }
 
 
-    //-----<zone containers become planes>--------------------------------
+    //-----<zone containers (not keepout areas) become planes>--------------------------------
+    // Note: only zones are output here, keepout areas be be created later
     {
         int netlessZones = 0;
 
@@ -1145,6 +1146,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         for( int i=0;  i<items.GetCount();  ++i )
         {
             ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
+
+            if( item->GetIsKeepout() )
+                continue;
 
             COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
             pcb->structure->planes.push_back( plane );
@@ -1214,7 +1218,80 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         }
     }
 
-    // keepouts could go here, there are none in Kicad at this time.
+    //-----<zone containers flagged keepout areas become keepout>--------------------------------
+    {
+        static const KICAD_T  scanZONEs[] = { PCB_ZONE_AREA_T, EOT };
+        items.Collect( aBoard, scanZONEs );
+
+        for( int i=0;  i<items.GetCount();  ++i )
+        {
+            ZONE_CONTAINER* item = (ZONE_CONTAINER*) items[i];
+
+            if( ! item->GetIsKeepout() )
+                continue;
+
+            // keepout areas have a type. types are
+            // T_place_keepout, T_via_keepout, T_wire_keepout,
+            // T_bend_keepout, T_elongate_keepout, T_keepout.
+            // Pcbnew knows only T_keepout, T_via_keepout and T_wire_keepout
+            DSN_T keepout_type;
+
+            if( item->GetDoNotAllowVias() && item->GetDoNotAllowTracks() )
+                keepout_type = T_keepout;
+            else if( item->GetDoNotAllowVias() )
+                keepout_type = T_via_keepout;
+            else if( item->GetDoNotAllowTracks() )
+                keepout_type = T_wire_keepout;
+            else
+                keepout_type = T_keepout;
+
+            KEEPOUT*   keepout = new KEEPOUT( pcb->structure, keepout_type );
+            pcb->structure->keepouts.push_back( keepout );
+
+            PATH* mainPolygon = new PATH( keepout, T_polygon );
+            keepout->SetShape( mainPolygon );
+
+            mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+
+            int count = item->m_Poly->corner.size();
+            int ndx = 0;  // used in 2 for() loops below
+            for( ; ndx<count; ++ndx )
+            {
+                wxPoint   point( item->m_Poly->corner[ndx].x,
+                                 item->m_Poly->corner[ndx].y );
+                mainPolygon->AppendPoint( mapPt(point) );
+
+                // this was the end of the main polygon
+                if( item->m_Poly->corner[ndx].end_contour )
+                    break;
+            }
+
+            WINDOW* window = 0;
+            PATH*   cutout = 0;
+
+            // handle the cutouts
+            for( ++ndx; ndx<count; ++ndx )
+            {
+                if( item->m_Poly->corner[ndx-1].end_contour )
+                {
+                    window = new WINDOW( keepout );
+                    keepout->AddWindow( window );
+
+                    cutout = new PATH( window, T_polygon );
+                    window->SetShape( cutout );
+
+                    cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+                }
+
+                wxASSERT( window );
+                wxASSERT( cutout );
+
+                wxPoint point(item->m_Poly->corner[ndx].x,
+                              item->m_Poly->corner[ndx].y );
+                cutout->AppendPoint( mapPt(point) );
+            }
+        }
+    }
 
     //-----<build the images, components, and netlist>-----------------------
     {

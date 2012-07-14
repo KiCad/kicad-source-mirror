@@ -539,12 +539,12 @@ public:
      * Accessors to parameters used in Keepout zones:
      */
     bool GetIsKeepout() const { return m_isKeepout; }
-    bool GetDoNotAllowPads() const { return m_doNotAllowPads; }
+    bool GetDoNotAllowCopperPour() const { return m_doNotAllowCopperPour; }
     bool GetDoNotAllowVias() const { return m_doNotAllowVias; }
     bool GetDoNotAllowTracks() const { return m_doNotAllowTracks; }
 
     void SetIsKeepout( bool aEnable ) { m_isKeepout = aEnable; }
-    void SetDoNotAllowPads( bool aEnable ) { m_doNotAllowPads = aEnable; }
+    void SetDoNotAllowCopperPour( bool aEnable ) { m_doNotAllowCopperPour = aEnable; }
     void SetDoNotAllowVias( bool aEnable ) { m_doNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable ) { m_doNotAllowTracks = aEnable; }
 
@@ -605,7 +605,7 @@ private:
     /* For keepout zones only:
      * what is not allowed inside the keepout ( pads, tracks and vias )
      */
-    bool                  m_doNotAllowPads;
+    bool                  m_doNotAllowCopperPour;
     bool                  m_doNotAllowVias;
     bool                  m_doNotAllowTracks;
 
