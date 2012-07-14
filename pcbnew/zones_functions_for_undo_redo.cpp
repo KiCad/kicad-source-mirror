@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+ * Copyright (C) 2009 Jean-Pierre Charras <jp.charras@wanadoo.fr>
  * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -70,16 +70,16 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if( m_Netname != aZoneToCompare.m_Netname )
         return false;
 
-    if(  GetPriority() != aZoneToCompare.GetPriority() )
+    if( GetPriority() != aZoneToCompare.GetPriority() )
         return false;
 
     // Compare zone specific parameters
-    if(  GetIsKeepout() != aZoneToCompare.GetIsKeepout() )
+    if( GetIsKeepout() != aZoneToCompare.GetIsKeepout() )
         return false;
 
-    if(  GetIsKeepout() )
+    if( GetIsKeepout() )
     {
-        if(  GetDoNotAllowPads() != aZoneToCompare.GetDoNotAllowPads() )
+        if(  GetDoNotAllowCopperPour() != aZoneToCompare.GetDoNotAllowCopperPour() )
             return false;
 
         if(  GetDoNotAllowVias() != aZoneToCompare.GetDoNotAllowVias() )
@@ -89,25 +89,25 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
             return false;
     }
 
-    if(  m_ArcToSegmentsCount != aZoneToCompare.m_ArcToSegmentsCount )
+    if( m_ArcToSegmentsCount != aZoneToCompare.m_ArcToSegmentsCount )
         return false;
 
-    if(  m_ZoneClearance != aZoneToCompare.m_ZoneClearance )
+    if( m_ZoneClearance != aZoneToCompare.m_ZoneClearance )
         return false;
 
-    if(  m_ZoneMinThickness != aZoneToCompare.m_ZoneMinThickness )
+    if( m_ZoneMinThickness != aZoneToCompare.m_ZoneMinThickness )
         return false;
 
-    if(  m_FillMode != aZoneToCompare.m_FillMode )
+    if( m_FillMode != aZoneToCompare.m_FillMode )
         return false;
 
-    if(  m_PadConnection != aZoneToCompare.m_PadConnection )
+    if( m_PadConnection != aZoneToCompare.m_PadConnection )
         return false;
 
-    if(  m_ThermalReliefGap != aZoneToCompare.m_ThermalReliefGap )
+    if( m_ThermalReliefGap != aZoneToCompare.m_ThermalReliefGap )
         return false;
 
-    if(  m_ThermalReliefCopperBridge != aZoneToCompare.m_ThermalReliefCopperBridge )
+    if( m_ThermalReliefCopperBridge != aZoneToCompare.m_ThermalReliefCopperBridge )
         return false;
 
 

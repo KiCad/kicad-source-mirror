@@ -2223,10 +2223,10 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                     data = strtok( NULL, delims );
                     zc->SetDoNotAllowVias( data && *data == 'N' );
                 }
-                else if( !strcmp( data, "pads" ) )
+                else if( !strcmp( data, "copperpour" ) )
                 {
                     data = strtok( NULL, delims );
-                    zc->SetDoNotAllowPads( data && *data == 'N' );
+                    zc->SetDoNotAllowCopperPour( data && *data == 'N' );
                 }
 
                 data = strtok( NULL, delims );
@@ -3596,10 +3596,10 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
 
     if( me->GetIsKeepout() )
     {
-        fprintf( m_fp,  "ZKeepout tracks %c vias %c pads %c\n",
+        fprintf( m_fp,  "ZKeepout tracks %c vias %c copperpour %c\n",
                         me->GetDoNotAllowTracks() ? 'N' : 'Y',
                         me->GetDoNotAllowVias() ? 'N' : 'Y',
-                        me->GetDoNotAllowPads() ? 'N' : 'Y' );
+                        me->GetDoNotAllowCopperPour() ? 'N' : 'Y' );
     }
 
     fprintf( m_fp,  "ZSmoothing %d %s\n",

@@ -58,10 +58,10 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     m_priority = 0;
     m_smoothedPoly = NULL;
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
-    m_isKeepout = false;
-    m_doNotAllowPads = true;                    // has meaning only if m_isKeepout == true
-    m_doNotAllowVias = true;                    // has meaning only if m_isKeepout == true
-    m_doNotAllowTracks = true;                  // has meaning only if m_isKeepout == true
+    SetIsKeepout( false );
+    SetDoNotAllowCopperPour( false );           // has meaning only if m_isKeepout == true
+    SetDoNotAllowVias( true );                  // has meaning only if m_isKeepout == true
+    SetDoNotAllowTracks( true );                // has meaning only if m_isKeepout == true
     m_cornerRadius = 0;
     utility    = 0;                             // flags used in polygon calculations
     utility2   = 0;                             // flags used in polygon calculations
@@ -92,7 +92,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_FillSegmList = aZone.m_FillSegmList;
 
     m_isKeepout = aZone.m_isKeepout;
-    m_doNotAllowPads = aZone.m_doNotAllowPads;
+    m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
     m_doNotAllowVias = aZone.m_doNotAllowVias;
     m_doNotAllowTracks = aZone.m_doNotAllowTracks;
 

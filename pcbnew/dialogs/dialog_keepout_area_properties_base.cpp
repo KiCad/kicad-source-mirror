@@ -67,8 +67,8 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 	m_cbViasCtrl = new wxCheckBox( this, wxID_ANY, _("No Vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerCutoutOpts->Add( m_cbViasCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_cbPadsCtrl = new wxCheckBox( this, wxID_ANY, _("No Pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerCutoutOpts->Add( m_cbPadsCtrl, 0, wxALL|wxEXPAND, 5 );
+	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("No Copper Pour"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerCutoutOpts->Add( m_cbCopperPourCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerRight->Add( sbSizerCutoutOpts, 0, wxEXPAND|wxALL, 5 );

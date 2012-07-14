@@ -2490,16 +2490,16 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                     zone->SetDoNotAllowVias( token == T_not_allowed );
                     break;
 
-                case T_pads:
+                case T_copperpour:
                     token = NextTok();
 
                     if( token != T_allowed && token != T_not_allowed )
                         Expecting( "allowed or not_allowed" );
-                    zone->SetDoNotAllowPads( token == T_not_allowed );
+                    zone->SetDoNotAllowCopperPour( token == T_not_allowed );
                     break;
 
                 default:
-                    Expecting( "tracks, vias or pads" );
+                    Expecting( "tracks, vias or copperpour" );
                 }
 
                 NeedRIGHT();
