@@ -163,9 +163,10 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     SetDrcParmeters();
 
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
-                          true,         // unconnected pdas DRC test enabled
-                          true,         // DRC test for zones enabled
-                          reportName, m_CreateRptCtrl->IsChecked() );
+                           true,        // unconnected pdas DRC test enabled
+                           true,        // DRC test for zones enabled
+                           true,        // DRC test for keepout areas enabled
+                           reportName, m_CreateRptCtrl->IsChecked() );
 
     DelDRCMarkers();
 
@@ -241,9 +242,10 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
     SetDrcParmeters();
 
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
-                          true,         // unconnected pdas DRC test enabled
-                          true,         // DRC test for zones enabled
-                          reportName, m_CreateRptCtrl->IsChecked() );
+                           true,        // unconnected pdas DRC test enabled
+                           true,        // DRC test for zones enabled
+                           true,        // DRC test for keepout areas enabled
+                           reportName, m_CreateRptCtrl->IsChecked() );
 
     DelDRCMarkers();
 

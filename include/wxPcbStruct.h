@@ -440,6 +440,13 @@ public:
     bool OnHotkeyEditItem( int aIdCommand );
 
     /**
+     * Function OnHotkeyCopyItem
+     * returns the copy event id for copyable items.
+     * @return Event id of a suitable copy event, zero when no copyable item found.
+     */
+    int OnHotkeyCopyItem();
+
+    /**
      * Function OnHotkeyMoveItem
      * Moves or drag the item (footprint, track, text .. ) found under the mouse cursor
      * Only a footprint or a track can be dragged
@@ -911,9 +918,9 @@ public:
     // Handling texts on the board
     void Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     void FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC );
-    TEXTE_PCB* Create_Texte_Pcb( wxDC* DC );
+    TEXTE_PCB* CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText = NULL );
     void Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC );
+    void StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aErase = true );
     void Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     void InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC );
 

@@ -85,9 +85,12 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     m_Parent = parent;
 
     // Make an image list containing small icons
-    imageList = new wxImageList( 16, 15, true, 2 );
+    // All icons are expected having the same size.
+    wxBitmap tree_nosel_bm( KiBitmap( tree_nosel_xpm ) );
+    imageList = new wxImageList( tree_nosel_bm.GetWidth(),
+                                 tree_nosel_bm.GetHeight(), true, 2 );
 
-    imageList->Add( KiBitmap( tree_nosel_xpm ) );
+    imageList->Add( tree_nosel_bm );
     imageList->Add( KiBitmap( tree_sel_xpm ) );
 
     AssignImageList( imageList );
@@ -147,19 +150,10 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, cons
 
     cellule = m_Tree->AddRoot( _( "Root" ), 0, 1 );
     m_Tree->SetItemBold( cellule, true );
+
     SCH_SHEET_PATH list;
     list.Push( g_RootSheet );
     m_Tree->SetItemData( cellule, new TreeItemData( list ) );
-
-    wxRect itemrect;
-#ifdef __UNIX__
-    itemrect.SetWidth( 100 );
-    itemrect.SetHeight( 20 );
-#else
-    m_Tree->GetBoundingRect( cellule, itemrect );
-#endif
-    m_TreeSize.x = itemrect.GetWidth() + 10;
-    m_TreeSize.y = 20;
 
     if( m_Parent->GetCurrentSheet().Last() == g_RootSheet )
         m_Tree->SelectItem( cellule ); //root.
@@ -167,16 +161,20 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, cons
     maxposx = 15;
     BuildSheetsTree( &list, &cellule );
 
-    if( m_nbsheets > 1 )
-    {
-        m_Tree->Expand( cellule );
+    m_Tree->Expand( cellule );
 
-        // Readjust the size of the frame to an optimal value.
-        m_TreeSize.y += m_nbsheets * itemrect.GetHeight();
-        m_TreeSize.x  = MIN( m_TreeSize.x, 250 );
-        m_TreeSize.y  = MIN( m_TreeSize.y, 350 );
-        SetClientSize( m_TreeSize );
-    }
+    wxRect itemrect;
+    m_Tree->GetBoundingRect( cellule, itemrect );
+
+    // Set dialog window size to be large enough
+    m_TreeSize.x = itemrect.GetWidth() + 20;
+    m_TreeSize.x = max( m_TreeSize.x, 250 );
+
+    // Readjust the size of the frame to an optimal value.
+    m_TreeSize.y = m_nbsheets * itemrect.GetHeight();
+    m_TreeSize.y += 10;
+
+    SetClientSize( m_TreeSize );
 }
 
 

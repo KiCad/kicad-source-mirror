@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,11 +32,15 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* m_OptionsBoxSizer;
 	m_OptionsBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
+	wxBoxSizer* m_layerSizer;
 	m_layerSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText17 = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
 	m_layerSizer->Add( m_staticText17, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	
+	m_LayerSelectionCtrl = new wxListView( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ALIGN_LEFT|wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_SMALL_ICON );
+	m_layerSizer->Add( m_LayerSelectionCtrl, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_OptionsBoxSizer->Add( m_layerSizer, 1, wxEXPAND, 5 );
@@ -128,7 +132,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_cornerSmoothingTitle = new wxStaticText( this, wxID_ANY, _("Chamfer distance (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerSmoothingTitle->Wrap( -1 );
-	bSizer9->Add( m_cornerSmoothingTitle, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer9->Add( m_cornerSmoothingTitle, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_cornerSmoothingCtrl = new wxTextCtrl( this, ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_cornerSmoothingCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -143,7 +147,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_staticText13->Wrap( -1 );
 	m_LeftBox->Add( m_staticText13, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	wxString m_PadInZoneOptChoices[] = { _("Solid"), _("Thermal relief"), _("None") };
+	wxString m_PadInZoneOptChoices[] = { _("Solid"), _("Thermal relief"), _("THT thermal"), _("None") };
 	int m_PadInZoneOptNChoices = sizeof( m_PadInZoneOptChoices ) / sizeof( wxString );
 	m_PadInZoneOpt = new wxChoice( this, ID_M_PADINZONEOPT, wxDefaultPosition, wxDefaultSize, m_PadInZoneOptNChoices, m_PadInZoneOptChoices, 0 );
 	m_PadInZoneOpt->SetSelection( 0 );
@@ -183,7 +187,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_staticText171->Wrap( -1 );
 	m_staticText171->SetToolTip( _("On each copper layer, zones are filled by priority order.\nSo when a zone is inside an other zone:\n* If its priority is highter: its outlines are removed from the other layer.\n* If its priority is equal: a DRC error is set.") );
 	
-	m_MiddleBox->Add( m_staticText171, 0, wxRIGHT|wxLEFT, 5 );
+	m_MiddleBox->Add( m_staticText171, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PriorityLevelCtrl = new wxSpinCtrl( this, ID_M_PRIORITYLEVELCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0 );
 	m_MiddleBox->Add( m_PriorityLevelCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -238,7 +242,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_ExportableSetupSizer->Add( bSizer81, 0, wxEXPAND, 5 );
 	
 	
-	m_MainBoxSizer->Add( m_ExportableSetupSizer, 1, wxALL|wxEXPAND, 5 );
+	m_MainBoxSizer->Add( m_ExportableSetupSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );

@@ -620,6 +620,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         OnHotkeyMoveItem( HK_MOVE_ITEM );
         break;
 
+    case HK_COPY_ITEM:
+        evt_type = OnHotkeyCopyItem();
+        break;
+
     case HK_ROTATE_ITEM:        // Rotation
         OnHotkeyRotateItem( HK_ROTATE_ITEM );
         break;
@@ -631,7 +635,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     case HK_SWITCH_HIGHCONTRAST_MODE: // switch to high contrast mode and refresh the canvas
         DisplayOpt.ContrastModeDisplay = !DisplayOpt.ContrastModeDisplay;
         m_canvas->Refresh();
-	break;
+        break;
     }
 
     if( evt_type != 0 )
@@ -714,6 +718,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
     SetCurItem( NULL );
     return true;
 }
+
 
 bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 {
@@ -807,6 +812,37 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
     }
 
     return false;
+}
+
+
+int PCB_EDIT_FRAME::OnHotkeyCopyItem()
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool itemCurrentlyEdited = item && item->GetFlags();
+
+    if( itemCurrentlyEdited )
+        return 0;
+
+    item = PcbGeneralLocateAndDisplay();
+
+    if( item == NULL )
+        return 0;
+
+    SetCurItem( item );
+
+    int eventId = 0;
+
+    switch( item->Type() )
+    {
+    case PCB_TEXT_T:
+        eventId = ID_POPUP_PCB_COPY_TEXTEPCB;
+        break;
+    default:
+        eventId = 0;
+        break;
+    }
+
+    return eventId;
 }
 
 

@@ -60,6 +60,10 @@ target_link_libraries( container_test
     ${wxWidgets_LIBRARIES}
     )
 
+add_executable( test-nm-biu-to-ascii-mm-round-tripping
+    EXCLUDE_FROM_ALL
+    test-nm-biu-to-ascii-mm-round-tripping.cpp
+    )
 
 add_executable( parser_gen
     EXCLUDE_FROM_ALL

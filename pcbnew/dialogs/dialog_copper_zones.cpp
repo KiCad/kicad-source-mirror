@@ -1,25 +1,47 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_copper_zones.cpp
-// Author:      jean-pierre Charras
-// Created:     09/oct/2008
-// Licence:     GNU License
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_copper_zones.cpp
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <wx/wx.h>
-#include <wx/imaglist.h>
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <confirm.h>
 #include <PolyLine.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
-#include <trigo.h>
 #include <zones.h>
 #include <base_units.h>
 
 #include <class_zone_settings.h>
 #include <class_board.h>
 #include <dialog_copper_zones_base.h>
+
+#include <wx/imaglist.h>    // needed for wx/listctrl.h, in wxGTK 2.8.12
 #include <wx/listctrl.h>
 
 
@@ -53,8 +75,6 @@ private:
 
     static wxString m_netNameShowFilter;    ///< the filter to show nets (default * "*").
                                             ///< static to keep this pattern for an entire pcbnew session
-
-    wxListView*     m_LayerSelectionCtrl;
 
     /**
      * Function initDialog
@@ -133,16 +153,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
     SetReturnCode( ZONE_ABORT );        // Will be changed on buttons click
 
-    m_LayerSelectionCtrl = new wxListView( this, wxID_ANY,
-                                           wxDefaultPosition, wxDefaultSize,
-                                           wxLC_NO_HEADER | wxLC_REPORT
-                                           | wxLC_SINGLE_SEL | wxRAISED_BORDER );
-    wxListItem col0;
-    col0.SetId( 0 );
-    m_LayerSelectionCtrl->InsertColumn( 0, col0 );
-    m_layerSizer->Add( m_LayerSelectionCtrl, 1,
-                       wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-
     // Fix static text widget minimum width to a suitable value so that
     // resizing the dialog is not necessary when changing the corner smoothing type.
     // Depends on the default text in the widget.
@@ -151,8 +161,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     initDialog();
 
     GetSizer()->SetSizeHints( this );
-
-    Center();
 }
 
 
@@ -177,8 +185,12 @@ void DIALOG_COPPER_ZONE::initDialog()
 
     switch( m_settings.GetPadConnection() )
     {
-    case PAD_NOT_IN_ZONE:           // Pads are not covered
+    case THT_THERMAL:               // Thermals only for THT pads
         m_PadInZoneOpt->SetSelection( 2 );
+        break;
+
+    case PAD_NOT_IN_ZONE:           // Pads are not covered
+        m_PadInZoneOpt->SetSelection( 3 );
         break;
 
     default:
@@ -191,7 +203,9 @@ void DIALOG_COPPER_ZONE::initDialog()
         break;
     }
 
-    if( m_settings.GetPadConnection() != THERMAL_PAD )
+    // Antipad and spokes are significant only for thermals
+    if( m_settings.GetPadConnection() != THERMAL_PAD &&
+        m_settings.GetPadConnection() != THT_THERMAL )
     {
         m_AntipadSizeValue->Enable( false );
         m_CopperWidthValue->Enable( false );
@@ -231,6 +245,10 @@ void DIALOG_COPPER_ZONE::initDialog()
     m_ArcApproximationOpt->SetSelection(
         m_settings.m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF ? 1 : 0 );
 
+    // Create one column in m_LayerSelectionCtrl
+    wxListItem col0;
+    col0.SetId( 0 );
+    m_LayerSelectionCtrl->InsertColumn( 0, col0 );
     // Build copper layer list and append to layer widget
     int layerCount = board->GetCopperLayerCount();
     int layerNumber, itemIndex, layerColor;
@@ -319,9 +337,14 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 {
     switch( m_PadInZoneOpt->GetSelection() )
     {
-    case 2:
+    case 3:
         // Pads are not covered
         m_settings.SetPadConnection( PAD_NOT_IN_ZONE );
+        break;
+
+    case 2:
+        // Use thermal relief for THT pads
+        m_settings.SetPadConnection( THT_THERMAL );
         break;
 
     case 1:
@@ -370,20 +393,25 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     // Test if this is a reasonable value for this parameter
     // A too large value can hang Pcbnew
-    #define CLEARANCE_MAX_VALUE 100*IU_PER_MILS
+    #define CLEARANCE_MAX_VALUE ZONE_CLEARANCE_MAX_VALUE_MIL*IU_PER_MILS
     if( m_settings.m_ZoneClearance > CLEARANCE_MAX_VALUE )
     {
-        DisplayError( this, _( "Clearance must be smaller than 0.5\" / 12.7 mm." ) );
+        wxString msg;
+        msg.Printf( _( "Clearance must be smaller than %f\" / %f mm." ),
+            ZONE_CLEARANCE_MAX_VALUE_MIL / 1000.0, ZONE_CLEARANCE_MAX_VALUE_MIL * 0.0254 );
+        DisplayError( this, msg );
         return false;
     }
 
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_settings.m_ZoneMinThickness = ReturnValueFromString( g_UserUnit, txtvalue );
 
-    if( m_settings.m_ZoneMinThickness < (1*IU_PER_MILS) )
+    if( m_settings.m_ZoneMinThickness < (ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS) )
     {
-        DisplayError( this,
-                      _( "Minimum width must be larger than 0.001\" / 0.0254 mm." ) );
+        wxString msg;
+        msg.Printf( _( "Minimum width must be larger than %f\" / %f mm." ),
+            ZONE_THICKNESS_MIN_VALUE_MIL / 1000.0, ZONE_THICKNESS_MIN_VALUE_MIL * 0.0254 );
+        DisplayError( this, msg );
         return false;
     }
 
@@ -402,9 +430,20 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     m_settings.m_ThermalReliefCopperBridge = ReturnValueFromTextCtrl( *m_CopperWidthValue );
 
-    m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY, (long) m_settings.m_ThermalReliefGap );
+    if( m_Config )
+    {
+        m_Config->Write( ZONE_CLEARANCE_WIDTH_STRING_KEY,
+            (double) m_settings.m_ZoneClearance / IU_PER_MILS );
 
-    m_Config->Write( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY, (long) m_settings.m_ThermalReliefCopperBridge );
+        m_Config->Write( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
+            (double) m_settings.m_ZoneMinThickness / IU_PER_MILS );
+
+        m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
+            (double) m_settings.m_ThermalReliefGap / IU_PER_MILS );
+
+        m_Config->Write( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
+            (double) m_settings.m_ThermalReliefCopperBridge / IU_PER_MILS );
+    }
 
     if( m_settings.m_ThermalReliefCopperBridge <= m_settings.m_ZoneMinThickness )
     {
@@ -528,6 +567,7 @@ void DIALOG_COPPER_ZONE::OnPadsInZoneClick( wxCommandEvent& event )
         m_CopperWidthValue->Enable( false );
         break;
 
+    case 2:
     case 1:
         m_AntipadSizeValue->Enable( true );
         m_CopperWidthValue->Enable( true );

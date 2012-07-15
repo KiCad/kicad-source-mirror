@@ -48,6 +48,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <class_pcb_text.h>
 #include <modview_frame.h>
 #include <class_pcb_layer_box_selector.h>
 
@@ -83,6 +84,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_ROTATE_TEXTEPCB:
     case ID_POPUP_PCB_FLIP_TEXTEPCB:
+    case ID_POPUP_PCB_COPY_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_MIRE:
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
@@ -939,6 +941,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         break;
 
+    case ID_POPUP_PCB_COPY_TEXTEPCB:
+        CreateTextePcb( &dc, (TEXTE_PCB*) GetCurItem() );
+        m_canvas->MoveCursorToCrossHair();
+        m_canvas->SetAutoPanRequest( true );
+        break;
+
     case ID_POPUP_PCB_FLIP_TEXTEPCB:
         FlipTextePcb( (TEXTE_PCB*) GetCurItem(), &dc );
         m_canvas->MoveCursorToCrossHair();
@@ -1333,6 +1341,10 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         if( !GetBoard()->IsHighLightNetON() && (GetBoard()->GetHighLightNetCode() > 0 ) )
             HighLight( &dc );
 
+        break;
+
+    case ID_PCB_KEEPOUT_AREA_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add keepout" ) );
         break;
 
     case ID_PCB_MIRE_BUTT:

@@ -86,6 +86,10 @@ static int            s_Clearance;  // Clearance value used in autorouter
 
 static PICKED_ITEMS_LIST s_ItemsListPicker;
 
+int OpenNodes;       /* total number of nodes opened */
+int ClosNodes;       /* total number of nodes closed */
+int MoveNodes;       /* total number of nodes moved */
+int MaxNodes;        /* maximum number of nodes opened at one time */
 
 #define NOSUCCESS       0
 #define STOP_FROM_ESC   -1
@@ -263,7 +267,7 @@ static long newmask[8] =
  * -1 if escape (stop being routed) request
  * -2 if default memory allocation
  */
-int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
+int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
 {
     int           current_net_code;
     int           row_source, col_source, row_target, col_target;
@@ -272,6 +276,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     bool          stop = false;
     wxString      msg;
     int           routedCount = 0;      // routed ratsnest count
+    bool          two_sides = aLayersCount == 2;
 
     m_canvas->SetAbortRequest( false );
 
@@ -522,7 +527,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     }
 
     InitQueue(); /* initialize the search queue */
-    apx_dist = GetApxDist( row_source, col_source, row_target, col_target );
+    apx_dist = RoutingMatrix.GetApxDist( row_source, col_source, row_target, col_target );
 
     /* Initialize first search. */
     if( two_sides )   /* Preferred orientation. */
@@ -713,7 +718,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             }
 
             olddir  = RoutingMatrix.GetDir( r, c, side );
-            newdist = d + CalcDist( ndir[i], olddir,
+            newdist = d + RoutingMatrix.CalcDist( ndir[i], olddir,
                                     ( olddir == FROM_OTHERSIDE ) ?
                                     RoutingMatrix.GetDir( r, c, 1 - side ) : 0, side );
 
@@ -725,7 +730,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                 RoutingMatrix.SetDist( nr, nc, side, newdist );
 
                 if( SetQueue( nr, nc, side, newdist,
-                              GetApxDist( nr, nc, row_target, col_target ),
+                              RoutingMatrix.GetApxDist( nr, nc, row_target, col_target ),
                               row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
@@ -736,7 +741,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                 RoutingMatrix.SetDir( nr, nc, side, ndir[i] );
                 RoutingMatrix.SetDist( nr, nc, side, newdist );
                 ReSetQueue( nr, nc, side, newdist,
-                            GetApxDist( nr, nc, row_target, col_target ),
+                            RoutingMatrix.GetApxDist( nr, nc, row_target, col_target ),
                             row_target, col_target );
             }
         }
@@ -781,7 +786,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             if( skip )      /* neighboring hole or trace? */
                 continue;   /* yes, can't drill via here */
 
-            newdist = d + CalcDist( FROM_OTHERSIDE, olddir, 0, side );
+            newdist = d + RoutingMatrix.CalcDist( FROM_OTHERSIDE, olddir, 0, side );
 
             /*  if (a) not visited yet,
              *  or (b) we have found a better path,

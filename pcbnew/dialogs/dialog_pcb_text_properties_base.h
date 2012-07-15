@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 19 2012)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,8 +19,8 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/choice.h>
+#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -38,25 +38,25 @@ class DIALOG_PCB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TextLabel;
 		wxTextCtrl* m_TextContentCtrl;
 		wxStaticText* m_SizeXLabel;
-		wxTextCtrl* m_SizeXCtrl;
-		wxStaticText* m_SizeYLabel;
-		wxTextCtrl* m_SizeYCtrl;
-		wxStaticText* m_ThicknessLabel;
-		wxTextCtrl* m_ThicknessCtrl;
 		wxStaticText* m_PositionXLabel;
-		wxTextCtrl* m_PositionXCtrl;
-		wxStaticText* m_PositionYLabel;
-		wxTextCtrl* m_PositionYCtrl;
 		wxStaticText* m_LayerLabel;
-		wxChoice* m_LayerSelectionCtrl;
-		wxStaticText* m_staticText8;
-		wxChoice* m_OrientationCtrl;
-		wxStaticText* m_staticText9;
-		wxChoice* m_StyleCtrl;
 		wxStaticText* m_staticText10;
+		wxTextCtrl* m_SizeXCtrl;
+		wxTextCtrl* m_PositionXCtrl;
+		wxChoice* m_LayerSelectionCtrl;
 		wxChoice* m_DisplayCtrl;
+		wxStaticText* m_SizeYLabel;
+		wxStaticText* m_PositionYLabel;
+		wxStaticText* m_staticText9;
 		wxStaticText* m_staticText11;
+		wxTextCtrl* m_SizeYCtrl;
+		wxTextCtrl* m_PositionYCtrl;
+		wxChoice* m_StyleCtrl;
 		wxChoice* m_justifyChoice;
+		wxStaticText* m_ThicknessLabel;
+		wxStaticText* m_orientationLabel;
+		wxTextCtrl* m_ThicknessCtrl;
+		wxTextCtrl* m_OrientationCtrl;
 		wxStdDialogButtonSizer* m_StandardSizer;
 		wxButton* m_StandardSizerOK;
 		wxButton* m_StandardSizerCancel;
@@ -69,7 +69,7 @@ class DIALOG_PCB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 433,465 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 433,450 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_PCB_TEXT_PROPERTIES_BASE();
 	
 };

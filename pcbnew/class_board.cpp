@@ -76,7 +76,7 @@ BOARD::BOARD() :
 
     for( int layer = 0; layer < LAYER_COUNT; ++layer )
     {
-        m_Layer[layer].m_Name = GetDefaultLayerName( layer );
+        m_Layer[layer].m_Name = GetDefaultLayerName( layer, true );
 
         if( layer <= LAST_COPPER_LAYER )
             m_Layer[layer].m_Type = LT_SIGNAL;
@@ -355,7 +355,7 @@ bool BOARD::SetLayer( int aIndex, const LAYER& aLayer )
 }
 
 
-wxString BOARD::GetLayerName( int aLayerIndex ) const
+wxString BOARD::GetLayerName( int aLayerIndex, bool aTranslate ) const
 {
     if( !IsValidLayerIndex( aLayerIndex ) )
         return wxEmptyString;
@@ -365,14 +365,51 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
     {
         // default names were set in BOARD::BOARD() but they may be
         // over-ridden by BOARD::SetLayerName()
-        return m_Layer[aLayerIndex].m_Name;
+        // For non translated name, return the actual copper layer names,
+        // otherwise, return the native layer names
+        if( aTranslate || aLayerIndex < FIRST_NO_COPPER_LAYER )
+            return m_Layer[aLayerIndex].m_Name;
     }
 
-    return GetDefaultLayerName( aLayerIndex );
+    return GetDefaultLayerName( aLayerIndex, aTranslate );
 }
 
 
-wxString BOARD::GetDefaultLayerName( int aLayerNumber )
+// Default layer names are statically initialized,
+// because we want the English name and the translation
+// The English name is stored here, and to get the tranlation
+// wxGetTranslation must be called explicitely
+static const wxChar * layer_FRONT_name  = _( "Front" );
+static const wxChar * layer_INNER1_name = _( "Inner1" );
+static const wxChar * layer_INNER2_name = _( "Inner2" );
+static const wxChar * layer_INNER3_name = _( "Inner3" );
+static const wxChar * layer_INNER4_name = _( "Inner4" );
+static const wxChar * layer_INNER5_name = _( "Inner5" );
+static const wxChar * layer_INNER6_name = _( "Inner6" );
+static const wxChar * layer_INNER7_name = _( "Inner7" );
+static const wxChar * layer_INNER8_name = _( "Inner8" );
+static const wxChar * layer_INNER9_name = _( "Inner9" );
+static const wxChar * layer_INNER10_name = _( "Inner10" );
+static const wxChar * layer_INNER11_name = _( "Inner11" );
+static const wxChar * layer_INNER12_name = _( "Inner12" );
+static const wxChar * layer_INNER13_name = _( "Inner13" );
+static const wxChar * layer_INNER14_name = _( "Inner14" );
+static const wxChar * layer_BACK_name    = _( "Back" );
+static const wxChar * layer_ADHESIVE_BACK_name     = _( "Adhes_Back" );
+static const wxChar * layer_ADHESIVE_FRONT_name    = _( "Adhes_Front" );
+static const wxChar * layer_SOLDERPASTE_BACK_namet = _( "SoldP_Back" );
+static const wxChar * layer_SOLDERPASTE_FRONT_name = _( "SoldP_Front" );
+static const wxChar * layer_SILKSCREEN_BACK_name   = _( "SilkS_Back" );
+static const wxChar * layer_SILKSCREEN_FRONT_name  = _( "SilkS_Front" );
+static const wxChar * layer_SOLDERMASK_BACK_name   = _( "Mask_Back" );
+static const wxChar * layer_SOLDERMASK_FRONT_name  = _( "Mask_Front" );
+static const wxChar * layer_DRAW_name = _( "Drawings" );
+static const wxChar * layer_COMMENT_name = _( "Comments" );
+static const wxChar * layer_ECO1_name = _( "Eco1" );
+static const wxChar * layer_ECO2_name = _( "Eco2" );
+static const wxChar * layer_EDGE_name = _( "PCB_Edges" );
+
+wxString BOARD::GetDefaultLayerName( int aLayerNumber, bool aTranslate )
 {
     const wxChar* txt;
 
@@ -382,39 +419,49 @@ wxString BOARD::GetDefaultLayerName( int aLayerNumber )
     // Use a switch to explicitly show the mapping more clearly
     switch( aLayerNumber )
     {
-    case LAYER_N_FRONT:         txt = _( "Front" );         break;
-    case LAYER_N_2:             txt = _( "Inner2" );        break;
-    case LAYER_N_3:             txt = _( "Inner3" );        break;
-    case LAYER_N_4:             txt = _( "Inner4" );        break;
-    case LAYER_N_5:             txt = _( "Inner5" );        break;
-    case LAYER_N_6:             txt = _( "Inner6" );        break;
-    case LAYER_N_7:             txt = _( "Inner7" );        break;
-    case LAYER_N_8:             txt = _( "Inner8" );        break;
-    case LAYER_N_9:             txt = _( "Inner9" );        break;
-    case LAYER_N_10:            txt = _( "Inner10" );       break;
-    case LAYER_N_11:            txt = _( "Inner11" );       break;
-    case LAYER_N_12:            txt = _( "Inner12" );       break;
-    case LAYER_N_13:            txt = _( "Inner13" );       break;
-    case LAYER_N_14:            txt = _( "Inner14" );       break;
-    case LAYER_N_15:            txt = _( "Inner15" );       break;
-    case LAYER_N_BACK:          txt = _( "Back" );          break;
-    case ADHESIVE_N_BACK:       txt = _( "Adhes_Back" );    break;
-    case ADHESIVE_N_FRONT:      txt = _( "Adhes_Front" );   break;
-    case SOLDERPASTE_N_BACK:    txt = _( "SoldP_Back" );    break;
-    case SOLDERPASTE_N_FRONT:   txt = _( "SoldP_Front" );   break;
-    case SILKSCREEN_N_BACK:     txt = _( "SilkS_Back" );    break;
-    case SILKSCREEN_N_FRONT:    txt = _( "SilkS_Front" );   break;
-    case SOLDERMASK_N_BACK:     txt = _( "Mask_Back" );     break;
-    case SOLDERMASK_N_FRONT:    txt = _( "Mask_Front" );    break;
-    case DRAW_N:                txt = _( "Drawings" );      break;
-    case COMMENT_N:             txt = _( "Comments" );      break;
-    case ECO1_N:                txt = _( "Eco1" );          break;
-    case ECO2_N:                txt = _( "Eco2" );          break;
-    case EDGE_N:                txt = _( "PCB_Edges" );     break;
-    default:                    txt = _( "BAD INDEX" );     break;
+    case LAYER_N_FRONT:         txt = layer_FRONT_name;         break;
+    case LAYER_N_2:             txt = layer_INNER1_name;        break;
+    case LAYER_N_3:             txt = layer_INNER2_name;        break;
+    case LAYER_N_4:             txt = layer_INNER3_name;        break;
+    case LAYER_N_5:             txt = layer_INNER4_name;        break;
+    case LAYER_N_6:             txt = layer_INNER5_name;        break;
+    case LAYER_N_7:             txt = layer_INNER6_name;        break;
+    case LAYER_N_8:             txt = layer_INNER7_name;        break;
+    case LAYER_N_9:             txt = layer_INNER8_name;        break;
+    case LAYER_N_10:            txt = layer_INNER9_name;       break;
+    case LAYER_N_11:            txt = layer_INNER10_name;       break;
+    case LAYER_N_12:            txt = layer_INNER11_name;       break;
+    case LAYER_N_13:            txt = layer_INNER12_name;       break;
+    case LAYER_N_14:            txt = layer_INNER13_name;       break;
+    case LAYER_N_15:            txt = layer_INNER14_name;       break;
+    case LAYER_N_BACK:          txt = layer_BACK_name;          break;
+    case ADHESIVE_N_BACK:       txt =layer_ADHESIVE_BACK_name;    break;
+    case ADHESIVE_N_FRONT:      txt = layer_ADHESIVE_FRONT_name;   break;
+    case SOLDERPASTE_N_BACK:    txt = layer_SOLDERPASTE_BACK_namet;    break;
+    case SOLDERPASTE_N_FRONT:   txt = layer_SOLDERPASTE_FRONT_name;   break;
+    case SILKSCREEN_N_BACK:     txt = layer_SILKSCREEN_BACK_name;    break;
+    case SILKSCREEN_N_FRONT:    txt = layer_SILKSCREEN_FRONT_name;   break;
+    case SOLDERMASK_N_BACK:     txt = layer_SOLDERMASK_BACK_name;     break;
+    case SOLDERMASK_N_FRONT:    txt = layer_SOLDERMASK_FRONT_name;    break;
+    case DRAW_N:                txt = layer_DRAW_name;      break;
+    case COMMENT_N:             txt = layer_COMMENT_name;      break;
+    case ECO1_N:                txt = layer_ECO1_name;          break;
+    case ECO2_N:                txt = layer_ECO2_name;          break;
+    case EDGE_N:                txt = layer_EDGE_name;     break;
+    default:                    txt = wxT( "BAD_INDEX" );     break;
     }
 
-    return wxString( txt );
+    wxString name;
+    if( aTranslate )
+    {
+        name = wxGetTranslation( txt );
+        name.Trim( true );
+        name.Trim( false );
+    }
+    else
+        name = txt;
+
+    return name;
 }
 
 
@@ -1334,13 +1381,10 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     NETINFO_ITEM* net = m_NetInfo.GetNetItem( aNetcode );
 
 #if defined(DEBUG)
-    if( net )     // item can be NULL if anetcode is not valid
+    if( net && aNetcode != net->GetNet())     // item can be NULL if anetcode is not valid
     {
-        if( aNetcode != net->GetNet() )
-        {
-            printf( "FindNet() anetcode %d != GetNet() %d (net: %s)\n",
-                    aNetcode, net->GetNet(), TO_UTF8( net->GetNetname() ) );
-        }
+        wxLogError( wxT( "FindNet() anetcode %d != GetNet() %d (net: %s)\n" ),
+                      aNetcode, net->GetNet(), TO_UTF8( net->GetNetname() ) );
     }
 #endif
 
@@ -1393,7 +1437,7 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
         if( item == NULL )
             return NULL;
 
-        int           icmp = item->GetNetname().Cmp( aNetname );
+        int icmp = item->GetNetname().Cmp( aNetname );
 
         if( icmp == 0 ) // found !
         {

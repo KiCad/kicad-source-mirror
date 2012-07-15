@@ -319,7 +319,7 @@ BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
 
     default:
         wxString err;
-        err.Printf( _( "unknown token \"%s\" " ), GetChars( FromUTF8() ) );
+        err.Printf( _( "unknown token \"%s\"" ), GetChars( FromUTF8() ) );
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
@@ -431,7 +431,7 @@ void PCB_PARSER::parseHeader() throw( IO_ERROR, PARSE_ERROR )
         Expecting( GetTokenText( T_version ) );
 
     // Get the file version.
-    m_board->SetFileFormatVersionAtLoad( NeedNUMBER( GetTokenText( T_version ) ) );
+    m_board->SetFileFormatVersionAtLoad( parseInt( GetTokenText( T_version ) ) );
 
     // Skip the host name and host build version information.
     NeedRIGHT();
@@ -489,37 +489,50 @@ void PCB_PARSER::parsePAGE_INFO() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a PAGE_INFO." ) );
 
     T token;
-    bool isPortrait = false;
+    PAGE_INFO pageInfo;
 
     NeedSYMBOL();
 
     wxString pageType = FromUTF8();
 
+    if( !pageInfo.SetType( pageType ) )
+    {
+        wxString err;
+        err.Printf( _( "page type \"%s\" is not valid " ), GetChars( FromUTF8() ) );
+        THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
+
     if( pageType == PAGE_INFO::Custom )
     {
-        PAGE_INFO::SetCustomWidthMils( Iu2Mils( NeedNUMBER( "width" ) ) );
-        PAGE_INFO::SetCustomHeightMils( Iu2Mils( NeedNUMBER( "height" ) ) );
+        double width = parseDouble( "width" );      // width in mm
+
+        // Perform some controls to avoid crashes if the size is edited by hands
+        if( width < 100.0 )
+            width = 100.0;
+        else if( width > 1200.0 )
+            width = 1200.0;
+
+        double height = parseDouble( "height" );    // height in mm
+
+        if( height < 100.0 )
+            height = 100.0;
+        else if( height > 1200.0 )
+            height = 1200.0;
+
+        pageInfo.SetWidthMils( Mm2mils( width ) );
+        pageInfo.SetHeightMils( Mm2mils( height ) );
     }
 
     token = NextTok();
 
     if( token == T_portrait )
     {
-        isPortrait = true;
+        pageInfo.SetPortrait( true );
         NeedRIGHT();
     }
     else if( token != T_RIGHT )
     {
         Expecting( "portrait|)" );
-    }
-
-    PAGE_INFO pageInfo;
-
-    if( !pageInfo.SetType( pageType, isPortrait ) )
-    {
-        wxString err;
-        err.Printf( _( "page type \"%s\" is not valid " ), GetChars( FromUTF8() ) );
-        THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
     m_board->SetPageSettings( pageInfo );
@@ -566,7 +579,7 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
 
         case T_comment:
         {
-            int commentNumber = NeedNUMBER( "comment" );
+            int commentNumber = parseInt( "comment" );
 
             switch( commentNumber )
             {
@@ -592,7 +605,7 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
 
             default:
                 wxString err;
-                err.Printf( _( "%d is not a valid title block comment number" ), commentNumber );
+                err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
                 THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
@@ -685,35 +698,18 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 
 int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
 {
-#if USE_LAYER_NAMES
     wxString name = FromUTF8();
     const LAYER_HASH_MAP::iterator it = m_layerMap.find( name );
 
     if( it == m_layerMap.end() )
     {
         wxString error;
-        error.Printf( _( "Layer '%s' in file <%s> at line %d, position %d was not defined in the layers section" ),
+        error.Printf( wxT( "Layer '%s' in file <%s> at line %d, position %d was not defined in the layers section" ),
                       GetChars( name ), GetChars( CurSource() ), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
 
     return m_layerMap[ name ];
-#else
-    if( CurTok() != T_NUMBER )
-        Expecting( T_NUMBER );
-
-    int layerIndex = parseInt();
-
-    if( !m_board->IsLayerEnabled( layerIndex ) )
-    {
-        wxString error;
-        error.Printf( _( "Layer index %d in file <%s> at line %d, offset %d was not defined in the layers section" ),
-                      layerIndex, GetChars( CurSource() ), CurLineNumber(), CurOffset() );
-        THROW_IO_ERROR( error );
-    }
-
-    return layerIndex;
-#endif
 }
 
 
@@ -928,8 +924,8 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
         case T_aux_axis_origin:
         {
-            int x = parseBoardUnits( "auxilary origin X" );
-            int y = parseBoardUnits( "auxilary origin Y" );
+            int x = parseBoardUnits( "auxiliary origin X" );
+            int y = parseBoardUnits( "auxiliary origin Y" );
             // x, y are not evaluated left to right, since they are push on stack right to left
             m_board->SetOriginAxisPosition( wxPoint( x, y ) );
             NeedRIGHT();
@@ -941,7 +937,6 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             NeedRIGHT();
             break;
 
-#if SAVE_PCB_PLOT_PARAMS
         case T_pcbplotparams:
         {
             PCB_PLOT_PARAMS plotParams;
@@ -949,9 +944,11 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
             plotParams.Parse( &parser );
             m_board->SetPlotOptions( plotParams );
+
+            // I don't know why but this seems to fix a problem in PCB_PLOT_PARAMS::Parse().
+            NextTok();
             break;
         }
-#endif
 
         default:
             Unexpected( CurText() );
@@ -990,10 +987,16 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
     wxString name = FromUTF8();
     NeedRIGHT();
 
-    NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
-    net->SetNet( number );
-    net->SetNetname( name );
-    m_board->AppendNet( net );
+    // net 0 should be already in list, so store this net
+    // if it is not the net 0, or if the net 0 does not exists.
+    // (TODO: a better test.)
+    if( number > 0 || m_board->FindNet( 0 ) == NULL )
+    {
+        NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
+        net->SetNet( number );
+        net->SetNetname( name );
+        m_board->AppendNet( net );
+    }
 }
 
 
@@ -1515,13 +1518,13 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_descr:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();   // some symbols can be 0508, so a number is also a symbol here
             module->SetDescription( FromUTF8() );
             NeedRIGHT();
             break;
 
         case T_tags:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();   // some symbols can be 0508, so a number is also a symbol here
             module->SetKeywords( FromUTF8() );
             NeedRIGHT();
             break;
@@ -1775,6 +1778,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
         pt.y = parseBoardUnits( "Y coordinate" );
         segment->SetStart0( pt );
         NeedRIGHT();
+        NeedLEFT();
         token = NextTok();
 
         if( token != T_end )
@@ -2022,6 +2026,9 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
         case T_drill:
         {
+            bool haveWidth = false;
+            wxSize drillSize = pad->GetDrillSize();
+
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
                 if( token == T_LEFT )
@@ -2033,23 +2040,21 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
                     pad->SetDrillShape( PAD_OVAL );
                     break;
 
-                case T_size:
+                case T_NUMBER:
                 {
-                    int width = parseBoardUnits( "drill width" );
-                    int height = width;
-                    token = NextTok();
-
-                    if( token == T_NUMBER )
+                    if( !haveWidth )
                     {
-                        height = parseBoardUnits();
-                        NeedRIGHT();
+                        drillSize.SetWidth( parseBoardUnits() );
+
+                        // If height is not defined the width and height are the same.
+                        drillSize.SetHeight( drillSize.GetWidth() );
+                        haveWidth = true;
                     }
-                    else if( token != T_RIGHT )
+                    else
                     {
-                        Expecting( ") or number" );
+                        drillSize.SetHeight( parseBoardUnits() );
                     }
 
-                    pad->SetDrillSize( wxSize( width, height ) );
                     break;
                 }
 
@@ -2064,6 +2069,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
                 }
             }
 
+            pad->SetDrillSize( drillSize );
             break;
         }
 
@@ -2286,12 +2292,12 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    int     hatchStyle = CPolyLine::NO_HATCH;   // Fix compil warning
-    int     hatchPitch = 0;                     // Fix compil warning
+    int     hatchStyle = CPolyLine::NO_HATCH;   // Fix compile warning
+    int     hatchPitch = 0;                     // Fix compile warning
     wxPoint pt;
     T       token;
 
-    // bigger scope since each filled_polygon is concatonated in here
+    // bigger scope since each filled_polygon is concatenated in here
     std::vector< CPolyPt > pts;
 
     auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
@@ -2306,7 +2312,10 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         switch( token )
         {
         case T_net:
-            zone->SetNet( parseInt( "net number" ) );
+            // Init the net code only, not the netname, to be sure
+            // the zone net name is the name read in file.
+            // (When mismatch, the user will be prompted in DRC, to fix the actual name)
+            zone->BOARD_CONNECTED_ITEM::SetNet( parseInt( "net number" ) );
             NeedRIGHT();
             break;
 
@@ -2363,6 +2372,10 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
                 case T_no:
                     zone->SetPadConnection( PAD_NOT_IN_ZONE );
+                    break;
+
+                case T_thru_hole_only:
+                    zone->SetPadConnection( THT_THERMAL );
                     break;
 
                 case T_clearance:
@@ -2444,6 +2457,49 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                 default:
                     Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
                                "smoothing, or radius" );
+                }
+
+                NeedRIGHT();
+            }
+
+            break;
+
+        case T_keepout:
+            zone->SetIsKeepout( true );
+
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                switch( token )
+                {
+                case T_tracks:
+                    token = NextTok();
+
+                    if( token != T_allowed && token != T_not_allowed )
+                        Expecting( "allowed or not_allowed" );
+                    zone->SetDoNotAllowTracks( token == T_not_allowed );
+                    break;
+
+                case T_vias:
+                    token = NextTok();
+
+                    if( token != T_allowed && token != T_not_allowed )
+                        Expecting( "allowed or not_allowed" );
+                    zone->SetDoNotAllowVias( token == T_not_allowed );
+                    break;
+
+                case T_copperpour:
+                    token = NextTok();
+
+                    if( token != T_allowed && token != T_not_allowed )
+                        Expecting( "allowed or not_allowed" );
+                    zone->SetDoNotAllowCopperPour( token == T_not_allowed );
+                    break;
+
+                default:
+                    Expecting( "tracks, vias or copperpour" );
                 }
 
                 NeedRIGHT();
