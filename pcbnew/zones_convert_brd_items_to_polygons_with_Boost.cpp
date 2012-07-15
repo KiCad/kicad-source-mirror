@@ -353,17 +353,20 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         }
     }
 
-    // Add zones outlines having an higher priority
+    // Add zones outlines having an higher priority and keepout
     for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = GetBoard()->GetArea( ii );
         if( zone->GetLayer() != GetLayer() )
             continue;
 
-        if( zone->GetPriority() <= GetPriority() )
+        if( !zone->GetIsKeepout() && zone->GetPriority() <= GetPriority() )
             continue;
 
-        // A highter priority zone is found: remove its area
+        if( zone->GetIsKeepout() && ! zone->GetDoNotAllowCopperPour() )
+            continue;
+
+        // A highter priority zone or keepout area is found: remove its area
         item_boundingbox = zone->GetBoundingBox();
         if( !item_boundingbox.Intersects( zone_boundingbox ) )
             continue;
@@ -372,11 +375,19 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         // However if the zone has the same net as the current zone,
         // do not add clearance.
         // the zone will be connected to the current zone, but filled areas
-        // will use different parameters (clearnce, thermal shapes )
+        // will use different parameters (clearance, thermal shapes )
         bool addclearance = GetNet() != zone->GetNet();
+        int clearance = zone_clearance;
+
+        if( zone->GetIsKeepout() )
+        {
+            addclearance = true;
+            clearance = m_ZoneMinThickness / 2;
+        }
+
         zone->TransformShapeWithClearanceToPolygon(
                     cornerBufferPolysToSubstract,
-                    zone_clearance, s_CircleToSegmentsCount,
+                    clearance, s_CircleToSegmentsCount,
                     s_Correction, addclearance );
     }
 
@@ -385,7 +396,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
-            if( GetPadConnection( pad ) != THERMAL_PAD )
+            // Rejects non-standard pads with tht-only thermal reliefs
+            if( GetPadConnection( pad ) == THT_THERMAL
+             && pad->GetAttribute() != PAD_STANDARD )
+                continue;
+
+            if( GetPadConnection( pad ) != THERMAL_PAD
+             && GetPadConnection( pad ) != THT_THERMAL )
                 continue;
 
             if( !pad->IsOnLayer( GetLayer() ) )

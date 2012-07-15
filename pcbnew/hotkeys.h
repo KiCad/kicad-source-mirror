@@ -15,6 +15,7 @@ enum hotkey_id_commnand {
     HK_BACK_SPACE,
     HK_ROTATE_ITEM,
     HK_FLIP_ITEM,
+    HK_COPY_ITEM,
     HK_MOVE_ITEM,
     HK_DRAG_ITEM,
     HK_GET_AND_MOVE_FOOTPRINT,

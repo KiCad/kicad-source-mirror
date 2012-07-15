@@ -39,8 +39,10 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 {
     m_ZonePriority = 0;
     m_FillMode = 0;                                            // Mode for filling zone : 1 use segments, 0 use polygons
-    m_ZoneClearance      = 200;                                // Clearance value
-    m_ZoneMinThickness   = 100;                                // Min thickness value in filled areas
+    // Clearance value
+    m_ZoneClearance      = Mils2iu( ZONE_CLEARANCE_MIL );
+    // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :
+    m_ZoneMinThickness   = Mils2iu( ZONE_THICKNESS_MIL );
     m_NetcodeSelection   = 0;                                  // Net code selection for the current zone
     m_CurrentZone_Layer  = 0;                                  // Layer used to create the current zone
     m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;           // Option to show the zone area (outlines only, short hatches or full hatches
@@ -49,15 +51,22 @@ ZONE_SETTINGS::ZONE_SETTINGS()
                                                                // ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
                                                                // or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF segments
 
-    m_ThermalReliefGap = 200;                                  // tickness of the gap in thermal reliefs
-    m_ThermalReliefCopperBridge = 200;                         // tickness of the copper bridge in thermal reliefs
+    // tickness of the gap in thermal reliefs:
+    m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
+    // tickness of the copper bridge in thermal reliefs:
+    m_ThermalReliefCopperBridge = Mils2iu( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
 
     m_PadConnection = THERMAL_PAD;                             // How pads are covered by copper in zone
 
     m_Zone_45_Only = false;
 
-    cornerSmoothingType = SMOOTHING_NONE;
-    cornerRadius = 0;
+    m_cornerSmoothingType = SMOOTHING_NONE;
+    m_cornerRadius = 0;
+
+    SetIsKeepout( false );
+    SetDoNotAllowCopperPour( false );
+    SetDoNotAllowVias( true );
+    SetDoNotAllowTracks( true );
 }
 
 
@@ -74,8 +83,12 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_ThermalReliefGap = aSource.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aSource.m_ThermalReliefCopperBridge;
     m_PadConnection = aSource.GetPadConnection();
-    cornerSmoothingType = aSource.GetCornerSmoothingType();
-    cornerRadius = aSource.GetCornerRadius();
+    m_cornerSmoothingType = aSource.GetCornerSmoothingType();
+    m_cornerRadius = aSource.GetCornerRadius();
+    m_isKeepout = aSource.GetIsKeepout();
+    m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
+    m_keepoutDoNotAllowVias = aSource.GetDoNotAllowVias();
+    m_keepoutDoNotAllowTracks = aSource.GetDoNotAllowTracks();
 
     return *this;
 }
@@ -91,8 +104,12 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.m_ThermalReliefGap = m_ThermalReliefGap;
     aTarget.m_ThermalReliefCopperBridge = m_ThermalReliefCopperBridge;
     aTarget.SetPadConnection( m_PadConnection );
-    aTarget.SetCornerSmoothingType( cornerSmoothingType );
-    aTarget.SetCornerRadius( cornerRadius );
+    aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
+    aTarget.SetCornerRadius( m_cornerRadius );
+    aTarget.SetIsKeepout( GetIsKeepout() );
+    aTarget.SetDoNotAllowCopperPour( GetDoNotAllowCopperPour() );
+    aTarget.SetDoNotAllowVias( GetDoNotAllowVias() );
+    aTarget.SetDoNotAllowTracks( GetDoNotAllowTracks() );
 
     if( aFullExport )
     {

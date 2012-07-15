@@ -679,6 +679,8 @@ public:
                        int width = -1 );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = -1 );
+    virtual void Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle, int aRadius,
+                      FILL_T aFill, int aWidth = -1 );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = -1);
 

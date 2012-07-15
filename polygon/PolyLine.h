@@ -49,25 +49,22 @@ public:
     int left, right, top, bottom;
 };
 
-
-class CPoint
-{
-public:
-    int x, y;
-public:
-    CPoint( void ) { x = y = 0; };
-    CPoint( int i, int j ) { x = i; y = j; };
-};
-
-
 class CSegment
 {
 public:
-    int xi, yi, xf, yf;
+    wxPoint m_Start;
+    wxPoint m_End;
+
     CSegment() { };
+    CSegment( const wxPoint & aStart, const wxPoint & aEnd )
+    {
+        m_Start = aStart;
+        m_End = aEnd;
+    }
     CSegment( int x0, int y0, int x1, int y1 )
     {
-        xi = x0; yi = y0; xf = x1; yf = y1;
+        m_Start.x = x0; m_Start.y = y0;
+        m_End.x = x1; m_End.y = y1;
     }
 };
 
@@ -282,6 +279,25 @@ public:
     void AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3);
     void AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4);
 
+    /**
+     * Function Distance
+     * Calculates the distance between a point and the zone:
+     * @param aPoint the coordinate of the point.
+     * @return int = distance between the point and outline.
+     *               0 if the point is inside
+     */
+    int Distance( const wxPoint& aPoint );
+
+    /**
+     * Function Distance
+     * Calculates the distance between a segment and the zone:
+     * @param aStart the starting point of the segment.
+     * @param aEnd  the ending point of the segment.
+     * @param aWidth  the width of the segment.
+     * @return int = distance between the segment and outline.
+     *               0 if segment intersects or is inside
+     */
+    int Distance( wxPoint aStart, wxPoint aEnd, int aWidth );
 
 private:
     int m_layer;        // layer to draw on

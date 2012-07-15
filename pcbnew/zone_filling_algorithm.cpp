@@ -69,35 +69,35 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>
         return 0;
 
     // Make a smoothed polygon out of the user-drawn polygon if required
-    if( smoothedPoly )
+    if( m_smoothedPoly )
     {
-        delete smoothedPoly;
-        smoothedPoly = NULL;
+        delete m_smoothedPoly;
+        m_smoothedPoly = NULL;
     }
 
-    switch( cornerSmoothingType )
+    switch( m_cornerSmoothingType )
     {
     case ZONE_SETTINGS::SMOOTHING_CHAMFER:
-        smoothedPoly = m_Poly->Chamfer( cornerRadius );
+        m_smoothedPoly = m_Poly->Chamfer( m_cornerRadius );
         break;
     case ZONE_SETTINGS::SMOOTHING_FILLET:
-        smoothedPoly = m_Poly->Fillet( cornerRadius, m_ArcToSegmentsCount );
+        m_smoothedPoly = m_Poly->Fillet( m_cornerRadius, m_ArcToSegmentsCount );
         break;
     default:
-        smoothedPoly = new CPolyLine;
-        smoothedPoly->Copy( m_Poly );
+        m_smoothedPoly = new CPolyLine;
+        m_smoothedPoly->Copy( m_Poly );
         break;
     }
 
-    smoothedPoly->MakeKboolPoly( -1, -1, NULL, true );
+    m_smoothedPoly->MakeKboolPoly( -1, -1, NULL, true );
     int count = 0;
-    while( smoothedPoly->GetKboolEngine()->StartPolygonGet() )
+    while( m_smoothedPoly->GetKboolEngine()->StartPolygonGet() )
     {
         CPolyPt corner( 0, 0, false );
-        while( smoothedPoly->GetKboolEngine()->PolygonHasMorePoints() )
+        while( m_smoothedPoly->GetKboolEngine()->PolygonHasMorePoints() )
         {
-            corner.x = (int) smoothedPoly->GetKboolEngine()->GetPolygonXPoint();
-            corner.y = (int) smoothedPoly->GetKboolEngine()->GetPolygonYPoint();
+            corner.x = (int) m_smoothedPoly->GetKboolEngine()->GetPolygonXPoint();
+            corner.y = (int) m_smoothedPoly->GetKboolEngine()->GetPolygonYPoint();
             corner.end_contour = false;
             if( aCornerBuffer )
                 aCornerBuffer->push_back( corner );
@@ -117,10 +117,10 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>
             m_FilledPolysList.pop_back();
             m_FilledPolysList.push_back( corner );
         }
-        smoothedPoly->GetKboolEngine()->EndPolygonGet();
+        m_smoothedPoly->GetKboolEngine()->EndPolygonGet();
     }
 
-    smoothedPoly->FreeKboolEngine();
+    m_smoothedPoly->FreeKboolEngine();
 
     /* For copper layers, we now must add holes in the Polygon list.
      * holes are pads and tracks with their clearance area

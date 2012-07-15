@@ -24,6 +24,7 @@
 # These are the keywords for the Pcbnew s-expression file format.
 
 add_net
+allowed
 angle
 arc
 arc_segments
@@ -48,6 +49,7 @@ comment
 company
 connect
 connect_pads
+copperpour
 crossbar
 date
 descr
@@ -84,6 +86,7 @@ hatch
 hide
 italic
 justify
+keepout
 kicad_pcb
 last_trace_width
 layer
@@ -107,10 +110,12 @@ nets
 no
 no_connects
 none
+not_allowed
 np_thru_hole
 offset
 oval
 pad
+pads
 pad_drill
 pad_size
 pad_to_mask_clearance
@@ -164,6 +169,7 @@ trace_clearance
 trapezoid
 thru
 thru_hole
+thru_hole_only
 tstamp
 user
 user_trace_width
@@ -177,6 +183,7 @@ uvias_allowed
 value
 version
 via
+vias
 via_dia
 via_drill
 via_min_drill
@@ -193,4 +200,5 @@ zone
 zone_45_only
 zone_clearance
 zone_connect
+zone_type
 zones

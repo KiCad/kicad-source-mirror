@@ -109,6 +109,8 @@ set( BMAPS_SMALL
     pintype_opencoll
     pintype_openemit
     pintype_noconnect
+    tree_nosel
+    tree_sel
     )
 
 # image basenames that go into the toolbar sized destinations, i.e. 26x26
@@ -127,6 +129,7 @@ set( BMAPS_MID
     add_hierar_pin
     add_hierarchical_subsheet
     add_junction
+    add_keepout_area
     add_line2bus
     add_line_label
     add_line
@@ -473,8 +476,6 @@ set( BMAPS_MID
     track_sketch
     track_unlocked
     transistor
-    tree_nosel
-    tree_sel
     undelete
     undo
     unit_inch

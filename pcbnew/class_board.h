@@ -303,10 +303,12 @@ public:
      * be different than the default if the user has renamed any copper layers.
      *
      * @param  aLayerNumber is the layer number to fetch
+     * @param  aTranslate = true to return the translated version
+     *                    = false to get the native version
      * @return wxString - containing the layer name or "BAD INDEX" if aLayerNumber
      *                      is not legal
      */
-    static wxString GetDefaultLayerName( int aLayerNumber );
+    static wxString GetDefaultLayerName( int aLayerNumber, bool aTranslate );
 
     /**
      * Function ReturnFlippedLayerNumber
@@ -619,10 +621,13 @@ public:
      * Function GetLayerName
      * returns the name of the layer given by aLayerIndex.
      *
-     * @param aLayerIndex A layer index, like LAYER_N_BACK, etc.
+     * @param aLayerIndex = A layer index, like LAYER_N_BACK, etc.
+     * @param  aTranslate = true to return the translated version (default)
+     *                    = false to get the native English name
+     *                   (Useful to build filenames from layer names)
      * @return wxString - the layer name.
      */
-    wxString GetLayerName( int aLayerIndex ) const;
+    wxString GetLayerName( int aLayerIndex, bool aTranslate = true ) const;
 
     /**
      * Function SetLayerName
@@ -1047,16 +1052,6 @@ public:
      * @return pointer to the new area
      */
     ZONE_CONTAINER* InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch );
-
-    /**
-     *  Function CompleteArea
-     * complete copper area contour by adding a line from last to first corner
-     * if there is only 1 or 2 corners, remove (delete) the area
-     * @param area_to_complete = area to complete or remove
-     * @param style = style of last corner
-     * @return 1 if Ok, 0 if area removed
-     */
-    int CompleteArea( ZONE_CONTAINER* area_to_complete, int style );
 
     /**
      * Function TestAreaPolygon

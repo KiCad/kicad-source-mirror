@@ -112,7 +112,6 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
     SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
 }
 
-
 const wxPoint DRAWSEGMENT::GetArcEnd() const
 {
     wxPoint endPoint;         // start of arc
@@ -134,44 +133,22 @@ const wxPoint DRAWSEGMENT::GetArcEnd() const
     return endPoint;   // after rotation, the end of the arc.
 }
 
-
-/* use GetArcStart() now
-const wxPoint DRAWSEGMENT::GetStart() const
+const double DRAWSEGMENT::GetArcAngleStart() const
 {
-    switch( m_Shape )
-    {
-    case S_ARC:
-        return m_End;  // the start of the arc is held in field m_End, center point is in m_Start.
+    // due to the Y axis orient atan2 needs - y value
+    double angleStart = atan2( (double)(GetArcStart().y - GetCenter().y),
+                               (double)(GetArcStart().x - GetCenter().x) );
+    // angleStart is in radians, convert it in 1/10 degrees
+    angleStart = angleStart / M_PI * 1800.0;
 
-    case S_SEGMENT:
-    default:
-        return m_Start;
-    }
+    // Normalize it to 0 ... 360 deg, to avoid discontinuity for angles near 180 deg
+    // because 180 deg and -180 are very near angles when ampping betewwen -180 ... 180 deg.
+    // and this is not easy to handle in calculations
+    if( angleStart < 0 )
+        angleStart += 3600.0;
+
+    return angleStart;
 }
-
-
-const wxPoint DRAWSEGMENT::GetEnd() const
-{
-    wxPoint endPoint;         // start of arc
-
-    switch( m_Shape )
-    {
-    case S_ARC:
-        // rotate the starting point of the arc, given by m_End, through the
-        // angle m_Angle to get the ending point of the arc.
-        // m_Start is the arc centre
-        endPoint  = m_End;         // m_End = start point of arc
-        RotatePoint( &endPoint, m_Start, -m_Angle );
-        return endPoint;   // after rotation, the end of the arc.
-        break;
-
-    case S_SEGMENT:
-    default:
-        return m_End;
-    }
-}
-*/
-
 
 void DRAWSEGMENT::SetAngle( double aAngle )
 {
@@ -450,14 +427,12 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 
 bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
 {
-    /* Calculate coordinates to test relative to segment origin. */
-    wxPoint relPos = aPosition - m_Start;
-
     switch( m_Shape )
     {
     case S_CIRCLE:
     case S_ARC:
         {
+            wxPoint relPos = aPosition - GetCenter();
             int radius = GetRadius();
             int dist  = (int) hypot( (double) relPos.x, (double) relPos.y );
 
@@ -466,18 +441,35 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition )
                 if( m_Shape == S_CIRCLE )
                     return true;
 
-                wxPoint startVec = wxPoint( m_End.x - m_Start.x, m_End.y - m_Start.y );
-                wxPoint endVec = m_End - m_Start;
-                RotatePoint( &endVec, -m_Angle );
+                // For arcs, the test point angle must be >= arc angle start
+                // and <= arc angle end
+                // However angle values > 360 deg are not easy to handle
+                // so we calculate the relative angle between arc start point and teast point
+                // this relative arc should be < arc angle if arc angle > 0 (CW arc)
+                // and > arc angle if arc angle < 0 (CCW arc)
+                double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
 
-                // Check dot products
-                if( (long long)relPos.x*startVec.x + (long long)relPos.y*startVec.y < 0 )
-                    return false;
+                double arc_hittest = atan2( (double) relPos.y, (double) relPos.x );
+                arc_hittest = arc_hittest / M_PI * 1800;    // angles are in 1/10 deg
 
-                if( (long long)relPos.x*endVec.x + (long long)relPos.y*endVec.y < 0 )
-                    return false;
+                // Calculate relative angle between the starting point of the arc, and the test point
+                arc_hittest -= arc_angle_start;
 
-                return true;
+                // Normalise arc_hittest between 0 ... 360 deg
+                NORMALIZE_ANGLE_POS( arc_hittest );
+
+                // Check angle: inside the arc angle when it is > 0
+                // and outside the not drawn arc when it is < 0
+                if( GetAngle() >= 0.0 )
+                {
+                    if( arc_hittest <= GetAngle() )
+                        return true;
+                }
+                else
+                {
+                    if( arc_hittest >= (3600.0 + GetAngle()) )
+                        return true;
+                }
             }
         }
         break;

@@ -188,7 +188,7 @@ double From_User_Unit( EDA_UNITS_T aUnit, double aValue )
 
 int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
 {
-    int    Value;
+    double value;
     double dtmp = 0;
 
     // Acquire the 'right' decimal point separator
@@ -239,9 +239,9 @@ int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
         dtmp /= 1000;
     }
 
-    Value = From_User_Unit( aUnits, dtmp );
+    value = From_User_Unit( aUnits, dtmp );
 
-    return Value;
+    return KiROUND( value );
 }
 
 

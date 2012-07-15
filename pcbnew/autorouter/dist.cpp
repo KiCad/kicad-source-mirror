@@ -39,7 +39,7 @@
 
  /* calculate approximate distance (manhattan distance)
  */
-int GetApxDist( int r1, int c1, int r2, int c2 )
+int MATRIX_ROUTING_HEAD::GetApxDist( int r1, int c1, int r2, int c2 )
 {
     int d1, d2; /* row and column deltas */
 
@@ -135,7 +135,7 @@ static int dir_penalty_BOTTOM[10][10] =
 
 /* calculate distance (with penalty) of a trace through a cell
 */
-int CalcDist(int x,int y,int z ,int side )
+int MATRIX_ROUTING_HEAD::CalcDist(int x,int y,int z ,int side  )
 {
     int adjust, ldist;
 
@@ -158,7 +158,7 @@ int CalcDist(int x,int y,int z ,int side )
 
     ldist = dist[x-1][y-1] + penalty[x-1][y-1] + adjust;
 
-    if( Nb_Sides )
+    if( m_RouteCount > 1 )
     {
         if( side == BOTTOM )
             ldist += dir_penalty_TOP[x-1][y-1];

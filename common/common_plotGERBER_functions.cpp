@@ -274,27 +274,35 @@ void GERBER_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
 }
 
 
-void GERBER_PLOTTER::Circle( const wxPoint& aCentre, int aDiameter, FILL_T aFill, 
-			     int aWidth )
+void GERBER_PLOTTER::Circle( const wxPoint& aCenter, int aDiameter, FILL_T aFill,
+                             int aWidth )
+{
+    Arc( aCenter, 0, 3600, aDiameter / 2, aFill, aWidth );
+}
+
+
+void GERBER_PLOTTER::Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle,
+                          int aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( outputFile );
-    wxPoint   start, end;
-    double    radius = aDiameter / 2;
-    const int delta  = 3600 / 32; /* increment (in 0.1 degrees) to draw circles */
-
-    start.x = aCentre.x + KiROUND( radius );
-    start.y = aCentre.y;
+    wxPoint start, end;
+    start.x = aCenter.x + KiROUND( aRadius*cos( DEG2RAD( aStAngle/10.0 ) ) );
+    start.y = aCenter.y - KiROUND( aRadius*sin( DEG2RAD( aStAngle/10.0 ) ) );
     SetCurrentLineWidth( aWidth );
     MoveTo( start );
+    end.x = aCenter.x + KiROUND( aRadius*cos( DEG2RAD( aEndAngle/10.0 ) ) );
+    end.y = aCenter.y - KiROUND( aRadius*sin( DEG2RAD( aEndAngle/10.0 ) ) );
+    DPOINT devEnd = userToDeviceCoordinates( end );
+    DPOINT devCenter = userToDeviceCoordinates( aCenter - start );
+    fprintf( outputFile, "G75*\n" ); // Multiquadrant mode
 
-    for( int ii = delta; ii < 3600; ii += delta )
-    {
-        end.x = aCentre.x + (int) ( radius * cos( DEG2RAD( ii / 10.0 ) ) );
-        end.y = aCentre.y + (int) ( radius * sin( DEG2RAD( ii / 10.0 ) ) );
-        LineTo( end );
-    }
-
-    FinishTo( start );
+    if( aStAngle < aEndAngle )
+        fprintf( outputFile, "G03" );
+    else
+        fprintf( outputFile, "G02" );
+    fprintf( outputFile, "X%dY%dI%dJ%dD01*\n", int( devEnd.x ), int( devEnd.y ),
+             int( devCenter.x ), int( devCenter.y ) );
+    fprintf( outputFile, "G74*\nG01*\n" ); // Back to single quadrant and linear interp.
 }
 
 

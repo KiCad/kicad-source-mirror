@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Mar 17 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -18,6 +18,7 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include <wx/listbox.h>
 #include <wx/choice.h>
@@ -71,8 +72,8 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		};
 		
 		wxBoxSizer* m_MainBoxSizer;
-		wxBoxSizer* m_layerSizer;
 		wxStaticText* m_staticText17;
+		wxListView* m_LayerSelectionCtrl;
 		wxStaticText* m_staticText2;
 		wxListBox* m_ListNetNameSelection;
 		wxStaticText* m_staticText16;
@@ -124,7 +125,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id = ID_DIALOG_COPPER_ZONE_BASE, const wxString& title = _("Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id = ID_DIALOG_COPPER_ZONE_BASE, const wxString& title = _("Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 567,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_COPPER_ZONE_BASE();
 	
 };

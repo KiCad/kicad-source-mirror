@@ -424,17 +424,39 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
     int      xpad = m_precision.m_lhs + m_precision.m_rhs;
     int      ypad = xpad;
 
-    /* I need to come up with an algorithm that handles any lhs:rhs format.*/
-    /* one idea is to take more inputs for xpad/ypad when metric is used.  */
-
     switch( DIALOG_GENDRILL::m_ZerosFormat )
     {
     default:
     case DECIMAL_FORMAT:
-        sprintf( aLine, "X%.3fY%.3f\n", aCoordX, aCoordY );
+        /* In Excellon files, resolution is 1/1000 mm or 1/10000 inch (0.1 mil)
+         * Although in decimal format, Excellon specifications do not specify
+         * clearly the resolution. However it seems to be 1/1000mm or 0.1 mil
+         * like in non decimal formats, so we trunk coordinates to 3 or 4 digits in mantissa
+         * Decimal format just prohibit useless leading 0:
+         * 0.45 or .45 is right, but 00.54 is incorrect.
+         */
+        if( m_unitsDecimal )
+        {
+            // resolution is 1/1000 mm
+            xs.Printf( wxT( "%.3f" ), aCoordX );
+            ys.Printf( wxT( "%.3f" ), aCoordY );
+        }
+        else
+        {
+            // resolution is 1/10000 inch
+            xs.Printf( wxT( "%.4f" ), aCoordX );
+            ys.Printf( wxT( "%.4f" ), aCoordY );
+        }
+
+        //Remove useless trailing 0
+        while( xs.Last() == '0' )
+            xs.RemoveLast();
+        while( ys.Last() == '0' )
+            ys.RemoveLast();
+        sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
 
-    case SUPPRESS_LEADING:             /* that should work now */
+    case SUPPRESS_LEADING:
         for( int i = 0; i< m_precision.m_rhs; i++ )
         {
             aCoordX *= 10; aCoordY *= 10;
