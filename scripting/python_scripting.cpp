@@ -68,14 +68,15 @@ static void swigAddBuiltin()
 {
     int i = 0;
 
-    while( PyImport_Inittab[i].name )
-    {
-            i++;
-    }
-    
+    /* discover the length of the pyimport inittab */
+    while( PyImport_Inittab[i].name )	i++;
+
+    /* allocate memory for the python module table */
     SwigImportInittab = (struct _inittab*)  malloc(
                         sizeof(struct _inittab)*(i+EXTRA_PYTHON_MODULES));
     
+    /* copy all pre-existing python modules into our newly created table */
+    i=0;
     while( PyImport_Inittab[i].name )
     {
         swigAddModule( PyImport_Inittab[i].name, PyImport_Inittab[i].initfunc );

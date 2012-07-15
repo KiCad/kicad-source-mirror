@@ -34,42 +34,42 @@
 {
    def ToMM(iu): 
       if type(iu) in [int,float]:
-         return iu * 0.00254 
+         return float(iu) / float(IU_PER_MM)
       elif type(iu) in [wxPoint,wxSize]:
          return tuple(map(ToMM,iu))
       
-   def FromMM(iu): 
-      if type(iu) in [int,float]:
-         return iu / 0.00254
-      elif type(iu) in [wxPoint,wxSize]:
-        return tuple(map(FromMM,iu))
+   def FromMM(mm): 
+      if type(mm) in [int,float]:
+         return int(float(mm) * float(IU_PER_MM))
+      elif type(mm) in [wxPoint,wxSize]:
+        return tuple(map(FromMM,mm))
     
    def ToMils(iu): 
       if type(iu) in [int,float]:
-      	return iu / 10.0
+      	return float(iu) / float(IU_PER_MILS)
       elif type(iu) in [wxPoint,wxSize]:
       	return tuple(map(ToMils,iu))
       	
-   def FromMils(iu): 
-      if type(iu) in [int,float]:
-         return iu*10.0
-      elif type(iu) in [wxPoint,wxSize]:
-      	return tuple(map(FromMils,iu))
+   def FromMils(mils): 
+      if type(mils) in [int,float]:
+         return int(float(mils)*float(IU_PER_MILS))
+      elif type(mils) in [wxPoint,wxSize]:
+      	return tuple(map(FromMils,mils))
       	
-   def SizeMM(mmx,mmy): return wxSize(FromMM(mmx),FromMM(mmy))
-   def SizeMils(mmx,mmy): return wxSize(FromMils(mmx),FromMils(mmy))
+   def wxSizeMM(mmx,mmy): return wxSize(FromMM(mmx),FromMM(mmy))
+   def wxSizeMils(mmx,mmy): return wxSize(FromMils(mmx),FromMils(mmy))
    	
-   def PointMM(mmx,mmy): return wxPoint(FromMM(mmx),FromMM(mmy))
-   def PointMils(mmx,mmy): return wxPoint(FromMils(mmx),FromMils(mmy))
+   def wxPointMM(mmx,mmy): return wxPoint(FromMM(mmx),FromMM(mmy))
+   def wxPointMils(mmx,mmy): return wxPoint(FromMils(mmx),FromMils(mmy))
    
-   def RectMM(x,y,wx,wy):
+   def wxRectMM(x,y,wx,wy):
    	x = int(FromMM(x))
    	y = int(FromMM(y))
    	wx = int(FromMM(wx))
    	wy = int (FromMM(wy))
    	return wxRect(x,y,wx,wy)
    
-   def RectMils(x,y,wx,wy):
+   def wxRectMils(x,y,wx,wy):
    	x = int(FromMils(x))
    	y = int(FromMils(y))
    	wx = int(FromMils(wx))

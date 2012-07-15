@@ -68,7 +68,9 @@
 	#include <class_title_block.h>
 	#include <class_colors_design_settings.h>
 	#include <class_marker_base.h>
-    #include <eda_text.h>
+    	#include <eda_text.h>
+	#include <convert_from_iu.h>
+	#include <convert_to_biu.h>
 
 %}
 
@@ -100,6 +102,8 @@
 %include <class_colors_design_settings.h>
 %include <class_marker_base.h>
 %include <eda_text.h>
+%include <convert_from_iu.h>
+%include <convert_to_biu.h>
 
 /* special iteration wrapper for DLIST objects */
 %include "dlist.i"
