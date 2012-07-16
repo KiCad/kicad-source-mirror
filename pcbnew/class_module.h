@@ -235,8 +235,6 @@ public:
      */
     bool Read_GPCB_Descr( const wxString& CmpFullFileName );
 
-    int Read_3D_Descr( LINE_READER* aReader );
-
     /* drawing functions */
 
     void Draw( EDA_DRAW_PANEL* aPanel,

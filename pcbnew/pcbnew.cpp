@@ -28,6 +28,9 @@
  * @brief Pcbnew main program.
  */
 
+#ifdef KICAD_SCRIPTING
+#include <pcbnew_scripting_helpers.h>
+#endif
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <confirm.h>
@@ -46,7 +49,13 @@
 #include <protos.h>
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
+#include <class_board.h>
 
+#include <dialogs/dialog_scripting.h>
+
+#ifdef KICAD_SCRIPTING
+#include <python_scripting.h>
+#endif
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
@@ -102,6 +111,11 @@ bool EDA_APP::OnInit()
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
+#ifdef KICAD_SCRIPTING    
+    pcbnewInitPythonScripting();
+#endif    
+    
+
     InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
@@ -136,6 +150,11 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
     frame = new PCB_EDIT_FRAME( NULL, wxT( "Pcbnew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+
+    #ifdef KICAD_SCRIPTING    
+    ScriptingSetPcbEditFrame(frame); /* give the scripting helpers access to our frame */
+    #endif    
+    
     frame->UpdateTitle();
 
     SetTopWindow( frame );

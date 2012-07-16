@@ -41,12 +41,12 @@
 #include <richio.h>
 #include <convert_to_biu.h>
 
-#if !wxUSE_PRINTING_ARCHITECTURE
+#if !wxUSE_PRINTING_ARCHITECTURE && !SWIG
 #   error "You must use '--enable-printarch' in your wx library configuration."
 #endif
 
 #if defined( __WXGTK__ )
-#   if !wxUSE_LIBGNOMEPRINT && !wxUSE_GTKPRINT
+#   if !wxUSE_LIBGNOMEPRINT && !wxUSE_GTKPRINT && !SWIG
 #       error "You must use '--with-gnomeprint' or '--with-gtkprint' in your wx library configuration."
 #   endif
 #endif
