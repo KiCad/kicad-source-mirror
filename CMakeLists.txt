@@ -91,14 +91,25 @@ endif(KICAD_STABLE_VERSION )
 #================================================
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-    # Set default flags for Release build.
-    set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG -fPIC")
-    set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG -fPIC")
-    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
+    if(WIN32)   # under Windows/mingw,  -fPIC option is enabled by default
+        # Set default flags for Release build.
+        set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
+        set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
+        set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
 
-    # Set default flags for Debug build.
-    set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -fPIC")
-    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -fPIC")
+        # Set default flags for Debug build.
+        set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+        set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+    else(WIN32)
+        # Set default flags for Release build.
+        set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG -fPIC")
+        set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG -fPIC")
+        set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
+
+        # Set default flags for Debug build.
+        set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -fPIC")
+        set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -fPIC")
+    endif(WIN32)
 
 endif(CMAKE_COMPILER_IS_GNUCXX)
 

@@ -87,6 +87,9 @@ void FOOTPRINT_WIZARD_FRAME::DisplayWizardInfos()
 
 void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 {
+    if( m_FootprintWizard == NULL )
+        return;
+
     SetCurItem( NULL );
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();

@@ -1,8 +1,8 @@
 /**
- * @file dialog_scripting.cpp
+ * @file dialog_footprint_wizard_list.cpp
  */
 
-#include <wx-2.8/wx/generic/grid.h>
+#include <wx/grid.h>
 
 
 
