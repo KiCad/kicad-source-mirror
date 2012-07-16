@@ -5,10 +5,10 @@ if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
   SET(PYTHON_DEST "lib/python${PYTHON_VERSION}/dist-packages" )
   file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting)
   FIND_PACKAGE(SWIG REQUIRED)
-  INCLUDE(${SWIG_USE_FILE})	
+  INCLUDE(${SWIG_USE_FILE})
   FIND_PACKAGE(PythonLibs)
   INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-  add_definitions(-DPCBNEW -DKICAD_SCRIPTING)	
+  add_definitions(-DPCBNEW -DKICAD_SCRIPTING)
 endif()
 
 ###
@@ -246,7 +246,7 @@ set(PCBNEW_SCRIPTING_DIALOGS
    )
 
 
-set(PCBNEW_SCRIPTING_PYTHON_HELPERS    
+set(PCBNEW_SCRIPTING_PYTHON_HELPERS
     ../scripting/wx_python_helpers.cpp
     ../scripting/python_scripting.cpp
     scripting/pcbnew_scripting_helpers.cpp
@@ -268,16 +268,16 @@ endif()
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
 	set(SWIG_FLAGS -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting )
-	if (DEBUG) 
+	if (DEBUG)
 		set(SWIG_FLAGS ${SWIG_FLAGS} -DDEBUG)
 	endif()
-	# collect CFLAGS , and pass them to swig later 
-	
+	# collect CFLAGS , and pass them to swig later
+
 	get_directory_property( DirDefs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} COMPILE_DEFINITIONS )
 	foreach( d ${DirDefs} )
 	    SET(SWIG_FLAGS ${SWIG_FLAGS} -D${d} )
 	endforeach()
-	
+
 	# check if we have IO_MGR and KICAD_PLUGIN available
 	if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
 	    SET(SWIG_FLAGS ${SWIG_FLAGS} -DBUILD_WITH_PLUGIN)
@@ -287,11 +287,11 @@ if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 	endif()
 
 endif()
-       
+
 if (KICAD_SCRIPTING)
       
 	SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
-		
+
 	add_custom_command(
 	               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
                        DEPENDS scripting/pcbnew.i
@@ -304,13 +304,13 @@ if (KICAD_SCRIPTING)
                        DEPENDS ../scripting/kicad.i
                        DEPENDS ../scripting/wx.i
                        DEPENDS ../scripting/kicadplugins.i
-                       
+
 	               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
 	               COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
 	               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	)
 
-	
+
 endif(KICAD_SCRIPTING)
 
 
@@ -323,7 +323,7 @@ if (KICAD_SCRIPTING_MODULES)
   SET(CMAKE_SWIG_FLAGS ${SWIG_FLAGS})
   SET_SOURCE_FILES_PROPERTIES(scripting/pcbnew.i PROPERTIES CPLUSPLUS ON)
   SWIG_ADD_MODULE(pcbnew python scripting/pcbnew.i ${PCBNEW_SCRIPTING_PYTHON_HELPERS} ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS})
-  SWIG_LINK_LIBRARIES(pcbnew 
+  SWIG_LINK_LIBRARIES(pcbnew
       3d-viewer
       pcbcommon
       common
@@ -334,8 +334,13 @@ if (KICAD_SCRIPTING_MODULES)
       ${OPENGL_LIBRARIES}
       ${GDI_PLUS_LIBRARIES}
       ${PYTHON_LIBRARIES})
-      
+
 endif (KICAD_SCRIPTING_MODULES)
+
+if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+    set ( PCBNEW_EXTRA_LIBS "rt" )
+endif (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+
 
 ###
 # Windows resource file
@@ -410,6 +415,7 @@ endif(APPLE)
 ###
 # Link executable target pcbnew with correct libraries
 ###
+
 target_link_libraries(pcbnew
     3d-viewer
     pcbcommon
@@ -421,7 +427,7 @@ target_link_libraries(pcbnew
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     ${PYTHON_LIBRARIES}
-    rt
+    ${PCBNEW_EXTRA_LIBS}
     )
 
 ###
@@ -435,7 +441,7 @@ if(KICAD_SCRIPTING)
 	add_custom_target(FixSwigImportsScripting ALL
                      ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew
-                     COMMENT "Fixing swig_import_helper"                     
+                     COMMENT "Fixing swig_import_helper"
                      )                                                                                               
                                                                                                               
 
@@ -447,13 +453,13 @@ if (KICAD_SCRIPTING_MODULES)
 	add_custom_target(FixSwigImportsModuleScripting ALL
                      ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew
-                     COMMENT "Fixing swig_import_helper"                     
+                     COMMENT "Fixing swig_import_helper"
                      )                                                                                               
                                                         
 
   install(FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py
           DESTINATION ${PYTHON_DEST})
-        
+
   install(FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so
           DESTINATION ${PYTHON_DEST})
 endif(KICAD_SCRIPTING_MODULES)
@@ -463,12 +469,12 @@ endif(KICAD_SCRIPTING_MODULES)
 if(NOT MSVC)
     # This one gets made only when testing.
     add_executable(specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp)
-    target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES} rt)
+    target_link_libraries(specctra_test common ${wxWidgets_LIBRARIES})
 endif(NOT MSVC)
 
 # This one gets made only when testing.
 add_executable(layer_widget_test WIN32 EXCLUDE_FROM_ALL
     layer_widget.cpp
     )
-target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES} rt)
+target_link_libraries(layer_widget_test common ${wxWidgets_LIBRARIES})
 
