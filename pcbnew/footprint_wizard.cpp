@@ -51,15 +51,15 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 /* Function OnLeftClick
  * Captures a left click event in the dialog
- * 
+ *
  */
 void FOOTPRINT_WIZARD_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
 }
 
 /* Function OnRightClick
- * Captures a right click event in the dialog 
- * 
+ * Captures a right click event in the dialog
+ *
  */
 bool FOOTPRINT_WIZARD_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
@@ -87,6 +87,9 @@ void FOOTPRINT_WIZARD_FRAME::DisplayWizardInfos()
 
 void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 {
+    if( m_FootprintWizard == NULL )
+        return;
+
     SetCurItem( NULL );
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();
@@ -108,11 +111,11 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 
 void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 {
-    DIALOG_FOOTPRINT_WIZARD_LIST         *selectWizard =  
+    DIALOG_FOOTPRINT_WIZARD_LIST         *selectWizard =
             new DIALOG_FOOTPRINT_WIZARD_LIST(this);
-    
+
     selectWizard->ShowModal();
-    
+
     m_FootprintWizard = selectWizard->GetWizard();
 
     if (m_FootprintWizard)
@@ -131,9 +134,9 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 
 void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
 {
-    
+
     SelectFootprintWizard();
-    
+
 }
 
 /**
@@ -142,26 +145,26 @@ void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
  */
 void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 {
-    
+
     int page = m_PageList->GetSelection();
-    
+
     if (page<0)
         return;
-    
+
     int n=m_ParameterGrid->GetNumberRows();
     wxArrayString arr;
-    
+
     for (int i=0;i<n;i++)
-    {    
+    {
         wxString val = m_ParameterGrid->GetCellValue(i,1);
         arr.Add(val);
     }
-    
+
     wxString res = m_FootprintWizard->SetParameterValues(page,arr);
-    
+
     ReloadFootprint();
     DisplayWizardInfos();
-    
+
 }
 
 
@@ -169,7 +172,7 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
  * Function RedrawActiveWindow
  * Display the current selected component.
  * If the component is an alias, the ROOT component is displayed
- * 
+ *
 */
 void FOOTPRINT_WIZARD_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
