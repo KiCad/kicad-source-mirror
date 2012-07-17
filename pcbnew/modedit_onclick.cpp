@@ -58,18 +58,19 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
             }
         }
+
+        else
+        {
+            if( !wxGetKeyState( WXK_SHIFT ) && !wxGetKeyState( WXK_ALT )
+               && !wxGetKeyState( WXK_CONTROL ) )
+                item = ModeditLocateAndDisplay();
+
+            SetCurItem( item );
+        }
     }
 
     item = GetCurItem();
-
-    if( !item || (item->GetFlags() == 0) )
-    {
-        if( !wxGetKeyState( WXK_SHIFT ) && !wxGetKeyState( WXK_ALT )
-           && !wxGetKeyState( WXK_CONTROL ) )
-            item = ModeditLocateAndDisplay();
-
-        SetCurItem( item );
-    }
+    bool no_item_edited = item == NULL || item->GetFlags() == 0;
 
     switch( GetToolId() )
     {
@@ -79,7 +80,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_MODEDIT_CIRCLE_TOOL:
     case ID_MODEDIT_ARC_TOOL:
     case ID_MODEDIT_LINE_TOOL:
-        if( !item || item->GetFlags() == 0 )
+        if( no_item_edited )
         {
             STROKE_T shape = S_SEGMENT;
 
@@ -117,9 +118,9 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_MODEDIT_DELETE_TOOL:
-        if( item == NULL ||              // No item to delete
-            (item->GetFlags() != 0) )    // Item in edit, cannot delete it
+        if( ! no_item_edited )    // Item in edit, cannot delete it
             break;
+        item = ModeditLocateAndDisplay();
 
         if( item->Type() != PCB_MODULE_T ) // Cannot delete the module itself
         {

@@ -68,19 +68,19 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 
     dialog.SetWidthUnits( ReturnUnitSymbol( g_UserUnit ) );
 
-    wxString val = ReturnStringFromValue( g_UserUnit, m_drawLineWidth );
+    wxString val = ReturnStringFromValue( g_UserUnit, DrawItem->GetWidth() );
     dialog.SetWidth( val );
-    dialog.SetApplyToAllUnits( !m_drawSpecificUnit );
+    dialog.SetApplyToAllUnits( DrawItem->GetUnit() == 0 );
     dialog.EnableApplyToAllUnits( component && component->GetPartCount() > 1 );
-    dialog.SetApplyToAllConversions( !m_drawSpecificConvert );
+    dialog.SetApplyToAllConversions( DrawItem->GetConvert() == 0 );
     dialog.EnableApplyToAllConversions( component && component->HasConversion() );
-//    dialog.SetFillStyle( m_drawFillStyle );   // could better to show the current setting
     dialog.SetFillStyle( DrawItem->GetFillMode() );
     dialog.EnableFillStyle( DrawItem->IsFillable() );
 
     if( dialog.ShowModal() == wxID_CANCEL )
         return;
 
+    // Init default values (used to create a new draw item)
     val = dialog.GetWidth();
     m_drawLineWidth = ReturnValueFromString( g_UserUnit, val );
     m_drawSpecificConvert = !dialog.GetApplyToAllConversions();
