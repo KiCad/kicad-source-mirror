@@ -242,6 +242,18 @@ static bool engStrToDouble( wxString aStr, double* aDouble )
 }
 
 
+static bool splitRefStr( const wxString& aRef, wxString* aStr, int* aNumber )
+{
+    static wxRegEx refRegEx( wxT( "^([a-zA-Z]+)([0-9]+)" ) );
+
+    if( !refRegEx.Matches( aRef ) )
+        return false;
+
+    *aStr = refRegEx.GetMatch( aRef, 1 );
+    *aNumber = wxAtoi( refRegEx.GetMatch( aRef, 2 ) );
+    return true;
+}
+
 /* sort the list of references by value.
  * Components are grouped by type and are sorted by value:
  * The value of a component accept multiplier symbols (p, n, K ..)
@@ -250,28 +262,22 @@ static bool engStrToDouble( wxString aStr, double* aDouble )
 bool SCH_REFERENCE_LIST::sortByValueOnly( const SCH_REFERENCE& item1,
                                           const SCH_REFERENCE& item2 )
 {
-    // First, group by type, assuming 2 first letter of references
-    // are different for different types of components.
-    wxString text1 = item1.GetComponent()->GetField( REFERENCE )->GetText().Left(2);
-    wxString text2 = item2.GetComponent()->GetField( REFERENCE )->GetText().Left(2);
-    if( text1[0] != text2[0] )
-        return text1[0] < text2[0];
+    // First, group by type according to reference text part (R, C, etc.)
+    wxString text1 = item1.GetComponent()->GetField( REFERENCE )->GetText();
+    wxString text2 = item2.GetComponent()->GetField( REFERENCE )->GetText();
+    wxString refNameStr1, refNameStr2;
+    int refNumber1, refNumber2;
 
-    // Compare the second letter, if exists
-    if( text1.length() > 1 && text2.length() > 1 )
-    {
-        if( (text1[1] < '0') || (text1[1] > '9') ||
-            (text2[1] < '0') || (text2[1] > '9') )
-            return text1[1] < text2[1];
-    }
+    if( !splitRefStr( text1, &refNameStr1, &refNumber1 ) )
+        return false;
 
+    if( !splitRefStr( text2, &refNameStr2, &refNumber2 ) )
+        return false;
 
-    // Inside a group of components of same value, it could be good to group per footprints
-    text1 = item1.GetComponent()->GetField( FOOTPRINT )->GetText();
-    text2 = item2.GetComponent()->GetField( FOOTPRINT )->GetText();
-    int same_footprint = text1.IsEmpty() || text2.IsEmpty();
-    if( same_footprint == 0 )
-        same_footprint = text1.CmpNoCase( text2 );
+    int ii = refNameStr1.CmpNoCase( refNameStr2 );
+
+    if( ii != 0 )
+        return ii < 0;
 
     // We can compare here 2 values relative to components of the same type
     // assuming references are correctly chosen
@@ -292,25 +298,28 @@ bool SCH_REFERENCE_LIST::sortByValueOnly( const SCH_REFERENCE& item1,
     if( !match1 && match2 )
         return false;
 
-    if( match1 && match2 )
-    {
-        if( value1 == value2 )
-            return same_footprint < 0;
+    if( match1 && match2 && (value1 != value2) )
         return value1 < value2;
-    }
+
+    // Inside a group of components of same value, it could be good to group per footprints
+    text1 = item1.GetComponent()->GetField( FOOTPRINT )->GetText();
+    text2 = item2.GetComponent()->GetField( FOOTPRINT )->GetText();
+    ii = text1.CmpNoCase( text2 );
+
+    if( ii != 0 )
+        return ii < 0;
+
+    if( refNumber1 != refNumber2 )
+        return refNumber1 < refNumber2;
 
     // Fall back to normal string compare
-    int ii = text1.CmpNoCase( text2 );
+    ii = text1.CmpNoCase( text2 );
 
     if( ii == 0 )
-    {
         ii = RefDesStringCompare( item1.GetRef(), item2.GetRef() );
-    }
 
     if( ii == 0 )
-    {
         ii = item1.m_Unit - item2.m_Unit;
-    }
 
     return ii < 0;
 }
