@@ -872,14 +872,14 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* aFile, SCH_REFERENCE_LIST
     while( index < aList.GetCount() )
     {
         SCH_COMPONENT *component = aList[index].GetComponent();
-        wxArrayString referenceStrList;
+        wxString referenceListStr;
         int qty = 1;
-        referenceStrList.Add( aList[index].GetRef() );
+        referenceListStr.append( aList[index].GetRef() );
         for( unsigned int i = index+1; i < aList.GetCount(); )
         {
             if( *(aList[i].GetComponent()) == *component )
             {
-                referenceStrList.Add( aList[i].GetRef() );
+                referenceListStr.append( wxT( " " ) + aList[i].GetRef() );
                 aList.RemoveItem( i );
                 qty++;
             }
@@ -887,22 +887,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* aFile, SCH_REFERENCE_LIST
                 i++; // Increment index only when current item is not removed from the list
         }
 
-        referenceStrList.Sort( RefDesStringCompare ); // Sort references for this component
-
-        // Write value, quantity
-        fprintf( aFile, "%15s%c%3d", TO_UTF8( component->GetField( VALUE )->GetText() ),
-                 s_ExportSeparatorSymbol, qty );
-
-        // Write list of references
-        for( int i = 0; i < referenceStrList.Count(); i++ )
-        {
-            if( i == 0 )
-                fprintf( aFile, "%c\"%s", s_ExportSeparatorSymbol, TO_UTF8( referenceStrList[i] ) );
-            else
-                fprintf( aFile, " %s", TO_UTF8( referenceStrList[i] ) );
-        }
-        if( referenceStrList.Count() )
-            fprintf( aFile, "\"" );
+        // Write value, quantity and list of references
+        fprintf( aFile, "%15s%c%3d%c\"%s\"", TO_UTF8( component->GetField( VALUE )->GetText() ),
+                 s_ExportSeparatorSymbol, qty,
+                 s_ExportSeparatorSymbol, TO_UTF8( referenceListStr ) );
 
         // Write the rest of the fields if required
 #if defined( KICAD_GOST )
