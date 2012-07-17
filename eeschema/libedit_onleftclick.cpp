@@ -29,13 +29,10 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
 #include <eeschema_id.h>
 
 #include <general.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <class_libentry.h>
 
@@ -43,19 +40,17 @@
 void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
     LIB_ITEM* item = m_drawItem;
+    bool no_item_edited = item == NULL || item->GetFlags() == 0;
 
     if( m_component == NULL )   // No component loaded !
         return;
 
-    if( item == NULL || item->GetFlags() == 0 )
+    if( ( GetToolId() == ID_NO_TOOL_SELECTED ) && no_item_edited )
     {
         item = LocateItemUsingCursor( aPosition );
 
         if( item )
-
-        {
             item->DisplayInfo( this );
-        }
         else
         {
             DisplayCmpDoc();
@@ -84,7 +79,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case ID_LIBEDIT_PIN_BUTT:
-        if( m_drawItem == NULL || m_drawItem->GetFlags() == 0 )
+        if( no_item_edited )
         {
             CreatePin( DC );
         }
@@ -99,7 +94,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_LIBEDIT_BODY_CIRCLE_BUTT:
     case ID_LIBEDIT_BODY_RECT_BUTT:
     case ID_LIBEDIT_BODY_TEXT_BUTT:
-        if( m_drawItem == NULL || m_drawItem->GetFlags() == 0 )
+        if( no_item_edited )
         {
             m_drawItem = CreateGraphicItem( m_component, DC );
         }
