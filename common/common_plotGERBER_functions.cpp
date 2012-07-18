@@ -293,7 +293,8 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle,
     end.x = aCenter.x + KiROUND( aRadius*cos( DEG2RAD( aEndAngle/10.0 ) ) );
     end.y = aCenter.y - KiROUND( aRadius*sin( DEG2RAD( aEndAngle/10.0 ) ) );
     DPOINT devEnd = userToDeviceCoordinates( end );
-    DPOINT devCenter = userToDeviceCoordinates( aCenter - start );
+    DPOINT devCenter = userToDeviceCoordinates( aCenter )
+        - userToDeviceCoordinates( start );
     fprintf( outputFile, "G75*\n" ); // Multiquadrant mode
 
     if( aStAngle < aEndAngle )
