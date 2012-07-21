@@ -167,7 +167,8 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     {
         SCH_LINE* prevSegment = (SCH_LINE*) segment->Back();
 
-        wxLogDebug( wxT( "Adding new segment after " ) + prevSegment->GetSelectMenuText() );
+        // Be aware prevSegment can be null when the horizontal and vertical lines only switch is off
+        // when we create the first segment.
 
         if( !g_HVLines )
         {
