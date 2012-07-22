@@ -462,7 +462,7 @@ if (KICAD_SCRIPTING_MODULES)
   install(FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py
           DESTINATION ${PYTHON_DEST})
   if (WIN32)
-     install(FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.dso
+     install(FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd
              DESTINATION ${PYTHON_DEST})
   else(WIN32)
      install(FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so
