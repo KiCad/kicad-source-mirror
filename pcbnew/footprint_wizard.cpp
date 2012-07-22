@@ -18,6 +18,7 @@
 #include "footprint_wizard_frame.h"
 #include <wildcards_and_files_ext.h>
 #include <dialogs/dialog_footprint_wizard_list.h>
+#include <base_units.h>
 
 #define NEXT_PART      1
 #define NEW_PART       0
@@ -153,11 +154,28 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
     
     int n=m_ParameterGrid->GetNumberRows();
     wxArrayString arr;
+    wxArrayString ptList = m_FootprintWizard->GetParameterTypes(page);
     
     for (int i=0;i<n;i++)
     {    
-        wxString val = m_ParameterGrid->GetCellValue(i,1);
-        arr.Add(val);
+        wxString value = m_ParameterGrid->GetCellValue(i,1);
+        
+        // if this parameter is expected to be an internal 
+        // unit convert it back from the user format
+        if (ptList[i]==wxT("IU")) 
+        {
+            double dValue;
+            value.ToDouble(&dValue);
+
+            // convert from mils to inches where it's needed
+            if (g_UserUnit==INCHES)  dValue = dValue / 1000.0; 
+            dValue = From_User_Unit(g_UserUnit,dValue);
+                        
+            value.Printf(wxT("%lf"),dValue); 
+            
+        }
+
+        arr.Add(value);
     }
     
     wxString res = m_FootprintWizard->SetParameterValues(page,arr);

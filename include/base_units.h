@@ -108,7 +108,7 @@ void PutValueInLocalUnits( wxTextCtrl& aTextCtr, int aValue );
 double From_User_Unit( EDA_UNITS_T aUnit, double aValue );
 
 /**
- * Function ReturnValueFromeString
+ * Function ReturnValueFromString
  * converts \a aTextValue in \a aUnits to internal units used by the application.
  *
  * @param aUnits The units of \a aTextValue.
@@ -116,6 +116,18 @@ double From_User_Unit( EDA_UNITS_T aUnit, double aValue );
  * @return The string from Value, according to units (inch, mm ...) for display,
  */
 int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue );
+
+/**
+ * Function ReturnValueFromString
+
+ * converts \a aTextValue in \a aUnits to internal units used by the application, 
+ * unit type will be obtained from g_UserUnit.
+ *
+ * @param aTextValue A reference to a wxString object containing the string to convert.
+ * @return The string from Value, according to units (inch, mm ...) for display,
+ */
+
+int ReturnValueFromString( const wxString& aTextValue );
 
 /**
  * Convert the number Value in a string according to the internal units

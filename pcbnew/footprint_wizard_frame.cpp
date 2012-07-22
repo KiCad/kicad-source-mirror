@@ -47,6 +47,7 @@
 
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
+#include <base_units.h>
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
@@ -177,9 +178,11 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( wxWindow* parent, wxSemaphore* s
 
     m_ParameterGridWindow->SetSashVisible( wxSASH_RIGHT, true );
     m_ParameterGridWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
-    m_ParameterGrid = new wxGrid(m_ParameterGridWindow,ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
+    m_ParameterGrid = new wxGrid(m_ParameterGridWindow,
+                                 ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                                  wxPoint(0,0),wxDefaultSize);
-    
+
+    printf("pws.x=%d pws.y=%d\n",m_ParameterGridSize.x, m_ParameterGridSize.y);
     ReCreatePageList();
 
     DisplayWizardInfos();
@@ -239,7 +242,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( wxWindow* parent, wxSemaphore* s
     pane.MinSize(wxSize(m_ParameterGridSize.x, -1));
 
     m_auimgr.Update();
-
+ 
     // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
 #ifdef USE_WX_GRAPHICS_CONTEXT
     GetScreen()->SetZoom( BestZoom() );
@@ -390,14 +393,13 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 
     m_ParameterGrid->ClearGrid();
     
-    
     // Columns
     m_ParameterGrid->AutoSizeColumns();
     m_ParameterGrid->SetColLabelSize( 20 );
     m_ParameterGrid->SetColLabelValue( 0, _("Parameter") );
     m_ParameterGrid->SetColLabelValue( 1, _("Value") );
+    m_ParameterGrid->SetColLabelValue( 2, _("Units") );
     m_ParameterGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
-    
     
     // Rows
     m_ParameterGrid->AutoSizeRows();
@@ -405,19 +407,60 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     m_ParameterGrid->SetRowLabelSize( 1 );
     m_ParameterGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
     
-    
-
+    // Get the list of names, values, and types
     wxArrayString fpList = m_FootprintWizard->GetParameterNames(page);
     wxArrayString fvList = m_FootprintWizard->GetParameterValues(page);
+    wxArrayString ptList = m_FootprintWizard->GetParameterTypes(page);
     
-    m_ParameterGrid->CreateGrid(fpList.size(),2);
+    
+  
+    
+    // Dimension the wxGrid 
+    m_ParameterGrid->CreateGrid(fpList.size(),3);
     
     for (unsigned int i=0;i<fpList.size();i++)
     {
-        m_ParameterGrid->SetCellValue( i, 0, fpList[i] );
+        wxString name,value,units;
+        
+        name = fpList[i];
+        value = fvList[i];
+        
+        
+        m_ParameterGrid->SetCellValue( i, 0, name);
         m_ParameterGrid->SetReadOnly( i, 0 );
-        m_ParameterGrid->SetCellValue( i, 1 , fvList[i] );
+        
+        if (ptList[i]==wxT("IU"))  
+        {
+            // We are handling internal units, so convert them to the current 
+            // system selected units and store into value.
+            double dValue;
+            value.ToDouble(&dValue);
+
+            dValue = To_User_Unit(g_UserUnit,dValue);
+
+            if (g_UserUnit==INCHES) // we convert inches into mils for more detail
+            {               
+                dValue = dValue*1000.0;
+                units = wxT("mils");
+            } 
+            else if (g_UserUnit==MILLIMETRES)
+            {
+                units = wxT("mm");
+            }
+
+            value.Printf(wxT("%lf"),dValue);
+        }
+        else if (ptList[i]==wxT("UNITS")) // 1,2,3,4,5 ... N
+        {
+            units = wxT("");
+        }
+
+        m_ParameterGrid->SetCellValue( i, 1 , value );        
+
+        m_ParameterGrid->SetCellValue( i, 2 , units );
+        m_ParameterGrid->SetReadOnly( i, 2 );
     }
+    
     m_ParameterGrid->AutoSizeColumns();
     
 
@@ -452,7 +495,7 @@ void FOOTPRINT_WIZARD_FRAME::LoadSettings( )
     cfg = wxGetApp().GetSettings();
 
     m_PageListSize.x = 150; // default width of libs list
-    m_ParameterGridSize.x = 250; // default width of component list
+    m_ParameterGridSize.x = 350; // default width of component list
 
     cfg->Read( PARTLIST_WIDTH_KEY , &m_PageListSize.x );
     cfg->Read( PARAMLIST_WIDTH_KEY, &m_ParameterGridSize.x );
@@ -463,6 +506,7 @@ void FOOTPRINT_WIZARD_FRAME::LoadSettings( )
 
     if ( m_ParameterGridSize.x > m_FrameSize.x/2 )
         m_ParameterGridSize.x = m_FrameSize.x/2;
+     
 }
 
 

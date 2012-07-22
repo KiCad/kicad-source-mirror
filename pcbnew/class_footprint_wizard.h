@@ -58,6 +58,15 @@ public:
     virtual wxArrayString GetParameterNames(int aPage)=0;
     
     /**
+     * Function GetParameterTypes
+     * @param aPage is the page we want the parameter types of
+     * @return an array string with the parameter types on a certain page
+     *          "IU" for internal units, "UNITS" for units (0,1,2,3...,N)
+     */
+    virtual wxArrayString GetParameterTypes(int aPage)=0;
+    
+    
+    /**
      * Function GetParameterValues
      * @param aPage is the page we want the parameter values of
      * @return an array of parameter values
