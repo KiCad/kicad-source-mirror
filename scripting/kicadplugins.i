@@ -45,17 +45,30 @@ def LoadPlugins():
     import os
     import sys
 
-    plugins_dir = os.environ['HOME']+'/.kicad_plugins/'
+    # Use environment variable KICAD_PATH to derive path to plugins as a temporary solution
+    kicad_path = os.environ.get('KICAD_PATH')
+    plugin_directories=[]
 
-    sys.path.append(plugins_dir)
+    if kicad_path and os.path.isdir(kicad_path):
+        plugin_directories.append(os.path.join(kicad_path, 'scripting', 'plugins'))
+        
+    if sys.platform.startswith('linux'):
+        plugin_directories.append(os.environ['HOME']+'/.kicad_plugins/')
+        plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/')
 
-    for module in os.listdir(plugins_dir):
-        if os.path.isdir(plugins_dir+module):
-            __import__(module, locals(), globals())
+    # scan all possible directories for plugins, and load them
 
-        if module == '__init__.py' or module[-3:] != '.py':
+    for plugins_dir in plugin_directories:
+        sys.path.append(plugins_dir)
+	if not os.path.isdir(plugins_dir):
             continue
-        __import__(module[:-3], locals(), globals())
+        for module in os.listdir(plugins_dir):
+            if os.path.isdir(plugins_dir+module):
+                __import__(module, locals(), globals())
+
+            if module == '__init__.py' or module[-3:] != '.py':
+                continue
+            __import__(module[:-3], locals(), globals())
 
 
 # KiCadPlugin base class will register any plugin into the right place
