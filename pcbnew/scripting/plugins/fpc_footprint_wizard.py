@@ -9,26 +9,22 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         self.description = "FPC Footprint Wizard"
         self.parameters = {
              "Pads":
-                {"n":40,"pitch":FromMM(0.5),
-                 "width":FromMM(0.25),"height":FromMM(1.6)},
+                {"*n":40,           # not internal units preceded by "*"
+                 "pitch":           FromMM(0.5),
+                 "width":           FromMM(0.25),
+                 "height":          FromMM(1.6)},
              "Shield":
-                {"shield_to_pad":FromMM(1.6),"from_top":FromMM(1.3),
-                 "width":FromMM(1.5),"height":FromMM(2)},
+                {"shield_to_pad":   FromMM(1.6),
+                 "from_top":        FromMM(1.3),
+                 "width":           FromMM(1.5),
+                 "height":          FromMM(2)},
                 
         }
         self.ClearErrors()
-  
-    def GetParameterValues(self,page_n):
-        name = self.GetParameterPageName(page_n)
-        values = self.parameters[name].values()
-        str_values = map( lambda x: str(x) , values)
-        
-        print values,str_values
-        return str_values
-    
+      
+    # build a rectangular pad
     def smdRectPad(self,module,size,pos,name):
             pad = D_PAD(module)
-            # print "smdRectPad( size=",size,"pos=",pos,"name=",name,")"
             pad.SetSize(size)
             pad.SetShape(PAD_RECT)
             pad.SetAttribute(PAD_SMD)
@@ -37,10 +33,11 @@ class FPCFootprintWizard(FootprintWizardPlugin):
             pad.SetPosition(pos)
             pad.SetPadName(name)
             return pad
-        
+
+    # This method checks the parameters provided to wizard and set errors
     def CheckParameters(self):
         p = self.parameters        
-        pads            = p["Pads"]["n"]        
+        pads            = p["Pads"]["*n"]        
         errors = ""
         if (pads<1):
             self.parameter_errors["Pads"]["n"]="Must be positive"
@@ -57,12 +54,10 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         
         return errors 
     
-    def SetParameterValues(self,page,values):
-        print "SetParameterValues("+str(page)+","+str(values)+")"
-        FootprintWizardPlugin.SetParameterValues(self,page,values)
         
+    # build the footprint from parameters 
     def BuildFootprint(self):
-        
+       
         print "parameters:",self.parameters
         #self.ClearErrors()
         #print "errors:",self.parameter_errors
@@ -71,7 +66,7 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         self.module = module
         
         p = self.parameters
-        pads            = int(p["Pads"]["n"])        
+        pads            = int(p["Pads"]["*n"])        
         pad_width       = p["Pads"]["width"]
         pad_height      = p["Pads"]["height"]
         pad_pitch       = p["Pads"]["pitch"]

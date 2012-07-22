@@ -245,6 +245,15 @@ int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
 }
 
 
+int ReturnValueFromString( const wxString& aTextValue )
+{
+    int      value;
+
+    value = ReturnValueFromString( g_UserUnit, aTextValue);
+
+    return value;
+}
+
 int ReturnValueFromTextCtrl( const wxTextCtrl& aTextCtr )
 {
     int      value;

@@ -170,9 +170,50 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames(int aPage)
     arglist = Py_BuildValue("(i)", aPage);
     ret = CallRetArrayStrMethod("GetParameterNames",arglist);
     Py_DECREF(arglist);
+ 
+    for (unsigned i=0;i<ret.GetCount();i++)
+    {   
+        wxString rest;
+        wxString item = ret[i];
+        if (item.StartsWith(wxT("*"),&rest))
+        {
+            ret[i]=rest;
+        }
+    }
+
     
     return ret;
 }
+
+wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterTypes(int aPage)
+{
+  
+    PyObject *arglist;
+    wxArrayString ret;
+    
+    arglist = Py_BuildValue("(i)", aPage);
+    ret = CallRetArrayStrMethod("GetParameterNames",arglist);
+    Py_DECREF(arglist);
+ 
+    for (unsigned i=0;i<ret.GetCount();i++)
+    {   
+        wxString rest;
+        wxString item = ret[i];
+        if (item.StartsWith(wxT("*"),&rest))
+        {
+            ret[i]=wxT("UNITS"); /* units */
+        }
+        else
+        {
+            ret[i]=wxT("IU"); /* internal units */
+        }
+    }
+
+    
+    return ret;
+}
+
+
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues(int aPage)
 {

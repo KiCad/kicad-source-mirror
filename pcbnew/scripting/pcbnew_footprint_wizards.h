@@ -29,6 +29,7 @@ public:
     int           GetNumParameterPages();
     wxString      GetParameterPageName(int aPage);
     wxArrayString GetParameterNames(int aPage);
+    wxArrayString GetParameterTypes(int aPage);
     wxArrayString GetParameterValues(int aPage);
     wxArrayString GetParameterErrors(int aPage);
     wxString      SetParameterValues(int aPage,wxArrayString& aValues); //< must return "OK" or error description
