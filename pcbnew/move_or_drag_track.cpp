@@ -887,7 +887,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     s_StartSegmentPresent = s_EndSegmentPresent = true;
 
     if( ( track->start == NULL ) || ( track->start->Type() == PCB_TRACE_T ) )
-        TrackToStartPoint = track->GetTrace( GetBoard()->m_Track, NULL, START );
+        TrackToStartPoint = track->GetTrace( GetBoard()->m_Track, NULL, FLG_START );
 
     //  Test if more than one segment is connected to this point
     if( TrackToStartPoint )
@@ -895,14 +895,14 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         TrackToStartPoint->SetState( BUSY, ON );
 
         if( ( TrackToStartPoint->Type() == PCB_VIA_T )
-           || track->GetTrace( GetBoard()->m_Track, NULL, START ) )
+           || track->GetTrace( GetBoard()->m_Track, NULL, FLG_START ) )
             error = true;
 
         TrackToStartPoint->SetState( BUSY, OFF );
     }
 
     if( ( track->end == NULL ) || ( track->end->Type() == PCB_TRACE_T ) )
-        TrackToEndPoint = track->GetTrace( GetBoard()->m_Track, NULL, END );
+        TrackToEndPoint = track->GetTrace( GetBoard()->m_Track, NULL, FLG_END );
 
     //  Test if more than one segment is connected to this point
     if( TrackToEndPoint )
@@ -910,7 +910,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         TrackToEndPoint->SetState( BUSY, ON );
 
         if( (TrackToEndPoint->Type() == PCB_VIA_T)
-           || track->GetTrace( GetBoard()->m_Track, NULL, END ) )
+           || track->GetTrace( GetBoard()->m_Track, NULL, FLG_END ) )
             error = true;
 
         TrackToEndPoint->SetState( BUSY, OFF );
