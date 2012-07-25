@@ -188,7 +188,7 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
                 x_coordinates.clear();
                 for( ics = istart, ice = iend; ics <= iend; ice = ics, ics++ )
                 {
-                    if ( m_FilledPolysList[ice].utility )
+                    if ( m_FilledPolysList[ice].m_utility )
                         continue;
                     int seg_startX = m_FilledPolysList[ics].x;
                     int seg_startY = m_FilledPolysList[ics].y;
