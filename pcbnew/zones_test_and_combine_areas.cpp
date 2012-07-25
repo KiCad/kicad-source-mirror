@@ -31,7 +31,6 @@
  */
 
 #include <fctsys.h>
-#include <polygons_defs.h>
 #include <common.h>
 #include <confirm.h>
 #include <class_undoredo_container.h>
@@ -777,58 +776,6 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
         return 2;
 
     return 1;
-}
-
-/**
- * Function CopyPolysListToKiPolygonWithHole
- * converts the outline contours aPolysList to a KI_POLYGON_WITH_HOLES
- *
- * @param aPolysList = the list of corners of contours
- * @param aPolygoneWithHole = a KI_POLYGON_WITH_HOLES to populate
- */
-void CopyPolysListToKiPolygonWithHole( const std::vector<CPolyPt>& aPolysList,
-                                        KI_POLYGON_WITH_HOLES& aPolygoneWithHole )
-{
-    unsigned corners_count = aPolysList.size();
-
-    std::vector<KI_POLY_POINT> cornerslist;
-    KI_POLYGON poly;
-
-    // Enter main outline: this is the first contour
-    unsigned ic = 0;
-    while( ic < corners_count )
-    {
-        const CPolyPt& corner = aPolysList[ic++];
-        cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
-
-        if( corner.end_contour )
-            break;
-    }
-
-    aPolygoneWithHole.set( cornerslist.begin(), cornerslist.end() );
-
-    // Enter holes: they are next contours (when exist)
-    if( ic < corners_count )
-    {
-        KI_POLYGON_SET holePolyList;
-        while( ic < corners_count )
-        {
-            cornerslist.clear();
-
-            while( ic < corners_count )
-            {
-                const CPolyPt& corner = aPolysList[ic++];
-                cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
-
-                if( corner.end_contour )
-                    break;
-            }
-
-            bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
-            holePolyList.push_back( poly );
-        }
-        aPolygoneWithHole.set_holes( holePolyList.begin(), holePolyList.end() );
-    }
 }
 
 

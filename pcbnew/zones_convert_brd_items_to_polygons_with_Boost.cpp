@@ -524,10 +524,6 @@ int CopyPolygonsFromKiPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
             corner.x = point.x();
             corner.y = point.y();
             corner.end_contour = false;
-
-            // Flag this corner if starting a hole connection segment:
-            // This is used by draw functions to draw only useful segments (and not extra segments)
-            // corner.utility = (aBoolengine->GetPolygonPointEdgeType() == KB_FALSE_EDGE) ? 1 : 0;
             polysList.push_back( corner );
             count++;
         }
