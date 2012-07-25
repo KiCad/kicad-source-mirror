@@ -31,18 +31,6 @@ enum
 };
 
 
-
-/**
- * Function ArmBoolEng
- * Initialise parameters used in kbool
- * @param aBooleng = pointer to the Bool_Engine to initialise
- * @param aConvertHoles = mode for holes when a boolean operation is made
- *   true: holes are linked into outer contours by double overlapping segments
- *   false: holes are not linked: in this mode contours are added clockwise
- *          and polygons added counter clockwise are holes (default)
- */
-void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
-
 class CRect
 {
 public:
@@ -86,22 +74,22 @@ class CPolyPt : public wxPoint
 {
 public:
     CPolyPt( int aX = 0, int aY = 0, bool aEnd = false, int aUtility = 0 ) :
-        wxPoint( aX, aY ), end_contour( aEnd ), utility( aUtility )
+        wxPoint( aX, aY ), end_contour( aEnd ), m_utility( aUtility )
     {}
 
     /// Pure copy constructor is here to dis-ambiguate from the
     /// specialized CPolyPt( const wxPoint& ) constructor version below.
     CPolyPt( const CPolyPt& aPt ) :
-        wxPoint( aPt.x, aPt.y ), end_contour( aPt.end_contour ), utility( aPt.utility )
+        wxPoint( aPt.x, aPt.y ), end_contour( aPt.end_contour ), m_utility( aPt.m_utility )
     {}
 
     CPolyPt( const wxPoint& aPoint ) :
-        wxPoint( aPoint ), end_contour( false ), utility( 0 )
+        wxPoint( aPoint ), end_contour( false ), m_utility( 0 )
     {}
 
 
     bool end_contour;
-    int  utility;
+    int  m_utility;
 
     bool operator == (const CPolyPt& cpt2 ) const
     { return (x == cpt2.x) && (y == cpt2.y) && (end_contour == cpt2.end_contour); }
@@ -116,7 +104,7 @@ public:
 class CPolyLine
 {
 public:
-    enum side_style { STRAIGHT, ARC_CW, ARC_CCW };                 // side styles
+    enum m_SideStyle { STRAIGHT, ARC_CW, ARC_CCW };                 // side styles
     enum hatch_style { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE };    // hatch styles
 
     // constructors/destructor
@@ -173,21 +161,21 @@ public:
     int        GetNumCorners();
     int        GetNumSides();
     int        GetClosed();
-    int        GetNumContours();
+    int        GetContoursCount();
     int        GetContour( int ic );
     int        GetContourStart( int icont );
     int        GetContourEnd( int icont );
     int        GetContourSize( int icont );
 
-    int        GetX( int ic ) const { return corner[ic].x; }
-    int        GetY( int ic ) const { return corner[ic].y; }
+    int        GetX( int ic ) const { return m_CornersList[ic].x; }
+    int        GetY( int ic ) const { return m_CornersList[ic].y; }
 
-    const wxPoint& GetPos( int ic ) const { return corner[ic]; }
+    const wxPoint& GetPos( int ic ) const { return m_CornersList[ic]; }
 
     int        GetEndContour( int ic );
 
-    int        GetUtility( int ic ) { return corner[ic].utility; };
-    void       SetUtility( int ic, int utility ) { corner[ic].utility = utility; };
+    int        GetUtility( int ic ) { return m_CornersList[ic].m_utility; };
+    void       SetUtility( int ic, int utility ) { m_CornersList[ic].m_utility = utility; };
     int        GetSideStyle( int is );
     int        GetHatchPitch() { return m_hatchPitch; }
     int        GetDefaultHatchPitchMils() { return 20; }   // default hatch pitch value in mils
@@ -301,18 +289,18 @@ public:
 
 private:
     int m_layer;        // layer to draw on
-    int m_Width;        // lines width when drawing. Provided but not really used
+    int m_width;        // lines width when drawing. Provided but not really used
     enum hatch_style m_hatchStyle;                           // hatch style, see enum above
     int m_hatchPitch;   // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
                         // and the len of eacvh segment
                         // for DIAGONAL_FULL, the pitch is twice this value
-    int utility;
+    int m_utility;      // a flag used in some calculations
     Bool_Engine* m_Kbool_Poly_Engine; // polygons set in kbool engine data
 
 public:
-    std::vector <CPolyPt>  corner;              // array of points for corners
-    std::vector <int>      side_style;          // array of styles for sides
-    std::vector <CSegment> m_HatchLines;        // hatch lines
+    std::vector <CPolyPt>  m_CornersList;   // array of points for corners
+    std::vector <int>      m_SideStyle;    // array of styles for sides
+    std::vector <CSegment> m_HatchLines;    // hatch lines showing the polygon area
 };
 
 #endif  // #ifndef POLYLINE_H

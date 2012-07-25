@@ -18,8 +18,8 @@ CPolyLine::CPolyLine()
 {
     m_hatchStyle = NO_HATCH;
     m_hatchPitch = 0;
-    m_Width = 0;
-    utility = 0;
+    m_width = 0;
+    m_utility = 0;
     m_Kbool_Poly_Engine = NULL;
 }
 
@@ -33,6 +33,16 @@ CPolyLine::~CPolyLine()
         delete m_Kbool_Poly_Engine;
 }
 
+/**
+ * Function armBoolEng
+ * Initialise parameters used in kbool
+ * @param aBooleng = pointer to the Bool_Engine to initialise
+ * @param aConvertHoles = mode for holes when a boolean operation is made
+ *   true: holes are linked into outer contours by double overlapping segments
+ *   false: holes are not linked: in this mode contours are added clockwise
+ *          and polygons added counter clockwise are holes (default)
+ */
+static void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
 
 /**
  * Function NormalizeWithKbool
@@ -95,8 +105,8 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
         else if( n_ext_cont == 0 )
         {
             // first external contour, replace this poly
-            corner.clear();
-            side_style.clear();
+            m_CornersList.clear();
+            m_SideStyle.clear();
             bool first = true;
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
             {
@@ -271,7 +281,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         m_Kbool_Poly_Engine = NULL;
     }
 
-    int polycount = GetNumContours();
+    int polycount = GetContoursCount();
 
     if( !GetClosed() && (aStart_contour == (polycount - 1) || aStart_contour == -1) )
         return 1; // error
@@ -297,7 +307,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         // Fill a kbool engine for this contour,
         // and combine it with previous contours
         Bool_Engine* booleng = new Bool_Engine();
-        ArmBoolEng( booleng, aConvertHoles );
+        armBoolEng( booleng, aConvertHoles );
 
         if( m_Kbool_Poly_Engine )  // a previous contour exists. Put it in new engine
         {
@@ -329,7 +339,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         }
         for( int ic = ic_st; ic<=ic_end; ic++ )
         {
-            int style = side_style[ic];
+            int style = m_SideStyle[ic];
             if( style == STRAIGHT )
                 n_vertices++;
             else
@@ -345,19 +355,19 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
         int ivtx = 0;
         for( int ic = ic_st; ic<=ic_end; ic++ )
         {
-            int style = side_style[ic];
-            int x1    = corner[ic].x;
-            int y1    = corner[ic].y;
+            int style = m_SideStyle[ic];
+            int x1    = m_CornersList[ic].x;
+            int y1    = m_CornersList[ic].y;
             int x2, y2;
             if( ic < ic_end )
             {
-                x2 = corner[ic + 1].x;
-                y2 = corner[ic + 1].y;
+                x2 = m_CornersList[ic + 1].x;
+                y2 = m_CornersList[ic + 1].y;
             }
             else
             {
-                x2 = corner[ic_st].x;
-                y2 = corner[ic_st].y;
+                x2 = m_CornersList[ic_st].x;
+                y2 = m_CornersList[ic_st].y;
             }
             if( style == STRAIGHT )
             {
@@ -504,14 +514,14 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
 
 
 /**
- * Function ArmBoolEng
+ * Function armBoolEng
  * Initialise parameters used in kbool
  * @param aBooleng = pointer to the Bool_Engine to initialise
  * @param aConvertHoles = mode for holes when a boolean operation is made
  *   true: in resulting polygon, holes are linked into outer contours by double overlapping segments
  *   false: in resulting polygons, holes are not linked: they are separate polygons
  */
-void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
+void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 {
     // set some global vals to arm the boolean engine
 
@@ -614,7 +624,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
         n_polys += pa->size();
     CPolyLine* poly;
 
-    // undraw polys and clear utility flag for all corners
+    // undraw polys and clear m_utility flag for all corners
     for( int ip = 0; ip<n_polys; ip++ )
     {
         if( ip == 0 )
@@ -625,7 +635,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
         for( int ic = 0; ic<poly->GetNumCorners(); ic++ )
             poly->SetUtility( ic, 0 );
 
-        // clear utility flag
+        // clear m_utility flag
     }
 
     // find arcs and replace them
@@ -649,7 +659,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
                 poly = this;
             else
                 poly = (*pa)[ip - 1];
-            int polycount = poly->GetNumContours();
+            int polycount = poly->GetContoursCount();
             for( int icont = 0; icont < polycount; icont++ )
             {
                 int ic_start = poly->GetContourStart( icont );
@@ -697,7 +707,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
                             }
                             if( bFound )
                             {
-                                poly->side_style[arc_start] = style;
+                                poly->m_SideStyle[arc_start] = style;
 
                                 // mark corners for deletion from arc_start+1 to arc_end-1
                                 for( int i = arc_start + 1; i!=arc_end; )
@@ -769,8 +779,8 @@ void CPolyLine::Start( int layer, int x, int y, int hatch )
     CPolyPt poly_pt( x, y );
     poly_pt.end_contour = false;
 
-    corner.push_back( poly_pt );
-    side_style.push_back( 0 );
+    m_CornersList.push_back( poly_pt );
+    m_SideStyle.push_back( 0 );
 }
 
 
@@ -783,10 +793,10 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
     poly_pt.end_contour = false;
 
     // add entries for new corner and side
-    corner.push_back( poly_pt );
-    side_style.push_back( style );
-    if( corner.size() > 0 && !corner[corner.size() - 1].end_contour )
-        side_style[corner.size() - 1] = style;
+    m_CornersList.push_back( poly_pt );
+    m_SideStyle.push_back( style );
+    if( m_CornersList.size() > 0 && !m_CornersList[m_CornersList.size() - 1].end_contour )
+        m_SideStyle[m_CornersList.size() - 1] = style;
     if( bDraw )
         Hatch();
 }
@@ -801,8 +811,8 @@ void CPolyLine::Close( int style, bool bDraw )
         wxASSERT( 0 );
     }
     UnHatch();
-    side_style[corner.size() - 1] = style;
-    corner[corner.size() - 1].end_contour = true;
+    m_SideStyle[m_CornersList.size() - 1] = style;
+    m_CornersList[m_CornersList.size() - 1].end_contour = true;
     if( bDraw )
         Hatch();
 }
@@ -813,8 +823,8 @@ void CPolyLine::Close( int style, bool bDraw )
 void CPolyLine::MoveCorner( int ic, int x, int y )
 {
     UnHatch();
-    corner[ic].x = x;
-    corner[ic].y = y;
+    m_CornersList[ic].x = x;
+    m_CornersList[ic].y = y;
     Hatch();
 }
 
@@ -827,23 +837,23 @@ void CPolyLine::DeleteCorner( int ic, bool bDraw )
     int  icont   = GetContour( ic );
     int  istart  = GetContourStart( icont );
     int  iend    = GetContourEnd( icont );
-    bool bClosed = icont < GetNumContours() - 1 || GetClosed();
+    bool bClosed = icont < GetContoursCount() - 1 || GetClosed();
 
     if( !bClosed )
     {
         // open contour, must be last contour
-        corner.erase( corner.begin() + ic );
+        m_CornersList.erase( m_CornersList.begin() + ic );
 
         if( ic != istart )
-            side_style.erase( side_style.begin() + ic - 1 );
+            m_SideStyle.erase( m_SideStyle.begin() + ic - 1 );
     }
     else
     {
         // closed contour
-        corner.erase( corner.begin() + ic );
-        side_style.erase( side_style.begin() + ic );
+        m_CornersList.erase( m_CornersList.begin() + ic );
+        m_SideStyle.erase( m_SideStyle.begin() + ic );
         if( ic == iend )
-            corner[ic - 1].end_contour = true;
+            m_CornersList[ic - 1].end_contour = true;
     }
     if( bClosed && GetContourSize( icont ) < 3 )
     {
@@ -869,7 +879,7 @@ void CPolyLine::RemoveContour( int icont )
     int istart = GetContourStart( icont );
     int iend   = GetContourEnd( icont );
 
-    int polycount = GetNumContours();
+    int polycount = GetContoursCount();
     if( icont == 0 && polycount == 1 )
     {
         // remove the only contour
@@ -878,16 +888,16 @@ void CPolyLine::RemoveContour( int icont )
     else if( icont == polycount - 1 )
     {
         // remove last contour
-        corner.erase( corner.begin() + istart, corner.end() );
-        side_style.erase( side_style.begin() + istart, side_style.end() );
+        m_CornersList.erase( m_CornersList.begin() + istart, m_CornersList.end() );
+        m_SideStyle.erase( m_SideStyle.begin() + istart, m_SideStyle.end() );
     }
     else
     {
         // remove closed contour
         for( int ic = iend; ic>=istart; ic-- )
         {
-            corner.erase( corner.begin() + ic );
-            side_style.erase( side_style.begin() + ic );
+            m_CornersList.erase( m_CornersList.begin() + ic );
+            m_SideStyle.erase( m_SideStyle.begin() + ic );
         }
     }
     Hatch();
@@ -904,7 +914,7 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
         return newPoly;
     }
 
-    int polycount = GetNumContours();
+    int polycount = GetContoursCount();
     for( int contour = 0; contour < polycount; contour++ )
     {
         unsigned int startIndex = GetContourStart( contour );
@@ -915,29 +925,29 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
             int x1, y1, nx, ny;
             long long xa, ya, xb, yb;
 
-            x1 = corner[index].x;
-            y1 = corner[index].y;
+            x1 = m_CornersList[index].x;
+            y1 = m_CornersList[index].y;
 
             if( index == startIndex )
             {
-                xa = corner[endIndex].x - x1;
-                ya = corner[endIndex].y - y1;
+                xa = m_CornersList[endIndex].x - x1;
+                ya = m_CornersList[endIndex].y - y1;
             }
             else
             {
-                xa = corner[index-1].x - x1;
-                ya = corner[index-1].y - y1;
+                xa = m_CornersList[index-1].x - x1;
+                ya = m_CornersList[index-1].y - y1;
             }
 
             if( index == endIndex )
             {
-                xb = corner[startIndex].x - x1;
-                yb = corner[startIndex].y - y1;
+                xb = m_CornersList[startIndex].x - x1;
+                yb = m_CornersList[startIndex].y - y1;
             }
             else
             {
-                xb = corner[index+1].x - x1;
-                yb = corner[index+1].y - y1;
+                xb = m_CornersList[index+1].x - x1;
+                yb = m_CornersList[index+1].y - y1;
             }
 
             unsigned int lena = (unsigned int)sqrt( (double)(xa*xa + ya*ya) );
@@ -980,7 +990,7 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
         return newPoly;
     }
 
-    int polycount = GetNumContours();
+    int polycount = GetContoursCount();
     for( int contour = 0; contour < polycount; contour++ )
     {
         unsigned int startIndex = GetContourStart( contour );
@@ -994,29 +1004,29 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             long long xb, yb; // Next vertex
             double nx, ny;
 
-            x1 = corner[index].x;
-            y1 = corner[index].y;
+            x1 = m_CornersList[index].x;
+            y1 = m_CornersList[index].y;
 
             if( index == startIndex )
             {
-                xa = corner[endIndex].x - x1;
-                ya = corner[endIndex].y - y1;
+                xa = m_CornersList[endIndex].x - x1;
+                ya = m_CornersList[endIndex].y - y1;
             }
             else
             {
-                xa = corner[index-1].x - x1;
-                ya = corner[index-1].y - y1;
+                xa = m_CornersList[index-1].x - x1;
+                ya = m_CornersList[index-1].y - y1;
             }
 
             if( index == endIndex )
             {
-                xb = corner[startIndex].x - x1;
-                yb = corner[startIndex].y - y1;
+                xb = m_CornersList[startIndex].x - x1;
+                yb = m_CornersList[startIndex].y - y1;
             }
             else
             {
-                xb = corner[index+1].x - x1;
-                yb = corner[index+1].y - y1;
+                xb = m_CornersList[index+1].x - x1;
+                yb = m_CornersList[index+1].y - y1;
             }
 
             double lena = sqrt( (double) (xa*xa + ya*ya) );
@@ -1103,8 +1113,8 @@ void CPolyLine::RemoveAllContours( void )
  * Others params are not chnaged
  */
 {
-    corner.clear();
-    side_style.clear();
+    m_CornersList.clear();
+    m_SideStyle.clear();
 }
 
 
@@ -1117,23 +1127,23 @@ void CPolyLine::RemoveAllContours( void )
 void CPolyLine::InsertCorner( int ic, int x, int y )
 {
     UnHatch();
-    if( (unsigned) (ic) >= corner.size() )
+    if( (unsigned) (ic) >= m_CornersList.size() )
     {
-        corner.push_back( CPolyPt( x, y ) );
-        side_style.push_back( STRAIGHT );
+        m_CornersList.push_back( CPolyPt( x, y ) );
+        m_SideStyle.push_back( STRAIGHT );
     }
     else
     {
-        corner.insert( corner.begin() + ic + 1, CPolyPt( x, y ) );
-        side_style.insert( side_style.begin() + ic + 1, STRAIGHT );
+        m_CornersList.insert( m_CornersList.begin() + ic + 1, CPolyPt( x, y ) );
+        m_SideStyle.insert( m_SideStyle.begin() + ic + 1, STRAIGHT );
     }
 
-    if( (unsigned) (ic + 1) < corner.size() )
+    if( (unsigned) (ic + 1) < m_CornersList.size() )
     {
-        if( corner[ic].end_contour )
+        if( m_CornersList[ic].end_contour )
         {
-            corner[ic + 1].end_contour = true;
-            corner[ic].end_contour = false;
+            m_CornersList[ic + 1].end_contour = true;
+            m_CornersList[ic].end_contour = false;
         }
     }
     Hatch();
@@ -1150,7 +1160,7 @@ void CPolyLine::UnHatch()
 
 int CPolyLine::GetEndContour( int ic )
 {
-    return corner[ic].end_contour;
+    return m_CornersList[ic].end_contour;
 }
 
 
@@ -1158,10 +1168,10 @@ CRect CPolyLine::GetBounds()
 {
     CRect r = GetCornerBounds();
 
-    r.left   -= m_Width / 2;
-    r.right  += m_Width / 2;
-    r.bottom -= m_Width / 2;
-    r.top += m_Width / 2;
+    r.left   -= m_width / 2;
+    r.right  += m_width / 2;
+    r.bottom -= m_width / 2;
+    r.top += m_width / 2;
     return r;
 }
 
@@ -1172,12 +1182,12 @@ CRect CPolyLine::GetCornerBounds()
 
     r.left  = r.bottom = INT_MAX;
     r.right = r.top = INT_MIN;
-    for( unsigned i = 0; i<corner.size(); i++ )
+    for( unsigned i = 0; i<m_CornersList.size(); i++ )
     {
-        r.left   = min( r.left, corner[i].x );
-        r.right  = max( r.right, corner[i].x );
-        r.bottom = min( r.bottom, corner[i].y );
-        r.top    = max( r.top, corner[i].y );
+        r.left   = min( r.left, m_CornersList[i].x );
+        r.right  = max( r.right, m_CornersList[i].x );
+        r.bottom = min( r.bottom, m_CornersList[i].y );
+        r.top    = max( r.top, m_CornersList[i].y );
     }
 
     return r;
@@ -1194,10 +1204,10 @@ CRect CPolyLine::GetCornerBounds( int icont )
     int iend   = GetContourEnd( icont );
     for( int i = istart; i<=iend; i++ )
     {
-        r.left   = min( r.left, corner[i].x );
-        r.right  = max( r.right, corner[i].x );
-        r.bottom = min( r.bottom, corner[i].y );
-        r.top    = max( r.top, corner[i].y );
+        r.left   = min( r.left, m_CornersList[i].x );
+        r.right  = max( r.right, m_CornersList[i].x );
+        r.bottom = min( r.bottom, m_CornersList[i].y );
+        r.top    = max( r.top, m_CornersList[i].y );
     }
 
     return r;
@@ -1206,31 +1216,31 @@ CRect CPolyLine::GetCornerBounds( int icont )
 
 int CPolyLine::GetNumCorners()
 {
-    return corner.size();
+    return m_CornersList.size();
 }
 
 
 int CPolyLine::GetNumSides()
 {
     if( GetClosed() )
-        return corner.size();
+        return m_CornersList.size();
     else
-        return corner.size() - 1;
+        return m_CornersList.size() - 1;
 }
 
 
-int CPolyLine::GetNumContours()
+int CPolyLine::GetContoursCount()
 {
     int ncont = 0;
 
-    if( !corner.size() )
+    if( !m_CornersList.size() )
         return 0;
 
-    for( unsigned ic = 0; ic<corner.size(); ic++ )
-        if( corner[ic].end_contour )
+    for( unsigned ic = 0; ic < m_CornersList.size(); ic++ )
+        if( m_CornersList[ic].end_contour )
             ncont++;
 
-    if( !corner[corner.size() - 1].end_contour )
+    if( !m_CornersList[m_CornersList.size() - 1].end_contour )
         ncont++;
     return ncont;
 }
@@ -1242,7 +1252,7 @@ int CPolyLine::GetContour( int ic )
 
     for( int i = 0; i<ic; i++ )
     {
-        if( corner[i].end_contour )
+        if( m_CornersList[i].end_contour )
             ncont++;
     }
 
@@ -1256,9 +1266,9 @@ int CPolyLine::GetContourStart( int icont )
         return 0;
 
     int ncont = 0;
-    for( unsigned i = 0; i<corner.size(); i++ )
+    for( unsigned i = 0; i<m_CornersList.size(); i++ )
     {
-        if( corner[i].end_contour )
+        if( m_CornersList[i].end_contour )
         {
             ncont++;
             if( ncont == icont )
@@ -1276,13 +1286,13 @@ int CPolyLine::GetContourEnd( int icont )
     if( icont < 0 )
         return 0;
 
-    if( icont == GetNumContours() - 1 )
-        return corner.size() - 1;
+    if( icont == GetContoursCount() - 1 )
+        return m_CornersList.size() - 1;
 
     int ncont = 0;
-    for( unsigned i = 0; i<corner.size(); i++ )
+    for( unsigned i = 0; i<m_CornersList.size(); i++ )
     {
-        if( corner[i].end_contour )
+        if( m_CornersList[i].end_contour )
         {
             if( ncont == icont )
                 return i;
@@ -1305,40 +1315,40 @@ void CPolyLine::SetSideStyle( int is, int style )
 {
     UnHatch();
     wxPoint p1, p2;
-    if( is == (int) (corner.size() - 1) )
+    if( is == (int) (m_CornersList.size() - 1) )
     {
-        p1.x = corner[corner.size() - 1].x;
-        p1.y = corner[corner.size() - 1].y;
-        p2.x = corner[0].x;
-        p2.y = corner[0].y;
+        p1.x = m_CornersList[m_CornersList.size() - 1].x;
+        p1.y = m_CornersList[m_CornersList.size() - 1].y;
+        p2.x = m_CornersList[0].x;
+        p2.y = m_CornersList[0].y;
     }
     else
     {
-        p1.x = corner[is].x;
-        p1.y = corner[is].y;
-        p2.x = corner[is + 1].x;
-        p2.y = corner[is + 1].y;
+        p1.x = m_CornersList[is].x;
+        p1.y = m_CornersList[is].y;
+        p2.x = m_CornersList[is + 1].x;
+        p2.y = m_CornersList[is + 1].y;
     }
     if( p1.x == p2.x || p1.y == p2.y )
-        side_style[is] = STRAIGHT;
+        m_SideStyle[is] = STRAIGHT;
     else
-        side_style[is] = style;
+        m_SideStyle[is] = style;
     Hatch();
 }
 
 
 int CPolyLine::GetSideStyle( int is )
 {
-    return side_style[is];
+    return m_SideStyle[is];
 }
 
 
 int CPolyLine::GetClosed()
 {
-    if( corner.size() == 0 )
+    if( m_CornersList.size() == 0 )
         return 0;
     else
-        return corner[corner.size() - 1].end_contour;
+        return m_CornersList[m_CornersList.size() - 1].end_contour;
 }
 
 
@@ -1360,20 +1370,20 @@ void CPolyLine::Hatch()
         return;
 
     // define range for hatch lines
-    int    min_x = corner[0].x;
-    int    max_x = corner[0].x;
-    int    min_y = corner[0].y;
-    int    max_y = corner[0].y;
-    for( unsigned ic = 1; ic < corner.size(); ic++ )
+    int    min_x = m_CornersList[0].x;
+    int    max_x = m_CornersList[0].x;
+    int    min_y = m_CornersList[0].y;
+    int    max_y = m_CornersList[0].y;
+    for( unsigned ic = 1; ic < m_CornersList.size(); ic++ )
     {
-        if( corner[ic].x < min_x )
-            min_x = corner[ic].x;
-        if( corner[ic].x > max_x )
-            max_x = corner[ic].x;
-        if( corner[ic].y < min_y )
-            min_y = corner[ic].y;
-        if( corner[ic].y > max_y )
-            max_y = corner[ic].y;
+        if( m_CornersList[ic].x < min_x )
+            min_x = m_CornersList[ic].x;
+        if( m_CornersList[ic].x > max_x )
+            max_x = m_CornersList[ic].x;
+        if( m_CornersList[ic].y < min_y )
+            min_y = m_CornersList[ic].y;
+        if( m_CornersList[ic].y > max_y )
+            max_y = m_CornersList[ic].y;
     }
 
     // Calculate spacing betwwen 2 hatch lines
@@ -1409,7 +1419,7 @@ void CPolyLine::Hatch()
     min_a += offset;
 
     // now calculate and draw hatch lines
-    int nc = corner.size();
+    int nc = m_CornersList.size();
 
     // loop through hatch lines
     #define MAXPTS 200      // Usually we store only few values per one hatch line
@@ -1433,22 +1443,22 @@ void CPolyLine::Hatch()
         {
             double x, y, x2, y2;
             int    ok;
-            if( corner[ic].end_contour || ( ic == (int) (corner.size() - 1) ) )
+            if( m_CornersList[ic].end_contour || ( ic == (int) (m_CornersList.size() - 1) ) )
             {
                 ok = FindLineSegmentIntersection( a, slope,
-                    corner[ic].x, corner[ic].y,
-                    corner[i_start_contour].x,
-                    corner[i_start_contour].y,
-                    side_style[ic],
+                    m_CornersList[ic].x, m_CornersList[ic].y,
+                    m_CornersList[i_start_contour].x,
+                    m_CornersList[i_start_contour].y,
+                    m_SideStyle[ic],
                     &x, &y, &x2, &y2 );
                 i_start_contour = ic + 1;
             }
             else
             {
                 ok = FindLineSegmentIntersection( a, slope,
-                    corner[ic].x, corner[ic].y,
-                    corner[ic + 1].x, corner[ic + 1].y,
-                    side_style[ic],
+                    m_CornersList[ic].x, m_CornersList[ic].y,
+                    m_CornersList[ic + 1].x, m_CornersList[ic + 1].y,
+                    m_SideStyle[ic],
                     &x, &y, &x2, &y2 );
             }
             if( ok )
@@ -1534,7 +1544,7 @@ bool CPolyLine::TestPointInside( int px, int py )
     // if the tested point is inside only one contour, it is inside the whole polygon
     // (in fact inside the main outline, and outside all holes).
     // if inside 2 contours (the main outline + an hole), it is outside the poly.
-    int polycount = GetNumContours();
+    int polycount = GetContoursCount();
     bool inside = false;
     for( int icont = 0; icont < polycount; icont++ )
     {
@@ -1542,7 +1552,7 @@ bool CPolyLine::TestPointInside( int px, int py )
         int iend   = GetContourEnd( icont );
 
         // Test this polygon:
-        if( TestPointInsidePolygon( corner, istart, iend, px, py) )   // test point inside the current polygon
+        if( TestPointInsidePolygon( m_CornersList, istart, iend, px, py) )   // test point inside the current polygon
             inside = not inside;
     }
 
@@ -1557,9 +1567,9 @@ void CPolyLine::Copy( CPolyLine* src )
     m_hatchStyle = src->m_hatchStyle;
     m_hatchPitch = src->m_hatchPitch;
     // copy corners, using vector copy
-    corner = src->corner;
+    m_CornersList = src->m_CornersList;
     // copy side styles, using vector copy
-    side_style = src->side_style;
+    m_SideStyle = src->m_SideStyle;
 }
 
 
@@ -1598,19 +1608,19 @@ void CPolyLine::MoveOrigin( int x_off, int y_off )
 //
 void CPolyLine::SetX( int ic, int x )
 {
-    corner[ic].x = x;
+    m_CornersList[ic].x = x;
 }
 
 
 void CPolyLine::SetY( int ic, int y )
 {
-    corner[ic].y = y;
+    m_CornersList[ic].y = y;
 }
 
 
 void CPolyLine::SetEndContour( int ic, bool end_contour )
 {
-    corner[ic].end_contour = end_contour;
+    m_CornersList[ic].end_contour = end_contour;
 }
 
 
@@ -1676,7 +1686,7 @@ int CPolyLine::Distance( wxPoint aStart, wxPoint aEnd, int aWidth )
         return 0;
 
     int distance = INT_MAX;
-    int polycount = GetNumContours();
+    int polycount = GetContoursCount();
 
     for( int icont = 0; icont < polycount; icont++ )
     {
@@ -1732,7 +1742,7 @@ int CPolyLine::Distance( const wxPoint& aPoint )
         return 0;
 
     int distance = INT_MAX;
-    int polycount = GetNumContours();
+    int polycount = GetContoursCount();
 
     for( int icont = 0; icont < polycount; icont++ )
     {
