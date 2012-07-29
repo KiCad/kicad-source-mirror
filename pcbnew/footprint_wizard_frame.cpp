@@ -182,7 +182,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( wxWindow* parent, wxSemaphore* s
                                  ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                                  wxPoint(0,0),wxDefaultSize);
 
-    printf("pws.x=%d pws.y=%d\n",m_ParameterGridSize.x, m_ParameterGridSize.y);
     ReCreatePageList();
 
     DisplayWizardInfos();
@@ -411,10 +410,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     wxArrayString fpList = m_FootprintWizard->GetParameterNames(page);
     wxArrayString fvList = m_FootprintWizard->GetParameterValues(page);
     wxArrayString ptList = m_FootprintWizard->GetParameterTypes(page);
-    
-    
-  
-    
+       
     // Dimension the wxGrid 
     m_ParameterGrid->CreateGrid(fpList.size(),3);
     
@@ -424,8 +420,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
         
         name = fpList[i];
         value = fvList[i];
-        
-        
+            
         m_ParameterGrid->SetCellValue( i, 0, name);
         m_ParameterGrid->SetReadOnly( i, 0 );
         
@@ -463,7 +458,6 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     
     m_ParameterGrid->AutoSizeColumns();
     
-
 }
 
 
