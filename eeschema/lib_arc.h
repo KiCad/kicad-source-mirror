@@ -37,15 +37,15 @@ class TRANSFORM;
 
 class LIB_ARC : public LIB_ITEM
 {
-    enum SELECT_T
+    enum SELECT_T               // When creating an arc: status of arc
     {
-        START,
-        END,
-        OUTLINE,
+        ARC_STATUS_START,
+        ARC_STATUS_END,
+        ARC_STATUS_OUTLINE,
     };
 
     int      m_Radius;
-    int      m_t1;              /* First radius angle of the arc in 0.1 degrees. */
+    int      m_t1;              // First radius angle of the arc in 0.1 degrees.
     int      m_t2;              /* Second radius angle of the arc in 0.1 degrees. */
     wxPoint  m_ArcStart;
     wxPoint  m_ArcEnd;          /* Arc end position. */

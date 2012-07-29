@@ -1059,7 +1059,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     m_out->Print( 0, ")\n" );
 
-    const std::vector< CPolyPt >& cv = aZone->m_Poly->corner;
+    const std::vector< CPolyPt >& cv = aZone->m_Poly->m_CornersList;
     int newLine = 0;
 
     if( cv.size() )

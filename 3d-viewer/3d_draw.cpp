@@ -305,7 +305,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
             {
                 CPolyPt* endcorner = &polysList[ic];
 
-                if( begincorner->utility == 0 )
+                if( begincorner->m_utility == 0 )
                 {
                     // Draw only basic outlines, not extra segments
                     dummysegment.m_Start.x = begincorner->x;
@@ -318,7 +318,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
                 if( (endcorner->end_contour) || (ic == imax) )
                 {
                     // the last corner of a filled area is found: draw it
-                    if( endcorner->utility == 0 )
+                    if( endcorner->m_utility == 0 )
                     {
                         // Draw only basic outlines, not extra segments
                         dummysegment.m_Start.x = endcorner->x;

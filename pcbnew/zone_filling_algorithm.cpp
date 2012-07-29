@@ -89,39 +89,12 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>
         break;
     }
 
-    m_smoothedPoly->MakeKboolPoly( -1, -1, NULL, true );
-    int count = 0;
-    while( m_smoothedPoly->GetKboolEngine()->StartPolygonGet() )
-    {
-        CPolyPt corner( 0, 0, false );
-        while( m_smoothedPoly->GetKboolEngine()->PolygonHasMorePoints() )
-        {
-            corner.x = (int) m_smoothedPoly->GetKboolEngine()->GetPolygonXPoint();
-            corner.y = (int) m_smoothedPoly->GetKboolEngine()->GetPolygonYPoint();
-            corner.end_contour = false;
-            if( aCornerBuffer )
-                aCornerBuffer->push_back( corner );
-            else
-                m_FilledPolysList.push_back( corner );
-            count++;
-        }
-
-        corner.end_contour = true;
-        if( aCornerBuffer )
-        {
-            aCornerBuffer->pop_back();
-            aCornerBuffer->push_back( corner );
-        }
-        else
-        {
-            m_FilledPolysList.pop_back();
-            m_FilledPolysList.push_back( corner );
-        }
-        m_smoothedPoly->GetKboolEngine()->EndPolygonGet();
-    }
-
-    m_smoothedPoly->FreeKboolEngine();
-
+    if( aCornerBuffer )
+        ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList,
+                                               *aCornerBuffer );
+    else
+        ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList,
+                                               m_FilledPolysList );
     /* For copper layers, we now must add holes in the Polygon list.
      * holes are pads and tracks with their clearance area
      */
@@ -134,7 +107,7 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>
             Fill_Zone_Areas_With_Segments( );
     }
 
-    return count;
+    return 1;
 }
 
 // Sort function to build filled zones
@@ -188,7 +161,7 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
                 x_coordinates.clear();
                 for( ics = istart, ice = iend; ics <= iend; ice = ics, ics++ )
                 {
-                    if ( m_FilledPolysList[ice].utility )
+                    if ( m_FilledPolysList[ice].m_utility )
                         continue;
                     int seg_startX = m_FilledPolysList[ics].x;
                     int seg_startY = m_FilledPolysList[ics].y;

@@ -25,8 +25,8 @@
 #define VISIBLE_ONLY  (1 << 3)   ///< if module not on a visible layer, do not select
 
 
-#define START 0                  /* Flag used in locate routines */
-#define END   1
+#define FLG_START 0             // Flag used in locate routines
+#define FLG_END   1             // Flag used in locate routines
 
 #define DIM_ANCRE_MODULE 3       /* Anchor size (footprint center) */
 #define DIM_ANCRE_TEXTE  2       /* Anchor size (Text center) */

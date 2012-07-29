@@ -115,7 +115,7 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     wxASSERT( m_Poly );                                      // m_Poly == NULL Should never happen
     wxASSERT( aZoneToCompare.m_Poly );
 
-    if( m_Poly->corner != aZoneToCompare.m_Poly->corner )    // Compare vector
+    if( m_Poly->m_CornersList != aZoneToCompare.m_Poly->m_CornersList )    // Compare vector
         return false;
 
     return true;

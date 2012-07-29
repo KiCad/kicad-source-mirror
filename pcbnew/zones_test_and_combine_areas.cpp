@@ -142,7 +142,7 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
     // first, check for sides intersecting other sides, especially arcs
     bool               bInt    = false;
     bool               bArcInt = false;
-    int                n_cont  = p->GetNumContours();
+    int                n_cont  = p->GetContoursCount();
 
     // make bounding rect for each contour
     std::vector<CRect> cr;
@@ -550,7 +550,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
             continue;
 
         // test for intersecting segments
-        for( int icont1 = 0; icont1<poly1->GetNumContours(); icont1++ )
+        for( int icont1 = 0; icont1<poly1->GetContoursCount(); icont1++ )
         {
             int is1 = poly1->GetContourStart( icont1 );
             int ie1 = poly1->GetContourEnd( icont1 );
@@ -574,7 +574,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 
                 style1 = poly1->GetSideStyle( ic1 );
 
-                for( int icont2 = 0; icont2 < poly2->GetNumContours(); icont2++ )
+                for( int icont2 = 0; icont2 < poly2->GetContoursCount(); icont2++ )
                 {
                     int is2 = poly2->GetContourStart( icont2 );
                     int ie2 = poly2->GetContourEnd( icont2 );
@@ -668,7 +668,7 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
     bool bInt    = false;
     bool bArcInt = false;
 
-    for( int icont1 = 0; icont1<poly1->GetNumContours(); icont1++ )
+    for( int icont1 = 0; icont1<poly1->GetContoursCount(); icont1++ )
     {
         int is1 = poly1->GetContourStart( icont1 );
         int ie1 = poly1->GetContourEnd( icont1 );
@@ -692,7 +692,7 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
 
             style1 = poly1->GetSideStyle( ic1 );
 
-            for( int icont2 = 0; icont2<poly2->GetNumContours(); icont2++ )
+            for( int icont2 = 0; icont2<poly2->GetContoursCount(); icont2++ )
             {
                 int is2 = poly2->GetContourStart( icont2 );
                 int ie2 = poly2->GetContourEnd( icont2 );
@@ -781,142 +781,84 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
 
 /**
  * Function CombineAreas
- * If possible, combine 2 copper areas
+ * Merge 2 copper areas (which  are expected intersecting)
  * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo
  *                       commands can be NULL
- * @param area_ref = tje main area (zone)
+ * @param area_ref = the main area (zone)
  * @param area_to_combine = the zone that can be merged with area_ref
  * area_ref must be BEFORE area_to_combine
  * area_to_combine will be deleted, if areas are combined
  * @return : 0 if no intersection
  *         1 if intersection
- *         2 if arcs intersect
+ *         2 if arcs intersect (Currently not supported)
  */
+
 int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_ref,
                          ZONE_CONTAINER* area_to_combine )
 {
     if( area_ref == area_to_combine )
     {
         wxASSERT( 0 );
+        return 0;
     }
 
     // polygons intersect, combine them
-    std::vector<CArc> arc_array1;
-    std::vector<CArc> arc_array2;
-    bool keep_area_to_combine = false;
+//    std::vector<CArc> arc_array1;
+//    std::vector<CArc> arc_array2;
+    bool keep_area_to_combine = false;      // TODO test if areas intersect
 
-    Bool_Engine*      booleng = new Bool_Engine();
-    ArmBoolEng( booleng );
+    KI_POLYGON_WITH_HOLES areaRefPoly;
+    KI_POLYGON_WITH_HOLES areaToMergePoly;
+    CopyPolysListToKiPolygonWithHole( area_ref->m_Poly->m_CornersList, areaRefPoly );
+    CopyPolysListToKiPolygonWithHole( area_to_combine->m_Poly->m_CornersList, areaToMergePoly );
 
-    area_ref->m_Poly->AddPolygonsToBoolEng( booleng, GROUP_A, -1, -1 );
-    area_to_combine->m_Poly->AddPolygonsToBoolEng( booleng, GROUP_B, -1, -1 );
-    booleng->Do_Operation( BOOL_OR );
+    KI_POLYGON_WITH_HOLES_SET mergedOutlines;
+    mergedOutlines.push_back( areaRefPoly );
+    mergedOutlines += areaToMergePoly;
 
+    // We should have only one polygon with holes in mergedOutlines
+    // or the 2 initial outlines do not intersect
+    if( mergedOutlines.size() > 1 )
+        return 0;
+
+    areaRefPoly = mergedOutlines[0];
+    area_ref->m_Poly->RemoveAllContours();
+
+    KI_POLYGON_WITH_HOLES::iterator_type corner = areaRefPoly.begin();
     // create area with external contour: Recreate only area edges, NOT holes
-    if( booleng->StartPolygonGet() )
+    area_ref->m_Poly->Start( area_ref->GetLayer(), corner->x(), corner->y(),
+                             area_ref->m_Poly->GetHatchStyle() );
+    while( ++corner != areaRefPoly.end() )
     {
-        if( booleng->GetPolygonPointEdgeType() == KB_INSIDE_EDGE )
+        area_ref->m_Poly->AppendCorner( corner->x(), corner->y() );
+    }
+
+    area_ref->m_Poly->Close();
+
+    // add holes (set of polygons)
+    KI_POLYGON_WITH_HOLES::iterator_holes_type hole = areaRefPoly.begin_holes();
+    while( hole != areaRefPoly.end_holes() )
+    {
+        KI_POLYGON::iterator_type hole_corner = hole->begin();
+        // create area with external contour: Recreate only area edges, NOT holes
+        while( hole_corner != hole->end() )
         {
-            DisplayError( NULL, wxT( "BOARD::CombineAreas() error: unexpected hole descriptor" ) );
+            area_ref->m_Poly->AppendCorner( hole_corner->x(), hole_corner->y() );
+            hole_corner++;
         }
-
-        area_ref->m_Poly->RemoveAllContours();
-
-        // foreach point in the polygon
-        bool first = true;
-
-        while( booleng->PolygonHasMorePoints() )
-        {
-            int x = (int) booleng->GetPolygonXPoint();
-            int y = (int) booleng->GetPolygonYPoint();
-
-            if( first )
-            {
-                first = false;
-                area_ref->m_Poly->Start( area_ref->GetLayer(
-                                            ), x, y, area_ref->m_Poly->GetHatchStyle() );
-            }
-            else
-            {
-                area_ref->m_Poly->AppendCorner( x, y );
-            }
-        }
-
-        booleng->EndPolygonGet();
         area_ref->m_Poly->Close();
+        hole++;
     }
 
-    // Recreate the area_to_combine if a second polygon exists
-    // if not exists , the first poly contains the 2 initial polygons
-#if 0   // TestAreaIntersection must be called before combine areas, so
-        // 2 intersecting areas are expected, and only one outline contour after combining areas
-    else
-    {
-        area_to_combine->m_Poly->RemoveAllContours();
-        keep_area_to_combine = true;
-
-        // create area with external contour: Recreate only area edges, NOT holes (todo..)
-        {
-            // foreach point in the polygon
-            bool first = true;
-            while( booleng->PolygonHasMorePoints() )
-            {
-                int x = booleng->GetPolygonXPoint();
-                int y = booleng->GetPolygonYPoint();
-
-                if( first )
-                {
-                    first = false;
-                    area_to_combine->m_Poly->Start( area_ref->GetLayer(), x, y,
-                                                    area_ref->m_Poly->GetHatchStyle() );
-                }
-                else
-                {
-                    area_to_combine->m_Poly->AppendCorner( x, y );
-                }
-            }
-
-            booleng->EndPolygonGet();
-            area_to_combine->m_Poly->Close();
-        }
-    }
-#endif
-
-    // add holes
-    bool show_error = true;
-
-    while( booleng->StartPolygonGet() )
-    {
-        // we expect all vertex are holes inside the main outline
-        if( booleng->GetPolygonPointEdgeType() != KB_INSIDE_EDGE )
-        {
-            if( show_error )    // show this error only once, if happens
-                DisplayError( NULL,
-                              wxT( "BOARD::CombineAreas() error: unexpected outside contour descriptor" ) );
-
-            show_error = false;
-            continue;
-        }
-
-        while( booleng->PolygonHasMorePoints() )
-        {
-            int x = (int) booleng->GetPolygonXPoint();
-            int y = (int) booleng->GetPolygonYPoint();
-            area_ref->m_Poly->AppendCorner( x, y );
-        }
-
-        area_ref->m_Poly->Close();
-        booleng->EndPolygonGet();
-    }
 
     if( !keep_area_to_combine )
         RemoveArea( aDeletedList, area_to_combine );
 
     area_ref->utility = 1;
-    area_ref->m_Poly->RestoreArcs( &arc_array1 );
-    area_ref->m_Poly->RestoreArcs( &arc_array2 );
+//    area_ref->m_Poly->RestoreArcs( &arc_array1 );
+//    area_ref->m_Poly->RestoreArcs( &arc_array2 );
     area_ref->m_Poly->Hatch();
-    delete booleng;
+
     return 1;
 }
 
@@ -1024,7 +966,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             }
 
             // now test spacing between areas
-            for( int icont = 0; icont < refSmoothedPoly->GetNumContours(); icont++ )
+            for( int icont = 0; icont < refSmoothedPoly->GetContoursCount(); icont++ )
             {
                 int ic_start = refSmoothedPoly->GetContourStart( icont );
                 int ic_end   = refSmoothedPoly->GetContourEnd( icont );
@@ -1048,7 +990,7 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 
                     int astyle = refSmoothedPoly->GetSideStyle( ic );
 
-                    for( int icont2 = 0; icont2 < testSmoothedPoly->GetNumContours(); icont2++ )
+                    for( int icont2 = 0; icont2 < testSmoothedPoly->GetContoursCount(); icont2++ )
                     {
                         int ic_start2 = testSmoothedPoly->GetContourStart( icont2 );
                         int ic_end2   = testSmoothedPoly->GetContourEnd( icont2 );
@@ -1128,7 +1070,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
     wxPoint  end;
 
     // Search the end point of the edge starting at aCornerIndex
-    if( aArea->m_Poly->corner[aCornerIndex].end_contour == false
+    if( aArea->m_Poly->m_CornersList[aCornerIndex].end_contour == false
        && aCornerIndex < (aArea->GetNumCorners() - 1) )
     {
         end = aArea->GetCornerPosition( aCornerIndex + 1 );
@@ -1141,7 +1083,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
 
         while( ii >= 0 )
         {
-            if( aArea->m_Poly->corner[ii].end_contour )
+            if( aArea->m_Poly->m_CornersList[ii].end_contour )
                 break;
 
             end = aArea->GetCornerPosition( ii );
@@ -1189,7 +1131,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
         int ax2    = end.x;
         int ay2    = end.y;
 
-        for( int icont2 = 0; icont2 < area_to_test->m_Poly->GetNumContours(); icont2++ )
+        for( int icont2 = 0; icont2 < area_to_test->m_Poly->GetContoursCount(); icont2++ )
         {
             int ic_start2 = area_to_test->m_Poly->GetContourStart( icont2 );
             int ic_end2   = area_to_test->m_Poly->GetContourEnd( icont2 );
