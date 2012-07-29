@@ -167,19 +167,19 @@ void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>
 
     // Calculate the polygon with clearance and holes
     // holes are linked to the main outline, so only one polygon should be created.
-    KPolygonSet polyset_zone_solid_areas;
-    std::vector<KPolyPoint> cornerslist;
+    KI_POLYGON_SET polyset_zone_solid_areas;
+    std::vector<KI_POLY_POINT> cornerslist;
     unsigned ic = 0;
     unsigned corners_count = zoneOutines.size();
     while( ic < corners_count )
     {
         cornerslist.clear();
-        KPolygon poly;
+        KI_POLYGON poly;
         {
             for( ; ic < corners_count; ic++ )
             {
                 CPolyPt* corner = &zoneOutines[ic];
-                cornerslist.push_back( KPolyPoint( corner->x, corner->y ) );
+                cornerslist.push_back( KI_POLY_POINT( corner->x, corner->y ) );
                 if( corner->end_contour )
                 {
                     ic++;
@@ -197,12 +197,12 @@ void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>
     // Put the resultng polygon in buffer
     for( unsigned ii = 0; ii < polyset_zone_solid_areas.size(); ii++ )
     {
-        KPolygon& poly = polyset_zone_solid_areas[ii];
+        KI_POLYGON& poly = polyset_zone_solid_areas[ii];
         CPolyPt   corner( 0, 0, false );
 
         for( unsigned jj = 0; jj < poly.size(); jj++ )
         {
-            KPolyPoint point = *(poly.begin() + jj);
+            KI_POLY_POINT point = *(poly.begin() + jj);
             corner.x = point.x();
             corner.y = point.y();
             corner.end_contour = false;

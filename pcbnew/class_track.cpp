@@ -1282,7 +1282,7 @@ TRACK* TRACK::GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint )
     int     ii;
     int     max_dist;
 
-    if( aEndPoint == START )
+    if( aEndPoint == FLG_START )
         position = m_Start;
     else
         position = m_End;

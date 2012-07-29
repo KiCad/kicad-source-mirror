@@ -210,7 +210,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const
     {
         seg_start = GetCornerPosition( ic ) + offset;
 
-        if( m_Poly->corner[ic].end_contour == false && ic < GetNumCorners() - 1 )
+        if( m_Poly->m_CornersList[ic].end_contour == false && ic < GetNumCorners() - 1 )
         {
             seg_end = GetCornerPosition( ic + 1 ) + offset;
         }
@@ -306,7 +306,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
         CornersBuffer.push_back( coord );
 
-        CornersTypeBuffer.push_back( (char) corner->utility );
+        CornersTypeBuffer.push_back( (char) corner->m_utility );
 
         if( (corner->end_contour) || (ic == imax) ) // the last corner of a filled area is found: draw it
         {
@@ -432,13 +432,13 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, in
         int yi = GetCornerPosition( ic ).y;
         int xf, yf;
 
-        if( m_Poly->corner[ic].end_contour == false && ic < icmax )
+        if( m_Poly->m_CornersList[ic].end_contour == false && ic < icmax )
         {
             is_close_segment = false;
             xf = GetCornerPosition( ic + 1 ).x;
             yf = GetCornerPosition( ic + 1 ).y;
 
-            if( (m_Poly->corner[ic + 1].end_contour) || (ic == icmax - 1) )
+            if( (m_Poly->m_CornersList[ic + 1].end_contour) || (ic == icmax - 1) )
                 current_gr_mode = GR_XOR;
             else
                 current_gr_mode = draw_mode;
@@ -507,12 +507,12 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
     int min_dist = MIN_DIST_IN_MILS*IU_PER_MILS;
 
     wxPoint delta;
-    unsigned lim = m_Poly->corner.size();
+    unsigned lim = m_Poly->m_CornersList.size();
 
     for( unsigned item_pos = 0; item_pos < lim; item_pos++ )
     {
-        delta.x = refPos.x - m_Poly->corner[item_pos].x;
-        delta.y = refPos.y - m_Poly->corner[item_pos].y;
+        delta.x = refPos.x - m_Poly->m_CornersList[item_pos].x;
+        delta.y = refPos.y - m_Poly->m_CornersList[item_pos].y;
 
         // Calculate a distance:
         int dist = MAX( abs( delta.x ), abs( delta.y ) );
@@ -530,7 +530,7 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 
 bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 {
-    unsigned lim = m_Poly->corner.size();
+    unsigned lim = m_Poly->m_CornersList.size();
 
     m_CornerSelection = -1;     // Set to not found
 
@@ -547,7 +547,7 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
          * the last segment of the current outline starts at current corner, and ends
          * at the first corner of the outline
          */
-        if( m_Poly->corner[item_pos].end_contour || end_segm >= lim )
+        if( m_Poly->m_CornersList[item_pos].end_contour || end_segm >= lim )
         {
             unsigned tmp = first_corner_pos;
             first_corner_pos = end_segm;    // first_corner_pos is now the beginning of the next outline
@@ -557,10 +557,10 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
         /* test the dist between segment and ref point */
         int dist = (int) GetPointToLineSegmentDistance( refPos.x,
                                                         refPos.y,
-                                                        m_Poly->corner[item_pos].x,
-                                                        m_Poly->corner[item_pos].y,
-                                                        m_Poly->corner[end_segm].x,
-                                                        m_Poly->corner[end_segm].y );
+                                                        m_Poly->m_CornersList[item_pos].x,
+                                                        m_Poly->m_CornersList[item_pos].y,
+                                                        m_Poly->m_CornersList[end_segm].x,
+                                                        m_Poly->m_CornersList[end_segm].y );
 
         if( dist < min_dist )
         {
@@ -703,7 +703,7 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
     msg = board->GetLayerName( m_Layer );
     frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
 
-    msg.Printf( wxT( "%d" ), (int) m_Poly->corner.size() );
+    msg.Printf( wxT( "%d" ), (int) m_Poly->m_CornersList.size() );
     frame->AppendMsgPanel( _( "Corners" ), msg, BLUE );
 
     if( m_FillMode )
@@ -730,7 +730,7 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
 void ZONE_CONTAINER::Move( const wxPoint& offset )
 {
     /* move outlines */
-    for( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
+    for( unsigned ii = 0; ii < m_Poly->m_CornersList.size(); ii++ )
     {
         SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
     }
@@ -761,7 +761,7 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
     SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
 
     // Move the end point of the selected edge:
-    if( m_Poly->corner[ii].end_contour || ii == GetNumCorners() - 1 )
+    if( m_Poly->m_CornersList[ii].end_contour || ii == GetNumCorners() - 1 )
     {
         int icont = m_Poly->GetContour( ii );
         ii = m_Poly->GetContourStart( icont );
@@ -781,13 +781,13 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 {
     wxPoint pos;
 
-    for( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
+    for( unsigned ii = 0; ii < m_Poly->m_CornersList.size(); ii++ )
     {
-        pos.x = m_Poly->corner[ii].x;
-        pos.y = m_Poly->corner[ii].y;
+        pos.x = m_Poly->m_CornersList[ii].x;
+        pos.y = m_Poly->m_CornersList[ii].y;
         RotatePoint( &pos, centre, angle );
-        m_Poly->corner[ii].x = pos.x;
-        m_Poly->corner[ii].y = pos.y;
+        m_Poly->m_CornersList[ii].x = pos.x;
+        m_Poly->m_CornersList[ii].y = pos.y;
     }
 
     m_Poly->Hatch();
@@ -820,11 +820,11 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 
 void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 {
-    for( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
+    for( unsigned ii = 0; ii < m_Poly->m_CornersList.size(); ii++ )
     {
-        m_Poly->corner[ii].y -= mirror_ref.y;
-        NEGATE( m_Poly->corner[ii].y );
-        m_Poly->corner[ii].y += mirror_ref.y;
+        m_Poly->m_CornersList[ii].y -= mirror_ref.y;
+        NEGATE( m_Poly->m_CornersList[ii].y );
+        m_Poly->m_CornersList[ii].y += mirror_ref.y;
     }
 
     m_Poly->Hatch();

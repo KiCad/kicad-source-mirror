@@ -272,7 +272,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame )
 
         if( (type_end & START_ON_PAD ) == 0 )
         {
-            other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, START );
+            other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, FLG_START );
 
             if( other == NULL )     // Test a connection to zones
             {
@@ -306,7 +306,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame )
                     segment->SetState( BUSY, ON );
 
                     SEGVIA* via = (SEGVIA*) other;
-                    other = via->GetTrace( aFrame->GetBoard()->m_Track, NULL, START );
+                    other = via->GetTrace( aFrame->GetBoard()->m_Track, NULL, FLG_START );
 
                     if( other == NULL )
                     {
@@ -327,7 +327,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame )
         // if not connected to a pad, test if segment's END is connected to another track
         if( (type_end & END_ON_PAD ) == 0 )
         {
-            other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, END );
+            other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, FLG_END );
 
             if( other == NULL )     // Test a connection to zones
             {
@@ -362,7 +362,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame )
                     segment->SetState( BUSY, ON );
 
                     SEGVIA* via = (SEGVIA*) other;
-                    other = via->GetTrace( aFrame->GetBoard()->m_Track, NULL, END );
+                    other = via->GetTrace( aFrame->GetBoard()->m_Track, NULL, FLG_END );
 
                     if( other == NULL )
                     {
@@ -486,7 +486,7 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
         // search for a possible point that connects on the START point of the segment
         for( segStart = segment->Next(); ; )
         {
-            segStart = segment->GetTrace( segStart, NULL, START );
+            segStart = segment->GetTrace( segStart, NULL, FLG_START );
 
             if( segStart )
             {
@@ -500,7 +500,7 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
 
                 // We must have only one segment connected
                 segStart->SetState( BUSY, ON );
-                other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, START );
+                other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, FLG_START );
                 segStart->SetState( BUSY, OFF );
 
                 if( other == NULL )
@@ -514,7 +514,7 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
         if( flag )   // We have the starting point of the segment is connected to an other segment
         {
             segDelete = MergeColinearSegmentIfPossible( aFrame->GetBoard(), segment, segStart,
-                                                        START );
+                                                        FLG_START );
 
             if( segDelete )
             {
@@ -526,7 +526,7 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
         // search for a possible point that connects on the END point of the segment:
         for( segEnd = segment->Next(); ; )
         {
-            segEnd = segment->GetTrace( segEnd, NULL, END );
+            segEnd = segment->GetTrace( segEnd, NULL, FLG_END );
 
             if( segEnd )
             {
@@ -538,7 +538,7 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
 
                 // We must have only one segment connected
                 segEnd->SetState( BUSY, ON );
-                other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, END );
+                other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, FLG_END );
                 segEnd->SetState( BUSY, OFF );
 
                 if( other == NULL )
@@ -554,7 +554,8 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
 
         if( flag & 2 )  // We have the ending point of the segment is connected to an other segment
         {
-            segDelete = MergeColinearSegmentIfPossible( aFrame->GetBoard(), segment, segEnd, END );
+            segDelete = MergeColinearSegmentIfPossible( aFrame->GetBoard(),
+                                                        segment, segEnd, FLG_END );
 
             if( segDelete )
             {
@@ -643,7 +644,7 @@ TRACK* MergeColinearSegmentIfPossible( BOARD* aPcb, TRACK* aTrackRef, TRACK* aCa
      * (this function) is called when there is only 2 connected segments,
      *and if this point is not on a pad, it can be removed and the 2 segments will be merged
      */
-    if( aEndType == START )
+    if( aEndType == FLG_START )
     {
         // We must not have a pad, which is a always terminal point for a track
         if( aPcb->GetPadFast( aTrackRef->m_Start, aTrackRef->ReturnMaskLayer() ) )
@@ -712,7 +713,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         }
         else
         {
-            other = segment->GetTrace( GetBoard()->m_Track, NULL, START );
+            other = segment->GetTrace( GetBoard()->m_Track, NULL, FLG_START );
 
             if( other )
                 net_code_s = other->GetNet();
@@ -730,7 +731,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         }
         else
         {
-            other = segment->GetTrace( GetBoard()->m_Track, NULL, END );
+            other = segment->GetTrace( GetBoard()->m_Track, NULL, FLG_END );
 
             if( other )
                 net_code_e = other->GetNet();
@@ -871,14 +872,14 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* aFrame )
         if( aFrame->GetCanvas()->GetAbortRequest() )
             return;
 
-        pad = aFrame->GetBoard()->GetPad( segment, START );
+        pad = aFrame->GetBoard()->GetPad( segment, FLG_START );
 
         if( pad )
         {
             // test if the track start point is not exactly starting on the pad
             if( segment->m_Start != pad->GetPosition() )
             {
-                if( segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, START ) == NULL )
+                if( segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, FLG_START ) == NULL )
                 {
                     TRACK* newTrack = (TRACK*) segment->Clone();
 
@@ -893,14 +894,14 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* aFrame )
             }
         }
 
-        pad = aFrame->GetBoard()->GetPad( segment, END );
+        pad = aFrame->GetBoard()->GetPad( segment, FLG_END );
 
         if( pad )
         {
             // test if the track end point is not exactly on the pad
             if( segment->m_End != pad->GetPosition() )
             {
-                if( segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, END ) == NULL )
+                if( segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, FLG_END ) == NULL )
                 {
                     TRACK* newTrack = (TRACK*)segment->Clone();
 

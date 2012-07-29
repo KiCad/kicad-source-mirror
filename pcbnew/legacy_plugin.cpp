@@ -3609,7 +3609,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     typedef std::vector< CPolyPt >    CPOLY_PTS;
 
     // Save the corner list
-    const CPOLY_PTS& cv = me->m_Poly->corner;
+    const CPOLY_PTS& cv = me->m_Poly->m_CornersList;
     for( CPOLY_PTS::const_iterator it = cv.begin();  it != cv.end();  ++it )
     {
         fprintf( m_fp,  "ZCorner %s %d\n",
@@ -3623,12 +3623,12 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     {
         fprintf( m_fp, "$POLYSCORNERS\n" );
 
-        for( CPOLY_PTS::const_iterator it = fv.begin();  it != fv.end();  ++it )
+        for( CPOLY_PTS::const_iterator it = fv.begin(); it != fv.end(); ++it )
         {
             fprintf( m_fp, "%s %d %d\n",
                            fmtBIUPair( it->x, it->y ).c_str(),
                            it->end_contour,
-                           it->utility );
+                           it->m_utility );
         }
 
         fprintf( m_fp, "$endPOLYSCORNERS\n" );

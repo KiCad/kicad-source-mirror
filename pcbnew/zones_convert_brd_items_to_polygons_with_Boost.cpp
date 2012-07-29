@@ -81,14 +81,14 @@ extern void CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                                            int                   aThermalRot );
 
 // Local Functions: helper function to calculate solid areas
-static void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>& aCornersBuffer,
-                                             KPolygonSet&           aKPolyList );
+static void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
+                                             KI_POLYGON_SET&           aKiPolyList );
 
-static int  CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
-                                                           KPolygonSet&    aKPolyList );
+static int  CopyPolygonsFromKiPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
+                                                           KI_POLYGON_SET&    aKiPolyList );
 
-static int  CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
-                                                            KPolygonSet&    aKPolyList );
+static int  CopyPolygonsFromFilledPolysListToKiPolygonList( ZONE_CONTAINER* aZone,
+                                                            KI_POLYGON_SET&    aKiPolyList );
 
 
 // Local Variables:
@@ -148,8 +148,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     s_Correction = 1.0 / cos( 3.14159265 / s_CircleToSegmentsCount );
 
-    // This KPolygonSet is the area(s) to fill, with m_ZoneMinThickness/2
-    KPolygonSet polyset_zone_solid_areas;
+    // This KI_POLYGON_SET is the area(s) to fill, with m_ZoneMinThickness/2
+    KI_POLYGON_SET polyset_zone_solid_areas;
     int         margin = m_ZoneMinThickness / 2;
 
     /* First, creates the main polygon (i.e. the filled area using only one outline)
@@ -160,7 +160,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * the main polygon is stored in polyset_zone_solid_areas
      */
 
-    CopyPolygonsFromFilledPolysListTotKPolygonList( this, polyset_zone_solid_areas );
+    CopyPolygonsFromFilledPolysListToKiPolygonList( this, polyset_zone_solid_areas );
     polyset_zone_solid_areas -= margin;
 
     if( polyset_zone_solid_areas.size() == 0 )
@@ -431,15 +431,15 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     // Calculate now actual solid areas
     if( cornerBufferPolysToSubstract.size() > 0 )
     {
-        KPolygonSet polyset_holes;
-        AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
+        KI_POLYGON_SET polyset_holes;
+        AddPolygonCornersToKiPolygonList( cornerBufferPolysToSubstract, polyset_holes );
         // Remove holes from initial area.:
         polyset_zone_solid_areas -= polyset_holes;
     }
 
     // put solid areas in m_FilledPolysList:
     m_FilledPolysList.clear();
-    CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
+    CopyPolygonsFromKiPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
 
     // Remove insulated islands:
     if( GetNet() > 0 )
@@ -455,13 +455,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     // remove copper areas
     if( cornerBufferPolysToSubstract.size() )
     {
-        KPolygonSet polyset_holes;
-        AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
+        KI_POLYGON_SET polyset_holes;
+        AddPolygonCornersToKiPolygonList( cornerBufferPolysToSubstract, polyset_holes );
         polyset_zone_solid_areas -= polyset_holes;
 
         // put these areas in m_FilledPolysList
         m_FilledPolysList.clear();
-        CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
+        CopyPolygonsFromKiPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
 
         if( GetNet() > 0 )
             Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
@@ -470,12 +470,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     cornerBufferPolysToSubstract.clear();
 }
 
-void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>& aCornersBuffer,
-                                      KPolygonSet&           aKPolyList )
+void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
+                                      KI_POLYGON_SET&           aKiPolyList )
 {
     unsigned ii;
 
-    std::vector<KPolyPoint> cornerslist;
+    std::vector<KI_POLY_POINT> cornerslist;
 
     int polycount = 0;
 
@@ -485,49 +485,45 @@ void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>& aCornersBuffer,
             polycount++;
     }
 
-    aKPolyList.reserve( polycount );
+    aKiPolyList.reserve( polycount );
 
     for( unsigned icnt = 0; icnt < aCornersBuffer.size(); )
     {
-        KPolygon poly;
+        KI_POLYGON poly;
         cornerslist.clear();
 
         for( ii = icnt; ii < aCornersBuffer.size(); ii++ )
         {
-            cornerslist.push_back( KPolyPoint( aCornersBuffer[ii].x, aCornersBuffer[ii].y ) );
+            cornerslist.push_back( KI_POLY_POINT( aCornersBuffer[ii].x, aCornersBuffer[ii].y ) );
 
             if( aCornersBuffer[ii].end_contour )
                 break;
         }
 
         bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
-        aKPolyList.push_back( poly );
+        aKiPolyList.push_back( poly );
         icnt = ii + 1;
     }
 }
 
 
-int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
-                                                   KPolygonSet&    aKPolyList )
+int CopyPolygonsFromKiPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
+                                                   KI_POLYGON_SET&    aKiPolyList )
 {
     int count = 0;
     std::vector<CPolyPt> polysList;
 
-    for( unsigned ii = 0; ii < aKPolyList.size(); ii++ )
+    for( unsigned ii = 0; ii < aKiPolyList.size(); ii++ )
     {
-        KPolygon& poly = aKPolyList[ii];
+        KI_POLYGON& poly = aKiPolyList[ii];
         CPolyPt   corner( 0, 0, false );
 
         for( unsigned jj = 0; jj < poly.size(); jj++ )
         {
-            KPolyPoint point = *(poly.begin() + jj);
+            KI_POLY_POINT point = *(poly.begin() + jj);
             corner.x = point.x();
             corner.y = point.y();
             corner.end_contour = false;
-
-            // Flag this corner if starting a hole connection segment:
-            // This is used by draw functions to draw only useful segments (and not extra segments)
-            // corner.utility = (aBoolengine->GetPolygonPointEdgeType() == KB_FALSE_EDGE) ? 1 : 0;
             polysList.push_back( corner );
             count++;
         }
@@ -542,10 +538,10 @@ int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
 }
 
 
-int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
-                                                    KPolygonSet&    aKPolyList )
+int CopyPolygonsFromFilledPolysListToKiPolygonList( ZONE_CONTAINER* aZone,
+                                                    KI_POLYGON_SET&    aKiPolyList )
 {
-    std::vector<CPolyPt> polysList = aZone->GetFilledPolysList();
+    const std::vector<CPolyPt>& polysList = aZone->GetFilledPolysList();
     unsigned corners_count = polysList.size();
     int      count = 0;
     unsigned ic    = 0;
@@ -554,35 +550,32 @@ int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
 
     for( unsigned ii = 0; ii < corners_count; ii++ )
     {
-        CPolyPt* corner = &polysList[ic];
+        const CPolyPt& corner = polysList[ii];
 
-        if( corner->end_contour )
+        if( corner.end_contour )
             polycount++;
     }
 
-    aKPolyList.reserve( polycount );
-    std::vector<KPolyPoint> cornerslist;
+    aKiPolyList.reserve( polycount );
+    std::vector<KI_POLY_POINT> cornerslist;
 
     while( ic < corners_count )
     {
         cornerslist.clear();
-        KPolygon poly;
+        KI_POLYGON poly;
         {
-            for( ; ic < corners_count; ic++ )
+            while( ic < corners_count )
             {
-                CPolyPt* corner = &polysList[ic];
-                cornerslist.push_back( KPolyPoint( corner->x, corner->y ) );
+                const CPolyPt& corner = polysList[ic++];
+                cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
                 count++;
 
-                if( corner->end_contour )
-                {
-                    ic++;
+                if( corner.end_contour )
                     break;
-                }
             }
 
             bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
-            aKPolyList.push_back( poly );
+            aKiPolyList.push_back( poly );
         }
     }
 

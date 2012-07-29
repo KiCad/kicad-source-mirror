@@ -561,15 +561,15 @@ void LIB_ARC::BeginEdit( int aEditMode, const wxPoint aPosition )
         // Drag either the start, end point or the outline
         if( HitTestPoints( m_ArcStart, aPosition, MINIMUM_SELECTION_DISTANCE ) )
         {
-            m_editSelectPoint = START;
+            m_editSelectPoint = ARC_STATUS_START;
         }
         else if( HitTestPoints( m_ArcEnd, aPosition, MINIMUM_SELECTION_DISTANCE ) )
         {
-            m_editSelectPoint = END;
+            m_editSelectPoint = ARC_STATUS_END;
         }
         else
         {
-            m_editSelectPoint = OUTLINE;
+            m_editSelectPoint = ARC_STATUS_OUTLINE;
         }
 
         m_editState = 0;
@@ -619,12 +619,12 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
         wxPoint newCenterPoint, startPos, endPos;
 
         // Choose the point of the arc to be adjusted
-        if( m_editSelectPoint == START )
+        if( m_editSelectPoint == ARC_STATUS_START )
         {
             startPos = aPosition;
             endPos   = m_ArcEnd;
         }
-        else if( m_editSelectPoint == END )
+        else if( m_editSelectPoint == ARC_STATUS_END )
         {
             endPos   = aPosition;
             startPos = m_ArcStart;
@@ -658,7 +658,7 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
                 newCenterPoint = m_Pos;
         }
 
-        if( m_editSelectPoint == START || m_editSelectPoint == END )
+        if( m_editSelectPoint == ARC_STATUS_START || m_editSelectPoint == ARC_STATUS_END )
         {
             // Compute the new center point when the start/end points are modified
             wxPoint middlePoint = wxPoint( (startPos.x + endPos.x) / 2,

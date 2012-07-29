@@ -613,7 +613,7 @@ private:
 
     /* set of filled polygons used to draw a zone as a filled area.
      * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
-     * (they are* all in one piece)  In very simple cases m_FilledPolysList is same
+     * (they are all in one piece)  In very simple cases m_FilledPolysList is same
      * as m_Poly.  In less simple cases (when m_Poly has holes) m_FilledPolysList is
      * a polygon equivalent to m_Poly, without holes but with extra outline segment
      * connecting "holes" with external main outline.  In complex cases an outline
