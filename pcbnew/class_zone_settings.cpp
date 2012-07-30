@@ -99,7 +99,6 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.m_FillMode = m_FillMode;
     aTarget.m_ZoneClearance    = m_ZoneClearance;
     aTarget.m_ZoneMinThickness = m_ZoneMinThickness;
-    aTarget.m_Poly->SetHatch( m_Zone_HatchingStyle, Mils2iu( 20 ) );
     aTarget.m_ArcToSegmentsCount = m_ArcToSegmentsCount;
     aTarget.m_ThermalReliefGap = m_ThermalReliefGap;
     aTarget.m_ThermalReliefCopperBridge = m_ThermalReliefCopperBridge;
@@ -118,4 +117,8 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
         aTarget.SetLayer( m_CurrentZone_Layer );
         aTarget.m_Poly->SetLayer( m_CurrentZone_Layer );
     }
+
+    // call SetHatch last, because hatch lines will be rebuilt,
+    // using new parameters values
+    aTarget.m_Poly->SetHatch( m_Zone_HatchingStyle, Mils2iu( 20 ), true );
 }

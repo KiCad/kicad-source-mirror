@@ -58,9 +58,6 @@ public:
     }
 };
 
-
-#include <math_for_graphics.h>
-
 class CArc
 {
 public:
@@ -107,7 +104,7 @@ class CPolyLine
 {
 public:
     enum m_SideStyle { STRAIGHT, ARC_CW, ARC_CCW };                 // side styles
-    enum hatch_style { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE };    // hatch styles
+    enum HATCH_STYLE { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE };    // hatch styles
 
     // constructors/destructor
     CPolyLine();
@@ -119,7 +116,7 @@ public:
     void        InsertCorner( int ic, int x, int y );
     void        DeleteCorner( int ic, bool bDraw = false );
     void        MoveCorner( int ic, int x, int y );
-    void        Close( int style = STRAIGHT, bool bDraw = false );
+    void        CloseLastContour();
     void        RemoveContour( int icont );
 
     /**
@@ -155,6 +152,11 @@ public:
     void        Copy( CPolyLine* src );
     bool        TestPointInside( int x, int y );
     bool        IsCutoutContour( int icont );
+
+    /**
+     * Function AppendArc.
+     * Adds segments to current contour to approximate the given arc
+     */
     void        AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num );
 
     // access functions
@@ -181,14 +183,15 @@ public:
     int GetSideStyle( int is );
 
     int        GetHatchPitch() { return m_hatchPitch; }
-    int        GetDefaultHatchPitchMils() { return 20; }    // default hatch pitch value in mils
+    static int GetDefaultHatchPitchMils() { return 20; }    // default hatch pitch value in mils
 
-    enum hatch_style GetHatchStyle() { return m_hatchStyle; }
-    void       SetHatch( int hatch, int pitch )
+    enum HATCH_STYLE GetHatchStyle() { return m_hatchStyle; }
+    void       SetHatch( int aHatchStyle, int aHatchPitch, bool aRebuildHatch )
     {
-        SetHatchPitch( pitch );
-        m_hatchStyle = (enum hatch_style) hatch;
-        Hatch();
+        SetHatchPitch( aHatchPitch );
+        m_hatchStyle = (enum HATCH_STYLE) aHatchStyle;
+        if( aRebuildHatch )
+            Hatch();
     }
 
     void    SetX( int ic, int x );
@@ -196,7 +199,7 @@ public:
     void    SetEndContour( int ic, bool end_contour );
     void    SetSideStyle( int is, int style );
 
-    void       SetHatchStyle( enum hatch_style style )
+    void       SetHatchStyle( enum HATCH_STYLE style )
     {
         m_hatchStyle = style;
     }
@@ -209,6 +212,14 @@ public:
                                bool                     bRetainArcs = false );
 
     // KBOOL functions
+
+    /**
+     * Function AddPolygonsToBoolEng
+     * Add a CPolyLine to a kbool engine, preparing a boolean op between polygons
+     * @param aBooleng : pointer on a bool engine (handle a set of polygons)
+     * @param aGroup : group to fill (aGroup = GROUP_A or GROUP_B) operations are made between GROUP_A and GROUP_B
+     */
+    int AddPolygonsToBoolEng( Bool_Engine* aBooleng, GroupType aGroup );
 
     /**
      * Function MakeKboolPoly
@@ -261,7 +272,7 @@ public:
 private:
     int                     m_layer;                // layer to draw on
     int                     m_width;                // lines width when drawing. Provided but not really used
-    enum hatch_style        m_hatchStyle;           // hatch style, see enum above
+    enum HATCH_STYLE        m_hatchStyle;           // hatch style, see enum above
     int                     m_hatchPitch;           // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
                                                     // and the len of eacvh segment
                                                     // for DIAGONAL_FULL, the pitch is twice this value

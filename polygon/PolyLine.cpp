@@ -13,11 +13,13 @@
 #include <PolyLine.h>
 #include <bezier_curves.h>
 #include <polygon_test_point_inside.h>
+#include <math_for_graphics.h>
 
 CPolyLine::CPolyLine()
 {
     m_hatchStyle    = NO_HATCH;
     m_hatchPitch    = 0;
+    m_layer     = 0;
     m_width     = 0;
     m_utility   = 0;
     m_Kbool_Poly_Engine = NULL;
@@ -44,7 +46,7 @@ CPolyLine::~CPolyLine()
  *   false: holes are not linked: in this mode contours are added clockwise
  *          and polygons added counter clockwise are holes (default)
  */
-static void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
+void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
 
 /**
  * Function NormalizeWithKbool
@@ -128,16 +130,19 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool
             }
 
             m_Kbool_Poly_Engine->EndPolygonGet();
-            Close();
+            CloseLastContour();
             n_ext_cont++;
         }
-        else if( aExtraPolyList )                                               // a new outside contour is found: create a new CPolyLine
+        else if( aExtraPolyList )                                   // a new outside contour is found: create a new CPolyLine
         {
-            polyline = new CPolyLine;                                           // create new poly
-            aExtraPolyList->push_back( polyline );                              // put it in array
+            polyline = new CPolyLine;
+            polyline->SetLayer( GetLayer() );
+            polyline->SetHatchStyle( GetHatchStyle() );
+            polyline->SetHatchPitch( GetHatchPitch() );
+            aExtraPolyList->push_back( polyline );                  // put it in array
             bool first = true;
 
-            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )                // read next external contour
+            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // read next external contour
             {
                 int x   = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
                 int y   = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
@@ -152,7 +157,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool
             }
 
             m_Kbool_Poly_Engine->EndPolygonGet();
-            polyline->Close( STRAIGHT, false );
+            polyline->CloseLastContour();
             n_ext_cont++;
         }
     }
@@ -201,7 +206,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool
                 polyline->AppendCorner( x, y, STRAIGHT, false );
             }
 
-            polyline->Close( STRAIGHT, false );
+            polyline->CloseLastContour();
         }
     }
 
@@ -219,6 +224,42 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool
 }
 
 
+/**
+ * Function AddPolygonsToBoolEng
+ * Add a CPolyLine to a kbool engine, preparing a boolean op between polygons
+ * @param aBooleng : pointer on a bool engine (handle a set of polygons)
+ * @param aGroup : group to fill (aGroup = GROUP_A or GROUP_B) operations are made between GROUP_A and GROUP_B
+ */
+int CPolyLine::AddPolygonsToBoolEng( Bool_Engine* aBooleng, GroupType aGroup )
+{
+    int count = 0;
+
+    /* Convert the current polyline contour to a kbool polygon: */
+    MakeKboolPoly();
+
+    /* add the resulting kbool set of polygons to the current kcool engine */
+    while( m_Kbool_Poly_Engine->StartPolygonGet() )
+    {
+        if( aBooleng->StartPolygonAdd( GROUP_A ) )
+        {
+            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
+            {
+                int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
+                int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
+                aBooleng->AddPoint( x, y );
+                count++;
+            }
+
+            aBooleng->EndPolygonAdd();
+        }
+        m_Kbool_Poly_Engine->EndPolygonGet();
+    }
+
+    delete m_Kbool_Poly_Engine;
+    m_Kbool_Poly_Engine = NULL;
+
+    return count;
+}
 /**
  * Function MakeKboolPoly
  * fill a kbool engine with a closed polyline contour
@@ -247,12 +288,31 @@ int CPolyLine::MakeKboolPoly( std::vector<CArc>* arc_array )
 
     int iarc = 0;
 
-    for( int icont = 0; icont<=last_contour; icont++ )
+    for( int icont = 0; icont <= last_contour; icont++ )
     {
         // Fill a kbool engine for this contour,
         // and combine it with previous contours
         Bool_Engine* booleng = new Bool_Engine();
         armBoolEng( booleng, false );
+
+        if( m_Kbool_Poly_Engine )  // a previous contour exists. Put it in new engine
+        {
+            while( m_Kbool_Poly_Engine->StartPolygonGet() )
+            {
+                if( booleng->StartPolygonAdd( GROUP_A ) )
+                {
+                    while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
+                    {
+                        int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
+                        int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
+                        booleng->AddPoint( x, y );
+                    }
+
+                    booleng->EndPolygonAdd();
+                }
+                m_Kbool_Poly_Engine->EndPolygonGet();
+            }
+        }
 
         // first, calculate number of vertices in contour
         int n_vertices = 0;
@@ -735,7 +795,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc>* arc_array, std::vector<CPolyLine*
 void CPolyLine::Start( int layer, int x, int y, int hatch )
 {
     m_layer = layer;
-    SetHatchStyle( (enum hatch_style) hatch );
+    SetHatchStyle( (enum HATCH_STYLE) hatch );
     CPolyPt poly_pt( x, y );
     poly_pt.end_contour = false;
 
@@ -766,19 +826,9 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
 
 // close last polyline contour
 //
-void CPolyLine::Close( int style, bool bDraw )
+void CPolyLine::CloseLastContour()
 {
-    if( GetClosed() )
-    {
-        wxASSERT( 0 );
-    }
-
-    UnHatch();
-    m_SideStyle[m_CornersList.size() - 1] = style;
     m_CornersList[m_CornersList.size() - 1].end_contour = true;
-
-    if( bDraw )
-        Hatch();
 }
 
 
@@ -944,7 +994,7 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
             newPoly->AppendCorner( x1 + nx, y1 + ny );
         }
 
-        newPoly->Close();
+        newPoly->CloseLastContour();
     }
 
     return newPoly;
@@ -1072,7 +1122,7 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             }
         }
 
-        newPoly->Close();
+        newPoly->CloseLastContour();
     }
 
     return newPoly;
@@ -1632,11 +1682,13 @@ void CPolyLine::SetEndContour( int ic, bool end_contour )
     m_CornersList[ic].end_contour = end_contour;
 }
 
-
+/*
+ * AppendArc adds segments to current contour to approximate the given arc
+ */
 void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num )
 {
     // get radius
-    double  r = sqrt( (double) (xi - xc) * (xi - xc) + (double) (yi - yc) * (yi - yc) );
+    double  radius = hypot( (double) (xi - xc), (double) (yi - yc) );
 
     // get angles of start and finish
     double  th_i    = atan2( (double) (yi - yc), (double) (xi - xc) );
@@ -1645,15 +1697,15 @@ void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int n
     double  theta   = th_i;
 
     // generate arc
-    for( int ic = 0; ic<num; ic++ )
+    for( int ic = 0; ic < num; ic++ )
     {
-        int x   = KiROUND( xc + r * cos( theta ) );
-        int y   = KiROUND( yc + r * sin( theta ) );
+        int x   = KiROUND( xc + radius * cos( theta ) );
+        int y   = KiROUND( yc + radius * sin( theta ) );
         AppendCorner( x, y, STRAIGHT, 0 );
         theta += th_d;
     }
 
-    Close( STRAIGHT );
+    CloseLastContour();
 }
 
 

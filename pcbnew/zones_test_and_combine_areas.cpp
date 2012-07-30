@@ -41,6 +41,7 @@
 
 #include <pcbnew.h>
 #include <drc_stuff.h>
+#include <math_for_graphics.h>
 
 
 static bool bDontShowSelfIntersectionArcsWarning;
@@ -311,19 +312,15 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
             str += wxT( "This may result in splitting the area.\n" );
             str += wxT( "If the area is complex, this may take a few seconds." );
             wxMessageBox( str );
-
-//          bDontShowSelfIntersectionWarning = dlg.bDontShowBoxState;
         }
     }
 
-//** TODO test for cutouts outside of area
-//**    if( test == 1 )
     {
         std::vector<CPolyLine*>* pa = new std::vector<CPolyLine*>;
         curr_polygon->UnHatch();
         int n_poly = aCurrArea->m_Poly->NormalizeAreaOutlines( pa, bRetainArcs );
 
-        // i.e if clipping has created some polygons, we must add these new copper areas.
+        // If clipping has created some polygons, we must add these new copper areas.
         if( n_poly > 1 )
         {
             ZONE_CONTAINER* NewArea;
@@ -803,10 +800,10 @@ int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_r
     }
 
     // polygons intersect, combine them
-//    std::vector<CArc> arc_array1;
-//    std::vector<CArc> arc_array2;
-    bool keep_area_to_combine = false;      // TODO test if areas intersect
+    // TODO: test here if areas intersect and combine only if so
 
+#if 0
+    // do not set to 1 (not fully working): only for me (JP. Charras) until this code is finished
     KI_POLYGON_WITH_HOLES areaRefPoly;
     KI_POLYGON_WITH_HOLES areaToMergePoly;
     CopyPolysListToKiPolygonWithHole( area_ref->m_Poly->m_CornersList, areaRefPoly );
@@ -814,14 +811,12 @@ int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_r
 
     KI_POLYGON_WITH_HOLES_SET mergedOutlines;
     mergedOutlines.push_back( areaRefPoly );
-    mergedOutlines += areaToMergePoly;
+    mergedOutlines |= areaToMergePoly;
 
-    // We should have only one polygon with holes in mergedOutlines
-    // or the 2 initial outlines do not intersect
-    if( mergedOutlines.size() > 1 )
-        return 0;
+    // We can have more than one polygon with holes in mergedOutlines
+    // depending on the complexity of outlines
 
-    areaRefPoly = mergedOutlines[0];
+    areaRefPoly = mergedOutlines[0];    // TODO: read and create all created polygons
     area_ref->m_Poly->RemoveAllContours();
 
     KI_POLYGON_WITH_HOLES::iterator_type corner = areaRefPoly.begin();
@@ -833,7 +828,7 @@ int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_r
         area_ref->m_Poly->AppendCorner( corner->x(), corner->y() );
     }
 
-    area_ref->m_Poly->Close();
+    area_ref->m_Poly->CloseLastContour();
 
     // add holes (set of polygons)
     KI_POLYGON_WITH_HOLES::iterator_holes_type hole = areaRefPoly.begin_holes();
@@ -846,17 +841,83 @@ int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_r
             area_ref->m_Poly->AppendCorner( hole_corner->x(), hole_corner->y() );
             hole_corner++;
         }
-        area_ref->m_Poly->Close();
+        area_ref->m_Poly->CloseLastContour();
         hole++;
     }
+#else
+    void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
+    Bool_Engine*      booleng = new Bool_Engine();
+    armBoolEng( booleng );
 
+    area_ref->m_Poly->AddPolygonsToBoolEng( booleng, GROUP_A );
+    area_to_combine->m_Poly->AddPolygonsToBoolEng(booleng, GROUP_B );
+    booleng->Do_Operation( BOOL_OR );
 
-    if( !keep_area_to_combine )
-        RemoveArea( aDeletedList, area_to_combine );
+    // create area with external contour: Recreate only area edges, NOT holes
+    if( booleng->StartPolygonGet() )
+    {
+        if( booleng->GetPolygonPointEdgeType() == KB_INSIDE_EDGE )
+        {
+            DisplayError( NULL, wxT( "BOARD::CombineAreas() error: unexpected hole descriptor" ) );
+        }
+
+        area_ref->m_Poly->RemoveAllContours();
+
+        // foreach point in the polygon
+        bool first = true;
+
+        while( booleng->PolygonHasMorePoints() )
+        {
+            int x = (int) booleng->GetPolygonXPoint();
+            int y = (int) booleng->GetPolygonYPoint();
+
+            if( first )
+            {
+                first = false;
+                area_ref->m_Poly->Start( area_ref->GetLayer(
+                                            ), x, y, area_ref->m_Poly->GetHatchStyle() );
+            }
+            else
+            {
+                area_ref->m_Poly->AppendCorner( x, y );
+            }
+        }
+
+        booleng->EndPolygonGet();
+        area_ref->m_Poly->CloseLastContour();
+    }
+
+    // add holes
+    bool show_error = true;
+
+    while( booleng->StartPolygonGet() )
+    {
+        // we expect all vertex are holes inside the main outline
+        if( booleng->GetPolygonPointEdgeType() != KB_INSIDE_EDGE )
+        {
+            if( show_error )    // show this error only once, if happens
+                DisplayError( NULL,
+                              wxT( "BOARD::CombineAreas() error: unexpected outside contour descriptor" ) );
+
+            show_error = false;
+            continue;
+        }
+
+        while( booleng->PolygonHasMorePoints() )
+        {
+            int x = (int) booleng->GetPolygonXPoint();
+            int y = (int) booleng->GetPolygonYPoint();
+            area_ref->m_Poly->AppendCorner( x, y );
+        }
+
+        area_ref->m_Poly->CloseLastContour();
+        booleng->EndPolygonGet();
+    }
+#endif
+
+    RemoveArea( aDeletedList, area_to_combine );
 
     area_ref->utility = 1;
-//    area_ref->m_Poly->RestoreArcs( &arc_array1 );
-//    area_ref->m_Poly->RestoreArcs( &arc_array2 );
     area_ref->m_Poly->Hatch();
 
     return 1;
@@ -916,6 +977,11 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             // obtain that value is now part of the zone object itself by way of
             // ZONE_CONTAINER::GetClearance().
             int zone2zoneClearance = Area_Ref->GetClearance( area_to_test );
+
+            // Keepout areas have no clearance, so set zone2zoneClearance to 1
+            // ( zone2zoneClearance = 0  can create problems in test functions)
+            if( Area_Ref->GetIsKeepout() )
+                zone2zoneClearance = 1;
 
             // test for some corners of Area_Ref inside area_to_test
             for( int ic = 0; ic < refSmoothedPoly->GetNumCorners(); ic++ )
@@ -1114,6 +1180,11 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
         if( area_to_test->GetIsKeepout() != aArea->GetIsKeepout() )
             continue;
 
+        // For keepout, there is no clearance, so use a minimal value for it
+        // use 1, not 0 as value to avoid some issues in tests
+        if( area_to_test->GetIsKeepout() )
+            zone_clearance = 1;
+
         // test for ending line inside area_to_test
         if( area_to_test->m_Poly->TestPointInside( end.x, end.y ) )
         {
@@ -1159,7 +1230,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
                                                      0,
                                                      ax1, ay1, ax2, ay2, astyle,
                                                      0,
-                                                     0,
+                                                     zone_clearance,
                                                      &x, &y );
 
                 if( d < zone_clearance )

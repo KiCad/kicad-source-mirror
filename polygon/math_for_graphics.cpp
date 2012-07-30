@@ -9,8 +9,22 @@
 #include <fctsys.h>
 
 #include <PolyLine.h>
+#include <math_for_graphics.h>
 
 #define NM_PER_MIL 25400
+
+typedef struct PointTag
+{
+    double X,Y;
+} PointT;
+
+typedef struct EllipseTag
+{
+    PointT Center;			/* ellipse center	 */
+    double xrad, yrad;		// radii on x and y
+    double theta1, theta2;	// start and end angle for arc
+} EllipseKH;
+
 
 double Distance( double x1, double y1, double x2, double y2 )
 {
@@ -19,6 +33,13 @@ double Distance( double x1, double y1, double x2, double y2 )
     double d  = sqrt( dx * dx + dy * dy );
     return d;
 }
+
+
+static int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
+                        double * x1=NULL, double * y1=NULL,
+                        double * x2=NULL, double * y2=NULL );
+static bool InRange( double x, double xi, double xf );
+
 
 
 /**
@@ -862,26 +883,26 @@ bool FindLineEllipseIntersections( double a, double b, double c, double d, doubl
 
 // Get clearance between 2 segments
 // Returns point in segment closest to other segment in x, y
-// in clearance > max_cl, just returns max_cl and doesn't return x,y
+// in clearance > max_cl, just returns max_cl+1 and doesn't return x,y
 //
 int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1, int w1,
                                  int x2i, int y2i, int x2f, int y2f, int style2, int w2,
                                  int max_cl, int* x, int* y )
 {
     // check clearance between bounding rectangles
-    int test = max_cl + w1 / 2 + w2 / 2;
+    int min_dist = max_cl + ( (w1 + w2) / 2 );
 
-    if( min( x1i, x1f ) - max( x2i, x2f ) > test )
-        return max_cl;
+    if( min( x1i, x1f ) - max( x2i, x2f ) > min_dist )
+        return max_cl+1;
 
-    if( min( x2i, x2f ) - max( x1i, x1f ) > test )
-        return max_cl;
+    if( min( x2i, x2f ) - max( x1i, x1f ) > min_dist )
+        return max_cl+1;
 
-    if( min( y1i, y1f ) - max( y2i, y2f ) > test )
-        return max_cl;
+    if( min( y1i, y1f ) - max( y2i, y2f ) > min_dist )
+        return max_cl+1;
 
-    if( min( y2i, y2f ) - max( y1i, y1f ) > test )
-        return max_cl;
+    if( min( y2i, y2f ) - max( y1i, y1f ) > min_dist )
+        return max_cl+1;
 
     if( style1 == CPolyLine::STRAIGHT && style1 == CPolyLine::STRAIGHT )
     {
@@ -890,7 +911,9 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
         double  dd;
         TestForIntersectionOfStraightLineSegments( x1i, y1i, x1f, y1f,
                                                    x2i, y2i, x2f, y2f, &xx, &yy, &dd );
-        int     d = max( 0, (int) dd - w1 / 2 - w2 / 2 );
+        int d = (int) dd - ( (w1 + w2) / 2 );
+        if( d < 0 )
+            d = 0;
 
         if( x )
             *x = xx;
@@ -905,10 +928,10 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
     // see if segments intersect
     double  xr[2];
     double  yr[2];
-    test =
+    int count =
         FindSegmentIntersections( x1i, y1i, x1f, y1f, style1, x2i, y2i, x2f, y2f, style2, xr, yr );
 
-    if( test )
+    if( count )
     {
         if( x )
             *x = (int) xr[0];

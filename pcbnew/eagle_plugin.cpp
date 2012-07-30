@@ -1404,17 +1404,18 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 zone->SetLayer( layer );
                 zone->SetNet( 0 );
 
-                int outline_hatch = CPolyLine::DIAGONAL_EDGE;
+                CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
                 zone->m_Poly->Start( layer, kicad_x( r.x1 ), kicad_y( r.y1 ), outline_hatch );
                 zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
                 zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
-                zone->m_Poly->Close();
+                zone->m_Poly->CloseLastContour();
 
                 // this is not my fault:
                 zone->m_Poly->SetHatch( outline_hatch,
-                                      Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ) );
+                                      Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ),
+                                      true );
             }
             m_xpath->pop();
         }
@@ -2360,7 +2361,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     zone->SetNet( netCode );
                     zone->SetNetName( netName );
 
-                    int outline_hatch = CPolyLine::DIAGONAL_EDGE;
+                    CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
                     bool first = true;
                     for( CITER vi = it->second.begin();  vi != it->second.end();  ++vi )
@@ -2380,10 +2381,11 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                             zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
                     }
 
-                    zone->m_Poly->Close();
+                    zone->m_Poly->CloseLastContour();
 
                     zone->m_Poly->SetHatch( outline_hatch,
-                                          Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ) );
+                                            Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ),
+                                            true );
 
                     // clearances, etc.
                     zone->SetArcSegCount( 32 );     // @todo: should be a constructor default?

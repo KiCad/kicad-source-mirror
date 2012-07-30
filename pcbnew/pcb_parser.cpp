@@ -2292,8 +2292,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    int     hatchStyle = CPolyLine::NO_HATCH;   // Fix compile warning
-    int     hatchPitch = 0;                     // Fix compile warning
+    CPolyLine::HATCH_STYLE hatchStyle = CPolyLine::NO_HATCH;
+    int     hatchPitch = Mils2iu( CPolyLine::GetDefaultHatchPitchMils() );
     wxPoint pt;
     T       token;
 
@@ -2587,7 +2587,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         }
 
         // Set hatch here, after outlines corners are read
-        zone->m_Poly->SetHatch( hatchStyle, hatchPitch );
+        zone->m_Poly->SetHatch( hatchStyle, hatchPitch, true );
     }
 
     if( pts.size() )
