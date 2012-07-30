@@ -679,8 +679,12 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             if( !Drc_On || !zone->IsOnCopperLayer() || ( m_drc->Drc( zone, ii - 1 ) == OK_DRC ) )
             {
                 // Ok, we can add a new corner
+                if( m_canvas->IsMouseCaptured() )
+                    m_canvas->CallMouseCapture( DC, wxPoint(0,0), false );
                 zone->AppendCorner( GetScreen()->GetCrossHairPosition() );
                 SetCurItem( zone );     // calls DisplayInfo().
+                if( m_canvas->IsMouseCaptured() )
+                    m_canvas->CallMouseCapture( DC, wxPoint(0,0), false );
             }
         }
     }
@@ -738,7 +742,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     // Put new zone in list
     if( !s_CurrentZone )
     {
-        zone->m_Poly->Close(); // Close the current corner list
+        zone->m_Poly->CloseLastContour(); // Close the current corner list
         GetBoard()->Add( zone );
         GetBoard()->m_CurrentZoneContour = NULL;
 
@@ -753,7 +757,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
             s_CurrentZone->AppendCorner( zone->GetCornerPosition( ii ) );
         }
 
-        s_CurrentZone->m_Poly->Close(); // Close the current corner list
+        s_CurrentZone->m_Poly->CloseLastContour(); // Close the current corner list
         zone->RemoveAllContours();      // All corners are copied in s_CurrentZone. Free corner list.
         zone = s_CurrentZone;
     }

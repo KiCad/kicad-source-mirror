@@ -2109,7 +2109,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
     auto_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
 
-    int     outline_hatch = CPolyLine::NO_HATCH;
+    CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::NO_HATCH;
     bool    sawCorner = false;
     char    buf[1024];
 
@@ -2133,7 +2133,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             sawCorner = true;
 
             if( flag )
-                zc->m_Poly->Close();
+                zc->m_Poly->CloseLastContour();
         }
 
         else if( TESTLINE( "ZInfo" ) )      // general info found
@@ -2350,9 +2350,11 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                     zc->SetNet( 0 );
                 }
 
+                // Hatch here, after outlines corners are read
                 // Set hatch here, after outlines corners are read
                 zc->m_Poly->SetHatch( outline_hatch,
-                                      Mils2iu( zc->m_Poly->GetDefaultHatchPitchMils() ) );
+                                      Mils2iu( CPolyLine::GetDefaultHatchPitchMils() ),
+                                      true );
 
                 m_board->Add( zc.release() );
             }

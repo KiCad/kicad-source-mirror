@@ -429,7 +429,7 @@ public:
         return m_Poly->GetHatchStyle();
     }
 
-    void SetHatchStyle( CPolyLine::hatch_style aStyle )
+    void SetHatchStyle( CPolyLine::HATCH_STYLE aStyle )
     {
         m_Poly->SetHatchStyle( aStyle );
     }

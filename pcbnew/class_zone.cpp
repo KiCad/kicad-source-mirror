@@ -46,6 +46,7 @@
 
 #include <pcbnew.h>
 #include <zones.h>
+#include <math_for_graphics.h>
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
@@ -912,7 +913,7 @@ void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
             AppendCorner( aPolygon[i] );
     }
 
-    m_Poly->Close();
+    m_Poly->CloseLastContour();
 }
 
 

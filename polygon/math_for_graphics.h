@@ -1,22 +1,5 @@
 // math stuff for graphics, from FreePCB
 
-#ifndef abs
-#define abs(x) (((x) >=0) ? (x) : (-(x)))
-#endif
-
-
-typedef struct PointTag
-{
-    double X,Y;
-} PointT;
-
-typedef struct EllipseTag
-{
-    PointT Center;			/* ellipse center	 */
-    double xrad, yrad;		// radii on x and y
-    double theta1, theta2;	// start and end angle for arc
-} EllipseKH;
-
 
 // math stuff for graphics
 bool Quadratic( double a, double b, double c, double *x1, double *x2 );
@@ -70,11 +53,5 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int yf );
 
 double GetPointToLineDistance( double a, double b, int x, int y, double * xp=NULL, double * yp=NULL );
-bool InRange( double x, double xi, double xf );
 
 double Distance( double x1, double y1, double x2, double y2 );
-
-int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
-                        double * x1=NULL, double * y1=NULL,
-                        double * x2=NULL, double * y2=NULL );
-
