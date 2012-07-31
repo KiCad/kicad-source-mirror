@@ -1041,7 +1041,7 @@ public:
      * @param aLayer = the layer of area
      * @param aStartPointPosition = position of the first point of the polygon outline of this area
      * @param aHatch = hatch option
-     * @return pointer to the new area
+     * @return a reference to the new area
      */
     ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
                              int aLayer, wxPoint aStartPointPosition, int aHatch );
@@ -1054,58 +1054,30 @@ public:
     ZONE_CONTAINER* InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch );
 
     /**
-     * Function TestAreaPolygon
-     * Test an area for self-intersection.
-     *
-     * @param CurrArea = copper area to test
-     * @return :
-     * -1 if arcs intersect other sides
-     *  0 if no intersecting sides
-     *  1 if intersecting sides, but no intersecting arcs
-     * Also sets utility2 flag of area with return value
-     */
-    int TestAreaPolygon( ZONE_CONTAINER* CurrArea );
-
-    /**
-     * Function ClipAreaPolygon
-     * Process an area that has been modified, by clipping its polygon against itself.
+     * Function NormalizeAreaPolygon
+     * Process an area that has been modified, by normalizing its polygon against itself.
+     * i.e. convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
      * This may change the number and order of copper areas in the net.
-     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful
-     *                        in undo commands) can be NULL
+     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new created areas pickers
      * @param aCurrArea = the zone to process
-     * @param bMessageBoxInt == true, shows message when clipping occurs.
-     * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
-     * @param bRetainArcs = true to handle arcs (not really used in KiCad)
-     * @return :
-     *  -1 if arcs intersect other sides, so polygon can't be clipped
-     *   0 if no intersecting sides
-     *   1 if intersecting sides
+     * @return true if changes are made
      * Also sets areas->utility1 flags if areas are modified
      */
-    int ClipAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList,
-                         ZONE_CONTAINER*    aCurrArea,
-                         bool               bMessageBoxArc,
-                         bool               bMessageBoxInt,
-                         bool               bRetainArcs = true );
+    bool NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
+                               ZONE_CONTAINER* aCurrArea );
 
     /**
-     * Process an area that has been modified, by clipping its polygon against
-     * itself and the polygons for any other areas on the same net.
+     * Function OnAreaPolygonModified
+     * Process an area that has been modified, by normalizing its polygon
+     * and merging the intersecting polygons for any other areas on the same net.
      * This may change the number and order of copper areas in the net.
      * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas
-     *                      (useful in undo commands. Can be NULL
+     *                             (useful in undo commands can be NULL
      * @param modified_area = area to test
-     * @param bMessageBoxInt : if true, shows message boxes when clipping occurs.
-     * @param bMessageBoxArc if true, shows message when clipping can't be done due to arcs.
-     * @return :
-     * -1 if arcs intersect other sides, so polygon can't be clipped
-     *  0 if no intersecting sides
-     *  1 if intersecting sides, polygon clipped
-     */
-    int AreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
-                             ZONE_CONTAINER*    modified_area,
-                             bool               bMessageBoxArc,
-                             bool               bMessageBoxInt );
+     * @return true if some areas modified
+    */
+    bool OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
+                                ZONE_CONTAINER*    modified_area );
 
     /**
      * Function CombineAllAreasInNet
@@ -1113,15 +1085,13 @@ public:
      * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
      *                       in undo commands can be NULL
      * @param aNetCode = net to consider
-     * @param bMessageBox : if true display warning message box
-     * @param bUseUtility : if true, don't check areas if both utility flags are 0
+     * @param aUseUtility : if true, don't check areas if both utility flags are 0
      * Sets utility flag = 1 for any areas modified
-     * If an area has self-intersecting arcs, doesn't try to combine it
+     * @return true if some areas modified
      */
-    int CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList,
+    bool CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList,
                               int                aNetCode,
-                              bool               bMessageBox,
-                              bool               bUseUtility );
+                              bool               aUseUtility );
 
     /**
      * Function RemoveArea
@@ -1154,19 +1124,17 @@ public:
     /**
      * Function CombineAreas
      * If possible, combine 2 copper areas
-     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
-     *                       in undo commands can be NULL
+     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas
+     *                      (useful for undo).
      * @param area_ref = the main area (zone)
      * @param area_to_combine = the zone that can be merged with area_ref
      * area_ref must be BEFORE area_to_combine
      * area_to_combine will be deleted, if areas are combined
-     * @return : 0 if no intersection
-     *         1 if intersection
-     *         2 if arcs intersect
+     * @return : true if area_to_combine is combined with area_ref (and therefore be deleted)
      */
-    int CombineAreas( PICKED_ITEMS_LIST* aDeletedList,
-                      ZONE_CONTAINER*    area_ref,
-                      ZONE_CONTAINER*    area_to_combine );
+    bool CombineAreas( PICKED_ITEMS_LIST* aDeletedList,
+                       ZONE_CONTAINER*    area_ref,
+                       ZONE_CONTAINER*    area_to_combine );
 
     /**
      * Function Test_Drc_Areas_Outlines_To_Areas_Outlines
