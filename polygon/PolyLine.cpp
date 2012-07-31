@@ -14,6 +14,10 @@
 #include <bezier_curves.h>
 #include <polygon_test_point_inside.h>
 #include <math_for_graphics.h>
+#include <polygon_test_point_inside.h>
+
+enum m_SideStyle { STRAIGHT };                 // side styles
+
 
 CPolyLine::CPolyLine()
 {
@@ -62,7 +66,6 @@ void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
  */
 int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList )
 {
-    std::vector<CArc>   arc_array;
     std::vector <void*> hole_array; // list of holes
     std::vector<int>*   hole;       // used to store corners for a given hole
     CPolyLine*          polyline;
@@ -108,7 +111,6 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList )
         {
             // first external contour, replace this poly
             m_CornersList.clear();
-            m_SideStyle.clear();
             bool first = true;
 
             while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
@@ -257,8 +259,7 @@ int CPolyLine::AddPolygonsToBoolEng( Bool_Engine* aBooleng, GroupType aGroup )
 /**
  * Function MakeKboolPoly
  * fill a kbool engine with a closed polyline contour
- * approximates arcs with multiple straight-line segments
- *  combining intersecting contours if possible
+ * normalize self-intersecting contours
  * @return error: 0 if Ok, 1 if error
  */
 int CPolyLine::MakeKboolPoly()
@@ -269,19 +270,11 @@ int CPolyLine::MakeKboolPoly()
         m_Kbool_Poly_Engine = NULL;
     }
 
-    std::vector<CArc>* arc_array = NULL;  // Remove me
-
     if( !GetClosed() )
         return 1; // error
 
-    int n_arcs = 0;
     int polycount = GetContoursCount();
     int last_contour = polycount - 1;
-
-    if( arc_array )
-        arc_array->clear();
-
-    int iarc = 0;
 
     for( int icont = 0; icont <= last_contour; icont++ )
     {
@@ -309,8 +302,6 @@ int CPolyLine::MakeKboolPoly()
             }
         }
 
-        // first, calculate number of vertices in contour
-        int n_vertices = 0;
         int ic_st   = GetContourStart( icont );
         int ic_end  = GetContourEnd( icont );
 
@@ -320,159 +311,12 @@ int CPolyLine::MakeKboolPoly()
             return 1;    // error
         }
 
-        for( int ic = ic_st; ic<=ic_end; ic++ )
+        // Enter this contour to booleng
+        for( int ic = ic_st; ic <= ic_end; ic++ )
         {
-            int style = m_SideStyle[ic];
-
-            if( style == STRAIGHT )
-                n_vertices++;
-            else
-            {
-                // style is ARC_CW or ARC_CCW
-                int n = CArc::ARC_STEPS;
-                n_vertices += n;
-                n_arcs++;
-            }
-        }
-
-        // now enter this contour to booleng
-        int ivtx = 0;
-
-        for( int ic = ic_st; ic<=ic_end; ic++ )
-        {
-            int style   = m_SideStyle[ic];
             int x1      = m_CornersList[ic].x;
             int y1      = m_CornersList[ic].y;
-            int x2, y2;
-
-            if( ic < ic_end )
-            {
-                x2  = m_CornersList[ic + 1].x;
-                y2  = m_CornersList[ic + 1].y;
-            }
-            else
-            {
-                x2  = m_CornersList[ic_st].x;
-                y2  = m_CornersList[ic_st].y;
-            }
-
-            if( style == STRAIGHT )
-            {
-                booleng->AddPoint( x1, y1 );
-                ivtx++;
-            }
-            else
-            {
-                // style is arc_cw or arc_ccw
-                int     n;                      // number of steps for arcs
-                n = CArc::ARC_STEPS;
-                double  xo, yo, theta1, theta2, a, b;
-                a   = fabs( (double) (x1 - x2) );
-                b   = fabs( (double) (y1 - y2) );
-
-                if( style == CPolyLine::ARC_CW )
-                {
-                    // clockwise arc (ie.quadrant of ellipse)
-                    if( x2 > x1 && y2 > y1 )
-                    {
-                        // first quadrant, draw second quadrant of ellipse
-                        xo      = x2;
-                        yo      = y1;
-                        theta1  = M_PI;
-                        theta2  = M_PI / 2.0;
-                    }
-                    else if( x2 < x1 && y2 > y1 )
-                    {
-                        // second quadrant, draw third quadrant of ellipse
-                        xo      = x1;
-                        yo      = y2;
-                        theta1  = 3.0 * M_PI / 2.0;
-                        theta2  = M_PI;
-                    }
-                    else if( x2 < x1 && y2 < y1 )
-                    {
-                        // third quadrant, draw fourth quadrant of ellipse
-                        xo      = x2;
-                        yo      = y1;
-                        theta1  = 2.0 * M_PI;
-                        theta2  = 3.0 * M_PI / 2.0;
-                    }
-                    else
-                    {
-                        xo      = x1; // fourth quadrant, draw first quadrant of ellipse
-                        yo      = y2;
-                        theta1  = M_PI / 2.0;
-                        theta2  = 0.0;
-                    }
-                }
-                else
-                {
-                    // counter-clockwise arc
-                    if( x2 > x1 && y2 > y1 )
-                    {
-                        xo      = x1; // first quadrant, draw fourth quadrant of ellipse
-                        yo      = y2;
-                        theta1  = 3.0 * M_PI / 2.0;
-                        theta2  = 2.0 * M_PI;
-                    }
-                    else if( x2 < x1 && y2 > y1 )
-                    {
-                        xo      = x2; // second quadrant
-                        yo      = y1;
-                        theta1  = 0.0;
-                        theta2  = M_PI / 2.0;
-                    }
-                    else if( x2 < x1 && y2 < y1 )
-                    {
-                        xo      = x1; // third quadrant
-                        yo      = y2;
-                        theta1  = M_PI / 2.0;
-                        theta2  = M_PI;
-                    }
-                    else
-                    {
-                        xo      = x2; // fourth quadrant
-                        yo      = y1;
-                        theta1  = M_PI;
-                        theta2  = 3.0 * M_PI / 2.0;
-                    }
-                }
-
-                // now write steps for arc
-                if( arc_array )
-                {
-                    CArc new_arc;
-                    new_arc.style   = style;
-                    new_arc.n_steps = n;
-                    new_arc.xi  = x1;
-                    new_arc.yi  = y1;
-                    new_arc.xf  = x2;
-                    new_arc.yf  = y2;
-                    arc_array->push_back( new_arc );
-                    iarc++;
-                }
-
-                for( int is = 0; is<n; is++ )
-                {
-                    double  theta   = theta1 + ( (theta2 - theta1) * (double) is ) / n;
-                    double  x       = xo + a* cos( theta );
-                    double  y       = yo + b* sin( theta );
-
-                    if( is == 0 )
-                    {
-                        x   = x1;
-                        y   = y1;
-                    }
-
-                    booleng->AddPoint( x, y );
-                    ivtx++;
-                }
-            }
-        }
-
-        if( n_vertices != ivtx )
-        {
-            wxASSERT( 0 );
+            booleng->AddPoint( x1, y1 );
         }
 
         // close list added to the bool engine
@@ -624,7 +468,6 @@ void CPolyLine::Start( int layer, int x, int y, int hatch )
     poly_pt.end_contour = false;
 
     m_CornersList.push_back( poly_pt );
-    m_SideStyle.push_back( 0 );
 }
 
 
@@ -636,12 +479,8 @@ void CPolyLine::AppendCorner( int x, int y )
     CPolyPt poly_pt( x, y );
     poly_pt.end_contour = false;
 
-    // add entries for new corner and side
+    // add entries for new corner
     m_CornersList.push_back( poly_pt );
-    m_SideStyle.push_back( STRAIGHT );
-
-    if( m_CornersList.size() > 0 && !m_CornersList[m_CornersList.size() - 1].end_contour )
-        m_SideStyle[m_CornersList.size() - 1] = STRAIGHT;
 }
 
 
@@ -670,29 +509,24 @@ void CPolyLine::DeleteCorner( int ic )
 {
     UnHatch();
     int     icont   = GetContour( ic );
-    int     istart  = GetContourStart( icont );
     int     iend    = GetContourEnd( icont );
-    bool    bClosed = icont < GetContoursCount() - 1 || GetClosed();
+    bool    closed = icont < GetContoursCount() - 1 || GetClosed();
 
-    if( !bClosed )
+    if( !closed )
     {
         // open contour, must be last contour
         m_CornersList.erase( m_CornersList.begin() + ic );
-
-        if( ic != istart )
-            m_SideStyle.erase( m_SideStyle.begin() + ic - 1 );
     }
     else
     {
         // closed contour
         m_CornersList.erase( m_CornersList.begin() + ic );
-        m_SideStyle.erase( m_SideStyle.begin() + ic );
 
         if( ic == iend )
             m_CornersList[ic - 1].end_contour = true;
     }
 
-    if( bClosed && GetContourSize( icont ) < 3 )
+    if( closed && GetContourSize( icont ) < 3 )
     {
         // delete the entire contour
         RemoveContour( icont );
@@ -725,7 +559,6 @@ void CPolyLine::RemoveContour( int icont )
     {
         // remove last contour
         m_CornersList.erase( m_CornersList.begin() + istart, m_CornersList.end() );
-        m_SideStyle.erase( m_SideStyle.begin() + istart, m_SideStyle.end() );
     }
     else
     {
@@ -733,7 +566,6 @@ void CPolyLine::RemoveContour( int icont )
         for( int ic = iend; ic>=istart; ic-- )
         {
             m_CornersList.erase( m_CornersList.begin() + ic );
-            m_SideStyle.erase( m_SideStyle.begin() + ic );
         }
     }
 
@@ -958,7 +790,6 @@ void CPolyLine::RemoveAllContours( void )
  */
 {
     m_CornersList.clear();
-    m_SideStyle.clear();
 }
 
 
@@ -975,12 +806,10 @@ void CPolyLine::InsertCorner( int ic, int x, int y )
     if( (unsigned) (ic) >= m_CornersList.size() )
     {
         m_CornersList.push_back( CPolyPt( x, y ) );
-        m_SideStyle.push_back( STRAIGHT );
     }
     else
     {
         m_CornersList.insert( m_CornersList.begin() + ic + 1, CPolyPt( x, y ) );
-        m_SideStyle.insert( m_SideStyle.begin() + ic + 1, STRAIGHT );
     }
 
     if( (unsigned) (ic + 1) < m_CornersList.size() )
@@ -1166,41 +995,6 @@ int CPolyLine::GetContourSize( int icont )
 }
 
 
-void CPolyLine::SetSideStyle( int is, int style )
-{
-    UnHatch();
-    wxPoint p1, p2;
-
-    if( is == (int) (m_CornersList.size() - 1) )
-    {
-        p1.x    = m_CornersList[m_CornersList.size() - 1].x;
-        p1.y    = m_CornersList[m_CornersList.size() - 1].y;
-        p2.x    = m_CornersList[0].x;
-        p2.y    = m_CornersList[0].y;
-    }
-    else
-    {
-        p1.x    = m_CornersList[is].x;
-        p1.y    = m_CornersList[is].y;
-        p2.x    = m_CornersList[is + 1].x;
-        p2.y    = m_CornersList[is + 1].y;
-    }
-
-    if( p1.x == p2.x || p1.y == p2.y )
-        m_SideStyle[is] = STRAIGHT;
-    else
-        m_SideStyle[is] = style;
-
-    Hatch();
-}
-
-
-int CPolyLine::GetSideStyle( int is )
-{
-    return m_SideStyle[is];
-}
-
-
 int CPolyLine::GetClosed()
 {
     if( m_CornersList.size() == 0 )
@@ -1318,7 +1112,7 @@ void CPolyLine::Hatch()
                                                   m_CornersList[ic].x, m_CornersList[ic].y,
                                                   m_CornersList[i_start_contour].x,
                                                   m_CornersList[i_start_contour].y,
-                                                  m_SideStyle[ic],
+                                                  STRAIGHT,
                                                   &x, &y, &x2, &y2 );
                 i_start_contour = ic + 1;
             }
@@ -1327,7 +1121,7 @@ void CPolyLine::Hatch()
                 ok = FindLineSegmentIntersection( a, slope,
                                                   m_CornersList[ic].x, m_CornersList[ic].y,
                                                   m_CornersList[ic + 1].x, m_CornersList[ic + 1].y,
-                                                  m_SideStyle[ic],
+                                                  STRAIGHT,
                                                   &x, &y, &x2, &y2 );
             }
 
@@ -1443,8 +1237,6 @@ void CPolyLine::Copy( CPolyLine* src )
     m_hatchPitch    = src->m_hatchPitch;
     // copy corners, using vector copy
     m_CornersList = src->m_CornersList;
-    // copy side styles, using vector copy
-    m_SideStyle = src->m_SideStyle;
 }
 
 
@@ -1595,10 +1387,9 @@ int CPolyLine::Distance( wxPoint aStart, wxPoint aEnd, int aWidth )
                 by2 = GetY( ic2 + 1 );
             }
 
-            int bstyle = GetSideStyle( ic2 );
-            int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, bstyle, 0,
+            int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, STRAIGHT, 0,
                                                  aStart.x, aStart.y, aEnd.x, aEnd.y,
-                                                 CPolyLine::STRAIGHT, aWidth,
+                                                 STRAIGHT, aWidth,
                                                  1,    // min clearance, should be > 0
                                                  NULL, NULL );
 
@@ -1654,11 +1445,8 @@ int CPolyLine::Distance( const wxPoint& aPoint )
                 by2 = GetY( ic2 + 1 );
             }
 
-            // Here we expect only straight lines for vertices
-            // (no arcs, not yet supported in Pcbnew)
             int d = KiROUND( GetPointToLineSegmentDistance( aPoint.x, aPoint.y,
                                                             bx1, by1, bx2, by2 ) );
-
 
             if( distance > d )
                 distance = d;
@@ -1901,9 +1689,9 @@ bool CPolyLine::IsPolygonSelfIntersecting()
                             int x2f    = GetX( is2_next );
                             int y2f    = GetY( is2_next );
                             int ret    = FindSegmentIntersections( x1i, y1i, x1f, y1f,
-                                                                   CPolyLine::STRAIGHT,
+                                                                   STRAIGHT,
                                                                    x2i, y2i, x2f, y2f,
-                                                                   CPolyLine::STRAIGHT );
+                                                                   STRAIGHT );
                             if( ret )
                             {
                                 // intersection between non-adjacent sides

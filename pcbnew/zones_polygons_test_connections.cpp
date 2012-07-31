@@ -28,7 +28,6 @@
 
 #include <algorithm> // sort
 
-
 #include <fctsys.h>
 #include <common.h>
 #include <macros.h>
@@ -40,6 +39,7 @@
 
 #include <pcbnew.h>
 #include <zones.h>
+#include <polygon_test_point_inside.h>
 
 static bool CmpZoneSubnetValue( const BOARD_CONNECTED_ITEM* a, const BOARD_CONNECTED_ITEM* b );
 void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
