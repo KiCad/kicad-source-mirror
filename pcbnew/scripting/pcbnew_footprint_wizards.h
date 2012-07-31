@@ -15,24 +15,24 @@ class PYTHON_FOOTPRINT_WIZARD: public FOOTPRINT_WIZARD
 {
 
     PyObject *m_PyWizard;
-    PyObject *CallMethod(const char *aMethod, PyObject *aArglist=NULL);
-    wxString CallRetStrMethod(const char *aMethod, PyObject *aArglist=NULL);
-    wxArrayString CallRetArrayStrMethod(const char *aMethod, 
-                                          PyObject *aArglist=NULL);
+    PyObject *CallMethod( const char *aMethod, PyObject *aArglist=NULL );
+    wxString CallRetStrMethod( const char *aMethod, PyObject *aArglist=NULL );
+    wxArrayString CallRetArrayStrMethod( const char *aMethod, 
+                                          PyObject *aArglist=NULL );
 
 public:
-    PYTHON_FOOTPRINT_WIZARD(PyObject *wizard);
+    PYTHON_FOOTPRINT_WIZARD( PyObject *wizard );
     ~PYTHON_FOOTPRINT_WIZARD();
     wxString      GetName();
     wxString      GetImage();  
     wxString      GetDescription();
     int           GetNumParameterPages();
-    wxString      GetParameterPageName(int aPage);
-    wxArrayString GetParameterNames(int aPage);
-    wxArrayString GetParameterTypes(int aPage);
-    wxArrayString GetParameterValues(int aPage);
-    wxArrayString GetParameterErrors(int aPage);
-    wxString      SetParameterValues(int aPage,wxArrayString& aValues); //< must return "OK" or error description
+    wxString      GetParameterPageName( int aPage );
+    wxArrayString GetParameterNames( int aPage );
+    wxArrayString GetParameterTypes( int aPage );
+    wxArrayString GetParameterValues( int aPage );
+    wxArrayString GetParameterErrors( int aPage );
+    wxString      SetParameterValues( int aPage, wxArrayString& aValues ); //< must return "OK" or error description
     MODULE       *GetModule();
 };
 
@@ -40,7 +40,7 @@ public:
 class PYTHON_FOOTPRINT_WIZARDS 
 {
 public:
-    static void register_wizard(PyObject *aPyWizard);
+    static void register_wizard( PyObject *aPyWizard );
 
 };
 
