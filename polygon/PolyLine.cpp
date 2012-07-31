@@ -57,10 +57,10 @@ void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
  * because copper areas have only one outside contour
  * Therefore, if this results in new CPolyLines, return them as std::vector pa
  * @param aExtraPolyList: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
- * @param bRetainArcs == true, try to retain arcs in polys
+ * (when after normalization, there is more than one polygon with holes)
  * @return number of external contours, or -1 if error
  */
-int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool bRetainArcs )
+int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList )
 {
     std::vector<CArc>   arc_array;
     std::vector <void*> hole_array; // list of holes
@@ -74,10 +74,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool
      * will be converted in non self crossing polygons by inserting extra points at the crossing locations
      * True holes are combined if possible
      */
-    if( bRetainArcs )
-        MakeKboolPoly( &arc_array );
-    else
-        MakeKboolPoly( NULL );
+    MakeKboolPoly();
 
     UnHatch();
 
@@ -203,15 +200,12 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool
             {
                 int x   = (*hole)[ii]; ii++;
                 int y   = (*hole)[ii];
-                polyline->AppendCorner( x, y, STRAIGHT, false );
+                polyline->AppendCorner( x, y );
             }
 
             polyline->CloseLastContour();
         }
     }
-
-    if( bRetainArcs )
-        RestoreArcs( &arc_array, aExtraPolyList );
 
     delete m_Kbool_Poly_Engine;
     m_Kbool_Poly_Engine = NULL;
@@ -265,16 +259,17 @@ int CPolyLine::AddPolygonsToBoolEng( Bool_Engine* aBooleng, GroupType aGroup )
  * fill a kbool engine with a closed polyline contour
  * approximates arcs with multiple straight-line segments
  *  combining intersecting contours if possible
- * @param arc_array : return corners computed from arcs approximations in arc_array
  * @return error: 0 if Ok, 1 if error
  */
-int CPolyLine::MakeKboolPoly( std::vector<CArc>* arc_array )
+int CPolyLine::MakeKboolPoly()
 {
     if( m_Kbool_Poly_Engine )
     {
         delete m_Kbool_Poly_Engine;
         m_Kbool_Poly_Engine = NULL;
     }
+
+    std::vector<CArc>* arc_array = NULL;  // Remove me
 
     if( !GetClosed() )
         return 1; // error
@@ -604,194 +599,23 @@ void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
 }
 
 
-int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* pa, bool bRetainArcs )
+/**
+ * Function NormalizeAreaOutlines
+ * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
+ * @param aNewPolygonList = a std::vector<CPolyLine*> reference where to store new CPolyLine
+ * needed by the normalization
+ * @return the polygon count (always >= 1, becuse there is at lesat one polygon)
+ * There are new polygons only if the polygon count  is > 1
+ */
+int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
 {
-    return NormalizeWithKbool( pa, bRetainArcs );
+    return NormalizeWithKbool( aNewPolygonList );
 }
 
 
-// Restore arcs to a polygon where they were replaced with steps
-// If pa != NULL, also use polygons in pa array
-//
-int CPolyLine::RestoreArcs( std::vector<CArc>* arc_array, std::vector<CPolyLine*>* pa )
-{
-    // get poly info
-    int n_polys = 1;
-
-    if( pa )
-        n_polys += pa->size();
-
-    CPolyLine* poly;
-
-    // undraw polys and clear m_utility flag for all corners
-    for( int ip = 0; ip<n_polys; ip++ )
-    {
-        if( ip == 0 )
-            poly = this;
-        else
-            poly = (*pa)[ip - 1];
-
-        poly->UnHatch();
-
-        for( int ic = 0; ic<poly->GetNumCorners(); ic++ )
-            poly->SetUtility( ic, 0 );
-
-        // clear m_utility flag
-    }
-
-    // find arcs and replace them
-    bool    bFound;
-    int     arc_start   = 0;
-    int     arc_end     = 0;
-
-    for( unsigned iarc = 0; iarc<arc_array->size(); iarc++ )
-    {
-        int arc_xi  = (*arc_array)[iarc].xi;
-        int arc_yi  = (*arc_array)[iarc].yi;
-        int arc_xf  = (*arc_array)[iarc].xf;
-        int arc_yf  = (*arc_array)[iarc].yf;
-        int n_steps = (*arc_array)[iarc].n_steps;
-        int style   = (*arc_array)[iarc].style;
-        bFound = false;
-
-        // loop through polys
-        for( int ip = 0; ip<n_polys; ip++ )
-        {
-            if( ip == 0 )
-                poly = this;
-            else
-                poly = (*pa)[ip - 1];
-
-            int polycount = poly->GetContoursCount();
-
-            for( int icont = 0; icont < polycount; icont++ )
-            {
-                int ic_start    = poly->GetContourStart( icont );
-                int ic_end      = poly->GetContourEnd( icont );
-
-                if( (ic_end - ic_start) > n_steps )
-                {
-                    for( int ic = ic_start; ic<=ic_end; ic++ )
-                    {
-                        int ic_next = ic + 1;
-
-                        if( ic_next > ic_end )
-                            ic_next = ic_start;
-
-                        int xi  = poly->GetX( ic );
-                        int yi  = poly->GetY( ic );
-
-                        if( xi == arc_xi && yi == arc_yi )
-                        {
-                            // test for forward arc
-                            int ic2 = ic + n_steps;
-
-                            if( ic2 > ic_end )
-                                ic2 = ic2 - ic_end + ic_start - 1;
-
-                            int xf  = poly->GetX( ic2 );
-                            int yf  = poly->GetY( ic2 );
-
-                            if( xf == arc_xf && yf == arc_yf )
-                            {
-                                // arc from ic to ic2
-                                bFound      = true;
-                                arc_start   = ic;
-                                arc_end     = ic2;
-                            }
-                            else
-                            {
-                                // try reverse arc
-                                ic2 = ic - n_steps;
-
-                                if( ic2 < ic_start )
-                                    ic2 = ic2 - ic_start + ic_end + 1;
-
-                                xf  = poly->GetX( ic2 );
-                                yf  = poly->GetY( ic2 );
-
-                                if( xf == arc_xf && yf == arc_yf )
-                                {
-                                    // arc from ic2 to ic
-                                    bFound      = true;
-                                    arc_start   = ic2;
-                                    arc_end     = ic;
-                                    style       = 3 - style;
-                                }
-                            }
-
-                            if( bFound )
-                            {
-                                poly->m_SideStyle[arc_start] = style;
-
-                                // mark corners for deletion from arc_start+1 to arc_end-1
-                                for( int i = arc_start + 1; i!=arc_end; )
-                                {
-                                    if( i > ic_end )
-                                        i = ic_start;
-
-                                    poly->SetUtility( i, 1 );
-
-                                    if( i == ic_end )
-                                        i = ic_start;
-                                    else
-                                        i++;
-                                }
-
-                                break;
-                            }
-                        }
-
-                        if( bFound )
-                            break;
-                    }
-                }
-
-                if( bFound )
-                    break;
-            }
-        }
-
-        if( bFound )
-            (*arc_array)[iarc].bFound = true;
-    }
-
-    // now delete all marked corners
-    for( int ip = 0; ip<n_polys; ip++ )
-    {
-        if( ip == 0 )
-            poly = this;
-        else
-            poly = (*pa)[ip - 1];
-
-        for( int ic = poly->GetNumCorners() - 1; ic>=0; ic-- )
-        {
-            if( poly->GetUtility( ic ) )
-                poly->DeleteCorner( ic, false );
-        }
-    }
-
-    return 0;
-}
-
-
-// initialize new polyline
-// set layer, width, selection box size, starting point, id and pointer
-//
-// if sel_box = 0, don't create selection elements at all
-//
-// if polyline is board outline, enter with:
-// id.type = ID_BOARD
-// id.st = ID_BOARD_OUTLINE
-// id.i = 0
-// ptr = NULL
-//
-// if polyline is copper area, enter with:
-// id.type = ID_NET;
-// id.st = ID_AREA
-// id.i = index to area
-// ptr = pointer to net
-//
+/* initialize a contour
+ * set layer, hatch style, and starting point
+ */
 void CPolyLine::Start( int layer, int x, int y, int hatch )
 {
     m_layer = layer;
@@ -806,7 +630,7 @@ void CPolyLine::Start( int layer, int x, int y, int hatch )
 
 // add a corner to unclosed polyline
 //
-void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
+void CPolyLine::AppendCorner( int x, int y )
 {
     UnHatch();
     CPolyPt poly_pt( x, y );
@@ -814,13 +638,10 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
 
     // add entries for new corner and side
     m_CornersList.push_back( poly_pt );
-    m_SideStyle.push_back( style );
+    m_SideStyle.push_back( STRAIGHT );
 
     if( m_CornersList.size() > 0 && !m_CornersList[m_CornersList.size() - 1].end_contour )
-        m_SideStyle[m_CornersList.size() - 1] = style;
-
-    if( bDraw )
-        Hatch();
+        m_SideStyle[m_CornersList.size() - 1] = STRAIGHT;
 }
 
 
@@ -845,7 +666,7 @@ void CPolyLine::MoveCorner( int ic, int x, int y )
 
 // delete corner and adjust arrays
 //
-void CPolyLine::DeleteCorner( int ic, bool bDraw )
+void CPolyLine::DeleteCorner( int ic )
 {
     UnHatch();
     int     icont   = GetContour( ic );
@@ -876,9 +697,6 @@ void CPolyLine::DeleteCorner( int ic, bool bDraw )
         // delete the entire contour
         RemoveContour( icont );
     }
-
-    if( bDraw )
-        Hatch();
 }
 
 
@@ -1683,7 +1501,8 @@ void CPolyLine::SetEndContour( int ic, bool end_contour )
 }
 
 /*
- * AppendArc adds segments to current contour to approximate the given arc
+ * AppendArc:
+ * adds segments to current contour to approximate the given arc
  */
 void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int num )
 {
@@ -1701,7 +1520,7 @@ void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int n
     {
         int x   = KiROUND( xc + radius * cos( theta ) );
         int y   = KiROUND( yc + radius * sin( theta ) );
-        AppendCorner( x, y, STRAIGHT, 0 );
+        AppendCorner( x, y );
         theta += th_d;
     }
 
@@ -1999,4 +1818,103 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
         aOnePolyList.pop_back();
         aOnePolyList.push_back( corner );
     }
+}
+
+/**
+ * Function IsPolygonSelfIntersecting
+ * Test a CPolyLine for self-intersection of vertex (all contours).
+ *
+ * @return :
+ *  false if no intersecting sides
+ *  true if intersecting sides
+ * When a CPolyLine is self intersectic, it need to be normalized.
+ * (converted to non intersecting polygons)
+ */
+bool CPolyLine::IsPolygonSelfIntersecting()
+{
+    // first, check for sides intersecting other sides
+    int                n_cont  = GetContoursCount();
+
+    // make bounding rect for each contour
+    std::vector<CRect> cr;
+    cr.reserve( n_cont );
+
+    for( int icont = 0; icont<n_cont; icont++ )
+        cr.push_back( GetCornerBounds( icont ) );
+
+    for( int icont = 0; icont<n_cont; icont++ )
+    {
+        int is_start = GetContourStart( icont );
+        int is_end   = GetContourEnd( icont );
+
+        for( int is = is_start; is<=is_end; is++ )
+        {
+            int is_prev = is - 1;
+
+            if( is_prev < is_start )
+                is_prev = is_end;
+
+            int is_next = is + 1;
+
+            if( is_next > is_end )
+                is_next = is_start;
+
+            int x1i   = GetX( is );
+            int y1i   = GetY( is );
+            int x1f   = GetX( is_next );
+            int y1f   = GetY( is_next );
+
+            // check for intersection with any other sides
+            for( int icont2 = icont; icont2<n_cont; icont2++ )
+            {
+                if( cr[icont].left > cr[icont2].right
+                    || cr[icont].bottom > cr[icont2].top
+                    || cr[icont2].left > cr[icont].right
+                    || cr[icont2].bottom > cr[icont].top )
+                {
+                    // rectangles don't overlap, do nothing
+                }
+                else
+                {
+                    int is2_start = GetContourStart( icont2 );
+                    int is2_end   = GetContourEnd( icont2 );
+
+                    for( int is2 = is2_start; is2<=is2_end; is2++ )
+                    {
+                        int is2_prev = is2 - 1;
+
+                        if( is2_prev < is2_start )
+                            is2_prev = is2_end;
+
+                        int is2_next = is2 + 1;
+
+                        if( is2_next > is2_end )
+                            is2_next = is2_start;
+
+                        if( icont != icont2
+                           || ( is2 != is && is2 != is_prev && is2 != is_next &&
+                                is != is2_prev && is != is2_next )
+                          )
+                        {
+                            int x2i    = GetX( is2 );
+                            int y2i    = GetY( is2 );
+                            int x2f    = GetX( is2_next );
+                            int y2f    = GetY( is2_next );
+                            int ret    = FindSegmentIntersections( x1i, y1i, x1f, y1f,
+                                                                   CPolyLine::STRAIGHT,
+                                                                   x2i, y2i, x2f, y2f,
+                                                                   CPolyLine::STRAIGHT );
+                            if( ret )
+                            {
+                                // intersection between non-adjacent sides
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
 }

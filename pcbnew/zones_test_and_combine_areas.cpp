@@ -44,11 +44,6 @@
 #include <math_for_graphics.h>
 
 
-static bool bDontShowSelfIntersectionArcsWarning;
-static bool bDontShowSelfIntersectionWarning;
-static bool bDontShowIntersectionArcsWarning;
-
-
 /**
  * Function AddArea
  * Add an empty copper area to board areas list
@@ -126,199 +121,31 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int
 
 
 /**
- * Function TestAreaPolygon
- * Test an area for self-intersection.
- *
- * @param CurrArea = copper area to test
- * @return :
- * -1 if arcs intersect other sides
- *  0 if no intersecting sides
- *  1 if intersecting sides, but no intersecting arcs
- * Also sets utility2 flag of area with return value
- */
-int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
-{
-    CPolyLine*         p = CurrArea->m_Poly;
-
-    // first, check for sides intersecting other sides, especially arcs
-    bool               bInt    = false;
-    bool               bArcInt = false;
-    int                n_cont  = p->GetContoursCount();
-
-    // make bounding rect for each contour
-    std::vector<CRect> cr;
-    cr.reserve( n_cont );
-
-    for( int icont = 0; icont<n_cont; icont++ )
-        cr.push_back( p->GetCornerBounds( icont ) );
-
-    for( int icont = 0; icont<n_cont; icont++ )
-    {
-        int is_start = p->GetContourStart( icont );
-        int is_end   = p->GetContourEnd( icont );
-
-        for( int is = is_start; is<=is_end; is++ )
-        {
-            int is_prev = is - 1;
-
-            if( is_prev < is_start )
-                is_prev = is_end;
-
-            int is_next = is + 1;
-
-            if( is_next > is_end )
-                is_next = is_start;
-
-            int style = p->GetSideStyle( is );
-            int x1i   = p->GetX( is );
-            int y1i   = p->GetY( is );
-            int x1f   = p->GetX( is_next );
-            int y1f   = p->GetY( is_next );
-
-            // check for intersection with any other sides
-            for( int icont2 = icont; icont2<n_cont; icont2++ )
-            {
-                if( cr[icont].left > cr[icont2].right
-                    || cr[icont].bottom > cr[icont2].top
-                    || cr[icont2].left > cr[icont].right
-                    || cr[icont2].bottom > cr[icont].top )
-                {
-                    // rectangles don't overlap, do nothing
-                }
-                else
-                {
-                    int is2_start = p->GetContourStart( icont2 );
-                    int is2_end   = p->GetContourEnd( icont2 );
-
-                    for( int is2 = is2_start; is2<=is2_end; is2++ )
-                    {
-                        int is2_prev = is2 - 1;
-
-                        if( is2_prev < is2_start )
-                            is2_prev = is2_end;
-
-                        int is2_next = is2 + 1;
-
-                        if( is2_next > is2_end )
-                            is2_next = is2_start;
-
-                        if( icont != icont2
-                           || (is2 != is && is2 != is_prev && is2 != is_next && is != is2_prev
-                               && is !=
-                               is2_next ) )
-                        {
-                            int style2 = p->GetSideStyle( is2 );
-                            int x2i    = p->GetX( is2 );
-                            int y2i    = p->GetY( is2 );
-                            int x2f    = p->GetX( is2_next );
-                            int y2f    = p->GetY( is2_next );
-                            int ret    = FindSegmentIntersections( x1i, y1i, x1f, y1f, style,
-                                                                   x2i, y2i, x2f, y2f, style2 );
-                            if( ret )
-                            {
-                                // intersection between non-adjacent sides
-                                bInt = true;
-
-                                if( style != CPolyLine::STRAIGHT || style2 != CPolyLine::STRAIGHT )
-                                {
-                                    bArcInt = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if( bArcInt )
-                    break;
-            }
-
-            if( bArcInt )
-                break;
-        }
-
-        if( bArcInt )
-            break;
-    }
-
-    if( bArcInt )
-        CurrArea->utility2 = -1;
-    else if( bInt )
-        CurrArea->utility2 = 1;
-    else
-        CurrArea->utility2 = 0;
-
-    return CurrArea->utility2;
-}
-
-
-/**
- * Function ClipAreaPolygon
- * Process an area that has been modified, by clipping its polygon against itself.
+ * Function NormalizeAreaPolygon
+ * Process an area that has been modified, by normalizing its polygon against itself.
+ * i.e. convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
  * This may change the number and order of copper areas in the net.
- * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful in
- *                        undo commands) can be NULL
+ * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new created areas
  * @param aCurrArea = the zone to process
- * @param bMessageBoxInt == true, shows message when clipping occurs.
- * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
- * @param bRetainArcs = true to handle arcs (not really used in KiCad)
- * @return
- *  -1 if arcs intersect other sides, so polygon can't be clipped
- *   0 if no intersecting sides
- *   1 if intersecting sides
+ * @return true if changes are made
  * Also sets areas->utility1 flags if areas are modified
  */
-int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
-                            ZONE_CONTAINER* aCurrArea,
-                            bool bMessageBoxArc, bool bMessageBoxInt, bool bRetainArcs )
+bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
+                                  ZONE_CONTAINER* aCurrArea )
 {
     CPolyLine* curr_polygon = aCurrArea->m_Poly;
-    int        test = TestAreaPolygon( aCurrArea ); // this sets utility2 flag
 
-    if( test == -1 && !bRetainArcs )
-        test = 1;
-
-    if( test == -1 )
-    {
-        // arc intersections, don't clip unless bRetainArcs == false
-        if( bMessageBoxArc && bDontShowSelfIntersectionArcsWarning == false )
-        {
-            wxString str;
-            str.Printf( wxT( "Area %08lX of net \"%s\" has arcs intersecting other sides.\n" ),
-                        aCurrArea->GetTimeStamp(), GetChars( aCurrArea->GetNetName() ) );
-            str += wxT( "This may cause problems with other editing operations,\n" );
-            str += wxT( "such as adding cutouts. It can't be fixed automatically.\n" );
-            str += wxT( "Manual correction is recommended." );
-            wxMessageBox( str );
-        }
-
-        return -1;  // arcs intersect with other sides, error
-    }
-
-    // mark all areas as unmodified except this one
+    // mark all areas as unmodified except this one, if modified
     for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
         m_ZoneDescriptorList[ia]->utility = 0;
 
     aCurrArea->utility = 1;
 
-    if( test == 1 )
-    {
-        // non-arc intersections, clip the polygon
-        if( bMessageBoxInt && bDontShowSelfIntersectionWarning == false )
-        {
-            wxString str;
-            str.Printf( wxT( "Area %08lX of net \"%s\" is self-intersecting and will be clipped.\n" ),
-                        aCurrArea->GetTimeStamp(), GetChars( aCurrArea->GetNetName() ) );
-            str += wxT( "This may result in splitting the area.\n" );
-            str += wxT( "If the area is complex, this may take a few seconds." );
-            wxMessageBox( str );
-        }
-    }
-
+    if( curr_polygon->IsPolygonSelfIntersecting() )
     {
         std::vector<CPolyLine*>* pa = new std::vector<CPolyLine*>;
         curr_polygon->UnHatch();
-        int n_poly = aCurrArea->m_Poly->NormalizeAreaOutlines( pa, bRetainArcs );
+        int n_poly = aCurrArea->m_Poly->NormalizeAreaOutlines( pa );
 
         // If clipping has created some polygons, we must add these new copper areas.
         if( n_poly > 1 )
@@ -340,60 +167,45 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
                 NewArea->utility = 1;
             }
         }
-
-        curr_polygon->Hatch();
         delete pa;
     }
 
-    return test;
+    curr_polygon->Hatch();
+
+    return true;
 }
 
 
 /**
- * Process an area that has been modified, by clipping its polygon against
- * itself and the polygons for any other areas on the same net.
+ * Process an area that has been modified, by normalizing its polygon
+ * and merging the intersecting polygons for any other areas on the same net.
  * This may change the number and order of copper areas in the net.
  * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas
  *                             (useful in undo commands can be NULL
  * @param modified_area = area to test
- * @param  bMessageBoxArc if true, shows message when clipping can't be done due to arcs.
- * @param bMessageBoxInt == true, shows message when clipping occurs.
- * @return :
- * -1 if arcs intersect other sides, so polygon can't be clipped
- *  0 if no intersecting sides
- *  1 if intersecting sides, polygon clipped
+ * @return true if some areas modified
  */
-int BOARD::AreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
-                                ZONE_CONTAINER* modified_area,
-                                bool            bMessageBoxArc,
-                                bool            bMessageBoxInt )
+bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
+                                ZONE_CONTAINER* modified_area )
 {
     // clip polygon against itself
-    int test = ClipAreaPolygon( aModifiedZonesList, modified_area, bMessageBoxArc, bMessageBoxInt );
-
-    if( test == -1 )
-        return test;
+    bool modified = NormalizeAreaPolygon( aModifiedZonesList, modified_area );
 
     // now see if we need to clip against other areas
     int  layer = modified_area->GetLayer();
-    bool bCheckAllAreas = false;
-
-    if( test == 1 )
-        bCheckAllAreas = true;
-    else
-        bCheckAllAreas = TestAreaIntersections( modified_area );
+    bool bCheckAllAreas = TestAreaIntersections( modified_area );
 
     if( bCheckAllAreas )
-        CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNet(), bMessageBoxInt, true );
+    {
+        modified = true;
+        CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNet(), true );
+    }
 
     if( layer >= FIRST_NO_COPPER_LAYER )    // Refill non copper zones on this layer
     {
-        if( m_ZoneDescriptorList.size() > 0 )
-        {
-            for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
-                if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
-                    m_ZoneDescriptorList[ia]->BuildFilledPolysListData( this );
-        }
+        for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
+            if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
+                m_ZoneDescriptorList[ia]->BuildFilledPolysListData( this );
     }
 
     // Test for bad areas: all zones must have more than 2 corners:
@@ -408,33 +220,29 @@ int BOARD::AreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
             RemoveArea( aModifiedZonesList, zone );
     }
 
-    return test;
+    return modified;
 }
 
 
 /**
  * Function CombineAllAreasInNet
  * Checks all copper areas in net for intersections, combining them if found
- * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in
- *                       undo commands can be NULL
+ * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
+ *                       in undo commands can be NULL
  * @param aNetCode = net to consider
- * @param bMessageBox : if true display warning message box
- * @param bUseUtility : if true, don't check areas if both utility flags are 0
+ * @param aUseUtility : if true, don't check areas if both utility flags are 0
  * Sets utility flag = 1 for any areas modified
- * If an area has self-intersecting arcs, doesn't try to combine it
- */
-int BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
-                                 bool bMessageBox, bool bUseUtility )
+ * @return true if some areas modified
+  */
+bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
+                                 bool aUseUtility )
 {
     if( m_ZoneDescriptorList.size() <= 1 )
-        return 0;
+        return false;
 
-    // start by testing all area polygons to set utility2 flags
-    for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
-        if( m_ZoneDescriptorList[ia]->GetNet() == aNetCode )
-            TestAreaPolygon( m_ZoneDescriptorList[ia] );
+    bool modified = false;
 
-    // now loop through all combinations
+    //Loop through all combinations
     for( unsigned ia1 = 0; ia1 < m_ZoneDescriptorList.size() - 1; ia1++ )
     {
         ZONE_CONTAINER* curr_area = m_ZoneDescriptorList[ia1];
@@ -458,15 +266,14 @@ int BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             if( curr_area->GetIsKeepout() != area2->GetIsKeepout() )
                 continue;
 
-            if( curr_area->GetLayer() == area2->GetLayer()
-                && curr_area->utility2 != -1 && area2->utility2 != -1 )
+            if( curr_area->GetLayer() == area2->GetLayer() )
             {
                 CRect b2 = area2->m_Poly->GetCornerBounds();
                 if( !( b1.left > b2.right || b1.right < b2.left
                        || b1.bottom > b2.top || b1.top < b2.bottom ) )
                 {
                     // check area2 against curr_area
-                    if( curr_area->utility || area2->utility || bUseUtility == false )
+                    if( curr_area->utility || area2->utility || aUseUtility == false )
                     {
                         int ret = TestAreaIntersection( curr_area, area2 );
 
@@ -476,19 +283,7 @@ int BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
                         if( ret == 1 )
                         {
                             mod_ia1 = true;
-                        }
-                        else if( ret == 2 )
-                        {
-                            if( bMessageBox && bDontShowIntersectionArcsWarning == false )
-                            {
-                                wxString str;
-                                str.Printf( wxT( "Areas %d and %d of net \"%s\" intersect, but some of the intersecting sides are arcs.\n" ),
-                                            ia1 + 1,
-                                            ia2 + 1,
-                                            GetChars( curr_area->GetNetName() ) );
-                                str += wxT( "Therefore, these areas can't be combined." );
-                                wxMessageBox( str );
-                            }
+                            modified = true;
                         }
                     }
                 }
@@ -499,7 +294,7 @@ int BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             ia1--;     // if modified, we need to check it again
     }
 
-    return 0;
+    return modified;
 }
 
 
@@ -556,7 +351,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
             {
                 int xi1 = poly1->GetX( ic1 );
                 int yi1 = poly1->GetY( ic1 );
-                int xf1, yf1, style1;
+                int xf1, yf1;
 
                 if( ic1 < ie1 )
                 {
@@ -569,8 +364,6 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
                     yf1 = poly1->GetY( is1 );
                 }
 
-                style1 = poly1->GetSideStyle( ic1 );
-
                 for( int icont2 = 0; icont2 < poly2->GetContoursCount(); icont2++ )
                 {
                     int is2 = poly2->GetContourStart( icont2 );
@@ -580,7 +373,7 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
                     {
                         int xi2 = poly2->GetX( ic2 );
                         int yi2 = poly2->GetY( ic2 );
-                        int xf2, yf2, style2;
+                        int xf2, yf2;
 
                         if( ic2 < ie2 )
                         {
@@ -593,9 +386,8 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
                             yf2 = poly2->GetY( is2 );
                         }
 
-                        style2 = poly2->GetSideStyle( ic2 );
-                        int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, style1,
-                                                              xi2, yi2, xf2, yf2, style2 );
+                        int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, CPolyLine::STRAIGHT,
+                                                              xi2, yi2, xf2, yf2, CPolyLine::STRAIGHT );
                         if( n_int )
                             return true;
                     }
@@ -640,7 +432,6 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
  * @param area_to_test = area to compare for intersection calculations
  * @return : 0 if no intersection
  *         1 if intersection
- *         2 if arcs intersect
  */
 int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test )
 {
@@ -655,15 +446,12 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
     CRect      b1 = poly1->GetCornerBounds();
     CRect      b2 = poly2->GetCornerBounds();
 
-    if(  b1.bottom > b2.top
-      || b1.top < b2.bottom
-      || b1.left > b2.right
-      || b1.right < b2.left )
+    if(  b1.bottom > b2.top || b1.top < b2.bottom ||
+         b1.left > b2.right || b1.right < b2.left )
         return 0;
 
     // now test for intersecting segments
     bool bInt    = false;
-    bool bArcInt = false;
 
     for( int icont1 = 0; icont1<poly1->GetContoursCount(); icont1++ )
     {
@@ -674,7 +462,7 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
         {
             int xi1 = poly1->GetX( ic1 );
             int yi1 = poly1->GetY( ic1 );
-            int xf1, yf1, style1;
+            int xf1, yf1;
 
             if( ic1 < ie1 )
             {
@@ -687,8 +475,6 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
                 yf1 = poly1->GetY( is1 );
             }
 
-            style1 = poly1->GetSideStyle( ic1 );
-
             for( int icont2 = 0; icont2<poly2->GetContoursCount(); icont2++ )
             {
                 int is2 = poly2->GetContourStart( icont2 );
@@ -698,7 +484,7 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
                 {
                     int xi2 = poly2->GetX( ic2 );
                     int yi2 = poly2->GetY( ic2 );
-                    int xf2, yf2, style2;
+                    int xf2, yf2;
 
                     if( ic2 < ie2 )
                     {
@@ -711,37 +497,20 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
                         yf2 = poly2->GetY( is2 );
                     }
 
-                    style2 = poly2->GetSideStyle( ic2 );
-                    int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, style1,
-                                                          xi2, yi2, xf2, yf2, style2 );
+                    int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, CPolyLine::STRAIGHT,
+                                                          xi2, yi2, xf2, yf2, CPolyLine::STRAIGHT );
                     if( n_int )
                     {
                         bInt = true;
-
-                        if( style1 != CPolyLine::STRAIGHT || style2 != CPolyLine::STRAIGHT )
-                            bArcInt = true;
-
                         break;
                     }
                 }
-
-                if( bArcInt )
-                    break;
             }
-
-            if( bArcInt )
-                break;
         }
-
-        if( bArcInt )
-            break;
     }
 
     if( !bInt )
     {
-        if( bArcInt )
-            return 0;
-
         // If a contour is inside an other contour, no segments intersects, but the zones
         // can be combined test a corner inside an outline (only one corner is enought)
         for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
@@ -769,9 +538,6 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
         return 0;
     }
 
-    if( bArcInt )
-        return 2;
-
     return 1;
 }
 
@@ -779,24 +545,22 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
 /**
  * Function CombineAreas
  * Merge 2 copper areas (which  are expected intersecting)
- * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo
- *                       commands can be NULL
+ * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas
+ *                      (useful for undo command)
  * @param area_ref = the main area (zone)
  * @param area_to_combine = the zone that can be merged with area_ref
  * area_ref must be BEFORE area_to_combine
  * area_to_combine will be deleted, if areas are combined
- * @return : 0 if no intersection
- *         1 if intersection
- *         2 if arcs intersect (Currently not supported)
+ * @return : true if area_to_combine is combined with area_ref (and therefore be deleted)
  */
 
-int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_ref,
+bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_ref,
                          ZONE_CONTAINER* area_to_combine )
 {
     if( area_ref == area_to_combine )
     {
         wxASSERT( 0 );
-        return 0;
+        return false;
     }
 
     // polygons intersect, combine them
@@ -920,7 +684,7 @@ int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_r
     area_ref->utility = 1;
     area_ref->m_Poly->Hatch();
 
-    return 1;
+    return true;
 }
 
 
@@ -1054,8 +818,6 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                         ay2 = refSmoothedPoly->GetY( ic + 1 );
                     }
 
-                    int astyle = refSmoothedPoly->GetSideStyle( ic );
-
                     for( int icont2 = 0; icont2 < testSmoothedPoly->GetContoursCount(); icont2++ )
                     {
                         int ic_start2 = testSmoothedPoly->GetContourStart( icont2 );
@@ -1078,13 +840,13 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                                 by2 = testSmoothedPoly->GetY( ic2 + 1 );
                             }
 
-                            int bstyle = testSmoothedPoly->GetSideStyle( ic2 );
                             int x, y;
 
-                            int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, bstyle,
+                            int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
+                                                                 CPolyLine::STRAIGHT,
                                                                  0,
-                                                                 ax1, ay1, ax2,
-                                                                 ay2, astyle,
+                                                                 ax1, ay1, ax2, ay2,
+                                                                 CPolyLine::STRAIGHT,
                                                                  0,
                                                                  zone2zoneClearance,
                                                                  &x, &y );
@@ -1196,7 +958,6 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
         }
 
         // now test spacing between areas
-        int astyle = CPolyLine::STRAIGHT;
         int ax1    = start.x;
         int ay1    = start.y;
         int ax2    = end.x;
@@ -1224,11 +985,10 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
                     by2 = area_to_test->m_Poly->GetY( ic2 + 1 );
                 }
 
-                int bstyle = area_to_test->m_Poly->GetSideStyle( ic2 );
                 int x, y;   // variables containing the intersecting point coordinates
-                int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, bstyle,
+                int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, CPolyLine::STRAIGHT,
                                                      0,
-                                                     ax1, ay1, ax2, ay2, astyle,
+                                                     ax1, ay1, ax2, ay2, CPolyLine::STRAIGHT,
                                                      0,
                                                      zone_clearance,
                                                      &x, &y );

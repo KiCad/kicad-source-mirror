@@ -110,14 +110,31 @@ public:
     CPolyLine();
     ~CPolyLine();
 
-    // functions for modifying polyline
+    // functions for modifying the CPolyLine contours
+
+    /* initialize a contour
+     * set layer, hatch style, and starting point
+     */
     void        Start( int layer, int x, int y, int hatch );
-    void        AppendCorner( int x, int y, int style = STRAIGHT, bool bDraw = false );
+
+    void        AppendCorner( int x, int y );
     void        InsertCorner( int ic, int x, int y );
-    void        DeleteCorner( int ic, bool bDraw = false );
+    void        DeleteCorner( int ic );
     void        MoveCorner( int ic, int x, int y );
     void        CloseLastContour();
     void        RemoveContour( int icont );
+
+    /**
+     * Function IsPolygonSelfIntersecting
+     * Test a CPolyLine for self-intersection of vertex (all contours).
+     *
+     * @return :
+     *  false if no intersecting sides
+     *  true if intersecting sides
+     * When a CPolyLine is self intersectic, it need to be normalized.
+     * (converted to non intersecting polygons)
+     */
+    bool IsPolygonSelfIntersecting();
 
     /**
      * Function Chamfer
@@ -206,10 +223,15 @@ public:
 
     void       SetHatchPitch( int pitch ) { m_hatchPitch = pitch; }
 
-    int RestoreArcs( std::vector<CArc>* arc_array, std::vector<CPolyLine*>* pa = NULL );
-
-    int NormalizeAreaOutlines( std::vector<CPolyLine*>* pa = NULL,
-                               bool                     bRetainArcs = false );
+    /**
+     * Function NormalizeAreaOutlines
+     * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
+     * @param aNewPolygonList = a std::vector<CPolyLine*> reference where to store new CPolyLine
+     * needed by the normalization
+     * @return the polygon count (always >= 1, becuse there is at lesat one polygon)
+     * There are new polygons only if the polygon count  is > 1
+     */
+    int NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList );
 
     // KBOOL functions
 
@@ -224,12 +246,9 @@ public:
     /**
      * Function MakeKboolPoly
      * fill a kbool engine with a closed polyline contour
-     * approximates arcs with multiple straight-line segments
-     *  combining intersecting contours if possible
-     * @param arc_array : return data on arcs in arc_array
      * @return error: 0 if Ok, 1 if error
      */
-    int MakeKboolPoly( std::vector<CArc>* arc_array = NULL );
+    int MakeKboolPoly();
 
     /**
      * Function NormalizeWithKbool
@@ -240,10 +259,10 @@ public:
      * because copper areas have only one outside contour
      * Therefore, if this results in new CPolyLines, return them as std::vector pa
      * @param aExtraPolyList: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
-     * @param bRetainArcs == false, try to retain arcs in polys
-     * @return number of external contours, or -1 if error
+     * (when after normalization, there is more than one polygon with holes)
+     * @return number of contours, or -1 if error
      */
-    int NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool bRetainArcs );
+    int NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList );
 
     // Bezier Support
     void    AppendBezier( int x1, int y1, int x2, int y2, int x3, int y3 );

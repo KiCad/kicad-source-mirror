@@ -573,7 +573,7 @@ public:
 
     // thickness of the copper bridge in thermal reliefs
     int                   m_ThermalReliefCopperBridge;
-    int                   utility, utility2;                // flags used in polygon calculations
+    int                   utility;                // flags used in polygon calculations
 
     // true when a zone was filled, false after deleting the filled areas
     bool                  m_IsFilled;

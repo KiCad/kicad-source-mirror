@@ -44,8 +44,6 @@
 #include <zones_functions_for_undo_redo.h>
 #include <drc_stuff.h>
 
-bool s_Verbose = false;       // false if zone outline diags must not be shown
-
 // Outline creation:
 static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
@@ -141,7 +139,7 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
         GetScreen()->SetCurItem( NULL );       // This outline may be deleted when merging outlines
 
         // Combine zones if possible
-        GetBoard()->AreaPolygonModified( &_AuxiliaryList, newZone, true, s_Verbose );
+        GetBoard()->OnAreaPolygonModified( &_AuxiliaryList, newZone );
 
         // Redraw zones
         GetBoard()->RedrawAreasOutlines( m_canvas, aDC, GR_OR, newZone->GetLayer() );
@@ -334,7 +332,7 @@ void PCB_EDIT_FRAME::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER*
 
     // Combine zones if possible
     wxBusyCursor dummy;
-    GetBoard()->AreaPolygonModified( &_AuxiliaryList, aZone, true, s_Verbose );
+    GetBoard()->OnAreaPolygonModified( &_AuxiliaryList, aZone );
     m_canvas->Refresh();
 
 
@@ -389,7 +387,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
     aZone->m_Poly->DeleteCorner( aZone->m_CornerSelection );
 
     // modify zones outlines according to the new aZone shape
-    GetBoard()->AreaPolygonModified( &_AuxiliaryList, aZone, true, s_Verbose );
+    GetBoard()->OnAreaPolygonModified( &_AuxiliaryList, aZone );
 
     if( DC )
     {
@@ -768,7 +766,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     GetScreen()->SetCurItem( NULL );       // This outline can be deleted when merging outlines
 
     // Combine zones if possible :
-    GetBoard()->AreaPolygonModified( &_AuxiliaryList, zone, true, s_Verbose );
+    GetBoard()->OnAreaPolygonModified( &_AuxiliaryList, zone );
 
     // Redraw the real edge zone :
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_OR, layer );
@@ -898,7 +896,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
         aZone->SetNetName( net->GetNetname() );
 
     // Combine zones if possible
-    GetBoard()->AreaPolygonModified( &_AuxiliaryList, aZone, true, s_Verbose );
+    GetBoard()->OnAreaPolygonModified( &_AuxiliaryList, aZone );
 
     // Redraw the real new zone outlines
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_OR, -1 );
