@@ -47,6 +47,7 @@
 #include <pcbnew.h>
 #include <zones.h>
 #include <math_for_graphics.h>
+#include <polygon_test_point_inside.h>
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :

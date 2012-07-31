@@ -35,6 +35,7 @@
 
 #include <pcbnew.h>
 #include <zones.h>
+#include <polygon_test_point_inside.h>
 
 
 /**

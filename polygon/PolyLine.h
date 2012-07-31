@@ -24,13 +24,13 @@
 #include <polygons_defs.h>
 
 // inflection modes for DS_LINE and DS_LINE_VERTEX, used in math_for_graphics.cpp
-enum {
+/*enum {
     IM_NONE = 0,
     IM_90_45,
     IM_45_90,
     IM_90
 };
-
+*/
 
 class CRect
 {
@@ -58,6 +58,7 @@ public:
     }
 };
 
+/*
 class CArc
 {
 public:
@@ -67,7 +68,7 @@ public:
     int     n_steps; // number of straight-line segments in gpc_poly
     bool    bFound;
 };
-
+*/
 
 class CPolyPt : public wxPoint
 {
@@ -98,12 +99,9 @@ public:
 };
 
 
-#include <polygon_test_point_inside.h>
-
 class CPolyLine
 {
 public:
-    enum m_SideStyle { STRAIGHT, ARC_CW, ARC_CCW };                 // side styles
     enum HATCH_STYLE { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE };    // hatch styles
 
     // constructors/destructor
@@ -197,7 +195,6 @@ public:
 
     int        GetUtility( int ic ) { return m_CornersList[ic].m_utility; };
     void       SetUtility( int ic, int utility ) { m_CornersList[ic].m_utility = utility; };
-    int GetSideStyle( int is );
 
     int        GetHatchPitch() { return m_hatchPitch; }
     static int GetDefaultHatchPitchMils() { return 20; }    // default hatch pitch value in mils
@@ -214,7 +211,6 @@ public:
     void    SetX( int ic, int x );
     void    SetY( int ic, int y );
     void    SetEndContour( int ic, bool end_contour );
-    void    SetSideStyle( int is, int style );
 
     void       SetHatchStyle( enum HATCH_STYLE style )
     {
@@ -299,7 +295,6 @@ private:
     Bool_Engine*            m_Kbool_Poly_Engine;    // polygons set in kbool engine data
 public:
     std::vector <CPolyPt>   m_CornersList;          // array of points for corners
-    std::vector <int>       m_SideStyle;            // array of styles for sides
     std::vector <CSegment>  m_HatchLines;           // hatch lines showing the polygon area
 };
 

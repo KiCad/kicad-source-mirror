@@ -1,9 +1,5 @@
 // math stuff for graphics, from FreePCB
 
-
-// math stuff for graphics
-bool Quadratic( double a, double b, double c, double *x1, double *x2 );
-
 /**
  * Function TestLineHit
  * test for hit on line segment i.e. a point within a given distance from segment
@@ -16,11 +12,10 @@ bool TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist );
 
 int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int yf, int style,
                 double * x1, double * y1, double * x2, double * y2, double * dist=NULL );
+
 int FindSegmentIntersections( int xi, int yi, int xf, int yf, int style,
                                  int xi2, int yi2, int xf2, int yf2, int style2,
                                  double x[]=NULL, double y[]=NULL );
-bool FindLineEllipseIntersections( double a, double b, double c, double d, double *x1, double *x2 );
-bool FindVerticalLineEllipseIntersections( double a, double b, double x, double *y1, double *y2 );
 
 /**
  * Function TestForIntersectionOfStraightLineSegments
