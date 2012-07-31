@@ -234,11 +234,11 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( wxWindow* parent, wxSemaphore* s
      */
     if( m_PageListWindow )
     {
-        wxAuiPaneInfo& pane = m_auimgr.GetPane(m_PageListWindow);
-        pane.MinSize( wxSize(m_PageListSize.x, -1));
+        wxAuiPaneInfo& pane = m_auimgr.GetPane( m_PageListWindow );
+        pane.MinSize( wxSize( m_PageListSize.x, -1 ) );
     }
-    wxAuiPaneInfo& pane = m_auimgr.GetPane(m_ParameterGridWindow);
-    pane.MinSize(wxSize(m_ParameterGridSize.x, -1));
+    wxAuiPaneInfo& pane = m_auimgr.GetPane( m_ParameterGridWindow );
+    pane.MinSize( wxSize( m_ParameterGridSize.x, -1 ) );
 
     m_auimgr.Update();
  
@@ -358,10 +358,10 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
 
     m_PageList->Clear();
     int max_page = m_FootprintWizard->GetNumParameterPages();
-    for (int i=0;i<max_page;i++)
+    for ( int i=0; i<max_page; i++)
     {
-        wxString name = m_FootprintWizard->GetParameterPageName(i);
-        m_PageList->Append(name);
+        wxString name = m_FootprintWizard->GetParameterPageName( i );
+        m_PageList->Append( name );
     }
         
     m_PageList->SetSelection( 0, true );
@@ -414,44 +414,43 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     // Dimension the wxGrid 
     m_ParameterGrid->CreateGrid(fpList.size(),3);
     
-    for (unsigned int i=0;i<fpList.size();i++)
+    for (unsigned int i=0; i<fpList.size(); i++)
     {
         wxString name,value,units;
         
         name = fpList[i];
         value = fvList[i];
             
-        m_ParameterGrid->SetCellValue( i, 0, name);
+        m_ParameterGrid->SetCellValue( i, 0, name );
         m_ParameterGrid->SetReadOnly( i, 0 );
         
-        if (ptList[i]==wxT("IU"))  
+        if ( ptList[i]==wxT( "IU" ) )  
         {
             // We are handling internal units, so convert them to the current 
             // system selected units and store into value.
             double dValue;
-            value.ToDouble(&dValue);
+            value.ToDouble( &dValue );
 
-            dValue = To_User_Unit(g_UserUnit,dValue);
+            dValue = To_User_Unit( g_UserUnit, dValue );
 
-            if (g_UserUnit==INCHES) // we convert inches into mils for more detail
+            if ( g_UserUnit==INCHES ) // we convert inches into mils for more detail
             {               
                 dValue = dValue*1000.0;
-                units = wxT("mils");
+                units = wxT( "mils" );
             } 
-            else if (g_UserUnit==MILLIMETRES)
+            else if ( g_UserUnit==MILLIMETRES )
             {
-                units = wxT("mm");
+                units = wxT( "mm" );
             }
 
-            value.Printf(wxT("%lf"),dValue);
+            value.Printf( wxT( "%lf" ), dValue );
         }
-        else if (ptList[i]==wxT("UNITS")) // 1,2,3,4,5 ... N
+        else if ( ptList[i]==wxT( "UNITS" ) ) // 1,2,3,4,5 ... N
         {
-            units = wxT("");
+            units = wxT( "" );
         }
 
         m_ParameterGrid->SetCellValue( i, 1 , value );        
-
         m_ParameterGrid->SetCellValue( i, 2 , units );
         m_ParameterGrid->SetReadOnly( i, 2 );
     }
@@ -529,7 +528,7 @@ void FOOTPRINT_WIZARD_FRAME::OnActivate( wxActivateEvent& event )
         return;
 
     bool footprintWizardsChanged=false;
-    if (footprintWizardsChanged)
+    if ( footprintWizardsChanged )
     {
        // If we are here, the library list has changed, rebuild it
         ReCreatePageList();
@@ -734,6 +733,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
                                     _( "Insert footprint in board" ) );
         }
 #endif
+
         // after adding the buttons to the toolbar, must call Realize() to
         // reflect the changes
         m_mainToolBar->Realize();
@@ -745,4 +745,5 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 
 void FOOTPRINT_WIZARD_FRAME::ReCreateVToolbar()
 {
+
 }

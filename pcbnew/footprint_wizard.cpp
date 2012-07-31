@@ -33,13 +33,13 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
     switch( event.GetId() )
     {
     case ID_FOOTPRINT_WIZARD_NEXT:
-        m_PageList->SetSelection(m_PageList->GetSelection()+1,true);
+        m_PageList->SetSelection( m_PageList->GetSelection()+1, true );
         break;
 
     case ID_FOOTPRINT_WIZARD_PREVIOUS:
         page = m_PageList->GetSelection()-1;
         if (page<0) page=0;
-        m_PageList->SetSelection(page,true);
+        m_PageList->SetSelection( page, true );
         break;
 
     default:
@@ -95,13 +95,13 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();
     MODULE *m = m_FootprintWizard->GetModule();
-    if (m)
+    if ( m )
     {
         /* Here we should make a copy of the object before adding to board*/
         m->SetParent((EDA_ITEM*)GetBoard());
         GetBoard()->m_Modules.Append(m);
-        wxPoint p(0,0);
-        m->SetPosition(p);
+        wxPoint p( 0 , 0 );
+        m->SetPosition( p );
     }
     else
     {
@@ -112,21 +112,21 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 
 void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 {
-    DIALOG_FOOTPRINT_WIZARD_LIST         *selectWizard =  
-            new DIALOG_FOOTPRINT_WIZARD_LIST(this);
+    DIALOG_FOOTPRINT_WIZARD_LIST *selectWizard =  
+            new DIALOG_FOOTPRINT_WIZARD_LIST( this );
     
     selectWizard->ShowModal();
     
     m_FootprintWizard = selectWizard->GetWizard();
 
-    if (m_FootprintWizard)
+    if ( m_FootprintWizard )
     {
         m_wizardName = m_FootprintWizard->GetName();
         m_wizardDescription = m_FootprintWizard->GetDescription();
     }
 
     ReloadFootprint();
-    Zoom_Automatique(false);
+    Zoom_Automatique( false );
     DisplayWizardInfos();
     ReCreatePageList();
     ReCreateParameterList();
@@ -149,36 +149,36 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
     
     int page = m_PageList->GetSelection();
     
-    if (page<0)
+    if ( page<0 )
         return;
     
     int n=m_ParameterGrid->GetNumberRows();
     wxArrayString arr;
     wxArrayString ptList = m_FootprintWizard->GetParameterTypes(page);
     
-    for (int i=0;i<n;i++)
+    for ( int i=0; i<n; i++ )
     {    
-        wxString value = m_ParameterGrid->GetCellValue(i,1);
+        wxString value = m_ParameterGrid->GetCellValue( i, 1 );
         
         // if this parameter is expected to be an internal 
         // unit convert it back from the user format
         if (ptList[i]==wxT("IU")) 
         {
             double dValue;
-            value.ToDouble(&dValue);
+            value.ToDouble( &dValue );
 
             // convert from mils to inches where it's needed
             if (g_UserUnit==INCHES)  dValue = dValue / 1000.0; 
-            dValue = From_User_Unit(g_UserUnit,dValue);
+            dValue = From_User_Unit( g_UserUnit, dValue);
                         
-            value.Printf(wxT("%lf"),dValue); 
+            value.Printf( wxT("%lf"), dValue ); 
             
         }
 
-        arr.Add(value);
+        arr.Add( value );
     }
     
-    wxString res = m_FootprintWizard->SetParameterValues(page,arr);
+    wxString res = m_FootprintWizard->SetParameterValues( page, arr );
     
     ReloadFootprint();
     DisplayWizardInfos();

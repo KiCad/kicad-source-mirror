@@ -43,20 +43,22 @@ static PCB_EDIT_FRAME *PcbEditFrame=NULL;
 
 BOARD *GetBoard()
 {
-	if (PcbEditFrame) return PcbEditFrame->GetBoard();
+	if (PcbEditFrame) 
+        return PcbEditFrame->GetBoard();
 	else return NULL;
 }
 
-void ScriptingSetPcbEditFrame(PCB_EDIT_FRAME *aPCBEdaFrame)
+void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME *aPCBEdaFrame )
 {
 	PcbEditFrame = aPCBEdaFrame;
 }
 
-BOARD* LoadBoard(wxString& aFileName)
+BOARD* LoadBoard( wxString& aFileName )
 {
 
-    if (aFileName.EndsWith(wxT(".kicad_brd"))) 
+    if ( aFileName.EndsWith( wxT( ".kicad_brd" ) ) ) 
         return LoadBoard(aFileName,IO_MGR::KICAD);
+
     else if (aFileName.EndsWith(wxT(".brd")))  
         return LoadBoard(aFileName,IO_MGR::LEGACY);
 	
@@ -65,19 +67,18 @@ BOARD* LoadBoard(wxString& aFileName)
      
 }
 
-BOARD* LoadBoard(wxString& aFileName,IO_MGR::PCB_FILE_T aFormat)
+BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 {
-	return IO_MGR::Load(aFormat,aFileName);	
-	
+	return IO_MGR::Load( aFormat, aFileName );
 }
 
-bool SaveBoard(wxString& aFilename, BOARD* aBoard)
+bool SaveBoard( wxString& aFilename, BOARD* aBoard )
 {
-    return SaveBoard(aFilename,aBoard,IO_MGR::KICAD);
+    return SaveBoard( aFilename, aBoard,IO_MGR::KICAD );
 }
 
-bool SaveBoard(wxString& aFileName, BOARD* aBoard,
-                IO_MGR::PCB_FILE_T aFormat)
+bool SaveBoard( wxString& aFileName, BOARD* aBoard,
+                IO_MGR::PCB_FILE_T aFormat )
 {
   aBoard->m_Status_Pcb &= ~CONNEXION_OK;
   aBoard->SynchronizeNetsAndNetClasses();
@@ -86,7 +87,7 @@ bool SaveBoard(wxString& aFileName, BOARD* aBoard,
   wxString header;
   PROPERTIES   props;
   
-  if (aFormat==IO_MGR::LEGACY)
+  if ( aFormat==IO_MGR::LEGACY )
   {
       header = wxString::Format(
                             wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s scripting\n\n" ),
