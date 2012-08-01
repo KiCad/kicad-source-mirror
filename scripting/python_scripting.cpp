@@ -28,6 +28,7 @@
  */
 
 #include <python_scripting.h>
+#include <wx/wxPython/wxPython.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -37,7 +38,7 @@ extern "C" void init_kicad( void );
 
 extern "C" void init_pcbnew( void );
 
-#define EXTRA_PYTHON_MODULES 2  // this is the number of python
+#define EXTRA_PYTHON_MODULES 10  // this is the number of python
                                 // modules that we want to add into the list
 
 
@@ -112,21 +113,43 @@ static void swigSwitchPythonBuiltin()
 
 /* Function pcbnewInitPythonScripting
  * Initializes all the python environment and publish our interface inside it 
+ * initializes all the wxpython interface, and returns the python thread control structure
  * 
  */
-void pcbnewInitPythonScripting()
+bool pcbnewInitPythonScripting(PyThreadState** aMainTState)
 {
+ 
     swigAddBuiltin();           // add builtin functions
     swigAddModules();           // add our own modules
     swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
 
-    Py_Initialize();    // call the python library to get it initialized
+    Py_Initialize();
+    PyEval_InitThreads();
+
+    // Load the wxPython core API.  Imports the wx._core_ module and sets a
+    // local pointer to a function table located there.  The pointer is used
+    // internally by the rest of the API functions.
+    if ( ! wxPyCoreAPI_IMPORT() ) {
+        wxLogError(wxT("***** Error importing the wxPython API! *****"));
+        PyErr_Print();
+        Py_Finalize();
+        return false;
+    }        
+    
+    // Save the current Python thread state and release the
+    // Global Interpreter Lock.
+
+    *aMainTState = wxPyBeginAllowThreads();
 
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
 
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
     PyRun_SimpleString( "import sys\n"
                         "sys.path.append(\".\")\n"
                         "import pcbnew\n"
                         "pcbnew.LoadPlugins()"
                         );
+    wxPyEndBlockThreads(blocked);
+
+    return true;
 }
