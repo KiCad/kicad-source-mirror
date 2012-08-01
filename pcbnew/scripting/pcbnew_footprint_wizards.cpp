@@ -4,6 +4,7 @@
  */
 
 #include "pcbnew_footprint_wizards.h"
+#include <wx/wxPython/wxPython.h>
 #include <stdio.h>
 
 PYTHON_FOOTPRINT_WIZARD::PYTHON_FOOTPRINT_WIZARD(PyObject *aWizard)
@@ -27,7 +28,9 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aAr
     if ( pFunc && PyCallable_Check( pFunc ) ) 
     {
         PyObject *result;
-        
+
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+
         result = PyObject_CallObject( pFunc, aArglist );
         
         if ( PyErr_Occurred() )
@@ -38,6 +41,8 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aAr
             printf ( "Exception: %s\n", PyString_AsString( PyObject_Str(v) ) );
             printf ( "         : %s\n", PyString_AsString( PyObject_Str(b) ) );
         }
+
+        wxPyEndBlockThreads( blocked );
         
         if ( result )
         {
@@ -65,9 +70,12 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObjec
     PyObject *result = CallMethod( aMethod, aArglist );
     if ( result )
     {
+         wxPyBlock_t blocked = wxPyBeginBlockThreads();
          const char *str_res = PyString_AsString( result );
          ret  = wxString::FromUTF8( str_res );
          Py_DECREF( result );    
+
+         wxPyEndBlockThreads( blocked );
     }
     return ret;
 }
@@ -90,6 +98,8 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
                         "result is not a list"),1 );
              return ret;
          }
+
+         wxPyBlock_t blocked = wxPyBeginBlockThreads();
          int list_size = PyList_Size( result );
          
          for ( int n=0; n<list_size; n++ )
@@ -102,6 +112,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
          }
          
          Py_DECREF( result );    
+         wxPyEndBlockThreads( blocked );
     }
     
     
@@ -137,8 +148,12 @@ int PYTHON_FOOTPRINT_WIZARD::GetNumParameterPages()
     {
          if ( !PyInt_Check( result ) ) 
             return -1;
+         wxPyBlock_t blocked = wxPyBeginBlockThreads();
+
          ret = PyInt_AsLong( result ); 
          Py_DECREF( result );    
+
+         wxPyEndBlockThreads( blocked );
     }
     return ret;
 }
@@ -156,9 +171,13 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
     
     if ( result )
     {
+         wxPyBlock_t blocked = wxPyBeginBlockThreads();
+
          const char *str_res = PyString_AsString( result );
          ret  = wxString::FromUTF8( str_res );
          Py_DECREF( result );    
+
+         wxPyEndBlockThreads( blocked );
     }
     return ret;
 }
@@ -275,10 +294,12 @@ MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
 
     if (!result) 
         return NULL;
-       
+    
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+
     obj = PyObject_GetAttrString( result, "this" );
     
-    if (PyErr_Occurred())
+    if ( PyErr_Occurred() )
     {
         /*
         PyObject *t, *v, *b;
@@ -289,8 +310,11 @@ MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
         */
         PyErr_Print();
     }
-         
-    return PyModule_to_MODULE(obj);
+    wxPyEndBlockThreads( blocked );
+
+    MODULE *mod = PyModule_to_MODULE( obj );
+
+    return mod;
 }
 
 
@@ -300,9 +324,10 @@ void PYTHON_FOOTPRINT_WIZARDS::register_wizard(PyObject* aPyWizard)
     
     fw = new PYTHON_FOOTPRINT_WIZARD( aPyWizard );
     
-    printf( "Registered python footprint wizard '%s'\n",
-            (const char*)fw->GetName().mb_str()
-            );
+    
+    //printf( "Registered python footprint wizard '%s'\n",
+    //        (const char*)fw->GetName().mb_str()
+    //        );
     
     // this get the wizard registered in the common
     // FOOTPRINT_WIZARDS class
