@@ -24,13 +24,13 @@
 #include <polygons_defs.h>
 
 // inflection modes for DS_LINE and DS_LINE_VERTEX, used in math_for_graphics.cpp
-enum {
+/*enum {
     IM_NONE = 0,
     IM_90_45,
     IM_45_90,
     IM_90
 };
-
+*/
 
 class CRect
 {
@@ -58,6 +58,7 @@ public:
     }
 };
 
+/*
 class CArc
 {
 public:
@@ -67,7 +68,7 @@ public:
     int     n_steps; // number of straight-line segments in gpc_poly
     bool    bFound;
 };
-
+*/
 
 class CPolyPt : public wxPoint
 {
@@ -98,26 +99,40 @@ public:
 };
 
 
-#include <polygon_test_point_inside.h>
-
 class CPolyLine
 {
 public:
-    enum m_SideStyle { STRAIGHT, ARC_CW, ARC_CCW };                 // side styles
     enum HATCH_STYLE { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE };    // hatch styles
 
     // constructors/destructor
     CPolyLine();
     ~CPolyLine();
 
-    // functions for modifying polyline
+    // functions for modifying the CPolyLine contours
+
+    /* initialize a contour
+     * set layer, hatch style, and starting point
+     */
     void        Start( int layer, int x, int y, int hatch );
-    void        AppendCorner( int x, int y, int style = STRAIGHT, bool bDraw = false );
+
+    void        AppendCorner( int x, int y );
     void        InsertCorner( int ic, int x, int y );
-    void        DeleteCorner( int ic, bool bDraw = false );
+    void        DeleteCorner( int ic );
     void        MoveCorner( int ic, int x, int y );
     void        CloseLastContour();
     void        RemoveContour( int icont );
+
+    /**
+     * Function IsPolygonSelfIntersecting
+     * Test a CPolyLine for self-intersection of vertex (all contours).
+     *
+     * @return :
+     *  false if no intersecting sides
+     *  true if intersecting sides
+     * When a CPolyLine is self intersectic, it need to be normalized.
+     * (converted to non intersecting polygons)
+     */
+    bool IsPolygonSelfIntersecting();
 
     /**
      * Function Chamfer
@@ -180,7 +195,6 @@ public:
 
     int        GetUtility( int ic ) { return m_CornersList[ic].m_utility; };
     void       SetUtility( int ic, int utility ) { m_CornersList[ic].m_utility = utility; };
-    int GetSideStyle( int is );
 
     int        GetHatchPitch() { return m_hatchPitch; }
     static int GetDefaultHatchPitchMils() { return 20; }    // default hatch pitch value in mils
@@ -197,7 +211,6 @@ public:
     void    SetX( int ic, int x );
     void    SetY( int ic, int y );
     void    SetEndContour( int ic, bool end_contour );
-    void    SetSideStyle( int is, int style );
 
     void       SetHatchStyle( enum HATCH_STYLE style )
     {
@@ -206,10 +219,15 @@ public:
 
     void       SetHatchPitch( int pitch ) { m_hatchPitch = pitch; }
 
-    int RestoreArcs( std::vector<CArc>* arc_array, std::vector<CPolyLine*>* pa = NULL );
-
-    int NormalizeAreaOutlines( std::vector<CPolyLine*>* pa = NULL,
-                               bool                     bRetainArcs = false );
+    /**
+     * Function NormalizeAreaOutlines
+     * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
+     * @param aNewPolygonList = a std::vector<CPolyLine*> reference where to store new CPolyLine
+     * needed by the normalization
+     * @return the polygon count (always >= 1, becuse there is at lesat one polygon)
+     * There are new polygons only if the polygon count  is > 1
+     */
+    int NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList );
 
     // KBOOL functions
 
@@ -224,12 +242,9 @@ public:
     /**
      * Function MakeKboolPoly
      * fill a kbool engine with a closed polyline contour
-     * approximates arcs with multiple straight-line segments
-     *  combining intersecting contours if possible
-     * @param arc_array : return data on arcs in arc_array
      * @return error: 0 if Ok, 1 if error
      */
-    int MakeKboolPoly( std::vector<CArc>* arc_array = NULL );
+    int MakeKboolPoly();
 
     /**
      * Function NormalizeWithKbool
@@ -240,10 +255,10 @@ public:
      * because copper areas have only one outside contour
      * Therefore, if this results in new CPolyLines, return them as std::vector pa
      * @param aExtraPolyList: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
-     * @param bRetainArcs == false, try to retain arcs in polys
-     * @return number of external contours, or -1 if error
+     * (when after normalization, there is more than one polygon with holes)
+     * @return number of contours, or -1 if error
      */
-    int NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList, bool bRetainArcs );
+    int NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList );
 
     // Bezier Support
     void    AppendBezier( int x1, int y1, int x2, int y2, int x3, int y3 );
@@ -280,7 +295,6 @@ private:
     Bool_Engine*            m_Kbool_Poly_Engine;    // polygons set in kbool engine data
 public:
     std::vector <CPolyPt>   m_CornersList;          // array of points for corners
-    std::vector <int>       m_SideStyle;            // array of styles for sides
     std::vector <CSegment>  m_HatchLines;           // hatch lines showing the polygon area
 };
 

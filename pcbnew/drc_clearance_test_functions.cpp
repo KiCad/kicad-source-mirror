@@ -45,6 +45,7 @@
 #include <class_zone.h>
 #include <class_marker_pcb.h>
 #include <math_for_graphics.h>
+#include <polygon_test_point_inside.h>
 
 
 /* compare 2 trapezoids (can be rectangle) and return true if distance > aDist

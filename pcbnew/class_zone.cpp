@@ -47,6 +47,7 @@
 #include <pcbnew.h>
 #include <zones.h>
 #include <math_for_graphics.h>
+#include <polygon_test_point_inside.h>
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
@@ -65,7 +66,6 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     SetDoNotAllowTracks( true );                // has meaning only if m_isKeepout == true
     m_cornerRadius = 0;
     utility    = 0;                             // flags used in polygon calculations
-    utility2   = 0;                             // flags used in polygon calculations
     m_Poly     = new CPolyLine();               // Outlines
     aBoard->GetZoneSettings().ExportSetting( *this );
 }
@@ -102,7 +102,6 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
 
 
     utility    = aZone.utility;
-    utility2   = aZone.utility;
 }
 
 

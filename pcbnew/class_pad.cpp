@@ -44,6 +44,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <polygon_test_point_inside.h>
 
 
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode

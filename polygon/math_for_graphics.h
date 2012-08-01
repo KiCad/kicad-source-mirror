@@ -1,9 +1,5 @@
 // math stuff for graphics, from FreePCB
 
-
-// math stuff for graphics
-bool Quadratic( double a, double b, double c, double *x1, double *x2 );
-
 /**
  * Function TestLineHit
  * test for hit on line segment i.e. a point within a given distance from segment
@@ -14,13 +10,23 @@ bool Quadratic( double a, double b, double c, double *x1, double *x2 );
  */
 bool TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist );
 
-int FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int yf, int style,
+/* Function FindLineSegmentIntersection
+ * find intersection between line y = a + bx and line segment (xi,yi) to (xf,yf)
+ * if b > DBL_MAX/10, assume vertical line at x = a
+ * return false if no intersection or true if intersect
+ * return coords of intersections in *x1, *y1, *x2, *y2
+ * if no intersection, returns min distance in dist
+ */
+bool FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, int yf,
                 double * x1, double * y1, double * x2, double * y2, double * dist=NULL );
-int FindSegmentIntersections( int xi, int yi, int xf, int yf, int style,
-                                 int xi2, int yi2, int xf2, int yf2, int style2,
-                                 double x[]=NULL, double y[]=NULL );
-bool FindLineEllipseIntersections( double a, double b, double c, double d, double *x1, double *x2 );
-bool FindVerticalLineEllipseIntersections( double a, double b, double x, double *y1, double *y2 );
+
+/* Function FindSegmentIntersections
+ * find intersections between line segment (xi,yi) to (xf,yf)
+ * and line segment (xi2,yi2) to (xf2,yf2)
+ * returns true if intersection found
+ */
+bool FindSegmentIntersections( int xi, int yi, int xf, int yf,
+                              int xi2, int yi2, int xf2, int yf2 );
 
 /**
  * Function TestForIntersectionOfStraightLineSegments
@@ -39,8 +45,13 @@ bool TestForIntersectionOfStraightLineSegments( int x1i, int y1i, int x1f, int y
                                        int x2i, int y2i, int x2f, int y2f,
                                        int * x=NULL, int * y=NULL, double * dist=NULL );
 
-int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1, int w1,
-                                   int x2i, int y2i, int x2f, int y2f, int style2, int w2,
+/* Function GetClearanceBetweenSegments
+ * Get clearance between 2 segments
+ * Returns coordinates of the closest point between these 2 segments in x, y
+ * If clearance > max_cl, just returns max_cl+1 and doesn't return x,y
+ */
+int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int w1,
+                                   int x2i, int y2i, int x2f, int y2f, int w2,
                                    int max_cl, int * x, int * y );
 
 /**
@@ -52,6 +63,11 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
  */
 double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int yf );
 
+/* Function GetPointToLineDistance
+ * Get min. distance from (x,y) to line y = a + bx
+ * if b > DBL_MAX/10, assume vertical line at x = a
+ * returns closest point on line in xpp, ypp
+ */
 double GetPointToLineDistance( double a, double b, int x, int y, double * xp=NULL, double * yp=NULL );
 
 double Distance( double x1, double y1, double x2, double y2 );
