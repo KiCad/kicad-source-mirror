@@ -470,7 +470,9 @@ public:
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
 
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
-
+    // HACK
+    // EDA_MSG_PANEL* GetMessagePanel() { return m_messagePanel; }
+    // end hack
     virtual wxString GetScreenDesc();
 
     /**

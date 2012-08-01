@@ -56,7 +56,10 @@ option(KICAD_SCRIPTING_MODULES
        "set this option ON to build kicad modules that can be used from scripting languages"
        )
        
-       
+option(KICAD_SCRIPTING_EXPERIMENT
+       "set this option ON to build Edwin's TEST code with linking to python and pycrust shell"
+       )
+        
 
 #Set version option (stable or testing)
 
@@ -136,7 +139,12 @@ endif(KICAD_SCRIPTING)
 if(KICAD_SCRIPTING_MODULES)
     add_definitions(-DKICAD_SCRIPTING_MODULES)
 endif(KICAD_SCRIPTING_MODULES)
- 
+
+if(KICAD_SCRIPTING_EXPERIMENT)
+    add_definitions(-DKICAD_SCRIPTING_EXPERIMENT)
+
+
+endif(KICAD_SCRIPTING_EXPERIMENT)
 
 if(USE_WX_GRAPHICS_CONTEXT)
     add_definitions(-DUSE_WX_GRAPHICS_CONTEXT)

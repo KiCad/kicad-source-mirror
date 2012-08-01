@@ -7,6 +7,6 @@
  * Initializes the Python engine inside pcbnew 
  */
 
-void pcbnewInitPythonScripting( void );
+bool pcbnewInitPythonScripting(PyThreadState** aMainTState);
 
 #endif
