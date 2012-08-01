@@ -37,7 +37,7 @@
 #include <wx/filename.h>
 #include <param_config.h>
 #ifdef KICAD_SCRIPTING_EXPERIMENT
-#include <python2.7/Python.h>
+#include <Python.h>
 #include <wx/wxPython/wxPython.h>
 #endif
 
