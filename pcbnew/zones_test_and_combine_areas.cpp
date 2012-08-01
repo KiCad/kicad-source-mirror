@@ -387,8 +387,8 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
                             yf2 = poly2->GetY( is2 );
                         }
 
-                        int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, STRAIGHT,
-                                                              xi2, yi2, xf2, yf2, STRAIGHT );
+                        int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1,
+                                                              xi2, yi2, xf2, yf2 );
                         if( n_int )
                             return true;
                     }
@@ -498,8 +498,8 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
                         yf2 = poly2->GetY( is2 );
                     }
 
-                    int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1, STRAIGHT,
-                                                          xi2, yi2, xf2, yf2, STRAIGHT );
+                    int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1,
+                                                          xi2, yi2, xf2, yf2 );
                     if( n_int )
                     {
                         bInt = true;
@@ -844,10 +844,8 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                             int x, y;
 
                             int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
-                                                                 STRAIGHT,
                                                                  0,
                                                                  ax1, ay1, ax2, ay2,
-                                                                 STRAIGHT,
                                                                  0,
                                                                  zone2zoneClearance,
                                                                  &x, &y );
@@ -987,9 +985,9 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
                 }
 
                 int x, y;   // variables containing the intersecting point coordinates
-                int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, STRAIGHT,
+                int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
                                                      0,
-                                                     ax1, ay1, ax2, ay2, STRAIGHT,
+                                                     ax1, ay1, ax2, ay2,
                                                      0,
                                                      zone_clearance,
                                                      &x, &y );
