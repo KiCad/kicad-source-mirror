@@ -1112,7 +1112,6 @@ void CPolyLine::Hatch()
                                                   m_CornersList[ic].x, m_CornersList[ic].y,
                                                   m_CornersList[i_start_contour].x,
                                                   m_CornersList[i_start_contour].y,
-                                                  STRAIGHT,
                                                   &x, &y, &x2, &y2 );
                 i_start_contour = ic + 1;
             }
@@ -1121,7 +1120,6 @@ void CPolyLine::Hatch()
                 ok = FindLineSegmentIntersection( a, slope,
                                                   m_CornersList[ic].x, m_CornersList[ic].y,
                                                   m_CornersList[ic + 1].x, m_CornersList[ic + 1].y,
-                                                  STRAIGHT,
                                                   &x, &y, &x2, &y2 );
             }
 
@@ -1387,9 +1385,9 @@ int CPolyLine::Distance( wxPoint aStart, wxPoint aEnd, int aWidth )
                 by2 = GetY( ic2 + 1 );
             }
 
-            int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, STRAIGHT, 0,
+            int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0,
                                                  aStart.x, aStart.y, aEnd.x, aEnd.y,
-                                                 STRAIGHT, aWidth,
+                                                 aWidth,
                                                  1,    // min clearance, should be > 0
                                                  NULL, NULL );
 
@@ -1689,9 +1687,7 @@ bool CPolyLine::IsPolygonSelfIntersecting()
                             int x2f    = GetX( is2_next );
                             int y2f    = GetY( is2_next );
                             int ret    = FindSegmentIntersections( x1i, y1i, x1f, y1f,
-                                                                   STRAIGHT,
-                                                                   x2i, y2i, x2f, y2f,
-                                                                   STRAIGHT );
+                                                                   x2i, y2i, x2f, y2f );
                             if( ret )
                             {
                                 // intersection between non-adjacent sides
