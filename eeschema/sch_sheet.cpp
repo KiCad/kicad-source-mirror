@@ -950,8 +950,6 @@ void SCH_SHEET::renumberPins()
 
 void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    // Using BOOST_FOREACH here creates problems (bad pointer value to pinsheet).
-    // I do not know why.
     for( unsigned ii = 0; ii < GetPins().size(); ii++ )
     {
         SCH_SHEET_PIN &pinsheet = GetPins()[ii];

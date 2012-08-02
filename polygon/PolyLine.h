@@ -108,6 +108,13 @@ public:
     CPolyLine();
     ~CPolyLine();
 
+    /**
+     * Function ImportSettings
+     * Copy settings (layer, hatch styles) from aPoly
+     * @param aPoly is the CPolyLine to import settings
+     */
+    void ImportSettings( const CPolyLine * aPoly );
+
     // functions for modifying the CPolyLine contours
 
     /* initialize a contour
@@ -176,15 +183,15 @@ public:
 
     // access functions
     void       SetLayer( int aLayer ) { m_layer = aLayer; }
-    int        GetLayer() { return m_layer; }
-    int         GetNumCorners();
-    int         GetNumSides();
-    int         GetClosed();
-    int         GetContoursCount();
-    int         GetContour( int ic );
-    int         GetContourStart( int icont );
-    int         GetContourEnd( int icont );
-    int         GetContourSize( int icont );
+    int        GetLayer() const { return m_layer; }
+    int        GetNumCorners();
+    int        GetNumSides();
+    int        GetClosed();
+    int        GetContoursCount();
+    int        GetContour( int ic );
+    int        GetContourStart( int icont );
+    int        GetContourEnd( int icont );
+    int        GetContourSize( int icont );
 
     int        GetX( int ic ) const { return m_CornersList[ic].x; }
     int        GetY( int ic ) const { return m_CornersList[ic].y; }
@@ -193,13 +200,13 @@ public:
 
     int GetEndContour( int ic );
 
-    int        GetUtility( int ic ) { return m_CornersList[ic].m_utility; };
+    int        GetUtility( int ic ) const { return m_CornersList[ic].m_utility; };
     void       SetUtility( int ic, int utility ) { m_CornersList[ic].m_utility = utility; };
 
-    int        GetHatchPitch() { return m_hatchPitch; }
+    int        GetHatchPitch() const { return m_hatchPitch; }
     static int GetDefaultHatchPitchMils() { return 20; }    // default hatch pitch value in mils
 
-    enum HATCH_STYLE GetHatchStyle() { return m_hatchStyle; }
+    enum HATCH_STYLE GetHatchStyle() const { return m_hatchStyle; }
     void       SetHatch( int aHatchStyle, int aHatchPitch, bool aRebuildHatch )
     {
         SetHatchPitch( aHatchPitch );
@@ -286,7 +293,6 @@ public:
 
 private:
     int                     m_layer;                // layer to draw on
-    int                     m_width;                // lines width when drawing. Provided but not really used
     enum HATCH_STYLE        m_hatchStyle;           // hatch style, see enum above
     int                     m_hatchPitch;           // for DIAGONAL_EDGE hatched outlines, basic distance between 2 hatch lines
                                                     // and the len of eacvh segment
