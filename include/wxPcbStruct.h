@@ -86,6 +86,11 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
 protected:
 
+#ifdef KICAD_SCRIPTING_WXPYTHON
+    // Panel used to let user talk with internal scripting
+    wxWindow* m_pythonPanel;
+#endif
+
     PCB_LAYER_WIDGET* m_Layers;
 
     DRC* m_drc;                              ///< the DRC controller, see drc.cpp

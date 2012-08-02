@@ -53,6 +53,9 @@
 #include <dialog_SVG_print.h>
 #include <dialog_helpers.h>
 
+#ifdef KICAD_SCRIPTING
+#include <python_scripting.h>
+#endif
 
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth" )
@@ -280,7 +283,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_autoPlaceModeId = 0;
-
+#ifdef KICAD_SCRIPTING_WXPYTHON 
+    m_pythonPanel = NULL;
+#endif
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
@@ -396,6 +401,22 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     if( m_messagePanel )
         m_auimgr.AddPane( m_messagePanel,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
+
+    
+    #ifdef KICAD_SCRIPTING_WXPYTHON
+    // Add the scripting panel
+    EDA_PANEINFO  pythonAuiInfo;
+    pythonAuiInfo.ScriptingToolbarPane();
+    pythonAuiInfo.Caption( wxT( "Python Scripting" ) );
+    pythonAuiInfo.MinSize( wxSize( 200, 100 ) );
+    pythonAuiInfo.BestSize( wxSize( GetClientSize().x/2, 200 ) );
+
+    m_pythonPanel = CreatePythonShellWindow( this );
+    m_auimgr.AddPane( m_pythonPanel,
+                          pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
+
+    #endif
+
 
     ReFillLayerWidget();        // this is near end because contents establish size
 

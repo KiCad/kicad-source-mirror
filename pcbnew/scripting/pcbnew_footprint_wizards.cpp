@@ -4,7 +4,8 @@
  */
 
 #include "pcbnew_footprint_wizards.h"
-#include <wx/wxPython/wxPython.h>
+#include <python_scripting.h>
+
 #include <stdio.h>
 
 PYTHON_FOOTPRINT_WIZARD::PYTHON_FOOTPRINT_WIZARD(PyObject *aWizard)
@@ -29,7 +30,7 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aAr
     {
         PyObject *result;
 
-        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        PY_BLOCK_THREADS( blocked );
 
         result = PyObject_CallObject( pFunc, aArglist );
         
@@ -42,7 +43,7 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aAr
             printf ( "         : %s\n", PyString_AsString( PyObject_Str(b) ) );
         }
 
-        wxPyEndBlockThreads( blocked );
+        PY_UNBLOCK_THREADS( blocked );
         
         if ( result )
         {
@@ -70,12 +71,12 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObjec
     PyObject *result = CallMethod( aMethod, aArglist );
     if ( result )
     {
-         wxPyBlock_t blocked = wxPyBeginBlockThreads();
+         PY_BLOCK_THREADS( blocked );
          const char *str_res = PyString_AsString( result );
          ret  = wxString::FromUTF8( str_res );
          Py_DECREF( result );    
 
-         wxPyEndBlockThreads( blocked );
+         PY_UNBLOCK_THREADS( blocked );
     }
     return ret;
 }
@@ -99,7 +100,8 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
              return ret;
          }
 
-         wxPyBlock_t blocked = wxPyBeginBlockThreads();
+         PY_BLOCK_THREADS( blocked );
+         
          int list_size = PyList_Size( result );
          
          for ( int n=0; n<list_size; n++ )
@@ -112,7 +114,8 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
          }
          
          Py_DECREF( result );    
-         wxPyEndBlockThreads( blocked );
+         
+         PY_UNBLOCK_THREADS( blocked );
     }
     
     
@@ -148,12 +151,13 @@ int PYTHON_FOOTPRINT_WIZARD::GetNumParameterPages()
     {
          if ( !PyInt_Check( result ) ) 
             return -1;
-         wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            
+         PY_BLOCK_THREADS( blocked );
 
          ret = PyInt_AsLong( result ); 
          Py_DECREF( result );    
 
-         wxPyEndBlockThreads( blocked );
+         PY_UNBLOCK_THREADS( blocked );
     }
     return ret;
 }
@@ -171,13 +175,13 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
     
     if ( result )
     {
-         wxPyBlock_t blocked = wxPyBeginBlockThreads();
+         PY_BLOCK_THREADS( blocked );
 
          const char *str_res = PyString_AsString( result );
          ret  = wxString::FromUTF8( str_res );
          Py_DECREF( result );    
 
-         wxPyEndBlockThreads( blocked );
+         PY_UNBLOCK_THREADS( blocked );
     }
     return ret;
 }
@@ -295,7 +299,7 @@ MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
     if (!result) 
         return NULL;
     
-    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    PY_BLOCK_THREADS( blocked );
 
     obj = PyObject_GetAttrString( result, "this" );
     
@@ -310,7 +314,7 @@ MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
         */
         PyErr_Print();
     }
-    wxPyEndBlockThreads( blocked );
+    PY_UNBLOCK_THREADS( blocked );
 
     MODULE *mod = PyModule_to_MODULE( obj );
 
