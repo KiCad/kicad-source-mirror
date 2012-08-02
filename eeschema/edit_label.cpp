@@ -230,6 +230,10 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     newtext->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     m_canvas->CrossHairOn( &dc );    // redraw schematic cursor
 
+    // if the old item is the current schematic item, replace it by the new text:
+    if( screen->GetCurItem() == text )
+        screen->SetCurItem( newtext );
+
     if( text->IsNew() )
     {
         // if the previous text is new, no undo command to prepare here

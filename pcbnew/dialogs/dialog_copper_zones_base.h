@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 17 2012)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -46,8 +46,8 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		void _wxFB_OnCornerSmoothingModeChoice( wxCommandEvent& event ){ OnCornerSmoothingModeChoice( event ); }
 		void _wxFB_OnPadsInZoneClick( wxCommandEvent& event ){ OnPadsInZoneClick( event ); }
 		void _wxFB_ExportSetupToOtherCopperZones( wxCommandEvent& event ){ ExportSetupToOtherCopperZones( event ); }
-		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
 		void _wxFB_OnButtonCancelClick( wxCommandEvent& event ){ OnButtonCancelClick( event ); }
+		void _wxFB_OnButtonOkClick( wxCommandEvent& event ){ OnButtonOkClick( event ); }
 		
 	
 	protected:
@@ -108,8 +108,9 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText15;
 		wxChoice* m_OutlineAppearanceCtrl;
 		wxButton* m_ExportSetupButton;
-		wxButton* m_OkButton;
-		wxButton* m_ButtonCancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
@@ -119,13 +120,13 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		virtual void OnCornerSmoothingModeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadsInZoneClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id = ID_DIALOG_COPPER_ZONE_BASE, const wxString& title = _("Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 567,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id = ID_DIALOG_COPPER_ZONE_BASE, const wxString& title = _("Copper Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 567,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_COPPER_ZONE_BASE();
 	
 };

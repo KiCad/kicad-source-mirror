@@ -1115,11 +1115,9 @@ public:
      * area_to_test must be after area_ref in m_ZoneDescriptorList
      * @param area_ref = area reference
      * @param area_to_test = area to compare for intersection calculations
-     * @return : 0 if no intersection
-     *         1 if intersection
-     *         2 if arcs intersect
+     * @return : false if no intersection, true if intersection
      */
-    int TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test );
+    bool TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test );
 
     /**
      * Function CombineAreas
