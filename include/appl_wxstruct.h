@@ -59,6 +59,7 @@ class wxHtmlHelpController;
  */
 class EDA_APP : public wxApp
 {
+
 protected:
     /// Used mainly to handle default paths libs m_Id = APP_EESCHEMA_T, APP_PCBNEW_T ...
     EDA_APP_T m_Id;
@@ -115,8 +116,8 @@ public:
      * this is the first executed function (like main() )
      * @return true if the application can be started.
      */
-    bool OnInit();
-
+    bool OnInit(); // should this be virtual
+        
     wxHtmlHelpController* GetHtmlHelpController() { return m_HtmlCtrl; }
 
     void SetHtmlHelpController( wxHtmlHelpController* aController );
@@ -408,6 +409,7 @@ public:
      * @param aIndex = insertion point
      */
     void InsertLibraryPath( const wxString& aPaths, size_t aIndex );
+
 };
 
 /*

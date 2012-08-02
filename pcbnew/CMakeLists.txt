@@ -1,14 +1,9 @@
 add_definitions(-DPCBNEW)
 
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
-  EXECUTE_PROCESS(COMMAND python2 -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-  SET(PYTHON_DEST "lib/python${PYTHON_VERSION}/dist-packages" )
   file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting)
   FIND_PACKAGE(SWIG REQUIRED)
   INCLUDE(${SWIG_USE_FILE})
-  FIND_PACKAGE(PythonLibs)
-  INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DKICAD_SCRIPTING -DKICAD_SCRIPTING_MODULES")
 endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
 
@@ -25,7 +20,6 @@ include_directories(
     ../polygon
     ../common/dialogs
     ./scripting
-    ../scripting
     ${INC_AFTER}
     )
 
