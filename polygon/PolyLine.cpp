@@ -24,7 +24,6 @@ CPolyLine::CPolyLine()
     m_hatchStyle    = NO_HATCH;
     m_hatchPitch    = 0;
     m_layer     = 0;
-    m_width     = 0;
     m_utility   = 0;
     m_Kbool_Poly_Engine = NULL;
 }
@@ -135,9 +134,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList )
         else if( aExtraPolyList )                                   // a new outside contour is found: create a new CPolyLine
         {
             polyline = new CPolyLine;
-            polyline->SetLayer( GetLayer() );
-            polyline->SetHatchStyle( GetHatchStyle() );
-            polyline->SetHatchPitch( GetHatchPitch() );
+            polyline->ImportSettings( this );
             aExtraPolyList->push_back( polyline );                  // put it in array
             bool first = true;
 
@@ -453,98 +450,19 @@ void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
  */
 int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
 {
-#if 1
     return NormalizeWithKbool( aNewPolygonList );
-#else   // Do NOT use this code: it does not yet work
-    unsigned corners_count = m_CornersList.size();
-
-    KI_POLYGON_SET polysholes;
-    KI_POLYGON_WITH_HOLES mainpoly;
-    std::vector<KI_POLY_POINT> cornerslist;
-    KI_POLYGON_WITH_HOLES_SET outlines;
-    KI_POLYGON poly_tmp;
-
-    unsigned ic    = 0;
-    // enter main outline
-    while( ic < corners_count )
-    {
-        const CPolyPt& corner = m_CornersList[ic++];
-        cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
-
-        if( corner.end_contour )
-            break;
-    }
-
-    mainpoly.set( cornerslist.begin(), cornerslist.end() );
-    outlines.push_back( mainpoly );
-    outlines &= mainpoly;
-
-    // Enter holes
-    while( ic < corners_count )
-    {
-        cornerslist.clear();
-        {
-            while( ic < corners_count )
-            {
-                const CPolyPt& corner = m_CornersList[ic++];
-                cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
-
-                if( corner.end_contour )
-                    break;
-            }
-
-            bpl::set_points( poly_tmp, cornerslist.begin(), cornerslist.end() );
-            polysholes.push_back( poly_tmp );
-        }
-    }
-
-    outlines -= polysholes;
-
-    // copy polygon with holes to destination
-    RemoveAllContours();
-
-    for( unsigned ii = 0; ii < outlines.size(); ii++ )
-    {
-        CPolyLine* polyline = this;
-        if( ii > 0 )
-        {
-            polyline = new CPolyLine;
-            polyline->SetLayer( GetLayer() );
-            polyline->SetHatchStyle( GetHatchStyle() );
-            polyline->SetHatchPitch( GetHatchPitch() );
-            aNewPolygonList->push_back( polyline );
-        }
-
-        KI_POLYGON_WITH_HOLES& curr_poly = outlines[ii];
-        KI_POLYGON_WITH_HOLES::iterator_type corner = curr_poly.begin();
-        // enter main contour
-        while( corner != curr_poly.end() )
-        {
-            polyline->AppendCorner( corner->x(), corner->y() );
-            corner++;
-        }
-        polyline->CloseLastContour();
-
-        // add holes (set of polygons)
-        KI_POLYGON_WITH_HOLES::iterator_holes_type hole = curr_poly.begin_holes();
-        while( hole != curr_poly.end_holes() )
-        {
-            KI_POLYGON::iterator_type hole_corner = hole->begin();
-            // create area with external contour: Recreate only area edges, NOT holes
-            while( hole_corner != hole->end() )
-            {
-                polyline->AppendCorner( hole_corner->x(), hole_corner->y() );
-                hole_corner++;
-            }
-            polyline->CloseLastContour();
-            hole++;
-        }
-    }
-
-    return outlines.size();
-#endif
 }
 
+/**
+ * Function ImportSettings
+ * Copy settings (layer, hatch styles) from aPoly
+ */
+void CPolyLine::ImportSettings( const CPolyLine * aPoly )
+{
+    SetLayer( aPoly->GetLayer() );
+    SetHatchStyle( aPoly->GetHatchStyle() );
+    SetHatchPitch( aPoly->GetHatchPitch() );
+}
 
 /* initialize a contour
  * set layer, hatch style, and starting point
@@ -931,11 +849,6 @@ int CPolyLine::GetEndContour( int ic )
 CRect CPolyLine::GetBounds()
 {
     CRect r = GetCornerBounds();
-
-    r.left      -= m_width / 2;
-    r.right     += m_width / 2;
-    r.bottom    -= m_width / 2;
-    r.top       += m_width / 2;
     return r;
 }
 

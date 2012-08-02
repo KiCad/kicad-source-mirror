@@ -59,7 +59,6 @@ typedef bpl::polygon_with_holes_data<int> KI_POLYGON_WITH_HOLES;
  * is always stored in a KI_POLYGON_WITH_HOLES_SET, because these operations
  * can create many separate polygons with holespolygons
  */
-
 typedef std::vector<KI_POLYGON_WITH_HOLES>  KI_POLYGON_WITH_HOLES_SET;
 
 
