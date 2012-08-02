@@ -29,6 +29,7 @@
  */
 
 #ifdef KICAD_SCRIPTING
+#include <python_scripting.h>
 #include <pcbnew_scripting_helpers.h>
 #endif
 #include <fctsys.h>
@@ -50,12 +51,6 @@
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
-
-#include <dialogs/dialog_scripting.h>
-
-#ifdef KICAD_SCRIPTING
-#include <python_scripting.h>
-#endif
 
 
 // Colors for layers and items
@@ -141,15 +136,11 @@ bool EDA_APP::OnInit()
     PCB_EDIT_FRAME* frame = NULL;
 
 #ifdef KICAD_SCRIPTING    
-    if ( !pcbnewInitPythonScripting(&m_mainTState) ) 
+    if ( !pcbnewInitPythonScripting() ) 
     {
-       return false;
+         return false;
     }
 #endif    
-#ifdef KICAD_SCRIPTING_EXPERIMENT
-    MyFrame *zz = new MyFrame(_T("Embedded wxPython Test"),wxDefaultPosition, wxSize(700, 600));
-    zz->Show(true);
-#endif
     
     InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
@@ -245,6 +236,11 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     frame->SetFocus();
     frame->GetCanvas()->SetFocus();
 #ifdef KICAD_SCRIPTING_EXPERIMENT
+
+    MyFrame *zz = new MyFrame(_T("Embedded wxPython Test"),wxDefaultPosition, wxSize(700, 600));
+    zz->Show(true);
+
+
     zz->ScriptingSetPcbEditFrame(frame); // make the frame available to my python thing
     // now to find a way to use it for something useful
 #endif
@@ -261,39 +257,14 @@ int EDA_APP::OnExit() {
     // in OnExit instead of ~MyApp because OnExit is only called if OnInit is
     // successful.
 #if KICAD_SCRIPTING_EXPERIMENT
-    wxPyEndAllowThreads(m_mainTState);
-    Py_Finalize();
+    pcbnewFinishPythonScripting();
 #endif
     return 0;    
 }
 #endif
 
 #ifdef KICAD_SCRIPTING_EXPERIMENT
-// stuff copied from WxPython examples
-bool EDA_APP::Init_wxPython() {
-    // Initialize Python
-    Py_Initialize();
-    PyEval_InitThreads();
 
-    // Load the wxPython core API.  Imports the wx._core_ module and sets a
-    // local pointer to a function table located there.  The pointer is used
-    // internally by the rest of the API functions.
-    if ( ! wxPyCoreAPI_IMPORT() ) {
-        wxLogError(wxT("***** Error importing the wxPython API! *****"));
-        PyErr_Print();
-        Py_Finalize();
-        return false;
-    }        
-    
-    // Save the current Python thread state and release the
-    // Global Interpreter Lock.
-    m_mainTState = wxPyBeginAllowThreads();
-
-    return true;
-}
-
-
-//
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame(NULL, -1, title, pos, size,
               wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
@@ -379,18 +350,35 @@ sys.stdin = sys.stderr = output\n";
     wxPyEndBlockThreads(blocked);
 }
 
-const char* python_code2 = "\
-import sys\nimport os\n\
-sys.path.append(os.path.expanduser('~/.kicad_plugins'))\n\
-import embedded_sample\n\
-\n\
-def makeWindow(parent):\n\
-    win = embedded_sample.MyPanel(parent)\n\
-    return win\n\
-";
+
 
 wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
 {
+
+const char* pycrust_panel = "\
+import wx\n\
+from wx.py import shell, version\n\
+\n\
+class MyPanel(wx.Panel):\n\
+\tdef __init__(self, parent):\n\
+\t\twx.Panel.__init__(self, parent, -1, style=wx.SUNKEN_BORDER)\n\
+\t\t\n\
+\t\ttext = wx.StaticText(self, -1,\n\
+\t\t\t\t\"Everything on this side of the splitter comes from Python.\")\n\
+\t\t\n\
+\t\tintro = \"Welcome To PyCrust %s - KiCad's Python Shell\" % version.VERSION\n\
+\t\tpycrust = shell.Shell(self, -1, introText=intro)\n\
+\t\t\n\
+\t\tsizer = wx.BoxSizer(wx.VERTICAL)\n\n\
+\t\tsizer.Add(text, 0, wx.EXPAND|wx.ALL, 10)\n\n\
+\t\tsizer.Add(pycrust, 1, wx.EXPAND|wx.BOTTOM|wx.LEFT|wx.RIGHT, 10)\n\n\
+\t\tself.SetSizer(sizer)\n\n\
+\n\
+def makeWindow(parent):\n\
+    win = MyPanel(parent)\n\
+    return win\n\
+";
+
     // More complex embedded situations will require passing C++ objects to
     // Python and/or returning objects from Python to be used in C++.  This
     // sample shows one way to do it.  NOTE: The above code could just have
@@ -413,7 +401,7 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
     Py_DECREF(builtins);
 
     // Execute the code to make the makeWindow function
-    result = PyRun_String(python_code2, Py_file_input, globals, globals);
+    result = PyRun_String(pycrust_panel, Py_file_input, globals, globals);
     // Was there an exception?
     if (! result) {
         PyErr_Print();
@@ -443,6 +431,7 @@ wxWindow* MyFrame::DoPythonStuff(wxWindow* parent)
         // Otherwise, get the returned window out of Python-land and
         // into C++-ville...
         bool success = wxPyConvertSwigPtr(result, (void**)&window, _T("wxWindow"));
+        (void)success;
         wxASSERT_MSG(success, _T("Returned object was not a wxWindow!"));
         Py_DECREF(result);
     }

@@ -36,10 +36,7 @@
 #include <wx/config.h>
 #include <wx/filename.h>
 #include <param_config.h>
-#ifdef KICAD_SCRIPTING_EXPERIMENT
-#include <Python.h>
-#include <wx/wxPython/wxPython.h>
-#endif
+
 
 enum EDA_APP_T {
     APP_UNKNOWN_T,
@@ -62,10 +59,7 @@ class wxHtmlHelpController;
  */
 class EDA_APP : public wxApp
 {
-#ifdef KICAD_SCRIPTING_EXPERIMENT
-    private:
-    PyThreadState* m_mainTState;
-#endif
+
 protected:
     /// Used mainly to handle default paths libs m_Id = APP_EESCHEMA_T, APP_PCBNEW_T ...
     EDA_APP_T m_Id;
@@ -123,12 +117,6 @@ public:
      * @return true if the application can be started.
      */
     bool OnInit(); // should this be virtual
-#ifdef KICAD_SCRIPTING_EXPERIMENT
-    bool Init_wxPython(); 
-#endif
-    // This is only called if OnInit() returned true so it's a good place to do
-    // any cleanup matching the initializations done there.
- ////   virtual int OnExit() ;//  { return(0) ; }; // TODO FIX THIS HACK MUST BE VIRTUAL
         
     wxHtmlHelpController* GetHtmlHelpController() { return m_HtmlCtrl; }
 
@@ -421,6 +409,7 @@ public:
      * @param aIndex = insertion point
      */
     void InsertLibraryPath( const wxString& aPaths, size_t aIndex );
+
 };
 
 /*

@@ -256,6 +256,19 @@ if(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
     check_find_package_result(GDI_PLUS_FOUND "GDI+")
 endif(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
 
+# Find Python and other scripting resources
+if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+
+  execute_process(COMMAND python2 -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(PYTHON_DEST "lib/python${PYTHON_VERSION}/dist-packages" )
+  find_package(PythonLibs)
+  include_directories(${PYTHON_INCLUDE_PATH}
+                      ./scripting)
+
+endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+
+
+
 # Automagically create version header file.
 include(CreateBzrVersionHeader)
 create_bzr_version_header()

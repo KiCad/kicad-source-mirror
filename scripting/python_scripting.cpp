@@ -116,7 +116,10 @@ static void swigSwitchPythonBuiltin()
  * initializes all the wxpython interface, and returns the python thread control structure
  * 
  */
-bool pcbnewInitPythonScripting(PyThreadState** aMainTState)
+
+PyThreadState *g_PythonMainTState;
+
+bool pcbnewInitPythonScripting()
 {
  
     swigAddBuiltin();           // add builtin functions
@@ -139,7 +142,7 @@ bool pcbnewInitPythonScripting(PyThreadState** aMainTState)
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
 
-    *aMainTState = wxPyBeginAllowThreads();
+    g_PythonMainTState = wxPyBeginAllowThreads();
 
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
 
@@ -152,4 +155,12 @@ bool pcbnewInitPythonScripting(PyThreadState** aMainTState)
     wxPyEndBlockThreads(blocked);
 
     return true;
+}
+
+void pcbnewFinishPythonScripting()
+{
+
+    wxPyEndAllowThreads(g_PythonMainTState);
+    Py_Finalize();
+
 }
