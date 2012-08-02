@@ -276,12 +276,12 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
                     // check area2 against curr_area
                     if( curr_area->utility || area2->utility || aUseUtility == false )
                     {
-                        int ret = TestAreaIntersection( curr_area, area2 );
+                        bool ret = TestAreaIntersection( curr_area, area2 );
 
-                        if( ret == 1 )
+                        if( ret )
                             ret = CombineAreas( aDeletedList, curr_area, area2 );
 
-                        if( ret == 1 )
+                        if( ret )
                         {
                             mod_ia1 = true;
                             modified = true;
@@ -306,8 +306,6 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
  */
 bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 {
-    CPolyLine* poly1 = area_to_test->m_Poly;
-
     for( unsigned ia2 = 0; ia2 < m_ZoneDescriptorList.size(); ia2++ )
     {
         ZONE_CONTAINER* area2 = m_ZoneDescriptorList[ia2];
@@ -330,95 +328,8 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
         if( area_to_test->GetIsKeepout() != area2->GetIsKeepout() )
             continue;
 
-        CPolyLine* poly2 = area2->m_Poly;
-
-        // test bounding rects
-        CRect      b1 = poly1->GetCornerBounds();
-        CRect      b2 = poly2->GetCornerBounds();
-
-        if(  b1.bottom > b2.top
-          || b1.top < b2.bottom
-          || b1.left > b2.right
-          || b1.right < b2.left )
-            continue;
-
-        // test for intersecting segments
-        for( int icont1 = 0; icont1<poly1->GetContoursCount(); icont1++ )
-        {
-            int is1 = poly1->GetContourStart( icont1 );
-            int ie1 = poly1->GetContourEnd( icont1 );
-
-            for( int ic1 = is1; ic1<=ie1; ic1++ )
-            {
-                int xi1 = poly1->GetX( ic1 );
-                int yi1 = poly1->GetY( ic1 );
-                int xf1, yf1;
-
-                if( ic1 < ie1 )
-                {
-                    xf1 = poly1->GetX( ic1 + 1 );
-                    yf1 = poly1->GetY( ic1 + 1 );
-                }
-                else
-                {
-                    xf1 = poly1->GetX( is1 );
-                    yf1 = poly1->GetY( is1 );
-                }
-
-                for( int icont2 = 0; icont2 < poly2->GetContoursCount(); icont2++ )
-                {
-                    int is2 = poly2->GetContourStart( icont2 );
-                    int ie2 = poly2->GetContourEnd( icont2 );
-
-                    for( int ic2 = is2; ic2<=ie2; ic2++ )
-                    {
-                        int xi2 = poly2->GetX( ic2 );
-                        int yi2 = poly2->GetY( ic2 );
-                        int xf2, yf2;
-
-                        if( ic2 < ie2 )
-                        {
-                            xf2 = poly2->GetX( ic2 + 1 );
-                            yf2 = poly2->GetY( ic2 + 1 );
-                        }
-                        else
-                        {
-                            xf2 = poly2->GetX( is2 );
-                            yf2 = poly2->GetY( is2 );
-                        }
-
-                        int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1,
-                                                              xi2, yi2, xf2, yf2 );
-                        if( n_int )
-                            return true;
-                    }
-                }
-            }
-        }
-
-        // If a contour is inside an other contour, no segments intersects, but the zones can
-        // be combined test a corner inside an outline (only one corner is enought)
-        for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
-        {
-            int x = poly2->GetX( ic2 );
-            int y = poly2->GetY( ic2 );
-
-            if( poly1->TestPointInside( x, y ) )
-            {
-                return true;
-            }
-        }
-
-        for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
-        {
-            int x = poly1->GetX( ic1 );
-            int y = poly1->GetY( ic1 );
-
-            if( poly2->TestPointInside( x, y ) )
-            {
-                return true;
-            }
-        }
+        if( TestAreaIntersection( area_to_test, area2 ) )
+            return true;
     }
 
     return false;
@@ -431,14 +342,13 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
  * area_to_test must be after area_ref in m_ZoneDescriptorList
  * @param area_ref = area reference
  * @param area_to_test = area to compare for intersection calculations
- * @return : 0 if no intersection
- *         1 if intersection
+ * @return : false if no intersection, true if intersection
  */
-int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test )
+bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test )
 {
     // see if areas are on same layer
     if( area_ref->GetLayer() != area_to_test->GetLayer() )
-        return 0;
+        return false;
 
     CPolyLine* poly1 = area_ref->m_Poly;
     CPolyLine* poly2 = area_to_test->m_Poly;
@@ -449,11 +359,9 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
 
     if(  b1.bottom > b2.top || b1.top < b2.bottom ||
          b1.left > b2.right || b1.right < b2.left )
-        return 0;
+        return false;
 
     // now test for intersecting segments
-    bool bInt    = false;
-
     for( int icont1 = 0; icont1<poly1->GetContoursCount(); icont1++ )
     {
         int is1 = poly1->GetContourStart( icont1 );
@@ -498,48 +406,40 @@ int BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_
                         yf2 = poly2->GetY( is2 );
                     }
 
-                    int n_int = FindSegmentIntersections( xi1, yi1, xf1, yf1,
-                                                          xi2, yi2, xf2, yf2 );
-                    if( n_int )
-                    {
-                        bInt = true;
-                        break;
-                    }
+                    bool intersect = FindSegmentIntersections( xi1, yi1, xf1, yf1,
+                                                               xi2, yi2, xf2, yf2 );
+                    if( intersect )
+                        return true;
                 }
             }
         }
     }
 
-    if( !bInt )
+    // If a contour is inside an other contour, no segments intersects, but the zones
+    // can be combined if a corner is inside an outline (only one corner is enought)
+    for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
     {
-        // If a contour is inside an other contour, no segments intersects, but the zones
-        // can be combined test a corner inside an outline (only one corner is enought)
-        for( int ic2 = 0; ic2 < poly2->GetNumCorners(); ic2++ )
+        int x = poly2->GetX( ic2 );
+        int y = poly2->GetY( ic2 );
+
+        if( poly1->TestPointInside( x, y ) )
         {
-            int x = poly2->GetX( ic2 );
-            int y = poly2->GetY( ic2 );
-
-            if( poly1->TestPointInside( x, y ) )
-            {
-                return 1;
-            }
+            return 1;
         }
-
-        for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
-        {
-            int x = poly1->GetX( ic1 );
-            int y = poly1->GetY( ic1 );
-
-            if( poly2->TestPointInside( x, y ) )
-            {
-                return 1;
-            }
-        }
-
-        return 0;
     }
 
-    return 1;
+    for( int ic1 = 0; ic1 < poly1->GetNumCorners(); ic1++ )
+    {
+        int x = poly1->GetX( ic1 );
+        int y = poly1->GetY( ic1 );
+
+        if( poly2->TestPointInside( x, y ) )
+        {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 

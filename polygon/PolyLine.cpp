@@ -453,7 +453,96 @@ void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
  */
 int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
 {
+#if 1
     return NormalizeWithKbool( aNewPolygonList );
+#else   // Do NOT use this code: it does not yet work
+    unsigned corners_count = m_CornersList.size();
+
+    KI_POLYGON_SET polysholes;
+    KI_POLYGON_WITH_HOLES mainpoly;
+    std::vector<KI_POLY_POINT> cornerslist;
+    KI_POLYGON_WITH_HOLES_SET outlines;
+    KI_POLYGON poly_tmp;
+
+    unsigned ic    = 0;
+    // enter main outline
+    while( ic < corners_count )
+    {
+        const CPolyPt& corner = m_CornersList[ic++];
+        cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
+
+        if( corner.end_contour )
+            break;
+    }
+
+    mainpoly.set( cornerslist.begin(), cornerslist.end() );
+    outlines.push_back( mainpoly );
+    outlines &= mainpoly;
+
+    // Enter holes
+    while( ic < corners_count )
+    {
+        cornerslist.clear();
+        {
+            while( ic < corners_count )
+            {
+                const CPolyPt& corner = m_CornersList[ic++];
+                cornerslist.push_back( KI_POLY_POINT( corner.x, corner.y ) );
+
+                if( corner.end_contour )
+                    break;
+            }
+
+            bpl::set_points( poly_tmp, cornerslist.begin(), cornerslist.end() );
+            polysholes.push_back( poly_tmp );
+        }
+    }
+
+    outlines -= polysholes;
+
+    // copy polygon with holes to destination
+    RemoveAllContours();
+
+    for( unsigned ii = 0; ii < outlines.size(); ii++ )
+    {
+        CPolyLine* polyline = this;
+        if( ii > 0 )
+        {
+            polyline = new CPolyLine;
+            polyline->SetLayer( GetLayer() );
+            polyline->SetHatchStyle( GetHatchStyle() );
+            polyline->SetHatchPitch( GetHatchPitch() );
+            aNewPolygonList->push_back( polyline );
+        }
+
+        KI_POLYGON_WITH_HOLES& curr_poly = outlines[ii];
+        KI_POLYGON_WITH_HOLES::iterator_type corner = curr_poly.begin();
+        // enter main contour
+        while( corner != curr_poly.end() )
+        {
+            polyline->AppendCorner( corner->x(), corner->y() );
+            corner++;
+        }
+        polyline->CloseLastContour();
+
+        // add holes (set of polygons)
+        KI_POLYGON_WITH_HOLES::iterator_holes_type hole = curr_poly.begin_holes();
+        while( hole != curr_poly.end_holes() )
+        {
+            KI_POLYGON::iterator_type hole_corner = hole->begin();
+            // create area with external contour: Recreate only area edges, NOT holes
+            while( hole_corner != hole->end() )
+            {
+                polyline->AppendCorner( hole_corner->x(), hole_corner->y() );
+                hole_corner++;
+            }
+            polyline->CloseLastContour();
+            hole++;
+        }
+    }
+
+    return outlines.size();
+#endif
 }
 
 
@@ -1526,8 +1615,8 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
                                             std::vector<CPolyPt>&  aOnePolyList )
 {
     unsigned corners_count = aPolysListWithHoles.size();
-    int      polycount = 0;
 
+    int      polycount = 0;
     for( unsigned ii = 0; ii < corners_count; ii++ )
     {
         const CPolyPt& corner = aPolysListWithHoles[ii];
@@ -1536,8 +1625,8 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
             polycount++;
     }
 
-    // If polycount<= 1, there is no holes found.
-    if( polycount<= 1 )
+    // If polycount<= 1, there is no holes found, and therefore just copy the polygon.
+    if( polycount <= 1 )
     {
         aOnePolyList = aPolysListWithHoles;
         return;
@@ -1587,23 +1676,21 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
     // We should have only one polygon in list
     wxASSERT( mainpoly.size() != 1 );
 
+    KI_POLYGON& poly_nohole = mainpoly[0];
+    CPolyPt   corner( 0, 0, false );
+
+    for( unsigned jj = 0; jj < poly_nohole.size(); jj++ )
     {
-        KI_POLYGON& poly_nohole = mainpoly[0];
-        CPolyPt   corner( 0, 0, false );
-
-        for( unsigned jj = 0; jj < poly_nohole.size(); jj++ )
-        {
-            KI_POLY_POINT point = *(poly_nohole.begin() + jj);
-            corner.x = point.x();
-            corner.y = point.y();
-            corner.end_contour = false;
-            aOnePolyList.push_back( corner );
-        }
-
-        corner.end_contour = true;
-        aOnePolyList.pop_back();
+        KI_POLY_POINT point = *(poly_nohole.begin() + jj);
+        corner.x = point.x();
+        corner.y = point.y();
+        corner.end_contour = false;
         aOnePolyList.push_back( corner );
     }
+
+    corner.end_contour = true;
+    aOnePolyList.pop_back();
+    aOnePolyList.push_back( corner );
 }
 
 /**
