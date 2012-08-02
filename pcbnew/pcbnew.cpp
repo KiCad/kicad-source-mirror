@@ -29,6 +29,7 @@
  */
 
 #ifdef KICAD_SCRIPTING
+#include <python_scripting.h>
 #include <pcbnew_scripting_helpers.h>
 #endif
 #include <fctsys.h>
@@ -51,11 +52,6 @@
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
 
-#include <dialogs/dialog_scripting.h>
-
-#ifdef KICAD_SCRIPTING
-#include <python_scripting.h>
-#endif
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
@@ -87,6 +83,7 @@ wxString g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
 wxArrayString g_LibraryNames;
 
+// wxWindow* DoPythonStuff(wxWindow* parent); // declaration
 
 IMPLEMENT_APP( EDA_APP )
 
@@ -105,17 +102,18 @@ void EDA_APP::MacOpenFile( const wxString& fileName )
     frame->LoadOnePcbFile( fileName, false );
 }
 
-
 bool EDA_APP::OnInit()
 {
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
 #ifdef KICAD_SCRIPTING    
-    pcbnewInitPythonScripting();
+    if ( !pcbnewInitPythonScripting() ) 
+    {
+         return false;
+    }
 #endif    
     
-
     InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
@@ -212,3 +210,23 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
 
     return true;
 }
+
+#if 0
+// for some reason KiCad classes do not implement OnExit
+// if I add it in the declaration, I need to fix it in every application
+// so for now make a note TODO TODO
+// we need to clean up python when the application exits
+int EDA_APP::OnExit() {
+    // Restore the thread state and tell Python to cleanup after itself.
+    // wxPython will do its own cleanup as part of that process.  This is done
+    // in OnExit instead of ~MyApp because OnExit is only called if OnInit is
+    // successful.
+#if KICAD_SCRIPTING_WXPYTHON
+    pcbnewFinishPythonScripting();
+#endif
+    return 0;    
+}
+
+#endif
+
+

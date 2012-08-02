@@ -470,7 +470,7 @@ public:
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
 
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
-
+    
     virtual wxString GetScreenDesc();
 
     /**
@@ -1071,6 +1071,19 @@ public:
         CaptionVisible( false );
         return *this;
     }
+
+    /**
+     * Function ScriptingToolbarPane
+     * Change *this to a scripting toolbar for KiCad.
+     */
+    EDA_PANEINFO& ScriptingToolbarPane()
+    {
+        CloseButton( false );
+        Floatable( true );
+        Resizable( true );
+        return *this;
+    }
+
 
 };
 

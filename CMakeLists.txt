@@ -56,7 +56,10 @@ option(KICAD_SCRIPTING_MODULES
        "set this option ON to build kicad modules that can be used from scripting languages"
        )
        
-       
+option(KICAD_SCRIPTING_WXPYTHON
+       "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
+       )
+        
 
 #Set version option (stable or testing)
 
@@ -136,7 +139,12 @@ endif(KICAD_SCRIPTING)
 if(KICAD_SCRIPTING_MODULES)
     add_definitions(-DKICAD_SCRIPTING_MODULES)
 endif(KICAD_SCRIPTING_MODULES)
- 
+
+if(KICAD_SCRIPTING_WXPYTHON)
+    add_definitions(-DKICAD_SCRIPTING_WXPYTHON)
+
+
+endif(KICAD_SCRIPTING_WXPYTHON)
 
 if(USE_WX_GRAPHICS_CONTEXT)
     add_definitions(-DUSE_WX_GRAPHICS_CONTEXT)
@@ -247,6 +255,19 @@ if(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
     find_package(GdiPlus)
     check_find_package_result(GDI_PLUS_FOUND "GDI+")
 endif(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
+
+# Find Python and other scripting resources
+if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+
+  execute_process(COMMAND python2 -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(PYTHON_DEST "lib/python${PYTHON_VERSION}/dist-packages" )
+  find_package(PythonLibs)
+  include_directories(${PYTHON_INCLUDE_PATH}
+                      ./scripting)
+
+endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+
+
 
 # Automagically create version header file.
 include(CreateBzrVersionHeader)
