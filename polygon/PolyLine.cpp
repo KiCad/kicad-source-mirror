@@ -24,7 +24,6 @@ CPolyLine::CPolyLine()
     m_hatchStyle    = NO_HATCH;
     m_hatchPitch    = 0;
     m_layer     = 0;
-    m_width     = 0;
     m_utility   = 0;
     m_Kbool_Poly_Engine = NULL;
 }
@@ -135,9 +134,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList )
         else if( aExtraPolyList )                                   // a new outside contour is found: create a new CPolyLine
         {
             polyline = new CPolyLine;
-            polyline->SetLayer( GetLayer() );
-            polyline->SetHatchStyle( GetHatchStyle() );
-            polyline->SetHatchPitch( GetHatchPitch() );
+            polyline->ImportSettings( this );
             aExtraPolyList->push_back( polyline );                  // put it in array
             bool first = true;
 
@@ -456,6 +453,16 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
     return NormalizeWithKbool( aNewPolygonList );
 }
 
+/**
+ * Function ImportSettings
+ * Copy settings (layer, hatch styles) from aPoly
+ */
+void CPolyLine::ImportSettings( const CPolyLine * aPoly )
+{
+    SetLayer( aPoly->GetLayer() );
+    SetHatchStyle( aPoly->GetHatchStyle() );
+    SetHatchPitch( aPoly->GetHatchPitch() );
+}
 
 /* initialize a contour
  * set layer, hatch style, and starting point
@@ -842,11 +849,6 @@ int CPolyLine::GetEndContour( int ic )
 CRect CPolyLine::GetBounds()
 {
     CRect r = GetCornerBounds();
-
-    r.left      -= m_width / 2;
-    r.right     += m_width / 2;
-    r.bottom    -= m_width / 2;
-    r.top       += m_width / 2;
     return r;
 }
 
@@ -1526,8 +1528,8 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
                                             std::vector<CPolyPt>&  aOnePolyList )
 {
     unsigned corners_count = aPolysListWithHoles.size();
-    int      polycount = 0;
 
+    int      polycount = 0;
     for( unsigned ii = 0; ii < corners_count; ii++ )
     {
         const CPolyPt& corner = aPolysListWithHoles[ii];
@@ -1536,8 +1538,8 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
             polycount++;
     }
 
-    // If polycount<= 1, there is no holes found.
-    if( polycount<= 1 )
+    // If polycount<= 1, there is no holes found, and therefore just copy the polygon.
+    if( polycount <= 1 )
     {
         aOnePolyList = aPolysListWithHoles;
         return;
@@ -1587,23 +1589,21 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
     // We should have only one polygon in list
     wxASSERT( mainpoly.size() != 1 );
 
+    KI_POLYGON& poly_nohole = mainpoly[0];
+    CPolyPt   corner( 0, 0, false );
+
+    for( unsigned jj = 0; jj < poly_nohole.size(); jj++ )
     {
-        KI_POLYGON& poly_nohole = mainpoly[0];
-        CPolyPt   corner( 0, 0, false );
-
-        for( unsigned jj = 0; jj < poly_nohole.size(); jj++ )
-        {
-            KI_POLY_POINT point = *(poly_nohole.begin() + jj);
-            corner.x = point.x();
-            corner.y = point.y();
-            corner.end_contour = false;
-            aOnePolyList.push_back( corner );
-        }
-
-        corner.end_contour = true;
-        aOnePolyList.pop_back();
+        KI_POLY_POINT point = *(poly_nohole.begin() + jj);
+        corner.x = point.x();
+        corner.y = point.y();
+        corner.end_contour = false;
         aOnePolyList.push_back( corner );
     }
+
+    corner.end_contour = true;
+    aOnePolyList.pop_back();
+    aOnePolyList.push_back( corner );
 }
 
 /**
