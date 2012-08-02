@@ -12,7 +12,9 @@
 
     #include <Python.h>
     #ifndef NO_WXPYTHON_EXTENSION_HEADERS
+    #ifdef KICAD_SCRIPTING_WXPYTHON
         #include <wx/wxPython/wxPython.h>
+    #endif
     #endif
 
 
@@ -22,5 +24,22 @@
 
 bool pcbnewInitPythonScripting();
 void pcbnewFinishPythonScripting();
+
+
+
+#ifdef KICAD_SCRIPTING_WXPYTHON
+
+void RedirectStdio(); 
+wxWindow* CreatePythonShellWindow(wxWindow* parent);
+
+#define PY_BLOCK_THREADS(name)    wxPyBlock_t name = wxPyBeginBlockThreads()
+#define PY_UNBLOCK_THREADS(name)    wxPyEndBlockThreads(name)
+
+#else
+
+#define PY_BLOCK_THREADS(name)    
+#define PY_UNBLOCK_THREADS(name) 
+
+#endif
 
 #endif

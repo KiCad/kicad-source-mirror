@@ -28,9 +28,16 @@
  */
 
 #include <python_scripting.h>
-#include <wx/wxPython/wxPython.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef __GNUG__
+#pragma implementation
+#endif
+
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <common.h>
+#include <colors.h>
 
 /* init functions defined by swig */
 
@@ -127,6 +134,8 @@ bool pcbnewInitPythonScripting()
     swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
 
     Py_Initialize();
+
+    #ifdef KICAD_SCRIPTING_WXPYTHON
     PyEval_InitThreads();
 
     // Load the wxPython core API.  Imports the wx._core_ module and sets a
@@ -146,21 +155,140 @@ bool pcbnewInitPythonScripting()
 
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
 
-    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    PY_BLOCK_THREADS( blocked );
+    #endif
     PyRun_SimpleString( "import sys\n"
                         "sys.path.append(\".\")\n"
                         "import pcbnew\n"
                         "pcbnew.LoadPlugins()"
                         );
-    wxPyEndBlockThreads(blocked);
 
+    PY_UNBLOCK_THREADS( blocked );
     return true;
 }
 
 void pcbnewFinishPythonScripting()
 {
-
+#ifdef KICAD_SCRIPTING_WXPYTHON
     wxPyEndAllowThreads(g_PythonMainTState);
+#endif
     Py_Finalize();
 
 }
+
+#ifdef KICAD_SCRIPTING_WXPYTHON
+
+void RedirectStdio() 
+{
+    // This is a helpful little tidbit to help debugging and such.  It
+    // redirects Python's stdout and stderr to a window that will popup
+    // only on demand when something is printed, like a traceback.
+    const char* python_redirect = 
+"import sys\n\
+import wx\n\
+output = wx.PyOnDemandOutputWindow()\n\
+c sys.stderr = output\n";
+    
+    PY_BLOCK_THREADS( blocked );
+    PyRun_SimpleString( python_redirect );
+    PY_UNBLOCK_THREADS( blocked );
+}
+
+
+
+wxWindow* CreatePythonShellWindow(wxWindow* parent)
+{
+
+const char* pycrust_panel = "\
+import wx\n\
+from wx.py import shell, version\n\
+\n\
+class PyCrustPanel(wx.Panel):\n\
+\tdef __init__(self, parent):\n\
+\t\twx.Panel.__init__(self, parent, -1, style=wx.SUNKEN_BORDER)\n\
+\t\t\n\
+\t\t\n\
+\t\tintro = \"Welcome To PyCrust %s - KiCAD Python Shell\" % version.VERSION\n\
+\t\tpycrust = shell.Shell(self, -1, introText=intro)\n\
+\t\t\n\
+\t\tsizer = wx.BoxSizer(wx.VERTICAL)\n\n\
+\t\tsizer.Add(pycrust, 1, wx.EXPAND|wx.BOTTOM|wx.LEFT|wx.RIGHT, 10)\n\n\
+\t\tself.SetSizer(sizer)\n\n\
+\n\
+def makeWindow(parent):\n\
+    win = PyCrustPanel(parent)\n\
+    return win\n\
+";
+
+
+    wxWindow* window = NULL;
+    PyObject* result;
+
+    // As always, first grab the GIL
+    PY_BLOCK_THREADS( blocked );
+
+    // Now make a dictionary to serve as the global namespace when the code is
+    // executed.  Put a reference to the builtins module in it.  
+
+    PyObject* globals = PyDict_New();
+    PyObject* builtins = PyImport_ImportModule( "__builtin__" );
+    PyDict_SetItemString( globals, "__builtins__", builtins );
+    Py_DECREF(builtins);
+
+    // Execute the code to make the makeWindow function we defined above
+    result = PyRun_String( pycrust_panel, Py_file_input, globals, globals );
+
+    // Was there an exception?
+    if ( !result ) 
+    {
+        PyErr_Print();
+        PY_UNBLOCK_THREADS( blocked );
+        return NULL;
+    }
+    Py_DECREF(result);
+
+    // Now there should be an object named 'makeWindow' in the dictionary that
+    // we can grab a pointer to:
+    PyObject* func = PyDict_GetItemString( globals, "makeWindow" );
+    wxASSERT( PyCallable_Check( func ) );
+
+    // Now build an argument tuple and call the Python function.  Notice the
+    // use of another wxPython API to take a wxWindows object and build a
+    // wxPython object that wraps it.
+
+    PyObject* arg = wxPyMake_wxObject( parent, false );
+    wxASSERT( arg != NULL );
+    PyObject* tuple = PyTuple_New( 1 );
+    PyTuple_SET_ITEM( tuple, 0, arg );
+    result = PyEval_CallObject( func, tuple );
+
+    // Was there an exception?
+    if ( !result )
+        PyErr_Print();
+    else 
+    {
+        // Otherwise, get the returned window out of Python-land and
+        // into C++-ville...
+        bool success = wxPyConvertSwigPtr(result, (void**)&window, _T("wxWindow") );
+        (void)success;
+        wxASSERT_MSG(success, _T("Returned object was not a wxWindow!") );
+        Py_DECREF(result);
+    }
+
+    // Release the python objects we still have
+    Py_DECREF( globals );
+    Py_DECREF( tuple );
+
+    // Finally, after all Python stuff is done, release the GIL
+    PY_UNBLOCK_THREADS( blocked );
+
+    return window;
+}
+#endif
+
+
+
+
+
+
+

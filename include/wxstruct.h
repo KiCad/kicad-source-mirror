@@ -1074,6 +1074,19 @@ public:
         return *this;
     }
 
+    /**
+     * Function ScriptingToolbarPane
+     * Change *this to a scripting toolbar for KiCad.
+     */
+    EDA_PANEINFO& ScriptingToolbarPane()
+    {
+        CloseButton( false );
+        Floatable( true );
+        Resizable( true );
+        return *this;
+    }
+
+
 };
 
 #endif  // WXSTRUCT_H_
