@@ -23,15 +23,6 @@
 
 #include <polygons_defs.h>
 
-// inflection modes for DS_LINE and DS_LINE_VERTEX, used in math_for_graphics.cpp
-/*enum {
-    IM_NONE = 0,
-    IM_90_45,
-    IM_45_90,
-    IM_90
-};
-*/
-
 class CRect
 {
 public:
@@ -57,18 +48,6 @@ public:
         m_End.x     = x1; m_End.y = y1;
     }
 };
-
-/*
-class CArc
-{
-public:
-    enum { ARC_STEPS = 16 };    // arc approximation step is 16 segm / 90 degres
-    int     style;
-    int     xi, yi, xf, yf;
-    int     n_steps; // number of straight-line segments in gpc_poly
-    bool    bFound;
-};
-*/
 
 class CPolyPt : public wxPoint
 {

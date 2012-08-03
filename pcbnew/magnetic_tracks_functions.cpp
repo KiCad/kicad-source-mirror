@@ -59,7 +59,7 @@ static bool Join( wxPoint* res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
 
     t = ((double) b1.y * b0.x - (double) b1.x * b0.y ) / denom;
 
-    t = min( max( t, 0.0 ), 1.0 );
+    t = std::min( std::max( t, 0.0 ), 1.0 );
 
     res->x = KiROUND( a0.x + t * a1.x );
     res->y = KiROUND( a0.y + t * a1.y );
@@ -83,7 +83,7 @@ bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track )
                double( on_grid.y - track->m_Start.y ) * vec.y;
 
     t /= (double) vec.x * vec.x + (double) vec.y * vec.y;
-    t = min( max( t, 0.0 ), 1.0 );
+    t = std::min( std::max( t, 0.0 ), 1.0 );
 
     res->x = KiROUND( track->m_Start.x + t * vec.x );
     res->y = KiROUND( track->m_Start.y + t * vec.y );

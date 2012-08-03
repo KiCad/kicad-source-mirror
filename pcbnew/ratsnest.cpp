@@ -304,7 +304,7 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
  *  @return  last subratsnest id in use
  */
 static int tst_links_between_blocks( NETINFO_ITEM*          aNetinfo,
-                                    vector<RATSNEST_ITEM>& aRatsnestBuffer )
+                                     std::vector<RATSNEST_ITEM>& aRatsnestBuffer )
 {
     int            subratsnest_id, min_id;
     RATSNEST_ITEM* link, * best_link;

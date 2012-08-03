@@ -174,7 +174,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * Note also the "local" clearance is used for clearance between non copper items
      *    or items like texts on copper layers
      */
-    int zone_clearance = max( m_ZoneClearance, GetClearance() );
+    int zone_clearance = std::max( m_ZoneClearance, GetClearance() );
     zone_clearance += margin;
 
     /* store holes (i.e. tracks and pads areas as polygons outlines)
@@ -187,7 +187,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     EDA_RECT item_boundingbox;
     EDA_RECT zone_boundingbox  = GetBoundingBox();
     int      biggest_clearance = aPcb->GetBiggestClearanceValue();
-    biggest_clearance = max( biggest_clearance, zone_clearance );
+    biggest_clearance = std::max( biggest_clearance, zone_clearance );
     zone_boundingbox.Inflate( biggest_clearance );
 
     /*
@@ -244,7 +244,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
-                    int clearance = max( zone_clearance, item_clearance );
+                    int clearance = std::max( zone_clearance, item_clearance );
                     pad->TransformShapeWithClearanceToPolygon( cornerBufferPolysToSubstract,
                                                                clearance,
                                                                s_CircleToSegmentsCount,
@@ -291,7 +291,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
         if( item_boundingbox.Intersects( zone_boundingbox ) )
         {
-            int clearance = max( zone_clearance, item_clearance );
+            int clearance = std::max( zone_clearance, item_clearance );
             track->TransformShapeWithClearanceToPolygon( cornerBufferPolysToSubstract,
                                                          clearance,
                                                          s_CircleToSegmentsCount,

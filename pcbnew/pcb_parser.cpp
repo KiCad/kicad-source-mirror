@@ -48,6 +48,7 @@
 
 #include <pcb_parser.h>
 
+using namespace std;
 
 double PCB_PARSER::parseDouble() throw( IO_ERROR )
 {

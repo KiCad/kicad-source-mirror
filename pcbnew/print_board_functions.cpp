@@ -300,7 +300,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
                 int diameter;
 
                 if( drillShapeOpt == PRINT_PARAMETERS::SMALL_DRILL_SHAPE )
-                    diameter = min( SMALL_DRILL, pt_trace->GetDrillValue() );
+                    diameter = std::min( SMALL_DRILL, pt_trace->GetDrillValue() );
                 else
                     diameter = pt_trace->GetDrillValue();
 
@@ -349,8 +349,8 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
 
         case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
             {
-                wxSize sz(  min( SMALL_DRILL, pad->GetDrillSize().x ),
-                            min( SMALL_DRILL, pad->GetDrillSize().y ) );
+                wxSize sz(  std::min( SMALL_DRILL, pad->GetDrillSize().x ),
+                            std::min( SMALL_DRILL, pad->GetDrillSize().y ) );
 
                 pad->SetDrillSize( sz );
             }

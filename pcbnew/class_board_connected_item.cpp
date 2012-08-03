@@ -116,7 +116,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
         if( aItem )
         {
             int hisClearance = aItem->GetClearance();
-            return max( hisClearance, myClearance );
+            return std::max( hisClearance, myClearance );
         }
 
         return myClearance;

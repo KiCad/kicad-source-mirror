@@ -279,7 +279,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         GetScreen()->SetCrossHairPosition( current + Module->m_Pos -
                                            Module->m_BoundaryBox.GetPosition() );
 
-        Ymax_size = max( Ymax_size, Module->m_BoundaryBox.GetHeight() );
+        Ymax_size = std::max( Ymax_size, Module->m_BoundaryBox.GetHeight() );
 
         PlaceModule( Module, NULL, true );
 

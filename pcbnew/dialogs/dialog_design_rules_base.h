@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,8 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class NETS_LIST_CTRL;
-
+#include "dialog_design_rules_aux_helper_class.h"
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
@@ -51,7 +50,7 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 			wxID_ADD_NETCLASS = 1000,
 			wxID_REMOVE_NETCLASS,
 			ID_LEFT_TO_RIGHT_COPY,
-			ID_RIGHT_TO_LEFT_COPY,
+			ID_RIGHT_TO_LEFT_COPY
 		};
 		
 		wxNotebook* m_DRnotebook;

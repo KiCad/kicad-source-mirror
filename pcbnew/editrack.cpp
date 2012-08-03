@@ -323,10 +323,10 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
     dy1 = curTrack->m_End.y - curTrack->m_Start.y;
 
     // Segments should have a min length.
-    if( max( abs( dx0 ), abs( dy0 ) ) < ( segm_step_45 * 2 ) )
+    if( std::max( abs( dx0 ), abs( dy0 ) ) < ( segm_step_45 * 2 ) )
         return false;
 
-    if( max( abs( dx1 ), abs( dy1 ) ) < ( segm_step_45 * 2 ) )
+    if( std::max( abs( dx1 ), abs( dy1 ) ) < ( segm_step_45 * 2 ) )
         return false;
 
     // Create a new segment and connect it with the previous 2 segments.
@@ -851,7 +851,7 @@ void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx
         break;
 
     case 45:
-        deltax = min( deltax, deltay );
+        deltax = std::min( deltax, deltay );
         deltay = deltax;
 
         // Recalculate the signs for deltax and deltaY.
@@ -946,7 +946,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
         break;
 
     case 45:
-        iDx = min( iDx, iDy );
+        iDx = std::min( iDx, iDy );
         iDy = iDx;
 
         // Recalculate the signs for deltax and deltaY.

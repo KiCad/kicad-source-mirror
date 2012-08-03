@@ -661,8 +661,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
     if( aCopperThickness < 0 )
         aCopperThickness = 0;
 
-    copper_thickness.x = min( dx, aCopperThickness );
-    copper_thickness.y = min( dy, aCopperThickness );
+    copper_thickness.x = std::min( dx, aCopperThickness );
+    copper_thickness.y = std::min( dy, aCopperThickness );
 
     switch( aPad.GetShape() )
     {

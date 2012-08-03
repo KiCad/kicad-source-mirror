@@ -1,11 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
-
-#include "dialog_drc.h"
 
 #include "dialog_drc_base.h"
 
@@ -69,13 +67,13 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_SetMicroViakMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgMinValuesSizer->Add( m_SetMicroViakMinSizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bSizer7->Add( fgMinValuesSizer, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* ReportFileSizer;
 	ReportFileSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Create Report File") ), wxHORIZONTAL );
 	
 	m_CreateRptCtrl = new wxCheckBox( this, ID_CHECKBOX_RPT_FILE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_CreateRptCtrl->SetToolTip( _("Enable writing report to this file") );
 	
 	ReportFileSizer->Add( m_CreateRptCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
@@ -89,9 +87,12 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_BrowseButton = new wxButton( this, ID_BUTTON_BROWSE_RPT_FILE, _("..."), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	ReportFileSizer->Add( m_BrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
+	
 	bSizer7->Add( ReportFileSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
+	
 	sbSizerOptions->Add( bSizer7, 1, wxEXPAND, 5 );
+	
 	
 	m_CommandSizer->Add( sbSizerOptions, 1, 0, 5 );
 	
@@ -105,7 +106,8 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_Messages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE|wxTE_READONLY );
 	m_Messages->SetMinSize( wxSize( 220,-1 ) );
 	
-	bSizerMessages->Add( m_Messages, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizerMessages->Add( m_Messages, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
 	
 	m_CommandSizer->Add( bSizerMessages, 1, wxEXPAND, 5 );
 	
@@ -129,11 +131,13 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	bSizer11->Add( m_DeleteAllButton, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
 	
 	m_DeleteCurrentMarkerButton = new wxButton( this, wxID_ANY, _("Delete Current Marker"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DeleteCurrentMarkerButton->SetToolTip( _("Delete the marker selected in the listBox below") );
+	m_DeleteCurrentMarkerButton->SetToolTip( _("Delete the marker selected in the list box below") );
 	
 	bSizer11->Add( m_DeleteCurrentMarkerButton, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxALL, 5 );
 	
+	
 	m_CommandSizer->Add( bSizer11, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	m_MainSizer->Add( m_CommandSizer, 0, wxALL|wxEXPAND, 5 );
 	
@@ -152,6 +156,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizeClearanceBox->Add( m_ClearanceListBox, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	m_panelClearanceListBox->SetSizer( bSizeClearanceBox );
 	m_panelClearanceListBox->Layout();
 	bSizeClearanceBox->Fit( m_panelClearanceListBox );
@@ -164,6 +169,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_UnconnectedListBox->SetToolTip( _("A list of unconnected pads, right click for popup menu") );
 	
 	bSizerUnconnectedBox->Add( m_UnconnectedListBox, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	m_panelUnconnectedBox->SetSizer( bSizerUnconnectedBox );
 	m_panelUnconnectedBox->Layout();
@@ -178,7 +184,9 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	m_MainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
@@ -214,4 +222,5 @@ DIALOG_DRC_CONTROL_BASE::~DIALOG_DRC_CONTROL_BASE()
 	m_UnconnectedListBox->Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnRightUpUnconnected ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnOkClick ), NULL, this );
+	
 }

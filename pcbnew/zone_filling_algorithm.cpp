@@ -135,9 +135,10 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
     int      istart, iend;      // index od the starting and the endif corner of one filled area in m_FilledPolysList
 
     int margin = m_ZoneMinThickness * 2 / 10;
-    margin = max (2, margin);
+    int minwidth = Mils2iu( 2 );
+    margin = std::max ( minwidth, margin );
     int step = m_ZoneMinThickness - margin;
-    step = max(step, 2);
+    step = std::max( step, minwidth );
 
     // Read all filled areas in m_FilledPolysList
     m_FillSegmList.clear();
