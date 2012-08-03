@@ -245,8 +245,8 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const
 void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                                      wxDC* DC, int aDrawMode, const wxPoint& offset )
 {
-    static vector <char>    CornersTypeBuffer;
-    static vector <wxPoint> CornersBuffer;
+    static std::vector <char>    CornersTypeBuffer;
+    static std::vector <wxPoint> CornersBuffer;
 
     // outline_mode is false to show filled polys,
     // and true to show polygons outlines only (test and debug purposes)
@@ -615,7 +615,7 @@ int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
     if( aItem )
     {
         int hisClearance = aItem->GetClearance( NULL );
-        myClearance = max( hisClearance, myClearance );
+        myClearance = std::max( hisClearance, myClearance );
     }
 
     return myClearance;

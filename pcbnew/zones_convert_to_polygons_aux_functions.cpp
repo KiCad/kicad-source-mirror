@@ -66,7 +66,7 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
     EDA_RECT item_boundingbox;
     EDA_RECT zone_boundingbox  = aZone->GetBoundingBox();
     int      biggest_clearance = aPcb->GetBiggestClearanceValue();
-    biggest_clearance = max( biggest_clearance, zone_clearance );
+    biggest_clearance = std::max( biggest_clearance, zone_clearance );
     zone_boundingbox.Inflate( biggest_clearance );
 
     // half size of the pen used to draw/plot zones outlines
@@ -83,7 +83,7 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
              && pad->GetAttribute() != PAD_STANDARD )
                 continue;
 
-            if( aZone->GetPadConnection( pad ) != THERMAL_PAD 
+            if( aZone->GetPadConnection( pad ) != THERMAL_PAD
              && aZone->GetPadConnection( pad ) != THT_THERMAL )
                 continue;
 
@@ -109,8 +109,8 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
             if( copperThickness < 0 )
                 copperThickness = 0;
 
-            startpoint.x = min( pad->GetSize().x, copperThickness );
-            startpoint.y = min( pad->GetSize().y, copperThickness );
+            startpoint.x = std::min( pad->GetSize().x, copperThickness );
+            startpoint.y = std::min( pad->GetSize().y, copperThickness );
             startpoint.x /= 2;
             startpoint.y /= 2;
 

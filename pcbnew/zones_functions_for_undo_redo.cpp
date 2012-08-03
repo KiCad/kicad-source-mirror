@@ -174,8 +174,8 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, in
  * @param aPcb = the Board
  *
  * aAuxiliaryList is a list of pickers updated by zone algorithms:
- *  In this list are put zone taht were added or deleted during the zone combine process
- * aPickList :is a list of zone that can be modified (changed or deleted, or not modified)
+ *  This list cointains zones which were added or deleted during the zones combine process
+ * aPickList :is a list of zones that can be modified (changed or deleted, or not modified)
  *  >> if the picked zone is not changed, it is removed from list
  *  >> if the picked zone was deleted (i.e. not found in boad list), the picker is modified:
  *  - its status becomes UR_DELETED
@@ -187,8 +187,9 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, in
  * After aPickList is cleaned, the aAuxiliaryList is read
  *  All pickers flagged UR_NEW are moved to aPickList
  * (the corresponding zones are zone that were created by the zone combine process, mainly when adding cutaout areas)
- * At the end of the update process the aAuxiliaryList must be void, because all pickers created by the combine process
- * must have been removed (removed for new and deleted zones, or moved in aPickList.)
+ * At the end of the update process the aAuxiliaryList must be void,
+ *  because all pickers created by the combine process
+ *  must have been removed (removed for new and deleted zones, or moved in aPickList.)
  * If not an error is set.
  */
 void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,

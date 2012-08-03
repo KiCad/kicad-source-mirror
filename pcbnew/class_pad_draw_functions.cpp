@@ -618,9 +618,9 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     {
         ReturnStringPadName( buffer );
         int numpad_len = buffer.Len();
-        numpad_len = MAX( numpad_len, MIN_CHAR_COUNT );
+        numpad_len = std::max( numpad_len, MIN_CHAR_COUNT );
 
-        tsize = min( AreaSize.y, AreaSize.x / numpad_len );
+        tsize = std::min( AreaSize.y, AreaSize.x / numpad_len );
         #define CHAR_SIZE_MIN 5
 
         if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN ) // Not drawable when size too small.
@@ -638,7 +638,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         return;
 
     shortname_len = MAX( shortname_len, MIN_CHAR_COUNT );
-    tsize = min( AreaSize.y, AreaSize.x / shortname_len );
+    tsize = std::min( AreaSize.y, AreaSize.x / shortname_len );
 
     if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )  // Not drawable in size too small.
     {

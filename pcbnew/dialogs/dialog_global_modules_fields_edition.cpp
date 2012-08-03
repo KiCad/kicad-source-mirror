@@ -120,8 +120,8 @@ void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::OnOKClick( wxCommandEvent& event )
     m_brdSettings->m_ModuleTextWidth = ReturnValueFromTextCtrl( *m_TicknessValue );
 
     // clip m_ModuleTextWidth to the 1/4 of min size, to keep it always readable
-    int minsize = min( m_brdSettings->m_ModuleTextSize.x,
-                       m_brdSettings->m_ModuleTextSize.y ) / 4;
+    int minsize = std::min( m_brdSettings->m_ModuleTextSize.x,
+                            m_brdSettings->m_ModuleTextSize.y ) / 4;
     if( m_brdSettings->m_ModuleTextWidth > minsize )
         m_brdSettings->m_ModuleTextWidth = minsize;
 

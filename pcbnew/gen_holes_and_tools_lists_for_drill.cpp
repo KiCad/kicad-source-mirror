@@ -128,7 +128,7 @@ void Build_Holes_List( BOARD* aPcb,
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
                 new_hole.m_Hole_Orient    = pad->GetOrientation();
                 new_hole.m_Hole_Shape    = 0;           // hole shape: round
-                new_hole.m_Hole_Diameter = min( pad->GetDrillSize().x, pad->GetDrillSize().y );
+                new_hole.m_Hole_Diameter = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
                 if( pad->GetDrillShape() != PAD_CIRCLE )

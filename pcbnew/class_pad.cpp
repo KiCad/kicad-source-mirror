@@ -348,7 +348,7 @@ int D_PAD::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
     if( aItem )
     {
         int hisClearance = aItem->GetClearance();
-        return max( hisClearance, clearance );
+        return std::max( hisClearance, clearance );
     }
 
     // Return the specific clearance.
