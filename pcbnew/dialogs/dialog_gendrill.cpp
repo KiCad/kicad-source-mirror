@@ -186,7 +186,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
             }
             else
             {
-                if( min( pad->GetDrillSize().x, pad->GetDrillSize().y ) != 0 )
+                if( std::min( pad->GetDrillSize().x, pad->GetDrillSize().y ) != 0 )
                 {
                     if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
                         m_notplatedPadsHoleCount++;

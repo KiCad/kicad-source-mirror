@@ -121,7 +121,7 @@ endif(APPLE)
 ###
 # Link executable target gerbview with correct libraries
 ###
-target_link_libraries(gerbview common polygon bitmaps kbool
+target_link_libraries(gerbview common polygon bitmaps
                       ${OPENGL_LIBRARIES}
                       ${wxWidgets_LIBRARIES}
                       ${GDI_PLUS_LIBRARIES})

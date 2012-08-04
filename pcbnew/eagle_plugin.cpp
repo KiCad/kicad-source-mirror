@@ -76,6 +76,7 @@ Load() TODO's
 #include <class_pcb_text.h>
 
 using namespace boost::property_tree;
+using namespace std;
 
 typedef EAGLE_PLUGIN::BIU                   BIU;
 typedef PTREE::const_assoc_iterator         CA_ITER;

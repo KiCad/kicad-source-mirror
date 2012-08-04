@@ -51,7 +51,6 @@ if(APPLE)
         common
         bitmaps
         polygon
-        kbool
         ${wxWidgets_LIBRARIES}
         )
 else(APPLE)
@@ -59,7 +58,6 @@ else(APPLE)
         common
         bitmaps
         polygon
-        kbool
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         )
