@@ -82,7 +82,6 @@ target_link_libraries( pcb_calculator
     common
     bitmaps
     polygon
-    kbool
     ${wxWidgets_LIBRARIES}
     )
 
