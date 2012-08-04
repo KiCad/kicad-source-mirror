@@ -55,11 +55,11 @@ option(KICAD_SCRIPTING
 option(KICAD_SCRIPTING_MODULES
        "set this option ON to build kicad modules that can be used from scripting languages"
        )
-       
+
 option(KICAD_SCRIPTING_WXPYTHON
        "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
        )
-        
+
 
 #Set version option (stable or testing)
 
@@ -314,7 +314,6 @@ add_subdirectory(gerbview)
 add_subdirectory(kicad)
 add_subdirectory(pcbnew)
 add_subdirectory(polygon)
-add_subdirectory(polygon/kbool/src)
 add_subdirectory(potrace)
 add_subdirectory(bitmap2component)
 add_subdirectory(pcb_calculator)

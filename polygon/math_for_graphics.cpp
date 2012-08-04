@@ -88,10 +88,10 @@ bool TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist )
 bool FindSegmentIntersections( int xi, int yi, int xf, int yf,
                               int xi2, int yi2, int xf2, int yf2  )
 {
-    if( max( xi, xf ) < min( xi2, xf2 )
-        || min( xi, xf ) > max( xi2, xf2 )
-        || max( yi, yf ) < min( yi2, yf2 )
-        || min( yi, yf ) > max( yi2, yf2 ) )
+    if( std::max( xi, xf ) < std::min( xi2, xf2 )
+        || std::min( xi, xf ) > std::max( xi2, xf2 )
+        || std::max( yi, yf ) < std::min( yi2, yf2 )
+        || std::min( yi, yf ) > std::max( yi2, yf2 ) )
         return false;
 
     return TestForIntersectionOfStraightLineSegments( xi, yi, xf, yf,
@@ -135,7 +135,7 @@ bool FindLineSegmentIntersection( double a, double b, int xi, int yi, int xf, in
             else
             {
                 if( dist )
-                    *dist = min( abs( a - xi ), abs( a - xf ) );
+                    *dist = std::min( abs( a - xi ), abs( a - xf ) );
 
                 return false;
             }
@@ -450,16 +450,16 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int w1,
     // check clearance between bounding rectangles
     int min_dist = max_cl + ( (w1 + w2) / 2 );
 
-    if( min( x1i, x1f ) - max( x2i, x2f ) > min_dist )
+    if( std::min( x1i, x1f ) - std::max( x2i, x2f ) > min_dist )
         return max_cl+1;
 
-    if( min( x2i, x2f ) - max( x1i, x1f ) > min_dist )
+    if( std::min( x2i, x2f ) - std::max( x1i, x1f ) > min_dist )
         return max_cl+1;
 
-    if( min( y1i, y1f ) - max( y2i, y2f ) > min_dist )
+    if( std::min( y1i, y1f ) - std::max( y2i, y2f ) > min_dist )
         return max_cl+1;
 
-    if( min( y2i, y2f ) - max( y1i, y1f ) > min_dist )
+    if( std::min( y2i, y2f ) - std::max( y1i, y1f ) > min_dist )
         return max_cl+1;
 
     int     xx, yy;
@@ -535,7 +535,7 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
         if( InRange( y, yi, yf ) )
             return abs( x - xi );
         else
-            return min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
+            return std::min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
     }
     else if( yf==yi )
     {
@@ -543,7 +543,7 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
         if( InRange( x, xi, xf ) )
             return abs( y - yi );
         else
-            return min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
+            return std::min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
     }
     else
     {
@@ -564,7 +564,7 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
         if( InRange( xp, xi, xf ) && InRange( yp, yi, yf ) )
             return Distance( x, y, xp, yp );
         else
-            return min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
+            return std::min( Distance( x, y, xi, yi ), Distance( x, y, xf, yf ) );
     }
 }
 

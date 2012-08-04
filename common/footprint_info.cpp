@@ -70,7 +70,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
 
                 for( unsigned i=0; i<fpnames.GetCount();  ++i )
                 {
-                    auto_ptr<MODULE> m( pi->FootprintLoad( libPath, fpnames[i] ) );
+                    std::auto_ptr<MODULE> m( pi->FootprintLoad( libPath, fpnames[i] ) );
 
                     // we're loading what we enumerated, all must be there.
                     wxASSERT( m.get() );

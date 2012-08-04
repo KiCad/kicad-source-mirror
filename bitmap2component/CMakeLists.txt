@@ -46,7 +46,7 @@ endif(APPLE)
 target_link_libraries( bitmap2component common polygon bitmaps
                         ${wxWidgets_LIBRARIES}
                         potrace
-                        kbool )
+                        )
 
 install(TARGETS bitmap2component
         DESTINATION ${KICAD_BIN}

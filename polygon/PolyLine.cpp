@@ -16,16 +16,12 @@
 #include <math_for_graphics.h>
 #include <polygon_test_point_inside.h>
 
-enum m_SideStyle { STRAIGHT };                 // side styles
-
-
 CPolyLine::CPolyLine()
 {
     m_hatchStyle    = NO_HATCH;
     m_hatchPitch    = 0;
     m_layer     = 0;
     m_utility   = 0;
-    m_Kbool_Poly_Engine = NULL;
 }
 
 
@@ -34,409 +30,6 @@ CPolyLine::CPolyLine()
 CPolyLine::~CPolyLine()
 {
     UnHatch();
-
-    if( m_Kbool_Poly_Engine )
-        delete m_Kbool_Poly_Engine;
-}
-
-
-/**
- * Function armBoolEng
- * Initialise parameters used in kbool
- * @param aBooleng = pointer to the Bool_Engine to initialise
- * @param aConvertHoles = mode for holes when a boolean operation is made
- *   true: holes are linked into outer contours by double overlapping segments
- *   false: holes are not linked: in this mode contours are added clockwise
- *          and polygons added counter clockwise are holes (default)
- */
-void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
-
-/**
- * Function NormalizeWithKbool
- * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
- * is converted to non self-crossing polygon by adding extra points at the crossing locations
- * and reordering corners
- * if more than one outside contour are found, extra CPolyLines will be created
- * because copper areas have only one outside contour
- * Therefore, if this results in new CPolyLines, return them as std::vector pa
- * @param aExtraPolyList: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
- * (when after normalization, there is more than one polygon with holes)
- * @return number of external contours, or -1 if error
- */
-int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList )
-{
-    std::vector <void*> hole_array; // list of holes
-    std::vector<int>*   hole;       // used to store corners for a given hole
-    CPolyLine*          polyline;
-    int n_ext_cont = 0;             // CPolyLine count
-
-    /* Creates a bool engine from this CPolyLine.
-     * Normalized outlines and holes will be in m_Kbool_Poly_Engine
-     * If some polygons are self crossing, after running the Kbool Engine, self crossing polygons
-     * will be converted in non self crossing polygons by inserting extra points at the crossing locations
-     * True holes are combined if possible
-     */
-    MakeKboolPoly();
-
-    UnHatch();
-
-    /* now, recreate polys
-     * if more than one outside contour are found, extra CPolyLines will be created
-     * because copper areas have only one outside contour
-     * the first outside contour found is the new "this" outside contour
-     * if others outside contours are found we create new CPolyLines
-     * Note: if there are holes in polygons, we must store them
-     * and when all outside contours are found, search the corresponding outside contour for each hole
-     */
-    while( m_Kbool_Poly_Engine->StartPolygonGet() )
-    {
-        // See if the current polygon is flagged as a hole
-        if( m_Kbool_Poly_Engine->GetPolygonPointEdgeType() == KB_INSIDE_EDGE )
-        {
-            hole = new std::vector<int>;
-            hole_array.push_back( hole );
-
-            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // store hole
-            {
-                int x   = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y   = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
-                hole->push_back( x );
-                hole->push_back( y );
-            }
-
-            m_Kbool_Poly_Engine->EndPolygonGet();
-        }
-        else if( n_ext_cont == 0 )
-        {
-            // first external contour, replace this poly
-            m_CornersList.clear();
-            bool first = true;
-
-            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
-            {
-                // foreach point in the polygon
-                int x   = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y   = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
-
-                if( first )
-                {
-                    first = false;
-                    Start( GetLayer(), x, y, GetHatchStyle() );
-                }
-                else
-                    AppendCorner( x, y );
-            }
-
-            m_Kbool_Poly_Engine->EndPolygonGet();
-            CloseLastContour();
-            n_ext_cont++;
-        }
-        else if( aExtraPolyList )                                   // a new outside contour is found: create a new CPolyLine
-        {
-            polyline = new CPolyLine;
-            polyline->ImportSettings( this );
-            aExtraPolyList->push_back( polyline );                  // put it in array
-            bool first = true;
-
-            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )    // read next external contour
-            {
-                int x   = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y   = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
-
-                if( first )
-                {
-                    first = false;
-                    polyline->Start( GetLayer(), x, y, GetHatchStyle() );
-                }
-                else
-                    polyline->AppendCorner( x, y );
-            }
-
-            m_Kbool_Poly_Engine->EndPolygonGet();
-            polyline->CloseLastContour();
-            n_ext_cont++;
-        }
-    }
-
-    // now add cutouts to the corresponding CPolyLine(s)
-    for( unsigned ii = 0; ii < hole_array.size(); ii++ )
-    {
-        hole        = (std::vector<int>*)hole_array[ii];
-        polyline    = NULL;
-
-        if( n_ext_cont == 1 )
-        {
-            polyline = this;
-        }
-        else
-        {
-            // find the polygon that contains this hole
-            // testing one corner inside is enought because a hole is entirely inside the polygon
-            // so we test only the first corner
-            int x   = (*hole)[0];
-            int y   = (*hole)[1];
-
-            if( TestPointInside( x, y ) )
-                polyline = this;
-            else if( aExtraPolyList )
-            {
-                for( int ext_ic = 0; ext_ic<n_ext_cont - 1; ext_ic++ )
-                {
-                    if( (*aExtraPolyList)[ext_ic]->TestPointInside( x, y ) )
-                    {
-                        polyline = (*aExtraPolyList)[ext_ic];
-                        break;
-                    }
-                }
-            }
-        }
-
-        if( !polyline )
-            wxASSERT( 0 );
-        else
-        {
-            for( unsigned ii = 0; ii< (*hole).size(); ii++ )
-            {
-                int x   = (*hole)[ii]; ii++;
-                int y   = (*hole)[ii];
-                polyline->AppendCorner( x, y );
-            }
-
-            polyline->CloseLastContour();
-        }
-    }
-
-    delete m_Kbool_Poly_Engine;
-    m_Kbool_Poly_Engine = NULL;
-
-    // free hole list
-    for( unsigned ii = 0; ii < hole_array.size(); ii++ )
-        delete (std::vector<int>*)hole_array[ii];
-
-    return n_ext_cont;
-}
-
-
-/**
- * Function AddPolygonsToBoolEng
- * Add a CPolyLine to a kbool engine, preparing a boolean op between polygons
- * @param aBooleng : pointer on a bool engine (handle a set of polygons)
- * @param aGroup : group to fill (aGroup = GROUP_A or GROUP_B) operations are made between GROUP_A and GROUP_B
- */
-int CPolyLine::AddPolygonsToBoolEng( Bool_Engine* aBooleng, GroupType aGroup )
-{
-    int count = 0;
-
-    /* Convert the current polyline contour to a kbool polygon: */
-    MakeKboolPoly();
-
-    /* add the resulting kbool set of polygons to the current kcool engine */
-    while( m_Kbool_Poly_Engine->StartPolygonGet() )
-    {
-        if( aBooleng->StartPolygonAdd( GROUP_A ) )
-        {
-            while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
-            {
-                int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
-                int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
-                aBooleng->AddPoint( x, y );
-                count++;
-            }
-
-            aBooleng->EndPolygonAdd();
-        }
-        m_Kbool_Poly_Engine->EndPolygonGet();
-    }
-
-    delete m_Kbool_Poly_Engine;
-    m_Kbool_Poly_Engine = NULL;
-
-    return count;
-}
-/**
- * Function MakeKboolPoly
- * fill a kbool engine with a closed polyline contour
- * normalize self-intersecting contours
- * @return error: 0 if Ok, 1 if error
- */
-int CPolyLine::MakeKboolPoly()
-{
-    if( m_Kbool_Poly_Engine )
-    {
-        delete m_Kbool_Poly_Engine;
-        m_Kbool_Poly_Engine = NULL;
-    }
-
-    if( !GetClosed() )
-        return 1; // error
-
-    int polycount = GetContoursCount();
-    int last_contour = polycount - 1;
-
-    for( int icont = 0; icont <= last_contour; icont++ )
-    {
-        // Fill a kbool engine for this contour,
-        // and combine it with previous contours
-        Bool_Engine* booleng = new Bool_Engine();
-        armBoolEng( booleng, false );
-
-        if( m_Kbool_Poly_Engine )  // a previous contour exists. Put it in new engine
-        {
-            while( m_Kbool_Poly_Engine->StartPolygonGet() )
-            {
-                if( booleng->StartPolygonAdd( GROUP_A ) )
-                {
-                    while( m_Kbool_Poly_Engine->PolygonHasMorePoints() )
-                    {
-                        int x = (int) m_Kbool_Poly_Engine->GetPolygonXPoint();
-                        int y = (int) m_Kbool_Poly_Engine->GetPolygonYPoint();
-                        booleng->AddPoint( x, y );
-                    }
-
-                    booleng->EndPolygonAdd();
-                }
-                m_Kbool_Poly_Engine->EndPolygonGet();
-            }
-        }
-
-        int ic_st   = GetContourStart( icont );
-        int ic_end  = GetContourEnd( icont );
-
-        if( !booleng->StartPolygonAdd( GROUP_B ) )
-        {
-            wxASSERT( 0 );
-            return 1;    // error
-        }
-
-        // Enter this contour to booleng
-        for( int ic = ic_st; ic <= ic_end; ic++ )
-        {
-            int x1      = m_CornersList[ic].x;
-            int y1      = m_CornersList[ic].y;
-            booleng->AddPoint( x1, y1 );
-        }
-
-        // close list added to the bool engine
-        booleng->EndPolygonAdd();
-
-        /* now combine polygon to the previous polygons.
-         * note: the first polygon is the outline contour, and others are holes inside the first polygon
-         * The first polygon is ORed with nothing, but is is a trick to sort corners (vertex)
-         * clockwise with the kbool engine.
-         * Others polygons are substract to the outline and corners will be ordered counter clockwise
-         * by the kbool engine
-         */
-        if( icont != 0 )    // substract hole to outside ( if the outline contour is take in account)
-        {
-            booleng->Do_Operation( BOOL_A_SUB_B );
-        }
-        else       // add outside or add holes if we do not use the outline contour
-        {
-            booleng->Do_Operation( BOOL_OR );
-        }
-
-        // now use result as new polygon (delete the old one if exists)
-        if( m_Kbool_Poly_Engine )
-            delete m_Kbool_Poly_Engine;
-
-        m_Kbool_Poly_Engine = booleng;
-    }
-
-    return 0;
-}
-
-
-/**
- * Function armBoolEng
- * Initialise parameters used in kbool
- * @param aBooleng = pointer to the Bool_Engine to initialise
- * @param aConvertHoles = mode for holes when a boolean operation is made
- *   true: in resulting polygon, holes are linked into outer contours by double overlapping segments
- *   false: in resulting polygons, holes are not linked: they are separate polygons
- */
-void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
-{
-    // set some global vals to arm the boolean engine
-
-    // input points are scaled up with GetDGrid() * GetGrid()
-
-    // DGRID is only meant to make fractional parts of input data which
-    /*
-     *  The input data scaled up with DGrid is related to the accuracy the user has in his input data.
-     *  User data with a minimum accuracy of 0.001, means set the DGrid to 1000.
-     *  The input data may contain data with a minimum accuracy much smaller, but by setting the DGrid
-     *  everything smaller than 1/DGrid is rounded.
-     *
-     *  DGRID is only meant to make fractional parts of input data which can be
-     *  doubles, part of the integers used in vertexes within the boolean algorithm.
-     *  And therefore DGRID bigger than 1 is not usefull, you would only loose accuracy.
-     *  Within the algorithm all input data is multiplied with DGRID, and the result
-     *  is rounded to an integer.
-     */
-    double DGRID = 1000.0;      // round coordinate X or Y value in calculations to this (initial value = 1000.0 in kbool example)
-                                // kbool uses DGRID to convert float user units to integer
-                                // kbool unit = (int)(user unit * DGRID)
-                                // Note: in kicad, coordinates are already integer so DGRID could be set to 1
-                                // we can choose 1.0,
-                                // but choose DGRID = 1000.0 solves some filling problems
-// (perhaps because this allows a better precision in kbool internal calculations
-
-    double MARGE = 1.0 / DGRID;         // snap with in this range points to lines in the intersection routines
-                                        // should always be >= 1/DGRID  a  MARGE >= 10/DGRID is ok
-                                        // this is also used to remove small segments and to decide when
-                                        // two segments are in line. ( initial value = 0.001 )
-                                        // For kicad we choose MARGE = 1/DGRID
-
-    double CORRECTIONFACTOR = 0.0;      // correct the polygons by this number: used in BOOL_CORRECTION operation
-                                        // this operation shrinks a polygon if CORRECTIONFACTOR < 0
-                                        // or stretch it if CORRECTIONFACTOR > 0
-                                        // the size change is CORRECTIONFACTOR (holes are correctly handled)
-    double  CORRECTIONABER  = 1.0;      // the accuracy for the rounded shapes used in correction
-    double  ROUNDFACTOR     = 1.5;      // when will we round the correction shape to a circle
-    double  SMOOTHABER      = 10.0;     // accuracy when smoothing a polygon
-    double  MAXLINEMERGE    = 1000.0;   // leave as is, segments of this length in smoothen
-
-
-    /*
-     *    Grid makes sure that the integer data used within the algorithm has room for extra intersections
-     *    smaller than the smallest number within the input data.
-     *    The input data scaled up with DGrid is related to the accuracy the user has in his input data.
-     *    Another scaling with Grid is applied on top of it to create space in the integer number for
-     *    even smaller numbers.
-     */
-    int GRID = (int) ( 10000.0 / DGRID );    // initial value = 10000 in kbool example but we use
-
-    // 10000/DGRID because the scaling is made by DGRID
-    // on integer pcbnew units and the global scaling
-    // ( GRID*DGRID) must be < 30000 to avoid overflow
-    // in calculations (made in long long in kbool)
-    if( GRID <= 1 ) // Cannot be null!
-        GRID = 1;
-
-    aBooleng->SetMarge( MARGE );
-    aBooleng->SetGrid( GRID );
-    aBooleng->SetDGrid( DGRID );
-    aBooleng->SetCorrectionFactor( CORRECTIONFACTOR );
-    aBooleng->SetCorrectionAber( CORRECTIONABER );
-    aBooleng->SetSmoothAber( SMOOTHABER );
-    aBooleng->SetMaxlinemerge( MAXLINEMERGE );
-    aBooleng->SetRoundfactor( ROUNDFACTOR );
-    aBooleng->SetWindingRule( true );           // This is the default kbool value
-
-    if( aConvertHoles )
-    {
-#if 1                                                   // Can be set to 1 for kbool version >= 2.1, must be set to 0 for previous versions
-         // SetAllowNonTopHoleLinking() exists only in kbool >= 2.1
-        aBooleng->SetAllowNonTopHoleLinking( false );   // Default = true, but i have problems (filling errors) when true
-#endif
-        aBooleng->SetLinkHoles( true );                 // holes will be connected by double overlapping segments
-        aBooleng->SetOrientationEntryMode( false );     // all polygons are contours, not holes
-    }
-    else
-    {
-        aBooleng->SetLinkHoles( false );                // holes will not be connected by double overlapping segments
-        aBooleng->SetOrientationEntryMode( true );      // holes are entered counter clockwise
-    }
 }
 
 
@@ -445,12 +38,119 @@ void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
  * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
  * @param aNewPolygonList = a std::vector<CPolyLine*> reference where to store new CPolyLine
  * needed by the normalization
- * @return the polygon count (always >= 1, becuse there is at lesat one polygon)
+ * @return the polygon count (always >= 1, because there is at least one polygon)
  * There are new polygons only if the polygon count  is > 1
  */
+#include "clipper.hpp"
 int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
 {
-    return NormalizeWithKbool( aNewPolygonList );
+    ClipperLib::Polygon raw_polygon;
+    ClipperLib::Polygons normalized_polygons;
+
+    unsigned corners_count = m_CornersList.size();
+
+    KI_POLYGON_SET polysholes;
+    KI_POLYGON_WITH_HOLES mainpoly;
+    std::vector<KI_POLY_POINT> cornerslist;
+    KI_POLYGON_WITH_HOLES_SET all_contours;
+    KI_POLYGON poly_tmp;
+
+    // Normalize first contour
+    unsigned ic    = 0;
+    while( ic < corners_count )
+    {
+        const CPolyPt& corner = m_CornersList[ic++];
+        raw_polygon.push_back( ClipperLib::IntPoint( corner.x, corner.y ) );
+
+        if( corner.end_contour )
+            break;
+    }
+    ClipperLib::SimplifyPolygon( raw_polygon, normalized_polygons );
+
+    // enter main outline
+    for( unsigned ii = 0; ii < normalized_polygons.size(); ii++ )
+    {
+        ClipperLib::Polygon& polygon = normalized_polygons[ii];
+        cornerslist.clear();
+        for( unsigned jj = 0; jj < polygon.size(); jj++ )
+            cornerslist.push_back( KI_POLY_POINT( (int)polygon[jj].X, (int)polygon[jj].Y ) );
+        mainpoly.set( cornerslist.begin(), cornerslist.end() );
+        all_contours.push_back(  mainpoly );
+    }
+
+    // Enter holes
+    while( ic < corners_count )
+    {
+        cornerslist.clear();
+        raw_polygon.clear();
+        normalized_polygons.clear();
+
+        // Normalize current hole and add it to hole list
+        while( ic < corners_count )
+        {
+            const CPolyPt& corner = m_CornersList[ic++];
+            raw_polygon.push_back( ClipperLib::IntPoint( corner.x, corner.y ) );
+
+            if( corner.end_contour )
+            {
+                ClipperLib::SimplifyPolygon( raw_polygon, normalized_polygons );
+                for( unsigned ii = 0; ii < normalized_polygons.size(); ii++ )
+                {
+                    ClipperLib::Polygon& polygon = normalized_polygons[ii];
+                    cornerslist.clear();
+                    for( unsigned jj = 0; jj < polygon.size(); jj++ )
+                        cornerslist.push_back( KI_POLY_POINT( (int)polygon[jj].X, (int)polygon[jj].Y ) );
+                    bpl::set_points( poly_tmp, cornerslist.begin(), cornerslist.end() );
+                    polysholes.push_back( poly_tmp );
+                }
+                break;
+            }
+        }
+    }
+    all_contours -= polysholes;
+
+    // copy polygon with holes to destination
+    RemoveAllContours();
+
+    #define outlines all_contours
+
+    for( unsigned ii = 0; ii < outlines.size(); ii++ )
+    {
+        CPolyLine* polyline = this;
+        if( ii > 0 )
+        {
+            polyline = new CPolyLine;
+            polyline->ImportSettings( this );
+            aNewPolygonList->push_back( polyline );
+        }
+
+        KI_POLYGON_WITH_HOLES& curr_poly = outlines[ii];
+        KI_POLYGON_WITH_HOLES::iterator_type corner = curr_poly.begin();
+        // enter main contour
+        while( corner != curr_poly.end() )
+        {
+            polyline->AppendCorner( corner->x(), corner->y() );
+            corner++;
+        }
+        polyline->CloseLastContour();
+
+        // add holes (set of polygons)
+        KI_POLYGON_WITH_HOLES::iterator_holes_type hole = curr_poly.begin_holes();
+        while( hole != curr_poly.end_holes() )
+        {
+            KI_POLYGON::iterator_type hole_corner = hole->begin();
+            // create area with external contour: Recreate only area edges, NOT holes
+            while( hole_corner != hole->end() )
+            {
+                polyline->AppendCorner( hole_corner->x(), hole_corner->y() );
+                hole_corner++;
+            }
+            polyline->CloseLastContour();
+            hole++;
+        }
+    }
+
+    return outlines.size();
 }
 
 /**
@@ -862,10 +562,10 @@ CRect CPolyLine::GetCornerBounds()
 
     for( unsigned i = 0; i<m_CornersList.size(); i++ )
     {
-        r.left      = min( r.left, m_CornersList[i].x );
-        r.right     = max( r.right, m_CornersList[i].x );
-        r.bottom    = min( r.bottom, m_CornersList[i].y );
-        r.top       = max( r.top, m_CornersList[i].y );
+        r.left      = std::min( r.left, m_CornersList[i].x );
+        r.right     = std::max( r.right, m_CornersList[i].x );
+        r.bottom    = std::min( r.bottom, m_CornersList[i].y );
+        r.top       = std::max( r.top, m_CornersList[i].y );
     }
 
     return r;
@@ -883,10 +583,10 @@ CRect CPolyLine::GetCornerBounds( int icont )
 
     for( int i = istart; i<=iend; i++ )
     {
-        r.left      = min( r.left, m_CornersList[i].x );
-        r.right     = max( r.right, m_CornersList[i].x );
-        r.bottom    = min( r.bottom, m_CornersList[i].y );
-        r.top       = max( r.top, m_CornersList[i].y );
+        r.left      = std::min( r.left, m_CornersList[i].x );
+        r.right     = std::max( r.right, m_CornersList[i].x );
+        r.bottom    = std::min( r.bottom, m_CornersList[i].y );
+        r.top       = std::max( r.top, m_CornersList[i].y );
     }
 
     return r;

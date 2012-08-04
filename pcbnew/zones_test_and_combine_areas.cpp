@@ -211,12 +211,12 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
 
     // Test for bad areas: all zones must have more than 2 corners:
     // Note: should not happen, but just in case.
-    for( unsigned ia1 = 0; ia1 < m_ZoneDescriptorList.size() - 1; )
+    for( unsigned ii = 0; ii < m_ZoneDescriptorList.size(); )
     {
-        ZONE_CONTAINER* zone = m_ZoneDescriptorList[ia1];
+        ZONE_CONTAINER* zone = m_ZoneDescriptorList[ii];
 
         if( zone->GetNumCorners() >= 3 )
-            ia1++;
+            ii++;
         else               // Remove zone because it is incorrect:
             RemoveArea( aModifiedZonesList, zone );
     }
@@ -267,25 +267,25 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             if( curr_area->GetIsKeepout() != area2->GetIsKeepout() )
                 continue;
 
-            if( curr_area->GetLayer() == area2->GetLayer() )
+            if( curr_area->GetLayer() != area2->GetLayer() )
+                continue;
+
+            CRect b2 = area2->m_Poly->GetCornerBounds();
+            if( !( b1.left > b2.right || b1.right < b2.left
+                   || b1.bottom > b2.top || b1.top < b2.bottom ) )
             {
-                CRect b2 = area2->m_Poly->GetCornerBounds();
-                if( !( b1.left > b2.right || b1.right < b2.left
-                       || b1.bottom > b2.top || b1.top < b2.bottom ) )
+                // check area2 against curr_area
+                if( curr_area->utility || area2->utility || aUseUtility == false )
                 {
-                    // check area2 against curr_area
-                    if( curr_area->utility || area2->utility || aUseUtility == false )
+                    bool ret = TestAreaIntersection( curr_area, area2 );
+
+                    if( ret )
+                        ret = CombineAreas( aDeletedList, curr_area, area2 );
+
+                    if( ret )
                     {
-                        bool ret = TestAreaIntersection( curr_area, area2 );
-
-                        if( ret )
-                            ret = CombineAreas( aDeletedList, curr_area, area2 );
-
-                        if( ret )
-                        {
-                            mod_ia1 = true;
-                            modified = true;
-                        }
+                        mod_ia1 = true;
+                        modified = true;
                     }
                 }
             }
@@ -424,7 +424,7 @@ bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area
 
         if( poly1->TestPointInside( x, y ) )
         {
-            return 1;
+            return true;
         }
     }
 
@@ -435,11 +435,11 @@ bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area
 
         if( poly2->TestPointInside( x, y ) )
         {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 
@@ -465,10 +465,6 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
     }
 
     // polygons intersect, combine them
-    // TODO: test here if areas intersect and combine only if so
-
-#if 0
-    // do not set to 1 (not fully working): only for me (JP. Charras) until this code is finished
     KI_POLYGON_WITH_HOLES areaRefPoly;
     KI_POLYGON_WITH_HOLES areaToMergePoly;
     CopyPolysListToKiPolygonWithHole( area_ref->m_Poly->m_CornersList, areaRefPoly );
@@ -478,10 +474,20 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
     mergedOutlines.push_back( areaRefPoly );
     mergedOutlines |= areaToMergePoly;
 
-    // We can have more than one polygon with holes in mergedOutlines
-    // depending on the complexity of outlines
+    // We should have one polygon with hole
+    // We can have 2 polygons with hole, if the 2 initial polygons have only one common corner
+    // and therefore cannot be merged (they are dectected as intersecting)
+    // but we should never have more than 2 polys
+    if( mergedOutlines.size() > 2 )
+    {
+        wxLogMessage(wxT("BOARD::CombineAreas error: more than 2 polys after merging") );
+        return false;
+    }
 
-    areaRefPoly = mergedOutlines[0];    // TODO: read and create all created polygons
+    if( mergedOutlines.size() > 1 )
+        return false;
+
+    areaRefPoly = mergedOutlines[0];
     area_ref->m_Poly->RemoveAllContours();
 
     KI_POLYGON_WITH_HOLES::iterator_type corner = areaRefPoly.begin();
@@ -509,76 +515,6 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
         area_ref->m_Poly->CloseLastContour();
         hole++;
     }
-#else
-    void armBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
-    Bool_Engine*      booleng = new Bool_Engine();
-    armBoolEng( booleng );
-
-    area_ref->m_Poly->AddPolygonsToBoolEng( booleng, GROUP_A );
-    area_to_combine->m_Poly->AddPolygonsToBoolEng(booleng, GROUP_B );
-    booleng->Do_Operation( BOOL_OR );
-
-    // create area with external contour: Recreate only area edges, NOT holes
-    if( booleng->StartPolygonGet() )
-    {
-        if( booleng->GetPolygonPointEdgeType() == KB_INSIDE_EDGE )
-        {
-            DisplayError( NULL, wxT( "BOARD::CombineAreas() error: unexpected hole descriptor" ) );
-        }
-
-        area_ref->m_Poly->RemoveAllContours();
-
-        // foreach point in the polygon
-        bool first = true;
-
-        while( booleng->PolygonHasMorePoints() )
-        {
-            int x = (int) booleng->GetPolygonXPoint();
-            int y = (int) booleng->GetPolygonYPoint();
-
-            if( first )
-            {
-                first = false;
-                area_ref->m_Poly->Start( area_ref->GetLayer(
-                                            ), x, y, area_ref->m_Poly->GetHatchStyle() );
-            }
-            else
-            {
-                area_ref->m_Poly->AppendCorner( x, y );
-            }
-        }
-
-        booleng->EndPolygonGet();
-        area_ref->m_Poly->CloseLastContour();
-    }
-
-    // add holes
-    bool show_error = true;
-
-    while( booleng->StartPolygonGet() )
-    {
-        // we expect all vertex are holes inside the main outline
-        if( booleng->GetPolygonPointEdgeType() != KB_INSIDE_EDGE )
-        {
-            if( show_error )    // show this error only once, if happens
-                DisplayError( NULL,
-                              wxT( "BOARD::CombineAreas() error: unexpected outside contour descriptor" ) );
-
-            show_error = false;
-            continue;
-        }
-
-        while( booleng->PolygonHasMorePoints() )
-        {
-            int x = (int) booleng->GetPolygonXPoint();
-            int y = (int) booleng->GetPolygonYPoint();
-            area_ref->m_Poly->AppendCorner( x, y );
-        }
-
-        area_ref->m_Poly->CloseLastContour();
-        booleng->EndPolygonGet();
-    }
-#endif
 
     RemoveArea( aDeletedList, area_to_combine );
 
@@ -822,7 +758,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
     for( int ia2 = 0; ia2 < m_pcb->GetAreaCount(); ia2++ )
     {
         ZONE_CONTAINER* area_to_test   = m_pcb->GetArea( ia2 );
-        int             zone_clearance = max( area_to_test->m_ZoneClearance,
+        int             zone_clearance = std::max( area_to_test->m_ZoneClearance,
                                               aArea->m_ZoneClearance );
 
         // test for same layer
