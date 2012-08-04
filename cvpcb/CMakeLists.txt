@@ -98,7 +98,6 @@ target_link_libraries(cvpcb
     common
     bitmaps
     polygon
-    kbool
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

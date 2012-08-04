@@ -217,7 +217,6 @@ target_link_libraries(eeschema
     common
     bitmaps
     polygon
-    kbool
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

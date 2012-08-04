@@ -17,7 +17,7 @@
 
 #include <vector>
 
-#include <kbool/include/kbool/booleng.h>
+//#include <kbool/include/kbool/booleng.h>
 #include <pad_shapes.h>
 #include <wx/gdicmn.h>      // for wxPoint definition
 
@@ -210,41 +210,10 @@ public:
      * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
      * @param aNewPolygonList = a std::vector<CPolyLine*> reference where to store new CPolyLine
      * needed by the normalization
-     * @return the polygon count (always >= 1, becuse there is at lesat one polygon)
+     * @return the polygon count (always >= 1, because there is at least one polygon)
      * There are new polygons only if the polygon count  is > 1
      */
     int NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList );
-
-    // KBOOL functions
-
-    /**
-     * Function AddPolygonsToBoolEng
-     * Add a CPolyLine to a kbool engine, preparing a boolean op between polygons
-     * @param aBooleng : pointer on a bool engine (handle a set of polygons)
-     * @param aGroup : group to fill (aGroup = GROUP_A or GROUP_B) operations are made between GROUP_A and GROUP_B
-     */
-    int AddPolygonsToBoolEng( Bool_Engine* aBooleng, GroupType aGroup );
-
-    /**
-     * Function MakeKboolPoly
-     * fill a kbool engine with a closed polyline contour
-     * @return error: 0 if Ok, 1 if error
-     */
-    int MakeKboolPoly();
-
-    /**
-     * Function NormalizeWithKbool
-     * Use the Kbool Library to clip contours: if outlines are crossing, the self-crossing polygon
-     * is converted to non self-crossing polygon by adding extra points at the crossing locations
-     * and reordering corners
-     * if more than one outside contour are found, extra CPolyLines will be created
-     * because copper areas have only one outside contour
-     * Therefore, if this results in new CPolyLines, return them as std::vector pa
-     * @param aExtraPolyList: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
-     * (when after normalization, there is more than one polygon with holes)
-     * @return number of contours, or -1 if error
-     */
-    int NormalizeWithKbool( std::vector<CPolyLine*>* aExtraPolyList );
 
     // Bezier Support
     void    AppendBezier( int x1, int y1, int x2, int y2, int x3, int y3 );
@@ -277,7 +246,7 @@ private:
                                                     // and the len of eacvh segment
                                                     // for DIAGONAL_FULL, the pitch is twice this value
     int                     m_utility;              // a flag used in some calculations
-    Bool_Engine*            m_Kbool_Poly_Engine;    // polygons set in kbool engine data
+
 public:
     std::vector <CPolyPt>   m_CornersList;          // array of points for corners
     std::vector <CSegment>  m_HatchLines;           // hatch lines showing the polygon area

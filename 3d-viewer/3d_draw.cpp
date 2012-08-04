@@ -170,12 +170,8 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     if( g_Parm_3D_Visu.m_Layers < 2 )
         g_Parm_3D_Visu.m_Layers = 2;
 
-    g_Parm_3D_Visu.m_BoardScale = 2.0 / max( g_Parm_3D_Visu.m_BoardSize.x,
-                                             g_Parm_3D_Visu.m_BoardSize.y );
-
-    // @TODO: epoxy_width (board thickness) must be set by user,
-    // because all boards thickness no not match with this setup:
-    // double epoxy_width = 1.6;    // epoxy width in mm
+    g_Parm_3D_Visu.m_BoardScale = 2.0 / std::max( g_Parm_3D_Visu.m_BoardSize.x,
+                                                  g_Parm_3D_Visu.m_BoardSize.y );
 
     g_Parm_3D_Visu.m_Epoxy_Width = pcb->GetDesignSettings().GetBoardThickness()
                                    * g_Parm_3D_Visu.m_BoardScale;

@@ -285,7 +285,7 @@ if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
 if (KICAD_SCRIPTING)
-      
+
 	SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
 	add_custom_command(
@@ -325,7 +325,6 @@ if (KICAD_SCRIPTING_MODULES)
       common
       bitmaps
       polygon
-      kbool
       ${wxWidgets_LIBRARIES}
       ${OPENGL_LIBRARIES}
       ${GDI_PLUS_LIBRARIES}
@@ -418,7 +417,6 @@ target_link_libraries(pcbnew
     common
     bitmaps
     polygon
-    kbool
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
@@ -438,8 +436,8 @@ if(KICAD_SCRIPTING)
                      ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew
                      COMMENT "Fixing swig_import_helper"
-                     )                                                                                               
-                                                                                                              
+                     )
+
 
   install(FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py
           DESTINATION ${PYTHON_DEST})
@@ -450,8 +448,8 @@ if (KICAD_SCRIPTING_MODULES)
                      ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew
                      COMMENT "Fixing swig_import_helper"
-                     )                                                                                               
-                                                        
+                     )
+
 
   install(FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py
           DESTINATION ${PYTHON_DEST})
