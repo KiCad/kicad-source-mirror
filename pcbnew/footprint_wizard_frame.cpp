@@ -69,8 +69,10 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 
     EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS,
               FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
-/*    EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
-              FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )*/
+
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
+              FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
+
     EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW, 
               FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
 
@@ -271,6 +273,13 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
  */
 void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
+    wxCommandEvent fakeEvent;
+    ExportSelectedFootprint( fakeEvent );
+}
+
+void FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint( wxCommandEvent& aEvent )
+{
+
     SaveSettings();
 
     if( m_Semaphore )
@@ -284,6 +293,8 @@ void FOOTPRINT_WIZARD_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         Destroy();
     }
+
+    
 }
 
 
@@ -723,16 +734,14 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
                              HK_ZOOM_AUTO, IS_COMMENT );
         m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                                 KiBitmap( zoom_fit_in_page_xpm ), msg );
-#if 0 
         if( m_Semaphore )
         {
             // The library browser is called from a "load component" command
             m_mainToolBar->AddSeparator();
-            m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_FOOTPRINT_EXPORT_TO_BOARD,
+            m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
                                     wxEmptyString, KiBitmap( export_footprint_names_xpm ),
                                     _( "Insert footprint in board" ) );
         }
-#endif
 
         // after adding the buttons to the toolbar, must call Realize() to
         // reflect the changes

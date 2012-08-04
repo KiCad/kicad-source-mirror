@@ -72,11 +72,17 @@ public:
     
     ~FOOTPRINT_WIZARD_FRAME();
 
-    MODULE* GetBuiltFootrint( void );
+    MODULE* GetBuiltFootprint( void );
 
 private:
 
     void OnSize( wxSizeEvent& event );
+    /**
+     * Function ExportSelectedFootprint();
+     * will let the caller exit from the wait loop, and get the built footprint
+     *
+     */
+    void ExportSelectedFootprint( wxCommandEvent& aEvent );
 
     /**
      * Function OnSashDrag

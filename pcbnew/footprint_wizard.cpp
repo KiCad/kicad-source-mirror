@@ -110,6 +110,11 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     m_canvas->Refresh();
 }
 
+MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
+{
+    return m_FootprintWizard->GetModule();
+}
+
 void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 {
     DIALOG_FOOTPRINT_WIZARD_LIST *selectWizard =  
