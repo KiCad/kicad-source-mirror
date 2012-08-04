@@ -262,6 +262,21 @@ public:
     int BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>* aCornerBuffer = NULL );
 
     /**
+     * Function CopyPolygonsFromKiPolygonListToFilledPolysList
+     * Copy polygons stored in aKiPolyList to m_FilledPolysList
+     * The previous m_FilledPolysList contents is replaced.
+     * @param aKiPolyList = a KI_POLYGON_SET containing polygons.
+     */
+    void CopyPolygonsFromKiPolygonListToFilledPolysList( KI_POLYGON_SET& aKiPolyList );
+
+    /**
+     * Function CopyPolygonsFromFilledPolysListToKiPolygonList
+     * Copy polygons from m_FilledPolysList to aKiPolyList
+     * @param aKiPolyList = a KI_POLYGON_SET to fill by polygons.
+     */
+    void  CopyPolygonsFromFilledPolysListToKiPolygonList( KI_POLYGON_SET& aKiPolyList );
+
+    /**
      * Function AddClearanceAreasPolygonsToPolysList
      * Add non copper areas polygons (pads and tracks with clearance)
      * to a filled copper area
