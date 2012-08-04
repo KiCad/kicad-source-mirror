@@ -293,14 +293,26 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-        MODULE* module = NULL;
         
-        FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME(this,NULL);
+        wxSemaphore semaphore( 0, 1 );
+        FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME( this, &semaphore );
         wizard->Show( true );
         wizard->Zoom_Automatique( false );
         
+        while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
+        {
+            wxYield();
+            wxMilliSleep( 50 );
+        }
+
+        MODULE* module = wizard->GetBuiltFootprint();
+        
         if( module )        // i.e. if create module command not aborted
         {
+            /* Here we should make a copy of the object before adding to board*/
+            module->SetParent( (EDA_ITEM*)GetBoard() );
+            GetBoard()->m_Modules.Append( module );
+
             // Initialize data relative to nets and netclasses (for a new
             // module the defaults are used)
             // This is mandatory to handle and draw pads
@@ -310,9 +322,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( GetBoard()->m_Modules )
                 GetBoard()->m_Modules->ClearFlags();
-
-            Zoom_Automatique( false );
+    
+   
         }
+
+        wizard->Destroy();
         break;
     }
 
