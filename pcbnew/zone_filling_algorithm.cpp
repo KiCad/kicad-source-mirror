@@ -95,14 +95,35 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>
     else
         ConvertPolysListWithHolesToOnePolygon( m_smoothedPoly->m_CornersList,
                                                m_FilledPolysList );
+
     /* For copper layers, we now must add holes in the Polygon list.
      * holes are pads and tracks with their clearance area
+     * for non copper layers just recalculate the m_FilledPolysList
+     * with m_ZoneMinThickness taken in account
      */
     if( ! aCornerBuffer )
     {
         if( IsOnCopperLayer() )
             AddClearanceAreasPolygonsToPolysList( aPcb );
+        else
+        {
+            // This KI_POLYGON_SET is the area(s) to fill, with m_ZoneMinThickness/2
+            KI_POLYGON_SET polyset_zone_solid_areas;
+            int         margin = m_ZoneMinThickness / 2;
 
+            /* First, creates the main polygon (i.e. the filled area using only one outline)
+             * to reserve a m_ZoneMinThickness/2 margin around the outlines and holes
+             * this margin is the room to redraw outlines with segments having a width set to
+             * m_ZoneMinThickness
+             * so m_ZoneMinThickness is the min thickness of the filled zones areas
+             * the polygon is stored in polyset_zone_solid_areas
+             */
+            CopyPolygonsFromFilledPolysListToKiPolygonList( polyset_zone_solid_areas );
+            polyset_zone_solid_areas -= margin;
+            // put solid area in m_FilledPolysList:
+            m_FilledPolysList.clear();
+            CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
+        }
         if ( m_FillMode )   // if fill mode uses segments, create them:
             Fill_Zone_Areas_With_Segments( );
     }
