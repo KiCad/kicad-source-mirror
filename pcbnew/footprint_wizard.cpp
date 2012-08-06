@@ -112,7 +112,14 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 
 MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 {
-    return m_FootprintWizard->GetModule();
+    if ( m_FootprintWizard )
+    {
+        return m_FootprintWizard->GetModule();
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
