@@ -174,7 +174,9 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_MODE_MODULE, PCB_EDIT_FRAME::OnSelectAutoPlaceMode )
     EVT_TOOL( ID_TOOLBARH_PCB_MODE_TRACKS, PCB_EDIT_FRAME::OnSelectAutoPlaceMode )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
-
+#ifdef KICAD_SCRIPTING_WXPYTHON        
+    EVT_TOOL( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, PCB_EDIT_FRAME::ScriptingConsoleEnableDisable )
+#endif
     // Option toolbar
     EVT_TOOL( ID_TB_OPTIONS_DRC_OFF,
                     PCB_EDIT_FRAME::OnSelectOptionToolbar )
@@ -410,11 +412,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     pythonAuiInfo.Caption( wxT( "Python Scripting" ) );
     pythonAuiInfo.MinSize( wxSize( 200, 100 ) );
     pythonAuiInfo.BestSize( wxSize( GetClientSize().x/2, 200 ) );
-
+    pythonAuiInfo.Hide();
+    
     m_pythonPanel = CreatePythonShellWindow( this );
     m_auimgr.AddPane( m_pythonPanel,
                           pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
 
+    m_pythonPanelHidden = true;
     #endif
 
 
@@ -786,6 +790,24 @@ void PCB_EDIT_FRAME::UpdateTitle()
     SetTitle( title );
 }
 
+#ifdef KICAD_SCRIPTING_WXPYTHON
+void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
+{
+    if ( m_pythonPanelHidden )
+    {
+        m_auimgr.GetPane( m_pythonPanel ).Show();
+        m_pythonPanelHidden = false;
+    }
+    else
+    {
+        m_auimgr.GetPane( m_pythonPanel ).Hide();
+        m_pythonPanelHidden = true;
+    }
+    
+    m_auimgr.Update();
+    
+}
+#endif
 
 void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
 {

@@ -554,6 +554,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Fast access to the Web Based FreeROUTE advanced router" ),
                  KiBitmap( web_support_xpm ) );
 
+#ifdef KICAD_SCRIPTING_WXPYTHON                 
+    /* Scripting */
+    AddMenuItem( toolsMenu, ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
+                 _( "&Scripting Console" ),
+                 _( "Show/Hide the Scripting console" ),
+                 KiBitmap( book_xpm ) );
+#endif
+                 
     /* Design Rules menu
      */
     wxMenu* designRulesMenu = new wxMenu;

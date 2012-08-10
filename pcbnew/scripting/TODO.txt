@@ -1,5 +1,11 @@
-* finish wizard implementation
-* cleanup
-* better build script helpers
 
+* think about documentation, how to do it
+* toolbar button and menu for scripting console
+* Action plugins: 
+	right click hooks,
+	toolbar hooks, 
+	menu hooks, 
+* IO plugins    
+* better footprint wizard (preview in footprint wizard list)
+ 
 
