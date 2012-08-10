@@ -1,14 +1,10 @@
+import pcbnew
+
 pcb = pcbnew.GetBoard()
 
-m = pcb.m_Modules.item()
-
-while m:
+for m in pcb.GetModules():
 	print m.GetReference(),"(",m.GetValue(),") at ", m.GetPosition()
-        m.SetValue("pepe")
-        p  = m.m_Pads.item()
-	while p:
+	for p in m.GetPads() 
 		print "    pad",p.GetPadName(), "at",p.GetPosition()
-		p = p.Next()
 
-	m = m.Next()		
 

@@ -300,6 +300,14 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
+    // Access to the scripting console
+#ifdef KICAD_SCRIPTING_WXPYTHON
+    m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
+                            KiBitmap( book_xpm ),
+                            _( "Show/Hide the Scripting console" ) );
+   
+    m_mainToolBar->AddSeparator();
+#endif
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 }

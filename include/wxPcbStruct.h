@@ -89,6 +89,7 @@ protected:
 #ifdef KICAD_SCRIPTING_WXPYTHON
     // Panel used to let user talk with internal scripting
     wxWindow* m_pythonPanel;
+    bool m_pythonPanelHidden;
 #endif
 
     PCB_LAYER_WIDGET* m_Layers;
@@ -1396,6 +1397,12 @@ public:
 
     // Autoplacement:
     void AutoPlace( wxCommandEvent& event );
+
+    /**
+     * Function ScriptingConsoleEnableDisable
+     * enables or disabled the scripting console
+     */
+    void ScriptingConsoleEnableDisable( wxCommandEvent& event );
 
     void OnSelectAutoPlaceMode( wxCommandEvent& aEvent );
 
