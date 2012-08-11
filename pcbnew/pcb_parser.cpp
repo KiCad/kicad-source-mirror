@@ -984,8 +984,10 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as net." ) );
 
     int number = parseInt( "net number" );
-    NeedSYMBOL();
+
+    NeedSYMBOLorNUMBER();
     wxString name = FromUTF8();
+
     NeedRIGHT();
 
     // net 0 should be already in list, so store this net
@@ -1049,7 +1051,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_add_net:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();
             nc->Add( FromUTF8() );
             break;
 
@@ -2090,7 +2092,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
         case T_net:
             pad->SetNet( parseInt( "net number" ) );
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();
             pad->SetNetname( FromUTF8() );
             NeedRIGHT();
             break;
