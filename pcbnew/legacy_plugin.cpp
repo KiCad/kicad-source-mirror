@@ -150,6 +150,52 @@ static inline unsigned ReadLine( LINE_READER* rdr, const char* caller )
 
 using namespace std;    // auto_ptr
 
+
+static inline const char* ShowVertJustify( EDA_TEXT_VJUSTIFY_T vertical )
+{
+    const char* rs;
+    switch( vertical )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:      rs = "T";   break;
+    case GR_TEXT_VJUSTIFY_CENTER:   rs = "C";   break;
+    case GR_TEXT_VJUSTIFY_BOTTOM:   rs = "B";   break;
+    default:                        rs = "?";   break;
+    }
+    return rs;
+}
+
+static inline const char* ShowHorizJustify( EDA_TEXT_HJUSTIFY_T horizontal )
+{
+    const char* rs;
+    switch( horizontal )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:     rs = "L";   break;
+    case GR_TEXT_HJUSTIFY_CENTER:   rs = "C";   break;
+    case GR_TEXT_HJUSTIFY_RIGHT:    rs = "R";   break;
+    default:                        rs = "?";   break;
+    }
+    return rs;
+}
+
+static inline EDA_TEXT_HJUSTIFY_T HorizJustify( const char* horizontal )
+{
+    if( !strcmp( "L", horizontal ) )
+        return GR_TEXT_HJUSTIFY_LEFT;
+    if( !strcmp( "R", horizontal ) )
+        return GR_TEXT_HJUSTIFY_RIGHT;
+    return GR_TEXT_HJUSTIFY_CENTER;
+}
+
+static inline EDA_TEXT_VJUSTIFY_T VertJustify( const char* vertical )
+{
+    if( !strcmp( "T", vertical ) )
+        return GR_TEXT_VJUSTIFY_TOP;
+    if( !strcmp( "B", vertical ) )
+        return GR_TEXT_VJUSTIFY_BOTTOM;
+    return GR_TEXT_VJUSTIFY_CENTER;
+}
+
+
 /**
  * Function intParse
  * parses an ASCII integer string with possible leading whitespace into
@@ -1457,10 +1503,12 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 {
     const char* data;
-    char* line = m_reader->Line();     // current (old) line
+    const char* txt_end;
+    const char* line = m_reader->Line();     // current (old) line
 
-    // sscanf( line + 1, "%d %d %d %d %d %d %d %s %s %d %s", &type, &m_Pos0.x, &m_Pos0.y, &m_Size.y, &m_Size.x,
-    //     &m_Orient, &m_Thickness,               BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
+    // sscanf( line + 1, "%d %d %d %d %d %d %d %s %s %d %s",
+    //  &type, &m_Pos0.x, &m_Pos0.y, &m_Size.y, &m_Size.x,
+    //  &m_Orient, &m_Thickness, BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
 
     // e.g. "T1 6940 -16220 350 300 900 60 M I 20 N "CFCARD"\r\n"
     // or    T1 0 500 600 400 900 80 M V 20 N"74LS245"
@@ -1481,7 +1529,15 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     // convert the "quoted, escaped, UTF8, text" to a wxString, find it by skipping
     // as far forward as needed until the first double quote.
-    ReadDelimitedText( &m_field, data );
+    txt_end = data + ReadDelimitedText( &m_field, data );
+
+#if 1 && defined(DEBUG)
+    if( m_field == wxT( "ARM_C8" ) )
+    {
+        int breakhere = 1;
+        (void) breakhere;
+    }
+#endif
 
     aText->SetText( m_field );
 
@@ -1493,29 +1549,17 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     int     layer   = tmp ? intParse( tmp ) : SILKSCREEN_N_FRONT;
     char*   italic  = strtok( NULL, delims );
 
+    char*   hjust   = strtok( (char*) txt_end, delims );
+    char*   vjust   = strtok( NULL, delims );
+
     if( type != TEXT_is_REFERENCE && type != TEXT_is_VALUE )
         type = TEXT_is_DIVERS;
 
     aText->SetType( type );
 
     aText->SetPos0( wxPoint( pos0_x, pos0_y ) );
-
-    /* @todo move to accessor?  cannot reach these defines from here
-        pcbnew.h off limit because of globals in there
-    // Test for a reasonable size:
-    if( size0_x < TEXTS_MIN_SIZE )
-        size0_x = TEXTS_MIN_SIZE;
-    if( size0_y < TEXTS_MIN_SIZE )
-        size0_y = TEXTS_MIN_SIZE;
-    */
-
     aText->SetSize( wxSize( size0_x, size0_y ) );
 
-    // Due to the Pcbnew history, .m_Orient is saved in screen value
-    // but it is handled as relative to its parent footprint
-
-    // @todo is there now an opportunity for a better way as we move to degrees and
-    // a new file format?
     orient -= ( (MODULE*) aText->GetParent() )->GetOrientation();
 
     aText->SetOrientation( orient );
@@ -1537,11 +1581,17 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     aText->SetItalic( italic && *italic == 'I' );
 
+    if( hjust )
+        aText->SetHorizJustify( HorizJustify( hjust ) );
+
+    if( vjust )
+        aText->SetVertJustify( VertJustify( vjust ) );
+
     if( layer < 0 )
         layer = 0;
-    if( layer > LAST_NO_COPPER_LAYER )
+    else if( layer > LAST_NO_COPPER_LAYER )
         layer = LAST_NO_COPPER_LAYER;
-    if( layer == LAYER_N_BACK )
+    else if( layer == LAYER_N_BACK )
         layer = SILKSCREEN_N_BACK;
     else if( layer == LAYER_N_FRONT )
         layer = SILKSCREEN_N_FRONT;
@@ -1851,29 +1901,22 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             time_t  timestamp   = hexParse( data, &data );
             char*   style       = strtok( (char*) data, delims );
             char*   hJustify    = strtok( NULL, delims );
+            char*   vJustify    = strtok( NULL, delims );
 
             pcbtxt->SetMirrored( !notMirrored );
             pcbtxt->SetTimeStamp( timestamp );
             pcbtxt->SetItalic( !strcmp( style, "Italic" ) );
 
-            EDA_TEXT_HJUSTIFY_T hj;
-
             if( hJustify )
-            {
-                switch( *hJustify )
-                {
-                default:
-                case 'C':   hj = GR_TEXT_HJUSTIFY_CENTER;     break;
-                case 'L':   hj = GR_TEXT_HJUSTIFY_LEFT;       break;
-                case 'R':   hj = GR_TEXT_HJUSTIFY_RIGHT;      break;
-                }
-            }
+                pcbtxt->SetHorizJustify( HorizJustify( hJustify ) );
             else
             {
-                hj = GR_TEXT_HJUSTIFY_CENTER;
+                // boom, somebody changed a constructor, I was relying on this:
+                wxASSERT( pcbtxt->GetHorizJustify() == GR_TEXT_HJUSTIFY_CENTER );
             }
 
-            pcbtxt->SetHorizJustify( hj );
+            if( vJustify )
+                pcbtxt->SetVertJustify( VertJustify( vJustify ) );
 
             if( layer < FIRST_COPPER_LAYER )
                 layer = FIRST_COPPER_LAYER;
@@ -3133,14 +3176,13 @@ void LEGACY_PLUGIN::saveMODULE_TEXT( const TEXTE_MODULE* me ) const
 
     wxString txt = me->GetText();
 
-    fprintf( m_fp,  "T%d %s %s %s %s %c %c %d %c %s\n",
+    fprintf( m_fp,  "T%d %s %s %s %s %c %c %d %c %s",
                     me->GetType(),
                     fmtBIUPoint( me->GetPos0() ).c_str(),   // m_Pos0.x, m_Pos0.y,
-#if 0
-                    fmtBIUSize( me->GetSize() ).c_str(),                    // m_Size.y, m_Size.x,
-#else
-                    fmtBIUPair( me->GetSize().y, me->GetSize().x ).c_str(),     // m_Size.y, m_Size.x,
-#endif
+
+                    // legacy has goofed reversed order: ( y, x )
+                    fmtBIUPair( me->GetSize().y, me->GetSize().x ).c_str(),
+
                     fmtDEG( orient ).c_str(),
                     fmtBIU( me->GetThickness() ).c_str(),   // m_Thickness,
                     me->IsMirrored() ? 'M' : 'N',
@@ -3149,6 +3191,17 @@ void LEGACY_PLUGIN::saveMODULE_TEXT( const TEXTE_MODULE* me ) const
                     me->IsItalic() ? 'I' : 'N',
                     EscapedUTF8( txt ).c_str()
                     );
+
+    if( me->GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER ||
+        me->GetVertJustify()  != GR_TEXT_VJUSTIFY_CENTER )
+    {
+        fprintf( m_fp,  " %s %s\n",
+                        ShowHorizJustify( me->GetHorizJustify() ),
+                        ShowVertJustify( me->GetVertJustify() )
+                        );
+    }
+    else
+        fprintf( m_fp, "\n" );
 
     CHECK_WRITE_ERROR();
 }
@@ -3751,22 +3804,22 @@ void LEGACY_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
                     fmtBIU( me->GetThickness() ).c_str(),
                     fmtDEG( me->GetOrientation() ).c_str() );
 
-    char hJustify;
-
-    switch( me->GetHorizJustify() )
-    {
-    default:
-    case GR_TEXT_HJUSTIFY_CENTER:   hJustify = 'C';     break;
-    case GR_TEXT_HJUSTIFY_LEFT:     hJustify = 'L';     break;
-    case GR_TEXT_HJUSTIFY_RIGHT:    hJustify = 'R';     break;
-    }
-
-    fprintf( m_fp,  "De %d %d %lX %s %c\n",
+    fprintf( m_fp,  "De %d %d %lX %s",
                     me->GetLayer(),
                     !me->IsMirrored(),
                     me->GetTimeStamp(),
-                    me->IsItalic() ? "Italic" : "Normal",
-                    hJustify );
+                    me->IsItalic() ? "Italic" : "Normal" );
+
+    if( me->GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER ||
+        me->GetVertJustify()  != GR_TEXT_VJUSTIFY_CENTER )
+    {
+        fprintf( m_fp,  " %s %s\n",
+                        ShowHorizJustify( me->GetHorizJustify() ),
+                        ShowVertJustify( me->GetVertJustify() )
+                        );
+    }
+    else
+        fprintf( m_fp, "\n" );
 
     fprintf( m_fp, "$EndTEXTPCB\n" );
 }

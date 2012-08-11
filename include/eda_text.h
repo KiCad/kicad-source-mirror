@@ -27,12 +27,13 @@
  * @brief Definition of base KiCad text object.
  */
 
-#ifndef _EDA_TEXT_H_
-#define _EDA_TEXT_H_
+#ifndef EDA_TEXT_H_
+#define EDA_TEXT_H_
 
-#include <common.h>               // wxStringSplit
-#include <gr_basic.h>             // EDA_DRAW_MODE_T
-#include <base_struct.h>          // EDA_RECT
+#include <macros.h>                 // NORMALIZE_ANGLE_POS( angle );
+#include <common.h>                 // wxStringSplit
+#include <gr_basic.h>               // EDA_DRAW_MODE_T
+#include <base_struct.h>            // EDA_RECT
 
 
 // Graphic Text justify:
@@ -49,6 +50,7 @@ enum EDA_TEXT_VJUSTIFY_T {
     GR_TEXT_VJUSTIFY_CENTER = 0,
     GR_TEXT_VJUSTIFY_BOTTOM = 1
 };
+
 
 /* Options to show solid segments (segments, texts...) */
 enum EDA_DRAW_MODE_T {
@@ -105,25 +107,29 @@ public:
      * returns text thickness.
      * @return int - text thickness.
      */
-    int GetThickness() const { return m_Thickness; };
+    int GetThickness() const            { return m_Thickness; };
 
-    void SetOrientation( double aOrientation ) { m_Orient = aOrientation; }
-    double GetOrientation() const { return m_Orient; }
+    void SetOrientation( double aOrientation )
+    {
+        NORMALIZE_ANGLE_POS( aOrientation );
+        m_Orient = aOrientation;
+    }
+    double GetOrientation() const       { return m_Orient; }
 
-    void SetItalic( bool isItalic ) { m_Italic = isItalic; }
-    bool IsItalic() const { return m_Italic; }
+    void SetItalic( bool isItalic )     { m_Italic = isItalic; }
+    bool IsItalic() const               { return m_Italic; }
 
-    void SetBold( bool aBold ) { m_Bold = aBold; }
-    bool IsBold() const { return m_Bold; }
+    void SetBold( bool aBold )          { m_Bold = aBold; }
+    bool IsBold() const                 { return m_Bold; }
 
     void SetVisible( bool aVisible )
     {
         ( aVisible ) ? m_Attributs &= ~TEXT_NO_VISIBLE : m_Attributs |= TEXT_NO_VISIBLE;
     }
-    bool IsVisible() const { return !( m_Attributs & TEXT_NO_VISIBLE ); }
+    bool IsVisible() const              { return !( m_Attributs & TEXT_NO_VISIBLE ); }
 
     void SetMirrored( bool isMirrored ) { m_Mirror = isMirrored; }
-    bool IsMirrored() const { return m_Mirror; }
+    bool IsMirrored() const             { return m_Mirror; }
 
     bool IsDefaultFormatting() const;
 
@@ -139,7 +145,7 @@ public:
      * returns text size.
      * @return wxSize - text size.
      */
-    const wxSize GetSize() const { return m_Size; };
+    const wxSize GetSize() const        { return m_Size; };
 
     /// named differently than the ones using multiple inheritance and including this class
     void SetPos( const wxPoint& aPoint ) { m_Pos = aPoint; }
@@ -260,10 +266,11 @@ public:
      */
     virtual const wxString GetText() const { return m_Text; }
 
-    EDA_TEXT_HJUSTIFY_T GetHorizJustify() const { return m_HJustify; };
-    EDA_TEXT_VJUSTIFY_T GetVertJustify() const { return m_VJustify; };
-    void SetHorizJustify( EDA_TEXT_HJUSTIFY_T aType ) { m_HJustify = aType; };
-    void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType ) { m_VJustify = aType; };
+    EDA_TEXT_HJUSTIFY_T GetHorizJustify() const         { return m_HJustify; };
+    EDA_TEXT_VJUSTIFY_T GetVertJustify() const          { return m_VJustify; };
+
+    void SetHorizJustify( EDA_TEXT_HJUSTIFY_T aType )   { m_HJustify = aType; };
+    void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType )    { m_VJustify = aType; };
 
     /**
      * Function Format
@@ -280,4 +287,4 @@ public:
 };
 
 
-#endif   //  _EDA_TEXT_H_
+#endif   //  EDA_TEXT_H_
