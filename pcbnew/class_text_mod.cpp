@@ -129,7 +129,6 @@ void TEXTE_MODULE::SetDrawCoord()
         return;
 
     double angle = module->GetOrientation();
-    NORMALIZE_ANGLE_POS( angle );
 
     RotatePoint( &m_Pos.x, &m_Pos.y, angle );
     m_Pos += module->GetPosition();
@@ -151,7 +150,6 @@ void TEXTE_MODULE::SetLocalCoord()
     m_Pos0 = m_Pos - module->m_Pos;
 
     int angle = module->m_Orient;
-    NORMALIZE_ANGLE_POS( angle );
 
     RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }

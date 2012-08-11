@@ -1688,10 +1688,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
         if( a.x && a.y )    // boost::optional
         {
             wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
-            wxPoint pos0 = pos - m->GetPosition();
-
             txt->SetPosition( pos );
-            txt->SetPos0( pos0 );
         }
 
         // Even though size and ratio are both optional, I am not seeing
@@ -1786,6 +1783,8 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
             txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
         }
     }
+
+    txt->SetLocalCoord();
 }
 
 
