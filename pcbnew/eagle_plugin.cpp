@@ -1004,29 +1004,29 @@ void ERULES::parse( CPTREE& aRules )
 {
     for( CITER it = aRules.begin();  it != aRules.end();  ++it )
     {
-        if( it->first.compare( "param" ) )
+        if( it->first != "param" )
             continue;
 
         CPTREE& attribs = it->second.get_child( "<xmlattr>" );
 
         const std::string& name = attribs.get<std::string>( "name" );
 
-        if( !name.compare( "psElongationLong" ) )
+        if( name == "psElongationLong" )
             psElongationLong = attribs.get<int>( "value" );
-        else if( !name.compare( "psElongationOffset" ) )
+        else if( name == "psElongationOffset" )
             psElongationOffset = attribs.get<int>( "value" );
-        else if( !name.compare( "rvPadTop" ) )
+        else if( name == "rvPadTop" )
             rvPadTop = attribs.get<double>( "value" );
-        else if( !name.compare( "rlMinPadTop" ) )
+        else if( name == "rlMinPadTop" )
             rlMinPadTop = parseEagle( attribs.get<std::string>( "value" ) );
-        else if( !name.compare( "rlMaxPadTop" ) )
+        else if( name == "rlMaxPadTop" )
             rlMaxPadTop = parseEagle( attribs.get<std::string>( "value" ) );
 
-        else if( !name.compare( "rvViaOuter" ) )
+        else if( name == "rvViaOuter" )
             rvViaOuter = attribs.get<double>( "value" );
-        else if( !name.compare( "rlMinViaOuter" ) )
+        else if( name == "rlMinViaOuter" )
             rlMinViaOuter = parseEagle( attribs.get<std::string>( "value" ) );
-        else if( !name.compare( "rlMaxViaOuter" ) )
+        else if( name == "rlMaxViaOuter" )
             rlMaxViaOuter = parseEagle( attribs.get<std::string>( "value" ) );
     }
 }
@@ -1260,26 +1260,30 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
     // (polygon | wire | text | circle | rectangle | frame | hole)*
     for( CITER gr = aGraphics.begin();  gr != aGraphics.end();  ++gr )
     {
-        if( !gr->first.compare( "wire" ) )
+        if( gr->first == "wire" )
         {
             m_xpath->push( "wire" );
-            EWIRE w( gr->second );
+            EWIRE   w( gr->second );
+            int     layer = kicad_layer( w.layer );
 
-            DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-            m_board->Add( dseg, ADD_APPEND );
+            if( layer != -1 )
+            {
+                DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
+                m_board->Add( dseg, ADD_APPEND );
 
-            dseg->SetTimeStamp( timeStamp( gr->second ) );
-            dseg->SetLayer( kicad_layer( w.layer ) );
-            dseg->SetStart( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
-            dseg->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
-            dseg->SetWidth( kicad( w.width ) );
+                dseg->SetTimeStamp( timeStamp( gr->second ) );
+                dseg->SetLayer( layer );
+                dseg->SetStart( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
+                dseg->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
+                dseg->SetWidth( kicad( w.width ) );
+            }
             m_xpath->pop();
         }
 
-        else if( !gr->first.compare( "text" ) )
+        else if( gr->first == "text" )
         {
 #if defined(DEBUG)
-            if( !gr->second.data().compare( "ATMEGA328" ) )
+            if( gr->second.data() == "ATMEGA328" )
             {
                 int breakhere = 1;
                 (void) breakhere;
@@ -1289,107 +1293,114 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             ETEXT   t( gr->second );
             int     layer = kicad_layer( t.layer );
 
-            TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
-            m_board->Add( pcbtxt, ADD_APPEND );
-
-            pcbtxt->SetLayer( layer );
-            pcbtxt->SetTimeStamp( timeStamp( gr->second ) );
-            pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
-            pcbtxt->SetPosition( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
-
-            pcbtxt->SetSize( kicad_fontz( t.size ) );
-
-            double  ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
-
-            pcbtxt->SetThickness( kicad( t.size * ratio / 100 ) );
-
-            int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
-
-            if( t.rot )
+            if( layer != -1 )       // supported layer
             {
-                int sign = t.rot->mirror ? -1 : 1;
-                pcbtxt->SetMirrored( t.rot->mirror );
+                TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
+                m_board->Add( pcbtxt, ADD_APPEND );
 
-                double degrees = t.rot->degrees;
+                pcbtxt->SetLayer( layer );
+                pcbtxt->SetTimeStamp( timeStamp( gr->second ) );
+                pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
+                pcbtxt->SetPosition( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
-                if( degrees == 90 || t.rot->spin )
-                    pcbtxt->SetOrientation( sign * t.rot->degrees * 10 );
+                pcbtxt->SetSize( kicad_fontz( t.size ) );
 
-                else if( degrees == 180 )
-                    align = ETEXT::TOP_RIGHT;
+                double  ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
 
-                else if( degrees == 270 )
+                pcbtxt->SetThickness( kicad( t.size * ratio / 100 ) );
+
+                int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
+
+                if( t.rot )
                 {
-                    pcbtxt->SetOrientation( sign * 90 * 10 );
-                    align = ETEXT::TOP_RIGHT;
+                    int sign = t.rot->mirror ? -1 : 1;
+                    pcbtxt->SetMirrored( t.rot->mirror );
+
+                    double degrees = t.rot->degrees;
+
+                    if( degrees == 90 || t.rot->spin )
+                        pcbtxt->SetOrientation( sign * t.rot->degrees * 10 );
+
+                    else if( degrees == 180 )
+                        align = ETEXT::TOP_RIGHT;
+
+                    else if( degrees == 270 )
+                    {
+                        pcbtxt->SetOrientation( sign * 90 * 10 );
+                        align = ETEXT::TOP_RIGHT;
+                    }
                 }
-            }
 
-            switch( align )
-            {
-            case ETEXT::CENTER:
-                // this was the default in pcbtxt's constructor
-                break;
+                switch( align )
+                {
+                case ETEXT::CENTER:
+                    // this was the default in pcbtxt's constructor
+                    break;
 
-            case ETEXT::CENTER_LEFT:
-                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-                break;
+                case ETEXT::CENTER_LEFT:
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                    break;
 
-            case ETEXT::CENTER_RIGHT:
-                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-                break;
+                case ETEXT::CENTER_RIGHT:
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                    break;
 
-            case ETEXT::TOP_CENTER:
-                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-                break;
+                case ETEXT::TOP_CENTER:
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                    break;
 
-            case ETEXT::TOP_LEFT:
-                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-                break;
+                case ETEXT::TOP_LEFT:
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                    break;
 
-            case ETEXT::TOP_RIGHT:
-                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-                break;
+                case ETEXT::TOP_RIGHT:
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                    break;
 
-            case ETEXT::BOTTOM_CENTER:
-                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-                break;
+                case ETEXT::BOTTOM_CENTER:
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                    break;
 
-            case ETEXT::BOTTOM_LEFT:
-                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-                break;
+                case ETEXT::BOTTOM_LEFT:
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                    break;
 
-            case ETEXT::BOTTOM_RIGHT:
-                pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-                pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-                break;
+                case ETEXT::BOTTOM_RIGHT:
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                    break;
+                }
             }
             m_xpath->pop();
         }
 
-        else if( !gr->first.compare( "circle" ) )
+        else if( gr->first == "circle" )
         {
             m_xpath->push( "circle" );
             ECIRCLE c( gr->second );
+            int     layer = kicad_layer( c.layer );
 
-            DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-            m_board->Add( dseg, ADD_APPEND );
+            if( layer != -1 )       // unsupported layer
+            {
+                DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
+                m_board->Add( dseg, ADD_APPEND );
 
-            dseg->SetShape( S_CIRCLE );
-            dseg->SetTimeStamp( timeStamp( gr->second ) );
-            dseg->SetLayer( kicad_layer( c.layer ) );
-            dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
-            dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
-            dseg->SetWidth( kicad( c.width ) );
+                dseg->SetShape( S_CIRCLE );
+                dseg->SetTimeStamp( timeStamp( gr->second ) );
+                dseg->SetLayer( layer );
+                dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
+                dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
+                dseg->SetWidth( kicad( c.width ) );
+            }
             m_xpath->pop();
         }
 
         // This seems to be a simplified rectangular [copper] zone, cannot find any
         // net related info on it from the DTD.
-        else if( !gr->first.compare( "rectangle" ) )
+        else if( gr->first == "rectangle" )
         {
             m_xpath->push( "rectangle" );
             ERECT   r( gr->second );
@@ -1421,7 +1432,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             m_xpath->pop();
         }
 
-        else if( !gr->first.compare( "hole" ) )
+        else if( gr->first == "hole" )
         {
             m_xpath->push( "hole" );
             EHOLE   e( gr->second );
@@ -1464,11 +1475,11 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             m_xpath->pop();
         }
 
-        else if( !gr->first.compare( "frame" ) )
+        else if( gr->first == "frame" )
         {
             // picture this
         }
-        else if( !gr->first.compare( "polygon" ) )
+        else if( gr->first == "polygon" )
         {
             // could be on a copper layer, could be on another layer.
             // copper layer would be done using netCode=0 type of ZONE_CONTAINER.
@@ -1504,7 +1515,7 @@ void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs )
                 const std::string& pack_name = package->second.get<std::string>( "<xmlattr>.name" );
 
     #if defined(DEBUG)
-                if( !pack_name.compare( "TO220H" ) )
+                if( pack_name == "TO220H" )
                 {
                     int breakhere = 1;
                     (void) breakhere;
@@ -1552,7 +1563,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
     for( CITER it = aElements.begin();  it != aElements.end();  ++it )
     {
-        if( it->first.compare( "element" ) )
+        if( it->first != "element" )
             continue;
 
         EELEMENT    e( it->second );
@@ -1562,14 +1573,6 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         EATTR*      valueAttr = 0;
 
         m_xpath->Value( e.name.c_str() );
-
-#if 1 && defined(DEBUG)
-        if( !e.value.compare( "LP2985-33DBVR" ) )
-        {
-            int breakhere = 1;
-            (void) breakhere;
-        }
-#endif
 
         std::string key = makeKey( e.library, e.package );
 
@@ -1584,7 +1587,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         }
 
 #if defined(DEBUG)
-        if( !e.name.compare( "IC3" ) )
+        if( e.name == "ARM_C8" )
         {
             int breakhere = 1;
             (void) breakhere;
@@ -1624,17 +1627,17 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         // So the logic is a bit different than in packageText() and in plain text.
         for( CITER ait = it->second.begin();  ait != it->second.end();  ++ait )
         {
-            if( ait->first.compare( "attribute" ) )
+            if( ait->first != "attribute" )
                 continue;
 
             EATTR   a( ait->second );
 
-            if( !a.name.compare( "NAME" ) )
+            if( a.name == "NAME" )
             {
                 name = a;
                 nameAttr = &name;
             }
-            else if( !a.name.compare( "VALUE" ) )
+            else if( a.name == "VALUE" )
             {
                 value = a;
                 valueAttr = &value;
@@ -1657,9 +1660,12 @@ void EAGLE_PLUGIN::orientModuleAndText( MODULE* m, const EELEMENT& e,
     {
         if( e.rot->mirror )
         {
+            double orientation = e.rot->degrees + 180.0;
+            m->SetOrientation( orientation * 10 );
             m->Flip( m->GetPosition() );
         }
-        m->SetOrientation( e.rot->degrees * 10 );
+        else
+            m->SetOrientation( e.rot->degrees * 10 );
     }
 
     orientModuleText( m, e, &m->Reference(), nameAttr );
@@ -1744,6 +1750,12 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
             txt->SetOrientation( sign * orient * 10 );
         }
 
+        else
+        {
+            orient = 90 + degrees - m->GetOrientation() / 10;
+            txt->SetOrientation( sign * orient * 10 );
+        }
+
         switch( align )
         {
         case ETEXT::TOP_RIGHT:
@@ -1765,7 +1777,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
     {
         double degrees = ( txt->GetOrientation() + m->GetOrientation() ) / 10;
 
-        // @todo there are a few more cases than theses to contend with:
+        // @todo there are a few more cases than these to contend with:
         if( (!txt->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ))
          || ( txt->IsMirrored() && ( degrees == 360 ) ) )
         {
@@ -1791,28 +1803,28 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName 
     {
         CPTREE& t = it->second;
 
-        if( it->first.compare( "wire" ) == 0 )
+        if( it->first == "wire" )
             packageWire( m.get(), t );
 
-        else if( !it->first.compare( "pad" ) )
+        else if( it->first == "pad" )
             packagePad( m.get(), t );
 
-        else if( !it->first.compare( "text" ) )
+        else if( it->first == "text" )
             packageText( m.get(), t );
 
-        else if( !it->first.compare( "rectangle" ) )
+        else if( it->first == "rectangle" )
             packageRectangle( m.get(), t );
 
-        else if( !it->first.compare( "polygon" ) )
+        else if( it->first == "polygon" )
             packagePolygon( m.get(), t );
 
-        else if( !it->first.compare( "circle" ) )
+        else if( it->first == "circle" )
             packageCircle( m.get(), t );
 
-        else if( !it->first.compare( "hole" ) )
+        else if( it->first == "hole" )
             packageHole( m.get(), t );
 
-        else if( !it->first.compare( "smd" ) )
+        else if( it->first == "smd" )
             packageSMD( m.get(), t );
     }
 
@@ -1934,9 +1946,9 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 
     TEXTE_MODULE* txt;
 
-    if( !t.text.compare( ">NAME" ) || !t.text.compare( ">name" ) )
+    if( t.text == ">NAME" || t.text == ">name" )
         txt = &aModule->Reference();
-    else if( !t.text.compare( ">VALUE" ) || !t.text.compare( ">value" ) )
+    else if( t.text == ">VALUE" || t.text == ">value" )
         txt = &aModule->Value();
     else
     {
@@ -2096,7 +2108,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 
         for( CITER vi = aTree.begin();  vi != aTree.end();  ++vi )
         {
-            if( vi->first.compare( "vertex" ) ) // skip <xmlattr> node
+            if( vi->first != "vertex" )     // skip <xmlattr> node
                 continue;
 
             EVERTEX v( vi->second );
@@ -2245,7 +2257,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
         // (contactref | polygon | wire | via)*
         for( CITER it = net->second.begin();  it != net->second.end();  ++it )
         {
-            if( !it->first.compare( "wire" ) )
+            if( it->first == "wire" )
             {
                 m_xpath->push( "wire" );
                 EWIRE   w( it->second );
@@ -2274,7 +2286,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->pop();
             }
 
-            else if( !it->first.compare( "via" ) )
+            else if( it->first == "via" )
             {
                 m_xpath->push( "via" );
                 EVIA    v( it->second );
@@ -2327,7 +2339,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->pop();
             }
 
-            else if( !it->first.compare( "contactref" ) )
+            else if( it->first == "contactref" )
             {
                 m_xpath->push( "contactref" );
                 // <contactref element="RN1" pad="7"/>
@@ -2345,7 +2357,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->pop();
             }
 
-            else if( !it->first.compare( "polygon" ) )
+            else if( it->first == "polygon" )
             {
                 m_xpath->push( "polygon" );
                 EPOLYGON p( it->second );
@@ -2367,7 +2379,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     bool first = true;
                     for( CITER vi = it->second.begin();  vi != it->second.end();  ++vi )
                     {
-                        if( vi->first.compare( "vertex" ) ) // skip <xmlattr> node
+                        if( vi->first != "vertex" )     // skip <xmlattr> node
                             continue;
 
                         EVERTEX v( vi->second );
@@ -2488,7 +2500,7 @@ int EAGLE_PLUGIN::kicad_layer( int aEagleLayer )
     int kiLayer;
 
     // eagle copper layer:
-    if( aEagleLayer >=1 && aEagleLayer <= 16 )
+    if( aEagleLayer >= 1 && aEagleLayer <= 16 )
     {
         kiLayer = LAYER_N_FRONT - ( aEagleLayer - 1 );
     }

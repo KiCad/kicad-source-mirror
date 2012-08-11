@@ -377,8 +377,8 @@ wxString BOARD::GetLayerName( int aLayerIndex, bool aTranslate ) const
 
 // Default layer names are statically initialized,
 // because we want the English name and the translation
-// The English name is stored here, and to get the tranlation
-// wxGetTranslation must be called explicitely
+// The English name is stored here, and to get the translation
+// wxGetTranslation must be called explicitly
 static const wxChar * layer_FRONT_name  = _( "Front" );
 static const wxChar * layer_INNER1_name = _( "Inner1" );
 static const wxChar * layer_INNER2_name = _( "Inner2" );

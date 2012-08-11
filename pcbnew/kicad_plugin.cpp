@@ -523,10 +523,20 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
         m_out->Print( aNestLevel, "(fp_poly (pts" );
 
         for( unsigned i = 0;  i < aModuleDrawing->GetPolyPoints().size();  ++i )
-            m_out->Print( 0, " (xy %s)",
-                          FMT_IU( aModuleDrawing->GetPolyPoints()[i] ).c_str() );
+        {
+            int nestLevel = 0;
 
-        m_out->Print( 0, ")\n" );
+            if( i && !(i%4) )   // newline every 4(pts)
+            {
+                nestLevel = aNestLevel + 1;
+                m_out->Print( 0, "\n" );
+            }
+
+            m_out->Print( nestLevel, "%s(xy %s)",
+                          nestLevel ? "" : " ",
+                          FMT_IU( aModuleDrawing->GetPolyPoints()[i] ).c_str() );
+        }
+        m_out->Print( 0, ")" );
         break;
 
     case S_CURVE:   // Bezier curve

@@ -524,9 +524,9 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_um",
                      uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
                      aPad->GetDelta().x < 0 ? 'n' : 'p',
-                     abs( IU2um( aPad->GetDelta().x )),
+                     std::abs( IU2um( aPad->GetDelta().x )),
                      aPad->GetDelta().y < 0 ? 'n' : 'p',
-                     abs( IU2um( aPad->GetDelta().y ) )
+                     std::abs( IU2um( aPad->GetDelta().y ) )
                      );
             name[ sizeof(name)-1 ] = 0;
 
