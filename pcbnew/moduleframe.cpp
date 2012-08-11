@@ -429,7 +429,16 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
     wxPoint     oldpos;
     wxPoint     pos = aPosition;
 
-    pos = GetScreen()->GetNearestGridPosition( aPosition );
+    // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
+    // for next cursor position
+    // ( shift or ctrl key down are PAN command with mouse wheel)
+    bool snapToGrid = true;
+    if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
+        snapToGrid = false;
+
+    if( snapToGrid )
+        pos = GetScreen()->GetNearestGridPosition( pos );
+
     oldpos = GetScreen()->GetCrossHairPosition();
     gridSize = GetScreen()->GetGridSize();
 
@@ -463,14 +472,14 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
         break;
     }
 
-    GetScreen()->SetCrossHairPosition( pos );
+    GetScreen()->SetCrossHairPosition( pos, snapToGrid );
 
     if( oldpos != GetScreen()->GetCrossHairPosition() )
     {
         pos = GetScreen()->GetCrossHairPosition();
-        GetScreen()->SetCrossHairPosition( oldpos );
+        GetScreen()->SetCrossHairPosition( oldpos, false );
         m_canvas->CrossHairOff( aDC );
-        GetScreen()->SetCrossHairPosition( pos );
+        GetScreen()->SetCrossHairPosition( pos, snapToGrid );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )

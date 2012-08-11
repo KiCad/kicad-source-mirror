@@ -343,7 +343,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // 3D Display
     AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
-                 _( "3&D Display" ),_( "Show board in 3D viewer" ),
+                 _( "&3D Display" ),_( "Show board in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
 
     // List Nets
@@ -372,7 +372,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Keepout areas
     AddMenuItem( placeMenu, ID_PCB_KEEPOUT_AREA_BUTT,
-                 _( "&Zone" ), _( "Add keepout areas" ), KiBitmap( add_keepout_area_xpm ) );
+                 _( "&Keepout Area" ), _( "Add keepout areas" ), KiBitmap( add_keepout_area_xpm ) );
 
     // Text
     AddMenuItem( placeMenu, ID_PCB_ADD_TEXT_BUTT,

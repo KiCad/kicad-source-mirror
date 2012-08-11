@@ -67,4 +67,11 @@ inline int Mils2iu( int mils )
 }
 #endif
 
+/// Convert mm to internal units (iu).
+inline int Millimeter2iu( double mm )
+{
+    return (int) ( mm < 0 ? mm * IU_PER_MM - 0.5 : mm * IU_PER_MM + 0.5);
+}
+
+
 #endif  // CONVERT_TO_BIU_H_
