@@ -17,7 +17,9 @@
 #include <gestfich.h>
 
 #include <3d_viewer.h>
+#include <info3d_visu.h>
 #include <trackball.h>
+#include <3d_viewer_id.h>
 
 
 // -----------------

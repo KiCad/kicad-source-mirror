@@ -47,19 +47,31 @@ class S3D_Color     /* 3D color (R, G, G) 3 floats range 0 to 1.0*/
 {
 public:
     double m_Red, m_Green, m_Blue;
+
 public: S3D_Color()
     {
         m_Red = m_Green = m_Blue = 0;
     }
 };
 
-class S3D_Vertex    /*  3D coordinate (3 float numbers: x,y,z coordinates)*/
+/*  S3D_Vertex manage a 3D coordinate (3 float numbers: x,y,z coordinates)*/
+class S3D_Vertex
 {
 public:
     double x, y, z;
 
 public:
-    S3D_Vertex();
+    S3D_Vertex()
+    {
+        x = y = z = 0.0;
+    }
+
+    S3D_Vertex( double px, double py, double pz)
+    {
+        x = px;
+        y = py;
+        z = pz;
+    }
 };
 
 class S3D_MATERIAL : public EDA_ITEM       /* openGL "material" data*/
@@ -166,26 +178,20 @@ public:
 
 
 /**
- * Class WinEDA_VertexCtrl
- * displays a vertex for editing.  A vertex is a triplet of values in INCHES, MM,
- * or without units.
- *
- * Internal_units are the internal units by inch which is  1000 for Eeschema and
- * 10000 for Pcbnew
+ * Class VERTEX_VALUE_CTRL
+ * displays a vertex for editing.  A vertex is a triplet of values
+ * Values can be scale, rotation, offset...
  */
-class WinEDA_VertexCtrl
+class VERTEX_VALUE_CTRL
 {
 private:
-    int           m_Units;
-    int           m_Internal_Unit;
     wxTextCtrl*   m_XValueCtrl, * m_YValueCtrl, * m_ZValueCtrl;
     wxStaticText* m_Text;
 
 public:
-    WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
-                       wxBoxSizer* BoxSizer, EDA_UNITS_T units, int internal_unit );
+    VERTEX_VALUE_CTRL( wxWindow* parent, const wxString& title, wxBoxSizer* BoxSizer );
 
-    ~WinEDA_VertexCtrl();
+    ~VERTEX_VALUE_CTRL();
 
     /**
      * Function GetValue

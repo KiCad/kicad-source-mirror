@@ -262,7 +262,17 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
-    wxPoint     pos = GetScreen()->GetNearestGridPosition( aPosition );
+    wxPoint     pos = aPosition;
+
+    // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
+    // for next cursor position
+    // ( shift or ctrl key down are PAN command with mouse wheel)
+    bool snapToGrid = true;
+    if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
+        snapToGrid = false;
+
+    if( snapToGrid )
+        pos = GetScreen()->GetNearestGridPosition( pos );
 
     oldpos = GetScreen()->GetCrossHairPosition();
 
@@ -299,50 +309,41 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     }
 
     // Put cursor in new position, according to the zoom keys (if any).
-    GetScreen()->SetCrossHairPosition( pos );
+    GetScreen()->SetCrossHairPosition( pos, snapToGrid );
 
     /* Put cursor on grid or a pad centre if requested. If the tool DELETE is active the
      * cursor is left off grid this is better to reach items to delete off grid,
      */
-    bool   keep_on_grid = true;
-
     if( GetToolId() == ID_PCB_DELETE_ITEM_BUTT )
-        keep_on_grid = false;
+        snapToGrid = false;
 
-    /* Cursor is left off grid if no block in progress and no moving object */
+    // Cursor is left off grid if no block in progress
     if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-        keep_on_grid = true;
+        snapToGrid = true;
 
-    EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();
+    wxPoint curs_pos = pos;
 
-    if( DrawStruct && DrawStruct->GetFlags() )
-        keep_on_grid = true;
+    wxSize grid;
+    grid.x = KiROUND( GetScreen()->GetGridSize().x );
+    grid.y = KiROUND( GetScreen()->GetGridSize().y );
 
-    if( keep_on_grid )
+    if( Magnetize( m_Pcb, this, GetToolId(), grid, curs_pos, &pos ) )
     {
-        wxPoint on_grid = GetScreen()->GetNearestGridPosition( pos );
-
-        wxSize grid;
-        grid.x = (int) GetScreen()->GetGridSize().x;
-        grid.y = (int) GetScreen()->GetGridSize().y;
-
-        if( Magnetize( m_Pcb, this, GetToolId(), grid, on_grid, &pos ) )
+        GetScreen()->SetCrossHairPosition( pos, false );
+    }
+    else
+    {
+        // If there's no intrusion and DRC is active, we pass the cursor
+        // "as is", and let ShowNewTrackWhenMovingCursor figure out what to do.
+        if( !Drc_On || !g_CurrentTrackSegment
+          || (BOARD_ITEM*)g_CurrentTrackSegment != this->GetCurItem()
+            || !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment,
+                                 GetScreen()->m_Active_Layer, GetScreen()->RefPos( true ) ) )
         {
-            GetScreen()->SetCrossHairPosition( pos, false );
-        }
-        else
-        {
-            // If there's no intrusion and DRC is active, we pass the cursor
-            // "as is", and let ShowNewTrackWhenMovingCursor figure out what to do.
-            if( !Drc_On || !g_CurrentTrackSegment
-              || (BOARD_ITEM*)g_CurrentTrackSegment != this->GetCurItem()
-                || !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment,
-                                     GetScreen()->m_Active_Layer, GetScreen()->RefPos( true ) ) )
-            {
-                GetScreen()->SetCrossHairPosition( on_grid );
-            }
+            GetScreen()->SetCrossHairPosition( curs_pos, snapToGrid );
         }
     }
+
 
     if( oldpos != GetScreen()->GetCrossHairPosition() )
     {

@@ -312,18 +312,16 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     // Initialize 3D parameters
 
     wxBoxSizer* BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Scale = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Scale:" ),
-                                        BoxSizer, UNSCALED_UNITS, 1 );
+    m_3D_Scale = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Scale:" ), BoxSizer );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     BoxSizer    = new wxBoxSizer( wxVERTICAL );
-    m_3D_Offset = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Offset:" ),
-                                         BoxSizer, UNSCALED_UNITS, 1 );
+    m_3D_Offset = new VERTEX_VALUE_CTRL( m_Panel3D, _( "Shape Offset (inch):" ), BoxSizer );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     BoxSizer = new wxBoxSizer( wxVERTICAL );
-    m_3D_Rotation = new WinEDA_VertexCtrl( m_Panel3D, _( "Shape Rotation:" ),
-                                           BoxSizer, UNSCALED_UNITS, 1 );
+    m_3D_Rotation = new VERTEX_VALUE_CTRL( m_Panel3D,
+                                           _( "Shape Rotation (degrees):" ), BoxSizer );
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     // if m_3D_ShapeNameListBox is not empty, preselect first 3D shape

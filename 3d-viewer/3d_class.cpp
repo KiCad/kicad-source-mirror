@@ -6,13 +6,6 @@
 
 #include <3d_viewer.h>
 
-
-S3D_Vertex::S3D_Vertex()
-{
-    x = y = z = 0.0;
-}
-
-
 S3D_MATERIAL::S3D_MATERIAL( S3D_MASTER* father, const wxString& name ) :
     EDA_ITEM( father, NOT_USED )
 {

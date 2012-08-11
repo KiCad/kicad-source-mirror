@@ -45,6 +45,7 @@
 #include <class_pcb_text.h>
 
 #include <3d_viewer.h>
+#include <info3d_visu.h>
 #include <trackball.h>
 
 
@@ -176,46 +177,44 @@ GLuint EDA_3D_CANVAS::DisplayCubeforTest()
 }
 
 
-Info_3D_Visu::Info_3D_Visu()
+INFO3D_VISU::INFO3D_VISU()
 {
     int ii;
 
-    m_Beginx = m_Beginy = 0.0;  /* position of mouse */
-    m_Zoom   = 1.0;             /* field of view in degrees */
+    m_Beginx = m_Beginy = 0.0;      // position of mouse
+    m_Zoom   = 1.0;
+    m_3D_Grid = 10.0;               // Grid value in mm
     trackball( m_Quat, 0.0, 0.0, 0.0, 0.0 );
 
     for( ii = 0; ii < 4; ii++ )
         m_Rot[ii] = 0.0;
 
-    m_Layers = 1;
+    m_CopperLayersCount = 2;
     m_BoardSettings  = NULL;
+
     // default all special item layers Visible
-    for (ii=0; ii< FL_LAST; ii++)
-        m_DrawFlags[ii]=true;
+    for( ii = 0; ii < FL_LAST; ii++)
+        m_DrawFlags[ii] = true;
+
+    m_DrawFlags[FL_GRID] = false;
 }
 
 
-Info_3D_Visu::~Info_3D_Visu()
+INFO3D_VISU::~INFO3D_VISU()
 {
 }
 
 
-WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
-                                      wxBoxSizer* BoxSizer,
-                                      EDA_UNITS_T units, int internal_unit )
+VERTEX_VALUE_CTRL::VERTEX_VALUE_CTRL( wxWindow* parent, const wxString& title,
+                                      wxBoxSizer* BoxSizer )
 {
     wxString      text;
     wxStaticText* msgtitle;
-
-    m_Units = units;
-    m_Internal_Unit = internal_unit;
 
     if( title.IsEmpty() )
         text = _( "Vertex " );
     else
         text = title;
-
-    text += ReturnUnitSymbol( units );
 
     msgtitle = new wxStaticText( parent, -1, text, wxDefaultPosition, wxSize( -1, -1 ), 0 );
 
@@ -267,12 +266,12 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
 }
 
 
-WinEDA_VertexCtrl::~WinEDA_VertexCtrl()
+VERTEX_VALUE_CTRL::~VERTEX_VALUE_CTRL()
 {
 }
 
 
-S3D_Vertex WinEDA_VertexCtrl::GetValue()
+S3D_Vertex VERTEX_VALUE_CTRL::GetValue()
 {
     S3D_Vertex value;
     double     dtmp;
@@ -287,7 +286,7 @@ S3D_Vertex WinEDA_VertexCtrl::GetValue()
 }
 
 
-void WinEDA_VertexCtrl::SetValue( S3D_Vertex vertex )
+void VERTEX_VALUE_CTRL::SetValue( S3D_Vertex vertex )
 {
     wxString text;
 
@@ -305,7 +304,7 @@ void WinEDA_VertexCtrl::SetValue( S3D_Vertex vertex )
 }
 
 
-void WinEDA_VertexCtrl::Enable( bool onoff )
+void VERTEX_VALUE_CTRL::Enable( bool onoff )
 {
     m_XValueCtrl->Enable( onoff );
     m_YValueCtrl->Enable( onoff );

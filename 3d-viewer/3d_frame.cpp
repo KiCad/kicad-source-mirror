@@ -1,33 +1,60 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        3d_frame.cpp
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file 3d_frame.cpp
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 
-#if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
-#endif
-
 #include <3d_viewer.h>
+#include <info3d_visu.h>
 #include <trackball.h>
 
 #include <wx/colordlg.h>
 #include <wxstruct.h>
+#include <3d_viewer_id.h>
 
-Info_3D_Visu g_Parm_3D_Visu;
+INFO3D_VISU g_Parm_3D_Visu;
 double       DataScale3D; // 3D conversion units.
 
 
 BEGIN_EVENT_TABLE( EDA_3D_FRAME, wxFrame )
     EVT_ACTIVATE( EDA_3D_FRAME::OnActivate )
+
     EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, EDA_3D_FRAME::Process_Zoom )
     EVT_TOOL_RANGE( ID_START_COMMAND_3D, ID_END_COMMAND_3D,
                     EDA_3D_FRAME::Process_Special_Functions )
     EVT_MENU( wxID_EXIT, EDA_3D_FRAME::Exit3DFrame )
     EVT_MENU( ID_MENU_SCREENCOPY_PNG, EDA_3D_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_SCREENCOPY_JPEG, EDA_3D_FRAME::Process_Special_Functions )
+
+    EVT_MENU_RANGE( ID_MENU3D_GRID, ID_MENU3D_GRID_END,
+                    EDA_3D_FRAME::On3DGridSelection )
+
     EVT_CLOSE( EDA_3D_FRAME::OnCloseWindow )
+
 END_EVENT_TABLE()
 
 
@@ -38,7 +65,6 @@ EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title, long 
     m_Canvas        = NULL;
     m_HToolBar      = NULL;
     m_VToolBar      = NULL;
-    m_InternalUnits = 10000;    // Internal units = 1/10000 inch
     m_reloadRequest = false;
 
     // Give it an icon
@@ -322,12 +348,58 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         return;
 
     default:
-        wxMessageBox( wxT( "EDA_3D_FRAME::Process_Special_Functions() error: unknown command" ) );
+        wxLogMessage( wxT( "EDA_3D_FRAME::Process_Special_Functions() error: unknown command" ) );
         return;
     }
 
     m_Canvas->Refresh( true );
     m_Canvas->DisplayStatus();
+}
+
+void EDA_3D_FRAME::On3DGridSelection( wxCommandEvent& event )
+{
+    int id = event.GetId();
+
+    for( int ii = ID_MENU3D_GRID; ii < ID_MENU3D_GRID_END; ii++ )
+    {
+        if( event.GetId() == ii )
+            continue;
+        GetMenuBar()->Check( ii, false );
+    }
+
+
+    switch( id )
+    {
+    case ID_MENU3D_GRID_NOGRID:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = false;
+        break;
+
+    case ID_MENU3D_GRID_10_MM:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = true;
+        g_Parm_3D_Visu.m_3D_Grid = 10.0;
+        break;
+
+    case ID_MENU3D_GRID_5_MM:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = true;
+        g_Parm_3D_Visu.m_3D_Grid = 5.0;
+        break;
+
+    case ID_MENU3D_GRID_2P5_MM:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = true;
+        g_Parm_3D_Visu.m_3D_Grid = 2.5;
+        break;
+
+    case ID_MENU3D_GRID_1_MM:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_GRID] = true;
+        g_Parm_3D_Visu.m_3D_Grid = 1.0;
+        break;
+
+    default:
+        wxLogMessage( wxT( "EDA_3D_FRAME::On3DGridSelection() error: unknown command" ) );
+        return;
+    }
+
+    NewDisplay();
 }
 
 
