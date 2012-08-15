@@ -177,7 +177,7 @@ static inline const char* ShowHorizJustify( EDA_TEXT_HJUSTIFY_T horizontal )
     return rs;
 }
 
-static inline EDA_TEXT_HJUSTIFY_T HorizJustify( const char* horizontal )
+static EDA_TEXT_HJUSTIFY_T horizJustify( const char* horizontal )
 {
     if( !strcmp( "L", horizontal ) )
         return GR_TEXT_HJUSTIFY_LEFT;
@@ -186,7 +186,7 @@ static inline EDA_TEXT_HJUSTIFY_T HorizJustify( const char* horizontal )
     return GR_TEXT_HJUSTIFY_CENTER;
 }
 
-static inline EDA_TEXT_VJUSTIFY_T VertJustify( const char* vertical )
+static EDA_TEXT_VJUSTIFY_T vertJustify( const char* vertical )
 {
     if( !strcmp( "T", vertical ) )
         return GR_TEXT_VJUSTIFY_TOP;
@@ -1582,10 +1582,10 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     aText->SetItalic( italic && *italic == 'I' );
 
     if( hjust )
-        aText->SetHorizJustify( HorizJustify( hjust ) );
+        aText->SetHorizJustify( horizJustify( hjust ) );
 
     if( vjust )
-        aText->SetVertJustify( VertJustify( vjust ) );
+        aText->SetVertJustify( vertJustify( vjust ) );
 
     if( layer < 0 )
         layer = 0;
@@ -1908,7 +1908,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             pcbtxt->SetItalic( !strcmp( style, "Italic" ) );
 
             if( hJustify )
-                pcbtxt->SetHorizJustify( HorizJustify( hJustify ) );
+                pcbtxt->SetHorizJustify( horizJustify( hJustify ) );
             else
             {
                 // boom, somebody changed a constructor, I was relying on this:
@@ -1916,7 +1916,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             }
 
             if( vJustify )
-                pcbtxt->SetVertJustify( VertJustify( vJustify ) );
+                pcbtxt->SetVertJustify( vertJustify( vJustify ) );
 
             if( layer < FIRST_COPPER_LAYER )
                 layer = FIRST_COPPER_LAYER;

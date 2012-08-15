@@ -62,23 +62,41 @@ public:
         return ( DIALOG_PRINT_USING_PRINTER* )wxWindow::GetParent();
     }
 
-    void OnCloseWindow( wxCloseEvent& event )
+    bool Show( bool show )      // overload
     {
-        if( !IsIconized() )
-        {
-            GetParent()->GetParent()->SetPreviewPosition( GetPosition() );
-            GetParent()->GetParent()->SetPreviewSize( GetSize() );
-        }
+        bool        ret;
 
-        wxPreviewFrame::OnCloseWindow( event );
+        // Show or hide the window.  If hiding, save current position and size.
+        // If showing, use previous position and size.
+        if( show )
+        {
+            ret = wxPreviewFrame::Show( show );
+
+            if( s_size.x != 0 && s_size.y != 0 )
+                SetSize( s_pos.x, s_pos.y, s_size.x, s_size.y, 0 );
+        }
+        else
+        {
+            // Save the dialog's position & size before hiding
+            s_size = GetSize();
+            s_pos  = GetPosition();
+
+            ret = wxPreviewFrame::Show( show );
+        }
+        return ret;
     }
 
 private:
+    static wxPoint  s_pos;
+    static wxSize   s_size;
+
     DECLARE_CLASS( SCH_PREVIEW_FRAME )
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS( SCH_PREVIEW_FRAME )
 };
 
+wxPoint SCH_PREVIEW_FRAME::s_pos;
+wxSize  SCH_PREVIEW_FRAME::s_size;
 
 IMPLEMENT_CLASS( SCH_PREVIEW_FRAME, wxPreviewFrame )
 
@@ -133,6 +151,15 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
     if ( GetSizer() )
         GetSizer()->SetSizeHints( this );
 
+#if 0
+    Does not work on a two monitor system when the 2nd monitor is not attached,
+    and when the coords were saved to disk when the playground was bigger while the
+    2nd monitor was attached.
+
+    Simply rely on the policy in class DIALOG_SHIM, which centers the dialog
+    initially during a runtime session but gives user the ability to move it in
+    that session.
+
     if( parent->GetPrintDialogPosition() == wxDefaultPosition &&
         parent->GetPrintDialogSize() == wxDefaultSize )
     {
@@ -143,11 +170,17 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
         SetPosition( parent->GetPrintDialogPosition() );
         SetSize( parent->GetPrintDialogSize() );
     }
+#else
+    // This dialog may get moved and resized in Show(), but in case this is
+    // the first time, center it for starters.
+    Center();
+#endif
 
-    SetFocus();
-
-    m_buttonPrint->SetDefault();
+    m_buttonPrint->SetDefault();    // on linux, this is inadequate to determine
+                                    // what ENTER does.  Must also SetFocus().
+    m_buttonPrint->SetFocus();
 }
+
 
 void DIALOG_PRINT_USING_PRINTER::GetPrintOptions()
 {
@@ -210,9 +243,13 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     preview->SetZoom( 100 );
 
-    SCH_PREVIEW_FRAME* frame = new SCH_PREVIEW_FRAME( preview, this, title,
-                                                      parent->GetPreviewPosition(),
-                                                      parent->GetPreviewSize() );
+    SCH_PREVIEW_FRAME* frame = new SCH_PREVIEW_FRAME( preview, this, title );
+
+    // on first invocation in this runtime session, set to 2/3 size of my parent,
+    // but will be changed in Show() if not first time as will position.
+    frame->SetSize( (2 * parent->GetSize()) / 3 );
+    frame->Center();
+
     frame->Initialize();
     frame->Show( true );
 }
