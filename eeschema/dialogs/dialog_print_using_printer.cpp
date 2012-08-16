@@ -247,7 +247,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     // on first invocation in this runtime session, set to 2/3 size of my parent,
     // but will be changed in Show() if not first time as will position.
-    frame->SetSize( (2 * parent->GetSize()) / 3 );
+    frame->SetSize( (parent->GetSize() * 2) / 3 );
     frame->Center();
 
     frame->Initialize();
