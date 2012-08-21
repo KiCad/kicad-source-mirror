@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -63,10 +63,8 @@ class ZONE_CONTAINER;
 
 #define LIB3D_PATH wxT( "packages3d" )
 
-
-class EDA_3D_CANVAS;
 class EDA_3D_FRAME;
-class S3D_Vertex;
+class S3D_VERTEX;
 class SEGVIA;
 
 
@@ -126,11 +124,37 @@ public:
 
     void   DrawGrid( double aGriSizeMM );
 
-    void   Draw3D_Track( TRACK* track );
+    /**
+     * Function Draw3D_Track
+     * @param aTrack = the aTrack to draw
+    */
+    void   Draw3D_Track( TRACK* aTrack );
+
+    /**
+     * Function Draw3D_Via
+     * draws 3D via as a cylinder and filled circles.
+     */
+    void   Draw3D_Via( SEGVIA* via );
+
+    /**
+     * Function Draw3D_DrawSegment
+     * draws a 3D segment (line, arc or circle).
+     */
+    void   Draw3D_DrawSegment( DRAWSEGMENT* segment );
+
+    /**
+     * Function Draw3D_Zone
+     * draw all solid areas in aZone
+     * @param aZone = the zone to draw
+    */
+    void Draw3D_Zone( ZONE_CONTAINER* aZone );
 
     /**
      * Function Draw3D_SolidPolygonsInZones
      * draw all solid polygons used as filled areas in a zone
+     * Function used by Draw3D_Zone
+     * Note: polygons are drawn, but not the thick polygon outlines
+     * Use Draw3D_Zone to draw aZone
      * @param aZone = the zone to draw
     */
     void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone );
@@ -142,13 +166,6 @@ public:
      * @param aZpos = the z position in 3D units
     */
     void   Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double aZpos );
-
-    /**
-     * Function Draw3D_Via
-     * draws 3D via as a cylinder and filled circles.
-     */
-    void   Draw3D_Via( SEGVIA* via );
-    void   Draw3D_DrawSegment( DRAWSEGMENT* segment );
 
     /**
      * Function Draw3D_DrawText
@@ -242,6 +259,6 @@ private:
 };
 
 void SetGLColor( int color );
-void Set_Object_Data( std::vector< S3D_Vertex >& aVertices );
+void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices );
 
 #endif  /*  __3D_VIEWER_H__ */

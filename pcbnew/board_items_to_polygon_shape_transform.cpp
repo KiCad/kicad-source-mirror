@@ -338,22 +338,8 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
     int delta = 3600 / aCircleToSegmentsCount; // rot angle in 0.1 degree
 
     // Compute the outlines of the segment, and creates a polygon
-    corner = wxPoint( 0, radius );
-    RotatePoint( &corner, -delta_angle );
-    corner += startp;
-    polypoint.x = corner.x;
-    polypoint.y = corner.y;
-    aCornerBuffer.push_back( polypoint );
-
-    corner = wxPoint( seg_len, radius );
-    RotatePoint( &corner, -delta_angle );
-    corner += startp;
-    polypoint.x = corner.x;
-    polypoint.y = corner.y;
-    aCornerBuffer.push_back( polypoint );
-
     // add right rounded end:
-    for( int ii = delta; ii < 1800; ii += delta )
+    for( int ii = 0; ii < 1800; ii += delta )
     {
         corner = wxPoint( 0, radius );
         RotatePoint( &corner, ii );
@@ -365,6 +351,7 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
         aCornerBuffer.push_back( polypoint );
     }
 
+    // Finish arc:
     corner = wxPoint( seg_len, -radius );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
@@ -372,15 +359,8 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
     polypoint.y = corner.y;
     aCornerBuffer.push_back( polypoint );
 
-    corner = wxPoint( 0, -radius );
-    RotatePoint( &corner, -delta_angle );
-    corner += startp;
-    polypoint.x = corner.x;
-    polypoint.y = corner.y;
-    aCornerBuffer.push_back( polypoint );
-
     // add left rounded end:
-    for( int ii = delta; ii < 1800; ii += delta )
+    for( int ii = 0; ii < 1800; ii += delta )
     {
         corner = wxPoint( 0, -radius );
         RotatePoint( &corner, ii );
@@ -390,6 +370,14 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
         polypoint.y = corner.y;
         aCornerBuffer.push_back( polypoint );
     }
+
+    // Finish arc:
+    corner = wxPoint( 0, radius );
+    RotatePoint( &corner, -delta_angle );
+    corner += startp;
+    polypoint.x = corner.x;
+    polypoint.y = corner.y;
+    aCornerBuffer.push_back( polypoint );
 
     aCornerBuffer.back().end_contour = true;
 }

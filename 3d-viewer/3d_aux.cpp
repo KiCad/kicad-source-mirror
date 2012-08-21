@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -29,10 +29,6 @@
 
 #include <fctsys.h>
 
-#if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
-#endif
-
 #include <common.h>
 #include <trigo.h>
 #include <wxBasePcbFrame.h>
@@ -49,7 +45,7 @@
 #include <trackball.h>
 
 
-void S3D_MASTER::Set_Object_Coords( std::vector< S3D_Vertex >& aVertices )
+void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
 {
     unsigned ii;
 
@@ -79,7 +75,7 @@ void S3D_MASTER::Set_Object_Coords( std::vector< S3D_Vertex >& aVertices )
 }
 
 
-void Set_Object_Data( std::vector< S3D_Vertex >& aVertices )
+void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices )
 {
     unsigned ii;
     GLfloat ax, ay, az, bx, by, bz, nx, ny, nz, r;
@@ -271,9 +267,9 @@ VERTEX_VALUE_CTRL::~VERTEX_VALUE_CTRL()
 }
 
 
-S3D_Vertex VERTEX_VALUE_CTRL::GetValue()
+S3D_VERTEX VERTEX_VALUE_CTRL::GetValue()
 {
-    S3D_Vertex value;
+    S3D_VERTEX value;
     double     dtmp;
 
     m_XValueCtrl->GetValue().ToDouble( &dtmp );
@@ -286,7 +282,7 @@ S3D_Vertex VERTEX_VALUE_CTRL::GetValue()
 }
 
 
-void VERTEX_VALUE_CTRL::SetValue( S3D_Vertex vertex )
+void VERTEX_VALUE_CTRL::SetValue( S3D_VERTEX vertex )
 {
     wxString text;
 

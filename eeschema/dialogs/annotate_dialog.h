@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2009 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@ public:
     DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent );
     ~DIALOG_ANNOTATE(){};
 
+private:
     /// Initialises member variables
     void InitValues();
     void OnCancelClick( wxCommandEvent& event );
@@ -56,6 +57,14 @@ public:
     bool GetResetItems( void );
     int GetSortOrder( void );
     int GetAnnotateAlgo( void );
+    bool GetAnnotateAutoCloseOpt()
+    {
+        return m_cbAutoCloseDlg->GetValue();
+    }
+    bool GetAnnotateSilentMode()
+    {
+        return m_cbUseSilentMode->GetValue();
+    }
 };
 
 #endif

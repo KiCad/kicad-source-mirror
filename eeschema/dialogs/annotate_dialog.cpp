@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
-  * Copyright (C) 1992-2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2012 jean-pierre Charras <jean-pierre.charras@ujf-grenoble.fr>
+  * Copyright (C) 1992-2012 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,8 @@
 
 #define KEY_ANNOTATE_SORT_OPTION wxT("AnnotateSortOption")
 #define KEY_ANNOTATE_ALGO_OPTION wxT("AnnotateAlgoOption")
+#define KEY_ANNOTATE_AUTOCLOSE_OPTION wxT("AnnotateAutoCloseOption")
+#define KEY_ANNOTATE_USE_SILENTMODE wxT("AnnotateSilentMode")
 
 
 DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent )
@@ -92,6 +94,14 @@ void DIALOG_ANNOTATE::InitValues()
                 m_rbStartSheetNumLarge->SetValue(1);
                 break;
         }
+
+        m_Config->Read(KEY_ANNOTATE_AUTOCLOSE_OPTION, &option, 0l);
+        if( option )
+            m_cbAutoCloseDlg->SetValue(1);
+
+        m_Config->Read(KEY_ANNOTATE_USE_SILENTMODE, &option, 0l);
+        if( option )
+            m_cbUseSilentMode->SetValue(1);
     }
 
     annotate_down_right_bitmap->SetBitmap( KiBitmap( annotate_down_right_xpm ) );
@@ -112,10 +122,19 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     {
         m_Config->Write(KEY_ANNOTATE_SORT_OPTION, GetSortOrder());
         m_Config->Write(KEY_ANNOTATE_ALGO_OPTION, GetAnnotateAlgo());
+        m_Config->Write(KEY_ANNOTATE_AUTOCLOSE_OPTION, GetAnnotateAutoCloseOpt());
+        m_Config->Write(KEY_ANNOTATE_USE_SILENTMODE, GetAnnotateSilentMode());
     }
 
+    // Display a message info in verbose mode,
+    // or if a reset of the previous annotation is asked.
+    bool promptUser = ! GetAnnotateSilentMode();
+
     if( GetResetItems() )
+    {
         message = _( "Clear and annotate all of the components " );
+        promptUser = true;
+    }
     else
         message = _( "Annotate only the unannotated components " );
 
@@ -125,10 +144,14 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
         message += _( "on the current sheet?" );
 
     message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
-    response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
 
-    if (response == wxCANCEL)
-        return;
+    if( promptUser )
+    {
+        response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
+
+        if (response == wxCANCEL)
+            return;
+    }
 
     m_Parent->AnnotateComponents( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
                                   (ANNOTATE_OPTION_T) GetAnnotateAlgo(),
@@ -136,6 +159,17 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     m_Parent->GetCanvas()->Refresh();
 
     m_btnClear->Enable();
+
+    if( GetAnnotateAutoCloseOpt() )
+    {
+        if( IsModal() )
+            EndModal( wxID_OK );
+        else
+        {
+            SetReturnCode( wxID_OK );
+            this->Show( false );
+        }
+    }
 }
 
 
