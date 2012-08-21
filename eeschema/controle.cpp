@@ -204,6 +204,10 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
         snapToGrid = false;
 
+    // Cursor is left off grid only if no block in progress
+    if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+        snapToGrid = true;
+
     if( snapToGrid )
         pos = screen->GetNearestGridPosition( pos );
 
@@ -297,6 +301,10 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     bool snapToGrid = true;
     if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
         snapToGrid = false;
+
+    // Cursor is left off grid only if no block in progress
+    if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+        snapToGrid = true;
 
     if( snapToGrid )
         pos = screen->GetNearestGridPosition( pos );

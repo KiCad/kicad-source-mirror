@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Jean-Pierre Charras
  * Copyright (C) 2012 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
@@ -267,15 +267,12 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->m_Text );
     m_ValueCtrl->SetValue( m_ValueCopy->m_Text );
 
-
-#if wxCHECK_VERSION( 2, 8, 0 )
     m_AttributsCtrl->SetItemToolTip( 0,
                                     _( "Use this attribute for most non smd components" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
                                     _( "Use this attribute for smd components.\nOnly components with this option are put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 2,
                                     _( "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)" ) );
-#endif
 
     /* Controls on right side of the dialog */
     switch( m_CurrentModule->m_Attributs & 255 )
@@ -299,12 +296,12 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     m_AutoPlaceCtrl->SetSelection(
         (m_CurrentModule->m_ModuleStatus & MODULE_is_LOCKED) ? 1 : 0 );
-#if wxCHECK_VERSION( 2, 8, 0 )
+
     m_AutoPlaceCtrl->SetItemToolTip( 0,
                                     _( "Enable hotkey move commands and Auto Placement" ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1,
                                     _( "Disable hotkey move commands and Auto Placement" ) );
-#endif
+
     m_CostRot90Ctrl->SetValue( m_CurrentModule->m_CntRot90 );
 
     m_CostRot180Ctrl->SetValue( m_CurrentModule->m_CntRot180 );
@@ -349,7 +346,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Transfert3DValuesToDisplay(
     }
     else
     {
-        S3D_Vertex dummy_vertex;
+        S3D_VERTEX dummy_vertex;
         dummy_vertex.x = dummy_vertex.y = dummy_vertex.z = 1.0;
         m_3D_Scale->SetValue( dummy_vertex );
     }
@@ -474,6 +471,10 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
     }
 
     S3D_MASTER* new3DShape = new S3D_MASTER( NULL );
+#ifdef __WINDOWS__
+    // Store filename in Unix notation
+    shortfilename.Replace( wxT( "\\" ), wxT( "/" ) );
+#endif
     new3DShape->m_Shape3DName = shortfilename;
     m_Shapes3D_list.push_back( new3DShape );
     m_3D_ShapeNameListBox->Append( shortfilename );

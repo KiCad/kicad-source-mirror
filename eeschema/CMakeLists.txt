@@ -10,25 +10,7 @@ include_directories(
     ${INC_AFTER}
     )
 
-set(EESCHEMA_SRCS
-    annotate.cpp
-    backanno.cpp
-    block.cpp
-    block_libedit.cpp
-    build_BOM.cpp
-    busentry.cpp
-    bus-wire-junction.cpp
-    class_drc_erc_item.cpp
-    class_libentry.cpp
-    class_library.cpp
-    class_netlist_object.cpp
-    cmp_library_keywords.cpp
-    cmp_library_lexer.cpp
-    component_references_lister.cpp
-    controle.cpp
-    cross-probing.cpp
-    dangling_ends.cpp
-    database.cpp
+set(EESCHEMA_DLGS
     dialogs/dialog_color_config.cpp
     dialogs/dialog_plot_schematic_DXF.cpp
     dialogs/dialog_plot_schematic_DXF_base.cpp
@@ -67,6 +49,7 @@ set(EESCHEMA_SRCS
     dialogs/dialog_lib_edit_pin_base.cpp
     dialogs/dialog_lib_new_component.cpp
     dialogs/dialog_lib_new_component_base.cpp
+    dialogs/dialog_netlist_base.cpp
     dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_sch_edit_sheet_pin.cpp
@@ -77,6 +60,28 @@ set(EESCHEMA_SRCS
     dialogs/dialog_schematic_find_base.cpp
     dialogs/dialog_SVG_print.cpp
     dialogs/dialog_SVG_print_base.cpp
+    )
+
+set(EESCHEMA_SRCS
+    annotate.cpp
+    backanno.cpp
+    block.cpp
+    block_libedit.cpp
+    build_BOM.cpp
+    busentry.cpp
+    bus-wire-junction.cpp
+    class_drc_erc_item.cpp
+    class_libentry.cpp
+    class_library.cpp
+    class_netlist_object.cpp
+    cmp_library_keywords.cpp
+    cmp_library_lexer.cpp
+    component_references_lister.cpp
+    controle.cpp
+    cross-probing.cpp
+    dangling_ends.cpp
+    database.cpp
+    ${EESCHEMA_DLGS}
     edit_component_in_schematic.cpp
     edit_bitmap.cpp
     edit_label.cpp

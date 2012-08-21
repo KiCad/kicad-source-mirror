@@ -431,7 +431,7 @@ void EDA_3D_FRAME::OnActivate( wxActivateEvent& event )
  */
 void EDA_3D_FRAME::Set3DBgColor()
 {
-    S3D_Color color;
+    S3D_COLOR color;
     wxColour  newcolor, oldcolor;
 
     oldcolor.Set( KiROUND( g_Parm_3D_Visu.m_BgColor.m_Red * 255 ),

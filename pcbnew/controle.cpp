@@ -335,10 +335,10 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     {
         // If there's no intrusion and DRC is active, we pass the cursor
         // "as is", and let ShowNewTrackWhenMovingCursor figure out what to do.
-        if( !Drc_On || !g_CurrentTrackSegment
-          || (BOARD_ITEM*)g_CurrentTrackSegment != this->GetCurItem()
-            || !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment,
-                                 GetScreen()->m_Active_Layer, GetScreen()->RefPos( true ) ) )
+        if( !Drc_On || !g_CurrentTrackSegment ||
+            (BOARD_ITEM*)g_CurrentTrackSegment != this->GetCurItem() ||
+            !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment,
+                              GetScreen()->m_Active_Layer, GetScreen()->RefPos( true ) ) )
         {
             GetScreen()->SetCrossHairPosition( curs_pos, snapToGrid );
         }
@@ -350,7 +350,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         pos = GetScreen()->GetCrossHairPosition();
         GetScreen()->SetCrossHairPosition( oldpos, false );
         m_canvas->CrossHairOff( aDC );
-        GetScreen()->SetCrossHairPosition( pos, false );
+        GetScreen()->SetCrossHairPosition( pos, snapToGrid );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )
