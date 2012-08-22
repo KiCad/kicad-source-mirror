@@ -72,12 +72,14 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
     // half size of the pen used to draw/plot zones outlines
     int pen_radius = aZone->m_ZoneMinThickness / 2;
 
-    // Calculate thermal bridge half width
-    int thermbridgeWidth = aZone->m_ThermalReliefCopperBridge / 2;
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
+            // Calculate thermal bridge half width
+            int thermalBridgeWidth = aZone->GetThermalReliefCopperBridge( pad ) / 2;
+            int thermalReliefGap = aZone->GetThermalReliefGap( pad );
+
             // Rejects non-standard pads with tht-only thermal reliefs
             if( aZone->GetPadConnection( pad ) == THT_THERMAL
              && pad->GetAttribute() != PAD_STANDARD )
@@ -95,15 +97,15 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
                 continue;
 
             item_boundingbox = pad->GetBoundingBox();
-            item_boundingbox.Inflate( aZone->m_ThermalReliefGap );
+            item_boundingbox.Inflate( thermalReliefGap );
             if( !( item_boundingbox.Intersects( zone_boundingbox ) ) )
                 continue;
 
             // Thermal bridges are like a segment from a starting point inside the pad
             // to an ending point outside the pad
             wxPoint startpoint, endpoint;
-            endpoint.x = ( pad->GetSize().x / 2 ) + aZone->m_ThermalReliefGap;
-            endpoint.y = ( pad->GetSize().y / 2 ) + aZone->m_ThermalReliefGap;
+            endpoint.x = ( pad->GetSize().x / 2 ) + thermalReliefGap;
+            endpoint.y = ( pad->GetSize().y / 2 ) + thermalReliefGap;
 
             int copperThickness = aZone->GetThermalReliefCopperBridge( pad ) - aZone->m_ZoneMinThickness;
             if( copperThickness < 0 )
@@ -149,31 +151,31 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
                 switch( i )
                 {
                 case 0:       // lower stub
-                    corners_buffer.push_back( wxPoint( -thermbridgeWidth, endpoint.y ) );
-                    corners_buffer.push_back( wxPoint( +thermbridgeWidth, endpoint.y ) );
-                    corners_buffer.push_back( wxPoint( +thermbridgeWidth, startpoint.y ) );
-                    corners_buffer.push_back( wxPoint( -thermbridgeWidth, startpoint.y ) );
+                    corners_buffer.push_back( wxPoint( -thermalBridgeWidth, endpoint.y ) );
+                    corners_buffer.push_back( wxPoint( +thermalBridgeWidth, endpoint.y ) );
+                    corners_buffer.push_back( wxPoint( +thermalBridgeWidth, startpoint.y ) );
+                    corners_buffer.push_back( wxPoint( -thermalBridgeWidth, startpoint.y ) );
                     break;
 
                 case 1:       // upper stub
-                    corners_buffer.push_back( wxPoint( -thermbridgeWidth, -endpoint.y ) );
-                    corners_buffer.push_back( wxPoint( +thermbridgeWidth, -endpoint.y ) );
-                    corners_buffer.push_back( wxPoint( +thermbridgeWidth, -startpoint.y ) );
-                    corners_buffer.push_back( wxPoint( -thermbridgeWidth, -startpoint.y ) );
+                    corners_buffer.push_back( wxPoint( -thermalBridgeWidth, -endpoint.y ) );
+                    corners_buffer.push_back( wxPoint( +thermalBridgeWidth, -endpoint.y ) );
+                    corners_buffer.push_back( wxPoint( +thermalBridgeWidth, -startpoint.y ) );
+                    corners_buffer.push_back( wxPoint( -thermalBridgeWidth, -startpoint.y ) );
                     break;
 
                 case 2:       // right stub
-                    corners_buffer.push_back( wxPoint( endpoint.x, -thermbridgeWidth ) );
-                    corners_buffer.push_back( wxPoint( endpoint.x, thermbridgeWidth ) );
-                    corners_buffer.push_back( wxPoint( +startpoint.x, thermbridgeWidth ) );
-                    corners_buffer.push_back( wxPoint( +startpoint.x, -thermbridgeWidth ) );
+                    corners_buffer.push_back( wxPoint( endpoint.x, -thermalBridgeWidth ) );
+                    corners_buffer.push_back( wxPoint( endpoint.x, thermalBridgeWidth ) );
+                    corners_buffer.push_back( wxPoint( +startpoint.x, thermalBridgeWidth ) );
+                    corners_buffer.push_back( wxPoint( +startpoint.x, -thermalBridgeWidth ) );
                     break;
 
                 case 3:       // left stub
-                    corners_buffer.push_back( wxPoint( -endpoint.x, -thermbridgeWidth ) );
-                    corners_buffer.push_back( wxPoint( -endpoint.x, thermbridgeWidth ) );
-                    corners_buffer.push_back( wxPoint( -startpoint.x, thermbridgeWidth ) );
-                    corners_buffer.push_back( wxPoint( -startpoint.x, -thermbridgeWidth ) );
+                    corners_buffer.push_back( wxPoint( -endpoint.x, -thermalBridgeWidth ) );
+                    corners_buffer.push_back( wxPoint( -endpoint.x, thermalBridgeWidth ) );
+                    corners_buffer.push_back( wxPoint( -startpoint.x, thermalBridgeWidth ) );
+                    corners_buffer.push_back( wxPoint( -startpoint.x, -thermalBridgeWidth ) );
                     break;
                 }
 
