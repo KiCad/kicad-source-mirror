@@ -30,7 +30,6 @@
 #include <trigo.h>
 #include <pcbstruct.h>
 #include <drawtxt.h>
-//include <confirm.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <class_board.h>
@@ -40,9 +39,8 @@
 #include <class_zone.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
-#include <class_board_design_settings.h>
-//#include <class_marker_pcb.h>
 #include <colors_selection.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 #include <3d_viewer.h>
 #include <info3d_visu.h>
@@ -51,15 +49,21 @@
 // angle increment to draw a circle, approximated by segments
 #define ANGLE_INC(x) (3600/(x))
 
+// Thickness of copper
+// TODO: use the actual copper thickness to draw copper items with thickness
+#define COPPER_THICKNESS (int)(0.035 * IU_PER_MM)
+
 extern void CheckGLError();
 
-/* draw a segment using 3D primitives, in a XY plane
- * aStartPos = 3D position of the starting point (3D units)
- * aEndx, aEndy = 3D position of the ending point (3D units)
- * aWidth = width of the segment (3D units)
+/* draw a thick segment using 3D primitives, in a XY plane
+ * wxPoint aStart, wxPoint aEnd = YX position of ends in board units
+ * aWidth = width of segment in board units
+ * aThickness = thickness of segment in board units
+ * aZpos = z position of segment in board units
  */
-static void    Draw3D_FilledSegment( const S3D_VERTEX& aStartPos,
-                                     double aEndx, double aEndy, double aWidth );
+static void    Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
+                                    int aWidth, int aThickness, int aZpos,
+                                    double aBiuTo3DUnits );
 
 static void    Draw3D_SegmentWithHole( double startx, double starty,
                                              double endx, double endy,
@@ -116,12 +120,12 @@ static void    Draw3D_ZaxisCylinder( const S3D_VERTEX& aPos, double aRadius, dou
 
 /* draw an oblong cylinder (oblong hole) using 3D primitives.
  * the cylinder axis are parallel to the Z axis
- * aCenterPos = 3D position of the first axis cylinder
+ * aStartPos = 3D position of the first axis cylinder
  * aEndx, aEndy = 3D position of the second axis cylinder
  * aRadius = radius of the cylinder (3D units)
  * aHeight = height of the cylinder (3D units)
  */
-static void Draw3D_ZaxisOblongCylinder( const S3D_VERTEX& aCenterPos,
+static void Draw3D_ZaxisOblongCylinder( const S3D_VERTEX& aStartPos,
                                         double aEndx, double aEndy,
                                         double aRadius, double aHeight );
 
@@ -410,8 +414,7 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_CopperLayersCount - 1;
 
-    double zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
-    double width  = aZone->m_ZoneMinThickness * g_Parm_3D_Visu.m_BoardScale;
+    int zpos = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] / g_Parm_3D_Visu.m_BoardScale );
 
     SetGLColor( color );
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
@@ -428,14 +431,10 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
     {
         // segments are used to fill areas
         for( unsigned iseg = 0; iseg < aZone->m_FillSegmList.size(); iseg++ )
-        {
-            double ox = aZone->m_FillSegmList[iseg].m_Start.x * g_Parm_3D_Visu.m_BoardScale;
-            double oy = aZone->m_FillSegmList[iseg].m_Start.y * g_Parm_3D_Visu.m_BoardScale;
-            double fx = aZone->m_FillSegmList[iseg].m_End.x * g_Parm_3D_Visu.m_BoardScale;
-            double fy = aZone->m_FillSegmList[iseg].m_End.y * g_Parm_3D_Visu.m_BoardScale;
-            S3D_VERTEX pos( ox, -oy, zpos );
-            Draw3D_FilledSegment( pos, fx, -fy, width );
-        }
+            Draw3D_SolidSegment( aZone->m_FillSegmList[iseg].m_Start,
+                                 aZone->m_FillSegmList[iseg].m_End,
+                                 aZone->m_ZoneMinThickness, COPPER_THICKNESS, zpos,
+                                 g_Parm_3D_Visu.m_BoardScale );
     }
 
     // Draw copper area outlines
@@ -458,12 +457,11 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
         if( begincorner->m_utility == 0 )
         {
             // Draw only basic outlines, not extra segments
-            double ox = begincorner->x * g_Parm_3D_Visu.m_BoardScale;
-            double oy = begincorner->y * g_Parm_3D_Visu.m_BoardScale;
-            double fx = endcorner->x * g_Parm_3D_Visu.m_BoardScale;
-            double fy = endcorner->y * g_Parm_3D_Visu.m_BoardScale;
-            S3D_VERTEX pos( ox, -oy, zpos );
-            Draw3D_FilledSegment( pos, fx, -fy, width );
+            wxPoint start( begincorner->x, begincorner->y  );
+            wxPoint end( endcorner->x, endcorner->y );
+            Draw3D_SolidSegment( start, end,
+                                 aZone->m_ZoneMinThickness, COPPER_THICKNESS, zpos,
+                                 g_Parm_3D_Visu.m_BoardScale );
         }
 
         if( (endcorner->end_contour) || (ic == imax) )
@@ -472,12 +470,11 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
             if( endcorner->m_utility == 0 )
             {
                 // Draw only basic outlines, not extra segments
-                double ox = endcorner->x * g_Parm_3D_Visu.m_BoardScale;
-                double oy = endcorner->y * g_Parm_3D_Visu.m_BoardScale;
-                double fx = firstcorner->x * g_Parm_3D_Visu.m_BoardScale;
-                double fy = firstcorner->y * g_Parm_3D_Visu.m_BoardScale;
-                S3D_VERTEX pos( ox, -oy, zpos );
-                Draw3D_FilledSegment( pos, fx, -fy, width );
+                wxPoint start( endcorner->x, endcorner->y );
+                wxPoint end( firstcorner->x, firstcorner->y );
+                Draw3D_SolidSegment( start, end,
+                                     aZone->m_ZoneMinThickness, COPPER_THICKNESS, zpos,
+                                     g_Parm_3D_Visu.m_BoardScale );
             }
 
             ic++;
@@ -632,19 +629,14 @@ void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_CopperLayersCount - 1;
 
-    double zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
+    int zpos = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] / g_Parm_3D_Visu.m_BoardScale );
 
     SetGLColor( color );
     glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
 
-    double w  = aTrack->m_Width * g_Parm_3D_Visu.m_BoardScale;
-    double ox = aTrack->m_Start.x * g_Parm_3D_Visu.m_BoardScale;
-    double oy = aTrack->m_Start.y * g_Parm_3D_Visu.m_BoardScale;
-    double fx = aTrack->m_End.x * g_Parm_3D_Visu.m_BoardScale;
-    double fy = aTrack->m_End.y * g_Parm_3D_Visu.m_BoardScale;
-
-    S3D_VERTEX pos( ox, -oy, zpos );
-    Draw3D_FilledSegment( pos, fx, -fy, w );
+    Draw3D_SolidSegment( aTrack->m_Start, aTrack->m_End,
+                         aTrack->m_Width, COPPER_THICKNESS, zpos,
+                         g_Parm_3D_Visu.m_BoardScale );
 }
 
 
@@ -801,10 +793,11 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
                 break;
 
             default:
-            {
-                S3D_VERTEX pos( x, -y, zpos );
-                Draw3D_FilledSegment( pos, xf, -yf, w );
-            }
+                Draw3D_SolidSegment( segment->GetStart(), segment->GetEnd(),
+                                    segment->GetWidth(), COPPER_THICKNESS,
+                                    KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] /
+                                             g_Parm_3D_Visu.m_BoardScale ),
+                                    g_Parm_3D_Visu.m_BoardScale );
                 break;
             }
         }
@@ -833,10 +826,11 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
                 break;
 
             default:
-            {
-                S3D_VERTEX pos( x, -y, zpos );
-                Draw3D_FilledSegment( pos , xf, -yf, w );
-            }
+                Draw3D_SolidSegment( segment->GetStart(), segment->GetEnd(),
+                                    segment->GetWidth(), COPPER_THICKNESS,
+                                    KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] /
+                                             g_Parm_3D_Visu.m_BoardScale ),
+                                    g_Parm_3D_Visu.m_BoardScale );
                 break;
             }
         }
@@ -847,18 +841,14 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 // These variables are used in Draw3dTextSegm.
 // But Draw3dTextSegm is a call back function, so we cannot send them as arguments,
 // so they are static.
-static double s_Text3DWidth, s_Text3DZPos;
+int s_Text3DWidth, s_Text3DZPos;
 
 // This is a call back function, used by DrawGraphicText to draw the 3D text shape:
 static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
 {
-    double startx = x0 * g_Parm_3D_Visu.m_BoardScale;
-    double starty = y0 * g_Parm_3D_Visu.m_BoardScale;
-    double endx   = xf * g_Parm_3D_Visu.m_BoardScale;
-    double endy   = yf * g_Parm_3D_Visu.m_BoardScale;
-
-    S3D_VERTEX pos( startx, -starty, s_Text3DZPos );
-    Draw3D_FilledSegment( pos, endx, -endy, s_Text3DWidth );
+    Draw3D_SolidSegment( wxPoint( x0, y0), wxPoint( xf, yf ),
+                        s_Text3DWidth, COPPER_THICKNESS, s_Text3DZPos,
+                        g_Parm_3D_Visu.m_BoardScale );
 }
 
 
@@ -868,8 +858,8 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
     int color = g_ColorsSettings.GetLayerColor( layer );
 
     SetGLColor( color );
-    s_Text3DZPos  = g_Parm_3D_Visu.m_LayerZcoord[layer];
-    s_Text3DWidth = text->GetThickness() * g_Parm_3D_Visu.m_BoardScale;
+    s_Text3DZPos  = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] / g_Parm_3D_Visu.m_BoardScale );
+    s_Text3DWidth = text->GetThickness();
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
     wxSize size = text->m_Size;
 
@@ -993,7 +983,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
     wxString s;
     int      dx, dy;
-    double   x, y, fx, fy, w, zpos;
+    double   x, y, fx, fy, w;
 
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( m_Layer ) == false )
         return;
@@ -1016,27 +1006,26 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
         for( int layer = 0; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
         {
             glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
-            zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
+            int izpos = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] / g_Parm_3D_Visu.m_BoardScale );
 
             switch( m_Shape )
             {
             case S_SEGMENT:
-            {
-                S3D_VERTEX pos( x, -y, zpos );
-                Draw3D_FilledSegment( pos, fx, -fy, w );
-            }
+                Draw3D_SolidSegment( m_Start, m_End, m_Width,
+                                     COPPER_THICKNESS, izpos,
+                                     g_Parm_3D_Visu.m_BoardScale );
                 break;
 
             case S_CIRCLE:
             {
-                S3D_VERTEX pos( x, -y, zpos );
+                S3D_VERTEX pos( x, -y, g_Parm_3D_Visu.m_LayerZcoord[layer] );
                 Draw3D_ThickCircle( pos, hypot( x - fx, y - fy ), w);
             }
                 break;
 
             case S_ARC:
             {
-                S3D_VERTEX pos( fx, -fy, zpos );
+                S3D_VERTEX pos( fx, -fy, g_Parm_3D_Visu.m_LayerZcoord[layer] );
                 Draw3D_ArcSegment( pos, x, -y, (double) m_Angle, w );
             }
                 break;
@@ -1059,7 +1048,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                     pt += module->m_Pos;
                 }
 
-                glcanvas->Draw3D_Polygon( points, zpos );
+                glcanvas->Draw3D_Polygon( points, g_Parm_3D_Visu.m_LayerZcoord[layer] );
             }
             break;
 
@@ -1073,27 +1062,26 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     else
     {
         glNormal3f( 0.0, 0.0, (m_Layer == LAYER_N_BACK) ? -1.0 : 1.0 );
-        zpos = g_Parm_3D_Visu.m_LayerZcoord[m_Layer];
+        int izpos = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[m_Layer] / g_Parm_3D_Visu.m_BoardScale );
 
         switch( m_Shape )
         {
         case S_SEGMENT:
-        {
-            S3D_VERTEX pos( x, -y, zpos );
-            Draw3D_FilledSegment( pos, fx, -fy, w );
-        }
+                Draw3D_SolidSegment( m_Start, m_End, m_Width,
+                                     COPPER_THICKNESS, izpos,
+                                     g_Parm_3D_Visu.m_BoardScale );
             break;
 
         case S_CIRCLE:
         {
-            S3D_VERTEX pos( x, -y, zpos );
+            S3D_VERTEX pos( x, -y, g_Parm_3D_Visu.m_LayerZcoord[m_Layer] );
             Draw3D_ThickCircle( pos, hypot( x - fx, y - fy ), w );
         }
             break;
 
         case S_ARC:
         {
-            S3D_VERTEX pos( fx, -fy, zpos );
+            S3D_VERTEX pos( fx, -fy, g_Parm_3D_Visu.m_LayerZcoord[m_Layer] );
             Draw3D_ArcSegment( pos, x, -y, (double) m_Angle, w );
         }
             break;
@@ -1116,7 +1104,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                 pt += module->m_Pos;
             }
 
-            glcanvas->Draw3D_Polygon( points, zpos );
+            glcanvas->Draw3D_Polygon( points, g_Parm_3D_Visu.m_LayerZcoord[m_Layer] );
         }
         break;
 
@@ -1460,56 +1448,72 @@ static void Draw3D_ZaxisCylinder( const S3D_VERTEX& aPos, double aRadius, double
 }
 
 
-// Draw a polygon similar to a segment has rounded tips
-static void Draw3D_FilledSegment( const S3D_VERTEX& aStartPos,
-                                  double aEndx, double aEndy, double aWidth )
+/* draw a thick segment using 3D primitives, in a XY plane
+ * wxPoint aStart, wxPoint aEnd = YX position of end in board units
+ * aWidth = width of segment in board units
+ * aThickness = thickness of segment in board units
+ * aZpos = z position of segment in board units
+ */
+void Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
+                          int aWidth, int aThickness, int aZpos, double aBiuTo3DUnits )
 {
-    double dx, dy, x, y, firstx = 0, firsty = 0;
-    int    ii, angle;
-
-    // Calculate the coordinates of the segment assumed horizontal.
-    // Then turn the strips of the desired angle.
-    dx    = aEndx - aStartPos.x;
-    dy    = aEndy - aStartPos.y;
-    angle = (int) ( ( atan2( dy, dx ) * 1800 / M_PI ) + 0.5 );
-
-    RotatePoint( &dx, &dy, angle );
-    aWidth /= 2;
-
-    glBegin( GL_POLYGON );
-
-    // Trace the flare to right (1st half polygon at the end of the segment)
+    std::vector <CPolyPt> cornerBuffer;
     const int slice = 16;
-    for( ii = 0; ii <= slice/2; ii++ )
-    {
-        x = 0.0;
-        y = -aWidth;
-        RotatePoint( &x, &y, -ii * ANGLE_INC(slice) );
-        x += dx;
-        RotatePoint( &x, &y, -angle );
-        glVertex3f( aStartPos.x + x, aStartPos.y + y, aStartPos.z );
+    TransformRoundedEndsSegmentToPolygon(cornerBuffer, aStart, aEnd, slice, aWidth );
 
-        if( ii == 0 )
-        {
-            firstx = aStartPos.x + x;
-            firsty = aStartPos.y + y;
-        }
+    //Build the 3D data : upper side then lower side
+    double zupperpos = ( aZpos + (aThickness/2) ) * aBiuTo3DUnits;
+    double zlowerpos = ( aZpos - (aThickness/2) ) * aBiuTo3DUnits;
+    if( aThickness )
+        glNormal3f( 0.0, 0.0, 1.0 ); // Normale is Z axis
+
+    double zpos = zupperpos;    // start with upper side
+    for( int face = 0; face < 2; face ++ )
+    {
+        glBegin( GL_POLYGON );
+        for( unsigned ii = 0; ii < cornerBuffer.size(); ii++ )
+            glVertex3f( cornerBuffer[ii].x * aBiuTo3DUnits,
+                        - cornerBuffer[ii].y * aBiuTo3DUnits, zpos );
+
+        // Close the polygon shape
+        glVertex3f( cornerBuffer[0].x * aBiuTo3DUnits,
+                    - cornerBuffer[0].y * aBiuTo3DUnits, zpos );
+        glEnd();
+
+        if( aThickness == 0 )
+            return;
+
+        // Prepare the creation of lower side
+        glNormal3f( 0.0, 0.0, -1.0 ); // Normale now is -Z axis
+        zpos = zlowerpos;
     }
 
-    // Rounding the left (2nd half polygon is the origin of the segment)
-    for( ii = 0; ii <= slice/2; ii++ )
+    //Build the 3D data : vertical sides
+    std::vector< S3D_VERTEX > vertices;
+    vertices.resize(4);
+    for( int ii = 0; ii < slice; ii++ )
     {
-        int jj = ii * ANGLE_INC(slice);
-        x = 0.0;
-        y = aWidth;
-        RotatePoint( &x, &y, -angle - jj );
-        glVertex3f( aStartPos.x + x, aStartPos.y + y, aStartPos.z );
+        int jj = ii+1;
+        if( jj >=slice )
+            jj = 0;
+        vertices[0].x = cornerBuffer[ii].x;
+        vertices[0].y = -cornerBuffer[ii].y;
+        vertices[0].z = aZpos + (aThickness/2);
+        vertices[1].x = cornerBuffer[ii].x;
+        vertices[1].y = -cornerBuffer[ii].y;
+        vertices[1].z = aZpos - (aThickness/2);
+        vertices[2].x = cornerBuffer[jj].x;
+        vertices[2].y = -cornerBuffer[jj].y;
+        vertices[2].z = aZpos - (aThickness/2);
+        vertices[3].x = cornerBuffer[jj].x;
+        vertices[3].y = -cornerBuffer[jj].y;
+        vertices[3].z = aZpos + (aThickness/2);
+
+        Set_Object_Data( vertices );
     }
 
-    glVertex3f( firstx, firsty, aStartPos.z );
-    glEnd();
+    glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
 }
-
 
 /* Draw a polygon similar to a segment ends with round hole
  */
@@ -1646,7 +1650,7 @@ static void Draw3D_ThickCircle( const S3D_VERTEX& aCenterPos, double aRadius, do
  * draw a segment with an oblong hole.
  * Used to draw oblong holes
  */
-void Draw3D_ZaxisOblongCylinder( const S3D_VERTEX& aCenterPos,
+void Draw3D_ZaxisOblongCylinder( const S3D_VERTEX& aStartPos,
                                  double aEndx, double aEndy,
                                  double aRadius, double aHeight )
 {
@@ -1659,20 +1663,20 @@ void Draw3D_ZaxisOblongCylinder( const S3D_VERTEX& aCenterPos,
 
     DataScale3D = 1.0;    // Coordinate is already in range for Set_Object_Data();
 
-    double dx  = aEndx - aCenterPos.x;
-    double dy  = aEndy - aCenterPos.y;
+    double dx  = aEndx - aStartPos.x;
+    double dy  = aEndy - aStartPos.y;
     double angle = atan2( dy, dx ) * 1800 / M_PI;
     dx    = 0;
     dy    = aRadius;
 
     // draws the first rectangle between half cylinders
     RotatePoint( &dx, &dy, angle );
-    coords[0].x = coords[1].x = aCenterPos.x + dx;
-    coords[0].y = coords[1].y = aCenterPos.y - dy;
+    coords[0].x = coords[1].x = aStartPos.x + dx;
+    coords[0].y = coords[1].y = aStartPos.y - dy;
     coords[2].x = coords[3].x = aEndx + dx;
     coords[2].y = coords[3].y = aEndy - dy;
-    coords[0].z = coords[3].z = aCenterPos.z;
-    coords[1].z = coords[2].z = aCenterPos.z + aHeight;
+    coords[0].z = coords[3].z = aStartPos.z;
+    coords[1].z = coords[2].z = aStartPos.z + aHeight;
     Set_Object_Data( coords );
 
     // Draw the first half cylinder
@@ -1693,10 +1697,10 @@ void Draw3D_ZaxisOblongCylinder( const S3D_VERTEX& aCenterPos,
     // draws the second rectangle between half cylinders
     coords[0].x = coords[1].x = aEndx - dx;
     coords[0].y = coords[1].y = aEndy + dy;
-    coords[2].x = coords[3].x = aCenterPos.x - dx;
-    coords[2].y = coords[3].y = aCenterPos.y + dy;
-    coords[0].z = coords[3].z = aCenterPos.z;
-    coords[1].z = coords[2].z = aCenterPos.z + aHeight;
+    coords[2].x = coords[3].x = aStartPos.x - dx;
+    coords[2].y = coords[3].y = aStartPos.y + dy;
+    coords[0].z = coords[3].z = aStartPos.z;
+    coords[1].z = coords[2].z = aStartPos.z + aHeight;
     Set_Object_Data( coords );
 
     // Draw the second half cylinder
@@ -1709,8 +1713,8 @@ void Draw3D_ZaxisOblongCylinder( const S3D_VERTEX& aCenterPos,
         coords[0].y = coords[2].y;
         coords[1].x = coords[3].x;
         coords[1].y = coords[3].y;
-        coords[2].x = coords[3].x = aCenterPos.x + ddx;
-        coords[2].y = coords[3].y = aCenterPos.y + ddy;
+        coords[2].x = coords[3].x = aStartPos.x + ddx;
+        coords[2].y = coords[3].y = aStartPos.y + ddy;
         Set_Object_Data( coords );
     }
 

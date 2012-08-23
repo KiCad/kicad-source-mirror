@@ -19,75 +19,7 @@
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
 #include <class_zone.h>
-
-
-// Exported functions
-
-/**
- * Function TransformRoundedEndsSegmentToPolygon
- * convert a segment with rounded ends to a polygon
- * Convert arcs to multiple straight lines
- * @param aCornerBuffer = a buffer to store the polygon
- * @param aStart = the segment start point coordinate
- * @param aEnd = the segment end point coordinate
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
- * @param aWidth = the segment width
- */
-void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                                           wxPoint aStart, wxPoint aEnd,
-                                           int aCircleToSegmentsCount,
-                                           int aWidth );
-
-
-/**
- * Function TransformArcToPolygon
- * Creates a polygon from an Arc
- * Convert arcs to multiple straight segments
- * @param aCornerBuffer = a buffer to store the polygon
- * @param aCentre = centre of the arc or circle
- * @param aStart = start point of the arc, or a point on the circle
- * @param aArcAngle = arc angle in 0.1 degrees. For a circle, aArcAngle = 3600
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
- * @param aWidth = width (thickness) of the line
- */
-void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                            wxPoint aCentre, wxPoint aStart, int aArcAngle,
-                            int aCircleToSegmentsCount, int aWidth )
-{
-    wxPoint arc_start, arc_end;
-    int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
-
-    arc_end = arc_start = aStart;
-
-    if( aArcAngle != 3600 )
-    {
-        RotatePoint( &arc_end, aCentre, -aArcAngle );
-    }
-
-    if( aArcAngle < 0 )
-    {
-        EXCHG( arc_start, arc_end );
-        NEGATE( aArcAngle );
-    }
-
-    // Compute the ends of segments and creates poly
-    wxPoint curr_end   = arc_start;
-    wxPoint curr_start = arc_start;
-
-    for( int ii = delta; ii < aArcAngle; ii += delta )
-    {
-        curr_end = arc_start;
-        RotatePoint( &curr_end, aCentre, -ii );
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, curr_start, curr_end,
-                                              aCircleToSegmentsCount, aWidth );
-        curr_start = curr_end;
-    }
-
-    if( curr_end != arc_end )
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                              curr_end, arc_end, aCircleToSegmentsCount, aWidth );
-}
-
+#include <convert_basic_shapes_to_polygon.h>
 
 /**
  * Function TransformShapeWithClearanceToPolygon
@@ -276,29 +208,14 @@ void TRACK:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
                                                    int                      aCircleToSegmentsCount,
                                                    double                   aCorrectionFactor )
 {
-    wxPoint corner_position;
-    int     ii, angle;
-    int     dx    = (m_Width / 2) + aClearanceValue;
-    int     delta = 3600 / aCircleToSegmentsCount;           // rot angle in 0.1 degree
-
     switch( Type() )
     {
     case PCB_VIA_T:
-        dx = (int) ( dx * aCorrectionFactor );
-
-        for( ii = 0; ii < aCircleToSegmentsCount; ii++ )
-        {
-            corner_position = wxPoint( dx, 0 );
-            RotatePoint( &corner_position.x, &corner_position.y, (1800 / aCircleToSegmentsCount) );
-            angle = ii * delta;
-            RotatePoint( &corner_position.x, &corner_position.y, angle );
-            corner_position.x += m_Start.x;
-            corner_position.y += m_Start.y;
-            CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.push_back( polypoint );
-        }
-
-        aCornerBuffer.back().end_contour = true;
+    {
+        int radius = (m_Width / 2) + aClearanceValue;
+        radius = KiROUND( radius * aCorrectionFactor );
+        TransformCircleToPolygon( aCornerBuffer, m_Start, radius, aCircleToSegmentsCount );
+    }
         break;
 
     default:
@@ -308,78 +225,6 @@ void TRACK:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
                                               m_Width + ( 2 * aClearanceValue) );
         break;
     }
-}
-
-
-/* Function TransformRoundedEndsSegmentToPolygon
- */
-void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-                                           wxPoint aStart, wxPoint aEnd,
-                                           int aCircleToSegmentsCount,
-                                           int aWidth )
-{
-    int     radius = aWidth / 2;
-    wxPoint endp   = aEnd - aStart; // end point coordinate for the same segment starting at (0,0)
-    wxPoint startp = aStart;
-    wxPoint corner;
-    int     seg_len;
-    CPolyPt polypoint;
-
-    // normalize the position in order to have endp.x >= 0;
-    if( endp.x < 0 )
-    {
-        endp   = aStart - aEnd;
-        startp = aEnd;
-    }
-
-    int delta_angle = ArcTangente( endp.y, endp.x );    // delta_angle is in 0.1 degrees
-    seg_len = (int) sqrt( ( (double) endp.y * endp.y ) + ( (double) endp.x * endp.x ) );
-
-    int delta = 3600 / aCircleToSegmentsCount; // rot angle in 0.1 degree
-
-    // Compute the outlines of the segment, and creates a polygon
-    // add right rounded end:
-    for( int ii = 0; ii < 1800; ii += delta )
-    {
-        corner = wxPoint( 0, radius );
-        RotatePoint( &corner, ii );
-        corner.x += seg_len;
-        RotatePoint( &corner, -delta_angle );
-        corner += startp;
-        polypoint.x = corner.x;
-        polypoint.y = corner.y;
-        aCornerBuffer.push_back( polypoint );
-    }
-
-    // Finish arc:
-    corner = wxPoint( seg_len, -radius );
-    RotatePoint( &corner, -delta_angle );
-    corner += startp;
-    polypoint.x = corner.x;
-    polypoint.y = corner.y;
-    aCornerBuffer.push_back( polypoint );
-
-    // add left rounded end:
-    for( int ii = 0; ii < 1800; ii += delta )
-    {
-        corner = wxPoint( 0, -radius );
-        RotatePoint( &corner, ii );
-        RotatePoint( &corner, -delta_angle );
-        corner += startp;
-        polypoint.x = corner.x;
-        polypoint.y = corner.y;
-        aCornerBuffer.push_back( polypoint );
-    }
-
-    // Finish arc:
-    corner = wxPoint( 0, radius );
-    RotatePoint( &corner, -delta_angle );
-    corner += startp;
-    polypoint.x = corner.x;
-    polypoint.y = corner.y;
-    aCornerBuffer.push_back( polypoint );
-
-    aCornerBuffer.back().end_contour = true;
 }
 
 
@@ -401,7 +246,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
                                                    double                   aCorrectionFactor )
 {
     wxPoint corner_position;
-    int     ii, angle;
+    int     angle;
     int     dx = (m_Size.x / 2) + aClearanceValue;
     int     dy = (m_Size.y / 2) + aClearanceValue;
 
@@ -416,98 +261,36 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
     {
     case PAD_CIRCLE:
         dx = (int) ( dx * aCorrectionFactor );
-
-        for( ii = 0; ii < aCircleToSegmentsCount; ii++ )
-        {
-            corner_position = wxPoint( dx, 0 );
-            RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
-
-            // Half increment offset to get more space between
-            angle = ii * delta;
-            RotatePoint( &corner_position, angle );
-            corner_position += PadShapePos;
-            CPolyPt polypoint( corner_position.x, corner_position.y );
-            aCornerBuffer.push_back( polypoint );
-        }
-
-        aCornerBuffer.back().end_contour = true;
+        TransformCircleToPolygon( aCornerBuffer, PadShapePos, dx,
+                                  aCircleToSegmentsCount );
         break;
 
     case PAD_OVAL:
+        // An oval pad has the same shape as a segment with rounded ends
         angle = m_Orient;
-        if( dy > dx )   // Oval pad X/Y ratio for choosing translation axles
+        {
+        int width;
+        wxPoint shape_offset;
+        if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
         {
             dy = (int) ( dy * aCorrectionFactor );
-            int     angle_pg;                                           // Polygon angle
-            wxPoint shape_offset = wxPoint( 0, dy - dx );
-
-            RotatePoint( &shape_offset, angle );    // Rotating shape offset vector with component
-
-            for( ii = 0; ii < aCircleToSegmentsCount / 2 + 1; ii++ )    // Half circle end cap...
-            {
-                corner_position = wxPoint( dx, 0 );
-
-                // Coordinate translation +dx
-                RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
-                RotatePoint( &corner_position, angle );
-                angle_pg = ii * delta;
-                RotatePoint( &corner_position, angle_pg );
-                corner_position += PadShapePos - shape_offset;
-                CPolyPt polypoint( corner_position.x, corner_position.y );
-                aCornerBuffer.push_back( polypoint );
-            }
-
-            for( ii = 0; ii < aCircleToSegmentsCount / 2 + 1; ii++ )  // Second half circle end cap...
-            {
-                corner_position = wxPoint( -dx, 0 );
-
-                // Coordinate translation -dx
-                RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
-                RotatePoint( &corner_position, angle );
-                angle_pg = ii * delta;
-                RotatePoint( &corner_position, angle_pg );
-                corner_position += PadShapePos + shape_offset;
-                CPolyPt polypoint( corner_position.x, corner_position.y );
-                aCornerBuffer.push_back( polypoint );
-            }
-
-            aCornerBuffer.back().end_contour = true;
-            break;
+            shape_offset.y = dy - dx;
+            width = dx * 2;
         }
         else    //if( dy <= dx )
         {
             dx = (int) ( dx * aCorrectionFactor );
-            int     angle_pg;   // Polygon angle
-            wxPoint shape_offset = wxPoint( (dy - dx), 0 );
-            RotatePoint( &shape_offset, angle );
-
-            for( ii = 0; ii < aCircleToSegmentsCount / 2 + 1; ii++ )
-            {
-                corner_position = wxPoint( 0, dy );
-                RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
-                RotatePoint( &corner_position, angle );
-                angle_pg = ii * delta;
-                RotatePoint( &corner_position, angle_pg );
-                corner_position += PadShapePos - shape_offset;
-                CPolyPt polypoint( corner_position.x, corner_position.y );
-                aCornerBuffer.push_back( polypoint );
-            }
-
-            for( ii = 0; ii < aCircleToSegmentsCount / 2 + 1; ii++ )
-            {
-                corner_position = wxPoint( 0, -dy );
-                RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
-                RotatePoint( &corner_position, angle );
-                angle_pg = ii * delta;
-                RotatePoint( &corner_position, angle_pg );
-                corner_position += PadShapePos + shape_offset;
-                CPolyPt polypoint( corner_position.x, corner_position.y );
-                aCornerBuffer.push_back( polypoint );
-            }
-
-            aCornerBuffer.back().end_contour = true;
-            break;
+            shape_offset.x = dy - dx;
+            width = dy * 2;
         }
+
+        RotatePoint( &shape_offset, angle );
+        wxPoint start = PadShapePos - shape_offset;
+        wxPoint end = PadShapePos + shape_offset;
+        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, start, end,
+                                              aCircleToSegmentsCount, width );
+        }
+        break;
 
     default:
     case PAD_TRAPEZOID:
