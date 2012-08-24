@@ -35,12 +35,15 @@ void SetupServerFunction( void (*remotefct)(const char* remotecmd) )
 
 /* Function to initialize a server socket
  */
-WinEDA_Server* CreateServer( wxWindow* window, int service )
+WinEDA_Server* CreateServer( wxWindow* window, int service, bool local )
 {
     wxIPV4address addr;
 
     // Create a new server
     addr.Service( service );
+    // Listen on localhost only if requested
+    if( local )
+        addr.Hostname( HOSTNAME );
 
     server = new wxServer( addr );
 

@@ -30,7 +30,7 @@
 /* autres fonctions */
 /********************/
 
-WinEDA_Server * CreateServer( wxWindow * window, int port );
+WinEDA_Server * CreateServer( wxWindow * window, int port, bool local = true );
 bool SendCommand( int port, const char* cmdline );
 void SetupServerFunction( void (*remotefct) (const char* remotecmd) );
 
