@@ -6,19 +6,17 @@
 #include <eda_dde.h>
 #include <wxstruct.h>
 #include <id.h>
-
 #include <common.h>
 #include <macros.h>
 
-wxString HOSTNAME( wxT( "localhost" ) );
-
+static const wxString HOSTNAME( wxT( "localhost" ) );
 
 // buffer for read and write data in socket connections
 #define IPC_BUF_SIZE 4096
 
-static char      client_ipc_buffer[IPC_BUF_SIZE];
+static char client_ipc_buffer[IPC_BUF_SIZE];
 
-static wxServer* server;
+static wxSocketServer* server;
 
 void      (*RemoteFct)(const char* cmd);
 
@@ -35,17 +33,18 @@ void SetupServerFunction( void (*remotefct)(const char* remotecmd) )
 
 /* Function to initialize a server socket
  */
-WinEDA_Server* CreateServer( wxWindow* window, int service, bool local )
+wxSocketServer* CreateServer( wxWindow* window, int service, bool local )
 {
     wxIPV4address addr;
 
-    // Create a new server
+    // Set the port number
     addr.Service( service );
+
     // Listen on localhost only if requested
     if( local )
         addr.Hostname( HOSTNAME );
 
-    server = new wxServer( addr );
+    server = new wxSocketServer( addr );
 
     if( server )
     {
