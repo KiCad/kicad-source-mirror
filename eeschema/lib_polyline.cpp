@@ -412,7 +412,7 @@ void LIB_POLYLINE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 
 wxString LIB_POLYLINE::GetSelectMenuText() const
 {
-    return wxString::Format( _( "Polyline at (%s, %s) with %u points" ),
+    return wxString::Format( _( "Polyline at (%s, %s) with %zu points" ),
                              GetChars( CoordinateToString( m_PolyPoints[0].x ) ),
                              GetChars( CoordinateToString( m_PolyPoints[0].y ) ),
                              m_PolyPoints.size() );

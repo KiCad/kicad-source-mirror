@@ -568,9 +568,9 @@ void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
 {
-    PICKED_ITEMS_LIST pickList;
-    SCH_SCREEN* screen = GetScreen();
-    wxPoint pos = screen->GetCrossHairPosition();
+    PICKED_ITEMS_LIST   pickList;
+    SCH_SCREEN*         screen = GetScreen();
+    wxPoint             pos = screen->GetCrossHairPosition();
 
     if( screen->GetConnection( pos, pickList, aFullConnection ) != 0 )
     {
@@ -582,7 +582,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
 
 bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
 {
-    SCH_ITEM* item;
+    SCH_ITEM*   item;
     SCH_SCREEN* screen = GetScreen();
 
     item = LocateItem( screen->GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
@@ -609,7 +609,7 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
 static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_ITEM*   item   = screen->GetCurItem();
 
     wxCHECK_RET( (item != NULL), wxT( "Cannot move invalid schematic item." ) );
 
@@ -617,8 +617,8 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
     // Erase the current item at its current position.
     if( aErase )
         item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
 #endif
+
     item->SetPosition( screen->GetCrossHairPosition() );
 
     // Draw the item item at it's new position.
@@ -628,8 +628,8 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
 
 static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_SCREEN*     screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_ITEM*       item = screen->GetCurItem();
     SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
 
     parent->SetRepeatItem( NULL );
@@ -710,7 +710,7 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
 void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_ITEM*   item = screen->GetCurItem();
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
@@ -934,7 +934,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_ITEM*   item   = screen->GetCurItem();
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
