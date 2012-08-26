@@ -13,9 +13,11 @@ set(3D-VIEWER_SRCS
     3d_canvas.cpp
     3d_class.cpp
     3d_draw.cpp
+    3d_draw_basic_functions.cpp
     3d_frame.cpp
     3d_read_mesh.cpp
     3d_toolbar.cpp
+    info3d_visu.cpp
     trackball.cpp
     )
 

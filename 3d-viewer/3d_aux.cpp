@@ -44,6 +44,9 @@
 #include <info3d_visu.h>
 #include <trackball.h>
 
+// Exported function:
+void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
+
 
 void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
 {
@@ -75,7 +78,7 @@ void S3D_MASTER::Set_Object_Coords( std::vector< S3D_VERTEX >& aVertices )
 }
 
 
-void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices )
+void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits )
 {
     unsigned ii;
     GLfloat ax, ay, az, bx, by, bz, nx, ny, nz, r;
@@ -126,9 +129,9 @@ void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices )
     /* draw polygon/triangle/quad */
     for( ii = 0; ii < aVertices.size(); ii++ )
     {
-        glVertex3f( aVertices[ii].x * DataScale3D,
-                    aVertices[ii].y * DataScale3D,
-                    aVertices[ii].z * DataScale3D );
+        glVertex3f( aVertices[ii].x * aBiuTo3DUnits,
+                    aVertices[ii].y * aBiuTo3DUnits,
+                    aVertices[ii].z * aBiuTo3DUnits );
     }
 
     glEnd();
@@ -171,35 +174,6 @@ GLuint EDA_3D_CANVAS::DisplayCubeforTest()
 
     return gllist;
 }
-
-
-INFO3D_VISU::INFO3D_VISU()
-{
-    int ii;
-
-    m_Beginx = m_Beginy = 0.0;      // position of mouse
-    m_Zoom   = 1.0;
-    m_3D_Grid = 10.0;               // Grid value in mm
-    trackball( m_Quat, 0.0, 0.0, 0.0, 0.0 );
-
-    for( ii = 0; ii < 4; ii++ )
-        m_Rot[ii] = 0.0;
-
-    m_CopperLayersCount = 2;
-    m_BoardSettings  = NULL;
-
-    // default all special item layers Visible
-    for( ii = 0; ii < FL_LAST; ii++)
-        m_DrawFlags[ii] = true;
-
-    m_DrawFlags[FL_GRID] = false;
-}
-
-
-INFO3D_VISU::~INFO3D_VISU()
-{
-}
-
 
 VERTEX_VALUE_CTRL::VERTEX_VALUE_CTRL( wxWindow* parent, const wxString& title,
                                       wxBoxSizer* BoxSizer )

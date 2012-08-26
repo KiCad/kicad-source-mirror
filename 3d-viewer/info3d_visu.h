@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -24,7 +24,7 @@
  */
 
 /**
- * @file 3d_viewer.h
+ * @file info3d_visu.h
  */
 
 #ifndef __INFO3D_VISU_H__
@@ -32,10 +32,6 @@
 
 #include <wxBasePcbFrame.h>                     // m_auimanager member.
 #include <layers_id_colors_and_visibility.h>    // Layers id definitions
-
-#if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
-#endif
 
 #include <wx/glcanvas.h>
 
@@ -74,34 +70,74 @@ public:
         FL_AXIS=0, FL_MODULE, FL_ZONE,
         FL_COMMENTS, FL_DRAWINGS, FL_ECO1, FL_ECO2,
         FL_GRID,
+        FL_USE_COPPER_THICKNESS,
         FL_LAST
     };
 
-    double      m_Beginx, m_Beginy;     // position of mouse
-    double      m_Quat[4];              // orientation of object
-    double      m_Rot[4];               // man rotation of object
-    double      m_Zoom;                 // field of view in degrees
-    double      m_3D_Grid;              // 3D grid valmue, in mm
+    double      m_Beginx, m_Beginy;                 // position of mouse (used in drag commands)
+    double      m_Quat[4];                          // orientation of 3D view
+    double      m_Rot[4];                           // rotation parameters of 3D view
+    double      m_Zoom;                             // 3D zoom value
+    double      m_3D_Grid;                          // 3D grid valmue, in mm
     S3D_COLOR   m_BgColor;
-    bool        m_DrawFlags[FL_LAST];   // show these special items
-    wxPoint     m_BoardPos;
-    wxSize      m_BoardSize;
+    bool        m_DrawFlags[FL_LAST];               // Enable/disable flags (see DISPLAY3D_FLG list)
+    wxPoint     m_BoardPos;                         // center board actual position in board units
+    wxSize      m_BoardSize;                        // board actual size in board units
     int         m_CopperLayersCount;                // Number of copper layers actually used by the board
 
     const BOARD_DESIGN_SETTINGS* m_BoardSettings;   // Link to current board design settings
 
+    double  m_BiuTo3Dunits;                         // Normalization scale to convert board
+                                                    // internal units to 3D units
+                                                    // to scale 3D units between -1.0 and +1.0
+    double  m_LayerZcoord[LAYER_COUNT];             // Z position of each layer (normalized)
+    double  m_CurrentZpos;                          // temporary storage of current value of Z position,
+                                                    // used in some calculation
+private:
+    double  m_CopperThickness;                      // Copper thickness (normalized)
     double  m_EpoxyThickness;                       // Epoxy thickness (normalized)
     double  m_NonCopperLayerThickness;              // Non copper layers thickness
 
-    double  m_BoardScale;                           /* Normalization scale for coordinates:
-                                                     * when scaled between -1.0 and +1.0 */
-    double  m_LayerZcoord[LAYER_COUNT];             // Z position of each layer (normalized)
-    double  m_ActZpos;
 public: INFO3D_VISU();
     ~INFO3D_VISU();
+
+    /**
+     * Function InitSettings
+     * Initialize info 3D Parameters from aBoard
+     * @param aBoard: the board to display
+     */
+    void InitSettings( BOARD* aBoard );
+
+    /**
+     * function m_BiuTo3Dunits
+     * @return the Z coordinate of the layer aLayer, in Board Internal Units
+     * @param aLayer: the layer number
+     */
+    int GetLayerZcoordBIU( int aLayer )
+    {
+        return (int) (m_LayerZcoord[aLayer] / m_BiuTo3Dunits );
+    }
+
+    int GetCopperThicknessBIU() const
+    {
+        return m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
+            (int) (m_CopperThickness / m_BiuTo3Dunits )
+            : 0;
+    }
+
+    int GetEpoxyThicknessBIU() const
+    {
+        return (int) (m_EpoxyThickness / m_BiuTo3Dunits );
+    }
+
+    int GetNonCopperLayerThicknessBIU() const
+    {
+        return  m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
+            (int) (m_NonCopperLayerThickness / m_BiuTo3Dunits )
+            : 0;
+    }
 };
 
-extern INFO3D_VISU  g_Parm_3D_Visu;
-extern double       DataScale3D; // 3D scale units.
+extern INFO3D_VISU g_Parm_3D_Visu;
 
 #endif /*  __INFO3D_VISU_H__ */

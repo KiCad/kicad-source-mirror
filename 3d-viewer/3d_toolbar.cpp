@@ -169,6 +169,10 @@ void EDA_3D_FRAME::ReCreateMenuBar()
 
     if( full_options )
     {
+        item = AddMenuItem( prefsMenu, ID_MENU3D_USE_COPPER_THICKNESS,
+               _( "Show Copper Thickness" ), KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
+        item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS]);
+
         item = AddMenuItem( prefsMenu, ID_MENU3D_MODULE_ONOFF,
                _( "Show 3D F&ootprints" ), KiBitmap( shape_3d_xpm ), wxITEM_CHECK );
         item->Check(g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE]);

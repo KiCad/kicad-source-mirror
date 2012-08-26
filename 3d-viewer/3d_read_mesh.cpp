@@ -34,6 +34,10 @@
 #include <appl_wxstruct.h>
 
 #include <3d_viewer.h>
+#include <info3d_visu.h>
+
+// Imported function:
+extern void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
 
 // separator chars
 static const char* sep_chars = " \t\n\r";
@@ -400,6 +404,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
     int     err    = 1;
     std::vector< double > points;
     std::vector< double > list;
+    double vrmlunits_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
 
     while( GetLine( file, line, LineNum, 512 ) )
     {
@@ -545,7 +550,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
                         }
 
                         Set_Object_Coords( vertices );
-                        Set_Object_Data( vertices );
+                        Set_Object_Data( vertices, vrmlunits_to_3Dunits );
                         vertices.clear();
                         coordIndex.clear();
                     }

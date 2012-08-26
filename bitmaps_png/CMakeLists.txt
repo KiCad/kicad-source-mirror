@@ -485,6 +485,7 @@ set( BMAPS_MID
     unzip
     update_module_board
     up
+    use_3D_copper_thickness
     via
     via_sketch
     warning
