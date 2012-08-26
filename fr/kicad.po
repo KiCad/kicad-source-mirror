@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-21 09:11+0100\n"
-"PO-Revision-Date: 2012-08-21 09:15+0100\n"
+"POT-Creation-Date: 2012-08-26 20:12+0100\n"
+"PO-Revision-Date: 2012-08-26 20:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -1810,7 +1810,7 @@ msgstr "Afficher les références des modules"
 
 #: pcbnew/class_pcb_layer_widget.cpp:123
 msgid "Show All Copper Layers"
-msgstr "Monter Toutes les Couches Cuivre."
+msgstr "Monter Toutes les Couches Cuivre"
 
 #: pcbnew/class_pcb_layer_widget.cpp:124
 msgid "Hide All Copper Layers But Active"
@@ -6555,7 +6555,7 @@ msgstr "Toutes couches actives"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:34
 msgid "Copper Layers"
-msgstr "Couches Cuivre."
+msgstr "Couches Cuivre"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:36
 msgid "2"
@@ -7940,7 +7940,7 @@ msgstr "Pas de Vias"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:70
 msgid "No Copper Pour"
-msgstr "Pade de Zone de Cuivre"
+msgstr "Pas de Zone de Cuivre"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
 msgid "Description"
@@ -9176,8 +9176,8 @@ msgstr "la position Y du point %d de la polyligne n'est pas définie"
 
 #: eeschema/lib_polyline.cpp:415
 #, c-format
-msgid "Polyline at (%s, %s) with %u points"
-msgstr "Polyligne à (%s, %s) avec %u points"
+msgid "Polyline at (%s, %s) with %zu points"
+msgstr "Polyligne à (%s, %s) avec %zu points"
 
 #: eeschema/lib_rectangle.cpp:51
 msgid "Rectangle"
@@ -14999,54 +14999,58 @@ msgid "Show 3D &Axis"
 msgstr "Montrer &Axes 3D"
 
 #: 3d-viewer/3d_toolbar.cpp:173
+msgid "Show Copper Thickness"
+msgstr "Monter Epaisseur Cuivre"
+
+#: 3d-viewer/3d_toolbar.cpp:177
 msgid "Show 3D F&ootprints"
 msgstr "Montrer M&odules 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:177
+#: 3d-viewer/3d_toolbar.cpp:181
 msgid "Show Zone &Filling"
 msgstr "Montrer Remplissage de &Zone"
 
-#: 3d-viewer/3d_toolbar.cpp:183
+#: 3d-viewer/3d_toolbar.cpp:187
 msgid "3D Grid"
 msgstr "Grille 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:184
+#: 3d-viewer/3d_toolbar.cpp:188
 msgid "No 3D Grid"
 msgstr "Pas de Grille 3D"
 
-#: 3d-viewer/3d_toolbar.cpp:187
+#: 3d-viewer/3d_toolbar.cpp:191
 msgid "3D Grid 10 mm"
 msgstr "Grille 3D 10 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:188
+#: 3d-viewer/3d_toolbar.cpp:192
 msgid "3D Grid 5 mm"
 msgstr "Grille 3D 5 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:189
+#: 3d-viewer/3d_toolbar.cpp:193
 msgid "3D Grid 2.5 mm"
 msgstr "Grille 3D 2,5 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:190
+#: 3d-viewer/3d_toolbar.cpp:194
 msgid "3D Grid 1 mm"
 msgstr "Grille 3D 1 mm"
 
-#: 3d-viewer/3d_toolbar.cpp:193
+#: 3d-viewer/3d_toolbar.cpp:197
 msgid "Show &Comments Layer"
 msgstr "Montrer Couche &Commentaires"
 
-#: 3d-viewer/3d_toolbar.cpp:197
+#: 3d-viewer/3d_toolbar.cpp:201
 msgid "Show &Drawings Layer"
 msgstr "Montrer Couche &Dessins"
 
-#: 3d-viewer/3d_toolbar.cpp:201
+#: 3d-viewer/3d_toolbar.cpp:205
 msgid "Show Eco&1 Layer"
 msgstr "Monter Couche Eco&1"
 
-#: 3d-viewer/3d_toolbar.cpp:205
+#: 3d-viewer/3d_toolbar.cpp:209
 msgid "Show Eco&2 Layer"
 msgstr "Monter Couche Eco&2"
 
-#: 3d-viewer/3d_aux.cpp:211
+#: 3d-viewer/3d_aux.cpp:185
 msgid "Vertex "
 msgstr "Vertex "
 
@@ -15327,7 +15331,6 @@ msgid "List of Material"
 msgstr "Liste du Matériel"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:84
-#: eeschema/dialogs/dialog_lib_new_component_base.h:61
 msgid "Component Properties"
 msgstr "Propriétés du Composant"
 
