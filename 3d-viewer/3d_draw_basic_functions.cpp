@@ -39,6 +39,8 @@
 extern void Set_Object_Data( std::vector<S3D_VERTEX>& aVertices, double aBiuTo3DUnits );
 extern void CheckGLError();
 
+// Number of segments to approximate a circle by segments
+#define SEGM_PER_CIRCLE 16
 
 #ifndef CALLBACK
 #define CALLBACK
@@ -210,11 +212,11 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
                            int aHeight, int aThickness,
                            int aZpos, double aBiuTo3DUnits )
 {
-    const int slice = 12;
+    const int slice = SEGM_PER_CIRCLE;
     std::vector <CPolyPt> outer_cornerBuffer;
 
     TransformCircleToPolygon( outer_cornerBuffer, aCenterPos,
-                              aRadius + (aThickness / 2), slice );
+                              aRadius + (aThickness / 2), SEGM_PER_CIRCLE );
 
     std::vector<S3D_VERTEX> coords;
     coords.resize( 4 );
@@ -229,11 +231,11 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
         coords[2].z = coords[1].z;
         coords[3].z = coords[0].z;
 
-        for( int ii = 0; ii < slice; ii++ )
+        for( unsigned ii = 0; ii < outer_cornerBuffer.size(); ii++ )
         {
-            int jj = ii + 1;
+            unsigned jj = ii + 1;
 
-            if( jj >= slice )
+            if( jj >= outer_cornerBuffer.size() )
                 jj = 0;
 
             // Build the 4 vertices of each GL_QUAD
@@ -277,11 +279,11 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
         TransformCircleToPolygon( inner_cornerBuffer, aCenterPos,
                                   aRadius - (aThickness / 2), slice );
 
-        for( int ii = 0; ii < slice; ii++ )
+        for( unsigned ii = 0; ii < inner_cornerBuffer.size(); ii++ )
         {
-            int jj = ii + 1;
+            unsigned jj = ii + 1;
 
-            if( jj >= slice )
+            if( jj >= inner_cornerBuffer.size() )
                 jj = 0;
 
             // Build the 4 vertices of each GL_QUAD
@@ -311,7 +313,7 @@ void Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
                                  int aRadius, int aHeight, int aThickness,
                                  int aZpos, double aBiuTo3DUnits  )
 {
-    const int slice = 12;
+    const int slice = SEGM_PER_CIRCLE;
 
     // Build the points to approximate oblong cylinder by segments
     std::vector <CPolyPt> cornerBuffer;
@@ -329,11 +331,11 @@ void Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
     coords[2].z = coords[1].z;
     coords[3].z = coords[0].z;
 
-    for( int ii = 0; ii < slice; ii++ )
+    for( unsigned ii = 0; ii < cornerBuffer.size(); ii++ )
     {
-        int jj = ii + 1;
+        unsigned jj = ii + 1;
 
-        if( jj >= slice )
+        if( jj >=  cornerBuffer.size() )
             jj = 0;
 
         // Build the 4 vertices of each GL_QUAD
@@ -363,7 +365,7 @@ void Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
                           int aWidth, int aThickness, int aZpos, double aBiuTo3DUnits )
 {
     std::vector <CPolyPt>   cornerBuffer;
-    const int               slice = 16;
+    const int               slice = SEGM_PER_CIRCLE;
 
     TransformRoundedEndsSegmentToPolygon( cornerBuffer, aStart, aEnd, slice, aWidth );
 
@@ -371,49 +373,18 @@ void Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
 }
 
 
-void Draw3D_ArcSegment( const S3D_VERTEX& aCenterPos,
-                        double aStartPointX, double aStartPointY,
-                        double aArcAngle, double aWidth )
+void Draw3D_ArcSegment( const wxPoint&  aCenterPos, const wxPoint& aStartPoint,
+                        int aArcAngle, int aWidth, int aThickness,
+                        int aZpos, double aBiuTo3DUnits )
 {
-    const int   slice = 16;           // Number of segments to approximate a circle by segments
-    double      arcStart_Angle;
+    const int   slice = SEGM_PER_CIRCLE;
 
-    arcStart_Angle =
-        (atan2( aStartPointX - aCenterPos.x, aStartPointY - aCenterPos.y ) * 1800 / M_PI );
-    double  radius = hypot( aStartPointX - aCenterPos.x, aStartPointY - aCenterPos.y )
-                     + ( aWidth / 2);
-    double  hole = radius - aWidth;
+    std::vector <CPolyPt> cornerBuffer;
+    TransformArcToPolygon( cornerBuffer, aCenterPos, aStartPoint, aArcAngle,
+                            slice, aWidth );
 
-    // Calculate the number of segments to approximate this arc
-    int     imax = (int) ( (double) aArcAngle / ANGLE_INC( slice ) );
+    Draw3D_SolidHorizontalPolyPolygons( cornerBuffer, aZpos, aThickness, aBiuTo3DUnits );
 
-    if( imax < 0 )
-        imax = -imax;
-
-    if( imax == 0 )
-        imax = 1;
-
-    // Adjust delta_angle to have exactly imax segments in arc_angle
-    // i.e. arc_angle = imax delta_agnle.
-    double delta_angle = (double) aArcAngle / imax;
-
-    glBegin( GL_QUAD_STRIP );
-
-    for( int ii = 0; ii <= imax; ii++ )
-    {
-        double  angle = (double) ii * delta_angle;
-        angle += arcStart_Angle + 900;
-        double  dx  = hole;
-        double  dy  = 0.0;
-        RotatePoint( &dx, &dy, (int) angle );
-        glVertex3f( dx + aStartPointX, dy + aStartPointY, aCenterPos.z );
-        dx  = radius;
-        dy  = 0.0;
-        RotatePoint( &dx, &dy, (int) angle );
-        glVertex3f( dx + aStartPointX, dy + aStartPointY, aCenterPos.z );
-    }
-
-    glEnd();
 }
 
 
@@ -427,7 +398,7 @@ void Draw3D_ArcSegment( const S3D_VERTEX& aCenterPos,
 void Draw3D_FlatRing( wxPoint aCenterPos, int aOuterRadius,
                   int aInnerRadius, int aZpos, double aBiuTo3DUnits )
 {
-    const int   slice = 16;
+    const int   slice = SEGM_PER_CIRCLE;
     const int   rot_angle   = ANGLE_INC( slice );
     double      cposx       = aCenterPos.x * aBiuTo3DUnits;
     double      cposy       = - aCenterPos.y * aBiuTo3DUnits;
@@ -518,13 +489,11 @@ void   Draw3D_HorizontalPolygon( std::vector<wxPoint>& aCornersList, int aZpos,
     vertices[2].z   = vertices[1].z;
     vertices[3].z   = vertices[0].z;
 
-    int slice = (int) aCornersList.size();
-
-    for( int ii = 0; ii < slice; ii++ )
+    for( unsigned ii = 0; ii < aCornersList.size(); ii++ )
     {
-        int jj = ii + 1;
+        unsigned jj = ii + 1;
 
-        if( jj >=slice )
+        if( jj >=aCornersList.size() )
             jj = 0;
 
         vertices[0].x   = aCornersList[ii].x;
