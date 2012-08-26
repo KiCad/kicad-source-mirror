@@ -30,8 +30,9 @@
 #ifndef __3D_VIEWER_H__
 #define __3D_VIEWER_H__
 
-#include <wxBasePcbFrame.h>        // m_auimanager member.
+#include <wxBasePcbFrame.h>         // for m_auimanager member.
 #include <layers_id_colors_and_visibility.h>    // Layers id definitions
+#include <PolyLine.h>                // fot CPolyPt
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
@@ -150,24 +151,6 @@ public:
     void Draw3D_Zone( ZONE_CONTAINER* aZone );
 
     /**
-     * Function Draw3D_SolidPolygonsInZones
-     * draw all solid polygons used as filled areas in a zone
-     * Function used by Draw3D_Zone
-     * Note: polygons are drawn, but not the thick polygon outlines
-     * Use Draw3D_Zone to draw aZone
-     * @param aZone = the zone to draw
-    */
-    void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone );
-
-    /**
-     * Function Draw3D_Polygon
-     * draw one solid polygon
-     * @param aCornersList = a std::vector<wxPoint> list of corners, in physical coordinates
-     * @param aZpos = the z position in 3D units
-    */
-    void   Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double aZpos );
-
-    /**
      * Function Draw3D_DrawText
      * draws 3D segments to create text objects.
      * When DrawGraphicText is called to draw a text to an OpenGL DC
@@ -257,8 +240,5 @@ private:
 
     DECLARE_EVENT_TABLE()
 };
-
-void SetGLColor( int color );
-void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices );
 
 #endif  /*  __3D_VIEWER_H__ */

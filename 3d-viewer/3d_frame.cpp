@@ -37,8 +37,6 @@
 #include <3d_viewer_id.h>
 
 INFO3D_VISU g_Parm_3D_Visu;
-double       DataScale3D; // 3D conversion units.
-
 
 BEGIN_EVENT_TABLE( EDA_3D_FRAME, wxFrame )
     EVT_ACTIVATE( EDA_3D_FRAME::OnActivate )
@@ -130,6 +128,13 @@ void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
     Destroy();
 }
 
+static const wxString keyPosx( wxT( "Pos_x" ) );
+static const wxString keyPosy( wxT( "Pos_y" ) );
+static const wxString keySizex( wxT( "Size_x" ) );
+static const wxString keySizey( wxT( "Size_y" ) );
+static const wxString keyBgColor_Red( wxT( "BgColor_Red" ) );
+static const wxString keyBgColor_Green( wxT( "BgColor_Green" ) );
+static const wxString keyBgColor_Blue( wxT( "BgColor_Blue" ) );
 
 void EDA_3D_FRAME::GetSettings()
 {
@@ -138,17 +143,17 @@ void EDA_3D_FRAME::GetSettings()
 
     if( config )
     {
-        text = m_FrameName + wxT( "Pos_x" );
+        text = m_FrameName + keyPosx;
         config->Read( text, &m_FramePos.x );
-        text = m_FrameName + wxT( "Pos_y" );
+        text = m_FrameName + keyPosy;
         config->Read( text, &m_FramePos.y );
-        text = m_FrameName + wxT( "Size_x" );
+        text = m_FrameName + keySizex;
         config->Read( text, &m_FrameSize.x, 600 );
-        text = m_FrameName + wxT( "Size_y" );
+        text = m_FrameName + keySizey;
         config->Read( text, &m_FrameSize.y, 400 );
-        config->Read( wxT( "BgColor_Red" ), &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
-        config->Read( wxT( "BgColor_Green" ), &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
-        config->Read( wxT( "BgColor_Blue" ), &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
+        config->Read( keyBgColor_Red, &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
+        config->Read( keyBgColor_Green, &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
+        config->Read( keyBgColor_Blue, &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
     }
 #if defined( __WXMAC__ )
     // for macOSX, the window must be below system (macOSX) toolbar
@@ -166,9 +171,9 @@ void EDA_3D_FRAME::SaveSettings()
     if( !Config )
         return;
 
-    Config->Write( wxT( "BgColor_Red" ), g_Parm_3D_Visu.m_BgColor.m_Red );
-    Config->Write( wxT( "BgColor_Green" ), g_Parm_3D_Visu.m_BgColor.m_Green );
-    Config->Write( wxT( "BgColor_Blue" ), g_Parm_3D_Visu.m_BgColor.m_Blue );
+    Config->Write( keyBgColor_Red, g_Parm_3D_Visu.m_BgColor.m_Red );
+    Config->Write( keyBgColor_Green, g_Parm_3D_Visu.m_BgColor.m_Green );
+    Config->Write( keyBgColor_Blue, g_Parm_3D_Visu.m_BgColor.m_Blue );
 
     if( IsIconized() )
         return;
@@ -176,13 +181,13 @@ void EDA_3D_FRAME::SaveSettings()
     m_FrameSize = GetSize();
     m_FramePos  = GetPosition();
 
-    text = m_FrameName + wxT( "Pos_x" );
+    text = m_FrameName + keyPosx;
     Config->Write( text, (long) m_FramePos.x );
-    text = m_FrameName + wxT( "Pos_y" );
+    text = m_FrameName + keyPosy;
     Config->Write( text, (long) m_FramePos.y );
-    text = m_FrameName + wxT( "Size_x" );
+    text = m_FrameName + keySizex;
     Config->Write( text, (long) m_FrameSize.x );
-    text = m_FrameName + wxT( "Size_y" );
+    text = m_FrameName + keySizey;
     Config->Write( text, (long) m_FrameSize.y );
 }
 
@@ -319,6 +324,11 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU3D_MODULE_ONOFF:
         g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] = isChecked;
+        NewDisplay();
+        return;
+
+    case ID_MENU3D_USE_COPPER_THICKNESS:
+        g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_USE_COPPER_THICKNESS] = isChecked;
         NewDisplay();
         return;
 

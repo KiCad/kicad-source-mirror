@@ -306,49 +306,6 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
                                                       &g_HPGL_Pen_Descr.m_Pen_Num,
                                                       1, 1, 8 ) );
 
-/* these globals don't exist
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A4" ),
-                                                      &g_Sheet_A4.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A4" ),
-                                                      &g_Sheet_A4.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A3" ),
-                                                      &g_Sheet_A3.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A3" ),
-                                                      &g_Sheet_A3.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A2" ),
-                                                      &g_Sheet_A2.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A2" ),
-                                                      &g_Sheet_A2.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A1" ),
-                                                      &g_Sheet_A1.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A1" ),
-                                                      &g_Sheet_A1.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A0" ),
-                                                      &g_Sheet_A0.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A0" ),
-                                                      &g_Sheet_A0.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A" ),
-                                                      &g_Sheet_A.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A" ),
-                                                      &g_Sheet_A.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_B" ),
-                                                      &g_Sheet_B.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_B" ),
-                                                      &g_Sheet_B.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_C" ),
-                                                      &g_Sheet_C.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_C" ),
-                                                      &g_Sheet_C.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_D" ),
-                                                      &g_Sheet_D.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_D" ),
-                                                      &g_Sheet_D.m_Offset.y ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_E" ),
-                                                      &g_Sheet_E.m_Offset.x ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_E" ),
-                                                      &g_Sheet_E.m_Offset.y ) );
-*/
-
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptD_X" ),
                                                       &g_RepeatStep.x,
                                                       0, -1000, +1000 ) );
