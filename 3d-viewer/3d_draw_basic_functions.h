@@ -80,6 +80,7 @@ void    Draw3D_SolidHorizontalPolygonWithHoles( const std::vector<CPolyPt>& aPol
  * @param aWidth = width of segment in board units
  * @param aThickness = thickness of segment in board units
  * @param aZpos = z position of segment in board units
+ * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
  * If aThickness 1 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
@@ -89,16 +90,19 @@ void    Draw3D_SolidSegment( const wxPoint& aStart, const wxPoint& aEnd,
                              int aWidth, int aThickness, int aZpos,
                              double aBiuTo3DUnits );
 
-/** draw an arc using 3D primitives, in a plane parallel to the XY plane
- * @param aCenterPos = 3D position of the center
- * @param aStartPointX, aStartPointY = start point coordinate of arc (3D units)
- * @param aWidth = width of the circle (3D units)
+/** draw an arc using 3D primitives, in a XY plane
+ * @param aCenterPos = XY position of the center in board units
+ * @param aStartPoint = start point coordinate of arc in board units
+ * @param aWidth = width of the circle in board units
  * @param aArcAngle = arc angle in 1/10 degrees
  * @param aWidth = thickness of arc
+ * @param aThickness = thickness of segment in board units
+ * @param aZpos = z position of segment in board units
+ * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  */
-void Draw3D_ArcSegment( const S3D_VERTEX& aCenterPos,
-                        double aStartPointX, double aStartPointY,
-                        double aArcAngle, double aWidth );
+void Draw3D_ArcSegment( const wxPoint&  aCenterPos, const wxPoint& aStartPoint,
+                        int aArcAngle, int aWidth, int aThickness,
+                        int aZpos, double aBiuTo3DUnits );
 
 
 /** draw a thick cylinder (a tube) using 3D primitives.

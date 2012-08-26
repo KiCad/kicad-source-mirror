@@ -538,26 +538,19 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 
     SetGLColor( color );
 
-    double w  = segment->GetWidth() * g_Parm_3D_Visu.m_BiuTo3Dunits;
-    double x  = segment->GetStart().x * g_Parm_3D_Visu.m_BiuTo3Dunits;
-    double y  = segment->GetStart().y * g_Parm_3D_Visu.m_BiuTo3Dunits;
-    double xf = segment->GetEnd().x * g_Parm_3D_Visu.m_BiuTo3Dunits;
-    double yf = segment->GetEnd().y * g_Parm_3D_Visu.m_BiuTo3Dunits;
-
     if( layer == EDGE_N )
     {
         for( layer = 0; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
         {
             glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
-            double zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
+            int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(layer);
 
             switch( segment->GetShape() )
             {
             case S_ARC:
-            {
-                S3D_VERTEX pos( xf, -yf, zpos );
-                Draw3D_ArcSegment( pos, x, -y, segment->GetAngle(), w );
-            }
+                Draw3D_ArcSegment( segment->GetCenter(), segment->GetArcStart(),
+                                   segment->GetAngle(), segment->GetWidth(), thickness,
+                                   zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
                 break;
 
             case S_CIRCLE:
@@ -567,16 +560,14 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
                                     );
                 Draw3D_ZaxisCylinder( segment->GetStart(), radius,
                                       thickness, segment->GetWidth(),
-                                      g_Parm_3D_Visu.GetLayerZcoordBIU(layer),
-                                      g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                      zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
                 }
                 break;
 
             default:
                 Draw3D_SolidSegment( segment->GetStart(), segment->GetEnd(),
                                     segment->GetWidth(), thickness,
-                                    g_Parm_3D_Visu.GetLayerZcoordBIU(layer),
-                                    g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                    zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
                 break;
             }
         }
@@ -584,17 +575,16 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     else
     {
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
-        double zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
+        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(layer);
 
         if( Is3DLayerEnabled( layer ) )
         {
             switch( segment->GetShape() )
             {
             case S_ARC:
-            {
-                S3D_VERTEX pos( xf, -yf, zpos );
-                Draw3D_ArcSegment( pos, x, -y, segment->GetAngle(), w );
-            }
+                Draw3D_ArcSegment( segment->GetCenter(), segment->GetArcStart(),
+                                   segment->GetAngle(), segment->GetWidth(), thickness,
+                                   zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
                 break;
 
             case S_CIRCLE:
@@ -604,16 +594,14 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
                                     );
                 Draw3D_ZaxisCylinder( segment->GetStart(), radius,
                                       thickness, segment->GetWidth(),
-                                      g_Parm_3D_Visu.GetLayerZcoordBIU(layer),
-                                      g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                      zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
             }
                 break;
 
             default:
                 Draw3D_SolidSegment( segment->GetStart(), segment->GetEnd(),
                                     segment->GetWidth(), thickness,
-                                    g_Parm_3D_Visu.GetLayerZcoordBIU(layer),
-                                    g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                    zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
                 break;
             }
         }
@@ -758,32 +746,18 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 
 void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
-    wxString s;
-    int      dx, dy;
-    double   x, y, fx, fy, w;
-
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( m_Layer ) == false )
         return;
 
     int color = g_ColorsSettings.GetLayerColor( m_Layer );
-
     SetGLColor( color );
-
-    dx   = m_End.x;
-    dy   = m_End.y;
-    w    = m_Width * g_Parm_3D_Visu.m_BiuTo3Dunits;
-    x    = m_Start.x * g_Parm_3D_Visu.m_BiuTo3Dunits;
-    y    = m_Start.y * g_Parm_3D_Visu.m_BiuTo3Dunits;
-    fx   = dx * g_Parm_3D_Visu.m_BiuTo3Dunits;
-    fy   = dy * g_Parm_3D_Visu.m_BiuTo3Dunits;
-
 
     if( m_Layer == EDGE_N )
     {
         for( int layer = 0; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
         {
             glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
-            int izpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
+            int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
             int thickness = m_Layer >= FIRST_NO_COPPER_LAYER ?
                     g_Parm_3D_Visu.GetNonCopperLayerThicknessBIU() :
                     g_Parm_3D_Visu.GetCopperThicknessBIU();
@@ -792,7 +766,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
             {
             case S_SEGMENT:
                 Draw3D_SolidSegment( m_Start, m_End, m_Width,
-                                     thickness, izpos,
+                                     thickness, zpos,
                                      g_Parm_3D_Visu.m_BiuTo3Dunits );
                 break;
 
@@ -803,16 +777,14 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                                     );
                 Draw3D_ZaxisCylinder( m_Start, radius,
                                       thickness, GetWidth(),
-                                      g_Parm_3D_Visu.GetLayerZcoordBIU(layer),
-                                      g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                      zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
             }
                 break;
 
             case S_ARC:
-            {
-                S3D_VERTEX pos( fx, -fy, g_Parm_3D_Visu.m_LayerZcoord[layer] );
-                Draw3D_ArcSegment( pos, x, -y, (double) m_Angle, w );
-            }
+                Draw3D_ArcSegment( GetCenter(), GetArcStart(),
+                                   GetAngle(), GetWidth(), thickness,
+                                   zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
                 break;
 
             case S_POLYGON:
@@ -833,13 +805,12 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                     pt += module->m_Pos;
                 }
 
-                Draw3D_HorizontalPolygon( points, izpos, 0, g_Parm_3D_Visu.m_BiuTo3Dunits);
+                Draw3D_HorizontalPolygon( points, zpos, 0, g_Parm_3D_Visu.m_BiuTo3Dunits);
             }
             break;
 
             default:
-                s.Printf( wxT( "Error: Shape nr %d not implemented!\n" ), m_Shape );
-                D( printf( "%s", TO_UTF8( s ) ); )
+                D( printf( "Error: Shape nr %d not implemented!\n", m_Shape ); )
                 break;
             }
         }
@@ -850,13 +821,13 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                         g_Parm_3D_Visu.GetNonCopperLayerThicknessBIU() :
                         g_Parm_3D_Visu.GetCopperThicknessBIU();
         glNormal3f( 0.0, 0.0, (m_Layer == LAYER_N_BACK) ? -1.0 : 1.0 );
-        int izpos = g_Parm_3D_Visu.GetLayerZcoordBIU(m_Layer);
+        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(m_Layer);
 
         switch( m_Shape )
         {
         case S_SEGMENT:
                 Draw3D_SolidSegment( m_Start, m_End, m_Width,
-                                     thickness, izpos,
+                                     thickness, zpos,
                                      g_Parm_3D_Visu.m_BiuTo3Dunits );
             break;
 
@@ -867,16 +838,14 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                                 );
             Draw3D_ZaxisCylinder( m_Start, radius,
                                   thickness, GetWidth(),
-                                  g_Parm_3D_Visu.GetLayerZcoordBIU(m_Layer),
-                                  g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                  zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
         }
             break;
 
         case S_ARC:
-        {
-            S3D_VERTEX pos( fx, -fy, g_Parm_3D_Visu.m_LayerZcoord[m_Layer] );
-            Draw3D_ArcSegment( pos, x, -y, (double) m_Angle, w );
-        }
+            Draw3D_ArcSegment( GetCenter(), GetArcStart(),
+                               GetAngle(), GetWidth(), thickness,
+                               zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
             break;
 
         case S_POLYGON:
@@ -897,13 +866,12 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                 pt += module->m_Pos;
             }
 
-            Draw3D_HorizontalPolygon( points, izpos, 0, g_Parm_3D_Visu.m_BiuTo3Dunits );
+            Draw3D_HorizontalPolygon( points, zpos, 0, g_Parm_3D_Visu.m_BiuTo3Dunits );
         }
         break;
 
         default:
-            s.Printf( wxT( "Error: Shape nr %d not implemented!\n" ), m_Shape );
-            D( printf( "%s", TO_UTF8( s ) ); )
+            D( printf( "Error: Shape nr %d not implemented!\n", m_Shape ); )
             break;
         }
     }
