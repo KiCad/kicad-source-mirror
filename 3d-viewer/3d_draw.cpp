@@ -241,7 +241,7 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_CopperLayersCount - 1;
 
-    int zpos = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] / g_Parm_3D_Visu.m_BiuTo3Dunits );
+    int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
     SetGLColor( color );
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
@@ -460,7 +460,7 @@ void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_CopperLayersCount - 1;
 
-    int zpos = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] / g_Parm_3D_Visu.m_BiuTo3Dunits );
+    int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
     SetGLColor( color );
     glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
@@ -485,7 +485,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
     // Drawing horizontal thick rings:
     for( layer = bottom_layer; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
     {
-        int zpos = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] / biu_to_3Dunits );
+        int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
         if( layer < g_Parm_3D_Visu.m_CopperLayersCount - 1 )
         {
@@ -518,7 +518,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
     color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->m_Shape );
     SetGLColor( color );
     int height = g_Parm_3D_Visu.GetLayerZcoordBIU(top_layer) -
-                 g_Parm_3D_Visu.m_LayerZcoord[bottom_layer] - thickness;
+                 g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) - thickness;
     int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(bottom_layer) + thickness/2;
 
     Draw3D_ZaxisCylinder( via->m_Start, inner_radius + thickness/2, height,
@@ -625,7 +625,7 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
     int color = g_ColorsSettings.GetLayerColor( layer );
 
     SetGLColor( color );
-    s_Text3DZPos  = KiROUND( g_Parm_3D_Visu.m_LayerZcoord[layer] / g_Parm_3D_Visu.m_BiuTo3Dunits );
+    s_Text3DZPos  = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
     s_Text3DWidth = text->GetThickness();
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
     wxSize size = text->m_Size;
@@ -681,13 +681,19 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     S3D_MASTER* Struct3D  = m_3D_Drawings;
     bool        As3dShape = false;
 
-    if (g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE])
+    if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] )
     {
+        double zpos;
+        if( m_Layer == LAYER_N_BACK )
+            zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( true );
+        else
+            zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( false );
+
         glPushMatrix();
 
         glTranslatef( m_Pos.x * g_Parm_3D_Visu.m_BiuTo3Dunits,
                       -m_Pos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
-                      g_Parm_3D_Visu.m_LayerZcoord[m_Layer] );
+                      zpos );
 
         if( m_Orient )
         {

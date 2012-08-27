@@ -78,7 +78,7 @@ public:
     double      m_Quat[4];                          // orientation of 3D view
     double      m_Rot[4];                           // rotation parameters of 3D view
     double      m_Zoom;                             // 3D zoom value
-    double      m_3D_Grid;                          // 3D grid valmue, in mm
+    double      m_3D_Grid;                          // 3D grid value, in mm
     S3D_COLOR   m_BgColor;
     bool        m_DrawFlags[FL_LAST];               // Enable/disable flags (see DISPLAY3D_FLG list)
     wxPoint     m_BoardPos;                         // center board actual position in board units
@@ -90,10 +90,10 @@ public:
     double  m_BiuTo3Dunits;                         // Normalization scale to convert board
                                                     // internal units to 3D units
                                                     // to scale 3D units between -1.0 and +1.0
-    double  m_LayerZcoord[LAYER_COUNT];             // Z position of each layer (normalized)
     double  m_CurrentZpos;                          // temporary storage of current value of Z position,
                                                     // used in some calculation
 private:
+    double  m_LayerZcoord[LAYER_COUNT];             // Z position of each layer (normalized)
     double  m_CopperThickness;                      // Copper thickness (normalized)
     double  m_EpoxyThickness;                       // Epoxy thickness (normalized)
     double  m_NonCopperLayerThickness;              // Non copper layers thickness
@@ -107,6 +107,21 @@ public: INFO3D_VISU();
      * @param aBoard: the board to display
      */
     void InitSettings( BOARD* aBoard );
+
+    /**
+     * function GetModulesZcoord3DIU
+     * @return the Z coordinate of the module, in 3D Units
+     * @param aIsFlipped: true for modules on Front (top) layer, false
+     * if on back (bottom) layer
+     * Used to know the Z position of 3D shapes
+     */
+    double GetModulesZcoord3DIU( bool aIsFlipped )
+    {
+        if(  aIsFlipped )
+            return m_LayerZcoord[ADHESIVE_N_BACK] - m_NonCopperLayerThickness;
+        else
+            return m_LayerZcoord[ADHESIVE_N_FRONT] + m_NonCopperLayerThickness;
+    }
 
     /**
      * function GetLayerZcoordBIU
