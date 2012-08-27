@@ -236,9 +236,7 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
 {
     int layer = aZone->GetLayer();
     int color = g_ColorsSettings.GetLayerColor( layer );
-    int thickness = layer >= FIRST_NO_COPPER_LAYER ?
-                    g_Parm_3D_Visu.GetNonCopperLayerThicknessBIU() :
-                    g_Parm_3D_Visu.GetCopperThicknessBIU();
+    int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
 
     if( layer == LAST_COPPER_LAYER )
         layer = g_Parm_3D_Visu.m_CopperLayersCount - 1;
@@ -532,9 +530,7 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 {
     int layer = segment->GetLayer();
     int color = g_ColorsSettings.GetLayerColor( layer );
-    int thickness = layer >= FIRST_NO_COPPER_LAYER ?
-                    g_Parm_3D_Visu.GetNonCopperLayerThicknessBIU() :
-                    g_Parm_3D_Visu.GetCopperThicknessBIU();
+    int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
 
     SetGLColor( color );
 
@@ -633,9 +629,7 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
     s_Text3DWidth = text->GetThickness();
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
     wxSize size = text->m_Size;
-    s_thickness = layer >= FIRST_NO_COPPER_LAYER ?
-                    g_Parm_3D_Visu.GetNonCopperLayerThicknessBIU() :
-                    g_Parm_3D_Visu.GetCopperThicknessBIU();
+    s_thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
 
     if( text->m_Mirror )
         NEGATE( size.x );
@@ -752,15 +746,41 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     int color = g_ColorsSettings.GetLayerColor( m_Layer );
     SetGLColor( color );
 
+    // for outline shape = S_POLYGON:
+    // We must compute true coordinates from m_PolyPoints
+    // which are relative to module position and module orientation = 0
+    std::vector<CPolyPt> polycorners;
+
+    if( m_Shape == S_POLYGON )
+    {
+        polycorners.reserve( m_PolyPoints.size() );
+        MODULE* module = (MODULE*) m_Parent;
+
+        CPolyPt corner;
+        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+        {
+            corner.x = m_PolyPoints[ii].x;
+            corner.y = m_PolyPoints[ii].y;
+
+            RotatePoint( &corner.x, &corner.y, module->GetOrientation() );
+            if( module )
+            {
+                corner.x += module->m_Pos.x;
+                corner.y += module->m_Pos.y;
+            }
+            polycorners.push_back( corner );
+        }
+
+        polycorners.back().end_contour = true;
+    }
+
     if( m_Layer == EDGE_N )
     {
         for( int layer = 0; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
         {
             glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
-            int thickness = m_Layer >= FIRST_NO_COPPER_LAYER ?
-                    g_Parm_3D_Visu.GetNonCopperLayerThicknessBIU() :
-                    g_Parm_3D_Visu.GetCopperThicknessBIU();
+            int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( m_Layer );
 
             switch( m_Shape )
             {
@@ -788,26 +808,9 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                 break;
 
             case S_POLYGON:
-            {
-                // We must compute true coordinates from m_PolyPoints
-                // which are relative to module position and module orientation = 0
-                std::vector<wxPoint> points = m_PolyPoints;
-                MODULE* module = (MODULE*) m_Parent;
-
-                if( module == NULL )
-                    break;
-
-                for( unsigned ii = 0; ii < points.size(); ii++ )
-                {
-                    wxPoint& pt = points[ii];
-
-                    RotatePoint( &pt.x, &pt.y, module->GetOrientation() );
-                    pt += module->m_Pos;
-                }
-
-                Draw3D_HorizontalPolygon( points, zpos, 0, g_Parm_3D_Visu.m_BiuTo3Dunits);
-            }
-            break;
+                Draw3D_SolidHorizontalPolyPolygons( polycorners, zpos, thickness,
+                                                    g_Parm_3D_Visu.m_BiuTo3Dunits);
+                break;
 
             default:
                 D( printf( "Error: Shape nr %d not implemented!\n", m_Shape ); )
@@ -817,9 +820,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     }
     else
     {
-        int thickness = m_Layer >= FIRST_NO_COPPER_LAYER ?
-                        g_Parm_3D_Visu.GetNonCopperLayerThicknessBIU() :
-                        g_Parm_3D_Visu.GetCopperThicknessBIU();
+        int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( m_Layer );
         glNormal3f( 0.0, 0.0, (m_Layer == LAYER_N_BACK) ? -1.0 : 1.0 );
         int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(m_Layer);
 
@@ -849,26 +850,9 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
             break;
 
         case S_POLYGON:
-        {
-            // We must compute true coordinates from m_PolyPoints
-            // which are relative to module position and module orientation = 0
-            std::vector<wxPoint> points = m_PolyPoints;
-            MODULE* module = (MODULE*) m_Parent;
-
-            if( module == NULL )
-                break;
-
-            for( unsigned ii = 0; ii < points.size(); ii++ )
-            {
-                wxPoint& pt = points[ii];
-
-                RotatePoint( &pt.x, &pt.y, module->GetOrientation() );
-                pt += module->m_Pos;
-            }
-
-            Draw3D_HorizontalPolygon( points, zpos, 0, g_Parm_3D_Visu.m_BiuTo3Dunits );
-        }
-        break;
+            Draw3D_SolidHorizontalPolyPolygons( polycorners, zpos, thickness,
+                                                g_Parm_3D_Visu.m_BiuTo3Dunits );
+            break;
 
         default:
             D( printf( "Error: Shape nr %d not implemented!\n", m_Shape ); )
