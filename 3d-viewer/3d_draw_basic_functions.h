@@ -31,22 +31,6 @@
 // angle increment to draw a circle, approximated by segments
 #define ANGLE_INC( x ) ( 3600 / (x) )
 
-
-/**
- * Function Draw3D_HorizontalPolygon
- * draw one solid polygon
- * @param aCornersList = a std::vector<wxPoint> list of corners, in board internal units
- * @param aZpos = z position in board internal units
- * @param aThickness = thickness in board internal units
- * @param aBiuTo3DUnits = board internal units to 3D units scaling value
- * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
- * If aThickness 1 0, a solid object is drawn.
- *  The top side is located at aZpos + aThickness / 2
- *  The bottom side is located at aZpos - aThickness / 2
- */
-void    Draw3D_HorizontalPolygon( std::vector<wxPoint>& aCornersList, int aZpos,
-                                  int aThickness, double aBiuTo3DUnits );
-
 /** draw all solid polygons found in aPolysList
  * @param aPolysList = the poligon list to draw
  * @param aZpos = z position in board internal units
@@ -67,7 +51,7 @@ void    Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysLi
  * @param aThickness = thickness in board internal units
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
- * If aThickness 1 0, a solid object is drawn.
+ * If aThickness > 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */
@@ -82,7 +66,7 @@ void    Draw3D_SolidHorizontalPolygonWithHoles( const std::vector<CPolyPt>& aPol
  * @param aZpos = z position of segment in board units
  * @param aBiuTo3DUnits = board internal units to 3D units scaling value
  * If aThickness = 0, a polygon area is drawn in a XY plane at Z position = aZpos.
- * If aThickness 1 0, a solid object is drawn.
+ * If aThickness > 0, a solid object is drawn.
  *  The top side is located at aZpos + aThickness / 2
  *  The bottom side is located at aZpos - aThickness / 2
  */

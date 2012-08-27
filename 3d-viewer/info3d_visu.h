@@ -109,15 +109,23 @@ public: INFO3D_VISU();
     void InitSettings( BOARD* aBoard );
 
     /**
-     * function m_BiuTo3Dunits
+     * function GetLayerZcoordBIU
      * @return the Z coordinate of the layer aLayer, in Board Internal Units
-     * @param aLayer: the layer number
+     * @param aLayerId: the layer number
      */
-    int GetLayerZcoordBIU( int aLayer )
+    int GetLayerZcoordBIU( int aLayerId )
     {
-        return (int) (m_LayerZcoord[aLayer] / m_BiuTo3Dunits );
+        return (int) (m_LayerZcoord[aLayerId] / m_BiuTo3Dunits );
     }
 
+    /**
+     * function GetCopperThicknessBIU
+     * @return the thickness (Z size) of the copper, in Board Internal Units
+     * note: the thickness (Z size) of the copper is not the thickness
+     * of the layer (the thickness of the layer is the epoxy thickness / layer count)
+     *
+     * Note: if m_DrawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
+     */
     int GetCopperThicknessBIU() const
     {
         return m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
@@ -125,16 +133,41 @@ public: INFO3D_VISU();
             : 0;
     }
 
+    /**
+     * function GetEpoxyThicknessBIU
+     * @return the thickness (Z size) of the epoxy board, in Board Internal Units
+     */
     int GetEpoxyThicknessBIU() const
     {
         return (int) (m_EpoxyThickness / m_BiuTo3Dunits );
     }
 
+    /**
+     * function GetNonCopperLayerThicknessBIU
+     * @return the thickness (Z size) of a technical layer,
+     *  in Board Internal Units
+     *
+     * Note: if m_DrawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
+     */
     int GetNonCopperLayerThicknessBIU() const
     {
         return  m_DrawFlags[FL_USE_COPPER_THICKNESS] ?
             (int) (m_NonCopperLayerThickness / m_BiuTo3Dunits )
             : 0;
+    }
+
+    /**
+     * function GetNonCopperLayerThicknessBIU
+     * @return the thickness (Z size) of the copper or a technical layer,
+     *  in Board Internal Units, depending on the layer id
+     *
+     * Note: if m_DrawFlags[FL_USE_COPPER_THICKNESS] is not set, returns 0
+     */
+    int GetLayerObjectThicknessBIU( int aLayerId) const
+    {
+        return aLayerId >= FIRST_NO_COPPER_LAYER ?
+                        GetNonCopperLayerThicknessBIU() :
+                        GetCopperThicknessBIU();
     }
 };
 
