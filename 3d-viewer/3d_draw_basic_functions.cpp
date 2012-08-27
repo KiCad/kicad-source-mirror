@@ -59,8 +59,8 @@ static void CALLBACK    tessCPolyPt2Vertex( const GLvoid* data );
  * Used to create the vertical sides of 3D horizontal shapes with thickness.
  */
 static void Draw3D_VerticalPolygonalCylinder( const std::vector<CPolyPt>& aPolysList,
-                                              int aHeight,
-                                              int aZpos, double aBiuTo3DUnits )
+                                              int aHeight, int aZpos,
+                                              bool aInside, double aBiuTo3DUnits )
 {
     if( aHeight == 0 )
         return;
@@ -69,8 +69,16 @@ static void Draw3D_VerticalPolygonalCylinder( const std::vector<CPolyPt>& aPolys
     coords.resize( 4 );
 
     // Init Z position of the 4 points of a GL_QUAD
-    coords[0].z = aZpos;
-    coords[1].z = aZpos + aHeight;
+    if( aInside )
+    {
+        coords[0].z = aZpos;
+        coords[1].z = aZpos + aHeight;
+    }
+    else
+    {
+        coords[0].z = aZpos + aHeight;
+        coords[1].z = aZpos;
+    }
     coords[2].z = coords[1].z;
     coords[3].z = coords[0].z;
 
@@ -87,12 +95,12 @@ static void Draw3D_VerticalPolygonalCylinder( const std::vector<CPolyPt>& aPolys
         }
 
         // Build the 4 vertices of each GL_QUAD
-        coords[0].x = aPolysList[jj].x;
-        coords[0].y = -aPolysList[jj].y;
+        coords[0].x = aPolysList[ii].x;
+        coords[0].y = -aPolysList[ii].y;
         coords[1].x = coords[0].x;
         coords[1].y = coords[0].y;              // only z change
-        coords[2].x = aPolysList[ii].x;
-        coords[2].y = -aPolysList[ii].y;
+        coords[2].x = aPolysList[jj].x;
+        coords[2].y = -aPolysList[jj].y;
         coords[3].x = coords[2].x;
         coords[3].y = coords[2].y;              // only z change
 
@@ -192,7 +200,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysList,
         return;
 
     // Build the 3D data : vertical side
-    Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos, aBiuTo3DUnits );
+    Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos, false, aBiuTo3DUnits );
 
     glNormal3f( 0.0, 0.0, 1.0 );
 }
@@ -203,7 +211,8 @@ void Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysList,
  * See Draw3D_SolidHorizontalPolyPolygons for more info
  */
 void Draw3D_SolidHorizontalPolygonWithHoles( const std::vector<CPolyPt>& aPolysList,
-                                             int aZpos, int aThickness, double aBiuTo3DUnits )
+                                             int aZpos, int aThickness,
+                                             double aBiuTo3DUnits )
 {
     std::vector<CPolyPt> polygon;
 
@@ -225,7 +234,7 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
     std::vector <CPolyPt> outer_cornerBuffer;
 
     TransformCircleToPolygon( outer_cornerBuffer, aCenterPos,
-                              aRadius + (aThickness / 2), SEGM_PER_CIRCLE );
+                              aRadius + (aThickness / 2), slice );
 
     std::vector<S3D_VERTEX> coords;
     coords.resize( 4 );
@@ -239,11 +248,11 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
     {
         // Draw the vertical outer side
         Draw3D_VerticalPolygonalCylinder( outer_cornerBuffer,
-                                      aHeight, aZpos, aBiuTo3DUnits );
+                                      aHeight, aZpos, false, aBiuTo3DUnits );
         if( aThickness )
             // Draws the vertical inner side (hole)
             Draw3D_VerticalPolygonalCylinder( inner_cornerBuffer,
-                                          aHeight, aZpos, aBiuTo3DUnits );
+                                          aHeight, aZpos, true, aBiuTo3DUnits );
     }
 
     if( aThickness )
@@ -286,32 +295,37 @@ void Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
     // Build the points to approximate oblong cylinder by segments
     std::vector <CPolyPt> outer_cornerBuffer;
 
-    int width = aThickness + aRadius * 2;
+    int segm_width = (aRadius * 2) + aThickness;
     TransformRoundedEndsSegmentToPolygon( outer_cornerBuffer, aAxis1Pos,
-                                          aAxis2Pos, slice, width );
+                                          aAxis2Pos, slice, segm_width );
 
     // Draw the oblong outer cylinder
     if( aHeight )
-        Draw3D_VerticalPolygonalCylinder( outer_cornerBuffer, aHeight, aZpos, aBiuTo3DUnits );
+        Draw3D_VerticalPolygonalCylinder( outer_cornerBuffer, aHeight, aZpos,
+                                          false, aBiuTo3DUnits );
 
     if( aThickness )
     {
         std::vector <CPolyPt> inner_cornerBuffer;
-        width = aThickness - aRadius * 2;
+        segm_width = aRadius * 2;
         TransformRoundedEndsSegmentToPolygon( inner_cornerBuffer, aAxis1Pos,
-                                              aAxis2Pos, slice, width );
+                                              aAxis2Pos, slice, segm_width );
 
         // Draw the oblong inner cylinder
         if( aHeight )
             Draw3D_VerticalPolygonalCylinder( inner_cornerBuffer, aHeight,
-                                         aZpos, aBiuTo3DUnits );
+                                              true, aZpos, aBiuTo3DUnits );
+
+        // Build the horizontal full polygon shape
+        // (outer polygon shape - inner polygon shape)
+        outer_cornerBuffer.insert( outer_cornerBuffer.end(),
+                                   inner_cornerBuffer.begin(),
+                                   inner_cornerBuffer.end() );
+
+        std::vector<CPolyPt> polygon;
+        ConvertPolysListWithHolesToOnePolygon( outer_cornerBuffer, polygon );
 
         // draw top (front) horizontal side (ring)
-        outer_cornerBuffer.insert( outer_cornerBuffer.end(),
-                             inner_cornerBuffer.begin(), inner_cornerBuffer.end() );
-        std::vector<CPolyPt> polygon;
-
-        ConvertPolysListWithHolesToOnePolygon( outer_cornerBuffer, polygon );
         glNormal3f( 0.0, 0.0, 1.0 );
         Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits );
 
