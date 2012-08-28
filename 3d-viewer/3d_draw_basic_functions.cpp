@@ -52,6 +52,18 @@ static void CALLBACK    tessEndCB();
 static void CALLBACK    tessErrorCB( GLenum errorCode );
 static void CALLBACK    tessCPolyPt2Vertex( const GLvoid* data );
 
+// 2 helper functions to set the current normal vector for gle items
+static inline void SetNormalZpos()
+{
+    glNormal3f( 0.0, 0.0, 1.0 );
+}
+
+static inline void SetNormalZneg()
+{
+    glNormal3f( 0.0, 0.0, -1.0 );
+}
+
+
 /* Draw3D_VerticalPolygonalCylinder is a helper function.
  *
  * draws a "vertical cylinder" having a polygon shape
@@ -147,7 +159,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysList,
 
     // Set normal to toward positive Z axis, for a solid object only (to draw the top side)
     if( aThickness )
-        glNormal3f( 0.0, 0.0, 1.0 );
+        SetNormalZpos();
 
     // gluTessProperty(tess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_ODD);
 
@@ -191,7 +203,7 @@ void Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysList,
         g_Parm_3D_Visu.m_CurrentZpos = zpos;
         v_data[2] = zpos;
         // Now;, set normal to toward negative Z axis, for the solid object bottom side
-        glNormal3f( 0.0, 0.0, -1.0 );
+        SetNormalZneg();
     }
 
     gluDeleteTess( tess );
@@ -201,8 +213,6 @@ void Draw3D_SolidHorizontalPolyPolygons( const std::vector<CPolyPt>& aPolysList,
 
     // Build the 3D data : vertical side
     Draw3D_VerticalPolygonalCylinder( polylist, aThickness, aZpos, false, aBiuTo3DUnits );
-
-    glNormal3f( 0.0, 0.0, 1.0 );
 }
 
 
@@ -258,7 +268,7 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
     if( aThickness )
     {
         // draw top (front) and bottom (back) horizontal sides (rings)
-        glNormal3f( 0.0, 0.0, 1.0 );
+        SetNormalZpos();
         outer_cornerBuffer.insert( outer_cornerBuffer.end(),
                              inner_cornerBuffer.begin(), inner_cornerBuffer.end() );
         std::vector<CPolyPt> polygon;
@@ -270,12 +280,12 @@ void Draw3D_ZaxisCylinder( wxPoint aCenterPos, int aRadius,
         if( aHeight )
         {
             // draw bottom (back) horizontal ring
-            glNormal3f( 0.0, 0.0, -1.0 );
+            SetNormalZneg();
             Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits );
         }
     }
 
-    glNormal3f( 0.0, 0.0, 1.0 );    // Normal is Z axis
+    SetNormalZpos();
 }
 
 
@@ -326,18 +336,18 @@ void Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
         ConvertPolysListWithHolesToOnePolygon( outer_cornerBuffer, polygon );
 
         // draw top (front) horizontal side (ring)
-        glNormal3f( 0.0, 0.0, 1.0 );
+        SetNormalZpos();
         Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos + aHeight, 0, aBiuTo3DUnits );
 
         if( aHeight )
         {
             // draw bottom (back) horizontal side (ring)
-            glNormal3f( 0.0, 0.0, -1.0 );
+            SetNormalZneg();
             Draw3D_SolidHorizontalPolyPolygons( polygon, aZpos, 0, aBiuTo3DUnits );
         }
     }
 
-    glNormal3f( 0.0, 0.0, 1.0 );    // Normal is Z axis
+    SetNormalZpos();
 }
 
 
@@ -395,7 +405,7 @@ void CALLBACK tessCPolyPt2Vertex( const GLvoid* data )
     // cast back to double type
     const CPolyPt* ptr = (const CPolyPt*) data;
 
-    glVertex3f( ptr->x * g_Parm_3D_Visu.m_BiuTo3Dunits,
+    glVertex3d( ptr->x * g_Parm_3D_Visu.m_BiuTo3Dunits,
                 -ptr->y * g_Parm_3D_Visu.m_BiuTo3Dunits,
                 g_Parm_3D_Visu.m_CurrentZpos );
 }

@@ -45,8 +45,8 @@
 #include <menus_helpers.h>
 
 //external functions used here:
-extern bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame,
-                       int aCurrentTool, wxSize grid, wxPoint on_grid, wxPoint* curpos );
+extern bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool,
+                       wxSize aGridSize, wxPoint on_grid, wxPoint* curpos );
 
 
 /**
@@ -323,11 +323,11 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     wxPoint curs_pos = pos;
 
-    wxSize grid;
-    grid.x = KiROUND( GetScreen()->GetGridSize().x );
-    grid.y = KiROUND( GetScreen()->GetGridSize().y );
+    wxSize igridsize;
+    igridsize.x = KiROUND( gridSize.x );
+    igridsize.y = KiROUND( gridSize.y );
 
-    if( Magnetize( m_Pcb, this, GetToolId(), grid, curs_pos, &pos ) )
+    if( Magnetize( this, GetToolId(), igridsize, curs_pos, &pos ) )
     {
         GetScreen()->SetCrossHairPosition( pos, false );
     }
@@ -350,7 +350,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         pos = GetScreen()->GetCrossHairPosition();
         GetScreen()->SetCrossHairPosition( oldpos, false );
         m_canvas->CrossHairOff( aDC );
-        GetScreen()->SetCrossHairPosition( pos, snapToGrid );
+        GetScreen()->SetCrossHairPosition( pos, false );
         m_canvas->CrossHairOn( aDC );
 
         if( m_canvas->IsMouseCaptured() )

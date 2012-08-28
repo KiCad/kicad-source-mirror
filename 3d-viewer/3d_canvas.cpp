@@ -499,8 +499,9 @@ void EDA_3D_CANVAS::InitGL()
         /* speedups */
         glEnable( GL_DITHER );
         glShadeModel( GL_SMOOTH );
-        glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST );
-        glHint( GL_POLYGON_SMOOTH_HINT, GL_FASTEST );
+        glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_DONT_CARE );
+        glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
+        glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );    // can be GL_FASTEST
 
         /* blend */
         glEnable( GL_BLEND );
