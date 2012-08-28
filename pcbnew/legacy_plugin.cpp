@@ -4091,12 +4091,18 @@ void FPL_CACHE::Save()
             _( "Legacy library file '%s' is read only" ), m_lib_name.GetData() ) );
     }
 
-    wxString tempFileName = wxFileName::CreateTempFileName( m_lib_name );
-
-    // wxLogDebug( "tempFileName:'%s'\n", TO_UTF8( tempFileName ) );
+    wxString tempFileName;
 
     // a block {} scope to fire wxFFile wxf()'s destructor
     {
+        // CreateTempFileName works better with an absolute path
+        wxFileName abs_lib_name( m_lib_name );
+
+        abs_lib_name.MakeAbsolute();
+        tempFileName = wxFileName::CreateTempFileName( abs_lib_name.GetFullPath() );
+
+        wxLogDebug( "tempFileName:'%s'  m_lib_name:'%s'\n", TO_UTF8( tempFileName ), TO_UTF8( m_lib_name ) );
+
         FILE* fp = wxFopen( tempFileName, wxT( "w" ) );
         if( !fp )
         {
@@ -4110,7 +4116,7 @@ void FPL_CACHE::Save()
         wxFFile wxf( fp );
 
         SaveHeader( fp );
-        SaveIndex(  fp );
+        SaveIndex( fp );
         SaveModules( fp );
         SaveEndOfFile( fp );
     }
@@ -4123,7 +4129,7 @@ void FPL_CACHE::Save()
     if( wxRename( tempFileName, m_lib_name ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Unable to rename tempfile '%s' to to library file '%s'" ),
+            _( "Unable to rename tempfile '%s' to library file '%s'" ),
             tempFileName.GetData(),
             m_lib_name.GetData() ) );
     }
