@@ -154,8 +154,6 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
                   -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BiuTo3Dunits,
                   0.0F );
 
-    glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
-
     // draw tracks and vias :
     for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
     {
@@ -453,7 +451,7 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
 
 void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
 {
-    int    layer = aTrack->GetLayer();
+    int layer = aTrack->GetLayer();
     int color = g_ColorsSettings.GetLayerColor( layer );
     int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
 
@@ -463,7 +461,7 @@ void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
     int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
     SetGLColor( color );
-    glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
+    glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
     Draw3D_SolidSegment( aTrack->m_Start, aTrack->m_End,
                          aTrack->m_Width, thickness, zpos,
@@ -503,13 +501,11 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
         }
 
         SetGLColor( color );
-
-        if( thickness == 0 )
-            glNormal3f( 0.0, 0.0, layer == LAYER_N_BACK ? -1.0 : 1.0 );
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
         Draw3D_ZaxisCylinder( via->m_Start, (outer_radius + inner_radius)/2,
                                   thickness, outer_radius - inner_radius,
-                                  zpos - (thickness/2), biu_to_3Dunits );
+                                  zpos, biu_to_3Dunits );
         if( layer >= top_layer )
             break;
     }
@@ -518,7 +514,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
     color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->m_Shape );
     SetGLColor( color );
     int height = g_Parm_3D_Visu.GetLayerZcoordBIU(top_layer) -
-                 g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) - thickness;
+                 g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer );
     int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(bottom_layer) + thickness/2;
 
     Draw3D_ZaxisCylinder( via->m_Start, inner_radius + thickness/2, height,
@@ -538,7 +534,7 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     {
         for( layer = 0; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
         {
-            glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
+            glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(layer);
 
             switch( segment->GetShape() )
@@ -784,7 +780,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     {
         for( int layer = 0; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
         {
-            glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
+            glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
             int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( m_Layer );
 
@@ -827,7 +823,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     else
     {
         int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( m_Layer );
-        glNormal3f( 0.0, 0.0, (m_Layer == LAYER_N_BACK) ? -1.0 : 1.0 );
+        glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( m_Layer ) );
         int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(m_Layer);
 
         switch( m_Shape )
@@ -970,7 +966,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
             int ring_radius = (m_Size.x + m_Drill.x) / 4;
             if( thickness == 0 )
-                glNormal3f( 0.0, 0.0, layer == LAYER_N_BACK ? -1.0 : 1.0 );
+                glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
             Draw3D_ZaxisCylinder(shape_pos, ring_radius,
                                   thickness, ( m_Size.x - m_Drill.x) / 2,
@@ -1047,7 +1043,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
             SetGLColor( color );
 
             if( thickness == 0 )
-                glNormal3f( 0.0, 0.0, layer == LAYER_N_BACK ? -1.0 : 1.0 );
+                glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
             // If not hole: draw a single polygon
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );

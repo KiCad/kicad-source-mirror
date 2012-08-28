@@ -129,7 +129,7 @@ void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits
     /* draw polygon/triangle/quad */
     for( ii = 0; ii < aVertices.size(); ii++ )
     {
-        glVertex3f( aVertices[ii].x * aBiuTo3DUnits,
+        glVertex3d( aVertices[ii].x * aBiuTo3DUnits,
                     aVertices[ii].y * aBiuTo3DUnits,
                     aVertices[ii].z * aBiuTo3DUnits );
     }
