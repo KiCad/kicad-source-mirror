@@ -52,8 +52,15 @@
     {
         char ExceptionError[256];
         sprintf(ExceptionError, "%s\n", TO_UTF8(e.errorText) );
-	PyErr_SetString(PyExc_IOError,ExceptionError);
-	return NULL;
+        PyErr_SetString(PyExc_IOError,ExceptionError);
+        return NULL;
+    }
+    catch( std::exception &e )
+    {
+        char ExceptionError[256];
+        sprintf( ExceptionError, "%s\n", e.what() );
+        PyErr_SetString(PyExc_IOError,ExceptionError);
+        return NULL;
     }
     catch( ... )
     {
