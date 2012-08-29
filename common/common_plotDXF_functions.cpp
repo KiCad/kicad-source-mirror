@@ -63,8 +63,12 @@ bool DXF_PLOTTER::StartPlot( FILE* fout )
            "  9\n"
            "$ANGDIR\n"
            "  70\n"
+           "  1\n"
+           "  9\n"
+           "$MEASUREMENT\n"
+           "  70\n"
            "0\n"
-           "  0\n"
+           "  0\n"              // This means 'metric units'
            "ENDSEC\n"
            "  0\n"
            "SECTION\n"
