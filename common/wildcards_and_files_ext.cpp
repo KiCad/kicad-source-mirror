@@ -44,6 +44,7 @@ const wxString PcbFileExtension( wxT( "brd" ) );
 const wxString PdfFileExtension( wxT( "pdf" ) );
 const wxString MacrosFileExtension( wxT( "mcr" ) );
 const wxString DrillFileExtension( wxT( "drl" ) );
+const wxString SVGFileExtension( wxT( "svg" ) );
 const wxString ReportFileExtension( wxT( "rpt" ) );
 const wxString FootprintPlaceFileExtension( wxT( "pos" ) );
 
@@ -66,6 +67,7 @@ const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 const wxString ComponentFileWildcard( _( "KiCad cmp/footprint link files (*.cmp)|*.cmp" ) );
 
 const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl;*.DRL" ) );
+const wxString SVGFileWildcard( _( "SVG files (*.svg)|*.svg;*.SVG" ) );
 const wxString ReportFileWildcard = _( "Report files (*.rpt)|*.rpt" );
 const wxString FootprintPlaceFileWildcard = _( "Footprint place files (*.pos)|*.pos" );
 const wxString VrmlFileWildcard( _( "Vrml files (*.wrl)|*.wrl" ) );

@@ -21,6 +21,32 @@ class RIGHT_KM_FRAME;
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;
 
+// Enum to identify the type of files handled by Kicad manager
+//
+// When changing this enum  please verify (and perhaps update)
+// TREE_PROJECT_FRAME::GetFileExt(),
+// TREE_PROJECT_FRAME::GetFileExt()
+// s_AllowedExtensionsToList[]
+
+enum TreeFileType {
+    TREE_PROJECT = 1,
+    TREE_SCHEMA,        // Schematic file (.sch)
+    TREE_LEGACY_PCB,    // board file (.brd) legacy format
+    TREE_SEXP_PCB,      // board file (.kicad_brd) new s expression format
+    TREE_GERBER,        // Gerber  file (.pho, .g*)
+    TREE_PDF,           // PDF file (.pdf)
+    TREE_TXT,           // ascii text file (.txt)
+    TREE_NET,           // netlist file (.net)
+    TREE_UNKNOWN,
+    TREE_DIRECTORY,
+    TREE_CMP_LINK,      // cmp/footprint link file (.cmp)
+    TREE_REPORT,        // report file (.rpt)
+    TREE_FP_PLACE,      // fooprints position (place) file (.pos)
+    TREE_DRILL,         // Excellon drill file (.drl)
+    TREE_SVG,           // SVG file (.svg)
+    TREE_MAX
+};
+
 
 /**
  * Command IDs for KiCad.
@@ -152,25 +178,6 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
     DECLARE_EVENT_TABLE()
 };
 
-// Order of this enum changes AddFile() internal working
-// please update both
-enum TreeFileType {
-    TREE_PROJECT = 1,
-    TREE_SCHEMA,        // Schematic file (.sch)
-    TREE_LEGACY_PCB,    // board file (.brd) legacy format
-    TREE_SEXP_PCB,      // board file (.kicad_brd) new s expression format
-    TREE_GERBER,        // Gerber  file (.pho, .g*)
-    TREE_PDF,           // PDF file (.pdf)
-    TREE_TXT,           // ascii text file (.txt)
-    TREE_NET,           // netlist file (.net)
-    TREE_UNKNOWN,
-    TREE_DIRECTORY,
-    TREE_CMP_LINK,      // cmp/footprint link file (.cmp)
-    TREE_REPORT,        // report file (.rpt)
-    TREE_FP_PLACE,      // fooprints position (place) file (.pos)
-    TREE_DRILL,         // Excellon drill file (.drl)
-    TREE_MAX
-};
 
 /** class RIGHT_KM_FRAME
  */

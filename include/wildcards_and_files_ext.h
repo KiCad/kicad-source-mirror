@@ -52,6 +52,7 @@ extern const wxString PdfFileExtension;
 extern const wxString MacrosFileExtension;
 extern const wxString ComponentFileExtension;
 extern const wxString DrillFileExtension;
+extern const wxString SVGFileExtension;
 extern const wxString ReportFileExtension;
 extern const wxString FootprintPlaceFileExtension;
 
@@ -69,6 +70,7 @@ extern const wxString MacrosFileWildcard;
 extern const wxString AllFilesWildcard;
 extern const wxString ComponentFileWildcard;
 extern const wxString DrillFileWildcard;
+extern const wxString SVGFileWildcard;
 extern const wxString ReportFileWildcard;
 extern const wxString FootprintPlaceFileWildcard;
 extern const wxString VrmlFileWildcard;

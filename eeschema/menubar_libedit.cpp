@@ -91,7 +91,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  ID_LIBEDIT_GEN_SVG_FILE,
                  _( "Create S&VG File" ),
                  _( "Create a SVG file from the current loaded component" ),
-                 KiBitmap( plot_xpm ) );
+                 KiBitmap( plot_svg_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();

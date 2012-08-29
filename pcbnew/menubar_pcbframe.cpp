@@ -218,7 +218,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( filesMenu, ID_GEN_PLOT_SVG,
                  _( "Print SV&G" ),
                  _( "Plot board in Scalable Vector Graphics format" ),
-                 KiBitmap( print_button_xpm ) );
+                 KiBitmap( plot_svg_xpm ) );
 
     // Plot
     AddMenuItem( filesMenu, ID_GEN_PLOT,
@@ -554,14 +554,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Fast access to the Web Based FreeROUTE advanced router" ),
                  KiBitmap( web_support_xpm ) );
 
-#ifdef KICAD_SCRIPTING_WXPYTHON                 
+#ifdef KICAD_SCRIPTING_WXPYTHON
     /* Scripting */
     AddMenuItem( toolsMenu, ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                  _( "&Scripting Console" ),
                  _( "Show/Hide the Scripting console" ),
                  KiBitmap( book_xpm ) );
 #endif
-                 
+
     /* Design Rules menu
      */
     wxMenu* designRulesMenu = new wxMenu;

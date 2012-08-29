@@ -150,8 +150,11 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
 
             fn.SetName( fn.GetName() + layer_extend );
             fn.SetExt( DrillFileExtension );
+            wxString defaultPath = m_plotDefaultpath;
+            if( defaultPath.IsEmpty() )
+                defaultPath = ::wxGetCwd();
 
-            wxFileDialog dlg( this, _( "Save Drill File" ), ::wxGetCwd(),
+            wxFileDialog dlg( this, _( "Save Drill File" ), defaultPath,
                               fn.GetFullName(), wxGetTranslation( DrillFileWildcard ),
                               wxFD_SAVE | wxFD_CHANGE_DIR );
 

@@ -1,8 +1,32 @@
 /**
  * @file tree_project_frame.cpp
- * @brief TODO
+ * @brief Function to build the tree of files in the current project directory
  */
 
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <confirm.h>
@@ -38,7 +62,7 @@ const wxString PcbSexpFileExtension( wxT("kicad_brd") );
 // list of files extensions listed in the tree project window
 // *.sch files are always allowed, do not add here
 // Add extensions in a compatible regex format to see others files types
-const wxChar* s_AllowedExtensionsToList[] =
+static const wxChar* s_allowedExtensionsToList[] =
 {
     wxT( "^.*\\.pro$" ),
     wxT( "^.*\\.pdf$" ),
@@ -60,13 +84,15 @@ const wxChar* s_AllowedExtensionsToList[] =
     wxT( "^.*\\.pos$" ),            // Footprint position files
     wxT( "^.*\\.cmp$" ),            // Cvpcb cmp/footprint link files
     wxT( "^.*\\.drl$" ),            // Excellon drill files
+    wxT( "^.*\\.svg$" ),            // SVG print/plot files
     NULL                            // end of list
 };
 
 
 /* TODO: Check if these file extension and wildcard definitions are used
  *       in any of the other KiCad programs and move them into the common
- *       library as required. */
+ *       library as required.
+ */
 
 /* File extension definitions. */
 const wxString TextFileExtension( wxT( "txt" ) );
@@ -78,7 +104,7 @@ const wxString TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
 /**
  * @brief class TREE_PROJECT_FRAME is the frame that shows the tree list
  * of files and subdirs inside the working directory
- * Files are filtered (see s_AllowedExtensionsToList) so
+ * Files are filtered (see s_allowedExtensionsToList) so
  * only useful files are shown.
  */
 
@@ -121,9 +147,9 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
 
     // NOTE: sch filter must be first because of a test in AddFile() below
     m_Filters.push_back( wxT( "^.*\\.sch$" ) );
-    for( int ii = 0; s_AllowedExtensionsToList[ii] != NULL; ii++ )
+    for( int ii = 0; s_allowedExtensionsToList[ii] != NULL; ii++ )
     {
-        m_Filters.push_back( s_AllowedExtensionsToList[ii] );
+        m_Filters.push_back( s_allowedExtensionsToList[ii] );
     }
 
     m_Filters.push_back( wxT( "^no KiCad files found" ) );
@@ -432,6 +458,10 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
         ext = DrillFileExtension;
         break;
 
+    case TREE_SVG:
+        ext = SVGFileExtension;
+        break;
+
     default:                       /* Eliminates unnecessary GCC warning. */
         break;
     }
@@ -491,6 +521,10 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 
     case TREE_DRILL:
         ext = DrillFileWildcard;
+        break;
+
+    case TREE_SVG:
+        ext = SVGFileWildcard;
         break;
 
     default:                       /* Eliminates unnecessary GCC warning. */
