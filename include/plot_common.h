@@ -34,11 +34,14 @@ enum PlotFormat {
  * 2) only use native postscript fonts
  * 3) use the internal vector font and add 'phantom' text to aid
  *    searching
+ *
+ * This is recognized by the DXF driver too, where NATIVE emits
+ * TEXT entities instead of stroking the text
  */
-enum PostscriptTextMode {
-    PSTEXTMODE_STROKE,
-    PSTEXTMODE_NATIVE,
-    PSTEXTMODE_PHANTOM
+enum PlotTextMode {
+    PLOTTEXTMODE_STROKE,
+    PLOTTEXTMODE_NATIVE,
+    PLOTTEXTMODE_PHANTOM
 };
 
 
@@ -51,6 +54,8 @@ enum PostscriptTextMode {
 class PLOTTER
 {
 public:
+    static const int DEFAULT_LINE_WIDTH = -1;
+
     PLOTTER( );
 
     virtual ~PLOTTER()
@@ -97,7 +102,7 @@ public:
 
     /**
      * Set the default line width. Used at the beginning and when a width
-     * of -1 is requested.
+     * of -1 (DEFAULT_LINE_WIDTH) is requested.
      * @param width is specified in IUs
      */
     virtual void SetDefaultLineWidth( int width ) = 0;
@@ -148,13 +153,20 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 	    double aScale, bool aMirror ) = 0;
 
+    /**
+     * The IUs per decimil are an essential scaling factor when
+     * plotting; they are set and saved when establishing the viewport.
+     * Here they can be get back again
+     */
+    double GetIUsPerDecimil() const { return m_IUsPerDecimil; }
+
     // Low level primitives
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = -1 ) = 0;
+                       int width = DEFAULT_LINE_WIDTH ) = 0;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = -1 ) = 0;
+                         int width = DEFAULT_LINE_WIDTH ) = 0;
     virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle, int rayon,
-                      FILL_T fill, int width = -1 );
+                      FILL_T fill, int width = DEFAULT_LINE_WIDTH );
 
     /**
      * moveto/lineto primitive, moves the 'pen' to the specified direction
@@ -195,7 +207,7 @@ public:
      * @param aWidth = line width
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
-			   int aWidth = -1 ) = 0;
+			   int aWidth = DEFAULT_LINE_WIDTH ) = 0;
 
     /**
      * Function PlotImage
@@ -274,6 +286,15 @@ public:
         // NOP for most plotters
     }
 
+    /**
+     * Change the current text mode. See the PlotTextMode
+     * explanation at the beginning of the file
+     */
+    virtual void SetTextMode( PlotTextMode mode )
+    {
+	// NOP for most plotters
+    }
+
 protected:
     // These are marker subcomponents
     void markerCircle( const wxPoint& pos, int radius );
@@ -297,6 +318,12 @@ protected:
 
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')
     double        plotScale;
+
+    /* Device scale (how many IUs in a decimil - always); it's a double
+     * because in eeschema there are 0.1 IUs in a decimil (eeschema
+     * always works in mils internally) while pcbnew can work in decimil
+     * or nanometers, so this value would be >= 1 */
+    double        m_IUsPerDecimil;
 
     /// Device scale (from IUs to device units - usually decimils)
     double        iuPerDeviceUnit;
@@ -334,6 +361,11 @@ public:
     virtual PlotFormat GetPlotterType() const
     {
 	return PLOT_FORMAT_HPGL;
+    }
+
+    static wxString GetDefaultFileExtension()
+    {
+	return wxString( wxT( "plt" ) );
     }
 
     virtual bool StartPlot( FILE* fout );
@@ -378,16 +410,16 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 			      double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-		       int width = -1 );
+		       int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = -1 );
+                         int width = DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = -1);
+                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH);
 
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
     virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle, int rayon,
-                      FILL_T fill, int width = -1 );
+                      FILL_T fill, int width = DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode );
@@ -416,16 +448,16 @@ class PSLIKE_PLOTTER : public PLOTTER
 {
 public:
     PSLIKE_PLOTTER() : plotScaleAdjX( 1 ), plotScaleAdjY( 1 ), plotWidthAdj( 0 ),
-                       psTextMode( PSTEXTMODE_PHANTOM )
+                       m_textMode( PLOTTEXTMODE_PHANTOM )
     {
     }
 
     /**
-     * Change the current postscript text mode
+     * PS and PDF fully implement native text (for the Latin-1 subset)
      */
-    void SetPsTextMode( PostscriptTextMode mode )
+    virtual void SetTextMode( PlotTextMode mode )
     {
-        psTextMode = mode;
+        m_textMode = mode;
     }
 
     virtual void SetDefaultLineWidth( int width );
@@ -510,7 +542,7 @@ protected:
     double plotWidthAdj;
 
     /// How to draw text
-    PostscriptTextMode  psTextMode;
+    PlotTextMode m_textMode;
 };
 
 
@@ -519,6 +551,11 @@ class PS_PLOTTER : public PSLIKE_PLOTTER
 public:
     PS_PLOTTER()
     {
+    }
+
+    static wxString GetDefaultFileExtension()
+    {
+	return wxString( wxT( "ps" ) );
     }
 
     virtual PlotFormat GetPlotterType() const
@@ -534,14 +571,14 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 			      double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = -1 );
+                       int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = -1 );
+                         int width = DEFAULT_LINE_WIDTH );
     virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle,
-		      int rayon, FILL_T fill, int width = -1 );
+		      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = -1);
+                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor );
@@ -573,6 +610,11 @@ public:
 	return PLOT_FORMAT_PDF;
     }
 
+    static wxString GetDefaultFileExtension()
+    {
+	return wxString( wxT( "pdf" ) );
+    }
+
     virtual bool StartPlot( FILE* fout );
     virtual bool EndPlot();
     virtual void StartPage();
@@ -586,14 +628,14 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 			      double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = -1 );
+                       int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = -1 );
+                         int width = DEFAULT_LINE_WIDTH );
     virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle,
-		      int rayon, FILL_T fill, int width = -1 );
+		      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = -1);
+                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH);
 
     virtual void PenTo( const wxPoint& pos, char plume );
 
@@ -665,6 +707,11 @@ public:
 	return PLOT_FORMAT_GERBER;
     }
 
+    static wxString GetDefaultFileExtension()
+    {
+	return wxString( wxT( "pho" ) );
+    }
+
     virtual bool StartPlot( FILE* fout );
     virtual bool EndPlot();
     virtual void SetCurrentLineWidth( int width );
@@ -676,13 +723,13 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 	                      double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = -1 );
+                       int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = -1 );
+                         int width = DEFAULT_LINE_WIDTH );
     virtual void Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle, int aRadius,
-                      FILL_T aFill, int aWidth = -1 );
+                      FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = -1);
+                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
 
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
@@ -727,10 +774,17 @@ public:
 	return PLOT_FORMAT_DXF;
     }
 
-    /// We can plot text as strokes or as TEXT entities
-    void SetDXFTextMode( bool aTextAsLines )
+    static wxString GetDefaultFileExtension()
     {
-        textAsLines = aTextAsLines;
+	return wxString( wxT( "dxf" ) );
+    }
+
+    /**
+     * DXF handles NATIVE text emitting TEXT entities
+     */
+    virtual void SetTextMode( PlotTextMode mode )
+    {
+        textAsLines = ( mode != PLOTTEXTMODE_NATIVE );
     }
 
     virtual bool StartPlot( FILE* fout );
@@ -755,15 +809,15 @@ public:
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 			      double aScale, bool aMirror );
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = -1 );
+                       int width = DEFAULT_LINE_WIDTH );
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = -1 );
+                         int width = DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = -1 );
+                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode );
     virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle, int rayon,
-                      FILL_T fill, int width = -1 );
+                      FILL_T fill, int width = DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode );
@@ -789,5 +843,17 @@ protected:
     bool textAsLines;
     int currentColor;
 };
+
+class TITLE_BLOCK;
+void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
+                    const PAGE_INFO& aPageInfo,
+                    int aSheetNumber, int aNumberOfSheets,
+                    const wxString &aSheetDesc,
+                    const wxString &aFilename );
+
+/** Returns the default plot extension for a format
+  */
+wxString GetDefaultPlotExtension( PlotFormat aFormat );
+
 
 #endif  // PLOT_COMMON_H_

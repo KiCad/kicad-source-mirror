@@ -183,7 +183,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         return 0;
 
     /* Build CMP file name by changing the extension of NetList filename */
-    fn = m_Parent->GetScreen()->GetFileName();
+    fn = m_Parent->GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
 
     FichCmp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
@@ -621,7 +621,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     }
 
     /* Calculation file name by changing the extension name to NetList */
-    fn = GetScreen()->GetFileName();
+    fn = GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
     wildcard = wxGetTranslation( ComponentFileWildcard );
 

@@ -177,13 +177,13 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         if( !filename.IsAbsolute() )
             filename.SetPath( currentPath );
 
-        GetScreen()->SetFileName( filename.GetFullPath() );
+        m_lastFileName = filename.GetFullPath();
 
         setActiveLayer( layer, false );
 
         if( Read_GERBER_File( filename.GetFullPath(), filename.GetFullPath() ) )
         {
-            UpdateFileHistory( GetScreen()->GetFileName() );
+            UpdateFileHistory( m_lastFileName );
 
             layer = getNextAvailableLayer( layer );
 
@@ -258,7 +258,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         if( !filename.IsAbsolute() )
             filename.SetPath( currentPath );
 
-        GetScreen()->SetFileName( filename.GetFullPath() );
+        m_lastFileName = filename.GetFullPath();
 
         setActiveLayer( layer, false );
 
@@ -301,7 +301,7 @@ bool GERBVIEW_FRAME::LoadDCodeFile( const wxString& aFullFileName )
     {
         wildcard = _( "Gerber DCODE files" );
         wildcard += wxT(" ") + AllFilesWildcard;
-        fn = GetScreen()->GetFileName();
+        fn = m_lastFileName;
         wxFileDialog dlg( this, _( "Load GERBER DCODE File" ),
                           fn.GetPath(), fn.GetFullName(), wildcard,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );

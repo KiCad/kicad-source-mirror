@@ -472,7 +472,7 @@ void PCB_PARSER::parseGeneralSection() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         default:              // Skip everything but the board thickness.
-            wxLogDebug( wxT( "Skipping general section token %s " ), GetTokenString( token ) );
+            wxLogDebug( wxT( "Skipping general section token %s " ), GetChars( GetTokenString( token ) ) );
 
             while( ( token = NextTok() ) != T_RIGHT )
             {
@@ -1676,7 +1676,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_fp_text, NULL,
                  wxString::Format( wxT( "Cannot parse %s as TEXTE_MODULE at line %d, offset %d." ),
-                                   GetTokenString( CurTok() ), CurLineNumber(), CurOffset() ) );
+                                   GetChars( GetTokenString( CurTok() ) ), CurLineNumber(), CurOffset() ) );
 
     T token = NextTok();
 

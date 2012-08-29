@@ -662,7 +662,8 @@ public:
      */
     double GetZoom();
 
-    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth, double aScalar );
+    void TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
+                         double aScale, const wxString &aFilename );
 
     /**
      * Function TraceWorkSheet is a core function for drawing of the page layout with
@@ -685,8 +686,6 @@ public:
                          wxString& aType, wxString& aFlNm, TITLE_BLOCK& aTb,
                          int aNScr, int aScr, int aLnW, double aScalar,
                          EDA_COLOR_T aClr1 = RED, EDA_COLOR_T aClr2 = RED );
-
-    void  PlotWorkSheet( PLOTTER* aPlotter, BASE_SCREEN* aScreen, int aLineWidth );
 
     /**
      * Function GetXYSheetReferences

@@ -119,7 +119,7 @@ static double MapYTo( int aY )
 /* Driver function: processing starts here */
 void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 {
-    wxFileName fn = GetScreen()->GetFileName();
+    wxFileName fn = GetBoard()->GetFileName();
     wxString   msg, ext, wildcard;
     FILE*      file;
 
@@ -688,7 +688,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
 {
     wxString    msg;
-    PCB_SCREEN* screen = (PCB_SCREEN*) aFrame->GetScreen();
+    BOARD *board = aFrame->GetBoard();
 
     fputs( "$HEADER\n", aFile );
     fputs( "GENCAD 1.4\n", aFile );
@@ -699,7 +699,7 @@ static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
                GetChars( GetBuildVersion() ) );
     fputs( TO_UTF8( msg ), aFile );
 
-    msg = wxT( "DRAWING \"" ) + screen->GetFileName() + wxT( "\"\n" );
+    msg = wxT( "DRAWING \"" ) + board->GetFileName() + wxT( "\"\n" );
     fputs( TO_UTF8( msg ), aFile );
 
     const TITLE_BLOCK&  tb = aFrame->GetTitleBlock();

@@ -336,7 +336,8 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll )
         plotOffset.x = -s_Offset.x;
         plotOffset.y = -s_Offset.y;
 
-        plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + wxT( ".plt" );
+        plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + '.'
+	    + HPGL_PLOTTER::GetDefaultFileExtension();
 
         LOCALE_IO   toggle;
 
@@ -379,9 +380,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString&  FileName,
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
 
     plotter->SetPageSettings( pageInfo );
-
-    plotter->SetViewport( offset, IU_PER_DECIMILS, plot_scale, 0 );
-    plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
+    plotter->SetViewport( offset, IU_PER_DECIMILS, plot_scale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-HPGL" ) );
@@ -395,7 +394,11 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString&  FileName,
     plotter->SetColor( BLACK );
 
     if( s_plot_Sheet_Ref )
-        m_Parent->PlotWorkSheet( plotter, screen, g_DrawDefaultLineThickness );
+        PlotWorkSheet( plotter, m_Parent->GetTitleBlock(),
+                       m_Parent->GetPageSettings(),
+                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       m_Parent->GetScreenDesc(),
+                       screen->GetFileName() );
 
     screen->Plot( plotter );
 

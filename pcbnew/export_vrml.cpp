@@ -1197,7 +1197,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 
     // Build default file name
     wxString ext = wxT( "wrl" );
-    fn = GetScreen()->GetFileName();
+    fn = GetBoard()->GetFileName();
     fn.SetExt( ext );
 
     DIALOG_EXPORT_3DFILE dlg( this );

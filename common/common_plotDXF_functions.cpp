@@ -29,15 +29,22 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     wxASSERT( !outputFile );
     plotOffset  = aOffset;
     plotScale   = aScale;
-    // XXX Need to think about this: what is the 'native' unit used for DXF? 
+
+    /* DXF paper is 'virtual' so there is no need of a paper size.
+       Also this way we can handle the aux origin which can be useful
+       (for example when aligning to a mechanical drawing) */
+    paperSize.x = 0;
+    paperSize.y = 0;
+
+    /* Like paper size DXF units are abstract too. Anyway there is a
+     * system variable (MEASUREMENT) which will be set to 1 to indicate
+     * metric units */
+    m_IUsPerDecimil = aIusPerDecimil;
     iuPerDeviceUnit = 1.0 / aIusPerDecimil; // Gives a DXF in decimils
-    iuPerDeviceUnit *= 0.00254;             // DXF in mm (I like it best)
-    // Compute the paper size in IUs 
-    paperSize = pageInfo.GetSizeMils();
-    paperSize.x *= 10.0 * aIusPerDecimil;
-    paperSize.y *= 10.0 * aIusPerDecimil;
-    SetDefaultLineWidth( 0 );    // No line width on DXF
-    plotMirror = false;             // No mirroring on DXF 
+    iuPerDeviceUnit *= 0.00254;             // ... now in mm
+
+    SetDefaultLineWidth( 0 );               // No line width on DXF
+    plotMirror = false;                     // No mirroring on DXF
     currentColor = BLACK;
 }
 
@@ -63,8 +70,12 @@ bool DXF_PLOTTER::StartPlot( FILE* fout )
            "  9\n"
            "$ANGDIR\n"
            "  70\n"
+           "  1\n"
+           "  9\n"
+           "$MEASUREMENT\n"
+           "  70\n"
            "0\n"
-           "  0\n"
+           "  0\n"              // This means 'metric units'
            "ENDSEC\n"
            "  0\n"
            "SECTION\n"

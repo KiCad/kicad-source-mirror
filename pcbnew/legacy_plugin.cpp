@@ -232,6 +232,10 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPE
 
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
+    // Give the filename to the board if it's new
+    if( !aAppendToMe )
+        m_board->SetFileName( aFileName );
+
     // delete on exception, iff I own m_board, according to aAppendToMe
     auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 

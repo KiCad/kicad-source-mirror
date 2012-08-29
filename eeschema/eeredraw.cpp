@@ -71,7 +71,8 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GetScreen()->Draw( m_canvas, DC, GR_DEFAULT_DRAWMODE );
 
-    TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness, IU_PER_MILS );
+    TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness, IU_PER_MILS,
+                    GetScreenDesc() );
 
 #ifdef USE_WX_OVERLAY
     if( IsShown() )

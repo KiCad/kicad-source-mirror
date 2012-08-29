@@ -76,7 +76,6 @@ class BASE_SCREEN : public EDA_ITEM
 {
 private:
     GRIDS       m_grids;          ///< List of valid grid sizes.
-    wxString    m_fileName;       ///< File used to load the screen.
     bool        m_FlagModified;   ///< Indicates current drawing has been modified.
     bool        m_FlagSave;       ///< Indicates automatic file save.
     EDA_ITEM*   m_CurrentItem;    ///< Currently selected object
@@ -152,10 +151,6 @@ public:
     EDA_ITEM* GetCurItem() const { return m_CurrentItem; }
 
     void InitDataPoints( const wxSize& aPageSizeInternalUnits );
-
-    void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
-
-    wxString GetFileName() const { return m_fileName; }
 
     /**
      * Function MilsToIuScalar
