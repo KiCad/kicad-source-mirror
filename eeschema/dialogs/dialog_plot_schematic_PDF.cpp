@@ -193,8 +193,6 @@ void DIALOG_PLOT_SCHEMATIC_PDF::createPDFFile()
     plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
     plotter->SetColorMode( m_plotColorOpt );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
-    plotter->SetPsTextMode( PSTEXTMODE_PHANTOM );
-
 
     // First page handling is different
     bool first_page = true;
@@ -220,8 +218,8 @@ void DIALOG_PLOT_SCHEMATIC_PDF::createPDFFile()
 
 	if( first_page ) {
 	    wxString msg;
-	    wxString plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet()
-		                    + wxT( ".pdf" );
+	    wxString plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + '.'
+		+ PDF_PLOTTER::GetDefaultFileExtension();
 	    msg.Printf( _( "Plot: %s " ), GetChars( plotFileName ) );
 	    m_MsgBox->AppendText( msg );
 
@@ -291,8 +289,8 @@ void DIALOG_PLOT_SCHEMATIC_PDF::plotSetupPage( PDF_PLOTTER*     plotter,
     double scalex = (double) plotPage.GetWidthMils()  / actualPage.GetWidthMils();
     double scaley = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
     double scale  = MIN( scalex, scaley );
-    plotter->SetViewport( wxPoint( 0, 0 ), IU_PER_DECIMILS, scale, 0 );
     plotter->SetPageSettings( plotPage );
+    plotter->SetViewport( wxPoint( 0, 0 ), IU_PER_DECIMILS, scale, false );
 }
 
 void DIALOG_PLOT_SCHEMATIC_PDF::plotOneSheet( PDF_PLOTTER*   plotter,
@@ -300,8 +298,12 @@ void DIALOG_PLOT_SCHEMATIC_PDF::plotOneSheet( PDF_PLOTTER*   plotter,
 {
     if( m_plot_Sheet_Ref )
     {
-	plotter->SetColor( BLACK );
-	m_Parent->PlotWorkSheet( plotter, screen, g_DrawDefaultLineThickness );
+        plotter->SetColor( BLACK );
+        PlotWorkSheet( plotter, m_Parent->GetTitleBlock(),
+                       m_Parent->GetPageSettings(),
+                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       m_Parent->GetScreenDesc(),
+                       screen->GetFileName() );
     }
 
     screen->Plot( plotter );

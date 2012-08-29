@@ -162,6 +162,8 @@ protected:
 
     // Auxiliary file history used to store drill files history.
     wxFileHistory           m_drillFileHistory;
+    /// The last filename chosen to be proposed to the user
+    wxString                m_lastFileName;
 public:
     GBR_LAYER_BOX_SELECTOR* m_SelLayerBox;
     DCODE_SELECTION_BOX*    m_DCodeSelector;    // a list box to select the dcode Id to highlight.

@@ -308,6 +308,7 @@ void PS_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     plotMirror = aMirror;
     plotOffset = aOffset;
     plotScale = aScale;
+    m_IUsPerDecimil = aIusPerDecimil;
     iuPerDeviceUnit = 1.0 / aIusPerDecimil;
     /* Compute the paper size in IUs */
     paperSize = pageInfo.GetSizeMils();
@@ -818,7 +819,7 @@ void PS_PLOTTER::Text( const wxPoint&              aPos,
     SetColor( aColor );
 
     // Draw the native postscript text (if requested)
-    if( psTextMode == PSTEXTMODE_NATIVE )
+    if( m_textMode == PLOTTEXTMODE_NATIVE )
     {
         const char *fontname = aItalic ? (aBold ? "/KicadFont-BoldOblique"
                 : "/KicadFont-Oblique")
@@ -862,7 +863,7 @@ void PS_PLOTTER::Text( const wxPoint&              aPos,
     }
 
     // Draw the hidden postscript text (if requested)
-    if( psTextMode == PSTEXTMODE_PHANTOM )
+    if( m_textMode == PLOTTEXTMODE_PHANTOM )
     {
         fputsPostscriptString( outputFile, aText );
 	DPOINT pos_dev = userToDeviceCoordinates( aPos );
@@ -871,7 +872,7 @@ void PS_PLOTTER::Text( const wxPoint&              aPos,
     }
 
     // Draw the stroked text (if requested)
-    if( psTextMode != PSTEXTMODE_NATIVE )
+    if( m_textMode != PLOTTEXTMODE_NATIVE )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
                 aWidth, aItalic, aBold );

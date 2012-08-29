@@ -161,7 +161,7 @@ void DIALOG_GEN_MODULE_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent&
 
     if( dialog.ShowModal() == wxID_YES )
     {
-        wxString boardFilePath = ( (wxFileName) m_parent->GetScreen()->GetFileName()).GetPath();
+        wxString boardFilePath = ( (wxFileName) m_parent->GetBoard()->GetFileName()).GetPath();
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
             wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
@@ -193,7 +193,6 @@ void DIALOG_GEN_MODULE_POSITION::OnOKButton( wxCommandEvent& event )
 bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 {
     BOARD * brd = m_parent->GetBoard();
-    PCB_SCREEN * screen = m_parent->GetScreen();
     wxFileName  fn;
     wxString    msg;
     wxString    frontLayerName;
@@ -201,7 +200,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     bool singleFile = OneFileOnly();
     int fullcount = 0;
 
-    fn = screen->GetFileName();
+    fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( GetOutputDirectory() );
     frontLayerName = brd->GetLayerName( LAYER_N_FRONT );
     backLayerName = brd->GetLayerName( LAYER_N_BACK );
@@ -250,7 +249,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     // Create the Back or Bottom side placement file
     fullcount = fpcount;
     side = 0;
-    fn = screen->GetFileName();
+    fn = brd->GetFileName();
     fn.SetPath( GetOutputDirectory() );
     fn.SetName( fn.GetName() + wxT( "-" ) + backLayerName );
     fn.SetExt( wxT( "pos" ) );
@@ -506,13 +505,13 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
 {
     wxFileName fn;
 
-    wxString boardFilePath = ( (wxFileName) GetScreen()->GetFileName()).GetPath();
+    wxString boardFilePath = ( (wxFileName) GetBoard()->GetFileName()).GetPath();
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), boardFilePath );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
         return;
 
-    fn = GetScreen()->GetFileName();
+    fn = GetBoard()->GetFileName();
     fn.SetPath( dirDialog.GetPath() );
     fn.SetExt( wxT( "rpt" ) );
 

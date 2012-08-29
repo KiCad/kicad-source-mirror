@@ -187,6 +187,7 @@ private:
     wxSize          m_FrameSize;
     wxAuiManager    m_auimgr;
     bool            m_reloadRequest;
+    wxString        m_defaultFileName;  /// Filename to propose for screenshot
 
 public:
     EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title,
@@ -216,6 +217,8 @@ public:
      */
     void NewDisplay();
 
+    void SetDefaultFileName(const wxString &aFn) { m_defaultFileName = aFn; }
+    const wxString &GetDefaultFileName() const { return m_defaultFileName; }
 private:
     void Exit3DFrame( wxCommandEvent& event );
     void OnCloseWindow( wxCloseEvent& Event );

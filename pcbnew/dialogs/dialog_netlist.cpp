@@ -14,6 +14,7 @@
 
 #include <pcbnew_config.h>
 #include <class_board_design_settings.h>
+#include <class_board.h>
 #include <wildcards_and_files_ext.h>
 
 #include <dialog_netlist.h>
@@ -28,7 +29,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 
     if( !fn.FileExists() )
     {
-        fn = GetScreen()->GetFileName();
+        fn = GetBoard()->GetFileName();
         fn.SetExt( NetlistFileExtension );
         lastNetlistName = fn.GetFullPath();
     }
@@ -40,10 +41,10 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     // Save project settings if needed.
     // Project settings are saved in the corresponding <board name>.pro file
     if( lastNetlistName != GetLastNetListRead() &&
-        !GetScreen()->GetFileName().IsEmpty() &&
+        !GetBoard()->GetFileName().IsEmpty() &&
         IsOK(NULL, _("Project config has changed. Save it ?") ) )
     {
-        wxFileName fn = GetScreen()->GetFileName();
+        wxFileName fn = GetBoard()->GetFileName();
         fn.SetExt( ProjectFileExtension );
         wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP,
                                        GetProjectFileParameters() );

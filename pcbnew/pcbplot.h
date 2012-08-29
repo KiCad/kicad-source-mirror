@@ -56,6 +56,46 @@ void Plot_1_EdgeModule( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, EDGE
 void PlotFilledAreas( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_CONTAINER* aZone,
                       EDA_DRAW_MODE_T trace_mode );
 
+PLOTTER *StartPlotBoard( BOARD *aBoard,
+                         PCB_PLOT_PARAMS *aPlotOpts,
+                         const wxString& aFullFileName,
+                         const wxString& aSheetDesc );
+
+void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
+                     const PCB_PLOT_PARAMS& plot_opts );
+
+/**
+    * Function Plot_Standard_Layer
+    * plot copper or technical layers.
+    * not used for silk screen layers, because these layers have specific
+    * requirements, mainly for pads
+    * @param aPlotter = the plotter to use
+    * @param aLayerMask = the mask to define the layers to plot
+    * @param aPlotVia = true to plot vias, false to skip vias (has meaning
+    *                  only for solder mask layers).
+    * @param aPlotMode = the plot mode (files, sketch). Has meaning for some formats only
+    * @param aSkipNPTH_Pads = true to skip NPTH Pads, when the pad size and the pad hole
+    *                      have the same size. Used in GERBER format only.
+    */
+void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
+                        const PCB_PLOT_PARAMS& plot_opts,
+                        bool aPlotVia, bool aSkipNPTH_Pads );
+
+void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
+                     const PCB_PLOT_PARAMS&  plot_opts );
+
+/**
+    * Function PlotDrillMarks
+    * Draw a drill mark for pads and vias.
+    * Must be called after all drawings, because it
+    * redraw the drill mark on a pad or via, as a negative (i.e. white) shape
+    * in FILLED plot mode
+    * @param aPlotter = the PLOTTER
+    * @param aPlotOpts = plot options
+    */
+void PlotDrillMarks( BOARD *aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts );
+
+
 // PLOTGERB.CPP
 void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );
 

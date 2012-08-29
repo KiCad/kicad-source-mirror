@@ -138,11 +138,11 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_MicroViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
 
     msg.Empty();
-    msg << plot_opts.m_HPGLPenNum;
+    msg << plot_opts.GetHPGLPenNum();
     m_PenNum->SetValue( msg );
 
     msg.Empty();
-    msg << plot_opts.m_HPGLPenSpeed;
+    msg << plot_opts.GetHPGLPenSpeed();
     m_PenSpeed->SetValue( msg );
 
     // See if we have some buried vias or/and microvias, and display
@@ -308,12 +308,12 @@ void DIALOG_GENDRILL::SetParams()
     msg = m_PenSpeed->GetValue();
 
     if( msg.ToLong( &ltmp ) )
-        plot_opts.m_HPGLPenSpeed = ltmp;
+        plot_opts.SetHPGLPenSpeed( ltmp );
 
     msg = m_PenNum->GetValue();
 
     if( msg.ToLong( &ltmp ) )
-        plot_opts.m_HPGLPenNum = ltmp;
+        plot_opts.SetHPGLPenNum( ltmp );
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );

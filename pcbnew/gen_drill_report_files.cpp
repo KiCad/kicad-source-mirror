@@ -55,18 +55,18 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     case PLOT_FORMAT_GERBER:
         offset  = auxoffset;
         plotter = new GERBER_PLOTTER();
-        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         break;
 
     case PLOT_FORMAT_HPGL:  // Scale for HPGL format.
         {
             HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
             plotter = hpgl_plotter;
-            hpgl_plotter->SetPenNumber( plot_opts.m_HPGLPenNum );
-            hpgl_plotter->SetPenSpeed( plot_opts.m_HPGLPenSpeed );
+            hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
+            hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
             hpgl_plotter->SetPenOverlap( 0 );
             plotter->SetPageSettings( aSheet );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         }
         break;
 
@@ -100,7 +100,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             PS_PLOTTER* ps_plotter = new PS_PLOTTER;
             plotter = ps_plotter;
             ps_plotter->SetPageSettings( pageA4 );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         }
         break;
 
@@ -109,7 +109,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
             plotter = dxf_plotter;
             plotter->SetPageSettings( aSheet );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         }
         break;
 
@@ -180,7 +180,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
     // Plot title  "Info"
     wxString Text = wxT( "Drill Map:" );
-    plotter->Text( wxPoint( plotX, plotY ), BLACK, Text, 0,
+    plotter->Text( wxPoint( plotX, plotY ), UNSPECIFIED, Text, 0,
                    wxSize( (int) ( charSize * charScale ),
                            (int) ( charSize * charScale ) ),
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -232,7 +232,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
                      aToolListBuffer[ii].m_OvalCount );
 
         msg += FROM_UTF8( line );
-        plotter->Text( wxPoint( plotX, y ), BLACK,
+        plotter->Text( wxPoint( plotX, y ), UNSPECIFIED,
                        msg,
                        0, wxSize( (int) ( charSize * charScale ), (int) ( charSize * charScale ) ),
                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,

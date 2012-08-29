@@ -52,6 +52,7 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     plotMirror = aMirror;
     plotOffset = aOffset;
     plotScale = aScale;
+    m_IUsPerDecimil = aIusPerDecimil;
 
     // The CTM is set to 1 user unit per decimil
     iuPerDeviceUnit = 1.0 / aIusPerDecimil;
@@ -425,10 +426,6 @@ int PDF_PLOTTER::startPdfStream(int handle)
 
 /**
  * Finish the current PDF stream (writes the deferred length, too)
- * XXX the compression code is not very elegant... is slurps the
- * whole stream in RAM, allocates an output buffer of the same size
- * and try to FLATE it. Asserts if it couldn't... enhancements are
- * welcome but for now it simply works
  */
 void PDF_PLOTTER::closePdfStream()
 {
@@ -730,7 +727,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         bool                        aBold )
 {
     // Emit native PDF text (if requested)
-    if( psTextMode != PSTEXTMODE_STROKE )
+    if( m_textMode != PLOTTEXTMODE_STROKE )
     {
         const char *fontname = aItalic ? (aBold ? "/KicadFontBI" : "/KicadFontI")
             : (aBold ? "/KicadFontB" : "/KicadFont");
@@ -754,7 +751,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
         fprintf( workFile, "q %f %f %f %f %g %g cm BT %s %g Tf %d Tr %g Tz ",
                 ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f,
                 fontname, heightFactor,
-                (psTextMode == PSTEXTMODE_NATIVE) ? 0 : 3,
+                (m_textMode == PLOTTEXTMODE_NATIVE) ? 0 : 3,
                 wideningFactor * 100 );
 
         // The text must be escaped correctly
@@ -763,7 +760,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
 
         /* We are still in text coordinates, plot the overbars (if we're
          * not doing phantom text) */
-        if( psTextMode == PSTEXTMODE_NATIVE )
+        if( m_textMode == PLOTTEXTMODE_NATIVE )
         {
             std::vector<int> pos_pairs;
             postscriptOverlinePositions( aText, aSize.x, aItalic, aBold, &pos_pairs );
@@ -786,7 +783,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     }
 
     // Plot the stroked text (if requested)
-    if( psTextMode != PSTEXTMODE_NATIVE )
+    if( m_textMode != PLOTTEXTMODE_NATIVE )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
                 aWidth, aItalic, aBold );

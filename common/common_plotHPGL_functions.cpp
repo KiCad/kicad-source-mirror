@@ -26,6 +26,7 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     wxASSERT( !outputFile );
     plotOffset  = aOffset;
     plotScale = aScale;
+    m_IUsPerDecimil = aIusPerDecimil;
     iuPerDeviceUnit = PLUsPERDECIMIL / aIusPerDecimil;
     /* Compute the paper size in IUs */
     paperSize = pageInfo.GetSizeMils();
@@ -161,7 +162,7 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
     DPOINT pos_dev = userToDeviceCoordinates( pos );
 
     if( penLastpos != pos )
-        fprintf( outputFile, "PA %.0f,%.0fd;\n", pos_dev.x, pos_dev.y );
+        fprintf( outputFile, "PA %.0f,%.0f;\n", pos_dev.x, pos_dev.y );
 
     penLastpos = pos;
 }

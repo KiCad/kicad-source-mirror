@@ -188,7 +188,8 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
         plot_offset.x = 0;
         plot_offset.y = 0;
 
-        plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".dxf" );
+        plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + '.'
+	    + DXF_PLOTTER::GetDefaultFileExtension();
 
         PlotOneSheetDXF( plotFileName, screen, plot_offset, 1 );
 
@@ -229,9 +230,8 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
 
     const PAGE_INFO&   pageInfo = screen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
-
-    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, 0 );
     plotter->SetColorMode( m_plotColorOpt );
+    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-DXF" ) );
@@ -241,7 +241,11 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
     if( m_plot_Sheet_Ref )
     {
         plotter->SetColor( BLACK );
-        m_Parent->PlotWorkSheet( plotter, screen, g_DrawDefaultLineThickness );
+        PlotWorkSheet( plotter, m_Parent->GetTitleBlock(),
+                       m_Parent->GetPageSettings(),
+                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       m_Parent->GetScreenDesc(),
+                       screen->GetFileName() );
     }
 
     screen->Plot( plotter );

@@ -129,7 +129,7 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
 
         if( s_ToolListBuffer.size() > 0 ) //  holes?
         {
-            fn = m_parent->GetScreen()->GetFileName();
+            fn = m_parent->GetBoard()->GetFileName();
             layer_extend.Empty();
 
             if( gen_NPTH_holes )
@@ -240,7 +240,7 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
 
     if( m_Choice_Drill_Report->GetSelection() > 0 )
     {
-        fn = m_parent->GetScreen()->GetFileName();
+        fn = m_parent->GetBoard()->GetFileName();
         GenDrillReport( fn.GetFullName() );
     }
 
@@ -607,22 +607,22 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString           aFileName,
     switch( format )
     {
     case PLOT_FORMAT_HPGL:
-        ext = wxT( "plt" );
+        ext = HPGL_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "HPGL plot files (.plt)|*.plt" );
         break;
 
     case PLOT_FORMAT_POST:
-        ext = wxT( "ps" );
+        ext = PS_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "PostScript files (.ps)|*.ps" );
         break;
 
     case PLOT_FORMAT_GERBER:
-        ext = wxT( "pho" );
+        ext = GERBER_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "Gerber files (.pho)|*.pho" );
         break;
 
     case PLOT_FORMAT_DXF:
-        ext = wxT( "dxf" );
+        ext = DXF_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "DXF files (.dxf)|*.dxf" );
         break;
 
@@ -693,7 +693,7 @@ void DIALOG_GENDRILL::GenDrillReport( const wxString aFileName )
     }
 
     GenDrillReportFile( report_dest, m_parent->GetBoard(),
-                        m_parent->GetScreen()->GetFileName(),
+                        m_parent->GetBoard()->GetFileName(),
                         m_UnitDrillIsInch,
                         s_HoleListBuffer,
                         s_ToolListBuffer );
