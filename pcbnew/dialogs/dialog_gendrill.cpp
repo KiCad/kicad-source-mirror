@@ -293,6 +293,8 @@ void DIALOG_GENDRILL::SetParams()
 
     PCB_PLOT_PARAMS plot_opts = m_board->GetPlotOptions();
 
+    m_plotDefaultpath = plot_opts.GetOutputDirectory();
+
     m_createMap = m_Choice_Drill_Map->GetSelection();
     m_createRpt = m_Choice_Drill_Report->GetSelection();
 

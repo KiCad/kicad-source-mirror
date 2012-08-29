@@ -415,10 +415,12 @@ set( BMAPS_MID
     pin_size_to
     pin_to
     pin
+    plot
+    plot_dxf
     plot_hpg
     plot_pdf
     plot_ps
-    plot
+    plot_svg
     polar_coord
     post_compo
     post_drill
@@ -467,6 +469,7 @@ set( BMAPS_MID
     show_zone
     show_zone_disable
     show_zone_outline_only
+    svg_file
     swap_layer
     text_sketch
     three_d

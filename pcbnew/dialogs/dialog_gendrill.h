@@ -44,13 +44,15 @@ public:
     static bool      m_Mirror;
     static bool      m_DrillOriginIsAuxAxis; /* Axis selection (main / auxiliary)
                                               *  for drill origin coordinates */
-    DRILL_PRECISION  m_Precision;       // Selected precision for drill files
-    wxPoint          m_FileDrillOffset; // Drill offset: 0,0 for absolute coordiantes, or auxialry axis origin
+    DRILL_PRECISION  m_Precision;           // Selected precision for drill files
+    wxPoint          m_FileDrillOffset;     // Drill offset: 0,0 for absolute coordinates,
+                                            // or origin of the auxiliary axis
 
 
 private:
     PCB_EDIT_FRAME* m_parent;
     BOARD*          m_board;
+    wxString        m_plotDefaultpath;      // Current default plot dircetory.
 
     int m_platedPadsHoleCount;
     int m_notplatedPadsHoleCount;

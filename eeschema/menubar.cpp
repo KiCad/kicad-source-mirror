@@ -165,14 +165,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_GEN_PLOT_SVG,
                  _( "Plot &SVG" ),
                  _( "Plot schematic sheet in SVG format" ),
-                 KiBitmap( plot_xpm ) );
+                 KiBitmap( plot_svg_xpm ) );
 
     // Plot DXF
     AddMenuItem( choice_plot_fmt,
                  ID_GEN_PLOT_DXF,
                  _( "Plot &DXF" ),
                  _( "Plot schematic sheet in DXF format" ),
-                 KiBitmap( plot_xpm ) );
+                 KiBitmap( plot_dxf_xpm ) );
 
     // Plot to Clipboard (Windows only)
 #ifdef __WINDOWS__
