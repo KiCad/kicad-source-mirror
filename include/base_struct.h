@@ -215,7 +215,7 @@ public:
         m_Size( aSize )
     { }
 
-    wxPoint Centre()
+    wxPoint Centre() const
     {
         return wxPoint( m_Pos.x + ( m_Size.x >> 1 ),
                         m_Pos.y + ( m_Size.y >> 1 ) );
