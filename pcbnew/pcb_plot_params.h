@@ -26,6 +26,7 @@
 #include <wx/wx.h>
 #include <pcb_plot_params_lexer.h>
 #include <eda_text.h>                // EDA_DRAW_MODE_T
+#include <plot_common.h>
 
 class PCB_PLOT_PARAMS_PARSER;
 class LINE_READER;
@@ -64,7 +65,7 @@ public:
     bool        m_PlotInvisibleTexts;
     bool        m_PlotPadsOnSilkLayer;  ///< allows pads outlines on silkscreen layer (when pads are also o, silk screen
 
-    int         m_PlotFormat;           ///< id for plot format (see enum PlotFormat in plot_common.h) */
+    PlotFormat  m_PlotFormat;           ///< id for plot format
     bool        m_PlotMirror;
 
     enum DrillShapeOptT {
@@ -107,8 +108,8 @@ public:
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
     bool        operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
 
-    void        SetPlotFormat( int aFormat ) { m_PlotFormat = aFormat; };
-    int         GetPlotFormat() const { return m_PlotFormat; };
+    void        SetPlotFormat( PlotFormat aFormat ) { m_PlotFormat = aFormat; };
+    PlotFormat  GetPlotFormat() const { return m_PlotFormat; };
     void        SetOutputDirectory( wxString aDir ) { outputDirectory = aDir; };
     wxString    GetOutputDirectory() const { return outputDirectory; };
     void        SetUseGerberExtensions( bool aUse ) { useGerberExtensions = aUse; };

@@ -26,6 +26,7 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     wxASSERT( !outputFile );
     plotOffset  = aOffset;
     plotScale = aScale;
+    m_IUsPerDecimil = aIusPerDecimil;
     iuPerDeviceUnit = PLUsPERDECIMIL / aIusPerDecimil;
     /* Compute the paper size in IUs */
     paperSize = pageInfo.GetSizeMils();

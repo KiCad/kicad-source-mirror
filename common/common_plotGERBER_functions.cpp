@@ -25,6 +25,7 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     plotOffset = aOffset;
     wxASSERT( aScale == 1 );
     plotScale = 1;
+    m_IUsPerDecimil = aIusPerDecimil;
     iuPerDeviceUnit = 1.0 / aIusPerDecimil;
     /* We don't handle the filmbox, and it's more useful to keep the
      * origin at the origin */

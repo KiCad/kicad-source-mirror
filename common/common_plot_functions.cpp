@@ -16,6 +16,32 @@
 #include <drawtxt.h>
 #include <class_title_block.h>
 
+
+wxString GetDefaultPlotExtension( PlotFormat aFormat )
+{
+    switch( aFormat )
+    {
+    case PLOT_FORMAT_DXF:
+        return DXF_PLOTTER::GetDefaultFileExtension();
+
+    case PLOT_FORMAT_POST:
+        return PS_PLOTTER::GetDefaultFileExtension();
+
+    case PLOT_FORMAT_PDF:
+        return PDF_PLOTTER::GetDefaultFileExtension();
+
+    case PLOT_FORMAT_HPGL:
+        return HPGL_PLOTTER::GetDefaultFileExtension();
+
+    case PLOT_FORMAT_GERBER:
+        return GERBER_PLOTTER::GetDefaultFileExtension();
+
+    default:
+        wxASSERT( false );
+        return wxEmptyString;
+    }
+}
+
 /* Plot sheet references
  * margin is in mils (1/1000 inch)
  */

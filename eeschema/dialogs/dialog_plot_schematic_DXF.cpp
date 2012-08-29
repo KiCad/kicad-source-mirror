@@ -188,7 +188,8 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
         plot_offset.x = 0;
         plot_offset.y = 0;
 
-        plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".dxf" );
+        plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + '.'
+	    + DXF_PLOTTER::GetDefaultFileExtension();
 
         PlotOneSheetDXF( plotFileName, screen, plot_offset, 1 );
 
@@ -229,9 +230,8 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
 
     const PAGE_INFO&   pageInfo = screen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
-
-    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, 0 );
     plotter->SetColorMode( m_plotColorOpt );
+    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-DXF" ) );

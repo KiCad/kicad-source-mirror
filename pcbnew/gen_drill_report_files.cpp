@@ -55,7 +55,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     case PLOT_FORMAT_GERBER:
         offset  = auxoffset;
         plotter = new GERBER_PLOTTER();
-        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         break;
 
     case PLOT_FORMAT_HPGL:  // Scale for HPGL format.
@@ -66,7 +66,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             hpgl_plotter->SetPenSpeed( plot_opts.m_HPGLPenSpeed );
             hpgl_plotter->SetPenOverlap( 0 );
             plotter->SetPageSettings( aSheet );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         }
         break;
 
@@ -100,7 +100,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             PS_PLOTTER* ps_plotter = new PS_PLOTTER;
             plotter = ps_plotter;
             ps_plotter->SetPageSettings( pageA4 );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         }
         break;
 
@@ -109,7 +109,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
             plotter = dxf_plotter;
             plotter->SetPageSettings( aSheet );
-            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, 0 );
+            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         }
         break;
 

@@ -56,7 +56,6 @@
 #define MIN_SCALE 0.01
 #define MAX_SCALE 100.0
 
-
 static bool setDouble( double* aDouble, double aValue, double aMin, double aMax )
 {
     if( aValue < aMin )
@@ -110,8 +109,6 @@ private:
     void CreateDrillFile( wxCommandEvent& event );
 };
 
-
-//const int UNITS_MILS = 1000;
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ),
@@ -567,7 +564,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
-    tempOptions.SetPlotFormat( m_plotFormatOpt->GetSelection() );
+    tempOptions.SetPlotFormat( static_cast<PlotFormat>(m_plotFormatOpt->GetSelection()) );
 
     long selectedLayers = 0;
     unsigned int i;
@@ -601,7 +598,6 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 {
     int        layer;
     wxFileName fn;
-    wxString   ext;
 
     applyPlotSettings();
 
@@ -676,24 +672,15 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     switch( m_plotOpts.GetPlotFormat() )
     {
-    case PLOT_FORMAT_POST:
-        ext = wxT( "ps" );
-        break;
-
     case PLOT_FORMAT_GERBER:
-        m_plotOpts.m_PlotScale = 1.0; // No scale option allowed in gerber format
-        ext = wxT( "pho" );
-        break;
-
-    case PLOT_FORMAT_HPGL:
-        ext = wxT( "plt" );
-        break;
-
     case PLOT_FORMAT_DXF:
-        m_plotOpts.m_PlotScale = 1.0;
-        ext = wxT( "dxf" );
+        m_plotOpts.m_PlotScale = 1.0; // No scaling for these
+        break;
+    default:
         break;
     }
+
+    wxString file_ext( GetDefaultPlotExtension( m_plotOpts.GetPlotFormat() ) );
 
     // Test for a reasonable scale value
     if( m_plotOpts.m_PlotScale < MIN_SCALE )
@@ -704,6 +691,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         DisplayInfoMessage( this,
                             _( "Warning: Scale option set to a very large value" ) );
 
+    // Save the current plot options in the board
     m_parent->SetPlotSettings( m_plotOpts );
 
     long layerMask = 1;
@@ -803,7 +791,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             }
             else
             {
-                fn.SetExt( ext );
+                fn.SetExt( file_ext );
             }
 
             switch( m_plotOpts.GetPlotFormat() )

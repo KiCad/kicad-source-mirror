@@ -607,22 +607,22 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString           aFileName,
     switch( format )
     {
     case PLOT_FORMAT_HPGL:
-        ext = wxT( "plt" );
+        ext = HPGL_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "HPGL plot files (.plt)|*.plt" );
         break;
 
     case PLOT_FORMAT_POST:
-        ext = wxT( "ps" );
+        ext = PS_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "PostScript files (.ps)|*.ps" );
         break;
 
     case PLOT_FORMAT_GERBER:
-        ext = wxT( "pho" );
+        ext = GERBER_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "Gerber files (.pho)|*.pho" );
         break;
 
     case PLOT_FORMAT_DXF:
-        ext = wxT( "dxf" );
+        ext = DXF_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "DXF files (.dxf)|*.dxf" );
         break;
 
