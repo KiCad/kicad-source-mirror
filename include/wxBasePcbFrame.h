@@ -91,9 +91,6 @@ protected:
     /// main window.
     wxAuiToolBar* m_auxiliaryToolBar;
 
-    /// True prints or plots the drawing border and title block.
-    bool m_printBorderAndTitleBlock;
-
     void updateGridSelectBox();
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh();
@@ -104,8 +101,6 @@ public:
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~PCB_BASE_FRAME();
-
-    bool GetPrintBorderAndTitleBlock() const { return m_printBorderAndTitleBlock; }
 
     /**
      * Function GetBoardBoundingBox

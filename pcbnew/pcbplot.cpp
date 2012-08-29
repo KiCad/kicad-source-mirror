@@ -220,15 +220,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
 
     // Option to plot page references:
-    if( m_parent->GetPrintBorderAndTitleBlock() )
-    {
-        m_plotSheetRef->SetValue( m_plotOpts.m_PlotFrameRef );
-    }
-    else
-    {
-        m_plotSheetRef->Enable( false );
-        m_plotSheetRef->SetValue( false );
-    }
+    m_plotSheetRef->SetValue( m_plotOpts.m_PlotFrameRef );
 
     // Option to plot pads on silkscreen layers or all layers
     m_plotPads_on_Silkscreen->SetValue( m_plotOpts.m_PlotPadsOnSilkLayer );
