@@ -242,7 +242,8 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
         plot_offset.x = 0;
         plot_offset.y = 0;
 
-        plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + wxT( ".ps" );
+        plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + '.'
+		+ PS_PLOTTER::GetDefaultFileExtension();
 
         plotOneSheetPS( plotFileName, screen, plotPage, plot_offset, scale );
 
@@ -281,10 +282,9 @@ void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString&  FileName,
 
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetPageSettings( pageInfo );
-    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, 0 );
     plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
     plotter->SetColorMode( m_plotColorOpt );
-    plotter->SetPsTextMode( PSTEXTMODE_STROKE );
+    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-PS" ) );

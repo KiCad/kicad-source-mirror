@@ -116,7 +116,6 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     plotter->SetDefaultLineWidth( plotOpts.m_PlotLineWidth );
     plotter->SetCreator( wxT( "PCBNEW-PS" ) );
     plotter->SetFilename( aFullFileName );
-    plotter->SetPsTextMode( PSTEXTMODE_PHANTOM );
     plotter->StartPlot( output_file );
 
     /* The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway */
