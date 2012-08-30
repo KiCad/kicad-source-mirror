@@ -139,26 +139,26 @@ void DIALOG_PLOT::Init_Dialog()
     m_WidthAdjustMinValue = -(m_board->GetDesignSettings().m_TrackMinWidth - 1);
     m_WidthAdjustMaxValue = m_board->GetSmallestClearanceValue() - 1;
 
-    m_plotFormatOpt->SetSelection( m_plotOpts.GetPlotFormat() );
+    m_plotFormatOpt->SetSelection( m_plotOpts.GetFormat() );
 
     // Set units and value for HPGL pen size (this param in in mils).
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
     msg = ReturnStringFromValue( g_UserUnit,
-                                 m_plotOpts.GetHpglPenDiameter() * IU_PER_MILS );
+                                 m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
 
     // Units are *always* cm/s for HPGL pen speed, from 1 to 99.
-    msg = ReturnStringFromValue( UNSCALED_UNITS, m_plotOpts.GetHpglPenSpeed() );
+    msg = ReturnStringFromValue( UNSCALED_UNITS, m_plotOpts.GetHPGLPenSpeed() );
     m_HPGLPenSpeedOpt->AppendText( msg );
 
     // Set units and value for HPGL pen overlay (this param in in mils).
     AddUnitSymbol( *m_textPenOvr, g_UserUnit );
     msg = ReturnStringFromValue( g_UserUnit,
-                                 m_plotOpts.GetHpglPenOverlay() * IU_PER_MILS );
+                                 m_plotOpts.GetHPGLPenOverlay() * IU_PER_MILS );
     m_HPGLPenOverlayOpt->AppendText( msg );
 
     AddUnitSymbol( *m_textDefaultPenSize, g_UserUnit );
-    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetPlotLineWidth() );
+    msg = ReturnStringFromValue( g_UserUnit, m_plotOpts.GetLineWidth() );
     m_linesWidth->AppendText( msg );
 
     // Set units for PS global width correction.
@@ -184,8 +184,8 @@ void DIALOG_PLOT::Init_Dialog()
     msg.Printf( wxT( "%f" ), To_User_Unit( g_UserUnit, m_PSWidthAdjust ) );
     m_PSFineAdjustWidthOpt->AppendText( msg );
 
-    m_plotPSNegativeOpt->SetValue( m_plotOpts.m_PlotPSNegative );
-    m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetPsA4Output() );
+    m_plotPSNegativeOpt->SetValue( m_plotOpts.GetNegative() );
+    m_forcePSA4OutputOpt->SetValue( m_plotOpts.GetA4Output() );
 
     //  List layers in same order than in setup layers dialog
     // (Front or Top to Back or Bottom)
@@ -212,36 +212,36 @@ void DIALOG_PLOT::Init_Dialog()
     m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberExtensions() );
 
     // Option for excluding contents of "Edges Pcb" layer
-    m_excludeEdgeLayerOpt->SetValue( m_plotOpts.m_ExcludeEdgeLayer );
+    m_excludeEdgeLayerOpt->SetValue( m_plotOpts.GetExcludeEdgeLayer() );
 
     m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
 
     // Option to plot page references:
-    m_plotSheetRef->SetValue( m_plotOpts.m_PlotFrameRef );
+    m_plotSheetRef->SetValue( m_plotOpts.GetPlotFrameRef() );
 
-    // Option to plot pads on silkscreen layers or all layers
-    m_plotPads_on_Silkscreen->SetValue( m_plotOpts.m_PlotPadsOnSilkLayer );
+    // Option to allow pads on silkscreen layers
+    m_plotPads_on_Silkscreen->SetValue( m_plotOpts.GetPlotPadsOnSilkLayer() );
 
     // Options to plot texts on footprints
-    m_plotModuleValueOpt->SetValue( m_plotOpts.m_PlotValue );
-    m_plotModuleRefOpt->SetValue( m_plotOpts.m_PlotReference );
-    m_plotTextOther->SetValue( m_plotOpts.m_PlotTextOther );
-    m_plotInvisibleText->SetValue( m_plotOpts.m_PlotInvisibleTexts );
+    m_plotModuleValueOpt->SetValue( m_plotOpts.GetPlotValue() );
+    m_plotModuleRefOpt->SetValue( m_plotOpts.GetPlotReference() );
+    m_plotTextOther->SetValue( m_plotOpts.GetPlotOtherText() );
+    m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
 
     // Options to plot pads and vias holes
-    m_drillShapeOpt->SetSelection( m_plotOpts.m_DrillShapeOpt );
+    m_drillShapeOpt->SetSelection( m_plotOpts.GetDrillMarksType() );
 
     // Scale option
     m_scaleOpt->SetSelection( m_plotOpts.GetScaleSelection() );
 
     // Plot mode
-    m_plotModeOpt->SetSelection( m_plotOpts.m_PlotMode );
+    m_plotModeOpt->SetSelection( m_plotOpts.GetMode() );
 
     // Plot mirror option
-    m_plotMirrorOpt->SetValue( m_plotOpts.m_PlotMirror );
+    m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
 
     // Put vias on mask layer
-    m_plotNoViaOnMaskOpt->SetValue( m_plotOpts.m_PlotViaOnMaskLayer );
+    m_plotNoViaOnMaskOpt->SetValue( m_plotOpts.GetPlotViaOnMaskLayer() );
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
@@ -324,37 +324,39 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     switch( m_plotFormatOpt->GetSelection() )
     {
     case PLOT_FORMAT_POST:
-    default:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( true );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
+        m_useAuxOriginCheckBox->SetValue( false );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
         m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
-        m_excludeEdgeLayerOpt->SetValue( false );
-        m_excludeEdgeLayerOpt->Enable( false );
+        m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
+        m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
+        m_useGerberExtensions->SetValue( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( true );
         m_fineAdjustYscaleOpt->Enable( true );
         m_PSFineAdjustWidthOpt->Enable( true );
         m_plotPSNegativeOpt->Enable( true );
+        m_forcePSA4OutputOpt->Enable( true );
+
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Show( m_PSOptionsSizer );
-        Layout();
-        m_MainSizer->SetSizeHints( this );
         break;
 
     case PLOT_FORMAT_GERBER:
         m_drillShapeOpt->Enable( false );
-        m_plotModeOpt->SetSelection( 1 );
+        m_drillShapeOpt->SetSelection( 0 );
         m_plotModeOpt->Enable( false );
-        m_plotMirrorOpt->SetValue( false );
+        m_plotModeOpt->SetSelection( 1 );
         m_plotMirrorOpt->Enable( false );
+        m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
@@ -363,74 +365,89 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( true );
         m_useGerberExtensions->Enable( true );
-        m_scaleOpt->SetSelection( 1 );
         m_scaleOpt->Enable( false );
+        m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
         m_PSFineAdjustWidthOpt->Enable( false );
-        m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
+        m_plotPSNegativeOpt->SetValue( false );
+        m_forcePSA4OutputOpt->Enable( false );
+        m_forcePSA4OutputOpt->SetValue( false );
+
         m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
-        Layout();
-        m_MainSizer->SetSizeHints( this );
         break;
 
     case PLOT_FORMAT_HPGL:
-        m_plotMirrorOpt->Enable( true );
-        m_drillShapeOpt->Enable( false );
+        m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( true );
+        m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
+        m_useAuxOriginCheckBox->SetValue( false );
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( true );
         m_HPGLPenSpeedOpt->Enable( true );
         m_HPGLPenOverlayOpt->Enable( true );
-        m_excludeEdgeLayerOpt->SetValue( false );
-        m_excludeEdgeLayerOpt->Enable( false );
+        m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
+        m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
+        m_useGerberExtensions->SetValue( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
         m_PSFineAdjustWidthOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
+        m_forcePSA4OutputOpt->Enable( true );
+
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Show( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
-        Layout();
-        m_MainSizer->SetSizeHints( this );
         break;
 
     case PLOT_FORMAT_DXF:
+        m_drillShapeOpt->Enable( true );
+        m_plotModeOpt->Enable( true );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
-        m_drillShapeOpt->Enable( false );
-        m_plotModeOpt->Enable( true );
-        m_useAuxOriginCheckBox->Enable( false );
+        m_useAuxOriginCheckBox->Enable( true );
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( false );
         m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
-        m_excludeEdgeLayerOpt->SetValue( false );
-        m_excludeEdgeLayerOpt->Enable( false );
+        m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
+        m_subtractMaskFromSilk->SetValue( false );
         m_useGerberExtensions->Enable( false );
+        m_useGerberExtensions->SetValue( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
         m_PSFineAdjustWidthOpt->Enable( false );
-        m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
-        m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
+        m_plotPSNegativeOpt->SetValue( false );
+        m_forcePSA4OutputOpt->Enable( false );
+        m_forcePSA4OutputOpt->SetValue( false );
+
+        m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
-        Layout();
-        m_MainSizer->SetSizeHints( this );
         break;
+
+    default:
+        wxASSERT( false );
     }
+
+    /* Update the interlock between scale and frame reference
+     * (scaling would mess up the frame border...) */
+    OnSetScaleOpt( event );
+
+    Layout();
+    m_MainSizer->SetSizeHints( this );
 }
 
 
@@ -438,29 +455,28 @@ void DIALOG_PLOT::applyPlotSettings()
 {
     PCB_PLOT_PARAMS tempOptions;
 
-    tempOptions.m_ExcludeEdgeLayer = m_excludeEdgeLayerOpt->GetValue();
+    tempOptions.SetExcludeEdgeLayer( m_excludeEdgeLayerOpt->GetValue() );
 
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
 
-    if( m_plotSheetRef )
-        tempOptions.m_PlotFrameRef = m_plotSheetRef->GetValue();
+    tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
 
-    tempOptions.m_PlotPadsOnSilkLayer = m_plotPads_on_Silkscreen->GetValue();
+    tempOptions.SetPlotPadsOnSilkLayer( m_plotPads_on_Silkscreen->GetValue() );
 
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
 
-    tempOptions.m_PlotValue     = m_plotModuleValueOpt->GetValue();
-    tempOptions.m_PlotReference = m_plotModuleRefOpt->GetValue();
-    tempOptions.m_PlotTextOther = m_plotTextOther->GetValue();
-    tempOptions.m_PlotInvisibleTexts = m_plotInvisibleText->GetValue();
+    tempOptions.SetPlotValue( m_plotModuleValueOpt->GetValue() );
+    tempOptions.SetPlotReference( m_plotModuleRefOpt->GetValue() );
+    tempOptions.SetPlotOtherText( m_plotTextOther->GetValue() );
+    tempOptions.SetPlotInvisibleText( m_plotInvisibleText->GetValue() );
 
     tempOptions.SetScaleSelection( m_scaleOpt->GetSelection() );
 
-    tempOptions.m_DrillShapeOpt =
-        (PCB_PLOT_PARAMS::DrillShapeOptT) m_drillShapeOpt->GetSelection();
-    tempOptions.m_PlotMirror = m_plotMirrorOpt->GetValue();
-    tempOptions.m_PlotMode   = (EDA_DRAW_MODE_T) m_plotModeOpt->GetSelection();
-    tempOptions.m_PlotViaOnMaskLayer = m_plotNoViaOnMaskOpt->GetValue();
+    tempOptions.SetDrillMarksType( static_cast<PCB_PLOT_PARAMS::DrillMarksType>
+            ( m_drillShapeOpt->GetSelection() ) );
+    tempOptions.SetMirror( m_plotMirrorOpt->GetValue() );
+    tempOptions.SetMode( static_cast<EDA_DRAW_MODE_T>( m_plotModeOpt->GetSelection() ) );
+    tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.
@@ -469,9 +485,9 @@ void DIALOG_PLOT::applyPlotSettings()
     wxString msg = m_HPGLPenSizeOpt->GetValue();
     int      tmp = ReturnValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
 
-    if( !tempOptions.SetHpglPenDiameter( tmp ) )
+    if( !tempOptions.SetHPGLPenDiameter( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenDiameter() * IU_PER_MILS );
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen size constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -481,9 +497,9 @@ void DIALOG_PLOT::applyPlotSettings()
     msg = m_HPGLPenSpeedOpt->GetValue();
     tmp = ReturnValueFromString( UNSCALED_UNITS, msg );
 
-    if( !tempOptions.SetHpglPenSpeed( tmp ) )
+    if( !tempOptions.SetHPGLPenSpeed( tmp ) )
     {
-        msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHpglPenSpeed() );
+        msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHPGLPenSpeed() );
         m_HPGLPenSpeedOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen speed constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -493,10 +509,10 @@ void DIALOG_PLOT::applyPlotSettings()
     msg = m_HPGLPenOverlayOpt->GetValue();
     tmp = ReturnValueFromString( g_UserUnit, msg ) / IU_PER_MILS;
 
-    if( !tempOptions.SetHpglPenOverlay( tmp ) )
+    if( !tempOptions.SetHPGLPenOverlay( tmp ) )
     {
         msg = ReturnStringFromValue( g_UserUnit,
-                                     tempOptions.GetHpglPenOverlay() * IU_PER_MILS );
+                                     tempOptions.GetHPGLPenOverlay() * IU_PER_MILS );
         m_HPGLPenOverlayOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen overlay constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -506,9 +522,9 @@ void DIALOG_PLOT::applyPlotSettings()
     msg = m_linesWidth->GetValue();
     tmp = ReturnValueFromString( g_UserUnit, msg );
 
-    if( !tempOptions.SetPlotLineWidth( tmp ) )
+    if( !tempOptions.SetLineWidth( tmp ) )
     {
-        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetPlotLineWidth() );
+        msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetLineWidth() );
         m_linesWidth->SetValue( msg );
         msg.Printf( _( "Default linewidth constrained!\n" ) );
         m_messagesBox->AppendText( msg );
@@ -564,7 +580,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
-    tempOptions.SetPlotFormat( static_cast<PlotFormat>(m_plotFormatOpt->GetSelection()) );
+    tempOptions.SetFormat( static_cast<PlotFormat>( m_plotFormatOpt->GetSelection() ) );
 
     long selectedLayers = 0;
     unsigned int i;
@@ -576,8 +592,8 @@ void DIALOG_PLOT::applyPlotSettings()
     }
 
     tempOptions.SetLayerSelection( selectedLayers );
-    tempOptions.m_PlotPSNegative = m_plotPSNegativeOpt->GetValue();
-    tempOptions.SetPsA4Output( m_forcePSA4OutputOpt->GetValue() );
+    tempOptions.SetNegative( m_plotPSNegativeOpt->GetValue() );
+    tempOptions.SetA4Output( m_forcePSA4OutputOpt->GetValue() );
 
     // Set output directory and replace backslashes with forward ones
     wxString dirStr;
@@ -631,28 +647,27 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         }
     }
 
-    m_plotOpts.m_AutoScale = false;
-    m_plotOpts.m_PlotScale = 1;
-
+    m_plotOpts.SetAutoScale( false );
+    m_plotOpts.SetScale( 1 );
     switch( m_plotOpts.GetScaleSelection() )
     {
     default:
         break;
 
-    case 0:
-        m_plotOpts.m_AutoScale = true;
+    case 0:     // Autoscale option
+        m_plotOpts.SetAutoScale( true );
         break;
 
-    case 2:
-        m_plotOpts.m_PlotScale = 1.5;
+    case 2:     // 3:2 option
+        m_plotOpts.SetScale( 1.5 );
         break;
 
-    case 3:
-        m_plotOpts.m_PlotScale = 2;
+    case 3:     // 2:1 option
+        m_plotOpts.SetScale( 2 );
         break;
 
-    case 4:
-        m_plotOpts.m_PlotScale = 3;
+    case 4:     // 3:1 option
+        m_plotOpts.SetScale( 3 );
         break;
     }
 
@@ -662,32 +677,34 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
      * settings resulting in a divide by zero fault.
      */
     if( m_fineAdjustXscaleOpt->IsEnabled()  && m_XScaleAdjust != 0.0 )
-        m_plotOpts.m_FineScaleAdjustX = m_XScaleAdjust;
+        m_plotOpts.SetFineScaleAdjustX( m_XScaleAdjust );
 
     if( m_fineAdjustYscaleOpt->IsEnabled() && m_YScaleAdjust != 0.0 )
-        m_plotOpts.m_FineScaleAdjustY = m_YScaleAdjust;
+        m_plotOpts.SetFineScaleAdjustY( m_YScaleAdjust );
 
     if( m_PSFineAdjustWidthOpt->IsEnabled() )
-        m_plotOpts.m_FineWidthAdjust = m_PSWidthAdjust;
+        m_plotOpts.SetWidthAdjust( m_PSWidthAdjust );
 
-    switch( m_plotOpts.GetPlotFormat() )
+    switch( m_plotOpts.GetFormat() )
     {
     case PLOT_FORMAT_GERBER:
     case PLOT_FORMAT_DXF:
-        m_plotOpts.m_PlotScale = 1.0; // No scaling for these
+        m_plotOpts.SetScale( 1 ); // No scaling for these
         break;
     default:
         break;
     }
 
-    wxString file_ext( GetDefaultPlotExtension( m_plotOpts.GetPlotFormat() ) );
+    wxString file_ext( GetDefaultPlotExtension( m_plotOpts.GetFormat() ) );
 
     // Test for a reasonable scale value
-    if( m_plotOpts.m_PlotScale < MIN_SCALE )
+    // XXX could this actually happen? isn't it constrained in the apply
+    // function?
+    if( m_plotOpts.GetScale() < MIN_SCALE )
         DisplayInfoMessage( this,
                             _( "Warning: Scale option set to a very small value" ) );
 
-    if( m_plotOpts.m_PlotScale > MAX_SCALE )
+    if( m_plotOpts.GetScale() > MAX_SCALE )
         DisplayInfoMessage( this,
                             _( "Warning: Scale option set to a very large value" ) );
 
@@ -713,7 +730,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
             // Use Gerber Extensions based on layer number
             // (See http://en.wikipedia.org/wiki/Gerber_File)
-            if( ( m_plotOpts.GetPlotFormat() == PLOT_FORMAT_GERBER )
+            if( ( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER )
                 && m_useGerberExtensions->GetValue() )
             {
                 switch( layer )
@@ -794,28 +811,28 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
                 fn.SetExt( file_ext );
             }
 
-            switch( m_plotOpts.GetPlotFormat() )
+            switch( m_plotOpts.GetFormat() )
             {
             case PLOT_FORMAT_POST:
                 success = m_parent->ExportToPostScriptFile( fn.GetFullPath(), layer,
-                                                            m_plotOpts.GetPsA4Output(),
-                                                            m_plotOpts.m_PlotMode );
+                                                            m_plotOpts.GetA4Output(),
+                                                            m_plotOpts.GetMode() );
                 break;
 
             case PLOT_FORMAT_GERBER:
                 success = m_parent->ExportToGerberFile( fn.GetFullPath(), layer,
                                                         m_plotOpts.GetUseAuxOrigin(),
-                                                        m_plotOpts.m_PlotMode );
+                                                        m_plotOpts.GetMode() );
                 break;
 
             case PLOT_FORMAT_HPGL:
                 success = m_parent->ExportToHpglFile( fn.GetFullPath(), layer,
-                                                      m_plotOpts.m_PlotMode );
+                                                      m_plotOpts.GetMode() );
                 break;
 
             case PLOT_FORMAT_DXF:
                 success = m_parent->ExportToDxfFile( fn.GetFullPath(), layer,
-                                                     m_plotOpts.m_PlotMode );
+                                                     m_plotOpts.GetMode() );
                 break;
             }
 

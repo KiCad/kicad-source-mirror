@@ -353,7 +353,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
 
     int idx = m_ScaleOption->GetSelection();
     s_Parameters.m_PrintScale =  s_ScaleList[idx];
-    plot_opts.m_PlotScale =  s_Parameters.m_PrintScale;
+    plot_opts.SetScale( s_Parameters.m_PrintScale );
 
     if( m_FineAdjustXscaleOpt )
     {
@@ -371,8 +371,8 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
         m_FineAdjustYscaleOpt->GetValue().ToDouble( &s_Parameters.m_YScaleAdjust );
     }
 
-    plot_opts.m_FineScaleAdjustX = s_Parameters.m_XScaleAdjust;
-    plot_opts.m_FineScaleAdjustY = s_Parameters.m_YScaleAdjust;
+    plot_opts.SetFineScaleAdjustX( s_Parameters.m_XScaleAdjust );
+    plot_opts.SetFineScaleAdjustY( s_Parameters.m_YScaleAdjust );
 
     m_parent->SetPlotSettings( plot_opts );
 
