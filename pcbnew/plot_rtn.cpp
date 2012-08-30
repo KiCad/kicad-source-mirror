@@ -80,7 +80,7 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* aPlotter, int aLayerMask, EDA_DRAW
     int layersmask_plotpads = aLayerMask;
     // Calculate the mask layers of allowed layers for pads
 
-    if( !plot_opts.m_PlotPadsOnSilkLayer )       // Do not plot pads on silk screen layers
+    if( !plot_opts.GetPlotPadsOnSilkLayer() )       // Do not plot pads on silk screen layers
         layersmask_plotpads &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT );
 
     if( layersmask_plotpads )
@@ -129,8 +129,8 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* aPlotter, int aLayerMask, EDA_DRAW
     for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
     {
         // see if we want to plot VALUE and REF fields
-        trace_val = plot_opts.m_PlotValue;
-        trace_ref = plot_opts.m_PlotReference;
+        trace_val = plot_opts.GetPlotValue();
+        trace_ref = plot_opts.GetPlotReference();
 
         TEXTE_MODULE* text = module->m_Reference;
         unsigned      textLayer = text->GetLayer();
@@ -149,7 +149,7 @@ module\n %s's \"reference\" text." ),
         if( ( ( 1 << textLayer ) & aLayerMask ) == 0 )
             trace_ref = false;
 
-        if( !text->IsVisible() && !plot_opts.m_PlotInvisibleTexts )
+        if( !text->IsVisible() && !plot_opts.GetPlotInvisibleText() )
             trace_ref = false;
 
         text = module->m_Value;
@@ -169,7 +169,7 @@ module\n %s's \"value\" text." ),
         if( ( (1 << textLayer) & aLayerMask ) == 0 )
             trace_val = false;
 
-        if( !text->IsVisible() && !plot_opts.m_PlotInvisibleTexts )
+        if( !text->IsVisible() && !plot_opts.GetPlotInvisibleText() )
             trace_val = false;
 
         // Plot text fields, if allowed
@@ -186,10 +186,10 @@ module\n %s's \"value\" text." ),
             if( pt_texte->Type() != PCB_MODULE_TEXT_T )
                 continue;
 
-            if( !plot_opts.m_PlotTextOther )
+            if( !plot_opts.GetPlotOtherText() )
                 continue;
 
-            if( !pt_texte->IsVisible() && !plot_opts.m_PlotInvisibleTexts )
+            if( !pt_texte->IsVisible() && !plot_opts.GetPlotInvisibleText() )
                 continue;
 
             textLayer = pt_texte->GetLayer();
@@ -417,7 +417,7 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
             double endAngle = startAngle + aEdge->GetAngle();
 
-            if ( ( aPlotOpts.GetPlotFormat() == PLOT_FORMAT_DXF ) &&
+            if ( ( aPlotOpts.GetFormat() == PLOT_FORMAT_DXF ) &&
                ( masque_layer & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
                 aPlotter->ThickArc( pos, -startAngle, -endAngle, radius,
                                 thickness, trace_mode );
@@ -607,7 +607,7 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, DRAWS
         return;
 
     if( trace_mode == LINE )
-        thickness = aPlotOpts.m_PlotLineWidth;
+        thickness = aPlotOpts.GetLineWidth();
     else
         thickness = aSeg->GetWidth();
 
@@ -658,7 +658,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* aPlotter, int Layer, EDA_DRAW_MODE_T t
     // in addition to the contents of the currently specified layer.
     int layer_mask = GetLayerMask( Layer );
 
-    if( !plot_opts.m_ExcludeEdgeLayer )
+    if( !plot_opts.GetExcludeEdgeLayer() )
         layer_mask |= EDGE_LAYER;
 
     switch( Layer )
@@ -679,15 +679,15 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* aPlotter, int Layer, EDA_DRAW_MODE_T t
     case LAYER_N_14:
     case LAYER_N_15:
     case LAST_COPPER_LAYER:
-        Plot_Standard_Layer( aPlotter, layer_mask, true, trace_mode,
-                             plot_opts.m_SkipNPTH_Pads );
+        // The last true make it skip NPTH pad plotting
+        Plot_Standard_Layer( aPlotter, layer_mask, true, trace_mode, true );
 
         // Adding drill marks, if required and if the plotter is able to plot them:
-        if( plot_opts.m_DrillShapeOpt != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
+        if( plot_opts.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         {
             if( aPlotter->GetPlotterType() == PLOT_FORMAT_POST )
                 PlotDrillMark( aPlotter, trace_mode,
-                               plot_opts.m_DrillShapeOpt ==
+                               plot_opts.GetDrillMarksType() ==
                                PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE );
         }
 
@@ -696,7 +696,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* aPlotter, int Layer, EDA_DRAW_MODE_T t
     case SOLDERMASK_N_BACK:
     case SOLDERMASK_N_FRONT:
         Plot_Standard_Layer( aPlotter, layer_mask,
-                             plot_opts.m_PlotViaOnMaskLayer, trace_mode );
+                             plot_opts.GetPlotViaOnMaskLayer(), trace_mode );
         break;
 
     case SOLDERPASTE_N_BACK:
@@ -724,7 +724,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* aPlotter, int Layer, EDA_DRAW_MODE_T t
             // Set layer polarity to negative
             aPlotter->SetLayerPolarity( false );
             Plot_Standard_Layer( aPlotter, layer_mask,
-                                 plot_opts.m_PlotViaOnMaskLayer,
+                                 plot_opts.GetPlotViaOnMaskLayer(),
                                  trace_mode );
         }
 
@@ -1012,7 +1012,7 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
         pos = pts->m_Start;
 
         // It is quite possible that the real drill value is less then small drill value.
-        if( plot_opts.m_DrillShapeOpt == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
+        if( plot_opts.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
             diam.x = diam.y = MIN( SMALL_DRILL, pts->GetDrillValue() );
         else
             diam.x = diam.y = pts->GetDrillValue();

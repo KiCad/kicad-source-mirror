@@ -46,7 +46,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
         return false;
     }
 
-    if( plotOpts.m_PlotScale != 1.0 || plotOpts.m_AutoScale )
+    if( plotOpts.GetScale() != 1.0 || plotOpts.GetAutoScale() )
     {
         // when scale != 1.0 we must calculate the position in page
         // because actual position has no meaning
@@ -54,8 +54,8 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     }
 
     // Set default line width
-    if( plotOpts.m_PlotLineWidth < 1 )
-        plotOpts.m_PlotLineWidth = 1;
+    if( plotOpts.GetLineWidth() < 1 )
+        plotOpts.SetLineWidth( 1 );
 
     wxSize pageSizeIU = GetPageSizeIU();
 
@@ -77,7 +77,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     boardSize   = bbbox.GetSize();
     boardCenter = bbbox.Centre();
 
-    if( plotOpts.m_AutoScale )       // Optimum scale
+    if( plotOpts.GetAutoScale() )       // Optimum scale
     {
         // Fit to 80% of the page
         double Xscale = (paperSizeIU.x * 0.8) / boardSize.x;
@@ -87,7 +87,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     }
     else
     {
-        scale = plotOpts.m_PlotScale * paperscale;
+        scale = plotOpts.GetScale() * paperscale;
     }
 
     if( center )
@@ -108,24 +108,24 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     // why did we have to change these settings?
     SetPlotSettings( plotOpts );
 
-    plotter->SetScaleAdjust( plotOpts.m_FineScaleAdjustX,
-                               plotOpts.m_FineScaleAdjustY );
-    plotter->SetPlotWidthAdj( plotOpts.m_FineWidthAdjust );
+    plotter->SetScaleAdjust( plotOpts.GetFineScaleAdjustX(),
+                               plotOpts.GetFineScaleAdjustY() );
+    plotter->SetPlotWidthAdj( plotOpts.GetWidthAdjust() );
     plotter->SetViewport( offset, IU_PER_DECIMILS, scale,
-	                  plotOpts.m_PlotMirror );
-    plotter->SetDefaultLineWidth( plotOpts.m_PlotLineWidth );
+	                  plotOpts.GetMirror() );
+    plotter->SetDefaultLineWidth( plotOpts.GetLineWidth() );
     plotter->SetCreator( wxT( "PCBNEW-PS" ) );
     plotter->SetFilename( aFullFileName );
     plotter->StartPlot( output_file );
 
     /* The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway */
-    if( plotOpts.m_PlotFrameRef && !center )
-        PlotWorkSheet( plotter, GetScreen(), plotOpts.GetPlotLineWidth() );
+    if( plotOpts.GetPlotFrameRef() && !center )
+        PlotWorkSheet( plotter, GetScreen(), plotOpts.GetLineWidth() );
 
     // If plot a negative board:
     // Draw a black rectangle (background for plot board in white)
     // and switch the current color to WHITE
-    if( plotOpts.m_PlotPSNegative )
+    if( plotOpts.GetNegative() )
     {
         int margin = 500;              // Add a 0.5 inch margin around the board
         plotter->SetNegative( true );

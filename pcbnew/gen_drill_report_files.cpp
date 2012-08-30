@@ -62,8 +62,8 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         {
             HPGL_PLOTTER* hpgl_plotter = new HPGL_PLOTTER;
             plotter = hpgl_plotter;
-            hpgl_plotter->SetPenNumber( plot_opts.m_HPGLPenNum );
-            hpgl_plotter->SetPenSpeed( plot_opts.m_HPGLPenSpeed );
+            hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
+            hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
             hpgl_plotter->SetPenOverlap( 0 );
             plotter->SetPageSettings( aSheet );
             plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );

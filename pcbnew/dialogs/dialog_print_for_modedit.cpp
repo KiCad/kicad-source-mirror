@@ -191,9 +191,9 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
     s_Parameters.m_PrintScale = s_ScaleList[m_ScaleOption->GetSelection()];
 
-    plot_opts.m_FineScaleAdjustX = s_Parameters.m_XScaleAdjust;
-    plot_opts.m_FineScaleAdjustY = s_Parameters.m_YScaleAdjust;
-    plot_opts.m_PlotScale = s_Parameters.m_PrintScale;
+    plot_opts.SetFineScaleAdjustX( s_Parameters.m_XScaleAdjust );
+    plot_opts.SetFineScaleAdjustY( s_Parameters.m_YScaleAdjust );
+    plot_opts.SetScale( s_Parameters.m_PrintScale );
 
     m_parent->SetPlotSettings( plot_opts );
 

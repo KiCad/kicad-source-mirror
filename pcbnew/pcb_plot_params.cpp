@@ -73,47 +73,49 @@ static bool setInt( int* aInt, int aValue, int aMin, int aMax )
     return (temp == aValue);
 }
 
-
 // PCB_PLOT_PARAMS
 
 PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 {
-    layerSelection         = LAYER_BACK | LAYER_FRONT
+    m_layerSelection       = LAYER_BACK | LAYER_FRONT
         | SILKSCREEN_LAYER_FRONT | SILKSCREEN_LAYER_BACK;
-    useGerberExtensions    = true;
-    m_SkipNPTH_Pads        = false;
-    m_ExcludeEdgeLayer     = true;
-    m_PlotLineWidth        = g_DrawDefaultLineThickness;
-    m_PlotFrameRef         = false;
-    m_PlotViaOnMaskLayer   = false;
-    m_PlotMode             = FILLED;
-    useAuxOrigin           = false;
+    m_useGerberExtensions  = true;
+    m_excludeEdgeLayer     = true;
+    m_lineWidth            = g_DrawDefaultLineThickness;
+    m_plotFrameRef         = false;
+    m_plotViaOnMaskLayer   = false;
+    m_mode                 = FILLED;
+    m_useAuxOrigin         = false;
     m_HPGLPenNum           = 1;
     m_HPGLPenSpeed         = 20;        // this param is always in cm/s
     m_HPGLPenDiam          = 15;        // in mils
     m_HPGLPenOvr           = 2;         // in mils
-    m_PlotPSColorOpt       = true;
-    m_PlotPSNegative       = false;
-    psA4Output             = false;
-    m_PlotReference        = true;
-    m_PlotValue            = true;
-    m_PlotTextOther        = true;
-    m_PlotInvisibleTexts   = false;
-    m_PlotPadsOnSilkLayer  = false;
-    subtractMaskFromSilk   = false;
-    m_PlotFormat           = PLOT_FORMAT_GERBER;
-    m_PlotMirror           = false;
-    m_DrillShapeOpt        = SMALL_DRILL_SHAPE;
-    m_AutoScale            = false;
-    m_PlotScale            = 1.0;
-    scaleSelection         = 1;
-    m_FineScaleAdjustX     = 1.0;
-    m_FineScaleAdjustY     = 1.0;
-    m_FineWidthAdjust      = 0.;
-    outputDirectory        = wxT( "" );
+    m_negative             = false;
+    m_A4Output             = false;
+    m_plotReference        = true;
+    m_plotValue            = true;
+    m_plotOtherText        = true;
+    m_plotInvisibleText    = false;
+    m_plotPadsOnSilkLayer  = false;
+    m_subtractMaskFromSilk = false;
+    m_format               = PLOT_FORMAT_GERBER;
+    m_mirror               = false;
+    m_drillMarks           = SMALL_DRILL_SHAPE;
+    m_autoScale            = false;
+    m_scale                = 1.0;
+    m_scaleSelection       = 1;
+    m_fineScaleAdjustX     = 1.0;
+    m_fineScaleAdjustY     = 1.0;
+    m_widthAdjust          = 0.;
+    m_outputDirectory.clear();
+    m_color                = BLACK;
+    m_referenceColor       = BLACK;
+    m_valueColor           = BLACK;
+    m_textMode		   = PLOTTEXTMODE_PHANTOM;
 }
 
 
+// PLEASE NOTE: only plot dialog options are processed
 void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                               int aNestLevel, int aControl ) const throw( IO_ERROR )
 {
@@ -122,21 +124,21 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 
     aFormatter->Print( aNestLevel, "(%s\n", getTokenName( T_pcbplotparams ) );
     aFormatter->Print( aNestLevel+1, "(%s %ld)\n", getTokenName( T_layerselection ),
-                       layerSelection );
+                       long(m_layerSelection) );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
-                       useGerberExtensions ? trueStr : falseStr );
+                       m_useGerberExtensions ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_excludeedgelayer ),
-                       m_ExcludeEdgeLayer ? trueStr : falseStr );
+                       m_excludeEdgeLayer ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_linewidth ),
-                       m_PlotLineWidth );
+                       m_lineWidth );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotframeref ),
-                       m_PlotFrameRef ? trueStr : falseStr );
+                       m_plotFrameRef ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_viasonmask ),
-                       m_PlotViaOnMaskLayer ? trueStr : falseStr );
+                       m_plotViaOnMaskLayer ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_mode ),
-                       m_PlotMode );
+                       m_mode );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_useauxorigin ),
-                       useAuxOrigin ? trueStr : falseStr );
+                       m_useAuxOrigin ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpennumber ),
                        m_HPGLPenNum );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
@@ -145,34 +147,32 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_HPGLPenDiam );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenoverlay ),
                        m_HPGLPenOvr );
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_pscolor ),
-                       m_PlotPSColorOpt ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psnegative ),
-                       m_PlotPSNegative ? trueStr : falseStr );
+                       m_negative ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psa4output ),
-                       psA4Output ? trueStr : falseStr );
+                       m_A4Output ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotreference ),
-                       m_PlotReference ? trueStr : falseStr );
+                       m_plotReference ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotvalue ),
-                       m_PlotValue ? trueStr : falseStr );
+                       m_plotValue ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotothertext ),
-                       m_PlotTextOther ? trueStr : falseStr );
+                       m_plotOtherText ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_plotinvisibletext ),
-                       m_PlotInvisibleTexts ? trueStr : falseStr );
+                       m_plotInvisibleText ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_padsonsilk ),
-                       m_PlotPadsOnSilkLayer ? trueStr : falseStr );
+                       m_plotPadsOnSilkLayer ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_subtractmaskfromsilk ),
-                       subtractMaskFromSilk ? trueStr : falseStr );
+                       m_subtractMaskFromSilk ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_outputformat ),
-                       m_PlotFormat );
+                       m_format );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_mirror ),
-                       m_PlotMirror ? trueStr : falseStr );
+                       m_mirror ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_drillshape ),
-                       m_DrillShapeOpt );
+                       m_drillMarks );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_scaleselection ),
-                       scaleSelection );
+                       m_scaleSelection );
     aFormatter->Print( aNestLevel+1, "(%s %s)", getTokenName( T_outputdirectory ),
-                       aFormatter->Quotew( outputDirectory ).c_str() );
+                       aFormatter->Quotew( m_outputDirectory ).c_str() );
     aFormatter->Print( 0, ")\n" );
 }
 
@@ -185,21 +185,21 @@ void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( IO_ERROR, 
 
 bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
 {
-    if( layerSelection != aPcbPlotParams.layerSelection )
+    if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
-    if( useGerberExtensions != aPcbPlotParams.useGerberExtensions )
+    if( m_useGerberExtensions != aPcbPlotParams.m_useGerberExtensions )
         return false;
-    if( m_ExcludeEdgeLayer != aPcbPlotParams.m_ExcludeEdgeLayer )
+    if( m_excludeEdgeLayer != aPcbPlotParams.m_excludeEdgeLayer )
         return false;
-    if( m_PlotLineWidth != aPcbPlotParams.m_PlotLineWidth )
+    if( m_lineWidth != aPcbPlotParams.m_lineWidth )
         return false;
-    if( m_PlotFrameRef != aPcbPlotParams.m_PlotFrameRef )
+    if( m_plotFrameRef != aPcbPlotParams.m_plotFrameRef )
         return false;
-    if( m_PlotViaOnMaskLayer != aPcbPlotParams.m_PlotViaOnMaskLayer )
+    if( m_plotViaOnMaskLayer != aPcbPlotParams.m_plotViaOnMaskLayer )
         return false;
-    if( m_PlotMode != aPcbPlotParams.m_PlotMode )
+    if( m_mode != aPcbPlotParams.m_mode )
         return false;
-    if( useAuxOrigin != aPcbPlotParams.useAuxOrigin )
+    if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
         return false;
     if( m_HPGLPenNum != aPcbPlotParams.m_HPGLPenNum )
         return false;
@@ -209,33 +209,49 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
     if( m_HPGLPenOvr != aPcbPlotParams.m_HPGLPenOvr )
         return false;
-    if( m_PlotPSColorOpt != aPcbPlotParams.m_PlotPSColorOpt )
+    if( m_negative != aPcbPlotParams.m_negative )
         return false;
-    if( m_PlotPSNegative != aPcbPlotParams.m_PlotPSNegative )
+    if( m_A4Output != aPcbPlotParams.m_A4Output )
         return false;
-    if( psA4Output != aPcbPlotParams.psA4Output )
+    if( m_plotReference != aPcbPlotParams.m_plotReference )
         return false;
-    if( m_PlotReference != aPcbPlotParams.m_PlotReference )
+    if( m_plotValue != aPcbPlotParams.m_plotValue )
         return false;
-    if( m_PlotValue != aPcbPlotParams.m_PlotValue )
+    if( m_plotOtherText != aPcbPlotParams.m_plotOtherText )
         return false;
-    if( m_PlotTextOther != aPcbPlotParams.m_PlotTextOther )
+    if( m_plotInvisibleText != aPcbPlotParams.m_plotInvisibleText )
         return false;
-    if( m_PlotInvisibleTexts != aPcbPlotParams.m_PlotInvisibleTexts )
+    if( m_plotPadsOnSilkLayer != aPcbPlotParams.m_plotPadsOnSilkLayer )
         return false;
-    if( m_PlotPadsOnSilkLayer != aPcbPlotParams.m_PlotPadsOnSilkLayer )
+    if( m_subtractMaskFromSilk != aPcbPlotParams.m_subtractMaskFromSilk )
         return false;
-    if( subtractMaskFromSilk != aPcbPlotParams.subtractMaskFromSilk )
+    if( m_format != aPcbPlotParams.m_format )
         return false;
-    if( m_PlotFormat != aPcbPlotParams.m_PlotFormat )
+    if( m_mirror != aPcbPlotParams.m_mirror )
         return false;
-    if( m_PlotMirror != aPcbPlotParams.m_PlotMirror )
+    if( m_drillMarks != aPcbPlotParams.m_drillMarks )
         return false;
-    if( m_DrillShapeOpt != aPcbPlotParams.m_DrillShapeOpt )
+    if( m_scaleSelection != aPcbPlotParams.m_scaleSelection )
         return false;
-    if( scaleSelection != aPcbPlotParams.scaleSelection )
+    if( m_autoScale != aPcbPlotParams.m_autoScale )
         return false;
-    if( !outputDirectory.IsSameAs( aPcbPlotParams.outputDirectory ) )
+    if( m_scale != aPcbPlotParams.m_scale )
+        return false;
+    if( m_fineScaleAdjustX != aPcbPlotParams.m_fineScaleAdjustX )
+        return false;
+    if( m_fineScaleAdjustY != aPcbPlotParams.m_fineScaleAdjustY )
+        return false;
+    if( m_widthAdjust != aPcbPlotParams.m_widthAdjust )
+        return false;
+    if( m_color != aPcbPlotParams.m_color )
+        return false;
+    if( m_referenceColor != aPcbPlotParams.m_referenceColor )
+        return false;
+    if( m_valueColor != aPcbPlotParams.m_valueColor )
+        return false;
+    if( m_textMode != aPcbPlotParams.m_textMode )
+        return false;
+    if( !m_outputDirectory.IsSameAs( aPcbPlotParams.m_outputDirectory ) )
         return false;
     return true;
 }
@@ -247,27 +263,27 @@ bool PCB_PLOT_PARAMS::operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
 }
 
 
-bool PCB_PLOT_PARAMS::SetHpglPenDiameter( int aValue )
+bool PCB_PLOT_PARAMS::SetHPGLPenDiameter( int aValue )
 {
     return setInt( &m_HPGLPenDiam, aValue, HPGL_PEN_DIAMETER_MIN, HPGL_PEN_DIAMETER_MAX );
 }
 
 
-bool PCB_PLOT_PARAMS::SetHpglPenSpeed( int aValue )
+bool PCB_PLOT_PARAMS::SetHPGLPenSpeed( int aValue )
 {
     return setInt( &m_HPGLPenSpeed, aValue, HPGL_PEN_SPEED_MIN, HPGL_PEN_SPEED_MAX );
 }
 
 
-bool PCB_PLOT_PARAMS::SetHpglPenOverlay( int aValue )
+bool PCB_PLOT_PARAMS::SetHPGLPenOverlay( int aValue )
 {
     return setInt( &m_HPGLPenOvr, aValue, HPGL_PEN_OVERLAP_MIN, HPGL_PEN_OVERLAP_MAX );
 }
 
 
-bool PCB_PLOT_PARAMS::SetPlotLineWidth( int aValue )
+bool PCB_PLOT_PARAMS::SetLineWidth( int aValue )
 {
-    return setInt( &m_PlotLineWidth, aValue, PLOT_LINEWIDTH_MIN, PLOT_LINEWIDTH_MAX );
+    return setInt( &m_lineWidth, aValue, PLOT_LINEWIDTH_MIN, PLOT_LINEWIDTH_MAX );
 }
 
 
@@ -305,32 +321,32 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             token = NextTok();
             if( token != T_NUMBER )
                 Expecting( T_NUMBER );
-            aPcbPlotParams->layerSelection = atol( CurText() );
+            aPcbPlotParams->m_layerSelection = atol( CurText() );
             break;
         case T_usegerberextensions:
-            aPcbPlotParams->useGerberExtensions = ParseBool();
+            aPcbPlotParams->m_useGerberExtensions = ParseBool();
             break;
         case T_psa4output:
-            aPcbPlotParams->psA4Output = ParseBool();
+            aPcbPlotParams->m_A4Output = ParseBool();
             break;
         case T_excludeedgelayer:
-            aPcbPlotParams->m_ExcludeEdgeLayer = ParseBool();
+            aPcbPlotParams->m_excludeEdgeLayer = ParseBool();
             break;
         case T_linewidth:
-            aPcbPlotParams->m_PlotLineWidth = ParseInt( PLOT_LINEWIDTH_MIN,
+            aPcbPlotParams->m_lineWidth = ParseInt( PLOT_LINEWIDTH_MIN,
                                                         PLOT_LINEWIDTH_MAX );
             break;
         case T_plotframeref:
-            aPcbPlotParams->m_PlotFrameRef = ParseBool();
+            aPcbPlotParams->m_plotFrameRef = ParseBool();
             break;
         case T_viasonmask:
-            aPcbPlotParams->m_PlotViaOnMaskLayer = ParseBool();
+            aPcbPlotParams->m_plotViaOnMaskLayer = ParseBool();
             break;
         case T_mode:
-            aPcbPlotParams->m_PlotMode = (EDA_DRAW_MODE_T)ParseInt( 0, 2 );
+            aPcbPlotParams->m_mode = static_cast<EDA_DRAW_MODE_T>( ParseInt( 0, 2 ) );
             break;
         case T_useauxorigin:
-            aPcbPlotParams->useAuxOrigin = ParseBool();
+            aPcbPlotParams->m_useAuxOrigin = ParseBool();
             break;
         case T_hpglpennumber:
             aPcbPlotParams->m_HPGLPenNum = ParseInt( HPGL_PEN_NUMBER_MIN,
@@ -349,44 +365,44 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
                                                      HPGL_PEN_OVERLAP_MAX );
             break;
         case T_pscolor:
-            aPcbPlotParams->m_PlotPSColorOpt = ParseBool();
+            NeedSYMBOL(); // This actually was never used...
             break;
         case T_psnegative:
-            aPcbPlotParams->m_PlotPSNegative = ParseBool();
+            aPcbPlotParams->m_negative = ParseBool();
             break;
         case T_plotreference:
-            aPcbPlotParams->m_PlotReference = ParseBool();
+            aPcbPlotParams->m_plotReference = ParseBool();
             break;
         case T_plotvalue:
-            aPcbPlotParams->m_PlotValue = ParseBool();
+            aPcbPlotParams->m_plotValue = ParseBool();
             break;
         case T_plotothertext:
-            aPcbPlotParams->m_PlotTextOther = ParseBool();
+            aPcbPlotParams->m_plotOtherText = ParseBool();
             break;
         case T_plotinvisibletext:
-            aPcbPlotParams->m_PlotInvisibleTexts = ParseBool();
+            aPcbPlotParams->m_plotInvisibleText = ParseBool();
             break;
         case T_padsonsilk:
-            aPcbPlotParams->m_PlotPadsOnSilkLayer= ParseBool();
+            aPcbPlotParams->m_plotPadsOnSilkLayer= ParseBool();
             break;
         case T_subtractmaskfromsilk:
-            aPcbPlotParams->subtractMaskFromSilk = ParseBool();
+            aPcbPlotParams->m_subtractMaskFromSilk = ParseBool();
             break;
         case T_outputformat:
-            aPcbPlotParams->m_PlotFormat = static_cast<PlotFormat>(ParseInt( 0, 3 ));
+            aPcbPlotParams->m_format = static_cast<PlotFormat>( ParseInt( 0, 3 ) );
             break;
         case T_mirror:
-            aPcbPlotParams->m_PlotMirror = ParseBool();
+            aPcbPlotParams->m_mirror = ParseBool();
             break;
         case T_drillshape:
-            aPcbPlotParams->m_DrillShapeOpt = (PCB_PLOT_PARAMS::DrillShapeOptT) ParseInt( 0, 2 );
+            aPcbPlotParams->m_drillMarks = static_cast<PCB_PLOT_PARAMS::DrillMarksType>( ParseInt( 0, 2 ) );
             break;
         case T_scaleselection:
-            aPcbPlotParams->scaleSelection = ParseInt( 0, 4 );
+            aPcbPlotParams->m_scaleSelection = ParseInt( 0, 4 );
             break;
         case T_outputdirectory:
             NeedSYMBOL();
-            aPcbPlotParams->outputDirectory = FROM_UTF8( CurText() );
+            aPcbPlotParams->m_outputDirectory = FROM_UTF8( CurText() );
             break;
         default:
             Unexpected( CurText() );
