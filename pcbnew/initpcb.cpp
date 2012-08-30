@@ -51,7 +51,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     SetCurItem( NULL );
 
     // clear filename, to avoid overwriting an old file
-    GetScreen()->GetFileName().Empty();
+    GetBoard()->SetFileName( wxEmptyString );
 
     // preserve grid size accross call to InitDataPoints()
 
@@ -101,7 +101,7 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     GetBoard()->m_Modules.DeleteAll();
 
     // init pointeurs  et variables
-    GetScreen()->GetFileName().Empty();
+    GetBoard()->SetFileName( wxEmptyString );
 
     SetCurItem( NULL );
 

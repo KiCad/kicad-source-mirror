@@ -85,7 +85,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
     switch( id )
     {
     case ID_LOAD_FILE:
-        LoadOnePcbFile( GetScreen()->GetFileName(), false, true );
+        LoadOnePcbFile( GetBoard()->GetFileName(), false, true );
         break;
 
     case ID_MENU_READ_LAST_SAVED_VERSION_BOARD:
@@ -99,7 +99,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
             }
             else
             {
-                fn = GetScreen()->GetFileName();
+                fn = GetBoard()->GetFileName();
                 fn.SetExt( pcbBackupFileExtension );
             }
 
@@ -119,7 +119,9 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 
             LoadOnePcbFile( fn.GetFullPath(), false );
             fn.SetExt( PcbFileExtension );
-            GetScreen()->SetFileName( fn.GetFullPath() );
+
+            // Re-set the name since extension changed
+            GetBoard()->SetFileName( fn.GetFullPath() );
             UpdateTitle();
         }
         break;
@@ -129,16 +131,20 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         break;
 
     case ID_NEW_BOARD:
-        Clear_Pcb( true );
-        GetScreen()->GetFileName().Printf( wxT( "%s%cnoname%s" ),
-                                           GetChars( wxGetCwd() ), DIR_SEP,
-                                           GetChars( PcbFileExtension ) );
-        UpdateTitle();
-        ReCreateLayerBox( NULL );
+        {
+            Clear_Pcb( true );
+            wxString newFilename;
+            newFilename.Printf( wxT( "%s%cnoname%s" ),
+                    GetChars( wxGetCwd() ), DIR_SEP,
+                    GetChars( PcbFileExtension ) );
+            GetBoard()->SetFileName( newFilename );
+            UpdateTitle();
+            ReCreateLayerBox( NULL );
+        }
         break;
 
     case ID_SAVE_BOARD:
-        SavePcbFile( GetScreen()->GetFileName() );
+        SavePcbFile( GetBoard()->GetFileName() );
         break;
 
     case ID_SAVE_BOARD_AS:
@@ -163,7 +169,7 @@ the changes?" ) ) )
 
     if( aAppend )
     {
-        GetScreen()->SetFileName( wxEmptyString );
+        GetBoard()->SetFileName( wxEmptyString );
         OnModify();
         GetBoard()->m_Status_Pcb = 0;
     }
@@ -235,7 +241,7 @@ the changes?" ) ) )
 
     CheckForAutoSaveFile( fileName, pcbBackupFileExtension );
 
-    GetScreen()->SetFileName( fileName.GetFullPath() );
+    GetBoard()->SetFileName( fileName.GetFullPath() );
 
     if( !aAppend )
     {
@@ -247,7 +253,7 @@ the changes?" ) ) )
         m_DisplayViaFill = DisplayOpt.DisplayViaFill;
 
         // load project settings before BOARD, in case BOARD file has overrides.
-        LoadProjectSettings( GetScreen()->GetFileName() );
+        LoadProjectSettings( GetBoard()->GetFileName() );
     }
     else
     {
@@ -264,7 +270,11 @@ the changes?" ) ) )
         props["page_height"] = wxString::Format( wxT( "%d" ), GetPageSizeIU().y );
 
         // load or append either:
-        loadedBoard = pi->Load( GetScreen()->GetFileName(), aAppend ? GetBoard() : NULL, &props );
+        loadedBoard = pi->Load( GetBoard()->GetFileName(), aAppend ? GetBoard() : NULL, &props );
+
+        // the Load plugin method makes a 'fresh' board, so we need to
+        // set its own name
+        GetBoard()->SetFileName( fileName.GetFullPath() );
 
         if( !aAppend )
         {
@@ -301,7 +311,7 @@ this file again." ) );
     // If append option: change the initial board name to <oldname>-append.brd
     if( aAppend )
     {
-        wxString new_filename = GetScreen()->GetFileName().BeforeLast( '.' );
+        wxString new_filename = GetBoard()->GetFileName().BeforeLast( '.' );
 
         if ( ! new_filename.EndsWith( wxT( "-append" ) ) )
             new_filename += wxT( "-append" );
@@ -309,13 +319,16 @@ this file again." ) );
         new_filename += wxT( "." ) + PcbFileExtension;
 
         OnModify();
-        GetScreen()->SetFileName( new_filename );
+        GetBoard()->SetFileName( new_filename );
     }
 
-    GetScreen()->GetFileName().Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+    // Fix the directory separator on Windows
+    wxString fn( GetBoard()->GetFileName() );
+    fn.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+    GetBoard()->SetFileName( fn );
 
     UpdateTitle();
-    UpdateFileHistory( GetScreen()->GetFileName() );
+    UpdateFileHistory( GetBoard()->GetFileName() );
 
     // Rebuild the new pad list (for drc and ratsnet control ...)
     GetBoard()->m_Status_Pcb = 0;
@@ -404,18 +417,18 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     if( aFileName == wxEmptyString )
     {
-        wxFileDialog dlg( this, _( "Save Board File" ), wxEmptyString, GetScreen()->GetFileName(),
+        wxFileDialog dlg( this, _( "Save Board File" ), wxEmptyString, GetBoard()->GetFileName(),
                           wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() != wxID_OK )
             return false;
 
-        GetScreen()->SetFileName( dlg.GetPath() );
+        GetBoard()->SetFileName( dlg.GetPath() );
         wildcardIndex = dlg.GetFilterIndex();         // Legacy or s-expression file format.
     }
     else
     {
-        GetScreen()->SetFileName( aFileName );
+        GetBoard()->SetFileName( aFileName );
     }
 
     // If changes are made, update the board date
@@ -427,7 +440,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         SetTitleBlock( tb );
     }
 
-    pcbFileName = GetScreen()->GetFileName();
+    pcbFileName = GetBoard()->GetFileName();
 
     if( pcbFileName.GetExt().IsEmpty() )
         pcbFileName.SetExt( IO_MGR::GetFileExtension( (IO_MGR::PCB_FILE_T) wildcardIndex ) );
@@ -500,7 +513,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     if( saveok )
     {
-        GetScreen()->SetFileName( pcbFileName.GetFullPath() );
+        GetBoard()->SetFileName( pcbFileName.GetFullPath() );
         UpdateTitle();
     }
 
@@ -537,7 +550,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
 bool PCB_EDIT_FRAME::doAutoSave()
 {
-    wxFileName tmpFileName = GetScreen()->GetFileName();
+    wxFileName tmpFileName = GetBoard()->GetFileName();
     wxFileName fn = tmpFileName;
 
     // Auto save file name is the normal file name prepended with $.
@@ -549,13 +562,13 @@ bool PCB_EDIT_FRAME::doAutoSave()
     if( SavePcbFile( fn.GetFullPath(), NO_BACKUP_FILE ) )
     {
         GetScreen()->SetModify();
-        GetScreen()->SetFileName( tmpFileName.GetFullPath() );
+        GetBoard()->SetFileName( tmpFileName.GetFullPath() );
         UpdateTitle();
         m_autoSaveState = false;
         return true;
     }
 
-    GetScreen()->SetFileName( tmpFileName.GetFullPath() );
+    GetBoard()->SetFileName( tmpFileName.GetFullPath() );
 
     return false;
 }

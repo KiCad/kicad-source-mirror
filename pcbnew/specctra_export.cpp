@@ -72,7 +72,7 @@ static const double  safetyMargin = 0.1;
 // see wxPcbStruct.h
 void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
 {
-    wxString        fullFileName = GetScreen()->GetFileName();
+    wxString        fullFileName = GetBoard()->GetFileName();
     wxString        path;
     wxString        name;
     wxString        ext;

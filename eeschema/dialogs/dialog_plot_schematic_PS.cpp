@@ -294,7 +294,11 @@ void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString&  FileName,
     if( m_plot_Sheet_Ref )
     {
         plotter->SetColor( BLACK );
-        m_Parent->PlotWorkSheet( plotter, screen, g_DrawDefaultLineThickness );
+        PlotWorkSheet( plotter, m_Parent->GetTitleBlock(),
+                       m_Parent->GetPageSettings(),
+                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       m_Parent->GetScreenDesc(),
+                       screen->GetFileName() );
     }
 
     screen->Plot( plotter );

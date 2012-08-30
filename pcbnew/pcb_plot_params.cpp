@@ -286,7 +286,6 @@ bool PCB_PLOT_PARAMS::SetLineWidth( int aValue )
     return setInt( &m_lineWidth, aValue, PLOT_LINEWIDTH_MIN, PLOT_LINEWIDTH_MAX );
 }
 
-
 // PCB_PLOT_PARAMS_PARSER
 
 PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader ) :

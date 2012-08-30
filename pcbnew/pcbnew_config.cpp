@@ -105,7 +105,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_CONFIG_READ:
         {
-            fn = GetScreen()->GetFileName();
+            fn = GetBoard()->GetFileName();
             fn.SetExt( ProjectFileExtension );
 
             wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
@@ -204,7 +204,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 {
     wxFileName fn;
 
-    fn = GetScreen()->GetFileName();
+    fn = GetBoard()->GetFileName();
     fn.SetExt( ProjectFileExtension );
 
     wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(), fn.GetFullName(),
@@ -391,7 +391,7 @@ void PCB_EDIT_FRAME::SaveMacros()
     wxXmlProperty *macrosProp, *hkProp, *xProp, *yProp;
     wxString str, hkStr, xStr, yStr;
 
-    fn = GetScreen()->GetFileName();
+    fn = GetBoard()->GetFileName();
     fn.SetExt( MacrosFileExtension );
 
     wxFileDialog dlg( this, _( "Save Macros File" ), fn.GetPath(), fn.GetFullName(),
@@ -437,7 +437,7 @@ void PCB_EDIT_FRAME::ReadMacros()
     wxString str;
     wxFileName fn;
 
-    fn = GetScreen()->GetFileName();
+    fn = GetBoard()->GetFileName();
     fn.SetExt( MacrosFileExtension );
 
     wxFileDialog dlg( this, _( "Read Macros File" ), fn.GetPath(),

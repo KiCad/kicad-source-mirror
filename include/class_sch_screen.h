@@ -62,6 +62,9 @@ enum SCH_LINE_TEST_T
 
 class SCH_SCREEN : public BASE_SCREEN
 {
+private:
+    wxString    m_fileName;     ///< File used to load the screen.
+
     int         m_refCount;     ///< Number of sheets referencing this screen.
                                 ///< Delete when it goes to zero.
 
@@ -104,6 +107,10 @@ public:
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
+
+    void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
+
+    const wxString& GetFileName() const { return m_fileName; }
 
     const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
     void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }

@@ -187,10 +187,6 @@ set(PCBNEW_CLASS_SRCS
     pcbnew.cpp
     pcbnew_config.cpp
     pcbplot.cpp
-    plotgerb.cpp
-    plothpgl.cpp
-    plotps.cpp
-    plotdxf.cpp
     plot_rtn.cpp
     print_board_functions.cpp
     printout_controler.cpp

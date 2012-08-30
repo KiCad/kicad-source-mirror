@@ -298,8 +298,12 @@ void DIALOG_PLOT_SCHEMATIC_PDF::plotOneSheet( PDF_PLOTTER*   plotter,
 {
     if( m_plot_Sheet_Ref )
     {
-	plotter->SetColor( BLACK );
-	m_Parent->PlotWorkSheet( plotter, screen, g_DrawDefaultLineThickness );
+        plotter->SetColor( BLACK );
+        PlotWorkSheet( plotter, m_Parent->GetTitleBlock(),
+                       m_Parent->GetPageSettings(),
+                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       m_Parent->GetScreenDesc(),
+                       screen->GetFileName() );
     }
 
     screen->Plot( plotter );

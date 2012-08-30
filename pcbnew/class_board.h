@@ -187,6 +187,9 @@ class BOARD : public BOARD_ITEM
     friend class PCB_EDIT_FRAME;
 
 private:
+    /// the board filename
+    wxString            m_fileName;
+
     // @todo: switch to boost:ptr_vector, and change ~BOARD()
     typedef std::vector<MARKER_PCB*> MARKERS;
 
@@ -236,6 +239,10 @@ private:
         throw( IO_ERROR );
 
 public:
+
+    void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
+
+    const wxString &GetFileName() const { return m_fileName; }
 
     /// Flags used in ratsnest calculation and update.
     int m_Status_Pcb;

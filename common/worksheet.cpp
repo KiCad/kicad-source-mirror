@@ -1004,7 +1004,7 @@ Ki_WorkSheetData WS_Segm5_LT =
 
 
 void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                                     double aScalar )
+                                     double aScalar, const wxString &aFilename )
 {
     if( !m_showBorderAndTitleBlock )
         return;
@@ -1024,7 +1024,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineW
     wxPoint margin_left_top( pageInfo.GetLeftMarginMils(), pageInfo.GetTopMarginMils() );
     wxPoint margin_right_bottom( pageInfo.GetRightMarginMils(), pageInfo.GetBottomMarginMils() );
     wxString paper = pageInfo.GetType();
-    wxString file = aScreen->GetFileName();
+    wxString file = aFilename;
     TITLE_BLOCK t_block = GetTitleBlock();
     int number_of_screens = aScreen->m_NumberOfScreens;
     int screen_to_draw = aScreen->m_ScreenNumber;

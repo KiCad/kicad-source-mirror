@@ -69,7 +69,7 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
     }
 */
 
-    wxString fullFileName = GetScreen()->GetFileName();
+    wxString fullFileName = GetBoard()->GetFileName();
     wxString path;
     wxString name;
     wxString ext;

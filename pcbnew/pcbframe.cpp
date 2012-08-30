@@ -482,7 +482,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         wxString msg;
         msg.Printf( _("Save the changes in\n<%s>\nbefore closing?"),
-                    GetChars( GetScreen()->GetFileName() ) );
+                    GetChars( GetBoard()->GetFileName() ) );
 
         int ii = DisplayExitDialog( this, msg );
         switch( ii )
@@ -496,13 +496,13 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
         case wxID_OK:
         case wxID_YES:
-            SavePcbFile( GetScreen()->GetFileName() );
+            SavePcbFile( GetBoard()->GetFileName() );
             break;
         }
     }
 
     // Delete the auto save file if it exists.
-    wxFileName fn = GetScreen()->GetFileName();
+    wxFileName fn = GetBoard()->GetFileName();
 
     // Auto save file name is the normal file name prefixed with a '$'.
     fn.SetName( wxT( "$" ) + fn.GetName() );
@@ -546,6 +546,7 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
     }
 
     m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ) );
+    m_Draw3DFrame->SetDefaultFileName( GetBoard()->GetFileName() );
     m_Draw3DFrame->Show( true );
 }
 
@@ -726,7 +727,7 @@ void PCB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 wxString PCB_EDIT_FRAME::GetLastNetListRead()
 {
     wxFileName absoluteFileName = m_lastNetListRead;
-    wxFileName pcbFileName = GetScreen()->GetFileName();
+    wxFileName pcbFileName = GetBoard()->GetFileName();
 
     if( !absoluteFileName.MakeAbsolute( pcbFileName.GetPath() ) || !absoluteFileName.FileExists() )
     {
@@ -741,7 +742,7 @@ wxString PCB_EDIT_FRAME::GetLastNetListRead()
 void PCB_EDIT_FRAME::SetLastNetListRead( const wxString& aLastNetListRead )
 {
     wxFileName relativeFileName = aLastNetListRead;
-    wxFileName pcbFileName = GetScreen()->GetFileName();
+    wxFileName pcbFileName = GetBoard()->GetFileName();
 
     if( relativeFileName.MakeRelativeTo( pcbFileName.GetPath() )
         && relativeFileName.GetFullPath() != aLastNetListRead )
@@ -771,7 +772,7 @@ void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 void PCB_EDIT_FRAME::UpdateTitle()
 {
     wxString title;
-    wxFileName fileName = GetScreen()->GetFileName();
+    wxFileName fileName = GetBoard()->GetFileName();
 
     if( fileName.IsOk() && fileName.FileExists() )
     {
