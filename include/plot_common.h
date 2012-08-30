@@ -844,6 +844,13 @@ protected:
     int currentColor;
 };
 
+class TITLE_BLOCK;
+void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
+                    const PAGE_INFO& aPageInfo,
+                    int aSheetNumber, int aNumberOfSheets,
+                    const wxString &aSheetDesc,
+                    const wxString &aFilename );
+
 /** Returns the default plot extension for a format
   */
 wxString GetDefaultPlotExtension( PlotFormat aFormat );

@@ -64,7 +64,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     }
 
     /* Set the file extension: */
-    fn = GetScreen()->GetFileName();
+    fn = GetBoard()->GetFileName();
     fn.SetExt( CsvFileExtension );
 
     wxFileDialog dlg( this, _( "Save Bill of Materials" ), wxGetCwd(),

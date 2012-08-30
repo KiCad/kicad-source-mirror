@@ -285,7 +285,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     if( m_PrintParams.m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
-                                  IU_PER_MILS );
+                                  IU_PER_MILS, m_Parent->GetScreenDesc() );
 
     if( printMirror )
     {

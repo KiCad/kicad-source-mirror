@@ -45,20 +45,18 @@ wxString GetDefaultPlotExtension( PlotFormat aFormat )
 /* Plot sheet references
  * margin is in mils (1/1000 inch)
  */
-void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int aLineWidth )
+void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
+                    const PAGE_INFO& aPageInfo,
+                    int aSheetNumber, int aNumberOfSheets,
+                    const wxString &aSheetDesc,
+                    const wxString &aFilename )
 {
-#define WSTEXTSIZE      50   // Text size in mils
+    static const int WSTEXTSIZE = 50; // Text size in mils
 
-    const PAGE_INFO&    pageInfo = GetPageSettings();
-    wxSize              pageSize = pageInfo.GetSizeMils();  // mils
-    int                 xg, yg;
-
-    wxPoint             pos, ref;
-    EDA_COLOR_T         color;
-
-    // Paper is sized in mils.  Here is a conversion factor to scale mils to internal units.
-    int      iusPerMil = screen->MilsToIuScalar();
-
+    int      iusPerMil = plotter->GetIUsPerDecimil() * 10;
+    wxSize   pageSize = aPageInfo.GetSizeMils();  // in mils
+    int      xg, yg;
+    wxPoint  pos, ref;
     wxString msg;
     wxSize   text_size;
 
@@ -68,22 +66,17 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
     wxSize   text_size1_5;
 #else
     int      UpperLimit = VARIABLE_BLOCK_START_POSITION;
-    bool     bold = false;
 #endif
 
-    bool     italic    = false;
-    int      thickness = aLineWidth;
-
-    color = BLACK;
-    plotter->SetColor( color );
-    plotter->SetCurrentLineWidth( thickness );
+    plotter->SetColor( BLACK );
+    plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
 
     // Plot edge.
-    ref.x = pageInfo.GetLeftMarginMils() * iusPerMil;
-    ref.y = pageInfo.GetTopMarginMils()  * iusPerMil;
+    ref.x = aPageInfo.GetLeftMarginMils() * iusPerMil;
+    ref.y = aPageInfo.GetTopMarginMils()  * iusPerMil;
 
-    xg    = ( pageSize.x - pageInfo.GetRightMarginMils() )  * iusPerMil;
-    yg    = ( pageSize.y - pageInfo.GetBottomMarginMils() ) * iusPerMil;
+    xg    = ( pageSize.x - aPageInfo.GetRightMarginMils() )  * iusPerMil;
+    yg    = ( pageSize.y - aPageInfo.GetBottomMarginMils() ) * iusPerMil;
 
 #if defined(KICAD_GOST)
     plotter->MoveTo( ref );
@@ -131,12 +124,12 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
     text_size.y = WSTEXTSIZE * iusPerMil;
 
     // upper left corner in mils
-    ref.x = pageInfo.GetLeftMarginMils();
-    ref.y = pageInfo.GetTopMarginMils();
+    ref.x = aPageInfo.GetLeftMarginMils();
+    ref.y = aPageInfo.GetTopMarginMils();
 
     // lower right corner in mils
-    xg    = ( pageSize.x - pageInfo.GetRightMarginMils() );
-    yg    = ( pageSize.y - pageInfo.GetBottomMarginMils() );
+    xg    = ( pageSize.x - aPageInfo.GetRightMarginMils() );
+    yg    = ( pageSize.y - aPageInfo.GetBottomMarginMils() );
 
 #if defined(KICAD_GOST)
     for( Ki_WorkSheetData* WsItem = &WS_Segm1_LU;
@@ -154,10 +147,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
         case WS_PODPIS_LU:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            plotter->Text( pos, color,
+            plotter->Text( pos, BLACK,
                            msg, TEXT_ORIENT_VERT, text_size,
                            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
-                           thickness, italic, false );
+                           PLOTTER::DEFAULT_LINE_WIDTH, false, false );
             break;
 
         case WS_SEGMENT_LU:
@@ -209,10 +202,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
 
         pos.x = ( ii - gxpas / 2 ) * iusPerMil;
         pos.y = ( ref.y + GRID_REF_W / 2 ) * iusPerMil;
-        plotter->Text( pos, color,
+        plotter->Text( pos, BLACK,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                       thickness, italic, false );
+                       PLOTTER::DEFAULT_LINE_WIDTH, false, false );
 
         if( ii < xg - PAS_REF / 2 )
         {
@@ -225,10 +218,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
         }
         pos.x = ( ii - gxpas / 2 ) * iusPerMil;
         pos.y = ( yg - GRID_REF_W / 2 ) * iusPerMil;
-        plotter->Text( pos, color,
+        plotter->Text( pos, BLACK,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                       thickness, italic, false );
+                       PLOTTER::DEFAULT_LINE_WIDTH, false, false );
     }
 
     // Plot legend along the Y axis.
@@ -251,10 +244,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
         }
         pos.x = ( ref.x + GRID_REF_W / 2 ) * iusPerMil;
         pos.y = ( ii - gypas / 2 ) * iusPerMil;
-        plotter->Text( pos, color,
+        plotter->Text( pos, BLACK,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                       thickness, italic, false );
+                       PLOTTER::DEFAULT_LINE_WIDTH, false, false );
 
         if( ii < yg - PAS_REF / 2 )
         {
@@ -268,9 +261,9 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
 
         pos.x = ( xg - GRID_REF_W / 2 ) * iusPerMil;
         pos.y = ( ii - gypas / 2 ) * iusPerMil;
-        plotter->Text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+        plotter->Text( pos, BLACK, msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                       thickness, italic, false );
+                       PLOTTER::DEFAULT_LINE_WIDTH, false, false );
     }
 
 #endif
@@ -287,10 +280,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
     text_size1_5.x = SIZETEXT * iusPerMil * 1.5;
     text_size1_5.y = SIZETEXT * iusPerMil * 1.5;
 
-    ref.x = pageSize.x - pageInfo.GetRightMarginMils();
-    ref.y = pageSize.y - pageInfo.GetBottomMarginMils();
+    ref.x = pageSize.x - aPageInfo.GetRightMarginMils();
+    ref.y = pageSize.y - aPageInfo.GetBottomMarginMils();
 
-    if( screen->m_ScreenNumber == 1 )
+    if( aSheetNumber == 1 )
     {
         for( Ki_WorkSheetData* WsItem = &WS_Date;
              WsItem != NULL;
@@ -314,10 +307,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
             case WS_PODPIS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                plotter->Text( pos, color,
+                plotter->Text( pos, BLACK,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                               thickness, italic, false );
+                               PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 break;
 
             case WS_SIZESHEET:
@@ -326,93 +319,93 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
             case WS_IDENTSHEET:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                if( screen->m_NumberOfScreens > 1 )
-                    msg << screen->m_ScreenNumber;
-                plotter->Text( pos, color,
+                if( aNumberOfSheets > 1 )
+                    msg << aSheetNumber;
+                plotter->Text( pos, BLACK,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                               thickness, italic, false );
+                               PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 break;
 
             case WS_SHEETS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-            msg << screen->m_NumberOfScreens;
-                plotter->Text( pos, color,
+                msg << aNumberOfSheets;
+                plotter->Text( pos, BLACK,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                               thickness, italic, false );
+                               PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 break;
 
             case WS_COMPANY_NAME:
-            msg = GetTitleBlock().GetCompany();
+            msg = aTitleBlock.GetCompany();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, color,
+                    plotter->Text( pos, BLACK,
                                    msg, TEXT_ORIENT_HORIZ, text_size1_5,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 }
                 break;
 
             case WS_TITLE:
-            msg = GetTitleBlock().GetTitle();
+            msg = aTitleBlock.GetTitle();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, color,
+                    plotter->Text( pos, BLACK,
                                    msg, TEXT_ORIENT_HORIZ, text_size1_5,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 }
                 break;
 
             case WS_COMMENT1:
-            msg = GetTitleBlock().GetComment1();
+            msg = aTitleBlock.GetComment1();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, color,
+                    plotter->Text( pos, BLACK,
                                    msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
-                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * iusPerMil;
-                    pos.y = (pageInfo.GetTopMarginMils() + 270) * iusPerMil;
-                    plotter->Text( pos, color,
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
+                    pos.x = (aPageInfo.GetLeftMarginMils() + 1260) * iusPerMil;
+                    pos.y = (aPageInfo.GetTopMarginMils() + 270) * iusPerMil;
+                    plotter->Text( pos, BLACK,
                                    msg.GetData(), 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 }
                 break;
 
             case WS_COMMENT2:
-            msg = GetTitleBlock().GetComment2();
+            msg = aTitleBlock.GetComment2();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, color,
+                    plotter->Text( pos, BLACK,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 }
                 break;
 
             case WS_COMMENT3:
-            msg = GetTitleBlock().GetComment3();
+            msg = aTitleBlock.GetComment3();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, color,
+                    plotter->Text( pos, BLACK,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 }
                 break;
 
             case WS_COMMENT4:
-            msg = GetTitleBlock().GetComment4();
+            msg = aTitleBlock.GetComment4();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, color,
+                    plotter->Text( pos, BLACK,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 }
                 break;
 
@@ -441,37 +434,37 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
             {
             case WS_CADRE:
             // Begin list number > 1
-            msg = GetTitleBlock().GetComment1();
+            msg = aTitleBlock.GetComment1();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, color,
+                    plotter->Text( pos, BLACK,
                                    msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
-                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * iusPerMil;
-                    pos.y = (pageInfo.GetTopMarginMils() + 270) * iusPerMil;
-                    plotter->Text( pos, color,
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
+                    pos.x = (aPageInfo.GetLeftMarginMils() + 1260) * iusPerMil;
+                    pos.y = (aPageInfo.GetTopMarginMils() + 270) * iusPerMil;
+                    plotter->Text( pos, BLACK,
                                    msg, 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                   thickness, italic, false );
+                                   PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 }
                 break;
 
             case WS_PODPIS_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                plotter->Text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+                plotter->Text( pos, BLACK, msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                               thickness, italic, false );
+                               PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 break;
 
             case WS_IDENTSHEET_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                msg << screen->m_ScreenNumber;
-                plotter->Text( pos, color, msg, TEXT_ORIENT_HORIZ, text_size,
+                msg << aSheetNumber;
+                plotter->Text( pos, BLACK, msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                               thickness, italic, false );
+                               PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 break;
 
             case WS_LEFT_SEGMENT_D:
@@ -487,16 +480,17 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
 
 #else
 
-    ref.x = pageSize.x - GRID_REF_W - pageInfo.GetRightMarginMils();
-    ref.y = pageSize.y - GRID_REF_W - pageInfo.GetBottomMarginMils();
+    ref.x = pageSize.x - GRID_REF_W - aPageInfo.GetRightMarginMils();
+    ref.y = pageSize.y - GRID_REF_W - aPageInfo.GetBottomMarginMils();
 
     for( Ki_WorkSheetData* WsItem = &WS_Date;
          WsItem != NULL;
          WsItem = WsItem->Pnext )
     {
+        bool bold = false;
+
         pos.x = ( ref.x - WsItem->m_Posx ) * iusPerMil;
         pos.y = ( ref.y - WsItem->m_Posy ) * iusPerMil;
-        bold  = false;
         if( WsItem->m_Legende )
             msg = WsItem->m_Legende;
         else
@@ -505,12 +499,12 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
         switch( WsItem->m_Type )
         {
         case WS_DATE:
-            msg += GetTitleBlock().GetDate();
+            msg += aTitleBlock.GetDate();
             bold = true;
             break;
 
         case WS_REV:
-            msg += GetTitleBlock().GetRevision();
+            msg += aTitleBlock.GetRevision();
             bold = true;
             break;
 
@@ -519,61 +513,57 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
             break;
 
         case WS_SIZESHEET:
-            msg += pageInfo.GetType();
+            msg += aPageInfo.GetType();
             break;
 
         case WS_IDENTSHEET:
-            msg << screen->m_ScreenNumber << wxT( "/" ) <<
-                screen->m_NumberOfScreens;
+            msg << aSheetNumber << wxT( "/" ) << aNumberOfSheets;
             break;
 
         case WS_FILENAME:
         {
             wxString fname, fext;
-            wxFileName::SplitPath( screen->GetFileName(),
-                                   (wxString*) NULL,
-                                   &fname,
-                                   &fext );
+            wxFileName::SplitPath( aFilename, NULL, &fname, &fext );
             msg << fname << wxT( "." ) << fext;
         }
         break;
 
         case WS_FULLSHEETNAME:
-            msg += GetScreenDesc();
+            msg += aSheetDesc;
             break;
 
         case WS_COMPANY_NAME:
-            msg += GetTitleBlock().GetCompany();
+            msg += aTitleBlock.GetCompany();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             bold = true;
             break;
 
         case WS_TITLE:
-            msg += GetTitleBlock().GetTitle();
+            msg += aTitleBlock.GetTitle();
             bold = true;
             break;
 
         case WS_COMMENT1:
-            msg += GetTitleBlock().GetComment1();
+            msg += aTitleBlock.GetComment1();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT2:
-            msg += GetTitleBlock().GetComment2();
+            msg += aTitleBlock.GetComment2();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT3:
-            msg += GetTitleBlock().GetComment3();
+            msg += aTitleBlock.GetComment3();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT4:
-            msg += GetTitleBlock().GetComment4();
+            msg += aTitleBlock.GetComment4();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
@@ -600,10 +590,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen, int a
 
         if( !msg.IsEmpty() )
         {
-            plotter->Text( pos, color,
+            plotter->Text( pos, BLACK,
                            msg, TEXT_ORIENT_HORIZ, text_size,
                            GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                           thickness, italic, bold );
+                           PLOTTER::DEFAULT_LINE_WIDTH, bold, false );
         }
     }
 

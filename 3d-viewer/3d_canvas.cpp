@@ -586,7 +586,7 @@ void EDA_3D_CANVAS::SetLights()
  */
 void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
 {
-    wxFileName fn( Parent()->Parent()->GetScreen()->GetFileName() );
+    wxFileName fn( Parent()->GetDefaultFileName() );
     wxString   FullFileName;
     wxString   file_ext, mask;
     bool       fmt_is_jpeg = false;
@@ -598,7 +598,7 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
     {
         file_ext     = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
         mask         = wxT( "*." ) + file_ext;
-        FullFileName = Parent()->Parent()->GetScreen()->GetFileName();
+        FullFileName = Parent()->GetDefaultFileName();
         fn.SetExt( file_ext );
 
         FullFileName = EDA_FileSelector( _( "3D Image filename:" ), wxEmptyString,

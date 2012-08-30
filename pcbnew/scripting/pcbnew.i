@@ -95,7 +95,10 @@
   #include <class_netclass.h>
   #include <class_netinfo.h>
   #include <pcbnew_scripting_helpers.h>
-  
+
+  #include <plotcontroller.h>
+  #include <pcb_plot_params.h>
+  #include <colors.h>
       
   BOARD *GetBoard(); /* get current editor board */
 %}
@@ -126,6 +129,11 @@
 %include <class_zone_settings.h>
 %include <class_netclass.h>
 %include <class_netinfo.h>
+
+%include <plotcontroller.h>
+%include <pcb_plot_params.h>
+%include <plot_common.h>
+%include <colors.h>
 
 %include "board_item.i"
 

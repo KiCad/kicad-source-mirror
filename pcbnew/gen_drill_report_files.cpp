@@ -180,7 +180,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
     // Plot title  "Info"
     wxString Text = wxT( "Drill Map:" );
-    plotter->Text( wxPoint( plotX, plotY ), BLACK, Text, 0,
+    plotter->Text( wxPoint( plotX, plotY ), UNSPECIFIED, Text, 0,
                    wxSize( (int) ( charSize * charScale ),
                            (int) ( charSize * charScale ) ),
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -232,7 +232,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
                      aToolListBuffer[ii].m_OvalCount );
 
         msg += FROM_UTF8( line );
-        plotter->Text( wxPoint( plotX, y ), BLACK,
+        plotter->Text( wxPoint( plotX, y ), UNSPECIFIED,
                        msg,
                        0, wxSize( (int) ( charSize * charScale ), (int) ( charSize * charScale ) ),
                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,

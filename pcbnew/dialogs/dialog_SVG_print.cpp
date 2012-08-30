@@ -183,7 +183,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref )
         fn = m_FileNameCtrl->GetValue();
         if( !fn.IsOk() )
         {
-            fn = screen->GetFileName();
+            fn = m_Parent->GetBoard()->GetFileName();
         }
 
         if( aPrintAll )
@@ -271,7 +271,8 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     g_DrawBgColor = WHITE;
 
     if( aPrint_Frame_Ref )
-        m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize, IU_PER_MILS );
+        m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize,
+                                  IU_PER_MILS, wxT( "" ) );
 
     m_Parent->PrintPage( &dc, m_PrintMaskLayer, false, &s_Parameters);
     g_DrawBgColor = bg_color;

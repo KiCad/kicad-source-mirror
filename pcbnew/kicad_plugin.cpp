@@ -1204,5 +1204,11 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
 
     PCB_PARSER parser( new FILE_LINE_READER( file.fp(), aFileName ), aAppendToMe );
 
-    return (BOARD*) parser.Parse();
+    BOARD* board = dynamic_cast<BOARD*>( parser.Parse() );
+    wxASSERT( board );
+
+    // Give the filename to the board if it's new
+    if( !aAppendToMe )
+        board->SetFileName( aFileName );
+    return board;
 }
