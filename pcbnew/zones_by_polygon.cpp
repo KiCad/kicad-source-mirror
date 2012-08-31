@@ -934,6 +934,7 @@ void PCB_EDIT_FRAME::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* aZone )
 
     else
     {
+        SaveCopyInUndoList( aZone, UR_CHANGED );
         aZone->m_Poly->RemoveContour( ncont );
     }
 
