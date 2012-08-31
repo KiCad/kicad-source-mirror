@@ -215,8 +215,9 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
 
     LOCALE_IO   toggle;
 
-    float       dpi = 1000.0;
-    KicadSVGFileDC dc( FullFileName, sheetSize.x, sheetSize.y, dpi );
+    double dpi = 1000.0*IU_PER_MILS;
+    wxPoint origin;
+    KicadSVGFileDC dc( FullFileName, origin, sheetSize, dpi );
 
     EDA_RECT    tmp = *panel->GetClipBox();
     GRResetPenAndBrush( &dc );

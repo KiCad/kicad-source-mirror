@@ -29,10 +29,17 @@ private:
     void OnButtonPrintSelectedClick( wxCommandEvent& event );
     void OnButtonPrintBoardClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
-    void OnSetColorModeSelected( wxCommandEvent& event );
     void SetPenWidth();
-    void PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref );
-    bool DrawPage( const wxString& FullFileName, BASE_SCREEN* screen, bool aPrint_Frame_Ref );
+    void PrintSVGDoc( bool aPrintAll );
+    bool PageIsBoardBoundarySize()
+    {
+        return m_rbSvgPageSizeOpt->GetSelection() == 2;
+    }
+    bool PrintPageRef()
+    {
+        return m_rbSvgPageSizeOpt->GetSelection() == 0;
+    }
+    bool DrawPage( const wxString& FullFileName, BASE_SCREEN* screen );
 };
 
 

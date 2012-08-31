@@ -242,7 +242,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
         plot_offset.x = 0;
         plot_offset.y = 0;
 
-        plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + '.'
+        plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + wxT(".")
 		+ PS_PLOTTER::GetDefaultFileExtension();
 
         plotOneSheetPS( plotFileName, screen, plotPage, plot_offset, scale );

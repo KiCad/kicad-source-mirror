@@ -1,20 +1,39 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_svg_print.cpp
-// Author:      jean-pierre Charras
-// Modified by:
-// Licence: GPL
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_svg_print.cpp
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
-#include <gestfich.h>
 #include <dcsvg.h>
 #include <wxBasePcbFrame.h>
 #include <class_pcb_screen.h>
-#include <macros.h>
 #include <base_units.h>
 
 #include <pcbnew.h>
@@ -22,26 +41,23 @@
 #include <printout_controler.h>
 
 #include <class_board.h>
-#include <class_edge_mod.h>
-#include <class_mire.h>
-#include <class_pcb_text.h>
-#include <class_dimension.h>
-#include <class_zone.h>
 
 #include <dialog_SVG_print.h>
 
 
 // Keys for configuration
 #define PLOTSVGMODECOLOR_KEY wxT( "PlotSVGModeColor" )
+#define PLOTSVGPAGESIZEOPT_KEY wxT( "PlotSVGPageOpt" )
+#define PLOTSVGPLOT_BRD_EDGE_KEY wxT( "PlotSVGBrdEdge" )
 
-// reasonnable values for default pen width (in 1/10000 inch)
-#define WIDTH_MAX_VALUE 500
-#define WIDTH_MIN_VALUE 1
+// reasonnable values for default pen width
+#define WIDTH_MAX_VALUE (2 *IU_PER_MM)
+#define WIDTH_MIN_VALUE (0.05 *IU_PER_MM)
 
 // Local variables:
 static PRINT_PARAMETERS  s_Parameters;
-static long s_SelectedLayers    = LAYER_BACK | LAYER_FRONT |
-                                  SILKSCREEN_LAYER_FRONT | SILKSCREEN_LAYER_BACK;
+static long s_SelectedLayers = LAYER_BACK | LAYER_FRONT |
+                               SILKSCREEN_LAYER_FRONT | SILKSCREEN_LAYER_BACK;
 
 
 /*!
@@ -66,14 +82,22 @@ void DIALOG_SVG_PRINT::initDialog( )
     if( m_Config )
     {
         m_Config->Read( PLOTSVGMODECOLOR_KEY, &s_Parameters.m_Print_Black_and_White );
+        long ltmp;
+        m_Config->Read( PLOTSVGPAGESIZEOPT_KEY, &ltmp, 0 );
+        m_rbSvgPageSizeOpt->SetSelection( ltmp );
+        m_Config->Read( PLOTSVGPLOT_BRD_EDGE_KEY, &ltmp, 1 );
+        m_PrintBoardEdgesCtrl->SetValue(ltmp );
     }
+
+    if( s_Parameters.m_Print_Black_and_White )
+        m_ModeColorOption->SetSelection( 1 );
+    else
+        m_ModeColorOption->SetSelection( 0 );
 
     s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
-    m_DialogPenWidth->SetValue(
+    m_DialogDefaultPenSize->SetValue(
         ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
-
-    m_Print_Frame_Ref_Ctrl->SetValue( s_Parameters.m_Print_Sheet_Ref );
 
     // Create layers list
     BOARD* board = m_Parent->GetBoard();
@@ -135,7 +159,7 @@ void DIALOG_SVG_PRINT::initDialog( )
 
 void DIALOG_SVG_PRINT::SetPenWidth()
 {
-    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth );
+    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogDefaultPenSize );
 
     if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
     {
@@ -148,16 +172,17 @@ void DIALOG_SVG_PRINT::SetPenWidth()
     }
 
     g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
-    m_DialogPenWidth->SetValue(
+    m_DialogDefaultPenSize->SetValue(
         ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize ) );
 }
 
 
-void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref )
+void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll )
 {
     wxFileName fn;
     wxString   msg;
 
+    s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
     SetPenWidth();
 
     PCB_SCREEN* screen = m_Parent->GetScreen();
@@ -202,7 +227,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref )
 
         fn.SetExt( wxT( "svg" ) );
 
-        bool success = DrawPage( fn.GetFullPath(), screen, aPrint_Frame_Ref );
+        bool success = DrawPage( fn.GetFullPath(), screen );
         msg = _( "Create file " ) + fn.GetFullPath();
         if( !success )
             msg += _( " error" );
@@ -219,11 +244,8 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Frame_Ref )
  * Actual print function.
  */
 bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
-                                 BASE_SCREEN*    screen,
-                                 bool            aPrint_Frame_Ref )
+                                 BASE_SCREEN*    screen )
 {
-    // const PAGE_INFO&    pageInfo = m_Parent->GetPageSettings();
-
     LOCALE_IO   toggle;
     int         tmpzoom;
     wxPoint     tmp_startvisu;
@@ -240,24 +262,23 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
 
     screen->SetScalingFactor( 1.0 );
 
-    float dpi;
-
-#if defined( USE_PCBNEW_NANOMETRES )
-    dpi = 25.4e6;
-#else
-    dpi = 10000.0;
-#endif
+    double dpi = IU_PER_MILS * 1000.0;
 
     EDA_DRAW_PANEL* panel = m_Parent->GetCanvas();
 
     // paper pageSize is in internal units, either nanometers or deci-mils
-    wxSize  pageSize = m_Parent->GetPageSizeIU();
+    EDA_RECT rect;
+    rect.SetSize( m_Parent->GetPageSizeIU() );
+    if( PageIsBoardBoundarySize() )
+    {
+        rect = m_Parent->GetBoard()->ComputeBoundingBox();
+    }
 
-    KicadSVGFileDC       dc( FullFileName, pageSize.x, pageSize.y, dpi );
+    KicadSVGFileDC dc( FullFileName, rect.GetOrigin(), rect.GetSize(), dpi );
 
-    EDA_RECT          tmp = *panel->GetClipBox();
+    EDA_RECT tmp = *panel->GetClipBox();
     GRResetPenAndBrush( &dc );
-    GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? false : true );
+    GRForceBlackPen( s_Parameters.m_Print_Black_and_White );
     s_Parameters.m_DrillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
 
     // Set clip box to the max size
@@ -270,7 +291,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     int bg_color = g_DrawBgColor;
     g_DrawBgColor = WHITE;
 
-    if( aPrint_Frame_Ref )
+    if( PrintPageRef() )
         m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize,
                                   IU_PER_MILS, wxT( "" ) );
 
@@ -292,15 +313,13 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
 
 void DIALOG_SVG_PRINT::OnButtonPrintBoardClick( wxCommandEvent& event )
 {
-    s_Parameters.m_Print_Sheet_Ref = m_Print_Frame_Ref_Ctrl->IsChecked();
-    PrintSVGDoc( true, s_Parameters.m_Print_Sheet_Ref );
+    PrintSVGDoc( true );
 }
 
 
 void DIALOG_SVG_PRINT::OnButtonPrintSelectedClick( wxCommandEvent& event )
 {
-    s_Parameters.m_Print_Sheet_Ref = m_Print_Frame_Ref_Ctrl->IsChecked();
-    PrintSVGDoc( false, s_Parameters.m_Print_Sheet_Ref );
+    PrintSVGDoc( false );
 }
 
 
@@ -317,6 +336,9 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
     if( m_Config )
     {
         m_Config->Write( PLOTSVGMODECOLOR_KEY, s_Parameters.m_Print_Black_and_White );
+        m_Config->Write( PLOTSVGPAGESIZEOPT_KEY, m_rbSvgPageSizeOpt->GetSelection() );
+        m_Config->Write( PLOTSVGPLOT_BRD_EDGE_KEY, m_PrintBoardEdgesCtrl->GetValue() );
+
         wxString layerKey;
         for( int layer = 0; layer<NB_LAYERS;  ++layer )
         {
@@ -327,12 +349,4 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
         }
     }
     EndModal( 0 );
-}
-
-
-/* called on radiobox color/black and white selection
- */
-void DIALOG_SVG_PRINT::OnSetColorModeSelected( wxCommandEvent& event )
-{
-    s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
 }

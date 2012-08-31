@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,15 +38,15 @@ class DIALOG_SVG_PRINT_base : public wxDialog
 		enum
 		{
 			wxID_PRINT_CURRENT = 1000,
-			wxID_PRINT_BOARD,
+			wxID_PRINT_BOARD
 		};
 		
 		wxStaticBoxSizer* m_CopperLayersBoxSizer;
 		wxStaticBoxSizer* m_TechnicalBoxSizer;
 		wxStaticText* m_TextPenWidth;
-		wxTextCtrl* m_DialogPenWidth;
+		wxTextCtrl* m_DialogDefaultPenSize;
 		wxRadioBox* m_ModeColorOption;
-		wxCheckBox* m_Print_Frame_Ref_Ctrl;
+		wxRadioBox* m_rbSvgPageSizeOpt;
 		wxCheckBox* m_PrintBoardEdgesCtrl;
 		wxButton* m_buttonPrintSelected;
 		wxButton* m_buttonBoard;
@@ -58,7 +58,6 @@ class DIALOG_SVG_PRINT_base : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnSetColorModeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPrintSelectedClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonPrintBoardClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }

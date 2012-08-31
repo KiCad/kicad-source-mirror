@@ -180,6 +180,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
     GetScreen()->SetCurItem( NULL );
     LoadSettings();
 
+    GetBoard()->SetVisibleAlls();
+
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
