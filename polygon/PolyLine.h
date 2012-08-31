@@ -103,7 +103,14 @@ public:
 
     void        AppendCorner( int x, int y );
     void        InsertCorner( int ic, int x, int y );
-    void        DeleteCorner( int ic );
+
+    /**
+     * Function DeleteCorner
+     * remove the given corner. if it is the last point of a contour
+     * keep the controur closed by modifying the previous corner
+     * @param ic = the index of the corner to delete
+     */
+    void        DeleteCorner ( int ic );
     void        MoveCorner( int ic, int x, int y );
     void        CloseLastContour();
     void        RemoveContour( int icont );
@@ -136,6 +143,14 @@ public:
      * @return CPolyLine* - Pointer to new polygon.
      */
     CPolyLine*  Fillet( unsigned int aRadius, unsigned int aSegments );
+
+    /**
+     * Function RemoveNullSegments
+     * Removes corners which create a null segment edge
+     * (i.e. when 2 successive corners are at the same location)
+     * @return the count of removed corners.
+     */
+     int        RemoveNullSegments();
 
     void        RemoveAllContours( void );
 

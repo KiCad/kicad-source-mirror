@@ -392,7 +392,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             aCallback( current_char_pos.x, current_char_pos.y, end.x, end.y );
         }
         else
-            GRLine( aPanel->GetClipBox(), aDC,
+            GRLine( clipBox, aDC,
                     current_char_pos.x, current_char_pos.y, end.x, end.y, aWidth, aColor );
 
         return;

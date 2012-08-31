@@ -671,7 +671,8 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     {
         ii = zone->GetNumCorners() - 1;
 
-        // edge in progress : the current corner coordinate was set by Show_New_Edge_While_Move_Mouse
+        // edge in progress : the current corner coordinate was set
+        // by Show_New_Edge_While_Move_Mouse
         if( zone->GetCornerPosition( ii - 1 ) != zone->GetCornerPosition( ii ) )
         {
             if( !Drc_On || !zone->IsOnCopperLayer() || ( m_drc->Drc( zone, ii - 1 ) == OK_DRC ) )
@@ -704,6 +705,9 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
         Abort_Zone_Create_Outline( m_canvas, DC );
         return true;
     }
+
+    // Remove the last corner if is is at the same location as the prevoius corner
+    zone->m_Poly->RemoveNullSegments();
 
     // Validate the current edge:
     int icorner = zone->GetNumCorners() - 1;
