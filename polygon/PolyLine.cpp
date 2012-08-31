@@ -32,6 +32,42 @@ CPolyLine::~CPolyLine()
     UnHatch();
 }
 
+/* Removes corners which create a null segment edge
+ * (i.e. when 2 successive corners are at the same location)
+ * returns the count of removed corners.
+ */
+ int CPolyLine::RemoveNullSegments()
+{
+    int removed = 0;
+
+    unsigned startcountour = 0;
+    for( unsigned icnt = 1; icnt < m_CornersList.size(); icnt ++ )
+    {
+        unsigned last = icnt-1;
+        if( m_CornersList[icnt].end_contour )
+        {
+            last = startcountour;
+            startcountour = icnt+1;
+        }
+
+        if( ( m_CornersList[last].x == m_CornersList[icnt].x ) &&
+            ( m_CornersList[last].y == m_CornersList[icnt].y ) )
+        {
+            DeleteCorner( icnt );
+            icnt--;
+            removed ++;
+        }
+
+        if( m_CornersList[icnt].end_contour )
+        {
+            startcountour = icnt+1;
+            icnt++;
+        }
+    }
+
+    return removed;
+}
+
 
 /**
  * Function NormalizeAreaOutlines
@@ -65,6 +101,7 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
         if( corner.end_contour )
             break;
     }
+
     ClipperLib::SimplifyPolygon( raw_polygon, normalized_polygons );
 
     // enter main outline
@@ -148,6 +185,8 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
             polyline->CloseLastContour();
             hole++;
         }
+
+        polyline->RemoveNullSegments();
     }
 
     return outlines.size();
