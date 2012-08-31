@@ -122,9 +122,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     m_Semaphore     = semaphore;
     m_exportToEeschemaCmpName.Empty();
 
-    if( m_Semaphore )
-        MakeModal(true);
-
     SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings();
@@ -270,9 +267,8 @@ void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
     if( m_Semaphore )
     {
         m_Semaphore->Post();
-        MakeModal(false);
         // This window will be destroyed by the calling function,
-        // to avoid side effects
+        // if needed
     }
     else
     {

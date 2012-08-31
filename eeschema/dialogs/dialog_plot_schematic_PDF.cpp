@@ -218,8 +218,8 @@ void DIALOG_PLOT_SCHEMATIC_PDF::createPDFFile()
 
 	if( first_page ) {
 	    wxString msg;
-	    wxString plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + '.'
-		+ PDF_PLOTTER::GetDefaultFileExtension();
+	    wxString plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + wxT(".")
+                                + PDF_PLOTTER::GetDefaultFileExtension();
 	    msg.Printf( _( "Plot: %s " ), GetChars( plotFileName ) );
 	    m_MsgBox->AppendText( msg );
 

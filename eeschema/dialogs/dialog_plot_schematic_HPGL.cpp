@@ -336,8 +336,8 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll )
         plotOffset.x = -s_Offset.x;
         plotOffset.y = -s_Offset.y;
 
-        plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + '.'
-	    + HPGL_PLOTTER::GetDefaultFileExtension();
+        plotFileName = m_Parent->GetUniqueFilenameForCurrentSheet() + wxT(".")
+                       + HPGL_PLOTTER::GetDefaultFileExtension();
 
         LOCALE_IO   toggle;
 

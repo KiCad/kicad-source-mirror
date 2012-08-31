@@ -26,8 +26,8 @@ class WXDLLIMPEXP_FWD_CORE KicadSVGFileDC;
 class WXDLLIMPEXP_CORE KicadSVGFileDCImpl : public wxDCImpl
 {
 public:
-    KicadSVGFileDCImpl( KicadSVGFileDC *owner, const wxString &filename,
-                     int width=320, int height=240, double dpi=72.0 );
+    KicadSVGFileDCImpl( KicadSVGFileDC *owner, const wxString &aFilename,
+                        wxPoint aOrigin, wxSize aSize, double aDpi );
 
     virtual ~KicadSVGFileDCImpl();
 
@@ -175,7 +175,7 @@ private:
 
    virtual wxSize GetPPI() const;
 
-   void Init (const wxString &filename, int width, int height, double dpi);
+   void Init (const wxString &aFilename, wxPoint aOrigin, wxSize aSize, double aDpi);
 
    void NewGraphics();
 
@@ -198,11 +198,9 @@ private:
 class WXDLLIMPEXP_CORE KicadSVGFileDC : public wxDC
 {
 public:
-    KicadSVGFileDC(const wxString& filename,
-                int width = 320,
-                int height = 240,
-                double dpi = 72.0)
-        : wxDC(new KicadSVGFileDCImpl(this, filename, width, height, dpi))
+    KicadSVGFileDC(const wxString& aFilename,
+                wxPoint aOrigin, wxSize aSize, double aDpi = 300.0)
+        : wxDC(new KicadSVGFileDCImpl(this, aFilename, aOrigin, aSize, aDpi))
     {
     }
 };
@@ -309,7 +307,8 @@ private:
             wxT( "wxSVGFILEDC::DoSetClippingRegionAsRegion Call not yet implemented" ) ); return;
     };
 
-    void    Init( wxString f, int Width, int Height, float dpi );
+    void    Init( const wxString& aFilename,
+                  wxPoint aOrigin, wxSize aSize, double aDpi );
 
     void    NewGraphics();
 
@@ -421,9 +420,8 @@ private:
 
 public:
 
-    wxSVGFileDC( wxString f );
-    wxSVGFileDC( wxString f, int Width, int Height );
-    wxSVGFileDC( wxString f, int Width, int Height, float dpi );
+    wxSVGFileDC( const wxString& aFilename,
+                 wxPoint aOrigin, wxSize aSize, double aDpi );
     ~wxSVGFileDC();
 
 

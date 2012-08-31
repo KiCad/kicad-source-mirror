@@ -188,8 +188,8 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
         plot_offset.x = 0;
         plot_offset.y = 0;
 
-        plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + '.'
-	    + DXF_PLOTTER::GetDefaultFileExtension();
+        plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT(".")
+                       + DXF_PLOTTER::GetDefaultFileExtension();
 
         PlotOneSheetDXF( plotFileName, screen, plot_offset, 1 );
 

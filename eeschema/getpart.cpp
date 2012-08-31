@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2008-2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 
 /**
  * @file getpart.cpp
- * @brief Cod to handle get & place library component.
+ * @brief functions to get and place library components.
  */
 
 #include <fctsys.h>
@@ -69,11 +69,15 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
 
     m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore );
     // Show the library viewer frame until it is closed
-    while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
+    // and disable the current frame, until the library viewer is closed
+    Enable(false);
+    // Wait for viewer closing event:
+    while( semaphore.TryWait() == wxSEMA_BUSY )
     {
         wxYield();
         wxMilliSleep( 50 );
     }
+    Enable(true);
 
     cmpname = m_ViewlibFrame->GetSelectedComponent();
     m_ViewlibFrame->Destroy();
