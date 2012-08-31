@@ -195,6 +195,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MODEDIT_EDIT_LAYER_CURRENT_EDGE:
     case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
     case ID_POPUP_MODEDIT_ENTER_EDGE_WIDTH:
+    case ID_POPUP_PCB_DELETE_EDGE:
+    case ID_POPUP_PCB_DELETE_TEXTMODULE:
+    case ID_POPUP_PCB_DELETE_PAD:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
@@ -285,7 +288,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
     }
-    
+
      case ID_MODEDIT_NEW_MODULE_FROM_WIZARD:
     {
         Clear_Pcb( true );
@@ -293,12 +296,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-        
+
         wxSemaphore semaphore( 0, 1 );
         FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME( this, &semaphore );
         wizard->Show( true );
         wizard->Zoom_Automatique( false );
-        
+
         while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
         {
             wxYield();
@@ -306,7 +309,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         MODULE* module = wizard->GetBuiltFootprint();
-        
+
         if( module )        // i.e. if create module command not aborted
         {
             /* Here we should make a copy of the object before adding to board*/
@@ -322,8 +325,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( GetBoard()->m_Modules )
                 GetBoard()->m_Modules->ClearFlags();
-    
-   
+
+
         }
 
         wizard->Destroy();

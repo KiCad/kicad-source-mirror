@@ -59,6 +59,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
+    // Active library selection
+    AddMenuItem( fileMenu, ID_MODEDIT_SELECT_CURRENT_LIB, _("Current Library"),
+                           _( "Select active library" ),
+                           KiBitmap( open_library_xpm ) );
+    fileMenu->AppendSeparator();
+
     // New module
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE,
                  _( "&New Module" ), _( "Create new module" ),
@@ -90,6 +96,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Load Module" ),
                  _( "Load a footprint module" ),
                  KiBitmap( open_document_xpm ) );
+    fileMenu->AppendSeparator();
 
     // Save module
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE,
@@ -108,8 +115,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Export Module" ),
                  _( "Save the current loaded module to a file" ),
                  KiBitmap( export_module_xpm ) );
-
-    // Separator
     fileMenu->AppendSeparator();
 
     // Print
