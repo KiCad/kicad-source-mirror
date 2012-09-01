@@ -94,7 +94,8 @@ void PCB_TARGET::Copy( PCB_TARGET* source )
  * The circle radius is half the radius of the target
  * 2 lines have length the diameter of the target
  */
-void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxPoint& offset )
+void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
+                       const wxPoint& offset )
 {
     int radius, ox, oy, gcolor, width;
     int dx1, dx2, dy1, dy2;

@@ -23,7 +23,7 @@
 
 
 static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
-                          int aDraw_mode, int aMasklayer,
+                          GR_DRAWMODE aDraw_mode, int aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt );
 
 void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
@@ -31,7 +31,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
                                       bool  aPrintMirrorMode,
                                       void * aData)
 {
-    int     drawmode = GR_COPY;
+    GR_DRAWMODE drawmode = GR_COPY;
     int     defaultPenSize = 50;
 
     DISPLAY_OPTIONS save_opt;
@@ -114,7 +114,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
                                 void* aData)
 {
     MODULE* Module;
-    int drawmode = GR_COPY;
+    GR_DRAWMODE     drawmode = GR_COPY;
     DISPLAY_OPTIONS save_opt;
     TRACK*          pt_trace;
     BOARD*          Pcb   = GetBoard();
@@ -329,7 +329,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
 
 static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
-                          int aDraw_mode, int aMasklayer,
+                          GR_DRAWMODE aDraw_mode, int aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt )
 {
     // Print pads

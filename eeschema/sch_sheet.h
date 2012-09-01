@@ -97,7 +97,7 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                const wxPoint&  aOffset,
-               int             aDraw_mode,
+               GR_DRAWMODE     aDraw_mode,
                int             aColor = -1 );
 
     /**
@@ -394,7 +394,7 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                const wxPoint&  aOffset,
-               int             aDrawMode,
+               GR_DRAWMODE     aDrawMode,
                int             aColor = -1 );
 
     EDA_RECT GetBoundingBox() const;

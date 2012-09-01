@@ -95,7 +95,7 @@ public:
     void Copy( DIMENSION* source );
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               int aColorMode, const wxPoint& offset = ZeroOffset );
+               GR_DRAWMODE aColorMode, const wxPoint& offset = ZeroOffset );
 
     /**
      * Function Move

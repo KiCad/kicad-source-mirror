@@ -67,7 +67,7 @@ public:
     }
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               int aDraw_mode, int aColor = -1 );
+               GR_DRAWMODE aDraw_mode, int aColor = -1 );
 
     bool Save( FILE* aFile ) const;
 

@@ -566,7 +566,7 @@ wxPoint SCH_SHEET::GetFileNamePosition()
 
 
 void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                      const wxPoint& aOffset, int aDrawMode, int aColor )
+                      const wxPoint& aOffset, GR_DRAWMODE aDrawMode, int aColor )
 {
     int      txtcolor;
     wxString Text;

@@ -11,7 +11,7 @@
 
 
 #include <vector>
-
+#include <gr_basic.h>
 #include <class_netclass.h>
 
 
@@ -86,7 +86,8 @@ public:
     /**
      * Function Draw
      */
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
+               const wxPoint& offset );
 };
 
 
@@ -347,7 +348,8 @@ public:
      * @todo we actually could show a NET, simply show all the tracks and
      *       a pads or net name on pad and vias
      */
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
+               const wxPoint& offset );
 
     /**
      * Function GetNet

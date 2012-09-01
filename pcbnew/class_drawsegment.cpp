@@ -167,7 +167,8 @@ MODULE* DRAWSEGMENT::GetParentModule() const
 }
 
 
-void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
+void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
+                        const wxPoint& aOffset )
 {
     int ux0, uy0, dx, dy;
     int l_trace;

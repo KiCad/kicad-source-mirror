@@ -120,7 +120,7 @@ public:
     }
 
     void Draw( EDA_DRAW_PANEL* DrawPanel, wxDC* DC,
-               int aDrawMode, const wxPoint& offset = ZeroOffset )
+               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset )
     {
     }
 

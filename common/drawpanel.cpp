@@ -714,7 +714,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
 }
 
 
-void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
+void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
     wxPoint origin = GetParent()->GetOriginAxisPosition();
 
@@ -744,7 +744,7 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
 }
 
 
-void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, int aDrawMode )
+void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
     BASE_SCREEN* screen = GetScreen();
 

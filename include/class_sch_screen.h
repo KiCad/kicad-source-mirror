@@ -189,7 +189,8 @@ public:
      * @param aDrawMode The drawing mode.
      * @param aColor The drawing color.
      */
-    void Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aColor = -1 );
+    void Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode,
+               int aColor = -1 );
 
     /**
      * Function Plot

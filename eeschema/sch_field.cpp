@@ -130,7 +130,7 @@ int SCH_FIELD::GetPenSize() const
 
 
 void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                      const wxPoint& offset, int DrawMode, int Color )
+                      const wxPoint& offset, GR_DRAWMODE DrawMode, int Color )
 {
     int            orient;
     EDA_COLOR_T    color;

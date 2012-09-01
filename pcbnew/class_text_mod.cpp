@@ -235,7 +235,8 @@ EDA_RECT TEXTE_MODULE::GetBoundingBox() const
  * @param offset = draw offset (usually wxPoint(0,0)
  * @param draw_mode = GR_OR, GR_XOR..
  */
-void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
+void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
+                         const wxPoint& offset )
 {
     int             width, color, orient;
     wxSize          size;
@@ -316,7 +317,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
 */
 void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
                                   wxDC*           aDC,
-                                  int             aDrawMode,
+                                  GR_DRAWMODE     aDrawMode,
                                   const wxPoint&  aOffset )
 {
     MODULE* parent = (MODULE*) GetParent();

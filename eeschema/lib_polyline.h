@@ -40,7 +40,8 @@ class LIB_POLYLINE : public LIB_ITEM
     int m_ModifyIndex;                        // Index of the polyline point to modify
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+                      int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      const TRANSFORM& aTransform );
 
     void calcEdit( const wxPoint& aPosition );
 

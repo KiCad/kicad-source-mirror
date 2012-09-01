@@ -239,15 +239,16 @@ public:
 
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
-               int             aDrawMode,
+               GR_DRAWMODE     aDrawMode,
                const wxPoint&  aOffset = ZeroOffset );
 
     void Draw3D( EDA_3D_CANVAS* glcanvas );
 
-    void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset, int draw_mode );
+    void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
+                        GR_DRAWMODE draw_mode );
 
     void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
-                    const wxPoint& offset, int dim_ancre, int draw_mode );
+                    const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
 
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 

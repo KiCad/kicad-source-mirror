@@ -362,7 +362,7 @@ void LIB_ARC::drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, int aColor )
 
 
 void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
+                           int aColor, GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     // Don't draw the arc until the end point is selected.  Only the edit indicators
     // get drawn at this time.

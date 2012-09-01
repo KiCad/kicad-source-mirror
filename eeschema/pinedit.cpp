@@ -412,7 +412,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
         m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
 
         if( DC )
-            pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, wxCOPY, &showPinText,
+            pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, GR_COPY, &showPinText,
                        DefaultTransform );
 
     }

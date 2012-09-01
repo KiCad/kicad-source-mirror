@@ -165,7 +165,7 @@ public:
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                const wxPoint& aOffset, EDA_COLOR_T aColor,
-               int aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
+               GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
                EDA_COLOR_T aAnchor_color = UNSPECIFIED );
 
 private:
@@ -186,7 +186,7 @@ private:
      */
     void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                             const wxPoint& aOffset, EDA_COLOR_T aColor,
-                            int aDrawMode, EDA_DRAW_MODE_T aFillMode,
+                            GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
                             EDA_COLOR_T aAnchor_color, wxString& aText,
                             wxPoint aPos );
 

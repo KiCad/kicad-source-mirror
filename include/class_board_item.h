@@ -32,7 +32,7 @@
 
 
 #include <base_struct.h>
-
+#include <gr_basic.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
@@ -118,7 +118,7 @@ public:
      * BOARD_ITEMs have their own color information.
      */
     virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                       int aDrawMode, const wxPoint& offset = ZeroOffset ) = 0;
+                       GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) = 0;
 
     /**
      * Function IsOnLayer

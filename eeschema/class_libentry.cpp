@@ -273,7 +273,7 @@ void LIB_COMPONENT::SetName( const wxString& aName )
 
 
 void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
-                          int aConvert, int aDrawMode, int aColor, const TRANSFORM& aTransform,
+                          int aConvert, GR_DRAWMODE aDrawMode, int aColor, const TRANSFORM& aTransform,
                           bool aShowPinText, bool aDrawFields, bool aOnlySelected )
 {
     BASE_SCREEN*   screen = aPanel->GetScreen();

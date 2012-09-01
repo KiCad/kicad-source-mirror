@@ -52,8 +52,8 @@ public:
 
     void Flip( const wxPoint& aCentre );
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
-               const wxPoint& aOffset = ZeroOffset )
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset )
     {
         DrawMarker( aPanel, aDC, aDrawMode, aOffset );
     }

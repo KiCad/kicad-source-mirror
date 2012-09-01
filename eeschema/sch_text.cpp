@@ -370,7 +370,7 @@ int SCH_TEXT::GetPenSize() const
 
 
 void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
-                     int DrawMode, int Color )
+                     GR_DRAWMODE DrawMode, int Color )
 {
     EDA_COLOR_T color;
     int         linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
@@ -880,7 +880,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 
 void SCH_LABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                      int DrawMode, int Color )
+                      GR_DRAWMODE DrawMode, int Color )
 {
     SCH_TEXT::Draw( panel, DC, offset, DrawMode, Color );
 }
@@ -1191,7 +1191,7 @@ void SCH_GLOBALLABEL::SetOrientation( int aOrientation )
 void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
                             wxDC*           DC,
                             const wxPoint&  aOffset,
-                            int             DrawMode,
+                            GR_DRAWMODE     DrawMode,
                             int             Color )
 {
     static std::vector <wxPoint> Poly;
@@ -1521,7 +1521,7 @@ void SCH_HIERLABEL::SetOrientation( int aOrientation )
 void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
                           wxDC*           DC,
                           const wxPoint&  offset,
-                          int             DrawMode,
+                          GR_DRAWMODE     DrawMode,
                           int             Color )
 {
     static std::vector <wxPoint> Poly;

@@ -195,7 +195,7 @@ int LIB_RECTANGLE::GetPenSize() const
 
 
 void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                 const wxPoint& aOffset, int aColor, int aDrawMode,
+                                 const wxPoint& aOffset, int aColor, GR_DRAWMODE aDrawMode,
                                  void* aData, const TRANSFORM& aTransform )
 {
     wxPoint pos1, pos2;

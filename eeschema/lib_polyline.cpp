@@ -265,7 +265,7 @@ int LIB_POLYLINE::GetPenSize() const
 
 
 void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                                int aColor, int aDrawMode, void* aData,
+                                int aColor, GR_DRAWMODE aDrawMode, void* aData,
                                 const TRANSFORM& aTransform )
 {
     wxPoint  pos1;

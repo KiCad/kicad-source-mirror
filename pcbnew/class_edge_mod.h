@@ -65,7 +65,7 @@ public:
 
     /* drawing functions */
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               int aDrawMode, const wxPoint& offset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
 
     void Draw3D( EDA_3D_CANVAS* glcanvas );
 

@@ -260,7 +260,7 @@ int LIB_FIELD::GetPenSize() const
 
 
 void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                             int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
+                             int aColor, GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint  text_pos;
     int      color;

@@ -182,7 +182,7 @@ MODULE::~MODULE()
  * every thing already drawn.
  */
 void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                        int dim_ancre, int draw_mode )
+                        int dim_ancre, GR_DRAWMODE draw_mode )
 {
     int anchor_size = DC->DeviceToLogicalXRel( dim_ancre );
 
@@ -307,7 +307,7 @@ void MODULE::Copy( MODULE* aModule )
  * @param aDrawMode = GR_OR, GR_XOR..
  * @param aOffset = draw offset (usually wxPoint(0,0)
  */
-void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
+void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aOffset )
 {
     if( (m_Flags & DO_NOT_DRAW) || (IsMoving()) )
         return;
@@ -371,7 +371,8 @@ void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoi
  *  @param offset = draw offset (usually wxPoint(0,0)
  *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
  */
-void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset, int draw_mode )
+void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
+                            GR_DRAWMODE draw_mode )
 {
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {

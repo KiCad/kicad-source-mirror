@@ -790,7 +790,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
                            wxDC*            aDC,
                            const wxPoint&   aOffset,
                            int              aColor,
-                           int              aDrawMode,
+                           GR_DRAWMODE      aDrawMode,
                            void*            aData,
                            const TRANSFORM& aTransform )
 {
@@ -853,7 +853,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
                              wxDC*           aDC,
                              const wxPoint&  aPinPos,
                              int             aOrient,
-                             int             aDrawMode,
+                             GR_DRAWMODE     aDrawMode,
                              int             aColor )
 {
     int       MapX1, MapY1, x1, y1;
@@ -1070,7 +1070,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                             bool            DrawPinNum,
                             bool            DrawPinName,
                             int             Color,
-                            int             DrawMode )
+                            GR_DRAWMODE     DrawMode )
 {
     int         x, y, x1, y1;
     wxString    StringPinNum;

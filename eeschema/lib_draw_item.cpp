@@ -115,7 +115,7 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 
 
 void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
-                     int aDrawMode, void* aData, const TRANSFORM& aTransform )
+                     GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     if( InEditMode() )
     {

@@ -133,7 +133,7 @@ public:
     virtual void Draw( EDA_DRAW_PANEL* panel,
                        wxDC*           DC,
                        const wxPoint&  offset,
-                       int             draw_mode,
+                       GR_DRAWMODE     draw_mode,
                        int             Color = -1 );
 
     /**
@@ -230,7 +230,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,
                const wxPoint&  offset,
-               int             draw_mode,
+               GR_DRAWMODE     draw_mode,
                int             Color = -1 );
 
     wxString GetClass() const
@@ -281,7 +281,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,
                const wxPoint&  offset,
-               int             draw_mode,
+               GR_DRAWMODE     draw_mode,
                int             Color = -1 );
 
     wxString GetClass() const
@@ -336,7 +336,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,
                const wxPoint&  offset,
-               int             draw_mode,
+               GR_DRAWMODE     draw_mode,
                int             Color = -1 );
 
     wxString GetClass() const

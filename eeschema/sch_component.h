@@ -249,7 +249,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,
                const wxPoint&  offset,
-               int             draw_mode,
+               GR_DRAWMODE     draw_mode,
                int             Color = -1 )
     {
         Draw( panel, DC, offset, draw_mode, Color, true );
@@ -258,7 +258,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,
                const wxPoint&  offset,
-               int             draw_mode,
+               GR_DRAWMODE     draw_mode,
                int             Color,
                bool            DrawPinText );
 

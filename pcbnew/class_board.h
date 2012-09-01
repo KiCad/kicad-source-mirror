@@ -807,7 +807,7 @@ public:
      * @param aOffset = an draw offset value (default = 0,0)
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               int aDrawMode, const wxPoint& aOffset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     /**
      * Function DrawHighLight
@@ -976,14 +976,15 @@ public:
      */
     void RedrawAreasOutlines( EDA_DRAW_PANEL* aPanel,
                               wxDC*           aDC,
-                              int             aDrawMode,
+                              GR_DRAWMODE     aDrawMode,
                               int             aLayer );
 
     /**
      * Function RedrawFilledAreas
      * Redraw all filled areas on layer aLayer ( redraw all if aLayer < 0 )
      */
-    void RedrawFilledAreas( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, int aLayer );
+    void RedrawFilledAreas( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
+                            int aLayer );
 
     /**
      * Function SetAreasNetCodesFromNetNames

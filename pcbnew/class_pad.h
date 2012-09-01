@@ -69,7 +69,7 @@ class PAD_DRAWINFO
 {
 public:
     EDA_DRAW_PANEL* m_DrawPanel;  // the EDA_DRAW_PANEL used to draw a PAD ; can be null
-    int m_DrawMode;               // the draw mode
+    GR_DRAWMODE m_DrawMode;       // the draw mode
     int m_Color;                  // color used to draw the pad shape , from pad layers and
                                   // visible layers
     int m_HoleColor;              // color used to draw the pad hole
@@ -270,7 +270,7 @@ public:
 
     /* drawing functions */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               int aDrawMode, const wxPoint& aOffset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     void Draw3D( EDA_3D_CANVAS* glcanvas );
 

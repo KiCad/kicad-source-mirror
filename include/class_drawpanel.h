@@ -33,6 +33,7 @@
 
 #include <colors.h>
 #include <base_struct.h>
+#include <gr_basic.h>
 
 class EDA_DRAW_FRAME;
 class BASE_SCREEN;
@@ -168,7 +169,7 @@ public:
      * @param aDC = current Device Context
      * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
      */
-    void DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode );
+    void DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode );
 
     /**
      * Function DrawGridAxis
@@ -177,7 +178,7 @@ public:
      * @param aDC = current Device Context
      * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
      */
-    void DrawGridAxis( wxDC* aDC, int aDrawMode );
+    void DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode );
 
     void OnEraseBackground( wxEraseEvent& event ) { }
 

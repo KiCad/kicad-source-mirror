@@ -34,7 +34,7 @@
 
 #include <base_struct.h>
 #include <class_undoredo_container.h>
-
+#include <gr_basic.h>
 
 /* Block state codes. */
 typedef enum {
@@ -123,7 +123,7 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                const wxPoint&  aOffset,
-               int             aDrawMode,
+               GR_DRAWMODE     aDrawMode,
                int             aColor );
 
     /**
