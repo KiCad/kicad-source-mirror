@@ -61,7 +61,7 @@
 PAD_DRAWINFO::PAD_DRAWINFO()
 {
     m_DrawPanel       = NULL;
-    m_DrawMode        = 0;
+    m_DrawMode        = GR_COPY;
     m_Color           = BLACK;
     m_HoleColor       = BLACK; // could be DARKGRAY;
     m_NPHoleColor     = YELLOW;
@@ -75,7 +75,8 @@ PAD_DRAWINFO::PAD_DRAWINFO()
 }
 
 
-void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoint& aOffset )
+void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
+                  const wxPoint& aOffset )
 {
     int    color = 0;
     wxSize mask_margin;   // margin (clearance) used for some non copper layers

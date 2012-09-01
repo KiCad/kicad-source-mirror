@@ -344,7 +344,7 @@ int LIB_TEXT::GetPenSize() const
 
 
 void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                            int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
+                            int aColor, GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     int     color = GetDefaultColor();
 

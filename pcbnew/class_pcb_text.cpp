@@ -82,7 +82,7 @@ void TEXTE_PCB::Copy( TEXTE_PCB* source )
 
 
 void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                      int DrawMode, const wxPoint& offset )
+                      GR_DRAWMODE DrawMode, const wxPoint& offset )
 {
     BOARD* brd = GetBoard();
 

@@ -161,7 +161,7 @@ public:
     void Copy( DRAWSEGMENT* source );
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                       int aDrawMode, const wxPoint& aOffset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
     virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 

@@ -43,7 +43,8 @@ class LIB_BEZIER : public LIB_ITEM
     std::vector<wxPoint> m_PolyPoints;     // list of points (>= 2)
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+                      int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      const TRANSFORM& aTransform );
 
 public:
     LIB_BEZIER( LIB_COMPONENT * aParent );

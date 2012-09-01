@@ -35,15 +35,45 @@
 class EDA_RECT;
 
 
-#define GR_COPY 0
-#define GR_OR   0x01000000
-#define GR_XOR  0x02000000
-#define GR_AND  0x04000000
-#define GR_NXOR 0x08000000
-#define GR_INVERT 0x10000000
-#define GR_ALLOW_HIGHCONTRAST 0x20000000
+/// Drawmode. Compositing mode plus a flag or two
+enum GR_DRAWMODE {
+    GR_COPY               = 0,
+    GR_OR                 = 0x01000000,
+    GR_XOR                = 0x02000000,
+    GR_AND                = 0x04000000,
+    GR_NXOR               = 0x08000000,
+    GR_INVERT             = 0x10000000,
+    GR_ALLOW_HIGHCONTRAST = 0x20000000,
+    GR_HIGHLIGHT          = 0x80000000,
+    UNSPECIFIED_DRAWMODE  = -1
+};
 
-#define GR_HIGHLIGHT 0x80000000
+inline void DrawModeAddHighlight(GR_DRAWMODE *mode)
+{
+    *mode = static_cast<GR_DRAWMODE>( int( *mode ) | GR_HIGHLIGHT );
+}
+
+inline void DrawModeAllowHighContrast(GR_DRAWMODE *mode)
+{
+    *mode = static_cast<GR_DRAWMODE>( int( *mode ) | GR_ALLOW_HIGHCONTRAST );
+}
+
+inline GR_DRAWMODE operator ~(const GR_DRAWMODE& a)
+{
+    return static_cast<GR_DRAWMODE>( ~int( a ) );
+}
+
+inline GR_DRAWMODE operator |(const GR_DRAWMODE& a, const GR_DRAWMODE& b)
+{
+    return static_cast<GR_DRAWMODE>( int( a ) | int( b ) );
+}
+
+inline GR_DRAWMODE operator &(const GR_DRAWMODE& a, const GR_DRAWMODE& b)
+{
+    return static_cast<GR_DRAWMODE>( int( a ) & int( b ) );
+}
+
+
 
 #define GR_M_LEFT_DOWN   0x10000000
 #define GR_M_RIGHT_DOWN  0x20000000
@@ -59,7 +89,7 @@ typedef int wxPenStyle;
 #endif
 
 
-extern int g_XorMode;
+extern GR_DRAWMODE g_XorMode;
 extern int g_DrawBgColor;
 
 
@@ -73,8 +103,8 @@ typedef enum {
 
 class EDA_DRAW_PANEL;
 
-void GRSetDrawMode( wxDC* DC, int mode );
-int  GRGetDrawMode( wxDC* DC );
+void GRSetDrawMode( wxDC* DC, GR_DRAWMODE mode );
+GR_DRAWMODE  GRGetDrawMode( wxDC* DC );
 void GRResetPenAndBrush( wxDC* DC );
 void GRSetColorPen( wxDC* DC, int Color, int width = 1, wxPenStyle stype = wxPENSTYLE_SOLID );
 void GRSetBrush( wxDC* DC, int Color, int fill = 0 );

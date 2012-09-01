@@ -83,7 +83,7 @@ public:
      * @param aOffset = an draw offset value
      */
     void    Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                  int aDrawMode, const wxPoint& aOffset );
+                  GR_DRAWMODE aDrawMode, const wxPoint& aOffset );
 
     /**
      * Function SetVisibleLayers

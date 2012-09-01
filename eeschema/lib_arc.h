@@ -61,7 +61,8 @@ class LIB_ARC : public LIB_ITEM
      * Draws the arc.
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+                      int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      const TRANSFORM& aTransform );
 
     /**
      * Draw the graphics when the arc is being edited.

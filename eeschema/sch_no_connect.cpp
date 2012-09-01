@@ -123,7 +123,7 @@ int SCH_NO_CONNECT::GetPenSize() const
 
 
 void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           int aDrawMode, int aColor )
+                           GR_DRAWMODE aDrawMode, int aColor )
 {
     int pX, pY, color;
     int delta = m_size.x / 2;

@@ -222,7 +222,7 @@ int SCH_LINE::GetPenSize() const
 
 
 void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                     int DrawMode, int Color )
+                     GR_DRAWMODE DrawMode, int Color )
 {
     int color;
     int width = GetPenSize();

@@ -290,7 +290,7 @@ int SCH_COMPONENT::GetPartCount() const
 
 
 void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                          int DrawMode, int Color, bool DrawPinText )
+                          GR_DRAWMODE DrawMode, int Color, bool DrawPinText )
 {
     bool           dummy = false;
 

@@ -31,7 +31,7 @@
 
 #include <base_struct.h>
 #include <dlist.h>
-
+#include <gr_basic.h>
 
 class GERBER_IMAGE;
 class GBR_LAYOUT;
@@ -221,7 +221,7 @@ public:
     /* Display on screen: */
     void Draw( EDA_DRAW_PANEL*         aPanel,
                wxDC*                   aDC,
-               int                     aDrawMode,
+               GR_DRAWMODE             aDrawMode,
                const wxPoint&aOffset );
 
     /**

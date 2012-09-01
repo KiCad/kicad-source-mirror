@@ -156,7 +156,7 @@ int SCH_POLYLINE::GetPenSize() const
 
 
 void SCH_POLYLINE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                         int aDrawMode, int aColor )
+                         GR_DRAWMODE aDrawMode, int aColor )
 {
     int color;
     int width = GetPenSize();

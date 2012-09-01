@@ -147,7 +147,7 @@ EDA_RECT MARKER_BASE::GetBoundingBoxMarker() const
     return EDA_RECT( m_Pos, realsize );
 }
 
-void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
+void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                               const wxPoint& aOffset )
 {
     wxPoint corners[CORNERS_COUNT];

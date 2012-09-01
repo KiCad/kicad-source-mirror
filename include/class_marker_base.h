@@ -6,6 +6,7 @@
 #define _CLASS_MARKER_BASE_H
 
 #include <class_drc_item.h>
+#include <gr_basic.h>
 
 class MARKER_BASE
 {
@@ -65,7 +66,8 @@ public:
      * Function DrawMarker
      * draws the shape is the polygon defined in m_Corners (array of wxPoints).
      */
-    void DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset );
+    void DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
+                     const wxPoint& aOffset );
 
     /**
      * Function GetPos

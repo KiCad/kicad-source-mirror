@@ -65,7 +65,7 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     NEGATE( offset.y );
 
     GRResetPenAndBrush( &dc );
-    m_dummyPin->Draw( NULL, &dc, offset, -1, wxCOPY,
+    m_dummyPin->Draw( NULL, &dc, offset, -1, GR_COPY,
                       NULL, DefaultTransform );
 
     m_dummyPin->SetParent(NULL);

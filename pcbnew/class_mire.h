@@ -88,8 +88,8 @@ public:
 
     void Copy( PCB_TARGET* source );
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
-               const wxPoint& offset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
 
     bool HitTest( const wxPoint& aPosition );
 

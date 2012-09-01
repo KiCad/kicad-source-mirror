@@ -121,7 +121,7 @@ public:
      */
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,
-               int             aDrawMode,
+               GR_DRAWMODE     aDrawMode,
                const wxPoint&  offset = ZeroOffset );
 
     /**
@@ -134,7 +134,7 @@ public:
      */
     void DrawFilledArea( EDA_DRAW_PANEL* panel,
                          wxDC*           DC,
-                         int             aDrawMode,
+                         GR_DRAWMODE     aDrawMode,
                          const wxPoint&  offset = ZeroOffset );
 
     /**
@@ -146,7 +146,8 @@ public:
      * @param DC = current Device Context
      * @param draw_mode = draw mode: OR, XOR ..
      */
-    void DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode = GR_OR );
+    void DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
+                                 GR_DRAWMODE draw_mode = GR_OR );
 
     /* Function GetBoundingBox
      * @return an EDA_RECT that is the bounding box of the zone outline

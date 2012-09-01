@@ -210,7 +210,7 @@ int LIB_CIRCLE::GetPenSize() const
 
 
 void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                              int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
+                              int aColor, GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     wxPoint pos1;
 

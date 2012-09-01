@@ -4,7 +4,7 @@
 
 #ifndef PROTO_H
 #define PROTO_H
-
+#include <gr_basic.h>
 
 class wxDC;
 class wxPoint;
@@ -45,7 +45,7 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
                  wxDC*           DC,
                  TRACK*          aStartTrace,
                  int             nbsegment,
-                 int             mode_color );
+                 GR_DRAWMODE     mode_color );
 
 /*************/
 /* MODULES.C */

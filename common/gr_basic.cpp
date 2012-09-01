@@ -47,7 +47,7 @@
 
 
 // For draw mode = XOR GR_XOR or GR_NXOR by background color
-int g_XorMode = GR_NXOR;
+GR_DRAWMODE g_XorMode = GR_NXOR;
 
 // Background color of the design frame
 int g_DrawBgColor = WHITE;
@@ -440,7 +440,7 @@ bool GetGRForceBlackPenState( void )
 /*************************************/
 /* Set the device context draw mode. */
 /*************************************/
-void GRSetDrawMode( wxDC* DC, int draw_mode )
+void GRSetDrawMode( wxDC* DC, GR_DRAWMODE draw_mode )
 {
     if( draw_mode & GR_OR )
 #if defined(__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION( 2, 9, 0 ) )

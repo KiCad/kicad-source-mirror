@@ -58,7 +58,8 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, int aPrintMasklayer,
 
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
-    GetLayout()->Draw( m_canvas, aDC, -1, wxPoint( 0, 0 ) );
+    // XXX -1 as drawmode?
+    GetLayout()->Draw( m_canvas, aDC, UNSPECIFIED_DRAWMODE, wxPoint( 0, 0 ) );
 
     m_canvas->SetPrintMirrored( false );
 
@@ -77,7 +78,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     wxBusyCursor dummy;
 
-    int          drawMode = -1;
+    GR_DRAWMODE drawMode = UNSPECIFIED_DRAWMODE;
 
     switch( GetDisplayMode() )
     {
@@ -121,7 +122,8 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 /*
  * Redraw All GerbView layers, using a buffered mode or not
  */
-void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
+void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
+                       const wxPoint& aOffset )
 {
     // Because Images can be negative (i.e with background filled in color) items are drawn
     // graphic layer per graphic layer, after the background is filled
@@ -273,7 +275,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const w
         if( layer == gerbFrame->getActiveLayer() )
             dcode_highlight = gerber->m_Selected_Tool;
 
-        int layerdrawMode = GR_COPY;
+        GR_DRAWMODE layerdrawMode = GR_COPY;
 
         if( aDrawMode == GR_OR && !gerber->HasNegativeItems() )
             layerdrawMode = GR_OR;
@@ -285,10 +287,10 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const w
             if( item->GetLayer() != layer )
                 continue;
 
-            int drawMode = layerdrawMode;
+            GR_DRAWMODE drawMode = layerdrawMode;
 
             if( dcode_highlight && dcode_highlight == item->m_DCode )
-                drawMode |= GR_HIGHLIGHT;
+                DrawModeAddHighlight( &drawMode);
 
             item->Draw( aPanel, plotDC, drawMode, wxPoint(0,0) );
             doBlit = true;
@@ -344,7 +346,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const w
 }
 
 
-void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
+void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
     wxPoint     pos;
     int         width, orient;

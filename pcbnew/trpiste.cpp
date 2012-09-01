@@ -14,7 +14,8 @@
 #include <protos.h>
 
 
-void DrawTraces( EDA_DRAW_PANEL* panel, wxDC* DC, TRACK* aTrackList, int nbsegment, int draw_mode )
+void DrawTraces( EDA_DRAW_PANEL* panel, wxDC* DC, TRACK* aTrackList, int nbsegment,
+                 GR_DRAWMODE draw_mode )
 {
     // preserve the start of the list for debugging.
     for( TRACK* track = aTrackList; nbsegment > 0  && track; nbsegment--, track = track->Next() )

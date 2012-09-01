@@ -42,7 +42,8 @@ class LIB_RECTANGLE  : public LIB_ITEM
     bool    m_isStartPointSelected; // Flag: is the upper left edge selected?
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
+                      int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      const TRANSFORM& aTransform );
 
     void calcEdit( const wxPoint& aPosition );
 

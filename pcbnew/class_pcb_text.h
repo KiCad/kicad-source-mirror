@@ -70,8 +70,8 @@ public:
     /* duplicate structure */
     void Copy( TEXTE_PCB* source );
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
-               const wxPoint& offset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
 
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 

@@ -169,7 +169,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     TRACK*       Track;
     BASE_SCREEN* screen = aPanel->GetScreen();
     int          track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
-    int          draw_mode = GR_XOR | GR_HIGHLIGHT;
+    GR_DRAWMODE  draw_mode = GR_XOR | GR_HIGHLIGHT;
 
     DisplayOpt.DisplayPcbTrackFill = false;
 
@@ -322,7 +322,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
         }
     }
 
-    int draw_mode = GR_XOR | GR_HIGHLIGHT;
+    GR_DRAWMODE draw_mode = GR_XOR | GR_HIGHLIGHT;
 
     /* Undraw the current moved track segments before modification*/
 
@@ -1026,7 +1026,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
         }
     }
 
-    int draw_mode = GR_OR | GR_HIGHLIGHT;
+    GR_DRAWMODE draw_mode = GR_OR | GR_HIGHLIGHT;
 
     // DRC Ok: place track segments
     Track->ClearFlags();

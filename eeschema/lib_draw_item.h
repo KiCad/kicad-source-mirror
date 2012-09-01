@@ -89,7 +89,8 @@ class LIB_ITEM : public EDA_ITEM
      */
     virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                               const wxPoint& aOffset, int aColor,
-                              int aDrawMode, void* aData, const TRANSFORM& aTransform ) = 0;
+                              GR_DRAWMODE aDrawMode, void* aData,
+                              const TRANSFORM& aTransform ) = 0;
 
     /**
      * Draw any editing specific graphics when the item is being edited.
@@ -211,8 +212,9 @@ public:
      *              pass reference to the lib component for pins.
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset, int aColor,
-                       int aDrawMode, void* aData, const TRANSFORM& aTransform );
+    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset,
+                       int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                       const TRANSFORM& aTransform );
 
     /**
      * Function GetPenSize

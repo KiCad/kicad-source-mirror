@@ -119,7 +119,7 @@ public:
     /* drawing functions */
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,
-               int             aDrawMode,
+               GR_DRAWMODE     aDrawMode,
                const wxPoint&  offset = ZeroOffset );
 
     /**
@@ -133,7 +133,7 @@ public:
      */
     void DrawUmbilical( EDA_DRAW_PANEL* aPanel,
                         wxDC*           aDC,
-                        int             aDrawMode,
+                        GR_DRAWMODE     aDrawMode,
                         const wxPoint&  aOffset = ZeroOffset );
 
     void DisplayInfo( EDA_DRAW_FRAME* frame );

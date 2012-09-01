@@ -686,7 +686,7 @@ public:
      * @param aDC = the current device context
      * @param aDrawMode = GR_COPY, GR_OR ...
      */
-    void            DrawItemsDCodeID( wxDC* aDC, int aDrawMode );
+    void            DrawItemsDCodeID( wxDC* aDC, GR_DRAWMODE aDrawMode );
 
     DECLARE_EVENT_TABLE()
 };

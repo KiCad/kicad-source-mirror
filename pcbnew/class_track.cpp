@@ -582,7 +582,8 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 }
 
 
-void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
+void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
+                  const wxPoint& aOffset )
 {
     int l_trace;
     int color;
@@ -756,7 +757,8 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
 }
 
 
-void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
+void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
+                   const wxPoint& aOffset )
 {
     int color;
     int radius;

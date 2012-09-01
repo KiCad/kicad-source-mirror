@@ -397,7 +397,7 @@ public:
      *                        Used for block move redraws.
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
-               int aMulti, int aConvert, int aDrawMode, int aColor = -1,
+               int aMulti, int aConvert, GR_DRAWMODE aDrawMode, int aColor = -1,
                const TRANSFORM& aTransform = DefaultTransform,
                bool aShowPinText = true, bool aDrawFields = true,
                bool aOnlySelected = false );

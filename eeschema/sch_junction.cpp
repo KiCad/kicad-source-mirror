@@ -114,7 +114,7 @@ EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 
 
 void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                         int aDrawMode, int aColor )
+                         GR_DRAWMODE aDrawMode, int aColor )
 {
     int color;
 

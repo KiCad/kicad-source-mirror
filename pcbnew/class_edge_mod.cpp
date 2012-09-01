@@ -95,7 +95,8 @@ void EDGE_MODULE::SetDrawCoord()
 }
 
 
-void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
+void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
+                        const wxPoint& offset )
 {
     int             ux0, uy0, dx, dy, radius, StAngle, EndAngle;
     int             color, type_trace;

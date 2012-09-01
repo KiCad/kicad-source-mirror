@@ -163,7 +163,7 @@ void ZONE_CONTAINER::SetNet( int aNetCode )
 }
 
 
-void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const wxPoint& offset )
+void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode, const wxPoint& offset )
 {
     if( DC == NULL )
         return;
@@ -243,7 +243,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const
 
 
 void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
-                                     wxDC* DC, int aDrawMode, const wxPoint& offset )
+                                     wxDC* DC, GR_DRAWMODE aDrawMode, const wxPoint& offset )
 {
     static std::vector <char>    CornersTypeBuffer;
     static std::vector <wxPoint> CornersBuffer;
@@ -400,9 +400,10 @@ EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
 }
 
 
-void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode )
+void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
+                                             GR_DRAWMODE draw_mode )
 {
-    int     current_gr_mode  = draw_mode;
+    GR_DRAWMODE current_gr_mode  = draw_mode;
     bool    is_close_segment = false;
     wxPoint seg_start, seg_end;
 
