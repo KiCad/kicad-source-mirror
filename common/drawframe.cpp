@@ -568,7 +568,7 @@ void EDA_DRAW_FRAME::SaveSettings()
     EDA_BASE_FRAME::SaveSettings();
     cfg->Write( m_FrameName + CursorShapeEntryKeyword, m_cursorShape );
     cfg->Write( m_FrameName + ShowGridEntryKeyword, IsGridVisible() );
-    cfg->Write( m_FrameName + GridColorEntryKeyword, GetGridColor() );
+    cfg->Write( m_FrameName + GridColorEntryKeyword, ( long ) GetGridColor() );
     cfg->Write( m_FrameName + LastGridSizeId, ( long ) m_LastGridSizeId );
 }
 
