@@ -566,11 +566,11 @@ wxPoint SCH_SHEET::GetFileNamePosition()
 
 
 void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                      const wxPoint& aOffset, GR_DRAWMODE aDrawMode, int aColor )
+                      const wxPoint& aOffset, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
-    int      txtcolor;
+    EDA_COLOR_T txtcolor;
     wxString Text;
-    int      color;
+    EDA_COLOR_T color;
     int      name_orientation;
     wxPoint  pos_sheetname,pos_filename;
     wxPoint  pos = m_pos + aOffset;
@@ -1102,7 +1102,7 @@ void SCH_SHEET::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 
 void SCH_SHEET::Plot( PLOTTER* aPlotter )
 {
-    EDA_COLOR_T txtcolor = UNSPECIFIED;
+    EDA_COLOR_T txtcolor = UNSPECIFIED_COLOR;
     wxSize      size;
     wxString    Text;
     int         name_orientation;

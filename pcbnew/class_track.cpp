@@ -586,7 +586,6 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                   const wxPoint& aOffset )
 {
     int l_trace;
-    int color;
     int radius;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
@@ -594,7 +593,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         return;
 
     BOARD * brd =  GetBoard( );
-    color = brd->GetLayerColor(m_Layer);
+    EDA_COLOR_T color = brd->GetLayerColor(m_Layer);
 
     if( brd->IsLayerVisible( m_Layer ) == false && !( draw_mode & GR_HIGHLIGHT ) )
         return;
@@ -608,19 +607,11 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) && DisplayOpt.ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
-        {
-            color &= ~MASKCOLOR;
-            color |= DARKDARKGRAY;
-        }
+            ColorTurnToDarkDarkGray( &color );
     }
 
     if( draw_mode & GR_HIGHLIGHT )
-    {
-        if( draw_mode & GR_AND )
-            color &= ~HIGHLIGHT_FLAG;
-        else
-            color |= HIGHLIGHT_FLAG;
-    }
+        ColorChangeHighlightFlag( &color, !(draw_mode & GR_AND) );
 
     if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
@@ -760,7 +751,6 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                    const wxPoint& aOffset )
 {
-    int color;
     int radius;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
@@ -774,7 +764,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     GRSetDrawMode( DC, draw_mode );
 
     BOARD * brd =  GetBoard( );
-    color = brd->GetVisibleElementColor(VIAS_VISIBLE + m_Shape);
+    EDA_COLOR_T color = brd->GetVisibleElementColor(VIAS_VISIBLE + m_Shape);
 
     if( brd->IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + m_Shape) ) == false
         && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
@@ -783,19 +773,11 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( DisplayOpt.ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
-        {
-            color &= ~MASKCOLOR;
-            color |= DARKDARKGRAY;
-        }
+            ColorTurnToDarkDarkGray( &color );
     }
 
     if( draw_mode & GR_HIGHLIGHT )
-    {
-        if( draw_mode & GR_AND )
-            color &= ~HIGHLIGHT_FLAG;
-        else
-            color |= HIGHLIGHT_FLAG;
-    }
+        ColorChangeHighlightFlag( &color, !(draw_mode & GR_AND) );
 
     if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;

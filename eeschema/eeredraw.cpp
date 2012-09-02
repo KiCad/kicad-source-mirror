@@ -45,7 +45,7 @@
 #include <sch_sheet_path.h>
 
 
-void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, int Color )
+void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, EDA_COLOR_T Color )
 {
     BASE_SCREEN* screen = panel->GetScreen();
 

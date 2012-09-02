@@ -273,7 +273,7 @@ void LIB_COMPONENT::SetName( const wxString& aName )
 
 
 void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
-                          int aConvert, GR_DRAWMODE aDrawMode, int aColor, const TRANSFORM& aTransform,
+                          int aConvert, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor, const TRANSFORM& aTransform,
                           bool aShowPinText, bool aDrawFields, bool aOnlySelected )
 {
     BASE_SCREEN*   screen = aPanel->GetScreen();
@@ -286,7 +286,8 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
      *   printing in black and white
      *   If the color is not the default color (aColor != -1 )
      */
-    if( ! (screen->m_IsPrinting && GetGRForceBlackPenState()) && (aColor == -1) )
+    if( ! (screen->m_IsPrinting && GetGRForceBlackPenState())
+            && (aColor == UNSPECIFIED_COLOR) )
     {
         BOOST_FOREACH( LIB_ITEM& drawItem, drawings )
         {
@@ -426,7 +427,7 @@ from component %s in library %s." ),
         if( *i == aItem )
         {
             if( aDc != NULL )
-                aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
+                aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
 
             drawings.erase( i );
             SetModified();

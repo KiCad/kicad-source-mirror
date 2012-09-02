@@ -34,15 +34,15 @@ public:
 
     // Returns a color index from the layer id
     // Virtual function because GerbView uses its own functions in a derived class
-    virtual int GetLayerColor( int aLayerIndex ) = 0;
+    virtual EDA_COLOR_T GetLayerColor( int aLayerIndex ) const = 0;
 
     // Returns the name of the layer id
     // Virtual pure function because GerbView uses its own functions in a derived class
-    virtual const wxString GetLayerName( int aLayerIndex ) = 0;
+    virtual wxString GetLayerName( int aLayerIndex ) const = 0;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function pure because GerbView uses its own functions in a derived class
-    virtual bool IsLayerEnabled( int aLayerIndex ) = 0;
+    virtual bool IsLayerEnabled( int aLayerIndex ) const = 0;
 
    // Get Current Item #
     int GetChoice();

@@ -48,7 +48,7 @@ class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
     bool m_updateText;            ///< Flag to indicate text change occurred while editing.
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform );
 
     void calcEdit( const wxPoint& aPosition );

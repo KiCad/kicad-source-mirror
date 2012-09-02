@@ -370,7 +370,7 @@ int SCH_TEXT::GetPenSize() const
 
 
 void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
-                     GR_DRAWMODE DrawMode, int Color )
+                     GR_DRAWMODE DrawMode, EDA_COLOR_T Color )
 {
     EDA_COLOR_T color;
     int         linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
@@ -378,7 +378,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     if( Color >= 0 )
-        color = (EDA_COLOR_T) Color;
+        color = Color;
     else
         color = ReturnLayerColor( m_Layer );
 
@@ -386,7 +386,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     if( m_isDangling )
@@ -880,7 +880,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 
 void SCH_LABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                      GR_DRAWMODE DrawMode, int Color )
+                      GR_DRAWMODE DrawMode, EDA_COLOR_T Color )
 {
     SCH_TEXT::Draw( panel, DC, offset, DrawMode, Color );
 }
@@ -1192,14 +1192,14 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
                             wxDC*           DC,
                             const wxPoint&  aOffset,
                             GR_DRAWMODE     DrawMode,
-                            int             Color )
+                            EDA_COLOR_T     Color )
 {
     static std::vector <wxPoint> Poly;
     EDA_COLOR_T color;
     wxPoint     text_offset = aOffset + GetSchematicTextOffset();
 
     if( Color >= 0 )
-        color = (EDA_COLOR_T) Color;
+        color = Color;
     else
         color = ReturnLayerColor( m_Layer );
 
@@ -1208,7 +1208,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     int linewidth = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + aOffset );
@@ -1522,7 +1522,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
                           wxDC*           DC,
                           const wxPoint&  offset,
                           GR_DRAWMODE     DrawMode,
-                          int             Color )
+                          EDA_COLOR_T     Color )
 {
     static std::vector <wxPoint> Poly;
     EDA_COLOR_T color;
@@ -1531,7 +1531,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     if( Color >= 0 )
-        color = (EDA_COLOR_T) Color;
+        color = Color;
     else
         color = ReturnLayerColor( m_Layer );
 
@@ -1539,7 +1539,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
     wxPoint text_offset = offset + GetSchematicTextOffset();
-    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + offset );

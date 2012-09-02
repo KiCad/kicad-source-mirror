@@ -9,7 +9,8 @@
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 #include <boost/ptr_container/ptr_vector.hpp>
-
+#include <colors.h>
+#include <limits>
 
 
 
@@ -25,13 +26,6 @@ enum paramcfg_id {
     PARAM_COMMAND_ERASE,
     PARAM_FIELDNAME_LIST
 };
-
-#define MAX_COLOR 0x8001F
-#define IS_VALID_COLOR( c ) ( ( c >= 0 ) && ( c <= 0x8001F ) )
-
-#define INT_MINVAL 0x80000000
-#define INT_MAXVAL 0x7FFFFFFF
-
 
 
 /**
@@ -84,10 +78,14 @@ public:
 
 public:
     PARAM_CFG_INT( const wxChar* ident, int* ptparam,
-                       int default_val = 0, int min = INT_MINVAL, int max = INT_MAXVAL,
+                       int default_val = 0,
+                       int min = std::numeric_limits<int>::min(),
+                       int max = std::numeric_limits<int>::max(),
                        const wxChar* group = NULL );
     PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
-                   int default_val = 0, int min = INT_MINVAL, int max = INT_MAXVAL,
+                   int default_val = 0,
+                   int min = std::numeric_limits<int>::min(),
+                   int max = std::numeric_limits<int>::max(),
                    const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const;
@@ -102,14 +100,14 @@ public:
 class PARAM_CFG_SETCOLOR : public PARAM_CFG_BASE
 {
 public:
-    int* m_Pt_param;    ///<  Pointer to the parameter value
-    int  m_Default;     ///<  The default value of the parameter
+    EDA_COLOR_T* m_Pt_param;    ///<  Pointer to the parameter value
+    EDA_COLOR_T  m_Default;     ///<  The default value of the parameter
 
 public:
-    PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
-                            int default_val, const wxChar* group = NULL );
-    PARAM_CFG_SETCOLOR( bool Insetup, const wxChar* ident, int* ptparam,
-                        int default_val, const wxChar* group = NULL );
+    PARAM_CFG_SETCOLOR( const wxChar* ident, EDA_COLOR_T* ptparam,
+                            EDA_COLOR_T default_val, const wxChar* group = NULL );
+    PARAM_CFG_SETCOLOR( bool Insetup, const wxChar* ident, EDA_COLOR_T* ptparam,
+                        EDA_COLOR_T default_val, const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const;
     virtual void SaveParam( wxConfigBase* aConfig ) const;

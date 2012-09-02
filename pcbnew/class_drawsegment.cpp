@@ -172,9 +172,10 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 {
     int ux0, uy0, dx, dy;
     int l_trace;
-    int color, mode;
+    int mode;
     int radius;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    EDA_COLOR_T color;
 
     BOARD * brd =  GetBoard( );
 
@@ -186,10 +187,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  DisplayOpt.ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) && !IsOnLayer( EDGE_N ) )
-        {
-            color &= ~MASKCOLOR;
-            color |= DARKDARKGRAY;
-        }
+            ColorTurnToDarkDarkGray( &color );
     }
 
 

@@ -39,7 +39,7 @@ class LIB_CIRCLE : public LIB_ITEM
     int     m_Width;          // Line width.
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform );
 
     void calcEdit( const wxPoint& aPosition );

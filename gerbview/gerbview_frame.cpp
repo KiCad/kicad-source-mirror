@@ -563,9 +563,9 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayerIndex ) const
  * returns the color of a pcb visible element.
  * @see enum PCB_VISIBLE
  */
-int GERBVIEW_FRAME::GetVisibleElementColor( int aItemIdVisible )
+EDA_COLOR_T GERBVIEW_FRAME::GetVisibleElementColor( int aItemIdVisible )
 {
-    int color = -1;
+    EDA_COLOR_T color = UNSPECIFIED_COLOR;
 
     switch( aItemIdVisible )
     {
@@ -594,7 +594,7 @@ void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 }
 
 
-void GERBVIEW_FRAME::SetVisibleElementColor( int aItemIdVisible, int aColor )
+void GERBVIEW_FRAME::SetVisibleElementColor( int aItemIdVisible, EDA_COLOR_T aColor )
 {
     switch( aItemIdVisible )
     {
@@ -617,7 +617,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aItemIdVisible, int aColor )
  * Function GetLayerColor
  * gets a layer color for any valid layer, including non-copper ones.
  */
-int GERBVIEW_FRAME::GetLayerColor( int aLayer )
+EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 {
     return m_colorsSettings->GetLayerColor( aLayer );
 }
@@ -627,7 +627,7 @@ int GERBVIEW_FRAME::GetLayerColor( int aLayer )
  * Function SetLayerColor
  * changes a layer color for any valid layer, including non-copper ones.
  */
-void GERBVIEW_FRAME::SetLayerColor( int aLayer, int aColor )
+void GERBVIEW_FRAME::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
 {
     m_colorsSettings->SetLayerColor( aLayer, aColor );
 }

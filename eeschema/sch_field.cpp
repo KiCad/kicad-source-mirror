@@ -130,7 +130,7 @@ int SCH_FIELD::GetPenSize() const
 
 
 void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                      const wxPoint& offset, GR_DRAWMODE DrawMode, int Color )
+                      const wxPoint& offset, GR_DRAWMODE DrawMode, EDA_COLOR_T Color )
 {
     int            orient;
     EDA_COLOR_T    color;
@@ -537,9 +537,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     wxCHECK_RET( parent != NULL && parent->Type() == SCH_COMPONENT_T,
                  wxT( "Cannot plot field with invalid parent." ) );
 
-    EDA_COLOR_T color = UNSPECIFIED;
-
-    color = ReturnLayerColor( GetLayer() );
+    EDA_COLOR_T color = ReturnLayerColor( GetLayer() );
 
     if( m_Attributs & TEXT_NO_VISIBLE )
         return;

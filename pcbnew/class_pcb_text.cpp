@@ -89,20 +89,20 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    int color = brd->GetLayerColor( m_Layer );
+    EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 
     EDA_DRAW_MODE_T fillmode = FILLED;
 
     if( DisplayOpt.DisplayDrawItems == SKETCH )
         fillmode = SKETCH;
 
-    int anchor_color = UNSPECIFIED;
+    EDA_COLOR_T anchor_color = UNSPECIFIED_COLOR;
 
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
         anchor_color = brd->GetVisibleElementColor( ANCHOR_VISIBLE );
 
-    EDA_TEXT::Draw( panel, DC, offset, (EDA_COLOR_T) color,
-                    DrawMode, fillmode, (EDA_COLOR_T) anchor_color );
+    EDA_TEXT::Draw( panel, DC, offset, color,
+                    DrawMode, fillmode, anchor_color );
 }
 
 

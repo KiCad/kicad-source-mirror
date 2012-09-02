@@ -240,7 +240,7 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 
     if( m_drawItem->ContinueEdit( pos ) )
     {
-        m_drawItem->Draw( m_canvas, DC, pos, -1, g_XorMode, NULL, DefaultTransform );
+        m_drawItem->Draw( m_canvas, DC, pos, UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
         return;
     }
 
@@ -270,11 +270,11 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     {
         int unit = ((LIB_EDIT_FRAME*)aPanel->GetParent())->GetUnit();
         wxString text = ((LIB_FIELD*)item)->GetFullText( unit );
-        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), -1, g_XorMode, &text,
+        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), UNSPECIFIED_COLOR, g_XorMode, &text,
                     DefaultTransform );
     }
     else
-        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), -1, g_XorMode, NULL,
+        item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), UNSPECIFIED_COLOR, g_XorMode, NULL,
                     DefaultTransform );
 }
 
@@ -317,7 +317,7 @@ static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
         return;
 
     item->SetEraseLastDrawItem( aErase );
-    item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), -1, g_XorMode, NULL,
+    item->Draw( aPanel, aDC, Screen->GetCrossHairPosition( true ), UNSPECIFIED_COLOR, g_XorMode, NULL,
                 DefaultTransform );
 }
 

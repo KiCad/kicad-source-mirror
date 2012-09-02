@@ -711,7 +711,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
-            DrawGraphicText( NULL, NULL, pos, (EDA_COLOR_T) 0,
+            DrawGraphicText( NULL, NULL, pos, BLACK,
                              txt, text->GetOrientation(), size,
                              text->m_HJustify, text->m_VJustify,
                              text->m_Thickness, text->m_Italic,
@@ -724,7 +724,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
     }
     else
     {
-        DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_COLOR_T) 0,
+        DrawGraphicText( NULL, NULL, text->m_Pos, BLACK,
                          text->m_Text, text->GetOrientation(), size,
                          text->m_HJustify, text->m_VJustify,
                          text->m_Thickness, text->m_Italic,
@@ -873,7 +873,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module ) //{{{
 
         s_text_layer = module->GetLayer();
         s_text_width = module->m_Thickness;
-        DrawGraphicText( NULL, NULL, module->m_Pos, (EDA_COLOR_T) 0,
+        DrawGraphicText( NULL, NULL, module->m_Pos, BLACK,
                          module->m_Text, module->GetDrawRotation(), size,
                          module->m_HJustify, module->m_VJustify,
                          module->m_Thickness, module->m_Italic,

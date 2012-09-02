@@ -97,7 +97,7 @@ void PCB_TARGET::Copy( PCB_TARGET* source )
 void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                        const wxPoint& offset )
 {
-    int radius, ox, oy, gcolor, width;
+    int radius, ox, oy, width;
     int dx1, dx2, dy1, dy2;
     int typeaff;
 
@@ -109,7 +109,7 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    gcolor = brd->GetLayerColor( m_Layer );
+    EDA_COLOR_T gcolor = brd->GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, mode_color );
     typeaff = DisplayOpt.DisplayDrawItems;

@@ -237,7 +237,7 @@ void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                                aColor,
                                aDrawMode,
                                aFillMode,
-                               i ?  UNSPECIFIED : aAnchor_color,
+                               i ?  UNSPECIFIED_COLOR : aAnchor_color,
                                txt,
                                pos );
             pos += offset;
@@ -273,7 +273,7 @@ void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         GRSetDrawMode( aDC, aDrawMode );
 
     /* Draw text anchor, if allowed */
-    if( aAnchor_color != UNSPECIFIED )
+    if( aAnchor_color != UNSPECIFIED_COLOR )
     {
 
         int anchor_size = aDC->DeviceToLogicalXRel( 2 );

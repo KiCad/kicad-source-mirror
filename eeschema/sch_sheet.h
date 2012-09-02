@@ -98,7 +98,7 @@ public:
                wxDC*           aDC,
                const wxPoint&  aOffset,
                GR_DRAWMODE     aDraw_mode,
-               int             aColor = -1 );
+               EDA_COLOR_T     aColor = UNSPECIFIED_COLOR );
 
     /**
      * Function CreateGraphicShape (virtual)
@@ -395,7 +395,7 @@ public:
                wxDC*           aDC,
                const wxPoint&  aOffset,
                GR_DRAWMODE     aDrawMode,
-               int             aColor = -1 );
+               EDA_COLOR_T     aColor = UNSPECIFIED_COLOR );
 
     EDA_RECT GetBoundingBox() const;
 

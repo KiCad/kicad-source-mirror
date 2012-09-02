@@ -616,7 +616,7 @@ void PCB_EDIT_FRAME::SaveSettings()
 }
 
 
-bool PCB_EDIT_FRAME::IsGridVisible()
+bool PCB_EDIT_FRAME::IsGridVisible() const
 {
     return IsElementVisible( GRID_VISIBLE );
 }
@@ -628,13 +628,13 @@ void PCB_EDIT_FRAME::SetGridVisibility(bool aVisible)
 }
 
 
-int PCB_EDIT_FRAME::GetGridColor()
+EDA_COLOR_T PCB_EDIT_FRAME::GetGridColor() const
 {
     return GetBoard()->GetVisibleElementColor( GRID_VISIBLE );
 }
 
 
-void PCB_EDIT_FRAME::SetGridColor(int aColor)
+void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
 {
     GetBoard()->SetVisibleElementColor( GRID_VISIBLE, aColor );
 }
@@ -688,7 +688,7 @@ void PCB_EDIT_FRAME::unitsChangeRefresh()
 }
 
 
-bool PCB_EDIT_FRAME::IsElementVisible( int aElement )
+bool PCB_EDIT_FRAME::IsElementVisible( int aElement ) const
 {
     return GetBoard()->IsElementVisible( aElement );
 }

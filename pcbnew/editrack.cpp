@@ -684,7 +684,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
         if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
         {
-            int color = g_ColorsSettings.GetLayerColor( g_CurrentTrackSegment->GetLayer() );
+            EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( g_CurrentTrackSegment->GetLayer() );
 
             GRCircle( aPanel->GetClipBox(), aDC, g_CurrentTrackSegment->m_End.x,
                       g_CurrentTrackSegment->m_End.y,
@@ -752,7 +752,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
     {
-        int color = g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
+        EDA_COLOR_T color = g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
 
         GRCircle( aPanel->GetClipBox(), aDC, g_CurrentTrackSegment->m_End.x,
                   g_CurrentTrackSegment->m_End.y,

@@ -208,7 +208,7 @@ void GERBER_LAYER_WIDGET::ReFill()
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
-void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, int aColor )
+void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
 {
     myframe->SetLayerColor( aLayer, aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
@@ -244,7 +244,7 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
         myframe->GetCanvas()->Refresh();
 }
 
-void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, int aColor )
+void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
 {
     myframe->SetVisibleElementColor( aId, aColor );
     myframe->GetCanvas()->Refresh();

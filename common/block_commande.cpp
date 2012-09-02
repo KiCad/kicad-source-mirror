@@ -117,7 +117,7 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
 
 
 void BLOCK_SELECTOR::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           GR_DRAWMODE aDrawMode, int aColor )
+                           GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
 
     int w = GetWidth();
