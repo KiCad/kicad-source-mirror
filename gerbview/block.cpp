@@ -151,10 +151,9 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositon,
                                      bool aErase )
 {
-    int          Color;
     BASE_SCREEN* screen = aPanel->GetScreen();
 
-    Color = YELLOW;
+    EDA_COLOR_T Color = YELLOW;
 
     if( aErase )
     {

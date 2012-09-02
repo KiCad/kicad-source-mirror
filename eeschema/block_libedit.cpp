@@ -338,15 +338,15 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
         block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
         component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert,
-                         g_XorMode, -1, DefaultTransform, true, true, true );
+                         g_XorMode, UNSPECIFIED_COLOR, DefaultTransform, true, true, true );
     }
 
-    /* Repaint new view */
+    // Repaint new view
     block->SetMoveVector( screen->GetCrossHairPosition() - block->GetLastCursorPosition() );
 
     GRSetDrawMode( aDC, g_XorMode );
     block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
     component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert,
-                     g_XorMode, -1, DefaultTransform, true, true, true );
+                     g_XorMode, UNSPECIFIED_COLOR, DefaultTransform, true, true, true );
 }

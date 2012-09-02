@@ -85,7 +85,7 @@ public:
     double GetLength() const;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, int aColor = -1 );
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     bool Save( FILE* aFile ) const;
 

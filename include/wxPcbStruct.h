@@ -281,7 +281,7 @@ public:
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool IsGridVisible();
+    virtual bool IsGridVisible() const;
 
     /**
      * Function SetGridVisibility() , virtual
@@ -295,13 +295,13 @@ public:
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual int GetGridColor();
+    virtual EDA_COLOR_T GetGridColor() const;
 
     /**
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void SetGridColor(int aColor);
+    virtual void SetGridColor(EDA_COLOR_T aColor);
 
     // Configurations:
     void InstallConfigFrame();
@@ -513,7 +513,7 @@ public:
      * @return bool - true if the element is visible.
      * @see enum PCB_VISIBLE
      */
-    bool IsElementVisible( int aElement );
+    bool IsElementVisible( int aElement ) const;
 
     /**
      * Function SetElementVisibility

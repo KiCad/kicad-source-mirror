@@ -238,7 +238,7 @@ EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                          const wxPoint& offset )
 {
-    int             width, color, orient;
+    int             width, orient;
     wxSize          size;
     wxPoint         pos;      // Center of text
     PCB_BASE_FRAME* frame;
@@ -268,6 +268,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     GRSetDrawMode( DC, draw_mode );
 
     BOARD * brd =  GetBoard( );
+    EDA_COLOR_T color;
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
     {
         color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);

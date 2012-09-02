@@ -288,7 +288,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
 
     screen->m_IsPrinting = true;
 
-    int bg_color = g_DrawBgColor;
+    EDA_COLOR_T bg_color = g_DrawBgColor;
     g_DrawBgColor = WHITE;
 
     if( PrintPageRef() )

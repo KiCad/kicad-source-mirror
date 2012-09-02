@@ -85,7 +85,7 @@ private:
      * creates the colored rectangle bitmaps used in the layer selection widget.
      * @param aColor is the color to fill the rectangle with.
      */
-    wxBitmap makeLayerBitmap( int aColor );
+    wxBitmap makeLayerBitmap( EDA_COLOR_T aColor );
 };
 
 
@@ -149,7 +149,8 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     m_LayerSelectionCtrl->InsertColumn( 0, col0 );
     // Build copper layer list and append to layer widget
     int layerCount = board->GetCopperLayerCount();
-    int layerNumber, itemIndex, layerColor;
+    int layerNumber, itemIndex;
+    EDA_COLOR_T layerColor;
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
     for( int ii = 0; ii < layerCount; ii++ )
@@ -261,7 +262,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
     return true;
 }
 
-wxBitmap DIALOG_KEEPOUT_AREA_PROPERTIES::makeLayerBitmap( int aColor )
+wxBitmap DIALOG_KEEPOUT_AREA_PROPERTIES::makeLayerBitmap( EDA_COLOR_T aColor )
 {
     wxBitmap    bitmap( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     wxBrush     brush;

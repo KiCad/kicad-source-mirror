@@ -260,7 +260,8 @@ int LIB_FIELD::GetPenSize() const
 
 
 void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                             int aColor, GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
+                             EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                             const TRANSFORM& aTransform )
 {
     wxPoint  text_pos;
     int      color;
@@ -514,9 +515,9 @@ EDA_RECT LIB_FIELD::GetBoundingBox() const
 }
 
 
-int LIB_FIELD::GetDefaultColor()
+EDA_COLOR_T LIB_FIELD::GetDefaultColor()
 {
-    int color;
+    EDA_COLOR_T color;
 
     switch( m_id )
     {

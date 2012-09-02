@@ -512,7 +512,7 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
         for( unsigned i = 0; i < list->Count(); i++ )
         {
             wxString txt = list->Item( i );
-            aPlotter->Text( pos, UNSPECIFIED, txt, orient, size,
+            aPlotter->Text( pos, UNSPECIFIED_COLOR, txt, orient, size,
                            pt_texte->m_HJustify, pt_texte->m_VJustify,
                            thickness, pt_texte->m_Italic, allow_bold );
             pos += offset;
@@ -522,7 +522,7 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
     }
     else
     {
-        aPlotter->Text( pos, UNSPECIFIED, pt_texte->m_Text, orient, size,
+        aPlotter->Text( pos, UNSPECIFIED_COLOR, pt_texte->m_Text, orient, size,
                        pt_texte->m_HJustify, pt_texte->m_VJustify,
                        thickness, pt_texte->m_Italic, allow_bold );
     }

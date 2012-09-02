@@ -250,7 +250,7 @@ public:
                wxDC*           DC,
                const wxPoint&  offset,
                GR_DRAWMODE     draw_mode,
-               int             Color = -1 )
+               EDA_COLOR_T     Color = UNSPECIFIED_COLOR )
     {
         Draw( panel, DC, offset, draw_mode, Color, true );
     }
@@ -259,7 +259,7 @@ public:
                wxDC*           DC,
                const wxPoint&  offset,
                GR_DRAWMODE     draw_mode,
-               int             Color,
+               EDA_COLOR_T     Color,
                bool            DrawPinText );
 
     void SwapData( SCH_ITEM* aItem );

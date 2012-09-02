@@ -265,11 +265,11 @@ int LIB_POLYLINE::GetPenSize() const
 
 
 void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                                int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                                EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                                 const TRANSFORM& aTransform )
 {
     wxPoint  pos1;
-    int      color = ReturnLayerColor( LAYER_DEVICE );
+    EDA_COLOR_T color = ReturnLayerColor( LAYER_DEVICE );
     wxPoint* buffer = NULL;
 
     if( aColor < 0 )                // Used normal color or selected color

@@ -220,7 +220,8 @@ void PCB_EDIT_FRAME::Reset_Noroutable( wxDC* DC )
 /* DEBUG Function: displays the routing matrix */
 void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
-    int dcell0, dcell1 = 0, color;
+    int dcell0, dcell1 = 0;
+    EDA_COLOR_T color;
 
     int maxi = 600 / RoutingMatrix.m_Ncols;
     maxi = ( maxi * 3 ) / 4;
@@ -234,7 +235,7 @@ void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
     {
         for( int row = 0; row < RoutingMatrix.m_Nrows; row++ )
         {
-            color  = 0;
+            color  = BLACK;
             dcell0 = RoutingMatrix.GetCell( row, col, BOTTOM );
 
             if( dcell0 & HOLE )
@@ -244,7 +245,7 @@ void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
 //                dcell1 = GetCell( row, col, TOP );
 
             if( dcell1 & HOLE )
-                color |= RED;
+                color = RED;
 
 //            dcell0 |= dcell1;
 

@@ -57,13 +57,13 @@ wxString       g_Prj_Config_LocalFilename;
 
 EDA_UNITS_T    g_UserUnit;
 
-int            g_GhostColor;
+EDA_COLOR_T    g_GhostColor;
 
 
 #if defined(KICAD_GOST)
-static bool s_gost = true;
+static const bool s_gost = true;
 #else
-static bool s_gost = false;
+static const bool s_gost = false;
 #endif
 
 bool IsGOST()

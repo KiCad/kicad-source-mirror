@@ -103,7 +103,7 @@ bool SCH_MARKER::Save( FILE* aFile ) const
 
 
 void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                       const wxPoint& aOffset, GR_DRAWMODE aDrawMode, int aColor )
+                       const wxPoint& aOffset, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
     EDA_COLOR_T color = (EDA_COLOR_T) m_Color;
     EDA_COLOR_T tmp   = color;
@@ -118,7 +118,7 @@ void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aColor < 0 )
         m_Color = color;
     else
-        m_Color = (EDA_COLOR_T) aColor;
+        m_Color = aColor;
 
     DrawMarker( aPanel, aDC, aDrawMode, aOffset );
     m_Color = tmp;

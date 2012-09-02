@@ -134,7 +134,7 @@ public:
                        wxDC*           DC,
                        const wxPoint&  offset,
                        GR_DRAWMODE     draw_mode,
-                       int             Color = -1 );
+                       EDA_COLOR_T     Color = UNSPECIFIED_COLOR );
 
     /**
      * Function CreateGraphicShape
@@ -231,7 +231,7 @@ public:
                wxDC*           DC,
                const wxPoint&  offset,
                GR_DRAWMODE     draw_mode,
-               int             Color = -1 );
+               EDA_COLOR_T     Color = UNSPECIFIED_COLOR );
 
     wxString GetClass() const
     {
@@ -282,7 +282,7 @@ public:
                wxDC*           DC,
                const wxPoint&  offset,
                GR_DRAWMODE     draw_mode,
-               int             Color = -1 );
+               EDA_COLOR_T     Color = UNSPECIFIED_COLOR );
 
     wxString GetClass() const
     {
@@ -337,7 +337,7 @@ public:
                wxDC*           DC,
                const wxPoint&  offset,
                GR_DRAWMODE     draw_mode,
-               int             Color = -1 );
+               EDA_COLOR_T     Color = UNSPECIFIED_COLOR );
 
     wxString GetClass() const
     {

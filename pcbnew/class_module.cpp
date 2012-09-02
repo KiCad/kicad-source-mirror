@@ -190,7 +190,7 @@ void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
     if( GetBoard()->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        int color = g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE );
+        EDA_COLOR_T color = g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE );
         GRLine( panel->GetClipBox(), DC,
                 m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
                 m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,

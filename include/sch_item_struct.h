@@ -168,7 +168,7 @@ public:
                        wxDC*           aDC,
                        const wxPoint&  aOffset,
                        GR_DRAWMODE     aDrawMode,
-                       int             aColor = -1 ) = 0;
+                       EDA_COLOR_T     aColor = UNSPECIFIED_COLOR ) = 0;
 
     /**
      * Function Move

@@ -99,7 +99,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                         const wxPoint& offset )
 {
     int             ux0, uy0, dx, dy, radius, StAngle, EndAngle;
-    int             color, type_trace;
+    int             type_trace;
     int             typeaff;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     PCB_BASE_FRAME* frame;
@@ -114,15 +114,12 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    color = brd->GetLayerColor( m_Layer );
+    EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 
     if(( draw_mode & GR_ALLOW_HIGHCONTRAST ) && DisplayOpt.ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
-        {
-            color &= ~MASKCOLOR;
-            color |= DARKDARKGRAY;
-        }
+            ColorTurnToDarkDarkGray( &color );
     }
 
 

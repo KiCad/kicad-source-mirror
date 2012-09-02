@@ -171,7 +171,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     wxPaintDC    dc( m_panelShowPad );
     PAD_DRAWINFO drawInfo;
 
-    int          color = 0;
+    EDA_COLOR_T color = ColorFromInt( 0 ); // XXX EVIL merge
 
     if( m_dummyPad->GetLayerMask() & LAYER_FRONT )
     {
@@ -180,7 +180,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     if( m_dummyPad->GetLayerMask() & LAYER_BACK )
     {
-        color |= m_Board->GetVisibleElementColor( PAD_BK_VISIBLE );
+        color = ColorFromInt( color | m_Board->GetVisibleElementColor( PAD_BK_VISIBLE ) ); // XXX EVIL merge
     }
 
     if( color == 0 )

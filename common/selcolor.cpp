@@ -45,19 +45,19 @@ BEGIN_EVENT_TABLE( WinEDA_SelColorFrame, wxDialog )
 END_EVENT_TABLE()
 
 
-int DisplayColorFrame( wxWindow* parent, int OldColor )
+EDA_COLOR_T DisplayColorFrame( wxWindow* parent, int OldColor )
 {
     wxPoint framepos;
-    int     color;
+    EDA_COLOR_T     color;
 
     wxGetMousePosition( &framepos.x, &framepos.y );
 
     WinEDA_SelColorFrame* frame = new WinEDA_SelColorFrame( parent,
                                                             framepos, OldColor );
-    color = frame->ShowModal();
+    color = static_cast<EDA_COLOR_T>( frame->ShowModal() );
     frame->Destroy();
     if( color > NBCOLOR )
-        color = -1;
+        color = UNSPECIFIED_COLOR;
     return color;
 }
 

@@ -138,7 +138,7 @@ public:
                wxDC*           aDC,
                const wxPoint&  aOffset,
                GR_DRAWMODE     aDrawMode,
-               int             aColor = -1 );
+               EDA_COLOR_T     aColor = UNSPECIFIED_COLOR );
 
     bool Save( FILE* aFile ) const;
 

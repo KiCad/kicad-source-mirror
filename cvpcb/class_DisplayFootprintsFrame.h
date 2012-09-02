@@ -46,7 +46,7 @@ public:
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool IsGridVisible();
+    virtual bool IsGridVisible() const;
 
     /**
      * Function SetGridVisibility() , virtual
@@ -59,7 +59,7 @@ public:
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual int GetGridColor();
+    virtual EDA_COLOR_T GetGridColor() const;
 
     void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );

@@ -378,7 +378,7 @@ protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
     int         m_LastGridSizeId;
     bool        m_DrawGrid;                 // hide/Show grid
-    int         m_GridColor;                // Grid color
+    EDA_COLOR_T m_GridColor;                // Grid color
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
@@ -533,7 +533,7 @@ public:
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool IsGridVisible()
+    virtual bool IsGridVisible() const
     {
         return m_DrawGrid;
     }
@@ -552,7 +552,7 @@ public:
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual int GetGridColor()
+    virtual EDA_COLOR_T GetGridColor() const
     {
         return m_GridColor;
     }
@@ -561,7 +561,7 @@ public:
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void SetGridColor( int aColor )
+    virtual void SetGridColor( EDA_COLOR_T aColor )
     {
         m_GridColor = aColor;
     }
@@ -574,7 +574,7 @@ public:
      * @param aPosition The position to test.
      * @return The wxPoint of the appropriate cursor position.
      */
-    wxPoint GetGridPosition( const wxPoint& aPosition );
+    wxPoint GetGridPosition( const wxPoint& aPosition ) const;
 
     /**
      * Command event handler for selecting grid sizes.
@@ -694,7 +694,7 @@ public:
      * @return a wxString containing the message locator like A3 or B6
      *         (or ?? if out of page limits)
      */
-    const wxString GetXYSheetReferences( const wxPoint& aPosition );
+    const wxString GetXYSheetReferences( const wxPoint& aPosition ) const;
 
     void DisplayToolMsg( const wxString& msg );
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
@@ -816,7 +816,7 @@ public:
      * @param pad - Number of spaces to pad between messages (default = 4).
      */
     void AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
-                         int color, int pad = 6 );
+                         EDA_COLOR_T color, int pad = 6 );
 
     /**
      * Clear all messages from the message panel.
@@ -843,7 +843,7 @@ public:
      *                       the current user unit is millimeters.
      * @return The converted string for display in user interface elements.
      */
-    wxString CoordinateToString( int aValue, bool aConvertToMils = false );
+    wxString CoordinateToString( int aValue, bool aConvertToMils = false ) const;
 
     /**
      * Function LengthDoubleToString
@@ -854,7 +854,7 @@ public:
      *                       the current user unit is millimeters.
      * @return The converted string for display in user interface elements.
      */
-    wxString LengthDoubleToString( double aValue, bool aConvertToMils = false );
+    wxString LengthDoubleToString( double aValue, bool aConvertToMils = false ) const;
 
     DECLARE_EVENT_TABLE()
 };
@@ -871,25 +871,7 @@ struct EDA_MSG_ITEM
     int      m_LowerY;
     wxString m_UpperText;
     wxString m_LowerText;
-    int      m_Color;
-
-    /**
-     * Function operator=
-     * overload the assignment operator so that the wxStrings get copied
-     * properly when copying a EDA_MSG_ITEM.
-     * No, actually I'm not sure this needed, C++ compiler may auto-generate it.
-     */
-    EDA_MSG_ITEM& operator=( const EDA_MSG_ITEM& rv )
-    {
-        m_X         = rv.m_X;
-        m_UpperY    = rv.m_UpperY;
-        m_LowerY    = rv.m_LowerY;
-        m_UpperText = rv.m_UpperText;   // overloaded operator=()
-        m_LowerText = rv.m_LowerText;   // overloaded operator=()
-        m_Color     = rv.m_Color;
-
-        return * this;
-    }
+    EDA_COLOR_T m_Color;
 };
 
 
@@ -917,7 +899,7 @@ protected:
     /**
      * Calculate the width and height of a text string using the system UI font.
      */
-    wxSize computeTextSize( const wxString& text );
+    wxSize computeTextSize( const wxString& text ) const;
 
 public:
     EDA_MSG_PANEL( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
@@ -944,7 +926,7 @@ public:
      * @param aColor Color of the text to display.
      */
     void SetMessage( int aXPosition, const wxString& aUpperText,
-                     const wxString& aLowerText, int aColor );
+                     const wxString& aLowerText, EDA_COLOR_T aColor );
 
     /**
      * Append a message to the message panel.
@@ -960,7 +942,7 @@ public:
      * @param pad - Number of spaces to pad between messages (default = 4).
      */
     void AppendMessage( const wxString& textUpper, const wxString& textLower,
-                        int color, int pad = 6 );
+                        EDA_COLOR_T color, int pad = 6 );
 
     DECLARE_EVENT_TABLE()
 };

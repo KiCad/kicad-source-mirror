@@ -463,8 +463,8 @@ void PARAM_CFG_INT::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
-                                        int default_val,
+PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, EDA_COLOR_T* ptparam,
+                                        EDA_COLOR_T default_val,
                                         const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_SETCOLOR, group )
 {
@@ -475,8 +475,8 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( const wxChar* ident, int* ptparam,
 
 PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
                                         const wxChar* ident,
-                                        int*          ptparam,
-                                        int           default_val,
+                                        EDA_COLOR_T*          ptparam,
+                                        EDA_COLOR_T           default_val,
                                         const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_SETCOLOR, group )
 {
@@ -488,9 +488,11 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
 
 void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 {
+    static const int MAX_COLOR = 0x8001F;
+
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
-    int itmp = aConfig->Read( m_Ident, m_Default );
+    EDA_COLOR_T itmp = ColorFromInt( aConfig->Read( m_Ident, m_Default ) );
 
     if( (itmp < 0) || (itmp > MAX_COLOR) )
         itmp = m_Default;

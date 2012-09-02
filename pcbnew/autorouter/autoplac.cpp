@@ -373,7 +373,8 @@ end_of_tst:
 
 void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 {
-    int       color, ii, jj;
+    int       ii, jj;
+    EDA_COLOR_T color;
     int       ox, oy;
     MATRIX_CELL top_state, bottom_state;
 
@@ -896,7 +897,7 @@ double PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
     cout = 0;
 
-    int color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
+    EDA_COLOR_T color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
 
     if( AutoPlaceShowAll )
         GRSetDrawMode( DC, GR_XOR );
