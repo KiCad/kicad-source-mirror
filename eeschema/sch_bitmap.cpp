@@ -195,7 +195,7 @@ EDA_RECT SCH_BITMAP::GetBoundingBox() const
 
 
 void SCH_BITMAP::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                       GR_DRAWMODE aDrawMode, int aColor )
+                       GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
     wxPoint pos = m_Pos + aOffset;
 

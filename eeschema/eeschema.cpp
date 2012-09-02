@@ -81,11 +81,11 @@ int         g_DrawDefaultLineThickness = 6; /* Default line thickness in
                                              * line width */
 
 // Color to draw selected items
-int g_ItemSelectetColor = BROWN;
+EDA_COLOR_T g_ItemSelectetColor = BROWN;
 
 // Color to draw items flagged invisible, in libedit (they are invisible
 // in Eeschema
-int g_InvisibleItemColor = DARKGRAY;
+EDA_COLOR_T g_InvisibleItemColor = DARKGRAY;
 
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 

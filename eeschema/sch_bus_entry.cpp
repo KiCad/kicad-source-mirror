@@ -178,9 +178,9 @@ int SCH_BUS_ENTRY::GetPenSize() const
 
 
 void SCH_BUS_ENTRY::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                          GR_DRAWMODE aDrawMode, int aColor )
+                          GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
-    int color;
+    EDA_COLOR_T color;
 
     if( aColor >= 0 )
         color = aColor;

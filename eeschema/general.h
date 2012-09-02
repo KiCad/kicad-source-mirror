@@ -95,12 +95,12 @@ class LayerStruct
 {
 public:
     char LayerNames[MAX_LAYERS + 1][8];
-    int  LayerColor[MAX_LAYERS + 1];
+    EDA_COLOR_T LayerColor[MAX_LAYERS + 1];
     char LayerStatus[MAX_LAYERS + 1];
     int  NumberOfLayers;
     int  CurrentLayer;
     int  CurrentWidth;
-    int  CommonColor;
+    EDA_COLOR_T  CommonColor;
     int  Flags;
 };
 
@@ -149,10 +149,10 @@ extern int            g_DrawDefaultLineThickness;
 
 
 /// Color to draw selected items
-extern int g_ItemSelectetColor;
+extern EDA_COLOR_T g_ItemSelectetColor;
 
 /// Color to draw items flagged invisible, in libedit (they are invisible in Eeschema
-extern int g_InvisibleItemColor;
+extern EDA_COLOR_T g_InvisibleItemColor;
 
 /* Global Variables */
 

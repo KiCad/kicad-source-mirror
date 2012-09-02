@@ -124,7 +124,7 @@ public:
                wxDC*           aDC,
                const wxPoint&  aOffset,
                GR_DRAWMODE     aDrawMode,
-               int             aColor );
+               EDA_COLOR_T     aColor );
 
     /**
      * Function PushItem
@@ -147,7 +147,7 @@ public:
      */
     void ClearItemsList();
 
-    unsigned GetCount()
+    unsigned GetCount() const
     {
         return m_items.GetCount();
     }

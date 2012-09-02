@@ -655,9 +655,11 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
         }
     }
 
-    m_settings->Read( wxT( "BgColor" ), &g_DrawBgColor );
+    int draw_bg_color;
+    m_settings->Read( wxT( "BgColor" ), &draw_bg_color );
+    g_DrawBgColor = ColorFromInt( draw_bg_color );
 
-    /* Load per-user search paths from settings file */
+    // Load per-user search paths from settings file
 
     wxString   upath;
     int i = 1;

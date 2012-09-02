@@ -210,11 +210,12 @@ int LIB_CIRCLE::GetPenSize() const
 
 
 void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                              int aColor, GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
+                              EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                              const TRANSFORM& aTransform )
 {
     wxPoint pos1;
 
-    int     color = ReturnLayerColor( LAYER_DEVICE );
+    EDA_COLOR_T color = ReturnLayerColor( LAYER_DEVICE );
 
     if( aColor < 0 )       // Used normal color or selected color
     {

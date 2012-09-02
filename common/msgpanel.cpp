@@ -76,7 +76,7 @@ int EDA_MSG_PANEL::GetRequiredHeight()
 }
 
 
-wxSize EDA_MSG_PANEL::computeTextSize( const wxString& text )
+wxSize EDA_MSG_PANEL::computeTextSize( const wxString& text ) const
 {
     // Get size of the wxSYS_DEFAULT_GUI_FONT
     wxSize      textSizeInPixels;
@@ -109,7 +109,7 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& event )
 
 void EDA_MSG_PANEL::AppendMessage( const wxString& textUpper,
                                    const wxString& textLower,
-                                   int color, int pad )
+                                   EDA_COLOR_T color, int pad )
 {
     wxString    text;
     wxSize      drawSize = GetClientSize();
@@ -143,7 +143,7 @@ void EDA_MSG_PANEL::AppendMessage( const wxString& textUpper,
 
 
 void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
-                                const wxString& aLowerText, int aColor )
+                                const wxString& aLowerText, EDA_COLOR_T aColor )
 {
     wxPoint pos;
     wxSize drawSize = GetClientSize();
@@ -196,11 +196,11 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
 
 void EDA_MSG_PANEL::showItem( wxDC& dc, const EDA_MSG_ITEM& aItem )
 {
-    int color = aItem.m_Color;
+    EDA_COLOR_T color = aItem.m_Color;
 
     if( color >= 0 )
     {
-        color &= MASKCOLOR;
+        color = ColorGetBase( color );
         dc.SetTextForeground( wxColour( ColorRefs[color].m_Red,
                                         ColorRefs[color].m_Green,
                                         ColorRefs[color].m_Blue ) );

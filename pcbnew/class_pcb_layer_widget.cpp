@@ -66,11 +66,11 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
 
     RR( _( "Anchors" ),         ANCHOR_VISIBLE,         WHITE,      _( "Show footprint and text origins as a cross" ) ),
     RR( _( "Grid" ),            GRID_VISIBLE,           WHITE,      _( "Show the (x,y) grid dots" ) ),
-    RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    -1,         _( "Show a marker on pads which have no net connected" ) ),
-    RR( _( "Modules Front" ),   MOD_FR_VISIBLE,         -1,         _( "Show footprints that are on board's front") ),
-    RR( _( "Modules Back" ),    MOD_BK_VISIBLE,         -1,         _( "Show footprints that are on board's back") ),
-    RR( _( "Values" ),          MOD_VALUES_VISIBLE,     -1,         _( "Show footprint's values") ),
-    RR( _( "References" ),      MOD_REFERENCES_VISIBLE, -1,         _( "Show footprint's references") ),
+    RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    UNSPECIFIED_COLOR,         _( "Show a marker on pads which have no net connected" ) ),
+    RR( _( "Modules Front" ),   MOD_FR_VISIBLE,         UNSPECIFIED_COLOR,         _( "Show footprints that are on board's front") ),
+    RR( _( "Modules Back" ),    MOD_BK_VISIBLE,         UNSPECIFIED_COLOR,         _( "Show footprints that are on board's back") ),
+    RR( _( "Values" ),          MOD_VALUES_VISIBLE,     UNSPECIFIED_COLOR,         _( "Show footprint's values") ),
+    RR( _( "References" ),      MOD_REFERENCES_VISIBLE, UNSPECIFIED_COLOR,         _( "Show footprint's references") ),
 };
 
 
@@ -324,7 +324,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
-void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, int aColor )
+void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
 {
     myframe->GetBoard()->SetLayerColor( aLayer, aColor );
     myframe->ReCreateLayerBox( NULL );
@@ -362,7 +362,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
         myframe->GetCanvas()->Refresh();
 }
 
-void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, int aColor )
+void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
 {
     myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
     myframe->GetCanvas()->Refresh();

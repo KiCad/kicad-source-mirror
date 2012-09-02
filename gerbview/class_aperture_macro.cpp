@@ -131,7 +131,7 @@ int AM_PRIMITIVE::GetExposure(GERBER_DRAW_ITEM* aParent) const
 void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
                                    EDA_RECT* aClipBox,
                                    wxDC* aDC,
-                                   int aColor, int aAltColor,
+                                   EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
                                    wxPoint aShapePos,
                                    bool aFilledShape )
 {
@@ -727,7 +727,7 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
  */
 void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent,
                                              EDA_RECT* aClipBox, wxDC* aDC,
-                                             int aColor, int aAltColor,
+                                             EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
                                              wxPoint aShapePos, bool aFilledShape )
 {
     for( AM_PRIMITIVES::iterator prim_macro = primitives.begin();

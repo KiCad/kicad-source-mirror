@@ -259,7 +259,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( gerber->m_ImageNegative )
         {
             // Draw background negative (i.e. in graphic layer color) for negative images.
-            int color = gerbFrame->GetLayerColor( layer );
+            EDA_COLOR_T color = gerbFrame->GetLayerColor( layer );
 
             GRSetDrawMode( &layerDC, GR_COPY );
             GRFilledRect( &drawBox, plotDC, drawBox.GetX(), drawBox.GetY(),

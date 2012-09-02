@@ -15,7 +15,7 @@
 /* Initial colors values: optimized for Pcbnew, but are also Ok for Eeschema
  * these values are superseded by config reading
  */
-static const int default_layer_color[LAYERSCOLORSBUFFERSIZE] =
+static const EDA_COLOR_T default_layer_color[LAYERSCOLORSBUFFERSIZE] =
 {
     GREEN,        BLUE,         LIGHTGRAY, BROWN,
     RED,          MAGENTA,      LIGHTGRAY, MAGENTA,
@@ -34,7 +34,7 @@ static const int default_layer_color[LAYERSCOLORSBUFFERSIZE] =
     DARKGRAY
 };
 
-static const int default_items_color[LAYERSCOLORSBUFFERSIZE] =
+static const EDA_COLOR_T default_items_color[LAYERSCOLORSBUFFERSIZE] =
 {
     LIGHTGRAY,  // unused
     CYAN,       // VIA_MICROVIA_VISIBLE
@@ -78,13 +78,13 @@ COLORS_DESIGN_SETTINGS:: COLORS_DESIGN_SETTINGS()
  * @return the color for aLayer which is one of the layer indices given
  * in pcbstruct.h or in schematic
  */
-int COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer )
+EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer ) const
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
     {
         return m_LayersColors[aLayer];
     }
-    return -1;
+    return UNSPECIFIED_COLOR;
 }
 
 
@@ -93,7 +93,7 @@ int COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer )
  * sets the color for aLayer which is one of the layer indices given
  * in pcbstruct.h or in schematic
  */
-void COLORS_DESIGN_SETTINGS::SetLayerColor( int aLayer, int aColor )
+void COLORS_DESIGN_SETTINGS::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
     {
@@ -107,13 +107,13 @@ void COLORS_DESIGN_SETTINGS::SetLayerColor( int aLayer, int aColor )
  * @return the color for an item which is one of the item indices given
  * in pcbstruct.h, enum PCB_VISIBLE or in schematic
  */
-int COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx )
+EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx )
 {
     if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
     {
         return m_ItemsColors[aItemIdx];
     }
-    return -1;
+    return UNSPECIFIED_COLOR;
 }
 
 
@@ -122,7 +122,7 @@ int COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx )
  * sets the color for an item which is one of the item indices given
  * in pcbstruct.h, enum PCB_VISIBLE or in schematic
  */
-void COLORS_DESIGN_SETTINGS::SetItemColor( int aItemIdx, int aColor )
+void COLORS_DESIGN_SETTINGS::SetItemColor( int aItemIdx, EDA_COLOR_T aColor )
 {
     if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
     {
@@ -136,7 +136,7 @@ void COLORS_DESIGN_SETTINGS::SetItemColor( int aItemIdx, int aColor )
  * sets alls colors to aColor
  * Usefull to create a monochrome color selection for printing purpose
  */
-void COLORS_DESIGN_SETTINGS::SetAllColorsAs( int aColor)
+void COLORS_DESIGN_SETTINGS::SetAllColorsAs( EDA_COLOR_T aColor )
 {
     for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )
         m_LayersColors[ii] = aColor;

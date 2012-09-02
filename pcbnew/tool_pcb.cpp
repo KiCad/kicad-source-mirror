@@ -94,7 +94,7 @@ static const char s_BitmapLayerIcon[24][24] = {
 void PCB_EDIT_FRAME::PrepareLayerIndicator()
 {
     int        ii, jj;
-    int        active_layer_color, Route_Layer_TOP_color,
+    EDA_COLOR_T active_layer_color, Route_Layer_TOP_color,
                Route_Layer_BOTTOM_color, via_color;
     bool       change = false;
     bool first_call = LayerPairBitmap == NULL;

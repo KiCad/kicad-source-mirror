@@ -40,6 +40,7 @@
 
 #include <richio.h>
 #include <convert_to_biu.h>
+#include <colors.h>
 
 #if !wxUSE_PRINTING_ARCHITECTURE && !SWIG
 #   error "You must use '--enable-printarch' in your wx library configuration."
@@ -465,7 +466,7 @@ extern wxString     g_Prj_Config_LocalFilename;
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
 
 /// Draw color for moving objects.
-extern int          g_GhostColor;
+extern EDA_COLOR_T  g_GhostColor;
 
 
 // COMMON.CPP
@@ -574,7 +575,7 @@ void InitKiCadAbout( wxAboutDialogInfo& info );
  */
 time_t GetNewTimeStamp();
 
-int DisplayColorFrame( wxWindow* parent, int OldColor );
+EDA_COLOR_T DisplayColorFrame( wxWindow* parent, int OldColor );
 int GetCommandOptions( const int argc, const char** argv,
                        const char* stringtst, const char** optarg,
                        int* optind );

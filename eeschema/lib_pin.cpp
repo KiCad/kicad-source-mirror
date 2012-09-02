@@ -789,7 +789,7 @@ int LIB_PIN::GetPenSize() const
 void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
                            wxDC*            aDC,
                            const wxPoint&   aOffset,
-                           int              aColor,
+                           EDA_COLOR_T      aColor,
                            GR_DRAWMODE      aDrawMode,
                            void*            aData,
                            const TRANSFORM& aTransform )
@@ -854,15 +854,14 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
                              const wxPoint&  aPinPos,
                              int             aOrient,
                              GR_DRAWMODE     aDrawMode,
-                             int             aColor )
+                             EDA_COLOR_T     aColor )
 {
     int       MapX1, MapY1, x1, y1;
-    int       color;
     int       width   = GetPenSize();
     int       posX    = aPinPos.x, posY = aPinPos.y, len = m_length;
     EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
 
-    color = ReturnLayerColor( LAYER_PIN );
+    EDA_COLOR_T color = ReturnLayerColor( LAYER_PIN );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -1069,7 +1068,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                             int             TextInside,
                             bool            DrawPinNum,
                             bool            DrawPinName,
-                            int             Color,
+                            EDA_COLOR_T     Color,
                             GR_DRAWMODE     DrawMode )
 {
     int         x, y, x1, y1;
@@ -1271,9 +1270,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation )
 {
     int         MapX1, MapY1, x1, y1;
-    EDA_COLOR_T color = UNSPECIFIED;
-
-    color = ReturnLayerColor( LAYER_PIN );
+    EDA_COLOR_T color = ReturnLayerColor( LAYER_PIN );
 
     aPlotter->SetColor( color );
 

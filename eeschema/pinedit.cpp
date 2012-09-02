@@ -267,7 +267,7 @@ another pin. Continue?" ) );
 
     m_canvas->CrossHairOff( DC );
     bool showPinText = true;
-    CurrentPin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
+    CurrentPin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, GR_DEFAULT_DRAWMODE,
                       &showPinText, DefaultTransform );
     m_canvas->CrossHairOn( DC );
 
@@ -342,13 +342,13 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( aErase )
     {
         CurrentPin->SetPosition( PinPreviousPos );
-        CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), -1, g_XorMode,
+        CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
                           &showPinText, DefaultTransform );
     }
 
     // Redraw pin in new position
     CurrentPin->SetPosition( aPanel->GetScreen()->GetCrossHairPosition( true ) );
-    CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
+    CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, &showPinText, DefaultTransform );
 
     PinPreviousPos = CurrentPin->GetPosition();
 
@@ -412,7 +412,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
         m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
 
         if( DC )
-            pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, GR_COPY, &showPinText,
+            pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, GR_COPY, &showPinText,
                        DefaultTransform );
 
     }
@@ -500,7 +500,7 @@ void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
         if( selected && !Pin->IsSelected() )
             continue;
 
-        Pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
+        Pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, &showPinText, DefaultTransform );
 
         switch( id )
         {
@@ -517,7 +517,7 @@ void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
             break;
         }
 
-        Pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, &showPinText,
+        Pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, GR_DEFAULT_DRAWMODE, &showPinText,
                    DefaultTransform );
     }
 }

@@ -88,7 +88,7 @@ class LIB_ITEM : public EDA_ITEM
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
     virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                              const wxPoint& aOffset, int aColor,
+                              const wxPoint& aOffset, EDA_COLOR_T aColor,
                               GR_DRAWMODE aDrawMode, void* aData,
                               const TRANSFORM& aTransform ) = 0;
 
@@ -99,7 +99,7 @@ class LIB_ITEM : public EDA_ITEM
      * @param aDC The device context to draw on.
      * @param aColor The index of the color to draw.
      */
-    virtual void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, int aColor ) {}
+    virtual void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, int EDA_COLOR_T ) {}
 
     /**
      * Calculates the attributes of an item at \a aPosition when it is being edited.
@@ -213,7 +213,7 @@ public:
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
     virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset,
-                       int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                       EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                        const TRANSFORM& aTransform );
 
     /**
@@ -402,7 +402,7 @@ public:
 
     void SetEraseLastDrawItem( bool aErase = true ) { m_eraseLastDrawItem = aErase; }
 
-    virtual int GetDefaultColor();
+    virtual EDA_COLOR_T GetDefaultColor();
 
     void SetUnit( int aUnit ) { m_Unit = aUnit; }
 

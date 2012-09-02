@@ -64,7 +64,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 }
 
 // Returns a color index from the layer id
-int GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex )
+EDA_COLOR_T GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
 {
     GERBVIEW_FRAME* frame = (GERBVIEW_FRAME*) GetParent()->GetParent();
 
@@ -72,7 +72,7 @@ int GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex )
 }
 
 // Returns the name of the layer id
-const wxString GBR_LAYER_BOX_SELECTOR::GetLayerName( int aLayerIndex )
+wxString GBR_LAYER_BOX_SELECTOR::GetLayerName( int aLayerIndex ) const
 {
     wxString name;
     name.Printf( _( "Layer %d" ), aLayerIndex + 1 );

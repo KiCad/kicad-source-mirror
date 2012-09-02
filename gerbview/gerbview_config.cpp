@@ -102,7 +102,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
                                                     false ) );
 
     // Default colors for layers 0 to 31
-    static const int color_default[] = {
+    static const EDA_COLOR_T color_default[] = {
         GREEN,     BLUE,         LIGHTGRAY, MAGENTA,
         RED,       DARKGREEN,    BROWN,     MAGENTA,
         LIGHTGRAY, BLUE,         GREEN,     CYAN,
@@ -134,7 +134,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
 
     for( unsigned i = 0; i < DIM(keys);  ++i )
     {
-        int* prm = &g_ColorsSettings.m_LayersColors[i];
+        EDA_COLOR_T* prm = &g_ColorsSettings.m_LayersColors[i];
 
         PARAM_CFG_SETCOLOR* prm_entry =
             new PARAM_CFG_SETCOLOR( true, keys[i], prm, color_default[i] );

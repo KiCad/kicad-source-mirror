@@ -318,7 +318,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     int t1  = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
     wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + offset;
 
-    plotter->Text( pos, UNSPECIFIED, m_Text,
+    plotter->Text( pos, UNSPECIFIED_COLOR, m_Text,
                    t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                    m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                    GetPenSize(), m_Italic, m_Bold );
@@ -344,9 +344,10 @@ int LIB_TEXT::GetPenSize() const
 
 
 void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                            int aColor, GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
+                            EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                            const TRANSFORM& aTransform )
 {
-    int     color = GetDefaultColor();
+    EDA_COLOR_T     color = GetDefaultColor();
 
     if( aColor < 0 )       // Used normal color or selected color
     {

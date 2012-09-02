@@ -723,9 +723,9 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
 }
 
 
-int BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
+EDA_COLOR_T BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
 {
-    int color = -1;
+    EDA_COLOR_T color = UNSPECIFIED_COLOR;
 
     switch( aPCB_VISIBLE )
     {
@@ -751,7 +751,7 @@ int BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
 }
 
 
-void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
+void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, EDA_COLOR_T aColor )
 {
     switch( aPCB_VISIBLE )
     {
@@ -775,13 +775,13 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, int aColor )
 }
 
 
-void BOARD::SetLayerColor( int aLayer, int aColor )
+void BOARD::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
 {
     GetColorsSettings()->SetLayerColor( aLayer, aColor );
 }
 
 
-int BOARD::GetLayerColor( int aLayer )
+EDA_COLOR_T BOARD::GetLayerColor( int aLayer ) const
 {
     return GetColorsSettings()->GetLayerColor( aLayer );
 }

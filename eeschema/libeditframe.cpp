@@ -726,9 +726,9 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         int oldFlags = m_drawItem->GetFlags();
         m_drawItem->ClearFlags();
-        m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
+        m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
         ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetScreen()->GetCrossHairPosition( true ) );
-        m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
+        m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
         m_drawItem->SetFlags( oldFlags );
         m_lastDrawItem = NULL;
         break;
@@ -932,18 +932,18 @@ void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
     if ( ( DrawItem == NULL ) || ( DrawItem->Type() != LIB_TEXT_T ) )
         return;
 
-    /* Deleting old text. */
+    // Deleting old text
     if( DC && !DrawItem->InEditMode() )
-        DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
+        DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
 
     DIALOG_LIB_EDIT_TEXT* frame = new DIALOG_LIB_EDIT_TEXT( this, (LIB_TEXT*) DrawItem );
     frame->ShowModal();
     frame->Destroy();
     OnModify();
 
-    /* Display new text. */
+    // Display new text
     if( DC && !DrawItem->InEditMode() )
-        DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, NULL,
+        DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, GR_DEFAULT_DRAWMODE, NULL,
                         DefaultTransform );
 }
 

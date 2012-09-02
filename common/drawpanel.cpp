@@ -153,7 +153,7 @@ BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
 }
 
 
-void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, int aColor )
+void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, EDA_COLOR_T aColor )
 {
     if( m_cursorLevel != 0 || aDC == NULL || !m_showCrossHair )
         return;
@@ -560,7 +560,7 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
 
 void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
 {
-    int          axis_color = BLUE;
+    EDA_COLOR_T axis_color = BLUE;
 
     GRSetDrawMode( DC, GR_COPY );
 
@@ -721,7 +721,7 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
     if( origin == wxPoint( 0, 0 ) )
         return;
 
-    int     color    = DARKRED;
+    EDA_COLOR_T color = DARKRED;
     wxSize  pageSize = GetParent()->GetPageSizeIU();
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -752,7 +752,7 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
         || ( screen->m_GridOrigin.x == 0 && screen->m_GridOrigin.y == 0 ) )
         return;
 
-    int     color    = GetParent()->GetGridColor();
+    EDA_COLOR_T color = GetParent()->GetGridColor();
     wxSize  pageSize = GetParent()->GetPageSizeIU();
 
     GRSetDrawMode( aDC, aDrawMode );

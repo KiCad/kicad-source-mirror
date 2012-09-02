@@ -63,13 +63,13 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
                          bool aErase )
 {
     SCH_LINE* segment;
-    int color;
 
     if( s_wires.GetCount() == 0 )
         return;
 
     segment = (SCH_LINE*) s_wires.begin();
-    color = ReturnLayerColor( segment->GetLayer() ) ^ HIGHLIGHT_FLAG;
+    EDA_COLOR_T color = ReturnLayerColor( segment->GetLayer() );
+    ColorChangeHighlightFlag( &color, !(color & HIGHLIGHT_FLAG) );
 
     if( aErase )
     {
