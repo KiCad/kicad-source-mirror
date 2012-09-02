@@ -505,7 +505,7 @@ void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig ) const
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
 
-    aConfig->Write( m_Ident, *m_Pt_param );
+    aConfig->Write( m_Ident, (long) *m_Pt_param );
 }
 
 
