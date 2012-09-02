@@ -475,7 +475,7 @@ void EDA_DRAW_FRAME::OnGrid( int grid_type )
 }
 
 
-wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition )
+wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 {
     wxPoint pos = aPosition;
 
@@ -553,7 +553,7 @@ void EDA_DRAW_FRAME::LoadSettings()
     int itmp;
 
     if( cfg->Read( m_FrameName + GridColorEntryKeyword, &itmp ) )
-        SetGridColor( itmp );
+        SetGridColor( ColorFromInt( itmp ) );
 
     cfg->Read( m_FrameName + LastGridSizeId, &m_LastGridSizeId, 0L );
 }
@@ -575,7 +575,7 @@ void EDA_DRAW_FRAME::SaveSettings()
 
 void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper,
                                      const wxString& textLower,
-                                     int color, int pad )
+                                     EDA_COLOR_T color, int pad )
 {
     if( m_messagePanel == NULL )
         return;
@@ -593,12 +593,12 @@ void EDA_DRAW_FRAME::ClearMsgPanel( void )
 }
 
 
-wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils )
+wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils ) const
 {
     return ::CoordinateToString( aValue, aConvertToMils );
 }
 
-wxString EDA_DRAW_FRAME::LengthDoubleToString( double aValue, bool aConvertToMils )
+wxString EDA_DRAW_FRAME::LengthDoubleToString( double aValue, bool aConvertToMils ) const
 {
     return ::LengthDoubleToString( aValue, aConvertToMils );
 }

@@ -7,43 +7,12 @@
 
 #include <wx/wx.h>
 
-/* Number of colors ( 32 bit palette. ) */
-#define NBCOLOR             24
-
-#define MASKCOLOR           31       ///< mask for color index into ColorRefs[]
-
-/// Flag bit display (seen / not seen) items: (defined in the color values
-//IMB: Not used anymore   #define ITEM_NOT_SHOW       (1<<18)      // 0x40000
-
-#define HIGHLIGHT_FLAG      ( 1<<19 )         // 0x80000
-
-
-/**
- * Function SetAlpha
- * ORs in the alpha blend parameter in to a color index.
+/** The color enumeration. Also contains a flag and the alpha value in
+ * the upper bits
  */
-static inline void SetAlpha( int* aColor, int aBlend )
-{
-    const int MASKALPHA = 0xFF;
-
-    *aColor = (*aColor & ~(MASKALPHA << 24)) | ((aBlend & MASKALPHA) << 24);
-}
-
-
-/**
- * Function GetAlpha
- * returns the alpha blend parameter from a color index.
- */
-static inline int GetAlpha( int aColor )
-{
-    const int MASKALPHA = 0xFF;
-    return (aColor >> 24) & MASKALPHA;
-}
-
-
 enum EDA_COLOR_T
 {
-    UNSPECIFIED = -1,
+    UNSPECIFIED_COLOR = -1,
     BLACK = 0,
     BLUE,
     GREEN,
@@ -68,8 +37,61 @@ enum EDA_COLOR_T
     DARKMAGENTA,
     DARKBROWN,
     LIGHTYELLOW,
-    LASTCOLOR
+    LASTCOLOR,
+    HIGHLIGHT_FLAG =  ( 1<<19 ),
+    NBCOLOR        =    24,      ///< Number of colors
+    MASKCOLOR      =    31       ///< mask for color index into ColorRefs[]
 };
+
+/// Checked cast. Use only when necessary (ex. I/O)
+inline EDA_COLOR_T ColorFromInt( int aColor )
+{
+    wxASSERT( aColor >= UNSPECIFIED_COLOR && aColor < LASTCOLOR );
+    return static_cast<EDA_COLOR_T>( aColor );
+}
+
+/// Return only the plain color part
+inline EDA_COLOR_T ColorGetBase( EDA_COLOR_T aColor)
+{
+    return static_cast<EDA_COLOR_T>( aColor & MASKCOLOR );
+}
+
+/// Force the color part of a color to darkdarkgray
+inline void ColorTurnToDarkDarkGray( EDA_COLOR_T *aColor )
+{
+    *aColor = static_cast<EDA_COLOR_T>( (int(*aColor) & ~MASKCOLOR) | DARKDARKGRAY );
+}
+
+inline void ColorChangeHighlightFlag( EDA_COLOR_T *aColor, bool flag )
+{
+    if( flag )
+        *aColor = static_cast<EDA_COLOR_T>( (int(*aColor) | HIGHLIGHT_FLAG ) );
+    else
+        *aColor = static_cast<EDA_COLOR_T>( (int(*aColor) & ~HIGHLIGHT_FLAG ) );
+}
+
+/**
+ * Function SetAlpha
+ * ORs in the alpha blend parameter in to a color index.
+ */
+inline void SetAlpha( EDA_COLOR_T* aColor, unsigned char aBlend )
+{
+    const unsigned char MASKALPHA = 0xFF;
+
+    *aColor = static_cast<EDA_COLOR_T>((*aColor & ~(MASKALPHA << 24))
+                                     | ((aBlend & MASKALPHA) << 24));
+}
+
+
+/**
+ * Function GetAlpha
+ * returns the alpha blend parameter from a color index.
+ */
+inline unsigned char GetAlpha( EDA_COLOR_T aColor )
+{
+    const unsigned char MASKALPHA = 0xFF;
+    return (aColor >> 24) & MASKALPHA;
+}
 
 
 struct StructColors
@@ -77,10 +99,10 @@ struct StructColors
     unsigned char   m_Blue;
     unsigned char   m_Green;
     unsigned char   m_Red;
-    unsigned char   m_Numcolor;
+    EDA_COLOR_T     m_Numcolor;
 
     const wxChar*   m_Name;
-    int             m_LightColor;
+    EDA_COLOR_T     m_LightColor;
 };
 
 // list of existing Colors:
@@ -95,7 +117,7 @@ extern StructColors ColorRefs[NBCOLOR];
  * not supporting alpha.
  * @return wxColour - given a KiCad color index with alpha value
  */
-static inline wxColour MakeColour( int aColor )
+inline wxColour MakeColour( EDA_COLOR_T aColor )
 {
 #if wxCHECK_VERSION(2,8,5)
     int alpha = GetAlpha( aColor );
@@ -111,8 +133,5 @@ static inline wxColour MakeColour( int aColor )
 #endif
         );
 }
-
-int DisplayColorFrame( wxWindow* parent, int OldColor );
-
 
 #endif /* ifndef _COLORS_H */

@@ -282,63 +282,63 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay2" ), LOC_COLOR( 2 ),
                                                         LIGHTGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay3" ), LOC_COLOR( 3 ),
-                                                        5 ) );
+                                                        MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay4" ), LOC_COLOR( 4 ),
-                                                        4 ) );
+                                                        RED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay5" ), LOC_COLOR( 5 ),
-                                                        5 ) );
+                                                        MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay6" ), LOC_COLOR( 6 ),
-                                                        6 ) );
+                                                        BROWN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay7" ), LOC_COLOR( 7 ),
-                                                        5 ) );
+                                                        MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay8" ), LOC_COLOR( 8 ),
-                                                        7 ) );
+                                                        LIGHTGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay9" ), LOC_COLOR( 9 ),
-                                                        1 ) );
+                                                        BLUE ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayA" ), LOC_COLOR( 10 ),
-                                                        2 ) );
+                                                        GREEN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayB" ), LOC_COLOR( 11 ),
-                                                        3 ) );
+                                                        CYAN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayC" ), LOC_COLOR( 12 ),
-                                                        12 ) );
+                                                        LIGHTRED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayD" ), LOC_COLOR( 13 ),
-                                                        13 ) );
+                                                        LIGHTMAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayE" ), LOC_COLOR( 14 ),
-                                                        14 ) );
+                                                        YELLOW ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayF" ), LOC_COLOR( 15 ),
                                                         RED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayG" ), LOC_COLOR( 16 ),
-                                                        1 ) );
+                                                        BLUE ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayH" ), LOC_COLOR( 17 ),
-                                                        5 ) );
+                                                        MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayI" ), LOC_COLOR( 18 ),
-                                                        11 ) );
+                                                        LIGHTCYAN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayJ" ), LOC_COLOR( 19 ),
-                                                        4 ) );
+                                                        RED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayK" ), LOC_COLOR( 20 ),
-                                                        5 ) );
+                                                        MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayL" ), LOC_COLOR( 21 ),
-                                                        3 ) );
+                                                        CYAN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayM" ), LOC_COLOR( 22 ),
-                                                        6 ) );
+                                                        BROWN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayN" ), LOC_COLOR( 23 ),
-                                                        5 ) );
+                                                        MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayO" ), LOC_COLOR( 24 ),
                                                         LIGHTGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayP" ), LOC_COLOR( 25 ),
-                                                        1 ) );
+                                                        BLUE ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayQ" ), LOC_COLOR( 26 ),
-                                                        2 ) );
+                                                        GREEN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayR" ), LOC_COLOR( 27 ),
-                                                        14 ) );
+                                                        YELLOW ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayS" ), LOC_COLOR( 28 ),
                                                         YELLOW ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayT" ), LOC_COLOR( 29 ),
-                                                        13 ) );
+                                                        LIGHTMAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayU" ), LOC_COLOR( 30 ),
-                                                        14 ) );
+                                                        YELLOW ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayV" ), LOC_COLOR( 31 ),
-                                                        7 ) );
+                                                        LIGHTGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CTxtMoC" ),
                                                         ITEM_COLOR( MOD_TEXT_FR_VISIBLE ),
                                                         LIGHTGRAY ) );

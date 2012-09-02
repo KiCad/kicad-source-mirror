@@ -354,7 +354,8 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                       const wxPoint& offset )
 {
-    int ox, oy, typeaff, width, gcolor;
+    int ox, oy, typeaff, width;
+    EDA_COLOR_T gcolor;
 
     ox = -offset.x;
     oy = -offset.y;

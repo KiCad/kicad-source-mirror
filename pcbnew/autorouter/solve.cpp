@@ -333,7 +333,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
         /* Draw segment. */
         GRLine( m_canvas->GetClipBox(), DC,
                 segm_oX, segm_oY, segm_fX, segm_fY,
-                0, WHITE | GR_XOR );
+                0, WHITE );
         pt_cur_ch->m_PadStart->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
         pt_cur_ch->m_PadEnd->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
 

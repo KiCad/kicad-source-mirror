@@ -287,12 +287,13 @@ int LIB_BEZIER::GetPenSize() const
 
 
 void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                              int aColor, GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
+                              EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                              const TRANSFORM& aTransform )
 {
     wxPoint              pos1;
     std::vector<wxPoint> PolyPointsTraslated;
 
-    int                  color = ReturnLayerColor( LAYER_DEVICE );
+    EDA_COLOR_T color = ReturnLayerColor( LAYER_DEVICE );
 
     m_PolyPoints = Bezier2Poly( m_BezierPoints[0],
                                 m_BezierPoints[1],

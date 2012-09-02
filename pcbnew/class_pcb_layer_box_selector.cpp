@@ -82,7 +82,7 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 }
 
 // Returns true if the layer id is enabled (i.e. is it should be displayed)
-bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( int aLayerIndex )
+bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( int aLayerIndex ) const
 {
     PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
@@ -92,7 +92,7 @@ bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( int aLayerIndex )
 }
 
 // Returns a color index from the layer id
-int PCB_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex )
+EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
 {
     PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();
@@ -102,7 +102,7 @@ int PCB_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex )
 }
 
 // Returns the name of the layer id
-const wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( int aLayerIndex )
+wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( int aLayerIndex ) const
 {
     PCB_BASE_FRAME* pcbFrame = (PCB_BASE_FRAME*) GetParent()->GetParent();
     BOARD* board = pcbFrame->GetBoard();

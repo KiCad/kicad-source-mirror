@@ -281,7 +281,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( MAX_VALUE, MAX_VALUE ) ) );
 
     m_Parent->GetScreen()->m_IsPrinting = true;
-    int bg_color = g_DrawBgColor;
+    EDA_COLOR_T bg_color = g_DrawBgColor;
 
     if( m_PrintParams.m_Print_Sheet_Ref )
         m_Parent->TraceWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,

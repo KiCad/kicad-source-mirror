@@ -116,7 +116,7 @@ private:
      * creates the colored rectangle bitmaps used in the layer selection widget.
      * @param aColor is the color to fill the rectangle with.
      */
-    wxBitmap makeLayerBitmap( int aColor );
+    wxBitmap makeLayerBitmap( EDA_COLOR_T aColor );
 };
 
 
@@ -251,7 +251,7 @@ void DIALOG_COPPER_ZONE::initDialog()
     m_LayerSelectionCtrl->InsertColumn( 0, col0 );
     // Build copper layer list and append to layer widget
     int layerCount = board->GetCopperLayerCount();
-    int layerNumber, itemIndex, layerColor;
+    int layerNumber, itemIndex;
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
     for( int ii = 0; ii < layerCount; ii++ )
@@ -266,7 +266,7 @@ void DIALOG_COPPER_ZONE::initDialog()
         m_LayerId.insert( m_LayerId.begin(), layerNumber );
 
         msg = board->GetLayerName( layerNumber ).Trim();
-        layerColor = board->GetLayerColor( layerNumber );
+        EDA_COLOR_T layerColor = board->GetLayerColor( layerNumber );
         imageList->Add( makeLayerBitmap( layerColor ) );
         itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
 
@@ -683,7 +683,7 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
 }
 
 
-wxBitmap DIALOG_COPPER_ZONE::makeLayerBitmap( int aColor )
+wxBitmap DIALOG_COPPER_ZONE::makeLayerBitmap( EDA_COLOR_T aColor )
 {
     wxBitmap    bitmap( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     wxBrush     brush;

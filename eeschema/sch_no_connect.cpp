@@ -123,15 +123,16 @@ int SCH_NO_CONNECT::GetPenSize() const
 
 
 void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           GR_DRAWMODE aDrawMode, int aColor )
+                           GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
-    int pX, pY, color;
+    int pX, pY;
     int delta = m_size.x / 2;
     int width = g_DrawDefaultLineThickness;
 
     pX = m_pos.x + aOffset.x;
     pY = m_pos.y + aOffset.y;
 
+    EDA_COLOR_T color;
     if( aColor >= 0 )
         color = aColor;
     else

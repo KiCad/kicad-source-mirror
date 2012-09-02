@@ -308,7 +308,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
 {
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE dummyD_CODE( 0 );
-    int           color, alt_color;
+    EDA_COLOR_T   color, alt_color;
     bool          isFilled;
     int           radius;
     int           halfPenWidth;
@@ -325,12 +325,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     color = gerbFrame->GetLayerColor( GetLayer() );
 
     if( aDrawMode & GR_HIGHLIGHT )
-    {
-        if( aDrawMode & GR_AND )
-            color &= ~HIGHLIGHT_FLAG;
-        else
-            color |= HIGHLIGHT_FLAG;
-    }
+        ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
 
     if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
@@ -528,7 +523,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
 
 void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_RECT*      aClipBox,
                                     wxDC*          aDC,
-                                    int            aColor,
+                                    EDA_COLOR_T    aColor,
                                     const wxPoint& aOffset,
                                     bool           aFilledShape )
 {

@@ -44,7 +44,7 @@
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
-extern int g_DrawBgColor;
+extern EDA_COLOR_T g_DrawBgColor;
 int g_Default_GERBER_Format;
 
 

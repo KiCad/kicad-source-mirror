@@ -66,7 +66,7 @@ static ButtonIndex buttonGroups[] = {
 };
 
 
-static int currentColors[ MAX_LAYER ];
+static EDA_COLOR_T currentColors[ MAX_LAYER ];
 
 
 IMPLEMENT_DYNAMIC_CLASS( DIALOG_COLOR_CONFIG, wxDialog )
@@ -253,7 +253,7 @@ void DIALOG_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 
     wxCHECK_RET( colorButton != NULL, wxT( "Client data not set for color button." ) );
 
-    int color = DisplayColorFrame( this, colorButton->m_Layer );
+    EDA_COLOR_T color = DisplayColorFrame( this, colorButton->m_Layer );
 
     if( color < 0 || currentColors[ colorButton->m_Layer ] == color )
         return;

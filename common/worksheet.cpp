@@ -1606,7 +1606,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
 }
 
 
-const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition )
+const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition ) const
 {
     const PAGE_INFO& pageInfo = GetPageSettings();
 

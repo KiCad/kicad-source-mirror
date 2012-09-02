@@ -135,7 +135,7 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
      * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
     void DrawBasicShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                         int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
+                         EDA_COLOR_T aColor, EDA_COLOR_T aAltColor, wxPoint aShapePos, bool aFilledShape );
 
     /** GetShapeDim
      * Calculate a value that can be used to evaluate the size of text
@@ -207,7 +207,7 @@ struct APERTURE_MACRO
      * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
+                                 EDA_COLOR_T aColor, EDA_COLOR_T aAltColor, wxPoint aShapePos, bool aFilledShape );
 
     /**
      * Function GetShapeDim

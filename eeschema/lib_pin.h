@@ -117,7 +117,7 @@ class LIB_PIN : public LIB_ITEM
     int      m_nameTextSize; /* Pin num and Pin name sizes */
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      int aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform );
 
 public:
@@ -363,7 +363,7 @@ public:
      */
     void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                         int aOrientation, GR_DRAWMODE aDrawMode,
-                        int aColor = -1 );
+                        EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     /**
      * Function DrawPinTexts
@@ -376,7 +376,7 @@ public:
      */
     void DrawPinTexts( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
                        int aOrientation, int TextInside, bool DrawPinNum, bool DrawPinName,
-                       int aColor, GR_DRAWMODE aDrawMode );
+                       EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode );
 
     /**
      * Function PlotPinTexts

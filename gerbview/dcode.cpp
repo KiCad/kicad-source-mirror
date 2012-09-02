@@ -339,7 +339,8 @@ void GERBVIEW_FRAME::CopyDCodesSizeToItems()
 
 
 void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
-                                EDA_RECT* aClipBox, wxDC* aDC, int aColor, int aAltColor,
+                                EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor,
+                                EDA_COLOR_T aAltColor,
                                 wxPoint aShapePos, bool aFilledShape )
 {
     int radius;
@@ -456,7 +457,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
 
 void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
                                  EDA_RECT* aClipBox, wxDC* aDC,
-                                 int aColor, bool aFilled,
+                                 EDA_COLOR_T aColor, bool aFilled,
                                  const wxPoint& aPosition )
 {
     if( m_PolyCorners.size() == 0 )
