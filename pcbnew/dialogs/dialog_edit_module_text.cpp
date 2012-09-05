@@ -215,7 +215,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     m_parent->OnModify();
 
     if( m_module )
-        m_module->m_LastEdit_Time = time( NULL );
+        m_module->SetLastEditTime();
 
     EndModal(1);
 }

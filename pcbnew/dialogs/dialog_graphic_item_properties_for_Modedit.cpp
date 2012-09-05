@@ -206,7 +206,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     m_parent->SaveCopyInUndoList( m_module, UR_MODEDIT );
-    m_module->m_LastEdit_Time = time( NULL );
+    m_module->SetLastEditTime();
 
     wxString msg;
 

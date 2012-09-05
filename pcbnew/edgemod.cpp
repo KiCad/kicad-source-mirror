@@ -184,7 +184,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 
     OnModify();
     module->CalculateBoundingBox();
-    module->m_LastEdit_Time = time( NULL );
+    module->SetLastEditTime();
 }
 
 
@@ -232,7 +232,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 
     OnModify();
     module->CalculateBoundingBox();
-    module->m_LastEdit_Time = time( NULL );
+    module->SetLastEditTime();
 }
 
 
@@ -274,7 +274,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Edge_Module( EDGE_MODULE* aEdge )
 
     // Delete segment.
     aEdge->DeleteStructure();
-    module->m_LastEdit_Time = time( NULL );
+    module->SetLastEditTime();
     module->CalculateBoundingBox();
     OnModify();
 }
@@ -399,7 +399,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
                 aEdge->SetEnd0( aEdge->GetStart0() );
 
                 module->CalculateBoundingBox();
-                module->m_LastEdit_Time = time( NULL );
+                module->SetLastEditTime();
                 OnModify();
             }
         }
@@ -427,7 +427,7 @@ void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* aEdge )
     }
 
     module->CalculateBoundingBox();
-    module->m_LastEdit_Time = time( NULL );
+    module->SetLastEditTime();
     OnModify();
     m_canvas->SetMouseCapture( NULL, NULL );
 }

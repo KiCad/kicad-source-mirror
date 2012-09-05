@@ -748,7 +748,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         MODULE* module = m_CurrentPad->GetParent();
 
         m_Parent->SaveCopyInUndoList( module, UR_CHANGED );
-        module->m_LastEdit_Time = time( NULL );
+        module->SetLastEditTime();
 
         // redraw the area where the pad was, without pad (delete pad on screen)
         m_CurrentPad->SetFlags( DO_NOT_DRAW );

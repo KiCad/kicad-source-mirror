@@ -124,7 +124,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
     Text->DisplayInfo( this );
 
     if( module )
-        module->m_LastEdit_Time = time( NULL );
+        module->SetLastEditTime();
 
     OnModify();
 }
@@ -147,7 +147,7 @@ void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* Text )
         m_canvas->RefreshDrawingRect( Text->GetBoundingBox() );
         Text->DeleteStructure();
         OnModify();
-        Module->m_LastEdit_Time = time( NULL );
+        Module->SetLastEditTime();
     }
 }
 
@@ -253,7 +253,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             Text->SetPos0( textRelPos );
             Text->ClearFlags();
             Module->ClearFlags();
-            Module->m_LastEdit_Time = time( NULL );
+            Module->SetLastEditTime();
             OnModify();
 
             /* Redraw text. */
