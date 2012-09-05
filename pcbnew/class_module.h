@@ -102,7 +102,7 @@ public:
     double        m_Surface;            // Bounding box area
 
     time_t        m_Link;               // Temporary logical link used in edition
-    long          m_LastEdit_Time;
+    time_t        m_LastEdit_Time;
     wxString      m_Path;
 
     wxString      m_Doc;                // Module Description (info for users)
@@ -223,8 +223,9 @@ public:
             m_ModuleStatus &= ~MODULE_is_PLACED;
     }
 
-    void SetLastEditTime( long aTime ) { m_LastEdit_Time = aTime; }
-    long GetLastEditTime() const { return m_LastEdit_Time; }
+    void SetLastEditTime( time_t aTime ) { m_LastEdit_Time = aTime; }
+    void SetLastEditTime( ) { m_LastEdit_Time = time( NULL ); }
+    time_t GetLastEditTime() const { return m_LastEdit_Time; }
 
     /**
      * Function Read_GPCB_Descr

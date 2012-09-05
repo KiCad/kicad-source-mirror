@@ -187,7 +187,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     if( aDraw )
         m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );
 
-    aPad->GetParent()->m_LastEdit_Time = time( NULL );
+    aPad->GetParent()->SetLastEditTime();
 }
 
 
@@ -199,7 +199,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     wxString lastPadName = GetDesignSettings().m_Pad_Master.GetPadName();
 
     m_Pcb->m_Status_Pcb     = 0;
-    aModule->m_LastEdit_Time = time( NULL );
+    aModule->SetLastEditTime();
 
     D_PAD* pad = new D_PAD( aModule );
 
@@ -260,7 +260,7 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
         return;
 
     module = (MODULE*) aPad->GetParent();
-    module->m_LastEdit_Time = time( NULL );
+    module->SetLastEditTime();
 
     if( aQuery )
     {
@@ -389,7 +389,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* aPad, wxDC* DC )
         aPad->Draw( m_canvas, DC, GR_OR );
 
     module->CalculateBoundingBox();
-    module->m_LastEdit_Time = time( NULL );
+    module->SetLastEditTime();
 
     EraseDragList();
 
@@ -407,7 +407,7 @@ void PCB_BASE_FRAME::RotatePad( D_PAD* aPad, wxDC* DC )
 
     MODULE* module = aPad->GetParent();
 
-    module->m_LastEdit_Time = time( NULL );
+    module->SetLastEditTime();
 
     OnModify();
 
