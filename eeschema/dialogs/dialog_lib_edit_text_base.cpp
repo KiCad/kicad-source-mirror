@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -34,6 +34,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	
 	bTextValueBoxSizer->Add( m_TextValue, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	
 	bUpperBoxSizer->Add( bTextValueBoxSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bTextSizeSizer;
@@ -46,7 +47,9 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_TextSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bTextSizeSizer->Add( m_TextSize, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bUpperBoxSizer->Add( bTextSizeSizer, 0, 0, 5 );
+	
 	
 	bPropertiesSizer->Add( bUpperBoxSizer, 0, wxEXPAND, 5 );
 	
@@ -71,6 +74,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_Invisible = new wxCheckBox( this, wxID_ANY, _("Invisible"), wxDefaultPosition, wxDefaultSize, 0 );
 	sOptionsSizer->Add( m_Invisible, 0, wxALL, 5 );
 	
+	
 	bBottomtBoxSizer->Add( sOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextShapeOptChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
@@ -91,12 +95,15 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_TextVJustificationOpt->SetSelection( 1 );
 	bBottomtBoxSizer->Add( m_TextVJustificationOpt, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bPropertiesSizer->Add( bBottomtBoxSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
+	
 	bPropertiesSizer->Add( bRightSizer, 0, wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bPropertiesSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 6 );
 	
@@ -106,7 +113,9 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_sdbSizerButtonsCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
+	
 	bMainSizer->Add( m_sdbSizerButtons, 0, wxALL|wxEXPAND, 12 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

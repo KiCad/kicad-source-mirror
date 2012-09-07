@@ -1,6 +1,6 @@
 
-#ifndef _DIALOG_EDIT_ONE_FIELD_H_
-#define _DIALOG_EDIT_ONE_FIELD_H_
+#ifndef DIALOG_EDIT_ONE_FIELD_H_
+#define DIALOG_EDIT_ONE_FIELD_H_
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
@@ -53,7 +53,8 @@ public:
         SetTitle( aTitle );
     }
 
-    ~DIALOG_EDIT_ONE_FIELD() {};
+    // ~DIALOG_EDIT_ONE_FIELD() {};
+
     virtual void TransfertDataToField();
 
     void SetTextField( const wxString& aText )
@@ -101,6 +102,7 @@ private:
     void initDlg( );
 };
 
+
 // Class to edit a schematic component field
 class DIALOG_SCH_EDIT_ONE_FIELD : public DIALOG_EDIT_ONE_FIELD
 {
@@ -117,7 +119,8 @@ public:
         GetSizer()->SetSizeHints(this);
         Centre();
     }
-    ~DIALOG_SCH_EDIT_ONE_FIELD() {};
+
+    // ~DIALOG_SCH_EDIT_ONE_FIELD() {};
 
     void TransfertDataToField();
     wxString GetTextField();
@@ -126,5 +129,4 @@ private:
     void initDlg( );
 };
 
-
-#endif    // _DIALOG_EDIT_ONE_FIELD_H_
+#endif    // DIALOG_EDIT_ONE_FIELD_H_
