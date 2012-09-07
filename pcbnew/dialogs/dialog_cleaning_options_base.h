@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_cleaning_options_base__
-#define __dialog_cleaning_options_base__
+#ifndef __DIALOG_CLEANING_OPTIONS_BASE_H__
+#define __DIALOG_CLEANING_OPTIONS_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -35,7 +36,6 @@ class DIALOG_CLEANING_OPTIONS_BASE : public wxDialog
 		wxCheckBox* m_cleanViasOpt;
 		wxCheckBox* m_mergeSegmOpt;
 		wxCheckBox* m_deleteUnconnectedOpt;
-		wxCheckBox* m_reconnectToPadsOpt;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -51,11 +51,10 @@ class DIALOG_CLEANING_OPTIONS_BASE : public wxDialog
 		bool cleanVias; 
 		bool mergeSegments; 
 		bool deleteUnconnectedSegm; 
-		bool connectToPads; 
 		
-		DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Cleaning options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 243,181 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Cleaning options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 243,146 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_CLEANING_OPTIONS_BASE();
 	
 };
 
-#endif //__dialog_cleaning_options_base__
+#endif //__DIALOG_CLEANING_OPTIONS_BASE_H__
