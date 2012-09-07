@@ -55,6 +55,13 @@
 double s_HerscheyScaleFactor = HERSHEY_SCALE_FACTOR;
 
 
+/* Helper function for texts with over bar
+ */
+int OverbarPositionY( int size_v, int thickness )
+{
+    return KiROUND( ( (double) size_v * 1.1 ) + ( (double) thickness * 1.5 ) );
+}
+
 /**
  * Function GetPensizeForBold
  * @return the "best" value for a pen size to draw/plot a bold text
@@ -68,7 +75,7 @@ int GetPenSizeForBold( int aTextSize )
 
 /**
  * Function  Clamp_Text_PenSize
- *As a rule, pen width should not be >1/4em, otherwise the character
+ * As a rule, pen width should not be >1/4em, otherwise the character
  * will be cluttered up in its own fatness
  * so pen width max is aSize/4 for bold text, and aSize/6 for normal text
  * The "best" pen width is aSize/5 for bold texts,
@@ -219,14 +226,6 @@ static void DrawGraphicTextPline(
 }
 
 
-/* Helper function for texts with over bar
- */
-static int overbar_position( int size_v, int thickness )
-{
-    return KiROUND( ( (double) size_v * 26 * s_HerscheyScaleFactor ) + ( (double) thickness * 1.5 ) );
-}
-
-
 /**
  * Function DrawGraphicText
  * Draw a graphic text (like module texts)
@@ -271,7 +270,6 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     int       dx, dy;                       // Draw coordinate for segments to draw. also used in some other calculation
     wxPoint   current_char_pos;             // Draw coordinates for the current char
     wxPoint   overbar_pos;                  // Start point for the current overbar
-    int       overbars;                     // Number of ~ seen
     int       overbar_italic_comp;          // Italic compensation for overbar
     EDA_RECT* clipBox;                      // Clip box used in basic draw functions
 
@@ -400,7 +398,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
 
     if( aItalic )
     {
-        overbar_italic_comp = overbar_position( size_v, aWidth ) / 8;
+        overbar_italic_comp = OverbarPositionY( size_v, aWidth ) / 8;
         if( italic_reverse )
         {
             overbar_italic_comp = -overbar_italic_comp;
@@ -411,7 +409,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         overbar_italic_comp = 0;
     };
 
-    overbars = 0;
+    int overbars = 0;       // Number of ~ seen
     ptr = 0;   /* ptr = text index */
     while( ptr < char_count )
     {
@@ -420,12 +418,12 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             /* Found an overbar, adjust the pointers */
             overbars++;
 
-            if( overbars % 2 )
+            if( overbars & 1 )      // odd overbars count
             {
                 /* Starting the overbar */
                 overbar_pos    = current_char_pos;
                 overbar_pos.x += overbar_italic_comp;
-                overbar_pos.y -= overbar_position( size_v, aWidth );
+                overbar_pos.y -= OverbarPositionY( size_v, aWidth );
                 RotatePoint( &overbar_pos, aPos, aOrient );
             }
             else
@@ -434,7 +432,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                 coord[0]       = overbar_pos;
                 overbar_pos    = current_char_pos;
                 overbar_pos.x += overbar_italic_comp;
-                overbar_pos.y -= overbar_position( size_v, aWidth );
+                overbar_pos.y -= OverbarPositionY( size_v, aWidth );
                 RotatePoint( &overbar_pos, aPos, aOrient );
                 coord[1] = overbar_pos;
                 /* Plot the overbar segment */
@@ -516,7 +514,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         /* Close the last overbar */
         coord[0]       = overbar_pos;
         overbar_pos    = current_char_pos;
-        overbar_pos.y -= overbar_position( size_v, aWidth );
+        overbar_pos.y -= OverbarPositionY( size_v, aWidth );
         RotatePoint( &overbar_pos, aPos, aOrient );
         coord[1] = overbar_pos;
         /* Plot the overbar segment */

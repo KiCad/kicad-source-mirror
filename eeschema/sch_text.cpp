@@ -44,6 +44,7 @@
 
 
 extern void IncrementLabelMember( wxString& name );
+extern int OverbarPositionY( int size_v, int thickness );
 
 
 /* Names of sheet label types. */
@@ -273,19 +274,19 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
 
     switch( GetOrientation() )
     {
-    case 0:             /* horizontal text */
+    case 0:     // horizontal text
         dy = m_Size.y;
         break;
 
-    case 1: /* Vert Orientation UP */
+    case 1:     // Vert Orientation UP
         dy = 0;
         break;
 
-    case 2:        /* invert horizontal text*/
+    case 2:     // invert horizontal text
         dy = m_Size.y;
         break;
 
-    case 3: /*  Vert Orientation BOTTOM */
+    case 3:     // Vert Orientation BOTTOM
         dy = 0;
         break;
 
@@ -1241,8 +1242,14 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     // Create outline shape : 6 points
     int x = symb_len + linewidth + 3;
 
-    // 50% more for negation bar
-    int y = KiROUND( (double) HalfSize * 1.5 + (double) linewidth + 3.0 );
+    // Use negation bar Y position to calculate full vertical size
+    #define Y_CORRECTION 1.22
+    // Note: this factor is due to the fact the negation bar Y position
+    // does not give exactly the full Y size of text
+    // and is experimentally set  to this value
+    int y = KiROUND( OverbarPositionY( HalfSize, linewidth ) * Y_CORRECTION );
+    // add room for line thickness and space between top of text and graphic shape
+    y += linewidth;
 
     // Starting point(anchor)
     aPoints.push_back( wxPoint( 0, 0 ) );

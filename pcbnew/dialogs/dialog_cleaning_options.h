@@ -14,7 +14,6 @@ public:
     static bool cleanVias;
     static bool mergeSegments;
     static bool deleteUnconnectedSegm;
-    static bool connectToPads;
 
 public:
     DIALOG_CLEANING_OPTIONS( wxWindow* parent );
@@ -44,7 +43,6 @@ private:
             cleanVias = m_cleanViasOpt->GetValue( );
             mergeSegments = m_mergeSegmOpt->GetValue( );
             deleteUnconnectedSegm = m_deleteUnconnectedOpt->GetValue( );
-            connectToPads = m_reconnectToPadsOpt->GetValue( );
         }
 };
 
