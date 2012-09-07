@@ -43,7 +43,7 @@
 #include <dialog_edit_one_field.h>
 
 
-void DIALOG_EDIT_ONE_FIELD::initDlg_base( )
+void DIALOG_EDIT_ONE_FIELD::initDlg_base()
 {
     wxString msg;
 
@@ -64,18 +64,17 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base( )
 
     switch ( m_textHjustify )
     {
-        case GR_TEXT_HJUSTIFY_LEFT:
-            m_TextHJustificationOpt->SetSelection( 0 );
-            break;
+    case GR_TEXT_HJUSTIFY_LEFT:
+        m_TextHJustificationOpt->SetSelection( 0 );
+        break;
 
-        case GR_TEXT_HJUSTIFY_CENTER:
-            m_TextHJustificationOpt->SetSelection( 1 );
-            break;
+    case GR_TEXT_HJUSTIFY_CENTER:
+        m_TextHJustificationOpt->SetSelection( 1 );
+        break;
 
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            m_TextHJustificationOpt->SetSelection( 2 );
-            break;
-
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        m_TextHJustificationOpt->SetSelection( 2 );
+        break;
     }
 
     switch ( m_textVjustify )
@@ -100,7 +99,7 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base( )
 }
 
 
-void DIALOG_LIB_EDIT_ONE_FIELD::initDlg( )
+void DIALOG_LIB_EDIT_ONE_FIELD::initDlg()
 {
     m_textsize = m_field->m_Size.x;
     m_TextValue->SetValue( m_field->m_Text );
@@ -118,7 +117,7 @@ void DIALOG_LIB_EDIT_ONE_FIELD::initDlg( )
     m_textHjustify = m_field->m_HJustify;
     m_textVjustify =  m_field->m_VJustify;
 
-    initDlg_base( );
+    initDlg_base();
 }
 
 wxString DIALOG_LIB_EDIT_ONE_FIELD::GetTextField()
@@ -195,7 +194,7 @@ void DIALOG_LIB_EDIT_ONE_FIELD::TransfertDataToField()
 }
 
 
-void DIALOG_SCH_EDIT_ONE_FIELD::initDlg( )
+void DIALOG_SCH_EDIT_ONE_FIELD::initDlg()
 {
     m_textsize = m_field->m_Size.x;
     m_TextValue->SetValue( m_field->m_Text );
@@ -211,7 +210,7 @@ void DIALOG_SCH_EDIT_ONE_FIELD::initDlg( )
     m_textHjustify = m_field->m_HJustify;
     m_textVjustify =  m_field->m_VJustify;
 
-    initDlg_base( );
+    initDlg_base();
 }
 
 
