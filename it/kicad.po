@@ -9,14 +9,12 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-30 23:17+0100\n"
-"PO-Revision-Date: 2012-04-09 22:57+0100\n"
-"Last-Translator: Ciocemax <ciocemax@alice.it>\n"
+"PO-Revision-Date: 2012-09-04 00:15+0100\n"
+"Last-Translator: Massimo Cioce <ciocemax@alice.it>\n"
 "Language-Team: Ciocemax <ciocemax@alice.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Italiano\n"
-"X-Poedit-Country: ITALIA\n"
 "X-Poedit-Basepath: H:\\Elettronica\\KiCad\\Traduzione\\Sezioni Scaricate\\stable\\trunk\n"
 "X-Generator: KBabel 1.9.1\n"
 "X-Poedit-KeywordsList: _\n"
@@ -564,7 +562,7 @@ msgstr "Auto"
 
 #: pcbnew/basepcbframe.cpp:625
 msgid "Zoom "
-msgstr "Zoom"
+msgstr "Zoom "
 
 #: pcbnew/block.cpp:291
 msgid "Block Operation"
@@ -617,7 +615,7 @@ msgstr "di"
 #: pcbnew/class_mire.cpp:249
 #, c-format
 msgid "Target on %s size %s"
-msgstr "Obbietivo su %s dimensione %s"
+msgstr "Marcatore su %s Dimensioni %s"
 
 #: pcbnew/class_module.cpp:757
 msgid "Last Change"
@@ -865,7 +863,7 @@ msgstr "su"
 
 #: pcbnew/class_track.cpp:187
 msgid "Via"
-msgstr "Via"
+msgstr "Via "
 
 #: pcbnew/class_track.cpp:192
 msgid "Blind/Buried"
@@ -1058,7 +1056,7 @@ msgstr "Imposta larghezza"
 #: pcbnew/edit.cpp:189
 #: pcbnew/editmod.cpp:45
 msgid "Module Editor"
-msgstr "Editore dei moduli"
+msgstr "Editore dei moduli "
 
 #: pcbnew/edit.cpp:601
 #: pcbnew/edit.cpp:623
@@ -1772,7 +1770,7 @@ msgstr "(Nessuna libreria attiva)"
 
 #: pcbnew/moduleframe.cpp:467
 msgid "Module Editor (active library: "
-msgstr "Editore dei moduli (libreria: "
+msgstr "Editore dei moduli   (libreria: "
 
 #: pcbnew/modules.cpp:40
 msgid "Search footprint"
@@ -2051,7 +2049,7 @@ msgstr "Modifica marcatore"
 
 #: pcbnew/onrightclick.cpp:244
 msgid "Delete Target"
-msgstr "Cancella evidenziatore"
+msgstr "Cancella marcatore"
 
 #: pcbnew/onrightclick.cpp:278
 msgid "Get and Move Footprint"
@@ -2466,7 +2464,7 @@ msgid ""
 "File <%s> does not exist.\n"
 "This is normal for a new project"
 msgstr ""
-"File <%s> inesistente.\n"
+"Impossibile aprire la scheda:  <%s> .\n"
 "E' normale per una nuova scheda."
 
 #: pcbnew/pcbplot.cpp:650
@@ -2849,7 +2847,7 @@ msgstr ""
 
 #: pcbnew/tool_pcb.cpp:579
 msgid "Track "
-msgstr "Pista"
+msgstr "Pista "
 
 #: pcbnew/tool_pcb.cpp:582
 #: pcbnew/tool_pcb.cpp:612
@@ -2858,7 +2856,7 @@ msgstr "*"
 
 #: pcbnew/tool_pcb.cpp:604
 msgid "Via "
-msgstr "Via"
+msgstr "Via "
 
 #: pcbnew/tool_pcb.cpp:630
 msgid "+/- to switch"
@@ -2900,11 +2898,11 @@ msgstr "Nessun modulo!"
 
 #: pcbnew/xchgmod.cpp:598
 msgid "Component files (."
-msgstr "Elenco componenti (."
+msgstr "Associazione moduli (."
 
 #: pcbnew/xchgmod.cpp:600
 msgid "Save Component Files"
-msgstr "Salva Elenco componenti"
+msgstr "Salva Associazione moduli"
 
 #: pcbnew/build_BOM_from_board.cpp:36
 msgid "Comma separated value files (*.csv)|*.csv"
@@ -2912,7 +2910,7 @@ msgstr "File Valori separati da virgola (*.csv)|*.csv"
 
 #: pcbnew/build_BOM_from_board.cpp:70
 msgid "Save Bill of Materials"
-msgstr "Salva Distinta componenti"
+msgstr "Salva Elenco materiali"
 
 #: pcbnew/build_BOM_from_board.cpp:90
 msgid "Id"
@@ -3407,7 +3405,7 @@ msgstr "Genera file di foratura in Excellon2"
 
 #: pcbnew/menubar_pcbframe.cpp:141
 msgid "&Component File"
-msgstr "&Elenco componenti"
+msgstr "&Associazione moduli"
 
 #: pcbnew/menubar_pcbframe.cpp:142
 msgid "(Re)create components file (*.cmp) for CvPcb"
@@ -3415,7 +3413,7 @@ msgstr "(Ri)crea file (*.cmp) per CvPcb"
 
 #: pcbnew/menubar_pcbframe.cpp:147
 msgid "&BOM File"
-msgstr "&Distinta componenti"
+msgstr "&Elenco materiali"
 
 #: pcbnew/menubar_pcbframe.cpp:148
 msgid "Create a bill of materials from schematic"
@@ -3555,7 +3553,7 @@ msgstr "Pulizia di elementi incompleti"
 
 #: pcbnew/menubar_pcbframe.cpp:292
 msgid "&Swap Layers"
-msgstr "Cambia livelli"
+msgstr "Cambia strati"
 
 #: pcbnew/menubar_pcbframe.cpp:293
 msgid "Swap tracks on copper layers or drawings on other layers"
@@ -3735,7 +3733,7 @@ msgstr "Vedi Preferenze dell'applicazione"
 
 #: pcbnew/menubar_pcbframe.cpp:537
 msgid "&Netlist"
-msgstr "Esporta Lista componenti"
+msgstr "Importa Lista componenti"
 
 #: pcbnew/menubar_pcbframe.cpp:538
 msgid "Read the netlist and update board connectivity"
@@ -6943,7 +6941,7 @@ msgstr "Si intende salvare le modifiche apportate alla configurazione del proget
 
 #: pcbnew/dialogs/dialog_netlist.cpp:91
 msgid "Select Netlist"
-msgstr "Seleziona lista collegamenti"
+msgstr "Importa lista componenti"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
 msgid "Timestamp"
@@ -7026,7 +7024,7 @@ msgstr "Rifai i collegamenti della scheda"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:82
 msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
-msgstr "Riesegui completamente i collegamenti (utile dopo un cambio di nome del collegamento delle piazzole)"
+msgstr "Verifica ed aggiorna i collegamenti della scheda"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
 msgid "Netlist File:"
@@ -8364,7 +8362,7 @@ msgstr "Coreano"
 
 #: common/edaappl.cpp:211
 msgid "Chinese simplified"
-msgstr "Cinese semplificato"
+msgstr "Cinese "
 
 #: common/edaappl.cpp:219
 msgid "Catalan"
@@ -8434,7 +8432,7 @@ msgstr "Seleziona zoom"
 
 #: common/zoom.cpp:181
 msgid "Zoom: "
-msgstr "Zoom:"
+msgstr "Zoom: "
 
 #: common/zoom.cpp:192
 msgid "Grid Select"
@@ -8838,7 +8836,7 @@ msgstr "Commenti 4"
 
 #: eeschema/backanno.cpp:127
 msgid "Load Back Annotate File"
-msgstr "Apri file di Annotazione"
+msgstr "Importa Annotazione"
 
 #: eeschema/backanno.cpp:138
 msgid "Do you want to make all the foot print fields visible?"
@@ -9550,7 +9548,9 @@ msgstr "Nome componente"
 
 #: eeschema/libfield.cpp:35
 msgid "Enter a name to create a new component based on this one."
-msgstr "Inserire un nome per creare un nuovo componente basato sul corrente"
+msgstr ""
+"Inserire un nome identificativo per il componente.\n"
+"Questo corrisponderà al campo valore."
 
 #: eeschema/libfield.cpp:39
 msgid "Edit Field"
@@ -9559,7 +9559,7 @@ msgstr "Modifica campo"
 #: eeschema/libfield.cpp:40
 #, c-format
 msgid "Enter a new value for the %s field."
-msgstr "Inserire un nuovo valore per il campo %s."
+msgstr "Inserire un identificativo per il campo %s."
 
 #: eeschema/libfield.cpp:56
 #, c-format
@@ -9632,7 +9632,7 @@ msgstr " è sato creato con la vecchia versione di PcbNew. Sarà memorizzato nel
 
 #: eeschema/load_one_schematic_file.cpp:262
 msgid "Done Loading "
-msgstr "Caricamente eseguito"
+msgstr "Caricamento eseguito:   "
 
 #: eeschema/menubar.cpp:73
 msgid "New schematic project"
@@ -9736,7 +9736,7 @@ msgstr "Esci"
 
 #: eeschema/menubar.cpp:224
 msgid "&Backannotate"
-msgstr "&Precedente annotazione"
+msgstr "&Importa Annotazione"
 
 #: eeschema/menubar.cpp:225
 msgid "Back annotate the footprint fields"
@@ -9744,7 +9744,7 @@ msgstr "Annota i campi delle impronte"
 
 #: eeschema/menubar.cpp:267
 msgid "&Hierarchy"
-msgstr "&Gerarchia"
+msgstr "&Gerarchia dello schema"
 
 #: eeschema/menubar.cpp:268
 msgid "Navigate schematic hierarchy"
@@ -9884,11 +9884,11 @@ msgstr "Genera Lista dei collegamenti dei componenti"
 
 #: eeschema/menubar.cpp:499
 msgid "Generate Bill of &Materials"
-msgstr "Crea& Distinta componenti"
+msgstr "Crea& Elenco materiali"
 
 #: eeschema/menubar.cpp:500
 msgid "Generate bill of materials"
-msgstr "Salva Distinta componenti"
+msgstr "Salva Elenco materiali"
 
 #: eeschema/menubar.cpp:509
 msgid "A&ssign Component Footprints"
@@ -10661,7 +10661,7 @@ msgstr "Cancella componente dalla libreria corrente"
 
 #: eeschema/tool_lib.cpp:120
 msgid "Create a new component"
-msgstr "Crea nuovo componente"
+msgstr "Editore librerie"
 
 #: eeschema/tool_lib.cpp:124
 msgid "Load component to edit from the current lib"
@@ -10764,7 +10764,7 @@ msgstr "Genera Lista componenti dello schema "
 
 #: eeschema/tool_sch.cpp:127
 msgid "Generate bill of materials and/or cross references"
-msgstr "Lista dei materiali e/o referenze incrociate"
+msgstr "Elenco materiali"
 
 #: eeschema/tool_sch.cpp:134
 msgid "Run CvPcb to associate components and footprints"
@@ -10776,7 +10776,7 @@ msgstr "Avvia PcbNew per la creazione del circuito stampato"
 
 #: eeschema/tool_sch.cpp:140
 msgid "Back annotate component foot prints"
-msgstr "Apri file di Annotazione"
+msgstr "Importa Annotazione"
 
 #: eeschema/tool_sch.cpp:167
 msgid "Ascend or descend hierarchy"
@@ -12235,7 +12235,7 @@ msgstr "Imposta pagina"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:23
 msgid "List items:"
-msgstr "Voci della distinta"
+msgstr "Voci Elenco materiali"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:25
 msgid "Components by reference"
@@ -12259,7 +12259,7 @@ msgstr "Piedini gerarchici per foglio"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:47
 msgid "List"
-msgstr "Distinta"
+msgstr "Elenco materiali"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:47
 msgid "Text for spreadsheet import"
@@ -12600,7 +12600,7 @@ msgid ""
 "This is the reference used in schematic for annotation.\n"
 "Do not use digits in reference."
 msgstr ""
-"Questo è il rifirimento usato nello schema per l'Annotazione.\n"
+"Questo è il riferimento usato nello schema per l'Annotazione.\n"
 "Non usare cifre nel riferimento."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:80
@@ -13284,16 +13284,16 @@ msgstr "Errore nella lista collegamenti:"
 
 #: cvpcb/savecmp.cpp:22
 msgid "Component Library Error"
-msgstr "Errore nel componente "
+msgstr "Attenzione:"
 
 #: cvpcb/savecmp.cpp:71
 #, c-format
 msgid "Cannot open CvPcb component file <%s>."
-msgstr "Impossibile aprire il componente della libreria <%s>."
+msgstr "Impossibile aprire il file  di Associazione modulii:  <%s>."
 
 #: cvpcb/savecmp.cpp:73
 msgid "This is normal if you are opening a new netlist file"
-msgstr "Questo è normale aprendo una nuova Lista componenti."
+msgstr "Questo è normale aprendo una nuova Lista componenti"
 
 #: cvpcb/savecmp.cpp:81
 #, c-format
@@ -13333,7 +13333,7 @@ msgstr "Mostra impronta selezionata"
 
 #: cvpcb/tool_cvpcb.cpp:43
 msgid "Perform automatic footprint association"
-msgstr "Esegui associazione impronte automaticamente"
+msgstr "Esegui automaticamente associazione moduli"
 
 #: cvpcb/tool_cvpcb.cpp:48
 msgid "Select previous free component"
@@ -15403,7 +15403,7 @@ msgstr "Parametri Circuiti stampati"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
-msgstr "Trova componenti e testo nella corrente scheda"
+msgstr "Cerca componenti e testo nella scheda corrente "
 
 #: pcbnew/help_common_strings.h:21
 msgid "Zoom to fit the board on the screen"
@@ -15635,7 +15635,7 @@ msgstr "Proprietà dei campi"
 
 #: eeschema/dialogs/dialog_build_BOM_base.h:69
 msgid "List of Material"
-msgstr "Distinta materiali"
+msgstr "Elenco materiali"
 
 #: eeschema/dialogs/dialog_erc_base.h:94
 msgid "EESchema Erc"
