@@ -104,7 +104,7 @@ END_EVENT_TABLE()
 
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
-    EDA_BASE_FRAME( NULL, CVPCB_FRAME, title, wxDefaultPosition, wxDefaultSize, style )
+    EDA_BASE_FRAME( NULL, CVPCB_FRAME_TYPE, title, wxDefaultPosition, wxDefaultSize, style )
 {
     m_FrameName = wxT( "CvpcbFrame" );
 

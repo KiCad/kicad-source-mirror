@@ -99,9 +99,10 @@ static wxAcceleratorEntry accels[] =
 #define EXTRA_BORDER_SIZE 2
 
 
-LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaphore* semaphore ) :
-    SCH_BASE_FRAME( father, VIEWER_FRAME, _( "Library Browser" ),
-                    wxDefaultPosition, wxDefaultSize )
+LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library,
+                                wxSemaphore* semaphore, long style ) :
+    SCH_BASE_FRAME( father, VIEWER_FRAME_TYPE, _( "Library Browser" ),
+                    wxDefaultPosition, wxDefaultSize, style )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
@@ -120,10 +121,12 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     m_LibListWindow = NULL;
     m_CmpListWindow = NULL;
     m_Semaphore     = semaphore;
+    if( m_Semaphore )
+        SetModalMode( true );
     m_exportToEeschemaCmpName.Empty();
 
     SetScreen( new SCH_SCREEN() );
-    GetScreen()->m_Center = true;      // Center coordinate origins on screen.
+    GetScreen()->m_Center = true;      // Axis origin centered on screen.
     LoadSettings();
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -269,6 +272,7 @@ void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
         m_Semaphore->Post();
         // This window will be destroyed by the calling function,
         // if needed
+        SetModalMode( false );
     }
     else
     {

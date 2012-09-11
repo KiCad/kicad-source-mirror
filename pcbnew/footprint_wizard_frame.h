@@ -46,30 +46,32 @@ class wxGridEvent;
 class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_FRAME
 {
 private:
-    
+
     wxSashLayoutWindow* m_PageListWindow;    //< List of libraries (for selection )
     wxListBox*          m_PageList;          //< The list of pages
     wxSize              m_PageListSize;      //< size of the window
 
-    
-    wxSashLayoutWindow* m_ParameterGridWindow;  //< List of components in the selected library  
+
+    wxSashLayoutWindow* m_ParameterGridWindow;  //< List of components in the selected library
     wxGrid*             m_ParameterGrid;        //< The list of parameters
     wxSize              m_ParameterGridSize;    //< size of the window
 
     // Flags
     wxSemaphore*        m_Semaphore;        //< != NULL if the frame must emulate a modal dialog
     wxString            m_configPath;       //< subpath for configuration
-    
+
     FOOTPRINT_WIZARD* m_FootprintWizard;
 
 protected:
-    wxString m_wizardName;          //< name of the current wizard     
-    wxString m_wizardDescription;   //< description of the wizard     
-    wxString m_wizardStatus;        //< current wizard status    
+    wxString m_wizardName;          //< name of the current wizard
+    wxString m_wizardDescription;   //< description of the wizard
+    wxString m_wizardStatus;        //< current wizard status
 
 public:
-    FOOTPRINT_WIZARD_FRAME( wxWindow* parent, wxSemaphore* semaphore = NULL );
-    
+    FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
+                            wxSemaphore* semaphore = NULL,
+                            long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+
     ~FOOTPRINT_WIZARD_FRAME();
 
     MODULE* GetBuiltFootprint( void );
@@ -97,35 +99,35 @@ private:
      * This list is sorted
      */
     void ReCreatePageList();
-    
+
     /**
      * Function ReCreateParameterList
      * Creates the list of parameters for the current page
      */
     void ReCreateParameterList();
-    
+
     /**
      * Function SelectFootprintWizard
      * Shows the list of footprint wizards available into the system
      */
     void SelectFootprintWizard();
-    
+
     /**
      * Function ReloadFootprint
      * Reloads the current footprint
      */
     void ReloadFootprint();
-    
-    
+
+
     void Process_Special_Functions( wxCommandEvent& event );
-    
+
     /**
      * Function DisplayWizardInfos
-     * Shows all the details about the current wizard 
+     * Shows all the details about the current wizard
      */
     void DisplayWizardInfos();
-    
-    
+
+
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void OnCloseWindow( wxCloseEvent& Event );
     void ReCreateHToolbar();

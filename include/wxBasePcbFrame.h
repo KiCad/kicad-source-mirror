@@ -96,7 +96,8 @@ protected:
     virtual void unitsChangeRefresh();
 
 public:
-    PCB_BASE_FRAME( wxWindow* father, int idtype, const wxString& title,
+    PCB_BASE_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
+                    const wxString& title,
                     const wxPoint& pos, const wxSize& size,
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 

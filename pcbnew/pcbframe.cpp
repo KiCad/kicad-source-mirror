@@ -174,7 +174,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_MODE_MODULE, PCB_EDIT_FRAME::OnSelectAutoPlaceMode )
     EVT_TOOL( ID_TOOLBARH_PCB_MODE_TRACKS, PCB_EDIT_FRAME::OnSelectAutoPlaceMode )
     EVT_TOOL( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, PCB_EDIT_FRAME::Access_to_External_Tool )
-#ifdef KICAD_SCRIPTING_WXPYTHON        
+#ifdef KICAD_SCRIPTING_WXPYTHON
     EVT_TOOL( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, PCB_EDIT_FRAME::ScriptingConsoleEnableDisable )
 #endif
     // Option toolbar
@@ -268,7 +268,7 @@ END_EVENT_TABLE()
 PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
                                 const wxPoint& pos, const wxSize& size,
                                 long style ) :
-    PCB_BASE_FRAME( parent, PCB_FRAME, title, pos, size, style )
+    PCB_BASE_FRAME( parent, PCB_FRAME_TYPE, title, pos, size, style )
 {
     m_FrameName = wxT( "PcbFrame" );
     m_showBorderAndTitleBlock = true;   // true to display sheet references
@@ -285,7 +285,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
     m_autoPlaceModeId = 0;
-#ifdef KICAD_SCRIPTING_WXPYTHON 
+#ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
 #endif
     for ( int i = 0; i < 10; i++ )
@@ -404,7 +404,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
         m_auimgr.AddPane( m_messagePanel,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
-    
+
     #ifdef KICAD_SCRIPTING_WXPYTHON
     // Add the scripting panel
     EDA_PANEINFO  pythonAuiInfo;
@@ -413,7 +413,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     pythonAuiInfo.MinSize( wxSize( 200, 100 ) );
     pythonAuiInfo.BestSize( wxSize( GetClientSize().x/2, 200 ) );
     pythonAuiInfo.Hide();
-    
+
     m_pythonPanel = CreatePythonShellWindow( this );
     m_auimgr.AddPane( m_pythonPanel,
                           pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
@@ -804,9 +804,9 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
         m_auimgr.GetPane( m_pythonPanel ).Hide();
         m_pythonPanelHidden = true;
     }
-    
+
     m_auimgr.Update();
-    
+
 }
 #endif
 

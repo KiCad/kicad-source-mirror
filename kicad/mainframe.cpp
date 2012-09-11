@@ -46,7 +46,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
                                           const wxString& title,
                                           const wxPoint&  pos,
                                           const wxSize&   size ) :
-    EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME, title, pos, size )
+    EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_TYPE, title, pos, size )
 {
     wxString msg;
     wxString line;

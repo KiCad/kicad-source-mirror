@@ -64,7 +64,8 @@ protected:
                                                     // the selected footprint is here
 
 public:
-    FOOTPRINT_VIEWER_FRAME( wxWindow* parent, wxSemaphore* semaphore = NULL );
+    FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* parent, wxSemaphore* semaphore = NULL,
+                            long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~FOOTPRINT_VIEWER_FRAME();
 

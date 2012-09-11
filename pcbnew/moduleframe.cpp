@@ -148,7 +148,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
                                             const wxPoint&  pos,
                                             const wxSize&   size,
                                             long            style ) :
-    PCB_BASE_FRAME( aParent, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
+    PCB_BASE_FRAME( aParent, MODULE_EDITOR_FRAME_TYPE, wxEmptyString, pos, size, style )
 {
     m_FrameName = wxT( "ModEditFrame" );
     m_showBorderAndTitleBlock = false;   // true to show the frame references

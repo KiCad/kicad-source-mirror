@@ -20,20 +20,20 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
 {
     SetFocus();
     int n_wizards = FOOTPRINT_WIZARDS::GetSize();
-    
+
     // Current wizard selection, empty or first
     m_FootprintWizard = NULL;
-   
+
     if (n_wizards)
         m_FootprintWizard = FOOTPRINT_WIZARDS::GetWizard(0);
-    
+
     // Choose selection mode and insert the needed rows
-        
+
     m_footprintWizardsGrid->SetColSize( 0, 0 ); // hide the preview for now
-    
+
     m_footprintWizardsGrid->SetSelectionMode(wxGrid::wxGridSelectRows);
     m_footprintWizardsGrid->InsertRows(0,n_wizards,true);
-        
+
     // Put all wizards in the list
     for (int i=0;i<n_wizards;i++)
     {
@@ -41,12 +41,12 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         wxString name = wizard->GetName();
         wxString description = wizard->GetDescription();
         wxString image = wizard->GetImage();
-        
+
         m_footprintWizardsGrid->SetCellValue(i,1,name);
         m_footprintWizardsGrid->SetCellValue(i,2,description);
-        
+
     }
-    
+
     // Select the first row
     m_footprintWizardsGrid->ClearSelection();
     m_footprintWizardsGrid->SelectRow(0,false);
@@ -68,6 +68,5 @@ FOOTPRINT_WIZARD* DIALOG_FOOTPRINT_WIZARD_LIST::GetWizard()
 
 void DIALOG_FOOTPRINT_WIZARD_LIST::OnOpenButtonClick( wxCommandEvent& event )
 {
-    this->MakeModal(false);
-    this->Close(true);
+    Close(true);
 }

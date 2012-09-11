@@ -63,7 +63,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    EDA_DRAW_FRAME( father, GERBER_FRAME, title, pos, size, style )
+    EDA_DRAW_FRAME( father, GERBER_FRAME_TYPE, title, pos, size, style )
 {
     m_colorsSettings = &g_ColorsSettings;
     m_Layout = NULL;

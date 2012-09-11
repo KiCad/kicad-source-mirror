@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jaen-pierre.charras
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
-#include <macros.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
@@ -109,9 +108,10 @@ static wxAcceleratorEntry accels[] =
 #define EXTRA_BORDER_SIZE 2
 
 
-FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( wxWindow* parent, wxSemaphore* semaphore ) :
-    PCB_BASE_FRAME( parent, MODULE_VIEWER_FRAME, _( "Footprint Library Browser" ),
-                    wxDefaultPosition, wxDefaultSize )
+FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* parent,
+                                                wxSemaphore* semaphore, long style ) :
+    PCB_BASE_FRAME( parent, MODULE_VIEWER_FRAME_TYPE, _( "Footprint Library Browser" ),
+                    wxDefaultPosition, wxDefaultSize, style )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
@@ -133,7 +133,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( wxWindow* parent, wxSemaphore* s
     m_selectedFootprintName.Empty();
 
     if( m_Semaphore )
-        MakeModal(true);
+        SetModalMode(true);
 
     SetBoard( new BOARD() );
     // Ensure all layers and items are visible:
@@ -276,7 +276,7 @@ void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     if( m_Semaphore )
     {
         m_Semaphore->Post();
-        MakeModal(false);
+        SetModalMode(false);
         // This window will be destroyed by the calling function,
         // to avoid side effects
     }

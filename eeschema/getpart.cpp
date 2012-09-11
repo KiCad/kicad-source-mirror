@@ -57,30 +57,22 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
     /* Close the current Lib browser, if open, and open a new one, in "modal" mode */
     if( m_ViewlibFrame )
     {
-        m_ViewlibFrame->Destroy();
+        delete m_ViewlibFrame;
         m_ViewlibFrame = NULL;
     }
 
-    if( m_LibeditFrame && m_LibeditFrame->m_ViewlibFrame )
-    {
-        m_LibeditFrame->m_ViewlibFrame->Destroy();
-        m_LibeditFrame->m_ViewlibFrame = NULL;
-    }
-
-    m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore );
+    m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore,
+                        KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
     // Show the library viewer frame until it is closed
-    // and disable the current frame, until the library viewer is closed
-    Enable(false);
     // Wait for viewer closing event:
     while( semaphore.TryWait() == wxSEMA_BUSY )
     {
         wxYield();
         wxMilliSleep( 50 );
     }
-    Enable(true);
 
     cmpname = m_ViewlibFrame->GetSelectedComponent();
-    m_ViewlibFrame->Destroy();
+    delete m_ViewlibFrame;
 
     return cmpname;
 }
