@@ -446,7 +446,7 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->EraseMsgBox();
 
-    if( frame->IsType( PCB_FRAME ) )
+    if( frame->IsType( PCB_FRAME_TYPE ) )
         flag = true;
 
     frame->AppendMsgPanel( m_Reference->m_Text, m_Value->m_Text, DARKCYAN );

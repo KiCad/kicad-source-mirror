@@ -28,7 +28,7 @@
 #include <base_units.h>
 
 SCH_BASE_FRAME::SCH_BASE_FRAME( wxWindow* aParent,
-                                id_drawframe aWindowType,
+                                ID_DRAWFRAME_TYPE aWindowType,
                                 const wxString& aTitle,
                                 const wxPoint& aPosition, const wxSize& aSize,
                                 long aStyle ) :

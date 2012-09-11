@@ -84,7 +84,8 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& title,
+EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
+                                const wxString& title,
                                 const wxPoint& pos, const wxSize& size, long style ) :
     EDA_BASE_FRAME( father, idtype, title, pos, size, style )
 {

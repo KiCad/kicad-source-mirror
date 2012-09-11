@@ -116,7 +116,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
 {
     wxSemaphore semaphore( 0, 1 );
 
-    // Close the current Lib browser, if open, and open a new one, in "modal" mode:
+    // Close the current Lib browser, if opened, and open a new one, in "modal" mode:
     FOOTPRINT_VIEWER_FRAME * viewer = GetActiveViewerFrame();
     if( viewer )
     {
@@ -127,7 +127,8 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
             m_ModuleEditFrame->m_ModuleViewerFrame = NULL;
     }
 
-    m_ModuleViewerFrame = new FOOTPRINT_VIEWER_FRAME( this, &semaphore );
+    m_ModuleViewerFrame = new FOOTPRINT_VIEWER_FRAME( this, &semaphore,
+                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
 
     // Show the library viewer frame until it is closed
     while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event

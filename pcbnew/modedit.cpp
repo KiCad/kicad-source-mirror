@@ -296,9 +296,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-
         wxSemaphore semaphore( 0, 1 );
-        FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME( this, &semaphore );
+        FOOTPRINT_WIZARD_FRAME *wizard = new FOOTPRINT_WIZARD_FRAME( this, &semaphore,
+                            KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
         wizard->Show( true );
         wizard->Zoom_Automatique( false );
 

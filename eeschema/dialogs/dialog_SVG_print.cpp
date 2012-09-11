@@ -121,7 +121,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
 
     SCH_SCREEN* screen = (SCH_SCREEN*) m_Parent->GetScreen();
 
-    if( aPrintAll && m_Parent->IsType( SCHEMATIC_FRAME ) )
+    if( aPrintAll && m_Parent->IsType( SCHEMATIC_FRAME_TYPE ) )
     {
         SCH_EDIT_FRAME*  schframe = (SCH_EDIT_FRAME*) m_Parent;
         SCH_SHEET_PATH*  sheetpath;
@@ -229,10 +229,10 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
 
     screen->m_IsPrinting = true;
 
-    if( frame->IsType( SCHEMATIC_FRAME ) )
+    if( frame->IsType( SCHEMATIC_FRAME_TYPE ) )
         screen->Draw( panel, &dc, GR_COPY );
 
-    if( frame->IsType( LIBEDITOR_FRAME ) )
+    if( frame->IsType( LIBEDITOR_FRAME_TYPE ) )
         ((LIB_EDIT_FRAME*)frame)->RedrawComponent( &dc,
                                                    wxPoint(sheetSize.x/2,
                                                    sheetSize.y/2) );

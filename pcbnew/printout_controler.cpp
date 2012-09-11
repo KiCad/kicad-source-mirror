@@ -180,7 +180,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     // In module editor, the module is located at 0,0 but for printing
     // it is moved to pageSizeIU.x/2, pageSizeIU.y/2.
     // So the equivalent board must be moved:
-    if( m_Parent->IsType( MODULE_EDITOR_FRAME ) )
+    if( m_Parent->IsType( MODULE_EDITOR_FRAME_TYPE ) )
     {
         bbbox.Move( wxPoint( pageSizeIU.x/2, pageSizeIU.y/2 ) );
     }

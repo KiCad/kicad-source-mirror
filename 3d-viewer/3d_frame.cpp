@@ -57,7 +57,7 @@ END_EVENT_TABLE()
 
 
 EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title, long style ) :
-    wxFrame( parent, DISPLAY3D_FRAME, title, wxPoint( -1, -1 ), wxSize( -1, -1 ), style )
+    wxFrame( parent, DISPLAY3D_FRAME_TYPE, title, wxPoint( -1, -1 ), wxSize( -1, -1 ), style )
 {
     m_FrameName     = wxT( "Frame3D" );
     m_Canvas        = NULL;

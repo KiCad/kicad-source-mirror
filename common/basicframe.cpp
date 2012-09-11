@@ -56,12 +56,11 @@ static const wxChar* entryAutoSaveInterval = wxT( "AutoSaveInterval" );
 
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
-                                int idtype,
+                                ID_DRAWFRAME_TYPE idtype,
                                 const wxString& title,
-                                const wxPoint& pos,
-                                const wxSize& size,
+                                const wxPoint& pos, const wxSize& size,
                                 long style ) :
-    wxFrame( father, -1, title, pos, size, style )
+    wxFrame( father, wxID_ANY, title, pos, size, style )
 {
     wxSize minsize;
 
@@ -256,24 +255,6 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 {
     SetStatusText( text );
 }
-
-
-void EDA_BASE_FRAME::DisplayActivity( int PerCent, const wxString& Text )
-{
-    wxString Line;
-
-    Line = Text;
-
-    PerCent  = (PerCent < 0) ? 0 : PerCent;
-    PerCent  = (PerCent > 100) ? 100 : PerCent;
-    PerCent /= 2;   // Bargraph is 0 .. 50 points from 0% to 100%
-
-    if( PerCent )
-        Line.Pad( PerCent, '*' );
-
-    SetStatusText( Line );
-}
-
 
 void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
                                         wxFileHistory * aFileHistory )
@@ -540,7 +521,7 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
 #endif
 
     tmp << wxT( "         USE_BOOST_POLYGON_LIBRARY\n" );
-    
+
     tmp << wxT( "         KICAD_SCRIPTING=" );
 #ifdef KICAD_SCRIPTING
     tmp << wxT( "ON\n" );
@@ -662,4 +643,37 @@ edits you made?" ),
         // Remove the auto save file when using the previous file as is.
         wxRemoveFile( autoSaveFileName.GetFullPath() );
     }
+}
+
+/**
+ * Function SetModalMode
+ * Disable or enable all other windows, to emulate a dialog behavior
+ * Useful when the frame is used to show and selec items
+ * (see FOOTPRINT_VIEWER_FRAME and LIB_VIEW_FRAME)
+ *
+ * @param aModal = true to disable all other opened windows (i.e.
+ * this windows is in dialog mode
+ *               = false to enable other windows
+ * This function is analog to MakeModal( aModal ), deprecated since wxWidgets 2.9.4
+ */
+void EDA_BASE_FRAME::SetModalMode( bool aModal )
+{
+    // Disable all other windows
+#if wxCHECK_VERSION(2, 9, 4)
+    if ( IsTopLevel() )
+    {
+        wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
+        while (node)
+        {
+            wxWindow *win = node->GetData();
+            if (win != this)
+                win->Enable(!aModal);
+
+            node = node->GetNext();
+        }
+    }
+#else
+    // Deprecated since wxWidgets 2.9.4
+    MakeModal( aModal );
+#endif
 }

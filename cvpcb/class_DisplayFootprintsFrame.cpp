@@ -76,7 +76,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* parent,
                                                     const wxString& title,
                                                     const wxPoint& pos,
                                                     const wxSize& size, long style ) :
-    PCB_BASE_FRAME( parent, CVPCB_DISPLAY_FRAME, title, pos, size, style )
+    PCB_BASE_FRAME( parent, CVPCB_DISPLAY_FRAME_TYPE, title, pos, size, style )
 {
     m_FrameName = wxT( "CmpFrame" );
     m_showAxis = true;         // true to draw axis.

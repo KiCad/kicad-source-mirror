@@ -680,7 +680,7 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] )
     {
         double zpos;
-        if( m_Layer == LAYER_N_BACK )
+        if( IsFlipped() )
             zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( true );
         else
             zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( false );
@@ -696,7 +696,7 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
             glRotatef( (double) m_Orient / 10, 0.0, 0.0, 1.0 );
         }
 
-        if( m_Layer == LAYER_N_BACK )
+        if( IsFlipped() )
         {
             glRotatef( 180.0, 0.0, 1.0, 0.0 );
             glRotatef( 180.0, 0.0, 0.0, 1.0 );

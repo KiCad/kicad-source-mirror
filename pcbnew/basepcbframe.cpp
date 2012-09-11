@@ -76,12 +76,10 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
-PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
-                                int             idtype,
+PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
                                 const wxString& title,
-                                const wxPoint&  pos,
-                                const wxSize&   size,
-                                long            style) :
+                                const wxPoint& pos, const wxSize& size,
+                                long style) :
     EDA_DRAW_FRAME( father, idtype, title, pos, size, style )
 {
     m_Pcb                 = NULL;
@@ -853,16 +851,16 @@ FOOTPRINT_VIEWER_FRAME * PCB_BASE_FRAME::GetActiveViewerFrame()
 
     switch( m_Ident )
     {
-        case PCB_FRAME:
+        case PCB_FRAME_TYPE:
             if( m_ModuleEditFrame )
                 return ((PCB_BASE_FRAME*)m_ModuleEditFrame)->m_ModuleViewerFrame;
             break;
 
-        case MODULE_EDITOR_FRAME:
+        case MODULE_EDITOR_FRAME_TYPE:
             return ((PCB_BASE_FRAME*)GetParent())->m_ModuleViewerFrame;
             break;
 
-        case MODULE_VIEWER_FRAME:
+        case MODULE_VIEWER_FRAME_TYPE:
             return (FOOTPRINT_VIEWER_FRAME *)this;
             break;
 

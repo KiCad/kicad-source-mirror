@@ -184,7 +184,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    SCH_BASE_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
+    SCH_BASE_FRAME( father, SCHEMATIC_FRAME_TYPE, title, pos, size, style )
 {
     m_FrameName = wxT( "SchematicFrame" );
     m_showAxis = false;                 // true to show axis

@@ -82,20 +82,22 @@ enum id_librarytype {
     LIBRARY_TYPE_SYMBOL
 };
 
-enum id_drawframe {
-    NOT_INIT_FRAME = 0,
-    SCHEMATIC_FRAME,
-    LIBEDITOR_FRAME,
-    VIEWER_FRAME,
-    PCB_FRAME,
-    MODULE_EDITOR_FRAME,
-    MODULE_VIEWER_FRAME,
-    CVPCB_FRAME,
-    CVPCB_DISPLAY_FRAME,
-    GERBER_FRAME,
-    TEXT_EDITOR_FRAME,
-    DISPLAY3D_FRAME,
-    KICAD_MAIN_FRAME
+enum ID_DRAWFRAME_TYPE
+{
+    NOT_INIT_FRAME_TYPE = 0,
+    SCHEMATIC_FRAME_TYPE,
+    LIBEDITOR_FRAME_TYPE,
+    VIEWER_FRAME_TYPE,
+    PCB_FRAME_TYPE,
+    MODULE_EDITOR_FRAME_TYPE,
+    MODULE_VIEWER_FRAME_TYPE,
+    FOOTPRINT_WIZARD_FRAME_TYPE,
+    CVPCB_FRAME_TYPE,
+    CVPCB_DISPLAY_FRAME_TYPE,
+    GERBER_FRAME_TYPE,
+    TEXT_EDITOR_FRAME_TYPE,
+    DISPLAY3D_FRAME_TYPE,
+    KICAD_MAIN_FRAME_TYPE
 };
 
 
@@ -111,7 +113,7 @@ extern const wxChar* traceAutoSave;
 class EDA_BASE_FRAME : public wxFrame
 {
 protected:
-    int          m_Ident;        // Id Type (pcb, schematic, library..)
+    ID_DRAWFRAME_TYPE m_Ident;  // Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
     int          m_MsgFrameHeight;
@@ -158,7 +160,8 @@ protected:
     virtual bool doAutoSave();
 
 public:
-    EDA_BASE_FRAME( wxWindow* father, int idtype, const wxString& title,
+    EDA_BASE_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
+                    const wxString& title,
                     const wxPoint& pos, const wxSize& size,
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
@@ -181,7 +184,7 @@ public:
 
     bool IsActive() const { return m_FrameIsActive; }
 
-    bool IsType( int aType ) const { return m_Ident == aType; }
+    bool IsType( ID_DRAWFRAME_TYPE aType ) const { return m_Ident == aType; }
 
     void GetKicadHelp( wxCommandEvent& event );
 
@@ -306,11 +309,6 @@ public:
      */
     void UpdateFileHistory( const wxString& FullFileName, wxFileHistory * aFileHistory = NULL );
 
-    /*
-     * Display a bargraph (0 to 50 point length) for a PerCent value from 0 to 100
-     */
-    void DisplayActivity( int PerCent, const wxString& Text );
-
     /**
      * Function ReCreateMenuBar
      * Creates recreates the menu bar.
@@ -354,6 +352,19 @@ public:
      *                             used to create the backup file name.
      */
     void CheckForAutoSaveFile( const wxFileName& aFileName, const wxString& aBackupFileExtension );
+
+    /**
+     * Function SetModalMode
+     * Disable or enable all other windows, to emulate a dialog behavior
+     * Useful when the frame is used to show and selec items
+     * (see FOOTPRINT_VIEWER_FRAME and LIB_VIEW_FRAME)
+     *
+     * @param aModal = true to disable all other opened windows (i.e.
+     * this windows is in dialog mode
+     *               = false to enable other windows
+     * This function is analog to MakeModal( aModal ), deprecated since wxWidgets 2.9.4
+     */
+    void SetModalMode( bool aModal );
 };
 
 
@@ -439,7 +450,8 @@ protected:
     virtual void unitsChangeRefresh();
 
 public:
-    EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& title,
+    EDA_DRAW_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
+                    const wxString& title,
                     const wxPoint& pos, const wxSize& size,
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
@@ -470,7 +482,7 @@ public:
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
 
     EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
-    
+
     virtual wxString GetScreenDesc();
 
     /**

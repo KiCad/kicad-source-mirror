@@ -57,7 +57,7 @@ protected:
 
 public:
     SCH_BASE_FRAME( wxWindow* aParent,
-                    id_drawframe aWindowType,
+                    ID_DRAWFRAME_TYPE aWindowType,
                     const wxString& aTitle,
                     const wxPoint& aPosition, const wxSize& aSize,
                     long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );

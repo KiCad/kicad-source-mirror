@@ -191,7 +191,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    SCH_BASE_FRAME( aParent, LIBEDITOR_FRAME, title, pos, size, style )
+    SCH_BASE_FRAME( aParent, LIBEDITOR_FRAME_TYPE, title, pos, size, style )
 {
     wxASSERT( aParent );
 
