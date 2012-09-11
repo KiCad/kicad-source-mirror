@@ -183,12 +183,16 @@ public:
     /**
      * function SearchTracksConnectedToPads
      * Explores the list of pads.
-     * Adds to m_PadsConnected member of each track the pad(s) connected to
-     * Adds to m_TracksConnected member of each pad the track(s) connected to
+     * if( add_to_padlist )
+     *  adds to m_PadsConnected member of each track the pad(s) connected to
+     * if add_to_tracklist
+     *  adds to m_TracksConnected member of each pad the track(s) connected to
      * D_PAD::m_TracksConnected is cleared before adding items
      * TRACK::m_PadsConnected is not cleared
+     * @param add_to_padlist = true to fill m_PadsConnected member of each track
+     * @param add_to_tracklist = true to fill m_TracksConnected member of each pad
      */
-    void SearchTracksConnectedToPads();
+    void SearchTracksConnectedToPads( bool add_to_padlist = true, bool add_to_tracklist = true);
 
     /**
      * function CollectItemsNearTo

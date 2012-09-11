@@ -566,7 +566,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_MOVE_PAD_REQUEST:
     {
         m_canvas->MoveCursorToCrossHair();
-        StartMovePad( (D_PAD*) GetScreen()->GetCurItem(), &dc );
+        StartMovePad( (D_PAD*) GetScreen()->GetCurItem(), &dc, false );
     }
     break;
 

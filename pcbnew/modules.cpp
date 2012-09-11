@@ -91,9 +91,10 @@ MODULE* PCB_BASE_FRAME::GetModuleByName()
 }
 
 
-void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
+void PCB_EDIT_FRAME::StartMoveModule( MODULE* aModule, wxDC* aDC,
+                                      bool aDragConnectedTracks )
 {
-    if( module == NULL )
+    if( aModule == NULL )
         return;
 
     if( s_ModuleInitialCopy )
@@ -102,33 +103,37 @@ void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
     s_PickedList.ClearItemsList();  // Should be empty, but...
 
     // Creates a copy of the current module, for abort and undo commands
-    s_ModuleInitialCopy = (MODULE*)module->Clone();
+    s_ModuleInitialCopy = (MODULE*)aModule->Clone();
     s_ModuleInitialCopy->SetParent( GetBoard() );
     s_ModuleInitialCopy->ClearFlags();
 
-    SetCurItem( module );
+    SetCurItem( aModule );
     GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
-    module->SetFlags( IS_MOVED );
+    aModule->SetFlags( IS_MOVED );
 
     /* Show ratsnest. */
     if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
-        DrawGeneralRatsnest( DC );
+        DrawGeneralRatsnest( aDC );
 
     EraseDragList();
 
-    if( g_Drag_Pistes_On )
+    if( aDragConnectedTracks )
     {
-        Build_Drag_Liste( m_canvas, DC, module );
+        DRAG_LIST drglist( GetBoard() );
+        drglist.BuildDragListe( aModule );
+
         ITEM_PICKER itemWrapper( NULL, UR_CHANGED );
 
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
-            TRACK* segm = g_DragSegmentList[ii].m_Segm;
+            TRACK* segm = g_DragSegmentList[ii].m_Track;
             itemWrapper.SetItem( segm );
             itemWrapper.SetLink( segm->Clone() );
             itemWrapper.GetLink()->SetState( IN_EDIT, OFF );
             s_PickedList.PushItem( itemWrapper );
         }
+
+        UndrawAndMarkSegmentsToDrag( m_canvas, aDC );
     }
 
     GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;
@@ -136,14 +141,14 @@ void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
     m_canvas->SetAutoPanRequest( true );
 
     // Erase the module.
-    if( DC )
+    if( aDC )
     {
-        module->SetFlags( DO_NOT_DRAW );
-        m_canvas->RefreshDrawingRect( module->GetBoundingBox() );
-        module->ClearFlags( DO_NOT_DRAW );
+        aModule->SetFlags( DO_NOT_DRAW );
+        m_canvas->RefreshDrawingRect( aModule->GetBoundingBox() );
+        aModule->ClearFlags( DO_NOT_DRAW );
     }
 
-    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
 }
 
 
@@ -169,22 +174,13 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
          */
         if( module->IsMoving() )
         {
-            if( g_Drag_Pistes_On )
-            {
-                /* Erase on screen dragged tracks */
-                for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
-                {
-                    pt_segm = g_DragSegmentList[ii].m_Segm;
-                    pt_segm->Draw( Panel, DC, GR_XOR );
-                }
-            }
-
-            /* Go to old position for dragged tracks */
+            /* Restore old position for dragged tracks */
             for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
             {
-                pt_segm = g_DragSegmentList[ii].m_Segm;
+                pt_segm = g_DragSegmentList[ii].m_Track;
+                pt_segm->Draw( Panel, DC, GR_XOR );
                 pt_segm->SetState( IN_EDIT, OFF );
-                g_DragSegmentList[ii].SetInitialValues();
+                g_DragSegmentList[ii].RestoreInitialValues();
                 pt_segm->Draw( Panel, DC, GR_OR );
             }
 
@@ -213,7 +209,6 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
         module->Draw( Panel, DC, GR_OR );
     }
 
-    g_Drag_Pistes_On     = false;
     pcbframe->SetCurItem( NULL );
 
     delete s_ModuleInitialCopy;
@@ -363,7 +358,6 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 
 void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreateRatsnest )
 {
-    TRACK*  pt_segm;
     wxPoint newpos;
 
     if( aModule == 0 )
@@ -406,23 +400,19 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
     if( aDC )
         aModule->Draw( m_canvas, aDC, GR_OR );
 
-    if( g_DragSegmentList.size() )
+    // Redraw dragged track segments, if any
+    for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        /* Redraw dragged track segments */
-        for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
-        {
-            pt_segm = g_DragSegmentList[ii].m_Segm;
-            pt_segm->SetState( IN_EDIT, OFF );
+        TRACK * track = g_DragSegmentList[ii].m_Track;
+        track->SetState( IN_EDIT, OFF );
 
-            if( aDC )
-                pt_segm->Draw( m_canvas, aDC, GR_OR );
-        }
-
-        // Delete drag list
-        EraseDragList();
+        if( aDC )
+            track->Draw( m_canvas, aDC, GR_OR );
     }
 
-    g_Drag_Pistes_On = false;
+    // Delete drag list
+    EraseDragList();
+
     m_canvas->SetMouseCapture( NULL, NULL );
 
     if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) && !aDoNotRecreateRatsnest )

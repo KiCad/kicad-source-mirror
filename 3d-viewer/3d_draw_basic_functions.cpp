@@ -324,7 +324,7 @@ void Draw3D_ZaxisOblongCylinder( wxPoint aAxis1Pos, wxPoint aAxis2Pos,
         // Draw the oblong inner cylinder
         if( aHeight )
             Draw3D_VerticalPolygonalCylinder( inner_cornerBuffer, aHeight,
-                                              true, aZpos, aBiuTo3DUnits );
+                                              aZpos, true, aBiuTo3DUnits );
 
         // Build the horizontal full polygon shape
         // (outer polygon shape - inner polygon shape)

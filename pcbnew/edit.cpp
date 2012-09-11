@@ -614,8 +614,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DRAG_MODULE_REQUEST:
-        g_Drag_Pistes_On = true;
-
     case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
         if( GetCurItem() == NULL )
             break;
@@ -625,10 +623,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( GetCurItem()->GetParent() );
 
         if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
-        {
-            g_Drag_Pistes_On = false;
             break;
-        }
 
         module = (MODULE*) GetCurItem();
 
@@ -644,7 +639,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SendMessageToEESCHEMA( module );
         GetScreen()->SetCrossHairPosition( module->m_Pos );
         m_canvas->MoveCursorToCrossHair();
-        StartMove_Module( module, &dc );
+        StartMoveModule( module, &dc, id == ID_POPUP_PCB_DRAG_MODULE_REQUEST );
         break;
 
     case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:      /* get module by name and move it */
@@ -665,7 +660,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         SendMessageToEESCHEMA( module );
         m_canvas->MoveCursorToCrossHair();
-        StartMove_Module( module, &dc );
+        StartMoveModule( module, &dc, false );
         break;
 
     case ID_POPUP_PCB_DELETE_MODULE:
@@ -809,9 +804,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        g_Drag_Pistes_On = true;
         m_canvas->MoveCursorToCrossHair();
-        StartMovePad( (D_PAD*) GetCurItem(), &dc );
+        StartMovePad( (D_PAD*) GetCurItem(), &dc, true );
         break;
 
     case ID_POPUP_PCB_MOVE_PAD_REQUEST:
@@ -829,9 +823,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        g_Drag_Pistes_On = false;
         m_canvas->MoveCursorToCrossHair();
-        StartMovePad( (D_PAD*) GetCurItem(), &dc );
+        StartMovePad( (D_PAD*) GetCurItem(), &dc, false );
         break;
 
     case ID_POPUP_PCB_EDIT_PAD:

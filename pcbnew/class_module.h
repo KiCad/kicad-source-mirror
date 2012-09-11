@@ -196,6 +196,12 @@ public:
 
     void Flip( const wxPoint& aCentre );
 
+    /**
+     * function IsFlipped
+     * @return true if the module is flipped, i.e. on the back side of the board
+     */
+    bool IsFlipped() const {return GetLayer() == LAYER_N_BACK; }
+
     bool IsLocked() const
     {
         return (m_ModuleStatus & MODULE_is_LOCKED) != 0;
