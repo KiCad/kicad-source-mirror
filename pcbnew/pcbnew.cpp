@@ -58,7 +58,6 @@ COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
 bool           Drc_On = true;
 bool           g_AutoDeleteOldTrack = true;
-bool           g_Drag_Pistes_On;
 bool           g_Show_Module_Ratsnest;
 bool           g_Raccord_45_Auto = true;
 bool 	       g_Alternate_Track_Posture = false;
@@ -107,13 +106,13 @@ bool EDA_APP::OnInit()
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
-#ifdef KICAD_SCRIPTING    
-    if ( !pcbnewInitPythonScripting() ) 
+#ifdef KICAD_SCRIPTING
+    if ( !pcbnewInitPythonScripting() )
     {
          return false;
     }
-#endif    
-    
+#endif
+
     InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
@@ -149,10 +148,10 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
 
     frame = new PCB_EDIT_FRAME( NULL, wxT( "Pcbnew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
-    #ifdef KICAD_SCRIPTING    
+    #ifdef KICAD_SCRIPTING
     ScriptingSetPcbEditFrame(frame); /* give the scripting helpers access to our frame */
-    #endif    
-    
+    #endif
+
     frame->UpdateTitle();
 
     SetTopWindow( frame );
@@ -224,7 +223,7 @@ int EDA_APP::OnExit() {
 #if KICAD_SCRIPTING_WXPYTHON
     pcbnewFinishPythonScripting();
 #endif
-    return 0;    
+    return 0;
 }
 
 #endif

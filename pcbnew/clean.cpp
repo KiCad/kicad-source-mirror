@@ -102,7 +102,7 @@ private:
      * merge aTrackRef and aCandidate, when possible,
      * i.e. when they are colinear, same width, and obviously same layer
      */
-    TRACK* mergeColinearSegmentIfPossible( TRACK* aTrackRef,
+    TRACK* mergeCollinearSegmentIfPossible( TRACK* aTrackRef,
                                            TRACK* aCandidate, int aEndType );
 };
 
@@ -489,7 +489,7 @@ bool TRACKS_CLEANER::clean_segments()
         }
     }
 
-    // delete intermediate points (merging colinear segments)
+    // merge collinear segments:
     for( segment = m_Brd->m_Track; segment; segment = nextsegment )
     {
         TRACK*  segStart;
@@ -533,7 +533,7 @@ bool TRACKS_CLEANER::clean_segments()
 
         if( flag )   // We have the starting point of the segment is connected to an other segment
         {
-            segDelete = mergeColinearSegmentIfPossible( segment, segStart, FLG_START );
+            segDelete = mergeCollinearSegmentIfPossible( segment, segStart, FLG_START );
 
             if( segDelete )
             {
@@ -574,7 +574,7 @@ bool TRACKS_CLEANER::clean_segments()
 
         if( flag & 2 )  // We have the ending point of the segment is connected to an other segment
         {
-            segDelete = mergeColinearSegmentIfPossible( segment, segEnd, FLG_END );
+            segDelete = mergeCollinearSegmentIfPossible( segment, segEnd, FLG_END );
 
             if( segDelete )
             {
@@ -593,9 +593,9 @@ bool TRACKS_CLEANER::clean_segments()
 
 
 /** Function used by clean_segments.
- *  Test alignment of aTrackRef and aCandidate (which must have a common end).
+ *  Test if aTrackRef and aCandidate (which must have a common end) are collinear.
  *  and see if the common point is not on a pad (i.e. if this common point can be removed).
- *  the ending point of pt_ref is the start point (aEndType == START)
+ *  the ending point of aTrackRef is the start point (aEndType == START)
  *  or the end point (aEndType != START)
  *  flags START_ON_PAD and END_ON_PAD must be set before calling this function
  *  if the common point can be deleted, this function
@@ -604,7 +604,7 @@ bool TRACKS_CLEANER::clean_segments()
  *    and return aCandidate (which can be deleted).
  *  else return NULL
  */
-TRACK* TRACKS_CLEANER::mergeColinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate,
+TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate,
                                        int aEndType )
 {
     if( aTrackRef->m_Width != aCandidate->m_Width )

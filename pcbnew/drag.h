@@ -1,8 +1,31 @@
 /**
  * @file drag.h
- * @brief Useful class and functions used to drag tracks
+ * @brief Useful classes and functions used to collect tracks to drag
  */
 
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <vector>
 #include <wx/gdicmn.h>
@@ -13,62 +36,151 @@ class wxDC;
 class EDA_DRAW_PANEL;
 class MODULE;
 class D_PAD;
+class CONNECTIONS;
 
 
-/** Helper class to handle a list of track segments to drag
+/** Helper classes to handle a list of track segments to drag
  * and has info to undo/abort the move command
- * a DRAG_SEGM manage one track segment or a via
  */
-class DRAG_SEGM
+
+ /*
+  * a DRAG_LIST manages the list of track segments to modify
+  * when the pad or the module is moving
+  */
+
+/*
+  * a DRAG_SEGM_PICKER manage one track segment or a via
+  */
+class DRAG_SEGM_PICKER
 {
 public:
-    TRACK*  m_Segm;         /* pointer to the segment a "dragger */
-    D_PAD*  m_Pad_Start;    /* pointer to the pad origin if origin segment of pad */
-    D_PAD*  m_Pad_End;      /* pointer to the pad end if end segment of pad */
-    int     m_Flag;         /* indicator flags */
+    TRACK*  m_Track;            // pointer to the parent track segment
+    D_PAD*  m_Pad_Start;        // pointer to the moving pad
+                                // if the start point should follow this pad
+                                // or NULL
+    D_PAD*  m_Pad_End;          // pointer to the moving pad
+                                // if the end point should follow this pad
+                                // or NULL
+    bool    m_Flag;             // flag used in drag vias and drag track segment functions
 
 private:
-    wxPoint m_StartInitialValue;
-    wxPoint m_EndInitialValue;    // For abort: initial m_Start and m_End values for m_Segm
-
+    double  m_RotationOffset;   // initial orientation of the parent module
+                                // Used to recalculate m_PadStartOffset and m_PadEndOffset
+                                // after a module rotation when dragging
+    bool    m_Flipped;          // initial side of the parent module
+                                // Used to recalculate m_PadStartOffset and m_PadEndOffset
+                                // if the module is flipped when dragging
+    wxPoint m_PadStartOffset;   // offset between the pad and the starting point of the track
+                                // usually 0,0, but not always
+    wxPoint m_PadEndOffset;     // offset between the pad and the ending point of the track
+                                // usually 0,0, but not always
+    wxPoint m_startInitialValue;
+    wxPoint m_endInitialValue;  // For abort command:
+                                // initial m_Start and m_End values for m_Track
 
 public:
 
-    DRAG_SEGM( TRACK* segm );
-    ~DRAG_SEGM() {};
+    DRAG_SEGM_PICKER( TRACK* aTrack );
+    ~DRAG_SEGM_PICKER() {};
 
-    void SetInitialValues()
+    /**
+     * Set auxiliary parameters relative to calucaltions needed
+     * to find track ends positions while dragging pads
+     * and when modules are rotated, flipped ..
+     */
+    void SetAuxParameters();
+
+    /**
+     * Calculate track ends position while dragging pads
+     * and when modules are rotated, flipped ..
+     * @param aOffset = offset of module or pad position (when moving)
+     */
+    void SetTrackEndsCoordinates(wxPoint aOffset);
+
+    void RestoreInitialValues()
     {
-        m_Segm->m_Start = m_StartInitialValue;
-        m_Segm->m_End   = m_EndInitialValue;
+        m_Track->SetStart( m_startInitialValue );
+        m_Track->SetEnd( m_endInitialValue );
     }
 };
 
-/* Variables */
+class DRAG_LIST
+{
+public:
+    BOARD * m_Brd;          // the main board
+    MODULE * m_Module;      // The link to the module to move, or NULL
+    D_PAD *  m_Pad;         // The link to the pad to move, or NULL
 
-// a list of DRAG_SEGM items used to move or drag tracks.
-// Each DRAG_SEGM item points a segment to move.
-extern std::vector<DRAG_SEGM> g_DragSegmentList;
+    std::vector<DRAG_SEGM_PICKER> m_DragList; // The list of DRAG_SEGM_PICKER items
 
-/* Functions */
+public:
+    DRAG_LIST( BOARD * aPcb )
+    {
+        m_Brd = aPcb;
+    }
+
+    /**
+     * Function ClearList
+     * clear the .m_Flags of all track segments in m_DragList
+     * and clear the list.
+     */
+    void ClearList();
+
+    /** Build the list of track segments connected to pads of aModule
+     *  in m_DragList
+     *  For each selected track segment the EDIT flag is set
+     */
+    void BuildDragListe( MODULE* aModule );
+
+    /** Build the list of track segments connected to aPad
+     *  in m_DragList
+     *  For each selected track segment the EDIT flag is set
+     */
+    void BuildDragListe( D_PAD* aPad );
+
+private:
+
+    /** Fills m_DragList with of track segments connected to pads in aConnections
+     *  For each selected track segment the EDIT flag is set
+     */
+    void fillList(CONNECTIONS& aConnections);
+};
+
+
+// Global variables:
+
+// a list of DRAG_SEGM_PICKER items used to move or drag tracks.
+// Each DRAG_SEGM_PICKER item points a segment to move.
+extern std::vector<DRAG_SEGM_PICKER> g_DragSegmentList;
+
+// Functions:
 void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC );
-void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module );
-void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad );
-void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
-                                  wxPoint& point, int LayerMask, int net_code );
-
 
 /**
  * Function EraseDragList
- * clear the .m_Flags of all track segments managed by in g_DragSegmentList
+ * clear the .m_Flags of all track segments stored in g_DragSegmentList
  * and clear the list.
- * In order to avoid useless memory allocation, the memory is not freed
+ * In order to avoid useless memory reallocation, the memory is not freed
  * and will be reused when creating a new list
  */
 void EraseDragList();
 
-/* Add the segment"Track" to the drag list, and erase it from screen
- * flag = STARTPOINT (if the point to drag is the start point of Track)
- * or ENDPOINT
+/*
+ * function used to collect track segments in drag track segment
  */
-void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Track );
+void Collect_TrackSegmentsToDrag( BOARD* aPcb, wxPoint& point, int LayerMask, int net_code );
+
+/* Add aTrack to the drag list
+ * flag = STARTPOINT (if the point to drag is the start point of Track)
+ * or ENDPOINT (if the point to drag is the end point of Track)
+ */
+void AddSegmentToDragList( int flag, TRACK* aTrack );
+
+/*
+ * Undraw the track segments in list, and set the EDIT flag
+ * Usually called after the track list is built, to prepare
+ * the redraw of the list when the mouse is moved
+ */
+void UndrawAndMarkSegmentsToDrag( EDA_DRAW_PANEL* aCanvas, wxDC* aDC );
+
+

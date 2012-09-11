@@ -339,7 +339,16 @@ public:
      */
     void DeletePad( D_PAD* aPad, bool aQuery = true );
 
-    void StartMovePad( D_PAD* Pad, wxDC* DC );
+    /**
+     * Function StartMovePad
+     * Initialize a drag or move pad command
+     * @param aPad = the pad to move or drag
+     * @param aDC = the current device context
+     * @param aDragConnectedTracks = true to drag connected tracks,
+     *                               false to just move the pad
+     */
+    void StartMovePad( D_PAD* aPad, wxDC* aDC, bool aDragConnectedTracks );
+
     void RotatePad( D_PAD* Pad, wxDC* DC );
     void PlacePad( D_PAD* Pad, wxDC* DC );
     void Export_Pad_Settings( D_PAD* aPad );

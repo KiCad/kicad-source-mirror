@@ -221,7 +221,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            DisplayError( this, wxT( "Internal err: Struct not PCB_TARGET_T" ) );
+            DisplayError( this, wxT( "OnLeftClick err: not a PCB_TARGET_T" ) );
         }
 
         break;
@@ -333,7 +333,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            DisplayError( this, wxT( "Internal err: Struct not PCB_TEXT_T" ) );
+            DisplayError( this, wxT( "OnLeftClick err: not a PCB_TEXT_T" ) );
         }
 
         break;
@@ -346,7 +346,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             SetCurItem( DrawStruct );
 
             if( DrawStruct )
-                StartMove_Module( (MODULE*) DrawStruct, aDC );
+                StartMoveModule( (MODULE*) DrawStruct, aDC, false );
         }
         else if( DrawStruct->Type() == PCB_MODULE_T )
         {

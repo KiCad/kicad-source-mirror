@@ -937,7 +937,16 @@ public:
 
     // Footprint edition (see also PCB_BASE_FRAME)
     void InstallModuleOptionsFrame( MODULE* Module, wxDC* DC );
-    void StartMove_Module( MODULE* module, wxDC* DC );
+
+    /**
+     * Function StartMoveModule
+     * Initialize a drag or move pad command
+     * @param aModule = the module to move or drag
+     * @param aDC = the current device context
+     * @param aDragConnectedTracks = true to drag connected tracks,
+     *                               false to just move the module
+     */
+    void StartMoveModule( MODULE* aModule, wxDC* aDC, bool aDragConnectedTracks );
 
     /**
      * Function DlgGlobalChange_PadSettings

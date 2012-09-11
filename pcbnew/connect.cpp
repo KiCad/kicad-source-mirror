@@ -105,7 +105,7 @@ void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
  * D_PAD::m_TracksConnected is cleared before adding items
  * TRACK::m_PadsConnected is not cleared
  */
-void CONNECTIONS::SearchTracksConnectedToPads()
+void CONNECTIONS::SearchTracksConnectedToPads( bool add_to_padlist, bool add_to_tracklist)
 {
     std::vector<CONNECTED_POINT*> candidates;
 
@@ -127,8 +127,11 @@ void CONNECTIONS::SearchTracksConnectedToPads()
 
             if( pad->HitTest( cp_item->GetPoint() ) )
             {
-                cp_item->GetTrack()->m_PadsConnected.push_back( pad );
-                pad->m_TracksConnected.push_back( cp_item->GetTrack() );
+                if( add_to_padlist )
+                    cp_item->GetTrack()->m_PadsConnected.push_back( pad );
+
+                if( add_to_tracklist )
+                    pad->m_TracksConnected.push_back( cp_item->GetTrack() );
             }
         }
     }

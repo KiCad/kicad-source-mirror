@@ -101,7 +101,7 @@ void PCB_EDIT_FRAME::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
 
     if( module )
     {
-        StartMove_Module( module, DC );
+        StartMoveModule( module, DC, false );
     }
 
     m_canvas->MoveCursorToCrossHair();

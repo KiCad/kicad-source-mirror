@@ -155,7 +155,7 @@ void EDA_LIST_DIALOG::SortList()
 {
     wxArrayString list = m_listBox->GetStrings();
 
-    if( list.IsEmpty() <= 0 )
+    if( list.IsEmpty() )
         return;
 
     list.Sort( SortItems );

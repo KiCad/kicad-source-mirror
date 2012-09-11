@@ -78,7 +78,7 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* parent ) :
 int DIALOG_GENDRILL:: m_UnitDrillIsInch = true;
 int DIALOG_GENDRILL:: m_ZerosFormat     = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;
-bool DIALOG_GENDRILL::m_Mirror = true;
+bool DIALOG_GENDRILL::m_Mirror = false;
 bool DIALOG_GENDRILL::m_DrillOriginIsAuxAxis = false;
 int DIALOG_GENDRILL:: m_PrecisionFormat = 1;
 bool DIALOG_GENDRILL::m_createRpt = false;

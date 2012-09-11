@@ -184,6 +184,7 @@ set(PCBNEW_CLASS_SRCS
     netlist_reader_kicad.cpp
     onleftclick.cpp
     onrightclick.cpp
+    pad_edition_functions.cpp
     pcbnew.cpp
     pcbnew_config.cpp
     pcbplot.cpp

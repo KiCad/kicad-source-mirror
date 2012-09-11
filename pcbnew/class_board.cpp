@@ -1807,8 +1807,9 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
 /**
  * Function SortPadsByXCoord
  * is used by GetSortedPadListByXCoord to Sort a pad list by x coordinate value.
+ * This function is used to build ordered pads lists
  */
-static bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
+bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 {
     if( ref->GetPosition().x == comp->GetPosition().x )
         return ref->GetPosition().y < comp->GetPosition().y;
