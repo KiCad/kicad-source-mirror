@@ -453,6 +453,7 @@ public:
      * @param aPad2PadTest Tells whether to test pad to pad distances.
      * @param aUnconnectedTest Tells whether to list unconnected pads.
      * @param aZonesTest Tells whether to test zones.
+     * @param aKeepoutTest Tells whether to test keepout areas.
      * @param aReportName A string telling the disk file report name entered.
      * @param aSaveReport A boolean telling whether to generate disk file report.
      */

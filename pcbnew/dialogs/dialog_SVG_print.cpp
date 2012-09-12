@@ -1,5 +1,5 @@
 /**
- * @file dialog_svg_print.cpp
+ * @file pcbnew/dialogs/dialog_SVG_print.cpp
  */
 
 /*

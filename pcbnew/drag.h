@@ -86,13 +86,13 @@ public:
     /**
      * Set auxiliary parameters relative to calucaltions needed
      * to find track ends positions while dragging pads
-     * and when modules are rotated, flipped ..
+     * and when modules are rotated, flipped
      */
     void SetAuxParameters();
 
     /**
      * Calculate track ends position while dragging pads
-     * and when modules are rotated, flipped ..
+     * and when modules are rotated, flipped
      * @param aOffset = offset of module or pad position (when moving)
      */
     void SetTrackEndsCoordinates(wxPoint aOffset);

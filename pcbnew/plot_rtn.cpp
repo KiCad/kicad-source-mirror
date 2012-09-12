@@ -661,7 +661,7 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 }
 
 
-void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
+void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
                      const PCB_PLOT_PARAMS& aPlotOpt )
 {
     // Set the color and the text mode for this layer
@@ -670,12 +670,12 @@ void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
 
     // Specify that the contents of the "Edges Pcb" layer are to be plotted
     // in addition to the contents of the currently specified layer.
-    int layer_mask = GetLayerMask( Layer );
+    int layer_mask = GetLayerMask( aLayer );
 
     if( !aPlotOpt.GetExcludeEdgeLayer() )
         layer_mask |= EDGE_LAYER;
 
-    switch( Layer )
+    switch( aLayer )
     {
     case FIRST_COPPER_LAYER:
     case LAYER_N_2:
@@ -722,7 +722,7 @@ void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
         if( aPlotter->GetPlotterType() == PLOT_FORMAT_GERBER
             && aPlotOpt.GetSubtractMaskFromSilk() )
         {
-            if( Layer == SILKSCREEN_N_FRONT )
+            if( aLayer == SILKSCREEN_N_FRONT )
                 layer_mask = GetLayerMask( SOLDERMASK_N_FRONT );
             else
                 layer_mask = GetLayerMask( SOLDERMASK_N_BACK );

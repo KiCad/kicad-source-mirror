@@ -70,7 +70,7 @@ PLOTTER *StartPlotBoard( BOARD *aBoard,
  * @param aLayer = the layer id to plot
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  */
-void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
+void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
                      const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
@@ -97,6 +97,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
  * Should not be used for other layers
  * @param aBoard = the board to plot
  * @param aPlotter = the plotter to use
+ * @param aLayerMask = the mask to define the layers to plot (silkscreen Front and/or Back)
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  */
 void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,

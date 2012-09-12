@@ -1,5 +1,5 @@
 /**
- * @file  dialog_display_options.h
+ * @file  cvpcb/dialogs/dialog_display_options.h
  */
 
 #ifndef _DIALOG_DISPLAY_OPTIONS_H_

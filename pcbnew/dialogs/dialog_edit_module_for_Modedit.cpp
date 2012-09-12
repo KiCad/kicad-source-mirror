@@ -1,5 +1,5 @@
 /**
- * @file dialod_edit_module_for_Modedit.cpp
+ * @file dialog_edit_module_for_Modedit.cpp
  *
  * @brief Dialog for editing a module properties in module editor (modedit)
  */
