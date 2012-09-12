@@ -143,8 +143,8 @@ public:
 
     /**
      * Set the plot offset and scaling for the current plot
-     * @param aIusPerDecimil gives the scaling factor from IUs to device
-     *		units
+     * @param aOffset is the plot offset
+     * @param aIusPerDecimil gives the scaling factor from IUs to device units
      * @param aScale is the user set plot scaling factor (either explicitly
      * 		or using 'fit to A4')
      * @param aMirror flips the plot in the Y direction (useful for toner
@@ -170,6 +170,7 @@ public:
 
     /**
      * moveto/lineto primitive, moves the 'pen' to the specified direction
+     * @param pos is the target position
      * @param plume specifies the kind of motion: 'U' only moves the pen,
      * 		'D' draw a line from the current position and 'Z' finish
      *		the drawing and returns the 'pen' to rest (flushes the trace)

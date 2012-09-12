@@ -34,20 +34,12 @@ extern const wxChar* g_GerberPageSizeList[8];
 #define GERB_STOP_DRAW   2      // Extinguish light (lift pen)
 #define GERB_FLASH       3      // Flash
 
-/*
-enum PlotFormat
-{
-    FORMAT_HPGL,
-    FORMAT_GERBER,
-    FORMAT_POST
-};
-*/
 
 /**
- * Enum ITEM_VISIBLE
- * is a set of visible PCB elements.
+ * Enum GERBER_VISIBLE_ID
+ * is a set of visible GERBVIEW elements.
  */
-enum GERBER_VISIBLE
+enum GERBER_VISIBLE_ID
 {
     DCODES_VISIBLE = 1,    // visible item id cannot be 0 because this id is used as wxWidget id
     GERBER_GRID_VISIBLE,

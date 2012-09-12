@@ -34,6 +34,7 @@
 #include <param_config.h>
 #include <wxstruct.h>
 
+#include <gerbview.h>
 #include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
 
@@ -263,20 +264,19 @@ public:
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
-     * @param aGERBER_VISIBLE is from the enum by the same name
+     * @param aItemIdVisible is an item id from the enum GERBER_VISIBLE_ID
      * @return bool - true if the element is visible.
-     * @see enum PCB_VISIBLE
      */
-    bool    IsElementVisible( int aGERBER_VISIBLE );
+    bool    IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible );
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
-     * @param aGERBER_VISIBLE is from the enum by the same name
+     * @param aItemIdVisible is an item id from the enum GERBER_VISIBLE_ID
      * @param aNewState = The new visibility state of the element category
-     * @see enum PCB_VISIBLE
+     *  (see enum PCB_VISIBLE)
      */
-    void    SetElementVisibility( int aGERBER_VISIBLE, bool aNewState );
+    void    SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible, bool aNewState );
 
     /**
      * Function SetVisibleAlls
@@ -317,12 +317,11 @@ public:
 
     /**
      * Function GetVisibleElementColor
-     * returns the color of a pcb visible element.
-     * @see enum PCB_VISIBLE
+     * returns the color of a gerber visible element.
      */
-    EDA_COLOR_T GetVisibleElementColor( int aItemIdVisible );
+    EDA_COLOR_T GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible );
 
-    void    SetVisibleElementColor( int aItemIdVisible, EDA_COLOR_T aColor );
+    void    SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible, EDA_COLOR_T aColor );
 
     /**
      * Function GetLayerColor

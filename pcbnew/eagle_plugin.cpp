@@ -279,8 +279,9 @@ struct EWIRE
 
 /**
  * Constructor EWIRE
- * converts a <wire>'s xml attributes to binary without additional conversion.
- * This result is an EWIRE with the <wire> textual data merely converted to binary.
+ * converts a "wire"'s xml attributes ( &ltwire&gt )
+ * to binary without additional conversion.
+ * This result is an EWIRE with the &ltwire&gt textual data merely converted to binary.
  */
 EWIRE::EWIRE( CPTREE& aWire )
 {

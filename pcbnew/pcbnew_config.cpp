@@ -384,14 +384,11 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 
 void PCB_EDIT_FRAME::SaveMacros()
 {
-    wxFileName fn;
     wxXmlDocument xml;
-    XNODE *rootNode = new XNODE( wxXML_ELEMENT_NODE, wxT( "macrosrootnode" ), wxEmptyString );
-    XNODE *macrosNode, *hkNode;
     wxXmlProperty *macrosProp, *hkProp, *xProp, *yProp;
     wxString str, hkStr, xStr, yStr;
 
-    fn = GetBoard()->GetFileName();
+    wxFileName fn = GetBoard()->GetFileName();
     fn.SetExt( MacrosFileExtension );
 
     wxFileDialog dlg( this, _( "Save Macros File" ), fn.GetPath(), fn.GetFullName(),
@@ -400,6 +397,7 @@ void PCB_EDIT_FRAME::SaveMacros()
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    XNODE *rootNode = new XNODE( wxXML_ELEMENT_NODE, wxT( "macrosrootnode" ), wxEmptyString );
     xml.SetRoot( rootNode );
 
     for( int number = 9; number >= 0; number-- )
@@ -407,8 +405,9 @@ void PCB_EDIT_FRAME::SaveMacros()
         str.Printf( wxT( "%d" ), number );
         macrosProp = new wxXmlProperty( wxT( "number" ), str );
 
-        macrosNode = new XNODE( rootNode, wxXML_ELEMENT_NODE, wxT( "macros" ), wxEmptyString,
-                                macrosProp );
+            XNODE * macrosNode = new XNODE( rootNode, wxXML_ELEMENT_NODE,
+                                            wxT( "macros" ), wxEmptyString,
+                                            macrosProp );
 
         for( std::list<MACROS_RECORD>::reverse_iterator i = m_Macros[number].m_Record.rbegin();
              i != m_Macros[number].m_Record.rend();
@@ -422,8 +421,8 @@ void PCB_EDIT_FRAME::SaveMacros()
             xProp = new wxXmlProperty( wxT( "x" ), xStr, yProp );
             hkProp = new wxXmlProperty( wxT( "hkcode" ), hkStr, xProp );
 
-            hkNode = new XNODE( macrosNode, wxXML_ELEMENT_NODE, wxT( "hotkey" ),
-                                wxEmptyString, hkProp );
+            new XNODE( macrosNode, wxXML_ELEMENT_NODE, wxT( "hotkey" ),
+                       wxEmptyString, hkProp );
         }
     }
 

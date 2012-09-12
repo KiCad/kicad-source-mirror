@@ -260,6 +260,12 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
 }
 
 
+/* loads aFootprintName from aLibraryPath.
+ * If found the module is added to the BOARD, just for good measure.
+ *
+ * aLibraryPath - the full filename or the short name of the library to read.
+ * if it is a short name, the file is searched in all library valid paths
+ */
 MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
             const wxString& aFootprintName, bool aDisplayError )
 {
@@ -298,6 +304,10 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
 }
 
 
+/* Explore the libraries list and
+ * loads aFootprintName from the first library it is found
+ * If found add the module is also added to the BOARD, just for good measure.
+ */
 MODULE* PCB_BASE_FRAME::loadFootprintFromLibraries(
         const wxString& aFootprintName, bool aDisplayError )
 {

@@ -68,7 +68,7 @@ private:
      * write a via to the board file (always uses a via through).
      * @param aGbrItem = the flashed Gerber item to export
      */
-    void    export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItemr );
+    void    export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem );
 
     /**
      * Function export_segline_copper_item

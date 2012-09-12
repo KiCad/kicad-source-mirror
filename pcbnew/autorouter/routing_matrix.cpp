@@ -26,8 +26,8 @@
  */
 
 /**
- * @file board.cpp
- * @brief Functions for autorouting
+ * @file routing_matrix.cpp
+ * @brief Functions to create autorouting maps
  */
 
 #include <fctsys.h>

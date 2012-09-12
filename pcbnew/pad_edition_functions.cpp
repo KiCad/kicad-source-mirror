@@ -25,7 +25,7 @@
  */
 
 /**
- * @file pad_change_functions.cpp
+ * @file pad_edition_functions.cpp
  */
 
 #include <fctsys.h>

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -378,11 +378,9 @@ public:
      * loads @a aFootprintName from @a aLibraryPath.
      * If found add the module is also added to the BOARD, just for good measure.
      *
-     *  @param aLibraryFullFilename - the full filename of the library to read. If empty,
-     *                   all active libraries are read
-     *
+     *  @param aLibraryPath - the full filename or the short name of the library to read.
+     *      if it is a short name, the file is searched in all library valid paths
      *  @param aFootprintName is the footprint to load
-     *
      *  @param aDisplayError = true to display an error message if any.
      *
      *  @return MODULE* - new module, or NULL
@@ -390,25 +388,36 @@ public:
     MODULE* loadFootprintFromLibrary( const wxString& aLibraryPath,
               const wxString& aFootprintName, bool aDisplayError );
 
+    /**
+     * Function loadFootprintFromLibraries
+     * Explore the libraries list and
+     * loads @a aFootprintName from the first library it is found
+     * If found the module is added to the BOARD, just for good measure.
+     *
+     *  @param aFootprintName is the footprint to load
+     *  @param aDisplayError = true to display an error message if any.
+     *
+     *  @return MODULE* - new module, or NULL
+     */
     MODULE* loadFootprintFromLibraries( const wxString& aFootprintName,
-                              bool            aDisplayError );
+                                        bool            aDisplayError );
 
     /**
      * Function GetModuleLibrary
      * scans active libraries to find and load @a aFootprintName.
-     * If found add the module is also added to the BOARD, just for good measure.
+     * If found  the module is added to the BOARD, just for good measure.
      *
+     *  @param aLibraryPath is the full/short name of the library.
+     *                      if empty, search in all libraries
      *  @param aFootprintName is the footprint to load
-     *
      *  @param aDisplayError = true to display an error message if any.
      *
      *  @return a pointer to the new module, or NULL
-     *
      */
     MODULE* GetModuleLibrary( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool aDisplayError )
     {
-        if( !aLibraryPath )
+        if( aLibraryPath.IsEmpty() )
             return loadFootprintFromLibraries( aFootprintName, aDisplayError );
         else
             return loadFootprintFromLibrary( aLibraryPath, aFootprintName, aDisplayError );
