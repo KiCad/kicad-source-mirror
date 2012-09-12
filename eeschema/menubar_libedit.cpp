@@ -62,6 +62,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
+    // Select current library
+    AddMenuItem( fileMenu,
+                 ID_LIBEDIT_SELECT_CURRENT_LIB,
+                 _( "&Current Library" ),
+                 _( "Select working library" ),
+                 KiBitmap( library_xpm ) );
+    fileMenu->AppendSeparator();
+
     // Save current library
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_CURRENT_LIB,
@@ -82,7 +90,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Export as png file
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_PNG_FILE,
-                 _( "&Create PNG File from Screen" ),
+                 _( "Create &PNG File from Screen" ),
                  _( "Create a PNG file from the component displayed on screen" ),
                  KiBitmap( plot_xpm ) );
 

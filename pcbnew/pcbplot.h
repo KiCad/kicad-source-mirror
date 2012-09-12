@@ -73,12 +73,12 @@ void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
     * @param aLayerMask = the mask to define the layers to plot
     * @param aPlotVia = true to plot vias, false to skip vias (has meaning
     *                  only for solder mask layers).
-    * @param aPlotMode = the plot mode (files, sketch). Has meaning for some formats only
+    * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
     * @param aSkipNPTH_Pads = true to skip NPTH Pads, when the pad size and the pad hole
     *                      have the same size. Used in GERBER format only.
     */
 void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
-                        const PCB_PLOT_PARAMS& plot_opts,
+                        const PCB_PLOT_PARAMS& aPlotOpt,
                         bool aPlotVia, bool aSkipNPTH_Pads );
 
 void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,

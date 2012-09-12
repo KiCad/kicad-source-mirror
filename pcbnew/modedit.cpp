@@ -231,15 +231,16 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_OPEN_MODULE_VIEWER:
-        if( GetActiveViewerFrame() == NULL )
         {
-            m_ModuleViewerFrame = new FOOTPRINT_VIEWER_FRAME( this, NULL );
-            m_ModuleViewerFrame->Show( true );
-            m_ModuleViewerFrame->Zoom_Automatique( false );
+        FOOTPRINT_VIEWER_FRAME * viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+        if( viewer == NULL )
+        {
+            viewer = new FOOTPRINT_VIEWER_FRAME( this, NULL );
+            viewer->Show( true );
+            viewer->Zoom_Automatique( false );
         }
         else
         {
-            FOOTPRINT_VIEWER_FRAME * viewer = GetActiveViewerFrame();
             if( viewer->IsIconized() )
                  viewer->Iconize( false );
 
@@ -249,6 +250,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // any platform.
             if( wxWindow::FindFocus() != viewer )
                 viewer->SetFocus();
+        }
         }
         break;
 

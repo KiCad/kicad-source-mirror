@@ -14,12 +14,23 @@ public:
     MODULE*  CurrentModule;
 
 public:
-    FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
-                          const wxString& title,
-                          const wxPoint& pos, const wxSize& size,
-                          long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent );
 
     ~FOOTPRINT_EDIT_FRAME();
+
+    /**
+     * Function GetFootprintEditorFrameName (static)
+     * @return the frame name used when creating the frame
+     * used to get a reference to this frame, if exists
+     */
+    static const wxChar* GetFootprintEditorFrameName();
+
+    /**
+     * Function GetActiveFootprintEditor (static)
+     * @return a reference to the current opened Footprint editor
+     * or NULL if no Footprint editor currently opened
+     */
+    static FOOTPRINT_EDIT_FRAME* GetActiveFootprintEditor();
 
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;           // overload PCB_BASE_FRAME, get parent's
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );  // overload

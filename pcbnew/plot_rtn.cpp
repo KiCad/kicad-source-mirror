@@ -103,7 +103,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
                     break;
 
                 case PAD_OVAL:
-                    aPlotter->FlashPadOval( shape_pos, pad->GetSize(), 
+                    aPlotter->FlashPadOval( shape_pos, pad->GetSize(),
 		                            pad->GetOrientation(), LINE );
                     break;
 
@@ -111,14 +111,14 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
                     {
                         wxPoint coord[4];
                         pad->BuildPadPolygon( coord, wxSize(0,0), 0 );
-                        aPlotter->FlashPadTrapez( shape_pos, coord, 
+                        aPlotter->FlashPadTrapez( shape_pos, coord,
 			                          pad->GetOrientation(), LINE );
                     }
                     break;
 
                 case PAD_RECT:
                 default:
-                    aPlotter->FlashPadRect( shape_pos, pad->GetSize(), 
+                    aPlotter->FlashPadRect( shape_pos, pad->GetSize(),
 		                            pad->GetOrientation(), LINE );
                     break;
                 }
@@ -745,14 +745,14 @@ void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
  * Silk screen layers are not plotted here.
  */
 void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                        long aLayerMask, const PCB_PLOT_PARAMS& plot_opts,
+                        long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                         bool aPlotVia, bool aSkipNPTH_Pads )
 {
     wxPoint  pos;
     wxSize   size;
     wxString msg;
 
-    EDA_DRAW_MODE_T aPlotMode = plot_opts.GetMode();
+    EDA_DRAW_MODE_T aPlotMode = aPlotOpt.GetMode();
 
     // Plot pcb draw items.
     for( BOARD_ITEM* item = aBoard->m_Drawings; item; item = item->Next() )
@@ -760,19 +760,19 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         switch( item->Type() )
         {
         case PCB_LINE_T:
-            PlotDrawSegment( aPlotter, plot_opts, (DRAWSEGMENT*) item, aLayerMask, aPlotMode );
+            PlotDrawSegment( aPlotter, aPlotOpt, (DRAWSEGMENT*) item, aLayerMask, aPlotMode );
             break;
 
         case PCB_TEXT_T:
-            PlotTextePcb( aPlotter, plot_opts, (TEXTE_PCB*) item, aLayerMask, aPlotMode );
+            PlotTextePcb( aPlotter, aPlotOpt, (TEXTE_PCB*) item, aLayerMask, aPlotMode );
             break;
 
         case PCB_DIMENSION_T:
-            PlotDimension( aPlotter, plot_opts, (DIMENSION*) item, aLayerMask, aPlotMode );
+            PlotDimension( aPlotter, aPlotOpt, (DIMENSION*) item, aLayerMask, aPlotMode );
             break;
 
         case PCB_TARGET_T:
-            PlotPcbTarget( aPlotter, plot_opts, (PCB_TARGET*) item, aLayerMask, aPlotMode );
+            PlotPcbTarget( aPlotter, aPlotOpt, (PCB_TARGET*) item, aLayerMask, aPlotMode );
             break;
 
         case PCB_MARKER_T:
@@ -793,7 +793,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             {
             case PCB_MODULE_EDGE_T:
                 if( aLayerMask & GetLayerMask(  item->GetLayer() ) )
-                    Plot_1_EdgeModule( aPlotter, plot_opts, (EDGE_MODULE*) item, aPlotMode, aLayerMask );
+                    Plot_1_EdgeModule( aPlotter, aPlotOpt, (EDGE_MODULE*) item, aPlotMode, aLayerMask );
 
                 break;
 
@@ -973,7 +973,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( ( ( 1 << edge_zone->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
-        PlotFilledAreas( aPlotter, plot_opts, edge_zone, aPlotMode );
+        PlotFilledAreas( aPlotter, aPlotOpt, edge_zone, aPlotMode );
     }
 }
 

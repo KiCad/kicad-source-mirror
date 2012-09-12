@@ -31,29 +31,20 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( wxWindow* aParent,
                                 ID_DRAWFRAME_TYPE aWindowType,
                                 const wxString& aTitle,
                                 const wxPoint& aPosition, const wxSize& aSize,
-                                long aStyle ) :
-    EDA_DRAW_FRAME( aParent, aWindowType, aTitle, aPosition, aSize, aStyle )
+                                long aStyle, const wxString & aFrameName ) :
+    EDA_DRAW_FRAME( aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName )
 {
-    m_ViewlibFrame = NULL;
-    m_LibeditFrame = NULL;
 }
 
 
 void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 {
-    if( m_ViewlibFrame )
-    {
-        m_ViewlibFrame->Show( true );
-        return;
-    }
+    LIB_VIEW_FRAME * viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer();;
 
-    if( m_LibeditFrame && m_LibeditFrame->m_ViewlibFrame )
-    {
-        m_LibeditFrame->m_ViewlibFrame->Show( true );
-        return;
-    }
-
-    m_ViewlibFrame = new LIB_VIEW_FRAME( this );
+    if( viewlibFrame )
+        viewlibFrame->Show( true );
+    else
+        new LIB_VIEW_FRAME( this );
 }
 
 

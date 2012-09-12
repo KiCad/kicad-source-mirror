@@ -84,10 +84,12 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
-                                const wxString& title,
-                                const wxPoint& pos, const wxSize& size, long style ) :
-    EDA_BASE_FRAME( father, idtype, title, pos, size, style )
+EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
+                                ID_DRAWFRAME_TYPE aFrameType,
+                                const wxString& aTitle,
+                                const wxPoint& aPos, const wxSize& aSize,
+                                long aStyle, const wxString & aFrameName ) :
+    EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;

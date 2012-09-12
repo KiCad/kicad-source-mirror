@@ -142,15 +142,14 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
 END_EVENT_TABLE()
 
+#define FOOTPRINT_EDIT_FRAME_NAME wxT( "ModEditFrame" )
 
-FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
-                                            const wxString& title,
-                                            const wxPoint&  pos,
-                                            const wxSize&   size,
-                                            long            style ) :
-    PCB_BASE_FRAME( aParent, MODULE_EDITOR_FRAME_TYPE, wxEmptyString, pos, size, style )
+FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent ) :
+    PCB_BASE_FRAME( aParent, MODULE_EDITOR_FRAME_TYPE, wxEmptyString,
+                    wxDefaultPosition, wxDefaultSize,
+                    KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
 {
-    m_FrameName = wxT( "ModEditFrame" );
+    m_FrameName = GetFootprintEditorFrameName();
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_showAxis = true;                   // true to show X and Y axis on screen
     m_showGridAxis = true;               // show the grid origin axis
@@ -161,6 +160,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent,
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
 
+    // Show a title (frame title + footprint name):
     UpdateTitle();
 
     if( !s_Pcb )
@@ -234,9 +234,6 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     // Do not delete PCB_SCREEN (by the destructor of EDA_DRAW_FRAME)
     SetScreen( NULL );
 
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
-    frame->m_ModuleEditFrame = NULL;
-
     // Do not allow PCB_BASE_FRAME::~PCB_BASE_FRAME()
     // to delete our precious BOARD, which is also in static FOOTPRINT_EDIT_FRAME::s_Pcb.
     // That function, PCB_BASE_FRAME::~PCB_BASE_FRAME(), runs immediately next
@@ -244,6 +241,19 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     m_Pcb = 0;
 }
 
+const wxChar* FOOTPRINT_EDIT_FRAME::GetFootprintEditorFrameName()
+{
+    return FOOTPRINT_EDIT_FRAME_NAME;
+}
+
+/* return a reference to the current opened Footprint editor
+ * or NULL if no Footprint editor currently opened
+ */
+FOOTPRINT_EDIT_FRAME* FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor()
+{
+    return (FOOTPRINT_EDIT_FRAME*)
+            wxWindow::FindWindowByName(GetFootprintEditorFrameName());
+}
 
 BOARD_DESIGN_SETTINGS& FOOTPRINT_EDIT_FRAME::GetDesignSettings() const
 {

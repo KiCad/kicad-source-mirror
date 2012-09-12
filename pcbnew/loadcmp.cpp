@@ -117,18 +117,13 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
     wxSemaphore semaphore( 0, 1 );
 
     // Close the current Lib browser, if opened, and open a new one, in "modal" mode:
-    FOOTPRINT_VIEWER_FRAME * viewer = GetActiveViewerFrame();
-    if( viewer )
-    {
-        viewer->Destroy();
-        // Clear the 2 existing references
-        m_ModuleViewerFrame = NULL;
-        if( m_ModuleEditFrame )
-            m_ModuleEditFrame->m_ModuleViewerFrame = NULL;
-    }
+    FOOTPRINT_VIEWER_FRAME * viewer = FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
 
-    m_ModuleViewerFrame = new FOOTPRINT_VIEWER_FRAME( this, &semaphore,
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
+    if( viewer )
+        viewer->Destroy();
+
+    viewer = new FOOTPRINT_VIEWER_FRAME( this, &semaphore,
+                 KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
 
     // Show the library viewer frame until it is closed
     while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
@@ -137,8 +132,8 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser( void )
         wxMilliSleep( 50 );
     }
 
-    wxString fpname = m_ModuleViewerFrame->GetSelectedFootprint();
-    m_ModuleViewerFrame->Destroy();
+    wxString fpname = viewer->GetSelectedFootprint();
+    viewer->Destroy();
 
     return fpname;
 }

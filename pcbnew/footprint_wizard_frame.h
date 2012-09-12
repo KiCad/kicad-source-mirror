@@ -38,6 +38,7 @@ class wxListBox;
 class wxSemaphore;
 class wxGrid;
 class wxGridEvent;
+class FOOTPRINT_EDIT_FRAME;
 
 
 /**

@@ -45,26 +45,14 @@ class LIB_EDIT_FRAME;
  */
 class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
-protected:
-    LIB_VIEW_FRAME*       m_ViewlibFrame;       // A library viewer, common to SCH_EDIT_FRAME
-                                                // and LIB_EDIT_FRAME.
-                                                // has no meaning to LIB_VIEW_FRAME
-    LIB_EDIT_FRAME*       m_LibeditFrame;       // the library editor.
-                                                // Is used mainly in SCH_EDIT_FRAME
-                                                // but is defined here because some functions
-                                                // need to know if a library editor or a libray
-                                                // viewer is currently opened
-
 public:
     SCH_BASE_FRAME( wxWindow* aParent,
                     ID_DRAWFRAME_TYPE aWindowType,
                     const wxString& aTitle,
                     const wxPoint& aPosition, const wxSize& aSize,
-                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                    long aStyle, const wxString & aFrameName );
 
     SCH_SCREEN* GetScreen() const;                              // overload EDA_DRAW_FRAME
-
-    void SetLibraryViewerWindow( LIB_VIEW_FRAME* aFrame ) { m_ViewlibFrame = aFrame; }
 
     void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
     const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME

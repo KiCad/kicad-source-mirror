@@ -42,8 +42,6 @@
 
 
 /* Forward declarations of classes. */
-class FOOTPRINT_EDIT_FRAME;
-class FOOTPRINT_VIEWER_FRAME;
 class BOARD;
 class BOARD_CONNECTED_ITEM;
 class MODULE;
@@ -79,8 +77,6 @@ public:
     int m_FastGrid2;
 
     EDA_3D_FRAME* m_Draw3DFrame;
-    FOOTPRINT_EDIT_FRAME* m_ModuleEditFrame;
-    FOOTPRINT_VIEWER_FRAME * m_ModuleViewerFrame;
 
 
 protected:
@@ -96,10 +92,10 @@ protected:
     virtual void unitsChangeRefresh();
 
 public:
-    PCB_BASE_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
-                    const wxString& title,
-                    const wxPoint& pos, const wxSize& size,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+                    const wxString& aTitle,
+                    const wxPoint& aPos, const wxSize& aSize,
+                    long aStyle, const wxString & aFrameName );
 
     ~PCB_BASE_FRAME();
 
@@ -457,16 +453,6 @@ public:
      * @return the selected footprint name
      */
     wxString SelectFootprintFromLibBrowser( void );
-
-    /**
-     * Function GetActiveViewerFrame
-     * @return a reference to the current Module Viewer Frame if exists
-     * if called from the PCB editor, this is the m_ModuleViewerFrame
-     * or m_ModuleEditFrame->m_ModuleViewerFrame
-     * if called from the module editor, this is the m_ModuleViewerFrame
-     * or parent->m_ModuleViewerFrame
-     */
-    FOOTPRINT_VIEWER_FRAME * GetActiveViewerFrame();
 
     //  ratsnest functions
     /**

@@ -43,7 +43,10 @@ enum hotkey_id_commnand {
     HK_ADD_HIER_SHEET,
     HK_ADD_GRAPHIC_TEXT,
     HK_ADD_GRAPHIC_POLYLINE,
-    HK_ADD_NOCONN_FLAG
+    HK_ADD_NOCONN_FLAG,
+    HK_SAVE_LIB,
+    HK_SAVE_SCH,
+    HK_LOAD_SCH
 };
 
 // List of hotkey descriptors for Eeschema

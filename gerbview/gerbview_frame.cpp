@@ -58,17 +58,18 @@ static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBloc
 /* class GERBVIEW_FRAME for GerbView */
 /*************************************/
 
-GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
-                                const wxString& title,
-                                const wxPoint&  pos,
-                                const wxSize&   size,
-                                long            style ) :
-    EDA_DRAW_FRAME( father, GERBER_FRAME_TYPE, title, pos, size, style )
+#define GERBVIEW_FRAME_NAME wxT( "GerberFrame" )
+
+GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
+                                const wxPoint& aPosition, const wxSize& aSize,
+                                long aStyle ) :
+    EDA_DRAW_FRAME( aParent, GERBER_FRAME_TYPE, aTitle, aPosition, aSize,
+                    aStyle, GERBVIEW_FRAME_NAME )
 {
     m_colorsSettings = &g_ColorsSettings;
     m_Layout = NULL;
 
-    m_FrameName = wxT( "GerberFrame" );
+    m_FrameName = GERBVIEW_FRAME_NAME;
     m_show_layer_manager_tools = true;
 
     m_showAxis = true;                      // true to show X and Y axis on screen
