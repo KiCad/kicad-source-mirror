@@ -69,6 +69,20 @@ public:
 
     ~FOOTPRINT_VIEWER_FRAME();
 
+    /**
+     * Function GetFootprintViewerFrameName (static)
+     * @return the frame name used when creating the frame
+     * used to get a reference to this frame, if exists
+     */
+    static const wxChar* GetFootprintViewerFrameName();
+
+    /**
+     * Function GetActiveFootprintViewer (static)
+     * @return a reference to the current opened Footprint viewer
+     * or NULL if no Footprint viewer currently opened
+     */
+    static FOOTPRINT_VIEWER_FRAME* GetActiveFootprintViewer();
+
     wxString& GetSelectedFootprint( void ) const { return m_selectedFootprintName; }
 
 private:

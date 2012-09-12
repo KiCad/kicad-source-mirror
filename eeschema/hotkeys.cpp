@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,6 +194,10 @@ static EDA_HOTKEY HkCreatePin( wxT( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' )
 static EDA_HOTKEY HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkMoveLibItem( wxT( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
+// Load/save files
+static EDA_HOTKEY HkSaveLib( wxT( "Save Lib" ), HK_SAVE_LIB, 'S' + GR_KB_CTRL );
+static EDA_HOTKEY HkSaveSchematic( wxT( "Save Schematic" ), HK_SAVE_SCH, 'S' + GR_KB_CTRL );
+static EDA_HOTKEY HkLoadSchematic( wxT( "Load Schematic" ), HK_LOAD_SCH, 'L' + GR_KB_CTRL );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* s_Common_Hotkey_List[] =
@@ -213,6 +217,8 @@ EDA_HOTKEY* s_Common_Hotkey_List[] =
 // List of hotkey descriptors for schematic
 EDA_HOTKEY* s_Schematic_Hotkey_List[] =
 {
+    &HkSaveSchematic,
+    &HkLoadSchematic,
     &HkFindItem,
     &HkFindNextItem,
     &HkFindNextDrcMarker,
@@ -250,6 +256,7 @@ EDA_HOTKEY* s_Schematic_Hotkey_List[] =
 // List of hotkey descriptors for library editor
 EDA_HOTKEY* s_LibEdit_Hotkey_List[] =
 {
+    &HkSaveLib,
     &HkCreatePin,
     &HkInsertPin,
     &HkEdit,

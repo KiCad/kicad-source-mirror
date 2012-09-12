@@ -107,15 +107,16 @@ static wxAcceleratorEntry accels[] =
 
 #define EXTRA_BORDER_SIZE 2
 
+#define FOOTPRINT_VIEWER_FRAME_NAME wxT( "ModViewFrame" )
 
 FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* parent,
                                                 wxSemaphore* semaphore, long style ) :
     PCB_BASE_FRAME( parent, MODULE_VIEWER_FRAME_TYPE, _( "Footprint Library Browser" ),
-                    wxDefaultPosition, wxDefaultSize, style )
+                    wxDefaultPosition, wxDefaultSize, style, GetFootprintViewerFrameName() )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
-    m_FrameName = wxT( "ModViewFrame" );
+    m_FrameName = GetFootprintViewerFrameName();
     m_configPath = wxT( "FootprintViewer" );
     m_showAxis = true;         // true to draw axis.
 
@@ -264,8 +265,23 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 {
     if( m_Draw3DFrame )
         m_Draw3DFrame->Destroy();
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
-    frame->m_ModuleViewerFrame = NULL;
+}
+
+/* return the frame name used when creating the frame
+ * used to get a reference to this frame, if exists
+ */
+const wxChar* FOOTPRINT_VIEWER_FRAME::GetFootprintViewerFrameName()
+{
+    return FOOTPRINT_VIEWER_FRAME_NAME;
+}
+
+/* return a reference to the current opened Footprint viewer
+ * or NULL if no Footprint viewer currently opened
+ */
+FOOTPRINT_VIEWER_FRAME* FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer()
+{
+    return (FOOTPRINT_VIEWER_FRAME*)
+            wxWindow::FindWindowByName(GetFootprintViewerFrameName());
 }
 
 
@@ -281,9 +297,7 @@ void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
         // to avoid side effects
     }
     else
-    {
         Destroy();
-    }
 }
 
 

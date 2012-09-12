@@ -304,14 +304,13 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase )
 {
-    BLOCK_SELECTOR*  block;
     BASE_SCREEN*     screen = aPanel->GetScreen();
-    BOARD_ITEM*      item;
-    wxPoint          move_offset;
-    MODULE*          currentModule =
-        ( (PCB_BASE_FRAME*) wxGetApp().GetTopWindow() )->m_ModuleEditFrame->GetBoard()->m_Modules;
+    FOOTPRINT_EDIT_FRAME * moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
 
-    block = &screen->m_BlockLocate;
+    wxASSERT( moduleEditFrame );
+    MODULE* currentModule = moduleEditFrame->GetBoard()->m_Modules;
+
+    BLOCK_SELECTOR* block = &screen->m_BlockLocate;
     GRSetDrawMode( aDC, g_XorMode );
 
     if( aErase )
@@ -320,9 +319,8 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
         if( currentModule )
         {
-            move_offset.x = -block->GetMoveVector().x;
-            move_offset.y = -block->GetMoveVector().y;
-            item = currentModule->m_Drawings;
+            wxPoint move_offset = -block->GetMoveVector();
+            BOARD_ITEM* item = currentModule->m_Drawings;
 
             for( ; item != NULL; item = item->Next() )
             {
@@ -360,8 +358,8 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
     if( currentModule )
     {
-        item = currentModule->m_Drawings;
-        move_offset = - block->GetMoveVector();
+        BOARD_ITEM* item = currentModule->m_Drawings;
+        wxPoint move_offset = - block->GetMoveVector();
 
         for( ; item != NULL; item = item->Next() )
         {

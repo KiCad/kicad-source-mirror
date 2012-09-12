@@ -178,15 +178,15 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
 END_EVENT_TABLE()
 
+#define SCH_EDIT_FRAME_NAME wxT( "SchematicFrame" )
 
-SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
-                                const wxString& title,
-                                const wxPoint&  pos,
-                                const wxSize&   size,
-                                long            style ) :
-    SCH_BASE_FRAME( father, SCHEMATIC_FRAME_TYPE, title, pos, size, style )
+SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
+                    const wxPoint& aPosition, const wxSize& aSize,
+                    long aStyle ) :
+    SCH_BASE_FRAME( aParent, SCHEMATIC_FRAME_TYPE, aTitle, aPosition, aSize,
+                    aStyle, SCH_EDIT_FRAME_NAME )
 {
-    m_FrameName = wxT( "SchematicFrame" );
+    m_FrameName = SCH_EDIT_FRAME_NAME;
     m_showAxis = false;                 // true to show axis
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_CurrentSheet = new SCH_SHEET_PATH();
@@ -414,10 +414,12 @@ void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem )
 
 void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
-    if( m_LibeditFrame && !m_LibeditFrame->Close() )   // Can close component editor?
+    LIB_EDIT_FRAME * libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
+    if( libeditFrame && !libeditFrame->Close() )   // Can close component editor?
         return;
 
-    if( m_ViewlibFrame && !m_ViewlibFrame->Close() )   // Can close component viewer?
+    LIB_VIEW_FRAME * viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer();;
+    if( viewlibFrame && !viewlibFrame->Close() )   // Can close component viewer?
         return;
 
     SCH_SHEET_LIST SheetList;
@@ -787,19 +789,20 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         component = (SCH_COMPONENT*) item;
     }
 
-    if( m_LibeditFrame )
+    LIB_EDIT_FRAME * libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
+    if( libeditFrame )
     {
-        if( m_LibeditFrame->IsIconized() )
-             m_LibeditFrame->Iconize( false );
+        if( libeditFrame->IsIconized() )
+             libeditFrame->Iconize( false );
 
-        m_LibeditFrame->Raise();
+        libeditFrame->Raise();
     }
     else
     {
-        m_LibeditFrame = new LIB_EDIT_FRAME( this,
-                                             wxT( "Library Editor" ),
-                                             wxPoint( -1, -1 ),
-                                             wxSize( 600, 400 ) );
+        libeditFrame = new LIB_EDIT_FRAME( this,
+                                           wxT( "Library Editor" ),
+                                           wxPoint( -1, -1 ),
+                                           wxSize( 600, 400 ) );
     }
 
     if( component )
@@ -810,7 +813,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
             return;
 
         CMP_LIBRARY* library = entry->GetLibrary();
-        m_LibeditFrame->LoadComponentAndSelectLib( entry, library );
+        libeditFrame->LoadComponentAndSelectLib( entry, library );
     }
 }
 
@@ -825,8 +828,9 @@ void SCH_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_BASE_FRAME::SetLanguage( event );
 
-    if( m_LibeditFrame )
-        m_LibeditFrame->EDA_BASE_FRAME::SetLanguage( event );
+    LIB_EDIT_FRAME * libeditFrame = LIB_EDIT_FRAME::GetActiveLibraryEditor();;
+    if( libeditFrame )
+        libeditFrame->EDA_BASE_FRAME::SetLanguage( event );
 }
 
 

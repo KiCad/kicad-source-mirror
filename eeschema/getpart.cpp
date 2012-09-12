@@ -54,14 +54,12 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
     wxSemaphore semaphore( 0, 1 );
     wxString cmpname;
 
-    /* Close the current Lib browser, if open, and open a new one, in "modal" mode */
-    if( m_ViewlibFrame )
-    {
-        delete m_ViewlibFrame;
-        m_ViewlibFrame = NULL;
-    }
+    // Close the current Lib browser, if open, and open a new one, in "modal" mode:
+    LIB_VIEW_FRAME * viewlibFrame = LIB_VIEW_FRAME::GetActiveLibraryViewer();;
+    if( viewlibFrame )
+        viewlibFrame->Destroy();
 
-    m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore,
+    viewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore,
                         KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT );
     // Show the library viewer frame until it is closed
     // Wait for viewer closing event:
@@ -71,8 +69,8 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( void )
         wxMilliSleep( 50 );
     }
 
-    cmpname = m_ViewlibFrame->GetSelectedComponent();
-    delete m_ViewlibFrame;
+    cmpname = viewlibFrame->GetSelectedComponent();
+    viewlibFrame->Destroy();
 
     return cmpname;
 }
@@ -133,9 +131,9 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
     {
         cmpName = SelectComponentFromLibBrowser();
         if( aUnit )
-            *aUnit = m_ViewlibFrame->GetUnit();
+            *aUnit = LIB_VIEW_FRAME::GetUnit();
         if( aConvert )
-            *aConvert = m_ViewlibFrame->GetConvert();
+            *aConvert = LIB_VIEW_FRAME::GetConvert();
         if( !cmpName.IsEmpty() )
             AddHistoryComponentName( aHistoryList, cmpName );
         return cmpName;

@@ -34,7 +34,7 @@
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
-#include <protos.h>
+//#include <protos.h>
 #include <viewlib_frame.h>
 #include <class_library.h>
 #include <hotkeys.h>
@@ -97,16 +97,16 @@ static wxAcceleratorEntry accels[] =
 #define ACCEL_TABLE_CNT ( sizeof( accels ) / sizeof( wxAcceleratorEntry ) )
 
 #define EXTRA_BORDER_SIZE 2
-
+#define LIB_VIEW_FRAME_NAME wxT( "ViewlibFrame" )
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library,
                                 wxSemaphore* semaphore, long style ) :
     SCH_BASE_FRAME( father, VIEWER_FRAME_TYPE, _( "Library Browser" ),
-                    wxDefaultPosition, wxDefaultSize, style )
+                    wxDefaultPosition, wxDefaultSize, style, GetLibViewerFrameName() )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
-    m_FrameName = wxT( "ViewlibFrame" );
+    m_FrameName = GetLibViewerFrameName();
     m_configPath = wxT( "LibraryViewer" );
 
     // Give an icon
@@ -258,10 +258,20 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library,
 
 LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
-    SCH_BASE_FRAME* frame = (SCH_BASE_FRAME*) GetParent();
-    frame->SetLibraryViewerWindow( NULL );
 }
 
+const wxChar* LIB_VIEW_FRAME::GetLibViewerFrameName()
+{
+    return LIB_VIEW_FRAME_NAME;
+}
+
+/* return a reference to the current opened Library viewer
+ * or NULL if no Library viewer currently opened
+ */
+LIB_VIEW_FRAME* LIB_VIEW_FRAME::GetActiveLibraryViewer()
+{
+    return (LIB_VIEW_FRAME*) wxWindow::FindWindowByName(GetLibViewerFrameName());
+}
 
 void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {

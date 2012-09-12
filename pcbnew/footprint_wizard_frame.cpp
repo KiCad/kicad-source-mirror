@@ -105,17 +105,19 @@ static wxAcceleratorEntry accels[] =
 
 /* Function FOOTPRINT_WIZARD_FRAME
  * it's the constructor for the footprint wizard frame, it creates everything inside
- *
  */
+
+#define FOOTPRINT_WIZARD_FRAME_NAME wxT( "FootprintWizard" )
+
 FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
                                                 wxSemaphore* semaphore, long style ) :
     PCB_BASE_FRAME( parent, FOOTPRINT_WIZARD_FRAME_TYPE,
                     _( "Footprint Wizard" ),
-                    wxDefaultPosition, wxDefaultSize, style )
+                    wxDefaultPosition, wxDefaultSize, style, FOOTPRINT_WIZARD_FRAME_NAME )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
-    m_FrameName = wxT( "FootprintWizard" );
+    m_FrameName = FOOTPRINT_WIZARD_FRAME_NAME;
     m_configPath = wxT( "FootprintWizard" );
     m_showAxis = true;         // true to draw axis.
 

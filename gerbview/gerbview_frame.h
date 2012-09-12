@@ -190,9 +190,9 @@ private:
     // An array sting to store warning messages when reaging a gerber file.
     wxArrayString   m_Messages;
 public:
-    GERBVIEW_FRAME( wxWindow* father, const wxString& title,
-                    const wxPoint& pos, const wxSize& size,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    GERBVIEW_FRAME( wxWindow* aParent, const wxString& aTitle,
+                    const wxPoint& aPosition, const wxSize& aSize,
+                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~GERBVIEW_FRAME();
 

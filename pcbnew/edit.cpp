@@ -189,40 +189,42 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_OPEN_MODULE_EDITOR:
-        if( m_ModuleEditFrame == NULL )
         {
-            m_ModuleEditFrame = new FOOTPRINT_EDIT_FRAME( this,
-                                                          _( "Module Editor" ),
-                                                          wxPoint( -1, -1 ),
-                                                          wxSize( 600, 400 ) );
-            m_ModuleEditFrame->Show( true );
-            m_ModuleEditFrame->Zoom_Automatique( false );
+        FOOTPRINT_EDIT_FRAME * editorFrame =
+                FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+        if( editorFrame == NULL )
+        {
+            editorFrame = new FOOTPRINT_EDIT_FRAME( this );
+            editorFrame->Show( true );
+            editorFrame->Zoom_Automatique( false );
         }
         else
         {
-            if( m_ModuleEditFrame->IsIconized() )
-                 m_ModuleEditFrame->Iconize( false );
+            if( editorFrame->IsIconized() )
+                 editorFrame->Iconize( false );
 
-            m_ModuleEditFrame->Raise();
+            editorFrame->Raise();
 
             // Raising the window does not set the focus on Linux.  This should work on
             // any platform.
-            if( wxWindow::FindFocus() != m_ModuleEditFrame )
-                m_ModuleEditFrame->SetFocus();
+            if( wxWindow::FindFocus() != editorFrame )
+                editorFrame->SetFocus();
         }
-
+        }
         break;
 
     case ID_OPEN_MODULE_VIEWER:
-        if( GetActiveViewerFrame() == NULL )
         {
-            m_ModuleViewerFrame = new FOOTPRINT_VIEWER_FRAME( this, NULL );
-            m_ModuleViewerFrame->Show( true );
-            m_ModuleViewerFrame->Zoom_Automatique( false );
+        FOOTPRINT_VIEWER_FRAME * viewer =
+                FOOTPRINT_VIEWER_FRAME::GetActiveFootprintViewer();
+        if( viewer == NULL )
+        {
+            viewer = new FOOTPRINT_VIEWER_FRAME( this, NULL );
+            viewer->Show( true );
+            viewer->Zoom_Automatique( false );
         }
         else
         {
-            FOOTPRINT_VIEWER_FRAME * viewer = GetActiveViewerFrame();
             if( viewer->IsIconized() )
                  viewer->Iconize( false );
 
@@ -232,6 +234,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // any platform.
             if( wxWindow::FindFocus() != viewer )
                 viewer->SetFocus();
+        }
         }
         break;
 

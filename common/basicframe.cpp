@@ -55,16 +55,16 @@ const wxChar* traceAutoSave = wxT( "KicadAutoSave" );
 static const wxChar* entryAutoSaveInterval = wxT( "AutoSaveInterval" );
 
 
-EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
-                                ID_DRAWFRAME_TYPE idtype,
-                                const wxString& title,
-                                const wxPoint& pos, const wxSize& size,
-                                long style ) :
-    wxFrame( father, wxID_ANY, title, pos, size, style )
+EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent,
+                                ID_DRAWFRAME_TYPE aFrameType,
+                                const wxString& aTitle,
+                                const wxPoint& aPos, const wxSize& aSize,
+                                long aStyle, const wxString & aFrameName ) :
+    wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     wxSize minsize;
 
-    m_Ident = idtype;
+    m_Ident = aFrameType;
     m_mainToolBar = NULL;
     m_FrameIsActive = true;
     m_hasAutoSave = false;
@@ -79,7 +79,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
 
     SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
 
-    if( ( size.x < minsize.x ) || ( size.y < minsize.y ) )
+    if( ( aSize.x < minsize.x ) || ( aSize.y < minsize.y ) )
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Create child subwindows.

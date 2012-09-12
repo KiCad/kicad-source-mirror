@@ -264,13 +264,15 @@ END_EVENT_TABLE()
 
 ///////****************************///////////:
 
+#define PCB_EDIT_FRAME_NAME wxT( "PcbFrame" )
 
 PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
                                 const wxPoint& pos, const wxSize& size,
                                 long style ) :
-    PCB_BASE_FRAME( parent, PCB_FRAME_TYPE, title, pos, size, style )
+    PCB_BASE_FRAME( parent, PCB_FRAME_TYPE, title, pos, size,
+                    style, PCB_EDIT_FRAME_NAME )
 {
-    m_FrameName = wxT( "PcbFrame" );
+    m_FrameName = PCB_EDIT_FRAME_NAME;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
     m_showAxis = false;                 // true to display X and Y axis
     m_showOriginAxis = true;
@@ -719,8 +721,9 @@ void PCB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
     m_auimgr.Update();
     ReFillLayerWidget();
 
-    if( m_ModuleEditFrame )
-        m_ModuleEditFrame->EDA_DRAW_FRAME::SetLanguage( event );
+    FOOTPRINT_EDIT_FRAME * moduleEditFrame = FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+    if( moduleEditFrame )
+        moduleEditFrame->EDA_DRAW_FRAME::SetLanguage( event );
 }
 
 

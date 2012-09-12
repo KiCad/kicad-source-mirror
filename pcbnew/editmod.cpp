@@ -39,19 +39,16 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 
     if( retvalue == 2 )
     {
-        if( m_ModuleEditFrame == NULL )
-        {
-            m_ModuleEditFrame = new FOOTPRINT_EDIT_FRAME( this,
-                                                          _( "Module Editor" ),
-                                                          wxPoint( -1, -1 ),
-                                                          wxSize( 600, 400 ) );
-        }
+        FOOTPRINT_EDIT_FRAME * editorFrame =
+                FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+        if( editorFrame == NULL )
+            editorFrame = new FOOTPRINT_EDIT_FRAME( this );
 
-        m_ModuleEditFrame->Load_Module_From_BOARD( Module );
+        editorFrame->Load_Module_From_BOARD( Module );
         SetCurItem( NULL );
 
-        m_ModuleEditFrame->Show( true );
-        m_ModuleEditFrame->Iconize( false );
+        editorFrame->Show( true );
+        editorFrame->Iconize( false );
     }
 }
 

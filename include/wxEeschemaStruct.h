@@ -189,18 +189,15 @@ protected:
     void addCurrentItemToList( wxDC* aDC );
 
 public:
-    SCH_EDIT_FRAME( wxWindow* father,
-                    const wxString& title,
-                    const wxPoint& pos, const wxSize& size,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
+                    const wxPoint& aPosition, const wxSize& aSize,
+                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~SCH_EDIT_FRAME();
 
     SCH_SCREEN* GetScreen() const;                  // overload SCH_BASE_FRAME
 
     void OnCloseWindow( wxCloseEvent& Event );
-
-    void SetLibraryEditorWindow( LIB_EDIT_FRAME* aFrame ) { m_LibeditFrame = aFrame; }
 
     bool GetShowAllPins() const { return m_showAllPins; }
 

@@ -50,7 +50,6 @@
 #include <dialogs/dialog_edit_component_in_lib.h>
 #include <dialogs/dialog_libedit_dimensions.h>
 
-//#include <dialog_helpers.h>
 #include <menus_helpers.h>
 
 #include <boost/foreach.hpp>
@@ -185,17 +184,19 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
 END_EVENT_TABLE()
 
+#define LIB_EDIT_FRAME_NAME wxT( "LibeditFrame" )
 
 LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
                                 const wxString& title,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    SCH_BASE_FRAME( aParent, LIBEDITOR_FRAME_TYPE, title, pos, size, style )
+    SCH_BASE_FRAME( aParent, LIBEDITOR_FRAME_TYPE, title, pos, size,
+                    style, GetLibEditFrameName() )
 {
     wxASSERT( aParent );
 
-    m_FrameName  = wxT( "LibeditFrame" );
+    m_FrameName  = GetLibEditFrameName();
     m_showAxis   = true;            // true to draw axis
     m_configPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );
@@ -276,9 +277,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
 LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 {
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
-
-    frame->SetLibraryEditorWindow( NULL );
     m_drawItem = m_lastDrawItem = NULL;
 
     if ( m_tempCopyComponent )
@@ -287,6 +285,23 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     m_tempCopyComponent = NULL;
 }
 
+/**
+ * Function GetLibEditFrameName (static)
+ * @return the frame name used when creating the frame
+ * used to get a reference to this frame, if exists
+ */
+const wxChar* LIB_EDIT_FRAME::GetLibEditFrameName()
+{
+    return LIB_EDIT_FRAME_NAME;
+}
+
+/* return a reference to the current opened Library editor
+ * or NULL if no Library editor currently opened
+ */
+LIB_EDIT_FRAME* LIB_EDIT_FRAME::GetActiveLibraryEditor()
+{
+    return (LIB_EDIT_FRAME*) wxWindow::FindWindowByName(GetLibEditFrameName());
+}
 
 void LIB_EDIT_FRAME::LoadSettings()
 {

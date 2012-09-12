@@ -67,6 +67,7 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
                    DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode )
 END_EVENT_TABLE()
 
+#define DISPLAY_FOOTPRINTS_FRAME_NAME wxT( "CmpFrame" )
 
 /***************************************************************************/
 /* DISPLAY_FOOTPRINTS_FRAME: the frame to display the current focused footprint */
@@ -76,9 +77,10 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* parent,
                                                     const wxString& title,
                                                     const wxPoint& pos,
                                                     const wxSize& size, long style ) :
-    PCB_BASE_FRAME( parent, CVPCB_DISPLAY_FRAME_TYPE, title, pos, size, style )
+    PCB_BASE_FRAME( parent, CVPCB_DISPLAY_FRAME_TYPE, title, pos, size,
+                    style, DISPLAY_FOOTPRINTS_FRAME_NAME )
 {
-    m_FrameName = wxT( "CmpFrame" );
+    m_FrameName = DISPLAY_FOOTPRINTS_FRAME_NAME;
     m_showAxis = true;         // true to draw axis.
 
     // Give an icon

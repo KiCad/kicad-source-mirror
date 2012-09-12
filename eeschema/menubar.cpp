@@ -70,14 +70,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // New
     AddMenuItem( fileMenu,
                  ID_NEW_PROJECT,
-                 _( "&New\tCtrl+N" ),
+                 _( "&New" ),
                  _( "New schematic project" ),
                  KiBitmap( new_xpm ) );
 
     // Open
+    text = AddHotkeyName( _( "&Open" ), s_Schematic_Hokeys_Descr, HK_LOAD_SCH );
     AddMenuItem( fileMenu,
-                 ID_LOAD_PROJECT,
-                 _( "&Open\tCtrl+O" ),
+                 ID_LOAD_PROJECT, text,
                  _( "Open an existing schematic project" ),
                  KiBitmap( open_document_xpm ) );
 
@@ -101,9 +101,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
 
     // Save schematic project
+    text = AddHotkeyName( _( "&Save Whole Schematic Project" ),
+                          s_Schematic_Hokeys_Descr, HK_SAVE_SCH );
     AddMenuItem( fileMenu,
-                 ID_SAVE_PROJECT,
-                 _( "&Save Whole Schematic Project\tCtrl+S" ),
+                 ID_SAVE_PROJECT, text,
                  _( "Save all sheets in the schematic project" ),
                  KiBitmap( save_project_xpm ) );
 

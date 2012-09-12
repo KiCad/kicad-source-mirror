@@ -55,6 +55,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         delete menuBar->Remove( 0 );
 
     // Recreate all menus:
+    wxString text;
 
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
@@ -99,8 +100,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
 
     // Save module
-    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE,
-                 _( "&Save Module in Active Library" ),
+    text = AddHotkeyName( _( "&Save Module in Active Library" ),
+                          s_Libedit_Hokeys_Descr, HK_SAVE_LIB );
+    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
                  _( "Save module in active library" ),
                  KiBitmap( save_library_xpm ) );
 
@@ -136,13 +138,15 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     // Undo
+    text = AddHotkeyName( _( "&Undo" ), s_Libedit_Hokeys_Descr, HK_UNDO );
     AddMenuItem( editMenu, wxID_UNDO,
-                 _( "&Undo" ), _( "Undo last edit" ),
+                 text, _( "Undo last edit" ),
                  KiBitmap( undo_xpm ) );
 
     // Redo
+    text = AddHotkeyName( _( "&Redo" ), s_Libedit_Hokeys_Descr, HK_REDO );
     AddMenuItem( editMenu, wxID_REDO,
-                 _( "&Redo" ), _( "Redo the last undo action" ),
+                 text, _( "Redo the last undo action" ),
                  KiBitmap( redo_xpm ) );
 
     // Delete items

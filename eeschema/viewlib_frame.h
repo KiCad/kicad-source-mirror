@@ -79,13 +79,26 @@ public:
 
     ~LIB_VIEW_FRAME();
 
+    /**
+     * Function GetLibViewerFrameName (static)
+     * @return the frame name used when creating the frame
+     * used to get a reference to this frame, if exists
+     */
+    static const wxChar* GetLibViewerFrameName();
+
+    /**
+     * Function GetActiveLibraryViewer (static)
+     * @return a reference to the current opened Library viewer
+     * or NULL if no Library viewer currently opened
+     */
+    static LIB_VIEW_FRAME* GetActiveLibraryViewer();
+
     void OnSize( wxSizeEvent& event );
 
     /**
      * Function OnSashDrag
      * resizes the child windows when dragging a sash window border.
      */
-
     void OnSashDrag( wxSashEvent& event );
 
     /**
@@ -132,8 +145,8 @@ public:
     wxString& GetEntryName( void ) const { return m_entryName; }
     wxString& GetSelectedComponent( void ) const { return m_exportToEeschemaCmpName; }
 
-    int  GetUnit( void ) { return m_unit; }
-    int  GetConvert( void ) { return m_convert; }
+    static int  GetUnit( void ) { return m_unit; }
+    static int  GetConvert( void ) { return m_convert; }
 
 private:
     /**

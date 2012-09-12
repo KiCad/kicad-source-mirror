@@ -103,10 +103,13 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
 END_EVENT_TABLE()
 
 
+#define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
+
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
-    EDA_BASE_FRAME( NULL, CVPCB_FRAME_TYPE, title, wxDefaultPosition, wxDefaultSize, style )
+    EDA_BASE_FRAME( NULL, CVPCB_FRAME_TYPE, title, wxDefaultPosition,
+                    wxDefaultSize, style, CVPCB_MAINFRAME_NAME )
 {
-    m_FrameName = wxT( "CvpcbFrame" );
+    m_FrameName = CVPCB_MAINFRAME_NAME;
 
     m_ListCmp = NULL;
     m_FootprintList = NULL;

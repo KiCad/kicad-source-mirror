@@ -160,10 +160,11 @@ protected:
     virtual bool doAutoSave();
 
 public:
-    EDA_BASE_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
-                    const wxString& title,
-                    const wxPoint& pos, const wxSize& size,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    EDA_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
+                    const wxString& aTitle,
+                    const wxPoint& aPos, const wxSize& aSize,
+                    long aStyle,
+                    const wxString & aFrameName );
 
     ~EDA_BASE_FRAME();
 
@@ -450,10 +451,12 @@ protected:
     virtual void unitsChangeRefresh();
 
 public:
-    EDA_DRAW_FRAME( wxWindow* father, ID_DRAWFRAME_TYPE idtype,
-                    const wxString& title,
-                    const wxPoint& pos, const wxSize& size,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    EDA_DRAW_FRAME( wxWindow* aParent,
+                    ID_DRAWFRAME_TYPE aFrameType,
+                    const wxString& aTitle,
+                    const wxPoint& aPos, const wxSize& aSize,
+                    long aStyle,
+                    const wxString & aFrameName );
 
     ~EDA_DRAW_FRAME();
 

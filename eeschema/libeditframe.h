@@ -128,6 +128,20 @@ public:
 
     ~LIB_EDIT_FRAME();
 
+    /**
+     * Function GetLibEditFrameName (static)
+     * @return the frame name used when creating the frame
+     * used to get a reference to this frame, if exists
+     */
+    static const wxChar* GetLibEditFrameName();
+
+    /**
+     * Function GetActiveLibraryEditor (static)
+     * @return a reference to the current opened Library editor
+     * or NULL if no Library editor currently opened
+     */
+    static LIB_EDIT_FRAME* GetActiveLibraryEditor();
+
     void ReCreateMenuBar();
 
     /**
