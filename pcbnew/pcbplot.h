@@ -61,28 +61,46 @@ PLOTTER *StartPlotBoard( BOARD *aBoard,
                          const wxString& aFullFileName,
                          const wxString& aSheetDesc );
 
+/**
+ * Function PlotBoardLayer
+ * main function to plot copper or technical layers.
+ * It calls the specilize plot function, according to the layer type
+ * @param aBoard = the board to plot
+ * @param aPlotter = the plotter to use
+ * @param aLayer = the layer id to plot
+ * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
+ */
 void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
-                     const PCB_PLOT_PARAMS& plot_opts );
+                     const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
-    * Function Plot_Standard_Layer
-    * plot copper or technical layers.
-    * not used for silk screen layers, because these layers have specific
-    * requirements, mainly for pads
-    * @param aPlotter = the plotter to use
-    * @param aLayerMask = the mask to define the layers to plot
-    * @param aPlotVia = true to plot vias, false to skip vias (has meaning
-    *                  only for solder mask layers).
-    * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
-    * @param aSkipNPTH_Pads = true to skip NPTH Pads, when the pad size and the pad hole
-    *                      have the same size. Used in GERBER format only.
-    */
+ * Function Plot_Standard_Layer
+ * plot copper or technical layers.
+ * not used for silk screen layers, because these layers have specific
+ * requirements, mainly for pads
+ * @param aBoard = the board to plot
+ * @param aPlotter = the plotter to use
+ * @param aLayerMask = the mask to define the layers to plot
+ * @param aPlotVia = true to plot vias, false to skip vias (has meaning
+ *                  only for solder mask layers).
+ * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
+ * @param aSkipNPTH_Pads = true to skip NPTH Pads, when the pad size and the pad hole
+ *                      have the same size. Used in GERBER format only.
+ */
 void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
                         const PCB_PLOT_PARAMS& aPlotOpt,
                         bool aPlotVia, bool aSkipNPTH_Pads );
 
+/**
+ * Function PlotSilkScreen
+ * plot silkscreen layers which have specific requirements, mainly for pads.
+ * Should not be used for other layers
+ * @param aBoard = the board to plot
+ * @param aPlotter = the plotter to use
+ * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
+ */
 void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
-                     const PCB_PLOT_PARAMS&  plot_opts );
+                     const PCB_PLOT_PARAMS&  aPlotOpt );
 
 /**
     * Function PlotDrillMarks
@@ -90,6 +108,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     * Must be called after all drawings, because it
     * redraw the drill mark on a pad or via, as a negative (i.e. white) shape
     * in FILLED plot mode
+    * @param aBoard = the board to plot
     * @param aPlotter = the PLOTTER
     * @param aPlotOpts = plot options
     */

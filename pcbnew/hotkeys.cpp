@@ -53,6 +53,7 @@ static EDA_HOTKEY HkSwitch2NextCopperLayer( wxT( "Switch to Next Layer" ),
 static EDA_HOTKEY HkSwitch2PreviousCopperLayer( wxT( "Switch to Previous Layer" ),
                                                 HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
+static EDA_HOTKEY HkSaveModule( wxT( "Save Module" ), HK_SAVE_MODULE, 'S' + GR_KB_CTRL );
 static EDA_HOTKEY HkSavefile( wxT( "Save board" ), HK_SAVE_BOARD, 'S' + GR_KB_CTRL );
 static EDA_HOTKEY HkLoadfile( wxT( "Load board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
 static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
@@ -234,6 +235,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkMoveItem,               &HkRotateItem,                &HkEditBoardItem,
     &HkDelete,
+    &HkSaveModule,
     NULL
  };
 
