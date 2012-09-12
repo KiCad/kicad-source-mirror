@@ -35,8 +35,8 @@
 #include <module_editor_frame.h>
 #include <menus_helpers.h>
 
-#include <protos.h>
 #include <pcbnew_id.h>
+#include <hotkeys.h>
 
 
 void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
@@ -101,7 +101,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save module
     text = AddHotkeyName( _( "&Save Module in Active Library" ),
-                          s_Libedit_Hokeys_Descr, HK_SAVE_LIB );
+                          g_Module_Editor_Hokeys_Descr, HK_SAVE_MODULE );
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
                  _( "Save module in active library" ),
                  KiBitmap( save_library_xpm ) );
@@ -138,13 +138,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     // Undo
-    text = AddHotkeyName( _( "&Undo" ), s_Libedit_Hokeys_Descr, HK_UNDO );
+    text = AddHotkeyName( _( "&Undo" ), g_Module_Editor_Hokeys_Descr, HK_UNDO );
     AddMenuItem( editMenu, wxID_UNDO,
                  text, _( "Undo last edit" ),
                  KiBitmap( undo_xpm ) );
 
     // Redo
-    text = AddHotkeyName( _( "&Redo" ), s_Libedit_Hokeys_Descr, HK_REDO );
+    text = AddHotkeyName( _( "&Redo" ), g_Module_Editor_Hokeys_Descr, HK_REDO );
     AddMenuItem( editMenu, wxID_REDO,
                  text, _( "Redo the last undo action" ),
                  KiBitmap( redo_xpm ) );

@@ -59,8 +59,8 @@ void    Draw3D_SolidHorizontalPolygonWithHoles( const std::vector<CPolyPt>& aPol
                                                 int aZpos, int aThickness, double aBiuTo3DUnits );
 
 /** draw a thick segment using 3D primitives, in a XY plane
- * @param wxPoint aStart = YX position of start point in board units
- * @param  wxPoint aEnd = YX position of end point in board units
+ * @param aStart = YX position of start point in board units
+ * @param aEnd = YX position of end point in board units
  * @param aWidth = width of segment in board units
  * @param aThickness = thickness of segment in board units
  * @param aZpos = z position of segment in board units
@@ -91,7 +91,7 @@ void Draw3D_ArcSegment( const wxPoint&  aCenterPos, const wxPoint& aStartPoint,
 
 /** draw a thick cylinder (a tube) using 3D primitives.
  * the cylinder axis is parallel to the Z axis
- * @param aCentPos = XY position of the axis cylinder ( board internal units)
+ * @param aCenterPos = XY position of the axis cylinder ( board internal units)
  * @param aRadius = radius of the cylinder ( board internal units)
  * @param aHeight = height of the cylinder ( boardinternal units)
  * @param aThickness = tichkness of tube ( boardinternal units)

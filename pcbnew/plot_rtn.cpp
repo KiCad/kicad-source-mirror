@@ -37,11 +37,11 @@ static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte,
 /* Creates the plot for silkscreen layers
  */
 void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
-                     const PCB_PLOT_PARAMS&  plot_opts )
+                     const PCB_PLOT_PARAMS&  aPlotOpt )
 {
     TEXTE_MODULE* pt_texte;
 
-    EDA_DRAW_MODE_T trace_mode = plot_opts.GetMode();
+    EDA_DRAW_MODE_T trace_mode = aPlotOpt.GetMode();
 
     // Plot edge layer and graphic items
 
@@ -50,19 +50,19 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
         switch( item->Type() )
         {
         case PCB_LINE_T:
-            PlotDrawSegment( aPlotter, plot_opts, (DRAWSEGMENT*) item, aLayerMask, trace_mode );
+            PlotDrawSegment( aPlotter, aPlotOpt, (DRAWSEGMENT*) item, aLayerMask, trace_mode );
             break;
 
         case PCB_TEXT_T:
-            PlotTextePcb( aPlotter, plot_opts, (TEXTE_PCB*) item, aLayerMask, trace_mode );
+            PlotTextePcb( aPlotter, aPlotOpt, (TEXTE_PCB*) item, aLayerMask, trace_mode );
             break;
 
         case PCB_DIMENSION_T:
-            PlotDimension( aPlotter, plot_opts, (DIMENSION*) item, aLayerMask, trace_mode );
+            PlotDimension( aPlotter, aPlotOpt, (DIMENSION*) item, aLayerMask, trace_mode );
             break;
 
         case PCB_TARGET_T:
-            PlotPcbTarget( aPlotter, plot_opts, (PCB_TARGET*) item, aLayerMask, trace_mode );
+            PlotPcbTarget( aPlotter, aPlotOpt, (PCB_TARGET*) item, aLayerMask, trace_mode );
             break;
 
         case PCB_MARKER_T:
@@ -75,13 +75,13 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     }
 
     // Plot footprint outlines :
-    Plot_Edges_Modules( aPlotter, plot_opts, aBoard, aLayerMask, trace_mode );
+    Plot_Edges_Modules( aPlotter, aPlotOpt, aBoard, aLayerMask, trace_mode );
 
     // Plot pads (creates pads outlines, for pads on silkscreen layers)
     int layersmask_plotpads = aLayerMask;
     // Calculate the mask layers of allowed layers for pads
 
-    if( !plot_opts.GetPlotPadsOnSilkLayer() )       // Do not plot pads on silk screen layers
+    if( !aPlotOpt.GetPlotPadsOnSilkLayer() )       // Do not plot pads on silk screen layers
         layersmask_plotpads &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT );
 
     if( layersmask_plotpads )
@@ -130,8 +130,8 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
         // see if we want to plot VALUE and REF fields
-        bool trace_val = plot_opts.GetPlotValue();
-        bool trace_ref = plot_opts.GetPlotReference();
+        bool trace_val = aPlotOpt.GetPlotValue();
+        bool trace_ref = aPlotOpt.GetPlotReference();
 
         TEXTE_MODULE* text = module->m_Reference;
         unsigned      textLayer = text->GetLayer();
@@ -150,7 +150,7 @@ module\n %s's \"reference\" text." ),
         if( ( ( 1 << textLayer ) & aLayerMask ) == 0 )
             trace_ref = false;
 
-        if( !text->IsVisible() && !plot_opts.GetPlotInvisibleText() )
+        if( !text->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
             trace_ref = false;
 
         text = module->m_Value;
@@ -170,17 +170,17 @@ module\n %s's \"value\" text." ),
         if( ( (1 << textLayer) & aLayerMask ) == 0 )
             trace_val = false;
 
-        if( !text->IsVisible() && !plot_opts.GetPlotInvisibleText() )
+        if( !text->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
             trace_val = false;
 
         // Plot text fields, if allowed
         if( trace_ref )
             PlotTextModule( aPlotter, module->m_Reference,
-                            trace_mode, plot_opts.GetReferenceColor() );
+                            trace_mode, aPlotOpt.GetReferenceColor() );
 
         if( trace_val )
             PlotTextModule( aPlotter, module->m_Value,
-                            trace_mode, plot_opts.GetValueColor() );
+                            trace_mode, aPlotOpt.GetValueColor() );
 
         for( pt_texte = (TEXTE_MODULE*) module->m_Drawings.GetFirst();
              pt_texte != NULL;
@@ -189,10 +189,10 @@ module\n %s's \"value\" text." ),
             if( pt_texte->Type() != PCB_MODULE_TEXT_T )
                 continue;
 
-            if( !plot_opts.GetPlotOtherText() )
+            if( !aPlotOpt.GetPlotOtherText() )
                 continue;
 
-            if( !pt_texte->IsVisible() && !plot_opts.GetPlotInvisibleText() )
+            if( !pt_texte->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
                 continue;
 
             textLayer = pt_texte->GetLayer();
@@ -213,7 +213,7 @@ for module\n %s's \"module text\" text of %s." ),
                 continue;
 
             PlotTextModule( aPlotter, pt_texte,
-                            trace_mode, plot_opts.GetColor() );
+                            trace_mode, aPlotOpt.GetColor() );
         }
     }
 
@@ -225,7 +225,7 @@ for module\n %s's \"module text\" text of %s." ),
         if( ( ( 1 << edge_zone->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
-        PlotFilledAreas( aPlotter, plot_opts, edge_zone, trace_mode );
+        PlotFilledAreas( aPlotter, aPlotOpt, edge_zone, trace_mode );
     }
 
     // Plot segments used to fill zone areas (outdated, but here for old boards
@@ -662,17 +662,17 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
 
 void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
-                     const PCB_PLOT_PARAMS& plot_opts )
+                     const PCB_PLOT_PARAMS& aPlotOpt )
 {
     // Set the color and the text mode for this layer
-    aPlotter->SetColor( plot_opts.GetColor() );
-    aPlotter->SetTextMode( plot_opts.GetTextMode() );
+    aPlotter->SetColor( aPlotOpt.GetColor() );
+    aPlotter->SetTextMode( aPlotOpt.GetTextMode() );
 
     // Specify that the contents of the "Edges Pcb" layer are to be plotted
     // in addition to the contents of the currently specified layer.
     int layer_mask = GetLayerMask( Layer );
 
-    if( !plot_opts.GetExcludeEdgeLayer() )
+    if( !aPlotOpt.GetExcludeEdgeLayer() )
         layer_mask |= EDGE_LAYER;
 
     switch( Layer )
@@ -694,33 +694,33 @@ void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
     case LAYER_N_15:
     case LAST_COPPER_LAYER:
         // Skip NPTH pads on copper layers ( only if hole size == pad size ):
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, plot_opts, true, true );
+        PlotStandardLayer( aBoard, aPlotter, layer_mask, aPlotOpt, true, true );
 
         // Adding drill marks, if required and if the plotter is able to plot them:
-        if( plot_opts.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
-            PlotDrillMarks( aBoard, aPlotter, plot_opts );
+        if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
+            PlotDrillMarks( aBoard, aPlotter, aPlotOpt );
 
         break;
 
     case SOLDERMASK_N_BACK:
     case SOLDERMASK_N_FRONT:
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, plot_opts,
-                           plot_opts.GetPlotViaOnMaskLayer(), false );
+        PlotStandardLayer( aBoard, aPlotter, layer_mask, aPlotOpt,
+                           aPlotOpt.GetPlotViaOnMaskLayer(), false );
         break;
 
     case SOLDERPASTE_N_BACK:
     case SOLDERPASTE_N_FRONT:
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, plot_opts,
+        PlotStandardLayer( aBoard, aPlotter, layer_mask, aPlotOpt,
                            false, false );
         break;
 
     case SILKSCREEN_N_FRONT:
     case SILKSCREEN_N_BACK:
-        PlotSilkScreen( aBoard, aPlotter, layer_mask, plot_opts );
+        PlotSilkScreen( aBoard, aPlotter, layer_mask, aPlotOpt );
 
         // Gerber: Subtract soldermask from silkscreen if enabled
         if( aPlotter->GetPlotterType() == PLOT_FORMAT_GERBER
-            && plot_opts.GetSubtractMaskFromSilk() )
+            && aPlotOpt.GetSubtractMaskFromSilk() )
         {
             if( Layer == SILKSCREEN_N_FRONT )
                 layer_mask = GetLayerMask( SOLDERMASK_N_FRONT );
@@ -729,13 +729,13 @@ void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int Layer,
 
             // Set layer polarity to negative
             aPlotter->SetLayerPolarity( false );
-            PlotStandardLayer( aBoard, aPlotter, layer_mask, plot_opts,
-                               plot_opts.GetPlotViaOnMaskLayer(), false );
+            PlotStandardLayer( aBoard, aPlotter, layer_mask, aPlotOpt,
+                               aPlotOpt.GetPlotViaOnMaskLayer(), false );
         }
         break;
 
     default:
-        PlotSilkScreen( aBoard, aPlotter, layer_mask, plot_opts );
+        PlotSilkScreen( aBoard, aPlotter, layer_mask, aPlotOpt );
         break;
     }
 }
@@ -1002,15 +1002,11 @@ static void PlotDrillMark( PLOTTER *aPlotter, PAD_SHAPE_T aDrillShape,
         aPlotter->FlashPadCircle( aDrillPos, aDrillSize.x, aTraceMode );
 }
 
-/**
- * Function PlotDrillMarks
+/* Function PlotDrillMarks
  * Draw a drill mark for pads and vias.
  * Must be called after all drawings, because it
  * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in
  * FILLED plot mode (for PS and PDF outputs)
- * @param aPlotter = the PLOTTER
- * @param aSmallDrillShape = true to plot a small drill shape, false to plot
- * the actual drill shape
  */
 void PlotDrillMarks( BOARD *aBoard, PLOTTER* aPlotter,
                      const PCB_PLOT_PARAMS& aPlotOpts )

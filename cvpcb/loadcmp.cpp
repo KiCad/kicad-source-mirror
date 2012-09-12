@@ -21,12 +21,11 @@
 #include <wildcards_and_files_ext.h>
 
 
-/**
- * Read libraries to find a module.
+/* Read libraries to find a module.
  * If this module is found, copy it into memory
  *
- * @param CmpName - Module name
- * @return - a pointer to the loaded module or NULL.
+ * aFootprintName is the module name
+ * return - a pointer to the loaded module or NULL.
  */
 MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 {
