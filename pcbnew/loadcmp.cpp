@@ -175,8 +175,6 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         return NULL;
     }
 
-    moduleName.MakeUpper();
-
     if( dlg.IsKeyword() )   // Selection by keywords
     {
         allowWildSeach = false;
@@ -241,12 +239,12 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         module->SetPosition( curspos );
 
         // Put it on FRONT layer,
-        // (Can be stored on BACK layer if the lib is an archive built from a board)
-        if( module->GetLayer() != LAYER_N_FRONT )
+        // (Can be stored flipped if the lib is an archive built from a board)
+        if( module->IsFlipped() )
             module->Flip( module->m_Pos );
 
-        // Put in in orientation 0,
-        // even if it is not saved with with orientation 0 in lib
+        // Place it in orientation 0,
+        // even if it is not saved with orientation 0 in lib
         // (Can happen if the lib is an archive built from a board)
         Rotate_Module( NULL, module, 0, false );
 
@@ -257,6 +255,25 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     }
 
     return module;
+}
+
+/* scans active libraries to find and load aFootprintName.
+ * If found  the module is added to the BOARD, just for good measure.
+ *  aLibraryPath is the full/short name of the library.
+ *                      if empty, search in all libraries
+ *  aFootprintName is the footprint to load
+ *  aDisplayError = true to display an error message if any.
+ *
+ *  return a pointer to the new module, or NULL
+ */
+MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryPath,
+                                          const wxString& aFootprintName,
+                                          bool aDisplayError )
+{
+    if( aLibraryPath.IsEmpty() )
+        return loadFootprintFromLibraries( aFootprintName, aDisplayError );
+    else
+        return loadFootprintFromLibrary( aLibraryPath, aFootprintName, aDisplayError );
 }
 
 

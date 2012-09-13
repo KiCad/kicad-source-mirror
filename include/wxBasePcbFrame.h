@@ -415,13 +415,7 @@ public:
      *  @return a pointer to the new module, or NULL
      */
     MODULE* GetModuleLibrary( const wxString& aLibraryPath, const wxString& aFootprintName,
-                              bool aDisplayError )
-    {
-        if( aLibraryPath.IsEmpty() )
-            return loadFootprintFromLibraries( aFootprintName, aDisplayError );
-        else
-            return loadFootprintFromLibrary( aLibraryPath, aFootprintName, aDisplayError );
-    }
+                              bool aDisplayError );
 
     /**
      * Function Select_1_Module_From_List
