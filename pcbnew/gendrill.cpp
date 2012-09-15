@@ -205,6 +205,11 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
                 GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
                              PLOT_FORMAT_DXF );
                 break;
+
+            case 5:
+                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
+                             PLOT_FORMAT_SVG );
+                break;
             }
         }
 
@@ -624,6 +629,11 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString           aFileName,
     case PLOT_FORMAT_DXF:
         ext = DXF_PLOTTER::GetDefaultFileExtension();
         wildcard = _( "DXF files (.dxf)|*.dxf" );
+        break;
+
+    case PLOT_FORMAT_SVG:
+        ext = SVG_PLOTTER::GetDefaultFileExtension();
+        wildcard = SVGFileWildcard;
         break;
 
     default:

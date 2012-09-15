@@ -9,7 +9,7 @@
  * POSTSCRIPT
  * GERBER
  * DXF
- * an SVG 'plot' is also provided along with the 'print' function by wx, but 
+ * an SVG 'plot' is also provided along with the 'print' function by wx, but
  * is not handled here.
  */
 
@@ -29,11 +29,11 @@ PLOTTER::PLOTTER( )
 {
     plotScale = 1;
     defaultPenWidth = 0;
-    currentPenWidth = -1;       // To-be-set marker 
+    currentPenWidth = -1;       // To-be-set marker
     penState = 'Z';             // End-of-path idle
-    plotMirror = 0;    		// Mirror flag 
+    plotMirror = false;    		// Mirror flag
     outputFile = 0;
-    colorMode = false;          // Starts as a BW plot 
+    colorMode = false;          // Starts as a BW plot
     negativeMode = false;
 }
 
@@ -53,7 +53,7 @@ DPOINT PLOTTER::userToDeviceCoordinates( const wxPoint& pos )
     else
         y = ( paperSize.y - ( pos.y - plotOffset.y )
 	      * plotScale ) * iuPerDeviceUnit ;
-    return DPOINT( x, y );		
+    return DPOINT( x, y );
 }
 
 /**
@@ -76,14 +76,14 @@ double PLOTTER::userToDeviceSize( double size )
 }
 
 
-/** 
- * Generic fallback: arc rendered as a polyline 
+/**
+ * Generic fallback: arc rendered as a polyline
  */
 void PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
                    FILL_T fill, int width )
 {
     wxPoint   start, end;
-    const int delta = 50;   // increment (in 0.1 degrees) to draw circles 
+    const int delta = 50;   // increment (in 0.1 degrees) to draw circles
     double    alpha;
 
     if( StAngle > EndAngle )
@@ -112,7 +112,7 @@ void PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int radius,
 /**
  * Fallback: if it doesn't handle bitmaps, we plot a rectangle
  */
-void PLOTTER::PlotImage(const wxImage & aImage, const wxPoint& aPos, 
+void PLOTTER::PlotImage(const wxImage & aImage, const wxPoint& aPos,
                         double aScaleFactor )
 {
     wxSize size( aImage.GetWidth() * aScaleFactor,
@@ -236,7 +236,7 @@ void PLOTTER::markerVBar( const wxPoint& pos, int radius )
 void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
 {
     int radius = diametre / 2;
-    /* Marker are composed by a series of 'parts' superimposed; not every 
+    /* Marker are composed by a series of 'parts' superimposed; not every
        combination make sense, obviously. Since they are used in order I
        tried to keep the uglier/more complex constructions at the end.
        Also I avoided the |/ |\ -/ -\ construction because they're *very*
@@ -245,7 +245,7 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
        If Visual C++ supported the 0b literals they would be optimally
        and easily encoded as an integer array. We have to do with octal */
     static const unsigned char marker_patterns[MARKER_COUNT] = {
-	// Bit order:  O Square Lozenge - | \ / 
+	// Bit order:  O Square Lozenge - | \ /
 	// First choice: simple shapes
 	0003,  // X
 	0100,  // O
@@ -316,32 +316,32 @@ void PLOTTER::Marker( const wxPoint& position, int diametre, unsigned aShapeId )
     {
 	// Fallback shape
 	markerCircle( position, radius );
-    } 
-    else 
+    }
+    else
     {
 	// Decode the pattern and draw the corresponding parts
 	unsigned char pat = marker_patterns[aShapeId];
-	if( pat & 0001 ) 
-	    markerSlash( position, radius );   
-	if( pat & 0002 ) 
-	    markerBackSlash( position, radius );   
-	if( pat & 0004 ) 
-	    markerVBar( position, radius );   
-	if( pat & 0010 ) 
-	    markerHBar( position, radius );   
-	if( pat & 0020 ) 
-	    markerLozenge( position, radius );   
-	if( pat & 0040 ) 
-	    markerSquare( position, radius );   
-	if( pat & 0100 ) 
-	    markerCircle( position, radius );   
+	if( pat & 0001 )
+	    markerSlash( position, radius );
+	if( pat & 0002 )
+	    markerBackSlash( position, radius );
+	if( pat & 0004 )
+	    markerVBar( position, radius );
+	if( pat & 0010 )
+	    markerHBar( position, radius );
+	if( pat & 0020 )
+	    markerLozenge( position, radius );
+	if( pat & 0040 )
+	    markerSquare( position, radius );
+	if( pat & 0100 )
+	    markerCircle( position, radius );
     }
 
 }
 
 
 /**
- * Convert a thick segment and plot it as an oval 
+ * Convert a thick segment and plot it as an oval
  */
 void PLOTTER::segmentAsOval( const wxPoint& start, const wxPoint& end, int width,
                              EDA_DRAW_MODE_T tracemode )

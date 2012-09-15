@@ -111,7 +111,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_color                = BLACK;
     m_referenceColor       = BLACK;
     m_valueColor           = BLACK;
-    m_textMode		   = PLOTTEXTMODE_PHANTOM;
+    m_textMode		       = PLOTTEXTMODE_PHANTOM;
 }
 
 
@@ -333,7 +333,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             break;
         case T_linewidth:
             aPcbPlotParams->m_lineWidth = ParseInt( PLOT_LINEWIDTH_MIN,
-                                                        PLOT_LINEWIDTH_MAX );
+                                                    PLOT_LINEWIDTH_MAX );
             break;
         case T_plotframeref:
             aPcbPlotParams->m_plotFrameRef = ParseBool();
@@ -388,13 +388,15 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             aPcbPlotParams->m_subtractMaskFromSilk = ParseBool();
             break;
         case T_outputformat:
-            aPcbPlotParams->m_format = static_cast<PlotFormat>( ParseInt( 0, 3 ) );
+            aPcbPlotParams->m_format = static_cast<PlotFormat>(
+                                    ParseInt( PLOT_FIRST_FORMAT, PLOT_LAST_FORMAT ) );
             break;
         case T_mirror:
             aPcbPlotParams->m_mirror = ParseBool();
             break;
         case T_drillshape:
-            aPcbPlotParams->m_drillMarks = static_cast<PCB_PLOT_PARAMS::DrillMarksType>( ParseInt( 0, 2 ) );
+            aPcbPlotParams->m_drillMarks = static_cast<PCB_PLOT_PARAMS::DrillMarksType>
+                                            ( ParseInt( 0, 2 ) );
             break;
         case T_scaleselection:
             aPcbPlotParams->m_scaleSelection = ParseInt( 0, 4 );

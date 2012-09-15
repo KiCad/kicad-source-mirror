@@ -112,7 +112,6 @@ void DIALOG_GENDRILL::initDialog()
 void DIALOG_GENDRILL::InitDisplayParams()
 {
     wxString msg;
-    const PCB_PLOT_PARAMS& plot_opts = m_board->GetPlotOptions();
 
     m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
     m_Choice_Precision->SetSelection( m_PrecisionFormat );
@@ -136,14 +135,6 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_ViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
 
     m_MicroViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
-
-    msg.Empty();
-    msg << plot_opts.GetHPGLPenNum();
-    m_PenNum->SetValue( msg );
-
-    msg.Empty();
-    msg << plot_opts.GetHPGLPenSpeed();
-    m_PenSpeed->SetValue( msg );
 
     // See if we have some buried vias or/and microvias, and display
     // microvias drill value if so
@@ -289,7 +280,6 @@ void DIALOG_GENDRILL::UpdatePrecisionOptions()
 void DIALOG_GENDRILL::SetParams()
 {
     wxString msg;
-    long     ltmp;
 
     PCB_PLOT_PARAMS plot_opts = m_board->GetPlotOptions();
 
@@ -305,15 +295,7 @@ void DIALOG_GENDRILL::SetParams()
     m_DrillOriginIsAuxAxis = m_Choice_Drill_Offset->GetSelection();
     m_PrecisionFormat = m_Choice_Precision->GetSelection();
 
-    msg = m_PenSpeed->GetValue();
-
-    if( msg.ToLong( &ltmp ) )
-        plot_opts.SetHPGLPenSpeed( ltmp );
-
-    msg = m_PenNum->GetValue();
-
-    if( msg.ToLong( &ltmp ) )
-        plot_opts.SetHPGLPenNum( ltmp );
+    plot_opts.SetHPGLPenNum( 1 );
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );

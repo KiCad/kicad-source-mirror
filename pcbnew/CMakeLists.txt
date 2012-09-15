@@ -83,6 +83,7 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_pcbnew_config_libs_and_paths.cpp
     dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp
     dialogs/dialog_plot_base.cpp
+    dialogs/dialog_plot.cpp
     dialogs/dialog_print_for_modedit.cpp
     dialogs/dialog_print_for_modedit_base.cpp
     dialogs/dialog_print_using_printer.cpp
