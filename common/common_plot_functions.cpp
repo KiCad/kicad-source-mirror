@@ -36,6 +36,9 @@ wxString GetDefaultPlotExtension( PlotFormat aFormat )
     case PLOT_FORMAT_GERBER:
         return GERBER_PLOTTER::GetDefaultFileExtension();
 
+    case PLOT_FORMAT_SVG:
+        return SVG_PLOTTER::GetDefaultFileExtension();
+
     default:
         wxASSERT( false );
         return wxEmptyString;

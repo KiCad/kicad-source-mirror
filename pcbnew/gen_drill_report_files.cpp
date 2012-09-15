@@ -113,6 +113,15 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         }
         break;
 
+    case PLOT_FORMAT_SVG:
+        {
+            SVG_PLOTTER* svg_plotter = new SVG_PLOTTER;
+            plotter = svg_plotter;
+            plotter->SetPageSettings( aSheet );
+            plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+        }
+        break;
+
     default:
         wxASSERT( false );
     }

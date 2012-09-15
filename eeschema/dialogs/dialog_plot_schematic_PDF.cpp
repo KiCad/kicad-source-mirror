@@ -129,7 +129,7 @@ void DIALOG_PLOT_SCHEMATIC_PDF::OnPlotCurrent( wxCommandEvent& event )
 
     initOptVars();
     createPDFFile();
-    m_MsgBox->AppendText( wxT( "*****\n" ) );
+    m_MsgBox->AppendText( wxT( "*\n" ) );
 }
 
 
@@ -143,7 +143,7 @@ void DIALOG_PLOT_SCHEMATIC_PDF::OnPlotAll( wxCommandEvent& event )
 
     initOptVars();
     createPDFFile();
-    m_MsgBox->AppendText( wxT( "*****\n" ) );
+    m_MsgBox->AppendText( wxT( "*\n" ) );
 }
 
 

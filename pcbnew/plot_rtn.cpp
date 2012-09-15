@@ -1226,7 +1226,7 @@ PLOTTER *StartPlotBoard( BOARD *aBoard,
         PS_PLOTTER* PS_plotter;
         PS_plotter = new PS_PLOTTER();
         PS_plotter->SetScaleAdjust( aPlotOpts->GetFineScaleAdjustX(),
-                                 aPlotOpts->GetFineScaleAdjustY() );
+                                    aPlotOpts->GetFineScaleAdjustY() );
         the_plotter = PS_plotter;
         break;
 
@@ -1246,6 +1246,10 @@ PLOTTER *StartPlotBoard( BOARD *aBoard,
 
     case PLOT_FORMAT_GERBER:
         the_plotter = new GERBER_PLOTTER();
+        break;
+
+    case PLOT_FORMAT_SVG:
+        the_plotter = new SVG_PLOTTER();
         break;
 
     default:
@@ -1281,8 +1285,6 @@ PLOTTER *StartPlotBoard( BOARD *aBoard,
 
     // error in start_plot( ) or before
     DisplayError( NULL, _("Error creating plot file"));
-
-    if( the_plotter )
-        delete the_plotter;
+    delete the_plotter;
     return NULL;
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 19 2012)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -55,7 +55,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bMiddleBoxSizer;
 	bMiddleBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_Choice_Drill_MapChoices[] = { _("None"), _("Drill map (HPGL)"), _("Drill map (PostScript)"), _("Drill map (Gerber)"), _("Drill map (DXF)") };
+	wxString m_Choice_Drill_MapChoices[] = { _("None"), _("Drill map (HPGL)"), _("Drill map (PostScript)"), _("Drill map (Gerber)"), _("Drill map (DXF)"), _("Drill map (SVG)") };
 	int m_Choice_Drill_MapNChoices = sizeof( m_Choice_Drill_MapChoices ) / sizeof( wxString );
 	m_Choice_Drill_Map = new wxRadioBox( this, wxID_ANY, _("Drill Sheet:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_MapNChoices, m_Choice_Drill_MapChoices, 1, wxRA_SPECIFY_COLS );
 	m_Choice_Drill_Map->SetSelection( 0 );
@@ -70,26 +70,6 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_Choice_Drill_Report->SetToolTip( _("Creates a plain text report") );
 	
 	bMiddleBoxSizer->Add( m_Choice_Drill_Report, 0, wxALL|wxEXPAND, 5 );
-	
-	wxStaticBoxSizer* sbHPGOptionsSizer;
-	sbHPGOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL plotter Options:") ), wxVERTICAL );
-	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Speed (cm/s)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	sbHPGOptionsSizer->Add( m_staticText1, 0, wxRIGHT|wxLEFT, 5 );
-	
-	m_PenSpeed = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbHPGOptionsSizer->Add( m_PenSpeed, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
-	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Pen Number"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	sbHPGOptionsSizer->Add( m_staticText2, 0, wxRIGHT|wxLEFT, 5 );
-	
-	m_PenNum = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbHPGOptionsSizer->Add( m_PenNum, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-	
-	
-	bMiddleBoxSizer->Add( sbHPGOptionsSizer, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbOptSizer;
 	sbOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
@@ -175,7 +155,6 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

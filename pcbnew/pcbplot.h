@@ -26,6 +26,13 @@ class ZONE_CONTAINER;
 #define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
 #define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
 #define OPTKEY_PRINT_PADS_DRILL      wxT( "PrintPadsDrillOpt" )
+#define OPTKEY_PLOT_X_FINESCALE_ADJ  wxT( "PlotXFineScaleAdj" )
+#define OPTKEY_PLOT_Y_FINESCALE_ADJ  wxT( "PlotYFineScaleAdj" )
+#define CONFIG_PS_FINEWIDTH_ADJ      wxT( "PSPlotFineWidthAdj" )
+
+// Define min and max reasonable values for plot/print scale
+#define PLOT_MIN_SCALE 0.01
+#define PLOT_MAX_SCALE 100.0
 
 // Conversion unit constants.
 // Convert pcb dimension of 0.1 mil to PS units of inches.
@@ -34,7 +41,7 @@ class ZONE_CONTAINER;
 // Convert dimension 0.1 mil -> HPGL units:
 #define SCALE_HPGL  0.102041
 
-// Small drill marks diameter value (in internal value = 1/10000 inch)
+// Small drill marks diameter value (in 1/10000 inch)
 #define SMALL_DRILL 150
 
 

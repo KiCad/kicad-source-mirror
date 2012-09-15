@@ -260,7 +260,7 @@ void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter,
         return;
 
     // These 2 lines are useful only fot plotters that cannot plot a bitmap
-    // and plot arectangle instead of.
+    // and plot a rectangle instead of.
     aPlotter->SetColor( aDefaultColor );
     aPlotter->SetCurrentLineWidth( aDefaultPensize );
 

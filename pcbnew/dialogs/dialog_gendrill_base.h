@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 19 2012)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,10 +19,9 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/statbox.h>
 #include <wx/checkbox.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -43,10 +42,6 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxRadioBox* m_Choice_Drill_Offset;
 		wxRadioBox* m_Choice_Drill_Map;
 		wxRadioBox* m_Choice_Drill_Report;
-		wxStaticText* m_staticText1;
-		wxTextCtrl* m_PenSpeed;
-		wxStaticText* m_staticText2;
-		wxTextCtrl* m_PenNum;
 		wxCheckBox* m_Check_Mirror;
 		wxCheckBox* m_Check_Minimal;
 		wxStaticBoxSizer* m_DefaultViasDrillSizer;
@@ -70,7 +65,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 455,358 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GENDRILL_BASE();
 	
 };

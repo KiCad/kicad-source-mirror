@@ -20,11 +20,14 @@
  * of the radio buttons in the plot panel/windows.
  */
 enum PlotFormat {
-    PLOT_FORMAT_HPGL,
+    PLOT_FIRST_FORMAT = 0,
+    PLOT_FORMAT_HPGL = PLOT_FIRST_FORMAT,
     PLOT_FORMAT_GERBER,
     PLOT_FORMAT_POST,
     PLOT_FORMAT_DXF,
-    PLOT_FORMAT_PDF
+    PLOT_FORMAT_PDF,
+    PLOT_FORMAT_SVG,
+    PLOT_LAST_FORMAT = PLOT_FORMAT_SVG
 };
 
 /**
@@ -336,7 +339,8 @@ protected:
     FILE*         outputFile;
 
     // Pen handling
-    bool          colorMode, negativeMode;
+    bool          colorMode;        /// true to plot in color, false to plot in black and white
+    bool          negativeMode;     /// true to generate a negative image (PS mode mainly)
     int           defaultPenWidth;
     int           currentPenWidth;
     /// Current pen state: 'U', 'D' or 'Z' (see PenTo)
@@ -556,12 +560,12 @@ public:
 
     static wxString GetDefaultFileExtension()
     {
-	return wxString( wxT( "ps" ) );
+        return wxString( wxT( "ps" ) );
     }
 
     virtual PlotFormat GetPlotterType() const
     {
-	return PLOT_FORMAT_POST;
+        return PLOT_FORMAT_POST;
     }
 
     virtual bool StartPlot( FILE* fout );
@@ -608,12 +612,12 @@ public:
 
     virtual PlotFormat GetPlotterType() const
     {
-	return PLOT_FORMAT_PDF;
+        return PLOT_FORMAT_PDF;
     }
 
     static wxString GetDefaultFileExtension()
     {
-	return wxString( wxT( "pdf" ) );
+        return wxString( wxT( "pdf" ) );
     }
 
     virtual bool StartPlot( FILE* fout );
@@ -672,6 +676,87 @@ protected:
     std::vector<long> xrefTable; /// The PDF xref offset table
 };
 
+class SVG_PLOTTER : public PSLIKE_PLOTTER
+{
+public:
+    SVG_PLOTTER();
+
+    static wxString GetDefaultFileExtension()
+    {
+        return wxString( wxT( "svg" ) );
+    }
+
+    virtual PlotFormat GetPlotterType() const
+    {
+        return PLOT_FORMAT_SVG;
+    }
+
+    virtual void SetColor( EDA_COLOR_T color );
+    virtual bool StartPlot( FILE* fout );
+    virtual bool EndPlot();
+    virtual void SetCurrentLineWidth( int width );
+    virtual void SetDash( bool dashed );
+
+    virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+			      double aScale, bool aMirror );
+    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+                       int width = DEFAULT_LINE_WIDTH );
+    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+                         int width = DEFAULT_LINE_WIDTH );
+    virtual void Arc( const wxPoint& centre, int StAngle, int EndAngle,
+		      int rayon, FILL_T fill, int width = DEFAULT_LINE_WIDTH );
+
+    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
+                           FILL_T aFill, int aWidth = DEFAULT_LINE_WIDTH );
+
+    virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
+                            double aScaleFactor );
+
+    virtual void PenTo( const wxPoint& pos, char plume );
+    virtual void Text( const wxPoint&              aPos,
+                       enum EDA_COLOR_T            aColor,
+                       const wxString&             aText,
+                       int                         aOrient,
+                       const wxSize&               aSize,
+                       enum EDA_TEXT_HJUSTIFY_T    aH_justify,
+                       enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold );
+
+protected:
+    FILL_T m_fillMode;              // true if the current contour
+                                    // rect, arc, circle, polygon must be filled
+    long m_pen_rgb_color;           // current rgb color value: each color has
+                                    // a value 0 ... 255, and the 3 colors are
+                                    // grouped in a 3x8 bits value
+                                    // (written in hex to svg files)
+    long m_brush_rgb_color;         // same as m_pen_rgb_color, used to fill
+                                    // some contours.
+    bool m_graphics_changed;        // true if a pen/brush parameter is modified
+                                    // color, pen size, fil mode ...
+                                    // the new SVG stype must be output on file
+
+    /**
+     * function emitSetRGBColor()
+     * initialize m_pen_rgb_color from reduced values r, g ,b
+     * ( reduced values are 0.0 to 1.0 )
+     */
+    virtual void emitSetRGBColor( double r, double g, double b );
+
+    /**
+     * function setSVGPlotStyle()
+     * output the string which define pen and brush color, shape, transparence
+     */
+    void setSVGPlotStyle();
+
+    /**
+     * function setFillMode()
+     * prepare parameters for setSVGPlotStyle()
+     */
+    void setFillMode( FILL_T fill );
+};
+
 /* Class to handle a D_CODE when plotting a board : */
 #define FIRST_DCODE_VALUE 10    // D_CODE < 10 is a command, D_CODE >= 10 is a tool
 
@@ -705,12 +790,12 @@ public:
 
     virtual PlotFormat GetPlotterType() const
     {
-	return PLOT_FORMAT_GERBER;
+        return PLOT_FORMAT_GERBER;
     }
 
     static wxString GetDefaultFileExtension()
     {
-	return wxString( wxT( "pho" ) );
+        return wxString( wxT( "pho" ) );
     }
 
     virtual bool StartPlot( FILE* fout );
@@ -772,12 +857,12 @@ public:
 
     virtual PlotFormat GetPlotterType() const
     {
-	return PLOT_FORMAT_DXF;
+        return PLOT_FORMAT_DXF;
     }
 
     static wxString GetDefaultFileExtension()
     {
-	return wxString( wxT( "dxf" ) );
+        return wxString( wxT( "dxf" ) );
     }
 
     /**

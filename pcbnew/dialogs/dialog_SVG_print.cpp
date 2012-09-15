@@ -215,7 +215,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll )
             fn.SetName( fn.GetName() + wxT( "-brd" ) );
         else
         {
-            wxString extraname = m_BoxSelectLayer[layer]->GetLabel();
+            wxString extraname = m_Parent->GetBoard()->GetLayerName( layer, false );
             extraname.Trim();    // remove leading and trailing spaces if any
             extraname.Trim(false);
             fn.SetName( fn.GetName() + wxT( "-" ) + extraname );
