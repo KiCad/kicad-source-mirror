@@ -2,6 +2,30 @@
  * @file libedit_plot_component.cpp
  */
 
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+
 #include <fctsys.h>
 
 #include <gr_basic.h>
@@ -15,7 +39,7 @@
 #include <general.h>
 #include <libeditframe.h>
 #include <class_library.h>
-#include <dialogs/dialog_SVG_print.h>
+#include <dialogs/dialog_plot_schematic.h>
 
 
 void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
@@ -69,22 +93,6 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
             if( FullFileName.IsEmpty() )
                 return;
 
-#if 0       // would the PAGE_INFO margins work for this old code:
-
-            // Give a size to the SVG draw area = component size + margin
-            // the margin is 10% the size of the component size
-            wxSize pagesize = GetScreen()->ReturnPageSize( );
-            wxSize componentSize = m_component->GetBoundingBox( m_unit, m_convert ).GetSize();
-
-            // Add a small margin to the plot bounding box
-            componentSize.x = (int)(componentSize.x * 1.2);
-            componentSize.y = (int)(componentSize.y * 1.2);
-
-            GetScreen()->SetPageSize( componentSize );
-            SVG_Print_Component( FullFileName );
-            GetScreen()->SetPageSize( pagesize );
-
-#else
             PAGE_INFO pageSave = GetScreen()->GetPageSettings();
             PAGE_INFO pageTemp = pageSave;
 
@@ -97,7 +105,6 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
             GetScreen()->SetPageSettings( pageTemp );
             SVG_Print_Component( FullFileName );
             GetScreen()->SetPageSettings( pageSave );
-#endif
         }
         break;
     }
@@ -131,7 +138,10 @@ void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_j
 
 void LIB_EDIT_FRAME::SVG_Print_Component( const wxString& FullFileName )
 {
-    DIALOG_SVG_PRINT::DrawSVGPage( this, FullFileName, GetScreen() );
+    bool plotBW = false;
+    bool plotFrameRef = false;
+    DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( this, FullFileName, GetScreen(),
+                                            plotBW, plotFrameRef );
 }
 
 void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData)
