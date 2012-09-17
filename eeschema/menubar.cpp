@@ -141,39 +141,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Plot submenu
     wxMenu* choice_plot_fmt = new wxMenu;
-
-    // Plot PostScript
-    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_PS,
-                 _( "Plot &PostScript" ),
-                 _( "Plot schematic sheet in PostScript format" ),
-                 KiBitmap( plot_ps_xpm ) );
-
-    // Plot PDF
-    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_PDF,
-                 _( "Plot PDF" ),
-                 _( "Plot schematic sheet in PDF format" ),
-                 KiBitmap( plot_pdf_xpm ) );
-
-    // Plot HPGL
-    AddMenuItem( choice_plot_fmt,
-                 ID_GEN_PLOT_HPGL,
-                 _( "Plot &HPGL" ),
-                 _( "Plot schematic sheet in HPGL format" ),
-                 KiBitmap( plot_hpg_xpm ) );
-
-    // Plot SVG
-    AddMenuItem( choice_plot_fmt,
-                 ID_GEN_PLOT_SVG,
-                 _( "Plot &SVG" ),
-                 _( "Plot schematic sheet in SVG format" ),
-                 KiBitmap( plot_svg_xpm ) );
-
-    // Plot DXF
-    AddMenuItem( choice_plot_fmt,
-                 ID_GEN_PLOT_DXF,
-                 _( "Plot &DXF" ),
-                 _( "Plot schematic sheet in DXF format" ),
-                 KiBitmap( plot_dxf_xpm ) );
+    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_SCHEMATIC,
+                 _( "&Plot" ),
+                 _( "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format" ),
+                 KiBitmap( plot_xpm ) );
 
     // Plot to Clipboard (Windows only)
 #ifdef __WINDOWS__

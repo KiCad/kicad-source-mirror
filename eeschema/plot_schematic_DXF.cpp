@@ -1,4 +1,4 @@
-/** @file dialog_plot_schematic_DXF.cpp
+/** @file plot_schematic_DXF.cpp
  */
 
 /*
@@ -26,124 +26,17 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <plot_common.h>
-#include <confirm.h>
 #include <worksheet.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
-
-#include <general.h>
-#include <protos.h>
 #include <sch_sheet_path.h>
+#include <dialog_plot_schematic.h>
 
-#include <dialog_plot_schematic_DXF_base.h>
 
-class DIALOG_PLOT_SCHEMATIC_DXF : public DIALOG_PLOT_SCHEMATIC_DXF_BASE
+void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( )
 {
-private:
-    SCH_EDIT_FRAME* m_Parent;
-
-public:
-
-    /// Constructors
-    DIALOG_PLOT_SCHEMATIC_DXF( SCH_EDIT_FRAME* parent );
-
-private:
-    static bool m_plotColorOpt;
-    static int  m_pageSizeSelect;
-    static bool m_plot_Sheet_Ref;
-    bool        m_select_PlotAll;
-private:
-    void OnPlotCurrent( wxCommandEvent& event );
-    void OnPlotAll( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-
-    void initDlg();
-    void initOptVars();
-    void CreateDXFFile();
-    void PlotOneSheetDXF( const wxString& FileName, SCH_SCREEN* screen,
-                         wxPoint plot_offset, double scale );
-};
-
-// static members (static to remember last state):
-bool DIALOG_PLOT_SCHEMATIC_DXF::m_plotColorOpt   = false;
-bool DIALOG_PLOT_SCHEMATIC_DXF::m_plot_Sheet_Ref = true;
-
-
-
-void SCH_EDIT_FRAME::ToPlot_DXF( wxCommandEvent& event )
-{
-    DIALOG_PLOT_SCHEMATIC_DXF DXF_frame( this );
-    DXF_frame.ShowModal();
-}
-
-
-DIALOG_PLOT_SCHEMATIC_DXF::DIALOG_PLOT_SCHEMATIC_DXF( SCH_EDIT_FRAME* parent )
-    : DIALOG_PLOT_SCHEMATIC_DXF_BASE( parent )
-{
-    m_Parent = parent;
-    m_select_PlotAll = false;
-    initDlg();
-
-    GetSizer()->SetSizeHints( this );
-    Centre();
-    m_buttonPlotAll->SetDefault();
-}
-
-void DIALOG_PLOT_SCHEMATIC_DXF::initDlg()
-{
-    SetFocus(); // make the ESC work
-    // Set options
-    m_PlotColorCtrl->SetSelection( m_plotColorOpt ? 1 : 0 );
-    m_Plot_Sheet_Ref_Ctrl->SetValue( m_plot_Sheet_Ref );
-}
-
-
-/* event handler for Plot Current button
- */
-void DIALOG_PLOT_SCHEMATIC_DXF::OnPlotCurrent( wxCommandEvent& event )
-{
-    m_select_PlotAll = false;
-
-    initOptVars();
-    CreateDXFFile( );
-    m_MsgBox->AppendText( wxT( "*****\n" ) );
-}
-
-/* event handler for Plot ALL button
- */
-void DIALOG_PLOT_SCHEMATIC_DXF::OnPlotAll( wxCommandEvent& event )
-{
-    m_select_PlotAll = true;
-
-    initOptVars();
-    CreateDXFFile( );
-    m_MsgBox->AppendText( wxT( "*****\n" ) );
-}
-
-
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
- */
-void DIALOG_PLOT_SCHEMATIC_DXF::OnCancelClick( wxCommandEvent& event )
-{
-    initOptVars();
-    EndModal( 0 );
-}
-
-
-void DIALOG_PLOT_SCHEMATIC_DXF::initOptVars()
-{
-    m_plot_Sheet_Ref  = m_Plot_Sheet_Ref_Ctrl->GetValue();
-    m_plotColorOpt = m_PlotColorCtrl->GetSelection() == 1 ? true : false;
-}
-
-
-void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
-{
-    SCH_EDIT_FRAME* schframe  = (SCH_EDIT_FRAME*) m_Parent;
+    SCH_EDIT_FRAME* schframe  = (SCH_EDIT_FRAME*) m_parent;
     SCH_SCREEN*     screen    = schframe->GetScreen();
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
@@ -203,7 +96,7 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
 }
 
 
-void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
+void DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    FileName,
                                                  SCH_SCREEN*        screen,
                                                  wxPoint            plot_offset,
                                                  double             scale )
@@ -217,12 +110,12 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
     {
         msg  = wxT( "\n** " );
         msg += _( "Unable to create " ) + FileName + wxT( " **\n" );
-        m_MsgBox->AppendText( msg );
+        m_MessagesBox->AppendText( msg );
         return;
     }
 
     msg.Printf( _( "Plot: %s " ), GetChars( FileName ) );
-    m_MsgBox->AppendText( msg );
+    m_MessagesBox->AppendText( msg );
 
     LOCALE_IO   toggle;
 
@@ -230,7 +123,7 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
 
     const PAGE_INFO&   pageInfo = screen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
-    plotter->SetColorMode( m_plotColorOpt );
+    plotter->SetColorMode( getModeColor() );
     plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
 
     // Init :
@@ -238,13 +131,13 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
     plotter->SetFilename( FileName );
     plotter->StartPlot( output_file );
 
-    if( m_plot_Sheet_Ref )
+    if( getPlotFrameRef() )
     {
         plotter->SetColor( BLACK );
-        PlotWorkSheet( plotter, m_Parent->GetTitleBlock(),
-                       m_Parent->GetPageSettings(),
+        PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
+                       m_parent->GetPageSettings(),
                        screen->m_ScreenNumber, screen->m_NumberOfScreens,
-                       m_Parent->GetScreenDesc(),
+                       m_parent->GetScreenDesc(),
                        screen->GetFileName() );
     }
 
@@ -254,5 +147,5 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
     plotter->EndPlot();
     delete plotter;
 
-    m_MsgBox->AppendText( wxT( "Ok\n" ) );
+    m_MessagesBox->AppendText( wxT( "Ok\n" ) );
 }
