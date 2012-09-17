@@ -56,7 +56,6 @@
 #include <dialogs/dialog_erc.h>
 #include <dialogs/dialog_print_using_printer.h>
 #include <dialogs/dialog_schematic_find.h>
-#include <dialogs/dialog_SVG_print.h>
 
 #include <wx/display.h>
 #include <build_version.h>
@@ -82,11 +81,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnSaveProject )
     EVT_MENU( ID_SAVE_ONE_SHEET, SCH_EDIT_FRAME::Save_File )
     EVT_MENU( ID_SAVE_ONE_SHEET_AS, SCH_EDIT_FRAME::Save_File )
-    EVT_MENU( ID_GEN_PLOT_PS, SCH_EDIT_FRAME::ToPlot_PS )
-    EVT_MENU( ID_GEN_PLOT_HPGL, SCH_EDIT_FRAME::ToPlot_HPGL )
-    EVT_MENU( ID_GEN_PLOT_SVG, SCH_EDIT_FRAME::SVG_Print )
-    EVT_MENU( ID_GEN_PLOT_DXF, SCH_EDIT_FRAME::ToPlot_DXF )
-    EVT_MENU( ID_GEN_PLOT_PDF, SCH_EDIT_FRAME::ToPlot_PDF )
+    EVT_MENU( ID_GEN_PLOT_SCHEMATIC, SCH_EDIT_FRAME::PlotSchematic )
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
 
@@ -852,15 +847,6 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
         wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
     }
 }
-
-
-void SCH_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
-{
-    DIALOG_SVG_PRINT frame( this );
-
-    frame.ShowModal();
-}
-
 
 void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData )
 {

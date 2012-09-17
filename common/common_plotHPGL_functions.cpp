@@ -90,10 +90,10 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill,
 }
 
 
-/** 
+/**
  * HPGL polygon: fill not supported (but closed, at least)
  */
-void HPGL_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, 
+void HPGL_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
                              FILL_T aFill, int aWidth)
 {
     if( aCornerList.size() <= 1 )
@@ -175,13 +175,13 @@ void HPGL_PLOTTER::SetDash( bool dashed )
 {
     wxASSERT( outputFile );
     if( dashed )
-        fputs( "LI 2;\n", stderr );
+        fputs( "LI 2;\n", outputFile );
     else
-        fputs( "LI;\n", stderr );
+        fputs( "LI;\n", outputFile );
 }
 
 
-void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, 
+void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
                                  int width, EDA_DRAW_MODE_T tracemode )
 {
     wxASSERT( outputFile );
@@ -189,7 +189,7 @@ void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
     wxSize  size;
 
     // Suppress overlap if pen is too big or in line mode
-    if( (penDiameter >= width) || (tracemode == LINE) ) 
+    if( (penDiameter >= width) || (tracemode == LINE) )
     {
         MoveTo( start );
         FinishTo( end );
@@ -302,7 +302,7 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 
     double rsize = userToDeviceSize( radius );
 
-    fprintf( outputFile, "PA %.0f,%.0fd;CI %.0f;\n", 
+    fprintf( outputFile, "PA %.0f,%.0fd;CI %.0f;\n",
              pos_dev.x, pos_dev.y, rsize );
 
     if( trace_mode == FILLED )        // Plot in filled mode.

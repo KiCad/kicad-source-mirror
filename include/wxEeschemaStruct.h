@@ -589,14 +589,10 @@ public:
     void SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
     bool GetPrintSheetReference() { return m_printSheetReference; }
     void SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
-    void SVG_Print( wxCommandEvent& event );
 
     // Plot functions:
-    void ToPlot_PS( wxCommandEvent& event );
-    void ToPlot_PDF( wxCommandEvent& event );
-    void ToPlot_HPGL( wxCommandEvent& event );
-    void ToPlot_DXF( wxCommandEvent& event );
-    void ToPostProcess( wxCommandEvent& event );
+//    void ToPostProcess( wxCommandEvent& event );
+    void PlotSchematic( wxCommandEvent& event );
 
     // read and save files
     void Save_File( wxCommandEvent& event );
