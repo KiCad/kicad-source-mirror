@@ -142,8 +142,8 @@ PlotFormat DIALOG_PLOT_SCHEMATIC::GetPlotFileFormat()
     {
         default:
         case 0: return PLOT_FORMAT_POST;
-        case 1: return PLOT_FORMAT_SVG;
-        case 2: return PLOT_FORMAT_PDF;
+        case 1: return PLOT_FORMAT_PDF;
+        case 2: return PLOT_FORMAT_SVG;
         case 3: return PLOT_FORMAT_DXF;
         case 4: return PLOT_FORMAT_HPGL;
     }
