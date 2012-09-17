@@ -12,14 +12,6 @@ include_directories(
 
 set(EESCHEMA_DLGS
     dialogs/dialog_color_config.cpp
-    dialogs/dialog_plot_schematic_DXF.cpp
-    dialogs/dialog_plot_schematic_DXF_base.cpp
-    dialogs/dialog_plot_schematic_HPGL.cpp
-    dialogs/dialog_plot_schematic_HPGL_base.cpp
-    dialogs/dialog_plot_schematic_PS.cpp
-    dialogs/dialog_plot_schematic_PS_base.cpp
-    dialogs/dialog_plot_schematic_PDF.cpp
-    dialogs/dialog_plot_schematic_PDF_base.cpp
     dialogs/annotate_dialog.cpp
     dialogs/dialog_annotate_base.cpp
     dialogs/dialog_lib_edit_text.cpp
@@ -50,6 +42,8 @@ set(EESCHEMA_DLGS
     dialogs/dialog_lib_new_component.cpp
     dialogs/dialog_lib_new_component_base.cpp
     dialogs/dialog_netlist_base.cpp
+    dialogs/dialog_plot_schematic_base.cpp
+    dialogs/dialog_plot_schematic.cpp
     dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_sch_edit_sheet_pin.cpp
@@ -58,8 +52,6 @@ set(EESCHEMA_DLGS
     dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
-    dialogs/dialog_SVG_print.cpp
-    dialogs/dialog_SVG_print_base.cpp
     )
 
 set(EESCHEMA_SRCS
@@ -125,6 +117,11 @@ set(EESCHEMA_SRCS
     onrightclick.cpp
     operations_on_items_lists.cpp
     pinedit.cpp
+    plot_schematic_DXF.cpp
+    plot_schematic_HPGL.cpp
+    plot_schematic_PS.cpp
+    plot_schematic_PDF.cpp
+    plot_schematic_SVG.cpp
     sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp

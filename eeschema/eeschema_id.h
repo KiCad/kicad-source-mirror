@@ -57,6 +57,7 @@ enum id_eeschema_frm
     ID_GET_ANNOTATE,
     ID_GET_ERC,
     ID_BACKANNO_ITEMS,
+    ID_GEN_PLOT_SCHEMATIC,
 
     /* Schematic editor veritcal toolbar IDs */
     ID_SCHEMATIC_VERTICAL_TOOLBAR_START,
