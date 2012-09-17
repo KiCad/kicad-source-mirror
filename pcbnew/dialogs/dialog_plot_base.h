@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -62,6 +62,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotInvisibleText;
 		wxCheckBox* m_plotNoViaOnMaskOpt;
 		wxCheckBox* m_plotMirrorOpt;
+		wxCheckBox* m_excludeEdgeLayerOpt;
 		wxStaticText* m_staticText11;
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* m_staticText12;
@@ -72,7 +73,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_linesWidth;
 		wxStaticBoxSizer* m_GerberOptionsSizer;
 		wxCheckBox* m_useGerberExtensions;
-		wxCheckBox* m_excludeEdgeLayerOpt;
 		wxCheckBox* m_subtractMaskFromSilk;
 		wxCheckBox* m_useAuxOriginCheckBox;
 		wxStaticBoxSizer* m_HPGLOptionsSizer;

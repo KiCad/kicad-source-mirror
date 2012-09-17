@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -119,6 +119,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotMirrorOpt = new wxCheckBox( this, ID_MIROR_OPT, _("Mirrored plot"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPlotItems->Add( m_plotMirrorOpt, 0, wxALL, 2 );
 	
+	m_excludeEdgeLayerOpt = new wxCheckBox( this, wxID_ANY, _("Exclude PCB edge layer from other layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_excludeEdgeLayerOpt->SetToolTip( _("Exclude contents of the pcb edge layer from all other layers") );
+	
+	bSizerPlotItems->Add( m_excludeEdgeLayerOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
+	
 	
 	bSizer192->Add( bSizerPlotItems, 0, wxEXPAND, 5 );
 	
@@ -181,11 +186,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_useGerberExtensions->SetToolTip( _("Use proper Gerber extensions - .GBL, .GTL, etc...") );
 	
 	m_GerberOptionsSizer->Add( m_useGerberExtensions, 0, wxLEFT|wxRIGHT|wxTOP, 2 );
-	
-	m_excludeEdgeLayerOpt = new wxCheckBox( this, wxID_ANY, _("Exclude PCB edge layer from other layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_excludeEdgeLayerOpt->SetToolTip( _("Exclude contents of the pcb edge layer from all other layers") );
-	
-	m_GerberOptionsSizer->Add( m_excludeEdgeLayerOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_subtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
