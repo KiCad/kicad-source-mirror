@@ -34,14 +34,13 @@
 #include <dialog_plot_schematic.h>
 
 
-void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( )
+void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 {
     SCH_EDIT_FRAME* schframe  = (SCH_EDIT_FRAME*) m_parent;
     SCH_SCREEN*     screen    = schframe->GetScreen();
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
     wxString        plotFileName;
-    wxPoint         plot_offset;
 
     /* When printing all pages, the printed page is not the current page.
      *  In complex hierarchies, we must setup references and others parameters
@@ -56,7 +55,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( )
 
     while( true )
     {
-        if( m_select_PlotAll )
+        if( aPlotAll )
         {
             if( sheetpath == NULL )
                 break;
@@ -78,15 +77,21 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( )
             sheetpath = SheetList.GetNext();
         }
 
-        plot_offset.x = 0;
-        plot_offset.y = 0;
-
+        wxPoint plot_offset;
         plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT(".")
                        + DXF_PLOTTER::GetDefaultFileExtension();
 
-        PlotOneSheetDXF( plotFileName, screen, plot_offset, 1 );
+        wxString msg;
 
-        if( !m_select_PlotAll )
+        if( PlotOneSheetDXF( plotFileName, screen, plot_offset, 1.0, aPlotFrameRef ) )
+            msg.Printf( _( "Plot: %s OK\n" ), GetChars( plotFileName ) );
+        else    // Error
+             msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
+
+        m_MessagesBox->AppendText( msg );
+
+
+        if( !aPlotAll )
             break;
     }
 
@@ -96,56 +101,46 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( )
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    FileName,
-                                                 SCH_SCREEN*        screen,
-                                                 wxPoint            plot_offset,
-                                                 double             scale )
+bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
+                                             SCH_SCREEN*        aScreen,
+                                             wxPoint            aPlotOffset,
+                                             double             aScale,
+                                             bool aPlotFrameRef )
 {
-
-
-    wxString msg;
-    FILE*    output_file = wxFopen( FileName, wxT( "wt" ) );
+    FILE*    output_file = wxFopen( aFileName, wxT( "wt" ) );
 
     if( output_file == NULL )
-    {
-        msg  = wxT( "\n** " );
-        msg += _( "Unable to create " ) + FileName + wxT( " **\n" );
-        m_MessagesBox->AppendText( msg );
-        return;
-    }
-
-    msg.Printf( _( "Plot: %s " ), GetChars( FileName ) );
-    m_MessagesBox->AppendText( msg );
+        return false;
 
     LOCALE_IO   toggle;
 
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
 
-    const PAGE_INFO&   pageInfo = screen->GetPageSettings();
+    const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
+    plotter->SetViewport( aPlotOffset, IU_PER_DECIMILS, aScale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-DXF" ) );
-    plotter->SetFilename( FileName );
+    plotter->SetFilename( aFileName );
     plotter->StartPlot( output_file );
 
-    if( getPlotFrameRef() )
+    if( aPlotFrameRef )
     {
         plotter->SetColor( BLACK );
         PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(),
-                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
-                       screen->GetFileName() );
+                       aScreen->GetFileName() );
     }
 
-    screen->Plot( plotter );
+    aScreen->Plot( plotter );
 
     // finish
     plotter->EndPlot();
     delete plotter;
 
-    m_MessagesBox->AppendText( wxT( "Ok\n" ) );
+    return true;
 }

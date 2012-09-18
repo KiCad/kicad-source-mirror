@@ -108,7 +108,7 @@ void DIALOG_PLOT_SCHEMATIC::SetHPGLPenWidth()
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll )
+void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
 {
     wxString        plotFileName;
     SCH_SCREEN*     screen = m_parent->GetScreen();
@@ -179,7 +179,14 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll )
 
         LOCALE_IO toggle;
 
-        Plot_1_Page_HPGL( plotFileName, screen, plotPage, plotOffset, plot_scale );
+        wxString msg;
+        if( Plot_1_Page_HPGL( plotFileName, screen, plotPage, plotOffset,
+                              plot_scale, aPlotFrameRef ) )
+            msg.Printf( _( "Plot: %s OK\n" ), GetChars( plotFileName ) );
+        else    // Error
+             msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
+
+        m_MessagesBox->AppendText( msg );
 
         if( !aPlotAll )
             break;
@@ -191,37 +198,28 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll )
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   FileName,
-                                              SCH_SCREEN*       screen,
-                                              const PAGE_INFO&  pageInfo,
-                                              wxPoint&          offset,
-                                              double            plot_scale )
+bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
+                                              SCH_SCREEN*       aScreen,
+                                              const PAGE_INFO&  aPageInfo,
+                                              wxPoint           aPlot0ffset,
+                                              double            aScale,
+                                              bool              aPlotFrameRef )
 {
-    wxString    msg;
-
-    FILE*       output_file = wxFopen( FileName, wxT( "wt" ) );
+    FILE*       output_file = wxFopen( aFileName, wxT( "wt" ) );
 
     if( output_file == NULL )
-    {
-        msg = wxT( "\n** " );
-        msg += _( "Unable to create " ) + FileName + wxT( " **\n" );
-        m_MessagesBox->AppendText( msg );
-        return;
-    }
+        return false;
 
     LOCALE_IO toggle;
 
-    msg.Printf( _( "Plot: %s " ), FileName.GetData() );
-    m_MessagesBox->AppendText( msg );
-
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
 
-    plotter->SetPageSettings( pageInfo );
-    plotter->SetViewport( offset, IU_PER_DECIMILS, plot_scale, false );
+    plotter->SetPageSettings( aPageInfo );
+    plotter->SetViewport( aPlot0ffset, IU_PER_DECIMILS, aScale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-HPGL" ) );
-    plotter->SetFilename( FileName );
+    plotter->SetFilename( aFileName );
     plotter->SetPenSpeed( g_HPGL_Pen_Descr.m_Pen_Speed );
     plotter->SetPenNumber( g_HPGL_Pen_Descr.m_Pen_Num );
     plotter->SetPenDiameter( g_HPGL_Pen_Descr.m_Pen_Diam );
@@ -233,14 +231,14 @@ void DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   FileName,
     if( getPlotFrameRef() )
         PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(),
-                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
-                       screen->GetFileName() );
+                       aScreen->GetFileName() );
 
-    screen->Plot( plotter );
+    aScreen->Plot( plotter );
 
     plotter->EndPlot();
     delete plotter;
 
-    m_MessagesBox->AppendText( wxT( "Ok\n" ) );
+    return true;
 }

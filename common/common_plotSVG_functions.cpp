@@ -71,7 +71,7 @@
  *
  *   <polygon points="0,0  50,0  25,50" style="stroke:#660000; fill:#cc3333;"/>
  *
- *  The <path> element is used to draw advanced shapes combined from lines and archs,
+ *  The <path> element is used to draw advanced shapes combined from lines and arcs,
  *  with or without fill.
  *  It is probably the most advanced and versatile SVG shape of them all.
  *  It is probably also the hardest element to master.
@@ -81,6 +81,14 @@
  *            M110,110
  *            L100,0"
  *         style="stroke:#660000; fill:none;"/>
+ *
+ *  Draw an elliptic arc: it is one of basic path command:
+ * <path d="M(startx,starty) A(radiusx,radiusy)
+ *          rotation-axe-x
+ *          flag_arc_large,flag_sweep endx,endy">
+ * flag_arc_large: 0 = small arc > 180 deg, 1 = large arc > 180 deg
+ * flag_sweep : 0 = CCW, 1 = CW
+ * The center of ellipse is automatically calculated.
  */
 #include <fctsys.h>
 #include <trigo.h>
@@ -152,7 +160,7 @@ void SVG_PLOTTER::setSVGPlotStyle()
         break;
 
     case FILLED_WITH_BG_BODYCOLOR:
-        fputs( "fill-opacity:0.3;\n", outputFile );
+        fputs( "fill-opacity:0.6;\n", outputFile );
         break;
     }
 
@@ -246,17 +254,18 @@ void SVG_PLOTTER::SetDash( bool dashed )
 
 void SVG_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
 {
-    DPOINT  p1_dev  = userToDeviceCoordinates( p1 );
-    DPOINT  p2_dev  = userToDeviceCoordinates( p2 );
+    EDA_RECT rect( p1, wxSize( p2.x -p1.x,  p2.y -p1.y ) );
+    rect.Normalize();
+    DPOINT  pos_dev  = userToDeviceCoordinates( rect.GetOrigin() );
+    DPOINT  size_dev = userToDeviceSize( rect.GetSize() );
 
     setFillMode( fill );
     SetCurrentLineWidth( width );
 
     fprintf( outputFile,
-             "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%d\" />\n",
-             (int) p1_dev.x, (int) p1_dev.y,                            // origin
-             (int) (p2_dev.x - p1_dev.x), (int) (p2_dev.y - p1_dev.y),  // size
-             0                                                          // radius of rounded corners
+             "<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" rx=\"%g\" />\n",
+             pos_dev.x, pos_dev.y, size_dev.x, size_dev.y,
+             0.0   // radius of rounded corners
              );
 }
 
@@ -299,18 +308,21 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int rad
     DPOINT  centre_dev  = userToDeviceCoordinates( centre );
     double  radius_dev  = userToDeviceSize( radius );
 
-    if( plotMirror )
+    if( !plotMirror )
     {
         int tmp = StAngle;
         StAngle     = -EndAngle;
         EndAngle    = -tmp;
     }
 
-    DPOINT  start = centre_dev;
-    start.x += radius_dev;
-    DPOINT  end = start;
+    DPOINT  start;
+    start.x = radius_dev;
     RotatePoint( &start.x, &start.y, StAngle );
+    DPOINT  end;
+    end.x = radius_dev;
     RotatePoint( &end.x, &end.y, EndAngle );
+    start += centre_dev;
+    end += centre_dev;
 
     double theta1 = StAngle * M_PI / 1800.0;
 
@@ -336,13 +348,11 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int rad
     // params are start point, radius1, radius2, X axe rotation,
     // flag arc size (0 = small arc > 180 deg, 1 = large arc > 180 deg),
     // sweep arc ( 0 = CCW, 1 = CW),
-    // end point,
-    // center point (optional, needed to draw a pie
-    fprintf( outputFile, "<path d=\"M%d %d A%d %d 0.0 %d %d %d %d \" /> \n",
-             (int) start.x, (int) start.y,
-             (int) radius_dev, (int) radius_dev,
+    // end point
+    fprintf( outputFile, "<path d=\"M%g %g A%g %g 0.0 %d %d %g %g \" />\n",
+             start.x, start.y, radius_dev, radius_dev,
              flg_arc, flg_sweep,
-             (int) end.x, (int) end.y  );
+             end.x, end.y  );
 }
 
 
@@ -355,7 +365,17 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     setFillMode( aFill );
     SetCurrentLineWidth( aWidth );
 
-    fprintf( outputFile, "<polygon style=\"fill-rule:evenodd;\"\n" );
+    switch( aFill )
+    {
+        case NO_FILL:
+            fprintf( outputFile, "<polyline fill=\"none;\"\n" );
+            break;
+
+        case FILLED_WITH_BG_BODYCOLOR:
+        case FILLED_SHAPE:
+            fprintf( outputFile, "<polyline style=\"fill-rule:evenodd;\"\n" );
+            break;
+    }
 
     DPOINT pos = userToDeviceCoordinates( aCornerList[0] );
     fprintf( outputFile, "points=\"%d,%d\n", (int) pos.x, (int) pos.y );
@@ -380,7 +400,7 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos,
     // in svg file we must insert a link to a png image file to plot an image
     // the image itself is not included in the svg file.
     // So we prefer skip the image, and just draw a rectangle,
-    // like othe plotter which do not support images
+    // like other plotters which do not support images
 
     PLOTTER::PlotImage( aImage, aPos, aScaleFactor );
 

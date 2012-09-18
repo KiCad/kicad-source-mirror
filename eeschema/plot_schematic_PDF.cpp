@@ -34,7 +34,7 @@
 #include <sch_sheet_path.h>
 #include <dialog_plot_schematic.h>
 
-void DIALOG_PLOT_SCHEMATIC::createPDFFile()
+void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 {
     SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH* sheetpath;
@@ -58,13 +58,15 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile()
     plotter->SetColorMode( getModeColor() );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
 
+    wxString msg;
+    wxString plotFileName;
+
     // First page handling is different
     bool first_page = true;
-
     do
     {
         // Step over the schematic hierarchy
-        if( m_select_PlotAll )
+        if( aPlotAll )
         {
             SCH_SHEET_PATH list;
 
@@ -83,27 +85,22 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile()
 
         if( first_page )
         {
-            wxString    msg;
-            wxString    plotFileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
-                                       + PDF_PLOTTER::GetDefaultFileExtension();
-            msg.Printf( _( "Plot: %s " ), GetChars( plotFileName ) );
-            m_MessagesBox->AppendText( msg );
+            plotFileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
+                           + PDF_PLOTTER::GetDefaultFileExtension();
 
             FILE* output_file = wxFopen( plotFileName, wxT( "wb" ) );
 
             if( output_file == NULL )
             {
-                msg = wxT( "\n** " );
-                msg += _( "Unable to create " ) + plotFileName + wxT( " **\n" );
+                msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
                 m_MessagesBox->AppendText( msg );
-                wxBell();
                 return;
             }
 
             // Open the plotter and do the first page
             SetLocaleTo_C_standard();
             plotter->SetFilename( plotFileName );
-            setupPlotPage( plotter, screen );
+            setupPlotPagePDF( plotter, screen );
             plotter->StartPlot( output_file );
             first_page = false;
         }
@@ -112,12 +109,12 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile()
             /* For the following pages you need to close the (finished) page,
              *  reconfigure, and then start a new one */
             plotter->ClosePage();
-            setupPlotPage( plotter, screen );
+            setupPlotPagePDF( plotter, screen );
             plotter->StartPage();
         }
 
-        plotOneSheetPDF( plotter, screen );
-    } while( m_select_PlotAll && sheetpath );
+        plotOneSheetPDF( plotter, screen, aPlotFrameRef );
+    } while( aPlotAll && sheetpath );
 
     // Everything done, close the plot and restore the environment
     plotter->EndPlot();
@@ -128,20 +125,58 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile()
     m_parent->SetCurrentSheet( oldsheetpath );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
+
+    msg.Printf( _( "Plot: %s OK\n" ), GetChars( plotFileName ) );
+    m_MessagesBox->AppendText( msg );
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* plotter, SCH_SCREEN* screen )
+void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
+                                             SCH_SCREEN* aScreen,
+                                             bool aPlotFrameRef )
 {
-    if( getPlotFrameRef() )
+    if( aPlotFrameRef )
     {
-        plotter->SetColor( BLACK );
-        PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
+        aPlotter->SetColor( BLACK );
+        PlotWorkSheet( aPlotter, m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(),
-                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
-                       screen->GetFileName() );
+                       aScreen->GetFileName() );
     }
 
-    screen->Plot( plotter );
+    aScreen->Plot( aPlotter );
 }
+
+
+void DIALOG_PLOT_SCHEMATIC::setupPlotPagePDF( PLOTTER * aPlotter, SCH_SCREEN* aScreen )
+{
+    PAGE_INFO   plotPage;                               // page size selected to plot
+    // Considerations on page size and scaling requests
+    PAGE_INFO   actualPage = aScreen->GetPageSettings(); // page size selected in schematic
+
+    switch( m_pageSizeSelect )
+    {
+    case PAGE_SIZE_A:
+        plotPage.SetType( wxT( "A" ) );
+        plotPage.SetPortrait( actualPage.IsPortrait() );
+        break;
+
+    case PAGE_SIZE_A4:
+        plotPage.SetType( wxT( "A4" ) );
+        plotPage.SetPortrait( actualPage.IsPortrait() );
+        break;
+
+    case PAGE_SIZE_AUTO:
+    default:
+        plotPage = actualPage;
+        break;
+    }
+
+    double  scalex  = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
+    double  scaley  = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
+    double  scale   = MIN( scalex, scaley );
+    aPlotter->SetPageSettings( plotPage );
+    aPlotter->SetViewport( wxPoint( 0, 0 ), IU_PER_DECIMILS, scale, false );
+}
+

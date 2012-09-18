@@ -4,7 +4,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr
+ * Copyright (C) 1992-2012 Jean-Pierre Charras <jp.charras at wanadoo.fr
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
@@ -42,13 +42,12 @@
 #define PLOT_MODECOLOR_KEY wxT( "PlotModeColor" )
 #define PLOT_FRAME_REFERENCE_KEY wxT( "PlotFrameRef" )
 #define PLOT_HPGL_ORIGIN_KEY wxT( "PlotHPGLOrg" )
+#define PLOT_HPGL_PAPERSIZE_KEY wxT( "PlotHPGLPaperSize" )
 
 
 
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
-int DIALOG_PLOT_SCHEMATIC::m_HPGLPaperSizeSelect = 0;
-
 
 void SCH_EDIT_FRAME::PlotSchematic( wxCommandEvent& event )
 {
@@ -64,7 +63,6 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
     m_parent = parent;
     m_config   = wxGetApp().GetSettings();
 
-    m_select_PlotAll = false;
     initDlg();
 
     GetSizer()->SetSizeHints( this );
@@ -93,6 +91,9 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     // Set HPGL plot origin to center of paper of left bottom corner
     m_config->Read( PLOT_HPGL_ORIGIN_KEY, &tmp, false );
     SetPlotOriginCenter( tmp );
+
+    m_config->Read( PLOT_HPGL_PAPERSIZE_KEY, &m_HPGLPaperSizeSelect, 0 );
+    m_HPGLPaperSizeOption->SetSelection( m_HPGLPaperSizeSelect );
 
     // Switch to the last save plot format
     long plotfmt;
@@ -164,6 +165,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
     m_config->Write( PLOT_FORMAT_KEY, (long) GetPlotFileFormat() );
     m_config->Write( PLOT_HPGL_ORIGIN_KEY, GetPlotOriginCenter() );
     m_HPGLPaperSizeSelect = m_HPGLPaperSizeOption->GetSelection();
+    m_config->Write( PLOT_HPGL_PAPERSIZE_KEY, m_HPGLPaperSizeSelect );
 
     m_pageSizeSelect    = m_PaperSizeOption->GetSelection();
     g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DefaultLineSizeCtrl );
@@ -175,37 +177,38 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
 void DIALOG_PLOT_SCHEMATIC::OnPlotFormatSelection( wxCommandEvent& event )
 {
 
-    switch( m_plotFormatOpt->GetSelection() )
+    switch( GetPlotFileFormat() )
     {
-        case 0:     // postscript
+        default:
+        case PLOT_FORMAT_POST:
             m_paperOptionsSizer->Hide( m_paperHPGLSizer );
             m_paperOptionsSizer->Show( m_PaperSizeOption );
             m_PaperSizeOption->Enable( true );
             m_DefaultLineSizeCtrl->Enable( true );
             break;
 
-        case 1:     // PDF
+        case PLOT_FORMAT_PDF:
             m_paperOptionsSizer->Hide( m_paperHPGLSizer );
             m_paperOptionsSizer->Show(m_PaperSizeOption);
             m_PaperSizeOption->Enable( true );
             m_DefaultLineSizeCtrl->Enable( true );
             break;
 
-        case 2:     // SVG
+        case PLOT_FORMAT_SVG:
             m_paperOptionsSizer->Hide( m_paperHPGLSizer );
             m_paperOptionsSizer->Show(m_PaperSizeOption);
             m_PaperSizeOption->Enable( false );
             m_DefaultLineSizeCtrl->Enable( true );
            break;
 
-        case 3:     // DXF
+        case PLOT_FORMAT_DXF:
             m_paperOptionsSizer->Hide( m_paperHPGLSizer );
             m_paperOptionsSizer->Show(m_PaperSizeOption);
             m_PaperSizeOption->Enable( false );
             m_DefaultLineSizeCtrl->Enable( false );
             break;
 
-        case 4:     //HPGL
+        case PLOT_FORMAT_HPGL:
             m_paperOptionsSizer->Show( m_paperHPGLSizer );
             m_paperOptionsSizer->Hide(m_PaperSizeOption);
             m_DefaultLineSizeCtrl->Enable( false );
@@ -217,75 +220,41 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotFormatSelection( wxCommandEvent& event )
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::setupPlotPage( PLOTTER * plotter, SCH_SCREEN* screen )
-{
-    PAGE_INFO   plotPage;                               // page size selected to plot
-    // Considerations on page size and scaling requests
-    PAGE_INFO   actualPage = screen->GetPageSettings(); // page size selected in schematic
-
-    switch( m_pageSizeSelect )
-    {
-    case PAGE_SIZE_A:
-        plotPage.SetType( wxT( "A" ) );
-        plotPage.SetPortrait( actualPage.IsPortrait() );
-        break;
-
-    case PAGE_SIZE_A4:
-        plotPage.SetType( wxT( "A4" ) );
-        plotPage.SetPortrait( actualPage.IsPortrait() );
-        break;
-
-    case PAGE_SIZE_AUTO:
-    default:
-        plotPage = actualPage;
-        break;
-    }
-
-    double  scalex  = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
-    double  scaley  = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
-    double  scale   = MIN( scalex, scaley );
-    plotter->SetPageSettings( plotPage );
-    plotter->SetViewport( wxPoint( 0, 0 ), IU_PER_DECIMILS, scale, false );
-}
-
-
 void DIALOG_PLOT_SCHEMATIC::OnButtonPlotCurrentClick( wxCommandEvent& event )
 {
-    m_select_PlotAll = false;
-    PlotSchematic();
+    PlotSchematic( true );
 }
 
 
 void DIALOG_PLOT_SCHEMATIC::OnButtonPlotAllClick( wxCommandEvent& event )
 {
-    m_select_PlotAll = true;
-    PlotSchematic();
+    PlotSchematic( false );
 }
 
-void DIALOG_PLOT_SCHEMATIC::PlotSchematic()
+void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
 {
     getPlotOptions();
     switch( GetPlotFileFormat() )
     {
         case PLOT_FORMAT_HPGL:
-            createHPGLFile( m_select_PlotAll );
+            createHPGLFile( aPlotAll, getPlotFrameRef() );
             break;
 
         default:
         case PLOT_FORMAT_POST:
-            createPSFile();
+            createPSFile( aPlotAll, getPlotFrameRef() );
             break;
 
         case PLOT_FORMAT_DXF:
-            CreateDXFFile();
+            CreateDXFFile( aPlotAll, getPlotFrameRef() );
             break;
 
         case PLOT_FORMAT_PDF:
-            createPDFFile();
+            createPDFFile( aPlotAll, getPlotFrameRef() );
             break;
 
         case PLOT_FORMAT_SVG:
-            createSVGFile( m_select_PlotAll, getPlotFrameRef() );
+            createSVGFile( aPlotAll, getPlotFrameRef() );
             break;
     }
     m_MessagesBox->AppendText( wxT( "****\n" ) );
