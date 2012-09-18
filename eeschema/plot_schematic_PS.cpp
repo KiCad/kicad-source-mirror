@@ -33,7 +33,7 @@
 #include <dialog_plot_schematic.h>
 
 
-void DIALOG_PLOT_SCHEMATIC::createPSFile()
+void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
 {
     SCH_SCREEN*     screen = m_parent->GetScreen();
     SCH_SHEET_PATH* sheetpath;
@@ -55,7 +55,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile()
 
     while( true )
     {
-        if( m_select_PlotAll )
+        if( aPlotAll )
         {
             if( sheetpath == NULL )
                 break;
@@ -104,9 +104,18 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile()
         plotFileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
                        + PS_PLOTTER::GetDefaultFileExtension();
 
-        plotOneSheetPS( plotFileName, screen, plotPage, plot_offset, scale );
+        wxString msg;
 
-        if( !m_select_PlotAll )
+        if( plotOneSheetPS( plotFileName, screen, plotPage, plot_offset,
+                            scale, aPlotFrameRef ) )
+            msg.Printf( _( "Plot: %s OK\n" ), GetChars( plotFileName ) );
+        else    // Error
+             msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
+
+        m_MessagesBox->AppendText( msg );
+
+
+        if( !aPlotAll )
             break;
     }
 
@@ -116,54 +125,45 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile()
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     FileName,
-                                            SCH_SCREEN*         screen,
-                                            const PAGE_INFO&    pageInfo,
-                                            wxPoint             plot_offset,
-                                            double              scale )
+bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
+                                            SCH_SCREEN*         aScreen,
+                                            const PAGE_INFO&    aPageInfo,
+                                            wxPoint             aPlot0ffset,
+                                            double              aScale,
+                                            bool                aPlotFrameRef )
 {
-    wxString    msg;
-
-    FILE*       output_file = wxFopen( FileName, wxT( "wt" ) );
+    FILE*       output_file = wxFopen( aFileName, wxT( "wt" ) );
 
     if( output_file == NULL )
-    {
-        msg = wxT( "\n** " );
-        msg += _( "Unable to create " ) + FileName + wxT( " **\n" );
-        m_MessagesBox->AppendText( msg );
-        return;
-    }
-
-    msg.Printf( _( "Plot: %s " ), GetChars( FileName ) );
-    m_MessagesBox->AppendText( msg );
+        return false;
 
     SetLocaleTo_C_standard();
     PS_PLOTTER* plotter = new PS_PLOTTER();
-    plotter->SetPageSettings( pageInfo );
+    plotter->SetPageSettings( aPageInfo );
     plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
+    plotter->SetViewport( aPlot0ffset, IU_PER_DECIMILS, aScale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-PS" ) );
-    plotter->SetFilename( FileName );
+    plotter->SetFilename( aFileName );
     plotter->StartPlot( output_file );
 
-    if( getPlotFrameRef() )
+    if( aPlotFrameRef )
     {
         plotter->SetColor( BLACK );
         PlotWorkSheet( plotter, m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(),
-                       screen->m_ScreenNumber, screen->m_NumberOfScreens,
+                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
-                       screen->GetFileName() );
+                       aScreen->GetFileName() );
     }
 
-    screen->Plot( plotter );
+    aScreen->Plot( plotter );
 
     plotter->EndPlot();
     delete plotter;
     SetLocaleTo_Default();
 
-    m_MessagesBox->AppendText( wxT( "Ok\n" ) );
+    return true;
 }

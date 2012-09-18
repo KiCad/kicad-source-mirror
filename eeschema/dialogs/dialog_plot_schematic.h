@@ -50,8 +50,7 @@ private:
     static int      m_pageSizeSelect;       // Static to keep last option for some format:
                                             // Static to keep last option:
                                             // use default size or force A or A4 size
-    static int      m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
-    bool            m_select_PlotAll;       // Flaf to plot current page or the full hierarchy
+    int             m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
 
 public:
     // / Constructors
@@ -67,6 +66,7 @@ private:
 
     // common
     void getPlotOptions();
+
     bool getModeColor()
     { return m_ModeColorOption->GetSelection() == 0; }
 
@@ -78,18 +78,17 @@ private:
     bool getPlotFrameRef() { return m_PlotFrameRefOpt->GetValue(); }
     void setPlotFrameRef( bool aPlot) {m_PlotFrameRefOpt->SetValue( aPlot ); }
 
-    void setupPlotPage( PLOTTER* plotter, SCH_SCREEN* screen );
-
-    void PlotSchematic();
+    void PlotSchematic( bool aPlotAll );
 
     // PDF
-    void    createPDFFile();
-    void    plotOneSheetPDF( PLOTTER* plotter, SCH_SCREEN* screen);
+    void    createPDFFile( bool aPlotAll, bool aPlotFrameRef );
+    void    plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotFrameRef);
+    void    setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen );
 
     // DXF
-    void    CreateDXFFile();
-    void    PlotOneSheetDXF( const wxString& FileName, SCH_SCREEN* screen,
-                             wxPoint plot_offset, double scale );
+    void    CreateDXFFile( bool aPlotAll, bool aPlotFrameRef );
+    bool    PlotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScreen,
+                             wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // HPGL
     bool    GetPlotOriginCenter()
@@ -100,24 +99,25 @@ private:
     {
         m_plotOriginOpt->SetSelection( aCenter ? 1 : 0 );
     }
-    void    createHPGLFile( bool aPlotAll );
+    void    createHPGLFile( bool aPlotAll, bool aPlotFrameRef );
     void    SetHPGLPenWidth();
-    void    Plot_1_Page_HPGL( const wxString& FileName, SCH_SCREEN* screen,
-                              const PAGE_INFO& pageInfo,
-                              wxPoint& offset, double plot_scale );
+    bool    Plot_1_Page_HPGL( const wxString& aFileName, SCH_SCREEN* aScreen,
+                              const PAGE_INFO& aPageInfo,
+                              wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // PS
-    void    createPSFile();
-    void    plotOneSheetPS( const wxString& FileName, SCH_SCREEN* screen,
-                            const PAGE_INFO& pageInfo,
-                            wxPoint plot_offset, double scale );
+    void    createPSFile( bool aPlotAll, bool aPlotFrameRef );
+    bool    plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
+                            const PAGE_INFO& aPageInfo,
+                            wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // SVG
-    void    createSVGFile( bool aPrintAll, bool aPrint_Sheet_Ref );
+    void    createSVGFile( bool aPlotAll, bool aPlotFrameRef );
+
 public:
     // This function is static because it is called by libedit
-    // outside a dialog.
-    static bool plotOneSheetSVG( EDA_DRAW_FRAME* frame, const wxString& FullFileName,
-                                 SCH_SCREEN* screen,
-                                 bool aPrintBlackAndWhite, bool aPrint_Sheet_Ref );
+    // outside a dialog. This is the reason we need aFrame as parameter
+    static bool plotOneSheetSVG( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
+                                 SCH_SCREEN* aScreen,
+                                 bool aPlotBlackAndWhite, bool aPlotFrameRef );
 };

@@ -102,75 +102,60 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
         bool success = plotOneSheetSVG( m_parent, fn.GetFullPath(), screen,
                                         getModeColor() ? false : true,
                                         aPrintFrameRef );
-        msg = _( "Create file " ) + fn.GetFullPath();
+        if( success )
+            msg.Printf( _( "Plot: %s OK\n" ),
+                        GetChars( fn.GetFullPath() ) );
+        else    // Error
+             msg.Printf( _( "** Unable to create %s **\n" ),
+                        GetChars( fn.GetFullPath() ) );
 
-        if( !success )
-            msg += _( " error" );
-
-        msg += wxT( "\n" );
         m_MessagesBox->AppendText( msg );
     }
 }
 
 
-bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    frame,
-                                             const wxString&    FullFileName,
+bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
+                                             const wxString&    aFileName,
                                              SCH_SCREEN*        aScreen,
-                                             bool               aPrintBlackAndWhite,
-                                             bool               aPrintFrameRef )
+                                             bool               aPlotBlackAndWhite,
+                                             bool               aPlotFrameRef )
 {
-    int     tmpzoom;
-    wxPoint tmp_startvisu;
-    wxSize  sheetSize;          // Sheet size in internal units
-    wxPoint old_org;
-    bool    success = true;
+   FILE*       output_file = wxFopen( aFileName, wxT( "wt" ) );
 
-    tmp_startvisu = aScreen->m_StartVisu;
-    tmpzoom = aScreen->GetZoom();
-    old_org = aScreen->m_DrawOrg;
-    aScreen->m_DrawOrg.x     = aScreen->m_DrawOrg.y = 0;
-    aScreen->m_StartVisu.x   = aScreen->m_StartVisu.y = 0;
+    if( output_file == NULL )
+        return false;
 
-    sheetSize = aScreen->GetPageSettings().GetSizeIU();
-    aScreen->SetScalingFactor( 1.0 );
-    EDA_DRAW_PANEL* panel = frame->GetCanvas();
+    LOCALE_IO   toggle;
 
-    LOCALE_IO       toggle;
+    SVG_PLOTTER* plotter = new SVG_PLOTTER();
 
-    double          dpi = 1000.0 * IU_PER_MILS;
-    wxPoint         origin;
-    KicadSVGFileDC  dc( FullFileName, origin, sheetSize, dpi );
+    const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
+    plotter->SetPageSettings( pageInfo );
+    plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
+    plotter->SetColorMode( aPlotBlackAndWhite ? false : true );
+    wxPoint plot_offset;
+    double scale = 1.0;
+    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
 
-    EDA_RECT        tmp = *panel->GetClipBox();
-    GRResetPenAndBrush( &dc );
-    GRForceBlackPen( aPrintBlackAndWhite );
+    // Init :
+    plotter->SetCreator( wxT( "Eeschema-SVG" ) );
+    plotter->SetFilename( aFileName );
+    plotter->StartPlot( output_file );
 
+    if( aPlotFrameRef )
+    {
+        plotter->SetColor( BLACK );
+        PlotWorkSheet( plotter, aFrame->GetTitleBlock(),
+                       aFrame->GetPageSettings(),
+                       aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
+                       aFrame->GetScreenDesc(),
+                       aScreen->GetFileName() );
+    }
 
-    panel->SetClipBox( EDA_RECT( wxPoint( -0x3FFFFF0, -0x3FFFFF0 ),
-                                 wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
+    aScreen->Plot( plotter );
 
-    aScreen->m_IsPrinting = true;
+    plotter->EndPlot();
+    delete plotter;
 
-    if( frame->IsType( SCHEMATIC_FRAME_TYPE ) )
-        aScreen->Draw( panel, &dc, GR_COPY );
-
-    if( frame->IsType( LIBEDITOR_FRAME_TYPE ) )
-        ( (LIB_EDIT_FRAME*) frame )->RedrawComponent( &dc,
-                                                      wxPoint( sheetSize.x / 2,
-                                                               sheetSize.y / 2 ) );
-
-    if( aPrintFrameRef )
-        frame->TraceWorkSheet( &dc, aScreen, g_DrawDefaultLineThickness,
-                               IU_PER_MILS, frame->GetScreenDesc() );
-
-    aScreen->m_IsPrinting = false;
-    panel->SetClipBox( tmp );
-
-    GRForceBlackPen( false );
-
-    aScreen->m_StartVisu = tmp_startvisu;
-    aScreen->m_DrawOrg   = old_org;
-    aScreen->SetZoom( tmpzoom );
-
-    return success;
+    return true;
 }
