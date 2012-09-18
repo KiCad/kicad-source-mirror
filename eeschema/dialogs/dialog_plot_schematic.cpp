@@ -88,7 +88,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
 
     // Set plot or not frame reference option
     m_config->Read( PLOT_FRAME_REFERENCE_KEY, &tmp, true );
-    setPlotFrameRef( true );
+    setPlotFrameRef( tmp );
 
     // Set HPGL plot origin to center of paper of left bottom corner
     m_config->Read( PLOT_HPGL_ORIGIN_KEY, &tmp, false );
