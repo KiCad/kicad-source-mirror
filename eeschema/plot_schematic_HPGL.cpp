@@ -170,7 +170,7 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll )
 
         if( GetPlotOriginCenter() )
         {
-            plotOffset.x    = -plotPage.GetWidthIU() / 2;
+            plotOffset.x    = plotPage.GetWidthIU() / 2;
             plotOffset.y    = -plotPage.GetHeightIU() / 2;
         }
 

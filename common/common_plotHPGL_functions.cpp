@@ -7,6 +7,164 @@
  * strokes to fill the shape
  */
 
+/* Some HPGL commands:
+ *  Note: the HPGL unit is 25 micrometers
+ *  All commands MUST be terminated by a semi-colon or a linefeed.
+ *  Spaces can NOT be substituted for required commas in the syntax of a command.
+ *
+ *
+ *  AA (Arc Absolute): Angle is a floating point # (requires non integer value)
+ *                   Draws an arc with the center at (X,Y).
+ *                   A positive angle creates a counter-clockwise arc.
+ *                   If the chord angle is specified,
+ *                   this will be the number of degrees used for stepping around the arc.
+ *                   If no value is given then a default value of five degrees is used.
+ *  AA x, y, a {,b};
+ *
+ *  AR (Arc Relative):
+ *  AR Dx, Dy, a {, b};
+ *
+ *  CA (Alternate Character Set):
+ *  CA {n};
+ *
+ *  CI (Circle):
+ *  CI r {,b};
+ *
+ *  CP (Character Plot):
+ *  CP {h, v};
+ *  h         [-127.9999 .. 127.9999]  Anzahl der Zeichen horizontal
+ *  v         [-127.9999 .. 127.9999]  Anzahl der Zeichen vertikal
+ *
+ *  CS (Standard Character Set):
+ *  CS {n};
+ *
+ *  DR (Relative Direction for Label Text):
+ *  DR s, a;
+ *
+ *  DI (Absolute Direction for Label Text):
+ *  DI {s, a};
+ *
+ *  DT (Define Terminator - this character becomes unavailable except to terminate a label string.
+ *                        Default is ^C control-C):
+ *  DT t;
+ *
+ *  EA (rEctangle Absolute - Unfilled, from current position to diagonal x,y):
+ *  EA x, y;
+ *
+ *  ER (rEctangle Relative - Unfilled, from current position to diagonal x,y):
+ *  ER x,y;
+ *
+ *  FT (Fill Type):
+ *  FT {s {,l {a}}};
+ *
+ *  IM (Input Mask):
+ *  IM {f};
+ *
+ *  IN (Initialize): This command instructs the controller to begin processing the HPGL plot file.
+ *                 Without this, the commands in the file are received but never executed.
+ *                 If multiple IN s are found during execution of the file,
+ *                 the controller performs a Pause/Cancel operation.
+ *                 All motion from the previous job, yet to be executed, is lost,
+ *                 and the new information is executed.
+ *  IN;
+ *
+ *  IP Input P1 and P2:
+ *  IP {P1x, P1y {, P2x, P2y}};
+ *
+ *  IW (Input Window):
+ *  IW {XUL, YUL, XOR, YOR};
+ *
+ *  LB (Label):
+ *  LB c1 .. cn t;
+ *
+ *  PA (Plot Absolute): Moves to an absolute HPGL position and sets absolute mode for
+ *                    future PU and PD commands. If no arguments follow the command,
+ *                    only absolute mode is set.
+ *  PA {x1, y1 {{PU|PD|,} ..., ..., xn, yn}};
+ *  P1x, P1y, P2x, P2y  [Integer in ASCII]
+ *
+ *  PD (Pen Down): Executes <current pen> pen then moves to the requested position
+ *               if one is specified. This position is dependent on whether absolute
+ *               or relative mode is set. This command performs no motion in 3-D mode,
+ *               but the outputs and feedrates are affected.
+ *  PD {x, y};
+ *
+ *  PR (Plot Relative):    Moves to the relative position specified and sets relative mode
+ *                       for future PU and PD commands.
+ *                       If no arguments follow the command, only relative mode is set.
+ *  PR {Dx1, Dy1 {{PU|PD|,} ..., ..., Dxn, Dyn}};
+ *
+ *  PS (Paper Size):
+ *  PS {n};
+ *
+ *  PT (Pen Thickness):
+ *  PT {l};
+ *
+ *  PU (Pen Up):   Executes <current pen> pen then moves to the requested position
+ *               if one is specified. This position is dependent on whether absolute
+ *               or relative mode is set.
+ *               This command performs no motion in 3-D mode, but the outputs
+ *               and feedrates are affected.
+ *  PU {x, y};
+ *
+ *  RA (Rectangle Absolute - Filled, from current position to diagonal x,y):
+ *  RA x, y;
+ *
+ *  RO (Rotate Coordinate System):
+ *  RO;
+ *
+ *  RR (Rectangle Relative - Filled, from current position to diagonal x,y):
+ *  RR x, y;
+ *
+ *  SA (Select Alternate Set):
+ *  SA;
+ *
+ *  SC (Scale):
+ *  SC {Xmin, Xmax, Ymin, Ymax};
+ *
+ *  SI (Absolute Character Size):
+ *  SI b, h;
+ *  b         [-127.9999 .. 127.9999, keine 0]
+ *  h         [-127.9999 .. 127.9999, keine 0]
+ *
+ *  SL (Character Slant):
+ *  SL {a};
+ *  a         [-3.5 .. -0.5, 0.5 .. 3.5]
+*
+ *  SP (Select Pen):   Selects a new pen or tool for use.
+ *                   If no pen number or a value of zero is given,
+ *                   the controller performs an EOF (end of file command).
+ *                   Once an EOF is performed, no motion is executed,
+ *                   until a new IN command is received.
+ *  SP n;
+ *
+ *  SR (Relative Character Size):
+ *  SR {b, h};
+ *  b         [-127.9999 .. 127.9999, keine 0]
+ *  h         [-127.9999 .. 127.9999, keine 0]
+ *
+ *  SS (Select Standard Set):
+ *  SS;
+ *
+ *  TL (Tick Length):
+ *  TL {tp {, tm}};
+ *
+ *  UC (User Defined Character):
+ *  UC {i,} x1, y1, {i,} x2, y2, ... {i,} xn, yn;
+ *
+ *  VS (Velocity Select):
+ *  VS {v {, n}};
+ *  v         [1 .. 40]
+ *  n         [1 .. 8, je nach Ausstattung]
+ *
+ *  XT (X Tick):
+ *  XT;
+ *
+ *  YT (Y Tick):
+ *  YT;
+ */
+
+
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <trigo.h>
@@ -16,25 +174,26 @@
 #include <macros.h>
 #include <kicad_string.h>
 
-// HPGL scale factor (1 PLU = 1/40mm IIRC)
+// HPGL scale factor (1 PLU = 1/40mm = 25 micrometers)
 static const double PLUsPERDECIMIL = 0.102041;
 
 
 void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-				double aScale, bool aMirror )
+                                double aScale, bool aMirror )
 {
     wxASSERT( !outputFile );
     plotOffset  = aOffset;
-    plotScale = aScale;
+    plotScale   = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
     iuPerDeviceUnit = PLUsPERDECIMIL / aIusPerDecimil;
     /* Compute the paper size in IUs */
-    paperSize = pageInfo.GetSizeMils();
+    paperSize   = pageInfo.GetSizeMils();
     paperSize.x *= 10.0 * aIusPerDecimil;
     paperSize.y *= 10.0 * aIusPerDecimil;
-    SetDefaultLineWidth( 0 ); // HPGL has pen sizes instead
+    SetDefaultLineWidth( 0 );    // HPGL has pen sizes instead
     plotMirror = aMirror;
 }
+
 
 /**
  * At the start of the HPGL plot pen speed and number are requested
@@ -47,6 +206,7 @@ bool HPGL_PLOTTER::StartPlot( FILE* fout )
     return true;
 }
 
+
 /**
  * HPGL end of plot: pen return and release
  */
@@ -58,6 +218,7 @@ bool HPGL_PLOTTER::EndPlot()
     outputFile = NULL;
     return true;
 }
+
 
 /**
  * HPGL rectangle: fill not supported
@@ -93,13 +254,14 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill,
 /**
  * HPGL polygon: fill not supported (but closed, at least)
  */
-void HPGL_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
-                             FILL_T aFill, int aWidth)
+void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
+                             FILL_T aFill, int aWidth )
 {
     if( aCornerList.size() <= 1 )
         return;
 
     MoveTo( aCornerList[0] );
+
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
         LineTo( aCornerList[ii] );
 
@@ -107,9 +269,11 @@ void HPGL_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     if( aFill )
     {
         int ii = aCornerList.size() - 1;
+
         if( aCornerList[ii] != aCornerList[0] )
             LineTo( aCornerList[0] );
     }
+
     PenFinish();
 }
 
@@ -120,29 +284,34 @@ void HPGL_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
 void HPGL_PLOTTER::penControl( char plume )
 {
     wxASSERT( outputFile );
+
     switch( plume )
     {
     case 'U':
+
         if( penState != 'U' )
         {
             fputs( "PU;", outputFile );
             penState = 'U';
         }
+
         break;
 
     case 'D':
+
         if( penState != 'D' )
         {
             fputs( "PD;", outputFile );
             penState = 'D';
         }
+
         break;
 
     case 'Z':
         fputs( "PU;", outputFile );
-        penState = 'U';
-        penLastpos.x = -1;
-        penLastpos.y = -1;
+        penState        = 'U';
+        penLastpos.x    = -1;
+        penLastpos.y    = -1;
         break;
     }
 }
@@ -174,6 +343,7 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
 void HPGL_PLOTTER::SetDash( bool dashed )
 {
     wxASSERT( outputFile );
+
     if( dashed )
         fputs( "LI 2;\n", outputFile );
     else
@@ -225,9 +395,9 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int ra
 
     // Calculate start point,
     wxPoint cmap;
-    cmap.x = (int) ( centre.x + ( radius * cos( RAD2DEG( StAngle / 10.0 ) ) ) );
-    cmap.y = (int) ( centre.y - ( radius * sin( RAD2DEG( StAngle / 10.0 ) ) ) );
-    DPOINT cmap_dev = userToDeviceCoordinates( cmap );
+    cmap.x  = (int) ( centre.x + ( radius * cos( RAD2DEG( StAngle / 10.0 ) ) ) );
+    cmap.y  = (int) ( centre.y - ( radius * sin( RAD2DEG( StAngle / 10.0 ) ) ) );
+    DPOINT  cmap_dev = userToDeviceCoordinates( cmap );
 
     fprintf( outputFile,
              "PU;PA %.0f,%.0f;PD;AA %.0f,%.0f,",
@@ -247,8 +417,8 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int or
                                  EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
-    int deltaxy, cx, cy;
-    wxSize size( aSize );
+    int     deltaxy, cx, cy;
+    wxSize  size( aSize );
 
     /* The pad is reduced to an oval with size.y > size.x
      * (Oval vertical orientation 0)
@@ -256,9 +426,11 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int or
     if( size.x > size.y )
     {
         EXCHG( size.x, size.y ); orient += 900;
+
         if( orient >= 3600 )
             orient -= 3600;
     }
+
     deltaxy = size.y - size.x;     // distance between centers of the oval
 
     if( trace_mode == FILLED )
@@ -285,10 +457,10 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
                                    EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
-    DPOINT pos_dev = userToDeviceCoordinates( pos );
+    DPOINT  pos_dev = userToDeviceCoordinates( pos );
 
-    int delta = KiROUND( penDiameter - penOverlap );
-    int radius = diametre / 2;
+    int     delta   = KiROUND( penDiameter - penOverlap );
+    int     radius  = diametre / 2;
 
     if( trace_mode != LINE )
     {
@@ -317,6 +489,7 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
             }
         }
     }
+
     PenFinish();
 }
 
@@ -325,67 +498,69 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
                                  int orient, EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
-    wxSize size;
-    int    delta;
-    int    ox, oy, fx, fy;
+    wxSize  size;
+    int     delta;
+    int     ox, oy, fx, fy;
 
-    size.x = padsize.x / 2;
-    size.y = padsize.y / 2;
+    size.x  = padsize.x / 2;
+    size.y  = padsize.y / 2;
 
     if( trace_mode != LINE )
     {
-        size.x = (padsize.x - (int) penDiameter) / 2;
-        size.y = (padsize.y - (int) penDiameter) / 2;
+        size.x  = (padsize.x - (int) penDiameter) / 2;
+        size.y  = (padsize.y - (int) penDiameter) / 2;
     }
 
     if( size.x < 0 )
         size.x = 0;
+
     if( size.y < 0 )
         size.y = 0;
 
     // If a dimension is zero, the trace is reduced to 1 line.
     if( size.x == 0 )
     {
-        ox = pos.x;
-        oy = pos.y - size.y;
+        ox  = pos.x;
+        oy  = pos.y - size.y;
         RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-        fx = pos.x;
-        fy = pos.y + size.y;
-        RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        MoveTo( wxPoint( ox, oy ) );
-        FinishTo( wxPoint( fx, fy ) );
-        return;
-    }
-    if( size.y == 0 )
-    {
-        ox = pos.x - size.x;
-        oy = pos.y;
-        RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-        fx = pos.x + size.x;
-        fy = pos.y;
+        fx  = pos.x;
+        fy  = pos.y + size.y;
         RotatePoint( &fx, &fy, pos.x, pos.y, orient );
         MoveTo( wxPoint( ox, oy ) );
         FinishTo( wxPoint( fx, fy ) );
         return;
     }
 
-    ox = pos.x - size.x;
-    oy = pos.y - size.y;
+    if( size.y == 0 )
+    {
+        ox  = pos.x - size.x;
+        oy  = pos.y;
+        RotatePoint( &ox, &oy, pos.x, pos.y, orient );
+        fx  = pos.x + size.x;
+        fy  = pos.y;
+        RotatePoint( &fx, &fy, pos.x, pos.y, orient );
+        MoveTo( wxPoint( ox, oy ) );
+        FinishTo( wxPoint( fx, fy ) );
+        return;
+    }
+
+    ox  = pos.x - size.x;
+    oy  = pos.y - size.y;
     RotatePoint( &ox, &oy, pos.x, pos.y, orient );
     MoveTo( wxPoint( ox, oy ) );
 
-    fx = pos.x - size.x;
-    fy = pos.y + size.y;
+    fx  = pos.x - size.x;
+    fy  = pos.y + size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
     LineTo( wxPoint( fx, fy ) );
 
-    fx = pos.x + size.x;
-    fy = pos.y + size.y;
+    fx  = pos.x + size.x;
+    fy  = pos.y + size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
     LineTo( wxPoint( fx, fy ) );
 
-    fx = pos.x + size.x;
-    fy = pos.y - size.y;
+    fx  = pos.x + size.x;
+    fy  = pos.y - size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
     LineTo( wxPoint( fx, fy ) );
 
@@ -399,42 +574,44 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
         if( delta > 0 )
             while( (size.x > 0) && (size.y > 0) )
             {
-                size.x -= delta;
-                size.y -= delta;
+                size.x  -= delta;
+                size.y  -= delta;
 
                 if( size.x < 0 )
                     size.x = 0;
+
                 if( size.y < 0 )
                     size.y = 0;
 
-                ox = pos.x - size.x;
-                oy = pos.y - size.y;
+                ox  = pos.x - size.x;
+                oy  = pos.y - size.y;
                 RotatePoint( &ox, &oy, pos.x, pos.y, orient );
                 MoveTo( wxPoint( ox, oy ) );
 
-                fx = pos.x - size.x;
-                fy = pos.y + size.y;
+                fx  = pos.x - size.x;
+                fy  = pos.y + size.y;
                 RotatePoint( &fx, &fy, pos.x, pos.y, orient );
                 LineTo( wxPoint( fx, fy ) );
 
-                fx = pos.x + size.x;
-                fy = pos.y + size.y;
+                fx  = pos.x + size.x;
+                fy  = pos.y + size.y;
                 RotatePoint( &fx, &fy, pos.x, pos.y, orient );
                 LineTo( wxPoint( fx, fy ) );
 
-                fx = pos.x + size.x;
-                fy = pos.y - size.y;
+                fx  = pos.x + size.x;
+                fy  = pos.y - size.y;
                 RotatePoint( &fx, &fy, pos.x, pos.y, orient );
                 LineTo( wxPoint( fx, fy ) );
 
                 FinishTo( wxPoint( ox, oy ) );
             }
 
+
     }
 }
 
 
-void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
+void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorners,
                                    int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
     wxASSERT( outputFile );
@@ -459,6 +636,7 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorne
         RotatePoint( &coord[ii], aPadOrient );
         coord[ii] += aPadPos;
     }
+
     MoveTo( coord[0] );
     LineTo( coord[1] );
     LineTo( coord[2] );
@@ -474,7 +652,7 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorne
         move = KiROUND( penDiameter - penOverlap );
         // Calculate fill height.
 
-        if( polygone[0].y == polygone[3].y ) // Horizontal
+        if( polygone[0].y == polygone[3].y )    // Horizontal
         {
             jj = polygone[3].y - (int) ( penDiameter + ( 2 * penOverlap ) );
         }
@@ -489,33 +667,36 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorne
         // Trace the outline.
         for( ; jj > 0; jj-- )
         {
-            polygone[0].x += move;
-            polygone[0].y -= move;
-            polygone[1].x += move;
-            polygone[1].y += move;
-            polygone[2].x -= move;
-            polygone[2].y += move;
-            polygone[3].x -= move;
-            polygone[3].y -= move;
+            polygone[0].x   += move;
+            polygone[0].y   -= move;
+            polygone[1].x   += move;
+            polygone[1].y   += move;
+            polygone[2].x   -= move;
+            polygone[2].y   += move;
+            polygone[3].x   -= move;
+            polygone[3].y   -= move;
 
             // Test for crossed vertexes.
-            if( polygone[0].x > polygone[3].x ) /* X axis intersection on
-                                                 *vertexes 0 and 3 */
+            if( polygone[0].x > polygone[3].x )    /* X axis intersection on
+                                                    * vertexes 0 and 3 */
             {
                 polygone[0].x = polygone[3].x = 0;
             }
-            if( polygone[1].x > polygone[2].x ) /*  X axis intersection on
-                                                 *vertexes 1 and 2 */
+
+            if( polygone[1].x > polygone[2].x )    /*  X axis intersection on
+                                                    * vertexes 1 and 2 */
             {
                 polygone[1].x = polygone[2].x = 0;
             }
-            if( polygone[1].y > polygone[0].y ) /* Y axis intersection on
-                                                 *vertexes 0 and 1 */
+
+            if( polygone[1].y > polygone[0].y )    /* Y axis intersection on
+                                                    * vertexes 0 and 1 */
             {
                 polygone[0].y = polygone[1].y = 0;
             }
-            if( polygone[2].y > polygone[3].y ) /* Y axis intersection on
-                                                 *vertexes 2 and 3 */
+
+            if( polygone[2].y > polygone[3].y )    /* Y axis intersection on
+                                                    * vertexes 2 and 3 */
             {
                 polygone[2].y = polygone[3].y = 0;
             }
@@ -535,4 +716,3 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorne
         }
     }
 }
-
