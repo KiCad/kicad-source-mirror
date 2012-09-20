@@ -27,7 +27,7 @@
 
 
 class OUTPUTFORMATTER;
-class IO_ERROR;
+struct IO_ERROR;
 
 
 extern wxString GenDate();
