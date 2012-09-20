@@ -64,7 +64,7 @@ class DIALOG_SVG_PRINT_base : public wxDialog
 	
 	public:
 		
-		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Create SVG file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 507,420 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export SVG file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 507,420 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SVG_PRINT_base();
 	
 };

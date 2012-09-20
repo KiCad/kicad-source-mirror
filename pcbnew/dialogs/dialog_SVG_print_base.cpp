@@ -78,7 +78,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	
 	wxString m_rbFileOptChoices[] = { _("One file per layer"), _("All in one file") };
 	int m_rbFileOptNChoices = sizeof( m_rbFileOptChoices ) / sizeof( wxString );
-	m_rbFileOpt = new wxRadioBox( this, wxID_ANY, _("wxRadioBox"), wxDefaultPosition, wxDefaultSize, m_rbFileOptNChoices, m_rbFileOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbFileOpt = new wxRadioBox( this, wxID_ANY, _("File option:"), wxDefaultPosition, wxDefaultSize, m_rbFileOptNChoices, m_rbFileOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbFileOpt->SetSelection( 0 );
 	bButtonsSizer->Add( m_rbFileOpt, 0, wxALL, 5 );
 	
