@@ -34,18 +34,87 @@ static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte,
                             EDA_DRAW_MODE_T trace_mode, EDA_COLOR_T aColor );
 
 
+static bool PlotAllTextsModule( PLOTTER* aPlotter, BOARD* aBoard,
+                                long aLayerMask, MODULE* aModule,
+                                const PCB_PLOT_PARAMS& aPlotOpt )
+{
+    TEXTE_MODULE* pt_texte;
+    EDA_DRAW_MODE_T trace_mode = aPlotOpt.GetMode();
+
+    // see if we want to plot VALUE and REF fields
+    bool trace_val = aPlotOpt.GetPlotValue();
+    bool trace_ref = aPlotOpt.GetPlotReference();
+
+    TEXTE_MODULE* text = aModule->m_Reference;
+    unsigned      textLayer = text->GetLayer();
+
+    if( textLayer >= 32 )
+        return false;
+
+    if( ( ( 1 << textLayer ) & aLayerMask ) == 0 )
+        trace_ref = false;
+
+    if( !text->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
+        trace_ref = false;
+
+    text = aModule->m_Value;
+    textLayer = text->GetLayer();
+
+    if( textLayer > 32 )
+        return false;
+
+    if( ( (1 << textLayer) & aLayerMask ) == 0 )
+        trace_val = false;
+
+    if( !text->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
+        trace_val = false;
+
+    // Plot text fields, if allowed
+    if( trace_ref )
+        PlotTextModule( aPlotter, aModule->m_Reference,
+                        trace_mode, aPlotOpt.GetReferenceColor() );
+
+    if( trace_val )
+        PlotTextModule( aPlotter, aModule->m_Value,
+                        trace_mode, aPlotOpt.GetValueColor() );
+
+    for( pt_texte = (TEXTE_MODULE*) aModule->m_Drawings.GetFirst();
+         pt_texte != NULL; pt_texte = pt_texte->Next() )
+    {
+        if( pt_texte->Type() != PCB_MODULE_TEXT_T )
+            continue;
+
+        if( !aPlotOpt.GetPlotOtherText() )
+            continue;
+
+        if( !pt_texte->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
+            continue;
+
+        textLayer = pt_texte->GetLayer();
+
+        if( textLayer >= 32 )
+            return false;
+
+        if( !( ( 1 << textLayer ) & aLayerMask ) )
+            continue;
+
+        EDA_COLOR_T color = aBoard->GetLayerColor( textLayer );
+        PlotTextModule( aPlotter, pt_texte, trace_mode, color );
+    }
+
+    return true;
+}
+
 /* Creates the plot for silkscreen layers
  */
 void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
                      const PCB_PLOT_PARAMS&  aPlotOpt )
 {
-    TEXTE_MODULE* pt_texte;
-
     EDA_DRAW_MODE_T trace_mode = aPlotOpt.GetMode();
 
     // Plot edge layer and graphic items
 
-    for( EDA_ITEM*  item = aBoard->m_Drawings;  item;  item = item->Next() )
+    for( EDA_ITEM* item = aBoard->m_Drawings; item; item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -91,10 +160,22 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
             for( D_PAD * pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
             {
                 // See if the pad is on this layer
-                if( (pad->GetLayerMask() & layersmask_plotpads) == 0 )
+                int masklayer = pad->GetLayerMask();
+                if( (masklayer & layersmask_plotpads) == 0 )
                     continue;
 
                 wxPoint shape_pos = pad->ReturnShapePos();
+
+                EDA_COLOR_T color = ColorFromInt(0);
+                if( (layersmask_plotpads & SILKSCREEN_LAYER_BACK) )
+                   color = aBoard->GetLayerColor( SILKSCREEN_N_BACK );
+
+                if((layersmask_plotpads & SILKSCREEN_LAYER_FRONT ) )
+                    color = ColorFromInt( color | aBoard->GetLayerColor( SILKSCREEN_N_FRONT ) );
+
+                // Set plot color (change WHITE to LIGHTGRAY because
+                // the white items are not seen on a white paper or screen
+                aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
                 switch( pad->GetShape() )
                 {
@@ -129,91 +210,10 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     // Plot footprints fields (ref, value ...)
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        // see if we want to plot VALUE and REF fields
-        bool trace_val = aPlotOpt.GetPlotValue();
-        bool trace_ref = aPlotOpt.GetPlotReference();
-
-        TEXTE_MODULE* text = module->m_Reference;
-        unsigned      textLayer = text->GetLayer();
-
-        if( textLayer >= 32 )
+        if( ! PlotAllTextsModule( aPlotter, aBoard, aLayerMask, module, aPlotOpt ) )
         {
-            wxString errMsg;
-
-            errMsg.Printf( _( "Your BOARD has a bad layer number of %u for \
-module\n %s's \"reference\" text." ),
-                           textLayer, GetChars( module->GetReference() ) );
-            DisplayError( NULL, errMsg );
-            return;
-        }
-
-        if( ( ( 1 << textLayer ) & aLayerMask ) == 0 )
-            trace_ref = false;
-
-        if( !text->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
-            trace_ref = false;
-
-        text = module->m_Value;
-        textLayer = text->GetLayer();
-
-        if( textLayer > 32 )
-        {
-            wxString errMsg;
-
-            errMsg.Printf( _( "Your BOARD has a bad layer number of %u for \
-module\n %s's \"value\" text." ),
-                           textLayer, GetChars( module->GetReference() ) );
-            DisplayError( NULL, errMsg );
-            return;
-        }
-
-        if( ( (1 << textLayer) & aLayerMask ) == 0 )
-            trace_val = false;
-
-        if( !text->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
-            trace_val = false;
-
-        // Plot text fields, if allowed
-        if( trace_ref )
-            PlotTextModule( aPlotter, module->m_Reference,
-                            trace_mode, aPlotOpt.GetReferenceColor() );
-
-        if( trace_val )
-            PlotTextModule( aPlotter, module->m_Value,
-                            trace_mode, aPlotOpt.GetValueColor() );
-
-        for( pt_texte = (TEXTE_MODULE*) module->m_Drawings.GetFirst();
-             pt_texte != NULL;
-             pt_texte = pt_texte->Next() )
-        {
-            if( pt_texte->Type() != PCB_MODULE_TEXT_T )
-                continue;
-
-            if( !aPlotOpt.GetPlotOtherText() )
-                continue;
-
-            if( !pt_texte->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
-                continue;
-
-            textLayer = pt_texte->GetLayer();
-
-            if( textLayer >= 32 )
-            {
-                wxString errMsg;
-
-                errMsg.Printf( _( "Your BOARD has a bad layer number of %u \
-for module\n %s's \"module text\" text of %s." ),
-                               textLayer, GetChars( module->GetReference() ),
-                               GetChars( pt_texte->m_Text ) );
-                DisplayError( NULL, errMsg );
-                return;
-            }
-
-            if( !( ( 1 << textLayer ) & aLayerMask ) )
-                continue;
-
-            PlotTextModule( aPlotter, pt_texte,
-                            trace_mode, aPlotOpt.GetColor() );
+             wxLogMessage( _( "Your BOARD has a bad layer number for module %s" ),
+                           GetChars( module->GetReference() ) );
         }
     }
 
@@ -246,6 +246,8 @@ static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte,
     wxSize  size;
     wxPoint pos;
     int     orient, thickness;
+
+    aPlotter->SetColor( aColor != WHITE ? aColor : LIGHTGRAY);
 
     // calculate some text parameters :
     size = pt_texte->m_Size;
@@ -286,6 +288,11 @@ void PlotDimension( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
     draw.SetWidth( (trace_mode==LINE) ? -1 : aDim->GetWidth() );
     draw.SetLayer( aDim->GetLayer() );
+
+    EDA_COLOR_T color = aDim->GetBoard()->GetLayerColor( aDim->GetLayer() );
+    // Set plot color (change WHITE to LIGHTGRAY because
+    // the white items are not seen on a white paper or screen
+    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
     PlotTextePcb( aPlotter, aPlotOpts, &aDim->m_Text, aLayerMask, trace_mode );
 
@@ -328,14 +335,21 @@ void PlotPcbTarget( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
     if( (GetLayerMask( aMire->GetLayer() ) & aLayerMask) == 0 )
         return;
 
+    EDA_COLOR_T color = aMire->GetBoard()->GetLayerColor( aMire->GetLayer() );
+    // Set plot color (change WHITE to LIGHTGRAY because
+    // the white items are not seen on a white paper or screen
+    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+
     DRAWSEGMENT  draw;
 
     draw.SetShape( S_CIRCLE );
     draw.SetWidth( ( trace_mode == LINE ) ? -1 : aMire->GetWidth() );
     draw.SetLayer( aMire->GetLayer() );
-
     draw.SetStart( aMire->GetPosition() );
-    draw.SetEnd( wxPoint( draw.GetStart().x + ( aMire->GetSize() / 4 ), draw.GetStart().y ));
+    radius = aMire->GetSize() / 3;
+    if( aMire->GetShape() )   // shape X
+        radius = aMire->GetSize() / 2;
+    draw.SetEnd( wxPoint( draw.GetStart().x + radius, draw.GetStart().y ));
     PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
 
     draw.SetShape( S_SEGMENT );
@@ -348,7 +362,7 @@ void PlotPcbTarget( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
     if( aMire->GetShape() )    // Shape X
     {
-        dx1 = dy1 = ( radius * 7 ) / 5;
+        dx1 = dy1 = radius;
         dx2 = dx1;
         dy2 = -dy1;
     }
@@ -399,6 +413,11 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
     if( aEdge->Type() != PCB_MODULE_EDGE_T )
         return;
+
+    EDA_COLOR_T color = aEdge->GetBoard( )->GetLayerColor( aEdge->GetLayer() );
+    // Set plot color (change WHITE to LIGHTGRAY because
+    // the white items are not seen on a white paper or screen
+    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
     type_trace = aEdge->GetShape();
     thickness  = aEdge->GetWidth();
@@ -486,6 +505,11 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
     if( ( GetLayerMask( pt_texte->GetLayer() ) & aLayerMask ) == 0 )
         return;
 
+    EDA_COLOR_T color = pt_texte->GetBoard( )->GetLayerColor( pt_texte->GetLayer() );
+    // Set plot color (change WHITE to LIGHTGRAY because
+    // the white items are not seen on a white paper or screen
+    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+
     size = pt_texte->m_Size;
     pos  = pt_texte->m_Pos;
     orient    = pt_texte->m_Orient;
@@ -542,6 +566,11 @@ void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_
     // We need a buffer to store corners coordinates:
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
+
+    EDA_COLOR_T color = aZone->GetBoard( )->GetLayerColor( aZone->GetLayer() );
+    // Set plot color (change WHITE to LIGHTGRAY because
+    // the white items are not seen on a white paper or screen
+    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
     /* Plot all filled areas: filled areas have a filled area and a thick
      * outline we must plot the filled area itself ( as a filled polygon
@@ -622,6 +651,14 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
     else
         thickness = aSeg->GetWidth();
 
+    if( aSeg->GetBoard() )  // temporary created segments in plot functions return NULL
+    {
+        EDA_COLOR_T color = aSeg->GetBoard()->GetLayerColor( aSeg->GetLayer() );
+        // Set plot color (change WHITE to LIGHTGRAY because
+        // the white items are not seen on a white paper or screen
+        aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+    }
+
     wxPoint start( aSeg->GetStart() );
     wxPoint end(   aSeg->GetEnd() );
 
@@ -664,7 +701,7 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
                      const PCB_PLOT_PARAMS& aPlotOpt )
 {
-    // Set the color and the text mode for this layer
+    // Set a default color and the text mode for this layer
     aPlotter->SetColor( aPlotOpt.GetColor() );
     aPlotter->SetTextMode( aPlotOpt.GetTextMode() );
 
@@ -779,22 +816,36 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             break;
 
         default:
-            DisplayError( NULL, wxT( "Plot_Standard_Layer() error : Unexpected Draw Type" ) );
+            wxLogMessage( wxT( "Plot_Standard_Layer() error : Unexpected Draw Type" ) );
             break;
         }
     }
 
     // Draw footprint shapes without pads (pads will plotted later)
+    // We plot here module texts, but they are usually on silkscreen layer,
+    // so they are not plot here but plot by PlotSilkScreen()
+    // Plot footprints fields (ref, value ...)
+    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    {
+        if( ! PlotAllTextsModule( aPlotter, aBoard, aLayerMask, module, aPlotOpt ) )
+        {
+            wxLogMessage( _( "Your BOARD has a bad layer number for module %s" ),
+                           GetChars( module->GetReference() ) );
+        }
+    }
+
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
         for( BOARD_ITEM* item = module->m_Drawings; item; item = item->Next() )
         {
+            if( ! (aLayerMask & GetLayerMask( item->GetLayer() ) ) )
+                continue;
+
             switch( item->Type() )
             {
             case PCB_MODULE_EDGE_T:
-                if( aLayerMask & GetLayerMask(  item->GetLayer() ) )
-                    Plot_1_EdgeModule( aPlotter, aPlotOpt, (EDGE_MODULE*) item, aPlotMode, aLayerMask );
-
+                Plot_1_EdgeModule( aPlotter, aPlotOpt, (EDGE_MODULE*) item,
+                                   aPlotMode, aLayerMask );
                 break;
 
             default:
@@ -847,6 +898,18 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             // Don't draw a null size item :
             if( size.x <= 0 || size.y <= 0 )
                 continue;
+
+            EDA_COLOR_T color = ColorFromInt(0);
+
+            if( (pad->GetLayerMask() & LAYER_BACK) )
+               color = aBoard->GetVisibleElementColor( PAD_BK_VISIBLE );
+
+            if((pad->GetLayerMask() & LAYER_FRONT ) )
+                color = ColorFromInt( color | aBoard->GetVisibleElementColor( PAD_FR_VISIBLE ) );
+
+            // Set plot color (change WHITE to LIGHTGRAY because
+            // the white items are not seen on a white paper or screen
+            aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
             switch( pad->GetShape() )
             {
@@ -917,9 +980,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 via_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
 
             if( aLayerMask & ALL_CU_LAYERS )
-            {
                 width_adj =  aPlotter->GetPlotWidthAdj();
-            }
 
             pos    = Via->m_Start;
             size.x = size.y = Via->m_Width + 2 * via_margin + width_adj;
@@ -927,6 +988,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             // Don't draw a null size item :
             if( size.x <= 0 )
                 continue;
+
+            EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->m_Shape);
+            // Set plot color (change WHITE to LIGHTGRAY because
+            // the white items are not seen on a white paper or screen
+            aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
             aPlotter->FlashPadCircle( pos, size.x, aPlotMode );
         }
@@ -946,6 +1012,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         size.x = size.y = track->m_Width + aPlotter->GetPlotWidthAdj();
         pos    = track->m_Start;
         end    = track->m_End;
+
+        EDA_COLOR_T color = aBoard->GetLayerColor( track->GetLayer() );
+        // Set plot color (change WHITE to LIGHTGRAY because
+        // the white items are not seen on a white paper or screen
+        aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
         aPlotter->ThickSegment( pos, end, size.x, aPlotMode );
     }
@@ -1021,7 +1092,7 @@ void PlotDrillMarks( BOARD *aBoard, PLOTTER* aPlotter,
     /* In the filled trace mode drill marks are drawn white-on-black to scrape
        the underlying pad. This works only for drivers supporting color change,
        obviously... it means that:
-       - PS and PDF output is correct (i.e. you have a 'donut' pad)
+       - PS, SVG and PDF output is correct (i.e. you have a 'donut' pad)
        - In HPGL you can't see them
        - In gerbers you can't see them, too. This is arguably the right thing to
          do since having drill marks and high speed drill stations is a sure
@@ -1149,7 +1220,7 @@ static void PlotSetupPlotter( PLOTTER *aPlotter, PCB_PLOT_PARAMS *aPlotOpts,
                            aPlotOpts->GetMirror() );
     aPlotter->SetDefaultLineWidth( aPlotOpts->GetLineWidth() );
     aPlotter->SetCreator( wxT( "PCBNEW" ) );
-    aPlotter->SetColorMode( true );
+    aPlotter->SetColorMode( false );        // default is plot in Black and White.
     aPlotter->SetFilename( aFilename );
     aPlotter->SetTextMode( aPlotOpts->GetTextMode() );
 }
@@ -1158,7 +1229,7 @@ static void PlotSetupPlotter( PLOTTER *aPlotter, PCB_PLOT_PARAMS *aPlotOpts,
  *  negative plot */
 static void FillNegativeKnockout(PLOTTER *aPlotter, const EDA_RECT &aBbbox )
 {
-    static const int margin = 500; // Add a 0.5 inch margin around the board
+    static const int margin = 5 * IU_PER_MM; // Add a 5 mm margin around the board
     aPlotter->SetNegative( true );
     aPlotter->SetColor( WHITE );   // Which will be plotted as black
     aPlotter->Rect( wxPoint( aBbbox.GetX() - margin, aBbbox.GetY() - margin ),
@@ -1200,8 +1271,7 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter,
  * Return the plotter object if OK, NULL if the file is not created
  * (or has a problem)
  */
-PLOTTER *StartPlotBoard( BOARD *aBoard,
-                         PCB_PLOT_PARAMS *aPlotOpts,
+PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
                          const wxString& aFullFileName,
                          const wxString& aSheetDesc )
 {
@@ -1266,7 +1336,7 @@ PLOTTER *StartPlotBoard( BOARD *aBoard,
         {
             /* When plotting a negative board: draw a black rectangle
              * (background for plot board in white) and switch the current
-             * color to WHITE; note the the color inversion is actually done
+             * color to WHITE; note the color inversion is actually done
              * in the driver (if supported) */
             if( aPlotOpts->GetNegative() )
                 FillNegativeKnockout( the_plotter, bbbox );

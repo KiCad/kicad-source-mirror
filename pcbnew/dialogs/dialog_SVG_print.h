@@ -18,6 +18,10 @@ private:
     wxConfig*        m_Config;
     long             m_PrintMaskLayer;
     wxCheckBox*      m_BoxSelectLayer[32];
+    bool             m_printBW;
+    // Static member to store options
+    static bool     m_printMirror;
+    static bool     m_oneFileOnly;
 
 public:
     DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent );
@@ -26,11 +30,10 @@ public:
 private:
     void OnCloseWindow( wxCloseEvent& event );
     void initDialog( );
-    void OnButtonPrintSelectedClick( wxCommandEvent& event );
-    void OnButtonPrintBoardClick( wxCommandEvent& event );
+    void OnButtonPlot( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
     void SetPenWidth();
-    void PrintSVGDoc( bool aPrintAll );
+    void ExportSVGFile( bool aOnlyOneFile );
     bool PageIsBoardBoundarySize()
     {
         return m_rbSvgPageSizeOpt->GetSelection() == 2;
@@ -39,7 +42,7 @@ private:
     {
         return m_rbSvgPageSizeOpt->GetSelection() == 0;
     }
-    bool DrawPage( const wxString& FullFileName, BASE_SCREEN* screen );
+    bool CreateSVGFile( const wxString& FullFileName );
 };
 
 
