@@ -191,7 +191,7 @@ void usage()
 }
 
 
-static KEYWORD empty_keywords[] = {};
+static KEYWORD empty_keywords[1] = {};
 
 
 ELEM* Scan( DSNLEXER* lex )
