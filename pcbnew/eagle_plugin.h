@@ -62,7 +62,7 @@ typedef NET_MAP::const_iterator         NET_MAP_CITER;
 typedef boost::property_tree::ptree     PTREE;
 typedef const PTREE                     CPTREE;
 
-class EELEMENT;
+struct EELEMENT;
 class XPATH;
 struct ERULES;
 struct EATTR;
