@@ -19,6 +19,9 @@ extern const double hvb_widths[256];
 extern const double hvo_widths[256];
 extern const double hvbo_widths[256];
 
+const double PSLIKE_PLOTTER::postscriptTextAscent = 0.718;
+
+
 // Common routines for Postscript-like plotting engines
 
 void PSLIKE_PLOTTER::SetDefaultLineWidth( int width )
