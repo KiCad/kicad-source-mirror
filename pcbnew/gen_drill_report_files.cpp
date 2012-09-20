@@ -86,12 +86,12 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             int ypagesize_for_board = (int) (pageSizeIU.y * 0.6);
             double Yscale = (double)( ypagesize_for_board - margin ) / bbbox.GetHeight();
 
-            scale = fmin( Xscale, Yscale );
+            scale = std::min( Xscale, Yscale );
 
             // Experience shows the scale should not to large, because texts
             // create problem (can be to big or too small).
             // So the scale is clipped at 3.0;
-            scale = fmin( scale, 3.0 );
+            scale = std::min( scale, 3.0 );
 
             offset.x  = (int) ( (double) bbbox.Centre().x - ( pageSizeIU.x / 2.0 ) / scale );
             offset.y  = (int) ( (double) bbbox.Centre().y -
