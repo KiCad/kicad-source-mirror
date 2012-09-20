@@ -533,7 +533,7 @@ protected:
     virtual void emitSetRGBColor( double r, double g, double b ) = 0;
 
     /// Height of the postscript font (from the AFM)
-    static const double postscriptTextAscent = 0.718;
+    static const double postscriptTextAscent; // = 0.718;
 
     int returnPostscriptTextWidth( const wxString& aText, int aXSize,
                                    bool aItalic, bool aBold );
