@@ -78,7 +78,6 @@ PAD_DRAWINFO::PAD_DRAWINFO()
 void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
                   const wxPoint& aOffset )
 {
-    EDA_COLOR_T color = ColorFromInt(0); // XXX EVIL (it will be ORed later)
     wxSize mask_margin;   // margin (clearance) used for some non copper layers
 
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
@@ -143,6 +142,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     else
         drawInfo.m_ShowPadFilled = false;
 
+    EDA_COLOR_T color = ColorFromInt(0); // XXX EVIL (it will be ORed later)
     if( m_layerMask & LAYER_FRONT )
     {
         color = brd->GetVisibleElementColor( PAD_FR_VISIBLE );
@@ -154,7 +154,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         color = ColorFromInt( color | brd->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
 
-    if( color == 0 ) // Not on copper layer XXX EVIL check
+    if( color == 0 ) // Not on a visible copper layer XXX EVIL check
     {
         // If the pad in on only one tech layer, use the layer color else use DARKGRAY
         int mask_non_copper_layers = m_layerMask & ~ALL_CU_LAYERS;

@@ -37,6 +37,7 @@
 #include <class_board.h>
 #include <pcbnew.h>
 #include <plotcontroller.h>
+#include <pcb_plot_params.h>
 #include <wx/ffile.h>
 #include <dialog_plot.h>
 

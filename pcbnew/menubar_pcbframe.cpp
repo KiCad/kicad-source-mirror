@@ -216,8 +216,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Create SVG file
     AddMenuItem( filesMenu, ID_GEN_PLOT_SVG,
-                 _( "Print SV&G" ),
-                 _( "Plot board in Scalable Vector Graphics format" ),
+                 _( "Export SV&G" ),
+                 _( "Export a board file in Scalable Vector Graphics format" ),
                  KiBitmap( plot_svg_xpm ) );
 
     // Plot

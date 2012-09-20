@@ -49,7 +49,6 @@ set(COMMON_SRCS
     common_plotSVG_functions.cpp
     confirm.cpp
     copy_to_clipboard.cpp
-    dcsvg.cpp
     dialog_shim.cpp
     displlst.cpp
     dlist.cpp

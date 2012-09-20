@@ -57,7 +57,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	wxString m_Choice_Drill_MapChoices[] = { _("None"), _("Drill map (HPGL)"), _("Drill map (PostScript)"), _("Drill map (Gerber)"), _("Drill map (DXF)"), _("Drill map (SVG)") };
 	int m_Choice_Drill_MapNChoices = sizeof( m_Choice_Drill_MapChoices ) / sizeof( wxString );
-	m_Choice_Drill_Map = new wxRadioBox( this, wxID_ANY, _("Drill Sheet:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_MapNChoices, m_Choice_Drill_MapChoices, 1, wxRA_SPECIFY_COLS );
+	m_Choice_Drill_Map = new wxRadioBox( this, wxID_ANY, _("Drill Map:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_MapNChoices, m_Choice_Drill_MapChoices, 1, wxRA_SPECIFY_COLS );
 	m_Choice_Drill_Map->SetSelection( 0 );
 	m_Choice_Drill_Map->SetToolTip( _("Creates a drill map in PS, HPGL or other formats") );
 	

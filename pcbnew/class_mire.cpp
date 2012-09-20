@@ -118,7 +118,9 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     if( DC->LogicalToDeviceXRel( width ) < 2 )
         typeaff = LINE;
 
-    radius = m_Size / 4;
+    radius = m_Size / 3;
+    if( GetShape() )   // shape X
+        radius = m_Size / 2;
 
     switch( typeaff )
     {
@@ -142,9 +144,9 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     dx2   = 0;
     dy2   = radius;
 
-    if( m_Shape ) /* Form X */
+    if( GetShape() )   // shape X
     {
-        dx1 = dy1 = ( radius * 7 ) / 5;
+        dx1 = dy1 = radius;
         dx2 = dx1;
         dy2 = -dy1;
     }
