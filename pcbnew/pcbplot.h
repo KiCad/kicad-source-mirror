@@ -7,14 +7,16 @@
 
 #include <pcb_plot_params.h>
 
-
 class PLOTTER;
 class TEXTE_PCB;
 class DRAWSEGMENT;
 class DIMENSION;
+class MODULE;
 class EDGE_MODULE;
 class PCB_TARGET;
+class TEXTE_MODULE;
 class ZONE_CONTAINER;
+class BOARD;
 
 
 // Shared Config keys for plot and print
@@ -43,25 +45,44 @@ class ZONE_CONTAINER;
 
 // Small drill marks diameter value (in 1/10000 inch)
 #define SMALL_DRILL 150
+// A helper class to plot board items
+class BRDITEMS_PLOTTER: public PCB_PLOT_PARAMS
+{
+    PLOTTER* m_plotter;
+    BOARD* m_board;
+    int m_layerMask;
 
+public:
+    BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts )
+        : PCB_PLOT_PARAMS( aPlotOpts )
+    {
+        m_plotter = aPlotter;
+        m_board = aBoard;
+        m_layerMask = 0;
+    }
 
-void PlotTextePcb( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PCB* pt_texte, int masque_layer,
-                   EDA_DRAW_MODE_T trace_mode );
+    // Basic functions to plot a board item
+    void SetLayerMask( int aLayerMask ){ m_layerMask = aLayerMask; }
+    void Plot_Edges_Modules();
+    void Plot_1_EdgeModule( EDGE_MODULE* aEdge );
+    void PlotTextModule( TEXTE_MODULE* aTextMod, EDA_COLOR_T aColor );
+    bool PlotAllTextsModule( MODULE* aModule );
+    void PlotDimension( DIMENSION* Dimension );
+    void PlotPcbTarget( PCB_TARGET* PtMire );
+    void PlotFilledAreas( ZONE_CONTAINER* aZone );
+    void PlotTextePcb( TEXTE_PCB* pt_texte );
+    void PlotDrawSegment( DRAWSEGMENT* PtSegm );
 
-void PlotDrawSegment( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, DRAWSEGMENT* PtSegm, int masque_layer,
-                      EDA_DRAW_MODE_T trace_mode );
-
-void PlotDimension( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, DIMENSION* Dimension, int masque_layer,
-                    EDA_DRAW_MODE_T trace_mode );
-
-void PlotPcbTarget( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, PCB_TARGET* PtMire, int masque_layer,
-                    EDA_DRAW_MODE_T trace_mode );
-
-void Plot_1_EdgeModule( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, EDGE_MODULE* PtEdge,
-                        EDA_DRAW_MODE_T trace_mode, int masque_layer );
-
-void PlotFilledAreas( PLOTTER* plotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_CONTAINER* aZone,
-                      EDA_DRAW_MODE_T trace_mode );
+    /**
+     * Function getColor
+     * @return the layer color
+     * @param aLayer = the layer id
+     * White color is special: cannot be seen on a white paper
+     * and in B&W mode, is plotted as white but other colors are plotted in BLACK
+     * so the returned color is LIGHTGRAY when the layer color is WHITE
+     */
+    EDA_COLOR_T getColor( int aLayer );
+};
 
 PLOTTER *StartPlotBoard( BOARD *aBoard,
                          PCB_PLOT_PARAMS *aPlotOpts,
