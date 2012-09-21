@@ -41,7 +41,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     wxPoint     offset;
     PLOTTER*    plotter = NULL;
 
-    const PCB_PLOT_PARAMS&  plot_opts = aPcb->GetPlotOptions();
+    PCB_PLOT_PARAMS plot_opts;    // starts plotting with default options
 
     LOCALE_IO   toggle;         // use standard C notation for float numbers
 
@@ -131,33 +131,26 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     plotter->SetDefaultLineWidth( 10 * IU_PER_DECIMILS );
     plotter->StartPlot( aFile );
 
-    // Draw items on edge layer
+    // Draw items on edge layer (not all, only items useful for drill map
+    BRDITEMS_PLOTTER itemplotter( plotter, aPcb, plot_opts );
+    itemplotter.SetLayerMask( EDGE_LAYER );
 
     for( EDA_ITEM* PtStruct = aPcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
         case PCB_LINE_T:
-            PlotDrawSegment( plotter, plot_opts, (DRAWSEGMENT*) PtStruct, EDGE_LAYER, FILLED );
+            itemplotter.PlotDrawSegment( (DRAWSEGMENT*) PtStruct );
             break;
 
         case PCB_TEXT_T:
-            PlotTextePcb( plotter, plot_opts, (TEXTE_PCB*) PtStruct, EDGE_LAYER, FILLED );
+            itemplotter.PlotTextePcb( (TEXTE_PCB*) PtStruct );
             break;
 
         case PCB_DIMENSION_T:
-            PlotDimension( plotter, plot_opts, (DIMENSION*) PtStruct, EDGE_LAYER, FILLED );
-            break;
-
         case PCB_TARGET_T:
-            PlotPcbTarget( plotter, plot_opts, (PCB_TARGET*) PtStruct, EDGE_LAYER, FILLED );
-            break;
-
         case PCB_MARKER_T:     // do not draw
-            break;
-
         default:
-            DisplayError( NULL, wxT( "WinEDA_DrillFrame::GenDrillMap() : Unexpected Draw Type" ) );
             break;
         }
     }

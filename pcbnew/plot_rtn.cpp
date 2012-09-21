@@ -8,11 +8,9 @@
 #include <plot_common.h>
 #include <base_struct.h>
 #include <drawtxt.h>
-#include <confirm.h>
 #include <trigo.h>
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
-#include <macros.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -27,79 +25,78 @@
 #include <pcbnew.h>
 #include <pcbplot.h>
 
-static void Plot_Edges_Modules( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
-                BOARD* pcb, int aLayerMask, EDA_DRAW_MODE_T trace_mode );
-
-static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte,
-                            EDA_DRAW_MODE_T trace_mode, EDA_COLOR_T aColor );
-
-
-static bool PlotAllTextsModule( PLOTTER* aPlotter, BOARD* aBoard,
-                                long aLayerMask, MODULE* aModule,
-                                const PCB_PLOT_PARAMS& aPlotOpt )
+/* Function getColor
+ * return the layer colorfrom the layer id
+ * White color is special: cannot be seen on a white paper
+ * and in B&W mode, is plotted as white but other colors are plotted in BLACK
+ * so the returned color is LIGHTGRAY when the layer color is WHITE
+ */
+EDA_COLOR_T BRDITEMS_PLOTTER::getColor( int aLayer )
 {
-    TEXTE_MODULE* pt_texte;
-    EDA_DRAW_MODE_T trace_mode = aPlotOpt.GetMode();
+    EDA_COLOR_T color = m_board->GetLayerColor( aLayer );
+    if (color == WHITE)
+        color = LIGHTGRAY;
+    return color;
+}
 
+bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
+{
     // see if we want to plot VALUE and REF fields
-    bool trace_val = aPlotOpt.GetPlotValue();
-    bool trace_ref = aPlotOpt.GetPlotReference();
+    bool trace_val = GetPlotValue();
+    bool trace_ref = GetPlotReference();
 
-    TEXTE_MODULE* text = aModule->m_Reference;
-    unsigned      textLayer = text->GetLayer();
+    TEXTE_MODULE* textModule = aModule->m_Reference;
+    unsigned      textLayer = textModule->GetLayer();
 
     if( textLayer >= 32 )
         return false;
 
-    if( ( ( 1 << textLayer ) & aLayerMask ) == 0 )
+    if( ( ( 1 << textLayer ) & m_layerMask ) == 0 )
         trace_ref = false;
 
-    if( !text->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
+    if( !textModule->IsVisible() && !GetPlotInvisibleText() )
         trace_ref = false;
 
-    text = aModule->m_Value;
-    textLayer = text->GetLayer();
+    textModule = aModule->m_Value;
+    textLayer = textModule->GetLayer();
 
     if( textLayer > 32 )
         return false;
 
-    if( ( (1 << textLayer) & aLayerMask ) == 0 )
+    if( ( (1 << textLayer) & m_layerMask ) == 0 )
         trace_val = false;
 
-    if( !text->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
+    if( !textModule->IsVisible() && !GetPlotInvisibleText() )
         trace_val = false;
 
     // Plot text fields, if allowed
     if( trace_ref )
-        PlotTextModule( aPlotter, aModule->m_Reference,
-                        trace_mode, aPlotOpt.GetReferenceColor() );
+        PlotTextModule( aModule->m_Reference, GetReferenceColor() );
 
     if( trace_val )
-        PlotTextModule( aPlotter, aModule->m_Value,
-                        trace_mode, aPlotOpt.GetValueColor() );
+        PlotTextModule( aModule->m_Value, GetValueColor() );
 
-    for( pt_texte = (TEXTE_MODULE*) aModule->m_Drawings.GetFirst();
-         pt_texte != NULL; pt_texte = pt_texte->Next() )
+    for( textModule = (TEXTE_MODULE*) aModule->m_Drawings.GetFirst();
+         textModule != NULL; textModule = textModule->Next() )
     {
-        if( pt_texte->Type() != PCB_MODULE_TEXT_T )
+        if( textModule->Type() != PCB_MODULE_TEXT_T )
             continue;
 
-        if( !aPlotOpt.GetPlotOtherText() )
+        if( !GetPlotOtherText() )
             continue;
 
-        if( !pt_texte->IsVisible() && !aPlotOpt.GetPlotInvisibleText() )
+        if( !textModule->IsVisible() && !GetPlotInvisibleText() )
             continue;
 
-        textLayer = pt_texte->GetLayer();
+        textLayer = textModule->GetLayer();
 
         if( textLayer >= 32 )
             return false;
 
-        if( !( ( 1 << textLayer ) & aLayerMask ) )
+        if( !( ( 1 << textLayer ) & m_layerMask ) )
             continue;
 
-        EDA_COLOR_T color = aBoard->GetLayerColor( textLayer );
-        PlotTextModule( aPlotter, pt_texte, trace_mode, color );
+        PlotTextModule( textModule, getColor( textLayer ) );
     }
 
     return true;
@@ -108,43 +105,44 @@ static bool PlotAllTextsModule( PLOTTER* aPlotter, BOARD* aBoard,
 /* Creates the plot for silkscreen layers
  */
 void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
-                     const PCB_PLOT_PARAMS&  aPlotOpt )
+                     const PCB_PLOT_PARAMS& aPlotOpt )
 {
-    EDA_DRAW_MODE_T trace_mode = aPlotOpt.GetMode();
+    BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
+    itemplotter.SetLayerMask( aLayerMask );
 
     // Plot edge layer and graphic items
-
     for( EDA_ITEM* item = aBoard->m_Drawings; item; item = item->Next() )
     {
         switch( item->Type() )
         {
         case PCB_LINE_T:
-            PlotDrawSegment( aPlotter, aPlotOpt, (DRAWSEGMENT*) item, aLayerMask, trace_mode );
+            itemplotter.PlotDrawSegment( (DRAWSEGMENT*) item);
             break;
 
         case PCB_TEXT_T:
-            PlotTextePcb( aPlotter, aPlotOpt, (TEXTE_PCB*) item, aLayerMask, trace_mode );
+            itemplotter.PlotTextePcb( (TEXTE_PCB*) item );
             break;
 
         case PCB_DIMENSION_T:
-            PlotDimension( aPlotter, aPlotOpt, (DIMENSION*) item, aLayerMask, trace_mode );
+            itemplotter.PlotDimension( (DIMENSION*) item );
             break;
 
         case PCB_TARGET_T:
-            PlotPcbTarget( aPlotter, aPlotOpt, (PCB_TARGET*) item, aLayerMask, trace_mode );
+            itemplotter.PlotPcbTarget( (PCB_TARGET*) item );
             break;
 
         case PCB_MARKER_T:
             break;
 
         default:
-            DisplayError( NULL, wxT( "PlotSilkScreen() error: unexpected Type()" ) );
+            wxLogMessage( wxT( "PlotSilkScreen() error: unexpected Type(%d)" ),
+                          item->Type() );
             break;
         }
     }
 
     // Plot footprint outlines :
-    Plot_Edges_Modules( aPlotter, aPlotOpt, aBoard, aLayerMask, trace_mode );
+    itemplotter.Plot_Edges_Modules();
 
     // Plot pads (creates pads outlines, for pads on silkscreen layers)
     int layersmask_plotpads = aLayerMask;
@@ -210,7 +208,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     // Plot footprints fields (ref, value ...)
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        if( ! PlotAllTextsModule( aPlotter, aBoard, aLayerMask, module, aPlotOpt ) )
+        if( ! itemplotter.PlotAllTextsModule( module ) )
         {
              wxLogMessage( _( "Your BOARD has a bad layer number for module %s" ),
                            GetChars( module->GetReference() ) );
@@ -225,7 +223,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
         if( ( ( 1 << edge_zone->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
-        PlotFilledAreas( aPlotter, aPlotOpt, edge_zone, trace_mode );
+        itemplotter.PlotFilledAreas( edge_zone );
     }
 
     // Plot segments used to fill zone areas (outdated, but here for old boards
@@ -235,19 +233,22 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
         if( ( ( 1 << seg->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
-        aPlotter->ThickSegment( seg->m_Start, seg->m_End, seg->m_Width, trace_mode );
+        aPlotter->ThickSegment( seg->m_Start, seg->m_End, seg->m_Width,
+                                itemplotter.GetMode() );
     }
 }
 
 
-static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte,
-                            EDA_DRAW_MODE_T trace_mode, EDA_COLOR_T aColor )
+void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte,
+                                       EDA_COLOR_T aColor )
 {
     wxSize  size;
     wxPoint pos;
     int     orient, thickness;
 
-    aPlotter->SetColor( aColor != WHITE ? aColor : LIGHTGRAY);
+    if( aColor == WHITE )
+        aColor = LIGHTGRAY;
+    m_plotter->SetColor( aColor );
 
     // calculate some text parameters :
     size = pt_texte->m_Size;
@@ -257,7 +258,7 @@ static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte,
 
     thickness = pt_texte->m_Thickness;
 
-    if( trace_mode == LINE )
+    if( GetMode() == LINE )
         thickness = -1;
 
     if( pt_texte->m_Mirror )
@@ -269,7 +270,7 @@ static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte,
     // So we set bold flag to true
     bool allow_bold = pt_texte->m_Bold || thickness;
 
-    aPlotter->Text( pos, aColor,
+    m_plotter->Text( pos, aColor,
                    pt_texte->m_Text,
                    orient, size,
                    pt_texte->m_HJustify, pt_texte->m_VJustify,
@@ -277,80 +278,76 @@ static void PlotTextModule( PLOTTER* aPlotter, TEXTE_MODULE* pt_texte,
 }
 
 
-void PlotDimension( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
-                    DIMENSION* aDim, int aLayerMask,
-                    EDA_DRAW_MODE_T trace_mode )
+void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
 {
-    if( (GetLayerMask( aDim->GetLayer() ) & aLayerMask) == 0 )
+    if( (GetLayerMask( aDim->GetLayer() ) & m_layerMask) == 0 )
         return;
 
     DRAWSEGMENT draw;
 
-    draw.SetWidth( (trace_mode==LINE) ? -1 : aDim->GetWidth() );
+    draw.SetWidth( (GetMode() == LINE) ? -1 : aDim->GetWidth() );
     draw.SetLayer( aDim->GetLayer() );
 
     EDA_COLOR_T color = aDim->GetBoard()->GetLayerColor( aDim->GetLayer() );
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen
-    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+    m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
-    PlotTextePcb( aPlotter, aPlotOpts, &aDim->m_Text, aLayerMask, trace_mode );
+    PlotTextePcb( &aDim->m_Text );
 
     draw.SetStart( wxPoint( aDim->m_crossBarOx, aDim->m_crossBarOy ));
     draw.SetEnd(   wxPoint( aDim->m_crossBarFx, aDim->m_crossBarFy ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 
     draw.SetStart( wxPoint( aDim->m_featureLineGOx, aDim->m_featureLineGOy ));
     draw.SetEnd(   wxPoint( aDim->m_featureLineGFx, aDim->m_featureLineGFy ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 
     draw.SetStart( wxPoint( aDim->m_featureLineDOx, aDim->m_featureLineDOy ));
     draw.SetEnd(   wxPoint( aDim->m_featureLineDFx, aDim->m_featureLineDFy ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 
     draw.SetStart( wxPoint( aDim->m_arrowD1Ox, aDim->m_arrowD1Oy ));
     draw.SetEnd(   wxPoint( aDim->m_arrowD1Fx, aDim->m_arrowD1Fy ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 
     draw.SetStart( wxPoint( aDim->m_arrowD2Ox, aDim->m_arrowD2Oy ));
     draw.SetEnd(   wxPoint( aDim->m_arrowD2Fx, aDim->m_arrowD2Fy ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 
     draw.SetStart( wxPoint( aDim->m_arrowG1Ox, aDim->m_arrowG1Oy ));
     draw.SetEnd(   wxPoint( aDim->m_arrowG1Fx, aDim->m_arrowG1Fy ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 
     draw.SetStart( wxPoint( aDim->m_arrowG2Ox, aDim->m_arrowG2Oy ));
     draw.SetEnd(   wxPoint( aDim->m_arrowG2Fx, aDim->m_arrowG2Fy ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 }
 
 
-void PlotPcbTarget( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
-                    PCB_TARGET* aMire, int aLayerMask,
-                    EDA_DRAW_MODE_T trace_mode )
+void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
 {
     int     dx1, dx2, dy1, dy2, radius;
 
-    if( (GetLayerMask( aMire->GetLayer() ) & aLayerMask) == 0 )
+    if( (GetLayerMask( aMire->GetLayer() ) & m_layerMask) == 0 )
         return;
 
-    EDA_COLOR_T color = aMire->GetBoard()->GetLayerColor( aMire->GetLayer() );
-    // Set plot color (change WHITE to LIGHTGRAY because
-    // the white items are not seen on a white paper or screen
-    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+    m_plotter->SetColor( getColor( aMire->GetLayer() ) );
 
     DRAWSEGMENT  draw;
 
     draw.SetShape( S_CIRCLE );
-    draw.SetWidth( ( trace_mode == LINE ) ? -1 : aMire->GetWidth() );
+    draw.SetWidth( ( GetMode() == LINE ) ? -1 : aMire->GetWidth() );
     draw.SetLayer( aMire->GetLayer() );
     draw.SetStart( aMire->GetPosition() );
     radius = aMire->GetSize() / 3;
     if( aMire->GetShape() )   // shape X
         radius = aMire->GetSize() / 2;
+
+    // Draw the circle
     draw.SetEnd( wxPoint( draw.GetStart().x + radius, draw.GetStart().y ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+
+    PlotDrawSegment( &draw );
 
     draw.SetShape( S_SEGMENT );
 
@@ -369,43 +366,39 @@ void PlotPcbTarget( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
     wxPoint mirePos( aMire->GetPosition() );
 
+    // Draw the X or + shape:
     draw.SetStart( wxPoint( mirePos.x - dx1, mirePos.y - dy1 ));
     draw.SetEnd(   wxPoint( mirePos.x + dx1, mirePos.y + dy1 ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 
     draw.SetStart( wxPoint( mirePos.x - dx2, mirePos.y - dy2 ));
     draw.SetEnd(   wxPoint( mirePos.x + dx2, mirePos.y + dy2 ));
-    PlotDrawSegment( aPlotter, aPlotOpts, &draw, aLayerMask, trace_mode );
+    PlotDrawSegment( &draw );
 }
 
 
 // Plot footprints graphic items (outlines)
-static void Plot_Edges_Modules( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
-                                BOARD* aPcb, int aLayerMask,
-                                EDA_DRAW_MODE_T trace_mode )
+void BRDITEMS_PLOTTER::Plot_Edges_Modules()
 {
-    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
+    for( MODULE* module = m_board->m_Modules;  module;  module = module->Next() )
     {
         for( EDGE_MODULE* edge = (EDGE_MODULE*) module->m_Drawings.GetFirst();
-             edge;
-             edge = edge->Next() )
+             edge; edge = edge->Next() )
         {
             if( edge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
-            if( ( GetLayerMask( edge->GetLayer() ) & aLayerMask ) == 0 )
+            if( ( GetLayerMask( edge->GetLayer() ) & m_layerMask ) == 0 )
                 continue;
 
-            Plot_1_EdgeModule( aPlotter, aPlotOpts, edge, trace_mode, aLayerMask );
+            Plot_1_EdgeModule( edge );
         }
     }
 }
 
 
 //* Plot a graphic item (outline) relative to a footprint
-void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
-                        EDGE_MODULE* aEdge, EDA_DRAW_MODE_T trace_mode,
-                        int masque_layer )
+void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
 {
     int     type_trace;         // Type of item to plot.
     int     thickness;          // Segment thickness.
@@ -414,10 +407,7 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
     if( aEdge->Type() != PCB_MODULE_EDGE_T )
         return;
 
-    EDA_COLOR_T color = aEdge->GetBoard( )->GetLayerColor( aEdge->GetLayer() );
-    // Set plot color (change WHITE to LIGHTGRAY because
-    // the white items are not seen on a white paper or screen
-    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+    m_plotter->SetColor( getColor( aEdge->GetLayer() ) );
 
     type_trace = aEdge->GetShape();
     thickness  = aEdge->GetWidth();
@@ -428,13 +418,13 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
     switch( type_trace )
     {
     case S_SEGMENT:
-        aPlotter->ThickSegment( pos, end, thickness, trace_mode );
+        m_plotter->ThickSegment( pos, end, thickness, GetMode() );
         break;
 
     case S_CIRCLE:
         radius = (int) hypot( (double) ( end.x - pos.x ),
                               (double) ( end.y - pos.y ) );
-        aPlotter->ThickCircle( pos, radius * 2, thickness, trace_mode );
+        m_plotter->ThickCircle( pos, radius * 2, thickness, GetMode() );
         break;
 
     case S_ARC:
@@ -446,13 +436,13 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
             double endAngle = startAngle + aEdge->GetAngle();
 
-            if ( ( aPlotOpts.GetFormat() == PLOT_FORMAT_DXF ) &&
-               ( masque_layer & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
-                aPlotter->ThickArc( pos, -startAngle, -endAngle, radius,
-                                thickness, trace_mode );
+            if ( ( GetFormat() == PLOT_FORMAT_DXF ) &&
+               ( m_layerMask & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
+                m_plotter->ThickArc( pos, -startAngle, -endAngle, radius,
+                                thickness, GetMode() );
             else
-                aPlotter->ThickArc( pos, -endAngle, -startAngle, radius,
-                                thickness, trace_mode );
+                m_plotter->ThickArc( pos, -endAngle, -startAngle, radius,
+                                thickness, GetMode() );
         }
         break;
 
@@ -484,7 +474,7 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
                 cornerList.push_back( corner );
             }
 
-            aPlotter->PlotPoly( cornerList, FILLED_SHAPE, thickness );
+            m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness );
         }
         break;
     }
@@ -492,8 +482,7 @@ void Plot_1_EdgeModule( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
 
 
 // Plot a PCB Text, i;e. a text found on a copper or technical layer
-void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PCB* pt_texte, int aLayerMask,
-                   EDA_DRAW_MODE_T trace_mode )
+void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 {
     int     orient, thickness;
     wxPoint pos;
@@ -502,18 +491,15 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
     if( pt_texte->m_Text.IsEmpty() )
         return;
 
-    if( ( GetLayerMask( pt_texte->GetLayer() ) & aLayerMask ) == 0 )
+    if( ( GetLayerMask( pt_texte->GetLayer() ) & m_layerMask ) == 0 )
         return;
 
-    EDA_COLOR_T color = pt_texte->GetBoard( )->GetLayerColor( pt_texte->GetLayer() );
-    // Set plot color (change WHITE to LIGHTGRAY because
-    // the white items are not seen on a white paper or screen
-    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+    m_plotter->SetColor( getColor( pt_texte->GetLayer() ) );
 
     size = pt_texte->m_Size;
     pos  = pt_texte->m_Pos;
     orient    = pt_texte->m_Orient;
-    thickness = ( trace_mode==LINE ) ? -1 : pt_texte->m_Thickness;
+    thickness = ( GetMode() == LINE ) ? -1 : pt_texte->m_Thickness;
 
     if( pt_texte->m_Mirror )
         size.x = -size.x;
@@ -536,7 +522,7 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
         for( unsigned i = 0; i < list->Count(); i++ )
         {
             wxString txt = list->Item( i );
-            aPlotter->Text( pos, UNSPECIFIED_COLOR, txt, orient, size,
+            m_plotter->Text( pos, UNSPECIFIED_COLOR, txt, orient, size,
                            pt_texte->m_HJustify, pt_texte->m_VJustify,
                            thickness, pt_texte->m_Italic, allow_bold );
             pos += offset;
@@ -546,7 +532,7 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
     }
     else
     {
-        aPlotter->Text( pos, UNSPECIFIED_COLOR, pt_texte->m_Text, orient, size,
+        m_plotter->Text( pos, UNSPECIFIED_COLOR, pt_texte->m_Text, orient, size,
                        pt_texte->m_HJustify, pt_texte->m_VJustify,
                        thickness, pt_texte->m_Italic, allow_bold );
     }
@@ -555,7 +541,7 @@ void PlotTextePcb( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, TEXTE_PC
 
 /* Plot areas (given by .m_FilledPolysList member) in a zone
  */
-void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_CONTAINER* aZone, EDA_DRAW_MODE_T trace_mode )
+void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 {
     std::vector<CPolyPt> polysList = aZone->GetFilledPolysList();
     unsigned imax = polysList.size();
@@ -567,10 +553,7 @@ void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
 
-    EDA_COLOR_T color = aZone->GetBoard( )->GetLayerColor( aZone->GetLayer() );
-    // Set plot color (change WHITE to LIGHTGRAY because
-    // the white items are not seen on a white paper or screen
-    aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+    m_plotter->SetColor( getColor( aZone->GetLayer() ) );
 
     /* Plot all filled areas: filled areas have a filled area and a thick
      * outline we must plot the filled area itself ( as a filled polygon
@@ -592,12 +575,12 @@ void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_
             }
 
             // Plot the current filled area and its outline
-            if( trace_mode == FILLED )
+            if( GetMode() == FILLED )
             {
                 // Plot the current filled area polygon
                 if( aZone->m_FillMode == 0 )    // We are using solid polygons
                 {                               // (if != 0: using segments )
-                    aPlotter->PlotPoly( cornerList, FILLED_SHAPE );
+                    m_plotter->PlotPoly( cornerList, FILLED_SHAPE );
                 }
                 else                            // We are using areas filled by
                 {                               // segments: plot them )
@@ -605,27 +588,27 @@ void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_
                     {
                         wxPoint start = aZone->m_FillSegmList[iseg].m_Start;
                         wxPoint end   = aZone->m_FillSegmList[iseg].m_End;
-                        aPlotter->ThickSegment( start, end,
+                        m_plotter->ThickSegment( start, end,
                                                 aZone->m_ZoneMinThickness,
-                                                trace_mode );
+                                                GetMode() );
                     }
                 }
 
                 // Plot the current filled area outline
                 if( aZone->m_ZoneMinThickness > 0 )
-                    aPlotter->PlotPoly( cornerList, NO_FILL, aZone->m_ZoneMinThickness );
+                    m_plotter->PlotPoly( cornerList, NO_FILL, aZone->m_ZoneMinThickness );
             }
             else
             {
                 if( aZone->m_ZoneMinThickness > 0 )
                 {
                     for( unsigned jj = 1; jj<cornerList.size(); jj++ )
-                        aPlotter->ThickSegment( cornerList[jj -1], cornerList[jj],
-                                                ( trace_mode == LINE ) ? -1 : aZone->m_ZoneMinThickness,
-                                                trace_mode );
+                        m_plotter->ThickSegment( cornerList[jj -1], cornerList[jj],
+                                                ( GetMode() == LINE ) ? -1 : aZone->m_ZoneMinThickness,
+                                                GetMode() );
                 }
 
-                aPlotter->SetCurrentLineWidth( -1 );
+                m_plotter->SetCurrentLineWidth( -1 );
             }
 
             cornerList.clear();
@@ -636,40 +619,32 @@ void PlotFilledAreas( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts, ZONE_
 
 /* Plot items type DRAWSEGMENT on layers allowed by aLayerMask
  */
-void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
-                      DRAWSEGMENT* aSeg, int aLayerMask,
-                      EDA_DRAW_MODE_T trace_mode )
+void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
 {
     int     thickness;
     int     radius = 0, StAngle = 0, EndAngle = 0;
 
-    if( (GetLayerMask( aSeg->GetLayer() ) & aLayerMask) == 0 )
+    if( (GetLayerMask( aSeg->GetLayer() ) & m_layerMask) == 0 )
         return;
 
-    if( trace_mode == LINE )
-        thickness = aPlotOpts.GetLineWidth();
+    if( GetMode() == LINE )
+        thickness = GetLineWidth();
     else
         thickness = aSeg->GetWidth();
 
-    if( aSeg->GetBoard() )  // temporary created segments in plot functions return NULL
-    {
-        EDA_COLOR_T color = aSeg->GetBoard()->GetLayerColor( aSeg->GetLayer() );
-        // Set plot color (change WHITE to LIGHTGRAY because
-        // the white items are not seen on a white paper or screen
-        aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
-    }
+    m_plotter->SetColor( getColor( aSeg->GetLayer() ) );
 
     wxPoint start( aSeg->GetStart() );
     wxPoint end(   aSeg->GetEnd() );
 
-    aPlotter->SetCurrentLineWidth( thickness );
+    m_plotter->SetCurrentLineWidth( thickness );
 
     switch( aSeg->GetShape() )
     {
     case S_CIRCLE:
         radius = (int) hypot( (double) ( end.x - start.x ),
                               (double) ( end.y - start.y ) );
-        aPlotter->ThickCircle( start, radius * 2, thickness, trace_mode );
+        m_plotter->ThickCircle( start, radius * 2, thickness, GetMode() );
         break;
 
     case S_ARC:
@@ -677,7 +652,7 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
                               (double) ( end.y - start.y ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + aSeg->GetAngle();
-        aPlotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, trace_mode );
+        m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetMode() );
         break;
 
     case S_CURVE:
@@ -685,15 +660,14 @@ void PlotDrawSegment( PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts,
             const std::vector<wxPoint>& bezierPoints = aSeg->GetBezierPoints();
 
             for( unsigned i = 1; i < bezierPoints.size(); i++ )
-                aPlotter->ThickSegment( bezierPoints[i - 1],
+                m_plotter->ThickSegment( bezierPoints[i - 1],
                                         bezierPoints[i],
-                                        thickness,
-                                        trace_mode );
+                                        thickness, GetMode() );
         }
         break;
 
     default:
-        aPlotter->ThickSegment( start, end, thickness, trace_mode );
+        m_plotter->ThickSegment( start, end, thickness, GetMode() );
     }
 }
 
@@ -785,9 +759,12 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                         long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                         bool aPlotVia, bool aSkipNPTH_Pads )
 {
+
+    BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
+    itemplotter.SetLayerMask( aLayerMask );
+
     wxPoint  pos;
     wxSize   size;
-    wxString msg;
 
     EDA_DRAW_MODE_T aPlotMode = aPlotOpt.GetMode();
 
@@ -797,26 +774,27 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         switch( item->Type() )
         {
         case PCB_LINE_T:
-            PlotDrawSegment( aPlotter, aPlotOpt, (DRAWSEGMENT*) item, aLayerMask, aPlotMode );
+            itemplotter.PlotDrawSegment( (DRAWSEGMENT*) item );
             break;
 
         case PCB_TEXT_T:
-            PlotTextePcb( aPlotter, aPlotOpt, (TEXTE_PCB*) item, aLayerMask, aPlotMode );
+            itemplotter.PlotTextePcb( (TEXTE_PCB*) item );
             break;
 
         case PCB_DIMENSION_T:
-            PlotDimension( aPlotter, aPlotOpt, (DIMENSION*) item, aLayerMask, aPlotMode );
+            itemplotter.PlotDimension( (DIMENSION*) item );
             break;
 
         case PCB_TARGET_T:
-            PlotPcbTarget( aPlotter, aPlotOpt, (PCB_TARGET*) item, aLayerMask, aPlotMode );
+            itemplotter.PlotPcbTarget( (PCB_TARGET*) item );
             break;
 
         case PCB_MARKER_T:
             break;
 
         default:
-            wxLogMessage( wxT( "Plot_Standard_Layer() error : Unexpected Draw Type" ) );
+            wxLogMessage( wxT( "Plot_Standard_Layer() error : Unexpected Draw Type %d" ),
+                          item->Type() );
             break;
         }
     }
@@ -827,7 +805,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // Plot footprints fields (ref, value ...)
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        if( ! PlotAllTextsModule( aPlotter, aBoard, aLayerMask, module, aPlotOpt ) )
+        if( ! itemplotter.PlotAllTextsModule( module ) )
         {
             wxLogMessage( _( "Your BOARD has a bad layer number for module %s" ),
                            GetChars( module->GetReference() ) );
@@ -844,8 +822,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             switch( item->Type() )
             {
             case PCB_MODULE_EDGE_T:
-                Plot_1_EdgeModule( aPlotter, aPlotOpt, (EDGE_MODULE*) item,
-                                   aPlotMode, aLayerMask );
+                itemplotter.Plot_1_EdgeModule( (EDGE_MODULE*) item );
                 break;
 
             default:
@@ -1039,12 +1016,12 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // Plot filled ares
     for( int ii = 0; ii < aBoard->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* edge_zone = aBoard->GetArea( ii );
+        ZONE_CONTAINER* zone = aBoard->GetArea( ii );
 
-        if( ( ( 1 << edge_zone->GetLayer() ) & aLayerMask ) == 0 )
+        if( ( ( 1 << zone->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
-        PlotFilledAreas( aPlotter, aPlotOpt, edge_zone, aPlotMode );
+        itemplotter.PlotFilledAreas( zone );
     }
 }
 
@@ -1354,7 +1331,7 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
     }
 
     // error in start_plot( ) or before
-    DisplayError( NULL, _("Error creating plot file"));
+    wxMessageBox(  _("Error creating plot file") );
     delete the_plotter;
     return NULL;
 }
