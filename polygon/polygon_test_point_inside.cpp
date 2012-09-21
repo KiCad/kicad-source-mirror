@@ -2,7 +2,7 @@
  * @file polygon_test_point_inside.cpp
  */
 
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <PolyLine.h>
 

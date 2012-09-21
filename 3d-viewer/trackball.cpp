@@ -49,7 +49,7 @@
  * Much mucking with by:
  * Gavin Bell
  */
-#include <math.h>
+#include <cmath>
 #include <wx/glcanvas.h>     // used only to define GLfloat
 #include <trackball.h>
 

@@ -6,7 +6,7 @@
 /* transform jaggy paths into smooth curves */
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 #include <string.h>
 

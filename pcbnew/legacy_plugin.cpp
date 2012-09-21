@@ -59,7 +59,7 @@
 */
 
 
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -4105,7 +4105,7 @@ void FPL_CACHE::Save()
         abs_lib_name.MakeAbsolute();
         tempFileName = wxFileName::CreateTempFileName( abs_lib_name.GetFullPath() );
 
-        wxLogDebug( wxT( "tempFileName:'%s'  m_lib_name:'%s'\n" ), 
+        wxLogDebug( wxT( "tempFileName:'%s'  m_lib_name:'%s'\n" ),
                     TO_UTF8( tempFileName ), TO_UTF8( m_lib_name ) );
 
         FILE* fp = wxFopen( tempFileName, wxT( "w" ) );
