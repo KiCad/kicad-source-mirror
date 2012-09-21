@@ -12,7 +12,7 @@
 
 #include <limits.h>
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 #include <string>
 #include <string.h>
 #include <stdlib.h>

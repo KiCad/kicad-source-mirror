@@ -24,7 +24,7 @@
 #ifndef __UNITS_H
 #define __UNITS_H
 
-#include <math.h>
+#include <cmath>
 #include <units_scales.h>
 
 #ifdef __MINGW32__

@@ -69,7 +69,7 @@
 #include <class_excellon.h>
 #include <kicad_string.h>
 
-#include <math.h>
+#include <cmath>
 
 #include <html_messagebox.h>
 

@@ -5,7 +5,7 @@
 **     since 2006/6/14
 **
 *****************************************************************************/
-#include <math.h>
+#include <cmath>
 
 #include <attenuator_classes.h>
 

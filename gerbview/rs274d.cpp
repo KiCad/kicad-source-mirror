@@ -11,7 +11,7 @@
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 
-#include <math.h>
+#include <cmath>
 
 /* Gerber: NOTES about some important commands found in RS274D and RS274X (G codes):
  * Gn =

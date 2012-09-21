@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <math.h>
+#include <cmath>
 #include <float.h>
 #include <limits.h>
 

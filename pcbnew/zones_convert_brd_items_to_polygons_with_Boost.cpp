@@ -44,7 +44,7 @@
  *      - shapes are smoothed.
  */
 
-#include <math.h>
+#include <cmath>
 
 #include <fctsys.h>
 #include <polygons_defs.h>

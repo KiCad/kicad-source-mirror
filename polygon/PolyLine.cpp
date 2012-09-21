@@ -3,7 +3,7 @@
 //
 // implementation for kicad and kbool polygon clipping library
 //
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <algorithm>
 
