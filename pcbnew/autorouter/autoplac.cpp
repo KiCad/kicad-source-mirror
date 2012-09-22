@@ -1045,7 +1045,7 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
             if( trace & 2 )
             {
                 data = RoutingMatrix.GetDist( row, col, TOP );
-                data = MAX( data, LocalKeepOut );
+                data = std::max( data, LocalKeepOut );
                 RoutingMatrix.SetDist( row, col, TOP, data );
             }
         }
@@ -1171,7 +1171,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
  *
  *  This function can request some iterations
  *  Iterations are made until no cell is added to the zone.
- *  @return: added cells count (i.e. which the attribute CELL_is_ZONE is set)
+ *  @return added cells count (i.e. which the attribute CELL_is_ZONE is set)
  */
 int propagate()
 {
@@ -1182,7 +1182,7 @@ int propagate()
 
 #define NO_CELL_ZONE (HOLE | CELL_is_EDGE | CELL_is_ZONE)
 
-    pt_cell_V.reserve( MAX( RoutingMatrix.m_Nrows, RoutingMatrix.m_Ncols ) );
+    pt_cell_V.reserve( std::max( RoutingMatrix.m_Nrows, RoutingMatrix.m_Ncols ) );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     // Search from left to right and top to bottom.

@@ -410,7 +410,7 @@ double LIB_EDIT_FRAME::BestZoom()
     double zx =(double) dx / ( margin_scale_factor * (double)size.x );
     double zy = (double) dy / ( margin_scale_factor * (double)size.y );
 
-    double bestzoom = MAX( zx, zy );
+    double bestzoom = std::max( zx, zy );
 
     // keep it >= minimal existing zoom (can happen for very small components
     // for instance when starting a new component

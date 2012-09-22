@@ -500,7 +500,7 @@ double SCH_EDIT_FRAME::BestZoom()
     double zx =(double) dx / ( margin_scale_factor * (double)size.x );
     double zy = (double) dy / ( margin_scale_factor * (double)size.y );
 
-    double bestzoom = MAX( zx, zy );
+    double bestzoom = std::max( zx, zy );
 
     GetScreen()->SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
 

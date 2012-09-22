@@ -87,8 +87,8 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 {
     wxASSERT( parent );
 
-    m_scrollIncrementX = MIN( size.x / 8, 10 );
-    m_scrollIncrementY = MIN( size.y / 8, 10 );
+    m_scrollIncrementX = std::min( size.x / 8, 10 );
+    m_scrollIncrementY = std::min( size.y / 8, 10 );
 
     SetBackgroundColour( MakeColour( g_DrawBgColor ) );
 
@@ -441,8 +441,8 @@ void EDA_DRAW_PANEL::SetClipBox( wxDC& aDC, const wxRect* aRect )
         scrollX = KiROUND( Screen->GetGridSize().x * scalar );
         scrollY = KiROUND( Screen->GetGridSize().y * scalar );
 
-        m_scrollIncrementX = MAX( GetClientSize().x / 8, scrollX );
-        m_scrollIncrementY = MAX( GetClientSize().y / 8, scrollY );
+        m_scrollIncrementX = std::max( GetClientSize().x / 8, scrollX );
+        m_scrollIncrementY = std::max( GetClientSize().y / 8, scrollY );
         Screen->m_ScrollbarPos.x = GetScrollPos( wxHORIZONTAL );
         Screen->m_ScrollbarPos.y = GetScrollPos( wxVERTICAL );
     }
@@ -1205,8 +1205,8 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
              */
             #define BLOCK_MINSIZE_LIMIT 1
             bool BlockIsSmall =
-                ( ABS( screen->m_BlockLocate.GetWidth() ) < BLOCK_MINSIZE_LIMIT )
-                && ( ABS( screen->m_BlockLocate.GetHeight() ) < BLOCK_MINSIZE_LIMIT );
+                ( std::abs( screen->m_BlockLocate.GetWidth() ) < BLOCK_MINSIZE_LIMIT )
+                && ( std::abs( screen->m_BlockLocate.GetHeight() ) < BLOCK_MINSIZE_LIMIT );
 
             if( (screen->m_BlockLocate.GetState() != STATE_NO_BLOCK) && BlockIsSmall )
             {

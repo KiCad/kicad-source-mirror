@@ -554,7 +554,7 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
     // Map image size to device
     DPOINT end_dev = userToDeviceCoordinates( end );
     fprintf( outputFile, "%g %g scale\n",
-            ABS(end_dev.x - start_dev.x), ABS(end_dev.y - start_dev.y));
+            std::abs(end_dev.x - start_dev.x), std::abs(end_dev.y - start_dev.y));
 
     // Dimensions of source image (in pixels
     fprintf( outputFile, "%d %d 8", pix_size.x, pix_size.y );

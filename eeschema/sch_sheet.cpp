@@ -643,8 +643,8 @@ EDA_RECT SCH_SHEET::GetBoundingBox() const
     int      textlen2 = ReturnGraphicTextWidth( text, m_fileNameSize, false, lineWidth );
 
     // Calculate bounding box X size:
-    textlen = MAX( textlen, textlen2 );
-    end.x = MAX( m_size.x, textlen );
+    textlen = std::max( textlen, textlen2 );
+    end.x = std::max( m_size.x, textlen );
 
     // Calculate bounding box pos:
     end.y = m_size.y;

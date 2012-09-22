@@ -233,7 +233,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     text = new wxStaticText( m_PanelERCOptions, -1, wxT( "W" ), pos );
 
     text_height   = text->GetRect().GetHeight();
-    bitmap_size.y = MAX( bitmap_size.y, text_height );
+    bitmap_size.y = std::max( bitmap_size.y, text_height );
     SAFE_DELETE( text );
 
     // compute the Y pos interval:
@@ -244,8 +244,8 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 
     // Size computation is not made in constructor, in some wxWidgets version,
     // and m_BoxSizerForERC_Opt position is always 0,0. and we can't use it
-    pos.x = MAX( pos.x, 5 );
-    pos.y = MAX( pos.y, m_ResetOptButton->GetRect().GetHeight() + 30 );
+    pos.x = std::max( pos.x, 5 );
+    pos.y = std::max( pos.y, m_ResetOptButton->GetRect().GetHeight() + 30 );
 
     BoxMatrixPosition = pos;
 
@@ -261,7 +261,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
                                      wxPoint( 5, y + ( bitmap_size.y / 2) - (text_height / 2) ) );
 
             int x = text->GetRect().GetRight();
-            pos.x = MAX( pos.x, x );
+            pos.x = std::max( pos.x, x );
         }
 
         pos.x += 5;
@@ -291,7 +291,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
                                              CommentERC_V[ii],
                                              txtpos );
 
-                BoxMatrixMinSize.x = MAX( BoxMatrixMinSize.x, text->GetRect().GetRight() );
+                BoxMatrixMinSize.x = std::max( BoxMatrixMinSize.x, text->GetRect().GetRight() );
             }
 
             event_id = ID_MATRIX_0 + ii + ( jj * PIN_NMAX );

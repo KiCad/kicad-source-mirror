@@ -134,11 +134,11 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 
     case APT_RECT:
     case APT_OVAL:
-        dim = MIN( m_Size.x, m_Size.y );
+        dim = std::min( m_Size.x, m_Size.y );
         break;
 
     case APT_POLYGON:
-        dim = MIN( m_Size.x, m_Size.y );
+        dim = std::min( m_Size.x, m_Size.y );
         break;
 
     case APT_MACRO:

@@ -29,7 +29,6 @@
 
 #include <eda_text.h>
 #include <drawtxt.h>
-#include <macros.h>              // MAX
 #include <trigo.h>               // RotatePoint
 #include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
@@ -134,7 +133,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         {
             text = list->Item( ii );
             dx   = LenSize( text );
-            textsize.x  = MAX( textsize.x, dx );
+            textsize.x  = std::max( textsize.x, dx );
             textsize.y += dy;
         }
     }

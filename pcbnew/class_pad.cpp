@@ -97,7 +97,7 @@ int D_PAD::boundingRadius() const
         break;
 
     case PAD_OVAL:
-        radius = MAX( m_Size.x, m_Size.y ) / 2;
+        radius = std::max( m_Size.x, m_Size.y ) / 2;
         break;
 
     case PAD_RECT:
@@ -106,8 +106,8 @@ int D_PAD::boundingRadius() const
         break;
 
     case PAD_TRAPEZOID:
-        x = m_Size.x + ABS( m_DeltaSize.y );   // Remember: m_DeltaSize.y is the m_Size.x change
-        y = m_Size.y + ABS( m_DeltaSize.x );   // Remember: m_DeltaSize.x is the m_Size.y change
+        x = m_Size.x + std::abs( m_DeltaSize.y );   // Remember: m_DeltaSize.y is the m_Size.x change
+        y = m_Size.y + std::abs( m_DeltaSize.x );   // Remember: m_DeltaSize.x is the m_Size.y change
         radius = 1 + (int) ( sqrt( (double) y * y + (double) x * x ) / 2 );
         break;
 
@@ -390,7 +390,7 @@ int D_PAD::GetSolderMaskMargin()
     // ensure mask have a size always >= 0
     if( margin < 0 )
     {
-        int minsize = -MIN( m_Size.x, m_Size.y ) / 2;
+        int minsize = -std::min( m_Size.x, m_Size.y ) / 2;
 
         if( margin < minsize )
             minsize = minsize;

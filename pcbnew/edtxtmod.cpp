@@ -77,7 +77,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
     Text->m_Text = wxT( "text" );
 
     GetDesignSettings().m_ModuleTextWidth = Clamp_Text_PenSize( GetDesignSettings().m_ModuleTextWidth,
-                                            MIN( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
+                                            std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
     Text->m_Size  = GetDesignSettings().m_ModuleTextSize;
     Text->m_Thickness = GetDesignSettings().m_ModuleTextWidth;
     Text->m_Pos   = GetScreen()->GetCrossHairPosition();

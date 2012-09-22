@@ -214,7 +214,7 @@ bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
     wxPoint dist = aPosition - m_pos;
 
-    if( ( ABS( dist.x ) <= delta ) && ( ABS( dist.y ) <= delta ) )
+    if( ( std::abs( dist.x ) <= delta ) && ( std::abs( dist.y ) <= delta ) )
         return true;
 
     return false;

@@ -166,7 +166,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     int parts_count = 1;
 
     if( component )
-        parts_count = MAX( component->GetPartCount(), 1 );
+        parts_count = std::max( component->GetPartCount(), 1 );
 
     SelpartBox->Clear();
 

@@ -38,12 +38,8 @@
 #include <layers_id_colors_and_visibility.h>
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
-#include <macros.h>
-
 #include <pcbnew_id.h>             // ID_TRACK_BUTT
 #include <pcbnew.h>
-#include <colors_selection.h>
-
 #include <class_board.h>
 
 
@@ -544,7 +540,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     /* Draw "No connect" ( / or \ or cross X ) if necessary. : */
     if( m_Netname.IsEmpty() && aDrawInfo.m_ShowNCMark )
     {
-        int dx0 = MIN( halfsize.x, halfsize.y );
+        int dx0 = std::min( halfsize.x, halfsize.y );
         EDA_COLOR_T nc_color = BLUE;
 
         if( m_layerMask & LAYER_FRONT )    /* Draw \ */
@@ -627,7 +623,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     if( shortname_len == 0 )
         return;
 
-    shortname_len = MAX( shortname_len, MIN_CHAR_COUNT );
+    shortname_len = std::max( shortname_len, MIN_CHAR_COUNT );
     tsize = std::min( AreaSize.y, AreaSize.x / shortname_len );
 
     if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )  // Not drawable in size too small.

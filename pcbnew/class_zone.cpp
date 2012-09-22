@@ -372,10 +372,10 @@ EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
     {
         wxPoint corner = GetCornerPosition( i );
 
-        ymax = MAX( ymax, corner.y );
-        xmax = MAX( xmax, corner.x );
-        ymin = MIN( ymin, corner.y );
-        xmin = MIN( xmin, corner.x );
+        ymax = std::max( ymax, corner.y );
+        xmax = std::max( xmax, corner.x );
+        ymin = std::min( ymin, corner.y );
+        xmin = std::min( xmin, corner.x );
     }
 
     EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
@@ -497,7 +497,7 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
         delta.y = refPos.y - m_Poly->m_CornersList[item_pos].y;
 
         // Calculate a distance:
-        int dist = MAX( abs( delta.x ), abs( delta.y ) );
+        int dist = std::max( abs( delta.x ), abs( delta.y ) );
 
         if( dist < min_dist )  // this corner is a candidate:
         {

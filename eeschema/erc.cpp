@@ -452,12 +452,12 @@ void TestOthersItems( unsigned NetItemRef, unsigned netstart,
             break;
 
         case NET_NOCONNECT:
-            local_minconn = MAX( NET_NC, local_minconn );
+            local_minconn = std::max( NET_NC, local_minconn );
             break;
 
         case NET_PIN:
             jj = g_NetObjectslist[NetItemTst]->m_ElectricalType;
-            local_minconn = MAX( MinimalReq[ref_elect_type][jj], local_minconn );
+            local_minconn = std::max( MinimalReq[ref_elect_type][jj], local_minconn );
 
             if( NetItemTst <= NetItemRef )
                 break;

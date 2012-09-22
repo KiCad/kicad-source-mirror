@@ -4,7 +4,6 @@
 
 #include <colors.h>
 
-
 class EDA_DRAW_PANEL;
 class EDA_DRAW_FRAME;
 class PICKED_ITEMS_LIST;
@@ -14,15 +13,12 @@ class CMP_LIBRARY;
 class SCH_COMPONENT;
 class SCH_SCREEN;
 class SCH_ITEM;
-class PLOTTER;
-class SCH_SHEET;
-class NETLIST_OBJECT;
 
 
 /****************/
 /* DATABASE.CPP */
 /****************/
-void DisplayCmpDoc( wxString& Name );
+//void DisplayCmpDoc( wxString& Name );
 wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufName );
 
 
@@ -56,12 +52,6 @@ void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, ED
 /* dialogs/dialog_color_config.cpp */
 /***********************************/
 EDA_COLOR_T ReturnLayerColor( int Layer );
-
-
-/***************/
-/* PINEDIT.CPP */
-/***************/
-void InstallPineditFrame( LIB_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos );
 
 
 /***************/
@@ -103,37 +93,11 @@ CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame );
  */
 int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, CMP_LIBRARY* Lib, wxString& BufName );
 
-/***************/
-/* LIBARCH.CPP */
-/***************/
-
-bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName );
-
-
-/***************/
-/* OPTIONS.CPP */
-/***************/
-void DisplayOptionFrame( SCH_EDIT_FRAME* parent, const wxPoint& framepos );
-
 
 /****************/
 /* CONTROLE.CPP */
 /****************/
 void RemoteCommand( const char* cmdline );
 
-
-/* Prototypes in netlist_control.cpp */
-void FreeNetObjectsList( std::vector <NETLIST_OBJECT*>& aNetObjectslist );
-
-/**
- * Function ReturnUserNetlistTypeName
- * to retrieve user netlist type names
- * @param first_item = true: return first name of the list, false = return next
- * @return a wxString : name of the type netlist or empty string
- * this function must be called first with "first_item" = true
- * and after with "first_item" = false to get all the other existing netlist
- * names
- */
-wxString ReturnUserNetlistTypeName( bool first_item );
 
 #endif  /* __PROTOS_H__ */

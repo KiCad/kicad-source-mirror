@@ -98,7 +98,7 @@ wxString BOM_LABEL::GetText() const
  * Routine to free memory used to calculate the netlist TabNetItems = pointer
  * to the main table (list items)
  */
-void FreeNetObjectsList( NETLIST_OBJECT_LIST& aNetObjectsBuffer )
+static void FreeNetObjectsList( NETLIST_OBJECT_LIST& aNetObjectsBuffer )
 {
     for( unsigned i = 0; i < aNetObjectsBuffer.size(); i++ )
         delete aNetObjectsBuffer[i];

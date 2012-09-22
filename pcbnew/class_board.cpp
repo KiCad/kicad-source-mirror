@@ -305,7 +305,7 @@ int BOARD::GetBiggestClearanceValue()
     for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
     {
         NETCLASS* netclass = nc->second;
-        clearance = MAX( clearance, netclass->GetClearance() );
+        clearance = std::max( clearance, netclass->GetClearance() );
     }
 
     return clearance;
@@ -320,7 +320,7 @@ int BOARD::GetSmallestClearanceValue()
     for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
     {
         NETCLASS* netclass = nc->second;
-        clearance = MIN( clearance, netclass->GetClearance() );
+        clearance = std::min( clearance, netclass->GetClearance() );
     }
 
     return clearance;
@@ -2152,7 +2152,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, int aActiveLayer,
         //off x & offy point to the middle of the box.
         int dist = abs( aPosition.x - offx ) + abs( aPosition.y - offy );
 
-        //int dist = MIN(lx, ly);  // to pick the smallest module (kinda
+        //int dist = std::min(lx, ly);  // to pick the smallest module (kinda
         // screwy with same-sized modules -- this is bad!)
 
         if( aActiveLayer == layer )

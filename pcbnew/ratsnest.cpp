@@ -9,7 +9,6 @@
 #include <class_drawpanel.h>
 #include <colors_selection.h>
 #include <wxBasePcbFrame.h>
-#include <macros.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -462,7 +461,7 @@ void PCB_BASE_FRAME::TestForActiveLinksInRatsnest( int aNetCode )
             pad = net->m_PadInNetList[ip];
             int subnet = pad->GetSubNet();
             pad->SetSubRatsnest( subnet );
-            subratsnest = MAX( subratsnest, subnet );
+            subratsnest = std::max( subratsnest, subnet );
         }
 
         for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )

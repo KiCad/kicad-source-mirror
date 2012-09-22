@@ -39,14 +39,10 @@
 #include <pcbcommon.h>
 #include <colors_selection.h>
 #include <wxstruct.h>
-#include <macros.h>
 #include <wxBasePcbFrame.h>
-
 #include <class_board.h>
 #include <class_track.h>
-
 #include <pcbnew.h>
-#include <protos.h>
 #include <base_units.h>
 
 /**
@@ -348,11 +344,11 @@ EDA_RECT TRACK::GetBoundingBox() const
     {
         radius = ( m_Width + 1 ) / 2;
 
-        ymax = MAX( m_Start.y, m_End.y );
-        xmax = MAX( m_Start.x, m_End.x );
+        ymax = std::max( m_Start.y, m_End.y );
+        xmax = std::max( m_Start.x, m_End.x );
 
-        ymin = MIN( m_Start.y, m_End.y );
-        xmin = MIN( m_Start.x, m_End.x );
+        ymin = std::min( m_Start.y, m_End.y );
+        xmin = std::min( m_Start.x, m_End.x );
     }
 
     if( ShowClearance( this ) )
@@ -701,7 +697,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( (m_End.x - m_Start.x) != 0 &&  (m_End.y - m_Start.y) != 0 )
         return;
 
-    int len = ABS( (m_End.x - m_Start.x) + (m_End.y - m_Start.y) );
+    int len = std::abs( (m_End.x - m_Start.x) + (m_End.y - m_Start.y) );
 
     if( len < THRESHOLD * m_Width )
         return;
@@ -722,7 +718,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( textlen > 0 )
     {
         // calculate a good size for the text
-        int     tsize = MIN( m_Width, len / textlen );
+        int     tsize = std::min( m_Width, len / textlen );
         wxPoint tpos  = m_Start + m_End;
         tpos.x /= 2;
         tpos.y /= 2;

@@ -469,10 +469,10 @@ start(%d, %d), end(%d, %d), radius %d" ),
     }
 
     /* Start with the start and end point of the arc. */
-    minX = MIN( startPos.x, endPos.x );
-    minY = MIN( startPos.y, endPos.y );
-    maxX = MAX( startPos.x, endPos.x );
-    maxY = MAX( startPos.y, endPos.y );
+    minX = std::min( startPos.x, endPos.x );
+    minY = std::min( startPos.y, endPos.y );
+    maxX = std::max( startPos.x, endPos.x );
+    maxY = std::max( startPos.y, endPos.y );
 
     /* Zero degrees is a special case. */
     if( angleStart == 0 )

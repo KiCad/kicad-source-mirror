@@ -195,7 +195,7 @@ double GERBVIEW_FRAME::BestZoom()
     double  y   = (double) bbox.GetHeight() / (double) size.y;
     GetScreen()->SetScrollCenterPosition( bbox.Centre() );
 
-    double  best_zoom = MAX( x, y );
+    double  best_zoom = std::max( x, y );
     return best_zoom;
 }
 

@@ -98,7 +98,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
         double  scalex  = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
         double  scaley  = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
 
-        double  scale = MIN( scalex, scaley );
+        double  scale = std::min( scalex, scaley );
 
         wxPoint plot_offset;
         plotFileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )

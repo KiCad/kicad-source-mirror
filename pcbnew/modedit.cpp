@@ -102,7 +102,7 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
         itemMenu.Append( item_title );
         itemMenu.AppendSeparator();
 
-        int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
+        int limit = std::min( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
 
         for( int ii = 0; ii<limit; ++ii )
         {

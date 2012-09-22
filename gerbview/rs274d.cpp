@@ -358,7 +358,7 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
     int arc_angle = start_angle - end_angle;
     // Approximate arc by 36 segments per 360 degree
     const int increment_angle = 3600 / 36;
-    int count = ABS( arc_angle / increment_angle );
+    int count = std::abs( arc_angle / increment_angle );
 
     // calculate polygon corners
     // when arc is counter-clockwise, dummyGbrItem arc goes from end to start
