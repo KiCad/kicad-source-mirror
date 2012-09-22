@@ -61,6 +61,8 @@ inline double atanh(double x)
 
   return log((1.0+x)/(1.0-x))/2.0;
 }
+#else
+using namespace std;
 #endif
 
 
