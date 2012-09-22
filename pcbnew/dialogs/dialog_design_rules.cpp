@@ -32,9 +32,7 @@
  */
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <macros.h>
 #include <base_units.h>
-
 #include <confirm.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
@@ -431,8 +429,8 @@ void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( NETS_LIST_CTRL* aListCtrl,
     {
         wxSize   net_needed = sDC.GetTextExtent( (*i)->net );
         wxSize   class_needed = sDC.GetTextExtent( (*i)->clazz );
-        net_colsize = MAX( net_colsize, net_needed.x );
-        class_colsize = MAX( class_colsize, class_needed.x );
+        net_colsize = std::max( net_colsize, net_needed.x );
+        class_colsize = std::max( class_colsize, class_needed.x );
         aListCtrl->setRowItems( row, (*i)->net, (*i)->clazz );
     }
 

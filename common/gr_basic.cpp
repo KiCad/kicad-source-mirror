@@ -723,7 +723,7 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
     }
     else
     {
-        if( ABS( dx ) == ABS( dy ) )                /* segment 45 degrees */
+        if( std::abs( dx ) == std::abs( dy ) )  // segment 45 degrees
         {
             dwx = dwy = ( (width * 5) + 4 ) / 7;    // = width / 2 * 0.707
             if( dy < 0 )
@@ -829,10 +829,10 @@ static bool IsGRSPolyDrawable( EDA_RECT* ClipBox, int n, wxPoint Points[] )
 
     for( int ii = 1; ii < n; ii++ )     // calculate rectangle
     {
-        Xmin = MIN( Xmin, Points[ii].x );
-        Xmax = MAX( Xmax, Points[ii].x );
-        Ymin = MIN( Ymin, Points[ii].y );
-        Ymax = MAX( Ymax, Points[ii].y );
+        Xmin = std::min( Xmin, Points[ii].x );
+        Xmax = std::max( Xmax, Points[ii].x );
+        Ymin = std::min( Ymin, Points[ii].y );
+        Ymax = std::max( Ymax, Points[ii].y );
     }
 
     xcliplo = ClipBox->GetX();

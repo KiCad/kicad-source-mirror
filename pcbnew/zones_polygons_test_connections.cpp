@@ -314,7 +314,7 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
     for( unsigned ii = 0; ii < Candidates.size(); ii++ )
     {
         int subnet = Candidates[ii]->GetSubNet();
-        next_subnet_free_number = MAX( next_subnet_free_number, subnet );
+        next_subnet_free_number = std::max( next_subnet_free_number, subnet );
     }
 
     next_subnet_free_number++;     // This is a subnet we can use with not connected items

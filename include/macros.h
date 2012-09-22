@@ -56,18 +56,6 @@ static inline const wxChar* GetChars( const wxString& s )
 #endif
 }
 
-
-#ifndef MIN
-#define MIN( x, y ) ( (x) > (y) ? (y) : (x) )
-#endif
-#ifndef MAX
-#define MAX( x, y ) ( (x) > (y) ? (x) : (y) )
-#endif
-
-#ifndef ABS
-#define ABS( y ) ( (y) >= 0 ? (y) : ( -(y) ) )
-#endif
-
 #define NEGATE( x ) (x = -x)
 
 /// # of elements in an array

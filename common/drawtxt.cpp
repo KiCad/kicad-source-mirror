@@ -89,7 +89,7 @@ int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold )
 {
     int    penSize  = aPenSize;
     double scale    = aBold ? 4.0 : 6.0;
-    int    maxWidth = KiROUND( ABS( aSize ) / scale );
+    int    maxWidth = KiROUND( std::abs( aSize ) / scale );
 
     if( penSize > maxWidth )
         penSize = maxWidth;
@@ -99,7 +99,7 @@ int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold )
 
 int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold )
 {
-    int size = MIN( ABS( aSize.x ), ABS( aSize.y ) );
+    int size = std::min( std::abs( aSize.x ), std::abs( aSize.y ) );
 
     return Clamp_Text_PenSize( aPenSize, size, aBold );
 }
@@ -283,7 +283,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     size_v = aSize.y;
 
     if( aWidth == 0 && aBold )       // Use default values if aWidth == 0
-        aWidth = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );
+        aWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
 
     if( aWidth < 0 )
     {
@@ -311,7 +311,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     if( aPanel )
     {
         int xm, ym, ll, xc, yc;
-        ll = ABS( dx );
+        ll = std::abs( dx );
 
         xc = current_char_pos.x;
         yc = current_char_pos.y;
@@ -372,7 +372,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
 
     /* if a text size is too small, the text cannot be drawn, and it is drawn as a single
      * graphic line */
-    if( ABS( aSize.x ) < 3 )
+    if( std::abs( aSize.x ) < 3 )
     {
         /* draw the text as a line always vertically centered */
         wxPoint end( current_char_pos.x + dx, current_char_pos.y );
@@ -554,7 +554,7 @@ void PLOTTER::Text( const wxPoint&              aPos,
     int textPensize = aWidth;
 
     if( textPensize == 0 && aBold )      // Use default values if aWidth == 0
-        textPensize = GetPenSizeForBold( MIN( aSize.x, aSize.y ) );
+        textPensize = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
 
     if( textPensize >= 0 )
         textPensize = Clamp_Text_PenSize( aWidth, aSize, aBold );

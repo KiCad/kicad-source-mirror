@@ -175,7 +175,7 @@ void DIALOG_PLOT_SCHEMATIC::setupPlotPagePDF( PLOTTER * aPlotter, SCH_SCREEN* aS
 
     double  scalex  = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
     double  scaley  = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
-    double  scale   = MIN( scalex, scaley );
+    double  scale   = std::min( scalex, scaley );
     aPlotter->SetPageSettings( plotPage );
     aPlotter->SetViewport( wxPoint( 0, 0 ), IU_PER_DECIMILS, scale, false );
 }

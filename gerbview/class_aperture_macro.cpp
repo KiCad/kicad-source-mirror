@@ -646,14 +646,14 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
     case AMP_LINE_CENTER:
     {
         wxPoint size = mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ), m_GerbMetric );
-        dim = MIN(size.x, size.y);
+        dim = std::min(size.x, size.y);
     }
     break;
 
     case AMP_LINE_LOWER_LEFT:
     {
         wxPoint size = mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ), m_GerbMetric );
-        dim = MIN(size.x, size.y);
+        dim = std::min(size.x, size.y);
     }
     break;
 
@@ -703,7 +703,7 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
         wxSize size;
         size.x = pos_max.x - pos_min.x;
         size.y = pos_max.y - pos_min.y;
-        dim = MIN( size.x, size.y );
+        dim = std::min( size.x, size.y );
     }
         break;
 

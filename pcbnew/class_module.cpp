@@ -46,8 +46,6 @@
 #include <3d_struct.h>
 
 #include <drag.h>
-
-#include <protos.h>
 #include <class_board.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
@@ -392,7 +390,7 @@ void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offs
 void MODULE::CalculateBoundingBox()
 {
     m_BoundaryBox = GetFootPrintRect();
-    m_Surface = ABS( (double) m_BoundaryBox.GetWidth() * m_BoundaryBox.GetHeight() );
+    m_Surface = std::abs( (double) m_BoundaryBox.GetWidth() * m_BoundaryBox.GetHeight() );
 }
 
 

@@ -393,10 +393,10 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
         break;
 
     case LAYER_WIRE:
-        if( GetItem( aPosition, MAX( g_DrawDefaultLineThickness, 3 ), SCH_BUS_ENTRY_T ) )
+        if( GetItem( aPosition, std::max( g_DrawDefaultLineThickness, 3 ), SCH_BUS_ENTRY_T ) )
             return true;
 
-        if( GetItem( aPosition, MAX( g_DrawDefaultLineThickness, 3 ), SCH_JUNCTION_T ) )
+        if( GetItem( aPosition, std::max( g_DrawDefaultLineThickness, 3 ), SCH_JUNCTION_T ) )
             return true;
 
         if( GetPin( aPosition, NULL, true ) )

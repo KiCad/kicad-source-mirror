@@ -413,7 +413,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     size.y = min_len;
 
     // Choose a reasonable starting value for the radius of the arcs.
-    int radius = MIN( aWidth * 5, size.x / 4 );
+    int radius = std::min( aWidth * 5, size.x / 4 );
 
     int segm_count;     // number of full len segments
                         // the half size segments (first and last segment) are not counted here
@@ -647,7 +647,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
             abort = true;
         }
 
-        angle = ABS( KiROUND( fval * fcoeff ) );
+        angle = std::abs( KiROUND( fval * fcoeff ) );
 
         if( angle > 1800 )
             angle = 1800;
@@ -1016,8 +1016,10 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
         pad2->SetX0( last_coordinate.x );
         polyPoints.push_back( wxPoint( last_coordinate.x, 0 ) );
 
-        pad1->SetSize( wxSize( ABS( first_coordinate.y ), ABS( first_coordinate.y ) ) );
-        pad2->SetSize( wxSize( ABS( last_coordinate.y ),  ABS( last_coordinate.y ) ) );
+        pad1->SetSize( wxSize( std::abs( first_coordinate.y ),
+                       std::abs( first_coordinate.y ) ) );
+        pad2->SetSize( wxSize( std::abs( last_coordinate.y ),
+                       std::abs( last_coordinate.y ) ) );
 
         pad1->SetY0( first_coordinate.y / 2 );
         pad2->SetY0( last_coordinate.y / 2 );
@@ -1036,8 +1038,10 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
             polyPoints.push_back( pt );
         }
 
-        pad1->SetSize( wxSize( 2 * ABS( first_coordinate.y ), 2 * ABS( first_coordinate.y ) ) );
-        pad2->SetSize( wxSize( 2 * ABS( last_coordinate.y ),  2 * ABS( last_coordinate.y ) ) );
+        pad1->SetSize( wxSize( 2 * std::abs( first_coordinate.y ),
+                       2 * std::abs( first_coordinate.y ) ) );
+        pad2->SetSize( wxSize( 2 * std::abs( last_coordinate.y ),
+                       2 * std::abs( last_coordinate.y ) ) );
         break;
     }
 

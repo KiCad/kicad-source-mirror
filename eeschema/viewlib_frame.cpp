@@ -374,7 +374,7 @@ double LIB_VIEW_FRAME::BestZoom()
                 ( margin_scale_factor * (double)size.y);
 
     // Calculates the best zoom
-    bestzoom = MAX( zx, zy );
+    bestzoom = std::max( zx, zy );
 
     // keep it >= minimal existing zoom (can happen for very small components
     // like small power symbols

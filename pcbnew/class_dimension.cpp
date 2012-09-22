@@ -565,23 +565,23 @@ EDA_RECT DIMENSION::GetBoundingBox() const
     ymin = bBox.GetY();
     ymax = bBox.GetBottom();
 
-    xmin = MIN( xmin, m_crossBarOx );
-    xmin = MIN( xmin, m_crossBarFx );
-    ymin = MIN( ymin, m_crossBarOy );
-    ymin = MIN( ymin, m_crossBarFy );
-    xmax = MAX( xmax, m_crossBarOx );
-    xmax = MAX( xmax, m_crossBarFx );
-    ymax = MAX( ymax, m_crossBarOy );
-    ymax = MAX( ymax, m_crossBarFy );
+    xmin = std::min( xmin, m_crossBarOx );
+    xmin = std::min( xmin, m_crossBarFx );
+    ymin = std::min( ymin, m_crossBarOy );
+    ymin = std::min( ymin, m_crossBarFy );
+    xmax = std::max( xmax, m_crossBarOx );
+    xmax = std::max( xmax, m_crossBarFx );
+    ymax = std::max( ymax, m_crossBarOy );
+    ymax = std::max( ymax, m_crossBarFy );
 
-    xmin = MIN( xmin, m_featureLineGOx );
-    xmin = MIN( xmin, m_featureLineGFx );
-    ymin = MIN( ymin, m_featureLineGOy );
-    ymin = MIN( ymin, m_featureLineGFy );
-    xmax = MAX( xmax, m_featureLineGOx );
-    xmax = MAX( xmax, m_featureLineGFx );
-    ymax = MAX( ymax, m_featureLineGOy );
-    ymax = MAX( ymax, m_featureLineGFy );
+    xmin = std::min( xmin, m_featureLineGOx );
+    xmin = std::min( xmin, m_featureLineGFx );
+    ymin = std::min( ymin, m_featureLineGOy );
+    ymin = std::min( ymin, m_featureLineGFy );
+    xmax = std::max( xmax, m_featureLineGOx );
+    xmax = std::max( xmax, m_featureLineGFx );
+    ymax = std::max( ymax, m_featureLineGOy );
+    ymax = std::max( ymax, m_featureLineGFy );
 
     bBox.SetX( xmin );
     bBox.SetY( ymin );

@@ -32,10 +32,7 @@
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <pcbcommon.h>
-#include <macros.h>
-
 #include <pcbnew_id.h>
-
 #include <class_board.h>
 #include <class_module.h>
 
@@ -78,7 +75,7 @@ static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aColle
         int     lx = module->m_BoundaryBox.GetWidth();
         int     ly = module->m_BoundaryBox.GetHeight();
 
-        int     lmin = MIN( lx, ly );
+        int     lmin = std::min( lx, ly );
 
         if( lmin < minDim )
         {
@@ -216,7 +213,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         itemMenu.Append( item_title );
         itemMenu.AppendSeparator();
 
-        int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
+        int limit = std::min( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
 
         for( int i = 0;  i<limit;  ++i )
         {

@@ -913,7 +913,7 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
 {
     double hole_drill_w = (double) aPad->GetDrillSize().x / 2;
     double hole_drill_h = (double) aPad->GetDrillSize().y / 2;
-    double hole_drill   = MIN( hole_drill_w, hole_drill_h );
+    double hole_drill   = std::min( hole_drill_w, hole_drill_h );
     double hole_x = aPad->GetPosition().x;
     double hole_y = aPad->GetPosition().y;
 

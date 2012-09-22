@@ -1,6 +1,7 @@
-/**********************************************/
-/* board_items_to_polygon_shape_transform.cpp */
-/**********************************************/
+/***
+ * @file board_items_to_polygon_shape_transform.cpp
+ * @brief function to convert shapes of items ( pads, tracks... ) to polygons
+ */
 
 /* Function to convert pads and tranck shapes to polygons
  * Used to fill zones areas
@@ -12,8 +13,6 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <trigo.h>
-#include <macros.h>
-
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_drawsegment.h>
@@ -294,8 +293,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
 
     default:
     case PAD_TRAPEZOID:
-        psize.x += ABS( m_DeltaSize.y );
-        psize.y += ABS( m_DeltaSize.x );
+        psize.x += std::abs( m_DeltaSize.y );
+        psize.y += std::abs( m_DeltaSize.x );
 
     // fall through
     case PAD_RECT:

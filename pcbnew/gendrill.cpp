@@ -335,8 +335,8 @@ int EXCELLON_WRITER::CreateDrillFile()
             fprintf( m_file, "T%d\n", tool_reference );
         }
 
-        diam = MIN( hole_descr.m_Hole_Size.x,
-                    hole_descr.m_Hole_Size.y );
+        diam = std::min( hole_descr.m_Hole_Size.x,
+                         hole_descr.m_Hole_Size.y );
         if( diam == 0 )
             continue;
 

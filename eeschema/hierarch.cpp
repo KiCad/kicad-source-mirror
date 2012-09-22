@@ -231,7 +231,7 @@ void HIERARCHY_NAVIG_DLG::BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId*  
             ll *= 12;   //  * char width
 #endif
             ll += maxposx + 20;
-            m_TreeSize.x  = MAX( m_TreeSize.x, ll );
+            m_TreeSize.x  = std::max( m_TreeSize.x, ll );
             m_TreeSize.y += 1;
 
             if( *list == m_Parent->GetCurrentSheet() )

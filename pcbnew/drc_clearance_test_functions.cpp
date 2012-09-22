@@ -663,8 +663,8 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 // Test DRC:
                 diag = false;
                 RotatePoint( &relativePadPos, aRefPad->GetOrientation() );
-                relativePadPos.x = ABS( relativePadPos.x );
-                relativePadPos.y = ABS( relativePadPos.y );
+                relativePadPos.x = std::abs( relativePadPos.x );
+                relativePadPos.y = std::abs( relativePadPos.y );
 
                 if( ( relativePadPos.x - ( (size.x + aRefPad->GetSize().x) / 2 ) ) >= dist_min )
                     diag = true;
@@ -804,8 +804,8 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
 
     if( aPad->GetShape() == PAD_TRAPEZOID ) // The size is bigger, due to GetDelta() extra size
     {
-        padHalfsize.x += ABS(aPad->GetDelta().y) / 2;   // Remember: GetDelta().y is the GetSize().x change
-        padHalfsize.y += ABS(aPad->GetDelta().x) / 2;   // Remember: GetDelta().x is the GetSize().y change
+        padHalfsize.x += std::abs(aPad->GetDelta().y) / 2;   // Remember: GetDelta().y is the GetSize().x change
+        padHalfsize.y += std::abs(aPad->GetDelta().x) / 2;   // Remember: GetDelta().x is the GetSize().y change
     }
 
     if( aPad->GetShape() == PAD_CIRCLE )

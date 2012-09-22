@@ -240,9 +240,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
 }
 
 
-/*
- * Actual print function.
- */
+// Actual SVG file export  function.
 bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
 {
     BOARD*          brd = m_Parent->GetBoard();
@@ -253,7 +251,7 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
     m_plotOpts.SetDrillMarksType( PCB_PLOT_PARAMS::FULL_DRILL_SHAPE );
     m_plotOpts.SetMirror( m_printMirror );
     m_plotOpts.SetFormat( PLOT_FORMAT_SVG );
-    EDA_COLOR_T color = BLACK;
+    EDA_COLOR_T color = UNSPECIFIED_COLOR;      // Used layer color to plot ref and value
     m_plotOpts.SetReferenceColor( color );
     m_plotOpts.SetValueColor( color );
 

@@ -334,13 +334,13 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
     rect.Normalize();       // ensure size is >= 0
 
     // calculate the left common area coordinate:
-    int  left   = MAX( me.m_Pos.x, rect.m_Pos.x );
+    int  left   = std::max( me.m_Pos.x, rect.m_Pos.x );
     // calculate the right common area coordinate:
-    int  right  = MIN( me.m_Pos.x + me.m_Size.x, rect.m_Pos.x + rect.m_Size.x );
+    int  right  = std::min( me.m_Pos.x + me.m_Size.x, rect.m_Pos.x + rect.m_Size.x );
     // calculate the upper common area coordinate:
-    int  top    = MAX( me.m_Pos.y, aRect.m_Pos.y );
+    int  top    = std::max( me.m_Pos.y, aRect.m_Pos.y );
     // calculate the lower common area coordinate:
-    int  bottom = MIN( me.m_Pos.y + me.m_Size.y, rect.m_Pos.y + rect.m_Size.y );
+    int  bottom = std::min( me.m_Pos.y + me.m_Size.y, rect.m_Pos.y + rect.m_Size.y );
 
     // if a common area exists, it must have a positive (null accepted) size
     if( left <= right && top <= bottom )
@@ -436,10 +436,10 @@ void EDA_RECT::Merge( const EDA_RECT& aRect )
     wxPoint  rect_end = rect.GetEnd();
 
     // Change origin and size in order to contain the given rect
-    m_Pos.x = MIN( m_Pos.x, rect.m_Pos.x );
-    m_Pos.y = MIN( m_Pos.y, rect.m_Pos.y );
-    end.x   = MAX( end.x, rect_end.x );
-    end.y   = MAX( end.y, rect_end.y );
+    m_Pos.x = std::min( m_Pos.x, rect.m_Pos.x );
+    m_Pos.y = std::min( m_Pos.y, rect.m_Pos.y );
+    end.x   = std::max( end.x, rect_end.x );
+    end.y   = std::max( end.y, rect_end.y );
     SetEnd( end );
 }
 
@@ -450,10 +450,10 @@ void EDA_RECT::Merge( const wxPoint& aPoint )
 
     wxPoint  end = GetEnd();
     // Change origin and size in order to contain the given rect
-    m_Pos.x = MIN( m_Pos.x, aPoint.x );
-    m_Pos.y = MIN( m_Pos.y, aPoint.y );
-    end.x   = MAX( end.x, aPoint.x );
-    end.y   = MAX( end.y, aPoint.y );
+    m_Pos.x = std::min( m_Pos.x, aPoint.x );
+    m_Pos.y = std::min( m_Pos.y, aPoint.y );
+    end.x   = std::max( end.x, aPoint.x );
+    end.y   = std::max( end.y, aPoint.y );
     SetEnd( end );
 }
 

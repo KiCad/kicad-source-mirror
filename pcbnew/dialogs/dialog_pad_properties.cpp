@@ -202,19 +202,19 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Calculate a suitable scale to fit the available draw area
-    int dim = m_dummyPad->GetSize().x + ABS( m_dummyPad->GetDelta().y);
+    int dim = m_dummyPad->GetSize().x + std::abs( m_dummyPad->GetDelta().y);
 
     if( m_dummyPad->GetLocalClearance() > 0 )
         dim += m_dummyPad->GetLocalClearance() * 2;
 
     double scale = (double) dc_size.x / dim;
 
-    dim = m_dummyPad->GetSize().y + ABS( m_dummyPad->GetDelta().x);
+    dim = m_dummyPad->GetSize().y + std::abs( m_dummyPad->GetDelta().x);
     if( m_dummyPad->GetLocalClearance() > 0 )
         dim += m_dummyPad->GetLocalClearance() * 2;
 
     double altscale = (double) dc_size.y / dim;
-    scale = MIN( scale, altscale );
+    scale = std::min( scale, altscale );
 
     // Give a margin
     scale *= 0.7;
@@ -690,8 +690,8 @@ if you do not want this pad plotted in gerber files");
     }
 
     wxPoint max_size;
-    max_size.x = ABS( m_dummyPad->GetOffset().x );
-    max_size.y = ABS( m_dummyPad->GetOffset().y );
+    max_size.x = std::abs( m_dummyPad->GetOffset().x );
+    max_size.y = std::abs( m_dummyPad->GetOffset().y );
     max_size.x += m_dummyPad->GetDrillSize().x / 2;
     max_size.y += m_dummyPad->GetDrillSize().y / 2;
     if( ( m_dummyPad->GetSize().x / 2 < max_size.x ) ||

@@ -71,10 +71,20 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 
     // Plot text fields, if allowed
     if( trace_ref )
-        PlotTextModule( aModule->m_Reference, GetReferenceColor() );
+    {
+        if( GetReferenceColor() == UNSPECIFIED_COLOR )
+            PlotTextModule( aModule->m_Reference, getColor( textLayer ) );
+        else
+            PlotTextModule( aModule->m_Reference, GetReferenceColor() );
+    }
 
     if( trace_val )
-        PlotTextModule( aModule->m_Value, GetValueColor() );
+    {
+        if( GetValueColor() == UNSPECIFIED_COLOR )
+            PlotTextModule( aModule->m_Value, getColor( textLayer ) );
+        else
+            PlotTextModule( aModule->m_Value, GetValueColor() );
+    }
 
     for( textModule = (TEXTE_MODULE*) aModule->m_Drawings.GetFirst();
          textModule != NULL; textModule = textModule->Next() )

@@ -391,15 +391,15 @@ EDA_RECT LIB_BEZIER::GetBoundingBox() const
 
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {
-        xmin = MIN( xmin, m_PolyPoints[ii].x );
-        xmax = MAX( xmax, m_PolyPoints[ii].x );
-        ymin = MIN( ymin, m_PolyPoints[ii].y );
-        ymax = MAX( ymax, m_PolyPoints[ii].y );
+        xmin = std::min( xmin, m_PolyPoints[ii].x );
+        xmax = std::max( xmax, m_PolyPoints[ii].x );
+        ymin = std::min( ymin, m_PolyPoints[ii].y );
+        ymax = std::max( ymax, m_PolyPoints[ii].y );
     }
 
-    rect.SetOrigin( xmin, ymin * -1 );
-    rect.SetEnd( xmax, ymax * -1 );
-    rect.Inflate( m_Width / 2, m_Width / 2 );
+    rect.SetOrigin( xmin, - ymin );
+    rect.SetEnd( xmax, - ymax );
+    rect.Inflate( m_Width / 2 );
 
     return rect;
 }

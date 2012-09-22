@@ -585,7 +585,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
     wxPoint ref_pos = GetXYPosition( aRefPos );
 
     // TODO: a better analyze of the shape (perhaps create a D_CODE::HitTest for flashed items)
-    int     radius = MIN( m_Size.x, m_Size.y ) >> 1;
+    int     radius = std::min( m_Size.x, m_Size.y ) >> 1;
 
     // delta is a vector from m_Start to m_End (an origin of m_Start)
     wxPoint delta = m_End - m_Start;

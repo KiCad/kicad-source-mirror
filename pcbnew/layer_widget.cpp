@@ -581,7 +581,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
     wxSize layerz  = m_LayersFlexGridSizer->GetMinSize();
     wxSize renderz = m_RenderFlexGridSizer->GetMinSize();
 
-    wxSize  clientz( MAX(renderz.x,layerz.x), MAX(renderz.y,layerz.y) );
+    wxSize  clientz( std::max(renderz.x,layerz.x), std::max(renderz.y,layerz.y) );
 
     return ClientToWindowSize( clientz );
 
@@ -656,7 +656,7 @@ wxSize LAYER_WIDGET::GetBestSize() const
 
     renderz += m_RenderingPanel->GetWindowBorderSize();
 
-    wxSize clientz( MAX(renderz.x,layerz.x), MAX(renderz.y,layerz.y) );
+    wxSize clientz( std::max(renderz.x,layerz.x), std::max(renderz.y,layerz.y) );
 
 //    wxSize diffz( GetSize() - GetClientSize() );
 //    clientz += diffz;

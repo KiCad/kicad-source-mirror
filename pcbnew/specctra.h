@@ -33,10 +33,7 @@
 #include <boost/ptr_container/ptr_set.hpp>
 
 #include <fctsys.h>
-#include <macros.h>              // MAX definition.
-
 #include <specctra_lexer.h>
-
 #include <pcbnew.h>
 
 
@@ -618,7 +615,7 @@ public:
                                quote, layer_id.c_str(), quote,
                                aperture_width );
 
-        int wrapNest = MAX( nestLevel+1, 6 );
+        int wrapNest = std::max( nestLevel+1, 6 );
         for( unsigned i=0;  i<points.size();  ++i )
         {
             if( perLine > RIGHTMARGIN )

@@ -403,10 +403,10 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
                 if( ii == 0 )
                     p_end = pt;
 
-                bbox.SetX( MIN( bbox.GetX(), pt.x ) );
-                bbox.SetY( MIN( bbox.GetY(), pt.y ) );
-                p_end.x   = MAX( p_end.x, pt.x );
-                p_end.y   = MAX( p_end.y, pt.y );
+                bbox.SetX( std::min( bbox.GetX(), pt.x ) );
+                bbox.SetY( std::min( bbox.GetY(), pt.y ) );
+                p_end.x   = std::max( p_end.x, pt.x );
+                p_end.y   = std::max( p_end.y, pt.y );
             }
 
             bbox.SetEnd( p_end );

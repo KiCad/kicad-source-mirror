@@ -31,7 +31,6 @@
 #include <appl_wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <macros.h>
 
 #include <kicad.h>
 #include <tree_project_frame.h>
@@ -60,7 +59,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
     m_RightWin             = NULL;              /* A shashwindow that contains the buttons
                                                  *  and the window display text
                                                  */
-    m_LeftWin_Width        = MAX( 60, GetSize().x/3 );
+    m_LeftWin_Width        = std::max( 60, GetSize().x/3 );
 
     LoadSettings();
 

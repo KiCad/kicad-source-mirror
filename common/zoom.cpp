@@ -31,7 +31,6 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>
 #include <id.h>
 #include <class_drawpanel.h>
 #include <class_base_screen.h>
@@ -89,7 +88,7 @@ void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
     double scalex    = (double) Rect.GetSize().x / size.x;
     double bestscale = (double) Rect.GetSize().y / size.y;
 
-    bestscale = MAX( bestscale, scalex );
+    bestscale = std::max( bestscale, scalex );
 
     GetScreen()->SetScalingFactor( bestscale );
     RedrawScreen( Rect.Centre(), true );

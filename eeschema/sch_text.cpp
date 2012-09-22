@@ -1643,7 +1643,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
 
-    int     width = MAX( m_Thickness, g_DrawDefaultLineThickness );
+    int     width = std::max( m_Thickness, g_DrawDefaultLineThickness );
 
     int     ii = m_Size.x + TXTMARGE + width;
 

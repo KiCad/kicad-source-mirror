@@ -1429,13 +1429,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                 msg = WsItem->m_Legende;
                 DrawGraphicText( m_canvas, aDC, pos, aClr1, msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 GetPenSizeForBold( MIN( size.x, size.y ) ), false, true );
+                                 GetPenSizeForBold( std::min( size.x, size.y ) ), false, true );
                 pos.x += ReturnGraphicTextWidth( msg, size.x, false, false );
              }
             msg = aTb.GetRevision();
             DrawGraphicText( m_canvas, aDC, pos, aClr2, msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             GetPenSizeForBold( MIN( size.x, size.y ) ), false, true );
+                             GetPenSizeForBold( std::min( size.x, size.y ) ), false, true );
             break;
 
         case WS_KICAD_VERSION:
@@ -1506,9 +1506,9 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                 DrawGraphicText( m_canvas, aDC, pos, aClr2,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 GetPenSizeForBold( MIN( size.x, size.y ) ),
+                                 GetPenSizeForBold( std::min( size.x, size.y ) ),
                                  false, true );
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
 
@@ -1518,13 +1518,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                 msg = WsItem->m_Legende;
                 DrawGraphicText( m_canvas, aDC, pos, aClr1, msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 GetPenSizeForBold( MIN( size.x, size.y ) ), false, true );
+                                 GetPenSizeForBold( std::min( size.x, size.y ) ), false, true );
                 pos.x += ReturnGraphicTextWidth( msg, size.x, false, false );
             }
             msg = aTb.GetTitle();
             DrawGraphicText( m_canvas, aDC, pos, aClr2, msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                             GetPenSizeForBold( MIN( size.x, size.y ) ), false, true );
+                             GetPenSizeForBold( std::min( size.x, size.y ) ), false, true );
             break;
 
         case WS_COMMENT1:
@@ -1537,7 +1537,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  aLnW, false, false );
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
 
@@ -1551,7 +1551,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  aLnW, false, false );
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
 
@@ -1565,7 +1565,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  aLnW, false, false );
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
 
@@ -1579,7 +1579,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  aLnW, false, false );
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             }
             break;
 

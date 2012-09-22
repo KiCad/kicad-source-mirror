@@ -49,6 +49,7 @@ CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame )
     return Lib;
 }
 
+extern void DisplayCmpDocAndKeywords( wxString& Name );
 
 int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
                                  CMP_LIBRARY* Library,
@@ -64,7 +65,7 @@ int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
 
     Library->GetEntryNames( nameList );
 
-    EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), nameList, OldName, DisplayCmpDoc );
+    EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), nameList, OldName, DisplayCmpDocAndKeywords );
 
     if( dlg.ShowModal() != wxID_OK )
         return 0;

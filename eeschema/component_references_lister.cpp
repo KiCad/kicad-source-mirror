@@ -703,7 +703,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
         // Error if unit number selected does not exist ( greater than the  number of
         // parts in the component ).  This can happen if a component has changed in a
         // library after a previous annotation.
-        if( MAX( componentFlatList[ii].GetLibComponent()->GetPartCount(), 1 )
+        if( std::max( componentFlatList[ii].GetLibComponent()->GetPartCount(), 1 )
           < componentFlatList[ii].m_Unit )
         {
             if( componentFlatList[ii].m_NumRef >= 0 )

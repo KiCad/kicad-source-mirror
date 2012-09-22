@@ -538,7 +538,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
         case WS_COMPANY_NAME:
             msg += aTitleBlock.GetCompany();
             if( !msg.IsEmpty() )
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             bold = true;
             break;
 
@@ -550,25 +550,25 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
         case WS_COMMENT1:
             msg += aTitleBlock.GetComment1();
             if( !msg.IsEmpty() )
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT2:
             msg += aTitleBlock.GetComment2();
             if( !msg.IsEmpty() )
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT3:
             msg += aTitleBlock.GetComment3();
             if( !msg.IsEmpty() )
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT4:
             msg += aTitleBlock.GetComment4();
             if( !msg.IsEmpty() )
-                UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
+                UpperLimit = std::max( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_UPPER_SEGMENT:
