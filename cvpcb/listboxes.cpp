@@ -43,7 +43,7 @@ void ITEMS_LISTBOX_BASE::OnSize( wxSizeEvent& event )
     wxSize size  = GetClientSize();
     int    width = 0;
 
-    SetColumnWidth( 0, MAX( width, size.x ) );
+    SetColumnWidth( 0, std::max( width, size.x ) );
 
     event.Skip();
 }
