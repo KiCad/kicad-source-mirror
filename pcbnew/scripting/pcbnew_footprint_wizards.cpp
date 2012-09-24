@@ -11,7 +11,7 @@
 PYTHON_FOOTPRINT_WIZARD::PYTHON_FOOTPRINT_WIZARD(PyObject *aWizard)
 {
     this->m_PyWizard= aWizard;
-    Py_XINCREF( aWizard );    
+    Py_XINCREF( aWizard );
 }
 
 PYTHON_FOOTPRINT_WIZARD::~PYTHON_FOOTPRINT_WIZARD()
@@ -22,18 +22,18 @@ PYTHON_FOOTPRINT_WIZARD::~PYTHON_FOOTPRINT_WIZARD()
 PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aArglist)
 {
      PyObject *pFunc;
-    
+
     /* pFunc is a new reference to the desired method */
     pFunc = PyObject_GetAttrString( this->m_PyWizard, aMethod );
-    
-    if ( pFunc && PyCallable_Check( pFunc ) ) 
+
+    if ( pFunc && PyCallable_Check( pFunc ) )
     {
         PyObject *result;
 
         PY_BLOCK_THREADS( blocked );
 
         result = PyObject_CallObject( pFunc, aArglist );
-        
+
         if ( PyErr_Occurred() )
         {
             PyObject *t, *v, *b;
@@ -44,29 +44,29 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aAr
         }
 
         PY_UNBLOCK_THREADS( blocked );
-        
+
         if ( result )
         {
             Py_XDECREF( pFunc );
             return result;
         }
-        
+
     }
     else
     {
         printf( "method not found, or not callable: %s\n", aMethod );
     }
-    
-    if ( pFunc ) 
+
+    if ( pFunc )
         Py_XDECREF( pFunc );
-    
+
     return NULL;
 }
 
 wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObject *aArglist )
 {
     wxString ret;
-    
+
     ret.Clear();
     PyObject *result = CallMethod( aMethod, aArglist );
     if ( result )
@@ -74,7 +74,7 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObjec
          PY_BLOCK_THREADS( blocked );
          const char *str_res = PyString_AsString( result );
          ret  = wxString::FromUTF8( str_res );
-         Py_DECREF( result );    
+         Py_DECREF( result );
 
          PY_UNBLOCK_THREADS( blocked );
     }
@@ -87,9 +87,9 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
     PyObject *result, *element;
     wxArrayString ret;
     wxString str_item;
-    
+
     result = CallMethod( aMethod, aArglist );
-    
+
     if ( result )
     {
          if ( !PyList_Check(result) )
@@ -101,9 +101,9 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
          }
 
          PY_BLOCK_THREADS( blocked );
-         
+
          int list_size = PyList_Size( result );
-         
+
          for ( int n=0; n<list_size; n++ )
          {
             element = PyList_GetItem( result, n );
@@ -112,16 +112,16 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
             str_item  = wxString::FromUTF8( str_res );
             ret.Add( str_item, 1 );
          }
-         
-         Py_DECREF( result );    
-         
+
+         Py_DECREF( result );
+
          PY_UNBLOCK_THREADS( blocked );
     }
-    
-    
-    
+
+
+
     return ret;
-   
+
 }
 
 wxString PYTHON_FOOTPRINT_WIZARD::GetName()
@@ -141,21 +141,21 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetDescription()
 
 int PYTHON_FOOTPRINT_WIZARD::GetNumParameterPages()
 {
-    int ret;
+    int ret = 0;
     PyObject *result;
-    
+
     /* Time to call the callback */
     result = CallMethod( "GetNumParameterPages" , NULL );
-   
+
     if (result)
     {
-         if ( !PyInt_Check( result ) ) 
+         if ( !PyInt_Check( result ) )
             return -1;
-            
+
          PY_BLOCK_THREADS( blocked );
 
-         ret = PyInt_AsLong( result ); 
-         Py_DECREF( result );    
+         ret = PyInt_AsLong( result );
+         Py_DECREF( result );
 
          PY_UNBLOCK_THREADS( blocked );
     }
@@ -167,19 +167,19 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
     wxString ret;
     PyObject *arglist;
     PyObject *result;
-    
+
     /* Time to call the callback */
     arglist = Py_BuildValue( "(i)", aPage );
     result = CallMethod( "GetParameterPageName", arglist );
     Py_DECREF( arglist );
-    
+
     if ( result )
     {
          PY_BLOCK_THREADS( blocked );
 
          const char *str_res = PyString_AsString( result );
          ret  = wxString::FromUTF8( str_res );
-         Py_DECREF( result );    
+         Py_DECREF( result );
 
          PY_UNBLOCK_THREADS( blocked );
     }
@@ -188,16 +188,16 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames( int aPage )
 {
-  
+
     PyObject *arglist;
     wxArrayString ret;
-    
+
     arglist = Py_BuildValue( "(i)", aPage );
     ret = CallRetArrayStrMethod( "GetParameterNames", arglist );
     Py_DECREF( arglist );
- 
+
     for ( unsigned i=0; i<ret.GetCount(); i++ )
-    {   
+    {
         wxString rest;
         wxString item = ret[i];
         if ( item.StartsWith( wxT("*"), &rest ) )
@@ -206,22 +206,22 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames( int aPage )
         }
     }
 
-    
+
     return ret;
 }
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterTypes( int aPage )
 {
-  
+
     PyObject *arglist;
     wxArrayString ret;
-    
+
     arglist = Py_BuildValue( "(i)", aPage );
     ret = CallRetArrayStrMethod( "GetParameterNames", arglist );
     Py_DECREF(arglist);
- 
+
     for ( unsigned i=0; i<ret.GetCount(); i++ )
-    {   
+    {
         wxString rest;
         wxString item = ret[i];
         if ( item.StartsWith( wxT("*"), &rest ) )
@@ -234,7 +234,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterTypes( int aPage )
         }
     }
 
-    
+
     return ret;
 }
 
@@ -244,11 +244,11 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues( int aPage )
 {
     PyObject *arglist;
     wxArrayString ret;
-    
+
     arglist = Py_BuildValue( "(i)", aPage );
     ret = CallRetArrayStrMethod( "GetParameterValues", arglist );
     Py_DECREF( arglist );
-    
+
     return ret;
 }
 
@@ -256,35 +256,35 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterErrors( int aPage )
 {
     PyObject *arglist;
     wxArrayString ret;
-    
+
     arglist = Py_BuildValue( "(i)", aPage );
     ret = CallRetArrayStrMethod( "GetParameterErrors", arglist );
     Py_DECREF( arglist );
-    
+
     return ret;
 }
 
 wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& aValues )
 {
-    
+
     int len = aValues.size();
     PyObject *py_list;
-    
+
     py_list = PyList_New( len );
-    
+
     for ( int i=0; i<len ; i++ )
     {
         wxString str = aValues[i];
         PyObject *py_str = PyString_FromString( (const char*)str.mb_str() );
         PyList_SetItem( py_list, i, py_str );
     }
-    
+
     PyObject *arglist;
-    
+
     arglist = Py_BuildValue( "(i,O)", aPage, py_list );
     wxString res = CallRetStrMethod( "SetParameterValues", arglist );
     Py_DECREF( arglist );
-    
+
     return res;
 }
 
@@ -296,13 +296,13 @@ MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
     PyObject *result, *obj;
     result = CallMethod( "GetModule", NULL );
 
-    if (!result) 
+    if (!result)
         return NULL;
-    
+
     PY_BLOCK_THREADS( blocked );
 
     obj = PyObject_GetAttrString( result, "this" );
-    
+
     if ( PyErr_Occurred() )
     {
         /*
@@ -325,31 +325,31 @@ MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
 void PYTHON_FOOTPRINT_WIZARDS::register_wizard(PyObject* aPyWizard)
 {
     PYTHON_FOOTPRINT_WIZARD *fw;
-    
+
     fw = new PYTHON_FOOTPRINT_WIZARD( aPyWizard );
-    
-    
+
+
     //printf( "Registered python footprint wizard '%s'\n",
     //        (const char*)fw->GetName().mb_str()
     //        );
-    
+
     // this get the wizard registered in the common
     // FOOTPRINT_WIZARDS class
-    
-    fw->register_wizard(); 
-                           
-#if 0 
+
+    fw->register_wizard();
+
+#if 0
     /* just to test if it works correctly */
     int pages = fw->GetNumParameterPages();
     printf("             %d pages\n",pages);
-    
+
     for (int n=0; n<pages; n++)
     {
         printf("                      page %d->'%s'\n",n,
             (const char*)fw->GetParameterPageName(n).mb_str());
     }
-#endif    
-    
+#endif
+
 }
 
 

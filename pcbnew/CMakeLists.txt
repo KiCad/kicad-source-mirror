@@ -189,7 +189,8 @@ set(PCBNEW_CLASS_SRCS
     pcbnew.cpp
     pcbnew_config.cpp
     pcbplot.cpp
-    plot_rtn.cpp
+    plot_board_layers.cpp
+    plot_brditems_plotter.cpp
     print_board_functions.cpp
     printout_controler.cpp
     ratsnest.cpp
