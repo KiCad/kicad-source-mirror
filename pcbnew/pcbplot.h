@@ -5,6 +5,7 @@
 #ifndef PCBPLOT_H_
 #define PCBPLOT_H_
 
+#include <pad_shapes.h>
 #include <pcb_plot_params.h>
 
 class PLOTTER;
@@ -52,6 +53,7 @@ class BRDITEMS_PLOTTER: public PCB_PLOT_PARAMS
     BOARD* m_board;
     int m_layerMask;
 
+
 public:
     BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts )
         : PCB_PLOT_PARAMS( aPlotOpts )
@@ -61,6 +63,18 @@ public:
         m_layerMask = 0;
     }
 
+    /**
+     * @return a 'width adjustment' for the postscript engine
+     * (useful for controlling toner bleeding during direct transfer)
+     * addded to track width and via/pads size
+     */
+    int getFineWidthAdj()
+    {
+        if( GetFormat() == PLOT_FORMAT_POST )
+            return GetWidthAdjust();
+        else
+            return 0;
+    }
     // Basic functions to plot a board item
     void SetLayerMask( int aLayerMask ){ m_layerMask = aLayerMask; }
     void Plot_Edges_Modules();
@@ -74,6 +88,20 @@ public:
     void PlotDrawSegment( DRAWSEGMENT* PtSegm );
 
     /**
+     * lot items like text and graphics,
+     *  but not tracks and modules
+     */
+    void PlotBoardGraphicItems();
+
+    /** Function PlotDrillMarks
+     * Draw a drill mark for pads and vias.
+     * Must be called after all drawings, because it
+     * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in
+     * FILLED plot mode (for PS and PDF outputs)
+     */
+    void PlotDrillMarks();
+
+    /**
      * Function getColor
      * @return the layer color
      * @param aLayer = the layer id
@@ -82,6 +110,16 @@ public:
      * so the returned color is LIGHTGRAY when the layer color is WHITE
      */
     EDA_COLOR_T getColor( int aLayer );
+
+private:
+    /** Helper function to plot a single drill mark. It compensate and clamp
+     * the drill mark size depending on the current plot options
+     */
+    void plotOneDrillMark( PAD_SHAPE_T aDrillShape,
+                           const wxPoint &aDrillPos, wxSize aDrillSize,
+                           const wxSize &aPadSize,
+                           double aOrientation, int aSmallDrill );
+
 };
 
 PLOTTER *StartPlotBoard( BOARD *aBoard,
@@ -90,34 +128,41 @@ PLOTTER *StartPlotBoard( BOARD *aBoard,
                          const wxString& aSheetDesc );
 
 /**
- * Function PlotBoardLayer
- * main function to plot copper or technical layers.
- * It calls the specilize plot function, according to the layer type
+ * Function PlotOneBoardLayer
+ * main function to plot one copper or technical layer.
+ * It prepare options and calls the specilized plot function,
+ * according to the layer type
  * @param aBoard = the board to plot
  * @param aPlotter = the plotter to use
  * @param aLayer = the layer id to plot
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  */
-void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
-                     const PCB_PLOT_PARAMS& aPlotOpt );
+void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
+                        const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
- * Function Plot_Standard_Layer
+ * Function PlotStandardLayer
  * plot copper or technical layers.
  * not used for silk screen layers, because these layers have specific
  * requirements, mainly for pads
  * @param aBoard = the board to plot
  * @param aPlotter = the plotter to use
  * @param aLayerMask = the mask to define the layers to plot
- * @param aPlotVia = true to plot vias, false to skip vias (has meaning
- *                  only for solder mask layers).
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
- * @param aSkipNPTH_Pads = true to skip NPTH Pads, when the pad size and the pad hole
- *                      have the same size. Used in GERBER format only.
+ *
+ * aPlotOpt has 3 important options to controle this plot,
+ * which are set, depending on the layer typpe to plot
+ *      SetEnablePlotVia( bool aEnable )
+ *          aEnable = true to plot vias, false to skip vias (has meaning
+ *                      only for solder mask layers).
+ *      SetSkipPlotNPTH_Pads( bool aSkip )
+ *          aSkip = true to skip NPTH Pads, when the pad size and the pad hole
+ *                  have the same size. Used in GERBER format only.
+ *      SetDrillMarksType( DrillMarksType aVal ) controle the actual hole:
+ *              no hole, small hole, actual hole
  */
 void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
-                        const PCB_PLOT_PARAMS& aPlotOpt,
-                        bool aPlotVia, bool aSkipNPTH_Pads );
+                        const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**
  * Function PlotSilkScreen
@@ -130,18 +175,6 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
  */
 void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
                      const PCB_PLOT_PARAMS&  aPlotOpt );
-
-/**
-    * Function PlotDrillMarks
-    * Draw a drill mark for pads and vias.
-    * Must be called after all drawings, because it
-    * redraw the drill mark on a pad or via, as a negative (i.e. white) shape
-    * in FILLED plot mode
-    * @param aBoard = the board to plot
-    * @param aPlotter = the PLOTTER
-    * @param aPlotOpts = plot options
-    */
-void PlotDrillMarks( BOARD *aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpts );
 
 
 // PLOTGERB.CPP

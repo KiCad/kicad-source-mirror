@@ -17,9 +17,6 @@ enum PAD_SHAPE_T
     PAD_RECT,
     PAD_OVAL,
     PAD_TRAPEZOID,
-    PAD_RRECT,
-    PAD_OCTAGON,
-    PAD_SQUARE,
 };
 
 

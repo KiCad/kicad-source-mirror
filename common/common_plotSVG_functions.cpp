@@ -228,15 +228,21 @@ void SVG_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int w
 {
     EDA_RECT rect( p1, wxSize( p2.x -p1.x,  p2.y -p1.y ) );
     rect.Normalize();
-    DPOINT  pos_dev  = userToDeviceCoordinates( rect.GetOrigin() );
-    DPOINT  size_dev = userToDeviceSize( rect.GetSize() );
+    DPOINT  org_dev  = userToDeviceCoordinates( rect.GetOrigin() );
+    DPOINT  end_dev = userToDeviceCoordinates( rect.GetEnd() );
+    DSIZE  size_dev = end_dev - org_dev;
+    // Ensure size of rect in device coordinates is > 0
+    // Inkscape has problems with negative values for width and/or height
+    DBOX rect_dev( org_dev, size_dev);
+    rect_dev.Normalize();
 
     setFillMode( fill );
     SetCurrentLineWidth( width );
 
     fprintf( outputFile,
              "<rect x=\"%g\" y=\"%g\" width=\"%g\" height=\"%g\" rx=\"%g\" />\n",
-             pos_dev.x, pos_dev.y, size_dev.x, size_dev.y,
+             rect_dev.GetPosition().x,  rect_dev.GetPosition().y,
+             rect_dev.GetSize().x, rect_dev.GetSize().y,
              0.0   // radius of rounded corners
              );
 }

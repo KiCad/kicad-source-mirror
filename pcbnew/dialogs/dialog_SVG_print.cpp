@@ -248,7 +248,11 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
     PCB_PLOT_PARAMS m_plotOpts;
 
     m_plotOpts.SetPlotFrameRef( PrintPageRef() );
+    // Adding drill marks
     m_plotOpts.SetDrillMarksType( PCB_PLOT_PARAMS::FULL_DRILL_SHAPE );
+
+    m_plotOpts.SetSkipPlotNPTH_Pads( false );
+
     m_plotOpts.SetMirror( m_printMirror );
     m_plotOpts.SetFormat( PLOT_FORMAT_SVG );
     EDA_COLOR_T color = UNSPECIFIED_COLOR;      // Used layer color to plot ref and value
@@ -278,10 +282,7 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
     if( plotter )
     {
         plotter->SetColorMode( m_ModeColorOption->GetSelection() == 0 );
-        PlotStandardLayer( brd, plotter, m_PrintMaskLayer, m_plotOpts, true, false );
-        // Adding drill marks, if required and if the plotter is able to plot them:
-        if( m_plotOpts.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
-            PlotDrillMarks( brd, plotter, m_plotOpts );
+        PlotStandardLayer( brd, plotter, m_PrintMaskLayer, m_plotOpts );
     }
 
     plotter->EndPlot();

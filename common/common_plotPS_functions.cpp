@@ -430,7 +430,6 @@ void PS_PLOTTER::SetCurrentLineWidth( int width )
     currentPenWidth = pen_width;
 }
 
-
 void PS_PLOTTER::emitSetRGBColor( double r, double g, double b )
 {
     wxASSERT( outputFile );

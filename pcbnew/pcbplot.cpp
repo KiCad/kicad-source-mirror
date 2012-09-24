@@ -274,7 +274,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             wxString msg;
             if( plotter )
             {
-                PlotBoardLayer( board, plotter, layer, m_plotOpts );
+                PlotOneBoardLayer( board, plotter, layer, m_plotOpts );
                 plotter->EndPlot();
                 delete plotter;
 
@@ -372,7 +372,7 @@ bool PLOT_CONTROLLER::PlotLayer( int aLayer )/*{{{*/
         return false;
 
     // Fully delegated to the parent
-    PlotBoardLayer( m_board, m_plotter, aLayer, m_plotOpts );
+    PlotOneBoardLayer( m_board, m_plotter, aLayer, m_plotOpts );
 
     return true;
 }/*}}}*/

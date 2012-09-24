@@ -472,7 +472,7 @@ void PCB_PARSER::parseGeneralSection() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         default:              // Skip everything but the board thickness.
-            wxLogDebug( wxT( "Skipping general section token %s " ), 
+            wxLogDebug( wxT( "Skipping general section token %s " ),
                         GetChars( GetTokenString( token ) ) );
 
             while( ( token = NextTok() ) != T_RIGHT )
@@ -756,7 +756,6 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
     T token;
-    int lastTraceWidth;
     NETCLASS* defaultNetclass = m_board->m_NetClasses.GetDefault();
     BOARD_DESIGN_SETTINGS designSettings = m_board->GetDesignSettings();
     ZONE_SETTINGS zoneSettings = m_board->GetZoneSettings();
@@ -770,8 +769,8 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 
         switch( token )
         {
-        case T_last_trace_width:
-            lastTraceWidth = parseBoardUnits( T_last_trace_width );
+        case T_last_trace_width:    // not used now
+            /* lastTraceWidth =*/ parseBoardUnits( T_last_trace_width );
             NeedRIGHT();
             break;
 

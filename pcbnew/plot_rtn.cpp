@@ -112,6 +112,38 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     return true;
 }
 
+
+// plot items like text and graphics, but not tracks and module
+void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
+{
+    for( BOARD_ITEM* item = m_board->m_Drawings; item; item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_LINE_T:
+            PlotDrawSegment( (DRAWSEGMENT*) item);
+            break;
+
+        case PCB_TEXT_T:
+            PlotTextePcb( (TEXTE_PCB*) item );
+            break;
+
+        case PCB_DIMENSION_T:
+            PlotDimension( (DIMENSION*) item );
+            break;
+
+        case PCB_TARGET_T:
+            PlotPcbTarget( (PCB_TARGET*) item );
+            break;
+
+        case PCB_MARKER_T:
+        default:
+            break;
+        }
+    }
+}
+
+
 /* Creates the plot for silkscreen layers
  */
 void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
@@ -121,35 +153,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     itemplotter.SetLayerMask( aLayerMask );
 
     // Plot edge layer and graphic items
-    for( EDA_ITEM* item = aBoard->m_Drawings; item; item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_LINE_T:
-            itemplotter.PlotDrawSegment( (DRAWSEGMENT*) item);
-            break;
-
-        case PCB_TEXT_T:
-            itemplotter.PlotTextePcb( (TEXTE_PCB*) item );
-            break;
-
-        case PCB_DIMENSION_T:
-            itemplotter.PlotDimension( (DIMENSION*) item );
-            break;
-
-        case PCB_TARGET_T:
-            itemplotter.PlotPcbTarget( (PCB_TARGET*) item );
-            break;
-
-        case PCB_MARKER_T:
-            break;
-
-        default:
-            wxLogMessage( wxT( "PlotSilkScreen() error: unexpected Type(%d)" ),
-                          item->Type() );
-            break;
-        }
-    }
+    itemplotter.PlotBoardGraphicItems();
 
     // Plot footprint outlines :
     itemplotter.Plot_Edges_Modules();
@@ -682,9 +686,10 @@ void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
 }
 
 
-void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
+void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
                      const PCB_PLOT_PARAMS& aPlotOpt )
 {
+    PCB_PLOT_PARAMS plotOpt = aPlotOpt;
     // Set a default color and the text mode for this layer
     aPlotter->SetColor( aPlotOpt.GetColor() );
     aPlotter->SetTextMode( aPlotOpt.GetTextMode() );
@@ -715,48 +720,53 @@ void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
     case LAYER_N_15:
     case LAST_COPPER_LAYER:
         // Skip NPTH pads on copper layers ( only if hole size == pad size ):
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, aPlotOpt, true, true );
-
-        // Adding drill marks, if required and if the plotter is able to plot them:
-        if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
-            PlotDrillMarks( aBoard, aPlotter, aPlotOpt );
-
+        plotOpt.SetSkipPlotNPTH_Pads( true );
+        // Drill mark will be plotted,
+        // if drill mark is SMALL_DRILL_SHAPE  or FULL_DRILL_SHAPE
+        PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
         break;
 
     case SOLDERMASK_N_BACK:
     case SOLDERMASK_N_FRONT:
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, aPlotOpt,
-                           aPlotOpt.GetPlotViaOnMaskLayer(), false );
+        plotOpt.SetSkipPlotNPTH_Pads( false );
+        // Disable plot pad holes
+        plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+        PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
         break;
 
     case SOLDERPASTE_N_BACK:
     case SOLDERPASTE_N_FRONT:
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, aPlotOpt,
-                           false, false );
+        plotOpt.SetSkipPlotNPTH_Pads( false );
+        // Disable plot pad holes
+        plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+        PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
         break;
 
     case SILKSCREEN_N_FRONT:
     case SILKSCREEN_N_BACK:
-        PlotSilkScreen( aBoard, aPlotter, layer_mask, aPlotOpt );
+        PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
 
         // Gerber: Subtract soldermask from silkscreen if enabled
         if( aPlotter->GetPlotterType() == PLOT_FORMAT_GERBER
-            && aPlotOpt.GetSubtractMaskFromSilk() )
+            && plotOpt.GetSubtractMaskFromSilk() )
         {
+            plotOpt.SetPlotViaOnMaskLayer( true );
             if( aLayer == SILKSCREEN_N_FRONT )
                 layer_mask = GetLayerMask( SOLDERMASK_N_FRONT );
             else
                 layer_mask = GetLayerMask( SOLDERMASK_N_BACK );
 
-            // Set layer polarity to negative
+            // Create the mask to substract by creating a negative layer polarity
             aPlotter->SetLayerPolarity( false );
-            PlotStandardLayer( aBoard, aPlotter, layer_mask, aPlotOpt,
-                               aPlotOpt.GetPlotViaOnMaskLayer(), false );
+            // Disable plot pad holes
+            plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
+            // Plot the mask
+            PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
         }
         break;
 
     default:
-        PlotSilkScreen( aBoard, aPlotter, layer_mask, aPlotOpt );
+        PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
         break;
     }
 }
@@ -766,48 +776,16 @@ void PlotBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
  * Silk screen layers are not plotted here.
  */
 void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
-                        long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
-                        bool aPlotVia, bool aSkipNPTH_Pads )
+                        long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt )
 {
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerMask( aLayerMask );
 
-    wxPoint  pos;
-    wxSize   size;
+    EDA_DRAW_MODE_T plotMode = aPlotOpt.GetMode();
 
-    EDA_DRAW_MODE_T aPlotMode = aPlotOpt.GetMode();
-
-    // Plot pcb draw items.
-    for( BOARD_ITEM* item = aBoard->m_Drawings; item; item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_LINE_T:
-            itemplotter.PlotDrawSegment( (DRAWSEGMENT*) item );
-            break;
-
-        case PCB_TEXT_T:
-            itemplotter.PlotTextePcb( (TEXTE_PCB*) item );
-            break;
-
-        case PCB_DIMENSION_T:
-            itemplotter.PlotDimension( (DIMENSION*) item );
-            break;
-
-        case PCB_TARGET_T:
-            itemplotter.PlotPcbTarget( (PCB_TARGET*) item );
-            break;
-
-        case PCB_MARKER_T:
-            break;
-
-        default:
-            wxLogMessage( wxT( "Plot_Standard_Layer() error : Unexpected Draw Type %d" ),
-                          item->Type() );
-            break;
-        }
-    }
+     // Plot edge layer and graphic items
+    itemplotter.PlotBoardGraphicItems();
 
     // Draw footprint shapes without pads (pads will plotted later)
     // We plot here module texts, but they are usually on silkscreen layer,
@@ -851,14 +829,12 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
             wxPoint shape_pos = pad->ReturnShapePos();
 
-            pos = shape_pos;
-
             wxSize margin;
             double width_adj = 0;
 
             if( aLayerMask & ALL_CU_LAYERS )
             {
-                width_adj =  aPlotter->GetPlotWidthAdj();
+                width_adj =  itemplotter.getFineWidthAdj();
             }
 
             switch( aLayerMask &
@@ -879,6 +855,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 break;
             }
 
+            wxSize size;
             size.x = pad->GetSize().x + ( 2 * margin.x ) + width_adj;
             size.y = pad->GetSize().y + ( 2 * margin.y ) + width_adj;
 
@@ -886,7 +863,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if( size.x <= 0 || size.y <= 0 )
                 continue;
 
-            EDA_COLOR_T color = ColorFromInt(0);
+            EDA_COLOR_T color = BLACK;
 
             if( (pad->GetLayerMask() & LAYER_BACK) )
                color = aBoard->GetVisibleElementColor( PAD_BK_VISIBLE );
@@ -901,126 +878,112 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             switch( pad->GetShape() )
             {
             case PAD_CIRCLE:
-                if( aSkipNPTH_Pads &&
+                if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
                     (pad->GetSize() == pad->GetDrillSize()) &&
                     (pad->GetAttribute() == PAD_HOLE_NOT_PLATED) )
                     break;
 
-                aPlotter->FlashPadCircle( pos, size.x, aPlotMode );
+                aPlotter->FlashPadCircle( shape_pos, size.x, plotMode );
                 break;
 
             case PAD_OVAL:
-                if( aSkipNPTH_Pads &&
+                if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
                     (pad->GetSize() == pad->GetDrillSize()) &&
                     (pad->GetAttribute() == PAD_HOLE_NOT_PLATED) )
                     break;
 
-                aPlotter->FlashPadOval( pos, size, pad->GetOrientation(), aPlotMode );
+                aPlotter->FlashPadOval( shape_pos, size, pad->GetOrientation(), plotMode );
                 break;
 
             case PAD_TRAPEZOID:
             {
                 wxPoint coord[4];
                 pad->BuildPadPolygon( coord, margin, 0 );
-                aPlotter->FlashPadTrapez( pos, coord, pad->GetOrientation(), aPlotMode );
+                aPlotter->FlashPadTrapez( shape_pos, coord, pad->GetOrientation(), plotMode );
             }
             break;
 
             case PAD_RECT:
             default:
-                aPlotter->FlashPadRect( pos, size, pad->GetOrientation(), aPlotMode );
+                aPlotter->FlashPadRect( shape_pos, size, pad->GetOrientation(), plotMode );
                 break;
             }
         }
     }
 
-    // Plot vias :
-    if( aPlotVia )
+    // Plot vias on copper layers, and if aPlotOpt.GetPlotViaOnMaskLayer() is true,
+    // plot them on solder mask
+    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
     {
-        for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+        if( track->Type() != PCB_VIA_T )
+            continue;
+
+        SEGVIA* Via = (SEGVIA*) track;
+
+        // vias are not plotted if not on selected layer, but if layer
+        // is SOLDERMASK_LAYER_BACK or SOLDERMASK_LAYER_FRONT,vias are drawn,
+        // only if they are on the corresponding external copper layer
+        int via_mask_layer = Via->ReturnMaskLayer();
+
+        if( aPlotOpt.GetPlotViaOnMaskLayer() )
         {
-            if( track->Type() != PCB_VIA_T )
-                continue;
-
-            SEGVIA* Via = (SEGVIA*) track;
-
-            // vias are not plotted if not on selected layer, but if layer
-            // is SOLDERMASK_LAYER_BACK or SOLDERMASK_LAYER_FRONT,vias are drawn,
-            // if they are on an external copper layer
-            int via_mask_layer = Via->ReturnMaskLayer();
-
             if( via_mask_layer & LAYER_BACK )
                 via_mask_layer |= SOLDERMASK_LAYER_BACK;
 
             if( via_mask_layer & LAYER_FRONT )
                 via_mask_layer |= SOLDERMASK_LAYER_FRONT;
-
-            if( ( via_mask_layer & aLayerMask ) == 0 )
-                continue;
-
-            int via_margin = 0;
-            double width_adj = 0;
-
-            // If the current layer is a solder mask, use the global mask
-            // clearance for vias
-            if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
-                via_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
-
-            if( aLayerMask & ALL_CU_LAYERS )
-                width_adj =  aPlotter->GetPlotWidthAdj();
-
-            pos    = Via->m_Start;
-            size.x = size.y = Via->m_Width + 2 * via_margin + width_adj;
-
-            // Don't draw a null size item :
-            if( size.x <= 0 )
-                continue;
-
-            EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->m_Shape);
-            // Set plot color (change WHITE to LIGHTGRAY because
-            // the white items are not seen on a white paper or screen
-            aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
-
-            aPlotter->FlashPadCircle( pos, size.x, aPlotMode );
         }
+
+        if( ( via_mask_layer & aLayerMask ) == 0 )
+            continue;
+
+        int via_margin = 0;
+        double width_adj = 0;
+
+        // If the current layer is a solder mask, use the global mask
+        // clearance for vias
+        if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
+            via_margin = aBoard->GetDesignSettings().m_SolderMaskMargin;
+
+        if( aLayerMask & ALL_CU_LAYERS )
+            width_adj = itemplotter.getFineWidthAdj();
+
+        int diameter = Via->m_Width + 2 * via_margin + width_adj;
+
+        // Don't draw a null size item :
+        if( diameter <= 0 )
+            continue;
+
+        EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->m_Shape);
+        // Set plot color (change WHITE to LIGHTGRAY because
+        // the white items are not seen on a white paper or screen
+        aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+        aPlotter->FlashPadCircle( Via->m_Start, diameter, plotMode );
     }
 
     // Plot tracks (not vias) :
     for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
     {
-        wxPoint end;
-
         if( track->Type() == PCB_VIA_T )
             continue;
 
         if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
-        size.x = size.y = track->m_Width + aPlotter->GetPlotWidthAdj();
-        pos    = track->m_Start;
-        end    = track->m_End;
-
-        EDA_COLOR_T color = aBoard->GetLayerColor( track->GetLayer() );
-        // Set plot color (change WHITE to LIGHTGRAY because
-        // the white items are not seen on a white paper or screen
-        aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
-
-        aPlotter->ThickSegment( pos, end, size.x, aPlotMode );
+        int width = track->m_Width + itemplotter.getFineWidthAdj();
+        aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
+        aPlotter->ThickSegment( track->m_Start, track->m_End, width, plotMode );
     }
 
     // Plot zones (outdated, for old boards compatibility):
     for( TRACK* track = aBoard->m_Zone; track; track = track->Next() )
     {
-        wxPoint end;
-
         if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
-        size.x = size.y = track->m_Width + aPlotter->GetPlotWidthAdj();
-        pos    = track->m_Start;
-        end    = track->m_End;
-
-        aPlotter->ThickSegment( pos, end, size.x, aPlotMode );
+        int width = track->m_Width + itemplotter.getFineWidthAdj();
+        aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
+        aPlotter->ThickSegment( track->m_Start, track->m_End, width, plotMode );
     }
 
     // Plot filled ares
@@ -1033,31 +996,35 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         itemplotter.PlotFilledAreas( zone );
     }
+
+    // Adding drill marks, if required and if the plotter is able to plot them:
+    if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
+        itemplotter.PlotDrillMarks();
 }
 
 /** Helper function to plot a single drill mark. It compensate and clamp
-    the drill mark size depending on the current plot options */
-static void PlotDrillMark( PLOTTER *aPlotter, PAD_SHAPE_T aDrillShape,
+ *   the drill mark size depending on the current plot options
+ */
+void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_SHAPE_T aDrillShape,
                            const wxPoint &aDrillPos, wxSize aDrillSize,
                            const wxSize &aPadSize,
-                           double aOrientation, int aSmallDrill,
-                           EDA_DRAW_MODE_T aTraceMode )
+                           double aOrientation, int aSmallDrill )
 {
     // Small drill marks have no significance when applied to slots
     if( aSmallDrill && aDrillShape == PAD_ROUND )
         aDrillSize.x = std::min( aSmallDrill, aDrillSize.x );
 
     // Round holes only have x diameter, slots have both
-    aDrillSize.x -= aPlotter->GetPlotWidthAdj();
+    aDrillSize.x -= getFineWidthAdj();
     aDrillSize.x = Clamp( 1, aDrillSize.x, aPadSize.x - 1 );
     if( aDrillShape == PAD_OVAL )
     {
-        aDrillSize.y -= aPlotter->GetPlotWidthAdj();
+        aDrillSize.y -= getFineWidthAdj();
         aDrillSize.y = Clamp( 1, aDrillSize.y, aPadSize.y - 1 );
-        aPlotter->FlashPadOval( aDrillPos, aDrillSize, aOrientation, aTraceMode );
+        m_plotter->FlashPadOval( aDrillPos, aDrillSize, aOrientation, GetMode() );
     }
     else
-        aPlotter->FlashPadCircle( aDrillPos, aDrillSize.x, aTraceMode );
+        m_plotter->FlashPadCircle( aDrillPos, aDrillSize.x, GetMode() );
 }
 
 /* Function PlotDrillMarks
@@ -1066,14 +1033,11 @@ static void PlotDrillMark( PLOTTER *aPlotter, PAD_SHAPE_T aDrillShape,
  * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in
  * FILLED plot mode (for PS and PDF outputs)
  */
-void PlotDrillMarks( BOARD *aBoard, PLOTTER* aPlotter,
-                     const PCB_PLOT_PARAMS& aPlotOpts )
+void BRDITEMS_PLOTTER::PlotDrillMarks()
 {
-    EDA_DRAW_MODE_T trace_mode = aPlotOpts.GetMode();
-
     /* If small drills marks were requested prepare a clamp value to pass
        to the helper function */
-    int small_drill = (aPlotOpts.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE) ?
+    int small_drill = (GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE) ?
                         SMALL_DRILL : 0;
 
     /* In the filled trace mode drill marks are drawn white-on-black to scrape
@@ -1087,40 +1051,35 @@ void PlotDrillMarks( BOARD *aBoard, PLOTTER* aPlotter,
          you could start a layer with negative polarity to scrape the film.
        - In DXF they go into the 'WHITE' layer. This could be useful.
      */
-    if( trace_mode == FILLED )
-    {
-        aPlotter->SetColor( WHITE );
-    }
+    if( GetMode() == FILLED )
+         m_plotter->SetColor( WHITE );
 
-    for( TRACK *pts = aBoard->m_Track; pts != NULL; pts = pts->Next() )
+    for( TRACK *pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
     {
         if( pts->Type() != PCB_VIA_T )
             continue;
 
-        PlotDrillMark( aPlotter, PAD_CIRCLE,
+        plotOneDrillMark(PAD_CIRCLE,
                        pts->m_Start, wxSize( pts->GetDrillValue(), 0 ),
-                       wxSize( pts->m_Width, 0 ), 0, small_drill,
-                       trace_mode );
+                       wxSize( pts->m_Width, 0 ), 0, small_drill );
     }
 
-    for( MODULE *Module = aBoard->m_Modules; Module != NULL; Module = Module->Next() )
+    for( MODULE *Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )
     {
         for( D_PAD *pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             if( pad->GetDrillSize().x == 0 )
                 continue;
 
-            PlotDrillMark( aPlotter, pad->GetDrillShape(),
+            plotOneDrillMark( pad->GetDrillShape(),
                            pad->GetPosition(), pad->GetDrillSize(),
                            pad->GetSize(), pad->GetOrientation(),
-                           small_drill, trace_mode );
+                           small_drill );
         }
     }
 
-    if( trace_mode == FILLED )
-    {
-        aPlotter->SetColor( aPlotOpts.GetColor() );
-    }
+    if( GetMode() == FILLED )
+        m_plotter->SetColor( GetColor() );
 }
 
 /** Set up most plot options for plotting a board (especially the viewport)
@@ -1202,7 +1161,7 @@ static void PlotSetupPlotter( PLOTTER *aPlotter, PCB_PLOT_PARAMS *aPlotOpts,
     /* Configure the plotter object with all the stuff computed and
        most of that taken from the options */
     aPlotter->SetPageSettings( *sheet_info );
-    aPlotter->SetPlotWidthAdj( aPlotOpts->GetWidthAdjust() );
+
     aPlotter->SetViewport( offset, IU_PER_DECIMILS, compound_scale,
                            aPlotOpts->GetMirror() );
     aPlotter->SetDefaultLineWidth( aPlotOpts->GetLineWidth() );
@@ -1214,14 +1173,14 @@ static void PlotSetupPlotter( PLOTTER *aPlotter, PCB_PLOT_PARAMS *aPlotOpts,
 
 /** Prefill in black an area a little bigger than the board to prepare for the
  *  negative plot */
-static void FillNegativeKnockout(PLOTTER *aPlotter, const EDA_RECT &aBbbox )
+static void FillNegativeKnockout( PLOTTER *aPlotter, const EDA_RECT &aBbbox )
 {
-    static const int margin = 5 * IU_PER_MM; // Add a 5 mm margin around the board
+    const int margin = 5 * IU_PER_MM;   // Add a 5 mm margin around the board
     aPlotter->SetNegative( true );
-    aPlotter->SetColor( WHITE );   // Which will be plotted as black
-    aPlotter->Rect( wxPoint( aBbbox.GetX() - margin, aBbbox.GetY() - margin ),
-                    wxPoint( aBbbox.GetRight() + margin, aBbbox.GetBottom() + margin ),
-                    FILLED_SHAPE );
+    aPlotter->SetColor( WHITE );       // Which will be plotted as black
+    EDA_RECT area = aBbbox;
+    area.Inflate( margin );
+    aPlotter->Rect( area.GetOrigin(), area.GetEnd(), FILLED_SHAPE );
     aPlotter->SetColor( BLACK );
 }
 
@@ -1232,7 +1191,7 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter,
 {
     /* Compute pen_dim (the value is given in mils) in pcb units,
        with plot scale (if Scale is 2, pen diameter value is always m_HPGLPenDiam
-       so apparent pen diam is real pen diam / Scale */
+       so apparent pen diam is actually pen diam / Scale */
     int pen_diam = KiROUND( aPlotOpts->GetHPGLPenDiameter() * IU_PER_MILS /
                             aPlotOpts->GetScale() );
 
@@ -1263,8 +1222,6 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
                          const wxString& aSheetDesc )
 {
     const PAGE_INFO& pageInfo = aBoard->GetPageSettings();
-    EDA_RECT bbbox = aBoard->ComputeBoundingBox();
-    wxPoint auxOrigin( aBoard->GetOriginAxisPosition() );
     FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
 
     if( output_file == NULL )
@@ -1315,6 +1272,8 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
 
     if( the_plotter )
     {
+        EDA_RECT bbbox = aBoard->ComputeBoundingBox();
+        wxPoint auxOrigin( aBoard->GetOriginAxisPosition() );
         // Compute the viewport and set the other options
         PlotSetupPlotter( the_plotter, aPlotOpts, pageInfo, bbbox, auxOrigin,
                           aFullFileName );
@@ -1333,8 +1292,7 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
                 PlotWorkSheet( the_plotter, aBoard->GetTitleBlock(),
                                aBoard->GetPageSettings(),
                                1, 1, // Only one page
-                               aSheetDesc,
-                               aBoard->GetFileName() );
+                               aSheetDesc, aBoard->GetFileName() );
 
             return the_plotter;
         }
