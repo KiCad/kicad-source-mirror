@@ -45,8 +45,8 @@
     #define DECIMILS_PER_IU (MM_PER_IU * 0.00254 )
     #else                                     // Pcbnew in deci-mils.
         #define DECIMILS_PER_IU  1
-        #define MILS_PER_IU   10.0
-        #define MM_PER_IU   (1e4 / 25.4)
+        #define MILS_PER_IU   0.1
+        #define MM_PER_IU   (25.4 / 1e4)
     #endif
 
 /// Convert PCBNEW internal units (iu) to mils.
