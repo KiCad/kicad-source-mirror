@@ -41,11 +41,13 @@ class BOARD;
 // Convert pcb dimension of 0.1 mil to PS units of inches.
 #define SCALE_PS    .0001
 
-// Convert dimension 0.1 mil -> HPGL units:
+// Convert dimension 0.1 mil -> HPGL units (1 HPGL unit = 25 micrometers):
 #define SCALE_HPGL  0.102041
 
-// Small drill marks diameter value (in 1/10000 inch)
-#define SMALL_DRILL 150
+// Small drill marks (small pad holes) diameter value
+#define SMALL_DRILL (int)( 0.35 * IU_PER_MM )
+
+
 // A helper class to plot board items
 class BRDITEMS_PLOTTER: public PCB_PLOT_PARAMS
 {
