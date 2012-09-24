@@ -47,12 +47,12 @@ private:
                                                     // plotter X scaling error
     double              m_YScaleAdjust;             // X scale factor adjust to compensate
                                                     // plotter Y scaling error
-    double              m_PSWidthAdjust;            // Global width correction for exact line width
+    int                 m_PSWidthAdjust;            // Global width correction for exact line width
                                                     // in postscript output.
                                                     // this is a correction factor for tracks width
                                                     // when plotted
-    double              m_WidthAdjustMinValue;      // Global track width limits
-    double              m_WidthAdjustMaxValue;      // tracks width will be "clipped" whenever the
+    int                 m_widthAdjustMinValue;      // Global track width limits
+    int                 m_widthAdjustMaxValue;      // tracks width will be "clipped" whenever the
                                                     // m_PSWidthAdjust to these limits.
 
     PCB_PLOT_PARAMS     m_plotOpts;

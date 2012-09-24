@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 11 2012)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -61,8 +61,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotTextOther;
 		wxCheckBox* m_plotInvisibleText;
 		wxCheckBox* m_plotNoViaOnMaskOpt;
-		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_excludeEdgeLayerOpt;
+		wxCheckBox* m_plotMirrorOpt;
+		wxCheckBox* m_plotPSNegativeOpt;
 		wxStaticText* m_staticText11;
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* m_staticText12;
@@ -89,7 +90,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_fineAdjustYscaleOpt;
 		wxStaticText* m_textPSFineAdjustWidth;
 		wxTextCtrl* m_PSFineAdjustWidthOpt;
-		wxCheckBox* m_plotPSNegativeOpt;
 		wxCheckBox* m_forcePSA4OutputOpt;
 		wxTextCtrl* m_messagesBox;
 		wxButton* m_plotButton;

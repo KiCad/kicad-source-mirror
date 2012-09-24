@@ -112,6 +112,10 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_referenceColor       = BLACK;
     m_valueColor           = BLACK;
     m_textMode		       = PLOTTEXTMODE_PHANTOM;
+
+    // This parameter controls if the NPTH pads will be plotted or not
+    // it is are "local" parameters
+    m_skipNPTH_Pads        = false;
 }
 
 

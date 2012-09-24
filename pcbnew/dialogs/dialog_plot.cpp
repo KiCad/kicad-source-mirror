@@ -61,12 +61,16 @@ void DIALOG_PLOT::Init_Dialog()
 
     m_config->Read( OPTKEY_PLOT_X_FINESCALE_ADJ, &m_XScaleAdjust );
     m_config->Read( OPTKEY_PLOT_Y_FINESCALE_ADJ, &m_YScaleAdjust );
-    m_config->Read( CONFIG_PS_FINEWIDTH_ADJ, &m_PSWidthAdjust );
+
+    // m_PSWidthAdjust is stored in mm in user config
+    double dtmp;
+    m_config->Read( CONFIG_PS_FINEWIDTH_ADJ, &dtmp, 0 );
+    m_PSWidthAdjust = KiROUND( dtmp * IU_PER_MM );
 
     // The reasonable width correction value must be in a range of
     // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
-    m_WidthAdjustMinValue   = -(m_board->GetDesignSettings().m_TrackMinWidth - 1);
-    m_WidthAdjustMaxValue   = m_board->GetSmallestClearanceValue() - 1;
+    m_widthAdjustMinValue   = -(m_board->GetDesignSettings().m_TrackMinWidth - 1);
+    m_widthAdjustMaxValue   = m_board->GetSmallestClearanceValue() - 1;
 
     switch( m_plotOpts.GetFormat() )
     {
@@ -130,7 +134,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_fineAdjustYscaleOpt->AppendText( msg );
 
     // Test for a reasonable PS width correction value. Set to 0 if problem.
-    if( m_PSWidthAdjust < m_WidthAdjustMinValue || m_PSWidthAdjust > m_WidthAdjustMaxValue )
+    if( m_PSWidthAdjust < m_widthAdjustMinValue || m_PSWidthAdjust > m_widthAdjustMaxValue )
         m_PSWidthAdjust = 0.;
 
     msg.Printf( wxT( "%f" ), To_User_Unit( g_UserUnit, m_PSWidthAdjust ) );
@@ -289,7 +293,8 @@ PlotFormat DIALOG_PLOT::GetPlotFormat()
     return plotFmt[ m_plotFormatOpt->GetSelection() ];
 }
 
-
+// Enable or disable widgets according to the plot format selected
+// and clear also some optional values
 void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
 {
     switch( GetPlotFormat() )
@@ -311,11 +316,13 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useGerberExtensions->Enable( false );
         m_useGerberExtensions->SetValue( false );
         m_scaleOpt->Enable( false );
+        m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
         m_PSFineAdjustWidthOpt->Enable( false );
-        m_plotPSNegativeOpt->Enable( false );
+        m_plotPSNegativeOpt->Enable( true );
         m_forcePSA4OutputOpt->Enable( false );
+        m_forcePSA4OutputOpt->SetValue( false );
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
@@ -469,6 +476,22 @@ static bool setDouble( double* aResult, double aValue, double aMin, double aMax 
     *aResult = aValue;
     return true;
 }
+static bool setInt( int* aResult, int aValue, int aMin, int aMax )
+{
+    if( aValue < aMin )
+    {
+        *aResult = aMin;
+        return false;
+    }
+    else if( aValue > aMax )
+    {
+        *aResult = aMax;
+        return false;
+    }
+
+    *aResult = aValue;
+    return true;
+}
 
 
 void DIALOG_PLOT::applyPlotSettings()
@@ -476,22 +499,15 @@ void DIALOG_PLOT::applyPlotSettings()
     PCB_PLOT_PARAMS tempOptions;
 
     tempOptions.SetExcludeEdgeLayer( m_excludeEdgeLayerOpt->GetValue() );
-
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
-
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
-
     tempOptions.SetPlotPadsOnSilkLayer( m_plotPads_on_Silkscreen->GetValue() );
-
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
-
     tempOptions.SetPlotValue( m_plotModuleValueOpt->GetValue() );
     tempOptions.SetPlotReference( m_plotModuleRefOpt->GetValue() );
     tempOptions.SetPlotOtherText( m_plotTextOther->GetValue() );
     tempOptions.SetPlotInvisibleText( m_plotInvisibleText->GetValue() );
-
     tempOptions.SetScaleSelection( m_scaleOpt->GetSelection() );
-
     tempOptions.SetDrillMarksType( static_cast<PCB_PLOT_PARAMS::DrillMarksType>
                                    ( m_drillShapeOpt->GetSelection() ) );
     tempOptions.SetMirror( m_plotMirrorOpt->GetValue() );
@@ -581,22 +597,23 @@ void DIALOG_PLOT::applyPlotSettings()
 
     // PS Width correction
     msg = m_PSFineAdjustWidthOpt->GetValue();
-    tmpDouble = ReturnValueFromString( g_UserUnit, msg );
+    int itmp = ReturnValueFromString( g_UserUnit, msg );
 
-    if( !setDouble( &m_PSWidthAdjust, tmpDouble, m_WidthAdjustMinValue, m_WidthAdjustMaxValue ) )
+    if( !setInt( &m_PSWidthAdjust, itmp, m_widthAdjustMinValue, m_widthAdjustMaxValue ) )
     {
         msg = ReturnStringFromValue( g_UserUnit, m_PSWidthAdjust );
         m_PSFineAdjustWidthOpt->SetValue( msg );
         msg.Printf( _( "Width correction constrained!\n"
                        "The reasonable width correction value must be in a range of\n"
                        " [%+f; %+f] (%s) for current design rules!\n" ),
-                    To_User_Unit( g_UserUnit, m_WidthAdjustMinValue ),
-                    To_User_Unit( g_UserUnit, m_WidthAdjustMaxValue ),
+                    To_User_Unit( g_UserUnit, m_widthAdjustMinValue ),
+                    To_User_Unit( g_UserUnit, m_widthAdjustMaxValue ),
                     ( g_UserUnit == INCHES ) ? wxT( "\"" ) : wxT( "mm" ) );
         m_messagesBox->AppendText( msg );
     }
 
-    m_config->Write( CONFIG_PS_FINEWIDTH_ADJ, m_PSWidthAdjust );
+    // Store m_PSWidthAdjust in mm in user config
+    m_config->Write( CONFIG_PS_FINEWIDTH_ADJ, (double)m_PSWidthAdjust / IU_PER_MM );
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 

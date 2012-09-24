@@ -47,6 +47,10 @@ public:
     };
 
 private:
+    // If true, do not plot NPTH pads
+    // (mainly used to disable NPTH pads plotting on copper layers)
+    bool        m_skipNPTH_Pads;
+
     /** LINE, FILLED or SKETCH selects how to plot filled objects.
      *  FILLED is not available with all drivers */
     EDA_DRAW_MODE_T m_mode;
@@ -132,10 +136,10 @@ private:
     double      m_fineScaleAdjustX;     ///< fine scale adjust X axis
     double      m_fineScaleAdjustY;     ///< fine scale adjust Y axis
 
-    /** This width factor is intended to compensate printers and plotters that do
-     *  not strictly obey line width settings. Only used for pads and zone
-     *  filling AFAIK */
-    double      m_widthAdjust;
+    /** This width factor is intended to compensate PS printers/ plotters that do
+     *  not strictly obey line width settings. Only used to plot pads and tracks
+     */
+    int         m_widthAdjust;
 
     int         m_HPGLPenNum;           ///< HPGL only: pen number selection(1 to 9)
     int         m_HPGLPenSpeed;         ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
@@ -148,7 +152,11 @@ private:
 public:
     PCB_PLOT_PARAMS();
 
-    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl=0 ) const throw( IO_ERROR );
+    void        SetSkipPlotNPTH_Pads( bool aSkip ) { m_skipNPTH_Pads = aSkip; }
+    bool        GetSkipPlotNPTH_Pads() const { return m_skipNPTH_Pads; }
+
+    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl=0 )
+                        const throw( IO_ERROR );
     void        Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( IO_ERROR, PARSE_ERROR );
 
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
@@ -156,30 +164,41 @@ public:
 
     void         SetColor( EDA_COLOR_T aVal ) { m_color = aVal; }
     EDA_COLOR_T GetColor() const { return m_color; }
+
     void         SetReferenceColor( EDA_COLOR_T aVal ) { m_referenceColor = aVal; }
     EDA_COLOR_T GetReferenceColor() const { return m_referenceColor; }
+
     void         SetValueColor( EDA_COLOR_T aVal ) { m_valueColor = aVal; }
     EDA_COLOR_T GetValueColor() const { return m_valueColor; }
+
     void        SetTextMode( PlotTextMode aVal ) { m_textMode = aVal; }
     PlotTextMode GetTextMode() const { return m_textMode; }
+
     void        SetMode( EDA_DRAW_MODE_T aVal ) { m_mode = aVal; }
     EDA_DRAW_MODE_T GetMode() const { return m_mode; }
+
     void        SetDrillMarksType( DrillMarksType aVal ) { m_drillMarks = aVal; }
     DrillMarksType GetDrillMarksType() const { return m_drillMarks; }
+
     void        SetScale( double aVal ) { m_scale = aVal; }
     double      GetScale() const { return m_scale; }
+
     void        SetFineScaleAdjustX( double aVal ) { m_fineScaleAdjustX = aVal; }
     double      GetFineScaleAdjustX() const { return m_fineScaleAdjustX; }
     void        SetFineScaleAdjustY( double aVal ) { m_fineScaleAdjustY = aVal; }
     double      GetFineScaleAdjustY() const { return m_fineScaleAdjustY; }
-    void        SetWidthAdjust( double aVal ) { m_widthAdjust = aVal; }
-    double      GetWidthAdjust() const { return m_widthAdjust; }
+    void        SetWidthAdjust( int aVal ) { m_widthAdjust = aVal; }
+    int         GetWidthAdjust() const { return m_widthAdjust; }
+
     void        SetAutoScale( bool aFlag ) { m_autoScale = aFlag; }
     bool        GetAutoScale() const { return m_autoScale; }
+
     void        SetMirror( bool aFlag ) { m_mirror = aFlag; }
     bool        GetMirror() const { return m_mirror; }
+
     void        SetPlotPadsOnSilkLayer( bool aFlag ) { m_plotPadsOnSilkLayer = aFlag; }
     bool        GetPlotPadsOnSilkLayer() const { return m_plotPadsOnSilkLayer; }
+
     void        SetPlotInvisibleText( bool aFlag ) { m_plotInvisibleText = aFlag; }
     bool        GetPlotInvisibleText() const { return m_plotInvisibleText; }
     void        SetPlotOtherText( bool aFlag ) { m_plotOtherText = aFlag; }
@@ -188,29 +207,41 @@ public:
     bool        GetPlotValue() const { return m_plotValue; }
     void        SetPlotReference( bool aFlag ) { m_plotReference = aFlag; }
     bool        GetPlotReference() const { return m_plotReference; }
+
     void        SetNegative( bool aFlag ) { m_negative = aFlag; }
     bool        GetNegative() const { return m_negative; }
+
     void        SetPlotViaOnMaskLayer( bool aFlag ) { m_plotViaOnMaskLayer = aFlag; }
     bool        GetPlotViaOnMaskLayer() const { return m_plotViaOnMaskLayer; }
+
     void        SetPlotFrameRef( bool aFlag ) { m_plotFrameRef = aFlag; }
     bool        GetPlotFrameRef() const { return m_plotFrameRef; }
+
     void        SetExcludeEdgeLayer( bool aFlag ) { m_excludeEdgeLayer = aFlag; }
     bool        GetExcludeEdgeLayer() const { return m_excludeEdgeLayer; }
+
     void        SetFormat( PlotFormat aFormat ) { m_format = aFormat; };
     PlotFormat  GetFormat() const { return m_format; };
+
     void        SetOutputDirectory( wxString aDir ) { m_outputDirectory = aDir; };
     wxString    GetOutputDirectory() const { return m_outputDirectory; };
+
     void        SetUseGerberExtensions( bool aUse ) { m_useGerberExtensions = aUse; };
     bool        GetUseGerberExtensions() const { return m_useGerberExtensions; };
+
     void        SetSubtractMaskFromSilk( bool aSubtract ) { m_subtractMaskFromSilk = aSubtract; };
     bool        GetSubtractMaskFromSilk() const { return m_subtractMaskFromSilk; };
+
     void        SetLayerSelection( long aSelection )
                     { m_layerSelection = aSelection; };
     long        GetLayerSelection() const { return m_layerSelection; };
+
     void        SetUseAuxOrigin( bool aAux ) { m_useAuxOrigin = aAux; };
     bool        GetUseAuxOrigin() const { return m_useAuxOrigin; };
+
     void        SetScaleSelection( int aSelection ) { m_scaleSelection = aSelection; };
     int         GetScaleSelection() const { return m_scaleSelection; };
+
     void        SetA4Output( int aForce ) { m_A4Output = aForce; };
     bool        GetA4Output() const { return m_A4Output; };
 
@@ -222,6 +253,7 @@ public:
     bool        SetHPGLPenOverlay( int aValue );
     void        SetHPGLPenNum( int aVal ) { m_HPGLPenNum = aVal; }
     int         GetHPGLPenNum() const { return m_HPGLPenNum; }
+
     int         GetLineWidth() const { return m_lineWidth; };
     bool        SetLineWidth( int aValue );
 };
