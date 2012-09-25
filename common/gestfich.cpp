@@ -423,9 +423,9 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 #ifdef __WXMAC__
     if( wxFileExists( FullFileName ) || wxDir::Exists( FullFileName ) ) 
     {
-       ProcessExecute( wxT("open -a ") + ExecFile + wxT(" ") + param );
+       ProcessExecute( wxGetApp().GetExecutablePath() + wxT("/") + ExecFile + wxT(" ") + param );
     } else {
-       ProcessExecute( wxT("open ") + param );
+       ProcessExecute( wxT("/usr/bin/open ") + param );
     }
     return 0;
 #else
