@@ -68,6 +68,55 @@ EDA_COLOR_T BRDITEMS_PLOTTER::getColor( int aLayer )
     return color;
 }
 
+/*
+ * Plot a pad.
+ * unlike other items, a pad had not a specific color,
+ * and be drawn as a non filled item although the plot mode is filled
+ * color and plot mode are needed by this function
+ */
+void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T aPlotMode )
+{
+    wxPoint shape_pos = aPad->ReturnShapePos();
+
+    // Set plot color (change WHITE to LIGHTGRAY because
+    // the white items are not seen on a white paper or screen
+    m_plotter->SetColor( aColor != WHITE ? aColor : LIGHTGRAY);
+
+    switch( aPad->GetShape() )
+    {
+    case PAD_CIRCLE:
+        m_plotter->FlashPadCircle( shape_pos, aPad->GetSize().x, aPlotMode );
+        break;
+
+    case PAD_OVAL:
+        m_plotter->FlashPadOval( shape_pos, aPad->GetSize(),
+                        aPad->GetOrientation(), aPlotMode );
+        break;
+
+    case PAD_TRAPEZOID:
+        {
+            wxPoint coord[4];
+            aPad->BuildPadPolygon( coord, wxSize(0,0), 0 );
+            m_plotter->FlashPadTrapez( shape_pos, coord,
+                          aPad->GetOrientation(), aPlotMode );
+        }
+        break;
+
+    case PAD_RECT:
+    default:
+        m_plotter->FlashPadRect( shape_pos, aPad->GetSize(),
+                        aPad->GetOrientation(), aPlotMode );
+        break;
+    }
+}
+
+/*
+ * Plot field of a module (footprint)
+ * Reference, Value, and other fields are plotted only if
+ * the corresponding option is enabled
+ * Invisible text fields are plotted only if PlotInvisibleText option is set
+ * usually they are not plotted.
+ */
 bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 {
     // see if we want to plot VALUE and REF fields
@@ -77,7 +126,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     TEXTE_MODULE* textModule = aModule->m_Reference;
     unsigned      textLayer = textModule->GetLayer();
 
-    if( textLayer >= 32 )
+    if( textLayer >= LAYER_COUNT )
         return false;
 
     if( ( ( 1 << textLayer ) & m_layerMask ) == 0 )
@@ -89,7 +138,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     textModule = aModule->m_Value;
     textLayer = textModule->GetLayer();
 
-    if( textLayer > 32 )
+    if( textLayer > LAYER_COUNT )
         return false;
 
     if( ( (1 << textLayer) & m_layerMask ) == 0 )
@@ -129,7 +178,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 
         textLayer = textModule->GetLayer();
 
-        if( textLayer >= 32 )
+        if( textLayer >= LAYER_COUNT )
             return false;
 
         if( !( ( 1 << textLayer ) & m_layerMask ) )

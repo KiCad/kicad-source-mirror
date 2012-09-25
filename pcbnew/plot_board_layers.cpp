@@ -85,8 +85,6 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
                 if( (masklayer & layersmask_plotpads) == 0 )
                     continue;
 
-                wxPoint shape_pos = pad->ReturnShapePos();
-
                 EDA_COLOR_T color = ColorFromInt(0);
                 if( (layersmask_plotpads & SILKSCREEN_LAYER_BACK) )
                    color = aBoard->GetLayerColor( SILKSCREEN_N_BACK );
@@ -94,36 +92,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
                 if((layersmask_plotpads & SILKSCREEN_LAYER_FRONT ) )
                     color = ColorFromInt( color | aBoard->GetLayerColor( SILKSCREEN_N_FRONT ) );
 
-                // Set plot color (change WHITE to LIGHTGRAY because
-                // the white items are not seen on a white paper or screen
-                aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
-
-                switch( pad->GetShape() )
-                {
-                case PAD_CIRCLE:
-                    aPlotter->FlashPadCircle( shape_pos, pad->GetSize().x, LINE );
-                    break;
-
-                case PAD_OVAL:
-                    aPlotter->FlashPadOval( shape_pos, pad->GetSize(),
-		                            pad->GetOrientation(), LINE );
-                    break;
-
-                case PAD_TRAPEZOID:
-                    {
-                        wxPoint coord[4];
-                        pad->BuildPadPolygon( coord, wxSize(0,0), 0 );
-                        aPlotter->FlashPadTrapez( shape_pos, coord,
-			                          pad->GetOrientation(), LINE );
-                    }
-                    break;
-
-                case PAD_RECT:
-                default:
-                    aPlotter->FlashPadRect( shape_pos, pad->GetSize(),
-		                            pad->GetOrientation(), LINE );
-                    break;
-                }
+                itemplotter.PlotPad( pad, color, LINE );
             }
         }
     }
@@ -302,15 +271,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if( (pad->GetLayerMask() & aLayerMask) == 0 )
                 continue;
 
-            wxPoint shape_pos = pad->ReturnShapePos();
-
             wxSize margin;
             double width_adj = 0;
 
             if( aLayerMask & ALL_CU_LAYERS )
-            {
                 width_adj =  itemplotter.getFineWidthAdj();
-            }
 
             switch( aLayerMask &
                    ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
@@ -330,12 +295,12 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 break;
             }
 
-            wxSize size;
-            size.x = pad->GetSize().x + ( 2 * margin.x ) + width_adj;
-            size.y = pad->GetSize().y + ( 2 * margin.y ) + width_adj;
+            wxSize padPlotsSize;
+            padPlotsSize.x = pad->GetSize().x + ( 2 * margin.x ) + width_adj;
+            padPlotsSize.y = pad->GetSize().y + ( 2 * margin.y ) + width_adj;
 
             // Don't draw a null size item :
-            if( size.x <= 0 || size.y <= 0 )
+            if( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 )
                 continue;
 
             EDA_COLOR_T color = BLACK;
@@ -346,43 +311,27 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if((pad->GetLayerMask() & LAYER_FRONT ) )
                 color = ColorFromInt( color | aBoard->GetVisibleElementColor( PAD_FR_VISIBLE ) );
 
-            // Set plot color (change WHITE to LIGHTGRAY because
-            // the white items are not seen on a white paper or screen
-            aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
-
+            // Temporary set the pad size to the required plot size:
+            wxSize tmppadsize = pad->GetSize();
+            pad->SetSize( padPlotsSize );
             switch( pad->GetShape() )
             {
             case PAD_CIRCLE:
-                if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
-                    (pad->GetSize() == pad->GetDrillSize()) &&
-                    (pad->GetAttribute() == PAD_HOLE_NOT_PLATED) )
-                    break;
-
-                aPlotter->FlashPadCircle( shape_pos, size.x, plotMode );
-                break;
-
             case PAD_OVAL:
                 if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
                     (pad->GetSize() == pad->GetDrillSize()) &&
                     (pad->GetAttribute() == PAD_HOLE_NOT_PLATED) )
                     break;
 
-                aPlotter->FlashPadOval( shape_pos, size, pad->GetOrientation(), plotMode );
-                break;
-
+                // Fall through:
             case PAD_TRAPEZOID:
-            {
-                wxPoint coord[4];
-                pad->BuildPadPolygon( coord, margin, 0 );
-                aPlotter->FlashPadTrapez( shape_pos, coord, pad->GetOrientation(), plotMode );
-            }
-            break;
-
             case PAD_RECT:
             default:
-                aPlotter->FlashPadRect( shape_pos, size, pad->GetOrientation(), plotMode );
+                itemplotter.PlotPad( pad, color, plotMode );
                 break;
             }
+
+            pad->SetSize( tmppadsize );     // Restore the pad size
         }
     }
 
@@ -663,38 +612,34 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
         wxASSERT( false );
     }
 
-    if( the_plotter )
+    the_plotter->SetFilename( aFullFileName );
+
+    // Compute the viewport and set the other options
+    initializePlotter( the_plotter, aBoard, aPlotOpts );
+
+    if( the_plotter->StartPlot( output_file ) )
     {
-        the_plotter->SetFilename( aFullFileName );
+        // Plot the frame reference if requested
+        if( aPlotOpts->GetPlotFrameRef() )
+            PlotWorkSheet( the_plotter, aBoard->GetTitleBlock(),
+                           aBoard->GetPageSettings(),
+                           1, 1, // Only one page
+                           aSheetDesc, aBoard->GetFileName() );
 
-        // Compute the viewport and set the other options
-        initializePlotter( the_plotter, aBoard, aPlotOpts );
-
-        if( the_plotter->StartPlot( output_file ) )
+        /* When plotting a negative board: draw a black rectangle
+         * (background for plot board in white) and switch the current
+         * color to WHITE; note the color inversion is actually done
+         * in the driver (if supported) */
+        if( aPlotOpts->GetNegative() )
         {
-            // Plot the frame reference if requested
-            if( aPlotOpts->GetPlotFrameRef() )
-                PlotWorkSheet( the_plotter, aBoard->GetTitleBlock(),
-                               aBoard->GetPageSettings(),
-                               1, 1, // Only one page
-                               aSheetDesc, aBoard->GetFileName() );
-
-            /* When plotting a negative board: draw a black rectangle
-             * (background for plot board in white) and switch the current
-             * color to WHITE; note the color inversion is actually done
-             * in the driver (if supported) */
-            if( aPlotOpts->GetNegative() )
-            {
-                EDA_RECT bbox = aBoard->ComputeBoundingBox();
-                FillNegativeKnockout( the_plotter, bbox );
-            }
-
-            return the_plotter;
+            EDA_RECT bbox = aBoard->ComputeBoundingBox();
+            FillNegativeKnockout( the_plotter, bbox );
         }
+
+        return the_plotter;
     }
 
-    // error in start_plot( ) or before
-    wxMessageBox(  _("Error creating plot file") );
-    delete the_plotter;
+    // error in start_plot( )
+    delete the_plotter;     // will close also output_file
     return NULL;
 }
