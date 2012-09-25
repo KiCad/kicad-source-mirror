@@ -90,7 +90,15 @@ public:
     void PlotDrawSegment( DRAWSEGMENT* PtSegm );
 
     /**
-     * lot items like text and graphics,
+     * Plot a pad.
+     * unlike other items, a pad had not a specific color,
+     * and be drawn as a non filled item although the plot mode is filled
+     * color and plot mode are needed by this function
+     */
+    void PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T aPlotMode );
+
+    /**
+     * plot items like text and graphics,
      *  but not tracks and modules
      */
     void PlotBoardGraphicItems();
