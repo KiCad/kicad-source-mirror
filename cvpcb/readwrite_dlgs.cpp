@@ -39,52 +39,74 @@
 
 #define titleComponentLibErr _( "Component Library Error" )
 
-
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 {
-    COMPONENT_INFO* Component;
-    bool       isUndefined = false;
-    int        NumCmp;
-    wxString   msg;
+    COMPONENT_INFO* component;
+    bool       hasFootprint = false;
+    int        componentIndex;
+    wxString   description;
 
     if( m_components.empty() )
         return;
 
-    NumCmp = m_ListCmp->GetSelection();
+    // if no component is selected, select the first one
 
-    if( NumCmp < 0 )
+    if(m_ListCmp->GetFirstSelected() < 0)
     {
-        NumCmp = 0;
-        m_ListCmp->SetSelection( NumCmp, true );
+        componentIndex = 0;
+        m_ListCmp->SetSelection( componentIndex, true );
     }
 
-    Component = &m_components[ NumCmp ];
+    // iterate over the selection
 
-    if( Component == NULL )
-        return;
+    while( m_ListCmp->GetFirstSelected() != -1)
+    {
+        // get the component for the current iteration
 
-    isUndefined = Component->m_Footprint.IsEmpty();
+        componentIndex = m_ListCmp->GetFirstSelected();
+        component = &m_components[componentIndex];
 
-    Component->m_Footprint = aFootprintName;
+        if( component == NULL )
+            return;
 
-    msg.Printf( CMP_FORMAT, NumCmp + 1,
-                GetChars( Component->m_Reference ),
-                GetChars( Component->m_Value ),
-                GetChars( Component->m_Footprint ) );
+        // check to see if the component has allready a footprint set.
+
+        hasFootprint = !(component->m_Footprint.IsEmpty());
+
+        component->m_Footprint = aFootprintName;
+
+        // create the new component description
+        
+        description.Printf( CMP_FORMAT, componentIndex + 1,
+                    GetChars( component->m_Reference ),
+                    GetChars( component->m_Value ),
+                    GetChars( component->m_Footprint ) );
+
+        // if the component hasn't had a footprint associated with it
+        // it now has, so we decrement the count of components without
+        // a footprint assigned.
+        
+        if( !hasFootprint )
+        {
+            hasFootprint = true;
+            m_undefinedComponentCnt -= 1;
+        }
+
+        // set the new description and deselect the processed component
+        m_ListCmp->SetString( componentIndex, description );
+        m_ListCmp->SetSelection( componentIndex, false );
+    }
+
+    // mark this "session" as modified
     m_modified = true;
 
-    if( isUndefined )
-        m_undefinedComponentCnt -= 1;
+    // select the next component, if there is one
+    if( componentIndex < (m_ListCmp->GetCount() - 1) )
+        componentIndex++;
 
-    m_ListCmp->SetString( NumCmp, msg );
-    m_ListCmp->SetSelection( NumCmp, false );
+    m_ListCmp->SetSelection( componentIndex, true );
 
-    // We activate next component:
-    if( NumCmp < (m_ListCmp->GetCount() - 1) )
-        NumCmp++;
-
-    m_ListCmp->SetSelection( NumCmp, true );
-
+    // update the statusbar
     DisplayStatus();
 }
 

@@ -18,7 +18,8 @@ class ITEMS_LISTBOX_BASE : public wxListView
 {
 public:
     ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
-                        const wxPoint& aLocation, const wxSize& aSize );
+                        const wxPoint& aLocation, const wxSize& aSize,
+                        long aStyle = wxLC_SINGLE_SEL);
 
     ~ITEMS_LISTBOX_BASE();
 
