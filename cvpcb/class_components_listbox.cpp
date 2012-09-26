@@ -17,7 +17,7 @@
 COMPONENTS_LISTBOX::COMPONENTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
                                         const wxPoint& loc, const wxSize& size,
                                         int nbitems, wxString choice[] ) :
-    ITEMS_LISTBOX_BASE( parent, id, loc, size )
+    ITEMS_LISTBOX_BASE( parent, id, loc, size, ~wxLC_SINGLE_SEL)
 {
 }
 
