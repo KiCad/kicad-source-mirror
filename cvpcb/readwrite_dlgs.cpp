@@ -39,53 +39,58 @@
 
 #define titleComponentLibErr _( "Component Library Error" )
 
-
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 {
     COMPONENT_INFO* Component;
     bool       isUndefined = false;
     int        NumCmp;
+    int        LastCmp;
     wxString   msg;
 
     if( m_components.empty() )
         return;
 
-    NumCmp = m_ListCmp->GetSelection();
-
-    if( NumCmp < 0 )
+    if(m_ListCmp->GetFirstSelected() < 0)
     {
         NumCmp = 0;
         m_ListCmp->SetSelection( NumCmp, true );
     }
 
-    Component = &m_components[ NumCmp ];
+    while( (NumCmp = m_ListCmp->GetFirstSelected() ) != -1)
+    {
+        Component = &m_components[NumCmp];
 
-    if( Component == NULL )
-        return;
+        if( Component == NULL )
+            return;
 
-    isUndefined = Component->m_Footprint.IsEmpty();
+        isUndefined = Component->m_Footprint.IsEmpty();
 
-    Component->m_Footprint = aFootprintName;
+        Component->m_Footprint = aFootprintName;
 
-    msg.Printf( CMP_FORMAT, NumCmp + 1,
-                GetChars( Component->m_Reference ),
-                GetChars( Component->m_Value ),
-                GetChars( Component->m_Footprint ) );
+        msg.Printf( CMP_FORMAT, NumCmp + 1,
+                    GetChars( Component->m_Reference ),
+                    GetChars( Component->m_Value ),
+                    GetChars( Component->m_Footprint ) );
+
+        if( isUndefined )
+            m_undefinedComponentCnt -= 1;
+
+        m_ListCmp->SetString( NumCmp, msg );
+        m_ListCmp->SetSelection( NumCmp, false );
+        
+        isUndefined = false;
+        LastCmp = NumCmp;
+        
+        DisplayStatus();
+    }
+
     m_modified = true;
 
-    if( isUndefined )
-        m_undefinedComponentCnt -= 1;
-
-    m_ListCmp->SetString( NumCmp, msg );
-    m_ListCmp->SetSelection( NumCmp, false );
-
-    // We activate next component:
-    if( NumCmp < (m_ListCmp->GetCount() - 1) )
-        NumCmp++;
+    if( LastCmp < (m_ListCmp->GetCount() - 1) )
+        NumCmp = LastCmp + 1;
 
     m_ListCmp->SetSelection( NumCmp, true );
 
-    DisplayStatus();
 }
 
 

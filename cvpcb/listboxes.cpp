@@ -19,11 +19,12 @@
 ******************************************************************************/
 
 #define LISTB_STYLE wxSUNKEN_BORDER | wxLC_NO_HEADER | \
-    wxLC_SINGLE_SEL | wxLC_REPORT | wxLC_VIRTUAL
+    wxLC_REPORT | wxLC_VIRTUAL
 
 ITEMS_LISTBOX_BASE::ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
-                                        const wxPoint& aLocation, const wxSize& aSize ) :
-    wxListView( aParent, aId, aLocation, aSize, LISTB_STYLE )
+                                        const wxPoint& aLocation, const wxSize& aSize,
+                                        long aStyle) :
+    wxListView( aParent, aId, aLocation, aSize, LISTB_STYLE | aStyle )
 {
     InsertColumn( 0, wxEmptyString );
     SetColumnWidth( 0, wxLIST_AUTOSIZE );
