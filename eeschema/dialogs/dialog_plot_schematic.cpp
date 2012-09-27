@@ -222,13 +222,13 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotFormatSelection( wxCommandEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC::OnButtonPlotCurrentClick( wxCommandEvent& event )
 {
-    PlotSchematic( true );
+    PlotSchematic( false );
 }
 
 
 void DIALOG_PLOT_SCHEMATIC::OnButtonPlotAllClick( wxCommandEvent& event )
 {
-    PlotSchematic( false );
+    PlotSchematic( true );
 }
 
 void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
