@@ -203,7 +203,7 @@ public:
 
     void OnCloseWindow( wxCloseEvent& Event );
 
-    bool GetDefaultLabelSize() const { return m_defaultLabelSize; }
+    int GetDefaultLabelSize() const { return m_defaultLabelSize; }
     void SetDefaultLabelSize( int aLabelSize ) { m_defaultLabelSize = aLabelSize; }
 
     bool GetForceHVLines() const { return m_forceHVLines; }
