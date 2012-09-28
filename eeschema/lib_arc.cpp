@@ -337,7 +337,7 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
 int LIB_ARC::GetPenSize() const
 {
-    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    return ( m_Width == 0 ) ? GetDefaultLineThickness() : m_Width;
 }
 
 
@@ -376,7 +376,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     if( aColor < 0 )       // Used normal color or selected color
     {
         if( IsSelected() )
-            color = g_ItemSelectetColor;
+            color = GetItemSelectedColor();
     }
     else
     {

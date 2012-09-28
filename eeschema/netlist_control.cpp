@@ -71,6 +71,7 @@ int TestDuplicateSheetNames( bool aCreateMarker );
 #define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )
 #define CUSTOM_NETLIST_COMMAND wxT( "CustomNetlistCommand" )
 #define NETLIST_USE_DEFAULT_NETNAME wxT( "NetlistUseDefaultNetname" )
+#define NETLIST_PSPICE_USE_NETNAME  wxT( "SpiceUseNetNames" )
 
 
 
@@ -105,6 +106,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_AddSubPrefix = NULL;
     m_ButtonCancel = NULL;
     m_NetOption = NULL;
+
     wxString netfmtName = ((NETLIST_DIALOG*)parent->GetParent())->m_NetFmtName;
     int fmtOption = 0;
 
@@ -177,11 +179,12 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     NETLIST_DIALOG_BASE( parent )
 {
     m_Parent = parent;
-    m_Config = wxGetApp().GetSettings();
+    m_config = wxGetApp().GetSettings();
 
     long tmp;
-    m_Config->Read( NETLIST_USE_DEFAULT_NETNAME, &tmp, 0l );
+    m_config->Read( NETLIST_USE_DEFAULT_NETNAME, &tmp, 0l );
     m_cbUseDefaultNetlistName->SetValue( tmp );
+    m_config->Read( NETLIST_PSPICE_USE_NETNAME,  &m_spiceNetlistUseNames, true );
 
 
     m_NetFmtName = m_Parent->GetNetListFormatName();
@@ -241,7 +244,7 @@ const wxString NETLIST_DIALOG::ReturnUserNetlistTypeName( bool first_item )
     msg = CUSTOM_NETLIST_TITLE;
     msg << index + 1;
 
-    name = m_Config->Read( msg );
+    name = m_config->Read( msg );
 
     return name;
 }
@@ -268,7 +271,7 @@ void NETLIST_DIALOG::InstallPageSpice()
                                         2, netlist_opt, 1,
                                         wxRA_SPECIFY_COLS );
 
-    if( !g_OptNetListUseNames )
+    if( !m_spiceNetlistUseNames )
         page->m_NetOption->SetSelection( 1 );
 
     page->m_LeftBoxSizer->Add( page->m_NetOption, 0, wxGROW | wxALL, 5 );
@@ -309,7 +312,7 @@ void NETLIST_DIALOG::InstallCustomPages()
         // Install a plugin panel
         msg = CUSTOM_NETLIST_COMMAND;
         msg << ii + 1;
-        wxString command = m_Config->Read( msg );
+        wxString command = m_config->Read( msg );
 
         currPage = AddOneCustomPage( title, command,
                                      (NETLIST_TYPE_ID)(NET_TYPE_CUSTOM1 + ii) );
@@ -432,10 +435,10 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
             m_Parent->SetNetListFormatName( m_PanelNetType[ii]->GetPageNetFmtName() );
     }
 
-    g_OptNetListUseNames = true; // Used for pspice, gnucap
+    m_spiceNetlistUseNames = true; // Used for pspice, gnucap
 
     if( m_PanelNetType[PANELSPICE]->m_NetOption->GetSelection() == 1 )
-        g_OptNetListUseNames = 	false;
+        m_spiceNetlistUseNames = 	false;
 }
 
 
@@ -468,7 +471,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     {
     case NET_TYPE_SPICE:
         // Set spice netlist options:
-        if( g_OptNetListUseNames )
+        if( m_spiceNetlistUseNames )
             netlist_opt |= NET_USE_NETNAMES;
         if( currPage->m_AddSubPrefix->GetValue() )
             netlist_opt |= NET_USE_X_PREFIX;
@@ -640,12 +643,12 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
 
     NETLIST_PAGE_DIALOG* currPage;
     currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
-    g_OptNetListUseNames = currPage->m_NetOption->GetSelection() == 0;
+    m_spiceNetlistUseNames = currPage->m_NetOption->GetSelection() == 0;
 
     // Set spice netlist options:
     unsigned netlist_opt = 0;
 
-    if( g_OptNetListUseNames )
+    if( m_spiceNetlistUseNames )
         netlist_opt |= NET_USE_NETNAMES;
     if( currPage->m_AddSubPrefix && currPage->m_AddSubPrefix->GetValue() )
         netlist_opt |= NET_USE_X_PREFIX;
@@ -668,7 +671,8 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup( void )
 
     NetlistUpdateOpt();
 
-    m_Config->Write( NETLIST_USE_DEFAULT_NETNAME, GetUseDefaultNetlistName() );
+    m_config->Write( NETLIST_USE_DEFAULT_NETNAME, GetUseDefaultNetlistName() );
+    m_config->Write( NETLIST_PSPICE_USE_NETNAME,  m_spiceNetlistUseNames );
 
     // Update the new titles
     for( int ii = 0; ii < CUSTOMPANEL_COUNTMAX; ii++ )
@@ -690,7 +694,7 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup( void )
             {
                 msg = CUSTOM_NETLIST_TITLE;
                 msg << ii + 1;
-                m_Config->Write( msg, title );
+                m_config->Write( msg, title );
             }
         }
 
@@ -699,7 +703,7 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup( void )
             Command = currPage->m_CommandStringCtrl->GetValue();
             msg     = CUSTOM_NETLIST_COMMAND;
             msg << ii + 1;
-            m_Config->Write( msg, Command );
+            m_config->Write( msg, Command );
         }
     }
 }

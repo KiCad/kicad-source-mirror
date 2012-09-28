@@ -98,13 +98,13 @@ static const wxChar* plot_sheet_list( int aSize )
 
 void DIALOG_PLOT_SCHEMATIC::SetHPGLPenWidth()
 {
-    g_HPGL_Pen_Descr.m_Pen_Diam = ReturnValueFromTextCtrl( *m_penHPGLWidthCtrl );
+    m_HPGLPenSize = ReturnValueFromTextCtrl( *m_penHPGLWidthCtrl );
 
-    if( g_HPGL_Pen_Descr.m_Pen_Diam > Millimeter2iu( 2 ) )
-        g_HPGL_Pen_Descr.m_Pen_Diam = Millimeter2iu( 2 );
+    if( m_HPGLPenSize > Millimeter2iu( 2 ) )
+        m_HPGLPenSize = Millimeter2iu( 2 );
 
-    if( g_HPGL_Pen_Descr.m_Pen_Diam < Millimeter2iu( 0.01 ) )
-        g_HPGL_Pen_Descr.m_Pen_Diam = Millimeter2iu( 0.01 );
+    if( m_HPGLPenSize < Millimeter2iu( 0.01 ) )
+        m_HPGLPenSize = Millimeter2iu( 0.01 );
 }
 
 
@@ -220,10 +220,10 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     // Init :
     plotter->SetCreator( wxT( "Eeschema-HPGL" ) );
     plotter->SetFilename( aFileName );
-    plotter->SetPenSpeed( g_HPGL_Pen_Descr.m_Pen_Speed );
-    plotter->SetPenNumber( g_HPGL_Pen_Descr.m_Pen_Num );
-    plotter->SetPenDiameter( g_HPGL_Pen_Descr.m_Pen_Diam );
-    plotter->SetPenOverlap( g_HPGL_Pen_Descr.m_Pen_Diam / 2 );
+    // Pen num and pen speed are not initialized here.
+    // Default HPGL driver values are used
+    plotter->SetPenDiameter( m_HPGLPenSize );
+    plotter->SetPenOverlap( m_HPGLPenSize / 4 );
     plotter->StartPlot( output_file );
 
     plotter->SetColor( BLACK );

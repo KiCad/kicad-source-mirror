@@ -210,11 +210,11 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 int SCH_LINE::GetPenSize() const
 {
-    int pensize = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
+    int pensize = ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
 
     if( m_Layer == LAYER_BUS )
     {
-        pensize = ( m_width == 0 ) ? g_DefaultBusWidth : m_width;
+        pensize = ( m_width == 0 ) ? GetDefaultBusThickness() : m_width;
     }
 
     return pensize;

@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,7 +255,7 @@ bool LIB_FIELD::Load( LINE_READER& aLineReader, wxString& errorMsg )
 
 int LIB_FIELD::GetPenSize() const
 {
-    return ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
+    return ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
 }
 
 
@@ -274,11 +274,11 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 
     if( ( m_Attributs & TEXT_NO_VISIBLE ) && ( aColor < 0 ) )
     {
-        color = g_InvisibleItemColor;
+        color = GetInvisibleItemColor();
     }
     else if( IsSelected() && ( aColor < 0 ) )
     {
-        color = g_ItemSelectetColor;
+        color = GetItemSelectedColor();
     }
     else
     {

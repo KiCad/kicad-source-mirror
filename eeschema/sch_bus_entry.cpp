@@ -157,7 +157,7 @@ EDA_RECT SCH_BUS_ENTRY::GetBoundingBox() const
     box.SetEnd( m_End() );
 
     box.Normalize();
-    int width = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
+    int width = ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
     box.Inflate( width / 2 );
 
     return box;
@@ -166,11 +166,11 @@ EDA_RECT SCH_BUS_ENTRY::GetBoundingBox() const
 
 int SCH_BUS_ENTRY::GetPenSize() const
 {
-    int pensize = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
+    int pensize = ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
 
     if( m_Layer == LAYER_BUS )
     {
-        pensize = ( m_width == 0 ) ? g_DefaultBusWidth : m_width;
+        pensize = ( m_width == 0 ) ? GetDefaultBusThickness() : m_width;
     }
 
     return pensize;

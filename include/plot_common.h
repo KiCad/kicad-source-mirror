@@ -344,18 +344,16 @@ protected:
 class HPGL_PLOTTER : public PLOTTER
 {
 public:
-    HPGL_PLOTTER()
-    {
-    }
+    HPGL_PLOTTER();
 
     virtual PlotFormat GetPlotterType() const
     {
-	return PLOT_FORMAT_HPGL;
+        return PLOT_FORMAT_HPGL;
     }
 
     static wxString GetDefaultFileExtension()
     {
-	return wxString( wxT( "plt" ) );
+        return wxString( wxT( "plt" ) );
     }
 
     virtual bool StartPlot( FILE* fout );
@@ -375,25 +373,21 @@ public:
 
     virtual void SetPenSpeed( int speed )
     {
-        wxASSERT( outputFile == 0 );
         penSpeed = speed;
     }
 
     virtual void SetPenNumber( int number )
     {
-        wxASSERT( outputFile == 0 );
         penNumber = number;
     }
 
     virtual void SetPenDiameter( double diameter )
     {
-        wxASSERT( outputFile == 0 );
         penDiameter = diameter;
     }
 
     virtual void SetPenOverlap( double overlap )
     {
-        wxASSERT( outputFile == 0 );
         penOverlap = overlap;
     }
 

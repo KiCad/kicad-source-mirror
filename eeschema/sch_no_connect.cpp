@@ -118,7 +118,7 @@ bool SCH_NO_CONNECT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 int SCH_NO_CONNECT::GetPenSize() const
 {
-    return g_DrawDefaultLineThickness;
+    return GetDefaultLineThickness();
 }
 
 
@@ -127,7 +127,7 @@ void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 {
     int pX, pY;
     int delta = m_size.x / 2;
-    int width = g_DrawDefaultLineThickness;
+    int width = GetDefaultLineThickness();
 
     pX = m_pos.x + aOffset.x;
     pY = m_pos.y + aOffset.y;
@@ -210,7 +210,7 @@ bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
 
 bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int delta = ( ( m_size.x + g_DrawDefaultLineThickness ) / 2 ) + aAccuracy;
+    int delta = ( ( m_size.x + GetDefaultLineThickness() ) / 2 ) + aAccuracy;
 
     wxPoint dist = aPosition - m_pos;
 

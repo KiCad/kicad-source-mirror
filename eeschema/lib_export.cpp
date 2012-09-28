@@ -30,17 +30,13 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <gestfich.h>
-#include <eeschema_id.h>
-#include <richio.h>
 
 #include <general.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <class_library.h>
+#include <wildcards_and_files_ext.h>
 
 #include <wx/filename.h>
 #include <wx/wfstream.h>
@@ -59,7 +55,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     m_lastDrawItem = NULL;
 
     wxFileDialog dlg( this, _( "Import Component" ), m_lastLibImportPath,
-                      wxEmptyString, CompLibFileWildcard,
+                      wxEmptyString, SchematicLibraryFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -110,12 +106,12 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     }
 
     fn = m_component->GetName().Lower();
-    fn.SetExt( CompLibFileExtension );
+    fn.SetExt( SchematicLibraryFileExtension );
 
     title = createLib ? _( "New Library" ) : _( "Export Component" );
 
     wxFileDialog dlg( this, title, wxGetCwd(), fn.GetFullName(),
-                      CompLibFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      SchematicLibraryFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

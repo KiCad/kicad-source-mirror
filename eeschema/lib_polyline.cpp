@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -260,7 +260,7 @@ void LIB_POLYLINE::AddPoint( const wxPoint& point )
 
 int LIB_POLYLINE::GetPenSize() const
 {
-    return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    return ( m_Width == 0 ) ? GetDefaultLineThickness() : m_Width;
 }
 
 
@@ -275,7 +275,7 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
     if( aColor < 0 )                // Used normal color or selected color
     {
         if( IsSelected() )
-            color = g_ItemSelectetColor;
+            color = GetItemSelectedColor();
     }
     else
     {

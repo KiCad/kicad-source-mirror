@@ -52,7 +52,6 @@
 
 #include <boost/foreach.hpp>
 
-
 // Set this to 1 to print debugging output in alias and component destructors to verify
 // objects get cleaned up properly.
 #if defined( TRACE_DESTRUCTOR )

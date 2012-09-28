@@ -51,6 +51,7 @@
 
 #include <wx/tokenzr.h>
 
+#define NULL_STRING "_NONAME_"
 
 static LIB_COMPONENT* DummyCmp;
 

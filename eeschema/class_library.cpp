@@ -46,7 +46,6 @@
 #include <wx/regex.h>
 #include <wx/wfstream.h>
 
-
 static const wxChar* duplicate_name_msg =
 _( "Library <%s> has duplicate entry name <%s>.\n\
 This may cause some unexpected behavior when loading components into a schematic." );
@@ -588,7 +587,7 @@ bool CMP_LIBRARY::LoadHeader( LINE_READER& aLineReader )
 bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
 {
     int        lineNumber = 0;
-    char       line[LINE_BUFFER_LEN_LARGE], * name, * text;
+    char       line[8000], * name, * text;
     LIB_ALIAS* entry;
     FILE*      file;
     wxString   msg;

@@ -54,7 +54,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
     // Allocate the plotter and set the job level parameter
     PDF_PLOTTER* plotter = new PDF_PLOTTER();
-    plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
+    plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
     plotter->SetColorMode( getModeColor() );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
 

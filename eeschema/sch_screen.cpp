@@ -53,6 +53,7 @@
 
 #include <boost/foreach.hpp>
 
+#define EESCHEMA_FILE_STAMP   "EESchema"
 
 /* Default Eeschema zoom values. Limited to 17 values to keep a decent size
  * to menus
@@ -393,10 +394,10 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
         break;
 
     case LAYER_WIRE:
-        if( GetItem( aPosition, std::max( g_DrawDefaultLineThickness, 3 ), SCH_BUS_ENTRY_T ) )
+        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_ENTRY_T ) )
             return true;
 
-        if( GetItem( aPosition, std::max( g_DrawDefaultLineThickness, 3 ), SCH_JUNCTION_T ) )
+        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_JUNCTION_T ) )
             return true;
 
         if( GetPin( aPosition, NULL, true ) )
@@ -503,8 +504,8 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
             return false;
     }
 
-    if( fprintf( aFile, "EELAYER %2d %2d\n", g_LayerDescr.NumberOfLayers,
-                 g_LayerDescr.CurrentLayer ) < 0
+    // This section is not used, but written for file compatibility
+    if( fprintf( aFile, "EELAYER %d %d\n", MAX_LAYERS, 0 ) < 0
         || fprintf( aFile, "EELAYER END\n" ) < 0 )
         return false;
 

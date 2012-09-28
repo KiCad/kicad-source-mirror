@@ -43,6 +43,7 @@
 #include <libeditframe.h>
 #include <class_library.h>
 #include <template_fieldnames.h>
+#include <wildcards_and_files_ext.h>
 
 #include <dialogs/dialog_lib_new_component.h>
 
@@ -309,7 +310,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     {   // Get a new name for the library
         wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
         wxFileDialog dlg( this, _( "Component Library Name:" ), default_path,
-                          wxEmptyString, CompLibFileWildcard,
+                          wxEmptyString, SchematicLibraryFileExtension,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -320,7 +321,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
         /* The GTK file chooser doesn't return the file extension added to
          * file name so add it here. */
         if( fn.GetExt().IsEmpty() )
-            fn.SetExt( CompLibFileExtension );
+            fn.SetExt( SchematicLibraryFileExtension );
 
         wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
     }

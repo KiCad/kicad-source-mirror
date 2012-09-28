@@ -79,8 +79,8 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LOAD_PROJECT, SCH_EDIT_FRAME::OnLoadProject )
 
     EVT_MENU( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnSaveProject )
-    EVT_MENU( ID_SAVE_ONE_SHEET, SCH_EDIT_FRAME::Save_File )
-    EVT_MENU( ID_SAVE_ONE_SHEET_AS, SCH_EDIT_FRAME::Save_File )
+    EVT_MENU( ID_UPDATE_ONE_SHEET, SCH_EDIT_FRAME::Save_File )
+    EVT_MENU( ID_SAVE_ONE_SHEET_UNDER_NEW_NAME, SCH_EDIT_FRAME::Save_File )
     EVT_MENU( ID_GEN_PLOT_SCHEMATIC, SCH_EDIT_FRAME::PlotSchematic )
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
@@ -198,6 +198,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow* aParent, const wxString& aTitle,
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
     m_undoItem = NULL;
     m_hasAutoSave = true;
+    SetForceHVLines( true );
+    SetDefaultLabelSize( DEFAULT_SIZE_TEXT );
 
     CreateScreens();
 
@@ -582,11 +584,11 @@ void SCH_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 
 void SCH_EDIT_FRAME::OnUpdateBusOrientation( wxUpdateUIEvent& aEvent )
 {
-    wxString tool_tip = g_HVLines ?
+    wxString tool_tip = GetForceHVLines() ?
                         _( "Draw wires and buses in any direction" ) :
                         _( "Draw horizontal and vertical wires and buses only" );
 
-    aEvent.Check( g_HVLines );
+    aEvent.Check( GetForceHVLines() );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_BUS_WIRES_ORIENT, tool_tip );
 }
 
@@ -851,7 +853,7 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData )
 {
     GetScreen()->Draw( m_canvas, aDC, GR_DEFAULT_DRAWMODE );
-    TraceWorkSheet( aDC, GetScreen(), g_DrawDefaultLineThickness, IU_PER_MILS,
+    TraceWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS,
                     GetScreenDesc() );
 }
 

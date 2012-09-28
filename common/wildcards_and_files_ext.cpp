@@ -32,6 +32,10 @@
  * file extensions and wildcards used in kicad.
  */
 
+const wxString SchematicSymbolFileExtension( wxT( "sym" ) );
+const wxString SchematicLibraryFileExtension( wxT( "lib" ) );
+const wxString SchematicBackupFileExtension( wxT( "bak" ) );
+
 const wxString VrmlFileExtension( wxT( "wrl" ) );
 
 const wxString ProjectFileExtension( wxT( "pro" ) );
@@ -51,6 +55,8 @@ const wxString FootprintPlaceFileExtension( wxT( "pos" ) );
 // These strings are wildcards for file selection dialogs.
 // Because thes are static, one should explicitely call wxGetTranslation
 // to display them translated.
+const wxString SchematicSymbolFileWildcard( _( "KiCad drawing symbol file (*.sym)|*.sym" ) );
+const wxString SchematicLibraryFileWildcard( _( "KiCad component library file (*.lib)|*.lib" ) );
 const wxString ProjectFileWildcard( _( "KiCad project files (*.pro)|*.pro" ) );
 const wxString SchematicFileWildcard( _( "KiCad schematic files (*.sch)|*.sch" ) );
 const wxString NetlistFileWildcard( _( "KiCad netlist files (*.net)|*.net" ) );

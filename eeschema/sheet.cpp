@@ -169,7 +169,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         if( renameFile )
         {
             aSheet->GetScreen()->SetFileName( fileName.GetFullName() );
-            SaveEEFile( aSheet->GetScreen(), FILE_SAVE_AS );
+            SaveEEFile( aSheet->GetScreen() );
 
             // If the the associated screen is shared by more than one sheet, remove the
             // screen and reload the file to a new screen.  Failure to do this will trash

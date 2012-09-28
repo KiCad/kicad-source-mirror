@@ -142,6 +142,10 @@ private:
     wxString              m_netListerCommand;   ///< Command line to call a custom net list
                                                 ///< generator.
 
+    bool                  m_forceHVLines;       ///< force H or V directions for wires, bus, line
+    int                   m_defaultLabelSize;   ///< size of a new label
+
+
     /// An index to the last find item in the found items list #m_foundItems.
     int m_foundItemIndex;
 
@@ -198,6 +202,12 @@ public:
     SCH_SCREEN* GetScreen() const;                  // overload SCH_BASE_FRAME
 
     void OnCloseWindow( wxCloseEvent& Event );
+
+    bool GetDefaultLabelSize() const { return m_defaultLabelSize; }
+    void SetDefaultLabelSize( int aLabelSize ) { m_defaultLabelSize = aLabelSize; }
+
+    bool GetForceHVLines() const { return m_forceHVLines; }
+    void SetForceHVLines( bool aForceHVdirection ) { m_forceHVLines = aForceHVdirection; }
 
     bool GetShowAllPins() const { return m_showAllPins; }
 
@@ -658,14 +668,16 @@ public:
      *
      * @param aScreen A pointer to the SCH_SCREEN object to save.  A NULL pointer saves
      *                the current screen.
-     * @param aSaveType Controls how the file is to be saved.
+     * @param aSaveUnderNewName Controls how the file is to be saved;: using  previous name
+     *                          or under a new name .
      * @param aCreateBackupFile Creates a back of the file associated with \a aScreen
-     *                          if true.  Helper definitions #CREATE_BACKUP_FILE and
+     *                          if true.
+     *                           Helper definitions #CREATE_BACKUP_FILE and
      *                          #NO_BACKUP_FILE are defined for improved code readability.
      * @return True if the file has been saved.
      */
     bool SaveEEFile( SCH_SCREEN* aScreen,
-                     int         aSaveType,
+                     bool        aSaveUnderNewName = false,
                      bool        aCreateBackupFile = CREATE_BACKUP_FILE );
 
     // General search:

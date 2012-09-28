@@ -83,8 +83,9 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     }
 
     wxPoint endpos = aPanel->GetScreen()->GetCrossHairPosition();
+    SCH_EDIT_FRAME * frame = ( SCH_EDIT_FRAME * ) aPanel->GetParent();
 
-    if( g_HVLines ) /* Coerce the line to vertical or horizontal one: */
+    if( frame->GetForceHVLines() ) /* Coerce the line to vertical or horizontal one: */
         ComputeBreakPoint( (SCH_LINE*) s_wires.GetLast()->Back(), endpos );
     else
         ( (SCH_LINE*) s_wires.GetLast() )->SetEndPoint( endpos );
@@ -152,7 +153,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 
         // We need 2 segments to go from a given start pin to an end point when the horizontal
         // and vertical lines only switch is on.
-        if( g_HVLines )
+        if( GetForceHVLines() )
         {
             nextSegment = new SCH_LINE( *segment );
             nextSegment->SetFlags( IS_NEW );
@@ -170,7 +171,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         // Be aware prevSegment can be null when the horizontal and vertical lines only switch is off
         // when we create the first segment.
 
-        if( !g_HVLines )
+        if( !GetForceHVLines() )
         {
             // If only one segment is needed and it has a zero length, do not create a new one.
             if( segment->IsNull() )
@@ -356,7 +357,7 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
         int idx = polyLine->GetCornerCount() - 1;
         wxPoint pt = (*polyLine)[idx];
 
-        if( g_HVLines )
+        if( GetForceHVLines() )
         {
             /* Coerce the line to vertical or horizontal one: */
             if( std::abs( endpos.x - pt.x ) < std::abs( endpos.y - pt.y ) )

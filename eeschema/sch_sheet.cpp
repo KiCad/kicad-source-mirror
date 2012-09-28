@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -524,7 +524,7 @@ SCH_SHEET_PIN* SCH_SHEET::GetPin( const wxPoint& aPosition )
 
 int SCH_SHEET::GetPenSize() const
 {
-    return g_DrawDefaultLineThickness;
+    return GetDefaultLineThickness();
 }
 
 
@@ -1146,7 +1146,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     size = wxSize( m_sheetNameSize, m_sheetNameSize );
 
     //pos  = m_pos; pos.y -= 4;
-    thickness = g_DrawDefaultLineThickness;
+    thickness = GetDefaultLineThickness();
     thickness = Clamp_Text_PenSize( thickness, size, false );
 
     aPlotter->SetColor( ReturnLayerColor( LAYER_SHEETNAME ) );
@@ -1159,7 +1159,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     /*Draw texts : FileName */
     Text = GetFileName();
     size = wxSize( m_fileNameSize, m_fileNameSize );
-    thickness = g_DrawDefaultLineThickness;
+    thickness = GetDefaultLineThickness();
     thickness = Clamp_Text_PenSize( thickness, size, false );
 
     aPlotter->SetColor( ReturnLayerColor( LAYER_SHEETFILENAME ) );

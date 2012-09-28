@@ -55,7 +55,66 @@
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
-int g_DefaultBusWidth = 9;
+static EDA_COLOR_T s_layerColor[MAX_LAYERS];
+
+// The width to draw busses that do not have a specific width
+static int s_defaultBusThickness;
+
+int GetDefaultBusThickness()
+{
+    return s_defaultBusThickness;
+}
+
+void SetDefaultBusThickness( int aThickness)
+{
+    if( aThickness >=1 )
+        s_defaultBusThickness = aThickness;
+    else
+        s_defaultBusThickness = 1;
+}
+
+/*
+ * Default line (in Eeschema units) thickness used to draw/plot items having a
+ * default thickness line value (i.e. = 0 ).
+ */
+static int s_drawDefaultLineThickness;
+
+int GetDefaultLineThickness()
+{
+    return s_drawDefaultLineThickness;
+}
+
+void SetDefaultLineThickness( int aThickness)
+{
+    if( aThickness >=1 )
+        s_drawDefaultLineThickness = aThickness;
+    else
+        s_drawDefaultLineThickness = 1;
+}
+
+EDA_COLOR_T ReturnLayerColor( int aLayer )
+{
+    return s_layerColor[aLayer];
+}
+
+void SetLayerColor( EDA_COLOR_T aColor, int aLayer )
+{
+    s_layerColor[aLayer] = aColor;
+}
+
+// Color to draw selected items
+EDA_COLOR_T GetItemSelectedColor()
+{
+    return BROWN;
+}
+
+// Color to draw items flagged invisible, in libedit (they are invisible
+// in Eeschema
+EDA_COLOR_T GetInvisibleItemColor()
+{
+    return DARKGRAY;
+}
+
 
 void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
 {
@@ -208,9 +267,9 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     dlg.SetUnits( units, g_UserUnit );
     dlg.SetGridSizes( grid_list, GetScreen()->GetGridId() );
-    dlg.SetBusWidth( g_DefaultBusWidth );
-    dlg.SetLineWidth( g_DrawDefaultLineThickness );
-    dlg.SetTextSize( g_DefaultTextLabelSize );
+    dlg.SetBusWidth( GetDefaultBusThickness() );
+    dlg.SetLineWidth( GetDefaultLineThickness() );
+    dlg.SetTextSize( GetDefaultLabelSize() );
     dlg.SetRepeatHorizontal( g_RepeatStep.x );
     dlg.SetRepeatVertical( g_RepeatStep.y );
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
@@ -220,7 +279,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetEnableMiddleButtonPan( m_canvas->GetEnableMiddleButtonPan() );
     dlg.SetMiddleButtonPanLimited( m_canvas->GetMiddleButtonPanLimited() );
     dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
-    dlg.SetEnableHVBusOrientation( g_HVLines );
+    dlg.SetEnableHVBusOrientation( GetForceHVLines() );
     dlg.SetShowPageLimits( g_ShowPageLimits );
     dlg.Layout();
     dlg.Fit();
@@ -242,9 +301,9 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 
     GetScreen()->SetGrid( grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
 
-    g_DefaultBusWidth = dlg.GetBusWidth();
-    g_DrawDefaultLineThickness = dlg.GetLineWidth();
-    g_DefaultTextLabelSize = dlg.GetTextSize();
+    SetDefaultBusThickness( dlg.GetBusWidth() );
+    SetDefaultLineThickness( dlg.GetLineWidth() );
+    SetDefaultLabelSize( dlg.GetTextSize() );
     g_RepeatStep.x = dlg.GetRepeatHorizontal();
     g_RepeatStep.y = dlg.GetRepeatVertical();
     g_RepeatDeltaLabel = dlg.GetRepeatLabel();
@@ -254,7 +313,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     m_canvas->SetEnableMiddleButtonPan( dlg.GetEnableMiddleButtonPan() );
     m_canvas->SetMiddleButtonPanLimited( dlg.GetMiddleButtonPanLimited() );
     m_canvas->SetEnableAutoPan( dlg.GetEnableAutoPan() );
-    g_HVLines = dlg.GetEnableHVBusOrientation();
+    SetForceHVLines( dlg.GetEnableHVBusOrientation() );
     g_ShowPageLimits = dlg.GetShowPageLimits();
 
     wxString templateFieldName;
@@ -295,17 +354,6 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
                                                          &m_netListFormat) );
 
-    // NOTE: Left as global until supporting code  can be fixed.
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLSpd" ),
-                                                      &g_HPGL_Pen_Descr.m_Pen_Speed,
-                                                      20, 2, 45 ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLDm" ),
-                                                      &g_HPGL_Pen_Descr.m_Pen_Diam,
-                                                      15, 1, 150 ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLNum" ),
-                                                      &g_HPGL_Pen_Descr.m_Pen_Num,
-                                                      1, 1, 8 ) );
-
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptD_X" ),
                                                       &g_RepeatStep.x,
                                                       0, -1000, +1000 ) );
@@ -316,8 +364,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
                                                       &g_RepeatDeltaLabel,
                                                       1, -10, +10 ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
-                                                      &g_DefaultTextLabelSize,
-                                                      DEFAULT_SIZE_TEXT, 0,
+                                                      &m_defaultLabelSize,
+                                                      DEFAULT_SIZE_TEXT, 5,
                                                       1000 ) );
 
     return m_projectFileParams;
@@ -402,7 +450,6 @@ static const wxString ReplaceStringEntry( wxT( "LastReplaceString" ) );
 static const wxString FindStringHistoryEntry( wxT( "FindStringHistoryList%d" ) );
 static const wxString ReplaceStringHistoryEntry( wxT( "ReplaceStringHistoryList%d" ) );
 static const wxString FieldNamesEntry( wxT( "FieldNames" ) );
-static const wxString SpiceNetNamesEntry( wxT( "SpiceUseNetNames" ) );
 static const wxString SimulatorCommandEntry( wxT( "SimCmdLine" ) );
 
 
@@ -414,80 +461,80 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
                                                    (int*)&g_UserUnit, MILLIMETRES ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColWire" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_WIRE],
+                                                        &s_layerColor[LAYER_WIRE],
                                                         GREEN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBus" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_BUS],
+                                                        &s_layerColor[LAYER_BUS],
                                                         BLUE ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorConn" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_JUNCTION],
+                                                        &s_layerColor[LAYER_JUNCTION],
                                                         GREEN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLlab" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_LOCLABEL],
+                                                        &s_layerColor[LAYER_LOCLABEL],
                                                         BLACK ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorHlab" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_HIERLABEL],
+                                                        &s_layerColor[LAYER_HIERLABEL],
                                                         BROWN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGbllab" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_GLOBLABEL],
+                                                        &s_layerColor[LAYER_GLOBLABEL],
                                                         RED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPinF" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_PINFUN],
+                                                        &s_layerColor[LAYER_PINFUN],
                                                         MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColPinN" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_PINNUM],
+                                                        &s_layerColor[LAYER_PINNUM],
                                                         RED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPNam" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_PINNAM],
+                                                        &s_layerColor[LAYER_PINNAM],
                                                         CYAN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorField" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_FIELDS],
+                                                        &s_layerColor[LAYER_FIELDS],
                                                         MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorRef" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_REFERENCEPART],
+                                                        &s_layerColor[LAYER_REFERENCEPART],
                                                         CYAN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorValue" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_VALUEPART],
+                                                        &s_layerColor[LAYER_VALUEPART],
                                                         CYAN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNote" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_NOTES],
+                                                        &s_layerColor[LAYER_NOTES],
                                                         LIGHTBLUE ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBody" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_DEVICE],
+                                                        &s_layerColor[LAYER_DEVICE],
                                                         RED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorBodyBg" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_DEVICE_BACKGROUND],
+                                                        &s_layerColor[LAYER_DEVICE_BACKGROUND],
                                                         LIGHTYELLOW ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNetN" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_NETNAM],
+                                                        &s_layerColor[LAYER_NETNAM],
                                                         DARKGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPin" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_PIN],
+                                                        &s_layerColor[LAYER_PIN],
                                                         RED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheet" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_SHEET],
+                                                        &s_layerColor[LAYER_SHEET],
                                                         MAGENTA ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
                                                         wxT( "ColorSheetFileName" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_SHEETFILENAME],
+                                                        &s_layerColor[LAYER_SHEETFILENAME],
                                                         BROWN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetName" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_SHEETNAME],
+                                                        &s_layerColor[LAYER_SHEETNAME],
                                                         CYAN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorSheetLab" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_SHEETLABEL],
+                                                        &s_layerColor[LAYER_SHEETLABEL],
                                                         BROWN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNoCo" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_NOCONNECT],
+                                                        &s_layerColor[LAYER_NOCONNECT],
                                                         BLUE ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcW" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_ERC_WARN],
+                                                        &s_layerColor[LAYER_ERC_WARN],
                                                         GREEN ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorErcE" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_ERC_ERR],
+                                                        &s_layerColor[LAYER_ERC_ERR],
                                                         RED ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorGrid" ),
-                                                        &g_LayerDescr.LayerColor[LAYER_GRID],
+                                                        &s_layerColor[LAYER_GRID],
                                                         DARKGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintMonochrome" ),
                                                     &m_printMonochrome, true ) );
@@ -510,13 +557,13 @@ void SCH_EDIT_FRAME::LoadSettings()
 
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
-    // This is required until someone gets rid of the global variable g_LayerDescription().
-    m_GridColor = g_LayerDescr.LayerColor[LAYER_GRID];
+    // This is required until someone gets rid of the global variable s_layerColor.
+    m_GridColor = ReturnLayerColor( LAYER_GRID );
 
-    g_DefaultBusWidth = cfg->Read( DefaultBusWidthEntry, (long) 8 );
-    g_DrawDefaultLineThickness = cfg->Read( DefaultDrawLineWidthEntry,(long) 6 );
+    SetDefaultBusThickness( cfg->Read( DefaultBusWidthEntry, 12l ) );
+    SetDefaultLineThickness( cfg->Read( DefaultDrawLineWidthEntry, 6l ) );
     cfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
-    cfg->Read( HorzVertLinesOnlyEntry, &g_HVLines, true );
+    cfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
 
     // Load print preview window session settings.
     cfg->Read( PreviewFramePositionXEntry, &tmp, -1 );
@@ -539,7 +586,6 @@ void SCH_EDIT_FRAME::LoadSettings()
     m_printDialogSize.SetHeight( (int) tmp );
 
     // Load netlists options:
-    cfg->Read( SpiceNetNamesEntry,  &g_OptNetListUseNames, false );
     cfg->Read( SimulatorCommandEntry, &m_simulatorCommand );
 
     // Load find dialog session setting.
@@ -605,10 +651,10 @@ void SCH_EDIT_FRAME::SaveSettings()
 
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
-    cfg->Write( DefaultBusWidthEntry, (long) g_DefaultBusWidth );
-    cfg->Write( DefaultDrawLineWidthEntry, (long) g_DrawDefaultLineThickness );
+    cfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
+    cfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
     cfg->Write( ShowHiddenPinsEntry, m_showAllPins );
-    cfg->Write( HorzVertLinesOnlyEntry, g_HVLines );
+    cfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
 
     // Save print preview window session settings.
     cfg->Write( PreviewFramePositionXEntry, m_previewPosition.x );
@@ -623,7 +669,6 @@ void SCH_EDIT_FRAME::SaveSettings()
     cfg->Write( PrintDialogHeightEntry, m_printDialogSize.GetHeight() );
 
     // Save netlists options:
-    cfg->Write( SpiceNetNamesEntry,  g_OptNetListUseNames );
     cfg->Write( SimulatorCommandEntry, m_simulatorCommand );
 
     // Save find dialog session setting.

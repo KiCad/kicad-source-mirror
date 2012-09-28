@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -361,7 +361,7 @@ int SCH_TEXT::GetPenSize() const
         if( m_Bold  )
             pensize = GetPenSizeForBold( m_Size.x );
         else
-            pensize = g_DrawDefaultLineThickness;
+            pensize = GetDefaultLineThickness();
     }
 
     // Clip pen size for small texts:
@@ -374,7 +374,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
                      GR_DRAWMODE DrawMode, EDA_COLOR_T Color )
 {
     EDA_COLOR_T color;
-    int         linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
+    int         linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -609,7 +609,7 @@ EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
     // We must pass the effective text thickness to GetTextBox
     // when calculating the bounding box
-    int linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
+    int linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -893,7 +893,7 @@ EDA_RECT SCH_LABEL::GetBoundingBox() const
 
     x = m_Pos.x;
     y = m_Pos.y;
-    int width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
+    int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
     length = LenSize( m_Text );
     height = m_Size.y + width;
     dx     = dy = 0;
@@ -1109,7 +1109,7 @@ void SCH_GLOBALLABEL::Rotate( wxPoint aPosition )
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
-    int     width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
+    int     width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
 
     width = Clamp_Text_PenSize( width, m_Size, m_Bold );
     int     HalfSize = m_Size.x / 2;
@@ -1206,7 +1206,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     GRSetDrawMode( DC, DrawMode );
 
-    int linewidth = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
+    int linewidth = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
     EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
@@ -1231,7 +1231,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
     int HalfSize  = m_Size.y / 2;
-    int linewidth = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
+    int linewidth = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -1327,7 +1327,7 @@ EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     y  = m_Pos.y;
     dx = dy = 0;
 
-    int width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
+    int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
     height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXTMARGE;
 
     // text X size add height for triangular shapes(bidirectional)
@@ -1533,7 +1533,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 {
     static std::vector <wxPoint> Poly;
     EDA_COLOR_T color;
-    int         linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
+    int         linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
@@ -1596,7 +1596,7 @@ EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     y  = m_Pos.y;
     dx = dy = 0;
 
-    int width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
+    int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
     height = m_Size.y + width + 2 * TXTMARGE;
     length = LenSize( m_Text )
              + height                 // add height for triangular shapes
@@ -1643,7 +1643,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
 
-    int     width = std::max( m_Thickness, g_DrawDefaultLineThickness );
+    int     width = std::max( m_Thickness, GetDefaultLineThickness() );
 
     int     ii = m_Size.x + TXTMARGE + width;
 

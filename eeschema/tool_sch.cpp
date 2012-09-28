@@ -306,7 +306,6 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     // set icon paddings
     m_optionsToolBar->SetToolBorderPadding(2); // padding
     m_optionsToolBar->SetToolSeparation(0);
-    //m_optionsToolBar->SetMargins(4,0); // margins width and height
 
     m_optionsToolBar->Realize();
 }
@@ -327,7 +326,7 @@ void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_BUS_WIRES_ORIENT:
-        g_HVLines = m_optionsToolBar->GetToolToggled( id );
+        SetForceHVLines( m_optionsToolBar->GetToolToggled( id ) );
         break;
 
     default:

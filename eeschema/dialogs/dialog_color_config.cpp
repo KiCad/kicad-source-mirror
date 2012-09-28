@@ -167,7 +167,7 @@ void DIALOG_COLOR_CONFIG::CreateControls()
             wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
 
             iconDC.SelectObject( bitmap );
-            color = currentColors[ buttons->m_Layer ] = g_LayerDescr.LayerColor[ buttons->m_Layer ];
+            color = currentColors[ buttons->m_Layer ] = ReturnLayerColor( buttons->m_Layer );
             iconDC.SetPen( *wxBLACK_PEN );
             wxBrush brush;
             brush.SetColour( ColorRefs[ color ].m_Red,
@@ -292,15 +292,15 @@ bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
 
     for( int ii = 0;  ii < MAX_LAYERS;  ii++ )
     {
-        g_LayerDescr.LayerColor[ ii ] = currentColors[ ii ];
+        SetLayerColor( currentColors[ ii ], ii );
 
-        if( g_DrawBgColor == g_LayerDescr.LayerColor[ ii ] )
+        if( g_DrawBgColor == ReturnLayerColor( ii ) )
             warning = true;
     }
 
-    m_Parent->SetGridColor( g_LayerDescr.LayerColor[LAYER_GRID] );
+    m_Parent->SetGridColor( ReturnLayerColor( LAYER_GRID ) );
 
-    if( g_DrawBgColor == g_LayerDescr.LayerColor[ LAYER_GRID ] )
+    if( g_DrawBgColor == ReturnLayerColor( LAYER_GRID ) )
         warning = true;
 
     return warning;
@@ -332,35 +332,4 @@ void DIALOG_COLOR_CONFIG::OnApplyClick( wxCommandEvent& event )
 {
     UpdateColorsSettings();
     m_Parent->GetCanvas()->Refresh();
-}
-
-
-void SeedLayers()
-{
-    LayerStruct* LayerPointer = &g_LayerDescr;
-    int          pt;
-
-    LayerPointer->CommonColor = WHITE;
-    LayerPointer->Flags = 0;
-    pt = 0;
-    LayerPointer->CurrentWidth = 1;
-
-    /* seed Up the Layer colours, set all user layers off */
-    for( pt = 0; pt < MAX_LAYERS; pt++ )
-    {
-        LayerPointer->LayerStatus[pt] = 0;
-        LayerPointer->LayerColor[pt]  = DARKGRAY;
-    }
-
-    LayerPointer->NumberOfLayers = pt - 1;
-    /* Specific colors: update by reading the config. */
-}
-
-
-EDA_COLOR_T ReturnLayerColor( int Layer )
-{
-    if( g_LayerDescr.Flags == 0 )
-        return (EDA_COLOR_T) g_LayerDescr.LayerColor[Layer];
-    else
-        return (EDA_COLOR_T) g_LayerDescr.CommonColor;
 }

@@ -25,6 +25,7 @@
 
 /**
  * @file eeschema.cpp
+ * @brief the main file
  */
 
 #include <fctsys.h>
@@ -33,7 +34,6 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <eda_dde.h>
-#include <id.h>
 #include <wxEeschemaStruct.h>
 #include <eda_text.h>
 
@@ -48,44 +48,10 @@
 
 
 // Global variables
-bool      g_OptNetListUseNames; /* true to use names rather than net
-                                 * The numbers (PSPICE netlist only) */
-wxSize    g_RepeatStep;
-int       g_RepeatDeltaLabel;
-
-bool                     g_HVLines = true;      // Bool: force H or V
-                                                // directions (Wires, Bus ..)
-
-int g_DefaultTextLabelSize = DEFAULT_SIZE_TEXT;
-
-HPGL_Pen_Descr_Struct g_HPGL_Pen_Descr;
-
-SCH_SHEET*     g_RootSheet = NULL;
-
-wxString       g_NetCmpExtBuffer( wxT( "cmp" ) );
-
-const wxString SymbolFileExtension( wxT( "sym" ) );
-const wxString CompLibFileExtension( wxT( "lib" ) );
-const wxString g_SchematicBackupFileExtension( wxT( "bak" ) );
-
-const wxString SymbolFileWildcard( wxT( "KiCad drawing symbol file (*.sym)|*.sym" ) );
-const wxString CompLibFileWildcard( wxT( "KiCad component library file (*.lib)|*.lib" ) );
-
-LayerStruct g_LayerDescr;            /* layer colors. */
-
-int         g_DrawDefaultLineThickness = 6; /* Default line thickness in
-                                             * Eeschema units used to
-                                             * draw/plot items having a
-                                             * default thickness line value
-                                             * (i.e. = 0 ). 0 = single pixel
-                                             * line width */
-
-// Color to draw selected items
-EDA_COLOR_T g_ItemSelectetColor = BROWN;
-
-// Color to draw items flagged invisible, in libedit (they are invisible
-// in Eeschema
-EDA_COLOR_T g_InvisibleItemColor = DARKGRAY;
+wxSize  g_RepeatStep;
+int     g_RepeatDeltaLabel;
+int     g_DefaultBusWidth;
+SCH_SHEET*  g_RootSheet = NULL;
 
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 
@@ -135,8 +101,10 @@ bool EDA_APP::OnInit()
     if( argc > 1 )
         filename = argv[1];
 
-    // Init Eeschema
-    SeedLayers();
+    // Give a default colour for all layers
+    // (actual color will beinitialized by config)
+    for( int ii = 0; ii < MAX_LAYERS; ii++ )
+        SetLayerColor( DARKGRAY, ii );
 
     // read current setup and reopen last directory if no filename to open in
     // command line

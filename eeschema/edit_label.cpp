@@ -102,7 +102,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     textItem->m_Bold = lastTextBold;
     textItem->m_Italic = lastTextItalic;
     textItem->SetOrientation( lastTextOrientation );
-    textItem->m_Size.x = textItem->m_Size.y = g_DefaultTextLabelSize;
+    textItem->m_Size.x = textItem->m_Size.y = GetDefaultLabelSize();
     textItem->SetFlags( IS_NEW | IS_MOVED );
 
     textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );

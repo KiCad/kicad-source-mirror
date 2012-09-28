@@ -45,10 +45,10 @@ class SCH_EDIT_FRAME;
 class SCH_TEXT;
 
 
-class DialogLabelEditor : public DialogLabelEditor_Base
+class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
 {
 public:
-    DialogLabelEditor( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
+    DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
 
 private:
     void InitDialog( );
@@ -72,14 +72,14 @@ void SCH_EDIT_FRAME::EditSchematicText( SCH_TEXT* aTextItem )
     if( aTextItem == NULL )
         return;
 
-    DialogLabelEditor dialog( this, aTextItem );
+    DIALOG_LABEL_EDITOR dialog( this, aTextItem );
 
     dialog.ShowModal();
 }
 
 
-DialogLabelEditor::DialogLabelEditor( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
-    DialogLabelEditor_Base( aParent )
+DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
+    DIALOG_LABEL_EDITOR_BASE( aParent )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -94,7 +94,7 @@ DialogLabelEditor::DialogLabelEditor( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextIt
 }
 
 
-void DialogLabelEditor::InitDialog()
+void DIALOG_LABEL_EDITOR::InitDialog()
 {
     wxString msg;
     bool multiLine = false;
@@ -135,7 +135,7 @@ void DialogLabelEditor::InitDialog()
     default:
         SetTitle( _( "Text Properties" ) );
         m_textLabel->Disconnect( wxEVT_COMMAND_TEXT_ENTER,
-                                 wxCommandEventHandler ( DialogLabelEditor::OnEnterKey ),
+                                 wxCommandEventHandler ( DIALOG_LABEL_EDITOR::OnEnterKey ),
                                  NULL, this );
         break;
     }
@@ -214,7 +214,7 @@ void DialogLabelEditor::InitDialog()
  * wxTE_PROCESS_ENTER  event handler for m_textLabel
  */
 
-void DialogLabelEditor::OnEnterKey( wxCommandEvent& aEvent )
+void DIALOG_LABEL_EDITOR::OnEnterKey( wxCommandEvent& aEvent )
 {
     TextPropertiesAccept( aEvent );
 }
@@ -224,7 +224,7 @@ void DialogLabelEditor::OnEnterKey( wxCommandEvent& aEvent )
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
  */
 
-void DialogLabelEditor::OnOkClick( wxCommandEvent& aEvent )
+void DIALOG_LABEL_EDITOR::OnOkClick( wxCommandEvent& aEvent )
 {
     TextPropertiesAccept( aEvent );
 }
@@ -234,14 +234,14 @@ void DialogLabelEditor::OnOkClick( wxCommandEvent& aEvent )
  * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
  */
 
-void DialogLabelEditor::OnCancelClick( wxCommandEvent& aEvent )
+void DIALOG_LABEL_EDITOR::OnCancelClick( wxCommandEvent& aEvent )
 {
     m_Parent->GetCanvas()->MoveCursorToCrossHair();
     EndModal( wxID_CANCEL );
 }
 
 
-void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
+void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
 {
     wxString text;
     int      value;
@@ -289,7 +289,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     /* Make the text size as new default size if it is a new text */
     if( m_CurrentText->IsNew() )
-        g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
+        m_Parent->SetDefaultLabelSize( m_CurrentText->m_Size.x );
 
     m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
     m_Parent->GetCanvas()->MoveCursorToCrossHair();

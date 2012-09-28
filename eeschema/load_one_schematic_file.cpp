@@ -35,7 +35,7 @@
 #include <richio.h>
 
 #include <general.h>
-#include <protos.h>
+//#include <protos.h>
 #include <sch_bus_entry.h>
 #include <sch_marker.h>
 #include <sch_junction.h>
@@ -46,6 +46,7 @@
 #include <sch_text.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
+#include <wildcards_and_files_ext.h>
 
 
 bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* Window );
@@ -55,10 +56,10 @@ static void LoadLayers( LINE_READER* aLine );
 
 bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName )
 {
-    char            Name1[256];
+    char            name1[256];
     bool            itemLoaded = false;
     SCH_ITEM*       item;
-    wxString        MsgDiag;            // Error and log messages
+    wxString        msgDiag;            // Error and log messages
     char*           line;
     wxFileName      fn;
 
@@ -69,7 +70,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
         return false;
 
     fn = aFullFileName;
-    CheckForAutoSaveFile( fn, g_SchematicBackupFileExtension );
+    CheckForAutoSaveFile( fn, SchematicBackupFileExtension );
 
     wxLogTrace( traceAutoSave, wxT( "Loading schematic file " ) + aFullFileName );
 
@@ -80,23 +81,23 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 
     if( ( f = wxFopen( aFullFileName, wxT( "rt" ) ) ) == NULL )
     {
-        MsgDiag = _( "Failed to open " ) + aFullFileName;
-        DisplayError( this, MsgDiag );
+        msgDiag = _( "Failed to open " ) + aFullFileName;
+        DisplayError( this, msgDiag );
         return false;
     }
 
     // reader now owns the open FILE.
     FILE_LINE_READER    reader( f, aFullFileName );
 
-    MsgDiag = _( "Loading " ) + aScreen->GetFileName();
-    PrintMsg( MsgDiag );
+    msgDiag = _( "Loading " ) + aScreen->GetFileName();
+    PrintMsg( msgDiag );
 
     if( !reader.ReadLine()
         || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING,
                     sizeof( SCHEMATIC_HEAD_STRING ) - 1 ) != 0 )
     {
-        MsgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
-        DisplayError( this, MsgDiag );
+        msgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
+        DisplayError( this, msgDiag );
         return false;
     }
 
@@ -113,9 +114,9 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
 
     if( version > EESCHEMA_VERSION )
     {
-        MsgDiag = aFullFileName + _( " was created by a more recent \
+        msgDiag = aFullFileName + _( " was created by a more recent \
 version of Eeschema and may not load correctly. Please consider updating!" );
-        DisplayInfoMessage( this, MsgDiag );
+        DisplayInfoMessage( this, msgDiag );
     }
 
 #if 0
@@ -132,8 +133,8 @@ again." );
 
     if( !reader.ReadLine() || strncmp( reader, "LIBS:", 5 ) != 0 )
     {
-        MsgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
-        DisplayError( this, MsgDiag );
+        msgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
+        DisplayError( this, msgDiag );
         return false;
     }
 
@@ -158,7 +159,7 @@ again." );
             else if( line[1] == 'S' )
                 item = new SCH_SHEET();
             else if( line[1] == 'D' )
-                itemLoaded = ReadSchemaDescr( &reader, MsgDiag, aScreen );
+                itemLoaded = ReadSchemaDescr( &reader, msgDiag, aScreen );
             else if( line[1] == 'B' )
                 item = new SCH_BITMAP();
             break;
@@ -193,17 +194,17 @@ again." );
             break;
 
         case 'T':                       // It is a text item.
-            if( sscanf( sline, "%s", Name1 ) != 1 )
+            if( sscanf( sline, "%s", name1 ) != 1 )
             {
-                MsgDiag.Printf( _( "Eeschema file text load error at line %d" ),
+                msgDiag.Printf( _( "Eeschema file text load error at line %d" ),
                                 reader.LineNumber() );
                 itemLoaded = false;
             }
-            else if( Name1[0] == 'L' )
+            else if( name1[0] == 'L' )
                 item = new SCH_LABEL();
-            else if( Name1[0] == 'G' && version > 1 )
+            else if( name1[0] == 'G' && version > 1 )
                 item = new SCH_GLOBALLABEL();
-            else if( (Name1[0] == 'H') || (Name1[0] == 'G' && version == 1) )
+            else if( (name1[0] == 'H') || (name1[0] == 'G' && version == 1) )
                 item = new SCH_HIERLABEL();
             else
                 item = new SCH_TEXT();
@@ -211,14 +212,14 @@ again." );
 
         default:
             itemLoaded = false;
-            MsgDiag.Printf( _( "Eeschema file undefined object at line %d, aborted" ),
+            msgDiag.Printf( _( "Eeschema file undefined object at line %d, aborted" ),
                             reader.LineNumber() );
-            MsgDiag << wxT( "\n" ) << FROM_UTF8( line );
+            msgDiag << wxT( "\n" ) << FROM_UTF8( line );
         }
 
         if( item )
         {
-            itemLoaded = item->Load( reader, MsgDiag );
+            itemLoaded = item->Load( reader, msgDiag );
 
             if( !itemLoaded )
             {
@@ -232,7 +233,7 @@ again." );
 
         if( !itemLoaded )
         {
-            DisplayError( this, MsgDiag );
+            DisplayError( this, msgDiag );
             break;
         }
     }
@@ -243,8 +244,8 @@ again." );
 
     aScreen->TestDanglingEnds();
 
-    MsgDiag = _( "Done Loading " ) + aScreen->GetFileName();
-    PrintMsg( MsgDiag );
+    msgDiag = _( "Done Loading " ) + aScreen->GetFileName();
+    PrintMsg( msgDiag );
 
     return true;    // Although it may be that file is only partially loaded.
 }
@@ -252,28 +253,12 @@ again." );
 
 static void LoadLayers( LINE_READER* aLine )
 {
-    int  Number;
-
-    //int Mode,Color,Layer;
-    char Name[256];
-
-    aLine->ReadLine();
-
-    sscanf( *aLine, "%s %d %d", Name, &Number, &g_LayerDescr.CurrentLayer );
-
-    if( strcmp( Name, "EELAYER" ) !=0 )
-    {
-        /* error : init par default */
-        Number = MAX_LAYER;
-    }
-
-    if( Number <= 0 )
-        Number = MAX_LAYER;
-
-    if( Number > MAX_LAYER )
-        Number = MAX_LAYER;
-
-    g_LayerDescr.NumberOfLayers = Number;
+    /* read the layer descr
+     * legacy code, not actually used, so this section is just skipped
+     * read lines like
+     * EELAYER 25  0
+     * EELAYER END
+     */
 
     while( aLine->ReadLine() )
     {

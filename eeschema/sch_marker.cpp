@@ -105,14 +105,13 @@ bool SCH_MARKER::Save( FILE* aFile ) const
 void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                        const wxPoint& aOffset, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
-    EDA_COLOR_T color = (EDA_COLOR_T) m_Color;
+    EDA_COLOR_T color = m_Color;
     EDA_COLOR_T tmp   = color;
 
     if( GetMarkerType() == MARK_ERC )
     {
-        color = ( GetErrorLevel() == WAR ) ?
-                (EDA_COLOR_T) g_LayerDescr.LayerColor[LAYER_ERC_WARN] :
-                (EDA_COLOR_T) g_LayerDescr.LayerColor[LAYER_ERC_ERR];
+        color = ( GetErrorLevel() == WAR ) ? ReturnLayerColor( LAYER_ERC_WARN ) :
+                                             ReturnLayerColor( LAYER_ERC_ERR );
     }
 
     if( aColor < 0 )
