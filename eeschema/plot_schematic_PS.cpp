@@ -140,7 +140,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     SetLocaleTo_C_standard();
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetPageSettings( aPageInfo );
-    plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
+    plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
     plotter->SetColorMode( getModeColor() );
     plotter->SetViewport( aPlot0ffset, IU_PER_DECIMILS, aScale, false );
 

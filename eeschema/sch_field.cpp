@@ -120,7 +120,7 @@ int SCH_FIELD::GetPenSize() const
         if( m_Bold  )
             pensize = GetPenSizeForBold( m_Size.x );
         else
-            pensize = g_DrawDefaultLineThickness;
+            pensize = GetDefaultLineThickness();
     }
 
     // Clip pen size for small texts:
@@ -143,7 +143,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
         if( m_Bold  )
             LineWidth = GetPenSizeForBold( m_Size.x );
         else
-            LineWidth = g_DrawDefaultLineThickness;
+            LineWidth = GetDefaultLineThickness();
     }
 
 
@@ -261,7 +261,7 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
-    int linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
+    int linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
 
     // We must pass the effective text thickness to GetTextBox
     // when calculating the bounding box

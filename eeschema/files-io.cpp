@@ -42,7 +42,7 @@
 #include <wildcards_and_files_ext.h>
 
 
-bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreateBackupFile )
+bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bool aCreateBackupFile )
 {
     wxString msg;
     wxFileName schematicFileName, backupFileName;
@@ -53,11 +53,10 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
 
     /* If no name exists in the window yet - save as new. */
     if( aScreen->GetFileName().IsEmpty() )
-        aSaveType = FILE_SAVE_NEW;
+        aSaveUnderNewName = true;
 
-    switch( aSaveType )
+    if( aSaveUnderNewName == false )
     {
-    case FILE_SAVE_AS:
         schematicFileName = aScreen->GetFileName();
 
         // Sheet file names are relative to the root sheet path which is the current
@@ -75,7 +74,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
             /* Rename the old file to a '.bak' one: */
             if( schematicFileName.FileExists() )
             {
-                backupFileName.SetExt( g_SchematicBackupFileExtension );
+                backupFileName.SetExt( SchematicBackupFileExtension );
                 if( backupFileName.FileExists() )
                     wxRemoveFile( backupFileName.GetFullPath() );
 
@@ -87,10 +86,8 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
                 }
             }
         }
-
-        break;
-
-    case FILE_SAVE_NEW:
+    }
+    else
     {
         schematicFileName = aScreen->GetFileName();
 
@@ -106,12 +103,6 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
 
         if( !IsWritable( schematicFileName ) )
             return false;
-
-        break;
-    }
-
-    default:
-        break;
     }
 
     wxLogTrace( traceAutoSave,
@@ -125,7 +116,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
         return false;
     }
 
-    if( aSaveType == FILE_SAVE_NEW )
+    if( aSaveUnderNewName )
         aScreen->SetFileName( schematicFileName.GetFullPath() );
 
     bool success = aScreen->Save( f );
@@ -169,16 +160,12 @@ void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_SAVE_ONE_SHEET:     /* Update Schematic File */
-        SaveEEFile( NULL, FILE_SAVE_AS );
+    case ID_UPDATE_ONE_SHEET:
+        SaveEEFile( NULL );
         break;
 
-    case ID_SAVE_ONE_SHEET_AS:     /* Save EED (new name) */
-        SaveEEFile( NULL, FILE_SAVE_NEW );
-        break;
-
-    default:
-        DisplayError( this, wxT( "SCH_EDIT_FRAME::Save_File Internal Error" ) );
+    case ID_SAVE_ONE_SHEET_UNDER_NEW_NAME:
+        SaveEEFile( NULL, true );
         break;
     }
 }
@@ -293,7 +280,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     wxString cachename =  fn.GetName() + wxT( "-cache" );
 
     fn.SetName( cachename );
-    fn.SetExt( CompLibFileExtension );
+    fn.SetExt( SchematicLibraryFileExtension );
 
     if( ! fn.FileExists() )
     {
@@ -320,7 +307,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
             if ( use_oldcachename )     // set the new name
             {
                 fn.SetName( cachename );
-                fn.SetExt( CompLibFileExtension );
+                fn.SetExt( SchematicLibraryFileExtension );
                 LibCache->SetFileName( fn );
             }
 
@@ -380,13 +367,11 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
         return;
 
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
-    {
-        SaveEEFile( screen, FILE_SAVE_AS );
-    }
+        SaveEEFile( screen );
 
     wxString cachename = fn.GetName() + wxT( "-cache" );
     fn.SetName( cachename );
-    fn.SetExt( CompLibFileExtension );
+    fn.SetExt( SchematicLibraryFileExtension );
     CreateArchiveLibrary( fn.GetFullPath() );
 }
 
@@ -417,14 +402,10 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
         screen->SetFileName( fn.GetFullPath() );
 
-        if( SaveEEFile( screen, FILE_SAVE_AS, NO_BACKUP_FILE ) )
-        {
+        if( SaveEEFile( screen, false, NO_BACKUP_FILE ) )
             screen->SetModify();
-        }
         else
-        {
             autoSaveOk = false;
-        }
 
         screen->SetFileName( tmpFileName.GetFullPath() );
     }

@@ -177,6 +177,11 @@
 // HPGL scale factor (1 PLU = 1/40mm = 25 micrometers)
 static const double PLUsPERDECIMIL = 0.102041;
 
+HPGL_PLOTTER::HPGL_PLOTTER()
+{
+    SetPenSpeed( 40 );      // Default pen speed = 40 cm/s
+    SetPenNumber( 1 );      // Default pen num = 1
+}
 
 void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                 double aScale, bool aMirror )

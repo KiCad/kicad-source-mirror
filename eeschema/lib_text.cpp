@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -334,7 +333,7 @@ int LIB_TEXT::GetPenSize() const
         if( m_Bold  )
             pensize = GetPenSizeForBold( m_Size.x );
         else
-            pensize = g_DrawDefaultLineThickness;
+            pensize = GetDefaultLineThickness();
     }
 
     // Clip pen size for small texts:
@@ -352,7 +351,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     if( aColor < 0 )       // Used normal color or selected color
     {
         if( IsSelected() )
-            color = g_ItemSelectetColor;
+            color = GetItemSelectedColor();
     }
     else
     {

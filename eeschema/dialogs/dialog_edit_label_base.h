@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 19 2012)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,9 +27,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DialogLabelEditor_Base
+/// Class DIALOG_LABEL_EDITOR_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DialogLabelEditor_Base : public DIALOG_SHIM
+class DIALOG_LABEL_EDITOR_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -63,8 +63,8 @@ class DialogLabelEditor_Base : public DIALOG_SHIM
 	
 	public:
 		
-		DialogLabelEditor_Base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DialogLabelEditor_Base();
+		DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_LABEL_EDITOR_BASE();
 	
 };
 

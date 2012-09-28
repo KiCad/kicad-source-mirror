@@ -131,7 +131,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
 
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
-    plotter->SetDefaultLineWidth( g_DrawDefaultLineThickness );
+    plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
     plotter->SetColorMode( aPlotBlackAndWhite ? false : true );
     wxPoint plot_offset;
     double scale = 1.0;

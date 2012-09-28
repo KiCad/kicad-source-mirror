@@ -51,6 +51,10 @@
 
 enum id_eeschema_frm
 {
+    ID_UPDATE_ONE_SHEET,
+    ID_SAVE_ONE_SHEET_UNDER_NEW_NAME,
+    ID_LOAD_ONE_SHEET,
+
     /* Schematic editor horizontal toolbar IDs */
     ID_HIERARCHY = ID_END_LIST,
     ID_TO_LIBVIEW,

@@ -110,14 +110,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Save current sheet
     AddMenuItem( fileMenu,
-                 ID_SAVE_ONE_SHEET,
+                 ID_UPDATE_ONE_SHEET,
                  _( "Save &Current Sheet Only" ),
                  _( "Save only current schematic sheet" ),
                  KiBitmap( save_xpm ) );
 
     // Save current sheet as
     AddMenuItem( fileMenu,
-                 ID_SAVE_ONE_SHEET_AS,
+                 ID_SAVE_ONE_SHEET_UNDER_NEW_NAME,
                  _( "Save Current Sheet &As" ),
                  _( "Save current schematic sheet as..." ),
                  KiBitmap( save_as_xpm ) );

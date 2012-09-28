@@ -149,7 +149,7 @@ bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 int SCH_POLYLINE::GetPenSize() const
 {
-    int pensize = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
+    int pensize = ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
 
     return pensize;
 }

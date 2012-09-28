@@ -17,6 +17,7 @@ enum PAD_SHAPE_T
     PAD_RECT,
     PAD_OVAL,
     PAD_TRAPEZOID,
+    PAD_OCTAGON         // Provided, but not existing in Pcbnew. waiting for a volunteer
 };
 
 

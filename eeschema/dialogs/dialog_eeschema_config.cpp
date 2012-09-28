@@ -37,6 +37,7 @@
 #include <netlist.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
+#include <wildcards_and_files_ext.h>
 
 #include <wx/tokenzr.h>
 
@@ -288,7 +289,7 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         libpath = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog FilesDialog( this, _( "Library files:" ), libpath,
-                              wxEmptyString, CompLibFileWildcard,
+                              wxEmptyString, SchematicLibraryFileWildcard,
                               wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
 
     if( FilesDialog.ShowModal() != wxID_OK )

@@ -11,6 +11,7 @@
 
 #include <general.h>
 #include <class_library.h>
+#include <wildcards_and_files_ext.h>
 
 #include <html_messagebox.h>
 
@@ -45,7 +46,7 @@ void SCH_EDIT_FRAME::LoadLibraries( void )
     {
         fn.Clear();
         fn.SetName( m_componentLibFiles[ii] );
-        fn.SetExt( CompLibFileExtension );
+        fn.SetExt( SchematicLibraryFileExtension );
 
         /* Skip if the file name is not valid.. */
         if( !fn.IsOk() )

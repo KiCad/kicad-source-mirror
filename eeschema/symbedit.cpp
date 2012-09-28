@@ -30,18 +30,16 @@
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
-#include <macros.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
 #include <class_sch_screen.h>
-#include <richio.h>
 
 #include <general.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <class_library.h>
+#include <wildcards_and_files_ext.h>
 
 #include <boost/foreach.hpp>
 #include <wx/wfstream.h>
@@ -62,7 +60,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog dlg( this, _( "Import Symbol Drawings" ), default_path,
-                      wxEmptyString, SymbolFileWildcard,
+                      wxEmptyString, SchematicSymbolFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -142,7 +140,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
-                      m_component->GetName(), SymbolFileWildcard,
+                      m_component->GetName(), SchematicSymbolFileWildcard,
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -153,7 +151,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     /* The GTK file chooser doesn't return the file extension added to
      * file name so add it here. */
     if( fn.GetExt().IsEmpty() )
-        fn.SetExt( SymbolFileExtension );
+        fn.SetExt( SchematicSymbolFileExtension );
 
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 

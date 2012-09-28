@@ -43,6 +43,7 @@
 #define PLOT_FRAME_REFERENCE_KEY wxT( "PlotFrameRef" )
 #define PLOT_HPGL_ORIGIN_KEY wxT( "PlotHPGLOrg" )
 #define PLOT_HPGL_PAPERSIZE_KEY wxT( "PlotHPGLPaperSize" )
+#define PLOT_HPGL_PEN_SIZE_KEY wxT( "PlotHPGLPenSize" )
 
 
 
@@ -95,6 +96,10 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     m_config->Read( PLOT_HPGL_PAPERSIZE_KEY, &m_HPGLPaperSizeSelect, 0 );
     m_HPGLPaperSizeOption->SetSelection( m_HPGLPaperSizeSelect );
 
+    // HPGL Pen Size is stored in mm in config
+    m_config->Read( PLOT_HPGL_PEN_SIZE_KEY, &m_HPGLPenSize, 0.5 );
+    m_HPGLPenSize *= IU_PER_MM;
+
     // Switch to the last save plot format
     long plotfmt;
     m_config->Read( PLOT_FORMAT_KEY, &plotfmt, 0 );
@@ -125,11 +130,11 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     // Set the default line width (pen width which should be used for
     // items that do not have a pen size defined (like frame ref)
     AddUnitSymbol( *m_defaultLineWidthTitle, g_UserUnit );
-    PutValueInLocalUnits( *m_DefaultLineSizeCtrl, g_DrawDefaultLineThickness );
+    PutValueInLocalUnits( *m_DefaultLineSizeCtrl, GetDefaultLineThickness() );
 
     // Initialize HPGL specific widgets
     AddUnitSymbol( *m_penHPLGWidthTitle, g_UserUnit );
-    PutValueInLocalUnits( *m_penHPGLWidthCtrl, g_HPGL_Pen_Descr.m_Pen_Diam );
+    PutValueInLocalUnits( *m_penHPGLWidthCtrl, m_HPGLPenSize );
     m_HPGLPaperSizeOption->SetSelection( m_HPGLPaperSizeSelect );
 
     // Hide/show widgets that are not always displayed:
@@ -166,12 +171,11 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
     m_config->Write( PLOT_HPGL_ORIGIN_KEY, GetPlotOriginCenter() );
     m_HPGLPaperSizeSelect = m_HPGLPaperSizeOption->GetSelection();
     m_config->Write( PLOT_HPGL_PAPERSIZE_KEY, m_HPGLPaperSizeSelect );
+    // HPGL Pen Size is stored in mm in config
+    m_config->Write( PLOT_HPGL_PEN_SIZE_KEY, m_HPGLPenSize/IU_PER_MM );
 
     m_pageSizeSelect    = m_PaperSizeOption->GetSelection();
-    g_DrawDefaultLineThickness = ReturnValueFromTextCtrl( *m_DefaultLineSizeCtrl );
-
-    if( g_DrawDefaultLineThickness < 1 )
-        g_DrawDefaultLineThickness = 1;
+    SetDefaultLineThickness( ReturnValueFromTextCtrl( *m_DefaultLineSizeCtrl ) );
 }
 
 void DIALOG_PLOT_SCHEMATIC::OnPlotFormatSelection( wxCommandEvent& event )

@@ -41,9 +41,11 @@
 # tools are required.  If MAINTAIN_PNG is defined, then you are a PNG maintainer
 # and will need the following tools findable in your PATH:
 #
-# 1) imagemagick - all its programs must be on your PATH
-# 2) inkscape - command line mode is used, must be on your PATH
-# 3) pngcrush -
+# 1) inkscape - command line mode is used, must be on your PATH
+# 2) pngcrush - this program must be on your PATH
+# 3) Under Windows only:
+#           dos2unix - to convert End Of Lines to unix EOL (CRLF to LF)
+#           this program must be on your PATH
 #
 
 # lower case is used for local variables, uppercase for global variables
@@ -69,19 +71,38 @@ option( MAINTAIN_PNGS
         "Set to true if you are a PNG maintainer and have the required tools given in the bitmaps_png/CMakeLists.txt file (default OFF)."
         OFF)
 
+
+# Used Only to maintain PNG files (and therefore to recreate .cpp files)
+# The png2cpp creates files with native End of Line format.
+# To avoid mixed EOF formats in these .cpp files, it is good to
+# convert them in Unix EOL format (LF)
+# Under Windows, the well known dos2unix.exe does the conversion
+# It is installed with MinGW and MSYS.
+# It is very easy to install (just an executable to copy in a known path) if it is missing
+
+if( WIN32 )
+    set( CONVERT_EOL true )
+    set( eol2unix_converter dos2unix )
+else()
+    set( CONVERT_EOL false )
+endif( WIN32 )
+
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ${INC_AFTER}
     )
 
 
+
+
 # Plan for three sizes of bitmaps:
-# SMALL - for listboxes or comboboxes and perhaps menus
+# SMALL - for menus
 # MID   - for toolbars  26 x 26
 # BIG   - for program icons  48 x 48
 # which are given on three basename lists: BMAPS_SMALL, BMAPS_MID,a nd BMAPS_BIG
 # respectively.  The basename is without file extension and without path.
 # A corresponding ${basename}.svg file must exist in 'sources' dir below here.
+
 
 # small icons (16x16) needed in listboxes
 set( BMAPS_SMALL
@@ -112,6 +133,7 @@ set( BMAPS_SMALL
     tree_nosel
     tree_sel
     )
+
 
 # image basenames that go into the toolbar sized destinations, i.e. 26x26
 set( BMAPS_MID
@@ -248,6 +270,7 @@ set( BMAPS_MID
     gerber_open_dcode_file
     gerbview_drill_file
     gerbview_clear_layers
+    gerber_open_dcode_file
     gerbview_open_recent_drill_files
     general_deletions
     general_ratsnest
@@ -541,7 +564,8 @@ function( svg2png inputFile outFile pngWidth pngHeight )
 
     add_custom_command(
         OUTPUT ${outFile}
-        COMMAND ${Inkscape_EXECUTABLE} --export-area-snap -f ${inputFile} -e ${outFile} -w ${pngWidth} -h ${pngHeight} > ${TMP_DIR}/${bmn}.inkscape.log
+        COMMAND ${Inkscape_EXECUTABLE} --export-area-snap -f ${inputFile} -e ${outFile}
+            -w ${pngWidth} -h ${pngHeight} > ${TMP_DIR}/${bmn}.inkscape.log
         DEPENDS ${inputFile}
         COMMENT "Creating ${pngHeight} pixel tall ${outFile}"
         )
@@ -566,9 +590,27 @@ function( png2png inputFile outFile )
         )
 endfunction()
 
-
 # Function png2cpp
 # converts a single *.png to *.cpp
+if( CONVERT_EOL )
+function( png2cpp inputFile outFile )
+    add_custom_command(
+        OUTPUT  ${outFile}
+
+        COMMAND rm -f ${outFile}.tmp
+        COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile} -DoutCppFile=${outFile}
+            -P ${CMAKE_MODULE_PATH}/PNG2cpp.cmake
+
+        DEPENDS ${inputFile} ${CMAKE_MODULE_PATH}/PNG2cpp.cmake
+
+        POST_BUILD
+        COMMAND ${eol2unix_EXECUTABLE} ${outFile}
+
+        COMMENT "Creating (with unix eol) ${outFile}"
+    )
+endfunction()
+
+else( CONVERT_EOL )
 function( png2cpp inputFile outFile )
     add_custom_command(
         OUTPUT  ${outFile}
@@ -577,10 +619,11 @@ function( png2cpp inputFile outFile )
             -P ${CMAKE_MODULE_PATH}/PNG2cpp.cmake
 
         DEPENDS ${inputFile} ${CMAKE_MODULE_PATH}/PNG2cpp.cmake
-
         COMMENT "Creating ${outFile}"
         )
 endfunction()
+
+endif(CONVERT_EOL)
 
 
 # Function bitmap_dir
@@ -652,12 +695,33 @@ if( MAINTAIN_PNGS )
         endif( NOT pngcrush_EXECUTABLE )
     endif( NOT pngcrush_FOUND )
 
+
     # these 3 cmake commands for each desired bitmap size set, repeat as needed:
     bitmap_dir( 16 16 "${BMAPS_SMALL}" )
 
     bitmap_dir( 26 26 "${BMAPS_MID}" )
 
     bitmap_dir( 48 48 "${BMAPS_BIG}" )
+
+if(CONVERT_EOL)
+    # dos2unix is required to convert EOL format (CRLF) to unix EOL format (LF)
+    set( eol2unix_FOUND FALSE )
+
+    if( NOT eol2unix_FOUND )
+        find_program( eol2unix_EXECUTABLE ${eol2unix_converter} DOC "The EOL to LF converter program." )
+
+        if( NOT eol2unix_EXECUTABLE )
+            message( FATAL_ERROR "Could not find the ${eol2unix_converter} EOL to LF converter program." )
+        else( NOT eol2unix_EXECUTABLE )
+            set( eol2unix_FOUND TRUE )
+            set( eol2unix_EXECUTABLE ${eol2unix_EXECUTABLE}
+                 CACHE FILEPATH "Path and file name of the end of line converter program." )
+            message( STATUS "The ${eol2unix_converter} EOL to LF converter program found." )
+        endif( NOT eol2unix_EXECUTABLE )
+    endif( NOT eol2unix_FOUND )
+elseif(APPLE)
+        #TODO: see if a EOL converted is needed # OSX
+endif(CONVERT_EOL)
 
     #message( "CPP_LIST: ${CPP_LIST}" )
 

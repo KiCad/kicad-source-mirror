@@ -51,6 +51,7 @@ private:
                                             // Static to keep last option:
                                             // use default size or force A or A4 size
     int             m_HPGLPaperSizeSelect;  // for HPGL format only: last selected paper size
+    double          m_HPGLPenSize;          // for HPGL format only: pen size
 
 public:
     // / Constructors

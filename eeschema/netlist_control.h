@@ -123,7 +123,9 @@ public:
     NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
 
 private:
-    wxConfig* m_Config;
+    wxConfig* m_config;
+    bool      m_spiceNetlistUseNames;   /* true to use names rather than net
+                                         * numbers (PSPICE netlist only) */
 
 public:
 

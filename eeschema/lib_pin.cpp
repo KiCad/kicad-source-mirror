@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -782,7 +782,7 @@ bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
 int LIB_PIN::GetPenSize() const
 {
-    return ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
+    return ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
 }
 
 
@@ -795,7 +795,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
                            const TRANSFORM& aTransform )
 {
     // Invisible pins are only drawn on request.
-    // They are drawn in g_InvisibleItemColor.
+    // They are drawn in GetInvisibleItemColor().
     // in schematic, they are drawn only if m_showAllPins is true.
     // In other windows, they are always drawn because we must see them.
     if( ! IsVisible() )
@@ -809,7 +809,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
             ! ((SCH_EDIT_FRAME*)frame)->GetShowAllPins() )
             return;
 
-        aColor = g_InvisibleItemColor;
+        aColor = GetInvisibleItemColor();
     }
 
     LIB_COMPONENT* Entry = GetParent();
@@ -866,7 +866,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
     if( aColor < 0 )       // Used normal color or selected color
     {
         if( IsSelected() )
-            color = g_ItemSelectetColor;
+            color = GetItemSelectedColor();
     }
     else
         color = aColor;
@@ -1088,7 +1088,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 
     /* Get the num and name colors */
     if( (Color < 0) && IsSelected() )
-        Color = g_ItemSelectetColor;
+        Color = GetItemSelectedColor();
 
     NameColor = (EDA_COLOR_T) ( Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color );
     NumColor  = (EDA_COLOR_T) ( Color == -1 ? ReturnLayerColor( LAYER_PINNUM ) : Color );

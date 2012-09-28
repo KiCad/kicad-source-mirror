@@ -41,6 +41,11 @@
  * that they cannot be changed.
  * Mainly wild cards are most of time translated when displayed
  */
+
+extern const wxString SchematicSymbolFileExtension;
+extern const wxString SchematicLibraryFileExtension;
+extern const wxString SchematicBackupFileExtension;
+
 extern const wxString VrmlFileExtension;
 extern const wxString ProjectFileExtension;
 extern const wxString SchematicFileExtension;
@@ -57,6 +62,8 @@ extern const wxString ReportFileExtension;
 extern const wxString FootprintPlaceFileExtension;
 
 /// Proper wxFileDialog wild card definitions.
+extern const wxString SchematicSymbolFileWildcard;
+extern const wxString SchematicLibraryFileWildcard;
 extern const wxString ProjectFileWildcard;
 extern const wxString SchematicFileWildcard;
 extern const wxString BoardFileWildcard;
