@@ -60,6 +60,12 @@ option(KICAD_SCRIPTING_WXPYTHON
        "set this option ON to build wxpython implementation for wx interface building in python and py.shell"
        )
 
+# when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
+# PYTHON_EXECUTABLE can be defined when invoking cmake
+# ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
+# when not defined by user, the default is python.exe under Windows and python2 for others
+# python binary filee should be is exec path.
+
 
 #Set version option (stable or testing)
 
@@ -259,7 +265,15 @@ endif(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
 # Find Python and other scripting resources
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
-  execute_process(COMMAND python2 -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if( "${PYTHON_EXECUTABLE}" STREQUAL  "" )
+        if(WIN32)
+            SET( PYTHON_EXECUTABLE "python.exe" )
+        else(WIN32)
+            SET( PYTHON_EXECUTABLE "python2" )
+        endif(WIN32)
+    endif()
+
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
   set(PYTHON_DEST "lib/python${PYTHON_VERSION}/dist-packages" )
   find_package(PythonLibs)
   include_directories(${PYTHON_INCLUDE_PATH}
