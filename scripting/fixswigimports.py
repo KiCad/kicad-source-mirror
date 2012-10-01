@@ -30,12 +30,12 @@ f.close()
 
 doneOk = False
 
-if (len(lines)<4000): 
+if (len(lines)<4000):
     print "still building"
     exit(0)
 
 txt = ""
-    
+
 for l in lines:
     if l.startswith("if version_info >= (2,6,0):"):
         l = l.replace("version_info >= (2,6,0)","False")
@@ -55,8 +55,8 @@ else:
     print "       and fix this script: fixswigimports.py"
     exit(2)
 
-    
+
 exit(0)
-    
-    
+
+
 
