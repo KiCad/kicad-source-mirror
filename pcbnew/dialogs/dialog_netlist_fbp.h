@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_netlist_fbp__
-#define __dialog_netlist_fbp__
+#ifndef __DIALOG_NETLIST_FBP_H__
+#define __DIALOG_NETLIST_FBP_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -28,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_NETLIST_FBP
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_NETLIST_FBP : public wxDialog 
+class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 {
 	private:
 	
@@ -38,7 +40,7 @@ class DIALOG_NETLIST_FBP : public wxDialog
 			ID_OPEN_NELIST = 1000,
 			ID_READ_NETLIST_FILE,
 			ID_TEST_NETLIST,
-			ID_COMPILE_RATSNEST,
+			ID_COMPILE_RATSNEST
 		};
 		
 		wxRadioBox* m_Select_By_Timestamp;
@@ -66,9 +68,9 @@ class DIALOG_NETLIST_FBP : public wxDialog
 	
 	public:
 		
-		DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id = wxID_CANCEL, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,431 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id = wxID_CANCEL, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,431 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_NETLIST_FBP();
 	
 };
 
-#endif //__dialog_netlist_fbp__
+#endif //__DIALOG_NETLIST_FBP_H__

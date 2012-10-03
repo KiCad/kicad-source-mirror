@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -30,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SVG_PRINT_base
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SVG_PRINT_base : public wxDialog 
+class DIALOG_SVG_PRINT_base : public DIALOG_SHIM
 {
 	private:
 	

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  6 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -44,6 +44,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_OptGridSizeY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	sbLeftSizer->Add( m_OptGridSizeY, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	
 	
 	bUpperSizer->Add( sbLeftSizer, 1, wxEXPAND|wxALL, 5 );
 	
@@ -81,10 +82,12 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	m_TextPosYUnits->Wrap( -1 );
 	fgSizerGridOrigin->Add( m_TextPosYUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	sbRightSizer->Add( fgSizerGridOrigin, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonReset = new wxButton( this, wxID_ANY, _("Reset Grid Origin"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbRightSizer->Add( m_buttonReset, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	bSizer4->Add( sbRightSizer, 1, wxEXPAND|wxALL, 5 );
 	
@@ -111,11 +114,15 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	m_comboBoxGrid2 = new wxComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	fgSizer3->Add( m_comboBoxGrid2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
+	
 	sbSizer4->Add( fgSizer3, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	bSizer4->Add( sbSizer4, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	bUpperSizer->Add( bSizer4, 1, wxEXPAND, 5 );
+	
 	
 	bSizerMain->Add( bUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -125,7 +132,9 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bSizerMain->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxTOP|wxBOTTOM, 5 );
+	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -46,6 +46,7 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	m_DelAlls = new wxCheckBox( this, wxID_ANY, _("Clear Board"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerLeft->Add( m_DelAlls, 0, wxALL, 5 );
 	
+	
 	bSizerUpper->Add( sbSizerLeft, 1, wxEXPAND|wxALL, 5 );
 	
 	wxBoxSizer* bSizerRight;
@@ -68,6 +69,7 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	m_TrackFilterVias->SetValue(true); 
 	sbTrackFilter->Add( m_TrackFilterVias, 0, wxALL, 5 );
 	
+	
 	bSizerRight->Add( sbTrackFilter, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_rbLayersOptionChoices[] = { _("All Layers"), _("Current Layer Only") };
@@ -83,7 +85,9 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	m_textCtrlCurrLayer = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	bSizerRight->Add( m_textCtrlCurrLayer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bSizerUpper->Add( bSizerRight, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	
 	
 	bSizerMain->Add( bSizerUpper, 0, wxEXPAND, 5 );
 	
@@ -96,7 +100,9 @@ DIALOG_GLOBAL_DELETION_BASE::DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWi
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bSizerMain->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();

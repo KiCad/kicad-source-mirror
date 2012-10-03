@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -30,6 +30,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_DocCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerDoc->Add( m_DocCtrl, 1, 0, 5 );
 	
+	
 	PropLeftSizer->Add( sbSizerDoc, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerKeysW;
@@ -37,6 +38,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_KeywordCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerKeysW->Add( m_KeywordCtrl, 1, 0, 5 );
+	
 	
 	PropLeftSizer->Add( sbSizerKeysW, 0, wxEXPAND, 5 );
 	
@@ -52,6 +54,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_button4 = new wxButton( m_PanelProperties, wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	sbSizerRef->Add( m_button4, 0, 0, 5 );
 	
+	
 	PropLeftSizer->Add( sbSizerRef, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerValue;
@@ -62,6 +65,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_button5 = new wxButton( m_PanelProperties, wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	sbSizerValue->Add( m_button5, 0, 0, 5 );
+	
 	
 	PropLeftSizer->Add( sbSizerValue, 0, wxEXPAND, 5 );
 	
@@ -77,7 +81,9 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	sbSizerFootprintName->Add( 0, 0, 0, 0, 5 );
 	
+	
 	PropLeftSizer->Add( sbSizerFootprintName, 0, wxEXPAND, 5 );
+	
 	
 	m_PanelPropertiesBoxSizer->Add( PropLeftSizer, 1, wxEXPAND, 5 );
 	
@@ -108,6 +114,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_CostRot90Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxSize( -1,-1 ), wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	bSizerRot90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
+	
 	sbSizerAutoplace->Add( bSizerRot90, 1, 0, 5 );
 	
 	wxBoxSizer* bSizerRot180;
@@ -120,7 +127,9 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_CostRot180Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	bSizerRot180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
+	
 	sbSizerAutoplace->Add( bSizerRot180, 1, 0, 5 );
+	
 	
 	m_PropRightSizer->Add( sbSizerAutoplace, 1, wxEXPAND|wxALL, 5 );
 	
@@ -197,11 +206,15 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_SolderPasteRatioMarginUnits->Wrap( -1 );
 	fgSizer1->Add( m_SolderPasteRatioMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
+	
 	sbSizer8->Add( fgSizer1, 1, wxEXPAND, 5 );
+	
 	
 	m_PropRightSizer->Add( sbSizer8, 0, wxEXPAND|wxALL, 5 );
 	
+	
 	m_PanelPropertiesBoxSizer->Add( m_PropRightSizer, 0, 0, 5 );
+	
 	
 	m_PanelProperties->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelProperties->Layout();
@@ -223,6 +236,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_Sizer3DValues = new wxStaticBoxSizer( new wxStaticBox( m_Panel3D, wxID_ANY, _("3D Scale and Pos") ), wxVERTICAL );
 	
+	
 	bLowerSizer3D->Add( m_Sizer3DValues, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer3DButtons;
@@ -234,9 +248,12 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_buttonRemove = new wxButton( m_Panel3D, ID_REMOVE_3D_SHAPE, _("Remove 3D Shape"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3DButtons->Add( m_buttonRemove, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
+	
 	bLowerSizer3D->Add( bSizer3DButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	bSizerMain3D->Add( bLowerSizer3D, 1, wxEXPAND, 5 );
+	
 	
 	m_Panel3D->SetSizer( bSizerMain3D );
 	m_Panel3D->Layout();
@@ -251,7 +268,9 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_sdbSizerStdButtonsCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
+	
 	m_GeneralBoxSizer->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALIGN_RIGHT|wxALL, 5 );
+	
 	
 	this->SetSizer( m_GeneralBoxSizer );
 	this->Layout();
@@ -276,4 +295,5 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::~DIALOG_MODULE_MODULE_EDITOR_BASE()
 	m_buttonRemove->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Remove3DShape ), NULL, this );
 	m_sdbSizerStdButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerStdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::OnOkClick ), NULL, this );
+	
 }

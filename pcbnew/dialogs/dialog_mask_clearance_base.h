@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_mask_clearance_base__
-#define __dialog_mask_clearance_base__
+#ifndef __DIALOG_MASK_CLEARANCE_BASE_H__
+#define __DIALOG_MASK_CLEARANCE_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -28,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PADS_MASK_CLEARANCE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PADS_MASK_CLEARANCE_BASE : public wxDialog 
+class DIALOG_PADS_MASK_CLEARANCE_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -56,14 +58,15 @@ class DIALOG_PADS_MASK_CLEARANCE_BASE : public wxDialog
 		wxButton* m_sdbButtonsSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pads Mask Clearance"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 361,253 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pads Mask Clearance"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 361,253 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PADS_MASK_CLEARANCE_BASE();
 	
 };
 
-#endif //__dialog_mask_clearance_base__
+#endif //__DIALOG_MASK_CLEARANCE_BASE_H__

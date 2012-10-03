@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "dialog_design_rules_aux_helper_class.h"
+#include "dialog_shim.h"
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
@@ -40,7 +41,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DESIGN_RULES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_DESIGN_RULES_BASE : public wxDialog 
+class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 {
 	private:
 	

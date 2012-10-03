@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 29 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -52,9 +52,12 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bLeftButtonsSizer->Add( m_buttonImport, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bLeftSubSizerSizer->Add( bLeftButtonsSizer, 1, wxEXPAND, 5 );
 	
+	
 	bLeftSizer->Add( bLeftSubSizerSizer, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	bUpperSizer->Add( bLeftSizer, 1, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
 	
@@ -94,11 +97,15 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	m_buttonHelp = new wxButton( this, wxID_BUTTON_HELP, _("Help"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightButtonsSizer->Add( m_buttonHelp, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bRightSubSizer->Add( bRightButtonsSizer, 1, wxEXPAND, 5 );
+	
 	
 	bRightSizer->Add( bRightSubSizer, 1, wxEXPAND, 5 );
 	
+	
 	bUpperSizer->Add( bRightSizer, 1, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -111,7 +118,9 @@ DIALOG_FREEROUTE_BASE::DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id, c
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bMainSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
@@ -139,4 +148,5 @@ DIALOG_FREEROUTE_BASE::~DIALOG_FREEROUTE_BASE()
 	m_buttonHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnHelpButtonClick ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FREEROUTE_BASE::OnOKButtonClick ), NULL, this );
+	
 }

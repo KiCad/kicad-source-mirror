@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -59,6 +59,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	fgSizeNetInfo->Add( m_CurrentNetclassName, 0, wxALL, 5 );
 	
+	
 	bSizerGrids->Add( fgSizeNetInfo, 0, wxEXPAND, 5 );
 	
 	
@@ -99,9 +100,12 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_gridDisplayCurrentSettings->SetDefaultCellAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	bSizerGrids->Add( m_gridDisplayCurrentSettings, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	bSizerCurrSettingsLeft->Add( bSizerGrids, 1, wxEXPAND, 5 );
 	
+	
 	bSizerCurrSettings->Add( bSizerCurrSettingsLeft, 1, wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bSizerCurrSettings, 0, wxEXPAND, 5 );
 	
@@ -116,6 +120,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_staticText11->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
 	bLowerSizer->Add( m_staticText11, 0, wxALL, 5 );
+	
 	
 	bMainSizer->Add( bLowerSizer, 0, wxALL|wxEXPAND, 5 );
 	
@@ -144,7 +149,9 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_radioBtn5 = new wxRadioButton( this, ID_ALL_TRACKS, _("Set all tracks (no via) to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRadioButtons->Add( m_radioBtn5, 0, wxALL, 5 );
 	
+	
 	bSizerOptions->Add( bSizerRadioButtons, 1, wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bSizerOptions, 0, wxEXPAND, 5 );
 	
@@ -154,7 +161,9 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bMainSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
@@ -179,4 +188,5 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BAS
 	m_radioBtn5->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnSelectionClick ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::OnOkClick ), NULL, this );
+	
 }

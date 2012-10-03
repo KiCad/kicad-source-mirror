@@ -1,13 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 29 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_freeroute_exchange_base__
-#define __dialog_freeroute_exchange_base__
+#ifndef __DIALOG_FREEROUTE_EXCHANGE_BASE_H__
+#define __DIALOG_FREEROUTE_EXCHANGE_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -32,19 +36,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FREEROUTE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_FREEROUTE_BASE : public wxDialog 
+class DIALOG_FREEROUTE_BASE : public DIALOG_SHIM
 {
 	private:
 	
 	protected:
 		wxStaticText* m_staticText2;
-		
 		wxButton* m_ExportDSN;
 		wxButton* m_buttonLaunchFreeroute;
 		wxButton* m_buttonImport;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticText3;
-		
 		wxButton* m_buttonVisit;
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_FreerouteURLName;
@@ -55,20 +57,21 @@ class DIALOG_FREEROUTE_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnExportButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnLaunchButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnImportButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnVisitButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnTextEditFrUrlUpdated( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnHelpButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOKButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnExportButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLaunchButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImportButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnVisitButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTextEditFrUrlUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnHelpButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_FREEROUTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FREEROUTE_BASE();
 	
 };
 
-#endif //__dialog_freeroute_exchange_base__
+#endif //__DIALOG_FREEROUTE_EXCHANGE_BASE_H__

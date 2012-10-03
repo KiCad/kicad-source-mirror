@@ -36,6 +36,7 @@ private:
         void OnCloseWindow( wxCloseEvent& event )
         {
             GetOpts( );
+            EndModal( wxID_CANCEL );
         }
 
         void GetOpts( )

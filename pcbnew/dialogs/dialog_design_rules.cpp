@@ -63,11 +63,7 @@ enum {
 const wxString DIALOG_DESIGN_RULES::wildCard = _( "* (Any)" );
 
 // dialog should remember its previously selected tab
-int DIALOG_DESIGN_RULES::           s_LastTabSelection = -1;
-
-// dialog should remember its previous screen position and size
-wxPoint DIALOG_DESIGN_RULES::       s_LastPos( -1, -1 );
-wxSize DIALOG_DESIGN_RULES::        s_LastSize;
+int DIALOG_DESIGN_RULES::s_LastTabSelection = -1;
 
 // methods for the helper class NETS_LIST_CTRL
 
@@ -190,13 +186,7 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent ) :
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 
-    if( s_LastPos.x != -1 )
-    {
-        SetSize( s_LastSize );
-        SetPosition( s_LastPos );
-    }
-    else
-        Center();
+    Center();
 }
 
 
@@ -673,10 +663,6 @@ void DIALOG_DESIGN_RULES::OnCancelButtonClick( wxCommandEvent& event )
 {
     s_LastTabSelection = m_DRnotebook->GetSelection();
 
-    // Save the dialog's position before finishing
-    s_LastPos  = GetPosition();
-    s_LastSize = GetSize();
-
     EndModal( wxID_CANCEL );
 }
 
@@ -698,10 +684,6 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
     CopyDimensionsListsToBoard();
 
     m_Pcb->SetDesignSettings( m_BrdSettings );
-
-    // Save the dialog's position before finishing
-    s_LastPos  = GetPosition();
-    s_LastSize = GetSize();
 
     EndModal( wxID_OK );
 

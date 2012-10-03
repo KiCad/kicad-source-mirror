@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -38,6 +38,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	
 	bLeftSizer->Add( m_ChangeExistingFootprintCtrl, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleSizer;
@@ -58,6 +59,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	m_RemoveExtraFootprintsCtrl->SetToolTip( _("Remove footprints found on the Board but not in netlist\nNote: only not locked footprints will be removed") );
 	
 	bMiddleSizer->Add( m_RemoveExtraFootprintsCtrl, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	bUpperSizer->Add( bMiddleSizer, 1, wxEXPAND, 5 );
 	
@@ -86,7 +88,9 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	m_button5 = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizerButtons->Add( m_button5, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bUpperSizer->Add( bRightSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	bMainSizer->Add( bUpperSizer, 0, wxEXPAND, 5 );
 	
@@ -108,6 +112,7 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	m_MessageWindow->SetMinSize( wxSize( -1,200 ) );
 	
 	bMainSizer->Add( m_MessageWindow, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

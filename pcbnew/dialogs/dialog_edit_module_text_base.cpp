@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -64,6 +64,7 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	m_TxtPosCtrlY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_TxtPosCtrlY, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	
 	bSizer2->Add( bSizer3, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer4;
@@ -88,6 +89,7 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	m_Show->SetSelection( 0 );
 	bSizer4->Add( m_Show, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bSizer2->Add( bSizer4, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer5;
@@ -109,9 +111,12 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_buttonCANCEL, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
+	
 	bSizer2->Add( bSizer5, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( bSizer2, 1, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
@@ -126,4 +131,5 @@ DialogEditModuleText_base::~DialogEditModuleText_base()
 	// Disconnect Events
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogEditModuleText_base::OnOkClick ), NULL, this );
 	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogEditModuleText_base::OnCancelClick ), NULL, this );
+	
 }

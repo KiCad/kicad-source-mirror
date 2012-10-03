@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  6 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_set_grid_base__
-#define __dialog_set_grid_base__
+#ifndef __DIALOG_SET_GRID_BASE_H__
+#define __DIALOG_SET_GRID_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -30,13 +32,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SET_GRID_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SET_GRID_BASE : public wxDialog 
+class DIALOG_SET_GRID_BASE : public DIALOG_SHIM
 {
 	private:
 	
 	protected:
 		wxRadioBox* m_UnitGrid;
-		
 		wxStaticText* m_staticTextSizeX;
 		wxTextCtrl* m_OptGridSizeX;
 		wxStaticText* m_staticTextSizeY;
@@ -64,9 +65,9 @@ class DIALOG_SET_GRID_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Origin and User Grid Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Origin and User Grid Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SET_GRID_BASE();
 	
 };
 
-#endif //__dialog_set_grid_base__
+#endif //__DIALOG_SET_GRID_BASE_H__

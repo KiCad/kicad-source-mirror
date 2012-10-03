@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  6 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -41,6 +41,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	sLeftBoxSizer->Add( m_OptDisplayViaHole, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( sLeftBoxSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbMiddleLeftSizer;
@@ -62,6 +63,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	sbMiddleLeftSizer->Add( m_OptDisplayTracksClearance, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( sbMiddleLeftSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sMiddleRightSizer;
@@ -81,6 +83,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_OptDisplayModTexts = new wxRadioBox( this, ID_TEXT_MODULES, _("Texts:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayModTextsNChoices, m_OptDisplayModTextsChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayModTexts->SetSelection( 1 );
 	bLModuleSizer->Add( m_OptDisplayModTexts, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	sMiddleRightSizer->Add( bLModuleSizer, 0, 0, 5 );
 	
@@ -104,7 +107,9 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_OptDisplayPadNoConn->SetValue(true); 
 	bRModuleSizer->Add( m_OptDisplayPadNoConn, 0, wxALL, 5 );
 	
+	
 	sMiddleRightSizer->Add( bRModuleSizer, 0, 0, 5 );
+	
 	
 	bMainSizer->Add( sMiddleRightSizer, 0, wxEXPAND|wxALL, 5 );
 	
@@ -126,6 +131,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_Show_Page_Limits->SetSelection( 0 );
 	sRightUpperSizer->Add( m_Show_Page_Limits, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bRightSizer->Add( sRightUpperSizer, 1, wxEXPAND, 5 );
 	
 	
@@ -137,7 +143,9 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_buttonCANCEL = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonCANCEL, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( bRightSizer, 0, wxEXPAND|wxALL, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

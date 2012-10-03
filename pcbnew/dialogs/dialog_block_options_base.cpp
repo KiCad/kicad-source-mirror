@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -47,13 +47,15 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	m_DrawBlockItems = new wxCheckBox( this, wxID_ANY, _("Draw selected items while moving"), wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_DrawBlockItems, 0, wxALL, 5 );
 	
-	sbSizer1->Add( gSizer1, 0, wxEXPAND, 5 );
+	
+	sbSizer1->Add( gSizer1, 1, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sbSizer1->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	m_checkBoxIncludeInvisible = new wxCheckBox( this, wxID_ANY, _("Include items on invisible layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_checkBoxIncludeInvisible, 0, wxALL, 5 );
+	
 	
 	bSizerMain->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
 	
@@ -63,7 +65,9 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bSizerMain->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();

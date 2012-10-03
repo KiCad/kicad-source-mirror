@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
@@ -69,6 +69,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_EndPointYUnit->Wrap( -1 );
 	fgUpperLeftGridSizer->Add( m_EndPointYUnit, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	
 	bUpperSizer->Add( fgUpperLeftGridSizer, 1, wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
@@ -116,6 +117,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_DefaulThicknessTextUnit->Wrap( -1 );
 	fgUpperRightGridSizer->Add( m_DefaulThicknessTextUnit, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
+	
 	bUpperRightSizer->Add( fgUpperRightGridSizer, 0, wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgLowerRightSizer;
@@ -135,9 +137,12 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	
 	fgLowerRightSizer->Add( m_LayerSelectionCtrl, 0, wxEXPAND|wxALL, 5 );
 	
+	
 	bUpperRightSizer->Add( fgLowerRightSizer, 1, wxEXPAND, 5 );
 	
+	
 	bUpperSizer->Add( bUpperRightSizer, 1, wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bUpperSizer, 1, wxALL|wxEXPAND, 5 );
 	
@@ -150,7 +155,9 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_StandardButtonsSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_StandardButtonsSizer->AddButton( m_StandardButtonsSizerCancel );
 	m_StandardButtonsSizer->Realize();
+	
 	bMainSizer->Add( m_StandardButtonsSizer, 0, wxALIGN_BOTTOM|wxALIGN_RIGHT|wxALL, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
