@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( 550,600 ), wxDefaultSize );
 	
@@ -28,6 +28,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_PresetsChoice->SetSelection( 0 );
 	sbPresetsSizer->Add( m_PresetsChoice, 0, wxEXPAND, 5 );
 	
+	
 	bChoicesSizer->Add( sbPresetsSizer, 2, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbCopperLayersSizer;
@@ -39,7 +40,9 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_CopperLayersChoice->SetSelection( 0 );
 	sbCopperLayersSizer->Add( m_CopperLayersChoice, 0, wxEXPAND, 5 );
 	
+	
 	bChoicesSizer->Add( sbCopperLayersSizer, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bChoicesSizer, 0, wxEXPAND, 5 );
 	
@@ -54,6 +57,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_TitlePanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
 	
 	bCaptionsSizer->Add( m_TitlePanel, 1, wxEXPAND, 5 );
+	
 	
 	sbLayersSizer->Add( bCaptionsSizer, 0, wxALIGN_CENTER|wxEXPAND, 5 );
 	
@@ -76,10 +80,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
 	m_AdhesFrontCheckBox = new wxCheckBox( m_AdhesFrontPanel, ID_ADHESFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_AdhesFrontCheckBox->SetToolTip( _("If you want an adhesive template for the front side of the board") );
 	
 	bSizer6->Add( m_AdhesFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_AdhesFrontPanel->SetSizer( bSizer6 );
 	m_AdhesFrontPanel->Layout();
@@ -101,10 +105,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
 	m_SoldPFrontCheckBox = new wxCheckBox( m_SoldPFrontPanel, ID_SOLDPFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_SoldPFrontCheckBox->SetToolTip( _("If you want a solder paster layer for front side of the board") );
 	
 	bSizer7->Add( m_SoldPFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_SoldPFrontPanel->SetSizer( bSizer7 );
 	m_SoldPFrontPanel->Layout();
@@ -126,10 +130,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 	
 	m_SilkSFrontCheckBox = new wxCheckBox( m_SilkSFrontPanel, ID_SILKSFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_SilkSFrontCheckBox->SetToolTip( _("If you want a silk screen layer for the front side of the board") );
 	
 	bSizer5->Add( m_SilkSFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_SilkSFrontPanel->SetSizer( bSizer5 );
 	m_SilkSFrontPanel->Layout();
@@ -151,10 +155,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 	
 	m_MaskFrontCheckBox = new wxCheckBox( m_MaskFrontPanel, ID_MASKFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_MaskFrontCheckBox->SetToolTip( _("If you want a solder mask layer for the front of the board") );
 	
 	bSizer8->Add( m_MaskFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_MaskFrontPanel->SetSizer( bSizer8 );
 	m_MaskFrontPanel->Layout();
@@ -178,10 +182,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 	
 	m_FrontCheckBox = new wxCheckBox( m_FrontPanel, ID_FRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_FrontCheckBox->SetToolTip( _("If you want a front copper layer") );
 	
 	bSizer9->Add( m_FrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_FrontPanel->SetSizer( bSizer9 );
 	m_FrontPanel->Layout();
@@ -207,8 +211,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner2Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner2CheckBox = new wxCheckBox( m_Inner2Panel, ID_INNER2CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner2Sizer->Add( m_Inner2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner2Panel->SetSizer( bInner2Sizer );
 	m_Inner2Panel->Layout();
@@ -234,8 +238,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner3Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner3CheckBox = new wxCheckBox( m_Inner3Panel, ID_INNER3CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner3Sizer->Add( m_Inner3CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner3Panel->SetSizer( bInner3Sizer );
 	m_Inner3Panel->Layout();
@@ -261,8 +265,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner4Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner4CheckBox = new wxCheckBox( m_Inner4Panel, ID_INNER4CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner4Sizer->Add( m_Inner4CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner4Panel->SetSizer( bInner4Sizer );
 	m_Inner4Panel->Layout();
@@ -288,8 +292,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner5Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner5CheckBox = new wxCheckBox( m_Inner5Panel, ID_INNER5CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner5Sizer->Add( m_Inner5CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner5Panel->SetSizer( bInner5Sizer );
 	m_Inner5Panel->Layout();
@@ -315,8 +319,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner6Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner6CheckBox = new wxCheckBox( m_Inner6Panel, ID_INNER6CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner6Sizer->Add( m_Inner6CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner6Panel->SetSizer( bInner6Sizer );
 	m_Inner6Panel->Layout();
@@ -342,8 +346,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner7Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner7CheckBox = new wxCheckBox( m_Inner7Panel, ID_INNER7CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner7Sizer->Add( m_Inner7CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner7Panel->SetSizer( bInner7Sizer );
 	m_Inner7Panel->Layout();
@@ -369,8 +373,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner8Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner8CheckBox = new wxCheckBox( m_Inner8Panel, ID_INNER8CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner8Sizer->Add( m_Inner8CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner8Panel->SetSizer( bInner8Sizer );
 	m_Inner8Panel->Layout();
@@ -396,8 +400,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner9Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner9CheckBox = new wxCheckBox( m_Inner9Panel, ID_INNER9CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner9Sizer->Add( m_Inner9CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner9Panel->SetSizer( bInner9Sizer );
 	m_Inner9Panel->Layout();
@@ -423,8 +427,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner10Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner10CheckBox = new wxCheckBox( m_Inner10Panel, ID_INNER10CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner10Sizer->Add( m_Inner10CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner10Panel->SetSizer( bInner10Sizer );
 	m_Inner10Panel->Layout();
@@ -450,8 +454,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner11Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner11CheckBox = new wxCheckBox( m_Inner11Panel, ID_INNER11CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner11Sizer->Add( m_Inner11CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner11Panel->SetSizer( bInner11Sizer );
 	m_Inner11Panel->Layout();
@@ -477,8 +481,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner12Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner12CheckBox = new wxCheckBox( m_Inner12Panel, ID_INNER12CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner12Sizer->Add( m_Inner12CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner12Panel->SetSizer( bInner12Sizer );
 	m_Inner12Panel->Layout();
@@ -504,8 +508,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner13Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner13CheckBox = new wxCheckBox( m_Inner13Panel, ID_INNER13CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner13Sizer->Add( m_Inner13CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner13Panel->SetSizer( bInner13Sizer );
 	m_Inner13Panel->Layout();
@@ -531,8 +535,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner14Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner14CheckBox = new wxCheckBox( m_Inner14Panel, ID_INNER14CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner14Sizer->Add( m_Inner14CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner14Panel->SetSizer( bInner14Sizer );
 	m_Inner14Panel->Layout();
@@ -558,8 +562,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bInner15Sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Inner15CheckBox = new wxCheckBox( m_Inner15Panel, ID_INNER15CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bInner15Sizer->Add( m_Inner15CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Inner15Panel->SetSizer( bInner15Sizer );
 	m_Inner15Panel->Layout();
@@ -587,10 +591,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bBackSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_BackCheckBox = new wxCheckBox( m_BackPanel, ID_BACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_BackCheckBox->SetToolTip( _("If you want a back copper layer") );
 	
 	bBackSizer->Add( m_BackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_BackPanel->SetSizer( bBackSizer );
 	m_BackPanel->Layout();
@@ -616,10 +620,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer24 = new wxBoxSizer( wxVERTICAL );
 	
 	m_MaskBackCheckBox = new wxCheckBox( m_MaskBackPanel, ID_MASKBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_MaskBackCheckBox->SetToolTip( _("If you want a solder mask layer for the back side of the board") );
 	
 	bSizer24->Add( m_MaskBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_MaskBackPanel->SetSizer( bSizer24 );
 	m_MaskBackPanel->Layout();
@@ -641,10 +645,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer25 = new wxBoxSizer( wxVERTICAL );
 	
 	m_SilkSBackCheckBox = new wxCheckBox( m_SilkSBackPanel, ID_SILKSBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_SilkSBackCheckBox->SetToolTip( _("If you want a silk screen layer for the back side of the board") );
 	
 	bSizer25->Add( m_SilkSBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_SilkSBackPanel->SetSizer( bSizer25 );
 	m_SilkSBackPanel->Layout();
@@ -666,10 +670,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer26 = new wxBoxSizer( wxVERTICAL );
 	
 	m_SoldPBackCheckBox = new wxCheckBox( m_SoldPBackPanel, ID_SOLDPBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_SoldPBackCheckBox->SetToolTip( _("If you want a solder paste layer for the back side of the board") );
 	
 	bSizer26->Add( m_SoldPBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_SoldPBackPanel->SetSizer( bSizer26 );
 	m_SoldPBackPanel->Layout();
@@ -691,10 +695,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer27 = new wxBoxSizer( wxVERTICAL );
 	
 	m_AdhesBackCheckBox = new wxCheckBox( m_AdhesBackPanel, ID_ADHESBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_AdhesBackCheckBox->SetToolTip( _("If you want an adhesive layer for the back side of the board") );
 	
 	bSizer27->Add( m_AdhesBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_AdhesBackPanel->SetSizer( bSizer27 );
 	m_AdhesBackPanel->Layout();
@@ -716,10 +720,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer28 = new wxBoxSizer( wxVERTICAL );
 	
 	m_PCBEdgesCheckBox = new wxCheckBox( m_PCBEdgesPanel, ID_PCBEDGESCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_PCBEdgesCheckBox->SetToolTip( _("If you want a board perimeter layer") );
 	
 	bSizer28->Add( m_PCBEdgesCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_PCBEdgesPanel->SetSizer( bSizer28 );
 	m_PCBEdgesPanel->Layout();
@@ -741,8 +745,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer29 = new wxBoxSizer( wxVERTICAL );
 	
 	m_Eco1CheckBox = new wxCheckBox( m_Eco1Panel, ID_ECO2CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bSizer29->Add( m_Eco1CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Eco1Panel->SetSizer( bSizer29 );
 	m_Eco1Panel->Layout();
@@ -764,8 +768,8 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer30 = new wxBoxSizer( wxVERTICAL );
 	
 	m_Eco2CheckBox = new wxCheckBox( m_Eco2Panel, ID_ECO1CHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	bSizer30->Add( m_Eco2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_Eco2Panel->SetSizer( bSizer30 );
 	m_Eco2Panel->Layout();
@@ -787,10 +791,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer31 = new wxBoxSizer( wxVERTICAL );
 	
 	m_CommentsCheckBox = new wxCheckBox( m_CommentsPanel, ID_COMMENTSCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_CommentsCheckBox->SetToolTip( _("If you want a separate layer for comments or notes") );
 	
 	bSizer31->Add( m_CommentsCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_CommentsPanel->SetSizer( bSizer31 );
 	m_CommentsPanel->Layout();
@@ -812,10 +816,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
 	
 	m_DrawingsCheckBox = new wxCheckBox( m_DrawingsPanel, ID_DRAWINGSCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_DrawingsCheckBox->SetToolTip( _("If you want a layer for documentation drawings") );
 	
 	bSizer32->Add( m_DrawingsCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	
 	m_DrawingsPanel->SetSizer( bSizer32 );
 	m_DrawingsPanel->Layout();
@@ -826,10 +830,12 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_DrawingsStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_DrawingsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
+	
 	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );
 	m_LayersListPanel->Layout();
 	m_LayerListFlexGridSizer->Fit( m_LayersListPanel );
 	sbLayersSizer->Add( m_LayersListPanel, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( sbLayersSizer, 1, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
 	
@@ -839,7 +845,9 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer2Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer2->AddButton( m_sdbSizer2Cancel );
 	m_sdbSizer2->Realize();
+	
 	bMainSizer->Add( m_sdbSizer2, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
@@ -917,4 +925,5 @@ DIALOG_LAYERS_SETUP_BASE::~DIALOG_LAYERS_SETUP_BASE()
 	m_DrawingsCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCheckBox ), NULL, this );
 	m_sdbSizer2Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnCancelButtonClick ), NULL, this );
 	m_sdbSizer2OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LAYERS_SETUP_BASE::OnOkButtonClick ), NULL, this );
+	
 }

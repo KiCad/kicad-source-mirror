@@ -44,9 +44,6 @@ private:
 
     static int              s_LastTabSelection;     ///< which tab user had open last
 
-    static wxSize		    s_LastSize;		        ///< last position and size
-    static wxPoint		    s_LastPos;
-
     /**
      * A two column table which gets filled once and never loses any elements, so it is
      * basically constant, except that the NETCUP::clazz member can change for any

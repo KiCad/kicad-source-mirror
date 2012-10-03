@@ -34,11 +34,6 @@
 #include <class_board_design_settings.h>
 
 
-// dialog should remember its previous screen position and size
-wxPoint DIALOG_DRC_CONTROL::s_LastPos( -1, -1 );
-wxSize  DIALOG_DRC_CONTROL::s_LastSize;
-
-
 /* class DIALOG_DRC_CONTROL: a dialog to set DRC parameters (clearance, min cooper size)
  * and run DRC tests
  */
@@ -62,30 +57,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
 
 bool DIALOG_DRC_CONTROL::Show( bool show )
 {
-    bool ret;
-
-    if( show )
-    {
-        ret = DIALOG_DRC_CONTROL_BASE::Show( show );
-
-        if( s_LastPos.x != -1 )
-        {
-            SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
-        }
-        else
-        {
-            // Do nothing: last position not yet saved.
-        }
-    }
-    else
-    {
-        // Save the dialog's position before hiding
-        s_LastPos  = GetPosition();
-        s_LastSize = GetSize();
-        ret = DIALOG_DRC_CONTROL_BASE::Show( show );
-    }
-
-    return ret;
+    return DIALOG_DRC_CONTROL_BASE::Show( show );
 }
 
 

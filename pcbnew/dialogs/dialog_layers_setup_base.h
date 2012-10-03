@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_layers_setup_base__
-#define __dialog_layers_setup_base__
+#ifndef __DIALOG_LAYERS_SETUP_BASE_H__
+#define __DIALOG_LAYERS_SETUP_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/choice.h>
 #include <wx/gdicmn.h>
@@ -119,7 +121,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_LAYERS_SETUP_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_LAYERS_SETUP_BASE : public wxDialog 
+class DIALOG_LAYERS_SETUP_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -250,18 +252,19 @@ class DIALOG_LAYERS_SETUP_BASE : public wxDialog
 		wxButton* m_sdbSizer2Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnPresetsChoice( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCopperLayersChoice( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCheckBox( wxCommandEvent& event ){ event.Skip(); }
-		virtual void DenyChangeCheckBox( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkButtonClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnPresetsChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCopperLayersChoice( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DenyChangeCheckBox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Layer Setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Layer Setup"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LAYERS_SETUP_BASE();
 	
 };
 
-#endif //__dialog_layers_setup_base__
+#endif //__DIALOG_LAYERS_SETUP_BASE_H__

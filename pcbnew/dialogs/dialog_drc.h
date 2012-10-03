@@ -69,11 +69,6 @@ public:
 
 
 private:
-
-    static wxSize		    s_LastSize;		        ///< last position and size
-    static wxPoint		    s_LastPos;
-
-
     /**
      * Function writeReport
      * outputs the MARKER items and unconnecte DRC_ITEMs with commentary to an

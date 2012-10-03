@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_edit_module_text_base__
-#define __dialog_edit_module_text_base__
+#ifndef __DIALOG_EDIT_MODULE_TEXT_BASE_H__
+#define __DIALOG_EDIT_MODULE_TEXT_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -28,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DialogEditModuleText_base
 ///////////////////////////////////////////////////////////////////////////////
-class DialogEditModuleText_base : public wxDialog 
+class DialogEditModuleText_base : public DIALOG_SHIM
 {
 	private:
 	
@@ -50,19 +52,19 @@ class DialogEditModuleText_base : public wxDialog
 		wxRadioBox* m_Orient;
 		wxRadioBox* m_Show;
 		wxRadioBox* m_Style;
-		
 		wxButton* m_buttonOK;
 		wxButton* m_buttonCANCEL;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint text properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 357,299 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint text properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 357,299 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DialogEditModuleText_base();
 	
 };
 
-#endif //__dialog_edit_module_text_base__
+#endif //__DIALOG_EDIT_MODULE_TEXT_BASE_H__

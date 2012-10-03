@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -28,7 +29,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_CLEANING_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_CLEANING_OPTIONS_BASE : public wxDialog 
+class DIALOG_CLEANING_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
 	

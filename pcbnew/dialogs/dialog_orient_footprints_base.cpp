@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_ORIENT_FOOTPRINTS_BASE::DIALOG_ORIENT_FOOTPRINTS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_ORIENT_FOOTPRINTS_BASE::DIALOG_ORIENT_FOOTPRINTS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -45,6 +45,7 @@ DIALOG_ORIENT_FOOTPRINTS_BASE::DIALOG_ORIENT_FOOTPRINTS_BASE( wxWindow* parent, 
 	
 	bSizerLeft->Add( m_ApplyToLocked, 0, wxALL, 5 );
 	
+	
 	bSizerMain->Add( bSizerLeft, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerRight;
@@ -57,7 +58,9 @@ DIALOG_ORIENT_FOOTPRINTS_BASE::DIALOG_ORIENT_FOOTPRINTS_BASE( wxWindow* parent, 
 	m_buttonClose = new wxButton( this, wxID_ANY, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_buttonClose, 0, wxALL, 5 );
 	
+	
 	bSizerMain->Add( bSizerRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();

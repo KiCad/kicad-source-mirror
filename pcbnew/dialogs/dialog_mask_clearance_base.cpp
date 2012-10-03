@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,12 +9,12 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_PADS_MASK_CLEARANCE_BASE, wxDialog )
+BEGIN_EVENT_TABLE( DIALOG_PADS_MASK_CLEARANCE_BASE, DIALOG_SHIM )
 	EVT_BUTTON( wxID_CANCEL, DIALOG_PADS_MASK_CLEARANCE_BASE::_wxFB_OnButtonCancelClick )
 	EVT_BUTTON( wxID_OK, DIALOG_PADS_MASK_CLEARANCE_BASE::_wxFB_OnButtonOkClick )
 END_EVENT_TABLE()
 
-DIALOG_PADS_MASK_CLEARANCE_BASE::DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_PADS_MASK_CLEARANCE_BASE::DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -78,9 +78,12 @@ DIALOG_PADS_MASK_CLEARANCE_BASE::DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* pare
 	m_SolderPasteRatioMarginUnits->Wrap( -1 );
 	fgGridSolderMaskSizer->Add( m_SolderPasteRatioMarginUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
+	
 	sbMiddleRightSizer->Add( fgGridSolderMaskSizer, 1, wxEXPAND, 5 );
 	
+	
 	bMainUpperSizer->Add( sbMiddleRightSizer, 1, wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bMainUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -93,7 +96,9 @@ DIALOG_PADS_MASK_CLEARANCE_BASE::DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* pare
 	m_sdbButtonsSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbButtonsSizer->AddButton( m_sdbButtonsSizerCancel );
 	m_sdbButtonsSizer->Realize();
+	
 	bMainSizer->Add( m_sdbButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

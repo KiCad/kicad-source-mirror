@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "dialog_drclistbox.h"
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -45,7 +46,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DRC_CONTROL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_DRC_CONTROL_BASE : public wxDialog 
+class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 {
 	private:
 	

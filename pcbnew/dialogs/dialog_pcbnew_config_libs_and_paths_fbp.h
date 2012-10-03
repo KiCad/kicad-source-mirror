@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_pcbnew_config_libs_and_paths_fbp__
-#define __dialog_pcbnew_config_libs_and_paths_fbp__
+#ifndef __DIALOG_PCBNEW_CONFIG_LIBS_AND_PATHS_FBP_H__
+#define __DIALOG_PCBNEW_CONFIG_LIBS_AND_PATHS_FBP_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
 #include <wx/string.h>
@@ -28,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PCBNEW_CONFIG_LIBS_FBP
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PCBNEW_CONFIG_LIBS_FBP : public wxDialog 
+class DIALOG_PCBNEW_CONFIG_LIBS_FBP : public DIALOG_SHIM
 {
 	private:
 	
@@ -40,7 +42,7 @@ class DIALOG_PCBNEW_CONFIG_LIBS_FBP : public wxDialog
 			wxID_BROWSE_MOD_DOC,
 			ID_LIB_PATH_SEL,
 			wxID_INSERT_PATH,
-			wxID_REMOVE_PATH,
+			wxID_REMOVE_PATH
 		};
 		
 		wxListBox* m_ListLibr;
@@ -76,9 +78,9 @@ class DIALOG_PCBNEW_CONFIG_LIBS_FBP : public wxDialog
 	
 	public:
 		
-		DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PCBNEW_CONFIG_LIBS_FBP();
 	
 };
 
-#endif //__dialog_pcbnew_config_libs_and_paths_fbp__
+#endif //__DIALOG_PCBNEW_CONFIG_LIBS_AND_PATHS_FBP_H__

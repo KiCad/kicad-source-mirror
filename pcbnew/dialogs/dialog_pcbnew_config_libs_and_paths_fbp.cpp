@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -21,6 +21,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	
 	wxBoxSizer* bLibsButtonsSizer;
 	bLibsButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
+	
 	
 	sbLibsChoiceSizer->Add( bLibsButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -54,7 +55,9 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	m_buttonDown = new wxButton( this, wxID_ANY, _("Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonDown, 0, wxALL, 5 );
 	
+	
 	sbLibsChoiceSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	
 	
 	bMainSizer->Add( sbLibsChoiceSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -66,6 +69,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	
 	m_buttonModDoc = new wxButton( this, wxID_BROWSE_MOD_DOC, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbModulesDocSizer->Add( m_buttonModDoc, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+	
 	
 	bMainSizer->Add( sbModulesDocSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -81,6 +85,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	
 	bUserListSizer->Add( m_listUserPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	sbSizer4->Add( bUserListSizer, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bUserPathsButtonsSizer;
@@ -95,7 +100,9 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	m_buttonRemovePath = new wxButton( this, wxID_REMOVE_PATH, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
 	bUserPathsButtonsSizer->Add( m_buttonRemovePath, 0, wxALL|wxBOTTOM, 5 );
 	
+	
 	sbSizer4->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( sbSizer4, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -105,6 +112,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	wxBoxSizer* bUserLibPathSizer;
 	bUserLibPathSizer = new wxBoxSizer( wxHORIZONTAL );
 	
+	
 	sbLibPathSizer->Add( bUserLibPathSizer, 1, wxEXPAND, 5 );
 	
 	m_DefaultLibraryPathslistBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB ); 
@@ -112,6 +120,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	m_DefaultLibraryPathslistBox->SetMinSize( wxSize( -1,70 ) );
 	
 	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( sbLibPathSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -124,7 +133,9 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

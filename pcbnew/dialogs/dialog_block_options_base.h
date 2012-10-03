@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_block_options_base__
-#define __dialog_block_options_base__
+#ifndef __DIALOG_BLOCK_OPTIONS_BASE_H__
+#define __DIALOG_BLOCK_OPTIONS_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -28,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_BLOCK_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_BLOCK_OPTIONS_BASE : public wxDialog 
+class DIALOG_BLOCK_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -55,9 +57,9 @@ class DIALOG_BLOCK_OPTIONS_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 397,226 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 397,226 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_BLOCK_OPTIONS_BASE();
 	
 };
 
-#endif //__dialog_block_options_base__
+#endif //__DIALOG_BLOCK_OPTIONS_BASE_H__

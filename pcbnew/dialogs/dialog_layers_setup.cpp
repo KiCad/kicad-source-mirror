@@ -73,9 +73,6 @@ struct CTLs
 class DIALOG_LAYERS_SETUP : public DIALOG_LAYERS_SETUP_BASE
 {
 private:
-    static wxPoint      s_LastPos;
-    static wxSize       s_LastSize;
-
     PCB_EDIT_FRAME*     m_Parent;
 
     int                 m_CopperLayerCount;
@@ -173,11 +170,6 @@ public:
         return ret;
     }
 };
-
-
-// We want our dialog to remember its previous screen position
-wxPoint DIALOG_LAYERS_SETUP::s_LastPos( -1, -1 );
-wxSize  DIALOG_LAYERS_SETUP::s_LastSize;
 
 
 // Layer bit masks for each defined "Preset Layer Grouping"
@@ -317,26 +309,7 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* parent ) :
 
 bool DIALOG_LAYERS_SETUP::Show( bool show )
 {
-    bool ret;
-
-    if( show )
-    {
-        if( s_LastPos.x != -1 )
-        {
-            SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
-        }
-        ret = DIALOG_LAYERS_SETUP_BASE::Show( show );
-    }
-    else
-    {
-        // Save the dialog's position before hiding
-        s_LastPos  = GetPosition();
-        s_LastSize = GetSize();
-
-        ret = DIALOG_LAYERS_SETUP_BASE::Show( show );
-    }
-
-    return ret;
+    return DIALOG_LAYERS_SETUP_BASE::Show( show );
 }
 
 
