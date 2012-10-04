@@ -55,13 +55,6 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
 }
 
 
-bool DIALOG_DRC_CONTROL::Show( bool show )
-{
-    return DIALOG_DRC_CONTROL_BASE::Show( show );
-}
-
-
-
 void DIALOG_DRC_CONTROL::InitValues()
 {
     // Connect events and objects

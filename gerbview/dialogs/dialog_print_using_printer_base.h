@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_print_using_printer_base__
-#define __dialog_print_using_printer_base__
+#ifndef __DIALOG_PRINT_USING_PRINTER_BASE_H__
+#define __DIALOG_PRINT_USING_PRINTER_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -29,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_PRINT_USING_PRINTER_base
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PRINT_USING_PRINTER_base : public wxDialog 
+class DIALOG_PRINT_USING_PRINTER_base : public DIALOG_SHIM
 {
 	private:
 	
@@ -38,7 +40,7 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		{
 			wxID_PRINT_MODE = 1000,
 			wxID_PRINT_OPTIONS,
-			wxID_PRINT_ALL,
+			wxID_PRINT_ALL
 		};
 		
 		wxStaticBoxSizer* m_leftLayersBoxSizer;
@@ -66,9 +68,9 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 	
 	public:
 		
-		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,314 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,314 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PRINT_USING_PRINTER_base();
 	
 };
 
-#endif //__dialog_print_using_printer_base__
+#endif //__DIALOG_PRINT_USING_PRINTER_BASE_H__

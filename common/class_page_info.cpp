@@ -139,7 +139,7 @@ void PAGE_INFO::setMargins()
         m_left_margin   =
         m_right_margin  =
         m_top_margin    =
-        m_bottom_margin = 400;
+        m_bottom_margin = 400;              // Units = mils
     }
 }
 

@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_cvpcb_config_fbp__
-#define __dialog_cvpcb_config_fbp__
+#ifndef __DIALOG_CVPCB_CONFIG_FBP_H__
+#define __DIALOG_CVPCB_CONFIG_FBP_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/listbox.h>
 #include <wx/gdicmn.h>
@@ -28,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_CVPCB_CONFIG_FBP
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_CVPCB_CONFIG_FBP : public wxDialog 
+class DIALOG_CVPCB_CONFIG_FBP : public DIALOG_SHIM
 {
 	private:
 	
@@ -48,7 +50,7 @@ class DIALOG_CVPCB_CONFIG_FBP : public wxDialog
 			ID_BROWSE_MOD_DOC,
 			ID_LIB_PATH_SEL,
 			ID_INSERT_PATH,
-			ID_REMOVE_PATH,
+			ID_REMOVE_PATH
 		};
 		
 		wxListBox* m_ListLibr;
@@ -90,9 +92,9 @@ class DIALOG_CVPCB_CONFIG_FBP : public wxDialog
 	
 	public:
 		
-		DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 570,625 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 570,625 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_CVPCB_CONFIG_FBP();
 	
 };
 
-#endif //__dialog_cvpcb_config_fbp__
+#endif //__DIALOG_CVPCB_CONFIG_FBP_H__
