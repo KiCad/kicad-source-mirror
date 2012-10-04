@@ -867,10 +867,6 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 // Draw 3D pads.
 void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
-    int layer, nlmax;
-    bool    Oncu, Oncmp, Both;
-    int     color;
-
     double scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
 
     // Calculate the center of the pad shape.
@@ -932,10 +928,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
 
-    nlmax = g_Parm_3D_Visu.m_CopperLayersCount - 1;
-    Oncu  = (m_layerMask & LAYER_BACK) ? true : false;
-    Oncmp = (m_layerMask & LAYER_FRONT) ? true : false;
-    Both  = Oncu && Oncmp;
+    int nlmax = g_Parm_3D_Visu.m_CopperLayersCount - 1;
 
     // Store here the points to approximate pad shape by segments
     std::vector<CPolyPt> polyPadShape;
@@ -943,26 +936,18 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
     switch( GetShape() )
     {
     case PAD_CIRCLE:
-        for( layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
+        for( int layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
         {
             if( layer && (layer == nlmax) )
                 layer = LAYER_N_FRONT;
 
-            if( (layer == LAYER_N_FRONT) && !Oncmp )
+            if( !IsOnLayer( layer ) )
                 continue;
-
-            if( (layer == LAYER_N_BACK) && !Oncu )
-                continue;
-
-            if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER) && !Both )
-                continue;
-
-            color = g_ColorsSettings.GetLayerColor( layer );
 
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
                 continue;
 
-            SetGLColor( color );
+            SetGLColor( g_ColorsSettings.GetLayerColor( layer ) );
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
             int ring_radius = (m_Size.x + m_Drill.x) / 4;
             if( thickness == 0 )
@@ -1022,25 +1007,18 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 
     if( polyPadShape.size() )
     {
-        for( layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
+        for( int layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
         {
             if( layer && (layer == nlmax) )
                 layer = LAYER_N_FRONT;
 
-            if( (layer == LAYER_N_FRONT) && !Oncmp )
-                continue;
-
-            if( (layer == LAYER_N_BACK) && !Oncu )
-                continue;
-
-            if( (layer > FIRST_COPPER_LAYER) && (layer < LAST_COPPER_LAYER) && !Both )
+            if( !IsOnLayer( layer ) )
                 continue;
 
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
                 continue;
 
-            color = g_ColorsSettings.GetLayerColor( layer );
-            SetGLColor( color );
+            SetGLColor( g_ColorsSettings.GetLayerColor( layer ) );
 
             if( thickness == 0 )
                 glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );

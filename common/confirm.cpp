@@ -58,7 +58,7 @@ void DisplayInfoMessage( wxWindow* parent, const wxString& text, int displaytime
 {
     wxMessageDialog* dialog;
 
-    dialog = new wxMessageDialog( parent, text, _( "Info:" ),
+    dialog = new wxMessageDialog( parent, text, _( "Info" ),
                                   wxOK | wxCENTRE | wxICON_INFORMATION );
 
     dialog->ShowModal();

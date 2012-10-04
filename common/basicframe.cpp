@@ -356,7 +356,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     }
     else
     {
-        msg.Printf( _( "Help file %s not found." ), GetChars( wxGetApp().GetHelpFileName() ) );
+        msg.Printf( _( "Help file %s could not be found." ), GetChars( wxGetApp().GetHelpFileName() ) );
         wxMessageBox( msg );
     }
 
