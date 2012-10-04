@@ -27,6 +27,7 @@
 
 #include <class_module.h>
 #include <class_pad.h>
+#include <class_track.h>
 #include <class_marker_pcb.h>
 
 
@@ -148,6 +149,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     MODULE*     module = NULL;
     D_PAD*      pad    = NULL;
     bool        pad_through = false;
+    SEGVIA*     via    = NULL;
     MARKER_PCB* marker = NULL;
 
 #if 0   // debugging
@@ -249,7 +251,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
         break;
 
-    case PCB_VIA_T:
+    case PCB_VIA_T:     // vias are on many layers, so layer test is specific
+        via = (SEGVIA*) item;
         break;
 
     case PCB_TRACE_T:
@@ -351,7 +354,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
         // Modules and their subcomponents: text and pads are not sensitive to the layer
         // visibility controls.  They all have their own separate visibility controls
-        if( module || pad || m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
+        // for vias, GetLayer() has no meaning, but IsOnLayer() works fine
+        if( via || module || pad || m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
             {
@@ -378,7 +382,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
         // Modules and their subcomponents: text and pads are not sensitive to the layer
         // visibility controls.  They all have their own separate visibility controls
-        if( module || pad || m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
+        if( via || module || pad || m_Guide->IsLayerVisible( layer ) || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
             {
