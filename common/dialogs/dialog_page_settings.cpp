@@ -45,10 +45,6 @@
 
 #include <dialog_page_settings.h>
 
-// dialog should remember its previous screen position and size
-wxPoint DIALOG_PAGES_SETTINGS::s_LastPos( -1, -1 );
-wxSize  DIALOG_PAGES_SETTINGS::s_LastSize;
-
 // List of page formats.
 // should be statically initialized, because we need both
 // the translated and the not translated version.
@@ -130,7 +126,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
 
 #ifdef EESCHEMA
-    // Init display value for sheet User size
+    // Init display value for schematic sub-sheet number
     wxString format = m_TextSheetCount->GetLabel();
     msg.Printf( format, m_Screen->m_NumberOfScreens );
     m_TextSheetCount->SetLabel( msg );
@@ -211,35 +207,6 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     // Make the OK button the default.
     m_sdbSizer1OK->SetDefault();
     m_initialized = true;
-}
-
-
-bool DIALOG_PAGES_SETTINGS::Show( bool show )
-{
-    bool ret;
-
-    if( show )
-    {
-        ret = DIALOG_PAGES_SETTINGS_BASE::Show( show );
-
-        if( s_LastPos.x != -1 )
-        {
-            SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
-        }
-        else
-        {
-            // Do nothing: last position not yet saved.
-        }
-    }
-    else
-    {
-        // Save the dialog's position before hiding
-        s_LastPos  = GetPosition();
-        s_LastSize = GetSize();
-        ret = DIALOG_PAGES_SETTINGS_BASE::Show( show );
-    }
-
-    return ret;
 }
 
 

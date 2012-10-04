@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -49,7 +49,9 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	m_buttonLibDown = new wxButton( this, ID_LIB_DOWN, _("Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLibButtons->Add( m_buttonLibDown, 0, wxRIGHT|wxLEFT, 5 );
 	
+	
 	sbLibsChoiceSizer->Add( bSizerLibButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	bMainSizer->Add( sbLibsChoiceSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -86,7 +88,9 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	m_buttonEquDown = new wxButton( this, ID_EQU_DOWN, _("Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerEquButtons->Add( m_buttonEquDown, 0, wxRIGHT|wxLEFT, 5 );
 	
+	
 	sbEquivChoiceSizer->Add( bSizerEquButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	bMainSizer->Add( sbEquivChoiceSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -98,6 +102,7 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	
 	m_buttonModDoc = new wxButton( this, ID_BROWSE_MOD_DOC, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbModulesDocSizer->Add( m_buttonModDoc, 0, wxRIGHT|wxLEFT, 5 );
+	
 	
 	bMainSizer->Add( sbModulesDocSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -113,6 +118,7 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	
 	bUserListSizer->Add( m_listUserPaths, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
+	
 	sbSizer4->Add( bUserListSizer, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bUserPathsButtonsSizer;
@@ -127,7 +133,9 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	m_buttonRemovePath = new wxButton( this, ID_REMOVE_PATH, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
 	bUserPathsButtonsSizer->Add( m_buttonRemovePath, 0, wxRIGHT|wxLEFT, 5 );
 	
+	
 	sbSizer4->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	bMainSizer->Add( sbSizer4, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -140,6 +148,7 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	
 	sbSizer6->Add( m_DefaultLibraryPathslistBox, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bMainSizer->Add( sbSizer6, 1, wxALL|wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -151,7 +160,9 @@ DIALOG_CVPCB_CONFIG_FBP::DIALOG_CVPCB_CONFIG_FBP( wxWindow* parent, wxWindowID i
 	m_sdbSizer2Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer2->AddButton( m_sdbSizer2Cancel );
 	m_sdbSizer2->Realize();
+	
 	bMainSizer->Add( m_sdbSizer2, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

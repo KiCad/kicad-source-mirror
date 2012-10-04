@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( LAYERS_MAP_DIALOG_BASE, wxDialog )
+BEGIN_EVENT_TABLE( LAYERS_MAP_DIALOG_BASE, DIALOG_SHIM )
 	EVT_COMBOBOX( ID_M_COMBOCOPPERLAYERSCOUNT, LAYERS_MAP_DIALOG_BASE::_wxFB_OnBrdLayersCountSelection )
 	EVT_BUTTON( ID_STORE_CHOICE, LAYERS_MAP_DIALOG_BASE::_wxFB_OnStoreSetup )
 	EVT_BUTTON( ID_GET_PREVIOUS_CHOICE, LAYERS_MAP_DIALOG_BASE::_wxFB_OnGetSetup )
@@ -18,7 +18,7 @@ BEGIN_EVENT_TABLE( LAYERS_MAP_DIALOG_BASE, wxDialog )
 	EVT_BUTTON( wxID_OK, LAYERS_MAP_DIALOG_BASE::_wxFB_OnOkClick )
 END_EVENT_TABLE()
 
-LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -38,10 +38,12 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	m_flexLeftColumnBoxSizer->SetFlexibleDirection( wxBOTH );
 	m_flexLeftColumnBoxSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
+	
 	sbSizerLayersTable->Add( m_flexLeftColumnBoxSizer, 1, wxEXPAND, 5 );
 	
 	m_staticlineSep = new wxStaticLine( this, ID_M_STATICLINESEP, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	sbSizerLayersTable->Add( m_staticlineSep, 0, wxEXPAND | wxALL, 5 );
+	
 	
 	sbUpperSizer->Add( sbSizerLayersTable, 1, wxEXPAND, 5 );
 	
@@ -66,6 +68,7 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	m_comboCopperLayersCount->Append( _("16 Layers") );
 	bSizerLyrCnt->Add( m_comboCopperLayersCount, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	
 	bRightSizer->Add( bSizerLyrCnt, 0, wxEXPAND, 5 );
 	
 	
@@ -83,9 +86,12 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	m_buttonReset = new wxButton( this, ID_RESET_CHOICE, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonReset, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bRightSizer->Add( bSizerButtons, 0, wxEXPAND, 5 );
 	
+	
 	sbUpperSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	bSizerMain->Add( sbUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -98,7 +104,9 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	m_sdbSizerButtonsCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
+	
 	bSizerMain->Add( m_sdbSizerButtons, 0, wxALIGN_RIGHT|wxALL, 5 );
+	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();

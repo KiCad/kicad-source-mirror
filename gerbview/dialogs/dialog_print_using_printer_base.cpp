@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
@@ -24,13 +24,17 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	
 	m_leftLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers:") ), wxVERTICAL );
 	
+	
 	bleftSizer->Add( m_leftLayersBoxSizer, 1, wxALL, 5 );
 	
 	m_rightLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers:") ), wxVERTICAL );
 	
+	
 	bleftSizer->Add( m_rightLayersBoxSizer, 1, wxALL, 5 );
 	
+	
 	sbLayersSizer->Add( bleftSizer, 1, wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( sbLayersSizer, 1, wxEXPAND, 5 );
 	
@@ -61,6 +65,7 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	
 	bmiddleLeftSizer->Add( m_FineAdjustYscaleOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( bmiddleLeftSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bmiddleRightSizer;
@@ -72,6 +77,7 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	m_Print_Mirror = new wxCheckBox( this, wxID_ANY, _("Mirror"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbOptionsSizer->Add( m_Print_Mirror, 0, wxALL, 5 );
 	
+	
 	bmiddleRightSizer->Add( sbOptionsSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
@@ -81,6 +87,7 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	m_ModeColorOption->SetToolTip( _("Choose if you want to print sheets in color, or force the black and white mode.") );
 	
 	bmiddleRightSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bmiddleRightSizer, 0, wxEXPAND, 5 );
 	
@@ -99,7 +106,9 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	b_buttonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( b_buttonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();

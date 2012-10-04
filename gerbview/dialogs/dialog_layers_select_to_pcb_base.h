@@ -1,22 +1,24 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_layers_select_to_pcb_base__
-#define __dialog_layers_select_to_pcb_base__
+#ifndef __DIALOG_LAYERS_SELECT_TO_PCB_BASE_H__
+#define __DIALOG_LAYERS_SELECT_TO_PCB_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
 #include <wx/statline.h>
-#include <wx/string.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/combobox.h>
@@ -28,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class LAYERS_MAP_DIALOG_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class LAYERS_MAP_DIALOG_BASE : public wxDialog 
+class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -51,7 +53,7 @@ class LAYERS_MAP_DIALOG_BASE : public wxDialog
 			ID_M_COMBOCOPPERLAYERSCOUNT,
 			ID_STORE_CHOICE,
 			ID_GET_PREVIOUS_CHOICE,
-			ID_RESET_CHOICE,
+			ID_RESET_CHOICE
 		};
 		
 		wxStaticBoxSizer* sbSizerLayersTable;
@@ -59,7 +61,6 @@ class LAYERS_MAP_DIALOG_BASE : public wxDialog
 		wxStaticLine* m_staticlineSep;
 		wxStaticText* m_staticTextCopperlayerCount;
 		wxComboBox* m_comboCopperLayersCount;
-		
 		wxButton* m_buttonStore;
 		wxButton* m_buttonRetrieve;
 		wxButton* m_buttonReset;
@@ -84,4 +85,4 @@ class LAYERS_MAP_DIALOG_BASE : public wxDialog
 	
 };
 
-#endif //__dialog_layers_select_to_pcb_base__
+#endif //__DIALOG_LAYERS_SELECT_TO_PCB_BASE_H__

@@ -155,8 +155,6 @@ public:
     DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* parent );
     ~DIALOG_LAYERS_SETUP( ) { };
 
-    bool Show( bool show );     // overload stock function
-
     /**
      * Function Layout
      * overrides the standard Layout() function so that the column titles can
@@ -304,12 +302,6 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( PCB_EDIT_FRAME* parent ) :
 
     m_sdbSizer2OK->SetFocus();
     m_sdbSizer2OK->SetDefault();
-}
-
-
-bool DIALOG_LAYERS_SETUP::Show( bool show )
-{
-    return DIALOG_LAYERS_SETUP_BASE::Show( show );
 }
 
 

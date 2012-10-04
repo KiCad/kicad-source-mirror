@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE::DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE::DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -28,7 +28,9 @@ DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE::DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( wxWindow
 	m_ShowPageLimits->SetSelection( 0 );
 	bRightSizer->Add( m_ShowPageLimits, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bUpperSizer->Add( bRightSizer, 1, wxEXPAND, 5 );
+	
 	
 	bDialogSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -41,7 +43,9 @@ DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE::DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( wxWindow
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	bDialogSizer->Add( m_sdbSizer1, 0, wxEXPAND|wxALL, 5 );
+	
 	
 	this->SetSizer( bDialogSizer );
 	this->Layout();
