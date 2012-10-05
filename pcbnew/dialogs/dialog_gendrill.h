@@ -39,7 +39,6 @@ public:
 
     static int       m_UnitDrillIsInch;
     static int       m_ZerosFormat;
-    static int       m_PrecisionFormat;
     static bool      m_MinimalHeader;
     static bool      m_Mirror;
     static bool      m_DrillOriginIsAuxAxis; /* Axis selection (main / auxiliary)

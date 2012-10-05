@@ -22,8 +22,8 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
-#include <wx/checkbox.h>
 #include <wx/stattext.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxButton* m_buttonBrowse;
 		wxRadioBox* m_Choice_Unit;
 		wxRadioBox* m_Choice_Zeros_Format;
-		wxRadioBox* m_Choice_Precision;
+		wxStaticText* m_staticTextPrecision;
 		wxRadioBox* m_Choice_Drill_Map;
 		wxCheckBox* m_Check_Mirror;
 		wxCheckBox* m_Check_Minimal;

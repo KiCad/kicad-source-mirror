@@ -51,18 +51,9 @@
 
 // list of allowed precision for EXCELLON files, for integer format:
 // Due to difference between inches and mm,
-// there are 2 set of reasonnable precision values, one for inches and one for metric
-static DRILL_PRECISION precisionListForInches[] =
-{
-    DRILL_PRECISION( 2, 3 ), DRILL_PRECISION( 2, 4 )
-};
-
-static DRILL_PRECISION precisionListForMetric[] =
-{
-    DRILL_PRECISION( 3, 2 ), DRILL_PRECISION( 3, 3 )
-};
-
-
+// there are 2 precision values, one for inches and one for metric
+static DRILL_PRECISION precisionListForInches( 2, 4 );
+static DRILL_PRECISION precisionListForMetric( 3, 3 );
 
 
 /* This function displays the dialog frame for drill tools
@@ -96,7 +87,6 @@ int DIALOG_GENDRILL::m_ZerosFormat     = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;
 bool DIALOG_GENDRILL::m_Mirror = false;
 bool DIALOG_GENDRILL::m_DrillOriginIsAuxAxis = false;
-int DIALOG_GENDRILL::m_PrecisionFormat = 1;
 int DIALOG_GENDRILL::m_mapFileType = 1;
 
 
@@ -109,7 +99,6 @@ DIALOG_GENDRILL::~DIALOG_GENDRILL()
 void DIALOG_GENDRILL::initDialog()
 {
     m_config->Read( ZerosFormatKey, &DIALOG_GENDRILL::m_ZerosFormat );
-    m_config->Read( PrecisionKey, &DIALOG_GENDRILL::m_PrecisionFormat );
     m_config->Read( MirrorKey, &DIALOG_GENDRILL::m_Mirror );
     m_config->Read( MinimalHeaderKey, &DIALOG_GENDRILL::m_MinimalHeader );
     m_config->Read( UnitDrillInchKey, &DIALOG_GENDRILL::m_UnitDrillIsInch );
@@ -124,11 +113,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
     wxString msg;
 
     m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
-    m_Choice_Precision->SetSelection( m_PrecisionFormat );
     m_Choice_Zeros_Format->SetSelection( m_ZerosFormat );
-
-    if( m_ZerosFormat == EXCELLON_WRITER::DECIMAL_FORMAT )
-        m_Choice_Precision->Enable( false );
 
     UpdatePrecisionOptions();
 
@@ -228,7 +213,6 @@ void DIALOG_GENDRILL::UpdateConfig()
     SetParams();
 
     m_config->Write( ZerosFormatKey, m_ZerosFormat );
-    m_config->Write( PrecisionKey, m_PrecisionFormat );
     m_config->Write( MirrorKey, m_Mirror );
     m_config->Write( MinimalHeaderKey, m_MinimalHeader );
     m_config->Write( UnitDrillInchKey, m_UnitDrillIsInch );
@@ -268,22 +252,17 @@ void DIALOG_GENDRILL::OnSelZerosFmtSelected( wxCommandEvent& event )
 void DIALOG_GENDRILL::UpdatePrecisionOptions()
 {
     if( m_Choice_Unit->GetSelection()== 1 )     // Units = inches
-    {
-        // inch options
-        m_Choice_Precision->SetString( 0, precisionListForInches[0].GetPrecisionString() );
-        m_Choice_Precision->SetString( 1, precisionListForInches[1].GetPrecisionString() );
-    }
+        m_staticTextPrecision->SetLabel( precisionListForInches.GetPrecisionString() );
     else
     {
         // metric options
-        m_Choice_Precision->SetString( 0, precisionListForMetric[0].GetPrecisionString() );
-        m_Choice_Precision->SetString( 1, precisionListForMetric[1].GetPrecisionString() );
+        m_staticTextPrecision->SetLabel( precisionListForMetric.GetPrecisionString() );
     }
 
     if( m_Choice_Zeros_Format->GetSelection() == EXCELLON_WRITER::DECIMAL_FORMAT )
-        m_Choice_Precision->Enable( false );
+        m_staticTextPrecision->Enable( false );
     else
-        m_Choice_Precision->Enable( true );
+        m_staticTextPrecision->Enable( true );
 }
 
 void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
@@ -339,20 +318,16 @@ void DIALOG_GENDRILL::SetParams()
     m_Mirror = m_Check_Mirror->IsChecked();
     m_ZerosFormat = m_Choice_Zeros_Format->GetSelection();
     m_DrillOriginIsAuxAxis = m_Choice_Drill_Offset->GetSelection();
-    m_PrecisionFormat = m_Choice_Precision->GetSelection();
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );
     else
         m_FileDrillOffset = m_parent->GetOriginAxisPosition();
 
-    // get precision
-    int idx = m_Choice_Precision->GetSelection();
-
     if( m_UnitDrillIsInch )
-        m_Precision = precisionListForInches[idx];
+        m_Precision = precisionListForInches;
     else
-        m_Precision = precisionListForMetric[idx];
+        m_Precision = precisionListForMetric;
 
     m_board->SetPlotOptions( m_plotOpts );
 }
