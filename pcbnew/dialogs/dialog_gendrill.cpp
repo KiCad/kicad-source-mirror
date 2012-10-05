@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Jean_Pierre Charras <jp.charras@ujf-grenoble.fr>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2012 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,13 +31,14 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbplot.h>
-#include <gendrill.h>
+#include <gendrill_Excellon_writer.h>
 
 #include <class_board.h>
 #include <class_track.h>
 #include <class_module.h>
 
 #include <dialog_gendrill.h>
+#include <wildcards_and_files_ext.h>
 
 
 // Keywords for read and write config
@@ -62,11 +63,26 @@ static DRILL_PRECISION precisionListForMetric[] =
 };
 
 
+
+
+/* This function displays the dialog frame for drill tools
+ */
+void PCB_EDIT_FRAME::InstallDrillFrame( wxCommandEvent& event )
+{
+    DIALOG_GENDRILL dlg( this );
+
+    dlg.ShowModal();
+}
+
+
+
 DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* parent ) :
     DIALOG_GENDRILL_BASE( parent )
 {
     m_parent = parent;
     m_board  = parent->GetBoard();
+    m_config = wxGetApp().GetSettings();
+    m_plotOpts = m_parent->GetPlotSettings();
 
     SetReturnCode( 1 );
     initDialog();
@@ -75,14 +91,13 @@ DIALOG_GENDRILL::DIALOG_GENDRILL( PCB_EDIT_FRAME* parent ) :
 
 
 // Static members of DIALOG_GENDRILL
-int DIALOG_GENDRILL:: m_UnitDrillIsInch = true;
-int DIALOG_GENDRILL:: m_ZerosFormat     = EXCELLON_WRITER::DECIMAL_FORMAT;
+int DIALOG_GENDRILL::m_UnitDrillIsInch = true;
+int DIALOG_GENDRILL::m_ZerosFormat     = EXCELLON_WRITER::DECIMAL_FORMAT;
 bool DIALOG_GENDRILL::m_MinimalHeader   = false;
 bool DIALOG_GENDRILL::m_Mirror = false;
 bool DIALOG_GENDRILL::m_DrillOriginIsAuxAxis = false;
-int DIALOG_GENDRILL:: m_PrecisionFormat = 1;
-bool DIALOG_GENDRILL::m_createRpt = false;
-int DIALOG_GENDRILL::m_createMap = 0;
+int DIALOG_GENDRILL::m_PrecisionFormat = 1;
+int DIALOG_GENDRILL::m_mapFileType = 1;
 
 
 DIALOG_GENDRILL::~DIALOG_GENDRILL()
@@ -93,17 +108,12 @@ DIALOG_GENDRILL::~DIALOG_GENDRILL()
 
 void DIALOG_GENDRILL::initDialog()
 {
-    wxConfig* Config = wxGetApp().GetSettings();
-
-    if( Config )
-    {
-        Config->Read( ZerosFormatKey, &DIALOG_GENDRILL::m_ZerosFormat );
-        Config->Read( PrecisionKey, &DIALOG_GENDRILL::m_PrecisionFormat );
-        Config->Read( MirrorKey, &DIALOG_GENDRILL::m_Mirror );
-        Config->Read( MinimalHeaderKey, &DIALOG_GENDRILL::m_MinimalHeader );
-        Config->Read( UnitDrillInchKey, &DIALOG_GENDRILL::m_UnitDrillIsInch );
-        Config->Read( DrillOriginIsAuxAxisKey, &DIALOG_GENDRILL::m_DrillOriginIsAuxAxis );
-    }
+    m_config->Read( ZerosFormatKey, &DIALOG_GENDRILL::m_ZerosFormat );
+    m_config->Read( PrecisionKey, &DIALOG_GENDRILL::m_PrecisionFormat );
+    m_config->Read( MirrorKey, &DIALOG_GENDRILL::m_Mirror );
+    m_config->Read( MinimalHeaderKey, &DIALOG_GENDRILL::m_MinimalHeader );
+    m_config->Read( UnitDrillInchKey, &DIALOG_GENDRILL::m_UnitDrillIsInch );
+    m_config->Read( DrillOriginIsAuxAxisKey, &DIALOG_GENDRILL::m_DrillOriginIsAuxAxis );
 
     InitDisplayParams();
 }
@@ -129,8 +139,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
 
     m_Check_Mirror->SetValue( m_Mirror );
 
-    m_Choice_Drill_Map->SetSelection( m_createMap );
-    m_Choice_Drill_Report->SetSelection( m_createRpt );
+    m_Choice_Drill_Map->SetSelection( m_mapFileType );
 
     m_ViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
 
@@ -208,6 +217,9 @@ void DIALOG_GENDRILL::InitDisplayParams()
     msg = m_BuriedViasInfoMsg->GetLabel();
     msg << wxT( " " ) << m_blindOrBuriedViasCount;
     m_BuriedViasInfoMsg->SetLabel( msg );
+
+    // Output directory
+    m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
 }
 
 
@@ -215,17 +227,12 @@ void DIALOG_GENDRILL::UpdateConfig()
 {
     SetParams();
 
-    wxConfig* config = wxGetApp().GetSettings();
-
-    if( config )
-    {
-        config->Write( ZerosFormatKey, m_ZerosFormat );
-        config->Write( PrecisionKey, m_PrecisionFormat );
-        config->Write( MirrorKey, m_Mirror );
-        config->Write( MinimalHeaderKey, m_MinimalHeader );
-        config->Write( UnitDrillInchKey, m_UnitDrillIsInch );
-        config->Write( DrillOriginIsAuxAxisKey, m_DrillOriginIsAuxAxis );
-    }
+    m_config->Write( ZerosFormatKey, m_ZerosFormat );
+    m_config->Write( PrecisionKey, m_PrecisionFormat );
+    m_config->Write( MirrorKey, m_Mirror );
+    m_config->Write( MinimalHeaderKey, m_MinimalHeader );
+    m_config->Write( UnitDrillInchKey, m_UnitDrillIsInch );
+    m_config->Write( DrillOriginIsAuxAxisKey, m_DrillOriginIsAuxAxis );
 }
 
 
@@ -234,11 +241,14 @@ void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
     UpdatePrecisionOptions();
 }
 
-
-void DIALOG_GENDRILL::OnOkClick( wxCommandEvent& event )
+void DIALOG_GENDRILL::OnGenMapFile( wxCommandEvent& event )
 {
-    GenDrillAndReportFiles();
-    EndModal( wxID_OK );
+    GenDrillAndMapFiles( false, true);
+}
+
+void DIALOG_GENDRILL::OnGenDrillFile( wxCommandEvent& event )
+{
+    GenDrillAndMapFiles(true, false);
 }
 
 
@@ -276,17 +286,53 @@ void DIALOG_GENDRILL::UpdatePrecisionOptions()
         m_Choice_Precision->Enable( true );
 }
 
+void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
+{
+    // Build the absolute path of current output plot directory
+    // to preselect it when opening the dialog.
+    wxFileName  fn( m_outputDirectoryName->GetValue() );
+    wxString    path;
+
+    if( fn.IsRelative() )
+        path = wxGetCwd() + fn.GetPathSeparator() + m_outputDirectoryName->GetValue();
+    else
+        path = m_outputDirectoryName->GetValue();
+
+    wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
+
+    if( dirDialog.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxFileName      dirName = wxFileName::DirName( dirDialog.GetPath() );
+
+    wxMessageDialog dialog( this, _( "Use a relative path? " ),
+                            _( "Plot Output Directory" ),
+                            wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
+
+    if( dialog.ShowModal() == wxID_YES )
+    {
+        wxString boardFilePath = ( (wxFileName) m_parent->GetBoard()->GetFileName() ).GetPath();
+
+        if( !dirName.MakeRelativeTo( boardFilePath ) )
+            wxMessageBox( _(
+                              "Cannot make path relative (target volume different from board file volume)!" ),
+                          _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
+    }
+
+    m_outputDirectoryName->SetValue( dirName.GetFullPath() );
+}
 
 void DIALOG_GENDRILL::SetParams()
 {
     wxString msg;
 
-    PCB_PLOT_PARAMS plot_opts = m_board->GetPlotOptions();
+    // Set output directory and replace backslashes with forward ones
+    wxString dirStr;
+    dirStr = m_outputDirectoryName->GetValue();
+    dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
+    m_plotOpts.SetOutputDirectory( dirStr );
 
-    m_plotDefaultpath = plot_opts.GetOutputDirectory();
-
-    m_createMap = m_Choice_Drill_Map->GetSelection();
-    m_createRpt = m_Choice_Drill_Report->GetSelection();
+    m_mapFileType = m_Choice_Drill_Map->GetSelection();
 
     m_UnitDrillIsInch = (m_Choice_Unit->GetSelection() == 0) ? false : true;
     m_MinimalHeader   = m_Check_Minimal->IsChecked();
@@ -294,8 +340,6 @@ void DIALOG_GENDRILL::SetParams()
     m_ZerosFormat = m_Choice_Zeros_Format->GetSelection();
     m_DrillOriginIsAuxAxis = m_Choice_Drill_Offset->GetSelection();
     m_PrecisionFormat = m_Choice_Precision->GetSelection();
-
-    plot_opts.SetHPGLPenNum( 1 );
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );
@@ -310,5 +354,271 @@ void DIALOG_GENDRILL::SetParams()
     else
         m_Precision = precisionListForMetric[idx];
 
-    m_board->SetPlotOptions( plot_opts );
+    m_board->SetPlotOptions( m_plotOpts );
+}
+
+/**
+ * Function GenDrillAndMapFiles
+ * Calls the functions to create EXCELLON drill files and/or drill map files
+ * >When all holes are through, only one excellon file is created.
+ * >When there are some partial holes (some blind or buried vias),
+ *  one excellon file is created, for all plated through holes,
+ *  and one file per layer pair, which have one or more holes, excluding
+ *  through holes, already in the first file.
+ *  one file for all Not Plated through holes
+ */
+void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
+{
+    wxString   layer_extend;              /* added to the  Board FileName to
+                                           * create FullFileName (= Board
+                                           * FileName + layer pair names) */
+    wxString   msg;
+    bool       hasBuriedVias = false;  /* If true, drill files are created
+                                        * layer pair by layer pair for
+                                        * buried vias */
+    int        layer1 = LAYER_N_BACK;
+    int        layer2 = LAYER_N_FRONT;
+    bool       gen_through_holes = true;
+    bool       gen_NPTH_holes    = false;
+
+    wxString   currentWD = ::wxGetCwd();
+
+    UpdateConfig(); // set params and Save drill options
+
+    m_parent->ClearMsgPanel();
+
+    if( m_microViasCount || m_blindOrBuriedViasCount )
+        hasBuriedVias = true;
+
+    EXCELLON_WRITER excellonWriter( m_parent->GetBoard(),
+                                    m_FileDrillOffset );
+    excellonWriter.SetFormat( !m_UnitDrillIsInch,
+                              (EXCELLON_WRITER::zeros_fmt) m_ZerosFormat,
+                              m_Precision.m_lhs, m_Precision.m_rhs );
+    excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset );
+
+    wxFileName fn;
+
+    for( ; ; )
+    {
+        excellonWriter.BuildHolesList( layer1, layer2,
+                          gen_through_holes ? false : true, gen_NPTH_holes );
+
+        if( excellonWriter.GetHolesCount() > 0 ) // has holes?
+        {
+            fn = m_parent->GetBoard()->GetFileName();
+            layer_extend.Empty();
+
+            if( gen_NPTH_holes )
+            {
+                layer_extend << wxT( "-NPTH" );
+            }
+            else if( !gen_through_holes )
+            {
+                if( layer1 == LAYER_N_BACK )
+                    layer_extend << wxT( "-back" );
+                else
+                    layer_extend << wxT( "-inner" ) << layer1;
+                if( layer2 == LAYER_N_FRONT )
+                    layer_extend << wxT( "-front" );
+                else
+                    layer_extend << wxT( "-inner" ) << layer2;
+            }
+
+            fn.SetName( fn.GetName() + layer_extend );
+            wxString defaultPath = m_plotOpts.GetOutputDirectory();
+            if( defaultPath.IsEmpty() )
+                defaultPath = ::wxGetCwd();
+
+            fn.SetPath( defaultPath );
+
+            if( aGenDrill )
+            {
+                fn.SetExt( DrillFileExtension );
+                wxString fullFilename = fn.GetFullPath();
+
+                FILE* file = wxFopen( fullFilename, wxT( "w" ) );
+
+                if( file == 0 )
+                {
+                    msg.Printf( _( "** Unable to create %s **\n" ),
+                                GetChars( fullFilename ) );
+                    m_messagesBox->AppendText( msg );
+                    break;
+                }
+                else
+                {
+                    msg.Printf( _( "Plot: %s OK\n" ), GetChars( fullFilename ) );
+                    m_messagesBox->AppendText( msg );
+                }
+
+                excellonWriter.CreateDrillFile( file );
+            }
+
+            if( aGenMap )
+            {
+                const PlotFormat filefmt[5] =
+                {   // Keep these format ids in the same order than m_Choice_Drill_Map choices
+                    PLOT_FORMAT_HPGL, PLOT_FORMAT_POST, PLOT_FORMAT_GERBER,
+                    PLOT_FORMAT_DXF, PLOT_FORMAT_SVG
+                };
+                unsigned choice = (unsigned) m_Choice_Drill_Map->GetSelection();
+
+                if( choice > 4 )
+                    choice = 1;
+
+                fn.SetExt( wxEmptyString ); // Will be modified by GenDrillMap
+
+                GenDrillMap( fn.GetFullPath(), excellonWriter, filefmt[choice] );
+            }
+        }
+
+        if( gen_NPTH_holes )    // The last drill file was created
+            break;
+
+        if( !hasBuriedVias )
+            gen_NPTH_holes = true;
+        else
+        {
+            if(  gen_through_holes )
+                layer2 = layer1 + 1;    // prepare generation of first layer pair
+            else
+            {
+                if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
+                {
+                    layer1 = LAYER_N_BACK;
+                    layer2 = LAYER_N_FRONT;
+                    gen_NPTH_holes = true;
+                    continue;
+                }
+                layer1++;
+                layer2++;                      // use next layer pair
+
+                if( layer2 == m_parent->GetBoard()->GetCopperLayerCount() - 1 )
+                    layer2 = LAYER_N_FRONT;         // the last layer is always the
+                                                    // Front layer
+            }
+
+            gen_through_holes = false;
+        }
+    }
+
+    ::wxSetWorkingDirectory( currentWD );
+}
+
+
+/*
+ *  Create a plain text report file giving a list of drill values and drill count
+ *  for through holes, oblong holes, and for buried vias,
+ *  drill values and drill count per layer pair
+ */
+void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
+{
+    UpdateConfig(); // set params and Save drill options
+
+    wxFileName fn = m_parent->GetBoard()->GetFileName();
+
+    fn.SetName( fn.GetName() + wxT( "-drl" ) );
+    fn.SetExt( ReportFileExtension );
+
+    wxString defaultPath = m_plotOpts.GetOutputDirectory();
+    if( defaultPath.IsEmpty() )
+        defaultPath = ::wxGetCwd();
+
+    wxFileDialog dlg( this, _( "Save Drill Report File" ), defaultPath,
+                      fn.GetFullName(), wxGetTranslation( ReportFileWildcard ),
+                      wxFD_SAVE );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    EXCELLON_WRITER excellonWriter( m_parent->GetBoard(),
+                                    m_FileDrillOffset );
+    excellonWriter.SetFormat( !m_UnitDrillIsInch,
+                              (EXCELLON_WRITER::zeros_fmt) m_ZerosFormat,
+                              m_Precision.m_lhs, m_Precision.m_rhs );
+    excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset );
+
+    bool success = excellonWriter.GenDrillReportFile( dlg.GetPath() );
+
+    wxString   msg;
+
+    if( ! success )
+    {
+        msg.Printf(  _( "** Unable to create %s **\n" ), GetChars( dlg.GetPath() ) );
+        m_messagesBox->AppendText( msg );
+    }
+    else
+    {
+        msg.Printf( _( "Create report file %s\n" ), GetChars( dlg.GetPath() ) );
+        m_messagesBox->AppendText( msg );
+    }
+}
+
+
+// Generate the drill map of the board
+void DIALOG_GENDRILL::GenDrillMap( const wxString aFileName,
+                                   EXCELLON_WRITER& aExcellonWriter,
+                                   PlotFormat     format )
+{
+    wxString   ext, wildcard;
+
+    /* Init extension */
+    switch( format )
+    {
+    case PLOT_FORMAT_HPGL:
+        ext = HPGL_PLOTTER::GetDefaultFileExtension();
+        wildcard = _( "HPGL plot files (.plt)|*.plt" );
+        break;
+
+    case PLOT_FORMAT_POST:
+        ext = PS_PLOTTER::GetDefaultFileExtension();
+        wildcard = _( "PostScript files (.ps)|*.ps" );
+        break;
+
+    case PLOT_FORMAT_GERBER:
+        ext = GERBER_PLOTTER::GetDefaultFileExtension();
+        wildcard = _( "Gerber files (.pho)|*.pho" );
+        break;
+
+    case PLOT_FORMAT_DXF:
+        ext = DXF_PLOTTER::GetDefaultFileExtension();
+        wildcard = _( "DXF files (.dxf)|*.dxf" );
+        break;
+
+    case PLOT_FORMAT_SVG:
+        ext = SVG_PLOTTER::GetDefaultFileExtension();
+        wildcard = SVGFileWildcard;
+        break;
+
+    default:
+        wxMessageBox( wxT( "DIALOG_GENDRILL::GenDrillMap() error" ) );
+        return;
+    }
+
+    /* Init file name */
+    wxFileName fn = aFileName;
+    fn.SetName( fn.GetName() + wxT( "-drl_map" ) );
+    fn.SetExt( ext );
+    wxString fullFilename = fn.GetFullPath();
+
+    bool success = aExcellonWriter.GenDrillMapFile( fullFilename,
+                                                   m_parent->GetPageSettings(),
+                                                   format );
+
+    wxString   msg;
+
+    if( ! success )
+    {
+        msg.Printf( _( "** Unable to create %s **\n" ),
+                    GetChars( fullFilename ) );
+        m_messagesBox->AppendText( msg );
+        return;
+    }
+    else
+    {
+        msg.Printf( _( "Plot: %s OK\n" ), GetChars( fullFilename ) );
+        m_messagesBox->AppendText( msg );
+    }
+
 }

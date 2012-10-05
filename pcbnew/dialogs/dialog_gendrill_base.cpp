@@ -14,7 +14,28 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bupperSizer;
+	bupperSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxStaticBoxSizer* bdirnameSizer;
+	bdirnameSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output directory:") ), wxHORIZONTAL );
+	
+	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bdirnameSizer->Add( m_outputDirectoryName, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_buttonBrowse = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
+	bdirnameSizer->Add( m_buttonBrowse, 0, wxBOTTOM|wxLEFT, 5 );
+	
+	
+	bupperSizer->Add( bdirnameSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bMainSizer->Add( bupperSizer, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bmiddlerSizer;
+	bmiddlerSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxBoxSizer* m_LeftBoxSizer;
 	m_LeftBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -41,35 +62,19 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_LeftBoxSizer->Add( m_Choice_Precision, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_Choice_Drill_OffsetChoices[] = { _("Absolute"), _("Auxiliary axis") };
-	int m_Choice_Drill_OffsetNChoices = sizeof( m_Choice_Drill_OffsetChoices ) / sizeof( wxString );
-	m_Choice_Drill_Offset = new wxRadioBox( this, wxID_ANY, _("Drill Origin:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_OffsetNChoices, m_Choice_Drill_OffsetChoices, 1, wxRA_SPECIFY_COLS );
-	m_Choice_Drill_Offset->SetSelection( 0 );
-	m_Choice_Drill_Offset->SetToolTip( _("Choose the coordinate origin: absolute or relative to the auxiliray axis") );
 	
-	m_LeftBoxSizer->Add( m_Choice_Drill_Offset, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	bMainSizer->Add( m_LeftBoxSizer, 1, wxEXPAND, 5 );
+	bmiddlerSizer->Add( m_LeftBoxSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleBoxSizer;
 	bMiddleBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_Choice_Drill_MapChoices[] = { _("None"), _("Drill map (HPGL)"), _("Drill map (PostScript)"), _("Drill map (Gerber)"), _("Drill map (DXF)"), _("Drill map (SVG)") };
+	wxString m_Choice_Drill_MapChoices[] = { _("Drill map (HPGL)"), _("Drill map (PostScript)"), _("Drill map (Gerber)"), _("Drill map (DXF)"), _("Drill map (SVG)") };
 	int m_Choice_Drill_MapNChoices = sizeof( m_Choice_Drill_MapChoices ) / sizeof( wxString );
 	m_Choice_Drill_Map = new wxRadioBox( this, wxID_ANY, _("Drill Map:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_MapNChoices, m_Choice_Drill_MapChoices, 1, wxRA_SPECIFY_COLS );
-	m_Choice_Drill_Map->SetSelection( 0 );
+	m_Choice_Drill_Map->SetSelection( 1 );
 	m_Choice_Drill_Map->SetToolTip( _("Creates a drill map in PS, HPGL or other formats") );
 	
 	bMiddleBoxSizer->Add( m_Choice_Drill_Map, 0, wxALL|wxEXPAND, 5 );
-	
-	wxString m_Choice_Drill_ReportChoices[] = { _("None"), _("Drill report") };
-	int m_Choice_Drill_ReportNChoices = sizeof( m_Choice_Drill_ReportChoices ) / sizeof( wxString );
-	m_Choice_Drill_Report = new wxRadioBox( this, wxID_ANY, _("Drill Report:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_ReportNChoices, m_Choice_Drill_ReportChoices, 1, wxRA_SPECIFY_COLS );
-	m_Choice_Drill_Report->SetSelection( 0 );
-	m_Choice_Drill_Report->SetToolTip( _("Creates a plain text report") );
-	
-	bMiddleBoxSizer->Add( m_Choice_Drill_Report, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbOptSizer;
 	sbOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
@@ -81,10 +86,18 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	sbOptSizer->Add( m_Check_Minimal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMiddleBoxSizer->Add( sbOptSizer, 0, wxEXPAND, 5 );
+	bMiddleBoxSizer->Add( sbOptSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	wxString m_Choice_Drill_OffsetChoices[] = { _("Absolute"), _("Auxiliary axis") };
+	int m_Choice_Drill_OffsetNChoices = sizeof( m_Choice_Drill_OffsetChoices ) / sizeof( wxString );
+	m_Choice_Drill_Offset = new wxRadioBox( this, wxID_ANY, _("Drill Origin:"), wxDefaultPosition, wxDefaultSize, m_Choice_Drill_OffsetNChoices, m_Choice_Drill_OffsetChoices, 1, wxRA_SPECIFY_COLS );
+	m_Choice_Drill_Offset->SetSelection( 0 );
+	m_Choice_Drill_Offset->SetToolTip( _("Choose the coordinate origin: absolute or relative to the auxiliray axis") );
+	
+	bMiddleBoxSizer->Add( m_Choice_Drill_Offset, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( bMiddleBoxSizer, 1, wxEXPAND, 5 );
+	bmiddlerSizer->Add( bMiddleBoxSizer, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightBoxSizer;
 	bRightBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -108,7 +121,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_MicroViasDrillSizer->Add( m_MicroViaDrillValue, 0, wxALL, 5 );
 	
 	
-	sbSizerInfo->Add( m_MicroViasDrillSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbSizerInfo->Add( m_MicroViasDrillSizer, 0, wxEXPAND|wxBOTTOM, 5 );
 	
 	wxStaticBoxSizer* sbSizerHoles;
 	sbSizerHoles = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Holes Count:") ), wxVERTICAL );
@@ -134,23 +147,49 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	sbSizerHoles->Add( m_BuriedViasInfoMsg, 0, wxALL, 5 );
 	
 	
-	sbSizerInfo->Add( sbSizerHoles, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbSizerInfo->Add( sbSizerHoles, 1, wxEXPAND|wxBOTTOM, 5 );
 	
 	
 	bRightBoxSizer->Add( sbSizerInfo, 0, wxEXPAND|wxTOP, 5 );
 	
 	
-	bRightBoxSizer->Add( 10, 10, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bmiddlerSizer->Add( bRightBoxSizer, 0, wxEXPAND, 5 );
 	
-	m_OkButton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OkButton->SetDefault(); 
-	bRightBoxSizer->Add( m_OkButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
-	
-	m_CancelButton = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightBoxSizer->Add( m_CancelButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxVERTICAL );
 	
 	
-	bMainSizer->Add( bRightBoxSizer, 1, wxEXPAND, 5 );
+	bSizerButtons->Add( 10, 20, 0, 0, 5 );
+	
+	m_buttonDrill = new wxButton( this, ID_GEN_DRILL_FILE, _("Drill Fille"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonDrill->SetDefault(); 
+	bSizerButtons->Add( m_buttonDrill, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	
+	m_buttonMap = new wxButton( this, wxID_ANY, _("Map File"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonMap, 0, wxALL, 5 );
+	
+	m_buttonReport = new wxButton( this, wxID_ANY, _("Report File"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonReport, 0, wxALL, 5 );
+	
+	m_CancelButton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_CancelButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	
+	
+	bmiddlerSizer->Add( bSizerButtons, 1, wxEXPAND, 5 );
+	
+	
+	bMainSizer->Add( bmiddlerSizer, 0, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* bmsgSizer;
+	bmsgSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Messages:") ), wxVERTICAL );
+	
+	m_messagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	m_messagesBox->SetMinSize( wxSize( -1,90 ) );
+	
+	bmsgSizer->Add( m_messagesBox, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bMainSizer->Add( bmsgSizer, 1, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
@@ -159,18 +198,24 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_Choice_Unit->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );
 	m_Choice_Zeros_Format->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
-	m_OkButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOkClick ), NULL, this );
+	m_buttonDrill->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenDrillFile ), NULL, this );
+	m_buttonMap->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenMapFile ), NULL, this );
+	m_buttonReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenReportFile ), NULL, this );
 	m_CancelButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnCancelClick ), NULL, this );
 }
 
 DIALOG_GENDRILL_BASE::~DIALOG_GENDRILL_BASE()
 {
 	// Disconnect Events
+	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_Choice_Unit->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );
 	m_Choice_Zeros_Format->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
-	m_OkButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOkClick ), NULL, this );
+	m_buttonDrill->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenDrillFile ), NULL, this );
+	m_buttonMap->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenMapFile ), NULL, this );
+	m_buttonReport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenReportFile ), NULL, this );
 	m_CancelButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnCancelClick ), NULL, this );
 	
 }

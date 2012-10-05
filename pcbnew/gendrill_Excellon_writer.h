@@ -1,13 +1,13 @@
 /**
- * @file gendrill.h
- * @brief Classes and functions declaration used in drill file and report generation.
+ * @file gendrill_Excellon_writer.h
+ * @brief Classes used in drill files, map files and report files generation.
  */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Jean_Pierre Charras <jp.charras@ujf-grenoble.fr>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2012 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _GENDRILL_H_
-#define _GENDRILL_H_
+#ifndef _GENDRILL_EXCELLON_WRITER_
+#define _GENDRILL_EXCELLON_WRITER_
 
 #include <vector>
 
@@ -44,7 +44,9 @@ public:
     int m_Diameter;         // the diameter of the used tool (for oblong, the smaller size)
     int m_TotalCount;       // how many times it is used (round and oblong)
     int m_OvalCount;        // oblong count
-public: DRILL_TOOL( int diametre )
+
+public:
+    DRILL_TOOL( int diametre )
     {
         m_TotalCount = 0;
         m_OvalCount  = 0;
@@ -104,7 +106,10 @@ public: DRILL_PRECISION( int l = 2, int r = 4 )
 };
 
 
-// A helper class to create Excellon drill files
+/**
+ * EXCELLON_WRITER is a class mainly used to create Excellon drill files
+ * However, this class is also used to create drill maps and drill report
+ */
 class EXCELLON_WRITER
 {
 public:
@@ -130,19 +135,14 @@ private:
                                                         // (i.e inches or mm)
     bool                     m_mirror;
     wxPoint                  m_offset;                  // Drill offset ooordinates
-    std::vector<HOLE_INFO>*  m_holeListBuffer;          // Buffer containing holes
-    std::vector<DRILL_TOOL>* m_toolListBuffer;          // Buffer containing tools
+    std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
+    std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
 
-public: EXCELLON_WRITER( BOARD* aPcb, FILE* aFile,
-                         wxPoint aOffset,
-                         std::vector<HOLE_INFO>* aHoleListBuffer,
-                         std::vector<DRILL_TOOL>* aToolListBuffer )
+public: EXCELLON_WRITER( BOARD* aPcb, wxPoint aOffset )
     {
-        m_file = aFile;
+        m_file = NULL;
         m_pcb  = aPcb;
         m_zeroFormat      = DECIMAL_FORMAT;
-        m_holeListBuffer  = aHoleListBuffer;
-        m_toolListBuffer  = aToolListBuffer;
         m_conversionUnits = 0.0001;
         m_unitsDecimal    = false;
         m_mirror = false;
@@ -154,6 +154,11 @@ public: EXCELLON_WRITER( BOARD* aPcb, FILE* aFile,
     {
     }
 
+    /**
+     * Return the plot offset (usually the position
+     * of the auxiliaty axis
+     */
+    const wxPoint GetOffset() { return m_offset; }
 
     /**
      * Function SetFormat
@@ -179,62 +184,74 @@ public: EXCELLON_WRITER( BOARD* aPcb, FILE* aFile,
         m_minimalHeader = aMinimalHeader;
     }
 
+    /**
+     * Function BuildHolesList
+     * Create the list of holes and tools for a given board
+     * The list is sorted by increasing drill values
+     * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because
+     * pad holes are always through holes)
+     * @param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored
+     * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
+     * @param aExcludeThroughHoles Exclude through holes if true.
+     * @param aGenerateNPTH_list :
+     *       true to create NPTH only list (with no plated holes)
+     *       false to created plated holes list (with no NPTH )
+     */
+    void BuildHolesList( int aFirstLayer, int aLastLayer,
+                           bool aExcludeThroughHoles,
+                           bool aGenerateNPTH_list );
+
+    int  GetHolesCount() const { return m_holeListBuffer.size(); }
 
     /**
      * Function CreateDrillFile
      * Creates an Excellon drill file
+     * @param aFile = an opened file to write to
+     *   will be closed by CreateDrillFile
      * @return hole count
      */
-    int  CreateDrillFile();
+    int  CreateDrillFile( FILE * aFile );
 
+    /**
+     * Function GenDrillReportFile
+     *  Create a plain text report file giving a list of drill values and drill count
+     *  for through holes, oblong holes, and for buried vias,
+     *  drill values and drill count per layer pair
+     *  there is only one report for all drill files even when buried or blinds vias exist
+     * @param aFullFileName : the name of the file to create
+     *  m_unitsDecimal = false tu use inches, true to use mm in report file
+     *
+     * @return success if the file is created
+     */
+    bool GenDrillReportFile( const wxString& aFullFileName );
+
+    /**
+     * Function GenDrillMapFile
+     * Plot a map of drill marks for holes.
+     * @param aFullFileName : the name of this file (to plot it)
+     * @param aSheet : the paper sheet touse for plot
+     * @param aFormat : one of the supported plot formats (see enum PlotFormat )
+     */
+    bool GenDrillMapFile( const wxString& aFullFileName,
+                          const PAGE_INFO& aSheet,
+                          PlotFormat aFormat );
 private:
-    void WriteHeader();
-    void WriteEndOfFile();
+    void WriteEXCELLONHeader();
+    void WriteEXCELLONEndOfFile();
     void WriteCoordinates( char* aLine, double aCoordX, double aCoordY );
+
+    /** Helper function.
+     * Writes the drill marks in HPGL, POSTSCRIPT or other supported formats
+     * Each hole size has a symbol (circle, cross X, cross + ...) up to
+     * PLOTTER::MARKER_COUNT different values.
+     * If more than PLOTTER::MARKER_COUNT different values,
+     * these other values share the same mark shape
+     * @param aPlotter = a PLOTTER instance (HPGL, POSTSCRIPT ... plotter).
+     */
+    bool PlotDrillMarks( PLOTTER* plotter );
 };
 
-/**
- * Function BuildHolesList
- * Create the list of holes and tools for a given board
- * The list is sorted by increasing drill values
- * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because
- * pad holes are always through holes)
- * @param aPcb : the given board
- * @param aHoleListBuffer : the std::vector<HOLE_INFO> to fill with pcb holes info
- * @param aToolListBuffer : the std::vector<DRILL_TOOL> to fill with tools to use
- * @param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored
- * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
- * @param aExcludeThroughHoles Exclude through holes if true.
- * @param aGenerateNPTH_list :
- *       true to create NPTH only list (with no plated holes)
- *       false to created plated holes list (with no NPTH )
- */
-void     Build_Holes_List( BOARD* aPcb, std::vector<HOLE_INFO>& aHoleListBuffer,
-                           std::vector<DRILL_TOOL>& aToolListBuffer,
-                           int aFirstLayer, int aLastLayer, bool aExcludeThroughHoles,
-                           bool aGenerateNPTH_list );
 
-void     GenDrillMapFile( BOARD* aPcb,
-                          FILE* aFile,
-                          const wxString& aFullFileName,
-                          const PAGE_INFO& aSheet,
-                          std::vector<HOLE_INFO> aHoleListBuffer,
-                          std::vector<DRILL_TOOL> aToolListBuffer,
-                          bool aUnit_Drill_is_Inch,
-                          int format, const wxPoint& auxoffset );
 
-void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* plotter,
-                       std::vector<HOLE_INFO>& aHoleListBuffer,
-                       std::vector<DRILL_TOOL>& aToolListBuffer );
 
-/*
- *  Create a list of drill values and drill count
- *  there is only one report for all drill files even when buried or blinds vias exist
- */
-void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilename,
-                         bool aUnit_Drill_is_Inch,
-                         std::vector<HOLE_INFO>& aHoleListBuffer,
-                         std::vector<DRILL_TOOL>& aToolListBuffer
-                         );
-
-#endif  //  #ifndef _GENDRILL_H_
+#endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_

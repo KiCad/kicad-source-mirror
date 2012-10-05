@@ -151,9 +151,8 @@ set(PCBNEW_CLASS_SRCS
     export_vrml.cpp
     files.cpp
     gen_drill_report_files.cpp
-    gen_holes_and_tools_lists_for_drill.cpp
     gen_modules_placefile.cpp
-    gendrill.cpp
+    gendrill_Excellon_writer.cpp
     globaleditpad.cpp
     gpcb_exchange.cpp
     highlight.cpp
