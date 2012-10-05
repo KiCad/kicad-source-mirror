@@ -72,6 +72,7 @@ const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 // Wildcard for cvpcb component to footprint link file
 const wxString ComponentFileWildcard( _( "KiCad cmp/footprint link files (*.cmp)|*.cmp" ) );
 
+// Wildcard for reports and fabrication documents
 const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl;*.DRL" ) );
 const wxString SVGFileWildcard( _( "SVG files (*.svg)|*.svg;*.SVG" ) );
 const wxString ReportFileWildcard = _( "Report files (*.rpt)|*.rpt" );

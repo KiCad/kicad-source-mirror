@@ -51,8 +51,9 @@ public:
 
 private:
     PCB_EDIT_FRAME* m_parent;
+    wxConfig*       m_config;
     BOARD*          m_board;
-    wxString        m_plotDefaultpath;      // Current default plot dircetory.
+    PCB_PLOT_PARAMS m_plotOpts;
 
     int m_platedPadsHoleCount;
     int m_notplatedPadsHoleCount;
@@ -60,8 +61,7 @@ private:
     int m_microViasCount;
     int m_blindOrBuriedViasCount;
 
-    static bool m_createRpt;           // true to create a drill file report
-    static int m_createMap;            // > 0 to create a map file report
+    static int m_mapFileType;            // HPGL, PS ...
 
 
     void            initDialog();
@@ -70,24 +70,25 @@ private:
     // event functions
     void            OnSelDrillUnitsSelected( wxCommandEvent& event );
     void            OnSelZerosFmtSelected( wxCommandEvent& event );
-    void            OnOkClick( wxCommandEvent& event );
+	void            OnGenDrillFile( wxCommandEvent& event );
+	void            OnGenMapFile( wxCommandEvent& event );
+	void            OnGenReportFile( wxCommandEvent& event );
     void            OnCancelClick( wxCommandEvent& event );
+    void            OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
 
     // Specific functions:
     void            SetParams( void );
-    void            GenDrillAndReportFiles();
-    void            GenDrillMap( const wxString           aFileName,
-                                 std::vector<HOLE_INFO>&  aHoleListBuffer,
-                                 std::vector<DRILL_TOOL>& aToolListBuffer,
-                                 int                      format );
+    void            GenDrillAndMapFiles(bool aGenDrill, bool aGenMap);
+    void            GenDrillMap( const wxString  aFileName,
+                                 EXCELLON_WRITER& aExcellonWriter,
+                                 PlotFormat      format );
+
     void            UpdatePrecisionOptions();
     void            UpdateConfig();
-    void            GenDrillReport( const wxString aFileName );
-    int             Create_Drill_File_EXCELLON( FILE*                    aFile,
-                                                wxPoint                  aOffset,
-                                                std::vector<HOLE_INFO>&  aHoleListBuffer,
-                                                std::vector<DRILL_TOOL>& aToolListBuffer );
-    int             Gen_Liste_Tools( std::vector<DRILL_TOOL>& buffer, bool print_header );
+    int             Create_Drill_File_EXCELLON( FILE*  aFile,
+                                                wxPoint aOffset );
+    int             Gen_Liste_Tools( std::vector<DRILL_TOOL>& buffer,
+                                     bool print_header );
 
     /**
      * Return the selected format for coordinates, if not decimal

@@ -1,13 +1,13 @@
 /**
- * @file gendrill.cpp
+ * @file gendrill_Excellon_writer.cpp
  * @brief Functions to create EXCELLON drill files and report files.
  */
 
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Jean_Pierre Charras <jp.charras@ujf-grenoble.fr>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2012 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,19 +39,18 @@
 
 #include <plot_common.h>
 #include <trigo.h>
-#include <confirm.h>
 #include <kicad_string.h>
-#include <gestfich.h>
 #include <wxPcbStruct.h>
-#include <macros.h>
 #include <appl_wxstruct.h>
 #include <build_version.h>
 
 #include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
 
 #include <pcbplot.h>
 #include <pcbnew.h>
-#include <gendrill.h>
+#include <gendrill_Excellon_writer.h>
 #include <wildcards_and_files_ext.h>
 
 #include <dialog_gendrill.h>   //  Dialog box for drill file generation
@@ -66,199 +65,17 @@
  *  Units
  *      - Decimal
  *      - Metric
- *
- *  The drill maps can be created in HPGL or PS format
- *
- * dialog_gendrill.cpp  is the file which handles
- * the Dialog box for drill file generation
  */
 
-static std::vector<DRILL_TOOL> s_ToolListBuffer;
-static std::vector<HOLE_INFO>  s_HoleListBuffer;
 
-
-/* This function displays the dialog frame for drill tools
- */
-void PCB_EDIT_FRAME::InstallDrillFrame( wxCommandEvent& event )
-{
-    DIALOG_GENDRILL dlg( this );
-
-    dlg.ShowModal();
-}
-
-
-/**
- * Function GenDrillAndReportFiles
- * Calls the functions to create EXCELLON drill files and/or drill map files
- * >When all holes are through, only one excellon file is created.
- * >When there are some partial holes (some blind or buried vias),
- *  one excellon file is created, for all plated through holes,
- *  and one file per layer pair, which have one or more holes, excluding
- *  through holes, already in the first file.
- *  one file for all Not Plated through holes
- */
-void DIALOG_GENDRILL::GenDrillAndReportFiles()
-{
-    wxFileName fn;
-    wxString   layer_extend;              /* added to the  Board FileName to
-                                           * create FullFileName (= Board
-                                           * FileName + layer pair names) */
-    wxString   msg;
-    bool       hasBuriedVias = false;  /* If true, drill files are created
-                                        * layer pair by layer pair for
-                                        * buried vias */
-    int        layer1 = LAYER_N_BACK;
-    int        layer2 = LAYER_N_FRONT;
-    bool       gen_through_holes = true;
-    bool       gen_NPTH_holes    = false;
-
-    wxString   currentWD = ::wxGetCwd();
-
-    UpdateConfig(); // set params and Save drill options
-
-    m_parent->ClearMsgPanel();
-
-    if( m_microViasCount || m_blindOrBuriedViasCount )
-        hasBuriedVias = true;
-
-    for( ; ; )
-    {
-        Build_Holes_List( m_parent->GetBoard(), s_HoleListBuffer,
-                          s_ToolListBuffer, layer1, layer2,
-                          gen_through_holes ? false : true, gen_NPTH_holes );
-
-        if( s_ToolListBuffer.size() > 0 ) //  holes?
-        {
-            fn = m_parent->GetBoard()->GetFileName();
-            layer_extend.Empty();
-
-            if( gen_NPTH_holes )
-            {
-                layer_extend << wxT( "-NPTH" );
-            }
-            else if( !gen_through_holes )
-            {
-                if( layer1 == LAYER_N_BACK )
-                    layer_extend << wxT( "-copper" );
-                else
-                    layer_extend << wxT( "-inner" ) << layer1;
-                if( layer2 == LAYER_N_FRONT )
-                    layer_extend << wxT( "-cmp" );
-                else
-                    layer_extend << wxT( "-inner" ) << layer2;
-            }
-
-            fn.SetName( fn.GetName() + layer_extend );
-            fn.SetExt( DrillFileExtension );
-            wxString defaultPath = m_plotDefaultpath;
-            if( defaultPath.IsEmpty() )
-                defaultPath = ::wxGetCwd();
-
-            wxFileDialog dlg( this, _( "Save Drill File" ), defaultPath,
-                              fn.GetFullName(), wxGetTranslation( DrillFileWildcard ),
-                              wxFD_SAVE | wxFD_CHANGE_DIR );
-
-            if( dlg.ShowModal() == wxID_CANCEL )
-                break;
-
-            FILE* aFile = wxFopen( dlg.GetPath(), wxT( "w" ) );
-
-            if( aFile == 0 )
-            {
-                msg.Printf( _( "Unable to create drill file %s" ), GetChars( dlg.GetPath() ) );
-                wxMessageBox( msg );
-                ::wxSetWorkingDirectory( currentWD );
-                EndModal( 0 );
-                return;
-            }
-
-            EXCELLON_WRITER excellonWriter( m_parent->GetBoard(),
-                                            aFile, m_FileDrillOffset,
-                                            &s_HoleListBuffer, &s_ToolListBuffer );
-            excellonWriter.SetFormat( !m_UnitDrillIsInch,
-                                      (EXCELLON_WRITER::zeros_fmt) m_ZerosFormat,
-                                      m_Precision.m_lhs, m_Precision.m_rhs );
-            excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset );
-            excellonWriter.CreateDrillFile();
-
-            switch( m_Choice_Drill_Map->GetSelection() )
-            {
-            case 0:
-                break;
-
-            case 1:
-                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
-                             PLOT_FORMAT_HPGL );
-                break;
-
-            case 2:
-                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
-                             PLOT_FORMAT_POST );
-                break;
-
-            case 3:
-                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
-                             PLOT_FORMAT_GERBER );
-                break;
-
-            case 4:
-                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
-                             PLOT_FORMAT_DXF );
-                break;
-
-            case 5:
-                GenDrillMap( dlg.GetPath(), s_HoleListBuffer, s_ToolListBuffer,
-                             PLOT_FORMAT_SVG );
-                break;
-            }
-        }
-
-        if( gen_NPTH_holes )    // The last drill file was created
-            break;
-
-        if( !hasBuriedVias )
-            gen_NPTH_holes = true;
-        else
-        {
-            if(  gen_through_holes )
-                layer2 = layer1 + 1;    // prepare generation of first layer pair
-            else
-            {
-                if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
-                {
-                    layer1 = LAYER_N_BACK;
-                    layer2 = LAYER_N_FRONT;
-                    gen_NPTH_holes = true;
-                    continue;
-                }
-                layer1++;
-                layer2++;                      // use next layer pair
-
-                if( layer2 == m_parent->GetBoard()->GetCopperLayerCount() - 1 )
-                    layer2 = LAYER_N_FRONT;         // the last layer is always the
-                                                    // component layer
-            }
-
-            gen_through_holes = false;
-        }
-    }
-
-    if( m_Choice_Drill_Report->GetSelection() > 0 )
-    {
-        fn = m_parent->GetBoard()->GetFileName();
-        GenDrillReport( fn.GetFullName() );
-    }
-
-    ::wxSetWorkingDirectory( currentWD );
-}
-
-
-/**
+/*
  * Create the drill file in EXCELLON format
- * @return hole count
+ * return hole count
  */
-int EXCELLON_WRITER::CreateDrillFile()
+int EXCELLON_WRITER::CreateDrillFile( FILE * aFile )
 {
+    m_file = aFile;
+
     int    diam, holes_count;
     int    x0, y0, xf, yf, xc, yc;
     double xt, yt;
@@ -266,14 +83,14 @@ int EXCELLON_WRITER::CreateDrillFile()
 
     SetLocaleTo_C_standard(); // Use the standard notation for double numbers
 
-    WriteHeader();
+    WriteEXCELLONHeader();
 
     holes_count = 0;
 
     /* Write the tool list */
-    for( unsigned ii = 0; ii < m_toolListBuffer->size(); ii++ )
+    for( unsigned ii = 0; ii < m_toolListBuffer.size(); ii++ )
     {
-        DRILL_TOOL& tool_descr = (*m_toolListBuffer)[ii];
+        DRILL_TOOL& tool_descr = m_toolListBuffer[ii];
         fprintf( m_file, "T%dC%.3f\n", ii + 1,
                  tool_descr.m_Diameter * m_conversionUnits  );
     }
@@ -294,9 +111,9 @@ int EXCELLON_WRITER::CreateDrillFile()
     /* Read the hole file and generate lines for normal holes (oblong
      * holes will be created later) */
     int tool_reference = -2;
-    for( unsigned ii = 0; ii < m_holeListBuffer->size(); ii++ )
+    for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        HOLE_INFO& hole_descr = (*m_holeListBuffer)[ii];
+        HOLE_INFO& hole_descr = m_holeListBuffer[ii];
 
         if( hole_descr.m_Hole_Shape )
             continue;  // oblong holes will be created later
@@ -323,10 +140,10 @@ int EXCELLON_WRITER::CreateDrillFile()
     /* Read the hole file and generate lines for normal holes (oblong holes
      * will be created later) */
     tool_reference = -2;    // set to a value not used for
-                            // aHoleListBuffer[ii].m_Tool_Reference
-    for( unsigned ii = 0; ii < m_holeListBuffer->size(); ii++ )
+                            // m_holeListBuffer[ii].m_Tool_Reference
+    for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        HOLE_INFO& hole_descr = (*m_holeListBuffer)[ii];
+        HOLE_INFO& hole_descr = m_holeListBuffer[ii];
         if( hole_descr.m_Hole_Shape == 0 )
             continue;  // wait for oblong holes
         if( tool_reference != hole_descr.m_Tool_Reference )
@@ -387,7 +204,7 @@ int EXCELLON_WRITER::CreateDrillFile()
         holes_count++;
     }
 
-    WriteEndOfFile();
+    WriteEXCELLONEndOfFile();
 
     SetLocaleTo_Default();  // Revert to locale double notation
 
@@ -432,7 +249,7 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
     int      xpad = m_precision.m_lhs + m_precision.m_rhs;
     int      ypad = xpad;
 
-    switch( DIALOG_GENDRILL::m_ZerosFormat )
+    switch( m_zeroFormat )
     {
     default:
     case DECIMAL_FORMAT:
@@ -526,7 +343,7 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
  * FMAT,2
  * INCH,TZ
  */
-void EXCELLON_WRITER::WriteHeader()
+void EXCELLON_WRITER::WriteEXCELLONHeader()
 {
     fputs( "M48\n", m_file );    // The beginning of a header
 
@@ -589,7 +406,7 @@ void EXCELLON_WRITER::WriteHeader()
 }
 
 
-void EXCELLON_WRITER::WriteEndOfFile()
+void EXCELLON_WRITER::WriteEXCELLONEndOfFile()
 {
     //add if minimal here
     fputs( "T0\nM30\n", m_file );
@@ -597,114 +414,154 @@ void EXCELLON_WRITER::WriteEndOfFile()
 }
 
 
-/* Generate the drill plan (Drill map) format HPGL or POSTSCRIPT
+
+/* Helper function for sorting hole list.
+ * Compare function used for sorting holes  by increasing diameter value
+ * and X value
  */
-void DIALOG_GENDRILL::GenDrillMap( const wxString           aFileName,
-                                   std::vector<HOLE_INFO>&  aHoleListBuffer,
-                                   std::vector<DRILL_TOOL>& buffer,
-                                   int                      format )
+static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
 {
-    wxFileName fn;
-    wxString   ext, wildcard;
-    wxString   msg;
+    if( a.m_Hole_Diameter != b.m_Hole_Diameter )
+        return a.m_Hole_Diameter < b.m_Hole_Diameter;
 
-    /* Init extension */
-    switch( format )
-    {
-    case PLOT_FORMAT_HPGL:
-        ext = HPGL_PLOTTER::GetDefaultFileExtension();
-        wildcard = _( "HPGL plot files (.plt)|*.plt" );
-        break;
+    if( a.m_Hole_Pos.x != b.m_Hole_Pos.x )
+        return a.m_Hole_Pos.x < b.m_Hole_Pos.x;
 
-    case PLOT_FORMAT_POST:
-        ext = PS_PLOTTER::GetDefaultFileExtension();
-        wildcard = _( "PostScript files (.ps)|*.ps" );
-        break;
-
-    case PLOT_FORMAT_GERBER:
-        ext = GERBER_PLOTTER::GetDefaultFileExtension();
-        wildcard = _( "Gerber files (.pho)|*.pho" );
-        break;
-
-    case PLOT_FORMAT_DXF:
-        ext = DXF_PLOTTER::GetDefaultFileExtension();
-        wildcard = _( "DXF files (.dxf)|*.dxf" );
-        break;
-
-    case PLOT_FORMAT_SVG:
-        ext = SVG_PLOTTER::GetDefaultFileExtension();
-        wildcard = SVGFileWildcard;
-        break;
-
-    default:
-        DisplayError( this, wxT( "DIALOG_GENDRILL::GenDrillMap() error" ) );
-        return;
-    }
-
-    /* Init file name */
-    fn = aFileName;
-    fn.SetName( fn.GetName() + wxT( "-drl" ) );
-    fn.SetExt( ext );
-
-    wxFileDialog dlg( this, _( "Save Drill Plot File" ), fn.GetPath(),
-                      fn.GetFullName(), wildcard,
-                      wxFD_SAVE );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    FILE* plotfile = wxFopen( dlg.GetPath(), wxT( "wt" ) );
-
-    if( plotfile == 0 )
-    {
-        msg = _( "Unable to create file" );
-        msg << wxT( " <" ) << dlg.GetPath() << wxT( ">" );
-        wxMessageBox( msg );
-        return;
-    }
-
-    GenDrillMapFile( m_parent->GetBoard(),
-                     plotfile,
-                     dlg.GetPath(),
-                     m_parent->GetPageSettings(),
-                     s_HoleListBuffer,
-                     s_ToolListBuffer,
-                     m_UnitDrillIsInch,
-                     format, m_FileDrillOffset );
+    return a.m_Hole_Pos.y < b.m_Hole_Pos.y;
 }
 
 
 /*
- *  Create a list of drill values and drill count
+ * Create the list of holes and tools for a given board
+ * The list is sorted by increasing drill values
+ * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because pad holes are always through holes)
+ * param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored   (used to creates report file)
+ * param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
+ * param aExcludeThroughHoles : if true, exclude through holes ( pads and vias through )
+ * param aGenerateNPTH_list :
+ *       true to create NPTH only list (with no plated holes)
+ *       false to created plated holes list (with no NPTH )
  */
-void DIALOG_GENDRILL::GenDrillReport( const wxString aFileName )
+void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
+                                      int aLastLayer,
+                                      bool aExcludeThroughHoles,
+                                      bool aGenerateNPTH_list )
 {
-    wxFileName fn;
-    wxString   msg;
+    HOLE_INFO new_hole;
+    int       hole_value;
 
-    fn = aFileName;
-    fn.SetName( fn.GetName() + wxT( "-drl" ) );
-    fn.SetExt( ReportFileExtension );
+    m_holeListBuffer.clear();
+    m_toolListBuffer.clear();
 
-    wxFileDialog dlg( this, _( "Save Drill Report File" ), fn.GetPath(),
-                      fn.GetFullName(), wxGetTranslation( ReportFileWildcard ),
-                      wxFD_SAVE );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    FILE* report_dest = wxFopen( dlg.GetPath(), wxT( "w" ) );
-
-    if( report_dest == 0 )
+    if( (aFirstLayer >= 0) && (aLastLayer >= 0) )
     {
-        msg = _( "Unable to create file " ) + dlg.GetPath();
-        wxMessageBox( msg );
-        return;
+        if( aFirstLayer > aLastLayer )
+            EXCHG( aFirstLayer, aLastLayer );
     }
 
-    GenDrillReportFile( report_dest, m_parent->GetBoard(),
-                        m_parent->GetBoard()->GetFileName(),
-                        m_UnitDrillIsInch,
-                        s_HoleListBuffer,
-                        s_ToolListBuffer );
+    /* build hole list for vias
+    */
+    if( ! aGenerateNPTH_list )  // vias are always plated !
+    {
+        for( TRACK* track = m_pcb->m_Track;  track;  track = track->Next() )
+        {
+            if( track->Type() != PCB_VIA_T )
+                continue;
+
+            SEGVIA* via = (SEGVIA*) track;
+            hole_value = via->GetDrillValue();
+
+            if( hole_value == 0 )
+                continue;
+
+            new_hole.m_Tool_Reference = -1;         // Flag value for Not initialized
+            new_hole.m_Hole_Orient    = 0;
+            new_hole.m_Hole_Diameter  = hole_value;
+            new_hole.m_Hole_Size.x = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
+
+            new_hole.m_Hole_Shape = 0;              // hole shape: round
+            new_hole.m_Hole_Pos = via->m_Start;
+            via->ReturnLayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
+
+            // ReturnLayerPair return params with m_Hole_Bottom_Layer < m_Hole_Top_Layer
+            if( (new_hole.m_Hole_Bottom_Layer > aFirstLayer) && (aFirstLayer >= 0) )
+                continue;
+
+            if( (new_hole.m_Hole_Top_Layer < aLastLayer) && (aLastLayer >= 0) )
+                continue;
+
+            if( aExcludeThroughHoles  && (new_hole.m_Hole_Bottom_Layer == LAYER_N_BACK)
+               && (new_hole.m_Hole_Top_Layer == LAYER_N_FRONT) )
+                continue;
+
+            m_holeListBuffer.push_back( new_hole );
+        }
+    }
+
+    // build hole list for pads (assumed always through holes)
+    if( !aExcludeThroughHoles || aGenerateNPTH_list )
+    {
+        for( MODULE* module = m_pcb->m_Modules;  module;  module = module->Next() )
+        {
+            // Read and analyse pads
+            for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+            {
+                if( ! aGenerateNPTH_list && pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
+                    continue;
+
+                if( aGenerateNPTH_list && pad->GetAttribute() != PAD_HOLE_NOT_PLATED )
+                    continue;
+
+                if( pad->GetDrillSize().x == 0 )
+                    continue;
+
+                new_hole.m_Hole_NotPlated = (pad->GetAttribute() == PAD_HOLE_NOT_PLATED);
+                new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
+                new_hole.m_Hole_Orient    = pad->GetOrientation();
+                new_hole.m_Hole_Shape    = 0;           // hole shape: round
+                new_hole.m_Hole_Diameter = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
+                new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
+
+                if( pad->GetDrillShape() != PAD_CIRCLE )
+                    new_hole.m_Hole_Shape = 1; // oval flag set
+
+                new_hole.m_Hole_Size = pad->GetDrillSize();
+                new_hole.m_Hole_Pos = pad->GetPosition();               // hole position
+                new_hole.m_Hole_Bottom_Layer = LAYER_N_BACK;
+                new_hole.m_Hole_Top_Layer    = LAYER_N_FRONT;// pad holes are through holes
+                m_holeListBuffer.push_back( new_hole );
+            }
+        }
+    }
+
+    // Sort holes per increasing diameter value
+    sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), CmpHoleDiameterValue );
+
+    // build the tool list
+    int        LastHole = -1; /* Set to not initialised (this is a value not used
+                               * for m_holeListBuffer[ii].m_Hole_Diameter) */
+    DRILL_TOOL new_tool( 0 );
+    unsigned   jj;
+
+    for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
+    {
+        if( m_holeListBuffer[ii].m_Hole_Diameter != LastHole )
+        {
+            new_tool.m_Diameter = ( m_holeListBuffer[ii].m_Hole_Diameter );
+            m_toolListBuffer.push_back( new_tool );
+            LastHole = new_tool.m_Diameter;
+        }
+
+        jj = m_toolListBuffer.size();
+
+        if( jj == 0 )
+            continue;                                       // Should not occurs
+
+        m_holeListBuffer[ii].m_Tool_Reference = jj;          // Tool value Initialized (value >= 1)
+
+        m_toolListBuffer.back().m_TotalCount++;
+
+        if( m_holeListBuffer[ii].m_Hole_Shape )
+            m_toolListBuffer.back().m_OvalCount++;
+    }
 }
