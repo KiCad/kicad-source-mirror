@@ -54,13 +54,15 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_LeftBoxSizer->Add( m_Choice_Zeros_Format, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_Choice_PrecisionChoices[] = { _("2:3"), _("2:4") };
-	int m_Choice_PrecisionNChoices = sizeof( m_Choice_PrecisionChoices ) / sizeof( wxString );
-	m_Choice_Precision = new wxRadioBox( this, wxID_ANY, _("Precision"), wxDefaultPosition, wxDefaultSize, m_Choice_PrecisionNChoices, m_Choice_PrecisionChoices, 1, wxRA_SPECIFY_COLS );
-	m_Choice_Precision->SetSelection( 1 );
-	m_Choice_Precision->SetToolTip( _("Choose EXCELLON numbers precision") );
+	wxStaticBoxSizer* sbSizerPrecision;
+	sbSizerPrecision = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Precision") ), wxVERTICAL );
 	
-	m_LeftBoxSizer->Add( m_Choice_Precision, 0, wxALL|wxEXPAND, 5 );
+	m_staticTextPrecision = new wxStaticText( this, wxID_ANY, _("Precision"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPrecision->Wrap( -1 );
+	sbSizerPrecision->Add( m_staticTextPrecision, 0, wxALL, 5 );
+	
+	
+	m_LeftBoxSizer->Add( sbSizerPrecision, 0, wxEXPAND, 5 );
 	
 	
 	bmiddlerSizer->Add( m_LeftBoxSizer, 0, wxEXPAND, 5 );
@@ -166,10 +168,10 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bSizerButtons->Add( m_buttonDrill, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_buttonMap = new wxButton( this, wxID_ANY, _("Map File"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonMap, 0, wxALL, 5 );
+	bSizerButtons->Add( m_buttonMap, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonReport = new wxButton( this, wxID_ANY, _("Report File"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonReport, 0, wxALL, 5 );
+	bSizerButtons->Add( m_buttonReport, 0, wxALL|wxEXPAND, 5 );
 	
 	m_CancelButton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_CancelButton, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
