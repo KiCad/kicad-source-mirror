@@ -56,6 +56,12 @@ using namespace std;
 
 #define FMTIU        BOARD_ITEM::FormatInternalUnits
 
+/**
+ * Definition for enabling and disabling footprint library trace output.  See the
+ * wxWidgets documentation on useing the WXTRACE environment variable.
+ */
+static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
+
 
 /**
  * Class FP_CACHE_ITEM
@@ -175,7 +181,8 @@ void FP_CACHE::Save()
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-        wxLogDebug( wxT( "Creating temporary library file %s" ), GetChars( tempFileName ) );
+        wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
+                    GetChars( tempFileName ) );
 
         wxFFileOutputStream os( tempFileName );
 
@@ -280,14 +287,15 @@ bool FP_CACHE::IsModified()
 
         if( !fn.FileExists() )
         {
-            wxLogDebug( wxT( "Footprint cache file '%s' does not exist." ),
+            wxLogTrace( traceFootprintLibrary, wxT( "Footprint cache file '%s' does not exist." ),
                         fn.GetFullPath().GetData() );
             return true;
         }
 
         if( it->second->IsModified() )
         {
-            wxLogDebug( wxT( "Footprint cache file '%s' has been modified." ),
+            wxLogTrace( traceFootprintLibrary,
+                        wxT( "Footprint cache file '%s' has been modified." ),
                         fn.GetFullPath().GetData() );
             return true;
         }
@@ -1581,7 +1589,8 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( it != mods.end() )
     {
-        wxLogDebug( wxT( "Removing footprint library file '%s'." ), fn.GetFullPath().GetData() );
+        wxLogTrace( traceFootprintLibrary, wxT( "Removing footprint library file '%s'." ),
+                    fn.GetFullPath().GetData() );
         mods.erase( footprintName );
         wxRemoveFile( fn.GetFullPath() );
     }
@@ -1598,7 +1607,8 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     if( module->GetLayer() != LAYER_N_FRONT )
         module->Flip( module->GetPosition() );
 
-    wxLogDebug( wxT( "Creating s-expression footprint file: %s." ), fn.GetFullPath().GetData() );
+    wxLogTrace( traceFootprintLibrary, wxT( "Creating s-expression footprint file: %s." ),
+                fn.GetFullPath().GetData() );
     mods.insert( footprintName, new FP_CACHE_ITEM( module, fn ) );
     m_cache->Save();
 }
@@ -1689,7 +1699,8 @@ void PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
         }
     }
 
-    wxLogDebug( wxT( "Removing footprint library '%s'" ), aLibraryPath.GetData() );
+    wxLogTrace( traceFootprintLibrary, wxT( "Removing footprint library '%s'" ),
+                aLibraryPath.GetData() );
 
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
     // we don't want that.  we want bare metal portability with no UI here.
