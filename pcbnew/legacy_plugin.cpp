@@ -4387,4 +4387,3 @@ LEGACY_PLUGIN::~LEGACY_PLUGIN()
 {
     delete m_cache;
 }
-

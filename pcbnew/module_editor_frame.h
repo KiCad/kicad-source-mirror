@@ -86,6 +86,15 @@ public:
     void OnSelectOptionToolbar( wxCommandEvent& event );
 
     /**
+     * Function OnSaveLibraryAs
+     * saves the current library to a new name and/or library type.
+     *
+     * @note Saving as a new library type requires the plug-in to support saving libraris.
+     * @see PLUGIN::FootprintSave and PLUGIN::FootprintLibCreate
+     */
+    void OnSaveLibraryAs( wxCommandEvent& aEvent );
+
+    /**
      * Function OnHotKey
      * handle hot key events.
      * <p?

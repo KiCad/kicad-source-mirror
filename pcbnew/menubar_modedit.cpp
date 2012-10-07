@@ -76,19 +76,19 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // from File
     AddMenuItem( openSubmenu, ID_MODEDIT_IMPORT_PART,
-                 _( "Load from File (&Import)" ),
+                 _( "Import Module from File (&Import)" ),
                  _( "Import a footprint from an existing file" ),
                  KiBitmap( import_module_xpm ) );
 
     // from Library
     AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE,
-                 _( "Load from Li&brary" ),
+                 _( "Load Module from Current Li&brary" ),
                  _( "Open a footprint module from a Library" ),
                  KiBitmap( module_xpm ) );
 
     // from current Board
     AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
-                 _( "Load from &Current Board" ),
+                 _( "Load Module from &Current Board" ),
                  _( "Load a footprint module from the current loaded board" ),
                  KiBitmap( load_module_board_xpm ) );
 
@@ -99,6 +99,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( open_document_xpm ) );
     fileMenu->AppendSeparator();
 
+#ifdef USE_PCBNEW_SEXPR_FOOTPRINT_LIBS
+    // Save the currently loaded legacy library as an s-expression library.
+    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS, _( "Save Library In S-Expression Format" ),
+                 _( "Save currently loaded legacy library as an s-expression library." ),
+                 wxNullBitmap );
+#endif
+
     // Save module
     text = AddHotkeyName( _( "&Save Module in Active Library" ),
                           g_Module_Editor_Hokeys_Descr, HK_SAVE_MODULE );
@@ -108,7 +115,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save module in new lib
     AddMenuItem( fileMenu, ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                 _( "S&ave Module in a New Lib" ),
+                 _( "S&ave Module in a New Library" ),
                  _( "Create new library and save current module" ),
                  KiBitmap( new_library_xpm ) );
 

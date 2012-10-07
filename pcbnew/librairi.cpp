@@ -163,7 +163,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
         config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
 
     title    = aCreateSysLib ? _( "Create New Library" ) : _( "Export Module" );
-    wildcard = aCreateSysLib ?  FootprintLibFileWildcard : ModExportFileWildcard;
+    wildcard = aCreateSysLib ?  LegacyFootprintLibFileWildcard : ModExportFileWildcard;
 
     fn.SetPath( path );
 
@@ -272,7 +272,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewM
     {
         wxFileDialog dlg( this, _( "Library" ), path,
                           wxEmptyString,
-                          wxGetTranslation( FootprintLibFileWildcard ),
+                          wxGetTranslation( LegacyFootprintLibFileWildcard ),
                           wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -562,4 +562,3 @@ int FOOTPRINT_EDIT_FRAME::CreateLibrary( const wxString& aLibName )
 
     return 1;       // remember how many times we succeeded
 }
-

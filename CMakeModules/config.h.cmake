@@ -55,8 +55,10 @@
 
 #cmakedefine USE_IMAGES_IN_MENUS 1
 
+/// Definitions to enable the s-expression file formats and nanometer units.
 #cmakedefine USE_PCBNEW_NANOMETRES
 #cmakedefine USE_PCBNEW_SEXPR_FILE_FORMAT
+#cmakedefine USE_PCBNEW_SEXPR_FOOTPRINT_LIBS
 
 /// The legacy file format revision of the *.brd file created by this build
 #if defined(USE_PCBNEW_NANOMETRES)

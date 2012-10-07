@@ -185,6 +185,44 @@ unsigned STRING_LINE_READER::ReadLine() throw( IO_ERROR )
 }
 
 
+INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream ) :
+    LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
+    m_stream( aStream )
+{
+}
+
+
+unsigned INPUTSTREAM_LINE_READER::ReadLine() throw( IO_ERROR )
+{
+    length  = 0;
+    line[0] = 0;
+
+    while( !m_stream->Eof() )
+    {
+        if( length >= maxLineLength )
+            THROW_IO_ERROR( _( "Maximum line length exceeded" ) );
+
+        if( length + 1 > capacity )
+            expandCapacity( capacity * 2 );
+
+        line[ length ] = m_stream->GetC();
+        length++;
+
+        if( line[ length - 1 ] == '\n' )
+            break;
+    }
+
+    line[ length ] = 0;
+    length -= 1;
+
+    // lineNum is incremented even if there was no line read, because this
+    // leads to better error reporting when we hit an end of file.
+    ++lineNum;
+
+    return length;
+}
+
+
 //-----<OUTPUTFORMATTER>----------------------------------------------------
 
 // factor out a common GetQuoteChar

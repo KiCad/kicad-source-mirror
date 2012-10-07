@@ -82,10 +82,8 @@ wxString BOARD_ITEM::GetLayerName() const
     if( board != NULL )
         return board->GetLayerName( m_Layer ).Trim();
 
-    wxFAIL_MSG( wxT( "No board found for board item type " ) + GetClass() );
-    layerName = _( "** undefined layer **" );
-
-    return layerName;
+    // If no parent, return the default layer for the object.
+    return BOARD::GetDefaultLayerName( m_Layer, true );
 }
 
 

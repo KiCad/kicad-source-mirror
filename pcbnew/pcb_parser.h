@@ -47,8 +47,10 @@ class TEXTE_MODULE;
 class TEXTE_PCB;
 class MODULE;
 class PCB_TARGET;
+class PROPERTIES;
 class S3D_MASTER;
 class ZONE_CONTAINER;
+class FPL_CACHE;
 
 
 WX_DECLARE_STRING_HASH_MAP( int, LAYER_HASH_MAP );
@@ -61,8 +63,8 @@ WX_DECLARE_STRING_HASH_MAP( int, LAYER_HASH_MAP );
  */
 class PCB_PARSER : public PCB_LEXER
 {
-    BOARD* m_board;
-    LAYER_HASH_MAP m_layerMap;  //< Map layer name to it's index saved in BOARD::m_Layer.
+    BOARD*          m_board;
+    LAYER_HASH_MAP  m_layerMap;  //< Map layer name to it's index saved in BOARD::m_Layer.
 
     void parseHeader() throw( IO_ERROR, PARSE_ERROR );
     void parseGeneralSection() throw( IO_ERROR, PARSE_ERROR );

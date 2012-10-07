@@ -21,10 +21,13 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 #
 
 option(USE_PCBNEW_SEXPR_FILE_FORMAT
-       "Use s-expression Pcbnew file format support (default OFF)." )
+       "Use Pcbnew s-expression file format support (default OFF)." )
 
 option(USE_PCBNEW_NANOMETRES
        "Use nanometers for Pcbnew internal units instead of deci-mils (default OFF).")
+
+option(USE_PCBNEW_SEXPR_FOOTPRINT_LIBS
+       "Use Pcbnew s-expression footprint library format (default OFF).")
 
 # Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
@@ -100,15 +103,20 @@ endif( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
 #================================================
 
 if(CMAKE_COMPILER_IS_GNUCXX)
+    # Added -Wno-narrowing on 10/7/12 to prevent a huge number of warnings when
+    # compiling with GCC 4.7.  This appears to be caused by and int to unsigned
+    # conversion in the Boost polygon library.  At some point in the future when
+    # Boost is updated to the next version, -Wno-narrowing should be removed to
+    # see if the problem has been resolved.  Wayne.
     if(WIN32)   # under Windows/mingw,  -fPIC option is enabled by default
         # Set default flags for Release build.
-        set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
-        set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG")
+        set(CMAKE_C_FLAGS_RELEASE "-Wall -Wno-narrowing -O2 -DNDEBUG")
+        set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Wno-narrowing -O2 -DNDEBUG")
         set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
 
         # Set default flags for Debug build.
-        set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
-        set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+        set(CMAKE_C_FLAGS_DEBUG "-Wall -Wno-narrowing -g3 -ggdb3 -DDEBUG")
+        set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wno-narrowing -g3 -ggdb3 -DDEBUG")
     else(WIN32)
         # Set default flags for Release build.
         set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG -fPIC")
@@ -116,8 +124,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
 
         # Set default flags for Debug build.
-        set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -fPIC")
-        set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG -fPIC")
+        set(CMAKE_C_FLAGS_DEBUG "-Wall -Wno-narrowing -g3 -ggdb3 -DDEBUG -fPIC")
+        set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wno-narrowing -g3 -ggdb3 -DDEBUG -fPIC")
     endif(WIN32)
 
 endif(CMAKE_COMPILER_IS_GNUCXX)

@@ -33,6 +33,7 @@
 #include <trigo.h>
 #include <3d_struct.h>
 #include <class_title_block.h>
+
 #include <class_board.h>
 #include <class_dimension.h>
 #include <class_drawsegment.h>
@@ -43,9 +44,9 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <kicad_plugin.h>
 #include <pcb_plot_params.h>
 #include <zones.h>
-
 #include <pcb_parser.h>
 
 using namespace std;
@@ -316,6 +317,10 @@ BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
             m_board = new BOARD();
 
         item = (BOARD_ITEM*) parseBOARD();
+        break;
+
+    case T_module:
+        item = (BOARD_ITEM*) parseMODULE();
         break;
 
     default:

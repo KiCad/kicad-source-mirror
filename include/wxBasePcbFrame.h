@@ -365,28 +365,29 @@ public:
      *        (usually: true in Schematic editor, false in Module editor)
      */
     void GlobalChange_PadSettings( D_PAD* aPad,
-                                    bool aSameFootprints,
-                                    bool aPadShapeFilter,
-                                    bool aPadOrientFilter,
-                                    bool aPadLayerFilter,
-                                    bool aRedraw, bool aSaveForUndo );
+                                   bool   aSameFootprints,
+                                   bool   aPadShapeFilter,
+                                   bool   aPadOrientFilter,
+                                   bool   aPadLayerFilter,
+                                   bool   aRedraw,
+                                   bool   aSaveForUndo );
 
     // loading footprints
 
     /**
      * Function loadFootprintFromLibrary
      * loads @a aFootprintName from @a aLibraryPath.
-     * If found add the module is also added to the BOARD, just for good measure.
      *
-     *  @param aLibraryPath - the full filename or the short name of the library to read.
+     * @param aLibraryPath - the full filename or the short name of the library to read.
      *      if it is a short name, the file is searched in all library valid paths
-     *  @param aFootprintName is the footprint to load
-     *  @param aDisplayError = true to display an error message if any.
+     * @param aFootprintName is the footprint to load
+     * @param aDisplayError = true to display an error message if any.
+     * @param aAddToBoard Set to true to add the footprint to the board if found.
      *
-     *  @return MODULE* - new module, or NULL
+     * @return MODULE* - new module, or NULL
      */
-    MODULE* loadFootprintFromLibrary( const wxString& aLibraryPath,
-              const wxString& aFootprintName, bool aDisplayError );
+    MODULE* loadFootprintFromLibrary( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                      bool aDisplayError, bool aAddToBoard = true );
 
     /**
      * Function loadFootprintFromLibraries
