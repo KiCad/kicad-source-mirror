@@ -29,6 +29,7 @@
 
 class BOARD;
 class BOARD_ITEM;
+class FP_CACHE;
 
 
 /** Current s-expression file format version.  2 was the last legacy format version. */
@@ -68,9 +69,27 @@ public:
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties = NULL );
 
+    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
+
+    MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                           PROPERTIES* aProperties = NULL );
+
+    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
+                        PROPERTIES* aProperties = NULL );
+
+    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName );
+
+    void FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
+
+    void FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+
+    bool IsFootprintLibWritable( const wxString& aLibraryPath );
+
     //-----</PLUGIN API>--------------------------------------------------------
 
     PCB_IO();
+
+    ~PCB_IO();
 
     /**
      * Function Format
@@ -92,17 +111,19 @@ public:
         return ret;
     }
 
+    void SetOutputFormatter( OUTPUTFORMATTER* aFormatter ) { m_out = aFormatter; }
 
 protected:
 
     wxString        m_error;        ///< for throwing exceptions
     BOARD*          m_board;        ///< which BOARD, no ownership here
     PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
+    FP_CACHE*       m_cache;        ///< Footprint library cache.
 
     LINE_READER*    m_reader;       ///< no ownership here.
     wxString        m_filename;     ///< for saves only, name is in m_reader for loads
 
-    int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
+    int             m_loading_format_version; ///< which #BOARD_FORMAT_VERSION should be Load()ed?
 
     STRING_FORMATTER    m_sf;
     OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
@@ -144,6 +165,11 @@ private:
         throw( IO_ERROR );
 
     void formatLayer( const BOARD_ITEM* aItem ) const;
+
+    /// we only cache one footprint library for now, this determines which one.
+    void cacheLib( const wxString& aLibraryPath );
+
+    void init( PROPERTIES* aProperties );
 };
 
 #endif  // KICAD_PLUGIN_H_

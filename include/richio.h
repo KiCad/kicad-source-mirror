@@ -385,6 +385,28 @@ public:
 
 
 /**
+ * Class INPUTSTREAM_LINE_READER
+ * is a LINE_READER that reads from a wxInputStream object.
+ */
+class INPUTSTREAM_LINE_READER : public LINE_READER
+{
+protected:
+    wxInputStream* m_stream;   //< The input stream to read.  No ownership of this pointer.
+
+public:
+
+    /**
+     * Constructor WXINPUTSTREAM_LINE_READER
+     *
+     * @param aStream A pointer to a wxInputStream object to read.
+     */
+    INPUTSTREAM_LINE_READER( wxInputStream* aStream );
+
+    unsigned ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
+};
+
+
+/**
  * Class OUTPUTFORMATTER
  * is an important interface (abstract) class used to output UTF8 text in
  * a convenient way. The primary interface is "printf() - like" but

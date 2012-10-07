@@ -284,7 +284,9 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryPath,
  * if it is a short name, the file is searched in all library valid paths
  */
 MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
-            const wxString& aFootprintName, bool aDisplayError )
+                                                  const wxString& aFootprintName,
+                                                  bool            aDisplayError,
+                                                  bool            aAddToBoard )
 {
     try
     {
@@ -309,7 +311,9 @@ MODULE* PCB_BASE_FRAME::loadFootprintFromLibrary( const wxString& aLibraryPath,
             return NULL;
         }
 
-        GetBoard()->Add( footprint, ADD_APPEND );
+        if( aAddToBoard )
+            GetBoard()->Add( footprint, ADD_APPEND );
+
         SetStatusText( wxEmptyString );
         return footprint;
     }
@@ -508,4 +512,87 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
     }
 
     return module;
+}
+
+
+
+
+void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
+{
+    wxFileName fn;
+    wxString   msg, path, title;
+    FOOTPRINT_LIST fpInfoList;
+
+    title = _( "Save Footprint Library As" );
+
+    fn = wxFileName( wxEmptyString, GetCurrentLib(), FootprintLibFileExtension );
+    path = wxGetApp().FindLibraryPath( fn );
+    fn.SetPath( path );
+
+    wxDirDialog dlg( this, msg, fn.GetPath() );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    fn.SetPath( dlg.GetPath() );
+    fn.AppendDir( GetCurrentLib() );
+
+    path = fn.GetPath();
+
+    try
+    {
+        // @todo : hard code this as IO_MGR::KICAD plugin, what would be the reason to "export"
+        // any other single footprint type, with clipboard support coming?
+        // Use IO_MGR::LEGACY for now, until the IO_MGR::KICAD plugin is ready.
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::KICAD ) );
+
+        try
+        {
+            // try to delete the library whether it exists or not, quietly.
+            pi->FootprintLibDelete( fn.GetPath() );
+        }
+        catch( IO_ERROR ioe )
+        {
+            // Ignore this, it will often happen and is not an error because
+            // the library may not exist.  If library was in a read only directory,
+            // it will still exist as we get to the FootprintLibCreate() below.
+        }
+
+        pi->FootprintLibCreate( fn.GetPath() );
+
+        wxArrayString libNameList;
+
+        wxLogDebug( wxT( "Loading legacy footprint library '%s'." ), m_CurrentLib.GetData() );
+
+        wxFileName libFileName = m_CurrentLib;
+
+        libFileName.SetExt( FootprintLibFileExtension );
+
+        wxString libPath = wxGetApp().FindLibraryPath( libFileName );
+
+        libNameList.Add( m_CurrentLib );
+        fpInfoList.ReadFootprintFiles( libNameList );
+
+        for( unsigned i = 0;  i < fpInfoList.GetCount();  i++ )
+        {
+            MODULE* module = loadFootprintFromLibrary( libFileName.GetFullPath(),
+                                                       fpInfoList.GetItem( i ).m_Module,
+                                                       true, false );
+
+            wxLogDebug( wxT( "Saving footprint %s as s-expression to path %s" ),
+                        module->GetLibRef().GetData(), path.GetData() );
+
+            pi->FootprintSave( path, module );
+        }
+    }
+    catch( IO_ERROR ioe )
+    {
+        DisplayError( this, ioe.errorText );
+        return;
+    }
+
+    msg.Printf( _( "Footprint library type '%s' saved to <%s> as s-expression" ),
+                GetCurrentLib().GetData(), path.GetData() );
+
+    DisplayInfoMessage( this, msg );
 }

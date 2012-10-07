@@ -60,6 +60,7 @@ extern const wxString DrillFileExtension;
 extern const wxString SVGFileExtension;
 extern const wxString ReportFileExtension;
 extern const wxString FootprintPlaceFileExtension;
+extern const wxString FootprintFileExtension;
 
 /// Proper wxFileDialog wild card definitions.
 extern const wxString SchematicSymbolFileWildcard;
@@ -82,6 +83,7 @@ extern const wxString ReportFileWildcard;
 extern const wxString FootprintPlaceFileWildcard;
 extern const wxString VrmlFileWildcard;
 extern const wxString DocModulesFileName;
+extern const wxString LegacyFootprintLibFileWildcard;
 extern const wxString FootprintLibFileWildcard;
 
 #endif  // INCLUDE_WILDCARDS_AND_FILES_EXT_H_
