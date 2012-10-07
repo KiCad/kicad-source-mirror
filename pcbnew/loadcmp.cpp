@@ -562,8 +562,6 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
 
         wxArrayString libNameList;
 
-        wxLogDebug( wxT( "Loading legacy footprint library '%s'." ), m_CurrentLib.GetData() );
-
         wxFileName libFileName = m_CurrentLib;
 
         libFileName.SetExt( FootprintLibFileExtension );
@@ -578,9 +576,6 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
             MODULE* module = loadFootprintFromLibrary( libFileName.GetFullPath(),
                                                        fpInfoList.GetItem( i ).m_Module,
                                                        true, false );
-
-            wxLogDebug( wxT( "Saving footprint %s as s-expression to path %s" ),
-                        module->GetLibRef().GetData(), path.GetData() );
 
             pi->FootprintSave( path, module );
         }
