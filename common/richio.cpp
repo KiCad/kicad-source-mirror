@@ -195,9 +195,8 @@ INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream ) :
 unsigned INPUTSTREAM_LINE_READER::ReadLine() throw( IO_ERROR )
 {
     length  = 0;
-    line[0] = 0;
 
-    while( !m_stream->Eof() )
+    for(;;)
     {
         if( length >= maxLineLength )
             THROW_IO_ERROR( _( "Maximum line length exceeded" ) );
@@ -205,15 +204,19 @@ unsigned INPUTSTREAM_LINE_READER::ReadLine() throw( IO_ERROR )
         if( length + 1 > capacity )
             expandCapacity( capacity * 2 );
 
-        line[ length ] = m_stream->GetC();
-        length++;
+        // this read may fail, docs say to test LastRead() before trusting cc.
+        char cc = m_stream->GetC();
 
-        if( line[ length - 1 ] == '\n' )
+        if( !m_stream->LastRead() )
+            break;
+
+        line[ length++ ] = cc;
+
+        if( cc == '\n' )
             break;
     }
 
     line[ length ] = 0;
-    length -= 1;
 
     // lineNum is incremented even if there was no line read, because this
     // leads to better error reporting when we hit an end of file.
