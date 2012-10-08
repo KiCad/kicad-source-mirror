@@ -70,8 +70,6 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
 void DIALOG_ERC::Init()
 {
-    SetFocus();
-
     m_Initialized = false;
 
     for( int ii = 0; ii < PIN_NMAX; ii++ )
