@@ -1,17 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Apr 11 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_erc_base__
-#define __dialog_erc_base__
+#ifndef __DIALOG_ERC_BASE_H__
+#define __DIALOG_ERC_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
-class ERC_HTML_LISTBOX;
-
+#include "dialog_erc_listbox.h"
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -37,7 +38,7 @@ class ERC_HTML_LISTBOX;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_ERC_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_ERC_BASE : public wxDialog 
+class DIALOG_ERC_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
@@ -56,7 +57,7 @@ class DIALOG_ERC_BASE : public wxDialog
 			ID_ERC_CMP = 1000,
 			ID_ERASE_DRC_MARKERS,
 			ID_MAKER_HTMLLISTBOX,
-			ID_RESET_MATRIX,
+			ID_RESET_MATRIX
 		};
 		
 		wxNotebook* m_NoteBook;
@@ -83,17 +84,18 @@ class DIALOG_ERC_BASE : public wxDialog
 		wxBoxSizer* m_MatrixSizer;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnErcCmpClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnEraseDrcMarkersClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnLeftDClickMarkersList( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnResetMatrixClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnErcCmpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEraseDrcMarkersClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLeftDClickMarkersList( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnResetMatrixClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("EESchema Erc"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 438,407 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("EESchema Erc"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_ERC_BASE();
 	
 };
 
-#endif //__dialog_erc_base__
+#endif //__DIALOG_ERC_BASE_H__

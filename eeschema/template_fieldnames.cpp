@@ -100,7 +100,7 @@ void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR )
 {
     T  tok;
 
-    while( (tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
+    while( ( tok = in->NextTok() ) != T_RIGHT && tok != T_EOF )
     {
         if( tok == T_LEFT )
             tok = in->NextTok();
@@ -132,8 +132,6 @@ void TEMPLATES::Parse( TEMPLATE_FIELDNAMES_LEXER* in ) throw( IO_ERROR )
             break;
         }
     }
-
-    D(printf("tok:%d\n", tok);)
 }
 
 

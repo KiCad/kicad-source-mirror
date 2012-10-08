@@ -181,6 +181,7 @@ the changes?" ) ) )
     // This is a subset of all PLUGINs which are trusted to be able to
     // load a BOARD.  Order is subject to change as KICAD plugin matures.
     // User may occasionally use the wrong plugin to load a *.brd file,
+    // (since both legacy and eagle use *.brd extension),
     // but eventually *.kicad_pcb will be more common than legacy *.brd files.
     static const struct
     {
