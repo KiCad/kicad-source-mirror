@@ -369,18 +369,25 @@ int DSNLEXER::NeedNUMBER( const char* aExpectation ) throw( IO_ERROR )
 
 /**
  * Function isSpace
- * strips the upper bits of the int to ensure the value passed to C++ %isspace() is
- * in the range of 0-255
+ * tests for whitespace.  Our whitespace, by our definition, is a subset of ASCII,
+ * i.e. no bytes with MSB on can be considered whitespace, since they are likely part
+ * of a multibyte UTF8 character.
  */
-static inline bool isSpace( int cc )
+static bool isSpace( int cc )
 {
-    // Warning: we are using UTF8 char, so values are coded from 0x01 to 0xFF
-    // isspace( int value ) works fine under Linux,
-    // but seems use only a 7 bits value under mingw, in comparisons.
-    // (for instance 0xA0 is seen as 0x20)
-    // So we need to test if the value is ASCII ( <= 127) and a space ( ' ', \t, \n ... )
-    // and not just a space:
-    return  ( (unsigned) cc <= 127 ) && ::isspace( cc );
+    if( cc <= ' ' )
+    {
+        switch( cc )
+        {
+        case ' ':
+        case '\n':
+        case '\r':
+        case '\t':
+        case '\0':              // PCAD s-expression files have this.
+            return true;
+        }
+    }
+    return false;
 }
 
 
