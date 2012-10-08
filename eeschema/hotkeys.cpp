@@ -480,14 +480,14 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_EDIT:                           // Edit schematic item.
     case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
     case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
-    {
-        EDA_HOTKEY_CLIENT_DATA data( aPosition );
-        cmd.SetInt( hotKey->m_Idcommand );
-        cmd.SetClientObject( &data );
-        cmd.SetId( hotKey->m_IdMenuEvent );
-        GetEventHandler()->ProcessEvent( cmd );
+        {
+            EDA_HOTKEY_CLIENT_DATA data( aPosition );
+            cmd.SetInt( hotKey->m_Idcommand );
+            cmd.SetClientObject( &data );
+            cmd.SetId( hotKey->m_IdMenuEvent );
+            GetEventHandler()->ProcessEvent( cmd );
+        }
         break;
-    }
     }
 }
 

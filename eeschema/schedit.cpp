@@ -371,7 +371,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_ITEM*   item = screen->GetCurItem();
 
     if( item == NULL )
     {
