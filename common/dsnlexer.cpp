@@ -375,7 +375,9 @@ int DSNLEXER::NeedNUMBER( const char* aExpectation ) throw( IO_ERROR )
  */
 static bool isSpace( int cc )
 {
-    if( cc <= ' ' )
+    // cc was signed extended from signed char, so it is often negative.
+    // Treat negative as large positive to exclude rapidly.
+    if( unsigned( cc ) <= ' ' )
     {
         switch( cc )
         {
