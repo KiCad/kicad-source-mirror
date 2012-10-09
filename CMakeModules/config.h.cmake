@@ -50,6 +50,9 @@
 #define strnicmp _strnicmp
 #endif
 
+/* Use Posix getc_unlocked() instead of getc() when it's available. */
+#cmakedefine HAVE_GETC_UNLOCKED
+
 /* Warning!!!  Using wxGraphicContext for rendering is experimental. */
 #cmakedefine USE_WX_GRAPHICS_CONTEXT 1
 

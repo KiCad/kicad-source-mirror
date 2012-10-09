@@ -28,6 +28,13 @@
 
 #include <richio.h>
 
+
+// Fall back to getc() when getc_unlocked() is not available on the target platform.
+#if !defined( HAVE_GETC_UNLOCKED )
+#define getc_unlocked getc
+#endif
+
+
 // This file defines 3 classes useful for working with DSN text files and is named
 // "richio" after its author, Richard Hollenbeck, aka Dick Hollenbeck.
 
