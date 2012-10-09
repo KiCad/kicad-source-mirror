@@ -273,7 +273,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
 
     wxFileDialog FilesDialog( this, _( "Footprint library files:" ), libpath,
                               wxEmptyString,
-                              wxGetTranslation( FootprintLibFileWildcard ),
+                              wxGetTranslation( LegacyFootprintLibFileWildcard ),
                               wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
 
     if( FilesDialog.ShowModal() != wxID_OK )
