@@ -44,6 +44,8 @@
 #include <macros.h>
 #include <menus_helpers.h>
 
+#include <boost/version.hpp>
+
 
 /// The default auto save interval is 10 minutes.
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
@@ -497,9 +499,14 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
         << info.GetArchName() << wxT( ", " ) << info.GetEndiannessName() << wxT( ", " )
         << info.GetPortIdName() << wxT( "\n" );
 
+    // Just in case someone builds KiCad with the platform native of Boost instead of
+    // the version included with the KiCad source.
+    tmp << wxT( "Boost version: " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
+        << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." ) << ( BOOST_VERSION % 100 ) << wxT( "\n" );
+
     tmp << wxT( "Options: " );
 
-    tmp << wxT( "         USE_PCBNEW_SEXPR_FILE_FORMAT=" );
+    tmp << wxT( "USE_PCBNEW_SEXPR_FILE_FORMAT=" );
 #ifdef USE_PCBNEW_SEXPR_FILE_FORMAT
     tmp << wxT( "ON\n" );
 #else
