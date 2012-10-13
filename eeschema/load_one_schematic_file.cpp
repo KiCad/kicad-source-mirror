@@ -35,7 +35,6 @@
 #include <richio.h>
 
 #include <general.h>
-//#include <protos.h>
 #include <sch_bus_entry.h>
 #include <sch_marker.h>
 #include <sch_junction.h>
@@ -78,8 +77,14 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     aScreen->SetFileName( aFullFileName );
 
     FILE* f;
+    wxString fname = aFullFileName;
+#ifdef __WINDOWS__
+    fname.Replace( wxT("/"), wxT("\\") );
+#else
+    fname.Replace( wxT("\\"), wxT("/") );
+#endif
 
-    if( ( f = wxFopen( aFullFileName, wxT( "rt" ) ) ) == NULL )
+    if( ( f = wxFopen( fname, wxT( "rt" ) ) ) == NULL )
     {
         msgDiag = _( "Failed to open " ) + aFullFileName;
         DisplayError( this, msgDiag );

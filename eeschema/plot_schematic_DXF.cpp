@@ -107,13 +107,6 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
                                              double             aScale,
                                              bool aPlotFrameRef )
 {
-    FILE*    output_file = wxFopen( aFileName, wxT( "wt" ) );
-
-    if( output_file == NULL )
-        return false;
-
-    LOCALE_IO   toggle;
-
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
 
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
@@ -123,8 +116,16 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-DXF" ) );
-    plotter->SetFilename( aFileName );
-    plotter->StartPlot( output_file );
+
+    if( ! plotter->OpenFile( aFileName ) )
+    {
+        delete plotter;
+        return false;
+    }
+
+    LOCALE_IO   toggle;
+
+    plotter->StartPlot();
 
     if( aPlotFrameRef )
     {

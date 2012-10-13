@@ -120,13 +120,6 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
                                              bool               aPlotBlackAndWhite,
                                              bool               aPlotFrameRef )
 {
-   FILE*       output_file = wxFopen( aFileName, wxT( "wt" ) );
-
-    if( output_file == NULL )
-        return false;
-
-    LOCALE_IO   toggle;
-
     SVG_PLOTTER* plotter = new SVG_PLOTTER();
 
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
@@ -139,8 +132,16 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-SVG" ) );
-    plotter->SetFilename( aFileName );
-    plotter->StartPlot( output_file );
+
+    if( ! plotter->OpenFile( aFileName ) )
+    {
+        delete plotter;
+        return false;
+    }
+
+    LOCALE_IO   toggle;
+
+    plotter->StartPlot();
 
     if( aPlotFrameRef )
     {

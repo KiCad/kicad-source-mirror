@@ -97,6 +97,11 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         }
         break;
 
+
+    default:
+        wxASSERT( false );
+        // fall through
+    case PLOT_FORMAT_PDF:
     case PLOT_FORMAT_POST:
         {
             PAGE_INFO   pageA4( wxT( "A4" ) );
@@ -124,9 +129,12 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
             offset.y    = (int) ( (double) bbbox.Centre().y -
                                   ( ypagesize_for_board / 2.0 ) / scale );
 
-            PS_PLOTTER* ps_plotter = new PS_PLOTTER;
-            plotter = ps_plotter;
-            ps_plotter->SetPageSettings( pageA4 );
+            if( aFormat == PLOT_FORMAT_PDF )
+                plotter = new PDF_PLOTTER;
+            else
+                plotter = new PS_PLOTTER;
+
+            plotter->SetPageSettings( pageA4 );
             plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         }
         break;
@@ -148,23 +156,19 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
             plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
         }
         break;
-
-    default:
-        wxASSERT( false );
     }
 
-    FILE* plotfile = wxFopen( aFullFileName, wxT( "wt" ) );
+    plotter->SetCreator( wxT( "PCBNEW" ) );
+    plotter->SetDefaultLineWidth( 5 * IU_PER_MILS );
+    plotter->SetColorMode( false );
 
-    if( plotfile == NULL )
+    if( ! plotter->OpenFile( aFullFileName ) )
     {
         delete plotter;
         return false;
     }
 
-    plotter->SetCreator( wxT( "PCBNEW" ) );
-    plotter->SetFilename( aFullFileName );
-    plotter->SetDefaultLineWidth( 10 * IU_PER_DECIMILS );
-    plotter->StartPlot( plotfile );
+    plotter->StartPlot();
 
     // Draw items on edge layer (not all, only items useful for drill map
     BRDITEMS_PLOTTER itemplotter( plotter, m_pcb, plot_opts );

@@ -39,6 +39,28 @@
 #include <wx/zstream.h>
 #include <wx/mstream.h>
 
+
+/*
+ * Open or create the plot file aFullFilename
+ * return true if success, false if the file cannot be created/opened
+ *
+ * Opens the PDF file in binary mode
+ */
+bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
+{
+    filename = aFullFilename;
+
+    wxASSERT( !outputFile );
+
+    // Open the PDF file in binary mode
+    outputFile = wxFopen( filename, wxT( "wb" ) );
+
+    if( outputFile == NULL )
+        return false ;
+
+    return true;
+}
+
 void PDF_PLOTTER::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     wxASSERT( !workFile );
@@ -555,11 +577,9 @@ void PDF_PLOTTER::ClosePage()
  * 'for free' the following are to be closed and reopened. Between
  * each page parameters can be set
  */
-bool PDF_PLOTTER::StartPlot( FILE* fout )
+bool PDF_PLOTTER::StartPlot()
 {
-    wxASSERT( !outputFile );
-
-    outputFile = fout;
+    wxASSERT( outputFile );
 
     // First things first: the customary null object
     xrefTable.clear();

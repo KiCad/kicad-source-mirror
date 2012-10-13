@@ -469,6 +469,8 @@ public:
     void SetFileName( const wxString& aFilename )
     {
         m_fileName = aFilename;
+        // Filenames are stored using unix notation
+        m_fileName.Replace( wxT("\\"), wxT("/") );
     }
 
     bool ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName );

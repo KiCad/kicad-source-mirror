@@ -203,10 +203,9 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 /**
  * At the start of the HPGL plot pen speed and number are requested
  */
-bool HPGL_PLOTTER::StartPlot( FILE* fout )
+bool HPGL_PLOTTER::StartPlot()
 {
-    wxASSERT( !outputFile );
-    outputFile = fout;
+    wxASSERT( outputFile );
     fprintf( outputFile, "IN;VS%d;PU;PA;SP%d;\n", penSpeed, penNumber );
     return true;
 }
