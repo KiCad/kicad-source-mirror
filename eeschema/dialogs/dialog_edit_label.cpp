@@ -257,7 +257,10 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
     if( !text.IsEmpty() )
         m_CurrentText->m_Text = text;
     else if( !m_CurrentText->IsNew() )
+    {
         DisplayError( this, _( "Empty Text!" ) );
+        return;
+    }
 
     m_CurrentText->SetOrientation( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
