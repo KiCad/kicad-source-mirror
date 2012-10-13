@@ -656,7 +656,10 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
     }
 
     int draw_bg_color;
-    m_settings->Read( wxT( "BgColor" ), &draw_bg_color );
+    // FIXME OSX Mountain Lion (10.8)
+    // Seems that Read doesn't found anything and ColorFromInt Asserts - I'm unable to reproduce on 10.7
+    // In general terms i think is better have a failsafe BLACK default than an uninit variable
+    m_settings->Read( wxT( "BgColor" ), &draw_bg_color , BLACK );
     g_DrawBgColor = ColorFromInt( draw_bg_color );
 
     // Load per-user search paths from settings file
