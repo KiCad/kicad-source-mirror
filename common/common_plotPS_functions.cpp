@@ -636,12 +636,11 @@ void PS_PLOTTER::PenTo( const wxPoint& pos, char plume )
  * BBox is the boundary box (position and size of the "client rectangle"
  * for drawings (page - margins) in mils (0.001 inch)
  */
-bool PS_PLOTTER::StartPlot( FILE* fout )
+bool PS_PLOTTER::StartPlot()
 {
-    wxASSERT( !outputFile );
+    wxASSERT( outputFile );
     wxString           msg;
 
-    outputFile = fout;
     static const char* PSMacro[] =
     {
 	"%%BeginProlog\n"

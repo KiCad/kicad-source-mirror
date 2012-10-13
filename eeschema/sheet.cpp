@@ -93,7 +93,14 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     bool loadFromFile = false;
     SCH_SCREEN* useScreen = NULL;
 
-    if( !g_RootSheet->SearchHierarchy( fileName.GetFullPath(), &useScreen ) )
+    wxString newFullFilename = fileName.GetFullPath();
+    // Inside Eeschema, filenames are stored using unix notation
+    newFullFilename.Replace( wxT("\\"), wxT("/") );
+
+    // Search for a schematic file having the same filename exists,
+    // already in use in the hierarchy, or on disk,
+    // in order to reuse it
+    if( !g_RootSheet->SearchHierarchy( newFullFilename, &useScreen ) )
         loadFromFile = fileName.FileExists();
 
     if( aSheet->GetScreen() == NULL )                          // New sheet.
@@ -101,7 +108,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         if( ( useScreen != NULL ) || loadFromFile )            // Load from existing file.
         {
             msg.Printf( _( "A file named \"%s\" already exists" ),
-                        GetChars( fileName.GetFullName() ) );
+                        GetChars( newFullFilename ) );
 
             if( useScreen != NULL )
                 msg += _( " in the current schematic hierarchy" );
@@ -114,7 +121,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         else                                                   // New file.
         {
             aSheet->SetScreen( new SCH_SCREEN() );
-            aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
+            aSheet->GetScreen()->SetFileName( newFullFilename );
         }
     }
     else                                                       // Existing sheet.
@@ -122,7 +129,11 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         bool isUndoable = true;
         bool renameFile = false;
 
-        if( fileName.GetFullName().CmpNoCase( aSheet->GetFileName() ) != 0 )
+        // We are always using here a case insensitive comparison
+        // to avoid issues under Windows, although under Unix
+        // filenames are case sensitive.
+        // But many users create schematic under both Unix and Windows
+        if( newFullFilename.CmpNoCase( aSheet->GetFileName() ) != 0 )
         {
             // Sheet file name changes cannot be undone.
             isUndoable = false;
@@ -131,7 +142,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
             if( ( useScreen != NULL ) || loadFromFile )        // Load from existing file.
             {
                 tmp.Printf( _( "A file named \"%s\" already exists" ),
-                            GetChars( fileName.GetFullName() ) );
+                            GetChars( newFullFilename ) );
                 msg += tmp;
 
                 if( useScreen != NULL )
@@ -168,7 +179,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
         if( renameFile )
         {
-            aSheet->GetScreen()->SetFileName( fileName.GetFullName() );
+            aSheet->GetScreen()->SetFileName( newFullFilename );
             SaveEEFile( aSheet->GetScreen() );
 
             // If the the associated screen is shared by more than one sheet, remove the
@@ -182,7 +193,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         }
     }
 
-    aSheet->SetFileName( fileName.GetFullPath() );
+    aSheet->SetFileName( newFullFilename );
 
     if( useScreen )
         aSheet->SetScreen( useScreen );

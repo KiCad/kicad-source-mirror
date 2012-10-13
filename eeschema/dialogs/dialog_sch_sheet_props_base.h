@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_sch_sheet_props_base__
-#define __dialog_sch_sheet_props_base__
+#ifndef __DIALOG_SCH_SHEET_PROPS_BASE_H__
+#define __DIALOG_SCH_SHEET_PROPS_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -18,6 +20,7 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -26,33 +29,31 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SCH_SHEET_PROPS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SCH_SHEET_PROPS_BASE : public wxDialog 
+class DIALOG_SCH_SHEET_PROPS_BASE : public DIALOG_SHIM
 {
 	private:
 	
 	protected:
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_textFileName;
-		
 		wxStaticText* m_staticText2;
 		wxTextCtrl* m_textFileNameSize;
 		wxStaticText* m_staticFileNameSizeUnits;
 		wxStaticText* m_staticText4;
 		wxTextCtrl* m_textSheetName;
-		
 		wxStaticText* m_staticText5;
 		wxTextCtrl* m_textSheetNameSize;
 		wxStaticText* m_staticSheetNameSizeUnits;
-		
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 	
 	public:
 		
-		DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Sheet Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 453,170 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Sheet Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 453,170 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SCH_SHEET_PROPS_BASE();
 	
 };
 
-#endif //__dialog_sch_sheet_props_base__
+#endif //__DIALOG_SCH_SHEET_PROPS_BASE_H__

@@ -619,7 +619,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Drill map (HPGL)&quot; &quot;Drill map (PostScript)&quot; &quot;Drill map (Gerber)&quot; &quot;Drill map (DXF)&quot; &quot;Drill map (SVG)&quot;</property>
+                                        <property name="choices">&quot;HPGL&quot; &quot;PostScript&quot; &quot;Gerber&quot; &quot;DXF&quot; &quot;SVG&quot; &quot;PDF&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -634,7 +634,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Drill Map:</property>
+                                        <property name="label">Drill Map File Format:</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>

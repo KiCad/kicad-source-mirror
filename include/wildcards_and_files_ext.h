@@ -74,6 +74,7 @@ extern const wxString LegacyPcbFileWildcard;
 extern const wxString PcbFileWildcard;
 extern const wxString EaglePcbFileWildcard;
 extern const wxString PdfFileWildcard;
+extern const wxString PSFileWildcard;
 extern const wxString MacrosFileWildcard;
 extern const wxString AllFilesWildcard;
 extern const wxString ComponentFileWildcard;

@@ -205,13 +205,6 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
                                               double            aScale,
                                               bool              aPlotFrameRef )
 {
-    FILE*       output_file = wxFopen( aFileName, wxT( "wt" ) );
-
-    if( output_file == NULL )
-        return false;
-
-    LOCALE_IO toggle;
-
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
 
     plotter->SetPageSettings( aPageInfo );
@@ -219,12 +212,20 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-HPGL" ) );
-    plotter->SetFilename( aFileName );
+
+    if( ! plotter->OpenFile( aFileName ) )
+    {
+        delete plotter;
+        return false;
+    }
+
+    LOCALE_IO toggle;
+
     // Pen num and pen speed are not initialized here.
     // Default HPGL driver values are used
     plotter->SetPenDiameter( m_HPGLPenSize );
     plotter->SetPenOverlap( m_HPGLPenSize / 4 );
-    plotter->StartPlot( output_file );
+    plotter->StartPlot();
 
     plotter->SetColor( BLACK );
 

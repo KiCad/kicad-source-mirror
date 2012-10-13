@@ -15,11 +15,8 @@ public:
     /** Constructor */
     DIALOG_SCH_SHEET_PROPS( wxWindow* parent );
 
-    void SetFileName( const wxString& aFileName )
-    {
-        m_textFileName->SetValue( aFileName );
-    }
-    wxString GetFileName() { return m_textFileName->GetValue(); }
+    void SetFileName( const wxString& aFileName );
+    const wxString GetFileName();
 
     void SetSheetName( const wxString& aSheetName )
     {

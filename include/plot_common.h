@@ -77,7 +77,7 @@ public:
      */
     virtual PlotFormat GetPlotterType() const = 0;
 
-    virtual bool StartPlot( FILE* fout ) = 0;
+    virtual bool StartPlot() = 0;
     virtual bool EndPlot() = 0;
 
     virtual void SetNegative( bool _negative )
@@ -124,11 +124,6 @@ public:
         creator = _creator;
     }
 
-    virtual void SetFilename( const wxString& _filename )
-    {
-        filename = _filename;
-    }
-
     /**
      * Set the plot offset and scaling for the current plot
      * @param aOffset is the plot offset
@@ -140,6 +135,16 @@ public:
      */
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 	    double aScale, bool aMirror ) = 0;
+
+    /**
+     * Open or create the plot file aFullFilename
+     * @param aFullFilename = the full file name of the file to create
+     * @return true if success, false if the file cannot be created/opened
+     *
+     * Virtual because some plotters use ascii files, some others binary files (PDF)
+     * The base class open the file in text mode
+     */
+    virtual bool OpenFile( const wxString& aFullFilename );
 
     /**
      * The IUs per decimil are an essential scaling factor when
@@ -356,7 +361,7 @@ public:
         return wxString( wxT( "plt" ) );
     }
 
-    virtual bool StartPlot( FILE* fout );
+    virtual bool StartPlot();
     virtual bool EndPlot();
 
     /// HPGL doesn't handle line thickness or color
@@ -528,7 +533,7 @@ public:
         return PLOT_FORMAT_POST;
     }
 
-    virtual bool StartPlot( FILE* fout );
+    virtual bool StartPlot();
     virtual bool EndPlot();
     virtual void SetCurrentLineWidth( int width );
     virtual void SetDash( bool dashed );
@@ -580,7 +585,17 @@ public:
         return wxString( wxT( "pdf" ) );
     }
 
-    virtual bool StartPlot( FILE* fout );
+    /**
+     * Open or create the plot file aFullFilename
+     * @param aFullFilename = the full file name of the file to create
+     * @return true if success, false if the file cannot be created/opened
+     *
+     * The base class open the file in text mode, so we should have this
+     * function overlaid for PDF files, which are binary files
+     */
+    virtual bool OpenFile( const wxString& aFullFilename );
+
+    virtual bool StartPlot();
     virtual bool EndPlot();
     virtual void StartPage();
     virtual void ClosePage();
@@ -652,7 +667,7 @@ public:
     }
 
     virtual void SetColor( EDA_COLOR_T color );
-    virtual bool StartPlot( FILE* fout );
+    virtual bool StartPlot();
     virtual bool EndPlot();
     virtual void SetCurrentLineWidth( int width );
     virtual void SetDash( bool dashed );
@@ -758,7 +773,7 @@ public:
         return wxString( wxT( "pho" ) );
     }
 
-    virtual bool StartPlot( FILE* fout );
+    virtual bool StartPlot();
     virtual bool EndPlot();
     virtual void SetCurrentLineWidth( int width );
     virtual void SetDefaultLineWidth( int width );
@@ -833,7 +848,7 @@ public:
         textAsLines = ( mode != PLOTTEXTMODE_NATIVE );
     }
 
-    virtual bool StartPlot( FILE* fout );
+    virtual bool StartPlot();
     virtual bool EndPlot();
 
     // For now we don't use 'thick' primitives, so no line width

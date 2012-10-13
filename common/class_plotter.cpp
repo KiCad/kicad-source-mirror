@@ -37,6 +37,28 @@ PLOTTER::PLOTTER( )
     negativeMode = false;
 }
 
+/*
+ * Open or create the plot file aFullFilename
+ * return true if success, false if the file connot be created/opened
+ *
+ * Virtual because some plotters use ascii files, some others binary files (PDF)
+ * The base class open the file in text mode
+ */
+bool PLOTTER::OpenFile( const wxString& aFullFilename )
+{
+    filename = aFullFilename;
+
+    wxASSERT( !outputFile );
+
+    // Open the file in text mode (not suitable for all plotters
+    // but only for most of them
+    outputFile = wxFopen( filename, wxT( "wt" ) );
+
+    if( outputFile == NULL )
+        return false ;
+
+    return true;
+}
 
 /**
  * Modifies coordinates according to the orientation,

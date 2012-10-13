@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -66,10 +66,14 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_staticSheetNameSizeUnits->Wrap( -1 );
 	fgSizer1->Add( m_staticSheetNameSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
+	
 	mainSizer->Add( fgSizer1, 1, wxALL|wxEXPAND, 12 );
 	
 	
 	mainSizer->Add( 0, 0, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -77,7 +81,9 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
+	
 	mainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 12 );
+	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();

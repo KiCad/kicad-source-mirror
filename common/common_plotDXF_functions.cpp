@@ -13,7 +13,7 @@
 #include <kicad_string.h>
 
 /**
- * Oblique angle for DXF native text 
+ * Oblique angle for DXF native text
  * (I don't remember if 15 degrees is the ISO value... it looks nice anyway)
  */
 static const double DXF_OBLIQUE_ANGLE = 15;
@@ -51,12 +51,11 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 /**
  * Opens the DXF plot with a skeleton header
  */
-bool DXF_PLOTTER::StartPlot( FILE* fout )
+bool DXF_PLOTTER::StartPlot()
 {
-    wxASSERT( !outputFile );
-    outputFile = fout;
+    wxASSERT( outputFile );
 
-    // DXF HEADER - Boilerplate 
+    // DXF HEADER - Boilerplate
     // Defines the minimum for drawing i.e. the angle system and the
     // continuous linetype
     fputs( "  0\n"
@@ -105,7 +104,7 @@ bool DXF_PLOTTER::StartPlot( FILE* fout )
            "ENDTAB\n",
             outputFile );
 
-    // Text styles table 
+    // Text styles table
     // Defines 4 text styles, one for each bold/italic combination
     fputs( "  0\n"
            "TABLE\n"
@@ -115,16 +114,16 @@ bool DXF_PLOTTER::StartPlot( FILE* fout )
            "4\n", outputFile );
 
     static const char *style_name[4] = {"KICAD", "KICADB", "KICADI", "KICADBI"};
-    for(int i = 0; i < 4; i++ ) 
+    for(int i = 0; i < 4; i++ )
     {
         fprintf( outputFile,
                  "  0\n"
                  "STYLE\n"
-                 "  2\n"        
+                 "  2\n"
                  "%s\n"         // Style name
-                 "  70\n"       
+                 "  70\n"
                  "0\n"          // Standard flags
-                 "  40\n"       
+                 "  40\n"
                  "0\n"          // Non-fixed height text
                  "  41\n"
                  "1\n"          // Width factor (base)
@@ -143,8 +142,8 @@ bool DXF_PLOTTER::StartPlot( FILE* fout )
     }
 
 
-    // Layer table - one layer per color 
-    fprintf( outputFile, 
+    // Layer table - one layer per color
+    fprintf( outputFile,
              "  0\n"
              "ENDTAB\n"
              "  0\n"
@@ -160,7 +159,7 @@ bool DXF_PLOTTER::StartPlot( FILE* fout )
        - An HSV zone (10-250, 5 values x 2 saturations x 10 hues
        - Greys (251 - 255)
 
-       The is *no* black... the white does it on paper, usually, and 
+       The is *no* black... the white does it on paper, usually, and
        anyway it depends on the plotter configuration, since DXF colors
        are meant to be logical only (they represent *both* line color and
        width); later version with plot styles only complicate the matter!
@@ -201,14 +200,14 @@ bool DXF_PLOTTER::StartPlot( FILE* fout )
     for( int i = 0; i < NBCOLOR; i++ )
     {
         wxString cname = ColorRefs[i].m_Name;
-        fprintf( outputFile, 
+        fprintf( outputFile,
                  "  0\n"
                  "LAYER\n"
                  "  2\n"
                  "%s\n"         // Layer name
                  "  70\n"
                  "0\n"          // Standard flags
-                 "  62\n"       
+                 "  62\n"
                  "%d\n"         // Color number
                  "  6\n"
                  "CONTINUOUS\n",// Linetype name
@@ -233,7 +232,7 @@ bool DXF_PLOTTER::EndPlot()
 {
     wxASSERT( outputFile );
 
-    // DXF FOOTER 
+    // DXF FOOTER
     fputs( "  0\n"
            "ENDSEC\n"
            "  0\n"
@@ -273,8 +272,8 @@ void DXF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int w
 }
 
 
-/** 
- * DXF circle: full functionality; it even does 'fills' drawing a 
+/**
+ * DXF circle: full functionality; it even does 'fills' drawing a
  * circle with a dual-arc polyline wide as the radius.
  *
  * I could use this trick to do other filled primitives
@@ -287,23 +286,23 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
     if( radius > 0 )
     {
         wxString cname = ColorRefs[currentColor].m_Name;
-        if (!fill) 
+        if (!fill)
         {
             fprintf( outputFile, "0\nCIRCLE\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n",
                     TO_UTF8( cname ),
                     centre_dev.x, centre_dev.y, radius );
         }
-        if (fill == FILLED_SHAPE) 
+        if (fill == FILLED_SHAPE)
         {
             double r = radius*0.5;
             fprintf( outputFile, "0\nPOLYLINE\n");
             fprintf( outputFile, "8\n%s\n66\n1\n70\n1\n", TO_UTF8( cname ));
             fprintf( outputFile, "40\n%g\n41\n%g\n", radius, radius);
             fprintf( outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
-            fprintf( outputFile, "10\n%g\n 20\n%g\n42\n1.0\n", 
+            fprintf( outputFile, "10\n%g\n 20\n%g\n42\n1.0\n",
                     centre_dev.x-r, centre_dev.y );
             fprintf( outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
-            fprintf( outputFile, "10\n%g\n 20\n%g\n42\n1.0\n", 
+            fprintf( outputFile, "10\n%g\n 20\n%g\n42\n1.0\n",
                     centre_dev.x+r, centre_dev.y );
             fprintf( outputFile, "0\nSEQEND\n");
         }
@@ -311,10 +310,10 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
 }
 
 
-/** 
+/**
  * DXF polygon: doesn't fill it but at least it close the filled ones
  */
-void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, 
+void DXF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
                             FILL_T aFill, int aWidth)
 {
     if( aCornerList.size() <= 1 )
@@ -347,7 +346,7 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 
     if( penLastpos != pos && plume == 'D' )
     {
-        // DXF LINE 
+        // DXF LINE
         wxString cname = ColorRefs[currentColor].m_Name;
         fprintf( outputFile, "0\nLINE\n8\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
                  TO_UTF8( cname ),
@@ -403,7 +402,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int rad
              StAngle / 10.0, EndAngle / 10.0 );
 }
 
-/** 
+/**
  * DXF oval pad: always done in sketch mode
  */
 void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int orient,
@@ -425,7 +424,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int ori
 }
 
 
-/** 
+/**
  * DXF round pad: always done in sketch mode; it could be filled but it isn't
  * pretty if other kinds of pad aren't...
  */
@@ -447,7 +446,7 @@ void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
     wxSize size;
     int    ox, oy, fx, fy;
 
-    size.x = padsize.x / 2;  
+    size.x = padsize.x / 2;
     size.y = padsize.y / 2;
 
     if( size.x < 0 )
@@ -543,7 +542,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
     if( textAsLines )
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
                 aWidth, aItalic, aBold );
-    else 
+    else
     {
         /* Emit text as a text entity. This loses formatting and shape but it's
            more useful as a CAD object */
@@ -553,7 +552,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
         wxString cname = ColorRefs[currentColor].m_Name;
         DPOINT size_dev = userToDeviceSize( aSize );
         int h_code = 0, v_code = 0;
-        switch( aH_justify ) 
+        switch( aH_justify )
         {
         case GR_TEXT_HJUSTIFY_LEFT:
             h_code = 0;
@@ -565,7 +564,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
             h_code = 2;
             break;
         }
-        switch( aV_justify ) 
+        switch( aV_justify )
         {
         case GR_TEXT_VJUSTIFY_TOP:
             v_code = 3;
@@ -578,7 +577,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
             break;
         }
 
-        // Position, size, rotation and alignment 
+        // Position, size, rotation and alignment
         // The two alignment point usages is somewhat idiot (see the DXF ref)
         // Anyway since we don't use the fit/aligned options, they're the same
         fprintf( outputFile,
@@ -614,9 +613,9 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                       : (aItalic ? "KICADI" : "KICAD"),
                 TO_UTF8( cname ),
                 origin_dev.x, origin_dev.x,
-                origin_dev.y, origin_dev.y, 
+                origin_dev.y, origin_dev.y,
                 size_dev.y, fabs( size_dev.y / size_dev.x ),
-                aOrient / 10.0, 
+                aOrient / 10.0,
                 aItalic ? DXF_OBLIQUE_ANGLE : 0,
                 size_dev.x < 0 ? 2 : 0, // X mirror flag
                 h_code, v_code );
@@ -631,7 +630,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
            bigfonts which are a massive PITA). Common denominator solution:
            use Latin1 (and however someone could choke on it, anyway). Sorry
            for the extended latin people. If somewant want to try fixing this
-           recent version seems to use UTF-8 (and not UCS2 like the rest of 
+           recent version seems to use UTF-8 (and not UCS2 like the rest of
            Windows)
 
            XXX Actually there is a *third* issue: older DXF formats are limited
@@ -649,17 +648,17 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
         {
             /* Here I do a bad thing: writing the output one byte at a time!
                but today I'm lazy and I have no idea on how to coerce a Unicode
-               wxString to spit out latin1 encoded text ... 
+               wxString to spit out latin1 encoded text ...
 
                Atleast stdio is *supposed* to do output buffering, so there is
                hope is not too slow */
             wchar_t ch = aText[i];
-            if( ch > 255 ) 
+            if( ch > 255 )
             {
                 // I can't encode this...
                 putc( '?', outputFile );
             }
-            else 
+            else
             {
                 if( ch == '~' )
                 {

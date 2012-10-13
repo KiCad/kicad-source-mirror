@@ -36,13 +36,13 @@ void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 
 /**
  * Emit a D-Code record, using proper conversions
- * to format a leading zero omitted gerber coordinate 
+ * to format a leading zero omitted gerber coordinate
  * (for 4 decimal positions, see header generation in start_plot
  */
 void GERBER_PLOTTER::emitDcode( const DPOINT& pt, int dcode )
 {
 
-    fprintf( outputFile, "X%dY%dD%02d*\n", 
+    fprintf( outputFile, "X%dY%dD%02d*\n",
 	    int( pt.x ), int( pt.y ), dcode );
 }
 
@@ -50,12 +50,12 @@ void GERBER_PLOTTER::emitDcode( const DPOINT& pt, int dcode )
  * Function start_plot
  * Write GERBER header to file
  * initialize global variable g_Plot_PlotOutputFile
- * @param aFile: an opened file to write to
  */
-bool GERBER_PLOTTER::StartPlot( FILE* aFile )
+bool GERBER_PLOTTER::StartPlot()
 {
-    wxASSERT( !outputFile );
-    finalFile = aFile;
+    wxASSERT( outputFile );
+
+    finalFile = outputFile;     // the actual gerber file will be created later
 
     // Create a temporary filename to store gerber file
     // note tmpfile() does not work under Vista and W7 in user mode
@@ -213,7 +213,7 @@ void GERBER_PLOTTER::writeApertureList()
             break;
 
         case APERTURE::Rect:
-            sprintf( text, "R,%gX%g*%%\n", 
+            sprintf( text, "R,%gX%g*%%\n",
 	             tool->Size.x * fscale,
                      tool->Size.y * fscale );
             break;
@@ -223,8 +223,8 @@ void GERBER_PLOTTER::writeApertureList()
             break;
 
         case APERTURE::Oval:
-            sprintf( text, "O,%gX%g*%%\n", 
-	            tool->Size.x * fscale, 
+            sprintf( text, "O,%gX%g*%%\n",
+	            tool->Size.x * fscale,
 		    tool->Size.y * fscale );
             break;
         }
@@ -256,7 +256,7 @@ void GERBER_PLOTTER::PenTo( const wxPoint& aPos, char plume )
 }
 
 
-void GERBER_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, 
+void GERBER_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
                            int width )
 {
     std::vector< wxPoint > cornerList;
@@ -312,7 +312,7 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, int aStAngle, int aEndAngle,
  * Gerber polygon: they can (and *should*) be filled with the
  * appropriate G36/G37 sequence (raster fills are deprecated)
  */
-void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, 
+void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
                                FILL_T aFill, int aWidth )
 {
     if( aCornerList.size() <= 1 )
@@ -344,7 +344,7 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
 /**
  * Filled circular flashes are stored as apertures
  */
-void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, 
+void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 				     EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( outputFile );
@@ -383,7 +383,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, int 
     {
         if( orient == 900 || orient == 2700 ) /* orientation turned 90 deg. */
             EXCHG( size.x, size.y );
-	
+
 	DPOINT pos_dev = userToDeviceCoordinates( pos );
         selectAperture( size, APERTURE::Oval );
 	emitDcode( pos_dev, 3 );
@@ -463,9 +463,9 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
 	}
 	break;
 
-    default: // plot pad shape as polygon 
+    default: // plot pad shape as polygon
 	{
-	    // XXX to do: use an aperture macro to declare the rotated pad 
+	    // XXX to do: use an aperture macro to declare the rotated pad
 	    wxPoint coord[4];
 	    // coord[0] is assumed the lower left
 	    // coord[1] is assumed the upper left
@@ -497,7 +497,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
                                      int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 
 {
-    // XXX to do: use an aperture macro to declare the pad 
+    // XXX to do: use an aperture macro to declare the pad
     // polygon corners list
     std::vector< wxPoint > cornerList;
 
@@ -518,7 +518,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
     PlotPoly( cornerList, aTrace_Mode==FILLED ? FILLED_SHAPE : NO_FILL );
 }
 
-/** 
+/**
  * Change the plot polarity and begin a new layer
  * Used to 'scratch off' silk screen away from solder mask
  */

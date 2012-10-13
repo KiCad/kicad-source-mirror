@@ -422,12 +422,11 @@ void SVG_PLOTTER::PenTo( const wxPoint& pos, char plume )
  * The code within this function
  * creates SVG files header
  */
-bool SVG_PLOTTER::StartPlot( FILE* fout )
+bool SVG_PLOTTER::StartPlot()
 {
-    wxASSERT( !outputFile );
+    wxASSERT( outputFile );
     wxString            msg;
 
-    outputFile = fout;
     static const char*  header[] =
     {
         "<?xml version=\"1.0\" standalone=\"no\"?>\n",

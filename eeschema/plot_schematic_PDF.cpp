@@ -88,20 +88,18 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
             plotFileName = m_parent->GetUniqueFilenameForCurrentSheet() + wxT( "." )
                            + PDF_PLOTTER::GetDefaultFileExtension();
 
-            FILE* output_file = wxFopen( plotFileName, wxT( "wb" ) );
-
-            if( output_file == NULL )
+            if( ! plotter->OpenFile( plotFileName ) )
             {
                 msg.Printf( _( "** Unable to create %s **\n" ), GetChars( plotFileName ) );
                 m_MessagesBox->AppendText( msg );
+                delete plotter;
                 return;
             }
 
             // Open the plotter and do the first page
             SetLocaleTo_C_standard();
-            plotter->SetFilename( plotFileName );
             setupPlotPagePDF( plotter, screen );
-            plotter->StartPlot( output_file );
+            plotter->StartPlot();
             first_page = false;
         }
         else

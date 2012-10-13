@@ -137,7 +137,6 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
     if( output_file == NULL )
         return false;
 
-    SetLocaleTo_C_standard();
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetPageSettings( aPageInfo );
     plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
@@ -146,8 +145,15 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-PS" ) );
-    plotter->SetFilename( aFileName );
-    plotter->StartPlot( output_file );
+
+    if( ! plotter->OpenFile( aFileName ) )
+    {
+        delete plotter;
+        return false;
+    }
+
+    SetLocaleTo_C_standard();
+    plotter->StartPlot();
 
     if( aPlotFrameRef )
     {

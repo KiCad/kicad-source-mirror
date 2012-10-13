@@ -612,13 +612,13 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
         wxASSERT( false );
     }
 
-    the_plotter->SetFilename( aFullFileName );
-
     // Compute the viewport and set the other options
     initializePlotter( the_plotter, aBoard, aPlotOpts );
 
-    if( the_plotter->StartPlot( output_file ) )
+    if( the_plotter->OpenFile( aFullFileName ) )
     {
+        the_plotter->StartPlot();
+
         // Plot the frame reference if requested
         if( aPlotOpts->GetPlotFrameRef() )
             PlotWorkSheet( the_plotter, aBoard->GetTitleBlock(),

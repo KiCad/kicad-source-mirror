@@ -432,14 +432,14 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
 
             if( aGenMap )
             {
-                const PlotFormat filefmt[5] =
+                const PlotFormat filefmt[6] =
                 {   // Keep these format ids in the same order than m_Choice_Drill_Map choices
                     PLOT_FORMAT_HPGL, PLOT_FORMAT_POST, PLOT_FORMAT_GERBER,
-                    PLOT_FORMAT_DXF, PLOT_FORMAT_SVG
+                    PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
                 };
                 unsigned choice = (unsigned) m_Choice_Drill_Map->GetSelection();
 
-                if( choice > 4 )
+                if( choice >= m_Choice_Drill_Map->GetCount() )
                     choice = 1;
 
                 fn.SetExt( wxEmptyString ); // Will be modified by GenDrillMap
@@ -548,7 +548,7 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString aFileName,
 
     case PLOT_FORMAT_POST:
         ext = PS_PLOTTER::GetDefaultFileExtension();
-        wildcard = _( "PostScript files (.ps)|*.ps" );
+        wildcard = PSFileWildcard;
         break;
 
     case PLOT_FORMAT_GERBER:
@@ -566,8 +566,13 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString aFileName,
         wildcard = SVGFileWildcard;
         break;
 
+    case PLOT_FORMAT_PDF:
+        ext = PDF_PLOTTER::GetDefaultFileExtension();
+        wildcard = PdfFileWildcard;
+        break;
+
     default:
-        wxMessageBox( wxT( "DIALOG_GENDRILL::GenDrillMap() error" ) );
+        wxLogMessage( wxT( "DIALOG_GENDRILL::GenDrillMap() error, fmt % unkown" ), format );
         return;
     }
 
