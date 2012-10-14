@@ -31,12 +31,20 @@
 #include <appl_wxstruct.h>
 #include <confirm.h>
 #include <gestfich.h>
-#include <prjconfig.h>
 #include <kicad.h>
+#include <prjconfig.h>
+#include <project_template.h>
 #include <tree_project_frame.h>
 #include <wildcards_and_files_ext.h>
-
+#include <vector>
 #include <build_version.h>
+
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
+
+#include "dialogs/dialog_template_selector.h"
+
+#define SEP()   wxFileName::GetPathSeparator()
 
 static const wxString GeneralGroupName( wxT( "/general" ) );
 
@@ -45,39 +53,94 @@ static const wxString SchematicRootNameEntry( wxT( "RootSch" ) );
 static const wxString BoardFileNameEntry( wxT( "BoardNm" ) );
 
 
-void KICAD_MANAGER_FRAME::CreateNewProject( const wxString PrjFullFileName )
+void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, bool aTemplateSelector = false )
 {
     wxString   filename;
-    wxFileName newProjectName = PrjFullFileName;
+    wxFileName newProjectName = aPrjFullFileName;
 
     ClearMsg();
 
-    /* Init default config filename */
+    // Init default config filename
     filename = wxGetApp().FindLibraryPath( wxT( "kicad" ) + g_KicadPrjFilenameExtension );
 
-    /* Check if file kicad.pro exist in template directory */
-    if( wxFileName::FileExists( filename ) )
+    // If we are creating a project from a template, make sure the template directory is sane
+    if( aTemplateSelector )
     {
-        wxCopyFile( filename, PrjFullFileName );
+        DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( this );
+
+        // Add a new tab for system templates
+        wxFileName templatePath = wxPathOnly(wxStandardPaths::Get().GetExecutablePath()) +
+                SEP() + wxT( ".." ) + SEP() + wxT( "share" ) + SEP() + wxT( "template" ) + SEP();
+
+        ps->AddPage( _( "System Templates" ), templatePath );
+
+        // Add a new tab for user templates
+        wxFileName userPath = wxStandardPaths::Get().GetDocumentsDir() +
+                SEP() + wxT( "kicad" ) + SEP() + wxT( "template" ) + SEP();
+
+        ps->AddPage( _( "User Templates" ), userPath );
+
+        // Check to see if a custom template location is available and setup a new selection tab
+        // if there is
+        wxString envStr;
+        wxGetEnv( wxT("KICAD_PTEMPLATES"), &envStr );
+        wxFileName envPath = envStr;
+
+        if( envStr != wxEmptyString )
+        {
+            wxFileName envPath = envStr;
+            ps->AddPage( _("Portable Templates"), envPath );
+        }
+
+        // Show the project template selector dialog
+        int result = ps->ShowModal();
+
+        if( result != wxID_OK )
+        {
+            wxMessageBox( _( "Did not generate new project from template" ),
+                          _( "Cancelled new project from template" ),
+                          wxOK | wxICON_EXCLAMATION,
+                          this );
+        }
+        else
+        {
+            // The selected template widget contains the template we're attempting to use to
+            // create a project
+            if( !ps->GetWidget()->GetTemplate()->CreateProject( newProjectName ) )
+            {
+                wxMessageBox( _( "Problem whilst creating new project from template!" ),
+                              _( "Could not generate new project" ),
+                              wxOK | wxICON_ERROR,
+                              this );
+            }
+        }
     }
     else
     {
-        DisplayInfoMessage( NULL, _( "Project template file <kicad.pro> not found. " ) );
-        return;
+        // Check if file kicad.pro exist in template directory
+        if( wxFileName::FileExists( filename ) )
+        {
+            wxCopyFile( filename, aPrjFullFileName );
+        }
+        else
+        {
+            DisplayInfoMessage( NULL, _( "Project template file <kicad.pro> not found. " ) );
+            return;
+        }
     }
 
-    /* Init schematic filename */
+    // Init schematic filename
     m_SchematicRootFileName = wxFileName( newProjectName.GetName(),
                                           SchematicFileExtension ).GetFullName();
 
-    /* Init pcb board filename */
+    // Init pcb board filename
     m_BoardFileName = wxFileName( newProjectName.GetName(), PcbFileExtension ).GetFullName();
 
-    /* Init project filename */
+    // Init project filename
     m_ProjectFileName = newProjectName;
 
-    /* Write settings to project file */
-    wxGetApp().WriteProjectConfig( PrjFullFileName, GeneralGroupName, NULL );
+    // Write settings to project file
+    wxGetApp().WriteProjectConfig( aPrjFullFileName, GeneralGroupName, NULL );
 }
 
 
@@ -90,7 +153,8 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     if( event.GetId() != wxID_ANY )
     {
-        if( event.GetId() == ID_NEW_PROJECT )
+        if( ( event.GetId() == ID_NEW_PROJECT ) ||
+            ( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE ) )
         {
             title = _( "Create New Project" );
             style = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
@@ -108,18 +172,24 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
         m_ProjectFileName = dlg.GetPath();
 
-        if( event.GetId() == ID_NEW_PROJECT )
+        if( ( event.GetId() == ID_NEW_PROJECT ) ||
+            ( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE ) )
         {
-            // Ensure project filename extension is .pro
-            wxString fullname = m_ProjectFileName.GetFullPath();
-
-            if ( !fullname.EndsWith( g_KicadPrjFilenameExtension ) )
+            if ( !m_ProjectFileName.GetFullPath().EndsWith( g_KicadPrjFilenameExtension ) )
             {
-                fullname += g_KicadPrjFilenameExtension;
-                m_ProjectFileName.SetFullName( fullname );
+                m_ProjectFileName.SetFullName( m_ProjectFileName.GetFullPath() +
+                                               g_KicadPrjFilenameExtension );
             }
 
-            CreateNewProject( m_ProjectFileName.GetFullPath() );
+            if( event.GetId() == ID_NEW_PROJECT )
+            {
+                CreateNewProject( m_ProjectFileName.GetFullPath() );
+            }
+            else if( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE )
+            {
+                // Launch the template selector dialog
+                CreateNewProject( m_ProjectFileName.GetFullPath(), true );
+            }
         }
     }
 

@@ -11,12 +11,15 @@ set(KICAD_SRCS
     class_treeprojectfiles.cpp
     class_treeproject_item.cpp
     commandframe.cpp
+    dialogs/dialog_template_selector_base.cpp
+    dialogs/dialog_template_selector.cpp
     files-io.cpp
     kicad.cpp
     mainframe.cpp
     menubar.cpp
     preferences.cpp
     prjconfig.cpp
+    project_template.cpp
     tree_project_frame.cpp)
 
 if(WIN32)
