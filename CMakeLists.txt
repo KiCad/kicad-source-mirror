@@ -108,10 +108,16 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     # conversion in the Boost polygon library.  At some point in the future when
     # Boost is updated to the next version, -Wno-narrowing should be removed to
     # see if the problem has been resolved.  Wayne.
+    #
+    # Also note the optimization level is -O1 instead of the usual -O2 level
+    # because boost::polygon has a function (inflate polygon) broken by
+    # the -O2 level with GCC 4.7 (works fine with  with GCC 4.6).
+    # This lower optimization level does not have a significant change on the speed.
+    #
     if(WIN32)   # under Windows/mingw,  -fPIC option is enabled by default
         # Set default flags for Release build.
-        set(CMAKE_C_FLAGS_RELEASE "-Wall -Wno-narrowing -O2 -DNDEBUG")
-        set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Wno-narrowing -O2 -DNDEBUG")
+        set(CMAKE_C_FLAGS_RELEASE "-Wall -Wno-narrowing -O1 -DNDEBUG")
+        set(CMAKE_CXX_FLAGS_RELEASE "-Wall -Wno-narrowing -O1 -DNDEBUG")
         set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
 
         # Set default flags for Debug build.
@@ -119,8 +125,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wno-narrowing -g3 -ggdb3 -DDEBUG")
     else(WIN32)
         # Set default flags for Release build.
-        set(CMAKE_C_FLAGS_RELEASE "-Wall -O2 -DNDEBUG -fPIC")
-        set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O2 -DNDEBUG -fPIC")
+        set(CMAKE_C_FLAGS_RELEASE "-Wall -O1 -DNDEBUG -fPIC")
+        set(CMAKE_CXX_FLAGS_RELEASE "-Wall -O1 -DNDEBUG -fPIC")
         set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
 
         # Set default flags for Debug build.

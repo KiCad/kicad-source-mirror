@@ -395,6 +395,7 @@ set( BMAPS_MID
     new_library
     new_pcb
     new_project
+    new_project_with_template
     new_sch
     new_txt
     new

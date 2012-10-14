@@ -1,0 +1,320 @@
+PCBNEW-BOARD Version 1 date 03/08/2012 23:04:25
+
+# Created by Pcbnew(2012-08-03 BZR 3666)-testing
+
+$GENERAL
+encoding utf-8
+Units deci-mils
+LayerCount 2
+EnabledLayers 1FFF8001
+VisibleLayers 1FFFFFFF
+Links 0
+NoConn 0
+Di 64424 41924 100576 63576
+Ndraw 4
+Ntrack 0
+Nzone 0
+BoardThickness 620
+Nmodule 1
+Nnets 4
+$EndGENERAL
+
+$SHEETDESCR
+Sheet A3 16535 11693
+Title ""
+Date "3 aug 2012"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndSHEETDESCR
+
+$SETUP
+Layers 2
+Layer[0] Back signal
+Layer[15] Front signal
+TrackWidth 100
+TrackClearence 100
+ZoneClearence 200
+Zone_45_Only 0
+TrackMinWidth 100
+DrawSegmWidth 150
+EdgeSegmWidth 150
+ViaSize 350
+ViaDrill 250
+ViaMinSize 350
+ViaMinDrill 200
+MicroViaSize 200
+MicroViaDrill 50
+MicroViasAllowed 0
+MicroViaMinSize 200
+MicroViaMinDrill 50
+TextPcbWidth 120
+TextPcbSize 600 800
+EdgeModWidth 150
+TextModSize 600 600
+TextModWidth 120
+PadSize 600 600
+PadDrill 320
+Pad2MaskClearance 100
+AuxiliaryAxisOrg 0 0
+VisibleElements FFFFFFBF
+PcbPlotParams (pcbplotparams (layerselection 3178497) (usegerberextensions true) (excludeedgelayer true) (linewidth 60) (plotframeref false) (viasonmask false) (mode 1) (useauxorigin false) (hpglpennumber 1) (hpglpenspeed 20) (hpglpendiameter 15) (hpglpenoverlay 2) (pscolor true) (psnegative false) (psa4output false) (plotreference true) (plotvalue true) (plotothertext true) (plotinvisibletext false) (padsonsilk false) (subtractmaskfromsilk false) (outputformat 1) (mirror false) (drillshape 1) (scaleselection 1) (outputdirectory ""))
+$EndSETUP
+
+$EQUIPOT
+Na 0 ""
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 1 "+3.3V"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 2 "+5V"
+St ~
+$EndEQUIPOT
+$EQUIPOT
+Na 3 "GND"
+St ~
+$EndEQUIPOT
+$NCLASS
+Name "Default"
+Desc "This is the default net class."
+Clearance 100
+TrackWidth 100
+ViaDia 350
+ViaDrill 250
+uViaDia 200
+uViaDrill 50
+AddNet ""
+AddNet "+3.3V"
+AddNet "+5V"
+AddNet "GND"
+$EndNCLASS
+$MODULE pin_array_13x2
+Po 71500 43500 0 15 501C4AA3 501C493E ~~
+Li pin_array_13x2
+Cd Double rangee de contacts 2 x 12 pins
+Kw CONN
+Sc 501C493E
+AR /501C45CC
+Op 0 0 0
+T0 -6000 1500 400 400 0 80 N V 21 N "P1"
+T1 4500 1500 400 400 0 80 N V 21 N "CONN_13X2"
+DS -6500 1000 6500 1000 80 21
+DS 6500 -1000 -6500 -1000 80 21
+DS -6500 -1000 -6500 1000 80 21
+DS 6500 1000 6500 -1000 80 21
+$PAD
+Sh "1" R 600 600 0 0 0
+Dr 320 0 0
+At STD N 00E0FFFF
+Ne 1 "+3.3V"
+Po -6000 500
+$EndPAD
+$PAD
+Sh "2" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 2 "+5V"
+Po -6000 -500
+$EndPAD
+$PAD
+Sh "3" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -5000 500
+$EndPAD
+$PAD
+Sh "4" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -5000 -500
+$EndPAD
+$PAD
+Sh "5" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -4000 500
+$EndPAD
+$PAD
+Sh "6" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 3 "GND"
+Po -4000 -500
+$EndPAD
+$PAD
+Sh "7" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -3000 500
+$EndPAD
+$PAD
+Sh "8" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -3000 -500
+$EndPAD
+$PAD
+Sh "9" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -2000 500
+$EndPAD
+$PAD
+Sh "10" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -2000 -500
+$EndPAD
+$PAD
+Sh "11" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -1000 500
+$EndPAD
+$PAD
+Sh "12" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -1000 -500
+$EndPAD
+$PAD
+Sh "13" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 0 500
+$EndPAD
+$PAD
+Sh "14" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 0 -500
+$EndPAD
+$PAD
+Sh "15" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 1000 500
+$EndPAD
+$PAD
+Sh "16" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 1000 -500
+$EndPAD
+$PAD
+Sh "17" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 2000 500
+$EndPAD
+$PAD
+Sh "18" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 2000 -500
+$EndPAD
+$PAD
+Sh "19" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 3000 500
+$EndPAD
+$PAD
+Sh "20" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 3000 -500
+$EndPAD
+$PAD
+Sh "21" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 4000 500
+$EndPAD
+$PAD
+Sh "22" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 4000 -500
+$EndPAD
+$PAD
+Sh "23" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 5000 500
+$EndPAD
+$PAD
+Sh "24" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 5000 -500
+$EndPAD
+$PAD
+Sh "25" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 6000 500
+$EndPAD
+$PAD
+Sh "26" C 600 600 0 0 0
+Dr 400 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 6000 -500
+$EndPAD
+$SHAPE3D
+Na "pin_array/pins_array_13x2.wrl"
+Sc 1 1 1
+Of 0 0 0
+Ro 0 0 0
+$EndSHAPE3D
+$EndMODULE pin_array_13x2
+$DRAWSEGMENT
+Po 0 100500 63500 64500 63500 150
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 64500 42000 64500 63500 150
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 100500 42000 100500 63500 150
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$DRAWSEGMENT
+Po 0 64500 42000 100500 42000 150
+De 28 0 900 0 0
+$EndDRAWSEGMENT
+$TRACK
+$EndTRACK
+$ZONE
+$EndZONE
+$EndBOARD

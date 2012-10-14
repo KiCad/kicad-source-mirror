@@ -155,7 +155,7 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
     void OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event );
     void OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
 
-    void CreateNewProject( const wxString PrjFullFileName );
+    void CreateNewProject( const wxString aPrjFullFileName, bool aTemplateSelector );
 
     /**
      * Function LoadSettings

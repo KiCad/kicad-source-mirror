@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2009-2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
     /* Toolbar events */
     EVT_TOOL( ID_NEW_PROJECT, KICAD_MANAGER_FRAME::OnLoadProject )
+    EVT_TOOL( ID_NEW_PROJECT_FROM_TEMPLATE, KICAD_MANAGER_FRAME::OnLoadProject )
     EVT_TOOL( ID_LOAD_PROJECT, KICAD_MANAGER_FRAME::OnLoadProject )
     EVT_TOOL( ID_SAVE_PROJECT, KICAD_MANAGER_FRAME::OnSaveProject )
     EVT_TOOL( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
@@ -134,8 +135,20 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  KiBitmap( open_project_xpm ) );
 
     // New
-    AddMenuItem( fileMenu, ID_NEW_PROJECT,
-                 _( "&New\tCtrl+N" ),
+    static wxMenu* newMenu = new wxMenu();
+    AddMenuItem( newMenu, ID_NEW_PROJECT,
+                 _( "&Blank\tCtrl+N" ),
+                 _( "Start a blank project" ),
+                 KiBitmap( new_project_xpm ) );
+
+    AddMenuItem( newMenu, ID_NEW_PROJECT_FROM_TEMPLATE,
+                 _( "New from &Template\tCtrl+T" ),
+                 _( "Start a new project from a template" ),
+                 KiBitmap( new_project_with_template_xpm ) );
+
+    AddMenuItem( fileMenu, newMenu,
+                wxID_ANY,
+                 _( "New" ),
                  _( "Start a new project" ),
                  KiBitmap( new_project_xpm ) );
 
@@ -308,6 +321,10 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
     m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
                             KiBitmap( new_project_xpm ),
                             _( "Start a new project" ) );
+
+    m_mainToolBar->AddTool( ID_NEW_PROJECT_FROM_TEMPLATE, wxEmptyString,
+                            KiBitmap( new_project_with_template_xpm ),
+                            _( "Start a new project from a template" ) );
 
     // Load
     m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
