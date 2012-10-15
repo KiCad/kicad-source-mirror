@@ -36,9 +36,8 @@
 
 
 class OUTPUTFORMATTER;
-
-
 class MODULE;
+class FP_LIB_TABLE_LEXER;
 
 /**
  * Class FP_LIB_TABLE
@@ -279,7 +278,6 @@ public:
      */
     std::vector<wxString> GetLogicalLibs();
 
-
     //-----<wxGridTableBase overloads>-------------------------------------------
 
     int         GetNumberRows () { return rows.size(); }
@@ -318,11 +316,18 @@ public:
 
             switch( aCol )
             {
-            case 1:     return r.SetType( aValue  );
-            case 2:     return r.SetFullURI( aValue );
-            case 3:     return r.SetOptions( aValue );
+            case 1:     r.SetType( aValue  );
+            case 2:     r.SetFullURI( aValue );
+            case 3:     r.SetOptions( aValue );
             }
         }
+    }
+
+    bool IsEmptyCell( int aRow, int aCol )
+    {
+        if( unsigned( aRow ) < rows.size() )
+            return false;
+        return true;
     }
 
     //-----</wxGridTableBase overloads>------------------------------------------
