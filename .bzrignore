@@ -1,6 +1,8 @@
 common/netlist_keywords.*
 common/netlist_lexer.h
 common/pcb_plot_params_lexer.h
+common/fp_lib_table_keywords.*
+include/fp_lib_table_lexer.h
 include/netlist_lexer.h
 eeschema/cmp_library_lexer.h
 eeschema/cmp_library_keywords.*
