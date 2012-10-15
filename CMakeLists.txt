@@ -16,7 +16,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 # KiCad build options should be added below.
 #
 # If you add a new build option, please add it's state to the CopyVersionInfoToClipboard()
-# function in common/basicframe.cpp so that build option settings can be includeed in bug
+# function in common/basicframe.cpp so that build option settings can be included in bug
 # reports.
 #
 
@@ -162,8 +162,6 @@ endif(KICAD_SCRIPTING_MODULES)
 
 if(KICAD_SCRIPTING_WXPYTHON)
     add_definitions(-DKICAD_SCRIPTING_WXPYTHON)
-
-
 endif(KICAD_SCRIPTING_WXPYTHON)
 
 if(USE_WX_GRAPHICS_CONTEXT)
@@ -171,7 +169,7 @@ if(USE_WX_GRAPHICS_CONTEXT)
 endif(USE_WX_GRAPHICS_CONTEXT)
 
 # Allow user to override the default settings for adding images to menu items.  By default
-# images in menu items are enabled on all plaforms except OSX.  This can be over ridden by
+# images in menu items are enabled on all platforms except OSX.  This can be over ridden by
 # defining -DUSE_IMAGES_IN_MENUS=ON/OFF to force the preferred behavior.
 if(NOT DEFINED USE_IMAGES_IN_MENUS)
     if(NOT APPLE)

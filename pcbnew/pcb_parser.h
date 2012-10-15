@@ -34,7 +34,7 @@
 #include <wx/hashmap.h>
 
 
-using namespace PCB;
+using namespace PCB_FILE_T;
 
 
 class BOARD;

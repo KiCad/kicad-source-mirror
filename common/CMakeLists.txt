@@ -124,6 +124,9 @@ set(PCB_COMMON_SRCS
     pcb_plot_params_keywords.cpp
     pcb_keywords.cpp
     ../pcbnew/pcb_parser.cpp
+    fp_lib_table_keywords.cpp
+    fp_lib_id.cpp
+    fp_lib_table.cpp
 )
 
 
@@ -155,9 +158,15 @@ make_lexer(
 make_lexer( ${CMAKE_CURRENT_SOURCE_DIR}/pcb.keywords
             ${PROJECT_SOURCE_DIR}/include/pcb_lexer.h
             ${CMAKE_CURRENT_SOURCE_DIR}/pcb_keywords.cpp
-            PCB
+            PCB_FILE_T
           )
 
+# auto-generate pcbnew s-expression footprint library table code.
+make_lexer( ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table.keywords
+            ${PROJECT_SOURCE_DIR}/include/fp_lib_table_lexer.h
+            ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table_keywords.cpp
+            FP_LIB_TABLE_T
+          )
 
 # The dsntest may not build properly using MS Visual Studio.
 if(NOT MSVC)
