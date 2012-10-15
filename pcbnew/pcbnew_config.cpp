@@ -43,6 +43,7 @@
 #include <dialog_hotkeys_editor.h>
 
 #include <class_board.h>
+#include <fp_lib_table.h>
 
 #include <pcbplot.h>
 #include <pcbnew.h>
@@ -58,8 +59,8 @@
 
 void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
-    int        id = event.GetId();
-    wxFileName fn;
+    int         id = event.GetId();
+    wxFileName  fn;
 
     switch( id )
     {
@@ -79,6 +80,25 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_CONFIG_REQ:
         InstallConfigFrame();
+        break;
+
+    case ID_PCB_LIB_TABLE_EDIT:
+        {
+            FP_LIB_TABLE    gbl;
+            FP_LIB_TABLE    prj;
+
+            int r = InvokePcbLibTableEditor( this, &gbl, &prj );
+
+            if( r & 1 )
+            {
+                // save global table to disk and apply it
+            }
+
+            if( r & 2 )
+            {
+                 // save project table to disk and apply it
+            }
+        }
         break;
 
     case ID_PCB_MASK_CLEARANCE:

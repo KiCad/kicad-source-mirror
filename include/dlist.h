@@ -27,9 +27,6 @@
 #define DLIST_H_
 
 
-#include <stdio.h>          // NULL definition.
-
-
 class EDA_ITEM;
 
 
@@ -216,20 +213,20 @@ public:
 
     //-----< STL like functions >---------------------------------------
     T* begin() const { return GetFirst(); }
-    T* end() const { return NULL; }
+    T* end() const { return 0; }
 
     T* PopFront()
     {
         if( GetFirst() )
             return Remove( GetFirst() );
-        return NULL;
+        return 0;
     }
 
     T* PopBack()
     {
         if( GetLast() )
             return Remove( GetLast() );
-        return NULL;
+        return 0;
     }
 
     /**
