@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -30,26 +31,26 @@
 
 /**
  * Class FP_LIB_ID
- * (aka GUID) is a Logical Part ID and consists of various portions much like a URI.
- * It is a container for the separated portions of a logical part id std::string so they
+ * is a Logical Footprint ID and consists of various portions much like a URI.
+ * It is a container for the separated portions of a logical footprint id so they
  * can be accessed individually.  The various portions of an FP_LIB_ID are:
- * logicalLibraryName, category, baseName, and revision.  Only the baseName is
- * mandatory.  There is another construct called "footprintName" which consists of
- * [category/]baseName.  That is the category followed by a slash, but only if
- * the category is not empty.
- * <p>
- * footprintName = [category/]baseName
- * <p>
+ * logicalLibraryName (nick name), footprint name, and revision.  The logical library
+ * name and the footprint name are mandatory.  The revision is optional and currently is
+ * not used.
+ *
  * Example FP_LIB_ID string:
- * "smt:R_0805".
+ * "smt:R_0805/rev0".
+ *
  * <p>
  * <ul>
- * <li> "smt" is the logical library name.
- * <li> "R" is the footprint name.
- * <li> "rev6" is the revision, which is optional.  If missing then its
+ * <li> "smt" is the logical library name used to look up library information saved in the
+ *      #FP_LIB_TABLE.
+ * <li> "R" is the name of the footprint within the library.
+ * <li> "rev0" is the revision, which is optional.  If missing then its
  *      / delimiter should also not be present. A revision must begin with
  *      "rev" and be followed by at least one or more decimal digits.
  * </ul>
+ *
  * @author Dick Hollenbeck
  */
 class FP_LIB_ID  // aka GUID
@@ -60,26 +61,28 @@ public:
 
     /**
      * Constructor FP_LIB_ID
-     * takes \a aId string and parses it.  A typical FP_LIB_ID string uses a logical
+     * takes \a aId string and parses it.  A typical FP_LIB_ID string consists of a logical
      * library name followed by a footprint name.
      * e.g.: "smt:R_0805", or
      * e.g.: "mylib:R_0805"
+     *
+     * @param aId is a string to be parsed into the FP_LIB_ID object.
      */
     FP_LIB_ID( const std::string& aId ) throw( PARSE_ERROR );
 
     /**
      * Function Parse
      * [re-]stuffs this FP_LIB_ID with the information from @a aId.
-     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
-     *  character offset into aId at which an error was detected.
+     *
+     * @param aId is the string to populate the #FP_LIB_ID object.
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the character offset into
+     *               aId at which an error was detected.
      */
     int Parse( const std::string& aId );
 
     /**
      * Function GetLogicalLib
-     * returns the logical library portion of a FP_LIB_ID.  There is not Set accessor
-     * for this portion since it comes from the library table and is considered
-     * read only here.
+     * returns the logical library name  portion of a FP_LIB_ID.
      */
     const std::string& GetLogicalLib() const
     {
@@ -87,35 +90,17 @@ public:
     }
 
     /**
-     * Function SetCategory
-     * overrides the logical lib name portion of the FP_LIB_ID to @a aLogical, and can be empty.
-     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
-     *  character offset into the parameter at which an error was detected, usually
-     *  because it contained '/' or ':'.
+     * Function SetLogicalLib
+     * overrides the logical footprint library name portion of the FP_LIB_ID to @a aLogical.
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the  character offset
+     *               into the parameter at which an error was detected, usually because it
+     *               contained '/' or ':'.
      */
     int SetLogicalLib( const std::string& aLogical );
 
     /**
-     * Function GetBaseName
-     * returns the part name without the category.
-     */
-    const std::string& GetBaseName() const
-    {
-        return baseName;
-    }
-
-    /**
-     * Function SetBaseName
-     * overrides the base name portion of the FP_LIB_ID to @a aBaseName
-     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
-     *  character offset into the parameter at which an error was detected, usually
-     *  because it contained '/' or ':', or is blank.
-     */
-    int SetBaseName( const std::string& aBaseName );
-
-    /**
      * Function GetFootprintName
-     * returns the part name, i.e. category/baseName without revision.
+     * returns the footprint name, i.e. footprintName part without revision.
      */
     const std::string& GetFootprintName() const
     {
@@ -124,18 +109,17 @@ public:
 
     /**
      * Function GetFootprintNameAndRev
-     * returns the part name with revision if any, i.e. baseName[/revN..]
+     * returns the part name with revision if any, i.e. footprintName[/revN..]
      */
     std::string GetFootprintNameAndRev() const;
 
     /**
      * Function SetFootprintName
-     * overrides the part name portion of the FP_LIB_ID to @a aFootprintName
-     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
-     *  character offset into the parameter at which an error was detected, usually
-     *  because it contained more than one '/', or one or more ':', or is blank.
-     *  A single '/' is allowed, since that is used to separate the category from the
-     *  base name.
+     * overrides the footprint name portion of the FP_LIB_ID to @a aFootprintName
+     *
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the character offset
+     * into the parameter at which an error was detected, usually because it contained
+     * more than one '/', or one or more ':', or is blank.
      */
     int SetFootprintName( const std::string& aFootprintName );
 
@@ -152,15 +136,16 @@ public:
      * Function SetRevision
      * overrides the revision portion of the FP_LIB_ID to @a aRevision and must
      * be in the form "rev<num>" where "<num>" is "1", "2", etc.
-     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the
-     *  character offset into the parameter at which an error was detected,
-     *  because it did not look like "rev23"
+     *
+     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the character offset*
+     *               into the parameter at which an error was detected,because it did not
+     *               look like "rev23"
      */
     int SetRevision( const std::string& aRevision );
 
     /**
      * Function Format
-     * returns the full text of the FP_LIB_ID.
+     * returns the fully formatted text of the FP_LIB_ID.
      */
     std::string Format() const;
 
@@ -168,6 +153,7 @@ public:
      * Function Format
      * returns a std::string in the proper format as an FP_LIB_ID for a combination of
      * aLogicalLib, aFootprintName, and aRevision.
+     *
      * @throw PARSE_ERROR if any of the pieces are illegal.
      */
     static std::string Format( const std::string& aLogicalLib, const std::string& aFootprintName,
@@ -182,25 +168,24 @@ public:
 
 protected:
     std::string  logical;        ///< logical lib name or empty
-    std::string  baseName;       ///< without category
     std::string  revision;       ///< "revN[N..]" or empty
-    std::string  footprintName;  ///< cannot be set directory, set via SetBaseName() & SetCategory()
+    std::string  footprintName;  ///< The name of the footprint in the logical library.
 };
 
 /**
  * Function EndsWithRev
  * returns a pointer to the final string segment: "revN[N..]" or NULL if none.
  * @param start is the beginning of string segment to test, the partname or
- *  any middle portion of it.
+ *              any middle portion of it.
  * @param tail is a pointer to the terminating nul, or one past inclusive end of
- *  segment, i.e. the string segment of interest is [start,tail)
+ *             segment, i.e. the string segment of interest is [start,tail)
  * @param separator is the separating byte, expected: '.' or '/', depending on context.
  */
 const char* EndsWithRev( const char* start, const char* tail, char separator = '/' );
 
 static inline const char* EndsWithRev( const std::string& aFootprintName, char separator = '/' )
 {
-    return EndsWithRev( aFootprintName.c_str(),  aFootprintName.c_str()+aFootprintName.size(),
+    return EndsWithRev( aFootprintName.c_str(), aFootprintName.c_str()+aFootprintName.size(),
                         separator );
 }
 
@@ -213,7 +198,7 @@ static inline const char* EndsWithRev( const std::string& aFootprintName, char s
  * @param s1 is a rev string like "rev10"
  * @param s2 is a rev string like "rev1".
  * @return int - either negative, zero, or positive depending on whether the revision
- *  is greater, equal, or less on the left hand side.
+ *               is greater, equal, or less on the left hand side.
  */
 int RevCmp( const char* s1, const char* s2 );
 
