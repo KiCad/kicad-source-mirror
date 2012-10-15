@@ -173,8 +173,14 @@ wxString* PROJECT_TEMPLATE::GetTitle(void)
         while( input.IsOk() && !input.Eof() && !done )
         {
             wxString line = text.ReadLine();
+
             start = line.Find( wxT( "<title>" ) );
+            if( start == wxNOT_FOUND )
+                start = line.Find( wxT( "<TITLE>" ) );
+
             finish = line.Find( wxT( "</title>" ) );
+            if( finish == wxNOT_FOUND )
+                finish = line.Find( wxT( "</TITLE>" ) );
 
             // find the opening tag
             if( start != wxNOT_FOUND )
