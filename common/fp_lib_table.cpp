@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2010-12 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
  *
@@ -39,7 +39,7 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
     fallBack( aFallBackTable )
 {
     // not copying fall back, simply search aFallBackTable separately
-    // if "logicalName not found".
+    // if "nickName not found".
 }
 
 
@@ -68,9 +68,9 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         in->NeedSYMBOLorNUMBER();
 
-        std::auto_ptr<ROW> row( new ROW( this ) );
+        ROW     row( this );
 
-        row->SetLogicalName( in->CurText() );
+        row.SetNickName( in->FromUTF8() );
 
         in->NeedRIGHT();
 
@@ -82,7 +82,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         in->NeedSYMBOLorNUMBER();
 
-        row->SetType( in->CurText() );
+        row.SetType( in->FromUTF8() );
 
         in->NeedRIGHT();
 
@@ -94,7 +94,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         in->NeedSYMBOLorNUMBER();
 
-        row->SetFullURI( in->CurText() );
+        row.SetFullURI( in->FromUTF8() );
 
         in->NeedRIGHT();
 
@@ -106,23 +106,21 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         in->NeedSYMBOLorNUMBER();
 
-        row->SetOptions( in->CurText() );
+        row.SetOptions( in->FromUTF8() );
 
         in->NeedRIGHT();
         in->NeedRIGHT();            // terminate the (lib..)
 
-        // all logicalNames within this table fragment must be unique, so we do not
+        // all nickNames within this table fragment must be unique, so we do not
         // use doReplace in InsertRow().  However a fallBack table can have a
-        // conflicting logicalName and ours will supercede that one since in
+        // conflicting nickName and ours will supercede that one since in
         // FindLib() we search this table before any fall back.
         if( !InsertRow( row ) )
         {
-            std::string msg;
-
-            msg += '\'';
-            msg += row->logicalName;
-            msg += '\'';
-            msg += " is a duplicate logical footprint library name";
+            wxString msg = wxString::Format(
+                                _( "'%s' is a duplicate footprint library nickName" ),
+                                GetChars( row.nickName )
+                                );
             THROW_IO_ERROR( msg );
         }
     }
@@ -135,7 +133,7 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     out->Print( nestLevel, "(fp_lib_table\n" );
 
     for( ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
-        it->second->Format( out, nestLevel+1 );
+        it->Format( out, nestLevel+1 );
 
     out->Print( nestLevel, ")\n" );
 }
@@ -144,48 +142,50 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     throw( IO_ERROR )
 {
-    out->Print( nestLevel, "(lib (logical %s)(type %s)(full_uri %s)(options %s))\n",
-                out->Quotes( logicalName ).c_str(),
-                out->Quotes( type ).c_str(),
-                out->Quotes( uri ).c_str(),
-                out->Quotes( options ).c_str() );
+    out->Print( nestLevel, "(lib (name %s)(type %s)(full_uri %s)(options %s))\n",
+                out->Quotew( nickName ).c_str(),
+                out->Quotew( type ).c_str(),
+                out->Quotew( uri ).c_str(),
+                out->Quotew( options ).c_str()
+                );
 }
 
 
-std::vector<std::string> FP_LIB_TABLE::GetLogicalLibs()
+std::vector<wxString> FP_LIB_TABLE::GetLogicalLibs()
 {
     // Only return unique logical library names.  Use std::set::insert() to
     // quietly reject any duplicates, which can happen when encountering a duplicate
-    // logical lib name from one of the fall back table(s).
+    // nickname from one of the fall back table(s).
 
-    std::set<std::string>      unique;
-    std::vector<std::string>   ret;
-    const FP_LIB_TABLE*        cur = this;
+    std::set<wxString>          unique;
+    std::vector<wxString>       ret;
+    const FP_LIB_TABLE*         cur = this;
 
     do
     {
         for( ROWS_CITER it = cur->rows.begin();  it!=cur->rows.end();  ++it )
         {
-            unique.insert( it->second->logicalName );
+            unique.insert( it->nickName );
         }
 
     } while( ( cur = cur->fallBack ) != 0 );
 
-    // return a sorted, unique set of logical lib name std::vector<std::string> to caller
-    for( std::set<std::string>::const_iterator it = unique.begin();  it!=unique.end();  ++it )
+    // return a sorted, unique set of nicknames in a std::vector<wxString> to caller
+    for( std::set<wxString>::const_iterator it = unique.begin();  it!=unique.end();  ++it )
         ret.push_back( *it );
 
     return ret;
 }
 
 
+#if 0       // will need PLUGIN_RELEASER.
 MODULE* FP_LIB_TABLE::LookupFootprint( const FP_LIB_ID& aFootprintId )
     throw( IO_ERROR )
 {
     PLUGIN* plugin = lookupLib( aFootprintId );
 
-    return plugin->FootprintLoad( wxString( aFootprintId.GetBaseName().c_str() ),
-                                  wxString( aFootprintId.GetLogicalLib().c_str() ) );
+    return plugin->FootprintLoad( FROM_UTF8( aFootprintId.GetBaseName().c_str() ),
+                                  FROM_UTF8( aFootprintId.GetLogicalLib().c_str() ) );
 }
 
 
@@ -254,24 +254,22 @@ void FP_LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
         THROW_IO_ERROR( msg );
     }
 }
+#endif
 
 
-FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const std::string& aLogicalName ) const
+FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickName ) const
 {
     // this function must be *super* fast, so therefore should not instantiate
-    // anything which would require using the heap.  This function is the reason
-    // ptr_map<> was used instead of ptr_set<>, which would have required
-    // instantiating a ROW just to find a ROW.
+    // anything which would require using the heap.
     const FP_LIB_TABLE* cur = this;
 
     do
     {
-        ROWS_CITER  it = cur->rows.find( aLogicalName );
+        INDEX_CITER  it = cur->nickIndex.find( aNickName );
 
-        if( it != cur->rows.end() )
+        if( it != cur->nickIndex.end() )
         {
-            // reference: http://myitcorner.com/blog/?p=361
-            return (FP_LIB_TABLE::ROW*) it->second;  // found
+            return (FP_LIB_TABLE::ROW*) &cur->rows[it->second];  // found
         }
 
         // not found, search fall back table(s), if any
@@ -281,29 +279,22 @@ FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const std::string& aLogicalName ) cons
 }
 
 
-bool FP_LIB_TABLE::InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace )
+bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
 {
     // this does not need to be super fast.
 
-    ROWS_CITER it = rows.find( aRow->logicalName );
+    INDEX_CITER it = nickIndex.find( aRow.nickName );
 
-    if( it == rows.end() )
+    if( it == nickIndex.end() )
     {
-        // be careful here, key is needed because aRow can be
-        // release()ed before logicalName is captured.
-        const std::string& key = aRow->logicalName;
-        rows.insert( key, aRow );
+        rows.push_back( aRow );
+        nickIndex.insert( INDEX_VALUE( aRow.nickName, rows.size() - 1 ) );
         return true;
     }
 
     if( doReplace )
     {
-        rows.erase( aRow->logicalName );
-
-        // be careful here, key is needed because aRow can be
-        // release()ed before logicalName is captured.
-        const std::string&   key = aRow->logicalName;
-        rows.insert( key, aRow );
+        rows[it->second] = aRow;
         return true;
     }
 

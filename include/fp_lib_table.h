@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2010-12 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
  *
@@ -26,16 +26,18 @@
 #ifndef _FP_LIB_TABLE_H_
 #define _FP_LIB_TABLE_H_
 
+#include <macros.h>
 
+#include <vector>
+#include <map>
+
+#include <wx/grid.h>
 #include <fp_lib_id.h>
-
-#include <boost/ptr_container/ptr_map.hpp>
 
 
 class OUTPUTFORMATTER;
-
-
 class MODULE;
+class FP_LIB_TABLE_LEXER;
 
 /**
  * Class FP_LIB_TABLE
@@ -78,7 +80,7 @@ class MODULE;
  *
  * @author Wayne Stambaugh
  */
-class FP_LIB_TABLE
+class FP_LIB_TABLE : public wxGridTableBase
 {
 public:
 
@@ -94,19 +96,19 @@ public:
     public:
 
         /**
-         * Function GetLogicalName
-         * returns the logical name of this library table row.
+         * Function GetNickName
+         * returns the short name of this library table row.
          */
-        const std::string& GetLogicalName() const
+        const wxString& GetNickName() const
         {
-            return logicalName;
+            return nickName;
         }
 
         /**
          * Function GetType
          * returns the type of LIB represented by this record.
          */
-        const std::string& GetType() const
+        const wxString& GetType() const
         {
             return type;
         }
@@ -115,7 +117,7 @@ public:
          * Function GetFullURI
          * returns the full location specifying URI for the LIB.
          */
-        const std::string& GetFullURI() const
+        const wxString& GetFullURI() const
         {
             return uri;
         }
@@ -125,14 +127,14 @@ public:
          * returns the options string, which may hold a password or anything else needed to
          * instantiate the underlying LIB_SOURCE.
          */
-        const std::string& GetOptions() const
+        const wxString& GetOptions() const
         {
             return options;
         }
 
         ~ROW()
         {
-            delete lib;
+            // delete lib;
         }
 
         /**
@@ -149,24 +151,24 @@ public:
     protected:
 
         ROW( FP_LIB_TABLE* aOwner ) :
-            owner( aOwner ),
-            lib( 0 )
+            owner( aOwner )
+            // lib( 0 )
         {}
 
         /**
-         * Function SetLogicalName
+         * Function SetNickName
          * changes the logical name of this library, useful for an editor.
          */
-        void SetLogicalName( const std::string& aLogicalName )
+        void SetNickName( const wxString& aNickName )
         {
-            logicalName = aLogicalName;
+            nickName = aNickName;
         }
 
         /**
          * Function SetType
          * changes the type represented by this record.
          */
-        void SetType( const std::string& aType )
+        void SetType( const wxString& aType )
         {
             type = aType;
         }
@@ -175,7 +177,7 @@ public:
          * Function SetFullURI
          * changes the full URI for the library, useful from a library table editor.
          */
-        void SetFullURI( const std::string& aFullURI )
+        void SetFullURI( const wxString& aFullURI )
         {
             uri = aFullURI;
         }
@@ -185,20 +187,23 @@ public:
          * changes the options string for this record, and is useful from
          * the library table editor.
          */
-        void SetOptions( const std::string& aOptions )
+        void SetOptions( const wxString& aOptions )
         {
             options = aOptions;
         }
 
     private:
-        FP_LIB_TABLE*  owner;
-        std::string    logicalName;
-        std::string    type;
-        std::string    uri;
-        std::string    options;
+        FP_LIB_TABLE*   owner;
+        wxString        nickName;
+        wxString        type;
+        wxString        uri;
+        wxString        options;
 
-        PLUGIN*        lib;        ///< ownership of the loaded LIB is here
+        /*
+        PLUGIN*         lib;        ///< ownership of the loaded LIB is here
+        */
     };
+
 
     /**
      * Constructor FP_LIB_TABLE
@@ -246,6 +251,7 @@ public:
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
 
+#if 0
     /**
      * Function LookupPart
      * finds and loads a MODULE, and parses it.  As long as the part is
@@ -262,25 +268,83 @@ public:
      * @throw IO_ERROR if any problem occurs or if the footprint cannot be found.
      */
     MODULE* LookupFootprint( const FP_LIB_ID& aFootprintId ) throw( IO_ERROR );
+#endif
+
 
     /**
      * Function GetLogicalLibs
      * returns the logical library names, all of them that are pertinent to
      * a lookup done on this FP_LIB_TABLE.
      */
-    std::vector<std::string> GetLogicalLibs();
+    std::vector<wxString> GetLogicalLibs();
+
+
+    //-----<wxGridTableBase overloads>-------------------------------------------
+
+    int         GetNumberRows () { return rows.size(); }
+    int         GetNumberCols () { return 4; }
+
+    wxString    GetValue( int aRow, int aCol )
+    {
+        if( unsigned( aRow ) < rows.size() )
+        {
+            const ROW&  r  = rows[aRow];
+
+            switch( aCol )
+            {
+            case 0:     return r.GetNickName();
+            case 1:     return r.GetType();
+            case 2:     return r.GetFullURI();
+            case 3:     return r.GetOptions();
+            default:
+                ;       // fall thru to wxEmptyString
+            }
+        }
+
+        return wxEmptyString;
+    }
+
+    void    SetValue( int aRow, int aCol, const wxString &aValue )
+    {
+        if( aCol == 0 )
+        {
+            // when the nickname is changed, there's careful work to do, including
+            // ensuring uniqueness of the nickname.
+        }
+        else if( unsigned( aRow ) < rows.size() )
+        {
+            ROW&  r  = rows[aRow];
+
+            switch( aCol )
+            {
+            case 1:     r.SetType( aValue  );
+            case 2:     r.SetFullURI( aValue );
+            case 3:     r.SetOptions( aValue );
+            }
+        }
+    }
+
+    bool IsEmptyCell( int aRow, int aCol )
+    {
+        if( unsigned( aRow ) < rows.size() )
+            return false;
+        return true;
+    }
+
+    //-----</wxGridTableBase overloads>------------------------------------------
+
 
     //----<read accessors>----------------------------------------------------
-    // the returning of a const std::string* tells if not found, but might be too
+    // the returning of a const wxString* tells if not found, but might be too
     // promiscuous?
 
     /**
      * Function GetURI
      * returns the full library path from a logical library name.
      * @param aLogicalLibraryName is the short name for the library of interest.
-     * @return const std::string* - or NULL if not found.
+     * @return const wxString* - or NULL if not found.
      */
-    const std::string* GetURI( const std::string& aLogicalLibraryName ) const
+    const wxString* GetURI( const wxString& aLogicalLibraryName ) const
     {
         const ROW* row = FindRow( aLogicalLibraryName );
         return row ? &row->uri : 0;
@@ -290,9 +354,9 @@ public:
      * Function GetType
      * returns the type of a logical library.
      * @param aLogicalLibraryName is the short name for the library of interest.
-     * @return const std::string* - or NULL if not found.
+     * @return const wxString* - or NULL if not found.
      */
-    const std::string* GetType( const std::string& aLogicalLibraryName ) const
+    const wxString* GetType( const wxString& aLogicalLibraryName ) const
     {
         const ROW* row = FindRow( aLogicalLibraryName );
         return row ? &row->type : 0;
@@ -302,9 +366,9 @@ public:
      * Function GetLibOptions
      * returns the options string for \a aLogicalLibraryName.
      * @param aLogicalLibraryName is the short name for the library of interest.
-     * @return const std::string* - or NULL if not found.
+     * @return const wxString* - or NULL if not found.
      */
-    const std::string* GetLibOptions( const std::string& aLogicalLibraryName ) const
+    const wxString* GetLibOptions( const wxString& aLogicalLibraryName ) const
     {
         const ROW* row = FindRow( aLogicalLibraryName );
         return row ? &row->options : 0;
@@ -324,23 +388,24 @@ protected:  // only a table editor can use these
      * Function InsertRow
      * adds aRow if it does not already exist or if doReplace is true.  If doReplace
      * is not true and the key for aRow already exists, the function fails and returns false.
-     * The key for the table is the logicalName, and all in this table must be unique.
+     * The key for the table is the nickName, and all in this table must be unique.
      * @param aRow is the new row to insert, or to forcibly add if doReplace is true.
      * @param doReplace if true, means insert regardless of whether aRow's key already
      *  exists.  If false, then fail if the key already exists.
      * @return bool - true if the operation succeeded.
      */
-    bool InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace = false );
+    bool InsertRow( const ROW& aRow, bool doReplace = false );
 
     /**
      * Function FindRow
-     * returns a #ROW* if aLogicalName is found in this table or in any chained
+     * returns a #ROW* if aNickName is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
-    ROW* FindRow( const std::string& aLogicalName ) const;
+    ROW* FindRow( const wxString& aNickName ) const;
 
 private:
 
+#if 0   // lets see what we need.
     /**
      * Function lookupLib
      * finds or loads a LIB based on @a aLogicalPartID or @a aFallBackLib.
@@ -367,12 +432,24 @@ private:
      * already loaded.
      */
     void loadLib( ROW* aRow ) throw( IO_ERROR );
+#endif
 
-    typedef boost::ptr_map<std::string, ROW>    ROWS;
-    typedef ROWS::iterator                      ROWS_ITER;
-    typedef ROWS::const_iterator                ROWS_CITER;
+    typedef std::vector<ROW>            ROWS;
+    typedef ROWS::iterator              ROWS_ITER;
+    typedef ROWS::const_iterator        ROWS_CITER;
 
     ROWS           rows;
+
+    /// this is a non-owning index into the ROWS table
+    typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
+    typedef INDEX::iterator             INDEX_ITER;
+    typedef INDEX::const_iterator       INDEX_CITER;
+    typedef INDEX::value_type           INDEX_VALUE;
+
+
+    /// the particular key is the nickName within each row.
+    INDEX           nickIndex;
+
     FP_LIB_TABLE*  fallBack;
 };
 
