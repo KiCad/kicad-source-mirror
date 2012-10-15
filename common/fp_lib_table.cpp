@@ -304,4 +304,3 @@ bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
 
     return false;
 }
-
