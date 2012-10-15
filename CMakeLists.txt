@@ -24,7 +24,7 @@ option(USE_PCBNEW_SEXPR_FILE_FORMAT
        "Use Pcbnew s-expression file format support (default OFF)." )
 
 option(USE_PCBNEW_NANOMETRES
-       "Use nanometers for Pcbnew internal units instead of deci-mils (default OFF).")
+       "Use nanometers for Pcbnew internal units instead of deci-mils (default ON)." ON)
 
 option(USE_PCBNEW_SEXPR_FOOTPRINT_LIBS
        "Use Pcbnew s-expression footprint library format (default OFF).")
