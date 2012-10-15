@@ -294,11 +294,7 @@ bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
 
     if( doReplace )
     {
-        int ndx = it->second;
-
-        rows[ndx] = aRow;
-        nickIndex.erase( aRow.nickName );
-        nickIndex.insert( INDEX_VALUE( aRow.nickName, ndx ) );
+        rows[it->second] = aRow;
         return true;
     }
 
