@@ -82,6 +82,8 @@ class FP_LIB_TABLE_LEXER;
  */
 class FP_LIB_TABLE : public wxGridTableBase
 {
+    friend class DIALOG_FP_LIB_TABLE;
+
 public:
 
     /**
@@ -92,6 +94,7 @@ public:
     class ROW
     {
         friend class FP_LIB_TABLE;
+        friend class DIALOG_FP_LIB_TABLE;
 
     public:
 
@@ -147,8 +150,6 @@ public:
          */
         void Format( OUTPUTFORMATTER* out, int nestLevel ) const
             throw( IO_ERROR );
-
-    protected:
 
         ROW( FP_LIB_TABLE* aOwner ) :
             owner( aOwner )
@@ -316,9 +317,9 @@ public:
 
             switch( aCol )
             {
-            case 1:     r.SetType( aValue  );
-            case 2:     r.SetFullURI( aValue );
-            case 3:     r.SetOptions( aValue );
+            case 1:     r.SetType( aValue  );       break;
+            case 2:     r.SetFullURI( aValue );     break;
+            case 3:     r.SetOptions( aValue );     break;
             }
         }
     }
@@ -328,6 +329,51 @@ public:
         if( unsigned( aRow ) < rows.size() )
             return false;
         return true;
+    }
+
+    bool InsertRows( size_t aPos = 0, size_t aNumRows = 1 )
+    {
+        if( aPos < rows.size() )
+        {
+            rows.insert( rows.begin() + aPos, aNumRows, ROW( this ) );
+            return true;
+        }
+        return false;
+    }
+
+    bool AppendRows( size_t aNumRows = 1 )
+    {
+        while( aNumRows-- )
+            rows.push_back( ROW( this ) );
+        return true;
+    }
+
+    bool DeleteRows( size_t aPos, size_t aNumRows )
+    {
+        if( aPos + aNumRows <= rows.size() )
+        {
+            ROWS_ITER start = rows.begin() + aPos;
+            rows.erase( start, start + aNumRows );
+            return true;
+        }
+        return false;
+    }
+
+    void Clear()
+    {
+        rows.clear();
+    }
+
+    wxString GetColLabelValue( int aCol )
+    {
+        switch( aCol )
+        {
+        case 0:     return _( "Nickname" );
+        case 1:     return _( "Plugin" );
+        case 2:     return _( "Library Path" );
+        case 3:     return _( "Options" );
+        default:    return wxEmptyString;
+        }
     }
 
     //-----</wxGridTableBase overloads>------------------------------------------

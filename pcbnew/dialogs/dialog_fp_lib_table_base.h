@@ -42,32 +42,42 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxSplitterWindow* m_splitter1;
+		wxSplitterWindow* m_splitter;
 		wxPanel* m_top;
-		wxAuiNotebook* m_auinotebook2;
-		wxPanel* m_panel4;
-		wxGrid* m_grid1;
-		wxPanel* m_panel5;
-		wxGrid* m_grid11;
-		wxButton* m_button1;
-		wxButton* m_button2;
-		wxButton* m_button3;
-		wxButton* m_button4;
+		wxAuiNotebook* m_auinotebook;
+		wxPanel* m_global_panel;
+		wxGrid* m_global_grid;
+		wxPanel* m_project_panel;
+		wxGrid* m_project_grid;
+		wxButton* m_append_button;
+		wxButton* m_delete_button;
+		wxButton* m_move_up_button;
+		wxButton* m_move_down_button;
 		wxPanel* m_bottom;
-		wxGrid* m_grid2;
+		wxGrid* m_path_subs_grid;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void appendRowHandler( wxMouseEvent& event ) { event.Skip(); }
+		virtual void deleteRowHandler( wxMouseEvent& event ) { event.Skip(); }
+		virtual void moveUpHandler( wxMouseEvent& event ) { event.Skip(); }
+		virtual void moveDownHandler( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		
-		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 864,652 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FP_LIB_TABLE_BASE();
 		
-		void m_splitter1OnIdle( wxIdleEvent& )
+		void m_splitterOnIdle( wxIdleEvent& )
 		{
-			m_splitter1->SetSashPosition( 254 );
-			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_FP_LIB_TABLE_BASE::m_splitter1OnIdle ), NULL, this );
+			m_splitter->SetSashPosition( 343 );
+			m_splitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_FP_LIB_TABLE_BASE::m_splitterOnIdle ), NULL, this );
 		}
 	
 };

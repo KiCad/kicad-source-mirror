@@ -178,6 +178,52 @@ std::vector<wxString> FP_LIB_TABLE::GetLogicalLibs()
 }
 
 
+FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickName ) const
+{
+    // this function must be *super* fast, so therefore should not instantiate
+    // anything which would require using the heap.
+    const FP_LIB_TABLE* cur = this;
+
+    do
+    {
+        INDEX_CITER  it = cur->nickIndex.find( aNickName );
+
+        if( it != cur->nickIndex.end() )
+        {
+            return (FP_LIB_TABLE::ROW*) &cur->rows[it->second];  // found
+        }
+
+        // not found, search fall back table(s), if any
+    } while( ( cur = cur->fallBack ) != 0 );
+
+    return 0;   // not found
+}
+
+
+bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
+{
+    // this does not need to be super fast.
+
+    INDEX_CITER it = nickIndex.find( aRow.nickName );
+
+    if( it == nickIndex.end() )
+    {
+        rows.push_back( aRow );
+        nickIndex.insert( INDEX_VALUE( aRow.nickName, rows.size() - 1 ) );
+        return true;
+    }
+
+    if( doReplace )
+    {
+        rows[it->second] = aRow;
+        return true;
+    }
+
+    return false;
+}
+
+
+
 #if 0       // will need PLUGIN_RELEASER.
 MODULE* FP_LIB_TABLE::LookupFootprint( const FP_LIB_ID& aFootprintId )
     throw( IO_ERROR )
@@ -256,47 +302,3 @@ void FP_LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
 }
 #endif
 
-
-FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickName ) const
-{
-    // this function must be *super* fast, so therefore should not instantiate
-    // anything which would require using the heap.
-    const FP_LIB_TABLE* cur = this;
-
-    do
-    {
-        INDEX_CITER  it = cur->nickIndex.find( aNickName );
-
-        if( it != cur->nickIndex.end() )
-        {
-            return (FP_LIB_TABLE::ROW*) &cur->rows[it->second];  // found
-        }
-
-        // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != 0 );
-
-    return 0;   // not found
-}
-
-
-bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
-{
-    // this does not need to be super fast.
-
-    INDEX_CITER it = nickIndex.find( aRow.nickName );
-
-    if( it == nickIndex.end() )
-    {
-        rows.push_back( aRow );
-        nickIndex.insert( INDEX_VALUE( aRow.nickName, rows.size() - 1 ) );
-        return true;
-    }
-
-    if( doReplace )
-    {
-        rows[it->second] = aRow;
-        return true;
-    }
-
-    return false;
-}
