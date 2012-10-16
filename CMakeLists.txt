@@ -148,8 +148,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         set(CMAKE_CXX_FLAGS_DEBUG "-Wall ${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG")
     else(WIN32)
         # Set default flags for Release build.
-        set(CMAKE_C_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS}1 -DNDEBUG -fPIC")
-        set(CMAKE_CXX_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS}1 -DNDEBUG -fPIC")
+        set(CMAKE_C_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG -fPIC")
+        set(CMAKE_CXX_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG -fPIC")
         set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
 
         # Set default flags for Debug build.
