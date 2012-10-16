@@ -24,7 +24,7 @@
  */
 
 
-
+#include <fctsys.h>
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
 
@@ -35,11 +35,113 @@
  */
 class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 {
+    //-----<event handlers>----------------------------------
+
+    void pageChangedHandler( wxAuiNotebookEvent& event )
+    {
+        int pageNdx = m_auinotebook->GetSelection();
+
+        m_cur_grid = pageNdx ? m_global_grid : m_project_grid;
+    }
+
+    void appendRowHandler( wxMouseEvent& event )
+    {
+        D(printf("%s\n", __func__);)
+    }
+
+    void deleteRowHandler( wxMouseEvent& event )
+    {
+        D(printf("%s\n", __func__);)
+    }
+
+    void moveUpHandler( wxMouseEvent& event )
+    {
+        D(printf("%s\n", __func__);)
+    }
+
+    void moveDownHandler( wxMouseEvent& event )
+    {
+        D(printf("%s\n", __func__);)
+    }
+
+    void onCancelButtonClick( wxCommandEvent& event )
+    {
+        m_global->rows  = m_orig_global;
+        m_project->rows = m_orig_project;
+
+        // @todo reindex, or add member function for wholesale row replacement
+
+        EndModal( wxID_CANCEL );
+    }
+
+    void onOKButtonClick( wxCommandEvent& event )
+    {
+        EndModal( wxID_OK );
+    }
+
+
+    //-----</event handlers>---------------------------------
+
+
+    // caller's tables are modified only on OK button.
+    FP_LIB_TABLE*       m_global;
+    FP_LIB_TABLE*       m_project;
+
+    // local copies are saved and restored if Cancel button.
+    FP_LIB_TABLE::ROWS  m_orig_global;
+    FP_LIB_TABLE::ROWS  m_orig_project;
+
+    wxGrid*             m_cur_grid;     ///< changed based on tab choice
+
 
 public:
-    DIALOG_FP_LIB_TABLE( wxFrame* aParent ) :
-        DIALOG_FP_LIB_TABLE_BASE( aParent )
+    DIALOG_FP_LIB_TABLE( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject ) :
+        DIALOG_FP_LIB_TABLE_BASE( aParent ),
+        m_global( aGlobal ),
+        m_project( aProject ),
+        m_orig_global( aGlobal->rows ),
+        m_orig_project( aProject->rows )
     {
+        /*
+        GetSizer()->SetSizeHints( this );
+        Centre();
+        SetAutoLayout( true );
+        Layout();
+        */
+
+#if 1 && defined(DEBUG)
+        // put some dummy data into table(s)
+        FP_LIB_TABLE::ROW   row( m_global );
+
+        row.SetNickName( wxT( "passives" ) );
+        row.SetType( wxT( "kicad" ) );
+        row.SetFullURI( wxT( "%G/passives" ) );
+        row.SetOptions( wxT( "speed=fast,purpose=testing" ) );
+        m_global->InsertRow( row );
+
+        row.SetNickName( wxT( "micros" ) );
+        row.SetType( wxT( "legacy" ) );
+        row.SetFullURI( wxT( "%P/micros" ) );
+        row.SetOptions( wxT( "speed=fast,purpose=testing" ) );
+        m_global->InsertRow( row );
+
+        row.owner = m_project;
+        row.SetFullURI( wxT( "%P/chips" ) );
+        m_project->InsertRow( row );
+
+#endif
+
+        m_global_grid->SetTable( m_global );
+        m_project_grid->SetTable( m_project );
+
+        //m_global_grid->AutoSize();
+        m_global_grid->AutoSizeColumns( false );
+
+        //m_project_grid->AutoSize();
+        m_project_grid->AutoSizeColumns( false );
+
+        //m_path_subs_grid->AutoSize();
+        m_path_subs_grid->AutoSizeColumns( false );
     }
 };
 
@@ -47,9 +149,17 @@ public:
 
 int InvokePcbLibTableEditor( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
 {
-    DIALOG_FP_LIB_TABLE dlg( aParent );
+    DIALOG_FP_LIB_TABLE     dlg( aParent, aGlobal, aProject );
 
-    dlg.Show( true );
+    int ret = dlg.ShowModal();
+    switch( ret )
+    {
+    case wxID_OK:
+        break;
+
+    case wxID_CANCEL:
+        break;
+    }
 
     return 0;
 }
