@@ -137,7 +137,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * For a circle the min radius is radius * cos( 2PI / s_CircleToSegmentsCount / 2)
      * s_Correction is 1 /cos( PI/s_CircleToSegmentsCount  )
      */
-    s_Correction = 1.0 / cos( 3.14159265 / s_CircleToSegmentsCount );
+    s_Correction = 1.0 / cos( M_PI / s_CircleToSegmentsCount );
 
     // This KI_POLYGON_SET is the area(s) to fill, with m_ZoneMinThickness/2
     KI_POLYGON_SET polyset_zone_solid_areas;

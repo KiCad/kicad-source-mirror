@@ -320,7 +320,7 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
     if( seg_count == 0 )
         seg_count = 1;
 
-    double increment_angle = (double) a_ArcAngle * 3.14159 / 1800 / seg_count;
+    double increment_angle = (double) a_ArcAngle * M_PI / 1800 / seg_count;
 
     // Creates nb_seg point to approximate arc by segments:
     for( int ii = 1; ii <= seg_count; ii++ )
