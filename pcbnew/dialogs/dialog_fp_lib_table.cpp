@@ -31,6 +31,11 @@
 #include <wx/grid.h>
 
 
+/**
+ * Class FP_TBL_MODEL
+ * mixes in wxGridTableBase into FP_LIB_TABLE so that the latter can be used
+ * as table within wxGrid.
+ */
 class FP_TBL_MODEL : public wxGridTableBase, public FP_LIB_TABLE
 {
 public:
@@ -161,6 +166,9 @@ public:
  */
 class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 {
+    typedef FP_LIB_TABLE::ROW   ROW;
+
+
     //-----<event handlers>----------------------------------
 
     void pageChangedHandler( wxAuiNotebookEvent& event )
@@ -228,44 +236,13 @@ public:
         m_global_model( *aGlobal ),
         m_project_model( *aProject )
     {
-        /*
-        GetSizer()->SetSizeHints( this );
-        Centre();
-        SetAutoLayout( true );
-        Layout();
-        */
-
-#if 1 && defined(DEBUG)
-        // put some dummy data into table(s)
-        FP_LIB_TABLE::ROW   row;
-
-        row.SetNickName( wxT( "passives" ) );
-        row.SetType( wxT( "kicad" ) );
-        row.SetFullURI( wxT( "%G/passives" ) );
-        row.SetOptions( wxT( "speed=fast,purpose=testing" ) );
-        m_global_model.InsertRow( row );
-
-        row.SetNickName( wxT( "micros" ) );
-        row.SetType( wxT( "legacy" ) );
-        row.SetFullURI( wxT( "%P/micros" ) );
-        row.SetOptions( wxT( "speed=fast,purpose=testing" ) );
-        m_global_model.InsertRow( row );
-
-        row.SetFullURI( wxT( "%P/chips" ) );
-        m_project_model.InsertRow( row );
-
-#endif
-
         m_global_grid->SetTable( (wxGridTableBase*) &m_global_model );
         m_project_grid->SetTable( (wxGridTableBase*) &m_project_model );
 
-        //m_global_grid->AutoSize();
         m_global_grid->AutoSizeColumns( false );
 
-        //m_project_grid->AutoSize();
         m_project_grid->AutoSizeColumns( false );
 
-        //m_path_subs_grid->AutoSize();
         m_path_subs_grid->AutoSizeColumns( false );
     }
 
@@ -275,7 +252,8 @@ public:
         // since the ~wxGrid() wants the wxGridTableBase to still be non-destroyed.
         // Without this call, the wxGridTableBase objects are destroyed first
         // (i.e. destructor called) and there is a segfault since wxGridTableBase's vtable
-        // is then no longer valid.
+        // is then no longer valid.  If ~wxGrid() would not examine a wxGridTableBase that
+        // it does not own, then this would not be a concern.  But it is, since it does.
         DestroyChildren();
     }
 };

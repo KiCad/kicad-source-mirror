@@ -74,18 +74,6 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         in->NeedRIGHT();
 
-        // (type "TYPE")
-        in->NeedLEFT();
-
-        if( ( tok = in->NextTok() ) != T_type )
-            in->Expecting( T_type );
-
-        in->NeedSYMBOLorNUMBER();
-
-        row.SetType( in->FromUTF8() );
-
-        in->NeedRIGHT();
-
         // (uri "FULL_URI")
         in->NeedLEFT();
 
@@ -95,6 +83,18 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
         in->NeedSYMBOLorNUMBER();
 
         row.SetFullURI( in->FromUTF8() );
+
+        in->NeedRIGHT();
+
+        // (type "TYPE")
+        in->NeedLEFT();
+
+        if( ( tok = in->NextTok() ) != T_type )
+            in->Expecting( T_type );
+
+        in->NeedSYMBOLorNUMBER();
+
+        row.SetType( in->FromUTF8() );
 
         in->NeedRIGHT();
 
@@ -142,11 +142,11 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     throw( IO_ERROR )
 {
-    out->Print( nestLevel, "(lib (name %s)(type %s)(full_uri %s)(options %s))\n",
-                out->Quotew( nickName ).c_str(),
-                out->Quotew( type ).c_str(),
-                out->Quotew( uri ).c_str(),
-                out->Quotew( options ).c_str()
+    out->Print( nestLevel, "(lib (name %s)(full_uri %s)(type %s)(options %s))\n",
+                out->Quotew( GetNickName() ).c_str(),
+                out->Quotew( GetFullURI() ).c_str(),
+                out->Quotew( GetType() ).c_str(),
+                out->Quotew( GetOptions() ).c_str()
                 );
 }
 
@@ -178,19 +178,19 @@ std::vector<wxString> FP_LIB_TABLE::GetLogicalLibs()
 }
 
 
-FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickName ) const
+const FP_LIB_TABLE::ROW* FP_LIB_TABLE::findRow( const wxString& aNickName )
 {
-    // this function must be *super* fast, so therefore should not instantiate
-    // anything which would require using the heap.
-    const FP_LIB_TABLE* cur = this;
+    FP_LIB_TABLE* cur = this;
 
     do
     {
+        cur->ensureIndex();
+
         INDEX_CITER  it = cur->nickIndex.find( aNickName );
 
         if( it != cur->nickIndex.end() )
         {
-            return (FP_LIB_TABLE::ROW*) &cur->rows[it->second];  // found
+            return &cur->rows[it->second];  // found
         }
 
         // not found, search fall back table(s), if any
@@ -202,7 +202,7 @@ FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aNickName ) const
 
 bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
 {
-    // this does not need to be super fast.
+    ensureIndex();
 
     INDEX_CITER it = nickIndex.find( aRow.nickName );
 
@@ -223,82 +223,50 @@ bool FP_LIB_TABLE::InsertRow( const ROW& aRow, bool doReplace )
 }
 
 
+const FP_LIB_TABLE::ROW* FP_LIB_TABLE::FindRow( const wxString& aLibraryNickName )
+    throw( IO_ERROR )
+{
+    const ROW* row = findRow( aLibraryNickName );
 
-#if 0       // will need PLUGIN_RELEASER.
+    if( !row )
+    {
+        wxString msg = wxString::Format( _("lib table contains no logical lib '%s'" ),
+                            GetChars( aLibraryNickName ) );
+        THROW_IO_ERROR( msg );
+    }
+
+    return row;
+}
+
+
+PLUGIN* FP_LIB_TABLE::PluginFind( const wxString& aLibraryNickName )
+    throw( IO_ERROR )
+{
+    const ROW* row = FindRow( aLibraryNickName );
+
+    // row will never be NULL here.
+
+    PLUGIN* plugin = IO_MGR::PluginFind( row->type );
+
+    return plugin;
+}
+
+
+#if 0  // don't know that this is needed yet
 MODULE* FP_LIB_TABLE::LookupFootprint( const FP_LIB_ID& aFootprintId )
     throw( IO_ERROR )
 {
-    PLUGIN* plugin = lookupLib( aFootprintId );
+    const ROW* row = FindRow( aFootprintId.GetLibraryNickName() );
 
-    return plugin->FootprintLoad( FROM_UTF8( aFootprintId.GetBaseName().c_str() ),
-                                  FROM_UTF8( aFootprintId.GetLogicalLib().c_str() ) );
-}
+    // row will never be NULL here.
 
+    PLUGIN::RELEASER pi( PluginFind( row->type ) );
 
-PLUGIN* FP_LIB_TABLE::lookupLib( const FP_LIB_ID& aFootprintId )
-    throw( IO_ERROR )
-{
-    if( aFootprintId.GetLogicalLib().size() )
-    {
-        ROW* row = FindRow( aFootprintId.GetLogicalLib() );
+    return pi->FootprintLoad(   aLibraryPath->GetFullURI() ),
+                                aFootprintId.GetFootprintName(),
 
-        if( !row )
-        {
-            std::string msg = "lib table contains no logical lib '";
-            msg += aFootprintId.GetLogicalLib();
-            msg += '\'';
-            THROW_IO_ERROR( msg );
-        }
-
-        if( !row->lib )
-        {
-            loadLib( row );
-        }
-
-        assert( row->lib );     // fix loadLib() to throw if cannot load
-
-        return row->lib;
-    }
-
-    std::string msg = "lookupLib() requires logicalLibName";
-    THROW_IO_ERROR( msg );
-}
-
-
-void FP_LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
-{
-    assert( !aRow->lib );   // caller should know better.
-
-    const std::string& type = aRow->GetType();
-
-    if( !type.compare( "dir" ) )
-    {
-        // @todo Look up plug in here.
-    }
-
-/*
-    else if( !type.compare( "schematic" ) )
-    {
-        // @todo code and load SCHEMATIC_LIB_SOURCE
-    }
-
-    else if( !type.compare( "subversion" ) )
-    {
-        // @todo code and load SVN_LIB_SOURCE
-    }
-
-    else if( !type.compare( "http" ) )
-    {
-        // @todo code and load HTTP_LIB_SOURCE
-    }
-*/
-    else
-    {
-        std::string msg = "cannot load unknown footprint library type: '";
-        msg += type;
-        msg += '\'';
-        THROW_IO_ERROR( msg );
-    }
+                                // fetch a PROPERTIES instance on stack here
+                                row->GetPropertiesFromOptions()
+                                );
 }
 #endif
-

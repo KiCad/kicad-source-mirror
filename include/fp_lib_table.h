@@ -23,8 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _FP_LIB_TABLE_H_
-#define _FP_LIB_TABLE_H_
+#ifndef FP_LIB_TABLE_H_
+#define FP_LIB_TABLE_H_
 
 #include <macros.h>
 
@@ -32,6 +32,7 @@
 #include <map>
 
 #include <fp_lib_id.h>
+#include <io_mgr.h>
 
 
 class OUTPUTFORMATTER;
@@ -97,6 +98,25 @@ public:
 
     public:
 
+        typedef IO_MGR::PCB_FILE_T   LIB_T;
+
+        ROW(){}
+
+        ROW( const wxString& aNick, const wxString& aURI, const wxString& aType, const wxString& aOptions ) :
+            nickName( aNick ),
+            uri( aURI ),
+            options( aOptions )
+        {
+            SetType( aType );
+        }
+
+        bool operator==( const ROW& r ) const
+        {
+            return  nickName==r.nickName && uri==r.uri && type==r.type && options==r.options;
+        }
+
+        bool operator!=( const ROW& r ) const   { return !( *this == r ); }
+
         /**
          * Function GetNickName
          * returns the short name of this library table row.
@@ -110,9 +130,9 @@ public:
          * Function GetType
          * returns the type of LIB represented by this record.
          */
-        const wxString& GetType() const
+        const wxString GetType() const
         {
-            return type;
+            return IO_MGR::ShowType( type );
         }
 
         /**
@@ -160,7 +180,7 @@ public:
          */
         void SetType( const wxString& aType )
         {
-            type = aType;
+            type = IO_MGR::EnumFromStr( aType );
         }
 
         /**
@@ -183,14 +203,11 @@ public:
         }
 
     private:
-        wxString        nickName;
-        wxString        type;
-        wxString        uri;
-        wxString        options;
 
-        /*
-        PLUGIN*         lib;        ///< ownership of the loaded LIB is here
-        */
+        wxString        nickName;
+        wxString        uri;
+        LIB_T           type;
+        wxString        options;
     };
 
 
@@ -240,25 +257,6 @@ public:
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
 
-#if 0
-    /**
-     * Function LookupPart
-     * finds and loads a MODULE, and parses it.  As long as the part is
-     * accessible in any LIB_SOURCE, opened or not opened, this function
-     * will find it and load it into its containing LIB, even if that means
-     * having to open a LIB in this table that was not previously opened.
-     *
-     * @param aFootprintId The fully qualified name of the footprint to look up.
-     *
-     * @return MODULE* - this will never be NULL, and no ownership is transferred because
-     *  all MODULEs live in LIBs.  You only get to point to them in some LIB. If the MODULE
-     *  cannot be found, then an exception is thrown.
-     *
-     * @throw IO_ERROR if any problem occurs or if the footprint cannot be found.
-     */
-    MODULE* LookupFootprint( const FP_LIB_ID& aFootprintId ) throw( IO_ERROR );
-#endif
-
 
     /**
      * Function GetLogicalLibs
@@ -267,10 +265,13 @@ public:
      */
     std::vector<wxString> GetLogicalLibs();
 
+
+
     //----<read accessors>----------------------------------------------------
     // the returning of a const wxString* tells if not found, but might be too
     // promiscuous?
 
+#if 0
     /**
      * Function GetURI
      * returns the full library path from a logical library name.
@@ -306,6 +307,7 @@ public:
         const ROW* row = FindRow( aLogicalLibraryName );
         return row ? &row->options : 0;
     }
+#endif
 
     //----</read accessors>---------------------------------------------------
 
@@ -314,9 +316,6 @@ public:
     /// accessors, something difficult to do from int main(int, char**)
     void Test();
 #endif
-
-
-protected:  // only a table editor can use these
 
     /**
      * Function InsertRow
@@ -331,11 +330,28 @@ protected:  // only a table editor can use these
     bool InsertRow( const ROW& aRow, bool doReplace = false );
 
     /**
+     * Function PluginFind
+     * returns a PLUGIN*.  Caller should wrap that in a PLUGIN::RELEASER()
+     * so when it goes out of scope, IO_MGR::PluginRelease() is called.
+     */
+    PLUGIN* PluginFind( const wxString& aLibraryNickName ) throw( IO_ERROR );
+
+    /**
      * Function FindRow
      * returns a #ROW* if aNickName is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
-    ROW* FindRow( const wxString& aNickName ) const;
+    const ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
+
+
+protected:
+
+    /**
+     * Function findRow
+     * returns a #ROW* if aNickName is found in this table or in any chained
+     * fallBack table fragment, else NULL.
+     */
+    const ROW* findRow( const wxString& aNickName );
 
     void reindex()
     {
@@ -343,6 +359,15 @@ protected:  // only a table editor can use these
 
         for( ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
             nickIndex.insert( INDEX_VALUE( it->nickName, it - rows.begin() ) );
+    }
+
+    void ensureIndex()
+    {
+        // The dialog lib table editor may not maintain the nickIndex.
+        // Lazy indexing may be required.  To handle lazy indexing, we must enforce
+        // that "nickIndex" is either empty or accurate, but never inaccurate.
+        if( !nickIndex.size() )
+            reindex();
     }
 
     typedef std::vector<ROW>            ROWS;
@@ -364,35 +389,25 @@ protected:  // only a table editor can use these
 };
 
 
-
-#if 0   // lets see what we need.
-    /**
-     * Function lookupLib
-     * finds or loads a LIB based on @a aLogicalPartID or @a aFallBackLib.
-     * If the LIB is already loaded then it is returned as is, else it is loaded.
-     *
-     * @param aLogicalPartID holds the partName and may also hold the logicalLibName.  If
-     *  logicalLibName is empty, then @a aFallBackLib should not be NULL.
-     *
-     * @param aFallBackLib is used only if aLogicalPartID has an empty logicalLibName.
-     *  This is for the case when an LPID has no logicalLibName because the LPID is using
-     *  a partName from the same LIB as was the referring content.
-     *
-     * @return PLUGIN* - this will never be NULL, and no ownership is transfered because
-     *  all LIBs live in the FP_LIB_TABLEs.  You only get to point to them in some FP_LIB_TABLE.
-     *  If the LIB cannot be found, then an exception is thrown.
-     *
-     * @throw IO_ERROR if any problem occurs or if the LIB cannot be found or cannot be loaded.
-     */
-    PLUGIN* lookupLib( const FP_LIB_ID& aLogicalPartID ) throw( IO_ERROR );
+#if 0   // I don't think this is going to be needed.
 
     /**
-     * Function loadLib
-     * loads a LIB using information in @a aRow.  Call only if LIB not
-     * already loaded.
+     * Function LookupPart
+     * finds and loads a MODULE, and parses it.  As long as the part is
+     * accessible in any LIB_SOURCE, opened or not opened, this function
+     * will find it and load it into its containing LIB, even if that means
+     * having to open a LIB in this table that was not previously opened.
+     *
+     * @param aFootprintId The fully qualified name of the footprint to look up.
+     *
+     * @return MODULE* - this will never be NULL, and no ownership is transferred because
+     *  all MODULEs live in LIBs.  You only get to point to them in some LIB. If the MODULE
+     *  cannot be found, then an exception is thrown.
+     *
+     * @throw IO_ERROR if any problem occurs or if the footprint cannot be found.
      */
-    void loadLib( ROW* aRow ) throw( IO_ERROR );
+    MODULE* LookupFootprint( const FP_LIB_ID& aFootprintId ) throw( IO_ERROR );
 #endif
 
 
-#endif  // _FP_LIB_TABLE_H_
+#endif  // FP_LIB_TABLE_H_
