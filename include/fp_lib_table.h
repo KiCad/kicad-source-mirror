@@ -31,7 +31,6 @@
 #include <vector>
 #include <map>
 
-#include <wx/grid.h>
 #include <fp_lib_id.h>
 
 
@@ -80,7 +79,7 @@ class FP_LIB_TABLE_LEXER;
  *
  * @author Wayne Stambaugh
  */
-class FP_LIB_TABLE : public wxGridTableBase
+class FP_LIB_TABLE
 {
     friend class DIALOG_FP_LIB_TABLE;
 
@@ -135,11 +134,6 @@ public:
             return options;
         }
 
-        ~ROW()
-        {
-            // delete lib;
-        }
-
         /**
          * Function Format
          * serializes this object as utf8 text to an OUTPUTFORMATTER, and tries to
@@ -150,11 +144,6 @@ public:
          */
         void Format( OUTPUTFORMATTER* out, int nestLevel ) const
             throw( IO_ERROR );
-
-        ROW( FP_LIB_TABLE* aOwner ) :
-            owner( aOwner )
-            // lib( 0 )
-        {}
 
         /**
          * Function SetNickName
@@ -194,7 +183,6 @@ public:
         }
 
     private:
-        FP_LIB_TABLE*   owner;
         wxString        nickName;
         wxString        type;
         wxString        uri;
@@ -279,106 +267,6 @@ public:
      */
     std::vector<wxString> GetLogicalLibs();
 
-    //-----<wxGridTableBase overloads>-------------------------------------------
-
-    int         GetNumberRows () { return rows.size(); }
-    int         GetNumberCols () { return 4; }
-
-    wxString    GetValue( int aRow, int aCol )
-    {
-        if( unsigned( aRow ) < rows.size() )
-        {
-            const ROW&  r  = rows[aRow];
-
-            switch( aCol )
-            {
-            case 0:     return r.GetNickName();
-            case 1:     return r.GetType();
-            case 2:     return r.GetFullURI();
-            case 3:     return r.GetOptions();
-            default:
-                ;       // fall thru to wxEmptyString
-            }
-        }
-
-        return wxEmptyString;
-    }
-
-    void    SetValue( int aRow, int aCol, const wxString &aValue )
-    {
-        if( aCol == 0 )
-        {
-            // when the nickname is changed, there's careful work to do, including
-            // ensuring uniqueness of the nickname.
-        }
-        else if( unsigned( aRow ) < rows.size() )
-        {
-            ROW&  r  = rows[aRow];
-
-            switch( aCol )
-            {
-            case 1:     r.SetType( aValue  );       break;
-            case 2:     r.SetFullURI( aValue );     break;
-            case 3:     r.SetOptions( aValue );     break;
-            }
-        }
-    }
-
-    bool IsEmptyCell( int aRow, int aCol )
-    {
-        if( unsigned( aRow ) < rows.size() )
-            return false;
-        return true;
-    }
-
-    bool InsertRows( size_t aPos = 0, size_t aNumRows = 1 )
-    {
-        if( aPos < rows.size() )
-        {
-            rows.insert( rows.begin() + aPos, aNumRows, ROW( this ) );
-            return true;
-        }
-        return false;
-    }
-
-    bool AppendRows( size_t aNumRows = 1 )
-    {
-        while( aNumRows-- )
-            rows.push_back( ROW( this ) );
-        return true;
-    }
-
-    bool DeleteRows( size_t aPos, size_t aNumRows )
-    {
-        if( aPos + aNumRows <= rows.size() )
-        {
-            ROWS_ITER start = rows.begin() + aPos;
-            rows.erase( start, start + aNumRows );
-            return true;
-        }
-        return false;
-    }
-
-    void Clear()
-    {
-        rows.clear();
-    }
-
-    wxString GetColLabelValue( int aCol )
-    {
-        switch( aCol )
-        {
-        case 0:     return _( "Nickname" );
-        case 1:     return _( "Plugin" );
-        case 2:     return _( "Library Path" );
-        case 3:     return _( "Options" );
-        default:    return wxEmptyString;
-        }
-    }
-
-    //-----</wxGridTableBase overloads>------------------------------------------
-
-
     //----<read accessors>----------------------------------------------------
     // the returning of a const wxString* tells if not found, but might be too
     // promiscuous?
@@ -427,6 +315,7 @@ public:
     void Test();
 #endif
 
+
 protected:  // only a table editor can use these
 
     /**
@@ -448,7 +337,33 @@ protected:  // only a table editor can use these
      */
     ROW* FindRow( const wxString& aNickName ) const;
 
-private:
+    void reindex()
+    {
+        nickIndex.clear();
+
+        for( ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
+            nickIndex.insert( INDEX_VALUE( it->nickName, it - rows.begin() ) );
+    }
+
+    typedef std::vector<ROW>            ROWS;
+    typedef ROWS::iterator              ROWS_ITER;
+    typedef ROWS::const_iterator        ROWS_CITER;
+
+    ROWS           rows;
+
+    /// this is a non-owning index into the ROWS table
+    typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
+    typedef INDEX::iterator             INDEX_ITER;
+    typedef INDEX::const_iterator       INDEX_CITER;
+    typedef INDEX::value_type           INDEX_VALUE;
+
+    /// this particular key is the nickName within each row.
+    INDEX           nickIndex;
+
+    FP_LIB_TABLE*  fallBack;
+};
+
+
 
 #if 0   // lets see what we need.
     /**
@@ -479,23 +394,5 @@ private:
     void loadLib( ROW* aRow ) throw( IO_ERROR );
 #endif
 
-    typedef std::vector<ROW>            ROWS;
-    typedef ROWS::iterator              ROWS_ITER;
-    typedef ROWS::const_iterator        ROWS_CITER;
-
-    ROWS           rows;
-
-    /// this is a non-owning index into the ROWS table
-    typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
-    typedef INDEX::iterator             INDEX_ITER;
-    typedef INDEX::const_iterator       INDEX_CITER;
-    typedef INDEX::value_type           INDEX_VALUE;
-
-
-    /// the particular key is the nickName within each row.
-    INDEX           nickIndex;
-
-    FP_LIB_TABLE*  fallBack;
-};
 
 #endif  // _FP_LIB_TABLE_H_

@@ -68,7 +68,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         in->NeedSYMBOLorNUMBER();
 
-        ROW     row( this );
+        ROW     row;
 
         row.SetNickName( in->FromUTF8() );
 
@@ -112,9 +112,9 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
         in->NeedRIGHT();            // terminate the (lib..)
 
         // all nickNames within this table fragment must be unique, so we do not
-        // use doReplace in InsertRow().  However a fallBack table can have a
+        // use doReplace in InsertRow().  (However a fallBack table can have a
         // conflicting nickName and ours will supercede that one since in
-        // FindLib() we search this table before any fall back.
+        // FindLib() we search this table before any fall back.)
         if( !InsertRow( row ) )
         {
             wxString msg = wxString::Format(
