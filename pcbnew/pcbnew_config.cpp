@@ -84,8 +84,18 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_PCB_LIB_TABLE_EDIT:
         {
+            // scaffolding: dummy up some data into tables, until actual load/save are in place.
             FP_LIB_TABLE    gbl;
             FP_LIB_TABLE    prj;
+
+            gbl.InsertRow( FP_LIB_TABLE::ROW(
+                wxT( "passives" ), wxT( "%G/passives" ), wxT( "KiCad" ), wxT( "speed=fast,purpose=testing" ) ) );
+
+            gbl.InsertRow( FP_LIB_TABLE::ROW(
+                wxT( "micros" ), wxT( "%P/micros" ), wxT( "Legacy" ), wxT( "speed=fast,purpose=testing" ) ) );
+
+            prj.InsertRow( FP_LIB_TABLE::ROW(
+                wxT( "micros" ), wxT( "%P/potato_chips" ), wxT( "Eagle" ), wxT( "speed=fast,purpose=testing" ) ) );
 
             int r = InvokePcbLibTableEditor( this, &gbl, &prj );
 

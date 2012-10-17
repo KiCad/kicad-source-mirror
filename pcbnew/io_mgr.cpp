@@ -79,19 +79,47 @@ void IO_MGR::PluginRelease( PLUGIN* aPlugin )
 }
 
 
-const wxString IO_MGR::ShowType( PCB_FILE_T aFileType )
+const wxString IO_MGR::ShowType( PCB_FILE_T aType )
 {
-    switch( aFileType )
+    // keep this function in sync with EnumFromStr() relative to the
+    // text spellings.  If you change the spellings, you will obsolete
+    // library tables, so don't do change, only additions are ok.
+
+    switch( aType )
     {
     default:
-        return wxString::Format( _( "Unknown PCB_FILE_T value: %d" ), aFileType );
+        return wxString::Format( _( "Unknown PCB_FILE_T value: %d" ), aType );
 
     case LEGACY:
-        return wxString( wxT( "KiCad Legacy" ) );
+        return wxString( wxT( "Legacy" ) );
 
     case KICAD:
         return wxString( wxT( "KiCad" ) );
+
+    case EAGLE:
+        return wxString( wxT( "Eagle" ) );
     }
+}
+
+
+IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
+{
+    // keep this function in sync with ShowType() relative to the
+    // text spellings.  If you change the spellings, you will obsolete
+    // library tables, so don't do change, only additions are ok.
+
+    if( aType == wxT( "KiCad" ) )
+        return KICAD;
+
+    if( aType == wxT( "Legacy" ) )
+        return LEGACY;
+
+    if( aType == wxT( "Eagle" ) )
+        return EAGLE;
+
+    // wxASSERT( blow up here )
+
+    return PCB_FILE_T( -1 );
 }
 
 
