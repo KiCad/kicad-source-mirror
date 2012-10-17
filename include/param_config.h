@@ -17,6 +17,7 @@
 /** Type of parameter in the configuration file */
 enum paramcfg_id {
     PARAM_INT,
+    PARAM_INT_WITH_SCALE,
     PARAM_SETCOLOR,
     PARAM_DOUBLE,
     PARAM_BOOL,
@@ -87,6 +88,36 @@ public:
                    int min = std::numeric_limits<int>::min(),
                    int max = std::numeric_limits<int>::max(),
                    const wxChar* group = NULL );
+
+    virtual void ReadParam( wxConfigBase* aConfig ) const;
+    virtual void SaveParam( wxConfigBase* aConfig ) const;
+};
+
+/**
+ * Configuration parameter - Integer Class
+ * with unit conversion.
+ * Mainly used to store an integer value in millimeters (or inches)
+ * and retrieve it in internal units
+ * the stored value is a floating number
+ */
+class PARAM_CFG_INT_WITH_SCALE : public PARAM_CFG_INT
+{
+public:
+    double  m_BIU_to_cfgunit;   ///<  the factor to convert the saved value in internal value
+
+public:
+    PARAM_CFG_INT_WITH_SCALE( const wxChar* ident, int* ptparam,
+                       int default_val = 0,
+                       int min = std::numeric_limits<int>::min(),
+                       int max = std::numeric_limits<int>::max(),
+                       const wxChar* group = NULL,
+                       double aBiu2cfgunit = 1.0);
+    PARAM_CFG_INT_WITH_SCALE( bool Insetup, const wxChar* ident, int* ptparam,
+                   int default_val = 0,
+                   int min = std::numeric_limits<int>::min(),
+                   int max = std::numeric_limits<int>::max(),
+                   const wxChar* group = NULL,
+                   double aBiu2cfgunit = 1.0 );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const;
     virtual void SaveParam( wxConfigBase* aConfig ) const;
