@@ -28,8 +28,8 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_global_panel->SetToolTip( _("Module libraries which  are visible for all projects") );
 	
-	wxBoxSizer* m_global_box_sizer;
-	m_global_box_sizer = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* m_global_sizer;
+	m_global_sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_global_grid = new wxGrid( m_global_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
@@ -56,12 +56,12 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	
 	// Cell Defaults
 	m_global_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_global_box_sizer->Add( m_global_grid, 1, wxALL|wxEXPAND, 5 );
+	m_global_sizer->Add( m_global_grid, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	m_global_panel->SetSizer( m_global_box_sizer );
+	m_global_panel->SetSizer( m_global_sizer );
 	m_global_panel->Layout();
-	m_global_box_sizer->Fit( m_global_panel );
+	m_global_sizer->Fit( m_global_panel );
 	m_auinotebook->AddPage( m_global_panel, _("Global Libraries"), true, wxNullBitmap );
 	m_project_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_project_sizer;
@@ -92,7 +92,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	
 	// Cell Defaults
 	m_project_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_project_sizer->Add( m_project_grid, 0, wxALL, 5 );
+	m_project_sizer->Add( m_project_grid, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	m_project_panel->SetSizer( m_project_sizer );

@@ -27,6 +27,132 @@
 #include <fctsys.h>
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
+#include <wx/grid.h>
+#include <wx/grid.h>
+
+
+class FP_TBL_MODEL : public wxGridTableBase, public FP_LIB_TABLE
+{
+public:
+
+    /**
+     * Constructor FP_TBL_MODEL
+     * builds a wxGridTableBase (table model) by wrapping an FP_LIB_TABLE.
+     * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
+     *
+     * @param aFallBackTable is another FP_LIB_TABLE which is searched only when
+     *                       a record is not found in this table.  No ownership is
+     *                       taken of aFallBackTable.
+     */
+    FP_TBL_MODEL( const FP_LIB_TABLE& aTableToEdit ) :
+        FP_LIB_TABLE( aTableToEdit )    // copy constructor
+    {
+    }
+
+    ~FP_TBL_MODEL()
+    {
+        D(printf("%s\n", __func__ );)
+    }
+
+    //-----<wxGridTableBase overloads>-------------------------------------------
+
+    int         GetNumberRows () { return rows.size(); }
+    int         GetNumberCols () { return 4; }
+
+    wxString    GetValue( int aRow, int aCol )
+    {
+        if( unsigned( aRow ) < rows.size() )
+        {
+            const ROW&  r  = rows[aRow];
+
+            switch( aCol )
+            {
+            case 0:     return r.GetNickName();
+            case 1:     return r.GetFullURI();
+            case 2:     return r.GetType();
+            case 3:     return r.GetOptions();
+            default:
+                ;       // fall thru to wxEmptyString
+            }
+        }
+
+        return wxEmptyString;
+    }
+
+    void    SetValue( int aRow, int aCol, const wxString &aValue )
+    {
+        if( unsigned( aRow ) < rows.size() )
+        {
+            ROW&  r  = rows[aRow];
+
+            switch( aCol )
+            {
+            case 0:     r.SetNickName( aValue );    break;
+            case 1:     r.SetType( aValue  );       break;
+            case 2:     r.SetFullURI( aValue );     break;
+            case 3:     r.SetOptions( aValue );     break;
+            }
+        }
+    }
+
+    bool IsEmptyCell( int aRow, int aCol )
+    {
+        if( unsigned( aRow ) < rows.size() )
+            return false;
+        return true;
+    }
+
+    bool InsertRows( size_t aPos = 0, size_t aNumRows = 1 )
+    {
+        if( aPos < rows.size() )
+        {
+            rows.insert( rows.begin() + aPos, aNumRows, ROW() );
+            return true;
+        }
+        return false;
+    }
+
+    bool AppendRows( size_t aNumRows = 1 )
+    {
+        while( aNumRows-- )
+            rows.push_back( ROW() );
+        return true;
+    }
+
+    bool DeleteRows( size_t aPos, size_t aNumRows )
+    {
+        if( aPos + aNumRows <= rows.size() )
+        {
+            ROWS_ITER start = rows.begin() + aPos;
+            rows.erase( start, start + aNumRows );
+            return true;
+        }
+        return false;
+    }
+
+    void Clear()
+    {
+        rows.clear();
+        nickIndex.clear();
+    }
+
+    wxString GetColLabelValue( int aCol )
+    {
+        switch( aCol )
+        {
+        case 0:     return _( "Nickname" );
+        case 1:     return _( "Library Path" );
+        case 2:     return _( "Plugin" );
+        case 3:     return _( "Options" );
+        default:    return wxEmptyString;
+        }
+    }
+
+    //-----</wxGridTableBase overloads>------------------------------------------
+
+};
+
+
 
 /**
  * Class DIALOG_FP_LIB_TABLE
@@ -66,16 +192,16 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
     void onCancelButtonClick( wxCommandEvent& event )
     {
-        m_global->rows  = m_orig_global;
-        m_project->rows = m_orig_project;
-
-        // @todo reindex, or add member function for wholesale row replacement
-
         EndModal( wxID_CANCEL );
     }
 
     void onOKButtonClick( wxCommandEvent& event )
     {
+        *m_global  = m_global_model;
+        *m_project = m_project_model;
+
+        // @todo reindex, or add member function for wholesale row replacement
+
         EndModal( wxID_OK );
     }
 
@@ -87,9 +213,9 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     FP_LIB_TABLE*       m_global;
     FP_LIB_TABLE*       m_project;
 
-    // local copies are saved and restored if Cancel button.
-    FP_LIB_TABLE::ROWS  m_orig_global;
-    FP_LIB_TABLE::ROWS  m_orig_project;
+    // local copies which are edited, but aborted if Cancel button.
+    FP_TBL_MODEL        m_global_model;
+    FP_TBL_MODEL        m_project_model;
 
     wxGrid*             m_cur_grid;     ///< changed based on tab choice
 
@@ -99,8 +225,8 @@ public:
         DIALOG_FP_LIB_TABLE_BASE( aParent ),
         m_global( aGlobal ),
         m_project( aProject ),
-        m_orig_global( aGlobal->rows ),
-        m_orig_project( aProject->rows )
+        m_global_model( *aGlobal ),
+        m_project_model( *aProject )
     {
         /*
         GetSizer()->SetSizeHints( this );
@@ -111,28 +237,27 @@ public:
 
 #if 1 && defined(DEBUG)
         // put some dummy data into table(s)
-        FP_LIB_TABLE::ROW   row( m_global );
+        FP_LIB_TABLE::ROW   row;
 
         row.SetNickName( wxT( "passives" ) );
         row.SetType( wxT( "kicad" ) );
         row.SetFullURI( wxT( "%G/passives" ) );
         row.SetOptions( wxT( "speed=fast,purpose=testing" ) );
-        m_global->InsertRow( row );
+        m_global_model.InsertRow( row );
 
         row.SetNickName( wxT( "micros" ) );
         row.SetType( wxT( "legacy" ) );
         row.SetFullURI( wxT( "%P/micros" ) );
         row.SetOptions( wxT( "speed=fast,purpose=testing" ) );
-        m_global->InsertRow( row );
+        m_global_model.InsertRow( row );
 
-        row.owner = m_project;
         row.SetFullURI( wxT( "%P/chips" ) );
-        m_project->InsertRow( row );
+        m_project_model.InsertRow( row );
 
 #endif
 
-        m_global_grid->SetTable( m_global );
-        m_project_grid->SetTable( m_project );
+        m_global_grid->SetTable( (wxGridTableBase*) &m_global_model );
+        m_project_grid->SetTable( (wxGridTableBase*) &m_project_model );
 
         //m_global_grid->AutoSize();
         m_global_grid->AutoSizeColumns( false );
@@ -142,6 +267,16 @@ public:
 
         //m_path_subs_grid->AutoSize();
         m_path_subs_grid->AutoSizeColumns( false );
+    }
+
+    ~DIALOG_FP_LIB_TABLE()
+    {
+        // Destroy the gui stuff first, with a goal of destroying the two wxGrids now,
+        // since the ~wxGrid() wants the wxGridTableBase to still be non-destroyed.
+        // Without this call, the wxGridTableBase objects are destroyed first
+        // (i.e. destructor called) and there is a segfault since wxGridTableBase's vtable
+        // is then no longer valid.
+        DestroyChildren();
     }
 };
 
