@@ -256,8 +256,10 @@ wxString EDA_FileSelector( const wxString& Title,
     wxString defaultpath = Path;
     wxString dotted_Ext = wxT(".") + Ext;
 
-    defaultname.Replace( wxT( "/" ), STRING_DIR_SEP );
-    defaultpath.Replace( wxT( "/" ), STRING_DIR_SEP );
+#ifdef __WINDOWS__
+    defaultname.Replace( wxT( "/" ), wxT( "\\" ) );
+    defaultpath.Replace( wxT( "/" ), wxT( "\\" ) );
+#endif
 
     if( defaultpath.IsEmpty() )
         defaultpath = wxGetCwd();
@@ -421,7 +423,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
     FullFileName = FindKicadFile( ExecFile );
 
 #ifdef __WXMAC__
-    if( wxFileExists( FullFileName ) || wxDir::Exists( FullFileName ) ) 
+    if( wxFileExists( FullFileName ) || wxDir::Exists( FullFileName ) )
     {
        ProcessExecute( wxGetApp().GetExecutablePath() + wxT("/") + ExecFile + wxT(" ") + param );
     } else {

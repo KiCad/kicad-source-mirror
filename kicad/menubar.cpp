@@ -32,7 +32,6 @@
 #include <kicad.h>
 #include <menus_helpers.h>
 
-
 /* Menubar and toolbar event table */
 BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     /* Window events */
@@ -91,6 +90,9 @@ END_EVENT_TABLE()
  */
 void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 {
+    static wxMenu* openRecentMenu;  // Open Recent submenu,
+                                    // static to remember this menu
+
     // Create and try to get the current  menubar
     wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
@@ -102,6 +104,12 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // This allows language changes of the menu text on the fly.
     menuBar->Freeze();
 
+    // Before deleting, remove the menus managed by m_fileHistory
+    // (the file history will be updated when adding/removing files in history)
+    if( openRecentMenu )
+        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
+
+    // Delete all existing menus
     while( menuBar->GetMenuCount() )
         delete menuBar->Remove( 0 );
 
@@ -117,14 +125,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "Open an existing project" ),
                  KiBitmap( open_project_xpm ) );
 
-    // Open Recent submenu
-    static wxMenu* openRecentMenu;
-
-    // Add this menu to list menu managed by m_fileHistory
-    // (the file history will be updated when adding/removing files in history
-    if( openRecentMenu )
-        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
-
+    // File history
     openRecentMenu = new wxMenu();
     wxGetApp().GetFileHistory().UseMenu( openRecentMenu );
     wxGetApp().GetFileHistory().AddFilesToMenu( );
@@ -135,7 +136,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  KiBitmap( open_project_xpm ) );
 
     // New
-    static wxMenu* newMenu = new wxMenu();
+    wxMenu* newMenu = new wxMenu();
     AddMenuItem( newMenu, ID_NEW_PROJECT,
                  _( "&Blank\tCtrl+N" ),
                  _( "Start a blank project" ),
@@ -147,7 +148,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  KiBitmap( new_project_with_template_xpm ) );
 
     AddMenuItem( fileMenu, newMenu,
-                wxID_ANY,
+                 wxID_ANY,
                  _( "New" ),
                  _( "Start a new project" ),
                  KiBitmap( new_project_xpm ) );

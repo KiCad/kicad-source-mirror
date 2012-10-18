@@ -26,19 +26,7 @@
 #endif
 
 /**
- * @note Shouldn't we be using wxFileName::GetPathSeparator() instead of the following code
- *       for improved portability?
- */
-#ifdef __WINDOWS__
-#define DIR_SEP        '\\'
-#define STRING_DIR_SEP wxT( "\\" )
-#else
-#define DIR_SEP        '/'
-#define STRING_DIR_SEP wxT( "/" )
-#endif
-
-/**
- * @note Do we really need these defined again?
+ * @note Do we really need these defined?
  */
 #define UNIX_STRING_DIR_SEP wxT( "/" )
 #define WIN_STRING_DIR_SEP  wxT( "\\" )

@@ -4,9 +4,6 @@
 
 #include <fctsys.h>
 #include <wxstruct.h>
-#include <gr_basic.h>
-#include <common.h>
-#include <macros.h>
 #include <kicad_string.h>
 #include <dialog_helpers.h>
 
@@ -30,7 +27,7 @@ END_EVENT_TABLE()
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemList, const wxString& aRefText,
                                   void(* aCallBackFunction)(wxString& Text), wxPoint aPos ) :
-    wxDialog( aParent, wxID_ANY, aTitle, aPos, wxDefaultSize,
+    DIALOG_SHIM( aParent, wxID_ANY, aTitle, aPos, wxDefaultSize,
               wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 {
     m_callBackFct = aCallBackFunction;
@@ -41,18 +38,30 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
     SetSizer( GeneralBoxSizer );
 
     m_listBox = new wxListBox( this, ID_LISTBOX_LIST, wxDefaultPosition,
-                               wxSize( 300, 200 ), 0, NULL,
+                               wxDefaultSize, 0, NULL,
                                wxLB_NEEDED_SB | wxLB_SINGLE | wxLB_HSCROLL );
+    m_listBox->SetMinSize( wxSize( 200, 200 ) );
 
     GeneralBoxSizer->Add( m_listBox, 2, wxGROW | wxALL, 5 );
 
     InsertItems( aItemList, 0 );
 
+    if( !aRefText.IsEmpty() )    // try to select the item matching aRefText
+    {
+        for( unsigned ii = 0; ii < aItemList.GetCount(); ii++ )
+            if( aItemList[ii] == aRefText )
+            {
+                m_listBox->SetSelection( ii );
+                break;
+            }
+    }
+
     if( m_callBackFct )
     {
         m_messages = new wxTextCtrl( this, -1, wxEmptyString,
-                                     wxDefaultPosition, wxSize( -1, 60 ),
+                                     wxDefaultPosition, wxDefaultSize,
                                      wxTE_READONLY | wxTE_MULTILINE );
+        m_messages->SetMinSize( wxSize( -1, 60 ) );
 
         GeneralBoxSizer->Add( m_messages, 1, wxGROW | wxALL, 5 );
     }
