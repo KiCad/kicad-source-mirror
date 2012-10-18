@@ -100,7 +100,9 @@ public:
 
         typedef IO_MGR::PCB_FILE_T   LIB_T;
 
-        ROW(){}
+        ROW() : type( IO_MGR::KICAD )
+        {
+        }
 
         ROW( const wxString& aNick, const wxString& aURI, const wxString& aType, const wxString& aOptions ) :
             nickName( aNick ),
@@ -221,6 +223,23 @@ public:
      *                       taken of aFallBackTable.
      */
     FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable = NULL );
+
+    bool operator==( const FP_LIB_TABLE& r ) const
+    {
+        if( rows.size() == r.rows.size() )
+        {
+            unsigned i;
+            for( i = 0; i < rows.size() && rows[i] == r.rows[i];  ++i )
+                ;
+
+            if( i == rows.size() )
+                return true;
+        }
+
+        return false;
+    }
+
+    bool operator!=( const FP_LIB_TABLE& r ) const { return !( *this == r ); }
 
     /**
      * Function Parse

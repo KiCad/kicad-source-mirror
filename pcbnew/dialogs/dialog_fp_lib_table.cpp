@@ -28,13 +28,12 @@
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
 #include <wx/grid.h>
-#include <wx/grid.h>
 
 
 /**
  * Class FP_TBL_MODEL
  * mixes in wxGridTableBase into FP_LIB_TABLE so that the latter can be used
- * as table within wxGrid.
+ * as a table within wxGrid.
  */
 class FP_TBL_MODEL : public wxGridTableBase, public FP_LIB_TABLE
 {
@@ -42,21 +41,12 @@ public:
 
     /**
      * Constructor FP_TBL_MODEL
-     * builds a wxGridTableBase (table model) by wrapping an FP_LIB_TABLE.
-     * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
-     *
-     * @param aFallBackTable is another FP_LIB_TABLE which is searched only when
-     *                       a record is not found in this table.  No ownership is
-     *                       taken of aFallBackTable.
+     * is a copy constructor that builds a wxGridTableBase (table model) by wrapping
+     * an FP_LIB_TABLE.
      */
     FP_TBL_MODEL( const FP_LIB_TABLE& aTableToEdit ) :
         FP_LIB_TABLE( aTableToEdit )    // copy constructor
     {
-    }
-
-    ~FP_TBL_MODEL()
-    {
-        D(printf("%s\n", __func__ );)
     }
 
     //-----<wxGridTableBase overloads>-------------------------------------------
@@ -93,8 +83,8 @@ public:
             switch( aCol )
             {
             case 0:     r.SetNickName( aValue );    break;
-            case 1:     r.SetType( aValue  );       break;
-            case 2:     r.SetFullURI( aValue );     break;
+            case 1:     r.SetFullURI( aValue );     break;
+            case 2:     r.SetType( aValue  );       break;
             case 3:     r.SetOptions( aValue );     break;
             }
         }
@@ -112,6 +102,18 @@ public:
         if( aPos < rows.size() )
         {
             rows.insert( rows.begin() + aPos, aNumRows, ROW() );
+
+            // use the (wxGridStringTable) source Luke.
+            if( GetView() )
+            {
+                wxGridTableMessage msg( this,
+                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+                                        aPos,
+                                        aNumRows );
+
+                GetView()->ProcessTableMessage( msg );
+            }
+
             return true;
         }
         return false;
@@ -119,8 +121,19 @@ public:
 
     bool AppendRows( size_t aNumRows = 1 )
     {
-        while( aNumRows-- )
+        // do not modify aNumRows, original value needed for wxGridTableMessage below
+        for( int i = aNumRows; i; --i )
             rows.push_back( ROW() );
+
+        if( GetView() )
+        {
+            wxGridTableMessage msg( this,
+                                    wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
+                                    aNumRows );
+
+            GetView()->ProcessTableMessage( msg );
+        }
+
         return true;
     }
 
@@ -130,6 +143,17 @@ public:
         {
             ROWS_ITER start = rows.begin() + aPos;
             rows.erase( start, start + aNumRows );
+
+            if( GetView() )
+            {
+                wxGridTableMessage msg( this,
+                                        wxGRIDTABLE_NOTIFY_ROWS_DELETED,
+                                        aPos,
+                                        aNumRows );
+
+                GetView()->ProcessTableMessage( msg );
+            }
+
             return true;
         }
         return false;
@@ -168,6 +192,39 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 {
     typedef FP_LIB_TABLE::ROW   ROW;
 
+    /* row & col "selection" acquisition, not currently used but works.
+    // selected area by cell coordinate and count
+    int selRowStart;
+    int selColStart;
+    int selRowCount;
+    int selColCount;
+
+    /// Gets the selected area into a sensible rectable of sel{Row,Col}{Start,Count} above.
+    void getSelectedArea()
+    {
+        wxGridCellCoordsArray topLeft  = m_cur_grid->GetSelectionBlockTopLeft();
+        wxGridCellCoordsArray botRight = m_cur_grid->GetSelectionBlockBottomRight();
+
+        if( topLeft.Count() && botRight.Count() )
+        {
+            selRowStart = topLeft[0].GetRow();
+            selColStart = topLeft[0].GetCol();
+
+            selRowCount = botRight[0].GetRow() - selRowStart + 1;
+            selColCount = botRight[0].GetCol() - selColStart + 1;
+        }
+        else
+        {
+            selRowStart = -1;
+            selColStart = -1;
+            selRowCount = 0;
+            selColCount = 0;
+        }
+
+        D(printf("selRowStart:%d selColStart:%d selRowCount:%d selColCount:%d\n",
+            selRowStart, selColStart, selRowCount, selColCount );)
+    }
+    */
 
     //-----<event handlers>----------------------------------
 
@@ -175,22 +232,52 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     {
         int pageNdx = m_auinotebook->GetSelection();
 
-        m_cur_grid = pageNdx ? m_global_grid : m_project_grid;
+        m_cur_grid = pageNdx==0 ? m_global_grid : m_project_grid;
+
+        D(printf("%s cur_grid is %s\n", __func__, pageNdx==0 ? "global" : "project" );)
     }
 
     void appendRowHandler( wxMouseEvent& event )
     {
         D(printf("%s\n", __func__);)
+        m_cur_grid->AppendRows( 1 );
     }
 
     void deleteRowHandler( wxMouseEvent& event )
     {
         D(printf("%s\n", __func__);)
+
+        int curRow = m_cur_grid->GetGridCursorRow();
+
+        m_cur_grid->DeleteRows( curRow );
     }
 
     void moveUpHandler( wxMouseEvent& event )
     {
         D(printf("%s\n", __func__);)
+
+        int curRow = m_cur_grid->GetGridCursorRow();
+        if( curRow >= 1 )
+        {
+            FP_TBL_MODEL* tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
+
+            ROW save = tbl->rows[curRow];
+
+            tbl->DeleteRows( curRow, 1 );
+            tbl->InsertRows( --curRow, 1 );
+
+            tbl->rows[curRow] = save;
+
+            if( tbl->GetView() )
+            {
+                wxGridTableMessage msg( tbl,
+                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+                                        curRow,
+                                        0 );
+
+                tbl->GetView()->ProcessTableMessage( msg );
+            }
+        }
     }
 
     void moveDownHandler( wxMouseEvent& event )
@@ -200,19 +287,31 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
     void onCancelButtonClick( wxCommandEvent& event )
     {
-        EndModal( wxID_CANCEL );
+        EndModal( 0 );
     }
 
     void onOKButtonClick( wxCommandEvent& event )
     {
-        *m_global  = m_global_model;
-        *m_project = m_project_model;
+        int dialogRet = 0;
 
-        // @todo reindex, or add member function for wholesale row replacement
+        if( m_global_model != *m_global )
+        {
+            dialogRet |= 1;
 
-        EndModal( wxID_OK );
+            *m_global  = m_global_model;
+            m_global->reindex();
+        }
+
+        if( m_project_model != *m_project )
+        {
+            dialogRet |= 2;
+
+            *m_project = m_project_model;
+            m_project->reindex();
+        }
+
+        EndModal( dialogRet );
     }
-
 
     //-----</event handlers>---------------------------------
 
@@ -244,6 +343,10 @@ public:
         m_project_grid->AutoSizeColumns( false );
 
         m_path_subs_grid->AutoSizeColumns( false );
+
+        // fire pageChangedHandler() so m_cur_grid gets set
+        wxAuiNotebookEvent uneventful;
+        pageChangedHandler( uneventful );
     }
 
     ~DIALOG_FP_LIB_TABLE()
@@ -262,18 +365,10 @@ public:
 
 int InvokePcbLibTableEditor( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
 {
-    DIALOG_FP_LIB_TABLE     dlg( aParent, aGlobal, aProject );
+    DIALOG_FP_LIB_TABLE dlg( aParent, aGlobal, aProject );
 
-    int ret = dlg.ShowModal();
-    switch( ret )
-    {
-    case wxID_OK:
-        break;
+    int dialogRet = dlg.ShowModal();    // returns value passed to EndModal() above
 
-    case wxID_CANCEL:
-        break;
-    }
-
-    return 0;
+    return dialogRet;
 }
 

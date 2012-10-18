@@ -102,11 +102,13 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             if( r & 1 )
             {
                 // save global table to disk and apply it
+                D( printf( "global has changed\n" );)
             }
 
             if( r & 2 )
             {
-                 // save project table to disk and apply it
+                // save project table to disk and apply it
+                D( printf( "project has changed\n" );)
             }
         }
         break;
