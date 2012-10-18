@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-10-15 08:37+0100\n"
-"PO-Revision-Date: 2012-10-15 18:26+0100\n"
+"PO-Revision-Date: 2012-10-18 16:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -6885,7 +6885,7 @@ msgstr "PDF"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:75
 msgid "Drill Map File Format:"
-msgstr "Format du fichier de perçage:"
+msgstr "Format du plan de perçage:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:77
 msgid "Creates a drill map in PS, HPGL or other formats"
