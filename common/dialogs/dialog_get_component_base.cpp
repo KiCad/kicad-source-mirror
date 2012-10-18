@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -35,6 +35,7 @@ DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindow
 	
 	bSizerLeft->Add( m_historyList, 1, wxALL|wxEXPAND, 5 );
 	
+	
 	bSizerMain->Add( bSizerLeft, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerRight;
@@ -56,7 +57,9 @@ DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindow
 	m_buttonBrowse = new wxButton( this, ID_EXTRA_TOOL, _("Select by Browser"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_buttonBrowse, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bSizerMain->Add( bSizerRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();

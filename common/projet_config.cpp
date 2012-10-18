@@ -298,7 +298,8 @@ bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
     else
     {
         if( wxPathOnly( g_Prj_Config_LocalFilename ).IsEmpty() )
-            m_CurrentOptionFile = wxGetCwd() + STRING_DIR_SEP + g_Prj_Config_LocalFilename;
+            m_CurrentOptionFile = wxGetCwd() + wxFileName::GetPathSeparator()
+                                  + g_Prj_Config_LocalFilename;
         else
             m_CurrentOptionFile = g_Prj_Config_LocalFilename;
     }
@@ -352,7 +353,8 @@ bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
     else
     {
         if( wxPathOnly( g_Prj_Config_LocalFilename ).IsEmpty() )
-            m_CurrentOptionFile = wxGetCwd() + STRING_DIR_SEP + g_Prj_Config_LocalFilename;
+            m_CurrentOptionFile = wxGetCwd() + wxFileName::GetPathSeparator()
+                                  + g_Prj_Config_LocalFilename;
         else
             m_CurrentOptionFile = g_Prj_Config_LocalFilename;
     }

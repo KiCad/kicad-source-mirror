@@ -133,11 +133,10 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
     case ID_NEW_BOARD:
         {
             Clear_Pcb( true );
-            wxString newFilename;
-            newFilename.Printf( wxT( "%s%cnoname%s" ),
-                    GetChars( wxGetCwd() ), DIR_SEP,
-                    GetChars( PcbFileExtension ) );
-            GetBoard()->SetFileName( newFilename );
+            wxFileName fn( wxT( "noname" ) );
+            fn.AssignCwd();
+            fn.SetExt( PcbFileExtension );
+            GetBoard()->SetFileName( fn.GetFullPath() );
             UpdateTitle();
             ReCreateLayerBox( NULL );
         }

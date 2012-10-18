@@ -16,11 +16,10 @@
 CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame )
 {
     static wxString OldLibName;
-    wxString        msg;
     wxArrayString   libNamesList;
-    int             count = CMP_LIBRARY::GetLibraryCount();
     CMP_LIBRARY*    Lib = NULL;
 
+    int count = CMP_LIBRARY::GetLibraryCount();
     if( count == 0 )
     {
         DisplayError( frame, _( "No component libraries are loaded." ) );
@@ -29,22 +28,20 @@ CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame )
 
     libNamesList = CMP_LIBRARY::GetLibraryNames();
 
-    msg.Printf( _( " Select 1 of %d libraries." ), count );
+    EDA_LIST_DIALOG dlg( frame, _( "Select Library" ), libNamesList, OldLibName );
 
-    wxSingleChoiceDialog dlg( frame, msg, _( "Select Library" ), libNamesList );
-
-    int index = libNamesList.Index( OldLibName );
-
-    if( index != wxNOT_FOUND )
-        dlg.SetSelection( index );
-
-    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
+    if( dlg.ShowModal() != wxID_OK )
         return NULL;
 
-    Lib = CMP_LIBRARY::FindLibrary( dlg.GetStringSelection() );
+    wxString libname = dlg.GetTextSelection();
+
+    if( libname.IsEmpty() )
+        return NULL;
+
+    Lib = CMP_LIBRARY::FindLibrary( libname );
 
     if( Lib != NULL )
-        OldLibName = dlg.GetStringSelection();
+        OldLibName = libname;
 
     return Lib;
 }

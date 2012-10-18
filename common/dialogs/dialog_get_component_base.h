@@ -1,15 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_get_component_base__
-#define __dialog_get_component_base__
+#ifndef __DIALOG_GET_COMPONENT_BASE_H__
+#define __DIALOG_GET_COMPONENT_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -32,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GET_COMPONENT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GET_COMPONENT_BASE : public wxDialog 
+class DIALOG_GET_COMPONENT_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -55,9 +57,9 @@ class DIALOG_GET_COMPONENT_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 375,210 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 375,210 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GET_COMPONENT_BASE();
 	
 };
 
-#endif //__dialog_get_component_base__
+#endif //__DIALOG_GET_COMPONENT_BASE_H__

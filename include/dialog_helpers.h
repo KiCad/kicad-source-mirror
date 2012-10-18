@@ -9,6 +9,7 @@
 
 
 #include <common.h>             // EDA_UNITS_T
+#include <dialog_shim.h>
 
 
 class EDA_DRAW_FRAME;
@@ -21,7 +22,7 @@ class EDA_DRAW_FRAME;
  * Used to display a list of elements for selection, and an help of info line
  * about the selected item.
  */
-class EDA_LIST_DIALOG : public wxDialog
+class EDA_LIST_DIALOG : public DIALOG_SHIM
 {
 private:
     wxListBox*           m_listBox;
