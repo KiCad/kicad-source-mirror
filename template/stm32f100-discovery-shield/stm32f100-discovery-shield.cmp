@@ -1,0 +1,24 @@
+Cmp-Mod V01 Created by CvPcb (2012-10-17 BZR 3773)-testing date = 2012-10-20 12:09:50
+
+BeginCmp
+TimeStamp = /50827277;
+Reference = P1;
+ValeurCmp = CONN28;
+IdModule  = PIN_ARRAY_28X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /50827286;
+Reference = P2;
+ValeurCmp = CONN28;
+IdModule  = PIN_ARRAY_28X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /50827295;
+Reference = P3;
+ValeurCmp = CONN6;
+IdModule  = PIN_ARRAY_6X1;
+EndCmp
+
+EndListe
