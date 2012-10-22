@@ -82,11 +82,11 @@ class FP_CACHE_ITEM
 public:
     FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName );
 
-    wxString GetName() const { return m_file_name.GetDirs().Last(); }
-    wxFileName GetFileName() const { return m_file_name; }
-    bool IsModified() const;
-    MODULE* GetModule() const { return m_module.get(); }
-    void UpdateModificationTime() { m_mod_time = m_file_name.GetModificationTime(); }
+    wxString    GetName() const { return m_file_name.GetDirs().Last(); }
+    wxFileName  GetFileName() const { return m_file_name; }
+    bool        IsModified() const;
+    MODULE*     GetModule() const { return m_module.get(); }
+    void        UpdateModificationTime() { m_mod_time = m_file_name.GetModificationTime(); }
 };
 
 
@@ -329,6 +329,18 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProper
     Format( aBoard, 1 );
 
     m_out->Print( 0, ")\n" );
+}
+
+
+BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput ) throw( IO_ERROR, PARSE_ERROR )
+{
+    std::string input = TO_UTF8( aClipboardSourceInput );
+
+    STRING_LINE_READER  reader( input, wxT( "clipboard" ) );
+
+    PCB_PARSER  parser( &reader );
+
+    return parser.Parse();
 }
 
 
@@ -1058,7 +1070,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     m_out->Print( 0, ")\n" );
 
     // Unconnected pad is default net so don't save it.
-    if( aPad->GetNet() != 0 )
+    if( !(m_ctl & CTL_CLIPBOARD) && aPad->GetNet() != 0 )
     {
         m_out->Print( aNestLevel+1, "(net %d %s)\n",
                       aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
@@ -1452,8 +1464,19 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
 
 PCB_IO::PCB_IO() :
-    m_cache( 0 )
+    m_cache( 0 ),
+    m_ctl( 0 )
 {
+    init( 0 );
+    m_out = &m_sf;
+}
+
+
+PCB_IO::PCB_IO( int aControlFlags ) :
+    m_cache( 0 ),
+    m_ctl( aControlFlags )
+{
+    init( 0 );
     m_out = &m_sf;
 }
 

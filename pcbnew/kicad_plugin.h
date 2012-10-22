@@ -89,6 +89,8 @@ public:
 
     PCB_IO();
 
+    PCB_IO( int aControlFlags );
+
     ~PCB_IO();
 
     /**
@@ -112,6 +114,9 @@ public:
     }
 
     void SetOutputFormatter( OUTPUTFORMATTER* aFormatter ) { m_out = aFormatter; }
+
+    BOARD_ITEM* Parse( const wxString& aClipboardSourceInput )
+        throw( IO_ERROR, PARSE_ERROR );
 
 protected:
 
