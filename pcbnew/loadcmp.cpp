@@ -257,6 +257,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     return module;
 }
 
+
 /* scans active libraries to find and load aFootprintName.
  * If found  the module is added to the BOARD, just for good measure.
  *  aLibraryPath is the full/short name of the library.

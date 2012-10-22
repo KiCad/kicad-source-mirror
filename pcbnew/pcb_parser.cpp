@@ -677,11 +677,14 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
         if( isVisible )
             visibleLayers |= 1 << layerIndex;
 
-        enum LAYER_T layerType = LAYER::ParseType( TO_UTF8( type ) );
-        LAYER layer( name, layerType, isVisible );
+        enum LAYER_T    layerType = LAYER::ParseType( TO_UTF8( type ) );
+        LAYER           layer( name, layerType, isVisible );
+
         layer.SetFixedListIndex( layerIndex );
         m_board->SetLayer( layerIndex, layer );
+
         m_layerMap[ name ] = layerIndex;
+
         wxLogDebug( wxT( "Mapping layer %s index index %d" ),
                     GetChars( name ), layerIndex );
 

@@ -4,6 +4,7 @@
  */
 
 #include <fctsys.h>
+#include <wx/ffile.h>
 #include <appl_wxstruct.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -22,7 +23,8 @@
 #include <pcbnew.h>
 #include <module_editor_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <legacy_plugin.h>              // temporarily, for LoadMODULE()
+#include <kicad_plugin.h>
+#include <legacy_plugin.h>
 
 
 #define BACKUP_EXT                 wxT( "bak" )
@@ -54,12 +56,10 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     if( dlg.ShowModal() == wxID_CANCEL )
         return NULL;
 
-    FILE* file = wxFopen( dlg.GetPath(), wxT( "rt" ) );
-
-    if( file == NULL )
+    FILE* fp = wxFopen( dlg.GetPath(), wxT( "rt" ) );
+    if( !fp )
     {
-        wxString msg;
-        msg.Printf( _( "File <%s> not found" ), GetChars( dlg.GetPath() ) );
+        wxString msg = wxString::Format( _( "File <%s> not found" ), GetChars( dlg.GetPath() ) );
         DisplayError( this, msg );
         return NULL;
     }
@@ -70,60 +70,114 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
         config->Write( EXPORT_IMPORT_LASTPATH_KEY, lastOpenedPathForLoading );
     }
 
-    LOCALE_IO   toggle;
+    wxString    moduleName;
 
-    FILE_LINE_READER fileReader( file, dlg.GetPath() );
+    bool    isGeda   = false;
+    bool    isLegacy = false;
 
-    FILTER_READER reader( fileReader );
-
-    // Read header and test file type
-    reader.ReadLine();
-    char* line = reader.Line();
-
-    bool      footprint_Is_GPCB_Format = false;
-
-    if( strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
     {
-        if( strnicmp( line, "Element", 7 ) == 0 )
+        FILE_LINE_READER    freader( fp, dlg.GetPath() );   // I own fp, and will close it.
+        FILTER_READER       reader( freader );              // skip blank lines
+
+        reader.ReadLine();
+        char* line = reader.Line();
+
+        if( !strnicmp( line, "(module", 7 ) )
         {
-            footprint_Is_GPCB_Format = true;
+            // isKicad = true;
+        }
+        else if( !strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
+        {
+            isLegacy = true;
+
+            while( reader.ReadLine() )
+            {
+                if( !strnicmp( line, "$MODULE", 7 ) )
+                {
+                    moduleName = FROM_UTF8( StrPurge( line + sizeof( "$MODULE" ) -1 ) );
+                    break;
+                }
+            }
+        }
+        else if( !strnicmp( line, "Element", 7 ) )
+        {
+            isGeda = true;
         }
         else
         {
             DisplayError( this, _( "Not a module file" ) );
             return NULL;
         }
-    }
 
-    // Read file: Search the description starting line (skip lib header)
-    if( !footprint_Is_GPCB_Format )
-    {
-        while( reader.ReadLine() )
-        {
-            if( strnicmp( line, "$MODULE", 7 ) == 0 )
-                break;
-        }
+        // fp is closed here by ~FILE_LINE_READER()
     }
 
     MODULE*   module;
 
-    if( footprint_Is_GPCB_Format )
+    if( isGeda )
     {
+        LOCALE_IO   toggle;
+
         // @todo GEDA plugin
         module = new MODULE( GetBoard() );
         module->Read_GPCB_Descr( dlg.GetPath() );
     }
-    else
+    else if( isLegacy )
     {
         try
         {
             PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
-            LEGACY_PLUGIN*  lp = (LEGACY_PLUGIN*)(PLUGIN*)pi;
+            module = pi->FootprintLoad( dlg.GetPath(), moduleName );
 
-            lp->SetReader( &reader );
+            if( !module )
+            {
+                wxString msg = wxString::Format(
+                    _( "Unable to find or load footprint '%s' from lib path '%s'" ),
+                    GetChars( moduleName ), GetChars( dlg.GetPath() ) );
+                DisplayError( this, msg );
+                return NULL;
+            }
+        }
+        catch( IO_ERROR ioe )
+        {
+            DisplayError( this, ioe.errorText );
+            return NULL;
+        }
+    }
+    else    //  if( isKicad )
+    {
+        try
+        {
+            // This technique was chosen to create an example of how reading
+            // the s-expression format from clipboard could be done.
 
-            module = lp->LoadMODULE();
+            wxString    fcontents;
+            PCB_IO      pcb_io( CTL_CLIPBOARD );
+            wxFFile     f( TO_UTF8( dlg.GetPath() ) );
+
+            if( !f.IsOpened() )
+            {
+                wxString msg = wxString::Format(
+                    _( "Unable to find or load footprint from path '%s'" ),
+                    GetChars( dlg.GetPath() ) );
+                DisplayError( this, msg );
+                return NULL;
+            }
+
+            f.ReadAll( &fcontents );
+
+            // @todo Fix this. The layernames are missing, and this fails.
+            module = dynamic_cast<MODULE*>( pcb_io.Parse( fcontents ) );
+
+            if( !module )
+            {
+                wxString msg = wxString::Format(
+                    _( "Unable to find or load footprint from lib path '%s'" ),
+                    GetChars( dlg.GetPath() ) );
+                DisplayError( this, msg );
+                return NULL;
+            }
         }
         catch( IO_ERROR ioe )
         {
@@ -186,8 +240,31 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
 
     try
     {
-        // @todo : hard code this as IO_MGR::KICAD plugin, what would be the reason to "export"
-        // any other single footprint type, with clipboard support coming?
+#if 0   // This *.kicad_mod export works fine.  It is the import which is still broken.
+        // The function PCB_PARSER::Parse() fails with due to the m_layerName[] table
+        // being empty.
+
+        // @todo, enable this code asap.
+
+        // Export as *.kicad_pcb format, using a strategy which is specifically chosen
+        // as an example on how it could also be used to send it to the system clipboard.
+
+        PCB_IO  pcb_io( CTL_CLIPBOARD );
+
+        /*  This module should *already* be "normalized" in a way such that
+            orientation is zero, etc., since it came from module editor.
+
+            module->SetTimeStamp( 0 );
+            module->SetParent( 0 );
+            module->SetOrientation( 0 );
+        */
+
+        pcb_io.Format( aModule );
+
+        FILE* fp = wxFopen( dlg.GetPath(), wxT( "wt" ) );
+        fprintf( fp, "%s", pcb_io.GetStringOutput( false ).c_str() );
+        fclose( fp );
+#else
         // Use IO_MGR::LEGACY for now, until the IO_MGR::KICAD plugin is ready.
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
 
@@ -205,6 +282,8 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
 
         pi->FootprintLibCreate( libPath );
         pi->FootprintSave( libPath, aModule );
+#endif
+
     }
     catch( IO_ERROR ioe )
     {
@@ -501,8 +580,6 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 
 void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 {
-    wxString msg;
-
     if( g_LibraryNames.GetCount() == 0 )
         return;
 
@@ -521,8 +598,10 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
     }
     else
     {
-        msg.Printf( _( "The footprint library <%s> could not be found in any of the search paths." ),
-                    GetChars( dlg.GetTextSelection() ) );
+        wxString msg = wxString::Format(
+                        _( "The footprint library <%s> could not be found in any of the search paths." ),
+                        GetChars( dlg.GetTextSelection() ) );
+
         DisplayError( this, msg );
         m_CurrentLib.Empty();
     }
