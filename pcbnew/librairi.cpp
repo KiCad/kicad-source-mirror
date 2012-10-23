@@ -154,7 +154,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
             wxString    fcontents;
             PCB_IO      pcb_io( CTL_CLIPBOARD );
-            wxFFile     f( TO_UTF8( dlg.GetPath() ) );
+            wxFFile     f( dlg.GetPath() );
 
             if( !f.IsOpened() )
             {
