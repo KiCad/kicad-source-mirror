@@ -68,6 +68,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
+    case ID_POPUP_SCH_BEGIN_WIRE:
+    case ID_POPUP_SCH_BEGIN_BUS:
     case ID_POPUP_END_LINE:
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
     case ID_POPUP_SCH_CLEANUP_SHEET:
@@ -161,8 +163,17 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         EndSegment( &dc );
         break;
 
-    case ID_POPUP_SCH_SET_SHAPE_TEXT:
+    case ID_POPUP_SCH_BEGIN_WIRE:
+        m_canvas->MoveCursorToCrossHair();
+        OnLeftClick( &dc, screen->GetCrossHairPosition() );
+        break;
 
+    case ID_POPUP_SCH_BEGIN_BUS:
+        m_canvas->MoveCursorToCrossHair();
+        OnLeftClick( &dc, screen->GetCrossHairPosition() );
+        break;
+
+    case ID_POPUP_SCH_SET_SHAPE_TEXT:
         // Not used
         break;
 

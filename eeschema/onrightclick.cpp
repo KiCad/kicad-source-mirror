@@ -99,7 +99,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         }
     }
 
-    // If Command in progress: add "cancel" and "end tool" menu
+    // If a command is in progress: add "cancel" and "end tool" menu
+    // If
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( item && item->GetFlags() )
@@ -114,6 +115,24 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         }
 
         PopMenu->AppendSeparator();
+
+        switch( GetToolId() )
+        {
+            case ID_WIRE_BUTT:
+                AddMenusForWire( PopMenu, NULL, this );
+                if( item == NULL )
+                    PopMenu->AppendSeparator();
+                break;
+
+            case ID_BUS_BUTT:
+                AddMenusForBus( PopMenu, NULL, this );
+                if( item == NULL )
+                    PopMenu->AppendSeparator();
+                break;
+
+            default:
+                break;
+        }
     }
     else
     {
@@ -533,14 +552,22 @@ void SCH_EDIT_FRAME::addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunct
 
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
-    bool     is_new = Wire->IsNew();
     SCH_SCREEN* screen = frame->GetScreen();
     wxPoint  pos    = screen->GetCrossHairPosition();
     wxString msg;
 
+    if( Wire == NULL )
+    {
+        msg = AddHotkeyName( _( "Begin Wire" ), s_Schematic_Hokeys_Descr, HK_BEGIN_WIRE );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_BEGIN_WIRE, msg, KiBitmap( add_line_xpm ) );
+        return;
+    }
+
+    bool is_new = Wire->IsNew();
     if( is_new )
     {
-        AddMenuItem( PopMenu, ID_POPUP_END_LINE, _( "Wire End" ), KiBitmap( apply_xpm ) );
+        msg = AddHotkeyName( _( "Wire End" ), s_Schematic_Hokeys_Descr, HK_END_CURR_LINEWIREBUS );
+        AddMenuItem( PopMenu, ID_POPUP_END_LINE, msg, KiBitmap( apply_xpm ) );
         return;
     }
 
@@ -576,13 +603,21 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 
 void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 {
-    bool    is_new = Bus->IsNew();
     wxPoint pos    = frame->GetScreen()->GetCrossHairPosition();
     wxString msg;
 
+    if( Bus == NULL )
+    {
+        msg = AddHotkeyName( _( "Begin Bus" ), s_Schematic_Hokeys_Descr, HK_BEGIN_BUS );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_BEGIN_BUS, msg, KiBitmap( add_bus_xpm ) );
+        return;
+    }
+
+    bool    is_new = Bus->IsNew();
     if( is_new )
     {
-        AddMenuItem( PopMenu, ID_POPUP_END_LINE, _( "Bus End" ), KiBitmap( apply_xpm ) );
+        msg = AddHotkeyName( _( "Bus End" ), s_Schematic_Hokeys_Descr, HK_END_CURR_LINEWIREBUS );
+        AddMenuItem( PopMenu, ID_POPUP_END_LINE, msg, KiBitmap( apply_xpm ) );
         return;
     }
 

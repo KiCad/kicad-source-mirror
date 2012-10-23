@@ -902,6 +902,16 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
         undoItem = sheet;
     }
 
+    else if( item->Type() == SCH_FIELD_T )
+    {
+        SCH_COMPONENT* cmp = (SCH_COMPONENT*) item->GetParent();
+
+        wxCHECK_RET( (cmp != NULL) && (cmp->Type() == SCH_COMPONENT_T),
+                     wxT( "Cannot place field in invalid schematic component object." ) );
+
+        undoItem = cmp;
+    }
+
     if( item->IsNew() )
     {
         if( item->Type() == SCH_SHEET_T )
@@ -932,8 +942,18 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
         }
         else
         {
+            // Here, item is not a basic schematic item, but an item inside
+            // a parent basic schematic item,
+            // currently: sheet pin or component field.
+            // currently, only a sheet pin can be found as new item,
+            // because new component fields have a specific handling, and do not appears here
             SaveCopyInUndoList( undoItem, UR_CHANGED );
-            ( (SCH_SHEET*)undoItem )->AddPin( (SCH_SHEET_PIN*) item );
+
+            if( item->Type() == SCH_SHEET_PIN_T )
+                ( (SCH_SHEET*)undoItem )->AddPin( (SCH_SHEET_PIN*) item );
+            else
+                wxLogMessage(wxT( "addCurrentItemToList: expected type = SCH_SHEET_PIN_T, actual type = %d" ),
+                            item->Type() );
         }
     }
     else

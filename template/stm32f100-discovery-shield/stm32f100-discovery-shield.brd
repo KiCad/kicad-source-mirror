@@ -1,6 +1,6 @@
-PCBNEW-BOARD Version 1 date 2012-10-20 20:10:51
+PCBNEW-BOARD Version 1 date 22/10/2012 08:11:40
 
-# Created by Pcbnew(2012-10-17 BZR 3773)-testing
+# Created by Pcbnew(2012-10-20 BZR 3775)-testing
 
 $GENERAL
 encoding utf-8
@@ -21,7 +21,7 @@ $EndGENERAL
 $SHEETDESCR
 Sheet A3 16535 11693
 Title "STM32 Value Line Discovery - Shiled board"
-Date "20 oct 2012"
+Date "22 oct 2012"
 Rev "1.0"
 Comp ""
 Comment1 ""
@@ -32,8 +32,8 @@ $EndSHEETDESCR
 
 $SETUP
 Layers 2
-Layer[0] Dolna signal
-Layer[15] Gorna signal
+Layer[0] Back signal
+Layer[15] Front signal
 TrackWidth 100
 TrackClearence 100
 ZoneClearence 200

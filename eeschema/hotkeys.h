@@ -34,6 +34,7 @@ enum hotkey_id_commnand {
     HK_ADD_NEW_POWER,
     HK_BEGIN_WIRE,
     HK_BEGIN_BUS,
+    HK_END_CURR_LINEWIREBUS,
     HK_ADD_WIRE_ENTRY,
     HK_ADD_BUS_ENTRY,
     HK_ADD_LABEL,
