@@ -983,20 +983,20 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     throw( IO_ERROR )
 {
-    std::string shape;
+    const char* shape;
 
     switch( aPad->GetShape() )
     {
-    case PAD_CIRCLE:    shape = "circle";     break;
-    case PAD_RECT:      shape = "rect";  break;
-    case PAD_OVAL:      shape = "oval";       break;
-    case PAD_TRAPEZOID: shape = "trapezoid";  break;
+    case PAD_CIRCLE:    shape = "circle";       break;
+    case PAD_RECT:      shape = "rect";         break;
+    case PAD_OVAL:      shape = "oval";         break;
+    case PAD_TRAPEZOID: shape = "trapezoid";    break;
 
     default:
         THROW_IO_ERROR( wxString::Format( _( "unknown pad type: %d"), aPad->GetShape() ) );
     }
 
-    std::string type;
+    const char* type;
 
     switch( aPad->GetAttribute() )
     {
@@ -1012,7 +1012,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     m_out->Print( aNestLevel, "(pad %s %s %s",
                   m_out->Quotew( aPad->GetPadName() ).c_str(),
-                  type.c_str(), shape.c_str() );
+                  type, shape );
     m_out->Print( 0, " (at %s", FMT_IU( aPad->GetPos0() ).c_str() );
 
     if( aPad->GetOrientation() != 0.0 )
@@ -1502,7 +1502,7 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
         THROW_IO_ERROR( msg );
     }
 
-    FILE_LINE_READER    reader( file.fp(), aFileName );
+    FILE_LINE_READER    reader( file.fp(), aFileName, false /* wxFFile owns fp */ );
 
     m_parser->SetLineReader( &reader );
     m_parser->SetBoard( aAppendToMe );
