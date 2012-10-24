@@ -1054,18 +1054,18 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     if( m_board )
         layerMask &= m_board->GetEnabledLayers();
 
+    wxString layerName;
+
     for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
     {
         if( layerMask & 1 )
         {
-            wxString layerName;
-
             if( m_board )
                 layerName = m_board->GetLayerName( layer );
             else
                 layerName = BOARD::GetDefaultLayerName( layer, true );
 
-            m_out->Print( 0, " %s", m_out->Quotew(layerName ).c_str() );
+            m_out->Print( 0, " %s", m_out->Quotew( layerName ).c_str() );
         }
     }
 
