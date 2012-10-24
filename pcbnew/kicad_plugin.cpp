@@ -240,7 +240,8 @@ void FP_CACHE::Load()
         }
 
         // reader now owns fp, will close on exception or return
-        PCB_PARSER parser( new FILE_LINE_READER( fp, fpFileName ) );
+        FILE_LINE_READER    reader( fp, fpFileName );
+        PCB_PARSER          parser( &reader );
 
         std::string name = TO_UTF8( fpFileName );
 
@@ -1493,12 +1494,12 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
 
     if( !file.IsOpened() )
     {
-        wxString msg;
-        msg.Printf( _( "Unable to read file \"%s\"" ), GetChars( aFileName ) );
+        wxString msg = wxString::Format( _( "Unable to read file \"%s\"" ), GetChars( aFileName ) );
         THROW_IO_ERROR( msg );
     }
 
-    PCB_PARSER parser( new FILE_LINE_READER( file.fp(), aFileName ), aAppendToMe );
+    FILE_LINE_READER    reader( file.fp(), aFileName );
+    PCB_PARSER          parser( &reader, aAppendToMe );
 
     BOARD* board = dynamic_cast<BOARD*>( parser.Parse() );
     wxASSERT( board );
