@@ -241,11 +241,12 @@ void FP_CACHE::Load()
 
         // reader now owns fp, will close on exception or return
         FILE_LINE_READER    reader( fp, fpFileName );
-        PCB_PARSER          parser( &reader );
+
+        m_owner->m_parser->SetLineReader( &reader );
 
         std::string name = TO_UTF8( fpFileName );
 
-        m_modules.insert( name, new FP_CACHE_ITEM( (MODULE*) parser.Parse(), fpFileName ) );
+        m_modules.insert( name, new FP_CACHE_ITEM( (MODULE*) m_owner->m_parser->Parse(), fpFileName ) );
 
     } while( dir.GetNext( &fpFileName ) );
 
@@ -339,9 +340,9 @@ BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput ) throw( IO_ERR
 
     STRING_LINE_READER  reader( input, wxT( "clipboard" ) );
 
-    PCB_PARSER  parser( &reader );
+    m_parser->SetLineReader( &reader );
 
-    return parser.Parse();
+    return m_parser->Parse();
 }
 
 
@@ -1466,7 +1467,8 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
 PCB_IO::PCB_IO() :
     m_cache( 0 ),
-    m_ctl( 0 )
+    m_ctl( 0 ),
+    m_parser( new PCB_PARSER() )
 {
     init( 0 );
     m_out = &m_sf;
@@ -1475,7 +1477,8 @@ PCB_IO::PCB_IO() :
 
 PCB_IO::PCB_IO( int aControlFlags ) :
     m_cache( 0 ),
-    m_ctl( aControlFlags )
+    m_ctl( aControlFlags ),
+    m_parser( new PCB_PARSER() )
 {
     init( 0 );
     m_out = &m_sf;
@@ -1485,6 +1488,7 @@ PCB_IO::PCB_IO( int aControlFlags ) :
 PCB_IO::~PCB_IO()
 {
     delete m_cache;
+    delete m_parser;
 }
 
 
@@ -1499,9 +1503,11 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
     }
 
     FILE_LINE_READER    reader( file.fp(), aFileName );
-    PCB_PARSER          parser( &reader, aAppendToMe );
 
-    BOARD* board = dynamic_cast<BOARD*>( parser.Parse() );
+    m_parser->SetLineReader( &reader );
+    m_parser->SetBoard( aAppendToMe );
+
+    BOARD* board = dynamic_cast<BOARD*>( m_parser->Parse() );
     wxASSERT( board );
 
     // Give the filename to the board if it's new
