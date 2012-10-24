@@ -51,6 +51,15 @@
 
 using namespace std;
 
+
+void PCB_PARSER::init()
+{
+    m_layerMap.clear();
+
+    // @todo add default layernames here.
+}
+
+
 double PCB_PARSER::parseDouble() throw( IO_ERROR )
 {
     char* tmp;

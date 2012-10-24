@@ -66,6 +66,15 @@ class PCB_PARSER : public PCB_LEXER
     BOARD*          m_board;
     LAYER_HASH_MAP  m_layerMap;  //< Map layer name to it's index saved in BOARD::m_Layer.
 
+
+    /**
+     * Function init
+     * clears and re-establishes m_layerMap with the default layer names.
+     * m_layerMap will have some of its entries overwritten whenever a (new) board
+     * is encountered.
+     */
+    void init();
+
     void parseHeader() throw( IO_ERROR, PARSE_ERROR );
     void parseGeneralSection() throw( IO_ERROR, PARSE_ERROR );
     void parsePAGE_INFO() throw( IO_ERROR, PARSE_ERROR );
@@ -204,11 +213,33 @@ class PCB_PARSER : public PCB_LEXER
 
     bool parseBool() throw( PARSE_ERROR );
 
+
 public:
-    PCB_PARSER( LINE_READER* aReader, BOARD* aBoard = NULL ) :
+
+    PCB_PARSER( LINE_READER* aReader = NULL ) :
         PCB_LEXER( aReader ),
-        m_board( aBoard )
+        m_board( 0 )
     {
+    }
+
+
+    /**
+     * Functoin SetLineReader
+     * sets @a aLineReader into the parser, and returns the previous one, if any.
+     * @param aReader is what to read from for tokens, no ownership is received.
+     * @return LINE_READER* - previous LINE_READER or NULL if none.
+     */
+    LINE_READER* SetLineReader( LINE_READER* aReader )
+    {
+        LINE_READER* ret = PopReader();
+        PushReader( aReader );
+        return ret;
+    }
+
+    void SetBoard( BOARD* aBoard )
+    {
+        init();
+        m_board = aBoard;
     }
 
     BOARD_ITEM* Parse() throw( IO_ERROR, PARSE_ERROR );

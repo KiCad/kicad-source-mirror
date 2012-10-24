@@ -30,6 +30,7 @@
 class BOARD;
 class BOARD_ITEM;
 class FP_CACHE;
+class PCB_PARSER;
 
 
 /** Current s-expression file format version.  2 was the last legacy format version. */
@@ -47,6 +48,8 @@ class FP_CACHE;
  */
 class PCB_IO : public PLUGIN
 {
+    friend class FP_CACHE;
+
 
 public:
 
@@ -133,6 +136,7 @@ protected:
     STRING_FORMATTER    m_sf;
     OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
     int                 m_ctl;
+    PCB_PARSER*         m_parser;
 
 
 private:
