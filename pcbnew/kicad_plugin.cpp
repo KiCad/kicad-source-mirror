@@ -184,18 +184,7 @@ void FP_CACHE::Save()
             wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
                         GetChars( tempFileName ) );
 
-            FILE* fp = wxFopen( tempFileName, wxT( "wt" ) );
-
-            if( !fp )
-            {
-                wxString msg = wxString::Format(
-                                    _( "cannot save footprint library file '%s'" ),
-                                    tempFileName.GetData() );
-
-                THROW_IO_ERROR( msg );
-            }
-
-            FILE_OUTPUTFORMATTER formatter( fp );   // gets fp ownership
+            FILE_OUTPUTFORMATTER formatter( tempFileName );
 
             m_owner->SetOutputFormatter( &formatter );
             m_owner->Format( (BOARD_ITEM*) it->second->GetModule() );
@@ -316,15 +305,7 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProper
 
     m_board = aBoard;
 
-    FILE*   fp = wxFopen( aFileName, wxT( "wt" ) );
-
-    if( !fp )
-    {
-        m_error.Printf( _( "cannot open file '%s'" ), aFileName.GetData() );
-        THROW_IO_ERROR( m_error );
-    }
-
-    FILE_OUTPUTFORMATTER    formatter( fp );    // gets ownership of fp
+    FILE_OUTPUTFORMATTER    formatter( aFileName );
 
     m_out = &formatter;     // no ownership
 

@@ -453,6 +453,42 @@ void STRING_FORMATTER::StripUseless()
     }
 }
 
+//-----<FILE_OUTPUTFORMATTER>----------------------------------------
+
+FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode )
+    throw( IO_ERROR ) :
+    m_filename( aFileName )
+{
+    m_fp = wxFopen( aFileName, aMode );
+
+    if( !m_fp )
+    {
+        wxString msg = wxString::Format(
+                            _( "cannot open or save file '%s'" ),
+                            m_filename.GetData() );
+        THROW_IO_ERROR( msg );
+    }
+}
+
+
+FILE_OUTPUTFORMATTER::~FILE_OUTPUTFORMATTER()
+{
+    if( m_fp )
+        fclose( m_fp );
+}
+
+
+void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
+{
+    if( 1 != fwrite( aOutBuf, aCount, 1, m_fp ) )
+    {
+        wxString msg = wxString::Format(
+                            _( "error writing to file '%s'" ),
+                            m_filename.GetData() );
+        THROW_IO_ERROR( msg );
+    }
+}
+
 
 //-----<STREAM_OUTPUTFORMATTER>--------------------------------------
 

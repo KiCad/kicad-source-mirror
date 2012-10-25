@@ -589,26 +589,25 @@ protected:
  */
 class FILE_OUTPUTFORMATTER : public OUTPUTFORMATTER
 {
-    FILE*   m_fp;           ///< takes ownership
+    FILE*       m_fp;               ///< takes ownership
+    wxString    m_filename;
 
 public:
-    FILE_OUTPUTFORMATTER( FILE* fp ) :
-        m_fp( fp )
-    {
-    }
 
-    ~FILE_OUTPUTFORMATTER()
-    {
-        if( m_fp )
-            fclose( m_fp );
-    }
+    /**
+     * Constructor
+     * @param aFileName is the full filename to open and save to as a text file.
+     * @param aMode is what you would pass to wxFopen()'s mode, defaults to wxT( "wt" )
+     *   for text files that are to be created here and now.
+     * @throw IO_ERROR if the file cannot be opened.
+     */
+    FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode = wxT( "wt" ) ) throw( IO_ERROR );
+
+    ~FILE_OUTPUTFORMATTER();
 
 protected:
     //-----<OUTPUTFORMATTER>------------------------------------------------
-    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
-    {
-        fwrite( aOutBuf, aCount, 1, m_fp );
-    }
+    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 
