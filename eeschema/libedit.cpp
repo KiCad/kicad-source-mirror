@@ -360,22 +360,22 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
         }
     }
 
-    wxFFileOutputStream libStream( libFileName.GetFullPath(), wxT( "wt" ) );
+    try
+    {
+        FILE_OUTPUTFORMATTER    libFormatter( libFileName.GetFullPath() );
 
-    if( !libStream.IsOk() )
+        if( !m_library->Save( libFormatter ) )
+        {
+            msg = _( "Error occurred while saving library file \"" ) + fn.GetFullPath() + _( "\"." );
+            AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
+            DisplayError( this, msg );
+            return;
+        }
+    }
+    catch( ... /* IO_ERROR ioe */ )
     {
         libFileName.MakeAbsolute();
         msg = wxT( "Failed to create component library file " ) + libFileName.GetFullPath();
-        DisplayError( this, msg );
-        return;
-    }
-
-    STREAM_OUTPUTFORMATTER libFormatter( libStream );
-
-    if( !m_library->Save( libFormatter ) )
-    {
-        msg = _( "Error occurred while saving library file \"" ) + fn.GetFullPath() + _( "\"." );
-        AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
         DisplayError( this, msg );
         return;
     }
@@ -399,24 +399,24 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
         }
     }
 
-    wxFFileOutputStream docStream( docFileName.GetFullPath(), wxT( "wt" ) );
+    try
+    {
+        FILE_OUTPUTFORMATTER    docFormatter( docFileName.GetFullPath() );
 
-    if( !docStream.IsOk() )
+        if( !m_library->SaveDocs( docFormatter ) )
+        {
+            msg = _( "Error occurred while saving library document file \"" ) +
+                  docFileName.GetFullPath() + _( "\"." );
+            AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
+            DisplayError( this, msg );
+            return;
+        }
+    }
+    catch( ... /* IO_ERROR ioe */ )
     {
         docFileName.MakeAbsolute();
         msg = wxT( "Failed to create component document library file " ) +
               docFileName.GetFullPath();
-        DisplayError( this, msg );
-        return;
-    }
-
-    STREAM_OUTPUTFORMATTER docFormatter( docStream );
-
-    if( !m_library->SaveDocs( docFormatter ) )
-    {
-        msg = _( "Error occurred while saving library document file \"" ) +
-              docFileName.GetFullPath() + _( "\"." );
-        AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
         DisplayError( this, msg );
         return;
     }

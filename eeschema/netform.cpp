@@ -1063,35 +1063,21 @@ bool NETLIST_EXPORT_TOOL::WriteKiCadNetList( const wxString& aOutFileName )
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
         g_NetObjectslist[ii]->m_Flag = 0;
 
-    bool rc = false;
-    wxFFileOutputStream os( aOutFileName, wxT( "wt" ) );
+    std::auto_ptr<XNODE>    xroot( makeGenericRoot() );
 
-    if( !os.IsOk() )
+    try
     {
-    L_error:
-        wxString msg = _( "Failed to create file " ) + aOutFileName;
-        DisplayError( NULL, msg );
+        FILE_OUTPUTFORMATTER    formatter( aOutFileName );
+
+        xroot->Format( &formatter, 0 );
     }
-    else
+    catch( IO_ERROR ioe )
     {
-        XNODE*  xroot = makeGenericRoot();
-
-        try
-        {
-            STREAM_OUTPUTFORMATTER  outputFormatter( os );
-            xroot->Format( &outputFormatter, 0 );
-        }
-        catch( IO_ERROR ioe )
-        {
-            delete xroot;
-            goto L_error;
-        }
-
-        delete xroot;
-        rc = true;
+        DisplayError( NULL, ioe.errorText );
+        return false;
     }
 
-    return rc;
+    return true;
 }
 
 bool NETLIST_EXPORT_TOOL::WriteGENERICNetList( const wxString& aOutFileName )

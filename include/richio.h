@@ -406,9 +406,11 @@ public:
 };
 
 
+#define OUTPUTFMTBUFZ    500        ///< default buffer size for any OUTPUT_FORMATTER
+
 /**
  * Class OUTPUTFORMATTER
- * is an important interface (abstract) class used to output UTF8 text in
+ * is an important interface (abstract class) used to output 8 bit text in
  * a convenient way. The primary interface is "printf() - like" but
  * with support for indentation control.  The destination of the 8 bit
  * wide text is up to the implementer.
@@ -424,16 +426,19 @@ public:
  */
 class OUTPUTFORMATTER
 {
-    std::vector<char>       buffer;
+    std::vector<char>   buffer;
+    char                quoteChar[2];
 
     int sprint( const char* fmt, ... )  throw( IO_ERROR );
     int vprint( const char* fmt,  va_list ap )  throw( IO_ERROR );
 
 
 protected:
-    OUTPUTFORMATTER( int aReserve = 300 ) :
+    OUTPUTFORMATTER( int aReserve = OUTPUTFMTBUFZ, char aQuoteChar = '"' ) :
             buffer( aReserve, '\0' )
     {
+        quoteChar[0] = aQuoteChar;
+        quoteChar[1] = '\0';
     }
 
     virtual ~OUTPUTFORMATTER() {}
@@ -507,10 +512,7 @@ public:
      * @return const char* - the quote_char as a single character string, or ""
      *   if the wrapee does not need to be wrapped.
      */
-    virtual const char* GetQuoteChar( const char* wrapee )
-    {
-        return GetQuoteChar( wrapee, "\"" );
-    }
+    virtual const char* GetQuoteChar( const char* wrapee );
 
     /**
      * Function Quotes
@@ -550,8 +552,8 @@ public:
      * Constructor STRING_FORMATTER
      * reserves space in the buffer
      */
-    STRING_FORMATTER( int aReserve = 300 ) :
-        OUTPUTFORMATTER( aReserve )
+    STRING_FORMATTER( int aReserve = OUTPUTFMTBUFZ, char aQuoteChar = '"' ) :
+        OUTPUTFORMATTER( aReserve, aQuoteChar )
     {
     }
 
@@ -575,8 +577,8 @@ public:
         return mystring;
     }
 
-    //-----<OUTPUTFORMATTER>------------------------------------------------
 protected:
+    //-----<OUTPUTFORMATTER>------------------------------------------------
     void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
@@ -589,9 +591,6 @@ protected:
  */
 class FILE_OUTPUTFORMATTER : public OUTPUTFORMATTER
 {
-    FILE*       m_fp;               ///< takes ownership
-    wxString    m_filename;
-
 public:
 
     /**
@@ -599,9 +598,14 @@ public:
      * @param aFileName is the full filename to open and save to as a text file.
      * @param aMode is what you would pass to wxFopen()'s mode, defaults to wxT( "wt" )
      *   for text files that are to be created here and now.
+     * @param qQuoteChar is a C string holding a single char used for quoting
+            problematic strings (with whitespace or special characters in them).
      * @throw IO_ERROR if the file cannot be opened.
      */
-    FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode = wxT( "wt" ) ) throw( IO_ERROR );
+    FILE_OUTPUTFORMATTER(   const wxString& aFileName,
+                            const wxChar* aMode = wxT( "wt" ),
+                            char aQuoteChar = '"' )
+        throw( IO_ERROR );
 
     ~FILE_OUTPUTFORMATTER();
 
@@ -609,6 +613,9 @@ protected:
     //-----<OUTPUTFORMATTER>------------------------------------------------
     void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
+
+    FILE*       m_fp;               ///< takes ownership
+    wxString    m_filename;
 };
 
 
@@ -620,7 +627,6 @@ protected:
 class STREAM_OUTPUTFORMATTER : public OUTPUTFORMATTER
 {
     wxOutputStream& os;
-    char            quoteChar[2];
 
 public:
     /**
@@ -629,16 +635,13 @@ public:
      * to a file, socket, or zip file.
      */
     STREAM_OUTPUTFORMATTER( wxOutputStream& aStream, char aQuoteChar = '"' ) :
+        OUTPUTFORMATTER( OUTPUTFMTBUFZ, aQuoteChar ),
         os( aStream )
     {
-        quoteChar[0] = aQuoteChar;
-        quoteChar[1] = 0;
     }
 
-    //-----<OUTPUTFORMATTER>------------------------------------------------
-    const char* GetQuoteChar( const char* wrapee );
-
 protected:
+    //-----<OUTPUTFORMATTER>------------------------------------------------
     void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
