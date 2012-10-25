@@ -583,6 +583,37 @@ protected:
 
 
 /**
+ * Class FILE_OUTPUTFORMATTER
+ * may be used for text file output.  It is about 8 times faster than
+ * STREAM_OUTPUTFORMATTER for file streams.
+ */
+class FILE_OUTPUTFORMATTER : public OUTPUTFORMATTER
+{
+    FILE*   m_fp;           ///< takes ownership
+
+public:
+    FILE_OUTPUTFORMATTER( FILE* fp ) :
+        m_fp( fp )
+    {
+    }
+
+    ~FILE_OUTPUTFORMATTER()
+    {
+        if( m_fp )
+            fclose( m_fp );
+    }
+
+protected:
+    //-----<OUTPUTFORMATTER>------------------------------------------------
+    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
+    {
+        fwrite( aOutBuf, aCount, 1, m_fp );
+    }
+    //-----</OUTPUTFORMATTER>-----------------------------------------------
+};
+
+
+/**
  * Class STREAM_OUTPUTFORMATTER
  * implements OUTPUTFORMATTER to a wxWidgets wxOutputStream.  The stream is
  * neither opened nor closed by this class.
@@ -612,5 +643,6 @@ protected:
     void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
+
 
 #endif // RICHIO_H_

@@ -181,21 +181,24 @@ void FP_CACHE::Save()
         // Allow file output stream to go out of scope to close the file stream before
         // renaming the file.
         {
-        wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
-                    GetChars( tempFileName ) );
+            wxLogTrace( traceFootprintLibrary, wxT( "Creating temporary library file %s" ),
+                        GetChars( tempFileName ) );
 
-        wxFFileOutputStream os( tempFileName );
+            FILE* fp = wxFopen( tempFileName, wxT( "wt" ) );
 
-        if( !os.IsOk() )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "cannot save footprint library file '%s'" ),
-                                              tempFileName.GetData() ) );
-        }
+            if( !fp )
+            {
+                wxString msg = wxString::Format(
+                                    _( "cannot save footprint library file '%s'" ),
+                                    tempFileName.GetData() );
 
-        STREAM_OUTPUTFORMATTER formatter( os );
+                THROW_IO_ERROR( msg );
+            }
 
-        m_owner->SetOutputFormatter( &formatter );
-        m_owner->Format( (BOARD_ITEM*) it->second->GetModule() );
+            FILE_OUTPUTFORMATTER formatter( fp );   // gets fp ownership
+
+            m_owner->SetOutputFormatter( &formatter );
+            m_owner->Format( (BOARD_ITEM*) it->second->GetModule() );
         }
 
         wxRemove( fn.GetFullPath() );     // it is not an error if this does not exist
@@ -313,15 +316,15 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProper
 
     m_board = aBoard;
 
-    wxFileOutputStream fs( aFileName );
+    FILE*   fp = wxFopen( aFileName, wxT( "wt" ) );
 
-    if( !fs.IsOk() )
+    if( !fp )
     {
         m_error.Printf( _( "cannot open file '%s'" ), aFileName.GetData() );
         THROW_IO_ERROR( m_error );
     }
 
-    STREAM_OUTPUTFORMATTER formatter( fs );
+    FILE_OUTPUTFORMATTER    formatter( fp );    // gets ownership of fp
 
     m_out = &formatter;     // no ownership
 
