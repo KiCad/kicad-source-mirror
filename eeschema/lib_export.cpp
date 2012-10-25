@@ -124,9 +124,15 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
     SaveOnePartInMemory();
 
-    wxFFileOutputStream os( fn.GetFullPath(), wxT( "wt" ) );
+    bool result = false;
 
-    if( !os.IsOk() )
+    try
+    {
+        FILE_OUTPUTFORMATTER    formatter( fn.GetFullPath() );
+
+        result = m_library->Save( formatter );
+    }
+    catch( ... /* IO_ERROR ioe */ )
     {
         fn.MakeAbsolute();
         msg = wxT( "Failed to create component library file " ) + fn.GetFullPath();
@@ -134,17 +140,13 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
         return;
     }
 
-    STREAM_OUTPUTFORMATTER formatter( os );
-
-    bool success = m_library->Save( formatter );
-
-    if( success )
+    if( result )
         m_lastLibExportPath = fn.GetPath();
 
     delete m_library;
     m_library = CurLibTmp;
 
-    if( success )
+    if( result )
     {
         if( createLib )
         {

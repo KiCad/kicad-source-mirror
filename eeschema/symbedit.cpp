@@ -155,20 +155,9 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    wxFile file( fn.GetFullPath(), wxFile::write );
-
-    if( !file.IsOpened() )
-    {
-        msg.Printf( _( "Unable to create file <%s>" ), GetChars( fn.GetFullPath() ) );
-        DisplayError( this, msg );
-        return;
-    }
-
     msg.Printf( _( "Saving symbol in [%s]" ), GetChars( fn.GetPath() ) );
     SetStatusText( msg );
 
-    wxFileOutputStream os( file );
-    STREAM_OUTPUTFORMATTER formatter( os );
     wxString line;
 
     /* File header */
@@ -201,36 +190,46 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
     try
     {
-        formatter.Print( 0, "%s", TO_UTF8( line ) );
-        m_component->GetReferenceField().Save( formatter );
-        m_component->GetValueField().Save( formatter );
-        formatter.Print( 0, "DRAW\n" );
+        FILE_OUTPUTFORMATTER    formatter( fn.GetFullPath() );
 
-        LIB_ITEMS& drawList = m_component->GetDrawItemList();
-
-        BOOST_FOREACH( LIB_ITEM& item, drawList )
+        try
         {
-            if( item.Type() == LIB_FIELD_T )
-                continue;
+            formatter.Print( 0, "%s", TO_UTF8( line ) );
+            m_component->GetReferenceField().Save( formatter );
+            m_component->GetValueField().Save( formatter );
+            formatter.Print( 0, "DRAW\n" );
 
-            /* Don't save unused parts or alternate body styles. */
-            if( m_unit && item.GetUnit() && ( item.GetUnit() != m_unit ) )
-                continue;
+            LIB_ITEMS& drawList = m_component->GetDrawItemList();
 
-            if( m_convert && item.GetConvert() && ( item.GetConvert() != m_convert ) )
-                continue;
+            BOOST_FOREACH( LIB_ITEM& item, drawList )
+            {
+                if( item.Type() == LIB_FIELD_T )
+                    continue;
 
-            item.Save( formatter );
+                /* Don't save unused parts or alternate body styles. */
+                if( m_unit && item.GetUnit() && ( item.GetUnit() != m_unit ) )
+                    continue;
+
+                if( m_convert && item.GetConvert() && ( item.GetConvert() != m_convert ) )
+                    continue;
+
+                item.Save( formatter );
+            }
+
+            formatter.Print( 0, "ENDDRAW\n" );
+            formatter.Print( 0, "ENDDEF\n" );
         }
-
-        formatter.Print( 0, "ENDDRAW\n" );
-        formatter.Print( 0, "ENDDEF\n" );
+        catch( IO_ERROR ioe )
+        {
+            msg.Printf( _( "An error occurred attempting to save symbol file <%s>" ),
+                        GetChars( fn.GetFullPath() ) );
+            DisplayError( this, msg );
+        }
     }
     catch( IO_ERROR ioe )
     {
-        msg.Printf( _( "An error occurred attempting to save symbol file <%s>" ),
-                    GetChars( fn.GetFullPath() ) );
-        DisplayError( this, msg );
+        DisplayError( this, ioe.errorText );
+        return;
     }
 }
 

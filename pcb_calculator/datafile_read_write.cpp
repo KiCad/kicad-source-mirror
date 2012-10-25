@@ -84,31 +84,26 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
 
 bool PCB_CALCULATOR_FRAME::WriteDataFile()
 {
-    wxFFileOutputStream os( GetDataFilename(), wxT( "wt" ) );
-    if( !os.IsOk() )
-        return false;
-
     // Switch the locale to standard C (needed to read/write floating point numbers
     LOCALE_IO   toggle;
 
-    PCB_CALCULATOR_DATAFILE * datafile = new PCB_CALCULATOR_DATAFILE( &m_RegulatorList );
+    std::auto_ptr<PCB_CALCULATOR_DATAFILE> datafile( new PCB_CALCULATOR_DATAFILE( &m_RegulatorList ) );
 
     try
     {
-        int nestlevel;
-        STREAM_OUTPUTFORMATTER  outputFormatter( os );
-        nestlevel = datafile->WriteHeader( &outputFormatter );
-        datafile->Format( &outputFormatter, nestlevel );
+        FILE_OUTPUTFORMATTER    formatter( GetDataFilename() );
+
+        int nestlevel = datafile->WriteHeader( &formatter );
+
+        datafile->Format( &formatter, nestlevel );
+
         while( nestlevel-- )
-            outputFormatter.Print( nestlevel, ")\n" );
+            formatter.Print( nestlevel, ")\n" );
     }
     catch( IO_ERROR ioe )
     {
-        delete datafile;
         return false;
     }
-
-    delete datafile;
 
     m_RegulatorListChanged = false;
     return true;

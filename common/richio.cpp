@@ -289,12 +289,12 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
     if( *wrapee == '#' )
         return quote_char;
 
-    if( strlen(wrapee)==0 )
+    if( strlen( wrapee ) == 0 )
         return quote_char;
 
     bool isFirst = true;
 
-    for(  ; *wrapee;  ++wrapee, isFirst=false )
+    for(  ; *wrapee;  ++wrapee, isFirst = false )
     {
         static const char quoteThese[] = "\t ()"
             "%"     // per Alfons of freerouting.net, he does not like this unquoted as of 1-Feb-2008
@@ -314,12 +314,17 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
 }
 
 
+const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee )
+{
+    return GetQuoteChar( wrapee, quoteChar );
+}
+
 int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )  throw( IO_ERROR )
 {
     int ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
     if( ret >= (int) buffer.size() )
     {
-        buffer.resize( ret+2000 );
+        buffer.resize( ret + 2000 );
         ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
     }
 
@@ -422,7 +427,7 @@ std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee ) throw( IO_ERRO
 
 std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee ) throw( IO_ERROR )
 {
-    // s-expressions atoms are always encoded as UTF-8.
+    // wxStrings are always encoded as UTF-8 as we convert to a byte sequence.
     // The non-virutal function calls the virtual workhorse function, and if
     // a different quoting or escaping strategy is desired from the standard,
     // a derived class can overload Quotes() above, but
@@ -455,8 +460,9 @@ void STRING_FORMATTER::StripUseless()
 
 //-----<FILE_OUTPUTFORMATTER>----------------------------------------
 
-FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode )
-    throw( IO_ERROR ) :
+FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName,
+        const wxChar* aMode,  char aQuoteChar ) throw( IO_ERROR ) :
+    OUTPUTFORMATTER( OUTPUTFMTBUFZ, aQuoteChar ),
     m_filename( aFileName )
 {
     m_fp = wxFopen( aFileName, aMode );
@@ -491,12 +497,6 @@ void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ER
 
 
 //-----<STREAM_OUTPUTFORMATTER>--------------------------------------
-
-const char* STREAM_OUTPUTFORMATTER::GetQuoteChar( const char* wrapee )
-{
-    return OUTPUTFORMATTER::GetQuoteChar( wrapee, quoteChar );
-}
-
 
 void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
 {
