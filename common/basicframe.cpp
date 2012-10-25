@@ -548,7 +548,12 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         USE_BOOST_POLYGON_LIBRARY\n" );
+    tmp << wxT( "         USE_BOOST_POLYGON_LIBRARY=" );
+#ifdef USE_BOOST_POLYGON_LIBRARY
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
 
     tmp << wxT( "         KICAD_SCRIPTING=" );
 #ifdef KICAD_SCRIPTING
@@ -557,6 +562,19 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
+    tmp << wxT( "         KICAD_SCRIPTING_MODULES=" );
+#ifdef KICAD_SCRIPTING_MODULES
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
+    tmp << wxT( "         KICAD_SCRIPTING_WXPYTHON=" );
+#ifdef KICAD_SCRIPTING_WXPYTHON
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
 
     wxTheClipboard->SetData( new wxTextDataObject( tmp ) );
     wxTheClipboard->Close();
