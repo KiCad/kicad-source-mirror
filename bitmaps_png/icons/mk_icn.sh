@@ -41,7 +41,7 @@ for fl in $ICON_FILES
 do
     NAME=${fl%.*} # strip the file extension
     icotool -c tmp/22/$NAME.png tmp/26/$NAME.png tmp/32/$NAME.png tmp/48/$NAME.png \
-	tmp/64/$NAME.png tmp/128/$NAME.png tmp/256/$NAME.png -o tmp/ico/$NAME.ico
+	tmp/64/$NAME.png tmp/128/$NAME.png -o tmp/ico/$NAME.ico
 	echo "file $fl converted in .ico file."
 done
 
@@ -49,8 +49,12 @@ done
 montage tmp/64/*.png -geometry +6+6 -tile x1 all.png
 echo "mosaic images created"
 
-# create png and xpm 32 px for icon_kicad
-cp tmp/32/icon_kicad.png ./
+# create png and xpm 64 px from icon_kicad
+cp tmp/64/icon_kicad.png ./icon_kicad_64.png
+convert icon_kicad_64.png icon_kicad_64.xpm
+
+# create png and xpm 128 px from icon_kicad
+cp tmp/128/icon_kicad.png ./
 convert icon_kicad.png icon_kicad.xpm
 
 # delete what is not needed
