@@ -194,7 +194,6 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
         if( aPlotter->GetPlotterType() == PLOT_FORMAT_GERBER
             && plotOpt.GetSubtractMaskFromSilk() )
         {
-            plotOpt.SetPlotViaOnMaskLayer( true );
             if( aLayer == SILKSCREEN_N_FRONT )
                 layer_mask = GetLayerMask( SOLDERMASK_N_FRONT );
             else
