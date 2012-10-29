@@ -1,0 +1,58 @@
+# EESchema Netlist Version 1.1 created  Thu 18 Oct 2012 10:10:38 PM PDT
+(
+ ( /5080DB5C $noname  J1 TI_BOOSTER_40_J1 {Lib=TI_BOOSTER_40_J1}
+  (    1 VCC )
+  (    2 ? )
+  (    3 ? )
+  (    4 ? )
+  (    5 ? )
+  (    6 ? )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+  (   10 ? )
+ )
+ ( /5080DBF4 $noname  J2 TI_BOOSTER_40_J2 {Lib=TI_BOOSTER_40_J2}
+  (    1 GND )
+  (    2 ? )
+  (    3 ? )
+  (    4 ? )
+  (    5 ? )
+  (    6 ? )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+  (   10 ? )
+ )
+ ( /5080DC03 $noname  J3 TI_BOOSTER_40_J3 {Lib=TI_BOOSTER_40_J3}
+  (    1 +5V )
+  (    2 GND )
+  (    3 ? )
+  (    4 ? )
+  (    5 ? )
+  (    6 ? )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+  (   10 ? )
+ )
+ ( /5080DC12 $noname  J4 TI_BOOSTER_40_J4 {Lib=TI_BOOSTER_40_J4}
+  (    1 ? )
+  (    2 ? )
+  (    3 ? )
+  (    4 ? )
+  (    5 ? )
+  (    6 ? )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+  (   10 ? )
+ )
+)
+*
+{ Pin List by Nets
+Net 2 "GND" "GND"
+ J3 2
+ J2 1
+}
+#End
