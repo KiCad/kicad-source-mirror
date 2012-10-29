@@ -1,0 +1,38 @@
+Cmp-Mod V01 Created by CvPcb (2011-nov-30)-testing date = Thu 18 Oct 2012 09:58:43 PM PDT
+
+BeginCmp
+TimeStamp = /5080DB5C;
+Reference = J1;
+ValeurCmp = TI_BOOSTER_40_J1;
+IdModule  = SIL-10;
+EndCmp
+
+BeginCmp
+TimeStamp = /5080DBF4;
+Reference = J2;
+ValeurCmp = TI_BOOSTER_40_J2;
+IdModule  = SIL-10;
+EndCmp
+
+BeginCmp
+TimeStamp = /5080DC03;
+Reference = J3;
+ValeurCmp = TI_BOOSTER_40_J3;
+IdModule  = SIL-10;
+EndCmp
+
+BeginCmp
+TimeStamp = /5080DC12;
+Reference = J4;
+ValeurCmp = TI_BOOSTER_40_J4;
+IdModule  = SIL-10;
+EndCmp
+
+BeginCmp
+TimeStamp = /5080A33C;
+Reference = J5;
+ValeurCmp = CONN_3;
+IdModule  = SIL-3;
+EndCmp
+
+EndListe
