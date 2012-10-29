@@ -47,8 +47,6 @@
 
 #include <dialogs/dialog_lib_new_component.h>
 
-#include <wx/wfstream.h>
-
 
 void LIB_EDIT_FRAME::DisplayLibInfos()
 {

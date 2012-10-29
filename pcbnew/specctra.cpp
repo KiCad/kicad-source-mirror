@@ -56,7 +56,6 @@
 #include <class_track.h>
 
 #include <specctra.h>
-#include <wx/wfstream.h>        // wxFFileOutputStream
 
 
 namespace DSN {

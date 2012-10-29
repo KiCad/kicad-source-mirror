@@ -34,7 +34,6 @@
 #include <pcb_calculator_datafile_lexer.h>
 #include <class_regulator_data.h>
 #include <datafile_read_write.h>
-#include <wx/wfstream.h>
 #include <build_version.h>
 
 

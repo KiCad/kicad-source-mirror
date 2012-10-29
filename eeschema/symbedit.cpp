@@ -42,7 +42,6 @@
 #include <wildcards_and_files_ext.h>
 
 #include <boost/foreach.hpp>
-#include <wx/wfstream.h>
 
 
 void LIB_EDIT_FRAME::LoadOneSymbol()

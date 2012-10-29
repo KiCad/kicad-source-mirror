@@ -39,7 +39,6 @@
 #include <wildcards_and_files_ext.h>
 
 #include <wx/filename.h>
-#include <wx/wfstream.h>
 
 
 extern int ExportPartId;

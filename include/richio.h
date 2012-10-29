@@ -597,9 +597,9 @@ public:
      * Constructor
      * @param aFileName is the full filename to open and save to as a text file.
      * @param aMode is what you would pass to wxFopen()'s mode, defaults to wxT( "wt" )
-     *   for text files that are to be created here and now.
-     * @param qQuoteChar is a C string holding a single char used for quoting
-            problematic strings (with whitespace or special characters in them).
+     *      for text files that are to be created here and now.
+     * @param qQuoteChar is a char used for quoting problematic strings
+            (with whitespace or special characters in them).
      * @throw IO_ERROR if the file cannot be opened.
      */
     FILE_OUTPUTFORMATTER(   const wxString& aFileName,

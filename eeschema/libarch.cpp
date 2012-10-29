@@ -41,8 +41,6 @@
 #include <class_library.h>
 #include <sch_component.h>
 
-#include <wx/wfstream.h>
-
 
 bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 {
