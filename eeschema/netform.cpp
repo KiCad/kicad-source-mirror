@@ -1055,7 +1055,6 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericComponents()
     return xcomps;
 }
 
-#include <wx/wfstream.h>        // wxFFileOutputStream
 
 bool NETLIST_EXPORT_TOOL::WriteKiCadNetList( const wxString& aOutFileName )
 {

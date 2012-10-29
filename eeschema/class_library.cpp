@@ -44,7 +44,6 @@
 
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
-#include <wx/wfstream.h>
 
 static const wxChar* duplicate_name_msg =
 _( "Library <%s> has duplicate entry name <%s>.\n\
