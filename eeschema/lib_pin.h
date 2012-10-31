@@ -31,13 +31,7 @@
 
 #include <lib_draw_item.h>
 
-
 #define TARGET_PIN_RADIUS   12  /* Circle diameter drawn at the active end of pins */
-
-#define DEFAULT_TEXT_SIZE   50  /* Default size for field texts */
-#define PART_NAME_LEN       15  /* Maximum length of part name. */
-#define PREFIX_NAME_LEN     5   /* Maximum length of prefix (IC, R, SW etc.). */
-#define PIN_WIDTH           100 /* Width between 2 pins in internal units. */
 #define PIN_LENGTH          300 /* Default Length of each pin to be drawn. */
 
 #if defined(KICAD_GOST)

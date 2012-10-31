@@ -132,8 +132,6 @@ bool EDA_APP::OnInit()
     /* Load file specified in the command line. */
     if( filename.IsOk() )
     {
-        wxLogDebug( wxT( "Loading schematic file " ) + filename.GetFullPath() );
-
         if( filename.GetExt() != SchematicFileExtension )
             filename.SetExt( SchematicFileExtension );
 
