@@ -28,8 +28,6 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <class_drawpanel.h>
 #include <drawtxt.h>
 #include <trigo.h>
@@ -39,7 +37,6 @@
 #include <kicad_string.h>
 
 #include <general.h>
-#include <protos.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
@@ -53,7 +50,7 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_pos = pos;
     m_size = wxSize( MIN_SHEET_WIDTH, MIN_SHEET_HEIGHT );
     SetTimeStamp( GetNewTimeStamp() );
-    m_sheetNameSize = m_fileNameSize = 60;
+    m_sheetNameSize = m_fileNameSize = DEFAULT_TEXT_SIZE;
     m_screen = NULL;
     m_name.Printf( wxT( "Sheet%8.8lX" ), m_TimeStamp );
     m_fileName.Printf( wxT( "file%8.8lX.sch" ), m_TimeStamp );
@@ -84,7 +81,7 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
 
 SCH_SHEET::~SCH_SHEET()
 {
-    wxLogDebug( wxT( "Destroying sheet " ) + m_name );
+//    wxLogDebug( wxT( "Destroying sheet " ) + m_name );
 
     // also, look at the associated sheet & its reference count
     // perhaps it should be deleted also.

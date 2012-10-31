@@ -19,6 +19,7 @@ class TRANSFORM;
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
 #define TXTMARGE 10                 // Offset in mils for placement of labels and pin numbers.
+#define DEFAULT_TEXT_SIZE   50  /* Default size for field texts */
 
 #define GR_DEFAULT_DRAWMODE GR_COPY
 

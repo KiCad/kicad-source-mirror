@@ -492,6 +492,11 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
     case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
         {
+            // force a new item search on hot keys at current position,
+            // if there is no currently edited item,
+            // to avoid using a previously selected item
+            if( ! itemInEdit )
+                screen->SetCurItem( NULL );
             EDA_HOTKEY_CLIENT_DATA data( aPosition );
             cmd.SetInt( hotKey->m_Idcommand );
             cmd.SetClientObject( &data );
