@@ -240,7 +240,8 @@ void FP_CACHE::Load()
         }
 
         // reader now owns fp, will close on exception or return
-        PCB_PARSER parser( new FILE_LINE_READER( fp, fpFileName ) );
+        FILE_LINE_READER    reader( fp, fpFileName );
+        PCB_PARSER          parser( &reader );
 
         std::string name = TO_UTF8( fpFileName );
 

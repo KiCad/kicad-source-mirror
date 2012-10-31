@@ -231,7 +231,6 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
     void pageChangedHandler( wxAuiNotebookEvent& event )
     {
         int pageNdx = m_auinotebook->GetSelection();
-
         m_cur_grid = pageNdx==0 ? m_global_grid : m_project_grid;
 
         D(printf("%s cur_grid is %s\n", __func__, pageNdx==0 ? "global" : "project" );)
@@ -239,37 +238,33 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
     void appendRowHandler( wxMouseEvent& event )
     {
-        D(printf("%s\n", __func__);)
         m_cur_grid->AppendRows( 1 );
     }
 
     void deleteRowHandler( wxMouseEvent& event )
     {
-        D(printf("%s\n", __func__);)
-
         int curRow = m_cur_grid->GetGridCursorRow();
-
         m_cur_grid->DeleteRows( curRow );
     }
 
     void moveUpHandler( wxMouseEvent& event )
     {
-        D(printf("%s\n", __func__);)
-
         int curRow = m_cur_grid->GetGridCursorRow();
         if( curRow >= 1 )
         {
+            int curCol = m_cur_grid->GetGridCursorCol();
+
             FP_TBL_MODEL* tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
 
-            ROW save = tbl->rows[curRow];
+            ROW move_me = tbl->rows[curRow];
 
-            tbl->DeleteRows( curRow, 1 );
-            tbl->InsertRows( --curRow, 1 );
-
-            tbl->rows[curRow] = save;
+            tbl->rows.erase( tbl->rows.begin() + curRow );
+            --curRow;
+            tbl->rows.insert( tbl->rows.begin() + curRow, move_me );
 
             if( tbl->GetView() )
             {
+                // fire a msg to cause redrawing
                 wxGridTableMessage msg( tbl,
                                         wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
                                         curRow,
@@ -277,11 +272,39 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
                 tbl->GetView()->ProcessTableMessage( msg );
             }
+
+            m_cur_grid->SetGridCursor( curRow, curCol );
         }
     }
 
     void moveDownHandler( wxMouseEvent& event )
     {
+        FP_TBL_MODEL* tbl = (FP_TBL_MODEL*) m_cur_grid->GetTable();
+
+        int curRow = m_cur_grid->GetGridCursorRow();
+        if( unsigned( curRow + 1 ) < tbl->rows.size() )
+        {
+            int curCol  = m_cur_grid->GetGridCursorCol();
+
+            ROW move_me = tbl->rows[curRow];
+
+            tbl->rows.erase( tbl->rows.begin() + curRow );
+             ++curRow;
+            tbl->rows.insert( tbl->rows.begin() + curRow, move_me );
+
+            if( tbl->GetView() )
+            {
+                // fire a msg to cause redrawing
+                wxGridTableMessage msg( tbl,
+                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+                                        curRow - 1,
+                                        0 );
+
+                tbl->GetView()->ProcessTableMessage( msg );
+            }
+
+            m_cur_grid->SetGridCursor( curRow, curCol );
+        }
         D(printf("%s\n", __func__);)
     }
 
