@@ -185,7 +185,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 }
 
 
-void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( IO_ERROR, PARSE_ERROR )
+void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser )
+                      throw( IO_ERROR, PARSE_ERROR )
 {
     aParser->Parse( this );
 }
@@ -302,13 +303,14 @@ PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader ) :
 }
 
 
-PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( char* aLine, wxString aSource ) :
+PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( char* aLine, const wxString& aSource ) :
     PCB_PLOT_PARAMS_LEXER( aLine, aSource )
 {
 }
 
 
-void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_ERROR, PARSE_ERROR )
+void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
+                             throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
     while( ( token = NextTok() ) != T_RIGHT )
@@ -422,7 +424,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
 }
 
 
-bool PCB_PLOT_PARAMS_PARSER::ParseBool() throw( IO_ERROR )
+bool PCB_PLOT_PARAMS_PARSER::ParseBool()
 {
     T token = NeedSYMBOL();
 
@@ -433,7 +435,7 @@ bool PCB_PLOT_PARAMS_PARSER::ParseBool() throw( IO_ERROR )
 }
 
 
-int PCB_PLOT_PARAMS_PARSER::ParseInt( int aMin, int aMax ) throw( IO_ERROR )
+int PCB_PLOT_PARAMS_PARSER::ParseInt( int aMin, int aMax )
 {
     T token = NextTok();
 

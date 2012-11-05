@@ -28,9 +28,32 @@
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <plot_common.h>
 
-class PCB_PLOT_PARAMS_PARSER;
+class PCB_PLOT_PARAMS;
 class LINE_READER;
 
+
+/**
+ * Class PCB_PLOT_PARAMS_PARSER
+ * is the parser class for PCB_PLOT_PARAMS.
+ */
+class PCB_PLOT_PARAMS_PARSER : public PCB_PLOT_PARAMS_LEXER
+{
+public:
+    PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader );
+    PCB_PLOT_PARAMS_PARSER( char* aLine, const wxString& aSource );
+    LINE_READER* GetReader() { return reader; };
+    void Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_ERROR, PARSE_ERROR );
+    bool ParseBool();
+
+    /**
+     * Function ParseInt
+     * parses an integer and constrains it between two values.
+     * @param aMin is the smallest return value.
+     * @param aMax is the largest return value.
+     * @return int - the parsed integer.
+     */
+    int ParseInt( int aMin, int aMax );
+};
 
 /**
  * Class PCB_PLOT_PARAMS
@@ -256,30 +279,6 @@ public:
 
     int         GetLineWidth() const { return m_lineWidth; };
     bool        SetLineWidth( int aValue );
-};
-
-
-/**
- * Class PCB_PLOT_PARAMS_PARSER
- * is the parser class for PCB_PLOT_PARAMS.
- */
-class PCB_PLOT_PARAMS_PARSER : public PCB_PLOT_PARAMS_LEXER
-{
-public:
-    PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader );
-    PCB_PLOT_PARAMS_PARSER( char* aLine, wxString aSource );
-    LINE_READER* GetReader() { return reader; };
-    void Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_ERROR, PARSE_ERROR );
-    bool ParseBool() throw( IO_ERROR );
-
-    /**
-     * Function ParseInt
-     * parses an integer and constrains it between two values.
-     * @param aMin is the smallest return value.
-     * @param aMax is the largest return value.
-     * @return int - the parsed integer.
-     */
-    int ParseInt( int aMin, int aMax ) throw( IO_ERROR );
 };
 
 

@@ -926,7 +926,12 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_pad_to_mask_clearance:
-            designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
+             designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
+            NeedRIGHT();
+            break;
+
+        case T_solder_mask_min_width:
+            designSettings.m_SolderMaskMinWidth = parseBoardUnits( T_solder_mask_min_width );
             NeedRIGHT();
             break;
 

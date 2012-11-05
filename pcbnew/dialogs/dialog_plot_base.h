@@ -72,6 +72,10 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxChoice* m_plotModeOpt;
 		wxStaticText* m_textDefaultPenSize;
 		wxTextCtrl* m_linesWidth;
+		wxStaticText* m_SolderMaskMarginLabel;
+		wxStaticText* m_SolderMaskMarginCurrValue;
+		wxStaticText* m_solderMaskMinWidthLabel;
+		wxStaticText* m_SolderMaskMinWidthCurrValue;
 		wxStaticBoxSizer* m_GerberOptionsSizer;
 		wxCheckBox* m_useGerberExtensions;
 		wxCheckBox* m_subtractMaskFromSilk;
@@ -81,8 +85,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_HPGLPenSizeOpt;
 		wxStaticText* m_textPenOvr;
 		wxTextCtrl* m_HPGLPenOverlayOpt;
-		wxStaticText* m_textPenSpeed;
-		wxTextCtrl* m_HPGLPenSpeedOpt;
 		wxStaticBoxSizer* m_PSOptionsSizer;
 		wxStaticText* m_staticText7;
 		wxTextCtrl* m_fineAdjustXscaleOpt;
