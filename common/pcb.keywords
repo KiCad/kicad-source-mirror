@@ -119,6 +119,7 @@ pads
 pad_drill
 pad_size
 pad_to_mask_clearance
+solder_mask_min_width
 pad_to_paste_clearance
 pad_to_paste_clearance_ratio
 page

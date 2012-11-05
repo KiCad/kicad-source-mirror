@@ -182,19 +182,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Pad settings
     AddMenuItem( dimensions_Submenu, ID_MODEDIT_PAD_SETTINGS,
                  _( "&Pad Settings" ), _( "Edit the settings for new pads" ),
-                 KiBitmap( options_pad_xpm ) );
+                 KiBitmap( pad_dimensions_xpm ) );
 
     // User grid size
     AddMenuItem( dimensions_Submenu, ID_PCB_USER_GRID_SETUP,
                  _( "&User Grid Size" ), _( "Adjust user grid" ),
                  KiBitmap( grid_xpm ) );
-
-    // Append dimensions_Submenu to editMenu
-    AddMenuItem( editMenu,
-                 dimensions_Submenu, -1,
-                 _( "Di&mensions" ),
-                 _( "Edit dimensions preferences" ),
-                 KiBitmap( add_dimension_xpm ) );
 
     // View menu
     wxMenu* viewMenu = new wxMenu;
@@ -294,6 +287,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
+    menuBar->Append( dimensions_Submenu, _( "Di&mensions" ) );
+
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );

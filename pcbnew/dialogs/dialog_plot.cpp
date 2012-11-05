@@ -46,6 +46,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     m_plotOpts( aParent->GetPlotSettings() )
 {
     m_config = wxGetApp().GetSettings();
+    m_brdSettings = m_board->GetDesignSettings();
 
     Init_Dialog();
 
@@ -96,16 +97,17 @@ void DIALOG_PLOT::Init_Dialog()
         break;
     }
 
+    msg = ReturnStringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMargin, true );
+    m_SolderMaskMarginCurrValue->SetLabel( msg );
+    msg = ReturnStringFromValue( g_UserUnit, m_brdSettings.m_SolderMaskMinWidth, true );
+    m_SolderMaskMinWidthCurrValue->SetLabel( msg );
+
 
     // Set units and value for HPGL pen size (this param in in mils).
     AddUnitSymbol( *m_textPenSize, g_UserUnit );
     msg = ReturnStringFromValue( g_UserUnit,
                                  m_plotOpts.GetHPGLPenDiameter() * IU_PER_MILS );
     m_HPGLPenSizeOpt->AppendText( msg );
-
-    // Units are *always* cm/s for HPGL pen speed, from 1 to 99.
-    msg = ReturnStringFromValue( UNSCALED_UNITS, m_plotOpts.GetHPGLPenSpeed() );
-    m_HPGLPenSpeedOpt->AppendText( msg );
 
     // Set units and value for HPGL pen overlay (this param in in mils).
     AddUnitSymbol( *m_textPenOvr, g_UserUnit );
@@ -308,7 +310,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->SetValue( false );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
-        m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
@@ -337,7 +338,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->SetValue( false );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
-        m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
@@ -366,7 +366,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( true );
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
-        m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( true );
@@ -394,7 +393,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->SetValue( false );
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( true );
-        m_HPGLPenSpeedOpt->Enable( true );
         m_HPGLPenOverlayOpt->Enable( true );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
@@ -422,7 +420,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_useAuxOriginCheckBox->Enable( true );
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( false );
-        m_HPGLPenSpeedOpt->Enable( false );
         m_HPGLPenOverlayOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
         m_subtractMaskFromSilk->Enable( false );
@@ -526,18 +523,6 @@ void DIALOG_PLOT::applyPlotSettings()
         msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHPGLPenDiameter() * IU_PER_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
         msg.Printf( _( "HPGL pen size constrained!\n" ) );
-        m_messagesBox->AppendText( msg );
-    }
-
-    // read HPGL pen speed (this param is stored in cm/s)
-    msg = m_HPGLPenSpeedOpt->GetValue();
-    tmp = ReturnValueFromString( UNSCALED_UNITS, msg );
-
-    if( !tempOptions.SetHPGLPenSpeed( tmp ) )
-    {
-        msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHPGLPenSpeed() );
-        m_HPGLPenSpeedOpt->SetValue( msg );
-        msg.Printf( _( "HPGL pen speed constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 

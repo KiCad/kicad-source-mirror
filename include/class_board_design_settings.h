@@ -34,6 +34,9 @@ public:
 
     // Global mask margins:
     int     m_SolderMaskMargin;             ///< Solder mask margin
+    int     m_SolderMaskMinWidth;           ///< Solder mask min width
+                                            // 2 areas near than m_SolderMaskMinWidth
+                                            // are merged
     int     m_SolderPasteMargin;            ///< Solder paste margin absolute value
     double  m_SolderPasteMarginRatio;       ///< Solder pask margin ratio value of pad size
                                             ///< The final margin is the sum of these 2 values

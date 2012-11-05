@@ -549,6 +549,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(pad_to_mask_clearance %s)\n",
                   FMTIU( aBoard->GetDesignSettings().m_SolderMaskMargin ).c_str() );
 
+    if( aBoard->GetDesignSettings().m_SolderMaskMinWidth )
+        m_out->Print( aNestLevel+1, "(solder_mask_min_width %s)\n",
+                      FMTIU( aBoard->GetDesignSettings().m_SolderMaskMinWidth ).c_str() );
+
     if( aBoard->GetDesignSettings().m_SolderPasteMargin != 0 )
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance %s)\n",
                       FMTIU( aBoard->GetDesignSettings().m_SolderPasteMargin ).c_str() );
