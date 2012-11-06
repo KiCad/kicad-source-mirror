@@ -163,7 +163,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotModeOpt->SetSelection( 0 );
 	bSizer14->Add( m_plotModeOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
-	m_textDefaultPenSize = new wxStaticText( this, wxID_ANY, _("Default linewidth"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textDefaultPenSize = new wxStaticText( this, wxID_ANY, _("Default line width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textDefaultPenSize->Wrap( -1 );
 	m_textDefaultPenSize->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	
@@ -182,6 +182,40 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	
 	m_PlotOptionsSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 3 );
+	
+	wxStaticBoxSizer* sbSizerSoldMaskLayerOpt;
+	sbSizerSoldMaskLayerOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Solder mask current settings:") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizerSoldMaskOpts;
+	fgSizerSoldMaskOpts = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizerSoldMaskOpts->SetFlexibleDirection( wxBOTH );
+	fgSizerSoldMaskOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_SolderMaskMarginLabel = new wxStaticText( this, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginLabel->Wrap( -1 );
+	m_SolderMaskMarginLabel->SetToolTip( _("Margin between pads and solder mask") );
+	
+	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_SolderMaskMarginCurrValue = new wxStaticText( this, wxID_ANY, _("val"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginCurrValue->Wrap( -1 );
+	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginCurrValue, 0, wxALL, 5 );
+	
+	m_solderMaskMinWidthLabel = new wxStaticText( this, wxID_ANY, _("Solder mask min width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_solderMaskMinWidthLabel->Wrap( -1 );
+	m_solderMaskMinWidthLabel->SetToolTip( _("Min dist between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting") );
+	
+	fgSizerSoldMaskOpts->Add( m_solderMaskMinWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_SolderMaskMinWidthCurrValue = new wxStaticText( this, wxID_ANY, _("val"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMinWidthCurrValue->Wrap( -1 );
+	fgSizerSoldMaskOpts->Add( m_SolderMaskMinWidthCurrValue, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	
+	sbSizerSoldMaskLayerOpt->Add( fgSizerSoldMaskOpts, 1, wxEXPAND, 5 );
+	
+	
+	m_PlotOptionsSizer->Add( sbSizerSoldMaskLayerOpt, 1, wxEXPAND, 5 );
 	
 	m_GerberOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Gerber Options") ), wxVERTICAL );
 	
@@ -213,19 +247,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_textPenSize = new wxStaticText( this, wxID_ANY, _("Pen size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPenSize->Wrap( -1 );
-	bSizer20->Add( m_textPenSize, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer20->Add( m_textPenSize, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_HPGLPenSizeOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer20->Add( m_HPGLPenSizeOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	m_textPenOvr = new wxStaticText( this, wxID_ANY, _("Pen overlay"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPenOvr->Wrap( -1 );
-	bSizer20->Add( m_textPenOvr, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_HPGLPenOverlayOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_HPGLPenOverlayOpt->SetToolTip( _("Set plot overlay for filling") );
-	
-	bSizer20->Add( m_HPGLPenOverlayOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	bSizer22->Add( bSizer20, 1, wxEXPAND, 5 );
@@ -233,14 +258,14 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
 	
-	m_textPenSpeed = new wxStaticText( this, wxID_ANY, _("Pen speed (cm/s):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPenSpeed->Wrap( -1 );
-	bSizer21->Add( m_textPenSpeed, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_textPenOvr = new wxStaticText( this, wxID_ANY, _("Pen overlay"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textPenOvr->Wrap( -1 );
+	bSizer21->Add( m_textPenOvr, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_HPGLPenSpeedOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_HPGLPenSpeedOpt->SetToolTip( _("Set pen speed in cm/s") );
+	m_HPGLPenOverlayOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_HPGLPenOverlayOpt->SetToolTip( _("Set plot overlay for filling") );
 	
-	bSizer21->Add( m_HPGLPenSpeedOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizer21->Add( m_HPGLPenOverlayOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	bSizer22->Add( bSizer21, 1, wxEXPAND, 5 );
@@ -261,7 +286,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_staticText7 = new wxStaticText( this, wxID_ANY, _("X scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
-	bSizer18->Add( m_staticText7, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer18->Add( m_staticText7, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_fineAdjustXscaleOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fineAdjustXscaleOpt->SetToolTip( _("Set global X scale adjust for exact scale postscript output.") );
@@ -276,7 +301,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_staticText8 = new wxStaticText( this, wxID_ANY, _("Y scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
-	bSizer19->Add( m_staticText8, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer19->Add( m_staticText8, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_fineAdjustYscaleOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fineAdjustYscaleOpt->SetToolTip( _("Set global Y scale adjust for exact scale postscript output.") );
@@ -291,7 +316,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_textPSFineAdjustWidth = new wxStaticText( this, wxID_ANY, _("Width correction"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPSFineAdjustWidth->Wrap( -1 );
-	bSizer191->Add( m_textPSFineAdjustWidth, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer191->Add( m_textPSFineAdjustWidth, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_PSFineAdjustWidthOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_PSFineAdjustWidthOpt->SetToolTip( _("Set global width correction for exact width postscript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );

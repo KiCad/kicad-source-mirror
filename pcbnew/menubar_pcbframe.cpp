@@ -96,8 +96,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Append Board" ),
                  _( "Append another Pcbnew board to the current loaded board" ),
                  KiBitmap( import_xpm ) );
-
-    // Separator
     filesMenu->AppendSeparator();
 
     // Save
@@ -248,7 +246,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Archive or add footprints in a library file" ),
                  KiBitmap( library_xpm ) );
 
-    /* Quit */
+    // Quit
     filesMenu->AppendSeparator();
     AddMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit Pcbnew" ),
                  KiBitmap( exit_xpm ) );
@@ -450,7 +448,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Select how items (pads, tracks texts ... ) are displayed" ),
                  KiBitmap( display_options_xpm ) );
 
-    // Create Dimensions submenu
+    // Create sizes and dimensions submenu
     wxMenu* dimensionsMenu = new wxMenu;
 
     // Grid
@@ -467,7 +465,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Pads
     AddMenuItem( dimensionsMenu, ID_PCB_PAD_SETUP,
                  _( "&Pads" ),  _( "Adjust default pad characteristics" ),
-                 KiBitmap( pad_xpm ) );
+                 KiBitmap( pad_dimensions_xpm ) );
 
     // Pads Mask Clearance
     AddMenuItem( dimensionsMenu, ID_PCB_MASK_CLEARANCE,
@@ -481,11 +479,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Save" ), _( "Save dimension preferences" ),
                  KiBitmap( save_xpm ) );
 
-    // Append dimension menu to config menu
-    AddMenuItem( configmenu, dimensionsMenu,
-                 -1, _( "Di&mensions" ),
-                 _( "Global dimensions preferences" ),
-                 KiBitmap( add_dimension_xpm ) );
 
     // Language submenu
     wxGetApp().AddMenuLanguageList( configmenu );
@@ -609,6 +602,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( configmenu, _( "P&references" ) );
+    menuBar->Append( dimensionsMenu, _( "D&imensions" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( designRulesMenu, _( "&Design Rules" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );

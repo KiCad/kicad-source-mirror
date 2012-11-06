@@ -46,6 +46,12 @@ class DIALOG_PADS_MASK_CLEARANCE_BASE : public DIALOG_SHIM
 		wxStaticText* m_MaskClearanceTitle;
 		wxTextCtrl* m_SolderMaskMarginCtrl;
 		wxStaticText* m_SolderMaskMarginUnits;
+		wxStaticText* m_staticTextMinWidth;
+		wxTextCtrl* m_SolderMaskMinWidthCtrl;
+		wxStaticText* m_solderMaskMinWidthUnit;
+		wxStaticLine* m_staticline3;
+		wxStaticLine* m_staticline4;
+		wxStaticLine* m_staticline5;
 		wxStaticText* m_staticTextSolderPaste;
 		wxTextCtrl* m_SolderPasteMarginCtrl;
 		wxStaticText* m_SolderPasteMarginUnits;
@@ -64,7 +70,7 @@ class DIALOG_PADS_MASK_CLEARANCE_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pads Mask Clearance"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 361,253 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PADS_MASK_CLEARANCE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pads Mask Clearance"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 361,292 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PADS_MASK_CLEARANCE_BASE();
 	
 };

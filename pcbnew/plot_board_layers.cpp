@@ -51,6 +51,18 @@
 #include <pcbnew.h>
 #include <pcbplot.h>
 
+// Imported function
+extern void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
+                                              KI_POLYGON_SET&        aKiPolyList );
+// Local
+/* Plot a solder mask layer.
+ * Solder mask layers have a minimum thickness value and cannot be drawn like standard layers,
+ * unless the minimum thickness is 0.
+ */
+static void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
+                                 long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
+                                 int aMinThickness );
+
 /* Creates the plot for silkscreen layers
  * Silkscreen layers have specific requirement for pads (not filled) and texts
  * (with option to remove them from some copper areas (pads...)
@@ -134,6 +146,8 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
                      const PCB_PLOT_PARAMS& aPlotOpt )
 {
     PCB_PLOT_PARAMS plotOpt = aPlotOpt;
+    int soldermask_min_thickness = aBoard->GetDesignSettings().m_SolderMaskMinWidth;
+
     // Set a default color and the text mode for this layer
     aPlotter->SetColor( aPlotOpt.GetColor() );
     aPlotter->SetTextMode( aPlotOpt.GetTextMode() );
@@ -175,7 +189,14 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
         plotOpt.SetSkipPlotNPTH_Pads( false );
         // Disable plot pad holes
         plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
-        PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+
+        // Plot solder mask:
+        if( soldermask_min_thickness == 0 )
+            PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
+        else
+            PlotSolderMaskLayer( aBoard, aPlotter, layer_mask, plotOpt,
+                                 soldermask_min_thickness );
+
         break;
 
     case SOLDERPASTE_N_BACK:
@@ -424,6 +445,152 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         itemplotter.PlotDrillMarks();
 }
+
+/* Plot a solder mask layer.
+ * Solder mask layers have a minimum thickness value and cannot be drawn like standard layers,
+ * unless the minimum thickness is 0.
+ */
+void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
+                          long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
+                          int aMinThickness )
+{
+    int layer = ( aLayerMask & SOLDERMASK_LAYER_BACK ) ?
+                 SOLDERMASK_N_BACK : SOLDERMASK_N_FRONT;
+    int inflate = aMinThickness/2;
+
+    BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
+    itemplotter.SetLayerMask( aLayerMask );
+
+//    EDA_DRAW_MODE_T plotMode = aPlotOpt.GetMode();
+//    EDA_COLOR_T color = BLACK;
+
+     // Plot edge layer and graphic items
+    itemplotter.PlotBoardGraphicItems();
+
+    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    {
+        for( BOARD_ITEM* item = module->m_Drawings; item; item = item->Next() )
+        {
+            if( aLayerMask != item->GetLayer() )
+                continue;
+
+            switch( item->Type() )
+            {
+            case PCB_MODULE_EDGE_T:
+                itemplotter.Plot_1_EdgeModule( (EDGE_MODULE*) item );
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+
+    // Build polygons for each pad shape.
+    // the size of the shape on solder mask should be:
+    // size of pad + clearance around the pad.
+    // clearance = solder mask clearance + extra margin
+    // extra margin is half the min width for solder mask
+    // This extra margin is used to merge too close shapes
+    // (distance < aMinThickness), and will be removed when creating
+    // the actual shapes
+    std::vector <CPolyPt> bufferPolys;  // Contains shapes to plot
+
+    /* calculates the coeff to compensate radius reduction of holes clearance
+     * due to the segment approx ( 1 /cos( PI/circleToSegmentsCount )
+     */
+    int circleToSegmentsCount = 32;
+    double correction = 1.0 / cos( M_PI / circleToSegmentsCount );
+
+    // Plot pads
+    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    {
+        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+        {
+            if( (pad->GetLayerMask() & aLayerMask) == 0 )
+                continue;
+
+            int margin = pad->GetSolderMaskMargin() + inflate;
+            pad->TransformShapeWithClearanceToPolygon( bufferPolys, margin,
+                                                       circleToSegmentsCount,
+                                                       correction );
+        }
+    }
+
+    // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,
+    if( aPlotOpt.GetPlotViaOnMaskLayer() )
+    {
+        for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+        {
+            if( track->Type() != PCB_VIA_T )
+                continue;
+
+            SEGVIA* via = (SEGVIA*) track;
+
+            // vias are plotted only if they are on the corresponding
+            // external copper layer
+            int via_mask_layer = via->ReturnMaskLayer();
+
+            if( via_mask_layer & LAYER_BACK )
+                via_mask_layer |= SOLDERMASK_LAYER_BACK;
+
+            if( via_mask_layer & LAYER_FRONT )
+                via_mask_layer |= SOLDERMASK_LAYER_FRONT;
+
+            if( ( via_mask_layer & aLayerMask ) == 0 )
+                continue;
+
+            // The current layer is a solder mask,
+            // use the global mask clearance for vias
+            int via_margin = aBoard->GetDesignSettings().m_SolderMaskMargin + inflate;
+
+            via->TransformShapeWithClearanceToPolygon( bufferPolys, via_margin,
+                                                       circleToSegmentsCount,
+                                                       correction );
+        }
+    }
+
+    // Add filled zone areas
+    for( int ii = 0; ii < aBoard->GetAreaCount(); ii++ )
+    {
+        ZONE_CONTAINER* zone = aBoard->GetArea( ii );
+
+        if( zone->GetLayer() != layer )
+            continue;
+
+        zone->TransformShapeWithClearanceToPolygon( bufferPolys,
+                    inflate, circleToSegmentsCount,
+                    correction, true );
+    }
+
+    // Now:
+    // 1 - merge areas which are intersecting, i.e. remove gaps
+    //     having a thickness < aMinThickness
+    // 2 - deflate resulting areas by aMinThickness/2
+    KI_POLYGON_SET areasToMerge;
+    AddPolygonCornersToKiPolygonList( bufferPolys, areasToMerge );
+
+    // Merge polygons: because each shape was created with an extra margin
+    // = aMinThickness/2, shapes too close ( dist < aMinThickness )
+    // will be merged, because they are overlapping
+    KI_POLYGON_SET areas;
+    areas |= areasToMerge;
+
+    // Deflate: remove the extra margin, to create the actual shapes
+    areas -= inflate;
+
+    // To avoid a lot of code, use a ZONE_CONTAINER
+    // to plot polygons, because they are exactly like
+    // filled areas in zones
+    ZONE_CONTAINER zone( aBoard );
+    zone.SetArcSegCount( 32 );
+    zone.SetMinThickness( 0 );      // trace polygons only
+    zone.SetLayer ( layer );
+
+    zone.CopyPolygonsFromKiPolygonListToFilledPolysList( areas );
+    itemplotter.PlotFilledAreas( &zone );
+}
+
 
 
 /** Set up most plot options for plotting a board (especially the viewport)

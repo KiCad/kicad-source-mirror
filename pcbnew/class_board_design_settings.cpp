@@ -25,6 +25,7 @@
 #define DEFAULT_GR_MODULE_THICKNESS Millimeter2iu( 0.15 )
 
 #define DEFAULT_SOLDERMASK_CLEARANCE Millimeter2iu( 0.1 )
+#define DEFAULT_SOLDERMASK_MIN_WIDTH Millimeter2iu( 0.0 )
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
@@ -63,7 +64,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_MicroViasMinDrill = DMils2iu( 50 );       // micro vias (not vias) min drill diameter
 
     // Global mask margins:
-    m_SolderMaskMargin  = DEFAULT_SOLDERMASK_CLEARANCE;      // Solder mask margin
+    m_SolderMaskMargin  = DEFAULT_SOLDERMASK_CLEARANCE; // Solder mask margin
+    m_SolderMaskMinWidth = DEFAULT_SOLDERMASK_MIN_WIDTH;   // Solder mask min width
     m_SolderPasteMargin = 0;                    // Solder paste margin absolute value
     m_SolderPasteMarginRatio = 0.0;             // Solder pask margin ratio value of pad size
                                                 // The final margin is the sum of these 2 values
@@ -118,6 +120,11 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskClearance" ),
                     &m_SolderMaskMargin,
                     DEFAULT_SOLDERMASK_CLEARANCE, 0, Millimeter2iu( 1.0 ),
+                    NULL, MM_PER_IU ) );
+
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskMinWidth" ),
+                    &m_SolderMaskMinWidth,
+                    DEFAULT_SOLDERMASK_MIN_WIDTH, 0, Millimeter2iu( 0.5 ),
                     NULL, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "DrawSegmentWidth" ),

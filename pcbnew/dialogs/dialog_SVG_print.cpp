@@ -248,8 +248,12 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName )
     PCB_PLOT_PARAMS m_plotOpts;
 
     m_plotOpts.SetPlotFrameRef( PrintPageRef() );
-    // Adding drill marks
-    m_plotOpts.SetDrillMarksType( PCB_PLOT_PARAMS::FULL_DRILL_SHAPE );
+
+    // Adding drill marks, for copper layers
+    if( (m_PrintMaskLayer & ALL_CU_LAYERS) )
+        m_plotOpts.SetDrillMarksType( PCB_PLOT_PARAMS::FULL_DRILL_SHAPE );
+    else
+        m_plotOpts.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
     m_plotOpts.SetSkipPlotNPTH_Pads( false );
 

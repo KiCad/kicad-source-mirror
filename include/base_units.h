@@ -53,6 +53,11 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue );
  * is a helper to convert the \a integer coordinate \a aValue to a string in inches,
  * millimeters, or unscaled units according to the current user units setting.
  *
+ * Should be used only to display a coordinate in status, but not in dialogs,
+ * because the mantissa of the number displayed has 4 digits max for readability.
+ * (i.e. the value shows the decimils or the microns )
+ * However the actual internal value could need up to 8 digits to be printed
+ *
  * @param aValue The integer coordinate to convert.
  * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
  *                       the current user unit is millimeters.
@@ -65,6 +70,11 @@ wxString CoordinateToString( int aValue, bool aConvertToMils = false );
  * is a helper to convert the \a double length \a aValue to a string in inches,
  * millimeters, or unscaled units according to the current user units setting.
  *
+ * Should be used only to display a coordinate in status, but not in dialogs,
+ * because the mantissa of the number displayed has 4 digits max for readability.
+ * (i.e. the value shows the decimils or the microns )
+ * However the actual internal value could need up to 8 digits to be printed
+ *
  * @param aValue The double value to convert.
  * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
  *                       the current user unit is millimeters.
@@ -76,6 +86,16 @@ wxString LengthDoubleToString( double aValue, bool aConvertToMils = false );
  * Function ReturnStringFromValue
  * returns the string from \a aValue according to units (inch, mm ...) for display,
  * and the initial unit for value.
+ *
+ * For readability, the mantissa has 3 or more digits (max 8 digits),
+ * the trailing 0 are removed if the mantissa has more than 3 digits
+ * and some trailing 0
+ * This function should be used to display values in dialogs because a value
+ * entered in mm (for instance 2.0 mm) could need up to 8 digits mantissa
+ * if displayed in inch to avoid truncation or rounding made just by the printf function.
+ * otherwise the actual value is rounded when read from dialog and converted
+ * in internal units, and therefore modified.
+ *
  * @param aUnit = display units (INCHES, MILLIMETRE ..)
  * @param aValue = value in Internal_Unit
  * @param aAddUnitSymbol = true to add symbol unit to the string value
@@ -120,7 +140,7 @@ int ReturnValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue );
 /**
  * Function ReturnValueFromString
 
- * converts \a aTextValue in \a aUnits to internal units used by the application, 
+ * converts \a aTextValue in \a aUnits to internal units used by the application,
  * unit type will be obtained from g_UserUnit.
  *
  * @param aTextValue A reference to a wxString object containing the string to convert.

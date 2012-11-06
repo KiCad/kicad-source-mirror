@@ -427,6 +427,7 @@ set( BMAPS_MID
     ortho
     pad_sketch
     pad
+    pad_dimensions
     pads_mask_layers
     palette
     part_properties
