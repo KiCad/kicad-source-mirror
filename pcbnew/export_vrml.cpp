@@ -14,6 +14,7 @@
 #include <class_track.h>
 #include <class_edge_mod.h>
 #include <class_pcb_text.h>
+#include <convert_from_iu.h>
 
 #include <vector>
 #include <cmath>
@@ -1272,7 +1273,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
 
     /* scaling factor to convert internal units (decimils) to inches
     */
-    double board_scaling_factor = 0.0001;
+    double board_scaling_factor = 0.001*MILS_PER_IU;
 
     /* auxiliary scale to export to a different scale.
      */

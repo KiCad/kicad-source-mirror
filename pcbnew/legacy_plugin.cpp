@@ -836,6 +836,12 @@ void LEGACY_PLUGIN::loadSETUP()
             bds.m_SolderMaskMargin = tmp;
         }
 
+        else if( TESTLINE( "SolderMaskMinWidth" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "SolderMaskMinWidth" ) );
+            bds.m_SolderMaskMinWidth = tmp;
+        }
+
         else if( TESTLINE( "Pad2PasteClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( "Pad2PasteClearance" ) );
@@ -3022,6 +3028,7 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
     fprintf( m_fp, "PadDrill %s\n", fmtBIU( bds.m_Pad_Master.GetDrillSize().x ).c_str() );
 
     fprintf( m_fp, "Pad2MaskClearance %s\n", fmtBIU( bds.m_SolderMaskMargin ).c_str() );
+    fprintf( m_fp, "SolderMaskMinWidth %s\n", fmtBIU( bds.m_SolderMaskMinWidth ).c_str() );
 
     if( bds.m_SolderPasteMargin != 0 )
         fprintf( m_fp, "Pad2PasteClearance %s\n", fmtBIU( bds.m_SolderPasteMargin ).c_str() );

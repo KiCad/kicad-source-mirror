@@ -640,8 +640,8 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     {
         Line = frame->CoordinateToString( (unsigned) m_Drill.x );
         wxString msg;
-        Line = frame->CoordinateToString( (unsigned) m_Drill.y );
-        Line += wxT( " / " ) + msg;
+        msg = frame->CoordinateToString( (unsigned) m_Drill.y );
+        Line += wxT( "/" ) + msg;
         frame->AppendMsgPanel( _( "Drill X / Y" ), Line, RED );
     }
 
@@ -649,10 +649,10 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     if( module_orient )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),
-                     (float) ( m_Orient - module_orient ) / 10,
-                     (float) module_orient / 10 );
+                     (double) ( m_Orient - module_orient ) / 10,
+                     (double) module_orient / 10 );
     else
-        Line.Printf( wxT( "%3.1f" ), (float) m_Orient / 10 );
+        Line.Printf( wxT( "%3.1f" ), (double) m_Orient / 10 );
 
     frame->AppendMsgPanel( _( "Orient" ), Line, LIGHTBLUE );
 

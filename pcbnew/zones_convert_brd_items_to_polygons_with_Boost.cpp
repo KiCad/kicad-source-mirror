@@ -79,8 +79,10 @@ extern void CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                                            int                   aCircleToSegmentsCount,
                                            double                aCorrectionFactor,
                                            int                   aThermalRot );
-static void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
-                                              KI_POLYGON_SET&        aKiPolyList );
+
+// Exported function
+void AddPolygonCornersToKiPolygonList( std::vector <CPolyPt>& aCornersBuffer,
+                                       KI_POLYGON_SET&        aKiPolyList );
 
 // Local Variables:
 static int s_thermalRot = 450;  // angle of stubs in thermal reliefs for round pads

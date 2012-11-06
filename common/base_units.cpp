@@ -65,7 +65,15 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue )
     }
 }
 
-
+/* Convert a value to a string using double notation.
+ * For readability, the mantissa has 0, 1, 3 or 4 digits, depending on units
+ * for unit = inch the mantissa has 3 digits (Eeschema) or 4 digits
+ * for unit = mil the mantissa has 0 digits (Eeschema) or 1 digits
+ * for unit = mm the mantissa has 3 digits (Eeschema) or 4 digits
+ * Should be used only to display info in status,
+ * but not in dialogs, because 4 digits only
+ * could truncate the actual value
+ */
 wxString CoordinateToString( int aValue, bool aConvertToMils )
 {
     return LengthDoubleToString( (double) aValue, aConvertToMils );
@@ -86,8 +94,7 @@ wxString LengthDoubleToString( double aValue, bool aConvertToMils )
 #else
             format = wxT( "%.1f" );
 #endif
-            if( aConvertToMils )
-                value *= 1000;
+            value *= 1000;
         }
         else
         {
@@ -118,17 +125,49 @@ wxString LengthDoubleToString( double aValue, bool aConvertToMils )
 }
 
 
+/* Convert a value to a string using double notation.
+ * For readability, the mantissa has 3 or more digits (max 8 digits),
+ * the trailing 0 are removed if the mantissa has more than 3 digits
+ * and some trailing 0
+ * This function should be used to display values in dialogs because a value
+ * entered in mm (for instance 2.0 mm) could need up to 8 digits mantissa
+ * if displayed in inch to avoid truncation or rounding made just by the printf function.
+ * otherwise the actual value is rounded when read from dialog and converted
+ * in internal units, and therefore modified.
+ */
 wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymbol )
 {
-    wxString StringValue;
+    wxString stringValue;
     double   value_to_print;
 
     value_to_print = To_User_Unit( aUnit, aValue );
 
-#if defined( PCBNEW )
-    StringValue.Printf( wxT( "%.4f" ), value_to_print );
+#if defined( EESCHEMA )
+    stringValue.Printf( wxT( "%.3f" ), value_to_print );
 #else
-    StringValue.Printf( wxT( "%.3f" ), value_to_print );
+ #if defined( USE_PCBNEW_NANOMETRES )
+    stringValue.Printf( wxT( "%.8f" ), value_to_print );
+ #else
+    stringValue.Printf( wxT( "%.4f" ), value_to_print );
+ #endif
+
+    // Strip trailing zeros. However, keep at least 3 digits in mantissa
+    // For readability
+    struct lconv * lc = localeconv();
+    char sep = lc->decimal_point[0];
+    unsigned sep_pos = stringValue.Find( sep );
+
+    if( sep_pos > 0 )
+    {
+        // We want to keep at least 3 digits after the separator
+        unsigned min_len = sep_pos + 4;
+
+        while( stringValue.Len() > min_len )
+            if( stringValue.Last() == '0' )
+                stringValue.RemoveLast();
+            else
+                break;
+    }
 #endif
 
     if( aAddUnitSymbol )
@@ -136,11 +175,11 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymb
         switch( aUnit )
         {
         case INCHES:
-            StringValue += _( " \"" );
+            stringValue += _( " \"" );
             break;
 
         case MILLIMETRES:
-            StringValue += _( " mm" );
+            stringValue += _( " mm" );
             break;
 
         case UNSCALED_UNITS:
@@ -148,7 +187,7 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymb
         }
     }
 
-    return StringValue;
+    return stringValue;
 }
 
 
