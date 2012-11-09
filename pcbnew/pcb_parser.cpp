@@ -56,7 +56,14 @@ void PCB_PARSER::init()
 {
     m_layerMap.clear();
 
-    // @todo add default layernames here.
+    // Add untranslated default (i.e. english) layernames.
+    // Some may be overridden later if parsing a board rather than a footprint.
+    // The english name will survive if parsing only a footprint.
+    for( int layerNdx = 0;  layerNdx < NB_LAYERS;  ++layerNdx )
+    {
+        wxString untranslated = BOARD::GetDefaultLayerName( layerNdx, false );
+        m_layerMap[ untranslated ] = layerNdx;
+    }
 }
 
 
@@ -594,38 +601,38 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_comment:
-        {
-            int commentNumber = parseInt( "comment" );
-
-            switch( commentNumber )
             {
-            case 1:
-                NextTok();
-                titleBlock.SetComment1( FromUTF8() );
+                int commentNumber = parseInt( "comment" );
+
+                switch( commentNumber )
+                {
+                case 1:
+                    NextTok();
+                    titleBlock.SetComment1( FromUTF8() );
+                    break;
+
+                case 2:
+                    NextTok();
+                    titleBlock.SetComment2( FromUTF8() );
+                    break;
+
+                case 3:
+                    NextTok();
+                    titleBlock.SetComment3( FromUTF8() );
+                    break;
+
+                case 4:
+                    NextTok();
+                    titleBlock.SetComment4( FromUTF8() );
+                    break;
+
+                default:
+                    wxString err;
+                    err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
+                    THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+                }
+
                 break;
-
-            case 2:
-                NextTok();
-                titleBlock.SetComment2( FromUTF8() );
-                break;
-
-            case 3:
-                NextTok();
-                titleBlock.SetComment3( FromUTF8() );
-                break;
-
-            case 4:
-                NextTok();
-                titleBlock.SetComment4( FromUTF8() );
-                break;
-
-            default:
-                wxString err;
-                err.Printf( wxT( "%d is not a valid title block comment number" ), commentNumber );
-                THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
-            }
-
-            break;
             }
 
         default:
@@ -644,14 +651,14 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     wxCHECK_RET( CurTok() == T_layers,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as layers." ) );
 
-    T token;
-    wxString name;
-    wxString type;
-    int layerIndex;
-    bool isVisible = true;
-    int visibleLayers = 0;
-    int enabledLayers = 0;
-    int copperLayerCount = 0;
+    T           token;
+    wxString    name;
+    std::string type;
+    int         layerIndex;
+    bool        isVisible = true;
+    int         visibleLayers = 0;
+    int         enabledLayers = 0;
+    int         copperLayerCount = 0;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -662,8 +669,9 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 
         NeedSYMBOL();
         name = FromUTF8();
+
         NeedSYMBOL();
-        type = FromUTF8();
+        type = CurText();
 
         token = NextTok();
 
@@ -686,7 +694,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
         if( isVisible )
             visibleLayers |= 1 << layerIndex;
 
-        enum LAYER_T    layerType = LAYER::ParseType( TO_UTF8( type ) );
+        enum LAYER_T    layerType = LAYER::ParseType( type.c_str() );
         LAYER           layer( name, layerType, isVisible );
 
         layer.SetFixedListIndex( layerIndex );
@@ -694,7 +702,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 
         m_layerMap[ name ] = layerIndex;
 
-        wxLogDebug( wxT( "Mapping layer %s index index %d" ),
+        wxLogDebug( wxT( "Mapping layer %s to index %d" ),
                     GetChars( name ), layerIndex );
 
         if( layerType != LT_UNDEFINED )
@@ -704,8 +712,9 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     // We need at least 2 copper layers and there must be an even number of them.
     if( (copperLayerCount < 2) || ((copperLayerCount % 2) != 0) )
     {
-        wxString err;
-        err.Printf( _( "%d is not a valid layer count" ), copperLayerCount );
+        wxString err = wxString::Format(
+            _( "%d is not a valid layer count" ), copperLayerCount );
+
         THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
 
@@ -722,13 +731,14 @@ int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
 
     if( it == m_layerMap.end() )
     {
-        wxString error;
-        error.Printf( wxT( "Layer '%s' in file <%s> at line %d, position %d was not defined in the layers section" ),
-                      GetChars( name ), GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+        wxString error = wxString::Format(
+            _( "Layer '%s' in file <%s> at line %d, position %d, was not defined in the layers section" ),
+            GetChars( name ), GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+
         THROW_IO_ERROR( error );
     }
 
-    return m_layerMap[ name ];
+    return it->second;
 }
 
 
