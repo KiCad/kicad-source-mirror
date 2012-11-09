@@ -1050,8 +1050,9 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         {
             if( m_board )
                 layerName = m_board->GetLayerName( layer );
-            else
-                layerName = BOARD::GetDefaultLayerName( layer, true );
+
+            else    // from FootprintSave()
+                layerName = BOARD::GetDefaultLayerName( layer, false );
 
             m_out->Print( 0, " %s", m_out->Quotew( layerName ).c_str() );
         }
