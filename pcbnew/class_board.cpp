@@ -376,38 +376,38 @@ wxString BOARD::GetLayerName( int aLayerIndex, bool aTranslate ) const
 
 
 // Default layer names are statically initialized,
-// because we want the English name and the translation
+// because we want the English name and the translation.
 // The English name is stored here, and to get the translation
-// wxGetTranslation must be called explicitly
-static const wxChar * layer_FRONT_name  = _( "Front" );
-static const wxChar * layer_INNER1_name = _( "Inner1" );
-static const wxChar * layer_INNER2_name = _( "Inner2" );
-static const wxChar * layer_INNER3_name = _( "Inner3" );
-static const wxChar * layer_INNER4_name = _( "Inner4" );
-static const wxChar * layer_INNER5_name = _( "Inner5" );
-static const wxChar * layer_INNER6_name = _( "Inner6" );
-static const wxChar * layer_INNER7_name = _( "Inner7" );
-static const wxChar * layer_INNER8_name = _( "Inner8" );
-static const wxChar * layer_INNER9_name = _( "Inner9" );
-static const wxChar * layer_INNER10_name = _( "Inner10" );
-static const wxChar * layer_INNER11_name = _( "Inner11" );
-static const wxChar * layer_INNER12_name = _( "Inner12" );
-static const wxChar * layer_INNER13_name = _( "Inner13" );
-static const wxChar * layer_INNER14_name = _( "Inner14" );
-static const wxChar * layer_BACK_name    = _( "Back" );
-static const wxChar * layer_ADHESIVE_BACK_name     = _( "Adhes_Back" );
-static const wxChar * layer_ADHESIVE_FRONT_name    = _( "Adhes_Front" );
-static const wxChar * layer_SOLDERPASTE_BACK_namet = _( "SoldP_Back" );
-static const wxChar * layer_SOLDERPASTE_FRONT_name = _( "SoldP_Front" );
-static const wxChar * layer_SILKSCREEN_BACK_name   = _( "SilkS_Back" );
-static const wxChar * layer_SILKSCREEN_FRONT_name  = _( "SilkS_Front" );
-static const wxChar * layer_SOLDERMASK_BACK_name   = _( "Mask_Back" );
-static const wxChar * layer_SOLDERMASK_FRONT_name  = _( "Mask_Front" );
-static const wxChar * layer_DRAW_name = _( "Drawings" );
-static const wxChar * layer_COMMENT_name = _( "Comments" );
-static const wxChar * layer_ECO1_name = _( "Eco1" );
-static const wxChar * layer_ECO2_name = _( "Eco2" );
-static const wxChar * layer_EDGE_name = _( "PCB_Edges" );
+// wxGetTranslation must be called explicitly.
+static const wxChar* layer_FRONT_name  = _( "Front" );
+static const wxChar* layer_INNER1_name = _( "Inner1" );
+static const wxChar* layer_INNER2_name = _( "Inner2" );
+static const wxChar* layer_INNER3_name = _( "Inner3" );
+static const wxChar* layer_INNER4_name = _( "Inner4" );
+static const wxChar* layer_INNER5_name = _( "Inner5" );
+static const wxChar* layer_INNER6_name = _( "Inner6" );
+static const wxChar* layer_INNER7_name = _( "Inner7" );
+static const wxChar* layer_INNER8_name = _( "Inner8" );
+static const wxChar* layer_INNER9_name = _( "Inner9" );
+static const wxChar* layer_INNER10_name = _( "Inner10" );
+static const wxChar* layer_INNER11_name = _( "Inner11" );
+static const wxChar* layer_INNER12_name = _( "Inner12" );
+static const wxChar* layer_INNER13_name = _( "Inner13" );
+static const wxChar* layer_INNER14_name = _( "Inner14" );
+static const wxChar* layer_BACK_name    = _( "Back" );
+static const wxChar* layer_ADHESIVE_BACK_name     = _( "Adhes_Back" );
+static const wxChar* layer_ADHESIVE_FRONT_name    = _( "Adhes_Front" );
+static const wxChar* layer_SOLDERPASTE_BACK_name  = _( "SoldP_Back" );
+static const wxChar* layer_SOLDERPASTE_FRONT_name = _( "SoldP_Front" );
+static const wxChar* layer_SILKSCREEN_BACK_name   = _( "SilkS_Back" );
+static const wxChar* layer_SILKSCREEN_FRONT_name  = _( "SilkS_Front" );
+static const wxChar* layer_SOLDERMASK_BACK_name   = _( "Mask_Back" );
+static const wxChar* layer_SOLDERMASK_FRONT_name  = _( "Mask_Front" );
+static const wxChar* layer_DRAW_name = _( "Drawings" );
+static const wxChar* layer_COMMENT_name = _( "Comments" );
+static const wxChar* layer_ECO1_name = _( "Eco1" );
+static const wxChar* layer_ECO2_name = _( "Eco2" );
+static const wxChar* layer_EDGE_name = _( "PCB_Edges" );
 
 wxString BOARD::GetDefaultLayerName( int aLayerNumber, bool aTranslate )
 {
@@ -428,40 +428,42 @@ wxString BOARD::GetDefaultLayerName( int aLayerNumber, bool aTranslate )
     case LAYER_N_7:             txt = layer_INNER6_name;        break;
     case LAYER_N_8:             txt = layer_INNER7_name;        break;
     case LAYER_N_9:             txt = layer_INNER8_name;        break;
-    case LAYER_N_10:            txt = layer_INNER9_name;       break;
+    case LAYER_N_10:            txt = layer_INNER9_name;        break;
     case LAYER_N_11:            txt = layer_INNER10_name;       break;
     case LAYER_N_12:            txt = layer_INNER11_name;       break;
     case LAYER_N_13:            txt = layer_INNER12_name;       break;
     case LAYER_N_14:            txt = layer_INNER13_name;       break;
     case LAYER_N_15:            txt = layer_INNER14_name;       break;
     case LAYER_N_BACK:          txt = layer_BACK_name;          break;
-    case ADHESIVE_N_BACK:       txt =layer_ADHESIVE_BACK_name;    break;
-    case ADHESIVE_N_FRONT:      txt = layer_ADHESIVE_FRONT_name;   break;
-    case SOLDERPASTE_N_BACK:    txt = layer_SOLDERPASTE_BACK_namet;    break;
-    case SOLDERPASTE_N_FRONT:   txt = layer_SOLDERPASTE_FRONT_name;   break;
-    case SILKSCREEN_N_BACK:     txt = layer_SILKSCREEN_BACK_name;    break;
-    case SILKSCREEN_N_FRONT:    txt = layer_SILKSCREEN_FRONT_name;   break;
-    case SOLDERMASK_N_BACK:     txt = layer_SOLDERMASK_BACK_name;     break;
-    case SOLDERMASK_N_FRONT:    txt = layer_SOLDERMASK_FRONT_name;    break;
-    case DRAW_N:                txt = layer_DRAW_name;      break;
-    case COMMENT_N:             txt = layer_COMMENT_name;      break;
+    case ADHESIVE_N_BACK:       txt = layer_ADHESIVE_BACK_name;         break;
+    case ADHESIVE_N_FRONT:      txt = layer_ADHESIVE_FRONT_name;        break;
+    case SOLDERPASTE_N_BACK:    txt = layer_SOLDERPASTE_BACK_name;      break;
+    case SOLDERPASTE_N_FRONT:   txt = layer_SOLDERPASTE_FRONT_name;     break;
+    case SILKSCREEN_N_BACK:     txt = layer_SILKSCREEN_BACK_name;       break;
+    case SILKSCREEN_N_FRONT:    txt = layer_SILKSCREEN_FRONT_name;      break;
+    case SOLDERMASK_N_BACK:     txt = layer_SOLDERMASK_BACK_name;       break;
+    case SOLDERMASK_N_FRONT:    txt = layer_SOLDERMASK_FRONT_name;      break;
+    case DRAW_N:                txt = layer_DRAW_name;          break;
+    case COMMENT_N:             txt = layer_COMMENT_name;       break;
     case ECO1_N:                txt = layer_ECO1_name;          break;
     case ECO2_N:                txt = layer_ECO2_name;          break;
-    case EDGE_N:                txt = layer_EDGE_name;     break;
-    default:                    txt = wxT( "BAD_INDEX" );     break;
+    case EDGE_N:                txt = layer_EDGE_name;          break;
+    default:                    txt = wxT( "BAD_INDEX" );       break;
     }
 
-    wxString name;
     if( aTranslate )
     {
-        name = wxGetTranslation( txt );
+        wxString name = wxGetTranslation( txt );
+
+        /* would someone translate into a name with leading or trailing spaces?
         name.Trim( true );
         name.Trim( false );
+        */
+
+        return name;
     }
     else
-        name = txt;
-
-    return name;
+        return txt;
 }
 
 
@@ -570,55 +572,6 @@ LAYER_T LAYER::ParseType( const char* aType )
         return LT_JUMPER;
     else
         return LT_UNDEFINED;
-}
-
-
-int LAYER::GetDefaultIndex( const wxString& aName )
-{
-    static LAYER_INDEX_HASH_MAP layerIndices;
-
-    if( layerIndices.empty() )
-    {
-        // These are only default layer names.  The copper names may be over-ridden in
-        // the BOARD (*.brd) file.
-
-        layerIndices[ _( "Front" ) ] = LAYER_N_FRONT;
-        layerIndices[ _( "Inner2" ) ] = LAYER_N_2;
-        layerIndices[ _( "Inner3" ) ] = LAYER_N_3;
-        layerIndices[ _( "Inner4" ) ] = LAYER_N_4;
-        layerIndices[ _( "Inner5" ) ] = LAYER_N_5;
-        layerIndices[ _( "Inner6" ) ] = LAYER_N_6;
-        layerIndices[ _( "Inner7" ) ] = LAYER_N_7;
-        layerIndices[ _( "Inner8" ) ] = LAYER_N_8;
-        layerIndices[ _( "Inner9" ) ] = LAYER_N_9;
-        layerIndices[ _( "Inner10" ) ] = LAYER_N_10;
-        layerIndices[ _( "Inner11" ) ] = LAYER_N_11;
-        layerIndices[ _( "Inner12" ) ] = LAYER_N_12;
-        layerIndices[ _( "Inner13" ) ] = LAYER_N_13;
-        layerIndices[ _( "Inner14" ) ] = LAYER_N_14;
-        layerIndices[ _( "Inner15" ) ] = LAYER_N_15;
-        layerIndices[ _( "Back" ) ] = LAYER_N_BACK;
-        layerIndices[ _( "Adhes_Back" ) ] = ADHESIVE_N_BACK;
-        layerIndices[ _( "Adhes_Front" ) ] = ADHESIVE_N_FRONT;
-        layerIndices[ _( "SoldP_Back" ) ] = SOLDERPASTE_N_BACK;
-        layerIndices[ _( "SoldP_Front" ) ] = SOLDERPASTE_N_FRONT;
-        layerIndices[ _( "SilkS_Back" ) ] = SILKSCREEN_N_BACK;
-        layerIndices[ _( "SilkS_Front" ) ] = SILKSCREEN_N_FRONT;
-        layerIndices[ _( "Mask_Back" ) ] = SOLDERMASK_N_BACK;
-        layerIndices[ _( "Mask_Front" ) ] = SOLDERMASK_N_FRONT;
-        layerIndices[ _( "Drawings" ) ] = DRAW_N;
-        layerIndices[ _( "Comments" ) ] = COMMENT_N;
-        layerIndices[ _( "Eco1" ) ] = ECO1_N;
-        layerIndices[ _( "Eco2" ) ] = ECO2_N;
-        layerIndices[ _( "PCB_Edges" ) ] = EDGE_N;
-    }
-
-    const LAYER_INDEX_HASH_MAP::iterator it = layerIndices.find( aName );
-
-    if( it == layerIndices.end() )
-        return UNDEFINED_LAYER;
-
-    return layerIndices[ aName ];
 }
 
 

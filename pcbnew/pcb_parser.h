@@ -64,7 +64,7 @@ WX_DECLARE_STRING_HASH_MAP( int, LAYER_HASH_MAP );
 class PCB_PARSER : public PCB_LEXER
 {
     BOARD*          m_board;
-    LAYER_HASH_MAP  m_layerMap;  //< Map layer name to it's index saved in BOARD::m_Layer.
+    LAYER_HASH_MAP  m_layerMap;     ///< Map layer name to it's index saved in BOARD::m_Layer.
 
 
     /**
@@ -220,6 +220,7 @@ public:
         PCB_LEXER( aReader ),
         m_board( 0 )
     {
+        init();
     }
 
 
