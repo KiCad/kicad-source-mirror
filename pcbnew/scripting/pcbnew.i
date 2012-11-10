@@ -40,7 +40,7 @@
 %ignore D_PAD::m_PadSketchModePenSize;
 
 // rename the Add method of classes to Add native, so we will handle
-// the Add method in python 
+// the Add method in python
 
 %rename(AddNative) *::Add;
 
@@ -50,16 +50,16 @@
     }
     catch( IO_ERROR e )
     {
-        char ExceptionError[256];
-        sprintf(ExceptionError, "%s\n", TO_UTF8(e.errorText) );
-        PyErr_SetString(PyExc_IOError,ExceptionError);
+        std::string str = TO_UTF8( e.errorText );
+        str += '\n';
+        PyErr_SetString( PyExc_IOError, str.c_str() );
         return NULL;
     }
     catch( std::exception &e )
     {
-        char ExceptionError[256];
-        sprintf( ExceptionError, "%s\n", e.what() );
-        PyErr_SetString(PyExc_IOError,ExceptionError);
+        std::string str = e.what();
+        str += '\n';
+        PyErr_SetString( PyExc_IOError, str.c_str() );
         return NULL;
     }
     catch( ... )
@@ -72,14 +72,14 @@
 
 // this is what it must be included in the wrapper .cxx code to compile
 
-%{ 
+%{
   #include <wx_python_helpers.h>
   #include <class_board_item.h>
   #include <class_board_connected_item.h>
   #include <class_board_design_settings.h>
   #include <class_board.h>
   #include <class_module.h>
-  #include <class_track.h>  
+  #include <class_track.h>
   #include <layers_id_colors_and_visibility.h>
   #include <class_pad.h>
   #include <pad_shapes.h>
@@ -99,7 +99,7 @@
   #include <plotcontroller.h>
   #include <pcb_plot_params.h>
   #include <colors.h>
-      
+
   BOARD *GetBoard(); /* get current editor board */
 %}
 
@@ -151,4 +151,4 @@
 %include "plugins.i"
 %include "units.i"
 
-        
+

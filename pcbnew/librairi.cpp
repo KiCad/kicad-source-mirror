@@ -240,7 +240,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
 
     try
     {
-#if 0   // This *.kicad_mod export works fine.  It is the import which is still broken.
+#if 1   // This *.kicad_mod export works fine.  It is the import which is still broken.
         // The function PCB_PARSER::Parse() fails with due to the m_layerName[] table
         // being empty.
 

@@ -33,11 +33,16 @@ class FP_CACHE;
 class PCB_PARSER;
 
 
-/** Current s-expression file format version.  2 was the last legacy format version. */
-#define SEXPR_BOARD_FILE_VERSION   3
+/// Current s-expression file format version.  2 was the last legacy format version.
+#define SEXPR_BOARD_FILE_VERSION    3
 
-/** Format output for the clipboard instead of a file. */
-#define CTL_CLIPBOARD              (1 << 0)
+/// Format output for the clipboard instead of a file.
+#define CTL_UNTRANSLATED_LAYERS     (1 << 0)
+
+#define CTL_OMIT_NETS               (1 << 1)
+
+/// Format output for the clipboard instead of a file
+#define CTL_CLIPBOARD               (CTL_UNTRANSLATED_LAYERS | CTL_OMIT_NETS)
 
 
 /**
@@ -49,7 +54,6 @@ class PCB_PARSER;
 class PCB_IO : public PLUGIN
 {
     friend class FP_CACHE;
-
 
 public:
 
