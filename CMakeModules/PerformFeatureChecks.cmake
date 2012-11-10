@@ -80,7 +80,7 @@ macro(perform_feature_checks)
 
     # Check for Posix getc_unlocked() for improved performance over getc().  Fall back to
     # getc() on platforms where getc_unlocked() doesn't exist.
-    check_symbol_exists(getc_unlocked "stdio.h" HAVE_GETC_UNLOCKED)
+    check_symbol_exists(getc_unlocked "stdio.h" HAVE_FGETC_NOLOCK)
 
     # Generate config.h.
     configure_file(${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake

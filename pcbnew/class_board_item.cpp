@@ -76,14 +76,13 @@ BOARD* BOARD_ITEM::GetBoard() const
 
 wxString BOARD_ITEM::GetLayerName() const
 {
-    wxString layerName;
-    BOARD* board = GetBoard();
+    BOARD*  board = GetBoard();
 
-    if( board != NULL )
+    if( board )
         return board->GetLayerName( m_Layer ).Trim();
 
-    // If no parent, return the default layer for the object.
-    return BOARD::GetDefaultLayerName( m_Layer, true );
+    // If no parent, return the untranslated layer name.
+    return BOARD::GetDefaultLayerName( m_Layer, false );
 }
 
 

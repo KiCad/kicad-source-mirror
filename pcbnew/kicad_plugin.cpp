@@ -388,7 +388,15 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
 
 void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
-    m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
+    if( m_ctl & CTL_UNTRANSLATED_LAYERS )
+    {
+        int layer = aItem->GetLayer();
+
+        // English layer names should never need quoting.
+        m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetDefaultLayerName( layer, false ) ) );
+    }
+    else
+        m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
 }
 
 
@@ -1048,7 +1056,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     {
         if( layerMask & 1 )
         {
-            if( m_board )
+            if( m_board && !(m_ctl & CTL_UNTRANSLATED_LAYERS) )
                 layerName = m_board->GetLayerName( layer );
 
             else    // from FootprintSave()
@@ -1061,7 +1069,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     m_out->Print( 0, ")\n" );
 
     // Unconnected pad is default net so don't save it.
-    if( !(m_ctl & CTL_CLIPBOARD) && aPad->GetNet() != 0 )
+    if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNet() != 0 )
     {
         m_out->Print( aNestLevel+1, "(net %d %s)\n",
                       aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
