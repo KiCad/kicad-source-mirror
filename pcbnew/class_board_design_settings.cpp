@@ -24,7 +24,7 @@
 #define DEFAULT_TEXT_MODULE_SIZE    Millimeter2iu( 1.5 )
 #define DEFAULT_GR_MODULE_THICKNESS Millimeter2iu( 0.15 )
 
-#define DEFAULT_SOLDERMASK_CLEARANCE Millimeter2iu( 0.1 )
+#define DEFAULT_SOLDERMASK_CLEARANCE Millimeter2iu( 0.2 )
 #define DEFAULT_SOLDERMASK_MIN_WIDTH Millimeter2iu( 0.0 )
 
 

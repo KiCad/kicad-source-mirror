@@ -47,10 +47,10 @@ protected:
 
 
 protected:
-    // The constructor is protected, because this class is not intendent to be instancied
+    // The constructor is protected, because this class is not intended to be instancied
     ATTENUATOR( ATTENUATORS_TYPE Topology );
 public:
-    ~ATTENUATOR();
+    virtual ~ATTENUATOR();
 
     /**
      * Function Calculate
@@ -76,25 +76,33 @@ public:
 
 class ATTENUATOR_PI : public ATTENUATOR
 {
-public: ATTENUATOR_PI();
+public:
+    ATTENUATOR_PI();
+    ~ATTENUATOR_PI(){};
     virtual bool Calculate();
 };
 
 class ATTENUATOR_TEE : public ATTENUATOR
 {
-public: ATTENUATOR_TEE();
+public:
+    ATTENUATOR_TEE();
+    ~ATTENUATOR_TEE(){};
     virtual bool Calculate();
 };
 
 class ATTENUATOR_BRIDGE : public ATTENUATOR
 {
-public: ATTENUATOR_BRIDGE();
+public:
+    ATTENUATOR_BRIDGE();
+    ~ATTENUATOR_BRIDGE(){};
     virtual bool Calculate();
 };
 
 class ATTENUATOR_SPLITTER : public ATTENUATOR
 {
-public: ATTENUATOR_SPLITTER();
+public:
+    ATTENUATOR_SPLITTER();
+    ~ATTENUATOR_SPLITTER(){};
     virtual bool Calculate();
 };
 

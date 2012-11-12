@@ -259,6 +259,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
             module->SetOrientation( 0 );
         */
 
+        LOCALE_IO toggle;
         pcb_io.Format( aModule );
 
         FILE* fp = wxFopen( dlg.GetPath(), wxT( "wt" ) );
