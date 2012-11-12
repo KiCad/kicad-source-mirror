@@ -193,6 +193,11 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
         }
     }
 
+    else
+        // No file to open: initialize a new empty board
+        // using default values for design settings:
+        frame->Clear_Pcb( false );
+
     // update the layer names in the listbox
     frame->ReCreateLayerBox( NULL );
 

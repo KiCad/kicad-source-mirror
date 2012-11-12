@@ -1700,6 +1700,8 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
         }
     }
 
+    module->CalculateBoundingBox();
+
     return module.release();
 }
 
