@@ -74,10 +74,10 @@ static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
  */
 class FP_CACHE_ITEM
 {
-    wxFileName         m_file_name; /// The the full file name and path of the footprint to cache.
-    bool               m_writable;  /// Writability status of the footprint file.
-    wxDateTime         m_mod_time;  /// The last file modified time stamp.
-    auto_ptr< MODULE > m_module;
+    wxFileName              m_file_name; ///< The the full file name and path of the footprint to cache.
+    bool                    m_writable;  ///< Writability status of the footprint file.
+    wxDateTime              m_mod_time;  ///< The last file modified time stamp.
+    unique_ptr< MODULE >    m_module;
 
 public:
     FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName );
@@ -90,11 +90,10 @@ public:
 };
 
 
-FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName )
+FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName ) :
+    m_module( aModule )
 {
     m_file_name = aFileName;
-    auto_ptr< MODULE > tmp( aModule );
-    m_module = tmp;
     m_mod_time.Now();
 }
 
@@ -301,7 +300,7 @@ bool FP_CACHE::IsModified()
 
 void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     m_board = aBoard;
 
@@ -333,6 +332,8 @@ BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput ) throw( IO_ERR
 void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
     throw( IO_ERROR )
 {
+    LOCALE_IO   toggle;     // public API function, perform anything convenient for caller
+
     switch( aItem->Type() )
     {
     case PCB_T:
@@ -822,11 +823,14 @@ void PCB_IO::format( EDGE_MODULE* aModuleDrawing, int aNestLevel ) const
     if( aModuleDrawing->GetWidth() != 0 )
         m_out->Print( 0, " (width %s)", FMT_IU( aModuleDrawing->GetWidth() ).c_str() );
 
+    /*  11-Nov-2021 remove if no one whines after a couple of months.  Simple graphic items
+        perhaps do not need these.
     if( aModuleDrawing->GetTimeStamp() )
         m_out->Print( 0, " (tstamp %lX)", aModuleDrawing->GetTimeStamp() );
 
     if( aModuleDrawing->GetStatus() )
         m_out->Print( 0, " (status %X)", aModuleDrawing->GetStatus() );
+    */
 
     m_out->Print( 0, ")\n" );
 }
@@ -865,8 +869,13 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
     formatLayer( aModule );
 
-    m_out->Print( 0, " (tedit %lX) (tstamp %lX)\n",
+    if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
+    {
+        m_out->Print( 0, " (tedit %lX) (tstamp %lX)\n",
                        aModule->GetLastEditTime(), aModule->GetTimeStamp() );
+    }
+    else
+        m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel+1, "(at %s", FMT_IU( aModule->m_Pos ).c_str() );
 
@@ -976,6 +985,80 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 }
 
 
+void PCB_IO::formatLayers( int aLayerMask, int aNestLevel ) const
+    throw( IO_ERROR )
+{
+    m_out->Print( aNestLevel, "(layers" );
+
+    int cuMask = ALL_CU_LAYERS;
+
+    if( m_board )
+        cuMask &= m_board->GetEnabledLayers();
+
+    // output copper layers first, then non copper
+
+    if( ( aLayerMask & cuMask ) == cuMask )
+    {
+        m_out->Print( 0, " *.Cu" );
+        aLayerMask &= ~ALL_CU_LAYERS;       // clear bits, so they are not output again below
+    }
+    else if( ( aLayerMask & cuMask ) == (LAYER_BACK | LAYER_FRONT) )
+    {
+        m_out->Print( 0, " F&B.Cu" );
+        aLayerMask &= ~(LAYER_BACK | LAYER_FRONT);
+    }
+
+    if( ( aLayerMask & (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT)) == (ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT) )
+    {
+        m_out->Print( 0, " *.Adhes" );
+        aLayerMask &= ~(ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
+    }
+
+    if( ( aLayerMask & (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT)) == (SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT) )
+    {
+        m_out->Print( 0, " *.Paste" );
+        aLayerMask &= ~(SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT);
+    }
+
+    if( ( aLayerMask & (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT)) == (SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT) )
+    {
+        m_out->Print( 0, " *.SilkS" );
+        aLayerMask &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT);
+    }
+
+    if( ( aLayerMask & (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT)) == (SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT) )
+    {
+        m_out->Print( 0, " *.Mask" );
+        aLayerMask &= ~(SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT);
+    }
+
+    // output any individual layers not handled in wildcard combos above
+
+    unsigned layerMask = aLayerMask;
+
+    if( m_board )
+        layerMask &= m_board->GetEnabledLayers();
+
+    wxString layerName;
+
+    for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
+    {
+        if( layerMask & 1 )
+        {
+            if( m_board && !(m_ctl & CTL_UNTRANSLATED_LAYERS) )
+                layerName = m_board->GetLayerName( layer );
+
+            else    // I am being called from FootprintSave()
+                layerName = BOARD::GetDefaultLayerName( layer, false );
+
+            m_out->Print( 0, " %s", m_out->Quotew( layerName ).c_str() );
+        }
+    }
+
+    m_out->Print( 0, ")\n" );
+}
+
+
 void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     throw( IO_ERROR )
 {
@@ -1043,30 +1126,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    m_out->Print( aNestLevel+1, "(layers" );
-
-    unsigned layerMask =  aPad->GetLayerMask();
-
-    if( m_board )
-        layerMask &= m_board->GetEnabledLayers();
-
-    wxString layerName;
-
-    for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
-    {
-        if( layerMask & 1 )
-        {
-            if( m_board && !(m_ctl & CTL_UNTRANSLATED_LAYERS) )
-                layerName = m_board->GetLayerName( layer );
-
-            else    // from FootprintSave()
-                layerName = BOARD::GetDefaultLayerName( layer, false );
-
-            m_out->Print( 0, " %s", m_out->Quotew( layerName ).c_str() );
-        }
-    }
-
-    m_out->Print( 0, ")\n" );
+    formatLayers( aPad->GetLayerMask(), aNestLevel+1 );
 
     // Unconnected pad is default net so don't save it.
     if( !(m_ctl & CTL_OMIT_NETS) && aPad->GetNet() != 0 )
@@ -1536,7 +1596,7 @@ void PCB_IO::cacheLib( const wxString& aLibraryPath )
 
 wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     init( aProperties );
 
@@ -1558,7 +1618,7 @@ wxArrayString PCB_IO::FootprintEnumerate( const wxString& aLibraryPath, PROPERTI
 MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                PROPERTIES* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     init( aProperties );
 
@@ -1581,9 +1641,13 @@ MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
 void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
                             PROPERTIES* aProperties )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
     init( aProperties );
+
+    // In this public PLUGIN API function, we can safely assume it was
+    // called for saving into a library path.
+    m_ctl = CTL_FOR_LIBRARY;
 
     cacheLib( aLibraryPath );
 
@@ -1667,7 +1731,7 @@ void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProp
                                           aLibraryPath.GetData() ) );
     }
 
-    LOCALE_IO toggle;
+    LOCALE_IO   toggle;
 
     init( aProperties );
 

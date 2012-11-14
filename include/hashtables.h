@@ -37,17 +37,17 @@
 #include <unordered_map>
 
 /// Map a C string to a wxString, used in PLUGINs.
-typedef unordered_map< const char*, wxString >  PROPERTIES;
+typedef std::unordered_map< std::string, wxString >  PROPERTIES;
 
 /// Map a C string to an integer.  Used in DSNLEXER.
-typedef unordered_map< const char*, int >       KEYWORD_MAP;
+typedef std::unordered_map< std::string, int >       KEYWORD_MAP;
 
 /// Map a C string to an EDA_RECT.
 /// The key is the classname of the derived wxformbuilder dialog.
-typedef unordered_map< const char*, EDA_RECT >  RECT_MAP;
+typedef std::unordered_map< std::string, EDA_RECT >  RECT_MAP;
 
 
-#elif 0     // boost::unordered_map
+#elif 1     // boost::unordered_map
 
 // fix a compile bug at line 97 of boost/detail/container_fwd.hpp
 #define BOOST_DETAIL_TEST_FORCE_CONTAINER_FWD
@@ -57,17 +57,17 @@ typedef unordered_map< const char*, EDA_RECT >  RECT_MAP;
 // see http://www.boost.org/doc/libs/1_49_0/doc/html/boost/unordered_map.html
 
 /// Map a C string to a wxString, used in PLUGINs.
-typedef boost::unordered_map< const char*, wxString >  PROPERTIES;
+typedef boost::unordered_map< std::string, wxString >  PROPERTIES;
 
 /// Map a C string to an integer.  Used in DSNLEXER.
-typedef boost::unordered_map< const char*, int >       KEYWORD_MAP;
+typedef boost::unordered_map< std::string, int >       KEYWORD_MAP;
 
 /// Map a C string to an EDA_RECT.
 /// The key is the classname of the derived wxformbuilder dialog.
-typedef boost::unordered_map< const char*, EDA_RECT >  RECT_MAP;
+typedef boost::unordered_map< std::string, EDA_RECT >  RECT_MAP;
 
 
-#elif 1     // wx is inconsistent accross platforms, will soon switch to boost
+#elif 0     // wx is inconsistent across platforms, will soon switch to boost
 
 // http://docs.wxwidgets.org/trunk/classwx_hash_map.html
 #include <wx/hashmap.h>

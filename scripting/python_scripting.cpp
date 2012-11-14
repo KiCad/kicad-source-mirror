@@ -77,12 +77,13 @@ static void swigAddBuiltin()
     int i = 0;
 
     /* discover the length of the pyimport inittab */
-    while( PyImport_Inittab[i].name )	i++;
+    while( PyImport_Inittab[i].name )
+        i++;
 
     /* allocate memory for the python module table */
     SwigImportInittab = (struct _inittab*)  malloc(
                         sizeof(struct _inittab)*(i+EXTRA_PYTHON_MODULES));
-    
+
     /* copy all pre-existing python modules into our newly created table */
     i=0;
     while( PyImport_Inittab[i].name )
@@ -92,10 +93,11 @@ static void swigAddBuiltin()
     }
 }
 
-/* Function swigAddModules 
+
+/* Function swigAddModules
  * adds the internal modules we offer to the python scripting, so they will be
  * available to the scripts we run.
- * 
+ *
  */
 
 static void swigAddModules()
@@ -110,7 +112,7 @@ static void swigAddModules()
 
 /* Function swigSwitchPythonBuiltin
  * switches python module table to our built one .
- * 
+ *
  */
 
 static void swigSwitchPythonBuiltin()
@@ -119,35 +121,36 @@ static void swigSwitchPythonBuiltin()
 }
 
 /* Function pcbnewInitPythonScripting
- * Initializes all the python environment and publish our interface inside it 
+ * Initializes all the python environment and publish our interface inside it
  * initializes all the wxpython interface, and returns the python thread control structure
- * 
+ *
  */
 
 PyThreadState *g_PythonMainTState;
 
 bool pcbnewInitPythonScripting()
 {
- 
+
     swigAddBuiltin();           // add builtin functions
     swigAddModules();           // add our own modules
     swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
 
     Py_Initialize();
 
-    #ifdef KICAD_SCRIPTING_WXPYTHON
+#ifdef KICAD_SCRIPTING_WXPYTHON
     PyEval_InitThreads();
 
     // Load the wxPython core API.  Imports the wx._core_ module and sets a
     // local pointer to a function table located there.  The pointer is used
     // internally by the rest of the API functions.
-    if ( ! wxPyCoreAPI_IMPORT() ) {
+    if( ! wxPyCoreAPI_IMPORT() )
+    {
         wxLogError(wxT("***** Error importing the wxPython API! *****"));
         PyErr_Print();
         Py_Finalize();
         return false;
-    }        
-    
+    }
+
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
 
@@ -156,7 +159,8 @@ bool pcbnewInitPythonScripting()
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
 
     PY_BLOCK_THREADS( blocked );
-    #endif
+#endif
+
     PyRun_SimpleString( "import sys\n"
                         "sys.path.append(\".\")\n"
                         "import pcbnew\n"
@@ -173,27 +177,26 @@ void pcbnewFinishPythonScripting()
     wxPyEndAllowThreads(g_PythonMainTState);
 #endif
     Py_Finalize();
-
 }
+
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
 
-void RedirectStdio() 
+void RedirectStdio()
 {
     // This is a helpful little tidbit to help debugging and such.  It
     // redirects Python's stdout and stderr to a window that will popup
     // only on demand when something is printed, like a traceback.
-    const char* python_redirect = 
+    const char* python_redirect =
 "import sys\n\
 import wx\n\
 output = wx.PyOnDemandOutputWindow()\n\
 c sys.stderr = output\n";
-    
+
     PY_BLOCK_THREADS( blocked );
     PyRun_SimpleString( python_redirect );
     PY_UNBLOCK_THREADS( blocked );
 }
-
 
 
 wxWindow* CreatePythonShellWindow(wxWindow* parent)
@@ -228,7 +231,7 @@ def makeWindow(parent):\n\
     PY_BLOCK_THREADS( blocked );
 
     // Now make a dictionary to serve as the global namespace when the code is
-    // executed.  Put a reference to the builtins module in it.  
+    // executed.  Put a reference to the builtins module in it.
 
     PyObject* globals = PyDict_New();
     PyObject* builtins = PyImport_ImportModule( "__builtin__" );
@@ -239,7 +242,7 @@ def makeWindow(parent):\n\
     result = PyRun_String( pycrust_panel, Py_file_input, globals, globals );
 
     // Was there an exception?
-    if ( !result ) 
+    if( !result )
     {
         PyErr_Print();
         PY_UNBLOCK_THREADS( blocked );
@@ -258,19 +261,22 @@ def makeWindow(parent):\n\
 
     PyObject* arg = wxPyMake_wxObject( parent, false );
     wxASSERT( arg != NULL );
+
     PyObject* tuple = PyTuple_New( 1 );
     PyTuple_SET_ITEM( tuple, 0, arg );
+
     result = PyEval_CallObject( func, tuple );
 
     // Was there an exception?
-    if ( !result )
+    if( !result )
         PyErr_Print();
-    else 
+    else
     {
         // Otherwise, get the returned window out of Python-land and
         // into C++-ville...
         bool success = wxPyConvertSwigPtr(result, (void**)&window, _T("wxWindow") );
         (void)success;
+
         wxASSERT_MSG(success, _T("Returned object was not a wxWindow!") );
         Py_DECREF(result);
     }
@@ -285,10 +291,4 @@ def makeWindow(parent):\n\
     return window;
 }
 #endif
-
-
-
-
-
-
 
