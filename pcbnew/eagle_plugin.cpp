@@ -1107,7 +1107,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
         m_board->SetFileName( aFileName );
 
     // delete on exception, iff I own m_board, according to aAppendToMe
-    auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
+    unique_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
     try
     {
@@ -1795,7 +1795,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 
 MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const std::string& aPkgName ) const
 {
-    std::auto_ptr<MODULE>   m( new MODULE( NULL ) );
+    std::unique_ptr<MODULE>   m( new MODULE( NULL ) );
 
     m->SetLibRef( FROM_UTF8( aPkgName.c_str() ) );
 

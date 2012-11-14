@@ -30,9 +30,7 @@
 #define _PCBNEW_PARSER_H_
 
 #include <pcb_lexer.h>
-
-#include <wx/hashmap.h>
-
+#include <hashtables.h>
 
 using namespace PCB;
 
@@ -47,13 +45,10 @@ class TEXTE_MODULE;
 class TEXTE_PCB;
 class MODULE;
 class PCB_TARGET;
-class PROPERTIES;
 class S3D_MASTER;
 class ZONE_CONTAINER;
 class FPL_CACHE;
 
-
-WX_DECLARE_STRING_HASH_MAP( int, LAYER_HASH_MAP );
 
 
 /**
@@ -63,8 +58,11 @@ WX_DECLARE_STRING_HASH_MAP( int, LAYER_HASH_MAP );
  */
 class PCB_PARSER : public PCB_LEXER
 {
+    typedef KEYWORD_MAP     LAYER_MAP;
+
     BOARD*          m_board;
-    LAYER_HASH_MAP  m_layerMap;     ///< Map layer name to it's index saved in BOARD::m_Layer.
+    LAYER_MAP       m_layerIndices;     ///< map layer name to it's index
+    LAYER_MAP       m_layerMasks;       ///< map layer names to their masks
 
 
     /**
@@ -101,11 +99,13 @@ class PCB_PARSER : public PCB_LEXER
      * Function lookUpLayer
      * parses the current token for the layer definition of a #BOARD_ITEM object.
      *
+     * @param aMap is the LAYER_MAP to use for the lookup.
+     *
      * @throw IO_ERROR if the layer is not valid.
      * @throw PARSE_ERROR if the layer syntax is incorrect.
-     * @return The index the parsed #BOARD_ITEM layer.
+     * @return int - The result of the parsed #BOARD_ITEM layer or set designator.
      */
-    int lookUpLayer() throw( PARSE_ERROR, IO_ERROR );
+    int lookUpLayer( const LAYER_MAP& aMap ) throw( PARSE_ERROR, IO_ERROR );
 
     /**
      * Function parseBoardItemLayer
@@ -223,9 +223,10 @@ public:
         init();
     }
 
+    // ~PCB_PARSER() {}
 
     /**
-     * Functoin SetLineReader
+     * Function SetLineReader
      * sets @a aLineReader into the parser, and returns the previous one, if any.
      * @param aReader is what to read from for tokens, no ownership is received.
      * @return LINE_READER* - previous LINE_READER or NULL if none.

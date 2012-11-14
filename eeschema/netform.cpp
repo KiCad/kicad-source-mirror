@@ -696,7 +696,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericDesignHeader()
 
 XNODE* NETLIST_EXPORT_TOOL::makeGenericLibraries()
 {
-    XNODE*  xlibs = node( wxT( "libraries" ) );     // auto_ptr
+    XNODE*  xlibs = node( wxT( "libraries" ) );     // unique_ptr
 
     for( std::set<void*>::iterator it = m_Libraries.begin(); it!=m_Libraries.end();  ++it )
     {
@@ -716,7 +716,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericLibraries()
 
 XNODE* NETLIST_EXPORT_TOOL::makeGenericLibParts()
 {
-    XNODE*      xlibparts = node( wxT( "libparts" ) );   // auto_ptr
+    XNODE*      xlibparts = node( wxT( "libparts" ) );   // unique_ptr
     wxString    sLibpart  = wxT( "libpart" );
     wxString    sLib      = wxT( "lib" );
     wxString    sPart     = wxT( "part" );
@@ -833,7 +833,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericLibParts()
 
 XNODE* NETLIST_EXPORT_TOOL::makeGenericListOfNets()
 {
-    XNODE*      xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
+    XNODE*      xnets = node( wxT( "nets" ) );      // unique_ptr if exceptions ever get used.
     wxString    netCodeTxt;
     wxString    netName;
     wxString    ref;
@@ -1062,7 +1062,7 @@ bool NETLIST_EXPORT_TOOL::WriteKiCadNetList( const wxString& aOutFileName )
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
         g_NetObjectslist[ii]->m_Flag = 0;
 
-    std::auto_ptr<XNODE>    xroot( makeGenericRoot() );
+    std::unique_ptr<XNODE>    xroot( makeGenericRoot() );
 
     try
     {

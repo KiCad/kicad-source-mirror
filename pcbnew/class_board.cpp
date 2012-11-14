@@ -379,35 +379,35 @@ wxString BOARD::GetLayerName( int aLayerIndex, bool aTranslate ) const
 // because we want the English name and the translation.
 // The English name is stored here, and to get the translation
 // wxGetTranslation must be called explicitly.
-static const wxChar* layer_FRONT_name  = _( "Front" );
-static const wxChar* layer_INNER1_name = _( "Inner1" );
-static const wxChar* layer_INNER2_name = _( "Inner2" );
-static const wxChar* layer_INNER3_name = _( "Inner3" );
-static const wxChar* layer_INNER4_name = _( "Inner4" );
-static const wxChar* layer_INNER5_name = _( "Inner5" );
-static const wxChar* layer_INNER6_name = _( "Inner6" );
-static const wxChar* layer_INNER7_name = _( "Inner7" );
-static const wxChar* layer_INNER8_name = _( "Inner8" );
-static const wxChar* layer_INNER9_name = _( "Inner9" );
-static const wxChar* layer_INNER10_name = _( "Inner10" );
-static const wxChar* layer_INNER11_name = _( "Inner11" );
-static const wxChar* layer_INNER12_name = _( "Inner12" );
-static const wxChar* layer_INNER13_name = _( "Inner13" );
-static const wxChar* layer_INNER14_name = _( "Inner14" );
-static const wxChar* layer_BACK_name    = _( "Back" );
-static const wxChar* layer_ADHESIVE_BACK_name     = _( "Adhes_Back" );
-static const wxChar* layer_ADHESIVE_FRONT_name    = _( "Adhes_Front" );
-static const wxChar* layer_SOLDERPASTE_BACK_name  = _( "SoldP_Back" );
-static const wxChar* layer_SOLDERPASTE_FRONT_name = _( "SoldP_Front" );
-static const wxChar* layer_SILKSCREEN_BACK_name   = _( "SilkS_Back" );
-static const wxChar* layer_SILKSCREEN_FRONT_name  = _( "SilkS_Front" );
-static const wxChar* layer_SOLDERMASK_BACK_name   = _( "Mask_Back" );
-static const wxChar* layer_SOLDERMASK_FRONT_name  = _( "Mask_Front" );
-static const wxChar* layer_DRAW_name = _( "Drawings" );
-static const wxChar* layer_COMMENT_name = _( "Comments" );
-static const wxChar* layer_ECO1_name = _( "Eco1" );
-static const wxChar* layer_ECO2_name = _( "Eco2" );
-static const wxChar* layer_EDGE_name = _( "PCB_Edges" );
+static const wxChar* layer_FRONT_name  = _( "F.Cu" );
+static const wxChar* layer_INNER1_name = _( "Inner1.Cu" );
+static const wxChar* layer_INNER2_name = _( "Inner2.Cu" );
+static const wxChar* layer_INNER3_name = _( "Inner3.Cu" );
+static const wxChar* layer_INNER4_name = _( "Inner4.Cu" );
+static const wxChar* layer_INNER5_name = _( "Inner5.Cu" );
+static const wxChar* layer_INNER6_name = _( "Inner6.Cu" );
+static const wxChar* layer_INNER7_name = _( "Inner7.Cu" );
+static const wxChar* layer_INNER8_name = _( "Inner8.Cu" );
+static const wxChar* layer_INNER9_name = _( "Inner9.Cu" );
+static const wxChar* layer_INNER10_name = _( "Inner10.Cu" );
+static const wxChar* layer_INNER11_name = _( "Inner11.Cu" );
+static const wxChar* layer_INNER12_name = _( "Inner12.Cu" );
+static const wxChar* layer_INNER13_name = _( "Inner13.Cu" );
+static const wxChar* layer_INNER14_name = _( "Inner14.Cu" );
+static const wxChar* layer_BACK_name    = _( "B.Cu" );
+static const wxChar* layer_ADHESIVE_BACK_name     = _( "B.Adhes" );
+static const wxChar* layer_ADHESIVE_FRONT_name    = _( "F.Adhes" );
+static const wxChar* layer_SOLDERPASTE_BACK_name  = _( "B.Paste" );
+static const wxChar* layer_SOLDERPASTE_FRONT_name = _( "F.Paste" );
+static const wxChar* layer_SILKSCREEN_BACK_name   = _( "B.SilkS" );
+static const wxChar* layer_SILKSCREEN_FRONT_name  = _( "F.SilkS" );
+static const wxChar* layer_SOLDERMASK_BACK_name   = _( "B.Mask" );
+static const wxChar* layer_SOLDERMASK_FRONT_name  = _( "F.Mask" );
+static const wxChar* layer_DRAW_name = _( "Dwgs.User" );
+static const wxChar* layer_COMMENT_name = _( "Cmts.User" );
+static const wxChar* layer_ECO1_name = _( "Eco1.User" );
+static const wxChar* layer_ECO2_name = _( "Eco2.User" );
+static const wxChar* layer_EDGE_name = _( "Edge.Cuts" );
 
 wxString BOARD::GetDefaultLayerName( int aLayerNumber, bool aTranslate )
 {

@@ -79,7 +79,7 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
 
         in->NeedSYMBOLorNUMBER();
 
-        std::auto_ptr<ROW> row( new ROW( this ) );
+        std::unique_ptr<ROW> row( new ROW( this ) );
 
         row->SetLogicalName( in->CurText() );
 
@@ -244,13 +244,13 @@ void LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
     if( !libType.compare( "dir" ) )
     {
         // autor_ptr wrap source while we create sink, in case sink throws.
-        std::auto_ptr<LIB_SOURCE>   source(
+        std::unique_ptr<LIB_SOURCE>   source(
             new DIR_LIB_SOURCE(
                 aRow->GetFullURI(),
                 aRow->GetOptions() ) );
 
         /* @todo load LIB_SINK
-        std::auto_ptr<LIB_SINK>     sink(
+        std::unique_ptr<LIB_SINK>     sink(
             new DIR_LIB_SINK(
                 aRow->GetFullURI(),
                 aRow->GetOptions() ) );
@@ -311,7 +311,7 @@ LIB_TABLE::ROW* LIB_TABLE::FindRow( const STRING& aLogicalName ) const
 }
 
 
-bool LIB_TABLE::InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace )
+bool LIB_TABLE::InsertRow( std::unique_ptr<ROW>& aRow, bool doReplace )
 {
     // this does not need to be super fast.
 

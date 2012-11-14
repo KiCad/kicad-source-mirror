@@ -153,7 +153,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
             // the s-expression format from clipboard could be done.
 
             wxString    fcontents;
-            PCB_IO      pcb_io( CTL_CLIPBOARD );
+            PCB_IO      pcb_io;
             wxFFile     f( dlg.GetPath() );
 
             if( !f.IsOpened() )
@@ -167,7 +167,6 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
             f.ReadAll( &fcontents );
 
-            // @todo Fix this. The layernames are missing, and this fails.
             module = dynamic_cast<MODULE*>( pcb_io.Parse( fcontents ) );
 
             if( !module )
@@ -209,16 +208,15 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
         return;
 
     fn.SetName( aModule->m_LibRef );
-    fn.SetExt( aCreateSysLib ? FootprintLibFileExtension : ModExportFileExtension );
 
-    if( aCreateSysLib )
-        path = wxGetApp().ReturnLastVisitedLibraryPath();
-    else if( config )
-        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
+    // There is no longer any point to exporting as a new library.  Work is planned
+    // for the library manager to make it easier to use.
+    title    = _( "Export Module" );
+    wildcard = FootprintLibFileWildcard;
 
-    title    = aCreateSysLib ? _( "Create New Library" ) : _( "Export Module" );
-    wildcard = aCreateSysLib ?  LegacyFootprintLibFileWildcard : ModExportFileWildcard;
+    fn.SetExt( FootprintFileExtension );
 
+    config->Read( EXPORT_IMPORT_LASTPATH_KEY, &path );
     fn.SetPath( path );
 
     wxFileDialog dlg( this, msg, fn.GetPath(), fn.GetFullName(),
@@ -229,27 +227,18 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
         return;
 
     fn = dlg.GetPath();
-    wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    if( !aCreateSysLib && config )  // Save file path
+    if( config )  // Save file path
     {
         config->Write( EXPORT_IMPORT_LASTPATH_KEY, fn.GetPath() );
     }
 
-    wxString libPath = fn.GetFullPath();
-
     try
     {
-#if 1   // This *.kicad_mod export works fine.  It is the import which is still broken.
-        // The function PCB_PARSER::Parse() fails with due to the m_layerName[] table
-        // being empty.
-
-        // @todo, enable this code asap.
-
         // Export as *.kicad_pcb format, using a strategy which is specifically chosen
         // as an example on how it could also be used to send it to the system clipboard.
 
-        PCB_IO  pcb_io( CTL_CLIPBOARD );
+        PCB_IO  pcb_io( CTL_FOR_LIBRARY );
 
         /*  This module should *already* be "normalized" in a way such that
             orientation is zero, etc., since it came from module editor.
@@ -259,32 +248,11 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
             module->SetOrientation( 0 );
         */
 
-        LOCALE_IO toggle;
         pcb_io.Format( aModule );
 
         FILE* fp = wxFopen( dlg.GetPath(), wxT( "wt" ) );
         fprintf( fp, "%s", pcb_io.GetStringOutput( false ).c_str() );
         fclose( fp );
-#else
-        // Use IO_MGR::LEGACY for now, until the IO_MGR::KICAD plugin is ready.
-        PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
-
-        try
-        {
-            // try to delete the library whether it exists or not, quietly.
-            pi->FootprintLibDelete( libPath );
-        }
-        catch( IO_ERROR ioe )
-        {
-            // Ignore this, it will often happen and is not an error because
-            // the library may not exist.  If library was in a read only directory,
-            // it will still exist as we get to the FootprintLibCreate() below.
-        }
-
-        pi->FootprintLibCreate( libPath );
-        pi->FootprintSave( libPath, aModule );
-#endif
-
     }
     catch( IO_ERROR ioe )
     {
@@ -292,7 +260,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
         return;
     }
 
-    msg.Printf( _( "Module exported in file <%s>" ), libPath.GetData() );
+    msg.Printf( _( "Module exported to file <%s>" ), GetChars( dlg.GetPath() ) );
     DisplayInfoMessage( this, msg );
 }
 

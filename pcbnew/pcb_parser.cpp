@@ -49,21 +49,32 @@
 #include <zones.h>
 #include <pcb_parser.h>
 
+
 using namespace std;
 
 
 void PCB_PARSER::init()
 {
-    m_layerMap.clear();
+    m_layerIndices.clear();
+    m_layerMasks.clear();
 
     // Add untranslated default (i.e. english) layernames.
     // Some may be overridden later if parsing a board rather than a footprint.
     // The english name will survive if parsing only a footprint.
     for( int layerNdx = 0;  layerNdx < NB_LAYERS;  ++layerNdx )
     {
-        wxString untranslated = BOARD::GetDefaultLayerName( layerNdx, false );
-        m_layerMap[ untranslated ] = layerNdx;
+        std::string untranslated = TO_UTF8( BOARD::GetDefaultLayerName( layerNdx, false ) );
+
+        m_layerIndices[ untranslated ] = layerNdx;
+        m_layerMasks[ untranslated ]   = 1 << layerNdx;
     }
+
+    m_layerMasks[ "*.Cu" ]      = ALL_CU_LAYERS;
+    m_layerMasks[ "F&B.Cu" ]    = LAYER_BACK | LAYER_FRONT;
+    m_layerMasks[ "*.Adhes" ]   = ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT;
+    m_layerMasks[ "*.Paste" ]   = SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT;
+    m_layerMasks[ "*.Mask" ]    = SOLDERMASK_LAYER_BACK | SILKSCREEN_LAYER_FRONT;
+    m_layerMasks[ "*.SilkS" ]   = SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT;
 }
 
 
@@ -251,7 +262,7 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR )
 
     T token;
 
-    auto_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
+    unique_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
 
     NeedSYMBOL();
     n3D->m_Shape3DName = FromUTF8();
@@ -652,7 +663,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as layers." ) );
 
     T           token;
-    wxString    name;
+    std::string name;
     std::string type;
     int         layerIndex;
     bool        isVisible = true;
@@ -668,7 +679,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
         layerIndex = parseInt( "layer index" );
 
         NeedSYMBOL();
-        name = FromUTF8();
+        name = CurText();
 
         NeedSYMBOL();
         type = CurText();
@@ -694,16 +705,17 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
         if( isVisible )
             visibleLayers |= 1 << layerIndex;
 
+        m_layerIndices[ name ] = layerIndex;
+        m_layerMasks[ name ]   = 1 << layerIndex;
+
+        wxString        wname = FROM_UTF8( name.c_str() );
         enum LAYER_T    layerType = LAYER::ParseType( type.c_str() );
-        LAYER           layer( name, layerType, isVisible );
+        LAYER           layer( wname, layerType, isVisible );
 
         layer.SetFixedListIndex( layerIndex );
         m_board->SetLayer( layerIndex, layer );
 
-        m_layerMap[ name ] = layerIndex;
-
-        wxLogDebug( wxT( "Mapping layer %s to index %d" ),
-                    GetChars( name ), layerIndex );
+        wxLogDebug( wxT( "Mapping layer %s to index %d" ),  GetChars( wname ), layerIndex );
 
         if( layerType != LT_UNDEFINED )
             copperLayerCount++;
@@ -724,16 +736,26 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-int PCB_PARSER::lookUpLayer() throw( PARSE_ERROR, IO_ERROR )
+int PCB_PARSER::lookUpLayer( const LAYER_MAP& aMap ) throw( PARSE_ERROR, IO_ERROR )
 {
-    wxString name = FromUTF8();
-    const LAYER_HASH_MAP::iterator it = m_layerMap.find( name );
+    // avoid constructing another std::string, use lexer's directly
+    LAYER_MAP::const_iterator it = aMap.find( curText );
 
-    if( it == m_layerMap.end() )
+    if( it == aMap.end() )
     {
+#if 1 && defined(DEBUG)
+        // dump the whole darn table, there's something wrong with it.
+        for( it = aMap.begin();  it != aMap.end();  ++it )
+        {
+            printf( &aMap == &m_layerIndices ? "lm[%s] = %d\n" : "lm[%s] = %08X\n",
+                it->first.c_str(), it->second );
+        }
+#endif
+
         wxString error = wxString::Format(
             _( "Layer '%s' in file <%s> at line %d, position %d, was not defined in the layers section" ),
-            GetChars( name ), GetChars( CurSource() ), CurLineNumber(), CurOffset() );
+            GetChars( FROM_UTF8( CurText() ) ), GetChars( CurSource() ),
+            CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
     }
@@ -749,7 +771,7 @@ int PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
 
     NextTok();
 
-    int layerIndex = lookUpLayer();
+    int layerIndex = lookUpLayer( m_layerIndices );
 
     // Handle closing ) in object parser.
 
@@ -763,14 +785,12 @@ int PCB_PARSER::parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as item layer mask." ) );
 
-    int layerIndex;
     int layerMask = 0;
-    T token;
 
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    for( T token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-        layerIndex = lookUpLayer();
-        layerMask |= ( 1 << layerIndex );
+        int mask = lookUpLayer( m_layerMasks );
+        layerMask |= mask;
     }
 
     return layerMask;
@@ -1042,7 +1062,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
+    unique_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
     NeedSYMBOL();
     nc->SetName( FromUTF8() );
@@ -1103,7 +1123,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
         // Must have been a name conflict, this is a bad board file.
         // User may have done a hand edit to the file.
 
-        // auto_ptr will delete nc on this code path
+        // unique_ptr will delete nc on this code path
 
         wxString error;
         error.Printf( _( "duplicate NETCLASS name '%s' in file %s at line %d, offset %d" ),
@@ -1121,7 +1141,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
     wxPoint pt;
-    auto_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
+    unique_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
 
     switch( CurTok() )
     {
@@ -1282,7 +1302,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    auto_ptr< TEXTE_PCB > text( new TEXTE_PCB( m_board ) );
+    unique_ptr< TEXTE_PCB > text( new TEXTE_PCB( m_board ) );
     NeedSYMBOLorNUMBER();
 
     text->SetText( FromUTF8() );
@@ -1350,7 +1370,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    auto_ptr< DIMENSION > dimension( new DIMENSION( NULL ) );
+    unique_ptr< DIMENSION > dimension( new DIMENSION( NULL ) );
 
     dimension->m_Value = parseBoardUnits( "dimension value" );
     NeedLEFT();
@@ -1499,7 +1519,7 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< MODULE > module( new MODULE( m_board ) );
+    unique_ptr< MODULE > module( new MODULE( m_board ) );
 
     NeedSYMBOL();
     module->SetLibRef( FromUTF8() );
@@ -1715,7 +1735,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 
     T token = NextTok();
 
-    auto_ptr< TEXTE_MODULE > text( new TEXTE_MODULE( NULL ) );
+    unique_ptr< TEXTE_MODULE > text( new TEXTE_MODULE( NULL ) );
 
     switch( token )
     {
@@ -1800,7 +1820,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
+    unique_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
 
     switch( CurTok() )
     {
@@ -1948,7 +1968,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         default:
-            Expecting( "layer, width, tstamp, or status" );
+            Expecting( "layer or width" );
         }
 
         NeedRIGHT();
@@ -1965,7 +1985,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
     wxSize sz;
     wxPoint pt;
-    auto_ptr< D_PAD > pad( new D_PAD( NULL ) );
+    unique_ptr< D_PAD > pad( new D_PAD( NULL ) );
 
     NeedSYMBOLorNUMBER();
     pad->SetPadName( FromUTF8() );
@@ -2112,18 +2132,20 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
         }
 
         case T_layers:
-        {
-            int layerMask = parseBoardItemLayersAsMask();
+            {
+                int layerMask = parseBoardItemLayersAsMask();
 
-            // Only the layers that are used are saved so we need to enable all the copper
-            // layers to prevent any problems with the current design.  At some point in
-            // the future, the layer handling should be improved.
-            if( pad->GetAttribute() == PAD_STANDARD )
-                layerMask |= ALL_CU_LAYERS;
+                /*
+                // Only the layers that are used are saved so we need to enable all the copper
+                // layers to prevent any problems with the current design.  At some point in
+                // the future, the layer handling should be improved.
+                if( pad->GetAttribute() == PAD_STANDARD )
+                    layerMask |= ALL_CU_LAYERS;
+                */
 
-            pad->SetLayerMask( layerMask );
+                pad->SetLayerMask( layerMask );
+            }
             break;
-        }
 
         case T_net:
             pad->SetNet( parseInt( "net number" ) );
@@ -2191,7 +2213,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< TRACK > track( new TRACK( m_board ) );
+    unique_ptr< TRACK > track( new TRACK( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2253,7 +2275,7 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< SEGVIA > via( new SEGVIA( m_board ) );
+    unique_ptr< SEGVIA > via( new SEGVIA( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2289,15 +2311,15 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_layers:
-        {
-            int layer1, layer2;
-            NextTok();
-            layer1 = lookUpLayer();
-            NextTok();
-            layer2 = lookUpLayer();
-            via->SetLayerPair( layer1, layer2 );
-            NeedRIGHT();
-        }
+            {
+                int layer1, layer2;
+                NextTok();
+                layer1 = lookUpLayer( m_layerIndices );
+                NextTok();
+                layer2 = lookUpLayer( m_layerIndices );
+                via->SetLayerPair( layer1, layer2 );
+                NeedRIGHT();
+            }
             break;
 
         case T_net:
@@ -2338,7 +2360,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     // bigger scope since each filled_polygon is concatenated in here
     std::vector< CPolyPt > pts;
 
-    auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
+    unique_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
 
     zone->SetPriority( 0 );
 
@@ -2643,7 +2665,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    auto_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
+    unique_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
 
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
