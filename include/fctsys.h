@@ -4,18 +4,7 @@
 #ifndef FCTSYS_H_
 #define FCTSYS_H_
 
-// For compilers that support precompilation, includes "wx.h".
-#include <wx/wxprec.h>
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWidgetss headers
-#ifndef WX_PRECOMP
 #include <wx/wx.h>
-#endif
 
 /**
  * @note This appears to already be included in the OSX build of wxWidgets.

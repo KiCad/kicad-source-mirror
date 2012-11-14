@@ -137,7 +137,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     endif(CMAKE_BUILD_TYPE STREQUAL Debug)
 
     # needed when using #include <unordered_map>, or std::unique_ptr which replaces std::auto_ptr
-    set(CMAKE_CXX_FLAGS "-std=c++0x")
+    if(WIN32)
+        set(CMAKE_CXX_FLAGS "-std=gnu++0x")
+    else(WIN32)
+        set(CMAKE_CXX_FLAGS "-std=c++0x")
+    endif(WIN32)
 
     if(WIN32)   # under Windows/mingw,  -fPIC option is enabled by default
         # Set default flags for Release build.
