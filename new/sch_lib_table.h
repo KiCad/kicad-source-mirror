@@ -337,7 +337,7 @@ protected:  // only a table editor can use these
      *  exists.  If false, then fail if the key already exists.
      * @return bool - true if the operation succeeded.
      */
-    bool InsertRow( std::unique_ptr<ROW>& aRow, bool doReplace = false );
+    bool InsertRow( std::auto_ptr<ROW>& aRow, bool doReplace = false );
 
     /**
      * Function FindRow

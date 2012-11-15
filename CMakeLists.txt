@@ -136,13 +136,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
                 "Setting GCC version ${GCC_VERSION} build flags \"${KICAD_GCC_RELEASE_BUILD_FLAGS}\"")
     endif(CMAKE_BUILD_TYPE STREQUAL Debug)
 
-    # needed when using #include <unordered_map>, or std::unique_ptr which replaces std::auto_ptr
-    if(WIN32)
-        set(CMAKE_CXX_FLAGS "-std=gnu++0x")
-    else(WIN32)
-        set(CMAKE_CXX_FLAGS "-std=c++0x")
-    endif(WIN32)
-
     if(WIN32)   # under Windows/mingw,  -fPIC option is enabled by default
         # Set default flags for Release build.
         set(CMAKE_C_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG")

@@ -29,7 +29,7 @@
 
 // Three strategies for providing a portable hashtable are given.
 // C++, boost, and wx, in that order.  C++ solution is no good for mingw.
-// So will soon try boost for all platforms.
+// So boost seems best for all platforms.
 
 
 #if 0   // C++
@@ -56,13 +56,13 @@ typedef std::unordered_map< std::string, EDA_RECT >  RECT_MAP;
 
 // see http://www.boost.org/doc/libs/1_49_0/doc/html/boost/unordered_map.html
 
-/// Map a C string to a wxString, used in PLUGINs.
+/// Map a std::string to a wxString, used in PLUGINs.
 typedef boost::unordered_map< std::string, wxString >  PROPERTIES;
 
-/// Map a C string to an integer.  Used in DSNLEXER.
+/// Map a std::string to an integer.  Used in DSNLEXER.
 typedef boost::unordered_map< std::string, int >       KEYWORD_MAP;
 
-/// Map a C string to an EDA_RECT.
+/// Map a std::string to an EDA_RECT.
 /// The key is the classname of the derived wxformbuilder dialog.
 typedef boost::unordered_map< std::string, EDA_RECT >  RECT_MAP;
 
