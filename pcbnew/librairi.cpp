@@ -47,7 +47,9 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     if( config )
         config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
 
-    wxString importWildCard = ModExportFileWildcard + wxT("|") + ModImportFileWildcard;
+    wxString importWildCard =   FootprintLibFileWildcard + wxT("|") +
+                                ModExportFileWildcard + wxT("|") +
+                                ModImportFileWildcard;
 
     wxFileDialog dlg( this, _( "Import Footprint Module" ),
                       lastOpenedPathForLoading, wxEmptyString,
