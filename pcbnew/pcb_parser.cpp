@@ -262,7 +262,7 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR )
 
     T token;
 
-    unique_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
+    auto_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
 
     NeedSYMBOL();
     n3D->m_Shape3DName = FromUTF8();
@@ -1062,7 +1062,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    unique_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
+    auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
     NeedSYMBOL();
     nc->SetName( FromUTF8() );
@@ -1123,7 +1123,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
         // Must have been a name conflict, this is a bad board file.
         // User may have done a hand edit to the file.
 
-        // unique_ptr will delete nc on this code path
+        // auto_ptr will delete nc on this code path
 
         wxString error;
         error.Printf( _( "duplicate NETCLASS name '%s' in file %s at line %d, offset %d" ),
@@ -1141,7 +1141,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
     wxPoint pt;
-    unique_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
+    auto_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
 
     switch( CurTok() )
     {
@@ -1302,7 +1302,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    unique_ptr< TEXTE_PCB > text( new TEXTE_PCB( m_board ) );
+    auto_ptr< TEXTE_PCB > text( new TEXTE_PCB( m_board ) );
     NeedSYMBOLorNUMBER();
 
     text->SetText( FromUTF8() );
@@ -1370,7 +1370,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    unique_ptr< DIMENSION > dimension( new DIMENSION( NULL ) );
+    auto_ptr< DIMENSION > dimension( new DIMENSION( NULL ) );
 
     dimension->m_Value = parseBoardUnits( "dimension value" );
     NeedLEFT();
@@ -1519,7 +1519,7 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    unique_ptr< MODULE > module( new MODULE( m_board ) );
+    auto_ptr< MODULE > module( new MODULE( m_board ) );
 
     NeedSYMBOL();
     module->SetLibRef( FromUTF8() );
@@ -1735,7 +1735,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 
     T token = NextTok();
 
-    unique_ptr< TEXTE_MODULE > text( new TEXTE_MODULE( NULL ) );
+    auto_ptr< TEXTE_MODULE > text( new TEXTE_MODULE( NULL ) );
 
     switch( token )
     {
@@ -1820,7 +1820,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    unique_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
+    auto_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
 
     switch( CurTok() )
     {
@@ -1985,7 +1985,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
     wxSize sz;
     wxPoint pt;
-    unique_ptr< D_PAD > pad( new D_PAD( NULL ) );
+    auto_ptr< D_PAD > pad( new D_PAD( NULL ) );
 
     NeedSYMBOLorNUMBER();
     pad->SetPadName( FromUTF8() );
@@ -2213,7 +2213,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    unique_ptr< TRACK > track( new TRACK( m_board ) );
+    auto_ptr< TRACK > track( new TRACK( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2275,7 +2275,7 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    unique_ptr< SEGVIA > via( new SEGVIA( m_board ) );
+    auto_ptr< SEGVIA > via( new SEGVIA( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2360,7 +2360,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     // bigger scope since each filled_polygon is concatenated in here
     std::vector< CPolyPt > pts;
 
-    unique_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
+    auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
 
     zone->SetPriority( 0 );
 
@@ -2665,7 +2665,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    unique_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
+    auto_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
 
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )

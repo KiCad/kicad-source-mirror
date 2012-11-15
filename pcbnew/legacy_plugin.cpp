@@ -148,7 +148,7 @@ static inline unsigned ReadLine( LINE_READER* rdr, const char* caller )
 #endif
 
 
-using namespace std;    // unique_ptr
+using namespace std;    // auto_ptr
 
 
 static inline const char* ShowVertJustify( EDA_TEXT_VJUSTIFY_T vertical )
@@ -237,7 +237,7 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPE
         m_board->SetFileName( aFileName );
 
     // delete on exception, iff I own m_board, according to aAppendToMe
-    unique_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
+    auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
     FILE* fp = wxFopen( aFileName, wxT( "r" ) );
     if( !fp )
@@ -929,7 +929,7 @@ void LEGACY_PLUGIN::loadSETUP()
 
 MODULE* LEGACY_PLUGIN::LoadMODULE()
 {
-    unique_ptr<MODULE> module( new MODULE( m_board ) );
+    auto_ptr<MODULE> module( new MODULE( m_board ) );
 
     while( READLINE( m_reader ) )
     {
@@ -1139,7 +1139,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 
 void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 {
-    unique_ptr<D_PAD> pad( new D_PAD( aModule ) );
+    auto_ptr<D_PAD> pad( new D_PAD( aModule ) );
 
     while( READLINE( m_reader ) )
     {
@@ -1382,7 +1382,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
         THROW_IO_ERROR( m_error );
     }
 
-    unique_ptr<EDGE_MODULE> dwg( new EDGE_MODULE( aModule, shape ) );    // a drawing
+    auto_ptr<EDGE_MODULE> dwg( new EDGE_MODULE( aModule, shape ) );    // a drawing
 
     const char* data;
 
@@ -1678,7 +1678,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
         $EndDRAWSEGMENT
     */
 
-    unique_ptr<DRAWSEGMENT> dseg( new DRAWSEGMENT( m_board ) );
+    auto_ptr<DRAWSEGMENT> dseg( new DRAWSEGMENT( m_board ) );
 
     while( READLINE( m_reader ) )
     {
@@ -2069,9 +2069,9 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
     // create an empty NETCLASS without a name, but do not add it to the BOARD
     // yet since that would bypass duplicate netclass name checking within the BOARD.
-    // store it temporarily in an unique_ptr until successfully inserted into the BOARD
+    // store it temporarily in an auto_ptr until successfully inserted into the BOARD
     // just before returning.
-    unique_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
+    auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
     while( READLINE( m_reader ) )
     {
@@ -2144,7 +2144,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
                 // Must have been a name conflict, this is a bad board file.
                 // User may have done a hand edit to the file.
 
-                // unique_ptr will delete nc on this code path
+                // auto_ptr will delete nc on this code path
 
                 m_error.Printf( _( "duplicate NETCLASS name '%s'" ), nc->GetName().GetData() );
                 THROW_IO_ERROR( m_error );
@@ -2160,7 +2160,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
 void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
-    unique_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
+    auto_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
 
     CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::NO_HATCH;
     bool    sawCorner = false;
@@ -2422,7 +2422,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
 void LEGACY_PLUGIN::loadDIMENSION()
 {
-    unique_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
+    auto_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
 
     while( READLINE( m_reader ) )
     {

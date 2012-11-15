@@ -86,7 +86,7 @@ bool PCB_CALCULATOR_FRAME::WriteDataFile()
     // Switch the locale to standard C (needed to read/write floating point numbers
     LOCALE_IO   toggle;
 
-    std::unique_ptr<PCB_CALCULATOR_DATAFILE> datafile( new PCB_CALCULATOR_DATAFILE( &m_RegulatorList ) );
+    std::auto_ptr<PCB_CALCULATOR_DATAFILE> datafile( new PCB_CALCULATOR_DATAFILE( &m_RegulatorList ) );
 
     try
     {
