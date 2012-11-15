@@ -108,11 +108,13 @@ static wxString GetGerberExtension( int layer )/*{{{*/
     }
 }/*}}}*/
 
-/** Complete a plot filename: forces the output directory, add a suffix to the name
-    and sets the extension if specified */
-static void BuildPlotFileName( wxFileName *aFilename, /*{{{*/
+/* Complete a plot filename: forces the output directory,
+ * add a suffix to the name and sets the specified extension
+ * the suffix is usually the layer name
+ */
+static void BuildPlotFileName( wxFileName *aFilename,
                                const wxString& aOutputDir,
-                               wxString aSuffix,
+                               const wxString& aSuffix,
                                const wxString& aExtension )
 {
     aFilename->SetPath( aOutputDir );
@@ -121,17 +123,21 @@ static void BuildPlotFileName( wxFileName *aFilename, /*{{{*/
     aFilename->SetExt( aExtension );
 
     /* remove leading and trailing spaces if any from the suffix, if
-       something survives add it to the name; also the suffix can contain
-       an extension: if that's the case, apply it */
-    aSuffix.Trim( true ); aSuffix.Trim( false );
+       something survives add it to the name;
+       also the suffix can contain some not allowed chars in filename (/ \ .),
+       so change them to underscore
+    */
+    wxString suffix = aSuffix;
+    suffix.Trim( true );
+    suffix.Trim( false );
 
-    wxFileName suffix_fn( aSuffix );
+    suffix.Replace( wxT("."), wxT("_") );
+    suffix.Replace( wxT("/"), wxT("_") );
+    suffix.Replace( wxT("\\"), wxT("_") );
 
-    if( suffix_fn.HasName() )
-        aFilename->SetName( aFilename->GetName() + wxT( "-" ) + suffix_fn.GetName() );
-    if( suffix_fn.HasExt() )
-        aFilename->SetExt( suffix_fn.GetExt() );
-}/*}}}*/
+    if( !suffix.IsEmpty() )
+        aFilename->SetName( aFilename->GetName() + wxT( "-" ) + suffix );
+}
 
 /** Fix the output directory pathname to absolute and ensure it exists */
 static bool EnsureOutputDirectory( wxFileName *aOutputDir, /*{{{*/
