@@ -111,8 +111,9 @@ static wxString GetGerberExtension( int layer )/*{{{*/
 /* Complete a plot filename: forces the output directory,
  * add a suffix to the name and sets the specified extension
  * the suffix is usually the layer name
+ * replaces not allowed chars in suffix by '_'
  */
-static void BuildPlotFileName( wxFileName *aFilename,
+void BuildPlotFileName( wxFileName *aFilename,
                                const wxString& aOutputDir,
                                const wxString& aSuffix,
                                const wxString& aExtension )
@@ -139,10 +140,13 @@ static void BuildPlotFileName( wxFileName *aFilename,
         aFilename->SetName( aFilename->GetName() + wxT( "-" ) + suffix );
 }
 
-/** Fix the output directory pathname to absolute and ensure it exists */
-static bool EnsureOutputDirectory( wxFileName *aOutputDir, /*{{{*/
-                                   const wxString& aBoardFilename,
-                                   wxTextCtrl* aMessageBox )
+/*
+ * Fix the output directory pathname to absolute and ensure it exists
+ * (Creates it if not exists)
+ */
+bool EnsureOutputDirectory( wxFileName *aOutputDir,
+                            const wxString& aBoardFilename,
+                            wxTextCtrl* aMessageBox )
 {
     wxString boardFilePath = wxFileName( aBoardFilename ).GetPath();
 
@@ -171,13 +175,14 @@ static bool EnsureOutputDirectory( wxFileName *aOutputDir, /*{{{*/
         }
         else
         {
-            wxMessageBox( _( "Cannot create output directory!" ),
-                          _( "Plot" ), wxOK | wxICON_ERROR );
+            if( aMessageBox )
+                wxMessageBox( _( "Cannot create output directory!" ),
+                              _( "Plot" ), wxOK | wxICON_ERROR );
             return false;
         }
     }
     return true;
-}/*}}}*/
+}
 
 /*
  * DIALOG_PLOT:Plot

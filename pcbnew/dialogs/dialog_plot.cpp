@@ -271,7 +271,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
             wxMessageBox( _(
-                              "Cannot make path relative (target volume different from board file volume)!" ),
+                             "Cannot make path relative (target volume different from board file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
     }
 
