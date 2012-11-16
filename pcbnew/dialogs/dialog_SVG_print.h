@@ -14,11 +14,14 @@ class wxConfig;
 class DIALOG_SVG_PRINT : public DIALOG_SVG_PRINT_base
 {
 private:
-    PCB_BASE_FRAME*  m_Parent;
-    wxConfig*        m_Config;
-    long             m_PrintMaskLayer;
-    wxCheckBox*      m_BoxSelectLayer[32];
-    bool             m_printBW;
+    PCB_BASE_FRAME* m_parent;
+    BOARD*          m_board;
+    wxConfig*       m_config;
+    long            m_printMaskLayer;
+    wxCheckBox*     m_boxSelectLayer[32];
+    bool            m_printBW;
+    wxString        m_outputDirectory;
+
     // Static member to store options
     static bool     m_printMirror;
     static bool     m_oneFileOnly;
@@ -32,6 +35,7 @@ private:
     void initDialog( );
     void OnButtonPlot( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
+    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
     void SetPenWidth();
     void ExportSVGFile( bool aOnlyOneFile );
     bool PageIsBoardBoundarySize()
