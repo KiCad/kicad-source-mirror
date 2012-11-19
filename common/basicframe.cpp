@@ -506,22 +506,8 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
 
     tmp << wxT( "Options: " );
 
-    tmp << wxT( "USE_PCBNEW_SEXPR_FILE_FORMAT=" );
-#ifdef USE_PCBNEW_SEXPR_FILE_FORMAT
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
-
     tmp << wxT( "         USE_PCBNEW_NANOMETRES=" );
 #ifdef USE_PCBNEW_NANOMETRES
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
-
-    tmp << wxT( "         USE_PCBNEW_SEXPR_FOOTPRINT_LIBS=" );
-#ifdef USE_PCBNEW_SEXPR_FOOTPRINT_LIBS
     tmp << wxT( "ON\n" );
 #else
     tmp << wxT( "OFF\n" );

@@ -39,7 +39,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         {
             wxFileName fn = parent->m_ModuleLibNames[i];
 
-            fn.SetExt( FootprintLibFileExtension );
+            fn.SetExt( LegacyFootprintLibPathExtension );
 
             wxString libPath = wxGetApp().FindLibraryPath( fn );
 

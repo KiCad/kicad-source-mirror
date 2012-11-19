@@ -99,24 +99,24 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( open_document_xpm ) );
     fileMenu->AppendSeparator();
 
-#ifdef USE_PCBNEW_SEXPR_FOOTPRINT_LIBS
     // Save the currently loaded legacy library as an s-expression library.
-    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS, _( "Save Library In S-Expression Format" ),
-                 _( "Save currently loaded legacy library as an s-expression library." ),
+    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
+                 _( "Save Current Library as Other" ),
+                 _( "Save entire current library as new library." ),
                  wxNullBitmap );
-#endif
 
     // Save module
     text = AddHotkeyName( _( "&Save Module in Active Library" ),
                           g_Module_Editor_Hokeys_Descr, HK_SAVE_MODULE );
+
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE, text,
                  _( "Save module in active library" ),
                  KiBitmap( save_library_xpm ) );
 
     // Save module in new lib
     AddMenuItem( fileMenu, ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                 _( "S&ave Module in a New Library" ),
-                 _( "Create new library and save current module" ),
+                 _( "S&ave Module into a New Library" ),
+                 _( "Create a new library and save current module into it" ),
                  KiBitmap( new_library_xpm ) );
 
     // Export module

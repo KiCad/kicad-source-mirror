@@ -7,12 +7,10 @@
 #define MODULE_EDITOR_FRAME_H_
 
 #include <wxBasePcbFrame.h>
+#include <io_mgr.h>
 
 class FOOTPRINT_EDIT_FRAME : public PCB_BASE_FRAME
 {
-public:
-    MODULE*  CurrentModule;
-
 public:
     FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent );
 
@@ -223,34 +221,8 @@ public:
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
-private:
-    static wxString m_CurrentLib;
+    wxString GetCurrentLib() const { return getLibNickName(); };
 
-    static BOARD*   s_Pcb;      ///< retain board accross invocations of module editor
-
-    /**
-     * Function GetComponentFromUndoList
-     * performs an undo operation on the last edition:
-     *  - Place the current edited library component in Redo list
-     *  - Get old version of the current edited library component
-     */
-    void GetComponentFromUndoList( wxCommandEvent& event );
-
-    /**
-     * Fucntion GetComponentFromRedoList
-     * performs a redo operation on the the last edition:
-     *  - Place the current edited library component in undo list
-     *  - Get old version of the current edited library component
-     */
-    void GetComponentFromRedoList( wxCommandEvent& event );
-
-    /**
-     * Function UpdateTitle
-     * updates window title according to m_CurrentLib.
-     */
-    void UpdateTitle();
-
-public:
 
     // Footprint edition
     void Place_Ancre( MODULE* module );
@@ -272,10 +244,8 @@ public:
      * So Create a new lib (which will contains one module) and export a footprint
      * is basically the same thing
      * @param aModule = the module to export
-     * @param aCreateSysLib : true = use default lib path to create lib
-     *                    false = use current path or last used path to export the footprint
      */
-    void Export_Module( MODULE* aModule, bool aCreateSysLib );
+    void Export_Module( MODULE* aModule );
 
     /**
      * Function Import_Module
@@ -286,7 +256,26 @@ public:
      * The import function can also read gpcb footprint file, in Newlib format
      * (One footprint per file, Newlib files have no special ext.)
      */
-    MODULE* Import_Module( );
+    MODULE* Import_Module();
+
+    /**
+     * Function CreateNewLibrary
+     * prompts user for a library path, then creates a new footprint library at that
+     * location.  If library exists, user is warned about that, and is given a chance
+     * to abort the new creation, and in that case existing library is first deleted.
+     *
+     * @return wxString - the newly created library path if library was successfully
+     *   created, else wxEmptyString because user aborted or error.
+     */
+    wxString CreateNewLibrary();
+
+    /**
+     * Function SaveCurrentModule
+     * saves the module which is currently being edited into aLibPath or into the
+     * currently selected library if aLibPath is NULL.
+     * @return bool - true if successfully saved, else false because abort or error.
+     */
+    bool SaveCurrentModule( const wxString* aLibPath = NULL );
 
     /**
      * Function Load_Module_From_BOARD
@@ -379,16 +368,54 @@ public:
      */
     void DlgGlobalChange_PadSettings( D_PAD* aPad );
 
-    // handlers for libraries:
-    void Delete_Module_In_Library( const wxString& libname );
-
-    int CreateLibrary( const wxString& LibName );
+    /**
+     * Function DeleteModuleFromCurrentLibrary
+     * prompts user for footprint name, then deletes it from current library.
+     */
+    bool DeleteModuleFromCurrentLibrary();
 
     void Select_Active_Library();
 
-    wxString GetCurrentLib() const { return m_CurrentLib; };
-
     DECLARE_EVENT_TABLE()
+
+protected:
+    static BOARD*   s_Pcb;      ///< retain board accross invocations of module editor
+
+    /**
+     * Function GetComponentFromUndoList
+     * performs an undo operation on the last edition:
+     *  - Place the current edited library component in Redo list
+     *  - Get old version of the current edited library component
+     */
+    void GetComponentFromUndoList( wxCommandEvent& event );
+
+    /**
+     * Function GetComponentFromRedoList
+     * performs a redo operation on the the last edition:
+     *  - Place the current edited library component in undo list
+     *  - Get old version of the current edited library component
+     */
+    void GetComponentFromRedoList( wxCommandEvent& event );
+
+    /**
+     * Function UpdateTitle
+     * updates window title according to getLibNickName().
+     */
+    void updateTitle();
+
+    // @todo these will eventually have to be made instance variables.
+    static wxString m_lib_nick_name;
+    static wxString m_lib_path;
+
+    /// The library nickName is a short string, for now the same as the library path
+    /// but without path and without extension.  After library table support it becomes
+    /// a lookup key.
+    wxString getLibNickName() const                     { return m_lib_nick_name; }
+    void setLibNickName( const wxString& aLibNickName ) { m_lib_nick_name = aLibNickName; }
+
+    /// The libPath is the full string used in the PLUGIN::Footprint*() calls.
+    wxString getLibPath() const                         { return m_lib_path; }
+    void setLibPath( const wxString& aLibPath )         { m_lib_path = aLibPath;  }
 };
 
 #endif      // MODULE_EDITOR_FRAME_H_

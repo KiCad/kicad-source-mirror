@@ -5,7 +5,6 @@
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
-
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4138,6 +4137,10 @@ void FPL_CACHE::Save()
 
     wxRemove( m_lib_name );     // it is not an error if this does not exist
 
+    // Even on linux you can see an _intermittent_ error when calling wxRename(),
+    // and it is fully inexplicable.  See if this dodges the error.
+    wxMilliSleep( 250L );
+
     if( wxRename( tempFileName, m_lib_name ) )
     {
         THROW_IO_ERROR( wxString::Format(
@@ -4339,16 +4342,12 @@ void LEGACY_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES
 }
 
 
-void LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
 {
     wxFileName fn = aLibraryPath;
 
     if( !fn.FileExists() )
-    {
-        THROW_IO_ERROR( wxString::Format(
-            _( "library '%s' does not exist, cannot be deleted" ),
-            aLibraryPath.GetData() ) );
-    }
+        return false;
 
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
     // we don't want that.  we want bare metal portability with no UI here.
@@ -4364,6 +4363,8 @@ void LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES
         delete m_cache;
         m_cache = 0;
     }
+
+    return true;
 }
 
 

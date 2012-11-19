@@ -52,7 +52,7 @@ extern const wxString SchematicFileExtension;
 extern const wxString NetlistFileExtension;
 extern const wxString GerberFileExtension;
 extern const wxString PcbFileExtension;
-extern const wxString FootprintLibFileExtension;
+extern const wxString LegacyFootprintLibPathExtension;
 extern const wxString PdfFileExtension;
 extern const wxString MacrosFileExtension;
 extern const wxString ComponentFileExtension;
@@ -60,7 +60,8 @@ extern const wxString DrillFileExtension;
 extern const wxString SVGFileExtension;
 extern const wxString ReportFileExtension;
 extern const wxString FootprintPlaceFileExtension;
-extern const wxString FootprintFileExtension;
+extern const wxString KiCadFootprintFileExtension;
+extern const wxString KiCadFootprintLibPathExtension;
 
 /// Proper wxFileDialog wild card definitions.
 extern const wxString SchematicSymbolFileWildcard;
@@ -84,7 +85,8 @@ extern const wxString ReportFileWildcard;
 extern const wxString FootprintPlaceFileWildcard;
 extern const wxString VrmlFileWildcard;
 extern const wxString DocModulesFileName;
-extern const wxString LegacyFootprintLibFileWildcard;
-extern const wxString FootprintLibFileWildcard;
+extern const wxString LegacyFootprintLibPathWildcard;
+extern const wxString KiCadFootprintLibFileWildcard;
+extern const wxString KiCadFootprintLibPathWildcard;
 
 #endif  // INCLUDE_WILDCARDS_AND_FILES_EXT_H_

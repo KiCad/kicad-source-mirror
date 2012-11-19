@@ -260,12 +260,13 @@ the changes?" ) ) )
         GetBoard()->m_NetClasses.Clear();
     }
 
-    BOARD* loadedBoard = 0;   // it will be set to non-NULL if loadedOK
+    BOARD* loadedBoard = 0;   // it will be set to non-NULL if loaded OK
 
     try
     {
         PROPERTIES  props;
 
+        // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
         props["page_width"]  = wxString::Format( wxT( "%d" ), GetPageSizeIU().x );
         props["page_height"] = wxString::Format( wxT( "%d" ), GetPageSizeIU().y );
 
@@ -409,11 +410,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     int         wildcardIndex = 0;
     bool        saveok = true;
 
-    wildcard = LegacyPcbFileWildcard;
-
-#if defined( USE_PCBNEW_SEXPR_FILE_FORMAT )
-    wildcard += wxT( "|" ) + PcbFileWildcard;
-#endif
+    wildcard << wxGetTranslation( LegacyPcbFileWildcard ) << wxChar( '|' ) <<
+                wxGetTranslation( PcbFileWildcard );
 
     if( aFileName == wxEmptyString )
     {
@@ -431,6 +429,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         GetBoard()->SetFileName( aFileName );
     }
 
+    IO_MGR::PCB_FILE_T pluginType = ( wildcardIndex == 0 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+
     // If changes are made, update the board date
     if( GetScreen()->IsModify() )
     {
@@ -443,7 +443,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     pcbFileName = GetBoard()->GetFileName();
 
     if( pcbFileName.GetExt().IsEmpty() )
-        pcbFileName.SetExt( IO_MGR::GetFileExtension( (IO_MGR::PCB_FILE_T) wildcardIndex ) );
+        pcbFileName.SetExt( IO_MGR::GetFileExtension( pluginType ) );
 
     if( !IsWritable( pcbFileName ) )
         return false;
@@ -487,8 +487,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     try
     {
-        PROPERTIES props;
-        PLUGIN* plugin = IO_MGR::PluginFind( ( IO_MGR::PCB_FILE_T ) wildcardIndex );
+        PROPERTIES  props;
+        PLUGIN*     plugin = IO_MGR::PluginFind( pluginType );
 
         if( plugin == NULL )
             THROW_IO_ERROR( wxString::Format( _( "cannot find file plug in for file format '%s'" ),

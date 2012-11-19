@@ -109,7 +109,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentLibrary( wxCommandEvent& event )
  */
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
-    wxString libname = m_libraryName + wxT(".") + FootprintLibFileExtension;
+    wxString libname = m_libraryName + wxT(".") + LegacyFootprintLibPathExtension;
     MODULE* oldmodule = GetBoard()->m_Modules;
     MODULE * module = Load_Module_From_Library( libname, false );
     if( module )
@@ -160,7 +160,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         SetCurItem( NULL );
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
-        GetModuleLibrary( m_libraryName + wxT(".") + FootprintLibFileExtension,
+        GetModuleLibrary( m_libraryName + wxT(".") + LegacyFootprintLibPathExtension,
                           m_footprintName, true );
         Update3D_Frame();
     }

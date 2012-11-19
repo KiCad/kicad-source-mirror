@@ -54,7 +54,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString& aFootprintsLibNames )
         {
             wxFileName filename = aFootprintsLibNames[ii];
 
-            filename.SetExt( FootprintLibFileExtension );
+            filename.SetExt( LegacyFootprintLibPathExtension );
 
             wxString libPath = wxGetApp().FindLibraryPath( filename );
 

@@ -115,13 +115,8 @@ std::string BOARD_ITEM::FormatInternalUnits( int aValue )
 std::string BOARD_ITEM::FormatAngle( double aAngle )
 {
     char temp[50];
-    int len;
 
-#if defined( USE_PCBNEW_SEXPR_FILE_FORMAT )
-    len = snprintf( temp, 49, "%.10g", aAngle / 10.0 );
-#else
-    len = snprintf( temp, 49, "%.10g", aAngle );
-#endif
+    int len = snprintf( temp, sizeof(temp), "%.10g", aAngle / 10.0 );
 
     return std::string( temp, len );
 }

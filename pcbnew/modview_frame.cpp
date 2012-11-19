@@ -190,7 +190,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( PCB_BASE_FRAME* parent,
 
     // If a footprint was previsiously loaded, reload it
     if( !m_libraryName.IsEmpty() && !m_footprintName.IsEmpty() )
-        GetModuleLibrary( m_libraryName + wxT(".") + FootprintLibFileExtension,
+        GetModuleLibrary( m_libraryName + wxT(".") + LegacyFootprintLibPathExtension,
                       m_footprintName, false );
 
 
@@ -451,7 +451,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         SetCurItem( NULL );
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
-        GetModuleLibrary( m_libraryName + wxT(".") + FootprintLibFileExtension,
+        GetModuleLibrary( m_libraryName + wxT(".") + LegacyFootprintLibPathExtension,
                           m_footprintName, true );
         DisplayLibInfos();
         Zoom_Automatique( false );

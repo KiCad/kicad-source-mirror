@@ -51,7 +51,8 @@
 
 static PCB_SCREEN* s_screenModule;      // the PCB_SCREEN used by the footprint editor
 
-wxString FOOTPRINT_EDIT_FRAME::m_CurrentLib = wxEmptyString;
+wxString FOOTPRINT_EDIT_FRAME::m_lib_nick_name;
+wxString FOOTPRINT_EDIT_FRAME::m_lib_path;
 
 BOARD* FOOTPRINT_EDIT_FRAME::s_Pcb;
 
@@ -68,9 +69,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_TOOL( ID_MODEDIT_SELECT_CURRENT_LIB, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
-#ifdef USE_PCBNEW_SEXPR_FOOTPRINT_LIBS
     EVT_TOOL( ID_MODEDIT_SAVE_LIBRARY_AS, FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs )
-#endif
 
     EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_OPEN_MODULE_VIEWER, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
@@ -134,7 +133,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
     EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected )
-    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBRARY_AS, FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected )
+
     EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                    FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
@@ -170,11 +169,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent ) :
     SetIcon( icon );
 
     // Show a title (frame title + footprint name):
-    UpdateTitle();
+    updateTitle();
 
     if( !s_Pcb )
     {
         s_Pcb = new BOARD();
+
         // Ensure all layers and items are visible:
         s_Pcb->SetVisibleAlls();
     }
@@ -344,7 +344,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( m_CurrentLib != wxEmptyString );
+    aEvent.Enable( getLibPath() != wxEmptyString );
 }
 
 
@@ -356,7 +356,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( ( m_CurrentLib != wxEmptyString ) && ( GetBoard()->m_Modules != NULL ) );
+    aEvent.Enable( getLibPath() != wxEmptyString  &&  GetBoard()->m_Modules != NULL );
 }
 
 
@@ -539,31 +539,42 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::UpdateTitle()
+void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
-    wxString title = _( "Module Editor " );
+    wxString title   = _( "Module Editor " );
+    wxString libPath = getLibPath();
 
-    if( m_CurrentLib.IsEmpty() )
+    if( !libPath )
     {
+    L_none:
         title += _( "(no active library)" );
     }
     else
     {
-        wxFileName fileName = wxFileName( wxEmptyString, m_CurrentLib, FootprintLibFileExtension );
-        fileName = wxGetApp().FindLibraryPath( fileName );
+        // See if we can open and test write-ability of the library.
+        IO_MGR::PCB_FILE_T  pluginType = IO_MGR::GuessPluginTypeFromLibPath( libPath );
 
-        if( !fileName.IsOk() || !fileName.FileExists() )
-        {
-            title += _( "(no active library)" );
-        }
-        else
-        {
-            title = _( "Module Editor (active library: " ) + fileName.GetFullPath() + wxT( ")" );
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
-            if( !fileName.IsFileWritable() )
+        try
+        {
+            bool writable = pi->IsFootprintLibWritable( libPath );
+
+            // no exception was thrown, this means libPath is valid, but it may be read only.
+            title = _( "Module Editor (active library: " ) + getLibNickName() + wxT( ")" );
+
+            if( !writable )
                 title += _( " [Read Only]" );
+        }
+        catch( IO_ERROR ioe )
+        {
+            // user may be bewildered as to why after selecting a library it is not showing up
+            // in the title, we could show an error message, but that should have been done at time
+            // of libary selection UI.
+            goto L_none;
         }
     }
 
     SetTitle( title );
 }
+

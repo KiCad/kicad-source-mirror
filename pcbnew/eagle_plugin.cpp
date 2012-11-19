@@ -2659,7 +2659,7 @@ void EAGLE_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES*
 }
 
 
-void EAGLE_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool EAGLE_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
 {
 }
 
