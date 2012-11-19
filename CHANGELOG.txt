@@ -4,6 +4,16 @@ KiCad ChangeLog 2012
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2012-Nov-19 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+Eliminate many assumptions in Pcbnew's library manager, pertaining to locality of libraries and
+their type, by using the more abstract PLUGIN::Footprint*() functions.
+
+This is an intermediate phase only, other changes will be necessary as library table support comes in.
+Encapsulate usage of library path searching, since that will go away as library table support comes in.
+Add FOOTPRINT_EDIT_FRAME::{get,set}LibPath() and FOOTPRINT_EDIT_FRAME::{get,set}LibNickName() functions
+to provide this encapsulation.
+
 2012-Nov-14 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 1) Switch to boost hashtable support from wx macros which did not handle std::string.

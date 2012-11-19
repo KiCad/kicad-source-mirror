@@ -98,7 +98,7 @@ public:
 
     void FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
 
-    void FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
+    bool FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath );
 */

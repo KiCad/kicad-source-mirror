@@ -22,12 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/filename.h>
 
 #include <io_mgr.h>
 #include <legacy_plugin.h>
 #include <kicad_plugin.h>
 #include <eagle_plugin.h>
-
+#include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
 #define FMT_NOTFOUND        _( "Plugin type '%s' is not found." )
@@ -107,6 +108,25 @@ const wxString IO_MGR::GetFileExtension( PCB_FILE_T aFileType )
     }
 
     return ext;
+}
+
+
+IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath )
+{
+    wxFileName  fn = aLibPath;
+    PCB_FILE_T  ret;
+
+    if( fn.GetExt() == LegacyFootprintLibPathExtension )
+        ret = LEGACY;
+    else
+    {
+        // Although KICAD PLUGIN uses libpaths with fixed extension of
+        // KiCadFootprintLibPathExtension, we don't make that assumption since
+        // a default choice is needed.
+        ret = KICAD;
+    }
+
+    return ret;
 }
 
 
@@ -190,7 +210,7 @@ void PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProp
 }
 
 
-void PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED, PluginName().GetData() , __FUNCTION__ ) );

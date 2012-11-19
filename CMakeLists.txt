@@ -20,14 +20,8 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 # reports.
 #
 
-option(USE_PCBNEW_SEXPR_FILE_FORMAT
-       "Use Pcbnew s-expression file format support (default OFF)." )
-
 option(USE_PCBNEW_NANOMETRES
        "Use nanometers for Pcbnew internal units instead of deci-mils (default ON)." ON)
-
-option(USE_PCBNEW_SEXPR_FOOTPRINT_LIBS
-       "Use Pcbnew s-expression footprint library format (default OFF).")
 
 # Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
@@ -91,12 +85,6 @@ else (KICAD_STABLE_VERSION )
     endif(KICAD_TESTING_VERSION )
 endif(KICAD_STABLE_VERSION )
 
-# Nanometers must be enabled when USE_PCBNEW_SEXPR_FILE_FORMAT=ON.
-if( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
-    set( TMP "The Pcbnew s-expression file format requires nano-meter internal units to be " )
-    set( TMP "${TMP} enabled using -DUSE_PCBNEW_NANOMETRES=ON." )
-    message( FATAL_ERROR ${TMP} )
-endif( USE_PCBNEW_SEXPR_FILE_FORMAT AND NOT USE_PCBNEW_NANOMETRES )
 
 #================================================
 # Set flags for GCC.

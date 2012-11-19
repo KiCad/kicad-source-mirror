@@ -215,7 +215,7 @@ void FP_CACHE::Load()
     }
 
     wxString fpFileName;
-    wxString wildcard = wxT( "*." ) + FootprintFileExtension;
+    wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
 
     if( !dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
         return;
@@ -1662,7 +1662,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     MODULE_MAP& mods = m_cache->GetModules();
 
     // Quietly overwrite module and delete module file from path for any by same name.
-    wxFileName fn( aLibraryPath, aFootprint->GetLibRef(), FootprintFileExtension );
+    wxFileName fn( aLibraryPath, aFootprint->GetLibRef(), KiCadFootprintFileExtension );
 
     if( !fn.IsOk() )
     {
@@ -1741,14 +1741,14 @@ void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, PROPERTIES* aProp
 }
 
 
-void PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
+bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );
 
     // Return if there is no library path to delete.
     if( !fn.DirExists() )
-        return;
+        return false;
 
     if( !fn.IsDirWritable() )
     {
@@ -1777,7 +1777,7 @@ void PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
         {
             tmp = files[i];
 
-            if( tmp.GetExt() != FootprintFileExtension )
+            if( tmp.GetExt() != KiCadFootprintFileExtension )
             {
                 THROW_IO_ERROR( wxString::Format( _( "unexpected file '%s' has found in library path '%'" ),
                                                   files[i].GetData(), aLibraryPath.GetData() ) );
@@ -1813,6 +1813,8 @@ void PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProp
         delete m_cache;
         m_cache = NULL;
     }
+
+    return true;
 }
 
 
