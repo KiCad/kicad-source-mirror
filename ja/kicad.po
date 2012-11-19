@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-03 23:18+0900\n"
-"PO-Revision-Date: 2012-09-03 23:20+0900\n"
+"PO-Revision-Date: 2012-09-03 23:32+0900\n"
 "Last-Translator: yoneken <midpika@hotmail.com>\n"
 "Language-Team: KiCad JP Localize <midpika@hotmail.com>\n"
 "Language: ja_JP\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: kicad/class_treeproject_item.cpp:127
 msgid "Unable to move file ... "
-msgstr "ファイルを移動できません..."
+msgstr "ファイルを移動できません…"
 
 #: kicad/class_treeproject_item.cpp:128 kicad/class_treeproject_item.cpp:203
 msgid "Permission error ?"
