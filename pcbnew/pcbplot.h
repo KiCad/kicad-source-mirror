@@ -5,6 +5,7 @@
 #ifndef PCBPLOT_H_
 #define PCBPLOT_H_
 
+#include <wx/filename.h>
 #include <pad_shapes.h>
 #include <pcb_plot_params.h>
 
