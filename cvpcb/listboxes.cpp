@@ -18,9 +18,6 @@
 * Not directly used: the 2 list boxes actually used are derived from it
 ******************************************************************************/
 
-#define LISTB_STYLE wxSUNKEN_BORDER | wxLC_NO_HEADER | \
-    wxLC_REPORT | wxLC_VIRTUAL
-
 ITEMS_LISTBOX_BASE::ITEMS_LISTBOX_BASE( CVPCB_MAINFRAME* aParent, wxWindowID aId,
                                         const wxPoint& aLocation, const wxSize& aSize,
                                         long aStyle) :
