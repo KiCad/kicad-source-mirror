@@ -913,6 +913,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
         // Fall thru if item is not on bus layer.
     case SCH_COMPONENT_T:
+    case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_SHEET_T:

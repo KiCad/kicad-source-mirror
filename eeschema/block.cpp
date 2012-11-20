@@ -186,12 +186,24 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     m_canvas->Refresh();
 }
 
-
+/*
+ * HandleBlockEnd is called when:
+ * a block is defined
+ * or a schematic iten should be dragged
+ * When the block is defined, all items inside the block should be collected
+ * When a schematic iten should be dragged, only this item should be collected
+ *
+ * In all cases, connected items are collected when a drag command is activated
+ */
 bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     bool            nextcmd = false;
     bool            zoom_command = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
+    bool            currItemOnly = false;
+
+    if ( block->GetCommand() == BLOCK_DRAG && GetScreen()->GetCurItem() != NULL )
+        currItemOnly = true;
 
     if( block->GetCount() )
     {
@@ -242,7 +254,14 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_MOVE:
         case BLOCK_COPY:
-            GetScreen()->UpdatePickList();
+            if( currItemOnly )
+            {
+                ITEM_PICKER picker;
+                picker.SetItem( GetScreen()->GetCurItem() );
+                block->PushItem( picker );
+            }
+            else
+                GetScreen()->UpdatePickList();
             // fall through
 
         case BLOCK_PRESELECT_MOVE: /* Move with preselection list*/
