@@ -154,9 +154,13 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     // on other images when drawn on screen
     bool useBufferBitmap = false;
 
+#ifndef __WXMAC__
+    // Can't work with MAC
+    // Don't try this with retina display
     if( (aDrawMode == GR_COPY) || ( aDrawMode == GR_OR ) )
         useBufferBitmap = true;
-
+#endif
+    
     // these parameters are saved here, because they are modified
     // and restored later
     EDA_RECT drawBox = *aPanel->GetClipBox();
