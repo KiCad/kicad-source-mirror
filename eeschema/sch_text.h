@@ -212,6 +212,8 @@ public:
 
     virtual EDA_ITEM* Clone() const;
 
+    void DisplayInfo( EDA_DRAW_FRAME* frame );  // Virtual function
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif

@@ -36,6 +36,7 @@
 #include <drawtxt.h>
 #include <wxEeschemaStruct.h>
 #include <plot_common.h>
+#include <base_units.h>
 
 #include <general.h>
 #include <protos.h>
@@ -729,6 +730,101 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         aPlotter->PlotPoly( Poly, NO_FILL );
 }
 
+/*
+ * Display the type, shape, size and some other props to the Message panel
+ */
+void SCH_TEXT::DisplayInfo( EDA_DRAW_FRAME* frame )
+{
+    wxString msg;
+
+    frame->ClearMsgPanel();
+
+    switch( Type() )
+    {
+        case SCH_TEXT_T:
+            msg = _("Graphic text");
+            break;
+
+        case SCH_LABEL_T:
+            msg = _("Label");
+            break;
+
+        case SCH_GLOBAL_LABEL_T:
+            msg = _("Global label");
+            break;
+
+        case SCH_HIERARCHICAL_LABEL_T:
+            msg = _("Hierarchical label");
+            break;
+
+    case SCH_SHEET_PIN_T:
+        msg = _( "Hierarchical Sheet Pin" );
+        break;
+
+        default:
+            return;
+    }
+
+    frame->AppendMsgPanel( msg, wxEmptyString, DARKCYAN );
+
+    switch( GetOrientation() )
+    {
+        case 0:     // horizontal text
+            msg = _("Horizontal");
+            break;
+
+        case 1:     // Vert Orientation UP
+            msg = _("Vertical up");
+            break;
+
+        case 2:     // invert horizontal text
+            msg = _("Horizontal invert");
+            break;
+
+        case 3:     // Vert Orientation Down
+            msg = _("Vertical down");;
+            break;
+
+        default:
+            msg = wxT("???");
+            break;
+    }
+
+    frame->AppendMsgPanel( _("Orientation"), msg, BROWN );
+
+    wxString textStyle[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
+    int style = 0;
+
+    if( m_Italic )
+        style = 1;
+
+    if( m_Bold )
+        style += 2;
+
+    frame->AppendMsgPanel( _("Style"), textStyle[style], BROWN );
+
+
+    // Display electricat type if it is relevant
+    if( (Type() == SCH_GLOBAL_LABEL_T) ||
+        (Type() == SCH_HIERARCHICAL_LABEL_T ) ||
+        (Type() == SCH_SHEET_PIN_T ) )
+    {
+        switch( GetShape() )
+        {
+            case NET_INPUT: msg = _("Input"); break;
+            case NET_OUTPUT: msg = _("Output"); break;
+            case NET_BIDI: msg = _("Bidirectional"); break;
+            case NET_TRISTATE: msg = _("Tri-State"); break;
+            case NET_UNSPECIFIED: msg = _("Passive"); break;
+            default: msg = wxT("???"); break;
+        }
+        frame->AppendMsgPanel( _("Type"), msg, BLUE );
+    }
+
+    // Display text size (X or Y value, with are the same value in Eeschema)
+    msg = ReturnStringFromValue( g_UserUnit, m_Size.x, true );
+    frame->AppendMsgPanel( _("Size"), msg, RED );
+}
 
 #if defined(DEBUG)
 
