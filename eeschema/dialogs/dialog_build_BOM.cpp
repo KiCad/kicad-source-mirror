@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2008 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -35,7 +35,6 @@
 #include <wxstruct.h>
 #include <build_version.h>
 
-#include <general.h>
 #include <netlist.h>
 #include <template_fieldnames.h>
 #include <sch_component.h>
@@ -45,14 +44,7 @@
 #include <wx/valgen.h>
 
 #include <dialog_build_BOM.h>
-
-#include <protos.h>
-
-
-extern void GenListeGLabels( std::vector <BOM_LABEL>& aList );
-extern bool SortLabelsByValue( const BOM_LABEL& obj1, const BOM_LABEL& obj2 );
-extern bool SortLabelsBySheet( const BOM_LABEL& obj1, const BOM_LABEL& obj2 );
-extern int  PrintListeGLabel( FILE* f, std::vector <BOM_LABEL>& aList );
+#include <BOM_lister.h>
 
 
 /* Local variables */
@@ -118,10 +110,10 @@ static char s_ExportSeparator[] = ("\t;,.");
 DIALOG_BUILD_BOM::DIALOG_BUILD_BOM( EDA_DRAW_FRAME* parent ) :
     DIALOG_BUILD_BOM_BASE( parent )
 {
-    m_Config = wxGetApp().GetSettings();
-    wxASSERT( m_Config != NULL );
+    m_config = wxGetApp().GetSettings();
+    wxASSERT( m_config != NULL );
 
-    m_Parent = parent;
+    m_parent = parent;
 
     Init();
 
@@ -142,18 +134,18 @@ void DIALOG_BUILD_BOM::Init()
     SetFocus();
 
     /* Get options */
-    m_Config->Read( OPTION_BOM_LIST_REF, &s_ListByRef );
-    m_Config->Read( OPTION_BOM_LIST_VALUE , &s_ListByValue );
-    m_Config->Read( OPTION_BOM_LIST_HPINS, &s_ListHierarchicalPinByName );
-    m_Config->Read( OPTION_BOM_LIST_HPINS_BY_SHEET, &s_ListWithSubCmponents );
-    m_Config->Read( OPTION_BOM_LIST_HPINS_BY_NAME_, &s_ListWithSubCmponents );
-    m_Config->Read( OPTION_BOM_LIST_SUB_CMP, &s_ListWithSubCmponents );
-    m_Config->Read( OPTION_BOM_LIST_HPINS_BY_SHEET, &s_ListHierarchicalPinBySheet );
-    m_Config->Read( OPTION_BOM_LIST_HPINS_BY_NAME_, &s_ListHierarchicalPinByName );
-    s_OutputFormOpt        = m_Config->Read( OPTION_BOM_FORMAT, (long) 0 );
-    m_Config->Read( OPTION_BOM_LAUNCH_BROWSER, &s_BrowseCreatedList );
-    s_OutputSeparatorOpt   = m_Config->Read( OPTION_BOM_SEPARATOR, (long) 0 );
-    long addfields = m_Config->Read( OPTION_BOM_ADD_FIELD, (long) 0 );
+    m_config->Read( OPTION_BOM_LIST_REF, &s_ListByRef );
+    m_config->Read( OPTION_BOM_LIST_VALUE , &s_ListByValue );
+    m_config->Read( OPTION_BOM_LIST_HPINS, &s_ListHierarchicalPinByName );
+    m_config->Read( OPTION_BOM_LIST_HPINS_BY_SHEET, &s_ListWithSubCmponents );
+    m_config->Read( OPTION_BOM_LIST_HPINS_BY_NAME_, &s_ListWithSubCmponents );
+    m_config->Read( OPTION_BOM_LIST_SUB_CMP, &s_ListWithSubCmponents );
+    m_config->Read( OPTION_BOM_LIST_HPINS_BY_SHEET, &s_ListHierarchicalPinBySheet );
+    m_config->Read( OPTION_BOM_LIST_HPINS_BY_NAME_, &s_ListHierarchicalPinByName );
+    s_OutputFormOpt = m_config->Read( OPTION_BOM_FORMAT, 0l );
+    m_config->Read( OPTION_BOM_LAUNCH_BROWSER, &s_BrowseCreatedList );
+    s_OutputSeparatorOpt   = m_config->Read( OPTION_BOM_SEPARATOR, 0l );
+    long addfields = m_config->Read( OPTION_BOM_ADD_FIELD, 0l );
 
     for( int ii = 0, bitmask = 1; s_AddFieldList[ii] != NULL; ii++ )
     {
@@ -264,8 +256,6 @@ void DIALOG_BUILD_BOM::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_BUILD_BOM::SavePreferences()
 {
-    wxASSERT( m_Config != NULL );
-
     // Determine current settings of "List items" and "Options" checkboxes
     s_ListByRef = m_ListCmpbyRefItems->GetValue();
     s_ListWithSubCmponents = m_ListSubCmpItems->GetValue();
@@ -296,16 +286,16 @@ void DIALOG_BUILD_BOM::SavePreferences()
     s_Add_Alls_state   = m_AddAllFields->GetValue();
 
     // Now save current settings of both radiobutton groups
-    m_Config->Write( OPTION_BOM_LIST_REF, s_ListByRef );
-    m_Config->Write( OPTION_BOM_LIST_VALUE , s_ListByValue );
-    m_Config->Write( OPTION_BOM_LIST_HPINS, s_ListHierarchicalPinByName );
-    m_Config->Write( OPTION_BOM_LIST_HPINS_BY_SHEET, s_ListHierarchicalPinBySheet );
-    m_Config->Write( OPTION_BOM_LIST_HPINS_BY_NAME_, s_ListHierarchicalPinByName );
-    m_Config->Write( OPTION_BOM_LIST_SUB_CMP, s_ListWithSubCmponents );
+    m_config->Write( OPTION_BOM_LIST_REF, s_ListByRef );
+    m_config->Write( OPTION_BOM_LIST_VALUE , s_ListByValue );
+    m_config->Write( OPTION_BOM_LIST_HPINS, s_ListHierarchicalPinByName );
+    m_config->Write( OPTION_BOM_LIST_HPINS_BY_SHEET, s_ListHierarchicalPinBySheet );
+    m_config->Write( OPTION_BOM_LIST_HPINS_BY_NAME_, s_ListHierarchicalPinByName );
+    m_config->Write( OPTION_BOM_LIST_SUB_CMP, s_ListWithSubCmponents );
 
-    m_Config->Write( OPTION_BOM_FORMAT, (long) s_OutputFormOpt );
-    m_Config->Write( OPTION_BOM_SEPARATOR, (long) s_OutputSeparatorOpt );
-    m_Config->Write( OPTION_BOM_LAUNCH_BROWSER, (long) s_BrowseCreatedList );
+    m_config->Write( OPTION_BOM_FORMAT, (long) s_OutputFormOpt );
+    m_config->Write( OPTION_BOM_SEPARATOR, (long) s_OutputSeparatorOpt );
+    m_config->Write( OPTION_BOM_LAUNCH_BROWSER, (long) s_BrowseCreatedList );
 
     // Now save current settings of all "Fields to add" checkboxes
     long addfields = 0;
@@ -318,7 +308,7 @@ void DIALOG_BUILD_BOM::SavePreferences()
         bitmask <<= 1;
     }
 
-    m_Config->Write( OPTION_BOM_ADD_FIELD, addfields );
+    m_config->Write( OPTION_BOM_ADD_FIELD, addfields );
 }
 
 
@@ -371,7 +361,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
 
     fn = dlg.GetPath();        // remember path+filename+ext for subsequent runs.
 
-    m_ListFileName = dlg.GetPath();
+    m_listFileName = dlg.GetPath();
 
     // Close dialog, then show the list (if so requested)
 
@@ -395,7 +385,7 @@ void DIALOG_BUILD_BOM::Create_BOM_Lists( int  aTypeFile,
     if( aRunBrowser )
     {
         wxString editorname = wxGetApp().GetEditorName();
-        wxString filename   = m_ListFileName;
+        wxString filename   = m_listFileName;
         AddDelimiterString( filename );
         ExecuteFile( this, editorname, filename );
     }
@@ -448,30 +438,23 @@ bool DIALOG_BUILD_BOM::IsFieldChecked(int aFieldId)
  */
 void DIALOG_BUILD_BOM::CreatePartsList( )
 {
-    FILE*    f;
-    wxString msg;
+    FILE* f;
 
-    if( ( f = wxFopen( m_ListFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
+        wxString msg;
         msg = _( "Failed to open file " );
-        msg << m_ListFileName;
+        msg << m_listFileName;
         DisplayError( this, msg );
         return;
     }
 
-    SCH_REFERENCE_LIST cmplist;
-    SCH_SHEET_LIST sheetList;
-
-    sheetList.GetComponents( cmplist, false );
-
-    // sort component list by ref and remove sub components
-    cmplist.RemoveSubComponentsFromList();
-
-    // sort component list by value
-    cmplist.SortByValueOnly( );
-    PrintComponentsListByPart( f, cmplist, false );
-
-    fclose( f );
+    BOM_LISTER bom_lister;
+    // Set the list of fields to add to list
+    for( int ii = FOOTPRINT, ii < FIELD8; ii++ )
+        if IsFieldChecked( ii )
+            bom_lister.AddFieldIdToPrintList( ii );
+    bom_lister.CreateCsvBOMList( s_ExportSeparatorSymbol, f );
 }
 
 
@@ -486,10 +469,10 @@ void DIALOG_BUILD_BOM::CreateExportList( bool aIncludeSubComponents )
     FILE*    f;
     wxString msg;
 
-    if( ( f = wxFopen( m_ListFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
         msg = _( "Failed to open file " );
-        msg << m_ListFileName;
+        msg << m_listFileName;
         DisplayError( this, msg );
         return;
     }
@@ -515,7 +498,7 @@ void DIALOG_BUILD_BOM::CreateExportList( bool aIncludeSubComponents )
 /*
  * GenereListeOfItems()
  * Main function to create the list of components and/or labels
- * (global labels and pin sheets" )
+ * (global labels, hierarchical labels and pin sheets )
  */
 void DIALOG_BUILD_BOM::GenereListeOfItems( bool aIncludeSubComponents )
 {
@@ -523,10 +506,10 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( bool aIncludeSubComponents )
     int      itemCount;
     wxString msg;
 
-    if( ( f = wxFopen( m_ListFileName, wxT( "wt" ) ) ) == NULL )
+    if( ( f = wxFopen( m_listFileName, wxT( "wt" ) ) ) == NULL )
     {
         msg = _( "Failed to open file " );
-        msg << m_ListFileName;
+        msg << m_listFileName;
         DisplayError( this, msg );
         return;
     }
@@ -561,39 +544,14 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( bool aIncludeSubComponents )
         }
     }
 
-    /*************************************************/
-    /* Create list of global labels and pins sheets */
-    /*************************************************/
-    std::vector <BOM_LABEL> listOfLabels;
+    // Create list of global labels, hierrachical labels and pins sheets
+    BOM_LISTER bom_lister;
 
-    GenListeGLabels( listOfLabels );
+    if( m_GenListLabelsbySheet->GetValue() )
+        bom_lister.PrintGlobalAndHierarchicalLabelsList( f, true );
 
-    if( ( itemCount = listOfLabels.size() ) > 0 )
-    {
-        if( m_GenListLabelsbySheet->GetValue() )
-        {
-            sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsBySheet );
-
-            msg.Printf( _( "\n#Global, Hierarchical Labels and PinSheets \
-( order = Sheet Number ) count = %d\n" ),
-                        itemCount );
-
-            fprintf( f, "%s", TO_UTF8( msg ) );
-            PrintListeGLabel( f, listOfLabels );
-        }
-
-        if( m_GenListLabelsbyVal->GetValue() )
-        {
-            sort( listOfLabels.begin(), listOfLabels.end(), SortLabelsByValue );
-
-            msg.Printf( _( "\n#Global, Hierarchical Labels and PinSheets ( \
-order = Alphab. ) count = %d\n\n" ),
-                        itemCount );
-
-            fprintf( f, "%s", TO_UTF8( msg ) );
-            PrintListeGLabel( f, listOfLabels );
-        }
-    }
+    if( m_GenListLabelsbyVal->GetValue() )
+        bom_lister.PrintGlobalAndHierarchicalLabelsList( f, false );
 
     msg = _( "\n#End List\n" );
     fprintf( f, "%s", TO_UTF8( msg ) );
@@ -763,11 +721,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
                 {
 #if defined(KICAD_GOST)
                     strCur.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol, GetChars( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( comp->GetPosition() );
+                    msg = m_parent->GetXYSheetReferences( comp->GetPosition() );
                     strCur.Printf( wxT( "%c%s)" ), s_ExportSeparatorSymbol, GetChars( msg ) );
 #else
                     fprintf( f, "%c%s", s_ExportSeparatorSymbol, TO_UTF8( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( comp->GetPosition() );
+                    msg = m_parent->GetXYSheetReferences( comp->GetPosition() );
                     fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
                              TO_UTF8( msg ) );
 #endif
@@ -775,7 +733,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
                 else
                 {
                     fprintf( f, "   (Sheet %s)", TO_UTF8( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( comp->GetPosition() );
+                    msg = m_parent->GetXYSheetReferences( comp->GetPosition() );
                     fprintf( f, "   (loc %s)", TO_UTF8( msg ) );
                 }
             }
@@ -865,49 +823,6 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
 }
 
 
-int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* aFile, SCH_REFERENCE_LIST& aList,
-                                                 bool aIncludeSubComponents )
-{
-    unsigned int index = 0;
-    while( index < aList.GetCount() )
-    {
-        SCH_COMPONENT *component = aList[index].GetComponent();
-        wxString referenceListStr;
-        int qty = 1;
-        referenceListStr.append( aList[index].GetRef() );
-        for( unsigned int i = index+1; i < aList.GetCount(); )
-        {
-            if( *(aList[i].GetComponent()) == *component )
-            {
-                referenceListStr.append( wxT( " " ) + aList[i].GetRef() );
-                aList.RemoveItem( i );
-                qty++;
-            }
-            else
-                i++; // Increment index only when current item is not removed from the list
-        }
-
-        // Write value, quantity and list of references
-        fprintf( aFile, "%15s%c%3d%c\"%s\"", TO_UTF8( component->GetField( VALUE )->GetText() ),
-                 s_ExportSeparatorSymbol, qty,
-                 s_ExportSeparatorSymbol, TO_UTF8( referenceListStr ) );
-
-        // Write the rest of the fields if required
-#if defined( KICAD_GOST )
-        fprintf( aFile, "%c%20s", s_ExportSeparatorSymbol,
-                 TO_UTF8( component->GetField( DATASHEET )->GetText() ) );
-#endif
-        for( int i = FOOTPRINT; i < component->GetFieldCount(); i++ )
-            if( IsFieldChecked( i ) )
-                fprintf( aFile, "%c%15s", s_ExportSeparatorSymbol,
-                         TO_UTF8( component->GetField( i )->GetText() ) );
-        fprintf( aFile, "\n" );
-        index++;
-    }
-    return 0;
-}
-
-
 int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
                                                 SCH_REFERENCE_LIST& aList,
                                                 bool                aIncludeSubComponents )
@@ -968,7 +883,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
             {
                 msg = aList[ii].GetSheetPath().PathHumanReadable();
                 fprintf( f, "   (Sheet %s)", TO_UTF8( msg ) );
-                msg = m_Parent->GetXYSheetReferences( DrawLibItem->GetPosition() );
+                msg = m_parent->GetXYSheetReferences( DrawLibItem->GetPosition() );
                 fprintf( f, "   (loc %s)", TO_UTF8( msg ) );
             }
         }
