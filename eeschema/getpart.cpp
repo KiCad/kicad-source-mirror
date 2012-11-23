@@ -121,7 +121,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 
     DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), aHistoryList,
                               msg, aUseLibBrowser );
-    if(  aHistoryList.GetCount() )
+    if( aHistoryList.GetCount() )
         dlg.SetComponentName( aHistoryList[0] );
 
     if ( dlg.ShowModal() == wxID_CANCEL )
@@ -143,6 +143,9 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 
     if( cmpName.IsEmpty() )
         return wxEmptyString;
+
+    // Here, cmpName contains the component name,
+    // or "*" if the Select All dialog button was pressed
 
 #ifndef KICAD_KEEPCASE
     cmpName.MakeUpper();
@@ -175,7 +178,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 
     libEntry = CMP_LIBRARY::FindLibraryComponent( cmpName, aLibname );
 
-    if( ( libEntry == NULL ) && allowWildSeach ) /* Search with wildcard */
+    if( ( libEntry == NULL ) && allowWildSeach ) // Search with wildcard
     {
         allowWildSeach = false;
         wxString wildname = wxChar( '*' ) + cmpName + wxChar( '*' );
@@ -191,7 +194,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
 
     if( libEntry == NULL )
     {
-        msg = _( "Failed to find part " ) + cmpName + _( " in library" );
+        msg.Printf( _( "Failed to find part <%s> in library" ), GetChars( cmpName ) );
         DisplayError( this, msg );
         return wxEmptyString;
     }
