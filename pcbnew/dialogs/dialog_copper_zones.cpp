@@ -37,7 +37,7 @@
 #include <zones.h>
 #include <base_units.h>
 
-#include <class_zone_settings.h>
+#include <class_zone.h>
 #include <class_board.h>
 #include <dialog_copper_zones_base.h>
 
@@ -545,11 +545,16 @@ void DIALOG_COPPER_ZONE::ExportSetupToOtherCopperZones( wxCommandEvent& event )
     if( !AcceptOptions( true, true ) )
         return;
 
-    // Export settings ( but layer and netcode ) to others zones:
+    // Export settings ( but layer and netcode ) to others copper zones
     BOARD* pcb = m_Parent->GetBoard();
     for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = pcb->GetArea( ii );
+
+        // Cannot export settings from a copper zone
+        // to a zone keepout:
+        if( zone->GetIsKeepout() )
+            continue;
         m_settings.ExportSetting( *zone, false );  // false = partial export
         m_Parent->OnModify();
     }
