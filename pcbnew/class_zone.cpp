@@ -641,6 +641,8 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     msg = _( "Zone Outline" );
 
+    // Display Cutout instead of Outline for holes inside a zone
+    // i.e. when num contour !=0
     int ncont = m_Poly->GetContour( m_CornerSelection );
 
     if( ncont )
@@ -648,7 +650,27 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
 
-    if( IsOnCopperLayer() )
+    if( GetIsKeepout() )
+    {
+        msg.Empty();
+        if( GetDoNotAllowVias() )
+            msg = _("No via");
+        if( GetDoNotAllowTracks() )
+        {
+            if( !msg.IsEmpty() )
+                msg += wxT(", ");
+            msg += _("No track");
+        }
+        if( GetDoNotAllowCopperPour() )
+        {
+            if( !msg.IsEmpty() )
+                msg += wxT(", ");
+            msg += _("No copper pour");
+        }
+
+        frame->AppendMsgPanel( _( "Keepout" ), msg, RED );
+    }
+    else if( IsOnCopperLayer() )
     {
         if( GetNet() >= 0 )
         {

@@ -79,7 +79,7 @@ int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, CMP_LIBRARY* Library, wxString& 
     static wxString OldCmpName;
 
     ii = DisplayComponentsNamesInLib( frame, Library, BufName, OldCmpName );
-    if( ii <= 0 )
+    if( ii <= 0 || BufName.IsEmpty() )
         return 0;
 
     OldCmpName = BufName;
