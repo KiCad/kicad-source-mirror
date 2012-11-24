@@ -95,7 +95,13 @@ DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
 void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
 {
     m_canvas->SetIgnoreMouseEvents( true );
+#ifndef __WXMAC__
     DIALOG_PCB_TEXT_PROPERTIES dlg( this, TextPCB, DC );
+#else
+    // Avoid "writes" in the dialog, creates errors with WxOverlay and NSView
+    // Raising an Exception - Fixes #891347
+    DIALOG_PCB_TEXT_PROPERTIES dlg( this, TextPCB, NULL );
+#endif
     dlg.ShowModal();
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
