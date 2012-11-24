@@ -3367,10 +3367,10 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
         fprintf( m_fp, ".ZoneConnection %d\n", me->GetZoneConnection() );
 
     if( me->GetThermalWidth() != 0 )
-        fprintf( m_fp, ".ThermalWidth %d\n", me->GetThermalWidth() );
+        fprintf( m_fp, ".ThermalWidth %s\n", fmtBIU( me->GetThermalWidth() ).c_str() );
 
     if( me->GetThermalGap() != 0 )
-        fprintf( m_fp, ".ThermalGap %d\n", me->GetThermalGap() );
+        fprintf( m_fp, ".ThermalGap %s\n", fmtBIU( me->GetThermalGap() ).c_str() );
 
     fprintf( m_fp, "$EndPAD\n" );
 
@@ -3430,10 +3430,10 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
         fprintf( m_fp, ".ZoneConnection %d\n", me->GetZoneConnection() );
 
     if( me->GetThermalWidth() != 0 )
-        fprintf( m_fp, ".ThermalWidth %d\n", me->GetThermalWidth() );
+        fprintf( m_fp, ".ThermalWidth %s\n", fmtBIU( me->GetThermalWidth() ).c_str() );
 
     if( me->GetThermalGap() != 0 )
-        fprintf( m_fp, ".ThermalGap %d\n", me->GetThermalGap() );
+        fprintf( m_fp, ".ThermalGap %s\n", fmtBIU( me->GetThermalGap() ).c_str() );
 
     // attributes
     if( me->GetAttributes() != MOD_DEFAULT )
