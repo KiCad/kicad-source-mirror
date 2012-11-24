@@ -67,7 +67,9 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( TextePcb == NULL )  // Should not occur
         return;
 
+#ifndef USE_WX_OVERLAY
     TextePcb->Draw( Panel, DC, GR_XOR );
+#endif
 
     if( TextePcb->IsNew() )  // If new: remove it
     {
@@ -78,7 +80,11 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     SwapData( TextePcb, &s_TextCopy );
     TextePcb->ClearFlags();
+#ifndef USE_WX_OVERLAY
     TextePcb->Draw( Panel, DC, GR_OR );
+#else
+    Panel->Refresh();
+#endif
 }
 
 
@@ -118,6 +124,9 @@ void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     }
 
     TextePcb->ClearFlags();
+#ifdef USE_WX_OVERLAY
+    m_canvas->Refresh();
+#endif
 }
 
 
@@ -132,6 +141,10 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aE
 
     aTextePcb->SetFlags( IS_MOVED );
     aTextePcb->DisplayInfo( this );
+
+#ifdef USE_WX_OVERLAY
+    m_canvas->Refresh();
+#endif
 
     GetScreen()->SetCrossHairPosition( aTextePcb->GetPosition() );
     m_canvas->MoveCursorToCrossHair();
@@ -240,6 +253,9 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         TextePcb->SetFlags( IN_EDIT );
 
     OnModify();
+#ifdef USE_WX_OVERLAY
+    m_canvas->Refresh();
+#endif
 }
 
 
@@ -261,4 +277,7 @@ void PCB_EDIT_FRAME::FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC )
         aTextePcb->SetFlags( IN_EDIT );
 
     OnModify();
+#ifdef USE_WX_OVERLAY
+    m_canvas->Refresh();
+#endif
 }
