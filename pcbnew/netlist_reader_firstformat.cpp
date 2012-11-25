@@ -80,9 +80,14 @@ bool NETLIST_READER::ReadOldFmtdNetList( FILE* aFile )
     /* First, read the netlist: Build the list of footprints found in netlist
      */
 
+#ifndef __WXMAC__
     // netlineReader dtor will close aFile
     FILE_LINE_READER netlineReader( aFile, m_netlistFullName );
-
+#else
+    //Seems that the setvbuf call destroys the FILE buffer (already allocated)
+    //And looses the first 4096 bytes so we set doOwn => false
+    FILE_LINE_READER netlineReader( aFile, m_netlistFullName, false );
+#endif
     COMPONENT_INFO *curComponent = NULL;
     while( netlineReader.ReadLine() )
     {
