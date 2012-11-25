@@ -27,8 +27,14 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
     if( Module == NULL )
         return;
 
+#ifndef __WXMAC__
     DIALOG_MODULE_BOARD_EDITOR* dialog = new DIALOG_MODULE_BOARD_EDITOR( this, Module, DC );
-
+#else
+    // avoid Avoid "writes" in the dialog, creates errors with WxOverlay and NSView & Modal
+    // Raising an Exception - Fixes #764678
+    DIALOG_MODULE_BOARD_EDITOR* dialog = new DIALOG_MODULE_BOARD_EDITOR( this, Module, NULL );
+#endif
+    
     int retvalue = dialog->ShowModal(); /* retvalue =
                                          *  -1 if abort,
                                          *  0 if exchange module,
@@ -36,6 +42,12 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
                                          *  and 2 for a goto editor command
                                          */
     dialog->Destroy();
+
+#ifdef __WXMAC__
+    // If something edited, push a refresh request
+    if (retvalue == 0 || retvalue == 1)
+        m_canvas->Refresh();
+#endif
 
     if( retvalue == 2 )
     {
