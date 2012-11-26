@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-26 13:00+0100\n"
-"PO-Revision-Date: 2012-11-26 13:37+0100\n"
+"POT-Creation-Date: 2012-11-26 18:33+0100\n"
+"PO-Revision-Date: 2012-11-26 18:39+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -525,19 +525,71 @@ msgstr "Opcje wyświetlania pola"
 msgid "Failed to open back annotate file <%s>"
 msgstr "Błąd otwarcia pliku numeracji wstecznej <%s>"
 
-#: eeschema/build_BOM.cpp:147
+#: eeschema/build_BOM.cpp:214
 #, c-format
-msgid "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s %s        (Arkusz %s) pozycja: %3.3f, %3.3f\n"
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = "
+"%d\n"
+msgstr ""
+"\n"
+"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = Numer "
+"arkusza ) liczba = %d\n"
 
-#: eeschema/build_BOM.cpp:170
+#: eeschema/build_BOM.cpp:222
 #, c-format
-msgid "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n"
-msgstr "> %-28.28s Arkusz pinów %-7.7s (Arkusz %s) pozycja: %3.3f, %3.3f\n"
+msgid ""
+"\n"
+"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
+"\n"
+msgstr ""
+"\n"
+"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = "
+"Alfabetyczny ) liczba = %d\n"
+"\n"
 
-#: eeschema/build_BOM.cpp:187
+#: eeschema/build_BOM.cpp:248
+#, c-format
+msgid "> %-28.28s %s        %s\n"
+msgstr "> %-28.28s %s        %s\n"
+
+#: eeschema/build_BOM.cpp:260
+#, c-format
+msgid "> %-28.28s PinSheet %-7.7s %s\n"
+msgstr "> %-28.28s PinSheet %-7.7s %s\n"
+
+#: eeschema/build_BOM.cpp:275
 msgid "#End labels\n"
 msgstr "#End labels\n"
+
+#: eeschema/build_BOM.cpp:352
+msgid "#Cmp ( order = Reference )"
+msgstr "#Cmp ( porządek = Oznaczenie )"
+
+#: eeschema/build_BOM.cpp:355 eeschema/build_BOM.cpp:670
+msgid " (with SubCmp)"
+msgstr " (z podelementem)"
+
+#: eeschema/build_BOM.cpp:488 eeschema/lib_field.cpp:71
+#: eeschema/lib_field.cpp:744 eeschema/template_fieldnames.cpp:25
+msgid "Field"
+msgstr "Pole"
+
+#: eeschema/build_BOM.cpp:492
+msgid "Item count"
+msgstr "Ilość elementów"
+
+#: eeschema/build_BOM.cpp:667
+msgid ""
+"\n"
+"#Cmp ( order = Value )"
+msgstr ""
+"\n"
+"#Cmp ( porządek = Wartość )"
+
+#: eeschema/build_BOM.cpp:716
+msgid "#End Cmp\n"
+msgstr "#Koniec Cmp\n"
 
 #: eeschema/class_drc_erc_item.cpp:40
 msgid "ERC err unspecified"
@@ -1232,6 +1284,7 @@ msgstr "Słowa kluczowe"
 
 #: eeschema/libedit.cpp:474 eeschema/lib_field.cpp:583
 #: eeschema/template_fieldnames.cpp:17
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:76
 msgid "Datasheet"
 msgstr "Dokumentacja"
 
@@ -1804,12 +1857,6 @@ msgstr " - Eksport OK"
 #: eeschema/lib_export.cpp:164
 msgid "Error creating "
 msgstr "Błąd podczas tworzenia "
-
-#: eeschema/lib_field.cpp:71 eeschema/lib_field.cpp:744
-#: eeschema/template_fieldnames.cpp:25
-#: eeschema/dialogs/dialog_build_BOM.cpp:677
-msgid "Field"
-msgstr "Pole"
 
 #: eeschema/lib_field.cpp:562 eeschema/onrightclick.cpp:319
 #: eeschema/sch_component.cpp:1481 eeschema/template_fieldnames.cpp:14
@@ -2624,8 +2671,7 @@ msgid "hierarchy..."
 msgstr "hierarchii..."
 
 #: eeschema/netlist_control.cpp:144
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:20
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:60
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:23
 #: pcbnew/dialogs/dialog_drc_base.cpp:23
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:89
@@ -3932,7 +3978,6 @@ msgid "Silent mode"
 msgstr "Nie potwierdzaj"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:202
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:135
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:65
@@ -3958,40 +4003,21 @@ msgstr "Usuń numerację"
 msgid "Annotation"
 msgstr "Numeruj"
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:352
+#: eeschema/dialogs/dialog_build_BOM.cpp:366
 msgid "Bill of Materials"
 msgstr "Lista materiałów"
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:456
-#: eeschema/dialogs/dialog_build_BOM.cpp:491
-#: eeschema/dialogs/dialog_build_BOM.cpp:528
+#: eeschema/dialogs/dialog_build_BOM.cpp:475
+#, c-format
+msgid "Failed to open file '%s'"
+msgstr "Błąd otwarcia pliku '%s'"
+
+#: eeschema/dialogs/dialog_build_BOM.cpp:512
+#: eeschema/dialogs/dialog_build_BOM.cpp:556
 msgid "Failed to open file "
 msgstr "Błąd otwierania pliku "
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:577
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = "
-"%d\n"
-msgstr ""
-"\n"
-"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = Numer "
-"arkusza ) liczba = %d\n"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:589
-#, c-format
-msgid ""
-"\n"
-"#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
-"\n"
-msgstr ""
-"\n"
-"#Etykiety globalne, hierarchiczne i arkusze pinów ( porządek = "
-"Alfabetyczny ) liczba = %d\n"
-"\n"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:598
+#: eeschema/dialogs/dialog_build_BOM.cpp:590
 msgid ""
 "\n"
 "#End List\n"
@@ -3999,45 +4025,19 @@ msgstr ""
 "\n"
 "#Koniec listy\n"
 
-#: eeschema/dialogs/dialog_build_BOM.cpp:686
-msgid ""
-"\n"
-"#Cmp ( order = Reference )"
-msgstr ""
-"\n"
-"#Cmp ( porządek = Oznaczenie )"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:689
-#: eeschema/dialogs/dialog_build_BOM.cpp:924
-msgid " (with SubCmp)"
-msgstr " (z podelementem)"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:837
-#: eeschema/dialogs/dialog_build_BOM.cpp:979
-msgid "#End Cmp\n"
-msgstr "#Koniec Cmp\n"
-
-#: eeschema/dialogs/dialog_build_BOM.cpp:921
-msgid ""
-"\n"
-"#Cmp ( order = Value )"
-msgstr ""
-"\n"
-"#Cmp ( porządek = Wartość )"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:23
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:26
 msgid "List items:"
 msgstr "Lista elementów:"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:25
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:28
 msgid "Components by reference"
 msgstr "Symbole wg oznaczeń"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:29
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:31
 msgid "Sub components (i.e. U2A, U2B ...)"
 msgstr "Elementy składowe (np. U2A, U2B ...)"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:33
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:34
 msgid "Components by value"
 msgstr "Symbole wg wartości"
 
@@ -4045,97 +4045,101 @@ msgstr "Symbole wg wartości"
 msgid "Hierarchy pins by name"
 msgstr "Piny hierarchii wg nazwy"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:41
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:40
 msgid "Hierarchy pins by sheets"
 msgstr "Piny hierarchii wg arkuszy"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:47
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:46
 msgid "List"
 msgstr "Lista"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:47
-msgid "Text for spreadsheet import"
-msgstr "Tekst dla importu do arkusza kalkulacyjnego"
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:46
+msgid "List for spreadsheet import (by ref)"
+msgstr "Lista importowana do arkusza kalkulacyjnego (wg oznaczeń)"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:47
-msgid "Single Part per line"
-msgstr "Jeden element w linii"
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:46
+msgid "List for spreadsheet import (by grouped ref)"
+msgstr "Lista importowana do arkusza kalkulacyjnego (wg grup oznaczeń)"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:49
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:46
+msgid "List for spreadsheet import (by value)"
+msgstr "Lista importowana do arkusza kalkulacyjnego (wg wartości)"
+
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:48
 msgid "Output format:"
 msgstr "Format wyjściowy:"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:53
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:52
 msgid "Tab"
 msgstr "Tab"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:53
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:52
 msgid ";"
 msgstr ";"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:53
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:52
 msgid ","
 msgstr ","
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:55
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:54
 msgid "Field separator for spreadsheet import:"
 msgstr "Separator pola przy imporcie z arkusza kalkulacyjnego:"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:62
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:58
 msgid "Launch list browser"
 msgstr "Uruchom przeglądarkę list"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:74
-msgid "Fields to add:"
-msgstr "Pola do dodania:"
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:68
+msgid "Add to list:"
+msgstr "Dodaj do listy:"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:77
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:70
+msgid "Component location"
+msgstr "Położenie elementu"
+
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:74
 msgid "System Fields:"
 msgstr "Pola systemowe:"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:86
-msgid "Users Fields:"
+msgid "Users fields:"
 msgstr "Pola użytkownika:"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:88
 msgid "Field 1"
 msgstr "Pole 1"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:92
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:91
 msgid "Field 2"
 msgstr "Pole 2"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:96
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:94
 msgid "Field 3"
 msgstr "Pole 3"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:100
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:97
 msgid "Field 4"
 msgstr "Pole 4"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:104
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:100
 msgid "Field 5"
 msgstr "Pole 5"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:108
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:103
 msgid "Field 6"
 msgstr "Pole 6"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:112
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:106
 msgid "Field 7"
 msgstr "Pole 7"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:116
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:109
 msgid "Field 8"
 msgstr "Pole 8"
 
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:120
-msgid "All existing users fields"
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:115
+msgid "All existing user fields"
 msgstr "Wszystkie istniejące pola użytkownika"
-
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:131
-msgid "Ok"
-msgstr "Ok"
 
 #: eeschema/dialogs/dialog_color_config.cpp:20
 msgid "Wire"
@@ -17657,7 +17661,7 @@ msgstr "Niepołączone"
 msgid "Annotate Schematic"
 msgstr "Numeruj schemat"
 
-#: eeschema/dialogs/dialog_build_BOM_base.h:69
+#: eeschema/dialogs/dialog_build_BOM_base.h:76
 msgid "List of Material"
 msgstr "Lista materiałów"
 
@@ -17882,6 +17886,15 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Single Part per line"
+#~ msgstr "Jeden element w linii"
+
+#~ msgid "Fields to add:"
+#~ msgstr "Pola do dodania:"
+
+#~ msgid "Ok"
+#~ msgstr "Ok"
 
 #~ msgid "Failed to find part "
 #~ msgstr "Nie znaleziono elementu "
