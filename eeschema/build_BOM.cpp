@@ -553,9 +553,8 @@ bool BOM_LISTER::PrintComponentsListByReferenceCsvForm( FILE* aFile )
             msg = returnURLItemLocation(
                 m_cmplist[ii].GetSheetPath().PathHumanReadable(),
                 comp->GetPosition() );
-            msg << m_separatorSymbol;
 
-            fprintf( m_outFile, "%s", TO_UTF8( msg ) );
+            fprintf( m_outFile, "%c%s", m_separatorSymbol, TO_UTF8( msg ) );
         }
 
         if( groupRefs )
