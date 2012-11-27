@@ -186,7 +186,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 
 
 void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser )
-                      throw( IO_ERROR, PARSE_ERROR )
+                      throw( PARSE_ERROR, IO_ERROR )
 {
     aParser->Parse( this );
 }
@@ -310,7 +310,7 @@ PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( char* aLine, const wxString& aSo
 
 
 void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
-                             throw( IO_ERROR, PARSE_ERROR )
+                             throw( PARSE_ERROR, IO_ERROR )
 {
     T token;
     while( ( token = NextTok() ) != T_RIGHT )

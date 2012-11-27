@@ -41,8 +41,10 @@ class PCB_PLOT_PARAMS_PARSER : public PCB_PLOT_PARAMS_LEXER
 public:
     PCB_PLOT_PARAMS_PARSER( LINE_READER* aReader );
     PCB_PLOT_PARAMS_PARSER( char* aLine, const wxString& aSource );
+
     LINE_READER* GetReader() { return reader; };
-    void Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_ERROR, PARSE_ERROR );
+
+    void Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( PARSE_ERROR, IO_ERROR );
     bool ParseBool();
 
     /**
@@ -54,6 +56,7 @@ public:
      */
     int ParseInt( int aMin, int aMax );
 };
+
 
 /**
  * Class PCB_PLOT_PARAMS
@@ -180,7 +183,7 @@ public:
 
     void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl=0 )
                         const throw( IO_ERROR );
-    void        Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( IO_ERROR, PARSE_ERROR );
+    void        Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( PARSE_ERROR, IO_ERROR );
 
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
     bool        operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
