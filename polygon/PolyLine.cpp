@@ -1321,12 +1321,12 @@ void ConvertPolysListWithHolesToOnePolygon( const std::vector<CPolyPt>&  aPolysL
             polysholes.push_back( poly_tmp );
         }
     }
-
     mainpoly -= polysholes;
 
     // copy polygon with no holes to destination
-    // We should have only one polygon in list
-    wxASSERT( mainpoly.size() != 1 );
+    // Because all holes are now linked to the main outline
+    // by overlapping segments, we should have only one polygon in list
+    wxASSERT( mainpoly.size() == 1 );
 
     KI_POLYGON& poly_nohole = mainpoly[0];
     CPolyPt   corner( 0, 0, false );

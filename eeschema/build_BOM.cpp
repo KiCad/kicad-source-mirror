@@ -245,7 +245,7 @@ order = Alphab. ) count = %d\n\n"                                               
                 labeltype = wxT( "Global      " );
 
             sheetpath = m_labelList[ii].GetSheetPath().PathHumanReadable();
-            msg.Printf( _( "> %-28.28s %s        %s\n" ),
+            msg.Printf( wxT( "> %-28.28s %s        %s\n" ),
                         GetChars( label->GetText() ),
                         GetChars( labeltype ),
                         GetChars( returnURLItemLocation( sheetpath, label->m_Pos ) ) );
