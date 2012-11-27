@@ -222,16 +222,8 @@ void FP_CACHE::Load()
 
     do
     {
-        FILE* fp = wxFopen( fpFileName, wxT( "r" ) );
-
-        if( !fp )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "cannot open footprint library file '%s'" ),
-                                              fpFileName.GetData() ) );
-        }
-
         // reader now owns fp, will close on exception or return
-        FILE_LINE_READER    reader( fp, fpFileName );
+        FILE_LINE_READER    reader( fpFileName );
 
         m_owner->m_parser->SetLineReader( &reader );
 
@@ -1551,15 +1543,7 @@ PCB_IO::~PCB_IO()
 
 BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
 {
-    wxFFile file( aFileName, wxT("r") );
-
-    if( !file.IsOpened() )
-    {
-        wxString msg = wxString::Format( _( "Unable to read file \"%s\"" ), GetChars( aFileName ) );
-        THROW_IO_ERROR( msg );
-    }
-
-    FILE_LINE_READER    reader( file.fp(), aFileName, false /* wxFFile owns fp */ );
+    FILE_LINE_READER    reader( aFileName );
 
     m_parser->SetLineReader( &reader );
     m_parser->SetBoard( aAppendToMe );

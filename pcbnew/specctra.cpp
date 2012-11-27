@@ -230,14 +230,9 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IO_ERROR )
 
 void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR )
 {
-    FILE*       fp = wxFopen( filename, wxT("r") );
+    FILE_LINE_READER    reader( filename );
 
-    if( !fp )
-    {
-        ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
-    }
-
-    PushReader( new FILE_LINE_READER( fp, filename ) );
+    PushReader( &reader );
 
     if( NextTok() != T_LEFT )
         Expecting( T_LEFT );
@@ -248,21 +243,15 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR )
     SetPCB( new PCB() );
 
     doPCB( pcb );
-
-    delete PopReader();     // close fp
+    PopReader();
 }
 
 
 void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IO_ERROR )
 {
-    FILE*       fp = wxFopen( filename, wxT("r") );
+    FILE_LINE_READER    reader( filename );
 
-    if( !fp )
-    {
-        ThrowIOError( _("Unable to open file \"%s\""), GetChars(filename) );
-    }
-
-    PushReader( new FILE_LINE_READER( fp, filename ) );
+    PushReader( &reader );
 
     if( NextTok() != T_LEFT )
         Expecting( T_LEFT );
@@ -274,7 +263,7 @@ void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IO_ERROR )
 
     doSESSION( session );
 
-    delete PopReader();      // close fp
+    PopReader();
 }
 
 

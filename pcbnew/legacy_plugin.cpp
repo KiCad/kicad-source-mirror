@@ -238,15 +238,7 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPE
     // delete on exception, iff I own m_board, according to aAppendToMe
     auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
-    FILE* fp = wxFopen( aFileName, wxT( "r" ) );
-    if( !fp )
-    {
-        m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
-        THROW_IO_ERROR( m_error );
-    }
-
-    // reader now owns fp, will close on exception or return
-    FILE_LINE_READER    reader( fp, aFileName );
+    FILE_LINE_READER    reader( aFileName );
 
     m_reader = &reader;          // member function accessibility
 
@@ -3920,15 +3912,7 @@ wxDateTime FPL_CACHE::GetLibModificationTime()
 
 void FPL_CACHE::Load()
 {
-    FILE* fp = wxFopen( m_lib_name, wxT( "r" ) );
-    if( !fp )
-    {
-        THROW_IO_ERROR( wxString::Format(
-            _( "Unable to open legacy library file '%s'" ), m_lib_name.GetData() ) );
-    }
-
-    // reader now owns fp, will close on exception or return
-    FILE_LINE_READER    reader( fp, m_lib_name );
+    FILE_LINE_READER    reader( m_lib_name );
 
     ReadAndVerifyHeader( &reader );
     SkipIndex( &reader );
