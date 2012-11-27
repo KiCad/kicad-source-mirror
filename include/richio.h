@@ -310,6 +310,27 @@ public:
 
     /**
      * Constructor FILE_LINE_READER
+     * takes @a aFileName and the size of the desired line buffer and opens
+     * the file and assumes the obligation to close it.
+     *
+     * @param aFileName is the name of the file to open and to use for error reporting purposes.
+     *
+     * @param aStartingLineNumber is the initial line number to report on error, and is
+     *  accessible here for the case where multiple DSNLEXERs are reading from the
+     *  same file in sequence, all from the same open file (with @a doOwn = false).
+     *  Internally it is incremented by one after each ReadLine(), so the first
+     *  reported line number will always be one greater than what is provided here.
+     *
+     * @param aMaxLineLength is the number of bytes to use in the line buffer.
+     *
+     * @throw IO_ERROR if @a aFileName cannot be opened.
+     */
+    FILE_LINE_READER( const wxString& aFileName,
+            unsigned aStartingLineNumber = 0,
+            unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX ) throw( IO_ERROR );
+
+    /**
+     * Constructor FILE_LINE_READER
      * takes an open FILE and the size of the desired line buffer and takes
      * ownership of the open file, i.e. assumes the obligation to close it.
      *

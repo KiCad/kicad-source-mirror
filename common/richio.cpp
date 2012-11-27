@@ -89,6 +89,27 @@ void LINE_READER::expandCapacity( unsigned newsize )
 }
 
 
+FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
+            unsigned aStartingLineNumber,
+            unsigned aMaxLineLength ) throw( IO_ERROR ) :
+    LINE_READER( aMaxLineLength ),
+    iOwn( true )
+{
+    fp = wxFopen( aFileName, wxT( "rt" ) );
+    if( !fp )
+    {
+        wxString msg = wxString::Format(
+            _( "Unable to open filename '%s' for reading" ), aFileName.GetData() );
+        THROW_IO_ERROR( msg );
+    }
+
+    setvbuf( fp, NULL, _IOFBF, BUFSIZ * 8 );
+
+    source  = aFileName;
+    lineNum = aStartingLineNumber;
+}
+
+
 FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName,
                     bool doOwn,
                     unsigned aStartingLineNumber,
@@ -97,7 +118,7 @@ FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName,
     iOwn( doOwn ),
     fp( aFile )
 {
-    if( doOwn )
+    if( doOwn && ftell( aFile ) == 0L )
     {
         setvbuf( fp, NULL, _IOFBF, BUFSIZ * 8 );
     }
