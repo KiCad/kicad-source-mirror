@@ -45,31 +45,20 @@ public:
      * Constructor ( LINE_READER& )
      * does not take ownership over @a aReader, so will not destroy it.
      */
-    FILTER_READER( LINE_READER& aReader ) :
-       reader( aReader )
-    {
-    }
+    FILTER_READER( LINE_READER& aReader );
 
-    unsigned ReadLine() throw( IO_ERROR );
+    ~FILTER_READER();
+
+    char* ReadLine() throw( IO_ERROR );
 
     const wxString& GetSource() const
     {
         return reader.GetSource();
     }
 
-    char* Line() const
-    {
-        return reader.Line();
-    }
-
     unsigned LineNumber() const
     {
         return reader.LineNumber();
-    }
-
-    unsigned Length() const
-    {
-        return reader.Length();
     }
 };
 
