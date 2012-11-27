@@ -227,20 +227,17 @@ public:
      */
     LINE_READER( unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX );
 
-    virtual ~LINE_READER()
-    {
-        delete[] line;
-    }
+    virtual ~LINE_READER();
 
     /**
      * Function ReadLine
      * reads a line of text into the buffer and increments the line number
      * counter.  If the line is larger than aMaxLineLength passed to the
      * constructor, then an exception is thrown.  The line is nul terminated.
-     * @return unsigned - The number of bytes read, 0 at end of file.
+     * @return char* - The beginning of the read line, or NULL if EOF.
      * @throw IO_ERROR when a line is too long.
      */
-    virtual unsigned ReadLine() throw( IO_ERROR ) = 0;
+    virtual char* ReadLine() throw( IO_ERROR ) = 0;
 
     /**
      * Function GetSource
@@ -258,7 +255,7 @@ public:
      * Function Line
      * returns a pointer to the last line that was read in.
      */
-    virtual char* Line() const
+    char* Line() const
     {
         return line;
     }
@@ -287,7 +284,7 @@ public:
      * Function Length
      * returns the number of bytes in the last line read from this LINE_READER.
      */
-    virtual unsigned Length() const
+    unsigned Length() const
     {
         return length;
     }
@@ -307,6 +304,27 @@ protected:
     FILE*   fp;     ///< I may own this file, but might not.
 
 public:
+
+    /**
+     * Constructor FILE_LINE_READER
+     * takes @a aFileName and the size of the desired line buffer and opens
+     * the file and assumes the obligation to close it.
+     *
+     * @param aFileName is the name of the file to open and to use for error reporting purposes.
+     *
+     * @param aStartingLineNumber is the initial line number to report on error, and is
+     *  accessible here for the case where multiple DSNLEXERs are reading from the
+     *  same file in sequence, all from the same open file (with @a doOwn = false).
+     *  Internally it is incremented by one after each ReadLine(), so the first
+     *  reported line number will always be one greater than what is provided here.
+     *
+     * @param aMaxLineLength is the number of bytes to use in the line buffer.
+     *
+     * @throw IO_ERROR if @a aFileName cannot be opened.
+     */
+    FILE_LINE_READER( const wxString& aFileName,
+            unsigned aStartingLineNumber = 0,
+            unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX ) throw( IO_ERROR );
 
     /**
      * Constructor FILE_LINE_READER
@@ -333,7 +351,7 @@ public:
      */
     ~FILE_LINE_READER();
 
-    unsigned ReadLine() throw( IO_ERROR );   // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR );   // see LINE_READER::ReadLine() description
 
     /**
      * Function Rewind
@@ -380,7 +398,7 @@ public:
      */
     STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint );
 
-    unsigned ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
 };
 
 
@@ -402,7 +420,7 @@ public:
      */
     INPUTSTREAM_LINE_READER( wxInputStream* aStream );
 
-    unsigned ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
 };
 
 

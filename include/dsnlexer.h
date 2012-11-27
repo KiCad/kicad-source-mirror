@@ -117,7 +117,9 @@ protected:
     {
         if( reader )
         {
-            unsigned len = reader->ReadLine();
+            reader->ReadLine();
+
+            unsigned len = reader->Length();
 
             // start may have changed in ReadLine(), which can resize and
             // relocate reader's line buffer.

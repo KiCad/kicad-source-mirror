@@ -64,6 +64,12 @@ LINE_READER::LINE_READER( unsigned aMaxLineLength )
 }
 
 
+LINE_READER::~LINE_READER()
+{
+    delete[] line;
+}
+
+
 void LINE_READER::expandCapacity( unsigned newsize )
 {
     // length can equal maxLineLength and nothing breaks, there's room for
@@ -89,6 +95,27 @@ void LINE_READER::expandCapacity( unsigned newsize )
 }
 
 
+FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
+            unsigned aStartingLineNumber,
+            unsigned aMaxLineLength ) throw( IO_ERROR ) :
+    LINE_READER( aMaxLineLength ),
+    iOwn( true )
+{
+    fp = wxFopen( aFileName, wxT( "rt" ) );
+    if( !fp )
+    {
+        wxString msg = wxString::Format(
+            _( "Unable to open filename '%s' for reading" ), aFileName.GetData() );
+        THROW_IO_ERROR( msg );
+    }
+
+    setvbuf( fp, NULL, _IOFBF, BUFSIZ * 8 );
+
+    source  = aFileName;
+    lineNum = aStartingLineNumber;
+}
+
+
 FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName,
                     bool doOwn,
                     unsigned aStartingLineNumber,
@@ -97,7 +124,7 @@ FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName,
     iOwn( doOwn ),
     fp( aFile )
 {
-    if( doOwn )
+    if( doOwn && ftell( aFile ) == 0L )
     {
         setvbuf( fp, NULL, _IOFBF, BUFSIZ * 8 );
     }
@@ -113,40 +140,8 @@ FILE_LINE_READER::~FILE_LINE_READER()
         fclose( fp );
 }
 
-#if 0
 
-// The strlen() will trip on embedded nuls which can come in via bad data files.
-// Try an alternate technique below.
-
-unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
-{
-    length  = 0;
-    line[0] = 0;
-
-    // fgets always puts a terminating nul at end of its read.
-    while( fgets( line + length, capacity - length, fp ) )
-    {
-        length += strlen( line + length );
-
-        if( length >= maxLineLength )
-            THROW_IO_ERROR( _("Line length exceeded") );
-
-        // a normal line breaks here, once through while loop
-        if( length+1 < capacity || line[length-1] == '\n' )
-            break;
-
-        expandCapacity( capacity * 2 );
-    }
-
-    // lineNum is incremented even if there was no line read, because this
-    // leads to better error reporting when we hit an end of file.
-    ++lineNum;
-
-    return length;
-}
-
-#else
-unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
+char* FILE_LINE_READER::ReadLine() throw( IO_ERROR )
 {
     length = 0;
 
@@ -175,9 +170,8 @@ unsigned FILE_LINE_READER::ReadLine() throw( IO_ERROR )
     // leads to better error reporting when we hit an end of file.
     ++lineNum;
 
-    return length;
+    return length ? line : NULL;
 }
-#endif
 
 
 STRING_LINE_READER::STRING_LINE_READER( const std::string& aString, const wxString& aSource ) :
@@ -203,7 +197,8 @@ STRING_LINE_READER::STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint
     lineNum = aStartingPoint.lineNum;
 }
 
-unsigned STRING_LINE_READER::ReadLine() throw( IO_ERROR )
+
+char* STRING_LINE_READER::ReadLine() throw( IO_ERROR )
 {
     size_t  nlOffset = lines.find( '\n', ndx );
 
@@ -231,7 +226,7 @@ unsigned STRING_LINE_READER::ReadLine() throw( IO_ERROR )
 
     line[length] = 0;
 
-    return length;
+    return length ? line : NULL;
 }
 
 
@@ -242,7 +237,7 @@ INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream ) :
 }
 
 
-unsigned INPUTSTREAM_LINE_READER::ReadLine() throw( IO_ERROR )
+char* INPUTSTREAM_LINE_READER::ReadLine() throw( IO_ERROR )
 {
     length  = 0;
 
@@ -272,7 +267,7 @@ unsigned INPUTSTREAM_LINE_READER::ReadLine() throw( IO_ERROR )
     // leads to better error reporting when we hit an end of file.
     ++lineNum;
 
-    return length;
+    return length ? line : NULL;
 }
 
 
