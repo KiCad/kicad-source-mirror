@@ -127,9 +127,9 @@ static bool inline isSpace( int c ) { return strchr( delims, c ) != 0; }
 /// The function and macro which follow comprise a shim which can be a
 /// monitor on lines of text read in from the input file.
 /// And it can be used as a trap.
-static inline unsigned ReadLine( LINE_READER* rdr, const char* caller )
+static inline char* ReadLine( LINE_READER* rdr, const char* caller )
 {
-    unsigned ret = rdr->ReadLine();
+    char* ret = rdr->ReadLine();
 
     const char* line = rdr->Line();
     printf( "%-6u %s: %s", rdr->LineNumber(), caller, line );
@@ -268,11 +268,10 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
     // $SETUP section is next
 
     // Then follows $EQUIPOT and all the rest
+    char* line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
-        char* line = m_reader->Line();
-
         // put the more frequent ones at the top, but realize TRACKs are loaded as a group
 
         if( TESTLINE( "$MODULE" ) )
@@ -344,10 +343,9 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             }
             else
             {
-                while( READLINE( m_reader ) )
+                while( ( line = READLINE( m_reader ) ) != NULL )
                 {
-                    line = m_reader->Line();     // gobble until $EndSetup
-
+                    // gobble until $EndSetup
                     if( TESTLINE( "$EndSETUP" ) )
                         break;
                 }
@@ -395,9 +393,10 @@ void LEGACY_PLUGIN::checkVersion()
 
 void LEGACY_PLUGIN::loadGENERAL()
 {
-    while( READLINE( m_reader ) )
+    char*   line;
+
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
-        char*       line = m_reader->Line();
         const char* data;
 
         if( TESTLINE( "Units" ) )
@@ -516,11 +515,10 @@ void LEGACY_PLUGIN::loadSHEET()
 {
     char        buf[260];
     TITLE_BLOCK tb;
+    char*       line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
-        char* line = m_reader->Line();
-
         if( TESTLINE( "Sheet" ) )
         {
             // e.g. "Sheet A3 16535 11700"
@@ -628,14 +626,14 @@ void LEGACY_PLUGIN::loadSHEET()
 
 void LEGACY_PLUGIN::loadSETUP()
 {
-    NETCLASS* netclass_default  = m_board->m_NetClasses.GetDefault();
+    NETCLASS*               netclass_default  = m_board->m_NetClasses.GetDefault();
     BOARD_DESIGN_SETTINGS   bds = m_board->GetDesignSettings();
     ZONE_SETTINGS           zs  = m_board->GetZoneSettings();
+    char*                   line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         const char* data;
-        char* line = m_reader->Line();
 
         if( TESTLINE( "PcbPlotParams" ) )
         {
@@ -928,12 +926,11 @@ void LEGACY_PLUGIN::loadSETUP()
 
 MODULE* LEGACY_PLUGIN::LoadMODULE()
 {
-    auto_ptr<MODULE> module( new MODULE( m_board ) );
+    auto_ptr<MODULE>    module( new MODULE( m_board ) );
+    char*               line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
-        char* line = m_reader->Line();
-
         const char* data;
 
         // most frequently encountered ones at the top
@@ -1139,11 +1136,11 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
 void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 {
     auto_ptr<D_PAD> pad( new D_PAD( aModule ) );
+    char*           line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         const char* data;
-        char* line = m_reader->Line();
 
         if( TESTLINE( "Sh" ) )              // (Sh)ape and padname
         {
@@ -1450,12 +1447,10 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
             for( int ii = 0;  ii<ptCount;  ++ii )
             {
-                if( !READLINE( m_reader ) )
+                if( ( line = READLINE( m_reader ) ) == NULL )
                 {
                     THROW_IO_ERROR( "S_POLGON point count mismatch." );
                 }
-
-                line = m_reader->Line();
 
                 // e.g. "Dl 23 44\n"
 
@@ -1625,10 +1620,9 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
         t3D = n3D;
     }
 
-    while( READLINE( m_reader ) )
+    char*   line;
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
-        char* line = m_reader->Line();
-
         if( TESTLINE( "Na" ) )     // Shape File Name
         {
             char    buf[512];
@@ -1677,12 +1671,12 @@ void LEGACY_PLUGIN::loadPCB_LINE()
         $EndDRAWSEGMENT
     */
 
-    auto_ptr<DRAWSEGMENT> dseg( new DRAWSEGMENT( m_board ) );
+    auto_ptr<DRAWSEGMENT>   dseg( new DRAWSEGMENT( m_board ) );
+    char*                   line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         const char* data;
-        char* line  = m_reader->Line();
 
         if( TESTLINE( "Po" ) )
         {
@@ -1783,12 +1777,12 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 {
     char  buf[1024];
 
-    NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
+    NETINFO_ITEM*   net = new NETINFO_ITEM( m_board );
+    char*           line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         const char* data;
-        char* line = m_reader->Line();
 
         if( TESTLINE( "Na" ) )
         {
@@ -1842,13 +1836,14 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
     char    text[1024];
 
     // maybe someday a constructor that takes all this data in one call?
-    TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
+    TEXTE_PCB*  pcbtxt = new TEXTE_PCB( m_board );
     m_board->Add( pcbtxt, ADD_APPEND );
 
-    while( READLINE( m_reader ) )
+    char*       line;
+
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         const char* data;
-        char* line = m_reader->Line();
 
         if( TESTLINE( "Te" ) )          // Text line (or first line for multi line texts)
         {
@@ -1947,7 +1942,9 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
 void LEGACY_PLUGIN::loadTrackList( int aStructType )
 {
-    while( READLINE( m_reader ) )
+    char*   line;
+
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         // read two lines per loop iteration, each loop is one TRACK or VIA
         // example first line:
@@ -1955,7 +1952,6 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         // e.g. "Po 3 21086 17586 21086 17586 180 -1"  for a via (uses sames start and end)
 
         const char* data;
-        char* line = m_reader->Line();
 
         if( line[0] == '$' )    // $EndTRACK
             return;             // preferred exit
@@ -2065,6 +2061,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 {
     char        buf[1024];
     wxString    netname;
+    char*       line;
 
     // create an empty NETCLASS without a name, but do not add it to the BOARD
     // yet since that would bypass duplicate netclass name checking within the BOARD.
@@ -2072,10 +2069,8 @@ void LEGACY_PLUGIN::loadNETCLASS()
     // just before returning.
     auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
-        char* line = m_reader->Line();
-
         if( TESTLINE( "AddNet" ) )      // most frequent type of line
         {
             // e.g. "AddNet "V3.3D"\n"
@@ -2164,11 +2159,11 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
     CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::NO_HATCH;
     bool    sawCorner = false;
     char    buf[1024];
+    char*   line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         const char* data;
-        char* line = m_reader->Line();
 
         if( TESTLINE( "ZCorner" ) )         // new corner found
         {
@@ -2349,10 +2344,8 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // Read the PolysList (polygons used for fill areas in the zone)
             std::vector<CPolyPt> polysList;
 
-            while( READLINE( m_reader ) )
+            while( ( line = READLINE( m_reader ) ) != NULL )
             {
-                line = m_reader->Line();
-
                 if( TESTLINE( "$endPOLYSCORNERS" ) )
                     break;
 
@@ -2370,10 +2363,8 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "$FILLSEGMENTS" ) )
         {
-            while( READLINE( m_reader ) )
+            while( ( line = READLINE( m_reader ) ) != NULL )
             {
-                line = m_reader->Line();
-
                 if( TESTLINE( "$endFILLSEGMENTS" ) )
                     break;
 
@@ -2422,11 +2413,11 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 void LEGACY_PLUGIN::loadDIMENSION()
 {
     auto_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
+    char*               line;
 
-    while( READLINE( m_reader ) )
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         const char*  data;
-        char* line = m_reader->Line();
 
         if( TESTLINE( "$endCOTATION" ) )
         {
@@ -2617,10 +2608,11 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
 void LEGACY_PLUGIN::loadPCB_TARGET()
 {
-    while( READLINE( m_reader ) )
+    char* line;
+
+    while( ( line = READLINE( m_reader ) ) != NULL )
     {
         const char* data;
-        char* line = m_reader->Line();
 
         if( TESTLINE( "$EndPCB_TARGET" ) || TESTLINE( "$EndMIREPCB" ) )
         {
@@ -3951,18 +3943,16 @@ void FPL_CACHE::Load()
 
 void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
 {
-    char* line;
+    char* line = aReader->ReadLine();
 
-    if( !aReader->ReadLine() )
+    if( !line )
         goto L_bad_library;
 
-    line = aReader->Line();
     if( !TESTLINE( "PCBNEW-LibModule-V1" ) )
         goto L_bad_library;
 
-    while( aReader->ReadLine() )
+    while( ( line = aReader->ReadLine() ) != NULL )
     {
-        line = aReader->Line();
         if( TESTLINE( "Units" ) )
         {
             const char* units = strtok( line + SZ( "Units" ), delims );
@@ -3992,20 +3982,17 @@ void FPL_CACHE::SkipIndex( LINE_READER* aReader )
     // Some broken INDEX sections have more than one section, due to prior bugs.
     // So we must read the next line after $EndINDEX tag,
     // to see if this is not a new $INDEX tag.
-    bool exit = false;
+    bool    exit = false;
+    char*   line = aReader->Line();
 
     do
     {
-        char* line = aReader->Line();
-
         if( TESTLINE( "$INDEX" ) )
         {
             exit = false;
 
-            while( aReader->ReadLine() )
+            while( ( line = aReader->ReadLine() ) != NULL )
             {
-                line = aReader->Line();
-
                 if( TESTLINE( "$EndINDEX" ) )
                 {
                     exit = true;
@@ -4015,7 +4002,7 @@ void FPL_CACHE::SkipIndex( LINE_READER* aReader )
         }
         else if( exit )
             break;
-    } while( aReader->ReadLine() );
+    } while( ( line = aReader->ReadLine() ) != NULL );
 }
 
 
@@ -4023,11 +4010,11 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
 {
     m_owner->SetReader( aReader );
 
+    char*   line = aReader->Line();
+
     do
     {
         // test first for the $MODULE, even before reading because of INDEX bug.
-        char* line = aReader->Line();
-
         if( TESTLINE( "$MODULE" ) )
         {
             MODULE* m = m_owner->LoadMODULE();
@@ -4089,7 +4076,7 @@ void FPL_CACHE::LoadModules( LINE_READER* aReader )
             }
         }
 
-    } while( aReader->ReadLine() );
+    } while( ( line = aReader->ReadLine() ) != NULL );
 }
 
 

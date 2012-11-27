@@ -365,25 +365,24 @@ bool NETLIST_READER::SetPadNetName( char* aText )
  */
 bool NETLIST_READER::ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistReader )
 {
-    wxString     cmpRef;
+    wxString        cmpRef;
     COMPONENT_INFO* cmp_info = NULL;
+    char*           line;
 
-    while( aNetlistReader.ReadLine() )
+    while( ( line = aNetlistReader.ReadLine() ) != NULL )
     {
-        const char* Line = aNetlistReader.Line();
-
-        if( strnicmp( Line, "$endlist", 8 ) == 0 ) // end of list for the current component
+        if( strnicmp( line, "$endlist", 8 ) == 0 ) // end of list for the current component
         {
             cmp_info = NULL;
             continue;
         }
-        if( strnicmp( Line, "$endfootprintlist", 4 ) == 0 )
+        if( strnicmp( line, "$endfootprintlist", 4 ) == 0 )
             // End of this section
             return 0;
 
-        if( strnicmp( Line, "$component", 10 ) == 0 ) // New component reference found
+        if( strnicmp( line, "$component", 10 ) == 0 ) // New component reference found
         {
-            cmpRef = FROM_UTF8( Line + 11 );
+            cmpRef = FROM_UTF8( line + 11 );
             cmpRef.Trim( true );
             cmpRef.Trim( false );
 
@@ -400,7 +399,7 @@ bool NETLIST_READER::ReadOldFmtFootprintFilterList(  FILE_LINE_READER& aNetlistR
         else if( cmp_info )
         {
             // Add new filter to list
-            wxString fp = FROM_UTF8( Line + 1 );
+            wxString fp = FROM_UTF8( line + 1 );
             fp.Trim( false );
             fp.Trim( true );
             cmp_info->m_FootprintFilter.Add( fp );

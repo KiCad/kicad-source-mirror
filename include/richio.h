@@ -227,20 +227,17 @@ public:
      */
     LINE_READER( unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX );
 
-    virtual ~LINE_READER()
-    {
-        delete[] line;
-    }
+    virtual ~LINE_READER();
 
     /**
      * Function ReadLine
      * reads a line of text into the buffer and increments the line number
      * counter.  If the line is larger than aMaxLineLength passed to the
      * constructor, then an exception is thrown.  The line is nul terminated.
-     * @return unsigned - The number of bytes read, 0 at end of file.
+     * @return char* - The beginning of the read line, or NULL if EOF.
      * @throw IO_ERROR when a line is too long.
      */
-    virtual unsigned ReadLine() throw( IO_ERROR ) = 0;
+    virtual char* ReadLine() throw( IO_ERROR ) = 0;
 
     /**
      * Function GetSource
@@ -258,7 +255,7 @@ public:
      * Function Line
      * returns a pointer to the last line that was read in.
      */
-    virtual char* Line() const
+    char* Line() const
     {
         return line;
     }
@@ -287,7 +284,7 @@ public:
      * Function Length
      * returns the number of bytes in the last line read from this LINE_READER.
      */
-    virtual unsigned Length() const
+    unsigned Length() const
     {
         return length;
     }
@@ -354,7 +351,7 @@ public:
      */
     ~FILE_LINE_READER();
 
-    unsigned ReadLine() throw( IO_ERROR );   // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR );   // see LINE_READER::ReadLine() description
 
     /**
      * Function Rewind
@@ -401,7 +398,7 @@ public:
      */
     STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint );
 
-    unsigned ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
 };
 
 
@@ -423,7 +420,7 @@ public:
      */
     INPUTSTREAM_LINE_READER( wxInputStream* aStream );
 
-    unsigned ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
 };
 
 

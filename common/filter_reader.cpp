@@ -27,14 +27,41 @@
 #include <richio.h>
 #include <filter_reader.h>
 
-unsigned FILTER_READER::ReadLine() throw( IO_ERROR )
-{
-    unsigned ret;
 
-    while( ( ret = reader.ReadLine() ) != 0 )
+FILTER_READER::FILTER_READER( LINE_READER& aReader ) :
+    LINE_READER( 1 ),
+    reader( aReader )
+{
+    // Not using our own line buffer, will be using aReader's.  This changes
+    // the meaning of this->line to be merely a pointer to aReader's line, which of course
+    // is not owned here.
+    delete [] line;
+
+    line = 0;
+}
+
+
+FILTER_READER::~FILTER_READER()
+{
+    // Our 'line' points to aReader's, and he will delete that buffer.
+    // Prevent subsequent call to ~LINE_READER() from deleting a buffer we do not own.
+    line = 0;
+}
+
+
+char* FILTER_READER::ReadLine() throw( IO_ERROR )
+{
+    char* s;
+
+    while( ( s = reader.ReadLine() ) != NULL )
     {
-        if( !strchr( "#\n\r", reader[0] ) )
+        if( !strchr( "#\n\r", s[0] ) )
             break;
     }
-    return ret;
+
+    line   = reader.Line();
+    length = reader.Length();
+
+    return length ? line : NULL;
 }
+
