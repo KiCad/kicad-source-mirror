@@ -129,7 +129,7 @@ public:
     void SetOutputFormatter( OUTPUTFORMATTER* aFormatter ) { m_out = aFormatter; }
 
     BOARD_ITEM* Parse( const wxString& aClipboardSourceInput )
-        throw( IO_ERROR, PARSE_ERROR );
+        throw( PARSE_ERROR, IO_ERROR );
 
 protected:
 

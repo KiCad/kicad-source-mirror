@@ -309,7 +309,7 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProper
 }
 
 
-BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput ) throw( IO_ERROR, PARSE_ERROR )
+BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput ) throw( PARSE_ERROR, IO_ERROR )
 {
     std::string input = TO_UTF8( aClipboardSourceInput );
 
