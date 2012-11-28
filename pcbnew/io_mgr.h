@@ -88,6 +88,12 @@ public:
     static const wxString ShowType( PCB_FILE_T aFileType );
 
     /**
+     * Function EnumFromStr
+     * returns the PCB_FILE_T from the corresponding plugin type name: "kicad", "legacy", etc.
+     */
+    static PCB_FILE_T EnumFromStr( const wxString& aFileType );
+
+    /**
      * Function GetFileExtension
      * returns the file extension for \a aFileType.
      *

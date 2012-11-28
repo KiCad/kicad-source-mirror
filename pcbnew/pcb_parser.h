@@ -32,7 +32,7 @@
 #include <pcb_lexer.h>
 #include <hashtables.h>
 
-using namespace PCB;
+using namespace PCB_KEYS_T;
 
 
 class BOARD;

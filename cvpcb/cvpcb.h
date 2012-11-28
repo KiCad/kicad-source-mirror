@@ -19,8 +19,7 @@
 
 #define FILTERFOOTPRINTKEY "FilterFootprint"
 
-#define LISTB_STYLE wxSUNKEN_BORDER | wxLC_NO_HEADER | \
-    wxLC_REPORT | wxLC_VIRTUAL
+#define LISTB_STYLE     (wxSUNKEN_BORDER | wxLC_NO_HEADER | wxLC_REPORT | wxLC_VIRTUAL)
 
 #include <netlist_reader.h>
 

@@ -50,6 +50,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_export_3Dfiles_base.cpp
     dialogs/dialog_find_base.cpp
     dialogs/dialog_find.cpp
+    dialogs/dialog_fp_lib_table_base.cpp
+    dialogs/dialog_fp_lib_table.cpp
     dialogs/dialog_freeroute_exchange.cpp
     dialogs/dialog_freeroute_exchange_base.cpp
     dialogs/dialog_gendrill.cpp
@@ -247,11 +249,11 @@ set(PCBNEW_SCRIPTING_PYTHON_HELPERS
    )
 
 if (KICAD_SCRIPTING)
-	set(PCBNEW_SCRIPTING_SRCS
-	${PCBNEW_SCRIPTING_DIALOGS}
-    	pcbnew_wrap.cxx
-    	${PCBNEW_SCRIPTING_PYTHON_HELPERS}
-   	)
+    set(PCBNEW_SCRIPTING_SRCS
+    ${PCBNEW_SCRIPTING_DIALOGS}
+        pcbnew_wrap.cxx
+        ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
+    )
 endif(KICAD_SCRIPTING)
 
 ##
@@ -260,34 +262,34 @@ endif(KICAD_SCRIPTING)
 
 if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
-	set(SWIG_FLAGS -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting )
-	if (DEBUG)
-		set(SWIG_FLAGS ${SWIG_FLAGS} -DDEBUG)
-	endif(DEBUG)
-	# collect CFLAGS , and pass them to swig later
+    set(SWIG_FLAGS -I${CMAKE_CURRENT_SOURCE_DIR}/../.. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/../include -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting )
+    if (DEBUG)
+        set(SWIG_FLAGS ${SWIG_FLAGS} -DDEBUG)
+    endif(DEBUG)
+    # collect CFLAGS , and pass them to swig later
 
-	get_directory_property( DirDefs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} COMPILE_DEFINITIONS )
-	foreach( d ${DirDefs} )
-	    SET(SWIG_FLAGS ${SWIG_FLAGS} -D${d} )
-	endforeach()
+    get_directory_property( DirDefs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} COMPILE_DEFINITIONS )
+    foreach( d ${DirDefs} )
+        SET(SWIG_FLAGS ${SWIG_FLAGS} -D${d} )
+    endforeach()
 
-	# check if we have IO_MGR and KICAD_PLUGIN available
-	if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
-	    SET(SWIG_FLAGS ${SWIG_FLAGS} -DBUILD_WITH_PLUGIN)
-	endif(USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE)
+    # check if we have IO_MGR and KICAD_PLUGIN available
+    if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
+        SET(SWIG_FLAGS ${SWIG_FLAGS} -DBUILD_WITH_PLUGIN)
+    endif(USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE)
 
-	if ( USE_PCBNEW_NANOMETRES )
-	    SET(SWIG_FLAGS ${SWIG_FLAGS} -DUSE_PCBNEW_NANOMETRES)
-	endif( USE_PCBNEW_NANOMETRES )
+    if ( USE_PCBNEW_NANOMETRES )
+        SET(SWIG_FLAGS ${SWIG_FLAGS} -DUSE_PCBNEW_NANOMETRES)
+    endif( USE_PCBNEW_NANOMETRES )
 
 endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
 if (KICAD_SCRIPTING)
 
-	SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
+    SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
-	add_custom_command(
-	               OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
+    add_custom_command(
+                   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
                        DEPENDS scripting/pcbnew.i
                        DEPENDS scripting/board.i
                        DEPENDS scripting/board_item.i
@@ -299,10 +301,10 @@ if (KICAD_SCRIPTING)
                        DEPENDS ../scripting/wx.i
                        DEPENDS ../scripting/kicadplugins.i
 
-	               COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
-	               COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
-	               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-	)
+                   COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
+                   COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
 
 endif(KICAD_SCRIPTING)
@@ -430,7 +432,7 @@ install(TARGETS pcbnew
     COMPONENT binary)
 
 if(KICAD_SCRIPTING)
-	add_custom_target(FixSwigImportsScripting ALL
+    add_custom_target(FixSwigImportsScripting ALL
                      COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew
                      COMMENT "Fixing swig_import_helper in Kicad scripting"
@@ -442,7 +444,7 @@ if(KICAD_SCRIPTING)
 endif(KICAD_SCRIPTING)
 
 if (KICAD_SCRIPTING_MODULES)
-	add_custom_target(FixSwigImportsModuleScripting ALL
+    add_custom_target(FixSwigImportsModuleScripting ALL
                      COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew
                      COMMENT "Fixing swig_import_helper in Kicad scripting modules"
