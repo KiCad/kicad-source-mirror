@@ -43,6 +43,7 @@
 #include <dialog_hotkeys_editor.h>
 
 #include <class_board.h>
+#include <fp_lib_table.h>
 
 #include <pcbplot.h>
 #include <pcbnew.h>
@@ -58,8 +59,8 @@
 
 void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
-    int        id = event.GetId();
-    wxFileName fn;
+    int         id = event.GetId();
+    wxFileName  fn;
 
     switch( id )
     {
@@ -79,6 +80,37 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_CONFIG_REQ:
         InstallConfigFrame();
+        break;
+
+    case ID_PCB_LIB_TABLE_EDIT:
+        {
+            // scaffolding: dummy up some data into tables, until actual load/save are in place.
+            FP_LIB_TABLE    gbl;
+            FP_LIB_TABLE    prj;
+
+            gbl.InsertRow( FP_LIB_TABLE::ROW(
+                wxT( "passives" ), wxT( "%G/passives" ), wxT( "KiCad" ), wxT( "speed=fast,purpose=testing" ) ) );
+
+            gbl.InsertRow( FP_LIB_TABLE::ROW(
+                wxT( "micros" ), wxT( "%P/micros" ), wxT( "Legacy" ), wxT( "speed=fast,purpose=testing" ) ) );
+
+            prj.InsertRow( FP_LIB_TABLE::ROW(
+                wxT( "micros" ), wxT( "%P/potato_chips" ), wxT( "Eagle" ), wxT( "speed=fast,purpose=testing" ) ) );
+
+            int r = InvokePcbLibTableEditor( this, &gbl, &prj );
+
+            if( r & 1 )
+            {
+                // save global table to disk and apply it
+                D( printf( "global has changed\n" );)
+            }
+
+            if( r & 2 )
+            {
+                // save project table to disk and apply it
+                D( printf( "project has changed\n" );)
+            }
+        }
         break;
 
     case ID_PCB_MASK_CLEARANCE:
