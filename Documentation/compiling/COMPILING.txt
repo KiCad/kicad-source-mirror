@@ -44,6 +44,9 @@ Compiler and basic development tools
 Make sure g++, make and other tools are in your path.
 If windows, then try running g++ and make from within your msys bash shell.
 
+PLEASE NOTE: g++ 4.7.1 at least (possibly the 4.7.x series) is known to
+miscompile pcbnew (it get zones wrong) with -O2; using -O1 is a suitable
+workaround until they fix the compiler.
 
 Install or Build wxWidgets
 --------------------------
