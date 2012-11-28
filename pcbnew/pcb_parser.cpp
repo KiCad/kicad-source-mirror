@@ -2117,8 +2117,9 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
                 }
 
                 case T_offset:
-                    pad->SetOffset( wxPoint( parseBoardUnits( "drill offset x" ),
-                                             parseBoardUnits( "drill offset y" ) ) );
+                    pt.x = parseBoardUnits( "drill offset x" );
+                    pt.y = parseBoardUnits( "drill offset y" );
+                    pad->SetOffset( pt );
                     NeedRIGHT();
                     break;
 
