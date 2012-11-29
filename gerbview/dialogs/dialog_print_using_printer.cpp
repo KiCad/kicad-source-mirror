@@ -341,8 +341,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Print Preview" );
     wxPrintPreview* preview =
-        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_Parent, title ),
-                            new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_Parent, title ),
+        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_Parent, title ),
+                            new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_Parent, title ),
                             g_PrintData );
 
     if( preview == NULL )
@@ -396,7 +396,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     wxPrinter         printer( &printDialogData );
 
     wxString          title = _( "Print" );
-    BOARD_PRINTOUT_CONTROLER      printout( s_Parameters, m_Parent, title );
+    BOARD_PRINTOUT_CONTROLLER      printout( s_Parameters, m_Parent, title );
 
 #if !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
     wxDC*             dc = printout.GetDC();

@@ -432,8 +432,8 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Print Preview" );
     wxPrintPreview* preview =
-        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_parent, title ),
-                            new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_parent, title ),
+        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_parent, title ),
+                            new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_parent, title ),
                             s_PrintData );
 
     if( preview == NULL )
@@ -481,7 +481,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     wxPrinter         printer( &printDialogData );
 
     wxString          title = _( "Print" );
-    BOARD_PRINTOUT_CONTROLER      printout( s_Parameters, m_parent, title );
+    BOARD_PRINTOUT_CONTROLLER      printout( s_Parameters, m_parent, title );
 
     // Alexander's patch had this removed altogether, waiting for testing.
 #if 0 && !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
