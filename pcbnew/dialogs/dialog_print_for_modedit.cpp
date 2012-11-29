@@ -162,8 +162,8 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Print Preview" );
     wxPrintPreview* preview =
-        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_parent, title ),
-                            new BOARD_PRINTOUT_CONTROLER( s_Parameters, m_parent, title ),
+        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_parent, title ),
+                            new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_parent, title ),
                             s_PrintData );
 
     if( preview == NULL )
@@ -200,7 +200,7 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     wxPrintDialogData printDialogData( *s_PrintData );
     wxPrinter         printer( &printDialogData );
 
-    BOARD_PRINTOUT_CONTROLER      printout( s_Parameters, m_parent, _( "Print Footprint" ) );
+    BOARD_PRINTOUT_CONTROLLER      printout( s_Parameters, m_parent, _( "Print Footprint" ) );
 
 #if !defined(__WINDOWS__) && !wxCHECK_VERSION(2,9,0)
     wxDC*             dc = printout.GetDC();
