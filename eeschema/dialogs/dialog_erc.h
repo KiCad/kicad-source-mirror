@@ -32,9 +32,10 @@ class DIALOG_ERC : public DIALOG_ERC_BASE
     DECLARE_EVENT_TABLE()
 
 private:
-    SCH_EDIT_FRAME* m_Parent;
-    wxBitmapButton* m_ButtonList[PIN_NMAX][PIN_NMAX];
-    bool            m_Initialized;
+    SCH_EDIT_FRAME* m_parent;
+    wxBitmapButton* m_buttonList[PIN_NMAX][PIN_NMAX];
+    bool            m_initialized;
+    const SCH_MARKER* m_lastMarkerFound;
     static bool     m_writeErcFile;
 
 public:
@@ -56,8 +57,11 @@ public:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RESET_MATRIX
     void OnResetMatrixClick( wxCommandEvent& event );
 
+    // Single click on a marker info:
+    void OnLeftClickMarkersList( wxCommandEvent& event );
+
     // Double click on a marker info:
-    void OnLeftDClickMarkersList( wxCommandEvent& event );
+    void OnLeftDblClickMarkersList( wxCommandEvent& event );
 
     void TestErc( wxArrayString* aMessagesList );
     void DisplayERC_MarkersList();
