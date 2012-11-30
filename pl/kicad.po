@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-28 17:25+0100\n"
-"PO-Revision-Date: 2012-11-28 18:48+0100\n"
+"POT-Creation-Date: 2012-11-30 18:22+0100\n"
+"PO-Revision-Date: 2012-11-30 18:24+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -4445,7 +4445,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
-#: eeschema/dialogs/dialog_erc_base.cpp:142
+#: eeschema/dialogs/dialog_erc_base.cpp:132
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:175
 #: pcbnew/dialogs/dialog_plot_base.cpp:82
@@ -5358,44 +5358,43 @@ msgstr "Pole użytkownika 8"
 msgid "Template Field Names"
 msgstr "Wzorce nazw pól"
 
-#: eeschema/dialogs/dialog_erc.cpp:454
+#: eeschema/dialogs/dialog_erc.cpp:181
+msgid "Marker not found"
+msgstr "Nie znaleziono znacznika"
+
+#: eeschema/dialogs/dialog_erc.cpp:419
 msgid "Annotation required!"
 msgstr "Wymagana numeracja elementów!"
 
-#: eeschema/dialogs/dialog_erc.cpp:571
+#: eeschema/dialogs/dialog_erc.cpp:537
 msgid "ERC File"
 msgstr "Plik ERC"
 
-#: eeschema/dialogs/dialog_erc.cpp:572
+#: eeschema/dialogs/dialog_erc.cpp:538
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Pliki ERC (*.erc)|*.erc"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:36
-msgid "Erc File Report:"
-msgstr "Plik raportu ERC:"
+#: eeschema/dialogs/dialog_erc_base.cpp:37
+msgid "Erc report:"
+msgstr "Raport ERC:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:41
-msgid "Total Errors Count:  "
+#: eeschema/dialogs/dialog_erc_base.cpp:42
+msgid "Total errors count:  "
 msgstr "Ogółem błędów:  "
 
-#: eeschema/dialogs/dialog_erc_base.cpp:45
-#: eeschema/dialogs/dialog_erc_base.cpp:53
-#: eeschema/dialogs/dialog_erc_base.cpp:61
-#: bitmap2component/bitmap2cmp_gui_base.cpp:52
-#: bitmap2component/bitmap2cmp_gui_base.cpp:64
-#: bitmap2component/bitmap2cmp_gui_base.cpp:76
-msgid "0000"
-msgstr "0000"
-
 #: eeschema/dialogs/dialog_erc_base.cpp:49
-msgid "Warnings Count:"
-msgstr "Ogółem ostrzeżeń: "
+msgid "Warnings count:"
+msgstr "Liczba ostrzeżeń: "
 
-#: eeschema/dialogs/dialog_erc_base.cpp:57
-msgid "Errors Count:"
+#: eeschema/dialogs/dialog_erc_base.cpp:56
+msgid "Errors count:"
 msgstr "Liczba błędów:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:74
+#: eeschema/dialogs/dialog_erc_base.cpp:66
+msgid "Create ERC file report"
+msgstr "Utwórz plik raportu"
+
+#: eeschema/dialogs/dialog_erc_base.cpp:75
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:120
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:375
 #: pcbnew/dialogs/dialog_drc_base.cpp:102
@@ -5409,7 +5408,7 @@ msgstr "Liczba błędów:"
 msgid "Messages:"
 msgstr "Wiadomości:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:89
+#: eeschema/dialogs/dialog_erc_base.cpp:88
 msgid "&Test Erc"
 msgstr "&Test ERC"
 
@@ -5422,18 +5421,14 @@ msgid "&Close"
 msgstr "&Zamknij"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:104
-msgid "Create ERC report"
-msgstr "Utwórz plik raportu"
+msgid "Error list:"
+msgstr "Lista błędów:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:110
-msgid "Markers:"
-msgstr "Znaczniki:"
-
-#: eeschema/dialogs/dialog_erc_base.cpp:123
+#: eeschema/dialogs/dialog_erc_base.cpp:117
 msgid "ERC"
 msgstr "ERC"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:127
+#: eeschema/dialogs/dialog_erc_base.cpp:122
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
 msgid "Reset"
 msgstr "Resetuj"
@@ -6553,7 +6548,7 @@ msgid "On Board"
 msgstr "Na płytce"
 
 #: pcbnew/class_netinfo_item.cpp:171 pcbnew/class_track.cpp:983
-#: pcbnew/editrack.cpp:800
+#: pcbnew/editrack.cpp:815
 msgid "On Die"
 msgstr "Na rdzeniu"
 
@@ -6915,11 +6910,11 @@ msgstr "Ślepa/zagrzebana"
 msgid "Net:"
 msgstr "Sieć:"
 
-#: pcbnew/class_track.cpp:975 pcbnew/editrack.cpp:794
+#: pcbnew/class_track.cpp:975 pcbnew/editrack.cpp:809
 msgid "Track Len"
 msgstr "Długość ścieżki"
 
-#: pcbnew/class_track.cpp:980 pcbnew/editrack.cpp:798
+#: pcbnew/class_track.cpp:980 pcbnew/editrack.cpp:813
 msgid "Full Len"
 msgstr "Pełna długość"
 
@@ -7288,7 +7283,7 @@ msgstr "Tekst jest OZNACZENIEM!"
 msgid "Text is VALUE!"
 msgstr "Tekst jest WARTOŚCIĄ!"
 
-#: pcbnew/editrack.cpp:805
+#: pcbnew/editrack.cpp:820
 msgid "Segs Count"
 msgstr "Liczba segmentów"
 
@@ -16390,6 +16385,12 @@ msgstr "Czarno-biały"
 msgid "Bitmap Info:"
 msgstr "Informacja:"
 
+#: bitmap2component/bitmap2cmp_gui_base.cpp:52
+#: bitmap2component/bitmap2cmp_gui_base.cpp:64
+#: bitmap2component/bitmap2cmp_gui_base.cpp:76
+msgid "0000"
+msgstr "0000"
+
 #: bitmap2component/bitmap2cmp_gui_base.cpp:56
 #: bitmap2component/bitmap2cmp_gui_base.cpp:68
 msgid "pixels"
@@ -17775,7 +17776,7 @@ msgstr "Właściwości pola"
 msgid "Schematic Editor Options"
 msgstr "Opcje edytora schematów"
 
-#: eeschema/dialogs/dialog_erc_base.h:96
+#: eeschema/dialogs/dialog_erc_base.h:94
 msgid "EESchema Erc"
 msgstr "ERC Eeschema"
 
@@ -17975,6 +17976,12 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Erc File Report:"
+#~ msgstr "Plik raportu ERC:"
+
+#~ msgid "Markers:"
+#~ msgstr "Znaczniki:"
 
 #~ msgid "> %-28.28s %s        %s\n"
 #~ msgstr "> %-28.28s %s        %s\n"
