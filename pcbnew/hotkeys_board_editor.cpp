@@ -24,9 +24,8 @@
 
 void PCB_EDIT_FRAME::RecordMacros(wxDC* aDC, int aNumber)
 {
-    assert( aNumber >= 0 );
-    assert( aNumber < 10 );
-    wxString msg, tmp;
+    wxASSERT( aNumber >= 0 && aNumber < 10 );
+    wxString msg;
 
     if( m_RecordingMacros < 0 )
     {
@@ -34,14 +33,14 @@ void PCB_EDIT_FRAME::RecordMacros(wxDC* aDC, int aNumber)
         m_Macros[aNumber].m_StartPosition = GetScreen()->GetCrossHairPosition( false );
         m_Macros[aNumber].m_Record.clear();
 
-        msg.Printf( wxT( "%s %d" ), _( "Recording macros" ), aNumber );
+        msg.Printf( _( "Recording macro %d" ), aNumber );
         SetStatusText( msg );
     }
     else
     {
         m_RecordingMacros = -1;
 
-        msg.Printf( wxT( "%s %d %s" ), _( "Macros" ), aNumber, _( "recorded" ) );
+        msg.Printf( _( "Macro %d recorded" ), aNumber );
         SetStatusText( msg );
     }
 }
@@ -54,7 +53,7 @@ void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumbe
 
     wxString msg;
 
-    msg.Printf( wxT( "%s %d" ), _( "Call macros" ), aNumber );
+    msg.Printf( _( "Call macro %d" ), aNumber );
     SetStatusText( msg );
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
@@ -110,27 +109,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( HK_Descr == NULL )
         return;
 
-    if( (m_RecordingMacros != -1)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_1)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_1)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_2)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_2)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_3)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_3)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_4)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_4)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_5)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_5)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_6)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_6)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_7)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_7)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_8)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_8)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_9)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_9)
-      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_0)
-      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_0) )
+    int hk_id = HK_Descr->m_Idcommand;
+
+    if( (m_RecordingMacros != -1) &&
+        !( hk_id > HK_MACRO_ID_BEGIN && hk_id < HK_MACRO_ID_END) )
     {
         MACROS_RECORD macros_record;
         macros_record.m_HotkeyCode = aHotkeyCode;
@@ -138,6 +120,9 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         macros_record.m_Position = screen->GetNearestGridPosition( aPosition ) -
                                    m_Macros[m_RecordingMacros].m_StartPosition;
         m_Macros[m_RecordingMacros].m_Record.push_back( macros_record );
+        wxString msg;
+        msg.Printf( _( "Add key [%c] in macro %d" ), aHotkeyCode, m_RecordingMacros );
+        SetStatusText( msg );
     }
 
     // Create a wxCommandEvent that will be posted in some hot keys functions
@@ -147,7 +132,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     int            ll;
     unsigned int   cnt;
 
-    switch( HK_Descr->m_Idcommand )
+    switch( hk_id )
     {
     default:
     case HK_NOT_FOUND:
@@ -155,83 +140,30 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_RECORD_MACROS_0:
-        RecordMacros( aDC, 0 );
-        break;
-
     case HK_RECORD_MACROS_1:
-        RecordMacros( aDC, 1 );
-        break;
-
     case HK_RECORD_MACROS_2:
-        RecordMacros( aDC, 2 );
-        break;
-
     case HK_RECORD_MACROS_3:
-        RecordMacros( aDC, 3 );
-        break;
-
     case HK_RECORD_MACROS_4:
-        RecordMacros( aDC, 4 );
-        break;
-
     case HK_RECORD_MACROS_5:
-        RecordMacros( aDC, 5 );
-        break;
-
     case HK_RECORD_MACROS_6:
-        RecordMacros( aDC, 6 );
-        break;
-
     case HK_RECORD_MACROS_7:
-        RecordMacros( aDC, 7 );
-        break;
-
     case HK_RECORD_MACROS_8:
-        RecordMacros( aDC, 8 );
-        break;
-
     case HK_RECORD_MACROS_9:
-        RecordMacros( aDC, 9 );
+        RecordMacros( aDC, hk_id - HK_RECORD_MACROS_0 );
         break;
 
     case HK_CALL_MACROS_0:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 0 );
-        break;
-
     case HK_CALL_MACROS_1:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 1 );
-        break;
-
     case HK_CALL_MACROS_2:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 2 );
-        break;
-
     case HK_CALL_MACROS_3:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 3 );
-        break;
-
     case HK_CALL_MACROS_4:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 4 );
-        break;
-
     case HK_CALL_MACROS_5:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 5 );
-        break;
-
     case HK_CALL_MACROS_6:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 6 );
-        break;
-
     case HK_CALL_MACROS_7:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 7 );
-        break;
-
     case HK_CALL_MACROS_8:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 8 );
-        break;
-
     case HK_CALL_MACROS_9:
-        CallMacros( aDC, screen->GetCrossHairPosition( false ), 9 );
+        CallMacros( aDC, screen->GetCrossHairPosition( false ),
+                    hk_id - HK_CALL_MACROS_0 );
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_NEXT:
@@ -551,39 +483,8 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         OnHotkeyPlaceItem( aDC );
         break;
 
-    case HK_ADD_NEW_TRACK: // Start new track
-        if( getActiveLayer() > LAYER_N_FRONT )
-            break;
-
-        if( GetToolId() != ID_TRACK_BUTT && !itemCurrentlyEdited )
-        {
-            cmd.SetId( ID_TRACK_BUTT );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-
-        if( GetToolId() != ID_TRACK_BUTT )
-            break;
-
-        if( !itemCurrentlyEdited )     // no track in progress:
-        {
-            TRACK* track = Begin_Route( NULL, aDC );
-            SetCurItem( track );
-
-            if( track )
-                m_canvas->SetAutoPanRequest( true );
-        }
-        else if( GetCurItem()->IsNew() )
-        {
-            TRACK* track = Begin_Route( (TRACK*) GetCurItem(), aDC );
-
-            // SetCurItem() must not write to the msg panel
-            // because a track info is displayed while moving the mouse cursor
-            if( track )      // A new segment was created
-                SetCurItem( track, false );
-
-            m_canvas->SetAutoPanRequest( true );
-        }
-
+    case HK_ADD_NEW_TRACK: // Start new track, if possible
+        OnHotkeyBeginRoute( aDC );
         break;
 
     case HK_EDIT_ITEM:      // Edit board item
@@ -1017,6 +918,58 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
     return false;
 }
 
+/*
+ * Function OnHotkeyBeginRoute
+ * If the current active layer is a copper layer,
+ * and if no item currently edited, starta new track on
+ * the current copper layer
+ * If a new track is in progress, terminate the current segment and
+ * start a new one.
+ * Returns a reference to the track if a track is created, or NULL
+ */
+TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
+{
+    if( getActiveLayer() > LAYER_N_FRONT )
+        return NULL;
+
+    bool itemCurrentlyEdited = (GetCurItem() && GetCurItem()->GetFlags());
+
+    // Ensure the track tool is active
+    if( GetToolId() != ID_TRACK_BUTT && !itemCurrentlyEdited )
+    {
+        wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+        cmd.SetEventObject( this );
+        cmd.SetId( ID_TRACK_BUTT );
+        GetEventHandler()->ProcessEvent( cmd );
+    }
+
+    if( GetToolId() != ID_TRACK_BUTT )
+        return NULL;
+
+    TRACK* track = NULL;
+
+    if( !itemCurrentlyEdited )     // no track in progress:
+    {
+        track = Begin_Route( NULL, aDC );
+        SetCurItem( track );
+
+        if( track )
+            m_canvas->SetAutoPanRequest( true );
+    }
+    else if( GetCurItem()->IsNew() )
+    {
+        track = Begin_Route( (TRACK*) GetCurItem(), aDC );
+
+        // SetCurItem() must not write to the msg panel
+        // because a track info is displayed while moving the mouse cursor
+        if( track )      // A new segment was created
+            SetCurItem( track, false );
+
+        m_canvas->SetAutoPanRequest( true );
+    }
+
+    return track;
+}
 
 bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 {

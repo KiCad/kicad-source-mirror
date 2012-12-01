@@ -58,6 +58,14 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH6:
     case ID_POPUP_PCB_SELECT_WIDTH7:
     case ID_POPUP_PCB_SELECT_WIDTH8:
+    case ID_POPUP_PCB_SELECT_WIDTH9:
+    case ID_POPUP_PCB_SELECT_WIDTH10:
+    case ID_POPUP_PCB_SELECT_WIDTH11:
+    case ID_POPUP_PCB_SELECT_WIDTH12:
+    case ID_POPUP_PCB_SELECT_WIDTH13:
+    case ID_POPUP_PCB_SELECT_WIDTH14:
+    case ID_POPUP_PCB_SELECT_WIDTH15:
+    case ID_POPUP_PCB_SELECT_WIDTH16:
         m_canvas->MoveCursorToCrossHair();
         GetDesignSettings().m_UseConnectedTrackWidth = false;
         ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
@@ -71,7 +79,16 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_VIASIZE5:
     case ID_POPUP_PCB_SELECT_VIASIZE6:
     case ID_POPUP_PCB_SELECT_VIASIZE7:
-    case ID_POPUP_PCB_SELECT_VIASIZE8:   // select the new current value for via size (via diameter)
+    case ID_POPUP_PCB_SELECT_VIASIZE8:
+    case ID_POPUP_PCB_SELECT_VIASIZE9:
+    case ID_POPUP_PCB_SELECT_VIASIZE10:
+    case ID_POPUP_PCB_SELECT_VIASIZE11:
+    case ID_POPUP_PCB_SELECT_VIASIZE12:
+    case ID_POPUP_PCB_SELECT_VIASIZE13:
+    case ID_POPUP_PCB_SELECT_VIASIZE14:
+    case ID_POPUP_PCB_SELECT_VIASIZE15:
+    case ID_POPUP_PCB_SELECT_VIASIZE16:
+        // select the new current value for via size (via diameter)
         m_canvas->MoveCursorToCrossHair();
         ii = id - ID_POPUP_PCB_SELECT_VIASIZE1;
         GetBoard()->m_ViaSizeSelector = ii;
@@ -90,5 +107,13 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     default:
         wxMessageBox( wxT( "PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event() error") );
         break;
+    }
+
+    // Refresh track in progress, if any, by forcing a mouse event,
+    // to call the current function attached to the mouse
+    if( m_canvas->IsMouseCaptured() )
+    {
+        wxMouseEvent event(wxEVT_MOTION);
+        wxPostEvent( m_canvas, event );
     }
 }

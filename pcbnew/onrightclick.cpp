@@ -336,11 +336,19 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
 
     case ID_TRACK_BUTT:
+        aPopMenu->AppendSeparator();
+
         if ( ! locate_track )   // This menu is already added when a track is located
+        {
+            msg = AddHotkeyName( _( "Begin Track" ),
+                                 g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK,
+                         msg, KiBitmap( add_tracks_xpm ) );
+
             AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
                          ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ),
                          KiBitmap( width_track_xpm ) );
-
+        }
         AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_CU_LAYER,
                      _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
         AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER_PAIR,
@@ -400,6 +408,11 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset Unrouted" ) );
             aPopMenu->AppendSeparator();
         }
+
+        msg = AddHotkeyName( _( "Begin Track" ),
+                             g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
+        AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK,
+                     msg, KiBitmap( add_tracks_xpm ) );
 
         if( locate_track )
             AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
@@ -487,6 +500,11 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( flags & IS_NEW )
         {
+            msg = AddHotkeyName( _( "Begin Track" ),
+                                 g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_BEGIN_TRACK,
+                         msg, KiBitmap( add_tracks_xpm ) );
+
             msg = AddHotkeyName( _( "End Track" ), g_Board_Editor_Hokeys_Descr, HK_END_TRACK );
             AddMenuItem( PopMenu, ID_POPUP_PCB_END_TRACK, msg, KiBitmap( apply_xpm ) );
         }
