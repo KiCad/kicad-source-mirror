@@ -56,9 +56,6 @@
 
 #include <dialog_global_edit_tracks_and_vias.h>
 
-// Uncomment following line to enable wxBell() command (which beeps speaker)
-// #include <wx/utils.h>
-
 /* Handles the selection of command events. */
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
@@ -94,6 +91,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EDIT_MODULE:
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
+    case ID_POPUP_PCB_BEGIN_TRACK:
     case ID_POPUP_PCB_END_TRACK:
     case ID_POPUP_PCB_PLACE_VIA:
     case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
@@ -340,6 +338,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         }
         m_canvas->MoveCursorToCrossHair();
+        break;
+
+    case ID_POPUP_PCB_BEGIN_TRACK:
+        m_canvas->MoveCursorToCrossHair();
+        OnHotkeyBeginRoute( &dc );
         break;
 
     case ID_POPUP_PCB_END_TRACK:
@@ -1225,14 +1228,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, int layer )
         if( GetBoard()->GetCopperLayerCount() < 2 )
         {
             if( layer != LAYER_N_BACK )
-            {
-                // Uncomment following command (and line 17) to beep
-                // the speaker. (Doing that would provide feedback to
-                // the user that the (layer-switching) command has been
-                // "acknowledged", but is unable to be acted upon.)
-//              wxBell();
                 return;
-            }
         }
         // If more than one copper layer is enabled, the "Copper"
         // and "Component" layers can be selected, but the total
@@ -1242,14 +1238,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, int layer )
         {
             if( ( layer != LAYER_N_BACK ) && ( layer != LAYER_N_FRONT )
                && ( layer >= GetBoard()->GetCopperLayerCount() - 1 ) )
-            {
-                // Uncomment following command (and line 17) to beep
-                // the speaker. (Doing that would provide feedback to
-                // the user that the (layer-switching) command has been
-                // "acknowledged", but is unable to be acted upon.)
-//              wxBell();
                 return;
-            }
         }
 
         EDA_ITEM* current = GetScreen()->GetCurItem();

@@ -305,6 +305,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     case PLOT_FORMAT_SVG:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
+        m_plotModeOpt->SetSelection( 1 );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
