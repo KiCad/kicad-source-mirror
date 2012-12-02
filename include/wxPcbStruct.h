@@ -471,6 +471,18 @@ public:
      */
     bool OnHotkeyRotateItem( int aIdCommand );
 
+    /**
+     * Function OnHotkeyBeginRoute
+     * If the current active layer is a copper layer,
+     * and if no item currently edited, start a new track segmenton
+     * the current copper layer.
+     * If a new track is in progress, terminate the current segment and
+     * start a new one.
+     * @param aDC = current device context
+     * @return a reference to the track if a track is created, or NULL
+     */
+    TRACK * OnHotkeyBeginRoute( wxDC* aDC );
+
     void OnCloseWindow( wxCloseEvent& Event );
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );

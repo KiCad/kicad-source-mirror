@@ -24,8 +24,8 @@
 class DIALOG_GLOBAL_PADS_EDITION : public DIALOG_GLOBAL_PADS_EDITION_BASE
 {
 private:
-    PCB_BASE_FRAME* m_Parent;
-    D_PAD*      m_CurrentPad;
+    PCB_BASE_FRAME* m_parent;
+    D_PAD*      m_currentPad;
 
 public:
     static bool m_Pad_Shape_Filter;
@@ -45,8 +45,8 @@ private:
 DIALOG_GLOBAL_PADS_EDITION::DIALOG_GLOBAL_PADS_EDITION( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
     DIALOG_GLOBAL_PADS_EDITION_BASE( aParent )
 {
-    m_Parent     = aParent;
-    m_CurrentPad = aPad;
+    m_parent     = aParent;
+    m_currentPad = aPad;
 
     // Pad filter selection.
     m_Pad_Shape_Filter_CB->SetValue( m_Pad_Shape_Filter );
@@ -76,7 +76,7 @@ void DIALOG_GLOBAL_PADS_EDITION::OnCancelClick( wxCommandEvent& event )
  */
 void DIALOG_GLOBAL_PADS_EDITION::InstallPadEditor( wxCommandEvent& event )
 {
-    m_Parent->InstallPadOptionsFrame( m_CurrentPad );
+    m_parent->InstallPadOptionsFrame( m_currentPad );
 }
 
 
@@ -101,7 +101,7 @@ void DIALOG_GLOBAL_PADS_EDITION::PadPropertiesAccept( wxCommandEvent& event )
         break;
     }
 
-    m_Parent->OnModify();
+    m_parent->OnModify();
 }
 
 

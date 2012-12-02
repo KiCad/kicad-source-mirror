@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Apr 10 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -31,7 +31,9 @@ DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* pare
 	m_Pad_Orient_Filter_CB = new wxCheckBox( this, wxID_ANY, _("Do not modify pads having a different orientation"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_Pad_Orient_Filter_CB, 0, wxALL, 5 );
 	
+	
 	bLeftSizer->Add( sbSizer1, 1, wxEXPAND, 5 );
+	
 	
 	bMainSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
 	
@@ -53,7 +55,9 @@ DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* pare
 	m_buttonCancel = new wxButton( this, wxID_ANY, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonCancel, 0, wxALL|wxEXPAND, 5 );
 	
+	
 	bMainSizer->Add( bRightSizer, 0, wxEXPAND, 5 );
+	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
