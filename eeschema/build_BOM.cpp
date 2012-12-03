@@ -471,25 +471,25 @@ bool BOM_LISTER::PrintComponentsListByReferenceCsvForm( FILE* aFile )
 
     // Print comment line:
     msg = wxT( "ref" );
-    msg << m_separatorSymbol << wxT( "value" );
+    msg << (wxChar)m_separatorSymbol << wxT( "value" );
 
     if( addDatasheet )
-        msg << m_separatorSymbol << wxT( "datasheet" );
+        msg << (wxChar)m_separatorSymbol << wxT( "datasheet" );
 
     if( printLocCmp )
-        msg << m_separatorSymbol << wxT( "sheet path(location)" );
+        msg << (wxChar)m_separatorSymbol << wxT( "sheet path(location)" );
 
     if( isFieldPrintable( FOOTPRINT ) )
-        msg << m_separatorSymbol << wxT( "footprint" );
+        msg << (wxChar)m_separatorSymbol << wxT( "footprint" );
 
     for( int ii = FIELD1; ii <= FIELD8; ii++ )
     {
         if( isFieldPrintable( ii ) )
-            msg << m_separatorSymbol << _( "Field" ) << ii - FIELD1 + 1;
+            msg << (wxChar)m_separatorSymbol << _( "Field" ) << ii - FIELD1 + 1;
     }
 
     if( groupRefs )
-        msg << m_separatorSymbol << _( "Item count" );
+        msg << (wxChar)m_separatorSymbol << _( "Item count" );
 
     fprintf( m_outFile, "%s\n", TO_UTF8( msg ) );
 
@@ -531,19 +531,19 @@ bool BOM_LISTER::PrintComponentsListByReferenceCsvForm( FILE* aFile )
         {
             // Store value and datasheet (will be printed later)
             strCur.Empty();
-            strCur << m_separatorSymbol << comp->GetField( VALUE )->m_Text;
+            strCur << (wxChar)m_separatorSymbol << comp->GetField( VALUE )->m_Text;
 
             if( addDatasheet )
-                strCur << m_separatorSymbol << comp->GetField( DATASHEET )->m_Text;
+                strCur << (wxChar)m_separatorSymbol << comp->GetField( DATASHEET )->m_Text;
         }
         else
         {
             // Print the current component reference, value and datasheet
             msg = cmpName;
-            msg << m_separatorSymbol << comp->GetField( VALUE )->m_Text;
+            msg << (wxChar)m_separatorSymbol << comp->GetField( VALUE )->m_Text;
 
             if( addDatasheet )
-                msg << m_separatorSymbol << comp->GetField( DATASHEET )->m_Text;
+                msg << (wxChar)m_separatorSymbol << comp->GetField( DATASHEET )->m_Text;
 
             fprintf( m_outFile, "%s",  TO_UTF8( msg ) );
         }
@@ -574,19 +574,19 @@ bool BOM_LISTER::PrintComponentsListByReferenceCsvForm( FILE* aFile )
                     {
                     case 1:     // One reference to print
                                 // format C103;47uF;CP6;;;1
-                        msg << cmpNameFirst <<strPred << m_separatorSymbol << amount;
+                        msg << cmpNameFirst <<strPred << (wxChar)m_separatorSymbol << amount;
                         break;
 
                     case 2:     // 2 references to print
                                 // format C103,C104;47uF;CP6;;;2
                         msg << cmpNameFirst  << wxT(",") << cmpNameLast
-                            << strPred << m_separatorSymbol << amount;
+                            << strPred << (wxChar)m_separatorSymbol << amount;
                         break;
 
                     default:    // Many references to print :
                                 // format: C103..C106;47uF;CP6;;;4
                         msg << cmpNameFirst << wxT("..") << cmpNameLast
-                            << strPred << m_separatorSymbol << amount;
+                            << strPred << (wxChar)m_separatorSymbol << amount;
                         break;
                     }
                     fprintf( m_outFile, "%s\n", TO_UTF8( msg ) );
@@ -614,17 +614,17 @@ bool BOM_LISTER::PrintComponentsListByReferenceCsvForm( FILE* aFile )
         switch( amount )
         {
         case 1:
-            msg << cmpNameFirst << strPred << m_separatorSymbol << amount;
+            msg << cmpNameFirst << strPred << (wxChar)m_separatorSymbol << amount;
             break;
 
         case 2:
             msg << cmpNameFirst  << wxT(",") << cmpNameLast
-                << strPred << m_separatorSymbol << amount;
+                << strPred << (wxChar)m_separatorSymbol << amount;
             break;
 
         default:
            msg << cmpNameFirst << wxT("..") << cmpNameFirst << cmpNameLast
-               << strPred << m_separatorSymbol << amount;
+               << strPred << (wxChar)m_separatorSymbol << amount;
             break;
         }
         fprintf( m_outFile, "%s\n", TO_UTF8( msg ) );
