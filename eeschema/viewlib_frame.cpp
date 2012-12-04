@@ -502,7 +502,12 @@ void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
 {
     if( m_Semaphore )
     {
-        ExportToSchematicLibraryPart ( event );
+        ExportToSchematicLibraryPart( event );
+
+        // Prevent the double click from being as a single click in the parent
+        // window which would cause the part to be parked rather than staying
+        // in drag mode.
+        event.StopPropagation();
     }
 }
 
