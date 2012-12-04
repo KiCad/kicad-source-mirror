@@ -74,6 +74,7 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     /* listbox events */
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, LIB_VIEW_FRAME::ClickOnLibList )
     EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, LIB_VIEW_FRAME::ClickOnCmpList )
+    EVT_LISTBOX_DCLICK( ID_LIBVIEW_CMP_LIST, LIB_VIEW_FRAME::DClickOnCmpList )
 
     EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
@@ -312,12 +313,12 @@ void LIB_VIEW_FRAME::OnSashDrag( wxSashEvent& event )
         break;
 
     case ID_LIBVIEW_CMPWINDOW:
-    {
-        wxAuiPaneInfo& pane = m_auimgr.GetPane( m_CmpListWindow );
-        m_CmpListSize.x = event.GetDragRect().width;
-        pane.MinSize( m_CmpListSize );
-        m_auimgr.Update();
-    }
+        {
+            wxAuiPaneInfo& pane = m_auimgr.GetPane( m_CmpListWindow );
+            m_CmpListSize.x = event.GetDragRect().width;
+            pane.MinSize( m_CmpListSize );
+            m_auimgr.Update();
+        }
         break;
     }
 }
@@ -497,6 +498,18 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
     }
 }
 
+void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
+{
+    if( m_Semaphore )
+    {
+        ExportToSchematicLibraryPart( event );
+
+        // Prevent the double click from being as a single click in the parent
+        // window which would cause the part to be parked rather than staying
+        // in drag mode.
+        event.StopPropagation();
+    }
+}
 
 void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 {

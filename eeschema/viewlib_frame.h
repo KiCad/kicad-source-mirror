@@ -166,6 +166,7 @@ private:
     void ExportToSchematicLibraryPart( wxCommandEvent& event );
     void ViewOneLibraryContent( CMP_LIBRARY* Lib, int Flag );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    void DClickOnCmpList( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
