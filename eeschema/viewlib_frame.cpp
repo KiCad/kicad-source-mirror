@@ -74,6 +74,7 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     /* listbox events */
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, LIB_VIEW_FRAME::ClickOnLibList )
     EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, LIB_VIEW_FRAME::ClickOnCmpList )
+    EVT_LISTBOX_DCLICK( ID_LIBVIEW_CMP_LIST, LIB_VIEW_FRAME::DClickOnCmpList )
 
     EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
@@ -497,6 +498,13 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
     }
 }
 
+void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
+{
+    if( m_Semaphore )
+    {
+        ExportToSchematicLibraryPart ( event );
+    }
+}
 
 void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 {
