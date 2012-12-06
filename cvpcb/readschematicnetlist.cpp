@@ -71,6 +71,9 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
     // True to read footprint filters section: true for CvPcb, false for Pcbnew
     netList_Reader.ReadLibpartSectionSetOpt( true );
 
+    // on OSX otherwise reloading a file you will see duplicates
+    m_components.clear();
+
     bool success = netList_Reader.ReadNetList( netfile );
     if( !success )
     {
