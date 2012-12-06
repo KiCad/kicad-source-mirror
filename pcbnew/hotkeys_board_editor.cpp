@@ -508,6 +508,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         {
             SetCurItem( module );
             module->SetLocked( !module->IsLocked() );
+            OnModify();
             module->DisplayInfo( this );
         }
 
