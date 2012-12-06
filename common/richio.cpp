@@ -126,9 +126,10 @@ FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName,
 {
     if( doOwn && ftell( aFile ) == 0L )
     {
+#ifndef __WXMAC__
         setvbuf( fp, NULL, _IOFBF, BUFSIZ * 8 );
+#endif
     }
-
     source  = aFileName;
     lineNum = aStartingLineNumber;
 }
