@@ -338,6 +338,18 @@ void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
  * aSide = 0 -> Back (bottom) side)
  * aSide = 1 -> Front (top) side)
  * aSide = 2 -> both sides
+ *
+ * The format is:
+ *  ### Module positions - created on 04/12/2012 15:24:24 ###
+ *  ### Printed by Pcbnew version pcbnew (2012-11-30 BZR 3828)-testing
+ *  ## Unit = inches, Angle = deg.
+ *  ## Side : Front
+ *  # Ref    Val                  Package         PosX       PosY        Rot     Side
+ *  C123     0,1uF/50V        SM0603              1.6024    -2.6280     180.0    Front
+ *  C124     0,1uF/50V        SM0603              1.6063    -2.7579     180.0    Front
+ *  C125     0,1uF/50V        SM0603              1.6010    -2.8310     180.0    Front
+ *  ## End
+ *
  */
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                                                  bool aUnitsMM,
@@ -368,7 +380,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
             continue;
         }
 
-        if( ( module->m_Attributs & MOD_CMS )  == 0 )
+        if( ( module->m_Attributs & MOD_CMS ) == 0 )
         {
             if( aForceSmdItems )    // true to fix a bunch of mis-labeled modules:
             {
@@ -385,7 +397,8 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                     continue;
                 }
             }
-            continue;
+            else
+                continue;
         }
 
         moduleCount++;
@@ -402,7 +415,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     // Build and sort the list of modules alphabetically
     std::vector<LIST_MOD> list;
     list.reserve(moduleCount);
-    for(  module = GetBoard()->m_Modules; module; module = module->Next() )
+    for( module = GetBoard()->m_Modules; module; module = module->Next() )
     {
         if( aSide < 2 )
         {
@@ -425,15 +438,14 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
         list.push_back( item );
     }
 
-    if( moduleCount > 1 )
+    if( list.size() > 1 )
         sort( list.begin(), list.end(), sortFPlist );
 
     wxString frontLayerName = GetBoard()->GetLayerName( LAYER_N_FRONT );
     wxString backLayerName = GetBoard()->GetLayerName( LAYER_N_BACK );
 
-    // Switch the locale to standard C (needed to print floating point
-    // numbers like 1.3)
-    SetLocaleTo_C_standard( );
+    // Switch the locale to standard C (needed to print floating point numbers)
+    LOCALE_IO   toggle;
 
     // Write file header
     sprintf( line, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
@@ -459,7 +471,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
         const wxString& ref = list[ii].m_Reference;
         const wxString& val = list[ii].m_Value;
         const wxString& pkg = list[ii].m_Module->m_LibRef;
-        sprintf( line, "%-8.8s %-16.16s %-16.16s", 
+        sprintf( line, "%-8.8s %-16.16s %-16.16s",
 	         TO_UTF8( ref ), TO_UTF8( val ), TO_UTF8( pkg ) );
 
         module_pos    = list[ii].m_Module->m_Pos;
@@ -493,8 +505,6 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
     // Write EOF
     fputs( "## End\n", file );
-
-    SetLocaleTo_Default( );      // revert to the current locale
 
     fclose( file );
     return moduleCount;

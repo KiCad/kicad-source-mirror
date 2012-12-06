@@ -73,9 +73,9 @@ protected:
     static int      m_convert;
 
 public:
-    LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library = NULL,
-                    wxSemaphore* semaphore = NULL,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    LIB_VIEW_FRAME( SCH_BASE_FRAME* aParent, CMP_LIBRARY* aLibrary = NULL,
+                    wxSemaphore* aSemaphore = NULL,
+                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~LIB_VIEW_FRAME();
 

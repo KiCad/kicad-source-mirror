@@ -209,6 +209,17 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
     event.Skip();
 }
 
+/* function IgnoreLeftButtonReleaseEvent
+ * after calling this function, the next left mouse button release
+ * event will be ignored.
+ * It is is usefull when closing a dialog on a mouse click,
+ * to ignore the next mouse click by the parent window, although the mouse
+ * button (cliched on the dialog) is released in the parent frame
+ */
+void EDA_DRAW_FRAME::IgnoreLeftButtonReleaseEvent()
+{
+   m_canvas->SetIgnoreLeftButtonReleaseEvent( true );
+}
 
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {

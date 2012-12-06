@@ -494,6 +494,27 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
     frame->AppendMsgPanel( _( "Orient" ), msg, BROWN );
 
+    /* Controls on right side of the dialog */
+    switch( m_Attributs & 255 )
+    {
+    case 0:
+        msg = _("Normal");
+        break;
+
+    case MOD_CMS:
+        msg = _("Insert");
+        break;
+
+    case MOD_VIRTUAL:
+        msg = _("Virtual");
+        break;
+
+    default:
+        msg = wxT("???");
+        break;
+    }
+    frame->AppendMsgPanel( _( "Attrib" ), msg, BROWN );
+
     frame->AppendMsgPanel( _( "Module" ), m_LibRef, BLUE );
 
     if(  m_3D_Drawings != NULL )
