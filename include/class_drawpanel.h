@@ -83,7 +83,19 @@ private:
 
     bool m_ignoreMouseEvents;     ///< Ignore mouse events when true.
 
+    /* Used to inhibit a response to a mouse left button release, after a double click
+     * (when releasing the left button at the end of the second click.  Used in Eeschema
+     * to inhibit a mouse left release command when switching between hierarchical sheets
+     * on a double click.
+     */
+    bool m_ignoreNextLeftButtonRelease;    ///< Ignore the next mouse left button release when true.
+
     bool m_enableBlockCommands;   ///< True enables block commands.
+
+    int m_minDragEventCount;    /* Count the drag events. Used to filter mouse moves before starting a
+                                 * block command.  A block command can be started only if
+                                 * MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
+                                 * in order to avoid spurious block commands. */
 
     /// True when drawing in mirror mode. Used by the draw arc function, because arcs
     /// are oriented, and in mirror mode, orientations are reversed.
@@ -133,6 +145,8 @@ public:
     void SetAutoPanRequest( bool aEnable ) { m_requestAutoPan = aEnable; }
 
     void SetIgnoreMouseEvents( bool aIgnore ) { m_ignoreMouseEvents = aIgnore; }
+
+    void SetIgnoreLeftButtonReleaseEvent( bool aIgnore ) { m_ignoreNextLeftButtonRelease = aIgnore; }
 
     void SetEnableBlockCommands( bool aEnable ) { m_enableBlockCommands = aEnable; }
 

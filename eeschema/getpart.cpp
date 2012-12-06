@@ -216,7 +216,6 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
 {
     int unit    = 1;
     int convert = 1;
-
     m_itemToRepeat = NULL;
     m_canvas->SetIgnoreMouseEvents( true );
 

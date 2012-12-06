@@ -205,6 +205,9 @@ void DIALOG_ERC::OnLeftDblClickMarkersList( wxCommandEvent& event )
     {
         m_parent->GetScreen()->SetCrossHairPosition( m_lastMarkerFound->m_Pos );
         m_parent->RedrawScreen( m_lastMarkerFound->m_Pos, true);
+        // prevent a left mouse click event on parent frame
+        // coming from the ERC dialog double click
+        m_parent->IgnoreLeftButtonReleaseEvent();
         EndModal( 1 );
     }
 }

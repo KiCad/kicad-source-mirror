@@ -498,6 +498,17 @@ public:
 
     void OnMenuOpen( wxMenuEvent& event );
     void  OnMouseEvent( wxMouseEvent& event );
+
+    /** function IgnoreLeftButtonReleaseEvent
+     * after calling this function, the next left mouse button release
+     * event will be ignored.
+     * It is is usefull when closing a dialog on a mouse click,
+     * to ignore the next mouse click by the parent window, although the mouse
+     * button (clicked on the dialog) is released in the parent frame,
+     * and therfore creates an unwanted mouse click event
+     */
+    void IgnoreLeftButtonReleaseEvent();
+
     virtual void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                            EDA_ITEM* aItem = NULL );
 
