@@ -347,7 +347,9 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
             // no destruction so we can preserve listbox cursor
             Show( false );
 
-            event.StopPropagation();    // still get the popup window.
+            // We do not want the clarification popup window.
+            // when releasing the left button in the main window
+            m_Parent->SkipNextLeftButtonReleaseEvent();
         }
     }
 }

@@ -48,6 +48,7 @@
 #define MinimalHeaderKey        wxT( "DrillMinHeader" )
 #define UnitDrillInchKey        wxT( "DrillUnit" )
 #define DrillOriginIsAuxAxisKey wxT( "DrillAuxAxis" )
+#define DrillMapFileTypeKey     wxT( "DrillMapFileType" )
 
 // list of allowed precision for EXCELLON files, for integer format:
 // Due to difference between inches and mm,
@@ -98,11 +99,12 @@ DIALOG_GENDRILL::~DIALOG_GENDRILL()
 
 void DIALOG_GENDRILL::initDialog()
 {
-    m_config->Read( ZerosFormatKey, &DIALOG_GENDRILL::m_ZerosFormat );
-    m_config->Read( MirrorKey, &DIALOG_GENDRILL::m_Mirror );
-    m_config->Read( MinimalHeaderKey, &DIALOG_GENDRILL::m_MinimalHeader );
-    m_config->Read( UnitDrillInchKey, &DIALOG_GENDRILL::m_UnitDrillIsInch );
-    m_config->Read( DrillOriginIsAuxAxisKey, &DIALOG_GENDRILL::m_DrillOriginIsAuxAxis );
+    m_config->Read( ZerosFormatKey, &m_ZerosFormat );
+    m_config->Read( MirrorKey, &m_Mirror );
+    m_config->Read( MinimalHeaderKey, &m_MinimalHeader );
+    m_config->Read( UnitDrillInchKey, &m_UnitDrillIsInch );
+    m_config->Read( DrillOriginIsAuxAxisKey, &m_DrillOriginIsAuxAxis );
+    m_config->Read( DrillMapFileTypeKey, &m_mapFileType );
 
     InitDisplayParams();
 }
@@ -114,20 +116,15 @@ void DIALOG_GENDRILL::InitDisplayParams()
 
     m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
     m_Choice_Zeros_Format->SetSelection( m_ZerosFormat );
-
     UpdatePrecisionOptions();
-
     m_Check_Minimal->SetValue( m_MinimalHeader );
 
     if( m_DrillOriginIsAuxAxis )
         m_Choice_Drill_Offset->SetSelection( 1 );
 
     m_Check_Mirror->SetValue( m_Mirror );
-
     m_Choice_Drill_Map->SetSelection( m_mapFileType );
-
     m_ViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
-
     m_MicroViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
 
     // See if we have some buried vias or/and microvias, and display
@@ -171,7 +168,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
             }
             else
             {
-                if( std::min( pad->GetDrillSize().x, pad->GetDrillSize().y ) != 0 )
+                if( pad->GetDrillSize().x != 0 && pad->GetDrillSize().y != 0 )
                 {
                     if( pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
                         m_notplatedPadsHoleCount++;
@@ -217,6 +214,7 @@ void DIALOG_GENDRILL::UpdateConfig()
     m_config->Write( MinimalHeaderKey, m_MinimalHeader );
     m_config->Write( UnitDrillInchKey, m_UnitDrillIsInch );
     m_config->Write( DrillOriginIsAuxAxisKey, m_DrillOriginIsAuxAxis );
+    m_config->Write( DrillMapFileTypeKey, m_mapFileType );
 }
 
 
@@ -335,7 +333,7 @@ void DIALOG_GENDRILL::SetParams()
 /**
  * Function GenDrillAndMapFiles
  * Calls the functions to create EXCELLON drill files and/or drill map files
- * >When all holes are through, only one excellon file is created.
+ * >When all holes are through holes, only one excellon file is created.
  * >When there are some partial holes (some blind or buried vias),
  *  one excellon file is created, for all plated through holes,
  *  and one file per layer pair, which have one or more holes, excluding
