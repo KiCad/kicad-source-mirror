@@ -498,6 +498,19 @@ public:
 
     void OnMenuOpen( wxMenuEvent& event );
     void  OnMouseEvent( wxMouseEvent& event );
+
+    /** function SkipNextLeftButtonReleaseEvent
+     * after calling this function, if the left mouse button
+     * is down, the next left mouse button release event will be ignored.
+     * It is is usefull for instance when closing a dialog on a mouse click,
+     * to skip the next mouse left button release event
+     * by the parent window, because the mouse button
+     * clicked on the dialog is often released in the parent frame,
+     * and therefore creates a left button released mouse event
+     * which can be unwanted in some cases
+     */
+    void SkipNextLeftButtonReleaseEvent();
+
     virtual void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                            EDA_ITEM* aItem = NULL );
 

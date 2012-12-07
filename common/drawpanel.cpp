@@ -105,6 +105,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_panScrollbarLimits = false;
     m_enableAutoPan = true;
     m_ignoreMouseEvents = false;
+    m_ignoreNextLeftButtonRelease = false;
 
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
@@ -118,6 +119,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
     m_requestAutoPan = false;
     m_enableBlockCommands = false;
+    m_minDragEventCount = 0;
 
 #ifdef __WXMAC__
     m_defaultCursor = m_currentCursor = wxCURSOR_CROSS;
@@ -874,16 +876,8 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 
 void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 {
-    /* Used to inhibit a response to a mouse left button release, after a double click
-     * (when releasing the left button at the end of the second click.  Used in Eeschema
-     * to inhibit a mouse left release command when switching between hierarchical sheets
-     * on a double click.
-     */
-    static bool ignoreNextLeftButtonRelease = false;
-    static EDA_DRAW_PANEL* LastPanel = NULL;
-
-    int                    localrealbutt = 0, localbutt = 0;
-    BASE_SCREEN*           screen = GetScreen();
+    int          localrealbutt = 0, localbutt = 0;
+    BASE_SCREEN* screen = GetScreen();
 
     if( !screen )
         return;
@@ -893,18 +887,8 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
      */
 #define MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND 5
 
-    /* Count the drag events.  Used to filter mouse moves before starting a
-     * block command.  A block command can be started only if
-     * MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
-     * and m_canStartBlock >= 0
-     * in order to avoid spurious block commands.
-     */
-    static int MinDragEventCount;
-
     if( event.Leaving() )
-    {
         m_canStartBlock = -1;
-    }
 
     if( !IsMouseCaptured() )          // No mouse capture in progress.
         m_requestAutoPan = false;
@@ -915,9 +899,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         return;
 
     if( !event.IsButton() && !event.Moving() && !event.Dragging() )
-    {
         return;
-    }
 
     if( event.RightDown() )
     {
@@ -970,26 +952,29 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         // inhibit a response to the mouse left button release,
         // because we have a double click, and we do not want a new
         // OnLeftClick command at end of this Double Click
-        ignoreNextLeftButtonRelease = true;
+        m_ignoreNextLeftButtonRelease = true;
     }
     else if( event.LeftUp() )
     {
         // A block command is in progress: a left up is the end of block
         // or this is the end of a double click, already seen
-        if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK && !ignoreNextLeftButtonRelease )
+        // Note also m_ignoreNextLeftButtonRelease can be set by
+        // the call to OnLeftClick(), so do not change it after calling OnLeftClick
+        bool ignoreEvt = m_ignoreNextLeftButtonRelease;
+        m_ignoreNextLeftButtonRelease = false;
+
+        if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK && !ignoreEvt )
             GetParent()->OnLeftClick( &DC, screen->RefPos( true ) );
 
-        ignoreNextLeftButtonRelease = false;
     }
-
-    if( !event.LeftIsDown() )
+    else if( !event.LeftIsDown() )
     {
         /* be sure there is a response to a left button release command
          * even when a LeftUp event is not seen.  This happens when a
          * double click opens a dialog box, and the release mouse button
-         * is made when the dialog box is open.
+         * is made when the dialog box is opened.
          */
-        ignoreNextLeftButtonRelease = false;
+        m_ignoreNextLeftButtonRelease = false;
     }
 
     if( event.ButtonDown( wxMOUSE_BTN_MIDDLE ) && m_enableMiddleButtonPan )
@@ -1115,9 +1100,10 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     /*******************************/
 
     // Command block can't start if mouse is dragging a new panel
-    if( LastPanel != this )
+    static EDA_DRAW_PANEL* lastPanel;
+    if( lastPanel != this )
     {
-        MinDragEventCount = 0;
+        m_minDragEventCount = 0;
         m_canStartBlock   = -1;
     }
 
@@ -1129,7 +1115,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
      */
     if( !event.LeftIsDown() && !event.MiddleIsDown() )
     {
-        MinDragEventCount = 0;
+        m_minDragEventCount = 0;
         m_canStartBlock   = 0;
 
         /* Remember the last cursor position when a drag mouse starts
@@ -1155,7 +1141,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
             {
                 m_requestAutoPan = false;
                 GetParent()->HandleBlockPlace( &DC );
-                ignoreNextLeftButtonRelease = true;
+                m_ignoreNextLeftButtonRelease = true;
             }
         }
         else if( ( m_canStartBlock >= 0 )
@@ -1174,8 +1160,8 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 // A block command is started if the drag is enough.  A small
                 // drag is ignored (it is certainly a little mouse move when
                 // clicking) not really a drag mouse
-                if( MinDragEventCount < MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND )
-                    MinDragEventCount++;
+                if( m_minDragEventCount < MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND )
+                    m_minDragEventCount++;
                 else
                 {
                     if( !GetParent()->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos ) )
@@ -1250,7 +1236,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     GetParent()->PrintMsg( msg_debug );
 #endif
 
-    LastPanel = this;
+    lastPanel = this;
 }
 
 
