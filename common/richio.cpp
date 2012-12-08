@@ -39,27 +39,58 @@
 // "richio" after its author, Richard Hollenbeck, aka Dick Hollenbeck.
 
 
+
+void IO_ERROR::init( const char* aThrowersFile, const char* aThrowersLoc, const wxString& aMsg )
+{
+    errorText.Printf( IO_FORMAT, aMsg.GetData(),
+        wxString::FromUTF8( aThrowersFile ).GetData(),
+        wxString::FromUTF8( aThrowersLoc ).GetData() );
+}
+
+
+void PARSE_ERROR::init( const char* aThrowersFile, const char* aThrowersLoc,
+           const wxString& aMsg, const wxString& aSource,
+           const char* aInputLine,
+           int aLineNumber, int aByteIndex )
+{
+    // save inpuLine, lineNumber, and offset for UI (.e.g. Sweet text editor)
+    inputLine  = aInputLine;
+    lineNumber = aLineNumber;
+    byteIndex  = aByteIndex;
+
+    errorText.Printf( PARSE_FORMAT, aMsg.GetData(), aSource.GetData(),
+        aLineNumber, aByteIndex,
+        wxString::FromUTF8( aThrowersFile ).GetData(),
+        wxString::FromUTF8( aThrowersLoc ).GetData() );
+}
+
+
 //-----<LINE_READER>------------------------------------------------------
 
 LINE_READER::LINE_READER( unsigned aMaxLineLength )
 {
     lineNum = 0;
 
-    if( aMaxLineLength == 0 )       // caller is goofed up.
-        aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX;
+    if( aMaxLineLength == 0 )
+    {
+        line = 0;
+    }
+    else
+    {
+        maxLineLength = aMaxLineLength;
 
-    maxLineLength = aMaxLineLength;
+        // start at the INITIAL size, expand as needed up to the MAX size in maxLineLength
+        capacity = LINE_READER_LINE_INITIAL_SIZE;
 
-    // start at the INITIAL size, expand as needed up to the MAX size in maxLineLength
-    capacity = LINE_READER_LINE_INITIAL_SIZE;
+        // but never go above user's aMaxLineLength, and leave space for trailing nul
+        if( capacity > aMaxLineLength+1 )
+            capacity = aMaxLineLength+1;
 
-    // but never go above user's aMaxLineLength, and leave space for trailing nul
-    if( capacity > aMaxLineLength+1 )
-        capacity = aMaxLineLength+1;
+        line = new char[capacity];
 
-    line = new char[capacity];
+        line[0] = '\0';
+    }
 
-    line[0] = '\0';
     length  = 0;
 }
 

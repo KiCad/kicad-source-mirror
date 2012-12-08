@@ -188,13 +188,13 @@ public:
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
     bool        operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
 
-    void         SetColor( EDA_COLOR_T aVal ) { m_color = aVal; }
+    void        SetColor( EDA_COLOR_T aVal ) { m_color = aVal; }
     EDA_COLOR_T GetColor() const { return m_color; }
 
-    void         SetReferenceColor( EDA_COLOR_T aVal ) { m_referenceColor = aVal; }
+    void        SetReferenceColor( EDA_COLOR_T aVal ) { m_referenceColor = aVal; }
     EDA_COLOR_T GetReferenceColor() const { return m_referenceColor; }
 
-    void         SetValueColor( EDA_COLOR_T aVal ) { m_valueColor = aVal; }
+    void        SetValueColor( EDA_COLOR_T aVal ) { m_valueColor = aVal; }
     EDA_COLOR_T GetValueColor() const { return m_valueColor; }
 
     void        SetTextMode( PlotTextMode aVal ) { m_textMode = aVal; }
@@ -291,6 +291,5 @@ public:
  * 0 = single pixel line width.
  */
 extern int g_DrawDefaultLineThickness;
-
 
 #endif // PCB_PLOT_PARAMS_H_
