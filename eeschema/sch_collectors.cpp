@@ -89,6 +89,21 @@ const KICAD_T SCH_COLLECTOR::EditableItems[] = {
     EOT
 };
 
+const KICAD_T SCH_COLLECTOR::CmpFieldValueOnly[] = {
+    SCH_FIELD_LOCATE_VALUE_T,
+    EOT
+};
+
+const KICAD_T SCH_COLLECTOR::CmpFieldReferenceOnly[] = {
+    SCH_FIELD_LOCATE_REFERENCE_T,
+    EOT
+};
+
+const KICAD_T SCH_COLLECTOR::CmpFieldFootprintOnly[] = {
+    SCH_FIELD_LOCATE_FOOTPRINT_T,
+    EOT
+};
+
 
 const KICAD_T SCH_COLLECTOR::MovableItems[] = {
     SCH_MARKER_T,

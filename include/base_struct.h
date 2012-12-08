@@ -94,6 +94,13 @@ enum KICAD_T {
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
 
+    // Be prudent with these 3 types:
+    // they should be used only to locate a specific field type
+    // among SCH_FIELD_T items types
+    SCH_FIELD_LOCATE_REFERENCE_T,
+    SCH_FIELD_LOCATE_VALUE_T,
+    SCH_FIELD_LOCATE_FOOTPRINT_T,
+
     // General
     SCH_SCREEN_T,
 
