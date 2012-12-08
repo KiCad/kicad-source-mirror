@@ -249,18 +249,37 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
 void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 {
-    wxString msg;
+    wxString msg, name;
+
+    switch( Field->GetId() )
+    {
+        case REFERENCE: name = _( "Reference" ); break;
+        case VALUE:     name = _( "Value" ); break;
+        case FOOTPRINT: name = _( "Footprint Field" ); break;
+        default:        name = _( "Field" ); break;
+    }
 
     if( !Field->GetFlags() )
     {
-        msg = AddHotkeyName( _( "Move Field" ), s_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move" ) + wxT(" ") + name, s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_text_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate Field" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate" ) + wxT(" ") + name, s_Schematic_Hokeys_Descr,
+                         HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_field_xpm ) );
-    msg = AddHotkeyName( _( "Edit Field" ), s_Schematic_Hokeys_Descr, HK_EDIT );
+
+    // Ref, value and footprint have specific hotkeys. Show the specific hotkey:
+    hotkey_id_commnand id;
+    switch( Field->GetId() )
+    {
+        case REFERENCE: id = HK_EDIT_COMPONENT_REFERENCE; break;
+        case VALUE:     id = HK_EDIT_COMPONENT_VALUE; break;
+        case FOOTPRINT: id = HK_EDIT_COMPONENT_FOOTPRINT; break;
+        default:        id = HK_EDIT; break;
+    }
+    msg = AddHotkeyName( _( "Edit" ) + wxT(" ") + name, s_Schematic_Hokeys_Descr, id );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
 }
 
@@ -313,13 +332,17 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     if( libComponent && libComponent->IsNormal() )
     {
-        msg = AddHotkeyName( _( "Value " ), s_Schematic_Hokeys_Descr, HK_EDIT_COMPONENT_VALUE );
-        AddMenuItem( editmenu, ID_SCH_EDIT_COMPONENT_VALUE, msg, KiBitmap( edit_comp_value_xpm ) );
+        msg = AddHotkeyName( _( "Value" ), s_Schematic_Hokeys_Descr,
+                             HK_EDIT_COMPONENT_VALUE );
+        AddMenuItem( editmenu, ID_SCH_EDIT_COMPONENT_VALUE, msg,
+                     KiBitmap( edit_comp_value_xpm ) );
 
-        AddMenuItem( editmenu, ID_SCH_EDIT_COMPONENT_REFERENCE, _( "Reference" ),
+        msg = AddHotkeyName( _( "Reference" ), s_Schematic_Hokeys_Descr,
+                             HK_EDIT_COMPONENT_REFERENCE );
+        AddMenuItem( editmenu, ID_SCH_EDIT_COMPONENT_REFERENCE, msg,
                      KiBitmap( edit_comp_ref_xpm ) );
 
-        msg = AddHotkeyName( _( "Footprint " ), s_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Footprint" ), s_Schematic_Hokeys_Descr,
                              HK_EDIT_COMPONENT_FOOTPRINT );
         AddMenuItem( editmenu, ID_SCH_EDIT_COMPONENT_FOOTPRINT, msg,
                      KiBitmap( edit_comp_footprint_xpm ) );

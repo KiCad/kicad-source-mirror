@@ -53,6 +53,21 @@ public:
     static const KICAD_T EditableItems[];
 
     /**
+     * A scan list for a specific editable field: Value.
+     */
+    static const KICAD_T CmpFieldValueOnly[];
+
+    /**
+     * A scan list for a specific editable field: Reference.
+     */
+    static const KICAD_T CmpFieldReferenceOnly[];
+
+    /**
+     * A scan list for a specific editable field: Footprint.
+     */
+    static const KICAD_T CmpFieldFootprintOnly[];
+
+    /**
      * A scan list for all movable schematic items.
      */
     static const KICAD_T MovableItems[];

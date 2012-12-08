@@ -168,6 +168,9 @@ static EDA_HOTKEY HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E', ID_SCH_EDI
 static EDA_HOTKEY HkEditComponentValue( wxT( "Edit Component Value" ),
                                         HK_EDIT_COMPONENT_VALUE, 'V',
                                         ID_SCH_EDIT_COMPONENT_VALUE );
+static EDA_HOTKEY HkEditComponentReference( wxT( "Edit Component Reference" ),
+                                        HK_EDIT_COMPONENT_REFERENCE, 'U',
+                                        ID_SCH_EDIT_COMPONENT_REFERENCE );
 static EDA_HOTKEY HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
                                             HK_EDIT_COMPONENT_FOOTPRINT, 'F',
                                             ID_SCH_EDIT_COMPONENT_FOOTPRINT );
@@ -240,6 +243,7 @@ EDA_HOTKEY* s_Schematic_Hotkey_List[] =
     &HkOrientNormalComponent,
     &HkEdit,
     &HkEditComponentValue,
+    &HkEditComponentReference,
     &HkEditComponentFootprint,
     &HkBeginWire,
     &HkBeginBus,
@@ -490,6 +494,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
     case HK_EDIT:                           // Edit schematic item.
     case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
+    case HK_EDIT_COMPONENT_REFERENCE:       // Edit component value reference.
     case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
         {
             // force a new item search on hot keys at current position,

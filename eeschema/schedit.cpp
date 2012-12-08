@@ -807,8 +807,36 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 
         wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
-        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::EditableItems,
+        // Set the locat filter, according to the edit command
+        const KICAD_T* filterList = SCH_COLLECTOR::EditableItems;
+        const KICAD_T* filterListAux = NULL;
+        switch( aEvent.GetId() )
+        {
+        case ID_SCH_EDIT_COMPONENT_REFERENCE:
+            filterList = SCH_COLLECTOR::CmpFieldReferenceOnly;
+            filterListAux = SCH_COLLECTOR::ComponentsOnly;
+            break;
+
+        case ID_SCH_EDIT_COMPONENT_VALUE:
+            filterList = SCH_COLLECTOR::CmpFieldValueOnly;
+            filterListAux = SCH_COLLECTOR::ComponentsOnly;
+            break;
+
+        case ID_SCH_EDIT_COMPONENT_FOOTPRINT:
+            filterList = SCH_COLLECTOR::CmpFieldFootprintOnly;
+            filterListAux = SCH_COLLECTOR::ComponentsOnly;
+            break;
+
+        default:
+            break;
+        }
+        item = LocateAndShowItem( data->GetPosition(), filterList,
                                   aEvent.GetInt() );
+
+        // If no item found, and if an auxiliary filter exists, try to use it
+        if( !item && filterListAux )
+            item = LocateAndShowItem( data->GetPosition(), filterListAux,
+                                      aEvent.GetInt() );
 
         // Exit if no item found at the current location or the item is already being edited.
         if( (item == NULL) || (item->GetFlags() != 0) )
