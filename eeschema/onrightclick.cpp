@@ -251,22 +251,23 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 {
     wxString msg, name;
 
+    name << wxT(" ");
     switch( Field->GetId() )
     {
-        case REFERENCE: name = _( "Reference" ); break;
-        case VALUE:     name = _( "Value" ); break;
-        case FOOTPRINT: name = _( "Footprint Field" ); break;
-        default:        name = _( "Field" ); break;
+        case REFERENCE: name << _( "Reference" ); break;
+        case VALUE:     name << _( "Value" ); break;
+        case FOOTPRINT: name << _( "Footprint Field" ); break;
+        default:        name << _( "Field" ); break;
     }
 
     if( !Field->GetFlags() )
     {
-        msg = AddHotkeyName( _( "Move" ) + wxT(" ") + name, s_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move" ) + name, s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_text_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate" ) + wxT(" ") + name, s_Schematic_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Rotate" ) + name, s_Schematic_Hokeys_Descr,
                          HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_field_xpm ) );
 
@@ -279,7 +280,7 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
         case FOOTPRINT: id = HK_EDIT_COMPONENT_FOOTPRINT; break;
         default:        id = HK_EDIT; break;
     }
-    msg = AddHotkeyName( _( "Edit" ) + wxT(" ") + name, s_Schematic_Hokeys_Descr, id );
+    msg = AddHotkeyName( _( "Edit" ) + name, s_Schematic_Hokeys_Descr, id );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
 }
 
