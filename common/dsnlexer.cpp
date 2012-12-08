@@ -304,9 +304,8 @@ void DSNLEXER::Unexpected( int aTok ) throw( IO_ERROR )
 
 void DSNLEXER::Duplicate( int aTok ) throw( IO_ERROR )
 {
-    wxString    errText;
-
-    errText.Printf( _("%s is a duplicate"), GetTokenString( aTok ).GetData() );
+    wxString errText = wxString::Format(
+        _("%s is a duplicate"), GetTokenString( aTok ).GetData() );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
@@ -358,9 +357,8 @@ int DSNLEXER::NeedNUMBER( const char* aExpectation ) throw( IO_ERROR )
     int tok = NextTok();
     if( tok != DSN_NUMBER )
     {
-        wxString    errText;
-
-        errText.Printf( _("need a NUMBER for '%s'"), wxString::FromUTF8( aExpectation ).GetData() );
+        wxString errText = wxString::Format(
+            _("need a NUMBER for '%s'"), wxString::FromUTF8( aExpectation ).GetData() );
         THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
     return tok;

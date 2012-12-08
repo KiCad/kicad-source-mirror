@@ -45,6 +45,10 @@
 #include <class_board.h>
 #include <fp_lib_table.h>
 
+#if defined(DEBUG)
+ #include <fp_lib_table_lexer.h>
+#endif
+
 #include <pcbplot.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -88,6 +92,39 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             FP_LIB_TABLE    gbl;
             FP_LIB_TABLE    prj;
 
+#if defined(DEBUG)
+            FP_LIB_TABLE_LEXER  glex(
+                "(fp_lib_table\n"
+                "   (lib (name passives)(descr \"Demo Lib\")(type KiCad)(uri ${KISFP}/passives.pretty))\n"
+                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KISFP}/passives.mod)(options \"op1=2\"))\n"
+                "   (lib (name chips)(descr \"Potatoe chips\")(type Eagle)(uri /opt/eagle-6.2.0/lbr/con-amp-micromatch.lbr))\n"
+                ")", wxT( "gbl" ) );
+
+            FP_LIB_TABLE_LEXER  plex(
+                "(fp_lib_table\n"
+                "   (lib (name passives)(descr \"Demo Lib\")(type KiCad)(uri ${KIUFP}/passives.pretty))\n"
+                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KIUFP}/micros.mod)(options \"op1=2\"))\n"
+                "   (lib (name chips)(descr \"Potatoe chips\")(type Eagle)(uri /opt/eagle-6.2.0/lbr/con-amp-micromatch.lbr))\n"
+                ")", wxT( "prj" ) );
+
+            try
+            {
+                gbl.Parse( &glex );
+                prj.Parse( &plex );
+            }
+            /* PARSE_ERROR is an IO_ERROR, handle them the same for now.
+            catch( PARSE_ERROR pe )
+            {
+                DisplayError( this, pe.errorText );
+                break;
+            }
+            */
+            catch( IO_ERROR ioe )
+            {
+                DisplayError( this, ioe.errorText );
+                break;
+            }
+#else
             gbl.InsertRow( FP_LIB_TABLE::ROW(
                 wxT( "passives" ), wxT( "%G/passives" ), wxT( "KiCad" ), wxT( "speed=fast,purpose=testing" ) ) );
 
@@ -96,6 +133,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
             prj.InsertRow( FP_LIB_TABLE::ROW(
                 wxT( "micros" ), wxT( "%P/potato_chips" ), wxT( "Eagle" ), wxT( "speed=fast,purpose=testing" ) ) );
+#endif
 
             int r = InvokePcbLibTableEditor( this, &gbl, &prj );
 
