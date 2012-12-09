@@ -95,15 +95,15 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 #if defined(DEBUG)
             FP_LIB_TABLE_LEXER  glex(
                 "(fp_lib_table\n"
-                "   (lib (name passives)(descr \"Demo Lib\")(type KiCad)(uri ${KISFP}/passives.pretty))\n"
-                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KISFP}/passives.mod)(options \"op1=2\"))\n"
+                "   (lib (name passives)(descr \"R/C Lib\")(type KiCad)(uri ${KISYSMODS}/passives.pretty))\n"
+                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KISYSMODS}/passives.mod)(options \"op1=2\"))\n"
                 "   (lib (name chips)(descr \"Potatoe chips\")(type Eagle)(uri /opt/eagle-6.2.0/lbr/con-amp-micromatch.lbr))\n"
                 ")", wxT( "gbl" ) );
 
             FP_LIB_TABLE_LEXER  plex(
                 "(fp_lib_table\n"
-                "   (lib (name passives)(descr \"Demo Lib\")(type KiCad)(uri ${KIUFP}/passives.pretty))\n"
-                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KIUFP}/micros.mod)(options \"op1=2\"))\n"
+                "   (lib (name passives)(descr \"Demo Lib\")(type KiCad)(uri ${KIUSRMODS}/passives.pretty))\n"
+                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KIUSRMODS}/micros.mod)(options \"op1=2\"))\n"
                 "   (lib (name chips)(descr \"Potatoe chips\")(type Eagle)(uri /opt/eagle-6.2.0/lbr/con-amp-micromatch.lbr))\n"
                 ")", wxT( "prj" ) );
 

@@ -304,7 +304,7 @@ PLUGIN* FP_LIB_TABLE::PluginFind( const wxString& aLibraryNickName )
 
 const wxString FP_LIB_TABLE::ExpandSubtitutions( const wxString aString )
 {
-    // We reserve the right to do this another way, but providing our own member
+    // We reserve the right to do this another way, by providing our own member
     // function.
     return wxExpandEnvVars( aString );
 }
