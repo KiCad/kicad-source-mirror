@@ -306,6 +306,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
         {
         case ID_CUT:
         case ID_COPY:
+            // this format is compatible with most spreadsheets
             if( wxTheClipboard->Open() )
             {
                 wxGridTableBase*    tbl = m_cur_grid->GetTable();
@@ -334,6 +335,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
         case ID_PASTE:
             D(printf( "paste\n" );)
+            // assume format came from a spreadsheet or us.
             if( wxTheClipboard->Open() )
             {
                 if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
