@@ -464,7 +464,7 @@
                                                                 <property name="col_label_size">30</property>
                                                                 <property name="col_label_values"></property>
                                                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
-                                                                <property name="cols">4</property>
+                                                                <property name="cols">5</property>
                                                                 <property name="column_sizes"></property>
                                                                 <property name="context_help"></property>
                                                                 <property name="context_menu">1</property>
@@ -524,9 +524,9 @@
                                                                 <event name="OnEnterWindow"></event>
                                                                 <event name="OnEraseBackground"></event>
                                                                 <event name="OnGridCellChange"></event>
-                                                                <event name="OnGridCellLeftClick"></event>
-                                                                <event name="OnGridCellLeftDClick"></event>
-                                                                <event name="OnGridCellRightClick"></event>
+                                                                <event name="OnGridCellLeftClick">onGridCellLeftClick</event>
+                                                                <event name="OnGridCellLeftDClick">onGridCellLeftDClick</event>
+                                                                <event name="OnGridCellRightClick">onGridCellRightClick</event>
                                                                 <event name="OnGridCellRightDClick"></event>
                                                                 <event name="OnGridCmdCellChange"></event>
                                                                 <event name="OnGridCmdCellLeftClick"></event>
@@ -543,7 +543,7 @@
                                                                 <event name="OnGridCmdLabelRightDClick"></event>
                                                                 <event name="OnGridCmdRangeSelect"></event>
                                                                 <event name="OnGridCmdRowSize"></event>
-                                                                <event name="OnGridCmdSelectCell"></event>
+                                                                <event name="OnGridCmdSelectCell">onGridCmdSelectCell</event>
                                                                 <event name="OnGridColSize"></event>
                                                                 <event name="OnGridEditorCreated"></event>
                                                                 <event name="OnGridEditorHidden"></event>
@@ -693,7 +693,7 @@
                                                                 <property name="col_label_size">30</property>
                                                                 <property name="col_label_values"></property>
                                                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
-                                                                <property name="cols">4</property>
+                                                                <property name="cols">5</property>
                                                                 <property name="column_sizes"></property>
                                                                 <property name="context_help"></property>
                                                                 <property name="context_menu">1</property>
@@ -753,9 +753,9 @@
                                                                 <event name="OnEnterWindow"></event>
                                                                 <event name="OnEraseBackground"></event>
                                                                 <event name="OnGridCellChange"></event>
-                                                                <event name="OnGridCellLeftClick"></event>
-                                                                <event name="OnGridCellLeftDClick"></event>
-                                                                <event name="OnGridCellRightClick"></event>
+                                                                <event name="OnGridCellLeftClick">onGridCellLeftClick</event>
+                                                                <event name="OnGridCellLeftDClick">onGridCellLeftDClick</event>
+                                                                <event name="OnGridCellRightClick">onGridCellRightClick</event>
                                                                 <event name="OnGridCellRightDClick"></event>
                                                                 <event name="OnGridCmdCellChange"></event>
                                                                 <event name="OnGridCmdCellLeftClick"></event>
@@ -772,7 +772,7 @@
                                                                 <event name="OnGridCmdLabelRightDClick"></event>
                                                                 <event name="OnGridCmdRangeSelect"></event>
                                                                 <event name="OnGridCmdRowSize"></event>
-                                                                <event name="OnGridCmdSelectCell"></event>
+                                                                <event name="OnGridCmdSelectCell">onGridCmdSelectCell</event>
                                                                 <event name="OnGridColSize"></event>
                                                                 <event name="OnGridEditorCreated"></event>
                                                                 <event name="OnGridEditorHidden"></event>
