@@ -61,6 +61,10 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void onGridCellLeftClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void onGridCellLeftDClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void onGridCellRightClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void onGridCmdSelectCell( wxGridEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxMouseEvent& event ) { event.Skip(); }
 		virtual void deleteRowHandler( wxMouseEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxMouseEvent& event ) { event.Skip(); }

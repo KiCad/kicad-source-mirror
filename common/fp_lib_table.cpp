@@ -59,7 +59,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
     T       tok;
 
     // This table may be nested within a larger s-expression, or not.
-    // Allow for parser of that optional outter s-epression to have looked ahead.
+    // Allow for parser of that optional containing s-epression to have looked ahead.
     if( in->CurTok() != T_fp_lib_table )
     {
         in->NeedLEFT();
@@ -84,7 +84,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
         if( ( tok = in->NextTok() ) != T_lib )
             in->Expecting( T_lib );
 
-        // (name LOGICAL_NAME)
+        // (name NICKNAME)
         in->NeedLEFT();
 
         if( ( tok = in->NextTok() ) != T_name )
@@ -97,7 +97,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
         in->NeedRIGHT();
 
         // After (name), remaining (lib) elements are order independent, and in
-        // the future, perhaps optional.  Flexibility for future changes.
+        // some cases optional.
 
         bool    sawType = false;
         bool    sawOpts = false;
@@ -191,12 +191,12 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     throw( IO_ERROR )
 {
-    out->Print( nestLevel, "(lib (name %s)(descr %s)(uri %s)(type %s)(options %s))\n",
+    out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s))\n",
                 out->Quotew( GetNickName() ).c_str(),
-                out->Quotew( GetDescr() ).c_str(),
-                out->Quotew( GetFullURI() ).c_str(),
                 out->Quotew( GetType() ).c_str(),
-                out->Quotew( GetOptions() ).c_str()
+                out->Quotew( GetFullURI() ).c_str(),
+                out->Quotew( GetOptions() ).c_str(),
+                out->Quotew( GetDescr() ).c_str()
                 );
 }
 
