@@ -566,6 +566,17 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibPath,
         if( footprintName.IsEmpty() )
             return false;
 
+        if( ! MODULE::IsLibNameValid( footprintName ) )
+        {
+            wxString msg;
+            msg.Printf( _("Error:\none of invalid chars <%s> found\nin <%s>" ),
+                        MODULE::ReturnStringLibNameInvalidChars( true ),
+                        GetChars( footprintName ) );
+
+            DisplayError( NULL, msg );
+                return false;
+        }
+
         aModule->SetLibRef( footprintName );
     }
 

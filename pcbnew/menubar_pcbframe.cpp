@@ -428,7 +428,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( configmenu, ID_PCB_LIB_TABLE_EDIT,
                 _( "Li&brary Tables" ), _( "Setup footprint libraries" ),
-                KiBitmap( library_xpm ) );
+                KiBitmap( library_table_xpm ) );
 
     // Colors and Visibility are also handled by the layers manager toolbar
     AddMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,

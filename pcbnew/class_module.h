@@ -361,6 +361,25 @@ public:
 
     EDA_ITEM* Clone() const;
 
+    /**
+     * static function IsLibNameValid
+     * Test for validity of a name of a footprint to be used in a footprint library
+     * ( no spaces, dir separators ... )
+     * @param aName = the name in library to validate
+     * @return true if the given name is valid
+     */
+    static bool IsLibNameValid( const wxString & aName );
+
+    /**
+     * static function ReturnStringLibNameInvalidChars
+     * Test for validity of the name in a library of the footprint
+     * ( no spaces, dir separators ... )
+     * @param bool aUserReadable = false to get the list of invalid chars
+     *        true to get a readable form (i.e ' ' = 'space' '\t'= 'tab')
+     * @return a constant std::string giving the list of invalid chars in lib name
+     */
+    static const wxChar* ReturnStringLibNameInvalidChars( bool aUserReadable );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif

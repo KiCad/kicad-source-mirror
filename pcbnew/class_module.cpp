@@ -139,7 +139,7 @@ MODULE::MODULE( const MODULE& aModule ) :
             break;
 
         default:
-            wxMessageBox( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
+            wxLogMessage( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
             break;
         }
     }
@@ -262,7 +262,7 @@ void MODULE::Copy( MODULE* aModule )
             break;
 
         default:
-            wxMessageBox( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
+            wxLogMessage( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
             break;
         }
     }
@@ -696,6 +696,41 @@ wxString MODULE::GetSelectMenuText() const
 EDA_ITEM* MODULE::Clone() const
 {
     return new MODULE( *this );
+}
+
+/* Test for validity of the name in a library of the footprint
+ * ( no spaces, dir separators ... )
+ * return true if the given name is valid
+ * static function
+ */
+bool MODULE::IsLibNameValid( const wxString & aName )
+{
+    const wxChar * invalids = ReturnStringLibNameInvalidChars( false );
+
+    if( aName.find_first_of( invalids ) != std::string::npos )
+        return false;
+
+    return true;
+}
+
+
+
+/* Test for validity of the name of a footprint to be used in a footprint library
+ * ( no spaces, dir separators ... )
+ * param bool aUserReadable = false to get the list of invalid chars
+ *        true to get a readable form (i.e ' ' = 'space' '\t'= 'tab')
+ * return a constant string giving the list of invalid chars in lib name
+ * static function
+ */
+const wxChar* MODULE::ReturnStringLibNameInvalidChars( bool aUserReadable )
+{
+    static const wxChar invalidChars[] = wxT("\t \"\\/");
+    static const wxChar invalidCharsReadable[] = wxT("'tab' 'space' \\ \" /");
+
+    if( aUserReadable )
+        return invalidCharsReadable;
+    else
+        return invalidChars;
 }
 
 
