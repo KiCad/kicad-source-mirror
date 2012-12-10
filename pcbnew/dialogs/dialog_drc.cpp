@@ -75,6 +75,8 @@ void DIALOG_DRC_CONTROL::InitValues()
     AddUnitSymbol( *m_ViaMinTitle );
     AddUnitSymbol( *m_MicroViaMinTitle );
 
+    m_DeleteCurrentMarkerButton->Enable( false );
+
     /* this looks terrible! does not fit into text field, do it in wxformbuilder instead
     m_SetClearance->SetValue( _("Netclasses values"));
     */
@@ -493,6 +495,15 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
     }
 }
 
+/* called when switching from Error list to Unconnected list
+ * To avoid mistakes, the current marker is selection is cleared
+ */
+void DIALOG_DRC_CONTROL::OnChangingMarkerList( wxNotebookEvent& event )
+{
+    m_DeleteCurrentMarkerButton->Enable( false );
+    m_ClearanceListBox->SetSelection( -1 );
+    m_UnconnectedListBox->SetSelection( -1 );
+}
 
 void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
 {
@@ -502,6 +513,12 @@ void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
     {
         // until a MARKER is selected, this button is not enabled.
         m_DeleteCurrentMarkerButton->Enable( true );
+
+        // Find the selected DRC_ITEM in the listbox, position cursor there,
+        // at the first of the two pads.
+        const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
+        if( item )
+            m_Parent->CursorGoto( item->GetPointA(), false );
     }
 
     event.Skip();
@@ -516,6 +533,12 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
     {
         // until a MARKER is selected, this button is not enabled.
         m_DeleteCurrentMarkerButton->Enable( true );
+
+        // Find the selected DRC_ITEM in the listbox, position cursor there,
+        // at the first of the two pads.
+        const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
+        if( item )
+            m_Parent->CursorGoto( item->GetPointA(), false );
     }
 
     event.Skip();
@@ -533,6 +556,7 @@ void DIALOG_DRC_CONTROL::DelDRCMarkers()
     m_Parent->SetCurItem( NULL );           // clear curr item, because it could be a DRC marker
     m_ClearanceListBox->DeleteAllItems();
     m_UnconnectedListBox->DeleteAllItems();
+    m_DeleteCurrentMarkerButton->Enable( false );
 }
 
 

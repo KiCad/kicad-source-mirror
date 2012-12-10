@@ -10,9 +10,10 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DIALOG_ERC_BASE, DIALOG_SHIM )
+	EVT_CLOSE( DIALOG_ERC_BASE::_wxFB_OnCloseErcDialog )
 	EVT_BUTTON( ID_ERC_CMP, DIALOG_ERC_BASE::_wxFB_OnErcCmpClick )
 	EVT_BUTTON( ID_ERASE_DRC_MARKERS, DIALOG_ERC_BASE::_wxFB_OnEraseDrcMarkersClick )
-	EVT_BUTTON( wxID_CANCEL, DIALOG_ERC_BASE::_wxFB_OnCancelClick )
+	EVT_BUTTON( wxID_CANCEL, DIALOG_ERC_BASE::_wxFB_OnButtonCloseClick )
 	EVT_LISTBOX( ID_MAKER_HTMLLISTBOX, DIALOG_ERC_BASE::_wxFB_OnLeftClickMarkersList )
 	EVT_LISTBOX_DCLICK( ID_MAKER_HTMLLISTBOX, DIALOG_ERC_BASE::_wxFB_OnLeftDblClickMarkersList )
 	EVT_BUTTON( ID_RESET_MATRIX, DIALOG_ERC_BASE::_wxFB_OnResetMatrixClick )
@@ -106,7 +107,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bercSizer->Add( m_textMarkers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MarkersList = new ERC_HTML_LISTBOX( m_PanelERC, ID_MAKER_HTMLLISTBOX, wxDefaultPosition, wxDefaultSize, 0, NULL, 0|wxSIMPLE_BORDER ); 
-	m_MarkersList->SetMinSize( wxSize( 450,250 ) );
+	m_MarkersList->SetMinSize( wxSize( 500,250 ) );
 	
 	bercSizer->Add( m_MarkersList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	

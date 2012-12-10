@@ -1826,7 +1826,7 @@
                         <event name="OnMotion"></event>
                         <event name="OnMouseEvents"></event>
                         <event name="OnMouseWheel"></event>
-                        <event name="OnNotebookPageChanged"></event>
+                        <event name="OnNotebookPageChanged">OnChangingMarkerList</event>
                         <event name="OnNotebookPageChanging"></event>
                         <event name="OnPaint"></event>
                         <event name="OnRightDClick"></event>
@@ -1989,7 +1989,7 @@
                                             <event name="OnLeftDClick">OnLeftDClickClearance</event>
                                             <event name="OnLeftDown"></event>
                                             <event name="OnLeftUp"></event>
-                                            <event name="OnListBox"></event>
+                                            <event name="OnListBox">OnMarkerSelectionEvent</event>
                                             <event name="OnListBoxDClick"></event>
                                             <event name="OnMiddleDClick"></event>
                                             <event name="OnMiddleDown"></event>
@@ -2163,7 +2163,7 @@
                                             <event name="OnLeftDClick">OnLeftDClickUnconnected</event>
                                             <event name="OnLeftDown"></event>
                                             <event name="OnLeftUp"></event>
-                                            <event name="OnListBox"></event>
+                                            <event name="OnListBox">OnUnconnectedSelectionEvent</event>
                                             <event name="OnListBoxDClick"></event>
                                             <event name="OnMiddleDClick"></event>
                                             <event name="OnMiddleDown"></event>

@@ -41,16 +41,17 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
-
+		
 		// Private event handlers
+		void _wxFB_OnCloseErcDialog( wxCloseEvent& event ){ OnCloseErcDialog( event ); }
 		void _wxFB_OnErcCmpClick( wxCommandEvent& event ){ OnErcCmpClick( event ); }
 		void _wxFB_OnEraseDrcMarkersClick( wxCommandEvent& event ){ OnEraseDrcMarkersClick( event ); }
-		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
+		void _wxFB_OnButtonCloseClick( wxCommandEvent& event ){ OnButtonCloseClick( event ); }
 		void _wxFB_OnLeftClickMarkersList( wxCommandEvent& event ){ OnLeftClickMarkersList( event ); }
 		void _wxFB_OnLeftDblClickMarkersList( wxCommandEvent& event ){ OnLeftDblClickMarkersList( event ); }
 		void _wxFB_OnResetMatrixClick( wxCommandEvent& event ){ OnResetMatrixClick( event ); }
-
-
+		
+	
 	protected:
 		enum
 		{
@@ -59,7 +60,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 			ID_MAKER_HTMLLISTBOX,
 			ID_RESET_MATRIX
 		};
-
+		
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelERC;
 		wxStaticText* m_ErcTotalErrorsText;
@@ -79,21 +80,22 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		wxPanel* m_PanelERCOptions;
 		wxButton* m_ResetOptButton;
 		wxPanel* m_matrixPanel;
-
+		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseErcDialog( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnErcCmpClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEraseDrcMarkersClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftClickMarkersList( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftDblClickMarkersList( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnResetMatrixClick( wxCommandEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
-
-		DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("EESchema Erc"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,392 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("EESchema Erc"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,392 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_ERC_BASE();
-
+	
 };
 
 #endif //__DIALOG_ERC_BASE_H__

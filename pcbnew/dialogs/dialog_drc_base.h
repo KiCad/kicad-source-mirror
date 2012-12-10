@@ -77,9 +77,12 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		virtual void OnListUnconnectedClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnChangingMarkerList( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickClearance( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnMarkerSelectionEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightUpClearance( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickUnconnected( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnUnconnectedSelectionEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightUpUnconnected( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
