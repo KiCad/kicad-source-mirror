@@ -338,6 +338,7 @@ set( BMAPS_MID
     library_browse
     library_update
     library
+    library_table
     libview
     lines90
     load_module_board

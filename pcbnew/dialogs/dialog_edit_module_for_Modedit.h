@@ -17,12 +17,12 @@ class DIALOG_MODULE_MODULE_EDITOR : public DIALOG_MODULE_MODULE_EDITOR_BASE
 {
 private:
 
-    FOOTPRINT_EDIT_FRAME*   m_Parent;
-    MODULE* m_CurrentModule;
-    TEXTE_MODULE* m_ReferenceCopy;
-    TEXTE_MODULE* m_ValueCopy;
-    std::vector <S3D_MASTER*>   m_Shapes3D_list;
-    int m_LastSelected3DShapeIndex;
+    FOOTPRINT_EDIT_FRAME*   m_parent;
+    MODULE* m_currentModule;
+    TEXTE_MODULE* m_referenceCopy;
+    TEXTE_MODULE* m_valueCopy;
+    std::vector <S3D_MASTER*> m_shapes3D_list;
+    int m_lastSelected3DShapeIndex;
     VERTEX_VALUE_CTRL * m_3D_Scale;
     VERTEX_VALUE_CTRL * m_3D_Offset;
     VERTEX_VALUE_CTRL * m_3D_Rotation;
@@ -34,7 +34,7 @@ public:
     ~DIALOG_MODULE_MODULE_EDITOR();
 
 private:
-    void InitModeditProperties();
+    void initModeditProperties();
     void Transfert3DValuesToDisplay( S3D_MASTER * aStruct3DSource );
     void TransfertDisplayTo3DValues( int aIndexSelection );
     void OnEditValue( wxCommandEvent& event );
