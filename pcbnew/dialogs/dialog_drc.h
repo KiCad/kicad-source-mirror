@@ -111,6 +111,7 @@ private:
 
     void OnMarkerSelectionEvent( wxCommandEvent& event );
     void OnUnconnectedSelectionEvent( wxCommandEvent& event );
+	void OnChangingMarkerList( wxNotebookEvent& event );
 
     void DelDRCMarkers();
     void RedrawDrawPanel();

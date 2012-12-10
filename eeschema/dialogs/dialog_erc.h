@@ -39,25 +39,18 @@ private:
     static bool     m_writeErcFile;
 
 public:
-
-    /// Constructors
     DIALOG_ERC( SCH_EDIT_FRAME* parent );
+    ~DIALOG_ERC();
 
+private:
     void Init();
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERC_CMP
+    // from DIALOG_ERC_BASE:
+	void OnCloseErcDialog( wxCloseEvent& event );
     void OnErcCmpClick( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS
     void OnEraseDrcMarkersClick( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
-    void OnCancelClick( wxCommandEvent& event );
-
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RESET_MATRIX
+    void OnButtonCloseClick( wxCommandEvent& event );
     void OnResetMatrixClick( wxCommandEvent& event );
-
-    // Single click on a marker info:
     void OnLeftClickMarkersList( wxCommandEvent& event );
 
     // Double click on a marker info:

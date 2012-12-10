@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,6 @@
 #include <sch_marker.h>
 #include <sch_sheet.h>
 #include <lib_pin.h>
-#include <protos.h>
 
 #include <dialog_erc.h>
 #include <dialog_erc_listbox.h>
@@ -65,6 +64,10 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     GetSizer()->SetSizeHints( this );
     Centre();
+}
+
+DIALOG_ERC::~DIALOG_ERC()
+{
 }
 
 
@@ -101,8 +104,6 @@ void DIALOG_ERC::Init()
     m_buttonERC->SetDefault();
 }
 
-
-/* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS */
 /* Delete the old ERC markers, over the whole hierarchy
  */
 void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
@@ -115,10 +116,16 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 }
 
 
-/* wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL */
-void DIALOG_ERC::OnCancelClick( wxCommandEvent& event )
+/* event handler for Close button
+*/
+void DIALOG_ERC::OnButtonCloseClick( wxCommandEvent& event )
 {
-    EndModal( 0 );
+    Close();
+}
+
+void DIALOG_ERC::OnCloseErcDialog( wxCloseEvent& event )
+{
+    Destroy();
 }
 
 
@@ -179,6 +186,9 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxCommandEvent& event )
     if( notFound ) // Error
     {
         wxMessageBox( _( "Marker not found" ) );
+
+        // The marker was deleted, so rebuild marker list
+        DisplayERC_MarkersList();
         return;
     }
 
@@ -210,8 +220,9 @@ void DIALOG_ERC::OnLeftDblClickMarkersList( wxCommandEvent& event )
         // ( the button is released after closing this dialog and will generate
         // an unwanted event in  parent frame)
         m_parent->SkipNextLeftButtonReleaseEvent();
-        EndModal( 1 );
     }
+
+    Close();
 }
 
 

@@ -199,9 +199,12 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_buttonListUnconnected->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnListUnconnectedClick ), NULL, this );
 	m_DeleteAllButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteAllClick ), NULL, this );
 	m_DeleteCurrentMarkerButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteOneClick ), NULL, this );
+	m_Notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_CONTROL_BASE::OnChangingMarkerList ), NULL, this );
 	m_ClearanceListBox->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnLeftDClickClearance ), NULL, this );
+	m_ClearanceListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnMarkerSelectionEvent ), NULL, this );
 	m_ClearanceListBox->Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnRightUpClearance ), NULL, this );
 	m_UnconnectedListBox->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnLeftDClickUnconnected ), NULL, this );
+	m_UnconnectedListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnUnconnectedSelectionEvent ), NULL, this );
 	m_UnconnectedListBox->Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnRightUpUnconnected ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnOkClick ), NULL, this );
@@ -216,9 +219,12 @@ DIALOG_DRC_CONTROL_BASE::~DIALOG_DRC_CONTROL_BASE()
 	m_buttonListUnconnected->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnListUnconnectedClick ), NULL, this );
 	m_DeleteAllButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteAllClick ), NULL, this );
 	m_DeleteCurrentMarkerButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnDeleteOneClick ), NULL, this );
+	m_Notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( DIALOG_DRC_CONTROL_BASE::OnChangingMarkerList ), NULL, this );
 	m_ClearanceListBox->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnLeftDClickClearance ), NULL, this );
+	m_ClearanceListBox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnMarkerSelectionEvent ), NULL, this );
 	m_ClearanceListBox->Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnRightUpClearance ), NULL, this );
 	m_UnconnectedListBox->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnLeftDClickUnconnected ), NULL, this );
+	m_UnconnectedListBox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnUnconnectedSelectionEvent ), NULL, this );
 	m_UnconnectedListBox->Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( DIALOG_DRC_CONTROL_BASE::OnRightUpUnconnected ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnOkClick ), NULL, this );

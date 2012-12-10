@@ -616,8 +616,8 @@ void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
 {
     DIALOG_ERC* dlg = new DIALOG_ERC( this );
 
-    dlg->ShowModal();
-    dlg->Destroy();
+    dlg->Show( true );
+//    dlg->Destroy();
 }
 
 
