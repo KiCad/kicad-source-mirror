@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-10 11:04+0100\n"
-"PO-Revision-Date: 2012-12-10 11:13+0100\n"
+"POT-Creation-Date: 2012-12-11 08:11+0100\n"
+"PO-Revision-Date: 2012-12-11 08:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -4907,7 +4907,7 @@ msgstr "Fermer"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_plot_base.cpp:345
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:375
-#: eeschema/dialogs/dialog_erc_base.cpp:75
+#: eeschema/dialogs/dialog_erc_base.cpp:76
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:120
 msgid "Messages:"
 msgstr "Messages:"
@@ -6573,13 +6573,25 @@ msgstr "Valeur:"
 msgid "Text:"
 msgstr "Texte:"
 
-#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:95
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:94
 msgid "Freeroute Help"
 msgstr "Aide Freeroute"
 
-#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:119
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:118
 msgid "Do you want to rebuild connectivity data ?"
 msgstr "Voulez vous recalculer le chevelu ?"
+
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:152
+msgid ""
+"It appears that the Java run time environment is not installed on this "
+"computer.  Java is required to use FreeRoute."
+msgstr ""
+"Il semble que Java run time n'est pas installé sur cet ordinateur. Java est "
+"requis pour utiliser FreeRoute."
+
+#: pcbnew/dialogs/dialog_freeroute_exchange.cpp:155
+msgid "Pcbnew Error"
+msgstr "Pcbnew Erreur"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to delete"
@@ -7832,7 +7844,7 @@ msgstr "Postscript"
 #: pcbnew/dialogs/dialog_plot_base.cpp:82
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:175
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
-#: eeschema/dialogs/dialog_erc_base.cpp:132
+#: eeschema/dialogs/dialog_erc_base.cpp:133
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
 #: bitmap2component/bitmap2cmp_gui_base.cpp:103
@@ -8188,9 +8200,8 @@ msgid "Orientation (0.1 deg):"
 msgstr "Orientation (0,1 deg):"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:172
-#, fuzzy
 msgid "Nickname"
-msgstr "NetName"
+msgstr "Pseudo nom"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:173
 msgid "Library Path"
@@ -8778,20 +8789,20 @@ msgstr "Description"
 msgid "Open"
 msgstr "Ouvrir"
 
-#: pcbnew/dialogs/dialog_drc.cpp:162 pcbnew/dialogs/dialog_drc.cpp:237
+#: pcbnew/dialogs/dialog_drc.cpp:164 pcbnew/dialogs/dialog_drc.cpp:239
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Fichier rapport \"%s\" créé"
 
-#: pcbnew/dialogs/dialog_drc.cpp:164 pcbnew/dialogs/dialog_drc.cpp:238
+#: pcbnew/dialogs/dialog_drc.cpp:166 pcbnew/dialogs/dialog_drc.cpp:240
 msgid "Disk File Report Completed"
 msgstr "Fichier rapport terminé"
 
-#: pcbnew/dialogs/dialog_drc.cpp:258
+#: pcbnew/dialogs/dialog_drc.cpp:260
 msgid "DRC report files (.rpt)|*.rpt"
 msgstr "Fichier rapport DRC  (.rpt)|*.rpt"
 
-#: pcbnew/dialogs/dialog_drc.cpp:264
+#: pcbnew/dialogs/dialog_drc.cpp:266
 msgid "Save DRC Report File"
 msgstr "Sauver Fichier Rapport DRC:"
 
@@ -12206,63 +12217,63 @@ msgstr " x L"
 msgid "Empty Text!"
 msgstr "Texte vide"
 
-#: eeschema/dialogs/dialog_erc.cpp:181
+#: eeschema/dialogs/dialog_erc.cpp:188
 msgid "Marker not found"
 msgstr "Marqueur non trouvé"
 
-#: eeschema/dialogs/dialog_erc.cpp:424
+#: eeschema/dialogs/dialog_erc.cpp:435
 msgid "Annotation required!"
 msgstr "Numérotation requise!"
 
-#: eeschema/dialogs/dialog_erc.cpp:542
+#: eeschema/dialogs/dialog_erc.cpp:553
 msgid "ERC File"
 msgstr "Fichier ERC"
 
-#: eeschema/dialogs/dialog_erc.cpp:543
+#: eeschema/dialogs/dialog_erc.cpp:554
 msgid "Electronic rule check file (.erc)|*.erc"
 msgstr "Fichier Contrôle des règles électroniques (.erc)|*.erc"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:37
+#: eeschema/dialogs/dialog_erc_base.cpp:38
 msgid "Erc report:"
 msgstr "Rapport d'erreur ERC:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:42
+#: eeschema/dialogs/dialog_erc_base.cpp:43
 msgid "Total errors count:  "
 msgstr "Nombre total d'erreurs:  "
 
-#: eeschema/dialogs/dialog_erc_base.cpp:49
+#: eeschema/dialogs/dialog_erc_base.cpp:50
 msgid "Warnings count:"
 msgstr "Nombre de warnings:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:56
+#: eeschema/dialogs/dialog_erc_base.cpp:57
 msgid "Errors count:"
 msgstr "Nombre d'erreurs:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:66
+#: eeschema/dialogs/dialog_erc_base.cpp:67
 msgid "Create ERC file report"
-msgstr "Créer fichier rapport ERCr"
+msgstr "Créer fichier rapport ERC"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:88
+#: eeschema/dialogs/dialog_erc_base.cpp:89
 msgid "&Test Erc"
 msgstr "&Test ERC"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:92
+#: eeschema/dialogs/dialog_erc_base.cpp:93
 msgid "&Del Markers"
 msgstr "&Supprimer Marqueurs"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:95
+#: eeschema/dialogs/dialog_erc_base.cpp:96
 msgid "&Close"
 msgstr "&Fermer"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:104
+#: eeschema/dialogs/dialog_erc_base.cpp:105
 msgid "Error list:"
 msgstr "Liste d'erreur:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:117
+#: eeschema/dialogs/dialog_erc_base.cpp:118
 msgid "ERC"
 msgstr "ERC"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:122
+#: eeschema/dialogs/dialog_erc_base.cpp:123
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
 msgid "Reset"
 msgstr "Défaut"
@@ -15707,15 +15718,15 @@ msgstr "Options et préférences générales des hotkeys"
 
 #: common/fp_lib_id.cpp:167
 msgid "Illegal character found in FP_LIB_ID string"
-msgstr ""
+msgstr "Charactère illegal trouvé dans la chaine FP_LIB_ID"
 
 #: common/fp_lib_id.cpp:267
 msgid "Illegal character found in logical library name"
-msgstr ""
+msgstr "Charactère illegal trouvé en nom logique de libairie"
 
 #: common/fp_lib_id.cpp:284
 msgid "Illegal character found in revision"
-msgstr ""
+msgstr "Charactère illegal trouvé en révision"
 
 #: common/zoom.cpp:197
 msgid "Zoom select"
@@ -15818,14 +15829,14 @@ msgid "Vrml files (*.wrl)|*.wrl"
 msgstr "Fichiers Vrml (*.wrl)|*.wrl"
 
 #: common/fp_lib_table.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a duplicate footprint library nickName"
-msgstr "<%s> n'est pas un fichier librairie de modules valide."
+msgstr "'%s' est un pseudo nom de librairie dupliqué"
 
 #: common/fp_lib_table.cpp:233
 #, c-format
 msgid "lib table contains no logical lib '%s'"
-msgstr ""
+msgstr "La table de librairie ne contient pas de librairie logique '%s'"
 
 #: common/dialogs/dialog_get_component_base.cpp:29
 msgid "History list:"
@@ -16481,7 +16492,7 @@ msgstr "Options de Nettoyage"
 msgid "Design Rules Editor"
 msgstr "Editeur de Règles de Conception"
 
-#: pcbnew/dialogs/dialog_drc_base.h:98
+#: pcbnew/dialogs/dialog_drc_base.h:101
 msgid "DRC Control"
 msgstr "Contrôle DRC"
 
@@ -16713,7 +16724,7 @@ msgstr "Marqueur ERC"
 msgid "No Connect"
 msgstr "Non Connection"
 
-#: eeschema/dialogs/dialog_erc_base.h:94
+#: eeschema/dialogs/dialog_erc_base.h:96
 msgid "EESchema Erc"
 msgstr "EESchema ERC"
 
