@@ -38,17 +38,16 @@
 
 #include <dialog_freeroute_exchange.h>
 
+#ifdef __WINDOWS__
+#include <wx/msw/registry.h>
+#endif
+
 
 #define FREEROUTE_URL_KEY wxT( "freeroute_url" )
 #define FREEROUTE_RUN_KEY wxT( "freeroute_command" )
 
 
-/**********************************************************************/
 void PCB_EDIT_FRAME::Access_to_External_Tool( wxCommandEvent& event )
-/**********************************************************************/
-
-/* Run an external tool (currently, only freeroute)
- */
 {
     DIALOG_FREEROUTE dialog( this );
     dialog.ShowModal();
@@ -69,7 +68,7 @@ DIALOG_FREEROUTE::DIALOG_FREEROUTE( PCB_EDIT_FRAME* parent ):
 
 
 
-/* Specific data initialisation
+/* Specific data initialization
  */
 
 void DIALOG_FREEROUTE::MyInit()
@@ -125,21 +124,59 @@ void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
  */
 void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 {
-    wxString FullFileName = FindKicadFile( wxT( "freeroute.jnlp" ) );
+    wxString url;
     wxString command;
+    wxFileName fileName( FindKicadFile( wxT( "freeroute.jnlp" ) ), wxPATH_UNIX );
 
-    if( wxFileExists( FullFileName ) )
+    if( fileName.FileExists() )
     {
+        wxString javaWebStartCommand = wxT( "javaws" );
+
+        // Find the Java web start application on Windows.
+#ifdef __WINDOWS__
+        // If you thought the registry was brain dead before, now you have to deal with
+        // accessing it in either 64 or 32 bit mode depending on the build version of
+        // Windows and the build version of KiCad.
+
+        // This key works for 32 bit Java on 32 bit Windows and 64 bit Java on 64 bit Windows.
+        wxRegKey key( wxRegKey::HKLM, wxT( "SOFTWARE\\JavaSoft\\Java Web Start" ),
+                      wxIsPlatform64Bit() ? wxRegKey::WOW64ViewMode_64 :
+                      wxRegKey::WOW64ViewMode_Default );
+
+        // It's possible that 32 bit Java is installed on 64 bit Windows.
+        if( !key.Exists() && wxIsPlatform64Bit() )
+            key.SetName( wxRegKey::HKLM, wxT( "SOFTWARE\\Wow6432Node\\JavaSoft\\Java Web Start" ) );
+
+        if( !key.Exists() )
+        {
+            ::wxMessageBox( _( "It appears that the Java run time environment is not "
+                               "installed on this computer.  Java is required to use "
+                               "FreeRoute." ),
+                            _( "Pcbnew Error" ), wxOK | wxICON_ERROR );
+            return;
+        }
+
+        key.Open( wxRegKey::Read );
+
+        // Get the current version of java installed to determine the executable path.
+        wxString value;
+        key.QueryValue( wxT( "CurrentVersion" ), value );
+        key.SetName( key.GetName() + wxT( "\\" ) + value );
+        key.QueryValue( wxT( "Home" ), value );
+        javaWebStartCommand = value + wxFileName::GetPathSeparator() + javaWebStartCommand;
+#endif
+
         // Wrap FullFileName in double quotes in case it has C:\Program Files in it.
         // The space is interpreted as an argument separator.
-        command << wxT("javaws") << wxChar(' ') << wxChar('"') << FullFileName << wxChar('"');
+        command << javaWebStartCommand << wxChar( ' ' ) << wxChar( '"' )
+                << fileName.GetFullPath() << wxChar( '"' );
         ProcessExecute( command );
         return;
     }
 
-    command = m_FreerouteURLName->GetValue() + wxT( "/java/freeroute.jnlp" );
+    url = m_FreerouteURLName->GetValue() + wxT( "/java/freeroute.jnlp" );
 
-    wxLaunchDefaultBrowser( command );
+    wxLaunchDefaultBrowser( url );
 }
 
 
@@ -179,5 +216,3 @@ void DIALOG_FREEROUTE::OnTextEditFrUrlUpdated( wxCommandEvent& event )
 {
     m_FreeRouteSetupChanged = true;
 }
-
-
