@@ -1822,11 +1822,9 @@ TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask 
 }
 
 
-TRACK* BOARD::MarkTrace( TRACK* aTrace,
-                         int*   aCount,
-                         int*   aTraceLength,
-                         int*   aDieLength,
-                         bool   aReorder )
+TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
+                         double* aTraceLength, double* aPadToDieLength,
+                         bool    aReorder )
 {
     int        NbSegmBusy;
 
@@ -1976,7 +1974,7 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
         return NULL;
 
     double full_len = 0;
-    double lenDie = 0;
+    double lenPadToDie = 0;
 
     if( aReorder )
     {
@@ -2002,20 +2000,20 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
                 if( aTraceLength )
                     full_len += track->GetLength();
 
-                if( aDieLength ) // Add now length die.
+                if( aPadToDieLength ) // Add now length die.
                 {
                     // In fact only 2 pads (maximum) will be taken in account:
                     // that are on each end of the track, if any
                     if( track->GetState( BEGIN_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->start;
-                        lenDie += (double) pad->GetDieLength();
+                        lenPadToDie += (double) pad->GetPadToDieLength();
                     }
 
                     if( track->GetState( END_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->end;
-                        lenDie += (double) pad->GetDieLength();
+                        lenPadToDie += (double) pad->GetPadToDieLength();
                     }
                 }
             }
@@ -2039,13 +2037,13 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
                 if( track->GetState( BEGIN_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->start;
-                    lenDie += (double) pad->GetDieLength();
+                    lenPadToDie += (double) pad->GetPadToDieLength();
                 }
 
                 if( track->GetState( END_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->end;
-                    lenDie += (double) pad->GetDieLength();
+                    lenPadToDie += (double) pad->GetPadToDieLength();
                 }
             }
         }
@@ -2054,8 +2052,8 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
     if( aTraceLength )
         *aTraceLength = KiROUND( full_len );
 
-    if( aDieLength )
-        *aDieLength = KiROUND( lenDie );
+    if( aPadToDieLength )
+        *aPadToDieLength = KiROUND( lenPadToDie );
 
     if( aCount )
         *aCount = NbSegmBusy;

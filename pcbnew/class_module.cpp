@@ -724,8 +724,8 @@ bool MODULE::IsLibNameValid( const wxString & aName )
  */
 const wxChar* MODULE::ReturnStringLibNameInvalidChars( bool aUserReadable )
 {
-    static const wxChar invalidChars[] = wxT("\t \"\\/");
-    static const wxChar invalidCharsReadable[] = wxT("'tab' 'space' \\ \" /");
+    static const wxChar invalidChars[] = wxT("%$\t \"\\/");
+    static const wxChar invalidCharsReadable[] = wxT("% $ 'tab' 'space' \\ \" /");
 
     if( aUserReadable )
         return invalidCharsReadable;

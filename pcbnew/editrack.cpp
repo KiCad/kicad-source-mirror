@@ -791,14 +791,14 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     // Display current track length (on board) and the the actual track len
     // if there is an extra len due to the len die on the starting pad (if any)
     double   trackLen = 0.0;
-    double   lenDie = 0.0;
+    double   lenPadToDie = 0.0;
     wxString msg;
 
     // If the starting point is on a pad, add current track length+ length die
     if( g_FirstTrackSegment->GetState( BEGIN_ONPAD ) )
     {
         D_PAD * pad = (D_PAD *) g_FirstTrackSegment->start;
-        lenDie = (double) pad->GetDieLength();
+        lenPadToDie = (double) pad->GetPadToDieLength();
     }
 
     // calculate track len on board:
@@ -808,11 +808,11 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     msg = frame->LengthDoubleToString( trackLen );
     frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
 
-    if( lenDie != 0 )      // display the track len on board and the actual track len
+    if( lenPadToDie != 0 )      // display the track len on board and the actual track len
     {
         frame->AppendMsgPanel( _( "Full Len" ), msg, DARKCYAN );
-        msg = frame->LengthDoubleToString( trackLen+lenDie );
-        frame->AppendMsgPanel( _( "On Die" ), msg, DARKCYAN );
+        msg = frame->LengthDoubleToString( trackLen+lenPadToDie );
+        frame->AppendMsgPanel( _( "Pad to die" ), msg, DARKCYAN );
     }
 
     // Add current segments count (number of segments in this new track):

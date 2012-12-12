@@ -207,7 +207,6 @@ set(PCBNEW_CLASS_SRCS
     toolbars_update_user_interface.cpp
     tracepcb.cpp
     tr_modif.cpp
-    trpiste.cpp
     xchgmod.cpp
     zones_convert_brd_items_to_polygons_with_Boost.cpp
     zones_convert_to_polygons_aux_functions.cpp

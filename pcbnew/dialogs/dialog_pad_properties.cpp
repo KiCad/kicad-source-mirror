@@ -342,7 +342,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_trapDeltaDirChoice->SetSelection( 1 );
     }
 
-    PutValueInLocalUnits( *m_LengthDieCtrl, m_dummyPad->GetDieLength() );
+    PutValueInLocalUnits( *m_LengthPadToDieCtrl, m_dummyPad->GetPadToDieLength() );
 
     PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_dummyPad->GetLocalClearance() );
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_dummyPad->GetLocalSolderMaskMargin() );
@@ -468,7 +468,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_PadNumCtrl->Enable( enable );
     m_PadNetNameCtrl->Enable( enable );
-    m_LengthDieCtrl->Enable( enable );
+    m_LengthPadToDieCtrl->Enable( enable );
 
     if( m_dummyPad->GetDrillShape() != PAD_OVAL )
         m_DrillShapeCtrl->SetSelection( 0 );
@@ -612,7 +612,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     bool enable = ii != 3;
     m_PadNumCtrl->Enable( enable );
     m_PadNetNameCtrl->Enable( enable );
-    m_LengthDieCtrl->Enable( enable );
+    m_LengthPadToDieCtrl->Enable( enable );
 }
 
 
@@ -788,7 +788,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         offset.y *= isign;
         m_CurrentPad->SetOffset( offset );
 
-        m_CurrentPad->SetDieLength( m_Pad_Master.GetDieLength() );
+        m_CurrentPad->SetPadToDieLength( m_Pad_Master.GetPadToDieLength() );
 
         if( m_CurrentPad->GetLayerMask() != m_Pad_Master.GetLayerMask() )
         {
@@ -925,7 +925,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetSize( wxSize( x, y ) );
 
     // Read pad length die
-    aPad->SetDieLength( ReturnValueFromTextCtrl( *m_LengthDieCtrl ) );
+    aPad->SetPadToDieLength( ReturnValueFromTextCtrl( *m_LengthPadToDieCtrl ) );
 
     // Read pad shape delta size:
     // m_DeltaSize.x or m_DeltaSize.y must be NULL. for a trapezoid.

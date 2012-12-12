@@ -2156,7 +2156,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_die_length:
-            pad->SetDieLength( parseBoardUnits( T_die_length ) );
+            pad->SetPadToDieLength( parseBoardUnits( T_die_length ) );
             NeedRIGHT();
             break;
 
