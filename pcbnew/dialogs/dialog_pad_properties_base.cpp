@@ -170,14 +170,14 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_PadShapeOffsetY_Unit->Wrap( -1 );
 	fgSizerShapeType->Add( m_PadShapeOffsetY_Unit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
-	m_staticText38 = new wxStaticText( m_panelGeneral, wxID_ANY, _("Die length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText38 = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad to die length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText38->Wrap( -1 );
 	m_staticText38->SetToolTip( _("Wire length from pad to die on chip ( used to calculate actual track length)") );
 	
 	fgSizerShapeType->Add( m_staticText38, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 	
-	m_LengthDieCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_LengthDieCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_LengthPadToDieCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerShapeType->Add( m_LengthPadToDieCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadLengthDie_Unit = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PadLengthDie_Unit->Wrap( -1 );

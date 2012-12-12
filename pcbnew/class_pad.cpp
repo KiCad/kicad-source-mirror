@@ -58,7 +58,7 @@ D_PAD::D_PAD( MODULE* parent ) :
 
     m_Size.x = m_Size.y = 500;          // give it a reasonable size
     m_Orient = 0;                       // Pad rotation in 1/10 degrees
-    m_LengthDie = 0;
+    m_LengthPadToDie = 0;
 
     if( m_Parent  &&  m_Parent->Type() == PCB_MODULE_T )
     {
@@ -313,7 +313,7 @@ void D_PAD::Copy( D_PAD* source )
     m_PadShape = source->m_PadShape;
     m_Attribute = source->m_Attribute;
     m_Orient   = source->m_Orient;
-    m_LengthDie = source->m_LengthDie;
+    m_LengthPadToDie = source->m_LengthPadToDie;
     m_LocalClearance = source->m_LocalClearance;
     m_LocalSolderMaskMargin  = source->m_LocalSolderMaskMargin;
     m_LocalSolderPasteMargin = source->m_LocalSolderPasteMargin;
@@ -662,10 +662,10 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     Line = frame->CoordinateToString( m_Pos.y );
     frame->AppendMsgPanel( _( "Y pos" ), Line, LIGHTBLUE );
 
-    if( GetDieLength() )
+    if( GetPadToDieLength() )
     {
-        Line = frame->CoordinateToString( GetDieLength() );
-        frame->AppendMsgPanel( _( "Length on die" ), Line, CYAN );
+        Line = frame->CoordinateToString( GetPadToDieLength() );
+        frame->AppendMsgPanel( _( "Length in package" ), Line, CYAN );
     }
 }
 

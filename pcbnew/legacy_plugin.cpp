@@ -1288,7 +1288,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
         else if( TESTLINE( "Le" ) )
         {
             BIU tmp = biuParse( line + SZ( "Le" ) );
-            pad->SetDieLength( tmp );
+            pad->SetPadToDieLength( tmp );
         }
 
         else if( TESTLINE( ".SolderMask" ) )
@@ -3331,8 +3331,8 @@ void LEGACY_PLUGIN::savePAD( const D_PAD* me ) const
 
     fprintf( m_fp, "Po %s\n", fmtBIUPoint( me->GetPos0() ).c_str() );
 
-    if( me->GetDieLength() != 0 )
-        fprintf( m_fp, "Le %s\n", fmtBIU( me->GetDieLength() ).c_str() );
+    if( me->GetPadToDieLength() != 0 )
+        fprintf( m_fp, "Le %s\n", fmtBIU( me->GetPadToDieLength() ).c_str() );
 
     if( me->GetLocalSolderMaskMargin() != 0 )
         fprintf( m_fp, ".SolderMask %s\n", fmtBIU( me->GetLocalSolderMaskMargin() ).c_str() );

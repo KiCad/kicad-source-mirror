@@ -968,19 +968,19 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
     // Display full track length (in Pcbnew)
     if( frame->IsType( PCB_FRAME_TYPE ) )
     {
-        int trackLen = 0;
-        int lenDie = 0;
-        board->MarkTrace( this, NULL, &trackLen, &lenDie, false );
+        double trackLen = 0;
+        double lenPadToDie = 0;
+        board->MarkTrace( this, NULL, &trackLen, &lenPadToDie, false );
         msg = frame->CoordinateToString( trackLen );
         frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
 
-        if( lenDie != 0 )
+        if( lenPadToDie != 0 )
         {
-            msg = frame->CoordinateToString( trackLen + lenDie );
+            msg = frame->LengthDoubleToString( trackLen + lenPadToDie );
             frame->AppendMsgPanel( _( "Full Len" ), msg, DARKCYAN );
 
-            msg = frame->CoordinateToString( lenDie );
-            frame->AppendMsgPanel( _( "On Die" ), msg, DARKCYAN );
+            msg = frame->LengthDoubleToString( lenPadToDie );
+            frame->AppendMsgPanel( _( "In Package" ), msg, DARKCYAN );
         }
     }
 

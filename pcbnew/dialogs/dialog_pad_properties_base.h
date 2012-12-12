@@ -83,7 +83,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_ShapeOffset_Y_Ctrl;
 		wxStaticText* m_PadShapeOffsetY_Unit;
 		wxStaticText* m_staticText38;
-		wxTextCtrl* m_LengthDieCtrl;
+		wxTextCtrl* m_LengthPadToDieCtrl;
 		wxStaticText* m_PadLengthDie_Unit;
 		wxStaticText* m_staticText21;
 		wxTextCtrl* m_ShapeDelta_Ctrl;

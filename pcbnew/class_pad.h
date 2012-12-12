@@ -190,8 +190,8 @@ public:
     void SetAttribute( PAD_ATTR_T aAttribute )  { m_Attribute = aAttribute; }
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
 
-    void SetDieLength( int aLength )            { m_LengthDie = aLength; }
-    int GetDieLength() const                    { return m_LengthDie; }
+    void SetPadToDieLength( int aLength )      { m_LengthPadToDie = aLength; }
+    int GetPadToDieLength() const              { return m_LengthPadToDie; }
 
     int GetLocalSolderMaskMargin() const        { return m_LocalSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
@@ -464,7 +464,7 @@ private:
     PAD_ATTR_T  m_Attribute;        ///< NORMAL, PAD_SMD, PAD_CONN, PAD_HOLE_NOT_PLATED
     double      m_Orient;           ///< in 1/10 degrees
 
-    int         m_LengthDie;            ///< Length net from pad to die on chip
+    int         m_LengthPadToDie;   ///< Length net from pad to die, inside the package
 
     /// Local clearance. When null, the module default value is used.
     /// when the module default value is null, the netclass value is used

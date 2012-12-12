@@ -1127,9 +1127,9 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                       aPad->GetNet(), m_out->Quotew( aPad->GetNetname() ).c_str() );
     }
 
-    if( aPad->GetDieLength() != 0 )
+    if( aPad->GetPadToDieLength() != 0 )
         m_out->Print( aNestLevel+1, "(die_length %s)\n",
-                      FMT_IU( aPad->GetDieLength() ).c_str() );
+                      FMT_IU( aPad->GetPadToDieLength() ).c_str() );
 
     if( aPad->GetLocalSolderMaskMargin() != 0 )
         m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",

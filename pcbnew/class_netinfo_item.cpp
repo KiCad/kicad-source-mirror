@@ -111,7 +111,7 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     MODULE*   module;
     D_PAD*    pad;
     double    lengthnet = 0;        // This  is the lenght of tracks on pcb
-    double    lengthdie = 0;        // this is the lenght of internal ICs connections
+    double    lengthPadToDie = 0;  // this is the lenght of internal ICs connections
 
     frame->ClearMsgPanel();
 
@@ -129,7 +129,7 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
             if( pad->GetNet() == GetNet() )
             {
                 count++;
-                lengthdie += pad->GetDieLength();
+                lengthPadToDie += pad->GetPadToDieLength();
             }
         }
     }
@@ -159,7 +159,7 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Vias" ), txt, BLUE );
 
     // Displays the full net lenght (tracks on pcb + internal ICs connections ):
-    txt = frame->CoordinateToString( lengthnet + lengthdie );
+    txt = frame->CoordinateToString( lengthnet + lengthPadToDie );
     frame->AppendMsgPanel( _( "Net Length:" ), txt, RED );
 
     // Displays the net lenght of tracks only:
@@ -167,8 +167,8 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "On Board" ), txt, RED );
 
     // Displays the net lenght of internal ICs connections (wires inside ICs):
-    txt = frame->CoordinateToString( lengthdie );
-    frame->AppendMsgPanel( _( "On Die" ), txt, RED );
+    txt = frame->CoordinateToString( lengthPadToDie );
+    frame->AppendMsgPanel( _( "In Package" ), txt, RED );
 }
 
 

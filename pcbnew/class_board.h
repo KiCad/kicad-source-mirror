@@ -1252,9 +1252,9 @@ public:
      * @param aTrace The segment within a list of trace segments to test.
      * @param aCount A pointer to an integer where to return the number of
      *               marked segments.
-     * @param aTraceLength A pointer to an integer where to return the length of the
+     * @param aTraceLength A pointer to an double where to return the length of the
      *                     trace.
-     * @param aDieLength A pointer to an integer where to return the extra lengths inside
+     * @param aInPackageLength A pointer to an double where to return the extra lengths inside
      *                   integrated circuits from the pads connected to this track to the
      *                   die (if any).
      * @param aReorder true for reorder the interesting segments (useful for
@@ -1264,8 +1264,8 @@ public:
      *                 track length in this case, flags are reset
      * @return TRACK* The first in the chain of interesting segments.
      */
-    TRACK* MarkTrace( TRACK* aTrace, int* aCount, int* aTraceLength,
-                      int* aDieLength, bool aReorder );
+    TRACK* MarkTrace( TRACK* aTrace, int* aCount, double* aTraceLength,
+                      double* aInPackageLength, bool aReorder );
 
     /**
      * Function GetFootprint
