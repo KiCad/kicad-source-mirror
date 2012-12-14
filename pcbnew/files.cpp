@@ -415,13 +415,20 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         wildcard << wxGetTranslation( PcbFileWildcard ) << wxChar( '|' ) <<
                     wxGetTranslation( LegacyPcbFileWildcard );
 
-        wxFileDialog dlg( this, _( "Save Board File As" ), wxEmptyString, GetBoard()->GetFileName(),
-                          wildcard, wxFD_SAVE
-                          /* wxFileDialog is not equipped to handle multiple wildcards and
+        pcbFileName = GetBoard()->GetFileName();
+
+        // Match the default wildcard filter choice, with the inital file extension shown.
+        // That'll be the extension unless user changes filter dropdown listbox.
+        pcbFileName.SetExt( KiCadPcbFileExtension );
+
+        wxFileDialog dlg(   this, _( "Save Board File As" ), wxEmptyString,
+                            pcbFileName.GetFullPath(),
+                            wildcard, wxFD_SAVE
+                            /* wxFileDialog is not equipped to handle multiple wildcards and
                                 wxFD_OVERWRITE_PROMPT both together.
-                          | wxFD_OVERWRITE_PROMPT
-                          */
-                          );
+                                | wxFD_OVERWRITE_PROMPT
+                            */
+                            );
 
         if( dlg.ShowModal() != wxID_OK )
             return false;
@@ -431,6 +438,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         pluginType = ( filterNdx == 1 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
 
         // Note: on Linux wxFileDialog is not reliable for noticing a changed filename.
+        // We probably need to file a bug report or implement our own derivation.
 
         pcbFileName = dlg.GetPath();
 
@@ -487,7 +495,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         else
         {
             backupFileName.Clear();
-            saveok = false;
         }
     }
 
