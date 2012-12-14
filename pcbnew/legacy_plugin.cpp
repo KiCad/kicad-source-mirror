@@ -62,6 +62,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <wx/ffile.h>
 
 #include <legacy_plugin.h>   // implement this here
 
@@ -83,8 +84,7 @@
 #include <drawtxt.h>
 #include <convert_to_biu.h>
 #include <trigo.h>
-
-#include <wx/ffile.h>
+#include <build_version.h>
 
 
 typedef LEGACY_PLUGIN::BIU      BIU;
@@ -2823,13 +2823,25 @@ void LEGACY_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* 
 
     m_fp = fp;          // member function accessibility
 
+#if 0   // old school, property "header" was not used by any other plugin.
     if( m_props )
     {
-        // @todo move the header production into this source file.
         wxString header = (*m_props)["header"];
+
         // save a file header, if caller provided one (with trailing \n hopefully).
         fprintf( m_fp, "%s", TO_UTF8( header ) );
     }
+
+#else
+
+    wxString header = wxString::Format(
+        wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s\n\n" ),
+        LEGACY_BOARD_FILE_VERSION, DateAndTime().GetData(),
+        GetBuildVersion().GetData() );
+
+    // save a file header, if caller provided one (with trailing \n hopefully).
+    fprintf( m_fp, "%s", TO_UTF8( header ) );
+#endif
 
     SaveBOARD( aBoard );
 }
