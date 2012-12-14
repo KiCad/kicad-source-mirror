@@ -65,7 +65,7 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^.*\\.pro$" ),
     wxT( "^.*\\.pdf$" ),
     wxT( "^[^$].*\\.brd$" ),        // Legacy Pcbnew files
-    wxT( "^[^$].*\\.kicad_brd$" ),  // S format Pcbnew files
+    wxT( "^[^$].*\\.kicad_pcb$" ),  // S format Pcbnew files
     wxT( "^.*\\.net$" ),
     wxT( "^.*\\.txt$" ),
     wxT( "^.*\\.pho$" ),            // Gerber file (Kicad extension)
