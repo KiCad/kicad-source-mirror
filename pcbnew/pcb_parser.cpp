@@ -1517,11 +1517,11 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as MODULE." ) );
 
     wxPoint pt;
-    T token;
+    T       token;
 
     auto_ptr< MODULE > module( new MODULE( m_board ) );
 
-    NeedSYMBOL();
+    NeedSYMBOLorNUMBER();
     module->SetLibRef( FromUTF8() );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
