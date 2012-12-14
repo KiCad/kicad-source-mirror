@@ -415,13 +415,22 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         wildcard << wxGetTranslation( PcbFileWildcard ) << wxChar( '|' ) <<
                     wxGetTranslation( LegacyPcbFileWildcard );
 
-        wxFileDialog dlg( this, _( "Save Board File" ), wxEmptyString, GetBoard()->GetFileName(),
-                          wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+        wxFileDialog dlg( this, _( "Save Board File As" ), wxEmptyString, GetBoard()->GetFileName(),
+                          wildcard, wxFD_SAVE
+                          /* wxFileDialog is not equipped to handle multiple wildcards and
+                                wxFD_OVERWRITE_PROMPT both together.
+                          | wxFD_OVERWRITE_PROMPT
+                          */
+                          );
 
         if( dlg.ShowModal() != wxID_OK )
             return false;
 
-        pluginType = ( dlg.GetFilterIndex() == 1 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+        int filterNdx = dlg.GetFilterIndex();
+
+        pluginType = ( filterNdx == 1 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+
+        // Note: on Linux wxFileDialog is not reliable for noticing a changed filename.
 
         pcbFileName = dlg.GetPath();
 
@@ -492,21 +501,15 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     try
     {
-        PROPERTIES  props;
-        PLUGIN*     plugin = IO_MGR::PluginFind( pluginType );
+        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( pluginType ) );
 
-        if( plugin == NULL )
+        /*
+        if( (PLUGIN*)pi == NULL )
             THROW_IO_ERROR( wxString::Format( _( "cannot find file plug in for file format '%s'" ),
                                               GetChars( pcbFileName.GetExt() ) ) );
+        */
 
-        wxString header = wxString::Format(
-            wxT( "PCBNEW-BOARD Version %d\n# Created by Pcbnew%s\n\n" ),
-            LEGACY_BOARD_FILE_VERSION,
-            GetBuildVersion().GetData() );
-
-        props["header"] = header;
-
-        plugin->Save( pcbFileName.GetFullPath(), GetBoard(), &props );
+        pi->Save( pcbFileName.GetFullPath(), GetBoard(), NULL );
     }
     catch( IO_ERROR ioe )
     {
