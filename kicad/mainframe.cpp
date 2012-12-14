@@ -199,10 +199,16 @@ void KICAD_MANAGER_FRAME::OnRunPcbCalculator( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 {
-    wxFileName fn( m_ProjectFileName );
+    wxFileName  legacy_board( m_ProjectFileName );
+    wxFileName  kicad_board( m_ProjectFileName );
 
-    fn.SetExt( PcbFileExtension );
-    ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( fn ) );
+    legacy_board.SetExt( LegacyPcbFileExtension );
+    kicad_board.SetExt( KiCadPcbFileExtension );
+
+    if( !legacy_board.FileExists() || kicad_board.FileExists() )
+        ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( kicad_board ) );
+    else
+        ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( legacy_board ) );
 }
 
 

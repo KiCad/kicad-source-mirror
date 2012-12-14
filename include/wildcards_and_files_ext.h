@@ -51,7 +51,11 @@ extern const wxString ProjectFileExtension;
 extern const wxString SchematicFileExtension;
 extern const wxString NetlistFileExtension;
 extern const wxString GerberFileExtension;
-extern const wxString PcbFileExtension;
+
+extern const wxString LegacyPcbFileExtension;
+extern const wxString KiCadPcbFileExtension;
+#define PcbFileExtension    KiCadPcbFileExtension       // symlink choice
+
 extern const wxString LegacyFootprintLibPathExtension;
 extern const wxString PdfFileExtension;
 extern const wxString MacrosFileExtension;
