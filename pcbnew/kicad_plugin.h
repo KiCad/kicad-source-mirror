@@ -73,6 +73,10 @@ public:
 
     const wxString& GetFileExtension() const
     {
+        // Would have used wildcards_and_files_ext.cpp's KiCadPcbFileExtension,
+        // but to be pure, a plugin should not assume that it will always be linked
+        // with the core of the pcbnew code. (Might someday be a DLL/DSO.)  Besides,
+        // file extension policy should be controlled by the plugin.
         static const wxString extension = wxT( "kicad_pcb" );
         return extension;
     }

@@ -188,8 +188,8 @@ the changes?" ) ) )
         IO_MGR::PCB_FILE_T  pluginType;
     } loaders[] =
     {
-        { LegacyPcbFileWildcard,    IO_MGR::LEGACY },
         { PcbFileWildcard,          IO_MGR::KICAD },
+        { LegacyPcbFileWildcard,    IO_MGR::LEGACY },
         { EaglePcbFileWildcard,     IO_MGR::EAGLE },
     };
 
@@ -405,31 +405,41 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     wxString    upperTxt;
     wxString    lowerTxt;
     wxString    msg;
-    wxString    wildcard;
-
-    int         wildcardIndex = 0;
     bool        saveok = true;
 
-    wildcard << wxGetTranslation( LegacyPcbFileWildcard ) << wxChar( '|' ) <<
-                wxGetTranslation( PcbFileWildcard );
+    IO_MGR::PCB_FILE_T pluginType;
 
     if( aFileName == wxEmptyString )
     {
+        wxString    wildcard;
+        wildcard << wxGetTranslation( PcbFileWildcard ) << wxChar( '|' ) <<
+                    wxGetTranslation( LegacyPcbFileWildcard );
+
         wxFileDialog dlg( this, _( "Save Board File" ), wxEmptyString, GetBoard()->GetFileName(),
                           wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() != wxID_OK )
             return false;
 
-        GetBoard()->SetFileName( dlg.GetPath() );
-        wildcardIndex = dlg.GetFilterIndex();         // Legacy or s-expression file format.
+        pluginType = ( dlg.GetFilterIndex() == 1 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+
+        pcbFileName = dlg.GetPath();
+
+        // enforce file extension, must match plugin's policy.
+        pcbFileName.SetExt( IO_MGR::GetFileExtension( pluginType ) );
     }
     else
     {
-        GetBoard()->SetFileName( aFileName );
-    }
+        pcbFileName = aFileName;
 
-    IO_MGR::PCB_FILE_T pluginType = ( wildcardIndex == 0 ) ? IO_MGR::LEGACY : IO_MGR::KICAD;
+        if( pcbFileName.GetExt() == LegacyPcbFileExtension )
+            pluginType = IO_MGR::LEGACY;
+        else
+        {
+            pluginType = IO_MGR::KICAD;
+            pcbFileName.SetExt( KiCadPcbFileExtension );
+        }
+    }
 
     // If changes are made, update the board date
     if( GetScreen()->IsModify() )
@@ -439,11 +449,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         tb.SetDate();
         SetTitleBlock( tb );
     }
-
-    pcbFileName = GetBoard()->GetFileName();
-
-    if( pcbFileName.GetExt().IsEmpty() )
-        pcbFileName.SetExt( IO_MGR::GetFileExtension( pluginType ) );
 
     if( !IsWritable( pcbFileName ) )
         return false;
@@ -462,7 +467,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
             if( backupFileName.FileExists() )
                 wxRemoveFile( backupFileName.GetFullPath() );
 
-            // Rename the "old" file" from xxx.brd to xxx.000
+            // Rename the "old" file" from xxx.kicad_pcb to xxx.000
             if( !wxRenameFile( pcbFileName.GetFullPath(), backupFileName.GetFullPath() ) )
             {
                 msg = _( "Warning: unable to create backup file " ) + backupFileName.GetFullPath();
@@ -495,8 +500,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
                                               GetChars( pcbFileName.GetExt() ) ) );
 
         wxString header = wxString::Format(
-            wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s\n\n" ),
-            LEGACY_BOARD_FILE_VERSION, DateAndTime().GetData(),
+            wxT( "PCBNEW-BOARD Version %d\n# Created by Pcbnew%s\n\n" ),
+            LEGACY_BOARD_FILE_VERSION,
             GetBuildVersion().GetData() );
 
         props["header"] = header;
@@ -515,6 +520,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         GetBoard()->SetFileName( pcbFileName.GetFullPath() );
         UpdateTitle();
+        UpdateFileHistory( GetBoard()->GetFileName() );
     }
 
     // Display the file names:

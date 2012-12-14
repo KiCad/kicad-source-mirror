@@ -44,7 +44,10 @@ const wxString NetlistFileExtension( wxT( "net" ) );
 const wxString LegacyFootprintLibPathExtension( wxT( "mod" ) );
 const wxString ComponentFileExtension( wxT( "cmp" ) );
 const wxString GerberFileExtension( wxT( "pho" ) );
-const wxString PcbFileExtension( wxT( "brd" ) );
+
+const wxString LegacyPcbFileExtension( wxT( "brd" ) );
+const wxString KiCadPcbFileExtension( wxT( "kicad_pcb" ) );
+
 const wxString PdfFileExtension( wxT( "pdf" ) );
 const wxString MacrosFileExtension( wxT( "mcr" ) );
 const wxString DrillFileExtension( wxT( "drl" ) );

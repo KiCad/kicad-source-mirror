@@ -77,7 +77,7 @@ class FP_CACHE_ITEM
     wxFileName              m_file_name; ///< The the full file name and path of the footprint to cache.
     bool                    m_writable;  ///< Writability status of the footprint file.
     wxDateTime              m_mod_time;  ///< The last file modified time stamp.
-    auto_ptr< MODULE >    m_module;
+    auto_ptr< MODULE >      m_module;
 
 public:
     FP_CACHE_ITEM( MODULE* aModule, const wxFileName& aFileName );
@@ -606,8 +606,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     for( BOARD_ITEM* item = aBoard->m_Drawings;  item;  item = item->Next() )
         Format( item, aNestLevel );
 
-    m_out->Print( 0, "\n" );
-    m_out->Print( 0, "\n" );
+    if( aBoard->m_Drawings.GetCount() )
+        m_out->Print( 0, "\n" );
 
     // Do not save MARKER_PCBs, they can be regenerated easily.
 
@@ -615,10 +615,11 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     for( TRACK* track = aBoard->m_Track;  track; track = track->Next() )
         Format( track, aNestLevel );
 
+    if( aBoard->m_Track.GetCount() )
+        m_out->Print( 0, "\n" );
+
     /// @todo Add warning here that the old segment filed zones are no longer supported and
     ///       will not be saved.
-
-    m_out->Print( 0, "\n" );
 
     // Save the polygon (which are the newer technology) zones.
     for( int i=0;  i < aBoard->GetAreaCount();  ++i )
