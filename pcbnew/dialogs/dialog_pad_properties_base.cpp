@@ -28,7 +28,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_LeftBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerPadType;
-	fgSizerPadType = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerPadType = new wxFlexGridSizer( 4, 2, 0, 0 );
 	fgSizerPadType->AddGrowableCol( 1 );
 	fgSizerPadType->SetFlexibleDirection( wxBOTH );
 	fgSizerPadType->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -49,19 +49,29 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticText44 = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText44->Wrap( -1 );
-	fgSizerPadType->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizerPadType->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_PadTypeChoices[] = { _("Through-hole"), _("SMD"), _("Connector"), _("NPTH, Mechanical") };
 	int m_PadTypeNChoices = sizeof( m_PadTypeChoices ) / sizeof( wxString );
 	m_PadType = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadTypeNChoices, m_PadTypeChoices, 0 );
 	m_PadType->SetSelection( 0 );
-	fgSizerPadType->Add( m_PadType, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizerPadType->Add( m_PadType, 0, wxEXPAND|wxALL, 5 );
+	
+	m_staticText45 = new wxStaticText( m_panelGeneral, wxID_ANY, _("Shape:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText45->Wrap( -1 );
+	fgSizerPadType->Add( m_staticText45, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxString m_PadShapeChoices[] = { _("Circular"), _("Oval"), _("Rectangular"), _("Trapezoidal") };
+	int m_PadShapeNChoices = sizeof( m_PadShapeChoices ) / sizeof( wxString );
+	m_PadShape = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadShapeNChoices, m_PadShapeChoices, 0 );
+	m_PadShape->SetSelection( 0 );
+	fgSizerPadType->Add( m_PadShape, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	m_LeftBoxSizer->Add( fgSizerPadType, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizerShapeType;
-	fgSizerShapeType = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerShapeType = new wxFlexGridSizer( 11, 3, 0, 0 );
 	fgSizerShapeType->AddGrowableCol( 1 );
 	fgSizerShapeType->SetFlexibleDirection( wxBOTH );
 	fgSizerShapeType->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -88,19 +98,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_PadPosY_Unit->Wrap( -1 );
 	fgSizerShapeType->Add( m_PadPosY_Unit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
-	m_staticText45 = new wxStaticText( m_panelGeneral, wxID_ANY, _("Shape:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText45->Wrap( -1 );
-	fgSizerShapeType->Add( m_staticText45, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	wxString m_PadShapeChoices[] = { _("Circular"), _("Oval"), _("Rectangular"), _("Trapezoidal") };
-	int m_PadShapeNChoices = sizeof( m_PadShapeChoices ) / sizeof( wxString );
-	m_PadShape = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadShapeNChoices, m_PadShapeChoices, 0 );
-	m_PadShape->SetSelection( 0 );
-	fgSizerShapeType->Add( m_PadShape, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-	
-	
-	fgSizerShapeType->Add( 0, 0, 0, wxEXPAND, 5 );
-	
 	m_staticText12 = new wxStaticText( m_panelGeneral, wxID_ANY, _("Size X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
 	fgSizerShapeType->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -117,7 +114,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerShapeType->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_ShapeSize_Y_Ctrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_ShapeSize_Y_Ctrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerShapeType->Add( m_ShapeSize_Y_Ctrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_PadShapeSizeY_Unit = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PadShapeSizeY_Unit->Wrap( -1 );
@@ -130,7 +127,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxString m_PadOrientChoices[] = { _("0"), _("90"), _("-90"), _("180"), _("Custom") };
 	int m_PadOrientNChoices = sizeof( m_PadOrientChoices ) / sizeof( wxString );
 	m_PadOrient = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadOrientNChoices, m_PadOrientChoices, 0 );
-	m_PadOrient->SetSelection( 0 );
+	m_PadOrient->SetSelection( 4 );
 	fgSizerShapeType->Add( m_PadOrient, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText491 = new wxStaticText( m_panelGeneral, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -142,7 +139,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerShapeType->Add( m_PadOrientText, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_PadOrientCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_PadOrientCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerShapeType->Add( m_PadOrientCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_customOrientUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("0.1 deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_customOrientUnits->Wrap( -1 );
@@ -174,10 +171,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticText38->Wrap( -1 );
 	m_staticText38->SetToolTip( _("Wire length from pad to die on chip ( used to calculate actual track length)") );
 	
-	fgSizerShapeType->Add( m_staticText38, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	fgSizerShapeType->Add( m_staticText38, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_LengthPadToDieCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_LengthPadToDieCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerShapeType->Add( m_LengthPadToDieCtrl, 0, wxEXPAND|wxALL, 5 );
 	
 	m_PadLengthDie_Unit = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PadLengthDie_Unit->Wrap( -1 );
@@ -239,7 +236,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticModuleRotValue = new wxStaticText( m_panelGeneral, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticModuleRotValue->Wrap( -1 );
-	fgSizer4->Add( m_staticModuleRotValue, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer4->Add( m_staticModuleRotValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTitleModuleSide = new wxStaticText( m_panelGeneral, wxID_ANY, _("Board side:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTitleModuleSide->Wrap( -1 );
