@@ -1852,7 +1852,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
         if( token != T_angle )
             Expecting( T_angle );
 
-        segment->SetAngle( parseDouble( "segment angle" ) );
+        segment->SetAngle( parseDouble( "segment angle" ) * 10.0 );
         NeedRIGHT();
         break;
 
