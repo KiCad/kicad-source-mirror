@@ -1064,7 +1064,8 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 
     auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
-    NeedSYMBOL();
+    // Read netclass name (can be a name or just a number like track width)
+    NeedSYMBOLorNUMBER();
     nc->SetName( FromUTF8() );
     NeedSYMBOL();
     nc->SetDescription( FromUTF8() );

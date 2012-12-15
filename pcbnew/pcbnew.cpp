@@ -132,7 +132,8 @@ bool EDA_APP::OnInit()
         if( fn.GetExt() != PcbFileExtension )
         {
             wxLogDebug( wxT( "Pcbnew file <%s> has the wrong extension.  \
-Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
+Changing extension to .%s." ), GetChars( fn.GetFullPath() ),
+                               GetChars( PcbFileExtension ) );
             fn.SetExt( PcbFileExtension );
         }
 
@@ -173,12 +174,48 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     {
         /* Note the first time Pcbnew is called after creating a new project
          * the board file may not exist so we load settings only.
+         * However, because legacy board files are named *.brd,
+         * and new files are named *.kicad_pcb,
+         * for all previous projects ( before 2012, december 14 ),
+         * becuse KiCad manager ask to load a .kicad_pcb file
+         * if this file does not exist, it is certainly useful
+         * to test if a legacy file is existing,
+         * under the same name, and therefore if the user want to load it
          */
+        bool file_exists = false;
+
         if( fn.FileExists() )
         {
+            file_exists = true;
             frame->LoadOnePcbFile( fn.GetFullPath() );
         }
-        else
+        else if( fn.GetExt() == KiCadPcbFileExtension )
+        {
+            // Try to find a legacy file with the same name:
+            wxFileName fn_legacy = fn;
+            fn_legacy.SetExt( LegacyPcbFileExtension );
+            if( fn_legacy.FileExists() )
+            {
+                wxString msg;
+                msg.Printf( _( "File <%s> does not exist.\n"
+"However a legacy file <%s> exists.\nDo you want to load it?\n"
+"It will be saved under the new file format" ),
+                            GetChars( fn.GetFullPath() ),
+                            GetChars( fn_legacy.GetFullPath() ) );
+                if( IsOK( frame, msg ) )
+                {
+                    file_exists = true;
+                    frame->LoadOnePcbFile( fn_legacy.GetFullPath() );
+                    wxString filename = fn.GetFullPath();
+                    filename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+                    frame->GetBoard()->SetFileName( filename );
+                    frame->UpdateTitle();
+                    frame->OnModify();  // Ready to save theboard inder the new fmt
+                }
+            }
+        }
+
+        if( ! file_exists )
         {   // File does not exists: prepare an empty board
             wxSetWorkingDirectory( fn.GetPath() );
             frame->GetBoard()->SetFileName( fn.GetFullPath( wxPATH_UNIX ) );
