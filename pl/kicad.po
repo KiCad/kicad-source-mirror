@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-11 18:01+0100\n"
-"PO-Revision-Date: 2012-12-11 18:04+0100\n"
+"POT-Creation-Date: 2012-12-15 10:08+0100\n"
+"PO-Revision-Date: 2012-12-15 10:10+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -176,11 +176,11 @@ msgstr ""
 "Gotowy\n"
 "Katalog roboczy: %s\n"
 
-#: kicad/mainframe.cpp:254
+#: kicad/mainframe.cpp:260
 msgid "Text file ("
 msgstr "Plik tekstowy ("
 
-#: kicad/mainframe.cpp:256
+#: kicad/mainframe.cpp:262
 msgid "Load File to Edit"
 msgstr "Załaduj plik do edycji"
 
@@ -439,63 +439,63 @@ msgstr "Plik projektu KiCad <"
 msgid "> not found"
 msgstr "> nie został znaleziony"
 
-#: kicad/tree_project_frame.cpp:174
+#: kicad/tree_project_frame.cpp:172
 msgid "New D&irectory"
 msgstr "Nowy &katalog"
 
-#: kicad/tree_project_frame.cpp:175
+#: kicad/tree_project_frame.cpp:173
 msgid "Create a New Directory"
 msgstr "Utwórz nowy katalog"
 
-#: kicad/tree_project_frame.cpp:189
+#: kicad/tree_project_frame.cpp:187
 msgid "&Rename file"
 msgstr "&Zmień nazwę pliku"
 
-#: kicad/tree_project_frame.cpp:190
+#: kicad/tree_project_frame.cpp:188
 msgid "&Rename directory"
 msgstr "Z&mień nazwę katalogu"
 
-#: kicad/tree_project_frame.cpp:191
+#: kicad/tree_project_frame.cpp:189
 msgid "Rename file"
 msgstr "Zmień nazwę pliku"
 
-#: kicad/tree_project_frame.cpp:192
+#: kicad/tree_project_frame.cpp:190
 msgid "Rename directory"
 msgstr "Zmień nazwę katalogu"
 
-#: kicad/tree_project_frame.cpp:202
+#: kicad/tree_project_frame.cpp:200
 msgid "&Edit in a text editor"
 msgstr "&Edytuj w edytorze tekstu"
 
-#: kicad/tree_project_frame.cpp:203
+#: kicad/tree_project_frame.cpp:201
 msgid "Open the file in a Text Editor"
 msgstr "Otwórz plik w edytorze tekstu"
 
-#: kicad/tree_project_frame.cpp:211
+#: kicad/tree_project_frame.cpp:209
 msgid "&Delete File"
 msgstr "&Usuń plik"
 
-#: kicad/tree_project_frame.cpp:212
+#: kicad/tree_project_frame.cpp:210
 msgid "&Delete Directory"
 msgstr "U&suń katalog"
 
-#: kicad/tree_project_frame.cpp:213
+#: kicad/tree_project_frame.cpp:211
 msgid "Delete the File"
 msgstr "Usuń plik"
 
-#: kicad/tree_project_frame.cpp:214
+#: kicad/tree_project_frame.cpp:212
 msgid "Delete the Directory and its content"
 msgstr "Usuń katalog i jego zawartość"
 
-#: kicad/tree_project_frame.cpp:392
+#: kicad/tree_project_frame.cpp:390
 msgid "Create New Directory"
 msgstr "Utwórz katalog"
 
-#: kicad/tree_project_frame.cpp:889
+#: kicad/tree_project_frame.cpp:887
 msgid "Change filename: "
 msgstr "Zmień nazwę pliku: "
 
-#: kicad/tree_project_frame.cpp:891
+#: kicad/tree_project_frame.cpp:889
 msgid "Change filename"
 msgstr "Zmienia nazwę pliku"
 
@@ -1191,8 +1191,8 @@ msgstr "Element "
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:178
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:471
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:321
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:468
 #: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "None"
 msgstr "Brak"
@@ -1797,7 +1797,7 @@ msgid "Undefined"
 msgstr "Nieokreślony"
 
 #: eeschema/lib_draw_item.cpp:68 eeschema/lib_draw_item.cpp:75
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:321
 msgid "All"
 msgstr "Wszystkie"
 
@@ -3374,11 +3374,11 @@ msgstr "Symbol %s, %s"
 msgid "Field %s"
 msgstr "Pole %s"
 
-#: eeschema/sch_line.cpp:482 pcbnew/dialogs/dialog_pad_properties_base.cpp:201
+#: eeschema/sch_line.cpp:482 pcbnew/dialogs/dialog_pad_properties_base.cpp:198
 msgid "Vert."
 msgstr "Pionowo"
 
-#: eeschema/sch_line.cpp:484 pcbnew/dialogs/dialog_pad_properties_base.cpp:201
+#: eeschema/sch_line.cpp:484 pcbnew/dialogs/dialog_pad_properties_base.cpp:198
 msgid "Horiz."
 msgstr "Poziomo"
 
@@ -4219,7 +4219,7 @@ msgstr "Siatka"
 
 #: eeschema/dialogs/dialog_color_config.cpp:61
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:22
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:382
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:379
 msgid "General"
 msgstr "Główne"
 
@@ -4738,8 +4738,8 @@ msgid "26"
 msgstr "26"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:39
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:130
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:240
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:237
 msgid "0"
 msgstr "0"
 
@@ -4748,12 +4748,12 @@ msgid "+90"
 msgstr "+90"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:39
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:130
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "180"
 msgstr "180"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:39
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:130
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "-90"
 msgstr "-90"
 
@@ -6564,9 +6564,8 @@ msgid "On Board"
 msgstr "Na płytce"
 
 #: pcbnew/class_netinfo_item.cpp:171 pcbnew/class_track.cpp:983
-#: pcbnew/editrack.cpp:815
-msgid "On Die"
-msgstr "Na rdzeniu"
+msgid "In Package"
+msgstr "Wewnątrz obudowy"
 
 #: pcbnew/class_pad.cpp:510
 msgid "RefP"
@@ -6598,7 +6597,7 @@ msgstr "Rozmiar pionowy"
 
 #: pcbnew/class_pad.cpp:637 pcbnew/class_track.cpp:1140
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:273
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:265
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Drill"
 msgstr "Wiercenie"
 
@@ -6615,11 +6614,11 @@ msgid "Y pos"
 msgstr "Pozycja Y"
 
 #: pcbnew/class_pad.cpp:668
-msgid "Length on die"
-msgstr "Długość na rdzeniu"
+msgid "Length in package"
+msgstr "Długość wewnątrz obudowy"
 
-#: pcbnew/class_pad.cpp:780 pcbnew/dialogs/dialog_pad_properties_base.cpp:95
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
+#: pcbnew/class_pad.cpp:780 pcbnew/dialogs/dialog_pad_properties_base.cpp:64
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
 msgid "Oval"
 msgstr "Owal"
 
@@ -7299,6 +7298,10 @@ msgstr "Tekst jest OZNACZENIEM!"
 msgid "Text is VALUE!"
 msgstr "Tekst jest WARTOŚCIĄ!"
 
+#: pcbnew/editrack.cpp:815
+msgid "Pad to die"
+msgstr "Od pola do krzemu"
+
 #: pcbnew/editrack.cpp:820
 msgid "Segs Count"
 msgstr "Liczba segmentów"
@@ -7358,20 +7361,15 @@ msgstr ""
 "Błąd podczas odczytywania PCB.\n"
 "%s"
 
-#: pcbnew/files.cpp:418 pcbnew/files.cpp:510
-msgid "Save Board File"
-msgstr "Zapisz plik PCB"
+#: pcbnew/files.cpp:424
+msgid "Save Board File As"
+msgstr "Zapisz plik PCB jako"
 
-#: pcbnew/files.cpp:468
+#: pcbnew/files.cpp:490
 msgid "Warning: unable to create backup file "
 msgstr "Ostrzeżenie: Nie można utworzyć pliku kopii zapasowej "
 
-#: pcbnew/files.cpp:494
-#, c-format
-msgid "cannot find file plug in for file format '%s'"
-msgstr "nie mogę odnaleźć wtyczki dla plików w formacie '%s'"
-
-#: pcbnew/files.cpp:508
+#: pcbnew/files.cpp:523
 #, c-format
 msgid ""
 "Error saving board.\n"
@@ -7380,15 +7378,19 @@ msgstr ""
 "Błąd podczas zapisywania płytki.\n"
 "%s"
 
-#: pcbnew/files.cpp:532
+#: pcbnew/files.cpp:525
+msgid "Save Board File"
+msgstr "Zapisz plik PCB"
+
+#: pcbnew/files.cpp:548
 msgid "Backup file: "
 msgstr "Plik kopii zapasowej: "
 
-#: pcbnew/files.cpp:536
+#: pcbnew/files.cpp:552
 msgid "Wrote board file: "
 msgstr "Zapisano plik płytki: "
 
-#: pcbnew/files.cpp:538
+#: pcbnew/files.cpp:554
 msgid "Failed to create "
 msgstr "Błąd przy tworzeniu "
 
@@ -7598,67 +7600,67 @@ msgstr ""
 msgid "footprint library path '%s' does not exist"
 msgstr "ścieżka do biblioteki '%s' nie istnieje"
 
-#: pcbnew/kicad_plugin.cpp:252 pcbnew/legacy_plugin.cpp:4288
+#: pcbnew/kicad_plugin.cpp:252 pcbnew/legacy_plugin.cpp:4300
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "biblioteka '%s' nie posiada footprintu '%s' by go usunąć"
 
-#: pcbnew/kicad_plugin.cpp:1067 pcbnew/legacy_plugin.cpp:95
+#: pcbnew/kicad_plugin.cpp:1068 pcbnew/legacy_plugin.cpp:95
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "nieznany typ pola lutowniczego: %d"
 
-#: pcbnew/kicad_plugin.cpp:1080 pcbnew/legacy_plugin.cpp:96
+#: pcbnew/kicad_plugin.cpp:1081 pcbnew/legacy_plugin.cpp:96
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "nieznany atrybut pola lutowniczego: %d"
 
-#: pcbnew/kicad_plugin.cpp:1262
+#: pcbnew/kicad_plugin.cpp:1263
 #, c-format
 msgid "unknown via type %d"
 msgstr "nieznany typ przelotki %d"
 
-#: pcbnew/kicad_plugin.cpp:1389
+#: pcbnew/kicad_plugin.cpp:1390
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "nieznany typ zaokrągleń krawędzi strefy %d"
 
-#: pcbnew/kicad_plugin.cpp:1640 pcbnew/kicad_plugin.cpp:1702
-#: pcbnew/legacy_plugin.cpp:4234 pcbnew/legacy_plugin.cpp:4278
+#: pcbnew/kicad_plugin.cpp:1641 pcbnew/kicad_plugin.cpp:1703
+#: pcbnew/legacy_plugin.cpp:4246 pcbnew/legacy_plugin.cpp:4290
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "Biblioteka '%s' jest oznaczona jako 'Tylko do odczytu'"
 
-#: pcbnew/kicad_plugin.cpp:1653
+#: pcbnew/kicad_plugin.cpp:1654
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Nazwa pliku '%s' jest niepoprawna."
 
-#: pcbnew/kicad_plugin.cpp:1659
+#: pcbnew/kicad_plugin.cpp:1660
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr "użytkownik nie ma wystarczających uprawnień do usunięcia pliku '%s'"
 
-#: pcbnew/kicad_plugin.cpp:1714
+#: pcbnew/kicad_plugin.cpp:1715
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "nie mogę nadpisać biblioteki '%s'"
 
-#: pcbnew/kicad_plugin.cpp:1739
+#: pcbnew/kicad_plugin.cpp:1740
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "użytkownik nie ma wystarczających uprawnień by usunąć folder '%s'"
 
-#: pcbnew/kicad_plugin.cpp:1747
+#: pcbnew/kicad_plugin.cpp:1748
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "folder z biblioteką '%s' zawiera niepożądane podfoldery"
 
-#: pcbnew/kicad_plugin.cpp:1766
+#: pcbnew/kicad_plugin.cpp:1767
 msgid "unexpected file '%s' has found in library path '%'"
 msgstr "został znaleziony niepożądany plik '%s' w ścieżce '%'."
 
-#: pcbnew/kicad_plugin.cpp:1784
+#: pcbnew/kicad_plugin.cpp:1785
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "biblioteka footprintów '%s' nie może zostać usunięta"
@@ -7746,12 +7748,12 @@ msgstr ""
 msgid "Unable to open file '%s'"
 msgstr "Nie mogę otworzyć pliku '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2840 common/richio.cpp:488
+#: pcbnew/legacy_plugin.cpp:2852 common/richio.cpp:488
 #, c-format
 msgid "error writing to file '%s'"
 msgstr "błąd zapisu do pliku '%s'"
 
-#: pcbnew/legacy_plugin.cpp:3949
+#: pcbnew/legacy_plugin.cpp:3961
 msgid ""
 "May not load millimeter legacy library file into 'Pcbnew compiled for deci-"
 "mils'"
@@ -7759,35 +7761,35 @@ msgstr ""
 "Nie mogę załadować pliku biblioteki starszego typu z jednostkami w "
 "milimetrach przez 'Pcbnew skompilowany z opcją deci-mils'"
 
-#: pcbnew/legacy_plugin.cpp:3959
+#: pcbnew/legacy_plugin.cpp:3971
 #, c-format
 msgid "File '%s' is empty or is not a legacy library"
 msgstr ""
 "Plik '%s' jest pusty lub nie jest nie jest plikiem biblioteki starszego typu"
 
-#: pcbnew/legacy_plugin.cpp:4072
+#: pcbnew/legacy_plugin.cpp:4084
 #, c-format
 msgid "Legacy library file '%s' is read only"
 msgstr ""
 "Plik biblioteki starszego typu '%s' jest oznaczony jako 'Tylko do odczytu'."
 
-#: pcbnew/legacy_plugin.cpp:4092
+#: pcbnew/legacy_plugin.cpp:4104
 #, c-format
 msgid "Unable to open or create legacy library file '%s'"
 msgstr "Nie mogę otworzyć ani utworzyć biblioteki starszego typu '%s'"
 
-#: pcbnew/legacy_plugin.cpp:4118
+#: pcbnew/legacy_plugin.cpp:4130
 #, c-format
 msgid "Unable to rename tempfile '%s' to library file '%s'"
 msgstr ""
 "Nie mogę zmienić nazwy pliku tymczasowego '%s' na nazwę pliku biblioteki '%s'"
 
-#: pcbnew/legacy_plugin.cpp:4301
+#: pcbnew/legacy_plugin.cpp:4313
 #, c-format
 msgid "library '%s' already exists, will not create anew"
 msgstr "biblioteka '%s' już istnieje, nie można stworzyć nowej"
 
-#: pcbnew/legacy_plugin.cpp:4328
+#: pcbnew/legacy_plugin.cpp:4340
 #, c-format
 msgid "library '%s' cannot be deleted"
 msgstr "biblioteka '%s' nie może zostać usunięta"
@@ -10457,19 +10459,19 @@ msgid "Chamfer distance (mm):"
 msgstr "Odległość ścięcia (mm):"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:146
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:467
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:464
 msgid "Pad connection:"
 msgstr "Sposób łączenia pól lutowniczych:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:178
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:471
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:468
 msgid "Solid"
 msgstr "Pełny"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:178
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:471
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:468
 msgid "Thermal relief"
 msgstr "Połączenie termiczne"
 
@@ -11442,28 +11444,28 @@ msgstr ""
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:52
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:65
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:87
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:76
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:87
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:111
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:122
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:158
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:169
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:182
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:193
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:293
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:304
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:410
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:423
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:436
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:498
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:86
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:97
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:108
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:119
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:155
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:166
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:179
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:190
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:290
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:301
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:407
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:420
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:433
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:484
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:495
 msgid "Inch"
 msgstr "cale"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:224
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:170
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:43
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:414
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:411
 #: pcbnew/dialogs/dialog_plot_base.cpp:194
 msgid "Solder mask clearance:"
 msgstr "Prześwit maski:"
@@ -11486,7 +11488,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:237
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:183
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:78
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:427
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:424
 msgid "Solder paste clearance:"
 msgstr "Prześwit dla pasty lutowniczej:"
 
@@ -11511,7 +11513,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:250
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:196
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:440
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:437
 msgid "Solder mask ratio clearance:"
 msgstr "Stosunek prześwitu dla masek:"
 
@@ -11538,7 +11540,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:259
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:205
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:100
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:449
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:446
 msgid "%"
 msgstr "%"
 
@@ -12154,7 +12156,7 @@ msgid "45"
 msgstr "45"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:77
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:130
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "90"
 msgstr "90"
 
@@ -12548,8 +12550,8 @@ msgid "Current Design Settings:"
 msgstr "Bieżące ustawienia projektowe:"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:66
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:104
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:286
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:101
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:283
 #: bitmap2component/bitmap2cmp_gui_base.cpp:48
 msgid "Size X:"
 msgstr "Rozmiar X:"
@@ -12561,8 +12563,8 @@ msgid "unit"
 msgstr "jednostka"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:77
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:115
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:297
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:112
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:294
 #: bitmap2component/bitmap2cmp_gui_base.cpp:60
 msgid "Size Y:"
 msgstr "Rozmiar Y:"
@@ -12827,7 +12829,7 @@ msgid "Preset Layer Groupings"
 msgstr "Domyślne ustawienia warstw"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:25
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:130
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Custom"
 msgstr "Własny"
 
@@ -12860,7 +12862,7 @@ msgid "Copper Layers"
 msgstr "Warstwy ścieżek"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:50
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:315
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:312
 #: pcbnew/dialogs/dialog_plot_base.cpp:70
 msgid "Layers"
 msgstr "Warstwy"
@@ -13094,7 +13096,7 @@ msgid "Inner15"
 msgstr "WewnetrznaL15"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:581
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:321
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:206
 msgid "Back"
 msgstr "Dolna"
@@ -13371,7 +13373,7 @@ msgid "Bad value for footprints orientation"
 msgstr "Zła wartość orientacji footprintów"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:22
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:126
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:123
 #: common/dialogs/dialog_page_settings_base.cpp:43
 msgid "Orientation:"
 msgstr "Orientacja:"
@@ -13475,149 +13477,149 @@ msgstr "Łącze"
 msgid "NPTH, Mechanical"
 msgstr "NPTH, Mechaniczne"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:69
-msgid "Position X:"
-msgstr "Pozycja X:"
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:80
-msgid "Position Y:"
-msgstr "Pozycja Y:"
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:272
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:60
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:269
 msgid "Shape:"
 msgstr "Kształt:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:95
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:64
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
 msgid "Circular"
 msgstr "Okrągły"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:95
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:64
 msgid "Rectangular"
 msgstr "Prostokątny"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:95
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:64
 msgid "Trapezoidal"
 msgstr "Trapezowy"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:136
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:79
+msgid "Position X:"
+msgstr "Pozycja X:"
+
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:90
+msgid "Position Y:"
+msgstr "Pozycja Y:"
+
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:133
 msgid "deg"
 msgstr "st."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:147
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:144
 msgid "0.1 deg"
 msgstr "0,1 st."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:151
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:148
 msgid "Shape offset X:"
 msgstr "Przesunięcie X:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:162
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:159
 msgid "Shape offset Y:"
 msgstr "Przesunięcie Y:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:173
-msgid "Die length:"
-msgstr "Długość wafla:"
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:170
+msgid "Pad to die length:"
+msgstr "Odległość od pola do krzemu:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:175
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:172
 msgid ""
 "Wire length from pad to die on chip ( used to calculate actual track length)"
 msgstr ""
 "Długość połączenia pomiędzy polem lutowniczym a rdzeniem wewnątrz układu "
 "scalonego (używana do obliczeń pełnej długości ścieżki)"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:186
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:183
 msgid "Trap. delta dim:"
 msgstr "Nachylenie:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:197
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:194
 msgid "Trap. direction:"
 msgstr "Kierunek:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:228
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:225
 msgid "Footprint Orientation"
 msgstr "Orientacja footprintu"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:236
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:233
 msgid "Rotation:"
 msgstr "Obrót:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:244
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:241
 msgid "Board side:"
 msgstr "Strona płytki:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:248
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:245
 msgid "Front side"
 msgstr "Strona górna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:320
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:317
 msgid "Copper:"
 msgstr "Warstwa ścieżek:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:324
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:321
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:191
 msgid "Front"
 msgstr "Gorna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:334
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:331
 msgid "Technical Layers"
 msgstr "Warstwy techniczne"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:333
 msgid "Adhesive Cmp"
 msgstr "Kleju gorna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
 msgid "Adhesive Copper"
 msgstr "Kleju dolna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
 msgid "Solder paste Cmp"
 msgstr "Pasty gorna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:345
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 msgid "Solder paste Copper"
 msgstr "Pasty dolna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:348
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:345
 msgid "Silkscreen Cmp"
 msgstr "Opisu gorna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:351
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:348
 msgid "Silkscreen Copper"
 msgstr "Opisu dolna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:354
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:351
 msgid "Solder mask Cmp"
 msgstr "Maska elementów"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:357
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:354
 msgid "Solder mask Copper"
 msgstr "Maska ścieżek"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:360
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:357
 msgid "Draft layer"
 msgstr "Warstwa szkicu"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:363
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:360
 msgid "E.C.O.1 layer"
 msgstr "ECO1"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:366
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:363
 msgid "E.C.O.2 layer"
 msgstr "ECO2"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:394
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:391
 msgid "Clearances"
 msgstr "Prześwity"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:401
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:398
 msgid "Net pad clearance:"
 msgstr "Prześwit pola lutowniczego:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:403
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:400
 msgid ""
 "This is the local net clearance for  pad.\n"
 "If 0, the footprint local value or the Netclass value is used"
@@ -13625,7 +13627,7 @@ msgstr ""
 "Jest to lokalna wartośc prześwitu dla pola lutowniczego.\n"
 "Jeśli wartością jest 0, użyta będzie wartość z klasy połączeń"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:416
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:413
 msgid ""
 "This is the local clearance between this  pad and the solder mask\n"
 "If 0, the footprint local value or the global value is used"
@@ -13633,7 +13635,7 @@ msgstr ""
 "Jest to lokalna wartośc prześwitu pomiędzy polem lutowniczym a maską.\n"
 "Jeśli wartością jest 0, użyta będzie wartość globalna"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:429
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:426
 msgid ""
 "This is the local clearance between this pad and the solder paste.\n"
 "If 0 the footprint value or the global value is used..\n"
@@ -13648,7 +13650,7 @@ msgstr ""
 "prześwitu.\n"
 "Wartość ujemna oznacza mniejszą maskę niż rozmiar pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:442
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:439
 msgid ""
 "This is the local clearance ratio in per cent between this pad and the "
 "solder paste.\n"
@@ -13666,33 +13668,33 @@ msgstr ""
 "Ostateczna wartość jest sumą tej wartości procentowej i wartości prześwitu\n"
 "Wartość negatywna oznacza mniejszą maskę niż rozmiar pola lutowniczego."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:460
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:457
 msgid "Copper Zones"
 msgstr "Pola miedzi"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:471
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:468
 msgid "From parent module"
 msgstr "Z footprintu nadrzędnego"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:480
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:477
 msgid "Thermal relief width:"
 msgstr "Szerokość połączenia termicznego"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:491
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:488
 msgid "Thermal relief gap:"
 msgstr "Prześwit połączenia termicznego:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:508
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:505
 msgid "Set fields to 0 to use parent or global values"
 msgstr ""
 "Ustaw wartość na 0\n"
 "by użyć danych z footprintu lub wart. globalnej"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:524
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:521
 msgid "Local Clearance and Settings"
 msgstr "Lokalny prześwit i ustawienia"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:542
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:539
 msgid ""
 "Warning:\n"
 "This pad is flipped on board.\n"
@@ -15334,7 +15336,7 @@ msgstr "Punkty:"
 msgid "Polygons:"
 msgstr "Wielokąty:"
 
-#: 3d-viewer/3d_aux.cpp:185
+#: 3d-viewer/3d_aux.cpp:186
 msgid "Vertex "
 msgstr "Wierzchołek "
 
@@ -15569,22 +15571,22 @@ msgstr "Nie mogę otworzyć schowka by zapisać informacje o wersji."
 msgid "Clipboard Error"
 msgstr "Błąd Schowka"
 
-#: common/basicframe.cpp:590
+#: common/basicframe.cpp:588
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "Nie masz uprawnień zapisu do folderu <%s>."
 
-#: common/basicframe.cpp:595
+#: common/basicframe.cpp:593
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr "Nie masz uprawnień zapisu do pliku <%s> w folderze <%s>."
 
-#: common/basicframe.cpp:600
+#: common/basicframe.cpp:598
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "Nie masz uprawnień zapisu do pliku <%s>."
 
-#: common/basicframe.cpp:633
+#: common/basicframe.cpp:631
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!  It appears that the last time you "
@@ -15595,11 +15597,11 @@ msgstr ""
 "został zapisany poprawnie.\n"
 "Czy chcesz przywrócić ostatnie edycje jakie wykonałeś?"
 
-#: common/basicframe.cpp:659
+#: common/basicframe.cpp:657
 msgid "Could not create backup file "
 msgstr "Nie mogę utworzyć pliku kopii zapasowej "
 
-#: common/basicframe.cpp:666
+#: common/basicframe.cpp:664
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Nie można zmienić nazwy pliku automatycznej kopii zapasowej na właściwą."
@@ -15938,94 +15940,94 @@ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER błąd zapisu"
 msgid "Colors"
 msgstr "Kolory"
 
-#: common/wildcards_and_files_ext.cpp:61
+#: common/wildcards_and_files_ext.cpp:64
 msgid "KiCad drawing symbol file (*.sym)|*.sym"
 msgstr "Plik rysunków symboli programu KiCad (*.sym)|*.sym"
 
-#: common/wildcards_and_files_ext.cpp:62
+#: common/wildcards_and_files_ext.cpp:65
 msgid "KiCad component library file (*.lib)|*.lib"
 msgstr "Plik bibliotek symboli programu KiCad (*.lib)|*.lib"
 
-#: common/wildcards_and_files_ext.cpp:63
+#: common/wildcards_and_files_ext.cpp:66
 msgid "KiCad project files (*.pro)|*.pro"
 msgstr "Pliki projektu programu KiCad (*.pro)|*.pro"
 
-#: common/wildcards_and_files_ext.cpp:64
+#: common/wildcards_and_files_ext.cpp:67
 msgid "KiCad schematic files (*.sch)|*.sch"
 msgstr "Pliki schematów programu KiCad (*.sch)|*.sch"
 
-#: common/wildcards_and_files_ext.cpp:65
+#: common/wildcards_and_files_ext.cpp:68
 msgid "KiCad netlist files (*.net)|*.net"
 msgstr "Pliki listy sieci programu KiCad (*.net)|*.net"
 
-#: common/wildcards_and_files_ext.cpp:66
+#: common/wildcards_and_files_ext.cpp:69
 msgid "Gerber files (*.pho)|*.pho"
 msgstr "Pliki Gerber (*.pho)|*.pho"
 
-#: common/wildcards_and_files_ext.cpp:67
+#: common/wildcards_and_files_ext.cpp:70
 msgid "KiCad printed circuit board files (*.brd)|*.brd"
 msgstr "Pliki PCB programu KiCad (*.brd)|*.brd"
 
-#: common/wildcards_and_files_ext.cpp:68
+#: common/wildcards_and_files_ext.cpp:71
 msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
 msgstr "Pliki PCB programu Eagle v6.x XML (*.brd)|*brd"
 
-#: common/wildcards_and_files_ext.cpp:69
+#: common/wildcards_and_files_ext.cpp:72
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
 msgstr "Pliki PCB S-expression (*.kicad_pcb)|*.kicad_pcb"
 
-#: common/wildcards_and_files_ext.cpp:70
+#: common/wildcards_and_files_ext.cpp:73
 msgid "KiCad footprint s-expre library file (*.kicad_mod)|*.kicad_mod"
 msgstr ""
 "Plik bibliotek footprintów S-expression programu KiCad (*.kicad_mod)|*."
 "kicad_mod"
 
-#: common/wildcards_and_files_ext.cpp:71
+#: common/wildcards_and_files_ext.cpp:74
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
 msgstr ""
 "Ścieżka bibliotek footprintów S-expression programu KiCad (*.pretty)|*.pretty"
 
-#: common/wildcards_and_files_ext.cpp:72
+#: common/wildcards_and_files_ext.cpp:75
 msgid "Legacy footprint library file (*.mod)|*.mod"
 msgstr "Starsze pliki bibliotek footprintów programu KiCad (*.mod)|*.mod"
 
-#: common/wildcards_and_files_ext.cpp:73
+#: common/wildcards_and_files_ext.cpp:76
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
 msgstr "Pliki nagrań makr programu KiCad (*.mcr)|*.mcr"
 
-#: common/wildcards_and_files_ext.cpp:76
+#: common/wildcards_and_files_ext.cpp:79
 msgid "All files (*)|*"
 msgstr "Wszystkie pliki (*.*)|*.*"
 
-#: common/wildcards_and_files_ext.cpp:79
+#: common/wildcards_and_files_ext.cpp:82
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 msgstr "Pliki łącznikowe komponent-footprint programu KiCad (*.cmp)|*.cmp"
 
-#: common/wildcards_and_files_ext.cpp:82
+#: common/wildcards_and_files_ext.cpp:85
 msgid "Drill files (*.drl)|*.drl;*.DRL"
 msgstr "Pliki wierceń (*.drl)|*.drl;*.DRL"
 
-#: common/wildcards_and_files_ext.cpp:83
+#: common/wildcards_and_files_ext.cpp:86
 msgid "SVG files (*.svg)|*.svg;*.SVG"
 msgstr "Pliki SVG (*.svg)|*.svg;*.SVG"
 
-#: common/wildcards_and_files_ext.cpp:84
+#: common/wildcards_and_files_ext.cpp:87
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Pliki PDF (*.pdf)|*.pdf"
 
-#: common/wildcards_and_files_ext.cpp:85
+#: common/wildcards_and_files_ext.cpp:88
 msgid "PostScript files (.ps)|*.ps"
 msgstr "Pliki PostScript (.ps)|*.ps"
 
-#: common/wildcards_and_files_ext.cpp:86
+#: common/wildcards_and_files_ext.cpp:89
 msgid "Report files (*.rpt)|*.rpt"
 msgstr "Pliki raportów (*.rpt)|*.rpt"
 
-#: common/wildcards_and_files_ext.cpp:87
+#: common/wildcards_and_files_ext.cpp:90
 msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Pliki położeń footprintów (*.pos)|*.pos"
 
-#: common/wildcards_and_files_ext.cpp:88
+#: common/wildcards_and_files_ext.cpp:91
 msgid "Vrml files (*.wrl)|*.wrl"
 msgstr "Pliki VRML (*.wrl)|*.wrl"
 
@@ -18020,6 +18022,12 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "cannot find file plug in for file format '%s'"
+#~ msgstr "nie mogę odnaleźć wtyczki dla plików w formacie '%s'"
+
+#~ msgid "On Die"
+#~ msgstr "Na rdzeniu"
 
 #~ msgid "Rotate Field"
 #~ msgstr "Obróć pole"
