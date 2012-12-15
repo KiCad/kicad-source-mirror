@@ -43,6 +43,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 
 #include <3d_viewer.h>
+#include <3d_canvas.h>
 #include <info3d_visu.h>
 #include <trackball.h>
 #include <3d_draw_basic_functions.h>

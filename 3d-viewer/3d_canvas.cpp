@@ -17,6 +17,7 @@
 #include <gestfich.h>
 
 #include <3d_viewer.h>
+#include <3d_canvas.h>
 #include <info3d_visu.h>
 #include <trackball.h>
 #include <3d_viewer_id.h>
@@ -73,12 +74,11 @@ END_EVENT_TABLE()
 
 
 EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
-    wxGLCanvas( parent, -1, attribList, wxDefaultPosition, wxDefaultSize,
+    wxGLCanvas( parent, wxID_ANY, attribList, wxDefaultPosition, wxDefaultSize,
                 wxFULL_REPAINT_ON_RESIZE )
 {
     m_init   = false;
     m_gllist = 0;
-    m_ortho  = false;
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext( this );
 
@@ -517,7 +517,7 @@ void EDA_3D_CANVAS::InitGL()
     if( g_Parm_3D_Visu.m_Zoom > MAX_VIEW_ANGLE )
         g_Parm_3D_Visu.m_Zoom = MAX_VIEW_ANGLE;
 
-     if( ModeIsOrtho() )
+     if( Parent()->ModeIsOrtho() )
      {
          // OrthoReductionFactor is chosen so as to provide roughly the same size as
          // Perspective View
