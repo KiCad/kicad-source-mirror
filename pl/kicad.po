@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-15 10:08+0100\n"
-"PO-Revision-Date: 2012-12-15 10:10+0100\n"
+"POT-Creation-Date: 2012-12-15 15:05+0100\n"
+"PO-Revision-Date: 2012-12-15 15:09+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -151,7 +151,7 @@ msgstr ""
 
 #: kicad/kicad.cpp:90 kicad/kicad.cpp:148 kicad/prjconfig.cpp:219
 #: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1012
-#: pcbnew/moduleframe.cpp:567 pcbnew/pcbframe.cpp:787 cvpcb/cvframe.cpp:717
+#: pcbnew/moduleframe.cpp:567 pcbnew/pcbframe.cpp:788 cvpcb/cvframe.cpp:717
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -3325,7 +3325,7 @@ msgstr "Schemat"
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1015 pcbnew/pcbframe.cpp:792 cvpcb/cvframe.cpp:722
+#: eeschema/schframe.cpp:1015 cvpcb/cvframe.cpp:722
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -9530,11 +9530,28 @@ msgstr "Widoczność"
 msgid "The auto save file <%s> could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 
+#: pcbnew/pcbframe.cpp:792
+msgid " [new file]"
+msgstr " [nowy plik]"
+
 #: pcbnew/pcbnew.cpp:120
 msgid "Pcbnew is already running, Continue?"
 msgstr "Pcbnew jest już uruchomiony. Kontynuować?"
 
-#: pcbnew/pcbnew.cpp:190
+#: pcbnew/pcbnew.cpp:200
+#, c-format
+msgid ""
+"File <%s> does not exist.\n"
+"However a legacy file <%s> exists.\n"
+"Do you want to load it?\n"
+"It will be saved under the new file format"
+msgstr ""
+"Plik <%s> nie istnieje.\n"
+"Dostępny jest jednak plik <%s> zapisany w starszym formacie.\n"
+"Czy chcesz go otworzyć?\n"
+"Zostanie on zapisany w nowym formacie."
+
+#: pcbnew/pcbnew.cpp:227
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -9666,13 +9683,13 @@ msgstr ""
 "Warstwa '%s' w pliku <%s> w linii %d, pozycja %d, nie została zdefiniowana w "
 "sekcji warstw"
 
-#: pcbnew/pcb_parser.cpp:1129
+#: pcbnew/pcb_parser.cpp:1130
 #, c-format
 msgid "duplicate NETCLASS name '%s' in file %s at line %d, offset %d"
 msgstr ""
 "zduplikowana nazwa Klasy Sieci '%s' w pliku %s w linii %d, przesunięcie %d"
 
-#: pcbnew/pcb_parser.cpp:1754
+#: pcbnew/pcb_parser.cpp:1755
 #, c-format
 msgid "cannot handle module text type %s"
 msgstr "nie mogę obsłużyć tekstu footprintu typu %s"
