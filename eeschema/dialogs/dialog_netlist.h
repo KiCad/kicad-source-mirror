@@ -1,5 +1,5 @@
 /**
- * @file netlist_control.h
+ * @file dialog_netlist.h
  */
 
 /*
@@ -27,8 +27,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _NETLIST_CONTROL_H_
-#define _NETLIST_CONTROL_H_
+#ifndef _DIALOG_NETLIST_H_
+#define _DIALOG_NETLIST_H_
 
 #include <dialogs/dialog_netlist_base.h>
 
@@ -98,8 +98,9 @@ public:
      * function GetPageNetFmtName
      * @return the name of the netlist format for this page
      * This is usually the page label.
-     * For the pcbnew netlist, this is the page label when the "old" format is selected
-     * and "PcbnewAdvanced" when the advanced format is selected
+     * For the pcbnew netlist, this is "LegacyPcbnew"
+     * when the "old" format is selected
+     * and "PcbnewAdvanced" when the advanced format (S expr fmt)is selected
      */
     const wxString GetPageNetFmtName();
 
@@ -204,4 +205,4 @@ private:
     void OnBrowsePlugins( wxCommandEvent& event );
 };
 
-#endif  /* _NETLIST_CONTROL_H_ */
+#endif  /* _DIALOG_NETLIST_H_ */

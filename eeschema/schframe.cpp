@@ -35,7 +35,6 @@
 #include <base_units.h>
 
 #include <general.h>
-#include <protos.h>
 #include <eeschema_id.h>
 #include <netlist.h>
 #include <lib_pin.h>
@@ -44,7 +43,7 @@
 #include <sch_component.h>
 
 #include <dialog_helpers.h>
-#include <netlist_control.h>
+#include <dialog_netlist.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <hotkeys.h>
