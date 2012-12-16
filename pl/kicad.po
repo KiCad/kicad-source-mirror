@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-15 15:05+0100\n"
-"PO-Revision-Date: 2012-12-15 15:09+0100\n"
+"POT-Creation-Date: 2012-12-16 14:22+0100\n"
+"PO-Revision-Date: 2012-12-16 14:24+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -150,7 +150,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:90 kicad/kicad.cpp:148 kicad/prjconfig.cpp:219
-#: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1012
+#: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1011
 #: pcbnew/moduleframe.cpp:567 pcbnew/pcbframe.cpp:788 cvpcb/cvframe.cpp:717
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -836,7 +836,7 @@ msgstr "Następujące biblioteki nie zostały znalezione:"
 msgid "Eeschema is already running, Continue?"
 msgstr "Eeschema jest już uruchomiony. Kontynuować?"
 
-#: eeschema/eeschema_config.cpp:152 eeschema/eeschema_config.cpp:220
+#: eeschema/eeschema_config.cpp:150 eeschema/eeschema_config.cpp:218
 #: pcbnew/pcbnew_config.cpp:143
 msgid "Read Project File"
 msgstr "Odczytaj plik projektu"
@@ -2642,7 +2642,7 @@ msgstr "W&czytaj ustawienia"
 msgid "Open the Eeschema manual"
 msgstr "Otwórz podręcznik programu Eeschema"
 
-#: eeschema/netform.cpp:384 eeschema/netform.cpp:1106
+#: eeschema/netform.cpp:383 eeschema/netform.cpp:1105
 msgid "Failed to create file "
 msgstr "Błąd tworzenia pliku "
 
@@ -2669,110 +2669,6 @@ msgstr "etykiety magistrali"
 #: eeschema/netlist.cpp:307
 msgid "hierarchy..."
 msgstr "hierarchii..."
-
-#: eeschema/netlist_control.cpp:144
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:23
-#: pcbnew/dialogs/dialog_drc_base.cpp:23
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:82
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:89
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:80
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
-msgid "Options:"
-msgstr "Opcje:"
-
-#: eeschema/netlist_control.cpp:148
-msgid "Default format"
-msgstr "Format domyślny"
-
-#: eeschema/netlist_control.cpp:154
-msgid "Pcbnew Format"
-msgstr "Format Pcbnew"
-
-#: eeschema/netlist_control.cpp:154
-msgid "Advanced Format"
-msgstr "Format rozszerzony"
-
-#: eeschema/netlist_control.cpp:155 eeschema/netlist_control.cpp:269
-msgid "Netlist Options:"
-msgstr "Opcje listy sieci:"
-
-#: eeschema/netlist_control.cpp:263
-msgid "Prefix references 'U' and 'IC' with 'X'"
-msgstr "Przedrostek odnośnika 'U' i 'IC' z 'X'"
-
-#: eeschema/netlist_control.cpp:268
-msgid "Use Net Names"
-msgstr "Użyj nazw sieci"
-
-#: eeschema/netlist_control.cpp:268
-msgid "Use Net Numbers"
-msgstr "Użyj numerów sieci"
-
-#: eeschema/netlist_control.cpp:279
-msgid "Simulator command:"
-msgstr "Polecenie symulatora:"
-
-#: eeschema/netlist_control.cpp:292
-msgid "&Run Simulator"
-msgstr "&Uruchom symulator"
-
-#: eeschema/netlist_control.cpp:333
-#: eeschema/dialogs/dialog_netlist_base.cpp:104
-msgid "Netlist command:"
-msgstr "Polecenie listy sieci:"
-
-#: eeschema/netlist_control.cpp:346
-msgid "Title:"
-msgstr "Tytuł:"
-
-#: eeschema/netlist_control.cpp:456
-msgid "Save Netlist File"
-msgstr "Zapisz pliki z listą sieci"
-
-#: eeschema/netlist_control.cpp:492
-#, c-format
-msgid "%s Export"
-msgstr "%s Eksportuj"
-
-#: eeschema/netlist_control.cpp:545
-msgid "SPICE netlist file (.cir)|*.cir"
-msgstr "Lista sieci programu SPICE (.cir)|*cir"
-
-#: eeschema/netlist_control.cpp:550
-msgid "CadStar netlist file (.frp)|*.frp"
-msgstr "Lista sieci programu CadStar (.frp)|*.frp"
-
-#: eeschema/netlist_control.cpp:591
-msgid ""
-"Some items are not annotated\n"
-"Do you want to annotate schematic?"
-msgstr ""
-"Niektóre elementy nie są ponumerowane\n"
-"Czy chcesz ponumerować schemat?"
-
-#: eeschema/netlist_control.cpp:606
-msgid "Error: duplicate sheet names. Continue?"
-msgstr "Błąd: Zdublowane nazwy arkuszy. Kontunować?"
-
-#: eeschema/netlist_control.cpp:759
-msgid "This plugin already exists. Abort"
-msgstr "Ta wtyczka już istnieje. Przerwano."
-
-#: eeschema/netlist_control.cpp:789
-msgid "Error. You must provide a command String"
-msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
-
-#: eeschema/netlist_control.cpp:795
-msgid "Error. You must provide a Title"
-msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
-
-#: eeschema/netlist_control.cpp:816
-msgid "Plugin files:"
-msgstr "Pliki wtyczek:"
-
-#: eeschema/netlist_control.cpp:847
-msgid "Do not forget to choose a title for this netlist control page"
-msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
 #: eeschema/onrightclick.cpp:151
 msgid "Leave Sheet"
@@ -3290,7 +3186,7 @@ msgstr "Dodaj symbol"
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
-#: eeschema/schframe.cpp:427 pcbnew/pcbframe.cpp:487
+#: eeschema/schframe.cpp:426 pcbnew/pcbframe.cpp:487
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -3301,31 +3197,31 @@ msgstr ""
 "<%s>\n"
 "przed zamknięciem?"
 
-#: eeschema/schframe.cpp:588
+#: eeschema/schframe.cpp:587
 msgid "Draw wires and buses in any direction"
 msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
 
-#: eeschema/schframe.cpp:589
+#: eeschema/schframe.cpp:588
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
 
-#: eeschema/schframe.cpp:598
+#: eeschema/schframe.cpp:597
 msgid "Do not show hidden pins"
 msgstr "Nie pokazuj ukrytych pinów"
 
-#: eeschema/schframe.cpp:599 eeschema/tool_sch.cpp:298
+#: eeschema/schframe.cpp:598 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/schframe.cpp:712
+#: eeschema/schframe.cpp:711
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:782
+#: eeschema/schframe.cpp:781
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1015 cvpcb/cvframe.cpp:722
+#: eeschema/schframe.cpp:1014 cvpcb/cvframe.cpp:722
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -4032,6 +3928,16 @@ msgstr ""
 "\n"
 "#Koniec listy\n"
 
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:23
+#: eeschema/dialogs/dialog_netlist.cpp:147
+#: pcbnew/dialogs/dialog_drc_base.cpp:23
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:82
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:89
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:80
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
+msgid "Options:"
+msgstr "Opcje:"
+
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:26
 msgid "List items:"
 msgstr "Lista elementów:"
@@ -4507,7 +4413,7 @@ msgstr "Kopiuj pola z elem. nadrzędnego"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:150
 msgid "Browse DocFiles"
-msgstr "Przeglądaj dokumenty"
+msgstr "Przeglądaj folder dokumentacji"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:168
 msgid "Alias List:"
@@ -5682,6 +5588,101 @@ msgstr "Pokaż nazwę pinu"
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:208
 msgid "Pin name &inside"
 msgstr "Nazwa p&inu wewnątrz"
+
+#: eeschema/dialogs/dialog_netlist.cpp:151
+msgid "Default format"
+msgstr "Format domyślny"
+
+#: eeschema/dialogs/dialog_netlist.cpp:157
+msgid "Legacy Format"
+msgstr "Starszy format"
+
+#: eeschema/dialogs/dialog_netlist.cpp:157
+msgid "Advanced Format"
+msgstr "Format rozszerzony"
+
+#: eeschema/dialogs/dialog_netlist.cpp:158
+#: eeschema/dialogs/dialog_netlist.cpp:273
+msgid "Netlist Options:"
+msgstr "Opcje listy sieci:"
+
+#: eeschema/dialogs/dialog_netlist.cpp:267
+msgid "Prefix references 'U' and 'IC' with 'X'"
+msgstr "Przedrostek odnośnika 'U' i 'IC' z 'X'"
+
+#: eeschema/dialogs/dialog_netlist.cpp:272
+msgid "Use Net Names"
+msgstr "Użyj nazw sieci"
+
+#: eeschema/dialogs/dialog_netlist.cpp:272
+msgid "Use Net Numbers"
+msgstr "Użyj numerów sieci"
+
+#: eeschema/dialogs/dialog_netlist.cpp:283
+msgid "Simulator command:"
+msgstr "Polecenie symulatora:"
+
+#: eeschema/dialogs/dialog_netlist.cpp:296
+msgid "&Run Simulator"
+msgstr "&Uruchom symulator"
+
+#: eeschema/dialogs/dialog_netlist.cpp:337
+#: eeschema/dialogs/dialog_netlist_base.cpp:104
+msgid "Netlist command:"
+msgstr "Polecenie listy sieci:"
+
+#: eeschema/dialogs/dialog_netlist.cpp:350
+msgid "Title:"
+msgstr "Tytuł:"
+
+#: eeschema/dialogs/dialog_netlist.cpp:460
+msgid "Save Netlist File"
+msgstr "Zapisz pliki z listą sieci"
+
+#: eeschema/dialogs/dialog_netlist.cpp:496
+#, c-format
+msgid "%s Export"
+msgstr "%s Eksportuj"
+
+#: eeschema/dialogs/dialog_netlist.cpp:549
+msgid "SPICE netlist file (.cir)|*.cir"
+msgstr "Lista sieci programu SPICE (.cir)|*cir"
+
+#: eeschema/dialogs/dialog_netlist.cpp:554
+msgid "CadStar netlist file (.frp)|*.frp"
+msgstr "Lista sieci programu CadStar (.frp)|*.frp"
+
+#: eeschema/dialogs/dialog_netlist.cpp:595
+msgid ""
+"Some items are not annotated\n"
+"Do you want to annotate schematic?"
+msgstr ""
+"Niektóre elementy nie są ponumerowane\n"
+"Czy chcesz ponumerować schemat?"
+
+#: eeschema/dialogs/dialog_netlist.cpp:610
+msgid "Error: duplicate sheet names. Continue?"
+msgstr "Błąd: Zdublowane nazwy arkuszy. Kontunować?"
+
+#: eeschema/dialogs/dialog_netlist.cpp:763
+msgid "This plugin already exists. Abort"
+msgstr "Ta wtyczka już istnieje. Przerwano."
+
+#: eeschema/dialogs/dialog_netlist.cpp:793
+msgid "Error. You must provide a command String"
+msgstr "Błąd. Musisz wypełnić pole \"Polecenie netlisty\""
+
+#: eeschema/dialogs/dialog_netlist.cpp:799
+msgid "Error. You must provide a Title"
+msgstr "Błąd. Musisz wypełnić pole \"Tytuł\""
+
+#: eeschema/dialogs/dialog_netlist.cpp:820
+msgid "Plugin files:"
+msgstr "Pliki wtyczek:"
+
+#: eeschema/dialogs/dialog_netlist.cpp:851
+msgid "Do not forget to choose a title for this netlist control page"
+msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:439
 #: eeschema/dialogs/dialog_netlist_base.h:76
@@ -18039,6 +18040,9 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Pcbnew Format"
+#~ msgstr "Format Pcbnew"
 
 #~ msgid "cannot find file plug in for file format '%s'"
 #~ msgstr "nie mogę odnaleźć wtyczki dla plików w formacie '%s'"
