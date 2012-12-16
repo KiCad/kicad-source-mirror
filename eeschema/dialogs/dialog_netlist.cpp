@@ -49,7 +49,7 @@
 #include <protos.h>
 #include <sch_sheet.h>
 #include <dialog_helpers.h>
-#include <netlist_control.h>
+#include <dialog_netlist.h>
 #include <dialogs/annotate_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include <wildcards_and_files_ext.h>
@@ -73,6 +73,8 @@ int TestDuplicateSheetNames( bool aCreateMarker );
 #define NETLIST_USE_DEFAULT_NETNAME wxT( "NetlistUseDefaultNetname" )
 #define NETLIST_PSPICE_USE_NETNAME  wxT( "SpiceUseNetNames" )
 
+#define NETLIST_PCBNEW_LEGACY wxT("LegacyPcbnew" )
+#define NETLIST_PCBNEW_NEWFMT wxT("PcbnewAdvanced" )
 
 
 BEGIN_EVENT_TABLE( NETLIST_DIALOG, NETLIST_DIALOG_BASE )
@@ -96,7 +98,8 @@ END_EVENT_TABLE()
 NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
                                           const wxString& title,
                                           NETLIST_TYPE_ID id_NetType ) :
-    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxBORDER_SUNKEN )
+    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize,
+             wxTAB_TRAVERSAL | wxBORDER_SUNKEN )
 {
     m_IdNetType = id_NetType;
     m_pageNetFmtName = title;
@@ -108,19 +111,19 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_NetOption = NULL;
 
     wxString netfmtName = ((NETLIST_DIALOG*)parent->GetParent())->m_NetFmtName;
-    int fmtOption = 0;
+    int fmtOption = 1;  // Default Pcbnew netlist fmt is advanced fmt
 
     bool selected = m_pageNetFmtName == netfmtName;
 
     // PCBNEW Format is a special type:
     if( id_NetType == NET_TYPE_PCBNEW )
     {
-        if( netfmtName.IsEmpty() )
+        if( netfmtName.IsEmpty() || netfmtName == NETLIST_PCBNEW_NEWFMT )
             selected = true;
-        if( netfmtName == wxT("PcbnewAdvanced" ) )
+        if( netfmtName == NETLIST_PCBNEW_LEGACY )
         {
             selected = true;
-            fmtOption = 1;
+            fmtOption = 0;
         }
     }
 
@@ -151,7 +154,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
 
     if( id_NetType == NET_TYPE_PCBNEW )
     {
-        wxString netlist_opt[2] = { _( "Pcbnew Format" ), _( "Advanced Format" ) };
+        wxString netlist_opt[2] = { _( "Legacy Format" ), _( "Advanced Format" ) };
         m_NetOption = new wxRadioBox( this, -1, _( "Netlist Options:" ),
                                       wxDefaultPosition, wxDefaultSize,
                                       2, netlist_opt, 1,
@@ -167,10 +170,11 @@ const wxString NETLIST_PAGE_DIALOG::GetPageNetFmtName()
     if( m_IdNetType == NET_TYPE_PCBNEW )
     {
         if( m_NetOption->GetSelection() )
-            return wxT( "PcbnewAdvanced" );
+            return NETLIST_PCBNEW_NEWFMT;
         else
-            return wxT( "Pcbnew" );
+            return NETLIST_PCBNEW_LEGACY;
     }
+
     return m_pageNetFmtName;
 }
 

@@ -34,8 +34,6 @@
 
 #include <eeschema_id.h>
 #include <general.h>
-#include <netlist_control.h>
-#include <protos.h>
 #include <libeditframe.h>
 #include <eeschema_config.h>
 #include <worksheet.h>

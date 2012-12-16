@@ -41,6 +41,7 @@ set(EESCHEMA_DLGS
     dialogs/dialog_lib_edit_pin_base.cpp
     dialogs/dialog_lib_new_component.cpp
     dialogs/dialog_lib_new_component_base.cpp
+    dialogs/dialog_netlist.cpp
     dialogs/dialog_netlist_base.cpp
     dialogs/dialog_plot_schematic_base.cpp
     dialogs/dialog_plot_schematic.cpp
@@ -111,7 +112,6 @@ set(EESCHEMA_SRCS
     menubar.cpp
     menubar_libedit.cpp
     netform.cpp
-    netlist_control.cpp
     netlist.cpp
     onleftclick.cpp
     onrightclick.cpp
