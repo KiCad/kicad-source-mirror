@@ -24,7 +24,7 @@
  */
 
 /**
- * @file netlist_control.cpp
+ * @file eeschema/dialogs/dialog_netlist.cpp
  * @brief Dialog box for creating netlists.
  */
 
@@ -530,8 +530,8 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
  * returns the filename extension and the wildcard string for this curr
  * or a void name if there is no default name
  * @param aNetTypeId = the netlist type ( NET_TYPE_PCBNEW ... )
- * @param aExt = a reference to a wxString to return the defaut  file ext.
- * @param aWildCard =  reference to a wxString to return the defaut wildcard.
+ * @param aExt = a reference to a wxString to return the default  file ext.
+ * @param aWildCard =  reference to a wxString to return the default wildcard.
  * @return true for known netlist type, false for custom formats
  */
 bool NETLIST_DIALOG::ReturnFilenamePrms( NETLIST_TYPE_ID aNetTypeId,

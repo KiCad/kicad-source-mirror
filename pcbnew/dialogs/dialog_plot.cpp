@@ -1,5 +1,5 @@
 /**
- * @file pcbnew/dialog_plot.cpp
+ * @file dialog_plot.cpp
  */
 
 /*

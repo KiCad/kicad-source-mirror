@@ -357,7 +357,7 @@ public:
 
     /**
      * Function FindRow
-     * returns a #ROW* if aNickName is found in this table or in any chained
+     * returns a #ROW if aNickName is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
     const ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
@@ -367,7 +367,7 @@ protected:
 
     /**
      * Function findRow
-     * returns a #ROW* if aNickName is found in this table or in any chained
+     * returns a #ROW if aNickName is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
     const ROW* findRow( const wxString& aNickName );

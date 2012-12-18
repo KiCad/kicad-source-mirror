@@ -145,7 +145,7 @@ protected:
     LINE_READER*    m_reader;       ///< no ownership here.
     wxString        m_filename;     ///< for saves only, name is in m_reader for loads
 
-    int             m_loading_format_version; ///< which #BOARD_FORMAT_VERSION should be Load()ed?
+    int             m_loading_format_version; ///< which #SEXPR_BOARD_FILE_VERSION should be Load()ed?
 
     STRING_FORMATTER    m_sf;
     OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership

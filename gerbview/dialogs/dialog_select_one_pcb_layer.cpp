@@ -1,5 +1,5 @@
 /**
- * @file select_pcb_layer.cpp
+ * @file dialog_select_one_pcb_layer.cpp
  * @brief Set up a dialog to choose a PCB Layer.
  */
 
@@ -222,5 +222,3 @@ const wxString GetPCBDefaultLayerName( int aLayerNumber )
 
     return wxString( txt );
 }
-
-

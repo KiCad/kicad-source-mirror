@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /**
- * @file dialog_freeroute.cpp
+ * @file dialog_freeroute_exchange.cpp
  * Dialog to access to FreeRoute, the web bases free router, export/import files
  * to/from FreeRoute
  */

@@ -84,7 +84,6 @@ public:
      * Function SetCvsFormOn
      * prepare parameters to create a BOM list in comma separated value (cvs)
      * @param aSeparator = the character used as "csv" separator
-     * @param aFile = the file to write to (will be closed)
      */
     void SetCvsFormOn( char aSeparator )
     {
