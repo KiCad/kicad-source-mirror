@@ -65,7 +65,6 @@
 #include <class_module.h>
 #include <pcbnew.h>
 #include <dialog_netlist.h>
-#include <html_messagebox.h>
 
 #include <netlist_reader.h>
 
@@ -251,46 +250,33 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
  *  1 - duplicate footprints on board
  *  2 - missing footprints (found in netlist but not on board)
  *  3 - footprints not in netlist but on board
- * @param aNetlistFullFilename = the full filename netlist
+ * param aFilename = the full filename netlist
+ * param aDuplicate = the list of duplicate modules to populate
+ * param aMissing = the list of missing module references and values
+ *      to populate. For each missing item, the first string is the ref,
+ *                   the second is the value.
+ * param aNotInNetlist = the list of not-in-netlist modules to populate
  */
-void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
-    const wxString& aNetlistFullFilename )
+bool PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
+        const wxString& aFilename,
+        std::vector <MODULE*>& aDuplicate,
+        wxArrayString& aMissing,
+        std::vector <MODULE*>& aNotInNetlist )
 {
-    #define ERR_CNT_MAX 100 // Max number of errors to output in dialog
-                            // to avoid a too long calculation time
-    wxString list;          // The messages to display
-
-    if( GetBoard()->m_Modules == NULL )
-    {
-        DisplayInfoMessage( this, _( "No modules" ) );
-        return;
-    }
-
-    FILE*   netfile = OpenNetlistFile( aNetlistFullFilename );
+    FILE*   netfile = OpenNetlistFile( aFilename );
     if( !netfile )
-        return;
-
-    SetLastNetListRead( aNetlistFullFilename );
+        return false;
 
     // Build the list of references of the net list modules.
     NETLIST_READER netList_Reader( this );
-    netList_Reader.SetFilesnames( aNetlistFullFilename, wxEmptyString );
+    netList_Reader.SetFilesnames( aFilename, wxEmptyString );
     netList_Reader.BuildModuleListOnlySetOpt( true );
     if( ! netList_Reader.ReadNetList( netfile ) )
-        return;  // error
+        return false;  // error
 
     COMPONENT_INFO_LIST& moduleInfoList = netList_Reader.GetComponentInfoList();
 
-    if( moduleInfoList.size() == 0 )
-    {
-        wxMessageBox( _( "No modules in NetList" ) );
-        return;
-    }
-
     // Search for duplicate footprints.
-    list << wxT("<p><b>") << _( "Duplicates:" ) << wxT("</b></p>");
-
-    int err_cnt = 0;
     MODULE* module = GetBoard()->m_Modules;
     for( ; module != NULL; module = module->Next() )
     {
@@ -300,40 +286,25 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
         {
             if( module->m_Reference->m_Text.CmpNoCase( altmodule->m_Reference->m_Text ) == 0 )
             {
-                if( module->m_Reference->m_Text.IsEmpty() )
-                    list << wxT("<br>") << wxT("[noref)");
-                else
-                    list << wxT("<br>") << module->m_Reference->m_Text;
-
-                list << wxT("  (<i>") << module->m_Value->m_Text << wxT("</i>)");
-                err_cnt++;
+                aDuplicate.push_back( module );
                 break;
             }
         }
-        if( ERR_CNT_MAX < err_cnt )
-            break;
     }
 
     // Search for missing modules on board.
-    list << wxT("<p><b>") <<  _( "Missing:" ) << wxT("</b></p>");
-
     for( unsigned ii = 0; ii < moduleInfoList.size(); ii++ )
     {
         COMPONENT_INFO* cmp_info = moduleInfoList[ii];
         module = GetBoard()->FindModuleByReference( cmp_info->m_Reference );
         if( module == NULL )    // Module missing, not found in board
         {
-            list << wxT("<br>") << cmp_info->m_Reference;
-            list << wxT("  (<i>") << cmp_info->m_Value << wxT("</i>)");
-            err_cnt++;
+            aMissing.Add( cmp_info->m_Reference );
+            aMissing.Add( cmp_info->m_Value );
         }
-        if( ERR_CNT_MAX < err_cnt )
-            break;
     }
 
     // Search for modules found on board but not in net list.
-    list << wxT("<p><b>") << _( "Not in Netlist:" ) << wxT("</b></p>");
-
     module = GetBoard()->m_Modules;
     for( ; module != NULL; module = module->Next() )
     {
@@ -346,25 +317,8 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
         }
 
         if( ii == moduleInfoList.size() )   // Module not found in netlist
-        {
-            if( module->m_Reference->m_Text.IsEmpty() )
-                list << wxT("<br>") << wxT("[noref)");
-            else
-                list << wxT("<br>") << module->m_Reference->m_Text ;
-            list << wxT("  (<i>") << module->m_Value->m_Text << wxT("</i>)");
-            err_cnt++;
-        }
-        if( ERR_CNT_MAX < err_cnt )
-            break;
-    }
-    if( ERR_CNT_MAX < err_cnt )
-    {
-        list << wxT("<p><b>")
-             << _( "Too many errors: some are skipped" )
-             << wxT("</b></p>");
+            aNotInNetlist.push_back( module );
     }
 
-    HTML_MESSAGE_BOX dlg( this, _( "Check Modules" ) );
-    dlg.AddHTML_Text(list);
-    dlg.ShowModal();
+    return true;
 }

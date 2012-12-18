@@ -443,8 +443,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     cornerBufferPolysToSubstract.clear();
 
     // Test thermal stubs connections and add polygons to remove unconnected stubs.
-    BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this,
-                                             s_Correction, s_thermalRot );
+    if( GetNet() > 0 )
+        BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this,
+                                                 s_Correction, s_thermalRot );
 
     // remove copper areas
     if( cornerBufferPolysToSubstract.size() )

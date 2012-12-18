@@ -1406,6 +1406,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
         {
             TEXTE_PCB* text = parseTEXTE_PCB();
             dimension->m_Text = *text;
+            dimension->SetPosition( text->GetPosition() );
             delete text;
             break;
         }

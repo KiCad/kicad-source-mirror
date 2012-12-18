@@ -404,9 +404,18 @@ public:
      *  1 - duplicate footprints on board
      *  2 - missing footprints (found in netlist but not on board)
      *  3 - footprints not in netlist but on board
-     * @param aNetlistFullFilename = the full filename netlist
+     * @param aFilename = the full filename netlist
+     * @param aDuplicate = the list of duplicate modules to populate
+     * @param aMissing = the list of missing module references and values
+     *      to populate. For each missing item, the first string is the ref,
+     *                   the second is the value.
+     * @param aNotInNetlist = the list of not-in-netlist modules to populate
+     * @return true if the netlist was read, or false
      */
-    void Test_Duplicate_Missing_And_Extra_Footprints( const wxString& aNetlistFullFilename );
+    bool Test_Duplicate_Missing_And_Extra_Footprints( const wxString& aFilename,
+        std::vector <MODULE*>& aDuplicate,
+        wxArrayString& aMissing,
+        std::vector <MODULE*>& aNotInNetlist );
 
     /**
      * Function OnHotKey.

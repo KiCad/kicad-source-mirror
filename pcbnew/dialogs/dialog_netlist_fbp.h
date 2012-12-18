@@ -47,11 +47,11 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		wxRadioBox* m_ChangeExistingFootprintCtrl;
 		wxRadioBox* m_DeleteBadTracks;
 		wxRadioBox* m_RemoveExtraFootprintsCtrl;
-		wxButton* m_button1;
-		wxButton* m_button2;
-		wxButton* m_button3;
-		wxButton* m_button4;
-		wxButton* m_button5;
+		wxButton* m_buttonBrowse;
+		wxButton* m_buttonRead;
+		wxButton* m_buttonFPTest;
+		wxButton* m_buttonRebild;
+		wxButton* m_buttonClose;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextNetfilename;
 		wxTextCtrl* m_NetlistFilenameCtrl;
@@ -59,7 +59,7 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		wxTextCtrl* m_MessageWindow;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOpenNelistClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOpenNetlistClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReadNetlistFileClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTestFootprintsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCompileRatsnestClick( wxCommandEvent& event ) { event.Skip(); }
