@@ -66,27 +66,27 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bRightSizerButtons;
 	bRightSizerButtons = new wxBoxSizer( wxVERTICAL );
 	
-	m_button1 = new wxButton( this, ID_OPEN_NELIST, _("Browse Netlist Files"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizerButtons->Add( m_button1, 0, wxALL|wxEXPAND, 5 );
+	m_buttonBrowse = new wxButton( this, ID_OPEN_NELIST, _("Browse Netlist Files"), wxDefaultPosition, wxDefaultSize, 0 );
+	bRightSizerButtons->Add( m_buttonBrowse, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_button2 = new wxButton( this, ID_READ_NETLIST_FILE, _("Read Current Netlist"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_button2->SetDefault(); 
-	m_button2->SetToolTip( _("Read the current netlist and update connections and connectivity info") );
+	m_buttonRead = new wxButton( this, ID_READ_NETLIST_FILE, _("Read Current Netlist"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRead->SetDefault(); 
+	m_buttonRead->SetToolTip( _("Read the current netlist and update connections and connectivity info") );
 	
-	bRightSizerButtons->Add( m_button2, 0, wxALL|wxEXPAND, 5 );
+	bRightSizerButtons->Add( m_buttonRead, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_button3 = new wxButton( this, ID_TEST_NETLIST, _("Footprints Test"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_button3->SetToolTip( _("Read the current neltist file and list missing and extra footprints") );
+	m_buttonFPTest = new wxButton( this, ID_TEST_NETLIST, _("Footprints Test"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonFPTest->SetToolTip( _("Read the current neltist file and list missing and extra footprints") );
 	
-	bRightSizerButtons->Add( m_button3, 0, wxALL|wxEXPAND, 5 );
+	bRightSizerButtons->Add( m_buttonFPTest, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_button4 = new wxButton( this, ID_COMPILE_RATSNEST, _("Rebuild Board Connectivity"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_button4->SetToolTip( _("Rebuild the full ratsnest (usefull after a manual pad netname edition)") );
+	m_buttonRebild = new wxButton( this, ID_COMPILE_RATSNEST, _("Rebuild Board Connectivity"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRebild->SetToolTip( _("Rebuild the full ratsnest (usefull after a manual pad netname edition)") );
 	
-	bRightSizerButtons->Add( m_button4, 0, wxALL|wxEXPAND, 5 );
+	bRightSizerButtons->Add( m_buttonRebild, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_button5 = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	bRightSizerButtons->Add( m_button5, 0, wxALL|wxEXPAND, 5 );
+	m_buttonClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	bRightSizerButtons->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bUpperSizer->Add( bRightSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -118,20 +118,20 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	this->Layout();
 	
 	// Connect Events
-	m_button1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNelistClick ), NULL, this );
-	m_button2->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnReadNetlistFileClick ), NULL, this );
-	m_button3->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnTestFootprintsClick ), NULL, this );
-	m_button4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCompileRatsnestClick ), NULL, this );
-	m_button5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCancelClick ), NULL, this );
+	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
+	m_buttonRead->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnReadNetlistFileClick ), NULL, this );
+	m_buttonFPTest->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnTestFootprintsClick ), NULL, this );
+	m_buttonRebild->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCompileRatsnestClick ), NULL, this );
+	m_buttonClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCancelClick ), NULL, this );
 }
 
 DIALOG_NETLIST_FBP::~DIALOG_NETLIST_FBP()
 {
 	// Disconnect Events
-	m_button1->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNelistClick ), NULL, this );
-	m_button2->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnReadNetlistFileClick ), NULL, this );
-	m_button3->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnTestFootprintsClick ), NULL, this );
-	m_button4->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCompileRatsnestClick ), NULL, this );
-	m_button5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCancelClick ), NULL, this );
+	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );
+	m_buttonRead->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnReadNetlistFileClick ), NULL, this );
+	m_buttonFPTest->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnTestFootprintsClick ), NULL, this );
+	m_buttonRebild->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCompileRatsnestClick ), NULL, this );
+	m_buttonClose->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnCancelClick ), NULL, this );
 	
 }

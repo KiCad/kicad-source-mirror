@@ -1,20 +1,43 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_netlist.cpp
-// Author:      jean-pierre Charras
-// Licence:     GPL
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_netlist.cpp
+ */
+
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <confirm.h>
-#include <pcbnew.h>
+#include <dialog_helpers.h>
+#include <html_messagebox.h>
+#include <base_units.h>
 #include <wxPcbStruct.h>
-#include <macros.h>
 #include <pcbcommon.h>
 
 #include <pcbnew_config.h>
 #include <class_board_design_settings.h>
 #include <class_board.h>
+#include <class_module.h>
 #include <wildcards_and_files_ext.h>
 
 #include <dialog_netlist.h>
@@ -53,12 +76,12 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 
 
 DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
-                                const wxString & aNetlistFull_Filename )
+                                const wxString & aNetlistFullFilename )
     : DIALOG_NETLIST_FBP( aParent )
 {
-    m_Parent = aParent;
-    m_DC = aDC;
-    m_NetlistFilenameCtrl->SetValue( aNetlistFull_Filename );
+    m_parent = aParent;
+    m_dc = aDC;
+    m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
 
     Init();
 
@@ -71,10 +94,10 @@ void DIALOG_NETLIST::Init()
     SetFocus();
 }
 
-void DIALOG_NETLIST::OnOpenNelistClick( wxCommandEvent& event )
+void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 {
     wxString lastPath = wxFileName::GetCwd();
-    wxString lastNetlistRead = m_Parent->GetLastNetListRead();
+    wxString lastNetlistRead = m_parent->GetLastNetListRead();
 
     if( !lastNetlistRead.IsEmpty() && !wxFileName::FileExists( lastNetlistRead ) )
     {
@@ -105,7 +128,7 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
     wxFileName fn = m_NetlistFilenameCtrl->GetValue();
     fn.SetExt( ComponentFileExtension );
 
-    m_Parent->ReadPcbNetlist( m_NetlistFilenameCtrl->GetValue(),
+    m_parent->ReadPcbNetlist( m_NetlistFilenameCtrl->GetValue(),
                               fn.GetFullPath(), m_MessageWindow,
                               m_ChangeExistingFootprintCtrl->GetSelection() == 1 ? true : false,
                               m_DeleteBadTracks->GetSelection() == 1 ? true : false,
@@ -116,7 +139,116 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 {
-    m_Parent->Test_Duplicate_Missing_And_Extra_Footprints( m_NetlistFilenameCtrl->GetValue() );
+    if( m_parent->GetBoard()->m_Modules == NULL )
+    {
+        DisplayInfoMessage( this, _( "No modules" ) );
+        return;
+    }
+
+    // Lists of duplicates, missing references and not in netlist footprints:
+    std::vector <MODULE*> duplicate;
+    wxArrayString missing;
+    std::vector <MODULE*> notInNetlist;
+    wxString netlistFilename = m_NetlistFilenameCtrl->GetValue();
+
+    if( ! m_parent->Test_Duplicate_Missing_And_Extra_Footprints(
+                netlistFilename, duplicate, missing, notInNetlist ) )
+    {
+        wxMessageBox( _("Netlist file not found!") );
+        return;
+    }
+
+    #define ERR_CNT_MAX 100 // Max number of errors to output in dialog
+                            // to avoid a too long message list
+
+    wxString list;          // The messages to display
+
+    m_parent->SetLastNetListRead( netlistFilename );
+
+    int err_cnt = 0;
+
+    // Search for duplicate footprints.
+    if( duplicate.size() == 0 )
+        list << wxT("<p><b>") << _( "No duplicate." ) << wxT("</b></p>");
+    else
+    {
+        list << wxT("<p><b>") << _( "Duplicates:" ) << wxT("</b></p>");
+
+        for( unsigned ii = 0; ii < duplicate.size(); ii++ )
+        {
+            MODULE* module = duplicate[ii];
+
+            if( module->m_Reference->m_Text.IsEmpty() )
+                list << wxT("<br>") << wxT("[noref)");
+            else
+                list << wxT("<br>") << module->m_Reference->m_Text;
+
+            list << wxT("  (<i>") << module->m_Value->m_Text << wxT("</i>)");
+            list << wxT(" @ ");
+            list << CoordinateToString( module->GetPosition().x ),
+            list << wxT(", ") << CoordinateToString( module->GetPosition().y ),
+            err_cnt++;
+
+            if( ERR_CNT_MAX < err_cnt )
+                break;
+        }
+    }
+
+    // Search for missing modules on board.
+    if( missing.size() == 0 )
+        list << wxT("<p><b>") <<  _( "No missing modules." ) << wxT("</b></p>");
+    else
+    {
+        list << wxT("<p><b>") << _( "Missing:" ) << wxT("</b></p>");
+
+        for( unsigned ii = 0; ii < missing.size(); ii += 2 )
+        {
+            list << wxT("<br>") << missing[ii];
+            list << wxT("  (<i>") << missing[ii+1] << wxT("</i>)");
+            err_cnt++;
+
+            if( ERR_CNT_MAX < err_cnt )
+                break;
+        }
+    }
+
+
+    // Search for modules found on board but not in net list.
+    if( notInNetlist.size() == 0 )
+        list << wxT("<p><b>") << _( "No extra modules." ) << wxT("</b></p>");
+    else
+    {
+        list << wxT("<p><b>") << _( "Not in Netlist:" ) << wxT("</b></p>");
+
+        for( unsigned ii = 0; ii < notInNetlist.size(); ii++ )
+        {
+            MODULE* module = notInNetlist[ii];
+
+            if( module->m_Reference->m_Text.IsEmpty() )
+                list << wxT("<br>") << wxT("[noref)");
+            else
+                list << wxT("<br>") << module->m_Reference->m_Text ;
+            list << wxT(" (<i>") << module->m_Value->m_Text << wxT("</i>)");
+            list << wxT(" @ ");
+            list << CoordinateToString( module->GetPosition().x ),
+            list << wxT(", ") << CoordinateToString( module->GetPosition().y ),
+            err_cnt++;
+
+            if( ERR_CNT_MAX < err_cnt )
+                break;
+        }
+    }
+
+    if( ERR_CNT_MAX < err_cnt )
+    {
+        list << wxT("<p><b>")
+             << _( "Too many errors: some are skipped" )
+             << wxT("</b></p>");
+    }
+
+    HTML_MESSAGE_BOX dlg( this, _( "Check Modules" ) );
+    dlg.AddHTML_Text(list);
+    dlg.ShowModal();
 }
 
 
@@ -126,7 +258,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
 {
-    m_Parent->Compile_Ratsnest( m_DC, true );
+    m_parent->Compile_Ratsnest( m_dc, true );
 }
 
 
