@@ -1,5 +1,5 @@
 /**
- * @file gerbview/select_layers_to_pcb.cpp
+ * @file select_layers_to_pcb.cpp
  * @brief Dialog to choose equivalence between gerber layers and pcb layers
  */
 
@@ -43,19 +43,22 @@ enum swap_layer_id {
     ID_TEXT_0 = ID_BUTTON_0 + GERBVIEW_LAYER_COUNT
 };
 
+
 /*
  * This dialog shows the gerber files loaded, and allows user to choose:
  *   what gerber file and what board layer are used
  *   the number of copper layers
  */
 
+int LAYERS_MAP_DIALOG::m_exportBoardCopperLayersCount = 2;
+
+
 BEGIN_EVENT_TABLE( LAYERS_MAP_DIALOG, LAYERS_MAP_DIALOG_BASE )
-EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + GERBVIEW_LAYER_COUNT-1,
-                   wxEVT_COMMAND_BUTTON_CLICKED,
-                   LAYERS_MAP_DIALOG::OnSelectLayer )
+    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + GERBVIEW_LAYER_COUNT-1,
+                       wxEVT_COMMAND_BUTTON_CLICKED,
+                       LAYERS_MAP_DIALOG::OnSelectLayer )
 END_EVENT_TABLE()
 
-int LAYERS_MAP_DIALOG::m_exportBoardCopperLayersCount = 2;
 
 LAYERS_MAP_DIALOG::LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent ) :
     LAYERS_MAP_DIALOG_BASE( parent )

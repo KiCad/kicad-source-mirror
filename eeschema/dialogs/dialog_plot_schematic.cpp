@@ -1,4 +1,4 @@
-/** @file dialog_plot_schematic_PDF.cpp
+/** @file dialog_plot_schematic.cpp
  */
 
 /*

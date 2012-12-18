@@ -64,7 +64,6 @@ protected:
 public:
     /**
      * @param aParent The window creating the dialog
-     * @param aDialogParent
      */
     TEMPLATE_SELECTION_PANEL( wxWindow* aParent );
     ~TEMPLATE_SELECTION_PANEL();

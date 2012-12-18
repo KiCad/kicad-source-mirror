@@ -1,5 +1,5 @@
 /**
- * @file dialog_netlist.h
+ * @file eeschema/dialogs/dialog_netlist.h
  */
 
 /*
@@ -59,7 +59,7 @@ enum panel_netlist_index {
                          * others use PANELCUSTOMBASE+1, PANELCUSTOMBASE+2.. */
 };
 
-// Values returned when the netlist dialog is demiss
+// Values returned when the netlist dialog is dismissed
 #define NET_PLUGIN_CHANGE 1
 // other values in use are wxID_OK and wxID_CANCEL
 
@@ -172,8 +172,8 @@ private:
      * returns the filename extension and the wildcard string for this curr
      * or a void name if there is no default name
      * @param aNetTypeId = the netlist type ( NET_TYPE_PCBNEW ... )
-     * @param aExt = a reference to a wxString to return the defaut  file ext.
-     * @param aWildCard =  reference to a wxString to return the defaut wildcard.
+     * @param aExt = a reference to a wxString to return the default  file ext.
+     * @param aWildCard =  reference to a wxString to return the default wildcard.
      * @return true for known netlist type, false for custom formats
      */
     bool ReturnFilenamePrms( NETLIST_TYPE_ID aNetTypeId,

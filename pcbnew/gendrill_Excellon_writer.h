@@ -248,7 +248,7 @@ private:
      * these other values share the same mark shape
      * @param aPlotter = a PLOTTER instance (HPGL, POSTSCRIPT ... plotter).
      */
-    bool PlotDrillMarks( PLOTTER* plotter );
+    bool PlotDrillMarks( PLOTTER* aPlotter );
 };
 
 
