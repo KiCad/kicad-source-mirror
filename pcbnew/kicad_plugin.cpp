@@ -644,46 +644,46 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
     Format( (TEXTE_PCB*) &aDimension->m_Text, aNestLevel+1 );
 
     m_out->Print( aNestLevel+1, "(feature1 (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_featureLineDOx ).c_str(),
-                  FMT_IU( aDimension->m_featureLineDOy ).c_str(),
-                  FMT_IU( aDimension->m_featureLineDFx ).c_str(),
-                  FMT_IU( aDimension->m_featureLineDFy ).c_str() );
+                  FMT_IU( aDimension->m_featureLineDO.x ).c_str(),
+                  FMT_IU( aDimension->m_featureLineDO.y ).c_str(),
+                  FMT_IU( aDimension->m_featureLineDF.x ).c_str(),
+                  FMT_IU( aDimension->m_featureLineDF.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(feature2 (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_featureLineGOx ).c_str(),
-                  FMT_IU( aDimension->m_featureLineGOy ).c_str(),
-                  FMT_IU( aDimension->m_featureLineGFx ).c_str(),
-                  FMT_IU( aDimension->m_featureLineGFy ).c_str() );
+                  FMT_IU( aDimension->m_featureLineGO.x ).c_str(),
+                  FMT_IU( aDimension->m_featureLineGO.y ).c_str(),
+                  FMT_IU( aDimension->m_featureLineGF.x ).c_str(),
+                  FMT_IU( aDimension->m_featureLineGF.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(crossbar (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_crossBarOx ).c_str(),
-                  FMT_IU( aDimension->m_crossBarOy ).c_str(),
-                  FMT_IU( aDimension->m_crossBarFx ).c_str(),
-                  FMT_IU( aDimension->m_crossBarFy ).c_str() );
+                  FMT_IU( aDimension->m_crossBarO.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarO.y ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.x ).c_str(),
+                  FMT_IU( aDimension->m_crossBarF.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow1a (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowD1Ox ).c_str(),
-                  FMT_IU( aDimension->m_arrowD1Oy ).c_str(),
-                  FMT_IU( aDimension->m_arrowD1Fx ).c_str(),
-                  FMT_IU( aDimension->m_arrowD1Fy ).c_str() );
+                  FMT_IU( aDimension->m_arrowD1O.x ).c_str(),
+                  FMT_IU( aDimension->m_arrowD1O.y ).c_str(),
+                  FMT_IU( aDimension->m_arrowD1F.x ).c_str(),
+                  FMT_IU( aDimension->m_arrowD1F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow1b (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowD2Ox ).c_str(),
-                  FMT_IU( aDimension->m_arrowD2Oy ).c_str(),
-                  FMT_IU( aDimension->m_arrowD2Fx ).c_str(),
-                  FMT_IU( aDimension->m_arrowD2Fy ).c_str() );
+                  FMT_IU( aDimension->m_arrowD2O.x ).c_str(),
+                  FMT_IU( aDimension->m_arrowD2O.y ).c_str(),
+                  FMT_IU( aDimension->m_arrowD2F.x ).c_str(),
+                  FMT_IU( aDimension->m_arrowD2F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow2a (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowG1Ox ).c_str(),
-                  FMT_IU( aDimension->m_arrowG1Oy ).c_str(),
-                  FMT_IU( aDimension->m_arrowG1Fx ).c_str(),
-                  FMT_IU( aDimension->m_arrowG1Fy ).c_str() );
+                  FMT_IU( aDimension->m_arrowG1O.x ).c_str(),
+                  FMT_IU( aDimension->m_arrowG1O.y ).c_str(),
+                  FMT_IU( aDimension->m_arrowG1F.x ).c_str(),
+                  FMT_IU( aDimension->m_arrowG1F.y ).c_str() );
 
     m_out->Print( aNestLevel+1, "(arrow2b (pts (xy %s %s) (xy %s %s)))\n",
-                  FMT_IU( aDimension->m_arrowG2Ox ).c_str(),
-                  FMT_IU( aDimension->m_arrowG2Oy ).c_str(),
-                  FMT_IU( aDimension->m_arrowG2Fx ).c_str(),
-                  FMT_IU( aDimension->m_arrowG2Fy ).c_str() );
+                  FMT_IU( aDimension->m_arrowG2O.x ).c_str(),
+                  FMT_IU( aDimension->m_arrowG2O.y ).c_str(),
+                  FMT_IU( aDimension->m_arrowG2F.x ).c_str(),
+                  FMT_IU( aDimension->m_arrowG2F.y ).c_str() );
 
     m_out->Print( aNestLevel, ")\n" );
 }

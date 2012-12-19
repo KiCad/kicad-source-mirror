@@ -50,7 +50,7 @@ DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
     m_Text( this )
 {
     m_Layer = DRAW_LAYER;
-    m_Width = 50;
+    m_Width = Millimeter2iu( 0.2 );
     m_Value = 0;
     m_Shape = 0;
     m_Unit  = INCHES;
@@ -64,8 +64,13 @@ DIMENSION::~DIMENSION()
 
 void DIMENSION::SetPosition( const wxPoint& aPos )
 {
-    m_Pos = aPos;
     m_Text.SetPos( aPos );
+}
+
+
+const wxPoint& DIMENSION::GetPosition() const
+{
+    return m_Text.GetPosition();
 }
 
 
@@ -84,91 +89,59 @@ const wxString DIMENSION::GetText() const
 void DIMENSION::SetLayer( int aLayer )
 {
     m_Layer = aLayer;
-    m_Text.SetLayer( aLayer);
+    m_Text.SetLayer( aLayer );
 }
 
 
 void DIMENSION::Copy( DIMENSION* source )
 {
-    m_Value     = source->m_Value;
+    m_Value = source->m_Value;
     SetLayer( source->GetLayer() );
-    m_Width     = source->m_Width;
-    m_Pos       = source->m_Pos;
-    m_Shape     = source->m_Shape;
-    m_Unit      = source->m_Unit;
+    m_Width = source->m_Width;
+    m_Shape = source->m_Shape;
+    m_Unit  = source->m_Unit;
     SetTimeStamp( GetNewTimeStamp() );
     m_Text.Copy( &source->m_Text );
 
-    m_crossBarOx    = source->m_crossBarOx;
-    m_crossBarOy    = source->m_crossBarOy;
-    m_crossBarFx    = source->m_crossBarFx;
-    m_crossBarFy    = source->m_crossBarFy;
-    m_featureLineGOx   = source->m_featureLineGOx;
-    m_featureLineGOy   = source->m_featureLineGOy;
-    m_featureLineGFx   = source->m_featureLineGFx;
-    m_featureLineGFy   = source->m_featureLineGFy;
-    m_featureLineDOx   = source->m_featureLineDOx;
-    m_featureLineDOy   = source->m_featureLineDOy;
-    m_featureLineDFx   = source->m_featureLineDFx;
-    m_featureLineDFy   = source->m_featureLineDFy;
-    m_arrowD1Ox = source->m_arrowD1Ox;
-    m_arrowD1Oy = source->m_arrowD1Oy;
-    m_arrowD1Fx = source->m_arrowD1Fx;
-    m_arrowD1Fy = source->m_arrowD1Fy;
-    m_arrowD2Ox = source->m_arrowD2Ox;
-    m_arrowD2Oy = source->m_arrowD2Oy;
-    m_arrowD2Fx = source->m_arrowD2Fx;
-    m_arrowD2Fy = source->m_arrowD2Fy;
-    m_arrowG1Ox = source->m_arrowG1Ox;
-    m_arrowG1Oy = source->m_arrowG1Oy;
-    m_arrowG1Fx = source->m_arrowG1Fx;
-    m_arrowG1Fy = source->m_arrowG1Fy;
-    m_arrowG2Ox = source->m_arrowG2Ox;
-    m_arrowG2Oy = source->m_arrowG2Oy;
-    m_arrowG2Fx = source->m_arrowG2Fx;
-    m_arrowG2Fy = source->m_arrowG2Fy;
+    m_crossBarO     = source->m_crossBarO;
+    m_crossBarF     = source->m_crossBarF;
+    m_featureLineGO = source->m_featureLineGO;
+    m_featureLineGF = source->m_featureLineGF;
+    m_featureLineDO = source->m_featureLineDO;
+    m_featureLineDF = source->m_featureLineDF;
+    m_arrowD1O  = source->m_arrowD1O;
+    m_arrowD1F  = source->m_arrowD1F;
+    m_arrowD2O  = source->m_arrowD2O;
+    m_arrowD2F  = source->m_arrowD2F;
+    m_arrowG1O  = source->m_arrowG1O;
+    m_arrowG1F  = source->m_arrowG1F;
+    m_arrowG2O  = source->m_arrowG2O;
+    m_arrowG2F  = source->m_arrowG2F;
 }
 
 
 void DIMENSION::Move( const wxPoint& offset )
 {
-    m_Pos += offset;
-    m_Text.m_Pos += offset;
-    m_crossBarOx    += offset.x;
-    m_crossBarOy    += offset.y;
-    m_crossBarFx    += offset.x;
-    m_crossBarFy    += offset.y;
-    m_featureLineGOx   += offset.x;
-    m_featureLineGOy   += offset.y;
-    m_featureLineGFx   += offset.x;
-    m_featureLineGFy   += offset.y;
-    m_featureLineDOx   += offset.x;
-    m_featureLineDOy   += offset.y;
-    m_featureLineDFx   += offset.x;
-    m_featureLineDFy   += offset.y;
-    m_arrowG1Ox += offset.x;
-    m_arrowG1Oy += offset.y;
-    m_arrowG1Fx += offset.x;
-    m_arrowG1Fy += offset.y;
-    m_arrowG2Ox += offset.x;
-    m_arrowG2Oy += offset.y;
-    m_arrowG2Fx += offset.x;
-    m_arrowG2Fy += offset.y;
-    m_arrowD1Ox += offset.x;
-    m_arrowD1Oy += offset.y;
-    m_arrowD1Fx += offset.x;
-    m_arrowD1Fy += offset.y;
-    m_arrowD2Ox += offset.x;
-    m_arrowD2Oy += offset.y;
-    m_arrowD2Fx += offset.x;
-    m_arrowD2Fy += offset.y;
+    m_Text.m_Pos    += offset;
+    m_crossBarO     += offset;
+    m_crossBarF     += offset;
+    m_featureLineGO += offset;
+    m_featureLineGF += offset;
+    m_featureLineDO += offset;
+    m_featureLineDF += offset;
+    m_arrowG1O  += offset;
+    m_arrowG1F  += offset;
+    m_arrowG2O  += offset;
+    m_arrowG2F  += offset;
+    m_arrowD1O  += offset;
+    m_arrowD1F  += offset;
+    m_arrowD2O  += offset;
+    m_arrowD2F  += offset;
 }
 
 
 void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_Pos, aRotCentre, aAngle );
-
     RotatePoint( &m_Text.m_Pos, aRotCentre, aAngle );
 
     double newAngle = m_Text.GetOrientation() + aAngle;
@@ -181,20 +154,20 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 
     m_Text.SetOrientation( newAngle );
 
-    RotatePoint( &m_crossBarOx, &m_crossBarOy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_crossBarFx, &m_crossBarFy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_featureLineGOx, &m_featureLineGOy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_featureLineGFx, &m_featureLineGFy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_featureLineDOx, &m_featureLineDOy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_featureLineDFx, &m_featureLineDFy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_arrowG1Ox, &m_arrowG1Oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_arrowG1Fx, &m_arrowG1Fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_arrowG2Ox, &m_arrowG2Oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_arrowG2Fx, &m_arrowG2Fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_arrowD1Ox, &m_arrowD1Oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_arrowD1Fx, &m_arrowD1Fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_arrowD2Ox, &m_arrowD2Oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &m_arrowD2Fx, &m_arrowD2Fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_crossBarO, aRotCentre, aAngle );
+    RotatePoint( &m_crossBarF, aRotCentre, aAngle );
+    RotatePoint( &m_featureLineGO, aRotCentre, aAngle );
+    RotatePoint( &m_featureLineGF, aRotCentre, aAngle );
+    RotatePoint( &m_featureLineDO, aRotCentre, aAngle );
+    RotatePoint( &m_featureLineDF, aRotCentre, aAngle );
+    RotatePoint( &m_arrowG1O, aRotCentre, aAngle );
+    RotatePoint( &m_arrowG1F, aRotCentre, aAngle );
+    RotatePoint( &m_arrowG2O, aRotCentre, aAngle );
+    RotatePoint( &m_arrowG2F, aRotCentre, aAngle );
+    RotatePoint( &m_arrowD1O, aRotCentre, aAngle );
+    RotatePoint( &m_arrowD1F, aRotCentre, aAngle );
+    RotatePoint( &m_arrowD2O, aRotCentre, aAngle );
+    RotatePoint( &m_arrowD2F, aRotCentre, aAngle );
 }
 
 
@@ -207,12 +180,12 @@ void DIMENSION::Flip( const wxPoint& aCentre )
 
 void DIMENSION::Mirror( const wxPoint& axis_pos )
 {
-#define INVERT( pos )       (pos) = axis_pos.y - ( (pos) - axis_pos.y )
-    INVERT( m_Pos.y );
+#define INVERT( pos ) (pos) = axis_pos.y - ( (pos) - axis_pos.y )
     INVERT( m_Text.m_Pos.y );
 
     // invert angle
     double newAngle = m_Text.GetOrientation();
+
     if( newAngle >= 3600 )
         newAngle -= 3600;
 
@@ -221,20 +194,20 @@ void DIMENSION::Mirror( const wxPoint& axis_pos )
 
     m_Text.SetOrientation( newAngle );
 
-    INVERT( m_crossBarOy );
-    INVERT( m_crossBarFy );
-    INVERT( m_featureLineGOy );
-    INVERT( m_featureLineGFy );
-    INVERT( m_featureLineDOy );
-    INVERT( m_featureLineDFy );
-    INVERT( m_arrowG1Oy );
-    INVERT( m_arrowG1Fy );
-    INVERT( m_arrowG2Oy );
-    INVERT( m_arrowG2Fy );
-    INVERT( m_arrowD1Oy );
-    INVERT( m_arrowD1Fy );
-    INVERT( m_arrowD2Oy );
-    INVERT( m_arrowD2Fy );
+    INVERT( m_crossBarO.y );
+    INVERT( m_crossBarF.y );
+    INVERT( m_featureLineGO.y );
+    INVERT( m_featureLineGF.y );
+    INVERT( m_featureLineDO.y );
+    INVERT( m_featureLineDF.y );
+    INVERT( m_arrowG1O.y );
+    INVERT( m_arrowG1F.y );
+    INVERT( m_arrowG2O.y );
+    INVERT( m_arrowG2F.y );
+    INVERT( m_arrowD1O.y );
+    INVERT( m_arrowD1F.y );
+    INVERT( m_arrowD2O.y );
+    INVERT( m_arrowD2F.y );
 }
 
 
@@ -242,10 +215,10 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 {
     const int   arrowz = DMils2iu( 500 );           // size of arrows
     int         ii;
-    int         measure, deltax, deltay;            //  value of the measure on X and Y axes
-    int         arrow_up_X = 0, arrow_up_Y = 0;     //  coordinates of arrow line /
-    int         arrow_dw_X = 0, arrow_dw_Y = 0;     //  coordinates of arrow line '\'
-    int         hx, hy;                             //  dimension line interval
+    int         measure, deltax, deltay;            // value of the measure on X and Y axes
+    int         arrow_up_X  = 0, arrow_up_Y = 0;    // coordinates of arrow line /
+    int         arrow_dw_X  = 0, arrow_dw_Y = 0;    // coordinates of arrow line '\'
+    int         hx, hy;                             // dimension line interval
     double      angle, angle_f;
     wxString    msg;
 
@@ -256,8 +229,8 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     ii = m_Text.m_Size.y +
          m_Text.GetThickness() + (m_Width * 3);
 
-    deltax = m_featureLineDOx - m_featureLineGOx;
-    deltay = m_featureLineDOy - m_featureLineGOy;
+    deltax  = m_featureLineDO.x - m_featureLineGO.x;
+    deltay  = m_featureLineDO.y - m_featureLineGO.y;
 
     // Calculate dimension value
     measure = KiROUND( hypot( (double) deltax, (double) deltay ) );
@@ -273,64 +246,65 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     // Taking into account the slope of the side lines.
     if( measure )
     {
-        hx = (abs) ( (int) ( ( (double) deltay * hx ) / measure ) );
-        hy = (abs) ( (int) ( ( (double) deltax * hy ) / measure ) );
+        hx  = (abs) ( (int) ( ( (double) deltay * hx ) / measure ) );
+        hy  = (abs) ( (int) ( ( (double) deltax * hy ) / measure ) );
 
-        if( m_featureLineGOx > m_crossBarOx )
+        if( m_featureLineGO.x > m_crossBarO.x )
             hx = -hx;
 
-        if( m_featureLineGOx == m_crossBarOx )
+        if( m_featureLineGO.x == m_crossBarO.x )
             hx = 0;
 
-        if( m_featureLineGOy > m_crossBarOy )
+        if( m_featureLineGO.y > m_crossBarO.y )
             hy = -hy;
 
-        if( m_featureLineGOy == m_crossBarOy )
+        if( m_featureLineGO.y == m_crossBarO.y )
             hy = 0;
 
         angle_f     = angle + (M_PI * 27.5 / 180);
-        arrow_up_X = (int) ( arrowz * cos( angle_f ) );
-        arrow_up_Y = (int) ( arrowz * sin( angle_f ) );
+        arrow_up_X  = (int) ( arrowz * cos( angle_f ) );
+        arrow_up_Y  = (int) ( arrowz * sin( angle_f ) );
         angle_f     = angle - (M_PI * 27.5 / 180);
-        arrow_dw_X = (int) ( arrowz * cos( angle_f ) );
-        arrow_dw_Y = (int) ( arrowz * sin( angle_f ) );
+        arrow_dw_X  = (int) ( arrowz * cos( angle_f ) );
+        arrow_dw_Y  = (int) ( arrowz * sin( angle_f ) );
     }
 
-    m_arrowG1Ox = m_crossBarOx;
-    m_arrowG1Oy = m_crossBarOy;
-    m_arrowG1Fx = m_crossBarOx + arrow_up_X;
-    m_arrowG1Fy = m_crossBarOy + arrow_up_Y;
+    m_arrowG1O.x    = m_crossBarO.x;
+    m_arrowG1O.y    = m_crossBarO.y;
+    m_arrowG1F.x    = m_crossBarO.x + arrow_up_X;
+    m_arrowG1F.y    = m_crossBarO.y + arrow_up_Y;
 
-    m_arrowG2Ox = m_crossBarOx;
-    m_arrowG2Oy = m_crossBarOy;
-    m_arrowG2Fx = m_crossBarOx + arrow_dw_X;
-    m_arrowG2Fy = m_crossBarOy + arrow_dw_Y;
+    m_arrowG2O.x    = m_crossBarO.x;
+    m_arrowG2O.y    = m_crossBarO.y;
+    m_arrowG2F.x    = m_crossBarO.x + arrow_dw_X;
+    m_arrowG2F.y    = m_crossBarO.y + arrow_dw_Y;
 
     /* The right arrow is symmetrical to the left.
      *  / = -\  and  \ = -/
      */
-    m_arrowD1Ox = m_crossBarFx;
-    m_arrowD1Oy = m_crossBarFy;
-    m_arrowD1Fx = m_crossBarFx - arrow_dw_X;
-    m_arrowD1Fy = m_crossBarFy - arrow_dw_Y;
+    m_arrowD1O.x    = m_crossBarF.x;
+    m_arrowD1O.y    = m_crossBarF.y;
+    m_arrowD1F.x    = m_crossBarF.x - arrow_dw_X;
+    m_arrowD1F.y    = m_crossBarF.y - arrow_dw_Y;
 
-    m_arrowD2Ox = m_crossBarFx;
-    m_arrowD2Oy = m_crossBarFy;
-    m_arrowD2Fx = m_crossBarFx - arrow_up_X;
-    m_arrowD2Fy = m_crossBarFy - arrow_up_Y;
+    m_arrowD2O.x    = m_crossBarF.x;
+    m_arrowD2O.y    = m_crossBarF.y;
+    m_arrowD2F.x    = m_crossBarF.x - arrow_up_X;
+    m_arrowD2F.y    = m_crossBarF.y - arrow_up_Y;
 
 
-    m_featureLineGFx = m_crossBarOx + hx;
-    m_featureLineGFy = m_crossBarOy + hy;
+    m_featureLineGF.x   = m_crossBarO.x + hx;
+    m_featureLineGF.y   = m_crossBarO.y + hy;
 
-    m_featureLineDFx = m_crossBarFx + hx;
-    m_featureLineDFy = m_crossBarFy + hy;
+    m_featureLineDF.x   = m_crossBarF.x + hx;
+    m_featureLineDF.y   = m_crossBarF.y + hy;
 
     // Calculate the better text position and orientation:
-    m_Pos.x = m_Text.m_Pos.x = (m_crossBarFx + m_featureLineGFx) / 2;
-    m_Pos.y = m_Text.m_Pos.y = (m_crossBarFy + m_featureLineGFy) / 2;
+    m_Text.m_Pos.x  = (m_crossBarF.x + m_featureLineGF.x) / 2;
+    m_Text.m_Pos.y  = (m_crossBarF.y + m_featureLineGF.y) / 2;
 
     double newAngle = -(angle * 1800 / M_PI);
+
     if( newAngle < 0 )
         newAngle += 3600;
 
@@ -345,7 +319,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     if( !aDoNotChangeText )
     {
         m_Value = measure;
-        msg = ::CoordinateToString( m_Value );
+        msg     = ::CoordinateToString( m_Value );
         SetText( msg );
     }
 }
@@ -354,20 +328,16 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                       const wxPoint& offset )
 {
-    int ox, oy, typeaff, width;
+    int         typeaff, width;
     EDA_COLOR_T gcolor;
-
-    ox = -offset.x;
-    oy = -offset.y;
-
-    m_Text.Draw( panel, DC, mode_color, offset );
-
-    BOARD * brd =  GetBoard( );
+    BOARD*      brd = GetBoard();
 
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    gcolor = brd->GetLayerColor(m_Layer);
+    m_Text.Draw( panel, DC, mode_color, offset );
+
+    gcolor = brd->GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, mode_color );
     typeaff = DisplayOpt.DisplayDrawItems;
@@ -382,58 +352,37 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
         width = 0;
 
     case FILLED:
-        GRLine( panel->GetClipBox(), DC,
-                m_crossBarOx - ox, m_crossBarOy - oy,
-                m_crossBarFx - ox, m_crossBarFy - oy, width, gcolor );
-        GRLine( panel->GetClipBox(), DC,
-                m_featureLineGOx - ox, m_featureLineGOy - oy,
-                m_featureLineGFx - ox, m_featureLineGFy - oy, width, gcolor );
-        GRLine( panel->GetClipBox(), DC,
-                m_featureLineDOx - ox, m_featureLineDOy - oy,
-                m_featureLineDFx - ox, m_featureLineDFy - oy, width, gcolor );
-        GRLine( panel->GetClipBox(), DC,
-                m_arrowD1Ox - ox, m_arrowD1Oy - oy,
-                m_arrowD1Fx - ox, m_arrowD1Fy - oy, width, gcolor );
-        GRLine( panel->GetClipBox(), DC,
-                m_arrowD2Ox - ox, m_arrowD2Oy - oy,
-                m_arrowD2Fx - ox, m_arrowD2Fy - oy, width, gcolor );
-        GRLine( panel->GetClipBox(), DC,
-                m_arrowG1Ox - ox, m_arrowG1Oy - oy,
-                m_arrowG1Fx - ox, m_arrowG1Fy - oy, width, gcolor );
-        GRLine( panel->GetClipBox(), DC,
-                m_arrowG2Ox - ox, m_arrowG2Oy - oy,
-                m_arrowG2Fx - ox, m_arrowG2Fy - oy, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, m_crossBarO + offset,
+                m_crossBarF + offset, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, m_featureLineGO + offset,
+                m_featureLineGF + offset, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, m_featureLineDO + offset,
+                m_featureLineDF + offset, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, m_arrowD1O + offset,
+                m_arrowD1F + offset, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, m_arrowD2O + offset,
+                m_arrowD2F + offset, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, m_arrowG1O + offset,
+                m_arrowG1F + offset, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, m_arrowG2O + offset,
+                m_arrowG2F + offset, width, gcolor );
         break;
 
     case SKETCH:
-        GRCSegm( panel->GetClipBox(), DC,
-                 m_crossBarOx - ox, m_crossBarOy - oy,
-                 m_crossBarFx - ox, m_crossBarFy - oy,
-                 width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC,
-                 m_featureLineGOx - ox, m_featureLineGOy - oy,
-                 m_featureLineGFx - ox, m_featureLineGFy - oy,
-                 width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC,
-                 m_featureLineDOx - ox, m_featureLineDOy - oy,
-                 m_featureLineDFx - ox, m_featureLineDFy - oy,
-                 width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC,
-                 m_arrowD1Ox - ox, m_arrowD1Oy - oy,
-                 m_arrowD1Fx - ox, m_arrowD1Fy - oy,
-                 width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC,
-                 m_arrowD2Ox - ox, m_arrowD2Oy - oy,
-                 m_arrowD2Fx - ox, m_arrowD2Fy - oy,
-                 width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC,
-                 m_arrowG1Ox - ox, m_arrowG1Oy - oy,
-                 m_arrowG1Fx - ox, m_arrowG1Fy - oy,
-                 width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC,
-                 m_arrowG2Ox - ox, m_arrowG2Oy - oy,
-                 m_arrowG2Fx - ox, m_arrowG2Fy - oy,
-                 width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, m_crossBarO + offset,
+                 m_crossBarF + offset, width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, m_featureLineGO + offset,
+                 m_featureLineGF + offset, width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, m_featureLineDO + offset,
+                 m_featureLineDF + offset, width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, m_arrowD1O + offset,
+                 m_arrowD1F + offset, width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, m_arrowD2O + offset,
+                 m_arrowD2F + offset, width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, m_arrowG1O + offset,
+                 m_arrowG1F + offset, width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, m_arrowG2O + offset,
+                 m_arrowG2F + offset, width, gcolor );
         break;
     }
 }
@@ -456,12 +405,12 @@ bool DIMENSION::HitTest( const wxPoint& aPosition )
         return true;
 
     // Locate SEGMENTS?
-    ux0 = m_crossBarOx;
-    uy0 = m_crossBarOy;
+    ux0 = m_crossBarO.x;
+    uy0 = m_crossBarO.y;
 
     // Recalculate coordinates with ux0, uy0 = origin.
-    dx = m_crossBarFx - ux0;
-    dy = m_crossBarFy - uy0;
+    dx  = m_crossBarF.x - ux0;
+    dy  = m_crossBarF.y - uy0;
 
     spot_cX = aPosition.x - ux0;
     spot_cY = aPosition.y - uy0;
@@ -469,23 +418,11 @@ bool DIMENSION::HitTest( const wxPoint& aPosition )
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = m_featureLineGOx;
-    uy0 = m_featureLineGOy;
+    ux0 = m_featureLineGO.x;
+    uy0 = m_featureLineGO.y;
 
-    dx = m_featureLineGFx - ux0;
-    dy = m_featureLineGFy - uy0;
-
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
-        return true;
-
-    ux0 = m_featureLineDOx;
-    uy0 = m_featureLineDOy;
-
-    dx = m_featureLineDFx - ux0;
-    dy = m_featureLineDFy - uy0;
+    dx  = m_featureLineGF.x - ux0;
+    dy  = m_featureLineGF.y - uy0;
 
     spot_cX = aPosition.x - ux0;
     spot_cY = aPosition.y - uy0;
@@ -493,23 +430,11 @@ bool DIMENSION::HitTest( const wxPoint& aPosition )
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = m_arrowD1Ox;
-    uy0 = m_arrowD1Oy;
+    ux0 = m_featureLineDO.x;
+    uy0 = m_featureLineDO.y;
 
-    dx = m_arrowD1Fx - ux0;
-    dy = m_arrowD1Fy - uy0;
-
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
-        return true;
-
-    ux0 = m_arrowD2Ox;
-    uy0 = m_arrowD2Oy;
-
-    dx = m_arrowD2Fx - ux0;
-    dy = m_arrowD2Fy - uy0;
+    dx  = m_featureLineDF.x - ux0;
+    dy  = m_featureLineDF.y - uy0;
 
     spot_cX = aPosition.x - ux0;
     spot_cY = aPosition.y - uy0;
@@ -517,11 +442,11 @@ bool DIMENSION::HitTest( const wxPoint& aPosition )
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = m_arrowG1Ox;
-    uy0 = m_arrowG1Oy;
+    ux0 = m_arrowD1O.x;
+    uy0 = m_arrowD1O.y;
 
-    dx = m_arrowG1Fx - ux0;
-    dy = m_arrowG1Fy - uy0;
+    dx  = m_arrowD1F.x - ux0;
+    dy  = m_arrowD1F.y - uy0;
 
     spot_cX = aPosition.x - ux0;
     spot_cY = aPosition.y - uy0;
@@ -529,11 +454,35 @@ bool DIMENSION::HitTest( const wxPoint& aPosition )
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = m_arrowG2Ox;
-    uy0 = m_arrowG2Oy;
+    ux0 = m_arrowD2O.x;
+    uy0 = m_arrowD2O.y;
 
-    dx = m_arrowG2Fx - ux0;
-    dy = m_arrowG2Fy - uy0;
+    dx  = m_arrowD2F.x - ux0;
+    dy  = m_arrowD2F.y - uy0;
+
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
+
+    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+        return true;
+
+    ux0 = m_arrowG1O.x;
+    uy0 = m_arrowG1O.y;
+
+    dx  = m_arrowG1F.x - ux0;
+    dy  = m_arrowG1F.y - uy0;
+
+    spot_cX = aPosition.x - ux0;
+    spot_cY = aPosition.y - uy0;
+
+    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+        return true;
+
+    ux0 = m_arrowG2O.x;
+    uy0 = m_arrowG2O.y;
+
+    dx  = m_arrowG2F.x - ux0;
+    dy  = m_arrowG2F.y - uy0;
 
     spot_cX = aPosition.x - ux0;
     spot_cY = aPosition.y - uy0;
@@ -547,7 +496,7 @@ bool DIMENSION::HitTest( const wxPoint& aPosition )
 
 bool DIMENSION::HitTest( const EDA_RECT& aRect ) const
 {
-    if( aRect.Contains( m_Pos ) )
+    if( aRect.Contains( GetPosition() ) )
         return true;
 
     return false;
@@ -556,32 +505,32 @@ bool DIMENSION::HitTest( const EDA_RECT& aRect ) const
 
 EDA_RECT DIMENSION::GetBoundingBox() const
 {
-    EDA_RECT bBox;
-    int xmin, xmax, ymin, ymax;
+    EDA_RECT    bBox;
+    int         xmin, xmax, ymin, ymax;
 
-    bBox = m_Text.GetTextBox( -1 );
-    xmin = bBox.GetX();
-    xmax = bBox.GetRight();
-    ymin = bBox.GetY();
-    ymax = bBox.GetBottom();
+    bBox    = m_Text.GetTextBox( -1 );
+    xmin    = bBox.GetX();
+    xmax    = bBox.GetRight();
+    ymin    = bBox.GetY();
+    ymax    = bBox.GetBottom();
 
-    xmin = std::min( xmin, m_crossBarOx );
-    xmin = std::min( xmin, m_crossBarFx );
-    ymin = std::min( ymin, m_crossBarOy );
-    ymin = std::min( ymin, m_crossBarFy );
-    xmax = std::max( xmax, m_crossBarOx );
-    xmax = std::max( xmax, m_crossBarFx );
-    ymax = std::max( ymax, m_crossBarOy );
-    ymax = std::max( ymax, m_crossBarFy );
+    xmin    = std::min( xmin, m_crossBarO.x );
+    xmin    = std::min( xmin, m_crossBarF.x );
+    ymin    = std::min( ymin, m_crossBarO.y );
+    ymin    = std::min( ymin, m_crossBarF.y );
+    xmax    = std::max( xmax, m_crossBarO.x );
+    xmax    = std::max( xmax, m_crossBarF.x );
+    ymax    = std::max( ymax, m_crossBarO.y );
+    ymax    = std::max( ymax, m_crossBarF.y );
 
-    xmin = std::min( xmin, m_featureLineGOx );
-    xmin = std::min( xmin, m_featureLineGFx );
-    ymin = std::min( ymin, m_featureLineGOy );
-    ymin = std::min( ymin, m_featureLineGFy );
-    xmax = std::max( xmax, m_featureLineGOx );
-    xmax = std::max( xmax, m_featureLineGFx );
-    ymax = std::max( ymax, m_featureLineGOy );
-    ymax = std::max( ymax, m_featureLineGFy );
+    xmin    = std::min( xmin, m_featureLineGO.x );
+    xmin    = std::min( xmin, m_featureLineGF.x );
+    ymin    = std::min( ymin, m_featureLineGO.y );
+    ymin    = std::min( ymin, m_featureLineGF.y );
+    xmax    = std::max( xmax, m_featureLineGO.x );
+    xmax    = std::max( xmax, m_featureLineGF.x );
+    ymax    = std::max( ymax, m_featureLineGO.y );
+    ymax    = std::max( ymax, m_featureLineGF.y );
 
     bBox.SetX( xmin );
     bBox.SetY( ymin );
