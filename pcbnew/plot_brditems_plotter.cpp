@@ -277,32 +277,32 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
 
     PlotTextePcb( &aDim->m_Text );
 
-    draw.SetStart( wxPoint( aDim->m_crossBarOx, aDim->m_crossBarOy ));
-    draw.SetEnd(   wxPoint( aDim->m_crossBarFx, aDim->m_crossBarFy ));
+    draw.SetStart( aDim->m_crossBarO );
+    draw.SetEnd( aDim->m_crossBarF );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( wxPoint( aDim->m_featureLineGOx, aDim->m_featureLineGOy ));
-    draw.SetEnd(   wxPoint( aDim->m_featureLineGFx, aDim->m_featureLineGFy ));
+    draw.SetStart( aDim->m_featureLineGO);
+    draw.SetEnd( aDim->m_featureLineGF );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( wxPoint( aDim->m_featureLineDOx, aDim->m_featureLineDOy ));
-    draw.SetEnd(   wxPoint( aDim->m_featureLineDFx, aDim->m_featureLineDFy ));
+    draw.SetStart( aDim->m_featureLineDO );
+    draw.SetEnd( aDim->m_featureLineDF );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( wxPoint( aDim->m_arrowD1Ox, aDim->m_arrowD1Oy ));
-    draw.SetEnd(   wxPoint( aDim->m_arrowD1Fx, aDim->m_arrowD1Fy ));
+    draw.SetStart( aDim->m_arrowD1O );
+    draw.SetEnd( aDim->m_arrowD1F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( wxPoint( aDim->m_arrowD2Ox, aDim->m_arrowD2Oy ));
-    draw.SetEnd(   wxPoint( aDim->m_arrowD2Fx, aDim->m_arrowD2Fy ));
+    draw.SetStart( aDim->m_arrowD2O );
+    draw.SetEnd( aDim->m_arrowD2F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( wxPoint( aDim->m_arrowG1Ox, aDim->m_arrowG1Oy ));
-    draw.SetEnd(   wxPoint( aDim->m_arrowG1Fx, aDim->m_arrowG1Fy ));
+    draw.SetStart( aDim->m_arrowG1O );
+    draw.SetEnd( aDim->m_arrowG1F );
     PlotDrawSegment( &draw );
 
-    draw.SetStart( wxPoint( aDim->m_arrowG2Ox, aDim->m_arrowG2Oy ));
-    draw.SetEnd(   wxPoint( aDim->m_arrowG2Fx, aDim->m_arrowG2Fy ));
+    draw.SetStart( aDim->m_arrowG2O );
+    draw.SetEnd( aDim->m_arrowG2F );
     PlotDrawSegment( &draw );
 }
 

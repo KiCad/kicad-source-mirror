@@ -244,26 +244,13 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 
         aDimension->SetLayer( getActiveLayer() );
 
-        aDimension->m_crossBarOx = aDimension->m_crossBarFx = pos.x;
-        aDimension->m_crossBarOy = aDimension->m_crossBarFy = pos.y;
-
-        aDimension->m_featureLineDOx = aDimension->m_featureLineDFx = pos.x;
-        aDimension->m_featureLineDOy = aDimension->m_featureLineDFy = pos.y;
-
-        aDimension->m_featureLineGOx = aDimension->m_featureLineGFx = pos.x;
-        aDimension->m_featureLineGOy = aDimension->m_featureLineGFy = pos.y;
-
-        aDimension->m_arrowG1Ox = aDimension->m_arrowG1Fx = pos.x;
-        aDimension->m_arrowG1Oy = aDimension->m_arrowG1Fy = pos.y;
-
-        aDimension->m_arrowG2Ox = aDimension->m_arrowG2Fx = pos.x;
-        aDimension->m_arrowG2Oy = aDimension->m_arrowG2Fy = pos.y;
-
-        aDimension->m_arrowD1Ox = aDimension->m_arrowD1Fx = pos.x;
-        aDimension->m_arrowD1Oy = aDimension->m_arrowD1Fy = pos.y;
-
-        aDimension->m_arrowD2Ox = aDimension->m_arrowD2Fx = pos.x;
-        aDimension->m_arrowD2Oy = aDimension->m_arrowD2Fy = pos.y;
+        aDimension->m_crossBarO = aDimension->m_crossBarF = pos;
+        aDimension->m_featureLineDO = aDimension->m_featureLineDF = pos;
+        aDimension->m_featureLineGO = aDimension->m_featureLineGF = pos;
+        aDimension->m_arrowG1O = aDimension->m_arrowG1F = pos;
+        aDimension->m_arrowG2O = aDimension->m_arrowG2F = pos;
+        aDimension->m_arrowD1O = aDimension->m_arrowD1F = pos;
+        aDimension->m_arrowD2O = aDimension->m_arrowD2F = pos;
 
         aDimension->m_Text.m_Size   = GetBoard()->GetDesignSettings().m_PcbTextSize;
         int width = GetBoard()->GetDesignSettings().m_PcbTextWidth;
@@ -327,31 +314,28 @@ static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     if( status_dimension == 1 )
     {
-        Dimension->m_featureLineDOx = pos.x;
-        Dimension->m_featureLineDOy = pos.y;
-        Dimension->m_crossBarFx  = Dimension->m_featureLineDOx;
-        Dimension->m_crossBarFy  = Dimension->m_featureLineDOy;
+        Dimension->m_featureLineDO = pos;
+        Dimension->m_crossBarF  = Dimension->m_featureLineDO;
         Dimension->AdjustDimensionDetails( );
     }
     else
     {
-        int   deltax, deltay, dx, dy;
+        wxPoint delta;
+        int dx, dy;
         float angle, depl;
-        deltax = Dimension->m_featureLineDOx - Dimension->m_featureLineGOx;
-        deltay = Dimension->m_featureLineDOy - Dimension->m_featureLineGOy;
+        delta = Dimension->m_featureLineDO - Dimension->m_featureLineGO;
 
         /* Calculating the direction of travel perpendicular to the selected axis. */
-        angle = atan2( (double)deltay, (double)deltax ) + (M_PI / 2);
+        angle = atan2( (double)delta.y, (double)delta.x ) + (M_PI / 2);
 
-        deltax = pos.x - Dimension->m_featureLineDOx;
-        deltay = pos.y - Dimension->m_featureLineDOy;
-        depl   = ( deltax * cos( angle ) ) + ( deltay * sin( angle ) );
+        delta = pos - Dimension->m_featureLineDO;
+        depl   = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
         dx = (int) ( depl * cos( angle ) );
         dy = (int) ( depl * sin( angle ) );
-        Dimension->m_crossBarOx = Dimension->m_featureLineGOx + dx;
-        Dimension->m_crossBarOy = Dimension->m_featureLineGOy + dy;
-        Dimension->m_crossBarFx = Dimension->m_featureLineDOx + dx;
-        Dimension->m_crossBarFy = Dimension->m_featureLineDOy + dy;
+        Dimension->m_crossBarO.x = Dimension->m_featureLineGO.x + dx;
+        Dimension->m_crossBarO.y = Dimension->m_featureLineGO.y + dy;
+        Dimension->m_crossBarF.x = Dimension->m_featureLineDO.x + dx;
+        Dimension->m_crossBarF.y = Dimension->m_featureLineDO.y + dy;
 
         Dimension->AdjustDimensionDetails( );
     }

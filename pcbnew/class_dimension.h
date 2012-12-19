@@ -43,21 +43,21 @@ class TEXTE_PCB;
 class DIMENSION : public BOARD_ITEM
 {
 public:
-    int        m_Width;
-    wxPoint    m_Pos;
-    int        m_Shape;         /// Current always 0.
-    int        m_Unit;          /// 0 = inches, 1 = mm
-    int        m_Value;         /// value of PCB dimensions.
+    int         m_Width;
+    int         m_Shape;        // / Currently always 0.
+    int         m_Unit;         // / 0 = inches, 1 = mm
+    int         m_Value;        // / value of PCB dimensions.
 
-    TEXTE_PCB  m_Text;
-    int        m_crossBarOx, m_crossBarOy, m_crossBarFx, m_crossBarFy;
-    int        m_featureLineGOx, m_featureLineGOy, m_featureLineGFx, m_featureLineGFy;
-    int        m_featureLineDOx, m_featureLineDOy, m_featureLineDFx, m_featureLineDFy;
-    int        m_arrowD1Ox, m_arrowD1Oy, m_arrowD1Fx, m_arrowD1Fy;
-    int        m_arrowD2Ox, m_arrowD2Oy, m_arrowD2Fx, m_arrowD2Fy;
-    int        m_arrowG1Ox, m_arrowG1Oy, m_arrowG1Fx, m_arrowG1Fy;
-    int        m_arrowG2Ox, m_arrowG2Oy, m_arrowG2Fx, m_arrowG2Fy;
+    TEXTE_PCB   m_Text;
 
+// private: These member should be private. they are public only due to legacy code
+    wxPoint     m_crossBarO, m_crossBarF;
+    wxPoint     m_featureLineGO, m_featureLineGF;
+    wxPoint     m_featureLineDO, m_featureLineDF;
+    wxPoint     m_arrowD1O, m_arrowD1F;
+    wxPoint     m_arrowD2O, m_arrowD2F;
+    wxPoint     m_arrowG1O, m_arrowG1F;
+    wxPoint     m_arrowG2O, m_arrowG2F;
 public:
     DIMENSION( BOARD_ITEM* aParent );
 
@@ -65,9 +65,9 @@ public:
 
     ~DIMENSION();
 
-    const wxPoint& GetPosition() const      { return m_Pos; }
+    const wxPoint&  GetPosition() const;
 
-    void SetPosition( const wxPoint& aPos );    // override, sets m_Text's position too
+    void            SetPosition( const wxPoint& aPos ); // override, sets m_Text's position too
 
     void SetTextSize( const wxSize& aTextSize )
     {
@@ -77,9 +77,9 @@ public:
     void SetLayer( int aLayer );
 
     void SetShape( int aShape )         { m_Shape = aShape; }
-    int GetShape() const                { return m_Shape; }
+    int GetShape() const { return m_Shape; }
 
-    int GetWidth() const                { return m_Width; }
+    int GetWidth() const { return m_Width; }
     void SetWidth( int aWidth )         { m_Width = aWidth; }
 
     /**
@@ -87,25 +87,25 @@ public:
      * Calculate coordinates of segments used to draw the dimension.
      * @param aDoNotChangeText (bool) if false, the dimension text is initialized
      */
-    void AdjustDimensionDetails( bool aDoNotChangeText = false );
+    void            AdjustDimensionDetails( bool aDoNotChangeText = false );
 
-    void SetText( const wxString& NewText );
-    const wxString GetText() const;
+    void            SetText( const wxString& NewText );
+    const wxString  GetText() const;
 
-    void Copy( DIMENSION* source );
+    void            Copy( DIMENSION* source );
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               GR_DRAWMODE aColorMode, const wxPoint& offset = ZeroOffset );
+    void            Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+                          GR_DRAWMODE aColorMode, const wxPoint& offset = ZeroOffset );
 
     /**
      * Function Move
      * @param offset : moving vector
      */
-    void Move( const wxPoint& offset );
+    void            Move( const wxPoint& offset );
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void            Rotate( const wxPoint& aRotCentre, double aAngle );
 
-    void Flip( const wxPoint& aCentre );
+    void            Flip( const wxPoint& aCentre );
 
     /**
      * Function Mirror
@@ -114,30 +114,30 @@ public:
      * the layer is not changed
      * @param axis_pos : vertical axis position
      */
-    void Mirror( const wxPoint& axis_pos );
+    void            Mirror( const wxPoint& axis_pos );
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void            DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    bool HitTest( const wxPoint& aPosition );
+    bool            HitTest( const wxPoint& aPosition );
 
-    bool HitTest( const EDA_RECT& aRect ) const;
+    bool            HitTest( const EDA_RECT& aRect ) const;
 
     wxString GetClass() const
     {
         return wxT( "DIMENSION" );
     }
 
-    EDA_RECT GetBoundingBox() const;
+    EDA_RECT    GetBoundingBox() const;
 
-    wxString GetSelectMenuText() const;
+    wxString    GetSelectMenuText() const;
 
-    BITMAP_DEF GetMenuImage() const { return  add_dimension_xpm; }
+    BITMAP_DEF GetMenuImage() const { return add_dimension_xpm; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM*   Clone() const;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
 #endif
 };
 
-#endif  // DIMENSION_H_
+#endif    // DIMENSION_H_

@@ -2485,10 +2485,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU crossBarFy = biuParse( data, &data );
             BIU width      = biuParse( data );
 
-            dim->m_crossBarOx = crossBarOx;
-            dim->m_crossBarOy = crossBarOy;
-            dim->m_crossBarFx = crossBarFx;
-            dim->m_crossBarFy = crossBarFy;
+            dim->m_crossBarO.x = crossBarOx;
+            dim->m_crossBarO.y = crossBarOy;
+            dim->m_crossBarF.x = crossBarFx;
+            dim->m_crossBarF.y = crossBarFy;
             dim->m_Width = width;
             (void) ignore;
         }
@@ -2503,10 +2503,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU featureLineDFx = biuParse( data, &data );
             BIU featureLineDFy = biuParse( data );
 
-            dim->m_featureLineDOx = featureLineDOx;
-            dim->m_featureLineDOy = featureLineDOy;
-            dim->m_featureLineDFx = featureLineDFx;
-            dim->m_featureLineDFy = featureLineDFy;
+            dim->m_featureLineDO.x = featureLineDOx;
+            dim->m_featureLineDO.y = featureLineDOy;
+            dim->m_featureLineDF.x = featureLineDFx;
+            dim->m_featureLineDF.y = featureLineDFy;
             (void) ignore;
         }
 
@@ -2520,10 +2520,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU featureLineGFx = biuParse( data, &data );
             BIU featureLineGFy = biuParse( data );
 
-            dim->m_featureLineGOx = featureLineGOx;
-            dim->m_featureLineGOy = featureLineGOy;
-            dim->m_featureLineGFx = featureLineGFx;
-            dim->m_featureLineGFy = featureLineGFy;
+            dim->m_featureLineGO.x = featureLineGOx;
+            dim->m_featureLineGO.y = featureLineGOy;
+            dim->m_featureLineGF.x = featureLineGFx;
+            dim->m_featureLineGF.y = featureLineGFy;
             (void) ignore;
         }
 
@@ -2537,10 +2537,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU arrowD1Fx   = biuParse( data, &data );
             BIU arrowD1Fy   = biuParse( data );
 
-            dim->m_arrowD1Ox = arrowD10x;
-            dim->m_arrowD1Oy = arrowD10y;
-            dim->m_arrowD1Fx = arrowD1Fx;
-            dim->m_arrowD1Fy = arrowD1Fy;
+            dim->m_arrowD1O.x = arrowD10x;
+            dim->m_arrowD1O.y = arrowD10y;
+            dim->m_arrowD1F.x = arrowD1Fx;
+            dim->m_arrowD1F.y = arrowD1Fy;
             (void) ignore;
         }
 
@@ -2554,10 +2554,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU arrowD2Fx = biuParse( data, &data );
             BIU arrowD2Fy = biuParse( data, &data );
 
-            dim->m_arrowD2Ox = arrowD2Ox;
-            dim->m_arrowD2Oy = arrowD2Oy;
-            dim->m_arrowD2Fx = arrowD2Fx;
-            dim->m_arrowD2Fy = arrowD2Fy;
+            dim->m_arrowD2O.x = arrowD2Ox;
+            dim->m_arrowD2O.y = arrowD2Oy;
+            dim->m_arrowD2F.x = arrowD2Fx;
+            dim->m_arrowD2F.y = arrowD2Fy;
             (void) ignore;
         }
 
@@ -2570,10 +2570,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU arrowG1Fx = biuParse( data, &data );
             BIU arrowG1Fy = biuParse( data, &data );
 
-            dim->m_arrowG1Ox = arrowG1Ox;
-            dim->m_arrowG1Oy = arrowG1Oy;
-            dim->m_arrowG1Fx = arrowG1Fx;
-            dim->m_arrowG1Fy = arrowG1Fy;
+            dim->m_arrowG1O.x = arrowG1Ox;
+            dim->m_arrowG1O.y = arrowG1Oy;
+            dim->m_arrowG1F.x = arrowG1Fx;
+            dim->m_arrowG1F.y = arrowG1Fy;
             (void) ignore;
         }
 
@@ -2586,10 +2586,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU arrowG2Fx = biuParse( data, &data );
             BIU arrowG2Fy = biuParse( data, &data );
 
-            dim->m_arrowG2Ox = arrowG2Ox;
-            dim->m_arrowG2Oy = arrowG2Oy;
-            dim->m_arrowG2Fx = arrowG2Fx;
-            dim->m_arrowG2Fy = arrowG2Fy;
+            dim->m_arrowG2O.x = arrowG2Ox;
+            dim->m_arrowG2O.y = arrowG2Oy;
+            dim->m_arrowG2F.x = arrowG2Fx;
+            dim->m_arrowG2F.y = arrowG2Fy;
             (void) ignore;
         }
     }
@@ -3743,38 +3743,38 @@ void LEGACY_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
                     );
 
     fprintf( m_fp,  "Sb %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_crossBarOx, me->m_crossBarOy ).c_str(),
-                    fmtBIUPair( me->m_crossBarFx, me->m_crossBarFy ).c_str(),
+                    fmtBIUPair( me->m_crossBarO.x, me->m_crossBarO.y ).c_str(),
+                    fmtBIUPair( me->m_crossBarF.x, me->m_crossBarF.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "Sd %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_featureLineDOx, me->m_featureLineDOy ).c_str(),
-                    fmtBIUPair( me->m_featureLineDFx, me->m_featureLineDFy ).c_str(),
+                    fmtBIUPair( me->m_featureLineDO.x, me->m_featureLineDO.y ).c_str(),
+                    fmtBIUPair( me->m_featureLineDF.x, me->m_featureLineDF.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "Sg %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_featureLineGOx, me->m_featureLineGOy ).c_str(),
-                    fmtBIUPair( me->m_featureLineGFx, me->m_featureLineGFy ).c_str(),
+                    fmtBIUPair( me->m_featureLineGO.x, me->m_featureLineGO.y ).c_str(),
+                    fmtBIUPair( me->m_featureLineGF.x, me->m_featureLineGF.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "S1 %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_arrowD1Ox, me->m_arrowD1Oy ).c_str(),
-                    fmtBIUPair( me->m_arrowD1Fx, me->m_arrowD1Fy ).c_str(),
+                    fmtBIUPair( me->m_arrowD1O.x, me->m_arrowD1O.y ).c_str(),
+                    fmtBIUPair( me->m_arrowD1F.x, me->m_arrowD1F.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "S2 %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_arrowD2Ox, me->m_arrowD2Oy ).c_str(),
-                    fmtBIUPair( me->m_arrowD2Fx, me->m_arrowD2Fy ).c_str(),
+                    fmtBIUPair( me->m_arrowD2O.x, me->m_arrowD2O.y ).c_str(),
+                    fmtBIUPair( me->m_arrowD2F.x, me->m_arrowD2F.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "S3 %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_arrowG1Ox, me->m_arrowG1Oy ).c_str(),
-                    fmtBIUPair( me->m_arrowG1Fx, me->m_arrowG1Fy ).c_str(),
+                    fmtBIUPair( me->m_arrowG1O.x, me->m_arrowG1O.y ).c_str(),
+                    fmtBIUPair( me->m_arrowG1F.x, me->m_arrowG1F.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp,  "S4 %d %s %s %s\n", S_SEGMENT,
-                    fmtBIUPair( me->m_arrowG2Ox, me->m_arrowG2Oy ).c_str(),
-                    fmtBIUPair( me->m_arrowG2Fx, me->m_arrowG2Fy ).c_str(),
+                    fmtBIUPair( me->m_arrowG2O.x, me->m_arrowG2O.y ).c_str(),
+                    fmtBIUPair( me->m_arrowG2F.x, me->m_arrowG2F.y ).c_str(),
                     fmtBIU( me->GetWidth() ).c_str() );
 
     fprintf( m_fp, "$endCOTATION\n" );
