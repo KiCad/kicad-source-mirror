@@ -42,7 +42,6 @@
 #include <appl_wxstruct.h>
 
 #include <pcbnew.h>
-#include <protos.h>
 #include <pcbnew_id.h>
 #include <io_mgr.h>
 #include <wildcards_and_files_ext.h>
@@ -51,9 +50,7 @@
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 
 
-static const wxString pcbBackupFileExtension(  wxT( "000" ) );
-static wxString saveFileName( wxT( "$savepcb" ) );
-
+static const wxString backupFileExtensionSuffix( wxT( "-bak" ) );
 
 void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 {
@@ -89,29 +86,22 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         break;
 
     case ID_MENU_READ_LAST_SAVED_VERSION_BOARD:
-    case ID_MENU_RECOVER_BOARD:
         {
             wxFileName fn;
-
-            if( id == ID_MENU_RECOVER_BOARD )
-            {
-                fn = wxFileName( wxEmptyString, saveFileName, PcbFileExtension );
-            }
-            else
-            {
-                fn = GetBoard()->GetFileName();
-                fn.SetExt( pcbBackupFileExtension );
-            }
+            fn = GetBoard()->GetFileName();
+            wxString backup_ext = fn.GetExt()+ backupFileExtensionSuffix;
+            fn.SetExt( backup_ext );
 
             if( !fn.FileExists() )
             {
-                msg = _( "Recovery file " ) + fn.GetFullPath() + _( " not found." );
+                msg.Printf( _( "Recovery file <%s> not found." ),
+                            GetChars( fn.GetFullPath() ) );
                 DisplayInfoMessage( this, msg );
                 break;
             }
             else
             {
-                msg = _( "OK to load recovery file " ) + fn.GetFullPath();
+                msg.Printf( _( "OK to load recovery file <%s>" ), GetChars(fn.GetFullPath() ) );
 
                 if( !IsOK( this, msg ) )
                     break;
@@ -224,10 +214,14 @@ the changes?" ) ) )
         int chosenFilter = dlg.GetFilterIndex();
         pluginType = loaders[chosenFilter].pluginType;
     }
-    else    // if a filename is given, force IO_MGR::KICAD if the file est is kicad_pcb
+    else    // if a filename is given, force IO_MGR::KICAD if the file ext is kicad_pcb
             // for instance if the filename comes from file history
+            // or it is a backup file with ext = kicad_pcb-bak
     {
-        if( fileName.GetExt() == IO_MGR::GetFileExtension( IO_MGR::KICAD ) )
+        wxString backup_ext = IO_MGR::GetFileExtension( IO_MGR::KICAD ) +
+                              backupFileExtensionSuffix;
+        if( fileName.GetExt() == IO_MGR::GetFileExtension( IO_MGR::KICAD ) ||
+            fileName.GetExt() == backup_ext )
             pluginType = IO_MGR::KICAD;
     }
 
@@ -239,7 +233,7 @@ the changes?" ) ) )
     if( !aAppend )
         Clear_Pcb( false );     // pass false since we prompted above for a modified board
 
-    CheckForAutoSaveFile( fileName, pcbBackupFileExtension );
+    CheckForAutoSaveFile( fileName, fileName.GetExt() );
 
     GetBoard()->SetFileName( fileName.GetFullPath() );
 
@@ -282,9 +276,9 @@ the changes?" ) ) )
             if( pluginType == IO_MGR::LEGACY &&
                 loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION )
             {
-                DisplayInfoMessage( this, _( "This file was created by an older \
-version of Pcbnew. It will be stored in the new file format when you save \
-this file again." ) );
+                DisplayInfoMessage( this,
+                                    _( "This file was created by an older version of Pcbnew.\
+\nIt will be stored in the new file format when you save this file again." ) );
             }
 
             SetBoard( loadedBoard );
@@ -474,7 +468,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         // Get the backup file name
         backupFileName = pcbFileName;
-        backupFileName.SetExt( pcbBackupFileExtension );
+        backupFileName.SetExt( pcbFileName.GetExt() + backupFileExtensionSuffix );
 
         // If an old backup file exists, delete it.  If an old board file exists, rename
         // it to the backup file name.
