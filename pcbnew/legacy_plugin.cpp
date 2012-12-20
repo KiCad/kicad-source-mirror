@@ -380,6 +380,7 @@ void LEGACY_PLUGIN::checkVersion()
 #endif
 
     m_loading_format_version = ver;
+    m_board->SetFileFormatVersionAtLoad( m_loading_format_version );
 }
 
 
