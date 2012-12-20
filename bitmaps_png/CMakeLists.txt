@@ -302,7 +302,6 @@ set( BMAPS_MID
     insert_module_board
     invert_module
     invisible_text
-    jigsaw
     kicad_icon_small
     label2glabel
     label2text

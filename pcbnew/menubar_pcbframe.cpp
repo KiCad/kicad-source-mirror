@@ -115,14 +115,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( filesMenu, ID_MENU_READ_LAST_SAVED_VERSION_BOARD,
                  _( "Revert" ),
                  _( "Clear board and get previous saved version of board" ),
-                 KiBitmap( jigsaw_xpm ) );
-
-    // Rescue
-    AddMenuItem( filesMenu, ID_MENU_RECOVER_BOARD, _( "Rescue" ),
-                 _( "Clear old board and get last rescue file" ),
-                 KiBitmap( hammer_xpm ) );
+                 KiBitmap( help_xpm ) );
     filesMenu->AppendSeparator();
-
 
     /* Fabrication Outputs submenu */
     wxMenu* fabricationOutputsMenu = new wxMenu;
