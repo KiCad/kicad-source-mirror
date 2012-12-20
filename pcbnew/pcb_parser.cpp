@@ -73,7 +73,7 @@ void PCB_PARSER::init()
     m_layerMasks[ "F&B.Cu" ]    = LAYER_BACK | LAYER_FRONT;
     m_layerMasks[ "*.Adhes" ]   = ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT;
     m_layerMasks[ "*.Paste" ]   = SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT;
-    m_layerMasks[ "*.Mask" ]    = SOLDERMASK_LAYER_BACK | SILKSCREEN_LAYER_FRONT;
+    m_layerMasks[ "*.Mask" ]    = SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT;
     m_layerMasks[ "*.SilkS" ]   = SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT;
 }
 
