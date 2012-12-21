@@ -85,12 +85,21 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         LoadOnePcbFile( GetBoard()->GetFileName(), false, true );
         break;
 
-    case ID_MENU_READ_LAST_SAVED_VERSION_BOARD:
+    case ID_MENU_READ_BOARD_BACKUP_FILE:
+    case ID_MENU_RECOVER_BOARD_AUTOSAVE:
         {
-            wxFileName fn;
-            fn = GetBoard()->GetFileName();
-            wxString backup_ext = fn.GetExt()+ backupFileExtensionSuffix;
-            fn.SetExt( backup_ext );
+            wxFileName currfn = GetBoard()->GetFileName();
+            wxFileName fn = currfn;
+            if( id == ID_MENU_RECOVER_BOARD_AUTOSAVE )
+            {
+                wxString rec_name = wxT("$") + fn.GetName();
+                fn.SetName( rec_name );
+            }
+            else
+            {
+                wxString backup_ext = fn.GetExt()+ backupFileExtensionSuffix;
+                fn.SetExt( backup_ext );
+            }
 
             if( !fn.FileExists() )
             {
@@ -99,19 +108,18 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
                 DisplayInfoMessage( this, msg );
                 break;
             }
-            else
-            {
-                msg.Printf( _( "OK to load recovery file <%s>" ), GetChars(fn.GetFullPath() ) );
 
-                if( !IsOK( this, msg ) )
-                    break;
-            }
+            msg.Printf( _( "OK to load recovery or backup file <%s>" ),
+                            GetChars(fn.GetFullPath() ) );
 
+            if( !IsOK( this, msg ) )
+                break;
+
+            GetScreen()->ClrModify();    // do not prompt the user for changes
             LoadOnePcbFile( fn.GetFullPath(), false );
-            fn.SetExt( PcbFileExtension );
 
-            // Re-set the name since extension changed
-            GetBoard()->SetFileName( fn.GetFullPath() );
+            // Re-set the name since name or extension was changed
+            GetBoard()->SetFileName( currfn.GetFullPath() );
             UpdateTitle();
         }
         break;

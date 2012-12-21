@@ -112,9 +112,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     // Revert
-    AddMenuItem( filesMenu, ID_MENU_READ_LAST_SAVED_VERSION_BOARD,
-                 _( "Revert" ),
-                 _( "Clear board and get previous saved version of board" ),
+    AddMenuItem( filesMenu, ID_MENU_READ_BOARD_BACKUP_FILE,
+                 _( "Revert to Last" ),
+                 _( "Clear board and get previous backup version of board" ),
+                 KiBitmap( help_xpm ) );
+
+    // Rescue
+    AddMenuItem( filesMenu, ID_MENU_RECOVER_BOARD_AUTOSAVE, _( "Rescue" ),
+                 _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
                  KiBitmap( help_xpm ) );
     filesMenu->AppendSeparator();
 
