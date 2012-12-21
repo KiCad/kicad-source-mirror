@@ -347,6 +347,13 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
                     wxStringTokenizer   rows( data.GetText(), ROW_SEP, wxTOKEN_RET_EMPTY );
 
+                    // if clipboard rows would extend paste end of current table size...
+                    if( int( rows.CountTokens() ) > tbl->GetNumberRows() - m_cur_row )
+                    {
+                        int newRowsNeeded = rows.CountTokens() - ( tbl->GetNumberRows() - m_cur_row );
+                        tbl->AppendRows( newRowsNeeded );
+                    }
+
                     for( int row = m_cur_row;  rows.HasMoreTokens();  ++row )
                     {
                         wxString rowTxt = rows.GetNextToken();
