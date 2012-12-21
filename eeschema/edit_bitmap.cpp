@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 jean-pierre.charras
+ * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,19 +27,11 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <class_drawpanel.h>
-#include <trigo.h>
-#include <richio.h>
-#include <plot_common.h>
 
 #include <wxEeschemaStruct.h>
-#include <general.h>
 #include <sch_bitmap.h>
 #include <dialog_image_editor.h>
-
-#include <algorithm>
 
 
 static void abortMoveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
@@ -70,7 +62,8 @@ static void abortMoveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
         // Never delete existing item, because it can be referenced by an undo/redo command
         // Just restore its data
-        swap( *item, *olditem );
+        item->SwapData( olditem );
+        parent->SetUndoItem( NULL );
     }
 
     screen->SetCurItem( item );
