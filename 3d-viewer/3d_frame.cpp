@@ -176,13 +176,6 @@ void EDA_3D_FRAME::GetSettings()
         config->Read( keyShowEco2Layer, &prms.m_DrawFlags[prms.FL_ECO2], true );
     }
 
-#if defined( __WXMAC__ )
-
-    // for macOSX, the window must be below system (macOSX) toolbar
-    if( m_FramePos.y < 20 )
-        m_FramePos.y = 20;
-
-#endif
 }
 
 
