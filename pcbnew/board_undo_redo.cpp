@@ -347,15 +347,15 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
         break;
 
     case UR_NEW:
+    case UR_DELETED:
+#ifdef USE_WX_OVERLAY
+        m_canvas->Refresh();
+#endif
     case UR_MOVED:
     case UR_FLIPPED:
     case UR_ROTATED:
     case UR_ROTATED_CLOCKWISE:
-    case UR_DELETED:
         commandToUndo->PushItem( itemWrapper );
-#ifdef USE_WX_OVERLAY
-        m_canvas->Refresh();
-#endif
         break;
 
     default:
