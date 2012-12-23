@@ -128,8 +128,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
-        if( aErase )
-            track = g_DragSegmentList[ii].m_Track;
+        track = g_DragSegmentList[ii].m_Track;
 
         if( aErase )
             track->Draw( aPanel, aDC, draw_mode );
