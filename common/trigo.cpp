@@ -8,12 +8,12 @@
 #include <trigo.h>
 #include <common.h>
 
+static bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
+
 bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist )
 {
-    // make coordinates relatives to aStart:
-    aEnd -= aStart;
-    aRefPoint -= aStart;
-    return DistanceTest( aDist, aEnd.x, aEnd.y, aRefPoint.x, aRefPoint.y );
+    return DistanceTest( aDist, aEnd.x - aStart.x, aEnd.y - aStart.y,
+                         aRefPoint.x - aStart.x, aRefPoint.y - aStart.y );
 }
 
 
@@ -347,41 +347,34 @@ void RotatePoint( double* pX, double* pY, double angle )
 
 double EuclideanNorm( wxPoint vector )
 {
-    return sqrt( (double) vector.x * (double) vector.x + (double) vector.y * (double) vector.y );
+    return hypot( (double) vector.x, (double) vector.y );
 }
-
-
-wxPoint TwoPointVector( wxPoint startPoint, wxPoint endPoint )
-{
-    return endPoint - startPoint;
-}
-
 
 double DistanceLinePoint( wxPoint linePointA, wxPoint linePointB, wxPoint referencePoint )
 {
     return fabs( (double) ( (linePointB.x - linePointA.x) * (linePointA.y - referencePoint.y) -
                  (linePointA.x - referencePoint.x ) * (linePointB.y - linePointA.y) )
-                  / EuclideanNorm( TwoPointVector( linePointA, linePointB ) ) );
+                  / EuclideanNorm( linePointB - linePointA ) );
 }
 
 
 bool HitTestPoints( wxPoint pointA, wxPoint pointB, double threshold )
 {
-    wxPoint vectorAB = TwoPointVector( pointA, pointB );
+    wxPoint vectorAB = pointB - pointA;
     double  distance = EuclideanNorm( vectorAB );
 
     return distance < threshold;
 }
 
 
-int CrossProduct( wxPoint vectorA, wxPoint vectorB )
+double CrossProduct( wxPoint vectorA, wxPoint vectorB )
 {
-    return vectorA.x * vectorB.y - vectorA.y * vectorB.x;
+    return (double)vectorA.x * vectorB.y - (double)vectorA.y * vectorB.x;
 }
 
 
 double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
 {
-    return sqrt( pow( (double) aPointA.x - (double) aPointB.x, 2 ) +
-                 pow( (double) aPointA.y - (double) aPointB.y, 2 ) );
+    return hypot( (double) aPointA.x - (double) aPointB.x,
+                  (double) aPointA.y - (double) aPointB.y );
 }

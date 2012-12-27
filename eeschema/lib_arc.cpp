@@ -41,6 +41,12 @@
 #include <lib_arc.h>
 #include <transform.h>
 
+// Helper function
+static inline wxPoint twoPointVector( wxPoint startPoint, wxPoint endPoint )
+{
+    return endPoint - startPoint;
+}
+
 
 //! @brief Given three points A B C, compute the circumcenter of the resulting triangle
 //! reference: http://en.wikipedia.org/wiki/Circumscribed_circle
@@ -188,7 +194,7 @@ bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTran
 
     NEGATE( relativePosition.y );       // reverse Y axis
 
-    int distance = KiROUND( EuclideanNorm( TwoPointVector( m_Pos, relativePosition ) ) );
+    int distance = KiROUND( EuclideanNorm( twoPointVector( m_Pos, relativePosition ) ) );
 
     if( abs( distance - m_Radius ) > aThreshold )
         return false;
@@ -196,16 +202,16 @@ bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTran
     // We are on the circle, ensure we are only on the arc, i.e. between
     //  m_ArcStart and m_ArcEnd
 
-    wxPoint startEndVector = TwoPointVector( m_ArcStart, m_ArcEnd);
-    wxPoint startRelativePositionVector = TwoPointVector( m_ArcStart, relativePosition );
+    wxPoint startEndVector = twoPointVector( m_ArcStart, m_ArcEnd);
+    wxPoint startRelativePositionVector = twoPointVector( m_ArcStart, relativePosition );
 
-    wxPoint centerStartVector = TwoPointVector( m_Pos, m_ArcStart );
-    wxPoint centerEndVector = TwoPointVector( m_Pos, m_ArcEnd );
-    wxPoint centerRelativePositionVector = TwoPointVector( m_Pos, relativePosition );
+    wxPoint centerStartVector = twoPointVector( m_Pos, m_ArcStart );
+    wxPoint centerEndVector = twoPointVector( m_Pos, m_ArcEnd );
+    wxPoint centerRelativePositionVector = twoPointVector( m_Pos, relativePosition );
 
     // Compute the cross product to check if the point is in the sector
-    int crossProductStart = CrossProduct( centerStartVector, centerRelativePositionVector );
-    int crossProductEnd = CrossProduct( centerEndVector, centerRelativePositionVector );
+    double crossProductStart = CrossProduct( centerStartVector, centerRelativePositionVector );
+    double crossProductEnd = CrossProduct( centerEndVector, centerRelativePositionVector );
 
     // The cross products need to be exchanged, depending on which side the center point
     // relative to the start point to end point vector lies
@@ -553,7 +559,7 @@ void LIB_ARC::BeginEdit( int aEditMode, const wxPoint aPosition )
         wxPoint middlePoint = wxPoint( (m_ArcStart.x + m_ArcEnd.x) / 2,
                                        (m_ArcStart.y + m_ArcEnd.y) / 2 );
         wxPoint centerVector   = m_Pos - middlePoint;
-        wxPoint startEndVector = TwoPointVector( m_ArcStart, m_ArcEnd );
+        wxPoint startEndVector = twoPointVector( m_ArcStart, m_ArcEnd );
         m_editCenterDistance = EuclideanNorm( centerVector );
 
         // Determine on which side is the center point
@@ -650,10 +656,10 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
             // Determine if the arc angle is larger than 180 degrees -> this happens if both
             // points (cursor position, center point) lie on the same side of the vector
             // start-end
-            int  crossA = CrossProduct( TwoPointVector( startPos, endPos ),
-                                        TwoPointVector( endPos, aPosition ) );
-            int  crossB = CrossProduct( TwoPointVector( startPos, endPos ),
-                                        TwoPointVector( endPos, newCenterPoint ) );
+            double  crossA = CrossProduct( twoPointVector( startPos, endPos ),
+                                        twoPointVector( endPos, aPosition ) );
+            double  crossB = CrossProduct( twoPointVector( startPos, endPos ),
+                                        twoPointVector( endPos, newCenterPoint ) );
 
             if( ( crossA < 0 && crossB < 0 ) || ( crossA >= 0 && crossB >= 0 ) )
                 newCenterPoint = m_Pos;
@@ -665,7 +671,7 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
             wxPoint middlePoint = wxPoint( (startPos.x + endPos.x) / 2,
                                            (startPos.y + endPos.y) / 2 );
 
-            wxPoint startEndVector = TwoPointVector( startPos, endPos );
+            wxPoint startEndVector = twoPointVector( startPos, endPos );
             wxPoint perpendicularVector = wxPoint( -startEndVector.y, startEndVector.x );
             double  lengthPerpendicularVector = EuclideanNorm( perpendicularVector );
 
@@ -736,8 +742,8 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
 
 void LIB_ARC::calcRadiusAngles()
 {
-    wxPoint centerStartVector = TwoPointVector( m_Pos, m_ArcStart );
-    wxPoint centerEndVector   = TwoPointVector( m_Pos, m_ArcEnd );
+    wxPoint centerStartVector = twoPointVector( m_Pos, m_ArcStart );
+    wxPoint centerEndVector   = twoPointVector( m_Pos, m_ArcEnd );
 
     m_Radius = KiROUND( EuclideanNorm( centerStartVector ) );
 

@@ -1163,27 +1163,17 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 
 bool TRACK::HitTest( const wxPoint& aPosition )
 {
-    int radius = m_Width >> 1;
-
-    // (dx, dy) is a vector from m_Start to m_End (an origin of m_Start)
-    int dx = m_End.x - m_Start.x;
-    int dy = m_End.y - m_Start.y;
-
-    // (spot_cX, spot_cY) is a vector from m_Start to ref_pos (an origin of m_Start)
-    int spot_cX = aPosition.x - m_Start.x;
-    int spot_cY = aPosition.y - m_Start.y;
+    int max_dist = m_Width >> 1;
 
     if( Type() == PCB_VIA_T )
     {
-        return (double) spot_cX * spot_cX + (double) spot_cY * spot_cY <= (double) radius * radius;
-    }
-    else
-    {
-        if( DistanceTest( radius, dx, dy, spot_cX, spot_cY ) )
-            return true;
+        // rel_pos is aPosition relative to m_Start (or the center of the via)
+        wxPoint rel_pos = aPosition - m_Start;
+        double dist = (double) rel_pos.x * rel_pos.x + (double) rel_pos.y * rel_pos.y;
+        return  dist <= (double) max_dist * max_dist;
     }
 
-    return false;
+    return TestSegmentHit( aPosition, m_Start, m_End, max_dist );
 }
 
 

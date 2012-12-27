@@ -51,6 +51,7 @@
 
 
 static const wxString backupFileExtensionSuffix( wxT( "-bak" ) );
+static const wxString autosaveFilePrefix( wxT( "_autosave-" ) );
 
 void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 {
@@ -92,7 +93,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
             wxFileName fn = currfn;
             if( id == ID_MENU_RECOVER_BOARD_AUTOSAVE )
             {
-                wxString rec_name = wxT("$") + fn.GetName();
+                wxString rec_name = autosaveFilePrefix + fn.GetName();
                 fn.SetName( rec_name );
             }
             else
@@ -532,7 +533,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         GetBoard()->SetFileName( pcbFileName.GetFullPath() );
         UpdateTitle();
-        UpdateFileHistory( GetBoard()->GetFileName() );
+
+        // Put the saved file in File History, unless aCreateBackupFile
+        // is false.
+        // aCreateBackupFile == false is mainly used to write autosave files
+        // and not need to have an autosave file in file history
+        if( aCreateBackupFile )
+            UpdateFileHistory( GetBoard()->GetFileName() );
     }
 
     // Display the file names:
@@ -542,7 +549,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         // Delete auto save file on successful save.
         wxFileName autoSaveFileName = pcbFileName;
-        autoSaveFileName.SetName( wxT( "$" ) + pcbFileName.GetName() );
+        autoSaveFileName.SetName( autosaveFilePrefix + pcbFileName.GetName() );
 
         if( autoSaveFileName.FileExists() )
             wxRemoveFile( autoSaveFileName.GetFullPath() );
@@ -571,8 +578,9 @@ bool PCB_EDIT_FRAME::doAutoSave()
     wxFileName tmpFileName = GetBoard()->GetFileName();
     wxFileName fn = tmpFileName;
 
-    // Auto save file name is the normal file name prepended with $.
-    fn.SetName( wxT( "$" ) + fn.GetName() );
+    // Auto save file name is the normal file name prepended with
+    // autosaveFilePrefix string.
+    fn.SetName( autosaveFilePrefix + fn.GetName() );
 
     wxLogTrace( traceAutoSave,
                 wxT( "Creating auto save file <" + fn.GetFullPath() ) + wxT( ">" ) );

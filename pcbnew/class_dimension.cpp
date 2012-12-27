@@ -398,96 +398,32 @@ void DIMENSION::DisplayInfo( EDA_DRAW_FRAME* frame )
 
 bool DIMENSION::HitTest( const wxPoint& aPosition )
 {
-    int ux0, uy0;
-    int dx, dy, spot_cX, spot_cY;
-
     if( m_Text.TextHitTest( aPosition ) )
         return true;
 
-    // Locate SEGMENTS?
-    ux0 = m_crossBarO.x;
-    uy0 = m_crossBarO.y;
+    int dist_max = m_Width / 2;
 
-    // Recalculate coordinates with ux0, uy0 = origin.
-    dx  = m_crossBarF.x - ux0;
-    dy  = m_crossBarF.y - uy0;
+    // Locate SEGMENTS
 
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+    if( TestSegmentHit( aPosition, m_crossBarO, m_crossBarF, dist_max ) )
         return true;
 
-    ux0 = m_featureLineGO.x;
-    uy0 = m_featureLineGO.y;
-
-    dx  = m_featureLineGF.x - ux0;
-    dy  = m_featureLineGF.y - uy0;
-
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+    if( TestSegmentHit( aPosition, m_featureLineGO, m_featureLineGF, dist_max ) )
         return true;
 
-    ux0 = m_featureLineDO.x;
-    uy0 = m_featureLineDO.y;
-
-    dx  = m_featureLineDF.x - ux0;
-    dy  = m_featureLineDF.y - uy0;
-
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+    if( TestSegmentHit( aPosition, m_featureLineDO, m_featureLineDF, dist_max ) )
         return true;
 
-    ux0 = m_arrowD1O.x;
-    uy0 = m_arrowD1O.y;
-
-    dx  = m_arrowD1F.x - ux0;
-    dy  = m_arrowD1F.y - uy0;
-
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+    if( TestSegmentHit( aPosition, m_arrowD1O, m_arrowD1F, dist_max ) )
         return true;
 
-    ux0 = m_arrowD2O.x;
-    uy0 = m_arrowD2O.y;
-
-    dx  = m_arrowD2F.x - ux0;
-    dy  = m_arrowD2F.y - uy0;
-
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+    if( TestSegmentHit( aPosition, m_arrowD2O, m_arrowD2F, dist_max ) )
         return true;
 
-    ux0 = m_arrowG1O.x;
-    uy0 = m_arrowG1O.y;
-
-    dx  = m_arrowG1F.x - ux0;
-    dy  = m_arrowG1F.y - uy0;
-
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+    if( TestSegmentHit( aPosition, m_arrowG1O, m_arrowG1F, dist_max ) )
         return true;
 
-    ux0 = m_arrowG2O.x;
-    uy0 = m_arrowG2O.y;
-
-    dx  = m_arrowG2F.x - ux0;
-    dy  = m_arrowG2F.y - uy0;
-
-    spot_cX = aPosition.x - ux0;
-    spot_cY = aPosition.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+    if( TestSegmentHit( aPosition, m_arrowG2O, m_arrowG2F, dist_max ) )
         return true;
 
     return false;

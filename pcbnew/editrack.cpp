@@ -556,17 +556,16 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoi
                 continue;
 
             // TRACK::HitTest
-            int     dist = (width + track->m_Width) / 2 + aTrack->GetClearance( track );
+            int dist = (width + track->m_Width) / 2 + aTrack->GetClearance( track );
 
-            wxPoint pos = aRef - track->m_Start;
-            wxPoint vec = track->m_End - track->m_Start;
-
-            if( !DistanceTest( dist, vec.x, vec.y, pos.x, pos.y ) )
+            if( !TestSegmentHit( aRef, track->m_Start, track->m_End, dist ) )
                 continue;
 
             found = track;
 
             // prefer intrusions from the side, not the end
+            wxPoint pos = aRef - track->m_Start;
+            wxPoint vec = track->m_End - track->m_Start;
             double tmp = (double) pos.x * vec.x + (double) pos.y * vec.y;
 
             if( tmp >= 0 && tmp <= (double) vec.x * vec.x + (double) vec.y * vec.y )
