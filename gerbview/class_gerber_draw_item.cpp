@@ -587,23 +587,10 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
     // TODO: a better analyze of the shape (perhaps create a D_CODE::HitTest for flashed items)
     int     radius = std::min( m_Size.x, m_Size.y ) >> 1;
 
-    // delta is a vector from m_Start to m_End (an origin of m_Start)
-    wxPoint delta = m_End - m_Start;
-
-    // dist is a vector from m_Start to ref_pos (an origin of m_Start)
-    wxPoint dist = ref_pos - m_Start;
-
     if( m_Flashed )
-    {
-        return (double) dist.x * dist.x + (double) dist.y * dist.y <= (double) radius * radius;
-    }
+        return HitTestPoints( m_Start, ref_pos, radius );
     else
-    {
-        if( DistanceTest( radius, delta.x, delta.y, dist.x, dist.y ) )
-            return true;
-    }
-
-    return false;
+        return TestSegmentHit( ref_pos, m_Start, m_End, radius );
 }
 
 

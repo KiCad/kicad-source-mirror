@@ -813,7 +813,8 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_DRAG_PAD_REQUEST, _( "Drag" ),
                  KiBitmap( drag_pad_xpm ) );
 
-    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD, _( "Edit" ), KiBitmap( options_pad_xpm ) );
+    msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD, msg, KiBitmap( options_pad_xpm ) );
     sub_menu_Pad->AppendSeparator();
 
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,

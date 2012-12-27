@@ -44,13 +44,6 @@ void RotatePoint( double *pX, double *pY, double cx, double cy, double angle );
  */
 int ArcTangente( int dy, int dx );
 
-/**
- * Function DistanceTest
- * Calculate the distance from mouse cursor to a line segment.
- * @return  False if distance > threshold or true if distance <= threshold.
- */
-bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
-
 //! @brief Compute the distance between a line and a reference point
 //! Reference: http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
 //! @param linePointA Point on line
@@ -63,12 +56,6 @@ double DistanceLinePoint( wxPoint linePointA, wxPoint linePointB, wxPoint refere
 //! @return Euclidean norm of the vector
 double EuclideanNorm( wxPoint vector );
 
-//! @brief Vector between two points
-//! @param startPoint The start point
-//! @param endPoint The end point
-//! @return Vector between the points
-wxPoint TwoPointVector( wxPoint startPoint, wxPoint endPoint );
-
 //! @brief Test, if two points are near each other
 //! @param pointA First point
 //! @param pointB Second point
@@ -79,7 +66,7 @@ bool HitTestPoints( wxPoint pointA, wxPoint pointB, double threshold );
 //! @brief Determine the cross product
 //! @param vectorA Two-dimensional vector
 //! @param vectorB Two-dimensional vector
-int CrossProduct( wxPoint vectorA, wxPoint vectorB );
+double CrossProduct( wxPoint vectorA, wxPoint vectorB );
 
 
 /**
@@ -99,29 +86,5 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
  * @return Length of a line.
  */
 double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB );
-
-
-/*******************/
-/* Macro NEW_COORD */
-/*******************/
-
-/* Calculate coordinates to rotate around an axis
- *           coord:  xrot = y + x * sin * cos
- *                   yrot = y * cos - sin * x
- *           either: xrot = (y + x * tg) * cos
- *                   yrot = (y - x * tg) * cos
- *
- * Cosine coefficients are loaded from a trigonometric table by 16 bit values.
- */
-#define NEW_COORD( x0, y0 )                       \
-    do {                                          \
-        int itmp;                                 \
-        itmp = x0;                                \
-        x0 = x0 + (int)( y0 * tg );               \
-        y0 = y0 - (int)( itmp * tg );             \
-        x0 = ( x0 * cosinus ) >> 8;               \
-        y0 = ( y0 * cosinus ) >> 8;               \
-    } while( 0 );
-
 
 #endif

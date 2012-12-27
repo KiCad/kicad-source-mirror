@@ -661,12 +661,15 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
         break;
 
     case PCB_PAD_T:
-        // Post a EDIT_MODULE event here to prevent pads
+        // Until dec 2012 a EDIT_MODULE event is posted here to prevent pads
         // from being edited by hotkeys.
-        // Process_Special_Functions takes care of finding
-        // the parent.
+        // Process_Special_Functions takes care of finding the parent.
+        // After dec 2012 a EDIT_PAD event is posted, because there is no
+        // reason to not allow pad edit by hotkey
+        // (pad coordinates are no more modified by rounding, in nanometer version
+        // when using inches or mm in dialog)
         if( aIdCommand == HK_EDIT_ITEM )
-            evt_type = ID_POPUP_PCB_EDIT_MODULE;
+            evt_type = ID_POPUP_PCB_EDIT_PAD;
 
         break;
 
