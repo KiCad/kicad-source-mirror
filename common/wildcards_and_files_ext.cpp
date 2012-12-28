@@ -57,6 +57,7 @@ const wxString FootprintPlaceFileExtension( wxT( "pos" ) );
 
 const wxString KiCadFootprintLibPathExtension( wxT( "pretty" ) );    ///< KICAD PLUGIN libpath
 const wxString KiCadFootprintFileExtension( wxT( "kicad_mod" ) );
+const wxString GedaPcbFootprintLibFileExtension( wxT( "fp" ) );
 
 // These strings are wildcards for file selection dialogs.
 // Because these are static, one should explicitly call wxGetTranslation
@@ -73,6 +74,7 @@ const wxString PcbFileWildcard( _( "KiCad s-expr printed circuit board files (*.
 const wxString KiCadFootprintLibFileWildcard( _( "KiCad footprint s-expre library file (*.kicad_mod)|*.kicad_mod" ) );
 const wxString KiCadFootprintLibPathWildcard( _( "KiCad footprint s-expre library path (*.pretty)|*.pretty" ) );
 const wxString LegacyFootprintLibPathWildcard( _( "Legacy footprint library file (*.mod)|*.mod" ) );
+const wxString GedaPcbFootprintLibFileWildcard( _( "Geda PCB footprint library file (*.fp)|*.fp" ) );
 const wxString MacrosFileWildcard( _( "KiCad recorded macros (*.mcr)|*.mcr" ) );
 
 // generic:

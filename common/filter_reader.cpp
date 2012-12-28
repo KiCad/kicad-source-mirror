@@ -65,3 +65,43 @@ char* FILTER_READER::ReadLine() throw( IO_ERROR )
     return length ? line : NULL;
 }
 
+
+WHITESPACE_FILTER_READER::WHITESPACE_FILTER_READER( LINE_READER& aReader ) :
+    LINE_READER( 1 ),
+    reader( aReader )
+{
+    // Not using our own line buffer, will be using aReader's.  This changes
+    // the meaning of this->line to be merely a pointer to aReader's line, which of course
+    // is not owned here.
+    delete [] line;
+
+    line = 0;
+}
+
+
+WHITESPACE_FILTER_READER::~WHITESPACE_FILTER_READER()
+{
+    // Our 'line' points to aReader's, and he will delete that buffer.
+    // Prevent subsequent call to ~LINE_READER() from deleting a buffer we do not own.
+    line = 0;
+}
+
+
+char* WHITESPACE_FILTER_READER::ReadLine() throw( IO_ERROR )
+{
+    char* s;
+
+    while( ( s = reader.ReadLine() ) != NULL )
+    {
+        while( s != NULL && strchr( " \t", *s ) )
+            s++;
+
+        if( s != NULL && !strchr( "#\n\r", *s ) )
+            break;
+    }
+
+    line   = s;
+    length = reader.Length();
+
+    return length ? line : NULL;
+}

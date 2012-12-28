@@ -51,7 +51,7 @@ public:
         LEGACY,             //< Legacy Pcbnew file formats prior to s-expression.
         KICAD,              //< S-expression Pcbnew file format.
         EAGLE,
-
+        GEDA_PCB,           //< Geda PCB file formats.
         // add your type here.
 
         // ALTIUM,
@@ -272,7 +272,8 @@ public:
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
-    virtual wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
+    virtual wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
+                                              PROPERTIES*     aProperties = NULL);
 
     /**
      * Function FootprintLoad
