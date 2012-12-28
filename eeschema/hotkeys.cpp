@@ -329,9 +329,14 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     // itemInEdit == false means no item currently edited. We can ask for editing a new item
     bool itemInEdit = screen->GetCurItem() && screen->GetCurItem()->GetFlags();
 
+    // blocInProgress == false means no block in progress.
+    // Because a drag command uses a drag block, false means also no drag in progress
+    // If false, we can ask for editing a new item
+    bool blocInProgress = screen->m_BlockLocate.GetState() != STATE_NO_BLOCK;
+
     // notBusy == true means no item currently edited and no other command in progress
     // We can change active tool and ask for editing a new item
-    bool notBusy = (!itemInEdit) && (screen->m_BlockLocate.GetState() == STATE_NO_BLOCK);
+    bool notBusy = (!itemInEdit) && (!blocInProgress);
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
@@ -418,7 +423,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             event.SetFindString( m_findReplaceData->GetFindString() );
             GetEventHandler()->ProcessEvent( event );
         }
-
         break;
 
     case HK_ADD_NEW_COMPONENT:      // Add component
@@ -467,7 +471,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 OnLeftClick( aDC, aPosition );
             }
         }
-
         break;
 
     case HK_COPY_COMPONENT_OR_LABEL:        // Duplicate component or text/label
@@ -486,16 +489,29 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         wxPostEvent( this, cmd );
         break;
 
-    case HK_MIRROR_Y_COMPONENT:             // Mirror Y
-    case HK_MIRROR_X_COMPONENT:             // Mirror X
-    case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
     case HK_DRAG:                           // Start drag
-    case HK_ROTATE:                         // Rotate schematic item or block.
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
-    case HK_EDIT:                           // Edit schematic item.
     case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
     case HK_EDIT_COMPONENT_REFERENCE:       // Edit component value reference.
     case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
+        // These commands are allowed only when no item currently edited.
+        if( ! notBusy )
+            break;
+
+        // Fall through
+    case HK_EDIT:
+        // Edit schematic item. Do not allow sheet edition when mowing
+        // Because a sheet edition can be complex.
+        if( itemInEdit && screen->GetCurItem()->Type() == SCH_SHEET_T )
+                break;
+
+        // Fall through
+    case HK_MIRROR_Y_COMPONENT:             // Mirror Y
+    case HK_MIRROR_X_COMPONENT:             // Mirror X
+    case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
+    case HK_ROTATE:                         // Rotate schematic item.
+        if( blocInProgress )
+            break;
         {
             // force a new item search on hot keys at current position,
             // if there is no currently edited item,
