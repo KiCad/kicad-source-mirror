@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ *
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file librairi.cpp
  * @brief Manage module (footprint) libraries.
@@ -69,8 +93,10 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 {
     // use the clipboard for this in the future?
 
-    wxString  lastOpenedPathForLoading;
-    wxConfig* config = wxGetApp().GetSettings();
+    // Some day it might be useful save the last library type selected aong with the path.
+    static int lastFilterIndex = 0;
+    wxString   lastOpenedPathForLoading;
+    wxConfig*  config = wxGetApp().GetSettings();
 
     if( config )
         config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
@@ -78,17 +104,22 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     wxString wildCard;
 
     wildCard << wxGetTranslation( KiCadFootprintLibFileWildcard ) << wxChar( '|' )
-              << wxGetTranslation( ModExportFileWildcard ) << wxChar( '|' )
-              << wxGetTranslation( ModImportFileWildcard );
+             << wxGetTranslation( ModExportFileWildcard ) << wxChar( '|' )
+             << wxGetTranslation( ModImportFileWildcard ) << wxChar( '|' )
+             << wxGetTranslation( GedaPcbFootprintLibFileWildcard );
 
     wxFileDialog dlg( this, FMT_IMPORT_MODULE,
                       lastOpenedPathForLoading, wxEmptyString,
                       wildCard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    dlg.SetFilterIndex( lastFilterIndex );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return NULL;
 
+    lastFilterIndex = dlg.GetFilterIndex();
+
     FILE* fp = wxFopen( dlg.GetPath(), wxT( "rt" ) );
+
     if( !fp )
     {
         wxString msg = wxString::Format( FMT_FILE_NOT_FOUND, GetChars( dlg.GetPath() ) );
@@ -104,12 +135,12 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
     wxString    moduleName;
 
-    bool    isGeda   = false;
-    bool    isLegacy = false;
+    bool        isGeda   = false;
+    bool        isLegacy = false;
 
     {
-        FILE_LINE_READER    freader( fp, dlg.GetPath() );   // I own fp, and will close it.
-        FILTER_READER       reader( freader );              // skip blank lines
+        FILE_LINE_READER         freader( fp, dlg.GetPath() );   // I own fp, and will close it.
+        WHITESPACE_FILTER_READER reader( freader );              // skip blank lines
 
         reader.ReadLine();
         char* line = reader.Line();
@@ -148,11 +179,28 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
     if( isGeda )
     {
-        LOCALE_IO   toggle;
+        try
+        {
+            wxFileName fn = dlg.GetPath();
+            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::GEDA_PCB ) );
 
-        // @todo GEDA plugin
-        module = new MODULE( GetBoard() );
-        module->Read_GPCB_Descr( dlg.GetPath() );
+            moduleName = fn.GetName();
+            module = pi->FootprintLoad( fn.GetPath(), moduleName );
+
+            if( !module )
+            {
+                wxString msg = wxString::Format(
+                    FMT_MOD_NOT_FOUND, GetChars( moduleName ), GetChars( fn.GetPath() ) );
+
+                DisplayError( this, msg );
+                return NULL;
+            }
+        }
+        catch( IO_ERROR ioe )
+        {
+            DisplayError( this, ioe.errorText );
+            return NULL;
+        }
     }
     else if( isLegacy )
     {

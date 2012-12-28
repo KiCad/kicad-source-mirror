@@ -121,6 +121,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/eagle_plugin.cpp
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/kicad_plugin.cpp
+    ../pcbnew/gpcb_plugin.cpp
     pcb_plot_params_keywords.cpp
     pcb_keywords.cpp
     ../pcbnew/pcb_parser.cpp

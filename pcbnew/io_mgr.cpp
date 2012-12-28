@@ -28,6 +28,7 @@
 #include <legacy_plugin.h>
 #include <kicad_plugin.h>
 #include <eagle_plugin.h>
+#include <gpcb_plugin.h>
 #include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
@@ -64,6 +65,9 @@ PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 
     case EAGLE:
         return new EAGLE_PLUGIN();
+
+    case GEDA_PCB:
+        return new GPCB_PLUGIN();
     }
 
     return NULL;
@@ -99,6 +103,9 @@ const wxString IO_MGR::ShowType( PCB_FILE_T aType )
 
     case EAGLE:
         return wxString( wxT( "Eagle" ) );
+
+    case GEDA_PCB:
+        return wxString( wxT( "Geda-PCB" ) );
     }
 }
 
@@ -117,6 +124,9 @@ IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
 
     if( aType == wxT( "Eagle" ) )
         return EAGLE;
+
+    if( aType == wxT( "Geda-PCB" ) )
+        return GEDA_PCB;
 
     // wxASSERT( blow up here )
 
@@ -145,7 +155,13 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
     PCB_FILE_T  ret;
 
     if( fn.GetExt() == LegacyFootprintLibPathExtension )
+    {
         ret = LEGACY;
+    }
+    else if( fn.GetExt() == GedaPcbFootprintLibFileExtension )
+    {
+        ret = GEDA_PCB;
+    }
     else
     {
         // Although KICAD PLUGIN uses libpaths with fixed extension of

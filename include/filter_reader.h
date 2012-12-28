@@ -62,4 +62,38 @@ public:
     }
 };
 
+
+/**
+ * Class WHITESPACE_FILTER_READER
+ * reads lines of text from another LINE_READER, but only returns non-comment
+ * lines and non-blank lines with leading whitespace characters (space and tab)
+ * removed from its ReadLine() function.
+ */
+class WHITESPACE_FILTER_READER : public LINE_READER
+{
+    LINE_READER&  reader;
+
+public:
+
+    /**
+     * Constructor ( LINE_READER& )
+     * does not take ownership over @a aReader, so will not destroy it.
+     */
+    WHITESPACE_FILTER_READER( LINE_READER& aReader );
+
+    ~WHITESPACE_FILTER_READER();
+
+    char* ReadLine() throw( IO_ERROR );
+
+    const wxString& GetSource() const
+    {
+        return reader.GetSource();
+    }
+
+    unsigned LineNumber() const
+    {
+        return reader.LineNumber();
+    }
+};
+
 #endif // FILTER_READER_H_

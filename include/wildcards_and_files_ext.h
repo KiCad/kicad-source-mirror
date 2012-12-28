@@ -66,6 +66,7 @@ extern const wxString ReportFileExtension;
 extern const wxString FootprintPlaceFileExtension;
 extern const wxString KiCadFootprintFileExtension;
 extern const wxString KiCadFootprintLibPathExtension;
+extern const wxString GedaPcbFootprintLibFileExtension;
 
 /// Proper wxFileDialog wild card definitions.
 extern const wxString SchematicSymbolFileWildcard;
@@ -92,5 +93,6 @@ extern const wxString DocModulesFileName;
 extern const wxString LegacyFootprintLibPathWildcard;
 extern const wxString KiCadFootprintLibFileWildcard;
 extern const wxString KiCadFootprintLibPathWildcard;
+extern const wxString GedaPcbFootprintLibFileWildcard;
 
 #endif  // INCLUDE_WILDCARDS_AND_FILES_EXT_H_

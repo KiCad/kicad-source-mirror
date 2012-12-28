@@ -1,3 +1,4 @@
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -76,7 +77,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // from File
     AddMenuItem( openSubmenu, ID_MODEDIT_IMPORT_PART,
-                 _( "Import Module from File (&Import)" ),
+                 _( "&Import Module from File" ),
                  _( "Import a footprint from an existing file" ),
                  KiBitmap( import_module_xpm ) );
 

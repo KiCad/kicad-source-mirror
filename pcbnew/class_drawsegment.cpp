@@ -265,31 +265,34 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                    radius, m_Width, color );
         }
         break;
-    case S_CURVE:
-            m_BezierPoints = Bezier2Poly(m_Start, m_BezierC1, m_BezierC2, m_End);
 
-            for (unsigned int i=1; i < m_BezierPoints.size(); i++) {
-                if( mode == LINE )
-                    GRLine( panel->GetClipBox(), DC,
-                            m_BezierPoints[i].x, m_BezierPoints[i].y,
-                            m_BezierPoints[i-1].x, m_BezierPoints[i-1].y, 0,
-                            color );
-                else if( mode == SKETCH )
-                {
-                    GRCSegm( panel->GetClipBox(), DC,
+    case S_CURVE:
+        m_BezierPoints = Bezier2Poly(m_Start, m_BezierC1, m_BezierC2, m_End);
+
+        for (unsigned int i=1; i < m_BezierPoints.size(); i++) {
+            if( mode == LINE )
+                GRLine( panel->GetClipBox(), DC,
+                        m_BezierPoints[i].x, m_BezierPoints[i].y,
+                        m_BezierPoints[i-1].x, m_BezierPoints[i-1].y, 0,
+                        color );
+            else if( mode == SKETCH )
+            {
+                GRCSegm( panel->GetClipBox(), DC,
+                         m_BezierPoints[i].x, m_BezierPoints[i].y,
+                         m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
+                         m_Width, color );
+            }
+            else
+            {
+                GRFillCSegm( panel->GetClipBox(), DC,
                              m_BezierPoints[i].x, m_BezierPoints[i].y,
                              m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
                              m_Width, color );
-                }
-                else
-                {
-                    GRFillCSegm( panel->GetClipBox(), DC,
-                                 m_BezierPoints[i].x, m_BezierPoints[i].y,
-                                 m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
-                                 m_Width, color );
-                }
             }
-         break;
+        }
+
+        break;
+
     default:
         if( mode == LINE )
         {
