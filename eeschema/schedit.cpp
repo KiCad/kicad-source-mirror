@@ -384,6 +384,12 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM*   item = screen->GetCurItem();
 
+    if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    {
+        // trying to move an item when there is a block at the same time is not acceptable
+        return;
+    }
+
     if( item == NULL )
     {
         // If we didn't get here by a hot key, then something has gone wrong.
@@ -725,15 +731,15 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
+    // Allows block rotate operation on hot key.
+    if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    {
+        HandleBlockEndByPopUp( BLOCK_ROTATE, &dc );
+        return;
+    }
+
     if( item == NULL )
     {
-        // Allows block rotate operation on hot key.
-        if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-        {
-            HandleBlockEndByPopUp( BLOCK_ROTATE, &dc );
-            return;
-        }
-
         // If we didn't get here by a hot key, then something has gone wrong.
         if( aEvent.GetInt() == 0 )
             return;
@@ -965,9 +971,6 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
         wxFAIL_MSG( wxString::Format( wxT( "Cannot drag schematic item type %s." ),
                                       GetChars( item->GetClass() ) ) );
     }
-
-    // Since the drag is actually a block command, clear the current item.
-    screen->SetCurItem( NULL );
 }
 
 
@@ -978,21 +981,21 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
+    // Allows block rotate operation on hot key.
+    if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    {
+        if( aEvent.GetId() == ID_SCH_MIRROR_X )
+            HandleBlockEndByPopUp( BLOCK_MIRROR_X, &dc );
+        else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
+            HandleBlockEndByPopUp( BLOCK_MIRROR_Y, &dc );
+        else
+            wxFAIL_MSG( wxT( "Unknown block oriention command ID." ) );
+
+        return;
+    }
+
     if( item == NULL )
     {
-        // Allows block rotate operation on hot key.
-        if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-        {
-            if( aEvent.GetId() == ID_SCH_MIRROR_X )
-                HandleBlockEndByPopUp( BLOCK_MIRROR_X, &dc );
-            else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
-                HandleBlockEndByPopUp( BLOCK_MIRROR_Y, &dc );
-            else
-                wxFAIL_MSG( wxT( "Unknown block oriention command ID." ) );
-
-            return;
-        }
-
         // If we didn't get here by a hot key, then something has gone wrong.
         if( aEvent.GetInt() == 0 )
             return;

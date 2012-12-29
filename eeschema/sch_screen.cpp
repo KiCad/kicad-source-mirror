@@ -774,6 +774,7 @@ void SCH_SCREEN::SelectBlockItems()
     for( ; ii < last_select_id; ii++ )
     {
         item = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
+        item->SetFlags( IS_DRAGGED );
 
         if( item->Type() == SCH_LINE_T )
         {
@@ -858,6 +859,8 @@ int SCH_SCREEN::UpdatePickList()
 {
     ITEM_PICKER picker;
     EDA_RECT area;
+    unsigned count;
+
     area.SetOrigin( m_BlockLocate.GetOrigin() );
     area.SetSize( m_BlockLocate.GetSize() );
     area.Normalize();
@@ -872,7 +875,19 @@ int SCH_SCREEN::UpdatePickList()
         }
     }
 
-    return m_BlockLocate.GetCount();
+    // if the block is composed of one item,
+    // select it as the current item
+    count =  m_BlockLocate.GetCount();
+    if( count == 1 )
+    {
+        SetCurItem( (SCH_ITEM*) m_BlockLocate.GetItem( 0 ) );
+    }
+    else
+    {
+        SetCurItem( NULL );
+    }
+
+    return count;
 }
 
 
