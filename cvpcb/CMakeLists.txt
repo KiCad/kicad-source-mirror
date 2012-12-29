@@ -95,6 +95,7 @@ endif(APPLE)
 target_link_libraries(cvpcb
     3d-viewer
     pcbcommon
+    pcad2kicadpcb
     common
     bitmaps
     polygon

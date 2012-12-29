@@ -416,6 +416,7 @@ target_link_libraries(pcbnew
     common
     bitmaps
     polygon
+    pcad2kicadpcb
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
