@@ -190,6 +190,7 @@ the changes?" ) ) )
         { PcbFileWildcard,          IO_MGR::KICAD },
         { LegacyPcbFileWildcard,    IO_MGR::LEGACY },
         { EaglePcbFileWildcard,     IO_MGR::EAGLE },
+        { PCadPcbFileWildcard,      IO_MGR::PCAD },
     };
 
     if( !fileName.IsOk() || !fileName.FileExists() || aForceFileDialog )
@@ -326,13 +327,28 @@ the changes?" ) ) )
         GetBoard()->SetFileName( new_filename );
     }
 
-    // Fix the directory separator on Windows
-    wxString fn( GetBoard()->GetFileName() );
+    // Fix the directory separator on Windows and
+    // force the new file format for not Kicad boards,
+    // to ensure the right format when saving the board
+    bool converted =  pluginType != IO_MGR::LEGACY && pluginType != IO_MGR::KICAD;
+    wxString fn;
+
+    if( converted )
+        fn = GetBoard()->GetFileName().BeforeLast( '.' );
+    else
+        fn = GetBoard()->GetFileName();
+
     fn.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
+    if( converted )
+        fn += wxT( "." ) + PcbFileExtension;
+
     GetBoard()->SetFileName( fn );
 
     UpdateTitle();
-    UpdateFileHistory( GetBoard()->GetFileName() );
+
+    if( !converted )
+        UpdateFileHistory( GetBoard()->GetFileName() );
 
     // Rebuild the new pad list (for drc and ratsnet control ...)
     GetBoard()->m_Status_Pcb = 0;

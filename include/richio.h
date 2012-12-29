@@ -212,7 +212,7 @@ protected:
 
     /**
      * Function expandCapacity
-     * will exand the capacity of @a line up to maxLineLength but not greater, so
+     * will expand the capacity of @a line up to maxLineLength but not greater, so
      * be careful about making assumptions of @a capacity after calling this.
      */
     void        expandCapacity( unsigned newsize );

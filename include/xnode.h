@@ -46,6 +46,7 @@
 class XNODE : public wxXmlNode
 {
 public:
+    //-----<overloads>---------------------------------------------------------
     XNODE() :
         wxXmlNode()
     {
@@ -61,6 +62,22 @@ public:
         wxXmlNode( aParent, aType, aName, aContent, aProperties )
     {
     }
+
+    XNODE* GetChildren() const
+    {
+        return (XNODE* )wxXmlNode::GetChildren();
+    }
+
+    XNODE* GetNext() const
+    {
+        return (XNODE* )wxXmlNode::GetNext();
+    }
+
+    XNODE* GetParent() const
+    {
+        return (XNODE* )wxXmlNode::GetParent();
+    }
+    //-----</overloads>--------------------------------------------------------
 
     /**
      * Function Format

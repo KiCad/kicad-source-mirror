@@ -1,0 +1,6 @@
+
+Examples description
+====================
+
+CK1202_V1.pcb - provided by author Andrey Manin <pcadbegin[at]rambler.ru>,
+downloaded from http://www.pcadbegin.webtm.ru/schetchik.php?scach=1

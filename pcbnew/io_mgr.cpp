@@ -28,6 +28,7 @@
 #include <legacy_plugin.h>
 #include <kicad_plugin.h>
 #include <eagle_plugin.h>
+#include <pcad2kicadpcb_plugin/pcad_plugin.h>
 #include <gpcb_plugin.h>
 #include <wildcards_and_files_ext.h>
 
@@ -65,6 +66,9 @@ PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 
     case EAGLE:
         return new EAGLE_PLUGIN();
+
+    case PCAD:
+        return new PCAD_PLUGIN();
 
     case GEDA_PCB:
         return new GPCB_PLUGIN();
@@ -104,6 +108,9 @@ const wxString IO_MGR::ShowType( PCB_FILE_T aType )
     case EAGLE:
         return wxString( wxT( "Eagle" ) );
 
+    case PCAD:
+        return wxString( wxT( "P-Cad" ) );
+
     case GEDA_PCB:
         return wxString( wxT( "Geda-PCB" ) );
     }
@@ -124,6 +131,9 @@ IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
 
     if( aType == wxT( "Eagle" ) )
         return EAGLE;
+
+    if( aType == wxT( "P-Cad" ) )
+        return PCAD;
 
     if( aType == wxT( "Geda-PCB" ) )
         return GEDA_PCB;
