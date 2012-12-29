@@ -539,6 +539,15 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 
     copyOptionsToPanel();
 
+    // disable some options inside the edit dialog
+    // which can cause problems while dragging
+    if( m_Cmp->IsDragging() )
+    {
+        orientationRadioBox->Disable();
+        mirrorRadioBox->Disable();
+        chipnameTextCtrl->Disable();
+    }
+
     // put focus on the list ctrl
     fieldListCtrl->SetFocus();
 
