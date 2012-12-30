@@ -1670,7 +1670,7 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
       || !m_company.IsEmpty() || !m_comment1.IsEmpty() || !m_comment2.IsEmpty()
       || !m_comment3.IsEmpty() || !m_comment4.IsEmpty()  )
     {
-        aFormatter->Print( aNestLevel, "(title_block " );
+        aFormatter->Print( aNestLevel, "(title_block \n" );
 
         if( !m_title.IsEmpty() )
             aFormatter->Print( aNestLevel+1, "(title %s)\n",

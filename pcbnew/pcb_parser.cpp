@@ -264,7 +264,7 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR )
 
     auto_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
 
-    NeedSYMBOL();
+    NeedSYMBOLorNUMBER();
     n3D->m_Shape3DName = FromUTF8();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -592,12 +592,12 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
         switch( token )
         {
         case T_title:
-            NeedSYMBOL();
+            NextTok();
             titleBlock.SetTitle( FromUTF8() );
             break;
 
         case T_date:
-            NeedSYMBOL();
+            NextTok();
             titleBlock.SetDate( FromUTF8() );
             break;
 
@@ -1587,7 +1587,7 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_path:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();   // Paths can be numerical so a number is also a symbol here
             module->SetPath( FromUTF8() );
             NeedRIGHT();
             break;
