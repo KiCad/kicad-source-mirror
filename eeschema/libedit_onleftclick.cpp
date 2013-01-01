@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,10 @@
 void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
     LIB_ITEM* item = m_drawItem;
-    bool no_item_edited = item == NULL || item->GetFlags() == 0;
+    bool item_in_edit = false;
+    if( item )
+        item_in_edit = item->IsNew() || item->IsMoving() || item->IsDragging();
+    bool no_item_edited = !item_in_edit;
 
     if( m_component == NULL )   // No component loaded !
         return;
@@ -63,7 +66,8 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( item && item->GetFlags() )   // moved object
+        // If an item is currently in edit, finish edit
+        if( item_in_edit )
         {
             switch( item->Type() )
             {
@@ -80,13 +84,9 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
     case ID_LIBEDIT_PIN_BUTT:
         if( no_item_edited )
-        {
             CreatePin( DC );
-        }
         else
-        {
             PlacePin( DC );
-        }
         break;
 
     case ID_LIBEDIT_BODY_LINE_BUTT:
@@ -95,9 +95,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_LIBEDIT_BODY_RECT_BUTT:
     case ID_LIBEDIT_BODY_TEXT_BUTT:
         if( no_item_edited )
-        {
             m_drawItem = CreateGraphicItem( m_component, DC );
-        }
         else if( m_drawItem )
         {
             if( m_drawItem->IsNew() )

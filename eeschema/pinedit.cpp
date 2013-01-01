@@ -159,7 +159,6 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     pin->SetFlags( item_flags );
 }
 
-
 /**
  * Clean up after aborting a move pin command.
  */
@@ -467,58 +466,60 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
 }
 
 
-/*  Depending on "id":
- * - Change pin text size (name or num) (range 10 .. 1000 mil)
- * - Change pin length.
+/* aMasterPin is the "template" pin
+ * aId is a param to select what should be mofified:
+ * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
+ *          Change pins text name size
+ * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
+ *          Change pins text num size
+ * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
+ *          Change pins length.
  *
- * If Pin is selected ( .m_flag == IS_SELECTED ) only the other selected
- * pins are modified
+ * If aMasterPin is selected ( .m_flag == IS_SELECTED ),
+ * only the other selected pins are modified
  */
-void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
+void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
 
 {
-    LIB_PIN* Pin;
-    bool     selected    = MasterPin->IsSelected();
-    bool     showPinText = true;
+    bool selected = aMasterPin->IsSelected();
 
-    if( ( m_component == NULL ) || ( MasterPin == NULL ) )
+    if( ( m_component == NULL ) || ( aMasterPin == NULL ) )
         return;
 
-    if( MasterPin->Type() != LIB_PIN_T )
+    if( aMasterPin->Type() != LIB_PIN_T )
         return;
 
     OnModify( );
 
-    Pin = m_component->GetNextPin();
+    LIB_PIN* pin = m_component->GetNextPin();
 
-    for( ; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
+    for( ; pin != NULL; pin = m_component->GetNextPin( pin ) )
     {
-        if( ( Pin->GetConvert() ) && ( Pin->GetConvert() != m_convert ) )
+        if( ( pin->GetConvert() ) && ( pin->GetConvert() != m_convert ) )
             continue;
 
         // Is it the "selected mode" ?
-        if( selected && !Pin->IsSelected() )
+        if( selected && !pin->IsSelected() )
             continue;
 
-        Pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, &showPinText, DefaultTransform );
-
-        switch( id )
+        switch( aId )
         {
         case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-            Pin->SetNumberTextSize( MasterPin->GetNumberTextSize() );
+            pin->SetNumberTextSize( aMasterPin->GetNumberTextSize() );
             break;
 
         case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
-            Pin->SetNameTextSize( MasterPin->GetNameTextSize() );
+            pin->SetNameTextSize( aMasterPin->GetNameTextSize() );
             break;
 
         case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
-            Pin->SetLength( MasterPin->GetLength() );
+            pin->SetLength( aMasterPin->GetLength() );
             break;
         }
 
-        Pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, GR_DEFAULT_DRAWMODE, &showPinText,
-                   DefaultTransform );
+        // Clear the flag IS_CHANGED, which was set by previous changes (if any)
+        // but not used here.
+        pin->ClearFlags( IS_CHANGED );
     }
 }
 
