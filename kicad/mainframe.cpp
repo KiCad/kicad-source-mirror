@@ -89,6 +89,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
     PrintMsg( line );
 
     RecreateBaseHToolbar();
+    ReCreateMenuBar();
 
     m_auimgr.SetManagedWindow( this );
 
@@ -258,8 +259,9 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 #endif
 
     mask = _( "Text file (" ) + mask + wxT( ")|" ) + mask;
+    wxString default_dir = wxGetCwd();
 
-    wxFileDialog dlg( this, _( "Load File to Edit" ), wxGetCwd(),
+    wxFileDialog dlg( this, _( "Load File to Edit" ), default_dir,
                       wxEmptyString, mask, wxFD_OPEN );
 
     if( dlg.ShowModal() == wxID_CANCEL )

@@ -148,13 +148,14 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 {
     int style;
     wxString title;
+    bool newProject = ( event.GetId() == ID_NEW_PROJECT ) ||
+                      ( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE );
 
     ClearMsg();
 
     if( event.GetId() != wxID_ANY )
     {
-        if( ( event.GetId() == ID_NEW_PROJECT ) ||
-            ( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE ) )
+        if( newProject )
         {
             title = _( "Create New Project" );
             style = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
@@ -165,15 +166,16 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
             style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
         }
 
-        wxFileDialog dlg( this, title, wxGetCwd(), wxEmptyString, ProjectFileWildcard, style );
+        wxString default_dir = wxGetCwd();
+        wxFileDialog dlg( this, title, default_dir, wxEmptyString,
+                          ProjectFileWildcard, style );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
 
         m_ProjectFileName = dlg.GetPath();
 
-        if( ( event.GetId() == ID_NEW_PROJECT ) ||
-            ( event.GetId() == ID_NEW_PROJECT_FROM_TEMPLATE ) )
+        if( newProject )
         {
             if ( !m_ProjectFileName.GetFullPath().EndsWith( g_KicadPrjFilenameExtension ) )
             {
@@ -221,11 +223,17 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     SetTitle( title );
     UpdateFileHistory( m_ProjectFileName.GetFullPath() );
     m_LeftWin->ReCreateTreePrj();
+#ifdef KICAD_USE_FILES_WATCHER
+    // Rebuild the list of watched paths.
+    // however this is possible only when the main loop event handler is running,
+    // so we use it to rub the rebuild function.
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_INIT_WATCHED_PATHS );
+    wxPostEvent( this, cmd);
+#endif
 
     PrintMsg( _( "Working dir: " ) + m_ProjectFileName.GetPath() +
               _( "\nProject: " ) + m_ProjectFileName.GetFullName() +
               wxT( "\n" ) );
-
 }
 
 
