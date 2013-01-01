@@ -222,10 +222,14 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     SetTitle( title );
     UpdateFileHistory( m_ProjectFileName.GetFullPath() );
-#if wxCHECK_VERSION( 2, 9, 2  )
-    m_LeftWin->FileWatcherReset();
-#endif
     m_LeftWin->ReCreateTreePrj();
+#ifdef KICAD_USE_FILES_WATCHER
+    // Rebuild the list of watched paths.
+    // however this is possible only when the main loop event handler is running,
+    // so we use it to rub the rebuild function.
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_INIT_WATCHED_PATHS );
+    wxPostEvent( this, cmd);
+#endif
 
     PrintMsg( _( "Working dir: " ) + m_ProjectFileName.GetPath() +
               _( "\nProject: " ) + m_ProjectFileName.GetFullName() +

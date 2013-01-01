@@ -31,6 +31,7 @@
 #include <appl_wxstruct.h>
 #include <kicad.h>
 #include <menus_helpers.h>
+#include <tree_project_frame.h>
 
 /* Menubar and toolbar event table */
 BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
@@ -67,8 +68,12 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
     /* Range menu events */
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, KICAD_MANAGER_FRAME::SetLanguage )
-
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, KICAD_MANAGER_FRAME::OnFileHistory )
+
+    // Special functions
+    #ifdef KICAD_USE_FILES_WATCHER
+    EVT_MENU( ID_INIT_WATCHED_PATHS, KICAD_MANAGER_FRAME::OnChangeWatchedPaths )
+    #endif
 
     /* Button events */
     EVT_BUTTON( ID_TO_PCB, KICAD_MANAGER_FRAME::OnRunPcbNew )

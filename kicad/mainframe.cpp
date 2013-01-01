@@ -89,6 +89,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
     PrintMsg( line );
 
     RecreateBaseHToolbar();
+    ReCreateMenuBar();
 
     m_auimgr.SetManagedWindow( this );
 
