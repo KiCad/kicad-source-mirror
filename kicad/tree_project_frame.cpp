@@ -34,7 +34,6 @@
 #include <appl_wxstruct.h>
 #include <macros.h>
 
-#include <kicad.h>
 #include <tree_project_frame.h>
 #include <class_treeprojectfiles.h>
 #include <class_treeproject_item.h>
@@ -137,9 +136,8 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
     m_TreeProject = NULL;
     wxMenuItem* item;
     m_PopupMenu = NULL;
-#if wxCHECK_VERSION( 2, 9, 2  )
-    m_watcher = new wxFileSystemWatcher();
-    m_watcher->SetOwner( this );
+#ifdef KICAD_USE_FILES_WATCHER
+    m_watcher = NULL;
     Connect( wxEVT_FSWATCHER,
              wxFileSystemWatcherEventHandler( TREE_PROJECT_FRAME::OnFileSystemEvent ) );
 #endif
@@ -235,7 +233,7 @@ TREE_PROJECT_FRAME::~TREE_PROJECT_FRAME()
     if( m_PopupMenu )
         delete m_PopupMenu;
 
-#if wxCHECK_VERSION( 2, 9, 2  )
+#ifdef KICAD_USE_FILES_WATCHER
     delete m_watcher;
 #endif
 }
@@ -935,6 +933,7 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
     wxTreeItemIdValue   cookie;
     wxTreeItemId        kid = m_TreeProject->GetFirstChild( itemId, cookie );
 
+    bool subdir_populated = false;
     for( ; kid.IsOk(); kid = m_TreeProject->GetNextChild( itemId, cookie ) )
     {
         TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
@@ -959,9 +958,19 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
         }
 
         itemData->m_WasPopulated = true;       // set state to populated
+        subdir_populated = true;
 
         /* Sort filenames by alphabetic order */
         m_TreeProject->SortChildren( kid );
+    }
+
+    if( subdir_populated )
+    {
+#ifdef KICAD_USE_FILES_WATCHER
+    #ifndef __WINDOWS__
+        m_TreeProject->FileWatcherReset();
+    #endif
+#endif
     }
 }
 
@@ -1032,20 +1041,16 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
 
         TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
 
-        if( itemData )
+        if( itemData && ( itemData->GetType() == TREE_DIRECTORY ) )
         {
-            if( itemData->GetType() != TREE_DIRECTORY )
-                continue;
-
             if( itemData->m_FileName == aSubDir )    // Found!
             {
                 root_id = kid;
                 break;
             }
 
-            // if kid is a subdir, push in list to explore it later
-            if( itemData->GetType() == TREE_DIRECTORY &&
-                itemData->m_WasPopulated )
+            // kid is a subdir, push in list to explore it later
+            if( itemData->m_WasPopulated )
                 subdirs_id.push( kid );
         }
         kid = m_TreeProject->GetNextChild( root_id, cookie );
@@ -1054,10 +1059,10 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
     return root_id;
 }
 
-#if wxCHECK_VERSION( 2, 9, 2  )
+#ifdef KICAD_USE_FILES_WATCHER
 /* called when a file or directory is modified/created/deleted
- * The tree project should be rebuilt when a file or directory
- * is created or deleted
+ * The tree project is modified when a file or directory
+ * is created/deleted/renamed to reflect the file change
  */
  void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
 {
@@ -1102,28 +1107,23 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
         {
             TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
 
-            if( itemData )
+            if( itemData && ( itemData->m_FileName == fn ) )
             {
-                if( itemData->m_FileName == fn )
+                if( event.GetChangeType() == wxFSW_EVENT_DELETE )
+                    m_TreeProject->Delete( kid );
+                else
                 {
-                    if( event.GetChangeType() == wxFSW_EVENT_DELETE )
-                    {
-                        m_TreeProject->Delete( kid );
-                    }
-                    else
-                    {
-                        wxFileName newpath = event.GetNewPath();
-                        wxString newfn = newpath.GetFullPath();
-                        // Change item label and item data
-                        // Extension could be modified and be not an usually selected file type
-                        // However, here we do not filter files.
-                        // This is simple, and I am not sure filtering renamed files here is better,
-                        // becuse they could disappear, like deleted files
-                        itemData->SetFileName( newpath.GetFullPath() );
-                        m_TreeProject->SetItemText( kid, newpath.GetFullName() );
-                    }
-                    return;
+                    wxFileName newpath = event.GetNewPath();
+                    wxString newfn = newpath.GetFullPath();
+                    // Change item label and item data
+                    // Extension could be modified and be not an usually selected file type
+                    // However, here we do not filter files.
+                    // This is simple, and I am not sure filtering renamed files here is better,
+                    // because they could disappear, like deleted files
+                    itemData->SetFileName( newpath.GetFullPath() );
+                    m_TreeProject->SetItemText( kid, newpath.GetFullName() );
                 }
+                return;
             }
 
             kid = m_TreeProject->GetNextChild( root_id, cookie );
@@ -1134,6 +1134,11 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
     m_TreeProject->SortChildren( root_id );
 }
 
+/* Reinit the watched paths
+ * Should be called after opening a new project to
+ * rebuild the list of watched paths.
+ * Should be called after the main loop event handler is started
+ */
 void TREE_PROJECT_FRAME::FileWatcherReset()
 {
     // Prepare file watcher:
@@ -1142,15 +1147,73 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
     m_watcher->SetOwner( this );
 
     // Add directories which should be monitored.
-    // under windows, we add the curr dir and subdirs
-    // under unix, we add only the curr dir
+    // under windows, we add the curr dir and all subdirs
+    // under unix, we add only the curr dir and the populated subdirs
     // see  http://docs.wxwidgets.org/trunk/classwx_file_system_watcher.htm
     // under unix, the file watcher needs more work to be efficient
+    // moreover, under wxWidgets 2.9.4, AddTree does not work properly.
+    wxFileName watched_path = wxFileName::DirName( wxGetCwd() );
 #ifdef __WINDOWS__
-    m_watcher->AddTree( wxFileName::DirName( wxT( "./" ) ) );
+    m_watcher->AddTree( watched_path );
 #else
-    m_watcher->Add( wxFileName::DirName( wxT( "./" ) ) );
+    m_watcher->Add( watched_path );
+
+    // Add subdirs
+    wxTreeItemIdValue  cookie;
+    wxTreeItemId       root_id = m_root;
+    std::stack < wxTreeItemId > subdirs_id;
+
+    wxTreeItemId kid = m_TreeProject->GetFirstChild( root_id, cookie );
+    while( 1 )
+    {
+        if( ! kid.IsOk() )
+        {
+            if( subdirs_id.empty() )    // all items were explored
+                break;
+            else
+            {
+                root_id = subdirs_id.top();
+                subdirs_id.pop();
+                kid = m_TreeProject->GetFirstChild( root_id, cookie );
+                if( ! kid.IsOk() )
+                    continue;
+            }
+        }
+
+        TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
+
+        if( itemData && ( itemData->GetType() == TREE_DIRECTORY ) )
+        {
+            watched_path = wxFileName::DirName( itemData->m_FileName );
+            m_watcher->Add( watched_path );
+
+            // if kid is a subdir, push in list to explore it later
+            if( itemData->m_WasPopulated && m_TreeProject->GetChildrenCount( kid ) )
+                subdirs_id.push( kid );
+        }
+        kid = m_TreeProject->GetNextChild( root_id, cookie );
+    }
 #endif
+
+#if 0   // For test only!
+    wxArrayString paths;
+    m_watcher->GetWatchedPaths( &paths );
+    for( unsigned ii = 0; ii < paths.GetCount(); ii++ )
+        wxLogMessage( paths[ii] );
+#endif
+}
+
+/* Called by sending a event with id = ID_INIT_WATCHED_PATHS
+ * rebuild the list of whatched paths
+ * We are using an event called function to install or reinit a file system watcher
+ * because a file watcher *needs* a running loop event handler.
+ * this is noticeable under Linux.
+ * therefore the safe way to do that is to use the main event loop
+ * to call m_LeftWin->FileWatcherReset()
+ */
+void KICAD_MANAGER_FRAME::OnChangeWatchedPaths(wxCommandEvent& aEvent )
+{
+    m_LeftWin->FileWatcherReset();
 }
 
 #endif

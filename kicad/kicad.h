@@ -15,6 +15,12 @@
 #include <wxstruct.h>
 #include <appl_wxstruct.h>
 
+// With a recent wxWidget, we can use the wxFileSystemWatcherEvent
+// to monitor files add/remove/rename in tree project
+#if wxCHECK_VERSION( 2, 9, 4  )
+#define KICAD_USE_FILES_WATCHER
+#endif
+
 extern const wxString g_KicadPrjFilenameExtension;
 
 class RIGHT_KM_FRAME;
@@ -77,7 +83,8 @@ enum id_kicad_frm {
     ID_SELECT_PREFERED_PDF_BROWSER,
     ID_SELECT_DEFAULT_PDF_BROWSER,
     ID_SAVE_AND_ZIP_FILES,
-    ID_READ_ZIP_ARCHIVE
+    ID_READ_ZIP_ARCHIVE,
+    ID_INIT_WATCHED_PATHS
 };
 
 
@@ -174,6 +181,15 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
      * settings will not get saved.
      */
     void SaveSettings();
+
+#ifdef KICAD_USE_FILES_WATCHER
+    void                            FileWatcherReset();
+    /**
+     * Called by sending a event with id = ID_INIT_WATCHED_PATHS
+     * rebuild the list of wahtched paths
+     */
+    void OnChangeWatchedPaths(wxCommandEvent& aEvent );
+#endif
 
     DECLARE_EVENT_TABLE()
 };
