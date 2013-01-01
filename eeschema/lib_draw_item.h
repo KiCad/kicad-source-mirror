@@ -398,7 +398,7 @@ public:
      *
      * @return True if the item is being edited.
      */
-    bool InEditMode() const { return ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0; }
+    bool InEditMode() const { return ( m_Flags & ( IS_NEW | IS_DRAGGED | IS_MOVED | IS_RESIZED ) ) != 0; }
 
     void SetEraseLastDrawItem( bool aErase = true ) { m_eraseLastDrawItem = aErase; }
 

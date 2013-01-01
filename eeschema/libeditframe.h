@@ -585,7 +585,22 @@ public:
     virtual bool HandleBlockEnd( wxDC* DC );
 
     void PlacePin( wxDC* DC );
-    void GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id );
+
+    /**
+     * Function GlobalSetPins
+     * @param aMasterPin is the "template" pin
+     * @param aId is a param to select what should be mofified:
+     * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
+     *          Change pins text name size
+     * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
+     *          Change pins text num size
+     * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
+     *          Change pins length.
+     *
+     * If aMasterPin is selected ( .m_flag == IS_SELECTED ),
+     * only the other selected pins are modified
+     */
+    void GlobalSetPins( LIB_PIN* aMasterPin, int aId );
 
     // Automatic placement of pins
     void RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
