@@ -161,7 +161,8 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath )
 wxString* PROJECT_TEMPLATE::GetTitle(void)
 {
     wxFileInputStream input( GetHtmlFile().GetFullPath() );
-    wxTextInputStream text( input, wxT( "\x9" ), wxConvUTF8 );
+    wxString separator( wxT( "\x9" ) );
+    wxTextInputStream text( input, separator, wxConvUTF8 );
 
     /* Open HTML file and get the text between the title tags */
     if( title == wxEmptyString )
