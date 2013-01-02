@@ -85,12 +85,17 @@ public:
 
     const wxString& GetFileExtension() const;
 
-/*
-    void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );
-
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL);
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, PROPERTIES* aProperties = NULL );
+
+    bool IsFootprintLibWritable( const wxString& aLibraryPath )
+    {
+        return false;   // until someone writes others like FootprintSave(), etc.
+    }
+
+/*
+    void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );
 
     void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, PROPERTIES* aProperties = NULL );
 
@@ -100,7 +105,6 @@ public:
 
     bool FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES* aProperties = NULL );
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath );
 */
 
     //-----</PUBLIC PLUGIN API>-------------------------------------------------
@@ -116,20 +120,22 @@ private:
     XPATH*      m_xpath;            ///< keeps track of what we are working on within
                                     ///< XML document during a Load().
 
-    std::string m_err_path;         ///< snapshot m_xpath contentx into here on exception
-
     int         m_hole_count;       ///< generates unique module names from eagle "hole"s.
 
     NET_MAP     m_pads_to_nets;     ///< net list
 
     MODULE_MAP  m_templates;        ///< is part of a MODULE factory that operates
                                     ///< using copy construction.
-                                    ///< lookup key is libname.packagename
+                                    ///< lookup key is either libname.packagename or simply
+                                    ///< packagename if FootprintLoad() or FootprintEnumberate()
 
     PROPERTIES* m_props;            ///< passed via Save() or Load(), no ownership, may be NULL.
     BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
     double      mm_per_biu;         ///< how many mm in each BIU
     double      biu_per_mm;         ///< how many bius in a mm
+
+    wxString    m_lib_path;
+    wxDateTime  m_mod_time;
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
@@ -150,31 +156,11 @@ private:
     double  eagle_x( BIU x ) const          { return eagle( x ); }
     double  eagle_y( BIU y ) const          { return eagle( y ); }
 
+    /// This PLUGIN only caches one footprint library, this determines which one.
+    void    cacheLib( const wxString& aLibraryPath );
 
-#if 0
-    /// encapsulate the BIU formatting tricks in one place.
-    int biuSprintf( char* buf, BIU aValue ) const;
-
-    /**
-     * Function fmtBIU
-     * converts a BIU to engineering units by scaling and formatting to ASCII.
-     * This function is the complement of biuParse().  One has to know what the
-     * other is doing.
-     */
-    std::string fmtBIU( BIU aValue ) const;
-
-    std::string fmtBIUPair( BIU first, BIU second ) const;
-
-    std::string fmtBIUPoint( const wxPoint& aPoint ) const
-    {
-        return fmtBIUPair( aPoint.x, aPoint.y );
-    }
-
-    std::string fmtBIUSize( const wxSize& aSize ) const
-    {
-        return fmtBIUPair( aSize.x, aSize.y );
-    }
-#endif
+    /// get a file's  or dir's modification time.
+    static wxDateTime getModificationTime( const wxString& aPath );
 
     // all these loadXXX() throw IO_ERROR or ptree_error exceptions:
 
@@ -183,6 +169,20 @@ private:
     void loadLayerDefs( CPTREE& aLayers );
     void loadPlain( CPTREE& aPlain );
     void loadSignals( CPTREE& aSignals );
+
+    /**
+     * Function loadLibrary
+     * loads the Eagle "library" XML element, which can occur either under
+     * a "libraries" element (if a *.brd file) or under a "drawing" element if a
+     * *.lbr file.
+     * @param aLib is the portion of the loaded XML document tree that is the "library"
+     *   element.
+     * @param aLibName is a pointer to the library name or NULL.  If NULL this means
+     *   we are loading a *.lbr not a *.brd file and the key used in m_templates is to exclude
+     *   the library name.
+     */
+    void loadLibrary( CPTREE& aLib, const std::string* aLibName );
+
     void loadLibraries( CPTREE& aLibs );
     void loadElements( CPTREE& aElements );
 

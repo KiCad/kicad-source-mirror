@@ -322,12 +322,14 @@ if (KICAD_SCRIPTING_MODULES)
       3d-viewer
       pcbcommon
       common
-      bitmaps
+      pcad2kicadpcb
       polygon
+      bitmaps
       ${wxWidgets_LIBRARIES}
       ${OPENGL_LIBRARIES}
       ${GDI_PLUS_LIBRARIES}
-      ${PYTHON_LIBRARIES})
+      ${PYTHON_LIBRARIES}
+      )
 
 endif (KICAD_SCRIPTING_MODULES)
 
@@ -414,9 +416,9 @@ target_link_libraries(pcbnew
     3d-viewer
     pcbcommon
     common
-    bitmaps
-    polygon
     pcad2kicadpcb
+    polygon
+    bitmaps
     ${wxWidgets_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

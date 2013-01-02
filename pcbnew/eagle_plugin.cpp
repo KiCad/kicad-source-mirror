@@ -67,6 +67,7 @@ Load() TODO's
 #include <macros.h>
 #include <fctsys.h>
 #include <trigo.h>
+#include <wx/filename.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -1053,6 +1054,7 @@ static inline unsigned long timeStamp( CPTREE& aTree )
 EAGLE_PLUGIN::EAGLE_PLUGIN() :
     m_rules( new ERULES() ),
     m_xpath( new XPATH() )
+//    m_mod_time( wxDateTime::Now() )
 {
     init( NULL );
 }
@@ -1158,7 +1160,8 @@ void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 
     m_xpath->clear();
     m_pads_to_nets.clear();
-    m_templates.clear();
+
+    // m_templates.clear();     this is the FOOTPRINT cache too
 
     m_board = NULL;
     m_props = aProperties;
@@ -1494,6 +1497,58 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 }
 
 
+void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const std::string* aLibName )
+{
+    m_xpath->push( "packages" );
+
+    // library will have <xmlattr> node, skip that and get the single packages node
+    CPTREE& packages = aLib.get_child( "packages" );
+
+    // Create a MODULE for all the eagle packages, for use later via a copy constructor
+    // to instantiate needed MODULES in our BOARD.  Save the MODULE templates in
+    // a MODULE_MAP using a single lookup key consisting of libname+pkgname.
+
+    for( CITER package = packages.begin();  package != packages.end();  ++package )
+    {
+        m_xpath->push( "package", "name" );
+        const std::string& pack_name = package->second.get<std::string>( "<xmlattr>.name" );
+
+#if defined(DEBUG)
+        if( pack_name == "TO220H" )
+        {
+            int breakhere = 1;
+            (void) breakhere;
+        }
+#endif
+        m_xpath->Value( pack_name.c_str() );
+
+        std::string key = aLibName ? makeKey( *aLibName, pack_name ) : pack_name;
+
+        MODULE* m = makeModule( package->second, pack_name );
+
+        // add the templating MODULE to the MODULE template factory "m_templates"
+        std::pair<MODULE_ITER, bool> r = m_templates.insert( key, m );
+
+        if( !r.second )
+        {
+            wxString lib = aLibName ? FROM_UTF8( aLibName->c_str() ) : m_lib_path;
+            wxString pkg = FROM_UTF8( pack_name.c_str() );
+
+            wxString emsg = wxString::Format(
+                _( "<package> name:'%s' duplicated in eagle <library>:'%s'" ),
+                GetChars( pkg ),
+                GetChars( lib )
+                );
+            THROW_IO_ERROR( emsg );
+        }
+
+        m_xpath->pop();
+    }
+
+    m_xpath->pop();     // "packages"
+}
+
+
 void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs )
 {
     m_xpath->push( "libraries.library", "name" );
@@ -1504,55 +1559,7 @@ void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs )
 
         m_xpath->Value( lib_name.c_str() );
 
-        {
-            m_xpath->push( "packages" );
-
-            // library will have <xmlattr> node, skip that and get the single packages node
-            CPTREE& packages = library->second.get_child( "packages" );
-
-            // Create a MODULE for all the eagle packages, for use later via a copy constructor
-            // to instantiate needed MODULES in our BOARD.  Save the MODULE templates in
-            // a MODULE_MAP using a single lookup key consisting of libname+pkgname.
-
-            for( CITER package = packages.begin();  package != packages.end();  ++package )
-            {
-                m_xpath->push( "package", "name" );
-                const std::string& pack_name = package->second.get<std::string>( "<xmlattr>.name" );
-
-    #if defined(DEBUG)
-                if( pack_name == "TO220H" )
-                {
-                    int breakhere = 1;
-                    (void) breakhere;
-                }
-    #endif
-                m_xpath->Value( pack_name.c_str() );
-
-                std::string key = makeKey( lib_name, pack_name );
-
-                MODULE* m = makeModule( package->second, pack_name );
-
-                // add the templating MODULE to the MODULE template factory "m_templates"
-                std::pair<MODULE_ITER, bool> r = m_templates.insert( key, m );
-
-                if( !r.second )
-                {
-                    wxString lib = FROM_UTF8( lib_name.c_str() );
-                    wxString pkg = FROM_UTF8( pack_name.c_str() );
-
-                    wxString emsg = wxString::Format(
-                        _( "<package> name:'%s' duplicated in eagle <library>:'%s'" ),
-                        GetChars( pkg ),
-                        GetChars( lib )
-                        );
-                    THROW_IO_ERROR( emsg );
-                }
-
-                m_xpath->pop();
-            }
-
-            m_xpath->pop();     // "packages"
-        }
+        loadLibrary( library->second, &lib_name );
     }
 
     m_xpath->pop();
@@ -1573,7 +1580,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
         EELEMENT    e( it->second );
 
-        // use "NULL-ness" as an indiation of presence of the attribute:
+        // use "NULL-ness" as an indication of presence of the attribute:
         EATTR*      nameAttr  = 0;
         EATTR*      valueAttr = 0;
 
@@ -2591,56 +2598,119 @@ void EAGLE_PLUGIN::centerBoard()
 }
 
 
-/*
-void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+wxDateTime EAGLE_PLUGIN::getModificationTime( const wxString& aPath )
 {
-    // Eagle lovers apply here.
+    wxFileName  fn( aPath );
+
+    /*
+    // update the writable flag while we have a wxFileName, in a network this
+    // is possibly quite dynamic anyway.
+    m_writable = fn.IsFileWritable();
+    */
+
+    return fn.GetModificationTime();
 }
 
 
-int EAGLE_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
+void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 {
-    double  engUnits = mm_per_biu * aValue;
-    int     len;
-
-    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
+    try
     {
-        // printf( "f: " );
-        len = sprintf( buf, "%.10f", engUnits );
+        wxDateTime  modtime;
 
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
+        if( aLibPath != m_lib_path ||
+            m_mod_time != ( modtime = getModificationTime( aLibPath ) ) )
+        {
+            //D(printf("Loading '%s'\n", TO_UTF8( aLibPath ) );)
 
-        ++len;
+            PTREE       doc;
+            LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
+            m_templates.clear();
+
+            // Set this before completion of loading, since we rely on it for
+            // text of an exception.  Delay setting m_mod_time until after successful load
+            // however.
+            m_lib_path = aLibPath;
+
+            // 8 bit "filename" should be encoded according to disk filename encoding,
+            // (maybe this is current locale, maybe not, its a filesystem issue),
+            // and is not necessarily utf8.
+            std::string filename = (const char*) aLibPath.char_str( wxConvFile );
+
+            read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
+
+            CPTREE& library = doc.get_child( "eagle.drawing.library" );
+
+            m_xpath->push( "eagle.drawing.library" );
+
+            loadLibrary( library, NULL );
+
+            m_xpath->pop();
+
+            m_mod_time = modtime;
+        }
     }
-    else
+    catch( file_parser_error fpe )
     {
-        // printf( "g: " );
-        len = sprintf( buf, "%.10g", engUnits );
+        // for xml_parser_error, what() has the line number in it,
+        // but no byte offset.  That should be an adequate error message.
+        THROW_IO_ERROR( fpe.what() );
     }
-    return len;
-}
 
+    // Class ptree_error is a base class for xml_parser_error & file_parser_error,
+    // so one catch should be OK for all errors.
+    catch( ptree_error pte )
+    {
+        std::string errmsg = pte.what();
 
-std::string EAGLE_PLUGIN::fmtBIU( BIU aValue ) const
-{
-    char    temp[50];
+        errmsg += " @\n";
+        errmsg += m_xpath->Contents();
 
-    int len = biuSprintf( temp, aValue );
-
-    return std::string( temp, len );
+        THROW_IO_ERROR( errmsg );
+    }
 }
 
 
 wxArrayString EAGLE_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, PROPERTIES* aProperties )
 {
-    return wxArrayString();
+    init( aProperties );
+
+    cacheLib( aLibraryPath );
+
+    wxArrayString   ret;
+
+    for( MODULE_CITER it = m_templates.begin();  it != m_templates.end();  ++it )
+        ret.Add( FROM_UTF8( it->first.c_str() ) );
+
+    return ret;
 }
 
 
 MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, PROPERTIES* aProperties )
 {
-    return NULL;
+    init( aProperties );
+
+    cacheLib( aLibraryPath );
+
+    std::string key = TO_UTF8( aFootprintName );
+
+    MODULE_CITER mi = m_templates.find( key );
+
+    if( mi == m_templates.end() )
+        return NULL;
+
+    // copy constructor to clone the template
+    MODULE* ret = new MODULE( *mi->second );
+
+    return ret;
+}
+
+
+/*
+void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+{
+    // Eagle lovers apply here.
 }
 
 
