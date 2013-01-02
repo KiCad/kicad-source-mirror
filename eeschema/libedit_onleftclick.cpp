@@ -40,9 +40,7 @@
 void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
     LIB_ITEM* item = m_drawItem;
-    bool item_in_edit = false;
-    if( item )
-        item_in_edit = item->IsNew() || item->IsMoving() || item->IsDragging();
+    bool item_in_edit = item && item->InEditMode();
     bool no_item_edited = !item_in_edit;
 
     if( m_component == NULL )   // No component loaded !
@@ -139,7 +137,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     if( m_component == NULL )
         return;
 
-    if( ( m_drawItem == NULL ) || ( m_drawItem->GetFlags() == 0 ) )
+    if( ( m_drawItem == NULL ) || !m_drawItem->InEditMode() )
     {   // We can locate an item
         m_drawItem = LocateItemUsingCursor( aPosition );
 
@@ -157,11 +155,12 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
         return;
 
     m_canvas->SetIgnoreMouseEvents( true );
+    bool not_edited = ! m_drawItem->InEditMode();
 
     switch( m_drawItem->Type() )
     {
     case LIB_PIN_T:
-        if( m_drawItem->GetFlags() == 0 )
+        if( not_edited )
         {
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
@@ -172,35 +171,25 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     case LIB_ARC_T:
     case LIB_CIRCLE_T:
     case LIB_RECTANGLE_T:
-        if( m_drawItem->GetFlags() == 0 )
-        {
+        if( not_edited )
             EditGraphicSymbol( DC, m_drawItem );
-        }
         break;
 
     case LIB_POLYLINE_T:
-        if( m_drawItem->GetFlags() == 0 )
-        {
+        if( not_edited )
             EditGraphicSymbol( DC, m_drawItem );
-        }
         else if( m_drawItem->IsNew() )
-        {
             EndDrawGraphicItem( DC );
-        }
         break;
 
     case LIB_TEXT_T:
-        if( m_drawItem->GetFlags() == 0 )
-        {
+        if( not_edited )
             EditSymbolText( DC, m_drawItem );
-        }
         break;
 
     case LIB_FIELD_T:
-        if( m_drawItem->GetFlags() == 0 )
-        {
+        if( not_edited )
             EditField( (LIB_FIELD*) m_drawItem );
-        }
         break;
 
     default:
