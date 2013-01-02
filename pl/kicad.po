@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-29 09:39+0100\n"
-"PO-Revision-Date: 2012-12-29 09:46+0100\n"
+"POT-Creation-Date: 2013-01-02 18:00+0100\n"
+"PO-Revision-Date: 2013-01-02 18:00+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -26,15 +26,15 @@ msgstr ""
 "X-Poedit-SearchPath-7: bitmap2component\n"
 "X-Poedit-SearchPath-8: pcb_calculator\n"
 
-#: kicad/class_treeproject_item.cpp:128
+#: kicad/class_treeproject_item.cpp:139
 msgid "Unable to move file ... "
 msgstr "Nie mogę przenieść pliku ... "
 
-#: kicad/class_treeproject_item.cpp:129 kicad/class_treeproject_item.cpp:204
+#: kicad/class_treeproject_item.cpp:140 kicad/class_treeproject_item.cpp:217
 msgid "Permission error ?"
 msgstr "Błąd uprawnień ?"
 
-#: kicad/class_treeproject_item.cpp:187
+#: kicad/class_treeproject_item.cpp:198
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -42,20 +42,20 @@ msgstr ""
 "Zmiana rozszerzenia pliku zmieni typ pliku.\n"
 " Czy chcesz kontynuować?"
 
-#: kicad/class_treeproject_item.cpp:189
+#: kicad/class_treeproject_item.cpp:200
 msgid "Rename File"
 msgstr "Zmień nazwę pliku"
 
-#: kicad/class_treeproject_item.cpp:203
+#: kicad/class_treeproject_item.cpp:216
 msgid "Unable to rename file ... "
 msgstr "Nie mogę zmienić nazwy pliku ... "
 
-#: kicad/class_treeproject_item.cpp:219
+#: kicad/class_treeproject_item.cpp:234
 #, c-format
 msgid "Do you really want to delete '%s'"
 msgstr "Czy na pewno chcesz usunąć '%s'"
 
-#: kicad/class_treeproject_item.cpp:221
+#: kicad/class_treeproject_item.cpp:236
 msgid "Delete File"
 msgstr "Usuń plik"
 
@@ -151,17 +151,17 @@ msgstr ""
 "\n"
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
-#: kicad/kicad.cpp:90 kicad/kicad.cpp:148 kicad/prjconfig.cpp:219
-#: eeschema/libedit.cpp:62 eeschema/schframe.cpp:1011
-#: pcbnew/moduleframe.cpp:567 pcbnew/pcbframe.cpp:788 cvpcb/cvframe.cpp:717
+#: kicad/kicad.cpp:78 kicad/prjconfig.cpp:221 eeschema/libedit.cpp:62
+#: eeschema/schframe.cpp:1011 pcbnew/moduleframe.cpp:567
+#: pcbnew/pcbframe.cpp:788 cvpcb/cvframe.cpp:717
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
-#: kicad/kicad.cpp:96 kicad/prjconfig.cpp:225
+#: kicad/kicad.cpp:84 kicad/prjconfig.cpp:234
 msgid "Working dir: "
 msgstr "Katalog roboczy: "
 
-#: kicad/kicad.cpp:97 kicad/prjconfig.cpp:226
+#: kicad/kicad.cpp:85 kicad/prjconfig.cpp:235
 msgid ""
 "\n"
 "Project: "
@@ -178,159 +178,159 @@ msgstr ""
 "Gotowy\n"
 "Katalog roboczy: %s\n"
 
-#: kicad/mainframe.cpp:260
+#: kicad/mainframe.cpp:261
 msgid "Text file ("
 msgstr "Plik tekstowy ("
 
-#: kicad/mainframe.cpp:262
+#: kicad/mainframe.cpp:264
 msgid "Load File to Edit"
 msgstr "Załaduj plik do edycji"
 
-#: kicad/menubar.cpp:124
+#: kicad/menubar.cpp:129
 msgid "&Open\tCtrl+O"
 msgstr "&Otwórz\tCtrl+O"
 
-#: kicad/menubar.cpp:125
+#: kicad/menubar.cpp:130
 msgid "Open an existing project"
 msgstr "Otwórz istniejący projekt"
 
-#: kicad/menubar.cpp:134 eeschema/menubar.cpp:96
+#: kicad/menubar.cpp:139 eeschema/menubar.cpp:96
 #: pcbnew/menubar_pcbframe.cpp:89 cvpcb/menubar.cpp:83
 msgid "Open &Recent"
 msgstr "Ostatnio otwie&rane"
 
-#: kicad/menubar.cpp:135 eeschema/menubar.cpp:97
+#: kicad/menubar.cpp:140 eeschema/menubar.cpp:97
 msgid "Open a recent opened schematic project"
 msgstr "Otwiera listę ostatnio otwieranych schematów"
 
-#: kicad/menubar.cpp:141
+#: kicad/menubar.cpp:146
 msgid "&Blank\tCtrl+N"
 msgstr "Pusty\tCtrl+N"
 
-#: kicad/menubar.cpp:142
+#: kicad/menubar.cpp:147
 msgid "Start a blank project"
 msgstr "Rozpoczyna od pusteogo projektu"
 
-#: kicad/menubar.cpp:146
+#: kicad/menubar.cpp:151
 msgid "New from &Template\tCtrl+T"
 msgstr "Nowy z szablonu\tCtrl+T"
 
-#: kicad/menubar.cpp:147 kicad/menubar.cpp:328
+#: kicad/menubar.cpp:152 kicad/menubar.cpp:333
 msgid "Start a new project from a template"
 msgstr "Rozpoczyna nowy projekt na podstawie szablonu"
 
-#: kicad/menubar.cpp:152
+#: kicad/menubar.cpp:157
 msgid "New"
 msgstr "Nowy"
 
-#: kicad/menubar.cpp:153 kicad/menubar.cpp:324
+#: kicad/menubar.cpp:158 kicad/menubar.cpp:329
 msgid "Start a new project"
 msgstr "Utwórz nowy projekt"
 
-#: kicad/menubar.cpp:159 cvpcb/menubar.cpp:93
+#: kicad/menubar.cpp:164 cvpcb/menubar.cpp:93
 msgid "&Save\tCtrl+S"
 msgstr "Zapisz \tCtrl-S"
 
-#: kicad/menubar.cpp:160 kicad/menubar.cpp:338
+#: kicad/menubar.cpp:165 kicad/menubar.cpp:343
 msgid "Save current project"
 msgstr "Zapisz bieżący projekt"
 
-#: kicad/menubar.cpp:167
+#: kicad/menubar.cpp:172
 msgid "&Archive"
 msgstr "Sp&akuj projekt"
 
-#: kicad/menubar.cpp:168
+#: kicad/menubar.cpp:173
 msgid "Archive project files in zip archive"
 msgstr "Spakuj pliki projektu do archiwum Zip"
 
-#: kicad/menubar.cpp:174
+#: kicad/menubar.cpp:179
 msgid "&Unarchive"
 msgstr "Rozpak&uj projekt"
 
-#: kicad/menubar.cpp:175
+#: kicad/menubar.cpp:180
 msgid "Unarchive project files from zip file"
 msgstr "Rozpakuj wszystkie pliki projektu z archiwum Zip"
 
-#: kicad/menubar.cpp:184 eeschema/menubar.cpp:171
+#: kicad/menubar.cpp:189 eeschema/menubar.cpp:171
 #: eeschema/menubar_libedit.cpp:110 pcbnew/menubar_pcbframe.cpp:250
 #: cvpcb/menubar.cpp:106
 msgid "&Quit"
 msgstr "Zakończ "
 
-#: kicad/menubar.cpp:185
+#: kicad/menubar.cpp:190
 msgid "Quit KiCad"
 msgstr "Zakończ pracę w programie KiCad"
 
-#: kicad/menubar.cpp:194
+#: kicad/menubar.cpp:199
 msgid "Text E&ditor"
 msgstr "E&dytor tekstu"
 
-#: kicad/menubar.cpp:195
+#: kicad/menubar.cpp:200
 msgid "Launch preferred text editor"
 msgstr "Uruchom preferowany edytor tekstu"
 
-#: kicad/menubar.cpp:201
+#: kicad/menubar.cpp:206
 msgid "&View File"
 msgstr "Wyświetl plik"
 
-#: kicad/menubar.cpp:202
+#: kicad/menubar.cpp:207
 msgid "View, read or edit file with a text editor"
 msgstr "Przeglądaj lub edytuj plik w edytorze tekstu"
 
-#: kicad/menubar.cpp:211 gerbview/menubar.cpp:215
+#: kicad/menubar.cpp:216 gerbview/menubar.cpp:215
 msgid "&Text Editor"
 msgstr "Edytor &tekstu"
 
-#: kicad/menubar.cpp:212 gerbview/menubar.cpp:216
+#: kicad/menubar.cpp:217 gerbview/menubar.cpp:216
 msgid "Select your preferred text editor"
 msgstr "Wybierz preferowany edytor tekstu"
 
-#: kicad/menubar.cpp:221
+#: kicad/menubar.cpp:226
 msgid "&Default"
 msgstr "&Domyślny"
 
-#: kicad/menubar.cpp:222
+#: kicad/menubar.cpp:227
 msgid "Use system default PDF viewer used to browse datasheets"
 msgstr "Użyj domyślnej przeglądarki PDF do przeglądania dokumentacji"
 
-#: kicad/menubar.cpp:234
+#: kicad/menubar.cpp:239
 msgid "&Favourite"
 msgstr "Ulubione"
 
-#: kicad/menubar.cpp:235
+#: kicad/menubar.cpp:240
 msgid "Use your favourite PDF viewer used to browse datasheets"
 msgstr "Użyj preferowanej przeglądarki PDF do przeglądania dokumentacji"
 
-#: kicad/menubar.cpp:248 kicad/menubar.cpp:255
+#: kicad/menubar.cpp:253 kicad/menubar.cpp:260
 msgid "&PDF Viewer"
 msgstr "Przeglądarka &PDF"
 
-#: kicad/menubar.cpp:249
+#: kicad/menubar.cpp:254
 msgid "Select your favourite PDF viewer used to browse datasheets"
 msgstr "Wybierz preferowaną przeglądarkę PDF do przeglądania dokumentacji"
 
-#: kicad/menubar.cpp:256
+#: kicad/menubar.cpp:261
 msgid "PDF viewer preferences"
 msgstr "Ustawienia przeglądarki PDF"
 
-#: kicad/menubar.cpp:272 eeschema/menubar.cpp:513
+#: kicad/menubar.cpp:277 eeschema/menubar.cpp:513
 #: eeschema/menubar_libedit.cpp:273 pcbnew/menubar_modedit.cpp:272
 #: pcbnew/menubar_pcbframe.cpp:584 cvpcb/menubar.cpp:149
 #: gerbview/menubar.cpp:228
 msgid "&Contents"
 msgstr "&Zawartość"
 
-#: kicad/menubar.cpp:273
+#: kicad/menubar.cpp:278
 msgid "Open the KiCad handbook"
 msgstr "Otwórz podręcznik programu KiCad"
 
-#: kicad/menubar.cpp:278 eeschema/menubar.cpp:519
+#: kicad/menubar.cpp:283 eeschema/menubar.cpp:519
 #: eeschema/menubar_libedit.cpp:279 pcbnew/menubar_modedit.cpp:277
 #: pcbnew/menubar_pcbframe.cpp:589
 msgid "&Getting Started in KiCad"
 msgstr "Pierwsze kroki w pro&gramie KiCad"
 
-#: kicad/menubar.cpp:279 eeschema/menubar.cpp:520
+#: kicad/menubar.cpp:284 eeschema/menubar.cpp:520
 #: eeschema/menubar_libedit.cpp:280 pcbnew/menubar_modedit.cpp:278
 #: pcbnew/menubar_pcbframe.cpp:590
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
@@ -338,46 +338,46 @@ msgstr ""
 "Otwiera przewodnik dla początkujących zatytułowany \"Pierwsze kroki w "
 "programie KiCad\""
 
-#: kicad/menubar.cpp:288
+#: kicad/menubar.cpp:293
 msgid "&About KiCad"
 msgstr "O progr&amie KiCad"
 
-#: kicad/menubar.cpp:289
+#: kicad/menubar.cpp:294
 msgid "About KiCad project manager"
 msgstr "O programie Menedżer projektu KiCad"
 
-#: kicad/menubar.cpp:293 eeschema/menubar.cpp:532
+#: kicad/menubar.cpp:298 eeschema/menubar.cpp:532
 #: eeschema/menubar_libedit.cpp:293 pcbnew/menubar_modedit.cpp:289
 #: pcbnew/menubar_pcbframe.cpp:603 cvpcb/menubar.cpp:160
 #: gerbview/menubar.cpp:240 3d-viewer/3d_toolbar.cpp:146
 msgid "&File"
 msgstr "&Plik"
 
-#: kicad/menubar.cpp:294
+#: kicad/menubar.cpp:299
 msgid "&Browse"
 msgstr "P&odgląd"
 
-#: kicad/menubar.cpp:295 cvpcb/menubar.cpp:161 gerbview/menubar.cpp:241
+#: kicad/menubar.cpp:300 cvpcb/menubar.cpp:161 gerbview/menubar.cpp:241
 #: 3d-viewer/3d_toolbar.cpp:159
 msgid "&Preferences"
 msgstr "&Ustawienia"
 
-#: kicad/menubar.cpp:296 eeschema/menubar.cpp:538
+#: kicad/menubar.cpp:301 eeschema/menubar.cpp:538
 #: eeschema/menubar_libedit.cpp:298 pcbnew/menubar_modedit.cpp:295
 #: pcbnew/menubar_pcbframe.cpp:611 cvpcb/menubar.cpp:162
 #: gerbview/menubar.cpp:243
 msgid "&Help"
 msgstr "Pomo&c"
 
-#: kicad/menubar.cpp:333
+#: kicad/menubar.cpp:338
 msgid "Load existing project"
 msgstr "Otwórz istniejący projekt"
 
-#: kicad/menubar.cpp:346
+#: kicad/menubar.cpp:351
 msgid "Archive all project files"
 msgstr "Zarchiwizuj wszystkie pliki projektu"
 
-#: kicad/menubar.cpp:354
+#: kicad/menubar.cpp:359
 msgid "Refresh project tree"
 msgstr "Odśwież drzewo projektu"
 
@@ -425,79 +425,79 @@ msgstr "Nie mogę utworzyć nowego projektu"
 msgid "Project template file <kicad.pro> not found. "
 msgstr "Plik szablonu projektu <kicad.pro> nie został znaleziony."
 
-#: kicad/prjconfig.cpp:159
+#: kicad/prjconfig.cpp:160
 msgid "Create New Project"
 msgstr "Utwórz nowy projekt"
 
-#: kicad/prjconfig.cpp:164
+#: kicad/prjconfig.cpp:165
 msgid "Open Existing Project"
 msgstr "Otwórz istniejący projekt"
 
-#: kicad/prjconfig.cpp:206
+#: kicad/prjconfig.cpp:208
 msgid "KiCad project file <"
 msgstr "Plik projektu KiCad <"
 
-#: kicad/prjconfig.cpp:207
+#: kicad/prjconfig.cpp:209
 msgid "> not found"
 msgstr "> nie został znaleziony"
 
-#: kicad/tree_project_frame.cpp:172
+#: kicad/tree_project_frame.cpp:174
 msgid "New D&irectory"
 msgstr "Nowy &katalog"
 
-#: kicad/tree_project_frame.cpp:173
+#: kicad/tree_project_frame.cpp:175
 msgid "Create a New Directory"
 msgstr "Utwórz nowy katalog"
 
-#: kicad/tree_project_frame.cpp:187
+#: kicad/tree_project_frame.cpp:188
 msgid "&Rename file"
 msgstr "&Zmień nazwę pliku"
 
-#: kicad/tree_project_frame.cpp:188
+#: kicad/tree_project_frame.cpp:189
 msgid "&Rename directory"
 msgstr "Z&mień nazwę katalogu"
 
-#: kicad/tree_project_frame.cpp:189
+#: kicad/tree_project_frame.cpp:190
 msgid "Rename file"
 msgstr "Zmień nazwę pliku"
 
-#: kicad/tree_project_frame.cpp:190
+#: kicad/tree_project_frame.cpp:191
 msgid "Rename directory"
 msgstr "Zmień nazwę katalogu"
 
-#: kicad/tree_project_frame.cpp:200
+#: kicad/tree_project_frame.cpp:201
 msgid "&Edit in a text editor"
 msgstr "&Edytuj w edytorze tekstu"
 
-#: kicad/tree_project_frame.cpp:201
+#: kicad/tree_project_frame.cpp:202
 msgid "Open the file in a Text Editor"
 msgstr "Otwórz plik w edytorze tekstu"
 
-#: kicad/tree_project_frame.cpp:209
+#: kicad/tree_project_frame.cpp:210
 msgid "&Delete File"
 msgstr "&Usuń plik"
 
-#: kicad/tree_project_frame.cpp:210
+#: kicad/tree_project_frame.cpp:211
 msgid "&Delete Directory"
 msgstr "U&suń katalog"
 
-#: kicad/tree_project_frame.cpp:211
+#: kicad/tree_project_frame.cpp:212
 msgid "Delete the File"
 msgstr "Usuń plik"
 
-#: kicad/tree_project_frame.cpp:212
+#: kicad/tree_project_frame.cpp:213
 msgid "Delete the Directory and its content"
 msgstr "Usuń katalog i jego zawartość"
 
-#: kicad/tree_project_frame.cpp:390
+#: kicad/tree_project_frame.cpp:376
 msgid "Create New Directory"
 msgstr "Utwórz katalog"
 
-#: kicad/tree_project_frame.cpp:887
+#: kicad/tree_project_frame.cpp:876
 msgid "Change filename: "
 msgstr "Zmień nazwę pliku: "
 
-#: kicad/tree_project_frame.cpp:889
+#: kicad/tree_project_frame.cpp:878
 msgid "Change filename"
 msgstr "Zmienia nazwę pliku"
 
@@ -568,7 +568,7 @@ msgid " (with SubCmp)"
 msgstr " (z podelementem)"
 
 #: eeschema/build_BOM.cpp:488 eeschema/lib_field.cpp:71
-#: eeschema/lib_field.cpp:744 eeschema/onrightclick.cpp:260
+#: eeschema/lib_field.cpp:744 eeschema/onrightclick.cpp:304
 #: eeschema/template_fieldnames.cpp:25
 msgid "Field"
 msgstr "Pole"
@@ -734,7 +734,7 @@ msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
 
-#: eeschema/controle.cpp:161 eeschema/libeditframe.cpp:1165
+#: eeschema/controle.cpp:161 eeschema/libeditframe.cpp:1166
 msgid "Clarify Selection"
 msgstr "Sprecyzuj Wybór"
 
@@ -1096,7 +1096,7 @@ msgstr "Nawigator"
 msgid "Root"
 msgstr "Główny"
 
-#: eeschema/hotkeys.cpp:651
+#: eeschema/hotkeys.cpp:656
 msgid "Add Pin"
 msgstr "Dodaj pin"
 
@@ -1205,7 +1205,7 @@ msgid "Alias"
 msgstr "Alias"
 
 #: eeschema/libedit.cpp:457 eeschema/lib_draw_item.cpp:72
-#: eeschema/onrightclick.cpp:374
+#: eeschema/onrightclick.cpp:447
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:26
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:35
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:46
@@ -1217,12 +1217,12 @@ msgid "Unit"
 msgstr "Część"
 
 #: eeschema/libedit.cpp:460 eeschema/lib_draw_item.cpp:83
-#: eeschema/onrightclick.cpp:353
+#: eeschema/onrightclick.cpp:426
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:73
 msgid "Convert"
 msgstr "Skonwertowany"
 
-#: eeschema/libedit.cpp:462 eeschema/onrightclick.cpp:325
+#: eeschema/libedit.cpp:462 eeschema/onrightclick.cpp:365
 #: eeschema/sch_text.cpp:795
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
@@ -1309,7 +1309,7 @@ msgstr ""
 "Wybierz jeden z %d symboli do usunięcia\n"
 "z biblioteki <%s>."
 
-#: eeschema/libedit.cpp:514 eeschema/onrightclick.cpp:392
+#: eeschema/libedit.cpp:514 eeschema/onrightclick.cpp:377
 msgid "Delete Component"
 msgstr "Usuń symbol"
 
@@ -1386,54 +1386,54 @@ msgstr ""
 msgid "Part %c"
 msgstr "Element %c"
 
-#: eeschema/libeditframe.cpp:1029
+#: eeschema/libeditframe.cpp:1030
 msgid "Add pin"
 msgstr "Dodaj pin"
 
-#: eeschema/libeditframe.cpp:1033
+#: eeschema/libeditframe.cpp:1034
 msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
-#: eeschema/libeditframe.cpp:1042 eeschema/schedit.cpp:517
+#: eeschema/libeditframe.cpp:1043 eeschema/schedit.cpp:523
 #: pcbnew/edit.cpp:1360 pcbnew/modedit.cpp:848
 msgid "Add text"
 msgstr "Dodaj tekst"
 
-#: eeschema/libeditframe.cpp:1046
+#: eeschema/libeditframe.cpp:1047
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1050 pcbnew/modedit.cpp:844
+#: eeschema/libeditframe.cpp:1051 pcbnew/modedit.cpp:844
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1054 pcbnew/modedit.cpp:840
+#: eeschema/libeditframe.cpp:1055 pcbnew/modedit.cpp:840
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1058 pcbnew/modedit.cpp:836
+#: eeschema/libeditframe.cpp:1059 pcbnew/modedit.cpp:836
 msgid "Add line"
 msgstr "Dodaj linię"
 
-#: eeschema/libeditframe.cpp:1062
+#: eeschema/libeditframe.cpp:1063
 msgid "Set anchor position"
 msgstr "Ustaw pozycję zakotwiczenia"
 
-#: eeschema/libeditframe.cpp:1066
+#: eeschema/libeditframe.cpp:1067
 msgid "Import"
 msgstr "Importuj"
 
-#: eeschema/libeditframe.cpp:1072
+#: eeschema/libeditframe.cpp:1073
 msgid "Export"
 msgstr "Eksportuj"
 
-#: eeschema/libeditframe.cpp:1084 eeschema/schedit.cpp:553
+#: eeschema/libeditframe.cpp:1085 eeschema/schedit.cpp:559
 #: pcbnew/edit.cpp:1372 pcbnew/modedit.cpp:873
 msgid "Delete item"
 msgstr "Usuń element"
 
-#: eeschema/libedit_onrightclick.cpp:46 eeschema/onrightclick.cpp:108
-#: eeschema/onrightclick.cpp:141 eeschema/dialogs/dialog_color_config.cpp:226
+#: eeschema/libedit_onrightclick.cpp:67 eeschema/onrightclick.cpp:152
+#: eeschema/onrightclick.cpp:185 eeschema/dialogs/dialog_color_config.cpp:226
 #: eeschema/dialogs/dialog_netlist_base.cpp:49
 #: eeschema/dialogs/dialog_netlist_base.cpp:130 pcbnew/mirepcb.cpp:100
 #: pcbnew/modedit_onclick.cpp:204 pcbnew/modedit_onclick.cpp:242
@@ -1450,194 +1450,195 @@ msgstr "Usuń element"
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: eeschema/libedit_onrightclick.cpp:64 eeschema/onrightclick.cpp:113
+#: eeschema/libedit_onrightclick.cpp:85 eeschema/onrightclick.cpp:157
 #: pcbnew/modedit_onclick.cpp:207 pcbnew/onrightclick.cpp:88
 #: gerbview/onrightclick.cpp:42
 msgid "End Tool"
 msgstr "Wyłącz narzędzie"
 
-#: eeschema/libedit_onrightclick.cpp:87
+#: eeschema/libedit_onrightclick.cpp:109
 msgid "Move Arc"
 msgstr "Przesuń łuk "
 
-#: eeschema/libedit_onrightclick.cpp:91
+#: eeschema/libedit_onrightclick.cpp:113
 msgid "Drag Arc Size"
 msgstr "Przeciągnij rozmiar łuku"
 
-#: eeschema/libedit_onrightclick.cpp:95
+#: eeschema/libedit_onrightclick.cpp:117
 msgid "Edit Arc Options"
 msgstr "Edytuj właściwości łuku"
 
-#: eeschema/libedit_onrightclick.cpp:100
+#: eeschema/libedit_onrightclick.cpp:122
 msgid "Delete Arc"
 msgstr "Usuń łuk "
 
-#: eeschema/libedit_onrightclick.cpp:108
+#: eeschema/libedit_onrightclick.cpp:130
 msgid "Move Circle"
 msgstr "Przesuń okrąg "
 
-#: eeschema/libedit_onrightclick.cpp:116
+#: eeschema/libedit_onrightclick.cpp:134
 msgid "Drag Circle Outline"
 msgstr "Przeciągnij obrys okręgu"
 
-#: eeschema/libedit_onrightclick.cpp:121
+#: eeschema/libedit_onrightclick.cpp:139
 msgid "Edit Circle Options"
 msgstr "Edycja właściwości okręgu"
 
-#: eeschema/libedit_onrightclick.cpp:127
+#: eeschema/libedit_onrightclick.cpp:145
 msgid "Delete Circle"
 msgstr "Usuń okrąg "
 
-#: eeschema/libedit_onrightclick.cpp:136
+#: eeschema/libedit_onrightclick.cpp:154
 msgid "Move Rectangle"
 msgstr "Przesuń prostokąt "
 
-#: eeschema/libedit_onrightclick.cpp:142
+#: eeschema/libedit_onrightclick.cpp:160
 msgid "Edit Rectangle Options"
 msgstr "Edycja właściwości prostokąta"
 
-#: eeschema/libedit_onrightclick.cpp:148
+#: eeschema/libedit_onrightclick.cpp:166
 msgid "Drag Rectangle Edge"
 msgstr "Przeciągnij krawędź prostokąta"
 
-#: eeschema/libedit_onrightclick.cpp:155
+#: eeschema/libedit_onrightclick.cpp:169
 msgid "Delete Rectangle"
 msgstr "Usuń prostokąt "
 
-#: eeschema/libedit_onrightclick.cpp:165 eeschema/onrightclick.cpp:517
+#: eeschema/libedit_onrightclick.cpp:179 eeschema/onrightclick.cpp:579
 msgid "Move Text"
 msgstr "Przesuń tekst "
 
-#: eeschema/libedit_onrightclick.cpp:171 eeschema/onrightclick.cpp:527
+#: eeschema/libedit_onrightclick.cpp:185 eeschema/onrightclick.cpp:101
+#: eeschema/onrightclick.cpp:589
 msgid "Edit Text"
 msgstr "Edytuj tekst"
 
-#: eeschema/libedit_onrightclick.cpp:174 eeschema/onrightclick.cpp:525
+#: eeschema/libedit_onrightclick.cpp:188 eeschema/onrightclick.cpp:587
 msgid "Rotate Text"
 msgstr "Obróć tekst"
 
-#: eeschema/libedit_onrightclick.cpp:179 eeschema/onrightclick.cpp:529
+#: eeschema/libedit_onrightclick.cpp:193 eeschema/onrightclick.cpp:591
 msgid "Delete Text"
 msgstr "Usuń tekst"
 
-#: eeschema/libedit_onrightclick.cpp:187
+#: eeschema/libedit_onrightclick.cpp:201
 msgid "Move Line"
 msgstr "Przesuń linię "
 
-#: eeschema/libedit_onrightclick.cpp:191
+#: eeschema/libedit_onrightclick.cpp:205
 msgid "Drag Edge Point"
 msgstr "Przeciągnij punkt krańcowy"
 
-#: eeschema/libedit_onrightclick.cpp:197
+#: eeschema/libedit_onrightclick.cpp:211
 msgid "Line End"
 msgstr "Zakończ linię"
 
-#: eeschema/libedit_onrightclick.cpp:201
+#: eeschema/libedit_onrightclick.cpp:215
 msgid "Edit Line Options"
 msgstr "Edycja właściwości linii"
 
-#: eeschema/libedit_onrightclick.cpp:207
+#: eeschema/libedit_onrightclick.cpp:221
 msgid "Delete Line "
 msgstr "Usuń linię "
 
-#: eeschema/libedit_onrightclick.cpp:215 pcbnew/onrightclick.cpp:559
+#: eeschema/libedit_onrightclick.cpp:230 pcbnew/onrightclick.cpp:559
 msgid "Delete Segment"
 msgstr "Usuń segment"
 
-#: eeschema/libedit_onrightclick.cpp:226
+#: eeschema/libedit_onrightclick.cpp:241
 msgid "Move Field"
 msgstr "Przesuń pole"
 
-#: eeschema/libedit_onrightclick.cpp:232
+#: eeschema/libedit_onrightclick.cpp:247
 msgid "Field Rotate"
 msgstr "Obróć pole"
 
-#: eeschema/libedit_onrightclick.cpp:234
+#: eeschema/libedit_onrightclick.cpp:249
 msgid "Field Edit"
 msgstr "Edytuj pole"
 
-#: eeschema/libedit_onrightclick.cpp:259
+#: eeschema/libedit_onrightclick.cpp:274
 msgid "Move Pin "
 msgstr "Przesuń pin"
 
-#: eeschema/libedit_onrightclick.cpp:264
+#: eeschema/libedit_onrightclick.cpp:279
 msgid "Edit Pin "
 msgstr "Edytuj pin "
 
-#: eeschema/libedit_onrightclick.cpp:267
+#: eeschema/libedit_onrightclick.cpp:282
 msgid "Rotate Pin "
 msgstr "Obróć pin"
 
-#: eeschema/libedit_onrightclick.cpp:272
+#: eeschema/libedit_onrightclick.cpp:287
 msgid "Delete Pin "
 msgstr "Usuń pin "
 
-#: eeschema/libedit_onrightclick.cpp:279
+#: eeschema/libedit_onrightclick.cpp:294
 msgid "Global"
 msgstr "Globalne"
 
-#: eeschema/libedit_onrightclick.cpp:282
+#: eeschema/libedit_onrightclick.cpp:297
 msgid "Pin Size to selected pins"
 msgstr "Rozmiar pinu dla wybranych pinów"
 
-#: eeschema/libedit_onrightclick.cpp:283
+#: eeschema/libedit_onrightclick.cpp:298
 msgid "Pin Size to Others"
 msgstr "Rozmiar pinu dla innych"
 
-#: eeschema/libedit_onrightclick.cpp:286
+#: eeschema/libedit_onrightclick.cpp:301
 msgid "Pin Name Size to selected pin"
 msgstr "Rozmiar nazwy pinu dla wybranego pinu"
 
-#: eeschema/libedit_onrightclick.cpp:287
+#: eeschema/libedit_onrightclick.cpp:302
 msgid "Pin Name Size to Others"
 msgstr "Rozmiar nazwy pinu dla innych"
 
-#: eeschema/libedit_onrightclick.cpp:290
+#: eeschema/libedit_onrightclick.cpp:305
 msgid "Pin Num Size to selected pin"
 msgstr "Rozmiar numeru pinu dla wybranego pinu"
 
-#: eeschema/libedit_onrightclick.cpp:291
+#: eeschema/libedit_onrightclick.cpp:306
 msgid "Pin Num Size to Others"
 msgstr "Rozmiar numeru pinu dla innych"
 
-#: eeschema/libedit_onrightclick.cpp:299 eeschema/onrightclick.cpp:732
+#: eeschema/libedit_onrightclick.cpp:314 eeschema/onrightclick.cpp:794
 #: pcbnew/modedit_onclick.cpp:219 pcbnew/onrightclick.cpp:437
 #: gerbview/onrightclick.cpp:53
 msgid "Cancel Block"
 msgstr "Anuluj blok"
 
-#: eeschema/libedit_onrightclick.cpp:304 pcbnew/modedit_onclick.cpp:221
+#: eeschema/libedit_onrightclick.cpp:319 pcbnew/modedit_onclick.cpp:221
 msgid "Zoom Block (drag middle mouse)"
 msgstr "Powiększ blok (shift + przeciąganie myszką)"
 
-#: eeschema/libedit_onrightclick.cpp:309 eeschema/onrightclick.cpp:740
+#: eeschema/libedit_onrightclick.cpp:324 eeschema/onrightclick.cpp:802
 #: pcbnew/modedit_onclick.cpp:225 pcbnew/onrightclick.cpp:441
 #: gerbview/onrightclick.cpp:56
 msgid "Place Block"
 msgstr "Dodaj blok"
 
-#: eeschema/libedit_onrightclick.cpp:313
+#: eeschema/libedit_onrightclick.cpp:328
 msgid "Select Items"
 msgstr "Wybierz elementy"
 
-#: eeschema/libedit_onrightclick.cpp:315 eeschema/onrightclick.cpp:749
+#: eeschema/libedit_onrightclick.cpp:330 eeschema/onrightclick.cpp:811
 #: pcbnew/onrightclick.cpp:442
 msgid "Copy Block"
 msgstr "Kopiuj blok"
 
-#: eeschema/libedit_onrightclick.cpp:316 eeschema/onrightclick.cpp:754
+#: eeschema/libedit_onrightclick.cpp:331 eeschema/onrightclick.cpp:816
 msgid "Mirror Block ||"
 msgstr "Odbij blok ||"
 
-#: eeschema/libedit_onrightclick.cpp:318 eeschema/onrightclick.cpp:757
+#: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:819
 msgid "Mirror Block --"
 msgstr "Odbij blok --"
 
-#: eeschema/libedit_onrightclick.cpp:320 eeschema/onrightclick.cpp:760
+#: eeschema/libedit_onrightclick.cpp:335 eeschema/onrightclick.cpp:822
 msgid "Rotate Block ccw"
 msgstr "Obróć blok (w lewo)"
 
-#: eeschema/libedit_onrightclick.cpp:322 eeschema/onrightclick.cpp:753
+#: eeschema/libedit_onrightclick.cpp:337 eeschema/onrightclick.cpp:815
 #: pcbnew/onrightclick.cpp:445
 msgid "Delete Block"
 msgstr "Usuń blok"
@@ -1857,8 +1858,8 @@ msgstr " - Eksport OK"
 msgid "Error creating "
 msgstr "Błąd podczas tworzenia "
 
-#: eeschema/lib_field.cpp:562 eeschema/onrightclick.cpp:257
-#: eeschema/onrightclick.cpp:341 eeschema/sch_component.cpp:1481
+#: eeschema/lib_field.cpp:562 eeschema/onrightclick.cpp:301
+#: eeschema/onrightclick.cpp:414 eeschema/sch_component.cpp:1481
 #: eeschema/template_fieldnames.cpp:14
 #: eeschema/dialogs/dialog_color_config.cpp:37 pcbnew/class_text_mod.cpp:460
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:27
@@ -1868,7 +1869,7 @@ msgid "Reference"
 msgstr "Oznaczenie"
 
 #: eeschema/lib_field.cpp:569 eeschema/lib_field.cpp:747
-#: eeschema/onrightclick.cpp:258 eeschema/onrightclick.cpp:336
+#: eeschema/onrightclick.cpp:302 eeschema/onrightclick.cpp:409
 #: eeschema/template_fieldnames.cpp:15
 #: eeschema/dialogs/dialog_color_config.cpp:38
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:79
@@ -1880,7 +1881,7 @@ msgstr "Oznaczenie"
 msgid "Value"
 msgstr "Wartość"
 
-#: eeschema/lib_field.cpp:576 eeschema/onrightclick.cpp:346
+#: eeschema/lib_field.cpp:576 eeschema/onrightclick.cpp:419
 #: eeschema/template_fieldnames.cpp:16
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:79 pcbnew/class_module.cpp:689
 msgid "Footprint"
@@ -2672,33 +2673,45 @@ msgstr "etykiety magistrali"
 msgid "hierarchy..."
 msgstr "hierarchii..."
 
-#: eeschema/onrightclick.cpp:151
+#: eeschema/onrightclick.cpp:107 eeschema/onrightclick.cpp:555
+msgid "Edit Label"
+msgstr "Edytuj etykietę"
+
+#: eeschema/onrightclick.cpp:113 eeschema/onrightclick.cpp:483
+msgid "Edit Global Label"
+msgstr "Edytuj etykietę globalną"
+
+#: eeschema/onrightclick.cpp:120 eeschema/onrightclick.cpp:519
+msgid "Edit Hierarchical Label"
+msgstr "Edytuj etykietę hierarchiczną"
+
+#: eeschema/onrightclick.cpp:195
 msgid "Leave Sheet"
 msgstr "Opuść arkusz"
 
-#: eeschema/onrightclick.cpp:165
+#: eeschema/onrightclick.cpp:209
 msgid "Delete No Connect"
 msgstr "Usuń \"Nie Połączone\""
 
-#: eeschema/onrightclick.cpp:222 pcbnew/onrightclick.cpp:192
+#: eeschema/onrightclick.cpp:266 pcbnew/onrightclick.cpp:192
 msgid "End Drawing"
 msgstr "Zakończ rysunek"
 
-#: eeschema/onrightclick.cpp:225 pcbnew/onrightclick.cpp:204
+#: eeschema/onrightclick.cpp:269 pcbnew/onrightclick.cpp:204
 msgid "Delete Drawing"
 msgstr "Usuń rysunek"
 
-#: eeschema/onrightclick.cpp:259
+#: eeschema/onrightclick.cpp:303
 msgid "Footprint Field"
 msgstr "Pole footprintu"
 
-#: eeschema/onrightclick.cpp:265 pcbnew/onrightclick.cpp:706
+#: eeschema/onrightclick.cpp:309 pcbnew/onrightclick.cpp:706
 #: pcbnew/onrightclick.cpp:751 pcbnew/onrightclick.cpp:811
 #: pcbnew/onrightclick.cpp:867
 msgid "Move"
 msgstr "Przesuń"
 
-#: eeschema/onrightclick.cpp:270
+#: eeschema/onrightclick.cpp:314
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:82
 #: pcbnew/modedit_onclick.cpp:260 pcbnew/onrightclick.cpp:756
@@ -2706,7 +2719,7 @@ msgstr "Przesuń"
 msgid "Rotate"
 msgstr "Obrót"
 
-#: eeschema/onrightclick.cpp:283 eeschema/onrightclick.cpp:331
+#: eeschema/onrightclick.cpp:327 eeschema/onrightclick.cpp:404
 #: pcbnew/modedit_onclick.cpp:342 pcbnew/onrightclick.cpp:725
 #: pcbnew/onrightclick.cpp:761 pcbnew/onrightclick.cpp:816
 #: pcbnew/onrightclick.cpp:879
@@ -2717,338 +2730,326 @@ msgstr "Obrót"
 msgid "Edit"
 msgstr "Edytuj"
 
-#: eeschema/onrightclick.cpp:307
+#: eeschema/onrightclick.cpp:347
 msgid "Move Component"
 msgstr "Przesuń symbol"
 
-#: eeschema/onrightclick.cpp:311
+#: eeschema/onrightclick.cpp:351
 msgid "Drag Component"
 msgstr "Przeciągnij symbol"
 
-#: eeschema/onrightclick.cpp:316 pcbnew/onrightclick.cpp:714
+#: eeschema/onrightclick.cpp:356 pcbnew/onrightclick.cpp:714
 msgid "Rotate +"
 msgstr "Obróć +"
 
-#: eeschema/onrightclick.cpp:319 pcbnew/onrightclick.cpp:718
+#: eeschema/onrightclick.cpp:359 pcbnew/onrightclick.cpp:718
 msgid "Rotate -"
 msgstr "Obróć -"
 
-#: eeschema/onrightclick.cpp:321 eeschema/onrightclick.cpp:792
+#: eeschema/onrightclick.cpp:361 eeschema/onrightclick.cpp:854
 msgid "Mirror --"
 msgstr "Odbij poziomo --"
 
-#: eeschema/onrightclick.cpp:323 eeschema/onrightclick.cpp:793
+#: eeschema/onrightclick.cpp:363 eeschema/onrightclick.cpp:855
 msgid "Mirror ||"
 msgstr "Odbij pionowo ||"
 
-#: eeschema/onrightclick.cpp:328
+#: eeschema/onrightclick.cpp:368
 msgid "Orient Component"
 msgstr "Zorientuj symbol"
 
-#: eeschema/onrightclick.cpp:364
-#, c-format
-msgid "Unit %d %c"
-msgstr "Część %d %c"
-
-#: eeschema/onrightclick.cpp:380
-msgid "Edit with Library Editor"
-msgstr "Edytuj za pomocą Edytora Bibliotek"
-
-#: eeschema/onrightclick.cpp:385
-msgid "Edit Component"
-msgstr "Edytuj symbol"
-
-#: eeschema/onrightclick.cpp:389
+#: eeschema/onrightclick.cpp:374
 msgid "Copy Component"
 msgstr "Kopiuj symbol"
 
-#: eeschema/onrightclick.cpp:397
+#: eeschema/onrightclick.cpp:382
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:27
 msgid "Doc"
 msgstr "Dokument"
 
-#: eeschema/onrightclick.cpp:408
+#: eeschema/onrightclick.cpp:437
+#, c-format
+msgid "Unit %d %c"
+msgstr "Część %d %c"
+
+#: eeschema/onrightclick.cpp:453
+msgid "Edit with Library Editor"
+msgstr "Edytuj za pomocą Edytora Bibliotek"
+
+#: eeschema/onrightclick.cpp:458
+msgid "Edit Component"
+msgstr "Edytuj symbol"
+
+#: eeschema/onrightclick.cpp:470
 msgid "Move Global Label"
 msgstr "Przesuń etykietę globalną"
 
-#: eeschema/onrightclick.cpp:411
+#: eeschema/onrightclick.cpp:473
 msgid "Drag Global Label"
 msgstr "Przeciągnij etykietę globalną"
 
-#: eeschema/onrightclick.cpp:414
+#: eeschema/onrightclick.cpp:476
 msgid "Copy Global Label"
 msgstr "Kopiuj etykietę globalną"
 
-#: eeschema/onrightclick.cpp:419
+#: eeschema/onrightclick.cpp:481
 msgid "Rotate Global Label"
 msgstr "Obróć etykietę globalną"
 
-#: eeschema/onrightclick.cpp:421
-msgid "Edit Global Label"
-msgstr "Edytuj etykietę globalną"
-
-#: eeschema/onrightclick.cpp:423
+#: eeschema/onrightclick.cpp:485
 msgid "Delete Global Label"
 msgstr "Usuń etykietę globalną"
 
-#: eeschema/onrightclick.cpp:428 eeschema/onrightclick.cpp:500
-#: eeschema/onrightclick.cpp:540
+#: eeschema/onrightclick.cpp:490 eeschema/onrightclick.cpp:562
+#: eeschema/onrightclick.cpp:602
 msgid "Change to Hierarchical Label"
 msgstr "Zmień na etykietę hierarchiczną"
 
-#: eeschema/onrightclick.cpp:430 eeschema/onrightclick.cpp:464
-#: eeschema/onrightclick.cpp:538
+#: eeschema/onrightclick.cpp:492 eeschema/onrightclick.cpp:526
+#: eeschema/onrightclick.cpp:600
 msgid "Change to Label"
 msgstr "Zmień na etykietę"
 
-#: eeschema/onrightclick.cpp:432 eeschema/onrightclick.cpp:466
-#: eeschema/onrightclick.cpp:502
+#: eeschema/onrightclick.cpp:494 eeschema/onrightclick.cpp:528
+#: eeschema/onrightclick.cpp:564
 msgid "Change to Text"
 msgstr "Zmień na tekst"
 
-#: eeschema/onrightclick.cpp:434 eeschema/onrightclick.cpp:470
-#: eeschema/onrightclick.cpp:506 eeschema/onrightclick.cpp:544
+#: eeschema/onrightclick.cpp:496 eeschema/onrightclick.cpp:532
+#: eeschema/onrightclick.cpp:568 eeschema/onrightclick.cpp:606
 msgid "Change Type"
 msgstr "Zmień typ"
 
-#: eeschema/onrightclick.cpp:445
+#: eeschema/onrightclick.cpp:507
 msgid "Move Hierarchical Label"
 msgstr "Przesuń etykietę hierarchiczną"
 
-#: eeschema/onrightclick.cpp:448
+#: eeschema/onrightclick.cpp:510
 msgid "Drag Hierarchical Label"
 msgstr "Przeciągnij etykietę hierarchiczną"
 
-#: eeschema/onrightclick.cpp:450
+#: eeschema/onrightclick.cpp:512
 msgid "Copy Hierarchical Label"
 msgstr "Kopiuj etykietę hierarchiczną"
 
-#: eeschema/onrightclick.cpp:455
+#: eeschema/onrightclick.cpp:517
 msgid "Rotate Hierarchical Label"
 msgstr "Obróć etykietę hierarchiczną"
 
-#: eeschema/onrightclick.cpp:457
-msgid "Edit Hierarchical Label"
-msgstr "Edytuj etykietę hierarchiczną"
-
-#: eeschema/onrightclick.cpp:459
+#: eeschema/onrightclick.cpp:521
 msgid "Delete Hierarchical Label"
 msgstr "Usuń etykietę hierarchiczną"
 
-#: eeschema/onrightclick.cpp:468 eeschema/onrightclick.cpp:504
-#: eeschema/onrightclick.cpp:542
+#: eeschema/onrightclick.cpp:530 eeschema/onrightclick.cpp:566
+#: eeschema/onrightclick.cpp:604
 msgid "Change to Global Label"
 msgstr "Zmień na etykietę globalną"
 
-#: eeschema/onrightclick.cpp:481
+#: eeschema/onrightclick.cpp:543
 msgid "Move Label"
 msgstr "Przesuń etykietę"
 
-#: eeschema/onrightclick.cpp:484
+#: eeschema/onrightclick.cpp:546
 msgid "Drag Label"
 msgstr "Przeciągnij etykietę"
 
-#: eeschema/onrightclick.cpp:486
+#: eeschema/onrightclick.cpp:548
 msgid "Copy Label"
 msgstr "Kopiuj etykietę"
 
-#: eeschema/onrightclick.cpp:491
+#: eeschema/onrightclick.cpp:553
 msgid "Rotate Label"
 msgstr "Obróć etykietę"
 
-#: eeschema/onrightclick.cpp:493
-msgid "Edit Label"
-msgstr "Edytuj etykietę"
-
-#: eeschema/onrightclick.cpp:495
+#: eeschema/onrightclick.cpp:557
 msgid "Delete Label"
 msgstr "Usuń etykietę"
 
-#: eeschema/onrightclick.cpp:520
+#: eeschema/onrightclick.cpp:582
 msgid "Copy Text"
 msgstr "Kopiuj tekst"
 
-#: eeschema/onrightclick.cpp:554
+#: eeschema/onrightclick.cpp:616
 msgid "Delete Junction"
 msgstr "Usuń węzeł"
 
-#: eeschema/onrightclick.cpp:560
+#: eeschema/onrightclick.cpp:622
 msgid "Drag Junction"
 msgstr "Przeciągnij węzeł"
 
-#: eeschema/onrightclick.cpp:563 eeschema/onrightclick.cpp:611
+#: eeschema/onrightclick.cpp:625 eeschema/onrightclick.cpp:673
 msgid "Break Wire"
 msgstr "Przerwij połączenie"
 
-#: eeschema/onrightclick.cpp:569 eeschema/onrightclick.cpp:603
+#: eeschema/onrightclick.cpp:631 eeschema/onrightclick.cpp:665
 msgid "Delete Node"
 msgstr "Usuń gałąź"
 
-#: eeschema/onrightclick.cpp:571 eeschema/onrightclick.cpp:605
+#: eeschema/onrightclick.cpp:633 eeschema/onrightclick.cpp:667
 msgid "Delete Connection"
 msgstr "Usuń do węzła"
 
-#: eeschema/onrightclick.cpp:585
+#: eeschema/onrightclick.cpp:647
 msgid "Begin Wire"
 msgstr "Rozpocznij Połączenie"
 
-#: eeschema/onrightclick.cpp:593
+#: eeschema/onrightclick.cpp:655
 msgid "Wire End"
 msgstr "Zakończ połączenie"
 
-#: eeschema/onrightclick.cpp:598
+#: eeschema/onrightclick.cpp:660
 msgid "Drag Wire"
 msgstr "Przeciągnij połączenie"
 
-#: eeschema/onrightclick.cpp:601
+#: eeschema/onrightclick.cpp:663
 msgid "Delete Wire"
 msgstr "Usuń połączenie"
 
-#: eeschema/onrightclick.cpp:616 eeschema/onrightclick.cpp:654
+#: eeschema/onrightclick.cpp:678 eeschema/onrightclick.cpp:716
 msgid "Add Junction"
 msgstr "Dodaj węzeł"
 
-#: eeschema/onrightclick.cpp:618 eeschema/onrightclick.cpp:656
+#: eeschema/onrightclick.cpp:680 eeschema/onrightclick.cpp:718
 msgid "Add Label"
 msgstr "Dodaj etykietę"
 
-#: eeschema/onrightclick.cpp:623 eeschema/onrightclick.cpp:661
+#: eeschema/onrightclick.cpp:685 eeschema/onrightclick.cpp:723
 msgid "Add Global Label"
 msgstr "Dodaj etykietę globalną"
 
-#: eeschema/onrightclick.cpp:635
+#: eeschema/onrightclick.cpp:697
 msgid "Begin Bus"
 msgstr "Rozpocznij Magistralę"
 
-#: eeschema/onrightclick.cpp:643
+#: eeschema/onrightclick.cpp:705
 msgid "Bus End"
 msgstr "Zakończ magistralę"
 
-#: eeschema/onrightclick.cpp:648
+#: eeschema/onrightclick.cpp:710
 msgid "Delete Bus"
 msgstr "Usuń magistralę"
 
-#: eeschema/onrightclick.cpp:651
+#: eeschema/onrightclick.cpp:713
 msgid "Break Bus"
 msgstr "Przerwij magistralę"
 
-#: eeschema/onrightclick.cpp:672
+#: eeschema/onrightclick.cpp:734
 msgid "Enter Sheet"
 msgstr "Wejdź w arkusz"
 
-#: eeschema/onrightclick.cpp:675
+#: eeschema/onrightclick.cpp:737
 msgid "Move Sheet"
 msgstr "Przesuń arkusz"
 
-#: eeschema/onrightclick.cpp:679
+#: eeschema/onrightclick.cpp:741
 msgid "Drag Sheet"
 msgstr "Przeciągnij arkusz"
 
-#: eeschema/onrightclick.cpp:685
+#: eeschema/onrightclick.cpp:747
 msgid "Place Sheet"
 msgstr "Dodaj arkusz"
 
-#: eeschema/onrightclick.cpp:689
+#: eeschema/onrightclick.cpp:751
 msgid "Edit Sheet"
 msgstr "Edytuj arkusz"
 
-#: eeschema/onrightclick.cpp:692
+#: eeschema/onrightclick.cpp:754
 msgid "Resize Sheet"
 msgstr "Zmień wielkość arkusza"
 
-#: eeschema/onrightclick.cpp:695
+#: eeschema/onrightclick.cpp:757
 msgid "Import Sheet Pins"
 msgstr "Importuj piny arkusza"
 
-#: eeschema/onrightclick.cpp:699
+#: eeschema/onrightclick.cpp:761
 msgid "Cleanup Sheet Pins"
 msgstr "Wyczyść piny arkusza"
 
-#: eeschema/onrightclick.cpp:703
+#: eeschema/onrightclick.cpp:765
 msgid "Delete Sheet"
 msgstr "Usuń arkusz"
 
-#: eeschema/onrightclick.cpp:715
+#: eeschema/onrightclick.cpp:777
 msgid "Move Sheet Pin"
 msgstr "Przesuń pin arkusza"
 
-#: eeschema/onrightclick.cpp:720
+#: eeschema/onrightclick.cpp:782
 msgid "Edit Sheet Pin"
 msgstr "Edytuj pin arkusza"
 
-#: eeschema/onrightclick.cpp:723
+#: eeschema/onrightclick.cpp:785
 msgid "Delete Sheet Pin"
 msgstr "Usuń pin arkusza"
 
-#: eeschema/onrightclick.cpp:738
+#: eeschema/onrightclick.cpp:800
 msgid "Window Zoom"
 msgstr "Powiększ okno"
 
-#: eeschema/onrightclick.cpp:746
+#: eeschema/onrightclick.cpp:808
 msgid "Save Block"
 msgstr "Zapisz blok"
 
-#: eeschema/onrightclick.cpp:750
+#: eeschema/onrightclick.cpp:812
 msgid "Drag Block"
 msgstr "Przeciągnij blok"
 
-#: eeschema/onrightclick.cpp:766
+#: eeschema/onrightclick.cpp:828
 msgid "Copy to Clipboard"
 msgstr "Kopiuj do schowka"
 
-#: eeschema/onrightclick.cpp:775 pcbnew/onrightclick.cpp:895
+#: eeschema/onrightclick.cpp:837 pcbnew/onrightclick.cpp:895
 msgid "Delete Marker"
 msgstr "Usuń znacznik"
 
-#: eeschema/onrightclick.cpp:776 pcbnew/onrightclick.cpp:897
+#: eeschema/onrightclick.cpp:838 pcbnew/onrightclick.cpp:897
 msgid "Marker Error Info"
 msgstr "Informacja o znaczniku błędu"
 
-#: eeschema/onrightclick.cpp:785
+#: eeschema/onrightclick.cpp:847
 msgid "Move Image"
 msgstr "Przesuń obraz"
 
-#: eeschema/onrightclick.cpp:790
+#: eeschema/onrightclick.cpp:852
 msgid "Rotate Image"
 msgstr "Obróć obraz"
 
-#: eeschema/onrightclick.cpp:797
+#: eeschema/onrightclick.cpp:859
 msgid "Edit Image"
 msgstr "Edytuj obraz"
 
-#: eeschema/onrightclick.cpp:800
+#: eeschema/onrightclick.cpp:862
 msgid "Delete Image"
 msgstr "Usuń obraz"
 
-#: eeschema/onrightclick.cpp:810
+#: eeschema/onrightclick.cpp:872
 msgid "Move Bus Entry"
 msgstr "Przesuń wejście magistrali"
 
-#: eeschema/onrightclick.cpp:817
+#: eeschema/onrightclick.cpp:879
 msgid "Set Bus Entry Shape /"
 msgstr "Ustaw wejście magistrali /"
 
-#: eeschema/onrightclick.cpp:820
+#: eeschema/onrightclick.cpp:882
 msgid "Set Bus Entry Shape \\"
 msgstr "Ustaw wejście magistrali \\"
 
-#: eeschema/onrightclick.cpp:822
+#: eeschema/onrightclick.cpp:884
 msgid "Delete Bus Entry"
 msgstr "Usuń wejście magistrali"
 
-#: eeschema/pinedit.cpp:222
+#: eeschema/pinedit.cpp:221
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Ta pozycja jest zajmowana przez inny pin. Kontynuować?"
 
-#: eeschema/pinedit.cpp:610
+#: eeschema/pinedit.cpp:611
 msgid "No pins!"
 msgstr "Brak pinów!"
 
-#: eeschema/pinedit.cpp:621
+#: eeschema/pinedit.cpp:622
 msgid "Marker Information"
 msgstr "Informacje o znacznikach"
 
-#: eeschema/pinedit.cpp:640
+#: eeschema/pinedit.cpp:641
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts "
@@ -3057,25 +3058,25 @@ msgstr ""
 "<b>Zdublowany pin %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> jest w "
 "konflikcie z pinem %s \"%s\" na pozycji <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:653 eeschema/pinedit.cpp:692
+#: eeschema/pinedit.cpp:654 eeschema/pinedit.cpp:693
 #, c-format
 msgid " in part %c"
 msgstr " w elemencie %c"
 
-#: eeschema/pinedit.cpp:660 eeschema/pinedit.cpp:699
+#: eeschema/pinedit.cpp:661 eeschema/pinedit.cpp:700
 msgid "  of converted"
 msgstr "   skonwerterowanych"
 
-#: eeschema/pinedit.cpp:662 eeschema/pinedit.cpp:701
+#: eeschema/pinedit.cpp:663 eeschema/pinedit.cpp:702
 msgid "  of normal"
 msgstr "   normalnych"
 
-#: eeschema/pinedit.cpp:684
+#: eeschema/pinedit.cpp:685
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin poza siatką %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:709
+#: eeschema/pinedit.cpp:710
 msgid "No off grid or duplicate pins were found."
 msgstr "Nie znaleziono pinów zdblowanych lub poza siatką."
 
@@ -3116,75 +3117,75 @@ msgstr ""
 msgid "Do you wish to cleanup this sheet?"
 msgstr "Czy oczyścić ten arkusz?"
 
-#: eeschema/schedit.cpp:477
+#: eeschema/schedit.cpp:483
 msgid "No tool selected"
 msgstr "Narzędzie nie zostało wybrane"
 
-#: eeschema/schedit.cpp:481
+#: eeschema/schedit.cpp:487
 msgid "Descend or ascend hierarchy"
 msgstr "Hierarchia opadająca lub wznosząca"
 
-#: eeschema/schedit.cpp:485
+#: eeschema/schedit.cpp:491
 msgid "Add no connect"
 msgstr "Dodaj flagę \"niepołączony\""
 
-#: eeschema/schedit.cpp:489
+#: eeschema/schedit.cpp:495
 msgid "Add wire"
 msgstr "Dodaj połączenie"
 
-#: eeschema/schedit.cpp:493
+#: eeschema/schedit.cpp:499
 msgid "Add bus"
 msgstr "Dodaj magistralę"
 
-#: eeschema/schedit.cpp:497
+#: eeschema/schedit.cpp:503
 msgid "Add lines"
 msgstr "Dodaj linie"
 
-#: eeschema/schedit.cpp:501
+#: eeschema/schedit.cpp:507
 msgid "Add junction"
 msgstr "Dodaj węzeł"
 
-#: eeschema/schedit.cpp:505
+#: eeschema/schedit.cpp:511
 msgid "Add label"
 msgstr "Dodaj etykietę"
 
-#: eeschema/schedit.cpp:509
+#: eeschema/schedit.cpp:515
 msgid "Add global label"
 msgstr "Dodaj etykietę globalną"
 
-#: eeschema/schedit.cpp:513
+#: eeschema/schedit.cpp:519
 msgid "Add hierarchical label"
 msgstr "Dodaj etykietę hierarchiczną"
 
-#: eeschema/schedit.cpp:521
+#: eeschema/schedit.cpp:527
 msgid "Add image"
 msgstr "Dodaj obraz"
 
-#: eeschema/schedit.cpp:525
+#: eeschema/schedit.cpp:531
 msgid "Add wire to bus entry"
 msgstr "Dodaj wejścia połączeń do magistrali"
 
-#: eeschema/schedit.cpp:529
+#: eeschema/schedit.cpp:535
 msgid "Add bus to bus entry"
 msgstr "Dodaj wejście magistrali do magistrali"
 
-#: eeschema/schedit.cpp:533
+#: eeschema/schedit.cpp:539
 msgid "Add sheet"
 msgstr "Dodaj arkusz"
 
-#: eeschema/schedit.cpp:537
+#: eeschema/schedit.cpp:543
 msgid "Add sheet pins"
 msgstr "Dodaj piny arkusza"
 
-#: eeschema/schedit.cpp:541
+#: eeschema/schedit.cpp:547
 msgid "Import sheet pins"
 msgstr "Importuj piny arkusza"
 
-#: eeschema/schedit.cpp:545
+#: eeschema/schedit.cpp:551
 msgid "Add component"
 msgstr "Dodaj symbol"
 
-#: eeschema/schedit.cpp:549
+#: eeschema/schedit.cpp:555
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
@@ -7185,12 +7186,12 @@ msgstr ""
 msgid "Track clearances"
 msgstr "Prześwity ścieżek"
 
-#: pcbnew/eagle_plugin.cpp:1544
+#: pcbnew/eagle_plugin.cpp:1538
 #, c-format
 msgid "<package> name:'%s' duplicated in eagle <library>:'%s'"
 msgstr "Obudowa:'%s' została zduplikowana w bibliotece programu Eagle:'%s'"
 
-#: pcbnew/eagle_plugin.cpp:1588
+#: pcbnew/eagle_plugin.cpp:1595
 #, c-format
 msgid "No '%s' package in library '%s'"
 msgstr "Nie ma obudowy '%s' w bibliotece '%s'"
@@ -7342,11 +7343,11 @@ msgid ""
 "The current board has been modified.  Do you wish to discard the changes?"
 msgstr "Bieżąca płytka została zmieniona. Porzucić zmiany?"
 
-#: pcbnew/files.cpp:215 pcbnew/files.cpp:300
+#: pcbnew/files.cpp:216 pcbnew/files.cpp:301
 msgid "Open Board File"
 msgstr "Otwórz plik PCB"
 
-#: pcbnew/files.cpp:289
+#: pcbnew/files.cpp:290
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -7354,7 +7355,7 @@ msgstr ""
 "Ten plik został stworzony w starszej wersji Pcbnew.\n"
 " Plik zostanie zachowany w nowym formacie, gdy ponownie zostanie zapisany."
 
-#: pcbnew/files.cpp:298
+#: pcbnew/files.cpp:299
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -7363,15 +7364,15 @@ msgstr ""
 "Błąd podczas odczytywania PCB.\n"
 "%s"
 
-#: pcbnew/files.cpp:427
+#: pcbnew/files.cpp:443
 msgid "Save Board File As"
 msgstr "Zapisz plik PCB jako"
 
-#: pcbnew/files.cpp:493
+#: pcbnew/files.cpp:509
 msgid "Warning: unable to create backup file "
 msgstr "Ostrzeżenie: Nie można utworzyć pliku kopii zapasowej "
 
-#: pcbnew/files.cpp:526
+#: pcbnew/files.cpp:542
 #, c-format
 msgid ""
 "Error saving board.\n"
@@ -7380,19 +7381,19 @@ msgstr ""
 "Błąd podczas zapisywania płytki.\n"
 "%s"
 
-#: pcbnew/files.cpp:528
+#: pcbnew/files.cpp:544
 msgid "Save Board File"
 msgstr "Zapisz plik PCB"
 
-#: pcbnew/files.cpp:557
+#: pcbnew/files.cpp:573
 msgid "Backup file: "
 msgstr "Plik kopii zapasowej: "
 
-#: pcbnew/files.cpp:561
+#: pcbnew/files.cpp:577
 msgid "Wrote board file: "
 msgstr "Zapisano plik płytki: "
 
-#: pcbnew/files.cpp:563
+#: pcbnew/files.cpp:579
 msgid "Failed to create "
 msgstr "Błąd przy tworzeniu "
 
@@ -7639,17 +7640,17 @@ msgstr ""
 "Bieżący footprint zostanie utracony i ta operacja nie może zostać cofnięta. "
 "Kontynuować?"
 
-#: pcbnew/io_mgr.cpp:34
+#: pcbnew/io_mgr.cpp:35
 #, c-format
 msgid "Plugin '%s' does not implement the '%s' function."
 msgstr "Wtyczka '%s' nie posiada zaimplementowanej funkcji '%s'."
 
-#: pcbnew/io_mgr.cpp:35
+#: pcbnew/io_mgr.cpp:36
 #, c-format
 msgid "Plugin type '%s' is not found."
 msgstr "Wtyczka typu '%s' nie została znaleziona."
 
-#: pcbnew/io_mgr.cpp:96
+#: pcbnew/io_mgr.cpp:100
 #, c-format
 msgid "Unknown PCB_FILE_T value: %d"
 msgstr "Nieznana wartość PCB_FILE_T: %d"
@@ -16047,65 +16048,69 @@ msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
 msgstr "Pliki PCB programu Eagle v6.x XML (*.brd)|*brd"
 
 #: common/wildcards_and_files_ext.cpp:73
+msgid "P-Cad 2002/2004 ASCII PCB files (*.pcb)|*.pcb"
+msgstr "Pliki ASCII PCB programu P-Cad 2002/2004 (*.pcb)|*.pcb"
+
+#: common/wildcards_and_files_ext.cpp:74
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
 msgstr "Pliki PCB S-expression (*.kicad_pcb)|*.kicad_pcb"
 
-#: common/wildcards_and_files_ext.cpp:74
+#: common/wildcards_and_files_ext.cpp:75
 msgid "KiCad footprint s-expre library file (*.kicad_mod)|*.kicad_mod"
 msgstr ""
 "Plik bibliotek footprintów S-expression programu KiCad (*.kicad_mod)|*."
 "kicad_mod"
 
-#: common/wildcards_and_files_ext.cpp:75
+#: common/wildcards_and_files_ext.cpp:76
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
 msgstr ""
 "Ścieżka bibliotek footprintów S-expression programu KiCad (*.pretty)|*.pretty"
 
-#: common/wildcards_and_files_ext.cpp:76
+#: common/wildcards_and_files_ext.cpp:77
 msgid "Legacy footprint library file (*.mod)|*.mod"
 msgstr "Starsze pliki bibliotek footprintów programu KiCad (*.mod)|*.mod"
 
-#: common/wildcards_and_files_ext.cpp:77
+#: common/wildcards_and_files_ext.cpp:78
 msgid "Geda PCB footprint library file (*.fp)|*.fp"
 msgstr "Plik bibliotek footprintów programu Geda PCB (*.fb)|*.fb"
 
-#: common/wildcards_and_files_ext.cpp:78
+#: common/wildcards_and_files_ext.cpp:79
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
 msgstr "Pliki nagrań makr programu KiCad (*.mcr)|*.mcr"
 
-#: common/wildcards_and_files_ext.cpp:81
+#: common/wildcards_and_files_ext.cpp:82
 msgid "All files (*)|*"
 msgstr "Wszystkie pliki (*.*)|*.*"
 
-#: common/wildcards_and_files_ext.cpp:84
+#: common/wildcards_and_files_ext.cpp:85
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 msgstr "Pliki łącznikowe komponent-footprint programu KiCad (*.cmp)|*.cmp"
 
-#: common/wildcards_and_files_ext.cpp:87
+#: common/wildcards_and_files_ext.cpp:88
 msgid "Drill files (*.drl)|*.drl;*.DRL"
 msgstr "Pliki wierceń (*.drl)|*.drl;*.DRL"
 
-#: common/wildcards_and_files_ext.cpp:88
+#: common/wildcards_and_files_ext.cpp:89
 msgid "SVG files (*.svg)|*.svg;*.SVG"
 msgstr "Pliki SVG (*.svg)|*.svg;*.SVG"
 
-#: common/wildcards_and_files_ext.cpp:89
+#: common/wildcards_and_files_ext.cpp:90
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Pliki PDF (*.pdf)|*.pdf"
 
-#: common/wildcards_and_files_ext.cpp:90
+#: common/wildcards_and_files_ext.cpp:91
 msgid "PostScript files (.ps)|*.ps"
 msgstr "Pliki PostScript (.ps)|*.ps"
 
-#: common/wildcards_and_files_ext.cpp:91
+#: common/wildcards_and_files_ext.cpp:92
 msgid "Report files (*.rpt)|*.rpt"
 msgstr "Pliki raportów (*.rpt)|*.rpt"
 
-#: common/wildcards_and_files_ext.cpp:92
+#: common/wildcards_and_files_ext.cpp:93
 msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Pliki położeń footprintów (*.pos)|*.pos"
 
-#: common/wildcards_and_files_ext.cpp:93
+#: common/wildcards_and_files_ext.cpp:94
 msgid "Vrml files (*.wrl)|*.wrl"
 msgstr "Pliki VRML (*.wrl)|*.wrl"
 
