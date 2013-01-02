@@ -123,8 +123,6 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy auxiliary data: Drawings
-    // m_Drawings.DeleteAll();
-
     for( BOARD_ITEM* item = aModule.m_Drawings;  item;  item = item->Next() )
     {
         BOARD_ITEM* newItem;
@@ -145,8 +143,6 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy auxiliary data: 3D_Drawings info
-    // m_3D_Drawings.DeleteAll();
-
     for( S3D_MASTER* item = aModule.m_3D_Drawings;  item;  item = item->Next() )
     {
         if( item->m_Shape3DName.IsEmpty() )           // do not copy empty shapes.
@@ -165,6 +161,9 @@ MODULE::MODULE( const MODULE& aModule ) :
 
     m_Doc     = aModule.m_Doc;
     m_KeyWord = aModule.m_KeyWord;
+
+    // Ensure auxiliary data is up to date
+    CalculateBoundingBox();
 }
 
 
@@ -294,6 +293,9 @@ void MODULE::Copy( MODULE* aModule )
 
     m_Doc     = aModule->m_Doc;
     m_KeyWord = aModule->m_KeyWord;
+
+    // Ensure auxiliary data is up to date
+    CalculateBoundingBox();
 }
 
 
@@ -400,7 +402,7 @@ EDA_RECT MODULE::GetFootPrintRect() const
 
     area.SetOrigin( m_Pos );
     area.SetEnd( m_Pos );
-    area.Inflate( 50 );       // Give a min size
+    area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
         if( edge->Type() == PCB_MODULE_EDGE_T )
