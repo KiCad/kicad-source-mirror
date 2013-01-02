@@ -183,7 +183,6 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
     void SaveSettings();
 
 #ifdef KICAD_USE_FILES_WATCHER
-    void                            FileWatcherReset();
     /**
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS
      * rebuild the list of wahtched paths
