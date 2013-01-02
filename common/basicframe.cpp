@@ -532,13 +532,6 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
-    tmp << wxT( "         USE_BOOST_POLYGON_LIBRARY=" );
-#ifdef USE_BOOST_POLYGON_LIBRARY
-    tmp << wxT( "ON\n" );
-#else
-    tmp << wxT( "OFF\n" );
-#endif
-
     tmp << wxT( "         KICAD_SCRIPTING=" );
 #ifdef KICAD_SCRIPTING
     tmp << wxT( "ON\n" );

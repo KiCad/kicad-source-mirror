@@ -595,7 +595,8 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
             addFile = false;
 
             // check the first 100 lines for the "Sheet 1" string
-            for( int i = 0; i<100; ++i )
+            int l =0;
+            for( int i = 0; i<100; ++i, l++ )
             {
                 if( !fgets( line, sizeof(line), fp ) )
                     break;
@@ -968,7 +969,7 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
     {
 #ifdef KICAD_USE_FILES_WATCHER
     #ifndef __WINDOWS__
-        m_TreeProject->FileWatcherReset();
+        FileWatcherReset();
     #endif
 #endif
     }
@@ -1066,6 +1067,9 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
  */
  void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
 {
+    wxFileName pathModified = event.GetPath();
+    wxString subdir = pathModified.GetPath();
+    wxString fn = pathModified.GetFullPath();
 
     switch( event.GetChangeType() )
     {
@@ -1084,50 +1088,53 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
         return;
     }
 
-    wxFileName pathModified = event.GetPath();
-    wxString subdir = pathModified.GetPath();
-    wxString fn = pathModified.GetFullPath();
 
     wxTreeItemId root_id = findSubdirTreeItem( subdir );
     if( !root_id.IsOk() )
         return;
 
-    // Add item if it is created
-    if( event.GetChangeType() == wxFSW_EVENT_CREATE )
-        AddItemToTreeProject( pathModified.GetFullPath(), root_id, false );
+    wxTreeItemIdValue  cookie;  // dummy variable needed by GetFirstChild()
+    wxTreeItemId kid = m_TreeProject->GetFirstChild( root_id, cookie );
 
-    // search for item to delete/rename.
-    if( event.GetChangeType() == wxFSW_EVENT_DELETE ||
-        event.GetChangeType() == wxFSW_EVENT_RENAME )
+    switch( event.GetChangeType() )
     {
-        wxTreeItemIdValue  cookie;  // dummy variable needed by GetFirstChild()
-        wxTreeItemId kid = m_TreeProject->GetFirstChild( root_id, cookie );
+        case wxFSW_EVENT_CREATE:
+            AddItemToTreeProject( pathModified.GetFullPath(), root_id, false );
+            break;
 
-        while( kid.IsOk() )
-        {
-            TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
-
-            if( itemData && ( itemData->m_FileName == fn ) )
+        case wxFSW_EVENT_DELETE:
+            while( kid.IsOk() )
             {
-                if( event.GetChangeType() == wxFSW_EVENT_DELETE )
-                    m_TreeProject->Delete( kid );
-                else
-                {
-                    wxFileName newpath = event.GetNewPath();
-                    wxString newfn = newpath.GetFullPath();
-                    // Change item label and item data
-                    // Extension could be modified and be not an usually selected file type
-                    // However, here we do not filter files.
-                    // This is simple, and I am not sure filtering renamed files here is better,
-                    // because they could disappear, like deleted files
-                    itemData->SetFileName( newpath.GetFullPath() );
-                    m_TreeProject->SetItemText( kid, newpath.GetFullName() );
-                }
-                return;
-            }
+                TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
 
-            kid = m_TreeProject->GetNextChild( root_id, cookie );
+                if( itemData && ( itemData->m_FileName == fn ) )
+                {
+                    m_TreeProject->Delete( kid );
+                    return;
+                }
+                kid = m_TreeProject->GetNextChild( root_id, cookie );
+            }
+            break;
+
+        case wxFSW_EVENT_RENAME :
+        {
+            wxFileName newpath = event.GetNewPath();
+            wxString newfn = newpath.GetFullPath();
+            while( kid.IsOk() )
+            {
+                TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
+
+                if( itemData && ( itemData->m_FileName == fn ) )
+                {
+                    m_TreeProject->Delete( kid );
+                    break;
+                }
+
+                kid = m_TreeProject->GetNextChild( root_id, cookie );
+            }
+            AddItemToTreeProject( newfn, root_id, false );
         }
+            break;
     }
 
     /* Sort filenames by alphabetic order */
