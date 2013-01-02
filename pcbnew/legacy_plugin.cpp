@@ -3866,7 +3866,7 @@ typedef MODULE_MAP::const_iterator              MODULE_CITER;
 struct FPL_CACHE
 {
     LEGACY_PLUGIN*  m_owner;        // my owner, I need its LEGACY_PLUGIN::LoadMODULE()
-    wxString        m_lib_name;
+    wxString        m_lib_path;
     wxDateTime      m_mod_time;
     MODULE_MAP      m_modules;      // map or tuple of footprint_name vs. MODULE*
     bool            m_writable;
@@ -3877,7 +3877,7 @@ struct FPL_CACHE
     // error codes nor user interface calls from here, nor in any PLUGIN.
     // Catch these exceptions higher up please.
 
-    /// save the entire legacy library to m_lib_name;
+    /// save the entire legacy library to m_lib_path;
     void Save();
 
     void SaveHeader( FILE* aFile );
@@ -3905,7 +3905,7 @@ struct FPL_CACHE
 
 FPL_CACHE::FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
     m_owner( aOwner ),
-    m_lib_name( aLibraryPath ),
+    m_lib_path( aLibraryPath ),
     m_writable( true )
 {
 }
@@ -3913,7 +3913,7 @@ FPL_CACHE::FPL_CACHE( LEGACY_PLUGIN* aOwner, const wxString& aLibraryPath ) :
 
 wxDateTime FPL_CACHE::GetLibModificationTime()
 {
-    wxFileName  fn( m_lib_name );
+    wxFileName  fn( m_lib_path );
 
     // update the writable flag while we have a wxFileName, in a network this
     // is possibly quite dynamic anyway.
@@ -3925,7 +3925,7 @@ wxDateTime FPL_CACHE::GetLibModificationTime()
 
 void FPL_CACHE::Load()
 {
-    FILE_LINE_READER    reader( m_lib_name );
+    FILE_LINE_READER    reader( m_lib_path );
 
     ReadAndVerifyHeader( &reader );
     SkipIndex( &reader );
@@ -3970,7 +3970,7 @@ void FPL_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
 
 L_bad_library:
     THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty or is not a legacy library" ),
-        m_lib_name.GetData() ) );
+        m_lib_path.GetData() ) );
 }
 
 
@@ -4082,7 +4082,7 @@ void FPL_CACHE::Save()
     if( !m_writable )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "Legacy library file '%s' is read only" ), m_lib_name.GetData() ) );
+            _( "Legacy library file '%s' is read only" ), m_lib_path.GetData() ) );
     }
 
     wxString tempFileName;
@@ -4090,20 +4090,20 @@ void FPL_CACHE::Save()
     // a block {} scope to fire wxFFile wxf()'s destructor
     {
         // CreateTempFileName works better with an absolute path
-        wxFileName abs_lib_name( m_lib_name );
+        wxFileName abs_lib_name( m_lib_path );
 
         abs_lib_name.MakeAbsolute();
         tempFileName = wxFileName::CreateTempFileName( abs_lib_name.GetFullPath() );
 
-        wxLogDebug( wxT( "tempFileName:'%s'  m_lib_name:'%s'\n" ),
-                    TO_UTF8( tempFileName ), TO_UTF8( m_lib_name ) );
+        wxLogDebug( wxT( "tempFileName:'%s'  m_lib_path:'%s'\n" ),
+                    TO_UTF8( tempFileName ), TO_UTF8( m_lib_path ) );
 
         FILE* fp = wxFopen( tempFileName, wxT( "w" ) );
         if( !fp )
         {
             THROW_IO_ERROR( wxString::Format(
                 _( "Unable to open or create legacy library file '%s'" ),
-                m_lib_name.GetData() ) );
+                m_lib_path.GetData() ) );
         }
 
         // wxf now owns fp, will close on exception or exit from
@@ -4117,20 +4117,20 @@ void FPL_CACHE::Save()
     }
 
     // fp is now closed here, and that seems proper before trying to rename
-    // the temporary file to m_lib_name.
+    // the temporary file to m_lib_path.
 
-    wxRemove( m_lib_name );     // it is not an error if this does not exist
+    wxRemove( m_lib_path );     // it is not an error if this does not exist
 
     // Even on linux you can see an _intermittent_ error when calling wxRename(),
     // and it is fully inexplicable.  See if this dodges the error.
     wxMilliSleep( 250L );
 
-    if( wxRename( tempFileName, m_lib_name ) )
+    if( wxRename( tempFileName, m_lib_path ) )
     {
         THROW_IO_ERROR( wxString::Format(
             _( "Unable to rename tempfile '%s' to library file '%s'" ),
             tempFileName.GetData(),
-            m_lib_name.GetData() ) );
+            m_lib_path.GetData() ) );
     }
 }
 
@@ -4173,7 +4173,7 @@ void FPL_CACHE::SaveModules( FILE* aFile )
 
 void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
 {
-    if( !m_cache || m_cache->m_lib_name != aLibraryPath ||
+    if( !m_cache || m_cache->m_lib_path != aLibraryPath ||
         // somebody else on a network touched the library:
         m_cache->m_mod_time != m_cache->GetLibModificationTime() )
     {
@@ -4342,7 +4342,7 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, PROPERTIES
             aLibraryPath.GetData() ) );
     }
 
-    if( m_cache && m_cache->m_lib_name == aLibraryPath )
+    if( m_cache && m_cache->m_lib_path == aLibraryPath )
     {
         delete m_cache;
         m_cache = 0;
