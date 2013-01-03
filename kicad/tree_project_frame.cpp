@@ -106,14 +106,11 @@ const wxString  TextFileWildcard( wxT( "Text files (*.txt)|*.txt" ) );
  * only useful files are shown.
  */
 
-
 /*****************************************************************************/
 BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
 EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnSelect )
 EVT_TREE_ITEM_EXPANDED( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnExpand )
 EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnRight )
-EVT_TREE_BEGIN_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragStart )
-EVT_TREE_END_DRAG( ID_PROJECT_TREE, TREE_PROJECT_FRAME::OnDragEnd )
 EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor )
 EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnCreateNewDirectory )
 EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
@@ -134,8 +131,6 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
 {
     m_Parent = parent;
     m_TreeProject = NULL;
-    wxMenuItem* item;
-    m_PopupMenu = NULL;
 #ifdef KICAD_USE_FILES_WATCHER
     m_watcher = NULL;
     Connect( wxEVT_FSWATCHER,
@@ -154,153 +149,15 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
 
     m_filters.push_back( wxT( "^no KiCad files found" ) );
 
-    for( int i = 0; i < TREE_MAX; i++ )
-        m_ContextMenus.push_back( new wxMenu() );
-
-    wxMenu* menu;
-
-    // New files context menu:
-    wxMenu* menus[2];
-    menus[0]    = m_ContextMenus[TREE_DIRECTORY];
-    menus[1]    = m_ContextMenus[TREE_PROJECT];
-
-    for( int i = 0; i < 2; i++ )
-    {
-        menu = menus[i];
-
-        // ID_PROJECT_NEWDIR
-        item = new wxMenuItem( menu,
-                               ID_PROJECT_NEWDIR,
-                               _( "New D&irectory" ),
-                               _( "Create a New Directory" ) );
-        item->SetBitmap( KiBitmap( directory_xpm ) );
-        menu->Append( item );
-    }
-
-
-    // Put the Rename and Delete file menu commands:
-    for( int i = TREE_PROJECT + 1; i < TREE_MAX; i++ )
-    {
-        menu = m_ContextMenus[i];
-
-        // ID_PROJECT_RENAME
-        item = new wxMenuItem( menu, ID_PROJECT_RENAME,
-                               TREE_DIRECTORY != i ? _( "&Rename file" ) :
-                               _( "&Rename directory" ),
-                               TREE_DIRECTORY != i ? _( "Rename file" ) :
-                               _( "Rename directory" ) );
-        item->SetBitmap( KiBitmap( right_xpm ) );
-        menu->Append( item );
-
-
-        if( TREE_DIRECTORY != i )
-        {
-            // ID_PROJECT_TXTEDIT
-            item = new wxMenuItem( menu,
-                                   ID_PROJECT_TXTEDIT,
-                                   _( "&Edit in a text editor" ),
-                                   _( "Open the file in a Text Editor" ) );
-            item->SetBitmap( KiBitmap( icon_txt_xpm ) );
-            menu->Append( item );
-        }
-
-        // ID_PROJECT_DELETE
-        item = new wxMenuItem( menu,
-                               ID_PROJECT_DELETE,
-                               TREE_DIRECTORY != i ? _( "&Delete File" ) :
-                               _( "&Delete Directory" ),
-                               TREE_DIRECTORY != i ? _( "Delete the File" ) :
-                               _( "Delete the Directory and its content" ) );
-        item->SetBitmap( KiBitmap( delete_xpm ) );
-        menu->Append( item );
-    }
-
     ReCreateTreePrj();
 }
 
 
 TREE_PROJECT_FRAME::~TREE_PROJECT_FRAME()
 {
-    size_t  i;
-    wxMenu* menu;
-
-    for( i = 0; i < m_ContextMenus.size(); i++ )
-    {
-        menu = m_ContextMenus[i];
-        delete menu;
-    }
-
-    if( m_PopupMenu )
-        delete m_PopupMenu;
-
 #ifdef KICAD_USE_FILES_WATCHER
     delete m_watcher;
 #endif
-}
-
-
-/**
- * @brief Allowing drag & drop of file other than the currently opened project
- */
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::OnDragStart( wxTreeEvent& event )
-/*****************************************************************************/
-{
-    /* Ensure item is selected
-     *  (Under Windows start drag does not activate the item)
-     */
-    wxTreeItemId        curr_item = event.GetItem();
-
-    m_TreeProject->SelectItem( curr_item );
-    TREEPROJECT_ITEM*   data = GetSelectedData();
-
-    if( data->GetFileName() == m_Parent->m_ProjectFileName.GetFullPath() )
-        return;
-
-    wxImage img = m_TreeProject->GetImageList()->GetBitmap( data->GetType() - 1 ).ConvertToImage();
-    m_DragCursor = wxCursor( img );
-    m_Parent->wxWindow::SetCursor( (wxCursor&) m_DragCursor );
-    event.Allow();
-}
-
-
-/*****************************************************************************/
-void TREE_PROJECT_FRAME::OnDragEnd( wxTreeEvent& event )
-/*****************************************************************************/
-{
-    m_Parent->SetCursor( wxNullCursor );
-
-    TREEPROJECT_ITEM*   source_data = GetSelectedData();
-    wxTreeItemId        dest = event.GetItem();
-
-    if( !dest.IsOk() )
-        return; // Cancelled ...
-
-    TREEPROJECT_ITEM* destData =
-        dynamic_cast<TREEPROJECT_ITEM*>( m_TreeProject->GetItemData( dest ) );
-
-    if( !destData )
-        return;
-
-    // the item can be a member of the selected directory; get the directory itself
-    if( TREE_DIRECTORY != destData->GetType()
-        && !m_TreeProject->ItemHasChildren( dest ) )
-    {
-        // the item is a member of the selected directory; get the directory itself
-        dest = m_TreeProject->GetItemParent( dest );
-
-        if( !dest.IsOk() )
-            return; // no parent ?
-
-        // Select the right destData:
-        destData =
-            dynamic_cast<TREEPROJECT_ITEM*>( m_TreeProject->GetItemData( dest ) );
-
-        if( !destData )
-            return;
-    }
-
-    source_data->Move( destData );
 }
 
 
@@ -318,16 +175,6 @@ void TREE_PROJECT_FRAME::RemoveFilter( const wxString& filter )
     }
 }
 
-
-/**
- * @brief TODO
- */
-/*****************************************************************************/
-wxMenu* TREE_PROJECT_FRAME::GetContextMenu( int type )
-/*****************************************************************************/
-{
-    return m_ContextMenus[type];
-}
 
 
 /**
@@ -379,7 +226,11 @@ void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
         return;
 
     if( wxMkdir( subdir ) )
+    {
+#ifndef KICAD_USE_FILES_WATCHER
         AddItemToTreeProject( subdir, root );
+#endif
+    }
 }
 
 
@@ -578,40 +429,52 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
         // at the top of the hierarchy.  The schematic is top level only if
         // there is a line in the header saying:
         // "Sheet 1 "
+        // However if the file has the same name as the project, it is always
+        // shown, because it is expected the root sheet.
+        // (and to fix an issue (under XP but could exist under other OS),
+        // when a .sch file is created, the file
+        // create is sent to the wxFileSystemWatcher, but the file still has 0 byte
+        // so it cannot detected as root sheet
+        // This is an ugly fix.
         if( isSchematic )
         {
-            char        line[128]; // small because we just need a few bytes from the start of a line
-            FILE*       fp;
+            wxString    fullFileName = aName.BeforeLast( '.' );
+            wxString    rootName;
+            TREEPROJECT_ITEM* itemData = GetItemIdData( m_root );
+            if( itemData )
+                rootName = itemData->m_FileName.BeforeLast( '.' );
 
-            wxString    FullFileName = aName;
-
-            fp = wxFopen( FullFileName, wxT( "rt" ) );
-
-            if( fp == NULL )
+            if( fullFileName != rootName )
             {
-                return false;
-            }
+                char        line[128]; // small because we just need a few bytes from the start of a line
+                FILE*       fp;
 
-            addFile = false;
+                fullFileName = aName;
+                fp = wxFopen( fullFileName, wxT( "rt" ) );
 
-            // check the first 100 lines for the "Sheet 1" string
-            int l =0;
-            for( int i = 0; i<100; ++i, l++ )
-            {
-                if( !fgets( line, sizeof(line), fp ) )
-                    break;
+                if( fp == NULL )
+                    return false;
 
-                if( !strncmp( line, "Sheet 1 ", 8 ) )
+                addFile = false;
+
+                // check the first 100 lines for the "Sheet 1" string
+                for( int i = 0; i<100; ++i )
                 {
-                    addFile = true;
-                    break;
+                    if( !fgets( line, sizeof(line), fp ) )
+                        break;
+
+                    if( !strncmp( line, "Sheet 1 ", 8 ) )
+                    {
+                        addFile = true;
+                        break;
+                    }
                 }
+
+                fclose( fp );
+
+                if( !addFile )
+                    return false; // it is a non-top-level schematic
             }
-
-            fclose( fp );
-
-            if( !addFile )
-                return false; // it is a non-top-level schematic
         }
 
         for( int i = TREE_PROJECT; i < TREE_MAX; i++ )
@@ -728,7 +591,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
 
     m_TreeProject->SetItemData( rootcellule,
                                 new TREEPROJECT_ITEM( TREE_PROJECT,
-                                                      wxEmptyString,
+                                                      fn.GetFullPath(),
                                                       m_TreeProject ) );
 
     // Now adding all current files if available
@@ -776,11 +639,6 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
     /* Ensure item is selected (Under Windows right click does not select the item) */
     m_TreeProject->SelectItem( curr_item );
 
-    // Delete and recreate the context menu
-    delete ( m_PopupMenu );
-    m_PopupMenu = new wxMenu();
-
-    // Get the current filename:
     tree_data = GetSelectedData();
 
     if( !tree_data )
@@ -789,41 +647,45 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
     tree_id = tree_data->GetType();
     FullFileName = tree_data->GetFileName();
 
-    // copy menu contents in order of the next array:
-    wxMenu* menus[] =
+    wxMenu popupMenu;
+
+    switch( tree_id )
     {
-        GetContextMenu( tree_id ),
-        const_cast<wxMenu*>( tree_data->GetMenu() )
-    };
+        case TREE_PROJECT:
+            AddMenuItem( &popupMenu, ID_PROJECT_NEWDIR,
+                         _( "New D&irectory" ),
+                         _( "Create a New Directory" ),
+                         KiBitmap( directory_xpm ) );
+            break;
 
-    for( unsigned int j = 0; j < sizeof(menus) / sizeof(wxMenu*); j++ )
-    {
-        wxMenu* menu = menus[j];
+        case TREE_DIRECTORY:
+            AddMenuItem( &popupMenu, ID_PROJECT_NEWDIR,
+                         _( "New D&irectory" ),
+                         _( "Create a New Directory" ),
+                         KiBitmap( directory_xpm ) );
+            AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,
+                         _( "&Delete Directory" ),
+                         _( "Delete the Directory and its content" ),
+                         KiBitmap( delete_xpm ) );
+            break;
 
-        if( !menu )
-            continue;
-
-        wxMenuItemList list = menu->GetMenuItems();
-
-        for( unsigned int i = 0; i < list.GetCount(); i++ )
-        {
-            // Grrrr! wxMenu does not have any copy constructor !! (do it by hand)
-            wxMenuItem* src     = list[i];
-            wxString    label   = src->GetItemLabelText();
-
-            // for obscure reasons, the & is translated into _ ... so replace it
-            label.Replace( wxT( "_" ), wxT( "&" ), true );
-            wxMenuItem* item = new wxMenuItem( m_PopupMenu, src->GetId(),
-                                               label,
-                                               src->GetHelp(), src->GetKind() );
-
-            item->SetBitmap( src->GetBitmap() );
-            m_PopupMenu->Append( item );
-        }
+        default:
+            AddMenuItem( &popupMenu, ID_PROJECT_TXTEDIT,
+                         _( "&Edit in a text editor" ),
+                         _( "Open the file in a Text Editor" ),
+                         KiBitmap( icon_txt_xpm ) );
+            AddMenuItem( &popupMenu, ID_PROJECT_RENAME,
+                         _( "&Rename file" ),
+                         _( "Rename file" ),
+                         KiBitmap( right_xpm ) );
+            AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,
+                         _( "&Delete File" ),
+                         _( "Delete the Directory and its content" ),
+                         KiBitmap( delete_xpm ) );
+            break;
     }
 
-    if( m_PopupMenu )
-        PopupMenu( m_PopupMenu );
+    PopupMenu( &popupMenu );
 }
 
 /*
@@ -835,6 +697,9 @@ void TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor( wxCommandEvent& event
     TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
     if( !tree_data )
+        return;
+
+    if( tree_data->GetType() == TREE_DIRECTORY )
         return;
 
     wxString    FullFileName = tree_data->GetFileName();
@@ -893,8 +758,8 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
 }
 
 
-/**
- * @brief TODO
+/*
+ * called on a double click on an item
  */
 /*****************************************************************************/
 void TREE_PROJECT_FRAME::OnSelect( wxTreeEvent& Event )
