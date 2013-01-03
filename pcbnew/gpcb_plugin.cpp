@@ -184,7 +184,7 @@ class GPCB_FPL_CACHE
      * other are parameters (number or delimited string)
      * last parameter is ) or ]
      *
-     * @param aParameterList. This list of parameters parsed.
+     * @param aParameterList This list of parameters parsed.
      * @param aLineReader    The line reader object to parse.
      */
     void parseParameters( wxArrayString& aParameterList, LINE_READER* aLineReader );

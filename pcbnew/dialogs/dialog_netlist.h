@@ -1,5 +1,5 @@
 /**
- * @file dialog_netlist.h
+ * @file pcbnew/dialogs/dialog_netlist.h
  */
 
 /*
