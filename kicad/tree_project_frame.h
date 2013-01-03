@@ -46,13 +46,10 @@ class TREE_PROJECT_FRAME : public wxSashLayoutWindow
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
     TREEPROJECTFILES*       m_TreeProject;
-    wxTreeItemId            m_root;
+
 private:
-    std::vector<wxMenu*>    m_ContextMenus;
+    wxTreeItemId            m_root;
     std::vector<wxString>   m_filters;
-    wxMenu*                 m_PopupMenu;
-    wxCursor                m_DragCursor;
-    wxCursor                m_Default;
 
 #ifdef KICAD_USE_FILES_WATCHER
     wxFileSystemWatcher*    m_watcher; // file system watcher (since wxWidgets 2.9.2)
@@ -73,7 +70,6 @@ public:
 #endif
 
 protected:
-    wxMenu*                         GetContextMenu( int type );
     static wxString                 GetFileExt( TreeFileType type );
     static wxString                 GetFileWildcard( TreeFileType type );
 
@@ -94,10 +90,19 @@ protected:
     TREEPROJECT_ITEM*               GetItemIdData( wxTreeItemId aId );
 
 private:
+    /**
+     * Called on a double click on an item
+     */
     void                            OnSelect( wxTreeEvent& Event );
+
+    /**
+     * Called on a click on the + or - button of an item with children
+     */
     void                            OnExpand( wxTreeEvent& Event );
-    void                            OnDragStart( wxTreeEvent& event );
-    void                            OnDragEnd( wxTreeEvent& event );
+
+    /**
+     * Called on a right click on an item
+     */
     void                            OnRight( wxTreeEvent& Event );
 
     /**

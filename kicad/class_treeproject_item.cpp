@@ -77,93 +77,10 @@ wxString TREEPROJECT_ITEM::GetDir() const
 
     wxFileName filename = wxFileName( m_FileName );
 
-    filename.MakeRelativeTo( wxGetCwd() );
-
-    wxArrayString   dirs = filename.GetDirs();
-
-    wxString        dir;
-
-    for( unsigned int i = 0; i < dirs.Count(); i++ )
-    {
-        dir += dirs[i] + filename.GetPathSeparator();
-    }
-
+    wxString dir = filename.GetPath();
     return dir;
 }
 
-
-// Move the object to dest
-void TREEPROJECT_ITEM::Move( TREEPROJECT_ITEM* dest )
-{
-    // function not safe.
-    return;
-
-    const wxString sep = wxFileName().GetPathSeparator();
-
-    if( m_Type == TREE_DIRECTORY )
-        return;
-
-    if( !dest )
-        return;
-
-    if( m_parent != dest->m_parent )
-        return; // Can not cross move!
-
-    if( dest == this )
-        return; // Can not move to ourself...
-
-    wxTreeItemId parent = m_parent->GetItemParent( GetId() );
-
-    if( dest == dynamic_cast<TREEPROJECT_ITEM*>( m_parent->GetItemData( parent ) ) )
-        return; // same parent ?
-
-    // We need to create a new item from us, and move
-    // data to there ...
-
-    // First move file on the disk
-    wxFileName  fname( m_FileName );
-
-    wxString    destName;
-
-    if( !dest->GetDir().IsEmpty() )
-        destName = dest->GetDir() + sep;
-
-    destName += fname.GetFullName();
-
-    if( destName == GetFileName() )
-        return; // Same place ??
-
-    // Move the file on the disk:
-    if( !wxRenameFile( GetFileName(), destName, false ) )
-    {
-        wxMessageDialog( m_parent, _( "Unable to move file ... " ),
-                         _( "Permission error ?" ), wxICON_ERROR | wxOK );
-        return;
-    }
-
-    SetFileName( destName );
-
-    if( TREE_DIRECTORY != GetType() )
-    {
-        // Move the tree item itself now:
-        wxTreeItemId    oldId   = GetId();
-        int             i       = m_parent->GetItemImage( oldId );
-        wxString        text    = m_parent->GetItemText( oldId );
-
-        // Bye bye old Id :'(
-        wxTreeItemId    newId = m_parent->AppendItem( dest->GetId(), text, i );
-        m_parent->SetItemData( newId, this );
-        m_parent->SetItemData( oldId, NULL );
-        m_parent->Delete( oldId );
-    }
-    else
-    {
-        // We should move recursively all files, but that's quite boring
-        // let's just refresh that's all ... TODO (change this to a better code ...)
-        wxCommandEvent dummy;
-        dynamic_cast<TREEPROJECTFILES*>( m_parent )->GetParent()->m_Parent->OnRefresh( dummy );
-    }
-}
 
 /* rename the file checking if extension change occurs */
 bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
@@ -218,7 +135,9 @@ type.\n Do you want to continue ?"                                              
         return false;
     }
 
+#ifndef KICAD_USE_FILES_WATCHER
     SetFileName( newFile );
+#endif
 
     return true;
 }
@@ -263,7 +182,7 @@ bool TREEPROJECT_ITEM::Delete( bool check )
 }
 
 
-/* Called under item activation */
+// Called under item activation
 void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
 {
     wxString        sep = wxFileName().GetPathSeparator();

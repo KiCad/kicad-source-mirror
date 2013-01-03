@@ -15,7 +15,6 @@ public:
     bool            m_WasPopulated; // True the name is a directory, and its content was read
 private:
     wxTreeCtrl*     m_parent;
-    wxMenu          m_fileMenu;
     int             m_state;
 public:
 
@@ -50,17 +49,15 @@ public:
         m_FileName = name;
     }
 
+    /**
+     * @return the path of an item.
+     * if this item is a directory, returns the stored filename
+     * if this is a file, returns its path
+     */
     wxString    GetDir() const;
 
     bool        Rename( const wxString& name, bool check = true );
     bool        Delete( bool check = true );
-    void        Move( TREEPROJECT_ITEM* dest );
     void        Activate( TREE_PROJECT_FRAME* prjframe );
-
-    const wxMenu* GetMenu()
-    {
-        return &m_fileMenu;
-    }
-
     void SetState( int state );
 };
