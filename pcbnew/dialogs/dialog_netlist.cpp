@@ -1,5 +1,5 @@
 /**
- * @file dialog_netlist.cpp
+ * @file pcbnew/dialogs/dialog_netlist.cpp
  */
 
 /*
