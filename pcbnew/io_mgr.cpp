@@ -172,6 +172,10 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
     {
         ret = GEDA_PCB;
     }
+    else if( fn.GetExt() == EagleFootprintLibPathExtension )
+    {
+        ret = EAGLE;
+    }
     else
     {
         // Although KICAD PLUGIN uses libpaths with fixed extension of

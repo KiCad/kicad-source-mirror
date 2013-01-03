@@ -41,7 +41,6 @@ const wxString VrmlFileExtension( wxT( "wrl" ) );
 const wxString ProjectFileExtension( wxT( "pro" ) );
 const wxString SchematicFileExtension( wxT( "sch" ) );
 const wxString NetlistFileExtension( wxT( "net" ) );
-const wxString LegacyFootprintLibPathExtension( wxT( "mod" ) );
 const wxString ComponentFileExtension( wxT( "cmp" ) );
 const wxString GerberFileExtension( wxT( "pho" ) );
 
@@ -56,6 +55,9 @@ const wxString ReportFileExtension( wxT( "rpt" ) );
 const wxString FootprintPlaceFileExtension( wxT( "pos" ) );
 
 const wxString KiCadFootprintLibPathExtension( wxT( "pretty" ) );    ///< KICAD PLUGIN libpath
+const wxString LegacyFootprintLibPathExtension( wxT( "mod" ) );
+const wxString EagleFootprintLibPathExtension( wxT( "lbr" ) );
+
 const wxString KiCadFootprintFileExtension( wxT( "kicad_mod" ) );
 const wxString GedaPcbFootprintLibFileExtension( wxT( "fp" ) );
 
@@ -75,6 +77,7 @@ const wxString PcbFileWildcard( _( "KiCad s-expr printed circuit board files (*.
 const wxString KiCadFootprintLibFileWildcard( _( "KiCad footprint s-expre library file (*.kicad_mod)|*.kicad_mod" ) );
 const wxString KiCadFootprintLibPathWildcard( _( "KiCad footprint s-expre library path (*.pretty)|*.pretty" ) );
 const wxString LegacyFootprintLibPathWildcard( _( "Legacy footprint library file (*.mod)|*.mod" ) );
+const wxString EagleFootprintLibPathWildcard( _( "Eagle ver. 6.x XML library files (*.lbr)|*.lbr" ) );
 const wxString GedaPcbFootprintLibFileWildcard( _( "Geda PCB footprint library file (*.fp)|*.fp" ) );
 const wxString MacrosFileWildcard( _( "KiCad recorded macros (*.mcr)|*.mcr" ) );
 
