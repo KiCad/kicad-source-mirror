@@ -156,7 +156,6 @@ set(PCBNEW_CLASS_SRCS
     gen_modules_placefile.cpp
     gendrill_Excellon_writer.cpp
     globaleditpad.cpp
-    gpcb_exchange.cpp
     highlight.cpp
     hotkeys.cpp
     hotkeys_board_editor.cpp
