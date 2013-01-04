@@ -117,16 +117,6 @@ bool EDA_APP::OnInit()
 
     InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
-    if( m_Checker && m_Checker->IsAnotherRunning() )
-    {
-        if( !IsOK( NULL, _( "Pcbnew is already running, Continue?" ) ) )
-            return false;
-    }
-
-    // read current setup and reopen last directory if no filename to open in command line
-    bool reopenLastUsedDirectory = argc == 1;
-    GetSettings( reopenLastUsedDirectory );
-
     if( argc > 1 )
     {
         fn = argv[1];
@@ -140,9 +130,25 @@ Changing extension to .%s." ), GetChars( fn.GetFullPath() ),
             wxMessageBox( msg );
         }
 
-        if( fn.IsOk() && fn.DirExists() )
-            wxSetWorkingDirectory( fn.GetPath() );
+        if( !wxGetApp().LockFile( fn.GetFullPath() ) )
+        {
+            DisplayError( NULL, _( "This file is already open." ) );
+            return false;
+        }
     }
+
+    if( m_Checker && m_Checker->IsAnotherRunning() )
+    {
+        if( !IsOK( NULL, _( "Pcbnew is already running, Continue?" ) ) )
+            return false;
+    }
+
+    // read current setup and reopen last directory if no filename to open in command line
+    bool reopenLastUsedDirectory = argc == 1;
+    GetSettings( reopenLastUsedDirectory );
+
+    if( fn.IsOk() && fn.DirExists() )
+        wxSetWorkingDirectory( fn.GetPath() );
 
     g_DrawBgColor = BLACK;
 
