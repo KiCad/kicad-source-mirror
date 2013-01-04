@@ -133,7 +133,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         # Set default flags for Debug build.
         set(CMAKE_C_FLAGS_DEBUG "-Wall ${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG")
         set(CMAKE_CXX_FLAGS_DEBUG "-Wall ${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG")
+
     else(WIN32)
+        # Thou shalt not link vaporware and tell us it's a valid DSO:
+        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+        set(CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined") # needed by SWIG macros on linux
+
         # Set default flags for Release build.
         set(CMAKE_C_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG -fPIC")
         set(CMAKE_CXX_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG -fPIC")
