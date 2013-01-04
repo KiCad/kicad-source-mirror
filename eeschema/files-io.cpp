@@ -32,6 +32,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <wxEeschemaStruct.h>
+#include <appl_wxstruct.h>
 
 #include <general.h>
 #include <protos.h>
@@ -204,14 +205,6 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
         FullFileName = dlg.GetPath();
     }
 
-    if( g_RootSheet )
-    {
-        SAFE_DELETE( g_RootSheet );
-    }
-
-    CreateScreens();
-    screen = GetScreen();
-
     wxFileName fn = FullFileName;
 
     if( fn.IsRelative() )
@@ -219,6 +212,21 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
         fn.MakeAbsolute();
         FullFileName = fn.GetFullPath();
     }
+
+    if( !wxGetApp().LockFile( FullFileName ) )
+    {
+        DisplayError( this, _( "This file is already open." ) );
+        return false;
+    }
+
+    // Clear the screen before open a new file
+    if( g_RootSheet )
+    {
+        SAFE_DELETE( g_RootSheet );
+    }
+
+    CreateScreens();
+    screen = GetScreen();
 
     wxLogDebug( wxT( "Loading schematic " ) + FullFileName );
     wxSetWorkingDirectory( fn.GetPath() );

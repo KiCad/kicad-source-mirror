@@ -273,6 +273,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
 EDA_APP::EDA_APP()
 {
     m_Checker = NULL;
+    m_oneInstancePerFileChecker = NULL;
     m_HtmlCtrl = NULL;
     m_settings = NULL;
     m_LanguageId = wxLANGUAGE_DEFAULT;
@@ -297,6 +298,9 @@ EDA_APP::~EDA_APP()
 
     if( m_Checker )
         delete m_Checker;
+
+    if( m_oneInstancePerFileChecker )
+        delete m_oneInstancePerFileChecker;
 
     delete m_Locale;
 }
@@ -1123,4 +1127,26 @@ void EDA_APP::InsertLibraryPath( const wxString& aPaths, size_t aIndex )
             aIndex++;
         }
     }
+}
+
+bool EDA_APP::LockFile( const wxString& fileName )
+{
+    // semaphore to protect the edition of the file by more than one instance
+    if( m_oneInstancePerFileChecker != NULL )
+    {
+        // it means that we had an open file and we are opening a different one
+        delete m_oneInstancePerFileChecker;
+    }
+    wxString lockFileName = fileName + wxT( ".lock" );
+    lockFileName.Replace( wxT( "/" ), wxT( "_" ) );
+    // We can have filenames coming from Windows, so also convert Windows separator
+    lockFileName.Replace( wxT( "\\" ), wxT( "_" ) );
+    m_oneInstancePerFileChecker = new wxSingleInstanceChecker( lockFileName );
+    if( m_oneInstancePerFileChecker &&
+        m_oneInstancePerFileChecker->IsAnotherRunning() )
+    {
+        return false;
+    }
+
+    return true;
 }

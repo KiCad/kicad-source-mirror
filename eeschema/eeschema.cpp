@@ -89,17 +89,32 @@ bool EDA_APP::OnInit()
 {
     wxFileName      filename;
     SCH_EDIT_FRAME* frame = NULL;
+    bool fileReady = false;
 
     InitEDA_Appl( wxT( "Eeschema" ), APP_EESCHEMA_T );
 
-    if( m_Checker && m_Checker->IsAnotherRunning() )
-    {
-        if( !IsOK( NULL, _( "Eeschema is already running, Continue?" ) ) )
-            return false;
-    }
-
     if( argc > 1 )
         filename = argv[1];
+
+    if( filename.IsOk() )
+    {
+        if( filename.GetExt() != SchematicFileExtension )
+            filename.SetExt( SchematicFileExtension );
+
+        if( !wxGetApp().LockFile( filename.GetFullPath() ) )
+        {
+            DisplayError( NULL, _( "This file is already open." ) );
+            return false;
+        }
+
+        fileReady = true;
+    }
+
+    if( m_Checker && m_Checker->IsAnotherRunning() )
+      {
+          if( !IsOK( NULL, _( "Eeschema is already running, Continue?" ) ) )
+              return false;
+      }
 
     // Give a default colour for all layers
     // (actual color will beinitialized by config)
@@ -130,11 +145,8 @@ bool EDA_APP::OnInit()
     frame->Zoom_Automatique( true );
 
     /* Load file specified in the command line. */
-    if( filename.IsOk() )
+    if( fileReady )
     {
-        if( filename.GetExt() != SchematicFileExtension )
-            filename.SetExt( SchematicFileExtension );
-
         wxSetWorkingDirectory( filename.GetPath() );
 
         if( frame->LoadOneEEProject( filename.GetFullPath(), false ) )

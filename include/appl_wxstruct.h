@@ -67,6 +67,9 @@ protected:
     /// Used to prevent multiple instances of an application from being run at the same time.
     wxSingleInstanceChecker* m_Checker;
 
+    /// Used to prevent opening the same file multiple times.
+    wxSingleInstanceChecker* m_oneInstancePerFileChecker;
+
     wxString m_Project;
 
     /// The application specific configuration settings.
@@ -410,6 +413,13 @@ public:
      */
     void InsertLibraryPath( const wxString& aPaths, size_t aIndex );
 
+    /**
+     * Function LockFile
+     * Locks the access to a file.
+     * @param fileName = full path to the file.
+     * @return false if the file was already locked, true otherwise.
+     */
+    bool LockFile( const wxString& fileName );
 };
 
 /*
