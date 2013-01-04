@@ -233,15 +233,6 @@ public:
     void SetLastEditTime( ) { m_LastEdit_Time = time( NULL ); }
     time_t GetLastEditTime() const { return m_LastEdit_Time; }
 
-    /**
-     * Function Read_GPCB_Descr
-     * reads a footprint description in GPCB format (newlib version)
-     * @param CmpFullFileName = Full file name (there is one footprint per file.
-     * this is also the footprint name
-     * @return bool - true if success reading else false.
-     */
-    bool Read_GPCB_Descr( const wxString& CmpFullFileName );
-
     /* drawing functions */
 
     void Draw( EDA_DRAW_PANEL* aPanel,
