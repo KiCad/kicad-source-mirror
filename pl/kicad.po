@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-02 18:00+0100\n"
-"PO-Revision-Date: 2013-01-02 18:00+0100\n"
+"POT-Creation-Date: 2013-01-04 20:39+0100\n"
+"PO-Revision-Date: 2013-01-04 20:41+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -26,15 +26,7 @@ msgstr ""
 "X-Poedit-SearchPath-7: bitmap2component\n"
 "X-Poedit-SearchPath-8: pcb_calculator\n"
 
-#: kicad/class_treeproject_item.cpp:139
-msgid "Unable to move file ... "
-msgstr "Nie mogę przenieść pliku ... "
-
-#: kicad/class_treeproject_item.cpp:140 kicad/class_treeproject_item.cpp:217
-msgid "Permission error ?"
-msgstr "Błąd uprawnień ?"
-
-#: kicad/class_treeproject_item.cpp:198
+#: kicad/class_treeproject_item.cpp:115
 msgid ""
 "Changing file extension will change file type.\n"
 " Do you want to continue ?"
@@ -42,20 +34,24 @@ msgstr ""
 "Zmiana rozszerzenia pliku zmieni typ pliku.\n"
 " Czy chcesz kontynuować?"
 
-#: kicad/class_treeproject_item.cpp:200
+#: kicad/class_treeproject_item.cpp:117
 msgid "Rename File"
 msgstr "Zmień nazwę pliku"
 
-#: kicad/class_treeproject_item.cpp:216
+#: kicad/class_treeproject_item.cpp:133
 msgid "Unable to rename file ... "
 msgstr "Nie mogę zmienić nazwy pliku ... "
 
-#: kicad/class_treeproject_item.cpp:234
+#: kicad/class_treeproject_item.cpp:134
+msgid "Permission error ?"
+msgstr "Błąd uprawnień ?"
+
+#: kicad/class_treeproject_item.cpp:153
 #, c-format
 msgid "Do you really want to delete '%s'"
 msgstr "Czy na pewno chcesz usunąć '%s'"
 
-#: kicad/class_treeproject_item.cpp:236
+#: kicad/class_treeproject_item.cpp:155
 msgid "Delete File"
 msgstr "Usuń plik"
 
@@ -441,63 +437,51 @@ msgstr "Plik projektu KiCad <"
 msgid "> not found"
 msgstr "> nie został znaleziony"
 
-#: kicad/tree_project_frame.cpp:174
-msgid "New D&irectory"
-msgstr "Nowy &katalog"
-
-#: kicad/tree_project_frame.cpp:175
-msgid "Create a New Directory"
-msgstr "Utwórz nowy katalog"
-
-#: kicad/tree_project_frame.cpp:188
-msgid "&Rename file"
-msgstr "&Zmień nazwę pliku"
-
-#: kicad/tree_project_frame.cpp:189
-msgid "&Rename directory"
-msgstr "Z&mień nazwę katalogu"
-
-#: kicad/tree_project_frame.cpp:190
-msgid "Rename file"
-msgstr "Zmień nazwę pliku"
-
-#: kicad/tree_project_frame.cpp:191
-msgid "Rename directory"
-msgstr "Zmień nazwę katalogu"
-
-#: kicad/tree_project_frame.cpp:201
-msgid "&Edit in a text editor"
-msgstr "&Edytuj w edytorze tekstu"
-
-#: kicad/tree_project_frame.cpp:202
-msgid "Open the file in a Text Editor"
-msgstr "Otwórz plik w edytorze tekstu"
-
-#: kicad/tree_project_frame.cpp:210
-msgid "&Delete File"
-msgstr "&Usuń plik"
-
-#: kicad/tree_project_frame.cpp:211
-msgid "&Delete Directory"
-msgstr "U&suń katalog"
-
-#: kicad/tree_project_frame.cpp:212
-msgid "Delete the File"
-msgstr "Usuń plik"
-
-#: kicad/tree_project_frame.cpp:213
-msgid "Delete the Directory and its content"
-msgstr "Usuń katalog i jego zawartość"
-
-#: kicad/tree_project_frame.cpp:376
+#: kicad/tree_project_frame.cpp:223
 msgid "Create New Directory"
 msgstr "Utwórz katalog"
 
-#: kicad/tree_project_frame.cpp:876
+#: kicad/tree_project_frame.cpp:656 kicad/tree_project_frame.cpp:663
+msgid "New D&irectory"
+msgstr "Nowy &katalog"
+
+#: kicad/tree_project_frame.cpp:657 kicad/tree_project_frame.cpp:664
+msgid "Create a New Directory"
+msgstr "Utwórz nowy katalog"
+
+#: kicad/tree_project_frame.cpp:667
+msgid "&Delete Directory"
+msgstr "U&suń katalog"
+
+#: kicad/tree_project_frame.cpp:668 kicad/tree_project_frame.cpp:683
+msgid "Delete the Directory and its content"
+msgstr "Usuń katalog i jego zawartość"
+
+#: kicad/tree_project_frame.cpp:674
+msgid "&Edit in a text editor"
+msgstr "&Edytuj w edytorze tekstu"
+
+#: kicad/tree_project_frame.cpp:675
+msgid "Open the file in a Text Editor"
+msgstr "Otwórz plik w edytorze tekstu"
+
+#: kicad/tree_project_frame.cpp:678
+msgid "&Rename file"
+msgstr "&Zmień nazwę pliku"
+
+#: kicad/tree_project_frame.cpp:679
+msgid "Rename file"
+msgstr "Zmień nazwę pliku"
+
+#: kicad/tree_project_frame.cpp:682
+msgid "&Delete File"
+msgstr "&Usuń plik"
+
+#: kicad/tree_project_frame.cpp:742
 msgid "Change filename: "
 msgstr "Zmień nazwę pliku: "
 
-#: kicad/tree_project_frame.cpp:878
+#: kicad/tree_project_frame.cpp:744
 msgid "Change filename"
 msgstr "Zmienia nazwę pliku"
 
@@ -812,7 +796,7 @@ msgstr "Biblioteka "
 msgid " loaded"
 msgstr " wczytana"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:83 eeschema/files-io.cpp:321
+#: eeschema/eelibs_read_libraryfiles.cpp:83 eeschema/files-io.cpp:329
 #, c-format
 msgid ""
 "Component library <%s> failed to load.\n"
@@ -834,7 +818,12 @@ msgstr "Nie znaleziono plików"
 msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
-#: eeschema/eeschema.cpp:97
+#: eeschema/eeschema.cpp:106 eeschema/files-io.cpp:218 pcbnew/files.cpp:247
+#: pcbnew/pcbnew.cpp:135
+msgid "This file is already open."
+msgstr "Ten plik jest już otwarty."
+
+#: eeschema/eeschema.cpp:115
 msgid "Eeschema is already running, Continue?"
 msgstr "Eeschema jest już uruchomiony. Kontynuować?"
 
@@ -991,38 +980,38 @@ msgstr ""
 "\n"
 " >> Błędy ERC: %d\n"
 
-#: eeschema/files-io.cpp:83
+#: eeschema/files-io.cpp:84
 #, c-format
 msgid "Could not save backup of file <%s>"
 msgstr "Nie mogę zapisać kopii pliku <%s>"
 
-#: eeschema/files-io.cpp:94
+#: eeschema/files-io.cpp:95
 msgid "Schematic Files"
 msgstr "Pliki schematów"
 
-#: eeschema/files-io.cpp:113
+#: eeschema/files-io.cpp:114
 #, c-format
 msgid "Failed to create file <%s>"
 msgstr "Błąd przy tworzeniu pliku <%s>"
 
-#: eeschema/files-io.cpp:126
+#: eeschema/files-io.cpp:127
 msgid "File write operation failed."
 msgstr "Błąd operacji zapisu do pliku."
 
-#: eeschema/files-io.cpp:146 cvpcb/readwrite_dlgs.cpp:232
+#: eeschema/files-io.cpp:147 cvpcb/readwrite_dlgs.cpp:232
 #, c-format
 msgid "File %s saved"
 msgstr "Plik %s został zapisany"
 
-#: eeschema/files-io.cpp:189
+#: eeschema/files-io.cpp:190
 msgid "Discard changes to the current schematic?"
 msgstr "Porzucić zmiany w bieżącym schemacie?"
 
-#: eeschema/files-io.cpp:197
+#: eeschema/files-io.cpp:198
 msgid "Open Schematic"
 msgstr "Otwórz schemat"
 
-#: eeschema/files-io.cpp:260
+#: eeschema/files-io.cpp:268
 msgid ""
 "Ready\n"
 "Working dir: \n"
@@ -1030,11 +1019,11 @@ msgstr ""
 "Gotowy\n"
 "Katalog roboczy: \n"
 
-#: eeschema/files-io.cpp:325
+#: eeschema/files-io.cpp:333
 msgid " ->Error"
 msgstr " ->Błąd"
 
-#: eeschema/files-io.cpp:334
+#: eeschema/files-io.cpp:342
 #, c-format
 msgid "File <%s> not found."
 msgstr "Nie znaleziono pliku <%s>."
@@ -1229,7 +1218,7 @@ msgstr "Skonwertowany"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:74
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:89
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
-#: pcbnew/class_module.cpp:501 pcbnew/muonde.cpp:815
+#: pcbnew/class_module.cpp:503 pcbnew/muonde.cpp:815
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:75
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:59
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:118
@@ -1883,7 +1872,7 @@ msgstr "Wartość"
 
 #: eeschema/lib_field.cpp:576 eeschema/onrightclick.cpp:419
 #: eeschema/template_fieldnames.cpp:16
-#: eeschema/dialogs/dialog_build_BOM_base.cpp:79 pcbnew/class_module.cpp:689
+#: eeschema/dialogs/dialog_build_BOM_base.cpp:79 pcbnew/class_module.cpp:691
 msgid "Footprint"
 msgstr "Footprint"
 
@@ -3770,7 +3759,7 @@ msgstr "Pokaż dokumentację symbolu"
 msgid "Insert component in schematic"
 msgstr "Wstaw symbol do schematu"
 
-#: eeschema/viewlibs.cpp:106 eeschema/viewlib_frame.cpp:105
+#: eeschema/viewlibs.cpp:106 eeschema/viewlib_frame.cpp:104
 #: pcbnew/modview.cpp:66
 msgid "Library Browser"
 msgstr "Przeglądarka bibliotek"
@@ -5051,7 +5040,7 @@ msgstr "Dodaj nową bibliotekę po zaznaczonej i załaduj ją"
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:36
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:71
-#: pcbnew/class_module.cpp:505
+#: pcbnew/class_module.cpp:507
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:42
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:97
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:36
@@ -6256,7 +6245,7 @@ msgstr "ECO2"
 msgid "Edge.Cuts"
 msgstr "Krawedziowa"
 
-#: pcbnew/class_board.cpp:1034 pcbnew/class_module.cpp:482
+#: pcbnew/class_board.cpp:1034 pcbnew/class_module.cpp:484
 #: pcbnew/class_netinfo_item.cpp:138
 msgid "Pads"
 msgstr "Pola lutownicze"
@@ -6325,7 +6314,7 @@ msgstr "Krzywa"
 msgid "Segment"
 msgstr "Segment"
 
-#: pcbnew/class_drawsegment.cpp:359 pcbnew/class_module.cpp:470
+#: pcbnew/class_drawsegment.cpp:359 pcbnew/class_module.cpp:472
 #: pcbnew/class_pad.cpp:623 pcbnew/class_pcb_layer_widget.cpp:191
 #: pcbnew/class_pcb_text.cpp:131 pcbnew/class_text_mod.cpp:399
 #: pcbnew/class_track.cpp:1125 pcbnew/class_zone.cpp:708
@@ -6469,7 +6458,7 @@ msgstr "Pole lutownicze wewnątrz strefy chronionej"
 msgid "Graphic Item"
 msgstr "Elementy graficzne"
 
-#: pcbnew/class_edge_mod.cpp:249 pcbnew/class_module.cpp:518
+#: pcbnew/class_edge_mod.cpp:249 pcbnew/class_module.cpp:520
 #: pcbnew/class_pad.cpp:508 pcbnew/class_text_mod.cpp:376 cvpcb/setvisu.cpp:35
 msgid "Module"
 msgstr "Footprint"
@@ -6508,46 +6497,46 @@ msgstr "Typ błędu"
 msgid "Target on %s size %s"
 msgstr "Punkt pozycjonujący na %s rozmiar %s"
 
-#: pcbnew/class_module.cpp:462
+#: pcbnew/class_module.cpp:464
 msgid "Last Change"
 msgstr "Ostatnia zmiana"
 
-#: pcbnew/class_module.cpp:467
+#: pcbnew/class_module.cpp:469
 msgid "Netlist path"
 msgstr "Ścieżka dla Lista sieci"
 
-#: pcbnew/class_module.cpp:492
+#: pcbnew/class_module.cpp:494
 msgid "Stat"
 msgstr "Status"
 
-#: pcbnew/class_module.cpp:495 pcbnew/class_pad.cpp:657
+#: pcbnew/class_module.cpp:497 pcbnew/class_pad.cpp:657
 #: pcbnew/class_text_mod.cpp:407
 msgid "Orient"
 msgstr "Orientacja"
 
-#: pcbnew/class_module.cpp:509
+#: pcbnew/class_module.cpp:511
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:118
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:92
 msgid "Virtual"
 msgstr "Wirtualny"
 
-#: pcbnew/class_module.cpp:516
+#: pcbnew/class_module.cpp:518
 msgid "Attrib"
 msgstr "Atrybuty"
 
-#: pcbnew/class_module.cpp:523
+#: pcbnew/class_module.cpp:525
 msgid "No 3D shape"
 msgstr "Brak kształtu 3D"
 
-#: pcbnew/class_module.cpp:525
+#: pcbnew/class_module.cpp:527
 msgid "3D-Shape"
 msgstr "Kształt 3D"
 
-#: pcbnew/class_module.cpp:527
+#: pcbnew/class_module.cpp:529
 msgid "Doc:  "
 msgstr "Dokumentacja:  "
 
-#: pcbnew/class_module.cpp:528
+#: pcbnew/class_module.cpp:530
 msgid "KeyW: "
 msgstr "Słowo kluczowe: "
 
@@ -7343,11 +7332,11 @@ msgid ""
 "The current board has been modified.  Do you wish to discard the changes?"
 msgstr "Bieżąca płytka została zmieniona. Porzucić zmiany?"
 
-#: pcbnew/files.cpp:216 pcbnew/files.cpp:301
+#: pcbnew/files.cpp:216 pcbnew/files.cpp:308
 msgid "Open Board File"
 msgstr "Otwórz plik PCB"
 
-#: pcbnew/files.cpp:290
+#: pcbnew/files.cpp:297
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -7355,7 +7344,7 @@ msgstr ""
 "Ten plik został stworzony w starszej wersji Pcbnew.\n"
 " Plik zostanie zachowany w nowym formacie, gdy ponownie zostanie zapisany."
 
-#: pcbnew/files.cpp:299
+#: pcbnew/files.cpp:306
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -7364,15 +7353,15 @@ msgstr ""
 "Błąd podczas odczytywania PCB.\n"
 "%s"
 
-#: pcbnew/files.cpp:443
+#: pcbnew/files.cpp:450
 msgid "Save Board File As"
 msgstr "Zapisz plik PCB jako"
 
-#: pcbnew/files.cpp:509
+#: pcbnew/files.cpp:516
 msgid "Warning: unable to create backup file "
 msgstr "Ostrzeżenie: Nie można utworzyć pliku kopii zapasowej "
 
-#: pcbnew/files.cpp:542
+#: pcbnew/files.cpp:549
 #, c-format
 msgid ""
 "Error saving board.\n"
@@ -7381,19 +7370,19 @@ msgstr ""
 "Błąd podczas zapisywania płytki.\n"
 "%s"
 
-#: pcbnew/files.cpp:544
+#: pcbnew/files.cpp:551
 msgid "Save Board File"
 msgstr "Zapisz plik PCB"
 
-#: pcbnew/files.cpp:573
+#: pcbnew/files.cpp:580
 msgid "Backup file: "
 msgstr "Plik kopii zapasowej: "
 
-#: pcbnew/files.cpp:577
+#: pcbnew/files.cpp:584
 msgid "Wrote board file: "
 msgstr "Zapisano plik płytki: "
 
-#: pcbnew/files.cpp:579
+#: pcbnew/files.cpp:586
 msgid "Failed to create "
 msgstr "Błąd przy tworzeniu "
 
@@ -9020,38 +9009,38 @@ msgstr "Dodaj wycinek łuku"
 msgid "Add Polynomial Shape"
 msgstr "Dodaj wielokątny kształt"
 
-#: pcbnew/netlist.cpp:87
+#: pcbnew/netlist.cpp:81
 #, c-format
 msgid "Netlist file %s not found"
 msgstr "Nie znaleziono pliku %s z listą sieci"
 
-#: pcbnew/netlist.cpp:136
+#: pcbnew/netlist.cpp:130
 #, c-format
 msgid "Reading Netlist \"%s\""
 msgstr "Odczytaj listę sieci \"%s\""
 
-#: pcbnew/netlist.cpp:141
+#: pcbnew/netlist.cpp:135
 #, c-format
 msgid "Using component/footprint link file \"%s\""
 msgstr "Użyto pliku połączeń symboli/footprintów \"%s\""
 
-#: pcbnew/netlist.cpp:148
+#: pcbnew/netlist.cpp:142
 msgid "Using time stamp selection"
 msgstr "Korzystanie z odcisków czasowych"
 
-#: pcbnew/netlist.cpp:177 cvpcb/readschematicnetlist.cpp:80
+#: pcbnew/netlist.cpp:171 cvpcb/readschematicnetlist.cpp:80
 msgid "Netlist read error"
 msgstr "Błąd odczytu listy sieci"
 
-#: pcbnew/netlist.cpp:185
+#: pcbnew/netlist.cpp:179
 msgid "Ok to delete not locked footprints not found in netlist?"
 msgstr "Czy usunąć nie zablokowane footprinty nie będące na liście sieci?"
 
-#: pcbnew/netlist.cpp:217
+#: pcbnew/netlist.cpp:211
 msgid "No Modules"
 msgstr "Brak footprintów"
 
-#: pcbnew/netlist.cpp:227
+#: pcbnew/netlist.cpp:221
 msgid "Components"
 msgstr "Komponenty"
 
@@ -9549,11 +9538,7 @@ msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 msgid " [new file]"
 msgstr " [nowy plik]"
 
-#: pcbnew/pcbnew.cpp:122
-msgid "Pcbnew is already running, Continue?"
-msgstr "Pcbnew jest już uruchomiony. Kontynuować?"
-
-#: pcbnew/pcbnew.cpp:136
+#: pcbnew/pcbnew.cpp:126
 #, c-format
 msgid ""
 "Pcbnew file <%s> has a wrong extension.\n"
@@ -9562,7 +9547,11 @@ msgstr ""
 "Plik Pcbnew <%s> posiada niepoprawne rozszerzenie.\n"
 "Zostaje zmienione na .%s."
 
-#: pcbnew/pcbnew.cpp:202
+#: pcbnew/pcbnew.cpp:142
+msgid "Pcbnew is already running, Continue?"
+msgstr "Pcbnew jest już uruchomiony. Kontynuować?"
+
+#: pcbnew/pcbnew.cpp:208
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -9575,7 +9564,7 @@ msgstr ""
 "Czy chcesz go otworzyć?\n"
 "Zostanie on zapisany w nowym formacie."
 
-#: pcbnew/pcbnew.cpp:229
+#: pcbnew/pcbnew.cpp:235
 #, c-format
 msgid ""
 "File <%s> does not exist.\n"
@@ -15646,22 +15635,22 @@ msgstr "Nie mogę otworzyć schowka by zapisać informacje o wersji."
 msgid "Clipboard Error"
 msgstr "Błąd Schowka"
 
-#: common/basicframe.cpp:588
+#: common/basicframe.cpp:581
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "Nie masz uprawnień zapisu do folderu <%s>."
 
-#: common/basicframe.cpp:593
+#: common/basicframe.cpp:586
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr "Nie masz uprawnień zapisu do pliku <%s> w folderze <%s>."
 
-#: common/basicframe.cpp:598
+#: common/basicframe.cpp:591
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "Nie masz uprawnień zapisu do pliku <%s>."
 
-#: common/basicframe.cpp:631
+#: common/basicframe.cpp:624
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!  It appears that the last time you "
@@ -15672,11 +15661,11 @@ msgstr ""
 "został zapisany poprawnie.\n"
 "Czy chcesz przywrócić ostatnie edycje jakie wykonałeś?"
 
-#: common/basicframe.cpp:657
+#: common/basicframe.cpp:650
 msgid "Could not create backup file "
 msgstr "Nie mogę utworzyć pliku kopii zapasowej "
 
-#: common/basicframe.cpp:664
+#: common/basicframe.cpp:657
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Nie można zmienić nazwy pliku automatycznej kopii zapasowej na właściwą."
@@ -15855,11 +15844,11 @@ msgstr "Japoński"
 msgid "Bulgarian"
 msgstr "Bułgarski"
 
-#: common/edaappl.cpp:856
+#: common/edaappl.cpp:860
 msgid "Language"
 msgstr "Język"
 
-#: common/edaappl.cpp:857
+#: common/edaappl.cpp:861
 msgid "Select application language (only for testing!)"
 msgstr "Wybierz język aplikacji (tylko do testowania!)"
 
@@ -16015,102 +16004,106 @@ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER błąd zapisu"
 msgid "Colors"
 msgstr "Kolory"
 
-#: common/wildcards_and_files_ext.cpp:65
+#: common/wildcards_and_files_ext.cpp:67
 msgid "KiCad drawing symbol file (*.sym)|*.sym"
 msgstr "Plik rysunków symboli programu KiCad (*.sym)|*.sym"
 
-#: common/wildcards_and_files_ext.cpp:66
+#: common/wildcards_and_files_ext.cpp:68
 msgid "KiCad component library file (*.lib)|*.lib"
 msgstr "Plik bibliotek symboli programu KiCad (*.lib)|*.lib"
 
-#: common/wildcards_and_files_ext.cpp:67
+#: common/wildcards_and_files_ext.cpp:69
 msgid "KiCad project files (*.pro)|*.pro"
 msgstr "Pliki projektu programu KiCad (*.pro)|*.pro"
 
-#: common/wildcards_and_files_ext.cpp:68
+#: common/wildcards_and_files_ext.cpp:70
 msgid "KiCad schematic files (*.sch)|*.sch"
 msgstr "Pliki schematów programu KiCad (*.sch)|*.sch"
 
-#: common/wildcards_and_files_ext.cpp:69
+#: common/wildcards_and_files_ext.cpp:71
 msgid "KiCad netlist files (*.net)|*.net"
 msgstr "Pliki listy sieci programu KiCad (*.net)|*.net"
 
-#: common/wildcards_and_files_ext.cpp:70
+#: common/wildcards_and_files_ext.cpp:72
 msgid "Gerber files (*.pho)|*.pho"
 msgstr "Pliki Gerber (*.pho)|*.pho"
 
-#: common/wildcards_and_files_ext.cpp:71
+#: common/wildcards_and_files_ext.cpp:73
 msgid "KiCad printed circuit board files (*.brd)|*.brd"
 msgstr "Pliki PCB programu KiCad (*.brd)|*.brd"
 
-#: common/wildcards_and_files_ext.cpp:72
+#: common/wildcards_and_files_ext.cpp:74
 msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
-msgstr "Pliki PCB programu Eagle v6.x XML (*.brd)|*brd"
+msgstr "Pliki PCB programu Eagle v6.x XML (*.brd)|*.brd"
 
-#: common/wildcards_and_files_ext.cpp:73
+#: common/wildcards_and_files_ext.cpp:75
 msgid "P-Cad 2002/2004 ASCII PCB files (*.pcb)|*.pcb"
 msgstr "Pliki ASCII PCB programu P-Cad 2002/2004 (*.pcb)|*.pcb"
 
-#: common/wildcards_and_files_ext.cpp:74
+#: common/wildcards_and_files_ext.cpp:76
 msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
 msgstr "Pliki PCB S-expression (*.kicad_pcb)|*.kicad_pcb"
 
-#: common/wildcards_and_files_ext.cpp:75
+#: common/wildcards_and_files_ext.cpp:77
 msgid "KiCad footprint s-expre library file (*.kicad_mod)|*.kicad_mod"
 msgstr ""
 "Plik bibliotek footprintów S-expression programu KiCad (*.kicad_mod)|*."
 "kicad_mod"
 
-#: common/wildcards_and_files_ext.cpp:76
+#: common/wildcards_and_files_ext.cpp:78
 msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
 msgstr ""
 "Ścieżka bibliotek footprintów S-expression programu KiCad (*.pretty)|*.pretty"
 
-#: common/wildcards_and_files_ext.cpp:77
+#: common/wildcards_and_files_ext.cpp:79
 msgid "Legacy footprint library file (*.mod)|*.mod"
 msgstr "Starsze pliki bibliotek footprintów programu KiCad (*.mod)|*.mod"
 
-#: common/wildcards_and_files_ext.cpp:78
+#: common/wildcards_and_files_ext.cpp:80
+msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
+msgstr "Pliki bibliotek programu Eagle v6.x XML (*.lbr)|*.lbr"
+
+#: common/wildcards_and_files_ext.cpp:81
 msgid "Geda PCB footprint library file (*.fp)|*.fp"
 msgstr "Plik bibliotek footprintów programu Geda PCB (*.fb)|*.fb"
 
-#: common/wildcards_and_files_ext.cpp:79
+#: common/wildcards_and_files_ext.cpp:82
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
 msgstr "Pliki nagrań makr programu KiCad (*.mcr)|*.mcr"
 
-#: common/wildcards_and_files_ext.cpp:82
+#: common/wildcards_and_files_ext.cpp:85
 msgid "All files (*)|*"
 msgstr "Wszystkie pliki (*.*)|*.*"
 
-#: common/wildcards_and_files_ext.cpp:85
+#: common/wildcards_and_files_ext.cpp:88
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 msgstr "Pliki łącznikowe komponent-footprint programu KiCad (*.cmp)|*.cmp"
 
-#: common/wildcards_and_files_ext.cpp:88
+#: common/wildcards_and_files_ext.cpp:91
 msgid "Drill files (*.drl)|*.drl;*.DRL"
 msgstr "Pliki wierceń (*.drl)|*.drl;*.DRL"
 
-#: common/wildcards_and_files_ext.cpp:89
+#: common/wildcards_and_files_ext.cpp:92
 msgid "SVG files (*.svg)|*.svg;*.SVG"
 msgstr "Pliki SVG (*.svg)|*.svg;*.SVG"
 
-#: common/wildcards_and_files_ext.cpp:90
+#: common/wildcards_and_files_ext.cpp:93
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Pliki PDF (*.pdf)|*.pdf"
 
-#: common/wildcards_and_files_ext.cpp:91
+#: common/wildcards_and_files_ext.cpp:94
 msgid "PostScript files (.ps)|*.ps"
 msgstr "Pliki PostScript (.ps)|*.ps"
 
-#: common/wildcards_and_files_ext.cpp:92
+#: common/wildcards_and_files_ext.cpp:95
 msgid "Report files (*.rpt)|*.rpt"
 msgstr "Pliki raportów (*.rpt)|*.rpt"
 
-#: common/wildcards_and_files_ext.cpp:93
+#: common/wildcards_and_files_ext.cpp:96
 msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Pliki położeń footprintów (*.pos)|*.pos"
 
-#: common/wildcards_and_files_ext.cpp:94
+#: common/wildcards_and_files_ext.cpp:97
 msgid "Vrml files (*.wrl)|*.wrl"
 msgstr "Pliki VRML (*.wrl)|*.wrl"
 
@@ -18105,6 +18098,18 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Unable to move file ... "
+#~ msgstr "Nie mogę przenieść pliku ... "
+
+#~ msgid "&Rename directory"
+#~ msgstr "Z&mień nazwę katalogu"
+
+#~ msgid "Rename directory"
+#~ msgstr "Zmień nazwę katalogu"
+
+#~ msgid "Delete the File"
+#~ msgstr "Usuń plik"
 
 #~ msgid "Recovery file "
 #~ msgstr "Plik kopii zapasowej "
