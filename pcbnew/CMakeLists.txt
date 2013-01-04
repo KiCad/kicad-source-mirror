@@ -287,26 +287,24 @@ if (KICAD_SCRIPTING)
     SET(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
     add_custom_command(
-                   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
-                       DEPENDS scripting/pcbnew.i
-                       DEPENDS scripting/board.i
-                       DEPENDS scripting/board_item.i
-                       DEPENDS scripting/module.i
-                       DEPENDS scripting/plugins.i
-                       DEPENDS scripting/units.i
-                       DEPENDS ../scripting/dlist.i
-                       DEPENDS ../scripting/kicad.i
-                       DEPENDS ../scripting/wx.i
-                       DEPENDS ../scripting/kicadplugins.i
+       OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
+           DEPENDS scripting/pcbnew.i
+           DEPENDS scripting/board.i
+           DEPENDS scripting/board_item.i
+           DEPENDS scripting/module.i
+           DEPENDS scripting/plugins.i
+           DEPENDS scripting/units.i
+           DEPENDS ../scripting/dlist.i
+           DEPENDS ../scripting/kicad.i
+           DEPENDS ../scripting/wx.i
+           DEPENDS ../scripting/kicadplugins.i
 
-                   COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
-                   COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+       COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
+       COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
-
 endif(KICAD_SCRIPTING)
-
 
 ###
 # _pcbnew DLL/DSO file creation
@@ -328,6 +326,7 @@ if (KICAD_SCRIPTING_MODULES)
       ${OPENGL_LIBRARIES}
       ${GDI_PLUS_LIBRARIES}
       ${PYTHON_LIBRARIES}
+      rt
       )
 
 endif (KICAD_SCRIPTING_MODULES)
