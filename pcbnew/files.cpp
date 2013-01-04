@@ -241,7 +241,14 @@ the changes?" ) ) )
         fileName.SetExt( pi->GetFileExtension() );
 
     if( !aAppend )
+    {
+        if( !wxGetApp().LockFile( fileName.GetFullPath() ) )
+        {
+            DisplayError( this, _( "This file is already open." ) );
+            return false;
+        }
         Clear_Pcb( false );     // pass false since we prompted above for a modified board
+    }
 
     CheckForAutoSaveFile( fileName, fileName.GetExt() );
 
