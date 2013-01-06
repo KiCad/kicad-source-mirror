@@ -92,6 +92,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
               GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
                     GERBVIEW_FRAME::OnSelectDisplayMode )
 
@@ -101,6 +102,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnUpdateLinesDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnUpdatePolygonsDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnUpdateShowDCodes )
+    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, GERBVIEW_FRAME::OnUpdateShowNegativeItems )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                    GERBVIEW_FRAME::OnUpdateShowLayerManager )
 
@@ -356,6 +358,11 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_DCODES:
         SetElementVisibility( DCODES_VISIBLE, state );
+        m_canvas->Refresh( true );
+        break;
+
+    case ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS:
+        SetElementVisibility( NEGATIVE_OBJECTS_VISIBLE, state );
         m_canvas->Refresh( true );
         break;
 

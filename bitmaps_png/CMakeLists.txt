@@ -268,6 +268,7 @@ set( BMAPS_MID
     gerber_file
     gerber_recent_files
     gerber_open_dcode_file
+    gerbview_show_negative_objects
     gerbview_drill_file
     gerbview_clear_layers
     gerber_open_dcode_file

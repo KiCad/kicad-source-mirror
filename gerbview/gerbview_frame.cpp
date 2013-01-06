@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1994 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,7 @@
 // Config keywords
 static const wxString   cfgShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
 static const wxString   cfgShowDCodes( wxT( "ShowDCodesOpt" ) );
+static const wxString   cfgShowNegativeObjects( wxT( "ShowNegativeObjectsOpt" ) );
 static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
 
 
@@ -228,9 +229,11 @@ void GERBVIEW_FRAME::LoadSettings()
 
     GetScreen()->InitDataPoints( pageInfo.GetSizeIU() );
 
-    long tmp;
-    config->Read( cfgShowDCodes, &tmp, 1 );
+    bool tmp;
+    config->Read( cfgShowDCodes, &tmp, true );
     SetElementVisibility( DCODES_VISIBLE, tmp );
+    config->Read( cfgShowNegativeObjects, &tmp, false );
+    SetElementVisibility( NEGATIVE_OBJECTS_VISIBLE, tmp );
 
     // because we have 2 file historues, we must read this one
     // using a specific path
@@ -259,6 +262,8 @@ void GERBVIEW_FRAME::SaveSettings()
     config->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
     config->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
     config->Write( cfgShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
+    config->Write( cfgShowNegativeObjects,
+                   IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
 
     // Save the drill file history list.
     // Because we have 2 file histories, we must save this one
@@ -302,6 +307,10 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible,
     {
     case DCODES_VISIBLE:
         m_DisplayOptions.m_DisplayDCodes = aNewState;
+        break;
+
+    case NEGATIVE_OBJECTS_VISIBLE:
+        m_DisplayOptions.m_DisplayNegativeObjects = aNewState;
         break;
 
     case GERBER_GRID_VISIBLE:
@@ -483,19 +492,22 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
     m_TextInfo->SetValue( text );
 }
 
-
 /*
  * Function IsElementVisible
  * tests whether a given element category is visible
  * aItemIdVisible is an item id from the enum GERBER_VISIBLE_ID
  * return true if the element is visible.
  */
-bool GERBVIEW_FRAME::IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible )
+bool GERBVIEW_FRAME::IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible ) const
 {
     switch( aItemIdVisible )
     {
     case DCODES_VISIBLE:
         return m_DisplayOptions.m_DisplayDCodes;
+        break;
+
+    case NEGATIVE_OBJECTS_VISIBLE:
+        return m_DisplayOptions.m_DisplayNegativeObjects;
         break;
 
     case GERBER_GRID_VISIBLE:
@@ -562,12 +574,13 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayerIndex ) const
  * returns the color of a pcb visible element.
  * @see enum PCB_VISIBLE
  */
-EDA_COLOR_T GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible )
+EDA_COLOR_T GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const
 {
     EDA_COLOR_T color = UNSPECIFIED_COLOR;
 
     switch( aItemIdVisible )
     {
+    case NEGATIVE_OBJECTS_VISIBLE:
     case DCODES_VISIBLE:
         color = m_colorsSettings->GetItemColor( aItemIdVisible );
         break;
@@ -599,6 +612,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible,
 {
     switch( aItemIdVisible )
     {
+    case NEGATIVE_OBJECTS_VISIBLE:
     case DCODES_VISIBLE:
         m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
         break;
@@ -614,10 +628,26 @@ void GERBVIEW_FRAME::SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible,
     }
 }
 
+/*
+ * Function GetNegativeItemsColor
+ * returns the color of negative items.
+ * This is usually the background color, but can be an other color
+ * in order to see negative objects
+ * therefore returns the background color if negative items not visible
+ * and the color selection of negative items if they are visible
+ */
+EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
+{
+    if( IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) )
+        return GetVisibleElementColor( NEGATIVE_OBJECTS_VISIBLE );
+    else
+        return g_DrawBgColor;
+}
 
-/**
+
+/*
  * Function GetLayerColor
- * gets a layer color for any valid layer, including non-copper ones.
+ * gets a layer color for any valid layer.
  */
 EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 {
@@ -627,7 +657,7 @@ EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 
 /**
  * Function SetLayerColor
- * changes a layer color for any valid layer, including non-copper ones.
+ * changes a layer color for any valid layer.
  */
 void GERBVIEW_FRAME::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
 {
