@@ -185,6 +185,7 @@ EXTERN_BITMAP( gerber_recent_files_xpm )
 EXTERN_BITMAP( gerbview_clear_layers_xpm )
 EXTERN_BITMAP( gerber_open_dcode_file_xpm )
 EXTERN_BITMAP( gerbview_open_recent_drill_files_xpm )
+EXTERN_BITMAP( gerbview_show_negative_objects_xpm );
 EXTERN_BITMAP( general_deletions_xpm )
 EXTERN_BITMAP( general_ratsnest_xpm )
 EXTERN_BITMAP( glabel2label_xpm )

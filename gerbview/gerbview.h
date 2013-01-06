@@ -41,9 +41,12 @@ extern const wxChar* g_GerberPageSizeList[8];
  */
 enum GERBER_VISIBLE_ID
 {
-    DCODES_VISIBLE = 1,    // visible item id cannot be 0 because this id is used as wxWidget id
+    DCODES_VISIBLE = 1,         // visible item id cannot be 0
+                                // because this id is used as wxWidget id
     GERBER_GRID_VISIBLE,
-    END_GERBER_VISIBLE_LIST  // sentinel
+    NEGATIVE_OBJECTS_VISIBLE,   // use the selected color to draw negative objects
+                                // instaed of background color, to make them visible
+    END_GERBER_VISIBLE_LIST     // sentinel
 };
 
 extern const wxString GerbviewProjectFileExt;

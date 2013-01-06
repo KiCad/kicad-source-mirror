@@ -330,7 +330,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     if( color & HIGHLIGHT_FLAG )
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
-    alt_color = g_DrawBgColor;
+    alt_color = gerbFrame->GetNegativeItemsColor();
 
     /* isDark is true if flash is positive and should use a drawing
      *   color other than the background color, else use the background color
@@ -346,12 +346,12 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    isFilled = gerbFrame->m_DisplayOptions.m_DisplayLinesFill;
+    isFilled = gerbFrame->DisplayLinesSolidMode();
 
     switch( m_Shape )
     {
     case GBR_POLYGON:
-        isFilled = gerbFrame->m_DisplayOptions.m_DisplayPolygonsFill;
+        isFilled = gerbFrame->DisplayPolygonsSolidMode();
 
         if( !isDark )
             isFilled = true;
@@ -411,7 +411,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
-        isFilled = gerbFrame->m_DisplayOptions.m_DisplayFlashedItemsFill;
+        isFilled = gerbFrame->DisplayFlashedItemsSolidMode();
         d_codeDescr->DrawFlashedShape( this, aPanel->GetClipBox(), aDC, color, alt_color,
                                        m_Start, isFilled );
         break;

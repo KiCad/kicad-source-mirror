@@ -178,6 +178,11 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
                                _( "Show polygons in sketch mode" ),
                                wxITEM_CHECK );
 
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, wxEmptyString,
+                               KiBitmap( gerbview_show_negative_objects_xpm ),
+                               _( "Show negatives objects in ghost color" ),
+                               wxITEM_CHECK );
+
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES, wxEmptyString,
                                KiBitmap( show_dcodenumber_xpm ),
                                _( "Show dcode number" ), wxITEM_CHECK );
@@ -261,6 +266,12 @@ void GERBVIEW_FRAME::OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent )
 void GERBVIEW_FRAME::OnUpdateShowDCodes( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( IsElementVisible( DCODES_VISIBLE ) );
+}
+
+
+void GERBVIEW_FRAME::OnUpdateShowNegativeItems( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
 }
 
 

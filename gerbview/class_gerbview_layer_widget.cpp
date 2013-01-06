@@ -97,13 +97,15 @@ void GERBER_LAYER_WIDGET::ReFillRender()
     // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
     // not a static variable, change the color & state after copying from code to renderRows
     // on the stack.
-    LAYER_WIDGET::ROW renderRows[2] = {
+    LAYER_WIDGET::ROW renderRows[3] = {
 
 #define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
 
              // text                id                      color       tooltip                 checked
         RR( _( "Grid" ),            GERBER_GRID_VISIBLE,    WHITE,      _( "Show the (x,y) grid dots" ) ),
         RR( _( "DCodes" ),          DCODES_VISIBLE,         WHITE,      _( "Show DCodes identification" ) ),
+        RR( _( "Neg. Obj." ),       NEGATIVE_OBJECTS_VISIBLE,  DARKGRAY,
+                                    _( "Show negative objects in this color" ) ),
     };
 
     for( unsigned row=0;  row<DIM(renderRows);  ++row )

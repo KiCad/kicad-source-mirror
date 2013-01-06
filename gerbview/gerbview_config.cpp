@@ -95,7 +95,11 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
                                                         &g_ColorsSettings.m_ItemsColors[
                                                             DCODES_VISIBLE],
                                                         WHITE ) );
-
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
+                                                        wxT( "NegativeObjectsColor" ),
+                                                        &g_ColorsSettings.m_ItemsColors[
+                                                            NEGATIVE_OBJECTS_VISIBLE],
+                                                        DARKGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true,
                                                     wxT( "DisplayPolarCoordinates" ),
                                                     &m_DisplayOptions.m_DisplayPolarCood,

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,9 @@ public:
     bool    m_DisplayPolygonsFill;
     bool    m_DisplayPolarCood;
     bool    m_DisplayDCodes;
+    bool    m_DisplayNegativeObjects;
     bool    m_IsPrinting;
+
 public:
     GBR_DISPLAY_OPTIONS()
     {
@@ -267,7 +269,7 @@ public:
      * @param aItemIdVisible is an item id from the enum GERBER_VISIBLE_ID
      * @return bool - true if the element is visible.
      */
-    bool    IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible );
+    bool    IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible ) const;
 
     /**
      * Function SetElementVisibility
@@ -319,21 +321,59 @@ public:
      * Function GetVisibleElementColor
      * returns the color of a gerber visible element.
      */
-    EDA_COLOR_T GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible );
+    EDA_COLOR_T GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const;
 
     void    SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible, EDA_COLOR_T aColor );
 
     /**
      * Function GetLayerColor
-     * gets a layer color for any valid layer, including non-copper ones.
+     * gets a layer color for any valid layer.
      */
     EDA_COLOR_T GetLayerColor( int aLayer ) const;
 
     /**
      * Function SetLayerColor
-     * changes a layer color for any valid layer, including non-copper ones.
+     * changes a layer color for any valid layer.
      */
     void    SetLayerColor( int aLayer, EDA_COLOR_T aColor );
+
+    /**
+     * Function GetNegativeItemsColor
+     * @return the color of negative items.
+     * This is usually the background color, but can be an other color
+     * in order to see negative objects
+     */
+    EDA_COLOR_T GetNegativeItemsColor() const;
+
+    /**
+     * Function DisplayLinesSolidMode
+     * @return true to draw gerber lines in solid (filled) mode,
+     * false to draw gerber lines in sketch mode
+     */
+    bool DisplayLinesSolidMode()
+    {
+        return  m_DisplayOptions.m_DisplayLinesFill;
+    }
+
+    /**
+     * Function DisplayPolygonsSolidMode
+     * @return true to draw polygon in solid (filled) mode,
+     * false to draw polygon outlines only
+     */
+    bool DisplayPolygonsSolidMode()
+    {
+        return  m_DisplayOptions.m_DisplayPolygonsFill;
+    }
+
+    /**
+     * Function DisplayFlashedItemsSolidMode
+     * @return true to draw flashed items in solid (filled) mode,
+     * false to draw draw flashed in sketch mode
+     */
+    bool DisplayFlashedItemsSolidMode()
+    {
+        return  m_DisplayOptions.m_DisplayFlashedItemsFill;
+    }
 
     /**
      * Function ReFillLayerWidget
@@ -500,6 +540,7 @@ public:
     void                OnUpdateLinesDrawMode( wxUpdateUIEvent& aEvent );
     void                OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent );
     void                OnUpdateShowDCodes( wxUpdateUIEvent& aEvent );
+    void                OnUpdateShowNegativeItems( wxUpdateUIEvent& aEvent );
     void                OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
     void                OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void                OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
