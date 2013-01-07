@@ -580,10 +580,14 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                     edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
                 }
                 else
+                {
+                    zoneInfo.SetIsKeepout( false );
                     edited = InvokeCopperZonesEditor( this, &zoneInfo );
+                }
             }
             else   // Put a zone on a non copper layer (technical layer)
             {
+                zoneInfo.SetIsKeepout( false );
                 zoneInfo.m_NetcodeSelection = 0;     // No net for non copper zones
                 edited = InvokeNonCopperZonesEditor( this, zone, &zoneInfo );
             }
