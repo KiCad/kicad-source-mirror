@@ -489,8 +489,9 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
 
             Show( false );
 
-            // intermittently, still get the popup window, even with this.
-            event.StopPropagation();
+            // We do not want the clarification popup window.
+            // when releasing the left button in the main window
+            m_Parent->SkipNextLeftButtonReleaseEvent();
         }
     }
 }
