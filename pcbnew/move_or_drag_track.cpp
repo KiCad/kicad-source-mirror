@@ -632,7 +632,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
         {
             Collect_TrackSegmentsToDrag( GetBoard(), aTrack->m_Start,
                                          aTrack->ReturnMaskLayer(),
-                                         aTrack->GetNet() );
+                                         aTrack->GetNet(), aTrack->GetWidth() / 2 );
         }
 
         PosInit = aTrack->m_Start;
@@ -652,17 +652,17 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
         case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:   // drag a segment
             pos = aTrack->m_Start;
             Collect_TrackSegmentsToDrag( GetBoard(), pos, aTrack->ReturnMaskLayer(),
-                                         aTrack->GetNet() );
+                                         aTrack->GetNet(), aTrack->GetWidth() / 2 );
             pos = aTrack->m_End;
             aTrack->SetFlags( IS_DRAGGED | ENDPOINT | STARTPOINT );
             Collect_TrackSegmentsToDrag( GetBoard(), pos, aTrack->ReturnMaskLayer(),
-                                         aTrack->GetNet() );
+                                         aTrack->GetNet(), aTrack->GetWidth() / 2 );
             break;
 
         case ID_POPUP_PCB_MOVE_TRACK_NODE:  // Drag via or move node
             pos = (diag & STARTPOINT) ? aTrack->m_Start : aTrack->m_End;
             Collect_TrackSegmentsToDrag( GetBoard(), pos, aTrack->ReturnMaskLayer(),
-                                         aTrack->GetNet() );
+                                         aTrack->GetNet(), aTrack->GetWidth() / 2 );
             PosInit = pos;
             break;
         }

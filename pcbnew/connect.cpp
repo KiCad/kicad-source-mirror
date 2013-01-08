@@ -282,6 +282,15 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd)
     sort( m_candidates.begin(), m_candidates.end(), sortConnectedPointByXthenYCoordinates );
 }
 
+/* Populates .m_connected with tracks/vias connected to aTrack
+ * param aTrack = track or via to use as reference
+ * For calculation time reason, an exhaustive search cannot be made
+ * and a proximity search is made:
+ * Only tracks with one end near one end of aTrack are collected.
+ * near means dist <= aTrack width / 2
+ * because with this constraint we can make a fast search in track list
+ * m_candidates is expected to be populated by the track candidates ends list
+ */
 int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
 {
     int count = 0;
@@ -290,9 +299,15 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     int layerMask = aTrack->ReturnMaskLayer();
 
     // Search for connections to starting point:
+#define USE_EXTENDED_SEARCH
+#ifdef USE_EXTENDED_SEARCH
+    int dist_max = aTrack->GetWidth() / 2;
+    static std::vector<CONNECTED_POINT*> tracks_candidates;
+#endif
     wxPoint position = aTrack->m_Start;
     for( int kk = 0; kk < 2; kk++ )
     {
+#ifndef USE_EXTENDED_SEARCH
         int idx = searchEntryPointInCandidatesList( position );
         if ( idx >= 0 )
         {
@@ -317,6 +332,30 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
         }
+#else
+        tracks_candidates.clear();
+        CollectItemsNearTo( tracks_candidates, position, dist_max );
+        for ( unsigned ii = 0; ii < tracks_candidates.size(); ii ++ )
+        {
+            TRACK * ctrack = tracks_candidates[ii]->GetTrack();
+
+            if( ( ctrack->ReturnMaskLayer() & layerMask ) == 0 )
+                continue;
+
+            if( ctrack == aTrack )
+                continue;
+
+            // We have a good candidate: calculate the actual distance
+            // beteween ends, which should be <= dist max.
+            wxPoint delta = tracks_candidates[ii]->GetPoint() - position;
+            int dist = (int) hypot( (double) delta.x, (double) delta.y );
+
+            if( dist > dist_max )
+                continue;
+
+            m_connected.push_back( ctrack );
+        }
+#endif
 
         // Search for connections to ending point:
         if( aTrack->Type() == PCB_VIA_T )
