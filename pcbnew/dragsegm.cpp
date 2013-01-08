@@ -345,29 +345,55 @@ void AddSegmentToDragList(  int flag, TRACK* aTrack )
 /* Build the list of tracks connected to the ref point
  * Net codes must be up to date, because only tracks having the right net code are tested.
  * aRefPos = reference point of connection
+ * aLayerMask = layers mask to collect tracks
+ * aNetCode = the net code to consider
+ * aMaxDist = max distance from aRefPos to a track end candidate to collect the track
  */
-void Collect_TrackSegmentsToDrag( BOARD* aPcb, wxPoint& aRefPos, int LayerMask, int net_code )
+void Collect_TrackSegmentsToDrag( BOARD* aPcb, wxPoint& aRefPos, int aLayerMask,
+                                  int aNetCode, int aMaxDist )
 {
-    TRACK* track = aPcb->m_Track->GetStartNetCode( net_code );
+    TRACK* track = aPcb->m_Track->GetStartNetCode( aNetCode );
 
     for( ; track; track = track->Next() )
     {
-        if( track->GetNet() != net_code )   // not the same netcodenet code: all candidates tested
+        if( track->GetNet() != aNetCode )   // not the same netcodenet code: all candidates tested
             break;
 
-        if( ( LayerMask & track->ReturnMaskLayer() ) == 0 )
+        if( ( aLayerMask & track->ReturnMaskLayer() ) == 0 )
             continue;                       // Cannot be connected, not on the same layer
 
         if( track->IsDragging() )
             continue;                       // already put in list
 
         int flag = 0;
+        int maxdist = std::max( aMaxDist, track->GetWidth() / 2 );
 
-        if( (track->m_Start == aRefPos) && ((track->GetFlags() & STARTPOINT) == 0) )
-            flag |= STARTPOINT;
+        if( (track->GetFlags() & STARTPOINT) == 0 )
+        {
+            wxPoint delta = track->m_Start - aRefPos;
+            if( std::abs( delta.x ) <= maxdist && std::abs( delta.y ) <= maxdist )
+            {
+                int dist = (int) hypot( (double) delta.x, (double) delta.y );
+                if( dist <= maxdist )
+                {
+                    flag |= STARTPOINT;
+                    if( track->Type() == PCB_VIA_T )
+                        flag |= ENDPOINT;
+                }
+            }
+        }
 
-        if( track->m_End == aRefPos && ((track->GetFlags() & ENDPOINT) == 0)  )
-            flag |= ENDPOINT;
+        if( (track->GetFlags() & ENDPOINT) == 0 )
+        {
+            wxPoint delta = track->m_End - aRefPos;
+            if( std::abs( delta.x ) <= maxdist && std::abs( delta.y ) <= maxdist )
+            {
+                int dist = (int) hypot( (double) delta.x, (double) delta.y );
+                if( dist <= maxdist )
+                    flag |= ENDPOINT;
+            }
+        }
+
 
         // Note: vias will be flagged with both STARTPOINT and ENDPOINT
         // and must not be entered twice.
@@ -379,7 +405,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, wxPoint& aRefPos, int LayerMask, 
             // collect also tracks connected by this via.
             if( track->Type() == PCB_VIA_T )
                 Collect_TrackSegmentsToDrag( aPcb, aRefPos, track->ReturnMaskLayer(),
-                                             net_code );
+                                             aNetCode, track->GetWidth() / 2 );
         }
     }
 }

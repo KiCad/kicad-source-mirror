@@ -165,10 +165,19 @@ void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC );
  */
 void EraseDragList();
 
-/*
- * function used to collect track segments in drag track segment
+/**
+ * function Collect_TrackSegmentsToDrag.
+ * used to collect track segments in drag track segment
+ * Build the list of tracks connected to the ref point by calling
+ * AddSegmentToDragList for each selected track
+ * Net codes must be up to date, because only tracks having the right net code are tested.
+ * @param aRefPos = reference point of connection
+ * @param aLayerMask = layers mask to collect tracks
+ * @param aNetCode = the net code to consider
+ * @param aMaxDist = max distance from aRefPos to a track end candidate to collect the track
  */
-void Collect_TrackSegmentsToDrag( BOARD* aPcb, wxPoint& point, int LayerMask, int net_code );
+void Collect_TrackSegmentsToDrag( BOARD* aPcb, wxPoint& aRefPos, int aLayerMask,
+                                  int aNetCode, int aMaxDist );
 
 /* Add aTrack to the drag list
  * flag = STARTPOINT (if the point to drag is the start point of Track)

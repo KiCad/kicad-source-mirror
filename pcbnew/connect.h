@@ -147,14 +147,15 @@ public:
 
     /**
      * Function BuildPadsCandidatesList
-     * Fills m_Candidates with all pads connecting points (pads position)
-     * m_sortedPads must be built
+     * Populates m_candidates with all pads connecting points (pads position)
+     * m_sortedPads is expected to be populated by the pad candidates list
      */
     void BuildPadsCandidatesList();
 
     /**
      * function SearchConnectedTracks
-     * Fills m_Connected with tracks/vias connected to aTrack
+     * Populates .m_connected with tracks/vias connected to aTrack
+     * m_candidates is expected to be populated by the track candidates ends list
      * @param aTrack = track or via to use as reference
      */
     int SearchConnectedTracks( const TRACK * aTrack );
