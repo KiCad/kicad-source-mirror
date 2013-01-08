@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-04 20:39+0100\n"
-"PO-Revision-Date: 2013-01-04 20:41+0100\n"
+"POT-Creation-Date: 2013-01-08 19:11+0100\n"
+"PO-Revision-Date: 2013-01-08 19:17+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -9525,7 +9525,7 @@ msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
 #: pcbnew/pcbframe.cpp:367 pcbnew/pcbframe.cpp:721
-#: gerbview/events_called_functions.cpp:310 gerbview/gerbview_frame.cpp:137
+#: gerbview/events_called_functions.cpp:312 gerbview/gerbview_frame.cpp:138
 msgid "Visibles"
 msgstr "Widoczność"
 
@@ -9574,13 +9574,13 @@ msgstr ""
 "Jest to normalne w przypadku nowych projektów."
 
 #: pcbnew/pcbnew_config.cpp:74 pcbnew/dialogs/dialog_general_options.cpp:238
-#: gerbview/events_called_functions.cpp:369 gerbview/menubar.cpp:158
+#: gerbview/events_called_functions.cpp:376 gerbview/menubar.cpp:158
 #: gerbview/menubar.cpp:160 gerbview/options.cpp:64
 msgid "Hide &Layers Manager"
 msgstr "Ukryj menadżera warstw"
 
 #: pcbnew/pcbnew_config.cpp:74 pcbnew/dialogs/dialog_general_options.cpp:238
-#: gerbview/events_called_functions.cpp:369 gerbview/menubar.cpp:160
+#: gerbview/events_called_functions.cpp:376 gerbview/menubar.cpp:160
 #: gerbview/options.cpp:64
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
@@ -10169,7 +10169,7 @@ msgstr ""
 "sprawdzaniu DRC!"
 
 #: pcbnew/zones_by_polygon.cpp:352 pcbnew/zones_by_polygon.cpp:411
-#: pcbnew/zones_by_polygon.cpp:788
+#: pcbnew/zones_by_polygon.cpp:792
 msgid "Area: DRC outline error"
 msgstr "Obszar: błąd DRC obrysu"
 
@@ -10177,11 +10177,11 @@ msgstr "Obszar: błąd DRC obrysu"
 msgid "Error: a keepout area is allowed only on copper layers"
 msgstr "BŁĄD: strefa chroniona jest dozwolona tylko na wartwie miedzi"
 
-#: pcbnew/zones_by_polygon.cpp:663
+#: pcbnew/zones_by_polygon.cpp:667
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr "Błąd DRC: punkt początkowy jest wewnątrz lub za blisko innego obszaru"
 
-#: pcbnew/zones_by_polygon.cpp:722
+#: pcbnew/zones_by_polygon.cpp:726
 msgid "DRC error: closing this area creates a drc error with an other area"
 msgstr "Błąd DRC: zamknięcie tego obszaru wywołuje błąd DRC z innym obszarem"
 
@@ -14736,7 +14736,7 @@ msgid "Show pad &number"
 msgstr "Pokaż &numery pól"
 
 #: gerbview/class_gbr_layer_box_selector.cpp:78
-#: gerbview/class_gerbview_layer_widget.cpp:203
+#: gerbview/class_gerbview_layer_widget.cpp:205
 #: gerbview/select_layers_to_pcb.cpp:184
 #, c-format
 msgid "Layer %d"
@@ -14802,15 +14802,23 @@ msgstr "DCodes"
 msgid "Show DCodes identification"
 msgstr "Pokaż identyfikatory DCodes"
 
-#: gerbview/class_gerbview_layer_widget.cpp:146
+#: gerbview/class_gerbview_layer_widget.cpp:107
+msgid "Neg. Obj."
+msgstr "Obiekty negatywowe"
+
+#: gerbview/class_gerbview_layer_widget.cpp:108
+msgid "Show negative objects in this color"
+msgstr "Pokaż obiekty negatywowe w tym kolorze"
+
+#: gerbview/class_gerbview_layer_widget.cpp:148
 msgid "Show All Layers"
 msgstr "Pokaż wszystkie warstwy"
 
-#: gerbview/class_gerbview_layer_widget.cpp:149
+#: gerbview/class_gerbview_layer_widget.cpp:151
 msgid "Hide All Layers But Active"
 msgstr "Ukryj wszystkie warstwy oprócz aktywnej"
 
-#: gerbview/class_gerbview_layer_widget.cpp:152
+#: gerbview/class_gerbview_layer_widget.cpp:154
 msgid "Hide All Layers"
 msgstr "Ukryj wszystkie warstwy"
 
@@ -14818,7 +14826,7 @@ msgstr "Ukryj wszystkie warstwy"
 msgid "File "
 msgstr "Plik"
 
-#: gerbview/events_called_functions.cpp:263
+#: gerbview/events_called_functions.cpp:265
 msgid "No editor defined. Please select one"
 msgstr "Edytor nie został zdefiniowany. Proszę wybrać"
 
@@ -14950,20 +14958,20 @@ msgstr "Wczytaj plik GERBER DCODE"
 msgid "GerbView is already running. Continue?"
 msgstr "Gerbview jest już uruchomiony. Kontynuować?"
 
-#: gerbview/gerbview_frame.cpp:427 gerbview/gerbview_frame.cpp:430
+#: gerbview/gerbview_frame.cpp:436 gerbview/gerbview_frame.cpp:439
 msgid "D Codes"
 msgstr "D Codes"
 
-#: gerbview/gerbview_frame.cpp:458
+#: gerbview/gerbview_frame.cpp:467
 #, c-format
 msgid "Layer %d not in use"
 msgstr "Warstwa %d nie jest używana"
 
-#: gerbview/gerbview_frame.cpp:464
+#: gerbview/gerbview_frame.cpp:473
 msgid "File:"
 msgstr "Plik:"
 
-#: gerbview/gerbview_frame.cpp:471
+#: gerbview/gerbview_frame.cpp:480
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr "Nazwa obrazu: \"%s\"  Nazwa warstwy: \"%s\""
@@ -15178,10 +15186,14 @@ msgid "Show polygons in sketch mode"
 msgstr "Pokaż zarysy wypełnień"
 
 #: gerbview/toolbars_gerber.cpp:183
+msgid "Show negatives objects in ghost color"
+msgstr "Pokaż obiekty negatywowe jako duszki"
+
+#: gerbview/toolbars_gerber.cpp:188
 msgid "Show dcode number"
 msgstr "Pokaż numer kodu wiercenia"
 
-#: gerbview/toolbars_gerber.cpp:189
+#: gerbview/toolbars_gerber.cpp:194
 msgid ""
 "Show layers in raw mode (could have problems with negative items when more "
 "than one gerber file is shown)"
@@ -15189,7 +15201,7 @@ msgstr ""
 "Pokaż warstwy w trybie RAW (Mogą być problemy z wyświetlaniem w negatywie "
 "gdy pokazywany jest więcej niż jeden plik Gerber)"
 
-#: gerbview/toolbars_gerber.cpp:194
+#: gerbview/toolbars_gerber.cpp:199
 msgid ""
 "Show layers in stacked mode (show negative items without artifacts, "
 "sometimes slow)"
@@ -15197,7 +15209,7 @@ msgstr ""
 "Pokaż warstwy w trybie nakładkowym (pokazuje elementy w negatywie bez "
 "artefaktów, czasami wolno)"
 
-#: gerbview/toolbars_gerber.cpp:199
+#: gerbview/toolbars_gerber.cpp:204
 msgid ""
 "Show layers in transparency mode (show negative items without artifacts, "
 "sometimes slow)"
@@ -15205,15 +15217,15 @@ msgstr ""
 "Pokaż warstwy w trybie przeźroczystym (pokazuje elementy w negatywie bez "
 "artefaktów, czasami wolno)"
 
-#: gerbview/toolbars_gerber.cpp:208 pcbnew/help_common_strings.h:24
+#: gerbview/toolbars_gerber.cpp:213 pcbnew/help_common_strings.h:24
 msgid "Show/hide the layers manager toolbar"
 msgstr "Pokaż/Ukryj pasek menadżera warstw"
 
-#: gerbview/toolbars_gerber.cpp:274
+#: gerbview/toolbars_gerber.cpp:285
 msgid "Hide layers manager"
 msgstr "Ukryj menadżera warstw"
 
-#: gerbview/toolbars_gerber.cpp:276
+#: gerbview/toolbars_gerber.cpp:287
 msgid "Show layers manager"
 msgstr "Pokaż menadżera warstw"
 
