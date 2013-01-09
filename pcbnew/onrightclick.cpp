@@ -796,7 +796,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     if( flags )     // Currently in edit, no others commands possible
         return;
 
-    if( GetBoard()->m_CurrentNetClassName != Pad->GetNetClassName() )
+    if( GetBoard()->GetCurrentNetClassName() != Pad->GetNetClassName() )
     {
         GetBoard()->SetCurrentNetClass( Pad->GetNetClassName() );
         updateTraceWidthSelectBox();
@@ -919,9 +919,9 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
     if( aBoard->GetDesignSettings().m_UseConnectedTrackWidth )
         trackwidth_menu->Check( ID_POPUP_PCB_SELECT_AUTO_WIDTH, true );
 
-    if( aBoard->m_ViaSizeSelector != 0
-        || aBoard->m_TrackWidthSelector != 0
-        || aBoard->GetDesignSettings().m_UseConnectedTrackWidth )
+    if(  aBoard->GetViaSizeIndex() != 0
+      || aBoard->GetTrackWidthIndex() != 0
+      || aBoard->GetDesignSettings().m_UseConnectedTrackWidth )
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES,
                                  _( "Use Netclass Values" ),
                                  _( "Use track and via sizes from their Netclass values" ),

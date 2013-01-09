@@ -499,7 +499,7 @@ void PCB_PARSER::parseGeneralSection() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_no_connects:
-            m_board->m_NbNoconnect = parseInt( "no connect count" );
+            m_board->SetUnconnectedNetCount( parseInt( "no connect count" ) );
             NeedRIGHT();
             break;
 

@@ -120,7 +120,7 @@ void NETINFO_LIST::buildListOfNets()
         last_pad = pad;
     }
 
-    m_Parent->m_NbNodes = nodes_count;
+    m_Parent->SetNodeCount( nodes_count );
 
     m_Parent->SynchronizeNetsAndNetClasses( );
 

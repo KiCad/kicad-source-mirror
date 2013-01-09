@@ -365,7 +365,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
         AppendMsgPanel( wxT( "Ok" ), msg, GREEN );
         msg.Printf( wxT( "%d" ), nbunsucces );
         AppendMsgPanel( wxT( "Fail" ), msg, RED );
-        msg.Printf( wxT( "  %d" ), GetBoard()->m_NbNoconnect );
+        msg.Printf( wxT( "  %d" ), GetBoard()->GetUnconnectedNetCount() );
         AppendMsgPanel( wxT( "Not Connected" ), msg, CYAN );
 
         /* Delete routing from display. */

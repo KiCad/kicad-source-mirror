@@ -621,9 +621,10 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
         m_SelTrackWidthBox->Append( msg );
     }
 
-    if( GetBoard()->m_TrackWidthSelector >= GetBoard()->m_TrackWidthList.size() )
-        GetBoard()->m_TrackWidthSelector = 0;
-    m_SelTrackWidthBox->SetSelection( GetBoard()->m_TrackWidthSelector );
+    if( GetBoard()->GetTrackWidthIndex() >= GetBoard()->m_TrackWidthList.size() )
+        GetBoard()->SetTrackWidthIndex( 0 );
+
+    m_SelTrackWidthBox->SetSelection( GetBoard()->GetTrackWidthIndex() );
 }
 
 
@@ -651,10 +652,10 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
         m_SelViaSizeBox->Append( msg );
     }
 
-    if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViasDimensionsList.size() )
-        GetBoard()->m_ViaSizeSelector = 0;
+    if( GetBoard()->GetViaSizeIndex() >= GetBoard()->m_ViasDimensionsList.size() )
+        GetBoard()->SetViaSizeIndex( 0 );
 
-    m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
+    m_SelViaSizeBox->SetSelection( GetBoard()->GetViaSizeIndex() );
 }
 
 

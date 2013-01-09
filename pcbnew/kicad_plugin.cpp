@@ -400,7 +400,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel, "(general\n" );
     m_out->Print( aNestLevel+1, "(links %d)\n", aBoard->GetRatsnestsCount() );
-    m_out->Print( aNestLevel+1, "(no_connects %d)\n", aBoard->m_NbNoconnect );
+    m_out->Print( aNestLevel+1, "(no_connects %d)\n", aBoard->GetUnconnectedNetCount() );
 
     // Write Bounding box info
     m_out->Print( aNestLevel+1,  "(area %s %s %s %s)\n",

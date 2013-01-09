@@ -66,8 +66,8 @@ BOARD::BOARD() :
 
     m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
     SetColorsSettings( &g_ColorsSettings );
-    m_NbNodes     = 0;                      // Number of connected pads.
-    m_NbNoconnect = 0;                      // Number of unconnected nets.
+    m_nodeCount     = 0;                    // Number of connected pads.
+    m_unconnectedNetCount   = 0;            // Number of unconnected nets.
 
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress
@@ -86,8 +86,8 @@ BOARD::BOARD() :
 
     m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
 
-    m_ViaSizeSelector    = 0;
-    m_TrackWidthSelector = 0;
+    m_viaSizeIndex    = 0;
+    m_trackWidthIndex = 0;
 
     /*  Dick 5-Feb-2012: this seems unnecessary.  I don't believe the comment
         near line 70 of class_netclass.cpp.  I stepped through with debugger.
@@ -258,7 +258,7 @@ bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
     if( netClass == NULL )
         netClass = m_NetClasses.GetDefault();
 
-    m_CurrentNetClassName = netClass->GetName();
+    m_currentNetClassName = netClass->GetName();
 
     // Initialize others values:
     if( m_ViasDimensionsList.size() == 0 )
@@ -287,11 +287,11 @@ bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
 
     m_TrackWidthList[0] = netClass->GetTrackWidth();
 
-    if( m_ViaSizeSelector >= m_ViasDimensionsList.size() )
-        m_ViaSizeSelector = m_ViasDimensionsList.size();
+    if( m_viaSizeIndex >= m_ViasDimensionsList.size() )
+        m_viaSizeIndex = m_ViasDimensionsList.size();
 
-    if( m_TrackWidthSelector >= m_TrackWidthList.size() )
-        m_TrackWidthSelector = m_TrackWidthList.size();
+    if( m_trackWidthIndex >= m_TrackWidthList.size() )
+        m_trackWidthIndex = m_TrackWidthList.size();
 
     return lists_sizes_modified;
 }
@@ -329,7 +329,7 @@ int BOARD::GetSmallestClearanceValue()
 
 int BOARD::GetCurrentMicroViaSize()
 {
-    NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );
+    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
 
     return netclass->GetuViaDiameter();
 }
@@ -337,7 +337,7 @@ int BOARD::GetCurrentMicroViaSize()
 
 int BOARD::GetCurrentMicroViaDrill()
 {
-    NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );
+    NETCLASS* netclass = m_NetClasses.Find( m_currentNetClassName );
 
     return netclass->GetuViaDrill();
 }
@@ -925,15 +925,9 @@ int BOARD::GetNumSegmZone() const
 }
 
 
-unsigned BOARD::GetNoconnectCount() const
-{
-    return m_NbNoconnect;
-}
-
-
 unsigned BOARD::GetNodesCount() const
 {
-    return m_NbNodes;
+    return m_nodeCount;
 }
 
 
@@ -1053,10 +1047,10 @@ void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
         txt.Printf( wxT( "%d" ), GetRatsnestsCount() );
         frame->AppendMsgPanel( _( "Links" ), txt, DARKGREEN );
 
-        txt.Printf( wxT( "%d" ), GetRatsnestsCount() - GetNoconnectCount() );
+        txt.Printf( wxT( "%d" ), GetRatsnestsCount() - GetUnconnectedNetCount() );
         frame->AppendMsgPanel( _( "Connect" ), txt, DARKGREEN );
 
-        txt.Printf( wxT( "%d" ), GetNoconnectCount() );
+        txt.Printf( wxT( "%d" ), GetUnconnectedNetCount() );
         frame->AppendMsgPanel( _( "Unconnected" ), txt, BLUE );
     }
 }
@@ -2235,6 +2229,24 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 
     aPosition = lockPoint;
     return newTrack;
+}
+
+
+void BOARD::SetViaSizeIndex( unsigned aIndex )
+{
+    if( aIndex >= m_ViasDimensionsList.size() )
+        m_viaSizeIndex = m_ViasDimensionsList.size();
+    else
+        m_viaSizeIndex = aIndex;
+}
+
+
+void BOARD::SetTrackWidthIndex( unsigned aIndex )
+{
+    if( m_trackWidthIndex >= m_TrackWidthList.size() )
+        m_trackWidthIndex = m_TrackWidthList.size();
+    else
+        m_trackWidthIndex = aIndex;
 }
 
 

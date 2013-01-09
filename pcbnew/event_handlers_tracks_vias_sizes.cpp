@@ -41,8 +41,8 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
 
     case ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES:
         GetDesignSettings().m_UseConnectedTrackWidth = false;
-        GetBoard()->m_TrackWidthSelector = 0;
-        GetBoard()->m_ViaSizeSelector = 0;
+        GetBoard()->SetTrackWidthIndex( 0 );
+        GetBoard()->SetViaSizeIndex( 0 );
         break;
 
     case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
@@ -69,7 +69,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         GetDesignSettings().m_UseConnectedTrackWidth = false;
         ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
-        GetBoard()->m_TrackWidthSelector = ii;
+        GetBoard()->SetTrackWidthIndex( ii );
         break;
 
     case ID_POPUP_PCB_SELECT_VIASIZE1:   // this is the default Netclass selection
@@ -91,17 +91,17 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         // select the new current value for via size (via diameter)
         m_canvas->MoveCursorToCrossHair();
         ii = id - ID_POPUP_PCB_SELECT_VIASIZE1;
-        GetBoard()->m_ViaSizeSelector = ii;
+        GetBoard()->SetViaSizeIndex( ii );
         break;
 
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
         ii = m_SelTrackWidthBox->GetCurrentSelection();
-        GetBoard()->m_TrackWidthSelector = ii;
+        GetBoard()->SetTrackWidthIndex( ii );
         break;
 
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
         ii = m_SelViaSizeBox->GetCurrentSelection();
-        GetBoard()->m_ViaSizeSelector = ii;
+        GetBoard()->SetViaSizeIndex( ii );
         break;
 
     default:
