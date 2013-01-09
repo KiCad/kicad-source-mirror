@@ -791,6 +791,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
     // Display results
     int net_notconnected_count = 0;
     NETINFO_ITEM* net = m_Pcb->FindNet( aNetCode );
+
     if( net )       // Should not occur, but ...
     {
         for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
@@ -798,8 +799,9 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
             if( m_Pcb->m_FullRatsnest[ii].IsActive() )
                 net_notconnected_count++;
         }
+
         msg.Printf( wxT( "links %d nc %d  net:nc %d" ),
-                    m_Pcb->GetRatsnestsCount(), m_Pcb->GetNoconnectCount(),
+                    m_Pcb->GetRatsnestsCount(), m_Pcb->GetUnconnectedNetCount(),
                     net_notconnected_count );
     }
     else

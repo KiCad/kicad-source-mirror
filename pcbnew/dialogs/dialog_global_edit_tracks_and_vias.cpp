@@ -49,17 +49,18 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     NETCLASSES&   netclasses = board->m_NetClasses;
     NETINFO_ITEM* net = board->FindNet( m_Netcode );
     NETCLASS*     netclass = netclasses.GetDefault();
+
     if( net )
     {
         m_CurrentNetName->SetLabel( net->GetNetname() );
-        m_CurrentNetclassName->SetLabel( board->m_CurrentNetClassName );
-        netclass = netclasses.Find( board->m_CurrentNetClassName );
+        m_CurrentNetclassName->SetLabel( board->GetCurrentNetClassName() );
+        netclass = netclasses.Find( board->GetCurrentNetClassName() );
     }
 
     /* Disable the option "copy current to net" if we have only default netclass values
      * i.e. when m_TrackWidthSelector and m_ViaSizeSelector are set to 0
      */
-    if( !board->m_TrackWidthSelector && !board->m_ViaSizeSelector )
+    if( !board->GetTrackWidthIndex() && !board->GetViaSizeIndex() )
     {
         m_Net2CurrValueButton->Enable( false );
         m_OptionID = ID_NETCLASS_VALUES_TO_CURRENT_NET;
@@ -75,19 +76,22 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     int value = netclass->GetTrackWidth();      // Display track width
     msg = ReturnStringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 0, msg  );
-    if( board->m_TrackWidthSelector )
+
+    if( board->GetTrackWidthIndex() )
     {
         value = board->GetCurrentTrackWidth();
         msg   = ReturnStringFromValue( g_UserUnit, value, true );
     }
     else
         msg = _( "Default" );
+
     m_gridDisplayCurrentSettings->SetCellValue( 1, 0, msg  );
 
     value = netclass->GetViaDiameter();      // Display via diameter
     msg   = ReturnStringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 1, msg  );
-    if( board->m_ViaSizeSelector )
+
+    if( board->GetViaSizeIndex() )
     {
         value = board->GetCurrentViaSize();
         msg   = ReturnStringFromValue( g_UserUnit, value, true );

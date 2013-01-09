@@ -173,30 +173,29 @@ class BOARD : public BOARD_ITEM
 
 private:
     /// the board filename
-    wxString            m_fileName;
+    wxString                m_fileName;
 
     // @todo: switch to boost:ptr_vector, and change ~BOARD()
     typedef std::vector<MARKER_PCB*> MARKERS;
 
     /// MARKER_PCBs for clearance problems, owned by pointer.
-    MARKERS             m_markers;
+    MARKERS                 m_markers;
 
     // @todo: switch to boost::ptr_vector, and change ~BOARD()
     typedef std::vector<ZONE_CONTAINER*> ZONE_CONTAINERS;
 
     /// edge zone descriptors, owned by pointer.
-    ZONE_CONTAINERS     m_ZoneDescriptorList;
+    ZONE_CONTAINERS         m_ZoneDescriptorList;
 
-    LAYER               m_Layer[LAYER_COUNT];
+    LAYER                   m_Layer[LAYER_COUNT];
                                                     // if true m_highLight_NetCode is used
-    HIGH_LIGHT_INFO     m_highLight;                // current high light data
-    HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
+    HIGH_LIGHT_INFO         m_highLight;                // current high light data
+    HIGH_LIGHT_INFO         m_highLightPrevious;        // a previously stored high light data
 
-    int                 m_fileFormatVersionAtLoad;  ///< the version in the *.brd header on first line
+    int                     m_fileFormatVersionAtLoad;  ///< the version loaded from the file
 
-    EDA_RECT            m_BoundingBox;
-
-    NETINFO_LIST        m_NetInfo;                  ///< net info list (name, design constraints ..
+    EDA_RECT                m_BoundingBox;
+    NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
     ZONE_SETTINGS           m_zoneSettings;
@@ -206,7 +205,24 @@ private:
     PCB_PLOT_PARAMS         m_plotOptions;
 
     /// Position of the origin axis, which is used in exports mostly
-    wxPoint             m_originAxisPosition;
+    wxPoint                 m_originAxisPosition;
+
+    /// Number of pads connected to the current net.
+    int                     m_nodeCount;
+
+    /// Number of unconnected nets in the current rats nest.
+    int                     m_unconnectedNetCount;
+
+    /// Current net class name used to display netclass info.
+    /// This is also the last used netclass after starting a track.
+    wxString                m_currentNetClassName;
+
+    /// Index for #m_ViaSizeList to select the current via size.
+    /// 0 is the index selection of the default value Netclass
+    unsigned                m_viaSizeIndex;
+
+    // Index for m_TrackWidthList to select the value.
+    unsigned                m_trackWidthIndex;
 
     /**
      * Function chainMarkedSegments
@@ -232,12 +248,6 @@ public:
     /// Flags used in ratsnest calculation and update.
     int m_Status_Pcb;
 
-    /// Active pads (pads attached to a net ) count.
-    int m_NbNodes;
-
-    /// Active ratsnest count (ratsnests not already connected by tracks)
-    int m_NbNoconnect;
-
     DLIST<BOARD_ITEM>           m_Drawings;              // linked list of lines & texts
     DLIST<MODULE>               m_Modules;               // linked list of MODULEs
     DLIST<TRACK>                m_Track;                 // linked list of TRACKs and SEGVIAs
@@ -255,10 +265,6 @@ public:
     /// List of current netclasses. There is always the default netclass.
     NETCLASSES                  m_NetClasses;
 
-    /// Current net class name used to display netclass info.
-    /// This is also the last used netclass after starting a track.
-    wxString                    m_CurrentNetClassName;
-
     // handling of vias and tracks size:
     // the first value is always the value of the current NetClass
     // The others values are extra values
@@ -270,13 +276,6 @@ public:
     // tracks widths (max count = HISTORY_MAX_COUNT)
     // The first value is the current netclass track width
     std::vector <int>           m_TrackWidthList;
-
-    /// Index for m_ViaSizeList to select the value.
-    /// 0 is the index selection of the default value Netclass
-    unsigned m_ViaSizeSelector;
-
-    // Index for m_TrackWidthList to select the value.
-    unsigned m_TrackWidthSelector;
 
 
     BOARD();
@@ -672,8 +671,6 @@ public:
     /** Calculate the zone segment count */
     int GetNumSegmZone() const;
 
-    unsigned GetNoconnectCount() const;    // Return the number of missing links.
-
     /**
      * Function GetNumRatsnests
      * @return int - The number of rats
@@ -689,6 +686,42 @@ public:
      * @return the number of pads members of nets (i.e. with netcode > 0)
      */
     unsigned GetNodesCount() const;
+
+    /**
+     * Function SetNodeCount
+     * set the number of nodes of the current net to \a aCount.
+     *
+     * @param aCount is the number of nodes attached to the current net.
+     */
+    void SetNodeCount( unsigned aCount )   { m_nodeCount = aCount; }
+
+    /**
+     * Function GetUnconnectedNetCount
+     * @return the number of unconnected nets in the current rats nest.
+     */
+    unsigned GetUnconnectedNetCount() const { return m_unconnectedNetCount; }
+
+    /**
+     * Function SetUnconnectedNetCount
+     * sets the number of unconnected nets in the current rats nest to \a aCount.
+     *
+     * @param aCount is the number of unconneceted nets in the current rats nest.
+     */
+    void SetUnconnectedNetCount( unsigned aCount ) { m_unconnectedNetCount = aCount; }
+
+    /**
+     * Function SetCurrentNetClassName
+     * sets the current net class name to \a aName.
+     *
+     * @param aName is a reference to a wxString object containing the current net class name.
+     */
+    void SetCurrentNetClassName( const wxString& aName ) { m_currentNetClassName = aName; }
+
+    /**
+     * Function GetCurrentNetClassName
+     * @return the current net class name.
+     */
+    const wxString& GetCurrentNetClassName() const { return m_currentNetClassName; }
 
     /**
      * Function GetPadCount
@@ -878,6 +911,20 @@ public:
     int GetSmallestClearanceValue();
 
     /**
+     * Function GetTrackWidthIndex
+     * @return the current track width list index.
+     */
+    unsigned GetTrackWidthIndex() const { return m_trackWidthIndex; }
+
+    /**
+     * Function SetTrackWidthIndex
+     * sets the current track width list index to \a aIndex.
+     *
+     * @param aIndex is the track width list index.
+     */
+    void SetTrackWidthIndex( unsigned aIndex );
+
+    /**
      * Function GetCurrentTrackWidth
      * @return the current track width, according to the selected options
      * ( using the default netclass value or a preset value )
@@ -885,8 +932,22 @@ public:
      */
     int GetCurrentTrackWidth() const
     {
-        return m_TrackWidthList[m_TrackWidthSelector];
+        return m_TrackWidthList[m_trackWidthIndex];
     }
+
+    /**
+     * Function GetViaSizeIndex
+     * @return the current via size list index.
+     */
+    unsigned GetViaSizeIndex() const { return m_viaSizeIndex; }
+
+    /**
+     * Function SetViaSizeIndex
+     * sets the current via size list index to \a aIndex.
+     *
+     * @param aIndex is the via size list index.
+     */
+    void SetViaSizeIndex( unsigned aIndex );
 
     /**
      * Function GetCurrentViaSize
@@ -896,7 +957,7 @@ public:
      */
     int GetCurrentViaSize()
     {
-        return m_ViasDimensionsList[m_ViaSizeSelector].m_Diameter;
+        return m_ViasDimensionsList[m_viaSizeIndex].m_Diameter;
     }
 
     /**
@@ -907,8 +968,8 @@ public:
      */
     int GetCurrentViaDrill()
     {
-        return m_ViasDimensionsList[m_ViaSizeSelector].m_Drill > 0 ?
-               m_ViasDimensionsList[m_ViaSizeSelector].m_Drill : -1;
+        return m_ViasDimensionsList[m_viaSizeIndex].m_Drill > 0 ?
+               m_ViasDimensionsList[m_viaSizeIndex].m_Drill : -1;
     }
 
     /**

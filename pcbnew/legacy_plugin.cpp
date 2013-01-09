@@ -454,7 +454,7 @@ void LEGACY_PLUGIN::loadGENERAL()
         else if( TESTLINE( "NoConn" ) )
         {
             int tmp = intParse( line + SZ( "NoConn" ) );
-            m_board->m_NbNoconnect = tmp;
+            m_board->SetUnconnectedNetCount( tmp );
         }
 
         else if( TESTLINE( "Di" ) )
@@ -2902,7 +2902,7 @@ void LEGACY_PLUGIN::saveGENERAL( const BOARD* aBoard ) const
         fprintf( m_fp, "VisibleLayers %08X\n", aBoard->GetVisibleLayers() );
 
     fprintf( m_fp, "Links %d\n",            aBoard->GetRatsnestsCount() );
-    fprintf( m_fp, "NoConn %d\n",           aBoard->m_NbNoconnect );
+    fprintf( m_fp, "NoConn %d\n",           aBoard->GetUnconnectedNetCount() );
 
     // Write Bounding box info
     EDA_RECT bbbox = ((BOARD*)aBoard)->ComputeBoundingBox();
