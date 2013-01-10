@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-08 19:11+0100\n"
-"PO-Revision-Date: 2013-01-08 19:17+0100\n"
+"POT-Creation-Date: 2013-01-10 17:38+0100\n"
+"PO-Revision-Date: 2013-01-10 17:50+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -5308,6 +5308,7 @@ msgstr "Utwórz plik raportu"
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:107
 #: pcbnew/dialogs/dialog_plot_base.cpp:345
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:116
+#: common/dialogs/dialog_list_selector_base.cpp:37
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1093
 msgid "Messages:"
 msgstr "Wiadomości:"
@@ -6245,37 +6246,37 @@ msgstr "ECO2"
 msgid "Edge.Cuts"
 msgstr "Krawedziowa"
 
-#: pcbnew/class_board.cpp:1034 pcbnew/class_module.cpp:484
+#: pcbnew/class_board.cpp:1028 pcbnew/class_module.cpp:484
 #: pcbnew/class_netinfo_item.cpp:138
 msgid "Pads"
 msgstr "Pola lutownicze"
 
-#: pcbnew/class_board.cpp:1037 pcbnew/class_netinfo_item.cpp:159
+#: pcbnew/class_board.cpp:1031 pcbnew/class_netinfo_item.cpp:159
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Przelotki"
 
-#: pcbnew/class_board.cpp:1040
+#: pcbnew/class_board.cpp:1034
 msgid "trackSegm"
 msgstr "Segmenty"
 
-#: pcbnew/class_board.cpp:1043
+#: pcbnew/class_board.cpp:1037
 msgid "Nodes"
 msgstr "Węzły"
 
-#: pcbnew/class_board.cpp:1046
+#: pcbnew/class_board.cpp:1040
 msgid "Nets"
 msgstr "Sieci"
 
-#: pcbnew/class_board.cpp:1054
+#: pcbnew/class_board.cpp:1048
 msgid "Links"
 msgstr "Łącza"
 
-#: pcbnew/class_board.cpp:1057
+#: pcbnew/class_board.cpp:1051
 msgid "Connect"
 msgstr "Połączone"
 
-#: pcbnew/class_board.cpp:1060 pcbnew/dialogs/dialog_drc_base.cpp:177
+#: pcbnew/class_board.cpp:1054 pcbnew/dialogs/dialog_drc_base.cpp:177
 msgid "Unconnected"
 msgstr "Niepołączone"
 
@@ -7610,10 +7611,6 @@ msgstr "Wywołaj makro %d"
 msgid "Add key [%c] in macro %d"
 msgstr "Przypisz klawisz [%c] do makra %d"
 
-#: pcbnew/hotkeys_board_editor.cpp:593 pcbnew/hotkeys_board_editor.cpp:610
-msgid "Delete module?"
-msgstr "Usunąć footprint?"
-
 #: pcbnew/initpcb.cpp:32
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue ?"
@@ -7967,16 +7964,16 @@ msgstr "Nie znaleziono pliku biblioteki <%s> w podanych ścieżkach dostępu."
 msgid "Footprint '%s' not found in any library"
 msgstr "Footprint '%s' nie został znaleziony w żadnej z bibliotek"
 
-#: pcbnew/loadcmp.cpp:441 pcbnew/loadcmp.cpp:495
+#: pcbnew/loadcmp.cpp:441 pcbnew/loadcmp.cpp:498
 #, c-format
 msgid "Modules [%d items]"
 msgstr "Footprinty [%d pozycji]"
 
-#: pcbnew/loadcmp.cpp:452
+#: pcbnew/loadcmp.cpp:455
 msgid "No footprint found"
 msgstr "Nie znaleziono footprintów"
 
-#: pcbnew/loadcmp.cpp:552
+#: pcbnew/loadcmp.cpp:554
 #, c-format
 msgid ""
 "Footprint library\n"
@@ -10117,15 +10114,15 @@ msgstr ""
 msgid "Track "
 msgstr "Ścieżka "
 
-#: pcbnew/tool_pcb.cpp:619 pcbnew/tool_pcb.cpp:649
+#: pcbnew/tool_pcb.cpp:619 pcbnew/tool_pcb.cpp:650
 msgid " *"
 msgstr "*"
 
-#: pcbnew/tool_pcb.cpp:641
+#: pcbnew/tool_pcb.cpp:642
 msgid "Via "
 msgstr "Przelotka "
 
-#: pcbnew/tool_pcb.cpp:668
+#: pcbnew/tool_pcb.cpp:669
 msgid "+/- to switch"
 msgstr "+/- aby zmienić"
 
@@ -10735,11 +10732,11 @@ msgid "uVia Drill"
 msgstr "Otwór mikroprzelotki"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:58
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:84
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:96
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:106
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:116
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:128
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:86
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:100
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:110
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:120
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:132
 #: common/edaappl.cpp:116
 msgid "Default"
 msgstr "Domyślny"
@@ -12448,13 +12445,13 @@ msgstr "Filtr warstw"
 msgid "Current layer:"
 msgstr "Bieżąca warstwa:"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:155
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:159
 msgid "Set current Net tracks and vias sizes and drill to the current values?"
 msgstr ""
 "Ustawić bieżące właściwości ścieżek, przelotek i otworów do właściwości z "
 "bieżących ustawień?"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:166
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:170
 msgid ""
 "Set current Net tracks and vias sizes and drill to the Netclass default "
 "value?"
@@ -12462,15 +12459,15 @@ msgstr ""
 "Ustawić bieżące właściwości ścieżek, przelotek i otworów do właściwości z "
 "klas połączeń?"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:175
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:179
 msgid "Set All Tracks and Vias to Netclass value"
 msgstr "Ustaw rozmiary wszystkich ścieżek i przelotek wg klas połączeń"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:184
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:188
 msgid "Set All Via to Netclass value"
 msgstr "Ustaw przelotki wg klas połączeń"
 
-#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:193
+#: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:197
 msgid "Set All Track to Netclass value"
 msgstr "Ustaw wszystkie ścieżki do wartości z klas połączeń"
 
@@ -13447,6 +13444,7 @@ msgid "New orientation (0.1 degree resolution)"
 msgstr "Nowa orientacja (rozdzielczość 0.1 stopnia)"
 
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:31
+#: common/dialogs/dialog_list_selector_base.cpp:19
 msgid "Filter:"
 msgstr "Filtr:"
 
@@ -16217,6 +16215,18 @@ msgstr "Cofnij ostatnią edycję"
 msgid "Image Scale:"
 msgstr "Skala obrazu:"
 
+#: common/dialogs/dialog_list_selector_base.cpp:21
+msgid ""
+"Enter a string to filter items.\n"
+"Only names containing this string will be listed"
+msgstr ""
+"Wpisz ciąg by odfiltrować elementy.\n"
+"Tylko nazwy zawierające ten ciąg zostaną wyświetlone na liście."
+
+#: common/dialogs/dialog_list_selector_base.cpp:28
+msgid "Items:"
+msgstr "Elementy:"
+
 #: common/dialogs/dialog_page_settings.cpp:55
 msgid "A4 210x297mm"
 msgstr "A4 210x297mm"
@@ -18110,6 +18120,9 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Delete module?"
+#~ msgstr "Usunąć footprint?"
 
 #~ msgid "Unable to move file ... "
 #~ msgstr "Nie mogę przenieść pliku ... "
