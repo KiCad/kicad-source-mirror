@@ -331,9 +331,9 @@ if (KICAD_SCRIPTING_MODULES)
 
 endif (KICAD_SCRIPTING_MODULES)
 
-if ((KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES) AND NOT WIN32)
+if ((KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES) AND NOT WIN32 AND NOT APPLE)
     set ( PCBNEW_EXTRA_LIBS "rt" )
-endif ((KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES) AND NOT WIN32)
+endif ((KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES) AND NOT WIN32 AND NOT APPLE)
 
 
 ###
@@ -430,11 +430,19 @@ target_link_libraries(pcbnew
 install(TARGETS pcbnew
     DESTINATION ${KICAD_BIN}
     COMPONENT binary)
+if(WIN32)
+	set(FINAL_EXE,pcbnew.exe)
+elseif(APPLE)
+	set(FINAL_EXE,pcbnew.app/Contents/MacOS/pcbnew)	
+else()
+	set(FINAL_EXE,pcbnew)
+endif(WIN32)
 
 if(KICAD_SCRIPTING)
-    add_custom_target(FixSwigImportsScripting ALL
-                     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pcbnew
+
+	add_custom_target(FixSwigImportsScripting ALL
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${FINAL_EXE}
                      COMMENT "Fixing swig_import_helper in Kicad scripting"
                      )
 
