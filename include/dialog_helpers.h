@@ -10,56 +10,58 @@
 
 #include <common.h>             // EDA_UNITS_T
 #include <dialog_shim.h>
+#include <../common/dialogs/dialog_list_selector_base.h>
 
 
 class EDA_DRAW_FRAME;
 
-
+#define SORT_LIST true
 
 /**
  * class EDA_LIST_DIALOG
  *
- * Used to display a list of elements for selection, and an help of info line
- * about the selected item.
+ * A dialog which shows:
+ *   a list of elements for selection,
+ *   a text control to display help or info about the selected item.
+ *   2 buttons (OK and Cancel)
+ *
  */
-class EDA_LIST_DIALOG : public DIALOG_SHIM
+class EDA_LIST_DIALOG : public EDA_LIST_DIALOG_BASE
 {
 private:
-    wxListBox*           m_listBox;
-    wxTextCtrl*          m_messages;
+    bool m_sortList;
     void (*m_callBackFct)( wxString& Text );
+    const wxArrayString* m_itemsListCp;
 
 public:
     /**
      * Constructor:
      * @param aParent Pointer to the parent window.
-     * @param aTitle The title shown on top.
-     * @param aItemList A wxArrayString of the list of elements.
-     * @param aRefText An item name if an item must be preselected.
-     * @param aCallBackFunction callback function to display comments
-     * @param aPos The position of the dialog.
+     * @param aTitle = The title shown on top.
+     * @param aItemList = A wxArrayString of the list of elements.
+     * @param aRefText = An item name if an item must be preselected.
+     * @param aCallBackFunction = callback function to display comments
+     * @param aSortList = true to sort list items by alphabetic order.
      */
     EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                      const wxArrayString& aItemList, const wxString& aRefText,
                      void(* aCallBackFunction)(wxString& Text) = NULL,
-                     wxPoint aPos = wxDefaultPosition );
+                     bool aSortList = false );
     ~EDA_LIST_DIALOG();
 
-    void     SortList();
     void     Append( const wxString& aItemStr );
     void     InsertItems( const wxArrayString& aItemList, int aPosition = 0 );
-    void     MoveMouseToOrigin();
     wxString GetTextSelection();
 
 private:
-    void     OnClose( wxCloseEvent& event );
-    void     OnCancelClick( wxCommandEvent& event );
-    void     OnOkClick( wxCommandEvent& event );
-    void     ClickOnList( wxCommandEvent& event );
-    void     D_ClickOnList( wxCommandEvent& event );
-    void     OnKeyEvent( wxKeyEvent& event );
+    void     onClose( wxCloseEvent& event );
+    void     onCancelClick( wxCommandEvent& event );
+    void     onOkClick( wxCommandEvent& event );
+    void     onClickOnList( wxCommandEvent& event );
+    void     onDClickOnList( wxCommandEvent& event );
+    void     textChangeInFilterBox(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    void     sortList();
 };
 
 

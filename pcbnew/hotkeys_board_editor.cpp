@@ -590,9 +590,6 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
             if( module == NULL )
                 return false;
 
-            if( !IsOK( this, _( "Delete module?" ) ) )
-                return false;
-
             RemoveStruct( module, aDC );
         }
         else
@@ -605,9 +602,6 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
             item = PcbGeneralLocateAndDisplay();
 
             if( item == NULL )
-                return false;
-
-            if( (item->Type() == PCB_MODULE_T) && !IsOK( this, _( "Delete module?" ) ) )
                 return false;
 
             RemoveStruct( item, aDC );

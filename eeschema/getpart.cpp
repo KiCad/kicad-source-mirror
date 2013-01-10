@@ -119,8 +119,8 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const wxString& aLibname,
     /* Ask for a component name or key words */
     msg.Printf( _( "component selection (%d items loaded):" ), CmpCount );
 
-    DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), aHistoryList,
-                              msg, aUseLibBrowser );
+    DIALOG_GET_COMPONENT dlg( this, aHistoryList, msg, aUseLibBrowser );
+
     if( aHistoryList.GetCount() )
         dlg.SetComponentName( aHistoryList[0] );
 

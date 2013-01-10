@@ -152,7 +152,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
     static wxString      lastComponentName;
 
     // Ask for a component name or key words
-    DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
+    DIALOG_GET_COMPONENT dlg( this, HistoryList,
                           _( "Load Module" ), aUseFootprintViewer );
 
     dlg.SetComponentName( lastComponentName );
@@ -440,10 +440,13 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
     {
         msg.Printf( _( "Modules [%d items]" ), (int) footprint_names_list.GetCount() );
         EDA_LIST_DIALOG dlg( aWindow, msg, footprint_names_list, OldName,
-                             DisplayCmpDoc, GetComponentDialogPosition() );
+                             DisplayCmpDoc );
 
         if( dlg.ShowModal() == wxID_OK )
+        {
             CmpName = dlg.GetTextSelection();
+            SkipNextLeftButtonReleaseEvent();
+        }
         else
             CmpName.Empty();
     }
@@ -494,8 +497,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
 
     msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
 
-    EDA_LIST_DIALOG dlg( this, msg, listnames, wxEmptyString );
-    dlg.SortList();
+    EDA_LIST_DIALOG dlg( this, msg, listnames, wxEmptyString, NULL, SORT_LIST );
 
     if( dlg.ShowModal() == wxID_OK )
         CmpName = dlg.GetTextSelection();

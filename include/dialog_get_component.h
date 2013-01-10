@@ -8,8 +8,6 @@
 
 #include <../common/dialogs/dialog_get_component_base.h>
 
-wxPoint  GetComponentDialogPosition( void );
-
 void     AddHistoryComponentName( wxArrayString& HistoryList,
                                   const wxString& Name );
 
@@ -26,7 +24,7 @@ public:
 
 public:
     // Constructor and destructor
-    DIALOG_GET_COMPONENT( EDA_DRAW_FRAME* parent, const wxPoint& framepos,
+    DIALOG_GET_COMPONENT( EDA_DRAW_FRAME* parent,
                           wxArrayString& HistoryList, const wxString& Title,
                           bool show_extra_tool );
     ~DIALOG_GET_COMPONENT() {};
