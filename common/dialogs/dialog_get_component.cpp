@@ -22,11 +22,10 @@ static unsigned s_HistoryMaxCount = 8;  // Max number of items displayed in hist
  *   This dialog shows an history of last selected items
  */
 DIALOG_GET_COMPONENT::DIALOG_GET_COMPONENT( EDA_DRAW_FRAME* parent,
-                                            const wxPoint&  framepos,
-                                            wxArrayString&  HistoryList,
+                                           wxArrayString&  HistoryList,
                                             const wxString& Title,
                                             bool            show_extra_tool ) :
-    DIALOG_GET_COMPONENT_BASE( parent, -1, Title, framepos )
+    DIALOG_GET_COMPONENT_BASE( parent, -1, Title )
 {
 
 #ifdef __WXMAC__
@@ -115,31 +114,6 @@ void DIALOG_GET_COMPONENT::SetComponentName( const wxString& name )
         m_textCmpNameCtrl->SetValue( name );
         m_textCmpNameCtrl->SetSelection(-1, -1);
     }
-}
-
-
-wxPoint GetComponentDialogPosition( void )
-{
-    wxPoint pos;
-    int     x, y, w, h;
-
-    pos = wxGetMousePosition();
-    wxClientDisplayRect( &x, &y, &w, &h );
-    pos.x -= 100;
-    pos.y -= 50;
-    if( pos.x < x )
-        pos.x = x;
-    if( pos.y < y )
-        pos.y = y;
-    if( pos.x < x )
-        pos.x = x;
-    x += w - 350;
-    if( pos.x > x )
-        pos.x = x;
-    if( pos.y < y )
-        pos.y = y;
-
-    return pos;
 }
 
 

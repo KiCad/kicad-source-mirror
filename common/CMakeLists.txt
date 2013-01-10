@@ -22,6 +22,7 @@ set(COMMON_ABOUT_DLG_SRCS
     dialogs/dialog_get_component_base.cpp
     dialogs/dialog_hotkeys_editor.cpp
     dialogs/dialog_hotkeys_editor_base.cpp
+    dialogs/dialog_list_selector_base.cpp
     dialogs/dialog_page_settings_base.cpp
     )
 

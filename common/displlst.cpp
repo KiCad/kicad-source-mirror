@@ -8,43 +8,19 @@
 #include <dialog_helpers.h>
 
 
-enum listbox {
-    ID_LISTBOX_LIST = 8000
-};
-
-
-BEGIN_EVENT_TABLE( EDA_LIST_DIALOG, wxDialog )
-    EVT_BUTTON( wxID_OK, EDA_LIST_DIALOG::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, EDA_LIST_DIALOG::OnCancelClick )
-    EVT_LISTBOX( ID_LISTBOX_LIST, EDA_LIST_DIALOG::ClickOnList )
-    EVT_LISTBOX_DCLICK( ID_LISTBOX_LIST, EDA_LIST_DIALOG::D_ClickOnList )
-    EVT_CHAR( EDA_LIST_DIALOG::OnKeyEvent )
-    EVT_CHAR_HOOK( EDA_LIST_DIALOG::OnKeyEvent )
-    EVT_CLOSE( EDA_LIST_DIALOG::OnClose )
-END_EVENT_TABLE()
-
-
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemList, const wxString& aRefText,
-                                  void(* aCallBackFunction)(wxString& Text), wxPoint aPos ) :
-    DIALOG_SHIM( aParent, wxID_ANY, aTitle, aPos, wxDefaultSize,
-              wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
+                                  void(* aCallBackFunction)(wxString& Text),
+                                  bool aSortList ) :
+    EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
+    m_sortList = aSortList;
     m_callBackFct = aCallBackFunction;
-    m_messages    = NULL;
-
-    wxBoxSizer* GeneralBoxSizer = new wxBoxSizer( wxVERTICAL );
-
-    SetSizer( GeneralBoxSizer );
-
-    m_listBox = new wxListBox( this, ID_LISTBOX_LIST, wxDefaultPosition,
-                               wxDefaultSize, 0, NULL,
-                               wxLB_NEEDED_SB | wxLB_SINGLE | wxLB_HSCROLL );
-    m_listBox->SetMinSize( wxSize( 200, 200 ) );
-
-    GeneralBoxSizer->Add( m_listBox, 2, wxGROW | wxALL, 5 );
+    m_itemsListCp = &aItemList;
 
     InsertItems( aItemList, 0 );
+    if( m_sortList )
+        sortList();
 
     if( !aRefText.IsEmpty() )    // try to select the item matching aRefText
     {
@@ -56,20 +32,13 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
             }
     }
 
-    if( m_callBackFct )
+    if( m_callBackFct == NULL )
     {
-        m_messages = new wxTextCtrl( this, -1, wxEmptyString,
-                                     wxDefaultPosition, wxDefaultSize,
-                                     wxTE_READONLY | wxTE_MULTILINE );
-        m_messages->SetMinSize( wxSize( -1, 60 ) );
-
-        GeneralBoxSizer->Add( m_messages, 1, wxGROW | wxALL, 5 );
+        m_messages->Show(false);
+        m_staticTextMsg->Show(false);
     }
 
-    wxSizer* buttonSizer = CreateButtonSizer( wxOK | wxCANCEL );
-
-    if( buttonSizer )
-        GeneralBoxSizer->Add( buttonSizer, 0, wxGROW | wxALL, 5 );
+    m_filterBox->SetFocus();
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -82,18 +51,28 @@ EDA_LIST_DIALOG::~EDA_LIST_DIALOG()
 }
 
 
-void EDA_LIST_DIALOG::MoveMouseToOrigin()
+void EDA_LIST_DIALOG::textChangeInFilterBox( wxCommandEvent& event )
 {
-    int    x, y, w, h;
-    wxSize list_size = m_listBox->GetSize();
-    int    orgx = m_listBox->GetRect().GetLeft();
-    int    orgy = m_listBox->GetRect().GetTop();
+    wxString filter;
+    wxString itemName;
 
-    wxClientDisplayRect( &x, &y, &w, &h );
+    filter = wxT("*") + m_filterBox->GetLineText(0).MakeLower() + wxT("*");
 
-    WarpPointer( x + orgx + 20, y + orgy + (list_size.y / 2) );
+    m_listBox->Clear();
+
+    for(unsigned i = 0; i < m_itemsListCp->GetCount(); i++)
+    {
+        itemName = m_itemsListCp->Item(i);
+
+        if( itemName.MakeLower().Matches(filter) )
+        {
+            m_listBox->Insert(m_itemsListCp->Item(i),m_listBox->GetCount());
+        }
+    }
+
+    if( m_sortList )
+        sortList();
 }
-
 
 wxString EDA_LIST_DIALOG::GetTextSelection()
 {
@@ -111,16 +90,19 @@ void EDA_LIST_DIALOG::Append( const wxString& item )
 void EDA_LIST_DIALOG::InsertItems( const wxArrayString& itemlist, int position )
 {
     m_listBox->InsertItems( itemlist, position );
+
+    if( m_sortList )
+        sortList();
 }
 
 
-void EDA_LIST_DIALOG::OnCancelClick( wxCommandEvent& event )
+void EDA_LIST_DIALOG::onCancelClick( wxCommandEvent& event )
 {
     EndModal( wxID_CANCEL );
 }
 
 
-void EDA_LIST_DIALOG::ClickOnList( wxCommandEvent& event )
+void EDA_LIST_DIALOG::onClickOnList( wxCommandEvent& event )
 {
     wxString text;
 
@@ -134,19 +116,19 @@ void EDA_LIST_DIALOG::ClickOnList( wxCommandEvent& event )
 }
 
 
-void EDA_LIST_DIALOG::D_ClickOnList( wxCommandEvent& event )
+void EDA_LIST_DIALOG::onDClickOnList( wxCommandEvent& event )
 {
     EndModal( wxID_OK );
 }
 
 
-void EDA_LIST_DIALOG::OnOkClick( wxCommandEvent& event )
+void EDA_LIST_DIALOG::onOkClick( wxCommandEvent& event )
 {
     EndModal( wxID_OK );
 }
 
 
-void EDA_LIST_DIALOG::OnClose( wxCloseEvent& event )
+void EDA_LIST_DIALOG::onClose( wxCloseEvent& event )
 {
     EndModal( wxID_CANCEL );
 }
@@ -154,28 +136,20 @@ void EDA_LIST_DIALOG::OnClose( wxCloseEvent& event )
 
 /* Sort alphabetically, case insensitive.
  */
-static int SortItems( const wxString& item1, const wxString& item2 )
+static int sortItems( const wxString& item1, const wxString& item2 )
 {
     return StrNumCmp( item1, item2, INT_MAX, true );
 }
 
 
-void EDA_LIST_DIALOG::SortList()
+void EDA_LIST_DIALOG::sortList()
 {
     wxArrayString list = m_listBox->GetStrings();
 
     if( list.IsEmpty() )
         return;
 
-    list.Sort( SortItems );
-
+    list.Sort( sortItems );
     m_listBox->Clear();
-
     m_listBox->Append( list );
-}
-
-
-void EDA_LIST_DIALOG::OnKeyEvent( wxKeyEvent& event )
-{
-    event.Skip();
 }
