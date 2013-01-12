@@ -96,6 +96,52 @@ public:
     }
 };
 
+
+/**
+ * Function OnExportVRML
+ * will export the current BOARD to a VRML file.
+ */
+void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
+{
+    wxFileName fn;
+    static wxString subDirFor3Dshapes = wxT("shapes3D");
+
+    // The general VRML scale factor
+    // Assuming the VRML default unit is the mm
+    // this is the mm to VRML scaling factor for inch, mm and meter
+    double scaleList[3] = { 1.0/25.4, 1, 0.001 };
+
+    // Build default file name
+    wxString ext = wxT( "wrl" );
+    fn = GetBoard()->GetFileName();
+    fn.SetExt( ext );
+
+    DIALOG_EXPORT_3DFILE dlg( this );
+    dlg.FilePicker()->SetPath( fn.GetFullPath() );
+    dlg.SetSubdir( subDirFor3Dshapes );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    double scale = scaleList[dlg.GetUnits( )];     // final scale export
+    bool export3DFiles = dlg.Get3DFilesOption( ) == 0;
+
+    wxBusyCursor dummy;
+
+    wxString fullFilename = dlg.FilePicker()->GetPath();
+    subDirFor3Dshapes = dlg.GetSubdir();
+
+    if( ! wxDirExists( subDirFor3Dshapes ) )
+        wxMkdir( subDirFor3Dshapes );
+
+    if( ! ExportVRML_File( fullFilename, scale, export3DFiles, subDirFor3Dshapes ) )
+    {
+        wxString msg = _( "Unable to create " ) + fullFilename;
+        wxMessageBox( msg );
+        return;
+    }
+}
+
 // I use this a lot...
 static const double PI2 = M_PI / 2;
 
@@ -1050,7 +1096,8 @@ static void compose_quat( double q1[4], double q2[4], double qr[4] )
 
 
 static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
-                                FILE* aOutputFile, double aScalingFactor,
+                                FILE* aOutputFile,
+                                double aVRMLModelsToBiu,
                                 bool aExport3DFiles, const wxString & a3D_Subdir )
 {
     // Reference and value
@@ -1146,16 +1193,10 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
             fprintf( aOutputFile, "  rotation %g %g %g %g\n", rot[0], rot[1], rot[2], rot[3] );
         }
 
-        fprintf( aOutputFile, "  scale %g %g %g\n",
-                 vrmlm->m_MatScale.x * aScalingFactor,
-                 vrmlm->m_MatScale.y * aScalingFactor,
-                 vrmlm->m_MatScale.z * aScalingFactor );
-
-        // adjust 3D shape offset position (offset is given in inch)
-        #define UNITS_3D_TO_PCB_UNITS (IU_PER_MILS*1000)
-        int offsetx = KiROUND( vrmlm->m_MatPosition.x * UNITS_3D_TO_PCB_UNITS );
-        int offsety = KiROUND( vrmlm->m_MatPosition.y * UNITS_3D_TO_PCB_UNITS );
-        double offsetz = vrmlm->m_MatPosition.z * UNITS_3D_TO_PCB_UNITS;
+        // adjust 3D shape offset position
+        int offsetx = vrmlm->m_MatPosition.x;
+        int offsety = vrmlm->m_MatPosition.y;
+        double offsetz = vrmlm->m_MatPosition.z;
 
         if ( isFlipped )
             NEGATE(offsetz);
@@ -1168,6 +1209,12 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                  (double) (offsetx + aModule->m_Pos.x),
                  - (double)(offsety + aModule->m_Pos.y),    // Y axis is reversed in Pcbnew
                  offsetz + layer_z[aModule->GetLayer()] );
+
+        fprintf( aOutputFile, "  scale %g %g %g\n",
+                 vrmlm->m_MatScale.x * aVRMLModelsToBiu,
+                 vrmlm->m_MatScale.y * aVRMLModelsToBiu,
+                 vrmlm->m_MatScale.z * aVRMLModelsToBiu );
+
         fprintf( aOutputFile,
                  "  children [\n    Inline {\n      url \"%s\"\n    } ]\n",
                  TO_UTF8( fname ) );
@@ -1185,64 +1232,32 @@ static void write_and_empty_triangle_bag( FILE* output_file, TriangleBag& triang
     }
 }
 
-
-/**
- * Function OnExportVRML
- * will export the current BOARD to a VRML file.
- */
-void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
-{
-    wxFileName fn;
-    static wxString subDirFor3Dshapes = wxT("shapes3D");
-    double scaleList[3] = { 1.0, 25.4, 25.4/1000 };
-
-    // Build default file name
-    wxString ext = wxT( "wrl" );
-    fn = GetBoard()->GetFileName();
-    fn.SetExt( ext );
-
-    DIALOG_EXPORT_3DFILE dlg( this );
-    dlg.FilePicker()->SetPath( fn.GetFullPath() );
-    dlg.SetSubdir( subDirFor3Dshapes );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    double scale = scaleList[dlg.GetUnits( )];     // final scale export
-    bool export3DFiles = dlg.Get3DFilesOption( ) == 0;
-
-wxBusyCursor dummy;
-
-    wxString fullFilename = dlg.FilePicker()->GetPath();
-    subDirFor3Dshapes = dlg.GetSubdir();
-
-    if( ! wxDirExists( subDirFor3Dshapes ) )
-        wxMkdir( subDirFor3Dshapes );
-
-    if( ! ExportVRML_File( fullFilename, scale, export3DFiles, subDirFor3Dshapes ) )
-    {
-        wxString msg = _( "Unable to create " ) + fullFilename;
-        wxMessageBox( msg );
-        return;
-    }
-}
-
 /**
  * Function ExportVRML_File
  * Creates the file(s) exporting current BOARD to a VRML file.
  * @param aFullFileName = the full filename of the file to create
- * @param aScale = the general scaling factor. 1.0 to export in inch
+ * @param aMMtoWRMLunit = the general scaling factor. 1.0 to export in mm
  * @param aExport3DFiles = true to copy 3D shapes in the subdir a3D_Subdir
  * @param a3D_Subdir = sub directory where 3D shapes files are copied
  * used only when aExport3DFiles == true
  * @return true if Ok.
  */
-/* When copying 3D shapes files, the new filename is build from
+/* Note1:
+ * When copying 3D shapes files, the new filename is build from
  * the full path name, changing the separators by underscore.
  * this is needed because files with the same shortname can exist in different directories
+ * Note 2:
+ * ExportVRML_File generates coordinates in board units (BIU) inside the file.
+ * (TODO: use mm inside the file)
+ * A general scale transform is applied to the whole file
+ * (1.0 to have the actual WRML unit im mm, 0.001 to have the actual WRML unit im meter
+ * Note 3:
+ * For 3D models built by a 3D modeler, the unit is 0,1 inch
+ * A specfic scale is applied to 3D models to convert them to BIU
+ *
  */
 bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
-                                      double aScale, bool aExport3DFiles,
+                                      double aMMtoWRMLunit, bool aExport3DFiles,
                                       const wxString & a3D_Subdir )
 {
     wxString   msg;
@@ -1266,42 +1281,30 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
                           "  title \"%s - Generated by Pcbnew\"\n"
                           "}\n", TO_UTF8( name ) );
 
-    /* The would be in decimils and not in meters, as the standard wants.
+    /* The would be in BIU and not in meters, as the standard wants.
      * It is trivial to embed everything in a transform node to
      * fix it. For example here we build the world in inches...
     */
 
-    /* scaling factor to convert internal units (decimils) to inches
-    */
-    double board_scaling_factor = 0.001*MILS_PER_IU;
-
-    /* auxiliary scale to export to a different scale.
-     */
-    double general_scaling_factor = board_scaling_factor * aScale;
+    // Global VRML scale to export to a different scale.
+    // (aMMtoWRMLScale = 1.0 to export in mm)
+    double boardIU2WRML = aMMtoWRMLunit / MM_PER_IU;
     fprintf( output_file, "Transform {\n" );
     fprintf( output_file, "  scale %g %g %g\n",
-             general_scaling_factor, general_scaling_factor, general_scaling_factor );
+            boardIU2WRML , boardIU2WRML, boardIU2WRML );
 
     /* Define the translation to have the board centre to the 2D axis origin
      * more easy for rotations...
      */
     EDA_RECT bbbox = pcb->ComputeBoundingBox();
 
-    double dx = board_scaling_factor * bbbox.Centre().x * aScale;
-    double dy = board_scaling_factor * bbbox.Centre().y * aScale;
+    double dx = boardIU2WRML * bbbox.Centre().x;
+    double dy = boardIU2WRML * bbbox.Centre().y;
 
     fprintf( output_file, "  translation %g %g 0.0\n", -dx, dy );
 
     fprintf( output_file, "  children [\n" );
 
-    /* scaling factor to convert 3D models to board units (decimils)
-     * Usually we use Wings3D to create thems.
-     * One can consider the 3D units is 0.1 inch
-     * So the scaling factor from 0.1 inch to board units
-     * is 0.1 / board_scaling_factor
-     */
-
-    double wrml_3D_models_scaling_factor = 0.1 / board_scaling_factor;
     // Preliminary computation: the z value for each layer
     compute_layer_Zs( pcb );
 
@@ -1315,6 +1318,13 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
 /* TODO    export_vrml_zones(pcb);
 */
 
+    /* scaling factor to convert 3D models to board units (decimils)
+     * Usually we use Wings3D to create thems.
+     * One can consider the 3D units is 0.1 inch (2.54 mm)
+     * So the scaling factor from 0.1 inch to board units
+     * is 0.1 / general_scaling_factor
+     */
+    double wrml_3D_models_scaling_factor = 2.54 /  boardIU2WRML;
     // Export footprints
     for( MODULE* module = pcb->m_Modules; module != 0; module = module->Next() )
         export_vrml_module( pcb, module, output_file,
