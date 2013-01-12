@@ -93,7 +93,7 @@ int S3D_MASTER::ReadData()
     {
         text = strtok( line, sep_chars );
 
-        if( stricmp( text, "DEF" ) == 0 )
+        if( stricmp( text, "DEF" ) == 0 || stricmp( text, "Group" ) == 0)
         {
             while( GetLine( file, line, &LineNum, 512 ) )
             {
@@ -144,7 +144,7 @@ int S3D_MASTER::ReadMaterial( FILE* file, int* LineNum )
         return 0;
     }
 
-    if( stricmp( command, "DEF" ) == 0 )
+    if( stricmp( command, "DEF" ) == 0 || stricmp( command, "Material") == 0)
     {
         material = new S3D_MATERIAL( this, mat_name );
 
@@ -475,6 +475,12 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
         {
             ReadCoordsList( file, line, list, LineNum );
             list.clear();
+            continue;
+        }
+
+        if( stricmp( text, "solid" ) == 0 )
+        {
+            // ignore solid
             continue;
         }
 
