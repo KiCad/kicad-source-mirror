@@ -34,6 +34,7 @@
 #include <wxPcbStruct.h>
 #include <3d_viewer.h>
 #include <pcbcommon.h>
+#include <msgpanel.h>
 
 #include <class_board.h>
 #include <class_module.h>

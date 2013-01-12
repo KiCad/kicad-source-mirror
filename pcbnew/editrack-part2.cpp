@@ -166,7 +166,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
         // Refresh DRC diag, erased by previous calls
         if( m_drc->GetCurrentMarker() )
-            m_drc->GetCurrentMarker()->DisplayInfo( this );
+            SetMsgPanel( m_drc->GetCurrentMarker() );
 
         return false;
     }
@@ -209,8 +209,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-    via->DisplayInfo( this );
-
+    SetMsgPanel( via );
     UpdateStatusBar();
 
     return true;
@@ -238,7 +237,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 
         if( pt_pad ) // Displaying the ratsnest of the corresponding net.
         {
-            pt_pad->DisplayInfo( this );
+            SetMsgPanel( pt_pad );
 
             for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
             {
@@ -272,7 +271,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 
             if( Module )
             {
-                Module->DisplayInfo( this );
+                SetMsgPanel( Module );
                 pt_pad = Module->m_Pads;
 
                 for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )

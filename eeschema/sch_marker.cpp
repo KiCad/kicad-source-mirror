@@ -31,6 +31,7 @@
 #include <wxstruct.h>
 #include <class_drawpanel.h>
 #include <trigo.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <sch_marker.h>
@@ -156,16 +157,12 @@ EDA_RECT SCH_MARKER::GetBoundingBox() const
 }
 
 
-void SCH_MARKER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
+void SCH_MARKER::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
-    if( aFrame == NULL )
-        return;
-
     wxString msg;
 
-    aFrame->ClearMsgPanel();
-    aFrame->AppendMsgPanel( _( "Electronics rule check error" ),
-                            GetReporter().GetErrorText(), DARKRED );
+    aList.push_back( MSG_PANEL_ITEM( _( "Electronics rule check error" ),
+                                     GetReporter().GetErrorText(), DARKRED ) );
 }
 
 

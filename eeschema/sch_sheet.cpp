@@ -35,6 +35,7 @@
 #include <wxEeschemaStruct.h>
 #include <plot_common.h>
 #include <kicad_string.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <sch_sheet.h>
@@ -820,16 +821,15 @@ wxString SCH_SHEET::GetFileName( void ) const
 }
 
 
-void SCH_SHEET::DisplayInfo( EDA_DRAW_FRAME* frame )
+void SCH_SHEET::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
-    frame->ClearMsgPanel();
-    frame->AppendMsgPanel( _( "Sheet name" ), m_name, CYAN );
-    frame->AppendMsgPanel( _( "File name" ), m_fileName, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Sheet name" ), m_name, CYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "File name" ), m_fileName, BROWN ) );
 
 #if 0   // Set to 1 to display the sheet time stamp (mainly for test)
     wxString msg;
     msg.Printf( wxT( "%.8X" ), m_TimeStamp );
-    frame->AppendMsgPanel( _( "Time Stamp" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Time Stamp" ), msg, BLUE ) );
 #endif
 }
 

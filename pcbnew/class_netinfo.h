@@ -24,7 +24,7 @@ class NETINFO_ITEM;
 class D_PAD;
 class BOARD;
 class BOARD_ITEM;
-
+class MSG_PANEL_ITEM;
 
 
 /*****************************/
@@ -215,6 +215,7 @@ private:
 
     NETCLASS* m_NetClass;
 
+    BOARD_ITEM* m_parent;       ///< The parent board item object the net belongs to.
 
 public:
     int m_NbNodes;                     // Pads count for this net
@@ -379,14 +380,7 @@ public:
      */
     void SetNetname( const wxString& aNetname );
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 };
 
 

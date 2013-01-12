@@ -214,7 +214,7 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
     }
 
     if( m_parent->GetDrawItem() )
-        m_parent->GetDrawItem()->DisplayInfo( m_parent );
+        m_parent->SetMsgPanel( m_parent->GetDrawItem() );
 
     EndModal(wxID_OK);
 }

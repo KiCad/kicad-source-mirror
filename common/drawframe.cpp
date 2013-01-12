@@ -36,6 +36,7 @@
 #include <id.h>
 #include <class_drawpanel.h>
 #include <class_base_screen.h>
+#include <msgpanel.h>
 #include <wxstruct.h>
 #include <confirm.h>
 #include <kicad_device_context.h>
@@ -110,6 +111,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
     m_DrawGrid            = true;       // hide/Show grid. default = show
     m_GridColor           = DARKGRAY;   // Grid color
     m_snapToGrid          = true;
+    m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
+
 
     //#define ZOOM_DISPLAY_SIZE       60
     //#define COORD_DISPLAY_SIZE      165
@@ -179,7 +182,7 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
     EDA_ITEM* item = GetScreen()->GetCurItem();
 
     if( item )
-        item->DisplayInfo( this );
+        SetMsgPanel( item );
 }
 
 
@@ -607,6 +610,28 @@ void EDA_DRAW_FRAME::ClearMsgPanel( void )
         return;
 
     m_messagePanel->EraseMsgBox();
+}
+
+
+void EDA_DRAW_FRAME::SetMsgPanel( const MSG_PANEL_ITEMS& aList )
+{
+    if( m_messagePanel == NULL && !aList.empty() )
+        return;
+
+    ClearMsgPanel();
+
+    for( unsigned i = 0;  i < aList.size();  i++ )
+        m_messagePanel->AppendMessage( aList[i] );
+}
+
+
+void EDA_DRAW_FRAME::SetMsgPanel( EDA_ITEM* aItem )
+{
+    wxCHECK_RET( aItem != NULL, wxT( "Invalid EDA_ITEM pointer.  Bad programmer." ) );
+
+    MSG_PANEL_ITEMS items;
+    aItem->GetMsgPanelInfo( items );
+    SetMsgPanel( items );
 }
 
 

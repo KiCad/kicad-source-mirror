@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <wxstruct.h>
 #include <trigo.h>
+#include <msgpanel.h>
 
 #include <pcbnew.h>
 #include <class_marker_pcb.h>
@@ -90,20 +91,18 @@ bool MARKER_PCB::IsOnLayer( int aLayer ) const
     return IsValidCopperLayerIndex( aLayer );
 }
 
-void MARKER_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
+void MARKER_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
-    frame->ClearMsgPanel();
-
     const DRC_ITEM& rpt = m_drc;
 
-    frame->AppendMsgPanel( _( "Type" ), _( "Marker" ), DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Marker" ), DARKCYAN ) );
 
     wxString errorTxt;
 
     errorTxt << _( "ErrType" ) << wxT( "(" ) << rpt.GetErrorCode() << wxT( ")-  " )
              << rpt.GetErrorText() << wxT( ":" );
 
-    frame->AppendMsgPanel( errorTxt, wxEmptyString, RED );
+    aList.push_back( MSG_PANEL_ITEM( errorTxt, wxEmptyString, RED ) );
 
     wxString txtA;
     txtA << DRC_ITEM::ShowCoord( rpt.GetPointA() ) << wxT( ": " ) << rpt.GetTextA();
@@ -113,7 +112,7 @@ void MARKER_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
     if ( rpt.HasSecondItem() )
         txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT( ": " ) << rpt.GetTextB();
 
-    frame->AppendMsgPanel( txtA, txtB, DARKBROWN );
+    aList.push_back( MSG_PANEL_ITEM( txtA, txtB, DARKBROWN ) );
 }
 
 

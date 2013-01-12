@@ -31,6 +31,7 @@
 
 #include <lib_draw_item.h>
 
+
 #define TARGET_PIN_RADIUS   12  /* Circle diameter drawn at the active end of pins */
 #define PIN_LENGTH          300 /* Default Length of each pin to be drawn. */
 
@@ -138,7 +139,7 @@ public:
 
     bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
-    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 

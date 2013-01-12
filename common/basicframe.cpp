@@ -74,10 +74,8 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent,
     m_autoSaveInterval = -1;
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
 
-    m_MsgFrameHeight = EDA_MSG_PANEL::GetRequiredHeight();
-
     minsize.x = 470;
-    minsize.y = 350 + m_MsgFrameHeight;
+    minsize.y = 350;
 
     SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
 
@@ -90,7 +88,6 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent,
     GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
 
     m_FramePos.x = m_FramePos.y = 0;
-    m_FrameSize.y -= m_MsgFrameHeight;
 
     Connect( ID_HELP_COPY_VERSION_STRING,
              wxEVT_COMMAND_MENU_SELECTED,

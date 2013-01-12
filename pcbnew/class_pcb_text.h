@@ -37,6 +37,7 @@
 
 class LINE_READER;
 class EDA_DRAW_PANEL;
+class MSG_PANEL_ITEM;
 
 
 class TEXTE_PCB : public BOARD_ITEM, public EDA_TEXT
@@ -73,7 +74,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool HitTest( const wxPoint& aPosition )
     {

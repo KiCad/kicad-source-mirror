@@ -132,7 +132,7 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
     {
         wxASSERT( m_currentMarker );
 
-        m_currentMarker->DisplayInfo( m_mainWindow );
+        m_mainWindow->SetMsgPanel( m_currentMarker );
         return BAD_DRC;
     }
 
@@ -140,7 +140,7 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
     {
         wxASSERT( m_currentMarker );
 
-        m_currentMarker->DisplayInfo( m_mainWindow );
+        m_mainWindow->SetMsgPanel( m_currentMarker );
         return BAD_DRC;
     }
 
@@ -165,7 +165,7 @@ int DRC::Drc( ZONE_CONTAINER* aArea, int aCornerIndex )
     if( !doEdgeZoneDrc( aArea, aCornerIndex ) )
     {
         wxASSERT( m_currentMarker );
-        m_currentMarker->DisplayInfo( m_mainWindow );
+        m_mainWindow->SetMsgPanel( m_currentMarker );
         return BAD_DRC;
     }
 

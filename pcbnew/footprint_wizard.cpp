@@ -215,11 +215,12 @@ void FOOTPRINT_WIZARD_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     MODULE* module = GetBoard()->m_Modules;
 
     if ( module )
-        module->DisplayInfo( this );
+        SetMsgPanel( module );
 
     m_canvas->DrawCrossHair( DC );
 
     ClearMsgPanel();
+
     if( module )
-        module->DisplayInfo( this );
+        SetMsgPanel( module );
 }

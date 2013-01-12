@@ -36,6 +36,7 @@
 #include <richio.h>
 #include <wxEeschemaStruct.h>
 #include <plot_common.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <class_library.h>
@@ -1464,7 +1465,7 @@ EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 }
 
 
-void SCH_COMPONENT::DisplayInfo( EDA_DRAW_FRAME* frame )
+void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     // search for the component in lib
     // Entry and root_component can differ if Entry is an alias
@@ -1476,30 +1477,29 @@ void SCH_COMPONENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     wxString msg;
 
-    frame->ClearMsgPanel();
-
-    frame->AppendMsgPanel( _( "Reference" ),
-                           GetRef( &( ( (SCH_EDIT_FRAME*) frame )->GetCurrentSheet() ) ),
-                           DARKCYAN );
+    if( m_currentSheetPath )
+        aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
+                                         GetRef( m_currentSheetPath ),
+                                         DARKCYAN ) );
 
     if( root_component->IsPower() )
         msg = _( "Power symbol" );
     else
         msg = _( "Name" );
 
-    frame->AppendMsgPanel( msg, GetField( VALUE )->m_Text, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->m_Text, DARKCYAN ) );
 
     // Display component reference in library and library
-    frame->AppendMsgPanel( _( "Component" ), m_ChipName, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Component" ), m_ChipName, BROWN ) );
 
     if( alias->GetName() != root_component->GetName() )
-        frame->AppendMsgPanel( _( "Alias of" ), root_component->GetName(), BROWN );
+        aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), root_component->GetName(), BROWN ) );
 
-    frame->AppendMsgPanel( _( "Library" ), alias->GetLibraryName(), BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), BROWN ) );
 
     // Display description of the component, and keywords found in lib
-    frame->AppendMsgPanel( _( "Description" ), alias->GetDescription(), DARKCYAN );
-    frame->AppendMsgPanel( _( "Key words" ), alias->GetKeyWords(), DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(), DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Key words" ), alias->GetKeyWords(), DARKCYAN ) );
 }
 
 

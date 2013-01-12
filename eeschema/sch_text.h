@@ -212,7 +212,7 @@ public:
 
     virtual EDA_ITEM* Clone() const;
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );  // Virtual function
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

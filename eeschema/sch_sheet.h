@@ -290,7 +290,7 @@ public:
 
     bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     /* there is no member for orientation in sch_sheet, to preserve file
      * format, we detect orientation based on pin edges

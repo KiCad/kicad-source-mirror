@@ -140,7 +140,7 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aE
         s_TextCopy.Copy( aTextePcb );
 
     aTextePcb->SetFlags( IS_MOVED );
-    aTextePcb->DisplayInfo( this );
+    SetMsgPanel( aTextePcb );
 
 #ifdef USE_WX_OVERLAY
     m_canvas->Refresh();
@@ -248,7 +248,7 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
     /* Redraw text in new position. */
     TextePcb->Draw( m_canvas, DC, GR_XOR );
-    TextePcb->DisplayInfo( this );
+    SetMsgPanel( TextePcb );
 
     if( TextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( TextePcb, UR_ROTATED, TextePcb->GetPosition() );
@@ -272,7 +272,7 @@ void PCB_EDIT_FRAME::FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC )
     aTextePcb->Flip( aTextePcb->GetPosition() );
 
     aTextePcb->Draw( m_canvas, aDC, GR_XOR );
-    aTextePcb->DisplayInfo( this );
+    SetMsgPanel( aTextePcb );
 
     if( aTextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( aTextePcb, UR_FLIPPED, aTextePcb->GetPosition() );

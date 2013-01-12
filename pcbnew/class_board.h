@@ -29,6 +29,7 @@ class SEGZONE;
 class TRACK;
 class D_PAD;
 class MARKER_PCB;
+class MSG_PANEL_ITEM;
 
 
 // non-owning container of item candidates when searching for items on the same track.
@@ -807,14 +808,7 @@ public:
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     /**
      * Function Draw.

@@ -32,6 +32,7 @@
 #include <eda_text.h>
 #include <lib_draw_item.h>
 
+
 /**
  * Class LIB_TEXT
  * defines a component library graphical text item.
@@ -93,7 +94,7 @@ public:
 
     int GetPenSize( ) const;
 
-    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     EDA_RECT GetBoundingBox() const;
 

@@ -37,6 +37,7 @@
 #include <plot_common.h>
 #include <trigo.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <protos.h>
@@ -723,26 +724,26 @@ void LIB_FIELD::calcEdit( const wxPoint& aPosition )
     }
 }
 
-void LIB_FIELD::DisplayInfo( EDA_DRAW_FRAME* aFrame )
+void LIB_FIELD::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    LIB_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::GetMsgPanelInfo( aList );
 
     // Display style:
     msg = GetTextStyleName();
-    aFrame->AppendMsgPanel( _( "Style" ), msg, MAGENTA );
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, MAGENTA ) );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Size.x, true );
-    aFrame->AppendMsgPanel( _( "Size X" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Size X" ), msg, BLUE ) );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Size.y, true );
-    aFrame->AppendMsgPanel( _( "Size Y" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Size Y" ), msg, BLUE ) );
 
     // Display field name (ref, value ...)
     msg = GetName();
-    aFrame->AppendMsgPanel( _( "Field" ), msg, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), msg, BROWN ) );
 
     // Display field text:
-    aFrame->AppendMsgPanel( _( "Value" ), m_Text, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), m_Text, BROWN ) );
 }

@@ -99,7 +99,7 @@ public:
 
     int GetPenSize( ) const;
 
-    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     EDA_ITEM* Clone() const;
 

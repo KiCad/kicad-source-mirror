@@ -42,6 +42,7 @@ class LIB_COMPONENT;
 class PLOTTER;
 class LIB_ITEM;
 class LIB_PIN;
+class MSG_PANEL_ITEM;
 
 
 extern const int fill_tab[];
@@ -261,7 +262,7 @@ public:
     virtual EDA_RECT GetBoundingBox() const { return EDA_ITEM::GetBoundingBox(); }
 
     /**
-     * Function DisplayInfo
+     * Function GetMsgPanelInfo
      * displays basic info (type, part and convert) about the current item
      * in message panel.
      * <p>
@@ -269,9 +270,9 @@ public:
      * all library items.  Call the base class from the derived class or the
      * common information will not be updated in the message panel.
      * </p>
-     * @param aFrame A pointer to EDA_DRAW_FRAME window where the message panel resides.
+     * @param aList is the list to populate.
      */
-    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     /**
      * Test LIB_ITEM objects for equivalence.

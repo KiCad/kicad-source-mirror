@@ -37,6 +37,7 @@
 #include <kicad_device_context.h>
 #include <wxBasePcbFrame.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -460,7 +461,11 @@ void PCB_BASE_FRAME::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
     if( aItem )
     {
         if( aDisplayInfo )
-            aItem->DisplayInfo( this );
+        {
+            MSG_PANEL_ITEMS items;
+            aItem->GetMsgPanelInfo( items );
+            SetMsgPanel( items );
+        }
 
 #if 0 && defined(DEBUG)
     aItem->Show( 0, std::cout );
@@ -471,8 +476,9 @@ void PCB_BASE_FRAME::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
     {
         // we can use either of these two:
 
-        //MsgPanel->EraseMsgBox();
-        m_Pcb->DisplayInfo( this );       // show the BOARD stuff
+        MSG_PANEL_ITEMS items;
+        m_Pcb->GetMsgPanelInfo( items );       // show the BOARD stuff
+        SetMsgPanel( items );
 
 #if 0 && defined(DEBUG)
         std::cout << "SetCurItem(NULL)\n";

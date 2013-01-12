@@ -35,6 +35,7 @@
 #include <bezier_curves.h>
 #include <richio.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <protos.h>
@@ -404,19 +405,19 @@ EDA_RECT LIB_BEZIER::GetBoundingBox() const
 }
 
 
-void LIB_BEZIER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
+void LIB_BEZIER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::GetMsgPanelInfo( aList );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
-    aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    aFrame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Bounding box" ), msg, BROWN ) );
 }

@@ -30,6 +30,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <wxstruct.h>
+#include <msgpanel.h>
 
 #include <protos.h>
 #include <general.h>
@@ -57,19 +58,18 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
 }
 
 
-void LIB_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
+void LIB_ITEM::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    aFrame->ClearMsgPanel();
-    aFrame->AppendMsgPanel( _( "Type" ), m_typeName, CYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), m_typeName, CYAN ) );
 
     if( m_Unit == 0 )
         msg = _( "All" );
     else
         msg.Printf( wxT( "%d" ), m_Unit );
 
-    aFrame->AppendMsgPanel( _( "Unit" ), msg, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Unit" ), msg, BROWN ) );
 
     if( m_Convert == 0 )
         msg = _( "All" );
@@ -80,7 +80,7 @@ void LIB_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     else
         msg = wxT( "?" );
 
-    aFrame->AppendMsgPanel( _( "Convert" ), msg, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Convert" ), msg, BROWN ) );
 }
 
 

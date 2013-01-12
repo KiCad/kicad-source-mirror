@@ -44,6 +44,8 @@
 #include <class_track.h>
 #include <pcbnew.h>
 #include <base_units.h>
+#include <msgpanel.h>
+
 
 /**
  * Function ShowClearance
@@ -957,30 +959,30 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
 
 // see class_track.h
-void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
+void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
-    BOARD*   board = ( (PCB_BASE_FRAME*) frame )->GetBoard();
+    BOARD*   board = GetBoard();
 
     // Display basic infos
-    DisplayInfoBase( frame );
+    GetMsgPanelInfoBase( aList );
 
     // Display full track length (in Pcbnew)
-    if( frame->IsType( PCB_FRAME_TYPE ) )
+    if( board )
     {
         double trackLen = 0;
         double lenPadToDie = 0;
         board->MarkTrace( this, NULL, &trackLen, &lenPadToDie, false );
-        msg = frame->CoordinateToString( trackLen );
-        frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
+        msg = ::CoordinateToString( trackLen );
+        aList.push_back( MSG_PANEL_ITEM( _( "Track Len" ), msg, DARKCYAN ) );
 
         if( lenPadToDie != 0 )
         {
-            msg = frame->LengthDoubleToString( trackLen + lenPadToDie );
-            frame->AppendMsgPanel( _( "Full Len" ), msg, DARKCYAN );
+            msg = ::LengthDoubleToString( trackLen + lenPadToDie );
+            aList.push_back( MSG_PANEL_ITEM( _( "Full Len" ), msg, DARKCYAN ) );
 
-            msg = frame->LengthDoubleToString( lenPadToDie );
-            frame->AppendMsgPanel( _( "In Package" ), msg, DARKCYAN );
+            msg = ::LengthDoubleToString( lenPadToDie );
+            aList.push_back( MSG_PANEL_ITEM( _( "In Package" ), msg, DARKCYAN ) );
         }
     }
 
@@ -988,54 +990,53 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     if( netclass )
     {
-        frame->AppendMsgPanel( _( "NC Name" ), netclass->GetName(), DARKMAGENTA );
-        frame->AppendMsgPanel( _( "NC Clearance" ),
-                               frame->CoordinateToString( netclass->GetClearance(), true ),
-                               DARKMAGENTA );
-        frame->AppendMsgPanel( _( "NC Width" ),
-                               frame->CoordinateToString( netclass->GetTrackWidth(), true ),
-                               DARKMAGENTA );
-        frame->AppendMsgPanel( _( "NC Via Size"),
-                               frame->CoordinateToString( netclass->GetViaDiameter(), true ),
-                               DARKMAGENTA );
-        frame->AppendMsgPanel( _( "NC Via Drill"),
-                               frame->CoordinateToString( netclass->GetViaDrill(), true ),
-                               DARKMAGENTA );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Name" ), netclass->GetName(), DARKMAGENTA ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Clearance" ),
+                                         ::CoordinateToString( netclass->GetClearance(), true ),
+                                         DARKMAGENTA ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Width" ),
+                                         ::CoordinateToString( netclass->GetTrackWidth(), true ),
+                                         DARKMAGENTA ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Via Size" ),
+                                         ::CoordinateToString( netclass->GetViaDiameter(), true ),
+                                         DARKMAGENTA ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "NC Via Drill"),
+                                         ::CoordinateToString( netclass->GetViaDrill(), true ),
+                                         DARKMAGENTA ) );
     }
 }
 
 
-void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
+void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
-    BOARD*   board = ( (PCB_BASE_FRAME*) frame )->GetBoard();
-
-    frame->ClearMsgPanel();
+    BOARD*   board = GetBoard();
 
     switch( Type() )
     {
     case PCB_VIA_T:
         switch( GetShape() )
         {
-            default:
-            case 0:
-                msg =  _( "??? Via" ); // Not used yet, does not exist currently
-                break;
+        default:
+        case 0:
+            msg =  _( "??? Via" ); // Not used yet, does not exist currently
+            break;
 
-            case 1:
-                msg = _( "Micro Via" ); // from external layer (TOP or BOTTOM) from
-                                        // the near neighbor inner layer only
-                break;
+        case 1:
+            msg = _( "Micro Via" ); // from external layer (TOP or BOTTOM) from
+                                    // the near neighbor inner layer only
+            break;
 
-            case 2:
-                msg = _( "Blind/Buried Via" );  // from inner or external to inner
-                                                // or external layer (no restriction)
-                break;
+        case 2:
+            msg = _( "Blind/Buried Via" );  // from inner or external to inner
+                                            // or external layer (no restriction)
+            break;
 
-            case 3:
-                msg =  _( "Through Via" );  // Usual via (from TOP to BOTTOM layer only )
-                break;
+        case 3:
+            msg =  _( "Through Via" );  // Usual via (from TOP to BOTTOM layer only )
+            break;
         }
+
         break;
 
     case PCB_TRACE_T:
@@ -1051,10 +1052,10 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
         break;
     }
 
-    frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
     // Display Net Name (in Pcbnew)
-    if( frame->IsType( PCB_FRAME_TYPE ) )
+    if( board )
     {
         NETINFO_ITEM* net = board->FindNet( GetNet() );
 
@@ -1063,36 +1064,36 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
         else
             msg = wxT( "<noname>" );
 
-        frame->AppendMsgPanel( _( "NetName" ), msg, RED );
+        aList.push_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
 
         /* Display net code : (useful in test or debug) */
         msg.Printf( wxT( "%d .%d" ), GetNet(), GetSubNet() );
-        frame->AppendMsgPanel( _( "NetCode" ), msg, RED );
+        aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
     }
 
 #if defined(DEBUG)
 
     // Display the flags
     msg.Printf( wxT( "0x%08X" ), m_Flags );
-    frame->AppendMsgPanel( wxT( "Flags" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "Flags" ), msg, BLUE ) );
 
 #if 0
     // Display start and end pointers:
     msg.Printf( wxT( "%p" ), start );
-    frame->AppendMsgPanel( wxT( "start ptr" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "start ptr" ), msg, BLUE ) );
     msg.Printf( wxT( "%p" ), end );
-    frame->AppendMsgPanel( wxT( "end ptr" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "end ptr" ), msg, BLUE ) );
     // Display this ptr
     msg.Printf( wxT( "%p" ), this );
-    frame->AppendMsgPanel( wxT( "this" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "this" ), msg, BLUE ) );
 #endif
 
 #if 0
     // Display start and end positions:
     msg.Printf( wxT( "%d %d" ), m_Start.x, m_Start.y );
-    frame->AppendMsgPanel( wxT( "Start pos" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "Start pos" ), msg, BLUE ) );
     msg.Printf( wxT( "%d %d" ), m_End.x, m_End.y );
-    frame->AppendMsgPanel( wxT( "End pos" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "End pos" ), msg, BLUE ) );
 #endif
 
 #endif  // defined(DEBUG)
@@ -1106,7 +1107,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     if( GetState( TRACK_AR ) )
         msg[2] = 'A';
 
-    frame->AppendMsgPanel( _( "Status" ), msg, MAGENTA );
+    aList.push_back( MSG_PANEL_ITEM( _( "Status" ), msg, MAGENTA ) );
 
     /* Display layer or layer pair) */
     if( Type() == PCB_VIA_T )
@@ -1122,20 +1123,20 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
         msg = board->GetLayerName( m_Layer );
     }
 
-    frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
 
     /* Display width */
-    msg = frame->CoordinateToString( (unsigned) m_Width );
+    msg = ::CoordinateToString( (unsigned) m_Width );
 
     if( Type() == PCB_VIA_T )      // Display Diam and Drill values
     {
         // Display diameter value:
-        frame->AppendMsgPanel( _( "Diam" ), msg, DARKCYAN );
+        aList.push_back( MSG_PANEL_ITEM( _( "Diam" ), msg, DARKCYAN ) );
 
         // Display drill value
         int drill_value = GetDrillValue();
 
-        msg = frame->CoordinateToString( (unsigned) drill_value );
+        msg = ::CoordinateToString( (unsigned) drill_value );
 
         wxString title = _( "Drill" );
         title += wxT( " " );
@@ -1145,18 +1146,18 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
         else
             title += _( "(Default)" );
 
-        frame->AppendMsgPanel( title, msg, RED );
+        aList.push_back( MSG_PANEL_ITEM( title, msg, RED ) );
     }
     else
     {
-        frame->AppendMsgPanel( _( "Width" ), msg, DARKCYAN );
+        aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
     }
 
     // Display segment length
     if( Type() != PCB_VIA_T )      // Display Diam and Drill values
     {
-        msg = frame->LengthDoubleToString( GetLength() );
-        frame->AppendMsgPanel( _( "Segment Length" ), msg, DARKCYAN );
+        msg = ::LengthDoubleToString( GetLength() );
+        aList.push_back( MSG_PANEL_ITEM( _( "Segment Length" ), msg, DARKCYAN ) );
     }
 }
 

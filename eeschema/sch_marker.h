@@ -33,6 +33,7 @@
 #include <sch_item_struct.h>
 #include <class_marker_base.h>
 
+
 /* Marker are mainly used to show an ERC error
  */
 
@@ -96,7 +97,7 @@ public:
      */
     bool Matches( wxFindReplaceData& aSearchData, wxPoint* aFindLocation );
 
-    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool IsSelectStateChanged( const wxRect& aRect );
 

@@ -280,7 +280,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     pad->SetPos0( pad->GetPosition() - module->GetPosition() );
 
     // Modify text positions.
-    module->DisplayInfo( this );
+    SetMsgPanel( module );
     module->m_Value->m_Pos.x = module->m_Reference->m_Pos.x =
                                ( Mself.m_Start.x + Mself.m_End.x ) / 2;
     module->m_Value->m_Pos.y = module->m_Reference->m_Pos.y =

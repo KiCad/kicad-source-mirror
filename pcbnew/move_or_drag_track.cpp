@@ -151,7 +151,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     if( track )
     {
         PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
-        track->DisplayInfo( frame );
+        frame->SetMsgPanel( track );
     }
 }
 
@@ -425,7 +425,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
 
     // Display track length
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
-    Track->DisplayInfo( frame );
+    frame->SetMsgPanel( Track );
 }
 
 

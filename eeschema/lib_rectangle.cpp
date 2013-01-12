@@ -35,6 +35,7 @@
 #include <wxstruct.h>
 #include <richio.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <protos.h>
@@ -243,15 +244,15 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 }
 
 
-void LIB_RECTANGLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
+void LIB_RECTANGLE::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    LIB_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::GetMsgPanelInfo( aList );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Width, true );
 
-    aFrame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
 }
 
 

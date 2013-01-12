@@ -45,6 +45,7 @@ class S3D_MASTER;
 class EDA_DRAW_PANEL;
 class D_PAD;
 class BOARD;
+class MSG_PANEL_ITEM;
 
 
 /**
@@ -248,7 +249,7 @@ public:
     void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
                     const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool HitTest( const wxPoint& aPosition );
 

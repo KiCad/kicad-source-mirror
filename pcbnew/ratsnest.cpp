@@ -169,7 +169,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
         DrawGeneralRatsnest( aDC, 0 );
 
     if( aDisplayStatus )
-        m_Pcb->DisplayInfo( this );
+        SetMsgPanel( m_Pcb );
 }
 
 

@@ -35,6 +35,7 @@
 #include <wxstruct.h>
 #include <richio.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <lib_draw_item.h>
 #include <general.h>
@@ -408,15 +409,15 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
 }
 
 
-void LIB_TEXT::DisplayInfo( EDA_DRAW_FRAME* frame )
+void LIB_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    LIB_ITEM::DisplayInfo( frame );
+    LIB_ITEM::GetMsgPanelInfo( aList );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Thickness, true );
 
-    frame->AppendMsgPanel( _( "Line width" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line width" ), msg, BLUE ) );
 }
 
 

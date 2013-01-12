@@ -23,14 +23,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file msgpanel.cpp
+ * @brief Message panel implementation file.
+ */
+
 #ifdef __GNUG__
 #pragma implementation
 #endif
 
-#include <fctsys.h>
-#include <wxstruct.h>
-#include <common.h>
-#include <colors.h>
+
+#include <msgpanel.h>
 
 
 BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
@@ -38,9 +41,9 @@ BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
 END_EVENT_TABLE()
 
 
-EDA_MSG_PANEL::EDA_MSG_PANEL( EDA_DRAW_FRAME* parent, int id,
-                              const wxPoint& pos, const wxSize& size ) :
-    wxPanel( parent, id, pos, size )
+EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
+                              const wxPoint& aPosition, const wxSize& aSize ) :
+    wxPanel( aParent, aId, aPosition, aSize )
 {
     SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
@@ -58,7 +61,7 @@ EDA_MSG_PANEL::~EDA_MSG_PANEL()
 wxSize EDA_MSG_PANEL::computeFontSize()
 {
     // Get size of the wxSYS_DEFAULT_GUI_FONT
-    wxSize      fontSizeInPixels;
+    wxSize     fontSizeInPixels;
 
     wxScreenDC dc;
 
@@ -76,21 +79,21 @@ int EDA_MSG_PANEL::GetRequiredHeight()
 }
 
 
-wxSize EDA_MSG_PANEL::computeTextSize( const wxString& text ) const
+wxSize EDA_MSG_PANEL::computeTextSize( const wxString& aText ) const
 {
     // Get size of the wxSYS_DEFAULT_GUI_FONT
-    wxSize      textSizeInPixels;
+    wxSize     textSizeInPixels;
 
     wxScreenDC dc;
 
     dc.SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
-    dc.GetTextExtent( text, &textSizeInPixels.x, &textSizeInPixels.y );
+    dc.GetTextExtent( aText, &textSizeInPixels.x, &textSizeInPixels.y );
 
     return textSizeInPixels;
 }
 
 
-void EDA_MSG_PANEL::OnPaint( wxPaintEvent& event )
+void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
 {
     wxPaintDC dc( this );
 
@@ -104,20 +107,21 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& event )
     for( unsigned i=0;  i<m_Items.size();  ++i )
         showItem( dc, m_Items[i] );
 
-    event.Skip();
+    aEvent.Skip();
 }
 
-void EDA_MSG_PANEL::AppendMessage( const wxString& textUpper,
-                                   const wxString& textLower,
-                                   EDA_COLOR_T color, int pad )
+
+void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText,
+                                   const wxString& aLowerText,
+                                   EDA_COLOR_T aColor, int aPad )
 {
     wxString    text;
     wxSize      drawSize = GetClientSize();
 
-    text = ( textUpper.Len() > textLower.Len() ) ? textUpper : textLower;
-    text.Append( ' ', pad );
+    text = ( aUpperText.Len() > aLowerText.Len() ) ? aUpperText : aLowerText;
+    text.Append( ' ', aPad );
 
-    EDA_MSG_ITEM item;
+    MSG_PANEL_ITEM item;
 
     /* Don't put the first message a window client position 0.  Offset by
      * one 'W' character width. */
@@ -129,9 +133,9 @@ void EDA_MSG_PANEL::AppendMessage( const wxString& textUpper,
     item.m_UpperY = ( drawSize.y / 2 ) - m_fontSize.y;
     item.m_LowerY = drawSize.y - m_fontSize.y;
 
-    item.m_UpperText = textUpper;
-    item.m_LowerText = textLower;
-    item.m_Color = color;
+    item.m_UpperText = aUpperText;
+    item.m_LowerText = aLowerText;
+    item.m_Color = aColor;
     m_Items.push_back( item );
     m_last_x += computeTextSize( text ).x;
 
@@ -153,7 +157,7 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
     else
         pos.x = m_last_x;
 
-    EDA_MSG_ITEM item;
+    MSG_PANEL_ITEM item;
 
     item.m_X = pos.x;
 
@@ -194,26 +198,26 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
 }
 
 
-void EDA_MSG_PANEL::showItem( wxDC& dc, const EDA_MSG_ITEM& aItem )
+void EDA_MSG_PANEL::showItem( wxDC& aDC, const MSG_PANEL_ITEM& aItem )
 {
     EDA_COLOR_T color = aItem.m_Color;
 
     if( color >= 0 )
     {
         color = ColorGetBase( color );
-        dc.SetTextForeground( wxColour( ColorRefs[color].m_Red,
-                                        ColorRefs[color].m_Green,
-                                        ColorRefs[color].m_Blue ) );
+        aDC.SetTextForeground( wxColour( ColorRefs[color].m_Red,
+                                         ColorRefs[color].m_Green,
+                                         ColorRefs[color].m_Blue ) );
     }
 
     if( !aItem.m_UpperText.IsEmpty() )
     {
-        dc.DrawText( aItem.m_UpperText, aItem.m_X, aItem.m_UpperY );
+        aDC.DrawText( aItem.m_UpperText, aItem.m_X, aItem.m_UpperY );
     }
 
     if( !aItem.m_LowerText.IsEmpty() )
     {
-        dc.DrawText( aItem.m_LowerText, aItem.m_X, aItem.m_LowerY );
+        aDC.DrawText( aItem.m_LowerText, aItem.m_X, aItem.m_LowerY );
     }
 }
 
@@ -226,7 +230,7 @@ void EDA_MSG_PANEL::EraseMsgBox()
 }
 
 
-void EDA_MSG_PANEL::erase( wxDC* DC )
+void EDA_MSG_PANEL::erase( wxDC* aDC )
 {
     wxPen   pen;
     wxBrush brush;
@@ -239,8 +243,7 @@ void EDA_MSG_PANEL::erase( wxDC* DC )
     brush.SetColour( color );
     brush.SetStyle( wxSOLID );
 
-    DC->SetPen( pen );
-    DC->SetBrush( brush );
-
-    DC->DrawRectangle( 0, 0, size.x, size.y );
+    aDC->SetPen( pen );
+    aDC->SetBrush( brush );
+    aDC->DrawRectangle( 0, 0, size.x, size.y );
 }

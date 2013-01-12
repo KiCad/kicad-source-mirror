@@ -35,6 +35,7 @@
 #include <base_units.h>
 #include <colors_selection.h>
 #include <class_gbr_layer_box_selector.h>
+#include <msgpanel.h>
 
 #include <gerbview.h>
 #include <class_gerber_draw_item.h>
@@ -744,6 +745,7 @@ void GERBVIEW_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
     m_Layout->SetOriginAxisPosition( aPosition );
 }
 
+
 void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
 {
     GetScreen()->SetCurItem( aItem );
@@ -751,11 +753,18 @@ void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
     if( aItem )
     {
         if( aDisplayInfo )
-            aItem->DisplayInfo( this );
+        {
+            MSG_PANEL_ITEMS items;
+            aItem->GetMsgPanelInfo( items );
+            SetMsgPanel( items );
+        }
     }
     else
+    {
         EraseMsgBox();
+    }
 }
+
 
 /*
  * Function GetLayoutBoundingBox

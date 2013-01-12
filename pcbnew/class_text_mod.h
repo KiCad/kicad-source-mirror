@@ -39,8 +39,8 @@
 class LINE_READER;
 class EDA_RECT;
 class EDA_DRAW_PANEL;
-class EDA_DRAW_FRAME;
 class MODULE;
+class MSG_PANEL_ITEM;
 
 
 #define TEXT_is_REFERENCE 0
@@ -136,7 +136,7 @@ public:
                         GR_DRAWMODE     aDrawMode,
                         const wxPoint&  aOffset = ZeroOffset );
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool HitTest( const wxPoint& aPosition );
 

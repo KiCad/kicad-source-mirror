@@ -190,7 +190,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
             Compile_Ratsnest( NULL, true );
     }
 
-    GetBoard()->DisplayInfo( this );
+    SetMsgPanel( GetBoard() );
     m_canvas->Refresh();
 
     return true;

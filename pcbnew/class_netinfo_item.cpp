@@ -37,6 +37,8 @@
 #include <colors_selection.h>
 #include <richio.h>
 #include <macros.h>
+#include <msgpanel.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -54,6 +56,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD_ITEM* aParent, const wxString& aNetName, int a
     if( aNetName.size() )
         SetNetname( aNetName );
 
+    m_parent   = aParent;
     m_NbNodes  = 0;
     m_NbLink   = 0;
     m_NbNoconn = 0;
@@ -103,7 +106,7 @@ void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
  * Is virtual from EDA_ITEM.
  * @param frame A EDA_DRAW_FRAME in which to print status information.
  */
-void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
+void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     int       count;
     EDA_ITEM* Struct;
@@ -111,17 +114,16 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     MODULE*   module;
     D_PAD*    pad;
     double    lengthnet = 0;        // This  is the lenght of tracks on pcb
-    double    lengthPadToDie = 0;  // this is the lenght of internal ICs connections
+    double    lengthPadToDie = 0;   // this is the lenght of internal ICs connections
 
-    frame->ClearMsgPanel();
-
-    frame->AppendMsgPanel( _( "Net Name" ), GetNetname(), RED );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net Name" ), GetNetname(), RED ) );
 
     txt.Printf( wxT( "%d" ), GetNet() );
-    frame->AppendMsgPanel( _( "Net Code" ), txt, RED );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), txt, RED ) );
 
     count  = 0;
-    module = ( (PCB_BASE_FRAME*) frame )->GetBoard()->m_Modules;
+    module = m_parent->GetBoard()->m_Modules;
+
     for( ; module != 0; module = module->Next() )
     {
         for( pad = module->m_Pads; pad != 0; pad = pad->Next() )
@@ -135,10 +137,10 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     }
 
     txt.Printf( wxT( "%d" ), count );
-    frame->AppendMsgPanel( _( "Pads" ), txt, DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), txt, DARKGREEN ) );
 
     count  = 0;
-    Struct = ( (PCB_BASE_FRAME*) frame )->GetBoard()->m_Track;
+    Struct = m_parent->GetBoard()->m_Track;
 
     for( ; Struct != NULL; Struct = Struct->Next() )
     {
@@ -156,19 +158,19 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     }
 
     txt.Printf( wxT( "%d" ), count );
-    frame->AppendMsgPanel( _( "Vias" ), txt, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Vias" ), txt, BLUE ) );
 
-    // Displays the full net lenght (tracks on pcb + internal ICs connections ):
-    txt = frame->CoordinateToString( lengthnet + lengthPadToDie );
-    frame->AppendMsgPanel( _( "Net Length:" ), txt, RED );
+    // Displays the full net length (tracks on pcb + internal ICs connections ):
+    txt = ::CoordinateToString( lengthnet + lengthPadToDie );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net Length:" ), txt, RED ) );
 
-    // Displays the net lenght of tracks only:
-    txt = frame->CoordinateToString( lengthnet );
-    frame->AppendMsgPanel( _( "On Board" ), txt, RED );
+    // Displays the net length of tracks only:
+    txt = ::CoordinateToString( lengthnet );
+    aList.push_back( MSG_PANEL_ITEM( _( "On Board" ), txt, RED ) );
 
-    // Displays the net lenght of internal ICs connections (wires inside ICs):
-    txt = frame->CoordinateToString( lengthPadToDie );
-    frame->AppendMsgPanel( _( "In Package" ), txt, RED );
+    // Displays the net length of internal ICs connections (wires inside ICs):
+    txt = ::CoordinateToString( lengthPadToDie );
+    aList.push_back( MSG_PANEL_ITEM( _( "In Package" ), txt, RED ) );
 }
 
 

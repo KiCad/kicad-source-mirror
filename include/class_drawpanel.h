@@ -35,7 +35,7 @@
 #include <base_struct.h>
 #include <gr_basic.h>
 
-class EDA_DRAW_FRAME;
+
 class BASE_SCREEN;
 class PCB_SCREEN;
 

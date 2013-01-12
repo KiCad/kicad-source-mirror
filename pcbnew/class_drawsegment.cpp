@@ -41,6 +41,7 @@
 #include <trigo.h>
 #include <richio.h>
 #include <pcbcommon.h>
+#include <msgpanel.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -313,7 +314,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
 
 // see pcbstruct.h
-void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
+void DRAWSEGMENT::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
     wxString coords;
@@ -321,31 +322,30 @@ void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
     BOARD*   board = (BOARD*) m_Parent;
     wxASSERT( board );
 
-    frame->ClearMsgPanel();
-
     msg = wxT( "DRAWING" );
 
-    frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
     wxString    shape = _( "Shape" );
 
-    switch( m_Shape ) {
-        case S_CIRCLE:
-            frame->AppendMsgPanel( shape, _( "Circle" ), RED );
-            break;
+    switch( m_Shape )
+    {
+    case S_CIRCLE:
+        aList.push_back( MSG_PANEL_ITEM( shape, _( "Circle" ), RED ) );
+        break;
 
-        case S_ARC:
-            frame->AppendMsgPanel( shape, _( "Arc" ), RED );
+    case S_ARC:
+        aList.push_back( MSG_PANEL_ITEM( shape, _( "Arc" ), RED ) );
+        msg.Printf( wxT( "%.1f" ), (double)m_Angle/10 );
+        aList.push_back( MSG_PANEL_ITEM( _("Angle"), msg, RED ) );
+        break;
 
-            msg.Printf( wxT( "%.1f" ), (double)m_Angle/10 );
-            frame->AppendMsgPanel( _("Angle"), msg, RED );
-            break;
-        case S_CURVE:
-            frame->AppendMsgPanel( shape, _( "Curve" ), RED );
-            break;
+    case S_CURVE:
+        aList.push_back( MSG_PANEL_ITEM( shape, _( "Curve" ), RED ) );
+        break;
 
-        default:
-            frame->AppendMsgPanel( shape, _( "Segment" ), RED );
+    default:
+        aList.push_back( MSG_PANEL_ITEM( shape, _( "Segment" ), RED ) );
     }
 
     wxString start;
@@ -354,12 +354,10 @@ void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
     wxString end;
     end << GetEnd();
 
-    frame->AppendMsgPanel( start, end, DARKGREEN );
-
-    frame->AppendMsgPanel( _( "Layer" ), board->GetLayerName( m_Layer ), DARKBROWN );
-
-    msg = frame->CoordinateToString( m_Width );
-    frame->AppendMsgPanel( _( "Width" ), msg, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( start, end, DARKGREEN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), board->GetLayerName( m_Layer ), DARKBROWN ) );
+    msg = ::CoordinateToString( m_Width );
+    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
 }
 
 

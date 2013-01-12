@@ -40,6 +40,7 @@
 #include <richio.h>
 #include <filter_reader.h>
 #include <appl_wxstruct.h>
+#include <msgpanel.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -403,7 +404,7 @@ the changes?" ) ) )
     // Compile ratsnest and displays net info
     wxBusyCursor dummy;    // Displays an Hourglass while building connectivity
     Compile_Ratsnest( NULL, true );
-    GetBoard()->DisplayInfo( this );
+    SetMsgPanel( GetBoard() );
 
     // Refresh the 3D view, if any
     if( m_Draw3DFrame )

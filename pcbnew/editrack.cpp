@@ -201,7 +201,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-        g_CurrentTrackSegment->DisplayInfoBase( this );
+        SetMsgPanel( g_CurrentTrackSegment );
         SetCurItem( g_CurrentTrackSegment, false );
         m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
 
@@ -510,7 +510,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
         // compute the new ratsnest
         TestNetConnection( aDC, netcode );
         OnModify();
-        GetBoard()->DisplayInfo( this );
+        SetMsgPanel( GetBoard() );
 
         // Redraw the entire new track.
         DrawTraces( m_canvas, aDC, firstTrack, newCount, GR_OR );
@@ -785,7 +785,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         isegm = g_CurrentTrackSegment->Back();
 
     // display interesting segment info only:
-    isegm->DisplayInfoBase( frame );
+    frame->SetMsgPanel( isegm );
 
     // Display current track length (on board) and the the actual track len
     // if there is an extra len due to the len die on the starting pad (if any)

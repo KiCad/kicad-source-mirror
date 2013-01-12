@@ -34,6 +34,7 @@
 #include <confirm.h>
 #include <class_sch_screen.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <libeditframe.h>
 #include <eeschema_id.h>
@@ -148,7 +149,10 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
             SaveCopyInUndoList( pin->GetParent() );
 
         OnModify( );
-        pin->DisplayInfo( this );
+
+        MSG_PANEL_ITEMS items;
+        pin->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
         m_canvas->Refresh();
     }
 
@@ -313,7 +317,9 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
     GetScreen()->SetCrossHairPosition( startPos );
     m_canvas->MoveCursorToCrossHair();
 
-    CurrentPin->DisplayInfo( this );
+    MSG_PANEL_ITEMS items;
+    CurrentPin->GetMsgPanelInfo( items );
+    SetMsgPanel( items );
     m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
     m_canvas->CrossHairOn( DC );
 }
@@ -563,7 +569,9 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     GetScreen()->SetCrossHairPosition( savepos );
     m_canvas->CrossHairOn( DC );
 
-    Pin->DisplayInfo( this );
+    MSG_PANEL_ITEMS items;
+    Pin->GetMsgPanelInfo( items );
+    SetMsgPanel( items );
     OnModify( );
 }
 

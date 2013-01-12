@@ -82,7 +82,7 @@ public:
 
     int GetPenSize( ) const;
 
-    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 

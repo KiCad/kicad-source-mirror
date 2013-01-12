@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
+#include <msgpanel.h>
 
 #include <class_board.h>
 #include <class_zone.h>
@@ -189,13 +190,17 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         int netcode = SelectHighLight( aDC );
 
         if( netcode < 0 )
-            GetBoard()->DisplayInfo( this );
+            SetMsgPanel( GetBoard() );
         else
         {
             NETINFO_ITEM* net = GetBoard()->FindNet( netcode );
 
             if( net )
-                net->DisplayInfo( this );
+            {
+                MSG_PANEL_ITEMS items;
+                net->GetMsgPanelInfo( items );
+                SetMsgPanel( items );
+            }
         }
     }
     break;
