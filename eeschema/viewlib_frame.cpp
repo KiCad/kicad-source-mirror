@@ -32,6 +32,7 @@
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
 #include <wxEeschemaStruct.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <viewlib_frame.h>

@@ -167,7 +167,7 @@ public:
 
     EDA_RECT GetBoundingBox() const;
 
-    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool HitTest( const wxPoint& aPosition );
 

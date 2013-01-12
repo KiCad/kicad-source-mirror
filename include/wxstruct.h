@@ -74,6 +74,8 @@ class PARAM_CFG_BASE;
 class PAGE_INFO;
 class PLOTTER;
 class TITLE_BLOCK;
+class MSG_PANEL_ITEM;
+
 
 enum id_librarytype {
     LIBRARY_TYPE_EESCHEMA,
@@ -116,7 +118,6 @@ protected:
     ID_DRAWFRAME_TYPE m_Ident;  // Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
-    int          m_MsgFrameHeight;
 
     wxAuiToolBar* m_mainToolBar; // Standard horizontal Toolbar
     bool         m_FrameIsActive;
@@ -431,6 +432,8 @@ protected:
 
     /// Panel used to display information at the bottom of the main window.
     EDA_MSG_PANEL* m_messagePanel;
+
+    int            m_MsgFrameHeight;
 
 #ifdef USE_WX_OVERLAY
     // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
@@ -852,6 +855,16 @@ public:
     void ClearMsgPanel( void );
 
     /**
+     * Function SetMsgPanel
+     * clears the message panel and populates it with the contents of \a aList.
+     *
+     * @param aList is the list of #MSG_PANEL_ITEM objects to fill the message panel.
+     */
+    void SetMsgPanel( const std::vector< MSG_PANEL_ITEM >& aList );
+
+    void SetMsgPanel( EDA_ITEM* aItem );
+
+    /**
      * Function PrintPage
      * used to print a page
      * Print the page pointed by current screen, set by the calling print function
@@ -886,95 +899,6 @@ public:
 
     DECLARE_EVENT_TABLE()
 };
-
-
-/**
- * Struct EDA_MSG_ITEM
- * is used privately by EDA_MSG_PANEL as the item type for displaying messages.
- */
-struct EDA_MSG_ITEM
-{
-    int      m_X;
-    int      m_UpperY;
-    int      m_LowerY;
-    wxString m_UpperText;
-    wxString m_LowerText;
-    EDA_COLOR_T m_Color;
-};
-
-
-/**
- * class EDA_MSG_PANEL
- * is a panel to display various information messages.
- */
-class EDA_MSG_PANEL : public wxPanel
-{
-protected:
-    std::vector<EDA_MSG_ITEM> m_Items;
-    int                       m_last_x;      ///< the last used x coordinate
-    wxSize                    m_fontSize;
-
-    void showItem( wxDC& dc, const EDA_MSG_ITEM& aItem );
-
-    void erase( wxDC* DC );
-
-    /**
-     * Function getFontSize
-     * computes the height and width of a 'W' in the system font.
-     */
-    static wxSize computeFontSize();
-
-    /**
-     * Calculate the width and height of a text string using the system UI font.
-     */
-    wxSize computeTextSize( const wxString& text ) const;
-
-public:
-    EDA_MSG_PANEL( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
-    ~EDA_MSG_PANEL();
-
-    /**
-     * Function GetRequiredHeight
-     * returns the required height (in pixels) of a EDA_MSG_PANEL.  This takes
-     * into consideration the system gui font, wxSYS_DEFAULT_GUI_FONT.
-     */
-    static int GetRequiredHeight();
-
-    void OnPaint( wxPaintEvent& event );
-    void EraseMsgBox();
-
-    /**
-     * Function SetMessage
-     * sets a message at \a aXPosition to \a aUpperText and \a aLowerText in the message panel.
-     *
-     * @param aXPosition The horizontal position to display the message or less than zero
-     *                   to set the message using the last message position.
-     * @param aUpperText The text to be displayed in top line.
-     * @param aLowerText The text to be displayed in bottom line.
-     * @param aColor Color of the text to display.
-     */
-    void SetMessage( int aXPosition, const wxString& aUpperText,
-                     const wxString& aLowerText, EDA_COLOR_T aColor );
-
-    /**
-     * Append a message to the message panel.
-     *
-     * This method automatically adjusts for the width of the text string.
-     * Making consecutive calls to AppendMessage will append each message
-     * to the right of the last message.  This message is not compatible
-     * with Affiche_1_Parametre.
-     *
-     * @param textUpper - The message upper text.
-     * @param textLower - The message lower text.
-     * @param color - A color ID from the KiCad color list (see colors.h).
-     * @param pad - Number of spaces to pad between messages (default = 4).
-     */
-    void AppendMessage( const wxString& textUpper, const wxString& textLower,
-                        EDA_COLOR_T color, int pad = 6 );
-
-    DECLARE_EVENT_TABLE()
-};
-
 
 
 /**

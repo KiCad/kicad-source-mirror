@@ -39,6 +39,7 @@
 #include <richio.h>
 #include <macros.h>
 #include <wxBasePcbFrame.h>
+#include <msgpanel.h>
 
 #include <protos.h>
 #include <class_board.h>
@@ -629,15 +630,13 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos ) const
 }
 
 
-void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
+void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
     BOARD*   board = (BOARD*) m_Parent;
 
     wxASSERT( board );
-
-    frame->ClearMsgPanel();
 
     msg = _( "Zone Outline" );
 
@@ -648,33 +647,38 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
     if( ncont )
         msg << wxT( " " ) << _( "(Cutout)" );
 
-    frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
     if( GetIsKeepout() )
     {
         msg.Empty();
+
         if( GetDoNotAllowVias() )
             msg = _("No via");
+
         if( GetDoNotAllowTracks() )
         {
             if( !msg.IsEmpty() )
                 msg += wxT(", ");
+
             msg += _("No track");
         }
+
         if( GetDoNotAllowCopperPour() )
         {
             if( !msg.IsEmpty() )
                 msg += wxT(", ");
+
             msg += _("No copper pour");
         }
 
-        frame->AppendMsgPanel( _( "Keepout" ), msg, RED );
+        aList.push_back( MSG_PANEL_ITEM( _( "Keepout" ), msg, RED ) );
     }
     else if( IsOnCopperLayer() )
     {
         if( GetNet() >= 0 )
         {
-            NETINFO_ITEM* equipot = ( (PCB_BASE_FRAME*) frame )->GetBoard()->FindNet( GetNet() );
+            NETINFO_ITEM* equipot = board->FindNet( GetNet() );
 
             if( equipot )
                 msg = equipot->GetNetname();
@@ -688,43 +692,44 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
             msg << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
 
-        frame->AppendMsgPanel( _( "NetName" ), msg, RED );
+        aList.push_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
+
 #if 1
         // Display net code : (useful in test or debug)
         msg.Printf( wxT( "%d" ), GetNet() );
-        frame->AppendMsgPanel( _( "NetCode" ), msg, RED );
+        aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
 #endif
 
         // Display priority level
         msg.Printf( wxT( "%d" ), GetPriority() );
-        frame->AppendMsgPanel( _( "Priority" ), msg, BLUE );
+        aList.push_back( MSG_PANEL_ITEM( _( "Priority" ), msg, BLUE ) );
     }
     else
     {
-        frame->AppendMsgPanel( _( "Non Copper Zone" ), wxEmptyString, RED );
+        aList.push_back( MSG_PANEL_ITEM( _( "Non Copper Zone" ), wxEmptyString, RED ) );
     }
 
     msg = board->GetLayerName( m_Layer );
-    frame->AppendMsgPanel( _( "Layer" ), msg, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
 
     msg.Printf( wxT( "%d" ), (int) m_Poly->m_CornersList.size() );
-    frame->AppendMsgPanel( _( "Corners" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Corners" ), msg, BLUE ) );
 
     if( m_FillMode )
         msg = _( "Segments" );
     else
         msg = _( "Polygons" );
 
-    frame->AppendMsgPanel( _( "Fill mode" ), msg, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Fill mode" ), msg, BROWN ) );
 
     // Useful for statistics :
     msg.Printf( wxT( "%d" ), (int) m_Poly->m_HatchLines.size() );
-    frame->AppendMsgPanel( _( "Hatch lines" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Hatch lines" ), msg, BLUE ) );
 
     if( m_FilledPolysList.size() )
     {
         msg.Printf( wxT( "%d" ), (int) m_FilledPolysList.size() );
-        frame->AppendMsgPanel( _( "Corners in DrawList" ), msg, BLUE );
+        aList.push_back( MSG_PANEL_ITEM( _( "Corners in DrawList" ), msg, BLUE ) );
     }
 }
 

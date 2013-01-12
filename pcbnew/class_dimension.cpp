@@ -389,10 +389,10 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 
 
 // see class_cotation.h
-void DIMENSION::DisplayInfo( EDA_DRAW_FRAME* frame )
+void DIMENSION::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
-    m_Text.DisplayInfo( frame );
+    m_Text.GetMsgPanelInfo( aList );
 }
 
 

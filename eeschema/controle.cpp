@@ -33,6 +33,7 @@
 #include <eda_dde.h>
 #include <wxEeschemaStruct.h>
 #include <menus_helpers.h>
+#include <msgpanel.h>
 
 #include <eeschema_id.h>
 #include <general.h>
@@ -104,11 +105,14 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
     if( Pin )
     {
         // Force display pin information (the previous display could be a component info)
-        Pin->DisplayInfo( this );
+        MSG_PANEL_ITEMS items;
+        Pin->GetMsgPanelInfo( items );
 
         if( LibItem )
-            AppendMsgPanel( LibItem->GetRef( m_CurrentSheet ),
-                            LibItem->GetField( VALUE )->m_Text, DARKCYAN );
+            items.push_back( MSG_PANEL_ITEM( LibItem->GetRef( m_CurrentSheet ),
+                                             LibItem->GetField( VALUE )->m_Text, DARKCYAN ) );
+
+        SetMsgPanel( items );
 
         // Cross probing:2 - pin found, and send a locate pin command to Pcbnew (highlight net)
         SendMessageToPCBNEW( Pin, LibItem );
@@ -182,9 +186,18 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
     GetScreen()->SetCurItem( item );
 
     if( item )
-        item->DisplayInfo( this );
+    {
+        if( item->Type() == SCH_COMPONENT_T )
+            ( (SCH_COMPONENT*) item )->SetCurrentSheetPath( &GetCurrentSheet() );
+
+        MSG_PANEL_ITEMS items;
+        item->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
+    }
     else
+    {
         ClearMsgPanel();
+    }
 
     return item;
 }

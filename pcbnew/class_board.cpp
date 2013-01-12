@@ -38,6 +38,7 @@
 #include <kicad_string.h>
 #include <pcbcommon.h>
 #include <wxBasePcbFrame.h>
+#include <msgpanel.h>
 
 #include <pcbnew.h>
 #include <colors_selection.h>
@@ -1007,14 +1008,11 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
 
 
 // virtual, see pcbstruct.h
-void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
+void BOARD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString txt;
-
-    frame->ClearMsgPanel();
-
-    int viasCount = 0;
-    int trackSegmentsCount = 0;
+    int      viasCount = 0;
+    int      trackSegmentsCount = 0;
 
     for( BOARD_ITEM* item = m_Track; item; item = item->Next() )
     {
@@ -1025,19 +1023,19 @@ void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
     }
 
     txt.Printf( wxT( "%d" ), GetPadCount() );
-    frame->AppendMsgPanel( _( "Pads" ), txt, DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), txt, DARKGREEN ) );
 
     txt.Printf( wxT( "%d" ), viasCount );
-    frame->AppendMsgPanel( _( "Vias" ), txt, DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Vias" ), txt, DARKGREEN ) );
 
     txt.Printf( wxT( "%d" ), trackSegmentsCount );
-    frame->AppendMsgPanel( _( "trackSegm" ), txt, DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( _( "trackSegm" ), txt, DARKGREEN ) );
 
     txt.Printf( wxT( "%d" ), GetNodesCount() );
-    frame->AppendMsgPanel( _( "Nodes" ), txt, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Nodes" ), txt, DARKCYAN ) );
 
     txt.Printf( wxT( "%d" ), m_NetInfo.GetNetCount() );
-    frame->AppendMsgPanel( _( "Nets" ), txt, RED );
+    aList.push_back( MSG_PANEL_ITEM( _( "Nets" ), txt, RED ) );
 
     /* These parameters are known only if the full ratsnest is available,
      *  so, display them only if this is the case
@@ -1045,13 +1043,13 @@ void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
     if( (m_Status_Pcb & NET_CODES_OK) )
     {
         txt.Printf( wxT( "%d" ), GetRatsnestsCount() );
-        frame->AppendMsgPanel( _( "Links" ), txt, DARKGREEN );
+        aList.push_back( MSG_PANEL_ITEM( _( "Links" ), txt, DARKGREEN ) );
 
         txt.Printf( wxT( "%d" ), GetRatsnestsCount() - GetUnconnectedNetCount() );
-        frame->AppendMsgPanel( _( "Connect" ), txt, DARKGREEN );
+        aList.push_back( MSG_PANEL_ITEM( _( "Connect" ), txt, DARKGREEN ) );
 
         txt.Printf( wxT( "%d" ), GetUnconnectedNetCount() );
-        frame->AppendMsgPanel( _( "Unconnected" ), txt, BLUE );
+        aList.push_back( MSG_PANEL_ITEM( _( "Unconnected" ), txt, BLUE ) );
     }
 }
 

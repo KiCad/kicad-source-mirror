@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxEeschemaStruct.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <class_library.h>
@@ -139,7 +140,10 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
         m_canvas->Refresh();
     }
 
-    component->DisplayInfo( this );
+    MSG_PANEL_ITEMS items;
+    component->SetCurrentSheetPath( &GetCurrentSheet() );
+    component->GetMsgPanelInfo( items );
+    SetMsgPanel( items );
 }
 
 

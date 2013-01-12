@@ -34,6 +34,7 @@
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <gr_basic.h>
+#include <msgpanel.h>
 
 #include <pcbnew.h>
 #include <cell.h>

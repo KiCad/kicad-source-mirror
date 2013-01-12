@@ -832,7 +832,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->SetThermalGap( m_Pad_Master.GetThermalGap() );
 
         module->CalculateBoundingBox();
-        m_CurrentPad->DisplayInfo( m_Parent );
+        m_Parent->SetMsgPanel( m_CurrentPad );
 
         // redraw the area where the pad was
         m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );

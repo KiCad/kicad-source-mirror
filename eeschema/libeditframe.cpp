@@ -35,6 +35,7 @@
 #include <eda_doc.h>
 #include <gr_basic.h>
 #include <wxEeschemaStruct.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <protos.h>
@@ -1185,9 +1186,15 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
     }
 
     if( item )
-        item->DisplayInfo( this );
+    {
+        MSG_PANEL_ITEMS items;
+        item->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
+    }
     else
+    {
         ClearMsgPanel();
+    }
 
     return item;
 }

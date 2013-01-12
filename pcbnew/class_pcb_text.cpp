@@ -40,6 +40,8 @@
 #include <richio.h>
 #include <class_drawpanel.h>
 #include <macros.h>
+#include <msgpanel.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -106,10 +108,9 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
 }
 
 
-void TEXTE_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
+void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString    msg;
-
     BOARD*      board;
     BOARD_ITEM* parent = (BOARD_ITEM*) m_Parent;
 
@@ -119,34 +120,33 @@ void TEXTE_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
         board = (BOARD*) parent->GetParent();
     else
         board = (BOARD*) parent;
+
     wxASSERT( board );
 
-    frame->ClearMsgPanel();
-
     if( m_Parent && m_Parent->Type() == PCB_DIMENSION_T )
-        frame->AppendMsgPanel( _( "DIMENSION" ), m_Text, DARKGREEN );
+        aList.push_back( MSG_PANEL_ITEM( _( "DIMENSION" ), m_Text, DARKGREEN ) );
     else
-        frame->AppendMsgPanel( _( "PCB Text" ), m_Text, DARKGREEN );
+        aList.push_back( MSG_PANEL_ITEM( _( "PCB Text" ), m_Text, DARKGREEN ) );
 
-    frame->AppendMsgPanel( _( "Layer" ),
-                         board->GetLayerName( m_Layer ), BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ),
+                                     board->GetLayerName( m_Layer ), BLUE ) );
 
     if( !m_Mirror )
-        frame->AppendMsgPanel( _( "Mirror" ), _( "No" ), DARKGREEN );
+        aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), _( "No" ), DARKGREEN ) );
     else
-        frame->AppendMsgPanel( _( "Mirror" ), _( "Yes" ), DARKGREEN );
+        aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), _( "Yes" ), DARKGREEN ) );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
-    frame->AppendMsgPanel( _( "Orientation" ), msg, DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, DARKGREEN ) );
 
-    msg = frame->CoordinateToString( m_Thickness );
-    frame->AppendMsgPanel( _( "Thickness" ), msg, MAGENTA );
+    msg = ::CoordinateToString( m_Thickness );
+    aList.push_back( MSG_PANEL_ITEM( _( "Thickness" ), msg, MAGENTA ) );
 
-    msg = frame->CoordinateToString( m_Size.x );
-    frame->AppendMsgPanel( _( "Size X" ), msg, RED );
+    msg = ::CoordinateToString( m_Size.x );
+    aList.push_back( MSG_PANEL_ITEM( _( "Size X" ), msg, RED ) );
 
-    msg = frame->CoordinateToString( m_Size.y );
-    frame->AppendMsgPanel( _( "Size Y" ), msg, RED );
+    msg = ::CoordinateToString( m_Size.y );
+    aList.push_back( MSG_PANEL_ITEM( _( "Size Y" ), msg, RED ) );
 }
 
 

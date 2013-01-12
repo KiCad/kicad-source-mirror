@@ -38,6 +38,7 @@
 class LINE_READER;
 class EDA_DRAW_PANEL;
 class TEXTE_PCB;
+class MSG_PANEL_ITEM;
 
 
 class DIMENSION : public BOARD_ITEM
@@ -116,7 +117,7 @@ public:
      */
     void            Mirror( const wxPoint& axis_pos );
 
-    void            DisplayInfo( EDA_DRAW_FRAME* frame );
+    void            GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool            HitTest( const wxPoint& aPosition );
 

@@ -304,8 +304,7 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
     if( aModule )
     {
         aModule->SetLocked( aLocked );
-
-        aModule->DisplayInfo( this );
+        SetMsgPanel( aModule );
         OnModify();
     }
     else

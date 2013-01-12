@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <gr_basic.h>
 #include <wxPcbStruct.h>
+#include <msgpanel.h>
 
 #include <pcbnew.h>
 #include <protos.h>
@@ -56,7 +57,10 @@ void PCB_EDIT_FRAME::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
     track->SetState( TRACK_LOCKED, Flag_On );
     track->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
     m_canvas->CrossHairOn( DC );    // Display cursor shape
-    track->DisplayInfo( this );
+
+    MSG_PANEL_ITEMS items;
+    track->GetMsgPanelInfo( items );
+    SetMsgPanel( items );
 }
 
 

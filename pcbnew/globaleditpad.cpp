@@ -128,7 +128,7 @@ void PCB_EDIT_FRAME::DlgGlobalChange_PadSettings( D_PAD* aPad, bool aRedraw )
         return;
     }
 
-    module->DisplayInfo( this );
+    SetMsgPanel( module );
 
     {
         DIALOG_GLOBAL_PADS_EDITION dlg( this, aPad );
@@ -172,7 +172,7 @@ void FOOTPRINT_EDIT_FRAME::DlgGlobalChange_PadSettings( D_PAD* aPad )
         return;
     }
 
-    module->DisplayInfo( this );
+    SetMsgPanel( module );
 
     {
         DIALOG_GLOBAL_PADS_EDITION dlg( this, aPad );

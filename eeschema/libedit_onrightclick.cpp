@@ -32,6 +32,7 @@
 #include <hotkeys.h>
 #include <class_drawpanel.h>
 #include <class_sch_screen.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <libeditframe.h>
@@ -89,9 +90,15 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     }
 
     if( item )
-        item->DisplayInfo( this );
+    {
+        MSG_PANEL_ITEMS items;
+        item->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
+    }
     else
+    {
         return true;
+    }
 
     m_drawItem = item;
     bool not_edited = !item->InEditMode();

@@ -467,7 +467,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( NULL );
             TestNetConnection( NULL, netcode );
             OnModify();
-            GetBoard()->DisplayInfo( this );
+            SetMsgPanel( GetBoard() );
         }
         break;
 
@@ -503,7 +503,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
             SetCurItem( NULL );
             TestNetConnection( NULL, netcode );
-            GetBoard()->DisplayInfo( this );
+            SetMsgPanel( GetBoard() );
         }
         break;
 
@@ -572,7 +572,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         Fill_All_Zones( this );
         m_canvas->Refresh();
-        GetBoard()->DisplayInfo( this );
+        SetMsgPanel( GetBoard() );
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
@@ -582,7 +582,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             zone_container->UnFill();
             TestNetConnection( NULL, zone_container->GetNet() );
             OnModify();
-            GetBoard()->DisplayInfo( this );
+            SetMsgPanel( GetBoard() );
             m_canvas->Refresh();
         }
         SetCurItem( NULL );
@@ -602,7 +602,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         TestConnections();
         TestForActiveLinksInRatsnest( 0 );   // Recalculate the active ratsnest, i.e. the unconnected links
         OnModify();
-        GetBoard()->DisplayInfo( this );
+        SetMsgPanel( GetBoard() );
         m_canvas->Refresh();
         break;
 
@@ -610,7 +610,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         Fill_Zone( (ZONE_CONTAINER*) GetCurItem() );
         TestNetConnection( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
-        GetBoard()->DisplayInfo( this );
+        SetMsgPanel( GetBoard() );
         m_canvas->Refresh();
         break;
 
@@ -1177,7 +1177,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         int netcode = ( (ZONE_CONTAINER*) Item )->GetNet();
         Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
         TestNetConnection( NULL, netcode );
-        GetBoard()->DisplayInfo( this );
+        SetMsgPanel( GetBoard() );
     }
 
     break;

@@ -47,7 +47,7 @@ void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* aPad )
     if( aPad == NULL )
         return;
 
-    aPad->DisplayInfo( this );
+    SetMsgPanel( aPad );
 
     D_PAD& mp = GetDesignSettings().m_Pad_Master;
 
@@ -169,7 +169,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     GetDesignSettings().m_Pad_Master.SetPadName(lastPadName);
 
     aModule->CalculateBoundingBox();
-    pad->DisplayInfo( this );
+    SetMsgPanel( pad );
 
     if( draw )
         m_canvas->RefreshDrawingRect( aModule->GetBoundingBox() );
@@ -249,7 +249,7 @@ void PCB_BASE_FRAME::RotatePad( D_PAD* aPad, wxDC* DC )
     aPad->SetDelta( sz );
 
     module->CalculateBoundingBox();
-    aPad->DisplayInfo( this );
+    SetMsgPanel( aPad );
 
     if( DC )
         module->Draw( m_canvas, DC, GR_OR );

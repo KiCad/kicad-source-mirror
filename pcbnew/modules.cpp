@@ -257,7 +257,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
     if( aModule == NULL )
         return false;
 
-    aModule->DisplayInfo( this );
+    SetMsgPanel( aModule );
 
     /* Confirm module delete. */
     if( aAskBeforeDeleting )
@@ -331,7 +331,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
     /* Flip the module */
     Module->Flip( Module->m_Pos );
 
-    Module->DisplayInfo( this );
+    SetMsgPanel( Module );
 
     if( !Module->IsMoving() ) /* Inversion simple */
     {
@@ -421,7 +421,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
     if( aDC )
         m_canvas->Refresh();
 
-    aModule->DisplayInfo( this );
+    SetMsgPanel( aModule );
 }
 
 
@@ -468,7 +468,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, int angle, bool in
     else
         module->SetOrientation( angle );
 
-    module->DisplayInfo( this );
+    SetMsgPanel( module );
 
     if( DC )
     {

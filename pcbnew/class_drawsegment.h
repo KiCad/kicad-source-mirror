@@ -38,6 +38,7 @@
 class LINE_READER;
 class EDA_DRAW_FRAME;
 class MODULE;
+class MSG_PANEL_ITEM;
 
 
 class DRAWSEGMENT : public BOARD_ITEM
@@ -163,7 +164,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
+    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     virtual EDA_RECT GetBoundingBox() const;
 

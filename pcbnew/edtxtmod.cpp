@@ -91,7 +91,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
     if( DC )
         Text->Draw( m_canvas, DC, GR_OR );
 
-    Text->DisplayInfo( this );
+    SetMsgPanel( Text );
 
     return Text;
 }
@@ -121,7 +121,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
         Text->m_Orient -= 1800;
 
     Text->Draw( m_canvas, DC, GR_XOR, MoveVector );
-    Text->DisplayInfo( this );
+    SetMsgPanel( Text );
 
     if( module )
         module->SetLastEditTime();
@@ -214,8 +214,7 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
     GetScreen()->SetCrossHairPosition( TextInitialPosition );
     m_canvas->MoveCursorToCrossHair();
 
-    Text->DisplayInfo( this );
-
+    SetMsgPanel( Text );
     SetCurItem( Text );
     m_canvas->SetMouseCapture( Show_MoveTexte_Module, AbortMoveTextModule );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );

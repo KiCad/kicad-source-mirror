@@ -42,11 +42,12 @@
 
 class EDA_RECT;
 class LINE_READER;
-class EDA_DRAW_FRAME;
 class EDA_DRAW_PANEL;
 class PCB_EDIT_FRAME;
 class BOARD;
 class ZONE_CONTAINER;
+class MSG_PANEL_ITEM;
+
 
 /**
  * Struct SEGMENT
@@ -109,7 +110,7 @@ public:
      */
     void Copy( ZONE_CONTAINER* src );
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     /**
      * Function Draw

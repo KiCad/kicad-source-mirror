@@ -38,11 +38,13 @@
 #include <param_config.h>       // PARAM_CFG_ARRAY
 #include "zones.h"
 
+
 class LINE_READER;
 class EDA_3D_CANVAS;
 class EDA_DRAW_PANEL;
 class MODULE;
 class TRACK;
+class MSG_PANEL_INFO;
 
 
 /* Default layers used for pads, according to the pad type.
@@ -341,7 +343,7 @@ public:
     void SetSubRatsnest( int aSubRatsnest ) { m_SubRatsnest = aSubRatsnest; }
 
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool IsOnLayer( int aLayer ) const;
 

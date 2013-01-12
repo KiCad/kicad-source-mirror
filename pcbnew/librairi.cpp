@@ -267,7 +267,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     GetBoard()->Add( module );
 
     // Display info :
-    module->DisplayInfo( this );
+    SetMsgPanel( module );
     PlaceModule( module, NULL );
     GetBoard()->m_Status_Pcb = 0;
     GetBoard()->BuildListOfNets();
@@ -595,7 +595,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibPath,
     if( aModule == NULL )
         return false;
 
-    aModule->DisplayInfo( this );
+    SetMsgPanel( aModule );
 
     // Ask what to use as the footprint name in the library
     wxString footprintName = aModule->GetLibRef();
@@ -739,10 +739,9 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     module->m_Value->m_Text = wxT( "VAL**" );
     module->m_Value->SetThickness( GetDesignSettings().m_ModuleTextWidth );
     module->m_Value->SetSize( GetDesignSettings().m_ModuleTextSize );
-
     module->SetPosition( wxPoint( 0, 0 ) );
 
-    module->DisplayInfo( this );
+    SetMsgPanel( module );
     return module;
 }
 

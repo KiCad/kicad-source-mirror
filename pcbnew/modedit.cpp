@@ -133,7 +133,7 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
 
     if( item )
     {
-        item->DisplayInfo( this );
+        SetMsgPanel( item );
     }
 
     return item;

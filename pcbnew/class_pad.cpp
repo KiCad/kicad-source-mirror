@@ -38,6 +38,8 @@
 #include <richio.h>
 #include <wxstruct.h>
 #include <macros.h>
+#include <msgpanel.h>
+#include <base_units.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>                      // ID_TRACK_BUTT
@@ -492,31 +494,29 @@ int D_PAD::GetThermalGap() const
 }
 
 
-void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
+void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 {
     MODULE*     module;
     wxString    Line;
     BOARD*      board;
-
-    frame->EraseMsgBox();
 
     module = (MODULE*) m_Parent;
 
     if( module )
     {
         wxString msg = module->GetReference();
-        frame->AppendMsgPanel( _( "Module" ), msg, DARKCYAN );
+        aList.push_back( MSG_PANEL_ITEM( _( "Module" ), msg, DARKCYAN ) );
         ReturnStringPadName( Line );
-        frame->AppendMsgPanel( _( "RefP" ), Line, BROWN );
+        aList.push_back( MSG_PANEL_ITEM( _( "RefP" ), Line, BROWN ) );
     }
 
-    frame->AppendMsgPanel( _( "Net" ), m_Netname, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), m_Netname, DARKCYAN ) );
 
     /* For test and debug only: display m_physical_connexion and
      * m_logical_connexion */
 #if 1   // Used only to debug connectivity calculations
     Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(), GetSubNet(), GetZoneSubNet() );
-    frame->AppendMsgPanel( wxT( "L-P-Z" ), Line, DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "L-P-Z" ), Line, DARKGREEN ) );
 #endif
 
     board = GetBoard();
@@ -620,29 +620,29 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
         }
     }
 
-    frame->AppendMsgPanel( _( "Layer" ), layerInfo, DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), layerInfo, DARKGREEN ) );
 
-    frame->AppendMsgPanel( ShowPadShape(), ShowPadAttr(), DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( ShowPadShape(), ShowPadAttr(), DARKGREEN ) );
 
-    Line = frame->CoordinateToString( m_Size.x );
-    frame->AppendMsgPanel( _( "H Size" ), Line, RED );
+    Line = ::CoordinateToString( m_Size.x );
+    aList.push_back( MSG_PANEL_ITEM( _( "H Size" ), Line, RED ) );
 
-    Line = frame->CoordinateToString( m_Size.y );
-    frame->AppendMsgPanel( _( "V Size" ), Line, RED );
+    Line = ::CoordinateToString( m_Size.y );
+    aList.push_back( MSG_PANEL_ITEM( _( "V Size" ), Line, RED ) );
 
-    Line = frame->CoordinateToString( (unsigned) m_Drill.x );
+    Line = ::CoordinateToString( (unsigned) m_Drill.x );
 
     if( m_DrillShape == PAD_CIRCLE )
     {
-        frame->AppendMsgPanel( _( "Drill" ), Line, RED );
+        aList.push_back( MSG_PANEL_ITEM( _( "Drill" ), Line, RED ) );
     }
     else
     {
-        Line = frame->CoordinateToString( (unsigned) m_Drill.x );
+        Line = ::CoordinateToString( (unsigned) m_Drill.x );
         wxString msg;
-        msg = frame->CoordinateToString( (unsigned) m_Drill.y );
+        msg = ::CoordinateToString( (unsigned) m_Drill.y );
         Line += wxT( "/" ) + msg;
-        frame->AppendMsgPanel( _( "Drill X / Y" ), Line, RED );
+        aList.push_back( MSG_PANEL_ITEM( _( "Drill X / Y" ), Line, RED ) );
     }
 
     int module_orient = module ? module->GetOrientation() : 0;
@@ -654,18 +654,18 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     else
         Line.Printf( wxT( "%3.1f" ), (double) m_Orient / 10 );
 
-    frame->AppendMsgPanel( _( "Orient" ), Line, LIGHTBLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Orient" ), Line, LIGHTBLUE ) );
 
-    Line = frame->CoordinateToString( m_Pos.x );
-    frame->AppendMsgPanel( _( "X Pos" ), Line, LIGHTBLUE );
+    Line = ::CoordinateToString( m_Pos.x );
+    aList.push_back( MSG_PANEL_ITEM( _( "X Pos" ), Line, LIGHTBLUE ) );
 
-    Line = frame->CoordinateToString( m_Pos.y );
-    frame->AppendMsgPanel( _( "Y pos" ), Line, LIGHTBLUE );
+    Line = ::CoordinateToString( m_Pos.y );
+    aList.push_back( MSG_PANEL_ITEM( _( "Y pos" ), Line, LIGHTBLUE ) );
 
     if( GetPadToDieLength() )
     {
-        Line = frame->CoordinateToString( GetPadToDieLength() );
-        frame->AppendMsgPanel( _( "Length in package" ), Line, CYAN );
+        Line = ::CoordinateToString( GetPadToDieLength() );
+        aList.push_back( MSG_PANEL_ITEM( _( "Length in package" ), Line, CYAN ) );
     }
 }
 

@@ -165,8 +165,8 @@ class wxFindReplaceData;
 class EDA_ITEM;
 class EDA_DRAW_FRAME;
 class EDA_RECT;
-class EDA_DRAW_PANEL;
 class DHEAD;
+class MSG_PANEL_ITEM;
 
 
 /**
@@ -495,14 +495,17 @@ public:
     void SetForceVisible( bool aEnable ) { m_forceVisible = aEnable; }
 
     /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status
-     * information about this object into the frame's message panel.
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
+     * Function GetMsgPanelInfo
+     * populates \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
+     * purposes.
+     *
+     * @note This method replaces DisplayInfo() so that KiCad objects no longer have any
+     *       knowledge of wxWidgets UI objects.
+     *
+     * @param aList is the list to populate.
      */
-    virtual void DisplayInfo( EDA_DRAW_FRAME* frame )
+    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
-        // derived classes may implement this
     }
 
     /**

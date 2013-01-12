@@ -7,6 +7,7 @@
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <bitmaps.h>
+#include <msgpanel.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -33,9 +34,9 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
     if( m_DisplayFootprintFrame == NULL )
     {
         m_DisplayFootprintFrame = new DISPLAY_FOOTPRINTS_FRAME( this, _( "Module" ),
-                                                  wxPoint( 0, 0 ),
-                                                  wxSize( 600, 400 ),
-                                                  KICAD_DEFAULT_DRAWFRAME_STYLE );
+                                                                wxPoint( 0, 0 ),
+                                                                wxSize( 600, 400 ),
+                                                                KICAD_DEFAULT_DRAWFRAME_STYLE );
         m_DisplayFootprintFrame->Show( true );
     }
     else
@@ -118,7 +119,11 @@ void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     MODULE* Module = GetBoard()->m_Modules;
 
     if ( Module )
-        Module->DisplayInfo( this );
+    {
+        MSG_PANEL_ITEMS items;
+        Module->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
+    }
 
     m_canvas->DrawCrossHair( DC );
 }

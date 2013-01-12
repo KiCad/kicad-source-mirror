@@ -381,7 +381,7 @@ void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
 
     aItem->Draw( m_canvas, DC, GR_XOR );
     aItem->SetFlags( IS_MOVED );
-    aItem->DisplayInfo( this );
+    SetMsgPanel( aItem );
 
     GetScreen()->SetCrossHairPosition( aItem->m_Text.m_Pos );
     m_canvas->MoveCursorToCrossHair();

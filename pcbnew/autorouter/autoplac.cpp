@@ -38,6 +38,7 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <pcbcommon.h>
+#include <msgpanel.h>
 
 #include <protos.h>
 #include <autorout.h>
@@ -591,7 +592,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
 
     g_Show_Module_Ratsnest = false;
 
-    aModule->DisplayInfo( this );
+    SetMsgPanel( aModule );
 
     LastPosOK.x = RoutingMatrix.m_BrdBox.GetX();
     LastPosOK.y = RoutingMatrix.m_BrdBox.GetY();
@@ -1106,7 +1107,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
             continue;
 
         pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
-        Module->DisplayInfo( pcbframe );
+        pcbframe->SetMsgPanel( Module );
         pcbframe->build_ratsnest_module( Module );
 
         /* Calculate external ratsnest. */

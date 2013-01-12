@@ -33,6 +33,7 @@
 #include <gestfich.h>
 #include <confirm.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <eeschema_id.h>

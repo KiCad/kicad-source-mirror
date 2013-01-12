@@ -42,6 +42,8 @@
 #include <macros.h>
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
+#include <msgpanel.h>
+#include <base_units.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -229,7 +231,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
 
 // see class_edge_mod.h
-void EDGE_MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
+void EDGE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
 
@@ -243,19 +245,16 @@ void EDGE_MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
     if( !board )
         return;
 
-    frame->ClearMsgPanel();
-
-    frame->AppendMsgPanel( _( "Graphic Item" ), wxEmptyString, DARKCYAN );
-    frame->AppendMsgPanel( _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
-    frame->AppendMsgPanel( _( "Value" ), module->m_Value->m_Text, BLUE );
-
+    aList.push_back( MSG_PANEL_ITEM( _( "Graphic Item" ), wxEmptyString, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Module" ), module->m_Reference->m_Text, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), module->m_Value->m_Text, BLUE ) );
     msg.Printf( wxT( "%8.8lX" ), module->GetTimeStamp() );
-    frame->AppendMsgPanel( _( "TimeStamp" ), msg, BROWN );
-    frame->AppendMsgPanel( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
-    frame->AppendMsgPanel( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED );
-
-    msg = frame->CoordinateToString( m_Width );
-    frame->AppendMsgPanel( _( "Width" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "TimeStamp" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ),
+                                     RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED ) );
+    msg = ::CoordinateToString( m_Width );
+    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, BLUE ) );
 }
 
 

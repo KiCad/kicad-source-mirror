@@ -38,6 +38,8 @@
 
 class TRACK;
 class D_PAD;
+class MSG_PANEL_ITEM;
+
 
 // Via attributes (m_Shape parameter)
 #define VIA_THROUGH                3       /* Always a through hole via */
@@ -239,16 +241,14 @@ public:
      */
     bool IsNull();
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     /**
-     * Function DisplayInfoBase
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
+     * Function GetMsgPanelInfoBase
      * Display info about the track segment only, and does not calculate the full track length
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
+     * @param aList A list of #MSG_PANEL_ITEM objects to add status information.
      */
-    void DisplayInfoBase( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
 
     /**
      * Function ShowWidth

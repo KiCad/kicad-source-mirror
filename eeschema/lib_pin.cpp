@@ -37,6 +37,7 @@
 #include <wxEeschemaStruct.h>
 #include <richio.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <protos.h>
@@ -1823,40 +1824,40 @@ void LIB_PIN::SetWidth( int aWidth )
 }
 
 
-void LIB_PIN::DisplayInfo( EDA_DRAW_FRAME* aFrame )
+void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
     wxString Text;
 
-    LIB_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::GetMsgPanelInfo( aList );
 
-    aFrame->AppendMsgPanel( _( "Name" ), m_name, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), m_name, DARKCYAN ) );
 
     if( m_number == 0 )
         Text = wxT( "?" );
     else
         ReturnPinStringNum( Text );
 
-    aFrame->AppendMsgPanel( _( "Number" ), Text, DARKCYAN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), Text, DARKCYAN ) );
 
-    aFrame->AppendMsgPanel( _( "Type" ),
-                           wxGetTranslation( pin_electrical_type_names[ m_type ] ),
-                           RED );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ),
+                                     wxGetTranslation( pin_electrical_type_names[ m_type ] ),
+                                     RED ) );
     Text = wxGetTranslation( pin_style_names[ GetStyleCodeIndex( m_shape ) ] );
-    aFrame->AppendMsgPanel( _( "Style" ), Text, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), Text, BLUE ) );
 
     if( IsVisible() )
         Text = _( "Yes" );
     else
         Text = _( "No" );
 
-    aFrame->AppendMsgPanel( _( "Visible" ), Text, DARKGREEN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), Text, DARKGREEN ) );
 
     /* Display pin length */
     Text = ReturnStringFromValue( g_UserUnit, m_length, true );
-    aFrame->AppendMsgPanel( _( "Length" ), Text, MAGENTA );
+    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), Text, MAGENTA ) );
 
     Text = wxGetTranslation( pin_orientation_names[ GetOrientationCodeIndex( m_orientation ) ] );
-    aFrame->AppendMsgPanel( _( "Orientation" ), Text, DARKMAGENTA );
+    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), Text, DARKMAGENTA ) );
 }
 
 

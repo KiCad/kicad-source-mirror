@@ -34,6 +34,7 @@
 #include <confirm.h>
 #include <macros.h>
 #include <bitmaps.h>
+#include <msgpanel.h>
 
 #include <class_board.h>
 

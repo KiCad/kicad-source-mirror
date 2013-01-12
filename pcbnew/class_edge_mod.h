@@ -37,7 +37,7 @@
 
 class LINE_READER;
 class EDA_3D_CANVAS;
-class EDA_DRAW_FRAME;
+class MSG_PANEL_ITEM;
 
 
 class EDGE_MODULE : public DRAWSEGMENT
@@ -69,7 +69,7 @@ public:
 
     void Draw3D( EDA_3D_CANVAS* glcanvas );
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     wxString GetClass() const
     {

@@ -11,6 +11,9 @@
 #include <class_marker_base.h>
 
 
+class MSG_PANEL_ITEM;
+
+
 class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE
 {
 
@@ -68,7 +71,7 @@ public:
 
     bool IsOnLayer( int aLayer ) const;
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     wxString GetSelectMenuText() const;
 

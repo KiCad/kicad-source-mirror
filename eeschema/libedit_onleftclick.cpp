@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <eeschema_id.h>
+#include <msgpanel.h>
 
 #include <general.h>
 #include <libeditframe.h>
@@ -51,7 +52,11 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         item = LocateItemUsingCursor( aPosition );
 
         if( item )
-            item->DisplayInfo( this );
+        {
+            MSG_PANEL_ITEMS items;
+            item->GetMsgPanelInfo( items );
+            SetMsgPanel( items );
+        }
         else
         {
             DisplayCmpDoc();
@@ -150,7 +155,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     }
 
     if( m_drawItem )
-        m_drawItem->DisplayInfo( this );
+        SetMsgPanel( m_drawItem );
     else
         return;
 

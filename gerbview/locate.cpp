@@ -28,8 +28,11 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <msgpanel.h>
+
 #include <gerbview.h>
 #include <class_gerber_draw_item.h>
+
 
 /* localize a gerber item and return a pointer to it.
  * Display info about this item
@@ -74,7 +77,9 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
 
     if( found )
     {
-        gerb_item->DisplayInfo( this );
+        MSG_PANEL_ITEMS items;
+        gerb_item->GetMsgPanelInfo( items );
+        SetMsgPanel( items );
         return gerb_item;
     }
 

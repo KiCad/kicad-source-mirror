@@ -36,6 +36,7 @@
 class GERBER_IMAGE;
 class GBR_LAYOUT;
 class D_CODE;
+class MSG_PANEL_ITEM;
 
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
@@ -243,15 +244,7 @@ public:
     /* divers */
     int Shape() const { return m_Shape; }
 
-    /**
-     * Function DisplayInfo
-     * has knowledge about the frame and how and where to put status information
-     * about this object into the frame's message panel.
-     * Is virtual from EDA_ITEM.
-     * Display info about this GERBER item
-     * @param frame A EDA_DRAW_FRAME in which to print status information.
-     */
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     wxString ShowGBRShape();
 

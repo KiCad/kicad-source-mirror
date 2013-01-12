@@ -34,6 +34,7 @@
 #include <confirm.h>
 #include <class_sch_screen.h>
 #include <base_units.h>
+#include <msgpanel.h>
 
 #include <eeschema_id.h>
 #include <general.h>
@@ -119,7 +120,9 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
         component->GetDrawItemList().sort();
     OnModify( );
 
-    DrawItem->DisplayInfo( this );
+    MSG_PANEL_ITEMS items;
+    DrawItem->GetMsgPanelInfo( items );
+    SetMsgPanel( items );
     m_canvas->Refresh();
 }
 

@@ -236,7 +236,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     if( m_DC )
         m_Item->Draw( m_parent->GetCanvas(), m_DC, GR_OR );
 
-    m_Item->DisplayInfo( m_parent );
+    m_parent->SetMsgPanel( m_Item );
 
     m_parent->SetDesignSettings( m_brdSettings );
 

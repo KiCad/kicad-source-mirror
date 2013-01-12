@@ -131,9 +131,9 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 
     SaveCopyInUndoList( aTrack, UR_DELETED );
     OnModify();
-
     TestNetConnection( DC, current_net_code );
-    GetBoard()->DisplayInfo( this );
+    SetMsgPanel( GetBoard() );
+
     return NULL;
 }
 
@@ -185,7 +185,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
     SaveCopyInUndoList( itemsList, UR_DELETED );
     OnModify();
     TestNetConnection( DC, net_code_delete );
-    GetBoard()->DisplayInfo( this );
+    SetMsgPanel( GetBoard() );
 }
 
 

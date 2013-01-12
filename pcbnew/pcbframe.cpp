@@ -39,6 +39,7 @@
 #include <build_version.h>
 #include <macros.h>
 #include <3d_viewer.h>
+#include <msgpanel.h>
 
 #include <pcbnew.h>
 #include <protos.h>

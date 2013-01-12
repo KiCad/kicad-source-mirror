@@ -44,6 +44,7 @@
 #include <filter_reader.h>
 #include <macros.h>
 #include <3d_struct.h>
+#include <msgpanel.h>
 
 #include <drag.h>
 #include <class_board.h>
@@ -436,40 +437,30 @@ EDA_RECT MODULE::GetBoundingBox() const
 /* Virtual function, from EDA_ITEM.
  * display module info on MsgPanel
  */
-void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
+void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     int      nbpad;
     char     bufcar[512], Line[512];
-    bool     flag = false;
     wxString msg;
     BOARD*   board = GetBoard();
 
-    frame->EraseMsgBox();
+    aList.push_back( MSG_PANEL_ITEM( m_Reference->m_Text, m_Value->m_Text, DARKCYAN ) );
 
-    if( frame->IsType( PCB_FRAME_TYPE ) )
-        flag = true;
+    // Display last date the component was edited (useful in Module Editor).
+    time_t edit_time = m_LastEdit_Time;
+    strcpy( Line, ctime( &edit_time ) );
+    strtok( Line, " \n\r" );
+    strcpy( bufcar, strtok( NULL, " \n\r" ) ); strcat( bufcar, " " );
+    strcat( bufcar, strtok( NULL, " \n\r" ) ); strcat( bufcar, ", " );
+    strtok( NULL, " \n\r" );
+    strcat( bufcar, strtok( NULL, " \n\r" ) );
+    msg = FROM_UTF8( bufcar );
+    aList.push_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
 
-    frame->AppendMsgPanel( m_Reference->m_Text, m_Value->m_Text, DARKCYAN );
-
-    if( flag ) // Display last date the component was edited( useful in Module Editor)
-    {
-        time_t edit_time = m_LastEdit_Time;
-        strcpy( Line, ctime( &edit_time ) );
-        strtok( Line, " \n\r" );
-        strcpy( bufcar, strtok( NULL, " \n\r" ) ); strcat( bufcar, " " );
-        strcat( bufcar, strtok( NULL, " \n\r" ) ); strcat( bufcar, ", " );
-        strtok( NULL, " \n\r" );
-        strcat( bufcar, strtok( NULL, " \n\r" ) );
-        msg = FROM_UTF8( bufcar );
-        frame->AppendMsgPanel( _( "Last Change" ), msg, BROWN );
-    }
-    else    // display time stamp in schematic
-    {
-        msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
-        frame->AppendMsgPanel( _( "Netlist path" ), m_Path, BROWN );
-    }
-
-    frame->AppendMsgPanel( _( "Layer" ), board->GetLayerName( m_Layer ), RED );
+    // display time stamp in schematic
+    msg.Printf( wxT( "%8.8lX" ), m_TimeStamp );
+    aList.push_back( MSG_PANEL_ITEM( _( "Netlist path" ), m_Path, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), board->GetLayerName( m_Layer ), RED ) );
 
     EDA_ITEM* PtStruct = m_Pads;
     nbpad = 0;
@@ -481,7 +472,7 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
     }
 
     msg.Printf( wxT( "%d" ), nbpad );
-    frame->AppendMsgPanel( _( "Pads" ), msg, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), msg, BLUE ) );
 
     msg = wxT( ".." );
 
@@ -491,10 +482,10 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
 
-    frame->AppendMsgPanel( _( "Stat" ), msg, MAGENTA );
+    aList.push_back( MSG_PANEL_ITEM( _( "Stat" ), msg, MAGENTA ) );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
-    frame->AppendMsgPanel( _( "Orient" ), msg, BROWN );
+    aList.push_back( MSG_PANEL_ITEM( _( "Orient" ), msg, BROWN ) );
 
     /* Controls on right side of the dialog */
     switch( m_Attributs & 255 )
@@ -515,20 +506,20 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
         msg = wxT("???");
         break;
     }
-    frame->AppendMsgPanel( _( "Attrib" ), msg, BROWN );
 
-    frame->AppendMsgPanel( _( "Module" ), m_LibRef, BLUE );
+    aList.push_back( MSG_PANEL_ITEM( _( "Attrib" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Module" ), m_LibRef, BLUE ) );
 
     if(  m_3D_Drawings != NULL )
         msg = m_3D_Drawings->m_Shape3DName;
     else
         msg = _( "No 3D shape" );
 
-    frame->AppendMsgPanel( _( "3D-Shape" ), msg, RED );
+    aList.push_back( MSG_PANEL_ITEM( _( "3D-Shape" ), msg, RED ) );
 
     wxString doc     = _( "Doc:  " ) + m_Doc;
     wxString keyword = _( "KeyW: " ) + m_KeyWord;
-    frame->AppendMsgPanel( doc, keyword, BLACK );
+    aList.push_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
 }
 
 

@@ -61,7 +61,7 @@ void PCB_EDIT_FRAME::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     drawitem->Draw( m_canvas, DC, GR_XOR );
     drawitem->SetFlags( IS_MOVED );
     s_InitialPosition = s_LastPosition = GetScreen()->GetCrossHairPosition();
-    drawitem->DisplayInfo( this );
+    SetMsgPanel( drawitem );
     m_canvas->SetMouseCapture( Move_Segment, Abort_EditEdge );
     SetCurItem( drawitem );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );

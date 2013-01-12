@@ -106,7 +106,7 @@ public:
 
     EDA_RECT GetBoundingBox() const;
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     int GetPenSize() const;
 

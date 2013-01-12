@@ -98,7 +98,7 @@ void PCB_BASE_FRAME::StartMovePad( D_PAD* aPad, wxDC* aDC, bool aDragConnectedTr
 
     Pad_OldPos = aPad->GetPosition();
 
-    aPad->DisplayInfo( this );
+    SetMsgPanel( aPad );
     m_canvas->SetMouseCapture( Show_Pad_Move, Abort_Move_Pad );
 
     // Draw the pad, in SKETCH mode

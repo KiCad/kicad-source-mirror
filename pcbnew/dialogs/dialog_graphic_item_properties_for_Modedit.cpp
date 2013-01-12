@@ -245,7 +245,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     m_parent->OnModify();
-    m_item->DisplayInfo( m_parent );
+    m_parent->SetMsgPanel( m_item );
 
     Close( true );
 }

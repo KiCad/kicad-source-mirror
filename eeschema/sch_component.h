@@ -68,6 +68,14 @@ class SCH_COMPONENT : public SCH_ITEM
     SCH_FIELDS m_Fields;    ///< Variable length list of fields.
 
     /**
+     * A temporary sheet path is required to generate the correct reference designator string
+     * in complex heirarchies.  Hopefully this is only a temporary hack to decouple schematic
+     * objects from the drawing window until a better design for handling complex heirarchies
+     * can be implemented.
+     */
+    const SCH_SHEET_PATH* m_currentSheetPath;
+
+    /**
      * Defines the hierarchical path and reference of the component.  This allows support
      * for hierarchical sheets that reference the same schematic.  The format for the path
      * is /&ltsheet time stamp&gt/&ltsheet time stamp&gt/.../&lscomponent time stamp&gt.
@@ -179,7 +187,7 @@ public:
      */
     wxPoint GetScreenCoord( const wxPoint& aPoint );
 
-    void DisplayInfo( EDA_DRAW_FRAME* frame );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     /**
      * Function ClearAnnotation
@@ -276,6 +284,11 @@ public:
      * @return true if OK
      */
     static bool IsReferenceStringValid( const wxString& aReferenceString );
+
+    void SetCurrentSheetPath( const SCH_SHEET_PATH* aSheetPath )
+    {
+        m_currentSheetPath = aSheetPath;
+    }
 
     /**
      * Function GetRef
