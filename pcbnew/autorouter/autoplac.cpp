@@ -462,7 +462,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
     TmpSegm.SetLayer( -1 );
     TmpSegm.SetNet( -1 );
-    TmpSegm.m_Width = RoutingMatrix.m_GridRouting / 2;
+    TmpSegm.SetWidth( RoutingMatrix.m_GridRouting / 2 );
 
     EDA_ITEM* PtStruct = GetBoard()->m_Drawings;
 

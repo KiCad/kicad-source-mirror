@@ -825,17 +825,17 @@ static void export_vrml_via( BOARD* pcb, SEGVIA* via ) //{{{
     double x, y, r, hole;
     int    top_layer, bottom_layer;
 
-    r    = via->m_Width / 2;
+    r    = via->GetWidth() / 2;
     hole = via->GetDrillValue() / 2;
-    x    = via->m_Start.x;
-    y    = via->m_Start.y;
+    x    = via->GetStart().x;
+    y    = via->GetStart().y;
     via->ReturnLayerPair( &top_layer, &bottom_layer );
 
     // Export the via padstack
     export_round_padstack( pcb, x, y, r, bottom_layer, top_layer );
 
     // Drill a hole
-    export_vrml_hole( via_triangles[via->m_Shape], top_layer, bottom_layer, x, y, hole );
+    export_vrml_hole( via_triangles[via->GetShape()], top_layer, bottom_layer, x, y, hole );
 }
 
 
@@ -846,8 +846,8 @@ static void export_vrml_tracks( BOARD* pcb ) //{{{
         if( track->Type() == PCB_VIA_T )
             export_vrml_via( pcb, (SEGVIA*) track );
         else
-            export_vrml_line( track->GetLayer(), track->m_Start.x, track->m_Start.y,
-                              track->m_End.x, track->m_End.y, track->m_Width, 4 );
+            export_vrml_line( track->GetLayer(), track->GetStart().x, track->GetStart().y,
+                              track->GetEnd().x, track->GetEnd().y, track->GetWidth(), 4 );
     }
 }
 

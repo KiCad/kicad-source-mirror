@@ -126,8 +126,8 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     if( ( StartTrack == NULL ) || ( EndTrack == NULL ) )
         return 0;
 
-    start = StartTrack->m_Start;
-    end   = EndTrack->m_End;
+    start = StartTrack->GetStart();
+    end   = EndTrack->GetEnd();
 
     // The start and end points cannot be the same.
     if( start == end )
@@ -248,7 +248,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
             if( pt_segm->GetState( BUSY ) == 0 )
                 break;
 
-            if( pt_segm->m_Start == start || pt_segm->m_End == start )
+            if( pt_segm->GetStart() == start || pt_segm->GetEnd() == start )
             {
                 // Marked track can be erased.
                 TRACK* NextS;

@@ -137,7 +137,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
         if( ( ( 1 << seg->GetLayer() ) & aLayerMask ) == 0 )
             continue;
 
-        aPlotter->ThickSegment( seg->m_Start, seg->m_End, seg->m_Width,
+        aPlotter->ThickSegment( seg->GetStart(), seg->GetEnd(), seg->GetWidth(),
                                 itemplotter.GetMode() );
     }
 }
@@ -392,17 +392,17 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( aLayerMask & ALL_CU_LAYERS )
             width_adj = itemplotter.getFineWidthAdj();
 
-        int diameter = Via->m_Width + 2 * via_margin + width_adj;
+        int diameter = Via->GetWidth() + 2 * via_margin + width_adj;
 
         // Don't draw a null size item :
         if( diameter <= 0 )
             continue;
 
-        EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->m_Shape);
+        EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->GetShape());
         // Set plot color (change WHITE to LIGHTGRAY because
         // the white items are not seen on a white paper or screen
         aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
-        aPlotter->FlashPadCircle( Via->m_Start, diameter, plotMode );
+        aPlotter->FlashPadCircle( Via->GetStart(), diameter, plotMode );
     }
 
     // Plot tracks (not vias) :
@@ -414,9 +414,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
-        int width = track->m_Width + itemplotter.getFineWidthAdj();
+        int width = track->GetWidth() + itemplotter.getFineWidthAdj();
         aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
-        aPlotter->ThickSegment( track->m_Start, track->m_End, width, plotMode );
+        aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode );
     }
 
     // Plot zones (outdated, for old boards compatibility):
@@ -425,9 +425,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
-        int width = track->m_Width + itemplotter.getFineWidthAdj();
+        int width = track->GetWidth() + itemplotter.getFineWidthAdj();
         aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
-        aPlotter->ThickSegment( track->m_Start, track->m_End, width, plotMode );
+        aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode );
     }
 
     // Plot filled ares

@@ -262,13 +262,13 @@ void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
     int half_width;
     int ux0, uy0, ux1, uy1;
 
-    half_width = ( pt_segm->m_Width / 2 ) + marge;
+    half_width = ( pt_segm->GetWidth() / 2 ) + marge;
 
     // Calculate the bounding rectangle of the segment (if H, V or Via)
-    ux0 = pt_segm->m_Start.x - RoutingMatrix.GetBrdCoordOrigin().x;
-    uy0 = pt_segm->m_Start.y - RoutingMatrix.GetBrdCoordOrigin().y;
-    ux1 = pt_segm->m_End.x - RoutingMatrix.GetBrdCoordOrigin().x;
-    uy1 = pt_segm->m_End.y - RoutingMatrix.GetBrdCoordOrigin().y;
+    ux0 = pt_segm->GetStart().x - RoutingMatrix.GetBrdCoordOrigin().x;
+    uy0 = pt_segm->GetStart().y - RoutingMatrix.GetBrdCoordOrigin().y;
+    ux1 = pt_segm->GetEnd().x - RoutingMatrix.GetBrdCoordOrigin().x;
+    uy1 = pt_segm->GetEnd().y - RoutingMatrix.GetBrdCoordOrigin().y;
 
     // Test if VIA (filled circle was drawn)
     if( pt_segm->Type() == PCB_VIA_T )
@@ -290,7 +290,7 @@ void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
             mask_layer = -1;
 
         if( mask_layer )
-            TraceFilledCircle( pt_segm->m_Start.x, pt_segm->m_Start.y,
+            TraceFilledCircle( pt_segm->GetStart().x, pt_segm->GetStart().y,
                                half_width, mask_layer, color, op_logic );
         return;
     }
@@ -301,13 +301,13 @@ void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
         layer = -1;
 
     // The segment is here a straight line or a circle or an arc.:
-    if( pt_segm->m_Shape == S_CIRCLE )
+    if( pt_segm->GetShape() == S_CIRCLE )
     {
         TraceCircle( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
         return;
     }
 
-    if( pt_segm->m_Shape == S_ARC )
+    if( pt_segm->GetShape() == S_ARC )
     {
         TraceArc( ux0, uy0, ux1, uy1, pt_segm->m_Param, half_width, layer, color, op_logic );
         return;

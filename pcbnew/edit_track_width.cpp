@@ -38,7 +38,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     if( aUseNetclassValue )
         net = GetBoard()->FindNet( aTrackItem->GetNet() );
 
-    initial_width = aTrackItem->m_Width;
+    initial_width = aTrackItem->GetWidth();
 
     if( net )
         new_width = net->GetTrackWidth();
@@ -60,7 +60,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             new_drill = GetBoard()->GetCurrentViaDrill();
         }
 
-        if( aTrackItem->m_Shape == VIA_MICROVIA )
+        if( aTrackItem->GetShape() == VIA_MICROVIA )
         {
             if( net )
                 new_width = net->GetViaSize();
@@ -69,7 +69,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         }
     }
 
-    aTrackItem->m_Width = new_width;
+    aTrackItem->SetWidth( new_width );
 
     // make a DRC test because the new size is bigger than the old size
     if( initial_width < new_width )
@@ -98,11 +98,11 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
 
         if( aItemsListPicker )
         {
-            aTrackItem->m_Width = initial_width;
+            aTrackItem->SetWidth( initial_width );
             ITEM_PICKER picker( aTrackItem, UR_CHANGED );
             picker.SetLink( aTrackItem->Clone() );
             aItemsListPicker->PushItem( picker );
-            aTrackItem->m_Width = new_width;
+            aTrackItem->SetWidth( new_width );
 
             if( aTrackItem->Type() == PCB_VIA_T )
             {
@@ -116,7 +116,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     }
     else
     {
-        aTrackItem->m_Width = initial_width;
+        aTrackItem->SetWidth( initial_width );
     }
 
     return change_ok;

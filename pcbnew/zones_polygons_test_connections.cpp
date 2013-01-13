@@ -169,12 +169,12 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {
-                        pos1 = pos2 = ( (SEGVIA*) item )->m_Start;
+                        pos1 = pos2 = ( (SEGVIA*) item )->GetStart();
                     }
                     else if( item->Type() == PCB_TRACE_T )
                     {
-                        pos1 = ( (TRACK*) item )->m_Start;
-                        pos2 = ( (TRACK*) item )->m_End;
+                        pos1 = ( (TRACK*) item )->GetStart();
+                        pos2 = ( (TRACK*) item )->GetEnd();
                     }
                     else
                     {

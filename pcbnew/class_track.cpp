@@ -98,13 +98,13 @@ TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition,
     {
         if( PtSegm->GetState( IS_DELETED | BUSY ) == 0 )
         {
-            if( aPosition == PtSegm->m_Start )
+            if( aPosition == PtSegm->GetStart() )
             {
                 if( aLayerMask & PtSegm->ReturnMaskLayer() )
                     return PtSegm;
             }
 
-            if( aPosition == PtSegm->m_End )
+            if( aPosition == PtSegm->GetEnd() )
             {
                 if( aLayerMask & PtSegm->ReturnMaskLayer() )
                     return PtSegm;

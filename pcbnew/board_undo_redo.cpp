@@ -245,11 +245,14 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         {
             TRACK* track = (TRACK*) aItem;
             TRACK* image = (TRACK*) aImage;
-            EXCHG( track->m_Start, image->m_Start );
-            EXCHG( track->m_End, image->m_End );
-            EXCHG( track->m_Width, image->m_Width );
-            EXCHG( track->m_Shape, image->m_Shape );
-            int atmp = track->GetDrillValue();
+
+            // swap start, end, width and shape for track and image.
+            wxPoint exchp = track->GetStart(); track->SetStart( image->GetStart() ); image->SetStart( exchp );
+            exchp = track->GetEnd(); track->SetEnd( image->GetEnd() ); image->SetEnd( exchp );
+            int atmp = track->GetWidth(); track->SetWidth( image->GetWidth() ); image->SetWidth( atmp );
+            atmp = track->GetShape(); track->SetShape( image->GetShape() ); image->SetShape( atmp );
+
+            atmp = track->GetDrillValue();
 
             if( track->IsDrillDefault() )
                 atmp = -1;

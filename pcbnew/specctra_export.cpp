@@ -761,7 +761,7 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
     if( topLayer > botLayer )
         EXCHG( topLayer, botLayer );
 
-    return makeVia( aVia->m_Width, aVia->GetDrillValue(), topLayer, botLayer );
+    return makeVia( aVia->GetWidth(), aVia->GetDrillValue(), topLayer, botLayer );
 }
 
 
@@ -1493,12 +1493,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
                 continue;
 
             if( old_netcode != netcode
-            ||  old_width   != track->m_Width
+            ||  old_width   != track->GetWidth()
             ||  old_layer   != track->GetLayer()
-            ||  (path && path->points.back() != mapPt(track->m_Start) )
+            ||  (path && path->points.back() != mapPt(track->GetStart()) )
               )
             {
-                old_width   = track->m_Width;
+                old_width   = track->GetWidth();
                 old_layer   = track->GetLayer();
 
                 if( old_netcode != netcode )
@@ -1524,10 +1524,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
                 path->layer_id = layerIds[pcbLayer];
                 path->aperture_width = scale( old_width );
 
-                path->AppendPoint( mapPt( track->m_Start ) );
+                path->AppendPoint( mapPt( track->GetStart() ) );
             }
 
-            path->AppendPoint( mapPt( track->m_End ) );
+            path->AppendPoint( mapPt( track->GetEnd() ) );
         }
     }
 

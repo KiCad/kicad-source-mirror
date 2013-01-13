@@ -111,9 +111,12 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
 
     // Refresh track in progress, if any, by forcing a mouse event,
     // to call the current function attached to the mouse
-    if( m_canvas->IsMouseCaptured() )
+    /*if( m_canvas->IsMouseCaptured() )
     {
         wxMouseEvent event(wxEVT_MOTION);
         wxPostEvent( m_canvas, event );
-    }
+    }*/
+    //+hp
+    //Refresh canvas, that we can see changes instantly. I use this because it dont,t throw  mouse up-left corner.
+    m_canvas->Refresh();
 }
