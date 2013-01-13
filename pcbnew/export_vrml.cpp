@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009-2013  Lorenzo Mercantonio
+ * Copyright (C) 2013 Jean-Pierre Charras jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
@@ -19,8 +43,10 @@
 #include <vector>
 #include <cmath>
 
-
-#define SEGM_COUNT_PER_360 32   // Number of segments to approximate a circle per segments
+// Number of segments to approximate a circle per segments:
+#define SEGM_COUNT_PER_360 32
+// basic angle to approximate a circle per segments
+static const double INC_ANGLE = M_PI*2 / SEGM_COUNT_PER_360;
 
 /* helper function:
  * some characters cannot be used in names,
@@ -28,137 +54,25 @@
  */
 static void ChangeIllegalCharacters( wxString & aFileName, bool aDirSepIsIllegal );
 
-
-/* the dialog to create VRML files, derived from DIALOG_EXPORT_3DFILE_BASE,
- * created by wxFormBuilder
- */
-#include <dialog_export_3Dfiles_base.h> // the wxFormBuilder header file
-
-#define OPTKEY_OUTPUT_UNIT wxT("VrmlExportUnit" )
-#define OPTKEY_3DFILES_OPT wxT("VrmlExport3DShapeFilesOpt" )
-
-class DIALOG_EXPORT_3DFILE : public DIALOG_EXPORT_3DFILE_BASE
-{
-private:
-    PCB_EDIT_FRAME* m_parent;
-    wxConfig* m_config;
-    int m_unitsOpt;          // to remember last option
-    int m_3DFilesOpt;        // to remember last option
-
-    void OnCancelClick( wxCommandEvent& event ){ EndModal( wxID_CANCEL ); }
-    void OnOkClick( wxCommandEvent& event ){ EndModal( wxID_OK ); }
-
-public:
-    DIALOG_EXPORT_3DFILE( PCB_EDIT_FRAME* parent ) :
-        DIALOG_EXPORT_3DFILE_BASE( parent )
-    {
-        m_parent = parent;
-        m_config = wxGetApp().GetSettings();
-        SetFocus();
-        m_config->Read( OPTKEY_OUTPUT_UNIT, &m_unitsOpt );
-        m_config->Read( OPTKEY_3DFILES_OPT, &m_3DFilesOpt );
-        m_rbSelectUnits->SetSelection(m_unitsOpt);
-        m_rb3DFilesOption->SetSelection(m_3DFilesOpt);
-        GetSizer()->SetSizeHints( this );
-        Centre();
-    }
-    ~DIALOG_EXPORT_3DFILE()
-    {
-        m_unitsOpt = GetUnits( );
-        m_3DFilesOpt = Get3DFilesOption( );
-        m_config->Write( OPTKEY_OUTPUT_UNIT, m_unitsOpt );
-        m_config->Write( OPTKEY_3DFILES_OPT, m_3DFilesOpt );
-    };
-
-    void SetSubdir( const wxString & aDir )
-    {
-        m_SubdirNameCtrl->SetValue( aDir);
-    }
-
-    wxString GetSubdir( )
-    {
-        return m_SubdirNameCtrl->GetValue( );
-    }
-
-    wxFilePickerCtrl* FilePicker()
-    {
-        return m_filePicker;
-    }
-
-    int GetUnits( )
-    {
-        return m_unitsOpt = m_rbSelectUnits->GetSelection();
-    }
-
-    int Get3DFilesOption( )
-    {
-        return m_3DFilesOpt = m_rb3DFilesOption->GetSelection();
-    }
-};
-
-
-/**
- * Function OnExportVRML
- * will export the current BOARD to a VRML file.
- */
-void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
-{
-    wxFileName fn;
-    static wxString subDirFor3Dshapes = wxT("shapes3D");
-
-    // The general VRML scale factor
-    // Assuming the VRML default unit is the mm
-    // this is the mm to VRML scaling factor for inch, mm and meter
-    double scaleList[3] = { 1.0/25.4, 1, 0.001 };
-
-    // Build default file name
-    wxString ext = wxT( "wrl" );
-    fn = GetBoard()->GetFileName();
-    fn.SetExt( ext );
-
-    DIALOG_EXPORT_3DFILE dlg( this );
-    dlg.FilePicker()->SetPath( fn.GetFullPath() );
-    dlg.SetSubdir( subDirFor3Dshapes );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    double scale = scaleList[dlg.GetUnits( )];     // final scale export
-    bool export3DFiles = dlg.Get3DFilesOption( ) == 0;
-
-    wxBusyCursor dummy;
-
-    wxString fullFilename = dlg.FilePicker()->GetPath();
-    subDirFor3Dshapes = dlg.GetSubdir();
-
-    if( ! wxDirExists( subDirFor3Dshapes ) )
-        wxMkdir( subDirFor3Dshapes );
-
-    if( ! ExportVRML_File( fullFilename, scale, export3DFiles, subDirFor3Dshapes ) )
-    {
-        wxString msg = _( "Unable to create " ) + fullFilename;
-        wxMessageBox( msg );
-        return;
-    }
-}
-
 // I use this a lot...
 static const double PI2 = M_PI / 2;
 
-// Absolutely not optimized triangle bag :D
-struct VRMLPt
+struct POINT_3D
 {
     double x, y, z;
 };
-struct FlatPt
+
+struct POINT_2D
 {
-    FlatPt( double _x = 0, double _y = 0 ) : x( _x ), y( _y )
+    POINT_2D( double _x = 0, double _y = 0 ) : x( _x ), y( _y )
     { }
     double x, y;
 };
-struct Triangle
+
+// Absolutely not optimized triangle bag :D
+struct TRIANGLE
 {
-    Triangle( double x1, double y1, double z1,
+    TRIANGLE( double x1, double y1, double z1,
               double x2, double y2, double z2,
               double x3, double y3, double z3 )
     {
@@ -166,36 +80,36 @@ struct Triangle
         p2.x = x2; p2.y = y2; p2.z = z2;
         p3.x = x3; p3.y = y3; p3.z = z3;
     }
-    Triangle() { }
-    VRMLPt p1, p2, p3;
+    TRIANGLE() { }
+    POINT_3D p1, p2, p3;
 };
-typedef std::vector<Triangle> TriangleBag;
+typedef std::vector<TRIANGLE> TRIANGLEBAG;
 
 // A flat triangle fan
-struct FlatFan
+struct FLAT_FAN
 {
-    FlatPt              c;
-    std::vector<FlatPt> pts;
+    POINT_2D              c;
+    std::vector<POINT_2D> pts;
     void                add( double x, double y )
     {
-        pts.push_back( FlatPt( x, y ) );
+        pts.push_back( POINT_2D( x, y ) );
     }
     void bag( int layer, bool close = true );
 };
 
 // A flat quad ring
-struct FlatRing
+struct FLAT_RING
 {
-    std::vector<FlatPt> inner;
-    std::vector<FlatPt> outer;
+    std::vector<POINT_2D> inner;
+    std::vector<POINT_2D> outer;
     void                add_inner( double x, double y )
     {
-        inner.push_back( FlatPt( x, y ) );
+        inner.push_back( POINT_2D( x, y ) );
     }
 
     void add_outer( double x, double y )
     {
-        outer.push_back( FlatPt( x, y ) );
+        outer.push_back( POINT_2D( x, y ) );
     }
 
     void bag( int layer, bool close = true );
@@ -204,19 +118,19 @@ struct FlatRing
 // A vertical quad loop
 struct VLoop
 {
-    std::vector<FlatPt> pts;
+    std::vector<POINT_2D> pts;
     double              z_top, z_bottom;
     void                add( double x, double y )
     {
-        pts.push_back( FlatPt( x, y ) );
+        pts.push_back( POINT_2D( x, y ) );
     }
 
-    void bag( TriangleBag& triangles, bool close = true );
+    void bag( TRIANGLEBAG& triangles, bool close = true );
 };
 
 // The bags for all the layers
-static TriangleBag layer_triangles[LAYER_COUNT];
-static TriangleBag via_triangles[4];
+static TRIANGLEBAG layer_triangles[LAYER_COUNT];
+static TRIANGLEBAG via_triangles[4];
 static double      layer_z[LAYER_COUNT];
 
 static void bag_flat_triangle( int layer, //{{{
@@ -226,11 +140,11 @@ static void bag_flat_triangle( int layer, //{{{
 {
     double z = layer_z[layer];
 
-    layer_triangles[layer].push_back( Triangle( x1, y1, z, x2, y2, z, x3, y3, z ) );
+    layer_triangles[layer].push_back( TRIANGLE( x1, y1, z, x2, y2, z, x3, y3, z ) );
 }
 
 
-void FlatFan::bag( int layer, bool close ) //{{{
+void FLAT_FAN::bag( int layer, bool close ) //{{{
 {
     unsigned i;
 
@@ -253,7 +167,7 @@ static void bag_flat_quad( int layer, //{{{
 }
 
 
-void FlatRing::bag( int layer, bool close ) //{{{
+void FLAT_RING::bag( int layer, bool close ) //{{{
 {
     unsigned i;
 
@@ -273,20 +187,20 @@ void FlatRing::bag( int layer, bool close ) //{{{
 }
 
 
-static void bag_vquad( TriangleBag& triangles, //{{{
+static void bag_vquad( TRIANGLEBAG& triangles, //{{{
                        double x1, double y1, double x2, double y2,
                        double z1, double z2 )
 {
-    triangles.push_back( Triangle( x1, y1, z1,
+    triangles.push_back( TRIANGLE( x1, y1, z1,
                                    x2, y2, z1,
                                    x2, y2, z2 ) );
-    triangles.push_back( Triangle( x1, y1, z1,
+    triangles.push_back( TRIANGLE( x1, y1, z1,
                                    x2, y2, z2,
                                    x1, y1, z2 ) );
 }
 
 
-void VLoop::bag( TriangleBag& triangles, bool close ) //{{{
+void VLoop::bag( TRIANGLEBAG& triangles, bool close ) //{{{
 {
     unsigned i;
 
@@ -303,16 +217,14 @@ void VLoop::bag( TriangleBag& triangles, bool close ) //{{{
 
 
 static void write_triangle_bag( FILE* output_file, int color_index, //{{{
-                                const TriangleBag& triangles )
+                                const TRIANGLEBAG& triangles,
+                                double boardIU2WRML )
 {
     /* A lot of nodes are not required, but blender sometimes chokes
      * without them */
     static const char* shape_boiler[] =
     {
         "Transform {\n",
-        "  translation 0.0 0.0 0.0\n",
-        "  rotation 1.0 0.0 0.0 0.0\n",
-        "  scale 1.0 1.0 1.0\n",
         "  children [\n",
         "    Group {\n",
         "      children [\n",
@@ -375,16 +287,19 @@ static void write_triangle_bag( FILE* output_file, int color_index, //{{{
             case 2:
             {
                 // Coordinates marker
-                for( TriangleBag::const_iterator i = triangles.begin();
+                for( TRIANGLEBAG::const_iterator i = triangles.begin();
                      i != triangles.end();
                      i++ )
                 {
-                    fprintf( output_file, "%g %g %g\n",
-                             i->p1.x, -i->p1.y, i->p1.z );
-                    fprintf( output_file, "%g %g %g\n",
-                             i->p2.x, -i->p2.y, i->p2.z );
-                    fprintf( output_file, "%g %g %g\n",
-                             i->p3.x, -i->p3.y, i->p3.z );
+                    fprintf( output_file, "%.8g %.8g %.8g\n",
+                             i->p1.x * boardIU2WRML, -i->p1.y * boardIU2WRML,
+                             i->p1.z * boardIU2WRML );
+                    fprintf( output_file, "%.8g %.8g %.8g\n",
+                             i->p2.x * boardIU2WRML, -i->p2.y * boardIU2WRML,
+                             i->p2.z * boardIU2WRML );
+                    fprintf( output_file, "%.8g %.8g %.8g\n",
+                             i->p3.x * boardIU2WRML, -i->p3.y * boardIU2WRML,
+                             i->p3.z * boardIU2WRML );
                 }
             }
             break;
@@ -394,7 +309,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, //{{{
                 // Index marker
                 // OK, that's sick ...
                 int j = 0;
-                for( TriangleBag::const_iterator i = triangles.begin();
+                for( TRIANGLEBAG::const_iterator i = triangles.begin();
                      i != triangles.end();
                      i++ )
                 {
@@ -455,7 +370,7 @@ static void export_vrml_line( int layer, double startx, double starty, //{{{
     double  r     = width / 2;
     double  angle = atan2( endy - starty, endx - startx );
     double  alpha;
-    FlatFan fan;
+    FLAT_FAN fan;
 
     // Output the 'bone' as a triangle fan, this is the fan centre
     fan.c.x = (startx + endx) / 2;
@@ -482,12 +397,12 @@ static void export_vrml_circle( int layer, double startx, double starty,
                                 double endx, double endy, double width )
 {
     double   hole, radius;
-    FlatRing ring;
+    FLAT_RING ring;
 
     radius = hypot( startx - endx, starty - endy ) + ( width / 2);
     hole  = radius - width;
 
-    for( double alpha = 0; alpha < M_PI * 2; alpha += M_PI * 2 / SEGM_COUNT_PER_360 )
+    for( double alpha = 0; alpha < M_PI * 2; alpha += INC_ANGLE )
     {
         ring.add_inner( startx + hole * cos( alpha ), starty + hole * sin( alpha ) );
         ring.add_outer( startx + radius * cos( alpha ), starty + radius * sin( alpha ) );
@@ -497,7 +412,7 @@ static void export_vrml_circle( int layer, double startx, double starty,
 }
 
 
-static void export_vrml_slot( TriangleBag& triangles, //{{{
+static void export_vrml_slot( TRIANGLEBAG& triangles, //{{{
                               int top_layer, int bottom_layer, double xc, double yc,
                               double dx, double dy, int orient )
 {
@@ -541,7 +456,8 @@ static void export_vrml_slot( TriangleBag& triangles, //{{{
 }
 
 
-static void export_vrml_hole( TriangleBag& triangles, int top_layer, int bottom_layer,
+static void export_vrml_hole( TRIANGLEBAG& triangles,
+                              int top_layer, int bottom_layer,
                               double xc, double yc, double hole )
 {
     VLoop loop;
@@ -549,7 +465,7 @@ static void export_vrml_hole( TriangleBag& triangles, int top_layer, int bottom_
     loop.z_top    = layer_z[top_layer];
     loop.z_bottom = layer_z[bottom_layer];
 
-    for( double alpha = 0; alpha < M_PI * 2; alpha += M_PI * 2 / SEGM_COUNT_PER_360 )
+    for( double alpha = 0; alpha < M_PI * 2; alpha += INC_ANGLE )
         loop.add( xc + cos( alpha ) * hole, yc + sin( alpha ) * hole );
 
     loop.bag( triangles );
@@ -560,7 +476,7 @@ static void export_vrml_oval_pad( int layer, double xc, double yc,
                                   double dx, double dy, int orient )
 {
     double  capx, capy; // Cap center
-    FlatFan fan;
+    FLAT_FAN fan;
 
     fan.c.x = xc;
     fan.c.y = yc;
@@ -603,7 +519,7 @@ static void export_vrml_arc( int layer, double centerx, double centery,
                              double arc_startx, double arc_starty,
                              double width, double arc_angle )
 {
-    FlatRing ring;
+    FLAT_RING ring;
     double   start_angle = atan2( arc_starty - centery, arc_startx - centerx );
 
     int count = KiROUND( arc_angle / 360.0 * SEGM_COUNT_PER_360 );
@@ -630,7 +546,7 @@ static void export_vrml_arc( int layer, double centerx, double centery,
     ring.bag( layer, false );
 }
 
-static void export_vrml_varc( TriangleBag& triangles,
+static void export_vrml_varc( TRIANGLEBAG& triangles,
                               int top_layer, int bottom_layer,
                               double centerx, double centery,
                               double arc_startx, double arc_starty,
@@ -803,7 +719,8 @@ static void export_vrml_drawings( BOARD* pcb ) //{{{
 }
 
 
-static void export_round_padstack( BOARD* pcb, double x, double y, double r, //{{{
+static void export_round_padstack( BOARD* pcb, double x, double y,
+                                   double r,
                                    int bottom_layer, int top_layer )
 {
     int copper_layers = pcb->GetCopperLayerCount( );
@@ -1098,7 +1015,8 @@ static void compose_quat( double q1[4], double q2[4], double qr[4] )
 static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                                 FILE* aOutputFile,
                                 double aVRMLModelsToBiu,
-                                bool aExport3DFiles, const wxString & a3D_Subdir )
+                                bool aExport3DFiles, const wxString & a3D_Subdir,
+                                double boardIU2WRML )
 {
     // Reference and value
     export_vrml_text_module( aModule->m_Reference );
@@ -1206,9 +1124,9 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         RotatePoint(&offsetx, &offsety, aModule->GetOrientation());
 
         fprintf( aOutputFile, "  translation %g %g %g\n",
-                 (double) (offsetx + aModule->m_Pos.x),
-                 - (double)(offsety + aModule->m_Pos.y),    // Y axis is reversed in Pcbnew
-                 offsetz + layer_z[aModule->GetLayer()] );
+                 (double) (offsetx + aModule->m_Pos.x) * boardIU2WRML,
+                 - (double)(offsety + aModule->m_Pos.y) * boardIU2WRML,    // Y axis is reversed in Pcbnew
+                 offsetz + layer_z[aModule->GetLayer()] * boardIU2WRML);
 
         fprintf( aOutputFile, "  scale %g %g %g\n",
                  vrmlm->m_MatScale.x * aVRMLModelsToBiu,
@@ -1216,6 +1134,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                  vrmlm->m_MatScale.z * aVRMLModelsToBiu );
 
         fprintf( aOutputFile,
+//                 "  children [\n    Inline {\n      url \"file://%s\"\n    } ]\n",
                  "  children [\n    Inline {\n      url \"%s\"\n    } ]\n",
                  TO_UTF8( fname ) );
         fprintf( aOutputFile, "  }\n" );
@@ -1223,24 +1142,23 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
 }
 
 
-static void write_and_empty_triangle_bag( FILE* output_file, TriangleBag& triangles, int color )
+static void write_and_empty_triangle_bag( FILE* output_file, TRIANGLEBAG& triangles,
+                                          int color, double boardIU2WRML )
 {
     if( !triangles.empty() )
     {
-        write_triangle_bag( output_file, color, triangles );
+        write_triangle_bag( output_file, color, triangles, boardIU2WRML );
         triangles.clear( );
     }
 }
 
-/**
- * Function ExportVRML_File
+/* ExportVRML_File
  * Creates the file(s) exporting current BOARD to a VRML file.
- * @param aFullFileName = the full filename of the file to create
- * @param aMMtoWRMLunit = the general scaling factor. 1.0 to export in mm
+ * aFullFileName = the full filename of the file to create
+ * aMMtoWRMLunit = the general WRML scaling factor. 1.0 to export in mm
  * @param aExport3DFiles = true to copy 3D shapes in the subdir a3D_Subdir
- * @param a3D_Subdir = sub directory where 3D shapes files are copied
+ * a3D_Subdir = sub directory where 3D shapes files are copied
  * used only when aExport3DFiles == true
- * @return true if Ok.
  */
 /* Note1:
  * When copying 3D shapes files, the new filename is build from
@@ -1290,8 +1208,6 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     // (aMMtoWRMLScale = 1.0 to export in mm)
     double boardIU2WRML = aMMtoWRMLunit / MM_PER_IU;
     fprintf( output_file, "Transform {\n" );
-    fprintf( output_file, "  scale %g %g %g\n",
-            boardIU2WRML , boardIU2WRML, boardIU2WRML );
 
     /* Define the translation to have the board centre to the 2D axis origin
      * more easy for rotations...
@@ -1302,7 +1218,6 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     double dy = boardIU2WRML * bbbox.Centre().y;
 
     fprintf( output_file, "  translation %g %g 0.0\n", -dx, dy );
-
     fprintf( output_file, "  children [\n" );
 
     // Preliminary computation: the z value for each layer
@@ -1322,27 +1237,30 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
      * Usually we use Wings3D to create thems.
      * One can consider the 3D units is 0.1 inch (2.54 mm)
      * So the scaling factor from 0.1 inch to board units
-     * is 0.1 / general_scaling_factor
+     * is 2.54 * aMMtoWRMLunit
      */
-    double wrml_3D_models_scaling_factor = 2.54 /  boardIU2WRML;
+    double wrml_3D_models_scaling_factor = 2.54 * aMMtoWRMLunit;
     // Export footprints
     for( MODULE* module = pcb->m_Modules; module != 0; module = module->Next() )
         export_vrml_module( pcb, module, output_file,
                             wrml_3D_models_scaling_factor,
-                            aExport3DFiles, a3D_Subdir );
+                            aExport3DFiles, a3D_Subdir,
+                            boardIU2WRML );
 
     /* Output the bagged triangles for each layer
      * Each layer will be a separate shape */
     for( int layer = 0; layer < LAYER_COUNT; layer++ )
         write_and_empty_triangle_bag( output_file,
                                       layer_triangles[layer],
-                                      pcb->GetLayerColor(layer) );
+                                      pcb->GetLayerColor(layer),
+                                      boardIU2WRML );
 
     // Same thing for the via layers
     for( int i = 0; i < 4; i++ )
         write_and_empty_triangle_bag( output_file,
                                       via_triangles[i],
-                                      pcb->GetVisibleElementColor( VIAS_VISIBLE + i ) );
+                                      pcb->GetVisibleElementColor( VIAS_VISIBLE + i ),
+                                      boardIU2WRML );
 
     // Close the outer 'transform' node
     fputs( "]\n}\n", output_file );

@@ -11,11 +11,11 @@
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">dialog_export_3Dfiles_base</property>
+        <property name="file">dialog_export_vrml_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">1</property>
-        <property name="name">dialog_export_3Dfiles</property>
+        <property name="name">dialog_export_vrml</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>

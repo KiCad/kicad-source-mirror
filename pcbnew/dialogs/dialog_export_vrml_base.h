@@ -1,16 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_EXPORT_3DFILES_BASE_H__
-#define __DIALOG_EXPORT_3DFILES_BASE_H__
+#ifndef __DIALOG_EXPORT_VRML_BASE_H__
+#define __DIALOG_EXPORT_VRML_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -59,4 +61,4 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 	
 };
 
-#endif //__DIALOG_EXPORT_3DFILES_BASE_H__
+#endif //__DIALOG_EXPORT_VRML_BASE_H__
