@@ -47,7 +47,8 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_edit_module_text.cpp
     dialogs/dialog_edit_module_text_base.cpp
     dialogs/dialog_exchange_modules_base.cpp
-    dialogs/dialog_export_3Dfiles_base.cpp
+    dialogs/dialog_export_vrml_base.cpp
+    dialogs/dialog_export_vrml.cpp
     dialogs/dialog_find_base.cpp
     dialogs/dialog_find.cpp
     dialogs/dialog_fp_lib_table_base.cpp
