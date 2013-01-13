@@ -1169,16 +1169,14 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->SetState( TRACK_AR, ON );
         g_CurrentTrackSegment->SetLayer( 0x0F );
 
-        g_CurrentTrackSegment->m_Start.x   =
-            g_CurrentTrackSegment->m_End.x = pcb->GetBoundingBox().GetX() +
-                                             ( RoutingMatrix.m_GridRouting * row );
-
-        g_CurrentTrackSegment->m_Start.y   =
-            g_CurrentTrackSegment->m_End.y = pcb->GetBoundingBox().GetY() +
-                                             ( RoutingMatrix.m_GridRouting * col );
-
-        g_CurrentTrackSegment->m_Width = pcb->GetCurrentViaSize();
-        g_CurrentTrackSegment->m_Shape = pcb->GetDesignSettings().m_CurrentViaType;
+        g_CurrentTrackSegment->SetStart(wxPoint( pcb->GetBoundingBox().GetX() +
+                                                ( RoutingMatrix.m_GridRouting * row ), 
+                                                pcb->GetBoundingBox().GetY() +
+                                                ( RoutingMatrix.m_GridRouting * col )));
+        g_CurrentTrackSegment->SetEnd( g_CurrentTrackSegment->GetStart() );
+            
+        g_CurrentTrackSegment->SetWidth( pcb->GetCurrentViaSize() );
+        g_CurrentTrackSegment->SetShape( pcb->GetDesignSettings().m_CurrentViaType );
 
         g_CurrentTrackSegment->SetNet( current_net_code );
     }
@@ -1194,35 +1192,34 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             g_CurrentTrackSegment->SetLayer( Route_Layer_TOP );
 
         g_CurrentTrackSegment->SetState( TRACK_AR, ON );
-        g_CurrentTrackSegment->m_End.x = pcb->GetBoundingBox().GetX() +
-                                         ( RoutingMatrix.m_GridRouting * row );
-        g_CurrentTrackSegment->m_End.y = pcb->GetBoundingBox().GetY() +
-                                         ( RoutingMatrix.m_GridRouting * col );
+        g_CurrentTrackSegment->SetEnd( wxPoint( pcb->GetBoundingBox().GetX() +
+                                         ( RoutingMatrix.m_GridRouting * row ),
+                                         pcb->GetBoundingBox().GetY() +
+                                         ( RoutingMatrix.m_GridRouting * col )));
         g_CurrentTrackSegment->SetNet( current_net_code );
 
         if( g_CurrentTrackSegment->Back() == NULL ) /* Start trace. */
         {
-            g_CurrentTrackSegment->m_Start.x = segm_fX;
-            g_CurrentTrackSegment->m_Start.y = segm_fY;
+            g_CurrentTrackSegment->SetStart( wxPoint( segm_fX, segm_fY ) );
 
             /* Placement on the center of the pad if outside grid. */
-            dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
-            dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
+            dx1 = g_CurrentTrackSegment->GetEnd().x - g_CurrentTrackSegment->GetStart().x;
+            dy1 = g_CurrentTrackSegment->GetEnd().y - g_CurrentTrackSegment->GetStart().y;
 
-            dx0 = pt_cur_ch->m_PadEnd->GetPosition().x - g_CurrentTrackSegment->m_Start.x;
-            dy0 = pt_cur_ch->m_PadEnd->GetPosition().y - g_CurrentTrackSegment->m_Start.y;
+            dx0 = pt_cur_ch->m_PadEnd->GetPosition().x - g_CurrentTrackSegment->GetStart().x;
+            dy0 = pt_cur_ch->m_PadEnd->GetPosition().y - g_CurrentTrackSegment->GetStart().y;
 
             /* If aligned, change the origin point. */
             if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) )
             {
-                g_CurrentTrackSegment->m_Start = pt_cur_ch->m_PadEnd->GetPosition();
+                g_CurrentTrackSegment->SetStart( pt_cur_ch->m_PadEnd->GetPosition() );
             }
             else    // Creation of a supplemental segment
             {
-                g_CurrentTrackSegment->m_Start = pt_cur_ch->m_PadEnd->GetPosition();
+                g_CurrentTrackSegment->SetStart( pt_cur_ch->m_PadEnd->GetPosition() );
 
                 newTrack = (TRACK*)g_CurrentTrackSegment->Clone();
-                newTrack->m_Start = g_CurrentTrackSegment->m_End;
+                newTrack->SetStart( g_CurrentTrackSegment->GetEnd());
 
                 g_CurrentTrackList.PushBack( newTrack );
             }
@@ -1231,28 +1228,28 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         {
             if( g_CurrentTrackSegment->Back() )
             {
-                g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->Back()->m_End;
+                g_CurrentTrackSegment->SetStart( g_CurrentTrackSegment->Back()->GetEnd() );
             }
         }
 
-        g_CurrentTrackSegment->m_Width = pcb->GetCurrentTrackWidth();
+        g_CurrentTrackSegment->SetWidth( pcb->GetCurrentTrackWidth() );
 
-        if( g_CurrentTrackSegment->m_Start != g_CurrentTrackSegment->m_End )
+        if( g_CurrentTrackSegment->GetStart() != g_CurrentTrackSegment->GetEnd() )
         {
             /* Reduce aligned segments by one. */
             TRACK* oldTrack = g_CurrentTrackSegment->Back();
 
             if( oldTrack &&  oldTrack->Type() != PCB_VIA_T )
             {
-                dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
-                dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
+                dx1 = g_CurrentTrackSegment->GetEnd().x - g_CurrentTrackSegment->GetStart().x;
+                dy1 = g_CurrentTrackSegment->GetEnd().y - g_CurrentTrackSegment->GetStart().y;
 
-                dx0 = oldTrack->m_End.x - oldTrack->m_Start.x;
-                dy0 = oldTrack->m_End.y - oldTrack->m_Start.y;
+                dx0 = oldTrack->GetEnd().x - oldTrack->GetStart().x;
+                dy0 = oldTrack->GetEnd().y - oldTrack->GetStart().y;
 
                 if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) )
                 {
-                    oldTrack->m_End = g_CurrentTrackSegment->m_End;
+                    oldTrack->SetEnd( g_CurrentTrackSegment->GetEnd() );
 
                     delete g_CurrentTrackList.PopBack();
                 }
@@ -1280,24 +1277,24 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
     via_marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentViaSize() / 2 );
 
-    dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
-    dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
+    dx1 = g_CurrentTrackSegment->GetEnd().x - g_CurrentTrackSegment->GetStart().x;
+    dy1 = g_CurrentTrackSegment->GetEnd().y - g_CurrentTrackSegment->GetStart().y;
 
     /* Place on center of pad if off grid. */
-    dx0 = pt_cur_ch->m_PadStart->GetPosition().x - g_CurrentTrackSegment->m_Start.x;
-    dy0 = pt_cur_ch->m_PadStart->GetPosition().y - g_CurrentTrackSegment->m_Start.y;
+    dx0 = pt_cur_ch->m_PadStart->GetPosition().x - g_CurrentTrackSegment->GetStart().x;
+    dy0 = pt_cur_ch->m_PadStart->GetPosition().y - g_CurrentTrackSegment->GetStart().y;
 
     /* If aligned, change the origin point. */
     if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) )
     {
-        g_CurrentTrackSegment->m_End = pt_cur_ch->m_PadStart->GetPosition();
+        g_CurrentTrackSegment->SetEnd( pt_cur_ch->m_PadStart->GetPosition() );
     }
     else
     {
         TRACK* newTrack = (TRACK*)g_CurrentTrackSegment->Clone();
 
-        newTrack->m_End   = pt_cur_ch->m_PadStart->GetPosition();
-        newTrack->m_Start = g_CurrentTrackSegment->m_End;
+        newTrack->SetEnd( pt_cur_ch->m_PadStart->GetPosition() );
+        newTrack->SetStart( g_CurrentTrackSegment->GetEnd() );
 
         g_CurrentTrackList.PushBack( newTrack );
     }

@@ -134,13 +134,13 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
             track->Draw( aPanel, aDC, draw_mode );
 
         if( track->GetFlags() & STARTPOINT )
-            track->m_Start += moveVector;
+            track->SetStart( track->GetStart() + moveVector );
 
         if( track->GetFlags() & ENDPOINT )
-            track->m_End += moveVector;
+            track->SetEnd( track->GetEnd() + moveVector );
 
         if( track->Type() == PCB_VIA_T )
-            track->m_End = track->m_Start;
+            track->SetEnd( track->GetStart() );
 
         track->Draw( aPanel, aDC, draw_mode );
     }
@@ -265,10 +265,10 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
     dy = Pos.y - s_LastPos.y;
 
     //move the line by dx and dy
-    tx1 = (double) ( Track->m_Start.x + dx );
-    ty1 = (double) ( Track->m_Start.y + dy );
-    tx2 = (double) ( Track->m_End.x + dx );
-    ty2 = (double) ( Track->m_End.y + dy );
+    tx1 = (double) ( Track->GetStart().x + dx );
+    ty1 = (double) ( Track->GetStart().y + dy );
+    tx2 = (double) ( Track->GetEnd().x + dx );
+    ty2 = (double) ( Track->GetEnd().y + dy );
 
     // recalculate the segments new parameters and intersection points
     // only the intercept will change, segment slopes does not change
@@ -393,25 +393,23 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
     if( update )
     {
         s_LastPos = Pos;
-        Track->m_Start.x = KiROUND( xi1 );
-        Track->m_Start.y = KiROUND( yi1 );
-        Track->m_End.x   = KiROUND( xi2 );
-        Track->m_End.y   = KiROUND( yi2 );
+        Track->SetStart( wxPoint( KiROUND( xi1 ), KiROUND( yi1 ) ) );
+        Track->SetEnd( wxPoint( KiROUND( xi2 ), KiROUND( yi2 ) ) );
 
         if( tSegmentToEnd )
         {
             if( tSegmentToEnd->GetFlags() & STARTPOINT )
-                tSegmentToEnd->m_Start = Track->m_End;
+                tSegmentToEnd->SetStart( Track->GetEnd() );
             else
-                tSegmentToEnd->m_End = Track->m_End;
+                tSegmentToEnd->SetEnd( Track->GetEnd() );
         }
 
         if( tSegmentToStart )
         {
             if( tSegmentToStart->GetFlags() & STARTPOINT )
-                tSegmentToStart->m_Start = Track->m_Start;
+                tSegmentToStart->SetStart( Track->GetStart() );
             else
-                tSegmentToStart->m_End = Track->m_Start;
+                tSegmentToStart->SetEnd( Track->GetStart() );
         }
     }
 
@@ -489,25 +487,25 @@ bool InitialiseDragParameters()
     {
         if( tSegmentToStart->GetFlags() & ENDPOINT )
         {
-            tx1 = (double) tSegmentToStart->m_Start.x;
-            ty1 = (double) tSegmentToStart->m_Start.y;
-            tx2 = (double) tSegmentToStart->m_End.x;
-            ty2 = (double) tSegmentToStart->m_End.y;
+            tx1 = (double) tSegmentToStart->GetStart().x;
+            ty1 = (double) tSegmentToStart->GetStart().y;
+            tx2 = (double) tSegmentToStart->GetEnd().x;
+            ty2 = (double) tSegmentToStart->GetEnd().y;
         }
         else
         {
-            tx1 = (double) tSegmentToStart->m_End.x;
-            ty1 = (double) tSegmentToStart->m_End.y;
-            tx2 = (double) tSegmentToStart->m_Start.x;
-            ty2 = (double) tSegmentToStart->m_Start.y;
+            tx1 = (double) tSegmentToStart->GetEnd().x;
+            ty1 = (double) tSegmentToStart->GetEnd().y;
+            tx2 = (double) tSegmentToStart->GetStart().x;
+            ty2 = (double) tSegmentToStart->GetStart().y;
         }
     }
-    else // move the start point on a line starting at Track->m_Start, and perpendicular to Track
+    else // move the start point on a line starting at Track->GetStart(), and perpendicular to Track
     {
-        tx1 = (double) Track->m_Start.x;
-        ty1 = (double) Track->m_Start.y;
-        tx2 = (double) Track->m_End.x;
-        ty2 = (double) Track->m_End.y;
+        tx1 = (double) Track->GetStart().x;
+        ty1 = (double) Track->GetStart().y;
+        tx2 = (double) Track->GetEnd().x;
+        ty2 = (double) Track->GetEnd().y;
         RotatePoint( &tx2, &ty2, tx1, ty1, 900 );
     }
 
@@ -532,25 +530,25 @@ bool InitialiseDragParameters()
         //check if second line is vertical
         if( tSegmentToEnd->GetFlags() & STARTPOINT )
         {
-            tx1 = (double) tSegmentToEnd->m_Start.x;
-            ty1 = (double) tSegmentToEnd->m_Start.y;
-            tx2 = (double) tSegmentToEnd->m_End.x;
-            ty2 = (double) tSegmentToEnd->m_End.y;
+            tx1 = (double) tSegmentToEnd->GetStart().x;
+            ty1 = (double) tSegmentToEnd->GetStart().y;
+            tx2 = (double) tSegmentToEnd->GetEnd().x;
+            ty2 = (double) tSegmentToEnd->GetEnd().y;
         }
         else
         {
-            tx1 = (double) tSegmentToEnd->m_End.x;
-            ty1 = (double) tSegmentToEnd->m_End.y;
-            tx2 = (double) tSegmentToEnd->m_Start.x;
-            ty2 = (double) tSegmentToEnd->m_Start.y;
+            tx1 = (double) tSegmentToEnd->GetEnd().x;
+            ty1 = (double) tSegmentToEnd->GetEnd().y;
+            tx2 = (double) tSegmentToEnd->GetStart().x;
+            ty2 = (double) tSegmentToEnd->GetStart().y;
         }
     }
-    else // move the start point on a line starting at Track->m_End, and perpendicular to Track
+    else // move the start point on a line starting at Track->GetEnd(), and perpendicular to Track
     {
-        tx1 = (double) Track->m_End.x;
-        ty1 = (double) Track->m_End.y;
-        tx2 = (double) Track->m_Start.x;
-        ty2 = (double) Track->m_Start.y;
+        tx1 = (double) Track->GetEnd().x;
+        ty1 = (double) Track->GetEnd().y;
+        tx2 = (double) Track->GetStart().x;
+        ty2 = (double) Track->GetStart().y;
         RotatePoint( &tx2, &ty2, tx1, ty1, -900 );
     }
 
@@ -570,10 +568,10 @@ bool InitialiseDragParameters()
     }
 
     // Init parameters for the moved segment
-    tx1 = (double) Track->m_Start.x;
-    ty1 = (double) Track->m_Start.y;
-    tx2 = (double) Track->m_End.x;
-    ty2 = (double) Track->m_End.y;
+    tx1 = (double) Track->GetStart().x;
+    ty1 = (double) Track->GetStart().y;
+    tx2 = (double) Track->GetEnd().x;
+    ty2 = (double) Track->GetEnd().y;
 
     if( tx2 != tx1 )
     {
@@ -630,12 +628,12 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
 
         if( aCommand != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
         {
-            Collect_TrackSegmentsToDrag( GetBoard(), aTrack->m_Start,
+            Collect_TrackSegmentsToDrag( GetBoard(), aTrack->GetStart(),
                                          aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet(), aTrack->GetWidth() / 2 );
         }
 
-        PosInit = aTrack->m_Start;
+        PosInit = aTrack->GetStart();
     }
     else
     {
@@ -650,17 +648,17 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
             break;
 
         case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:   // drag a segment
-            pos = aTrack->m_Start;
+            pos = aTrack->GetStart();
             Collect_TrackSegmentsToDrag( GetBoard(), pos, aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet(), aTrack->GetWidth() / 2 );
-            pos = aTrack->m_End;
+            pos = aTrack->GetEnd();
             aTrack->SetFlags( IS_DRAGGED | ENDPOINT | STARTPOINT );
             Collect_TrackSegmentsToDrag( GetBoard(), pos, aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet(), aTrack->GetWidth() / 2 );
             break;
 
         case ID_POPUP_PCB_MOVE_TRACK_NODE:  // Drag via or move node
-            pos = (diag & STARTPOINT) ? aTrack->m_Start : aTrack->m_End;
+            pos = (diag & STARTPOINT) ? aTrack->GetStart() : aTrack->GetEnd();
             Collect_TrackSegmentsToDrag( GetBoard(), pos, aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet(), aTrack->GetWidth() / 2 );
             PosInit = pos;
@@ -770,7 +768,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     {
         int flag = STARTPOINT;
 
-        if( track->m_Start != TrackToStartPoint->m_Start )
+        if( track->GetStart() != TrackToStartPoint->GetStart() )
             flag = ENDPOINT;
 
         AddSegmentToDragList( flag, TrackToStartPoint );
@@ -781,7 +779,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     {
         int flag = STARTPOINT;
 
-        if( track->m_End != TrackToEndPoint->m_Start )
+        if( track->GetEnd() != TrackToEndPoint->GetStart() )
             flag = ENDPOINT;
 
         AddSegmentToDragList( flag, TrackToEndPoint );
@@ -868,14 +866,14 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
          *  (only pad connection must be tested, track connection will be
          * tested by TestNetConnection() ) */
         int layerMask = GetLayerMask( Track->GetLayer() );
-        Track->start = GetBoard()->GetPadFast( Track->m_Start, layerMask );
+        Track->start = GetBoard()->GetPadFast( Track->GetStart(), layerMask );
 
         if( Track->start )
             Track->SetState( BEGIN_ONPAD, ON );
         else
             Track->SetState( BEGIN_ONPAD, OFF );
 
-        Track->end = GetBoard()->GetPadFast( Track->m_End, layerMask );
+        Track->end = GetBoard()->GetPadFast( Track->GetEnd(), layerMask );
 
         if( Track->end )
             Track->SetState( END_ONPAD, ON );

@@ -464,8 +464,8 @@ void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
     SetGLColor( color );
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
-    Draw3D_SolidSegment( aTrack->m_Start, aTrack->m_End,
-                         aTrack->m_Width, thickness, zpos,
+    Draw3D_SolidSegment( aTrack->GetStart(), aTrack->GetEnd(),
+                         aTrack->GetWidth(), thickness, zpos,
                          g_Parm_3D_Visu.m_BiuTo3Dunits );
 }
 
@@ -475,7 +475,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
     int    color;
     double biu_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits ;
 
-    int outer_radius = via->m_Width / 2;
+    int outer_radius = via->GetWidth() / 2;
     int inner_radius = via->GetDrillValue() / 2;
     int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
 
@@ -504,7 +504,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
         SetGLColor( color );
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
-        Draw3D_ZaxisCylinder( via->m_Start, (outer_radius + inner_radius)/2,
+        Draw3D_ZaxisCylinder( via->GetStart(), (outer_radius + inner_radius)/2,
                                   thickness, outer_radius - inner_radius,
                                   zpos, biu_to_3Dunits );
         if( layer >= top_layer )
@@ -512,13 +512,13 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
     }
 
     // Drawing via hole:
-    color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->m_Shape );
+    color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->GetShape() );
     SetGLColor( color );
     int height = g_Parm_3D_Visu.GetLayerZcoordBIU(top_layer) -
                  g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer );
     int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(bottom_layer) + thickness/2;
 
-    Draw3D_ZaxisCylinder( via->m_Start, inner_radius + thickness/2, height,
+    Draw3D_ZaxisCylinder( via->GetStart(), inner_radius + thickness/2, height,
                           thickness, zpos, biu_to_3Dunits );
 }
 

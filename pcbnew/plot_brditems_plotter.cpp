@@ -711,8 +711,8 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
             continue;
 
         plotOneDrillMark(PAD_CIRCLE,
-                       pts->m_Start, wxSize( pts->GetDrillValue(), 0 ),
-                       wxSize( pts->m_Width, 0 ), 0, small_drill );
+                       pts->GetStart(), wxSize( pts->GetDrillValue(), 0 ),
+                       wxSize( pts->GetWidth(), 0 ), 0, small_drill );
     }
 
     for( MODULE *Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )

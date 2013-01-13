@@ -264,11 +264,11 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd)
     m_candidates.reserve( ii );
     for( TRACK* track = aBegin; track; track = track->Next() )
     {
-        CONNECTED_POINT candidate( track, track->m_Start);
+        CONNECTED_POINT candidate( track, track->GetStart());
         m_candidates.push_back( candidate );
         if( track->Type() != PCB_VIA_T )
         {
-            CONNECTED_POINT candidate2( track, track->m_End);
+            CONNECTED_POINT candidate2( track, track->GetEnd());
             m_candidates.push_back( candidate2 );
         }
 
@@ -304,7 +304,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     int dist_max = aTrack->GetWidth() / 2;
     static std::vector<CONNECTED_POINT*> tracks_candidates;
 #endif
-    wxPoint position = aTrack->m_Start;
+    wxPoint position = aTrack->GetStart();
     for( int kk = 0; kk < 2; kk++ )
     {
 #ifndef USE_EXTENDED_SEARCH
@@ -361,7 +361,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
         if( aTrack->Type() == PCB_VIA_T )
             break;
 
-        position = aTrack->m_End;
+        position = aTrack->GetEnd();
     }
 
     return count;

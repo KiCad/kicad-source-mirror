@@ -231,12 +231,12 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
         if( pt_trace->Type() == PCB_VIA_T ) // VIA encountered.
         {
-            int radius = pt_trace->m_Width >> 1;
-            EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + pt_trace->m_Shape );
+            int radius = pt_trace->GetWidth() >> 1;
+            EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + pt_trace->GetShape() );
             GRSetDrawMode( aDC, drawmode );
             GRFilledCircle( m_canvas->GetClipBox(), aDC,
-                            pt_trace->m_Start.x,
-                            pt_trace->m_Start.y,
+                            pt_trace->GetStart().x,
+                            pt_trace->GetStart().y,
                             radius,
                             0, color, color );
         }
@@ -305,7 +305,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
                     diameter = pt_trace->GetDrillValue();
 
                 GRFilledCircle( m_canvas->GetClipBox(), aDC,
-                                pt_trace->m_Start.x, pt_trace->m_Start.y,
+                                pt_trace->GetStart().x, pt_trace->GetStart().y,
                                 diameter/2,
                                 0, color, color );
             }

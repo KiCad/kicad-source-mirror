@@ -847,10 +847,10 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
 
             if( !track->GetSubNet() || (track->GetSubNet() != subnet) )
             {
-                if( aPosition != track->m_Start )
-                    s_TargetsLocations.push_back( track->m_Start );
-                if( aPosition != track->m_End && track->m_Start != track->m_End )
-                    s_TargetsLocations.push_back( track->m_End );
+                if( aPosition != track->GetStart() )
+                    s_TargetsLocations.push_back( track->GetStart() );
+                if( aPosition != track->GetEnd() && track->GetStart() != track->GetEnd() )
+                    s_TargetsLocations.push_back( track->GetEnd() );
             }
         }
 

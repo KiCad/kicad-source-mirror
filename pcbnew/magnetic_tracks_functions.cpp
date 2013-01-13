@@ -74,19 +74,19 @@ static bool Join( wxPoint* aIntersectPoint, wxPoint a0, wxPoint a1, wxPoint b0, 
  */
 bool Project( wxPoint* aNearPos, wxPoint on_grid, const TRACK* track )
 {
-    if( track->m_Start == track->m_End )
+    if( track->GetStart ()== track->GetEnd() )
         return false;
 
-    wxPoint vec = track->m_End - track->m_Start;
+    wxPoint vec = track->GetEnd() - track->GetStart();
 
-    double t = double( on_grid.x - track->m_Start.x ) * vec.x +
-               double( on_grid.y - track->m_Start.y ) * vec.y;
+    double t = double( on_grid.x - track->GetStart().x ) * vec.x +
+               double( on_grid.y - track->GetStart().y ) * vec.y;
 
     t /= (double) vec.x * vec.x + (double) vec.y * vec.y;
     t = std::min( std::max( t, 0.0 ), 1.0 );
 
-    aNearPos->x = KiROUND( track->m_Start.x + t * vec.x );
-    aNearPos->y = KiROUND( track->m_Start.y + t * vec.y );
+    aNearPos->x = KiROUND( track->GetStart().x + t * vec.x );
+    aNearPos->y = KiROUND( track->GetStart().y + t * vec.y );
 
     return true;
 }
@@ -183,7 +183,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
             {
                 if( !doCheckNet || !currTrack || currTrack->GetNet() == via->GetNet() )
                 {
-                    *curpos = via->m_Start;
+                    *curpos = via->GetStart();
                     // D(printf("via hit\n");)
                     return true;
                 }
@@ -210,10 +210,10 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
          * In two segment mode, ignore the final segment if it's inside a grid square.
          */
         if( !amMovingVia && currTrack && g_TwoSegmentTrackBuild && currTrack->Back()
-            && currTrack->m_Start.x - aGridSize.x < currTrack->m_End.x
-            && currTrack->m_Start.x + aGridSize.x > currTrack->m_End.x
-            && currTrack->m_Start.y - aGridSize.y < currTrack->m_End.y
-            && currTrack->m_Start.y + aGridSize.y > currTrack->m_End.y )
+            && currTrack->GetStart().x - aGridSize.x < currTrack->GetEnd().x
+            && currTrack->GetStart().x + aGridSize.x > currTrack->GetEnd().x
+            && currTrack->GetStart().y - aGridSize.y < currTrack->GetEnd().y
+            && currTrack->GetStart().y + aGridSize.y > currTrack->GetEnd().y )
         {
             currTrack = currTrack->Back();
         }
@@ -239,7 +239,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
             // D(printf( "have track prospect\n");)
 
-            if( Join( curpos, track->m_Start, track->m_End, currTrack->m_Start, currTrack->m_End ) )
+            if( Join( curpos, track->GetStart(), track->GetEnd(), currTrack->GetStart(), currTrack->GetEnd() ) )
             {
                 // D(printf( "join currTrack->Type()=%d\n", currTrack->Type() );)
                 return true;
@@ -251,27 +251,27 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 // a new track and that new track is parallel to the track the
                 // mouse is on. Find the nearest end point of the track under mouse
                 // to the mouse and return that.
-                double distStart = hypot( double( curpos->x - track->m_Start.x ),
-                                          double( curpos->y - track->m_Start.y ));
+                double distStart = hypot( double( curpos->x - track->GetStart().x ),
+                                          double( curpos->y - track->GetStart().y ));
 
-                double distEnd   = hypot( double( curpos->x - track->m_End.x ),
-                                          double( curpos->y - track->m_End.y ));
+                double distEnd   = hypot( double( curpos->x - track->GetEnd().x ),
+                                          double( curpos->y - track->GetEnd().y ));
 
                 // if track not via, or if its a via dragging but not with its adjacent track
                 if( currTrack->Type() != PCB_VIA_T
-                  || ( currTrack->m_Start != track->m_Start && currTrack->m_Start != track->m_End ))
+                  || ( currTrack->GetStart() != track->GetStart() && currTrack->GetStart() != track->GetEnd() ))
                 {
-                    if( distStart <= currTrack->m_Width/2 )
+                    if( distStart <= currTrack->GetWidth()/2 )
                     {
                         // D(printf("nearest end is start\n");)
-                        *curpos = track->m_Start;
+                        *curpos = track->GetStart();
                         return true;
                     }
 
-                    if( distEnd <= currTrack->m_Width/2 )
+                    if( distEnd <= currTrack->GetWidth()/2 )
                     {
                         // D(printf("nearest end is end\n");)
-                        *curpos = track->m_End;
+                        *curpos = track->GetEnd();
                         return true;
                     }
 

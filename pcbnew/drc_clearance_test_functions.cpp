@@ -165,9 +165,9 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     /* In order to make some calculations more easier or faster,
      * pads and tracks coordinates will be made relative to the reference segment origin
      */
-    wxPoint origin = aRefSeg->m_Start;  // origin will be the origin of other coordinates
+    wxPoint origin = aRefSeg->GetStart();  // origin will be the origin of other coordinates
 
-    m_segmEnd   = delta = aRefSeg->m_End - origin;
+    m_segmEnd   = delta = aRefSeg->GetEnd() - origin;
     m_segmAngle = 0;
 
     layerMask    = aRefSeg->ReturnMaskLayer();
@@ -179,7 +179,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // test if the via size is smaller than minimum
         if( aRefSeg->GetShape() == VIA_MICROVIA )
         {
-            if( aRefSeg->m_Width < netclass->GetuViaMinDiameter() )
+            if( aRefSeg->GetWidth() < netclass->GetuViaMinDiameter() )
             {
                 m_currentMarker = fillMarker( aRefSeg, NULL,
                                               DRCE_TOO_SMALL_MICROVIA, m_currentMarker );
@@ -188,7 +188,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         }
         else
         {
-            if( aRefSeg->m_Width < netclass->GetViaMinDiameter() )
+            if( aRefSeg->GetWidth() < netclass->GetViaMinDiameter() )
             {
                 m_currentMarker = fillMarker( aRefSeg, NULL,
                                               DRCE_TOO_SMALL_VIA, m_currentMarker );
@@ -199,7 +199,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // test if via's hole is bigger than its diameter
         // This test is necessary since the via hole size and width can be modified
         // and a default via hole can be bigger than some vias sizes
-        if( aRefSeg->GetDrillValue() > aRefSeg->m_Width )
+        if( aRefSeg->GetDrillValue() > aRefSeg->GetWidth() )
         {
             m_currentMarker = fillMarker( aRefSeg, NULL,
                                           DRCE_VIA_HOLE_BIGGER, m_currentMarker );
@@ -237,7 +237,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     }
     else    // This is a track segment
     {
-        if( aRefSeg->m_Width < netclass->GetTrackMinWidth() )
+        if( aRefSeg->GetWidth() < netclass->GetTrackMinWidth() )
         {
             m_currentMarker = fillMarker( aRefSeg, NULL,
                                           DRCE_TOO_SMALL_TRACK_WIDTH, m_currentMarker );
@@ -303,7 +303,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
                 m_padToTestPos = dummypad.GetPosition() - origin;
 
-                if( !checkClearanceSegmToPad( &dummypad, aRefSeg->m_Width,
+                if( !checkClearanceSegmToPad( &dummypad, aRefSeg->GetWidth(),
                                               netclass->GetClearance() ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, pad,
@@ -324,7 +324,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             shape_pos = pad->ReturnShapePos();
             m_padToTestPos = shape_pos - origin;
 
-            if( !checkClearanceSegmToPad( pad, aRefSeg->m_Width, aRefSeg->GetClearance( pad ) ) )
+            if( !checkClearanceSegmToPad( pad, aRefSeg->GetWidth(), aRefSeg->GetClearance( pad ) ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, pad,
                                               DRCE_TRACK_NEAR_PAD, m_currentMarker );
@@ -355,15 +355,15 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // the minimum distance = clearance plus half the reference track
         // width plus half the other track's width
         int w_dist = aRefSeg->GetClearance( track );
-        w_dist += (aRefSeg->m_Width + track->m_Width) / 2;
+        w_dist += (aRefSeg->GetWidth() + track->GetWidth()) / 2;
 
         // If the reference segment is a via, we test it here
         if( aRefSeg->Type() == PCB_VIA_T )
         {
             int angle = 0;  // angle du segment a tester;
 
-            delta = track->m_End - track->m_Start;
-            segStartPoint = aRefSeg->m_Start - track->m_Start;
+            delta = track->GetEnd() - track->GetStart();
+            segStartPoint = aRefSeg->GetStart() - track->GetStart();
 
             if( track->Type() == PCB_VIA_T )
             {
@@ -399,8 +399,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
          * the segment to test in the new axis : the new X axis is the
          * reference segment.  We must translate and rotate the segment to test
          */
-        segStartPoint = track->m_Start - origin;
-        segEndPoint   = track->m_End - origin;
+        segStartPoint = track->GetStart() - origin;
+        segEndPoint   = track->GetEnd() - origin;
         RotatePoint( &segStartPoint, m_segmAngle );
         RotatePoint( &segEndPoint, m_segmAngle );
         if( track->Type() == PCB_VIA_T )
@@ -529,8 +529,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 else    // The drc error is due to the starting or the ending point of the reference segment
                 {
                     // Test the starting and the ending point
-                    segStartPoint = track->m_Start;
-                    segEndPoint   = track->m_End;
+                    segStartPoint = track->GetStart();
+                    segEndPoint   = track->GetEnd();
                     delta = segEndPoint - segStartPoint;
 
                     /* Compute the segment orientation (angle) en 0,1 degre */
@@ -542,8 +542,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                     /* Comute the reference segment coordinates relatives to a
                      *  X axis = current tested segment
                      */
-                    wxPoint relStartPos = aRefSeg->m_Start - segStartPoint;
-                    wxPoint relEndPos   = aRefSeg->m_End - segStartPoint;
+                    wxPoint relStartPos = aRefSeg->GetStart() - segStartPoint;
+                    wxPoint relEndPos   = aRefSeg->GetEnd() - segStartPoint;
 
                     RotatePoint( &relStartPos, angle );
                     RotatePoint( &relEndPos, angle );

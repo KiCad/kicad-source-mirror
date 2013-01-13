@@ -235,10 +235,10 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
     TRACK* track = new TRACK( sessionBoard );
 
-    track->m_Start   = mapPt( aPath->points[aPointIndex+0], routeResolution );
-    track->m_End     = mapPt( aPath->points[aPointIndex+1], routeResolution );
+    track->SetStart( mapPt( aPath->points[aPointIndex+0], routeResolution ) );
+    track->SetEnd( mapPt( aPath->points[aPointIndex+1], routeResolution ) );
     track->SetLayer( pcbLayer2kicad[layerNdx] );
-    track->m_Width   = scale( aPath->aperture_width, routeResolution );
+    track->SetWidth( scale( aPath->aperture_width, routeResolution ) );
     track->SetNet( aNetcode );
 
     return track;
@@ -295,8 +295,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         via = new SEGVIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
         via->SetDrill( drillDiam );
-        via->m_Shape = VIA_THROUGH;
-        via->m_Width = viaDiam;
+        via->SetShape( VIA_THROUGH );
+        via->SetWidth( viaDiam );
         via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
     }
     else if( shapeCount == copperLayerCount )
@@ -313,8 +313,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
         via = new SEGVIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
         via->SetDrill( drillDiam );
-        via->m_Shape = VIA_THROUGH;
-        via->m_Width = viaDiam;
+        via->SetShape( VIA_THROUGH );
+        via->SetWidth( viaDiam );
         via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
     }
     else    // VIA_MICROVIA or VIA_BLIND_BURIED
@@ -357,11 +357,11 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
         if( (topLayerNdx==0 && botLayerNdx==1)
          || (topLayerNdx==copperLayerCount-2 && botLayerNdx==copperLayerCount-1))
-            via->m_Shape = VIA_MICROVIA;
+            via->SetShape( VIA_MICROVIA );
         else
-            via->m_Shape = VIA_BLIND_BURIED;
+            via->SetShape( VIA_BLIND_BURIED );
 
-        via->m_Width = viaDiam;
+        via->SetWidth( viaDiam );
 
         topLayerNdx = pcbLayer2kicad[topLayerNdx];
         botLayerNdx = pcbLayer2kicad[botLayerNdx];

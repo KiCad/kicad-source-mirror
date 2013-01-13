@@ -480,7 +480,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
             new_hole.m_Hole_Size.x = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
             new_hole.m_Hole_Shape = 0;              // hole shape: round
-            new_hole.m_Hole_Pos = via->m_Start;
+            new_hole.m_Hole_Pos = via->GetStart();
             via->ReturnLayerPair( &new_hole.m_Hole_Top_Layer, &new_hole.m_Hole_Bottom_Layer );
 
             // ReturnLayerPair return params with m_Hole_Bottom_Layer < m_Hole_Top_Layer

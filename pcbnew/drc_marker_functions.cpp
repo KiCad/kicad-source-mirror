@@ -70,17 +70,17 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
 
             posB = track->GetPosition();
 
-            wxPoint endPos = track->m_End;
+            wxPoint endPos = track->GetEnd();
 
             // either of aItem's start or end will be used for the marker position
             // first assume start, then switch at end if needed.  decision made on
             // distance from end of aTrack.
-            position = track->m_Start;
+            position = track->GetStart();
 
-            double dToEnd = hypot( endPos.x - aTrack->m_End.x,
-                                   endPos.y - aTrack->m_End.y );
-            double dToStart = hypot( position.x - aTrack->m_End.x,
-                                     position.y - aTrack->m_End.y );
+            double dToEnd = hypot( endPos.x - aTrack->GetEnd().x,
+                                   endPos.y - aTrack->GetEnd().y );
+            double dToStart = hypot( position.x - aTrack->GetEnd().x,
+                                     position.y - aTrack->GetEnd().y );
 
             if( dToEnd < dToStart )
                 position = endPos;

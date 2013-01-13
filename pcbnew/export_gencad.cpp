@@ -225,8 +225,8 @@ static int ViaSort( const void* aRefptr, const void* aObjptr )
     TRACK* padref = *(TRACK**) aRefptr;
     TRACK* padcmp = *(TRACK**) aObjptr;
 
-    if( padref->m_Width != padcmp->m_Width )
-        return padref->m_Width - padcmp->m_Width;
+    if( padref->GetWidth() != padcmp->GetWidth() )
+        return padref->GetWidth() - padcmp->GetWidth();
 
     if( padref->GetDrillValue() != padcmp->GetDrillValue() )
         return padref->GetDrillValue() - padcmp->GetDrillValue();
@@ -292,10 +292,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         old_via = via;
         viastacks.push_back( via );
         fprintf( aFile, "PAD V%d.%d.%X ROUND %g\nCIRCLE 0 0 %g\n",
-                via->m_Width, via->GetDrillValue(),
+                via->GetWidth(), via->GetDrillValue(),
                 via->ReturnMaskLayer(),
                 via->GetDrillValue() / SCALE_FACTOR,
-                via->m_Width / (SCALE_FACTOR * 2) );
+                via->GetWidth() / (SCALE_FACTOR * 2) );
     }
 
     // Emit component pads
@@ -436,7 +436,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         TRACK*   via  = viastacks[i];
         unsigned mask = via->ReturnMaskLayer() & master_layermask;
         fprintf( aFile, "PADSTACK VIA%d.%d.%X %g\n",
-                 via->m_Width, via->GetDrillValue(), mask,
+                 via->GetWidth(), via->GetDrillValue(), mask,
                  via->GetDrillValue() / SCALE_FACTOR );
 
         for( int layer = 0; layer < 32; layer++ )
@@ -444,7 +444,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             if( mask & (1 << layer) )
             {
                 fprintf( aFile, "PAD V%d.%d.%X %s 0 0\n",
-                        via->m_Width, via->GetDrillValue(),
+                        via->GetWidth(), via->GetDrillValue(),
                         mask,
                         TO_UTF8( GenCADLayerName[layer] ) );
             }
@@ -736,7 +736,7 @@ static int TrackListSortByNetcode( const void* refptr, const void* objptr )
     if( ( diff = ref->GetNet() - cmp->GetNet() ) )
         return diff;
 
-    if( ( diff = ref->m_Width - cmp->m_Width ) )
+    if( ( diff = ref->GetWidth() - cmp->GetWidth() ) )
         return diff;
 
     if( ( diff = ref->GetLayer() - cmp->GetLayer() ) )
@@ -814,10 +814,10 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
             fprintf( aFile, "ROUTE %s\n", TO_UTF8( netname ) );
         }
 
-        if( old_width != track->m_Width )
+        if( old_width != track->GetWidth() )
         {
-            old_width = track->m_Width;
-            fprintf( aFile, "TRACK TRACK%d\n", track->m_Width );
+            old_width = track->GetWidth();
+            fprintf( aFile, "TRACK TRACK%d\n", track->GetWidth() );
         }
 
         if( (track->Type() == PCB_TRACE_T) || (track->Type() == PCB_ZONE_T) )
@@ -830,15 +830,15 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
             }
 
             fprintf( aFile, "LINE %g %g %g %g\n",
-                    MapXTo( track->m_Start.x ), MapYTo( track->m_Start.y ),
-                    MapXTo( track->m_End.x ), MapYTo( track->m_End.y ) );
+                    MapXTo( track->GetStart().x ), MapYTo( track->GetStart().y ),
+                    MapXTo( track->GetEnd().x ), MapYTo( track->GetEnd().y ) );
         }
         if( track->Type() == PCB_VIA_T )
         {
             fprintf( aFile, "VIA VIA%d.%d.%X %g %g ALL %g via%d\n",
-                     track->m_Width, track->GetDrillValue(),
+                     track->GetWidth(), track->GetDrillValue(),
                      track->ReturnMaskLayer() & master_layermask,
-                     MapXTo( track->m_Start.x ), MapYTo( track->m_Start.y ),
+                     MapXTo( track->GetStart().x ), MapYTo( track->GetStart().y ),
                      track->GetDrillValue() / SCALE_FACTOR, vianum++ );
         }
     }
@@ -931,35 +931,35 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
 
     for( track = aPcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( last_width != track->m_Width ) // Find a thickness already used.
+        if( last_width != track->GetWidth() ) // Find a thickness already used.
         {
             for( ii = 0; ii < trackinfo.size(); ii++ )
             {
-                if( trackinfo[ii] == track->m_Width )
+                if( trackinfo[ii] == track->GetWidth() )
                     break;
             }
 
             if( ii == trackinfo.size() )    // not found
-                trackinfo.push_back( track->m_Width );
+                trackinfo.push_back( track->GetWidth() );
 
-            last_width = track->m_Width;
+            last_width = track->GetWidth();
         }
     }
 
     for( track = aPcb->m_Zone; track != NULL; track = track->Next() )
     {
-        if( last_width != track->m_Width ) // Find a thickness already used.
+        if( last_width != track->GetWidth() ) // Find a thickness already used.
         {
             for( ii = 0; ii < trackinfo.size(); ii++ )
             {
-                if( trackinfo[ii] == track->m_Width )
+                if( trackinfo[ii] == track->GetWidth() )
                     break;
             }
 
             if( ii == trackinfo.size() )    // not found
-                trackinfo.push_back( track->m_Width );
+                trackinfo.push_back( track->GetWidth() );
 
-            last_width = track->m_Width;
+            last_width = track->GetWidth();
         }
     }
 

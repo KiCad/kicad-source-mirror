@@ -214,13 +214,13 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* 
              */
             aLayerMask = candidate->ReturnMaskLayer();
 
-            if( aPosition == candidate->m_Start )
+            if( aPosition == candidate->GetStart() )
             {
-                aPosition = candidate->m_End;
+                aPosition = candidate->GetEnd();
             }
             else
             {
-                aPosition = candidate->m_Start;
+                aPosition = candidate->GetStart();
             }
 
             segment = m_Track; /* restart list of tracks to analyze */
@@ -1586,7 +1586,7 @@ TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, int aLayerMask )
         if( track->Type() != PCB_VIA_T )
             continue;
 
-        if( track->m_Start != aPosition )
+        if( track->GetStart() != aPosition )
             continue;
 
         if( track->GetState( BUSY | IS_DELETED ) )
@@ -1628,11 +1628,11 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, int aEndPoint )
 
     if( aEndPoint == FLG_START )
     {
-        aPosition = aTrace->m_Start;
+        aPosition = aTrace->GetStart();
     }
     else
     {
-        aPosition = aTrace->m_End;
+        aPosition = aTrace->GetEnd();
     }
 
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
@@ -1852,16 +1852,16 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
     if( aTrace->Type() == PCB_VIA_T )
     {
         TRACK* Segm1, * Segm2 = NULL, * Segm3 = NULL;
-        Segm1 = ::GetTrace( m_Track, NULL, aTrace->m_Start, layerMask );
+        Segm1 = ::GetTrace( m_Track, NULL, aTrace->GetStart(), layerMask );
 
         if( Segm1 )
         {
-            Segm2 = ::GetTrace( Segm1->Next(), NULL, aTrace->m_Start, layerMask );
+            Segm2 = ::GetTrace( Segm1->Next(), NULL, aTrace->GetStart(), layerMask );
         }
 
         if( Segm2 )
         {
-            Segm3 = ::GetTrace( Segm2->Next(), NULL, aTrace->m_Start, layerMask );
+            Segm3 = ::GetTrace( Segm2->Next(), NULL, aTrace->GetStart(), layerMask );
         }
 
         if( Segm3 ) // More than 2 segments are connected to this via. the track" is only this via
@@ -1875,19 +1875,19 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
         if( Segm1 ) // search for others segments connected to the initial segment start point
         {
             layerMask = Segm1->ReturnMaskLayer();
-            chainMarkedSegments( aTrace->m_Start, layerMask, &trackList );
+            chainMarkedSegments( aTrace->GetStart(), layerMask, &trackList );
         }
 
         if( Segm2 ) // search for others segments connected to the initial segment end point
         {
             layerMask = Segm2->ReturnMaskLayer();
-            chainMarkedSegments( aTrace->m_Start, layerMask, &trackList );
+            chainMarkedSegments( aTrace->GetStart(), layerMask, &trackList );
         }
     }
     else    // mark the chain using both ends of the initial segment
     {
-        chainMarkedSegments( aTrace->m_Start, layerMask, &trackList );
-        chainMarkedSegments( aTrace->m_End, layerMask, &trackList );
+        chainMarkedSegments( aTrace->GetStart(), layerMask, &trackList );
+        chainMarkedSegments( aTrace->GetEnd(), layerMask, &trackList );
     }
 
     // Now examine selected vias and flag them if they are on the track
@@ -1909,7 +1909,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 
         layerMask = via->ReturnMaskLayer();
 
-        TRACK* track = ::GetTrace( m_Track, NULL, via->m_Start, layerMask );
+        TRACK* track = ::GetTrace( m_Track, NULL, via->GetStart(), layerMask );
 
         // GetTrace does not consider tracks flagged BUSY.
         // So if no connected track found, this via is on the current track
@@ -1931,7 +1931,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
          */
         int layer = track->GetLayer();
 
-        while( ( track = ::GetTrace( track->Next(), NULL, via->m_Start, layerMask ) ) != NULL )
+        while( ( track = ::GetTrace( track->Next(), NULL, via->GetStart(), layerMask ) ) != NULL )
         {
             if( layer != track->GetLayer() )
             {
@@ -2159,21 +2159,21 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
      * The new segment starts from aPosition and ends at the end point of
      * aSegment. The original segment now ends at aPosition.
      */
-    if( aSegment->m_Start == aPosition || aSegment->m_End == aPosition )
+    if( aSegment->GetStart() == aPosition || aSegment->GetEnd() == aPosition )
         return NULL;
 
     /* A via is a good lock point */
     if( aSegment->Type() == PCB_VIA_T )
     {
-        aPosition = aSegment->m_Start;
+        aPosition = aSegment->GetStart();
         return aSegment;
     }
 
     // Calculation coordinate of intermediate point relative to the start point of aSegment
-     wxPoint delta = aSegment->m_End - aSegment->m_Start;
+     wxPoint delta = aSegment->GetEnd() - aSegment->GetStart();
 
-    // calculate coordinates of aPosition relative to aSegment->m_Start
-    wxPoint lockPoint = aPosition - aSegment->m_Start;
+    // calculate coordinates of aPosition relative to aSegment->GetStart()
+    wxPoint lockPoint = aPosition - aSegment->GetStart();
 
     // lockPoint must be on aSegment:
     // Ensure lockPoint.y/lockPoint.y = delta.y/delta.x
@@ -2185,11 +2185,11 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     /* Create the intermediate point (that is to say creation of a new
      * segment, beginning at the intermediate point.
      */
-    lockPoint += aSegment->m_Start;
+    lockPoint += aSegment->GetStart();
 
     TRACK* newTrack = (TRACK*)aSegment->Clone();
     // The new segment begins at the new point,
-    newTrack->m_Start = lockPoint;
+    newTrack->SetStart(lockPoint);
     newTrack->start = aSegment;
     newTrack->SetState( BEGIN_ONPAD, OFF );
 
@@ -2211,7 +2211,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     }
 
     // Old track segment now ends at new point.
-    aSegment->m_End = lockPoint;
+    aSegment->SetEnd(lockPoint);
     aSegment->end = newTrack;
     aSegment->SetState( END_ONPAD, OFF );
 

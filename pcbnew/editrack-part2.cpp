@@ -62,13 +62,13 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     // Avoid more than one via on the current location:
-    if( GetBoard()->GetViaByPosition( g_CurrentTrackSegment->m_End,
+    if( GetBoard()->GetViaByPosition( g_CurrentTrackSegment->GetEnd(),
                                       g_CurrentTrackSegment->GetLayer() ) )
         return false;
 
     for( TRACK* segm = g_FirstTrackSegment;  segm;  segm = segm->Next() )
     {
-        if( segm->Type() == PCB_VIA_T && g_CurrentTrackSegment->m_End == segm->m_Start )
+        if( segm->Type() == PCB_VIA_T && g_CurrentTrackSegment->GetEnd() == segm->GetStart() )
             return false;
     }
 
@@ -98,10 +98,11 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     // create the via
     SEGVIA* via    = new SEGVIA( GetBoard() );
     via->SetFlags( IS_NEW );
-    via->m_Shape   = GetDesignSettings().m_CurrentViaType;
-    via->m_Width   = GetBoard()->GetCurrentViaSize();
+    via->SetShape( GetDesignSettings().m_CurrentViaType );
+    via->SetWidth( GetBoard()->GetCurrentViaSize());
     via->SetNet( GetBoard()->GetHighLightNetCode() );
-    via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
+    via->SetEnd( g_CurrentTrackSegment->GetEnd() );
+    via->SetStart( g_CurrentTrackSegment->GetEnd() );
 
     // Usual via is from copper to component.
     // layer pair is LAYER_N_BACK and LAYER_N_FRONT.
@@ -140,7 +141,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             via->SetLayerPair( first_layer, last_layer );
             {
                 NETINFO_ITEM* net = GetBoard()->FindNet( via->GetNet() );
-                via->m_Width      = net->GetMicroViaSize();
+                via->SetWidth( net->GetMicroViaSize() );
             }
         }
             break;
@@ -198,7 +199,8 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     /* the start point is the via position and the end point is the cursor
      * which also is on the via (will change when moving mouse)
      */
-    track->m_Start = track->m_End = via->m_Start;
+    track->SetEnd( via->GetStart() );
+    track->SetStart( via->GetStart() ); 
 
     g_CurrentTrackList.PushBack( track );
 

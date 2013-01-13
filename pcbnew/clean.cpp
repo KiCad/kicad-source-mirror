@@ -218,8 +218,8 @@ bool TRACKS_CLEANER::clean_vias()
         // Correct via m_End defects (if any)
         if( track->Type() == PCB_VIA_T )
         {
-            if( track->m_Start != track->m_End )
-                track->m_End = track->m_Start;
+            if( track->GetStart() != track->GetEnd() )
+                track->SetEnd( track->GetStart() );
         }
 
         if( track->GetShape() != VIA_THROUGH )
@@ -232,10 +232,10 @@ bool TRACKS_CLEANER::clean_vias()
         {
             next_track = alt_track->Next();
 
-            if( alt_track->m_Shape != VIA_THROUGH )
+            if( alt_track->GetShape() != VIA_THROUGH )
                 continue;
 
-            if( alt_track->m_Start != track->m_Start )
+            if( alt_track->GetStart() != track->GetStart() )
                 continue;
 
             // delete via
@@ -250,7 +250,7 @@ bool TRACKS_CLEANER::clean_vias()
     {
         next_track = track->Next();
 
-        if( track->m_Shape != VIA_THROUGH )
+        if( track->GetShape() != VIA_THROUGH )
             continue;
 
         // Examine the list of connected pads:
@@ -319,13 +319,13 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                 {
                     if( track->Type() != PCB_VIA_T )
                     {
-                        zone = m_Brd->HitTestForAnyFilledArea( track->m_Start,
+                        zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
                                                                track->GetLayer() );
                     }
                     else
                     {
                         ((SEGVIA*)track)->ReturnLayerPair( &top_layer, &bottom_layer );
-                        zone = m_Brd->HitTestForAnyFilledArea( track->m_Start,
+                        zone = m_Brd->HitTestForAnyFilledArea( track->GetStart(),
                                                                top_layer, bottom_layer );
                     }
                 }
@@ -352,7 +352,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         if( other == NULL )
                         {
                             via->ReturnLayerPair( &top_layer, &bottom_layer );
-                            zone = m_Brd->HitTestForAnyFilledArea( via->m_Start,
+                            zone = m_Brd->HitTestForAnyFilledArea( via->GetStart(),
                                                                    bottom_layer, top_layer );
                         }
 
@@ -374,13 +374,13 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                 {
                     if( track->Type() != PCB_VIA_T )
                     {
-                        zone = m_Brd->HitTestForAnyFilledArea( track->m_End,
+                        zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
                                                                track->GetLayer() );
                     }
                     else
                     {
                         ((SEGVIA*)track)->ReturnLayerPair( &top_layer, &bottom_layer );
-                        zone = m_Brd->HitTestForAnyFilledArea( track->m_End,
+                        zone = m_Brd->HitTestForAnyFilledArea( track->GetEnd(),
                                                                top_layer, bottom_layer );
                     }
                 }
@@ -408,7 +408,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         if( other == NULL )
                         {
                             via->ReturnLayerPair( &top_layer, &bottom_layer );
-                            zone = m_Brd->HitTestForAnyFilledArea( via->m_End,
+                            zone = m_Brd->HitTestForAnyFilledArea( via->GetEnd(),
                                                                    bottom_layer, top_layer );
                         }
 
@@ -472,12 +472,12 @@ bool TRACKS_CLEANER::clean_segments()
             if( segment->GetNet() != other->GetNet() )
                 break;
 
-            if( ( segment->m_Start == other->m_Start ) &&
-                ( segment->m_End == other->m_End ) )
+            if( ( segment->GetStart() == other->GetStart() ) &&
+                ( segment->GetEnd() == other->GetEnd() ) )
                 erase = true;
 
-            if( ( segment->m_Start == other->m_End ) &&
-                ( segment->m_End == other->m_Start ) )
+            if( ( segment->GetStart() == other->GetEnd() ) &&
+                ( segment->GetEnd() == other->GetStart() ) )
                 erase = true;
 
             // Delete redundant point
@@ -511,7 +511,7 @@ bool TRACKS_CLEANER::clean_segments()
             if( segStart )
             {
                 // the two segments must have the same width
-                if( segment->m_Width != segStart->m_Width )
+                if( segment->GetWidth() != segStart->GetWidth() )
                     break;
 
                 // it cannot be a via
@@ -550,7 +550,7 @@ bool TRACKS_CLEANER::clean_segments()
 
             if( segEnd )
             {
-                if( segment->m_Width != segEnd->m_Width )
+                if( segment->GetWidth() != segEnd->GetWidth() )
                     break;
 
                 if( segEnd->Type() != PCB_TRACE_T )
@@ -607,7 +607,7 @@ bool TRACKS_CLEANER::clean_segments()
 TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate,
                                        int aEndType )
 {
-    if( aTrackRef->m_Width != aCandidate->m_Width )
+    if( aTrackRef->GetWidth() != aCandidate->GetWidth() )
         return NULL;
 
     bool is_colinear = false;
@@ -615,20 +615,20 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
     // Trivial case: superimposed tracks ( tracks, not vias ):
     if( aTrackRef->Type() == PCB_TRACE_T && aCandidate->Type() == PCB_TRACE_T )
     {
-        if( ( aTrackRef->m_Start == aCandidate->m_Start ) &&
-            ( aTrackRef->m_End == aCandidate->m_End ) )
+        if( ( aTrackRef->GetStart() == aCandidate->GetStart() ) &&
+            ( aTrackRef->GetEnd() == aCandidate->GetEnd() ) )
             return aCandidate;
 
-        if( ( aTrackRef->m_Start == aCandidate->m_End ) &&
-            ( aTrackRef->m_End == aCandidate->m_Start ) )
+        if( ( aTrackRef->GetStart() == aCandidate->GetEnd() ) &&
+            ( aTrackRef->GetEnd() == aCandidate->GetStart() ) )
             return aCandidate;
     }
 
-    int refdx = aTrackRef->m_End.x - aTrackRef->m_Start.x;
-    int refdy = aTrackRef->m_End.y - aTrackRef->m_Start.y;
+    int refdx = aTrackRef->GetEnd().x - aTrackRef->GetStart().x;
+    int refdy = aTrackRef->GetEnd().y - aTrackRef->GetStart().y;
 
-    int segmdx = aCandidate->m_End.x - aCandidate->m_Start.x;
-    int segmdy = aCandidate->m_End.y - aCandidate->m_Start.y;
+    int segmdx = aCandidate->GetEnd().x - aCandidate->GetStart().x;
+    int segmdy = aCandidate->GetEnd().y - aCandidate->GetStart().y;
 
     // test for vertical alignment (easy to handle)
     if( refdx == 0 )
@@ -673,16 +673,16 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
 
         /* change the common point coordinate of pt_segm to use the other point
          * of pt_segm (pt_segm will be removed later) */
-        if( aTrackRef->m_Start == aCandidate->m_Start )
+        if( aTrackRef->GetStart() == aCandidate->GetStart() )
         {
-            aTrackRef->m_Start = aCandidate->m_End;
+            aTrackRef->SetStart( aCandidate->GetEnd());
             aTrackRef->start = aCandidate->end;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( END_ON_PAD) );
             return aCandidate;
         }
         else
         {
-            aTrackRef->m_Start = aCandidate->m_Start;
+            aTrackRef->SetStart( aCandidate->GetStart() );
             aTrackRef->start = aCandidate->start;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( START_ON_PAD) );
             return aCandidate;
@@ -696,16 +696,16 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
 
         /* change the common point coordinate of pt_segm to use the other point
          * of pt_segm (pt_segm will be removed later) */
-        if( aTrackRef->m_End == aCandidate->m_Start )
+        if( aTrackRef->GetEnd() == aCandidate->GetStart() )
         {
-            aTrackRef->m_End = aCandidate->m_End;
+            aTrackRef->SetEnd( aCandidate->GetEnd() );
             aTrackRef->end = aCandidate->end;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( END_ON_PAD) );
             return aCandidate;
         }
         else
         {
-            aTrackRef->m_End = aCandidate->m_Start;
+            aTrackRef->SetEnd( aCandidate->GetStart() );
             aTrackRef->end = aCandidate->start;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( START_ON_PAD) );
             return aCandidate;

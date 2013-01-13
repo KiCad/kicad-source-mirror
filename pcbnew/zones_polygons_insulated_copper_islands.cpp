@@ -74,10 +74,10 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
         if( track->GetNet() != GetNet() )
             continue;
 
-        listPointsCandidates.push_back( track->m_Start );
+        listPointsCandidates.push_back( track->GetStart() );
 
         if( track->Type() != PCB_VIA_T )
-            listPointsCandidates.push_back( track->m_End );
+            listPointsCandidates.push_back( track->GetEnd() );
     }
 
     // test if a point is inside
