@@ -11,19 +11,22 @@ Wayne Stambaugh <stambaughw[at]verizon-dot-net>
 Hauptmech <hauptmech[at]gmail-dot-com>
 Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
 Jonas Diemer <diemer[at]gmx-dot-de>
-KBool Library http://boolean.klaasholwerda.nl/bool.html
 Lorenzo <lomarcan[at]tin-dot-it>
 Marco Serantoni <marco.serantoni[at]gmail-dot-com>  (OSX maintener)
 Rok Markovic <rok[at]kanardia.eu>
 Tim Hanson <sideskate[at]gmail-dot-com>
 Vesa Solonen <vesa.solonen[at]hut-dot-fi>
 Alexander Zakamaldin <zaka62[at]mail.ru>
+Miguel Angel Ajo Pelayo <miguelangel@nbee.es> (Python Scripting)
+Alexander Lunev <al.lunev@yahoo.com>  (Pcad to Kicad converter)
+Jacobo Aragunde Perez <jaragunde@igalia.com> for Igalia and the CERN
 
 See also CHANGELOG.txt for contributors.
 
 == Document Writers
 Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab.inpg.fr>
 Igor Plyatov <plyatov[at]gmail.com>
+Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
 
 == Translators
 Czech (CZ) Martin Krato≈°ka <martin[at]ok1rr-dot-com>
@@ -31,11 +34,16 @@ Dutch (NL) Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
 Finnish (FI) Vesa Solonen <vesa.solonen[at]hut-dot-fi>
 French (FR) Jean-Pierre Charras <jean-pierre.charras[at]inpg-dot-fr>
 Polish (PL) Mateusz Skowroøski <skowri[at]gmail-dot-com>
+Polish (PL) Kerusey Karyu <keruseykaryu@o2.pl>
 Portuguese (PT) Renie Marquet <reniemarquet[at]uol-dot-com-dot-br>"
 Russian (RU) Igor Plyatov <plyatov[at]gmail-dot-com>
+Russian (RU) Andrey Fedorushkov <andrf@mail.ru>
 Spanish (ES) Pedro Martin del Valle <pkicad[at]yahoo-dot-es>
 Spanish (ES) IÒigo Zuluaga <inigo_zuluaga[at]yahoo-dot-es>
 German (DE) Rafael Sokolowski <Rafael.Sokolowski[at]web-dot-de
+Japanese (JA) Kenta Yonekura <midpika@hotmail.com>
+Japanese (JA) yoneken <midpika@hotmail.com>
+
 Remy Halvick, David Briscoe, Dominique Laigle, Paul Burke
 
 == Programm credits for icons and others
