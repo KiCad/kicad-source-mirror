@@ -53,13 +53,14 @@
 #include <module_editor_frame.h>
 #include <dialog_SVG_print.h>
 #include <dialog_helpers.h>
+#include <convert_from_iu.h>
 
 #ifdef KICAD_SCRIPTING
 #include <python_scripting.h>
 #endif
 
 // Keys used in read/write config
-#define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth" )
+#define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
 #define PCB_SHOW_FULL_RATSNET_OPT   wxT( "PcbFulRatsnest" )
 #define PCB_MAGNETIC_PADS_OPT   wxT( "PcbMagPadOpt" )
 #define PCB_MAGNETIC_TRACKS_OPT wxT( "PcbMagTrackOpt" )
@@ -582,8 +583,14 @@ void PCB_EDIT_FRAME::LoadSettings()
 
     PCB_BASE_FRAME::LoadSettings();
 
+    double dtmp;
+    config->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &dtmp, 0.1 ); // stored in mm
+    if( dtmp < 0.01 )
+        dtmp = 0.01;
+    if( dtmp > 5.0 )
+        dtmp = 5.0;
+    g_DrawDefaultLineThickness = Millimeter2iu( dtmp );
     long tmp;
-    config->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &g_DrawDefaultLineThickness );
     config->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
     GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, tmp);
     config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
@@ -610,7 +617,9 @@ void PCB_EDIT_FRAME::SaveSettings()
 
     PCB_BASE_FRAME::SaveSettings();
 
-    config->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE, g_DrawDefaultLineThickness );
+    // This value is stored in mm )
+    config->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE,
+                   MM_PER_IU * g_DrawDefaultLineThickness );
     long tmp = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
     config->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );
     config->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
