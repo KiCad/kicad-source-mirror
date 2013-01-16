@@ -442,7 +442,7 @@ endif(WIN32)
 
 if(KICAD_SCRIPTING)
     add_custom_target(FixSwigImportsScripting ALL
-        ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripting/fixswigimports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${FINAL_EXE}
         COMMENT "Fixing swig_import_helper in Kicad scripting"
         )
