@@ -43,7 +43,7 @@ static PCB_EDIT_FRAME *PcbEditFrame=NULL;
 
 BOARD *GetBoard()
 {
-	if (PcbEditFrame) 
+	if (PcbEditFrame)
         return PcbEditFrame->GetBoard();
 	else return NULL;
 }
@@ -56,15 +56,15 @@ void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME *aPCBEdaFrame )
 BOARD* LoadBoard( wxString& aFileName )
 {
 
-    if ( aFileName.EndsWith( wxT( ".kicad_brd" ) ) ) 
+    if ( aFileName.EndsWith( wxT( ".kicad_pcb" ) ) )
         return LoadBoard(aFileName,IO_MGR::KICAD);
 
-    else if (aFileName.EndsWith(wxT(".brd")))  
+    else if (aFileName.EndsWith(wxT(".brd")))
         return LoadBoard(aFileName,IO_MGR::LEGACY);
-	
+
     // as fall back for any other kind use the legacy format
     return LoadBoard(aFileName,IO_MGR::LEGACY);
-     
+
 }
 
 BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
@@ -86,7 +86,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard,
 
   wxString header;
   PROPERTIES   props;
-  
+
   if ( aFormat==IO_MGR::LEGACY )
   {
       header = wxString::Format(
@@ -95,12 +95,12 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard,
                             GetBuildVersion().GetData() );
       props["header"] = header;
   }
-  
 
- 
+
+
   IO_MGR::Save( aFormat, aFileName, aBoard, &props );
   return true;
- 
+
 }
 
 
