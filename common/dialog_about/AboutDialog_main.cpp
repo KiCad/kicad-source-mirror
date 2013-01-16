@@ -205,7 +205,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     /* The developers */
     info.AddDeveloper( new Contributor( wxT( "Jean-Pierre Charras" ),
-                                        wxT( "jean-pierre.charras@gipsa-lab.inpg.fr" ) ) );
+                                        wxT( "jp.charras@wanadoo.fr" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Dick Hollenbeck" ), wxT( "dick@softplc.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Frank Bennett" ), wxT( "bennett78@lpbroadband.net" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Hauptmech" ), wxT( "hauptmech@gmail.com" ) ) );
@@ -218,6 +218,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddDeveloper( new Contributor( wxT( "Marco Serantoni" ),
                                         wxT( "marco.serantoni@gmail.com" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Marco Mattila" ), wxT( "marcom99@gmail.com" ) ) );
+    info.AddDeveloper( new Contributor( wxT( "Miguel Angel Ajo Pelayo" ),
+                                        wxT( "miguelangel@nbee.es" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Rafael Sokolowski" ),
                                         wxT( "rafael.sokolowski@web.de" ) ) );
     info.AddDeveloper( new Contributor( wxT( "Rok Markovic" ), wxT( "rok@kanardia.eu" ) ) );
@@ -228,7 +230,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     /* The document writers */
     info.AddDocWriter( new Contributor( wxT( "Jean-Pierre Charras" ),
-                                        wxT( "jean-pierre.charras@gipsa-lab.inpg.fr" ) ) );
+                                        wxT( "jp.charras@wanadoo.fr" ) ) );
     info.AddDocWriter( new Contributor( wxT( "Igor Plyatov" ),
                                         wxT( "plyatov@gmail.com" ) ) );
     info.AddDocWriter( new Contributor( wxT( "Fabrizio Tappero" ),
@@ -246,7 +248,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator( new Contributor( wxT( "Vesa Solonen" ), wxT( "vesa.solonen@hut.fi" ),
                                          wxT( "Finnish (FI)" ), KiBitmapNew( lang_fi_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Jean-Pierre Charras" ),
-                                         wxT( "jean-pierre.charras@gipsa-lab.inpg.fr" ),
+                                         wxT( "jp.charras@wanadoo.fr" ),
                                          wxT( "French (FR)" ), KiBitmapNew( lang_fr_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Mateusz Skowroński" ), wxT( "skowri@gmail.com" ),
                                          wxT( "Polish (PL)" ), KiBitmapNew( lang_pl_xpm ) ) );
@@ -254,7 +256,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                          wxT( "Portuguese (PT)" ), KiBitmapNew( lang_pt_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Igor Plyatov" ), wxT( "plyatov@gmail.com" ),
                                          wxT( "Russian (RU)" ), KiBitmapNew( lang_ru_xpm ) ) );
-    info.AddTranslator( new Contributor( wxT( "Andrey Fedorushkov" ), wxT( "<andrf@mail.ru>" ),
+    info.AddTranslator( new Contributor( wxT( "Andrey Fedorushkov" ), wxT( "andrf@mail.ru" ),
                                          wxT( "Russian (RU)" ), KiBitmapNew( lang_ru_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Pedro Martin del Valle" ), wxT( "pkicad@yahoo.es" ),
                                          wxT( "Spanish (ES)" ), KiBitmapNew( lang_es_xpm ) ) );
