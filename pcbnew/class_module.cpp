@@ -510,10 +510,16 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Attrib" ), msg, BROWN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Module" ), m_LibRef, BLUE ) );
 
-    if(  m_3D_Drawings != NULL )
-        msg = m_3D_Drawings->m_Shape3DName;
-    else
-        msg = _( "No 3D shape" );
+    msg = _( "No 3D shape" );
+    // Search the first active 3D shape in list
+    for( S3D_MASTER* struct3D = m_3D_Drawings; struct3D; struct3D = struct3D->Next() )
+    {
+        if( !struct3D->m_Shape3DName.IsEmpty() )
+        {
+            msg = struct3D->m_Shape3DName;
+            break;
+        }
+    }
 
     aList.push_back( MSG_PANEL_ITEM( _( "3D-Shape" ), msg, RED ) );
 
