@@ -28,10 +28,10 @@
 #include <wx/dialog.h>
 #include <hashtables.h>
 
-#if wxMINOR_VERSION == 9 && defined(__WXGTK__)
- #define DLGSHIM_USE_SETFOCUS      0
-#else
+#if wxMINOR_VERSION == 8 && defined(__WXGTK__)
  #define DLGSHIM_USE_SETFOCUS      1
+#else
+ #define DLGSHIM_USE_SETFOCUS      0
 #endif
 
 
