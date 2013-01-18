@@ -7,6 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2013 CERN (www.cern.ch)
  * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -186,15 +187,51 @@ void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::PROCESS_TERMINATE_EVENT_HANDLER::
+                        OnTerminate( int pid, int status )
+{
+
+    wxString msg;
+
+    msg.Printf( appName + _( " closed [pid=%d]\n" ), pid );
+    ( (KICAD_MANAGER_FRAME*) wxGetApp().GetTopWindow() )->PrintMsg( msg );
+
+    delete this;
+}
+
+
+void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
+                                   const wxString& param )
+{
+
+    PROCESS_TERMINATE_EVENT_HANDLER* callback;
+    long pid;
+    wxString msg;
+
+    callback = new PROCESS_TERMINATE_EVENT_HANDLER( execFile );
+    pid = ExecuteFile( frame, execFile, param, callback );
+
+    if( pid > 0 )
+    {
+        msg.Printf( execFile + _( " opened [pid=%ld]\n" ), pid );
+        PrintMsg( msg );
+    }
+    else
+    {
+        delete callback;
+    }
+}
+
+
 void KICAD_MANAGER_FRAME::OnRunBitmapConverter( wxCommandEvent& event )
 {
-    ExecuteFile( this, BITMAPCONVERTER_EXE, wxEmptyString );
+    Execute( this, BITMAPCONVERTER_EXE );
 }
 
 
 void KICAD_MANAGER_FRAME::OnRunPcbCalculator( wxCommandEvent& event )
 {
-    ExecuteFile( this, PCB_CALCULATOR_EXE, wxEmptyString );
+    Execute( this, PCB_CALCULATOR_EXE );
 }
 
 
@@ -207,9 +244,9 @@ void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
     kicad_board.SetExt( KiCadPcbFileExtension );
 
     if( !legacy_board.FileExists() || kicad_board.FileExists() )
-        ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( kicad_board ) );
+        Execute( this, PCBNEW_EXE, QuoteFullPath( kicad_board ) );
     else
-        ExecuteFile( this, PCBNEW_EXE, QuoteFullPath( legacy_board ) );
+        Execute( this, PCBNEW_EXE, QuoteFullPath( legacy_board ) );
 }
 
 
@@ -218,18 +255,17 @@ void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
     wxFileName fn( m_ProjectFileName );
 
     fn.SetExt( NetlistFileExtension );
-    ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
+    Execute( this, CVPCB_EXE, QuoteFullPath( fn ) );
 }
-
 
 void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
 
     fn.SetExt( SchematicFileExtension );
-    ExecuteFile( this, EESCHEMA_EXE, QuoteFullPath( fn ) );
-}
+    Execute( this, EESCHEMA_EXE, QuoteFullPath( fn ) );
 
+}
 
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
@@ -237,7 +273,7 @@ void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
     wxString path = wxT( "\"" );
     path += fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) + wxT( "\"" );
 
-    ExecuteFile( this, GERBVIEW_EXE, path );
+    Execute( this, GERBVIEW_EXE, path );
 }
 
 
@@ -246,7 +282,7 @@ void KICAD_MANAGER_FRAME::OnOpenTextEditor( wxCommandEvent& event )
     wxString editorname = wxGetApp().GetEditorName();
 
     if( !editorname.IsEmpty() )
-        ExecuteFile( this, editorname, wxEmptyString );
+        Execute( this, editorname, wxEmptyString );
 }
 
 
@@ -271,7 +307,7 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
     filename += dlg.GetPath() + wxT( "\"" );
 
     if( !dlg.GetPath().IsEmpty() &&  !wxGetApp().GetEditorName().IsEmpty() )
-        ExecuteFile( this, wxGetApp().GetEditorName(), filename );
+        Execute( this, wxGetApp().GetEditorName(), filename );
 }
 
 

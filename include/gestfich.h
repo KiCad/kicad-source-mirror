@@ -10,6 +10,7 @@
 #define __INCLUDE__GESTFICH_H__ 1
 
 #include <wx/filename.h>
+#include <wx/process.h>
 
 
 /* Forward class declarations. */
@@ -79,7 +80,7 @@ EDA_LIST_DIALOG* GetFileNames( char* Directory, char* Mask );
  * calls the executable file \a ExecFile with the command line parameters \a param.
  */
 int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
-                 const wxString& param = wxEmptyString );
+                 const wxString& param = wxEmptyString, wxProcess *callback = NULL );
 
 /**
  * Function AddDelimiterString
