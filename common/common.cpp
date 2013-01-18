@@ -313,15 +313,9 @@ wxString GenDate()
 }
 
 
-bool ProcessExecute( const wxString& aCommandLine, int aFlags )
+int ProcessExecute( const wxString& aCommandLine, int aFlags, wxProcess *callback )
 {
-#ifdef __WINDOWS__
-    int        pid = wxExecute( aCommandLine );
-    return pid ? true : false;
-#else
-    wxProcess* process = wxProcess::Open( aCommandLine, aFlags );
-    return (process != NULL) ? true : false;
-#endif
+    return wxExecute( aCommandLine, aFlags, callback );
 }
 
 

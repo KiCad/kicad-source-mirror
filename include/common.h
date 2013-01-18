@@ -555,9 +555,13 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
  * @param aCommandLine The process and any arguments to it all in a single
  *                     string.
  * @param aFlags The same args as allowed for wxExecute()
- * @return bool - true if success, else false
+ * @param callback wxProcess implementing OnTerminate to be run when the
+                   child process finishes
+ * @return int - pid of process, 0 in case of error (like return values of
+ *               wxExecute())
  */
-bool ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC );
+int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
+                     wxProcess *callback = NULL );
 
 
 /*******************/
