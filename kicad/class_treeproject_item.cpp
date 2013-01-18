@@ -34,6 +34,7 @@
 #include <macros.h>
 
 #include <kicad.h>
+#include <appl_wxstruct.h>
 #include <tree_project_frame.h>
 #include <class_treeprojectfiles.h>
 #include <class_treeproject_item.h>
@@ -188,6 +189,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
     wxString        sep = wxFileName().GetPathSeparator();
     wxString        FullFileName = GetFileName();
     wxTreeItemId    id = GetId();
+    KICAD_MANAGER_FRAME* mainFrame = (KICAD_MANAGER_FRAME*) wxGetApp().GetTopWindow();
 
     AddDelimiterString( FullFileName );
 
@@ -201,16 +203,16 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     case TREE_SCHEMA:
-        ExecuteFile( m_parent, EESCHEMA_EXE, FullFileName );
+        mainFrame->Execute( m_parent, EESCHEMA_EXE, FullFileName );
         break;
 
     case TREE_LEGACY_PCB:
     case TREE_SEXP_PCB:
-        ExecuteFile( m_parent, PCBNEW_EXE, FullFileName );
+        mainFrame->Execute( m_parent, PCBNEW_EXE, FullFileName );
         break;
 
     case TREE_GERBER:
-        ExecuteFile( m_parent, GERBVIEW_EXE, FullFileName );
+        mainFrame->Execute( m_parent, GERBVIEW_EXE, FullFileName );
         break;
 
     case TREE_PDF:
@@ -218,7 +220,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         break;
 
     case TREE_NET:
-        ExecuteFile( m_parent, CVPCB_EXE, FullFileName );
+        mainFrame->Execute( m_parent, CVPCB_EXE, FullFileName );
         break;
 
     case TREE_TXT:
@@ -226,7 +228,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
             wxString editorname = wxGetApp().GetEditorName();
 
             if( !editorname.IsEmpty() )
-                ExecuteFile( m_parent, editorname, FullFileName );
+                mainFrame->Execute( m_parent, editorname, FullFileName );
 
             break;
         }
@@ -235,4 +237,5 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         OpenFile( FullFileName );
         break;
     }
+
 }
