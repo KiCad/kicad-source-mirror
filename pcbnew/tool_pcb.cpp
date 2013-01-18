@@ -59,7 +59,9 @@
 /* Data to build the layer pair indicator button */
 static wxBitmap*  LayerPairBitmap = NULL;
 
-static const char s_BitmapLayerIcon[24][24] = {
+#define BM_LAYERICON_SIZE 24
+static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
+{
     // 0 = draw pixel with active layer color
     // 1 = draw pixel with top layer color (top/bottom layer used inautoroute and place via)
     // 2 = draw pixel with bottom layer color
@@ -155,9 +157,9 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     wxPen      pen;
     int buttonColor = -1;
 
-    for( ii = 0; ii < 24; ii++ )
+    for( ii = 0; ii < BM_LAYERICON_SIZE; ii++ )
     {
-        for( jj = 0; jj < 24; jj++ )
+        for( jj = 0; jj < BM_LAYERICON_SIZE; jj++ )
         {
             if( s_BitmapLayerIcon[ii][jj] != buttonColor )
             {
@@ -305,7 +307,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
                             KiBitmap( book_xpm ),
                             _( "Show/Hide the Scripting console" ) );
-   
+
     m_mainToolBar->AddSeparator();
 #endif
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
