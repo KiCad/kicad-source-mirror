@@ -206,15 +206,25 @@ void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent )
 {
-    // Automatic placement of modules and tracks is a mutually exclusive operation so
-    // clear the other tool if one of the two is selected.
-    aEvent.Check( m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS );
+    // Automatic placement of modules and tracks is a mutually exclusive operation
+    // So this tool is activated only if
+    // m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS.
+    // To avoid creating erroneous events (seems happen on some Linux/wxWidgets versions)
+    // the tool state is changed only when it is incorrect
+    bool state = m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS;
+    if( aEvent.IsChecked() != state )
+        aEvent.Check( state );
 }
 
 
 void PCB_EDIT_FRAME::OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent )
 {
-    // Automatic placement of modules and tracks is a mutually exclusive operation so
-    // clear the other tool if one of the two is selected.
-    aEvent.Check( m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE );
+    // Automatic placement of modules and tracks is a mutually exclusive operation,
+    // So this tool is activated only if
+    // m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE.
+    // To avoid creating erroneous events (seems happen on some Linux/wxWidgets versions)
+    // the tool state is changed only when it is incorrect
+    bool state = m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE;
+    if( aEvent.IsChecked() != state )
+        aEvent.Check( state );
 }

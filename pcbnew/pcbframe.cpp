@@ -826,13 +826,42 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
 {
-    if( aEvent.IsChecked() )
+    // Automatic placement of modules and tracks is a mutually exclusive operation so
+    // clear the other tool if one of the two is selected.
+    // Be careful: this event function is called both by the
+    // ID_TOOLBARH_PCB_MODE_MODULE and the ID_TOOLBARH_PCB_MODE_TRACKS tool
+    // Therefore we should avoid a race condition when deselecting one of these tools
+    // inside this function (seems happen on some Linux/wxWidgets versions)
+    // when the other tool is selected
+
+    int previous_state = m_autoPlaceModeId;
+    switch( aEvent.GetId() )
     {
-        m_autoPlaceModeId = aEvent.GetId();
-    }
-    else
-    {
-        m_autoPlaceModeId = 0;
-    }
+        case ID_TOOLBARH_PCB_MODE_MODULE:
+            if( aEvent.IsChecked() )
+            {
+                m_autoPlaceModeId = ID_TOOLBARH_PCB_MODE_MODULE;
+
+                if( previous_state == ID_TOOLBARH_PCB_MODE_TRACKS )
+                    m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, false );
+            }
+            else if( m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE )
+                // Deselect m_autoPlaceModeId only if it was selected by this tool
+                m_autoPlaceModeId = 0;
+            break;
+
+        case ID_TOOLBARH_PCB_MODE_TRACKS:
+            if( aEvent.IsChecked() )
+            {
+                m_autoPlaceModeId = ID_TOOLBARH_PCB_MODE_TRACKS;
+
+                if( previous_state == ID_TOOLBARH_PCB_MODE_MODULE )
+                    m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, false );
+            }
+            else if( m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS )
+                // Deselect m_autoPlaceModeId only if it was selected by this tool
+                m_autoPlaceModeId = 0;
+            break;
+        }
 }
 
