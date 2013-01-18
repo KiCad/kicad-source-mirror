@@ -415,7 +415,8 @@ wxString FindKicadFile( const wxString& shortname )
 }
 
 
-int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& param )
+int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& param,
+                 wxProcess *callback )
 {
     wxString FullFileName;
 
@@ -425,19 +426,21 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 #ifdef __WXMAC__
     if( wxFileExists( FullFileName ) || wxDir::Exists( FullFileName ) )
     {
-       ProcessExecute( wxGetApp().GetExecutablePath() + wxT("/") + ExecFile + wxT(" ") + param );
-    } else {
-       ProcessExecute( wxT("/usr/bin/open ") + param );
+        return ProcessExecute( wxGetApp().GetExecutablePath() + wxT( "/" )
+                               + ExecFile + wxT( " " )
+                               + param, wxEXEC_ASYNC, callback );
     }
-    return 0;
+    else
+    {
+        return ProcessExecute( wxT( "/usr/bin/open " ) + param, wxEXEC_ASYNC, callback );
+    }
 #else
     if( wxFileExists( FullFileName ) )
     {
         if( !param.IsEmpty() )
             FullFileName += wxT( " " ) + param;
 
-        ProcessExecute( FullFileName );
-        return 0;
+        return ProcessExecute( FullFileName, wxEXEC_ASYNC, callback );
     }
 #endif
     wxString msg;
