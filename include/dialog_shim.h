@@ -28,6 +28,12 @@
 #include <wx/dialog.h>
 #include <hashtables.h>
 
+#if wxMINOR_VERSION == 9 && defined(__WXGTK__)
+ #define DLGSHIM_USE_SETFOCUS      0
+#else
+ #define DLGSHIM_USE_SETFOCUS      1
+#endif
+
 
 /**
  * Class DIALOG_SHIM
@@ -50,10 +56,11 @@ public:
 
     bool Show( bool show );     // overload wxDialog::Show
 
-    /*
-    const wxSize& GetLastSize();
-    const wxPoint& GetLastPosition();
-    */
+
+#if DLGSHIM_USE_SETFOCUS
+private:
+    void    onInit( wxInitDialogEvent& aEvent );
+#endif
 };
 
 #endif  // DIALOG_SHIM_

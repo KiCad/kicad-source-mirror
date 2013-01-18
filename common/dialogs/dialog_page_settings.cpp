@@ -45,6 +45,7 @@
 
 #include <dialog_page_settings.h>
 
+
 // List of page formats.
 // should be statically initialized, because we need both
 // the translated and the not translated version.
@@ -108,8 +109,6 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     wxString    msg;
     double      customSizeX;
     double      customSizeY;
-
-    SetFocus();
 
     // initalize page format choice box and page format list.
     // The first shows translated strings, the second contains not tralated strings

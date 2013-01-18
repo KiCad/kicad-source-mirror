@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  9 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,15 +11,18 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
+#include "dialog_shim.h"
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/string.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/statline.h>
@@ -32,7 +35,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EXIT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EXIT_BASE : public wxDialog 
+class DIALOG_EXIT_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -53,7 +56,7 @@ class DIALOG_EXIT_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 345,155 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXIT_BASE();
 	
 };

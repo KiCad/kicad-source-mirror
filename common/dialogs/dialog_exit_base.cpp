@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  9 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -60,6 +60,7 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_buttonSaveAndExit = new wxButton( this, wxID_ANY, _("Save and Exit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonSaveAndExit->SetDefault(); 
 	bSizerButtons->Add( m_buttonSaveAndExit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_buttonExitNoSave = new wxButton( this, wxID_ANY, _("Exit without Save"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -77,6 +78,7 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
