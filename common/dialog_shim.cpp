@@ -30,8 +30,9 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
     wxDialog( aParent, id, title, pos, size, style, name )
 {
-    // linux wxGTK needed this at one time to allow the ESCAPE key to close a wxDialog window.
-    SetFocus();
+#if DLGSHIM_USE_SETFOCUS
+    Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SHIM::onInit ) );
+#endif
 }
 
 
@@ -70,17 +71,54 @@ bool DIALOG_SHIM::Show( bool show )
     return ret;
 }
 
-/*
-const wxSize& DIALOG_SHIM::GetLastSize()
+
+#if DLGSHIM_USE_SETFOCUS
+
+static bool findWindowRecursively( const wxWindowList& children, const wxWindow* wanted )
 {
-    const char* classname = typeid(*this).name();
-    return class_map[ classname ].GetSize();
+    for( wxWindowList::const_iterator it = children.begin();  it != children.end();  ++it )
+    {
+        const wxWindow* child = *it;
+
+        if( wanted == child )
+            return true;
+        else
+        {
+            if( findWindowRecursively( child->GetChildren(), wanted ) )
+                return true;
+        }
+    }
+
+    return false;
 }
 
 
-const wxPoint& DIALOG_SHIM::GetLastPosition()
+static bool findWindowRecursively( const wxWindow* topmost, const wxWindow* wanted )
 {
-    const char* classname = typeid(*this).name();
-    return class_map[ classname ].GetPosition();
+    // wanted may be NULL and that is ok.
+
+    if( wanted == topmost )
+        return true;
+
+    return findWindowRecursively( topmost->GetChildren(), wanted );
 }
-*/
+
+
+/// Set the focus if it is not already set in a derived constructor to a specific control.
+void DIALOG_SHIM::onInit( wxInitDialogEvent& aEvent )
+{
+    wxWindow* focusWnd = wxWindow::FindFocus();
+
+    // If focusWnd is not already this window or a child of it, then SetFocus().
+    // Otherwise the derived class's constructor SetFocus() already to a specific
+    // child control.
+
+    if( !findWindowRecursively( this, focusWnd ) )
+    {
+        // Linux wxGTK needs this to allow the ESCAPE key to close a wxDialog window.
+        SetFocus();
+    }
+
+    aEvent.Skip();     // derived class's handler should be called too
+}
+#endif
