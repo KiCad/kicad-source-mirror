@@ -834,32 +834,21 @@ void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
     // inside this function (seems happen on some Linux/wxWidgets versions)
     // when the other tool is selected
 
-    int previous_state = m_autoPlaceModeId;
     switch( aEvent.GetId() )
     {
         case ID_TOOLBARH_PCB_MODE_MODULE:
             if( aEvent.IsChecked() )
-            {
                 m_autoPlaceModeId = ID_TOOLBARH_PCB_MODE_MODULE;
-
-                if( previous_state == ID_TOOLBARH_PCB_MODE_TRACKS )
-                    m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, false );
-            }
             else if( m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE )
-                // Deselect m_autoPlaceModeId only if it was selected by this tool
+                // clear m_autoPlaceModeId only if it was activated by this tool
                 m_autoPlaceModeId = 0;
             break;
 
         case ID_TOOLBARH_PCB_MODE_TRACKS:
             if( aEvent.IsChecked() )
-            {
                 m_autoPlaceModeId = ID_TOOLBARH_PCB_MODE_TRACKS;
-
-                if( previous_state == ID_TOOLBARH_PCB_MODE_MODULE )
-                    m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, false );
-            }
             else if( m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS )
-                // Deselect m_autoPlaceModeId only if it was selected by this tool
+                // clear m_autoPlaceModeId only if it was activated by this tool
                 m_autoPlaceModeId = 0;
             break;
         }
