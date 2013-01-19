@@ -289,7 +289,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_hasAutoSave = true;
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
-    m_autoPlaceModeId = 0;
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
 #endif
@@ -837,19 +836,15 @@ void PCB_EDIT_FRAME::OnSelectAutoPlaceMode( wxCommandEvent& aEvent )
     switch( aEvent.GetId() )
     {
         case ID_TOOLBARH_PCB_MODE_MODULE:
-            if( aEvent.IsChecked() )
-                m_autoPlaceModeId = ID_TOOLBARH_PCB_MODE_MODULE;
-            else if( m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE )
-                // clear m_autoPlaceModeId only if it was activated by this tool
-                m_autoPlaceModeId = 0;
+            if( aEvent.IsChecked() &&
+                m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
+                m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, false );
             break;
 
         case ID_TOOLBARH_PCB_MODE_TRACKS:
-            if( aEvent.IsChecked() )
-                m_autoPlaceModeId = ID_TOOLBARH_PCB_MODE_TRACKS;
-            else if( m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS )
-                // clear m_autoPlaceModeId only if it was activated by this tool
-                m_autoPlaceModeId = 0;
+            if( aEvent.IsChecked() &&
+                m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_MODULE ) )
+                m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, false );
             break;
         }
 }

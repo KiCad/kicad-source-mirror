@@ -77,10 +77,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
     int             m_RecordingMacros;
     MACROS_RECORDED m_Macros[10];
 
-    /// The command ID of the current auto place mode which will be set for either
-    /// automatic placement of tracks or modules.
-    int m_autoPlaceModeId;
-
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
 
