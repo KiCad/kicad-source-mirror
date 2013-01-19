@@ -89,6 +89,7 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent ) :
     m_modified = false;
     m_page_bitmap = NULL;
     m_tb = m_Parent->GetTitleBlock();
+    m_customFmt = false;
 
     initDialog();
 
@@ -111,7 +112,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     double      customSizeY;
 
     // initalize page format choice box and page format list.
-    // The first shows translated strings, the second contains not tralated strings
+    // The first shows translated strings, the second contains not translated strings
     m_paperSizeComboBox->Clear();
 
     for( unsigned ii = 0; ; ii++ )
@@ -146,11 +147,22 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     wxCommandEvent dummy;
     OnPaperSizeChoice( dummy );
 
+    if( m_customFmt)    // The custom value is defined by the page size
+    {
+        customSizeX = m_pageInfo.GetWidthMils();
+        customSizeY = m_pageInfo.GetHeightMils();
+    }
+    else    // The custom value is set to a default value, or the last defined value
+    {
+        customSizeX = m_pageInfo.GetCustomWidthMils();
+        customSizeY = m_pageInfo.GetCustomHeightMils();
+    }
+
     switch( g_UserUnit )
     {
     case MILLIMETRES:
-        customSizeX = m_pageInfo.GetCustomWidthMils() * 25.4e-3;
-        customSizeY = m_pageInfo.GetCustomHeightMils()* 25.4e-3;
+        customSizeX *= 25.4e-3;
+        customSizeY *= 25.4e-3;
 
         msg.Printf( wxT( "%.2f" ), customSizeX );
         m_TextUserSizeX->SetValue( msg );
@@ -161,8 +173,8 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     default:
     case INCHES:
-        customSizeX = m_pageInfo.GetCustomWidthMils()  / 1000.0;
-        customSizeY = m_pageInfo.GetCustomHeightMils() / 1000.0;
+        customSizeX /= 1000.0;
+        customSizeY /= 1000.0;
 
         msg.Printf( wxT( "%.3f" ), customSizeX );
         m_TextUserSizeX->SetValue( msg );
@@ -172,15 +184,6 @@ void DIALOG_PAGES_SETTINGS::initDialog()
         break;
     }
 
-#if 0
-    m_TextRevision->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Revision ) );
-    m_TextTitle->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Title ) );
-    m_TextCompany->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Company ) );
-    m_TextComment1->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Commentaire1 ) );
-    m_TextComment2->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Commentaire2 ) );
-    m_TextComment3->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Commentaire3 ) );
-    m_TextComment4->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Commentaire4 ) );
-#else
     m_TextRevision->SetValue( m_tb.GetRevision() );
     m_TextTitle->SetValue( m_tb.GetTitle() );
     m_TextCompany->SetValue( m_tb.GetCompany() );
@@ -188,7 +191,6 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_TextComment2->SetValue( m_tb.GetComment2() );
     m_TextComment3->SetValue( m_tb.GetComment3() );
     m_TextComment4->SetValue( m_tb.GetComment4() );
-#endif
 
 #ifndef EESCHEMA
     m_RevisionExport->Show( false );
@@ -248,6 +250,7 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
         m_orientationComboBox->Enable( false );
         m_TextUserSizeX->Enable( true );
         m_TextUserSizeY->Enable( true );
+        m_customFmt = true;
     }
     else
     {
@@ -261,6 +264,7 @@ void DIALOG_PAGES_SETTINGS::OnPaperSizeChoice( wxCommandEvent& event )
 
         m_TextUserSizeX->Enable( false );
         m_TextUserSizeY->Enable( false );
+        m_customFmt = false;
     }
 
     GetPageLayoutInfoFromDialog();

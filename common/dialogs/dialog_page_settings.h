@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 <Creator>
- * Copyright (C) 1992-2010 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2013 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +44,7 @@ private:
     wxBitmap*       m_page_bitmap;      /// Temporary bitmap for the page layout example.
     wxSize          m_layout_size;      /// Logical page layout size.
     PAGE_INFO       m_pageInfo;         /// Temporary page info.
+    bool            m_customFmt;        /// true if the page selection is custom
     TITLE_BLOCK     m_tb;               /// Temporary title block (basic inscriptions).
 
 public:

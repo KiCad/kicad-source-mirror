@@ -113,7 +113,8 @@ void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( !Drc_On );
+    bool state = !Drc_On;
+    aEvent.Check( state );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
                                         Drc_On ?
                                         _( "Disable design rule checking" ) :
@@ -205,15 +206,12 @@ void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 
 
 void PCB_EDIT_FRAME::OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent )
-{
+{return;
     // Automatic placement of modules and tracks is a mutually exclusive operation
     // So this tool is activated only if
     // m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS.
-    // To avoid creating erroneous events (seems happen on some Linux/wxWidgets versions)
-    // the tool state is changed only when it is incorrect
     bool state = m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS;
-    if( aEvent.IsChecked() != state )
-        aEvent.Check( state );
+    m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, state );
 }
 
 
@@ -222,9 +220,6 @@ void PCB_EDIT_FRAME::OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent )
     // Automatic placement of modules and tracks is a mutually exclusive operation,
     // So this tool is activated only if
     // m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE.
-    // To avoid creating erroneous events (seems happen on some Linux/wxWidgets versions)
-    // the tool state is changed only when it is incorrect
     bool state = m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE;
-    if( aEvent.IsChecked() != state )
-        aEvent.Check( state );
+    m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, state );
 }

@@ -155,7 +155,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
-    bool state = m_optionsToolBar->GetToolToggled( id );
+    bool state = event.IsChecked();
 
     switch( id )
     {
@@ -169,16 +169,13 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             else
                 m_canvas->SetCursor( wxCURSOR_QUESTION_ARROW );
         }
-
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
         SetElementVisibility( RATSNEST_VISIBLE, state );
 
         if( state && (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-        {
             Compile_Ratsnest( NULL, true );
-        }
 
         m_canvas->Refresh();
         break;
