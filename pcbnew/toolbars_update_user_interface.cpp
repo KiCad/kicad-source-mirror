@@ -206,20 +206,12 @@ void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 
 
 void PCB_EDIT_FRAME::OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent )
-{return;
-    // Automatic placement of modules and tracks is a mutually exclusive operation
-    // So this tool is activated only if
-    // m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS.
-    bool state = m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_TRACKS;
-    m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, state );
+{
+    //Nothing to do.
 }
 
 
 void PCB_EDIT_FRAME::OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent )
 {
-    // Automatic placement of modules and tracks is a mutually exclusive operation,
-    // So this tool is activated only if
-    // m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE.
-    bool state = m_autoPlaceModeId == ID_TOOLBARH_PCB_MODE_MODULE;
-    m_mainToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, state );
+    //Nothing to do.
 }
