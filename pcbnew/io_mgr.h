@@ -51,6 +51,8 @@ public:
         LEGACY,             //< Legacy Pcbnew file formats prior to s-expression.
         KICAD,              //< S-expression Pcbnew file format.
         EAGLE,
+        PCAD,
+        GEDA_PCB,           //< Geda PCB file formats.
 
         // add your type here.
 

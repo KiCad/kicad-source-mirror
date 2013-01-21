@@ -24,12 +24,27 @@
  */
 
 
+/*  TODO:
+
+*)  Check for duplicate nicknames per table
+
+*)  Grab text from any pending ChoiceEditor when OK button pressed.
+
+*)  Test wxRE_ADVANCED on Windows.
+
+*/
+
+
+
 #include <fctsys.h>
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
 #include <wx/grid.h>
 #include <wx/clipbrd.h>
 #include <wx/tokenzr.h>
+#include <wx/arrstr.h>
+#include <wx/regex.h>
+#include <set>
 
 /**
  * Class FP_TBL_MODEL
@@ -184,18 +199,32 @@ public:
         {
         case COL_NICKNAME:  return _( "Nickname" );
         case COL_URI:       return _( "Library Path" );
-        case COL_TYPE:      return _( "Plugin" );
+
+        // keep this text fairly long so column is sized wide enough
+        case COL_TYPE:      return _( "Plugin Type" );
         case COL_OPTIONS:   return _( "Options" );
         case COL_DESCR:     return _( "Description" );
         default:            return wxEmptyString;
         }
     }
 
+    /*
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) const // overload
+    {
+        if( aCol != COL_TYPE )
+            return wxGridTableBase::GetAttr( aRow, aCol, aKind );
+        else
+        {
+
+        }
+    }
+    */
+
     //-----</wxGridTableBase overloads>------------------------------------------
 };
 
 
-// It works for table data on clipboard for an excell spreadsheet,
+// It works for table data on clipboard for an Excell spreadsheet,
 // why not us too for now.
 #define COL_SEP     wxT( '\t' )
 #define ROW_SEP     wxT( '\n' )
@@ -509,6 +538,71 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
         event.Skip();
     }
 
+    /// Populate the readonly environment variable table with names and values
+    /// by examining all the full_uri columns.
+    void populateEnvironReadOnlyTable()
+    {
+        wxRegEx re( wxT( ".*?\\$\\{(.+?)\\}.*?" ), wxRE_ADVANCED );
+        wxASSERT( re.IsValid() );   // wxRE_ADVANCED is required.
+
+        std::set< wxString >        unique;
+        typedef std::set<wxString>::const_iterator      SET_CITER;
+
+        m_path_subs_grid->DeleteRows( 0, m_path_subs_grid->GetNumberRows() );
+
+        int gblRowCount = m_global_model.GetNumberRows();
+        int prjRowCount = m_project_model.GetNumberRows();
+        int row;
+
+        for( row = 0;  row < gblRowCount;  ++row )
+        {
+            wxString uri = m_global_model.GetValue( row, FP_TBL_MODEL::COL_URI );
+
+            while( re.Matches( uri ) )
+            {
+                wxString envvar = re.GetMatch( uri, 1 );
+
+                // ignore duplicates
+                unique.insert( envvar );
+
+                // delete the last match and search again
+                uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
+            }
+        }
+
+        for( row = 0;  row < prjRowCount;  ++row )
+        {
+            wxString uri = m_project_model.GetValue( row, FP_TBL_MODEL::COL_URI );
+
+            while( re.Matches( uri ) )
+            {
+                wxString envvar = re.GetMatch( uri, 1 );
+
+                // ignore duplicates
+                unique.insert( envvar );
+
+                // delete the last match and search again
+                uri.Replace( re.GetMatch( uri, 0 ), wxEmptyString );
+            }
+        }
+
+        m_path_subs_grid->AppendRows( unique.size() );
+
+        row = 0;
+        for( SET_CITER it = unique.begin();  it != unique.end();  ++it, ++row )
+        {
+            wxString    evName = *it;
+            wxString    evValue;
+
+            m_path_subs_grid->SetCellValue( row, 0, evName );
+
+            if( wxGetEnv( evName, &evValue ) )
+                m_path_subs_grid->SetCellValue( row, 1, evValue );
+        }
+
+        m_path_subs_grid->AutoSizeColumns();
+    }
+
     //-----</event handlers>---------------------------------
 
     // caller's tables are modified only on OK button.
@@ -540,13 +634,37 @@ public:
         m_project_grid->SetTable( (wxGridTableBase*) &m_project_model );
 
         m_global_grid->AutoSizeColumns( false );
-
         m_project_grid->AutoSizeColumns( false );
 
-        m_path_subs_grid->AutoSizeColumns( false );
+        wxArrayString choices;
+        choices.Add( IO_MGR::ShowType( IO_MGR::KICAD ) );
+        choices.Add( IO_MGR::ShowType( IO_MGR::LEGACY ) );
+        choices.Add( IO_MGR::ShowType( IO_MGR::EAGLE ) );
+        //choices.Add( IO_MGR::ShowType( IO_MGR::GEDA_PCB ) );
+
+        wxGridCellAttr* attr;
+
+        attr = new wxGridCellAttr;
+        attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
+        m_project_grid->SetColAttr( FP_TBL_MODEL::COL_TYPE, attr );
+
+        attr = new wxGridCellAttr;
+        attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
+        m_global_grid->SetColAttr(  FP_TBL_MODEL::COL_TYPE, attr );
+
+        m_global_grid->AutoSizeColumns();
+        m_project_grid->AutoSizeColumns();
+
+        m_path_subs_grid->AutoSizeColumns();
 
         Connect( ID_CUT, ID_PASTE, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler( DIALOG_FP_LIB_TABLE::onPopupSelection ), NULL, this );
+
+        populateEnvironReadOnlyTable();
+
+        /* This scrunches the dialog hideously
+        Fit();
+        */
 
         // fire pageChangedHandler() so m_cur_grid gets set
         wxAuiNotebookEvent uneventful;
@@ -555,16 +673,16 @@ public:
 
     ~DIALOG_FP_LIB_TABLE()
     {
-        // Destroy the gui stuff first, with a goal of destroying the two wxGrids now,
-        // since the ~wxGrid() wants the wxGridTableBase to still be non-destroyed.
-        // Without this call, the wxGridTableBase objects are destroyed first
-        // (i.e. destructor called) and there is a segfault since wxGridTableBase's vtable
-        // is then no longer valid.  If ~wxGrid() would not examine a wxGridTableBase that
-        // it does not own, then this would not be a concern.  But it is, since it does.
-        DestroyChildren();
+        Disconnect( ID_CUT, ID_PASTE, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler( DIALOG_FP_LIB_TABLE::onPopupSelection ), NULL, this );
+
+        // ~wxGrid() examines its table, and the tables will have been destroyed before
+        // the wxGrids are, so remove the tables from the wxGrids' awareness.
+        // Otherwise there is a segfault.
+        m_global_grid->SetTable( NULL );
+        m_project_grid->SetTable( NULL );
     }
 };
-
 
 
 int InvokePcbLibTableEditor( wxFrame* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
