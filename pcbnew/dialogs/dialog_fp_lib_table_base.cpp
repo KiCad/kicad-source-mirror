@@ -142,7 +142,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_path_subs_grid = new wxGrid( m_bottom, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_path_subs_grid->CreateGrid( 2, 2 );
+	m_path_subs_grid->CreateGrid( 1, 2 );
 	m_path_subs_grid->EnableEditing( true );
 	m_path_subs_grid->EnableGridLines( true );
 	m_path_subs_grid->EnableDragGridSize( false );
@@ -155,15 +155,13 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_path_subs_grid->EnableDragColMove( false );
 	m_path_subs_grid->EnableDragColSize( true );
 	m_path_subs_grid->SetColLabelSize( 30 );
-	m_path_subs_grid->SetColLabelValue( 0, _("Category") );
+	m_path_subs_grid->SetColLabelValue( 0, _("Environment Variable") );
 	m_path_subs_grid->SetColLabelValue( 1, _("Path Segment") );
 	m_path_subs_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
 	m_path_subs_grid->EnableDragRowSize( true );
 	m_path_subs_grid->SetRowLabelSize( 40 );
-	m_path_subs_grid->SetRowLabelValue( 0, _("%S") );
-	m_path_subs_grid->SetRowLabelValue( 1, _("%P") );
 	m_path_subs_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Label Appearance
@@ -188,7 +186,7 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_bottom->SetSizer( m_bottom_sizer );
 	m_bottom->Layout();
 	m_bottom_sizer->Fit( m_bottom );
-	m_splitter->SplitHorizontally( m_top, m_bottom, 343 );
+	m_splitter->SplitHorizontally( m_top, m_bottom, 398 );
 	bSizer1->Add( m_splitter, 2, wxEXPAND, 5 );
 	
 	

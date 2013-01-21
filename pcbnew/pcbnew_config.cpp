@@ -45,9 +45,7 @@
 #include <class_board.h>
 #include <fp_lib_table.h>
 
-#if defined(DEBUG)
- #include <fp_lib_table_lexer.h>
-#endif
+#include <fp_lib_table_lexer.h>
 
 #include <pcbplot.h>
 #include <pcbnew.h>
@@ -92,7 +90,6 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             FP_LIB_TABLE    gbl;
             FP_LIB_TABLE    prj;
 
-#if defined(DEBUG)
             FP_LIB_TABLE_LEXER  glex(
                 "(fp_lib_table\n"
                 "   (lib (name passives)(descr \"R/C Lib\")(type KiCad)(uri ${KISYSMODS}/passives.pretty))\n"
@@ -124,29 +121,35 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
                 DisplayError( this, ioe.errorText );
                 break;
             }
-#else
-            gbl.InsertRow( FP_LIB_TABLE::ROW(
-                wxT( "passives" ), wxT( "%G/passives" ), wxT( "KiCad" ), wxT( "speed=fast,purpose=testing" ) ) );
-
-            gbl.InsertRow( FP_LIB_TABLE::ROW(
-                wxT( "micros" ), wxT( "%P/micros" ), wxT( "Legacy" ), wxT( "speed=fast,purpose=testing" ) ) );
-
-            prj.InsertRow( FP_LIB_TABLE::ROW(
-                wxT( "micros" ), wxT( "%P/potato_chips" ), wxT( "Eagle" ), wxT( "speed=fast,purpose=testing" ) ) );
-#endif
 
             int r = InvokePcbLibTableEditor( this, &gbl, &prj );
 
             if( r & 1 )
             {
+#if defined(DEBUG)
+                printf( "changed global:\n" );)
+
+                STRING_FORMATTER sf;
+
+                gbl.Format( &sf, 0 );
+
+                printf( "%s\n", sf.GetString().c_str() );
+#endif
                 // save global table to disk and apply it
-                D( printf( "global has changed\n" );)
             }
 
             if( r & 2 )
             {
+#if defined(DEBUG)
+                D( printf( "changed project:n" );)
+
+                STRING_FORMATTER sf;
+
+                prj.Format( &sf, 0 );
+
+                printf( "%s\n", sf.GetString().c_str() );
+#endif
                 // save project table to disk and apply it
-                D( printf( "project has changed\n" );)
             }
         }
         break;
