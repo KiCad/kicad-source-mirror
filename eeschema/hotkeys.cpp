@@ -491,10 +491,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_DRAG:                           // Start drag
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
-    case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
-    case HK_EDIT_COMPONENT_REFERENCE:       // Edit component value reference.
-    case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
-        // These commands are allowed only when no item currently edited.
         if( ! notBusy )
             break;
 
@@ -506,12 +502,13 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 break;
 
         // Fall through
+    case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
+    case HK_EDIT_COMPONENT_REFERENCE:       // Edit component value reference.
+    case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
     case HK_MIRROR_Y_COMPONENT:             // Mirror Y
     case HK_MIRROR_X_COMPONENT:             // Mirror X
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
     case HK_ROTATE:                         // Rotate schematic item.
-        if( blocInProgress )
-            break;
         {
             // force a new item search on hot keys at current position,
             // if there is no currently edited item,

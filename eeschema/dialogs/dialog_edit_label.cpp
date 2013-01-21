@@ -247,7 +247,9 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
     int      value;
 
     /* save old text in undo list if not already in edit */
-    if( m_CurrentText->GetFlags() == 0 )
+    /* or the label to be edited is part of a block */
+    if( m_CurrentText->GetFlags() == 0 ||
+        m_Parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
 
     m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );

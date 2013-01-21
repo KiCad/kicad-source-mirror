@@ -223,7 +223,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     }
 
     // save old cmp in undo list if not already in edit, or moving ...
-    if( m_Cmp->m_Flags == 0 )
+    // or the component to be edited is part of a block
+    if( m_Cmp->m_Flags == 0 ||
+        m_Parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
 
     copyPanelToOptions();
