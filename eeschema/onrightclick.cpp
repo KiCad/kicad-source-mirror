@@ -123,6 +123,12 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                     PopMenu->AppendSeparator();
                     break;
 
+                case SCH_BITMAP_T:
+                    msg = AddHotkeyName( _( "Edit Image" ), s_Schematic_Hokeys_Descr, HK_EDIT );
+                    AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( image_xpm ) );
+                    PopMenu->AppendSeparator();
+                    break;
+
                 default:
                     break;
             }
@@ -819,8 +825,8 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
         msg = AddHotkeyName( _( "Mirror Block --" ), s_Schematic_Hokeys_Descr,
                              HK_MIRROR_X_COMPONENT );
         AddMenuItem( PopMenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
-        AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, _( "Rotate Block ccw" ),
-                     KiBitmap( rotate_ccw_xpm ) );
+        msg = AddHotkeyName( _( "Rotate Block ccw" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
+        AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
 
 #if 0
   #ifdef __WINDOWS__
@@ -851,13 +857,17 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
 
     msg = AddHotkeyName( _( "Rotate Image" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( aPopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
-    AddMenuItem( aPopMenu, ID_SCH_MIRROR_X, _( "Mirror --" ), KiBitmap( mirror_v_xpm ) );
-    AddMenuItem( aPopMenu, ID_SCH_MIRROR_Y, _( "Mirror ||" ), KiBitmap( mirror_h_xpm ) );
+    msg = AddHotkeyName( _( "Mirror --" ), s_Schematic_Hokeys_Descr,
+                         HK_MIRROR_X_COMPONENT );
+    AddMenuItem( aPopMenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
+    msg = AddHotkeyName( _( "Mirror ||" ), s_Schematic_Hokeys_Descr,
+                         HK_MIRROR_Y_COMPONENT );
+    AddMenuItem( aPopMenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
+    msg = AddHotkeyName( _( "Edit Image" ), s_Schematic_Hokeys_Descr, HK_EDIT );
+    AddMenuItem( aPopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( image_xpm ) );
 
     if( aBitmap->GetFlags() == 0 )
     {
-        msg = AddHotkeyName( _( "Edit Image" ), s_Schematic_Hokeys_Descr, HK_EDIT );
-        AddMenuItem( aPopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( image_xpm ) );
         aPopMenu->AppendSeparator();
         msg = AddHotkeyName( _( "Delete Image" ), s_Schematic_Hokeys_Descr, HK_DELETE );
         AddMenuItem( aPopMenu, ID_POPUP_SCH_DELETE, msg, KiBitmap( delete_xpm ) );
