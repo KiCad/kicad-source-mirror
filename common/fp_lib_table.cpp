@@ -24,6 +24,8 @@
  */
 
 
+#include <wx/config.h>      // wxExpandEnvVars()
+
 #include <set>
 
 #include <io_mgr.h>
@@ -45,11 +47,29 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 
 void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
 {
-    T tok;
+    /*
+        (fp_lib_table
+            (lib (name NICKNAME)(descr DESCRIPTION)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
+            :
+        )
+
+        Elements after (name) are order independent.
+    */
+
+    T       tok;
+
+    // This table may be nested within a larger s-expression, or not.
+    // Allow for parser of that optional containing s-epression to have looked ahead.
+    if( in->CurTok() != T_fp_lib_table )
+    {
+        in->NeedLEFT();
+        if( ( tok = in->NextTok() ) != T_fp_lib_table )
+            in->Expecting( T_fp_lib_table );
+    }
 
     while( ( tok = in->NextTok() ) != T_RIGHT )
     {
-        // (lib (name "LOGICAL")(type "TYPE")(full_uri "FULL_URI")(options "OPTIONS"))
+        ROW     row;        // reconstructed for each row in input stream.
 
         if( tok == T_EOF )
             in->Expecting( T_RIGHT );
@@ -57,10 +77,14 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
         if( tok != T_LEFT )
             in->Expecting( T_LEFT );
 
-        if( ( tok = in->NextTok() ) != T_fp_lib )
-            in->Expecting( T_fp_lib );
+        // in case there is a "row integrity" error, tell where later.
+        int lineNum = in->CurLineNumber();
+        int offset  = in->CurOffset();
 
-        // (name "LOGICAL_NAME")
+        if( ( tok = in->NextTok() ) != T_lib )
+            in->Expecting( T_lib );
+
+        // (name NICKNAME)
         in->NeedLEFT();
 
         if( ( tok = in->NextTok() ) != T_name )
@@ -68,48 +92,74 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         in->NeedSYMBOLorNUMBER();
 
-        ROW     row;
-
         row.SetNickName( in->FromUTF8() );
 
         in->NeedRIGHT();
 
-        // (uri "FULL_URI")
-        in->NeedLEFT();
+        // After (name), remaining (lib) elements are order independent, and in
+        // some cases optional.
 
-        if( ( tok = in->NextTok() ) != T_full_uri )
-            in->Expecting( T_full_uri );
+        bool    sawType = false;
+        bool    sawOpts = false;
+        bool    sawDesc = false;
+        bool    sawUri  = false;
 
-        in->NeedSYMBOLorNUMBER();
+        while( ( tok = in->NextTok() ) != T_RIGHT )
+        {
+            if( tok == T_EOF )
+                in->Unexpected( T_EOF );
 
-        row.SetFullURI( in->FromUTF8() );
+            if( tok != T_LEFT )
+                in->Expecting( T_LEFT );
 
-        in->NeedRIGHT();
+            tok = in->NeedSYMBOLorNUMBER();
 
-        // (type "TYPE")
-        in->NeedLEFT();
+            switch( tok )
+            {
+            case T_uri:
+                if( sawUri )
+                    in->Duplicate( tok );
+                sawUri = true;
+                in->NeedSYMBOLorNUMBER();
+                row.SetFullURI( in->FromUTF8() );
+                break;
 
-        if( ( tok = in->NextTok() ) != T_type )
+            case T_type:
+                if( sawType )
+                    in->Duplicate( tok );
+                sawType = true;
+                in->NeedSYMBOLorNUMBER();
+                row.SetType( in->FromUTF8() );
+                break;
+
+            case T_options:
+                if( sawOpts )
+                    in->Duplicate( tok );
+                sawOpts = true;
+                in->NeedSYMBOLorNUMBER();
+                row.SetOptions( in->FromUTF8() );
+                break;
+
+            case T_descr:
+                if( sawDesc )
+                    in->Duplicate( tok );
+                sawDesc = true;
+                in->NeedSYMBOLorNUMBER();
+                row.SetDescr( in->FromUTF8() );
+                break;
+
+            default:
+                in->Unexpected( tok );
+            }
+
+            in->NeedRIGHT();
+        }
+
+        if( !sawType )
             in->Expecting( T_type );
 
-        in->NeedSYMBOLorNUMBER();
-
-        row.SetType( in->FromUTF8() );
-
-        in->NeedRIGHT();
-
-        // (options "OPTIONS")
-        in->NeedLEFT();
-
-        if( ( tok = in->NextTok() ) != T_options )
-            in->Expecting( T_options );
-
-        in->NeedSYMBOLorNUMBER();
-
-        row.SetOptions( in->FromUTF8() );
-
-        in->NeedRIGHT();
-        in->NeedRIGHT();            // terminate the (lib..)
+        if( !sawUri )
+            in->Expecting( T_uri );
 
         // all nickNames within this table fragment must be unique, so we do not
         // use doReplace in InsertRow().  (However a fallBack table can have a
@@ -119,9 +169,8 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
         {
             wxString msg = wxString::Format(
                                 _( "'%s' is a duplicate footprint library nickName" ),
-                                GetChars( row.nickName )
-                                );
-            THROW_IO_ERROR( msg );
+                                GetChars( row.nickName ) );
+            THROW_PARSE_ERROR( msg, in->CurSource(), in->CurLine(), lineNum, offset );
         }
     }
 }
@@ -142,11 +191,12 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     throw( IO_ERROR )
 {
-    out->Print( nestLevel, "(lib (name %s)(full_uri %s)(type %s)(options %s))\n",
+    out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s))\n",
                 out->Quotew( GetNickName() ).c_str(),
-                out->Quotew( GetFullURI() ).c_str(),
                 out->Quotew( GetType() ).c_str(),
-                out->Quotew( GetOptions() ).c_str()
+                out->Quotew( GetFullURI() ).c_str(),
+                out->Quotew( GetOptions() ).c_str(),
+                out->Quotew( GetDescr() ).c_str()
                 );
 }
 
@@ -249,6 +299,14 @@ PLUGIN* FP_LIB_TABLE::PluginFind( const wxString& aLibraryNickName )
     PLUGIN* plugin = IO_MGR::PluginFind( row->type );
 
     return plugin;
+}
+
+
+const wxString FP_LIB_TABLE::ExpandSubtitutions( const wxString aString )
+{
+    // We reserve the right to do this another way, by providing our own member
+    // function.
+    return wxExpandEnvVars( aString );
 }
 
 
