@@ -1168,6 +1168,15 @@ public:
     void LoadLibraries( void );
 
     /**
+     * Function CreateArchiveLibraryCacheFile
+     * creates a library file with the name of the root document plus the '-cache' suffix,
+     * That file will contain all components used in the current schematic.
+     *
+     * @return True if the file was written successfully.
+     */
+    bool CreateArchiveLibraryCacheFile( void );
+
+    /**
      * Function CreateArchiveLibrary
      * creates a library \a aFileName that contains all components used in the current schematic.
      *

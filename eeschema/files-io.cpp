@@ -166,7 +166,10 @@ void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
         break;
 
     case ID_SAVE_ONE_SHEET_UNDER_NEW_NAME:
-        SaveEEFile( NULL, true );
+        if( SaveEEFile( NULL, true ) )
+        {
+            CreateArchiveLibraryCacheFile();
+        }
         break;
     }
 }
@@ -377,10 +380,7 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
         SaveEEFile( screen );
 
-    wxString cachename = fn.GetName() + wxT( "-cache" );
-    fn.SetName( cachename );
-    fn.SetExt( SchematicLibraryFileExtension );
-    CreateArchiveLibrary( fn.GetFullPath() );
+    CreateArchiveLibraryCacheFile();
 }
 
 
