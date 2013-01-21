@@ -122,15 +122,15 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
     // because the parameter list that use these keywords does not store them,
     // just points to them.
     static const wxChar* keys[] = {
-        wxT("ColorLayer0"),     wxT("ColorLayer1"),     wxT("ColorLayer2"),     wxT("ColorLayer3"),
-        wxT("ColorLayer4"),     wxT("ColorLayer5"),     wxT("ColorLayer6"),     wxT("ColorLayer7"),
-        wxT("ColorLayer8"),     wxT("ColorLayer9"),     wxT("ColorLayer10"),    wxT("ColorLayer11"),
-        wxT("ColorLayer12"),    wxT("ColorLayer13"),    wxT("ColorLayer14"),    wxT("ColorLayer15"),
+        wxT("ColorLayer_0"),     wxT("ColorLayer_1"),     wxT("ColorLayer_2"),     wxT("ColorLayer_3"),
+        wxT("ColorLayer_4"),     wxT("ColorLayer_5"),     wxT("ColorLayer_6"),     wxT("ColorLayer_7"),
+        wxT("ColorLayer_8"),     wxT("ColorLayer_9"),     wxT("ColorLayer_10"),    wxT("ColorLayer_11"),
+        wxT("ColorLayer_12"),    wxT("ColorLayer_13"),    wxT("ColorLayer_14"),    wxT("ColorLayer_15"),
 
-        wxT("ColorLayer16"),    wxT("ColorLayer17"),    wxT("ColorLayer18"),    wxT("ColorLayer19"),
-        wxT("ColorLayer20"),    wxT("ColorLayer21"),    wxT("ColorLayer22"),    wxT("ColorLayer23"),
-        wxT("ColorLayer24"),    wxT("ColorLayer25"),    wxT("ColorLayer26"),    wxT("ColorLayer27"),
-        wxT("ColorLayer28"),    wxT("ColorLayer29"),    wxT("ColorLayer30"),    wxT("ColorLayer31"),
+        wxT("ColorLayer_16"),    wxT("ColorLayer_17"),    wxT("ColorLayer_18"),    wxT("ColorLayer_19"),
+        wxT("ColorLayer_20"),    wxT("ColorLayer_21"),    wxT("ColorLayer_22"),    wxT("ColorLayer_23"),
+        wxT("ColorLayer_24"),    wxT("ColorLayer_25"),    wxT("ColorLayer_26"),    wxT("ColorLayer_27"),
+        wxT("ColorLayer_28"),    wxT("ColorLayer_29"),    wxT("ColorLayer_30"),    wxT("ColorLayer_31"),
     };
 
     wxASSERT( DIM(keys) == DIM(color_default) );

@@ -50,7 +50,7 @@
 
 
 // Config keywords
-static const wxString   cfgShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
+static const wxString   cfgShowPageSizeOption( wxT( "PageSizeOpt" ) );
 static const wxString   cfgShowDCodes( wxT( "ShowDCodesOpt" ) );
 static const wxString   cfgShowNegativeObjects( wxT( "ShowNegativeObjectsOpt" ) );
 static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
