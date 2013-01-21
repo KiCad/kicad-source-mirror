@@ -153,7 +153,8 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                                    char*&    text )
 {
     int      code;
-    int      xy_seq_len, xy_seq_char;
+    int      xy_seq_len;        // not used, provided but not yet in use
+    int      xy_seq_char;
     bool     ok = true;
     char     line[GERBER_BUFZ];
     wxString msg;
@@ -215,13 +216,14 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 break;
 
             case 'X':
-            case 'Y':       // Values transmitted :2 (really xy_seq_len : FIX
-                            // ME) digits
+            case 'Y':       // Values transmitted :2 (really xy_seq_len :
+                            // digits
             {
                 code = *(text++);
                 char ctmp = *(text++) - '0';
                 if( code == 'X' )
                 {
+                    xy_seq_len--;
                     // number of digits after the decimal point (0 to 6 allowed)
                     m_FmtScale.x = *text - '0';
                     m_FmtLen.x   = ctmp + m_FmtScale.x;
@@ -234,6 +236,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 }
                 else
                 {
+                    xy_seq_len--;
                     m_FmtScale.y = *text - '0';
                     m_FmtLen.y   = ctmp + m_FmtScale.y;
                     if( m_FmtScale.y < 0 )
@@ -253,6 +256,11 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 ok = false;
                 break;
             }
+        }
+
+        if( xy_seq_len != 0 )
+        {
+            ReportMessage( wxT( "RS274X: suspicious Format Statement (FS) command" ) );
         }
 
         break;
