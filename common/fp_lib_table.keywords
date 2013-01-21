@@ -1,9 +1,7 @@
 fp_lib_table
+lib
 name
 type
-kicad
-legacy
-eagle
-full_uri
+uri
 options
-fp_lib
+descr

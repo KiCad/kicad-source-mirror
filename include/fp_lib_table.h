@@ -41,7 +41,7 @@ class FP_LIB_TABLE_LEXER;
 
 /**
  * Class FP_LIB_TABLE
- * holds FP_LIB_TABLE::ROW records, and can be searched based on logical library name.
+ * holds FP_LIB_TABLE::ROW records (rows), and can be searched based on library nickName.
  * <p>
  * This class owns the <b>footprint library table</b>, which is like fstab in concept and maps
  * logical library name to the library URI, type, and options. It is heavily based on the SWEET
@@ -104,10 +104,12 @@ public:
         {
         }
 
-        ROW( const wxString& aNick, const wxString& aURI, const wxString& aType, const wxString& aOptions ) :
+        ROW( const wxString& aNick, const wxString& aURI, const wxString& aType,
+                const wxString& aOptions, const wxString& aDescr = wxEmptyString ) :
             nickName( aNick ),
             uri( aURI ),
-            options( aOptions )
+            options( aOptions ),
+            description( aDescr )
         {
             SetType( aType );
         }
@@ -119,42 +121,69 @@ public:
 
         bool operator!=( const ROW& r ) const   { return !( *this == r ); }
 
+        //-----<accessors>------------------------------------------------------
+
         /**
          * Function GetNickName
          * returns the short name of this library table row.
          */
-        const wxString& GetNickName() const
-        {
-            return nickName;
-        }
+        const wxString& GetNickName() const         { return nickName; }
+
+        /**
+         * Function SetNickName
+         * changes the logical name of this library, useful for an editor.
+         */
+        void SetNickName( const wxString& aNickName ) { nickName = aNickName; }
 
         /**
          * Function GetType
-         * returns the type of LIB represented by this record.
+         * returns the type of LIB represented by this row.
          */
-        const wxString GetType() const
-        {
-            return IO_MGR::ShowType( type );
-        }
+        const wxString GetType() const              { return IO_MGR::ShowType( type ); }
+
+        /**
+         * Function SetType
+         * changes the type represented by this row.
+         */
+        void SetType( const wxString& aType )       { type = IO_MGR::EnumFromStr( aType ); }
 
         /**
          * Function GetFullURI
          * returns the full location specifying URI for the LIB.
          */
-        const wxString& GetFullURI() const
-        {
-            return uri;
-        }
+        const wxString& GetFullURI() const          { return uri; }
+
+        /**
+         * Function SetFullURI
+         * changes the full URI for the library.
+         */
+        void SetFullURI( const wxString& aFullURI ) { uri = aFullURI; }
 
         /**
          * Function GetOptions
          * returns the options string, which may hold a password or anything else needed to
          * instantiate the underlying LIB_SOURCE.
          */
-        const wxString& GetOptions() const
-        {
-            return options;
-        }
+        const wxString& GetOptions() const          { return options; }
+
+        /**
+         * Function SetOptions
+         */
+        void SetOptions( const wxString& aOptions ) { options = aOptions; }
+
+        /**
+         * Function GetDescr
+         * returns the description of the library referenced by this row.
+         */
+        const wxString& GetDescr() const            { return description; }
+
+        /**
+         * Function SetDescr
+         * changes the description of the library referenced by this row.
+         */
+        void SetDescr( const wxString& aDescr )     { description = aDescr; }
+
+        //-----</accessors>-----------------------------------------------------
 
         /**
          * Function Format
@@ -167,49 +196,13 @@ public:
         void Format( OUTPUTFORMATTER* out, int nestLevel ) const
             throw( IO_ERROR );
 
-        /**
-         * Function SetNickName
-         * changes the logical name of this library, useful for an editor.
-         */
-        void SetNickName( const wxString& aNickName )
-        {
-            nickName = aNickName;
-        }
-
-        /**
-         * Function SetType
-         * changes the type represented by this record.
-         */
-        void SetType( const wxString& aType )
-        {
-            type = IO_MGR::EnumFromStr( aType );
-        }
-
-        /**
-         * Function SetFullURI
-         * changes the full URI for the library, useful from a library table editor.
-         */
-        void SetFullURI( const wxString& aFullURI )
-        {
-            uri = aFullURI;
-        }
-
-        /**
-         * Function SetOptions
-         * changes the options string for this record, and is useful from
-         * the library table editor.
-         */
-        void SetOptions( const wxString& aOptions )
-        {
-            options = aOptions;
-        }
-
     private:
 
         wxString        nickName;
         wxString        uri;
         LIB_T           type;
         wxString        options;
+        wxString        description;
     };
 
 
@@ -219,7 +212,7 @@ public:
      * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
      *
      * @param aFallBackTable is another FP_LIB_TABLE which is searched only when
-     *                       a record is not found in this table.  No ownership is
+     *                       a row is not found in this table.  No ownership is
      *                       taken of aFallBackTable.
      */
     FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable = NULL );
@@ -249,9 +242,9 @@ public:
      *
      * <pre>
      * (fp_lib_table
-     *   (lib (name LOGICAL)(type TYPE)(uri FULL_URI)(options OPTIONS))
-     *   (lib (name LOGICAL)(type TYPE)(uri FULL_URI)(options OPTIONS))
-     *   (lib (name LOGICAL)(type TYPE)(uri FULL_URI)(options OPTIONS))
+     *   (lib (name LOGICAL)(descr DESCRIPTION)(uri FULL_URI)(type TYPE)(options OPTIONS))
+     *   (lib (name LOGICAL)(descr DESCRIPTION)(uri FULL_URI)(type TYPE)(options OPTIONS))
+     *   (lib (name LOGICAL)(descr DESCRIPTION)(uri FULL_URI)(type TYPE)(options OPTIONS))
      *  )
      * </pre>
      *
@@ -362,6 +355,15 @@ public:
      */
     const ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
 
+
+    /**
+     * Function ExpandEnvSubsitutions
+     * replaces any environment variable references with their values and is
+     * here to fully embellish the ROW::uri in a platform independent way.
+     * This enables (fp_lib_table)s to have platform dependent environment
+     * variables in them, allowing for a uniform table across platforms.
+     */
+    static const wxString ExpandSubtitutions( const wxString aString );
 
 protected:
 

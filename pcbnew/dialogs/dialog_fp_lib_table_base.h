@@ -61,6 +61,10 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void onGridCellLeftClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void onGridCellLeftDClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void onGridCellRightClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void onGridCmdSelectCell( wxGridEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxMouseEvent& event ) { event.Skip(); }
 		virtual void deleteRowHandler( wxMouseEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxMouseEvent& event ) { event.Skip(); }
@@ -71,12 +75,12 @@ class DIALOG_FP_LIB_TABLE_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 864,652 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Library Tables"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 996,652 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FP_LIB_TABLE_BASE();
 		
 		void m_splitterOnIdle( wxIdleEvent& )
 		{
-			m_splitter->SetSashPosition( 343 );
+			m_splitter->SetSashPosition( 398 );
 			m_splitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_FP_LIB_TABLE_BASE::m_splitterOnIdle ), NULL, this );
 		}
 	

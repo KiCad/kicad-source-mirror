@@ -53,6 +53,7 @@ public:
         EAGLE,
         PCAD,
         GEDA_PCB,           //< Geda PCB file formats.
+
         // add your type here.
 
         // ALTIUM,

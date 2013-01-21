@@ -115,12 +115,7 @@ struct IO_ERROR // : std::exception
         init( aThrowersFile, aThrowersLoc, wxString( aMsg ) );
     }
 
-    void init( const char* aThrowersFile, const char* aThrowersLoc, const wxString& aMsg )
-    {
-        errorText.Printf( IO_FORMAT, aMsg.GetData(),
-            wxString::FromUTF8( aThrowersFile ).GetData(),
-            wxString::FromUTF8( aThrowersLoc ).GetData() );
-    }
+    void init( const char* aThrowersFile, const char* aThrowersLoc, const wxString& aMsg );
 
     IO_ERROR() {}
 
@@ -165,18 +160,7 @@ struct PARSE_ERROR : public IO_ERROR
     void init( const char* aThrowersFile, const char* aThrowersLoc,
                const wxString& aMsg, const wxString& aSource,
                const char* aInputLine,
-               int aLineNumber, int aByteIndex )
-    {
-        // save inpuLine, lineNumber, and offset for UI (.e.g. Sweet text editor)
-        inputLine  = aInputLine;
-        lineNumber = aLineNumber;
-        byteIndex  = aByteIndex;
-
-        errorText.Printf( PARSE_FORMAT, aMsg.GetData(), aSource.GetData(),
-            aLineNumber, aByteIndex,
-            wxString::FromUTF8( aThrowersFile ).GetData(),
-            wxString::FromUTF8( aThrowersLoc ).GetData() );
-    }
+               int aLineNumber, int aByteIndex );
 
     ~PARSE_ERROR() throw ( /*none*/ ){}
 };

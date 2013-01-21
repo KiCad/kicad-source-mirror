@@ -45,6 +45,8 @@
 #include <class_board.h>
 #include <fp_lib_table.h>
 
+#include <fp_lib_table_lexer.h>
+
 #include <pcbplot.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -88,27 +90,66 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             FP_LIB_TABLE    gbl;
             FP_LIB_TABLE    prj;
 
-            gbl.InsertRow( FP_LIB_TABLE::ROW(
-                wxT( "passives" ), wxT( "%G/passives" ), wxT( "KiCad" ), wxT( "speed=fast,purpose=testing" ) ) );
+            FP_LIB_TABLE_LEXER  glex(
+                "(fp_lib_table\n"
+                "   (lib (name passives)(descr \"R/C Lib\")(type KiCad)(uri ${KISYSMODS}/passives.pretty))\n"
+                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KISYSMODS}/passives.mod)(options \"op1=2\"))\n"
+                "   (lib (name chips)(descr \"Potatoe chips\")(type Eagle)(uri /opt/eagle-6.2.0/lbr/con-amp-micromatch.lbr))\n"
+                ")", wxT( "gbl" ) );
 
-            gbl.InsertRow( FP_LIB_TABLE::ROW(
-                wxT( "micros" ), wxT( "%P/micros" ), wxT( "Legacy" ), wxT( "speed=fast,purpose=testing" ) ) );
+            FP_LIB_TABLE_LEXER  plex(
+                "(fp_lib_table\n"
+                "   (lib (name passives)(descr \"Demo Lib\")(type KiCad)(uri ${KIUSRMODS}/passives.pretty))\n"
+                "   (lib (name micros)(descr \"Small stuff\")(type Legacy)(uri ${KIUSRMODS}/micros.mod)(options \"op1=2\"))\n"
+                "   (lib (name chips)(descr \"Potatoe chips\")(type Eagle)(uri /opt/eagle-6.2.0/lbr/con-amp-micromatch.lbr))\n"
+                ")", wxT( "prj" ) );
 
-            prj.InsertRow( FP_LIB_TABLE::ROW(
-                wxT( "micros" ), wxT( "%P/potato_chips" ), wxT( "Eagle" ), wxT( "speed=fast,purpose=testing" ) ) );
+            try
+            {
+                gbl.Parse( &glex );
+                prj.Parse( &plex );
+            }
+            /* PARSE_ERROR is an IO_ERROR, handle them the same for now.
+            catch( PARSE_ERROR pe )
+            {
+                DisplayError( this, pe.errorText );
+                break;
+            }
+            */
+            catch( IO_ERROR ioe )
+            {
+                DisplayError( this, ioe.errorText );
+                break;
+            }
 
             int r = InvokePcbLibTableEditor( this, &gbl, &prj );
 
             if( r & 1 )
             {
+#if defined(DEBUG)
+                printf( "changed global:\n" );
+
+                STRING_FORMATTER sf;
+
+                gbl.Format( &sf, 0 );
+
+                printf( "%s\n", sf.GetString().c_str() );
+#endif
                 // save global table to disk and apply it
-                D( printf( "global has changed\n" );)
             }
 
             if( r & 2 )
             {
+#if defined(DEBUG)
+                printf( "changed project:\n" );
+
+                STRING_FORMATTER sf;
+
+                prj.Format( &sf, 0 );
+
+                printf( "%s\n", sf.GetString().c_str() );
+#endif
                 // save project table to disk and apply it
-                D( printf( "project has changed\n" );)
             }
         }
         break;
