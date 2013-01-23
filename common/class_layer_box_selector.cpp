@@ -78,7 +78,7 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
 
     for( int i = 0; i < elements; i++ )
     {
-        if( GetClientData( i ) == (void*) layer )
+        if( GetClientData( i ) == (void*)(intptr_t) layer )
         {
             if( GetSelection() != i )   // Element (i) is not selected
             {

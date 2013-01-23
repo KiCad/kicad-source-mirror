@@ -77,9 +77,10 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
         if( m_layerhotkeys && m_hotkeys != NULL )
             layername = AddHotkeyName( layername, m_hotkeys, layerhk[layerid], IS_COMMENT );
 
-        Append( layername, layerbmp, (void*) layerid );
+        Append( layername, layerbmp, (void*)(intptr_t) layerid );
     }
 }
+
 
 // Returns true if the layer id is enabled (i.e. is it should be displayed)
 bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( int aLayerIndex ) const
@@ -91,6 +92,7 @@ bool PCB_LAYER_BOX_SELECTOR::IsLayerEnabled( int aLayerIndex ) const
     return board->IsLayerEnabled( aLayerIndex );
 }
 
+
 // Returns a color index from the layer id
 EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
 {
@@ -100,6 +102,7 @@ EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
 
     return board->GetLayerColor( aLayerIndex );
 }
+
 
 // Returns the name of the layer id
 wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( int aLayerIndex ) const
