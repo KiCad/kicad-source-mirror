@@ -319,6 +319,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     wxLogTrace( tracePrinting, wxT( "Logical origin:                   x=%d, y=%d" ),
                 offset.x, offset.y );
 
+#if defined(DEBUG)
     wxRect paperRect = GetPaperRectPixels();
     wxLogTrace( tracePrinting, wxT( "Paper rectangle:                  left=%d, top=%d, "
                                     "right=%d, bottom=%d" ),
@@ -332,6 +333,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     wxLogTrace( tracePrinting, wxT( "Final device rectangle:           left=%d, top=%d, "
                                     "right=%d, bottom=%d\n" ),
                 devLeft, devTop, devRight, devBottom );
+#endif
 
     g_DrawBgColor = WHITE;
 

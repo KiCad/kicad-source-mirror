@@ -48,8 +48,8 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 
     for( int layerid = 0; layerid < LAYER_COUNT; layerid++ )
     {
-        wxBitmap layerbmp( 14, 14 );
-        wxString   layername;
+        wxBitmap    layerbmp( 14, 14 );
+        wxString    layername;
 
         if( !IsLayerEnabled( layerid ) )
             continue;
@@ -59,9 +59,10 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 
         layername = GetLayerName( layerid );
 
-        Append( layername, layerbmp, (void*) layerid );
+        Append( layername, layerbmp, (void*)(intptr_t) layerid );
     }
 }
+
 
 // Returns a color index from the layer id
 EDA_COLOR_T GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
@@ -70,6 +71,7 @@ EDA_COLOR_T GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
 
     return frame->GetLayerColor( aLayerIndex );
 }
+
 
 // Returns the name of the layer id
 wxString GBR_LAYER_BOX_SELECTOR::GetLayerName( int aLayerIndex ) const
