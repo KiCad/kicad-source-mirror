@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 CERN (www.cern.ch)
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -40,6 +41,7 @@
 #include <class_library.h>
 #include <libeditframe.h>
 #include <sch_sheet.h>
+#include <sch_component.h>
 #include <wildcards_and_files_ext.h>
 
 
@@ -175,6 +177,73 @@ void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
 }
 
 
+bool SCH_EDIT_FRAME::LoadCacheLibrary( const wxString& aFilename )
+{
+    wxString msg;
+    bool LibCacheExist = false;
+    wxFileName fn = aFilename;
+
+    /* Loading the project library cache
+     * until apr 2009 the lib is named <root_name>.cache.lib
+     * and after (due to code change): <root_name>-cache.lib
+     * so if the <name>-cache.lib is not found, the old way will be tried
+     */
+    bool use_oldcachename = false;
+    wxString cachename =  fn.GetName() + wxT( "-cache" );
+
+    fn.SetName( cachename );
+    fn.SetExt( SchematicLibraryFileExtension );
+
+    if( ! fn.FileExists() )
+    {
+        fn = aFilename;
+        fn.SetExt( wxT( "cache.lib" ) );
+        use_oldcachename = true;
+    }
+
+    if( fn.FileExists() )
+    {
+        wxString errMsg;
+
+        wxLogDebug( wxT( "Load schematic cache library file <%s>" ),
+                    GetChars( fn.GetFullPath() ) );
+        msg = wxT( "Load " ) + fn.GetFullPath();
+
+        CMP_LIBRARY* LibCache = CMP_LIBRARY::LoadLibrary( fn, errMsg );
+
+        if( LibCache )
+        {
+            LibCache->SetCache();
+            msg += wxT( " OK" );
+
+            if ( use_oldcachename )     // set the new name
+            {
+                fn.SetName( cachename );
+                fn.SetExt( SchematicLibraryFileExtension );
+                LibCache->SetFileName( fn );
+            }
+
+            LibCacheExist = true;
+            CMP_LIBRARY::GetLibraryList().push_back( LibCache );
+        }
+        else
+        {
+            wxString prompt;
+
+            prompt.Printf( _( "Component library <%s> failed to load.\nError: %s" ),
+                           GetChars( fn.GetFullPath() ),
+                           GetChars( errMsg ) );
+            DisplayError( this, prompt );
+            msg += _( " ->Error" );
+        }
+
+        PrintMsg( msg );
+    }
+
+    return LibCacheExist;
+}
+
+
 bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
 {
     SCH_SCREEN* screen;
@@ -280,64 +349,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     // Delete old caches.
     CMP_LIBRARY::RemoveCacheLibrary();
 
-    /* Loading the project library cache
-     * until apr 2009 the lib is named <root_name>.cache.lib
-     * and after (due to code change): <root_name>-cache.lib
-     * so if the <name>-cache.lib is not found, the old way will be tried
-     */
-    fn = g_RootSheet->GetScreen()->GetFileName();
-
-    bool use_oldcachename = false;
-    wxString cachename =  fn.GetName() + wxT( "-cache" );
-
-    fn.SetName( cachename );
-    fn.SetExt( SchematicLibraryFileExtension );
-
-    if( ! fn.FileExists() )
-    {
-        fn = g_RootSheet->GetScreen()->GetFileName();
-        fn.SetExt( wxT( "cache.lib" ) );
-        use_oldcachename = true;
-    }
-
-    if( fn.FileExists() )
-    {
-        wxString errMsg;
-
-        wxLogDebug( wxT( "LoadOneEEProject() load schematic cache library file <%s>" ),
-                    GetChars( fn.GetFullPath() ) );
-        msg = wxT( "Load " ) + fn.GetFullPath();
-
-        CMP_LIBRARY* LibCache = CMP_LIBRARY::LoadLibrary( fn, errMsg );
-
-        if( LibCache )
-        {
-            LibCache->SetCache();
-            msg += wxT( " OK" );
-
-            if ( use_oldcachename )     // set the new name
-            {
-                fn.SetName( cachename );
-                fn.SetExt( SchematicLibraryFileExtension );
-                LibCache->SetFileName( fn );
-            }
-
-            LibCacheExist = true;
-            CMP_LIBRARY::GetLibraryList().push_back( LibCache );
-        }
-        else
-        {
-            wxString prompt;
-
-            prompt.Printf( _( "Component library <%s> failed to load.\nError: %s" ),
-                           GetChars( fn.GetFullPath() ),
-                           GetChars( errMsg ) );
-            DisplayError( this, prompt );
-            msg += _( " ->Error" );
-        }
-
-        PrintMsg( msg );
-    }
+    LibCacheExist = LoadCacheLibrary( g_RootSheet->GetScreen()->GetFileName() );
 
     if( !wxFileExists( g_RootSheet->GetScreen()->GetFileName() ) && !LibCacheExist )
     {
@@ -361,6 +373,90 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     SetSheetNumberAndCount();
     m_canvas->Refresh( true );
     return diag;
+}
+
+
+bool SCH_EDIT_FRAME::AppendOneEEProject()
+{
+    SCH_SCREEN* screen;
+    wxString    FullFileName;
+    wxString msg;
+
+    screen = GetScreen();
+
+    if( !screen )
+    {
+        wxLogError( wxT("Document not ready, cannot import") );
+        return false;
+    }
+
+    // open file chooser dialog
+    wxFileDialog dlg( this, _( "Import Schematic" ), wxGetCwd(),
+                      wxEmptyString, SchematicFileWildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return false;
+
+    FullFileName = dlg.GetPath();
+
+    wxFileName fn = FullFileName;
+
+    if( fn.IsRelative() )
+    {
+        fn.MakeAbsolute();
+        FullFileName = fn.GetFullPath();
+    }
+
+    LoadCacheLibrary( FullFileName );
+
+    wxLogDebug( wxT( "Importing schematic " ) + FullFileName );
+
+    // load the project
+    bool success = LoadOneEEFile( screen, FullFileName, true );
+    if( success )
+    {
+        // load sub-sheets
+        EDA_ITEM* bs = screen->GetDrawItems();
+        while( bs )
+        {
+            // do not append hierarchical sheets
+            if( bs->Type() ==  SCH_SHEET_T )
+            {
+                screen->Remove( (SCH_SHEET*) bs );
+            }
+            // clear annotation and init new time stamp for the new components
+            else if( bs->Type() == SCH_COMPONENT_T )
+            {
+                ( (SCH_COMPONENT*) bs )->SetTimeStamp( GetNewTimeStamp() );
+                ( (SCH_COMPONENT*) bs )->ClearAnnotation( NULL );
+                // Clear flags, which are set by these previous modifications:
+                bs->ClearFlags();
+            }
+
+            bs = bs->Next();
+        }
+    }
+
+    // redraw base screen (ROOT) if necessary
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
+    Zoom_Automatique( false );
+    SetSheetNumberAndCount();
+    m_canvas->Refresh( true );
+    return success;
+}
+
+
+void SCH_EDIT_FRAME::OnAppendProject( wxCommandEvent& event )
+{
+    wxString msg = _( "This operation cannot be undone. "
+            "Besides, take into account that hierarchical sheets will not be appended.\n\n"
+            "Do you want to save the current document before proceeding?" );
+
+    if( IsOK( this, msg ) )
+        OnSaveProject( event );
+
+    AppendOneEEProject();
 }
 
 

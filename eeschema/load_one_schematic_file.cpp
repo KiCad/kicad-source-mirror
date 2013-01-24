@@ -53,7 +53,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* Window
 static void LoadLayers( LINE_READER* aLine );
 
 
-bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName )
+bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName, bool append )
 {
     char            name1[256];
     bool            itemLoaded = false;
@@ -74,7 +74,8 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     wxLogTrace( traceAutoSave, wxT( "Loading schematic file " ) + aFullFileName );
 
     aScreen->SetCurItem( NULL );
-    aScreen->SetFileName( aFullFileName );
+    if( !append )
+        aScreen->SetFileName( aFullFileName );
 
     FILE* f;
     wxString fname = aFullFileName;
