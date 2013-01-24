@@ -860,13 +860,13 @@ CMP_LIBRARY* CMP_LIBRARY::FindLibrary( const wxString& aName )
 
 wxArrayString CMP_LIBRARY::GetLibraryNames( bool aSorted )
 {
-    wxString cacheName;
+    wxArrayString cacheNames;
     wxArrayString names;
 
     BOOST_FOREACH( CMP_LIBRARY& lib, CMP_LIBRARY::libraryList )
     {
         if( lib.isCache && aSorted )
-            cacheName = lib.GetName();
+            cacheNames.Add( lib.GetName() );
         else
             names.Add( lib.GetName() );
     }
@@ -875,8 +875,8 @@ wxArrayString CMP_LIBRARY::GetLibraryNames( bool aSorted )
     if( aSorted )
         names.Sort();
 
-    if( !cacheName.IsEmpty() )
-        names.Add( cacheName );
+    for( unsigned int i = 0; i<cacheNames.Count(); i++ )
+        names.Add( cacheNames.Item( i ) );
 
     return names;
 }
