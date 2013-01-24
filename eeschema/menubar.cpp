@@ -97,6 +97,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open a recent opened schematic project" ),
                  KiBitmap( open_project_xpm ) );
 
+    // Import
+    AddMenuItem( fileMenu,
+                 ID_APPEND_PROJECT, _( "&Append Schematic" ),
+                 _( "Append another schematic project to the current loaded schematic" ),
+                 KiBitmap( open_document_xpm ) );
+
     // Separator
     fileMenu->AppendSeparator();
 

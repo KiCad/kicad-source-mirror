@@ -128,11 +128,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         # Set default flags for Release build.
         set(CMAKE_C_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG")
         set(CMAKE_CXX_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG")
-        set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
+        set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s -static-libgcc -static-libstdc++")
 
         # Set default flags for Debug build.
         set(CMAKE_C_FLAGS_DEBUG "-Wall ${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG")
         set(CMAKE_CXX_FLAGS_DEBUG "-Wall ${KICAD_GCC_DEBUG_BUILD_FLAGS} -g3 -ggdb3 -DDEBUG")
+        set(CMAKE_MODULE_LINKER_FLAGS "-static-libgcc -static-libstdc++") # SWIG macros on Windows
 
     else(WIN32)
         # Thou shalt not link vaporware and tell us it's a valid DSO:
