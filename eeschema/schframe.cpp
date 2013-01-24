@@ -75,6 +75,8 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, SCH_EDIT_FRAME::OnLoadFile )
 
+    EVT_MENU( ID_APPEND_PROJECT, SCH_EDIT_FRAME::OnAppendProject )
+
     EVT_TOOL( ID_NEW_PROJECT, SCH_EDIT_FRAME::OnNewProject )
     EVT_TOOL( ID_LOAD_PROJECT, SCH_EDIT_FRAME::OnLoadProject )
 
@@ -512,7 +514,8 @@ double SCH_EDIT_FRAME::BestZoom()
 
 wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 {
-    wxFileName fn = g_RootSheet->GetFileName();
+    SCH_SCREENS ScreenList;
+    wxFileName fn = ScreenList.GetFirst()->GetFileName();
 
 #ifndef KICAD_GOST
     wxString filename = fn.GetName();

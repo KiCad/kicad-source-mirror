@@ -631,6 +631,14 @@ public:
     bool LoadOneEEProject( const wxString& aFileName, bool aIsNew );
 
     /**
+     * Function AppendOneEEProject
+     * read an entire project and loads it into the schematic editor *whitout* replacing the
+     * existing contents.
+     * @return True if the project was imported properly.
+     */
+    bool AppendOneEEProject();
+
+    /**
      * Function LoadOneEEFile
      * loads the schematic (.sch) file \a aFullFileName into \a aScreen.
      *
@@ -638,9 +646,11 @@ public:
      *                \a aFullFileName.
      * @param aFullFileName A reference to a wxString object containing the absolute path
      *                      and file name to load.
+     * @param append True if loaded file is being appended to the currently open file instead
+ *                   of replacing it.
      * @return True if \a aFullFileName has been loaded (at least partially.)
      */
-    bool LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName );
+    bool LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName, bool append = false );
 
     bool ReadInputStuffFile();
 
@@ -746,6 +756,7 @@ private:
     void OnLoadStuffFile( wxCommandEvent& event );
     void OnNewProject( wxCommandEvent& event );
     void OnLoadProject( wxCommandEvent& event );
+    void OnAppendProject( wxCommandEvent& event );
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
     void OnOpenLibraryEditor( wxCommandEvent& event );
@@ -874,6 +885,8 @@ private:
     void InstallHierarchyFrame( wxDC* DC, wxPoint& pos );
     SCH_SHEET* CreateSheet( wxDC* DC );
     void ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
+    // Loads the cache library associated to the aFileName
+    bool LoadCacheLibrary( const wxString& aFileName );
 
 public:
     /**
