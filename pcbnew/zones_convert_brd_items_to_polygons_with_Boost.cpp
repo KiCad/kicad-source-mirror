@@ -560,6 +560,7 @@ void ZONE_CONTAINER::CopyPolygonsFromFilledPolysListToKiPolygonList( KI_POLYGON_
             }
 
             bpl::set_points( poly, cornerslist.begin(), cornerslist.end() );
+
             aKiPolyList.push_back( poly );
         }
     }
