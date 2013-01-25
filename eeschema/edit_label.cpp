@@ -223,8 +223,18 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     m_canvas->CrossHairOff( &dc );   // Erase schematic cursor
     text->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
 
-    screen->Remove( text );
-    screen->Append( newtext );
+    // For an exiting item (i.e. already in list):
+    // replace the existing item by the new text in list
+    for( SCH_ITEM* item = screen->GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item == text )
+        {
+            screen->Remove( text );
+            screen->Append( newtext );
+            break;
+        }
+    }
+
     m_itemToRepeat = NULL;
     OnModify();
     newtext->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
@@ -246,7 +256,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     // So this is equivalent to delete text and add newtext
     // If text if being currently edited (i.e. moved)
     // we also save the initial copy of text, and prepare undo command for new text modifications.
-    // we must save it as modified text (if currently beeing edited), then deleted text,
+    // we must save it as modified text,if it is currently edited, then save as deleted text,
     // and replace text with newtext
     PICKED_ITEMS_LIST pickList;
     ITEM_PICKER picker( text, UR_CHANGED );

@@ -98,7 +98,7 @@ void MIN_SPAN_TREE_PADS::AddTreeToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnes
 int MIN_SPAN_TREE_PADS::GetWeight( int aItem1, int aItem2 )
 {
     // NOTE: The distance (weight) between a node and itself should be 0
-    // so we add 1 to other distances th be sure we never have 0
+    // so we add 1 to other distances to be sure we never have 0
     // in cases other than a node and itself
 
     D_PAD* pad1 = (*m_PadsList)[aItem1];

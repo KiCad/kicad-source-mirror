@@ -60,7 +60,7 @@ static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
 
 void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
+    PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
 
     if( !GetBoard() || !screen )
         return;
@@ -71,18 +71,20 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
 
     // Redraw the footprints
-    for( MODULE* module = GetBoard()->m_Modules;  module;  module = module->Next() )
+    for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
     {
         module->Draw( m_canvas, DC, GR_OR );
     }
 
 #ifdef USE_WX_OVERLAY
+
     if( IsShown() )
     {
         m_overlay.Reset();
-        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC );
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*) DC );
         overlaydc.Clear();
     }
+
 #endif
 
     if( m_canvas->IsMouseCaptured() )
@@ -109,17 +111,19 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness,
                     IU_PER_MILS, wxEmptyString );
 
-    GetBoard()->Draw( m_canvas, DC, GR_OR | GR_ALLOW_HIGHCONTRAST);
+    GetBoard()->Draw( m_canvas, DC, GR_OR | GR_ALLOW_HIGHCONTRAST );
 
     DrawGeneralRatsnest( DC );
 
 #ifdef USE_WX_OVERLAY
+
     if( IsShown() )
     {
         m_overlay.Reset();
-        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC );
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*) DC );
         overlaydc.Clear();
     }
+
 #endif
 
     if( m_canvas->IsMouseCaptured() )
@@ -148,18 +152,18 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
      * tracks.  But a white track will cover any other color since it has
      * more bits to OR in.
      */
-    for( TRACK* track = m_Track;  track;   track = track->Next() )
+    for( TRACK* track = m_Track; track; track = track->Next() )
     {
         track->Draw( aPanel, DC, aDrawMode );
     }
 
-    for( SEGZONE* zone = m_Zone;  zone;   zone = zone->Next() )
+    for( SEGZONE* zone = m_Zone; zone; zone = zone->Next() )
     {
         zone->Draw( aPanel, DC, aDrawMode );
     }
 
     // Draw the graphic items
-    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
     {
         if( item->IsMoving() )
             continue;
@@ -173,7 +177,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
             item->Draw( aPanel, DC, aDrawMode );
             break;
 
-       default:
+        default:
             break;
         }
     }
@@ -181,26 +185,26 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
     // Draw areas (i.e. zones)
     for( int ii = 0; ii < GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* zone = GetArea(ii);
+        ZONE_CONTAINER* zone = GetArea( ii );
 
         // Areas must be drawn here only if not moved or dragged,
         // because these areas are drawn by ManageCursor() in a specific manner
-        if ( (zone->GetFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
+        if( ( zone->GetFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED) ) == 0 )
         {
             zone->Draw( aPanel, DC, aDrawMode );
             zone->DrawFilledArea( aPanel, DC, aDrawMode );
         }
     }
 
-    for( MODULE* module = m_Modules;  module;  module = module->Next() )
+    for( MODULE* module = m_Modules; module; module = module->Next() )
     {
-        bool display = true;
-        int  layerMask = ALL_CU_LAYERS;
+        bool    display     = true;
+        int     layerMask   = ALL_CU_LAYERS;
 
         if( module->IsMoving() )
             continue;
 
-        if( !IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) ) )
+        if( !IsElementVisible( PCB_VISIBLE( MOD_FR_VISIBLE ) ) )
         {
             if( module->GetLayer() == LAYER_N_FRONT )
                 display = false;
@@ -208,10 +212,11 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
             layerMask &= ~LAYER_FRONT;
         }
 
-        if( !IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) ) )
+        if( !IsElementVisible( PCB_VISIBLE( MOD_BK_VISIBLE ) ) )
         {
             if( module->GetLayer() == LAYER_N_BACK )
                 display = false;
+
             layerMask &= ~LAYER_BACK;
         }
 
@@ -225,7 +230,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         DrawHighLight( aPanel, DC, GetHighLightNetCode() );
 
     // draw the BOARD's markers last, otherwise the high light will erase any marker on a pad
-    for( unsigned i=0; i < m_markers.size();  ++i )
+    for( unsigned i = 0; i < m_markers.size(); ++i )
     {
         m_markers[i]->Draw( aPanel, DC, aDrawMode );
     }
@@ -244,7 +249,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
     // Redraw ZONE_CONTAINERS
     BOARD::ZONE_CONTAINERS& zones = m_ZoneDescriptorList;
 
-    for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
+    for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin(); zc!=zones.end(); ++zc )
     {
         if( (*zc)->GetNet() == aNetCode )
         {
@@ -253,9 +258,9 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
     }
 
     // Redraw any pads that have aNetCode
-    for( MODULE* module = m_Modules;  module; module = module->Next() )
+    for( MODULE* module = m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+        for( D_PAD* pad = module->m_Pads; pad; pad = pad->Next() )
         {
             if( pad->GetNet() == aNetCode )
             {
@@ -265,7 +270,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
     }
 
     // Redraw track and vias that have aNetCode
-    for( TRACK* seg = m_Track;   seg;   seg = seg->Next() )
+    for( TRACK* seg = m_Track; seg; seg = seg->Next() )
     {
         if( seg->GetNet() == aNetCode )
         {
@@ -285,12 +290,12 @@ static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule,
 {
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
 
-    int tmp = frame->m_DisplayPadFill;
+    int             tmp = frame->m_DisplayPadFill;
 
     frame->m_DisplayPadFill = false;
 
     // Draw pads.
-    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->m_Pads; pad; pad = pad->Next() )
     {
         if( (pad->GetLayerMask() & aLayerMask) == 0 )
             continue;

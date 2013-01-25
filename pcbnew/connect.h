@@ -47,7 +47,7 @@ class CONNECTED_POINT
 {
 private:
     BOARD_CONNECTED_ITEM * m_item;  // a link to the parent item (track, via or pad)
-    wxPoint m_point;                // the connection point (coordinate of this point)
+    wxPoint m_point;                // coordinates of this connected point
 
 public:
     // ctor to build a CONNECTED_POINT instance, when the parent is a track or via

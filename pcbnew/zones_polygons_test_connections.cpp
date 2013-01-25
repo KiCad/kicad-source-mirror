@@ -42,6 +42,7 @@
 #include <polygon_test_point_inside.h>
 
 static bool CmpZoneSubnetValue( const BOARD_CONNECTED_ITEM* a, const BOARD_CONNECTED_ITEM* b );
+
 void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
 
 // This helper function sort a list of zones by netcode,
@@ -64,7 +65,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 {
     // list of pads and tracks candidates on this layer and on this net.
     // It is static to avoid multiple memory realloc.
-    static std::vector <BOARD_CONNECTED_ITEM*> Candidates;
+    static std::vector <BOARD_CONNECTED_ITEM*> candidates;
 
     // clear .m_ZoneSubnet parameter for pads
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
@@ -101,7 +102,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
     // For a given net, examine the smaller zones first slightly speed up calculation
     // (25% faster)
     // this is only noticeable with very large boards and depends on board zones topology
-    // This is due to the fact some items are connected bt small zones ares,
+    // This is due to the fact some items are connected by small zones ares,
     // before examining large zones areas and these items are not tested after a connection is found
     sort(zones_candidates.begin(), zones_candidates.end(), sort_areas );
 
@@ -123,12 +124,12 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
         if( oldnetcode != netcode )
         {
             oldnetcode = netcode;
-            Candidates.clear();
+            candidates.clear();
 
             // Build the list of pads candidates connected to the net:
-            Candidates.reserve( net->m_PadInNetList.size() );
+            candidates.reserve( net->m_PadInNetList.size() );
             for( unsigned ii = 0; ii < net->m_PadInNetList.size(); ii++ )
-                Candidates.push_back( net->m_PadInNetList[ii] );
+                candidates.push_back( net->m_PadInNetList[ii] );
 
             // Build the list of track candidates connected to the net:
             TRACK* track = m_Track.GetFirst()->GetStartNetCode( netcode );
@@ -136,7 +137,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
             {
                 if( track->GetNet() != netcode )
                     break;
-                Candidates.push_back( track );
+                candidates.push_back( track );
             }
         }
 
@@ -151,14 +152,14 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                 subnet++;
                 EDA_RECT bbox = curr_zone->CalculateSubAreaBoundaryBox( indexstart, indexend );
 
-                for( unsigned ic = 0; ic < Candidates.size(); ic++ )
+                for( unsigned ic = 0; ic < candidates.size(); ic++ )
                 { // test if this area is connected to a board item:
-                    BOARD_CONNECTED_ITEM* item = Candidates[ic];
+                    BOARD_CONNECTED_ITEM* item = candidates[ic];
 
                     if( item->GetZoneSubNet() == subnet )   // Already merged
                         continue;
 
-                    if( !item->IsOnLayer( curr_zone->GetLayer() ) )
+                   if( !item->IsOnLayer( curr_zone->GetLayer() ) )
                         continue;
 
                     wxPoint pos1, pos2;
@@ -201,7 +202,8 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                     }
 
                     if( connected )
-                    {   // Set ZoneSubnet to the current subnet value.
+                    {
+                        // Set ZoneSubnet to the current subnet value.
                         // If the previous subnet is not 0, merge all items with old subnet
                         // to the new one
                         int old_subnet = item->GetZoneSubNet();
@@ -210,12 +212,14 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
                         // Merge previous subnet with the current
                         if( (old_subnet > 0) && (old_subnet != subnet) )
                         {
-                            for( unsigned jj = 0; jj < Candidates.size(); jj++ )
+                            for( unsigned jj = 0; jj < candidates.size(); jj++ )
                             {
-                                BOARD_CONNECTED_ITEM* item_to_merge = Candidates[jj];
+                                BOARD_CONNECTED_ITEM* item_to_merge = candidates[jj];
 
                                 if( old_subnet == item_to_merge->GetZoneSubNet() )
+                                {
                                     item_to_merge->SetZoneSubNet( subnet );
+                                }
                             }
                         }   // End if ( old_subnet > 0 )
                     }       // End if( connected )
