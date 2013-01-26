@@ -715,7 +715,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
         layer.SetFixedListIndex( layerIndex );
         m_board->SetLayer( layerIndex, layer );
 
-        wxLogDebug( wxT( "Mapping layer %s to index %d" ),  GetChars( wname ), layerIndex );
+//        wxLogDebug( wxT( "Mapping layer %s to index %d" ),  GetChars( wname ), layerIndex );
 
         if( layerType != LT_UNDEFINED )
             copperLayerCount++;
