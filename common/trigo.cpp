@@ -1,176 +1,159 @@
 /**
  * @file trigo.cpp
- * @brief Trigonometric functions.
+ * @brief Trigonometric and geometric basic functions.
  */
 
 #include <fctsys.h>
 #include <macros.h>
 #include <trigo.h>
 #include <common.h>
+#include <math_for_graphics.h>
 
-static bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
-
+/* Function TestSegmentHit
+ * test for hit on line segment
+ * i.e. a reference point is within a given distance from segment
+ * aRefPoint = reference point to test
+ * aStart, aEnd are coordinates of end points segment
+ * aDist = maximum distance for hit
+ * Note: for calculation time reasons, the distance between the ref point
+ * and the segment is not always exactly calculated
+ * (we only know if the actual dist is < aDist, not exactly know this dist.
+ * Because many times we have horizontal or vertical segments,
+ * a special calcultaion is made for them
+ * Note: sometimes we need to calculate the distande between 2 points
+ * A square root should be calculated.
+ * However, because we just compare 2 distnaces, to avoid calculating square root,
+ * the square of distances are compared.
+*/
+static inline double square( int x )    // helper function to calculate x*x
+{
+    return (double) x * x;
+}
 bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist )
 {
-    return DistanceTest( aDist, aEnd.x - aStart.x, aEnd.y - aStart.y,
-                         aRefPoint.x - aStart.x, aRefPoint.y - aStart.y );
-}
-
-
-bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY )
-{
-    /*  We can have 4 cases::
-     *      horizontal segment
-     *      vertical segment
-     *      45 degrees segment
-     *      other slopes
-     */
-    int cXrot, cYrot, segX, segY;
-    int pointX, pointY;
-
-    segX   = dx;
-    segY   = dy;
-    pointX = spot_cX;
-    pointY = spot_cY;
-
-    /* Recalculating coord for the segment is in 1st quadrant (coord >= 0) */
-    if( segX < 0 )   /* set > 0 by symmetry about the Y axis */
+    // test for vertical or horizontal segment
+    if( aEnd.x == aStart.x )
     {
-        segX   = -segX;
-        pointX = -pointX;
-    }
+        // vertical segment
+        int ll = abs( aRefPoint.x - aStart.x );
 
-    if( segY < 0 )   /* set > 0 by symmetry about the X axis */
-    {
-        segY   = -segY;
-        pointY = -pointY;
-    }
+        if( ll >= aDist )
+            return false;
 
+        // To have only one case to examine, ensure aEnd.y > aStart.y
+        if( aEnd.y < aStart.y )
+            EXCHG( aStart.y, aEnd.y );
 
-    if( segY == 0 ) /* horizontal */
-    {
-        if( abs( pointY ) <= seuil )
+        if( aRefPoint.y < aEnd.y && aRefPoint.y > aStart.y )
+            return true;
+
+        // there is a special case: x,y near an end point (distance < dist )
+        // the distance should be carefully calculated
+        if( (aStart.y - aRefPoint.y) < aDist )
         {
-            if( ( pointX >= 0 ) && ( pointX <= segX ) )
-                return 1;
-
-            if( ( pointX < 0 ) && ( pointX >= -seuil ) )
-            {
-                if( ( ( pointX * pointX ) + ( pointY * pointY ) ) <= ( seuil * seuil ) )
-                    return true;
-            }
-            if( ( pointX > segX ) && ( pointX <= ( segX + seuil ) ) )
-            {
-                if( ( ( ( pointX - segX ) * ( pointX - segX ) )
-                     + ( pointY * pointY ) ) <= ( seuil * seuil ) )
-                    return true;
-            }
-        }
-    }
-    else if( segX == 0 ) /* vertical */
-    {
-        if( abs( pointX ) <= seuil )
-        {
-            if( ( pointY >= 0 ) && ( pointY <= segY ) )
+            double dd = square( aRefPoint.x - aStart.x) +
+                 square( aRefPoint.y - aStart.y );
+            if( dd < square( aDist ) )
                 return true;
-
-            if( ( pointY < 0 ) && ( pointY >= -seuil ) )
-            {
-                if( ( ( pointY * pointY ) + ( pointX * pointX ) ) <= ( seuil * seuil ) )
-                    return true;
-            }
-
-            if( ( pointY > segY ) && ( pointY <= ( segY + seuil ) ) )
-            {
-                if( ( ( ( pointY - segY ) * ( pointY - segY ) )
-                     + ( pointX * pointX ) ) <= ( seuil * seuil ) )
-                    return true;
-            }
         }
-    }
-    else if( segX == segY )    /* 45 degrees */
-    {
-        /* Rotate axes of 45 degrees. mouse was then
-         * Coord: x1 = x * y * cos45 + sin45
-         * y1 = y * cos45 - sin45 x *
-         * And the segment of track is horizontal.
-         * Coord recalculation of the mouse (sin45 = cos45 = .707 = 7 / 10
-         * Note: sin or cos45 = .707, and when recalculating coord
-         * dx45 and dy45, lect coeff .707 is neglected, dx and dy are
-         * actually 0707 times
-         * Too big. (security hole too small)
-         * Spot_cX, Y * must be by .707 * .707 = 0.5
-         */
 
-        cXrot = (pointX + pointY) >> 1;
-        cYrot = (pointY - pointX) >> 1;
-
-        /* Recalculating coord of segment extremity, which will be vertical
-         * following the orientation of axes on the screen: dx45 = pointx
-         * (or pointy) and 1.414 is actually greater, and dy45 = 0
-         */
-
-        // * Threshold should be .707 to reflect the change in coeff dx, dy
-        seuil *= 7;
-        seuil /= 10;
-
-        if( abs( cYrot ) <= seuil ) /* ok on vertical axis */
+        if( (aRefPoint.y - aEnd.y) < aDist )
         {
-            if( ( cXrot >= 0 ) && ( cXrot <= segX ) )
+            double dd = square( aRefPoint.x - aEnd.x ) +
+                 square( aRefPoint.y - aEnd.y );
+            if( dd < square( aDist ) )
                 return true;
-
-            /* Check extremes using the radius of a circle. */
-            if( ( cXrot < 0 ) && ( cXrot >= -seuil ) )
-            {
-                if( ( ( cXrot * cXrot ) + ( cYrot * cYrot ) ) <= ( seuil * seuil ) )
-                    return true;
-            }
-            if( ( cXrot > segX ) && ( cXrot <= ( segX + seuil ) ) )
-            {
-                if( ( ( ( cXrot - segX ) * ( cXrot - segX ) )
-                     + ( cYrot * cYrot ) ) <= ( seuil * seuil ) )
-                    return true;
-            }
         }
     }
-    else    /* any orientation */
+    else if( aEnd.y == aStart.y )
     {
-        /* There is a change of axis (rotation), so that the segment
-         * track is horizontal in the new reference
-         */
-        int angle;
+        // horizontal segment
+        int ll = abs( aRefPoint.y - aStart.y );
 
-        angle = KiROUND( ( atan2( (double) segY, (double) segX ) * 1800.0 / M_PI ) );
-        cXrot = pointX;
-        cYrot = pointY;
+        if( ll >= aDist )
+            return false;
 
-        RotatePoint( &cXrot, &cYrot, angle );   /* Rotate the point to be tested */
-        RotatePoint( &segX, &segY, angle );     /* Rotate the segment */
+        // To have only one case to examine, ensure xf > xi
+        if( aEnd.x < aStart.x )
+            EXCHG( aStart.x, aEnd.x );
 
-        /* The track is horizontal, following the amendments to coordinate
-         * axis and, therefore segX = length of segment
-         */
-        if( abs( cYrot ) <= seuil ) /* vertical axis */
+        if( aRefPoint.x < aEnd.x && aRefPoint.x > aStart.x )
+            return true;
+
+        // there is a special case: x,y near an end point (distance < dist )
+        // the distance should be carefully calculated
+        if( (aStart.x - aRefPoint.x) < aDist )
         {
-            if( ( cXrot >= 0 ) && ( cXrot <= segX ) )
+            double dd = square( aRefPoint.x - aStart.x) +
+                        square( aRefPoint.y - aStart.y );
+            if( dd < square( aDist ) )
                 return true;
+        }
 
-            if( ( cXrot < 0 ) && ( cXrot >= -seuil ) )
-            {
-                if( ( ( cXrot * cXrot ) + ( cYrot * cYrot ) ) <= ( seuil * seuil ) )
-                    return true;
-            }
-
-            if( ( cXrot > segX ) && ( cXrot <= ( segX + seuil ) ) )
-            {
-                if( ( ( ( cXrot - segX ) * ( cXrot - segX ) )
-                    + ( cYrot * cYrot ) ) <= ( seuil * seuil ) )
-                    return true;
-            }
+        if( (aRefPoint.x - aEnd.x) < aDist )
+        {
+            double dd = square(aRefPoint.x - aEnd.x) +
+                        square( aRefPoint.y - aEnd.y);
+            if( dd < square( aDist ) )
+                return true;
         }
     }
+    else
+    {
+        // oblique segment:
+        // First, we need to calculate the distance between the point
+        // and the line defined by aStart and aEnd
+        // this dist should be < dist
+        //
+        // find a,slope such that aStart and aEnd lie on y = a + slope*x
+        double  slope   = (double) (aEnd.y - aStart.y) / (aEnd.x - aStart.x);
+        double  a   = (double) aStart.y - slope * aStart.x;
+        // find c,orthoslope such that (x,y) lies on y = c + orthoslope*x,
+        // where orthoslope=(-1/slope)
+        // to calculate xp, yp = near point from aRefPoint
+        // which is on the line defined by aStart, aEnd
+        double  orthoslope   = -1.0 / slope;
+        double  c   = (double) aRefPoint.y - orthoslope * aRefPoint.x;
+        // find nearest point to (x,y) on line defined by aStart, aEnd
+        double  xp  = (a - c) / (orthoslope - slope);
+        double  yp  = a + slope * xp;
+        // find distance to line, in fact the square of dist,
+        // because we just know if it is > or < aDist
+        double dd = square( aRefPoint.x - xp ) + square( aRefPoint.y - yp );
+        double dist = square( aDist );
 
-    return false;
+        if( dd >= dist )    // this reference point is not a good candiadte.
+            return false;
+
+        // dd is < dist, therefore we should make a fine test
+        if( fabs( slope ) > 0.7 )
+        {
+            // line segment more vertical than horizontal
+            if( (aEnd.y > aStart.y && yp < aEnd.y && yp > aStart.y) ||
+                (aEnd.y < aStart.y && yp > aEnd.y && yp < aStart.y) )
+                return true;
+        }
+        else
+        {
+            // line segment more horizontal than vertical
+            if( (aEnd.x > aStart.x && xp < aEnd.x && xp > aStart.x) ||
+                (aEnd.x < aStart.x && xp > aEnd.x && xp < aStart.x) )
+                return true;
+        }
+
+        // Here, the test point is still a good candidate,
+        // however it is not "between" the end points of the segment.
+        // It is "outside" the segment, but it could be near a segment end point
+        // Therefore, we test the dist from the test point to each segment end point
+        dd = square( aRefPoint.x - aEnd.x ) + square( aRefPoint.y - aEnd.y );
+        if( dd < dist )
+            return true;
+        dd = square( aRefPoint.x - aStart.x ) + square( aRefPoint.y - aStart.y );
+        if( dd < dist )
+            return true;
+    }
+
+    return false;    // no hit
 }
 
 

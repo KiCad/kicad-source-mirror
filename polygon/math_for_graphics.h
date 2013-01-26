@@ -1,15 +1,5 @@
 // math stuff for graphics, from FreePCB
 
-/**
- * Function TestLineHit
- * test for hit on line segment i.e. a point within a given distance from segment
- * @param xi,yi and xf,yf = the end-points of the line segment
- * @param dist = maximum distance for hit
- * @param x, y = point to test coords
- * @return  true if hit (i.e dist < distance between the point and the segment, false if not.
- */
-bool TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist );
-
 /* Function FindLineSegmentIntersection
  * find intersection between line y = a + bx and line segment (xi,yi) to (xf,yf)
  * if b > DBL_MAX/10, assume vertical line at x = a

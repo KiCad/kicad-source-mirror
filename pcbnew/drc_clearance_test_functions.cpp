@@ -136,16 +136,10 @@ bool trapezoid2pointDRC( wxPoint aTref[4], wxPoint aPcompare, int aDist )
         return false;
     }
 
-    // Test distance between aPcompare and polygon edges:
-    int    ii, jj;
-    double dist = (double) aDist;
-
-    for( ii = 0, jj = 3; ii < 4; jj = ii, ii++ )  // for all edges in polygon
+    // Test distance between aPcompare and each segment of the polygon:
+    for( int ii = 0, jj = 3; ii < 4; jj = ii, ii++ )  // for all edge in polygon
     {
-        if( TestLineHit( aTref[ii].x, aTref[ii].y,
-                         aTref[jj].x, aTref[jj].y,
-                         aPcompare.x, aPcompare.y,
-                         dist ) )
+        if( TestSegmentHit( aTref[ii], aTref[jj], aPcompare, aDist ) )
             return false;
     }
 
@@ -602,12 +596,30 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     bool swap_pads;
     swap_pads = false;
 
-    if( aRefPad->GetShape() != PAD_CIRCLE  &&  aPad->GetShape() == PAD_CIRCLE )
-        swap_pads = true;
-    else if(  aRefPad->GetShape() != PAD_OVAL  &&  aPad->GetShape() == PAD_OVAL )
-        swap_pads = true;
-    else if(  aRefPad->GetShape() != PAD_RECT  &&  aPad->GetShape() == PAD_RECT )
-        swap_pads = true;
+    // swap pads to make comparisons easier
+    // priority is aRefPad = ROUND then OVAL then RECT then other
+    if( aRefPad->GetShape() != aPad->GetShape() && aRefPad->GetShape() != PAD_CIRCLE )
+    {
+        // pad ref shape is here oval, rect or trapezoid
+        switch( aPad->GetShape() )
+        {
+            case PAD_CIRCLE:
+                swap_pads = true;
+                break;
+
+            case PAD_OVAL:
+                swap_pads = true;
+                break;
+
+            case PAD_RECT:
+                if( aRefPad->GetShape() != PAD_OVAL )
+                    swap_pads = true;
+                break;
+
+            default:
+                break;
+        }
+    }
 
     if( swap_pads )
     {
@@ -639,7 +651,6 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         break;
 
     case PAD_RECT:
-
         // pad_angle = pad orient relative to the aRefPad orient
         pad_angle = aRefPad->GetOrientation() + aPad->GetOrientation();
         NORMALIZE_ANGLE_POS( pad_angle );
@@ -707,7 +718,9 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         {
             // Should not occur, because aPad and aRefPad are swapped
             // to have only aPad shape RECT or TRAP and aRefPad shape TRAP or RECT.
-            wxLogDebug( wxT( "unexpected pad shape %d") , aPad->GetShape() );
+            wxLogDebug( wxT( "DRC::checkClearancePadToPad: unexpected pad ref RECT @ %d, %d to pad shape %d @ %d, %d"),
+                aRefPad->GetPosition().x, aRefPad->GetPosition().y,
+                aPad->GetShape(), aPad->GetPosition().x, aPad->GetPosition().y );
         }
         break;
 
@@ -775,7 +788,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         break;
 
     default:
-        wxLogDebug( wxT( "unexpected pad shape" ) );
+        wxLogDebug( wxT( "DRC::checkClearancePadToPad: unexpected pad shape" ) );
         break;
     }
 

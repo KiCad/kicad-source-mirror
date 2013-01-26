@@ -18,67 +18,6 @@ double Distance( double x1, double y1, double x2, double y2 )
     return hypot( x1 - x2, y1 - y2 );
 }
 
-/**
- * Function TestLineHit
- * test for hit on line segment i.e. a point within a given distance from segment
- * @param x, y = cursor coords
- * @param xi,yi,xf,yf = the end-points of the line segment
- * @param dist = maximum distance for hit
- * return true if dist < distance between the point and the segment
- */
-bool TestLineHit( int xi, int yi, int xf, int yf, int x, int y, double dist )
-{
-    double dd;
-
-    // test for vertical or horizontal segment
-    if( xf==xi )
-    {
-        // vertical segment
-        dd = fabs( (double) (x - xi) );
-
-        if( dd<dist && ( (yf>yi && y<yf && y>yi) || (yf<yi && y>yf && y<yi) ) )
-            return true;
-    }
-    else if( yf==yi )
-    {
-        // horizontal segment
-        dd = fabs( (double) (y - yi) );
-
-        if( dd<dist && ( (xf>xi && x<xf && x>xi) || (xf<xi && x>xf && x<xi) ) )
-            return true;
-    }
-    else
-    {
-        // oblique segment
-        // find a,b such that (xi,yi) and (xf,yf) lie on y = a + bx
-        double  b   = (double) (yf - yi) / (xf - xi);
-        double  a   = (double) yi - b * xi;
-        // find c,d such that (x,y) lies on y = c + dx where d=(-1/b)
-        double  d   = -1.0 / b;
-        double  c   = (double) y - d * x;
-        // find nearest point to (x,y) on line segment (xi,yi) to (xf,yf)
-        double  xp  = (a - c) / (d - b);
-        double  yp  = a + b * xp;
-        // find distance
-        dd = sqrt( (x - xp) * (x - xp) + (y - yp) * (y - yp) );
-
-        if( fabs( b )>0.7 )
-        {
-            // line segment more vertical than horizontal
-            if( dd<dist && ( (yf>yi && yp<yf && yp>yi) || (yf<yi && yp>yf && yp<yi) ) )
-                return 1;
-        }
-        else
-        {
-            // line segment more horizontal than vertical
-            if( dd<dist && ( (xf>xi && xp<xf && xp>xi) || (xf<xi && xp>xf && xp<xi) ) )
-                return true;
-        }
-    }
-
-    return false;    // no hit
-}
-
 
 /* Function FindSegmentIntersections
  * find intersections between line segment (xi,yi) to (xf,yf)
