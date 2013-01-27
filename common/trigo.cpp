@@ -37,14 +37,14 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
         // vertical segment
         int ll = abs( aRefPoint.x - aStart.x );
 
-        if( ll >= aDist )
+        if( ll > aDist )
             return false;
 
         // To have only one case to examine, ensure aEnd.y > aStart.y
         if( aEnd.y < aStart.y )
             EXCHG( aStart.y, aEnd.y );
 
-        if( aRefPoint.y < aEnd.y && aRefPoint.y > aStart.y )
+        if( aRefPoint.y <= aEnd.y && aRefPoint.y >= aStart.y )
             return true;
 
         // there is a special case: x,y near an end point (distance < dist )
@@ -53,7 +53,7 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
         {
             double dd = square( aRefPoint.x - aStart.x) +
                  square( aRefPoint.y - aStart.y );
-            if( dd < square( aDist ) )
+            if( dd <= square( aDist ) )
                 return true;
         }
 
@@ -61,7 +61,7 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
         {
             double dd = square( aRefPoint.x - aEnd.x ) +
                  square( aRefPoint.y - aEnd.y );
-            if( dd < square( aDist ) )
+            if( dd <= square( aDist ) )
                 return true;
         }
     }
@@ -70,31 +70,31 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
         // horizontal segment
         int ll = abs( aRefPoint.y - aStart.y );
 
-        if( ll >= aDist )
+        if( ll > aDist )
             return false;
 
         // To have only one case to examine, ensure xf > xi
         if( aEnd.x < aStart.x )
             EXCHG( aStart.x, aEnd.x );
 
-        if( aRefPoint.x < aEnd.x && aRefPoint.x > aStart.x )
+        if( aRefPoint.x <= aEnd.x && aRefPoint.x >= aStart.x )
             return true;
 
         // there is a special case: x,y near an end point (distance < dist )
         // the distance should be carefully calculated
-        if( (aStart.x - aRefPoint.x) < aDist )
+        if( (aStart.x - aRefPoint.x) <= aDist )
         {
             double dd = square( aRefPoint.x - aStart.x) +
                         square( aRefPoint.y - aStart.y );
-            if( dd < square( aDist ) )
+            if( dd <= square( aDist ) )
                 return true;
         }
 
-        if( (aRefPoint.x - aEnd.x) < aDist )
+        if( (aRefPoint.x - aEnd.x) <= aDist )
         {
             double dd = square(aRefPoint.x - aEnd.x) +
                         square( aRefPoint.y - aEnd.y);
-            if( dd < square( aDist ) )
+            if( dd <= square( aDist ) )
                 return true;
         }
     }
@@ -122,22 +122,22 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
         double dd = square( aRefPoint.x - xp ) + square( aRefPoint.y - yp );
         double dist = square( aDist );
 
-        if( dd >= dist )    // this reference point is not a good candiadte.
+        if( dd > dist )    // this reference point is not a good candiadte.
             return false;
 
         // dd is < dist, therefore we should make a fine test
         if( fabs( slope ) > 0.7 )
         {
             // line segment more vertical than horizontal
-            if( (aEnd.y > aStart.y && yp < aEnd.y && yp > aStart.y) ||
-                (aEnd.y < aStart.y && yp > aEnd.y && yp < aStart.y) )
+            if( (aEnd.y > aStart.y && yp <= aEnd.y && yp >= aStart.y) ||
+                (aEnd.y < aStart.y && yp >= aEnd.y && yp <= aStart.y) )
                 return true;
         }
         else
         {
             // line segment more horizontal than vertical
-            if( (aEnd.x > aStart.x && xp < aEnd.x && xp > aStart.x) ||
-                (aEnd.x < aStart.x && xp > aEnd.x && xp < aStart.x) )
+            if( (aEnd.x > aStart.x && xp <= aEnd.x && xp >= aStart.x) ||
+                (aEnd.x < aStart.x && xp >= aEnd.x && xp <= aStart.x) )
                 return true;
         }
 
@@ -146,10 +146,10 @@ bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist 
         // It is "outside" the segment, but it could be near a segment end point
         // Therefore, we test the dist from the test point to each segment end point
         dd = square( aRefPoint.x - aEnd.x ) + square( aRefPoint.y - aEnd.y );
-        if( dd < dist )
+        if( dd <= dist )
             return true;
         dd = square( aRefPoint.x - aStart.x ) + square( aRefPoint.y - aStart.y );
-        if( dd < dist )
+        if( dd <= dist )
             return true;
     }
 
