@@ -1131,13 +1131,18 @@ void EDA_APP::InsertLibraryPath( const wxString& aPaths, size_t aIndex )
 
 bool EDA_APP::LockFile( const wxString& fileName )
 {
+    // first make absolute and normalize, to avoid that different lock files
+    // for the same file can be created
+    wxFileName fn = fileName;
+    fn.MakeAbsolute();
+
     // semaphore to protect the edition of the file by more than one instance
     if( m_oneInstancePerFileChecker != NULL )
     {
         // it means that we had an open file and we are opening a different one
         delete m_oneInstancePerFileChecker;
     }
-    wxString lockFileName = fileName + wxT( ".lock" );
+    wxString lockFileName = fn.GetFullPath() + wxT( ".lock" );
     lockFileName.Replace( wxT( "/" ), wxT( "_" ) );
     // We can have filenames coming from Windows, so also convert Windows separator
     lockFileName.Replace( wxT( "\\" ), wxT( "_" ) );
