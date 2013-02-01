@@ -514,8 +514,7 @@ double SCH_EDIT_FRAME::BestZoom()
 
 wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 {
-    SCH_SCREENS ScreenList;
-    wxFileName fn = ScreenList.GetFirst()->GetFileName();
+    wxFileName fn = GetScreen()->GetFileName();
 
 #ifndef KICAD_GOST
     wxString filename = fn.GetName();

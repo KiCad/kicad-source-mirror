@@ -174,6 +174,8 @@ void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
         }
         break;
     }
+
+    UpdateTitle();
 }
 
 
@@ -477,6 +479,8 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
         SaveEEFile( screen );
 
     CreateArchiveLibraryCacheFile();
+
+    UpdateTitle();
 }
 
 

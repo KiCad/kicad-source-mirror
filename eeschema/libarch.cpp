@@ -46,10 +46,7 @@
 
 bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile()
 {
-    wxFileName fn;
-    SCH_SCREENS ScreenList;
-
-    fn = ScreenList.GetFirst()->GetFileName();
+    wxFileName fn = GetScreen()->GetFileName();
     fn.SetName( fn.GetName() + wxT( "-cache" ) );
     fn.SetExt( SchematicLibraryFileExtension );
 
