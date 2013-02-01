@@ -39,6 +39,7 @@
 #include <vector>
 #include <build_version.h>
 
+#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 
@@ -177,10 +178,25 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
         if( newProject )
         {
-            if ( !m_ProjectFileName.GetFullPath().EndsWith( g_KicadPrjFilenameExtension ) )
+            m_ProjectFileName.SetExt( ProjectFileExtension );
+
+            // Check if the project directory is empty
+            wxDir directory ( m_ProjectFileName.GetPath() );
+            if( directory.HasFiles() )
             {
-                m_ProjectFileName.SetFullName( m_ProjectFileName.GetFullPath() +
-                                               g_KicadPrjFilenameExtension );
+                wxString msg = _( "The selected directory is not empty. "
+                        "We recommend you create projects in their own clean directory.\n\n"
+                        "Do you want to create a new empty directory for the project?" );
+
+                if( IsOK( this, msg ) )
+                {
+                    // Append a new directory with the same name of the project file
+                    // and try to create it
+                    m_ProjectFileName.AppendDir( m_ProjectFileName.GetName() );
+                    if( !wxMkdir( m_ProjectFileName.GetPath() ) )
+                        // There was a problem, undo
+                        m_ProjectFileName.RemoveLastDir();
+                }
             }
 
             if( event.GetId() == ID_NEW_PROJECT )
