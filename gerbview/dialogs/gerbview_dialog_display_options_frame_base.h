@@ -44,6 +44,7 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxRadioBox* m_OptDisplayFlashedItems;
 		wxRadioBox* m_OptDisplayPolygons;
 		wxRadioBox* m_ShowPageLimits;
+		wxCheckBox* m_OptZoomNoCenter;
 		wxCheckBox* m_OptMiddleButtonPan;
 		wxCheckBox* m_OptMiddleButtonPanLimited;
 		wxStaticLine* m_staticline1;

@@ -98,6 +98,8 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 
     m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( DCODES_VISIBLE ) );
 
+
+    m_OptZoomNoCenter->SetValue( m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
     m_OptMiddleButtonPan->SetValue( m_Parent->GetCanvas()->GetEnableMiddleButtonPan() );
     m_OptMiddleButtonPanLimited->SetValue( m_Parent->GetCanvas()->GetMiddleButtonPanLimited() );
     m_OptMiddleButtonPanLimited->Enable( m_OptMiddleButtonPan->GetValue() );
@@ -141,6 +143,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 
     m_Parent->SetPageSettings( pageInfo );
 
+	m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_OptZoomNoCenter->GetValue() );
     m_Parent->GetCanvas()->SetEnableMiddleButtonPan( m_OptMiddleButtonPan->GetValue() );
     m_Parent->GetCanvas()->SetMiddleButtonPanLimited( m_OptMiddleButtonPanLimited->GetValue() );
 

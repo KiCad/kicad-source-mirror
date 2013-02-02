@@ -43,6 +43,7 @@ class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxRadioBox* m_TextDisplayOption;
 		wxCheckBox* m_IsShowPadFill;
 		wxCheckBox* m_IsShowPadNum;
+		wxCheckBox* m_IsZoomNoCenter;
 		wxCheckBox* m_IsMiddleButtonPan;
 		wxCheckBox* m_IsMiddleButtonPanLimited;
 		wxStaticLine* m_staticline1;

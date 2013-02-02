@@ -675,6 +675,13 @@ public:
     void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
     /**
+     * Function RedrawScreen2
+     * puts the crosshair back to the screen position it had before zooming
+     * @param beforePos The screen position of the crosshair before zooming
+     */
+    void RedrawScreen2( const wxPoint& posBefore );
+
+    /**
      * Function Zoom_Automatique
      * redraws the screen with best zoom level and the best centering
      * that shows all the page or the board

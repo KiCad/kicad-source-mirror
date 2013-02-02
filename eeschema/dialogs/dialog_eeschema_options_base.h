@@ -81,6 +81,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public wxDialog
 		wxStaticText* m_staticText23;
 		wxCheckBox* m_checkShowGrid;
 		wxCheckBox* m_checkShowHiddenPins;
+		wxCheckBox* m_checkEnableZoomNoCenter;
 		wxCheckBox* m_checkEnableMiddleButtonPan;
 		wxCheckBox* m_checkMiddleButtonPanLimited;
 		wxCheckBox* m_checkAutoPan;

@@ -54,6 +54,9 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	
 	wxStaticBoxSizer* sbSizerViewOpt;
 	sbSizerViewOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
+
+	m_IsZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Zoom off center"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerViewOpt->Add( m_IsZoomNoCenter, 0, wxALL|wxEXPAND, 5 );
 	
 	m_IsMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerViewOpt->Add( m_IsMiddleButtonPan, 0, wxALL|wxEXPAND, 5 );

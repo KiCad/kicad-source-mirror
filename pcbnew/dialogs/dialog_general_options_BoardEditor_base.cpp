@@ -149,6 +149,11 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	wxStaticBoxSizer* sbSizer2PAN;
 	sbSizer2PAN = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
 	
+	m_ZoomNoCenterOpt = new wxCheckBox( this, wxID_ZOOMNOCENTER, _("Zoom off center"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZoomNoCenterOpt->SetToolTip( _("Keep the cursor at its current location when zooming") );
+	
+	sbSizer2PAN->Add( m_ZoomNoCenterOpt, 0, wxALL, 5 );
+
 	m_MiddleButtonPANOpt = new wxCheckBox( this, wxID_MIDDLEBUTTONPAN, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MiddleButtonPANOpt->SetToolTip( _("Use middle mouse button dragging to pan") );
 	
