@@ -112,15 +112,6 @@ public:
      */
     void             AssocieModule( wxCommandEvent& event );
 
-    /**
-     * Function WriteStuffList
-     * Creates a file for Eeschema, import footprint selections
-     * in schematic
-     * the file format is
-     * comp = "<reference>" module = "<footprint name">
-     */
-    void             WriteStuffList( wxCommandEvent& event );
-
     void             DisplayDocFile( wxCommandEvent& event );
 
     /**

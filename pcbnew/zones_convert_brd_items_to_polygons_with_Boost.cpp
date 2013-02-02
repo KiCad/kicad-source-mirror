@@ -456,13 +456,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         // In very rare cases, the next calculation crashes when Pcbnew is in nanometers.
         // the crash is inside boost::polygon (tested with version 1.49 and 1.53,
         // so this crash is nearly impossible to fix
-        // However it seems happen when subtracting polygons having exactly the sane edges
-        // and a workaround therefore is to slightly expand the polygons to substract.
-        // This is not so bad, because it ensures stubs are fully removed.
-        // The shapes are expanded by 1 micrometer, so this creates no noticeable change
-        const int expand_value = (int) (0.001 * IU_PER_MM );
-        if( expand_value )
-            polyset_holes += expand_value;
+        // and a workaround is here to combine the polygons to substract, to modify
+        // the geometry of the polygons to substract, because
+        // the 2 known cases are related to 2 rectangular overlapping rect to substract
+        // with a given geometry
+        KI_POLYGON_SET dummy; polyset_holes += dummy;
 
         // Remove unconnected stubs
         polyset_zone_solid_areas -= polyset_holes;

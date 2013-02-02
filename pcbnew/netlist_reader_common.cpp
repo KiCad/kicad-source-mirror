@@ -393,7 +393,7 @@ MODULE* NETLIST_READER::FindModule( const wxString& aId )
  *
  * Sample file:
  *
- * Cmp-Mod V01 Genere by Pcbnew 29/10/2003-13: 11:6 *
+ * Cmp-Mod V01 Genere by CvPcb 29/10/2003-13: 11:6 *
  *  BeginCmp
  *  TimeStamp = /32307DE2/AA450F67;
  *  Reference = C1;

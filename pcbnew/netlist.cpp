@@ -87,25 +87,25 @@ static FILE* OpenNetlistFile( const wxString& aFullFileName )
 
 
 
-/**
- * Function ReadPcbNetlist
- * Update footprints (load missing footprints and delete on request extra
- * footprints)
+/* Update footprints (load missing footprints and delete on request extra footprints)
  * Update connectivity info ( Net Name list )
  * Update Reference, value and "TIME STAMP"
- * @param aNetlistFullFilename = netlist file name (*.net)
- * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
- * @param aMessageWindow  = a wxTextCtrl to print messages (can be NULL).
- * @param aChangeFootprint = true to change existing footprints
+ * param aNetlistFullFilename = netlist file name (*.net)
+ * param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
+ * param aMessageWindow  = a wxTextCtrl to print messages (can be NULL).
+ * param aChangeFootprint = true to change existing footprints
  *                              when the netlist gives a different footprint.
  *                           false to keep existing footprints
- * @param aDeleteBadTracks - true to erase erroneous tracks after updating connectivity info.
- * @param aDeleteExtraFootprints - true to remove unlocked footprints found on board but not
+ * param aDeleteBadTracks - true to erase erroneous tracks after updating connectivity info.
+ * param aDeleteExtraFootprints - true to remove unlocked footprints found on board but not
  *                                 in netlist.
- * @param aSelect_By_Timestamp - true to use schematic timestamps instead of schematic references
+ * param aSelect_By_Timestamp - true to use schematic timestamps instead of schematic references
  *                              to identify footprints on board
  *                              (Must be used after a full reannotation in schematic).
- * @return true if Ok
+ * param aUseCmpFileForFootprintsNames = false to use only the netlist to know the
+ *                      fontprint names of each component.
+ *                                     = true to use the .cmp file created by CvPcb
+ * return true if Ok
  */
 bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
                                      const wxString& aCmpFullFileName,
@@ -121,8 +121,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
         return false;
 
     SetLastNetListRead( aNetlistFullFilename );
-
-    bool useCmpfile = ! aCmpFullFileName.IsEmpty() && wxFileExists( aCmpFullFileName );
+    bool useCmpfile = !aCmpFullFileName.IsEmpty() && wxFileExists( aCmpFullFileName );
 
     if( aMessageWindow )
     {

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
@@ -44,6 +46,7 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 		};
 		
 		wxRadioBox* m_Select_By_Timestamp;
+		wxRadioBox* m_cmpNameSourceOpt;
 		wxRadioBox* m_ChangeExistingFootprintCtrl;
 		wxRadioBox* m_DeleteBadTracks;
 		wxRadioBox* m_RemoveExtraFootprintsCtrl;

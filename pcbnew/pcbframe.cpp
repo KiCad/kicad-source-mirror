@@ -289,6 +289,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_hasAutoSave = true;
     m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
+    m_useCmpFileForFpNames = true;
 #ifdef KICAD_SCRIPTING_WXPYTHON
     m_pythonPanel = NULL;
 #endif
