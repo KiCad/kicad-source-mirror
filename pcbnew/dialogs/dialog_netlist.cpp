@@ -42,10 +42,11 @@
 
 #include <dialog_netlist.h>
 
+
 void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 {
-    /* Setup the netlist file name to the last net list file read or the board file
-     * name if no last file read is not set.
+    /* Setup the netlist file name to the last netlist file read,
+     * or the board file name if the last filename is empty or last file not existing.
      */
     wxFileName fn = GetLastNetListRead();
     wxString lastNetlistName = GetLastNetListRead();
@@ -57,13 +58,20 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
         lastNetlistName = fn.GetFullPath();
     }
 
-    DIALOG_NETLIST frame( this, DC, lastNetlistName );
+    DIALOG_NETLIST dlg( this, DC, lastNetlistName );
 
-    frame.ShowModal();
+    dlg.ShowModal();
 
     // Save project settings if needed.
     // Project settings are saved in the corresponding <board name>.pro file
-    if( lastNetlistName != GetLastNetListRead() &&
+    bool configChanged = lastNetlistName != GetLastNetListRead();
+    if( dlg.UseCmpFileForFpNames() != GetUseCmpFileForFpNames() )
+    {
+        SetUseCmpFileForFpNames( dlg.UseCmpFileForFpNames() );
+        configChanged = true;
+    }
+
+    if( configChanged &&
         !GetBoard()->GetFileName().IsEmpty() &&
         IsOK(NULL, _("Project config has changed. Save it ?") ) )
     {
@@ -82,16 +90,9 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
     m_parent = aParent;
     m_dc = aDC;
     m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
-
-    Init();
+    m_cmpNameSourceOpt->SetSelection( m_parent->GetUseCmpFileForFpNames() ? 1 : 0 );
 
     GetSizer()->SetSizeHints( this );
-}
-
-
-void DIALOG_NETLIST::Init()
-{
-    SetFocus();
 }
 
 void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
@@ -125,11 +126,16 @@ void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 {
-    wxFileName fn = m_NetlistFilenameCtrl->GetValue();
-    fn.SetExt( ComponentFileExtension );
+    wxString fullNetfileName = m_NetlistFilenameCtrl->GetValue();
+    wxString cmpFilename;
+    if( UseCmpFileForFpNames() )
+    {
+        wxFileName fn = m_NetlistFilenameCtrl->GetValue();
+        fn.SetExt( ComponentFileExtension );
+        cmpFilename = fn.GetFullPath();
+    }
 
-    m_parent->ReadPcbNetlist( m_NetlistFilenameCtrl->GetValue(),
-                              fn.GetFullPath(), m_MessageWindow,
+    m_parent->ReadPcbNetlist( fullNetfileName, cmpFilename, m_MessageWindow,
                               m_ChangeExistingFootprintCtrl->GetSelection() == 1 ? true : false,
                               m_DeleteBadTracks->GetSelection() == 1 ? true : false,
                               m_RemoveExtraFootprintsCtrl->GetSelection() == 1 ? true : false,

@@ -80,6 +80,7 @@ const wxString LegacyFootprintLibPathWildcard( _( "Legacy footprint library file
 const wxString EagleFootprintLibPathWildcard( _( "Eagle ver. 6.x XML library files (*.lbr)|*.lbr" ) );
 const wxString GedaPcbFootprintLibFileWildcard( _( "Geda PCB footprint library file (*.fp)|*.fp" ) );
 const wxString MacrosFileWildcard( _( "KiCad recorded macros (*.mcr)|*.mcr" ) );
+const wxString ComponentFileExtensionWildcard( _( "Component-footprint link file (*.cmp)|*cmp" ) );
 
 // generic:
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );

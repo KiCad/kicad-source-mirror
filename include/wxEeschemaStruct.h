@@ -652,25 +652,34 @@ public:
      */
     bool LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName, bool append = false );
 
-    bool ReadInputStuffFile();
+    /**
+     * Function ReadCmpToFootprintLinkFile
+     * Loads a .cmp file from CvPcb and update the footprin field
+     * of components
+     * Prepares parameters and calls ProcessCmpToFootprintLinkFile
+     * to actually read the file and update Fp fields
+     */
+    bool LoadCmpToFootprintLinkFile();
 
     /**
      * Function ProcessStuffFile
      * gets footprint info from each line in the Stuff File by Ref Desg
      *
-     * Read a "stuff" file created by CvPcb.
+     * Read a Cmp To Footprint Link file created by CvPcb (the .cmp file).
      * That file has lines like:
-     * comp = "C1" module = "CP6"
-     * comp = "C2" module = "C1"
-     * comp = "C3" module = "C1"
-     * "comp =" gives the component reference
-     * "module =" gives the footprint name
+     *  BeginCmp
+     *  TimeStamp = /32307DE2/AA450F67;
+     *  Reference = C1;
+     *  ValeurCmp = 47uF;
+     *  IdModule  = CP6;
+     *  EndCmp
      *
-     * @param aFilename The file to read from.
+     * @param aFullFilename = the full filename to read
      * @param aSetFieldsAttributeToVisible = true to set the footprint field flag to visible
-     * @return bool - true if success, else true.
+     * @return bool = true if success.
      */
-    bool ProcessStuffFile( FILE* aFilename, bool  aSetFieldsAttributeToVisible );
+    bool ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
+                                        bool  aSetFieldsAttributeToVisible );
 
     /**
      * Function SaveEEFile
@@ -753,7 +762,7 @@ private:
     void OnFindReplace( wxFindDialogEvent& aEvent );
 
     void OnLoadFile( wxCommandEvent& event );
-    void OnLoadStuffFile( wxCommandEvent& event );
+    void OnLoadCmpToFootprintLinkFile( wxCommandEvent& event );
     void OnNewProject( wxCommandEvent& event );
     void OnLoadProject( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );

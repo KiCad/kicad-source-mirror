@@ -116,7 +116,8 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
             startpoint.x /= 2;
             startpoint.y /= 2;
 
-            // This is CIRCLE pad tweak (for circle pads the thermal stubs are at 45 deg)
+            // This is a CIRCLE pad tweak
+            // for circle pads, the thermal stubs orientation is 45 deg
             int fAngle = pad->GetOrientation();
             if( pad->GetShape() == PAD_CIRCLE )
             {

@@ -76,7 +76,7 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         component->m_Footprint = aFootprintName;
 
         // create the new component description
-        
+
         description.Printf( CMP_FORMAT, componentIndex + 1,
                     GetChars( component->m_Reference ),
                     GetChars( component->m_Value ),
@@ -85,7 +85,7 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         // if the component hasn't had a footprint associated with it
         // it now has, so we decrement the count of components without
         // a footprint assigned.
-        
+
         if( !hasFootprint )
         {
             hasFootprint = true;
@@ -232,49 +232,4 @@ int CVPCB_MAINFRAME::SaveCmpLinkFile( const wxString& aFullFileName )
     msg.Printf( _("File %s saved"), GetChars( fn.GetFullPath() ) );
     SetStatusText( msg );
     return 1;
-}
-
-/* Creates a file for Eeschema, import footprint selections in schematic
- * the file format is
- * comp = "<reference>" module = "<footprint name">
- */
-
-void CVPCB_MAINFRAME::WriteStuffList( wxCommandEvent& event )
-{
-    FILE*      FileEquiv;
-    wxString   Line;
-    wxFileName fn = m_NetlistFileName;
-
-    if( m_components.empty() )
-        return;
-
-    fn.SetExt( RetroFileExtension );
-
-    wxFileDialog dlg( this, wxT( "Save Stuff File" ), fn.GetPath(),
-                      fn.GetFullName(), RetroFileWildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    FileEquiv = wxFopen( dlg.GetPath(), wxT( "wt" ) );
-
-    if( FileEquiv == 0 )
-    {
-        Line = _( "Unable to create " ) + dlg.GetPath();
-        DisplayError( this, Line, 30 );
-        return;
-    }
-
-    BOOST_FOREACH( COMPONENT_INFO& component, m_components )
-    {
-        if( component.m_Footprint.empty() )
-            continue;
-
-        fprintf( FileEquiv, "comp = %s module = %s\n",
-                 EscapedUTF8( component.m_Reference ).c_str(),
-                 EscapedUTF8( component.m_Footprint ).c_str() );
-    }
-
-    fclose( FileEquiv );
 }

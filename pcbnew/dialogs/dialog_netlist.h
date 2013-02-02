@@ -37,21 +37,25 @@ private:
     PCB_EDIT_FRAME * m_parent;
     wxDC * m_dc;
 
-
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
                     const wxString & aNetlistFullFilename );
     ~DIALOG_NETLIST() {};
+    // return true if the user choice is tu use the .cmp file
+    // created by CvPcb to know footprin names associated to components
+    // and false tu use the netlist only
+    bool UseCmpFileForFpNames()
+    {
+        return m_cmpNameSourceOpt->GetSelection() == 1;
+    }
 
 private:
-    void Init();
-    // Virtual event handlers, overide them in your derived class
+    // Virtual event handlers:
     void OnOpenNetlistClick( wxCommandEvent& event );
     void OnReadNetlistFileClick( wxCommandEvent& event );
     void OnTestFootprintsClick( wxCommandEvent& event );
     void OnCompileRatsnestClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
-
 };
 
 
