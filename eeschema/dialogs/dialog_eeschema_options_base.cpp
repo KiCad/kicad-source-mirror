@@ -155,6 +155,11 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_checkShowHiddenPins = new wxCheckBox( m_panel1, wxID_ANY, _("Show hi&dden pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_checkShowHiddenPins, 0, wxALL|wxEXPAND, 3 );
 	
+	m_checkEnableZoomNoCenter = new wxCheckBox( m_panel1, xwID_ANY, _("Enable zooming off center"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkEnableZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
+	
+	bSizer2->Add( m_checkEnableZoomNoCenter, 0, wxALL, 3 );
+
 	m_checkEnableMiddleButtonPan = new wxCheckBox( m_panel1, xwID_ANY, _("Enable middle mouse button panning"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkEnableMiddleButtonPan->SetToolTip( _("Use middle mouse button dragging to pan") );
 	

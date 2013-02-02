@@ -86,6 +86,9 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* bLeftBottomSizer;
 	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
 	
+	m_OptZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Zoom off center"), wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftBottomSizer->Add( m_OptZoomNoCenter, 0, wxALL, 5 );
+	
 	m_OptMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftBottomSizer->Add( m_OptMiddleButtonPan, 0, wxALL, 5 );
 	
