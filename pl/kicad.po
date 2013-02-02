@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-25 19:46+0100\n"
-"PO-Revision-Date: 2013-01-25 19:50+0100\n"
+"POT-Creation-Date: 2013-02-02 08:43+0100\n"
+"PO-Revision-Date: 2013-02-02 08:49+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -103,7 +103,7 @@ msgstr ""
 
 #: kicad/files-io.cpp:77
 msgid "Target Directory"
-msgstr "Katalog docelowy"
+msgstr "Folder docelowy"
 
 #: kicad/files-io.cpp:84
 msgid "Unzipping project in "
@@ -147,17 +147,17 @@ msgstr ""
 "\n"
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
-#: kicad/kicad.cpp:78 kicad/prjconfig.cpp:221 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1015 pcbnew/moduleframe.cpp:571
+#: kicad/kicad.cpp:78 kicad/prjconfig.cpp:237 eeschema/libedit.cpp:62
+#: eeschema/schframe.cpp:1014 pcbnew/moduleframe.cpp:571
 #: pcbnew/pcbframe.cpp:797 cvpcb/cvframe.cpp:717
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
-#: kicad/kicad.cpp:84 kicad/prjconfig.cpp:234
+#: kicad/kicad.cpp:84 kicad/prjconfig.cpp:250
 msgid "Working dir: "
-msgstr "Katalog roboczy: "
+msgstr "Folder roboczy: "
 
-#: kicad/kicad.cpp:85 kicad/prjconfig.cpp:235
+#: kicad/kicad.cpp:85 kicad/prjconfig.cpp:251
 msgid ""
 "\n"
 "Project: "
@@ -172,7 +172,7 @@ msgid ""
 "Working dir: %s\n"
 msgstr ""
 "Gotowy\n"
-"Katalog roboczy: %s\n"
+"Folder roboczy: %s\n"
 
 #: kicad/mainframe.cpp:196
 #, c-format
@@ -399,73 +399,85 @@ msgstr "Pliki wykonywalne ("
 msgid "Select Preferred Pdf Browser"
 msgstr "Wybierz preferowaną przeglądarkę PDF"
 
-#: kicad/prjconfig.cpp:75
+#: kicad/prjconfig.cpp:76
 msgid "System Templates"
 msgstr "Szablony systemowe"
 
-#: kicad/prjconfig.cpp:81
+#: kicad/prjconfig.cpp:82
 msgid "User Templates"
 msgstr "Szablony użytkownika"
 
-#: kicad/prjconfig.cpp:92
+#: kicad/prjconfig.cpp:93
 msgid "Portable Templates"
 msgstr "Szablony przenośne"
 
-#: kicad/prjconfig.cpp:100
+#: kicad/prjconfig.cpp:101
 msgid "Did not generate new project from template"
 msgstr "Nie wygenerowano nowego projektu z szablonu"
 
-#: kicad/prjconfig.cpp:101
+#: kicad/prjconfig.cpp:102
 msgid "Cancelled new project from template"
 msgstr "Nowy projekt z szablonu został anulowany"
 
-#: kicad/prjconfig.cpp:111
+#: kicad/prjconfig.cpp:112
 msgid "Problem whilst creating new project from template!"
 msgstr "Wystąpił problem przy tworzniu nowego projektu z szablonu!"
 
-#: kicad/prjconfig.cpp:112
+#: kicad/prjconfig.cpp:113
 msgid "Could not generate new project"
 msgstr "Nie mogę utworzyć nowego projektu"
 
-#: kicad/prjconfig.cpp:127
+#: kicad/prjconfig.cpp:128
 msgid "Project template file <kicad.pro> not found. "
 msgstr "Plik szablonu projektu <kicad.pro> nie został znaleziony."
 
-#: kicad/prjconfig.cpp:160
+#: kicad/prjconfig.cpp:161
 msgid "Create New Project"
 msgstr "Utwórz nowy projekt"
 
-#: kicad/prjconfig.cpp:165
+#: kicad/prjconfig.cpp:166
 msgid "Open Existing Project"
 msgstr "Otwórz istniejący projekt"
 
-#: kicad/prjconfig.cpp:208
+#: kicad/prjconfig.cpp:187
+msgid ""
+"The selected directory is not empty. We recommend you create projects in "
+"their own clean directory.\n"
+"\n"
+"Do you want to create a new empty directory for the project?"
+msgstr ""
+"Wybrany folder nie jest pusty. Zalecane jest tworzenie projektów w ich "
+"własnych folderach.\n"
+"\n"
+"Czy chcesz by program utworzył nowy pusty folder dla projektu?"
+
+#: kicad/prjconfig.cpp:224
 msgid "KiCad project file <"
 msgstr "Plik projektu KiCad <"
 
-#: kicad/prjconfig.cpp:209
+#: kicad/prjconfig.cpp:225
 msgid "> not found"
 msgstr "> nie został znaleziony"
 
 #: kicad/tree_project_frame.cpp:223
 msgid "Create New Directory"
-msgstr "Utwórz katalog"
+msgstr "Utwórz nowy folder"
 
 #: kicad/tree_project_frame.cpp:656 kicad/tree_project_frame.cpp:663
 msgid "New D&irectory"
-msgstr "Nowy &katalog"
+msgstr "Nowy folder"
 
 #: kicad/tree_project_frame.cpp:657 kicad/tree_project_frame.cpp:664
 msgid "Create a New Directory"
-msgstr "Utwórz nowy katalog"
+msgstr "Tworzy nowy folder"
 
 #: kicad/tree_project_frame.cpp:667
 msgid "&Delete Directory"
-msgstr "U&suń katalog"
+msgstr "U&suń folder"
 
 #: kicad/tree_project_frame.cpp:668 kicad/tree_project_frame.cpp:683
 msgid "Delete the Directory and its content"
-msgstr "Usuń katalog i jego zawartość"
+msgstr "Usuwa folder i jego zawartość"
 
 #: kicad/tree_project_frame.cpp:674
 msgid "&Edit in a text editor"
@@ -806,7 +818,7 @@ msgstr "Biblioteka "
 msgid " loaded"
 msgstr " wczytana"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:83 eeschema/files-io.cpp:233
+#: eeschema/eelibs_read_libraryfiles.cpp:83 eeschema/files-io.cpp:235
 #, c-format
 msgid ""
 "Component library <%s> failed to load.\n"
@@ -828,7 +840,7 @@ msgstr "Nie znaleziono plików"
 msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
-#: eeschema/eeschema.cpp:106 eeschema/files-io.cpp:290 pcbnew/files.cpp:248
+#: eeschema/eeschema.cpp:106 eeschema/files-io.cpp:292 pcbnew/files.cpp:248
 #: pcbnew/pcbnew.cpp:135
 msgid "This file is already open."
 msgstr "Ten plik jest już otwarty."
@@ -1013,36 +1025,36 @@ msgstr "Błąd operacji zapisu do pliku."
 msgid "File %s saved"
 msgstr "Plik %s został zapisany"
 
-#: eeschema/files-io.cpp:237
+#: eeschema/files-io.cpp:239
 msgid " ->Error"
 msgstr " ->Błąd"
 
-#: eeschema/files-io.cpp:262
+#: eeschema/files-io.cpp:264
 msgid "Discard changes to the current schematic?"
 msgstr "Porzucić zmiany w bieżącym schemacie?"
 
-#: eeschema/files-io.cpp:270
+#: eeschema/files-io.cpp:272
 msgid "Open Schematic"
 msgstr "Otwórz schemat"
 
-#: eeschema/files-io.cpp:340
+#: eeschema/files-io.cpp:342
 msgid ""
 "Ready\n"
 "Working dir: \n"
 msgstr ""
 "Gotowy\n"
-"Katalog roboczy: \n"
+"Folder roboczy: \n"
 
-#: eeschema/files-io.cpp:357
+#: eeschema/files-io.cpp:359
 #, c-format
 msgid "File <%s> not found."
 msgstr "Nie znaleziono pliku <%s>."
 
-#: eeschema/files-io.cpp:394
+#: eeschema/files-io.cpp:396
 msgid "Import Schematic"
 msgstr "Importuj Schemat"
 
-#: eeschema/files-io.cpp:452
+#: eeschema/files-io.cpp:454
 msgid ""
 "This operation cannot be undone. Besides, take into account that "
 "hierarchical sheets will not be appended.\n"
@@ -1115,7 +1127,7 @@ msgstr "Główny"
 msgid "Add Pin"
 msgstr "Dodaj pin"
 
-#: eeschema/libarch.cpp:100
+#: eeschema/libarch.cpp:97
 #, c-format
 msgid "An error occurred attempting to save component library <%s>."
 msgstr "Wystąpił błąd przy próbie zapisania symbolu w bibliotece <%s>."
@@ -3224,31 +3236,31 @@ msgstr ""
 "<%s>\n"
 "przed zamknięciem?"
 
-#: eeschema/schframe.cpp:591
+#: eeschema/schframe.cpp:590
 msgid "Draw wires and buses in any direction"
 msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
 
-#: eeschema/schframe.cpp:592
+#: eeschema/schframe.cpp:591
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
 
-#: eeschema/schframe.cpp:601
+#: eeschema/schframe.cpp:600
 msgid "Do not show hidden pins"
 msgstr "Nie pokazuj ukrytych pinów"
 
-#: eeschema/schframe.cpp:602 eeschema/tool_sch.cpp:298
+#: eeschema/schframe.cpp:601 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
-#: eeschema/schframe.cpp:715
+#: eeschema/schframe.cpp:714
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/schframe.cpp:785
+#: eeschema/schframe.cpp:784
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1018 cvpcb/cvframe.cpp:722
+#: eeschema/schframe.cpp:1017 cvpcb/cvframe.cpp:722
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -7470,7 +7482,7 @@ msgstr "Wstaw footprint na płytkę"
 #: pcbnew/dialogs/dialog_gendrill.cpp:278 pcbnew/dialogs/dialog_plot.cpp:257
 #: pcbnew/dialogs/dialog_SVG_print.cpp:179
 msgid "Select Output Directory"
-msgstr "Wybierz katalog wyjściowy"
+msgstr "Wybierz folder wyjściowy"
 
 #: pcbnew/gen_modules_placefile.cpp:158 pcbnew/dialogs/dialog_gendrill.cpp:285
 #: pcbnew/dialogs/dialog_plot.cpp:264 pcbnew/dialogs/dialog_SVG_print.cpp:186
@@ -7483,7 +7495,7 @@ msgstr "Użyć ścieżki względnej? "
 #: pcbnew/dialogs/dialog_plot.cpp:275 pcbnew/dialogs/dialog_SVG_print.cpp:187
 #: pcbnew/dialogs/dialog_SVG_print.cpp:197
 msgid "Plot Output Directory"
-msgstr "Katalog docelowy"
+msgstr "Folder docelowy"
 
 #: pcbnew/gen_modules_placefile.cpp:167 pcbnew/dialogs/dialog_gendrill.cpp:295
 #: pcbnew/dialogs/dialog_plot.cpp:274 pcbnew/dialogs/dialog_SVG_print.cpp:196
@@ -8565,7 +8577,7 @@ msgstr "&Biblioteki"
 
 #: pcbnew/menubar_pcbframe.cpp:425
 msgid "Setting libraries, directories and others..."
-msgstr "Ustawienia dotyczące bibliotek, katalogi i inne..."
+msgstr "Ustawienia dotyczące bibliotek, folderów i innych..."
 
 #: pcbnew/menubar_pcbframe.cpp:429
 msgid "Li&brary Tables"
@@ -9650,11 +9662,11 @@ msgstr "Rysuj"
 #: pcbnew/pcbplot.cpp:171
 #, c-format
 msgid "Directory %s created.\n"
-msgstr "Katalog %s został utworzony.\n"
+msgstr "Folder %s został utworzony.\n"
 
 #: pcbnew/pcbplot.cpp:179
 msgid "Cannot create output directory!"
-msgstr "Nie można utwożyć katalogu docelowego!"
+msgstr "Nie można utwożyć folderu docelowego!"
 
 #: pcbnew/pcbplot.cpp:249 pcbnew/dialogs/dialog_print_using_printer.cpp:370
 #: gerbview/dialogs/dialog_print_using_printer.cpp:300
@@ -11750,7 +11762,7 @@ msgstr "Zapisz plik VRML płytki"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:30
 msgid "Vrml 3D footprints shapes subdir:"
-msgstr "Podkatalog VRML dla trójwymiarowych kształtów footprintów:"
+msgstr "Podfolder VRML dla trójwymiarowych kształtów footprintów:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 msgid "Meter"
@@ -11763,7 +11775,7 @@ msgstr "Jednostki"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:50
 msgid "Copy 3D Shapes Files in Subdir"
-msgstr "Kopiuj pliki kształtów 3D do podkatalogu"
+msgstr "Kopiuj pliki kształtów 3D do podfolderu"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:50
 msgid "Use Absolute Path in Vrml File "
@@ -12000,7 +12012,7 @@ msgstr "Pliki AutoCAD DXF (.dxf)|*.dxf"
 #: pcbnew/dialogs/dialog_plot_base.cpp:43
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:19
 msgid "Output directory:"
-msgstr "Katalog wyjściowy:"
+msgstr "Folder wyjściowy:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:43
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:33
@@ -12362,8 +12374,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
-"Katalog docelowy dla plików z rysunkami. Można wpisać ścieżkę bezwzględną "
-"lub względną w stosunku do reszty plików."
+"Folder docelowy dla plików z rysunkami. Można wpisać ścieżkę bezwzględną lub "
+"względną w stosunku do reszty plików."
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:37
 #: pcbnew/dialogs/dialog_plot_base.cpp:55
