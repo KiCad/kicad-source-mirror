@@ -393,14 +393,16 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, int StAngle, int EndAngle, int ra
     DPOINT centre_dev = userToDeviceCoordinates( centre );
 
     if( plotMirror )
-        angle = (StAngle - EndAngle) / 10.0;
+        angle = StAngle - EndAngle;
     else
-        angle = (EndAngle - StAngle) / 10.0;
+        angle = EndAngle - StAngle;
+    NORMALIZE_ANGLE_180( angle );
+    angle /= 10;
 
     // Calculate start point,
     wxPoint cmap;
-    cmap.x  = (int) ( centre.x + ( radius * cos( RAD2DEG( StAngle / 10.0 ) ) ) );
-    cmap.y  = (int) ( centre.y - ( radius * sin( RAD2DEG( StAngle / 10.0 ) ) ) );
+    cmap.x  = int( centre.x + ( radius * cos( DEG2RAD( StAngle / 10.0 ) ) ) );
+    cmap.y  = int( centre.y - ( radius * sin( DEG2RAD( StAngle / 10.0 ) ) ) );
     DPOINT  cmap_dev = userToDeviceCoordinates( cmap );
 
     fprintf( outputFile,
@@ -478,7 +480,7 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 
     double rsize = userToDeviceSize( radius );
 
-    fprintf( outputFile, "PA %.0f,%.0fd;CI %.0f;\n",
+    fprintf( outputFile, "PA %.0f,%.0f;CI %.0f;\n",
              pos_dev.x, pos_dev.y, rsize );
 
     if( trace_mode == FILLED )        // Plot in filled mode.
