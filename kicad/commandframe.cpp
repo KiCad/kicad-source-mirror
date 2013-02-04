@@ -114,7 +114,7 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
 Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture"                                                                                     ) );
 
     btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( icon_pcbcalculator_xpm ) );
-    btn->SetToolTip( _( "Pcb calculator, the Suiss army knife..." ) );
+    btn->SetToolTip( _( "Pcb calculator, the Swiss army knife..." ) );
 }
 
 
