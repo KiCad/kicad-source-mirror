@@ -40,7 +40,6 @@ RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
 {
     m_Parent    = parent;
     m_MessagesBox = NULL;
-    m_ButtPanel = new wxPanel( this, wxID_ANY );
     m_bitmapButtons_maxHeigth = 0;
     m_ButtonSeparation = 10;        // control of command buttons position
     m_ButtonsListPosition.x = m_ButtonSeparation;
@@ -48,8 +47,9 @@ RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
     m_ButtonLastPosition    = m_ButtonsListPosition;
 
     // Add bitmap buttons to launch KiCad utilities:
+    m_ButtPanel = new wxPanel( this, wxID_ANY );
     CreateCommandToolbar();
-    m_ButtonsPanelHeight    = m_ButtonsListPosition.y + m_bitmapButtons_maxHeigth + 10;
+    m_ButtonsPanelHeight    = m_ButtonsListPosition.y + m_bitmapButtons_maxHeigth + m_ButtonSeparation;
 
     // Add the wxTextCtrl showing all messages from KiCad:
     m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
@@ -61,23 +61,17 @@ RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
 void RIGHT_KM_FRAME::OnSize( wxSizeEvent& event )
 {
     #define EXTRA_MARGE 4
-    wxSize  wsize = GetClientSize();
-    wsize.x -= EXTRA_MARGE;
-    wsize.y -= m_ButtonsPanelHeight + EXTRA_MARGE;
-    wxPoint wpos;
-    wpos.x = EXTRA_MARGE / 2;
-    wpos.y = m_ButtonsPanelHeight + (EXTRA_MARGE / 2);
-    if( m_MessagesBox )
-    {
-        m_MessagesBox->SetSize( wsize );
-        m_MessagesBox->SetPosition( wpos );
-    }
+    wxSize  wsize;
+    wsize.x = GetClientSize().x;
 
-    wpos.y = EXTRA_MARGE / 2;
-    m_ButtPanel->SetPosition( wpos );
-    wsize.y -= m_ButtonsPanelHeight - EXTRA_MARGE;
+    // Fix size of buttons area
+    wsize.y = m_ButtonsPanelHeight;
     m_ButtPanel->SetSize( wsize );
-    m_ButtPanel->Refresh();
+
+    // Fix position and size of the message area, below the buttons area
+    wsize.y = GetClientSize().y - m_ButtonsPanelHeight;
+    m_MessagesBox->SetSize( wsize );
+    m_MessagesBox->SetPosition( wxPoint( 0, m_ButtonsPanelHeight ) );
 
     event.Skip();
 }
