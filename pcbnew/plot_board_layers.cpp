@@ -784,22 +784,18 @@ static void ConfigureHPGLPenSizes( HPGL_PLOTTER *aPlotter,
  * Return the plotter object if OK, NULL if the file is not created
  * (or has a problem)
  */
-PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
+PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
                          const wxString& aFullFileName,
                          const wxString& aSheetDesc )
 {
-    FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
-
-    if( output_file == NULL )
-        return NULL;
-
     // Create the plotter driver and set the few plotter specific
     // options
-    PLOTTER *the_plotter = NULL;
+    PLOTTER*    plotter = NULL;
+
     switch( aPlotOpts->GetFormat() )
     {
     case PLOT_FORMAT_DXF:
-        the_plotter = new DXF_PLOTTER();
+        plotter = new DXF_PLOTTER();
         break;
 
     case PLOT_FORMAT_POST:
@@ -807,11 +803,11 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
         PS_plotter = new PS_PLOTTER();
         PS_plotter->SetScaleAdjust( aPlotOpts->GetFineScaleAdjustX(),
                                     aPlotOpts->GetFineScaleAdjustY() );
-        the_plotter = PS_plotter;
+        plotter = PS_plotter;
         break;
 
     case PLOT_FORMAT_PDF:
-        the_plotter = new PDF_PLOTTER();
+        plotter = new PDF_PLOTTER();
         break;
 
     case PLOT_FORMAT_HPGL:
@@ -821,31 +817,32 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
         /* HPGL options are a little more convoluted to compute, so
            they're split in an other function */
         ConfigureHPGLPenSizes( HPGL_plotter, aPlotOpts );
-        the_plotter = HPGL_plotter;
+        plotter = HPGL_plotter;
         break;
 
     case PLOT_FORMAT_GERBER:
-        the_plotter = new GERBER_PLOTTER();
+        plotter = new GERBER_PLOTTER();
         break;
 
     case PLOT_FORMAT_SVG:
-        the_plotter = new SVG_PLOTTER();
+        plotter = new SVG_PLOTTER();
         break;
 
     default:
         wxASSERT( false );
+        return NULL;
     }
 
     // Compute the viewport and set the other options
-    initializePlotter( the_plotter, aBoard, aPlotOpts );
+    initializePlotter( plotter, aBoard, aPlotOpts );
 
-    if( the_plotter->OpenFile( aFullFileName ) )
+    if( plotter->OpenFile( aFullFileName ) )
     {
-        the_plotter->StartPlot();
+        plotter->StartPlot();
 
         // Plot the frame reference if requested
         if( aPlotOpts->GetPlotFrameRef() )
-            PlotWorkSheet( the_plotter, aBoard->GetTitleBlock(),
+            PlotWorkSheet( plotter, aBoard->GetTitleBlock(),
                            aBoard->GetPageSettings(),
                            1, 1, // Only one page
                            aSheetDesc, aBoard->GetFileName() );
@@ -857,13 +854,12 @@ PLOTTER *StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
         if( aPlotOpts->GetNegative() )
         {
             EDA_RECT bbox = aBoard->ComputeBoundingBox();
-            FillNegativeKnockout( the_plotter, bbox );
+            FillNegativeKnockout( plotter, bbox );
         }
 
-        return the_plotter;
+        return plotter;
     }
 
-    // error in start_plot( )
-    delete the_plotter;     // will close also output_file
+    delete plotter;
     return NULL;
 }
