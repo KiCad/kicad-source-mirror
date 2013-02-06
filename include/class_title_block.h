@@ -44,6 +44,8 @@ class TITLE_BLOCK
 {
 public:
     // TITLE_BLOCK();
+    virtual ~TITLE_BLOCK() {};      // a virtual dtor seems needed to build
+                                    // python lib without warning
 
     void SetTitle( const wxString& aTitle )             { m_title = aTitle; }
     const wxString& GetTitle() const                    { return m_title; }

@@ -37,6 +37,16 @@ PLOTTER::PLOTTER( )
     negativeMode = false;
 }
 
+PLOTTER::~PLOTTER()
+{
+    // Emergency cleanup, but closing the file is
+    // usually made in EndPlot().
+    if( outputFile )
+    {
+        fclose( outputFile );
+    }
+}
+
 /*
  * Open or create the plot file aFullFilename
  * return true if success, false if the file connot be created/opened

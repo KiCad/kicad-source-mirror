@@ -61,14 +61,7 @@ public:
 
     PLOTTER( );
 
-    virtual ~PLOTTER()
-    {
-        // Emergency cleanup
-        if( outputFile )
-        {
-            fclose( outputFile );
-        }
-    }
+    virtual ~PLOTTER();
 
     /**
      * Returns the effective plot engine in use. It's not very OO but for
