@@ -1091,8 +1091,10 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     if( (Color < 0) && IsSelected() )
         Color = GetItemSelectedColor();
 
-    NameColor = (EDA_COLOR_T) ( Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color );
-    NumColor  = (EDA_COLOR_T) ( Color == -1 ? ReturnLayerColor( LAYER_PINNUM ) : Color );
+    NameColor = (EDA_COLOR_T) ( Color == UNSPECIFIED_COLOR ?
+                                ReturnLayerColor( LAYER_PINNAM ) : Color );
+    NumColor  = (EDA_COLOR_T) ( Color == UNSPECIFIED_COLOR ?
+                                ReturnLayerColor( LAYER_PINNUM ) : Color );
 
     /* Create the pin num string */
     ReturnPinStringNum( StringPinNum );

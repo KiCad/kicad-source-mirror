@@ -575,7 +575,7 @@ void CONNECTIONS::Propagate_SubNets()
                     pad->SetSubNet( curr_pad->GetSubNet() );
                 }
             }
-            else                              // the track segment is not attached to a cluster
+            else   // the current pad is not attached to a cluster
             {
                 if( pad->GetSubNet() > 0 )
                 {
@@ -599,7 +599,7 @@ void CONNECTIONS::Propagate_SubNets()
     if( curr_track )
         curr_track->SetSubNet( sub_netcode );
 
-    // Examine connections between trcaks and pads
+    // Examine connections between tracks and pads
     for( ; curr_track != NULL; curr_track = curr_track->Next() )
     {
         // First: handling connections to pads

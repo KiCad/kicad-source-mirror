@@ -114,8 +114,10 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, EDA_COLOR_T aColor,
-                     GR_DRAWMODE aDrawMode, void* aData, const TRANSFORM& aTransform )
+void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                     const wxPoint& aOffset, EDA_COLOR_T aColor,
+                     GR_DRAWMODE aDrawMode, void* aData,
+                     const TRANSFORM& aTransform )
 {
     if( InEditMode() )
     {
@@ -131,7 +133,8 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, 
         {
             GRSetDrawMode( aDC, g_XorMode );
             drawEditGraphics( aPanel->GetClipBox(), aDC, color );
-            drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData, aTransform );
+            drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData,
+                         aTransform );
         }
 #endif
         // Calculate the new attributes at the current cursor position.
@@ -139,7 +142,8 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, 
 
         // Draw the items using the new attributes.
         drawEditGraphics( aPanel->GetClipBox(), aDC, color );
-        drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData, aTransform );
+        drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData,
+                     aTransform );
 
         m_Fill = fillMode;
     }

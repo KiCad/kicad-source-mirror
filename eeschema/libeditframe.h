@@ -584,7 +584,12 @@ public:
      */
     virtual bool HandleBlockEnd( wxDC* DC );
 
-    void PlacePin( wxDC* DC );
+    /**
+     * Function PlacePin
+     * Place at cursor location the pin currently moved (i.e. pin pointed by m_drawItem)
+     * (and the linked pins, if any)
+     */
+    void PlacePin();
 
     /**
      * Function GlobalSetPins

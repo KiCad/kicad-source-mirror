@@ -75,7 +75,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
             switch( item->Type() )
             {
             case LIB_PIN_T:
-                PlacePin( DC );
+                PlacePin();
                 break;
 
             default:
@@ -89,7 +89,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         if( no_item_edited )
             CreatePin( DC );
         else
-            PlacePin( DC );
+            PlacePin();
         break;
 
     case ID_LIBEDIT_BODY_LINE_BUTT:

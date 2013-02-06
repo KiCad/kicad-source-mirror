@@ -195,7 +195,7 @@ static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC )
 /**
  * Managed cursor callback for placing component pins.
  */
-void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
+void LIB_EDIT_FRAME::PlacePin()
 {
     LIB_PIN* Pin;
     LIB_PIN* CurrentPin  = (LIB_PIN*) m_drawItem;
@@ -268,13 +268,9 @@ another pin. Continue?" ) );
         Pin->ClearFlags();
     }
 
-    m_canvas->CrossHairOff( DC );
-    bool showPinText = true;
-    CurrentPin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, GR_DEFAULT_DRAWMODE,
-                      &showPinText, DefaultTransform );
-    m_canvas->CrossHairOn( DC );
-
     m_drawItem = NULL;
+
+    m_canvas->Refresh();
 }
 
 
@@ -286,42 +282,44 @@ another pin. Continue?" ) );
  */
 void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 {
-    LIB_PIN* Pin;
-    LIB_PIN* CurrentPin = (LIB_PIN*) m_drawItem;
+    LIB_PIN* currentPin = (LIB_PIN*) m_drawItem;
     wxPoint  startPos;
 
     TempCopyComponent();
 
     // Mark pins for moving.
-    Pin = m_component->GetNextPin();
+    LIB_PIN* pin = m_component->GetNextPin();
 
-    for( ; Pin != NULL; Pin = m_component->GetNextPin( Pin ) )
+    for( ; pin != NULL; pin = m_component->GetNextPin( pin ) )
     {
-        Pin->ClearFlags();
+        pin->ClearFlags();
 
-        if( Pin == CurrentPin )
+        if( pin == currentPin )
             continue;
 
-        if( ( Pin->GetPosition() == CurrentPin->GetPosition() )
-            && ( Pin->GetOrientation() == CurrentPin->GetOrientation() )
+        if( ( pin->GetPosition() == currentPin->GetPosition() )
+            && ( pin->GetOrientation() == currentPin->GetOrientation() )
             && SynchronizePins() )
-            Pin->SetFlags( IS_LINKED | IS_MOVED );
+            pin->SetFlags( IS_LINKED | IS_MOVED );
     }
 
-    CurrentPin->SetFlags( IS_LINKED | IS_MOVED );
-    PinPreviousPos = OldPos = CurrentPin->GetPosition();
-
+    currentPin->SetFlags( IS_LINKED | IS_MOVED );
+    PinPreviousPos = OldPos = currentPin->GetPosition();
     startPos.x = OldPos.x;
     startPos.y = -OldPos.y;
-    m_canvas->CrossHairOff( DC );
+//    m_canvas->CrossHairOff( DC );
     GetScreen()->SetCrossHairPosition( startPos );
     m_canvas->MoveCursorToCrossHair();
 
     MSG_PANEL_ITEMS items;
-    CurrentPin->GetMsgPanelInfo( items );
+    currentPin->GetMsgPanelInfo( items );
     SetMsgPanel( items );
     m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
-    m_canvas->CrossHairOn( DC );
+//    m_canvas->CrossHairOn( DC );
+
+    // Refresh the screen to avoid color artifacts when drawing
+    // the pin in Edit mode and moving it from its start position
+    m_canvas->Refresh();
 }
 
 
@@ -353,7 +351,8 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
 
     // Redraw pin in new position
     CurrentPin->SetPosition( aPanel->GetScreen()->GetCrossHairPosition( true ) );
-    CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, &showPinText, DefaultTransform );
+    CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
+                      &showPinText, DefaultTransform );
 
     PinPreviousPos = CurrentPin->GetPosition();
 
@@ -558,12 +557,13 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 
     wxPoint savepos = GetScreen()->GetCrossHairPosition();
     m_canvas->CrossHairOff( DC );
-    GetScreen()->SetCrossHairPosition( wxPoint( Pin->GetPosition().x, -Pin->GetPosition().y ) );
+    GetScreen()->SetCrossHairPosition( wxPoint( Pin->GetPosition().x,
+                                                -Pin->GetPosition().y ) );
 
     // Add this new pin in list, and creates pins for others parts if needed
     m_drawItem = Pin;
     ClearTempCopyComponent();
-    PlacePin( DC );
+    PlacePin();
     m_lastDrawItem = Pin;
 
     GetScreen()->SetCrossHairPosition( savepos );
