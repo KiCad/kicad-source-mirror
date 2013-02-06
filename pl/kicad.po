@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-02 08:43+0100\n"
-"PO-Revision-Date: 2013-02-02 08:49+0100\n"
+"POT-Creation-Date: 2013-02-06 18:32+0100\n"
+"PO-Revision-Date: 2013-02-06 18:39+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: D:/Programy/BAZAAR/KICADSRC\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.5\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -55,23 +55,23 @@ msgstr "Czy na pewno chcesz usunąć '%s'"
 msgid "Delete File"
 msgstr "Usuń plik"
 
-#: kicad/commandframe.cpp:100
+#: kicad/commandframe.cpp:94
 msgid "Eeschema (Schematic editor)"
 msgstr "Eeschema (Edytor Schematów)"
 
-#: kicad/commandframe.cpp:103
+#: kicad/commandframe.cpp:97
 msgid "CvPcb (Components to modules)"
 msgstr "CvPcb (Kojarzenie komponentów i footprintów)"
 
-#: kicad/commandframe.cpp:106
+#: kicad/commandframe.cpp:100
 msgid "Pcbnew (PCB editor)"
 msgstr "Pcbnew (Edytor Obwodów Drukowanych)"
 
-#: kicad/commandframe.cpp:109
+#: kicad/commandframe.cpp:103
 msgid "GerbView (Gerber viewer)"
 msgstr "GerbView (Przeglądarka plików Gerber)"
 
-#: kicad/commandframe.cpp:113
+#: kicad/commandframe.cpp:107
 msgid ""
 "Bitmap2Component (a tool to build a logo from a bitmap)\n"
 "Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a "
@@ -81,8 +81,8 @@ msgstr ""
 "Tworzy czarno-białe symbole (dla Eeschema) lub footprinty (dla Pcbnew), "
 "które można później wstawiać do projektu."
 
-#: kicad/commandframe.cpp:117
-msgid "Pcb calculator, the Suiss army knife..."
+#: kicad/commandframe.cpp:111
+msgid "Pcb calculator, the Swiss army knife..."
 msgstr "PCB Calculator, Szwajcarski scyzoryk..."
 
 #: kicad/files-io.cpp:53
@@ -149,7 +149,7 @@ msgstr ""
 
 #: kicad/kicad.cpp:78 kicad/prjconfig.cpp:237 eeschema/libedit.cpp:62
 #: eeschema/schframe.cpp:1014 pcbnew/moduleframe.cpp:571
-#: pcbnew/pcbframe.cpp:797 cvpcb/cvframe.cpp:717
+#: pcbnew/pcbframe.cpp:798 cvpcb/cvframe.cpp:716
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
 
@@ -516,22 +516,22 @@ msgstr "<html><h1>Template Selector</h1></html>"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "Zostało znalezionych i zamienionych %d powielonych odcisków czasowych."
 
-#: eeschema/backanno.cpp:127
-msgid "Load Back Annotate File"
-msgstr "Załaduj plik numeracji wstecznej"
+#: eeschema/backanno.cpp:156
+msgid "Load Component-Footprint Link File"
+msgstr "Otwiera plik łącz komponentów z footprintami"
 
-#: eeschema/backanno.cpp:138
+#: eeschema/backanno.cpp:169
 msgid "Do you want to make all the foot print fields visible?"
 msgstr "Czy wszystkie pola footprintu mają być widoczne?"
 
-#: eeschema/backanno.cpp:139
+#: eeschema/backanno.cpp:170
 msgid "Field Display Option"
 msgstr "Opcje wyświetlania pola"
 
-#: eeschema/backanno.cpp:152
+#: eeschema/backanno.cpp:181
 #, c-format
-msgid "Failed to open back annotate file <%s>"
-msgstr "Błąd otwarcia pliku numeracji wstecznej <%s>"
+msgid "Failed to open component-footprint link file <%s>"
+msgstr "Nie udało się otworzyć pliku łącz symboli i footprintów <%s>"
 
 #: eeschema/build_BOM.cpp:214
 #, c-format
@@ -1285,7 +1285,7 @@ msgid "Component"
 msgstr "Symbol"
 
 #: eeschema/libedit.cpp:471 eeschema/lib_draw_item.cpp:65
-#: eeschema/lib_pin.cpp:1842 eeschema/sch_text.cpp:822
+#: eeschema/lib_pin.cpp:1844 eeschema/sch_text.cpp:822
 #: pcbnew/class_drawsegment.cpp:327 pcbnew/class_marker_pcb.cpp:98
 #: pcbnew/class_text_mod.cpp:386 pcbnew/class_track.cpp:1055
 #: pcbnew/class_zone.cpp:650 pcbnew/dialogs/dialog_layers_setup.cpp:293
@@ -1925,7 +1925,7 @@ msgstr "Pole%d"
 msgid "Field %s %s"
 msgstr "Pole %s %s"
 
-#: eeschema/lib_field.cpp:735 eeschema/lib_pin.cpp:1846
+#: eeschema/lib_field.cpp:735 eeschema/lib_pin.cpp:1848
 #: eeschema/sch_text.cpp:804
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:100
 msgid "Style"
@@ -2079,7 +2079,7 @@ msgstr "Nie podłączony"
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/lib_pin.cpp:1833 eeschema/sch_component.cpp:1488
+#: eeschema/lib_pin.cpp:1835 eeschema/sch_component.cpp:1488
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:160
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:36
@@ -2088,11 +2088,11 @@ msgstr "Pin"
 msgid "Name"
 msgstr "Nazwa"
 
-#: eeschema/lib_pin.cpp:1840
+#: eeschema/lib_pin.cpp:1842
 msgid "Number"
 msgstr "Numer"
 
-#: eeschema/lib_pin.cpp:1849 pcbnew/class_pcb_text.cpp:137
+#: eeschema/lib_pin.cpp:1851 pcbnew/class_pcb_text.cpp:137
 #: pcbnew/class_text_mod.cpp:391
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
 #: gerbview/class_gerber_draw_item.cpp:572
@@ -2100,7 +2100,7 @@ msgstr "Numer"
 msgid "Yes"
 msgstr "Tak"
 
-#: eeschema/lib_pin.cpp:1851 pcbnew/class_pcb_text.cpp:135
+#: eeschema/lib_pin.cpp:1853 pcbnew/class_pcb_text.cpp:135
 #: pcbnew/class_text_mod.cpp:389
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
 #: gerbview/class_gerber_draw_item.cpp:572
@@ -2108,16 +2108,16 @@ msgstr "Tak"
 msgid "No"
 msgstr "Nie"
 
-#: eeschema/lib_pin.cpp:1853
+#: eeschema/lib_pin.cpp:1855
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:86
 msgid "Visible"
 msgstr "Widoczny"
 
-#: eeschema/lib_pin.cpp:1857 pcbnew/muonde.cpp:203
+#: eeschema/lib_pin.cpp:1859 pcbnew/muonde.cpp:203
 msgid "Length"
 msgstr "Długość"
 
-#: eeschema/lib_pin.cpp:1860 eeschema/sch_text.cpp:793
+#: eeschema/lib_pin.cpp:1862 eeschema/sch_text.cpp:793
 #: pcbnew/class_pcb_text.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:57
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
@@ -2125,7 +2125,7 @@ msgstr "Długość"
 msgid "Orientation"
 msgstr "Orientacja"
 
-#: eeschema/lib_pin.cpp:2112
+#: eeschema/lib_pin.cpp:2114
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
@@ -3225,7 +3225,7 @@ msgstr "Dodaj symbol"
 msgid "Add power"
 msgstr "Dodaj port zasilania"
 
-#: eeschema/schframe.cpp:429 pcbnew/pcbframe.cpp:488
+#: eeschema/schframe.cpp:429 pcbnew/pcbframe.cpp:489
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -3260,7 +3260,7 @@ msgstr "Schemat"
 msgid "Error: not a component or no component"
 msgstr "Błąd: To nie jest symbol albo brak symboli"
 
-#: eeschema/schframe.cpp:1017 cvpcb/cvframe.cpp:722
+#: eeschema/schframe.cpp:1017 cvpcb/cvframe.cpp:721
 msgid " [no file]"
 msgstr " [brak pliku]"
 
@@ -3745,7 +3745,7 @@ msgstr "Uruchom Pcbnew - Stwórz obwód drukowany"
 msgid "Ascend or descend hierarchy"
 msgstr "Hierarchia wznosząca lub opadająca"
 
-#: eeschema/tool_sch.cpp:254 eeschema/help_common_strings.h:65
+#: eeschema/tool_sch.cpp:254 eeschema/help_common_strings.h:67
 msgid "Add a bitmap image"
 msgstr "Dodaj obraz w postaci bitmapy"
 
@@ -3925,7 +3925,7 @@ msgstr "Nie potwierdzaj"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:65
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:176
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:88
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:365
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
@@ -4486,8 +4486,8 @@ msgstr "Dodaj"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
 #: pcbnew/onrightclick.cpp:555 pcbnew/onrightclick.cpp:772
 #: pcbnew/onrightclick.cpp:835 pcbnew/onrightclick.cpp:887
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
 msgid "Delete"
 msgstr "Usuń"
 
@@ -5352,7 +5352,7 @@ msgstr "Utwórz plik raportu"
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:75
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:107
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:116
 #: pcbnew/dialogs/dialog_plot_base.cpp:345
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:116
 #: common/dialogs/dialog_list_selector_base.cpp:37
@@ -5724,9 +5724,9 @@ msgstr "Pliki wtyczek:"
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Nie zapomnij wypełnić pola \"Tytuł\""
 
-#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:439
+#: eeschema/dialogs/dialog_netlist_base.cpp:46 cvpcb/cvframe.cpp:438
 #: eeschema/dialogs/dialog_netlist_base.h:76
-#: pcbnew/dialogs/dialog_netlist_fbp.h:71
+#: pcbnew/dialogs/dialog_netlist_fbp.h:74
 msgid "Netlist"
 msgstr "Lista sieci"
 
@@ -7356,7 +7356,6 @@ msgid "Save GenCAD Board File"
 msgstr "Zapisz plik płytki GenCAD"
 
 #: pcbnew/export_gencad.cpp:139 pcbnew/dialogs/dialog_export_vrml.cpp:142
-#: cvpcb/readwrite_dlgs.cpp:264
 msgid "Unable to create "
 msgstr "Nie mogę utworzyć "
 
@@ -8907,7 +8906,7 @@ msgstr "Ustaw szerokość linii"
 msgid "Module Editor: Module modified! Continue?"
 msgstr "Edytor Footprintów: Footrprint został zmieniony! Kontynuować?"
 
-#: pcbnew/moduleframe.cpp:446 pcbnew/pcbframe.cpp:552
+#: pcbnew/moduleframe.cpp:446 pcbnew/pcbframe.cpp:553
 #: cvpcb/class_DisplayFootprintsFrame.cpp:450
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
@@ -9058,33 +9057,33 @@ msgstr "Dodaj wielokątny kształt"
 msgid "Netlist file %s not found"
 msgstr "Nie znaleziono pliku %s z listą sieci"
 
-#: pcbnew/netlist.cpp:130
+#: pcbnew/netlist.cpp:129
 #, c-format
 msgid "Reading Netlist \"%s\""
 msgstr "Odczytaj listę sieci \"%s\""
 
-#: pcbnew/netlist.cpp:135
+#: pcbnew/netlist.cpp:134
 #, c-format
 msgid "Using component/footprint link file \"%s\""
 msgstr "Użyto pliku połączeń symboli/footprintów \"%s\""
 
-#: pcbnew/netlist.cpp:142
+#: pcbnew/netlist.cpp:141
 msgid "Using time stamp selection"
 msgstr "Korzystanie z odcisków czasowych"
 
-#: pcbnew/netlist.cpp:171 cvpcb/readschematicnetlist.cpp:80
+#: pcbnew/netlist.cpp:170 cvpcb/readschematicnetlist.cpp:80
 msgid "Netlist read error"
 msgstr "Błąd odczytu listy sieci"
 
-#: pcbnew/netlist.cpp:179
+#: pcbnew/netlist.cpp:178
 msgid "Ok to delete not locked footprints not found in netlist?"
 msgstr "Czy usunąć nie zablokowane footprinty nie będące na liście sieci?"
 
-#: pcbnew/netlist.cpp:211
+#: pcbnew/netlist.cpp:210
 msgid "No Modules"
 msgstr "Brak footprintów"
 
-#: pcbnew/netlist.cpp:221
+#: pcbnew/netlist.cpp:220
 msgid "Components"
 msgstr "Komponenty"
 
@@ -9568,17 +9567,17 @@ msgstr "Przelotka %s; (otwór %s)"
 msgid "Delete Pad (module %s %s) "
 msgstr "Usuń pole lutownicze (footprint %s %s) "
 
-#: pcbnew/pcbframe.cpp:368 pcbnew/pcbframe.cpp:730
+#: pcbnew/pcbframe.cpp:369 pcbnew/pcbframe.cpp:731
 #: gerbview/events_called_functions.cpp:312 gerbview/gerbview_frame.cpp:139
 msgid "Visibles"
 msgstr "Widoczność"
 
-#: pcbnew/pcbframe.cpp:519
+#: pcbnew/pcbframe.cpp:520
 #, c-format
 msgid "The auto save file <%s> could not be removed!"
 msgstr "Plik automatycznej kopii zapasowej <%s> nie może zostac usunięty!"
 
-#: pcbnew/pcbframe.cpp:801
+#: pcbnew/pcbframe.cpp:802
 msgid " [new file]"
 msgstr " [nowy plik]"
 
@@ -9629,7 +9628,7 @@ msgstr "Ukryj menadżera warstw"
 msgid "Show &Layers Manager"
 msgstr "Pokaż menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:194 pcbnew/pcbnew_config.cpp:525
+#: pcbnew/pcbnew_config.cpp:194 pcbnew/pcbnew_config.cpp:527
 #: gerbview/excellon_read_drill_file.cpp:170
 #, c-format
 msgid "File %s not found"
@@ -9639,11 +9638,11 @@ msgstr "Nie znaleziono pliku %s"
 msgid "Save Project File"
 msgstr "Zapisz plik projektu"
 
-#: pcbnew/pcbnew_config.cpp:467
+#: pcbnew/pcbnew_config.cpp:469
 msgid "Save Macros File"
 msgstr "Zapisz plik makr"
 
-#: pcbnew/pcbnew_config.cpp:515
+#: pcbnew/pcbnew_config.cpp:517
 msgid "Read Macros File"
 msgstr "Odczytaj plik makr"
 
@@ -13331,51 +13330,51 @@ msgstr ""
 "lutowniczego.\n"
 "Ostateczna wartość prześwitu jest sumą tej wartości i wartością prześwitu"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:68
+#: pcbnew/dialogs/dialog_netlist.cpp:76
 msgid "Project config has changed. Save it ?"
 msgstr "Konfiguracja projektu została zmieniona. Zapisać ją ?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:116
+#: pcbnew/dialogs/dialog_netlist.cpp:117
 msgid "Select Netlist"
 msgstr "Wybierz listę sieci"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:144
+#: pcbnew/dialogs/dialog_netlist.cpp:150
 msgid "No modules"
 msgstr "Brak footprintów"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:157
+#: pcbnew/dialogs/dialog_netlist.cpp:163
 msgid "Netlist file not found!"
 msgstr "Nie znaleziono pliku z listą sieci"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:172
+#: pcbnew/dialogs/dialog_netlist.cpp:178
 msgid "No duplicate."
 msgstr "Brak duplikatów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:175
+#: pcbnew/dialogs/dialog_netlist.cpp:181
 msgid "Duplicates:"
 msgstr "Duplikaty:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:199
+#: pcbnew/dialogs/dialog_netlist.cpp:205
 msgid "No missing modules."
 msgstr "Brak brakujących footprintów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:202
+#: pcbnew/dialogs/dialog_netlist.cpp:208
 msgid "Missing:"
 msgstr "Brakujące:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:218
+#: pcbnew/dialogs/dialog_netlist.cpp:224
 msgid "No extra modules."
 msgstr "Brak dodatkowych footprintów."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:221
+#: pcbnew/dialogs/dialog_netlist.cpp:227
 msgid "Not in Netlist:"
 msgstr "Brak na liście sieci:"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:245
+#: pcbnew/dialogs/dialog_netlist.cpp:251
 msgid "Too many errors: some are skipped"
 msgstr "Zbyt dużo błędów: niektóre zostały pominięte"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:249
+#: pcbnew/dialogs/dialog_netlist.cpp:255
 msgid "Check Modules"
 msgstr "Sprawdź footprinty"
 
@@ -13399,20 +13398,44 @@ msgstr ""
 "numerowaniu schematu)"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:47
+msgid "From netlist"
+msgstr "Z listy sieci"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+msgid "From separate .cmp file"
+msgstr "Z oddzielnego pliku .cmp"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
+msgid "Module Name Source:"
+msgstr "Nazwa źródła footprintu:"
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
+msgid ""
+"Source of footprints names for component:\n"
+"- the netlist (if you have filled the footprint field of each component  in "
+"schematic)\n"
+"- the .cmp file created by CvPcb"
+msgstr ""
+"Mogą być dwa źródła nazw footprintów dla elementów:\n"
+"- lista sieci (jeśli wypełnione zostały pola Footprint każdgo symbolu na "
+"scheacie),\n"
+"- plik .cmp tworzony przez CvPcb."
+
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
 msgid "Keep"
 msgstr "Pozostaw"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
 msgid "Change"
 msgstr "Zmień"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:35
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:43
 msgid "Exchange Module:"
 msgstr "Zamiana footprintów:"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:45
 msgid ""
 "Keep or change an existing footprint when the netlist gives a different "
 "footprint"
@@ -13420,19 +13443,19 @@ msgstr ""
 "Zachowaj lub zmień istniejącą footprint, gdy lista sieci wskazuje inny "
 "footprint"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:49
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
 msgid "Bad Tracks Deletion:"
 msgstr "Usuwanie błędnych ścieżek:"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:51
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:59
 msgid "Keep or delete bad tracks after a netlist change"
 msgstr "Zachowaj lub usuń błędne ścieżki po zmianach w liście sieci"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
 msgid "Extra Footprints"
 msgstr "Usuwanie dodatkowych footprintów:"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:59
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
 msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
@@ -13440,37 +13463,37 @@ msgstr ""
 "Usuń footprinty znalezione na płytce nie będące na liście sieci\n"
 "Uwaga: tylko nie zablokowane footprinty zostaną usunięte"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:69
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:77
 msgid "Browse Netlist Files"
 msgstr "Przeglądaj pliki list sieci"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:72
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:80
 msgid "Read Current Netlist"
 msgstr "Wczytaj bieżącą listę sieci"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:74
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:82
 msgid "Read the current netlist and update connections and connectivity info"
 msgstr ""
 "Wczytaj bieżącą listę sieci i uaktualnij brakujące lub dodatkowe footprinty"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:78
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:86
 msgid "Footprints Test"
 msgstr "Test poprawności footprintów"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:79
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:87
 msgid "Read the current neltist file and list missing and extra footprints"
 msgstr "Wczytaj bieżącą netlistę i wypisz brakujące lub dodatkowe footprinty"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:83
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:91
 msgid "Rebuild Board Connectivity"
 msgstr "Odbuduj połączenia płytki"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:84
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:92
 msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
 msgstr ""
 "Odbuduj pełne połączenia (użyteczne po ręcznej zmianie nazwy sieci pola lut.)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:100
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:108
 msgid "Netlist File:"
 msgstr "Plik listy sieci:"
 
@@ -14522,7 +14545,7 @@ msgstr "Pokaż szkic jako wypełniony"
 msgid "Show outlines in sketch mode"
 msgstr "Pokaż tylko zarys szkicu"
 
-#: cvpcb/cvframe.cpp:257
+#: cvpcb/cvframe.cpp:256
 msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
@@ -14530,51 +14553,51 @@ msgstr ""
 "Linki pomiędzy komponentami a footprintami zostały zmienione.\n"
 "Zapisać przed zakończeniem?"
 
-#: cvpcb/cvframe.cpp:279
+#: cvpcb/cvframe.cpp:278
 msgid "Problem when saving file, exit anyway ?"
 msgstr "Problem podczas zapisu pliku, zakończyć mimo to?"
 
-#: cvpcb/cvframe.cpp:411
+#: cvpcb/cvframe.cpp:410
 msgid "Delete selections"
 msgstr "Usuń zaznaczone"
 
-#: cvpcb/cvframe.cpp:443
+#: cvpcb/cvframe.cpp:442
 msgid "Open Net List"
 msgstr "Otwórz plik netlisty"
 
-#: cvpcb/cvframe.cpp:646
+#: cvpcb/cvframe.cpp:645
 #, c-format
 msgid "Components: %d (free: %d)"
 msgstr "Komponenty: %d (wolne: %d)"
 
-#: cvpcb/cvframe.cpp:654
+#: cvpcb/cvframe.cpp:653
 #, c-format
 msgid "Footprints (All): %d"
 msgstr "Footprintów (Wszystkie): %d"
 
-#: cvpcb/cvframe.cpp:657
+#: cvpcb/cvframe.cpp:656
 #, c-format
 msgid "Footprints (filtered): %d"
 msgstr "Footprintów (Filtrowane): %d"
 
-#: cvpcb/cvframe.cpp:674
+#: cvpcb/cvframe.cpp:673
 msgid "No PCB footprint libraries are listed in the current project file."
 msgstr ""
 "Brak wyszczególnionych bibliotek footprintów w bieżącym pliku projektu."
 
-#: cvpcb/cvframe.cpp:675
+#: cvpcb/cvframe.cpp:674
 msgid "Project File Error"
 msgstr "Błąd pliku"
 
-#: cvpcb/cvframe.cpp:684
+#: cvpcb/cvframe.cpp:683
 msgid "Load Error"
 msgstr "Błąd wczytywania"
 
-#: cvpcb/cvframe.cpp:688
+#: cvpcb/cvframe.cpp:687
 msgid "Some files could not be found!"
 msgstr "Pewne pliki nie zostały znalezione!"
 
-#: cvpcb/cvframe.cpp:696
+#: cvpcb/cvframe.cpp:695
 msgid "Some files are invalid!"
 msgstr "Niektóre pliki są niepoprawne!"
 
@@ -14737,29 +14760,21 @@ msgid "Delete all associations"
 msgstr "Usuń wszystkie skojarzenia"
 
 #: cvpcb/tool_cvpcb.cpp:89
-msgid ""
-"Create export file (component/footprint list, used by Eeschema to fill the "
-"footprint field of components)"
-msgstr ""
-"Utwórz plik eksportu (lista komponentów/footprintów, użytych przez Eeschema "
-"do wypełnienia pól symboli)"
-
-#: cvpcb/tool_cvpcb.cpp:95
 msgid "Display footprints list documentation"
 msgstr "Pokaż dokumentację listy footprintów"
 
-#: cvpcb/tool_cvpcb.cpp:103
+#: cvpcb/tool_cvpcb.cpp:97
 msgid "Display the filtered footprint list for the current component"
 msgstr "Pokaż filtrowaną listę footprintów dla bieżącego komponentu"
 
-#: cvpcb/tool_cvpcb.cpp:110
+#: cvpcb/tool_cvpcb.cpp:104
 msgid ""
 "Display the filtered footprint list by pin count for the current component"
 msgstr ""
 "Pokaż listę footprintów dla bieżącego komponentu filtrowaną według liczby "
 "pinów."
 
-#: cvpcb/tool_cvpcb.cpp:116
+#: cvpcb/tool_cvpcb.cpp:110
 msgid "Display the full footprint list (without filtering)"
 msgstr "Pokaż pełną listę footprintów (bez filtrowania)"
 
@@ -16135,39 +16150,43 @@ msgstr "Plik bibliotek footprintów programu Geda PCB (*.fb)|*.fb"
 msgid "KiCad recorded macros (*.mcr)|*.mcr"
 msgstr "Pliki nagrań makr programu KiCad (*.mcr)|*.mcr"
 
-#: common/wildcards_and_files_ext.cpp:85
+#: common/wildcards_and_files_ext.cpp:83
+msgid "Component-footprint link file (*.cmp)|*cmp"
+msgstr "Pliki łącz komponent-footprint (*.cmp)|*.cmp"
+
+#: common/wildcards_and_files_ext.cpp:86
 msgid "All files (*)|*"
 msgstr "Wszystkie pliki (*.*)|*.*"
 
-#: common/wildcards_and_files_ext.cpp:88
+#: common/wildcards_and_files_ext.cpp:89
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 msgstr "Pliki łącznikowe komponent-footprint programu KiCad (*.cmp)|*.cmp"
 
-#: common/wildcards_and_files_ext.cpp:91
+#: common/wildcards_and_files_ext.cpp:92
 msgid "Drill files (*.drl)|*.drl;*.DRL"
 msgstr "Pliki wierceń (*.drl)|*.drl;*.DRL"
 
-#: common/wildcards_and_files_ext.cpp:92
+#: common/wildcards_and_files_ext.cpp:93
 msgid "SVG files (*.svg)|*.svg;*.SVG"
 msgstr "Pliki SVG (*.svg)|*.svg;*.SVG"
 
-#: common/wildcards_and_files_ext.cpp:93
+#: common/wildcards_and_files_ext.cpp:94
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Pliki PDF (*.pdf)|*.pdf"
 
-#: common/wildcards_and_files_ext.cpp:94
+#: common/wildcards_and_files_ext.cpp:95
 msgid "PostScript files (.ps)|*.ps"
 msgstr "Pliki PostScript (.ps)|*.ps"
 
-#: common/wildcards_and_files_ext.cpp:95
+#: common/wildcards_and_files_ext.cpp:96
 msgid "Report files (*.rpt)|*.rpt"
 msgstr "Pliki raportów (*.rpt)|*.rpt"
 
-#: common/wildcards_and_files_ext.cpp:96
+#: common/wildcards_and_files_ext.cpp:97
 msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Pliki położeń footprintów (*.pos)|*.pos"
 
-#: common/wildcards_and_files_ext.cpp:97
+#: common/wildcards_and_files_ext.cpp:98
 msgid "Vrml files (*.wrl)|*.wrl"
 msgstr "Pliki VRML (*.wrl)|*.wrl"
 
@@ -17905,31 +17924,35 @@ msgstr "Przeglądarka bibliotek - Przeglądanie symboli"
 msgid "Generate bill of materials and/or cross references"
 msgstr "Generuje listę materiałów i/lub referencje"
 
-#: eeschema/help_common_strings.h:56
-msgid "Import footprint selection from CvPcb in components footprint field"
-msgstr "Importuje dane o footprintach z CvPcb na podstawie zawartości pól"
+#: eeschema/help_common_strings.h:57
+msgid ""
+"Import the footprint selection from CvPcb (the .cmp file)\n"
+"in component footprint fields"
+msgstr ""
+"Importuje dane o wybranych footprintach z CvPcb (plik .cmp)\n"
+"do pól \"Footprint\" symboli"
 
-#: eeschema/help_common_strings.h:59
+#: eeschema/help_common_strings.h:61
 msgid "Add pins to the component"
 msgstr "Dodaj wyprowadzenia do symbolu"
 
-#: eeschema/help_common_strings.h:60
+#: eeschema/help_common_strings.h:62
 msgid "Add graphic texts to the component body"
 msgstr "Dodaj tekst (grafika) do ciała symbolu"
 
-#: eeschema/help_common_strings.h:61
+#: eeschema/help_common_strings.h:63
 msgid "Add graphic rectangles to the component body"
 msgstr "Dodaj prostokąt (grafika) do ciała symbolu"
 
-#: eeschema/help_common_strings.h:62
+#: eeschema/help_common_strings.h:64
 msgid "Add circles to the component body"
 msgstr "Dodaj okrąg (grafika) do ciała symbolu"
 
-#: eeschema/help_common_strings.h:63
+#: eeschema/help_common_strings.h:65
 msgid "Add arcs to the component body"
 msgstr "Dodaj łuk (grafika) do ciała symbolu"
 
-#: eeschema/help_common_strings.h:64
+#: eeschema/help_common_strings.h:66
 msgid "Add lines and polygons to the component body"
 msgstr "Dodaj linie i wielokąty (grafika) do ciała symbolu"
 
@@ -18174,3 +18197,16 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Load Back Annotate File"
+#~ msgstr "Załaduj plik numeracji wstecznej"
+
+#~ msgid "Failed to open back annotate file <%s>"
+#~ msgstr "Błąd otwarcia pliku numeracji wstecznej <%s>"
+
+#~ msgid ""
+#~ "Create export file (component/footprint list, used by Eeschema to fill "
+#~ "the footprint field of components)"
+#~ msgstr ""
+#~ "Utwórz plik eksportu (lista komponentów/footprintów, użytych przez "
+#~ "Eeschema do wypełnienia pól symboli)"
