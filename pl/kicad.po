@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-06 18:32+0100\n"
-"PO-Revision-Date: 2013-02-06 18:39+0100\n"
+"POT-Creation-Date: 2013-02-07 19:20+0100\n"
+"PO-Revision-Date: 2013-02-07 19:21+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -148,7 +148,7 @@ msgstr ""
 "Archiwum ZIP <%s> (%d bajtów) zostało utworzone"
 
 #: kicad/kicad.cpp:78 kicad/prjconfig.cpp:237 eeschema/libedit.cpp:62
-#: eeschema/schframe.cpp:1014 pcbnew/moduleframe.cpp:571
+#: eeschema/schframe.cpp:1014 pcbnew/moduleframe.cpp:598
 #: pcbnew/pcbframe.cpp:798 cvpcb/cvframe.cpp:716
 msgid " [Read Only]"
 msgstr " [Tyko do odczytu]"
@@ -740,7 +740,7 @@ msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
 
-#: eeschema/controle.cpp:165 eeschema/libeditframe.cpp:1167
+#: eeschema/controle.cpp:165 eeschema/libeditframe.cpp:1177
 msgid "Clarify Selection"
 msgstr "Sprecyzuj Wybór"
 
@@ -1168,55 +1168,55 @@ msgstr "Nazwa symbolu \"%s\" nie została znaleziona w \"%s\"."
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Nie można stworzyć kopii części <%s> w bibliotece <%s>"
 
-#: eeschema/libedit.cpp:297 eeschema/libedit.cpp:685
+#: eeschema/libedit.cpp:307 eeschema/libedit.cpp:697
 msgid "No library specified."
 msgstr "Nie wybrano żadnej biblioteki."
 
-#: eeschema/libedit.cpp:303
+#: eeschema/libedit.cpp:313
 msgid "Include last component changes?"
 msgstr "Dołączyć ostatnie zmiany w symbolu?"
 
-#: eeschema/libedit.cpp:310
+#: eeschema/libedit.cpp:320
 msgid "Component Library Name:"
 msgstr "Nazwa pliku biblioteki symboli:"
 
-#: eeschema/libedit.cpp:330
+#: eeschema/libedit.cpp:340
 msgid "Modify library file \""
 msgstr "Czy zmodyfikować plik biblioteki \""
 
-#: eeschema/libedit.cpp:330
+#: eeschema/libedit.cpp:340
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:367
+#: eeschema/libedit.cpp:377
 msgid "Error occurred while saving library file \""
 msgstr "Błąd podczas zapisu pliku biblioteki \""
 
-#: eeschema/libedit.cpp:367 eeschema/libedit.cpp:407
+#: eeschema/libedit.cpp:377 eeschema/libedit.cpp:417
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:368 eeschema/libedit.cpp:408
+#: eeschema/libedit.cpp:378 eeschema/libedit.cpp:418
 msgid "*** ERROR: ***"
 msgstr "*** BŁĄD: ***"
 
-#: eeschema/libedit.cpp:406
+#: eeschema/libedit.cpp:416
 msgid "Error occurred while saving library document file \""
 msgstr "Błąd podczas zapisiu pliku dokumentacji biblioteki \""
 
-#: eeschema/libedit.cpp:422
+#: eeschema/libedit.cpp:432
 msgid "Library file \""
 msgstr "Plik biblioteki \""
 
-#: eeschema/libedit.cpp:424
+#: eeschema/libedit.cpp:434
 msgid "Document file \""
 msgstr "Plik dokumentacji \""
 
-#: eeschema/libedit.cpp:441 eeschema/viewlibs.cpp:304
+#: eeschema/libedit.cpp:453 eeschema/viewlibs.cpp:304
 msgid "Part"
 msgstr "Element "
 
-#: eeschema/libedit.cpp:444 eeschema/viewlibs.cpp:292
+#: eeschema/libedit.cpp:456 eeschema/viewlibs.cpp:292
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:178
@@ -1226,12 +1226,12 @@ msgstr "Element "
 msgid "None"
 msgstr "Brak"
 
-#: eeschema/libedit.cpp:452 eeschema/viewlibs.cpp:305
+#: eeschema/libedit.cpp:464 eeschema/viewlibs.cpp:305
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:199
 msgid "Alias"
 msgstr "Alias"
 
-#: eeschema/libedit.cpp:457 eeschema/lib_draw_item.cpp:72
+#: eeschema/libedit.cpp:469 eeschema/lib_draw_item.cpp:72
 #: eeschema/onrightclick.cpp:453
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:26
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:35
@@ -1243,13 +1243,13 @@ msgstr "Alias"
 msgid "Unit"
 msgstr "Część"
 
-#: eeschema/libedit.cpp:460 eeschema/lib_draw_item.cpp:83
+#: eeschema/libedit.cpp:472 eeschema/lib_draw_item.cpp:83
 #: eeschema/onrightclick.cpp:432
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:73
 msgid "Convert"
 msgstr "Skonwertowany"
 
-#: eeschema/libedit.cpp:462 eeschema/onrightclick.cpp:371
+#: eeschema/libedit.cpp:474 eeschema/onrightclick.cpp:371
 #: eeschema/sch_text.cpp:795
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
@@ -1270,21 +1270,21 @@ msgstr "Skonwertowany"
 msgid "Normal"
 msgstr "Normalny"
 
-#: eeschema/libedit.cpp:464 eeschema/dialogs/dialog_color_config.cpp:32
+#: eeschema/libedit.cpp:476 eeschema/dialogs/dialog_color_config.cpp:32
 msgid "Body"
 msgstr "Obrys"
 
-#: eeschema/libedit.cpp:467
+#: eeschema/libedit.cpp:479
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:98
 msgid "Power Symbol"
 msgstr "Symbol zasilania"
 
-#: eeschema/libedit.cpp:469 eeschema/sch_component.cpp:1493
+#: eeschema/libedit.cpp:481 eeschema/sch_component.cpp:1493
 #: eeschema/dialogs/dialog_color_config.cpp:62
 msgid "Component"
 msgstr "Symbol"
 
-#: eeschema/libedit.cpp:471 eeschema/lib_draw_item.cpp:65
+#: eeschema/libedit.cpp:483 eeschema/lib_draw_item.cpp:65
 #: eeschema/lib_pin.cpp:1844 eeschema/sch_text.cpp:822
 #: pcbnew/class_drawsegment.cpp:327 pcbnew/class_marker_pcb.cpp:98
 #: pcbnew/class_text_mod.cpp:386 pcbnew/class_track.cpp:1055
@@ -1295,7 +1295,7 @@ msgstr "Symbol"
 msgid "Type"
 msgstr "Typ"
 
-#: eeschema/libedit.cpp:472 eeschema/sch_component.cpp:1501
+#: eeschema/libedit.cpp:484 eeschema/sch_component.cpp:1501
 #: eeschema/viewlibs.cpp:306
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:160
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:37
@@ -1304,31 +1304,31 @@ msgstr "Typ"
 msgid "Description"
 msgstr "Opis"
 
-#: eeschema/libedit.cpp:473 eeschema/sch_component.cpp:1502
+#: eeschema/libedit.cpp:485 eeschema/sch_component.cpp:1502
 #: eeschema/viewlibs.cpp:307
 msgid "Key words"
 msgstr "Słowa kluczowe"
 
-#: eeschema/libedit.cpp:474 eeschema/lib_field.cpp:584
+#: eeschema/libedit.cpp:486 eeschema/lib_field.cpp:584
 #: eeschema/template_fieldnames.cpp:17
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:76
 msgid "Datasheet"
 msgstr "Dokumentacja"
 
-#: eeschema/libedit.cpp:496
+#: eeschema/libedit.cpp:508
 msgid "Please select a component library."
 msgstr "Proszę wybrać bibliotekę symboli."
 
-#: eeschema/libedit.cpp:505
+#: eeschema/libedit.cpp:517
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Biblioteka symboli <%s> jest pusta."
 
-#: eeschema/libedit.cpp:506
+#: eeschema/libedit.cpp:518
 msgid "Delete Entry Error"
 msgstr "Błąd przy usuwaniu wpisu"
 
-#: eeschema/libedit.cpp:510
+#: eeschema/libedit.cpp:522
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -1337,21 +1337,21 @@ msgstr ""
 "Wybierz jeden z %d symboli do usunięcia\n"
 "z biblioteki <%s>."
 
-#: eeschema/libedit.cpp:514 eeschema/onrightclick.cpp:383
+#: eeschema/libedit.cpp:526 eeschema/onrightclick.cpp:383
 msgid "Delete Component"
 msgstr "Usuń symbol"
 
-#: eeschema/libedit.cpp:523
+#: eeschema/libedit.cpp:535
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Wpisz <%s> nie został znaleziony w <%s>."
 
-#: eeschema/libedit.cpp:530
+#: eeschema/libedit.cpp:542
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Usunąć symbol \"%s\" z biblioteki \"%s\"?"
 
-#: eeschema/libedit.cpp:548
+#: eeschema/libedit.cpp:560
 msgid ""
 "The component being deleted has been modified. All changes will be lost. "
 "Discard changes?"
@@ -1359,7 +1359,7 @@ msgstr ""
 "Symbol który został skasowany został zmodyfikowany. Wszystkie zmiany zostaną "
 "utracone. Porzucić zmiany?"
 
-#: eeschema/libedit.cpp:575
+#: eeschema/libedit.cpp:587
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -1369,38 +1369,34 @@ msgstr ""
 "\n"
 "Usunąć symbol z pola edycji?"
 
-#: eeschema/libedit.cpp:591
+#: eeschema/libedit.cpp:603
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Ten nowy symbol nie ma nazwy i nie może zostać utworzony. Przerwano"
 
-#: eeschema/libedit.cpp:606
+#: eeschema/libedit.cpp:618
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Symbol \"%s\" istnieje już w bibliotece \"%s\"."
 
-#: eeschema/libedit.cpp:676
+#: eeschema/libedit.cpp:688
 msgid "No component to save."
 msgstr "Brak symbolu do zapisania."
 
-#: eeschema/libedit.cpp:695
+#: eeschema/libedit.cpp:707
 #, c-format
 msgid "Component \"%s\" already exists. Change it?"
 msgstr "Symbol \"%s\" istnieje, zamienić go?"
 
-#: eeschema/libedit.cpp:712
+#: eeschema/libedit.cpp:724
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Symbol %s został zapisany w bibliotece %s"
 
 #: eeschema/libeditframe.cpp:346
-msgid ""
-"Component was modified!\n"
-"Discard changes?"
-msgstr ""
-"Symbol został zmieniony!\n"
-"Porzucić zmiany?"
+msgid "Save the changes in the library before closing?"
+msgstr "Zapisać zmiany w bibliotece przed zamknięciem?"
 
-#: eeschema/libeditframe.cpp:362
+#: eeschema/libeditframe.cpp:372
 #, c-format
 msgid ""
 "Library \"%s\" was modified!\n"
@@ -1409,53 +1405,53 @@ msgstr ""
 "Biblioteka \"%s\" została zmieniona!\n"
 "Porzucić zmiany?"
 
-#: eeschema/libeditframe.cpp:462 eeschema/tool_viewlib.cpp:176
+#: eeschema/libeditframe.cpp:472 eeschema/tool_viewlib.cpp:176
 #, c-format
 msgid "Part %c"
 msgstr "Element %c"
 
-#: eeschema/libeditframe.cpp:1031
+#: eeschema/libeditframe.cpp:1041
 msgid "Add pin"
 msgstr "Dodaj pin"
 
-#: eeschema/libeditframe.cpp:1035
+#: eeschema/libeditframe.cpp:1045
 msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
-#: eeschema/libeditframe.cpp:1044 eeschema/schedit.cpp:523
+#: eeschema/libeditframe.cpp:1054 eeschema/schedit.cpp:523
 #: pcbnew/edit.cpp:1360 pcbnew/modedit.cpp:848
 msgid "Add text"
 msgstr "Dodaj tekst"
 
-#: eeschema/libeditframe.cpp:1048
+#: eeschema/libeditframe.cpp:1058
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1052 pcbnew/modedit.cpp:844
+#: eeschema/libeditframe.cpp:1062 pcbnew/modedit.cpp:844
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1056 pcbnew/modedit.cpp:840
+#: eeschema/libeditframe.cpp:1066 pcbnew/modedit.cpp:840
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1060 pcbnew/modedit.cpp:836
+#: eeschema/libeditframe.cpp:1070 pcbnew/modedit.cpp:836
 msgid "Add line"
 msgstr "Dodaj linię"
 
-#: eeschema/libeditframe.cpp:1064
+#: eeschema/libeditframe.cpp:1074
 msgid "Set anchor position"
 msgstr "Ustaw pozycję zakotwiczenia"
 
-#: eeschema/libeditframe.cpp:1068
+#: eeschema/libeditframe.cpp:1078
 msgid "Import"
 msgstr "Importuj"
 
-#: eeschema/libeditframe.cpp:1074
+#: eeschema/libeditframe.cpp:1084
 msgid "Export"
 msgstr "Eksportuj"
 
-#: eeschema/libeditframe.cpp:1086 eeschema/schedit.cpp:559
+#: eeschema/libeditframe.cpp:1096 eeschema/schedit.cpp:559
 #: pcbnew/edit.cpp:1372 pcbnew/modedit.cpp:873
 msgid "Delete item"
 msgstr "Usuń element"
@@ -6949,7 +6945,7 @@ msgid "** BOARD NOT DEFINED **"
 msgstr "** PŁYTKA NIE ZDEFINIOWANA **"
 
 #: pcbnew/class_track.cpp:178 pcbnew/class_track.cpp:228
-#: pcbnew/class_track.cpp:1528 pcbnew/class_zone.cpp:971
+#: pcbnew/class_track.cpp:1528 pcbnew/class_zone.cpp:974
 msgid " on "
 msgstr " na "
 
@@ -7064,7 +7060,7 @@ msgstr "Bez stref wypełnień"
 msgid "Keepout"
 msgstr "Strefa chroniona"
 
-#: pcbnew/class_zone.cpp:692 pcbnew/class_zone.cpp:968
+#: pcbnew/class_zone.cpp:692 pcbnew/class_zone.cpp:971
 msgid "Not Found"
 msgstr "Nie znaleziono"
 
@@ -7100,11 +7096,15 @@ msgstr "Linie kreskowe"
 msgid "Corners in DrawList"
 msgstr "Narożniki w liście rysunkowej"
 
-#: pcbnew/class_zone.cpp:947
+#: pcbnew/class_zone.cpp:943
+msgid "(Keepout)"
+msgstr "(Strefa chroniona)"
+
+#: pcbnew/class_zone.cpp:950
 msgid "Not on copper layer"
 msgstr "Nie na warstwie ścieżek"
 
-#: pcbnew/class_zone.cpp:962
+#: pcbnew/class_zone.cpp:965
 msgid "** NO BOARD DEFINED **"
 msgstr "** NIE ZDEFINIOWANO PŁYTKI **"
 
@@ -8903,23 +8903,28 @@ msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
 #: pcbnew/moduleframe.cpp:323
-msgid "Module Editor: Module modified! Continue?"
-msgstr "Edytor Footprintów: Footrprint został zmieniony! Kontynuować?"
+msgid "Save the changes in the module before closing?"
+msgstr "Zapisać zmiany w footprincie przed zamknięciem?"
 
-#: pcbnew/moduleframe.cpp:446 pcbnew/pcbframe.cpp:553
+#: pcbnew/moduleframe.cpp:345
+msgid "Library is not set, the module could not be saved."
+msgstr ""
+"Biblioteka robocza nie została wybrana, footprint nie może zostać zapisany."
+
+#: pcbnew/moduleframe.cpp:473 pcbnew/pcbframe.cpp:553
 #: cvpcb/class_DisplayFootprintsFrame.cpp:450
 msgid "3D Viewer"
 msgstr "Podgląd 3D"
 
-#: pcbnew/moduleframe.cpp:548
+#: pcbnew/moduleframe.cpp:575
 msgid "Module Editor "
 msgstr "Edytor Footprintów"
 
-#: pcbnew/moduleframe.cpp:554
+#: pcbnew/moduleframe.cpp:581
 msgid "(no active library)"
 msgstr " (brak aktywnej biblioteki)"
 
-#: pcbnew/moduleframe.cpp:568
+#: pcbnew/moduleframe.cpp:595
 msgid "Module Editor (active library: "
 msgstr "Edytor Footprintów (aktywna biblioteka: "
 
@@ -18197,6 +18202,16 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid ""
+#~ "Component was modified!\n"
+#~ "Discard changes?"
+#~ msgstr ""
+#~ "Symbol został zmieniony!\n"
+#~ "Porzucić zmiany?"
+
+#~ msgid "Module Editor: Module modified! Continue?"
+#~ msgstr "Edytor Footprintów: Footrprint został zmieniony! Kontynuować?"
 
 #~ msgid "Load Back Annotate File"
 #~ msgstr "Załaduj plik numeracji wstecznej"
