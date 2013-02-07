@@ -98,7 +98,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_ACTIVATE( LIB_EDIT_FRAME::OnActivate )
 
     /* Main horizontal toolbar. */
-    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::SaveActiveLibrary )
+    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::OnSaveActiveLibrary )
     EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_LIBEDIT_DELETE_PART, LIB_EDIT_FRAME::DeleteOnePart )
     EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
@@ -130,7 +130,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     /* menubar commands */
     EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::CloseWindow )
-    EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::SaveActiveLibrary )
+    EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::OnSaveActiveLibrary )
     EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
@@ -343,15 +343,25 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
     {
-        if( !IsOK( this, _( "Component was modified!\nDiscard changes?" ) ) )
+        int ii = DisplayExitDialog( this, _( "Save the changes in the library before closing?" ) );
+
+        switch( ii )
         {
+        case wxID_NO:
+            break;
+
+        case wxID_OK:
+        case wxID_YES:
+            if ( this->SaveActiveLibrary( false ) )
+                break;
+
+            // fall through: cancel the close because of an error
+
+        case wxID_CANCEL:
             Event.Veto();
             return;
         }
-        else
-        {
-            GetScreen()->ClrModify();
-        }
+        GetScreen()->ClrModify();
     }
 
     BOOST_FOREACH( const CMP_LIBRARY &lib, CMP_LIBRARY::GetLibraryList() )
