@@ -346,7 +346,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
                 continue;
 
             // We have a good candidate: calculate the actual distance
-            // beteween ends, which should be <= dist max.
+            // between ends, which should be <= dist max.
             wxPoint delta = tracks_candidates[ii]->GetPoint() - position;
             int dist = (int) hypot( (double) delta.x, (double) delta.y );
 
@@ -495,7 +495,7 @@ int CONNECTIONS::Merge_PadsSubNets( int aOldSubNet, int aNewSubNet )
 /*
  * Change a subnet value to a new value, for tracks and pads which are connected to.
  * The result is merging 2 clusters (or subnets) into only one cluster.
- * Note: the resultig sub net value is the smallest between aOldSubNet et aNewSubNet
+ * Note: the resulting sub net value is the smallest between aOldSubNet et aNewSubNet
  */
 int CONNECTIONS::Merge_SubNets( int aOldSubNet, int aNewSubNet )
 {
@@ -527,7 +527,9 @@ int CONNECTIONS::Merge_SubNets( int aOldSubNet, int aNewSubNet )
         {
             D_PAD * pad = curr_track->m_PadsConnected[ii];
             if( pad->GetSubNet() == aOldSubNet )
+            {
                 pad->SetSubNet( curr_track->GetSubNet() );
+            }
         }
 
         if( curr_track == m_lastTrack )
@@ -544,57 +546,16 @@ int CONNECTIONS::Merge_SubNets( int aOldSubNet, int aNewSubNet )
  * from m_firstTrack to m_lastTrack have the same net
  * When 2 items are connected (a track to a pad, or a track to an other track),
  * they are grouped in a cluster.
- * For pads, this is the .m_physical_connexion member which is a cluster identifier
- * For tracks, this is the .m_Subnet member which is a cluster identifier
+ * The .m_Subnet member is the cluster identifier (subnet id)
  * For a given net, if all tracks are created, there is only one cluster.
  * but if not all tracks are created, there are more than one cluster,
  * and some ratsnests will be left active.
+ * A ratsnest is active when it "connect" 2 items having different subnet id
  */
 void CONNECTIONS::Propagate_SubNets()
 {
-    int sub_netcode = 0;
+    int sub_netcode = 1;
 
-    // Examine connections between intersecting pads
-    for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
-    {
-        D_PAD * curr_pad = m_sortedPads[ii];
-        for( unsigned jj = 0; jj < curr_pad->m_PadsConnected.size(); jj++ )
-        {
-            D_PAD * pad = curr_pad->m_PadsConnected[jj];
-            if( curr_pad->GetSubNet() )
-            {
-                if( pad->GetSubNet() > 0 )
-                {
-                    // The pad is already a cluster member, so we can merge the 2 clusters
-                    Merge_PadsSubNets( pad->GetSubNet(), curr_pad->GetSubNet() );
-                }
-                else
-                {
-                    // The pad is not yet attached to a cluster,
-                    // so we can add this pad to the cluster
-                    pad->SetSubNet( curr_pad->GetSubNet() );
-                }
-            }
-            else   // the current pad is not attached to a cluster
-            {
-                if( pad->GetSubNet() > 0 )
-                {
-                    // it is connected to a pad in a cluster, merge this pad
-                    curr_pad->SetSubNet( pad->GetSubNet() );
-                }
-                else
-                {
-                    // it is connected to a pad not in a cluster,
-                    // so we must create a new cluster (only with the 2 pads.
-                    sub_netcode++;
-                    curr_pad->SetSubNet( sub_netcode );
-                    pad->SetSubNet( curr_pad->GetSubNet() );
-                }
-            }
-        }
-    }
-
-    sub_netcode++;
     TRACK* curr_track = (TRACK*)m_firstTrack;
     if( curr_track )
         curr_track->SetSubNet( sub_netcode );
@@ -678,6 +639,54 @@ void CONNECTIONS::Propagate_SubNets()
 
         if( curr_track == m_lastTrack )
             break;
+    }
+
+    // Examine connections between intersecting pads, and propagate
+    // sub_netcodes to intersecting pads
+    for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
+    {
+        D_PAD * curr_pad = m_sortedPads[ii];
+        for( unsigned jj = 0; jj < curr_pad->m_PadsConnected.size(); jj++ )
+        {
+            D_PAD * pad = curr_pad->m_PadsConnected[jj];
+            if( curr_pad->GetSubNet() )   // the current pad is already attached to a cluster
+            {
+                if( pad->GetSubNet() > 0 )
+                {
+                    // The pad is already a cluster member, so we can merge the 2 clusters
+                    // Store the initial subnets, which will be modified by Merge_PadsSubNets
+                    int subnet1 = pad->GetSubNet();
+                    int subnet2 = curr_pad->GetSubNet();
+                    // merge subnets of pads only, even those not connected by tracks
+                    Merge_PadsSubNets( subnet1, subnet2 );
+                    // merge subnets of tracks (and pads, which are already merged)
+                    Merge_SubNets( subnet1, subnet2 );
+                }
+                else
+                {
+                    // The pad is not yet attached to a cluster,
+                    // so we can add this pad to the cluster
+                    pad->SetSubNet( curr_pad->GetSubNet() );
+                }
+            }
+            else   // the current pad is not attached to a cluster
+            {
+                if( pad->GetSubNet() > 0 )
+                {
+                    // the connected pad is in a cluster,
+                    // so we can add the current pad to the cluster
+                    curr_pad->SetSubNet( pad->GetSubNet() );
+                }
+                else
+                {
+                    // the connected pad is not in a cluster,
+                    // so we must create a new cluster, with the 2 pads.
+                    sub_netcode++;
+                    curr_pad->SetSubNet( sub_netcode );
+                    pad->SetSubNet( curr_pad->GetSubNet() );
+                }
+            }
+        }
     }
 }
 
