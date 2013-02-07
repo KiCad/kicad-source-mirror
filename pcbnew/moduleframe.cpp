@@ -320,12 +320,39 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
     {
-        if( !IsOK( this, _( "Module Editor: Module modified! Continue?" ) ) )
+        int ii = DisplayExitDialog( this, _( "Save the changes in the module before closing?" ) );
+
+        switch( ii )
         {
-            Event.Veto(); return;
+        case wxID_NO:
+            break;
+
+        case wxID_OK:
+        case wxID_YES:
+            // code from FOOTPRINT_EDIT_FRAME::Process_Special_Functions,
+            // at case ID_MODEDIT_SAVE_LIBMODULE
+            if( GetBoard()->m_Modules && getLibPath() != wxEmptyString )
+            {
+                if( Save_Module_In_Library( getLibPath(), GetBoard()->m_Modules, true, true ))
+                {
+                    // save was correct
+                    GetScreen()->ClrModify();
+                    break;
+                }
+            }
+            else
+            {
+                DisplayError( this, _( "Library is not set, the module could not be saved." ) );
+            }
+            // fall through: cancel the close because of an error
+
+        case wxID_CANCEL:
+            Event.Veto();
+            return;
         }
     }
 
+    //close the editor
     SaveSettings();
     Destroy();
 }

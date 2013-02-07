@@ -285,7 +285,17 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnSaveActiveLibrary( wxCommandEvent& event )
+{
+    bool newFile = false;
+    if( event.GetId() == ID_LIBEDIT_SAVE_CURRENT_LIB_AS )
+        newFile = true;
+
+    this->SaveActiveLibrary( newFile );
+}
+
+
+bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 {
     wxFileName fn;
     wxString   msg;
@@ -295,7 +305,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     if( m_library == NULL )
     {
         DisplayError( this, _( "No library specified." ) );
-        return;
+        return false;
     }
 
     if( GetScreen()->IsModify() )
@@ -304,7 +314,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
             SaveOnePartInMemory();
     }
 
-    if( event.GetId() == ID_LIBEDIT_SAVE_CURRENT_LIB_AS )
+    if( newFile )
     {   // Get a new name for the library
         wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
         wxFileDialog dlg( this, _( "Component Library Name:" ), default_path,
@@ -312,7 +322,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
-            return;
+            return false;
 
         fn = dlg.GetPath();
 
@@ -330,12 +340,12 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
         msg = _( "Modify library file \"" ) + fn.GetFullPath() + _( "\"?" );
 
         if( !IsOK( this, msg ) )
-            return;
+            return false;
     }
 
     // Verify the user has write privileges before attempting to save the library file.
     if( !IsWritable( fn ) )
-        return;
+        return false;
 
     ClearMsgPanel();
 
@@ -367,7 +377,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
             msg = _( "Error occurred while saving library file \"" ) + fn.GetFullPath() + _( "\"." );
             AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
             DisplayError( this, msg );
-            return;
+            return false;
         }
     }
     catch( ... /* IO_ERROR ioe */ )
@@ -375,7 +385,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
         libFileName.MakeAbsolute();
         msg = wxT( "Failed to create component library file " ) + libFileName.GetFullPath();
         DisplayError( this, msg );
-        return;
+        return false;
     }
 
     wxFileName docFileName = libFileName;
@@ -407,7 +417,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
                   docFileName.GetFullPath() + _( "\"." );
             AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
             DisplayError( this, msg );
-            return;
+            return false;
         }
     }
     catch( ... /* IO_ERROR ioe */ )
@@ -416,13 +426,15 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
         msg = wxT( "Failed to create component document library file " ) +
               docFileName.GetFullPath();
         DisplayError( this, msg );
-        return;
+        return false;
     }
 
     msg = _( "Library file \"" ) + fn.GetFullName() + wxT( "\" Ok" );
     fn.SetExt( DOC_EXT );
     wxString msg1 = _( "Document file \"" ) + fn.GetFullPath() + wxT( "\" Ok" );
     AppendMsgPanel( msg, msg1, BLUE );
+
+    return true;
 }
 
 
