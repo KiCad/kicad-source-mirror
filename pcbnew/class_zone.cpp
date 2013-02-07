@@ -939,6 +939,9 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     if( ncont )
         text << wxT( " " ) << _( "(Cutout)" );
 
+    if( GetIsKeepout() )
+        text << wxT( " " ) << _( "(Keepout)" );
+
     text << wxT( " " );
     text << wxString::Format( wxT( "(%08lX)" ), m_TimeStamp );
 
