@@ -453,14 +453,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     {
         KI_POLYGON_SET polyset_holes;
         AddPolygonCornersToKiPolygonList( cornerBufferPolysToSubstract, polyset_holes );
-        // In very rare cases, the next calculation crashes when Pcbnew is in nanometers.
-        // the crash is inside boost::polygon (tested with version 1.49 and 1.53,
-        // so this crash is nearly impossible to fix
-        // and a workaround is here to combine the polygons to substract, to modify
-        // the geometry of the polygons to substract, because
-        // the 2 known cases are related to 2 rectangular overlapping rect to substract
-        // with a given geometry
-        KI_POLYGON_SET dummy; polyset_holes += dummy;
 
         // Remove unconnected stubs
         polyset_zone_solid_areas -= polyset_holes;

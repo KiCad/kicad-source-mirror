@@ -1472,13 +1472,12 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* aDC, wxSize& aSz, wxPoint& aLT, wxPoi
 
         case WS_FILENAME:
             {
-                wxString fname, fext;
-                wxFileName::SplitPath( aFlNm, (wxString*) NULL, &fname, &fext );
+                wxFileName fn( aFlNm );
 
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
 
-                msg << fname << wxT( "." ) << fext;
+                msg << fn.GetFullName();
                 DrawGraphicText( m_canvas, aDC, pos, aClr1,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,

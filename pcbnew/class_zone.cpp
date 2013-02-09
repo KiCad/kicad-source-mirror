@@ -945,33 +945,34 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     text << wxT( " " );
     text << wxString::Format( wxT( "(%08lX)" ), m_TimeStamp );
 
-    if ( !IsOnCopperLayer() )
+    // Display net name for copper zones
+    if( !GetIsKeepout() )
     {
-        text << wxT( " [" ) << _( "Not on copper layer" ) << wxT( "]" );
-    }
-    else if( GetNet() >= 0 )
-    {
-        if( board )
+        if( GetNet() >= 0 )
         {
-            net = board->FindNet( GetNet() );
-
-            if( net )
+            if( board )
             {
-                text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
+                net = board->FindNet( GetNet() );
+
+                if( net )
+                {
+                    text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
+                }
+            }
+            else
+            {
+                text << _( "** NO BOARD DEFINED **" );
             }
         }
         else
-        {
-            text << _( "** NO BOARD DEFINED **" );
+        {   // A netcode < 0 is an error:
+            // Netname not found or area not initialised
+            text << wxT( " [" ) << m_Netname << wxT( "]" );
+            text << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
         }
     }
-    else    // A netcode < 0 is an error flag (Netname not found or area not initialised)
-    {
-        text << wxT( " [" ) << m_Netname << wxT( "]" );
-        text << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
-    }
 
-    text << _( " on " ) << GetLayerName();
+    text << _( " on layer " ) << GetLayerName();
 
     return text;
 }

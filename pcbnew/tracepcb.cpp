@@ -109,7 +109,7 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     m_canvas->DrawBackGround( DC );
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness,
-                    IU_PER_MILS, wxEmptyString );
+                    IU_PER_MILS, GetBoard()->GetFileName() );
 
     GetBoard()->Draw( m_canvas, DC, GR_OR | GR_ALLOW_HIGHCONTRAST );
 
