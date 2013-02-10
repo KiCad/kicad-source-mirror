@@ -293,6 +293,19 @@ void LIB_ARC::MirrorHorizontal( const wxPoint& aCenter )
     m_ArcEnd.x *= -1;
     m_ArcEnd.x += aCenter.x;
     EXCHG( m_ArcStart, m_ArcEnd );
+    EXCHG( m_t1, m_t2 );
+    m_t1 = 1800 - m_t1;
+    m_t2 = 1800 - m_t2;
+    if( m_t1 > 3600 || m_t2 > 3600 )
+    {
+        m_t1 -= 3600;
+        m_t2 -= 3600;
+    }
+    else if( m_t1 < -3600 || m_t2 < -3600 )
+    {
+        m_t1 += 3600;
+        m_t2 += 3600;
+    }
 }
 
 void LIB_ARC::MirrorVertical( const wxPoint& aCenter )
@@ -307,6 +320,19 @@ void LIB_ARC::MirrorVertical( const wxPoint& aCenter )
     m_ArcEnd.y *= -1;
     m_ArcEnd.y += aCenter.y;
     EXCHG( m_ArcStart, m_ArcEnd );
+    EXCHG( m_t1, m_t2 );
+    m_t1 = - m_t1;
+    m_t2 = - m_t2;
+    if( m_t1 > 3600 || m_t2 > 3600 )
+    {
+        m_t1 -= 3600;
+        m_t2 -= 3600;
+    }
+    else if( m_t1 < -3600 || m_t2 < -3600 )
+    {
+        m_t1 += 3600;
+        m_t2 += 3600;
+    }
 }
 
 void LIB_ARC::Rotate( const wxPoint& aCenter, bool aRotateCCW )
@@ -315,6 +341,18 @@ void LIB_ARC::Rotate( const wxPoint& aCenter, bool aRotateCCW )
     RotatePoint( &m_Pos, aCenter, rot_angle );
     RotatePoint( &m_ArcStart, aCenter, rot_angle );
     RotatePoint( &m_ArcEnd, aCenter, rot_angle );
+    m_t1 -= rot_angle;
+    m_t2 -= rot_angle;
+    if( m_t1 > 3600 || m_t2 > 3600 )
+    {
+        m_t1 -= 3600;
+        m_t2 -= 3600;
+    }
+    else if( m_t1 < -3600 || m_t2 < -3600 )
+    {
+        m_t1 += 3600;
+        m_t2 += 3600;
+    }
 }
 
 
