@@ -1,4 +1,10 @@
+/*
+  Copyright 2008 Intel Corporation
 
+  Use, modification and distribution are subject to the Boost Software License,
+  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+*/
 namespace boost { namespace polygon { namespace detail {
 
 template <typename coordinate_type>
@@ -24,13 +30,13 @@ struct minkowski_offset {
   static void convolve_two_point_sequences(polygon_set& result, itrT1 ab, itrT1 ae, itrT2 bb, itrT2 be) {
     if(ab == ae || bb == be)
       return;
-//    point first_a = *ab;      // seems unused
+    point first_a = *ab;
     point prev_a = *ab;
     std::vector<point> vec;
     polygon poly;
     ++ab;
     for( ; ab != ae; ++ab) {
-//      point first_b = *bb;      // seems unused
+      point first_b = *bb;
       point prev_b = *bb;
       itrT2 tmpb = bb;
       ++tmpb;

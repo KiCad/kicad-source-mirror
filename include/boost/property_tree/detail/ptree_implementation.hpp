@@ -389,7 +389,7 @@ namespace boost { namespace property_tree
             template <typename P>
             bool operator ()(const P& lhs, const P& rhs) const {
               return lhs.first < rhs.first;
-            };
+            }
         };
     }
 

@@ -84,7 +84,7 @@ struct skew_heap_node:
         children.assign(0);
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     skew_heap_node(value_type && v):
         value(v)
     {
@@ -199,10 +199,15 @@ struct make_skew_heap_base
             base_type(arg)
         {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
         type(type && rhs):
             base_type(std::move(static_cast<base_type&>(rhs))),
             allocator_type(std::move(static_cast<allocator_type&>(rhs)))
+        {}
+
+        type(type const & rhs):
+            base_type(rhs),
+            allocator_type(rhs)
         {}
 
         type & operator=(type && rhs)
@@ -383,7 +388,7 @@ public:
         return *this;
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     /// \copydoc boost::heap::priority_queue::priority_queue(priority_queue &&)
     skew_heap(skew_heap && rhs):
         super_t(std::move(rhs)), root(rhs.root)
@@ -418,7 +423,7 @@ public:
         return push_helper::push(this, v);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /**
      * \b Effects: Adds a new element to the priority queue. The element is directly constructed in-place.
      *
@@ -559,7 +564,7 @@ public:
         rhs.root = NULL;
         sanity_check();
 
-        super_t::set_stability_count(std::max(super_t::get_stability_count(),
+        super_t::set_stability_count((std::max)(super_t::get_stability_count(),
                                      rhs.get_stability_count()));
         rhs.set_stability_count(0);
     }
@@ -616,7 +621,8 @@ public:
     /// \copydoc boost::heap::d_ary_heap::s_handle_from_iterator
     static handle_type s_handle_from_iterator(iterator const & it)
     {
-        return handle_type(&*it);
+        node * ptr = const_cast<node *>(it.get_node());
+        return handle_type(ptr);
     }
 
     /**
@@ -756,7 +762,7 @@ private:
             self->push_internal(v);
         }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template <class... Args>
         static void emplace(skew_heap * self, Args&&... args)
         {
@@ -772,7 +778,7 @@ private:
             return handle_type(self->push_internal(v));
         }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template <class... Args>
         static handle_type emplace(skew_heap * self, Args&&... args)
         {
@@ -792,7 +798,7 @@ private:
         return n;
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <class... Args>
     node_pointer emplace_internal(Args&&... args)
     {

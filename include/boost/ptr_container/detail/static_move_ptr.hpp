@@ -32,11 +32,6 @@
 #pragma warning(disable:4521)        // Multiple copy constuctors.
 #endif
 
-#ifdef __APPLE__ 
-// this fixes some already defined "check" in MacOSX headers
-#undef check
-#endif
-
 namespace boost { namespace ptr_container_detail {
 
     

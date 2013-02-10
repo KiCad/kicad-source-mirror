@@ -10,6 +10,7 @@
 #define BOOST_HEAP_BINOMIAL_HEAP_HPP
 
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 #include <boost/assert.hpp>
@@ -61,7 +62,11 @@ struct make_binomial_heap_base
             base_type(arg)
         {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        type(type const & rhs):
+            base_type(rhs), allocator_type(rhs)
+        {}
+
         type(type && rhs):
             base_type(std::move(static_cast<base_type&>(rhs))),
             allocator_type(std::move(static_cast<allocator_type&>(rhs)))
@@ -145,6 +150,7 @@ private:
 
         typedef typename base_maker::compare_argument value_compare;
         typedef typename base_maker::allocator_type allocator_type;
+        typedef typename base_maker::node_type node;
 
         typedef typename allocator_type::pointer node_pointer;
         typedef typename allocator_type::const_pointer const_node_pointer;
@@ -240,7 +246,7 @@ public:
         return *this;
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     /// \copydoc boost::heap::priority_queue::priority_queue(priority_queue &&)
     binomial_heap(binomial_heap && rhs):
         super_t(std::move(rhs)), top_element(rhs.top_element)
@@ -348,7 +354,7 @@ public:
         return handle_type(n);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /**
      * \b Effects: Adds a new element to the priority queue. The element is directly constructed in-place. Returns handle to element.
      *
@@ -523,7 +529,7 @@ public:
         rhs.set_size(0);
         rhs.top_element = NULL;
 
-        super_t::set_stability_count(std::max(super_t::get_stability_count(),
+        super_t::set_stability_count((std::max)(super_t::get_stability_count(),
                                      rhs.get_stability_count()));
         rhs.set_stability_count(0);
     }
@@ -569,7 +575,8 @@ public:
     /// \copydoc boost::heap::d_ary_heap_mutable::s_handle_from_iterator
     static handle_type s_handle_from_iterator(iterator const & it)
     {
-        return handle_type(&*it);
+        node_type * ptr = const_cast<node_type *>(it.get_node());
+        return handle_type(ptr);
     }
 
     /// \copydoc boost::heap::priority_queue::value_comp
