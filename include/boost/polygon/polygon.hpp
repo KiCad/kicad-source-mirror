@@ -1,6 +1,6 @@
 /*
   Copyright 2008 Intel Corporation
- 
+
   Use, modification and distribution are subject to the Boost Software License,
   Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -16,14 +16,7 @@
 #include "point_traits.hpp"
 #include "point_concept.hpp"
 
-//point 3d
-#include "point_3d_data.hpp"
-#include "point_3d_traits.hpp"
-#include "point_3d_concept.hpp"
-
 #include "transform.hpp"
-#include "detail/transform_detail.hpp"
-#include "detail/polygon_sort_adaptor.hpp"
 
 //interval
 #include "interval_data.hpp"
@@ -34,6 +27,11 @@
 #include "rectangle_data.hpp"
 #include "rectangle_traits.hpp"
 #include "rectangle_concept.hpp"
+
+//segment
+#include "segment_data.hpp"
+#include "segment_traits.hpp"
+#include "segment_concept.hpp"
 
 //algorithms needed by polygon types
 #include "detail/iterator_points_to_compact.hpp"
@@ -88,5 +86,7 @@
 #include "detail/polygon_set_view.hpp"
 
 #include "polygon_set_concept.hpp"
+
+#include "segment_utils.hpp"
 
 #endif
