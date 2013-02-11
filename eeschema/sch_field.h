@@ -133,7 +133,6 @@ public:
         return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
     }
 
-
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                const wxPoint&  aOffset,

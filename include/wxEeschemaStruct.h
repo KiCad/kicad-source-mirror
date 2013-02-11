@@ -675,11 +675,15 @@ public:
      *  EndCmp
      *
      * @param aFullFilename = the full filename to read
-     * @param aSetFieldsAttributeToVisible = true to set the footprint field flag to visible
+     * @param aForceFieldsVisibleAttribute = true to change the footprint field flag
+     *                                      visible or invisible
+     *                                      false = keep old state.
+     * @param aFieldsVisibleAttributeState = footprint field flag visible new state
      * @return bool = true if success.
      */
     bool ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
-                                        bool  aSetFieldsAttributeToVisible );
+                                        bool aForceFieldsVisibleAttribute,
+                                        bool aFieldsVisibleAttributeState );
 
     /**
      * Function SaveEEFile

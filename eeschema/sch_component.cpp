@@ -1042,16 +1042,14 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     }
 
     // Fixed fields:
-    // Save fixed fields which are non blank.
+    // Save fixed fields even they are non blank,
+    // because the visibility, size and orientation are set from libaries
+    // mainly for footprint names, for those who do not use CvPcb
     for( unsigned i = 0;  i<MANDATORY_FIELDS;  ++i )
     {
         SCH_FIELD* fld = GetField( i );
-
-        if( !fld->m_Text.IsEmpty() )
-        {
-            if( !fld->Save( f ) )
-                return false;
-        }
+        if( !fld->Save( f ) )
+            return false;
     }
 
     // User defined fields:
@@ -1496,6 +1494,13 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), root_component->GetName(), BROWN ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), BROWN ) );
+
+    // Display the current associated footprin, if exists.
+    if( ! GetField( FOOTPRINT )->IsVoid() )
+        msg = GetField( FOOTPRINT )->m_Text;
+    else
+        msg = _("<Unknown>");
+    aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
 
     // Display description of the component, and keywords found in lib
     aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(), DARKCYAN ) );

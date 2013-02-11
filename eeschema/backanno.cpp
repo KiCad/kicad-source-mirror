@@ -45,7 +45,8 @@
 
 
 bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
-                                                    bool aSetFieldAttributeToVisible  )
+                                                    bool aForceFieldsVisibleAttribute,
+                                                    bool aFieldsVisibleAttributeState )
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST referencesList;
@@ -117,29 +118,15 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
                 // So we *do not* stop the search here
                 SCH_COMPONENT* component = referencesList[ii].GetComponent();
                 SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
-                /* Give a reasonable value to the field position and
-                 * orientation, if the text is empty at position 0, because
-                 * it is probably not yet initialized
-                 */
-                if( fpfield->m_Text.IsEmpty() &&
-                    ( fpfield->GetPosition() == component->GetPosition() ) )
-                {
-                    fpfield->m_Orient = component->GetField( VALUE )->m_Orient;
-                    fpfield->SetPosition( component->GetField( VALUE )->GetPosition() );
-                    fpfield->m_Size   = component->GetField( VALUE )->m_Size;
-
-                    if( fpfield->m_Orient == 0 )
-                        fpfield->m_Pos.y += 100;
-                    else
-                        fpfield->m_Pos.x += 100;
-                }
-
                 fpfield->m_Text = footprint;
 
-                if( aSetFieldAttributeToVisible )
-                    component->GetField( FOOTPRINT )->m_Attributs &= ~TEXT_NO_VISIBLE;
-                else
-                    component->GetField( FOOTPRINT )->m_Attributs |= TEXT_NO_VISIBLE;
+                if( aForceFieldsVisibleAttribute )
+                {
+                    if( aFieldsVisibleAttributeState )
+                        component->GetField( FOOTPRINT )->m_Attributs &= ~TEXT_NO_VISIBLE;
+                    else
+                        component->GetField( FOOTPRINT )->m_Attributs |= TEXT_NO_VISIBLE;
+                }
             }
         }
     }
@@ -149,39 +136,50 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
 
 bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
 {
-    wxString title, filename;
-    wxString msg;
-    bool     visible = false;
+    wxString path = wxGetCwd();
 
     wxFileDialog dlg( this, _( "Load Component-Footprint Link File" ),
-                      wxEmptyString, wxEmptyString,
+                      path, wxEmptyString,
                       ComponentFileExtensionWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
-    filename = dlg.GetPath();
-    title  = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    wxString filename = dlg.GetPath();
+    wxString title  = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
     title += wxT( " " ) + filename;
     SetTitle( title );
 
-    int response = wxMessageBox( _( "Do you want to make all the foot print fields visible?" ),
-                                 _( "Field Display Option" ),
+    int response = wxMessageBox( _( "Do you want to force all the footprint fields visibility?" ),
+                                 _( "Field Visibility Change" ),
                                  wxYES_NO | wxICON_QUESTION | wxCANCEL, this );
 
     if( response == wxCANCEL )
         return false;
 
-    if( response == wxYES )
-        visible = true;
+    bool changevisibility = response == wxYES;
+    bool visible = false;
 
-    if( ! ProcessCmpToFootprintLinkFile( filename, visible ) )
+    if( changevisibility )
     {
+        response = wxMessageBox( _( "Do you want to make all the footprint fields visible?" ),
+                                     _( "Field Visibility Option" ),
+                                     wxYES_NO | wxICON_QUESTION | wxCANCEL, this );
+        if( response == wxCANCEL )
+            return false;
+
+        visible = response == wxYES;
+    }
+
+    if( ! ProcessCmpToFootprintLinkFile( filename, changevisibility, visible ) )
+    {
+        wxString msg;
         msg.Printf( _( "Failed to open component-footprint link file <%s>" ), filename.GetData() );
         DisplayError( this, msg );
         return false;
     }
 
+    OnModify();
     return true;
 }
