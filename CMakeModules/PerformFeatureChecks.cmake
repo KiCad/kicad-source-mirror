@@ -42,6 +42,9 @@ macro(perform_feature_checks)
     #include(CheckFunctionExists)
     include(CheckLibraryExists)
     include(CheckSymbolExists)
+    include(CheckIncludeFileCXX)
+    include(CheckCXXSymbolExists)
+    include(CheckCXXSourceCompiles)
 
     check_include_file("malloc.h" HAVE_MALLOC_H)
 
@@ -70,7 +73,20 @@ macro(perform_feature_checks)
     check_symbol_exists(_stricmp "string.h" HAVE_ISO_STRICMP)
     check_symbol_exists(_strnicmp "string.h" HAVE_ISO_STRNICMP)
     check_symbol_exists(_snprintf "stdio.h" HAVE_ISO_SNPRINTF)
+
+    # Check for functions in math.h.
+    check_include_file("math.h" HAVE_MATH_H)
     check_symbol_exists(_hypot "math.h" HAVE_ISO_HYPOT)
+
+    # Check for functions in C++ cmath.
+    check_include_file_cxx(cmath HAVE_CXX_CMATH)
+    check_cxx_symbol_exists(asinh cmath HAVE_CMATH_ASINH )
+    check_cxx_symbol_exists(acosh cmath HAVE_CMATH_ACOSH )
+    check_cxx_symbol_exists(atanh cmath HAVE_CMATH_ATANH )
+
+    # CMakes check_cxx_symbol_exists() doesn't work for templates so we must create a
+    # small program to verify isinf() exists in cmath.
+    check_cxx_source_compiles( "#include <cmath>\nusing namespace std;\nint main(int argc, char** argv)\n{\n  (void)argv;\n  isinf(1.0);  (void)argc;\n  return 0;\n}\n"  HAVE_CMATH_ISINF )
 
     #check_symbol_exists(clock_gettime "time.h" HAVE_CLOCK_GETTIME) non-standard library, does not work
     check_library_exists(rt clock_gettime "" HAVE_CLOCK_GETTIME)

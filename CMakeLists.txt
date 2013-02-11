@@ -61,29 +61,22 @@ option(KICAD_SCRIPTING_WXPYTHON
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
 # when not defined by user, the default is python.exe under Windows and python2 for others
-# python binary filee should be is exec path.
+# python binary file should be is exec path.
 
 
 #Set version option (stable or testing)
 
-if (KICAD_STABLE_VERSION )
-    if ( KICAD_TESTING_VERSION )
-        message( FATAL_ERROR
-        "Please set to ON only one option KICAD_TESTING_VERSION or KICAD_STABLE_VERSION" )
-    endif( KICAD_TESTING_VERSION )
+if(KICAD_STABLE_VERSION AND KICAD_TESTING_VERSION )
+    message(FATAL_ERROR "Only one KiCad build version option KICAD_TESTING_VERSION or KICAD_STABLE_VERSION can be set to ON")
+elif(NOT KICAD_STABLE_VERSION AND NOT KICAD_TESTING_VERSION)
+    message(FATAL_ERROR "Either KiCad build version option KICAD_TESTING_VERSION or KICAD_STABLE_VERSION must be set to ON")
+elif(KICAD_STABLE_VERSION)
     add_definitions(-DKICAD_STABLE_VERSION)
-    message( "Build stable version of Kicad" )
-else (KICAD_STABLE_VERSION )
-    if (KICAD_TESTING_VERSION )
-        add_definitions(-DKICAD_TESTING_VERSION)
-        message( "Build testing (unstable) version of Kicad" )
-    else (KICAD_TESTING_VERSION )
-        message( "Please set to ON one option of KICAD_TESTING_VERSION or KICAD_STABLE_VERSION" )
-        message( "When calling cmake add option -DKICAD_STABLE_VERSION=ON" )
-        message( "or add option -DKICAD_TESTING_VERSION=ON" )
-        message( FATAL_ERROR "one option of KICAD_TESTING_VERSION or KICAD_STABLE_VERSION must be defined" )
-    endif(KICAD_TESTING_VERSION )
-endif(KICAD_STABLE_VERSION )
+    message( "Build stable version of KiCad")
+else(KICAD_STABLE_VERSION AND KICAD_TESTING_VERSION)
+    add_definitions(-DKICAD_TESTING_VERSION)
+    message("Build testing (unstable) version of KiCad")
+endif(KICAD_STABLE_VERSION AND KICAD_TESTING_VERSION)
 
 
 #================================================
@@ -291,22 +284,30 @@ if(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
 endif(WIN32 AND USE_WX_GRAPHICS_CONTEXT)
 
 # Find Python and other scripting resources
-if (KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+if(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
+    set(PythonInterp_FIND_VERSION)
+    find_package(PythonInterp)
+    check_find_package_result(PYTHONINTERP_FOUND "Python Interpreter")
 
-    if( "${PYTHON_EXECUTABLE}" STREQUAL  "" )
-        if(WIN32)
-            SET( PYTHON_EXECUTABLE "python.exe" )
-        else(WIN32)
-            SET( PYTHON_EXECUTABLE "python2" )
-        endif(WIN32)
-    endif()
+    # Get the correct Python site package install path from the Python interpreter found by
+    # FindPythonInterp unless the user specifically defined a custom path.
+    if(NOT PYTHON_SITE_PACKAGE_PATH)
+        execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import distutils.sysconfig;print\"%s\"%distutils.sysconfig.get_python_lib()"
+            OUTPUT_VARIABLE PYTHON_SITE_PACKAGE_PATH
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            )
 
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import sys;print\"%s.%s\"%sys.version_info[0:2]" OUTPUT_VARIABLE PYTHON_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-  set(PYTHON_DEST "lib/python${PYTHON_VERSION}/dist-packages" )
-  find_package(PythonLibs)
-  include_directories(${PYTHON_INCLUDE_PATH}
-                      ./scripting)
+        if(NOT PYTHON_SITE_PACKAGE_PATH)
+            message(FATAL_ERROR "Error occurred while attemping to find the Python site library path.")
+        endif(NOT PYTHON_SITE_PACKAGE_PATH)
+    endif(NOT PYTHON_SITE_PACKAGE_PATH)
 
+    set(PYTHON_DEST "${PYTHON_SITE_PACKAGE_PATH}" CACHE PATH "Python module install path.")
+    mark_as_advanced(PYTHON_DEST)
+    message( STATUS "Python module install path: ${PYTHON_DEST}")
+    find_package(PythonLibs)
+    include_directories(${PYTHON_INCLUDE_PATH}
+                        ./scripting)
 endif(KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES)
 
 

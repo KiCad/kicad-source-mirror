@@ -1,0 +1,144 @@
+KiCad uses CMake to generate the build files specific for the target platform
+specified by the developer.  This document attempts to define some of the more
+common CMake and KiCad build configuration settings.  You can use CMake either
+by the command CMake on or the graphical version ccmake.  This document only
+documents a very small subset of the total CMake documentation  For all of the
+gory details, please see the complete CMake documentation at:
+
+http://www.cmake.org/cmake/help/documentation.html.
+
+
+Useful CMake Build Settings.
+----------------------------
+This section defines some of the more common CMake build configuration setting
+used when configuring KiCad.  These settings are valid for all projects that
+use CMake.
+
+Changing the Build Generator.
+-----------------------------
+CMake attempts to create the project build system based on the platform.  On
+Posix systems CMake will create Unix Makefiles to build KiCad.  On Windows
+systems CMake will attempt to find the latest version of Visual C++ installed
+on the system and create the appropriate project files.  This behavior can be
+changed by specifying the project generator using the -G "Project Generator"
+switch on the command line.  Please note, only a small subset of these project
+generators are supported.  If you want to use Eclipse on Linux to build KiCad,
+you may be in for a lot of work.
+
+CMAKE_BUILD_TYPE (Release/Debug/RelWithDebInfo/MinSizeRel)
+----------------------------------------------------------
+When configuring the KiCad build for the command line you must specify build
+type.  To create a debug build, set CMAKE_BUILD_TYPE to Debug.  To create a
+release build, set CMAKE_BUILD_TYPE to Release.  See the CMake documentation
+for other build types.  For IDE project files, the build type can be selected
+by the IDE configuration manager.
+
+CMAKE_INSTALL_PATH (InstallPath)
+--------------------------------
+By default CMake will select the correct install path for your platform.  If
+you wish to install KiCad in a custom location, set CMAKE_INSTALL_PATH to the
+path where you want to install KiCad.  Please note that the default install
+path that CMake chooses will likely overwrite the current version of KiCad
+installed on your system.
+
+
+wxWidgets Library Configuration.
+--------------------------------
+KiCad is built using the wxWidgets library.  The following options allow you
+to specifically tailor the wxWidgets library configuration.  For the complete
+list of wxWidgets setting see CMakeModules/FindwxWidgets.cmake in the KiCad
+source.
+
+wxWidgets_ROOT_DIR (NonDefaultwxWidgetsPath)
+--------------------------------------------
+CMake looks in the standard platform locations to find the default version of
+the wxWidgets library.  If you wish to use a custom built wxWidgets library,
+set wxWidgets_ROOT_DIR to the correct path.
+
+wxWidgets_USE_DEBUG (ON/OFF)
+----------------------------
+When creating a debug build of KiCad, it is often useful to link against the
+debug build of the wxWidgets.  To use the debug build of wxWidgets, set
+wxWidgets_USE_DEBUG to ON.
+
+wxWidgets_USE_UNICODE (ON/OFF)
+------------------------------
+If you platform supports Unicode and you wish to build KiCad with Unicode
+support, set wxWidgets_USE_UNICODE to ON.  Please note as of the 2.9 branch
+this option is not required.
+
+
+KiCad Specific Options
+----------------------
+All of the configuration settings below are specific to the KiCad project.
+If for any reason you add or remove a build option to the KiCad CMake files,
+please update the list below.
+
+KICAD_STABLE_VERSION (ON/OFF)
+-----------------------------
+This option enables or disables the stable version string to be created and
+used when building KiCad.  It is mutually exclusive with KICAD_TESTING_VERSION.
+
+KICAD_TESTING_VERSION (ON/OFF)
+------------------------------
+This option enables or disables the testing version string to be created and
+used when building KiCad.  It is mutually exclusive with KICAD_STABLE_VERSION.
+
+USE_WX_GRAPHICS_CONTEXT (ON/OFF)
+--------------------------------
+This option is *Experimental* and used the advanced drawing library code
+using wxGraphicsContext and should only be used for testing purposes.
+Under Windows, a very recent version of mingw is needed.  It also requires
+wxWidgets to be built with the --enable-graphics_ctx configuration switch.
+
+USE_IMAGES_IN_MENUS (ON/OFF)
+----------------------------
+This option is used to enable or disable building KiCad with images in menu
+items.  If this is not defined when CMake is used to create the build files,
+images will be included in menu items on all platforms except OSX.
+
+USE_PCBNEW_NANOMETRES (ON/OFF)
+This option is used to enable or disable the nano-meter internal units for
+Pcbnew.  The default is ON.
+
+KICAD_GOST (ON/OFF)
+-------------------
+This option is used to enable or disable the GOST notation for multiple gates
+per package in Eeschema.  The default is  OFF
+
+KICAD_KEEPCASE (ON/OFF)
+-----------------------
+This option enables or disables turning off the  automatic component name
+conversion to uppercase.  The default is OFF which means component names will
+be converted to upper case.
+
+USE_WX_OVERLAY (ON/OFF)
+-----------------------
+This option enables or disables wxOverlay for drawing operation on OSX.  It is
+OFF by default on all platforms except OSX.  Warning, this is experimental!
+
+KICAD_SCRIPTING (ON/OFF)
+------------------------
+This option enables or disables building Python scripting support for KiCad.
+The default is OFF.  Currently only Pcbnew is supported.  This option requires
+that SWIG and Python are installed on the system.
+
+KICAD_SCRIPTING_MODULES (ON/OFF)
+--------------------------------
+This option enables or disables building the KiCad modules that can be used
+from scripting languages.  The default is OFF.  Currently only Pcbnew is
+supported.  This option requires that SWIG and Python are installed on the
+system.
+
+KICAD_SCRIPTING_WXPYTHON (ON/OFF)
+---------------------------------
+This option enables or disables building wxPython support into KiCad for
+python and py.shell.    The default is OFF.  Currently only Pcbnew is
+supported.  This option requires that SWIG, Python, and wxPython are
+installed on the system.
+
+PYTHON_SITE_PACKAGE_PATH (PATH)
+-------------------------------
+When building KiCad with Python scripting enable, the Python site library path
+is used by default.  If you want to install the KiCad Python extension in a
+different path, set this variable to the desired path.
