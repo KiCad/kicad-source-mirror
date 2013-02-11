@@ -24,14 +24,40 @@
 #ifndef __UNITS_H
 #define __UNITS_H
 
+#include <config.h>
 #include <cmath>
 #include <units_scales.h>
 
-#ifdef __MINGW32__
-#define atanh(x) (0.5 * log((1.0 + (x)) / (1.0 - (x))))
-#define asinh(x) log((x) + sqrt((x) * (x) + 1.0))
-#define acosh(x) log((x) + sqrt((x) * (x) - 1.0))
+#ifndef HAVE_CMATH_ASINH
+inline double asinh( double x )
+{
+    if( x==0.0 ) return sqrt( -1.0 );
+
+    return log( x+sqrt(x*x+1) );
+}
 #endif
+
+#ifndef HAVE_CMATH_ACOSH
+inline double acosh( double x )
+{
+    // must be x>=1, if not return Nan (Not a Number)
+    if( !(x>=1.0) ) return sqrt( -1.0 );
+
+    // return only the positive result (as sqrt does).
+    return log( x+sqrt(x*x-1.0) );
+}
+#endif
+
+#ifndef HAVE_CMATH_ATANH
+inline double atanh( double x )
+{
+    // must be x>-1, x<1, if not return Nan (Not a Number)
+    if( !(x>-1.0 && x<1.0) ) return sqrt( -1.0 );
+
+    return log( (1.0+x)/(1.0-x) ) / 2.0;
+}
+#endif
+
 
 #ifndef M_PI
 #define M_PI           3.1415926535897932384626433832795029  /* pi */

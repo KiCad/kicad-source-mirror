@@ -17,13 +17,30 @@
 #define snprintf _snprintf
 #endif
 
+
+// Handle platform differences in math.h
+#cmakedefine HAVE_MATH_H
+
 #cmakedefine HAVE_ISO_HYPOT
 
 #if defined( HAVE_ISO_HYPOT )
 #define hypot _hypot
 #endif
 
+
+// Handle platform differences in C++ cmath.
+#cmakedefine HAVE_CXX_CMATH
+
+#cmakedefine HAVE_CMATH_ASINH
+
+#cmakedefine HAVE_CMATH_ACOSH
+
+#cmakedefine HAVE_CMATH_ATANH
+
+#cmakedefine HAVE_CMATH_ISINF
+
 #cmakedefine HAVE_CLOCK_GETTIME
+
 #cmakedefine HAVE_GETTIMEOFDAY_FUNC
 
 #cmakedefine MALLOC_IN_STDLIB_H

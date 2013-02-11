@@ -519,7 +519,7 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 }
 
 
-void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
+void SCH_COMPONENT::SetTimeStamp( time_t aNewTimeStamp )
 {
     wxString string_timestamp, string_oldtimestamp;
 

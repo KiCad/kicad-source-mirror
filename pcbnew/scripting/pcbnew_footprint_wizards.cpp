@@ -95,8 +95,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
          if ( !PyList_Check(result) )
          {
              Py_DECREF( result );
-             ret.Add( wxT("PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod, "
-                        "result is not a list"),1 );
+             ret.Add( wxT("PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod, result is not a list"), 1 );
              return ret;
          }
 

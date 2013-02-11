@@ -30,7 +30,6 @@
 #include <wx/wx.h>
 #include <wx/config.h>
 #include <trigo.h>
-#include <stdint.h>
 
 #include <pcb_pad.h>
 
@@ -155,7 +154,7 @@ void PCB_PAD::WriteToFile( wxFile* aFile, char aFileType, int aRotation )
     PCB_PAD_SHAPE*  padShape;
     wxString        padShapeName = wxT( "Ellipse" );
     wxString        s, padType;
-    uint32_t        layerMask;
+    wxUint32        layerMask;
     int             i;
     int             width = 0;
     int             height = 0;
