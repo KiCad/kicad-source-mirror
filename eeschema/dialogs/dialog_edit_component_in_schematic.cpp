@@ -846,7 +846,12 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     INSTALL_UNBUFFERED_DC( dc, m_Parent->GetCanvas() );
     m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
 
-    // Initialize field values to default values found in library:
+    // Initialize fixed field values to default values found in library
+    // Note: the field texts are not modified because they are set in schematic,
+    // the text from libraries is most of time a dummy text
+    // Only VALUE and REFERENCE are re-initialized
+    // Perhaps the FOOTPRINT field should also be considered,
+    // but for most of components it is not set in library
     LIB_FIELD& refField = entry->GetReferenceField();
     m_Cmp->GetField( REFERENCE )->m_Pos = refField.m_Pos + m_Cmp->m_Pos;
     m_Cmp->GetField( REFERENCE )->ImportValues( refField );

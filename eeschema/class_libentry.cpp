@@ -575,13 +575,12 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
 
     // Fixed fields:
     // may have their own save policy so there is a separate loop for them.
+    // Empty fields are saved, because the user may have set visibility,
+    // size and orientation
     for( i = 0;  i < MANDATORY_FIELDS;  ++i )
     {
-        if( !fields[i].m_Text.IsEmpty() )
-        {
-            if( !fields[i].Save( aFormatter ) )
-                return false;
-        }
+        if( !fields[i].Save( aFormatter ) )
+            return false;
     }
 
     // User defined fields:

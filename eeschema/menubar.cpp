@@ -206,12 +206,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( editMenu, wxID_REPLACE, _( "Find and Re&place\tCtrl+Shift+F" ), HELP_REPLACE,
                  KiBitmap( find_replace_xpm ) );
 
-    // Backannotate
+    // Import footprint association from the CvPcb cmp file:
     editMenu->AppendSeparator();
-    AddMenuItem( editMenu,
-                 ID_BACKANNO_ITEMS,
-                 _( "&Backannotate" ),
-                 _( "Back annotate the footprint fields" ),
+    AddMenuItem( editMenu, ID_BACKANNO_ITEMS,
+                 _( "Import Footprint Selection" ),
+                 HELP_IMPORT_FOOTPRINTS,
                  KiBitmap( import_footprint_names_xpm ) );
 
     // Menu View:
@@ -501,11 +500,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Layout Printed Circuit Board" ),
                  _( "Run Pcbnew" ),
                  KiBitmap( pcbnew_xpm ) );
-
-    AddMenuItem( toolsMenu, ID_BACKANNO_ITEMS,
-                 _( "Import Footprint Selection" ),
-                 HELP_IMPORT_FOOTPRINTS,
-                 KiBitmap( import_footprint_names_xpm ) );
 
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;

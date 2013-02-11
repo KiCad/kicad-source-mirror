@@ -1002,10 +1002,10 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericComponents()
 
             xcomp->AddChild( node( sValue, comp->GetField( VALUE )->m_Text ) );
 
-            if( !comp->GetField( FOOTPRINT )->m_Text.IsEmpty() )
+            if( !comp->GetField( FOOTPRINT )->IsVoid() )
                 xcomp->AddChild( node( sFootprint, comp->GetField( FOOTPRINT )->m_Text ) );
 
-            if( !comp->GetField( DATASHEET )->m_Text.IsEmpty() )
+            if( !comp->GetField( DATASHEET )->IsVoid() )
                 xcomp->AddChild( node( sDatasheet, comp->GetField( DATASHEET )->m_Text ) );
 
             // Export all user defined fields within the component,
@@ -1020,8 +1020,8 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericComponents()
                 {
                     SCH_FIELD*  f = comp->GetField( fldNdx );
 
-                    // only output a field if non empty
-                    if( !f->GetText().IsEmpty() )
+                    // only output a field if non empty and not just "~"
+                    if( !f->IsVoid() )
                     {
                         XNODE*  xfield;
                         xfields->AddChild( xfield = node( sField, f->m_Text ) );
