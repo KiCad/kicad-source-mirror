@@ -319,9 +319,10 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     wxLogTrace( tracePrinting, wxT( "Logical origin:                   x=%d, y=%d" ),
                 offset.x, offset.y );
 
-#if defined(DEBUG)
+#if defined(wxUSE_LOG_TRACE)
     wxRect paperRect = GetPaperRectPixels();
-    wxLogTrace( tracePrinting, wxT( "Paper rectangle:                  left=%d, top=%d, right=%d, bottom=%d" ),
+    wxLogTrace( tracePrinting, wxT( "Paper rectangle:                  left=%d, top=%d, "
+                                    "right=%d, bottom=%d" ),
                 paperRect.GetLeft(), paperRect.GetTop(), paperRect.GetRight(),
                 paperRect.GetBottom() );
 
@@ -329,7 +330,8 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     int devTop = dc->LogicalToDeviceY( drawRect.GetY() );
     int devRight = dc->LogicalToDeviceX( drawRect.GetRight() );
     int devBottom = dc->LogicalToDeviceY( drawRect.GetBottom() );
-    wxLogTrace( tracePrinting, wxT( "Final device rectangle:           left=%d, top=%d, right=%d, bottom=%d\n" ),
+    wxLogTrace( tracePrinting, wxT( "Final device rectangle:           left=%d, top=%d, "
+                                    "right=%d, bottom=%d\n" ),
                 devLeft, devTop, devRight, devBottom );
 #endif
 

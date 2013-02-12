@@ -1,12 +1,13 @@
 Introduction
 ------------
-This document details how to build KiCad from source on Windows.  The current
-supported method of building KiCad on Windows systems is to use MinGW/MSYS.
-Other build systems such as Visual Studio and Eclipse can be used but your
-mileage may vary.  If you choose to build KiCad with one of the unsupported
-tools, please do not expect a great deal of help from the KiCad developers
-unless you want to be the person that supports the build tool.  If you add
-or remove any of the KiCad  build dependencies, please update this document.
+
+This document details how to build KiCad from source on Windows. The current
+supported method of building KiCad on Windows systems is to use MinGW,
+either from MSYS or cross compiling from Linux. Visual Studio is not
+supported, and don't ask about it, it is not supported and will not be.
+
+If you add or remove any of the KiCad build dependencies, please update this
+document.
 
 Install Build Tools
 -------------------
