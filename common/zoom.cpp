@@ -56,9 +56,9 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 
 void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 {
-	wxPoint dPos = posBefore - m_canvas->GetClientSize() / 2; // relative screen position to center before zoom
-	wxPoint newScreenPos = m_canvas->ToDeviceXY( GetScreen()->GetCrossHairPosition() ); // screen position of crosshair after zoom
-	wxPoint newCenter = m_canvas->ToLogicalXY( newScreenPos - dPos );
+    wxPoint dPos = posBefore - m_canvas->GetClientSize() / 2; // relative screen position to center before zoom
+    wxPoint newScreenPos = m_canvas->ToDeviceXY( GetScreen()->GetCrossHairPosition() ); // screen position of crosshair after zoom
+    wxPoint newCenter = m_canvas->ToLogicalXY( newScreenPos - dPos );
 
     AdjustScrollBars( newCenter );
 

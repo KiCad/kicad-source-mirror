@@ -143,7 +143,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 
     m_Parent->SetPageSettings( pageInfo );
 
-	m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_OptZoomNoCenter->GetValue() );
+    m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_OptZoomNoCenter->GetValue() );
     m_Parent->GetCanvas()->SetEnableMiddleButtonPan( m_OptMiddleButtonPan->GetValue() );
     m_Parent->GetCanvas()->SetMiddleButtonPanLimited( m_OptMiddleButtonPanLimited->GetValue() );
 
