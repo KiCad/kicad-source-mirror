@@ -56,35 +56,34 @@ int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in ske
 D_PAD::D_PAD( MODULE* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
-    m_NumPadName = 0;
-
-    m_Size.x = m_Size.y = 500;          // give it a reasonable size
-    m_Orient = 0;                       // Pad rotation in 1/10 degrees
-    m_LengthPadToDie = 0;
+    m_NumPadName          = 0;
+    m_Size.x = m_Size.y   = DMils2iu( 600 ); // Default pad size 60 mils.
+    m_Drill.x = m_Drill.y = DMils2iu( 300 ); // Default drill size 30 mils.
+    m_Orient              = 0;               // Pad rotation in 1/10 degrees.
+    m_LengthPadToDie      = 0;
 
     if( m_Parent  &&  m_Parent->Type() == PCB_MODULE_T )
     {
         m_Pos = GetParent()->GetPosition();
     }
 
-    m_PadShape = PAD_CIRCLE;            // Shape: PAD_CIRCLE, PAD_RECT PAD_OVAL
-                                        // PAD_TRAPEZOID
-    m_Attribute      = PAD_STANDARD;    // Type: NORMAL, PAD_SMD, PAD_CONN
-    m_DrillShape     = PAD_CIRCLE;      // Drill shape = circle
-    m_LocalClearance = 0;
+    m_PadShape            = PAD_CIRCLE;      // Default pad shape is PAD_CIRCLE.
+    m_Attribute           = PAD_STANDARD;    // Default pad type is NORMAL (thru hole)
+    m_DrillShape          = PAD_CIRCLE;      // Default pad drill shape is a circle.
+    m_LocalClearance      = 0;
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
-    m_ZoneConnection = UNDEFINED_CONNECTION; // Use parent setting by default
-    m_ThermalWidth = 0; // Use parent setting by default
-    m_ThermalGap = 0; // Use parent setting by default
+    m_ZoneConnection      = UNDEFINED_CONNECTION; // Use parent setting by default
+    m_ThermalWidth        = 0;                // Use parent setting by default
+    m_ThermalGap          = 0;                // Use parent setting by default
 
-    // set layers mask to default for a standard pad
-    m_layerMask = PAD_STANDARD_DEFAULT_LAYERS;
+    // Set layers mask to default for a standard thru hole pad.
+    m_layerMask           = PAD_STANDARD_DEFAULT_LAYERS;
 
-    SetSubRatsnest( 0 );                // used in ratsnest calculations
+    SetSubRatsnest( 0 );                       // used in ratsnest calculations
 
-    m_boundingRadius = -1;
+    m_boundingRadius      = -1;
 }
 
 

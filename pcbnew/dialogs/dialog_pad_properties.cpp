@@ -1015,7 +1015,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     case PAD_SMD:
         // SMD and PAD_CONN has no hole.
         // basically, SMD and PAD_CONN are same type of pads
-        // PAD_CONN has just a default non technical layers that differs frm SMD
+        // PAD_CONN has just a default non technical layers that differs from SMD
         // and are intended to be used in virtual edge board connectors
         // However we can accept a non null offset,
         // mainly to allow complex pads build from a set of from basic pad shapes
