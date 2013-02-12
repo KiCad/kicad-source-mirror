@@ -30,13 +30,13 @@ struct minkowski_offset {
   static void convolve_two_point_sequences(polygon_set& result, itrT1 ab, itrT1 ae, itrT2 bb, itrT2 be) {
     if(ab == ae || bb == be)
       return;
-    point first_a = *ab;
+    // point first_a = *ab;
     point prev_a = *ab;
     std::vector<point> vec;
     polygon poly;
     ++ab;
     for( ; ab != ae; ++ab) {
-      point first_b = *bb;
+      // point first_b = *bb;
       point prev_b = *bb;
       itrT2 tmpb = bb;
       ++tmpb;
