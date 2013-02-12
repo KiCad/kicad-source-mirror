@@ -160,20 +160,20 @@ BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
 
 wxPoint EDA_DRAW_PANEL::ToDeviceXY( const wxPoint& pos )
 {
-	wxPoint ret;
-	INSTALL_UNBUFFERED_DC( dc, this );
-	ret.x = dc.LogicalToDeviceX( pos.x );
-	ret.y = dc.LogicalToDeviceY( pos.y );
-	return ret;
+    wxPoint ret;
+    INSTALL_UNBUFFERED_DC( dc, this );
+    ret.x = dc.LogicalToDeviceX( pos.x );
+    ret.y = dc.LogicalToDeviceY( pos.y );
+    return ret;
 }
 
 wxPoint EDA_DRAW_PANEL::ToLogicalXY( const wxPoint& pos )
 {
-	wxPoint ret;
-	INSTALL_UNBUFFERED_DC( dc, this );
-	ret.x = dc.DeviceToLogicalX( pos.x );
-	ret.y = dc.DeviceToLogicalY( pos.y );
-	return ret;
+    wxPoint ret;
+    INSTALL_UNBUFFERED_DC( dc, this );
+    ret.x = dc.DeviceToLogicalX( pos.x );
+    ret.y = dc.DeviceToLogicalY( pos.y );
+    return ret;
 }
 
 void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, EDA_COLOR_T aColor )
