@@ -189,7 +189,7 @@ public:
     void SetLayerMask( int aLayerMask )         { m_layerMask = aLayerMask; }
     int GetLayerMask() const                    { return m_layerMask; }
 
-    void SetAttribute( PAD_ATTR_T aAttribute )  { m_Attribute = aAttribute; }
+    void SetAttribute( PAD_ATTR_T aAttribute );
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
 
     void SetPadToDieLength( int aLength )      { m_LengthPadToDie = aLength; }

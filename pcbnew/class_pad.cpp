@@ -135,6 +135,15 @@ EDA_RECT D_PAD::GetBoundingBox() const
 }
 
 
+void D_PAD::SetAttribute( PAD_ATTR_T aAttribute )
+{
+    m_Attribute = aAttribute;
+
+    if( aAttribute == PAD_SMD )
+        m_Drill = wxSize( 0, 0 );
+}
+
+
 void D_PAD::SetOrientation( double aAngle )
 {
     NORMALIZE_ANGLE_POS( aAngle );
