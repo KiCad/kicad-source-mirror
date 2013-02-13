@@ -61,10 +61,6 @@ PCB_COMPONENT::~PCB_COMPONENT()
 }
 
 
-void PCB_COMPONENT::WriteToFile( wxFile* aFile, char aFileType )
-{
-}
-
 
 void PCB_COMPONENT::AddToModule( MODULE* aModule )
 {

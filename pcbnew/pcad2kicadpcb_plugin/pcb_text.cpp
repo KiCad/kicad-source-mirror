@@ -93,41 +93,6 @@ void PCB_TEXT::Parse( XNODE*        aNode,
 }
 
 
-void PCB_TEXT::WriteToFile( wxFile* aFile, char aFileType )
-{
-    char visibility, mirrored;
-
-    if( m_name.textIsVisible == 1 )
-        visibility = wxT( 'V' );
-    else
-        visibility = wxT( 'I' );
-
-    if( m_name.mirror == 1 )
-        mirrored = wxT( 'M' );
-    else
-        mirrored = wxT( 'N' );
-
-    // Simple, not the best, but acceptable text positioning.....
-    m_name.textPositionX    = m_positionX;
-    m_name.textPositionY    = m_positionY;
-    CorrectTextPosition( &m_name, m_rotation );
-
-    // Go out
-    if( aFileType == wxT( 'L' ) )    // Library component
-    {
-        aFile->Write( wxString::Format( wxT( "T%d %d %d %d %d %d %d " ), m_tag,
-                                        m_name.correctedPositionX,
-                                        m_name.correctedPositionY,
-                                        KiROUND( m_name.textHeight / 2 ),
-                                        KiROUND( m_name.textHeight / 1.1 ),
-                                        m_rotation, m_name.textstrokeWidth ) +
-                      mirrored + wxT( ' ' ) + visibility +
-                      wxString::Format( wxT( " %d \"" ), m_KiCadLayer ) +
-                      m_name.text + wxT( "\"\n" ) );    // ValueString
-    }
-}
-
-
 void PCB_TEXT::AddToModule( MODULE* aModule )
 {
 }

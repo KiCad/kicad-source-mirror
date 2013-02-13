@@ -48,7 +48,6 @@ public:
                            int          aLayer,
                            wxString     aDefaultMeasurementUnit,
                            wxString     aActualConversion );
-    virtual void    WriteToFile( wxFile* aFile, char aFileType );
     void            AddToModule( MODULE* aModule );
     void            AddToBoard();
 

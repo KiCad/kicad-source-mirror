@@ -902,38 +902,6 @@ void PCB::Parse( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, wxString aActu
 }
 
 
-void PCB::WriteToFile( wxString aFileName )
-{
-    wxFile  f;
-    int     i;
-
-    f.Open( aFileName, wxFile::write );
-
-    // LIBRARY
-    f.Write( wxT( "PCBNEW-LibModule-V1  01/01/2001-01:01:01\n" ) );
-    f.Write( wxT( "\n" ) );
-    f.Write( wxT( "$INDEX\n" ) );
-
-    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
-    {
-        if( m_pcbComponents[i]->m_objType == wxT( 'M' ) )
-            f.Write( m_pcbComponents[i]->m_name.text + wxT( "\n" ) );
-    }
-
-    f.Write( wxT( "$EndINDEX\n" ) );
-
-    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
-    {
-        if( m_pcbComponents[i]->m_objType == wxT( 'M' ) )
-            m_pcbComponents[i]->WriteToFile( &f, wxT( 'L' ) );
-    }
-
-    f.Write( wxT( "$EndLIBRARY\n" ) );
-
-    f.Close();
-}
-
-
 void PCB::AddToBoard()
 {
     int i;
