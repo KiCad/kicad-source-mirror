@@ -2002,6 +2002,9 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
     case T_smd:
         pad->SetAttribute( PAD_SMD );
+
+        // Default D_PAD object is thru hole with drill.
+        pad->SetDrillSize( wxSize( 0, 0 ) );
         break;
 
     case T_connect:
@@ -2130,7 +2133,15 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
                 }
             }
 
-            pad->SetDrillSize( drillSize );
+            // This fixes a bug caused by setting the default D_PAD drill size to a value
+            // other than 0 used to fix a bunch of debug assertions even though it is defined
+            // as a through hole pad.  Wouldn't a though hole pad with no drill be a surface
+            // mount pad?
+            if( pad->GetAttribute() != PAD_SMD )
+                pad->SetDrillSize( drillSize );
+            else
+                pad->SetDrillSize( wxSize( 0, 0 ) );
+
             break;
         }
 
