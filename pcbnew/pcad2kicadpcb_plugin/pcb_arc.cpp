@@ -124,22 +124,6 @@ void PCB_ARC::Parse( XNODE*     aNode,
 }
 
 
-void PCB_ARC::WriteToFile( wxFile* aFile, char aFileType )
-{
-/*
- *  DC ox oy fx fy w  DC is a Draw Circle  DC Xcentre Ycentre Xpoint Ypoint Width Layer
- *  DA x0 y0 x1 y1 angle width layer  DA is a Draw ArcX0,y0 = Start point x1,y1 = end point
- */
-    if( aFileType == wxT( 'L' ) )    // Library component
-    {
-        aFile->Write( wxString::Format( wxT( "DA %d %d %d %d %d %d %d\n" ),
-                                        m_positionX, m_positionY, m_startX,
-                                        m_startY, m_angle, m_width,
-                                        m_KiCadLayer ) );    // ValueString
-    }
-}
-
-
 void PCB_ARC::SetPosOffset( int aX_offs, int aY_offs )
 {
     PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );

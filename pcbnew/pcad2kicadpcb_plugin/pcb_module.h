@@ -62,7 +62,6 @@ public:
     virtual void    Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
                            wxString aDefaultMeasurementUnit, wxString aActualConversion );
 
-    virtual void    WriteToFile( wxFile* aFile, char aFileType );
     virtual void    Flip();
     void            AddToBoard();
 

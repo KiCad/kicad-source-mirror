@@ -65,7 +65,6 @@ public:
     PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_COMPONENT();
 
-    virtual void    WriteToFile( wxFile* aFile, char aFileType );
     virtual void    SetPosOffset( int aX_offs, int aY_offs );
     virtual void    AddToModule( MODULE* aModule );
     virtual void    AddToBoard() = 0;
@@ -73,6 +72,7 @@ public:
     int GetKiCadLayer() { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
     int GetNewTimestamp() { return m_callbacks->GetNewTimestamp(); }
     int GetNetCode( wxString aNetName ) { return m_callbacks->GetNetCode( aNetName ); }
+
 protected:
     PCB_CALLBACKS*  m_callbacks;
     BOARD*          m_board;

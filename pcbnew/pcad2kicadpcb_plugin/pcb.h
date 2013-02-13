@@ -61,7 +61,6 @@ public:
                            wxXmlDocument* aXmlDoc,
                            wxString     aActualConversion );
 
-    virtual void    WriteToFile( wxString aFileName );
     void            AddToBoard();
 
 private:
