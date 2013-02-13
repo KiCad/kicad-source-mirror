@@ -48,8 +48,9 @@
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bool aCreateBackupFile )
 {
     wxString msg;
-    wxFileName schematicFileName, backupFileName;
+    wxFileName schematicFileName;
     FILE* f;
+    bool success;
 
     if( aScreen == NULL )
         aScreen = GetScreen();
@@ -58,56 +59,53 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bo
     if( aScreen->GetFileName().IsEmpty() )
         aSaveUnderNewName = true;
 
-    if( aSaveUnderNewName == false )
+    /* Construct the name of the file to be saved */
+    schematicFileName = aScreen->GetFileName();
+
+    if( aSaveUnderNewName )
     {
-        schematicFileName = aScreen->GetFileName();
-
-        // Sheet file names are relative to the root sheet path which is the current
-        // working directory.  The IsWritable funtion expects the path to be set.
-        if( schematicFileName.GetPath().IsEmpty() )
-            schematicFileName.Assign( wxFileName::GetCwd(), schematicFileName.GetFullName() );
-
-        if( aCreateBackupFile )
-        {
-            backupFileName = schematicFileName;
-
-            if( !IsWritable( schematicFileName ) )
-                return false;
-
-            /* Rename the old file to a '.bak' one: */
-            if( schematicFileName.FileExists() )
-            {
-                backupFileName.SetExt( SchematicBackupFileExtension );
-                if( backupFileName.FileExists() )
-                    wxRemoveFile( backupFileName.GetFullPath() );
-
-                if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
-                {
-                    msg.Printf( _( "Could not save backup of file <%s>" ),
-                                GetChars( schematicFileName.GetFullPath() ) );
-                    DisplayError( this, msg );
-                }
-            }
-        }
-    }
-    else
-    {
-        schematicFileName = aScreen->GetFileName();
-
         wxFileDialog dlg( this, _( "Schematic Files" ), wxGetCwd(),
-                          schematicFileName.GetFullName(), SchematicFileWildcard,
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                schematicFileName.GetFullName(), SchematicFileWildcard,
+                wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
-        aScreen->SetFileName( dlg.GetPath() );
         schematicFileName = dlg.GetPath();
 
-        if( !IsWritable( schematicFileName ) )
-            return false;
+        if( schematicFileName.GetExt() != SchematicFileExtension )
+            schematicFileName.SetExt( SchematicFileExtension );
+    }
+    else
+    {
+        // Sheet file names are relative to the root sheet path which is the current
+        // working directory.  The IsWritable funtion expects the path to be set.
+        if( schematicFileName.GetPath().IsEmpty() )
+            schematicFileName.Assign( wxFileName::GetCwd(), schematicFileName.GetFullName() );
     }
 
+    if( !IsWritable( schematicFileName ) )
+        return false;
+
+    /* Create backup if requested */
+    if( aCreateBackupFile && schematicFileName.FileExists() )
+    {
+        wxFileName backupFileName = schematicFileName;
+
+        /* Rename the old file to a '.bak' one: */
+        backupFileName.SetExt( SchematicBackupFileExtension );
+        if( backupFileName.FileExists() )
+            wxRemoveFile( backupFileName.GetFullPath() );
+
+        if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+        {
+            msg.Printf( _( "Could not save backup of file <%s>" ),
+                    GetChars( schematicFileName.GetFullPath() ) );
+            DisplayError( this, msg );
+        }
+    }
+
+    /* Save */
     wxLogTrace( traceAutoSave,
                 wxT( "Saving file <" ) + schematicFileName.GetFullPath() + wxT( ">" ) );
 
@@ -119,18 +117,11 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bo
         return false;
     }
 
-    if( aSaveUnderNewName )
-        aScreen->SetFileName( schematicFileName.GetFullPath() );
+    success = aScreen->Save( f );
 
-    bool success = aScreen->Save( f );
-
-    if( !success )
+    if( success )
     {
-        DisplayError( this, _( "File write operation failed." ) );
-    }
-    else
-    {
-        // Delete auto save file on successful save.
+        // Delete auto save file.
         wxFileName autoSaveFileName = schematicFileName;
         autoSaveFileName.SetName( wxT( "$" ) + schematicFileName.GetName() );
 
@@ -143,13 +134,19 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bo
             wxRemoveFile( autoSaveFileName.GetFullPath() );
         }
 
+        // Update the screen and frame info.
+        if( aSaveUnderNewName )
+            aScreen->SetFileName( schematicFileName.GetFullPath() );
         aScreen->ClrSave();
         aScreen->ClrModify();
-        wxString msg;
+
         msg.Printf( _( "File %s saved" ), GetChars( aScreen->GetFileName() ) );
         SetStatusText( msg, 0 );
     }
-
+    else
+    {
+        DisplayError( this, _( "File write operation failed." ) );
+    }
 
     fclose( f );
 
