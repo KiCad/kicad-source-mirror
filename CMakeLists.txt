@@ -85,12 +85,6 @@ endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 
-    # We build DLL/DSOs from static libraries, so create position independent code
-    # for all cases, since we do not have DLL/DSO specific static libraries.
-    # This flag could be localized to any object file going into a DLL/DSO in the future.
-    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC" )
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
-
     set(KICAD_GCC_RELEASE_BUILD_FLAGS "-O2")
     set(KICAD_GCC_RELEASE_DEBUG_FLAGS "")
 
@@ -124,7 +118,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
             "Setting GCC version ${GCC_VERSION} build flags \"${KICAD_GCC_RELEASE_BUILD_FLAGS}\"")
     endif()
 
-    if(MINGW)   # under Windows/mingw,  -fPIC option is enabled by default
+    if(MINGW)
+        # According to some sources, under Windows -fPIC option is not needed:
+        # http://mingw.5.n7.nabble.com/Option-fPIC-not-supported-td18480.html
+
         # Set default flags for Release build.
         set(CMAKE_C_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG")
         set(CMAKE_CXX_FLAGS_RELEASE "-Wall ${KICAD_GCC_RELEASE_BUILD_FLAGS} -DNDEBUG")
@@ -136,6 +133,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         set(CMAKE_MODULE_LINKER_FLAGS "-static-libgcc -static-libstdc++") # SWIG macros on Windows
 
     else()
+        # We build DLL/DSOs from static libraries, so create position independent code
+        # for all cases, since we do not have DLL/DSO specific static libraries.
+        # This flag could be localized to any object file going into a DLL/DSO in the future.
+        set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC" )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
+
         # Thou shalt not link vaporware and tell us it's a valid DSO:
         set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
         set(CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined") # needed by SWIG macros on linux
