@@ -114,6 +114,7 @@ private:
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnFootprintList( wxCommandEvent& event );
+    void DClickOnFootprintList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
