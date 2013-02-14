@@ -355,8 +355,9 @@ void GRSetColorPen( wxDC* DC, EDA_COLOR_T Color, int width, wxPenStyle style )
         width = 0;
 
 #ifdef __WXMAC__
-    // Under OSX when wxPen is set to 0, cocoa follows the request drawing nothing
-    if( width == 0)
+    // Under OSX when wxPen is set to 0, cocoa follows the request drawing nothing &
+    // in the bitmap world the minimum is enough to light a pixel, in vectorial one not
+    if( width <= 1 )
         width = DC->DeviceToLogicalXRel( 1 );
 #endif
 
