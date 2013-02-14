@@ -84,6 +84,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     /* listbox events */
     EVT_LISTBOX( ID_MODVIEW_LIB_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnLibList )
     EVT_LISTBOX( ID_MODVIEW_FOOTPRINT_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList )
+    EVT_LISTBOX_DCLICK( ID_MODVIEW_FOOTPRINT_LIST, FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList )
 
     EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_VIEWER_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
@@ -461,6 +462,19 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
     }
 }
 
+void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxCommandEvent& event )
+{
+    if( m_Semaphore )
+    {
+        ExportSelectedFootprint( event );
+        // Prevent the double click from being as a single mouse button release
+        // event in the parent window which would cause the part to be parked
+        // rather than staying in mode mode.
+        // Remember the mouse button will be released in the parent window
+        // thus creating a mouse button release event which should be ingnored.
+        ((PCB_BASE_FRAME*)GetParent())->SkipNextLeftButtonReleaseEvent();
+    }
+}
 
 void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
 {
