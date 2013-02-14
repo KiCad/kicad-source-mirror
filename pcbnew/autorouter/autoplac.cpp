@@ -673,18 +673,21 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         for( ; CurrPosition.y < RoutingMatrix.m_BrdBox.GetBottom() - fy;
              CurrPosition.y += RoutingMatrix.m_GridRouting )
         {
+#ifndef USE_WX_OVERLAY
             /* Erase traces. */
             DrawModuleOutlines( m_canvas, aDC, aModule );
 
             if( showRat )
                 Compute_Ratsnest_PlaceModule( aDC );
-
+#endif
             showRat = 0;
             aModule->m_BoundaryBox.SetX( ox + CurrPosition.x );
             aModule->m_BoundaryBox.SetY( oy + CurrPosition.y );
 
             g_Offset_Module.y = cy - CurrPosition.y;
+#ifndef USE_WX_OVERLAY
             DrawModuleOutlines( m_canvas, aDC, aModule );
+#endif
             keepOut = TstModuleOnBoard( GetBoard(), aModule, TstOtherSide );
 
             if( keepOut >= 0 ) // i.e. if the module can be put here
@@ -918,11 +921,12 @@ double PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
         start = pt_local_rats_nest->m_PadStart->GetPosition() - g_Offset_Module;
         end = pt_local_rats_nest->m_PadEnd->GetPosition();
 
+#ifndef USE_WX_OVERLAY
         if( AutoPlaceShowAll )
         {
             GRLine( m_canvas->GetClipBox(), DC, start, end, 0, color );
         }
-
+#endif
         /* Cost of the ratsnest. */
         dx = end.x - start.x;
         dy = end.y - start.y;

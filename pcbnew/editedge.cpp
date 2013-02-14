@@ -225,6 +225,10 @@ static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
         Segment->Draw( Panel, DC, GR_OR );
     }
 
+#ifdef USE_WX_OVERLAY
+    Panel->Refresh();
+#endif
+    
     Panel->SetMouseCapture( NULL, NULL );
     ( (PCB_EDIT_FRAME*) Panel->GetParent() )->SetCurItem( NULL );
 }

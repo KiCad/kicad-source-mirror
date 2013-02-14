@@ -352,6 +352,10 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     case UR_NEW:
     case UR_DELETED:
 #ifdef USE_WX_OVERLAY
+    // Avoid to redraw when autoplacing
+    if( aItem->Type() == PCB_MODULE_T )    
+        if( ((MODULE*)aItem)->GetFlags() & MODULE_to_PLACE )
+            break;
         m_canvas->Refresh();
 #endif
     case UR_MOVED:
