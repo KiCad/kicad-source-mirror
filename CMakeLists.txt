@@ -88,7 +88,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     # We build DLL/DSOs from static libraries, so create position independent code
     # for all cases, since we do not have DLL/DSO specific static libraries.
     # This flag could be localized to any object file going into a DLL/DSO in the future.
-    set( CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
+    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC" )
     set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC" )
 
     set(KICAD_GCC_RELEASE_BUILD_FLAGS "-O2")
