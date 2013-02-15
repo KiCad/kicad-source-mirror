@@ -528,6 +528,25 @@ void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorner
     FinishTo( coord[0] );
 }
 
+/**
+ * Checks if a given string contains non-ASCII characters.
+ * FIXME: the performance of this code is really poor, but in this case it can be
+ * acceptable because the plot operation is not called very often.
+ * @param string String to check
+ * @return true if it contains some non-ASCII character, false if all characters are
+ *         inside ASCII range (<=255).
+ */
+bool containsNonAsciiChars( const wxString& string )
+{
+    for( unsigned i = 0; i < string.length(); i++ )
+    {
+        wchar_t ch = string[i];
+        if( ch > 255 )
+            return true;
+    }
+    return false;
+}
+
 void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         enum EDA_COLOR_T            aColor,
                         const wxString&             aText,
@@ -539,7 +558,8 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         bool                        aItalic,
                         bool                        aBold )
 {
-    if( textAsLines )
+    if( textAsLines || containsNonAsciiChars( aText ) )
+        /* output text as graphics */
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
                 aWidth, aItalic, aBold );
     else
