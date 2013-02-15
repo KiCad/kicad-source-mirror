@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-12 08:02+0100\n"
-"PO-Revision-Date: 2013-02-12 08:06+0100\n"
+"POT-Creation-Date: 2013-02-15 17:38+0100\n"
+"PO-Revision-Date: 2013-02-15 17:38+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -826,7 +826,7 @@ msgstr "Biblioteka "
 msgid " loaded"
 msgstr " wczytana"
 
-#: eeschema/eelibs_read_libraryfiles.cpp:83 eeschema/files-io.cpp:235
+#: eeschema/eelibs_read_libraryfiles.cpp:83 eeschema/files-io.cpp:232
 #, c-format
 msgid ""
 "Component library <%s> failed to load.\n"
@@ -848,7 +848,7 @@ msgstr "Nie znaleziono plików"
 msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
-#: eeschema/eeschema.cpp:106 eeschema/files-io.cpp:292 pcbnew/files.cpp:248
+#: eeschema/eeschema.cpp:106 eeschema/files-io.cpp:289 pcbnew/files.cpp:248
 #: pcbnew/pcbnew.cpp:135
 msgid "This file is already open."
 msgstr "Ten plik jest już otwarty."
@@ -1010,42 +1010,42 @@ msgstr ""
 "\n"
 " >> Błędy ERC: %d\n"
 
-#: eeschema/files-io.cpp:86
+#: eeschema/files-io.cpp:67
+msgid "Schematic Files"
+msgstr "Pliki schematów"
+
+#: eeschema/files-io.cpp:102
 #, c-format
 msgid "Could not save backup of file <%s>"
 msgstr "Nie mogę zapisać kopii pliku <%s>"
 
-#: eeschema/files-io.cpp:97
-msgid "Schematic Files"
-msgstr "Pliki schematów"
-
-#: eeschema/files-io.cpp:116
+#: eeschema/files-io.cpp:114
 #, c-format
 msgid "Failed to create file <%s>"
 msgstr "Błąd przy tworzeniu pliku <%s>"
 
-#: eeschema/files-io.cpp:129
-msgid "File write operation failed."
-msgstr "Błąd operacji zapisu do pliku."
-
-#: eeschema/files-io.cpp:149 cvpcb/readwrite_dlgs.cpp:232
+#: eeschema/files-io.cpp:143 cvpcb/readwrite_dlgs.cpp:232
 #, c-format
 msgid "File %s saved"
 msgstr "Plik %s został zapisany"
 
-#: eeschema/files-io.cpp:239
+#: eeschema/files-io.cpp:148
+msgid "File write operation failed."
+msgstr "Błąd operacji zapisu do pliku."
+
+#: eeschema/files-io.cpp:236
 msgid " ->Error"
 msgstr " ->Błąd"
 
-#: eeschema/files-io.cpp:264
+#: eeschema/files-io.cpp:261
 msgid "Discard changes to the current schematic?"
 msgstr "Porzucić zmiany w bieżącym schemacie?"
 
-#: eeschema/files-io.cpp:272
+#: eeschema/files-io.cpp:269
 msgid "Open Schematic"
 msgstr "Otwórz schemat"
 
-#: eeschema/files-io.cpp:342
+#: eeschema/files-io.cpp:339
 msgid ""
 "Ready\n"
 "Working dir: \n"
@@ -1053,16 +1053,16 @@ msgstr ""
 "Gotowy\n"
 "Folder roboczy: \n"
 
-#: eeschema/files-io.cpp:359
+#: eeschema/files-io.cpp:356
 #, c-format
 msgid "File <%s> not found."
 msgstr "Nie znaleziono pliku <%s>."
 
-#: eeschema/files-io.cpp:396
+#: eeschema/files-io.cpp:393
 msgid "Import Schematic"
 msgstr "Importuj Schemat"
 
-#: eeschema/files-io.cpp:454
+#: eeschema/files-io.cpp:451
 msgid ""
 "This operation cannot be undone. Besides, take into account that "
 "hierarchical sheets will not be appended.\n"
@@ -1808,7 +1808,7 @@ msgid "Bezier point %d Y position not defined"
 msgstr "Pozycja punktu Y krzywej Beziera %d nie jest ustalona"
 
 #: eeschema/lib_circle.cpp:54 pcbnew/class_board_item.cpp:45
-#: pcbnew/class_drawsegment.cpp:334 pcbnew/class_pad.cpp:776
+#: pcbnew/class_drawsegment.cpp:334 pcbnew/class_pad.cpp:785
 #: gerbview/class_gerber_draw_item.cpp:189
 msgid "Circle"
 msgstr "Okrąg"
@@ -6327,7 +6327,7 @@ msgstr "Połączone"
 msgid "Unconnected"
 msgstr "Niepołączone"
 
-#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:782
+#: pcbnew/class_board_item.cpp:43 pcbnew/class_pad.cpp:791
 msgid "Rect"
 msgstr "Prostokąt"
 
@@ -6363,7 +6363,7 @@ msgid "Segment"
 msgstr "Segment"
 
 #: pcbnew/class_drawsegment.cpp:358 pcbnew/class_module.cpp:463
-#: pcbnew/class_pad.cpp:622 pcbnew/class_pcb_layer_widget.cpp:191
+#: pcbnew/class_pad.cpp:631 pcbnew/class_pcb_layer_widget.cpp:191
 #: pcbnew/class_pcb_text.cpp:131 pcbnew/class_text_mod.cpp:404
 #: pcbnew/class_track.cpp:1126 pcbnew/class_zone.cpp:713
 #: pcbnew/layer_widget.cpp:533 pcbnew/sel_layer.cpp:147
@@ -6507,7 +6507,7 @@ msgid "Graphic Item"
 msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:249 pcbnew/class_module.cpp:511
-#: pcbnew/class_pad.cpp:507 pcbnew/class_text_mod.cpp:376 cvpcb/setvisu.cpp:36
+#: pcbnew/class_pad.cpp:516 pcbnew/class_text_mod.cpp:376 cvpcb/setvisu.cpp:36
 msgid "Module"
 msgstr "Footprint"
 
@@ -6557,7 +6557,7 @@ msgstr "Ścieżka dla Lista sieci"
 msgid "Stat"
 msgstr "Status"
 
-#: pcbnew/class_module.cpp:488 pcbnew/class_pad.cpp:656
+#: pcbnew/class_module.cpp:488 pcbnew/class_pad.cpp:665
 #: pcbnew/class_text_mod.cpp:414
 msgid "Orient"
 msgstr "Orientacja"
@@ -6608,90 +6608,90 @@ msgstr "Na płytce"
 msgid "In Package"
 msgstr "Wewnątrz obudowy"
 
-#: pcbnew/class_pad.cpp:509
+#: pcbnew/class_pad.cpp:518
 msgid "RefP"
 msgstr "Oznaczenie pola lutowniczego"
 
-#: pcbnew/class_pad.cpp:512 pcbnew/dialogs/dialog_design_rules.cpp:50
+#: pcbnew/class_pad.cpp:521 pcbnew/dialogs/dialog_design_rules.cpp:50
 msgid "Net"
 msgstr "Sieć"
 
-#: pcbnew/class_pad.cpp:582
+#: pcbnew/class_pad.cpp:591
 msgid "Non-copper"
 msgstr "Poza warstwami ścieżek"
 
-#: pcbnew/class_pad.cpp:590
+#: pcbnew/class_pad.cpp:599
 msgid " & int"
 msgstr " & int"
 
-#: pcbnew/class_pad.cpp:618
+#: pcbnew/class_pad.cpp:627
 msgid "internal"
 msgstr "wewnętrzne"
 
-#: pcbnew/class_pad.cpp:627 pcbnew/class_text_mod.cpp:420
+#: pcbnew/class_pad.cpp:636 pcbnew/class_text_mod.cpp:420
 msgid "H Size"
 msgstr "Rozmiar poziomy"
 
-#: pcbnew/class_pad.cpp:630 pcbnew/class_text_mod.cpp:423
+#: pcbnew/class_pad.cpp:639 pcbnew/class_text_mod.cpp:423
 msgid "V Size"
 msgstr "Rozmiar pionowy"
 
-#: pcbnew/class_pad.cpp:636 pcbnew/class_track.cpp:1141
+#: pcbnew/class_pad.cpp:645 pcbnew/class_track.cpp:1141
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:273
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:277
 msgid "Drill"
 msgstr "Wiercenie"
 
-#: pcbnew/class_pad.cpp:644
+#: pcbnew/class_pad.cpp:653
 msgid "Drill X / Y"
 msgstr "Wiercenie X / Y"
 
-#: pcbnew/class_pad.cpp:659
+#: pcbnew/class_pad.cpp:668
 msgid "X Pos"
 msgstr "Pozycja X"
 
-#: pcbnew/class_pad.cpp:662
+#: pcbnew/class_pad.cpp:671
 msgid "Y pos"
 msgstr "Pozycja Y"
 
-#: pcbnew/class_pad.cpp:667
+#: pcbnew/class_pad.cpp:676
 msgid "Length in package"
 msgstr "Długość wewnątrz obudowy"
 
-#: pcbnew/class_pad.cpp:779 pcbnew/dialogs/dialog_pad_properties_base.cpp:66
+#: pcbnew/class_pad.cpp:788 pcbnew/dialogs/dialog_pad_properties_base.cpp:66
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:288
 msgid "Oval"
 msgstr "Owal"
 
-#: pcbnew/class_pad.cpp:785
+#: pcbnew/class_pad.cpp:794
 msgid "Trap"
 msgstr "Trap"
 
-#: pcbnew/class_pad.cpp:798
+#: pcbnew/class_pad.cpp:807
 msgid "Std"
 msgstr "Standardowy"
 
-#: pcbnew/class_pad.cpp:801
+#: pcbnew/class_pad.cpp:810
 msgid "Smd"
 msgstr "SMD"
 
-#: pcbnew/class_pad.cpp:804
+#: pcbnew/class_pad.cpp:813
 msgid "Conn"
 msgstr "Łącze"
 
-#: pcbnew/class_pad.cpp:807
+#: pcbnew/class_pad.cpp:816
 msgid "Not Plated"
 msgstr "Bez pokrycia cyną"
 
-#: pcbnew/class_pad.cpp:823
+#: pcbnew/class_pad.cpp:832
 msgid "all copper layers"
 msgstr "wszystkie warstwy ścieżek"
 
-#: pcbnew/class_pad.cpp:829
+#: pcbnew/class_pad.cpp:838
 msgid "???"
 msgstr "???"
 
-#: pcbnew/class_pad.cpp:831
+#: pcbnew/class_pad.cpp:840
 #, c-format
 msgid "Pad [%s] (%s) of %s"
 msgstr "Pad [%s] (%s) z %s"
@@ -7456,7 +7456,7 @@ msgstr "Parametr"
 msgid "Units"
 msgstr "Jednostki"
 
-#: pcbnew/footprint_wizard_frame.cpp:679 pcbnew/modview_frame.cpp:675
+#: pcbnew/footprint_wizard_frame.cpp:679 pcbnew/modview_frame.cpp:689
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
 msgstr "Podgląd Footprintów: Przeglądarka 3D [%s]"
@@ -8945,7 +8945,7 @@ msgstr "Usunąć footprint %s (wartość %s)?"
 msgid "Select Current Library:"
 msgstr "Wybierz bieżącą bibliotekę:"
 
-#: pcbnew/modview_frame.cpp:115
+#: pcbnew/modview_frame.cpp:116
 msgid "Footprint Library Browser"
 msgstr "Przeglądarka bibliotek footprintów"
 
