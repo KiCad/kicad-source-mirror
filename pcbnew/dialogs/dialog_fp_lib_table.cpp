@@ -210,18 +210,6 @@ public:
         }
     }
 
-    /*
-    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) const // overload
-    {
-        if( aCol != COL_TYPE )
-            return wxGridTableBase::GetAttr( aRow, aCol, aKind );
-        else
-        {
-
-        }
-    }
-    */
-
     //-----</wxGridTableBase overloads>------------------------------------------
 };
 
@@ -378,7 +366,7 @@ class DIALOG_FP_LIB_TABLE : public DIALOG_FP_LIB_TABLE_BASE
 
                     wxStringTokenizer   rows( data.GetText(), ROW_SEP, wxTOKEN_RET_EMPTY );
 
-                    // if clipboard rows would extend paste end of current table size...
+                    // if clipboard rows would extend past end of current table size...
                     if( int( rows.CountTokens() ) > tbl->GetNumberRows() - m_cur_row )
                     {
                         int newRowsNeeded = rows.CountTokens() - ( tbl->GetNumberRows() - m_cur_row );
@@ -656,8 +644,6 @@ public:
 
         m_global_grid->AutoSizeColumns();
         m_project_grid->AutoSizeColumns();
-
-        m_path_subs_grid->AutoSizeColumns();
 
         Connect( ID_CUT, ID_PASTE, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler( DIALOG_FP_LIB_TABLE::onPopupSelection ), NULL, this );

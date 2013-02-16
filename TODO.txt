@@ -20,10 +20,60 @@ Common
   WinEDA_BasicFrame ) so that file open behavior is consistent across all applications.
 
 * Look over Brian's python BOM generation scripts, which are now in
-  scripts/python/ky and sort them out, and get something into the installation as well.
+  scripts/python/ky and sort them out.
   Code came from Brian in this posting's attachment, which is ky2.zip:
   https://lists.launchpad.net/kicad-developers/msg06763.html
   but is now in scripts/python/ky temporarily.
+
+
+FP LIB TABLE
+------------
+
+Dialog:
+- - - -
+
+a) check for duplicate nicknames in a single table, complain, give the user a nice indication of the duplicate(s)
+
+b) in the uri column give a small button popup a window(dialog?) which lets user choose a file or directory local to his system by pointing at it.
+
+c) Active library table load and save functions.  There are two tables active at any time, but
+they look like one table.  Identify a place to keep the access mechanism (pointer).  Modify
+the project specific portion of this RAM table when the board changes.
+
+
+Other:
+- - - -
+
+a) develop a syntax for nickname:footprint combo, i.e. bring to life class FPID
+ with development and testing of parsing and formatting.
+
+
+b) modify cvpcb to handle the nickname:footprint, i.e. textual form of FPID.
+This means having a wider textfield for the FPID than was allocated for the footprint name alone.
+Needed is the ability to pick a footprint from any active library.
+
+
+c) modify the netlist format to handle nickname:footprint, save and load.
+The nickname needs to be optional.  I would say allowed in the grammar in the
+footprint position are:
+
+    footprint | (fp_id FPID)
+
+or just
+
+    FPID   # if it can be parsed when nickname is missing.
+
+
+d) write functions to lookup a footprint from
+ i) FPID
+ ii) footprint alone since most old netlists don't have nicknames in them.
+
+These i) and ii) merge into one if footprint alone is a valid FPID.
+Incorporate any environment variable in the the uri expansion using:
+const wxString FP_LIB_TABLE::ExpandSubtitutions( const wxString aString )
+
+
+
 
 
 EESchema

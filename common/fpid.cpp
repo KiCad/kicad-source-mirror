@@ -26,7 +26,7 @@
 #include <cstring>
 #include <wx/wx.h>      // _()
 
-#include <fp_lib_id.h>
+#include <fpid.h>
 
 
 static inline bool isDigit( char c )
@@ -106,7 +106,7 @@ static int okRevision( const std::string& aField )
 //----</Policy and field test functions>-------------------------------------
 
 
-void FP_LIB_ID::clear()
+void FPID::clear()
 {
     logical.clear();
     footprintName.clear();
@@ -114,7 +114,7 @@ void FP_LIB_ID::clear()
 }
 
 
-int FP_LIB_ID::Parse( const std::string& aId )
+int FPID::Parse( const std::string& aId )
 {
     clear();
 
@@ -158,13 +158,13 @@ int FP_LIB_ID::Parse( const std::string& aId )
 }
 
 
-FP_LIB_ID::FP_LIB_ID( const std::string& aId ) throw( PARSE_ERROR )
+FPID::FPID( const std::string& aId ) throw( PARSE_ERROR )
 {
     int offset = Parse( aId );
 
     if( offset != -1 )
     {
-        THROW_PARSE_ERROR( _( "Illegal character found in FP_LIB_ID string" ),
+        THROW_PARSE_ERROR( _( "Illegal character found in FPID string" ),
                            wxString::FromUTF8( aId.c_str() ),
                            aId.c_str(),
                            0,
@@ -173,7 +173,7 @@ FP_LIB_ID::FP_LIB_ID( const std::string& aId ) throw( PARSE_ERROR )
 }
 
 
-int FP_LIB_ID::SetLogicalLib( const std::string& aLogical )
+int FPID::SetLogicalLib( const std::string& aLogical )
 {
     int offset = okLogical( aLogical );
 
@@ -186,7 +186,7 @@ int FP_LIB_ID::SetLogicalLib( const std::string& aLogical )
 }
 
 
-int FP_LIB_ID::SetFootprintName( const std::string& aFootprintName )
+int FPID::SetFootprintName( const std::string& aFootprintName )
 {
     int          separation = int( aFootprintName.find_first_of( "/" ) );
 
@@ -204,7 +204,7 @@ int FP_LIB_ID::SetFootprintName( const std::string& aFootprintName )
 }
 
 
-int FP_LIB_ID::SetRevision( const std::string& aRevision )
+int FPID::SetRevision( const std::string& aRevision )
 {
     int offset = okRevision( aRevision );
 
@@ -217,7 +217,7 @@ int FP_LIB_ID::SetRevision( const std::string& aRevision )
 }
 
 
-std::string FP_LIB_ID::Format() const
+std::string FPID::Format() const
 {
     std::string  ret;
 
@@ -237,7 +237,7 @@ std::string FP_LIB_ID::Format() const
 }
 
 
-std::string FP_LIB_ID::GetFootprintNameAndRev() const
+std::string FPID::GetFootprintNameAndRev() const
 {
     std::string ret;
 
@@ -251,7 +251,7 @@ std::string FP_LIB_ID::GetFootprintNameAndRev() const
 }
 
 
-std::string FP_LIB_ID::Format( const std::string& aLogicalLib, const std::string& aFootprintName,
+std::string FPID::Format( const std::string& aLogicalLib, const std::string& aFootprintName,
                                const std::string& aRevision )
     throw( PARSE_ERROR )
 {
@@ -300,7 +300,7 @@ std::string FP_LIB_ID::Format( const std::string& aLogicalLib, const std::string
 
 // build this with Debug CMAKE_BUILD_TYPE
 
-void FP_LIB_ID::Test()
+void FPID::Test()
 {
     static const char* lpids[] = {
         "smt:R_0805/rev0",
@@ -312,7 +312,7 @@ void FP_LIB_ID::Test()
     {
         // test some round tripping
 
-        FP_LIB_ID lpid( lpids[i] );  // parse
+        FPID lpid( lpids[i] );  // parse
 
         // format
         printf( "input:'%s'  full:'%s'  logical: %s  footprintName:'%s' rev:'%s'\n",
@@ -327,7 +327,7 @@ void FP_LIB_ID::Test()
 
 int main( int argc, char** argv )
 {
-    FP_LIB_ID::Test();
+    FPID::Test();
 
     return 0;
 }
