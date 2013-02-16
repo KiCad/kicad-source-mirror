@@ -64,6 +64,8 @@ DIALOG_FP_LIB_TABLE_BASE::DIALOG_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_global_sizer->Fit( m_global_panel );
 	m_auinotebook->AddPage( m_global_panel, _("Global Libraries"), true, wxNullBitmap );
 	m_project_panel = new wxPanel( m_auinotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_project_panel->SetToolTip( _("Module libraries which  are visible for curent project only") );
+	
 	wxBoxSizer* m_project_sizer;
 	m_project_sizer = new wxBoxSizer( wxVERTICAL );
 	
