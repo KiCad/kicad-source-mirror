@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-15 17:38+0100\n"
-"PO-Revision-Date: 2013-02-15 17:38+0100\n"
+"POT-Creation-Date: 2013-02-17 08:10+0100\n"
+"PO-Revision-Date: 2013-02-17 08:10+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -3717,7 +3717,7 @@ msgstr "Wytnij zaznaczony element"
 msgid "Copy selected item"
 msgstr "Kopiuj zaznaczony element"
 
-#: eeschema/tool_sch.cpp:87 pcbnew/dialogs/dialog_fp_lib_table.cpp:308
+#: eeschema/tool_sch.cpp:87 pcbnew/dialogs/dialog_fp_lib_table.cpp:296
 msgid "Paste"
 msgstr "Wklej"
 
@@ -4793,7 +4793,7 @@ msgstr "Usuń jedno z pól dodatkowych"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:110
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:40
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:82
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:118
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:120
 msgid "Move Up"
 msgstr "Przesuń w górę"
 
@@ -9528,7 +9528,7 @@ msgstr "Automatyczne rozmieszczenie pola lutowniczego"
 msgid "Autoroute Net"
 msgstr "Automatyczne rozmieszczenie sieci"
 
-#: pcbnew/onrightclick.cpp:870 pcbnew/dialogs/dialog_fp_lib_table.cpp:307
+#: pcbnew/onrightclick.cpp:870 pcbnew/dialogs/dialog_fp_lib_table.cpp:295
 msgid "Copy"
 msgstr "Kopiuj"
 
@@ -11843,19 +11843,19 @@ msgstr "Ścieżka"
 msgid "Plugin Type"
 msgstr "Typ wtyczki"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:306
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:294
 msgid "Cut"
 msgstr "Wytnij"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:306
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:294
 msgid "Clear selected cells"
 msgstr "Wyczyść zaznaczone komórki"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:307
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:295
 msgid "Copy selected cells to clipboard"
 msgstr "Kopiuj zaznaczone komórki do schowka"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:308
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:296
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Wklej komórki ze schowka do matrycy od bieżącej pozycji"
 
@@ -11865,53 +11865,57 @@ msgstr "Tabele bibliotek według zasięgu"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:29
 msgid "Module libraries which  are visible for all projects"
-msgstr "Biblioteki footprintów widoczne dla wszystkich projektów"
+msgstr "Biblioteki footprintów, które są widoczne dla wszystkich projektów"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:65
 msgid "Global Libraries"
 msgstr "Biblioteki globalne"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:101
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:67
+msgid "Module libraries which  are visible for curent project only"
+msgstr "Biblioteki footprintów, które są widoczne tylko dla bieżącego projektu"
+
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:103
 msgid "Project Specific Libraries"
 msgstr "Biblioteki własne projektu"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:108
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:110
 msgid "Append Row"
 msgstr "Dołącz wpis"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:109
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:111
 msgid "Add a pcb library row to this table"
 msgstr "Dodaje wpis o bibliotece PCB w tej tabeli"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:113
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:115
 msgid "Delete Row"
 msgstr "Usuń wpis"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:114
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:116
 msgid "Remove a PCB library from this library table"
 msgstr "Usuwa bibliotekę PCB z tej tabeli"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:119
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:121
 msgid "Move the currently selected row up one position"
 msgstr "Przesuń zaznaczony wpis o jedną pozycję w górę"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:123 3d-viewer/3d_canvas.cpp:379
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:125 3d-viewer/3d_canvas.cpp:379
 msgid "Move Down"
 msgstr "Przesuń w dół v"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:124
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:126
 msgid "Move the currently selected row down one position"
 msgstr "Przesuń zaznaczony wpis o jedną pozycję w górę"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:140
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:142
 msgid "Path Substitutions"
 msgstr "Odpowiedniki ścieżek"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:158
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:160
 msgid "Environment Variable"
 msgstr "Zmienna środowiskowa"
 
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:159
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:161
 msgid "Path Segment"
 msgstr "Ścieżka"
 
@@ -15953,15 +15957,15 @@ msgstr "Nieznany typ MIME pliku dokumentacji <%s>"
 msgid "Bold+Italic"
 msgstr "Pogrubiona kursywa"
 
-#: common/fp_lib_id.cpp:167
-msgid "Illegal character found in FP_LIB_ID string"
-msgstr "Niepoprawny znak w ciągu FP_LIB_ID"
+#: common/fpid.cpp:167
+msgid "Illegal character found in FPID string"
+msgstr "Znaleziono niepoprawny znak w ciągu FPID"
 
-#: common/fp_lib_id.cpp:267
+#: common/fpid.cpp:267
 msgid "Illegal character found in logical library name"
 msgstr "Niepoprawny znak w danych o logicznej nazwie biblioteki"
 
-#: common/fp_lib_id.cpp:284
+#: common/fpid.cpp:284
 msgid "Illegal character found in revision"
 msgstr "Niepoprawny znak w danych o rewizji"
 
