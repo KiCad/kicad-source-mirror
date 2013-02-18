@@ -81,6 +81,15 @@ public:
     void SetShowHiddenPins( bool show ) { m_checkShowHiddenPins->SetValue( show ); }
     bool GetShowHiddenPins( void ) { return m_checkShowHiddenPins->GetValue(); }
 
+    void SetEnableZoomNoCenter( bool enable )
+    {
+        m_checkEnableZoomNoCenter->SetValue( enable );
+    }
+
+    bool GetEnableZoomNoCenter( void )
+    {
+        return m_checkEnableZoomNoCenter->GetValue();
+    }
     void SetEnableMiddleButtonPan( bool enable )
     {
         m_checkEnableMiddleButtonPan->SetValue( enable );

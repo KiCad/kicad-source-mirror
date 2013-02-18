@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -85,6 +85,11 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	wxStaticBoxSizer* bLeftBottomSizer;
 	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
+	
+	m_OptZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Zoom off center"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
+	
+	bLeftBottomSizer->Add( m_OptZoomNoCenter, 0, wxALL, 5 );
 	
 	m_OptMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftBottomSizer->Add( m_OptMiddleButtonPan, 0, wxALL, 5 );

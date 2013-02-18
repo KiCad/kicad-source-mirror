@@ -88,6 +88,7 @@ void DIALOG_GENERALOPTIONS::init()
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
+    m_ZoomNoCenterOpt->SetValue( GetParent()->GetCanvas()->GetEnableZoomNoCenter() );
     m_MiddleButtonPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableMiddleButtonPan() );
     m_OptMiddleButtonPanLimited->SetValue( GetParent()->GetCanvas()->GetMiddleButtonPanLimited() );
     m_OptMiddleButtonPanLimited->Enable( m_MiddleButtonPANOpt->GetValue() );
@@ -137,6 +138,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
 
+    GetParent()->GetCanvas()->SetEnableZoomNoCenter( m_ZoomNoCenterOpt->GetValue() );
     GetParent()->GetCanvas()->SetEnableMiddleButtonPan( m_MiddleButtonPANOpt->GetValue() );
     GetParent()->GetCanvas()->SetMiddleButtonPanLimited( m_OptMiddleButtonPanLimited->GetValue() );
 

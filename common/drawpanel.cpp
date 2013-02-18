@@ -44,6 +44,7 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 #define CLIP_BOX_PADDING 2
 
 // keys to store options in config:
+#define ENBL_ZOOM_NO_CENTER_KEY wxT( "ZoomNoCenter" )
 #define ENBL_MIDDLE_BUTT_PAN_KEY wxT( "MiddleButtonPAN" )
 #define MIDDLE_BUTT_PAN_LIMITED_KEY wxT( "MiddleBtnPANLimited" )
 #define ENBL_AUTO_PAN_KEY wxT( "AutoPAN" )
@@ -102,6 +103,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_canStartBlock = -1;       // Command block can start if >= 0
     m_abortRequest = false;
     m_enableMiddleButtonPan = false;
+    m_enableZoomNoCenter = false;
     m_panScrollbarLimits = false;
     m_enableAutoPan = true;
     m_ignoreMouseEvents = false;
@@ -113,6 +115,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     if( wxGetApp().GetSettings() )
     {
         wxGetApp().GetSettings()->Read( ENBL_MIDDLE_BUTT_PAN_KEY, &m_enableMiddleButtonPan, false );
+        wxGetApp().GetSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
         wxGetApp().GetSettings()->Read( MIDDLE_BUTT_PAN_LIMITED_KEY, &m_panScrollbarLimits, false );
         wxGetApp().GetSettings()->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
     }
@@ -137,6 +140,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 {
     wxGetApp().GetSettings()->Write( ENBL_MIDDLE_BUTT_PAN_KEY, m_enableMiddleButtonPan );
+    wxGetApp().GetSettings()->Write( ENBL_ZOOM_NO_CENTER_KEY, m_enableZoomNoCenter );
     wxGetApp().GetSettings()->Write( MIDDLE_BUTT_PAN_LIMITED_KEY, m_panScrollbarLimits );
     wxGetApp().GetSettings()->Write( ENBL_AUTO_PAN_KEY, m_enableAutoPan );
 }
@@ -154,6 +158,23 @@ BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
     return parentFrame->GetScreen();
 }
 
+wxPoint EDA_DRAW_PANEL::ToDeviceXY( const wxPoint& pos )
+{
+    wxPoint ret;
+    INSTALL_UNBUFFERED_DC( dc, this );
+    ret.x = dc.LogicalToDeviceX( pos.x );
+    ret.y = dc.LogicalToDeviceY( pos.y );
+    return ret;
+}
+
+wxPoint EDA_DRAW_PANEL::ToLogicalXY( const wxPoint& pos )
+{
+    wxPoint ret;
+    INSTALL_UNBUFFERED_DC( dc, this );
+    ret.x = dc.DeviceToLogicalX( pos.x );
+    ret.y = dc.DeviceToLogicalY( pos.y );
+    return ret;
+}
 
 void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, EDA_COLOR_T aColor )
 {
@@ -856,6 +877,8 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
             cmd.SetId( ID_PAN_UP );
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_LEFT );
+        else if( event.AltDown() || m_enableZoomNoCenter)
+            cmd.SetId( ID_OFFCENTER_ZOOM_IN );
         else
             cmd.SetId( ID_POPUP_ZOOM_IN );
     }
@@ -865,6 +888,8 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
             cmd.SetId( ID_PAN_DOWN );
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_RIGHT );
+        else if( event.AltDown() || m_enableZoomNoCenter)
+            cmd.SetId( ID_OFFCENTER_ZOOM_OUT );
         else
             cmd.SetId( ID_POPUP_ZOOM_OUT );
     }
