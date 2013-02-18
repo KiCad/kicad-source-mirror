@@ -114,7 +114,7 @@
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
-                                <property name="bg"></property>
+                                <property name="bg">wxSYS_COLOUR_BTNFACE</property>
                                 <property name="bitmapsize"></property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
