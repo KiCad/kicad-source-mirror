@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -34,10 +34,10 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	m_ListCmpbyValItems = new wxCheckBox( this, wxID_ANY, _("Components by value"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbListOptionsSizer->Add( m_ListCmpbyValItems, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_GenListLabelsbyVal = new wxCheckBox( this, wxID_ANY, _("Hierarchy pins by name"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_GenListLabelsbyVal = new wxCheckBox( this, wxID_ANY, _("Hierarchical pins by name"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbListOptionsSizer->Add( m_GenListLabelsbyVal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_GenListLabelsbySheet = new wxCheckBox( this, wxID_ANY, _("Hierarchy pins by sheets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_GenListLabelsbySheet = new wxCheckBox( this, wxID_ANY, _("Hierarchical pins by sheet"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbListOptionsSizer->Add( m_GenListLabelsbySheet, 0, wxALL, 5 );
 	
 	
@@ -59,7 +59,7 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	sbOptionsSizer->Add( m_GetListBrowser, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerUpper->Add( sbOptionsSizer, 10, wxALL|wxEXPAND, 5 );
+	bSizerUpper->Add( sbOptionsSizer, 3, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -119,13 +119,13 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	bRightSizer->Add( sbAddToListSelectionSizer, 1, wxEXPAND, 5 );
 	
 	
-	bSizerUpper->Add( bRightSizer, 0, wxALL|wxEXPAND, 5 );
+	bSizerUpper->Add( bRightSizer, 2, wxALL|wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -134,11 +134,12 @@ DIALOG_BUILD_BOM_BASE::DIALOG_BUILD_BOM_BASE( wxWindow* parent, wxWindowID id, c
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bMainSizer->Add( m_sdbSizer, 0, wxALIGN_RIGHT, 5 );
+	bMainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_OutputFormCtrl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_BUILD_BOM_BASE::OnRadioboxSelectFormatSelected ), NULL, this );

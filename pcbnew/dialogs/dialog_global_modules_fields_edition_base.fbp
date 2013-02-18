@@ -42,10 +42,10 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE</property>
             <property name="pos"></property>
-            <property name="size">409,199</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Global Module Fields Edition</property>
+            <property name="title">Set Text Size</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -93,7 +93,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -103,7 +103,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">2</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bLeftSizer</property>
@@ -111,11 +111,11 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxRIGHT</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND|wxRIGHT</property>
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Fields:</property>
+                                        <property name="label">Footprint Fields</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">sbSizer1</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -154,7 +154,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Modify reference</property>
+                                                <property name="label">Reference designator</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -242,7 +242,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Modify value</property>
+                                                <property name="label">Value</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -330,7 +330,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Modify other fields</property>
+                                                <property name="label">User defined</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -419,7 +419,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Modules Filter:</property>
+                                        <property name="label">Footprint Filter:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -472,7 +472,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -508,7 +508,7 @@
                                         <property name="maxlength">0</property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size">180,-1</property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_ModuleFilter</property>
                                         <property name="pane_border">1</property>
@@ -566,7 +566,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">0</property>
+                            <property name="proportion">3</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bRightSizer</property>
@@ -574,11 +574,11 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxLEFT</property>
+                                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Current Design Settings:</property>
+                                        <property name="label">Current Text Dimensions</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">sbSizerSettings</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -632,7 +632,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Size X:</property>
+                                                        <property name="label">Width:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -889,7 +889,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Size Y:</property>
+                                                        <property name="label">Height:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -942,7 +942,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -1116,7 +1116,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -1199,7 +1199,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -1290,7 +1290,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -1381,7 +1381,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND | wxALL</property>
+                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticLine" expanded="1">
                         <property name="BottomDockable">1</property>
@@ -1462,7 +1462,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
                         <property name="Apply">0</property>

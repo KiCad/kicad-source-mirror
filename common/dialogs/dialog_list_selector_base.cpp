@@ -50,7 +50,7 @@ EDA_LIST_DIALOG_BASE::EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerMain->Add( m_sdbSizer, 0, wxALIGN_RIGHT, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
