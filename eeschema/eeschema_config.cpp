@@ -275,6 +275,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_showAllPins );
     dlg.SetEnableMiddleButtonPan( m_canvas->GetEnableMiddleButtonPan() );
+    dlg.SetEnableZoomNoCenter( m_canvas->GetEnableZoomNoCenter() );
     dlg.SetMiddleButtonPanLimited( m_canvas->GetMiddleButtonPanLimited() );
     dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
     dlg.SetEnableHVBusOrientation( GetForceHVLines() );
@@ -309,6 +310,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     SetGridVisibility( dlg.GetShowGrid() );
     m_showAllPins = dlg.GetShowHiddenPins();
     m_canvas->SetEnableMiddleButtonPan( dlg.GetEnableMiddleButtonPan() );
+    m_canvas->SetEnableZoomNoCenter( dlg.GetEnableZoomNoCenter() );
     m_canvas->SetMiddleButtonPanLimited( dlg.GetMiddleButtonPanLimited() );
     m_canvas->SetEnableAutoPan( dlg.GetEnableAutoPan() );
     SetForceHVLines( dlg.GetEnableHVBusOrientation() );

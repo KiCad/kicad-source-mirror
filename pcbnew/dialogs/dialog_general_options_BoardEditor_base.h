@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
@@ -72,6 +74,7 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Track_DoubleSegm_Ctrl;
 		wxRadioBox* m_MagneticPadOptCtrl;
 		wxRadioBox* m_MagneticTrackOptCtrl;
+		wxCheckBox* m_ZoomNoCenterOpt;
 		wxCheckBox* m_MiddleButtonPANOpt;
 		wxCheckBox* m_OptMiddleButtonPanLimited;
 		wxCheckBox* m_AutoPANOpt;

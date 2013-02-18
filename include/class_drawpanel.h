@@ -71,6 +71,7 @@ private:
 
     bool m_abortRequest;          ///< Flag used to abort long commands.
 
+    bool m_enableZoomNoCenter;    ///< True to enable zooming around the crosshair instead of the center
     bool m_enableMiddleButtonPan; ///< True to enable middle mouse button panning.
     bool m_panScrollbarLimits;    ///< has meaning only if m_enableMiddleButtonPan = true
                                   ///< true to limit panning to scrollbar current limits
@@ -133,6 +134,10 @@ public:
     bool GetEnableMiddleButtonPan() const { return m_enableMiddleButtonPan; }
 
     void SetEnableMiddleButtonPan( bool aEnable ) { m_enableMiddleButtonPan = aEnable; }
+
+    bool GetEnableZoomNoCenter() const { return m_enableZoomNoCenter; }
+
+    void SetEnableZoomNoCenter( bool aEnable ) { m_enableZoomNoCenter = aEnable; }
 
     bool GetMiddleButtonPanLimited() const { return m_panScrollbarLimits; }
 
@@ -319,6 +324,18 @@ public:
      * warps the cursor to the current cross hair position.
      */
     void MoveCursorToCrossHair();
+    
+    /**
+     * Function ToDeviceXY
+     * transforms logical to device coordinates
+     */
+    wxPoint ToDeviceXY( const wxPoint& pos );
+
+    /**
+     * Function ToLogicalXY
+     * transforms device to logical coordinates
+     */
+    wxPoint ToLogicalXY( const wxPoint& pos );
 
     /**
      * Function MoveCursor
