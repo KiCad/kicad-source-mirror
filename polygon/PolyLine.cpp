@@ -1,7 +1,8 @@
 // PolyLine.cpp ... implementation of CPolyLine class from FreePCB.
 
 //
-// implementation for kicad and kbool polygon clipping library
+// implementation for kicad, using clipper polygon clipping library
+// for transformations not handled (at least for Kicad) by boost::polygon
 //
 #include <cmath>
 #include <vector>
