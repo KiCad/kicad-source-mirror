@@ -44,7 +44,7 @@
             <property name="pos"></property>
             <property name="size"></property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
-            <property name="subclass"></property>
+            <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Schematic Editor Options</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -93,7 +93,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">12</property>
-                    <property name="flag"></property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -266,7 +266,7 @@
                                             <property name="orient">wxHORIZONTAL</property>
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="1">
-                                                <property name="border">12</property>
+                                                <property name="border">6</property>
                                                 <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxBoxSizer" expanded="1">
@@ -288,7 +288,7 @@
                                                             <property name="name">fgSizer1</property>
                                                             <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                             <property name="permission">none</property>
-                                                            <property name="rows">8</property>
+                                                            <property name="rows">9</property>
                                                             <property name="vgap">0</property>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">3</property>
@@ -2202,7 +2202,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Auto save time interval:</property>
+                                                                    <property name="label">Auto save &amp;time interval:</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2467,7 +2467,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Show g&amp;rid</property>
+                                                                    <property name="label">Show gr&amp;id</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2611,7 +2611,7 @@
                                                                 </object>
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
-                                                                <property name="border">5</property>
+                                                                <property name="border">3</property>
                                                                 <property name="flag">wxALL</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxCheckBox" expanded="1">
@@ -2643,7 +2643,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Zoom off center</property>
+                                                                    <property name="label">Do not center and &amp;warp cursor on zoom</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2731,7 +2731,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">xwID_ANY</property>
-                                                                    <property name="label">Enable middle mouse button panning</property>
+                                                                    <property name="label">Use &amp;middle mouse button to pan</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2819,7 +2819,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Middle mouse button panning limited</property>
+                                                                    <property name="label">&amp;Limit panning to scroll size</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2907,7 +2907,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Enable automatic &amp;panning</property>
+                                                                    <property name="label">Pan while moving ob&amp;ject</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -3140,26 +3140,16 @@
                                                             </object>
                                                         </object>
                                                     </object>
-                                                    <object class="sizeritem" expanded="0">
-                                                        <property name="border">10</property>
-                                                        <property name="flag">wxALL|wxEXPAND</property>
-                                                        <property name="proportion">1</property>
-                                                        <object class="spacer" expanded="0">
-                                                            <property name="height">0</property>
-                                                            <property name="permission">protected</property>
-                                                            <property name="width">0</property>
-                                                        </object>
-                                                    </object>
                                                 </object>
                                             </object>
                                         </object>
                                     </object>
                                 </object>
-                                <object class="notebookpage" expanded="0">
+                                <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Template Field Names</property>
                                     <property name="select">0</property>
-                                    <object class="wxPanel" expanded="0">
+                                    <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -3233,7 +3223,7 @@
                                         <event name="OnSetFocus"></event>
                                         <event name="OnSize"></event>
                                         <event name="OnUpdateUI"></event>
-                                        <object class="wxBoxSizer" expanded="0">
+                                        <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizer6</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -4759,7 +4749,7 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
-                            <property name="border">12</property>
+                            <property name="border">6</property>
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxStdDialogButtonSizer" expanded="0">

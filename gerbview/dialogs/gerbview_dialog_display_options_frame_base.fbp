@@ -42,7 +42,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_DISPLAY_OPTIONS_BASE</property>
             <property name="pos"></property>
-            <property name="size">446,330</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Gerbview Options</property>
@@ -102,8 +102,8 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
-                            <property name="proportion">0</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bLeftSizer</property>
@@ -127,7 +127,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;No Display&quot; &quot;Display&quot;</property>
+                                        <property name="choices">&quot;Rectangular&quot; &quot;Polar&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -142,7 +142,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Display Polar Coord</property>
+                                        <property name="label">Coordinates</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -217,7 +217,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Inches&quot; &quot;millimeters&quot;</property>
+                                        <property name="choices">&quot;Inches&quot; &quot;Millimeters&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -471,8 +471,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
-                            <property name="proportion">0</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bMiddleSizer</property>
@@ -511,7 +511,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Lines:</property>
+                                        <property name="label">Lines</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -601,7 +601,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Spots:</property>
+                                        <property name="label">Pads</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -691,7 +691,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Polygons:</property>
+                                        <property name="label">Polygons</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -752,18 +752,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag"></property>
-                            <property name="proportion">0</property>
-                            <object class="spacer" expanded="1">
-                                <property name="height">20</property>
-                                <property name="permission">protected</property>
-                                <property name="width">20</property>
-                            </object>
-                        </object>
-                        <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="proportion">2</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bRightSizer</property>
@@ -787,7 +777,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Full size. Do not show page limits&quot; &quot;Full size&quot; &quot;Size A4&quot; &quot;Size A3&quot; &quot;Size A2&quot; &quot;Size A&quot; &quot;Size B&quot; &quot;Size C&quot;</property>
+                                        <property name="choices">&quot;Full size without limits&quot; &quot;Full size&quot; &quot;Size A4&quot; &quot;Size A3&quot; &quot;Size A2&quot; &quot;Size A&quot; &quot;Size B&quot; &quot;Size C&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -802,7 +792,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Show Page Limits:</property>
+                                        <property name="label">Page</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -865,7 +855,7 @@
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Pan:</property>
+                                        <property name="label">Pan and Zoom</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">bLeftBottomSizer</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -873,7 +863,7 @@
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxLEFT|wxRIGHT|wxTOP</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="1">
                                                 <property name="BottomDockable">1</property>
@@ -904,7 +894,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Zoom off center</property>
+                                                <property name="label">Do not center and warp cursor on zoom</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -961,7 +951,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag">wxALL</property>
+                                            <property name="flag">wxLEFT|wxRIGHT|wxTOP</property>
                                             <property name="proportion">0</property>
                                             <object class="wxCheckBox" expanded="0">
                                                 <property name="BottomDockable">1</property>
@@ -992,7 +982,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Middle Button PAN Enabled</property>
+                                                <property name="label">Use middle mouse button to pan</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1080,7 +1070,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Middle Button PAN Limited</property>
+                                                <property name="label">Limit panning to scroll size</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1143,7 +1133,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
+                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticLine" expanded="1">
                         <property name="BottomDockable">1</property>
