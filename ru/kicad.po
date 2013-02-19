@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-17 10:09+0300\n"
-"PO-Revision-Date: 2013-02-17 10:11+0300\n"
+"POT-Creation-Date: 2013-02-19 07:16+0300\n"
+"PO-Revision-Date: 2013-02-19 07:21+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: \n"
@@ -4248,78 +4248,86 @@ msgid "Show hi&dden pins"
 msgstr "Показать скрытые выводы"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:158
-msgid "Enable middle mouse button panning"
-msgstr "Включить масштабирование средней кнопкой мыши"
+msgid "Zoom off center"
+msgstr "Масштаб без центрирования"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:159
-msgid "Use middle mouse button dragging to pan"
-msgstr "Использовать среднюю кнопку мыши для масштабирования"
+msgid "Keep the cursor at its current location when zooming"
+msgstr "Сохранять курсор в текущем положении при масштабировании"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:163
-msgid "Middle mouse button panning limited"
-msgstr "Масштабирование средней кнопкой мыши ограничено"
+msgid "Enable middle mouse button panning"
+msgstr "Включить панорамирование средней кнопкой мыши"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:164
-msgid "Middle mouse button panning limited by current scrollbar size"
-msgstr "Масштабирование средней кнопкой мыши ограничено размером полосы прокрутки"
+msgid "Use middle mouse button dragging to pan"
+msgstr "Использовать среднюю кнопку мыши для панорамирования"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:168
+msgid "Middle mouse button panning limited"
+msgstr "Панорамирование средней кнопкой мыши ограничено"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:169
+msgid "Middle mouse button panning limited by current scrollbar size"
+msgstr "Панорамирование средней кнопкой мыши ограничено размером полосы прокрутки"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:173
 msgid "Enable automatic &panning"
 msgstr "Вкл. автопанораму"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:171
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:176
 msgid "Allow buses and wires to be placed in H or V &orientation only"
 msgstr "Цепи и шины только в гориз. и верт. ориентации"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:174
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:179
 msgid "Show p&age limits"
 msgstr "Показать границы страницы"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:190
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:195
 msgid "General Options"
 msgstr "Общие настройки"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:192
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:197
 msgid "User defined field names for schematic components. "
 msgstr "Заданные пользователем имена полей для компонентов схемы."
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:200
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:205
 msgid "Please enter fieldnames which you want presented in the component fieldname (property) editors.  Names may not include (, ), or \" characters."
 msgstr "Введите имена полей, которые будут представлены в редакторе полей компонента.  Имена не должны включать символы (, ), или \"."
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:216
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:221
 msgid "Custom field 1"
 msgstr "Пользовательское поле 1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:223
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:229
 msgid "Custom field 2"
 msgstr "Пользовательское поле 2"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:230
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:237
 msgid "Custom field 3"
 msgstr "Пользовательское поле 3"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:237
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:245
 msgid "Custom field 4"
 msgstr "Пользовательское поле 4"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:244
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:253
 msgid "Custom field 5"
 msgstr "Пользовательское поле 5"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:251
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:261
 msgid "Custom field 6"
 msgstr "Пользовательское поле 6"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:258
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:269
 msgid "Custom field 7"
 msgstr "Пользовательское поле 7"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:265
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:277
 msgid "Custom field 8"
 msgstr "Пользовательское поле 8"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:282
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:295
 msgid "Template Field Names"
 msgstr "Шаблон имен полей"
 
@@ -5637,13 +5645,13 @@ msgstr "Показать номер конт.пл."
 msgid "Pan:"
 msgstr "Масштабирование:"
 
-#: cvpcb/dialogs/dialog_display_options_base.cpp:58
+#: cvpcb/dialogs/dialog_display_options_base.cpp:63
 msgid "Middle Button PAN Enabled"
-msgstr "Масштабирование средней кнопкой включено"
+msgstr "Включить панорамирование средней кнопкой мыши"
 
-#: cvpcb/dialogs/dialog_display_options_base.cpp:61
+#: cvpcb/dialogs/dialog_display_options_base.cpp:66
 msgid "Middle Button PAN Limited"
-msgstr "Масштабирование средней кнопкой выключено"
+msgstr "Панорамирование средней кнопкой мыши ограничено"
 
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:20
 msgid "Footprint library files"
@@ -6992,7 +7000,7 @@ msgstr "Doc файл"
 msgid "Unknown MIME type for doc file <%s>"
 msgstr "Неизвестный MIME-тип для файла документации <%s>"
 
-#: common/drawframe.cpp:289
+#: common/drawframe.cpp:290
 msgid "Show grid"
 msgstr "Показать сетку"
 
@@ -7144,18 +7152,6 @@ msgstr "ошибка записи в файл '%s'"
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER ошибка записи"
 
-#: common/fp_lib_id.cpp:167
-msgid "Illegal character found in FP_LIB_ID string"
-msgstr "неправильный символ найден в FP_LIB_ID строке"
-
-#: common/fp_lib_id.cpp:267
-msgid "Illegal character found in logical library name"
-msgstr "неправильный символ найден в логическом имени библиотеки"
-
-#: common/fp_lib_id.cpp:284
-msgid "Illegal character found in revision"
-msgstr "неправильный символ найден в ревизии"
-
 #: common/class_marker_base.cpp:177
 msgid "Marker Info"
 msgstr "Информация о маркере"
@@ -7297,19 +7293,19 @@ msgstr "Горячие клавиши"
 msgid "Hotkeys configuration and preferences"
 msgstr "Настройка горячих клавиш"
 
-#: common/zoom.cpp:197
+#: common/zoom.cpp:222
 msgid "Zoom select"
 msgstr "Выбор масштаба"
 
-#: common/zoom.cpp:210
+#: common/zoom.cpp:235
 msgid "Zoom: "
 msgstr "Масштаб: "
 
-#: common/zoom.cpp:221
+#: common/zoom.cpp:246
 msgid "Grid Select"
 msgstr "Выбор сетки"
 
-#: common/zoom.cpp:234
+#: common/zoom.cpp:259
 msgid "User Grid"
 msgstr "Сетка пользователя"
 
@@ -7328,6 +7324,14 @@ msgstr "в"
 #: common/fpid.cpp:167
 msgid "Illegal character found in FPID string"
 msgstr "неправильный символ найден в FPID строке"
+
+#: common/fpid.cpp:267
+msgid "Illegal character found in logical library name"
+msgstr "неправильный символ найден в логическом имени библиотеки"
+
+#: common/fpid.cpp:284
+msgid "Illegal character found in revision"
+msgstr "неправильный символ найден в ревизии"
 
 #: common/selcolor.cpp:66
 msgid "Colors"
@@ -9025,6 +9029,7 @@ msgid "Full Len"
 msgstr "Полная длина"
 
 #: pcbnew/class_track.cpp:985
+#: pcbnew/class_netinfo_item.cpp:173
 msgid "In Package"
 msgstr "В корпусе"
 
@@ -13487,7 +13492,6 @@ msgstr ""
 "в полярных координатах (угол и расстояние)"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:33
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:43
 msgid "Millimeters"
 msgstr "Миллиметры"
 
@@ -13625,11 +13629,11 @@ msgstr "Притягивающая дорожка"
 msgid "Control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr "Управление захватом (притяжением) курсора к центру дорожки при нахождении курсора на дорожке"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:162
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:167
 msgid "Auto PAN"
 msgstr "АвтоПАН"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:163
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:168
 msgid "Allows auto pan when creating a track, or moving an item."
 msgstr "Разрешает автопанорамирование при создании дорожек и перемещении элементов."
 
@@ -16988,7 +16992,7 @@ msgstr "Свойства компонента"
 msgid "Library Text Properties"
 msgstr "Свойства текста библиотеки компонентов"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.h:118
+#: eeschema/dialogs/dialog_eeschema_options_base.h:119
 msgid "Schematic Editor Options"
 msgstr "Параметры редактора схем"
 
@@ -17016,7 +17020,7 @@ msgstr "Сохранить фал соответствия компоненто�
 msgid "Save the component/footprint link file (.cmp file) with a new name"
 msgstr "Сохранить файл соответствий компонентов и посадочных мест(.cmp file) с новым именем"
 
-#: cvpcb/dialogs/dialog_display_options_base.h:63
+#: cvpcb/dialogs/dialog_display_options_base.h:66
 msgid "Display Options"
 msgstr "Параметры отображения"
 
@@ -17024,7 +17028,7 @@ msgstr "Параметры отображения"
 msgid "Page Borders"
 msgstr "Рамка страницы"
 
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:62
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:65
 msgid "Gerbview Options"
 msgstr "Параметры Gerbview"
 
@@ -17056,7 +17060,7 @@ msgstr "Увеличить плату по размеру экрана"
 msgid "Redraw the screen of the board"
 msgstr "Перерисовать плате на экране"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:91
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:94
 msgid "General settings"
 msgstr "Общие настройки"
 
@@ -17163,6 +17167,9 @@ msgstr "Параметры стабилизатора"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Калькулятор для печатных плат"
+
+#~ msgid "Illegal character found in FP_LIB_ID string"
+#~ msgstr "неправильный символ найден в FP_LIB_ID строке"
 
 #~ msgid ""
 #~ "Component was modified!\n"
