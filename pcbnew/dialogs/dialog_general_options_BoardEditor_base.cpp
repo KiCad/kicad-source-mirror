@@ -47,32 +47,37 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	bLeftSizer->Add( m_CursorShape, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerUpper->Add( bLeftSizer, 3, wxALL|wxEXPAND, 5 );
+	bSizerUpper->Add( bLeftSizer, 2, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleLeftSizer;
 	bMiddleLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
 	m_staticTextmaxlinks = new wxStaticText( this, wxID_ANY, _("Maximum Links:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextmaxlinks->Wrap( -1 );
-	bMiddleLeftSizer->Add( m_staticTextmaxlinks, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticTextmaxlinks, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_MaxShowLinks = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 5, 1 );
 	m_MaxShowLinks->SetToolTip( _("Adjust the number of ratsnets shown from cursor to closest pads") );
 	
-	bMiddleLeftSizer->Add( m_MaxShowLinks, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_MaxShowLinks, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_staticTextautosave = new wxStaticText( this, wxID_ANY, _("Auto Save (minutes):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextautosave->Wrap( -1 );
-	bMiddleLeftSizer->Add( m_staticTextautosave, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_staticTextautosave, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_SaveTime = new wxSpinCtrl( this, wxID_ANY, wxT("0"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 60, 0 );
 	m_SaveTime->SetToolTip( _("Delay after the first change to create a backup file of the board on disk.") );
 	
-	bMiddleLeftSizer->Add( m_SaveTime, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_SaveTime, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_staticTextRotationAngle = new wxStaticText( this, wxID_ANY, _("Rotation Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotationAngle->Wrap( -1 );
-	bMiddleLeftSizer->Add( m_staticTextRotationAngle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	wxString m_RotationAngleChoices[] = { _("45"), _("90") };
 	int m_RotationAngleNChoices = sizeof( m_RotationAngleChoices ) / sizeof( wxString );
@@ -80,10 +85,10 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	m_RotationAngle->SetSelection( 0 );
 	m_RotationAngle->SetToolTip( _("Footprints rotation increment, for rotate menu or hot key.") );
 	
-	bMiddleLeftSizer->Add( m_RotationAngle, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	fgSizer1->Add( m_RotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	bSizerUpper->Add( bMiddleLeftSizer, 3, wxALL|wxEXPAND, 5 );
+	bMiddleLeftSizer->Add( fgSizer1, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* bMiddleRightBoxSizer;
 	bMiddleRightBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
@@ -126,7 +131,10 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	bMiddleRightBoxSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxALL, 5 );
 	
 	
-	bSizerUpper->Add( bMiddleRightBoxSizer, 4, wxALL|wxEXPAND, 5 );
+	bMiddleLeftSizer->Add( bMiddleRightBoxSizer, 4, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizerUpper->Add( bMiddleLeftSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -148,9 +156,9 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	bRightSizer->Add( m_MagneticTrackOptCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer2PAN;
-	sbSizer2PAN = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan") ), wxVERTICAL );
+	sbSizer2PAN = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
-	m_ZoomNoCenterOpt = new wxCheckBox( this, wxID_ANY, _("Do not center and warp mouse on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZoomNoCenterOpt = new wxCheckBox( this, wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ZoomNoCenterOpt->SetToolTip( _("Keep the cursor at its current location when zooming") );
 	
 	sbSizer2PAN->Add( m_ZoomNoCenterOpt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
@@ -174,10 +182,10 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	bRightSizer->Add( sbSizer2PAN, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerUpper->Add( bRightSizer, 5, wxALL|wxEXPAND, 5 );
+	bSizerUpper->Add( bRightSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( bSizerUpper, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerUpper, 0, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );

@@ -22,13 +22,13 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_PolarDisplayChoices[] = { _("No Display"), _("Display") };
+	wxString m_PolarDisplayChoices[] = { _("Rectangular"), _("Polar") };
 	int m_PolarDisplayNChoices = sizeof( m_PolarDisplayChoices ) / sizeof( wxString );
-	m_PolarDisplay = new wxRadioBox( this, wxID_ANY, _("Display Polar Coord"), wxDefaultPosition, wxDefaultSize, m_PolarDisplayNChoices, m_PolarDisplayChoices, 1, wxRA_SPECIFY_COLS );
+	m_PolarDisplay = new wxRadioBox( this, wxID_ANY, _("Coordinates"), wxDefaultPosition, wxDefaultSize, m_PolarDisplayNChoices, m_PolarDisplayChoices, 1, wxRA_SPECIFY_COLS );
 	m_PolarDisplay->SetSelection( 0 );
 	bLeftSizer->Add( m_PolarDisplay, 0, wxALL|wxEXPAND, 5 );
 	
-	wxString m_BoxUnitsChoices[] = { _("Inches"), _("millimeters") };
+	wxString m_BoxUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_BoxUnitsNChoices = sizeof( m_BoxUnitsChoices ) / sizeof( wxString );
 	m_BoxUnits = new wxRadioBox( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, m_BoxUnitsNChoices, m_BoxUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_BoxUnits->SetSelection( 0 );
@@ -45,69 +45,66 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	bLeftSizer->Add( m_OptDisplayDCodes, 0, wxALL, 5 );
 	
 	
-	bUpperSizer->Add( bLeftSizer, 0, wxEXPAND, 5 );
+	bUpperSizer->Add( bLeftSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bMiddleSizer;
 	bMiddleSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxString m_OptDisplayLinesChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayLinesNChoices = sizeof( m_OptDisplayLinesChoices ) / sizeof( wxString );
-	m_OptDisplayLines = new wxRadioBox( this, wxID_ANY, _("Lines:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayLinesNChoices, m_OptDisplayLinesChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayLines = new wxRadioBox( this, wxID_ANY, _("Lines"), wxDefaultPosition, wxDefaultSize, m_OptDisplayLinesNChoices, m_OptDisplayLinesChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayLines->SetSelection( 1 );
 	bMiddleSizer->Add( m_OptDisplayLines, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayFlashedItemsChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayFlashedItemsNChoices = sizeof( m_OptDisplayFlashedItemsChoices ) / sizeof( wxString );
-	m_OptDisplayFlashedItems = new wxRadioBox( this, wxID_ANY, _("Spots:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayFlashedItemsNChoices, m_OptDisplayFlashedItemsChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayFlashedItems = new wxRadioBox( this, wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, m_OptDisplayFlashedItemsNChoices, m_OptDisplayFlashedItemsChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayFlashedItems->SetSelection( 1 );
 	bMiddleSizer->Add( m_OptDisplayFlashedItems, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayPolygonsChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayPolygonsNChoices = sizeof( m_OptDisplayPolygonsChoices ) / sizeof( wxString );
-	m_OptDisplayPolygons = new wxRadioBox( this, wxID_ANY, _("Polygons:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayPolygonsNChoices, m_OptDisplayPolygonsChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayPolygons = new wxRadioBox( this, wxID_ANY, _("Polygons"), wxDefaultPosition, wxDefaultSize, m_OptDisplayPolygonsNChoices, m_OptDisplayPolygonsChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayPolygons->SetSelection( 1 );
 	bMiddleSizer->Add( m_OptDisplayPolygons, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bUpperSizer->Add( bMiddleSizer, 0, wxEXPAND, 5 );
-	
-	
-	bUpperSizer->Add( 20, 20, 0, 0, 5 );
+	bUpperSizer->Add( bMiddleSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_ShowPageLimitsChoices[] = { _("Full size. Do not show page limits"), _("Full size"), _("Size A4"), _("Size A3"), _("Size A2"), _("Size A"), _("Size B"), _("Size C") };
+	wxString m_ShowPageLimitsChoices[] = { _("Full size without limits"), _("Full size"), _("Size A4"), _("Size A3"), _("Size A2"), _("Size A"), _("Size B"), _("Size C") };
 	int m_ShowPageLimitsNChoices = sizeof( m_ShowPageLimitsChoices ) / sizeof( wxString );
-	m_ShowPageLimits = new wxRadioBox( this, wxID_ANY, _("Show Page Limits:"), wxDefaultPosition, wxDefaultSize, m_ShowPageLimitsNChoices, m_ShowPageLimitsChoices, 1, wxRA_SPECIFY_COLS );
+	m_ShowPageLimits = new wxRadioBox( this, wxID_ANY, _("Page"), wxDefaultPosition, wxDefaultSize, m_ShowPageLimitsNChoices, m_ShowPageLimitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_ShowPageLimits->SetSelection( 0 );
 	bRightSizer->Add( m_ShowPageLimits, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* bLeftBottomSizer;
-	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
+	bLeftBottomSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
-	m_OptZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Zoom off center"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
 	
-	bLeftBottomSizer->Add( m_OptZoomNoCenter, 0, wxALL, 5 );
+	bLeftBottomSizer->Add( m_OptZoomNoCenter, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_OptMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftBottomSizer->Add( m_OptMiddleButtonPan, 0, wxALL, 5 );
+	m_OptMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	bLeftBottomSizer->Add( m_OptMiddleButtonPan, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Limited"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_OptMiddleButtonPanLimited = new wxCheckBox( this, wxID_ANY, _("Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
 	bLeftBottomSizer->Add( m_OptMiddleButtonPanLimited, 0, wxALL, 5 );
 	
 	
 	bRightSizer->Add( bLeftBottomSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
-	bUpperSizer->Add( bRightSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bRightSizer, 2, wxALL|wxEXPAND, 5 );
 	
 	
 	bDialogSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bDialogSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bDialogSizer->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -121,6 +118,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	this->SetSizer( bDialogSizer );
 	this->Layout();
+	bDialogSizer->Fit( this );
 	
 	// Connect Events
 	m_OptMiddleButtonPan->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DISPLAY_OPTIONS_BASE::OnMiddleBtnPanEnbl ), NULL, this );

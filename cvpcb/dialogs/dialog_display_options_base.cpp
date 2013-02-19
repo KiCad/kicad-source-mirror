@@ -24,13 +24,13 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	
 	wxString m_EdgesDisplayOptionChoices[] = { _("Line"), _("Filled"), _("Sketch") };
 	int m_EdgesDisplayOptionNChoices = sizeof( m_EdgesDisplayOptionChoices ) / sizeof( wxString );
-	m_EdgesDisplayOption = new wxRadioBox( this, ID_EDGE_SELECT, _("Edges:"), wxDefaultPosition, wxDefaultSize, m_EdgesDisplayOptionNChoices, m_EdgesDisplayOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_EdgesDisplayOption = new wxRadioBox( this, ID_EDGE_SELECT, _("Edges"), wxDefaultPosition, wxDefaultSize, m_EdgesDisplayOptionNChoices, m_EdgesDisplayOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_EdgesDisplayOption->SetSelection( 0 );
 	bSizerLeft->Add( m_EdgesDisplayOption, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_TextDisplayOptionChoices[] = { _("Line"), _("Filled"), _("Sketch") };
 	int m_TextDisplayOptionNChoices = sizeof( m_TextDisplayOptionChoices ) / sizeof( wxString );
-	m_TextDisplayOption = new wxRadioBox( this, ID_TEXT_SELECT, _("Texts:"), wxDefaultPosition, wxDefaultSize, m_TextDisplayOptionNChoices, m_TextDisplayOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_TextDisplayOption = new wxRadioBox( this, ID_TEXT_SELECT, _("Text"), wxDefaultPosition, wxDefaultSize, m_TextDisplayOptionNChoices, m_TextDisplayOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextDisplayOption->SetSelection( 0 );
 	bSizerLeft->Add( m_TextDisplayOption, 1, wxALL|wxEXPAND, 5 );
 	
@@ -41,10 +41,10 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerPads;
-	sbSizerPads = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pads:") ), wxVERTICAL );
+	sbSizerPads = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pads") ), wxVERTICAL );
 	
 	m_IsShowPadFill = new wxCheckBox( this, ID_PADFILL_OPT, _("Fill &pad"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerPads->Add( m_IsShowPadFill, 0, wxALL|wxEXPAND, 5 );
+	sbSizerPads->Add( m_IsShowPadFill, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_IsShowPadNum = new wxCheckBox( this, wxID_ANY, _("Show pad &number"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPads->Add( m_IsShowPadNum, 0, wxALL|wxEXPAND, 5 );
@@ -53,24 +53,24 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	bSizerRight->Add( sbSizerPads, 1, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizerViewOpt;
-	sbSizerViewOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan:") ), wxVERTICAL );
+	sbSizerViewOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
-	m_IsZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Zoom off center"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_IsZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Do not center and warp cusor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_IsZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
 	
-	sbSizerViewOpt->Add( m_IsZoomNoCenter, 0, wxALL, 5 );
+	sbSizerViewOpt->Add( m_IsZoomNoCenter, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_IsMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Enabled"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerViewOpt->Add( m_IsMiddleButtonPan, 0, wxALL|wxEXPAND, 5 );
+	m_IsMiddleButtonPan = new wxCheckBox( this, wxID_ANY, _("Use middle mouse button to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerViewOpt->Add( m_IsMiddleButtonPan, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_IsMiddleButtonPanLimited = new wxCheckBox( this, wxID_ANY, _("Middle Button PAN Limited"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerViewOpt->Add( m_IsMiddleButtonPanLimited, 0, wxALL, 5 );
+	m_IsMiddleButtonPanLimited = new wxCheckBox( this, wxID_ANY, _("Limit panning to scroll size"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerViewOpt->Add( m_IsMiddleButtonPanLimited, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerRight->Add( sbSizerViewOpt, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bUpperSizer->Add( bSizerRight, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bSizerRight, 2, wxEXPAND, 5 );
 	
 	
 	bSizerMain->Add( bUpperSizer, 1, wxEXPAND, 5 );
@@ -92,6 +92,7 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	// Connect Events
 	m_IsMiddleButtonPan->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::OnMiddleBtnPanEnbl ), NULL, this );
