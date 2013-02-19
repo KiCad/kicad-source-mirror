@@ -300,7 +300,10 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
              * with outlines thickness = 0 is a faster than
              * just draw filled polygons but with outlines thickness = m_ZoneMinThickness
              * So DO NOT use draw filled polygons with outlines having a thickness  > 0
-             * Note: Extra segments ( added by kbool to joint holes with external outline) are not drawn
+             * Note: Extra segments ( added to joint holes with external outline) flagged by
+             * m_utility != 0 are not drawn
+             * Note not all polygon libraries provide a flag for these extra-segments, therefore
+             * the m_utility member can be always 0
              */
             {
                 // Draw outlines:

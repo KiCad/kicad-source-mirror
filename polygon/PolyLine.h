@@ -17,7 +17,6 @@
 
 #include <vector>
 
-//#include <kbool/include/kbool/booleng.h>
 #include <pad_shapes.h>
 #include <wx/gdicmn.h>      // for wxPoint definition
 
