@@ -363,8 +363,9 @@ public:
     /**
      * Function DrawPinTexts
      * puts the pin number and pin text info, given the pin line coordinates.
-     * The line must be vertical or horizontal.  If PinText == NULL nothing is printed.
-     * If PinNum = 0 no number is printed.  The current zoom factor is taken into account.
+     * The line must be vertical or horizontal.
+     * If DrawPinName == false the pin name is not printed.
+     * If DrawPinNum = false the pin number is not printed.
      * If TextInside then the text is been put inside,otherwise all is drawn outside.
      * Pin Name:    substring between '~' is negated
      * DrawMode = GR_OR, XOR ...
@@ -378,8 +379,6 @@ public:
      * plots the pin number and pin text info, given the pin line coordinates.
      * Same as DrawPinTexts((), but output is the plotter
      * The line must be vertical or horizontal.
-     * If PinNext == NULL nothing is printed.
-     * Current Zoom factor is taken into account.
      * If TextInside then the text is been put inside (moving from x1, y1 in
      * the opposite direction to x2,y2), otherwise all is drawn outside.
      */

@@ -1308,8 +1308,8 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         aPlotter->Circle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
                                    MapY1 * INVERT_PIN_RADIUS + y1 ),
                           INVERT_PIN_RADIUS * 2, // diameter
-                          NO_FILL,               // fill
-                          -1 );                  // width
+                          NO_FILL,               // fill option
+                          GetPenSize() );       // width
 
         aPlotter->MoveTo( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
                                     MapY1 * INVERT_PIN_RADIUS * 2 + y1 ) );
