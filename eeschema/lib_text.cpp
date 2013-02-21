@@ -318,7 +318,15 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     int t1  = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
     wxPoint pos = aTransform.TransformCoordinate( m_Pos ) + offset;
 
-    plotter->Text( pos, UNSPECIFIED_COLOR, m_Text,
+    // Get color
+    EDA_COLOR_T     color;
+
+    if( plotter->GetColorMode() )       // Used normal color or selected color
+        color = IsSelected() ? GetItemSelectedColor() : GetDefaultColor();
+    else
+        color = BLACK;
+
+    plotter->Text( pos, color, m_Text,
                    t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
                    m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                    GetPenSize(), m_Italic, m_Bold );

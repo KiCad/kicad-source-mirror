@@ -71,7 +71,9 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     int      UpperLimit = VARIABLE_BLOCK_START_POSITION;
 #endif
 
-    plotter->SetColor( BLACK );
+    EDA_COLOR_T      plotClr;
+    plotClr = plotter->GetColorMode() ? RED : BLACK;
+    plotter->SetColor( plotClr );
     plotter->SetCurrentLineWidth( PLOTTER::DEFAULT_LINE_WIDTH );
 
     // Plot edge.
@@ -150,7 +152,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
         case WS_PODPIS_LU:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            plotter->Text( pos, BLACK,
+            plotter->Text( pos, plotClr,
                            msg, TEXT_ORIENT_VERT, text_size,
                            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
                            PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -205,7 +207,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
 
         pos.x = ( ii - gxpas / 2 ) * iusPerMil;
         pos.y = ( ref.y + GRID_REF_W / 2 ) * iusPerMil;
-        plotter->Text( pos, BLACK,
+        plotter->Text( pos, plotClr,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                        PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -221,7 +223,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
         }
         pos.x = ( ii - gxpas / 2 ) * iusPerMil;
         pos.y = ( yg - GRID_REF_W / 2 ) * iusPerMil;
-        plotter->Text( pos, BLACK,
+        plotter->Text( pos, plotClr,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                        PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -247,7 +249,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
         }
         pos.x = ( ref.x + GRID_REF_W / 2 ) * iusPerMil;
         pos.y = ( ii - gypas / 2 ) * iusPerMil;
-        plotter->Text( pos, BLACK,
+        plotter->Text( pos, plotClr,
                        msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                        PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -264,7 +266,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
 
         pos.x = ( xg - GRID_REF_W / 2 ) * iusPerMil;
         pos.y = ( ii - gypas / 2 ) * iusPerMil;
-        plotter->Text( pos, BLACK, msg, TEXT_ORIENT_HORIZ, text_size,
+        plotter->Text( pos, plotClr, msg, TEXT_ORIENT_HORIZ, text_size,
                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                        PLOTTER::DEFAULT_LINE_WIDTH, false, false );
     }
@@ -310,7 +312,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             case WS_PODPIS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                plotter->Text( pos, BLACK,
+                plotter->Text( pos, plotClr,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -324,7 +326,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                     msg = WsItem->m_Legende;
                 if( aNumberOfSheets > 1 )
                     msg << aSheetNumber;
-                plotter->Text( pos, BLACK,
+                plotter->Text( pos, plotClr,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -334,17 +336,17 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 msg << aNumberOfSheets;
-                plotter->Text( pos, BLACK,
+                plotter->Text( pos, plotClr,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 break;
 
             case WS_COMPANY_NAME:
-            msg = aTitleBlock.GetCompany();
+                msg = aTitleBlock.GetCompany();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg, TEXT_ORIENT_HORIZ, text_size1_5,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -352,10 +354,10 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                 break;
 
             case WS_TITLE:
-            msg = aTitleBlock.GetTitle();
+                msg = aTitleBlock.GetTitle();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg, TEXT_ORIENT_HORIZ, text_size1_5,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -363,16 +365,16 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                 break;
 
             case WS_COMMENT1:
-            msg = aTitleBlock.GetComment1();
+                msg = aTitleBlock.GetComment1();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                     pos.x = (aPageInfo.GetLeftMarginMils() + 1260) * iusPerMil;
                     pos.y = (aPageInfo.GetTopMarginMils() + 270) * iusPerMil;
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg.GetData(), 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -380,10 +382,10 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                 break;
 
             case WS_COMMENT2:
-            msg = aTitleBlock.GetComment2();
+                msg = aTitleBlock.GetComment2();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -391,10 +393,10 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                 break;
 
             case WS_COMMENT3:
-            msg = aTitleBlock.GetComment3();
+                msg = aTitleBlock.GetComment3();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -402,10 +404,10 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                 break;
 
             case WS_COMMENT4:
-            msg = aTitleBlock.GetComment4();
+                msg = aTitleBlock.GetComment4();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg, TEXT_ORIENT_HORIZ, text_size,
                                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -440,13 +442,13 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             msg = aTitleBlock.GetComment1();
                 if( !msg.IsEmpty() )
                 {
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                     pos.x = (aPageInfo.GetLeftMarginMils() + 1260) * iusPerMil;
                     pos.y = (aPageInfo.GetTopMarginMils() + 270) * iusPerMil;
-                    plotter->Text( pos, BLACK,
+                    plotter->Text( pos, plotClr,
                                    msg, 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    PLOTTER::DEFAULT_LINE_WIDTH, false, false );
@@ -456,7 +458,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
             case WS_PODPIS_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                plotter->Text( pos, BLACK, msg, TEXT_ORIENT_HORIZ, text_size,
+                plotter->Text( pos, plotClr, msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 break;
@@ -465,7 +467,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 msg << aSheetNumber;
-                plotter->Text( pos, BLACK, msg, TEXT_ORIENT_HORIZ, text_size,
+                plotter->Text( pos, plotClr, msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                PLOTTER::DEFAULT_LINE_WIDTH, false, false );
                 break;
@@ -593,7 +595,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
 
         if( !msg.IsEmpty() )
         {
-            plotter->Text( pos, BLACK,
+            plotter->Text( pos, plotClr,
                            msg, TEXT_ORIENT_HORIZ, text_size,
                            GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                            PLOTTER::DEFAULT_LINE_WIDTH, bold, false );
