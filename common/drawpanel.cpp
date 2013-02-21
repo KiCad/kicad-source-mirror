@@ -877,7 +877,8 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
             cmd.SetId( ID_PAN_UP );
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_LEFT );
-        else if( event.AltDown() || m_enableZoomNoCenter)
+        else if( (event.ControlDown() && event.ShiftDown() )
+                 || m_enableZoomNoCenter)
             cmd.SetId( ID_OFFCENTER_ZOOM_IN );
         else
             cmd.SetId( ID_POPUP_ZOOM_IN );

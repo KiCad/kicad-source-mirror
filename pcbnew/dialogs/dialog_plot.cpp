@@ -159,7 +159,7 @@ void DIALOG_PLOT::Init_Dialog()
         if( !m_board->IsLayerEnabled( layer ) )
             continue;
 
-        layerList.push_back( layer );
+        m_layerList.push_back( layer );
         checkIndex = m_layerCheckListBox->Append( m_board->GetLayerName( layer ) );
 
         if( m_plotOpts.GetLayerSelection() & ( 1 << layer ) )
@@ -223,6 +223,68 @@ void DIALOG_PLOT::OnClose( wxCloseEvent& event )
     EndModal( 0 );
 }
 
+// A helper function to show a popup menu, when the dialog is right clicked.
+void DIALOG_PLOT::OnRightClick( wxMouseEvent& event )
+{
+    PopupMenu( m_popMenu );
+}
+
+// Select or deselect groups of layers in the layers list:
+#include <layers_id_colors_and_visibility.h>
+void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
+{
+    unsigned int    i;
+
+    switch( event.GetId() )
+    {
+        case ID_LAYER_FAB: // Select layers usually neede d to build a board
+            for( i = 0; i < m_layerList.size(); i++ )
+            {
+                long layermask = 1 << m_layerList[ i ];
+                if( ( layermask &
+                    ( ALL_CU_LAYERS | SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT |
+                      SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
+                      SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT ) )
+                    != 0 )
+                    m_layerCheckListBox->Check( i, true );
+                else
+                    m_layerCheckListBox->Check( i, false );
+
+            }
+            break;
+
+        case ID_SELECT_COPPER_LAYERS:
+            for( i = 0; i < m_layerList.size(); i++ )
+            {
+                if( m_layerList[i] <= LAST_COPPER_LAYER )
+                    m_layerCheckListBox->Check( i, true );
+
+            }
+            break;
+
+        case ID_DESELECT_COPPER_LAYERS:
+            for( i = 0; i < m_layerList.size(); i++ )
+            {
+                if( m_layerList[i] <= LAST_COPPER_LAYER )
+                    m_layerCheckListBox->Check( i, false );
+
+            }
+            break;
+
+        case ID_SELECT_ALL_LAYERS:
+            for( i = 0; i < m_layerList.size(); i++ )
+                m_layerCheckListBox->Check( i, true );
+            break;
+
+        case ID_DESELECT_ALL_LAYERS:
+            for( i = 0; i < m_layerList.size(); i++ )
+                m_layerCheckListBox->Check( i, false );
+            break;
+
+        default:
+            break;
+    }
+}
 
 void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 {
@@ -608,10 +670,10 @@ void DIALOG_PLOT::applyPlotSettings()
     long            selectedLayers = 0;
     unsigned int    i;
 
-    for( i = 0; i < layerList.size(); i++ )
+    for( i = 0; i < m_layerList.size(); i++ )
     {
         if( m_layerCheckListBox->IsChecked( i ) )
-            selectedLayers |= (1 << layerList[i]);
+            selectedLayers |= (1 << m_layerList[i]);
     }
 
     tempOptions.SetLayerSelection( selectedLayers );
