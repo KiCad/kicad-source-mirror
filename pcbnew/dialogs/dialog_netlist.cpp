@@ -274,5 +274,5 @@ void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal( -1 );
+    EndModal( wxID_CANCEL );
 }

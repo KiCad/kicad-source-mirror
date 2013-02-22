@@ -100,32 +100,39 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bUpperSizer->Add( bRightSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bMainSizer->Add( bUpperSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bUpperSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
+	wxBoxSizer* bLowerSizer;
+	bLowerSizer = new wxBoxSizer( wxVERTICAL );
+	
 	m_staticTextNetfilename = new wxStaticText( this, wxID_ANY, _("Netlist File:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNetfilename->Wrap( -1 );
-	bMainSizer->Add( m_staticTextNetfilename, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( m_staticTextNetfilename, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_NetlistFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_NetlistFilenameCtrl->SetMaxLength( 0 ); 
-	bMainSizer->Add( m_NetlistFilenameCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( m_NetlistFilenameCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	bMainSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MessageWindow = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
 	m_MessageWindow->SetMaxLength( 0 ); 
-	m_MessageWindow->SetMinSize( wxSize( -1,200 ) );
+	m_MessageWindow->SetMinSize( wxSize( -1,150 ) );
 	
-	bMainSizer->Add( m_MessageWindow, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLowerSizer->Add( m_MessageWindow, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bMainSizer->Add( bLowerSizer, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_NETLIST_FBP::OnOpenNetlistClick ), NULL, this );

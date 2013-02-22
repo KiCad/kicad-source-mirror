@@ -24,6 +24,7 @@
  */
 
 #include <cstring>
+#include <memory>
 #include <wx/wx.h>      // _()
 
 #include <fpid.h>
@@ -95,7 +96,7 @@ static int okRevision( const std::string& aField )
         strcpy( rev, "x/" );
         strcat( rev, aField.c_str() );
 
-        if( EndsWithRev( rev, rev + strlen(rev) ) == rev+2 )
+        if( EndsWithRev( rev, rev + strlen(rev), '/' ) == rev+2 )
             return -1;    // success
     }
 
@@ -108,8 +109,8 @@ static int okRevision( const std::string& aField )
 
 void FPID::clear()
 {
-    logical.clear();
-    footprintName.clear();
+    nickname.clear();
+    footprint.clear();
     revision.clear();
 }
 
@@ -118,7 +119,12 @@ int FPID::Parse( const std::string& aId )
 {
     clear();
 
-    const char* rev = EndsWithRev( aId );
+    size_t      cnt = aId.length() + 1;
+    char        tmp[cnt];  // C string for speed
+
+    std::strcpy( tmp, aId.c_str() );
+
+    const char* rev = EndsWithRev( tmp, tmp+aId.length(), '/' );
     size_t      revNdx;
     size_t      partNdx;
     int         offset;
@@ -137,10 +143,10 @@ int FPID::Parse( const std::string& aId )
         revNdx = aId.size();
     }
 
-    //=====<logical>==========================================
+    //=====<nickname>==========================================
     if( ( partNdx = aId.find( ':' ) ) != aId.npos )
     {
-        offset = SetLogicalLib( aId.substr( 0, partNdx ) );
+        offset = SetLibNickname( aId.substr( 0, partNdx ) );
 
         if( offset > -1 )
         {
@@ -153,6 +159,12 @@ int FPID::Parse( const std::string& aId )
     {
         partNdx = 0;
     }
+
+    //=====<footprint name>====================================
+    if( partNdx >= revNdx )
+        return partNdx;
+
+    SetFootprintName( aId.substr( partNdx, revNdx ) );
 
     return -1;
 }
@@ -173,13 +185,13 @@ FPID::FPID( const std::string& aId ) throw( PARSE_ERROR )
 }
 
 
-int FPID::SetLogicalLib( const std::string& aLogical )
+int FPID::SetLibNickname( const std::string& aLogical )
 {
     int offset = okLogical( aLogical );
 
     if( offset == -1 )
     {
-        logical = aLogical;
+        nickname = aLogical;
     }
 
     return offset;
@@ -192,12 +204,12 @@ int FPID::SetFootprintName( const std::string& aFootprintName )
 
     if( separation != -1 )
     {
-        logical = aFootprintName.substr( separation+1 );
-        return separation + (int) logical.size() + 1;
+        nickname = aFootprintName.substr( separation+1 );
+        return separation + (int) nickname.size() + 1;
     }
     else
     {
-        footprintName = aFootprintName;
+        footprint = aFootprintName;
     }
 
     return -1;
@@ -221,11 +233,13 @@ std::string FPID::Format() const
 {
     std::string  ret;
 
-    if( logical.size() )
+    if( nickname.size() )
     {
-        ret += logical;
+        ret += nickname;
         ret += ':';
     }
+
+    ret += footprint;
 
     if( revision.size() )
     {
@@ -252,7 +266,7 @@ std::string FPID::GetFootprintNameAndRev() const
 
 
 std::string FPID::Format( const std::string& aLogicalLib, const std::string& aFootprintName,
-                               const std::string& aRevision )
+                          const std::string& aRevision )
     throw( PARSE_ERROR )
 {
     std::string  ret;
@@ -315,10 +329,10 @@ void FPID::Test()
         FPID lpid( lpids[i] );  // parse
 
         // format
-        printf( "input:'%s'  full:'%s'  logical: %s  footprintName:'%s' rev:'%s'\n",
+        printf( "input:'%s'  full:'%s'  nickname: %s  footprint:'%s' rev:'%s'\n",
                 lpids[i],
                 lpid.Format().c_str(),
-                lpid.GetLogicalLib().c_str(),
+                lpid.GetLibNickname().c_str(),
                 lpid.GetFootprintName().c_str(),
                 lpid.GetRevision().c_str() );
     }

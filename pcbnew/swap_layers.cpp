@@ -7,6 +7,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
+#include <dialog_shim.h>
 
 #include <class_board.h>
 #include <class_track.h>
@@ -30,7 +31,7 @@ enum swap_layer_id {
 };
 
 
-class WinEDA_SwapLayerFrame : public wxDialog
+class WinEDA_SwapLayerFrame : public DIALOG_SHIM
 {
 private:
     PCB_BASE_FRAME*         m_Parent;
@@ -67,8 +68,8 @@ END_EVENT_TABLE()
 
 
 WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
-    wxDialog( parent, -1, _( "Swap Layers:" ), wxPoint( -1, -1 ),
-              wxDefaultSize, wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
+    DIALOG_SHIM( parent, -1, _( "Swap Layers:" ), wxPoint( -1, -1 ),
+                 wxDefaultSize, wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 {
     BOARD* board = parent->GetBoard();
 
