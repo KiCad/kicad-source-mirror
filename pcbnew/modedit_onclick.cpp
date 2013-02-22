@@ -120,9 +120,10 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_MODEDIT_DELETE_TOOL:
         if( ! no_item_edited )    // Item in edit, cannot delete it
             break;
+
         item = ModeditLocateAndDisplay();
 
-        if( item->Type() != PCB_MODULE_T ) // Cannot delete the module itself
+        if( item && item->Type() != PCB_MODULE_T ) // Cannot delete the module itself
         {
             SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
             RemoveStruct( item );
