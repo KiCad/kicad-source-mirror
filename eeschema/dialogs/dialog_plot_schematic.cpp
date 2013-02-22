@@ -77,8 +77,6 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
 // Initialize the dialog options:
 void DIALOG_PLOT_SCHEMATIC::initDlg()
 {
-    SetFocus();    // make the ESC work
-
     // Set paper size option
     m_PaperSizeOption->SetSelection( m_pageSizeSelect );
 
