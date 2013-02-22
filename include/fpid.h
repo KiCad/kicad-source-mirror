@@ -68,7 +68,7 @@ public:
      *
      * @param aId is a string to be parsed into the FPID object.
      */
-    FPID( const wxString& aId ) throw( PARSE_ERROR );
+    FPID( const std::string& aId ) throw( PARSE_ERROR );
 
     /**
      * Function Parse
@@ -78,15 +78,15 @@ public:
      * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the character offset into
      *               aId at which an error was detected.
      */
-    int Parse( const wxString& aId );
+    int Parse( const std::string& aId );
 
     /**
      * Function GetLibNickname
      * returns the logical library name  portion of a FPID.
      */
-    const wxString& GetLibNickname() const
+    const std::string& GetLibNickname() const
     {
-        return logical;
+        return nickname;
     }
 
     /**
@@ -96,25 +96,31 @@ public:
      *               into the parameter at which an error was detected, usually because it
      *               contained '/' or ':'.
      */
-    int SetLibNickname( const wxString& aNickname );
+    int SetLibNickname( const std::string& aNickname );
 
     /**
      * Function GetFootprintName
      * returns the footprint name, i.e. footprintName.
      */
-    const wxString& GetFootprintName() const;
+    const std::string& GetFootprintName() const;
 
     /**
      * Function SetFootprintName
      * overrides the footprint name portion of the FPID to @a aFootprintName
      */
-    void SetFootprintName( const wxString& aFootprintName );
+    int SetFootprintName( const std::string& aFootprintName );
+
+    int SetRevision( const std::string& aRevision );
+
+    const std::string& GetRevision() const { return revision; }
+
+    std::string GetFootprintNameAndRev() const;
 
     /**
      * Function Format
      * returns the fully formatted text of the FPID.
      */
-    wxString Format() const;
+    std::string Format() const;
 
     /**
      * Function Format
@@ -123,7 +129,8 @@ public:
      *
      * @throw PARSE_ERROR if any of the pieces are illegal.
      */
-    static wxString Format( const wxString& aLibNickname, const wxString& aFootprintName )
+    static std::string Format( const std::string& aLibNickname, const std::string& aFootprintName,
+                               const std::string& aRevision )
         throw( PARSE_ERROR );
 
     void clear();
@@ -133,8 +140,9 @@ public:
 #endif
 
 protected:
-    wxString    nickname;       ///< logical lib name or empty
-    wxString    footprint;      ///< The name of the footprint in the logical library.
+    std::string    nickname;       ///< The nickname of the footprint library or empty.
+    std::string    footprint;      ///< The name of the footprint in the logical library.
+    std::string    revision;       ///< The footprint revision.
 };
 
 

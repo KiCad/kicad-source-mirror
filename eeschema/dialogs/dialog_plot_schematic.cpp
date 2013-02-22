@@ -50,6 +50,7 @@
 // static members (static to remember last state):
 int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
 
+
 void SCH_EDIT_FRAME::PlotSchematic( wxCommandEvent& event )
 {
     DIALOG_PLOT_SCHEMATIC dlg( this );
@@ -62,7 +63,7 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
     DIALOG_PLOT_SCHEMATIC_BASE( parent )
 {
     m_parent = parent;
-    m_config   = wxGetApp().GetSettings();
+    m_config = wxGetApp().GetSettings();
 
     initDlg();
 
@@ -70,6 +71,7 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent ) :
 
     Centre();
 }
+
 
 
 // Initialize the dialog options:
@@ -103,28 +105,29 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     // Switch to the last save plot format
     long plotfmt;
     m_config->Read( PLOT_FORMAT_KEY, &plotfmt, 0 );
+
     switch( plotfmt )
     {
-        default:
-        case PLOT_FORMAT_POST:
-            m_plotFormatOpt->SetSelection( 0 );
-            break;
+    default:
+    case PLOT_FORMAT_POST:
+        m_plotFormatOpt->SetSelection( 0 );
+        break;
 
-        case PLOT_FORMAT_PDF:
-            m_plotFormatOpt->SetSelection( 1 );
-            break;
+    case PLOT_FORMAT_PDF:
+        m_plotFormatOpt->SetSelection( 1 );
+        break;
 
-        case PLOT_FORMAT_SVG:
-            m_plotFormatOpt->SetSelection( 2 );
-            break;
+    case PLOT_FORMAT_SVG:
+        m_plotFormatOpt->SetSelection( 2 );
+        break;
 
-        case PLOT_FORMAT_DXF:
-            m_plotFormatOpt->SetSelection( 3 );
-            break;
+    case PLOT_FORMAT_DXF:
+        m_plotFormatOpt->SetSelection( 3 );
+        break;
 
-        case PLOT_FORMAT_HPGL:
-            m_plotFormatOpt->SetSelection( 4 );
-            break;
+    case PLOT_FORMAT_HPGL:
+        m_plotFormatOpt->SetSelection( 4 );
+        break;
     }
 
     // Set the default line width (pen width which should be used for
@@ -141,6 +144,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
     wxCommandEvent cmd_event;
     OnPlotFormatSelection( cmd_event );
 }
+
 
 PlotFormat DIALOG_PLOT_SCHEMATIC::GetPlotFileFormat()
 {
@@ -159,7 +163,7 @@ PlotFormat DIALOG_PLOT_SCHEMATIC::GetPlotFileFormat()
 void DIALOG_PLOT_SCHEMATIC::OnButtonCancelClick( wxCommandEvent& event )
 {
     getPlotOptions();
-    EndModal( 0 );
+    EndModal( wxID_CANCEL );
 }
 
 
@@ -178,45 +182,46 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions()
     SetDefaultLineThickness( ReturnValueFromTextCtrl( *m_DefaultLineSizeCtrl ) );
 }
 
+
 void DIALOG_PLOT_SCHEMATIC::OnPlotFormatSelection( wxCommandEvent& event )
 {
 
     switch( GetPlotFileFormat() )
     {
-        default:
-        case PLOT_FORMAT_POST:
-            m_paperOptionsSizer->Hide( m_paperHPGLSizer );
-            m_paperOptionsSizer->Show( m_PaperSizeOption );
-            m_PaperSizeOption->Enable( true );
-            m_DefaultLineSizeCtrl->Enable( true );
-            break;
+    default:
+    case PLOT_FORMAT_POST:
+        m_paperOptionsSizer->Hide( m_paperHPGLSizer );
+        m_paperOptionsSizer->Show( m_PaperSizeOption );
+        m_PaperSizeOption->Enable( true );
+        m_DefaultLineSizeCtrl->Enable( true );
+        break;
 
-        case PLOT_FORMAT_PDF:
-            m_paperOptionsSizer->Hide( m_paperHPGLSizer );
-            m_paperOptionsSizer->Show(m_PaperSizeOption);
-            m_PaperSizeOption->Enable( true );
-            m_DefaultLineSizeCtrl->Enable( true );
-            break;
+    case PLOT_FORMAT_PDF:
+        m_paperOptionsSizer->Hide( m_paperHPGLSizer );
+        m_paperOptionsSizer->Show(m_PaperSizeOption);
+        m_PaperSizeOption->Enable( true );
+        m_DefaultLineSizeCtrl->Enable( true );
+        break;
 
-        case PLOT_FORMAT_SVG:
-            m_paperOptionsSizer->Hide( m_paperHPGLSizer );
-            m_paperOptionsSizer->Show(m_PaperSizeOption);
-            m_PaperSizeOption->Enable( false );
-            m_DefaultLineSizeCtrl->Enable( true );
-           break;
+    case PLOT_FORMAT_SVG:
+        m_paperOptionsSizer->Hide( m_paperHPGLSizer );
+        m_paperOptionsSizer->Show(m_PaperSizeOption);
+        m_PaperSizeOption->Enable( false );
+        m_DefaultLineSizeCtrl->Enable( true );
+        break;
 
-        case PLOT_FORMAT_DXF:
-            m_paperOptionsSizer->Hide( m_paperHPGLSizer );
-            m_paperOptionsSizer->Show(m_PaperSizeOption);
-            m_PaperSizeOption->Enable( false );
-            m_DefaultLineSizeCtrl->Enable( false );
-            break;
+    case PLOT_FORMAT_DXF:
+        m_paperOptionsSizer->Hide( m_paperHPGLSizer );
+        m_paperOptionsSizer->Show(m_PaperSizeOption);
+        m_PaperSizeOption->Enable( false );
+        m_DefaultLineSizeCtrl->Enable( false );
+        break;
 
-        case PLOT_FORMAT_HPGL:
-            m_paperOptionsSizer->Show( m_paperHPGLSizer );
-            m_paperOptionsSizer->Hide(m_PaperSizeOption);
-            m_DefaultLineSizeCtrl->Enable( false );
-           break;
+    case PLOT_FORMAT_HPGL:
+        m_paperOptionsSizer->Show( m_paperHPGLSizer );
+        m_paperOptionsSizer->Hide(m_PaperSizeOption);
+        m_DefaultLineSizeCtrl->Enable( false );
+        break;
 
     }
 
@@ -235,32 +240,35 @@ void DIALOG_PLOT_SCHEMATIC::OnButtonPlotAllClick( wxCommandEvent& event )
     PlotSchematic( true );
 }
 
+
 void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
 {
     getPlotOptions();
+
     switch( GetPlotFileFormat() )
     {
-        case PLOT_FORMAT_HPGL:
-            createHPGLFile( aPlotAll, getPlotFrameRef() );
-            break;
+    case PLOT_FORMAT_HPGL:
+        createHPGLFile( aPlotAll, getPlotFrameRef() );
+        break;
 
-        default:
-        case PLOT_FORMAT_POST:
-            createPSFile( aPlotAll, getPlotFrameRef() );
-            break;
+    default:
+        // Fall through.  Default to Postscript.
+    case PLOT_FORMAT_POST:
+        createPSFile( aPlotAll, getPlotFrameRef() );
+        break;
 
-        case PLOT_FORMAT_DXF:
-            CreateDXFFile( aPlotAll, getPlotFrameRef() );
-            break;
+    case PLOT_FORMAT_DXF:
+        CreateDXFFile( aPlotAll, getPlotFrameRef() );
+        break;
 
-        case PLOT_FORMAT_PDF:
-            createPDFFile( aPlotAll, getPlotFrameRef() );
-            break;
+    case PLOT_FORMAT_PDF:
+        createPDFFile( aPlotAll, getPlotFrameRef() );
+        break;
 
-        case PLOT_FORMAT_SVG:
-            createSVGFile( aPlotAll, getPlotFrameRef() );
-            break;
+    case PLOT_FORMAT_SVG:
+        createSVGFile( aPlotAll, getPlotFrameRef() );
+        break;
     }
+
     m_MessagesBox->AppendText( wxT( "****\n" ) );
 }
-

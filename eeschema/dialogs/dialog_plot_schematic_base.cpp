@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,13 +22,13 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	
 	wxString m_PaperSizeOptionChoices[] = { _("Schematic size"), _("Force size A4"), _("Force size A") };
 	int m_PaperSizeOptionNChoices = sizeof( m_PaperSizeOptionChoices ) / sizeof( wxString );
-	m_PaperSizeOption = new wxRadioBox( this, wxID_ANY, _("Plot Page Size:"), wxDefaultPosition, wxDefaultSize, m_PaperSizeOptionNChoices, m_PaperSizeOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_PaperSizeOption = new wxRadioBox( this, wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, m_PaperSizeOptionNChoices, m_PaperSizeOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_PaperSizeOption->SetSelection( 0 );
 	m_paperOptionsSizer->Add( m_PaperSizeOption, 0, wxALL|wxEXPAND, 5 );
 	
-	m_paperHPGLSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options:") ), wxVERTICAL );
+	m_paperHPGLSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("HPGL Options") ), wxVERTICAL );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Plot Page Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	m_paperHPGLSizer->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -40,95 +40,99 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	
 	wxString m_plotOriginOptChoices[] = { _("Bottom left corner"), _("Center of the page") };
 	int m_plotOriginOptNChoices = sizeof( m_plotOriginOptChoices ) / sizeof( wxString );
-	m_plotOriginOpt = new wxRadioBox( this, wxID_ANY, _("Plot Origin:"), wxDefaultPosition, wxDefaultSize, m_plotOriginOptNChoices, m_plotOriginOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_plotOriginOpt = new wxRadioBox( this, wxID_ANY, _("Origin"), wxDefaultPosition, wxDefaultSize, m_plotOriginOptNChoices, m_plotOriginOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotOriginOpt->SetSelection( 0 );
 	m_paperHPGLSizer->Add( m_plotOriginOpt, 0, wxALL, 5 );
 	
-	m_penHPLGWidthTitle = new wxStaticText( this, wxID_ANY, _("Pen Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_penHPLGWidthTitle = new wxStaticText( this, wxID_ANY, _("Pen Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_penHPLGWidthTitle->Wrap( -1 );
 	m_paperHPGLSizer->Add( m_penHPLGWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_penHPGLWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_penHPGLWidthCtrl->SetMaxLength( 0 ); 
 	m_paperHPGLSizer->Add( m_penHPGLWidthCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	m_paperOptionsSizer->Add( m_paperHPGLSizer, 1, wxEXPAND, 5 );
 	
 	
-	m_optionsSizer->Add( m_paperOptionsSizer, 1, wxEXPAND, 5 );
-	
-	wxStaticBoxSizer* sbSizerPlotFormat;
-	sbSizerPlotFormat = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General options") ), wxVERTICAL );
+	m_optionsSizer->Add( m_paperOptionsSizer, 0, wxEXPAND, 5 );
 	
 	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF"), _("HPGL") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
-	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Plot format:"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotFormatOpt->SetSelection( 0 );
-	sbSizerPlotFormat->Add( m_plotFormatOpt, 0, wxALL|wxEXPAND, 5 );
+	m_optionsSizer->Add( m_plotFormatOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
+	wxStaticBoxSizer* sbSizerPlotFormat;
+	sbSizerPlotFormat = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options") ), wxVERTICAL );
 	
-	m_optionsSizer->Add( sbSizerPlotFormat, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-	
-	wxStaticBoxSizer* sbOptionsSizer;
-	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Plot options:") ), wxVERTICAL );
-	
-	m_defaultLineWidthTitle = new wxStaticText( this, wxID_ANY, _("Default Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_defaultLineWidthTitle = new wxStaticText( this, wxID_ANY, _("Default Line Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_defaultLineWidthTitle->Wrap( -1 );
-	sbOptionsSizer->Add( m_defaultLineWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizerPlotFormat->Add( m_defaultLineWidthTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DefaultLineSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DefaultLineSizeCtrl->SetMaxLength( 0 ); 
 	m_DefaultLineSizeCtrl->SetToolTip( _("Selection of the default pen thickness used to draw items, when their thickness is set to 0.") );
 	
-	sbOptionsSizer->Add( m_DefaultLineSizeCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	sbSizerPlotFormat->Add( m_DefaultLineSizeCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
-	m_ModeColorOption = new wxRadioBox( this, wxID_ANY, _("Plot mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_ModeColorOption = new wxRadioBox( this, wxID_ANY, _("Mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ModeColorOption->SetSelection( 1 );
 	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
 	
-	sbOptionsSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
+	sbSizerPlotFormat->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
 	
-	m_PlotFrameRefOpt = new wxCheckBox( this, wxID_ANY, _("Plot frame ref"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PlotFrameRefOpt = new wxCheckBox( this, wxID_ANY, _("Plot border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PlotFrameRefOpt->SetValue(true); 
 	m_PlotFrameRefOpt->SetToolTip( _("Print (or not) the Frame references.") );
 	
-	sbOptionsSizer->Add( m_PlotFrameRefOpt, 0, wxALL, 5 );
+	sbSizerPlotFormat->Add( m_PlotFrameRefOpt, 0, wxALL, 5 );
 	
 	
-	m_optionsSizer->Add( sbOptionsSizer, 1, 0, 5 );
+	m_optionsSizer->Add( sbSizerPlotFormat, 0, wxEXPAND|wxLEFT, 5 );
 	
 	m_ButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonPlotCurrent = new wxButton( this, wxID_PRINT_CURRENT, _("Plot Current"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonPlotCurrent = new wxButton( this, wxID_PRINT_CURRENT, _("Plot Current Page"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonPlotCurrent->SetDefault(); 
 	m_ButtonsSizer->Add( m_buttonPlotCurrent, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	m_buttonPlotAll = new wxButton( this, wxID_PRINT_ALL, _("Plot All"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonPlotAll = new wxButton( this, wxID_PRINT_ALL, _("Plot All Pages"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonPlotAll->SetDefault(); 
 	m_ButtonsSizer->Add( m_buttonPlotAll, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Quit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonQuit = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ButtonsSizer->Add( m_buttonQuit, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	
 	m_optionsSizer->Add( m_ButtonsSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( m_optionsSizer, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	bMainSizer->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer4->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_MessagesBox->SetMaxLength( 0 ); 
 	m_MessagesBox->SetMinSize( wxSize( -1,80 ) );
 	
-	bMainSizer->Add( m_MessagesBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer4->Add( m_MessagesBox, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	
+	bMainSizer->Add( bSizer4, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PLOT_SCHEMATIC_BASE::OnCloseWindow ) );

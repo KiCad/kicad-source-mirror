@@ -127,7 +127,7 @@ set(PCB_COMMON_SRCS
     pcb_keywords.cpp
     ../pcbnew/pcb_parser.cpp
     fp_lib_table_keywords.cpp
-#    fpid.cpp
+    fpid.cpp
     fp_lib_table.cpp
 )
 

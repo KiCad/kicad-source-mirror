@@ -71,7 +71,7 @@ class DIALOG_NETLIST_FBP : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id = wxID_CANCEL, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 519,431 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_NETLIST_FBP();
 	
 };
