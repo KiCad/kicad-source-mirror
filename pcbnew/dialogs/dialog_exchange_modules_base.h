@@ -1,15 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_exchange_modules_base__
-#define __dialog_exchange_modules_base__
+#ifndef __DIALOG_EXCHANGE_MODULES_BASE_H__
+#define __DIALOG_EXCHANGE_MODULES_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -29,7 +33,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EXCHANGE_MODULE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_EXCHANGE_MODULE_BASE : public wxDialog 
+class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -56,9 +60,9 @@ class DIALOG_EXCHANGE_MODULE_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Exchange Modules"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 416,469 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Exchange Modules"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXCHANGE_MODULE_BASE();
 	
 };
 
-#endif //__dialog_exchange_modules_base__
+#endif //__DIALOG_EXCHANGE_MODULES_BASE_H__

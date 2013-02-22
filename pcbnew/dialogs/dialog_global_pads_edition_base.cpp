@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* pare
 	sbSizer1->Add( m_Pad_Orient_Filter_CB, 0, wxALL, 5 );
 	
 	
-	bLeftSizer->Add( sbSizer1, 1, wxEXPAND, 5 );
+	bLeftSizer->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
@@ -52,15 +52,16 @@ DIALOG_GLOBAL_PADS_EDITION_BASE::DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* pare
 	m_buttonIdModules = new wxButton( this, ID_CHANGE_ID_MODULES, _("Change Pads on Same Modules"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonIdModules, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonCancel = new wxButton( this, wxID_ANY, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_buttonCancel, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( bRightSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bRightSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_buttonPadEditor->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_PADS_EDITION_BASE::InstallPadEditor ), NULL, this );
