@@ -680,7 +680,7 @@
                                                 <event name="OnMouseWheel"></event>
                                                 <event name="OnPaint"></event>
                                                 <event name="OnRightDClick"></event>
-                                                <event name="OnRightDown"></event>
+                                                <event name="OnRightDown">OnRightClick</event>
                                                 <event name="OnRightUp"></event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
@@ -4415,7 +4415,7 @@
                     <property name="help"></property>
                     <property name="id">ID_LAYER_FAB</property>
                     <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Select fab layers</property>
+                    <property name="label">Select Fab Layers</property>
                     <property name="name">m_menuItem1</property>
                     <property name="permission">none</property>
                     <property name="shortcut"></property>
@@ -4430,7 +4430,7 @@
                     <property name="help"></property>
                     <property name="id">ID_SELECT_COPPER_LAYERS</property>
                     <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Select all copper layers</property>
+                    <property name="label">Select all Copper Layers</property>
                     <property name="name">m_menuItem2</property>
                     <property name="permission">none</property>
                     <property name="shortcut"></property>
@@ -4445,7 +4445,7 @@
                     <property name="help"></property>
                     <property name="id">ID_DESELECT_COPPER_LAYERS</property>
                     <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Deselect all copper layers</property>
+                    <property name="label">Deselect all Copper Layers</property>
                     <property name="name">m_menuItem3</property>
                     <property name="permission">none</property>
                     <property name="shortcut"></property>
@@ -4460,7 +4460,7 @@
                     <property name="help"></property>
                     <property name="id">ID_SELECT_ALL_LAYERS</property>
                     <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Select all layers</property>
+                    <property name="label">Select all Layers</property>
                     <property name="name">m_menuItem4</property>
                     <property name="permission">none</property>
                     <property name="shortcut"></property>
@@ -4475,7 +4475,7 @@
                     <property name="help"></property>
                     <property name="id">ID_DESELECT_ALL_LAYERS</property>
                     <property name="kind">wxITEM_NORMAL</property>
-                    <property name="label">Deselect all layers</property>
+                    <property name="label">Deselect all Layers</property>
                     <property name="name">m_menuItem5</property>
                     <property name="permission">none</property>
                     <property name="shortcut"></property>
