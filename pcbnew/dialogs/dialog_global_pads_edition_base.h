@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
@@ -53,7 +55,7 @@ class DIALOG_GLOBAL_PADS_EDITION_BASE : public DIALOG_SHIM
 	public:
 		wxButton* m_buttonIdModules;
 		
-		DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Global Pads Edition"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 482,165 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_GLOBAL_PADS_EDITION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Global Pads Edition"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GLOBAL_PADS_EDITION_BASE();
 	
 };

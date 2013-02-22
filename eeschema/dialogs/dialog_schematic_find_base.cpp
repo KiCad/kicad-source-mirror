@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -21,17 +21,19 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	wxFlexGridSizer* leftGridSizer;
 	leftGridSizer = new wxFlexGridSizer( 3, 2, 3, 3 );
+	leftGridSizer->AddGrowableCol( 1 );
 	leftGridSizer->SetFlexibleDirection( wxBOTH );
 	leftGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("&Search for:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	leftGridSizer->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 6 );
+	leftGridSizer->Add( m_staticText1, 0, wxALIGN_BOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
 	
 	m_comboFind = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN ); 
+	m_comboFind->SetToolTip( _("Text with optional wildcards") );
 	m_comboFind->SetMinSize( wxSize( 125,-1 ) );
 	
-	leftGridSizer->Add( m_comboFind, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 6 );
+	leftGridSizer->Add( m_comboFind, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 6 );
 	
 	m_staticReplace = new wxStaticText( this, wxID_ANY, _("Replace &with:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticReplace->Wrap( -1 );
@@ -63,9 +65,11 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	directionSizer->Add( m_radioBackward, 0, wxALL, 3 );
 	
+	
 	leftGridSizer->Add( directionSizer, 1, wxEXPAND, 5 );
 	
-	leftSizer->Add( leftGridSizer, 0, wxALL|wxEXPAND, 6 );
+	
+	leftSizer->Add( leftGridSizer, 1, wxALL|wxEXPAND, 6 );
 	
 	m_checkWholeWord = new wxCheckBox( this, wxID_ANY, _("Match whole wor&d"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkWholeWord->SetValue(true); 
@@ -98,6 +102,7 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_checkNoWarpCursor = new wxCheckBox( this, wxID_ANY, _("D&o not warp cursor to found item"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkNoWarpCursor, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
+	
 	mainSizer->Add( leftSizer, 1, wxALL|wxEXPAND, 6 );
 	
 	wxBoxSizer* rightSizer;
@@ -120,10 +125,13 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	rightSizer->Add( m_buttonCancel, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 6 );
 	
+	
 	mainSizer->Add( rightSizer, 0, wxALL|wxEXPAND, 6 );
+	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

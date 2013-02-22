@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,6 +28,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	sbSizerDoc->SetMinSize( wxSize( 300,-1 ) ); 
 	m_DocCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DocCtrl->SetMaxLength( 0 ); 
 	sbSizerDoc->Add( m_DocCtrl, 1, 0, 5 );
 	
 	
@@ -37,6 +38,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	sbSizerKeysW = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Keywords") ), wxHORIZONTAL );
 	
 	m_KeywordCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_KeywordCtrl->SetMaxLength( 0 ); 
 	sbSizerKeysW->Add( m_KeywordCtrl, 1, 0, 5 );
 	
 	
@@ -49,6 +51,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	sbSizerRef = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Reference") ), wxHORIZONTAL );
 	
 	m_ReferenceCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_ReferenceCtrl->SetMaxLength( 0 ); 
 	sbSizerRef->Add( m_ReferenceCtrl, 1, 0, 5 );
 	
 	m_button4 = new wxButton( m_PanelProperties, wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -61,6 +64,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	sbSizerValue = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Value") ), wxHORIZONTAL );
 	
 	m_ValueCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_ValueCtrl->SetMaxLength( 0 ); 
 	sbSizerValue->Add( m_ValueCtrl, 1, 0, 5 );
 	
 	m_button5 = new wxButton( m_PanelProperties, wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -71,18 +75,6 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	
 	PropLeftSizer->Add( 0, 20, 0, 0, 5 );
-	
-	wxStaticBoxSizer* sbSizerFootprintName;
-	sbSizerFootprintName = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Footprint Name in Lib") ), wxHORIZONTAL );
-	
-	m_FootprintNameCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerFootprintName->Add( m_FootprintNameCtrl, 1, 0, 5 );
-	
-	
-	sbSizerFootprintName->Add( 0, 0, 0, 0, 5 );
-	
-	
-	PropLeftSizer->Add( sbSizerFootprintName, 0, wxEXPAND, 5 );
 	
 	
 	m_PanelPropertiesBoxSizer->Add( PropLeftSizer, 1, wxEXPAND, 5 );
@@ -152,6 +144,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_staticTextNetClearance, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_NetClearanceValueCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_NetClearanceValueCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_NetClearanceValueCtrl, 0, wxALL, 5 );
 	
 	m_NetClearanceUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -174,11 +167,25 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_MaskClearanceTitle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_SolderMaskMarginCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SolderMaskMarginCtrl, 0, wxALL, 5 );
 	
 	m_SolderMaskMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginUnits->Wrap( -1 );
 	fgSizer1->Add( m_SolderMaskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	
+	wxStaticBoxSizer* sbSizerFootprintName;
+	sbSizerFootprintName = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Footprint Name in Lib") ), wxHORIZONTAL );
+	
+	m_FootprintNameCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_FootprintNameCtrl->SetMaxLength( 0 ); 
+	sbSizerFootprintName->Add( m_FootprintNameCtrl, 1, 0, 5 );
+	
+	
+	sbSizerFootprintName->Add( 0, 0, 0, 0, 5 );
+	
+	
+	fgSizer1->Add( sbSizerFootprintName, 0, wxEXPAND, 5 );
 	
 	m_staticTextSolderPaste = new wxStaticText( m_PanelProperties, wxID_ANY, _("Solder paste clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSolderPaste->Wrap( -1 );
@@ -187,6 +194,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_staticTextSolderPaste, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_SolderPasteMarginCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SolderPasteMarginCtrl, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_SolderPasteMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -200,6 +208,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_SolderPasteMarginRatioCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginRatioCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SolderPasteMarginRatioCtrl, 0, wxALL, 5 );
 	
 	m_SolderPasteRatioMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -274,6 +283,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	this->SetSizer( m_GeneralBoxSizer );
 	this->Layout();
+	m_GeneralBoxSizer->Fit( this );
 	
 	// Connect Events
 	m_button4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::OnEditReference ), NULL, this );
