@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-19 18:02+0100\n"
-"PO-Revision-Date: 2013-02-19 18:14+0100\n"
+"POT-Creation-Date: 2013-02-23 08:05+0100\n"
+"PO-Revision-Date: 2013-02-23 08:08+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1227,10 +1227,10 @@ msgstr "Element "
 #: eeschema/libedit.cpp:456 eeschema/viewlibs.cpp:292
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:178
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:183
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:488
-#: pcbnew/dialogs/dialog_plot_base.cpp:140
+#: pcbnew/dialogs/dialog_plot_base.cpp:141
 msgid "None"
 msgstr "Brak"
 
@@ -1266,9 +1266,9 @@ msgstr "Skonwertowany"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:80
 #: pcbnew/class_module.cpp:494 pcbnew/muonde.cpp:815
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:75
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:59
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:118
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:92
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:123
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:84
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:98
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:98
@@ -1468,7 +1468,7 @@ msgstr "Usuń element"
 #: eeschema/onrightclick.cpp:191 eeschema/dialogs/dialog_color_config.cpp:226
 #: eeschema/dialogs/dialog_netlist_base.cpp:49
 #: eeschema/dialogs/dialog_netlist_base.cpp:130 pcbnew/mirepcb.cpp:100
-#: pcbnew/modedit_onclick.cpp:204 pcbnew/modedit_onclick.cpp:242
+#: pcbnew/modedit_onclick.cpp:205 pcbnew/modedit_onclick.cpp:243
 #: pcbnew/muonde.cpp:806 pcbnew/onrightclick.cpp:82 pcbnew/onrightclick.cpp:98
 #: pcbnew/sel_layer.cpp:166 pcbnew/sel_layer.cpp:319
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:389
@@ -1483,7 +1483,7 @@ msgid "Cancel"
 msgstr "Anuluj"
 
 #: eeschema/libedit_onrightclick.cpp:86 eeschema/onrightclick.cpp:163
-#: pcbnew/modedit_onclick.cpp:207 pcbnew/onrightclick.cpp:88
+#: pcbnew/modedit_onclick.cpp:208 pcbnew/onrightclick.cpp:88
 #: gerbview/onrightclick.cpp:42
 msgid "End Tool"
 msgstr "Wyłącz narzędzie"
@@ -1634,17 +1634,17 @@ msgid "Pin Num Size to Others"
 msgstr "Rozmiar numeru pinu dla innych"
 
 #: eeschema/libedit_onrightclick.cpp:321 eeschema/onrightclick.cpp:800
-#: pcbnew/modedit_onclick.cpp:219 pcbnew/onrightclick.cpp:437
+#: pcbnew/modedit_onclick.cpp:220 pcbnew/onrightclick.cpp:437
 #: gerbview/onrightclick.cpp:53
 msgid "Cancel Block"
 msgstr "Anuluj blok"
 
-#: eeschema/libedit_onrightclick.cpp:326 pcbnew/modedit_onclick.cpp:221
+#: eeschema/libedit_onrightclick.cpp:326 pcbnew/modedit_onclick.cpp:222
 msgid "Zoom Block (drag middle mouse)"
 msgstr "Powiększ blok (shift + przeciąganie myszką)"
 
 #: eeschema/libedit_onrightclick.cpp:331 eeschema/onrightclick.cpp:808
-#: pcbnew/modedit_onclick.cpp:225 pcbnew/onrightclick.cpp:441
+#: pcbnew/modedit_onclick.cpp:226 pcbnew/onrightclick.cpp:441
 #: gerbview/onrightclick.cpp:56
 msgid "Place Block"
 msgstr "Dodaj blok"
@@ -1769,7 +1769,7 @@ msgstr "łuk posiada tylko %d parametrów z wymaganych 8"
 
 #: eeschema/lib_arc.cpp:559 eeschema/lib_bezier.cpp:417
 #: eeschema/lib_circle.cpp:278 eeschema/lib_polyline.cpp:405
-#: eeschema/lib_rectangle.cpp:255 eeschema/lib_text.cpp:420
+#: eeschema/lib_rectangle.cpp:255 eeschema/lib_text.cpp:428
 msgid "Line width"
 msgstr "Szerokość linii"
 
@@ -1895,7 +1895,7 @@ msgstr "Błąd podczas tworzenia "
 #: eeschema/template_fieldnames.cpp:14
 #: eeschema/dialogs/dialog_color_config.cpp:37 pcbnew/class_text_mod.cpp:467
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:27
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:49
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:51
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
 msgid "Reference"
 msgstr "Oznaczenie"
@@ -1908,8 +1908,8 @@ msgstr "Oznaczenie"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:163
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_text_mod.cpp:372
 #: pcbnew/class_text_mod.cpp:471 pcbnew/footprint_wizard_frame.cpp:413
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:39
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:61
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:40
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:64
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
 msgid "Value"
 msgstr "Wartość"
@@ -1989,7 +1989,7 @@ msgstr "Dół"
 #: pcbnew/dialogs/dialog_display_options_base.cpp:122
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
-#: pcbnew/dialogs/dialog_plot_base.cpp:160
+#: pcbnew/dialogs/dialog_plot_base.cpp:161
 #: cvpcb/dialogs/dialog_display_options_base.cpp:25
 #: cvpcb/dialogs/dialog_display_options_base.cpp:31
 #: gerbview/class_gerber_draw_item.cpp:183
@@ -2124,8 +2124,8 @@ msgstr "Długość"
 
 #: eeschema/lib_pin.cpp:1862 eeschema/sch_text.cpp:793
 #: pcbnew/class_pcb_text.cpp:140
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:57
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:59
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:63
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:82
 msgid "Orientation"
 msgstr "Orientacja"
@@ -2181,6 +2181,7 @@ msgstr "Prostokąt od (%s, %s) do (%s, %s)"
 #: eeschema/lib_text.cpp:52 pcbnew/class_text_mod.cpp:372
 #: pcbnew/class_text_mod.cpp:379 pcbnew/class_text_mod.cpp:476
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
+#: cvpcb/dialogs/dialog_display_options_base.cpp:33
 msgid "Text"
 msgstr "Tekst"
 
@@ -2189,7 +2190,7 @@ msgstr "Tekst"
 msgid "text only had %d parameters of the required 8"
 msgstr "Tekst posiada tylko %d parameterów z wymaganych 8"
 
-#: eeschema/lib_text.cpp:485 eeschema/sch_text.cpp:644
+#: eeschema/lib_text.cpp:493 eeschema/sch_text.cpp:644
 #, c-format
 msgid "Graphic Text %s"
 msgstr "Tekst (grafika) %s"
@@ -2351,7 +2352,7 @@ msgid "&Delete"
 msgstr "&Usuń"
 
 #: eeschema/menubar.cpp:202
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:106
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:111
 #: pcbnew/menubar_pcbframe.cpp:272
 msgid "&Find"
 msgstr "Znajdź"
@@ -2752,19 +2753,19 @@ msgstr "Przesuń"
 #: eeschema/onrightclick.cpp:320
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:82
-#: pcbnew/modedit_onclick.cpp:260 pcbnew/onrightclick.cpp:756
+#: pcbnew/modedit_onclick.cpp:261 pcbnew/onrightclick.cpp:756
 #: pcbnew/onrightclick.cpp:875 common/dialogs/dialog_image_editor_base.cpp:39
 msgid "Rotate"
 msgstr "Obrót"
 
 #: eeschema/onrightclick.cpp:333 eeschema/onrightclick.cpp:410
-#: pcbnew/modedit_onclick.cpp:342 pcbnew/onrightclick.cpp:725
+#: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:725
 #: pcbnew/onrightclick.cpp:761 pcbnew/onrightclick.cpp:816
 #: pcbnew/onrightclick.cpp:879
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:32
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:44
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:54
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:66
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:33
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:46
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:57
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:70
 msgid "Edit"
 msgstr "Edytuj"
 
@@ -3922,14 +3923,15 @@ msgid "Silent mode"
 msgstr "Nie potwierdzaj"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:202
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:65
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:125
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:176
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
-#: pcbnew/dialogs/dialog_plot_base.cpp:365
+#: pcbnew/dialogs/dialog_plot_base.cpp:373
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:107
@@ -4191,7 +4193,7 @@ msgstr "Kolor Tła"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:385
 #: pcbnew/dialogs/dialog_display_options_base.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:107
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:62
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:67
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:156
 #: common/dialogs/dialog_get_component_base.cpp:44
@@ -4406,8 +4408,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc_base.cpp:133
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:207
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:89
-#: pcbnew/dialogs/dialog_plot_base.cpp:82
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:94
+#: pcbnew/dialogs/dialog_plot_base.cpp:83
 #: bitmap2component/bitmap2cmp_gui_base.cpp:103
 msgid "Options"
 msgstr "Opcje"
@@ -4524,14 +4526,14 @@ msgstr "Pozycja "
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:86
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:170
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:84
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:87
 #: common/wxwineda.cpp:168
 msgid "X"
 msgstr "X"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:91
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:175
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:91
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:95
 #: common/wxwineda.cpp:181
 msgid "Y"
 msgstr "Y"
@@ -4724,7 +4726,7 @@ msgstr "Odbij pionowo |"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:54
 #: pcbnew/class_pcb_text.cpp:135 pcbnew/class_pcb_text.cpp:137
-#: pcbnew/class_text_mod.cpp:411 pcbnew/modedit_onclick.cpp:262
+#: pcbnew/class_text_mod.cpp:411 pcbnew/modedit_onclick.cpp:263
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:75
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
 #: gerbview/class_gerber_draw_item.cpp:574
@@ -4828,13 +4830,13 @@ msgstr "Wyrównanie w poziomie"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:50
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
 msgid "Bottom"
 msgstr "Dolna"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:50
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
 msgid "Top"
 msgstr "Górna"
 
@@ -5210,7 +5212,7 @@ msgid "&Repeat label increment:"
 msgstr "Zmieniaj numer etykiety co:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:135
-msgid "Auto save time interval:"
+msgid "Auto save &time interval:"
 msgstr "Auto zapis tworzony co:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:142
@@ -5218,7 +5220,7 @@ msgid "minutes"
 msgstr "minut"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:152
-msgid "Show g&rid"
+msgid "Show gr&id"
 msgstr "Pokaż siatkę"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:155
@@ -5226,43 +5228,39 @@ msgid "Show hi&dden pins"
 msgstr "Pokaż ukryte piny"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:158
-#: cvpcb/dialogs/dialog_display_options_base.cpp:58
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:89
-msgid "Zoom off center"
-msgstr "Nie centruj podczas powiększania"
+msgid "Do not center and &warp cursor on zoom"
+msgstr "Nie centruj i nie przesuwaj kursora przy powiększaniu"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:159
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:154
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:162
 #: cvpcb/dialogs/dialog_display_options_base.cpp:59
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:90
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:87
 msgid "Keep the cursor at its current location when zooming"
 msgstr "Zachowaj bieżącą pozycję kursora podczas powiększania"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:163
-msgid "Enable middle mouse button panning"
-msgstr ""
-"Włącz automatyczne przesuwanie widoku za pomocą środkowego klawisza myszy"
+msgid "Use &middle mouse button to pan"
+msgstr "Użyj środkowego klawisza myszy do panoramowania"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:164
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:159
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:167
 msgid "Use middle mouse button dragging to pan"
 msgstr "Użyj środkowego klawisza myszy do przesuwania widoku"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:168
-msgid "Middle mouse button panning limited"
-msgstr "Ograniczone przesuwanie widoku środkowym klawiszem myszy"
+msgid "&Limit panning to scroll size"
+msgstr "Panoramuj tylko do obszaru dającego się przesuwać"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:169
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:164
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:172
 msgid "Middle mouse button panning limited by current scrollbar size"
 msgstr ""
 "Przesuwanie widoku za pomocą środkowego klawisza myszy ograniczone przez "
 "bieżący rozmiar suwaków"
 
-# Tak jest czytelniej
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:173
-msgid "Enable automatic &panning"
-msgstr "&Pozwól na automatyczne przesuwanie widoku"
+msgid "Pan while moving ob&ject"
+msgstr "Panoramuj podczas przesuwania obiektów"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:176
 msgid "Allow buses and wires to be placed in H or V &orientation only"
@@ -5273,15 +5271,16 @@ msgstr ""
 msgid "Show p&age limits"
 msgstr "Pokaż granice strony"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:195
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:192
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:68
 msgid "General Options"
 msgstr "Opcje główne"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:197
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:194
 msgid "User defined field names for schematic components. "
 msgstr "Nazwy pól użytkownika dla symboli schematowych."
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:205
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:202
 msgid ""
 "Please enter fieldnames which you want presented in the component fieldname "
 "(property) editors.  Names may not include (, ), or \" characters."
@@ -5289,39 +5288,39 @@ msgstr ""
 "Wpisz nazwy pól, które chcesz przedstawić w edytorze symboli "
 "(właściwościach). Nazwy nie mogą zawierać znaków (, ), lub \" ."
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:221
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:218
 msgid "Custom field 1"
 msgstr "Pole użytkownika 1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:229
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:226
 msgid "Custom field 2"
 msgstr "Pole użytkownika 2"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:237
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:234
 msgid "Custom field 3"
 msgstr "Pole użytkownika 3"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:245
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:242
 msgid "Custom field 4"
 msgstr "Pole użytkownika 4"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:253
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:250
 msgid "Custom field 5"
 msgstr "Pole użytkownika 5"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:261
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:258
 msgid "Custom field 6"
 msgstr "Pole użytkownika 6"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:269
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:266
 msgid "Custom field 7"
 msgstr "Pole użytkownika 7"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:277
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:274
 msgid "Custom field 8"
 msgstr "Pole użytkownika 8"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:295
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:292
 msgid "Template Field Names"
 msgstr "Wzorce nazw pól"
 
@@ -5362,14 +5361,14 @@ msgid "Create ERC file report"
 msgstr "Utwórz plik raportu"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:76
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:120
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:375
 #: pcbnew/dialogs/dialog_drc_base.cpp:102
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:75
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:82
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:116
-#: pcbnew/dialogs/dialog_plot_base.cpp:345
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:119
+#: pcbnew/dialogs/dialog_plot_base.cpp:352
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:116
 #: common/dialogs/dialog_list_selector_base.cpp:37
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1093
@@ -5792,12 +5791,13 @@ msgstr "Wymuś rozmiar A"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:31
-msgid "Plot Page Size:"
-msgstr "Rozmiar strony rysunku:"
+msgid "Page Size:"
+msgstr "Rozmiar strony:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:29
-msgid "HPGL Options:"
-msgstr "Opcje HPGL:"
+#: pcbnew/dialogs/dialog_plot_base.cpp:242
+msgid "HPGL Options"
+msgstr "Opcje HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:35
 msgid "Page size A4"
@@ -5848,59 +5848,51 @@ msgid "Center of the page"
 msgstr "Na środku strony"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
-msgid "Plot Origin:"
-msgstr "Punkt zerowy rysunku:"
+#: pcbnew/dialogs/dialog_set_grid_base.cpp:62
+msgid "Origin"
+msgstr "Punkt bazowy siatki"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:47
-msgid "Pen Width"
-msgstr "Szerokość pisaka"
+msgid "Pen Width:"
+msgstr "Grubość pisaka:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
-msgid "General options"
-msgstr "Opcje główne"
-
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "Postscript"
 msgstr "Postscript"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:73
 msgid "PDF"
 msgstr "PDF"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:73
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "SVG"
 msgstr "SVG"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:73
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "DXF"
 msgstr "DXF"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:73
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "HPGL"
 msgstr "HPGL"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#: pcbnew/dialogs/dialog_plot_base.cpp:27
-msgid "Plot format:"
-msgstr "Format wyjściowy:"
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:63
+msgid "Format"
+msgstr "Format"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:73
-msgid "Plot options:"
-msgstr "Opcje rysowania:"
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:70
+msgid "Default Line Thickness:"
+msgstr "Domyślna grubość linii:"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:75
-msgid "Default Thickness"
-msgstr "Domyślna grubość"
-
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:80
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
@@ -5908,7 +5900,7 @@ msgstr ""
 "Wybór domyślnego rozmiaru pisaka używanego do rysowania elementów, kiedy ich "
 "szerokość jest ustawiona na 0."
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:84
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:80
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:69
@@ -5916,7 +5908,7 @@ msgstr ""
 msgid "Color"
 msgstr "Kolorowy"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:84
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:80
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:69
@@ -5924,11 +5916,11 @@ msgstr "Kolorowy"
 msgid "Black and white"
 msgstr "Czarno-biały"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:86
-msgid "Plot mode"
-msgstr "Tryb rysowania"
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
+msgid "Mode"
+msgstr "Tryb"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:88
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:84
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:38
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:113
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
@@ -5940,27 +5932,23 @@ msgstr ""
 "Wybierz czy chcesz narysować arkusz tak jak jest przedstawiony na ekranie,\n"
 "czy w trybie czarno-białym, lepszym do druku na drukarkach monochromatycznych"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:92
-msgid "Plot frame ref"
-msgstr "Rysuj oznaczenia arkusza"
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:88
+msgid "Plot border and title block"
+msgstr "Rysuj opis arkusza i tabliczkę tytułową"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:90
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:30
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:93
 msgid "Print (or not) the Frame references."
 msgstr "Drukuj (lub nie) oznaczenia arkusza."
 
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:99
+msgid "Plot Current Page"
+msgstr "Rysuj bieżącą stronę"
+
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:103
-msgid "Plot Current"
-msgstr "Rysuj bieżącą"
-
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
-msgid "Plot All"
-msgstr "Rysuj wszystko"
-
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:111
-msgid "Quit"
-msgstr "Zakończ"
+msgid "Plot All Pages"
+msgstr "Rysuj wszystkie strony"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:233
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
@@ -6018,7 +6006,7 @@ msgid "Print"
 msgstr "Drukuj"
 
 #: eeschema/dialogs/dialog_schematic_find.cpp:39
-#: eeschema/dialogs/dialog_schematic_find_base.h:73
+#: eeschema/dialogs/dialog_schematic_find_base.h:76
 #: pcbnew/dialogs/dialog_find_base.h:54
 msgid "Find"
 msgstr "Znajdź"
@@ -6027,67 +6015,71 @@ msgstr "Znajdź"
 msgid "Find and Replace"
 msgstr "Wyszukaj i zamień"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:27
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:28
 msgid "&Search for:"
 msgstr "&Szukaj:"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:36
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:33
+msgid "Text with optional wildcards"
+msgstr "Tekst z opcjonalnym wzorcem"
+
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:38
 msgid "Replace &with:"
 msgstr "Zamień przez:"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:47
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:49
 msgid "Direction:"
 msgstr "Kierunek"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:56
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:58
 msgid "F&orward"
 msgstr "D&o przodu"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:61
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:63
 msgid "&Backward"
 msgstr "Wstecz"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:70
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:74
 msgid "Match whole wor&d"
 msgstr "Porównuj tylko całe wyrazy"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:74
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:78
 msgid "&Match case"
 msgstr "Rozróźniaj wielkość liter"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:77
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:81
 msgid "Search &using simple wildcard matching"
 msgstr "Szukaj &używając prostego maskowania"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:80
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:84
 msgid "Wrap around &end of search list"
 msgstr "Wróć na początek gdy osiągnięto koniec listy wyszukiwania"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:84
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:88
 msgid "Search all com&ponent fields"
 msgstr "Przeszukuj wszystkie &pola symboli"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:87
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:91
 msgid "Search all pin &names and numbers"
 msgstr "Szukaj wszystkich &nazw i numerów pinów"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:90
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:94
 msgid "Search the current &sheet onl&y"
 msgstr "Prze&szukaj tylko bieżący arkusz"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:93
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:97
 msgid "Replace componen&t reference designators"
 msgstr "Zamień oznaczenia komponen&tów"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:98
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:102
 msgid "D&o not warp cursor to found item"
 msgstr "Nie przesuwaj kurs&ora nad znaleziony element"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:110
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:115
 msgid "&Replace"
 msgstr "Zamień"
 
-#: eeschema/dialogs/dialog_schematic_find_base.cpp:115
+#: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 msgid "Replace &All"
 msgstr "Z&amień wszystkie"
 
@@ -6137,7 +6129,7 @@ msgstr "Pokaż pola lutownicze jako pełne"
 msgid "User Grid"
 msgstr "Siatka użytkownika"
 
-#: pcbnew/basepcbframe.cpp:820 pcbnew/dialogs/dialog_plot_base.cpp:150
+#: pcbnew/basepcbframe.cpp:820 pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "Auto"
 msgstr "Dopasuj powiększenie"
 
@@ -6311,6 +6303,8 @@ msgstr "Krawedziowa"
 
 #: pcbnew/class_board.cpp:1026 pcbnew/class_module.cpp:475
 #: pcbnew/class_netinfo_item.cpp:140
+#: cvpcb/dialogs/dialog_display_options_base.cpp:44
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
 msgid "Pads"
 msgstr "Pola lutownicze"
 
@@ -6579,8 +6573,8 @@ msgid "Orient"
 msgstr "Orientacja"
 
 #: pcbnew/class_module.cpp:502
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:118
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:92
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:123
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:84
 msgid "Virtual"
 msgstr "Wirtualny"
 
@@ -6942,7 +6936,6 @@ msgstr "Oznaczenie"
 #: pcbnew/class_text_mod.cpp:393
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:77
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:88
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:25
 msgid "Display"
 msgstr "Pokazuj"
 
@@ -7100,6 +7093,7 @@ msgid "Segments"
 msgstr "Segmenty"
 
 #: pcbnew/class_zone.cpp:724
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
 msgid "Polygons"
 msgstr "Wielokąty"
 
@@ -7498,26 +7492,26 @@ msgid "Insert footprint in board"
 msgstr "Wstaw footprint na płytkę"
 
 #: pcbnew/gen_modules_placefile.cpp:151 pcbnew/gen_modules_placefile.cpp:519
-#: pcbnew/dialogs/dialog_gendrill.cpp:278 pcbnew/dialogs/dialog_plot.cpp:257
+#: pcbnew/dialogs/dialog_gendrill.cpp:278 pcbnew/dialogs/dialog_plot.cpp:319
 #: pcbnew/dialogs/dialog_SVG_print.cpp:179
 msgid "Select Output Directory"
 msgstr "Wybierz folder wyjściowy"
 
 #: pcbnew/gen_modules_placefile.cpp:158 pcbnew/dialogs/dialog_gendrill.cpp:285
-#: pcbnew/dialogs/dialog_plot.cpp:264 pcbnew/dialogs/dialog_SVG_print.cpp:186
+#: pcbnew/dialogs/dialog_plot.cpp:326 pcbnew/dialogs/dialog_SVG_print.cpp:186
 msgid "Use a relative path? "
 msgstr "Użyć ścieżki względnej? "
 
 #: pcbnew/gen_modules_placefile.cpp:159 pcbnew/gen_modules_placefile.cpp:168
 #: pcbnew/dialogs/dialog_gendrill.cpp:286
-#: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:265
-#: pcbnew/dialogs/dialog_plot.cpp:275 pcbnew/dialogs/dialog_SVG_print.cpp:187
+#: pcbnew/dialogs/dialog_gendrill.cpp:296 pcbnew/dialogs/dialog_plot.cpp:327
+#: pcbnew/dialogs/dialog_plot.cpp:337 pcbnew/dialogs/dialog_SVG_print.cpp:187
 #: pcbnew/dialogs/dialog_SVG_print.cpp:197
 msgid "Plot Output Directory"
 msgstr "Folder docelowy"
 
 #: pcbnew/gen_modules_placefile.cpp:167 pcbnew/dialogs/dialog_gendrill.cpp:295
-#: pcbnew/dialogs/dialog_plot.cpp:274 pcbnew/dialogs/dialog_SVG_print.cpp:196
+#: pcbnew/dialogs/dialog_plot.cpp:336 pcbnew/dialogs/dialog_SVG_print.cpp:196
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
@@ -8818,107 +8812,107 @@ msgstr "Ustaw punkt bazowy siatki"
 msgid "Pad settings"
 msgstr "Właściwości pól lutowniczych"
 
-#: pcbnew/modedit_onclick.cpp:227
+#: pcbnew/modedit_onclick.cpp:228
 msgid "Copy Block (shift + drag mouse)"
 msgstr "Kopiuj blok (shift + przeciąganie myszką)"
 
-#: pcbnew/modedit_onclick.cpp:230
+#: pcbnew/modedit_onclick.cpp:231
 msgid "Mirror Block (alt + drag mouse)"
 msgstr "Odbij blok (alt + przeciąganie myszką)"
 
-#: pcbnew/modedit_onclick.cpp:233
+#: pcbnew/modedit_onclick.cpp:234
 msgid "Rotate Block (ctrl + drag mouse)"
 msgstr "Obróć blok (ctrl + przeciąganie myszką)"
 
-#: pcbnew/modedit_onclick.cpp:236
+#: pcbnew/modedit_onclick.cpp:237
 msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Usuń blok (shift+ctrl + przeciąganie myszką)"
 
-#: pcbnew/modedit_onclick.cpp:264
+#: pcbnew/modedit_onclick.cpp:265
 msgid "Edit Module"
 msgstr "Edytuj footprint"
 
-#: pcbnew/modedit_onclick.cpp:267
+#: pcbnew/modedit_onclick.cpp:268
 msgid "Transform Module"
 msgstr "Przekształć footprint"
 
-#: pcbnew/modedit_onclick.cpp:274
+#: pcbnew/modedit_onclick.cpp:275
 msgid "Move Pad"
 msgstr "Przesuń pole"
 
-#: pcbnew/modedit_onclick.cpp:278
+#: pcbnew/modedit_onclick.cpp:279
 msgid "Edit Pad"
 msgstr "Edytuj pole"
 
-#: pcbnew/modedit_onclick.cpp:281
+#: pcbnew/modedit_onclick.cpp:282
 msgid "New Pad Settings"
 msgstr "Nowe ustawienia pola lutowniczego"
 
-#: pcbnew/modedit_onclick.cpp:283
+#: pcbnew/modedit_onclick.cpp:284
 msgid "Export Pad Settings"
 msgstr "Eksportuj ustawienia pola lutowniczego"
 
-#: pcbnew/modedit_onclick.cpp:284
+#: pcbnew/modedit_onclick.cpp:285
 msgid "Delete Pad"
 msgstr "Usuń pole"
 
-#: pcbnew/modedit_onclick.cpp:291
+#: pcbnew/modedit_onclick.cpp:292
 msgid "Global Pad Settings"
 msgstr "Globalne ustawienia pól lutowniczych"
 
-#: pcbnew/modedit_onclick.cpp:299
+#: pcbnew/modedit_onclick.cpp:300
 msgid "Move Text Mod."
 msgstr "Przesuń tekst footprintu"
 
-#: pcbnew/modedit_onclick.cpp:305
+#: pcbnew/modedit_onclick.cpp:306
 msgid "Rotate Text Mod."
 msgstr "Obróć tekst footprintu"
 
-#: pcbnew/modedit_onclick.cpp:311
+#: pcbnew/modedit_onclick.cpp:312
 msgid "Edit Text Mod."
 msgstr "Edytuj tekst footprintu"
 
-#: pcbnew/modedit_onclick.cpp:317
+#: pcbnew/modedit_onclick.cpp:318
 msgid "Delete Text Mod."
 msgstr "Usuń tekst footprintu"
 
-#: pcbnew/modedit_onclick.cpp:328
+#: pcbnew/modedit_onclick.cpp:329
 msgid "End edge"
 msgstr "Zakończ krawędź"
 
-#: pcbnew/modedit_onclick.cpp:333
+#: pcbnew/modedit_onclick.cpp:334
 msgid "Move edge"
 msgstr "Przesuń krawędź"
 
-#: pcbnew/modedit_onclick.cpp:338
+#: pcbnew/modedit_onclick.cpp:339
 msgid "Place edge"
 msgstr "Dodaj krawędź"
 
-#: pcbnew/modedit_onclick.cpp:344
+#: pcbnew/modedit_onclick.cpp:345
 msgid "Edit Body Item"
 msgstr "Edycja elementu"
 
-#: pcbnew/modedit_onclick.cpp:346
+#: pcbnew/modedit_onclick.cpp:347
 msgid "Change Body Item Width (Current)"
 msgstr "Zmień szerokość elementu (Bieżąca)"
 
-#: pcbnew/modedit_onclick.cpp:348
+#: pcbnew/modedit_onclick.cpp:349
 msgid "Change Body Items Width (All)"
 msgstr "Zmień szerokość elementu (Wszystkie)"
 
-#: pcbnew/modedit_onclick.cpp:350
+#: pcbnew/modedit_onclick.cpp:351
 msgid "Change Body Item Layer (Current)"
 msgstr "Zmień warstwę (Bieżąca)"
 
-#: pcbnew/modedit_onclick.cpp:352
+#: pcbnew/modedit_onclick.cpp:353
 msgid "Change Body Items Layer (All)"
 msgstr "Zmień warstwę (Wszystkie)"
 
-#: pcbnew/modedit_onclick.cpp:353
+#: pcbnew/modedit_onclick.cpp:354
 msgid "Delete edge"
 msgstr "Usuń krawędź"
 
-#: pcbnew/modedit_onclick.cpp:393
+#: pcbnew/modedit_onclick.cpp:394
 msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
@@ -9526,7 +9520,7 @@ msgid "Copy this Pad Settings to Current Settings"
 msgstr "Kopiuj ustawienia tego pola do bieżących ustawień pola"
 
 #: pcbnew/onrightclick.cpp:830
-#: pcbnew/dialogs/dialog_global_pads_edition_base.h:56
+#: pcbnew/dialogs/dialog_global_pads_edition_base.h:58
 msgid "Global Pads Edition"
 msgstr "Globalna edycja pól lutowniczych"
 
@@ -9678,9 +9672,10 @@ msgid "Cannot make %s absolute with respect to %s!"
 msgstr "Nie mogę utworzyć bezwzględnego %s w stosunku do %s!"
 
 #: pcbnew/pcbplot.cpp:159 pcbnew/pcbplot.cpp:180
-#: pcbnew/dialogs/dialog_plot_base.cpp:358
+#: pcbnew/dialogs/dialog_plot_base.cpp:366
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
-#: pcbnew/dialogs/dialog_plot_base.h:114
+#: eeschema/dialogs/dialog_plot_schematic_base.h:80
+#: pcbnew/dialogs/dialog_plot_base.h:128
 msgid "Plot"
 msgstr "Rysuj"
 
@@ -9897,24 +9892,24 @@ msgstr "Plik sesji zawiera 'odniesienie' do nieistniejącego komponentu \"%s\""
 msgid "A wire_via references a missing padstack \"%s\""
 msgstr "wire_via odnosi się do brakującego stosu \"%s\""
 
-#: pcbnew/swap_layers.cpp:70
+#: pcbnew/swap_layers.cpp:71
 msgid "Swap Layers:"
 msgstr "Zamień warstwy:"
 
-#: pcbnew/swap_layers.cpp:218 pcbnew/swap_layers.cpp:225
-#: pcbnew/swap_layers.cpp:314
+#: pcbnew/swap_layers.cpp:219 pcbnew/swap_layers.cpp:226
+#: pcbnew/swap_layers.cpp:315
 msgid "No Change"
 msgstr "Bez zmian"
 
-#: pcbnew/swap_layers.cpp:258
+#: pcbnew/swap_layers.cpp:259
 msgid "&OK"
 msgstr "&OK"
 
-#: pcbnew/swap_layers.cpp:262
+#: pcbnew/swap_layers.cpp:263
 msgid "&Cancel"
 msgstr "&Anuluj"
 
-#: pcbnew/swap_layers.cpp:303
+#: pcbnew/swap_layers.cpp:304
 msgid "Deselect this layer to select the No Change state"
 msgstr "Odznacz tą warstwę, aby przywrócić ją do stanu \"Bez zmian\""
 
@@ -10019,8 +10014,6 @@ msgid "Export module"
 msgstr "Eksportuj footprint"
 
 #: pcbnew/tool_modedit.cpp:121
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:124
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:105
 msgid "Module properties"
 msgstr "Właściwości footprintu"
 
@@ -10317,6 +10310,7 @@ msgid "Cols"
 msgstr "Kolumny"
 
 #: pcbnew/autorouter/autoplac.cpp:440
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:55
 msgid "Lines"
 msgstr "Linie"
 
@@ -10405,7 +10399,7 @@ msgid "merge aligned track segments, and remove null segments"
 msgstr "Połącz wstawione segmenty ścieżki i usuń puste segmenty"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:32
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:108
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:113
 msgid "Delete unconnected tracks"
 msgstr "Usuń niepołączone ścieżki"
 
@@ -10558,13 +10552,13 @@ msgid "Pad connection:"
 msgstr "Sposób łączenia pól lutowniczych:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:178
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:183
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:488
 msgid "Solid"
 msgstr "Pełny"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:178
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:183
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:488
 msgid "Thermal relief"
 msgstr "Połączenie termiczne"
@@ -11091,7 +11085,7 @@ msgstr "Ścieżki i przelotki:"
 #: pcbnew/dialogs/dialog_display_options_base.cpp:81
 #: pcbnew/dialogs/dialog_display_options_base.cpp:93
 #: pcbnew/dialogs/dialog_display_options_base.cpp:122
-#: pcbnew/dialogs/dialog_plot_base.cpp:160
+#: pcbnew/dialogs/dialog_plot_base.cpp:161
 #: cvpcb/dialogs/dialog_display_options_base.cpp:25
 #: cvpcb/dialogs/dialog_display_options_base.cpp:31
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:53
@@ -11106,7 +11100,7 @@ msgstr "Zarys"
 #: pcbnew/dialogs/dialog_display_options_base.cpp:81
 #: pcbnew/dialogs/dialog_display_options_base.cpp:93
 #: pcbnew/dialogs/dialog_display_options_base.cpp:122
-#: pcbnew/dialogs/dialog_plot_base.cpp:160
+#: pcbnew/dialogs/dialog_plot_base.cpp:161
 #: cvpcb/dialogs/dialog_display_options_base.cpp:25
 #: cvpcb/dialogs/dialog_display_options_base.cpp:31
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:53
@@ -11129,8 +11123,8 @@ msgstr "Kształty przelotek:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:36
 #: pcbnew/dialogs/dialog_display_options_base.cpp:58
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:134
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:142
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:150
 msgid "Never"
 msgstr "Nigdy"
 
@@ -11140,8 +11134,8 @@ msgstr "Otwory zdefiniowane"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:36
 #: pcbnew/dialogs/dialog_display_options_base.cpp:58
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:134
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:142
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:150
 msgid "Always"
 msgstr "Zawsze"
 
@@ -11221,7 +11215,6 @@ msgid "Module Edges:"
 msgstr "Krawędzie footprintu:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:83
-#: cvpcb/dialogs/dialog_display_options_base.cpp:33
 msgid "Texts:"
 msgstr "Teksty:"
 
@@ -11422,102 +11415,102 @@ msgstr "Obrót kształtu (w stopniach):"
 msgid "3D Shape:"
 msgstr "Kształt 3D:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:54
 msgid "Side"
 msgstr "Warstwa"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:59
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
 msgid "+90.0"
 msgstr "+90.0"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:59
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
 msgid "-90.0"
 msgstr "-90.0"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:59
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
 msgid "180.0"
 msgstr "180.0"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:59
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
 msgid "User"
 msgstr "Użytkownika"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:65
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:67
 msgid "User orientation (in 0.1 degrees):"
 msgstr "Orientacja użytkownika (co 0.1 stopnia)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:76
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:79
 msgid "Position"
 msgstr "Pozycja"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:109
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:114
 msgid "Change Module(s)"
 msgstr "Zmień footprinty(y)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:112
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:117
 msgid "Module Editor"
 msgstr "Edytor footprintów"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:118
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:92
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:123
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:84
 msgid "Normal+Insert"
 msgstr "Normalny+Wstawianie"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:120
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:125
 msgid "Attributes"
 msgstr "Atrybuty"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:124
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:90
 msgid "Free"
 msgstr "Wolny"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:124
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:90
 msgid "Locked"
 msgstr "Zablokowany"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:126
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:100
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:92
 msgid "Move and Auto Place"
 msgstr "Przesuwanie i autorozmieszczanie"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:134
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:105
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:139
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:97
 msgid "Auto Move and Place"
 msgstr "Globalne przesuwanie i umieszczanie"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:139
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:110
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:144
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:102
 msgid "Rotation 90 degree"
 msgstr "Obrót o 90 stopni"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:152
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:123
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:157
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:115
 msgid "Rotation 180 degree"
 msgstr "Obrót o 180 stopni"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:166
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:171
 msgid "Local Settings"
 msgstr "Właściwości lokalne"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:174
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:179
 msgid "Pad connection to zones:"
 msgstr "Sposób łączenia pól lutowniczych:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:178
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:183
 msgid "Use zone setting"
 msgstr "Użyj ustawień ze stref"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:187
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:192
 msgid "Set clearances to 0 to use global values"
 msgstr "Ustaw wartość 0 by użyć globalnych ustawień"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:202
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:207
 msgid "All pads nets clearance:"
 msgstr "Prześwit dla wszystkich pól lutowniczych:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:204
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:209
 msgid ""
 "This is the local net clearance for all pad of this footprint\n"
 "If 0, the Netclass values are used\n"
@@ -11529,11 +11522,11 @@ msgstr ""
 "Wartość ta może zostać zastąpiona przez lokalne ustawienia dla pól "
 "lutowniczych."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:211
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:233
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:246
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:157
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:192
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:217
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:240
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:254
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:150
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:200
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:52
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:65
@@ -11556,16 +11549,16 @@ msgstr ""
 msgid "Inch"
 msgstr "cale"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:224
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:170
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:230
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:163
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:43
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:428
-#: pcbnew/dialogs/dialog_plot_base.cpp:194
+#: pcbnew/dialogs/dialog_plot_base.cpp:196
 msgid "Solder mask clearance:"
 msgstr "Prześwit maski:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:226
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:172
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:232
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:165
 msgid ""
 "This is the local clearance between pads and the solder mask\n"
 "for this footprint\n"
@@ -11579,15 +11572,15 @@ msgstr ""
 "Wartość ta może zostać zastąpiona przez lokalne ustawienia dla pól "
 "lutowniczych."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:237
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:183
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:244
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:190
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:78
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:442
 msgid "Solder paste clearance:"
 msgstr "Prześwit dla pasty lutowniczej:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:239
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:185
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:246
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:192
 msgid ""
 "This is the local clearance between pads and the solder paste\n"
 "for this footprint.\n"
@@ -11604,15 +11597,15 @@ msgstr ""
 "Właściwy prześwit jest sumą tej wartości i stosunkowej wartości prześwitu.\n"
 "Wartość ujemna oznacza mniejszy rozmiar maski niż rozmiar pola lutowniczego."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:250
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:196
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:258
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:204
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:91
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:456
 msgid "Solder mask ratio clearance:"
 msgstr "Stosunek prześwitu dla masek:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:252
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:198
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:260
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:206
 msgid ""
 "This is the local clearance ratio in per cent between pads and the solder "
 "paste\n"
@@ -11631,43 +11624,43 @@ msgstr ""
 "Ostateczny rozmiar prześwitu jest sumą tej wartości i rozmiaru prześwitu\n"
 "Wartość ujemna oznacza, że maska jest mniejsza niż rozmiar pola lutowniczego."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:259
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:205
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:268
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:214
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:466
 msgid "%"
 msgstr "%"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:276
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:222
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:285
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:231
 msgid "Properties"
 msgstr "Właściwości"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:281
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:227
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:290
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:236
 msgid "3D Shape Name"
 msgstr "Nazwa obiektu 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:291
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:300
 msgid "3D Scale and Position"
 msgstr "Skala 3D i pozycja"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:299
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:308
 msgid "Browse Shapes"
 msgstr "Przeglądaj Kształty"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:302
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:245
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:311
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:254
 msgid "Add 3D Shape"
 msgstr "Dodaj kształt 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:305
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:248
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:314
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:257
 msgid "Remove 3D Shape"
 msgstr "Usuń kształt 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:318
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:261
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:327
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:270
 msgid "3D settings"
 msgstr "Ustawienia 3D"
 
@@ -11675,36 +11668,36 @@ msgstr "Ustawienia 3D"
 msgid "Fields:"
 msgstr "Pola:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:37
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:38
 msgid "Keywords"
 msgstr "Słowa kluczowe"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:76
-msgid "Footprint Name in Lib"
-msgstr "Nazwa footprintu w bibliotece"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:94
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:86
 msgid "Attributs:"
 msgstr "Atrybuty:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:137
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:129
 msgid "Masks clearances local values:"
 msgstr "Lokalna wartość prześwitu dla masek:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:139
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:131
 msgid "Set these values to 0 to use global values"
 msgstr "Ustaw wartość 0 by użyć globalnych ustawień"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:150
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:142
 msgid "All pads nets clearance"
 msgstr "Prześwit dla pól lutowniczych"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:179
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:173
 #: pcb_calculator/UnitSelector.cpp:18
 msgid "inch"
 msgstr "cale"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:237
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:178
+msgid "Footprint Name in Lib"
+msgstr "Nazwa footprintu w bibliotece"
+
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:246
 msgid "3D Scale and Pos"
 msgstr "Skala 3D i pozycja"
 
@@ -11741,35 +11734,35 @@ msgstr "Pionowo"
 msgid "Current Module"
 msgstr "Bieżący footprint"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:32
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:33
 msgid "Current Value"
 msgstr "Bieżąca wartość"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:39
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:41
 msgid "New Module"
 msgstr "Nowy footprint"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:51
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:55
 msgid "Change module"
 msgstr "Zamień footprint"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:51
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:55
 msgid "Change same modules"
 msgstr "Zamień te same footprinty"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:51
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:55
 msgid "Ch. same module+value"
 msgstr "Zamień te same footprinty+wartość"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:51
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:55
 msgid "Change all"
 msgstr "Zamień wszystkie"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:53
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:57
 msgid "Browse Libs modules"
 msgstr "Przeglądaj biblioteki footprintów"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:68
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:73
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:28
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:70
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:103
@@ -12046,6 +12039,7 @@ msgstr "Folder wyjściowy:"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:43
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:33
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:25
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
 msgid "Millimeters"
 msgstr "Milimetry"
 
@@ -12191,14 +12185,17 @@ msgstr "Plik raportu"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:25
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:68
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:25
 msgid "Rectangular"
 msgstr "Prostokątny"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:25
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:25
 msgid "Polar"
 msgstr "Polarne"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:27
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:27
 msgid "Coordinates"
 msgstr "Współrzędne"
 
@@ -12234,49 +12231,49 @@ msgstr "Kursor"
 msgid "Main cursor shape selection (small cross or large cursor)"
 msgstr "Wybór kształtu głównego kursora (mały krzyż lub duży kursor)"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:55
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:60
 msgid "Maximum Links:"
 msgstr "Łącz maksymalnie:"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:60
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:65
 msgid "Adjust the number of ratsnets shown from cursor to closest pads"
 msgstr ""
 "Ustaw liczbę połączeń wspomagających pokazywanych z pozycji kursora do "
 "najbliższych pól lutowniczych"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:64
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:69
 msgid "Auto Save (minutes):"
 msgstr "Auto zapis (minut):"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:69
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:74
 msgid ""
 "Delay after the first change to create a backup file of the board on disk."
 msgstr ""
 "Opóźnienie pomiędzy pierwszą zmianą w płytce a zapisem kopii zapasowej na "
 "dysku."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:73
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:78
 msgid "Rotation Angle:"
 msgstr "Kąt obrotu:"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:77
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:82
 msgid "45"
 msgstr "45"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:77
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:82
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:135
 msgid "90"
 msgstr "90"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:81
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:86
 msgid "Footprints rotation increment, for rotate menu or hot key."
 msgstr "Krok rotacji footprintów, dla menu obrotu lub klawiszy skrótów."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:91
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:96
 msgid "Enforce design rules when routing"
 msgstr "Stosuj kontrolę reguł projektowych podczas trasowania"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:93
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:98
 msgid ""
 "Enable/disable the DRC control.\n"
 "When DRC is disable, all connections are allowed."
@@ -12284,19 +12281,19 @@ msgstr ""
 "Włącz/Wyłącz kontrolę DRC.\n"
 "Gdy DRC jest wyłączone, wszystkie połączenia są dozwolone!"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:97
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:102
 msgid "Show ratsnest"
 msgstr "Pokaż połączenia wspomagające"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:99
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:104
 msgid "Show (or not) the full rastnest."
 msgstr "Pokaż (ukryj) pełną siatkę połączeń pomocniczych"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:103
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:108
 msgid "Show footprint ratsnest"
 msgstr "Pokaż połączenia wspomagające footprintu"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:104
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:109
 msgid ""
 "Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
 "This ratsnest is useful to place a footprint."
@@ -12305,15 +12302,15 @@ msgstr ""
 "podczas jego przesuwania.\n"
 "Połączenia wspomagające są pomocne podczas ustawiania footprintów."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:109
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:114
 msgid "Enable/disable the automatic track deletion when recreating a track."
 msgstr "Włącz/Wyłącz automatyczne usuwanie starych ścieżek."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:113
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:118
 msgid "Limit tracks to 45 degrees"
 msgstr "Ścieżki tylko pod kątem 45 stopni"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:114
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:119
 msgid ""
 "If enabled, force tracks directions to H, V or 45 degrees, when creating a "
 "track."
@@ -12321,11 +12318,11 @@ msgstr ""
 "Gdy włączone, wymusza tworzenie ścieżek tylko jako proste lub pod kątem 45 "
 "st."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:118
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:123
 msgid "Limit graphic lines to 45 degrees"
 msgstr "Linie graficzne tylko pod kątem 45 stopni"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:119
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:124
 msgid ""
 "If enabled, force segments directions to H, V or 45 degrees, when creating a "
 "segment on technical layers."
@@ -12333,11 +12330,11 @@ msgstr ""
 "Gdy włączone, wymusza tworzenie segmentów na warstwach technologicznych "
 "tylko jako proste lub pod kątem 45 st."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:123
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:128
 msgid "Use double segmented tracks"
 msgstr "Używaj ścieżek z podwójnym segmentem"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:124
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:129
 msgid ""
 "If enabled, uses two track segments, with 45 degrees angle between them when "
 "creating a new track "
@@ -12345,58 +12342,65 @@ msgstr ""
 "Jeśli włączona, używa dwóch segmentów ścieżek, pochylonych wględem siebie o "
 "45 st. w trakcie tworzenia nowych ścieżek"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:134
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:142
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:150
 msgid "When creating tracks"
 msgstr "W trakcie tworzenia ścieżek"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:136
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:144
 msgid "Magnetic Pads"
 msgstr "Przyciągaj do padów"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:138
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:146
 msgid ""
 "control the capture of the pcb cursor when the mouse cursor enters a pad area"
 msgstr ""
 "Kontrola przechwycenia kursora PCB, gdy wchodzi w obszar pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:144
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:152
 msgid "Magnetic Tracks"
 msgstr "Przyciągaj do ścieżek"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:146
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:154
 msgid ""
 "Control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr "Kontrola przechwycenia kursora PCB, gdy wchodzi w obszar ścieżki"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:151
-msgid "Pan"
-msgstr "Panoramuj"
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:159
+#: cvpcb/dialogs/dialog_display_options_base.cpp:56
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:84
+msgid "Pan and Zoom"
+msgstr "Panoramowanie i przybliżanie"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:153
-msgid "Do not center and warp mouse on zoom"
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:161
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:86
+msgid "Do not center and warp cursor on zoom"
 msgstr "Nie centruj i nie przesuwaj kursora przy powiększaniu"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:158
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:166
+#: cvpcb/dialogs/dialog_display_options_base.cpp:63
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:91
 msgid "Use middle mouse button to pan"
 msgstr "Użyj środkowego klawisza myszy do przesuwania widoku"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:163
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:171
+#: cvpcb/dialogs/dialog_display_options_base.cpp:66
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:94
 msgid "Limit panning to scroll size"
 msgstr "Panoramuj tylko do obszaru dającego się przesuwać"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:168
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:176
 msgid "Pan while moving object"
 msgstr "Panoramuj podczas przesuwania obiektów"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:169
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:177
 msgid "Allows auto pan when creating a track, or moving an item."
 msgstr ""
 "Zezwalaj na przesuwanie widoku podczas tworzenia ścieżek lub przesuwania "
 "elementów."
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:32
-#: pcbnew/dialogs/dialog_plot_base.cpp:51
+#: pcbnew/dialogs/dialog_plot_base.cpp:52
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
@@ -12405,7 +12409,7 @@ msgstr ""
 "względną w stosunku do reszty plików."
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:37
-#: pcbnew/dialogs/dialog_plot_base.cpp:55
+#: pcbnew/dialogs/dialog_plot_base.cpp:56
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:32
 msgid "Browse..."
 msgstr "Przeglądaj..."
@@ -12743,7 +12747,7 @@ msgid "Default pen size"
 msgstr "Domyślny rozmiar pisaka:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:100
-#: pcbnew/dialogs/dialog_plot_base.cpp:168
+#: pcbnew/dialogs/dialog_plot_base.cpp:169
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:84
 msgid ""
 "Pen size used to draw items that have no pen size specified.\n"
@@ -12950,7 +12954,7 @@ msgstr "Warstwy ścieżek"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:50
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:331
-#: pcbnew/dialogs/dialog_plot_base.cpp:70
+#: pcbnew/dialogs/dialog_plot_base.cpp:71
 msgid "Layers"
 msgstr "Warstwy"
 
@@ -13298,7 +13302,7 @@ msgstr ""
 "footprintach lub dla pól lutowniczych."
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:56
-#: pcbnew/dialogs/dialog_plot_base.cpp:204
+#: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid "Solder mask min width:"
 msgstr "Minimalna szerokość maski lutowniczej:"
 
@@ -13506,7 +13510,7 @@ msgid "Rebuild the full ratsnest (usefull after a manual pad netname edition)"
 msgstr ""
 "Odbuduj pełne połączenia (użyteczne po ręcznej zmianie nazwy sieci pola lut.)"
 
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:108
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
 msgid "Netlist File:"
 msgstr "Plik listy sieci:"
 
@@ -13925,27 +13929,27 @@ msgstr "Wyrównanie:"
 msgid "Orientation (0.1 deg):"
 msgstr "Orientacja (co 0.1 stopnia):"
 
-#: pcbnew/dialogs/dialog_plot.cpp:526
+#: pcbnew/dialogs/dialog_plot.cpp:588
 msgid "HPGL pen size constrained!\n"
 msgstr "Rozmiar pisaka HPGL ograniczony!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:539
+#: pcbnew/dialogs/dialog_plot.cpp:601
 msgid "HPGL pen overlay constrained!\n"
 msgstr "Pokrycie pisaka HPGL ograniczone!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:551
+#: pcbnew/dialogs/dialog_plot.cpp:613
 msgid "Default linewidth constrained!\n"
 msgstr "Domyślna szerokość linii ograniczona!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:564
+#: pcbnew/dialogs/dialog_plot.cpp:626
 msgid "X scale constrained!\n"
 msgstr "Skala X ograniczona!\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:578
+#: pcbnew/dialogs/dialog_plot.cpp:640
 msgid "Y scale constrained!\n"
 msgstr "Skala Y ograniczona!'\n"
 
-#: pcbnew/dialogs/dialog_plot.cpp:592
+#: pcbnew/dialogs/dialog_plot.cpp:654
 #, c-format
 msgid ""
 "Width correction constrained!\n"
@@ -13956,15 +13960,19 @@ msgstr ""
 "Prawidłowa wartość korekcji musi zawierać się w granicach\n"
 "[%+f; %+f] (%s) dla bieżących reguł projektowych!\n"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:90
+#: pcbnew/dialogs/dialog_plot_base.cpp:27
+msgid "Plot format:"
+msgstr "Format wyjściowy:"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Plot sheet reference on all layers"
 msgstr "Rysuj oznaczenie arkusza na wszystkich warstwach"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:93
+#: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Plot pads on silkscreen"
 msgstr "Rysuj pola lutownicze na war. opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:94
+#: pcbnew/dialogs/dialog_plot_base.cpp:95
 msgid ""
 "Enable/disable print/plot pads on silkscreen layers\n"
 "When disable, pads are never potted on silkscreen layers\n"
@@ -13975,117 +13983,117 @@ msgstr ""
 "Gdy włączone, pola lutownicze są wbite tylko jesli występują na warstwach "
 "opisowych"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:98
+#: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Plot module value on silkscreen"
 msgstr "Rysuj wartości na war. opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:101
+#: pcbnew/dialogs/dialog_plot_base.cpp:102
 msgid "Plot module reference on silkscreen"
 msgstr "Rysuj oznaczenia na war. opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:104
+#: pcbnew/dialogs/dialog_plot_base.cpp:105
 msgid "Plot other module texts on silkscreen"
 msgstr "Rysuj pozostałe teksty footprintu na war. opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:105
+#: pcbnew/dialogs/dialog_plot_base.cpp:106
 msgid "Enable/disable print/plot module field texts on silkscreen layers"
 msgstr ""
 "Włącz/wyłącz drukowanie/rysowanie pól tekstowych footprintu na warstwach "
 "opisu"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:109
+#: pcbnew/dialogs/dialog_plot_base.cpp:110
 msgid "Plot invisible texts on silkscreen"
 msgstr "Rysuj ukryty tekst na war. opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:110
+#: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Force print/plot module invisible texts on silkscreen layers"
 msgstr ""
 "Włącz/wyłącz drukowanie/rysowanie ukrytych tekstów footprintu na warstwach "
 "opisu"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:114
+#: pcbnew/dialogs/dialog_plot_base.cpp:115
 msgid "Do not tent vias"
 msgstr "Nie maskuj przelotek"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:115
+#: pcbnew/dialogs/dialog_plot_base.cpp:116
 msgid "Remove soldermask on vias."
 msgstr "Usuń maskę lutowniczą z przelotek."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:119
+#: pcbnew/dialogs/dialog_plot_base.cpp:120
 msgid "Exclude PCB edge layer from other layers"
 msgstr "Wyłącz warstwę krawędzi PCB z pozostałych warstw"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:120
+#: pcbnew/dialogs/dialog_plot_base.cpp:121
 msgid "Exclude contents of the pcb edge layer from all other layers"
 msgstr "Wyłącz zawartość warstwy krawędzi PCB na pozostałych warstwach"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:124
+#: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "Mirrored plot"
 msgstr "Rysowanie w odbiciu lustrzanym"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:127
+#: pcbnew/dialogs/dialog_plot_base.cpp:128
 msgid "Negative plot"
 msgstr "Rysuj w negatywie"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:136
+#: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Drill marks:"
 msgstr "Znaczniki wierceń:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:140
+#: pcbnew/dialogs/dialog_plot_base.cpp:141
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:37
 msgid "Small"
 msgstr "Mały"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:140
+#: pcbnew/dialogs/dialog_plot_base.cpp:141
 msgid "Actual size"
 msgstr "Rozmiar rzeczywisty"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:146
+#: pcbnew/dialogs/dialog_plot_base.cpp:147
 msgid "Scaling:"
 msgstr "Skala:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:150
+#: pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "1:1"
 msgstr "1:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:150
+#: pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "3:2"
 msgstr "3:2"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:150
+#: pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "2:1"
 msgstr "2:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:150
+#: pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "3:1"
 msgstr "3:1"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:156
+#: pcbnew/dialogs/dialog_plot_base.cpp:157
 msgid "Plot mode:"
 msgstr "Tryb rysowania:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:166
+#: pcbnew/dialogs/dialog_plot_base.cpp:167
 msgid "Default line width"
 msgstr "Domyślna szerokość linii"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:173
+#: pcbnew/dialogs/dialog_plot_base.cpp:175
 msgid "Line width for, e.g., sheet references."
 msgstr "Szerokość lini dla, przykładowo: odnośników arkusza."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:187
+#: pcbnew/dialogs/dialog_plot_base.cpp:189
 msgid "Solder mask current settings:"
 msgstr "Bieżące ustawienia maski lutowniczej:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:196
+#: pcbnew/dialogs/dialog_plot_base.cpp:198
 msgid "Margin between pads and solder mask"
 msgstr "Odstęp pomiędzy polem lutowniczym a maską lutowniczą"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:200
-#: pcbnew/dialogs/dialog_plot_base.cpp:210
+#: pcbnew/dialogs/dialog_plot_base.cpp:202
+#: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid "val"
 msgstr "val"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:206
+#: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid ""
 "Min dist between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting"
@@ -14094,76 +14102,72 @@ msgstr ""
 "Dwa pola umieszczone bliżej siebie niż ta wartość zostaną połączone podczas "
 "rysowania."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:220
+#: pcbnew/dialogs/dialog_plot_base.cpp:222
 msgid "Gerber Options"
 msgstr "Opcje Gerber"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:222
+#: pcbnew/dialogs/dialog_plot_base.cpp:224
 msgid "Use proper filename extensions"
 msgstr "Użyj właściwych rozszerzeń plików"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:223
+#: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "Use proper Gerber extensions - .GBL, .GTL, etc..."
 msgstr "Użyj właściwych rozszerzeń dla plików Gerber - .GBL, .GTL, itd..."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:227
+#: pcbnew/dialogs/dialog_plot_base.cpp:229
 msgid "Subtract soldermask from silkscreen"
 msgstr "Odejmij maskę lutowniczą od warstwy opisowej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:228
+#: pcbnew/dialogs/dialog_plot_base.cpp:230
 msgid "Remove silkscreen from areas without soldermask"
 msgstr "Usuń maskę opisową z pól wokół maski lutowniczej"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:232
+#: pcbnew/dialogs/dialog_plot_base.cpp:234
 msgid "Use auxiliary axis as origin"
 msgstr "Użyj osi pomocniczej jako puntu początkowego"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:233
+#: pcbnew/dialogs/dialog_plot_base.cpp:235
 msgid "Use auxiliary axis as coordinates origin in Gerber files."
 msgstr ""
 "Użyj osi pomocniczej jako początku układu współrzędnych dla plików Gerber."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:240
-msgid "HPGL Options"
-msgstr "Opcje HPGL"
-
-#: pcbnew/dialogs/dialog_plot_base.cpp:248
+#: pcbnew/dialogs/dialog_plot_base.cpp:250
 msgid "Pen size"
 msgstr "Rozmiar pisaka"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:261
+#: pcbnew/dialogs/dialog_plot_base.cpp:264
 msgid "Pen overlay"
 msgstr "Pokrycie pisaka"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:266
+#: pcbnew/dialogs/dialog_plot_base.cpp:270
 msgid "Set plot overlay for filling"
 msgstr "Ustaw pokrycie rysunku do wypełnienia"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:279
+#: pcbnew/dialogs/dialog_plot_base.cpp:283
 msgid "Postscript Options"
 msgstr "Opcje PostScript"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:287
+#: pcbnew/dialogs/dialog_plot_base.cpp:291
 msgid "X scale:"
 msgstr "Skala X:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:292
+#: pcbnew/dialogs/dialog_plot_base.cpp:297
 msgid "Set global X scale adjust for exact scale postscript output."
 msgstr "Ustawia globalną skalę w osi X dla dostrojenia skali rysunku Postscipt"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:302
+#: pcbnew/dialogs/dialog_plot_base.cpp:307
 msgid "Y scale:"
 msgstr "Skala Y:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:307
+#: pcbnew/dialogs/dialog_plot_base.cpp:313
 msgid "Set global Y scale adjust for exact scale postscript output."
 msgstr "Ustawia globalną skalę w osi Y dla dostrojenia skali rysunku Postscipt"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:317
+#: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Width correction"
 msgstr "Korekcja szerokości"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:322
+#: pcbnew/dialogs/dialog_plot_base.cpp:329
 msgid ""
 "Set global width correction for exact width postscript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -14179,13 +14183,33 @@ msgstr ""
 "ścieżki - 1), +(Min Rozmiar prześwitu - 1)] i jest wyrażony w dzesiątkach "
 "milsów."
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:332
+#: pcbnew/dialogs/dialog_plot_base.cpp:339
 msgid "Force A4 output"
 msgstr "Wymuś format A4"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:362
+#: pcbnew/dialogs/dialog_plot_base.cpp:370
 msgid "Generate Drill File"
 msgstr "Generuj plik wierceń"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:388
+msgid "Select Fab Layers"
+msgstr "Zaznacz warstwy techniczne"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:392
+msgid "Select all Copper Layers"
+msgstr "Zaznacz wszystkie warstwy miedzi"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:396
+msgid "Deselect all Copper Layers"
+msgstr "Odznacz wszystkie warstwy miedzi"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:400
+msgid "Select all Layers"
+msgstr "Zaznacz wszystkie warstwy"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:404
+msgid "Deselect all Layers"
+msgstr "Odznacz wszystkie warstwy"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:69
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:94
@@ -14376,10 +14400,6 @@ msgstr "Wydruk strony"
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:23
 msgid "User Defined Grid"
 msgstr "Siatka użytkownika"
-
-#: pcbnew/dialogs/dialog_set_grid_base.cpp:62
-msgid "Origin"
-msgstr "Punkt bazowy siatki"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:70
 msgid "X:"
@@ -14798,12 +14818,8 @@ msgid "Footprint alias files"
 msgstr "Pliki aliasów footprintów"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:27
-msgid "Edges:"
-msgstr "Krawędzie:"
-
-#: cvpcb/dialogs/dialog_display_options_base.cpp:44
-msgid "Pads:"
-msgstr "Pola lutownicze:"
+msgid "Edges"
+msgstr "Krawędzie"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:46
 msgid "Fill &pad"
@@ -14813,20 +14829,9 @@ msgstr "&Punkt lutowniczy wypełniony"
 msgid "Show pad &number"
 msgstr "Pokaż &numery pól"
 
-#: cvpcb/dialogs/dialog_display_options_base.cpp:56
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:87
-msgid "Pan:"
-msgstr "Przesuwanie widoku:"
-
-#: cvpcb/dialogs/dialog_display_options_base.cpp:63
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:94
-msgid "Middle Button PAN Enabled"
-msgstr "Włącz przesuwanie widoku"
-
-#: cvpcb/dialogs/dialog_display_options_base.cpp:66
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:97
-msgid "Middle Button PAN Limited"
-msgstr "Przesuwanie widoku z ograniczeniami"
+#: cvpcb/dialogs/dialog_display_options_base.cpp:58
+msgid "Do not center and warp cusor on zoom"
+msgstr "Nie centruj i nie przesuwaj kursora przy powiększaniu"
 
 #: gerbview/class_gbr_layer_box_selector.cpp:80
 #: gerbview/class_gerbview_layer_widget.cpp:205
@@ -15432,62 +15437,47 @@ msgid "PCB_Edges"
 msgstr "Krawedziowa"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
 msgid "Full size. Do not show page limits"
 msgstr "Pełny rozmiar. Nie pokazuj granic strony"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Full size"
 msgstr "Pełny rozmiar"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Size A4"
 msgstr "Rozmiar A4"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Size A3"
 msgstr "Rozmiar A3"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Size A2"
 msgstr "Rozmiar A2"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Size A"
 msgstr "Rozmiar A"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Size B"
 msgstr "Rozmiar B"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:80
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
 msgid "Size C"
 msgstr "Rozmiar C"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:27
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:82
 msgid "Show Page Limits:"
 msgstr "Pokaż granice strony:"
-
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:25
-msgid "No Display"
-msgstr "Nie pokazuj"
-
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:27
-msgid "Display Polar Coord"
-msgstr "Pokaż współrzędne polarne"
-
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
-#: common/common.cpp:221
-msgid "millimeters"
-msgstr "Milimetry"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:37
 msgid "Large"
@@ -15497,17 +15487,13 @@ msgstr "Duże"
 msgid "Show D codes"
 msgstr "Pokaż kody wierceń"
 
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:55
-msgid "Lines:"
-msgstr "Linie:"
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:77
+msgid "Full size without limits"
+msgstr "Pełny rozmiar bez ograniczeń"
 
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
-msgid "Spots:"
-msgstr "Punkty:"
-
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
-msgid "Polygons:"
-msgstr "Wielokąty:"
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:79
+msgid "Page"
+msgstr "Strona"
 
 #: 3d-viewer/3d_aux.cpp:186
 msgid "Vertex "
@@ -15831,6 +15817,10 @@ msgstr "\""
 msgid "inches"
 msgstr "cale"
 
+#: common/common.cpp:221
+msgid "millimeters"
+msgstr "Milimetry"
+
 #: common/common.cpp:240
 msgid "in"
 msgstr "w"
@@ -15974,15 +15964,15 @@ msgstr "Nieznany typ MIME pliku dokumentacji <%s>"
 msgid "Bold+Italic"
 msgstr "Pogrubiona kursywa"
 
-#: common/fpid.cpp:167
+#: common/fpid.cpp:179
 msgid "Illegal character found in FPID string"
 msgstr "Znaleziono niepoprawny znak w ciągu FPID"
 
-#: common/fpid.cpp:267
+#: common/fpid.cpp:281
 msgid "Illegal character found in logical library name"
 msgstr "Niepoprawny znak w danych o logicznej nazwie biblioteki"
 
-#: common/fpid.cpp:284
+#: common/fpid.cpp:298
 msgid "Illegal character found in revision"
 msgstr "Niepoprawny znak w danych o rewizji"
 
@@ -18015,7 +18005,7 @@ msgstr "Edytor tekstu"
 msgid "Fields Properties"
 msgstr "Właściwości pola"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.h:119
+#: eeschema/dialogs/dialog_eeschema_options_base.h:122
 msgid "Schematic Editor Options"
 msgstr "Opcje edytora schematów"
 
@@ -18042,10 +18032,6 @@ msgstr "Właściwości tekstów biblioteki"
 #: eeschema/dialogs/dialog_netlist_base.h:117
 msgid "Plugins:"
 msgstr "Wtyczki:"
-
-#: eeschema/dialogs/dialog_plot_schematic_base.h:78
-msgid "Create Plot File"
-msgstr "Utwórz plik rysunku"
 
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:55
 msgid "Sheet Pin Properties"
@@ -18087,11 +18073,16 @@ msgstr "Właściwości wymiarowań"
 msgid "DRC Control"
 msgstr "Kontrola DRC"
 
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:126
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:107
+msgid "Module Properties"
+msgstr "Właściwości footprintu"
+
 #: pcbnew/dialogs/dialog_edit_module_text_base.h:65
 msgid "Footprint text properties"
 msgstr "Właściwości tekstu footprintu"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.h:59
+#: pcbnew/dialogs/dialog_exchange_modules_base.h:63
 msgid "Exchange Modules"
 msgstr "Zamień footprinty"
 
@@ -18219,105 +18210,3 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
-
-#~ msgid "Drc ON"
-#~ msgstr "DRC włączone"
-
-#~ msgid "Show Mod Ratsnest"
-#~ msgstr "Pokaż połączenia wspomagające footprintów"
-
-#~ msgid "Tracks Auto Del"
-#~ msgstr "Automatyczne usuwanie ścieżek"
-
-#~ msgid "Segments 45 Only"
-#~ msgstr "Segmenty tylko pod kątem 45 stopni"
-
-#~ msgid "Auto PAN"
-#~ msgstr "Autodopasowanie powiększenia"
-
-#~ msgid "Delete Zones"
-#~ msgstr "Usuń strefy"
-
-#~ msgid "Delete Texts"
-#~ msgstr "Usuń teksty"
-
-#~ msgid "Delete Drawings"
-#~ msgstr "Usuń rysunki"
-
-#~ msgid "Delete Modules"
-#~ msgstr "Usuń footprinty"
-
-#~ msgid "Delete Tracks"
-#~ msgstr "Usuń ścieżki"
-
-#~ msgid "Delete Markers"
-#~ msgstr "Usuń znaczniki"
-
-#~ msgid "Modify reference"
-#~ msgstr "Zmodyfikuj odnośnik"
-
-#~ msgid "Modify value"
-#~ msgstr "Zmodyfikuj wartość"
-
-#~ msgid "Modify other fields"
-#~ msgstr "Zmodyfikuj pozostałe pola"
-
-#~ msgid "Modules Filter:"
-#~ msgstr "Filtr footprintów:"
-
-#~ msgid "Current Design Settings:"
-#~ msgstr "Bieżące ustawienia projektowe:"
-
-#~ msgid "User Grid Size"
-#~ msgstr "Rozmiar siatki użytkownika"
-
-#~ msgid "Grid Size Units"
-#~ msgstr "Jednostka rozmiaru siatki"
-
-#~ msgid "User Grid Size X"
-#~ msgstr "Rozmiar siatki użytkownika X"
-
-#~ msgid "User Grid Size Y"
-#~ msgstr "Rozmiar siatki użytkownika Y"
-
-#~ msgid "Grid origin X:"
-#~ msgstr "Punkt bazowy X siatki:"
-
-#~ msgid "Grid origin Y:"
-#~ msgstr "Punkt bazowy Y siatki:"
-
-#~ msgid "General settings"
-#~ msgstr "Opcje główne"
-
-#~ msgid "Global Module Fields Edition"
-#~ msgstr "Globalna edycja pól footprintów"
-
-#~ msgid "Grid Origin and User Grid Size"
-#~ msgstr "Położenie i rozmiar siatki użytkownika"
-
-#~ msgid "&Backannotate"
-#~ msgstr "Numeracja wsteczna"
-
-#~ msgid "Back annotate the footprint fields"
-#~ msgstr "Numeracja wsteczna pól footprintów"
-
-#~ msgid "Adhesive Cmp"
-#~ msgstr "Kleju gorna"
-
-#~ msgid "Adhesive Copper"
-#~ msgstr "Kleju dolna"
-
-#~ msgid "Solder paste Copper"
-#~ msgstr "Pasty dolna"
-
-#~ msgid "Silkscreen Cmp"
-#~ msgstr "Opisu gorna"
-
-#~ msgid "Silkscreen Copper"
-#~ msgstr "Opisu dolna"
-
-#~ msgid "Solder mask Copper"
-#~ msgstr "Maska ścieżek"
-
-#~ msgid "Draft layer"
-#~ msgstr "Warstwa szkicu"
