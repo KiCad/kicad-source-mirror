@@ -142,3 +142,11 @@ PYTHON_SITE_PACKAGE_PATH (PATH)
 When building KiCad with Python scripting enable, the Python site library path
 is used by default.  If you want to install the KiCad Python extension in a
 different path, set this variable to the desired path.
+
+
+USE_FP_LIB_TABLE (ON/OFF)
+-------------------------
+This option enable or disables building KiCad with the new footprint library
+table support.  The default setting (OFF) builds KiCad with the legacy library
+path support.  This option is experimental until the library table support is
+ready for release.

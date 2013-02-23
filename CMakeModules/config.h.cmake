@@ -85,4 +85,7 @@
 #define LEGACY_BOARD_FILE_VERSION          1
 #endif
 
+/// Definition to compile with Pcbnew footprint library table implementation.
+#cmakedefine USE_FP_LIB_TABLE
+
 #endif  // CONFIG_H_
