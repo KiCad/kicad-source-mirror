@@ -64,6 +64,8 @@ option(KICAD_SCRIPTING_WXPYTHON
 # python binary file should be is exec path.
 
 
+option(USE_FP_LIB_TABLE "Use the new footprint library table implementation. (default OFF)")
+
 #Set version option (stable or testing)
 
 if(KICAD_STABLE_VERSION AND KICAD_TESTING_VERSION )

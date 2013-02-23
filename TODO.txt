@@ -81,7 +81,6 @@ EESchema
 * Drag and drop between two EESchema windows.
 
 Wayne:
-E2)  Finish adding replace capability to new Find dialog.
 E3)  Hook up perform last library search hot key to replace search libraries for
      component support removed from find dialog.
 E4)  Change add component dialog search text control to combobox and add component

@@ -165,9 +165,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Specctra Session
     AddMenuItem( submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
-                           _( "&Specctra Session" ),
-                           _( "Import a routed \"Specctra Session\" (*.ses) file" ),
-                           KiBitmap( import_xpm ) );
+                 _( "&Specctra Session" ),
+                 _( "Import a routed \"Specctra Session\" (*.ses) file" ),
+                 KiBitmap( import_xpm ) );
 
     AddMenuItem( filesMenu, submenuImport,
                  ID_GEN_IMPORT_FILE, _( "&Import" ),
@@ -421,13 +421,15 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* configmenu = new wxMenu;
 
     // Library
+#if !defined( USE_FP_LIB_TABLE )
     AddMenuItem( configmenu, ID_CONFIG_REQ,
                  _( "Li&brary" ), _( "Setting libraries, directories and others..." ),
                  KiBitmap( library_xpm ) );
-
+#else
     AddMenuItem( configmenu, ID_PCB_LIB_TABLE_EDIT,
                 _( "Li&brary Tables" ), _( "Setup footprint libraries" ),
                 KiBitmap( library_table_xpm ) );
+#endif
 
     // Colors and Visibility are also handled by the layers manager toolbar
     AddMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
