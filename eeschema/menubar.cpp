@@ -36,7 +36,6 @@
 #include <wxEeschemaStruct.h>
 
 #include <general.h>
-//#include <protos.h>
 #include <eeschema_id.h>
 #include <hotkeys.h>
 #include <menus_helpers.h>
@@ -145,6 +144,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Print schematic" ),
                  KiBitmap( print_button_xpm ) );
 
+#ifdef __WINDOWS__ // __WINDOWS__
+
     // Plot submenu
     wxMenu* choice_plot_fmt = new wxMenu;
     AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_SCHEMATIC,
@@ -153,20 +154,29 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( plot_xpm ) );
 
     // Plot to Clipboard (Windows only)
-#ifdef __WINDOWS__
+
 
     AddMenuItem( choice_plot_fmt, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
                  _( "Plot to &Clipboard" ),
                  _( "Export drawings to clipboard" ),
                  KiBitmap( copy_button_xpm ) );
 
-#endif // __WINDOWS__
-
-    // Plot submenu
+    // Plot
     AddMenuItem( fileMenu, choice_plot_fmt,
                  ID_GEN_PLOT, _( "&Plot" ),
                  _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
                  KiBitmap( plot_xpm ) );
+
+#else   // Other
+
+    // Plot
+    AddMenuItem( fileMenu,
+                 ID_GEN_PLOT_SCHEMATIC,
+                 _( "&Plot" ),
+                 _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
+                 KiBitmap( plot_xpm ) );
+
+#endif
 
     // Separator
     fileMenu->AppendSeparator();
