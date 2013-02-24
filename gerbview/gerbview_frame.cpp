@@ -814,11 +814,11 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         switch( g_UserUnit )
         {
         case INCHES:
-            formatter = wxT( "Ro %.4f Th %.1f" );
+            formatter = wxT( "Ro %.6f Th %.1f" );
             break;
 
         case MILLIMETRES:
-            formatter = wxT( "Ro %.3f Th %.1f" );
+            formatter = wxT( "Ro %.5f Th %.1f" );
             break;
 
         case UNSCALED_UNITS:
@@ -835,25 +835,19 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
     dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
 
-    if ( g_UserUnit == MILLIMETRES )
-    {
-        dXpos = RoundTo0( dXpos, 1000.0 );
-        dYpos = RoundTo0( dYpos, 1000.0 );
-    }
 
-    // The following sadly is an if Eeschema/if Pcbnew
     wxString absformatter;
 
     switch( g_UserUnit )
     {
     case INCHES:
-        absformatter = wxT( "X %.4f  Y %.4f" );
-        locformatter = wxT( "dx %.4f  dy %.4f  d %.4f" );
+        absformatter = wxT( "X %.6f  Y %.6f" );
+        locformatter = wxT( "dx %.6f  dy %.6f  d %.6f" );
         break;
 
     case MILLIMETRES:
-        absformatter = wxT( "X %.3f  Y %.3f" );
-        locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
+        absformatter = wxT( "X %.5f  Y %.5f" );
+        locformatter = wxT( "dx %.5f  dy %.5f  d %.5f" );
         break;
 
     case UNSCALED_UNITS:
@@ -872,12 +866,6 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
         dXpos = To_User_Unit( g_UserUnit, dx );
         dYpos = To_User_Unit( g_UserUnit, dy );
-
-        if ( g_UserUnit == MILLIMETRES )
-        {
-            dXpos = RoundTo0( dXpos, 1000.0 );
-            dYpos = RoundTo0( dYpos, 1000.0 );
-        }
 
         // We already decided the formatter above
         line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );

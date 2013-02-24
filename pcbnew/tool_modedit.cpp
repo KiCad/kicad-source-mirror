@@ -78,10 +78,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString, KiBitmap( new_footprint_xpm ),
                             _( "New module" ) );
 
+#ifdef KICAD_SCRIPTING_WXPYTHON
     m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE_FROM_WIZARD, wxEmptyString,
                             KiBitmap( module_wizard_xpm ),
                             _( "New module from footprint wizard" ) );
-
+#endif
 
 
     m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE, wxEmptyString,

@@ -606,12 +606,6 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x );
     dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y );
 
-    if ( g_UserUnit == MILLIMETRES )
-    {
-        dXpos = RoundTo0( dXpos, 1000.0 );
-        dYpos = RoundTo0( dYpos, 1000.0 );
-    }
-
     // The following sadly is an if Eeschema/if Pcbnew
     wxString absformatter;
 
@@ -634,6 +628,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         break;
 
     case MILLIMETRES:
+        dXpos = RoundTo0( dXpos, 1000.0 );
+        dYpos = RoundTo0( dYpos, 1000.0 );
         absformatter = wxT( "X %.3f  Y %.3f" );
         locformatter = wxT( "dx %.3f  dy %.3f  d %.3f" );
         break;
@@ -656,11 +652,13 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         dXpos = To_User_Unit( g_UserUnit, dx );
         dYpos = To_User_Unit( g_UserUnit, dy );
 
+#ifndef USE_PCBNEW_NANOMETRES
         if ( g_UserUnit == MILLIMETRES )
         {
             dXpos = RoundTo0( dXpos, 1000.0 );
             dYpos = RoundTo0( dYpos, 1000.0 );
         }
+#endif
 
         // We already decided the formatter above
         line.Printf( locformatter, dXpos, dYpos, sqrt( dXpos * dXpos + dYpos * dYpos ) );
@@ -772,7 +770,7 @@ void PCB_BASE_FRAME::updateGridSelectBox()
         break;
 
     case MILLIMETRES:
-        format += wxT( " %.3f" );
+        format += wxT( " %.4f" );
         break;
 
     case UNSCALED_UNITS:
