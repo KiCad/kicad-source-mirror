@@ -445,7 +445,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
         {
             if( paramCnt != 8 )
             {
-                msg.Printf( _( "ElementLine token contains %d parameters." ), paramCnt );
+                msg.Printf( wxT( "ElementLine token contains %d parameters." ), paramCnt );
                 THROW_PARSE_ERROR( msg, aLineReader->GetSource(), (const char *)aLineReader,
                                    aLineReader->LineNumber(), 0 );
             }
@@ -468,7 +468,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
         {
             if( paramCnt != 10 )
             {
-                msg.Printf( _( "ElementArc token contains %d parameters." ), paramCnt );
+                msg.Printf( wxT( "ElementArc token contains %d parameters." ), paramCnt );
                 THROW_PARSE_ERROR( msg, aLineReader->GetSource(), (const char *)aLineReader,
                                    aLineReader->LineNumber(), 0 );
             }
@@ -520,7 +520,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
         {
             if( paramCnt < 10 || paramCnt > 13 )
             {
-                msg.Printf( _( "Pad token contains %d parameters." ), paramCnt );
+                msg.Printf( wxT( "Pad token contains %d parameters." ), paramCnt );
                 THROW_PARSE_ERROR( msg, aLineReader->GetSource(), (const char *)aLineReader,
                                    aLineReader->LineNumber(), 0 );
             }
@@ -593,7 +593,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
         {
             if( paramCnt < 8 || paramCnt > 12 )
             {
-                msg.Printf( _( "Pin token contains %d parameters." ), paramCnt );
+                msg.Printf( wxT( "Pin token contains %d parameters." ), paramCnt );
                 THROW_PARSE_ERROR( msg, aLineReader->GetSource(), (const char *)aLineReader,
                                    aLineReader->LineNumber(), 0 );
             }
