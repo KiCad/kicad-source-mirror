@@ -31,7 +31,6 @@
 #include <appl_wxstruct.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <dcsvg.h>
 #include <wxBasePcbFrame.h>
 #include <class_pcb_screen.h>
 #include <base_units.h>

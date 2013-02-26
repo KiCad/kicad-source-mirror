@@ -124,6 +124,31 @@ wxString LengthDoubleToString( double aValue, bool aConvertToMils )
     return text;
 }
 
+/* Remove trailing 0 from a string containing a converted float number.
+ * the trailing 0 are removed if the mantissa has more
+ * than aTrailingZeroAllowed digits and some trailing 0
+ */
+void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
+{
+    struct lconv * lc = localeconv();
+    char sep = lc->decimal_point[0];
+    unsigned sep_pos = aStringValue.Find( sep );
+
+    if( sep_pos > 0 )
+    {
+        // We want to keep at least aTrailingZeroAllowed digits after the separator
+        unsigned min_len = sep_pos + aTrailingZeroAllowed + 1;
+
+        while( aStringValue.Len() > min_len )
+        {
+            if( aStringValue.Last() == '0' )
+                aStringValue.RemoveLast();
+            else
+                break;
+        }
+    }
+}
+
 
 /* Convert a value to a string using double notation.
  * For readability, the mantissa has 3 or more digits (max 8 digits),
@@ -153,21 +178,7 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, bool aAddUnitSymb
 
     // Strip trailing zeros. However, keep at least 3 digits in mantissa
     // For readability
-    struct lconv * lc = localeconv();
-    char sep = lc->decimal_point[0];
-    unsigned sep_pos = stringValue.Find( sep );
-
-    if( sep_pos > 0 )
-    {
-        // We want to keep at least 3 digits after the separator
-        unsigned min_len = sep_pos + 4;
-
-        while( stringValue.Len() > min_len )
-            if( stringValue.Last() == '0' )
-                stringValue.RemoveLast();
-            else
-                break;
-    }
+    StripTrailingZeros( stringValue, 3 );
 #endif
 
     if( aAddUnitSymbol )

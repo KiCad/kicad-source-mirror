@@ -99,14 +99,6 @@ bool WildCompareString( const wxString& pattern,
                         bool            case_sensitive = true );
 
 /**
- * Function to_point
- * converts a string used to compensate for internalization of printf().  It generates
- * floating point numbers with a comma instead of point.
- * @deprecated Use SetLocaleTo_C_standard instead.
- */
-char* to_point( char* Text );
-
-/**
  * Function RefDesStringCompare
  * acts just like the strcmp function but treats numbers within the string text
  * correctly for sorting.  eg. A10 > A2

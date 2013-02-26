@@ -761,16 +761,13 @@ void PCB_BASE_FRAME::updateGridSelectBox()
     m_gridSelectBox->Clear();
 
     wxString msg;
-    wxString format = _( "Grid");
+    wxString format = _( "Grid:");
 
     switch( g_UserUnit )
     {
-    case INCHES:
-        format += wxT( " %.1f" );
-        break;
-
+    case INCHES:    // the grid size is displayed in mils
     case MILLIMETRES:
-        format += wxT( " %.4f" );
+        format += wxT( " %.6f" );
         break;
 
     case UNSCALED_UNITS:
@@ -782,20 +779,13 @@ void PCB_BASE_FRAME::updateGridSelectBox()
     {
         GRID_TYPE& grid = GetScreen()->GetGrid( i );
         double value = To_User_Unit( g_UserUnit, grid.m_Size.x );
+        if( g_UserUnit == INCHES )
+            value *= 1000;
 
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {
-            switch( g_UserUnit )
-            {
-            case INCHES:
-                msg.Printf( format.GetData(), value * 1000 );
-                break;
-
-            case MILLIMETRES:
-            case UNSCALED_UNITS:
-                msg.Printf( format.GetData(), value );
-                break;
-            }
+            msg.Printf( format.GetData(), value );
+            StripTrailingZeros( msg );
         }
         else
             msg = _( "User Grid" );

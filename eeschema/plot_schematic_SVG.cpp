@@ -32,7 +32,6 @@
 #include <class_drawpanel.h>
 #include <class_sch_screen.h>
 #include <wxEeschemaStruct.h>
-#include <dcsvg.h>
 #include <base_units.h>
 #include <libeditframe.h>
 #include <sch_sheet_path.h>
