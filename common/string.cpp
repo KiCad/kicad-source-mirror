@@ -304,23 +304,6 @@ bool WildCompareString( const wxString& pattern, const wxString& string_to_tst,
 }
 
 
-char* to_point( char* Text )
-{
-    char* line = Text;
-
-    if( Text == NULL )
-        return NULL;
-
-    for( ; *Text != 0; Text++ )
-    {
-        if( *Text == ',' )
-            *Text = '.';
-    }
-
-    return line;
-}
-
-
 int RefDesStringCompare( const wxString& strFWord, const wxString& strSWord )
 {
     // The different sections of the first string

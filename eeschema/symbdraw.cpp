@@ -290,7 +290,14 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
     SetCursor( wxCURSOR_HAND );
 
     TempCopyComponent();
-    m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCrossHairPosition( true ) );
+
+    // For fields only, move the anchor point of the field
+    // to the cursor position to allow user to see the text justification
+    if( m_drawItem->Type() == LIB_FIELD_T )
+        m_drawItem->BeginEdit( IS_MOVED, m_drawItem->GetPosition() );
+    else
+        m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCrossHairPosition( true ) );
+
     m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
 }
