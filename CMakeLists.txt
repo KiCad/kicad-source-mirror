@@ -70,9 +70,9 @@ option(USE_FP_LIB_TABLE "Use the new footprint library table implementation. (de
 
 if(KICAD_STABLE_VERSION AND KICAD_TESTING_VERSION )
     message(FATAL_ERROR "Only one KiCad build version option KICAD_TESTING_VERSION or KICAD_STABLE_VERSION can be set to ON")
-elif(NOT KICAD_STABLE_VERSION AND NOT KICAD_TESTING_VERSION)
+elseif(NOT KICAD_STABLE_VERSION AND NOT KICAD_TESTING_VERSION)
     message(FATAL_ERROR "Either KiCad build version option KICAD_TESTING_VERSION or KICAD_STABLE_VERSION must be set to ON")
-elif(KICAD_STABLE_VERSION)
+elseif(KICAD_STABLE_VERSION)
     add_definitions(-DKICAD_STABLE_VERSION)
     message( "Build stable version of KiCad")
 else()

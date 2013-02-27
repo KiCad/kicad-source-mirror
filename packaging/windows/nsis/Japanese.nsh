@@ -1,7 +1,7 @@
 ;Additional text definitions for Japanese
 
 ;File name of license file
-LicenseLangString MUILicense ${LANG_JAPANESE} "..\licendoc.txt"
+LicenseLangString MUILicense ${LANG_JAPANESE} "..\COPYRIGHT.txt"
 
 ;Component option
 LangString TITLE_SEC01 ${LANG_JAPANESE} "メイン アプリケーション"
