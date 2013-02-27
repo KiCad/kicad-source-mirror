@@ -3,7 +3,7 @@
 ;Please correct as required
 
 ;file name of license file
-LicenseLangString MUILicense ${LANG_SPANISH} "..\licendoc.txt"
+LicenseLangString MUILicense ${LANG_SPANISH} "..\COPYRIGHT.txt"
 
 ;component option
 LangString TITLE_SEC01 ${LANG_SPANISH} "Uso principal"

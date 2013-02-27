@@ -1,7 +1,7 @@
 ;Additional text definitions for Dutch
 
 ;File name of license file
-LicenseLangString MUILicense ${LANG_DUTCH} "..\licendoc.txt"
+LicenseLangString MUILicense ${LANG_DUTCH} "..\COPYRIGHT.txt"
 
 ;Component option
 LangString TITLE_SEC01 ${LANG_DUTCH} "Hoofdprogramma"
