@@ -767,36 +767,29 @@ PADSTACK* SPECCTRA_DB::makeVia( const SEGVIA* aVia )
 
 void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ERROR )
 {
-    TYPE_COLLECTOR          items;
+    TYPE_COLLECTOR  items;
 
     // get all the DRAWSEGMENTS into 'items', then look for layer == EDGE_N,
     // and those segments comprise the board's perimeter.
 
-    static const KICAD_T  scanDRAWSEGMENTS[] = { PCB_LINE_T, EOT };
+    static const KICAD_T  scan_graphics[] = { PCB_LINE_T, PCB_MODULE_EDGE_T, EOT };
 
-    items.Collect( aBoard, scanDRAWSEGMENTS );
-
-    bool haveEdges = false;
+    items.Collect( aBoard, scan_graphics );
 
     for( int i=0;  i<items.GetCount();  )
     {
-        DRAWSEGMENT* item = (DRAWSEGMENT*) items[i];
-
-        wxASSERT( item->Type() == PCB_LINE_T );
-
-        if( item->GetLayer() != EDGE_N )
+        if( items[i]->GetLayer() != EDGE_N )
         {
             items.Remove( i );
         }
-        else
+        else    // remove graphics not on EDGE_N layer
         {
-            haveEdges = true;
             ++i;
             D( item->Show( 0, std::cout );)
         }
     }
 
-    if( haveEdges )
+    if( items.GetCount() )
     {
         PATH*  path = new PATH( boundary );
         boundary->paths.push_back( path );
