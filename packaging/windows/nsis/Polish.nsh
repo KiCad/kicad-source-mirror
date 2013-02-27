@@ -1,7 +1,7 @@
 ;Additional text definitions for Polish
 
 ;File name of license file
-LicenseLangString MUILicense ${LANG_POLISH} "..\licendoc.txt"
+LicenseLangString MUILicense ${LANG_POLISH} "..\COPYRIGHT.txt"
 
 ;Component option
 LangString TITLE_SEC01 ${LANG_POLISH} "Pliki aplikacji"

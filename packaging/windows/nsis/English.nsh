@@ -1,7 +1,7 @@
 ;Additional text definitions for English
 
 ;File name of license file
-LicenseLangString MUILicense ${LANG_ENGLISH} "..\licendoc.txt"
+LicenseLangString MUILicense ${LANG_ENGLISH} "..\COPYRIGHT.txt"
 
 ;Component option
 LangString TITLE_SEC01 ${LANG_ENGLISH} "Main application"
