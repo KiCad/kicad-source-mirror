@@ -2394,7 +2394,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_net_name:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();
             zone->SetNetName( FromUTF8() );
             NeedRIGHT();
             break;
