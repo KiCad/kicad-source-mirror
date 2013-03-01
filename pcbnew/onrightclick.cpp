@@ -722,11 +722,16 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
 
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE, msg,
+        msg = AddHotkeyName( _( "Edit Prms" ),
+                             g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE_PRMS, msg,
                      KiBitmap( edit_module_xpm ) );
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE_WITH_MODEDIT,
+                     _( "Edit with ModEdit" ),
+                     KiBitmap( module_editor_xpm ) );
         sub_menu_footprint->AppendSeparator();
-        msg = AddHotkeyName( _( "Delete Module" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
+        msg = AddHotkeyName( _( "Delete Module" ),
+                             g_Board_Editor_Hokeys_Descr, HK_DELETE );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DELETE_MODULE,
                      msg, KiBitmap( delete_module_xpm ) );
     }

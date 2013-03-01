@@ -650,7 +650,7 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 
     case PCB_MODULE_T:
         if( aIdCommand == HK_EDIT_ITEM )
-            evt_type = ID_POPUP_PCB_EDIT_MODULE;
+            evt_type = ID_POPUP_PCB_EDIT_MODULE_PRMS;
 
         break;
 

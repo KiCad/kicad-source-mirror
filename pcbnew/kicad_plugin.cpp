@@ -1298,8 +1298,12 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     throw( IO_ERROR )
 {
+    // Save the NET info; For keepout zones, net code and net name are irrelevant
+    // so be sure a dummy value is stored, just for ZONE_CONTAINER compatibility
+    // (perhaps netcode and netname should be not stored)
     m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
-                  aZone->GetNet(), m_out->Quotew( aZone->GetNetName() ).c_str() );
+                  aZone->GetIsKeepout() ? 0 : aZone->GetNet(),
+                  m_out->Quotew( aZone->GetIsKeepout() ? "" : aZone->GetNetName() ).c_str() );
 
     formatLayer( aZone );
 
