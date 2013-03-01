@@ -187,83 +187,50 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
 
 void SCH_TEXT::MirrorY( int aYaxis_position )
 {
-    // Text is NOT really mirrored; it is moved to a suitable position
-    // which is the closest position for a true mirrored text
-    // The center position is mirrored and the text is moved for half
-    // horizontal len
-    int px = m_Pos.x;
-    int dx;
-
+    // Text is NOT really mirrored; it is moved to a suitable horizontal position
     switch( GetOrientation() )
     {
-    case 0:             /* horizontal text */
-        dx = LenSize( m_Text ) / 2;
+    case 0: // horizontal text
+        SetOrientation( 2 );
         break;
 
-    case 1: /* Vert Orientation UP */
-        dx = -m_Size.x / 2;
+    case 2: // invert horizontal text
+        SetOrientation( 0 );
         break;
 
-    case 2:        /* invert horizontal text*/
-        dx = -LenSize( m_Text ) / 2;
-        break;
-
-    case 3: /*  Vert Orientation BOTTOM */
-        dx = m_Size.x / 2;
-        break;
-
+    case 1: // Vert Orientation UP
+    case 3: // Vert Orientation BOTTOM
     default:
-        dx = 0;
         break;
     }
 
-    px += dx;
-    px -= aYaxis_position;
-    NEGATE( px );
-    px += aYaxis_position;
-    px -= dx;
-    m_Pos.x = px;
+    m_Pos.x -= aYaxis_position;
+    NEGATE( m_Pos.x );
+    m_Pos.x += aYaxis_position;
 }
 
 
 void SCH_TEXT::MirrorX( int aXaxis_position )
 {
-    // Text is NOT really mirrored; it is moved to a suitable position
-    // which is the closest position for a true mirrored text
-    // The center position is mirrored and the text is moved for half
-    // horizontal len
-    int py = m_Pos.y;
-    int dy;
-
+    // Text is NOT really mirrored; it is moved to a suitable vertical position
     switch( GetOrientation() )
     {
-    case 0:             /* horizontal text */
-        dy = -m_Size.y / 2;
+    case 1: // Vert Orientation UP
+        SetOrientation( 3 );
         break;
 
-    case 1: /* Vert Orientation UP */
-        dy = -LenSize( m_Text ) / 2;
+    case 3: // Vert Orientation BOTTOM
+        SetOrientation( 1 );
         break;
 
-    case 2:                 /* invert horizontal text*/
-        dy = m_Size.y / 2;  // how to calculate text height?
-        break;
-
-    case 3: /*  Vert Orientation BOTTOM */
-        dy = LenSize( m_Text ) / 2;
-        break;
-
+    case 0: // horizontal text
+    case 2: // invert horizontal text
     default:
-        dy = 0;
         break;
     }
-
-    py += dy;
-    py -= aXaxis_position;
-    NEGATE( py );
-    py += aXaxis_position;
-    py -= dy;
-    m_Pos.y = py;
+    m_Pos.y -= aXaxis_position;
+    NEGATE( m_Pos.y );
+    m_Pos.y += aXaxis_position;
 }
 
 
@@ -877,15 +844,25 @@ void SCH_LABEL::SetOrientation( int aOrientation )
 void SCH_LABEL::MirrorX( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
-    // which is the closest position for a true mirrored text
-    // The center position is mirrored and the text is moved for half
-    // horizontal len
-    int py = m_Pos.y;
+    switch( GetOrientation() )
+    {
+    case 1: // Vert Orientation UP
+        SetOrientation( 3 );
+        break;
 
-    py -= aXaxis_position;
-    NEGATE( py );
-    py += aXaxis_position;
-    m_Pos.y = py;
+    case 3: // Vert Orientation BOTTOM
+        SetOrientation( 1 );
+        break;
+
+    case 0: // horizontal text
+    case 2: // invert horizontal text
+    default:
+        break;
+    }
+
+    m_Pos.y -= aXaxis_position;
+    NEGATE( m_Pos.y );
+    m_Pos.y += aXaxis_position;
 }
 
 

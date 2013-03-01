@@ -88,7 +88,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
     case ID_POPUP_PCB_CHANGE_SIDE_MODULE:
-    case ID_POPUP_PCB_EDIT_MODULE:
+    case ID_POPUP_PCB_EDIT_MODULE_PRMS:
+    case ID_POPUP_PCB_EDIT_MODULE_WITH_MODEDIT:
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
     case ID_POPUP_PCB_BEGIN_TRACK:
@@ -782,8 +783,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
 
-    case ID_POPUP_PCB_EDIT_MODULE:
-
+    case ID_POPUP_PCB_EDIT_MODULE_PRMS:
         // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != PCB_MODULE_T )
             SetCurItem( GetCurItem()->GetParent() );
@@ -792,6 +792,34 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         InstallModuleOptionsFrame( (MODULE*) GetCurItem(), &dc );
+        m_canvas->MoveCursorToCrossHair();
+        break;
+
+    case ID_POPUP_PCB_EDIT_MODULE_WITH_MODEDIT:
+        // If the current Item is a pad, text module ...: Get its parent
+        if( GetCurItem()->Type() != PCB_MODULE_T )
+            SetCurItem( GetCurItem()->GetParent() );
+
+        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
+            break;
+
+        if( GetCurItem()->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
+        {
+            GetCurItem()->SetTimeStamp( GetNewTimeStamp() );
+            OnModify();
+        }
+        {
+            FOOTPRINT_EDIT_FRAME * editorFrame =
+                    FOOTPRINT_EDIT_FRAME::GetActiveFootprintEditor();
+            if( editorFrame == NULL )
+                editorFrame = new FOOTPRINT_EDIT_FRAME( this );
+
+            editorFrame->Load_Module_From_BOARD( (MODULE*)GetCurItem() );
+            SetCurItem( NULL ); // the current module could be deleted by
+
+            editorFrame->Show( true );
+            editorFrame->Iconize( false );
+        }
         m_canvas->MoveCursorToCrossHair();
         break;
 

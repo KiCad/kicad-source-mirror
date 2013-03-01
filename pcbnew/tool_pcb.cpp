@@ -231,7 +231,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString,
-                            KiBitmap( module_edit_xpm ),
+                            KiBitmap( module_editor_xpm ),
                             _( "Open module editor" ) );
 
     m_mainToolBar->AddTool( ID_OPEN_MODULE_VIEWER, wxEmptyString,

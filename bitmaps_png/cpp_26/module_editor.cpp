@@ -93,6 +93,6 @@ static const unsigned char png[] = {
  0x60, 0x82,
 };
 
-const BITMAP_OPAQUE module_edit_xpm[1] = {{ png, sizeof( png ), "module_edit_xpm" }};
+const BITMAP_OPAQUE module_editor_xpm[1] = {{ png, sizeof( png ), "module_editor_xpm" }};
 
 //EOF

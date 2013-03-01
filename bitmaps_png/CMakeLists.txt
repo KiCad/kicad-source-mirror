@@ -353,7 +353,7 @@ set( BMAPS_MID
     mode_track
     modratsnest
     module_check
-    module_edit
+    module_editor
     module_wizard
     module_filtered_list
     module_full_list

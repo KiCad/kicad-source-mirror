@@ -540,11 +540,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         redraw = true;
         break;
 
-    case ID_POPUP_PCB_EDIT_MODULE:
+    case ID_POPUP_PCB_EDIT_MODULE_PRMS:
         {
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
             int ret = dialog.ShowModal();
-            GetScreen()->GetCurItem()->ClearFlags();
             GetScreen()->GetCurItem()->ClearFlags();
             m_canvas->MoveCursorToCrossHair();
 

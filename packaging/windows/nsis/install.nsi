@@ -17,7 +17,7 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2013.02.26"
+!define PRODUCT_VERSION "2013.02.27"
 !define PRODUCT_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
 !define SOURCEFORGE_WEB_SITE "http://kicad.sourceforge.net/"
 !define COMPANY_NAME ""
@@ -36,7 +36,7 @@ SetCompressor /final /solid lzma
 CRCCheck force
 XPStyle on
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${PRODUCT_NAME}_stable-${PRODUCT_VERSION}-BZR3974_Win_full_version.exe"
+OutFile "${PRODUCT_NAME}_stable-${PRODUCT_VERSION}-BZR3976_Win_full_version.exe"
 InstallDir "$PROGRAMFILES\KiCad"
 ShowInstDetails hide
 ShowUnInstDetails hide
@@ -124,8 +124,6 @@ Section $(TITLE_SEC01) SEC01
   File /r "..\bin\*"
   SetOutPath "$INSTDIR\share\internat"
   File /r "..\share\internat\*"
-  SetOutPath "$INSTDIR\python"
-  File /nonfatal /r "..\python\*"
 SectionEnd
 
 Section $(TITLE_SEC02) SEC02

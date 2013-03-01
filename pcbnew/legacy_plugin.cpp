@@ -3608,9 +3608,12 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     fprintf( m_fp, "$CZONE_OUTLINE\n" );
 
     // Save the outline main info
+    // For keepout zones, net code and net name are irrelevant, so we store a dummy value
+    // just for ZONE_CONTAINER compatibility
     fprintf( m_fp,  "ZInfo %lX %d %s\n",
-                    me->GetTimeStamp(), me->GetNet(),
-                    EscapedUTF8( me->GetNetName() ).c_str() );
+                    me->GetTimeStamp(),
+                    me->GetIsKeepout() ? 0 : me->GetNet(),
+                    EscapedUTF8( me->GetIsKeepout() ? "" : me->GetNetName() ).c_str() );
 
     // Save the outline layer info
     fprintf( m_fp, "ZLayer %d\n", me->GetLayer() );
