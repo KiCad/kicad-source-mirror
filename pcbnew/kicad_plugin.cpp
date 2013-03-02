@@ -1303,7 +1303,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     // (perhaps netcode and netname should be not stored)
     m_out->Print( aNestLevel, "(zone (net %d) (net_name %s)",
                   aZone->GetIsKeepout() ? 0 : aZone->GetNet(),
-                  m_out->Quotew( aZone->GetIsKeepout() ? "" : aZone->GetNetName() ).c_str() );
+                  m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetName() ).c_str() );
 
     formatLayer( aZone );
 
