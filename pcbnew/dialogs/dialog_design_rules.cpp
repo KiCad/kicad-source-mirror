@@ -700,7 +700,7 @@ void DIALOG_DESIGN_RULES::OnAddNetclassClick( wxCommandEvent& event )
     wxTextEntryDialog dlg( this, _( "New Net Class Name:" ), wxEmptyString, class_name );
 
     if( dlg.ShowModal() != wxID_OK )
-        return; // cancelled by user
+        return; // canceled by user
 
     class_name = dlg.GetValue();
     class_name.Trim( true );
@@ -757,7 +757,7 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
     bool reinit = false;
 
     // rows labels are not removed when deleting rows: they are not deleted.
-    // So we must store them, remove correponding labels and reinit them
+    // So we must store them, remove corresponding labels and reinit them
     wxArrayString labels;
     for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
         labels.Add( m_grid->GetRowLabelValue( ii ) );
@@ -778,7 +778,7 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
             swapNetClass( classname, NETCLASS::Default );
         }
         else
-            wxMessageBox( _( "The defaut Netclass cannot be removed" ) );
+            wxMessageBox( _( "The default Netclass cannot be removed" ) );
     }
 
     if( reinit )
@@ -916,7 +916,7 @@ void DIALOG_DESIGN_RULES::OnLeftToRightCopyButton( wxCommandEvent& event )
 
 
 /* Called on clicking the left "select all" button:
- * select alls items of the left netname list lisxt box
+ * select all items of the left netname list lisxt box
  */
 void DIALOG_DESIGN_RULES::OnLeftSelectAllButton( wxCommandEvent& event )
 {
@@ -926,7 +926,7 @@ void DIALOG_DESIGN_RULES::OnLeftSelectAllButton( wxCommandEvent& event )
 
 
 /* Called on clicking the right "select all" button:
- * select alls items of the right netname list lisxt box
+ * select all items of the right netname list lisxt box
  */
 void DIALOG_DESIGN_RULES::OnRightSelectAllButton( wxCommandEvent& event )
 {
@@ -1110,7 +1110,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity()
             m_MessagesList->AppendToPage( msg );
         }
 
-        // Test for a reasonnable via size:
+        // Test for a reasonable via size:
         if( viadia > maxval )    // 1 inch!
         {
             result = false;
