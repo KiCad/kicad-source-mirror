@@ -23,65 +23,66 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	wxStaticBoxSizer* PropLeftSizer;
 	PropLeftSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Fields") ), wxVERTICAL );
 	
-	wxStaticBoxSizer* sbSizerDoc;
-	sbSizerDoc = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Doc") ), wxHORIZONTAL );
+	m_staticTextDoc = new wxStaticText( m_PanelProperties, wxID_ANY, _("Doc"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDoc->Wrap( -1 );
+	PropLeftSizer->Add( m_staticTextDoc, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	sbSizerDoc->SetMinSize( wxSize( 300,-1 ) ); 
 	m_DocCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_DocCtrl->SetMaxLength( 0 ); 
-	sbSizerDoc->Add( m_DocCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	PropLeftSizer->Add( m_DocCtrl, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
-	
-	PropLeftSizer->Add( sbSizerDoc, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-	
-	wxStaticBoxSizer* sbSizerKeysW;
-	sbSizerKeysW = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Keywords") ), wxHORIZONTAL );
+	m_staticTextKeywords = new wxStaticText( m_PanelProperties, wxID_ANY, _("Keywords"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextKeywords->Wrap( -1 );
+	PropLeftSizer->Add( m_staticTextKeywords, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_KeywordCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_KeywordCtrl->SetMaxLength( 0 ); 
-	sbSizerKeysW->Add( m_KeywordCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	PropLeftSizer->Add( m_KeywordCtrl, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
+	m_staticTextRef = new wxStaticText( m_PanelProperties, wxID_ANY, _("Reference"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRef->Wrap( -1 );
+	PropLeftSizer->Add( m_staticTextRef, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	PropLeftSizer->Add( sbSizerKeysW, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-	
-	wxStaticBoxSizer* sbSizerRef;
-	sbSizerRef = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Reference") ), wxHORIZONTAL );
+	wxBoxSizer* bSizerRef;
+	bSizerRef = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ReferenceCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_ReferenceCtrl->SetMaxLength( 0 ); 
-	sbSizerRef->Add( m_ReferenceCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizerRef->Add( m_ReferenceCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_button4 = new wxButton( m_PanelProperties, wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	sbSizerRef->Add( m_button4, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizerRef->Add( m_button4, 0, wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	PropLeftSizer->Add( sbSizerRef, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	PropLeftSizer->Add( bSizerRef, 0, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbSizerValue;
-	sbSizerValue = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Value") ), wxHORIZONTAL );
+	m_staticTextVal = new wxStaticText( m_PanelProperties, wxID_ANY, _("Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextVal->Wrap( -1 );
+	PropLeftSizer->Add( m_staticTextVal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerVal;
+	bSizerVal = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ValueCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_ValueCtrl->SetMaxLength( 0 ); 
-	sbSizerValue->Add( m_ValueCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bSizerVal->Add( m_ValueCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_button5 = new wxButton( m_PanelProperties, wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	sbSizerValue->Add( m_button5, 0, wxBOTTOM|wxRIGHT, 5 );
+	bSizerVal->Add( m_button5, 0, wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	PropLeftSizer->Add( sbSizerValue, 0, wxALL|wxEXPAND, 5 );
+	PropLeftSizer->Add( bSizerVal, 0, wxEXPAND, 5 );
 	
 	
 	PropLeftSizer->Add( 0, 20, 0, 0, 5 );
 	
-	wxStaticBoxSizer* sbSizerFootprintName;
-	sbSizerFootprintName = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Footprint Name in Library") ), wxHORIZONTAL );
+	m_staticTextFp = new wxStaticText( m_PanelProperties, wxID_ANY, _("Footprint Name in Library"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFp->Wrap( -1 );
+	PropLeftSizer->Add( m_staticTextFp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_FootprintNameCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_FootprintNameCtrl->SetMaxLength( 0 ); 
-	sbSizerFootprintName->Add( m_FootprintNameCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-	
-	
-	PropLeftSizer->Add( sbSizerFootprintName, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	PropLeftSizer->Add( m_FootprintNameCtrl, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	
 	PropLeftSizer->Add( 0, 0, 0, wxEXPAND, 5 );

@@ -15,17 +15,17 @@ class DIALOG_SHIM;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/textctrl.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/radiobox.h>
-#include <wx/stattext.h>
 #include <wx/slider.h>
+#include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/statline.h>
 #include <wx/panel.h>
@@ -58,14 +58,17 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelProperties;
+		wxStaticText* m_staticTextRef;
 		wxTextCtrl* m_ReferenceCtrl;
 		wxButton* m_button4;
+		wxStaticText* m_staticTextVal;
 		wxTextCtrl* m_ValueCtrl;
 		wxButton* m_button5;
 		wxRadioBox* m_LayerCtrl;
 		wxRadioBox* m_OrientCtrl;
 		wxStaticText* m_staticText4;
 		wxTextCtrl* m_OrientValue;
+		wxStaticText* m_staticTextPos;
 		wxStaticText* m_XPosLabel;
 		wxTextCtrl* m_ModPositionX;
 		wxStaticText* m_XPosUnit;
@@ -125,7 +128,7 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 	public:
 		wxStaticBoxSizer* m_Sizer3DValues;
 		
-		DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Module Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Module Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 499,561 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_MODULE_BOARD_EDITOR_BASE();
 	
 };
