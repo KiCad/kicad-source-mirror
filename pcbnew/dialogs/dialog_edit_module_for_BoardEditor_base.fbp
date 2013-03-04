@@ -1586,11 +1586,11 @@
                                                     <event name="OnUpdateUI"></event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">1</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizer12</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -1718,7 +1718,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Move and Place:</property>
+                                                            <property name="label">Move and Place</property>
                                                             <property name="majorDimension">1</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
@@ -1777,13 +1777,13 @@
                                                     </object>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND|wxALL</property>
                                                 <property name="proportion">1</property>
-                                                <object class="wxStaticBoxSizer" expanded="0">
+                                                <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">Auto Place:</property>
+                                                    <property name="label">Auto Place</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbSizerAutoplace</property>
                                                     <property name="orient">wxHORIZONTAL</property>
@@ -2531,7 +2531,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">All pads nets clearance:</property>
+                                                                    <property name="label">Pad clearance:</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -4044,7 +4044,7 @@
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxEXPAND</property>
+                                                <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
