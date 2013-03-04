@@ -65,7 +65,6 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     InitBoardProperties();
 
     m_sdbSizerStdButtonsOK->SetDefault();
-    GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
 }
@@ -328,6 +327,10 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
         m_3D_ShapeNameListBox->SetSelection( m_LastSelected3DShapeIndex );
         Transfert3DValuesToDisplay( m_Shapes3D_list[m_LastSelected3DShapeIndex] );
     }
+
+    // We have modified the UI, so call Fit() for m_Panel3D
+    // to be sure the m_Panel3D sizers are initiliazed before opening the dialog
+    m_Panel3D->GetSizer()->Fit( m_Panel3D );
 }
 
 

@@ -59,6 +59,7 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		wxButton* m_button4;
 		wxTextCtrl* m_ValueCtrl;
 		wxButton* m_button5;
+		wxTextCtrl* m_FootprintNameCtrl;
 		wxRadioBox* m_AttributsCtrl;
 		wxRadioBox* m_AutoPlaceCtrl;
 		wxStaticText* m_staticText11;
@@ -75,7 +76,6 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_MaskClearanceTitle;
 		wxTextCtrl* m_SolderMaskMarginCtrl;
 		wxStaticText* m_SolderMaskMarginUnits;
-		wxTextCtrl* m_FootprintNameCtrl;
 		wxStaticText* m_staticTextSolderPaste;
 		wxTextCtrl* m_SolderPasteMarginCtrl;
 		wxStaticText* m_SolderPasteMarginUnits;
