@@ -168,9 +168,9 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_Sizer3DValues->Add( BoxSizer, 0, wxGROW | wxALL, 5 );
 
     // Initialize dialog relative to masks clearances
-    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_NetClearanceUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_SolderMaskMarginUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_SolderPasteMarginUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
     wxString  msg;
     PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_currentModule->GetLocalClearance() );

@@ -66,10 +66,12 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxRadioBox* m_OrientCtrl;
 		wxStaticText* m_staticText4;
 		wxTextCtrl* m_OrientValue;
-		wxStaticText* XPositionStatic;
+		wxStaticText* m_XPosLabel;
 		wxTextCtrl* m_ModPositionX;
-		wxStaticText* YPositionStatic;
+		wxStaticText* m_XPosUnit;
+		wxStaticText* m_YPosLabel;
 		wxTextCtrl* m_ModPositionY;
+		wxStaticText* m_YPosUnit;
 		wxButton* m_buttonExchange;
 		wxButton* m_buttonModuleEditor;
 		wxRadioBox* m_AttributsCtrl;
