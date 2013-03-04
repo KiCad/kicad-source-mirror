@@ -20,94 +20,102 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	wxBoxSizer* m_PanelPropertiesBoxSizer;
 	m_PanelPropertiesBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bSizer13;
-	bSizer13 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerLeft;
+	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sbSizerRef;
-	sbSizerRef = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Reference") ), wxHORIZONTAL );
+	m_staticTextRef = new wxStaticText( m_PanelProperties, wxID_ANY, _("Reference"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRef->Wrap( -1 );
+	bSizerLeft->Add( m_staticTextRef, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerRef;
+	bSizerRef = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ReferenceCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_ReferenceCtrl->SetMaxLength( 0 ); 
-	sbSizerRef->Add( m_ReferenceCtrl, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
+	bSizerRef->Add( m_ReferenceCtrl, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_button4 = new wxButton( m_PanelProperties, wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	sbSizerRef->Add( m_button4, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
+	bSizerRef->Add( m_button4, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	
-	bSizer13->Add( sbSizerRef, 0, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( bSizerRef, 0, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbSizerValue;
-	sbSizerValue = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Value") ), wxHORIZONTAL );
+	m_staticTextVal = new wxStaticText( m_PanelProperties, wxID_ANY, _("Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextVal->Wrap( -1 );
+	bSizerLeft->Add( m_staticTextVal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bSizerVal;
+	bSizerVal = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ValueCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
 	m_ValueCtrl->SetMaxLength( 0 ); 
-	sbSizerValue->Add( m_ValueCtrl, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
+	bSizerVal->Add( m_ValueCtrl, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_button5 = new wxButton( m_PanelProperties, wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	sbSizerValue->Add( m_button5, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
+	bSizerVal->Add( m_button5, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	
-	bSizer13->Add( sbSizerValue, 0, wxALL|wxEXPAND, 5 );
+	bSizerLeft->Add( bSizerVal, 0, wxEXPAND, 5 );
 	
 	wxString m_LayerCtrlChoices[] = { _("Top"), _("Bottom") };
 	int m_LayerCtrlNChoices = sizeof( m_LayerCtrlChoices ) / sizeof( wxString );
-	m_LayerCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Side"), wxDefaultPosition, wxDefaultSize, m_LayerCtrlNChoices, m_LayerCtrlChoices, 1, 0 );
+	m_LayerCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Side"), wxDefaultPosition, wxDefaultSize, m_LayerCtrlNChoices, m_LayerCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_LayerCtrl->SetSelection( 0 );
-	bSizer13->Add( m_LayerCtrl, 0, wxALL|wxEXPAND, 5 );
-	
-	wxStaticBoxSizer* sbSizerOrientation;
-	sbSizerOrientation = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Orientation") ), wxVERTICAL );
+	bSizerLeft->Add( m_LayerCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OrientCtrlChoices[] = { _("Normal"), _("+90.0"), _("-90.0"), _("180.0"), _("User") };
 	int m_OrientCtrlNChoices = sizeof( m_OrientCtrlChoices ) / sizeof( wxString );
 	m_OrientCtrl = new wxRadioBox( m_PanelProperties, ID_LISTBOX_ORIENT_SELECT, _("Orientation"), wxDefaultPosition, wxDefaultSize, m_OrientCtrlNChoices, m_OrientCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_OrientCtrl->SetSelection( 1 );
-	sbSizerOrientation->Add( m_OrientCtrl, 0, wxALL|wxEXPAND, 5 );
+	m_OrientCtrl->SetSelection( 0 );
+	bSizerLeft->Add( m_OrientCtrl, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticText4 = new wxStaticText( m_PanelProperties, wxID_ANY, _("User orientation (in 0.1 degrees):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	sbSizerOrientation->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerLeft->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_OrientValue = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_OrientValue->SetMaxLength( 0 ); 
-	sbSizerOrientation->Add( m_OrientValue, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerLeft->Add( m_OrientValue, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	m_staticTextPos = new wxStaticText( m_PanelProperties, wxID_ANY, _("Position"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPos->Wrap( -1 );
+	bSizerLeft->Add( m_staticTextPos, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	bSizer13->Add( sbSizerOrientation, 0, wxALL|wxEXPAND, 5 );
+	wxFlexGridSizer* fgSizerPos;
+	fgSizerPos = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizerPos->AddGrowableCol( 1 );
+	fgSizerPos->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizerPos->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	wxStaticBoxSizer* sbSizerPosition;
-	sbSizerPosition = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Position") ), wxVERTICAL );
-	
-	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 2, 2, 0, 0 );
-	fgSizer2->AddGrowableCol( 1 );
-	fgSizer2->SetFlexibleDirection( wxHORIZONTAL );
-	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	XPositionStatic = new wxStaticText( m_PanelProperties, wxID_ANY, _("X"), wxDefaultPosition, wxDefaultSize, 0 );
-	XPositionStatic->Wrap( -1 );
-	fgSizer2->Add( XPositionStatic, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_XPosLabel = new wxStaticText( m_PanelProperties, wxID_ANY, _("X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_XPosLabel->Wrap( -1 );
+	fgSizerPos->Add( m_XPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_ModPositionX = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ModPositionX->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_ModPositionX, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizerPos->Add( m_ModPositionX, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 	
-	YPositionStatic = new wxStaticText( m_PanelProperties, wxID_ANY, _("Y"), wxDefaultPosition, wxDefaultSize, 0 );
-	YPositionStatic->Wrap( -1 );
-	fgSizer2->Add( YPositionStatic, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_XPosUnit = new wxStaticText( m_PanelProperties, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_XPosUnit->Wrap( -1 );
+	fgSizerPos->Add( m_XPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	
+	m_YPosLabel = new wxStaticText( m_PanelProperties, wxID_ANY, _("Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_YPosLabel->Wrap( -1 );
+	fgSizerPos->Add( m_YPosLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_ModPositionY = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ModPositionY->SetMaxLength( 0 ); 
-	fgSizer2->Add( m_ModPositionY, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizerPos->Add( m_ModPositionY, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	
+	m_YPosUnit = new wxStaticText( m_PanelProperties, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_YPosUnit->Wrap( -1 );
+	fgSizerPos->Add( m_YPosUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	
-	sbSizerPosition->Add( fgSizer2, 1, wxEXPAND, 5 );
+	bSizerLeft->Add( fgSizerPos, 0, wxEXPAND|wxBOTTOM, 5 );
 	
 	
-	bSizer13->Add( sbSizerPosition, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	m_PanelPropertiesBoxSizer->Add( bSizer13, 1, wxEXPAND, 5 );
+	m_PanelPropertiesBoxSizer->Add( bSizerLeft, 1, wxEXPAND, 5 );
 	
 	m_PropRightSizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -117,55 +125,55 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_buttonModuleEditor = new wxButton( m_PanelProperties, ID_GOTO_MODULE_EDITOR, _("Module Editor"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PropRightSizer->Add( m_buttonModuleEditor, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer12;
-	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerAttrib;
+	bSizerAttrib = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxString m_AttributsCtrlChoices[] = { _("Normal"), _("Normal+Insert"), _("Virtual") };
 	int m_AttributsCtrlNChoices = sizeof( m_AttributsCtrlChoices ) / sizeof( wxString );
 	m_AttributsCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Attributes"), wxDefaultPosition, wxDefaultSize, m_AttributsCtrlNChoices, m_AttributsCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_AttributsCtrl->SetSelection( 0 );
-	bSizer12->Add( m_AttributsCtrl, 1, wxALL|wxEXPAND, 5 );
+	bSizerAttrib->Add( m_AttributsCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_AutoPlaceCtrlChoices[] = { _("Free"), _("Locked") };
 	int m_AutoPlaceCtrlNChoices = sizeof( m_AutoPlaceCtrlChoices ) / sizeof( wxString );
 	m_AutoPlaceCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Move and Place"), wxDefaultPosition, wxDefaultSize, m_AutoPlaceCtrlNChoices, m_AutoPlaceCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_AutoPlaceCtrl->SetSelection( 0 );
-	bSizer12->Add( m_AutoPlaceCtrl, 1, wxALL|wxEXPAND, 5 );
+	bSizerAttrib->Add( m_AutoPlaceCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	m_PropRightSizer->Add( bSizer12, 1, wxEXPAND, 5 );
+	m_PropRightSizer->Add( bSizerAttrib, 0, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbSizerAutoplace;
-	sbSizerAutoplace = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Auto Place") ), wxHORIZONTAL );
+	wxStaticBoxSizer* sbSizerAP;
+	sbSizerAP = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Auto Place") ), wxHORIZONTAL );
 	
 	wxBoxSizer* bSizerRotOpt;
 	bSizerRotOpt = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText11 = new wxStaticText( m_PanelProperties, wxID_ANY, _("Rotation 90 degree"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	bSizerRotOpt->Add( m_staticText11, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
+	bSizerRotOpt->Add( m_staticText11, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
 	m_CostRot90Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	bSizerRotOpt->Add( m_CostRot90Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizerRotOpt->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	sbSizerAutoplace->Add( bSizerRotOpt, 1, wxEXPAND, 5 );
+	sbSizerAP->Add( bSizerRotOpt, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerMoveOpt;
 	bSizerMoveOpt = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText12 = new wxStaticText( m_PanelProperties, wxID_ANY, _("Rotation 180 degree"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
-	bSizerMoveOpt->Add( m_staticText12, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
+	bSizerMoveOpt->Add( m_staticText12, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
 	m_CostRot180Ctrl = new wxSlider( m_PanelProperties, wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
 	bSizerMoveOpt->Add( m_CostRot180Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
-	sbSizerAutoplace->Add( bSizerMoveOpt, 1, wxEXPAND, 5 );
+	sbSizerAP->Add( bSizerMoveOpt, 1, wxEXPAND, 5 );
 	
 	
-	m_PropRightSizer->Add( sbSizerAutoplace, 1, wxEXPAND|wxALL, 5 );
+	m_PropRightSizer->Add( sbSizerAP, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizerLocalProperties;
 	sbSizerLocalProperties = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Local Settings") ), wxVERTICAL );
@@ -193,10 +201,10 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_staticTextInfo->Wrap( -1 );
 	m_staticTextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	bSizer11->Add( m_staticTextInfo, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	bSizer11->Add( m_staticTextInfo, 0, wxALL, 5 );
 	
 	
-	sbSizerLocalProperties->Add( bSizer11, 0, 0, 5 );
+	sbSizerLocalProperties->Add( bSizer11, 0, wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizerClearances;
 	fgSizerClearances = new wxFlexGridSizer( 5, 3, 0, 0 );
@@ -214,18 +222,18 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_NetClearanceValueCtrl->SetMaxLength( 0 ); 
 	fgSizerClearances->Add( m_NetClearanceValueCtrl, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
-	m_NetClearanceUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_NetClearanceUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_NetClearanceUnits->Wrap( -1 );
 	fgSizerClearances->Add( m_NetClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	m_staticline1 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizerClearances->Add( m_staticline1, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizerClearances->Add( m_staticline1, 1, wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizerClearances->Add( m_staticline2, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizerClearances->Add( m_staticline2, 1, wxEXPAND, 5 );
 	
 	m_staticline3 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizerClearances->Add( m_staticline3, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizerClearances->Add( m_staticline3, 1, wxEXPAND, 5 );
 	
 	m_MaskClearanceTitle = new wxStaticText( m_PanelProperties, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskClearanceTitle->Wrap( -1 );
@@ -237,7 +245,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_SolderMaskMarginCtrl->SetMaxLength( 0 ); 
 	fgSizerClearances->Add( m_SolderMaskMarginCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
-	m_SolderMaskMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginUnits->Wrap( -1 );
 	fgSizerClearances->Add( m_SolderMaskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
@@ -251,7 +259,7 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	m_SolderPasteMarginCtrl->SetMaxLength( 0 ); 
 	fgSizerClearances->Add( m_SolderPasteMarginCtrl, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_SolderPasteMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderPasteMarginUnits->Wrap( -1 );
 	fgSizerClearances->Add( m_SolderPasteMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 	
@@ -340,7 +348,6 @@ DIALOG_MODULE_BOARD_EDITOR_BASE::DIALOG_MODULE_BOARD_EDITOR_BASE( wxWindow* pare
 	
 	this->SetSizer( m_GeneralBoxSizer );
 	this->Layout();
-	m_GeneralBoxSizer->Fit( this );
 	
 	// Connect Events
 	m_button4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_BOARD_EDITOR_BASE::OnEditReference ), NULL, this );
