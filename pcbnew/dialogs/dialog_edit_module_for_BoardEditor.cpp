@@ -89,10 +89,10 @@ DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
 void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 {
     PutValueInLocalUnits( *m_ModPositionX, m_CurrentModule->GetPosition().x );
-    AddUnitSymbol( *XPositionStatic, g_UserUnit );
+    m_XPosUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
     PutValueInLocalUnits( *m_ModPositionY, m_CurrentModule->GetPosition().y );
-    AddUnitSymbol( *YPositionStatic, g_UserUnit );
+    m_YPosUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
     m_LayerCtrl->SetSelection(
          (m_CurrentModule->GetLayer() == LAYER_N_BACK) ? 1 : 0 );
@@ -131,9 +131,9 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_OrientValue->Enable( select );
 
     // Initialize dialog relative to masks clearances
-    m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
-    m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_NetClearanceUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_SolderMaskMarginUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_SolderPasteMarginUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
     PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_CurrentModule->GetLocalClearance() );
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl, m_CurrentModule->GetLocalSolderMaskMargin() );
