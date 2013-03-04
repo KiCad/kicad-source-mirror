@@ -76,25 +76,44 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	PropLeftSizer->Add( 0, 20, 0, 0, 5 );
 	
+	wxStaticBoxSizer* sbSizerFootprintName;
+	sbSizerFootprintName = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Footprint Name in Lib") ), wxHORIZONTAL );
+	
+	m_FootprintNameCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_FootprintNameCtrl->SetMaxLength( 0 ); 
+	sbSizerFootprintName->Add( m_FootprintNameCtrl, 1, 0, 5 );
+	
+	
+	sbSizerFootprintName->Add( 0, 0, 0, 0, 5 );
+	
+	
+	PropLeftSizer->Add( sbSizerFootprintName, 0, wxEXPAND, 5 );
+	
 	
 	m_PanelPropertiesBoxSizer->Add( PropLeftSizer, 1, wxEXPAND, 5 );
 	
 	m_PropRightSizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxBoxSizer* bSizerAttrib;
+	bSizerAttrib = new wxBoxSizer( wxHORIZONTAL );
+	
 	wxString m_AttributsCtrlChoices[] = { _("Normal"), _("Normal+Insert"), _("Virtual") };
 	int m_AttributsCtrlNChoices = sizeof( m_AttributsCtrlChoices ) / sizeof( wxString );
 	m_AttributsCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Attributs:"), wxDefaultPosition, wxDefaultSize, m_AttributsCtrlNChoices, m_AttributsCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_AttributsCtrl->SetSelection( 0 );
-	m_PropRightSizer->Add( m_AttributsCtrl, 0, wxALL|wxEXPAND, 5 );
+	bSizerAttrib->Add( m_AttributsCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	wxString m_AutoPlaceCtrlChoices[] = { _("Free"), _("Locked") };
 	int m_AutoPlaceCtrlNChoices = sizeof( m_AutoPlaceCtrlChoices ) / sizeof( wxString );
-	m_AutoPlaceCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Move and Auto Place"), wxDefaultPosition, wxDefaultSize, m_AutoPlaceCtrlNChoices, m_AutoPlaceCtrlChoices, 1, wxRA_SPECIFY_COLS );
+	m_AutoPlaceCtrl = new wxRadioBox( m_PanelProperties, wxID_ANY, _("Move and Place:"), wxDefaultPosition, wxDefaultSize, m_AutoPlaceCtrlNChoices, m_AutoPlaceCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_AutoPlaceCtrl->SetSelection( 0 );
-	m_PropRightSizer->Add( m_AutoPlaceCtrl, 0, wxALL|wxEXPAND, 5 );
+	bSizerAttrib->Add( m_AutoPlaceCtrl, 1, wxEXPAND|wxALL, 5 );
+	
+	
+	m_PropRightSizer->Add( bSizerAttrib, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerAutoplace;
-	sbSizerAutoplace = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Auto Move and Place") ), wxHORIZONTAL );
+	sbSizerAutoplace = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Auto Place:") ), wxHORIZONTAL );
 	
 	wxBoxSizer* bSizerRot90;
 	bSizerRot90 = new wxBoxSizer( wxVERTICAL );
@@ -173,19 +192,6 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_SolderMaskMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginUnits->Wrap( -1 );
 	fgSizer1->Add( m_SolderMaskMarginUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-	
-	wxStaticBoxSizer* sbSizerFootprintName;
-	sbSizerFootprintName = new wxStaticBoxSizer( new wxStaticBox( m_PanelProperties, wxID_ANY, _("Footprint Name in Lib") ), wxHORIZONTAL );
-	
-	m_FootprintNameCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_FootprintNameCtrl->SetMaxLength( 0 ); 
-	sbSizerFootprintName->Add( m_FootprintNameCtrl, 1, 0, 5 );
-	
-	
-	sbSizerFootprintName->Add( 0, 0, 0, 0, 5 );
-	
-	
-	fgSizer1->Add( sbSizerFootprintName, 0, wxEXPAND, 5 );
 	
 	m_staticTextSolderPaste = new wxStaticText( m_PanelProperties, wxID_ANY, _("Solder paste clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSolderPaste->Wrap( -1 );

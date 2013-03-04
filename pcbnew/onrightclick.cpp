@@ -722,7 +722,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
 
     if( !flags )
     {
-        msg = AddHotkeyName( _( "Edit Prms" ),
+        msg = AddHotkeyName( _( "Edit Parameters" ),
                              g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE_PRMS, msg,
                      KiBitmap( edit_module_xpm ) );
