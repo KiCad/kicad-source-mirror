@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-03 09:17+0100\n"
-"PO-Revision-Date: 2013-03-03 09:17+0100\n"
+"POT-Creation-Date: 2013-03-04 18:12+0100\n"
+"PO-Revision-Date: 2013-03-04 18:15+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1268,7 +1268,7 @@ msgstr "Skonwertowany"
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:75
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:123
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:84
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:97
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:98
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:98
@@ -1895,7 +1895,7 @@ msgstr "Błąd podczas tworzenia "
 #: eeschema/template_fieldnames.cpp:14
 #: eeschema/dialogs/dialog_color_config.cpp:37 pcbnew/class_text_mod.cpp:467
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:27
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:51
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:48
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
 msgid "Reference"
 msgstr "Oznaczenie"
@@ -1909,7 +1909,7 @@ msgstr "Oznaczenie"
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_text_mod.cpp:372
 #: pcbnew/class_text_mod.cpp:471 pcbnew/footprint_wizard_frame.cpp:413
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:40
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:64
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:61
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
 msgid "Value"
 msgstr "Wartość"
@@ -2763,8 +2763,8 @@ msgstr "Obrót"
 #: pcbnew/onrightclick.cpp:821 pcbnew/onrightclick.cpp:884
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:33
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:46
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:57
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:70
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:54
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:67
 msgid "Edit"
 msgstr "Edytuj"
 
@@ -4134,6 +4134,7 @@ msgstr "&Nazwa pinu:"
 #: eeschema/dialogs/dialog_color_config.cpp:39
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:90
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:20
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:24
 msgid "Fields"
 msgstr "Pola"
 
@@ -5045,16 +5046,16 @@ msgid "Default Path for Libraries"
 msgstr "Domyślna ścieżka dla bibliotek"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:374
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:462
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:333
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:465
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:336
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths.cpp:357
 #: cvpcb/dialogs/dialog_cvpcb_config.cpp:405
 msgid "Use a relative path?"
 msgstr "Użyć ścieżki względnej?"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:374
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:463
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:334
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:466
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:337
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths.cpp:358
 #: cvpcb/dialogs/dialog_cvpcb_config.cpp:406
 msgid "Path type"
@@ -6577,7 +6578,7 @@ msgstr "Orientacja"
 
 #: pcbnew/class_module.cpp:502
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:123
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:84
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:97
 msgid "Virtual"
 msgstr "Wirtualny"
 
@@ -7967,7 +7968,7 @@ msgid "GPcb foot print files (*)|*"
 msgstr "Pliki footprintów GPcb (*)|*"
 
 #: pcbnew/librairi.cpp:620
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:382
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:385
 #, c-format
 msgid ""
 "Error:\n"
@@ -9487,8 +9488,8 @@ msgid "Flip"
 msgstr "Odbij"
 
 #: pcbnew/onrightclick.cpp:725
-msgid "Edit Prms"
-msgstr "Edytuj parametry"
+msgid "Edit Parameters"
+msgstr "Edycja parametrów"
 
 #: pcbnew/onrightclick.cpp:730
 msgid "Edit with ModEdit"
@@ -10686,8 +10687,8 @@ msgstr ""
 "Przerwano"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:781
-msgid "The defaut Netclass cannot be removed"
-msgstr "Domyślna klasa połączeń nie może być usunięta"
+msgid "The default Netclass cannot be removed"
+msgstr "Domyślna klasa połączeń nie może zostać usunięta"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:980
 #, c-format
@@ -11353,13 +11354,13 @@ msgid "A list of unconnected pads, right click for popup menu"
 msgstr ""
 "Lista niepołączonych pól. Prawy przycisk myszy uruchamia menu podręczne."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:271
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:120
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:270
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:119
 msgid "Use this attribute for most non smd components"
 msgstr "Użyj tego atrybutu dla większości komponentów nie będących SMD"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:273
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:123
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:272
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:122
 msgid ""
 "Use this attribute for smd components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -11367,8 +11368,8 @@ msgstr ""
 "Użyj tego atrybutu dla komponentów SMD.\n"
 "Tylko komponenty z tą opcją są umieszczone na liście położeń footprintów"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:275
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:126
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:274
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:125
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board (like a old ISA "
 "PC bus connector)"
@@ -11376,33 +11377,33 @@ msgstr ""
 "Użyj tego atrybutu dla \"wirtualnych\" komponentów rysowanych na płytce (jak "
 "stare złącze ISA PC)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:301
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:150
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:300
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:149
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Włącz przesuwanie i autorozmieszczanie klawiszami skrótów"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:303
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:151
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:302
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:150
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Wyłącz przesuwanie i autorozmieszczanie klawiszami skrótów"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:312
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:160
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:311
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:159
 msgid "Shape Scale:"
 msgstr "Skala kształtu:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:316
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:164
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:315
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:163
 msgid "Shape Offset (inch):"
 msgstr "Przesunięcie kształtu (w calach):"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:321
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:168
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:320
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:167
 msgid "Shape Rotation (degrees):"
 msgstr "Obrót kształtu (w stopniach):"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:432
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:305
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:435
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:308
 msgid "3D Shape:"
 msgstr "Kształt 3D:"
 
@@ -11443,41 +11444,42 @@ msgid "Module Editor"
 msgstr "Edytor footprintów"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:123
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:84
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:97
 msgid "Normal+Insert"
 msgstr "Normalny+Wstawianie"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:125
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:99
 msgid "Attributes"
 msgstr "Atrybuty"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:90
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:103
 msgid "Free"
 msgstr "Wolny"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:90
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:103
 msgid "Locked"
 msgstr "Zablokowany"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:92
-msgid "Move and Auto Place"
-msgstr "Przesuwanie i autorozmieszczanie"
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:105
+msgid "Move and Place"
+msgstr "Przesuwanie i rozmieszczanie"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:139
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:97
-msgid "Auto Move and Place"
-msgstr "Globalne przesuwanie i umieszczanie"
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:113
+msgid "Auto Place"
+msgstr "Automatyczne rozmieszczanie"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:144
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:102
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:118
 msgid "Rotation 90 degree"
 msgstr "Obrót o 90 stopni"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:157
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:115
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:131
 msgid "Rotation 180 degree"
 msgstr "Obrót o 180 stopni"
 
@@ -11494,12 +11496,14 @@ msgid "Use zone setting"
 msgstr "Użyj ustawień ze stref"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:192
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:147
 msgid "Set clearances to 0 to use global values"
 msgstr "Ustaw wartość 0 by użyć globalnych ustawień"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:207
-msgid "All pads nets clearance:"
-msgstr "Prześwit dla wszystkich pól lutowniczych:"
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:158
+msgid "Pad clearance:"
+msgstr "Prześwit pola lutowniczego:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:209
 msgid ""
@@ -11516,8 +11520,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:217
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:240
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:254
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:150
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:200
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:166
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:203
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:52
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:65
@@ -11541,7 +11545,7 @@ msgid "Inch"
 msgstr "cale"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:230
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:163
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:179
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:43
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:428
 #: pcbnew/dialogs/dialog_plot_base.cpp:196
@@ -11549,7 +11553,7 @@ msgid "Solder mask clearance:"
 msgstr "Prześwit maski:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:232
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:165
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:181
 msgid ""
 "This is the local clearance between pads and the solder mask\n"
 "for this footprint\n"
@@ -11564,14 +11568,14 @@ msgstr ""
 "lutowniczych."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:244
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:190
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:193
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:78
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:442
 msgid "Solder paste clearance:"
 msgstr "Prześwit dla pasty lutowniczej:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:246
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:192
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:195
 msgid ""
 "This is the local clearance between pads and the solder paste\n"
 "for this footprint.\n"
@@ -11589,14 +11593,14 @@ msgstr ""
 "Wartość ujemna oznacza mniejszy rozmiar maski niż rozmiar pola lutowniczego."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:258
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:204
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:207
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:91
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:456
 msgid "Solder mask ratio clearance:"
 msgstr "Stosunek prześwitu dla masek:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:260
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:206
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:209
 msgid ""
 "This is the local clearance ratio in per cent between pads and the solder "
 "paste\n"
@@ -11616,23 +11620,24 @@ msgstr ""
 "Wartość ujemna oznacza, że maska jest mniejsza niż rozmiar pola lutowniczego."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:268
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:214
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:217
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:466
 msgid "%"
 msgstr "%"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:285
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:231
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:234
 msgid "Properties"
 msgstr "Właściwości"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:290
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:236
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:239
 msgid "3D Shape Name"
 msgstr "Nazwa obiektu 3D"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:300
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:249
 msgid "3D Scale and Position"
 msgstr "Skala 3D i pozycja"
 
@@ -11641,56 +11646,36 @@ msgid "Browse Shapes"
 msgstr "Przeglądaj Kształty"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:311
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:254
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:257
 msgid "Add 3D Shape"
 msgstr "Dodaj kształt 3D"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:314
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:257
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:260
 msgid "Remove 3D Shape"
 msgstr "Usuń kształt 3D"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:327
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:270
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:273
 msgid "3D settings"
 msgstr "Ustawienia 3D"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:24
-msgid "Fields:"
-msgstr "Pola:"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:38
 msgid "Keywords"
 msgstr "Słowa kluczowe"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:86
-msgid "Attributs:"
-msgstr "Atrybuty:"
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:77
+msgid "Footprint Name in Library"
+msgstr "Nazwa footprintu w bibliotece"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:129
-msgid "Masks clearances local values:"
-msgstr "Lokalna wartość prześwitu dla masek:"
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:145
+msgid "Local Clearance Values"
+msgstr "Lokalny prześwit"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:131
-msgid "Set these values to 0 to use global values"
-msgstr "Ustaw wartość 0 by użyć globalnych ustawień"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:142
-msgid "All pads nets clearance"
-msgstr "Prześwit dla pól lutowniczych"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:173
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:189
 #: pcb_calculator/UnitSelector.cpp:18
 msgid "inch"
 msgstr "cale"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:178
-msgid "Footprint Name in Lib"
-msgstr "Nazwa footprintu w bibliotece"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:246
-msgid "3D Scale and Pos"
-msgstr "Skala 3D i pozycja"
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:111
 msgid "Value:"
@@ -18201,6 +18186,36 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Edit Prms"
+#~ msgstr "Edytuj parametry"
+
+#~ msgid "Move and Auto Place"
+#~ msgstr "Przesuwanie i autorozmieszczanie"
+
+#~ msgid "Auto Move and Place"
+#~ msgstr "Globalne przesuwanie i umieszczanie"
+
+#~ msgid "All pads nets clearance:"
+#~ msgstr "Prześwit dla wszystkich pól lutowniczych:"
+
+#~ msgid "Fields:"
+#~ msgstr "Pola:"
+
+#~ msgid "Attributs:"
+#~ msgstr "Atrybuty:"
+
+#~ msgid "Masks clearances local values:"
+#~ msgstr "Lokalna wartość prześwitu dla masek:"
+
+#~ msgid "Set these values to 0 to use global values"
+#~ msgstr "Ustaw wartość 0 by użyć globalnych ustawień"
+
+#~ msgid "All pads nets clearance"
+#~ msgstr "Prześwit dla pól lutowniczych"
+
+#~ msgid "3D Scale and Pos"
+#~ msgstr "Skala 3D i pozycja"
 
 #~ msgid "ElementLine token contains %d parameters."
 #~ msgstr "Token \"ElementLine\" zawiera %d parametrów."
