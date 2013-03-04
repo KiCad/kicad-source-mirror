@@ -1370,7 +1370,7 @@
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
-                                                <property name="proportion">1</property>
+                                                <property name="proportion">0</property>
                                                 <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizerAttrib</property>
@@ -1468,7 +1468,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxEXPAND|wxALL</property>
+                                                        <property name="flag">wxALL|wxEXPAND</property>
                                                         <property name="proportion">1</property>
                                                         <object class="wxRadioBox" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -1561,7 +1561,7 @@
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND|wxALL</property>
-                                                <property name="proportion">1</property>
+                                                <property name="proportion">0</property>
                                                 <object class="wxStaticBoxSizer" expanded="1">
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Auto Place</property>
@@ -1581,7 +1581,7 @@
                                                             <property name="permission">none</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_HORIZONTAL</property>
+                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="1">
                                                                     <property name="BottomDockable">1</property>
@@ -1783,7 +1783,7 @@
                                                             <property name="permission">none</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT</property>
+                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="1">
                                                                     <property name="BottomDockable">1</property>
@@ -1990,7 +1990,7 @@
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_HORIZONTAL</property>
+                                                        <property name="flag">wxALL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticText" expanded="1">
                                                             <property name="BottomDockable">1</property>
