@@ -153,6 +153,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 5, 3, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -162,20 +163,20 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_NetClearanceValueCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_NetClearanceValueCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_NetClearanceValueCtrl, 0, wxALL, 5 );
+	fgSizer1->Add( m_NetClearanceValueCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_NetClearanceUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_NetClearanceUnits->Wrap( -1 );
 	fgSizer1->Add( m_NetClearanceUnits, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticline1 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticline1, 0, wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticline2, 0, wxEXPAND, 5 );
 	
 	m_staticline3 = new wxStaticLine( m_PanelProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fgSizer1->Add( m_staticline3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticline3, 0, wxEXPAND, 5 );
 	
 	m_MaskClearanceTitle = new wxStaticText( m_PanelProperties, wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MaskClearanceTitle->Wrap( -1 );
@@ -185,7 +186,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_SolderMaskMarginCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_SolderMaskMarginCtrl, 0, wxALL, 5 );
+	fgSizer1->Add( m_SolderMaskMarginCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_SolderMaskMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginUnits->Wrap( -1 );
@@ -199,7 +200,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_SolderPasteMarginCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderPasteMarginCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_SolderPasteMarginCtrl, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_SolderPasteMarginCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_SolderPasteMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderPasteMarginUnits->Wrap( -1 );
@@ -213,7 +214,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	m_SolderPasteMarginRatioCtrl = new wxTextCtrl( m_PanelProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderPasteMarginRatioCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_SolderPasteMarginRatioCtrl, 0, wxALL, 5 );
+	fgSizer1->Add( m_SolderPasteMarginRatioCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_SolderPasteRatioMarginUnits = new wxStaticText( m_PanelProperties, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderPasteRatioMarginUnits->Wrap( -1 );
@@ -232,7 +233,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_PanelProperties->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelProperties->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelProperties );
-	m_NoteBook->AddPage( m_PanelProperties, _("Properties"), false );
+	m_NoteBook->AddPage( m_PanelProperties, _("Properties"), true );
 	m_Panel3D = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerMain3D;
 	bSizerMain3D = new wxBoxSizer( wxVERTICAL );
@@ -271,7 +272,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_Panel3D->SetSizer( bSizerMain3D );
 	m_Panel3D->Layout();
 	bSizerMain3D->Fit( m_Panel3D );
-	m_NoteBook->AddPage( m_Panel3D, _("3D settings"), true );
+	m_NoteBook->AddPage( m_Panel3D, _("3D settings"), false );
 	
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND | wxALL, 5 );
 	
@@ -287,7 +288,6 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	
 	this->SetSizer( m_GeneralBoxSizer );
 	this->Layout();
-	m_GeneralBoxSizer->Fit( this );
 	
 	// Connect Events
 	m_button4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::OnEditReference ), NULL, this );
