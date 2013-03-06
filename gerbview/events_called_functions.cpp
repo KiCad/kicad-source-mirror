@@ -261,9 +261,14 @@ void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
             ExecuteFile( this, editorname, QuoteFullPath( fn ) );
         }
         else
-        {
             wxMessageBox( _( "No editor defined. Please select one" ) );
-        }
+    }
+
+    else
+    {
+        wxString msg;
+        msg.Printf( _( "No file loaded on the active layer %d" ), layer + 1 );
+        wxMessageBox( msg );
     }
 }
 

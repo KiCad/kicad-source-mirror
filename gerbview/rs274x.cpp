@@ -153,12 +153,14 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                                    char*&    text )
 {
     int      code;
-    int      xy_seq_len;        // not used, provided but not yet in use
-    int      xy_seq_char;
+    int      seq_len;    // not used, just provided
+    int      seq_char;
     bool     ok = true;
     char     line[GERBER_BUFZ];
     wxString msg;
     double   fcoord;
+    bool     x_fmt_known = false;
+    bool     y_fmt_known = false;
 
     // conv_scale = scaling factor from inch to Internal Unit
     double   conv_scale = IU_PER_MILS * 1000;
@@ -170,7 +172,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
     switch( command )
     {
     case FORMAT_STATEMENT:
-        xy_seq_len = 2;
+        seq_len = 2;
 
         while( *text != '*' )
         {
@@ -192,11 +194,6 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 text++;
                 break;
 
-            case 'D':       // Decimal format: sometimes found, but not really documented
-                m_DecimalFormat = true;
-                text++;
-                break;
-
             case 'A':       // Absolute coord
                 m_Relative = false;
                 text++;
@@ -207,23 +204,36 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 text++;
                 break;
 
-            case 'N':       // Sequence code (followed by the number of digits
-                            // for the X,Y command
+            case 'G':
+            case 'N':       // Sequence code (followed by one digit: the sequence len)
+                            // (sometimes found before the X,Y sequence)
+                            // Obscure option
                 text++;
-                xy_seq_char = *text++;
-                if( (xy_seq_char >= '0') && (xy_seq_char <= '9') )
-                    xy_seq_len = -'0';
+                seq_char = *text++;
+                if( (seq_char >= '0') && (seq_char <= '9') )
+                    seq_len = seq_char - '0';
+                break;
+
+            case 'D':
+            case 'M':       // Sequence code (followed by one digit: the sequence len)
+                            // (sometimes found after the X,Y sequence)
+                            // Obscure option
+                code = *text++;
+                if( ( *text >= '0' ) && ( *text<= '9' ) )
+                    text++;     // skip the digit
+                else if( code == 'D' )
+                    // Decimal format: sometimes found, but not really documented
+                    m_DecimalFormat = true;
                 break;
 
             case 'X':
-            case 'Y':       // Values transmitted :2 (really xy_seq_len :
-                            // digits
+            case 'Y':
             {
                 code = *(text++);
                 char ctmp = *(text++) - '0';
                 if( code == 'X' )
                 {
-                    xy_seq_len--;
+                    x_fmt_known = true;
                     // number of digits after the decimal point (0 to 6 allowed)
                     m_FmtScale.x = *text - '0';
                     m_FmtLen.x   = ctmp + m_FmtScale.x;
@@ -236,7 +246,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 }
                 else
                 {
-                    xy_seq_len--;
+                    y_fmt_known = true;
                     m_FmtScale.y = *text - '0';
                     m_FmtLen.y   = ctmp + m_FmtScale.y;
                     if( m_FmtScale.y < 0 )
@@ -252,16 +262,16 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
                 break;
 
             default:
+                msg.Printf( wxT( "Unknown id (%c) in FS command" ),
+                           *text );
+                ReportMessage( msg );
                 GetEndOfBlock( buff, text, m_Current_File );
                 ok = false;
                 break;
             }
         }
-
-        if( xy_seq_len != 0 )
-        {
-            ReportMessage( wxT( "RS274X: suspicious Format Statement (FS) command" ) );
-        }
+        if( !x_fmt_known || !y_fmt_known )
+            ReportMessage( wxT( "RS274X: Format Statement (FS) without X or Y format" ) );
 
         break;
 
