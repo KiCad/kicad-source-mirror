@@ -433,13 +433,16 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
     /* clear direction flags */
     i = RoutingMatrix.m_Nrows * RoutingMatrix.m_Ncols * sizeof(DIR_CELL);
-    memset( RoutingMatrix.m_DirSide[TOP], FROM_NOWHERE, i );
+
+    if( two_sides )
+        memset( RoutingMatrix.m_DirSide[TOP], FROM_NOWHERE, i );
     memset( RoutingMatrix.m_DirSide[BOTTOM], FROM_NOWHERE, i );
 
     lastopen = lastclos = lastmove = 0;
 
     /* Set tab_masque[side] for final test of routing. */
-    tab_mask[TOP]    = topLayerMask;
+    if( two_sides )
+        tab_mask[TOP]    = topLayerMask;
     tab_mask[BOTTOM] = bottomLayerMask;
 
     /* Set active layers mask. */
@@ -1170,11 +1173,11 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->SetLayer( 0x0F );
 
         g_CurrentTrackSegment->SetStart(wxPoint( pcb->GetBoundingBox().GetX() +
-                                                ( RoutingMatrix.m_GridRouting * row ), 
+                                                ( RoutingMatrix.m_GridRouting * row ),
                                                 pcb->GetBoundingBox().GetY() +
                                                 ( RoutingMatrix.m_GridRouting * col )));
         g_CurrentTrackSegment->SetEnd( g_CurrentTrackSegment->GetStart() );
-            
+
         g_CurrentTrackSegment->SetWidth( pcb->GetCurrentViaSize() );
         g_CurrentTrackSegment->SetShape( pcb->GetDesignSettings().m_CurrentViaType );
 

@@ -56,7 +56,6 @@ DIALOG_CLEANING_OPTIONS_BASE::DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wx
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnCloseWindow ) );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnOKClick ), NULL, this );
 }
@@ -64,7 +63,6 @@ DIALOG_CLEANING_OPTIONS_BASE::DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wx
 DIALOG_CLEANING_OPTIONS_BASE::~DIALOG_CLEANING_OPTIONS_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnCloseWindow ) );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnOKClick ), NULL, this );
 	

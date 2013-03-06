@@ -32,9 +32,9 @@
 DIALOG_CLEANING_OPTIONS::DIALOG_CLEANING_OPTIONS( wxWindow* parent ):
     DIALOG_CLEANING_OPTIONS_BASE( parent )
 {
-    m_cleanViasOpt->SetValue( cleanVias );
-    m_mergeSegmOpt->SetValue( mergeSegments );
-    m_deleteUnconnectedOpt->SetValue( deleteUnconnectedSegm );
+    m_cleanViasOpt->SetValue( m_cleanVias );
+    m_mergeSegmOpt->SetValue( m_mergeSegments );
+    m_deleteUnconnectedOpt->SetValue( m_deleteUnconnectedSegm );
 
     m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints(this);
@@ -42,7 +42,7 @@ DIALOG_CLEANING_OPTIONS::DIALOG_CLEANING_OPTIONS( wxWindow* parent ):
 }
 
 // Static members of DIALOG_CLEANING_OPTIONS
-bool DIALOG_CLEANING_OPTIONS::cleanVias = true;
-bool DIALOG_CLEANING_OPTIONS::mergeSegments = true;
-bool DIALOG_CLEANING_OPTIONS::deleteUnconnectedSegm = true;
+bool DIALOG_CLEANING_OPTIONS::m_cleanVias = true;
+bool DIALOG_CLEANING_OPTIONS::m_mergeSegments = true;
+bool DIALOG_CLEANING_OPTIONS::m_deleteUnconnectedSegm = true;
 

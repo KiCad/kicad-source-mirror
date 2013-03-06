@@ -11,15 +11,16 @@
 class DIALOG_CLEANING_OPTIONS: public DIALOG_CLEANING_OPTIONS_BASE
 {
 public:
-    static bool cleanVias;
-    static bool mergeSegments;
-    static bool deleteUnconnectedSegm;
+    static bool m_cleanVias;
+    static bool m_mergeSegments;
+    static bool m_deleteUnconnectedSegm;
 
 public:
     DIALOG_CLEANING_OPTIONS( wxWindow* parent );
 
     ~DIALOG_CLEANING_OPTIONS()
     {
+        GetOpts( );
     }
 
 private:
@@ -33,17 +34,11 @@ private:
             EndModal( wxID_OK );
         }
 
-        void OnCloseWindow( wxCloseEvent& event )
-        {
-            GetOpts( );
-            EndModal( wxID_CANCEL );
-        }
-
         void GetOpts( )
         {
-            cleanVias = m_cleanViasOpt->GetValue( );
-            mergeSegments = m_mergeSegmOpt->GetValue( );
-            deleteUnconnectedSegm = m_deleteUnconnectedOpt->GetValue( );
+            m_cleanVias = m_cleanViasOpt->GetValue( );
+            m_mergeSegments = m_mergeSegmOpt->GetValue( );
+            m_deleteUnconnectedSegm = m_deleteUnconnectedOpt->GetValue( );
         }
 };
 

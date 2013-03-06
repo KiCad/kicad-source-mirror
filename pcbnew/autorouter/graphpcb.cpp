@@ -410,7 +410,9 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
 
         for( ; dx <= lim; )
         {
-            if( ( dx >= 0 ) && ( dy >= 0 ) && ( dx < RoutingMatrix.m_Ncols ) && ( dy < RoutingMatrix.m_Nrows ) )
+            if( ( dx >= 0 ) && ( dy >= 0 ) &&
+                ( dx < RoutingMatrix.m_Ncols ) &&
+                ( dy < RoutingMatrix.m_Nrows ) )
             {
                 OP_CELL( layer, dy, dx );
             }
@@ -475,7 +477,8 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
     if( ( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) ) )
         trace = 1;     // Trace on BOTTOM
 
-    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && RoutingMatrix.m_RoutingLayersCount > 1 )
+    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) &&
+        RoutingMatrix.m_RoutingLayersCount > 1 )
         trace |= 2;    // Trace on TOP
 
     if( trace == 0 )

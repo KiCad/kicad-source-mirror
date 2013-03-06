@@ -100,45 +100,47 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb, bool aUseBoardEdgesOnl
 
 int MATRIX_ROUTING_HEAD::InitRoutingMatrix()
 {
-    int ii, kk;
-
     if( m_Nrows <= 0 || m_Ncols <= 0 )
         return 0;
 
     m_InitMatrixDone = true;     // we have been called
 
     // give a small margin for memory allocation:
-   ii = (RoutingMatrix.m_Nrows + 1) * (RoutingMatrix.m_Ncols + 1);
+    int ii = (RoutingMatrix.m_Nrows + 1) * (RoutingMatrix.m_Ncols + 1);
 
-    for( kk = 0; kk < m_RoutingLayersCount; kk++ )
+    int side = BOTTOM;
+    for( int jj = 0; jj < m_RoutingLayersCount; jj++ )  // m_RoutingLayersCount = 1 or 2
     {
-        m_BoardSide[kk] = NULL;
-        m_DistSide[kk]  = NULL;
-        m_DirSide[kk]   = NULL;
+        m_BoardSide[side] = NULL;
+        m_DistSide[side]  = NULL;
+        m_DirSide[side]   = NULL;
 
         /* allocate matrix & initialize everything to empty */
-        m_BoardSide[kk] = (MATRIX_CELL*) operator new( ii * sizeof(MATRIX_CELL) );
-        memset( m_BoardSide[kk], 0, ii * sizeof(MATRIX_CELL) );
+        m_BoardSide[side] = (MATRIX_CELL*) operator new( ii * sizeof(MATRIX_CELL) );
+        memset( m_BoardSide[side], 0, ii * sizeof(MATRIX_CELL) );
 
-        if( m_BoardSide[kk] == NULL )
+        if( m_BoardSide[side] == NULL )
             return -1;
 
         // allocate Distances
-        m_DistSide[kk] = (DIST_CELL*) operator new( ii * sizeof(DIST_CELL) );
-        memset( m_DistSide[kk], 0, ii * sizeof(DIST_CELL) );
+        m_DistSide[side] = (DIST_CELL*) operator new( ii * sizeof(DIST_CELL) );
+        memset( m_DistSide[side], 0, ii * sizeof(DIST_CELL) );
 
-        if( m_DistSide[kk] == NULL )
+        if( m_DistSide[side] == NULL )
             return -1;
 
         // allocate Dir (chars)
-        m_DirSide[kk] = (char*) operator new( ii );
-        memset( m_DirSide[kk], 0, ii );
+        m_DirSide[side] = (char*) operator new( ii );
+        memset( m_DirSide[side], 0, ii );
 
-        if( m_DirSide[kk] == NULL )
+        if( m_DirSide[side] == NULL )
             return -1;
+
+        side = TOP;
     }
 
-    m_MemSize = m_RouteCount * ii * ( sizeof(MATRIX_CELL) + sizeof(DIST_CELL) + sizeof(char) );
+    m_MemSize = m_RouteCount * ii * ( sizeof(MATRIX_CELL)
+                + sizeof(DIST_CELL) + sizeof(char) );
 
     return m_MemSize;
 }
