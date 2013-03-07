@@ -5,8 +5,9 @@
 Capitalization:
 
     For any visible text used within KiCad, follow recommendations here:
-    http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
-    This applies to all Menus, Titles, Labels, Tooltips, Buttons, etc.
+    http://developer.gnome.org/hig-book/stable/design-text-labels.html.en
+    in the "Capitalization" section.  This applies to all Menus, Titles,
+    Labels, Tooltips, Buttons, etc.
 
     The capitalization for the application names is KiCad, Eeschema, CvPcb,
     GerbView, and Pcbnew.  All strings that have application names that are
@@ -19,7 +20,7 @@ Dialogs:
 
     Follow the recommendations here:
 
-    http://library.gnome.org/devel/hig-book/2.20/windows-dialog.html.en
+    http://developer.gnome.org/hig-book/stable/design-window.html.en
     paying particular attention to "initial focus", "sensible default values",
     "default buttons", ESC key termination.  Please note that the escape key
     termination only works properly if there is a dialog button defined with

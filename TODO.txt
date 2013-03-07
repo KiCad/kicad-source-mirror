@@ -68,6 +68,43 @@ d) write functions to lookup a footprint from
  i) FPID
  ii) footprint alone since most old netlists don't have nicknames in them.
 
+e) Replace MODULE::m_LibRef which is a wxString with FPID.  FPID supports
+   the footprint name only which is backwards compatible with the current
+   design.
+
+f) On the first time an empty global footprint table is encountered, add
+   standard KiCad and user libraries not located in the project directory
+   or any of it's sub-directories to the global footprint library table.
+
+g) When a project is opened and the project footprint library table is
+   empty, add any user library that is located in the project path or any
+   of it's sub-directories to the project footprint library table.
+
+h) When populating the footprint library tables, use the library  file name
+   without the extension as the FPID nickname.  When duplicate names exist,
+   append an incremental integer to the nickname so that the second logic
+   libraries FPID nickname becomes logic1.  Assign FPID library nicknames
+   to each MODULE based on the legacy library search order when loading an
+   existing board that does not have fully defined MODULE FPIDs.
+
+i) Add check for KISYSMOD environment variable, on Pcbnew and CvPcb start up
+   and set it to the known directory of the default KiCad footprint libraries.
+   The code should look something like:
+
+{
+    const char* envar;
+
+    envar = getenv( "KISYSMOD" );
+
+    if( !envar )
+    {
+        envvar = knownDirOfSysMods;
+
+        setenv( "KISYSMOD", envar );
+    }
+}
+
+
 These i) and ii) merge into one if footprint alone is a valid FPID.
 Incorporate any environment variable in the the uri expansion using:
 const wxString FP_LIB_TABLE::ExpandSubtitutions( const wxString aString )

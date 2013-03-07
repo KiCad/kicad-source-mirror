@@ -677,7 +677,7 @@ public:
     /**
      * Function RedrawScreen2
      * puts the crosshair back to the screen position it had before zooming
-     * @param beforePos The screen position of the crosshair before zooming
+     * @param posBefore screen position of the crosshair before zooming
      */
     void RedrawScreen2( const wxPoint& posBefore );
 

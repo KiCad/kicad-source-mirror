@@ -218,7 +218,7 @@ private:
     /// This is also the last used netclass after starting a track.
     wxString                m_currentNetClassName;
 
-    /// Index for #m_ViaSizeList to select the current via size.
+    /// Index for #m_ViasDimensionsList to select the current via size.
     /// 0 is the index selection of the default value Netclass
     unsigned                m_viaSizeIndex;
 
