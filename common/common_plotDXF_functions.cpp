@@ -635,7 +635,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                 TO_UTF8( cname ),
                 origin_dev.x, origin_dev.x,
                 origin_dev.y, origin_dev.y,
-                size_dev.y, fabs( size_dev.y / size_dev.x ),
+                size_dev.y, fabs( size_dev.x / size_dev.y ),
                 aOrient / 10.0,
                 aItalic ? DXF_OBLIQUE_ANGLE : 0,
                 size_dev.x < 0 ? 2 : 0, // X mirror flag
