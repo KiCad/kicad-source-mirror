@@ -27,12 +27,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <vector>
-#include <wx/gdicmn.h>
+#ifndef _DRAG_H_
+#define _DRAG_H_
+
+
 #include <class_track.h>
+#include <vector>
 
 
 class wxDC;
+class wxPoint;
 class EDA_DRAW_PANEL;
 class MODULE;
 class D_PAD;
@@ -84,7 +88,7 @@ public:
     ~DRAG_SEGM_PICKER() {};
 
     /**
-     * Set auxiliary parameters relative to calucaltions needed
+     * Set auxiliary parameters relative to calculations needed
      * to find track ends positions while dragging pads
      * and when modules are rotated, flipped
      */
@@ -95,7 +99,7 @@ public:
      * and when modules are rotated, flipped
      * @param aOffset = offset of module or pad position (when moving)
      */
-    void SetTrackEndsCoordinates(wxPoint aOffset);
+    void SetTrackEndsCoordinates( wxPoint aOffset );
 
     void RestoreInitialValues()
     {
@@ -104,17 +108,18 @@ public:
     }
 };
 
+
 class DRAG_LIST
 {
 public:
-    BOARD * m_Brd;          // the main board
-    MODULE * m_Module;      // The link to the module to move, or NULL
-    D_PAD *  m_Pad;         // The link to the pad to move, or NULL
+    BOARD*   m_Brd;         // the main board
+    MODULE*  m_Module;      // The link to the module to move, or NULL
+    D_PAD*   m_Pad;         // The link to the pad to move, or NULL
 
     std::vector<DRAG_SEGM_PICKER> m_DragList; // The list of DRAG_SEGM_PICKER items
 
 public:
-    DRAG_LIST( BOARD * aPcb )
+    DRAG_LIST( BOARD* aPcb )
     {
         m_Brd = aPcb;
     }
@@ -143,7 +148,7 @@ private:
     /** Fills m_DragList with of track segments connected to pads in aConnections
      *  For each selected track segment the EDIT flag is set
      */
-    void fillList(CONNECTIONS& aConnections);
+    void fillList( CONNECTIONS& aConnections );
 };
 
 
@@ -166,11 +171,13 @@ void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC );
 void EraseDragList();
 
 /**
- * function Collect_TrackSegmentsToDrag.
+ * Function Collect_TrackSegmentsToDrag.
  * used to collect track segments in drag track segment
  * Build the list of tracks connected to the ref point by calling
  * AddSegmentToDragList for each selected track
  * Net codes must be up to date, because only tracks having the right net code are tested.
+ *
+ * @param aPcb A point the the #BOARD object to collect track segment to drag.
  * @param aRefPos = reference point of connection
  * @param aLayerMask = layers mask to collect tracks
  * @param aNetCode = the net code to consider
@@ -193,3 +200,4 @@ void AddSegmentToDragList( int flag, TRACK* aTrack );
 void UndrawAndMarkSegmentsToDrag( EDA_DRAW_PANEL* aCanvas, wxDC* aDC );
 
 
+#endif    // _DRAG_H_
