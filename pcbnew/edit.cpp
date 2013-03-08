@@ -1120,7 +1120,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MENU_PCB_CLEAN:
-        Clean_Pcb( &dc );
+        Clean_Pcb();
         break;
 
     case ID_MENU_PCB_SWAP_LAYERS:

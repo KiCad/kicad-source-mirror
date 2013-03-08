@@ -1544,7 +1544,14 @@ public:
      */
     void Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC );
 
-    void Clean_Pcb( wxDC* DC );
+    /**
+     * Function Clean_Pcb
+     * Clean up the board (remove redundant vias, not connected tracks
+     * and merges collinear track segments)
+     * Install the cleanup dialog frame to know what should be cleaned
+     * and run the cleanup function
+     */
+    void Clean_Pcb();
 
     void InstallFindFrame();
 

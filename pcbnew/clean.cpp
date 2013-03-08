@@ -106,9 +106,9 @@ private:
                                            TRACK* aCandidate, int aEndType );
 };
 
-/* Install the track operation dialog frame
+/* Install the cleanup dialog frame to know what should be cleaned
 */
-void PCB_EDIT_FRAME::Clean_Pcb( wxDC* DC )
+void PCB_EDIT_FRAME::Clean_Pcb()
 {
     DIALOG_CLEANING_OPTIONS dlg( this );
 
