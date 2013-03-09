@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -154,26 +154,25 @@ XNODE* PCB_MODULE::FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGra
     if( pNode )
         lNode = FindNode( pNode, wxT( "multiLayer" ) );  // Old file format
 
-    *aPatGraphRefName = wxEmptyString;                                  // default
-
     if( lNode )
+    {
+        *aPatGraphRefName = wxEmptyString; // default
         result = lNode;
+    }
     else
     {
         // New file format
-        if( FindNode( aNode, wxT( "patternGraphicsNameRef" ) ) )
+
+        if( *aPatGraphRefName == wxEmptyString ) // default
         {
-            FindNode( aNode,
-                      wxT( "patternGraphicsNameRef" ) )->GetAttribute( wxT( "Name" ),
-                                                                       aPatGraphRefName );
+            if( FindNode( aNode, wxT( "patternGraphicsNameRef" ) ) )
+            {
+                FindNode( aNode,
+                          wxT( "patternGraphicsNameRef" ) )->GetAttribute( wxT( "Name" ),
+                                                                           aPatGraphRefName );
+            }
         }
 
-// /////////////////////////////////////////////////////////////////////
-// lNode:=iNode.ChildNodes.FindNode('patternGraphicsDef');  before
-// Fixed 02/08, Sergeys input file format
-// Did it work before  ????
-// lNode:=pNode.ChildNodes.FindNode('patternGraphicsDef');  Nw for some files
-// ////////////////////////////////////////////////////////////////////
         if( FindNode( aNode, wxT( "patternGraphicsDef" ) ) )
             lNode = FindNode( aNode, wxT( "patternGraphicsDef" ) );
         else
@@ -586,59 +585,23 @@ void PCB_MODULE::AddToBoard()
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'P' ) )
-            ( (PCB_PAD*) m_moduleObjects[i] )->AddToModule( module, m_rotation );
+            ( (PCB_PAD*) m_moduleObjects[i] )->AddToModule( module, m_rotation, false );
     }
 
     // VIAS
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'V' ) )
-            ( (PCB_VIA*) m_moduleObjects[i] )->AddToModule( module, m_rotation );
+            ( (PCB_VIA*) m_moduleObjects[i] )->AddToModule( module, m_rotation, false );
     }
 
     module->CalculateBoundingBox();
 }
 
 
-int PCB_MODULE::FlipLayers( int aLayer )
-{
-    int result = aLayer;    // no swap default....
-
-    // routed layers
-    if( aLayer == 0 )
-        result = 15;
-
-    if( aLayer == 15 )
-        result = 0;
-
-    // Silk
-    if( aLayer == 21 )
-        result = 20;
-
-    if( aLayer == 20 )
-        result = 21;
-
-    // Paste
-    if( aLayer == 19 )
-        result = 18;
-
-    if( aLayer == 18 )
-        result = 19;
-
-    // Mask
-    if( aLayer == 23 )
-        result = 22;
-
-    if( aLayer == 22 )
-        result = 23;
-
-    return result;
-}
-
-
 void PCB_MODULE::Flip()
 {
-    int i, j;
+    int i;
 
     if( m_mirror == 1 )
     {
@@ -652,45 +615,12 @@ void PCB_MODULE::Flip()
 
         for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
         {
-            // MODULE LINES
-            if( m_moduleObjects[i]->m_objType == wxT( 'L' ) )
+            if( m_moduleObjects[i]->m_objType == wxT( 'L' ) || // lines
+                m_moduleObjects[i]->m_objType == wxT( 'A' ) || // arcs
+                m_moduleObjects[i]->m_objType == wxT( 'P' ) || // pads
+                m_moduleObjects[i]->m_objType == wxT( 'V' ) )  // vias
             {
-                m_moduleObjects[i]->m_positionX = -m_moduleObjects[i]->m_positionX;
-                ( (PCB_LINE*) m_moduleObjects[i] )->m_toX =
-                    -( (PCB_LINE*) m_moduleObjects[i] )->m_toX;
-                m_moduleObjects[i]->m_KiCadLayer = FlipLayers( m_moduleObjects[i]->m_KiCadLayer );
-            }
-
-            // MODULE Arcs
-            if( m_moduleObjects[i]->m_objType == wxT( 'A' ) )
-            {
-                m_moduleObjects[i]->m_positionX = -m_moduleObjects[i]->m_positionX;
-                ( (PCB_ARC*) m_moduleObjects[i] )->m_startX =
-                    -( (PCB_ARC*) m_moduleObjects[i] )->m_startX;
-                m_moduleObjects[i]->m_KiCadLayer = FlipLayers( m_moduleObjects[i]->m_KiCadLayer );
-            }
-
-            // PADS
-            if( m_moduleObjects[i]->m_objType == wxT( 'P' ) )
-            {
-                m_moduleObjects[i]->m_positionX = -m_moduleObjects[i]->m_positionX;
-                m_moduleObjects[i]->m_rotation  = -m_moduleObjects[i]->m_rotation;
-
-                for( j = 0; j < (int) ( (PCB_PAD*) m_moduleObjects[i] )->m_shapes.GetCount(); j++ )
-                    ( (PCB_PAD*) m_moduleObjects[i] )->m_shapes[j]->m_KiCadLayer =
-                        FlipLayers( ( (PCB_PAD*) m_moduleObjects[i] )->m_shapes[j]->m_KiCadLayer );
-
-            }
-
-            // VIAS
-            if( m_moduleObjects[i]->m_objType == wxT( 'V' ) )
-            {
-                m_moduleObjects[i]->m_positionX = -m_moduleObjects[i]->m_positionX;
-
-                for( j = 0; j < (int) ( (PCB_VIA*) m_moduleObjects[i] )->m_shapes.GetCount(); j++ )
-                    ( (PCB_VIA*) m_moduleObjects[i] )->m_shapes[j]->m_KiCadLayer =
-                        FlipLayers( ( (PCB_VIA*) m_moduleObjects[i] )->m_shapes[j]->m_KiCadLayer );
-
+                m_moduleObjects[i]->Flip();
             }
         }
     }

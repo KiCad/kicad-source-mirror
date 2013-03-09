@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -50,19 +50,19 @@ namespace PCAD2KICAD {
 
 int PCB::GetKiCadLayer( int aPCadLayer )
 {
-    assert( aPCadLayer >= FIRST_COPPER_LAYER && aPCadLayer <= LAST_NO_COPPER_LAYER );
+    wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
     return m_layersMap[aPCadLayer].KiCadLayer;
 }
 
 LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer )
 {
-    assert( aPCadLayer >= FIRST_COPPER_LAYER && aPCadLayer <= LAST_NO_COPPER_LAYER );
+    wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
     return m_layersMap[aPCadLayer].layerType;
 }
 
 wxString PCB::GetLayerNetNameRef( int aPCadLayer )
 {
-    assert( aPCadLayer >= FIRST_COPPER_LAYER && aPCadLayer <= LAST_NO_COPPER_LAYER );
+    wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
     return m_layersMap[aPCadLayer].netNameRef;
 }
 
@@ -72,7 +72,7 @@ PCB::PCB( BOARD* aBoard ) : PCB_MODULE( this, aBoard )
 
     m_defaultMeasurementUnit = wxT( "mil" );
 
-    for( i = 0; i < NB_LAYERS; i++ )
+    for( i = 0; i < MAX_PCAD_LAYER_QTY; i++ )
     {
         m_layersMap[i].KiCadLayer = SOLDERMASK_N_FRONT; // default
         m_layersMap[i].layerType = LAYER_TYPE_NONSIGNAL; // default
@@ -173,7 +173,7 @@ void PCB::SetTextProperty( XNODE*   aNode, TTEXTVALUE* aTextValue,
     t1Node  = aNode;
     n = aXmlName;
 
-    // new file foramat version
+    // new file format version
     if( FindNode( tNode, wxT( "patternGraphicsNameRef" ) ) )
     {
         FindNode( tNode,
@@ -262,6 +262,11 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                 if( tNode )
                 {
                     mc = new PCB_MODULE( this, m_board );
+
+                    mNode = FindNode( lNode, wxT( "patternGraphicsNameRef" ) );
+                    if( mNode )
+                        mNode->GetAttribute( wxT( "Name" ), &mc->m_patGraphRefName );
+
                     mc->Parse( tNode, aStatusBar, m_defaultMeasurementUnit, aActualConversion );
                 }
             }
@@ -515,7 +520,9 @@ void PCB::MapLayer( XNODE* aNode )
     if( FindNode( aNode, wxT( "layerNum" ) ) )
         FindNode( aNode, wxT( "layerNum" ) )->GetNodeContent().ToLong( &num );
 
-    assert( num >= FIRST_COPPER_LAYER && num <= LAST_NO_COPPER_LAYER );
+    if( num < 0 || num >= MAX_PCAD_LAYER_QTY )
+        THROW_IO_ERROR( wxString::Format( wxT( "layerNum = %ld is out of range" ), num ) );
+
     m_layersMap[(int) num].KiCadLayer = KiCadLayer;
 
     if( FindNode( aNode, wxT( "layerType" ) ) )

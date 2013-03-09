@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -39,11 +39,11 @@ namespace PCAD2KICAD {
 
 PCB_ARC::PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONENT( aCallbacks, aBoard )
 {
-    m_objType   = wxT( 'A' );
-    m_startX    = 0;
-    m_startY    = 0;
-    m_angle     = 0;
-    m_width     = 0;
+    m_objType    = wxT( 'A' );
+    m_startX     = 0;
+    m_startY     = 0;
+    m_angle      = 0;
+    m_width      = 0;
 }
 
 
@@ -58,11 +58,14 @@ void PCB_ARC::Parse( XNODE*     aNode,
                      wxString   aActualConversion )
 {
     XNODE*      lNode;
-    double      r = 0.0, a = 0.0;
-    int         endPointX, endPointY;
+    double      a = 0.0;
+    int         r = 0;
+    int         endX;
+    int         endY;
 
     m_PCadLayer     = aLayer;
     m_KiCadLayer    = GetKiCadLayer();
+
     if( FindNode( aNode, wxT( "width" ) ) )
         SetWidth( FindNode( aNode, wxT( "width" ) )->GetNodeContent(),
                   aDefaultMeasurementUnit, &m_width, aActualConversion );
@@ -88,17 +91,16 @@ void PCB_ARC::Parse( XNODE*     aNode,
 
         if( lNode )
             SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                         &endPointX, &endPointY, aActualConversion );
+                         &endX, &endY, aActualConversion );
 
         int alpha1  = ArcTangente( m_startY - m_positionY, m_startX - m_positionX );
-        int alpha2  = ArcTangente( endPointY - m_positionY, endPointX - m_positionX );
+        int alpha2  = ArcTangente( endY - m_positionY, endX - m_positionX );
         m_angle = alpha1 - alpha2;
 
         if( m_angle < 0 )
             m_angle = 3600 + m_angle;
     }
-
-    if( aNode->GetName() == wxT( "arc" ) )
+    else if( aNode->GetName() == wxT( "arc" ) )
     {
         lNode = FindNode( aNode, wxT( "pt" ) );
 
@@ -108,18 +110,20 @@ void PCB_ARC::Parse( XNODE*     aNode,
 
         lNode   = FindNode( aNode, wxT( "radius" ) );
         if( lNode)
-            r = StrToIntUnits( lNode->GetNodeContent(), wxT( ' ' ), aActualConversion );
+            SetWidth( FindNode( aNode, wxT( "radius" ) )->GetNodeContent(),
+                      aDefaultMeasurementUnit, &r, aActualConversion );
+
 
         lNode   = FindNode( aNode, wxT( "startAngle" ) );
         if( lNode )
             a = StrToInt1Units( lNode->GetNodeContent() );
 
-        m_startX    = KiROUND( m_positionX + r * sin( (a - 900.0) * M_PI / 1800.0 ) );
-        m_startY    = KiROUND( m_positionY - r * cos( (a - 900.0) * M_PI / 1800.0 ) );
-
         lNode   = FindNode( aNode, wxT( "sweepAngle" ) );
         if( lNode )
             m_angle = StrToInt1Units( lNode->GetNodeContent() );
+
+        m_startX = KiROUND( m_positionX + (double)r * cos( a * M_PI / 1800.0 ) );
+        m_startY = KiROUND( m_positionY - (double)r * sin( a * M_PI / 1800.0 ) );
     }
 }
 
@@ -130,6 +134,17 @@ void PCB_ARC::SetPosOffset( int aX_offs, int aY_offs )
 
     m_startX    += aX_offs;
     m_startY    += aY_offs;
+}
+
+
+void PCB_ARC::Flip()
+{
+    PCB_COMPONENT::Flip();
+
+    m_startX = -m_startX;
+    m_angle = -m_angle;
+
+    m_KiCadLayer = FlipLayers( m_KiCadLayer );
 }
 
 

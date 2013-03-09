@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -39,12 +39,13 @@ namespace PCAD2KICAD {
 PCB_POLYGON::PCB_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer ) :
     PCB_COMPONENT( aCallbacks, aBoard )
 {
-    m_width     = 0;
-    m_priority  = 0;
-    m_objType   = wxT( 'Z' );
-    m_PCadLayer = aPCadLayer;
+    m_width      = 0;
+    m_priority   = 0;
+    m_objType    = wxT( 'Z' );
+    m_PCadLayer  = aPCadLayer;
     m_KiCadLayer = GetKiCadLayer();
-    m_timestamp = GetNewTimestamp();
+    m_timestamp  = GetNewTimestamp();
+    m_filled     = true;
 }
 
 
@@ -209,7 +210,9 @@ void PCB_POLYGON::AddToBoard()
             zone->SetDoNotAllowCopperPour( true );
         }
 
-        //zone->BuildFilledPolysListData( m_board );
+        //if( m_filled )
+        //    cvpcb is not linked
+        //    zone->BuildFilledPolysListData( m_board );
     }
 }
 

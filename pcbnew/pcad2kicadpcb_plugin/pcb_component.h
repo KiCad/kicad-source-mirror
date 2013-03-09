@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -66,6 +66,7 @@ public:
     ~PCB_COMPONENT();
 
     virtual void    SetPosOffset( int aX_offs, int aY_offs );
+    virtual void    Flip();
     virtual void    AddToModule( MODULE* aModule );
     virtual void    AddToBoard() = 0;
 
@@ -76,6 +77,8 @@ public:
 protected:
     PCB_CALLBACKS*  m_callbacks;
     BOARD*          m_board;
+
+    int             FlipLayers( int aLayer );
 };
 
 WX_DEFINE_ARRAY( PCB_COMPONENT*, PCB_COMPONENTS_ARRAY );
