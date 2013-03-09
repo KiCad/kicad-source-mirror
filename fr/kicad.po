@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-04 17:34+0100\n"
-"PO-Revision-Date: 2013-03-04 17:36+0100\n"
+"POT-Creation-Date: 2013-03-06 20:35+0100\n"
+"PO-Revision-Date: 2013-03-06 20:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "Language: fr_FR\n"
@@ -575,8 +575,8 @@ msgstr "Module"
 
 #: pcbnew/class_edge_mod.cpp:250 pcbnew/class_text_mod.cpp:372
 #: pcbnew/class_text_mod.cpp:471 pcbnew/footprint_wizard_frame.cpp:413
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:61
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:40
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
 #: eeschema/lib_field.cpp:570 eeschema/lib_field.cpp:748
 #: eeschema/onrightclick.cpp:308 eeschema/onrightclick.cpp:415
@@ -1514,8 +1514,8 @@ msgid "Stat"
 msgstr "Stat"
 
 #: pcbnew/class_module.cpp:494 pcbnew/muonde.cpp:815
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:97
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:98
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
@@ -1545,7 +1545,7 @@ msgid "Insert"
 msgstr "Insérer"
 
 #: pcbnew/class_module.cpp:502
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:97
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
 msgid "Virtual"
 msgstr "Virtuel"
@@ -1579,13 +1579,13 @@ msgstr "Empreinte"
 
 #: pcbnew/pcbnew_config.cpp:76 pcbnew/dialogs/dialog_general_options.cpp:237
 #: gerbview/menubar.cpp:158 gerbview/menubar.cpp:160 gerbview/options.cpp:64
-#: gerbview/events_called_functions.cpp:376
+#: gerbview/events_called_functions.cpp:381
 msgid "Hide &Layers Manager"
 msgstr "Cacher le &Gestionnaire de Couches"
 
 #: pcbnew/pcbnew_config.cpp:76 pcbnew/dialogs/dialog_general_options.cpp:237
 #: gerbview/menubar.cpp:160 gerbview/options.cpp:64
-#: gerbview/events_called_functions.cpp:376
+#: gerbview/events_called_functions.cpp:381
 msgid "Show &Layers Manager"
 msgstr "Affiche le &Gestionnaire de Couches"
 
@@ -2471,8 +2471,7 @@ msgid "Yes"
 msgstr "Oui"
 
 #: pcbnew/class_pcb_text.cpp:140
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:59
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:63
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:68
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:82
 #: eeschema/lib_pin.cpp:1862 eeschema/sch_text.cpp:760
 msgid "Orientation"
@@ -2861,8 +2860,8 @@ msgid " Yes"
 msgstr "Oui"
 
 #: pcbnew/class_text_mod.cpp:467 pcbnew/dialogs/dialog_netlist_fbp.cpp:25
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:48
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:27
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: eeschema/lib_field.cpp:563 eeschema/onrightclick.cpp:307
 #: eeschema/onrightclick.cpp:420 eeschema/sch_component.cpp:1479
 #: eeschema/template_fieldnames.cpp:14
@@ -3064,7 +3063,7 @@ msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
 #: pcbnew/pcbframe.cpp:369 pcbnew/pcbframe.cpp:731
-#: gerbview/gerbview_frame.cpp:139 gerbview/events_called_functions.cpp:312
+#: gerbview/gerbview_frame.cpp:139 gerbview/events_called_functions.cpp:317
 msgid "Visibles"
 msgstr "Visibles"
 
@@ -3579,10 +3578,10 @@ msgstr "Place contour"
 
 #: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:766
 #: pcbnew/onrightclick.cpp:821 pcbnew/onrightclick.cpp:884
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:54
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:67
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:33
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:46
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:53
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:70
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:37
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:54
 #: eeschema/onrightclick.cpp:333 eeschema/onrightclick.cpp:410
 msgid "Edit"
 msgstr "Editer"
@@ -5700,75 +5699,75 @@ msgstr "Fichiers DXF  (.dxf)|*.dxf"
 msgid "Fields"
 msgstr "Champs"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:27
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:26
 #: eeschema/onrightclick.cpp:388
 msgid "Doc"
 msgstr "Doc"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:38
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:34
 msgid "Keywords"
 msgstr "Mots Clés"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:77
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:79
 msgid "Footprint Name in Library"
 msgstr "Nom du Module en Librairie"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:97
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:131
 msgid "Normal+Insert"
 msgstr "Normal+Insert"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:99
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:100
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:133
 msgid "Attributes"
 msgstr "Attributs"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:103
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:104
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:137
 msgid "Free"
 msgstr "Libre"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:103
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:104
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:137
 msgid "Locked"
 msgstr "Verrouillé"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:105
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:106
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:139
 msgid "Move and Place"
 msgstr "Déplacer et Placer"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:113
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:114
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:147
 msgid "Auto Place"
 msgstr "Auto Placement"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:118
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:119
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:152
 msgid "Rotation 90 degree"
 msgstr "Rotation 90 degrés"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:131
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:132
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:165
 msgid "Rotation 180 degree"
 msgstr "Rotation 180 degrés"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:145
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:146
 msgid "Local Clearance Values"
 msgstr "Valeurs d'Isolation Locales"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:147
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:148
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:200
 msgid "Set clearances to 0 to use global values"
 msgstr "Mettre les imarges à 0 pour utiliser les valeurs globales"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:158
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:160
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:215
 msgid "Pad clearance:"
 msgstr "Isolation pad:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:166
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:203
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:168
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:205
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:52
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:65
@@ -5791,7 +5790,7 @@ msgstr "Isolation pad:"
 msgid "Inch"
 msgstr "Pouce"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:179
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:181
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:238
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:43
 #: pcbnew/dialogs/dialog_plot_base.cpp:196
@@ -5799,7 +5798,7 @@ msgstr "Pouce"
 msgid "Solder mask clearance:"
 msgstr "Marge vernis épargne:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:181
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:183
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:240
 msgid ""
 "This is the local clearance between pads and the solder mask\n"
@@ -5812,18 +5811,18 @@ msgstr ""
 "Cette valeur peut être remplacée par une valeur locale du pad\n"
 "Si 0, la valeur globale sera utilisée"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:189
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:191
 msgid "inch"
 msgstr "Pouce"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:193
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:195
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:252
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:78
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:442
 msgid "Solder paste clearance:"
 msgstr "Marge masque pâte des pads"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:195
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:197
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:254
 msgid ""
 "This is the local clearance between pads and the solder paste\n"
@@ -5840,14 +5839,14 @@ msgstr ""
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
 "Une valeur négative signifie que le masque est plus petit que le pad"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:207
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:209
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:266
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:91
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:456
 msgid "Solder mask ratio clearance:"
 msgstr "Coeff. vernis épargne:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:209
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:211
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:268
 msgid ""
 "This is the local clearance ratio in per cent between pads and the solder "
@@ -5867,39 +5866,39 @@ msgstr ""
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
 "Une valeur négative signifie que le masque est plus petit que le pad."
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:217
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:219
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:276
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:466
 msgid "%"
 msgstr "%"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:234
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:236
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:293
 msgid "Properties"
 msgstr "Propriétés"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:239
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:241
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:298
 msgid "3D Shape Name"
 msgstr "3D forme"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:249
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:251
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:308
 msgid "3D Scale and Position"
 msgstr "Echelle et Position 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:257
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:259
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:319
 msgid "Add 3D Shape"
 msgstr "Ajout Forme 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:260
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:262
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:322
 msgid "Remove 3D Shape"
 msgstr "Suppr. Forme 3D:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:273
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:275
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:335
 msgid "3D settings"
 msgstr "3D Caract"
@@ -6014,55 +6013,55 @@ msgstr "Problèmes / Marqueurs"
 msgid "A list of unconnected pads, right click for popup menu"
 msgstr "Pour une liste de pads non connecté, clic droit pour ouvrir un menu"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
 msgid "Top"
 msgstr "Dessus"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:61
 msgid "Bottom"
 msgstr "Dessous"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:54
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:62
 msgid "Side"
 msgstr "Coté"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "+90.0"
 msgstr "+90,0"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "-90.0"
 msgstr "-90,0"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "180.0"
 msgstr "180,0"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:61
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "User"
 msgstr "Utilisateur"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:67
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:72
 msgid "User orientation (in 0.1 degrees):"
 msgstr "Orientation utilisateur (en 0.1 degrés)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:79
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:80
 msgid "Position"
 msgstr "Position"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:87
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:90
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:86
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:170
 #: common/wxwineda.cpp:168
 msgid "X"
 msgstr "X"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:95
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:107
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:98
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:110
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:225
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:248
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:262
@@ -6072,7 +6071,7 @@ msgstr "X"
 msgid "unit"
 msgstr "unité"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:99
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:102
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:91
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:175
 #: common/wxwineda.cpp:181
@@ -14785,15 +14784,15 @@ msgstr ">  non trouvé"
 msgid "<html><h1>Template Selector</h1></html>"
 msgstr "<html><h1>Selection Modèles</h1></html>"
 
-#: gerbview/rs274x.cpp:379
+#: gerbview/rs274x.cpp:389
 msgid "RS274X: Command \"IR\" rotation value not allowed"
 msgstr "RS274X: Commande \"IR\"valeur pour rotation non autorisée"
 
-#: gerbview/rs274x.cpp:470
+#: gerbview/rs274x.cpp:480
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "RS274X: Commande KNOCKOUT ignorée par GerVview"
 
-#: gerbview/rs274x.cpp:532
+#: gerbview/rs274x.cpp:542
 msgid "Too many include files!!"
 msgstr "Trop de fichiers inclus!!"
 
@@ -15273,9 +15272,14 @@ msgstr "Cacher le gestionnaire de couches"
 msgid "Show layers manager"
 msgstr "Afficher le gestionnaire de couches"
 
-#: gerbview/events_called_functions.cpp:265
+#: gerbview/events_called_functions.cpp:264
 msgid "No editor defined. Please select one"
 msgstr "Pas d'éditeur défini. SVP, sélectionnez en un"
+
+#: gerbview/events_called_functions.cpp:270
+#, c-format
+msgid "No file loaded on the active layer %d"
+msgstr "Pas de fichier chargé sur la couche active %d"
 
 #: gerbview/onrightclick.cpp:58
 msgid "Delete Block (ctrl + drag mouse)"
@@ -16651,7 +16655,7 @@ msgstr "Propriétés de la Zone sur Cuivre"
 msgid "Export SVG file"
 msgstr "Export fichier SVG"
 
-#: pcbnew/dialogs/dialog_cleaning_options_base.h:58
+#: pcbnew/dialogs/dialog_cleaning_options_base.h:57
 msgid "Cleaning Options"
 msgstr "Options de Nettoyage"
 
@@ -16663,8 +16667,8 @@ msgstr "Editeur de Règles de Conception"
 msgid "DRC Control"
 msgstr "Contrôle DRC"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:128
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:107
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:131
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:112
 msgid "Module Properties"
 msgstr "Propriétés du Module"
 
