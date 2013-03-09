@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -51,6 +51,7 @@ public:
                            wxString aDefaultMeasurementUnit, wxString aActualConversion );
 
     virtual void    SetPosOffset( int aX_offs, int aY_offs );
+    virtual void    Flip();
     void            AddToModule( MODULE* aModule );
     void            AddToBoard();
 };

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -38,13 +38,15 @@
 
 namespace PCAD2KICAD {
 
+#define MAX_PCAD_LAYER_QTY 32
+
 class PCB : public PCB_MODULE, public PCB_CALLBACKS
 {
 public:
     PCB_COMPONENTS_ARRAY    m_pcbComponents;    // PCB Modules,Lines,Routes,Texts, .... and so on
     PCB_NETS_ARRAY          m_pcbNetlist;       // net objects collection
     wxString                m_defaultMeasurementUnit;
-    TLAYER                  m_layersMap[NB_LAYERS];    // flexible layers mapping
+    TLAYER                  m_layersMap[MAX_PCAD_LAYER_QTY];    // flexible layers mapping
     int m_sizeX;
     int m_sizeY;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -61,7 +61,6 @@ PCB_COMPONENT::~PCB_COMPONENT()
 }
 
 
-
 void PCB_COMPONENT::AddToModule( MODULE* aModule )
 {
 }
@@ -71,6 +70,46 @@ void PCB_COMPONENT::SetPosOffset( int aX_offs, int aY_offs )
 {
     m_positionX += aX_offs;
     m_positionY += aY_offs;
+}
+
+void PCB_COMPONENT::Flip()
+{
+    m_positionX = -m_positionX;
+}
+
+int PCB_COMPONENT::FlipLayers( int aLayer )
+{
+    int result = aLayer;    // dafault is no swap
+
+    // routed layers
+    if( aLayer == LAYER_N_BACK )
+        result = LAYER_N_FRONT;
+
+    if( aLayer == LAYER_N_FRONT )
+        result = LAYER_N_BACK;
+
+    // Silk
+    if( aLayer == SILKSCREEN_N_FRONT )
+        result = SILKSCREEN_N_BACK;
+
+    if( aLayer == SILKSCREEN_N_BACK )
+        result = SILKSCREEN_N_FRONT;
+
+    // Paste
+    if( aLayer == SOLDERPASTE_N_FRONT )
+        result = SOLDERPASTE_N_BACK;
+
+    if( aLayer == SOLDERPASTE_N_BACK )
+        result = SOLDERPASTE_N_FRONT;
+
+    // Mask
+    if( aLayer == SOLDERMASK_N_FRONT )
+        result = SOLDERMASK_N_BACK;
+
+    if( aLayer == SOLDERMASK_N_BACK )
+        result = SOLDERMASK_N_FRONT;
+
+    return result;
 }
 
 } // namespace PCAD2KICAD

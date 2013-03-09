@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -41,6 +41,7 @@ PCB_COPPER_POUR::PCB_COPPER_POUR( PCB_CALLBACKS*    aCallbacks,
                                   int               aPCadLayer ) :
     PCB_POLYGON( aCallbacks, aBoard, aPCadLayer )
 {
+    m_filled = false;
 }
 
 
@@ -86,6 +87,9 @@ bool PCB_COPPER_POUR::Parse( XNODE*         aNode,
     if( FindNode( aNode, wxT( "thermalWidth" ) ) )
         SetWidth( FindNode( aNode, wxT( "thermalWidth" ) )->GetNodeContent(),
                   aDefaultMeasurementUnit, &thermalWidth, aActualConversion );
+
+    if( FindNode( aNode, wxT( "island" ) ) )
+        m_filled = true;
 
     lNode = FindNode( aNode, wxT( "pcbPoly" ) );
 

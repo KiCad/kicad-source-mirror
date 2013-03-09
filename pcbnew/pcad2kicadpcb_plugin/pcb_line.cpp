@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
- * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -102,6 +102,15 @@ void PCB_LINE::SetPosOffset( int aX_offs, int aY_offs )
 
     m_toX   += aX_offs;
     m_toY   += aY_offs;
+}
+
+
+void PCB_LINE::Flip()
+{
+    PCB_COMPONENT::Flip();
+
+    m_toX = -m_toX;
+    m_KiCadLayer = FlipLayers( m_KiCadLayer );
 }
 
 

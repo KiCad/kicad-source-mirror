@@ -24,7 +24,7 @@
 
 /**
  * @file pcad_plugin.cpp
- * @brief Pcbnew PLUGIN for P-Cad 2002/2004 ASCII *.pcb format.
+ * @brief Pcbnew PLUGIN for P-Cad 200x ASCII *.pcb format.
  */
 
 #include <errno.h>
