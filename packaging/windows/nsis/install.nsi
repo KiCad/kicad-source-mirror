@@ -36,7 +36,7 @@ SetCompressor /final /solid lzma
 CRCCheck force
 XPStyle on
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${PRODUCT_NAME}_stable-${PRODUCT_VERSION}-BZR3992_Win_full_version.exe"
+OutFile "${PRODUCT_NAME}_stable-${PRODUCT_VERSION}-BZR3993_Win_full_version.exe"
 InstallDir "$PROGRAMFILES\KiCad"
 ShowInstDetails hide
 ShowUnInstDetails hide
