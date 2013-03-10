@@ -69,9 +69,20 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, boo
     {
         DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( this );
 
+        wxFileName templatePath;
+
         // Add a new tab for system templates
-        wxFileName templatePath = wxPathOnly(wxStandardPaths::Get().GetExecutablePath()) +
+        if( ::wxGetEnv( wxT( "KICAD" ), NULL ) )
+        {
+            wxString kicadEnv;
+            wxGetEnv( wxT( "KICAD"), &kicadEnv ); 
+            templatePath = kicadEnv + SEP() + wxT("template")+SEP();
+        }
+        else
+        {
+            wxFileName templatePath = wxPathOnly(wxStandardPaths::Get().GetExecutablePath()) +
                 SEP() + wxT( ".." ) + SEP() + wxT( "share" ) + SEP() + wxT( "template" ) + SEP();
+        }
 
         ps->AddPage( _( "System Templates" ), templatePath );
 
