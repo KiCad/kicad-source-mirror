@@ -2375,6 +2375,14 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "$endCZONE_OUTLINE" ) )
         {
+            // Ensure keepout does not have a net
+            // (which have no sense for a keepout zone)
+            if( zc->GetIsKeepout() )
+            {
+                zc->SetNet(0);
+                zc->SetNetName( wxEmptyString );
+            }
+
             // should always occur, but who knows, a zone without two corners
             // is no zone at all, it's a spot?
 
