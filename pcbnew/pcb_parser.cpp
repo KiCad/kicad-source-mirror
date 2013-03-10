@@ -2004,11 +2004,16 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
         pad->SetAttribute( PAD_SMD );
 
         // Default D_PAD object is thru hole with drill.
+        // SMD pads have no hole
         pad->SetDrillSize( wxSize( 0, 0 ) );
         break;
 
     case T_connect:
         pad->SetAttribute( PAD_CONN );
+
+        // Default D_PAD object is thru hole with drill.
+        // CONN pads have no hole
+        pad->SetDrillSize( wxSize( 0, 0 ) );
         break;
 
     case T_np_thru_hole:
@@ -2136,8 +2141,8 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
             // This fixes a bug caused by setting the default D_PAD drill size to a value
             // other than 0 used to fix a bunch of debug assertions even though it is defined
             // as a through hole pad.  Wouldn't a though hole pad with no drill be a surface
-            // mount pad?
-            if( pad->GetAttribute() != PAD_SMD )
+            // mount pad (or a conn pad which is a smd pad with no solder paste)?
+            if( ( pad->GetAttribute() != PAD_SMD ) && ( pad->GetAttribute() != PAD_CONN ) )
                 pad->SetDrillSize( drillSize );
             else
                 pad->SetDrillSize( wxSize( 0, 0 ) );
@@ -2666,6 +2671,13 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 
     if( pts.size() )
         zone->AddFilledPolysList( pts );
+
+    // Ensure keepout does not have a net (which have no sense for a keepout zone)
+    if( zone->GetIsKeepout() )
+    {
+        zone->SetNet(0);
+        zone->SetNetName( wxEmptyString );
+    }
 
     return zone.release();
 }
