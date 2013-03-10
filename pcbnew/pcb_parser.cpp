@@ -1016,7 +1016,7 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
     // "last_trace_width", "trace_min_width", "via_size", "via_drill",
     // "via_min_size", and "via_clearance", put those same global
     // values into the default NETCLASS until later board load
-    // code should override them.  *.kicad_brd files which have been
+    // code should override them.  *.kicad_pcb files which have been
     // saved with knowledge of NETCLASSes will override these
     // defaults, old boards will not.
     //
