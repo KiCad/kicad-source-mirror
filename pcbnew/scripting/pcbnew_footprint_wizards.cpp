@@ -8,190 +8,190 @@
 
 #include <stdio.h>
 
-PYTHON_FOOTPRINT_WIZARD::PYTHON_FOOTPRINT_WIZARD(PyObject *aWizard)
+
+PYTHON_FOOTPRINT_WIZARD::PYTHON_FOOTPRINT_WIZARD( PyObject* aWizard )
 {
+    PyLOCK  lock;
+
     this->m_PyWizard= aWizard;
     Py_XINCREF( aWizard );
 }
 
+
 PYTHON_FOOTPRINT_WIZARD::~PYTHON_FOOTPRINT_WIZARD()
 {
+    PyLOCK  lock;
+
     Py_XDECREF( this->m_PyWizard );
 }
 
-PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod(const char* aMethod, PyObject *aArglist)
+
+PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aArglist )
 {
-     PyObject *pFunc;
+    PyLOCK  lock;
 
-    /* pFunc is a new reference to the desired method */
-    pFunc = PyObject_GetAttrString( this->m_PyWizard, aMethod );
+    // pFunc is a new reference to the desired method
+    PyObject* pFunc = PyObject_GetAttrString( this->m_PyWizard, aMethod );
 
-    if ( pFunc && PyCallable_Check( pFunc ) )
+    if( pFunc && PyCallable_Check( pFunc ) )
     {
-        PyObject *result;
+        PyObject* result = PyObject_CallObject( pFunc, aArglist );
 
-        PY_BLOCK_THREADS( blocked );
-
-        result = PyObject_CallObject( pFunc, aArglist );
-
-        if ( PyErr_Occurred() )
+        if( PyErr_Occurred() )
         {
-            PyObject *t, *v, *b;
+            PyObject* t;
+            PyObject* v;
+            PyObject* b;
+
             PyErr_Fetch( &t, &v, &b );
             printf ( "calling %s()\n", aMethod );
-            printf ( "Exception: %s\n", PyString_AsString( PyObject_Str(v) ) );
-            printf ( "         : %s\n", PyString_AsString( PyObject_Str(b) ) );
+            printf ( "Exception: %s\n", PyString_AsString( PyObject_Str( v ) ) );
+            printf ( "         : %s\n", PyString_AsString( PyObject_Str( b ) ) );
         }
 
-        PY_UNBLOCK_THREADS( blocked );
-
-        if ( result )
+        if( result )
         {
             Py_XDECREF( pFunc );
             return result;
         }
-
     }
     else
     {
         printf( "method not found, or not callable: %s\n", aMethod );
     }
 
-    if ( pFunc )
+    if( pFunc )
         Py_XDECREF( pFunc );
 
     return NULL;
 }
 
-wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObject *aArglist )
-{
-    wxString ret;
 
-    ret.Clear();
-    PyObject *result = CallMethod( aMethod, aArglist );
-    if ( result )
+wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObject* aArglist )
+{
+    wxString    ret;
+    PyLOCK      lock;
+
+    PyObject* result = CallMethod( aMethod, aArglist );
+    if( result )
     {
-         PY_BLOCK_THREADS( blocked );
-         const char *str_res = PyString_AsString( result );
+         const char* str_res = PyString_AsString( result );
          ret  = wxString::FromUTF8( str_res );
          Py_DECREF( result );
-
-         PY_UNBLOCK_THREADS( blocked );
     }
     return ret;
 }
 
+
 wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod
-                        ( const char *aMethod, PyObject *aArglist )
+                        ( const char* aMethod, PyObject* aArglist )
 {
-    PyObject *result, *element;
     wxArrayString ret;
-    wxString str_item;
+    wxString    str_item;
+    PyLOCK      lock;
 
-    result = CallMethod( aMethod, aArglist );
+    PyObject* result = CallMethod( aMethod, aArglist );
 
-    if ( result )
+    if( result )
     {
-         if ( !PyList_Check(result) )
+         if( !PyList_Check( result ) )
          {
              Py_DECREF( result );
-             ret.Add( wxT("PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod, result is not a list"), 1 );
+             ret.Add( wxT( "PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod, result is not a list" ), 1 );
              return ret;
          }
-
-         PY_BLOCK_THREADS( blocked );
 
          int list_size = PyList_Size( result );
 
          for ( int n=0; n<list_size; n++ )
          {
-            element = PyList_GetItem( result, n );
+            PyObject*  element = PyList_GetItem( result, n );
 
-            const char *str_res = PyString_AsString( element );
+            const char* str_res = PyString_AsString( element );
+
             str_item  = wxString::FromUTF8( str_res );
             ret.Add( str_item, 1 );
          }
 
          Py_DECREF( result );
-
-         PY_UNBLOCK_THREADS( blocked );
     }
 
-
-
     return ret;
-
 }
+
 
 wxString PYTHON_FOOTPRINT_WIZARD::GetName()
 {
+    PyLOCK      lock;
+
     return CallRetStrMethod( "GetName" );
 }
 
+
 wxString PYTHON_FOOTPRINT_WIZARD::GetImage()
 {
+    PyLOCK      lock;
+
     return CallRetStrMethod( "GetImage" );
 }
 
+
 wxString PYTHON_FOOTPRINT_WIZARD::GetDescription()
 {
+    PyLOCK      lock;
+
     return CallRetStrMethod( "GetDescription" );
 }
 
+
 int PYTHON_FOOTPRINT_WIZARD::GetNumParameterPages()
 {
-    int ret = 0;
-    PyObject *result;
+    int         ret = 0;
+    PyLOCK      lock;
 
-    /* Time to call the callback */
-    result = CallMethod( "GetNumParameterPages" , NULL );
+    // Time to call the callback
+    PyObject*   result = CallMethod( "GetNumParameterPages" , NULL );
 
-    if (result)
+    if( result )
     {
-         if ( !PyInt_Check( result ) )
+         if( !PyInt_Check( result ) )
             return -1;
-
-         PY_BLOCK_THREADS( blocked );
 
          ret = PyInt_AsLong( result );
          Py_DECREF( result );
-
-         PY_UNBLOCK_THREADS( blocked );
     }
+
     return ret;
 }
+
 
 wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
 {
-    wxString ret;
-    PyObject *arglist;
-    PyObject *result;
+    wxString    ret;
+    PyLOCK      lock;
 
-    /* Time to call the callback */
-    arglist = Py_BuildValue( "(i)", aPage );
-    result = CallMethod( "GetParameterPageName", arglist );
+    // Time to call the callback
+    PyObject* arglist = Py_BuildValue( "( i )", aPage );
+    PyObject* result  = CallMethod( "GetParameterPageName", arglist );
+
     Py_DECREF( arglist );
 
-    if ( result )
+    if( result )
     {
-         PY_BLOCK_THREADS( blocked );
-
-         const char *str_res = PyString_AsString( result );
+         const char* str_res = PyString_AsString( result );
          ret  = wxString::FromUTF8( str_res );
          Py_DECREF( result );
-
-         PY_UNBLOCK_THREADS( blocked );
     }
     return ret;
 }
 
+
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames( int aPage )
 {
-
-    PyObject *arglist;
     wxArrayString ret;
+    PyLOCK  lock;
 
-    arglist = Py_BuildValue( "(i)", aPage );
+    PyObject* arglist = Py_BuildValue( "( i )", aPage );
     ret = CallRetArrayStrMethod( "GetParameterNames", arglist );
     Py_DECREF( arglist );
 
@@ -199,53 +199,51 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames( int aPage )
     {
         wxString rest;
         wxString item = ret[i];
-        if ( item.StartsWith( wxT("*"), &rest ) )
+        if( item.StartsWith( wxT( "*" ), &rest ) )
         {
             ret[i]=rest;
         }
     }
 
-
     return ret;
 }
 
+
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterTypes( int aPage )
 {
+    wxArrayString   ret;
+    PyLOCK          lock;
 
-    PyObject *arglist;
-    wxArrayString ret;
-
-    arglist = Py_BuildValue( "(i)", aPage );
+    PyObject* arglist = Py_BuildValue( "( i )", aPage );
     ret = CallRetArrayStrMethod( "GetParameterNames", arglist );
-    Py_DECREF(arglist);
+    Py_DECREF( arglist );
 
     for ( unsigned i=0; i<ret.GetCount(); i++ )
     {
         wxString rest;
         wxString item = ret[i];
-        if ( item.StartsWith( wxT("*"), &rest ) )
+        if( item.StartsWith( wxT( "*" ), &rest ) )
         {
-            ret[i]=wxT( "UNITS" ); /* units */
+            ret[i] = wxT( "UNITS" );    // units
         }
         else
         {
-            ret[i]=wxT( "IU" ); /* internal units */
+            ret[i] = wxT( "IU" );       // internal units
         }
     }
-
 
     return ret;
 }
 
 
-
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues( int aPage )
 {
-    PyObject *arglist;
-    wxArrayString ret;
+    PyLOCK  lock;
 
-    arglist = Py_BuildValue( "(i)", aPage );
-    ret = CallRetArrayStrMethod( "GetParameterValues", arglist );
+    PyObject* arglist = Py_BuildValue( "( i )", aPage );
+
+    wxArrayString ret = CallRetArrayStrMethod( "GetParameterValues", arglist );
+
     Py_DECREF( arglist );
 
     return ret;
@@ -253,84 +251,83 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues( int aPage )
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterErrors( int aPage )
 {
-    PyObject *arglist;
-    wxArrayString ret;
+    PyLOCK  lock;
 
-    arglist = Py_BuildValue( "(i)", aPage );
-    ret = CallRetArrayStrMethod( "GetParameterErrors", arglist );
+    PyObject* arglist = Py_BuildValue( "( i )", aPage );
+
+    wxArrayString ret = CallRetArrayStrMethod( "GetParameterErrors", arglist );
     Py_DECREF( arglist );
 
     return ret;
 }
 
+
 wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& aValues )
 {
-
     int len = aValues.size();
-    PyObject *py_list;
 
-    py_list = PyList_New( len );
+    PyLOCK  lock;
+
+    PyObject* py_list = PyList_New( len );
 
     for ( int i=0; i<len ; i++ )
     {
         wxString str = aValues[i];
-        PyObject *py_str = PyString_FromString( (const char*)str.mb_str() );
+        PyObject* py_str = PyString_FromString( ( const char* )str.mb_str() );
         PyList_SetItem( py_list, i, py_str );
     }
 
-    PyObject *arglist;
+    PyObject* arglist;
 
-    arglist = Py_BuildValue( "(i,O)", aPage, py_list );
+    arglist = Py_BuildValue( "( i,O )", aPage, py_list );
     wxString res = CallRetStrMethod( "SetParameterValues", arglist );
     Py_DECREF( arglist );
 
     return res;
 }
 
-/* this is a SWIG function declaration -from module.i*/
-MODULE *PyModule_to_MODULE(PyObject *obj0);
 
-MODULE *PYTHON_FOOTPRINT_WIZARD::GetModule()
+// this is a SWIG function declaration -from module.i
+MODULE* PyModule_to_MODULE( PyObject* obj0 );
+
+
+MODULE* PYTHON_FOOTPRINT_WIZARD::GetModule()
 {
-    PyObject *result, *obj;
-    result = CallMethod( "GetModule", NULL );
+    PyLOCK      lock;
 
-    if (!result)
+    PyObject*   result = CallMethod( "GetModule", NULL );
+
+    if( !result )
         return NULL;
 
-    PY_BLOCK_THREADS( blocked );
+    PyObject* obj = PyObject_GetAttrString( result, "this" );
 
-    obj = PyObject_GetAttrString( result, "this" );
-
-    if ( PyErr_Occurred() )
+    if( PyErr_Occurred() )
     {
         /*
         PyObject *t, *v, *b;
-        PyErr_Fetch(&t, &v, &b);
-        printf ("calling GetModule()\n");
-        printf ("Exception: %s\n",PyString_AsString(PyObject_Str(v)));
-        printf ("         : %s\n",PyString_AsString(PyObject_Str(b)));
+        PyErr_Fetch( &t, &v, &b );
+        printf ( "calling GetModule()\n" );
+        printf ( "Exception: %s\n",PyString_AsString( PyObject_Str( v ) ) );
+        printf ( "         : %s\n",PyString_AsString( PyObject_Str( b ) ) );
         */
         PyErr_Print();
     }
-    PY_UNBLOCK_THREADS( blocked );
 
-    MODULE *mod = PyModule_to_MODULE( obj );
+    MODULE* mod = PyModule_to_MODULE( obj );
 
     return mod;
 }
 
 
-void PYTHON_FOOTPRINT_WIZARDS::register_wizard(PyObject* aPyWizard)
+void PYTHON_FOOTPRINT_WIZARDS::register_wizard( PyObject* aPyWizard )
 {
-    PYTHON_FOOTPRINT_WIZARD *fw;
-
-    fw = new PYTHON_FOOTPRINT_WIZARD( aPyWizard );
+    PYTHON_FOOTPRINT_WIZARD* fw = new PYTHON_FOOTPRINT_WIZARD( aPyWizard );
 
 
     //printf( "Registered python footprint wizard '%s'\n",
-    //        (const char*)fw->GetName().mb_str()
-    //        );
+    //        ( const char* )fw->GetName().mb_str()
+    //       );
 
     // this get the wizard registered in the common
     // FOOTPRINT_WIZARDS class
@@ -338,17 +335,15 @@ void PYTHON_FOOTPRINT_WIZARDS::register_wizard(PyObject* aPyWizard)
     fw->register_wizard();
 
 #if 0
-    /* just to test if it works correctly */
+    // just to test if it works correctly
     int pages = fw->GetNumParameterPages();
-    printf("             %d pages\n",pages);
+    printf( "             %d pages\n",pages );
 
-    for (int n=0; n<pages; n++)
+    for ( int n=0; n<pages; n++ )
     {
-        printf("                      page %d->'%s'\n",n,
-            (const char*)fw->GetParameterPageName(n).mb_str());
+        printf( "                      page %d->'%s'\n",n,
+            ( const char* )fw->GetParameterPageName( n ).mb_str() );
     }
 #endif
 
 }
-
-

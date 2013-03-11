@@ -55,7 +55,7 @@
 #include <dialog_helpers.h>
 #include <convert_from_iu.h>
 
-#ifdef KICAD_SCRIPTING
+#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
 #endif
 
@@ -410,7 +410,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
 
-    #ifdef KICAD_SCRIPTING_WXPYTHON
+#ifdef KICAD_SCRIPTING_WXPYTHON
     // Add the scripting panel
     EDA_PANEINFO  pythonAuiInfo;
     pythonAuiInfo.ScriptingToolbarPane();
@@ -424,8 +424,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
                           pythonAuiInfo.Name( wxT( "PythonPanel" ) ).Bottom().Layer(9) );
 
     m_pythonPanelHidden = true;
-    #endif
-
+#endif
 
     ReFillLayerWidget();        // this is near end because contents establish size
 
