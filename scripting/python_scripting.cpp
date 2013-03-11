@@ -45,8 +45,8 @@ extern "C" void init_kicad( void );
 
 extern "C" void init_pcbnew( void );
 
-#define EXTRA_PYTHON_MODULES 10  // this is the number of python
-                                // modules that we want to add into the list
+#define EXTRA_PYTHON_MODULES 10     // this is the number of python
+                                    // modules that we want to add into the list
 
 
 /* python inittab that links module names to module init functions
@@ -126,11 +126,10 @@ static void swigSwitchPythonBuiltin()
  *
  */
 
-PyThreadState *g_PythonMainTState;
+PyThreadState* g_PythonMainTState;
 
 bool pcbnewInitPythonScripting()
 {
-
     swigAddBuiltin();           // add builtin functions
     swigAddModules();           // add our own modules
     swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
@@ -158,16 +157,18 @@ bool pcbnewInitPythonScripting()
 
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
 
-    PY_BLOCK_THREADS( blocked );
 #endif
 
-    PyRun_SimpleString( "import sys\n"
-                        "sys.path.append(\".\")\n"
-                        "import pcbnew\n"
-                        "pcbnew.LoadPlugins()"
-                        );
+    {
+        PyLOCK  lock;
 
-    PY_UNBLOCK_THREADS( blocked );
+        PyRun_SimpleString( "import sys\n"
+                            "sys.path.append(\".\")\n"
+                            "import pcbnew\n"
+                            "pcbnew.LoadPlugins()"
+                            );
+    }
+
     return true;
 }
 
@@ -180,7 +181,7 @@ void pcbnewFinishPythonScripting()
 }
 
 
-#ifdef KICAD_SCRIPTING_WXPYTHON
+#if defined(KICAD_SCRIPTING_WXPYTHON)
 
 void RedirectStdio()
 {
@@ -193,9 +194,8 @@ import wx\n\
 output = wx.PyOnDemandOutputWindow()\n\
 c sys.stderr = output\n";
 
-    PY_BLOCK_THREADS( blocked );
+    PyLOCK  lock;
     PyRun_SimpleString( python_redirect );
-    PY_UNBLOCK_THREADS( blocked );
 }
 
 
@@ -228,7 +228,7 @@ def makeWindow(parent):\n\
     PyObject* result;
 
     // As always, first grab the GIL
-    PY_BLOCK_THREADS( blocked );
+    PyLOCK  lock;
 
     // Now make a dictionary to serve as the global namespace when the code is
     // executed.  Put a reference to the builtins module in it.
@@ -245,7 +245,6 @@ def makeWindow(parent):\n\
     if( !result )
     {
         PyErr_Print();
-        PY_UNBLOCK_THREADS( blocked );
         return NULL;
     }
     Py_DECREF(result);
@@ -285,10 +284,6 @@ def makeWindow(parent):\n\
     Py_DECREF( globals );
     Py_DECREF( tuple );
 
-    // Finally, after all Python stuff is done, release the GIL
-    PY_UNBLOCK_THREADS( blocked );
-
     return window;
 }
 #endif
-
