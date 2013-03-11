@@ -21,8 +21,8 @@
 #include <dialog_print_using_printer_base.h>
 
 
-#define WIDTH_MAX_VALUE           1000
-#define WIDTH_MIN_VALUE           1
+#define PEN_WIDTH_MAX_VALUE ( (int)(5 * IU_PER_MM) )
+#define PEN_WIDTH_MIN_VALUE ( (int)(0.005 * IU_PER_MM) )
 
 
 extern int g_DrawDefaultLineThickness;
@@ -211,6 +211,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         m_config->Read( OPTKEY_PRINT_SCALE, &scale_idx );
         m_config->Read( OPTKEY_PRINT_PAGE_FRAME, &s_Parameters.m_Print_Sheet_Ref, 1);
         m_config->Read( OPTKEY_PRINT_MONOCHROME_MODE, &s_Parameters.m_Print_Black_and_White, 1);
+        m_config->Read( OPTKEY_PRINT_PAGE_PER_LAYER, &s_Parameters.m_OptionPrintPage, 0);
         int tmp;
         m_config->Read( OPTKEY_PRINT_PADS_DRILL,  &tmp, PRINT_PARAMETERS::SMALL_DRILL_SHAPE );
         s_Parameters.m_DrillShapeOpt = (PRINT_PARAMETERS::DrillShapeOptT) tmp;
@@ -258,6 +259,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     else
         m_ModeColorOption->SetSelection( 0 );
 
+    m_PagesOption->SetSelection(s_Parameters.m_OptionPrintPage);
     s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
@@ -320,6 +322,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_config->Write( OPTKEY_PRINT_SCALE, m_ScaleOption->GetSelection() );
         m_config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
         m_config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
+        m_config->Write( OPTKEY_PRINT_PAGE_PER_LAYER, s_Parameters.m_OptionPrintPage );
         m_config->Write( OPTKEY_PRINT_PADS_DRILL, (long) s_Parameters.m_DrillShapeOpt );
         wxString layerKey;
         for( int layer = 0; layer < NB_LAYERS;  ++layer )
@@ -387,14 +390,14 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
 
     s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth );
 
-    if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
+    if( s_Parameters.m_PenDefaultSize > PEN_WIDTH_MAX_VALUE )
     {
-        s_Parameters.m_PenDefaultSize = WIDTH_MAX_VALUE;
+        s_Parameters.m_PenDefaultSize = PEN_WIDTH_MAX_VALUE;
     }
 
-    if( s_Parameters.m_PenDefaultSize < WIDTH_MIN_VALUE )
+    if( s_Parameters.m_PenDefaultSize < PEN_WIDTH_MIN_VALUE )
     {
-        s_Parameters.m_PenDefaultSize = WIDTH_MIN_VALUE;
+        s_Parameters.m_PenDefaultSize = PEN_WIDTH_MIN_VALUE;
     }
 
     g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
@@ -429,6 +432,14 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
     SetPrintParameters( );
 
+    // If no layer selected, we have no plot. prompt user if it happens
+    // because he could think there is a bug in Pcbnew:
+    if( s_Parameters.m_PrintMaskLayer == 0 )
+    {
+        DisplayError( this, _( "No layer selected" ) );
+        return;
+    }
+
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Print Preview" );
     wxPrintPreview* preview =
@@ -439,16 +450,6 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     if( preview == NULL )
     {
         DisplayError( this, wxT( "OnPrintPreview() problem" ) );
-        return;
-    }
-
-    SetLayerMaskFromListSelection();
-
-    // If no layer selected, we have no plot. prompt user if it happens
-    // because he could think there is a bug in Pcbnew:
-    if( s_Parameters.m_PrintMaskLayer == 0 )
-    {
-        DisplayError( this, _( "No layer selected" ) );
         return;
     }
 

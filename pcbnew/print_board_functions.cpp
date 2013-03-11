@@ -32,7 +32,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
                                       void * aData)
 {
     GR_DRAWMODE drawmode = GR_COPY;
-    int     defaultPenSize = 50;
+    int     defaultPenSize = Millimeter2iu( 0.2 );
 
     DISPLAY_OPTIONS save_opt;
 
@@ -53,6 +53,8 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
     bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
     GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
+    bool anchorsTmp = GetBoard()->IsElementVisible( ANCHOR_VISIBLE );
+    GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, false );
     DisplayOpt.DisplayPadIsol    = false;
     DisplayOpt.DisplayModEdge    = FILLED;
     DisplayOpt.DisplayModText    = FILLED;
@@ -96,6 +98,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
     GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, nctmp );
+    GetBoard()->SetElementVisibility(ANCHOR_VISIBLE, anchorsTmp);
 }
 
 
@@ -116,9 +119,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     MODULE* Module;
     GR_DRAWMODE     drawmode = GR_COPY;
     DISPLAY_OPTIONS save_opt;
-    TRACK*          pt_trace;
     BOARD*          Pcb   = GetBoard();
-    int             defaultPenSize = 50;
+    int             defaultPenSize = Millimeter2iu( 0.2 );
     bool            onePagePerLayer = false;
 
     PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
@@ -222,7 +224,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     }
 
     // Print tracks
-    pt_trace = Pcb->m_Track;
+    TRACK * pt_trace = Pcb->m_Track;
 
     for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
@@ -246,8 +248,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         }
     }
 
+    // Outdated: only for compatibility to old boards
     pt_trace = Pcb->m_Zone;
-
     for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
         if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )

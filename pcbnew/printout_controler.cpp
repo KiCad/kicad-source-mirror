@@ -163,10 +163,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     wxBusyCursor  dummy;
 
 #ifdef PCBNEW
-    if( m_PrintParams.PrintBorderAndTitleBlock() )
-        boardBoundingBox =((PCB_BASE_FRAME*) m_Parent)->GetBoard()->ComputeBoundingBox();
-    else
-        boardBoundingBox =((PCB_BASE_FRAME*) m_Parent)->GetBoard()->ComputeBoundingBox( true );
+    boardBoundingBox =((PCB_BASE_FRAME*) m_Parent)->GetBoard()->ComputeBoundingBox();
 #else
     boardBoundingBox = ((GERBVIEW_FRAME*) m_Parent)->GetLayoutBoundingBox();
 #endif
@@ -185,15 +182,16 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
                                         boardBoundingBox.GetHeight()/2 ) );
     }
 
-    wxLogTrace( tracePrinting, wxT( "Drawing bounding box:             x=%d, y=%d, w=%d, h=%d" ),
+    wxLogTrace( tracePrinting, wxT( "Drawing bounding box:                 x=%d, y=%d, w=%d, h=%d" ),
                 boardBoundingBox.GetX(), boardBoundingBox.GetY(),
                 boardBoundingBox.GetWidth(), boardBoundingBox.GetHeight() );
 
     // Compute the PCB size in internal units
     userscale = m_PrintParams.m_PrintScale;
 
-    if( m_PrintParams.m_PrintScale == 0 )                //  fit in page
+    if( m_PrintParams.m_PrintScale == 0 )   //  fit in page option
     {
+        // TODO: a better way to calculate the userscale
         userscale = 1.0;
     }
 

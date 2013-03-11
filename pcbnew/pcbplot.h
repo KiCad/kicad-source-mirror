@@ -28,6 +28,7 @@ class BOARD;
 #define OPTKEY_PRINT_MODULE_SCALE    wxT( "PrintModuleScale" )
 #define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
 #define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
+#define OPTKEY_PRINT_PAGE_PER_LAYER  wxT( "PrintSinglePage" )
 #define OPTKEY_PRINT_PADS_DRILL      wxT( "PrintPadsDrillOpt" )
 #define OPTKEY_PLOT_X_FINESCALE_ADJ  wxT( "PlotXFineScaleAdj" )
 #define OPTKEY_PLOT_Y_FINESCALE_ADJ  wxT( "PlotYFineScaleAdj" )
@@ -36,13 +37,6 @@ class BOARD;
 // Define min and max reasonable values for plot/print scale
 #define PLOT_MIN_SCALE 0.01
 #define PLOT_MAX_SCALE 100.0
-
-// Conversion unit constants.
-// Convert pcb dimension of 0.1 mil to PS units of inches.
-#define SCALE_PS    .0001
-
-// Convert dimension 0.1 mil -> HPGL units (1 HPGL unit = 25 micrometers):
-#define SCALE_HPGL  0.102041
 
 // Small drill marks (small pad holes) diameter value
 #define SMALL_DRILL (int)( 0.35 * IU_PER_MM )
