@@ -17,9 +17,6 @@
 #include <dialog_print_for_modedit_base.h>
 #include <printout_controler.h>
 
-#define WIDTH_MAX_VALUE           1000
-#define WIDTH_MIN_VALUE           1
-
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0, 4.0, 8.0, 16.0 };
 

@@ -121,6 +121,13 @@ bool EDA_APP::OnInit()
     {
         fn = argv[1];
 
+        // Be sure the filename is absolute, to avoid issues
+        // when the filename is relative,
+        // for instance when stored in history list without path,
+        // and when building the config filename ( which should have a path )
+        if( fn.IsRelative() )
+            fn.MakeAbsolute();
+
         if( fn.GetExt() != PcbFileExtension && fn.GetExt() != LegacyPcbFileExtension )
         {
             msg.Printf( _( "Pcbnew file <%s> has a wrong extension.\n\

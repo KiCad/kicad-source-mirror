@@ -18,9 +18,6 @@
 #include <pcbplot.h>
 #include <class_board_design_settings.h>
 
-#define WIDTH_MAX_VALUE           1000
-#define WIDTH_MIN_VALUE           1
-
 static long   s_SelectedLayers;
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
