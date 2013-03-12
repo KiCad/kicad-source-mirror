@@ -59,8 +59,8 @@ static const wxString tracePrinting( wxT( "KicadPrinting" ) );
 
 PRINT_PARAMETERS::PRINT_PARAMETERS()
 {
-    m_PenDefaultSize        = 50;     // A reasonable minimal value to draw items
-                                      // mainly that do not have a specified line width
+    m_PenDefaultSize        = Millimeter2iu( 0.2 ); // A reasonable defualt value to draw items
+                                      // which do not have a specified line width
     m_PrintScale            = 1.0;
     m_XScaleAdjust          = 1.0;
     m_YScaleAdjust          = 1.0;
@@ -159,6 +159,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     wxDC*         dc = GetDC();
     BASE_SCREEN*  screen = m_Parent->GetScreen();
     bool          printMirror = m_PrintParams.m_PrintMirror;
+    wxSize        pageSizeIU = m_Parent->GetPageSizeIU();
 
     wxBusyCursor  dummy;
 
@@ -171,16 +172,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     // Use the page size as the drawing area when the board is shown or the user scale
     // is less than 1.
     if( m_PrintParams.PrintBorderAndTitleBlock() )
-        boardBoundingBox = EDA_RECT( wxPoint( 0, 0 ), m_Parent->GetPageSizeIU() );
-
-    // In module editor, the module is located at 0,0 but for printing
-    // it is moved to pageSizeIU.x/2, pageSizeIU.y/2.
-    // So the equivalent board must be moved:
-    if( m_Parent->IsType( MODULE_EDITOR_FRAME_TYPE ) )
-    {
-        boardBoundingBox.Move( wxPoint( boardBoundingBox.GetWidth()/2,
-                                        boardBoundingBox.GetHeight()/2 ) );
-    }
+        boardBoundingBox = EDA_RECT( wxPoint( 0, 0 ), pageSizeIU );
 
     wxLogTrace( tracePrinting, wxT( "Drawing bounding box:                 x=%d, y=%d, w=%d, h=%d" ),
                 boardBoundingBox.GetX(), boardBoundingBox.GetY(),
@@ -191,14 +183,23 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     if( m_PrintParams.m_PrintScale == 0 )   //  fit in page option
     {
-        // TODO: a better way to calculate the userscale
-        userscale = 1.0;
+        if(boardBoundingBox.GetWidth() && boardBoundingBox.GetHeight())
+        {
+            int margin = Millimeter2iu( 10.0 ); // add a margin around the drawings
+            double scaleX = (double)(pageSizeIU.x - (2 * margin)) /
+                            boardBoundingBox.GetWidth();
+            double scaleY = (double)(pageSizeIU.y - (2 * margin)) /
+                            boardBoundingBox.GetHeight();
+            userscale = (scaleX < scaleY) ? scaleX : scaleY;
+        }
+        else
+            userscale = 1.0;
     }
 
-    wxSize scaledPageSize = m_Parent->GetPageSizeIU();
+    wxSize scaledPageSize = pageSizeIU;
     drawRect.SetSize( scaledPageSize );
-    scaledPageSize.x = wxRound( (double) scaledPageSize.x / userscale );
-    scaledPageSize.y = wxRound( (double) scaledPageSize.y / userscale );
+    scaledPageSize.x = wxRound( scaledPageSize.x / userscale );
+    scaledPageSize.y = wxRound( scaledPageSize.y / userscale );
 
 
     if( m_PrintParams.m_PageSetupData )
@@ -213,12 +214,13 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     // Compute Accurate scale 1
     if( m_PrintParams.m_PrintScale == 1.0 )
     {
-        // We want a 1:1 scale and margins for printing
-        MapScreenSizeToPaper();
+        // We want a 1:1 scale, regardless the page setup
+        // like page size, margin ...
+        MapScreenSizeToPaper(); // set best scale and offset (scale is not used)
         int w, h;
         GetPPIPrinter( &w, &h );
-        double accurate_Xscale = ( (double) (  w ) ) / (IU_PER_MILS*1000);
-        double accurate_Yscale = ( (double) (  h ) ) / (IU_PER_MILS*1000);
+        double accurate_Xscale = (double) w / (IU_PER_MILS*1000);
+        double accurate_Yscale = (double) h / (IU_PER_MILS*1000);
 
         if( IsPreview() )  // Scale must take in account the DC size in Preview
         {
@@ -226,16 +228,14 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
             wxSize       PlotAreaSize;
             dc->GetSize( &PlotAreaSize.x, &PlotAreaSize.y );
             GetPageSizePixels( &w, &h );
-            accurate_Xscale *= PlotAreaSize.x;
-            accurate_Xscale /= (double) w;
-            accurate_Yscale *= PlotAreaSize.y;
-            accurate_Yscale /= (double) h;
+            accurate_Xscale *= (double)PlotAreaSize.x / w;
+            accurate_Yscale *= (double)PlotAreaSize.y / h;
         }
-
+        // Fine scale adjust
         accurate_Xscale *= m_PrintParams.m_XScaleAdjust;
         accurate_Yscale *= m_PrintParams.m_YScaleAdjust;
 
-        // Fine scale adjust
+        // Set print scale for 1:1 exact scale
         dc->SetUserScale( accurate_Xscale, accurate_Yscale );
     }
 
@@ -254,6 +254,14 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
     PlotAreaSizeInUserUnits.y = (int) (PlotAreaSizeInPixels.y/scaley);
     wxLogTrace( tracePrinting, wxT( "Scaled plot area in user units:   x=%d, y=%d" ),
                 PlotAreaSizeInUserUnits.x, PlotAreaSizeInUserUnits.y );
+
+    // In module editor, the module is located at 0,0 but for printing
+    // it is moved to pageSizeIU.x/2, pageSizeIU.y/2.
+    // So the equivalent board must be moved to the center of the page:
+    if( m_Parent->IsType( MODULE_EDITOR_FRAME_TYPE ) )
+    {
+        boardBoundingBox.Move( wxPoint( pageSizeIU.x/2, pageSizeIU.y/2 ) );
+    }
 
     // In some cases the plot origin is the centre of the board outline rather than the center
     // of the selected paper size.

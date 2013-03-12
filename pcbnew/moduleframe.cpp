@@ -198,6 +198,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( PCB_EDIT_FRAME* aParent ) :
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
+    // In modedit, set the default paper size to A4:
+    // this should be OK for all footprint to plot/print
+    SetPageSettings( PAGE_INFO::A4 );
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateMenuBar();
     ReCreateHToolbar();

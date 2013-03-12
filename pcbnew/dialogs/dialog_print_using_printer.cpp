@@ -3,7 +3,7 @@
 /****************************************/
 
 // Set this to 1 if you want to test PostScript printing under MSW.
-#define wxTEST_POSTSCRIPT_IN_MSW 1
+//#define wxTEST_POSTSCRIPT_IN_MSW 1
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
@@ -100,6 +100,7 @@ void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
         s_pageSetupData = new wxPageSetupDialogData( *s_PrintData );
 
     s_pageSetupData->SetPaperId( pageInfo.GetPaperId() );
+    s_pageSetupData->GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
 
     if( pageInfo.IsCustom() )
     {
@@ -110,10 +111,6 @@ void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
             s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetHeightMils() ),
                                                    Mils2mm( pageInfo.GetWidthMils() ) ) );
     }
-
-    s_pageSetupData->SetMarginTopLeft( wxPoint( 0, 0 ) );
-    s_pageSetupData->SetMarginBottomRight( wxPoint( 0, 0 ) );
-    s_pageSetupData->GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
 
     *s_PrintData = s_pageSetupData->GetPrintData();
 
@@ -454,9 +451,10 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     }
 
     // Uses the parent position and size.
-    // @todo uses last position and size ans store them when exit in m_config
     wxPoint         WPos  = m_parent->GetPosition();
     wxSize          WSize = m_parent->GetSize();
+
+    preview->SetZoom( 100 );
 
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
 

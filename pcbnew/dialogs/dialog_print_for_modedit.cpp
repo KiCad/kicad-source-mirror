@@ -3,7 +3,7 @@
 
 
 // Set this to 1 if you want to test PostScript printing under MSW.
-#define wxTEST_POSTSCRIPT_IN_MSW 1
+//#define wxTEST_POSTSCRIPT_IN_MSW 1
 
 #include <fctsys.h>
 #include <appl_wxstruct.h>
@@ -43,7 +43,7 @@ private:
     void OnCloseWindow( wxCloseEvent& event );
 
     /// Open a dialog box for printer setup (printer options, page size ...)
-    void OnPrintSetup( wxCommandEvent& event );
+    void OnPageSetup( wxCommandEvent& event );
 
     void OnPrintPreview( wxCommandEvent& event );
 
@@ -57,6 +57,8 @@ private:
 
 void FOOTPRINT_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
 {
+    const PAGE_INFO& pageInfo = GetPageSettings();
+
     if( s_PrintData == NULL )  // First print
     {
         s_PrintData = new wxPrintData();
@@ -68,7 +70,15 @@ void FOOTPRINT_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
         s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
     }
 
-    s_PrintData->SetOrientation( GetPageSettings().IsPortrait() ? wxPORTRAIT : wxLANDSCAPE );
+    if( s_pageSetupData == NULL )
+        s_pageSetupData = new wxPageSetupDialogData( *s_PrintData );
+
+    s_pageSetupData->SetPaperId( pageInfo.GetPaperId() );
+    s_pageSetupData->GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
+    s_PrintData->SetOrientation( pageInfo.GetWxOrientation() );
+
+    *s_PrintData = s_pageSetupData->GetPrintData();
+    s_Parameters.m_PageSetupData = s_pageSetupData;
 
     DIALOG_PRINT_FOR_MODEDIT dlg( this );
 
@@ -91,17 +101,6 @@ DIALOG_PRINT_FOR_MODEDIT::DIALOG_PRINT_FOR_MODEDIT( PCB_BASE_FRAME* parent ) :
 
 void DIALOG_PRINT_FOR_MODEDIT::InitValues( )
 {
-    if( s_pageSetupData == NULL )
-    {
-        s_pageSetupData = new wxPageSetupDialogData;
-        // Set initial page margins.
-        // Margins are already set in Pcbnew, so we cans use 0
-        s_pageSetupData->SetMarginTopLeft(wxPoint(0, 0));
-        s_pageSetupData->SetMarginBottomRight(wxPoint(0, 0));
-    }
-
-    s_Parameters.m_PageSetupData = s_pageSetupData;
-
     // Read the scale adjust option
     int scale_Select = 3; // default selected scale = ScaleList[3] = 1
     if( m_config )
@@ -130,19 +129,13 @@ void DIALOG_PRINT_FOR_MODEDIT::OnCloseWindow( wxCloseEvent& event )
 }
 
 
-
-void DIALOG_PRINT_FOR_MODEDIT::OnPrintSetup( wxCommandEvent& event )
+void DIALOG_PRINT_FOR_MODEDIT::OnPageSetup( wxCommandEvent& event )
 {
-    wxPrintDialogData printDialogData( *s_PrintData );
+    wxPageSetupDialog pageSetupDialog( this, s_pageSetupData );
+    pageSetupDialog.ShowModal();
 
-    if( printDialogData.Ok() )
-    {
-        wxPrintDialog printerDialog( this, &printDialogData );
-        printerDialog.ShowModal();
-        *s_PrintData = printerDialog.GetPrintDialogData().GetPrintData();
-    }
-    else
-        DisplayError( this, _( "Printer Problem!" ) );
+    (*s_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
+    (*s_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
 
