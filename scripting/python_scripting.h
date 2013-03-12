@@ -44,14 +44,13 @@ public:
 
 
 #else
-
 class PyLOCK
 {
+   PyGILState_STATE gil_state;
+
 public:
-    // @todo: this is wrong, python docs clearly say we need the GIL,
-    // irrespective of wxPython.
-    PyLOCK()    {}
-    ~PyLOCK()   {}
+   PyLOCK()      { gil_state = PyGILState_Ensure(); }
+   ~PyLOCK()     { PyGILState_Release( gil_state ); }
 };
 
 #endif

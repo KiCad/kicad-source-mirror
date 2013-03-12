@@ -171,7 +171,7 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
     PyLOCK      lock;
 
     // Time to call the callback
-    PyObject* arglist = Py_BuildValue( "( i )", aPage );
+    PyObject* arglist = Py_BuildValue( "(i)", aPage );
     PyObject* result  = CallMethod( "GetParameterPageName", arglist );
 
     Py_DECREF( arglist );
@@ -191,7 +191,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterNames( int aPage )
     wxArrayString ret;
     PyLOCK  lock;
 
-    PyObject* arglist = Py_BuildValue( "( i )", aPage );
+    PyObject* arglist = Py_BuildValue( "(i)", aPage );
     ret = CallRetArrayStrMethod( "GetParameterNames", arglist );
     Py_DECREF( arglist );
 
@@ -214,7 +214,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterTypes( int aPage )
     wxArrayString   ret;
     PyLOCK          lock;
 
-    PyObject* arglist = Py_BuildValue( "( i )", aPage );
+    PyObject* arglist = Py_BuildValue( "(i)", aPage );
     ret = CallRetArrayStrMethod( "GetParameterNames", arglist );
     Py_DECREF( arglist );
 
@@ -240,7 +240,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterValues( int aPage )
 {
     PyLOCK  lock;
 
-    PyObject* arglist = Py_BuildValue( "( i )", aPage );
+    PyObject* arglist = Py_BuildValue( "(i)", aPage );
 
     wxArrayString ret = CallRetArrayStrMethod( "GetParameterValues", arglist );
 
@@ -253,7 +253,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterErrors( int aPage )
 {
     PyLOCK  lock;
 
-    PyObject* arglist = Py_BuildValue( "( i )", aPage );
+    PyObject* arglist = Py_BuildValue( "(i)", aPage );
 
     wxArrayString ret = CallRetArrayStrMethod( "GetParameterErrors", arglist );
     Py_DECREF( arglist );
@@ -279,7 +279,7 @@ wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& 
 
     PyObject* arglist;
 
-    arglist = Py_BuildValue( "( i,O )", aPage, py_list );
+    arglist = Py_BuildValue( "(i,O)", aPage, py_list );
     wxString res = CallRetStrMethod( "SetParameterValues", arglist );
     Py_DECREF( arglist );
 
