@@ -573,7 +573,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     }
 
     /* Trace clearance. */
-    marge   = ( RoutingMatrix.m_GridRouting * Module->m_PadNum ) / GAIN;
+    marge   = ( RoutingMatrix.m_GridRouting * Module->GetPadCount() ) / GAIN;
     CreateKeepOutRectangle( ox, oy, fx, fy, marge, KEEP_OUT_MARGIN, layerMask );
 }
 
@@ -883,7 +883,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
             return error;
     }
 
-    marge = ( RoutingMatrix.m_GridRouting * Module->m_PadNum ) / GAIN;
+    marge = ( RoutingMatrix.m_GridRouting * Module->GetPadCount() ) / GAIN;
 
     return CalculateKeepOutArea( ox - marge, oy - marge, fx + marge, fy + marge, side );
 }
@@ -1063,8 +1063,8 @@ static bool Tri_PlaceModules( MODULE* ref, MODULE* compare )
 {
     double ff1, ff2;
 
-    ff1 = ref->m_Surface * ref->m_PadNum;
-    ff2 = compare->m_Surface * compare->m_PadNum;
+    ff1 = ref->m_Surface * ref->GetPadCount();
+    ff2 = compare->m_Surface * compare->GetPadCount();
     return ff2 < ff1;
 }
 
