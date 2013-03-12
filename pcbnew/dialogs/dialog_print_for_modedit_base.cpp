@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 19 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -69,7 +69,7 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnCloseWindow ) );
-	m_buttonOption->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintSetup ), NULL, this );
+	m_buttonOption->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPageSetup ), NULL, this );
 	m_buttonPreview->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintButtonClick ), NULL, this );
 	m_buttonQuit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnButtonCancelClick ), NULL, this );
@@ -79,7 +79,7 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::~DIALOG_PRINT_FOR_MODEDIT_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnCloseWindow ) );
-	m_buttonOption->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintSetup ), NULL, this );
+	m_buttonOption->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPageSetup ), NULL, this );
 	m_buttonPreview->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnPrintButtonClick ), NULL, this );
 	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_FOR_MODEDIT_BASE::OnButtonCancelClick ), NULL, this );

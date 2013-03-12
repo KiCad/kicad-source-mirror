@@ -151,30 +151,12 @@ void DIALOG_PRINT_USING_PRINTER::OnInitDialog( wxInitDialogEvent& event )
     if ( GetSizer() )
         GetSizer()->SetSizeHints( this );
 
-#if 0
-    Does not work on a two monitor system when the 2nd monitor is not attached,
-    and when the coords were saved to disk when the playground was bigger while the
-    2nd monitor was attached.
-
-    Simply rely on the policy in class DIALOG_SHIM, which centers the dialog
-    initially during a runtime session but gives user the ability to move it in
-    that session.
-
-    if( parent->GetPrintDialogPosition() == wxDefaultPosition &&
-        parent->GetPrintDialogSize() == wxDefaultSize )
-    {
-        Center();
-    }
-    else
-    {
-        SetPosition( parent->GetPrintDialogPosition() );
-        SetSize( parent->GetPrintDialogSize() );
-    }
-#else
+    // Rely on the policy in class DIALOG_SHIM, which centers the dialog
+    // initially during a runtime session but gives user the ability to move it in
+    // that session.
     // This dialog may get moved and resized in Show(), but in case this is
     // the first time, center it for starters.
     Center();
-#endif
 
     m_buttonPrint->SetDefault();    // on linux, this is inadequate to determine
                                     // what ENTER does.  Must also SetFocus().
