@@ -95,6 +95,23 @@ public:
     EDA_TEXT( const EDA_TEXT& aText );
     virtual ~EDA_TEXT();
 
+    wxString& Text()  { return m_Text; }
+    wxString& Text() const  { return *(const_cast<wxString*> (&m_Text)); }
+
+    void SetText( const wxString& aText ) { m_Text = aText; }
+
+    /**
+     * Function GetText
+     * returns the string associated with the text object.
+     * <p>
+     * This function is virtual to allow derived classes to override getting the
+     * string to provide a way for modifying the base string by adding a suffix or
+     * prefix to the base string.
+     * </p>
+     * @return a const wxString object containing the string of the item.
+     */
+    virtual const wxString GetText() const { return m_Text; }
+
     /**
      * Function SetThickness
      * sets text thickness.
@@ -147,9 +164,15 @@ public:
      */
     const wxSize GetSize() const        { return m_Size; };
 
+    void SetWidth( int aWidth ) { m_Size.x = aWidth; }
+    int GetWidth() const { return m_Size.x; }
+
+    void SetHeight( int aHeight ) { m_Size.y = aHeight; }
+    int GetHeight() const { return m_Size.y; }
+
     /// named differently than the ones using multiple inheritance and including this class
-    void SetPos( const wxPoint& aPoint ) { m_Pos = aPoint; }
-    const wxPoint GetPos() const { return m_Pos; }
+    void SetPosition( const wxPoint& aPoint ) { m_Pos = aPoint; }
+    const wxPoint GetPosition() const { return m_Pos; }
 
     int GetLength() const { return m_Text.Length(); };
 
@@ -251,20 +274,6 @@ public:
      * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic)
      */
     wxString GetTextStyleName();
-
-    void SetText( const wxString& aText ) { m_Text = aText; }
-
-    /**
-     * Function GetText
-     * returns the string associated with the text object.
-     * <p>
-     * This function is virtual to allow derived classes to override getting the
-     * string to provide a way for modifying the base string by adding a suffix or
-     * prefix to the base string.
-     * </p>
-     * @return a const wxString object containing the string of the item.
-     */
-    virtual const wxString GetText() const { return m_Text; }
 
     EDA_TEXT_HJUSTIFY_T GetHorizJustify() const         { return m_HJustify; };
     EDA_TEXT_VJUSTIFY_T GetVertJustify() const          { return m_VJustify; };

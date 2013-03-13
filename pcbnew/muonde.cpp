@@ -235,10 +235,10 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
         return NULL;
 
     // here the module is already in the BOARD, Create_1_Module() does that.
-    module->m_LibRef    = wxT( "MuSelf" );
-    module->m_Attributs = MOD_VIRTUAL | MOD_CMS;
+    module->SetLibRef( wxT( "MuSelf" ) );
+    module->SetAttributes( MOD_VIRTUAL | MOD_CMS );
     module->ClearFlags();
-    module->m_Pos = Mself.m_End;
+    module->SetPosition( Mself.m_End );
 
     // Generate segments
     for( unsigned jj = 1; jj < buffer.size(); jj++ )
@@ -281,15 +281,15 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 
     // Modify text positions.
     SetMsgPanel( module );
-    module->m_Value->m_Pos.x = module->m_Reference->m_Pos.x =
-                               ( Mself.m_Start.x + Mself.m_End.x ) / 2;
-    module->m_Value->m_Pos.y = module->m_Reference->m_Pos.y =
-                               ( Mself.m_Start.y + Mself.m_End.y ) / 2;
+    module->Value().m_Pos.x = module->Reference().m_Pos.x =
+                              ( Mself.m_Start.x + Mself.m_End.x ) / 2;
+    module->Value().m_Pos.y = module->Reference().m_Pos.y =
+                              ( Mself.m_Start.y + Mself.m_End.y ) / 2;
 
-    module->m_Reference->m_Pos.y -= module->m_Reference->m_Size.y;
-    module->m_Value->m_Pos.y     += module->m_Value->m_Size.y;
-    module->m_Reference->SetPos0( module->m_Reference->m_Pos - module->m_Pos );
-    module->m_Value->SetPos0( module->m_Value->m_Pos - module->m_Pos );
+    module->Reference().m_Pos.y -= module->Reference().m_Size.y;
+    module->Value().m_Pos.y     += module->Value().m_Size.y;
+    module->Reference().SetPos0( module->Reference().m_Pos - module->GetPosition() );
+    module->Value().SetPos0( module->Value().m_Pos - module->GetPosition() );
 
     module->CalculateBoundingBox();
     module->Draw( m_canvas, DC, GR_OR );
@@ -535,21 +535,21 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
     #define DEFAULT_SIZE 30
     module->SetTimeStamp( GetNewTimeStamp() );
 
-    module->m_Value->m_Size       = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
+    module->Value().m_Size       = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
 
-    module->m_Value->SetPos0( wxPoint( 0, -DEFAULT_SIZE ) );
+    module->Value().SetPos0( wxPoint( 0, -DEFAULT_SIZE ) );
 
-    module->m_Value->m_Pos.y     += module->m_Value->GetPos0().y;
+    module->Value().m_Pos.y     += module->Value().GetPos0().y;
 
-    module->m_Value->m_Thickness  = DEFAULT_SIZE / 4;
+    module->Value().m_Thickness  = DEFAULT_SIZE / 4;
 
-    module->m_Reference->m_Size   = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
+    module->Reference().m_Size   = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
 
-    module->m_Reference->SetPos0( wxPoint( 0, DEFAULT_SIZE ) );
+    module->Reference().SetPos0( wxPoint( 0, DEFAULT_SIZE ) );
 
-    module->m_Reference->m_Pos.y += module->m_Reference->GetPos0().y;
+    module->Reference().m_Pos.y += module->Reference().GetPos0().y;
 
-    module->m_Reference->m_Thickness  = DEFAULT_SIZE / 4;
+    module->Reference().m_Thickness  = DEFAULT_SIZE / 4;
 
     // Create 2 pads used in gaps and stubs.  The gap is between these 2 pads
     // the stub is the pad 2
@@ -1063,7 +1063,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
         return;
 
     // Test if module is a gap type (name begins with GAP, and has 2 pads).
-    msg = aModule->m_Reference->m_Text.Left( 3 );
+    msg = aModule->GetReference().Left( 3 );
 
     if( msg != wxT( "GAP" ) )
         return;
@@ -1110,7 +1110,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
     wxPoint padpos = pad->GetPos0() + aModule->GetPosition();
 
     RotatePoint( &padpos.x, &padpos.y,
-                 aModule->m_Pos.x, aModule->m_Pos.y, aModule->GetOrientation() );
+                 aModule->GetPosition().x, aModule->GetPosition().y, aModule->GetOrientation() );
 
     pad->SetPosition( padpos );
 
@@ -1123,7 +1123,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
     padpos = next_pad->GetPos0() + aModule->GetPosition();
 
     RotatePoint( &padpos.x, &padpos.y,
-                 aModule->m_Pos.x, aModule->m_Pos.y, aModule->GetOrientation() );
+                 aModule->GetPosition().x, aModule->GetPosition().y, aModule->GetOrientation() );
 
     next_pad->SetPosition( padpos );
 

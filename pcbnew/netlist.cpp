@@ -215,7 +215,7 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
     Module = (MODULE*) GetBoard()->m_Modules;
 
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
-        listnames.Add( Module->m_Reference->m_Text );
+        listnames.Add( Module->GetReference() );
 
     EDA_LIST_DIALOG dlg( this, _( "Components" ), listnames, wxEmptyString );
 
@@ -227,7 +227,7 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
 
     for( ; Module != NULL; Module = Module->Next() )
     {
-        if( Module->m_Reference->m_Text == ref )
+        if( Module->GetReference() == ref )
             break;
     }
 
@@ -271,13 +271,14 @@ bool PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
 
     // Search for duplicate footprints.
     MODULE* module = GetBoard()->m_Modules;
+
     for( ; module != NULL; module = module->Next() )
     {
         MODULE* altmodule = module->Next();
 
         for( ; altmodule != NULL; altmodule = altmodule->Next() )
         {
-            if( module->m_Reference->m_Text.CmpNoCase( altmodule->m_Reference->m_Text ) == 0 )
+            if( module->GetReference().CmpNoCase( altmodule->GetReference() ) == 0 )
             {
                 aDuplicate.push_back( module );
                 break;
@@ -305,7 +306,7 @@ bool PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
         for( ii = 0; ii < moduleInfoList.size(); ii++ )
         {
             COMPONENT_INFO* cmp_info = moduleInfoList[ii];
-            if( module->m_Reference->m_Text.CmpNoCase( cmp_info->m_Reference ) == 0 )
+            if( module->GetReference().CmpNoCase( cmp_info->m_Reference ) == 0 )
                 break; // Module is in net list.
         }
 

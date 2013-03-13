@@ -163,7 +163,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
         if( aRef )
         {
-            item = module->m_Reference;
+            item = &module->Reference();
 
             if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
                 item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
@@ -174,7 +174,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
         if( aValue )
         {
-            item = module->m_Value;
+            item = &module->Value();
 
             if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
                 item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
@@ -215,14 +215,14 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
         if( aRef )
         {
-            module->m_Reference->SetThickness( GetDesignSettings().m_ModuleTextWidth );
-            module->m_Reference->SetSize( GetDesignSettings().m_ModuleTextSize );
+            module->Reference().SetThickness( GetDesignSettings().m_ModuleTextWidth );
+            module->Reference().SetSize( GetDesignSettings().m_ModuleTextSize );
         }
 
         if( aValue )
         {
-            module->m_Value->SetThickness( GetDesignSettings().m_ModuleTextWidth );
-            module->m_Value->SetSize( GetDesignSettings().m_ModuleTextSize );
+            module->Value().SetThickness( GetDesignSettings().m_ModuleTextWidth );
+            module->Value().SetSize( GetDesignSettings().m_ModuleTextSize );
         }
 
         if( aOthers )

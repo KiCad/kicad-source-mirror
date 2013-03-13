@@ -377,11 +377,11 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
 
     if( mlayer & aMasklayer )
     {
-        if( aModule->m_Reference->IsVisible() )
-            aModule->m_Reference->Draw( aPanel, aDC, aDraw_mode );
+        if( aModule->Reference().IsVisible() )
+            aModule->Reference().Draw( aPanel, aDC, aDraw_mode );
 
-        if( aModule->m_Value->IsVisible() )
-            aModule->m_Value->Draw( aPanel, aDC, aDraw_mode );
+        if( aModule->Value().IsVisible() )
+            aModule->Value().Draw( aPanel, aDC, aDraw_mode );
     }
 
     for( EDA_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )

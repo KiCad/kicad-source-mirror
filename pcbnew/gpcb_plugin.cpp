@@ -397,7 +397,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
                            parseInt( parameters[7], conv_unit ) );
     }
 
-    module->Reference().SetPos( textPos );
+    module->Reference().SetPosition( textPos );
     module->Reference().SetPos0( textPos );
 
     int orientation = parseInt( parameters[paramCnt-4] );
@@ -415,7 +415,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
     module->Value().SetSize( module->Reference().GetSize() );
     module->Value().SetThickness( module->Reference().GetThickness() );
     textPos.y += tsize + thickness;
-    module->Value().SetPos( textPos );
+    module->Value().SetPosition( textPos );
     module->Value().SetPos0( textPos );
 
     while( aLineReader->ReadLine() )

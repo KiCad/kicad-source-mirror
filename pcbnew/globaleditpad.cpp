@@ -241,7 +241,7 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
             if( !aSameFootprints && (module != Module_Ref) )
                 continue;
 
-            if( module->m_LibRef != Module_Ref->m_LibRef )
+            if( module->GetLibRef() != Module_Ref->GetLibRef() )
                 continue;
 
             bool   saveMe = false;
@@ -280,7 +280,7 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
         if( !aSameFootprints && (module != Module_Ref) )
             continue;
 
-        if( module->m_LibRef != Module_Ref->m_LibRef )
+        if( module->GetLibRef() != Module_Ref->GetLibRef() )
             continue;
 
         // Erase module on screen

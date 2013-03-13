@@ -64,7 +64,7 @@ DIMENSION::~DIMENSION()
 
 void DIMENSION::SetPosition( const wxPoint& aPos )
 {
-    m_Text.SetPos( aPos );
+    m_Text.SetPosition( aPos );
 }
 
 

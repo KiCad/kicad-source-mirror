@@ -63,7 +63,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_CntRot90 = m_CntRot180 = 0;
     m_Surface  = 0.0;
     m_Link     = 0;
-    m_LastEdit_Time  = time( NULL );
+    m_LastEditTime  = time( NULL );
     m_LocalClearance = 0;
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
@@ -91,10 +91,9 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_ModuleStatus = aModule.m_ModuleStatus;
     m_Orient = aModule.m_Orient;
     m_BoundaryBox = aModule.m_BoundaryBox;
-    m_PadNum = aModule.m_PadNum;
     m_CntRot90 = aModule.m_CntRot90;
     m_CntRot180 = aModule.m_CntRot180;
-    m_LastEdit_Time = aModule.m_LastEdit_Time;
+    m_LastEditTime = aModule.m_LastEditTime;
     m_Link = aModule.m_Link;
     m_Path = aModule.m_Path;              //is this correct behavior?
 
@@ -210,10 +209,9 @@ void MODULE::Copy( MODULE* aModule )
     m_ModuleStatus  = aModule->m_ModuleStatus;
     m_Orient        = aModule->m_Orient;
     m_BoundaryBox   = aModule->m_BoundaryBox;
-    m_PadNum        = aModule->m_PadNum;
     m_CntRot90      = aModule->m_CntRot90;
     m_CntRot180     = aModule->m_CntRot180;
-    m_LastEdit_Time = aModule->m_LastEdit_Time;
+    m_LastEditTime  = aModule->m_LastEditTime;
     m_Link          = aModule->m_Link;
     m_Path          = aModule->m_Path; //is this correct behavior?
     SetTimeStamp( GetNewTimeStamp() );
@@ -444,10 +442,10 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     wxString msg;
     BOARD*   board = GetBoard();
 
-    aList.push_back( MSG_PANEL_ITEM( m_Reference->m_Text, m_Value->m_Text, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( m_Reference->GetText(), m_Value->GetText(), DARKCYAN ) );
 
     // Display last date the component was edited (useful in Module Editor).
-    time_t edit_time = m_LastEdit_Time;
+    time_t edit_time = m_LastEditTime;
     strcpy( Line, ctime( &edit_time ) );
     strtok( Line, " \n\r" );
     strcpy( bufcar, strtok( NULL, " \n\r" ) ); strcat( bufcar, " " );
@@ -713,7 +711,6 @@ bool MODULE::IsLibNameValid( const wxString & aName )
 }
 
 
-
 /* Test for validity of the name of a footprint to be used in a footprint library
  * ( no spaces, dir separators ... )
  * param bool aUserReadable = false to get the list of invalid chars
@@ -733,6 +730,242 @@ const wxChar* MODULE::ReturnStringLibNameInvalidChars( bool aUserReadable )
 }
 
 
+void MODULE::Move( const wxPoint& aMoveVector )
+{
+    wxPoint newpos = m_Pos + aMoveVector;
+    SetPosition( newpos );
+}
+
+
+void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    wxPoint newpos = m_Pos;
+    RotatePoint( &newpos, aRotCentre, aAngle );
+    SetPosition( newpos );
+    SetOrientation( GetOrientation() + aAngle );
+}
+
+
+void MODULE::Flip( const wxPoint& aCentre )
+{
+    TEXTE_MODULE* text;
+
+    // Move module to its final position:
+    wxPoint finalPos = m_Pos;
+
+    finalPos.y  = aCentre.y - ( finalPos.y - aCentre.y );     /// Mirror the Y position
+
+    SetPosition( finalPos );
+
+    // Flip layer
+    SetLayer( BOARD::ReturnFlippedLayerNumber( GetLayer() ) );
+
+    // Reverse mirror orientation.
+    NEGATE( m_Orient );
+    NORMALIZE_ANGLE_POS( m_Orient );
+
+    // Mirror pads to other side of board about the x axis, i.e. vertically.
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+        pad->Flip( m_Pos.y );
+
+    // Mirror reference.
+    text = m_Reference;
+    text->m_Pos.y -= m_Pos.y;
+    text->m_Pos.y  = -text->m_Pos.y;
+    text->m_Pos.y += m_Pos.y;
+    NEGATE(text->m_Pos0.y);
+    text->m_Mirror = false;
+    NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
+    text->SetLayer( GetLayer() );
+    text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
+
+    if( GetLayer() == LAYER_N_BACK )
+        text->SetLayer( SILKSCREEN_N_BACK );
+
+    if( GetLayer() == LAYER_N_FRONT )
+        text->SetLayer( SILKSCREEN_N_FRONT );
+
+    if( (GetLayer() == SILKSCREEN_N_BACK)
+       || (GetLayer() == ADHESIVE_N_BACK) || (GetLayer() == LAYER_N_BACK) )
+        text->m_Mirror = true;
+
+    // Mirror value.
+    text = m_Value;
+    text->m_Pos.y -= m_Pos.y;
+    NEGATE( text->m_Pos.y );
+    text->m_Pos.y += m_Pos.y;
+    NEGATE( text->m_Pos0.y );
+    text->m_Mirror = false;
+    NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
+    text->SetLayer( GetLayer() );
+    text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
+
+    if( GetLayer() == LAYER_N_BACK )
+        text->SetLayer( SILKSCREEN_N_BACK );
+
+    if( GetLayer() == LAYER_N_FRONT )
+        text->SetLayer( SILKSCREEN_N_FRONT );
+
+    if( (GetLayer() == SILKSCREEN_N_BACK)
+       || (GetLayer() == ADHESIVE_N_BACK) || (GetLayer() == LAYER_N_BACK) )
+        text->m_Mirror = true;
+
+    // Reverse mirror module graphics and texts.
+    for( EDA_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_EDGE_T:
+            {
+                EDGE_MODULE*  em = (EDGE_MODULE*) item;
+
+                wxPoint s = em->GetStart();
+                s.y -= m_Pos.y;
+                s.y  = -s.y;
+                s.y += m_Pos.y;
+                em->SetStart( s );
+
+                wxPoint e = em->GetEnd();
+                e.y -= m_Pos.y;
+                e.y  = -e.y;
+                e.y += m_Pos.y;
+                em->SetEnd( e );
+
+                NEGATE( em->m_Start0.y );
+                NEGATE( em->m_End0.y );
+
+                if( em->GetShape() == S_ARC )
+                {
+                    em->SetAngle( -em->GetAngle() );
+                }
+
+                em->SetLayer( BOARD::ReturnFlippedLayerNumber( em->GetLayer() ) );
+            }
+            break;
+
+        case PCB_MODULE_TEXT_T:
+            // Reverse mirror position and mirror.
+            text = (TEXTE_MODULE*) item;
+            text->m_Pos.y -= m_Pos.y;
+            text->m_Pos.y  = -text->m_Pos.y;
+            text->m_Pos.y += m_Pos.y;
+            NEGATE( text->m_Pos0.y );
+            text->m_Mirror = false;
+            NEGATE_AND_NORMALIZE_ANGLE_POS( text->m_Orient );
+
+            text->SetLayer( GetLayer() );
+            text->SetLayer( BOARD::ReturnFlippedLayerNumber( text->GetLayer() ) );
+
+            if( GetLayer() == LAYER_N_BACK )
+                text->SetLayer( SILKSCREEN_N_BACK );
+
+            if( GetLayer() == LAYER_N_FRONT )
+                text->SetLayer( SILKSCREEN_N_FRONT );
+
+            if(  GetLayer() == SILKSCREEN_N_BACK
+                 || GetLayer() == ADHESIVE_N_BACK
+                 || GetLayer() == LAYER_N_BACK )
+            {
+                text->m_Mirror = true;
+            }
+
+            break;
+
+        default:
+            wxMessageBox( wxT( "MODULE::Flip() error: Unknown Draw Type" ) );
+            break;
+        }
+    }
+
+    CalculateBoundingBox();
+}
+
+
+void MODULE::SetPosition( const wxPoint& newpos )
+{
+    wxPoint delta = newpos - m_Pos;
+
+    m_Pos += delta;
+    m_Reference->SetPosition( m_Reference->GetPosition() + delta );
+    m_Value->SetPosition( m_Value->GetPosition() + delta );
+
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    {
+        pad->SetPosition( pad->GetPosition() + delta );
+    }
+
+    for( EDA_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_EDGE_T:
+        {
+            EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) item;
+            pt_edgmod->SetDrawCoord();
+            break;
+        }
+
+        case PCB_MODULE_TEXT_T:
+        {
+            TEXTE_MODULE* text = (TEXTE_MODULE*) item;
+            text->m_Pos += delta;
+            break;
+        }
+
+        default:
+            wxMessageBox( wxT( "Draw type undefined." ) );
+            break;
+        }
+    }
+
+    CalculateBoundingBox();
+}
+
+
+void MODULE::SetOrientation( double newangle )
+{
+    double  angleChange = newangle - m_Orient;  // change in rotation
+    wxPoint pt;
+
+    NORMALIZE_ANGLE_POS( newangle );
+
+    m_Orient = newangle;
+
+    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    {
+        pt = pad->GetPos0();
+
+        pad->SetOrientation( pad->GetOrientation() + angleChange );
+
+        RotatePoint( &pt, m_Orient );
+
+        pad->SetPosition( GetPosition() + pt );
+    }
+
+    // Update of the reference and value.
+    m_Reference->SetDrawCoord();
+    m_Value->SetDrawCoord();
+
+    // Displace contours and text of the footprint.
+    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    {
+        if( item->Type() == PCB_MODULE_EDGE_T )
+        {
+            EDGE_MODULE* edge = (EDGE_MODULE*) item;
+            edge->SetDrawCoord();
+        }
+
+        else if( item->Type() == PCB_MODULE_TEXT_T )
+        {
+            TEXTE_MODULE* text = (TEXTE_MODULE*) item;
+            text->SetDrawCoord();
+        }
+    }
+
+    CalculateBoundingBox();
+}
+
+
 #if defined(DEBUG)
 
 void MODULE::Show( int nestLevel, std::ostream& os ) const
@@ -741,8 +974,8 @@ void MODULE::Show( int nestLevel, std::ostream& os ) const
 
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " ref=\"" << m_Reference->m_Text.mb_str() << '"' <<
-    " value=\"" << m_Value->m_Text.mb_str() << '"' <<
+    " ref=\"" << m_Reference->GetText().mb_str() << '"' <<
+    " value=\"" << m_Value->GetText().mb_str() << '"' <<
     " layer=\"" << board->GetLayerName( m_Layer ).mb_str() << '"' <<
     ">\n";
 

@@ -408,10 +408,10 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
 
     MODULE* module_in_edit = GetBoard()->m_Modules;
-    bool canInsert = ( module_in_edit && !module_in_edit->m_Link );
+    bool canInsert = ( module_in_edit && !module_in_edit->GetLink() );
 
     // If the source was deleted, the module can inserted but not updated in the board.
-    if( module_in_edit && module_in_edit->m_Link ) // this is not a new module
+    if( module_in_edit && module_in_edit->GetLink() ) // this is not a new module
     {
         BOARD*  mainpcb = frame->GetBoard();
         MODULE* source_module = mainpcb->m_Modules;
@@ -419,7 +419,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
         // search if the source module was not deleted:
         for( ; source_module != NULL; source_module = source_module->Next() )
         {
-            if( module_in_edit->m_Link == source_module->GetTimeStamp() )
+            if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
                 break;
         }
 
@@ -435,9 +435,9 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
 
     MODULE* module_in_edit = GetBoard()->m_Modules;
-    bool canReplace = ( module_in_edit && module_in_edit->m_Link );
+    bool canReplace = ( module_in_edit && module_in_edit->GetLink() );
 
-    if( module_in_edit && module_in_edit->m_Link ) // this is not a new module
+    if( module_in_edit && module_in_edit->GetLink() ) // this is not a new module
     {
         BOARD*  mainpcb = frame->GetBoard();
         MODULE* source_module = mainpcb->m_Modules;
@@ -445,7 +445,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
         // search if the source module was not deleted:
         for( ; source_module != NULL; source_module = source_module->Next() )
         {
-            if( module_in_edit->m_Link == source_module->GetTimeStamp() )
+            if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
                 break;
         }
 

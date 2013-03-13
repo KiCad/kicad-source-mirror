@@ -631,8 +631,8 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
     throw( IO_ERROR )
 {
     m_out->Print( aNestLevel, "(dimension %s (width %s)",
-                  FMT_IU( aDimension->m_Value ).c_str(),
-                  FMT_IU( aDimension->m_Width ).c_str() );
+                  FMT_IU( aDimension->GetValue() ).c_str(),
+                  FMT_IU( aDimension->GetWidth() ).c_str() );
 
     formatLayer( aDimension );
 
@@ -641,7 +641,7 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
 
     m_out->Print( 0, "\n" );
 
-    Format( (TEXTE_PCB*) &aDimension->m_Text, aNestLevel+1 );
+    Format( (TEXTE_PCB*) &aDimension->Text(), aNestLevel+1 );
 
     m_out->Print( aNestLevel+1, "(feature1 (pts (xy %s %s) (xy %s %s)))\n",
                   FMT_IU( aDimension->m_featureLineDO.x ).c_str(),
@@ -852,7 +852,7 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
 void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     throw( IO_ERROR )
 {
-    m_out->Print( aNestLevel, "(module %s", m_out->Quotew( aModule->m_LibRef ).c_str() );
+    m_out->Print( aNestLevel, "(module %s", m_out->Quotew( aModule->GetLibRef() ).c_str() );
 
     if( aModule->IsLocked() )
         m_out->Print( aNestLevel, " locked" );
@@ -870,30 +870,30 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     else
         m_out->Print( 0, "\n" );
 
-    m_out->Print( aNestLevel+1, "(at %s", FMT_IU( aModule->m_Pos ).c_str() );
+    m_out->Print( aNestLevel+1, "(at %s", FMT_IU( aModule->GetPosition() ).c_str() );
 
-    if( aModule->m_Orient != 0.0 )
-        m_out->Print( 0, " %s", FMT_ANGLE( aModule->m_Orient ).c_str() );
+    if( aModule->GetOrientation() != 0.0 )
+        m_out->Print( 0, " %s", FMT_ANGLE( aModule->GetOrientation() ).c_str() );
 
     m_out->Print( 0, ")\n" );
 
-    if( !aModule->m_Doc.IsEmpty() )
+    if( !aModule->GetDescription().IsEmpty() )
         m_out->Print( aNestLevel+1, "(descr %s)\n",
-                      m_out->Quotew( aModule->m_Doc ).c_str() );
+                      m_out->Quotew( aModule->GetDescription() ).c_str() );
 
-    if( !aModule->m_KeyWord.IsEmpty() )
+    if( !aModule->GetKeywords().IsEmpty() )
         m_out->Print( aNestLevel+1, "(tags %s)\n",
-                      m_out->Quotew( aModule->m_KeyWord ).c_str() );
+                      m_out->Quotew( aModule->GetKeywords() ).c_str() );
 
-    if( !aModule->m_Path.IsEmpty() )
+    if( !aModule->GetPath().IsEmpty() )
         m_out->Print( aNestLevel+1, "(path %s)\n",
-                      m_out->Quotew( aModule->m_Path ).c_str() );
+                      m_out->Quotew( aModule->GetPath() ).c_str() );
 
-    if( aModule->m_CntRot90 != 0 )
-        m_out->Print( aNestLevel+1, "(autoplace_cost90 %d)\n", aModule->m_CntRot90 );
+    if( aModule->GetPlacementCost90() != 0 )
+        m_out->Print( aNestLevel+1, "(autoplace_cost90 %d)\n", aModule->GetPlacementCost90() );
 
-    if( aModule->m_CntRot180 != 0 )
-        m_out->Print( aNestLevel+1, "(autoplace_cost180 %d)\n", aModule->m_CntRot180 );
+    if( aModule->GetPlacementCost180() != 0 )
+        m_out->Print( aNestLevel+1, "(autoplace_cost180 %d)\n", aModule->GetPlacementCost180() );
 
     if( aModule->GetLocalSolderMaskMargin() != 0 )
         m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
@@ -911,33 +911,33 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
                       FMT_IU( aModule->GetLocalClearance() ).c_str() );
 
-    if( aModule->m_ZoneConnection != UNDEFINED_CONNECTION )
-        m_out->Print( aNestLevel+1, "(zone_connect %d)\n", aModule->m_ZoneConnection );
+    if( aModule->GetZoneConnection() != UNDEFINED_CONNECTION )
+        m_out->Print( aNestLevel+1, "(zone_connect %d)\n", aModule->GetZoneConnection() );
 
-    if( aModule->m_ThermalWidth != 0 )
+    if( aModule->GetThermalWidth() != 0 )
         m_out->Print( aNestLevel+1, "(thermal_width %s)\n",
-                      FMT_IU( aModule->m_ThermalWidth ).c_str() );
+                      FMT_IU( aModule->GetThermalWidth() ).c_str() );
 
-    if( aModule->m_ThermalGap != 0 )
+    if( aModule->GetThermalGap() != 0 )
         m_out->Print( aNestLevel+1, "(thermal_gap %s)\n",
-                      FMT_IU( aModule->m_ThermalGap ).c_str() );
+                      FMT_IU( aModule->GetThermalGap() ).c_str() );
 
     // Attributes
-    if( aModule->m_Attributs != MOD_DEFAULT )
+    if( aModule->GetAttributes() != MOD_DEFAULT )
     {
         m_out->Print( aNestLevel+1, "(attr" );
 
-        if( aModule->m_Attributs & MOD_CMS )
+        if( aModule->GetAttributes() & MOD_CMS )
             m_out->Print( 0, " smd" );
 
-        if( aModule->m_Attributs & MOD_VIRTUAL )
+        if( aModule->GetAttributes() & MOD_VIRTUAL )
             m_out->Print( 0, " virtual" );
 
         m_out->Print( 0, ")\n" );
     }
 
-    Format( (BOARD_ITEM*) aModule->m_Reference, aNestLevel+1 );
-    Format( (BOARD_ITEM*) aModule->m_Value, aNestLevel+1 );
+    Format( (BOARD_ITEM*) &aModule->Reference(), aNestLevel+1 );
+    Format( (BOARD_ITEM*) &aModule->Value(), aNestLevel+1 );
 
     // Save drawing elements.
     for( BOARD_ITEM* gr = aModule->m_Drawings;  gr;  gr = gr->Next() )

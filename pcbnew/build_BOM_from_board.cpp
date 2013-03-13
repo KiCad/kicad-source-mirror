@@ -108,10 +108,11 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         for( iter = list.begin(); iter != list.end(); iter++ )
         {
             cmp* current = *iter;
-            if( (current->m_Val == Module->m_Value->m_Text) && (current->m_Pkg == Module->m_LibRef) )
+
+            if( (current->m_Val == Module->GetValue()) && (current->m_Pkg == Module->GetLibRef()) )
             {
                 current->m_Ref.Append( wxT( ", " ), 1 );
-                current->m_Ref.Append( Module->m_Reference->m_Text );
+                current->m_Ref.Append( Module->GetReference() );
                 current->m_CmpCount++;
 
                 valExist = true;
@@ -124,9 +125,9 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         {
             comp = new cmp();
             comp->m_Id  = i++;
-            comp->m_Val = Module->m_Value->m_Text;
-            comp->m_Ref = Module->m_Reference->m_Text;
-            comp->m_Pkg = Module->m_LibRef;
+            comp->m_Val = Module->GetValue();
+            comp->m_Ref = Module->GetReference();
+            comp->m_Pkg = Module->GetLibRef();
             comp->m_CmpCount = 1;
             list.Append( comp );
         }

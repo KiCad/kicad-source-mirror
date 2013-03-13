@@ -72,8 +72,8 @@ static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aColle
     {
         MODULE* module = (MODULE*) (*aCollector)[i];
 
-        int     lx = module->m_BoundaryBox.GetWidth();
-        int     ly = module->m_BoundaryBox.GetHeight();
+        int     lx = module->GetBoundingBox().GetWidth();
+        int     ly = module->GetBoundingBox().GetHeight();
 
         int     lmin = std::min( lx, ly );
 

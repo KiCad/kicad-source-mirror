@@ -68,7 +68,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
 
     if( module && ( module->Type() == PCB_MODULE_T ) )
     {
-        m_Pos = module->m_Pos;
+        m_Pos = module->GetPosition();
 
         int moduleLayer = module->GetLayer();
 
@@ -149,9 +149,9 @@ void TEXTE_MODULE::SetLocalCoord()
         return;
     }
 
-    m_Pos0 = m_Pos - module->m_Pos;
+    m_Pos0 = m_Pos - module->GetPosition();
 
-    int angle = module->m_Orient;
+    int angle = module->GetOrientation();
 
     RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
 }
@@ -344,7 +344,7 @@ int TEXTE_MODULE::GetDrawRotation() const
     rotation = m_Orient;
 
     if( module )
-        rotation += module->m_Orient;
+        rotation += module->GetOrientation();
 
     NORMALIZE_ANGLE_POS( rotation );
 
@@ -372,7 +372,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         _( "Ref." ), _( "Value" ), _( "Text" )
     };
 
-    Line = module->m_Reference->m_Text;
+    Line = module->GetReference();
     aList.push_back( MSG_PANEL_ITEM( _( "Module" ), Line, DARKCYAN ) );
 
     Line = m_Text;

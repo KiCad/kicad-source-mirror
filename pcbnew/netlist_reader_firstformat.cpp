@@ -335,7 +335,7 @@ bool NETLIST_READER::SetPadNetName( char* aText )
         {
             wxString msg;
             msg.Printf( _( "Module [%s]: Pad [%s] not found" ),
-                        GetChars( m_currModule->m_Reference->m_Text ),
+                        GetChars( m_currModule->GetReference() ),
                         GetChars( pinName ) );
             m_messageWindow->AppendText( msg + wxT( "\n" ) );
         }

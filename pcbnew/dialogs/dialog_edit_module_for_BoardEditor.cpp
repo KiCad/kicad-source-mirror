@@ -126,7 +126,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     }
 
     wxString msg;
-    msg << m_CurrentModule->m_Orient;
+    msg << m_CurrentModule->GetOrientation();
     m_OrientValue->SetValue( msg );
     m_OrientValue->Enable( select );
 
@@ -261,8 +261,8 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     m_ReferenceCopy = new TEXTE_MODULE( NULL );
     m_ValueCopy     = new TEXTE_MODULE( NULL );
-    m_ReferenceCopy->Copy( m_CurrentModule->m_Reference );
-    m_ValueCopy->Copy( m_CurrentModule->m_Value );
+    m_ReferenceCopy->Copy( &m_CurrentModule->Reference() );
+    m_ValueCopy->Copy( &m_CurrentModule->Value() );
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->m_Text );
     m_ValueCtrl->SetValue( m_ValueCopy->m_Text );
 
@@ -274,7 +274,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
                                     _( "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)" ) );
 
     /* Controls on right side of the dialog */
-    switch( m_CurrentModule->m_Attributs & 255 )
+    switch( m_CurrentModule->GetAttributes() & 255 )
     {
     case 0:
         m_AttributsCtrl->SetSelection( 0 );
@@ -293,17 +293,16 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
         break;
     }
 
-    m_AutoPlaceCtrl->SetSelection(
-        (m_CurrentModule->m_ModuleStatus & MODULE_is_LOCKED) ? 1 : 0 );
+    m_AutoPlaceCtrl->SetSelection( (m_CurrentModule->IsLocked()) ? 1 : 0 );
 
     m_AutoPlaceCtrl->SetItemToolTip( 0,
                                     _( "Enable hotkey move commands and Auto Placement" ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1,
                                     _( "Disable hotkey move commands and Auto Placement" ) );
 
-    m_CostRot90Ctrl->SetValue( m_CurrentModule->m_CntRot90 );
+    m_CostRot90Ctrl->SetValue( m_CurrentModule->GetPlacementCost90() );
 
-    m_CostRot180Ctrl->SetValue( m_CurrentModule->m_CntRot180 );
+    m_CostRot180Ctrl->SetValue( m_CurrentModule->GetPlacementCost180() );
 
     // Initialize 3D parameters
 
@@ -507,8 +506,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     }
 
     // Init Fields (should be first, because they can be moved or/and flipped later):
-    m_CurrentModule->m_Reference->Copy( m_ReferenceCopy );
-    m_CurrentModule->m_Value->Copy( m_ValueCopy );
+    m_CurrentModule->Reference().Copy( m_ReferenceCopy );
+    m_CurrentModule->Value().Copy( m_ValueCopy );
 
     // Initialize masks clearances
     m_CurrentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
@@ -553,29 +552,25 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     modpos.x = ReturnValueFromTextCtrl( *m_ModPositionX );
     modpos.y = ReturnValueFromTextCtrl( *m_ModPositionY );
     m_CurrentModule->SetPosition( modpos );
-
-    if( m_AutoPlaceCtrl->GetSelection() == 1 )
-        m_CurrentModule->m_ModuleStatus |= MODULE_is_LOCKED;
-    else
-        m_CurrentModule->m_ModuleStatus &= ~MODULE_is_LOCKED;
+    m_CurrentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
     switch( m_AttributsCtrl->GetSelection() )
     {
     case 0:
-        m_CurrentModule->m_Attributs = 0;
+        m_CurrentModule->SetAttributes( 0 );
         break;
 
     case 1:
-        m_CurrentModule->m_Attributs = MOD_CMS;
+        m_CurrentModule->SetAttributes( MOD_CMS );
         break;
 
     case 2:
-        m_CurrentModule->m_Attributs = MOD_VIRTUAL;
+        m_CurrentModule->SetAttributes( MOD_VIRTUAL );
         break;
     }
 
-    m_CurrentModule->m_CntRot90  = m_CostRot90Ctrl->GetValue();
-    m_CurrentModule->m_CntRot180 = m_CostRot180Ctrl->GetValue();
+    m_CurrentModule->SetPlacementCost90( m_CostRot90Ctrl->GetValue() );
+    m_CurrentModule->SetPlacementCost180( m_CostRot180Ctrl->GetValue() );
 
     /* Now, set orientation. must be made after others changes,
      * because rotation changes fields positions on board according to the new orientation
@@ -585,9 +580,9 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     msg = m_OrientValue->GetValue();
     msg.ToLong( &orient );
 
-    if( m_CurrentModule->m_Orient != orient )
-        m_CurrentModule->Rotate( m_CurrentModule->m_Pos,
-                                 orient - m_CurrentModule->m_Orient );
+    if( m_CurrentModule->GetOrientation() != orient )
+        m_CurrentModule->Rotate( m_CurrentModule->GetPosition(),
+                                 orient - m_CurrentModule->GetOrientation() );
 
     // Set component side, that also have effect on the fields positions on board
     bool change_layer = false;
@@ -600,7 +595,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
         change_layer = true;
 
     if( change_layer )
-        m_CurrentModule->Flip( m_CurrentModule->m_Pos );
+        m_CurrentModule->Flip( m_CurrentModule->GetPosition() );
 
     /* Update 3D shape list */
     int         ii = m_3D_ShapeNameListBox->GetSelection();

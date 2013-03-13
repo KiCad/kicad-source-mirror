@@ -80,7 +80,7 @@ MODULE* PCB_BASE_FRAME::GetModuleByName()
 
         while( module )
         {
-            if( module->m_Reference->m_Text.CmpNoCase( moduleName ) == 0 )
+            if( module->GetReference().CmpNoCase( moduleName ) == 0 )
                 break;
 
             module = module->Next();
@@ -200,8 +200,8 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     /* Redraw the module. */
     if( module && s_ModuleInitialCopy )
     {
-        if( s_ModuleInitialCopy->m_Orient != module->m_Orient )
-            pcbframe->Rotate_Module( NULL, module, s_ModuleInitialCopy->m_Orient, false );
+        if( s_ModuleInitialCopy->GetOrientation() != module->GetOrientation() )
+            pcbframe->Rotate_Module( NULL, module, s_ModuleInitialCopy->GetOrientation(), false );
 
         if( s_ModuleInitialCopy->GetLayer() != module->GetLayer() )
             pcbframe->Change_Side_Module( module, NULL );
@@ -243,7 +243,7 @@ void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
     }
 
     /* Redraw the module at the new position. */
-    g_Offset_Module = module->m_Pos - aPanel->GetScreen()->GetCrossHairPosition();
+    g_Offset_Module = module->GetPosition() - aPanel->GetScreen()->GetCrossHairPosition();
     DrawModuleOutlines( aPanel, aDC, module );
 
     DrawSegmentWhileMovingFootprint( aPanel, aDC );
@@ -263,8 +263,8 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
     if( aAskBeforeDeleting )
     {
         msg.Printf( _( "Delete Module %s (value %s) ?" ),
-                    GetChars( aModule->m_Reference->m_Text ),
-                    GetChars( aModule->m_Value->m_Text ) );
+                    GetChars( aModule->GetReference() ),
+                    GetChars( aModule->GetValue() ) );
 
         if( !IsOK( this, msg ) )
         {
@@ -329,7 +329,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
     }
 
     /* Flip the module */
-    Module->Flip( Module->m_Pos );
+    Module->Flip( Module->GetPosition() );
 
     SetMsgPanel( Module );
 
@@ -464,7 +464,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, int angle, bool in
     GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK );
 
     if( incremental )
-        module->SetOrientation( module->m_Orient + angle );
+        module->SetOrientation( module->GetOrientation() + angle );
     else
         module->SetOrientation( angle );
 

@@ -119,7 +119,8 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             if( currModule == NULL )
                 return;
 
-            currModule->m_ModuleStatus &= ~(MODULE_is_PLACED | MODULE_to_PLACE);
+            currModule->SetIsPlaced( false );
+            currModule->SetNeedsPlaced( false );
             break;
 
         case PLACE_OUT_OF_BOARD:
@@ -157,7 +158,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Module->m_ModuleStatus &= ~MODULE_to_PLACE;
+        Module->SetNeedsPlaced( false );
 
         switch( place_mode )
         {
@@ -167,8 +168,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
                 // Module will be placed, add to undo.
                 picker.SetItem( currModule );
                 newList.PushItem( picker );
-
-                Module->m_ModuleStatus |= MODULE_to_PLACE;
+                Module->SetNeedsPlaced( true );
             }
 
             break;
@@ -179,13 +179,12 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             if( Module->IsLocked() )
                 break;
 
-            if( !RoutingMatrix.m_BrdBox.Contains( Module->m_Pos ) )
+            if( !RoutingMatrix.m_BrdBox.Contains( Module->GetPosition() ) )
             {
                 // Module will be placed, add to undo.
                 picker.SetItem( Module );
                 newList.PushItem( picker );
-
-                Module->m_ModuleStatus |= MODULE_to_PLACE;
+                Module->SetNeedsPlaced( true );
             }
 
             break;
@@ -199,8 +198,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             // Module will be placed, add to undo.
             picker.SetItem( Module );
             newList.PushItem( picker );
-
-            Module->m_ModuleStatus |= MODULE_to_PLACE;
+            Module->SetNeedsPlaced( true );
             break;
 
         case PLACE_INCREMENTAL:
@@ -210,20 +208,19 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
                 break;
             }
 
-            if( !(Module->m_ModuleStatus & MODULE_is_PLACED) )
+            if( !Module->NeedsPlaced() )
             {
                 // Module will be placed, add to undo.
                 picker.SetItem( Module );
                 newList.PushItem( picker );
-
-                Module->m_ModuleStatus |= MODULE_to_PLACE;
+                Module->SetNeedsPlaced( true );
             }
 
             break;
         }
 
 
-        if( Module->m_ModuleStatus & MODULE_to_PLACE )  // Erase from screen
+        if( Module->NeedsPlaced() )  // Erase from screen
         {
             moduleCount++;
             Module->Draw( m_canvas, DC, GR_XOR );
@@ -259,7 +256,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             goto end_of_tst;
 
         /* Determine if the best orientation of a module is 180. */
-        ii = Module->m_CntRot180 & 0x0F;
+        ii = Module->GetPlacementCost180() & 0x0F;
 
         if( ii != 0 )
         {
@@ -285,7 +282,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         }
 
         /* Determine if the best orientation of a module is 90. */
-        ii = Module->m_CntRot90 & 0x0F;
+        ii = Module->GetPlacementCost90() & 0x0F;
 
         if( ii != 0 )
         {
@@ -310,7 +307,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         }
 
         /*  Determine if the best orientation of a module is 270. */
-        ii = (Module->m_CntRot90 >> 4 ) & 0x0F;
+        ii = (Module->GetPlacementCost90() >> 4 ) & 0x0F;
 
         if( ii != 0 )
         {
@@ -349,7 +346,7 @@ end_of_tst:
 
         GenModuleOnBoard( Module );
         Module->SetIsPlaced( true );
-        Module->m_ModuleStatus &= ~MODULE_to_PLACE;
+        Module->SetNeedsPlaced( false );
     }
 
     CurrPosition = memopos;
@@ -521,10 +518,10 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     int    layerMask;
     D_PAD* Pad;
 
-    ox = Module->m_BoundaryBox.GetX() - marge;
-    fx = Module->m_BoundaryBox.GetRight() + marge;
-    oy = Module->m_BoundaryBox.GetY() - marge;
-    fy = Module->m_BoundaryBox.GetBottom() + marge;
+    ox = Module->GetBoundingBox().GetX() - marge;
+    fx = Module->GetBoundingBox().GetRight() + marge;
+    oy = Module->GetBoundingBox().GetY() - marge;
+    fy = Module->GetBoundingBox().GetBottom() + marge;
 
     if( ox < RoutingMatrix.m_BrdBox.GetX() )
         ox = RoutingMatrix.m_BrdBox.GetX();
@@ -597,11 +594,12 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     LastPosOK.x = RoutingMatrix.m_BrdBox.GetX();
     LastPosOK.y = RoutingMatrix.m_BrdBox.GetY();
 
-    cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
-    ox = aModule->m_BoundaryBox.GetX() - cx;
-    fx = aModule->m_BoundaryBox.GetWidth() + ox;
-    oy = aModule->m_BoundaryBox.GetY() - cy;
-    fy = aModule->m_BoundaryBox.GetHeight() + oy;
+    cx = aModule->GetPosition().x;
+    cy = aModule->GetPosition().y;
+    ox = aModule->GetBoundingBox().GetX() - cx;
+    fx = aModule->GetBoundingBox().GetWidth() + ox;
+    oy = aModule->GetBoundingBox().GetY() - cy;
+    fy = aModule->GetBoundingBox().GetHeight() + oy;
 
     CurrPosition.x = RoutingMatrix.m_BrdBox.GetX() - ox;
     CurrPosition.y = RoutingMatrix.m_BrdBox.GetY() - oy;
@@ -656,9 +654,10 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
                 m_canvas->SetAbortRequest( false );
         }
 
-        cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
-        aModule->m_BoundaryBox.SetX( ox + CurrPosition.x );
-        aModule->m_BoundaryBox.SetY( oy + CurrPosition.y );
+        cx = aModule->GetPosition().x;
+        cy = aModule->GetPosition().y;
+        aModule->GetBoundingBox().SetX( ox + CurrPosition.x );
+        aModule->GetBoundingBox().SetY( oy + CurrPosition.y );
 
         DrawModuleOutlines( m_canvas, aDC, aModule );
 
@@ -681,8 +680,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
                 Compute_Ratsnest_PlaceModule( aDC );
 #endif
             showRat = 0;
-            aModule->m_BoundaryBox.SetX( ox + CurrPosition.x );
-            aModule->m_BoundaryBox.SetY( oy + CurrPosition.y );
+            aModule->GetBoundingBox().SetX( ox + CurrPosition.x );
+            aModule->GetBoundingBox().SetY( oy + CurrPosition.y );
 
             g_Offset_Module.y = cy - CurrPosition.y;
 #ifndef USE_WX_OVERLAY
@@ -726,8 +725,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         Compute_Ratsnest_PlaceModule( aDC );
 
     /* Regeneration of the modified variable. */
-    aModule->m_BoundaryBox.SetX( ox + cx );
-    aModule->m_BoundaryBox.SetY( oy + cy );
+    aModule->GetBoundingBox().SetX( ox + cx );
+    aModule->GetBoundingBox().SetY( oy + cy );
     CurrPosition = LastPosOK;
 
     GetBoard()->m_Status_Pcb &= ~( RATSNEST_ITEM_LOCAL_OK | LISTE_PAD_OK );
@@ -865,10 +864,10 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
         side = BOTTOM; otherside = TOP;
     }
 
-    ox = Module->m_BoundaryBox.GetX();
-    fx = Module->m_BoundaryBox.GetRight();
-    oy = Module->m_BoundaryBox.GetY();
-    fy = Module->m_BoundaryBox.GetBottom();
+    ox = Module->GetBoundingBox().GetX();
+    fx = Module->GetBoundingBox().GetRight();
+    oy = Module->GetBoundingBox().GetY();
+    fy = Module->GetBoundingBox().GetBottom();
 
     error = TstRectangle( Pcb, ox, oy, fx, fy, side );
 
@@ -1063,8 +1062,9 @@ static bool Tri_PlaceModules( MODULE* ref, MODULE* compare )
 {
     double ff1, ff2;
 
-    ff1 = ref->m_Surface * ref->GetPadCount();
-    ff2 = compare->m_Surface * compare->GetPadCount();
+    ff1 = ref->GetArea() * ref->GetPadCount();
+    ff2 = compare->GetArea() * compare->GetPadCount();
+
     return ff2 < ff1;
 }
 
@@ -1073,8 +1073,8 @@ static bool Tri_RatsModules( MODULE* ref, MODULE* compare )
 {
     double ff1, ff2;
 
-    ff1 = ref->m_Surface * ref->flag;
-    ff2 = compare->m_Surface * compare->flag;
+    ff1 = ref->GetArea() * ref->GetFlag();
+    ff2 = compare->GetArea() * compare->GetFlag();
     return ff2 < ff1;
 }
 
@@ -1105,9 +1105,9 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
         Module = moduleList[ii];
-        Module->flag = 0;
+        Module->SetFlag( 0 );
 
-        if( !( Module->m_ModuleStatus & MODULE_to_PLACE ) )
+        if( !Module->NeedsPlaced() )
             continue;
 
         pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
@@ -1119,7 +1119,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         {
             if( ( pcbframe->GetBoard()->m_LocalRatsnest[ii].m_Status &
                   LOCAL_RATSNEST_ITEM ) == 0 )
-                Module->flag++;
+                Module->IncrementFlag();
         }
     }
 
@@ -1135,12 +1135,12 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     {
         Module = moduleList[ii];
 
-        if( !( Module->m_ModuleStatus & MODULE_to_PLACE ) )
+        if( !Module->NeedsPlaced() )
             continue;
 
         altModule = Module;
 
-        if( Module->flag == 0 )
+        if( Module->GetFlag() == 0 )
             continue;
 
         bestModule = Module;

@@ -355,7 +355,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
         // Initialize the relative coordinates
         aEdge->SetStart0( aEdge->GetStart() - module->GetPosition() );
 
-        RotatePoint( &aEdge->m_Start0, -module->m_Orient );
+        RotatePoint( &aEdge->m_Start0, -module->GetOrientation() );
 
         aEdge->m_End0 = aEdge->m_Start0;
         module->CalculateBoundingBox();

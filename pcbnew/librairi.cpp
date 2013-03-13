@@ -284,7 +284,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     if( aModule == NULL )
         return;
 
-    fn.SetName( aModule->m_LibRef );
+    fn.SetName( aModule->GetLibRef() );
 
     wxString    wildcard = wxGetTranslation( KiCadFootprintLibFileWildcard );
 
@@ -728,17 +728,17 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
     module->SetLastEditTime();
 
     // Update its name in lib
-    module->m_LibRef = moduleName;
+    module->SetLibRef( moduleName );
 
     // Update reference:
-    module->m_Reference->m_Text = moduleName;
-    module->m_Reference->SetThickness( GetDesignSettings().m_ModuleTextWidth );
-    module->m_Reference->SetSize( GetDesignSettings().m_ModuleTextSize );
+    module->SetReference( moduleName );
+    module->Reference().SetThickness( GetDesignSettings().m_ModuleTextWidth );
+    module->Reference().SetSize( GetDesignSettings().m_ModuleTextSize );
 
     // Set the value field to a default value
-    module->m_Value->m_Text = wxT( "VAL**" );
-    module->m_Value->SetThickness( GetDesignSettings().m_ModuleTextWidth );
-    module->m_Value->SetSize( GetDesignSettings().m_ModuleTextSize );
+    module->SetValue( wxT( "VAL**" ) );
+    module->Value().SetThickness( GetDesignSettings().m_ModuleTextWidth );
+    module->Value().SetSize( GetDesignSettings().m_ModuleTextSize );
     module->SetPosition( wxPoint( 0, 0 ) );
 
     SetMsgPanel( module );

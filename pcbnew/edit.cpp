@@ -638,13 +638,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->m_Reference->m_Text.GetData() );
+                        module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }
 
         SendMessageToEESCHEMA( module );
-        GetScreen()->SetCrossHairPosition( module->m_Pos );
+        GetScreen()->SetCrossHairPosition( module->GetPosition() );
         m_canvas->MoveCursorToCrossHair();
         StartMoveModule( module, &dc, id == ID_POPUP_PCB_DRAG_MODULE_REQUEST );
         break;
@@ -660,7 +660,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->m_Reference->m_Text.GetData() );
+                        module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }
@@ -686,7 +686,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->m_Reference->m_Text.GetData() );
+                        module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }
@@ -714,14 +714,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->m_Reference->m_Text.GetData() );
+                        module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }
 
         /* This is a simple rotation, no other editing in progress */
         if( !GetCurItem()->IsMoving() )
-            SaveCopyInUndoList(GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->m_Pos);
+            SaveCopyInUndoList( GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->GetPosition() );
 
         Rotate_Module( &dc, (MODULE*) GetCurItem(), g_RotationAngle, true );
         break;
@@ -742,7 +742,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->m_Reference->m_Text.GetData() );
+                        module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }
@@ -750,7 +750,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         /* This is a simple rotation, no other editing in progress */
         if( !GetCurItem()->IsMoving() )
             SaveCopyInUndoList( GetCurItem(), UR_ROTATED_CLOCKWISE,
-                                ((MODULE*)GetCurItem())->m_Pos );
+                                ((MODULE*)GetCurItem())->GetPosition() );
 
         Rotate_Module( &dc, (MODULE*) GetCurItem(), -g_RotationAngle, true );
         break;
@@ -771,14 +771,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->m_Reference->m_Text.GetData() );
+                        module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }
 
         /* This is a simple flip, no other editing in progress */
         if( !GetCurItem()->IsMoving() )
-            SaveCopyInUndoList(GetCurItem(), UR_FLIPPED, ((MODULE*)GetCurItem())->m_Pos);
+            SaveCopyInUndoList( GetCurItem(), UR_FLIPPED, ((MODULE*)GetCurItem())->GetPosition() );
 
         Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
@@ -833,7 +833,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "The parent (%s) of the pad is locked" ),
-                        module->m_Reference->m_Text.GetData() );
+                        module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }
@@ -852,7 +852,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxString msg;
             msg.Printf( _( "The parent (%s) of the pad is locked" ),
-                        module->m_Reference->m_Text.GetData() );
+                        module->GetReference().GetData() );
             DisplayInfoMessage( this, msg );
             break;
         }

@@ -317,12 +317,12 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             layerMask = GetLayerMask( PtText->GetLayer() );
 
             TraceFilledRectangle( ux0 - marge, uy0 - marge, ux1 + marge,
-                                  uy1 + marge, (int) (PtText->m_Orient),
+                                  uy1 + marge, (int) (PtText->GetOrientation()),
                                   layerMask, HOLE, WRITE_CELL );
 
             TraceFilledRectangle( ux0 - via_marge, uy0 - via_marge,
                                   ux1 + via_marge, uy1 + via_marge,
-                                  (int) (PtText->m_Orient),
+                                  (int) (PtText->GetOrientation()),
                                   layerMask, VIA_IMPOSSIBLE, WRITE_OR_CELL );
         }
         break;

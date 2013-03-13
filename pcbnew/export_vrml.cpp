@@ -264,6 +264,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, //{{{
         else
         {
             marker_found++;
+
             switch( marker_found )
             {
             case 1: // Material marker
@@ -309,6 +310,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, //{{{
                 // Index marker
                 // OK, that's sick ...
                 int j = 0;
+
                 for( TRIANGLEBAG::const_iterator i = triangles.begin();
                      i != triangles.end();
                      i++ )
@@ -323,6 +325,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, //{{{
                 break;
             }
         }
+
         lineno++;
     }
 }
@@ -523,10 +526,13 @@ static void export_vrml_arc( int layer, double centerx, double centery,
     double   start_angle = atan2( arc_starty - centery, arc_startx - centerx );
 
     int count = KiROUND( arc_angle / 360.0 * SEGM_COUNT_PER_360 );
+
     if( count < 0 )
         count = -count;
+
     if( count == 0 )
         count = 1;
+
     double divisions = arc_angle*M_PI/180.0 / count;
 
     double outer_radius = hypot( arc_starty - centery, arc_startx - centerx )
@@ -561,13 +567,17 @@ static void export_vrml_varc( TRIANGLEBAG& triangles,
     double radius = hypot( arc_starty - centery, arc_startx - centerx );
 
     int count = KiROUND( arc_angle / 360.0 * SEGM_COUNT_PER_360 );
+
     if( count < 0 )
         count = -count;
+
     if( count == 0 )
         count = 1;
+
     double divisions = arc_angle*M_PI/180.0 / count;
 
     double alpha = 0;
+
     for( int ii = 0; ii <= count; alpha += divisions, ii++ )
     {
         double angle_rot = start_angle + alpha;
@@ -665,12 +675,13 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
     if( text->m_MultilineAllowed )
     {
         wxPoint        pos  = text->m_Pos;
-        wxArrayString* list = wxStringSplit( text->m_Text, '\n' );
+        wxArrayString* list = wxStringSplit( text->GetText(), '\n' );
         wxPoint        offset;
 
         offset.y = text->GetInterline();
 
         RotatePoint( &offset, text->GetOrientation() );
+
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
@@ -688,7 +699,7 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
     else
     {
         DrawGraphicText( NULL, NULL, text->m_Pos, BLACK,
-                         text->m_Text, text->GetOrientation(), size,
+                         text->GetText(), text->GetOrientation(), size,
                          text->m_HJustify, text->m_VJustify,
                          text->m_Thickness, text->m_Italic,
                          true,
@@ -804,9 +815,11 @@ static void export_vrml_zones( BOARD* pcb )
             for( int ic = 1; ic <= imax; ic++ )
             {
                 CPolyPt* endcorner = &zone->m_FilledPolysList[ic];
+
                 if( begincorner->utility == 0 ) // Draw only basic outlines, not extra segments
                     export_vrml_line( layer, begincorner->x, begincorner->y,
                                       endcorner->x, endcorner->y, width, 1 );
+
                 if( (endcorner->end_contour) || (ic == imax) )  // the last corner of a filled area is found: draw it
                 {
                     if( endcorner->utility == 0 )               // Draw only basic outlines, not extra segments
@@ -838,7 +851,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module ) //{{{
         s_text_layer = module->GetLayer();
         s_text_width = module->m_Thickness;
         DrawGraphicText( NULL, NULL, module->m_Pos, BLACK,
-                         module->m_Text, module->GetDrawRotation(), size,
+                         module->GetText(), module->GetDrawRotation(), size,
                          module->m_HJustify, module->m_VJustify,
                          module->m_Thickness, module->m_Italic,
                          true,
@@ -1019,8 +1032,8 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                                 double boardIU2WRML )
 {
     // Reference and value
-    export_vrml_text_module( aModule->m_Reference );
-    export_vrml_text_module( aModule->m_Value );
+    export_vrml_text_module( &aModule->Reference() );
+    export_vrml_text_module( &aModule->Value() );
 
     // Export module edges
     for( EDA_ITEM* item = aModule->m_Drawings;  item != NULL;  item = item->Next() )
@@ -1084,11 +1097,11 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         double roty = - vrmlm->m_MatRotation.y;
         double rotz = - vrmlm->m_MatRotation.z;
 
-        if ( isFlipped )
+        if( isFlipped )
         {
             rotx += 180.0;
-            NEGATE(roty);
-            NEGATE(rotz);
+            NEGATE( roty );
+            NEGATE( rotz );
         }
 
         // Do some quaternion munching
@@ -1098,6 +1111,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         compose_quat( q1, q2, q1 );
         build_quat( 0, 0, 1, rotz / 180.0 * M_PI, q2 );
         compose_quat( q1, q2, q1 );
+
         // Note here aModule->GetOrientation() is in 0.1 degrees,
         // so module rotation is aModule->GetOrientation() / 1800.0
         build_quat( 0, 0, 1, aModule->GetOrientation() / 1800.0 * M_PI, q2 );
@@ -1105,6 +1119,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         from_quat( q1, rot );
 
         fprintf( aOutputFile, "Transform {\n" );
+
         // A null rotation would fail the acos!
         if( rot[3] != 0.0 )
         {
@@ -1117,7 +1132,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         double offsety = vrmlm->m_MatPosition.y * IU_PER_MILS * 1000.0;
         double offsetz = vrmlm->m_MatPosition.z * IU_PER_MILS * 1000.0;
 
-        if ( isFlipped )
+        if( isFlipped )
             NEGATE(offsetz);
         else    // In normal mode, Y axis is reversed in Pcbnew.
             NEGATE(offsety);
@@ -1125,8 +1140,8 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         RotatePoint(&offsetx, &offsety, aModule->GetOrientation());
 
         fprintf( aOutputFile, "  translation %g %g %g\n",
-                 (offsetx + aModule->m_Pos.x) * boardIU2WRML,
-                 - (offsety + aModule->m_Pos.y) * boardIU2WRML,    // Y axis is reversed in Pcbnew
+                 (offsetx + aModule->GetPosition().x) * boardIU2WRML,
+               - (offsety + aModule->GetPosition().y) * boardIU2WRML,   // Y axis is reversed in Pcbnew
                  (offsetz + layer_z[aModule->GetLayer()]) * boardIU2WRML);
 
         fprintf( aOutputFile, "  scale %g %g %g\n",

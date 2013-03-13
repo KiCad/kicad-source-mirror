@@ -398,7 +398,7 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
                 if( module ) // Transform, if we belong to a module
                 {
                     RotatePoint( &pt, module->GetOrientation() );
-                    pt += module->m_Pos;
+                    pt += module->GetPosition();
                 }
 
                 if( ii == 0 )

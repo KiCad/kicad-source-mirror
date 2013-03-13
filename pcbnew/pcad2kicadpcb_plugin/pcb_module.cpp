@@ -516,7 +516,7 @@ void PCB_MODULE::AddToBoard()
     module->SetAttributes( MOD_DEFAULT | MOD_CMS );
 
     // reference text
-    TEXTE_MODULE* ref_text = module->m_Reference;
+    TEXTE_MODULE* ref_text = &module->Reference();
 
     ref_text->SetText( m_name.text );
     ref_text->SetType( TEXT_is_REFERENCE );
@@ -537,7 +537,7 @@ void PCB_MODULE::AddToBoard()
     ref_text->SetDrawCoord();
 
     // value text
-    TEXTE_MODULE* val_text = module->m_Value;
+    TEXTE_MODULE* val_text = &module->Value();
 
     val_text->SetText( m_value.text );
     val_text->SetType( TEXT_is_REFERENCE );

@@ -123,7 +123,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     bool trace_val = GetPlotValue();
     bool trace_ref = GetPlotReference();
 
-    TEXTE_MODULE* textModule = aModule->m_Reference;
+    TEXTE_MODULE* textModule = &aModule->Reference();
     unsigned      textLayer = textModule->GetLayer();
 
     if( textLayer >= LAYER_COUNT )
@@ -135,7 +135,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     if( !textModule->IsVisible() && !GetPlotInvisibleText() )
         trace_ref = false;
 
-    textModule = aModule->m_Value;
+    textModule = &aModule->Value();
     textLayer = textModule->GetLayer();
 
     if( textLayer > LAYER_COUNT )
@@ -151,17 +151,17 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     if( trace_ref )
     {
         if( GetReferenceColor() == UNSPECIFIED_COLOR )
-            PlotTextModule( aModule->m_Reference, getColor( textLayer ) );
+            PlotTextModule( &aModule->Reference(), getColor( textLayer ) );
         else
-            PlotTextModule( aModule->m_Reference, GetReferenceColor() );
+            PlotTextModule( &aModule->Reference(), GetReferenceColor() );
     }
 
     if( trace_val )
     {
         if( GetValueColor() == UNSPECIFIED_COLOR )
-            PlotTextModule( aModule->m_Value, getColor( textLayer ) );
+            PlotTextModule( &aModule->Value(), getColor( textLayer ) );
         else
-            PlotTextModule( aModule->m_Value, GetValueColor() );
+            PlotTextModule( &aModule->Value(), GetValueColor() );
     }
 
     for( textModule = (TEXTE_MODULE*) aModule->m_Drawings.GetFirst();
@@ -253,10 +253,10 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte,
     bool allow_bold = pt_texte->m_Bold || thickness;
 
     m_plotter->Text( pos, aColor,
-                   pt_texte->m_Text,
-                   orient, size,
-                   pt_texte->m_HJustify, pt_texte->m_VJustify,
-                   thickness, pt_texte->m_Italic, allow_bold );
+                     pt_texte->GetText(),
+                     orient, size,
+                     pt_texte->m_HJustify, pt_texte->m_VJustify,
+                     thickness, pt_texte->m_Italic, allow_bold );
 }
 
 
@@ -275,7 +275,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
-    PlotTextePcb( &aDim->m_Text );
+    PlotTextePcb( &aDim->Text() );
 
     draw.SetStart( aDim->m_crossBarO );
     draw.SetEnd( aDim->m_crossBarF );
@@ -470,7 +470,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     wxPoint pos;
     wxSize  size;
 
-    if( pt_texte->m_Text.IsEmpty() )
+    if( pt_texte->GetText().IsEmpty() )
         return;
 
     if( ( GetLayerMask( pt_texte->GetLayer() ) & m_layerMask ) == 0 )
@@ -494,7 +494,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 
     if( pt_texte->m_MultilineAllowed )
     {
-        wxArrayString* list = wxStringSplit( pt_texte->m_Text, '\n' );
+        wxArrayString* list = wxStringSplit( pt_texte->GetText(), '\n' );
         wxPoint        offset;
 
         offset.y = pt_texte->GetInterline();
@@ -514,9 +514,9 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     }
     else
     {
-        m_plotter->Text( pos, UNSPECIFIED_COLOR, pt_texte->m_Text, orient, size,
-                       pt_texte->m_HJustify, pt_texte->m_VJustify,
-                       thickness, pt_texte->m_Italic, allow_bold );
+        m_plotter->Text( pos, UNSPECIFIED_COLOR, pt_texte->GetText(), orient, size,
+                         pt_texte->m_HJustify, pt_texte->m_VJustify,
+                         thickness, pt_texte->m_Italic, allow_bold );
     }
 }
 
