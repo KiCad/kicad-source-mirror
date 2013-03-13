@@ -116,6 +116,8 @@ public:
 
 private:
 
+    int         m_cu_map[17];       ///< map eagle to kicad, cu layers only.
+
     ERULES*     m_rules;            ///< Eagle design rules.
     XPATH*      m_xpath;            ///< keeps track of what we are working on within
                                     ///< XML document during a Load().
@@ -149,7 +151,7 @@ private:
     wxSize  kicad_fontz( double d ) const;
 
     /// Convert an Eagle layer to a KiCad layer.
-    static int kicad_layer( int aLayer );
+    int     kicad_layer( int aLayer ) const;
 
     /// Convert a KiCad distance to an Eagle distance.
     double  eagle( BIU d ) const            { return mm_per_biu * d; }

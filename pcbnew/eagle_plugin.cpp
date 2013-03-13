@@ -1158,6 +1158,10 @@ void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 {
     m_hole_count = 0;
 
+    // all cu layers are invalid until we see one in the <layers> section while board loading.
+    for( unsigned i = 0;  i < DIM(m_cu_map);  ++i )
+        m_cu_map[i] = -1;
+
     m_xpath->clear();
     m_pads_to_nets.clear();
 
@@ -1244,6 +1248,27 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
             cu.push_back( elayer );
         }
     }
+
+    // establish cu layer map:
+    int ki_layer_count = 0;
+    for( EITER it = cu.begin();  it != cu.end();  ++it,  ++ki_layer_count )
+    {
+        if( ki_layer_count == 0 )
+            m_cu_map[it->number] = LAYER_N_FRONT;
+        else if( ki_layer_count == int( cu.size()-1 ) )
+            m_cu_map[it->number] = LAYER_N_BACK;
+        else
+            // some eagle boards do not have contiguous layer number sequences.
+            m_cu_map[it->number] = cu.size() - 1 - ki_layer_count;
+    }
+
+#if 0 && defined(DEBUG)
+    printf( "m_cu_map:\n" );
+    for( unsigned i=0; i<DIM(m_cu_map);  ++i )
+    {
+        printf( "\t[%d]:%d\n", i, m_cu_map[i] );
+    }
+#endif
 
     m_board->SetCopperLayerCount( cu.size() );
 
@@ -2438,7 +2463,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 }
 
 
-int EAGLE_PLUGIN::kicad_layer( int aEagleLayer )
+int EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 {
     /* will assume this is a valid mapping for all eagle boards until I get paid more:
 
@@ -2507,13 +2532,12 @@ int EAGLE_PLUGIN::kicad_layer( int aEagleLayer )
 
     */
 
-
     int kiLayer;
 
     // eagle copper layer:
-    if( aEagleLayer >= 1 && aEagleLayer <= 16 )
+    if( aEagleLayer >= 1 && aEagleLayer < int( DIM( m_cu_map ) ) )
     {
-        kiLayer = LAYER_N_FRONT - ( aEagleLayer - 1 );
+        return m_cu_map[aEagleLayer];
     }
 
     else
