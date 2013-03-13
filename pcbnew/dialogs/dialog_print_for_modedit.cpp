@@ -1,10 +1,6 @@
 
 /* File: dialog_print_for_modedit.cpp */
 
-
-// Set this to 1 if you want to test PostScript printing under MSW.
-//#define wxTEST_POSTSCRIPT_IN_MSW 1
-
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <class_drawpanel.h>
@@ -17,7 +13,7 @@
 #include <dialog_print_for_modedit_base.h>
 #include <printout_controler.h>
 
-static double s_ScaleList[] =
+static double s_scaleList[] =
 { 0, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0, 4.0, 8.0, 16.0 };
 
 
@@ -147,7 +143,7 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
  */
 {
     s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
-    s_Parameters.m_PrintScale = s_ScaleList[m_ScaleOption->GetSelection()];
+    s_Parameters.m_PrintScale = s_scaleList[m_ScaleOption->GetSelection()];
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Print Preview" );
@@ -179,7 +175,7 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     PCB_PLOT_PARAMS plot_opts = m_parent->GetPlotSettings();
 
     s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection();
-    s_Parameters.m_PrintScale = s_ScaleList[m_ScaleOption->GetSelection()];
+    s_Parameters.m_PrintScale = s_scaleList[m_ScaleOption->GetSelection()];
 
     plot_opts.SetFineScaleAdjustX( s_Parameters.m_XScaleAdjust );
     plot_opts.SetFineScaleAdjustY( s_Parameters.m_YScaleAdjust );
