@@ -142,6 +142,8 @@ private:
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
 
+    void    clear_cu_map();
+
     /// Convert an Eagle distance to a KiCad distance.
     int     kicad( double d ) const;
     int     kicad_y( double y ) const       { return -kicad( y ); }

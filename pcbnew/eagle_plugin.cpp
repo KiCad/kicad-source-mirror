@@ -1057,6 +1057,8 @@ EAGLE_PLUGIN::EAGLE_PLUGIN() :
 //    m_mod_time( wxDateTime::Now() )
 {
     init( NULL );
+
+    clear_cu_map();
 }
 
 
@@ -1158,10 +1160,6 @@ void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 {
     m_hole_count = 0;
 
-    // all cu layers are invalid until we see one in the <layers> section while board loading.
-    for( unsigned i = 0;  i < DIM(m_cu_map);  ++i )
-        m_cu_map[i] = -1;
-
     m_xpath->clear();
     m_pads_to_nets.clear();
 
@@ -1175,6 +1173,15 @@ void EAGLE_PLUGIN::init( PROPERTIES* aProperties )
 
     delete m_rules;
     m_rules = new ERULES();
+}
+
+
+void EAGLE_PLUGIN::clear_cu_map()
+{
+    // All cu layers are invalid until we see them in the <layers> section while
+    // loading either a board or library.  See loadLayerDefs().
+    for( unsigned i = 0;  i < DIM(m_cu_map);  ++i )
+        m_cu_map[i] = -1;
 }
 
 
@@ -1195,8 +1202,12 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
     }
 
     {
+        m_xpath->push( "layers" );
+
         CPTREE& layers = drawing.get_child( "layers" );
         loadLayerDefs( layers );
+
+        m_xpath->pop();
     }
 
     {
@@ -1231,8 +1242,6 @@ void EAGLE_PLUGIN::loadDesignRules( CPTREE& aDesignRules )
 
 void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 {
-    m_xpath->push( "layers.layer" );
-
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
@@ -1281,8 +1290,6 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 
         // could map the colors here
     }
-
-    m_xpath->pop();
 }
 
 
@@ -2664,12 +2671,17 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 
             read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
 
-            CPTREE& library = doc.get_child( "eagle.drawing.library" );
+            // clear the cu map and then rebuild it.
+            clear_cu_map();
+
+            m_xpath->push( "eagle.drawing.layers" );
+            CPTREE& layers  = doc.get_child( "eagle.drawing.layers" );
+            loadLayerDefs( layers );
+            m_xpath->pop();
 
             m_xpath->push( "eagle.drawing.library" );
-
+            CPTREE& library = doc.get_child( "eagle.drawing.library" );
             loadLibrary( library, NULL );
-
             m_xpath->pop();
 
             m_mod_time = modtime;
