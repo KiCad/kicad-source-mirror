@@ -136,7 +136,7 @@ bool PCB_EDIT_FRAME::ReOrientModules( const wxString& ModuleMask,
         if( module->IsLocked() && !include_fixe )
             continue;
 
-        if( WildCompareString( ModuleMask, module->m_Reference->m_Text, false ) )
+        if( WildCompareString( ModuleMask, module->GetReference(), false ) )
         {
             modified = true;
             Rotate_Module( NULL, module, Orient, false );

@@ -119,14 +119,14 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
             }
         }
 
-        if( WildCompareString( searchString, module->m_Value->m_Text.GetData(), false ) )
+        if( WildCompareString( searchString, module->GetValue().GetData(), false ) )
         {
             count++;
 
             if( count > itemCount )
             {
                 foundItem = module;
-                pos = module->m_Pos;
+                pos = module->GetPosition();
                 itemCount++;
                 break;
             }
@@ -134,6 +134,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     }
 
     wxString msg;
+
     if( foundItem )
     {
         parent->SetCurItem( foundItem );

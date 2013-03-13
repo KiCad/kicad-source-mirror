@@ -91,8 +91,8 @@ void EDGE_MODULE::SetDrawCoord()
         RotatePoint( &m_Start.x, &m_Start.y, module->GetOrientation() );
         RotatePoint( &m_End.x,   &m_End.y,   module->GetOrientation() );
 
-        m_Start += module->m_Pos;
-        m_End   += module->m_Pos;
+        m_Start += module->GetPosition();
+        m_End   += module->GetPosition();
     }
 }
 
@@ -221,7 +221,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             wxPoint& pt = points[ii];
 
             RotatePoint( &pt.x, &pt.y, module->GetOrientation() );
-            pt += module->m_Pos - offset;
+            pt += module->GetPosition() - offset;
         }
 
         GRPoly( panel->GetClipBox(), DC, points.size(), &points[0], true, m_Width, color, color );
@@ -246,8 +246,8 @@ void EDGE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         return;
 
     aList.push_back( MSG_PANEL_ITEM( _( "Graphic Item" ), wxEmptyString, DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Module" ), module->m_Reference->m_Text, DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), module->m_Value->m_Text, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Module" ), module->GetReference(), DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), module->GetValue(), BLUE ) );
     msg.Printf( wxT( "%8.8lX" ), module->GetTimeStamp() );
     aList.push_back( MSG_PANEL_ITEM( _( "TimeStamp" ), msg, BROWN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ),

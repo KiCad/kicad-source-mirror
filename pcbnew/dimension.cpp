@@ -109,27 +109,27 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
 
     CurrentDimension = aDimension;
 
-    if( aDimension->m_Text.m_Mirror )
+    if( aDimension->Text().IsMirrored() )
         m_rbMirror->SetSelection( 1 );
     else
         m_rbMirror->SetSelection( 0 );
 
-    m_Name->SetValue( aDimension->m_Text.m_Text );
+    m_Name->SetValue( aDimension->Text().GetText() );
 
     // Enter size value in dialog
-    PutValueInLocalUnits( *m_TxtSizeXCtrl, aDimension->m_Text.m_Size.x );
+    PutValueInLocalUnits( *m_TxtSizeXCtrl, aDimension->Text().GetSize().x );
     AddUnitSymbol( *m_staticTextSizeX );
-    PutValueInLocalUnits( *m_TxtSizeYCtrl, aDimension->m_Text.m_Size.y );
+    PutValueInLocalUnits( *m_TxtSizeYCtrl, aDimension->Text().GetSize().y );
     AddUnitSymbol( *m_staticTextSizeY );
 
     // Enter lines thickness value in dialog
-    PutValueInLocalUnits( *m_TxtWidthCtrl, aDimension->m_Width );
+    PutValueInLocalUnits( *m_TxtWidthCtrl, aDimension->GetWidth() );
     AddUnitSymbol( *m_staticTextWidth );
 
     // Enter position value in dialog
-    PutValueInLocalUnits( *m_textCtrlPosX, aDimension->m_Text.m_Pos.x );
+    PutValueInLocalUnits( *m_textCtrlPosX, aDimension->Text().GetPosition().x );
     AddUnitSymbol( *m_staticTextPosX );
-    PutValueInLocalUnits( *m_textCtrlPosY, aDimension->m_Text.m_Pos.y );
+    PutValueInLocalUnits( *m_textCtrlPosY, aDimension->Text().GetPosition().y );
     AddUnitSymbol( *m_staticTextPosY );
 
     for( int layer = FIRST_NO_COPPER_LAYER;  layer<NB_LAYERS;  layer++ )
@@ -169,21 +169,23 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     // Get new size value:
     msg = m_TxtSizeXCtrl->GetValue();
-    CurrentDimension->m_Text.m_Size.x = ReturnValueFromString( g_UserUnit, msg );
+    CurrentDimension->Text().SetWidth( ReturnValueFromString( g_UserUnit, msg ) );
     msg = m_TxtSizeYCtrl->GetValue();
-    CurrentDimension->m_Text.m_Size.y = ReturnValueFromString( g_UserUnit, msg );
+    CurrentDimension->Text().SetHeight( ReturnValueFromString( g_UserUnit, msg ) );
 
     // Get new position value:
     // It will be copied later in dimension, because
     msg = m_textCtrlPosX->GetValue();
-    CurrentDimension->m_Text.m_Pos.x = ReturnValueFromString( g_UserUnit, msg );
+    wxPoint pos;
+    pos.x = ReturnValueFromString( g_UserUnit, msg );
     msg = m_textCtrlPosY->GetValue();
-    CurrentDimension->m_Text.m_Pos.y = ReturnValueFromString( g_UserUnit, msg );
+    pos.y = ReturnValueFromString( g_UserUnit, msg );
+    CurrentDimension->Text().SetPosition( pos );
 
     // Get new line thickness value:
     msg = m_TxtWidthCtrl->GetValue();
     int width = ReturnValueFromString( g_UserUnit, msg );
-    int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->m_Text.m_Size );
+    int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->Text().GetSize() );
 
     if( width > maxthickness )
     {
@@ -192,9 +194,10 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
         width = maxthickness;
     }
 
-    CurrentDimension->m_Text.m_Thickness = CurrentDimension->m_Width = width ;
+    CurrentDimension->SetWidth( width );
+    CurrentDimension->Text().SetThickness( width );
 
-    CurrentDimension->m_Text.m_Mirror = ( m_rbMirror->GetSelection() == 1 ) ? true : false;
+    CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
 
     CurrentDimension->SetLayer( m_SelLayerBox->GetCurrentSelection() + FIRST_NO_COPPER_LAYER );
 
@@ -252,18 +255,18 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         aDimension->m_arrowD1O = aDimension->m_arrowD1F = pos;
         aDimension->m_arrowD2O = aDimension->m_arrowD2F = pos;
 
-        aDimension->m_Text.m_Size   = GetBoard()->GetDesignSettings().m_PcbTextSize;
+        aDimension->Text().SetSize( GetBoard()->GetDesignSettings().m_PcbTextSize );
         int width = GetBoard()->GetDesignSettings().m_PcbTextWidth;
-        int maxthickness = Clamp_Text_PenSize(width, aDimension->m_Text.m_Size );
+        int maxthickness = Clamp_Text_PenSize(width, aDimension->Text().GetSize() );
 
         if( width > maxthickness )
         {
             width = maxthickness;
         }
 
-        aDimension->m_Text.m_Thickness = aDimension->m_Width = width ;
-
-        aDimension->AdjustDimensionDetails( );
+        aDimension->Text().SetThickness( width );
+        aDimension->SetWidth( width );
+        aDimension->AdjustDimensionDetails();
 
         aDimension->Draw( m_canvas, aDC, GR_XOR );
 
@@ -377,13 +380,13 @@ void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
         return;
 
     // Store the initial position for undo/abort command
-    initialTextPosition = aItem->m_Text.m_Pos;
+    initialTextPosition = aItem->Text().GetPosition();
 
     aItem->Draw( m_canvas, DC, GR_XOR );
     aItem->SetFlags( IS_MOVED );
     SetMsgPanel( aItem );
 
-    GetScreen()->SetCrossHairPosition( aItem->m_Text.m_Pos );
+    GetScreen()->SetCrossHairPosition( aItem->Text().GetPosition() );
     m_canvas->MoveCursorToCrossHair();
 
     m_canvas->SetMouseCapture( MoveDimensionText, AbortMoveDimensionText );
@@ -404,7 +407,7 @@ static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     if( aErase )
         dimension->Draw( aPanel, aDC, GR_XOR );
 
-    dimension->m_Text.m_Pos = aPanel->GetScreen()->GetCrossHairPosition();
+    dimension->Text().SetPosition( aPanel->GetScreen()->GetCrossHairPosition() );
 
     dimension->Draw( aPanel, aDC, GR_XOR );
 }
@@ -425,7 +428,7 @@ void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         return;
 
     dimension->Draw( aPanel, aDC, GR_XOR );
-    dimension->m_Text.m_Pos = initialTextPosition;
+    dimension->Text().SetPosition( initialTextPosition );
     dimension->ClearFlags();
     dimension->Draw( aPanel, aDC, GR_OR );
 }
@@ -444,9 +447,10 @@ void PCB_EDIT_FRAME::PlaceDimensionText( DIMENSION* aItem, wxDC* DC )
     aItem->Draw( m_canvas, DC, GR_OR );
     OnModify();
 
-    EXCHG( aItem->m_Text.m_Pos, initialTextPosition );
+    wxPoint tmp = aItem->Text().GetPosition();
+    aItem->Text().SetPosition( initialTextPosition );
     SaveCopyInUndoList( aItem, UR_CHANGED );
-    EXCHG( aItem->m_Text.m_Pos, initialTextPosition );
+    aItem->Text().SetPosition( tmp );
 
     aItem->ClearFlags();
 }

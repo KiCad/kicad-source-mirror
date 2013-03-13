@@ -373,27 +373,27 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                 continue;
         }
 
-        if( module->m_Attributs & MOD_VIRTUAL )
+        if( module->GetAttributes() & MOD_VIRTUAL )
         {
             D( printf( "skipping module %s because it's virtual\n",
                        TO_UTF8( module->GetReference() ) );)
             continue;
         }
 
-        if( ( module->m_Attributs & MOD_CMS ) == 0 )
+        if( ( module->GetAttributes() & MOD_CMS ) == 0 )
         {
             if( aForceSmdItems )    // true to fix a bunch of mis-labeled modules:
             {
                 if( !HasNonSMDPins( module ) )
                 {
                     // all module's pins are SMD, mark the part for pick and place
-                    module->m_Attributs |= MOD_CMS;
+                    module->SetAttributes( module->GetAttributes() | MOD_CMS );
                     OnModify();
                 }
                 else
                 {
                     D(printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n",
-                            TO_UTF8(module->GetReference()) ) );
+                              TO_UTF8(module->GetReference()) ) );
                     continue;
                 }
             }
@@ -425,15 +425,16 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                 continue;
         }
 
-        if( module->m_Attributs & MOD_VIRTUAL )
+        if( module->GetAttributes() & MOD_VIRTUAL )
             continue;
 
-        if( (module->m_Attributs & MOD_CMS)  == 0 )
+        if( (module->GetAttributes() & MOD_CMS) == 0 )
             continue;
+
         LIST_MOD item;
         item.m_Module    = module;
-        item.m_Reference = module->m_Reference->m_Text;
-        item.m_Value     = module->m_Value->m_Text;
+        item.m_Reference = module->GetReference();
+        item.m_Value     = module->GetValue();
         item.m_Layer     = module->GetLayer();
         list.push_back( item );
     }
@@ -470,11 +471,11 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
         wxPoint  module_pos;
         const wxString& ref = list[ii].m_Reference;
         const wxString& val = list[ii].m_Value;
-        const wxString& pkg = list[ii].m_Module->m_LibRef;
+        const wxString& pkg = list[ii].m_Module->GetLibRef();
         sprintf( line, "%-8.8s %-16.16s %-16.16s",
-	         TO_UTF8( ref ), TO_UTF8( val ), TO_UTF8( pkg ) );
+                 TO_UTF8( ref ), TO_UTF8( val ), TO_UTF8( pkg ) );
 
-        module_pos    = list[ii].m_Module->m_Pos;
+        module_pos  = list[ii].m_Module->GetPosition();
         module_pos -= File_Place_Offset;
 
         char* text = line + strlen( line );
@@ -483,7 +484,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
         sprintf( text, " %9.4f  %9.4f  %8.1f    ",
                  module_pos.x * conv_unit,
                  -module_pos.y * conv_unit,
-                 double(list[ii].m_Module->m_Orient) / 10 );
+                 double(list[ii].m_Module->GetOrientation()) / 10 );
 
         int layer = list[ii].m_Module->GetLayer();
 
@@ -605,31 +606,31 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 
         for( MODULE* Module = GetBoard()->m_Modules;  Module;  Module = Module->Next() )
         {
-            sprintf( line, "$MODULE %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
+            sprintf( line, "$MODULE %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
             fputs( line, rptfile );
 
-            sprintf( line, "reference %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
+            sprintf( line, "reference %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
             fputs( line, rptfile );
-            sprintf( line, "value %s\n", EscapedUTF8( Module->m_Value->m_Text ).c_str() );
+            sprintf( line, "value %s\n", EscapedUTF8( Module->GetValue() ).c_str() );
             fputs( line, rptfile );
-            sprintf( line, "footprint %s\n", EscapedUTF8( Module->m_LibRef ).c_str() );
+            sprintf( line, "footprint %s\n", EscapedUTF8( Module->GetLibRef() ).c_str() );
             fputs( line, rptfile );
 
             msg = wxT( "attribut" );
 
-            if( Module->m_Attributs & MOD_VIRTUAL )
+            if( Module->GetAttributes() & MOD_VIRTUAL )
                 msg += wxT( " virtual" );
 
-            if( Module->m_Attributs & MOD_CMS )
+            if( Module->GetAttributes() & MOD_CMS )
                 msg += wxT( " smd" );
 
-            if( ( Module->m_Attributs & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
+            if( ( Module->GetAttributes() & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
                 msg += wxT( " none" );
 
             msg += wxT( "\n" );
             fputs( TO_UTF8( msg ), rptfile );
 
-            module_pos    = Module->m_Pos;
+            module_pos    = Module->GetPosition();
             module_pos.x -= File_Place_Offset.x;
             module_pos.y -= File_Place_Offset.y;
 
@@ -638,7 +639,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
                      module_pos.y * conv_unit );
             fputs( line, rptfile );
 
-            sprintf( line, "orientation  %.2f\n", (double) Module->m_Orient / 10 );
+            sprintf( line, "orientation  %.2f\n", (double) Module->GetOrientation() / 10 );
 
             if( Module->GetLayer() == LAYER_N_FRONT )
                 strcat( line, "layer component\n" );
@@ -696,8 +697,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
                 fprintf( rptfile, "$EndPAD\n" );
             }
 
-            fprintf( rptfile, "$EndMODULE  %s\n\n",
-                     TO_UTF8(Module->m_Reference->m_Text ) );
+            fprintf( rptfile, "$EndMODULE  %s\n\n", TO_UTF8 (Module->GetReference() ) );
         }
     }
     catch( IO_ERROR ioe )

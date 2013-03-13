@@ -555,7 +555,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
     IMAGE*  image = new IMAGE(0);
 
-    image->image_id = TO_UTF8( aModule->m_LibRef );
+    image->image_id = TO_UTF8( aModule->GetLibRef() );
 
     // from the pads, and make an IMAGE using collated padstacks.
     for( int p=0;  p<moduleItems.GetCount();  ++p )
@@ -1365,12 +1365,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             comp->places.push_back( place );
 
             place->SetRotation( module->GetOrientation()/10.0 );
-            place->SetVertex( mapPt( module->m_Pos ) );
+            place->SetVertex( mapPt( module->GetPosition() ) );
             place->component_id = componentId;
             place->part_number  = TO_UTF8( module->GetValue() );
 
             // module is flipped from bottom side, set side to T_back
-            if( module->flag )
+            if( module->GetFlag() )
             {
                 int angle = 1800 - module->GetOrientation();
                 NORMALIZE_ANGLE_POS(angle);
@@ -1679,11 +1679,12 @@ void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
 {
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        module->flag = 0;
+        module->SetFlag( 0 );
+
         if( module->GetLayer() == LAYER_N_BACK )
         {
-            module->Flip( module->m_Pos );
-            module->flag = 1;
+            module->Flip( module->GetPosition() );
+            module->SetFlag( 1 );
         }
     }
 
@@ -1700,10 +1701,10 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
     //  top view.  Restore those that were flipped.
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        if( module->flag )
+        if( module->GetFlag() )
         {
-            module->Flip( module->m_Pos );
-            module->flag = 0;
+            module->Flip( module->GetPosition() );
+            module->SetFlag( 0 );
         }
     }
 

@@ -948,15 +948,16 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             TEXTE_MODULE* textm;
 
             if( tnum == TEXT_is_REFERENCE )
-                textm = module->m_Reference;
+                textm = &module->Reference();
             else if( tnum == TEXT_is_VALUE )
-                textm = module->m_Value;
+                textm = &module->Value();
             else
             {
                 // text is a drawing
                 textm = new TEXTE_MODULE( module.get() );
                 module->m_Drawings.PushBack( textm );
             }
+
             loadMODULE_TEXT( textm );
         }
 
@@ -1013,7 +1014,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             if( cntRot180 > 10 )
                 cntRot180 = 10;
 
-            module->m_CntRot180 = cntRot180;
+            module->SetPlacementCost180( cntRot180 );
 
             int cntRot90  = itmp1 & 0x0F;
             if( cntRot90 > 10 )
@@ -1023,7 +1024,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             if( itmp1 > 10 )
                 itmp1 = 0;
 
-            module->m_CntRot90 = (itmp1 << 4) | cntRot90;
+            module->SetPlacementCost90( (itmp1 << 4) | cntRot90 );
         }
 
         else if( TESTLINE( "At" ) )         // (At)tributes of module
@@ -1056,12 +1057,12 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
         else if( TESTLINE( "Cd" ) )
         {
             // e.g. "Cd Double rangee de contacts 2 x 4 pins\r\n"
-            module->m_Doc = FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) );
+            module->SetDescription( FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
         }
 
         else if( TESTLINE( "Kw" ) )         // Key words
         {
-            module->m_KeyWord = FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) );
+            module->SetKeywords( FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) ) );
         }
 
         else if( TESTLINE( ".SolderPasteRatio" ) )
@@ -2429,7 +2430,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
         else if( TESTLINE( "Va" ) )
         {
             BIU value = biuParse( line + SZ( "Va" ) );
-            dim->m_Value = value;
+            dim->SetValue( value );
         }
 
         else if( TESTLINE( "Ge" ) )
@@ -2456,7 +2457,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             char  buf[2048];
 
             ReadDelimitedText( buf, line + SZ( "Te" ), sizeof(buf) );
-            dim->m_Text.SetText( FROM_UTF8( buf ) );
+            dim->SetText( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Po" ) )
@@ -2477,10 +2478,9 @@ void LEGACY_PLUGIN::loadDIMENSION()
             dim->SetPosition( wxPoint( pos_x, pos_y ) );
             dim->SetTextSize( wxSize( width, height ) );
 
-            dim->m_Text.SetMirrored( mirror && *mirror == '0' );
-
-            dim->m_Text.SetThickness( thickn );
-            dim->m_Text.SetOrientation( orient );
+            dim->Text().SetMirrored( mirror && *mirror == '0' );
+            dim->Text().SetThickness( thickn );
+            dim->Text().SetOrientation( orient );
         }
 
         else if( TESTLINE( "Sb" ) )
@@ -2498,7 +2498,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             dim->m_crossBarO.y = crossBarOy;
             dim->m_crossBarF.x = crossBarFx;
             dim->m_crossBarF.y = crossBarFy;
-            dim->m_Width = width;
+            dim->SetWidth( width );
             (void) ignore;
         }
 
@@ -3416,7 +3416,7 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
 
     fprintf( m_fp, "Sc %lX\n", me->GetTimeStamp() );
     fprintf( m_fp, "AR %s\n", TO_UTF8( me->GetPath() ) );
-    fprintf( m_fp, "Op %X %X 0\n", me->m_CntRot90, me->m_CntRot180 );
+    fprintf( m_fp, "Op %X %X 0\n", me->GetPlacementCost90(), me->GetPlacementCost180() );
 
     if( me->GetLocalSolderMaskMargin() != 0 )
         fprintf( m_fp, ".SolderMask %s\n", fmtBIU( me->GetLocalSolderMaskMargin() ).c_str() );
@@ -3454,9 +3454,9 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
         fprintf( m_fp, "\n" );
     }
 
-    saveMODULE_TEXT( me->m_Reference );
+    saveMODULE_TEXT( &me->Reference() );
 
-    saveMODULE_TEXT( me->m_Value );
+    saveMODULE_TEXT( &me->Value() );
 
     // save drawing elements
     for( BOARD_ITEM* gr = me->m_Drawings;  gr;  gr = gr->Next() )
@@ -3739,19 +3739,19 @@ void LEGACY_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
 
     fprintf( m_fp, "Ge %d %d %lX\n", me->GetShape(), me->GetLayer(), me->GetTimeStamp() );
 
-    fprintf( m_fp, "Va %s\n", fmtBIU( me->m_Value ).c_str() );
+    fprintf( m_fp, "Va %s\n", fmtBIU( me->GetValue() ).c_str() );
 
-    if( !me->m_Text.GetText().IsEmpty() )
-        fprintf( m_fp, "Te %s\n", EscapedUTF8( me->m_Text.GetText() ).c_str() );
+    if( !me->GetText().IsEmpty() )
+        fprintf( m_fp, "Te %s\n", EscapedUTF8( me->GetText() ).c_str() );
     else
         fprintf( m_fp, "Te \"?\"\n" );
 
     fprintf( m_fp,  "Po %s %s %s %s %d\n",
-                    fmtBIUPoint( me->m_Text.GetPosition() ).c_str(),
-                    fmtBIUSize( me->m_Text.GetSize() ).c_str(),
-                    fmtBIU( me->m_Text.GetThickness() ).c_str(),
-                    fmtDEG( me->m_Text.GetOrientation() ).c_str(),
-                    me->m_Text.IsMirrored() ? 0 : 1     // strange but true
+                    fmtBIUPoint( me->Text().GetPosition() ).c_str(),
+                    fmtBIUSize( me->Text().GetSize() ).c_str(),
+                    fmtBIU( me->Text().GetThickness() ).c_str(),
+                    fmtDEG( me->Text().GetOrientation() ).c_str(),
+                    me->Text().IsMirrored() ? 0 : 1     // strange but true
                     );
 
     fprintf( m_fp,  "Sb %d %s %s %s\n", S_SEGMENT,

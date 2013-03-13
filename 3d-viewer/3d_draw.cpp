@@ -634,7 +634,7 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
     if( text->m_MultilineAllowed )
     {
         wxPoint        pos  = text->m_Pos;
-        wxArrayString* list = wxStringSplit( text->m_Text, '\n' );
+        wxArrayString* list = wxStringSplit( text->GetText(), '\n' );
         wxPoint        offset;
 
         offset.y = text->GetInterline();
@@ -657,7 +657,7 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
     else
     {
         DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_COLOR_T) color,
-                         text->m_Text, text->GetOrientation(), size,
+                         text->GetText(), text->GetOrientation(), size,
                          text->m_HJustify, text->m_VJustify,
                          text->GetThickness(), text->m_Italic,
                          true,
@@ -766,11 +766,13 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
             corner.y = m_PolyPoints[ii].y;
 
             RotatePoint( &corner.x, &corner.y, module->GetOrientation() );
+
             if( module )
             {
-                corner.x += module->m_Pos.x;
-                corner.y += module->m_Pos.y;
+                corner.x += module->GetPosition().x;
+                corner.y += module->GetPosition().y;
             }
+
             polycorners.push_back( corner );
         }
 

@@ -75,14 +75,14 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* aModule )
     if( aModule == NULL )
         return;
 
-    moveVector = aModule->m_Pos - GetScreen()->GetCrossHairPosition();
+    moveVector = aModule->GetPosition() - GetScreen()->GetCrossHairPosition();
 
-    aModule->m_Pos = GetScreen()->GetCrossHairPosition();
+    aModule->SetPosition( GetScreen()->GetCrossHairPosition() );
 
     /* Update the relative coordinates:
      * The coordinates are relative to the anchor point.
      * Calculate deltaX and deltaY from the anchor. */
-    RotatePoint( &moveVector, -aModule->m_Orient );
+    RotatePoint( &moveVector, -aModule->GetOrientation() );
 
     // Update the pad coordinates.
     for( D_PAD* pad = (D_PAD*) aModule->m_Pads;  pad;  pad = pad->Next() )

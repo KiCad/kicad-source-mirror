@@ -196,7 +196,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     {
         TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
 
-        if( tm->m_Text == wxT( "10uH" ) )
+        if( tm->GetText() == wxT( "10uH" ) )
         {
             breakhere++;
         }
@@ -290,10 +290,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
             if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_N_FRONT )
                 goto exit;
 
-            if( m_Guide->IgnoreModulesVals() && item == module->m_Value )
+            if( m_Guide->IgnoreModulesVals() && item == &module->Value() )
                 goto exit;
 
-            if( m_Guide->IgnoreModulesRefs() && item == module->m_Reference )
+            if( m_Guide->IgnoreModulesRefs() && item == &module->Reference() )
                 goto exit;
         }
         break;

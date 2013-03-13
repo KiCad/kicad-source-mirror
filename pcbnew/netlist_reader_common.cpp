@@ -335,19 +335,20 @@ int NETLIST_READER::SetPadsNetName( const wxString & aModule, const wxString & a
 void NETLIST_READER::RemoveExtraFootprints()
 {
     MODULE* nextModule;
-
     MODULE* module = m_pcbframe->GetBoard()->m_Modules;
+
     for( ; module != NULL; module = nextModule )
     {
         unsigned ii;
         nextModule = module->Next();
 
-        if( module->m_ModuleStatus & MODULE_is_LOCKED )
+        if( module->IsLocked() )
             continue;
 
         for( ii = 0; ii < m_componentsInNetlist.size(); ii++ )
         {
             COMPONENT_INFO* cmp_info = m_componentsInNetlist[ii];
+
             if( module->GetReference().CmpNoCase( cmp_info->m_Reference ) == 0 )
                 break; // Module is found in net list.
         }
@@ -370,7 +371,7 @@ MODULE* NETLIST_READER::FindModule( const wxString& aId )
     {
         if( m_UseTimeStamp ) // identification by time stamp
         {
-            if( aId.CmpNoCase( module->m_Path ) == 0 )
+            if( aId.CmpNoCase( module->GetPath() ) == 0 )
                 return module;
         }
         else    // identification by Reference

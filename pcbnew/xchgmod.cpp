@@ -106,9 +106,9 @@ void DIALOG_EXCHANGE_MODULE::Init()
 {
     SetFocus();
 
-    m_OldModule->AppendText( m_CurrentModule->m_LibRef );
-    m_NewModule->AppendText( m_CurrentModule->m_LibRef );
-    m_OldValue->AppendText( m_CurrentModule->m_Value->m_Text );
+    m_OldModule->AppendText( m_CurrentModule->GetLibRef() );
+    m_NewModule->AppendText( m_CurrentModule->GetLibRef() );
+    m_OldValue->AppendText( m_CurrentModule->GetValue() );
     m_Selection->SetSelection( s_SelectionMode );
 
     // Enable/disable widgets:
@@ -317,16 +317,16 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     if( newmodulename == wxEmptyString )
         return;
 
-    lib_reference = m_CurrentModule->m_LibRef;
+    lib_reference = m_CurrentModule->GetLibRef();
 
     if( aUseValue )
     {
         check_module_value = true;
-        value = m_CurrentModule->m_Value->m_Text;
+        value = m_CurrentModule->GetValue();
         msg.Printf( _( "Change modules <%s> -> <%s> (val = %s)?" ),
-                    GetChars( m_CurrentModule->m_LibRef ),
+                    GetChars( m_CurrentModule->GetLibRef() ),
                     GetChars( newmodulename ),
-                    GetChars( m_CurrentModule->m_Value->m_Text ) );
+                    GetChars( m_CurrentModule->GetValue() ) );
     }
     else
     {
@@ -351,12 +351,12 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     {
         PtBack = Module->Back();
 
-        if( lib_reference.CmpNoCase( Module->m_LibRef ) != 0 )
+        if( lib_reference.CmpNoCase( Module->GetLibRef() ) != 0 )
             continue;
 
         if( check_module_value )
         {
-            if( value.CmpNoCase( Module->m_Value->m_Text ) != 0 )
+            if( value.CmpNoCase( Module->GetValue() ) != 0 )
                 continue;
         }
 
@@ -413,7 +413,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
     {
         PtBack = Module->Back();
 
-        if( Change_1_Module( Module, Module->m_LibRef, &pickList, ShowErr ) )
+        if( Change_1_Module( Module, Module->GetLibRef(), &pickList, ShowErr ) )
             change = true;
         else if( ShowErr )
             ShowErr--;
@@ -458,12 +458,12 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
     wxBusyCursor dummy;
 
     /* Copy parameters from the old module. */
-    oldnamecmp = Module->m_LibRef;
+    oldnamecmp = Module->GetLibRef();
     namecmp    = new_module;
 
     /* Load module. */
     line.Printf( _( "Change module %s (%s)  " ),
-                 GetChars( Module->m_Reference->m_Text ),
+                 GetChars( Module->GetReference() ),
                  GetChars( oldnamecmp ) );
     m_WinMessages->AppendText( line );
 
@@ -484,7 +484,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
 
     m_Parent->Exchange_Module( Module, NewModule, aUndoPickList );
 
-    Maj_ListeCmp( NewModule->m_Reference->m_Text, oldnamecmp, namecmp, ShowError );
+    Maj_ListeCmp( NewModule->GetReference(), oldnamecmp, namecmp, ShowError );
 
     return true;
 }
@@ -517,7 +517,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
 
     GetBoard()->m_Status_Pcb = 0;
     oldpos = GetScreen()->GetCrossHairPosition();
-    GetScreen()->SetCrossHairPosition( aOldModule->m_Pos, false );
+    GetScreen()->SetCrossHairPosition( aOldModule->GetPosition(), false );
 
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board
@@ -528,22 +528,22 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     /* Flip footprint if needed */
     if( aOldModule->GetLayer() != aNewModule->GetLayer() )
     {
-        aNewModule->Flip( aNewModule->m_Pos );
+        aNewModule->Flip( aNewModule->GetPosition() );
     }
 
     /* Rotate footprint if needed */
-    if( aOldModule->m_Orient != aNewModule->m_Orient )
+    if( aOldModule->GetOrientation() != aNewModule->GetOrientation() )
     {
-        Rotate_Module( NULL, aNewModule, aOldModule->m_Orient, false );
+        Rotate_Module( NULL, aNewModule, aOldModule->GetOrientation(), false );
     }
 
     /* Update reference and value */
-    aNewModule->m_Reference->m_Text = aOldModule->m_Reference->m_Text;
-    aNewModule->m_Value->m_Text     = aOldModule->m_Value->m_Text;
+    aNewModule->SetReference( aOldModule->GetReference() );
+    aNewModule->SetValue( aOldModule->GetValue() );
 
     /* Updating other parameters */
     aNewModule->SetTimeStamp( aOldModule->GetTimeStamp() );
-    aNewModule->m_Path = aOldModule->m_Path;
+    aNewModule->SetPath( aOldModule->GetPath() );
 
     /* Update pad netnames ( when possible) */
     pad = aNewModule->m_Pads;
@@ -650,14 +650,14 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     {
         fprintf( FichCmp, "\nBeginCmp\n" );
         fprintf( FichCmp, "TimeStamp = %8.8lX\n", Module->GetTimeStamp() );
-        fprintf( FichCmp, "Path = %s\n", TO_UTF8( Module->m_Path ) );
+        fprintf( FichCmp, "Path = %s\n", TO_UTF8( Module->GetPath() ) );
         fprintf( FichCmp, "Reference = %s;\n",
-                 !Module->m_Reference->m_Text.IsEmpty() ?
-                 TO_UTF8( Module->m_Reference->m_Text ) : "[NoRef]" );
+                 !Module->GetReference().IsEmpty() ?
+                 TO_UTF8( Module->GetReference() ) : "[NoRef]" );
         fprintf( FichCmp, "ValeurCmp = %s;\n",
-                 !Module->m_Value->m_Text.IsEmpty() ?
-                 TO_UTF8( Module->m_Value->m_Text ) : "[NoVal]" );
-        fprintf( FichCmp, "IdModule  = %s;\n", TO_UTF8( Module->m_LibRef ) );
+                 !Module->GetValue().IsEmpty() ?
+                 TO_UTF8( Module->GetValue() ) : "[NoVal]" );
+        fprintf( FichCmp, "IdModule  = %s;\n", TO_UTF8( Module->GetLibRef() ) );
         fprintf( FichCmp, "EndCmp\n" );
     }
 

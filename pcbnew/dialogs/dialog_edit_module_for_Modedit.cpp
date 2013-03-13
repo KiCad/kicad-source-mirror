@@ -105,27 +105,25 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
         draw3D = (S3D_MASTER*) draw3D->Next();
     }
 
-    m_DocCtrl->SetValue( m_currentModule->m_Doc );
-    m_KeywordCtrl->SetValue( m_currentModule->m_KeyWord);
+    m_DocCtrl->SetValue( m_currentModule->GetDescription() );
+    m_KeywordCtrl->SetValue( m_currentModule->GetKeywords() );
     m_referenceCopy = new TEXTE_MODULE(NULL);
     m_valueCopy = new TEXTE_MODULE(NULL);
-    m_referenceCopy->Copy(m_currentModule->m_Reference);
-    m_valueCopy->Copy(m_currentModule->m_Value);
+    m_referenceCopy->Copy( &m_currentModule->Reference() );
+    m_valueCopy->Copy( &m_currentModule->Value() );
     m_ReferenceCtrl->SetValue( m_referenceCopy->m_Text );
     m_ValueCtrl->SetValue( m_valueCopy->m_Text );
     m_ValueCtrl->SetValue( m_valueCopy->m_Text );
-    m_FootprintNameCtrl->SetValue( m_currentModule->m_LibRef );
+    m_FootprintNameCtrl->SetValue( m_currentModule->GetLibRef() );
 
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non smd components" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
-                                    _(
-                                        "Use this attribute for smd components.\nOnly components with this option are put in the footprint position list file" ) );
+                                    _( "Use this attribute for smd components.\nOnly components with this option are put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 2,
-                                    _(
-                                        "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)" ) );
+                                    _( "Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus connector)" ) );
 
     // Controls on right side of the dialog
-    switch( m_currentModule->m_Attributs & 255 )
+    switch( m_currentModule->GetAttributes() & 255 )
     {
     case 0:
         m_AttributsCtrl->SetSelection( 0 );
@@ -144,14 +142,13 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
         break;
     }
 
-    m_AutoPlaceCtrl->SetSelection(
-        (m_currentModule->m_ModuleStatus & MODULE_is_LOCKED) ? 1 : 0 );
+    m_AutoPlaceCtrl->SetSelection( (m_currentModule->IsLocked()) ? 1 : 0 );
     m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Enable hotkey move commands and Auto Placement" ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Disable hotkey move commands and Auto Placement" ) );
 
-    m_CostRot90Ctrl->SetValue( m_currentModule->m_CntRot90 );
+    m_CostRot90Ctrl->SetValue( m_currentModule->GetPlacementCost90() );
 
-    m_CostRot180Ctrl->SetValue( m_currentModule->m_CntRot180 );
+    m_CostRot180Ctrl->SetValue( m_currentModule->GetPlacementCost180() );
 
     // Initialize 3D parameters
 
@@ -392,39 +389,35 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     }
 
     m_parent->SaveCopyInUndoList( m_currentModule, UR_MODEDIT );
-
-    if( m_AutoPlaceCtrl->GetSelection() == 1 )
-        m_currentModule->m_ModuleStatus |= MODULE_is_LOCKED;
-    else
-        m_currentModule->m_ModuleStatus &= ~MODULE_is_LOCKED;
+    m_currentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
     switch( m_AttributsCtrl->GetSelection() )
     {
     case 0:
-        m_currentModule->m_Attributs = 0;
+        m_currentModule->SetAttributes( 0 );
         break;
 
     case 1:
-        m_currentModule->m_Attributs = MOD_CMS;
+        m_currentModule->SetAttributes( MOD_CMS );
         break;
 
     case 2:
-        m_currentModule->m_Attributs = MOD_VIRTUAL;
+        m_currentModule->SetAttributes( MOD_VIRTUAL );
         break;
     }
 
-    m_currentModule->m_CntRot90  = m_CostRot90Ctrl->GetValue();
-    m_currentModule->m_CntRot180 = m_CostRot180Ctrl->GetValue();
-    m_currentModule->m_Doc = m_DocCtrl->GetValue();
-    m_currentModule->m_KeyWord = m_KeywordCtrl->GetValue();
+    m_currentModule->SetPlacementCost90( m_CostRot90Ctrl->GetValue() );
+    m_currentModule->SetPlacementCost180( m_CostRot180Ctrl->GetValue() );
+    m_currentModule->SetDescription( m_DocCtrl->GetValue() );
+    m_currentModule->SetKeywords( m_KeywordCtrl->GetValue() );
 
     // Init footprint name in library
     if( ! footprintName.IsEmpty() )
-        m_currentModule->m_LibRef = footprintName;
+        m_currentModule->SetLibRef( footprintName );
 
     // Init Fields:
-    m_currentModule->m_Reference->Copy(m_referenceCopy );
-    m_currentModule->m_Value->Copy(m_valueCopy );
+    m_currentModule->Reference().Copy( m_referenceCopy );
+    m_currentModule->Value().Copy( m_valueCopy );
 
     // Initialize masks clearances
     m_currentModule->SetLocalClearance( ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl ) );

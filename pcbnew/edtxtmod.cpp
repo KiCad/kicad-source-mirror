@@ -74,10 +74,10 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
 
     Text->SetFlags( IS_NEW );
 
-    Text->m_Text = wxT( "text" );
+    Text->SetText( wxT( "text" ) );
 
     GetDesignSettings().m_ModuleTextWidth = Clamp_Text_PenSize( GetDesignSettings().m_ModuleTextWidth,
-                                            std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
+                                                                std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
     Text->m_Size  = GetDesignSettings().m_ModuleTextSize;
     Text->m_Thickness = GetDesignSettings().m_ModuleTextWidth;
     Text->m_Pos   = GetScreen()->GetCrossHairPosition();
@@ -247,8 +247,8 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
             // Set the new position for text.
             Text->m_Pos = GetScreen()->GetCrossHairPosition();
-            wxPoint textRelPos = Text->m_Pos - Module->m_Pos;
-            RotatePoint( &textRelPos, -Module->m_Orient );
+            wxPoint textRelPos = Text->GetPosition() - Module->GetPosition();
+            RotatePoint( &textRelPos, -Module->GetOrientation() );
             Text->SetPos0( textRelPos );
             Text->ClearFlags();
             Module->ClearFlags();

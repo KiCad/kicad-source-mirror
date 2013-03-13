@@ -348,13 +348,13 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             // Search the old module (source) if exists
             // Because this source could be deleted when editing the main board...
-            if( module_in_edit->m_Link )        // this is not a new module ...
+            if( module_in_edit->GetLink() )        // this is not a new module ...
             {
                 source_module = mainpcb->m_Modules;
 
                 for( ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
                 {
-                    if( module_in_edit->m_Link == source_module->GetTimeStamp() )
+                    if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
                         break;
                 }
             }
@@ -382,7 +382,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // Create the "new" module
             MODULE* newmodule = new MODULE( *module_in_edit );
             newmodule->SetParent( mainpcb );
-            newmodule->m_Link = 0;
+            newmodule->SetLink( 0 );
 
             // Put the footprint in the main pcb linked list.
             mainpcb->Add( newmodule );
@@ -395,7 +395,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 // and the source_module (old module) is deleted
                 PICKED_ITEMS_LIST pickList;
                 pcbframe->Exchange_Module( source_module, newmodule, &pickList );
-                newmodule->SetTimeStamp( module_in_edit->m_Link );
+                newmodule->SetTimeStamp( module_in_edit->GetLink() );
 
                 if( pickList.GetCount() )
                     pcbframe->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
@@ -477,20 +477,20 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         // otherwise you cannot see what you are doing on board
         if( GetBoard() && GetBoard()->m_Modules )
         {
-            TEXTE_MODULE* ref = GetBoard()->m_Modules->m_Reference;
-            TEXTE_MODULE* val = GetBoard()->m_Modules->m_Value;
+            TEXTE_MODULE* ref = &GetBoard()->m_Modules->Reference();
+            TEXTE_MODULE* val = &GetBoard()->m_Modules->Value();
 
             if( val && ref )
             {
                 ref->SetType( TEXT_is_REFERENCE );    // just in case ...
 
-                if( ref->m_Text.Length() == 0 )
-                    ref->m_Text = L"Ref**";
+                if( ref->GetLength() == 0 )
+                    ref->SetText( wxT( "Ref**" ) );
 
                 val->SetType( TEXT_is_VALUE );        // just in case ...
 
-                if( val->m_Text.Length() == 0 )
-                    val->m_Text = L"Val**";
+                if( val->GetLength() == 0 )
+                    val->SetText( L"Val**" );
             }
         }
 
@@ -769,29 +769,29 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         #define ROTATE( z ) RotatePoint( (&z), angle )
         RotateMarkedItems( module, wxPoint(0,0), true );
 
-        pos = module->m_Reference->GetPosition();
+        pos = module->Reference().GetPosition();
         ROTATE( pos );
-        module->m_Reference->SetPosition( pos );
-        module->m_Reference->SetPos0( module->m_Reference->GetPosition() );
-        module->m_Reference->m_Orient += angle;
+        module->Reference().SetPosition( pos );
+        module->Reference().SetPos0( module->Reference().GetPosition() );
+        module->Reference().m_Orient += angle;
 
-        if( module->m_Reference->m_Orient >= 1800 )
-            module->m_Reference->m_Orient -= 1800;
+        if( module->Reference().m_Orient >= 1800 )
+            module->Reference().m_Orient -= 1800;
 
-        pos = module->m_Value->GetPosition();
+        pos = module->Value().GetPosition();
         ROTATE( pos );
-        module->m_Value->SetPosition( pos );
-        module->m_Value->SetPos0( module->m_Value->m_Pos );
-        module->m_Value->m_Orient += angle;
+        module->Value().SetPosition( pos );
+        module->Value().SetPos0( module->Value().m_Pos );
+        module->Value().m_Orient += angle;
 
-        if( module->m_Value->m_Orient >= 1800 )
-            module->m_Value->m_Orient -= 1800;
+        if( module->Value().m_Orient >= 1800 )
+            module->Value().m_Orient -= 1800;
 
         break;
 
     case ID_MODEDIT_MODULE_MIRROR:
          // Mirror reference.
-        textmod = module->m_Reference;
+        textmod = &module->Reference();
         NEGATE( textmod->m_Pos.x );
         NEGATE( textmod->m_Pos0.x );
 
@@ -799,7 +799,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
         // Mirror value.
-        textmod = module->m_Value;
+        textmod = &module->Value();
         NEGATE( textmod->m_Pos.x );
         NEGATE( textmod->m_Pos0.x );
 

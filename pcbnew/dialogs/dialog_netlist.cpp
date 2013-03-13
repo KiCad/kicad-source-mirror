@@ -184,12 +184,12 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
         {
             MODULE* module = duplicate[ii];
 
-            if( module->m_Reference->m_Text.IsEmpty() )
+            if( module->GetReference().IsEmpty() )
                 list << wxT("<br>") << wxT("[noref)");
             else
-                list << wxT("<br>") << module->m_Reference->m_Text;
+                list << wxT("<br>") << module->GetReference();
 
-            list << wxT("  (<i>") << module->m_Value->m_Text << wxT("</i>)");
+            list << wxT("  (<i>") << module->GetValue() << wxT("</i>)");
             list << wxT(" @ ");
             list << CoordinateToString( module->GetPosition().x ),
             list << wxT(", ") << CoordinateToString( module->GetPosition().y ),
@@ -230,11 +230,12 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
         {
             MODULE* module = notInNetlist[ii];
 
-            if( module->m_Reference->m_Text.IsEmpty() )
+            if( module->GetReference().IsEmpty() )
                 list << wxT("<br>") << wxT("[noref)");
             else
-                list << wxT("<br>") << module->m_Reference->m_Text ;
-            list << wxT(" (<i>") << module->m_Value->m_Text << wxT("</i>)");
+                list << wxT("<br>") << module->GetReference() ;
+
+            list << wxT(" (<i>") << module->GetValue() << wxT("</i>)");
             list << wxT(" @ ");
             list << CoordinateToString( module->GetPosition().x ),
             list << wxT(", ") << CoordinateToString( module->GetPosition().y ),

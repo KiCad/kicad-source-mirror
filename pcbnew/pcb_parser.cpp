@@ -1373,7 +1373,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
     auto_ptr< DIMENSION > dimension( new DIMENSION( NULL ) );
 
-    dimension->m_Value = parseBoardUnits( "dimension value" );
+    dimension->SetValue( parseBoardUnits( "dimension value" ) );
     NeedLEFT();
     token = NextTok();
 
@@ -1405,7 +1405,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
         case T_gr_text:
         {
             TEXTE_PCB* text = parseTEXTE_PCB();
-            dimension->m_Text = *text;
+            dimension->Text() = *text;
             dimension->SetPosition( text->GetPosition() );
             delete text;
             break;
@@ -1593,12 +1593,12 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_autoplace_cost90:
-            module->m_CntRot90 = parseInt( "auto place cost at 90 degrees" );
+            module->SetPlacementCost90( parseInt( "auto place cost at 90 degrees" ) );
             NeedRIGHT();
             break;
 
         case T_autoplace_cost180:
-            module->m_CntRot180 = parseInt( "auto place cost at 180 degrees" );
+            module->SetPlacementCost180( parseInt( "auto place cost at 180 degrees" ) );
             NeedRIGHT();
             break;
 

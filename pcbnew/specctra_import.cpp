@@ -440,21 +440,25 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 {
                     // convert from degrees to tenths of degrees used in KiCad.
                     int orientation = (int) (place->rotation * 10.0);
+
                     if( module->GetLayer() != LAYER_N_FRONT )
                     {
                         // module is on copper layer (back)
-                        module->Flip( module->m_Pos );
+                        module->Flip( module->GetPosition() );
                     }
+
                     module->SetOrientation( orientation );
                 }
                 else if( place->side == T_back )
                 {
                     int orientation = (int) ((place->rotation + 180.0) * 10.0);
+
                     if( module->GetLayer() != LAYER_N_BACK )
                     {
                         // module is on component layer (front)
-                        module->Flip( module->m_Pos );
+                        module->Flip( module->GetPosition() );
                     }
+
                     module->SetOrientation( orientation );
                 }
                 else

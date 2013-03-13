@@ -57,7 +57,7 @@ class MSG_PANEL_ITEM;
 enum MODULE_ATTR_T
 {
     MOD_DEFAULT = 0,    ///< default
-    MOD_CMS = 1,        ///< Set for modules listed in the automatic insertion list
+    MOD_CMS     = 1,    ///< Set for modules listed in the automatic insertion list
                         ///< (usually SMD footprints)
     MOD_VIRTUAL = 2     ///< Virtual component: when created by copper shapes on
                         ///<  board (Like edge card connectors, mounting hole...)
@@ -66,53 +66,15 @@ enum MODULE_ATTR_T
 
 class MODULE : public BOARD_ITEM
 {
-
 public:
-    double            m_Orient;        // orientation in 0.1 degrees
-    wxPoint           m_Pos;           // Real coord on board
     DLIST<D_PAD>      m_Pads;          /* Pad list (linked list) */
     DLIST<BOARD_ITEM> m_Drawings;      /* Graphic items list (linked list) */
     DLIST<S3D_MASTER> m_3D_Drawings;   /* First item of the 3D shapes (linked list)*/
-    TEXTE_MODULE*     m_Reference;     // Component reference (U34, R18..)
-    TEXTE_MODULE*     m_Value;         // Component value (74LS00, 22K..)
-    wxString          m_LibRef;        /* Name of the module in library (and
-                                        * the default value when loading a
-                                        * module from the library) */
-    int           m_Attributs;          ///< Flag bits ( see Mod_Attribut )
-    int           flag;                 /* Use to trace ratsnest and auto routing. */
-
-    int           m_ModuleStatus;       ///< For autoplace: flags (LOCKED, AUTOPLACED)
 
 // m_ModuleStatus bits:
 #define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
 #define MODULE_is_PLACED    0x02        ///< In autoplace: module automatically placed
 #define MODULE_to_PLACE     0x04        ///< In autoplace: module waiting for autoplace
-
-
-    EDA_RECT      m_BoundaryBox;        // Bounding box : coordinates on board, real orientation.
-    int           m_PadNum;             // Pad count
-    int           m_AltPadNum;          /* Pad with netcode > 0 (active pads) count */
-
-    int           m_CntRot90;           ///< Automatic placement : cost ( 0..10 )
-                                        ///< for 90 degrees rotation (Horiz<->Vertical)
-
-    int           m_CntRot180;          ///< Automatic placement : cost ( 0..10 )
-                                        ///< for 180 degrees rotation (UP <->Down)
-
-    wxSize        m_Ext;                // Margin around the module, in automatic placement
-    double        m_Surface;            // Bounding box area
-
-    time_t        m_Link;               // Temporary logical link used in edition
-    time_t        m_LastEdit_Time;
-    wxString      m_Path;
-
-    wxString      m_Doc;                // Module Description (info for users)
-    wxString      m_KeyWord;            // Keywords to select the module in lib
-
-    // The final margin is the sum of these 2 values
-
-    ZoneConnection m_ZoneConnection;
-    int m_ThermalWidth, m_ThermalGap;
 
 public:
     MODULE( BOARD* parent );
@@ -191,6 +153,10 @@ public:
     int GetAttributes() const { return m_Attributs; }
     void SetAttributes( int aAttributes ) { m_Attributs = aAttributes; }
 
+    void SetFlag( int aFlag ) { flag = aFlag; }
+    void IncrementFlag() { flag += 1; }
+    int GetFlag() const { return flag; }
+
     void Move( const wxPoint& aMoveVector );
 
     void Rotate( const wxPoint& aRotCentre, double aAngle );
@@ -230,9 +196,18 @@ public:
             m_ModuleStatus &= ~MODULE_is_PLACED;
     }
 
-    void SetLastEditTime( time_t aTime ) { m_LastEdit_Time = aTime; }
-    void SetLastEditTime( ) { m_LastEdit_Time = time( NULL ); }
-    time_t GetLastEditTime() const { return m_LastEdit_Time; }
+    bool NeedsPlaced() const  { return (m_ModuleStatus & MODULE_to_PLACE); }
+    void SetNeedsPlaced( bool needsPlaced )
+    {
+        if( needsPlaced )
+            m_ModuleStatus |= MODULE_to_PLACE;
+        else
+            m_ModuleStatus &= ~MODULE_to_PLACE;
+    }
+
+    void SetLastEditTime( time_t aTime ) { m_LastEditTime = aTime; }
+    void SetLastEditTime( ) { m_LastEditTime = time( NULL ); }
+    time_t GetLastEditTime() const { return m_LastEditTime; }
 
     /* drawing functions */
 
@@ -296,6 +271,10 @@ public:
     TEXTE_MODULE& Value()       { return *m_Value; }
     TEXTE_MODULE& Reference()   { return *m_Reference; }
 
+    /// The const versions to keep the compiler happy.
+    TEXTE_MODULE& Value() const       { return *m_Value; }
+    TEXTE_MODULE& Reference() const   { return *m_Reference; }
+
 
     /**
      * Function FindPadByName
@@ -322,6 +301,17 @@ public:
      * returns the number of pads.
      */
     unsigned GetPadCount() const            { return m_Pads.GetCount() ; }
+
+    double GetArea() const                  { return m_Surface; }
+
+    time_t GetLink() const                  { return m_Link; }
+    void SetLink( time_t aLink )            { m_Link = aLink; }
+
+    int GetPlacementCost180() const         { return m_CntRot180; }
+    void SetPlacementCost180( int aCost )   { m_CntRot180 = aCost; }
+
+    int GetPlacementCost90() const          { return m_CntRot90; }
+    void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
 
     /**
      * Function Add3DModel
@@ -377,16 +367,38 @@ public:
 #endif
 
 private:
+    double            m_Orient;         ///< Orientation in tenths of a degree, 900=90.0 degrees.
+    wxPoint           m_Pos;            ///< Position of module on the board in internal units.
+    TEXTE_MODULE*     m_Reference;      ///< Component reference designator value (U34, R18..)
+    TEXTE_MODULE*     m_Value;          ///< Component value (74LS00, 22K..)
+    wxString          m_LibRef;         ///< Name of the module in the library.
+    int               m_Attributs;      ///< Flag bits ( see Mod_Attribut )
+    int               m_ModuleStatus;   ///< For autoplace: flags (LOCKED, AUTOPLACED)
+    EDA_RECT          m_BoundaryBox;    ///< Bounding box : coordinates on board, real orientation.
+
+    // The final margin is the sum of these 2 values
+    int               m_ThermalWidth;
+    int               m_ThermalGap;
+    wxString          m_Doc;            ///< File name and path for documentation file.
+    wxString          m_KeyWord;        ///< Search keywords to find module in library.
+    wxString          m_Path;
+    ZoneConnection    m_ZoneConnection;
+    time_t            m_LastEditTime;
+    int               flag;             ///< Use to trace ratsnest and auto routing.
+    double            m_Surface;        ///< Bounding box area
+    time_t            m_Link;           ///< Temporary logical link used in edition
+    int               m_CntRot90;       ///< Horizontal automatic placement cost ( 0..10 ).
+    int               m_CntRot180;      ///< Vertical automatic placement cost ( 0..10 ).
+
     // Local tolerances. When zero, this means the corresponding netclass value
     // is used. Usually theses local tolerances zero, in deference to the
     // corresponding netclass values.
-    int           m_LocalClearance;
-    int           m_LocalSolderMaskMargin;         ///< Solder mask margin
-    int           m_LocalSolderPasteMargin;        ///< Solder paste margin
-                                                   ///< absolute value
+    int               m_LocalClearance;
+    int               m_LocalSolderMaskMargin;    ///< Solder mask margin
+    int               m_LocalSolderPasteMargin;   ///< Solder paste margin absolute value
 
-    double        m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
-                                                   ///< value of pad size
+    double            m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
+                                                        ///< value of pad size
 };
 
 #endif     // MODULE_H_

@@ -198,8 +198,8 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
     {
         wxString msg;
         msg.Printf( _( "Delete Pad (module %s %s) " ),
-                    GetChars( module->m_Reference->m_Text ),
-                    GetChars( module->m_Value->m_Text ) );
+                    GetChars( module->GetReference() ),
+                    GetChars( module->GetValue() ) );
 
         if( !IsOK( this, msg ) )
             return;

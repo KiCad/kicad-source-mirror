@@ -240,11 +240,11 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
         if( PlaceModulesHorsPcb && edgesExist )
         {
-            if( bbbox.Contains( Module->m_Pos ) )
+            if( bbbox.Contains( Module->GetPosition() ) )
                 continue;
         }
 
-        surface += Module->m_Surface;
+        surface += Module->GetArea();
     }
 
     Xsize_allowed = (int) ( sqrt( surface ) * 4.0 / 3.0 );
@@ -261,7 +261,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
         if( PlaceModulesHorsPcb && edgesExist )
         {
-            if( bbbox.Contains( Module->m_Pos ) )
+            if( bbbox.Contains( Module->GetPosition() ) )
                 continue;
         }
 
@@ -276,17 +276,17 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
             Ymax_size  = 0;
         }
 
-        GetScreen()->SetCrossHairPosition( current + Module->m_Pos -
-                                           Module->m_BoundaryBox.GetPosition() );
+        GetScreen()->SetCrossHairPosition( current + Module->GetPosition() -
+                                           Module->GetBoundingBox().GetPosition() );
 
-        Ymax_size = std::max( Ymax_size, Module->m_BoundaryBox.GetHeight() );
+        Ymax_size = std::max( Ymax_size, Module->GetBoundingBox().GetHeight() );
 
         PlaceModule( Module, NULL, true );
 
         // Undo: add new Module to undo
         newList.PushItem( picker );
 
-        current.x += Module->m_BoundaryBox.GetWidth() + pas_grille;
+        current.x += Module->GetBoundingBox().GetWidth() + pas_grille;
     }
 
     // Undo: commit
@@ -313,7 +313,7 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
 
         for( ; aModule != NULL; aModule = aModule->Next() )
         {
-            if( WildCompareString( ModulesMaskSelection, aModule->m_Reference->m_Text ) )
+            if( WildCompareString( ModulesMaskSelection, aModule->GetReference() ) )
             {
                 aModule->SetLocked( aLocked );
                 OnModify();
@@ -325,5 +325,5 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
 
 static bool sortModulesbySize( MODULE* ref, MODULE* compare )
 {
-    return compare->m_Surface < ref->m_Surface;
+    return compare->GetArea() < ref->GetArea();
 }

@@ -247,10 +247,19 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
             TRACK* image = (TRACK*) aImage;
 
             // swap start, end, width and shape for track and image.
-            wxPoint exchp = track->GetStart(); track->SetStart( image->GetStart() ); image->SetStart( exchp );
-            exchp = track->GetEnd(); track->SetEnd( image->GetEnd() ); image->SetEnd( exchp );
-            int atmp = track->GetWidth(); track->SetWidth( image->GetWidth() ); image->SetWidth( atmp );
-            atmp = track->GetShape(); track->SetShape( image->GetShape() ); image->SetShape( atmp );
+            wxPoint exchp = track->GetStart();
+            track->SetStart( image->GetStart() );
+            image->SetStart( exchp );
+            exchp = track->GetEnd();
+            track->SetEnd( image->GetEnd() );
+            image->SetEnd( exchp );
+
+            int atmp = track->GetWidth();
+            track->SetWidth( image->GetWidth() );
+            image->SetWidth( atmp );
+            atmp = track->GetShape();
+            track->SetShape( image->GetShape() );
+            image->SetShape( atmp );
 
             atmp = track->GetDrillValue();
 
@@ -277,16 +286,17 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         break;
 
     case PCB_TEXT_T:
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Mirror, ( (TEXTE_PCB*) aImage )->m_Mirror );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Size, ( (TEXTE_PCB*) aImage )->m_Size );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Pos, ( (TEXTE_PCB*) aImage )->m_Pos );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Thickness, ( (TEXTE_PCB*) aImage )->m_Thickness );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Orient, ( (TEXTE_PCB*) aImage )->m_Orient );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Text, ( (TEXTE_PCB*) aImage )->m_Text );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Italic, ( (TEXTE_PCB*) aImage )->m_Italic );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_Bold, ( (TEXTE_PCB*) aImage )->m_Bold );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_HJustify, ( (TEXTE_PCB*) aImage )->m_HJustify );
-        EXCHG( ( (TEXTE_PCB*) aItem )->m_VJustify, ( (TEXTE_PCB*) aImage )->m_VJustify );
+        std::swap( *((TEXTE_PCB*)aItem), *((TEXTE_PCB*)aImage) );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Mirror, ( (TEXTE_PCB*) aImage )->m_Mirror );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Size, ( (TEXTE_PCB*) aImage )->m_Size );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Pos, ( (TEXTE_PCB*) aImage )->m_Pos );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Thickness, ( (TEXTE_PCB*) aImage )->m_Thickness );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Orient, ( (TEXTE_PCB*) aImage )->m_Orient );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Text, ( (TEXTE_PCB*) aImage )->m_Text );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Italic, ( (TEXTE_PCB*) aImage )->m_Italic );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_Bold, ( (TEXTE_PCB*) aImage )->m_Bold );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_HJustify, ( (TEXTE_PCB*) aImage )->m_HJustify );
+        // EXCHG( ( (TEXTE_PCB*) aItem )->m_VJustify, ( (TEXTE_PCB*) aImage )->m_VJustify );
         break;
 
     case PCB_TARGET_T:
@@ -295,16 +305,17 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 
     case PCB_DIMENSION_T:
         {
-            wxString txt = ( (DIMENSION*) aItem )->GetText();
-            ( (DIMENSION*) aItem )->SetText( ( (DIMENSION*) aImage )->GetText() );
-            ( (DIMENSION*) aImage )->SetText( txt );
-            EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
-            EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Size, ( (DIMENSION*) aImage )->m_Text.m_Size );
-            EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Pos, ( (DIMENSION*) aImage )->m_Text.m_Pos );
-            EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Thickness,
-                   ( (DIMENSION*) aImage )->m_Text.m_Thickness );
-            EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Mirror,
-                   ( (DIMENSION*) aImage )->m_Text.m_Mirror );
+            std::swap( *((DIMENSION*)aItem), *((DIMENSION*)aImage) );
+            // wxString txt = ( (DIMENSION*) aItem )->GetText();
+            // ( (DIMENSION*) aItem )->SetText( ( (DIMENSION*) aImage )->GetText() );
+            // ( (DIMENSION*) aImage )->SetText( txt );
+            // EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
+            // EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Size, ( (DIMENSION*) aImage )->m_Text.m_Size );
+            // EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Pos, ( (DIMENSION*) aImage )->m_Text.m_Pos );
+            // EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Thickness,
+            //        ( (DIMENSION*) aImage )->m_Text.m_Thickness );
+            // EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Mirror,
+            //        ( (DIMENSION*) aImage )->m_Text.m_Mirror );
         }
         break;
 

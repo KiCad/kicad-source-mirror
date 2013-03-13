@@ -95,9 +95,9 @@ void DialogEditModuleText::initDlg( )
     {
         wxString format = m_ModuleInfoText->GetLabel();
         msg.Printf( format,
-                    GetChars( m_module->m_Reference->m_Text ),
-                    GetChars( m_module->m_Value->m_Text ),
-                    (float) m_module->m_Orient / 10 );
+                    GetChars( m_module->GetReference() ),
+                    GetChars( m_module->GetValue() ),
+                    (float) m_module->GetOrientation() / 10 );
     }
     else
     {

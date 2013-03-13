@@ -81,7 +81,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     GetBoard()->m_Status_Pcb = 0;
     newModule = new MODULE( *aModule );
     newModule->SetParent( GetBoard() );
-    newModule->m_Link = aModule->GetTimeStamp();
+    newModule->SetLink( aModule->GetTimeStamp() );
 
     aModule = newModule;
 
@@ -97,7 +97,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     // Put it on FRONT layer,
     // because this is the default in ModEdit, and in libs
     if( aModule->GetLayer() != LAYER_N_FRONT )
-        aModule->Flip( aModule->m_Pos );
+        aModule->Flip( aModule->GetPosition() );
 
     // Put it in orientation 0,
     // because this is the default orientation in ModEdit, and in libs
@@ -231,7 +231,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         AddHistoryComponentName( HistoryList, moduleName );
 
         module->SetFlags( IS_NEW );
-        module->m_Link = 0;
+        module->SetLink( 0 );
 
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
@@ -241,7 +241,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& aLibrary,
         // Put it on FRONT layer,
         // (Can be stored flipped if the lib is an archive built from a board)
         if( module->IsFlipped() )
-            module->Flip( module->m_Pos );
+            module->Flip( module->GetPosition() );
 
         // Place it in orientation 0,
         // even if it is not saved with orientation 0 in lib
@@ -493,7 +493,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
     module = aPcb->m_Modules;
 
     for( ; module != NULL; module = (MODULE*) module->Next() )
-        listnames.Add( module->m_Reference->m_Text );
+        listnames.Add( module->GetReference() );
 
     msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
 
@@ -510,7 +510,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
 
     for( ; module != NULL; module = (MODULE*) module->Next() )
     {
-        if( CmpName == module->m_Reference->m_Text )
+        if( CmpName == module->GetReference() )
             break;
     }
 

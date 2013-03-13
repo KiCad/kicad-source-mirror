@@ -163,12 +163,12 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
     for( module = pcb->m_Modules; module != NULL; module = module->Next() )
     {
-        module->flag = 0;
+        module->SetFlag( 0 );
 
         if( module->GetLayer() == LAYER_N_BACK )
         {
-            module->Flip( module->m_Pos );
-            module->flag = 1;
+            module->Flip( module->GetPosition() );
+            module->SetFlag( 1 );
         }
     }
 
@@ -200,10 +200,10 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     // Undo the footprints modifications (flipped footprints)
     for( module = pcb->m_Modules; module != NULL; module = module->Next() )
     {
-        if( module->flag )
+        if( module->GetFlag() )
         {
-            module->Flip( module->m_Pos );
-            module->flag = 0;
+            module->Flip( module->GetPosition() );
+            module->SetFlag( 0 );
         }
     }
 }
@@ -519,11 +519,11 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
             if( ( pad->GetLayerMask() & ALL_CU_LAYERS ) == LAYER_BACK )
             {
-                layer = ( module->flag ) ? "TOP" : "BOTTOM";
+                layer = ( module->GetFlag() ) ? "TOP" : "BOTTOM";
             }
             else if( ( pad->GetLayerMask() & ALL_CU_LAYERS ) == LAYER_FRONT )
             {
-                layer = ( module->flag ) ? "BOTTOM" : "TOP";
+                layer = ( module->GetFlag() ) ? "BOTTOM" : "TOP";
             }
 
             pad->ReturnStringPadName( pinname );
@@ -535,7 +535,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             NORMALIZE_ANGLE_POS( orient );
 
             // Bottom side modules use the flipped padstack
-            fprintf( aFile, (module->flag) ?
+            fprintf( aFile, (module->GetFlag()) ?
                      "PIN %s PAD%dF %g %g %s %g %s\n" :
                      "PIN %s PAD%d %g %g %s %g %s\n",
                      TO_UTF8( pinname ), pad->GetSubRatsnest(),
@@ -565,7 +565,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         const char*   flip;
         int           orient = module->GetOrientation();
 
-        if( module->flag )
+        if( module->GetFlag() )
         {
             mirror = "0";
             flip   = "FLIP";
@@ -578,52 +578,51 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         }
 
         fprintf( aFile, "\nCOMPONENT %s\n",
-                TO_UTF8( module->m_Reference->m_Text ) );
+                 TO_UTF8( module->GetReference() ) );
         fprintf( aFile, "DEVICE %s_%s\n",
-                TO_UTF8( module->m_Reference->m_Text ),
-                TO_UTF8( module->m_Value->m_Text ) );
+                 TO_UTF8( module->GetReference() ),
+                 TO_UTF8( module->GetValue() ) );
         fprintf( aFile, "PLACE %g %g\n",
-                MapXTo( module->m_Pos.x ),
-                MapYTo( module->m_Pos.y ) );
+                 MapXTo( module->GetPosition().x ),
+                 MapYTo( module->GetPosition().y ) );
         fprintf( aFile, "LAYER %s\n",
-                 (module->flag) ? "BOTTOM" : "TOP" );
+                 (module->GetFlag()) ? "BOTTOM" : "TOP" );
         fprintf( aFile, "ROTATION %g\n",
                  orient / 10.0 );
         fprintf( aFile, "SHAPE %s %s %s\n",
-                 TO_UTF8( module->m_Reference->m_Text ),
+                 TO_UTF8( module->GetReference() ),
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
-        textmod = module->m_Reference;
+        textmod = &module->Reference();
 
         for( int ii = 0; ii < 2; ii++ )
         {
             int      orient = textmod->GetOrientation();
-            wxString layer  = GenCADLayerName[(module->flag) ?
+            wxString layer  = GenCADLayerName[(module->GetFlag()) ?
                                               SILKSCREEN_N_BACK : SILKSCREEN_N_FRONT];
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
-                    textmod->GetPos0().x / SCALE_FACTOR,
+                     textmod->GetPos0().x / SCALE_FACTOR,
                     -textmod->GetPos0().y / SCALE_FACTOR,
-                    textmod->GetSize().x / SCALE_FACTOR,
-                    orient / 10.0,
-                    mirror,
-                    TO_UTF8( layer ),
-                    TO_UTF8( textmod->m_Text ) );
+                     textmod->GetSize().x / SCALE_FACTOR,
+                     orient / 10.0,
+                     mirror,
+                     TO_UTF8( layer ),
+                     TO_UTF8( textmod->GetText() ) );
 
             // Please note, the width is approx
             fprintf( aFile, " 0 0 %g %g\n",
-                     ( textmod->GetSize().x * textmod->m_Text.Len() )
-                     / SCALE_FACTOR,
+                     ( textmod->GetSize().x * textmod->GetLength() ) / SCALE_FACTOR,
                      textmod->GetSize().y / SCALE_FACTOR );
 
-            textmod = module->m_Value; // Dirty trick for the second iteration
+            textmod = &module->Value(); // Dirty trick for the second iteration
         }
 
         // The SHEET is a 'generic description' for referencing the component
         fprintf( aFile, "SHEET \"RefDes: %s, Value: %s\"\n",
-                TO_UTF8( module->m_Reference->m_Text ),
-                TO_UTF8( module->m_Value->m_Text ) );
+                 TO_UTF8( module->GetReference() ),
+                 TO_UTF8( module->GetValue() ) );
     }
 
     fputs( "$ENDCOMPONENTS\n\n", aFile );
@@ -671,8 +670,8 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 
                 pad->ReturnStringPadName( padname );
                 msg.Printf( wxT( "NODE %s %s" ),
-                           GetChars( module->m_Reference->m_Text ),
-                           GetChars( padname ) );
+                            GetChars( module->GetReference() ),
+                            GetChars( padname ) );
 
                 fputs( TO_UTF8( msg ), aFile );
                 fputs( "\n", aFile );
@@ -861,15 +860,15 @@ static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
 
     for( module = aPcb->m_Modules; module != NULL; module = module->Next() )
     {
-        fprintf( aFile, "DEVICE \"%s\"\n", TO_UTF8( module->m_Reference->m_Text ) );
-        fprintf( aFile, "PART \"%s\"\n", TO_UTF8( module->m_Value->m_Text ) );
-        fprintf( aFile, "PACKAGE \"%s\"\n", TO_UTF8( module->m_LibRef ) );
+        fprintf( aFile, "DEVICE \"%s\"\n", TO_UTF8( module->GetReference() ) );
+        fprintf( aFile, "PART \"%s\"\n", TO_UTF8( module->GetValue() ) );
+        fprintf( aFile, "PACKAGE \"%s\"\n", TO_UTF8( module->GetLibRef() ) );
 
         // The TYPE attribute is almost freeform
         const char* ty = "TH";
-        if( module->m_Attributs & MOD_CMS )
+        if( module->GetAttributes() & MOD_CMS )
             ty = "SMD";
-        if( module->m_Attributs & MOD_VIRTUAL )
+        if( module->GetAttributes() & MOD_VIRTUAL )
             ty = "VIRTUAL";
         fprintf( aFile, "TYPE %s\n", ty );
     }
@@ -990,19 +989,19 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
     int          Yaxis_sign = -1;
 
     // Flip for bottom side components
-    if( module->flag )
+    if( module->GetFlag() )
         Yaxis_sign = 1;
 
     /* creates header: */
-    fprintf( aFile, "\nSHAPE %s\n", TO_UTF8( module->m_Reference->m_Text ) );
+    fprintf( aFile, "\nSHAPE %s\n", TO_UTF8( module->GetReference() ) );
 
-    if( module->m_Attributs & MOD_VIRTUAL )
+    if( module->GetAttributes() & MOD_VIRTUAL )
     {
         fprintf( aFile, "INSERT SMD\n" );
     }
     else
     {
-        if( module->m_Attributs & MOD_CMS )
+        if( module->GetAttributes() & MOD_CMS )
         {
             fprintf( aFile, "INSERT SMD\n" );
         }
