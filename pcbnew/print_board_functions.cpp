@@ -2,6 +2,28 @@
  * @file print_board_functions.cpp
  * @brief Functions to print boards.
  */
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+  * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
@@ -53,12 +75,10 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
     bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
     GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
-    bool anchorsTmp = GetBoard()->IsElementVisible( ANCHOR_VISIBLE );
-    GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, false );
     DisplayOpt.DisplayPadIsol    = false;
     DisplayOpt.DisplayModEdge    = FILLED;
     DisplayOpt.DisplayModText    = FILLED;
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
+    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = true;
     DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     DisplayOpt.DisplayDrawItems    = FILLED;
     DisplayOpt.DisplayZonesMode    = 0;
@@ -98,7 +118,6 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
     GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, nctmp );
-    GetBoard()->SetElementVisibility(ANCHOR_VISIBLE, anchorsTmp);
 }
 
 
@@ -182,10 +201,12 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
     bool nctmp = GetBoard()->IsElementVisible( NO_CONNECTS_VISIBLE );
     GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, false );
-    DisplayOpt.DisplayPadIsol    = false;
+    bool anchorsTmp = GetBoard()->IsElementVisible( ANCHOR_VISIBLE );
+    GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, false );
+    DisplayOpt.DisplayPadIsol = false;
     m_DisplayModEdge = DisplayOpt.DisplayModEdge    = FILLED;
     m_DisplayModText = DisplayOpt.DisplayModText    = FILLED;
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = FILLED;
+    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = true;
     DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
     DisplayOpt.DisplayDrawItems    = FILLED;
     DisplayOpt.DisplayZonesMode    = 0;
@@ -224,38 +245,35 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     }
 
     // Print tracks
-    TRACK * pt_trace = Pcb->m_Track;
-
-    for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
+    for( TRACK * track = Pcb->m_Track; track; track = track->Next() )
     {
-        if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
+        if( ( aPrintMaskLayer & track->ReturnMaskLayer() ) == 0 )
             continue;
 
-        if( pt_trace->Type() == PCB_VIA_T ) // VIA encountered.
+        if( track->Type() == PCB_VIA_T ) // VIA encountered.
         {
-            int radius = pt_trace->GetWidth() >> 1;
-            EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + pt_trace->GetShape() );
+            int radius = track->GetWidth() >> 1;
+            EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + track->GetShape() );
             GRSetDrawMode( aDC, drawmode );
             GRFilledCircle( m_canvas->GetClipBox(), aDC,
-                            pt_trace->GetStart().x,
-                            pt_trace->GetStart().y,
+                            track->GetStart().x,
+                            track->GetStart().y,
                             radius,
                             0, color, color );
         }
         else
         {
-            pt_trace->Draw( m_canvas, aDC, drawmode );
+            track->Draw( m_canvas, aDC, drawmode );
         }
     }
 
     // Outdated: only for compatibility to old boards
-    pt_trace = Pcb->m_Zone;
-    for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
+    for( TRACK * track = Pcb->m_Zone; track != NULL; track = track->Next() )
     {
-        if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
+        if( ( aPrintMaskLayer & track->ReturnMaskLayer() ) == 0 )
             continue;
 
-        pt_trace->Draw( m_canvas, aDC, drawmode );
+        track->Draw( m_canvas, aDC, drawmode );
     }
 
     // Draw filled areas (i.e. zones)
@@ -286,28 +304,28 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
      * vias */
     if( drillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
     {
-        pt_trace = Pcb->m_Track;
+        TRACK * track = Pcb->m_Track;
         EDA_COLOR_T color = g_DrawBgColor;
         bool blackpenstate = GetGRForceBlackPenState();
         GRForceBlackPen( false );
         GRSetDrawMode( aDC, GR_COPY );
 
-        for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
+        for( ; track != NULL; track = track->Next() )
         {
-            if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
+            if( ( aPrintMaskLayer & track->ReturnMaskLayer() ) == 0 )
                 continue;
 
-            if( pt_trace->Type() == PCB_VIA_T ) // VIA encountered.
+            if( track->Type() == PCB_VIA_T ) // VIA encountered.
             {
                 int diameter;
 
                 if( drillShapeOpt == PRINT_PARAMETERS::SMALL_DRILL_SHAPE )
-                    diameter = std::min( SMALL_DRILL, pt_trace->GetDrillValue() );
+                    diameter = std::min( SMALL_DRILL, track->GetDrillValue() );
                 else
-                    diameter = pt_trace->GetDrillValue();
+                    diameter = track->GetDrillValue();
 
                 GRFilledCircle( m_canvas->GetClipBox(), aDC,
-                                pt_trace->GetStart().x, pt_trace->GetStart().y,
+                                track->GetStart().x, track->GetStart().y,
                                 diameter/2,
                                 0, color, color );
             }
@@ -327,6 +345,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_DisplayModEdge = DisplayOpt.DisplayModEdge;
     m_DisplayModText = DisplayOpt.DisplayModText;
     GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, nctmp);
+    GetBoard()->SetElementVisibility(ANCHOR_VISIBLE, anchorsTmp);
 }
 
 
