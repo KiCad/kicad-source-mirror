@@ -192,3 +192,19 @@ void INFO3D_VISU::InitSettings( BOARD* aBoard )
         m_LayerZcoord[layer_id] = zpos;
     }
 }
+
+/* return the Z position of 3D shapes, in 3D Units
+ * aIsFlipped: true for modules on Front (top) layer, false
+ * if on back (bottom) layer
+ * Note: in draw functions, the copper has a thickness = m_CopperThickness
+ * Vias and tracks are draw with the top side position = m_CopperThickness/2
+ * and the bottom side position = -m_CopperThickness/2 from the Z layer position
+ */
+double INFO3D_VISU::GetModulesZcoord3DIU( bool aIsFlipped )
+{
+    if(  aIsFlipped )
+        return m_LayerZcoord[LAYER_N_BACK] - ( m_CopperThickness / 2 );
+    else
+        return m_LayerZcoord[LAYER_N_FRONT] + ( m_CopperThickness / 2 );
+}
+

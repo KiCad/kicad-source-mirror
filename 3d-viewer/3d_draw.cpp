@@ -506,7 +506,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
 
         Draw3D_ZaxisCylinder( via->GetStart(), (outer_radius + inner_radius)/2,
                                   thickness, outer_radius - inner_radius,
-                                  zpos, biu_to_3Dunits );
+                                  zpos - (thickness/2), biu_to_3Dunits );
         if( layer >= top_layer )
             break;
     }
@@ -515,7 +515,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
     color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->GetShape() );
     SetGLColor( color );
     int height = g_Parm_3D_Visu.GetLayerZcoordBIU(top_layer) -
-                 g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer );
+                 g_Parm_3D_Visu.GetLayerZcoordBIU( bottom_layer ) - thickness;
     int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(bottom_layer) + thickness/2;
 
     Draw3D_ZaxisCylinder( via->GetStart(), inner_radius + thickness/2, height,
