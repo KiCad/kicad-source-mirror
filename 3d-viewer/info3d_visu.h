@@ -110,18 +110,11 @@ public: INFO3D_VISU();
 
     /**
      * function GetModulesZcoord3DIU
-     * @return the Z coordinate of the module, in 3D Units
+     * @return the Z position of 3D shapes, in 3D Units
      * @param aIsFlipped: true for modules on Front (top) layer, false
      * if on back (bottom) layer
-     * Used to know the Z position of 3D shapes
      */
-    double GetModulesZcoord3DIU( bool aIsFlipped )
-    {
-        if(  aIsFlipped )
-            return m_LayerZcoord[ADHESIVE_N_BACK] - m_NonCopperLayerThickness;
-        else
-            return m_LayerZcoord[ADHESIVE_N_FRONT] + m_NonCopperLayerThickness;
-    }
+    double GetModulesZcoord3DIU( bool aIsFlipped );
 
     /**
      * function GetLayerZcoordBIU
