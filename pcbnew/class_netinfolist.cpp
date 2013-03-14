@@ -44,6 +44,8 @@ void NETINFO_LIST::clear()
 void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 {
     m_NetBuffer.push_back( aNewElement );
+
+    // D(Show();)
 }
 
 
@@ -128,17 +130,20 @@ void NETINFO_LIST::buildListOfNets()
 
     m_Parent->SetAreasNetCodesFromNetNames();
 
-// For test and debug purposes only
-#if 0
-    for( unsigned icnt = 0; icnt < GetCount(); icnt++)
-    {
-        wxLogWarning( wxT( "icnt %d, netcode %d, netname <%s>\n" ),
-                      icnt, m_NetBuffer[icnt]->GetNet(),
-                      GetChars( m_NetBuffer[icnt]->GetNetname() ) );
-    }
-#endif
+    // D( Show(); )
 }
 
+#if defined(DEBUG)
+void NETINFO_LIST::Show() const
+{
+    for( unsigned i=0; i < m_NetBuffer.size();  ++i )
+    {
+        printf( "[%d]: netcode:%d  netname:<%s>\n",
+            i, m_NetBuffer[i]->GetNet(),
+            TO_UTF8( m_NetBuffer[i]->GetNetname() ) );
+    }
+}
+#endif
 
 void NETINFO_LIST::buildPadsFullList()
 {
