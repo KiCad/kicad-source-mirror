@@ -573,13 +573,15 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel, ")\n\n" );
 
-
     int netcount = aBoard->GetNetCount();
 
     for( int i = 0;  i < netcount;  ++i )
+    {
+        NETINFO_ITEM*   net = aBoard->FindNet( i );
         m_out->Print( aNestLevel, "(net %d %s)\n",
-                      aBoard->FindNet( i )->GetNet(),
-                      m_out->Quotew( aBoard->FindNet( i )->GetNetname() ).c_str() );
+                      net->GetNet(),
+                      m_out->Quotew( net->GetNetname() ).c_str() );
+    }
 
     m_out->Print( 0, "\n" );
 

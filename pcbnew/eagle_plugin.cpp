@@ -955,7 +955,8 @@ ELAYER::ELAYER( CPTREE& aLayer )
 }
 
 
-/// parse an eagle distance which is either straight mm or mils if there is "mil" suffix.
+/// Parse an eagle distance which is either mm, or mils if there is "mil" suffix.
+/// Return is in BIU.
 static double parseEagle( const std::string& aDistance )
 {
     double ret = strtod( aDistance.c_str(), NULL );
@@ -985,6 +986,7 @@ struct ERULES
     double      rvViaOuter;         ///< copper annulus is this percent of via hole
     double      rlMinViaOuter;      ///< minimum copper annulus on via
     double      rlMaxViaOuter;      ///< maximum copper annulus on via
+    double      mdWireWire;         ///< wire to wire spacing I presume.
 
 
     ERULES() :
@@ -996,7 +998,8 @@ struct ERULES
 
         rvViaOuter          ( 0.25 ),
         rlMinViaOuter       ( Mils2iu( 10 ) ),
-        rlMaxViaOuter       ( Mils2iu( 20 ) )
+        rlMaxViaOuter       ( Mils2iu( 20 ) ),
+        mdWireWire          ( 0 )
     {}
 
     void parse( CPTREE& aRules );
@@ -1030,6 +1033,8 @@ void ERULES::parse( CPTREE& aRules )
             rlMinViaOuter = parseEagle( attribs.get<std::string>( "value" ) );
         else if( name == "rlMaxViaOuter" )
             rlMaxViaOuter = parseEagle( attribs.get<std::string>( "value" ) );
+        else if( name == "mdWireWire" )
+            mdWireWire = parseEagle( attribs.get<std::string>( "value" ) );
     }
 }
 
@@ -1122,7 +1127,31 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  PROPE
 
         read_xml( filename, doc, xml_parser::trim_whitespace | xml_parser::no_comments );
 
+        m_min_trace    = INT_MAX;
+        m_min_via      = INT_MAX;
+        m_min_via_hole = INT_MAX;
+
         loadAllSections( doc );
+
+        BOARD_DESIGN_SETTINGS&  designSettings = m_board->GetDesignSettings();
+
+        if( m_min_trace < designSettings.m_TrackMinWidth )
+            designSettings.m_TrackMinWidth = m_min_trace;
+
+        if( m_min_via < designSettings.m_ViasMinSize )
+            designSettings.m_ViasMinSize = m_min_via;
+
+        if( m_min_via_hole < designSettings.m_ViasMinDrill )
+            designSettings.m_ViasMinDrill = m_min_via_hole;
+
+        if( m_rules->mdWireWire )
+        {
+            NETCLASS*   defaultNetclass = m_board->m_NetClasses.GetDefault();
+            int         clearance = KiROUND( m_rules->mdWireWire );
+
+            if( clearance < defaultNetclass->GetClearance() )
+                defaultNetclass->SetClearance( clearance );
+        }
 
         // should be empty, else missing m_xpath->pop()
         wxASSERT( m_xpath->Contents().size() == 0 );
@@ -2281,21 +2310,36 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
     // don't know what stop, thermals, and cream should look like now.
 }
 
+/// non-owning container
+typedef std::vector<ZONE_CONTAINER*>    ZONES;
+
 
 void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 {
+    ZONES   zones;      // per net
+
     m_xpath->push( "signals.signal", "name" );
 
     int netCode = 1;
 
-    for( CITER net = aSignals.begin();  net != aSignals.end();  ++net, ++netCode )
+    for( CITER net = aSignals.begin();  net != aSignals.end();  ++net )
     {
+        bool    sawPad = false;
+
+        zones.clear();
+
         const std::string& nname = net->second.get<std::string>( "<xmlattr>.name" );
         wxString netName = FROM_UTF8( nname.c_str() );
 
         m_xpath->Value( nname.c_str() );
 
-        m_board->AppendNet( new NETINFO_ITEM( m_board, netName, netCode ) );
+#if defined(DEBUG)
+        if( netName == wxT( "N$8" ) )
+        {
+            int breakhere = 1;
+            (void) breakhere;
+        }
+#endif
 
         // (contactref | polygon | wire | via)*
         for( CITER it = net->second.begin();  it != net->second.end();  ++it )
@@ -2315,7 +2359,11 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
                     t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
 
-                    t->SetWidth( kicad( w.width ) );
+                    int width = kicad( w.width );
+                    if( width < m_min_trace )
+                        m_min_trace = width;
+
+                    t->SetWidth( width );
                     t->SetLayer( layer );
                     t->SetNet( netCode );
 
@@ -2340,6 +2388,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 if( IsValidCopperLayerIndex( layer_front_most ) &&
                     IsValidCopperLayerIndex( layer_back_most ) )
                 {
+                    int     kidiam;
                     int     drillz = kicad( v.drill );
                     SEGVIA* via = new SEGVIA( m_board );
                     m_board->m_Track.Insert( via, NULL );
@@ -2348,18 +2397,24 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                     if( v.diam )
                     {
-                        int kidiam = kicad( *v.diam );
+                        kidiam = kicad( *v.diam );
                         via->SetWidth( kidiam );
                     }
                     else
                     {
                         double annulus = drillz * m_rules->rvViaOuter;  // eagle "restring"
                         annulus = Clamp( m_rules->rlMinViaOuter, annulus, m_rules->rlMaxViaOuter );
-                        int diameter = KiROUND( drillz + 2 * annulus );
-                        via->SetWidth( diameter );
+                        kidiam = KiROUND( drillz + 2 * annulus );
+                        via->SetWidth( kidiam );
                     }
 
                     via->SetDrill( drillz );
+
+                    if( kidiam < m_min_via )
+                        m_min_via = kidiam;
+
+                    if( drillz < m_min_via_hole )
+                        m_min_via_hole = drillz;
 
                     if( layer_front_most == LAYER_N_FRONT && layer_back_most == LAYER_N_BACK )
                         via->SetShape( VIA_THROUGH );
@@ -2398,6 +2453,8 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_pads_to_nets[ key ] = ENET( netCode, nname );
 
                 m_xpath->pop();
+
+                sawPad = true;
             }
 
             else if( it->first == "polygon" )
@@ -2411,6 +2468,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     // use a "netcode = 0" type ZONE:
                     ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
                     m_board->Add( zone, ADD_APPEND );
+                    zones.push_back( zone );
 
                     zone->SetTimeStamp( timeStamp( it->second ) );
                     zone->SetLayer( layer );
@@ -2464,6 +2522,21 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->pop();     // "polygon"
             }
         }
+
+        if( zones.size() && !sawPad )
+        {
+            // KiCad does not support an unconnected zone with its own non-zero netcode,
+            // but only when assigned netcode = 0 w/o a name...
+            for( ZONES::iterator it = zones.begin();  it != zones.end();  ++it )
+            {
+                (*it)->SetNet( 0 );
+                (*it)->SetNetName( wxEmptyString );
+            }
+
+            // therefore omit this signal/net.
+        }
+        else
+            m_board->AppendNet( new NETINFO_ITEM( m_board, netName, netCode++ ) );
     }
 
     m_xpath->pop();     // "signals.signal"

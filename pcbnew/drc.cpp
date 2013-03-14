@@ -557,14 +557,14 @@ void DRC::testZones()
     // This is allowed, but i am not sure this is a good idea
     for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
-        ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ii );
+        ZONE_CONTAINER* test_area = m_pcb->GetArea( ii );
 
-        if( !Area_To_Test->IsOnCopperLayer() )
+        if( !test_area->IsOnCopperLayer() )
             continue;
 
-        if( Area_To_Test->GetNet() < 0 )
+        if( test_area->GetNet() < 0 )
         {
-            m_currentMarker = fillMarker( Area_To_Test,
+            m_currentMarker = fillMarker( test_area,
                                           DRCE_NON_EXISTANT_NET_FOR_ZONE_OUTLINE, m_currentMarker );
             m_pcb->Add( m_currentMarker );
             m_currentMarker = 0;

@@ -160,6 +160,10 @@ public:
             return NULL;
     }
 
+#if defined(DEBUG)
+    void Show() const;
+#endif
+
 private:
 
     /**
