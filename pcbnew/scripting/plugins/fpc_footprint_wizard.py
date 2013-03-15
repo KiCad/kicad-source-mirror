@@ -79,8 +79,8 @@ class FPCFootprintWizard(FootprintWizardPlugin):
         size_shld = wxSize(shl_width,shl_height)
        
         module.SetReference("FPC"+str(pads))   # give it a reference name
-        module.m_Reference.SetPos0(wxPointMM(-1,-2))
-        module.m_Reference.SetPosition(wxPointMM(-1,-2))
+        module.Reference().SetPos0(wxPointMM(-1,-2))
+        module.Reference().SetPosition(wxPointMM(-1,-2))
         
         # create a pad array and add it to the module
         for n in range (0,pads):

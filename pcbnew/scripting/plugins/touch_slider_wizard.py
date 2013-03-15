@@ -165,8 +165,8 @@ class TouchSliderWizard(FootprintWizardPlugin):
         step_length = float(touch_length) / float(steps)    
         
         module.SetReference("TS"+str(steps))   # give it a reference name
-        module.m_Reference.SetPos0(wxPointMM(-1,-2))
-        module.m_Reference.SetPosition(wxPointMM(-1,-2))
+        module.Reference().SetPos0(wxPointMM(-1,-2))
+        module.Reference().SetPosition(wxPointMM(-1,-2))
     
         # starting pad
     

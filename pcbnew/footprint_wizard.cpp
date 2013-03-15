@@ -184,6 +184,10 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
             dValue = From_User_Unit( g_UserUnit, dValue);
                         
             value.Printf( wxT("%lf"), dValue ); 
+
+            // If our locale is set to use , for decimal point, just change it
+            // to be scripting compatible
+            value.Replace(",",".");
             
         }
 
