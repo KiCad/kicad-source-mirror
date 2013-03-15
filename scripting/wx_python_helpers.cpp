@@ -65,8 +65,8 @@ wxString* newWxStringFromPy( PyObject* src )
 {
     bool        must_unref_str = false;
 
-    wxString*   result = NULL;
-    PyObject*   obj    = src;
+    wxString*   result  = NULL;
+    PyObject*   obj     = src;
 
 #if wxUSE_UNICODE
     bool        must_unref_obj = false;
@@ -111,14 +111,14 @@ wxString* newWxStringFromPy( PyObject* src )
     // normal string (or object) to normal python string
     PyObject* str = src;
 
-    if( PyUnicode_Check( src ) ) // if it's unicode convert to normal string
+    if( PyUnicode_Check( src ) )    // if it's unicode convert to normal string
     {
         str = PyUnicode_AsEncodedString( src, wxPythonEncoding, "strict" );
 
         if( PyErr_Occurred() )
             return NULL;
     }
-    else if( !PyString_Check( src ) ) // if it's not a string, str(obj)
+    else if( !PyString_Check( src ) )    // if it's not a string, str(obj)
     {
         str = PyObject_Str( src );
         must_unref_str = true;

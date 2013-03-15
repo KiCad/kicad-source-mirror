@@ -134,6 +134,9 @@ public:
 class FOOTPRINT_WIZARDS
 {
 private:
+    /**
+    * FOOTPRINT_WIZARD system wide static list
+    */
     static    std::vector<FOOTPRINT_WIZARD*>  m_FootprintWizards;
 
 public:

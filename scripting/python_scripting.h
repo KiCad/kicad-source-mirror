@@ -1,7 +1,7 @@
 #ifndef __PYTHON_SCRIPTING_H
 #define __PYTHON_SCRIPTING_H
 
-    // undefs explained here: https://bugzilla.redhat.com/show_bug.cgi?id=427617
+// undefs explained here: https://bugzilla.redhat.com/show_bug.cgi?id=427617
 
 #ifdef _POSIX_C_SOURCE
     #undef _POSIX_C_SOURCE
@@ -21,19 +21,18 @@
  * Initializes the Python engine inside pcbnew
  */
 
-bool pcbnewInitPythonScripting();
-void pcbnewFinishPythonScripting();
+bool        pcbnewInitPythonScripting();
+void        pcbnewFinishPythonScripting();
 
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
 
-void RedirectStdio();
-wxWindow* CreatePythonShellWindow( wxWindow* parent );
+void        RedirectStdio();
+wxWindow*   CreatePythonShellWindow( wxWindow* parent );
 
 class PyLOCK
 {
-    wxPyBlock_t     b;
-
+    wxPyBlock_t b;
 public:
 
     // @todo, find out why these are wxPython specific.  We need the GIL regardless.
@@ -46,13 +45,12 @@ public:
 #else
 class PyLOCK
 {
-   PyGILState_STATE gil_state;
-
+    PyGILState_STATE gil_state;
 public:
-   PyLOCK()      { gil_state = PyGILState_Ensure(); }
-   ~PyLOCK()     { PyGILState_Release( gil_state ); }
+    PyLOCK()      { gil_state = PyGILState_Ensure(); }
+    ~PyLOCK()     { PyGILState_Release( gil_state ); }
 };
 
 #endif
 
-#endif  // __PYTHON_SCRIPTING_H
+#endif    // __PYTHON_SCRIPTING_H
