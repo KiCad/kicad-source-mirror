@@ -31,16 +31,17 @@
  * we want plain pcbnew.<method_name> access from python */
 
 #ifndef SWIG
-void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME *aPCBEdaFrame );
-#endif 
+void    ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPCBEdaFrame );
 
-BOARD *GetBoard();
+#endif
 
-BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat );
-BOARD* LoadBoard( wxString& aFileName );
+BOARD*  GetBoard();
 
-bool  SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat );
-bool  SaveBoard( wxString& aFileName, BOARD* aBoard );
+BOARD*  LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat );
+BOARD*  LoadBoard( wxString& aFileName );
+
+bool    SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat );
+bool    SaveBoard( wxString& aFileName, BOARD* aBoard );
 
 
 #endif

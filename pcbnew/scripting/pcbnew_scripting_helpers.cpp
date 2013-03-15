@@ -39,68 +39,68 @@
 #include <macros.h>
 #include <stdlib.h>
 
-static PCB_EDIT_FRAME *PcbEditFrame=NULL;
+static PCB_EDIT_FRAME* PcbEditFrame = NULL;
 
-BOARD *GetBoard()
+BOARD* GetBoard()
 {
-	if (PcbEditFrame)
+    if( PcbEditFrame )
         return PcbEditFrame->GetBoard();
-	else return NULL;
+    else
+        return NULL;
 }
 
-void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME *aPCBEdaFrame )
+
+void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPCBEdaFrame )
 {
-	PcbEditFrame = aPCBEdaFrame;
+    PcbEditFrame = aPCBEdaFrame;
 }
+
 
 BOARD* LoadBoard( wxString& aFileName )
 {
+    if( aFileName.EndsWith( wxT( ".kicad_pcb" ) ) )
+        return LoadBoard( aFileName, IO_MGR::KICAD );
 
-    if ( aFileName.EndsWith( wxT( ".kicad_pcb" ) ) )
-        return LoadBoard(aFileName,IO_MGR::KICAD);
-
-    else if (aFileName.EndsWith(wxT(".brd")))
-        return LoadBoard(aFileName,IO_MGR::LEGACY);
+    else if( aFileName.EndsWith( wxT( ".brd" ) ) )
+        return LoadBoard( aFileName, IO_MGR::LEGACY );
 
     // as fall back for any other kind use the legacy format
-    return LoadBoard(aFileName,IO_MGR::LEGACY);
-
+    return LoadBoard( aFileName, IO_MGR::LEGACY );
 }
+
 
 BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 {
-	return IO_MGR::Load( aFormat, aFileName );
+    return IO_MGR::Load( aFormat, aFileName );
 }
+
 
 bool SaveBoard( wxString& aFilename, BOARD* aBoard )
 {
-    return SaveBoard( aFilename, aBoard,IO_MGR::KICAD );
+    return SaveBoard( aFilename, aBoard, IO_MGR::KICAD );
 }
+
 
 bool SaveBoard( wxString& aFileName, BOARD* aBoard,
                 IO_MGR::PCB_FILE_T aFormat )
 {
-  aBoard->m_Status_Pcb &= ~CONNEXION_OK;
-  aBoard->SynchronizeNetsAndNetClasses();
-  aBoard->SetCurrentNetClass( aBoard->m_NetClasses.GetDefault()->GetName() );
+    aBoard->m_Status_Pcb &= ~CONNEXION_OK;
+    aBoard->SynchronizeNetsAndNetClasses();
+    aBoard->SetCurrentNetClass( aBoard->m_NetClasses.GetDefault()->GetName() );
 
-  wxString header;
-  PROPERTIES   props;
+    wxString    header;
+    PROPERTIES  props;
 
-  if ( aFormat==IO_MGR::LEGACY )
-  {
-      header = wxString::Format(
-                            wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s scripting\n\n" ),
-                            LEGACY_BOARD_FILE_VERSION, DateAndTime().GetData(),
-                            GetBuildVersion().GetData() );
-      props["header"] = header;
-  }
+    if( aFormat==IO_MGR::LEGACY )
+    {
+        header = wxString::Format(
+            wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s scripting\n\n" ),
+            LEGACY_BOARD_FILE_VERSION, DateAndTime().GetData(),
+            GetBuildVersion().GetData() );
+        props["header"] = header;
+    }
 
 
-
-  IO_MGR::Save( aFormat, aFileName, aBoard, &props );
-  return true;
-
+    IO_MGR::Save( aFormat, aFileName, aBoard, &props );
+    return true;
 }
-
-
