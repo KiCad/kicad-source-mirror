@@ -123,9 +123,11 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     m_showAxis = true;         // true to draw axis.
 
     // Give an icon
-    wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( module_wizard_xpm) );
-    SetIcon( icon );
+
+    // Disabled for now, it raises an assert error in wxwidgets
+    // wxIcon  icon;
+    // icon.CopyFromBitmap( KiBitmap( module_wizard_xpm) );
+    // SetIcon( icon );
 
     m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
     m_FootprintWizard = NULL;
@@ -185,9 +187,22 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
 
     m_ParameterGridWindow->SetSashVisible( wxSASH_RIGHT, true );
     m_ParameterGridWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
-    m_ParameterGrid = new wxGrid(m_ParameterGridWindow,
+    m_ParameterGrid = new wxGrid( m_ParameterGridWindow,
                                  ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                                 wxPoint(0,0),wxDefaultSize);
+                                 wxPoint( 0 , 0 ),
+                                 wxDefaultSize );
+
+    m_ParameterGrid->CreateGrid( 1, 3 );
+
+    // Columns
+    m_ParameterGrid->AutoSizeColumns();
+    m_ParameterGrid->SetColLabelSize( 20 );
+    m_ParameterGrid->SetColLabelValue( 0, _("Parameter") );
+    m_ParameterGrid->SetColLabelValue( 1, _("Value") );
+    m_ParameterGrid->SetColLabelValue( 2, _("Units") );
+    m_ParameterGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
+
+
 
     ReCreatePageList();
 
@@ -406,13 +421,6 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 
     m_ParameterGrid->ClearGrid();
 
-    // Columns
-    m_ParameterGrid->AutoSizeColumns();
-    m_ParameterGrid->SetColLabelSize( 20 );
-    m_ParameterGrid->SetColLabelValue( 0, _("Parameter") );
-    m_ParameterGrid->SetColLabelValue( 1, _("Value") );
-    m_ParameterGrid->SetColLabelValue( 2, _("Units") );
-    m_ParameterGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
 
     // Rows
     m_ParameterGrid->AutoSizeRows();
@@ -421,12 +429,13 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     m_ParameterGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 
     // Get the list of names, values, and types
-    wxArrayString fpList = m_FootprintWizard->GetParameterNames(page);
-    wxArrayString fvList = m_FootprintWizard->GetParameterValues(page);
-    wxArrayString ptList = m_FootprintWizard->GetParameterTypes(page);
+    wxArrayString fpList = m_FootprintWizard->GetParameterNames( page );
+    wxArrayString fvList = m_FootprintWizard->GetParameterValues( page );
+    wxArrayString ptList = m_FootprintWizard->GetParameterTypes( page );
 
     // Dimension the wxGrid
-    m_ParameterGrid->CreateGrid(fpList.size(),3);
+    m_ParameterGrid->DeleteRows( 0, m_ParameterGrid->GetNumberRows() );
+    m_ParameterGrid->AppendRows( fpList.size() );
 
     for (unsigned int i=0; i<fpList.size(); i++)
     {
