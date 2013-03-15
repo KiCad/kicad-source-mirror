@@ -458,6 +458,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
             }
 
             value.Printf( wxT( "%lf" ), dValue );
+            value.Replace( wxT( "," ), wxT( "." ) );
         }
         else if ( ptList[i]==wxT( "UNITS" ) ) // 1,2,3,4,5 ... N
         {
