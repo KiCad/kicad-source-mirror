@@ -1,12 +1,11 @@
 
 * think about documentation, how to do it
-* Action plugins: 
+* Action plugins:
 	right click hooks,
-	toolbar hooks, 
-	menu hooks, 
-* IO plugins    
+	toolbar hooks,
+	menu hooks,
+* IO plugins
 * better footprint wizard (preview in footprint wizard list)
-* fix WX asserts
 
- 
+
 
