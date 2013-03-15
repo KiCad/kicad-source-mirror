@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import subprocess, os, difflib
 
-EXTENSIONS=["cpp","cxx","h","hpp"]
+EXTENSIONS=["cpp","cxx","h","hpp","c"]
 
 #
 # Function to call uncrustify, it returns the re-formated code and
@@ -13,8 +13,6 @@ def uncrustify_file(filename):
 	popen = subprocess.Popen(args, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 	popen.wait()
 	return [popen.stdout.readlines(),popen.stderr.read()]
-
-
 
 #
 # This function talks to bzr, and gets the list of modified files
@@ -34,6 +32,10 @@ def bzr_modified():
 		if line.startswith("modified:"):
 			in_modifieds = True
 			continue
+		if line.startswith("added:"):
+			in_modifieds = True
+			continue
+
 		if in_modifieds:
 			modifieds.append( line.lstrip("\t ").rstrip("\t ") )
 
