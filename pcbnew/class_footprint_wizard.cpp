@@ -31,48 +31,73 @@
 #include "class_footprint_wizard.h"
 #include <stdio.h>
 
+
+FOOTPRINT_WIZARD::~FOOTPRINT_WIZARD()
+{
+}
+
+
 void FOOTPRINT_WIZARD::register_wizard()
 {
     FOOTPRINT_WIZARDS::register_wizard( this );
 }
 
-std::vector<FOOTPRINT_WIZARD*>  FOOTPRINT_WIZARDS::m_FootprintWizards;
+
+std::vector<FOOTPRINT_WIZARD*> FOOTPRINT_WIZARDS::m_FootprintWizards;
 
 FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( int aIndex )
 {
     return m_FootprintWizards[aIndex];
 }
 
+
 FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( wxString aName )
 {
     int max = GetSize();
 
-    for( int i=0; i<max; i++ )
+    for( int i = 0; i<max; i++ )
     {
-        FOOTPRINT_WIZARD *wizard =  GetWizard( i );
+        FOOTPRINT_WIZARD*   wizard = GetWizard( i );
 
-        wxString name = wizard->GetName();
+        wxString            name = wizard->GetName();
 
-        if ( name.Cmp( aName ) )
-                return wizard;
+        if( name.Cmp( aName )==0 )
+            return wizard;
     }
 
     return NULL;
 }
+
 
 int FOOTPRINT_WIZARDS::GetSize()
 {
     return m_FootprintWizards.size();
 }
 
-void FOOTPRINT_WIZARDS::register_wizard(FOOTPRINT_WIZARD *aWizard)
+
+void FOOTPRINT_WIZARDS::register_wizard( FOOTPRINT_WIZARD* aWizard )
 {
-
     wxString name = aWizard->GetName();
-    m_FootprintWizards.push_back( aWizard );
 
+    m_FootprintWizards.push_back( aWizard );
 }
 
 
+bool FOOTPRINT_WIZARDS::deregister_object( void* aObject )
+{
+    int max = GetSize();
 
+    for( int i = 0; i<max; i++ )
+    {
+        FOOTPRINT_WIZARD* wizard = GetWizard( i );
 
+        if( wizard->GetObject() == aObject )
+        {
+            m_FootprintWizards.erase( m_FootprintWizards.begin() + i );
+            delete wizard;
+            return true;
+        }
+    }
+
+    return false;
+}

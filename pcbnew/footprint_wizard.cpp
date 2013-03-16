@@ -94,13 +94,15 @@ void FOOTPRINT_WIZARD_FRAME::DisplayWizardInfos()
 
 void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 {
-    if( m_FootprintWizard == NULL )
+    FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
+
+    if( !footprintWizard )
         return;
 
     SetCurItem( NULL );
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();
-    MODULE* m = m_FootprintWizard->GetModule();
+    MODULE* m = footprintWizard->GetModule();
 
     if( m )
     {
@@ -112,18 +114,37 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     }
     else
     {
-        printf( "m_FootprintWizard->GetModule() returns NULL\n" );
+        printf( "footprintWizard->GetModule() returns NULL\n" );
     }
 
     m_canvas->Refresh();
 }
 
 
+FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_FRAME::GetMyWizard()
+{
+    if( m_wizardName.Length()==0 )
+        return NULL;
+
+    FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARDS::GetWizard( m_wizardName );
+
+    if( !footprintWizard )
+    {
+        wxMessageBox( _( "Couldn't reload footprint wizard" ) );
+        return NULL;
+    }
+
+    return footprintWizard;
+}
+
+
 MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 {
-    if( m_FootprintWizard )
+    FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARDS::GetWizard( m_wizardName );
+
+    if( footprintWizard )
     {
-        return m_FootprintWizard->GetModule();
+        return footprintWizard->GetModule();
     }
     else
     {
@@ -139,12 +160,17 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
 
     selectWizard->ShowModal();
 
-    m_FootprintWizard = selectWizard->GetWizard();
+    FOOTPRINT_WIZARD* footprintWizard = selectWizard->GetWizard();
 
-    if( m_FootprintWizard )
+    if( footprintWizard )
     {
-        m_wizardName = m_FootprintWizard->GetName();
-        m_wizardDescription = m_FootprintWizard->GetDescription();
+        m_wizardName = footprintWizard->GetName();
+        m_wizardDescription = footprintWizard->GetDescription();
+    }
+    else
+    {
+        m_wizardName = wxT( "" );
+        m_wizardDescription = wxT( "" );
     }
 
     ReloadFootprint();
@@ -169,12 +195,17 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 {
     int page = m_PageList->GetSelection();
 
+    FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
+
+    if( !footprintWizard )
+        return;
+
     if( page<0 )
         return;
 
     int             n = m_ParameterGrid->GetNumberRows();
     wxArrayString   arr;
-    wxArrayString   ptList = m_FootprintWizard->GetParameterTypes( page );
+    wxArrayString   ptList = footprintWizard->GetParameterTypes( page );
 
     for( int i = 0; i<n; i++ )
     {
@@ -184,8 +215,8 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
         // unit convert it back from the user format
         if( ptList[i]==wxT( "IU" ) )
         {
-            LOCALE_IO toggle;
-            double dValue;
+            LOCALE_IO   toggle;
+            double      dValue;
 
             value.ToDouble( &dValue );
 
@@ -205,7 +236,7 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
         arr.Add( value );
     }
 
-    wxString res = m_FootprintWizard->SetParameterValues( page, arr );
+    wxString res = footprintWizard->SetParameterValues( page, arr );
 
     ReloadFootprint();
     DisplayWizardInfos();
