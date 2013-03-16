@@ -51,10 +51,11 @@ PYTHON_FOOTPRINT_WIZARD::~PYTHON_FOOTPRINT_WIZARD()
 
 PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aArglist )
 {
-    PyLOCK      lock;
+    PyLOCK lock;
 
+    PyErr_Clear();
     // pFunc is a new reference to the desired method
-    PyObject*   pFunc = PyObject_GetAttrString( this->m_PyWizard, aMethod );
+    PyObject* pFunc = PyObject_GetAttrString( this->m_PyWizard, aMethod );
 
     if( pFunc && PyCallable_Check( pFunc ) )
     {
@@ -79,6 +80,8 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aA
             wxMessageBox( message,
                           wxT( "Exception on python footprint wizard code" ),
                           wxICON_ERROR | wxOK );
+
+            PyErr_Clear();
         }
 
         if( result )
@@ -346,11 +349,20 @@ MODULE* PYTHON_FOOTPRINT_WIZARD::GetModule()
     PyObject* obj = PyObject_GetAttrString( result, "this" );
 
     if( PyErr_Occurred() )
+    {
         PyErr_Print();
+        PyErr_Clear();
+    }
 
     MODULE* mod = PyModule_to_MODULE( obj );
 
     return mod;
+}
+
+
+void* PYTHON_FOOTPRINT_WIZARD::GetObject()
+{
+    return (void*) m_PyWizard;
 }
 
 
@@ -359,4 +371,11 @@ void PYTHON_FOOTPRINT_WIZARDS::register_wizard( PyObject* aPyWizard )
     PYTHON_FOOTPRINT_WIZARD* fw = new PYTHON_FOOTPRINT_WIZARD( aPyWizard );
 
     fw->register_wizard();
+}
+
+
+void PYTHON_FOOTPRINT_WIZARDS::deregister_wizard( PyObject* aPyWizard )
+{
+    // deregister also destroyes the previously created "PYTHON_FOOTPRINT_WIZARD object"
+    FOOTPRINT_WIZARDS::deregister_object( (void*) aPyWizard );
 }

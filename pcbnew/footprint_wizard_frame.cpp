@@ -52,37 +52,39 @@
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
-    /* Window events */
-    EVT_CLOSE( FOOTPRINT_WIZARD_FRAME::OnCloseWindow )
-    EVT_SIZE( FOOTPRINT_WIZARD_FRAME::OnSize )
-    EVT_ACTIVATE( FOOTPRINT_WIZARD_FRAME::OnActivate )
+/* Window events */
+EVT_CLOSE( FOOTPRINT_WIZARD_FRAME::OnCloseWindow )
+EVT_SIZE( FOOTPRINT_WIZARD_FRAME::OnSize )
+EVT_ACTIVATE( FOOTPRINT_WIZARD_FRAME::OnActivate )
 
-    /* Sash drag events */
-    EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PAGES, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
-    EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PARAMETERS, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
+/* Sash drag events */
+EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PAGES, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
+EVT_SASH_DRAGGED( ID_FOOTPRINT_WIZARD_PARAMETERS, FOOTPRINT_WIZARD_FRAME::OnSashDrag )
 
-    /* Toolbar events */
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
-              FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard )
+/* Toolbar events */
+EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
+          FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard )
 
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT,
-              FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
+EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT,
+          FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
 
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS,
-              FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
+EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS,
+          FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
 
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
-              FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
+EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
+          FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
 
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW,
-              FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
+EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW,
+          FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
 
-    /* listbox events */
-    EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
-    EVT_GRID_CMD_CELL_CHANGE( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
-                              FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
+/* listbox events */
+EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
+EVT_GRID_CMD_CELL_CHANGE( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
+                          FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
+EVT_GRID_CMD_EDITOR_HIDDEN( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
+                            FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
 
-    EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset )
+EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
 
 
@@ -131,7 +133,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( FOOTPRINT_EDIT_FRAME* parent,
     // SetIcon( icon );
 
     m_HotkeysZoomAndGridList = g_Module_Viewer_Hokeys_Descr;
-    m_FootprintWizard = NULL;
     m_PageList = NULL;
     m_ParameterGrid     = NULL;
     m_PageListWindow    = NULL;
@@ -386,15 +387,18 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
     if( m_PageList == NULL )
         return;
 
-    if( m_FootprintWizard == NULL )
+    FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
+
+    if( !footprintWizard )
         return;
 
+
     m_PageList->Clear();
-    int max_page = m_FootprintWizard->GetNumParameterPages();
+    int max_page = footprintWizard->GetNumParameterPages();
 
     for( int i = 0; i<max_page; i++ )
     {
-        wxString name = m_FootprintWizard->GetParameterPageName( i );
+        wxString name = footprintWizard->GetParameterPageName( i );
         m_PageList->Append( name );
     }
 
@@ -417,7 +421,9 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     if( m_ParameterGrid == NULL )
         return;
 
-    if( m_FootprintWizard == NULL )
+    FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
+
+    if( footprintWizard == NULL )
         return;
 
     int page = m_PageList->GetSelection();
@@ -435,9 +441,9 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     m_ParameterGrid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 
     // Get the list of names, values, and types
-    wxArrayString   fpList  = m_FootprintWizard->GetParameterNames( page );
-    wxArrayString   fvList  = m_FootprintWizard->GetParameterValues( page );
-    wxArrayString   ptList  = m_FootprintWizard->GetParameterTypes( page );
+    wxArrayString   fpList  = footprintWizard->GetParameterNames( page );
+    wxArrayString   fvList  = footprintWizard->GetParameterValues( page );
+    wxArrayString   ptList  = footprintWizard->GetParameterTypes( page );
 
     // Dimension the wxGrid
     m_ParameterGrid->DeleteRows( 0, m_ParameterGrid->GetNumberRows() );
@@ -580,9 +586,9 @@ void FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
 
     cmd.SetEventObject( this );
 
-    pos = screen->GetNearestGridPosition( pos );
-    oldpos = screen->GetCrossHairPosition();
-    gridSize = screen->GetGridSize();
+    pos         = screen->GetNearestGridPosition( pos );
+    oldpos      = screen->GetCrossHairPosition();
+    gridSize    = screen->GetGridSize();
 
     switch( aHotKey )
     {

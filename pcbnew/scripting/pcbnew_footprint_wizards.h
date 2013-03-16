@@ -56,6 +56,7 @@ public:
     wxArrayString   GetParameterErrors( int aPage );
     wxString        SetParameterValues( int aPage, wxArrayString& aValues ); // < must return "OK" or error description
     MODULE*         GetModule();
+    void*           GetObject();
 };
 
 
@@ -63,6 +64,7 @@ class PYTHON_FOOTPRINT_WIZARDS
 {
 public:
     static void register_wizard( PyObject* aPyWizard );
+    static void deregister_wizard( PyObject* aPyWizard );
 };
 
 #endif /* PCBNEW_FOOTPRINT_WIZARDS_H */

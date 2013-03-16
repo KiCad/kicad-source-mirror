@@ -29,7 +29,7 @@
  */
 
 #ifndef CLASS_FOOTPRINT_WIZARD_H
-#define	CLASS_FOOTPRINT_WIZARD_H
+#define CLASS_FOOTPRINT_WIZARD_H
 #include <vector>
 #include <wxPcbStruct.h>
 
@@ -39,48 +39,47 @@
  * derive */
 class FOOTPRINT_WIZARD
 {
-
 public:
     FOOTPRINT_WIZARD() {}
-    ~FOOTPRINT_WIZARD() {}
+    virtual ~FOOTPRINT_WIZARD();
 
     /**
      * Function GetName
      * @return the name of the wizard
      */
-    virtual wxString      GetName()=0;
+    virtual wxString        GetName() = 0;
 
     /**
      * Function GetImage
      * @return an svg image of the wizard to be rendered
      */
-    virtual wxString      GetImage()=0;
+    virtual wxString        GetImage() = 0;
 
     /**
      * Function GetDescription
      * @return a description of the footprint wizard
      */
-    virtual wxString      GetDescription()=0;
+    virtual wxString        GetDescription() = 0;
 
     /**
      * Function GetNumParameterPages
      * @return the number of parameter pages that this wizard will show to the user
      */
-    virtual int           GetNumParameterPages()=0;
+    virtual int             GetNumParameterPages() = 0;
 
     /**
      * Function GetParameterPageName
      * @param aPage is the page we want the name of
      * @return a string with the page name
      */
-    virtual wxString      GetParameterPageName(int aPage)=0;
+    virtual wxString        GetParameterPageName( int aPage ) = 0;
 
     /**
      * Function GetParameterNames
      * @param aPage is the page we want the parameter names of
      * @return an array string with the parameter names on a certain page
      */
-    virtual wxArrayString GetParameterNames(int aPage)=0;
+    virtual wxArrayString   GetParameterNames( int aPage ) = 0;
 
     /**
      * Function GetParameterTypes
@@ -88,7 +87,7 @@ public:
      * @return an array string with the parameter types on a certain page
      *          "IU" for internal units, "UNITS" for units (0,1,2,3...,N)
      */
-    virtual wxArrayString GetParameterTypes(int aPage)=0;
+    virtual wxArrayString   GetParameterTypes( int aPage ) = 0;
 
 
     /**
@@ -96,14 +95,14 @@ public:
      * @param aPage is the page we want the parameter values of
      * @return an array of parameter values
      */
-    virtual wxArrayString GetParameterValues(int aPage)=0;
+    virtual wxArrayString   GetParameterValues( int aPage ) = 0;
 
     /**
      * Function GetParameterErrors
      * @param aPage is the page we want to know the errors of
      * @return an array of errors (if any) for the parameters, empty strings for OK parameters
      */
-    virtual wxArrayString GetParameterErrors(int aPage)=0;
+    virtual wxArrayString   GetParameterErrors( int aPage ) = 0;
 
     /**
      * Function SetParameterValues
@@ -111,14 +110,21 @@ public:
      * @param aValues are the values we want to set into the parameters
      * @return an array of parameter values
      */
-    virtual wxString      SetParameterValues(int aPage,wxArrayString& aValues)=0;
+    virtual wxString        SetParameterValues( int aPage, wxArrayString& aValues ) = 0;
 
     /**
      * Function GetModule
      * This method builds the module itself and returns it to the caller function
      * @return  PCB module built from the parameters given to the class
      */
-    virtual MODULE       *GetModule()=0;
+    virtual MODULE*         GetModule() = 0;
+
+    /**
+     * Function GetObject
+     * This method gets the pointer to the object from where this wizard constructs
+     * @return  it's a void pointer, as it could be a PyObject or any other
+     */
+    virtual void*           GetObject() = 0;
 
     /**
      * Function register_wizard
@@ -126,8 +132,7 @@ public:
      * the FOOTPRINT_WIZARDS singleton manager
      *
      */
-    void register_wizard();
-
+    void                    register_wizard();
 };
 
 
@@ -135,10 +140,9 @@ class FOOTPRINT_WIZARDS
 {
 private:
     /**
-    * FOOTPRINT_WIZARD system wide static list
-    */
-    static    std::vector<FOOTPRINT_WIZARD*>  m_FootprintWizards;
-
+     * FOOTPRINT_WIZARD system wide static list
+     */
+    static std::vector<FOOTPRINT_WIZARD*> m_FootprintWizards;
 public:
 
     /**
@@ -149,7 +153,18 @@ public:
      * @param aWizard is the footprint wizard to be registered
      *
      */
-    static void register_wizard(FOOTPRINT_WIZARD *aWizard);
+    static void                 register_wizard( FOOTPRINT_WIZARD* aWizard );
+
+    /**
+     * Function deregister_object
+     * Anyone calls this method to deregister an object which builds a wizard,
+     * it will lookup on the vector calling GetObject until find, then removed
+     * and deleted
+     *
+     * @param aObject is the footprint wizard object to be deregistered
+     *
+     */
+    static bool                 deregister_object( void* aObject );
 
     /**
      * Function GetWizard
@@ -157,7 +172,7 @@ public:
      * @return a wizard object by it's name or NULL if it isn't available.
      *
      */
-    static FOOTPRINT_WIZARD* GetWizard(wxString aName);
+    static FOOTPRINT_WIZARD*    GetWizard( wxString aName );
 
     /**
      * Function GetWizard
@@ -165,15 +180,13 @@ public:
      * @param  aIndex is the wizard index in list
      *
      */
-    static FOOTPRINT_WIZARD* GetWizard( int aIndex );
+    static FOOTPRINT_WIZARD*    GetWizard( int aIndex );
 
     /**
      * Function GetSize
      * @return the number of wizards available into the system
      */
-    static int GetSize();
-
+    static int                  GetSize();
 };
 
-#endif	/* PCBNEW_FOOTPRINT_WIZARDS_H */
-
+#endif /* PCBNEW_FOOTPRINT_WIZARDS_H */
