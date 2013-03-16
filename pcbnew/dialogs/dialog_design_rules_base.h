@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,7 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include "dialog_design_rules_aux_helper_class.h"
+class DIALOG_SHIM;
+class NETS_LIST_CTRL;
+
 #include "dialog_shim.h"
 #include <wx/colour.h>
 #include <wx/settings.h>

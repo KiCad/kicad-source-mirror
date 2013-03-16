@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "dialog_design_rules_aux_helper_class.h"
 
 #include "dialog_design_rules_base.h"
 
@@ -198,6 +200,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	fgMinValuesSizer->Add( m_TrackMinWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
 	m_SetTrackMinWidthCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SetTrackMinWidthCtrl->SetMaxLength( 0 ); 
 	fgMinValuesSizer->Add( m_SetTrackMinWidthCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ViaMinTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Min via diameter"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -205,6 +208,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	fgMinValuesSizer->Add( m_ViaMinTitle, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 	
 	m_SetViasMinSizeCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SetViasMinSizeCtrl->SetMaxLength( 0 ); 
 	fgMinValuesSizer->Add( m_SetViasMinSizeCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ViaMinDrillTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Min via drill dia"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -212,6 +216,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	fgMinValuesSizer->Add( m_ViaMinDrillTitle, 0, wxTOP|wxBOTTOM|wxLEFT|wxALIGN_RIGHT, 5 );
 	
 	m_SetViasMinDrillCtrl = new wxTextCtrl( m_panelGolbalDesignRules, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SetViasMinDrillCtrl->SetMaxLength( 0 ); 
 	fgMinValuesSizer->Add( m_SetViasMinDrillCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_MicroViaMinSizeTitle = new wxStaticText( m_panelGolbalDesignRules, wxID_ANY, _("Min uvia diameter"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -323,18 +328,6 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_gridTrackWidthList->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
-	m_gridTrackWidthList->SetRowSize( 0, 17 );
-	m_gridTrackWidthList->SetRowSize( 1, 17 );
-	m_gridTrackWidthList->SetRowSize( 2, 17 );
-	m_gridTrackWidthList->SetRowSize( 3, 17 );
-	m_gridTrackWidthList->SetRowSize( 4, 17 );
-	m_gridTrackWidthList->SetRowSize( 5, 17 );
-	m_gridTrackWidthList->SetRowSize( 6, 17 );
-	m_gridTrackWidthList->SetRowSize( 7, 17 );
-	m_gridTrackWidthList->SetRowSize( 8, 17 );
-	m_gridTrackWidthList->SetRowSize( 9, 17 );
-	m_gridTrackWidthList->SetRowSize( 10, 17 );
-	m_gridTrackWidthList->SetRowSize( 11, 17 );
 	m_gridTrackWidthList->EnableDragRowSize( true );
 	m_gridTrackWidthList->SetRowLabelSize( 80 );
 	m_gridTrackWidthList->SetRowLabelValue( 0, _("Track 1") );
