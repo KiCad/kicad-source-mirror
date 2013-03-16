@@ -72,9 +72,9 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aA
             message.Printf( wxT( "calling %s()\n"
                                  "Exception: %s\n"
                                  "         : %s\n" ),
-                            aMethod,
-                            FROM_UTF8( PyString_AsString( PyObject_Str( v ) ) ),
-                            FROM_UTF8( PyString_AsString( PyObject_Str( b ) ) )
+                            FROM_UTF8( aMethod ).c_str(),
+                            FROM_UTF8( PyString_AsString( PyObject_Str( v ) ) ).c_str(),
+                            FROM_UTF8( PyString_AsString( PyObject_Str( b ) ) ).c_str()
                             );
 
             wxMessageBox( message,
