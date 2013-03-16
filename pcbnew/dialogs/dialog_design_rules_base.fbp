@@ -3256,7 +3256,7 @@
                                                             <property name="row_label_size">80</property>
                                                             <property name="row_label_values">&quot;Track 1&quot; &quot;Track 2&quot; &quot;Track 3&quot; &quot;Track 4&quot; &quot;Track 5&quot; &quot;Track 6&quot; &quot;Track 7&quot; &quot;Track 8&quot; &quot;Track 9&quot; &quot;Track 10&quot; &quot;Track 11&quot; &quot;Track 12&quot;</property>
                                                             <property name="row_label_vert_alignment">wxALIGN_CENTRE</property>
-                                                            <property name="row_sizes">17,17,17,17,17,17,17,17,17,17,17,17</property>
+                                                            <property name="row_sizes"></property>
                                                             <property name="rows">12</property>
                                                             <property name="show">1</property>
                                                             <property name="size"></property>
