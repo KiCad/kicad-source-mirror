@@ -53,4 +53,7 @@ public:
 
 #endif
 
+wxArrayString   PyArrayStringToWx( PyObject* arr );
+wxString        PyErrStringWithTraceback();
+
 #endif    // __PYTHON_SCRIPTING_H

@@ -38,6 +38,7 @@
 #include <wxstruct.h>
 #include <common.h>
 #include <colors.h>
+#include <macros.h>
 
 /* init functions defined by swig */
 
@@ -62,11 +63,11 @@ static int          SwigNumModules = 0;
 
 static void swigAddModule( const char* name, void (* initfunc)() )
 {
-    SwigImportInittab[SwigNumModules].name = (char*) name;
-    SwigImportInittab[SwigNumModules].initfunc = initfunc;
+    SwigImportInittab[SwigNumModules].name      = (char*) name;
+    SwigImportInittab[SwigNumModules].initfunc  = initfunc;
     SwigNumModules++;
-    SwigImportInittab[SwigNumModules].name = (char*) 0;
-    SwigImportInittab[SwigNumModules].initfunc = 0;
+    SwigImportInittab[SwigNumModules].name      = (char*) 0;
+    SwigImportInittab[SwigNumModules].initfunc  = 0;
 }
 
 
@@ -165,7 +166,7 @@ bool pcbnewInitPythonScripting()
     {
         PyLOCK lock;
 
-        PyRun_SimpleString( "import sys\n"
+        PyRun_SimpleString( "import sys, traceback\n"
                             "sys.path.append(\".\")\n"
                             "import pcbnew\n"
                             "pcbnew.LoadPlugins()"
@@ -198,7 +199,7 @@ void RedirectStdio()
         "output = wx.PyOnDemandOutputWindow()\n"
         "sys.stderr = output\n";
 
-    PyLOCK      lock;
+    PyLOCK lock;
 
     PyRun_SimpleString( python_redirect );
 }
@@ -295,3 +296,57 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent )
 
 
 #endif
+
+wxArrayString PyArrayStringToWx( PyObject* aArrayString )
+{
+    wxArrayString   ret;
+
+    int             list_size = PyList_Size( aArrayString );
+
+    for( int n = 0; n<list_size; n++ )
+    {
+        PyObject* element = PyList_GetItem( aArrayString, n );
+
+        ret.Add( FROM_UTF8( PyString_AsString( element ) ), 1 );
+    }
+
+    return ret;
+}
+
+
+wxString PyErrStringWithTraceback()
+{
+    wxString err;
+
+    if( !PyErr_Occurred() )
+        return err;
+
+    PyObject*   type;
+    PyObject*   value;
+    PyObject*   traceback;
+
+    PyErr_Fetch( &type, &value, &traceback );
+
+    PyObject*   tracebackModuleString = PyString_FromString( (char*) "traceback" );
+    PyObject*   tracebackModule = PyImport_Import( tracebackModuleString );
+
+
+    PyObject*   formatException = PyObject_GetAttrString( tracebackModule,
+                                                          (char*) "format_exception" );
+    PyObject*   args = Py_BuildValue( "(O,O,O)", type, value, traceback );
+
+    PyObject*   result = PyObject_CallObject( formatException, args );
+
+    Py_DECREF( args );
+
+    wxArrayString res = PyArrayStringToWx( result );
+
+    for( int i = 0; i<res.Count(); i++ )
+    {
+        err += res[i] + wxT( "\n" );
+    }
+
+    PyErr_Clear();
+
+    return err;
+}
