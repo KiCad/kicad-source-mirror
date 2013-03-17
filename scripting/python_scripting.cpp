@@ -341,7 +341,7 @@ wxString PyErrStringWithTraceback()
 
     wxArrayString res = PyArrayStringToWx( result );
 
-    for( int i = 0; i<res.Count(); i++ )
+    for( unsigned i = 0; i<res.Count(); i++ )
     {
         err += res[i] + wxT( "\n" );
     }
