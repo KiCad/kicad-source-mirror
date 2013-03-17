@@ -2241,7 +2241,7 @@ void BOARD::SetViaSizeIndex( unsigned aIndex )
 
 void BOARD::SetTrackWidthIndex( unsigned aIndex )
 {
-    if( m_trackWidthIndex >= m_TrackWidthList.size() )
+    if( aIndex >= m_TrackWidthList.size() )
         m_trackWidthIndex = m_TrackWidthList.size();
     else
         m_trackWidthIndex = aIndex;

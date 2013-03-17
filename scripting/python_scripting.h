@@ -17,6 +17,9 @@
 #endif
 #endif
 
+#include <wx/string.h>
+#include <wx/arrstr.h>
+
 /* Function pcbnewInitPythonScripting
  * Initializes the Python engine inside pcbnew
  */
