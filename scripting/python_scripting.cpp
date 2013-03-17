@@ -224,8 +224,8 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent )
         "\t\tself.SetSizer(sizer)\n\n"
         "\n"
         "def makeWindow(parent):\n"
-        "    win = PyCrustPanel(parent)\n"
-        "    return win\n"
+        "    shell_window = PyCrustPanel(parent)\n"
+        "    return shell_window\n"
         "\n";
 
 

@@ -47,11 +47,25 @@ def ReloadPlugin(name):
     if not KICAD_PLUGINS.has_key(name):
         return False
 
-    KICAD_PLUGINS[name]["wizard"].deregister()
-
+    KICAD_PLUGINS[name]["object"].deregister()
     mod = reload(KICAD_PLUGINS[name]["module"])
+    KICAD_PLUGINS[name]["object"]= mod.register()
 
-    KICAD_PLUGINS[name]["wizard"]= mod.register()
+
+def ReloadPlugins():
+    import os.path
+    for k in KICAD_PLUGINS.keys():
+        plugin = KICAD_PLUGINS[k]
+
+        filename = plugin["filename"]
+        mtime = plugin["modification_time"]
+        now_mtime = os.path.getmtime(filename)
+
+        if mtime!=now_mtime:
+            print filename, " is modified, reloading"
+            KICAD_PLUGINS[k]["modification_time"]=now_mtime
+            ReloadPlugin(k)
+
 
 def LoadPlugins():
     import os
@@ -85,11 +99,12 @@ def LoadPlugins():
 
             mod = __import__(module[:-3], locals(), globals())
 
-
-
+            module_filename = plugins_dir+"/"+module
+            mtime = os.path.getmtime(module_filename)
             if hasattr(mod,'register'):
-                KICAD_PLUGINS[module]={"filename":plugins_dir+"/"+module,
-                                       "wizard":mod.register(),
+                KICAD_PLUGINS[module]={"filename":module_filename,
+                                       "modification_time":mtime,
+                                       "object":mod.register(),
                                        "module":mod}
 
 
