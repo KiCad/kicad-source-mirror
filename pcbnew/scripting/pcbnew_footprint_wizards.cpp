@@ -63,25 +63,9 @@ PyObject* PYTHON_FOOTPRINT_WIZARD::CallMethod( const char* aMethod, PyObject* aA
 
         if( PyErr_Occurred() )
         {
-            wxString    message;
-            PyObject*   t;
-            PyObject*   v;
-            PyObject*   b;
-
-            PyErr_Fetch( &t, &v, &b );
-            message.Printf( wxT( "calling %s()\n"
-                                 "Exception: %s\n"
-                                 "         : %s\n" ),
-                            FROM_UTF8( aMethod ).c_str(),
-                            FROM_UTF8( PyString_AsString( PyObject_Str( v ) ) ).c_str(),
-                            FROM_UTF8( PyString_AsString( PyObject_Str( b ) ) ).c_str()
-                            );
-
-            wxMessageBox( message,
+            wxMessageBox( PyErrStringWithTraceback(),
                           wxT( "Exception on python footprint wizard code" ),
                           wxICON_ERROR | wxOK );
-
-            PyErr_Clear();
         }
 
         if( result )
@@ -140,17 +124,7 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::CallRetArrayStrMethod( const char*   aMet
             return ret;
         }
 
-        int list_size = PyList_Size( result );
-
-        for( int n = 0; n<list_size; n++ )
-        {
-            PyObject*   element = PyList_GetItem( result, n );
-
-            const char* str_res = PyString_AsString( element );
-
-            str_item = FROM_UTF8( str_res );
-            ret.Add( str_item, 1 );
-        }
+        ret = PyArrayStringToWx( result );
 
         Py_DECREF( result );
     }
