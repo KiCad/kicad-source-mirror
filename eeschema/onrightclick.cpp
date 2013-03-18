@@ -351,7 +351,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     if( !Component->GetFlags() )
     {
         msg = _( "Move Component" );
-        msg << wxT( " " ) << Component->GetField( REFERENCE )->m_Text;
+        msg << wxT( " " ) << Component->GetField( REFERENCE )->GetText();
         msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
         msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr, HK_DRAG );
@@ -600,7 +600,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
     /* add menu change type text (to label, glabel, text),
      * but only if this is a single line text
      */
-    if( Text->m_Text.Find( wxT( "\n" ) ) ==  wxNOT_FOUND )
+    if( Text->GetText().Find( wxT( "\n" ) ) ==  wxNOT_FOUND )
     {
         AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
                      _( "Change to Label" ), KiBitmap( label2text_xpm ) );

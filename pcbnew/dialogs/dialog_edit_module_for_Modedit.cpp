@@ -91,7 +91,7 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_lastSelected3DShapeIndex = -1;
 
     // Init 3D shape list
-    S3D_MASTER* draw3D = m_currentModule->m_3D_Drawings;
+    S3D_MASTER* draw3D = m_currentModule->Models();
 
     while( draw3D )
     {
@@ -111,9 +111,9 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_valueCopy = new TEXTE_MODULE(NULL);
     m_referenceCopy->Copy( &m_currentModule->Reference() );
     m_valueCopy->Copy( &m_currentModule->Value() );
-    m_ReferenceCtrl->SetValue( m_referenceCopy->m_Text );
-    m_ValueCtrl->SetValue( m_valueCopy->m_Text );
-    m_ValueCtrl->SetValue( m_valueCopy->m_Text );
+    m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
+    m_ValueCtrl->SetValue( m_valueCopy->GetText() );
+    m_ValueCtrl->SetValue( m_valueCopy->GetText() );
     m_FootprintNameCtrl->SetValue( m_currentModule->GetLibRef() );
 
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non smd components" ) );
@@ -442,7 +442,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     int ii = m_3D_ShapeNameListBox->GetSelection();
     if ( ii >= 0 )
         TransfertDisplayTo3DValues( ii  );
-    S3D_MASTER*   draw3D  = m_currentModule->m_3D_Drawings;
+    S3D_MASTER*   draw3D  = m_currentModule->Models();
     for( unsigned ii = 0; ii < m_shapes3D_list.size(); ii++ )
     {
         S3D_MASTER*   draw3DCopy = m_shapes3D_list[ii];
@@ -451,7 +451,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
         if( draw3D == NULL )
         {
             draw3D = new S3D_MASTER( draw3D );
-            m_currentModule->m_3D_Drawings.Append( draw3D );
+            m_currentModule->Models().Append( draw3D );
         }
 
         draw3D->m_Shape3DName = draw3DCopy->m_Shape3DName;
@@ -467,12 +467,12 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     for( ; draw3D != NULL; draw3D = nextdraw3D )
     {
         nextdraw3D = (S3D_MASTER*) draw3D->Next();
-        delete m_currentModule->m_3D_Drawings.Remove( draw3D );
+        delete m_currentModule->Models().Remove( draw3D );
     }
 
     // Fill shape list with one void entry, if no entry
-    if( m_currentModule->m_3D_Drawings == NULL )
-        m_currentModule->m_3D_Drawings.PushBack( new S3D_MASTER( m_currentModule ) );
+    if( m_currentModule->Models() == NULL )
+        m_currentModule->Models().PushBack( new S3D_MASTER( m_currentModule ) );
 
 
     m_currentModule->CalculateBoundingBox();
@@ -488,10 +488,10 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditReference(wxCommandEvent& event)
 /***********************************************************************/
 {
     wxPoint tmp = m_parent->GetScreen()->GetCrossHairPosition();
-    m_parent->GetScreen()->SetCrossHairPosition( m_referenceCopy->m_Pos );
+    m_parent->GetScreen()->SetCrossHairPosition( m_referenceCopy->GetTextPosition() );
     m_parent->InstallTextModOptionsFrame( m_referenceCopy, NULL );
     m_parent->GetScreen()->SetCrossHairPosition( tmp );
-    m_ReferenceCtrl->SetValue(m_referenceCopy->m_Text);
+    m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
 }
 
 /***********************************************************/
@@ -499,9 +499,9 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditValue(wxCommandEvent& event)
 /***********************************************************/
 {
     wxPoint tmp = m_parent->GetScreen()->GetCrossHairPosition();
-    m_parent->GetScreen()->SetCrossHairPosition( m_valueCopy->m_Pos );
+    m_parent->GetScreen()->SetCrossHairPosition( m_valueCopy->GetTextPosition() );
     m_parent->InstallTextModOptionsFrame( m_valueCopy, NULL );
-    m_parent->GetScreen()->SetCrossHairPosition( tmp);
-    m_ValueCtrl->SetValue(m_valueCopy->m_Text);
+    m_parent->GetScreen()->SetCrossHairPosition( tmp );
+    m_ValueCtrl->SetValue( m_valueCopy->GetText() );
 }
 

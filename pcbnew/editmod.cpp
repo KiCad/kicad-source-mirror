@@ -85,13 +85,13 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* aModule )
     RotatePoint( &moveVector, -aModule->GetOrientation() );
 
     // Update the pad coordinates.
-    for( D_PAD* pad = (D_PAD*) aModule->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = (D_PAD*) aModule->Pads();  pad;  pad = pad->Next() )
     {
         pad->SetPos0( pad->GetPos0() + moveVector );
     }
 
     // Update the draw element coordinates.
-    for( EDA_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
+    for( EDA_ITEM* item = aModule->GraphicalItems();  item;  item = item->Next() )
     {
         switch( item->Type() )
         {

@@ -154,7 +154,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
 
     for( MODULE* module = m_parent->GetBoard()->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
         {
             if( pad->GetDrillShape() == PAD_CIRCLE )
             {

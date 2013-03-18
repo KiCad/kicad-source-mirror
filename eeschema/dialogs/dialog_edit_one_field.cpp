@@ -101,21 +101,21 @@ void DIALOG_EDIT_ONE_FIELD::initDlg_base()
 
 void DIALOG_LIB_EDIT_ONE_FIELD::initDlg()
 {
-    m_textsize = m_field->m_Size.x;
-    m_TextValue->SetValue( m_field->m_Text );
+    m_textsize = m_field->GetSize().x;
+    m_TextValue->SetValue( m_field->GetText() );
 
     m_textorient = m_field->GetOrientation();
 
     m_text_invisible = m_field->IsVisible() ? false : true;
 
     m_textshape = 0;
-    if( m_field->m_Italic )
+    if( m_field->IsItalic() )
         m_textshape = 1;
-    if( m_field->m_Bold )
+    if( m_field->IsBold() )
         m_textshape |= 2;
 
-    m_textHjustify = m_field->m_HJustify;
-    m_textVjustify =  m_field->m_VJustify;
+    m_textHjustify = m_field->GetHorizJustify();
+    m_textVjustify = m_field->GetVertJustify();
 
     initDlg_base();
 }
@@ -171,44 +171,31 @@ void DIALOG_LIB_EDIT_ONE_FIELD::TransfertDataToField()
 
     m_field->SetText( GetTextField() );
 
-    m_field->m_Size.x = m_field->m_Size.y = m_textsize;
-    m_field->m_Orient = m_textorient;
-
-    if( m_Invisible->GetValue() )
-        m_field->m_Attributs |= TEXT_NO_VISIBLE;
-    else
-        m_field->m_Attributs &= ~TEXT_NO_VISIBLE;
-
-    if( ( m_TextShapeOpt->GetSelection() & 1 ) != 0 )
-        m_field->m_Italic = true;
-    else
-        m_field->m_Italic = false;
-
-    if( ( m_TextShapeOpt->GetSelection() & 2 ) != 0 )
-        m_field->m_Bold = true;
-    else
-        m_field->m_Bold = false;
-
-    m_field->m_HJustify = m_textHjustify;
-    m_field->m_VJustify = m_textVjustify;
+    m_field->SetSize( wxSize( m_textsize, m_textsize ) );
+    m_field->SetOrientation( m_textorient );
+    m_field->SetVisible( !m_Invisible->GetValue() );
+    m_field->SetItalic( ( m_TextShapeOpt->GetSelection() & 1 ) != 0 );
+    m_field->SetBold( ( m_TextShapeOpt->GetSelection() & 2 ) != 0 );
+    m_field->SetHorizJustify( m_textHjustify );
+    m_field->SetVertJustify( m_textVjustify );
 }
 
 
 void DIALOG_SCH_EDIT_ONE_FIELD::initDlg()
 {
-    m_textsize = m_field->m_Size.x;
-    m_TextValue->SetValue( m_field->m_Text );
+    m_textsize = m_field->GetSize().x;
+    m_TextValue->SetValue( m_field->GetText() );
     m_textorient = m_field->GetOrientation();
     m_text_invisible = m_field->IsVisible() ? false : true;
 
     m_textshape = 0;
-    if( m_field->m_Italic )
+    if( m_field->IsItalic() )
         m_textshape = 1;
-    if( m_field->m_Bold )
+    if( m_field->IsBold() )
         m_textshape |= 2;
 
-    m_textHjustify = m_field->m_HJustify;
-    m_textVjustify =  m_field->m_VJustify;
+    m_textHjustify = m_field->GetHorizJustify();
+    m_textVjustify = m_field->GetVertJustify();
 
     initDlg_base();
 }
@@ -228,24 +215,12 @@ void DIALOG_SCH_EDIT_ONE_FIELD::TransfertDataToField()
 
     m_field->SetText( GetTextField() );
 
-    m_field->m_Size.x = m_field->m_Size.y = m_textsize;
-    m_field->m_Orient = m_textorient;
+    m_field->SetSize( wxSize( m_textsize, m_textsize ) );
+    m_field->SetOrientation( m_textorient );
+    m_field->SetVisible( !m_Invisible->GetValue() );
 
-    if( m_Invisible->GetValue() )
-        m_field->m_Attributs |= TEXT_NO_VISIBLE;
-    else
-        m_field->m_Attributs &= ~TEXT_NO_VISIBLE;
-
-    if( ( m_TextShapeOpt->GetSelection() & 1 ) != 0 )
-        m_field->m_Italic = true;
-    else
-        m_field->m_Italic = false;
-
-    if( ( m_TextShapeOpt->GetSelection() & 2 ) != 0 )
-        m_field->m_Bold = true;
-    else
-        m_field->m_Bold = false;
-
-    m_field->m_HJustify = m_textHjustify;
-    m_field->m_VJustify = m_textVjustify;
+    m_field->SetItalic( ( m_TextShapeOpt->GetSelection() & 1 ) != 0 );
+    m_field->SetBold( ( m_TextShapeOpt->GetSelection() & 2 ) != 0 );
+    m_field->SetHorizJustify( m_textHjustify );
+    m_field->SetVertJustify( m_textVjustify );
 }

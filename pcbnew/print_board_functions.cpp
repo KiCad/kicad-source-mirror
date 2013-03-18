@@ -354,7 +354,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt )
 {
     // Print pads
-    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
     {
         if( (pad->GetLayerMask() & aMasklayer ) == 0 )
             continue;
@@ -403,7 +403,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
             aModule->Value().Draw( aPanel, aDC, aDraw_mode );
     }
 
-    for( EDA_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
+    for( EDA_ITEM* item = aModule->GraphicalItems();  item;  item = item->Next() )
     {
         switch( item->Type() )
         {

@@ -245,14 +245,14 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
     SetGLColor( color );
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
-    if( aZone->m_FillMode == 0 )
+    if( aZone->GetFillMode() == 0 )
     {
         // solid polygons only are used to fill areas
         if( aZone->GetFilledPolysList().size() > 3 )
         {
             Draw3D_SolidHorizontalPolyPolygons( aZone->GetFilledPolysList(),
-                                  g_Parm_3D_Visu.GetLayerZcoordBIU( layer ),
-                                  thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                                g_Parm_3D_Visu.GetLayerZcoordBIU( layer ),
+                                                thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
         }
     }
     else
@@ -261,7 +261,7 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
         for( unsigned iseg = 0; iseg < aZone->m_FillSegmList.size(); iseg++ )
             Draw3D_SolidSegment( aZone->m_FillSegmList[iseg].m_Start,
                                  aZone->m_FillSegmList[iseg].m_End,
-                                 aZone->m_ZoneMinThickness, thickness, zpos,
+                                 aZone->GetMinThickness(), thickness, zpos,
                                  g_Parm_3D_Visu.m_BiuTo3Dunits );
     }
 
@@ -271,7 +271,7 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
     if( polysList.size() == 0 )
         return;
 
-    if( aZone->m_ZoneMinThickness <= 1 )
+    if( aZone->GetMinThickness() <= 1 )
         return;
 
     int      imax = polysList.size() - 1;
@@ -288,7 +288,7 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
             wxPoint start( begincorner->x, begincorner->y  );
             wxPoint end( endcorner->x, endcorner->y );
             Draw3D_SolidSegment( start, end,
-                                 aZone->m_ZoneMinThickness, thickness, zpos,
+                                 aZone->GetMinThickness(), thickness, zpos,
                                  g_Parm_3D_Visu.m_BiuTo3Dunits );
         }
 
@@ -301,7 +301,7 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
                 wxPoint start( endcorner->x, endcorner->y );
                 wxPoint end( firstcorner->x, firstcorner->y );
                 Draw3D_SolidSegment( start, end,
-                                     aZone->m_ZoneMinThickness, thickness, zpos,
+                                     aZone->GetMinThickness(), thickness, zpos,
                                      g_Parm_3D_Visu.m_BiuTo3Dunits );
             }
 
@@ -625,15 +625,15 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
     s_Text3DZPos  = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
     s_Text3DWidth = text->GetThickness();
     glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
-    wxSize size = text->m_Size;
+    wxSize size = text->GetSize();
     s_thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
 
-    if( text->m_Mirror )
+    if( text->IsMirrored() )
         NEGATE( size.x );
 
-    if( text->m_MultilineAllowed )
+    if( text->IsMultilineAllowed() )
     {
-        wxPoint        pos  = text->m_Pos;
+        wxPoint        pos  = text->GetTextPosition();
         wxArrayString* list = wxStringSplit( text->GetText(), '\n' );
         wxPoint        offset;
 
@@ -646,8 +646,8 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
             wxString txt = list->Item( i );
             DrawGraphicText( NULL, NULL, pos, (EDA_COLOR_T) color,
                              txt, text->GetOrientation(), size,
-                             text->m_HJustify, text->m_VJustify,
-                             text->GetThickness(), text->m_Italic,
+                             text->GetHorizJustify(), text->GetVertJustify(),
+                             text->GetThickness(), text->IsItalic(),
                              true, Draw3dTextSegm );
             pos += offset;
         }
@@ -656,10 +656,10 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
     }
     else
     {
-        DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_COLOR_T) color,
+        DrawGraphicText( NULL, NULL, text->GetTextPosition(), (EDA_COLOR_T) color,
                          text->GetText(), text->GetOrientation(), size,
-                         text->m_HJustify, text->m_VJustify,
-                         text->GetThickness(), text->m_Italic,
+                         text->GetHorizJustify(), text->GetVertJustify(),
+                         text->GetThickness(), text->IsItalic(),
                          true,
                          Draw3dTextSegm );
     }

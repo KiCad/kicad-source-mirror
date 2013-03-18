@@ -49,16 +49,6 @@ public:
 
     ~TEXTE_PCB();
 
-    const wxPoint& GetPosition() const          // was overload
-    {
-        return m_Pos;   // within EDA_TEXT
-    }
-
-    void SetPosition( const wxPoint& aPos )     // was overload
-    {
-        m_Pos = aPos;   // within EDA_TEXT
-    }
-
     void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;

@@ -233,7 +233,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
         if( t->Type() == SCH_COMPONENT_T )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) t;
-            component->GetField( REFERENCE )->m_Text = component->GetRef( this );
+            component->GetField( REFERENCE )->SetText( component->GetRef( this ) );
             component->SetUnit( component->GetUnitSelection( this ) );
         }
 

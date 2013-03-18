@@ -330,7 +330,7 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
 
     GRSetDrawMode( aDC, GR_XOR );
     GRLine( aPanel->GetClipBox(), aDC,
-            parent->GetPosition(), GetPosition() + aOffset,
+            parent->GetPosition(), GetTextPosition() + aOffset,
             0, UMBILICAL_COLOR);
 }
 

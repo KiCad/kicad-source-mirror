@@ -89,16 +89,16 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
             return false;
     }
 
-    if( m_ArcToSegmentsCount != aZoneToCompare.m_ArcToSegmentsCount )
+    if( m_ArcToSegmentsCount != aZoneToCompare.GetArcSegmentCount() )
         return false;
 
     if( m_ZoneClearance != aZoneToCompare.m_ZoneClearance )
         return false;
 
-    if( m_ZoneMinThickness != aZoneToCompare.m_ZoneMinThickness )
+    if( m_ZoneMinThickness != aZoneToCompare.GetMinThickness() )
         return false;
 
-    if( m_FillMode != aZoneToCompare.m_FillMode )
+    if( m_FillMode != aZoneToCompare.GetFillMode() )
         return false;
 
     if( m_PadConnection != aZoneToCompare.m_PadConnection )

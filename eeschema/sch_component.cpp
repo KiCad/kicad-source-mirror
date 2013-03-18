@@ -107,8 +107,8 @@ void CreateDummyCmp()
 
     LIB_TEXT* Text = new LIB_TEXT( DummyCmp );
 
-    Text->m_Size.x = Text->m_Size.y = 150;
-    Text->m_Text   = wxT( "??" );
+    Text->SetSize( wxSize( 150, 150 ) );
+    Text->SetText( wxString( wxT( "??" ) ) );
 
     DummyCmp->AddDrawItem( Square );
     DummyCmp->AddDrawItem( Text );
@@ -157,14 +157,14 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
             schField = AddField( fld );
         }
 
-        schField->m_Pos = m_Pos + it->m_Pos;
+        schField->SetPosition( m_Pos + it->GetPosition() );
 
         schField->ImportValues( *it );
 
-        schField->m_Text = it->m_Text;
+        schField->SetText( it->GetText() );
     }
 
-    wxString msg = libComponent.GetReferenceField().m_Text;
+    wxString msg = libComponent.GetReferenceField().GetText();
 
     if( msg.IsEmpty() )
         msg = wxT( "U" );
@@ -178,7 +178,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
     /* Use the schematic component name instead of the library value field
      * name.
      */
-    GetField( VALUE )->m_Text = m_ChipName;
+    GetField( VALUE )->SetText( m_ChipName );
 }
 
 
@@ -420,10 +420,10 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
     // this will happen if we load a version 1 schematic file.
     // it will also mean that multiple instances of the same sheet by default
     // all have the same component references, but perhaps this is best.
-    if( !GetField( REFERENCE )->m_Text.IsEmpty() )
+    if( !GetField( REFERENCE )->GetText().IsEmpty() )
     {
-        SetRef( sheet, GetField( REFERENCE )->m_Text );
-        return GetField( REFERENCE )->m_Text;
+        SetRef( sheet, GetField( REFERENCE )->GetText() );
+        return GetField( REFERENCE )->GetText();
     }
 
     return m_prefix;
@@ -489,17 +489,15 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 
     SCH_FIELD* rf = GetField( REFERENCE );
 
-    if( rf->m_Text.IsEmpty()
-       || ( abs( rf->m_Pos.x - m_Pos.x ) +
-            abs( rf->m_Pos.y - m_Pos.y ) > 10000 ) )
+    if( rf->GetText().IsEmpty()
+      || ( abs( rf->GetPosition().x - m_Pos.x ) +
+           abs( rf->GetPosition().y - m_Pos.y ) > 10000 ) )
     {
         // move it to a reasonable position
-        rf->m_Pos    = m_Pos;
-        rf->m_Pos.x += 50;         // a slight offset
-        rf->m_Pos.y += 50;
+        rf->SetPosition( m_Pos + wxPoint( 50, 50 ) );
     }
 
-    rf->m_Text = ref;  // for drawing.
+    rf->SetText( ref );  // for drawing.
 
     // Reinit the m_prefix member if needed
     wxString prefix = ref;
@@ -750,7 +748,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     // When a clear annotation is made, the calling function must call a
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
-    m_Fields[REFERENCE].m_Text = defRef; //for drawing.
+    m_Fields[REFERENCE].SetText( defRef ); //for drawing.
 
     SetModified();
 }
@@ -943,7 +941,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
     // skip the reference, it's been output already.
     for( int i = 1; i < GetFieldCount();  ++i )
     {
-        wxString value = GetField( i )->m_Text;
+        wxString value = GetField( i )->GetText();
 
         if( !value.IsEmpty() )
         {
@@ -978,10 +976,10 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     }
     else
     {
-        if( GetField( REFERENCE )->m_Text.IsEmpty() )
+        if( GetField( REFERENCE )->GetText().IsEmpty() )
             name1 = toUTFTildaText( m_prefix );
         else
-            name1 = toUTFTildaText( GetField( REFERENCE )->m_Text );
+            name1 = toUTFTildaText( GetField( REFERENCE )->GetText() );
     }
 
     if( !m_ChipName.IsEmpty() )
@@ -1121,14 +1119,14 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         m_ChipName = FROM_UTF8( name1 );
 
         if( !newfmt )
-            GetField( VALUE )->m_Text = FROM_UTF8( name1 );
+            GetField( VALUE )->SetText( FROM_UTF8( name1 ) );
     }
     else
     {
         m_ChipName.Empty();
-        GetField( VALUE )->m_Text.Empty();
-        GetField( VALUE )->m_Orient    = TEXT_ORIENT_HORIZ;
-        GetField( VALUE )->m_Attributs = TEXT_NO_VISIBLE;
+        GetField( VALUE )->Empty();
+        GetField( VALUE )->SetOrientation( TEXT_ORIENT_HORIZ );
+        GetField( VALUE )->SetVisible( false );
     }
 
     if( strcmp( name2, NULL_STRING ) != 0 )
@@ -1172,11 +1170,11 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         }
 
         if( !newfmt )
-            GetField( REFERENCE )->m_Text = FROM_UTF8( name2 );
+            GetField( REFERENCE )->SetText( FROM_UTF8( name2 ) );
     }
     else
     {
-        GetField( REFERENCE )->m_Attributs = TEXT_NO_VISIBLE;
+        GetField( REFERENCE )->SetVisible( false );
     }
 
     /* Parse component description
@@ -1205,10 +1203,10 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             // Set fields position to a default position (that is the
             // component position.  For existing fields, the real position
             // will be set later
-            for( int i = 0; i<GetFieldCount();  ++i )
+            for( int i = 0; i<GetFieldCount();  i++ )
             {
-                if( GetField( i )->m_Text.IsEmpty() )
-                    GetField( i )->m_Pos = m_Pos;
+                if( GetField( i )->GetText().IsEmpty() )
+                    GetField( i )->SetPosition( m_Pos );
             }
         }
         else if( line[0] == 'A' && line[1] == 'R' )
@@ -1244,7 +1242,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 multi = 1;
 
             AddHierarchicalReference( path, ref, multi );
-            GetField( REFERENCE )->m_Text = ref;
+            GetField( REFERENCE )->SetText( ref );
         }
         else if( line[0] == 'F' )
         {
@@ -1306,14 +1304,11 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 GetField( fieldNdx )->SetName( fieldName );
             }
 
-            GetField( fieldNdx )->m_Text = fieldText;
+            GetField( fieldNdx )->SetText( fieldText );
             memset( char3, 0, sizeof(char3) );
+            int x, y, w, attr;
 
-            if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", char1,
-                               &GetField( fieldNdx )->m_Pos.x,
-                               &GetField( fieldNdx )->m_Pos.y,
-                               &GetField( fieldNdx )->m_Size.x,
-                               &GetField( fieldNdx )->m_Attributs,
+            if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", char1, &x, &y, &w, &attr,
                                char2, char3 ) ) < 4 )
             {
                 aErrorMsg.Printf( wxT( "Component Field error line %d, aborted" ),
@@ -1321,14 +1316,17 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 continue;
             }
 
-            if( (GetField( fieldNdx )->m_Size.x == 0 ) || (ii == 4) )
-                GetField( fieldNdx )->m_Size.x = DEFAULT_SIZE_TEXT;
+            GetField( fieldNdx )->SetTextPosition( wxPoint( x, y ) );
+            GetField( fieldNdx )->SetAttributes( attr );
 
-            GetField( fieldNdx )->m_Orient = TEXT_ORIENT_HORIZ;
-            GetField( fieldNdx )->m_Size.y = GetField( fieldNdx )->m_Size.x;
+            if( (w == 0 ) || (ii == 4) )
+                w = DEFAULT_SIZE_TEXT;
+
+            GetField( fieldNdx )->SetSize( wxSize( w, w ) );
+            GetField( fieldNdx )->SetOrientation( TEXT_ORIENT_HORIZ );
 
             if( char1[0] == 'V' )
-                GetField( fieldNdx )->m_Orient = TEXT_ORIENT_VERT;
+                GetField( fieldNdx )->SetOrientation( TEXT_ORIENT_VERT );
 
             if( ii >= 7 )
             {
@@ -1342,23 +1340,15 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 else if( char3[0] == 'T' )
                     vjustify = GR_TEXT_VJUSTIFY_TOP;
 
-                if( char3[1] == 'I' )
-                    GetField( fieldNdx )->m_Italic = true;
-                else
-                    GetField( fieldNdx )->m_Italic = false;
-
-                if( char3[2] == 'B' )
-                    GetField( fieldNdx )->m_Bold = true;
-                else
-                    GetField( fieldNdx )->m_Bold = false;
-
-                GetField( fieldNdx )->m_HJustify = hjustify;
-                GetField( fieldNdx )->m_VJustify = vjustify;
+                GetField( fieldNdx )->SetItalic( char3[1] == 'I' );
+                GetField( fieldNdx )->SetBold( char3[2] == 'B' );
+                GetField( fieldNdx )->SetHorizJustify( hjustify );
+                GetField( fieldNdx )->SetVertJustify( vjustify );
             }
 
             if( fieldNdx == REFERENCE )
-                if( GetField( fieldNdx )->m_Text[0] == '#' )
-                    GetField( fieldNdx )->m_Attributs |= TEXT_NO_VISIBLE;
+                if( GetField( fieldNdx )->GetText()[0] == '#' )
+                    GetField( fieldNdx )->SetVisible( false );
         }
         else
         {
@@ -1485,7 +1475,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     else
         msg = _( "Name" );
 
-    aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->m_Text, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetText(), DARKCYAN ) );
 
     // Display component reference in library and library
     aList.push_back( MSG_PANEL_ITEM( _( "Component" ), m_ChipName, BROWN ) );
@@ -1497,7 +1487,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     // Display the current associated footprin, if exists.
     if( ! GetField( FOOTPRINT )->IsVoid() )
-        msg = GetField( FOOTPRINT )->m_Text;
+        msg = GetField( FOOTPRINT )->GetText();
     else
         msg = _("<Unknown>");
     aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
@@ -1520,9 +1510,10 @@ void SCH_COMPONENT::MirrorY( int aYaxis_position )
 
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        /* move the fields to the new position because the component itself
-         * has moved */
-        GetField( ii )->m_Pos.x -= dx;
+        // Move the fields to the new position because the component itself has moved.
+        wxPoint pos = GetField( ii )->GetPosition();
+        pos.x -= dx;
+        GetField( ii )->SetPosition( pos );
     }
 }
 
@@ -1539,9 +1530,10 @@ void SCH_COMPONENT::MirrorX( int aXaxis_position )
 
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        /* move the fields to the new position because the component itself
-         * has moved */
-        GetField( ii )->m_Pos.y -= dy;
+        // Move the fields to the new position because the component itself has moved.
+        wxPoint pos = GetField( ii )->GetPosition();
+        pos.y -= dy;
+        GetField( ii )->SetPosition( pos );
     }
 }
 
@@ -1557,10 +1549,11 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
 
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
-        /* move the fields to the new position because the component itself
-         * has moved */
-        GetField( ii )->m_Pos.x -= prev.x - m_Pos.x;
-        GetField( ii )->m_Pos.y -= prev.y - m_Pos.y;
+        // Move the fields to the new position because the component itself has moved.
+        wxPoint pos = GetField( ii )->GetPosition();
+        pos.x -= prev.x - m_Pos.x;
+        pos.y -= prev.y - m_Pos.y;
+        GetField( ii )->SetPosition( pos );
     }
 }
 

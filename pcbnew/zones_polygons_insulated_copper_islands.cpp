@@ -54,7 +54,7 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
 
     for( MODULE* module = aPcb->m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
         {
             if( !pad->IsOnLayer( GetLayer() ) )
                 continue;

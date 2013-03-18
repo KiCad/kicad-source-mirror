@@ -289,6 +289,7 @@ if (KICAD_SCRIPTING)
     set(SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
+        DEPENDS pcbcommon
         DEPENDS scripting/pcbnew.i
         DEPENDS scripting/board.i
         DEPENDS scripting/board_item.i

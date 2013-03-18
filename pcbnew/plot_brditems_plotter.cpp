@@ -164,7 +164,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
             PlotTextModule( &aModule->Value(), GetValueColor() );
     }
 
-    for( textModule = (TEXTE_MODULE*) aModule->m_Drawings.GetFirst();
+    for( textModule = (TEXTE_MODULE*) aModule->GraphicalItems().GetFirst();
          textModule != NULL; textModule = textModule->Next() )
     {
         if( textModule->Type() != PCB_MODULE_TEXT_T )
@@ -233,30 +233,30 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte,
     m_plotter->SetColor( aColor );
 
     // calculate some text parameters :
-    size = pt_texte->m_Size;
-    pos  = pt_texte->m_Pos;
+    size = pt_texte->GetSize();
+    pos  = pt_texte->GetTextPosition();
 
     orient = pt_texte->GetDrawRotation();
 
-    thickness = pt_texte->m_Thickness;
+    thickness = pt_texte->GetThickness();
 
     if( GetMode() == LINE )
         thickness = -1;
 
-    if( pt_texte->m_Mirror )
+    if( pt_texte->IsMirrored() )
         NEGATE( size.x );  // Text is mirrored
 
     // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
     // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
     // (like bold text) and we manage the thickness.
     // So we set bold flag to true
-    bool allow_bold = pt_texte->m_Bold || thickness;
+    bool allow_bold = pt_texte->IsBold() || thickness;
 
     m_plotter->Text( pos, aColor,
                      pt_texte->GetText(),
                      orient, size,
-                     pt_texte->m_HJustify, pt_texte->m_VJustify,
-                     thickness, pt_texte->m_Italic, allow_bold );
+                     pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
+                     thickness, pt_texte->IsItalic(), allow_bold );
 }
 
 
@@ -364,7 +364,7 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
 {
     for( MODULE* module = m_board->m_Modules;  module;  module = module->Next() )
     {
-        for( EDGE_MODULE* edge = (EDGE_MODULE*) module->m_Drawings.GetFirst();
+        for( EDGE_MODULE* edge = (EDGE_MODULE*) module->GraphicalItems().GetFirst();
              edge; edge = edge->Next() )
         {
             if( edge->Type() != PCB_MODULE_EDGE_T )
@@ -478,21 +478,21 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 
     m_plotter->SetColor( getColor( pt_texte->GetLayer() ) );
 
-    size = pt_texte->m_Size;
-    pos  = pt_texte->m_Pos;
-    orient    = pt_texte->m_Orient;
-    thickness = ( GetMode() == LINE ) ? -1 : pt_texte->m_Thickness;
+    size      = pt_texte->GetSize();
+    pos       = pt_texte->GetTextPosition();
+    orient    = pt_texte->GetOrientation();
+    thickness = ( GetMode() == LINE ) ? -1 : pt_texte->GetThickness();
 
-    if( pt_texte->m_Mirror )
+    if( pt_texte->IsMirrored() )
         size.x = -size.x;
 
     // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
     // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
     // (like bold text) and we manage the thickness.
     // So we set bold flag to true
-    bool allow_bold = pt_texte->m_Bold || thickness;
+    bool allow_bold = pt_texte->IsBold() || thickness;
 
-    if( pt_texte->m_MultilineAllowed )
+    if( pt_texte->IsMultilineAllowed() )
     {
         wxArrayString* list = wxStringSplit( pt_texte->GetText(), '\n' );
         wxPoint        offset;
@@ -505,8 +505,8 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
         {
             wxString txt = list->Item( i );
             m_plotter->Text( pos, UNSPECIFIED_COLOR, txt, orient, size,
-                           pt_texte->m_HJustify, pt_texte->m_VJustify,
-                           thickness, pt_texte->m_Italic, allow_bold );
+                             pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
+                             thickness, pt_texte->IsItalic(), allow_bold );
             pos += offset;
         }
 
@@ -515,8 +515,8 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     else
     {
         m_plotter->Text( pos, UNSPECIFIED_COLOR, pt_texte->GetText(), orient, size,
-                         pt_texte->m_HJustify, pt_texte->m_VJustify,
-                         thickness, pt_texte->m_Italic, allow_bold );
+                         pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
+                         thickness, pt_texte->IsItalic(), allow_bold );
     }
 }
 
@@ -560,7 +560,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
             if( GetMode() == FILLED )
             {
                 // Plot the current filled area polygon
-                if( aZone->m_FillMode == 0 )    // We are using solid polygons
+                if( aZone->GetFillMode() == 0 )    // We are using solid polygons
                 {                               // (if != 0: using segments )
                     m_plotter->PlotPoly( cornerList, FILLED_SHAPE );
                 }
@@ -571,23 +571,24 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
                         wxPoint start = aZone->m_FillSegmList[iseg].m_Start;
                         wxPoint end   = aZone->m_FillSegmList[iseg].m_End;
                         m_plotter->ThickSegment( start, end,
-                                                aZone->m_ZoneMinThickness,
-                                                GetMode() );
+                                                 aZone->GetMinThickness(),
+                                                 GetMode() );
                     }
                 }
 
                 // Plot the current filled area outline
-                if( aZone->m_ZoneMinThickness > 0 )
-                    m_plotter->PlotPoly( cornerList, NO_FILL, aZone->m_ZoneMinThickness );
+                if( aZone->GetMinThickness() > 0 )
+                    m_plotter->PlotPoly( cornerList, NO_FILL, aZone->GetMinThickness() );
             }
             else
             {
-                if( aZone->m_ZoneMinThickness > 0 )
+                if( aZone->GetMinThickness() > 0 )
                 {
                     for( unsigned jj = 1; jj<cornerList.size(); jj++ )
                         m_plotter->ThickSegment( cornerList[jj -1], cornerList[jj],
-                                                ( GetMode() == LINE ) ? -1 : aZone->m_ZoneMinThickness,
-                                                GetMode() );
+                                                 ( GetMode() == LINE ) ? -1 :
+                                                 aZone->GetMinThickness(),
+                                                 GetMode() );
                 }
 
                 m_plotter->SetCurrentLineWidth( -1 );
@@ -717,7 +718,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 
     for( MODULE *Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )
     {
-        for( D_PAD *pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( D_PAD *pad = Module->Pads(); pad != NULL; pad = pad->Next() )
         {
             if( pad->GetDrillSize().x == 0 )
                 continue;

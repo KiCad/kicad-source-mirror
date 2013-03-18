@@ -886,8 +886,8 @@ void MODULE::SetPosition( const wxPoint& newpos )
     wxPoint delta = newpos - m_Pos;
 
     m_Pos += delta;
-    m_Reference->SetPosition( m_Reference->GetPosition() + delta );
-    m_Value->SetPosition( m_Value->GetPosition() + delta );
+    m_Reference->SetTextPosition( m_Reference->GetTextPosition() + delta );
+    m_Value->SetTextPosition( m_Value->GetTextPosition() + delta );
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {

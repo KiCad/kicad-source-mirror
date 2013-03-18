@@ -126,7 +126,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     for( ; module != 0; module = module->Next() )
     {
-        for( pad = module->m_Pads; pad != 0; pad = pad->Next() )
+        for( pad = module->Pads(); pad != 0; pad = pad->Next() )
         {
             if( pad->GetNet() == GetNet() )
             {

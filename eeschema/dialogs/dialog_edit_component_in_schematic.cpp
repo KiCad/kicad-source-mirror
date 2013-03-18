@@ -216,7 +216,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     if( !copyPanelToSelectedField() )
         return;
 
-    if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].m_Text ) )
+    if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].GetText() ) )
     {
         DisplayError( NULL, _( "Illegal reference. A reference must start with a letter" ) );
         return;
@@ -233,7 +233,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
-        m_FieldsBuf[i].m_Pos += m_Cmp->m_Pos;
+        m_FieldsBuf[i].SetPosition( m_FieldsBuf[i].GetPosition() + m_Cmp->m_Pos );
     }
 
     // Delete any fields with no name before we copy all of m_FieldsBuf back into the component.
@@ -274,7 +274,7 @@ Do you wish to remove this and all remaining undefined fields?" ),
     LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
 
     if( entry &&  entry->IsPower() )
-        m_FieldsBuf[VALUE].m_Text = m_Cmp->m_ChipName;
+        m_FieldsBuf[VALUE].SetText( m_Cmp->m_ChipName );
 
     // copy all the fields back, and change the length of m_Fields.
     m_Cmp->SetFields( m_FieldsBuf );
@@ -282,7 +282,7 @@ Do you wish to remove this and all remaining undefined fields?" ),
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
-    m_Cmp->SetRef( &m_Parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].m_Text );
+    m_Cmp->SetRef( &m_Parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
 
     m_Parent->OnModify();
     m_Parent->GetScreen()->TestDanglingEnds();
@@ -303,7 +303,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::addFieldButtonHandler( wxCommandEvent& 
 
     SCH_FIELD blank( wxPoint(), fieldNdx, m_Cmp );
 
-    blank.m_Orient = m_FieldsBuf[REFERENCE].m_Orient;
+    blank.SetOrientation( m_FieldsBuf[REFERENCE].GetOrientation() );
 
     m_FieldsBuf.push_back( blank );
     m_FieldsBuf[fieldNdx].SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx ) );
@@ -364,7 +364,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& ev
     SCH_FIELD tmp = m_FieldsBuf[fieldNdx - 1];
 
     D( printf( "tmp.m_Text=\"%s\" tmp.m_Name=\"%s\"\n",
-               TO_UTF8( tmp.m_Text ), TO_UTF8( tmp.GetName( false ) ) ); )
+               TO_UTF8( tmp.GetText() ), TO_UTF8( tmp.GetName( false ) ) ); )
 
     m_FieldsBuf[fieldNdx - 1] = m_FieldsBuf[fieldNdx];
     setRowItem( fieldNdx - 1, m_FieldsBuf[fieldNdx] );
@@ -458,7 +458,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         m_FieldsBuf.push_back(  aComponent->m_Fields[i] );
 
         // make the editable field position relative to the component
-        m_FieldsBuf[i].m_Pos -= m_Cmp->m_Pos;
+        m_FieldsBuf[i].SetPosition( m_FieldsBuf[i].GetPosition() - m_Cmp->m_Pos );
     }
 
     // Add template fieldnames:
@@ -480,18 +480,18 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         if( !schField )
         {
             if( !it->m_Visible )
-                fld.m_Attributs |= TEXT_NO_VISIBLE;
+                fld.SetVisible( false );
             else
-                fld.m_Attributs &= ~TEXT_NO_VISIBLE;
+                fld.SetVisible( true );
 
-            fld.m_Text = it->m_Value;   // empty? ok too.
+            fld.SetText( it->m_Value );   // empty? ok too.
         }
         else
         {
             fld = *schField;
 
             // make the editable field position relative to the component
-            fld.m_Pos -= m_Cmp->m_Pos;
+            fld.SetPosition( fld.GetPosition() - m_Cmp->m_Pos );
         }
 
         m_FieldsBuf.push_back( fld );
@@ -510,7 +510,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
             m_FieldsBuf.push_back( *cmp );
 
             // make the editable field position relative to the component
-            m_FieldsBuf[newNdx].m_Pos -= m_Cmp->m_Pos;
+            m_FieldsBuf[newNdx].SetPosition( m_FieldsBuf[newNdx].GetPosition() - m_Cmp->m_Pos );
         }
     }
 
@@ -523,7 +523,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     }
 #endif
 
-    m_FieldsBuf[REFERENCE].m_Text = m_Cmp->GetRef( &m_Parent->GetCurrentSheet() );
+    m_FieldsBuf[REFERENCE].SetText( m_Cmp->GetRef( &m_Parent->GetCurrentSheet() ) );
 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
@@ -590,31 +590,31 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     SCH_FIELD& field = m_FieldsBuf[fieldNdx];
 
-    showCheckBox->SetValue( !(field.m_Attributs & TEXT_NO_VISIBLE) );
+    showCheckBox->SetValue( field.IsVisible() );
 
-    rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
+    rotateCheckBox->SetValue( field.GetOrientation() == TEXT_ORIENT_VERT );
 
     int style = 0;
 
-    if( field.m_Italic )
+    if( field.IsItalic() )
         style = 1;
 
-    if( field.m_Bold )
+    if( field.IsBold() )
         style |= 2;
 
     m_StyleRadioBox->SetSelection( style );
 
     // Select the right text justification
-    if( field.m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+    if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
         m_FieldHJustifyCtrl->SetSelection(0);
-    else if( field.m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+    else if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
         m_FieldHJustifyCtrl->SetSelection(2);
     else
         m_FieldHJustifyCtrl->SetSelection(1);
 
-    if( field.m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+    if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
         m_FieldVJustifyCtrl->SetSelection(0);
-    else if( field.m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+    else if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
         m_FieldVJustifyCtrl->SetSelection(2);
     else
         m_FieldVJustifyCtrl->SetSelection(1);
@@ -633,7 +633,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     // may only delete user defined fields
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
-    fieldValueTextCtrl->SetValue( field.m_Text );
+    fieldValueTextCtrl->SetValue( field.GetText() );
 
     // For power symbols, the value is NOR editable, because value and pin
     // name must be same and can be edited only in library editor
@@ -642,23 +642,23 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     else
         fieldValueTextCtrl->Enable( true );
 
-    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.m_Size.x ) );
+    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
 
-    wxPoint coord = field.m_Pos;
+    wxPoint coord = field.GetPosition();
     wxPoint zero  = -m_Cmp->m_Pos;  // relative zero
 
     // If the field value is empty and the position is at relative zero, we
     // set the initial position as a small offset from the ref field, and
     // orient it the same as the ref field.  That is likely to put it at least
     // close to the desired position.
-    if( coord == zero && field.m_Text.IsEmpty() )
+    if( coord == zero && field.GetText().IsEmpty() )
     {
-        rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].m_Orient == TEXT_ORIENT_VERT );
+        rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].GetOrientation() == TEXT_ORIENT_VERT );
 
-        coord.x = m_FieldsBuf[REFERENCE].m_Pos.x
+        coord.x = m_FieldsBuf[REFERENCE].GetPosition().x
             + ( fieldNdx - MANDATORY_FIELDS + 1 ) * 100;
 
-        coord.y = m_FieldsBuf[REFERENCE].m_Pos.y
+        coord.y = m_FieldsBuf[REFERENCE].GetPosition().y
             + ( fieldNdx - MANDATORY_FIELDS + 1 ) * 100;
 
         // coord can compute negative if field is < MANDATORY_FIELDS, e.g. FOOTPRINT.
@@ -683,17 +683,14 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
 
     SCH_FIELD& field = m_FieldsBuf[fieldNdx];
 
-    if( showCheckBox->GetValue() )
-        field.m_Attributs &= ~TEXT_NO_VISIBLE;
-    else
-        field.m_Attributs |= TEXT_NO_VISIBLE;
+    field.SetVisible( showCheckBox->GetValue() );
 
     if( rotateCheckBox->GetValue() )
-        field.m_Orient = TEXT_ORIENT_VERT;
+        field.SetOrientation( TEXT_ORIENT_VERT );
     else
-        field.m_Orient = TEXT_ORIENT_HORIZ;
+        field.SetOrientation( TEXT_ORIENT_HORIZ );
 
-    rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
+    rotateCheckBox->SetValue( field.GetOrientation() == TEXT_ORIENT_VERT );
 
     // Copy the text justification
     EDA_TEXT_HJUSTIFY_T hjustify[3] = {
@@ -706,8 +703,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
         GR_TEXT_VJUSTIFY_TOP
     };
 
-    field.m_HJustify = hjustify[m_FieldHJustifyCtrl->GetSelection()];
-    field.m_VJustify = vjustify[m_FieldVJustifyCtrl->GetSelection()];
+    field.SetHorizJustify( hjustify[m_FieldHJustifyCtrl->GetSelection()] );
+    field.SetVertJustify( vjustify[m_FieldVJustifyCtrl->GetSelection()] );
 
     field.SetName( fieldNameTextCtrl->GetValue() );
 
@@ -717,27 +714,21 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
      * When void, usually netlists are broken
      */
     if( !fieldValueTextCtrl->GetValue().IsEmpty() || fieldNdx > VALUE )
-        field.m_Text = fieldValueTextCtrl->GetValue();
+        field.SetText( fieldValueTextCtrl->GetValue() );
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
-    field.m_Size.x = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(), g_UserUnit );
-    field.m_Size.y = field.m_Size.x;
-
+    int tmp = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(), g_UserUnit );
+    field.SetSize( wxSize( tmp, tmp ) );
     int style = m_StyleRadioBox->GetSelection();
 
-    if( (style & 1 ) != 0 )
-        field.m_Italic = true;
-    else
-        field.m_Italic = false;
+    field.SetItalic( (style & 1 ) != 0 );
+    field.SetBold( (style & 2 ) != 0 );
 
-    if( (style & 2 ) != 0 )
-        field.m_Bold = true;
-    else
-        field.m_Bold = false;
-
-    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() );
-    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() );
+    wxPoint pos;
+    pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() );
+    pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() );
+    field.SetPosition( pos );
 
     return true;
 }
@@ -853,11 +844,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     // Perhaps the FOOTPRINT field should also be considered,
     // but for most of components it is not set in library
     LIB_FIELD& refField = entry->GetReferenceField();
-    m_Cmp->GetField( REFERENCE )->m_Pos = refField.m_Pos + m_Cmp->m_Pos;
+    m_Cmp->GetField( REFERENCE )->SetPosition( refField.GetPosition() + m_Cmp->m_Pos );
     m_Cmp->GetField( REFERENCE )->ImportValues( refField );
 
     LIB_FIELD& valField = entry->GetValueField();
-    m_Cmp->GetField( VALUE )->m_Pos = valField.m_Pos + m_Cmp->m_Pos;
+    m_Cmp->GetField( VALUE )->SetPosition( valField.GetPosition() + m_Cmp->m_Pos );
     m_Cmp->GetField( VALUE )->ImportValues( valField );
 
     m_Cmp->SetOrientation( CMP_NORMAL );

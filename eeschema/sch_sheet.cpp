@@ -368,7 +368,7 @@ void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
     }
 
     wxLogDebug( wxT( "Fix me: attempt to remove label %s which is not in sheet %s." ),
-                GetChars( aSheetPin->m_Text ), GetChars( m_name ) );
+                GetChars( aSheetPin->GetText() ), GetChars( m_name ) );
 }
 
 
@@ -376,7 +376,7 @@ bool SCH_SHEET::HasPin( const wxString& aName )
 {
     BOOST_FOREACH( SCH_SHEET_PIN pin, m_pins )
     {
-        if( pin.m_Text.CmpNoCase( aName ) == 0 )
+        if( pin.GetText().CmpNoCase( aName ) == 0 )
             return true;
     }
 
@@ -410,7 +410,7 @@ bool SCH_SHEET::HasUndefinedPins()
 
             HLabel = (SCH_HIERLABEL*) DrawStruct;
 
-            if( pin.m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
+            if( pin.GetText().CmpNoCase( HLabel->GetText() ) == 0 )
                 break;  // Found!
 
             HLabel = NULL;
@@ -443,7 +443,7 @@ int SCH_SHEET::GetMinWidth() const
 
         for( size_t j = 0; j < m_pins.size(); j++ )
         {
-            if( (i == j) || (m_pins[i].m_Pos.y != m_pins[j].m_Pos.y) )
+            if( (i == j) || (m_pins[i].GetPosition().y != m_pins[j].GetPosition().y) )
                 continue;
 
             if( width < rect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth() )
@@ -464,7 +464,7 @@ int SCH_SHEET::GetMinHeight() const
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
-        int pinY = m_pins[i].m_Pos.y - m_pos.y;
+        int pinY = m_pins[i].GetPosition().y - m_pos.y;
 
         if( pinY > height )
             height = pinY;
@@ -494,7 +494,7 @@ void SCH_SHEET::CleanupSheet()
 
             HLabel = (SCH_HIERLABEL*) DrawStruct;
 
-            if( i->m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
+            if( i->GetText().CmpNoCase( HLabel->GetText() ) == 0 )
                 break;  // Found!
 
             HLabel = NULL;
@@ -673,7 +673,7 @@ int SCH_SHEET::ComponentCount()
             {
                 SCH_COMPONENT* Cmp = (SCH_COMPONENT*) bs;
 
-                if( Cmp->GetField( VALUE )->m_Text.GetChar( 0 ) != '#' )
+                if( Cmp->GetField( VALUE )->GetText().GetChar( 0 ) != '#' )
                     n++;
             }
 
@@ -896,7 +896,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
     /* Move the sheet labels according to the new sheet size. */
     BOOST_FOREACH( SCH_SHEET_PIN& label, m_pins )
     {
-        label.ConstrainOnEdge( label.m_Pos );
+        label.ConstrainOnEdge( label.GetPosition() );
     }
 }
 
@@ -1003,7 +1003,7 @@ bool SCH_SHEET::IsSelectStateChanged( const wxRect& aRect )
 void SCH_SHEET::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 {
     for( size_t i = 0; i < GetPins().size(); i++ )
-        aPoints.push_back( GetPins()[i].m_Pos );
+        aPoints.push_back( GetPins()[i].GetPosition() );
 }
 
 
@@ -1087,11 +1087,11 @@ void SCH_SHEET::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
         item->m_Link = this;
         item->m_Type = NET_SHEETLABEL;
         item->m_ElectricalType = m_pins[i].GetShape();
-        item->m_Label = m_pins[i].m_Text;
-        item->m_Start = item->m_End = m_pins[i].m_Pos;
+        item->m_Label = m_pins[i].GetText();
+        item->m_Start = item->m_End = m_pins[i].GetPosition();
         aNetListItems.push_back( item );
 
-        if( IsBusLabel( m_pins[i].m_Text ) )
+        if( IsBusLabel( m_pins[i].GetText() ) )
             item->ConvertBusToNetListItems( aNetListItems );
     }
 }

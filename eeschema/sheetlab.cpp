@@ -56,10 +56,10 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
 
     DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
 
-    dlg.SetLabelName( aSheetPin->m_Text );
-    dlg.SetTextHeight( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.y ) );
+    dlg.SetLabelName( aSheetPin->GetText() );
+    dlg.SetTextHeight( ReturnStringFromValue( g_UserUnit, aSheetPin->GetSize().y ) );
     dlg.SetTextHeightUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.x ) );
+    dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aSheetPin->GetSize().x ) );
     dlg.SetTextWidthUnits( GetUnitsLabel( g_UserUnit ) );
     dlg.SetConnectionType( aSheetPin->GetShape() );
 
@@ -84,9 +84,9 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
         GetScreen()->SetCurItem( NULL );
     }
 
-    aSheetPin->m_Text = dlg.GetLabelName();
-    aSheetPin->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight() );
-    aSheetPin->m_Size.x = ReturnValueFromString( g_UserUnit, dlg.GetTextWidth() );
+    aSheetPin->SetText( dlg.GetLabelName() );
+    aSheetPin->SetSize( wxSize( ReturnValueFromString( g_UserUnit, dlg.GetTextHeight() ),
+                                ReturnValueFromString( g_UserUnit, dlg.GetTextWidth() ) ) );
     aSheetPin->SetShape( dlg.GetConnectionType() );
 
     if( aDC )
@@ -103,19 +103,19 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
 
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), line );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->m_Size  = m_lastSheetPinTextSize;
+    sheetPin->SetSize( m_lastSheetPinTextSize );
     sheetPin->SetShape( m_lastSheetPinType );
 
     int response = EditSheetPin( sheetPin, NULL );
 
-    if( sheetPin->m_Text.IsEmpty() || (response == wxID_CANCEL) )
+    if( sheetPin->GetText().IsEmpty() || (response == wxID_CANCEL) )
     {
         delete sheetPin;
         return NULL;
     }
 
     m_lastSheetPinType = sheetPin->GetShape();
-    m_lastSheetPinTextSize = sheetPin->m_Size;
+    m_lastSheetPinTextSize = sheetPin->GetSize();
 
     MoveItem( (SCH_ITEM*) sheetPin, aDC );
 
@@ -143,7 +143,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
         label = (SCH_HIERLABEL*) item;
 
         /* A global label has been found: check if there a corresponding sheet label. */
-        if( !aSheet->HasPin( label->m_Text ) )
+        if( !aSheet->HasPin( label->GetText() ) )
             break;
 
         label = NULL;
@@ -155,9 +155,9 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
         return NULL;
     }
 
-    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->m_Text );
+    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->GetText() );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->m_Size   = m_lastSheetPinTextSize;
+    sheetPin->SetSize( m_lastSheetPinTextSize );
     m_lastSheetPinType = label->GetShape();
     sheetPin->SetShape( label->GetShape() );
 

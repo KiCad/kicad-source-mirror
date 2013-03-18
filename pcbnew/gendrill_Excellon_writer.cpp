@@ -504,7 +504,7 @@ void EXCELLON_WRITER::BuildHolesList( int aFirstLayer,
         for( MODULE* module = m_pcb->m_Modules;  module;  module = module->Next() )
         {
             // Read and analyse pads
-            for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+            for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
                 if( ! aGenerateNPTH_list && pad->GetAttribute() == PAD_HOLE_NOT_PLATED )
                     continue;

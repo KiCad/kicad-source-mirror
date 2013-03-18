@@ -224,15 +224,15 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
 
 void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
-    m_Orient    = aSource.m_Orient;
-    m_Size      = aSource.m_Size;
-    m_HJustify  = aSource.m_HJustify;
-    m_VJustify  = aSource.m_VJustify;
-    m_Italic    = aSource.m_Italic;
-    m_Bold      = aSource.m_Bold;
-    m_Thickness = aSource.m_Thickness;
-    m_Attributs = aSource.m_Attributs;
-    m_Mirror    = aSource.m_Mirror;
+    m_Orient    = aSource.GetOrientation();
+    m_Size      = aSource.GetSize();
+    m_HJustify  = aSource.GetHorizJustify();
+    m_VJustify  = aSource.GetVertJustify();
+    m_Italic    = aSource.IsItalic();
+    m_Bold      = aSource.IsBold();
+    m_Thickness = aSource.GetThickness();
+    m_Attributs = aSource.GetAttributes();
+    m_Mirror    = aSource.IsMirrored();
 }
 
 

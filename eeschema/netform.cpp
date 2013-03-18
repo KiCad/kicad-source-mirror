@@ -777,10 +777,10 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericLibParts()
 
         for( unsigned i=0;  i<fieldList.size();  ++i )
         {
-            if( !fieldList[i].m_Text.IsEmpty() )
+            if( !fieldList[i].GetText().IsEmpty() )
             {
                 XNODE*     xfield;
-                xfields->AddChild( xfield = node( sField, fieldList[i].m_Text ) );
+                xfields->AddChild( xfield = node( sField, fieldList[i].GetText() ) );
                 xfield->AddAttribute( sName, fieldList[i].GetName(false) );
             }
         }
@@ -1000,13 +1000,13 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericComponents()
             xcomps->AddChild( xcomp = node( sComponent ) );
             xcomp->AddAttribute( sRef, comp->GetRef( path ) );
 
-            xcomp->AddChild( node( sValue, comp->GetField( VALUE )->m_Text ) );
+            xcomp->AddChild( node( sValue, comp->GetField( VALUE )->GetText() ) );
 
             if( !comp->GetField( FOOTPRINT )->IsVoid() )
-                xcomp->AddChild( node( sFootprint, comp->GetField( FOOTPRINT )->m_Text ) );
+                xcomp->AddChild( node( sFootprint, comp->GetField( FOOTPRINT )->GetText() ) );
 
             if( !comp->GetField( DATASHEET )->IsVoid() )
-                xcomp->AddChild( node( sDatasheet, comp->GetField( DATASHEET )->m_Text ) );
+                xcomp->AddChild( node( sDatasheet, comp->GetField( DATASHEET )->GetText() ) );
 
             // Export all user defined fields within the component,
             // which start at field index MANDATORY_FIELDS.  Only output the <fields>
@@ -1024,7 +1024,7 @@ XNODE* NETLIST_EXPORT_TOOL::makeGenericComponents()
                     if( !f->IsVoid() )
                     {
                         XNODE*  xfield;
-                        xfields->AddChild( xfield = node( sField, f->m_Text ) );
+                        xfields->AddChild( xfield = node( sField, f->GetText() ) );
                         xfield->AddAttribute( sName, f->GetName() );
                     }
                 }
@@ -1229,7 +1229,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool use_netnames, bool a
 
             SCH_TEXT*   drawText = (SCH_TEXT*) item;
 
-            text = drawText->m_Text;
+            text = drawText->GetText();
 
             if( text.IsEmpty() )
                 continue;
@@ -1247,14 +1247,15 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool use_netnames, bool a
             {
                 // Put the Y position as an ascii string, for sort by vertical
                 // position, using usual sort string by alphabetic value
-                int ypos = drawText->m_Pos.y;
+                int ypos = drawText->GetPosition().y;
+
                 for( int ii = 0; ii < BUFYPOS_LEN; ii++ )
                 {
                     bufnum[BUFYPOS_LEN - 1 - ii] = (ypos & 63) + ' ';
                     ypos >>= 6;
                 }
 
-                text = drawText->m_Text.AfterFirst( ' ' );
+                text = drawText->GetText().AfterFirst( ' ' );
 
                 // First BUFYPOS_LEN char are the Y position.
                 msg.Printf( wxT( "%s %s" ), bufnum, text.GetData() );
@@ -1305,7 +1306,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool use_netnames, bool a
             SCH_FIELD*  netlistEnabledField = comp->FindField( wxT( "Spice_Netlist_Enabled" ) );
             if( netlistEnabledField )
             {
-                wxString netlistEnabled = netlistEnabledField->m_Text;
+                wxString netlistEnabled = netlistEnabledField->GetText();
 
                 if( netlistEnabled.IsEmpty() )
                     break;
@@ -1319,7 +1320,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool use_netnames, bool a
             if( spiceSeqField )
             {
                 // Get String containing the Sequence of Nodes:
-                wxString nodeSeqIndexLineStr = spiceSeqField->m_Text;
+                wxString nodeSeqIndexLineStr = spiceSeqField->GetText();
 
                 // Verify Field Exists and is not empty:
                 if( nodeSeqIndexLineStr.IsEmpty() )
@@ -1416,7 +1417,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool use_netnames, bool a
             }
 
             // Get Component Value Name:
-            wxString CompValue = comp->GetField( VALUE )->m_Text;
+            wxString CompValue = comp->GetField( VALUE )->GetText();
 
             // Check if Override Model Name is Provided:
             SCH_FIELD* spiceModelField = comp->FindField( wxT( "spice_model" ) );
@@ -1424,7 +1425,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPspice( FILE* f, bool use_netnames, bool a
             if( spiceModelField )
             {
                 // Get Model Name String:
-                wxString ModelNameStr = spiceModelField->m_Text;
+                wxString ModelNameStr = spiceModelField->GetText();
 
                 // Verify Field Exists and is not empty:
                 if( !ModelNameStr.IsEmpty() )
@@ -1527,7 +1528,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 
             if( !comp->GetField( FOOTPRINT )->IsVoid() )
             {
-                footprint = comp->GetField( FOOTPRINT )->m_Text;
+                footprint = comp->GetField( FOOTPRINT )->GetText();
                 footprint.Replace( wxT( " " ), wxT( "_" ) );
             }
             else
@@ -1541,7 +1542,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 
             ret |= fprintf( f, "  %s", TO_UTF8( field ) );
 
-            field = comp->GetField( VALUE )->m_Text;
+            field = comp->GetField( VALUE )->GetText();
             field.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, " %s", TO_UTF8( field ) );
 
@@ -1901,7 +1902,7 @@ bool NETLIST_EXPORT_TOOL::WriteNetListCADSTAR( FILE* f )
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
             ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
-            msg = Component->GetField( VALUE )->m_Text;
+            msg = Component->GetField( VALUE )->GetText();
             msg.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
             ret |= fprintf( f, "\n" );

@@ -769,18 +769,18 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         #define ROTATE( z ) RotatePoint( (&z), angle )
         RotateMarkedItems( module, wxPoint(0,0), true );
 
-        pos = module->Reference().GetPosition();
+        pos = module->Reference().GetTextPosition();
         ROTATE( pos );
-        module->Reference().SetPosition( pos );
-        module->Reference().SetPos0( module->Reference().GetPosition() );
+        module->Reference().SetTextPosition( pos );
+        module->Reference().SetPos0( module->Reference().GetTextPosition() );
         module->Reference().m_Orient += angle;
 
         if( module->Reference().m_Orient >= 1800 )
             module->Reference().m_Orient -= 1800;
 
-        pos = module->Value().GetPosition();
+        pos = module->Value().GetTextPosition();
         ROTATE( pos );
-        module->Value().SetPosition( pos );
+        module->Value().SetTextPosition( pos );
         module->Value().SetPos0( module->Value().m_Pos );
         module->Value().m_Orient += angle;
 

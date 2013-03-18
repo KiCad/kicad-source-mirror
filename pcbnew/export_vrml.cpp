@@ -666,15 +666,16 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
 {
     // Coupling by globals! Ewwww...
     s_text_layer = text->GetLayer();
-    s_text_width = text->m_Thickness;
+    s_text_width = text->GetThickness();
 
-    wxSize size = text->m_Size;
-    if( text->m_Mirror )
+    wxSize size = text->GetSize();
+
+    if( text->IsMirrored() )
         NEGATE( size.x );
 
-    if( text->m_MultilineAllowed )
+    if( text->IsMultilineAllowed() )
     {
-        wxPoint        pos  = text->m_Pos;
+        wxPoint        pos  = text->GetTextPosition();
         wxArrayString* list = wxStringSplit( text->GetText(), '\n' );
         wxPoint        offset;
 
@@ -687,8 +688,8 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
             wxString txt = list->Item( i );
             DrawGraphicText( NULL, NULL, pos, BLACK,
                              txt, text->GetOrientation(), size,
-                             text->m_HJustify, text->m_VJustify,
-                             text->m_Thickness, text->m_Italic,
+                             text->GetHorizJustify(), text->GetVertJustify(),
+                             text->GetThickness(), text->IsItalic(),
                              true,
                              vrml_text_callback );
             pos += offset;
@@ -698,10 +699,10 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
     }
     else
     {
-        DrawGraphicText( NULL, NULL, text->m_Pos, BLACK,
+        DrawGraphicText( NULL, NULL, text->GetTextPosition(), BLACK,
                          text->GetText(), text->GetOrientation(), size,
-                         text->m_HJustify, text->m_VJustify,
-                         text->m_Thickness, text->m_Italic,
+                         text->GetHorizJustify(), text->GetVertJustify(),
+                         text->GetThickness(), text->IsItalic(),
                          true,
                          vrml_text_callback );
     }
@@ -800,10 +801,11 @@ static void export_vrml_zones( BOARD* pcb )
         ZONE_CONTAINER* zone = pcb->GetArea( i );
 
         if( ( zone->m_FilledPolysList.size() == 0 )
-           ||( zone->m_ZoneMinThickness <= 1 ) )
+           ||( zone->GetMinThickness() <= 1 ) )
             continue;
 
-        int width = zone->m_ZoneMinThickness;
+        int width = zone->GetMinThickness();
+
         if( width > 0 )
         {
             int      imax  = zone->m_FilledPolysList.size() - 1;
@@ -843,17 +845,17 @@ static void export_vrml_text_module( TEXTE_MODULE* module ) //{{{
 {
     if( module->IsVisible() )
     {
-        wxSize size = module->m_Size;
+        wxSize size = module->GetSize();
 
-        if( module->m_Mirror )
+        if( module->IsMirrored() )
             NEGATE( size.x ); // Text is mirrored
 
         s_text_layer = module->GetLayer();
-        s_text_width = module->m_Thickness;
-        DrawGraphicText( NULL, NULL, module->m_Pos, BLACK,
+        s_text_width = module->GetThickness();
+        DrawGraphicText( NULL, NULL, module->GetTextPosition(), BLACK,
                          module->GetText(), module->GetDrawRotation(), size,
-                         module->m_HJustify, module->m_VJustify,
-                         module->m_Thickness, module->m_Italic,
+                         module->GetHorizJustify(), module->GetVertJustify(),
+                         module->GetThickness(), module->IsItalic(),
                          true,
                          vrml_text_callback );
     }
@@ -1036,7 +1038,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
     export_vrml_text_module( &aModule->Value() );
 
     // Export module edges
-    for( EDA_ITEM* item = aModule->m_Drawings;  item != NULL;  item = item->Next() )
+    for( EDA_ITEM* item = aModule->GraphicalItems();  item != NULL;  item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -1054,13 +1056,13 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
     }
 
     // Export pads
-    for( D_PAD* pad = aModule->m_Pads;  pad; pad = pad->Next() )
+    for( D_PAD* pad = aModule->Pads();  pad; pad = pad->Next() )
         export_vrml_pad( aPcb, pad );
 
     bool isFlipped = aModule->GetLayer() == LAYER_N_BACK;
 
     // Export the object VRML model(s)
-    for( S3D_MASTER* vrmlm = aModule->m_3D_Drawings; vrmlm != 0; vrmlm = vrmlm->Next() )
+    for( S3D_MASTER* vrmlm = aModule->Models(); vrmlm != 0; vrmlm = vrmlm->Next() )
     {
         wxString fname = vrmlm->m_Shape3DName;
 

@@ -77,16 +77,6 @@ public:
 
     TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
 
-    void SetPosition( const wxPoint& aPos )     // was overload
-    {
-        m_Pos = aPos;       // in EDA_TEXT
-    }
-
-    const wxPoint& GetPosition() const          // was overload
-    {
-        return m_Pos;       // from EDA_TEXT
-    }
-
     /// @deprecated it seems
     void SetType( int aType )           { m_Type = aType; }
     int GetType() const                 { return m_Type; }

@@ -90,7 +90,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, long aLayerMask,
     {
         for( MODULE* Module = aBoard->m_Modules; Module; Module = Module->Next() )
         {
-            for( D_PAD * pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
+            for( D_PAD * pad = Module->Pads(); pad != NULL; pad = pad->Next() )
             {
                 // See if the pad is on this layer
                 int masklayer = pad->GetLayerMask();
@@ -220,7 +220,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
             else
                 layer_mask = GetLayerMask( SOLDERMASK_N_BACK );
 
-            // Create the mask to substract by creating a negative layer polarity
+            // Create the mask to subtract by creating a negative layer polarity
             aPlotter->SetLayerPolarity( false );
             // Disable plot pad holes
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
@@ -266,7 +266,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        for( BOARD_ITEM* item = module->m_Drawings; item; item = item->Next() )
+        for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item->Next() )
         {
             if( ! (aLayerMask & GetLayerMask( item->GetLayer() ) ) )
                 continue;
@@ -286,7 +286,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // Plot footprint pads
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+        for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
         {
             if( (pad->GetLayerMask() & aLayerMask) == 0 )
                 continue;
@@ -456,7 +456,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
  * 3 - deflate result by (min width solder mask /2)
  * 4 - oring result by all pad shapes as polygons with a size inflated by
  *      mask clearance only (because deflate sometimes creates shape artifacts)
- * 5 - draw result as plolygons.
+ * 5 - draw result as polygons
  *
  * TODO:
  * make this calculation only for shapes with clearance near than (min width solder mask)
@@ -480,7 +480,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        for( BOARD_ITEM* item = module->m_Drawings; item; item = item->Next() )
+        for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item->Next() )
         {
             if( aLayerMask != item->GetLayer() )
                 continue;
@@ -517,7 +517,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // Plot pads
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+        for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
         {
             if( (pad->GetLayerMask() & aLayerMask) == 0 )
                 continue;
@@ -629,19 +629,19 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     areas |= areasToMerge;
 
     // Deflate: remove the extra margin, to create the actual shapes
-    // Here I am using ploygon:resize, because this function creates better shapes
+    // Here I am using polygon:resize, because this function creates better shapes
     // than deflate algo.
     // Use here deflate with arc creation and 16 segments per circle to create arcs
     areas = resize( areas, -inflate , true, 16 );
 
-    // Resize slighly changes shapes. So *ensure* initial shapes are kept
+    // Resize slightly changes shapes. So *ensure* initial shapes are kept
     areas |= initialAreas;
 
     // To avoid a lot of code, use a ZONE_CONTAINER
     // to plot polygons, because they are exactly like
     // filled areas in zones
     ZONE_CONTAINER zone( aBoard );
-    zone.SetArcSegCount( 32 );
+    zone.SetArcSegmentCount( 32 );
     zone.SetMinThickness( 0 );      // trace polygons only
     zone.SetLayer ( layer );
 
@@ -657,7 +657,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
  *      paper size is the physical page size
  */
 static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
-                              PCB_PLOT_PARAMS *aPlotOpts )
+                               PCB_PLOT_PARAMS *aPlotOpts )
 {
     PAGE_INFO pageA4( wxT( "A4" ) );
     const PAGE_INFO& pageInfo = aBoard->GetPageSettings();

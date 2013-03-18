@@ -67,16 +67,6 @@ enum MODULE_ATTR_T
 class MODULE : public BOARD_ITEM
 {
 public:
-    DLIST<D_PAD>      m_Pads;          /* Pad list (linked list) */
-    DLIST<BOARD_ITEM> m_Drawings;      /* Graphic items list (linked list) */
-    DLIST<S3D_MASTER> m_3D_Drawings;   /* First item of the 3D shapes (linked list)*/
-
-// m_ModuleStatus bits:
-#define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
-#define MODULE_is_PLACED    0x02        ///< In autoplace: module automatically placed
-#define MODULE_to_PLACE     0x04        ///< In autoplace: module waiting for autoplace
-
-public:
     MODULE( BOARD* parent );
 
     MODULE( const MODULE& aModule );
@@ -110,6 +100,15 @@ public:
     EDA_RECT GetFootPrintRect() const;
 
     EDA_RECT GetBoundingBox() const;
+
+    DLIST<D_PAD>& Pads()                        { return m_Pads; }
+    const DLIST<D_PAD>& Pads() const            { return m_Pads; }
+
+    DLIST<BOARD_ITEM>& GraphicalItems()         { return m_Drawings; }
+    const DLIST<BOARD_ITEM>& GraphicalItems() const { return m_Drawings; }
+
+    DLIST<S3D_MASTER>& Models()                 { return m_3D_Drawings; }
+    const DLIST<S3D_MASTER>& Models() const     { return m_3D_Drawings; }
 
     void SetPosition( const wxPoint& aPos );                        // was overload
     const wxPoint& GetPosition() const          { return m_Pos; }   // was overload
@@ -168,6 +167,12 @@ public:
      * @return true if the module is flipped, i.e. on the back side of the board
      */
     bool IsFlipped() const {return GetLayer() == LAYER_N_BACK; }
+
+// m_ModuleStatus bits:
+#define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
+#define MODULE_is_PLACED    0x02        ///< In autoplace: module automatically placed
+#define MODULE_to_PLACE     0x04        ///< In autoplace: module waiting for autoplace
+
 
     bool IsLocked() const
     {
@@ -367,6 +372,9 @@ public:
 #endif
 
 private:
+    DLIST<D_PAD>      m_Pads;           ///< Linked list of pads.
+    DLIST<BOARD_ITEM> m_Drawings;       ///< Linked list of graphical items.
+    DLIST<S3D_MASTER> m_3D_Drawings;    ///< Linked list of 3D models.
     double            m_Orient;         ///< Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint           m_Pos;            ///< Position of module on the board in internal units.
     TEXTE_MODULE*     m_Reference;      ///< Component reference designator value (U34, R18..)
@@ -396,9 +404,8 @@ private:
     int               m_LocalClearance;
     int               m_LocalSolderMaskMargin;    ///< Solder mask margin
     int               m_LocalSolderPasteMargin;   ///< Solder paste margin absolute value
-
     double            m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
-                                                        ///< value of pad size
+                                                       ///< value of pad size
 };
 
 #endif     // MODULE_H_

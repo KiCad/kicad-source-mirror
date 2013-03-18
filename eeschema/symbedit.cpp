@@ -168,8 +168,8 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     line << wxT( "# SYMBOL " ) << m_component->GetName() << wxT( "\n#\nDEF " )
          << m_component->GetName() << wxT( " " );
 
-    if( !m_component->GetReferenceField().m_Text.IsEmpty() )
-        line << m_component->GetReferenceField().m_Text << wxT( " " );
+    if( !m_component->GetReferenceField().GetText().IsEmpty() )
+        line << m_component->GetReferenceField().GetText() << wxT( " " );
     else
         line << wxT( "~ " );
 

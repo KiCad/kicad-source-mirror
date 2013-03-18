@@ -186,7 +186,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
         if( aOthers )
         {
             // Go through all other module text fields
-            for( boardItem = module->m_Drawings; boardItem; boardItem = boardItem->Next() )
+            for( boardItem = module->GraphicalItems(); boardItem; boardItem = boardItem->Next() )
             {
                 if( boardItem->Type() == PCB_MODULE_TEXT_T )
                 {
@@ -227,7 +227,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
         if( aOthers )
         {
-            for( boardItem = module->m_Drawings; boardItem; boardItem = boardItem->Next() )
+            for( boardItem = module->GraphicalItems(); boardItem; boardItem = boardItem->Next() )
             {
                 if( boardItem->Type() == PCB_MODULE_TEXT_T )
                 {

@@ -47,7 +47,7 @@
 
 EDA_TEXT::EDA_TEXT( const wxString& text )
 {
-    m_Size.x    = m_Size.y = MILS_TO_IU( DEFAULT_SIZE_TEXT );  // Width and height of font.
+    m_Size.x    = m_Size.y = Mils2iu( DEFAULT_SIZE_TEXT );  // Width and height of font.
     m_Orient    = 0;                             // Rotation angle in 0.1 degrees.
     m_Attributs = 0;
     m_Mirror    = false;                         // display mirror if true
@@ -325,8 +325,8 @@ wxString EDA_TEXT::GetTextStyleName()
 
 bool EDA_TEXT::IsDefaultFormatting() const
 {
-    return (  ( m_Size.x == DEFAULT_SIZE_TEXT )
-           && ( m_Size.y == DEFAULT_SIZE_TEXT )
+    return (  ( m_Size.x == Mils2iu( DEFAULT_SIZE_TEXT ) )
+           && ( m_Size.y == Mils2iu( DEFAULT_SIZE_TEXT ) )
            && ( m_Attributs == 0 )
            && ( m_Mirror == false )
            && ( m_HJustify == GR_TEXT_HJUSTIFY_CENTER )
@@ -345,14 +345,15 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     {
         aFormatter->Print( aNestLevel+1, "(effects" );
 
-        if( ( m_Size.x != DEFAULT_SIZE_TEXT ) || ( m_Size.y != DEFAULT_SIZE_TEXT ) || m_Bold
-          || m_Italic )
+        if( ( m_Size.x != Mils2iu( DEFAULT_SIZE_TEXT ) )
+          || ( m_Size.y != Mils2iu( DEFAULT_SIZE_TEXT ) ) || m_Bold || m_Italic )
         {
             aFormatter->Print( 0, " (font" );
 
             // Add font support here at some point in the future.
 
-            if( ( m_Size.x != DEFAULT_SIZE_TEXT ) || ( m_Size.y != DEFAULT_SIZE_TEXT ) )
+            if( ( m_Size.x != Mils2iu( DEFAULT_SIZE_TEXT ) )
+              || ( m_Size.y != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
                 aFormatter->Print( 0, " (size %s %s)", FMT_IU( m_Size.GetHeight() ).c_str(),
                                    FMT_IU( m_Size.GetWidth() ).c_str() );
 

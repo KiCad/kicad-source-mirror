@@ -169,7 +169,7 @@ void NETINFO_LIST::buildPadsFullList()
     // Clear variables used in ratsnest computation
     for( MODULE* module = m_Parent->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+        for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
         {
             m_PadsFullList.push_back( pad );
 

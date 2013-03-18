@@ -72,33 +72,27 @@ enum EDA_DRAW_MODE_T {
  */
 class EDA_TEXT
 {
-public:
-    wxString m_Text;
-    int      m_Thickness;               ///< pen size used to draw this text
-    double   m_Orient;                  ///< Orient in 0.1 degrees
-    wxPoint  m_Pos;                     ///< XY position of anchor text.
-    wxSize   m_Size;                    ///< XY size of text
-    bool     m_Mirror;                  ///< true if mirrored
-    int      m_Attributs;               ///< bit flags such as visible, etc.
-    bool     m_Italic;                  ///< should be italic font (if available)
-    bool     m_Bold;                    ///< should be bold font (if available)
-    EDA_TEXT_HJUSTIFY_T m_HJustify;     ///< horizontal justification
-    EDA_TEXT_VJUSTIFY_T m_VJustify;     ///< vertical justification
-
-    bool     m_MultilineAllowed;        /**< true to use multiline option, false
-                                         * to use only single line text
-                                         * Single line is faster in
-                                         * calculations than multiline */
+protected:
+    wxString            m_Text;
+    int                 m_Thickness;        ///< pen size used to draw this text
+    double              m_Orient;           ///< Orient in 0.1 degrees
+    wxPoint             m_Pos;              ///< XY position of anchor text.
+    wxSize              m_Size;             ///< XY size of text
+    bool                m_Mirror;           ///< true if mirrored
+    int                 m_Attributs;        ///< bit flags such as visible, etc.
+    bool                m_Italic;           ///< should be italic font (if available)
+    bool                m_Bold;             ///< should be bold font (if available)
+    EDA_TEXT_HJUSTIFY_T m_HJustify;         ///< horizontal justification
+    EDA_TEXT_VJUSTIFY_T m_VJustify;         ///< vertical justification
+    bool                m_MultilineAllowed; /**< true to use multiline option, false
+                                             * to use only single line text
+                                             * Single line is faster in
+                                             * calculations than multiline */
 
 public:
     EDA_TEXT( const wxString& text = wxEmptyString );
     EDA_TEXT( const EDA_TEXT& aText );
     virtual ~EDA_TEXT();
-
-    wxString& Text()  { return m_Text; }
-    wxString& Text() const  { return *(const_cast<wxString*> (&m_Text)); }
-
-    void SetText( const wxString& aText ) { m_Text = aText; }
 
     /**
      * Function GetText
@@ -112,6 +106,8 @@ public:
      */
     virtual const wxString GetText() const { return m_Text; }
 
+    virtual void SetText( const wxString& aText ) { m_Text = aText; }
+
     /**
      * Function SetThickness
      * sets text thickness.
@@ -124,29 +120,32 @@ public:
      * returns text thickness.
      * @return int - text thickness.
      */
-    int GetThickness() const            { return m_Thickness; };
+    int GetThickness() const               { return m_Thickness; };
 
     void SetOrientation( double aOrientation )
     {
         NORMALIZE_ANGLE_POS( aOrientation );
         m_Orient = aOrientation;
     }
-    double GetOrientation() const       { return m_Orient; }
+    double GetOrientation() const          { return m_Orient; }
 
-    void SetItalic( bool isItalic )     { m_Italic = isItalic; }
-    bool IsItalic() const               { return m_Italic; }
+    void SetItalic( bool isItalic )        { m_Italic = isItalic; }
+    bool IsItalic() const                  { return m_Italic; }
 
-    void SetBold( bool aBold )          { m_Bold = aBold; }
-    bool IsBold() const                 { return m_Bold; }
+    void SetBold( bool aBold )             { m_Bold = aBold; }
+    bool IsBold() const                    { return m_Bold; }
 
     void SetVisible( bool aVisible )
     {
         ( aVisible ) ? m_Attributs &= ~TEXT_NO_VISIBLE : m_Attributs |= TEXT_NO_VISIBLE;
     }
-    bool IsVisible() const              { return !( m_Attributs & TEXT_NO_VISIBLE ); }
+    bool IsVisible() const                 { return !( m_Attributs & TEXT_NO_VISIBLE ); }
 
-    void SetMirrored( bool isMirrored ) { m_Mirror = isMirrored; }
-    bool IsMirrored() const             { return m_Mirror; }
+    void SetMirrored( bool isMirrored )    { m_Mirror = isMirrored; }
+    bool IsMirrored() const                { return m_Mirror; }
+
+    void SetAttributes( int aAttributes )  { m_Attributs = aAttributes; }
+    int GetAttributes() const              { return m_Attributs; }
 
     bool IsDefaultFormatting() const;
 
@@ -162,7 +161,7 @@ public:
      * returns text size.
      * @return wxSize - text size.
      */
-    const wxSize GetSize() const        { return m_Size; };
+    const wxSize& GetSize() const          { return m_Size; };
 
     void SetWidth( int aWidth ) { m_Size.x = aWidth; }
     int GetWidth() const { return m_Size.x; }
@@ -171,10 +170,15 @@ public:
     int GetHeight() const { return m_Size.y; }
 
     /// named differently than the ones using multiple inheritance and including this class
-    void SetPosition( const wxPoint& aPoint ) { m_Pos = aPoint; }
-    const wxPoint GetPosition() const { return m_Pos; }
+    void SetTextPosition( const wxPoint& aPoint ) { m_Pos = aPoint; }
+    const wxPoint& GetTextPosition() const { return m_Pos; }
 
-    int GetLength() const { return m_Text.Length(); };
+    void SetMultilineAllowed( bool aAllow )  { m_MultilineAllowed = aAllow; }
+    bool IsMultilineAllowed() const          { return m_MultilineAllowed; }
+
+    void Offset( const wxPoint& aOffset ) { m_Pos += aOffset; }
+
+    void Empty() { m_Text.Empty(); }
 
     /**
      * Function Draw
@@ -190,30 +194,6 @@ public:
                const wxPoint& aOffset, EDA_COLOR_T aColor,
                GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
                EDA_COLOR_T aAnchor_color = UNSPECIFIED_COLOR );
-
-private:
-
-    /**
-     * Function DrawOneLineOfText
-     * Draw a single text line.
-     * Used to draw each line of this EDA_TEXT, that can be multiline
-     * @param aPanel = the current DrawPanel
-     * @param aDC = the current Device Context
-     * @param aOffset = draw offset (usually (0,0))
-     * @param aColor = text color
-     * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     * @param aFillMode = LINE, FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
-     * @param aText = the single line of text to draw.
-     * @param aPos = the position of this line ).
-     */
-    void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                            const wxPoint& aOffset, EDA_COLOR_T aColor,
-                            GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                            EDA_COLOR_T aAnchor_color, wxString& aText,
-                            wxPoint aPos );
-
-public:
 
     /**
      * Function TextHitTest
@@ -293,6 +273,27 @@ public:
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
 
+private:
+
+    /**
+     * Function DrawOneLineOfText
+     * Draw a single text line.
+     * Used to draw each line of this EDA_TEXT, that can be multiline
+     * @param aPanel = the current DrawPanel
+     * @param aDC = the current Device Context
+     * @param aOffset = draw offset (usually (0,0))
+     * @param aColor = text color
+     * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
+     * @param aFillMode = LINE, FILLED or SKETCH
+     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
+     * @param aText = the single line of text to draw.
+     * @param aPos = the position of this line ).
+     */
+    void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                            const wxPoint& aOffset, EDA_COLOR_T aColor,
+                            GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
+                            EDA_COLOR_T aAnchor_color, wxString& aText,
+                            wxPoint aPos );
 };
 
 
