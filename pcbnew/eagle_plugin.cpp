@@ -1370,7 +1370,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 pcbtxt->SetLayer( layer );
                 pcbtxt->SetTimeStamp( timeStamp( gr->second ) );
                 pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
-                pcbtxt->SetPosition( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
+                pcbtxt->SetTextPosition( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
                 pcbtxt->SetSize( kicad_fontz( t.size ) );
 
@@ -1523,7 +1523,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
             // Add a PAD_HOLE_NOT_PLATED pad to this module.
             D_PAD* pad = new D_PAD( module );
-            module->m_Pads.PushBack( pad );
+            module->Pads().PushBack( pad );
 
             pad->SetShape( PAD_ROUND );
             pad->SetAttribute( PAD_HOLE_NOT_PLATED );
@@ -1671,7 +1671,7 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         m_board->Add( m, ADD_APPEND );
 
         // update the nets within the pads of the clone
-        for( D_PAD* pad = m->m_Pads;  pad;  pad = pad->Next() )
+        for( D_PAD* pad = m->Pads();  pad;  pad = pad->Next() )
         {
             std::string key  = makeKey( e.name, TO_UTF8( pad->GetPadName() ) );
 
@@ -1761,7 +1761,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
         if( a.x && a.y )    // boost::optional
         {
             wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
-            txt->SetPosition( pos );
+            txt->SetTextPosition( pos );
         }
 
         // Even though size and ratio are both optional, I am not seeing
@@ -1916,7 +1916,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
         int     width = kicad( w.width );
 
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_SEGMENT );
-        aModule->m_Drawings.PushBack( dwg );
+        aModule->GraphicalItems().PushBack( dwg );
 
         dwg->SetStart0( start );
         dwg->SetEnd0( end );
@@ -1933,7 +1933,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
     EPAD e( aTree );
 
     D_PAD*  pad = new D_PAD( aModule );
-    aModule->m_Pads.PushBack( pad );
+    aModule->Pads().PushBack( pad );
 
     pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
 
@@ -2025,7 +2025,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
     else
     {
         txt = new TEXTE_MODULE( aModule );
-        aModule->m_Drawings.PushBack( txt );
+        aModule->GraphicalItems().PushBack( txt );
     }
 
     txt->SetTimeStamp( timeStamp( aTree ) );
@@ -2033,7 +2033,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 
     wxPoint pos( kicad_x( t.x ), kicad_y( t.y ) );
 
-    txt->SetPosition( pos );
+    txt->SetTextPosition( pos );
     txt->SetPos0( pos - aModule->GetPosition() );
 
     txt->SetLayer( layer );
@@ -2122,7 +2122,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
     if( IsValidNonCopperLayerIndex( layer ) )  // skip copper "package.rectangle"s
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->m_Drawings.PushBack( dwg );
+        aModule->GraphicalItems().PushBack( dwg );
 
         dwg->SetLayer( layer );
         dwg->SetWidth( 0 );
@@ -2155,7 +2155,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
     if( IsValidNonCopperLayerIndex( layer ) )  // skip copper "package.rectangle"s
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->m_Drawings.PushBack( dwg );
+        aModule->GraphicalItems().PushBack( dwg );
 
         dwg->SetWidth( 0 );     // it's filled, no need for boundary width
 
@@ -2202,7 +2202,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
     int     layer = kicad_layer( e.layer );
 
     EDGE_MODULE* gr = new EDGE_MODULE( aModule, S_CIRCLE );
-    aModule->m_Drawings.PushBack( gr );
+    aModule->GraphicalItems().PushBack( gr );
 
     gr->SetWidth( kicad( e.width ) );
 
@@ -2228,7 +2228,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
 
     // we add a PAD_HOLE_NOT_PLATED pad to this module.
     D_PAD* pad = new D_PAD( aModule );
-    aModule->m_Pads.PushBack( pad );
+    aModule->Pads().PushBack( pad );
 
     pad->SetShape( PAD_ROUND );
     pad->SetAttribute( PAD_HOLE_NOT_PLATED );
@@ -2264,7 +2264,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
     }
 
     D_PAD*  pad = new D_PAD( aModule );
-    aModule->m_Pads.PushBack( pad );
+    aModule->Pads().PushBack( pad );
 
     pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
     pad->SetShape( PAD_RECT );
@@ -2502,7 +2502,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                                             true );
 
                     // clearances, etc.
-                    zone->SetArcSegCount( 32 );     // @todo: should be a constructor default?
+                    zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?
                     zone->SetMinThickness( kicad( p.width ) );
 
                     if( p.spacing )

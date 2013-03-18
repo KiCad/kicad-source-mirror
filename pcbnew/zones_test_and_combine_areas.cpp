@@ -758,8 +758,8 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
     for( int ia2 = 0; ia2 < m_pcb->GetAreaCount(); ia2++ )
     {
         ZONE_CONTAINER* area_to_test   = m_pcb->GetArea( ia2 );
-        int             zone_clearance = std::max( area_to_test->m_ZoneClearance,
-                                              aArea->m_ZoneClearance );
+        int             zone_clearance = std::max( area_to_test->GetZoneClearance(),
+                                                   aArea->GetZoneClearance() );
 
         // test for same layer
         if( area_to_test->GetLayer() != aArea->GetLayer() )

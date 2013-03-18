@@ -246,7 +246,7 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
 
             bool   saveMe = false;
 
-            for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+            for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
             {
                 // Filters changes prohibited.
                 if( aPadShapeFilter && ( pad->GetShape() != aPad->GetShape() ) )
@@ -291,7 +291,7 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
             module->ClearFlags( DO_NOT_DRAW );
         }
 
-        for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+        for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
         {
             // Filters changes prohibited.
             if( aPadShapeFilter && ( pad->GetShape() != aPad->GetShape() ) )

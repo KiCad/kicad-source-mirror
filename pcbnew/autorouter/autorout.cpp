@@ -134,7 +134,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
         case ROUTE_MODULE:
         {
-            D_PAD* pt_pad = (D_PAD*) Module->m_Pads;
+            D_PAD* pt_pad = (D_PAD*) Module->Pads();
             for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
             {
                 if( ptmp->m_PadStart == pt_pad )

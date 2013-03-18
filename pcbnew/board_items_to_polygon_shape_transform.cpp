@@ -37,7 +37,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCo
                                                       int                    aCircleToSegmentsCount,
                                                       double                 aCorrectionFactor )
 {
-    if( GetLength() == 0 )
+    if( GetText().Length() == 0 )
         return;
 
     CPolyPt  corners[4];    // Buffer of polygon corners

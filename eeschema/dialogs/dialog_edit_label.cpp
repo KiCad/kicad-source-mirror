@@ -99,7 +99,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     wxString msg;
     bool multiLine = false;
 
-    if( m_CurrentText->m_MultilineAllowed )
+    if( m_CurrentText->IsMultilineAllowed() )
     {
         m_textLabel = m_textLabelMultiLine;
         m_textLabelSingleLine->Show(false);
@@ -111,7 +111,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
         m_textLabelMultiLine->Show(false);
     }
 
-    m_textLabel->SetValue( m_CurrentText->m_Text );
+    m_textLabel->SetValue( m_CurrentText->GetText() );
     m_textLabel->SetFocus();
 
     switch( m_CurrentText->Type() )
@@ -146,19 +146,19 @@ void DIALOG_LABEL_EDITOR::InitDialog()
 
     if ( !multiLine )
     {
-        max_len =m_CurrentText->m_Text.Length();
+        max_len =m_CurrentText->GetText().Length();
     }
     else
     {
         // calculate the length of the biggest line
         // we cannot use the length of the entire text that has no meaning
         int curr_len = MINTEXTWIDTH;
-        int imax = m_CurrentText->m_Text.Len();
+        int imax = m_CurrentText->GetText().Length();
 
         for( int count = 0; count < imax; count++ )
         {
-            if( m_CurrentText->m_Text[count] == '\n' ||
-                m_CurrentText->m_Text[count] == '\r' ) // new line
+            if( m_CurrentText->GetText()[count] == '\n' ||
+                m_CurrentText->GetText()[count] == '\r' ) // new line
             {
                 curr_len = 0;
             }
@@ -185,10 +185,10 @@ void DIALOG_LABEL_EDITOR::InitDialog()
 
     int style = 0;
 
-    if( m_CurrentText->m_Italic )
+    if( m_CurrentText->IsItalic() )
         style = 1;
 
-    if( m_CurrentText->m_Bold )
+    if( m_CurrentText->IsBold() )
         style += 2;
 
     m_TextStyle->SetSelection( style );
@@ -197,7 +197,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     msg = _( "H" ) + units + _( " x W" ) + units;
     m_staticSizeUnits->SetLabel( msg );
 
-    msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->m_Size.x );
+    msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->GetSize().x );
     m_TextSize->SetValue( msg );
 
     if( m_CurrentText->Type() != SCH_GLOBAL_LABEL_T
@@ -257,7 +257,7 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
     text = m_textLabel->GetValue();
 
     if( !text.IsEmpty() )
-        m_CurrentText->m_Text = text;
+        m_CurrentText->SetText( text );
     else if( !m_CurrentText->IsNew() )
     {
         DisplayError( this, _( "Empty Text!" ) );
@@ -267,34 +267,31 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
     m_CurrentText->SetOrientation( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
     value = ReturnValueFromString( g_UserUnit, text );
-    m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
+    m_CurrentText->SetSize( wxSize( value, value ) );
 
     if( m_TextShape )
         m_CurrentText->SetShape( m_TextShape->GetSelection() );
 
     int style = m_TextStyle->GetSelection();
 
-    if( ( style & 1 ) )
-        m_CurrentText->m_Italic = 1;
-    else
-        m_CurrentText->m_Italic = 0;
+    m_CurrentText->SetItalic( ( style & 1 ) );
 
     if( ( style & 2 ) )
     {
-        m_CurrentText->m_Bold  = true;
-        m_CurrentText->m_Thickness = GetPenSizeForBold( m_CurrentText->m_Size.x );
+        m_CurrentText->SetBold( true );
+        m_CurrentText->SetThickness( GetPenSizeForBold( m_CurrentText->GetSize().x ) );
     }
     else
     {
-        m_CurrentText->m_Bold  = false;
-        m_CurrentText->m_Thickness = 0;
+        m_CurrentText->SetBold( false );
+        m_CurrentText->SetThickness( 0 );
     }
 
     m_Parent->OnModify();
 
     /* Make the text size as new default size if it is a new text */
     if( m_CurrentText->IsNew() )
-        m_Parent->SetDefaultLabelSize( m_CurrentText->m_Size.x );
+        m_Parent->SetDefaultLabelSize( m_CurrentText->GetSize().x );
 
     m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
     m_Parent->GetCanvas()->MoveCursorToCrossHair();

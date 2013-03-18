@@ -1,3 +1,4 @@
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -223,8 +224,8 @@ public:
     }
     int GetThermalReliefCopperBridge( D_PAD* aPad = NULL ) const;
 
-    void SetArcSegCount( int aArcSegCount ) { m_ArcToSegmentsCount = aArcSegCount; }
-    int GetArcSegCount() const { return m_ArcToSegmentsCount; }
+    void SetArcSegmentCount( int aArcSegCount ) { m_ArcToSegmentsCount = aArcSegCount; }
+    int GetArcSegmentCount() const { return m_ArcToSegmentsCount; }
 
     bool IsFilled() const { return m_IsFilled; }
     void SetIsFilled( bool isFilled ) { m_IsFilled = isFilled; }
@@ -557,25 +558,8 @@ public:
 
     // For corner moving, corner index to drag, or -1 if no selection.
     int                   m_CornerSelection;
-    int                   m_ZoneClearance;                  // clearance value
-    int                   m_ZoneMinThickness;               // Min thickness value in filled areas
 
-    /// How to fill areas: 0 => use filled polygons, 1 => fill with segments.
-    int                   m_FillMode;
-
-    // number of segments to convert a circle to a polygon (uses
-    //ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
-    int                   m_ArcToSegmentsCount;
-
-    // thickness of the gap in thermal reliefs.
-    int                   m_ThermalReliefGap;
-
-    // thickness of the copper bridge in thermal reliefs
-    int                   m_ThermalReliefCopperBridge;
     int                   utility;                // flags used in polygon calculations
-
-    // true when a zone was filled, false after deleting the filled areas
-    bool                  m_IsFilled;
 
     /* set of segments used to fill area, when fill zone by segment is used.
      *  ( m_FillMode == 1 )
@@ -609,11 +593,33 @@ private:
     bool                  m_doNotAllowTracks;
 
     ZoneConnection        m_PadConnection;
+    int                   m_ZoneClearance;           ///< Clearance value in internal units.
+    int                   m_ZoneMinThickness;        ///< Minimum thickness value in filled areas.
+
+    /** The number of segments to convert a circle to a polygon.  Valid values are
+        #ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or #ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF. */
+    int                   m_ArcToSegmentsCount;
+
+    /** True when a zone was filled, false after deleting the filled areas. */
+    bool                  m_IsFilled;
+
+    ///< Width of the gap in thermal reliefs.
+    int                   m_ThermalReliefGap;
+
+    ///< Width of the copper bridge in thermal reliefs.
+    int                   m_ThermalReliefCopperBridge;
+
+
+    /// How to fill areas: 0 => use filled polygons, 1 => fill with segments.
+    int                   m_FillMode;
 
     /* set of filled polygons used to draw a zone as a filled area.
      * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
      * (they are all in one piece)  In very simple cases m_FilledPolysList is same
      * as m_Poly.  In less simple cases (when m_Poly has holes) m_FilledPolysList is
+
+
+
      * a polygon equivalent to m_Poly, without holes but with extra outline segment
      * connecting "holes" with external main outline.  In complex cases an outline
      * described by m_Poly can have many filled areas

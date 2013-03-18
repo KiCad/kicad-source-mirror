@@ -61,7 +61,7 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
     corners_buffer.reserve( 4 );
     wxPoint  ptTest[4];
 
-    int      zone_clearance = aZone->m_ZoneClearance;
+    int      zone_clearance = aZone->GetZoneClearance();
 
     EDA_RECT item_boundingbox;
     EDA_RECT zone_boundingbox  = aZone->GetBoundingBox();
@@ -70,11 +70,11 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
     zone_boundingbox.Inflate( biggest_clearance );
 
     // half size of the pen used to draw/plot zones outlines
-    int pen_radius = aZone->m_ZoneMinThickness / 2;
+    int pen_radius = aZone->GetMinThickness() / 2;
 
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
         {
             // Rejects non-standard pads with tht-only thermal reliefs
             if( aZone->GetPadConnection( pad ) == THT_THERMAL
@@ -94,7 +94,7 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
 
             // Calculate thermal bridge half width
             int thermalBridgeWidth = aZone->GetThermalReliefCopperBridge( pad )
-                                     - aZone->m_ZoneMinThickness;
+                                     - aZone->GetMinThickness();
             if( thermalBridgeWidth <= 0 )
                 continue;
 
@@ -122,7 +122,8 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
             // inside the pad
             wxPoint startpoint;
             int copperThickness = aZone->GetThermalReliefCopperBridge( pad )
-                                  - aZone->m_ZoneMinThickness;
+                                  - aZone->GetMinThickness();
+
             if( copperThickness < 0 )
                 copperThickness = 0;
 

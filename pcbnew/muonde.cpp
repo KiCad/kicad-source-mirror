@@ -252,13 +252,13 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
         PtSegm->SetShape( S_SEGMENT );
         PtSegm->SetStart0( PtSegm->GetStart() - module->GetPosition() );
         PtSegm->SetEnd0(   PtSegm->GetEnd()   - module->GetPosition() );
-        module->m_Drawings.PushBack( PtSegm );
+        module->GraphicalItems().PushBack( PtSegm );
     }
 
     // Place a pad on each end of coil.
     pad = new D_PAD( module );
 
-    module->m_Pads.PushFront( pad );
+    module->Pads().PushFront( pad );
 
     pad->SetPadName( wxT( "1" ) );
     pad->SetPosition( Mself.m_End );
@@ -272,7 +272,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 
     D_PAD* newpad = new D_PAD( *pad );
 
-    module->m_Pads.Insert( newpad, pad->Next() );
+    module->Pads().Insert( newpad, pad->Next() );
 
     pad = newpad;
     pad->SetPadName( wxT( "2" ) );
@@ -281,15 +281,18 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 
     // Modify text positions.
     SetMsgPanel( module );
-    module->Value().m_Pos.x = module->Reference().m_Pos.x =
-                              ( Mself.m_Start.x + Mself.m_End.x ) / 2;
-    module->Value().m_Pos.y = module->Reference().m_Pos.y =
-                              ( Mself.m_Start.y + Mself.m_End.y ) / 2;
 
-    module->Reference().m_Pos.y -= module->Reference().m_Size.y;
-    module->Value().m_Pos.y     += module->Value().m_Size.y;
-    module->Reference().SetPos0( module->Reference().m_Pos - module->GetPosition() );
-    module->Value().SetPos0( module->Value().m_Pos - module->GetPosition() );
+    wxPoint refPos( ( Mself.m_Start.x + Mself.m_End.x ) / 2,
+                    ( Mself.m_Start.y + Mself.m_End.y ) / 2 );
+
+    wxPoint valPos = refPos;
+
+    refPos.y -= module->Reference().GetSize().y;
+    module->Reference().SetTextPosition( refPos );
+    valPos.y += module->Value().GetSize().y;
+    module->Value().SetTextPosition( valPos );
+    module->Reference().SetPos0( module->Reference().GetTextPosition() - module->GetPosition() );
+    module->Value().SetPos0( module->Value().GetTextPosition() - module->GetPosition() );
 
     module->CalculateBoundingBox();
     module->Draw( m_canvas, DC, GR_OR );
@@ -535,21 +538,21 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
     #define DEFAULT_SIZE 30
     module->SetTimeStamp( GetNewTimeStamp() );
 
-    module->Value().m_Size       = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
+    module->Value().SetSize( wxSize( DEFAULT_SIZE, DEFAULT_SIZE ) );
 
     module->Value().SetPos0( wxPoint( 0, -DEFAULT_SIZE ) );
 
-    module->Value().m_Pos.y     += module->Value().GetPos0().y;
+    module->Value().Offset( wxPoint( 0, module->Value().GetPos0().y ) );
 
-    module->Value().m_Thickness  = DEFAULT_SIZE / 4;
+    module->Value().SetThickness( DEFAULT_SIZE / 4 );
 
-    module->Reference().m_Size   = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
+    module->Reference().SetSize( wxSize( DEFAULT_SIZE, DEFAULT_SIZE ) );
 
     module->Reference().SetPos0( wxPoint( 0, DEFAULT_SIZE ) );
 
-    module->Reference().m_Pos.y += module->Reference().GetPos0().y;
+    module->Reference().Offset( wxPoint( 0, module->Reference().GetPos0().y ) );
 
-    module->Reference().m_Thickness  = DEFAULT_SIZE / 4;
+    module->Reference().SetThickness( DEFAULT_SIZE / 4 );
 
     // Create 2 pads used in gaps and stubs.  The gap is between these 2 pads
     // the stub is the pad 2
@@ -557,7 +560,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
     {
         D_PAD* pad = new D_PAD( module );
 
-        module->m_Pads.PushFront( pad );
+        module->Pads().PushFront( pad );
 
         int tw = GetBoard()->GetCurrentTrackWidth();
         pad->SetSize( wxSize( tw, tw ) );
@@ -660,7 +663,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     }
 
     module = Create_MuWaveBasicShape( cmp_name, pad_count );
-    pad    = module->m_Pads;
+    pad    = module->Pads();
 
     switch( shape_type )
     {
@@ -687,7 +690,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     case 2:     // Arc Stub created by a polygonal approach:
         {
             EDGE_MODULE* edge = new EDGE_MODULE( module );
-            module->m_Drawings.PushFront( edge );
+            module->GraphicalItems().PushFront( edge );
 
             edge->SetShape( S_POLYGON );
             edge->SetLayer( LAYER_N_FRONT );
@@ -974,7 +977,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     cmp_name = wxT( "POLY" );
 
     module = Create_MuWaveBasicShape( cmp_name, pad_count );
-    pad1   = module->m_Pads;
+    pad1   = module->Pads();
 
     pad1->SetX0( -ShapeSize.x / 2 );
     pad1->SetX( pad1->GetPos0().x + pad1->GetPosition().x );
@@ -985,7 +988,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     edge = new EDGE_MODULE( module );
 
-    module->m_Drawings.PushFront( edge );
+    module->GraphicalItems().PushFront( edge );
 
     edge->SetShape( S_POLYGON );
     edge->SetLayer( LAYER_N_FRONT );
@@ -1068,7 +1071,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
     if( msg != wxT( "GAP" ) )
         return;
 
-    pad = aModule->m_Pads;
+    pad = aModule->Pads();
 
     if( pad == NULL )
     {

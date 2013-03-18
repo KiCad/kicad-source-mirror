@@ -118,14 +118,14 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( wxString& aFullFilename,
                 // So we *do not* stop the search here
                 SCH_COMPONENT* component = referencesList[ii].GetComponent();
                 SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
-                fpfield->m_Text = footprint;
+                fpfield->SetText( footprint );
 
                 if( aForceFieldsVisibleAttribute )
                 {
                     if( aFieldsVisibleAttributeState )
-                        component->GetField( FOOTPRINT )->m_Attributs &= ~TEXT_NO_VISIBLE;
+                        component->GetField( FOOTPRINT )->SetVisible( false );
                     else
-                        component->GetField( FOOTPRINT )->m_Attributs |= TEXT_NO_VISIBLE;
+                        component->GetField( FOOTPRINT )->SetVisible( true );
                 }
             }
         }

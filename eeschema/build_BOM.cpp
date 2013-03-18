@@ -248,7 +248,7 @@ order = Alphab. ) count = %d\n\n"                                               
             msg.Printf( wxT( "> %-28.28s %s        %s\n" ),
                         GetChars( label->GetText() ),
                         GetChars( labeltype ),
-                        GetChars( returnURLItemLocation( sheetpath, label->m_Pos ) ) );
+                        GetChars( returnURLItemLocation( sheetpath, label->GetPosition() ) ) );
 
             fputs( TO_UTF8( msg ), m_outFile );
             break;
@@ -262,7 +262,7 @@ order = Alphab. ) count = %d\n\n"                                               
                         GetChars( labeltype ),
                         GetChars( returnURLItemLocation( m_labelList[ii].GetSheetPath().
                                                          PathHumanReadable(),
-                                                         pinsheet->m_Pos ) ) );
+                                                         pinsheet->GetPosition() ) ) );
 
             fputs( TO_UTF8( msg ), m_outFile );
             break;
@@ -294,7 +294,7 @@ const wxString BOM_LISTER::returnFieldsString( SCH_COMPONENT* aComponent )
             continue;
 
         if( aComponent->GetFieldCount() > ii )
-            text = aComponent->GetField( ii )->m_Text;
+            text = aComponent->GetField( ii )->GetText();
         else
             text = wxEmptyString;
 
@@ -388,11 +388,11 @@ bool BOM_LISTER::PrintComponentsListByReferenceHumanReadable( FILE* aFile )
         }
 
         fprintf( m_outFile, "| %-10s %-12s", CmpName.c_str(),
-                 TO_UTF8( comp->GetField( VALUE )->m_Text ) );
+                 TO_UTF8( comp->GetField( VALUE )->GetText() ) );
 
         if( addDatasheet )
             fprintf( m_outFile, "%-20s",
-                     TO_UTF8( comp->GetField( DATASHEET )->m_Text ) );
+                     TO_UTF8( comp->GetField( DATASHEET )->GetText() ) );
 
         if( m_includeSubComponents )
         {
@@ -531,19 +531,19 @@ bool BOM_LISTER::PrintComponentsListByReferenceCsvForm( FILE* aFile )
         {
             // Store value and datasheet (will be printed later)
             strCur.Empty();
-            strCur << (wxChar)m_separatorSymbol << comp->GetField( VALUE )->m_Text;
+            strCur << (wxChar)m_separatorSymbol << comp->GetField( VALUE )->GetText();
 
             if( addDatasheet )
-                strCur << (wxChar)m_separatorSymbol << comp->GetField( DATASHEET )->m_Text;
+                strCur << (wxChar)m_separatorSymbol << comp->GetField( DATASHEET )->GetText();
         }
         else
         {
             // Print the current component reference, value and datasheet
             msg = cmpName;
-            msg << (wxChar)m_separatorSymbol << comp->GetField( VALUE )->m_Text;
+            msg << (wxChar)m_separatorSymbol << comp->GetField( VALUE )->GetText();
 
             if( addDatasheet )
-                msg << (wxChar)m_separatorSymbol << comp->GetField( DATASHEET )->m_Text;
+                msg << (wxChar)m_separatorSymbol << comp->GetField( DATASHEET )->GetText();
 
             fprintf( m_outFile, "%s",  TO_UTF8( msg ) );
         }
@@ -698,7 +698,7 @@ int BOM_LISTER::PrintComponentsListByValue( FILE* aFile )
             cmpName += TO_UTF8( LIB_COMPONENT::ReturnSubReference( m_cmplist[ii].GetUnit() ) );
 
         fprintf( m_outFile, "| %-12s %-10s",
-                 TO_UTF8( drawLibItem->GetField( VALUE )->m_Text ),
+                 TO_UTF8( drawLibItem->GetField( VALUE )->GetText() ),
                  cmpName.c_str() );
 
         // print the sheet path and location

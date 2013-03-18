@@ -243,7 +243,7 @@ another pin. Continue?" ) );
 
     m_canvas->SetMouseCapture( NULL, NULL );
     OnModify();
-    CurrentPin->SetPosition( newpos );
+    CurrentPin->Move( newpos );
 
     if( CurrentPin->IsNew() )
     {
@@ -264,7 +264,7 @@ another pin. Continue?" ) );
         if( Pin->GetFlags() == 0 )
             continue;
 
-        Pin->SetPosition( CurrentPin->GetPosition() );
+        Pin->Move( CurrentPin->GetPosition() );
         Pin->ClearFlags();
     }
 
@@ -344,13 +344,13 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     // Erase pin in old position
     if( aErase )
     {
-        CurrentPin->SetPosition( PinPreviousPos );
+        CurrentPin->Move( PinPreviousPos );
         CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
                           &showPinText, DefaultTransform );
     }
 
     // Redraw pin in new position
-    CurrentPin->SetPosition( aPanel->GetScreen()->GetCrossHairPosition( true ) );
+    CurrentPin->Move( aPanel->GetScreen()->GetCrossHairPosition( true ) );
     CurrentPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode,
                       &showPinText, DefaultTransform );
 
@@ -359,7 +359,7 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     /* Keep the original position for existing pin (for Undo command)
      * and the current position for a new pin */
     if( !CurrentPin->IsNew() )
-        CurrentPin->SetPosition( pinpos );
+        CurrentPin->Move( pinpos );
 }
 
 
@@ -388,7 +388,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     if( SynchronizePins() )
         pin->SetFlags( IS_LINKED );
 
-    pin->SetPosition( GetScreen()->GetCrossHairPosition( true ) );
+    pin->Move( GetScreen()->GetCrossHairPosition( true ) );
     pin->SetLength( LastPinLength );
     pin->SetOrientation( LastPinOrient );
     pin->SetType( LastPinType );
@@ -541,7 +541,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     Pin = (LIB_PIN*) SourcePin->Clone();
     Pin->ClearFlags();
     Pin->SetFlags( IS_NEW );
-    Pin->SetPosition( Pin->GetPosition() + wxPoint( g_RepeatStep.x, -g_RepeatStep.y ) );
+    Pin->Move( Pin->GetPosition() + wxPoint( g_RepeatStep.x, -g_RepeatStep.y ) );
     wxString nextName = Pin->GetName();
     IncrementLabelMember( nextName );
     Pin->SetName( nextName );

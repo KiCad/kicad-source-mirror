@@ -118,13 +118,13 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     AddUnitSymbol( *m_PositionYLabel );
 
     // Fill fields with current values
-    *m_TextContentCtrl << m_SelectedPCBText->m_Text;
+    *m_TextContentCtrl << m_SelectedPCBText->GetText();
 
-    PutValueInLocalUnits( *m_SizeXCtrl, m_SelectedPCBText->m_Size.x );
-    PutValueInLocalUnits( *m_SizeYCtrl, m_SelectedPCBText->m_Size.y );
-    PutValueInLocalUnits( *m_ThicknessCtrl, m_SelectedPCBText->m_Thickness );
-    PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->m_Pos.x );
-    PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->m_Pos.y );
+    PutValueInLocalUnits( *m_SizeXCtrl, m_SelectedPCBText->GetSize().x );
+    PutValueInLocalUnits( *m_SizeYCtrl, m_SelectedPCBText->GetSize().y );
+    PutValueInLocalUnits( *m_ThicknessCtrl, m_SelectedPCBText->GetThickness() );
+    PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->GetTextPosition().x );
+    PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->GetTextPosition().y );
 
     int enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
 
@@ -145,12 +145,12 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     orientationStr << m_SelectedPCBText->GetOrientation();
     m_OrientationCtrl->SetValue( orientationStr );
 
-    if( m_SelectedPCBText->m_Mirror )
+    if( m_SelectedPCBText->IsMirrored() )
         m_DisplayCtrl->SetSelection( 1 );
     else
         m_DisplayCtrl->SetSelection( 0 );
 
-    if( m_SelectedPCBText->m_Italic )
+    if( m_SelectedPCBText->IsItalic() )
         m_StyleCtrl->SetSelection( 1 );
     else
         m_StyleCtrl->SetSelection( 0 );
@@ -203,13 +203,13 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     // Set the new text content
     if( !m_TextContentCtrl->GetValue().IsEmpty() )
     {
-        m_SelectedPCBText->m_Text = m_TextContentCtrl->GetValue();
+        m_SelectedPCBText->SetText( m_TextContentCtrl->GetValue() );
     }
 
     // Set PCB Text position
     newPosition.x = ReturnValueFromString( g_UserUnit, m_PositionXCtrl->GetValue() );
     newPosition.y = ReturnValueFromString( g_UserUnit, m_PositionYCtrl->GetValue() );
-    m_SelectedPCBText->m_Pos  = newPosition;
+    m_SelectedPCBText->SetTextPosition( newPosition );
 
     // Check constraints and set PCB Text size
     newSize.x = ReturnValueFromString( g_UserUnit, m_SizeXCtrl->GetValue() );
@@ -227,28 +227,28 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     if( newSize.y > TEXTS_MAX_WIDTH )
         newSize.y = TEXTS_MAX_WIDTH;
 
-    m_SelectedPCBText->m_Size = newSize;
+    m_SelectedPCBText->SetSize( newSize );
 
     // Set the new thickness
-    m_SelectedPCBText->m_Thickness = ReturnValueFromString( g_UserUnit,
-                                                            m_ThicknessCtrl->GetValue() );
+    m_SelectedPCBText->SetThickness( ReturnValueFromString( g_UserUnit,
+                                                            m_ThicknessCtrl->GetValue() ) );
 
     // Test for acceptable values for thickness and size and clamp if fails
-    int maxthickness = Clamp_Text_PenSize( m_SelectedPCBText->m_Thickness,
-                                           m_SelectedPCBText->m_Size  );
+    int maxthickness = Clamp_Text_PenSize( m_SelectedPCBText->GetThickness(),
+                                           m_SelectedPCBText->GetSize()  );
 
-    if( m_SelectedPCBText->m_Thickness > maxthickness )
+    if( m_SelectedPCBText->GetThickness() > maxthickness )
     {
         DisplayError( NULL,
                       _( "The text thickness is too large for the text size. It will be clamped" ) );
-        m_SelectedPCBText->m_Thickness = maxthickness;
+        m_SelectedPCBText->SetThickness( maxthickness );
     }
 
     // Set the layer on which the PCB text is laying
     m_SelectedPCBText->SetLayer( layerList[m_LayerSelectionCtrl->GetSelection()] );
 
     // Set whether the PCB text is mirrored (faced down from layer face perspective)
-    m_SelectedPCBText->m_Mirror = (m_DisplayCtrl->GetSelection() == 1) ? true : false;
+    m_SelectedPCBText->SetMirrored( m_DisplayCtrl->GetSelection() == 1 );
 
     // Set the text orientation
     long orientation;
@@ -257,7 +257,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_SelectedPCBText->SetOrientation( orientation );
 
     // Set whether the PCB text is slanted (it is not italics, as italics has additional curves in style)
-    m_SelectedPCBText->m_Italic = m_StyleCtrl->GetSelection() ? 1 : 0;
+    m_SelectedPCBText->SetItalic( m_StyleCtrl->GetSelection() );
 
     // Set justification
     switch( m_justifyChoice->GetSelection() )

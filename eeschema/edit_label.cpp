@@ -99,23 +99,23 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
         return NULL;
     }
 
-    textItem->m_Bold = lastTextBold;
-    textItem->m_Italic = lastTextItalic;
+    textItem->SetBold( lastTextBold );
+    textItem->SetItalic( lastTextItalic );
     textItem->SetOrientation( lastTextOrientation );
-    textItem->m_Size.x = textItem->m_Size.y = GetDefaultLabelSize();
+    textItem->SetSize( wxSize( GetDefaultLabelSize(), GetDefaultLabelSize() ) );
     textItem->SetFlags( IS_NEW | IS_MOVED );
 
     textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     EditSchematicText( textItem );
 
-    if( textItem->m_Text.IsEmpty() )
+    if( textItem->GetText().IsEmpty() )
     {
         SAFE_DELETE( textItem );
         return NULL;
     }
 
-    lastTextBold = textItem->m_Bold;
-    lastTextItalic = textItem->m_Italic;
+    lastTextBold = textItem->IsBold();
+    lastTextItalic = textItem->IsItalic();
     lastTextOrientation = textItem->GetOrientation();
 
     if( (aType == SCH_GLOBAL_LABEL_T) || (aType == SCH_HIERARCHICAL_LABEL_T) )
@@ -180,19 +180,19 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     switch( type )
     {
     case SCH_LABEL_T:
-        newtext = new SCH_LABEL( text->m_Pos, text->m_Text );
+        newtext = new SCH_LABEL( text->GetPosition(), text->GetText() );
         break;
 
     case SCH_GLOBAL_LABEL_T:
-        newtext = new SCH_GLOBALLABEL( text->m_Pos, text->m_Text );
+        newtext = new SCH_GLOBALLABEL( text->GetPosition(), text->GetText() );
         break;
 
     case SCH_HIERARCHICAL_LABEL_T:
-        newtext = new SCH_HIERLABEL( text->m_Pos, text->m_Text );
+        newtext = new SCH_HIERLABEL( text->GetPosition(), text->GetText() );
         break;
 
     case SCH_TEXT_T:
-        newtext = new SCH_TEXT( text->m_Pos, text->m_Text );
+        newtext = new SCH_TEXT( text->GetPosition(), text->GetText() );
         break;
 
     default:
@@ -208,10 +208,10 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     newtext->SetFlags( text->GetFlags() );
     newtext->SetShape( text->GetShape() );
     newtext->SetOrientation( text->GetOrientation() );
-    newtext->m_Size = text->m_Size;
-    newtext->m_Thickness = text->m_Thickness;
-    newtext->m_Italic = text->m_Italic;
-    newtext->m_Bold = text->m_Bold;
+    newtext->SetSize( text->GetSize() );
+    newtext->SetThickness( text->GetThickness() );
+    newtext->SetItalic( text->IsItalic() );
+    newtext->SetBold( text->IsBold() );
 
     /* Save the new text in undo list if the old text was not itself a "new created text"
      * In this case, the old text is already in undo list as a deleted item.

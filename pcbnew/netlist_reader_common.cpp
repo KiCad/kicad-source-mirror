@@ -190,7 +190,7 @@ bool NETLIST_READER::InitializeModules()
         MODULE* module = FindModule( *idMod );
         if( module )
         {
-            for( D_PAD* pad = module->m_Pads; pad; pad = pad->Next() )
+            for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
                 pad->SetNetname( wxEmptyString );
         }
     }
@@ -199,7 +199,7 @@ bool NETLIST_READER::InitializeModules()
     // Clear all footprints
     for( MODULE* module = m_pcbframe->GetBoard()->m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad; pad = pad->Next() )
+        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
             pad->SetNetname( wxEmptyString );
     }
 #endif

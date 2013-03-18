@@ -318,7 +318,7 @@ static bool HasNonSMDPins( MODULE* aModule )
 {
     D_PAD* pad;
 
-    for( pad = aModule->m_Pads;  pad;  pad = pad->Next() )
+    for( pad = aModule->Pads();  pad;  pad = pad->Next() )
     {
         if( pad->GetAttribute() != PAD_SMD )
             return true;
@@ -652,7 +652,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 
             legacy->SaveModule3D( Module );
 
-            for( pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
+            for( pad = Module->Pads(); pad != NULL; pad = pad->Next() )
             {
                 fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
                 sprintf( line, "position %9.6f %9.6f\n",

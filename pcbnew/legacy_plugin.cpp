@@ -955,7 +955,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             {
                 // text is a drawing
                 textm = new TEXTE_MODULE( module.get() );
-                module->m_Drawings.PushBack( textm );
+                module->GraphicalItems().PushBack( textm );
             }
 
             loadMODULE_TEXT( textm );
@@ -1346,7 +1346,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             pad->SetPosition( padpos + aModule->GetPosition() );
 
-            aModule->m_Pads.PushBack( pad.release() );
+            aModule->Pads().PushBack( pad.release() );
             return;     // preferred exit
         }
     }
@@ -1490,7 +1490,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
     EDGE_MODULE* em = dwg.release();
 
-    aModule->m_Drawings.PushBack( em );
+    aModule->GraphicalItems().PushBack( em );
 
     // this had been done at the MODULE level before, presumably because the
     // EDGE_MODULE needs to be already added to a module before this function will work.
@@ -1603,13 +1603,13 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
 void LEGACY_PLUGIN::load3D( MODULE* aModule )
 {
-    S3D_MASTER* t3D = aModule->m_3D_Drawings;
+    S3D_MASTER* t3D = aModule->Models();
 
     if( !t3D->m_Shape3DName.IsEmpty() )
     {
         S3D_MASTER* n3D = new S3D_MASTER( aModule );
 
-        aModule->m_3D_Drawings.PushBack( n3D );
+        aModule->Models().PushBack( n3D );
 
         t3D = n3D;
     }
@@ -1886,7 +1886,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             pcbtxt->SetThickness( thickn );
             pcbtxt->SetOrientation( angle );
 
-            pcbtxt->SetPosition( wxPoint( pos_x, pos_y ) );
+            pcbtxt->SetTextPosition( wxPoint( pos_x, pos_y ) );
         }
 
         else if( TESTLINE( "De" ) )
@@ -2291,7 +2291,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             if( arcsegcount >= 32 )
                 arcsegcount = 32;
 
-            zc->SetArcSegCount( arcsegcount );
+            zc->SetArcSegmentCount( arcsegcount );
             zc->SetIsFilled( fillstate == 'S' ? true : false );
             zc->SetThermalReliefGap( thermalReliefGap );
             zc->SetThermalReliefCopperBridge( thermalReliefCopperBridge );
@@ -3459,7 +3459,7 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
     saveMODULE_TEXT( &me->Value() );
 
     // save drawing elements
-    for( BOARD_ITEM* gr = me->m_Drawings;  gr;  gr = gr->Next() )
+    for( BOARD_ITEM* gr = me->GraphicalItems();  gr;  gr = gr->Next() )
     {
         switch( gr->Type() )
         {
@@ -3474,7 +3474,7 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
         }
     }
 
-    for( D_PAD* pad = me->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = me->Pads();  pad;  pad = pad->Next() )
         savePAD( pad );
 
     SaveModule3D( me );
@@ -3487,7 +3487,7 @@ void LEGACY_PLUGIN::SaveMODULE( const MODULE* me ) const
 
 void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 {
-    for( S3D_MASTER* t3D = me->m_3D_Drawings;  t3D;  t3D = t3D->Next() )
+    for( S3D_MASTER* t3D = me->Models();  t3D;  t3D = t3D->Next() )
     {
         if( !t3D->m_Shape3DName.IsEmpty() )
         {
@@ -3662,7 +3662,7 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
 
     fprintf( m_fp,  "ZOptions %d %d %c %s %s\n",
                     me->GetFillMode(),
-                    me->GetArcSegCount(),
+                    me->GetArcSegmentCount(),
                     me->IsFilled() ? 'S' : 'F',
                     fmtBIU( me->GetThermalReliefGap() ).c_str(),
                     fmtBIU( me->GetThermalReliefCopperBridge() ).c_str() );
@@ -3747,7 +3747,7 @@ void LEGACY_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
         fprintf( m_fp, "Te \"?\"\n" );
 
     fprintf( m_fp,  "Po %s %s %s %s %d\n",
-                    fmtBIUPoint( me->Text().GetPosition() ).c_str(),
+                    fmtBIUPoint( me->Text().GetTextPosition() ).c_str(),
                     fmtBIUSize( me->Text().GetSize() ).c_str(),
                     fmtBIU( me->Text().GetThickness() ).c_str(),
                     fmtDEG( me->Text().GetOrientation() ).c_str(),
@@ -3817,7 +3817,7 @@ void LEGACY_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
     delete list;
 
     fprintf( m_fp,  "Po %s %s %s %s\n",
-                    fmtBIUPoint( me->GetPosition() ).c_str(),
+                    fmtBIUPoint( me->GetTextPosition() ).c_str(),
                     fmtBIUSize( me->GetSize() ).c_str(),
                     fmtBIU( me->GetThickness() ).c_str(),
                     fmtDEG( me->GetOrientation() ).c_str() );

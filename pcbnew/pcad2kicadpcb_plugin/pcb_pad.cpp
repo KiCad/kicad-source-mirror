@@ -194,7 +194,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
     int             height = 0;
 
     D_PAD* pad = new D_PAD( aModule );
-    aModule->m_Pads.PushBack( pad );
+    aModule->Pads().PushBack( pad );
 
     if( !m_isHolePlated && m_hole )
     {

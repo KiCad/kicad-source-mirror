@@ -64,13 +64,13 @@ DIMENSION::~DIMENSION()
 
 void DIMENSION::SetPosition( const wxPoint& aPos )
 {
-    m_Text.SetPosition( aPos );
+    m_Text.SetTextPosition( aPos );
 }
 
 
 const wxPoint& DIMENSION::GetPosition() const
 {
-    return m_Text.GetPosition();
+    return m_Text.GetTextPosition();
 }
 
 
@@ -122,7 +122,7 @@ void DIMENSION::Copy( DIMENSION* source )
 
 void DIMENSION::Move( const wxPoint& offset )
 {
-    m_Text.m_Pos    += offset;
+    m_Text.SetTextPosition( m_Text.GetTextPosition() + offset );
     m_crossBarO     += offset;
     m_crossBarF     += offset;
     m_featureLineGO += offset;
@@ -142,7 +142,9 @@ void DIMENSION::Move( const wxPoint& offset )
 
 void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_Text.m_Pos, aRotCentre, aAngle );
+    wxPoint tmp = m_Text.GetTextPosition();
+    RotatePoint( &tmp, aRotCentre, aAngle );
+    m_Text.SetTextPosition( tmp );
 
     double newAngle = m_Text.GetOrientation() + aAngle;
 
@@ -180,8 +182,12 @@ void DIMENSION::Flip( const wxPoint& aCentre )
 
 void DIMENSION::Mirror( const wxPoint& axis_pos )
 {
+    wxPoint newPos = m_Text.GetTextPosition();
+
 #define INVERT( pos ) (pos) = axis_pos.y - ( (pos) - axis_pos.y )
-    INVERT( m_Text.m_Pos.y );
+    INVERT( newPos.y );
+
+    m_Text.SetTextPosition( newPos );
 
     // invert angle
     double newAngle = m_Text.GetOrientation();
@@ -226,8 +232,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     m_Text.SetLayer( GetLayer() );
 
     // calculate the size of the dimension (text + line above the text)
-    ii = m_Text.m_Size.y +
-         m_Text.GetThickness() + (m_Width * 3);
+    ii = m_Text.GetSize().y + m_Text.GetThickness() + (m_Width * 3);
 
     deltax  = m_featureLineDO.x - m_featureLineGO.x;
     deltay  = m_featureLineDO.y - m_featureLineGO.y;
@@ -300,8 +305,10 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     m_featureLineDF.y   = m_crossBarF.y + hy;
 
     // Calculate the better text position and orientation:
-    m_Text.m_Pos.x  = (m_crossBarF.x + m_featureLineGF.x) / 2;
-    m_Text.m_Pos.y  = (m_crossBarF.y + m_featureLineGF.y) / 2;
+    wxPoint textPos;
+    textPos.x  = (m_crossBarF.x + m_featureLineGF.x) / 2;
+    textPos.y  = (m_crossBarF.y + m_featureLineGF.y) / 2;
+    m_Text.SetTextPosition( textPos );
 
     double newAngle = -(angle * 1800 / M_PI);
 

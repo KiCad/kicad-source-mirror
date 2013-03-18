@@ -180,8 +180,8 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
     case ID_LIBEDIT_BODY_TEXT_BUTT:
     {
         LIB_TEXT* Text = new LIB_TEXT( LibEntry );
-        Text->m_Size.x = Text->m_Size.y = m_textSize;
-        Text->m_Orient = m_textOrientation;
+        Text->SetSize( wxSize( m_textSize, m_textSize ) );
+        Text->SetOrientation( m_textOrientation );
 
         // Enter the graphic text info
         m_canvas->SetIgnoreMouseEvents( true );
@@ -189,7 +189,7 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
         m_canvas->SetIgnoreMouseEvents( false );
         m_canvas->MoveCursorToCrossHair();
 
-        if( Text->m_Text.IsEmpty() )
+        if( Text->GetText().IsEmpty() )
         {
             delete Text;
             m_drawItem = NULL;

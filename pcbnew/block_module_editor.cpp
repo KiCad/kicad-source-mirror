@@ -320,7 +320,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
         if( currentModule )
         {
             wxPoint move_offset = -block->GetMoveVector();
-            BOARD_ITEM* item = currentModule->m_Drawings;
+            BOARD_ITEM* item = currentModule->GraphicalItems();
 
             for( ; item != NULL; item = item->Next() )
             {
@@ -339,7 +339,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                 }
             }
 
-            D_PAD* pad = currentModule->m_Pads;
+            D_PAD* pad = currentModule->Pads();
 
             for( ; pad != NULL; pad = pad->Next() )
             {
@@ -358,7 +358,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
     if( currentModule )
     {
-        BOARD_ITEM* item = currentModule->m_Drawings;
+        BOARD_ITEM* item = currentModule->GraphicalItems();
         wxPoint move_offset = - block->GetMoveVector();
 
         for( ; item != NULL; item = item->Next() )
@@ -378,7 +378,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
             }
         }
 
-        D_PAD* pad = currentModule->m_Pads;
+        D_PAD* pad = currentModule->Pads();
 
         for( ; pad != NULL; pad = pad->Next() )
         {
@@ -398,7 +398,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
     if( module == NULL )
         return;
 
-    for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
     {
         if( !pad->IsSelected() )
             continue;
@@ -407,12 +407,12 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         D_PAD* NewPad = new D_PAD( *pad );
         NewPad->SetParent( module );
         NewPad->SetFlags( SELECTED );
-        module->m_Pads.PushFront( NewPad );
+        module->Pads().PushFront( NewPad );
     }
 
     BOARD_ITEM* newItem;
 
-    for( BOARD_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
+    for( BOARD_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
     {
         if( !item->IsSelected() )
             continue;
@@ -422,7 +422,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         newItem = (BOARD_ITEM*)item->Clone();
         newItem->SetParent( module );
         newItem->SetFlags( SELECTED );
-        module->m_Drawings.PushFront( newItem );
+        module->GraphicalItems().PushFront( newItem );
     }
 
     MoveMarkedItems( module, offset );
@@ -438,7 +438,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
     if( module == NULL )
         return;
 
-    D_PAD* pad = module->m_Pads;
+    D_PAD* pad = module->Pads();
 
     for( ; pad != NULL; pad = pad->Next() )
     {
@@ -449,7 +449,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         pad->SetPos0( pad->GetPos0() + offset );
     }
 
-    item = module->m_Drawings;
+    item = module->GraphicalItems();
 
     for( ; item != NULL; item = item->Next() )
     {
@@ -459,22 +459,22 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            {
-                TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
-                tm->m_Pos += offset;
-                tm->SetPos0( tm->GetPos0() + offset );
-            }
-            break;
+        {
+            TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
+            tm->Offset( offset );
+            tm->SetPos0( tm->GetPos0() + offset );
+        }
+        break;
 
         case PCB_MODULE_EDGE_T:
-            {
-                EDGE_MODULE* em = (EDGE_MODULE*) item;
-                em->SetStart( em->GetStart() + offset );
-                em->SetEnd( em->GetEnd() + offset );
-                em->SetStart0( em->GetStart0() + offset );
-                em->SetEnd0( em->GetEnd0() + offset );
-            }
-            break;
+        {
+            EDGE_MODULE* em = (EDGE_MODULE*) item;
+            em->SetStart( em->GetStart() + offset );
+            em->SetEnd( em->GetEnd() + offset );
+            em->SetStart0( em->GetStart0() + offset );
+            em->SetEnd0( em->GetEnd0() + offset );
+        }
+        break;
 
         default:
             ;
@@ -497,7 +497,7 @@ void DeleteMarkedItems( MODULE* module )
     if( module == NULL )
         return;
 
-    pad = module->m_Pads;
+    pad = module->Pads();
 
     for( ; pad != NULL; pad = next_pad )
     {
@@ -509,7 +509,7 @@ void DeleteMarkedItems( MODULE* module )
         pad->DeleteStructure();
     }
 
-    item = module->m_Drawings;
+    item = module->GraphicalItems();
 
     for( ; item != NULL; item = next_item )
     {
@@ -536,7 +536,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
     if( module == NULL )
         return;
 
-    for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
     {
         // Skip pads not selected, i.e. not inside the block to mirror:
         if( !pad->IsSelected() && !force_all )
@@ -559,7 +559,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         pad->SetOrientation( 1800 - pad->GetOrientation() );
     }
 
-    for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
+    for( EDA_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
     {
         // Skip items not selected, i.e. not inside the block to mirror:
         if( !item->IsSelected() && !force_all )
@@ -588,9 +588,9 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         case PCB_MODULE_TEXT_T:
             {
                 TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
-                tmp = tm->GetPosition();
+                tmp = tm->GetTextPosition();
                 SETMIRROR( tmp.x );
-                tm->SetPosition( tmp );
+                tm->SetTextPosition( tmp );
                 tmp.y = tm->GetPos0().y;
                 tm->SetPos0( tmp );
             }
@@ -616,7 +616,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
     if( module == NULL )
         return;
 
-    for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
     {
         if( !pad->IsSelected() && !force_all )
             continue;
@@ -629,7 +629,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         pad->SetOrientation( pad->GetOrientation() + 900 );
     }
 
-    for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
+    for( EDA_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
     {
         if( !item->IsSelected() && !force_all)
             continue;
@@ -655,10 +655,10 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         case PCB_MODULE_TEXT_T:
         {
             TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
-            wxPoint pos = tm->GetPosition();
+            wxPoint pos = tm->GetTextPosition();
             ROTATE( pos );
-            tm->SetPosition( pos );
-            tm->SetPos0( tm->GetPosition() );
+            tm->SetTextPosition( pos );
+            tm->SetPos0( tm->GetTextPosition() );
             tm->SetOrientation( tm->GetOrientation() + 900 );
         }
         break;
@@ -679,14 +679,14 @@ void ClearMarkItems( MODULE* module )
     if( module == NULL )
         return;
 
-    item = module->m_Drawings;
+    item = module->GraphicalItems();
 
     for( ; item != NULL; item = item->Next() )
     {
         item->ClearFlags();
     }
 
-    item = module->m_Pads;
+    item = module->Pads();
 
     for( ; item != NULL; item = item->Next() )
     {
@@ -708,7 +708,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
     if( module == NULL )
         return 0;
 
-    pad = module->m_Pads;
+    pad = module->Pads();
 
     for( ; pad != NULL; pad = pad->Next() )
     {
@@ -722,7 +722,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
         }
     }
 
-    item = module->m_Drawings;
+    item = module->GraphicalItems();
 
     for( ; item != NULL; item = item->Next() )
     {
@@ -740,7 +740,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
             break;
 
         case PCB_MODULE_TEXT_T:
-            pos = ( (TEXTE_MODULE*) item )->GetPosition();
+            pos = ( (TEXTE_MODULE*) item )->GetTextPosition();
 
             if( Rect.Contains( pos ) )
             {

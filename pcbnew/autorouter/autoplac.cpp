@@ -564,7 +564,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     /* Trace pads and surface safely. */
     marge = trackWidth + clearance;
 
-    for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
+    for( Pad = Module->Pads(); Pad != NULL; Pad = Pad->Next() )
     {
         ::PlacePad( Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
     }
@@ -626,7 +626,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         if( aModule->GetLayer() == LAYER_N_BACK )
             otherLayerMask = LAYER_FRONT;
 
-        for( Pad = aModule->m_Pads; Pad != NULL; Pad = Pad->Next() )
+        for( Pad = aModule->Pads(); Pad != NULL; Pad = Pad->Next() )
         {
             if( ( Pad->GetLayerMask() & otherLayerMask ) == 0 )
                 continue;

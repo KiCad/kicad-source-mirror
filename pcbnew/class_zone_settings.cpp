@@ -73,15 +73,15 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
 {
     m_ZonePriority = aSource.GetPriority();
-    m_FillMode     = aSource.m_FillMode;
-    m_ZoneClearance      = aSource.m_ZoneClearance;
-    m_ZoneMinThickness   = aSource.m_ZoneMinThickness;
+    m_FillMode           = aSource.GetFillMode();
+    m_ZoneClearance      = aSource.GetClearance();
+    m_ZoneMinThickness   = aSource.GetMinThickness();
     m_NetcodeSelection   = aSource.GetNet();
     m_CurrentZone_Layer  = aSource.GetLayer();
     m_Zone_HatchingStyle = aSource.GetHatchStyle();
-    m_ArcToSegmentsCount = aSource.m_ArcToSegmentsCount;
-    m_ThermalReliefGap = aSource.m_ThermalReliefGap;
-    m_ThermalReliefCopperBridge = aSource.m_ThermalReliefCopperBridge;
+    m_ArcToSegmentsCount = aSource.GetArcSegmentCount();
+    m_ThermalReliefGap = aSource.GetThermalReliefGap();
+    m_ThermalReliefCopperBridge = aSource.GetThermalReliefCopperBridge();
     m_PadConnection = aSource.GetPadConnection();
     m_cornerSmoothingType = aSource.GetCornerSmoothingType();
     m_cornerRadius = aSource.GetCornerRadius();
@@ -96,12 +96,12 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
 
 void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) const
 {
-    aTarget.m_FillMode = m_FillMode;
-    aTarget.m_ZoneClearance    = m_ZoneClearance;
-    aTarget.m_ZoneMinThickness = m_ZoneMinThickness;
-    aTarget.m_ArcToSegmentsCount = m_ArcToSegmentsCount;
-    aTarget.m_ThermalReliefGap = m_ThermalReliefGap;
-    aTarget.m_ThermalReliefCopperBridge = m_ThermalReliefCopperBridge;
+    aTarget.SetFillMode( m_FillMode );
+    aTarget.SetZoneClearance( m_ZoneClearance );
+    aTarget.SetMinThickness( m_ZoneMinThickness );
+    aTarget.SetArcSegmentCount( m_ArcToSegmentsCount );
+    aTarget.SetThermalReliefGap( m_ThermalReliefGap );
+    aTarget.SetThermalReliefCopperBridge( m_ThermalReliefCopperBridge );
     aTarget.SetPadConnection( m_PadConnection );
     aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
     aTarget.SetCornerRadius( m_cornerRadius );

@@ -31,7 +31,7 @@ void FOOTPRINT_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
 
     GetScreen()->PushCommandToUndoList( lastcmd );
     /* Clear current flags (which can be temporary set by a current edit command) */
-    for( item = CopyItem->m_Drawings; item != NULL; item = item->Next() )
+    for( item = CopyItem->GraphicalItems(); item != NULL; item = item->Next() )
         item->ClearFlags();
 
     /* Clear redo list, because after new save there is no redo to do */

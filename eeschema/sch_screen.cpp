@@ -375,7 +375,7 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
         label = GetSheetLabel( aPosition );
 
-        if( label && IsBusLabel( label->m_Text ) && label->IsConnected( aPosition ) )
+        if( label && IsBusLabel( label->GetText() ) && label->IsConnected( aPosition ) )
             return true;
 
         text = GetLabel( aPosition );
@@ -413,7 +413,7 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
         label = GetSheetLabel( aPosition );
 
-        if( label && label->IsConnected( aPosition ) && !IsBusLabel( label->m_Text ) )
+        if( label && label->IsConnected( aPosition ) && !IsBusLabel( label->GetText() ) )
             return true;
 
         break;
@@ -1083,25 +1083,21 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
              * it is probably not yet initialized
              */
             SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
-            if( fpfield->m_Text.IsEmpty()
-              && ( fpfield->m_Pos == component->GetPosition() ) )
+            if( fpfield->GetText().IsEmpty()
+              && ( fpfield->GetPosition() == component->GetPosition() ) )
             {
-                fpfield->m_Orient = component->GetField( VALUE )->m_Orient;
-                fpfield->m_Pos    = component->GetField( VALUE )->m_Pos;
-                fpfield->m_Size   = component->GetField( VALUE )->m_Size;
+                fpfield->SetOrientation( component->GetField( VALUE )->GetOrientation() );
+                fpfield->SetPosition( component->GetField( VALUE )->GetPosition() );
+                fpfield->SetSize( component->GetField( VALUE )->GetSize() );
 
-                if( fpfield->m_Orient == 0 )
-                    fpfield->m_Pos.y += 100;
+                if( fpfield->GetOrientation() == 0 )
+                    fpfield->Offset( wxPoint( 0, 100 ) );
                 else
-                    fpfield->m_Pos.x += 100;
+                    fpfield->Offset( wxPoint( 100, 0 ) );
             }
 
-            fpfield->m_Text = aFootPrint;
-
-            if( aSetVisible )
-                fpfield->m_Attributs &= ~TEXT_NO_VISIBLE;
-            else
-                fpfield->m_Attributs |= TEXT_NO_VISIBLE;
+            fpfield->SetText( aFootPrint );
+            fpfield->SetVisible( aSetVisible );
 
             found = true;
         }

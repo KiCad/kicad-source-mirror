@@ -70,7 +70,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
     // clear .m_ZoneSubnet parameter for pads
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
             if( (aNetcode < 0) || ( aNetcode == pad->GetNet() ) )
                 pad->SetZoneSubNet( 0 );
     }

@@ -1317,7 +1317,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
 
     pt.x = parseBoardUnits( "X coordinate" );
     pt.y = parseBoardUnits( "Y coordinate" );
-    text->SetPosition( pt );
+    text->SetTextPosition( pt );
 
     // If there is no orientation defined, then it is the default value of 0 degrees.
     token = NextTok();
@@ -1406,7 +1406,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
         {
             TEXTE_PCB* text = parseTEXTE_PCB();
             dimension->Text() = *text;
-            dimension->SetPosition( text->GetPosition() );
+            dimension->SetPosition( text->GetTextPosition() );
             delete text;
             break;
         }
@@ -1680,7 +1680,7 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
             }
             else
             {
-                module->m_Drawings.PushBack( text );
+                module->GraphicalItems().PushBack( text );
             }
 
             break;
@@ -1695,7 +1695,7 @@ MODULE* PCB_PARSER::parseMODULE() throw( IO_ERROR, PARSE_ERROR )
             EDGE_MODULE* em = parseEDGE_MODULE();
             em->SetParent( module.get() );
             em->SetDrawCoord();
-            module->m_Drawings.PushBack( em );
+            module->GraphicalItems().PushBack( em );
             break;
         }
 
@@ -2497,7 +2497,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                     break;
 
                 case T_arc_segments:
-                    zone->SetArcSegCount( parseInt( "arc segment count" ) );
+                    zone->SetArcSegmentCount( parseInt( "arc segment count" ) );
                     break;
 
                 case T_thermal_gap:

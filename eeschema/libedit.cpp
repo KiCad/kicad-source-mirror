@@ -257,12 +257,12 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
         // although it is stored without ? and part id.
         // So temporary change the reference by a schematic like reference
         LIB_FIELD* Field = m_component->GetField( REFERENCE );
-        wxString fieldText = Field->m_Text;
+        wxString fieldText = Field->GetText();
         wxString fieldfullText = Field->GetFullText( m_unit );
-        Field->m_Text = fieldfullText;
+        Field->SetText( fieldfullText );
         m_component->Draw( m_canvas, aDC, aOffset, m_unit,
                            m_convert, GR_DEFAULT_DRAWMODE );
-        Field->m_Text = fieldText;
+        Field->SetText( fieldText );
     }
 }
 
@@ -623,7 +623,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
     }
 
     LIB_COMPONENT* component = new LIB_COMPONENT( name );
-    component->GetReferenceField().m_Text = dlg.GetReference();
+    component->GetReferenceField().SetText( dlg.GetReference() );
     component->SetPartCount( dlg.GetPartCount() );
 
     // Initialize component->m_TextInside member:

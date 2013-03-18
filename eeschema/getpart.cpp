@@ -257,7 +257,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     component->SetLibName( Name );
 
     // Set the component value that can differ from component name in lib, for aliases
-    component->GetField( VALUE )->m_Text = Name;
+    component->GetField( VALUE )->SetText( Name );
 
     MSG_PANEL_ITEMS items;
     component->SetCurrentSheetPath( &GetCurrentSheet() );

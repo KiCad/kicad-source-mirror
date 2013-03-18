@@ -176,7 +176,7 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
     LIB_FIELD* value = new LIB_FIELD( this, VALUE );
-    value->m_Text = aName;
+    value->SetText( aName );
     drawings.push_back( value );
 
     drawings.push_back( new LIB_FIELD( this, REFERENCE ) );
@@ -266,7 +266,7 @@ wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
 void LIB_COMPONENT::SetName( const wxString& aName )
 {
     m_name = aName;
-    GetValueField().m_Text = aName;
+    GetValueField().SetText( aName );
     m_aliases[0]->SetName( aName );
 }
 
@@ -535,25 +535,25 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
     LIB_FIELD&  value = GetValueField();
 
     // First line: it s a comment (component name for readers)
-    aFormatter.Print( 0, "#\n# %s\n#\n", TO_UTF8( value.m_Text ) );
+    aFormatter.Print( 0, "#\n# %s\n#\n", TO_UTF8( value.GetText() ) );
 
     // Save data
     aFormatter.Print( 0, "DEF" );
 
     if( value.IsVisible() )
     {
-        aFormatter.Print( 0, " %s", TO_UTF8( value.m_Text ) );
+        aFormatter.Print( 0, " %s", TO_UTF8( value.GetText() ) );
     }
     else
     {
-        aFormatter.Print( 0, " ~%s", TO_UTF8( value.m_Text ) );
+        aFormatter.Print( 0, " ~%s", TO_UTF8( value.GetText() ) );
     }
 
     LIB_FIELD& reference = GetReferenceField();
 
-    if( !reference.m_Text.IsEmpty() )
+    if( !reference.GetText().IsEmpty() )
     {
-        aFormatter.Print( 0, " %s", TO_UTF8( reference.m_Text ) );
+        aFormatter.Print( 0, " %s", TO_UTF8( reference.GetText() ) );
     }
     else
     {
@@ -593,7 +593,7 @@ bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
         // There is no need to save empty fields, i.e. no reason to preserve field
         // names now that fields names come in dynamically through the template
         // fieldnames.
-        if( !fields[i].m_Text.IsEmpty() )
+        if( !fields[i].GetText().IsEmpty() )
         {
             fields[i].SetId( fieldId++ );
 
@@ -724,13 +724,15 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( componentName[0] != '~' )
     {
-        m_name = value.m_Text = FROM_UTF8( componentName );
-        m_name = value.m_Text = m_name.MakeUpper();
+        m_name = FROM_UTF8( componentName );
+        m_name = m_name.MakeUpper();
+        value.SetText( m_name );
     }
     else
     {
-        m_name = value.m_Text = FROM_UTF8( &componentName[1] );
-        value.m_Attributs |= TEXT_NO_VISIBLE;
+        m_name = FROM_UTF8( &componentName[1] );
+        value.SetText( m_name );
+        value.SetVisible( false );
     }
 
     // Add the root alias to the alias list.
@@ -740,12 +742,12 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     if( strcmp( prefix, "~" ) == 0 )
     {
-        reference.m_Text.Empty();
-        reference.m_Attributs |= TEXT_NO_VISIBLE;
+        reference.Empty();
+        reference.SetVisible( false );
     }
     else
     {
-        reference.m_Text = FROM_UTF8( prefix );
+        reference.SetText( FROM_UTF8( prefix ) );
     }
 
     // Copy optional infos
@@ -927,7 +929,7 @@ bool LIB_COMPONENT::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
         *fixedField = *field;
 
         if( field->GetId() == VALUE )
-            m_name = field->m_Text;
+            m_name = field->GetText();
 
         SAFE_DELETE( field );
     }

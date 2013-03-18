@@ -70,7 +70,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
 
     /* Add the new text object to the beginning of the draw item list. */
     if( Module )
-        Module->m_Drawings.PushFront( Text );
+        Module->GraphicalItems().PushFront( Text );
 
     Text->SetFlags( IS_NEW );
 
@@ -78,9 +78,9 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
 
     GetDesignSettings().m_ModuleTextWidth = Clamp_Text_PenSize( GetDesignSettings().m_ModuleTextWidth,
                                                                 std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
-    Text->m_Size  = GetDesignSettings().m_ModuleTextSize;
-    Text->m_Thickness = GetDesignSettings().m_ModuleTextWidth;
-    Text->m_Pos   = GetScreen()->GetCrossHairPosition();
+    Text->SetSize( GetDesignSettings().m_ModuleTextSize );
+    Text->SetThickness( GetDesignSettings().m_ModuleTextWidth );
+    Text->SetTextPosition( GetScreen()->GetCrossHairPosition() );
     Text->SetLocalCoord();
 
     InstallTextModOptionsFrame( Text, NULL );
@@ -115,10 +115,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
     // we expect MoveVector to be (0,0) if there is no move in progress
     Text->Draw( m_canvas, DC, GR_XOR, MoveVector );
 
-    Text->m_Orient += 900;
-
-    while( Text->m_Orient >= 1800 )
-        Text->m_Orient -= 1800;
+    Text->SetOrientation( Text->GetOrientation() + 900 );
 
     Text->Draw( m_canvas, DC, GR_XOR, MoveVector );
     SetMsgPanel( Text );
@@ -176,7 +173,7 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     // If the text was moved (the move does not change internal data)
     // it could be rotated while moving. So set old value for orientation
     if( Text->IsMoving() )
-        Text->m_Orient = TextInitialOrientation;
+        Text->SetOrientation( TextInitialOrientation );
 
     /* Redraw the text */
     Panel->RefreshDrawingRect( Text->GetBoundingBox() );
@@ -207,8 +204,8 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MoveVector.x = MoveVector.y = 0;
 
-    TextInitialPosition    = Text->m_Pos;
-    TextInitialOrientation = Text->m_Orient;
+    TextInitialPosition    = Text->GetTextPosition();
+    TextInitialOrientation = Text->GetOrientation();
 
     // Center cursor on initial position of text
     GetScreen()->SetCrossHairPosition( TextInitialPosition );
@@ -236,18 +233,19 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
         if( Module )
         {
             // Prepare undo command (a rotation can be made while moving)
-            EXCHG( Text->m_Orient, TextInitialOrientation );
+            int tmp = Text->GetOrientation();
+            Text->SetOrientation( TextInitialOrientation );
 
             if( IsType( PCB_FRAME_TYPE ) )
                 SaveCopyInUndoList( Module, UR_CHANGED );
             else
                 SaveCopyInUndoList( Module, UR_MODEDIT );
 
-            EXCHG( Text->m_Orient, TextInitialOrientation );
+            Text->SetOrientation( tmp );
 
             // Set the new position for text.
-            Text->m_Pos = GetScreen()->GetCrossHairPosition();
-            wxPoint textRelPos = Text->GetPosition() - Module->GetPosition();
+            Text->SetTextPosition( GetScreen()->GetCrossHairPosition() );
+            wxPoint textRelPos = Text->GetTextPosition() - Module->GetPosition();
             RotatePoint( &textRelPos, -Module->GetOrientation() );
             Text->SetPos0( textRelPos );
             Text->ClearFlags();
@@ -260,7 +258,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
         }
         else
         {
-            Text->m_Pos = GetScreen()->GetCrossHairPosition();
+            Text->SetTextPosition( GetScreen()->GetCrossHairPosition() );
         }
     }
 

@@ -158,7 +158,7 @@ void DRAG_LIST::BuildDragListe( MODULE* aModule )
     CONNECTIONS connections( m_Brd );
     std::vector<D_PAD*>&padList = connections.GetPadsList();
 
-    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
         padList.push_back( pad );
 
     sort( padList.begin(), padList.end(), sortPadsByXthenYCoord );

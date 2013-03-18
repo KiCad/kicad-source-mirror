@@ -397,7 +397,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
                            parseInt( parameters[7], conv_unit ) );
     }
 
-    module->Reference().SetPosition( textPos );
+    module->Reference().SetTextPosition( textPos );
     module->Reference().SetPos0( textPos );
 
     int orientation = parseInt( parameters[paramCnt-4] );
@@ -415,7 +415,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
     module->Value().SetSize( module->Reference().GetSize() );
     module->Value().SetThickness( module->Reference().GetThickness() );
     textPos.y += tsize + thickness;
-    module->Value().SetPosition( textPos );
+    module->Value().SetTextPosition( textPos );
     module->Value().SetPos0( textPos );
 
     while( aLineReader->ReadLine() )
@@ -459,7 +459,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
                                        parseInt( parameters[5], conv_unit ) ) );
             drawSeg->SetWidth( parseInt( parameters[6], conv_unit ) );
             drawSeg->SetDrawCoord();
-            module->m_Drawings.PushBack( drawSeg );
+            module->GraphicalItems().PushBack( drawSeg );
             continue;
         }
 
@@ -477,7 +477,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
             EDGE_MODULE* drawSeg = new EDGE_MODULE( module.get() );
             drawSeg->SetLayer( SILKSCREEN_N_FRONT );
             drawSeg->SetShape( S_ARC );
-            module->m_Drawings.PushBack( drawSeg );
+            module->GraphicalItems().PushBack( drawSeg );
 
             // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
             int     radius = ( parseInt( parameters[4], conv_unit ) +

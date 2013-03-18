@@ -229,7 +229,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
     for( MODULE* module = aPcb->m_Modules; module; module = module->Next() )
     {
-        for( BOARD_ITEM* item = module->m_Drawings; item; item = item->Next() )
+        for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item->Next() )
         {
             switch( item->Type() )
             {
@@ -295,7 +295,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             TEXTE_PCB* PtText;
             PtText = (TEXTE_PCB*) item;
 
-            if( PtText->GetLength() == 0 )
+            if( PtText->GetText().Length() == 0 )
                 break;
 
             EDA_RECT textbox = PtText->GetTextBox( -1 );

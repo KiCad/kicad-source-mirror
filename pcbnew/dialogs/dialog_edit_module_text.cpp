@@ -114,15 +114,15 @@ void DialogEditModuleText::initDlg( )
     else if( m_currentText->GetType() != TEXT_is_REFERENCE )
         m_TextDataTitle->SetLabel( wxT( "???" ) );
 
-    m_Name->SetValue( m_currentText->m_Text );
+    m_Name->SetValue( m_currentText->GetText() );
 
-    m_Style->SetSelection( m_currentText->m_Italic ? 1 : 0 );
+    m_Style->SetSelection( m_currentText->IsItalic() ? 1 : 0 );
 
     AddUnitSymbol( *m_SizeXTitle );
-    PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->m_Size.x );
+    PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->GetSize().x );
 
     AddUnitSymbol( *m_SizeYTitle );
-    PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->m_Size.y );
+    PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->GetSize().y );
 
     AddUnitSymbol( *m_PosXTitle );
     PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x );
@@ -131,9 +131,9 @@ void DialogEditModuleText::initDlg( )
     PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->GetPos0().y );
 
     AddUnitSymbol( *m_WidthTitle );
-    PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->m_Thickness );
+    PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
 
-    int text_orient = m_currentText->m_Orient;
+    int text_orient = m_currentText->GetOrientation();
     NORMALIZE_ANGLE_90(text_orient)
 
     if( (text_orient != 0) )
@@ -156,9 +156,9 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
         m_currentText->Draw( m_parent->GetCanvas(), m_dc, GR_XOR,
                              (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
-    m_currentText->m_Text = m_Name->GetValue();
 
-    m_currentText->m_Italic = m_Style->GetSelection() == 1 ? true : false;
+    m_currentText->SetText( m_Name->GetValue() );
+    m_currentText->SetItalic( m_Style->GetSelection() == 1 );
 
     wxPoint tmp;
 
@@ -170,16 +170,16 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 
     m_currentText->SetPos0( tmp );
 
-    msg = m_TxtSizeCtrlX->GetValue();
-    m_currentText->m_Size.x = ReturnValueFromString( g_UserUnit, msg );
-    msg = m_TxtSizeCtrlY->GetValue();
-    m_currentText->m_Size.y = ReturnValueFromString( g_UserUnit, msg );
+    wxSize textSize( wxSize( ReturnValueFromString( g_UserUnit, m_TxtSizeCtrlX->GetValue() ),
+                             ReturnValueFromString( g_UserUnit, m_TxtSizeCtrlY->GetValue() ) ) );
 
     // Test for a reasonnable size:
-    if( m_currentText->m_Size.x< TEXTS_MIN_SIZE )
-        m_currentText->m_Size.x = TEXTS_MIN_SIZE;
-    if( m_currentText->m_Size.y< TEXTS_MIN_SIZE )
-        m_currentText->m_Size.y = TEXTS_MIN_SIZE;
+    if( textSize.x < TEXTS_MIN_SIZE )
+        textSize.x = TEXTS_MIN_SIZE;
+    if( textSize.y < TEXTS_MIN_SIZE )
+        textSize.y = TEXTS_MIN_SIZE;
+
+    m_currentText->SetSize( textSize ),
 
     msg = m_TxtWidthCtlr->GetValue();
     int width = ReturnValueFromString( g_UserUnit, msg );
@@ -188,7 +188,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if( width <= 1 )
         width = 1;
 
-    int maxthickness = Clamp_Text_PenSize(width, m_currentText->m_Size );
+    int maxthickness = Clamp_Text_PenSize(width, m_currentText->GetSize() );
 
     if( width > maxthickness )
     {
@@ -202,7 +202,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     m_currentText->SetVisible( m_Show->GetSelection() == 0 );
 
     int text_orient = (m_Orient->GetSelection() == 0) ? 0 : 900;
-    m_currentText->m_Orient = text_orient;
+    m_currentText->SetOrientation( text_orient );
 
     m_currentText->SetDrawCoord();
 

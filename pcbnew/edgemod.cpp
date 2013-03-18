@@ -167,7 +167,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 
     if( aEdge == NULL )
     {
-        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->m_Drawings;
+        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->GraphicalItems();
 
         for( ; aEdge != NULL; aEdge = aEdge->Next() )
         {
@@ -215,7 +215,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 
     if( aEdge == NULL )
     {
-        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->m_Drawings;
+        aEdge = (EDGE_MODULE*) (BOARD_ITEM*) module->GraphicalItems();
 
         for( ; aEdge != NULL; aEdge = aEdge->Next() )
         {
@@ -327,7 +327,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
         MoveVector.x = MoveVector.y = 0;
 
         // Add the new item to the Drawings list head
-        module->m_Drawings.PushFront( aEdge );
+        module->GraphicalItems().PushFront( aEdge );
 
         // Update characteristics of the segment or arc.
         aEdge->SetFlags( IS_NEW );
@@ -377,7 +377,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
                 EDGE_MODULE* newedge = new EDGE_MODULE( *aEdge );
 
                 // insert _after_ aEdge, which is the same as inserting before aEdge->Next()
-                module->m_Drawings.Insert( newedge, aEdge->Next() );
+                module->GraphicalItems().Insert( newedge, aEdge->Next() );
                 aEdge->ClearFlags();
 
                 aEdge = newedge;     // point now new item

@@ -222,7 +222,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
         return;
 
     // test if reference prefix is acceptable
-    if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].m_Text ) )
+    if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].GetText() ) )
     {
         DisplayError( NULL, _( "Illegal reference prefix. A reference must start by a letter" ) );
         return;
@@ -235,7 +235,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
      */
     /* If a new name entered in the VALUE field, that it not an existing alias name
      * or root alias of the component */
-    wxString newvalue = m_FieldsBuf[VALUE].m_Text;
+    wxString newvalue = m_FieldsBuf[VALUE].GetText();
 
     if( m_LibEntry->HasAlias( newvalue ) && !m_LibEntry->GetAlias( newvalue )->IsRoot() )
     {
@@ -255,7 +255,7 @@ An alias %s already exists!\nCannot update this component" ),
     // back into the component
     for( unsigned i = MANDATORY_FIELDS; i < m_FieldsBuf.size(); )
     {
-        if( m_FieldsBuf[i].GetName().IsEmpty() || m_FieldsBuf[i].m_Text.IsEmpty() )
+        if( m_FieldsBuf[i].GetName().IsEmpty() || m_FieldsBuf[i].GetText().IsEmpty() )
         {
             m_FieldsBuf.erase( m_FieldsBuf.begin() + i );
             continue;
@@ -269,7 +269,7 @@ An alias %s already exists!\nCannot update this component" ),
     {
         printf( "save[%d].name:'%s' value:'%s'\n", i,
                 TO_UTF8( m_FieldsBuf[i].GetName() ),
-                TO_UTF8( m_FieldsBuf[i].m_Text ) );
+                TO_UTF8( m_FieldsBuf[i].GetText() ) );
     }
 #endif
 
@@ -277,7 +277,7 @@ An alias %s already exists!\nCannot update this component" ),
     m_LibEntry->SetFields( m_FieldsBuf );
 
     // We need to keep the name and the value the same at the moment!
-    SetName( m_LibEntry->GetValueField().m_Text );
+    SetName( m_LibEntry->GetValueField().GetText() );
 
     m_Parent->OnModify();
 
@@ -329,7 +329,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEven
 
     m_skipCopyFromPanel = true;
 
-    if( m_FieldsBuf[fieldNdx].m_Text.IsEmpty() )
+    if( m_FieldsBuf[fieldNdx].GetText().IsEmpty() )
     {
         m_FieldsBuf.erase( m_FieldsBuf.begin() + fieldNdx );
         fieldListCtrl->DeleteItem( fieldNdx );
@@ -339,7 +339,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEven
     }
     else
     {
-        m_FieldsBuf[fieldNdx].m_Text.Empty();
+        m_FieldsBuf[fieldNdx].Empty();
         copySelectedFieldToPanel();
     }
 
@@ -512,12 +512,12 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
             D( printf( "add template:%s\n", TO_UTF8( it->m_Name ) ); )
 
             fld.SetName( it->m_Name );
-            fld.m_Text = it->m_Value;   // empty? ok too.
+            fld.SetText( it->m_Value );   // empty? ok too.
 
             if( !it->m_Visible )
-                fld.m_Attributs |= TEXT_NO_VISIBLE;
+                fld.SetVisible( false );
             else
-                fld.m_Attributs &= ~TEXT_NO_VISIBLE;
+                fld.SetVisible( true );;
         }
         else
         {
@@ -580,7 +580,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LIB_FI
     }
 
     fieldListCtrl->SetItem( aFieldNdx, COLUMN_FIELD_NAME, aField.GetName() );
-    fieldListCtrl->SetItem( aFieldNdx, COLUMN_TEXT, aField.m_Text );
+    fieldListCtrl->SetItem( aFieldNdx, COLUMN_TEXT, aField.GetText() );
 
     // recompute the column widths here, after setting texts
     fieldListCtrl->SetColumnWidth( COLUMN_FIELD_NAME, wxLIST_AUTOSIZE );
@@ -599,30 +599,31 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     LIB_FIELD& field = m_FieldsBuf[fieldNdx];
 
-    showCheckBox->SetValue( !(field.m_Attributs & TEXT_NO_VISIBLE) );
+    showCheckBox->SetValue( field.IsVisible() );
 
-    rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
+    rotateCheckBox->SetValue( field.GetOrientation() == TEXT_ORIENT_VERT );
 
     int style = 0;
-    if( field.m_Italic )
+
+    if( field.IsItalic() )
         style = 1;
 
-    if( field.m_Bold )
+    if( field.IsBold() )
         style |= 2;
 
     m_StyleRadioBox->SetSelection( style );
 
     // Select the right text justification
-    if( field.m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+    if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
         m_FieldHJustifyCtrl->SetSelection(0);
-    else if( field.m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+    else if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
         m_FieldHJustifyCtrl->SetSelection(2);
     else
         m_FieldHJustifyCtrl->SetSelection(1);
 
-    if( field.m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+    if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
         m_FieldVJustifyCtrl->SetSelection(0);
-    else if( field.m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+    else if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
         m_FieldVJustifyCtrl->SetSelection(2);
     else
         m_FieldVJustifyCtrl->SetSelection(1);
@@ -656,23 +657,23 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     // if fieldNdx == REFERENCE, VALUE, then disable delete button
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
-    fieldValueTextCtrl->SetValue( field.m_Text );
+    fieldValueTextCtrl->SetValue( field.GetText() );
 
-    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.m_Size.x ) );
+    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
 
-    wxPoint coord = field.m_Pos;
+    wxPoint coord = field.GetPosition();
     wxPoint zero;
 
     // If the field value is empty and the position is at relative zero, we set the
     // initial position as a small offset from the ref field, and orient
     // it the same as the ref field.  That is likely to put it at least
     // close to the desired position.
-    if( coord == zero && field.m_Text.IsEmpty() )
+    if( coord == zero && field.GetText().IsEmpty() )
     {
-        rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].m_Orient == TEXT_ORIENT_VERT );
+        rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].GetOrientation() == TEXT_ORIENT_VERT );
 
-        coord.x = m_FieldsBuf[REFERENCE].m_Pos.x + (fieldNdx - MANDATORY_FIELDS + 1) * 100;
-        coord.y = m_FieldsBuf[REFERENCE].m_Pos.y + (fieldNdx - MANDATORY_FIELDS + 1) * 100;
+        coord.x = m_FieldsBuf[REFERENCE].GetPosition().x + (fieldNdx - MANDATORY_FIELDS + 1) * 100;
+        coord.y = m_FieldsBuf[REFERENCE].GetPosition().y + (fieldNdx - MANDATORY_FIELDS + 1) * 100;
 
         // coord can compute negative if field is < MANDATORY_FIELDS, e.g. FOOTPRINT.
         // That is ok, we basically don't want all the new empty fields on
@@ -702,14 +703,14 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     LIB_FIELD& field = m_FieldsBuf[fieldNdx];
 
     if( showCheckBox->GetValue() )
-        field.m_Attributs &= ~TEXT_NO_VISIBLE;
+        field.SetVisible( true );
     else
-        field.m_Attributs |= TEXT_NO_VISIBLE;
+        field.SetVisible( false );
 
     if( rotateCheckBox->GetValue() )
-        field.m_Orient = TEXT_ORIENT_VERT;
+        field.SetOrientation( TEXT_ORIENT_VERT );
     else
-        field.m_Orient = TEXT_ORIENT_HORIZ;
+        field.SetOrientation( TEXT_ORIENT_HORIZ );
 
     // Copy the text justification
     static const EDA_TEXT_HJUSTIFY_T hjustify[3] = {
@@ -722,14 +723,14 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
         GR_TEXT_VJUSTIFY_TOP
     };
 
-    field.m_HJustify = hjustify[m_FieldHJustifyCtrl->GetSelection()];
-    field.m_VJustify = vjustify[m_FieldVJustifyCtrl->GetSelection()];
+    field.SetHorizJustify( hjustify[m_FieldHJustifyCtrl->GetSelection()] );
+    field.SetVertJustify( vjustify[m_FieldVJustifyCtrl->GetSelection()] );
 
     // Blank/empty field texts for REFERENCE and VALUE are not allowed.
     // (Value is the name of the component in lib!)
     // Change them only if user provided a non blank value
     if( !fieldValueTextCtrl->GetValue().IsEmpty() || fieldNdx > VALUE )
-        field.m_Text = fieldValueTextCtrl->GetValue();
+        field.SetText( fieldValueTextCtrl->GetValue() );
 
     // FieldNameTextCtrl has a tricked value in it for VALUE index, do not copy it back.
     // It has the "Chip Name" appended.
@@ -744,27 +745,23 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
-    field.m_Size.x = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(), g_UserUnit );
+    int tmp = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(), g_UserUnit );
 
-    field.m_Size.y = field.m_Size.x;
+    field.SetSize( wxSize( tmp, tmp ) );
 
     int style = m_StyleRadioBox->GetSelection();
-    if( (style & 1 ) != 0 )
-        field.m_Italic = true;
-    else
-        field.m_Italic = false;
 
-    if( (style & 2 ) != 0 )
-        field.m_Bold = true;
-    else
-        field.m_Bold = false;
+    field.SetItalic( (style & 1 ) != 0 );
+    field.SetBold( (style & 2 ) != 0 );
 
-    field.m_Pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() );
-    field.m_Pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() );
+    wxPoint pos( ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() ),
+                 ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() ) );
 
     // Note: the Y axis for components in lib is from bottom to top
     // and the screen axis is top to bottom: we must change the y coord sign for editing
-    NEGATE( field.m_Pos.y );
+    NEGATE( pos.y );
+
+    field.SetPosition( pos );
 
     return true;
 }

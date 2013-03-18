@@ -71,7 +71,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
      * the old one.  Rename the component and remove any conflicting aliases to prevent name
      * errors when updating the library.
      */
-    if( (aField->GetId() == VALUE) && ( text != aField->m_Text ) )
+    if( (aField->GetId() == VALUE) && ( text != aField->GetText() ) )
     {
         wxString msg;
 

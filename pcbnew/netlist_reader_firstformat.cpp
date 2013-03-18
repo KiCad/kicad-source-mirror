@@ -315,7 +315,7 @@ bool NETLIST_READER::SetPadNetName( char* aText )
     wxString netName = FROM_UTF8( p );
 
     bool     found = false;
-    for( D_PAD* pad = m_currModule->m_Pads; pad; pad = pad->Next() )
+    for( D_PAD* pad = m_currModule->Pads(); pad; pad = pad->Next() )
     {
         wxString padName = pad->GetPadName();
 

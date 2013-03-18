@@ -132,14 +132,14 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
         if( LibItem == NULL )
             break;
 
-        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
         SendCommand( MSG_TO_PCB, Line );
     }
     break;
 
     case SCH_COMPONENT_T:
         LibItem = (SCH_COMPONENT*) objectToSync;
-        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+        sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
         SendCommand( MSG_TO_PCB, Line );
         break;
 
@@ -154,11 +154,11 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
             wxString pinnum;
             Pin->ReturnPinStringNum( pinnum );
             sprintf( Line, "$PIN: %s $PART: %s", TO_UTF8( pinnum ),
-                     TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+                     TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
         }
         else
         {
-            sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->m_Text ) );
+            sprintf( Line, "$PART: %s", TO_UTF8( LibItem->GetField( REFERENCE )->GetText() ) );
         }
 
         SendCommand( MSG_TO_PCB, Line );

@@ -510,7 +510,7 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
     pad_fill_tmp = DisplayOpt.DisplayPadFill;
     DisplayOpt.DisplayPadFill = true;
 
-    pt_pad = module->m_Pads;
+    pt_pad = module->Pads();
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );

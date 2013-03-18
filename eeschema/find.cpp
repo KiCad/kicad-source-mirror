@@ -174,7 +174,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
                 case FIND_VALUE:             // find value
                     pos = pSch->GetPosition();
 
-                    if( aSearchText.CmpNoCase( pSch->GetField( VALUE )->m_Text ) != 0 )
+                    if( aSearchText.CmpNoCase( pSch->GetField( VALUE )->GetText() ) != 0 )
                         break;
 
                     notFound = false;

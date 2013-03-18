@@ -75,7 +75,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
 
     // Don't use GetText() here.  If the field is the reference designator and it's parent
     // component has multiple parts, we don't want the part suffix added to the field.
-    wxString newtext = aField->m_Text;
+    wxString newtext = aField->GetText();
     m_canvas->SetIgnoreMouseEvents( true );
 
     wxString title;
@@ -155,10 +155,10 @@ void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField, wxDC* aDC )
 
     aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    if( aField->m_Orient == TEXT_ORIENT_HORIZ )
-        aField->m_Orient = TEXT_ORIENT_VERT;
+    if( aField->GetOrientation() == TEXT_ORIENT_HORIZ )
+        aField->SetOrientation( TEXT_ORIENT_VERT );
     else
-        aField->m_Orient = TEXT_ORIENT_HORIZ;
+        aField->SetOrientation( TEXT_ORIENT_HORIZ );
 
     aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
 

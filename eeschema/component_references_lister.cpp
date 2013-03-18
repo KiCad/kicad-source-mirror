@@ -329,15 +329,12 @@ bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
                                               const SCH_REFERENCE& item2 )
 {
     int             ii;
-    const wxString* Text1, * Text2;
 
     ii = RefDesStringCompare( item1.GetRef(), item2.GetRef() );
 
     if( ii == 0 )
     {
-        Text1 = &( item1.m_RootCmp->GetField( VALUE )->m_Text );
-        Text2 = &( item2.m_RootCmp->GetField( VALUE )->m_Text );
-        ii    = Text1->CmpNoCase( *Text2 );
+        ii = item1.m_RootCmp->GetField( VALUE )->GetText().CmpNoCase( item2.m_RootCmp->GetField( VALUE )->GetText() );
     }
 
     if( ii == 0 )
@@ -803,21 +800,21 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
                         GetChars( componentFlatList[ii].GetRef() ),
                         componentFlatList[ii].m_NumRef,
                         componentFlatList[ii].m_Unit,
-                        GetChars( *componentFlatList[ii].m_Value ),
+                        GetChars( componentFlatList[ii].m_Value-GetText() ),
                         GetChars( componentFlatList[next].GetRef() ),
                         componentFlatList[next].m_NumRef,
                         componentFlatList[next].m_Unit,
-                        componentFlatList[next].m_Value->GetData() );
+                        componentFlatList[next].m_Value->GetText().GetData() );
 #else
             msg.Printf( _( "Different values for %s%d%c (%s) and %s%d%c (%s)" ),
                         GetChars( componentFlatList[ii].GetRef() ),
                         componentFlatList[ii].m_NumRef,
                         componentFlatList[ii].m_Unit + 'A' - 1,
-                        GetChars( *componentFlatList[ii].m_Value ),
+                        GetChars( componentFlatList[ii].m_Value->GetText() ),
                         GetChars( componentFlatList[next].GetRef() ),
                         componentFlatList[next].m_NumRef,
                         componentFlatList[next].m_Unit + 'A' - 1,
-                        GetChars( *componentFlatList[next].m_Value ) );
+                        GetChars( componentFlatList[next].m_Value->GetText() ) );
 #endif
 
             if( aMessageList )
@@ -884,7 +881,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_COMPONENT* aLibComp
     if( aComponent->GetField( VALUE )->GetText().IsEmpty() )
         aComponent->GetField( VALUE )->SetText( wxT( "~" ) );
 
-    m_Value = &aComponent->GetField( VALUE )->m_Text;
+    m_Value = aComponent->GetField( VALUE );
 }
 
 

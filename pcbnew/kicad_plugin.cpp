@@ -942,15 +942,15 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     Format( (BOARD_ITEM*) &aModule->Value(), aNestLevel+1 );
 
     // Save drawing elements.
-    for( BOARD_ITEM* gr = aModule->m_Drawings;  gr;  gr = gr->Next() )
+    for( BOARD_ITEM* gr = aModule->GraphicalItems();  gr;  gr = gr->Next() )
         Format( gr, aNestLevel+1 );
 
     // Save pads.
-    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
         Format( pad, aNestLevel+1 );
 
     // Save 3D info.
-    for( S3D_MASTER* t3D = aModule->m_3D_Drawings;  t3D;  t3D = t3D->Next() )
+    for( S3D_MASTER* t3D = aModule->Models();  t3D;  t3D = t3D->Next() )
     {
         if( !t3D->m_Shape3DName.IsEmpty() )
         {
@@ -1170,7 +1170,7 @@ void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(gr_text %s (at %s",
                   m_out->Quotew( aText->GetText() ).c_str(),
-                  FMT_IU( aText->GetPosition() ).c_str() );
+                  FMT_IU( aText->GetTextPosition() ).c_str() );
 
     if( aText->GetOrientation() != 0.0 )
         m_out->Print( 0, " %s", FMT_ANGLE( aText->GetOrientation() ).c_str() );
@@ -1374,7 +1374,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( 0, " (mode segment)" );
 
     m_out->Print( 0, " (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)",
-                  aZone->GetArcSegCount(),
+                  aZone->GetArcSegmentCount(),
                   FMT_IU( aZone->GetThermalReliefGap() ).c_str(),
                   FMT_IU( aZone->GetThermalReliefCopperBridge() ).c_str() );
 

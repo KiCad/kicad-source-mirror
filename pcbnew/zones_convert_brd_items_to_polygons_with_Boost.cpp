@@ -205,7 +205,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     D_PAD* nextpad;
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = nextpad )
+        for( D_PAD* pad = module->Pads(); pad != NULL; pad = nextpad )
         {
             nextpad = pad->Next();  // pad pointer can be modified by next code, so
                                     // calculate the next pad here
@@ -299,7 +299,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        for( BOARD_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
+        for( BOARD_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
         {
             if( !item->IsOnLayer( GetLayer() ) )
                 continue;
@@ -388,7 +388,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
    // Remove thermal symbols
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
         {
             // Rejects non-standard pads with tht-only thermal reliefs
             if( GetPadConnection( pad ) == THT_THERMAL

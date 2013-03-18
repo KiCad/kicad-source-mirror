@@ -119,7 +119,7 @@ void PCB_LINE::AddToModule( MODULE* aModule )
     if( IsValidNonCopperLayerIndex( m_KiCadLayer ) )
     {
         EDGE_MODULE* segment = new EDGE_MODULE( aModule, S_SEGMENT );
-        aModule->m_Drawings.PushBack( segment );
+        aModule->GraphicalItems().PushBack( segment );
 
         segment->m_Start0   = wxPoint( m_positionX, m_positionY );
         segment->m_End0     = wxPoint( m_toX, m_toY );
