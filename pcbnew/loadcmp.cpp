@@ -438,8 +438,20 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
 
     if( footprint_names_list.GetCount() )
     {
+        wxArrayString headers;
+        headers.Add( wxT("Module") );
+        std::vector<wxArrayString> itemsToDisplay;
+        
+        // Conversion from wxArrayString to vector of ArrayString
+        for( unsigned i = 0; i < footprint_names_list.GetCount(); i++ )
+        {
+            wxArrayString item;
+            item.Add( footprint_names_list[i] );
+            itemsToDisplay.push_back( item );
+        }
+        
         msg.Printf( _( "Modules [%d items]" ), (int) footprint_names_list.GetCount() );
-        EDA_LIST_DIALOG dlg( aWindow, msg, footprint_names_list, OldName,
+        EDA_LIST_DIALOG dlg( aWindow, msg, headers, itemsToDisplay, OldName,
                              DisplayCmpDoc );
 
         if( dlg.ShowModal() == wxID_OK )
@@ -497,7 +509,18 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
 
     msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
 
-    EDA_LIST_DIALOG dlg( this, msg, listnames, wxEmptyString, NULL, SORT_LIST );
+    wxArrayString headers;
+    headers.Add( wxT("Module") );
+    std::vector<wxArrayString> itemsToDisplay;
+    
+    // Conversion from wxArrayString to vector of ArrayString
+    for( unsigned i = 0; i < listnames.GetCount(); i++ )
+    {
+        wxArrayString item;
+        item.Add( listnames[i] );
+        itemsToDisplay.push_back( item );
+    } 
+    EDA_LIST_DIALOG dlg( this, msg, headers, itemsToDisplay, wxEmptyString, NULL, SORT_LIST );
 
     if( dlg.ShowModal() == wxID_OK )
         CmpName = dlg.GetTextSelection();

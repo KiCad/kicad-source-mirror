@@ -31,7 +31,7 @@ class EDA_LIST_DIALOG : public EDA_LIST_DIALOG_BASE
 private:
     bool m_sortList;
     void (*m_callBackFct)( wxString& Text );
-    const wxArrayString* m_itemsListCp;
+    const std::vector<wxArrayString>* m_itemsListCp;
 
 public:
     /**
@@ -44,23 +44,24 @@ public:
      * @param aSortList = true to sort list items by alphabetic order.
      */
     EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
-                     const wxArrayString& aItemList, const wxString& aRefText,
-                     void(* aCallBackFunction)(wxString& Text) = NULL,
+                     const wxArrayString& aItemHeaders,
+                     const std::vector<wxArrayString>& aItemList,
+                     const wxString& aRefText,
+                     void(*aCallBackFunction)(wxString& Text) = NULL,
                      bool aSortList = false );
     ~EDA_LIST_DIALOG();
 
-    void     Append( const wxString& aItemStr );
-    void     InsertItems( const wxArrayString& aItemList, int aPosition = 0 );
+    void     Append( const wxArrayString& aItemStr );
+    void     InsertItems( const std::vector<wxArrayString>& aItemList, int aPosition = 0 );
     wxString GetTextSelection();
 
 private:
     void     onClose( wxCloseEvent& event );
     void     onCancelClick( wxCommandEvent& event );
     void     onOkClick( wxCommandEvent& event );
-    void     onClickOnList( wxCommandEvent& event );
-    void     onDClickOnList( wxCommandEvent& event );
+    void     onListItemSelected( wxListEvent& event );
+    void     onListItemActivated( wxListEvent& event );
     void     textChangeInFilterBox(wxCommandEvent& event);
-
     void     sortList();
 };
 

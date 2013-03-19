@@ -21,7 +21,7 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/listbox.h>
+#include <wx/listctrl.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -40,7 +40,7 @@ class EDA_LIST_DIALOG_BASE : public DIALOG_SHIM
 		wxStaticText* m_filterLabel;
 		wxTextCtrl* m_filterBox;
 		wxStaticText* m_staticText2;
-		wxListBox* m_listBox;
+		wxListCtrl* m_listBox;
 		wxStaticText* m_staticTextMsg;
 		wxTextCtrl* m_messages;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -50,8 +50,8 @@ class EDA_LIST_DIALOG_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void textChangeInFilterBox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onClickOnList( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onDClickOnList( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onListItemActivated( wxListEvent& event ) { event.Skip(); }
+		virtual void onListItemSelected( wxListEvent& event ) { event.Skip(); }
 		virtual void onCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

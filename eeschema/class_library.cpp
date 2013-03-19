@@ -143,25 +143,50 @@ void CMP_LIBRARY::GetEntryNames( wxArrayString& aNames, bool aSort, bool aMakeUp
 }
 
 
-void CMP_LIBRARY::SearchEntryNames( wxArrayString& aNames,
+/**
+ * Function sortFunction
+ * simple function used as comparator to sort a std::vector<wxArrayString>&.
+ *
+ * @param aItem1 is the first comparison parameter.
+ * @param aItem1 is the second.
+ * @return bool - which item should be put first in the sorted list.
+ */
+bool sortFunction( wxArrayString aItem1, wxArrayString aItem2 )
+{
+    return( aItem1.Item( 0 ) < aItem2.Item( 0 ) );
+}
+
+
+void CMP_LIBRARY::SearchEntryNames( std::vector<wxArrayString>& aNames,
                                     const wxString& aNameSearch,
                                     const wxString& aKeySearch,
                                     bool aSort )
 {
     LIB_ALIAS_MAP::iterator it;
 
-    for( it=aliases.begin();  it!=aliases.end();  it++ )
+    for( it = aliases.begin();  it!=aliases.end();  it++ )
     {
+
         if( !aKeySearch.IsEmpty() && KeyWordOk( aKeySearch, (*it).second->GetKeyWords() ) )
-            aNames.Add( (*it).first );
+        {
+            wxArrayString item;
+            item.Add( (*it).first );
+            item.Add( GetLogicalName() );
+            aNames.push_back( item );
+        }
 
         if( !aNameSearch.IsEmpty() && WildCompareString( aNameSearch,
                                                          (*it).second->GetName(), false ) )
-            aNames.Add( (*it).first );
+        {
+            wxArrayString item;
+            item.Add( (*it).first );
+            item.Add( GetLogicalName() );
+            aNames.push_back( item );
+        }
     }
 
     if( aSort )
-        aNames.Sort();
+        std::sort( aNames.begin(), aNames.end(), sortFunction );
 }
 
 
@@ -172,7 +197,7 @@ void CMP_LIBRARY::SearchEntryNames( wxArrayString& aNames, const wxRegEx& aRe, b
 
     LIB_ALIAS_MAP::iterator it;
 
-    for( it=aliases.begin();  it!=aliases.end();  it++ )
+    for( it = aliases.begin();  it!=aliases.end();  it++ )
     {
         if( aRe.Matches( (*it).second->GetKeyWords() ) )
             aNames.Add( (*it).first );
@@ -824,7 +849,7 @@ void CMP_LIBRARY::RemoveLibrary( const wxString& aName )
 
     CMP_LIBRARY_LIST::iterator i;
 
-    for ( i = libraryList.begin(); i < libraryList.end(); i++ )
+    for( i = libraryList.begin(); i < libraryList.end(); i++ )
     {
         if( i->GetName().CmpNoCase( aName ) == 0 )
         {
@@ -845,6 +870,7 @@ bool CMP_LIBRARY::LibraryExists( const CMP_LIBRARY* aLibptr )
 
     return false;
 }
+
 
 CMP_LIBRARY* CMP_LIBRARY::FindLibrary( const wxString& aName )
 {
@@ -925,7 +951,7 @@ void CMP_LIBRARY::RemoveCacheLibrary()
 {
     CMP_LIBRARY_LIST::iterator i;
 
-    for ( i = libraryList.begin(); i < libraryList.end(); i++ )
+    for( i = libraryList.begin(); i < libraryList.end(); i++ )
     {
         if( i->isCache )
             libraryList.erase( i-- );

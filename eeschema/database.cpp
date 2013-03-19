@@ -32,15 +32,15 @@ void DisplayCmpDocAndKeywords( wxString& Name )
 }
 
 /*
- * Displays a list of filterd components found in libraries for selection,
+ * Displays a list of filtered components found in libraries for selection,
  * Keys is a list of keywords to filter components which do not match these keywords
  * If Keys is empty, list components that match BufName mask (with * and?)
  *
- * Returns the name of the selected component, or an ampty string
+ * Returns the name of the selected component, or an empty string
  */
 wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufName )
 {
-    wxArrayString  nameList;
+    std::vector<wxArrayString>  nameList;
     wxString       msg;
 
 #ifndef KICAD_KEEPCASE
@@ -54,7 +54,7 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
         lib.SearchEntryNames( nameList, BufName, Keys );
     }
 
-    if( nameList.IsEmpty() )
+    if( nameList.empty() )
     {
         msg = _( "No components found matching " );
 
@@ -74,10 +74,14 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
         return wxEmptyString;
     }
 
+    wxArrayString headers;
+    headers.Add( wxT("Component") );
+    headers.Add( wxT("Library") );
+    
     // Show candidate list:
     wxString cmpname;
-    EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), nameList, cmpname,
-                         DisplayCmpDocAndKeywords );
+    EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), headers, nameList, cmpname,
+                         DisplayCmpDocAndKeywords, true );
 
     if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;
