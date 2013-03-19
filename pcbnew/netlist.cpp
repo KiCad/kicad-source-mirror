@@ -142,7 +142,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
                         GetChars( aCmpFullFileName ) );
             aMessageWindow->AppendText( msg + wxT( "\n" ) );
         }
-     }
+    }
 
     // Clear undo and redo lists to avoid inconsistencies between lists
     GetScreen()->ClearUndoRedoList();
@@ -165,6 +165,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
     netList_Reader.ReadLibpartSectionSetOpt( false );
 
     bool success = netList_Reader.ReadNetList( netfile );
+
     if( !success )
     {
         wxMessageBox( _("Netlist read error") );
@@ -217,7 +218,18 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
         listnames.Add( Module->GetReference() );
 
-    EDA_LIST_DIALOG dlg( this, _( "Components" ), listnames, wxEmptyString );
+    wxArrayString headers;
+    headers.Add( wxT("Module") );
+    std::vector<wxArrayString> itemsToDisplay;
+    
+    // Conversion from wxArrayString to vector of ArrayString
+    for( unsigned i = 0; i < listnames.GetCount(); i++ )
+    {
+        wxArrayString item;
+        item.Add( listnames[i] );
+        itemsToDisplay.push_back( item );
+    }
+    EDA_LIST_DIALOG dlg( this, _( "Components" ), headers, itemsToDisplay, wxEmptyString );
 
     if( dlg.ShowModal() != wxID_OK )
         return NULL;

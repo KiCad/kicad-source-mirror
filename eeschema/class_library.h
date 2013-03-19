@@ -212,7 +212,7 @@ public:
      * @param aKeySearch - Key word search criteria.
      * @param aSort - Sort names if true.
      */
-    void SearchEntryNames( wxArrayString& aNames,
+    void SearchEntryNames( std::vector<wxArrayString>& aNames,
                            const wxString& aNameSearch = wxEmptyString,
                            const wxString& aKeySearch = wxEmptyString,
                            bool aSort = true );

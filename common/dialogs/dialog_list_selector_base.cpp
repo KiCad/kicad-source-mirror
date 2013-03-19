@@ -29,7 +29,7 @@ EDA_LIST_DIALOG_BASE::EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	m_staticText2->Wrap( -1 );
 	bSizerMain->Add( m_staticText2, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	m_listBox = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxVSCROLL );
 	m_listBox->SetMinSize( wxSize( 300,200 ) );
 	
 	bSizerMain->Add( m_listBox, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -61,8 +61,8 @@ EDA_LIST_DIALOG_BASE::EDA_LIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_LIST_DIALOG_BASE::onClose ) );
 	m_filterBox->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::textChangeInFilterBox ), NULL, this );
-	m_listBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::onClickOnList ), NULL, this );
-	m_listBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::onDClickOnList ), NULL, this );
+	m_listBox->Connect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( EDA_LIST_DIALOG_BASE::onListItemActivated ), NULL, this );
+	m_listBox->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( EDA_LIST_DIALOG_BASE::onListItemSelected ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::onCancelClick ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::onOkClick ), NULL, this );
 }
@@ -72,8 +72,8 @@ EDA_LIST_DIALOG_BASE::~EDA_LIST_DIALOG_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_LIST_DIALOG_BASE::onClose ) );
 	m_filterBox->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::textChangeInFilterBox ), NULL, this );
-	m_listBox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::onClickOnList ), NULL, this );
-	m_listBox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::onDClickOnList ), NULL, this );
+	m_listBox->Disconnect( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, wxListEventHandler( EDA_LIST_DIALOG_BASE::onListItemActivated ), NULL, this );
+	m_listBox->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( EDA_LIST_DIALOG_BASE::onListItemSelected ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::onCancelClick ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( EDA_LIST_DIALOG_BASE::onOkClick ), NULL, this );
 	

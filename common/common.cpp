@@ -43,7 +43,7 @@
 /**
  * Global variables definitions.
  *
- * TODO: All if these variables should be moved into the class were they
+ * TODO: All of these variables should be moved into the class were they
  *       are defined and used.  Most of them probably belong in the
  *       application class.
  */
@@ -115,7 +115,7 @@ StructColors ColorRefs[NBCOLOR] =
  * And other problem is a bug when cross compiling under linux:
  * a printf print 1,5 and the read functions expects 1.5
  * (depending on version print = 1.5 and read = 1,5
- * Very annoying and we detect this and use a stupid but necessary workarount
+ * Very annoying and we detect this and use a stupid but necessary workaround
 */
 bool g_DisableFloatingPointLocalNotation = false;
 

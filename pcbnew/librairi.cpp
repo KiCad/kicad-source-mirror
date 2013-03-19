@@ -751,7 +751,19 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
     if( g_LibraryNames.GetCount() == 0 )
         return;
 
-    EDA_LIST_DIALOG dlg( this, FMT_SELECT_LIB, g_LibraryNames, getLibNickName() );
+    wxArrayString headers;
+    headers.Add( wxT("Library") );
+    
+    std::vector<wxArrayString> itemsToDisplay;
+    
+    // Conversion from wxArrayString to vector of ArrayString
+    for( unsigned i = 0; i < g_LibraryNames.GetCount(); i++ )
+    {
+        wxArrayString item;
+        item.Add( g_LibraryNames[i] );
+        itemsToDisplay.push_back( item );
+    }
+    EDA_LIST_DIALOG dlg( this, FMT_SELECT_LIB, headers, itemsToDisplay, getLibNickName() );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
