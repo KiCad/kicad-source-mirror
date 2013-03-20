@@ -77,7 +77,7 @@ BOARD::BOARD() :
 
     for( int layer = 0; layer < LAYER_COUNT; ++layer )
     {
-        m_Layer[layer].m_Name = GetDefaultLayerName( layer, true );
+        m_Layer[layer].m_Name = GetStandardLayerName( layer );
 
         if( layer <= LAST_COPPER_LAYER )
             m_Layer[layer].m_Type = LT_SIGNAL;
@@ -356,7 +356,7 @@ bool BOARD::SetLayer( int aIndex, const LAYER& aLayer )
 }
 
 
-wxString BOARD::GetLayerName( int aLayerIndex, bool aTranslate ) const
+wxString BOARD::GetLayerName( int aLayerIndex ) const
 {
     if( !IsValidLayerIndex( aLayerIndex ) )
         return wxEmptyString;
@@ -364,53 +364,19 @@ wxString BOARD::GetLayerName( int aLayerIndex, bool aTranslate ) const
     // All layer names are stored in the BOARD.
     if( IsLayerEnabled( aLayerIndex ) )
     {
-        // default names were set in BOARD::BOARD() but they may be
-        // over-ridden by BOARD::SetLayerName()
-        // For non translated name, return the actual copper layer names,
-        // otherwise, return the native layer names
-        if( aTranslate || aLayerIndex < FIRST_NO_COPPER_LAYER )
+        // Standard names were set in BOARD::BOARD() but they may be
+        // over-ridden by BOARD::SetLayerName().
+        // For copper layers, return the actual copper layer name,
+        // otherwise return the Standard English layer name.
+        if( aLayerIndex < FIRST_NO_COPPER_LAYER )
             return m_Layer[aLayerIndex].m_Name;
     }
 
-    return GetDefaultLayerName( aLayerIndex, aTranslate );
+    return GetStandardLayerName( aLayerIndex );
 }
 
 
-// Default layer names are statically initialized,
-// because we want the English name and the translation.
-// The English name is stored here, and to get the translation
-// wxGetTranslation must be called explicitly.
-static const wxChar* layer_FRONT_name  = _( "F.Cu" );
-static const wxChar* layer_INNER1_name = _( "Inner1.Cu" );
-static const wxChar* layer_INNER2_name = _( "Inner2.Cu" );
-static const wxChar* layer_INNER3_name = _( "Inner3.Cu" );
-static const wxChar* layer_INNER4_name = _( "Inner4.Cu" );
-static const wxChar* layer_INNER5_name = _( "Inner5.Cu" );
-static const wxChar* layer_INNER6_name = _( "Inner6.Cu" );
-static const wxChar* layer_INNER7_name = _( "Inner7.Cu" );
-static const wxChar* layer_INNER8_name = _( "Inner8.Cu" );
-static const wxChar* layer_INNER9_name = _( "Inner9.Cu" );
-static const wxChar* layer_INNER10_name = _( "Inner10.Cu" );
-static const wxChar* layer_INNER11_name = _( "Inner11.Cu" );
-static const wxChar* layer_INNER12_name = _( "Inner12.Cu" );
-static const wxChar* layer_INNER13_name = _( "Inner13.Cu" );
-static const wxChar* layer_INNER14_name = _( "Inner14.Cu" );
-static const wxChar* layer_BACK_name    = _( "B.Cu" );
-static const wxChar* layer_ADHESIVE_BACK_name     = _( "B.Adhes" );
-static const wxChar* layer_ADHESIVE_FRONT_name    = _( "F.Adhes" );
-static const wxChar* layer_SOLDERPASTE_BACK_name  = _( "B.Paste" );
-static const wxChar* layer_SOLDERPASTE_FRONT_name = _( "F.Paste" );
-static const wxChar* layer_SILKSCREEN_BACK_name   = _( "B.SilkS" );
-static const wxChar* layer_SILKSCREEN_FRONT_name  = _( "F.SilkS" );
-static const wxChar* layer_SOLDERMASK_BACK_name   = _( "B.Mask" );
-static const wxChar* layer_SOLDERMASK_FRONT_name  = _( "F.Mask" );
-static const wxChar* layer_DRAW_name = _( "Dwgs.User" );
-static const wxChar* layer_COMMENT_name = _( "Cmts.User" );
-static const wxChar* layer_ECO1_name = _( "Eco1.User" );
-static const wxChar* layer_ECO2_name = _( "Eco2.User" );
-static const wxChar* layer_EDGE_name = _( "Edge.Cuts" );
-
-wxString BOARD::GetDefaultLayerName( int aLayerNumber, bool aTranslate )
+wxString BOARD::GetStandardLayerName( int aLayerNumber )
 {
     const wxChar* txt;
 
@@ -420,51 +386,39 @@ wxString BOARD::GetDefaultLayerName( int aLayerNumber, bool aTranslate )
     // Use a switch to explicitly show the mapping more clearly
     switch( aLayerNumber )
     {
-    case LAYER_N_FRONT:         txt = layer_FRONT_name;         break;
-    case LAYER_N_2:             txt = layer_INNER1_name;        break;
-    case LAYER_N_3:             txt = layer_INNER2_name;        break;
-    case LAYER_N_4:             txt = layer_INNER3_name;        break;
-    case LAYER_N_5:             txt = layer_INNER4_name;        break;
-    case LAYER_N_6:             txt = layer_INNER5_name;        break;
-    case LAYER_N_7:             txt = layer_INNER6_name;        break;
-    case LAYER_N_8:             txt = layer_INNER7_name;        break;
-    case LAYER_N_9:             txt = layer_INNER8_name;        break;
-    case LAYER_N_10:            txt = layer_INNER9_name;        break;
-    case LAYER_N_11:            txt = layer_INNER10_name;       break;
-    case LAYER_N_12:            txt = layer_INNER11_name;       break;
-    case LAYER_N_13:            txt = layer_INNER12_name;       break;
-    case LAYER_N_14:            txt = layer_INNER13_name;       break;
-    case LAYER_N_15:            txt = layer_INNER14_name;       break;
-    case LAYER_N_BACK:          txt = layer_BACK_name;          break;
-    case ADHESIVE_N_BACK:       txt = layer_ADHESIVE_BACK_name;         break;
-    case ADHESIVE_N_FRONT:      txt = layer_ADHESIVE_FRONT_name;        break;
-    case SOLDERPASTE_N_BACK:    txt = layer_SOLDERPASTE_BACK_name;      break;
-    case SOLDERPASTE_N_FRONT:   txt = layer_SOLDERPASTE_FRONT_name;     break;
-    case SILKSCREEN_N_BACK:     txt = layer_SILKSCREEN_BACK_name;       break;
-    case SILKSCREEN_N_FRONT:    txt = layer_SILKSCREEN_FRONT_name;      break;
-    case SOLDERMASK_N_BACK:     txt = layer_SOLDERMASK_BACK_name;       break;
-    case SOLDERMASK_N_FRONT:    txt = layer_SOLDERMASK_FRONT_name;      break;
-    case DRAW_N:                txt = layer_DRAW_name;          break;
-    case COMMENT_N:             txt = layer_COMMENT_name;       break;
-    case ECO1_N:                txt = layer_ECO1_name;          break;
-    case ECO2_N:                txt = layer_ECO2_name;          break;
-    case EDGE_N:                txt = layer_EDGE_name;          break;
+    case LAYER_N_FRONT:         txt = wxT( "F.Cu" );            break;
+    case LAYER_N_2:             txt = wxT( "Inner1.Cu" );       break;
+    case LAYER_N_3:             txt = wxT( "Inner2.Cu" );       break;
+    case LAYER_N_4:             txt = wxT( "Inner3.Cu" );       break;
+    case LAYER_N_5:             txt = wxT( "Inner4.Cu" );       break;
+    case LAYER_N_6:             txt = wxT( "Inner5.Cu" );       break;
+    case LAYER_N_7:             txt = wxT( "Inner6.Cu" );       break;
+    case LAYER_N_8:             txt = wxT( "Inner7.Cu" );       break;
+    case LAYER_N_9:             txt = wxT( "Inner8.Cu" );       break;
+    case LAYER_N_10:            txt = wxT( "Inner9.Cu" );       break;
+    case LAYER_N_11:            txt = wxT( "Inner10.Cu" );      break;
+    case LAYER_N_12:            txt = wxT( "Inner11.Cu" );      break;
+    case LAYER_N_13:            txt = wxT( "Inner12.Cu" );      break;
+    case LAYER_N_14:            txt = wxT( "Inner13.Cu" );      break;
+    case LAYER_N_15:            txt = wxT( "Inner14.Cu" );      break;
+    case LAYER_N_BACK:          txt = wxT( "B.Cu" );            break;
+    case ADHESIVE_N_BACK:       txt = wxT( "B.Adhes" );         break;
+    case ADHESIVE_N_FRONT:      txt = wxT( "F.Adhes" );         break;
+    case SOLDERPASTE_N_BACK:    txt = wxT( "B.Paste" );         break;
+    case SOLDERPASTE_N_FRONT:   txt = wxT( "F.Paste" );         break;
+    case SILKSCREEN_N_BACK:     txt = wxT( "B.SilkS" );         break;
+    case SILKSCREEN_N_FRONT:    txt = wxT( "F.SilkS" );         break;
+    case SOLDERMASK_N_BACK:     txt = wxT( "B.Mask" );          break;
+    case SOLDERMASK_N_FRONT:    txt = wxT( "F.Mask" );          break;
+    case DRAW_N:                txt = wxT( "Dwgs.User" );       break;
+    case COMMENT_N:             txt = wxT( "Cmts.User" );       break;
+    case ECO1_N:                txt = wxT( "Eco1.User" );       break;
+    case ECO2_N:                txt = wxT( "Eco2.User" );       break;
+    case EDGE_N:                txt = wxT( "Edge.Cuts" );       break;
     default:                    txt = wxT( "BAD_INDEX" );       break;
     }
 
-    if( aTranslate )
-    {
-        wxString name = wxGetTranslation( txt );
-
-        /* would someone translate into a name with leading or trailing spaces?
-        name.Trim( true );
-        name.Trim( false );
-        */
-
-        return name;
-    }
-    else
-        return txt;
+    return txt;     // wxString constructed once here
 }
 
 

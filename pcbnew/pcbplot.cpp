@@ -272,7 +272,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
             // Create file name (from the English layer name for non copper layers).
             BuildPlotFileName( &fn, outputDir.GetPath(),
-                               m_board->GetLayerName( layer, false ),
+                               m_board->GetStandardLayerName( layer ),
                                file_ext );
 
             LOCALE_IO toggle;

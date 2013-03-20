@@ -63,7 +63,7 @@ void PCB_PARSER::init()
     // The english name will survive if parsing only a footprint.
     for( int layerNdx = 0;  layerNdx < NB_LAYERS;  ++layerNdx )
     {
-        std::string untranslated = TO_UTF8( BOARD::GetDefaultLayerName( layerNdx, false ) );
+        std::string untranslated = TO_UTF8( BOARD::GetStandardLayerName( layerNdx ) );
 
         m_layerIndices[ untranslated ] = layerNdx;
         m_layerMasks[ untranslated ]   = 1 << layerNdx;

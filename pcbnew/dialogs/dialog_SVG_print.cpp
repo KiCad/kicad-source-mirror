@@ -250,7 +250,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
         if( (printMaskLayer & currlayer_mask ) == 0 )
             continue;
 
-        wxString suffix = m_board->GetLayerName( layer, false );
+        wxString suffix = m_board->GetStandardLayerName( layer );
 
         if( aOnlyOneFile )
         {
@@ -260,7 +260,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
         else
         {
             m_printMaskLayer = currlayer_mask;
-            suffix = m_board->GetLayerName( layer, false );
+            suffix = m_board->GetStandardLayerName( layer );
         }
 
         wxFileName fn(boardFilename);

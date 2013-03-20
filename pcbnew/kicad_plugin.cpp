@@ -381,12 +381,12 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
 
 void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
-    if( m_ctl & CTL_UNTRANSLATED_LAYERS )
+    if( m_ctl & CTL_STD_LAYER_NAMES )
     {
         int layer = aItem->GetLayer();
 
         // English layer names should never need quoting.
-        m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetDefaultLayerName( layer, false ) ) );
+        m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
     }
     else
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
@@ -1040,11 +1040,11 @@ void PCB_IO::formatLayers( int aLayerMask, int aNestLevel ) const
     {
         if( layerMask & 1 )
         {
-            if( m_board && !(m_ctl & CTL_UNTRANSLATED_LAYERS) )
+            if( m_board && !(m_ctl & CTL_STD_LAYER_NAMES) )
                 layerName = m_board->GetLayerName( layer );
 
             else    // I am being called from FootprintSave()
-                layerName = BOARD::GetDefaultLayerName( layer, false );
+                layerName = BOARD::GetStandardLayerName( layer );
 
             m_out->Print( 0, " %s", m_out->Quotew( layerName ).c_str() );
         }
