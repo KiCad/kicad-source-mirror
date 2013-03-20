@@ -1628,12 +1628,14 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
     int delta = aPadList.size();
 
     int idx = 0;        // Starting index is the beginning of list
+
     while( delta )
     {
         // Calculate half size of remaining interval to test.
         // Ensure the computed value is not truncated (too small)
         if( (delta & 1) && ( delta > 1 ) )
             delta++;
+
         delta /= 2;
 
         D_PAD* pad = aPadList[idx];
@@ -1651,8 +1653,10 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             for( int ii = idx+1; ii <= idxmax; ii++ )
             {
                 pad = aPadList[ii];
+
                 if( pad->GetPosition() != aPosition )
                     break;
+
                 if( (aLayerMask & pad->GetLayerMask()) != 0 )
                     return pad;
             }
@@ -1660,8 +1664,10 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             for(  int ii = idx-1 ;ii >=0; ii-- )
             {
                 pad = aPadList[ii];
+
                 if( pad->GetPosition() != aPosition )
                     break;
+
                 if( (aLayerMask & pad->GetLayerMask()) != 0 )
                     return pad;
             }
@@ -1675,12 +1681,14 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             if(pad->GetPosition().y < aPosition.y)  // Must search after this item
             {
                 idx += delta;
+
                 if( idx > idxmax )
                     idx = idxmax;
             }
             else // Must search before this item
             {
                 idx -= delta;
+
                 if( idx < 0 )
                     idx = 0;
             }
@@ -1688,12 +1696,14 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
         else if( pad->GetPosition().x < aPosition.x ) // Must search after this item
         {
             idx += delta;
+
             if( idx > idxmax )
                 idx = idxmax;
         }
         else // Must search before this item
         {
             idx -= delta;
+
             if( idx < 0 )
                 idx = 0;
         }
@@ -2199,6 +2209,106 @@ void BOARD::SetTrackWidthIndex( unsigned aIndex )
         m_trackWidthIndex = m_TrackWidthList.size();
     else
         m_trackWidthIndex = aIndex;
+}
+
+
+ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
+                                int aLayer, wxPoint aStartPointPosition, int aHatch )
+{
+    ZONE_CONTAINER* new_area = InsertArea( aNetcode,
+                                           m_ZoneDescriptorList.size( ) - 1,
+                                           aLayer, aStartPointPosition.x,
+                                           aStartPointPosition.y, aHatch );
+
+    if( aNewZonesList )
+    {
+        ITEM_PICKER picker( new_area, UR_NEW );
+        aNewZonesList->PushItem( picker );
+    }
+
+    return new_area;
+}
+
+
+void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to_remove )
+{
+    if( area_to_remove == NULL )
+        return;
+
+    if( aDeletedList )
+    {
+        ITEM_PICKER picker( area_to_remove, UR_DELETED );
+        aDeletedList->PushItem( picker );
+        Remove( area_to_remove );   // remove from zone list, but does not delete it
+    }
+    else
+    {
+        Delete( area_to_remove );
+    }
+}
+
+
+ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch )
+{
+    ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
+
+    new_area->SetNet( netcode );
+    new_area->SetLayer( layer );
+    new_area->SetTimeStamp( GetNewTimeStamp() );
+
+    if( iarea < (int) ( m_ZoneDescriptorList.size() - 1 ) )
+        m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + iarea + 1, new_area );
+    else
+        m_ZoneDescriptorList.push_back( new_area );
+
+    new_area->Outline()->Start( layer, x, y, hatch );
+    return new_area;
+}
+
+
+bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAINER* aCurrArea )
+{
+    CPolyLine* curr_polygon = aCurrArea->Outline();
+
+    // mark all areas as unmodified except this one, if modified
+    for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
+        m_ZoneDescriptorList[ia]->SetFlags( 0 );
+
+    aCurrArea->SetFlags( 1 );
+
+    if( curr_polygon->IsPolygonSelfIntersecting() )
+    {
+        std::vector<CPolyLine*>* pa = new std::vector<CPolyLine*>;
+        curr_polygon->UnHatch();
+        int n_poly = aCurrArea->Outline()->NormalizeAreaOutlines( pa );
+
+        // If clipping has created some polygons, we must add these new copper areas.
+        if( n_poly > 1 )
+        {
+            ZONE_CONTAINER* NewArea;
+
+            for( int ip = 1; ip < n_poly; ip++ )
+            {
+                // create new copper area and copy poly into it
+                CPolyLine* new_p = (*pa)[ip - 1];
+                NewArea = AddArea( aNewZonesList, aCurrArea->GetNet(), aCurrArea->GetLayer(),
+                                   wxPoint(0, 0), CPolyLine::NO_HATCH );
+
+                // remove the poly that was automatically created for the new area
+                // and replace it with a poly from NormalizeAreaOutlines
+                delete NewArea->Outline();
+                NewArea->SetOutline( new_p );
+                NewArea->Outline()->Hatch();
+                NewArea->SetFlags( 1 );
+            }
+        }
+
+        delete pa;
+    }
+
+    curr_polygon->Hatch();
+
+    return true;
 }
 
 

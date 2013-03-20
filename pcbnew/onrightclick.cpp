@@ -61,7 +61,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     BOARD_ITEM* item = GetCurItem();
 
-    m_canvas->SetCanStartBlock( -1 );    // Avoid to start a block coomand when clicking on menu
+    m_canvas->SetCanStartBlock( -1 );    // Avoid to start a block command when clicking on menu
 
     // If a command or a block is in progress:
     // Put the Cancel command (if needed) and the End command
@@ -167,13 +167,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
                 if( !flags )
                     aPopMenu->Append( ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE,
-                                      _( "Auto Place Module" ) );
+                                      _( "Automatically Place Module" ) );
             }
 
             if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
             {
                 if( !flags )
-                    aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_MODULE, _( "Autoroute Module" ) );
+                    aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_MODULE,
+                                      _( "Automatically Route Module" ) );
             }
             break;
 
@@ -205,7 +206,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
                 if( item->GetLayer() > LAST_COPPER_LAYER )
                     AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING_LAYER,
-                                 _( "Delete All Drawing on Layer" ), KiBitmap( delete_xpm ) );
+                                 _( "Delete All Drawings on Layer" ), KiBitmap( delete_xpm ) );
             }
 
             break;
@@ -377,7 +378,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         {
             wxMenu* commands = new wxMenu;
             AddMenuItem( aPopMenu, commands, ID_POPUP_PCB_AUTOPLACE_COMMANDS,
-                         _( "Glob Move and Place" ), KiBitmap( move_xpm ) );
+                         _( "Global Move and Place" ), KiBitmap( move_xpm ) );
             AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES,
                          _( "Unlock All Modules" ), KiBitmap( unlocked_xpm ) );
             AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES,
@@ -387,9 +388,12 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                          _( "Move All Modules" ), KiBitmap( move_xpm ) );
             commands->Append( ID_POPUP_PCB_AUTOMOVE_NEW_MODULES, _( "Move New Modules" ) );
             commands->AppendSeparator();
-            commands->Append( ID_POPUP_PCB_AUTOPLACE_ALL_MODULES, _( "Autoplace All Modules" ) );
-            commands->Append( ID_POPUP_PCB_AUTOPLACE_NEW_MODULES, _( "Autoplace New Modules" ) );
-            commands->Append( ID_POPUP_PCB_AUTOPLACE_NEXT_MODULE, _( "Autoplace Next Module" ) );
+            commands->Append( ID_POPUP_PCB_AUTOPLACE_ALL_MODULES,
+                              _( "Automatically Place All Modules" ) );
+            commands->Append( ID_POPUP_PCB_AUTOPLACE_NEW_MODULES,
+                              _( "Automatically Place New Modules" ) );
+            commands->Append( ID_POPUP_PCB_AUTOPLACE_NEXT_MODULE,
+                              _( "Automatically Place Next Module" ) );
             commands->AppendSeparator();
             AddMenuItem( commands, ID_POPUP_PCB_REORIENT_ALL_MODULES,
                          _( "Orient All Modules" ), KiBitmap( rotate_module_pos_xpm ) );
@@ -403,16 +407,15 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             AddMenuItem( commands, ID_POPUP_PCB_SELECT_LAYER_PAIR,
                          _( "Select Layer Pair" ), KiBitmap( select_layer_pair_xpm ) );
             commands->AppendSeparator();
-            commands->Append( ID_POPUP_PCB_AUTOROUTE_ALL_MODULES, _( "Autoroute All Modules" ) );
+            commands->Append( ID_POPUP_PCB_AUTOROUTE_ALL_MODULES,
+                              _( "Automatically Route All Modules" ) );
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOROUTE_RESET_UNROUTED, _( "Reset Unrouted" ) );
             aPopMenu->AppendSeparator();
         }
 
-        msg = AddHotkeyName( _( "Begin Track" ),
-                             g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
-        AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK,
-                     msg, KiBitmap( add_tracks_xpm ) );
+        msg = AddHotkeyName( _( "Begin Track" ), g_Board_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK );
+        AddMenuItem( aPopMenu, ID_POPUP_PCB_BEGIN_TRACK, msg, KiBitmap( add_tracks_xpm ) );
 
         if( locate_track )
             AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
@@ -574,7 +577,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         PopMenu->AppendSeparator();
         AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
-                     _( "Global Tracks and Vias Edition" ), KiBitmap( width_track_via_xpm ) );
+                     _( "Edit All Tracks and Vias" ), KiBitmap( width_track_via_xpm ) );
     }
 
     // Add lock/unlock flags menu:
@@ -671,14 +674,15 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
         msg = AddHotkeyName( _( "Move Zone" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_ZONE_OUTLINES, msg, KiBitmap( move_xpm ) );
 
-        msg = AddHotkeyName( _( "Edit Zone Params" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
+        msg = AddHotkeyName( _( "Edit Zone Properties" ), g_Board_Editor_Hokeys_Descr,
+                             HK_EDIT_ITEM );
         AddMenuItem( zones_menu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
                      msg, KiBitmap( edit_xpm ) );
 
         zones_menu->AppendSeparator();
 
-        if( edge_zone->m_CornerSelection >= 0 &&
-            edge_zone->m_Poly->IsCutoutContour( edge_zone->m_CornerSelection ) )
+        if( edge_zone->GetSelectedCorner() >= 0 &&
+            edge_zone->Outline()->IsCutoutContour( edge_zone->GetSelectedCorner() ) )
             AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CUTOUT,
                          _( "Delete Cutout" ), KiBitmap( delete_xpm ) );
 
@@ -727,7 +731,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE_PRMS, msg,
                      KiBitmap( edit_module_xpm ) );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE_WITH_MODEDIT,
-                     _( "Edit with ModEdit" ),
+                     _( "Edit with Module Editor" ),
                      KiBitmap( module_editor_xpm ) );
         sub_menu_footprint->AppendSeparator();
         msg = AddHotkeyName( _( "Delete Module" ),
@@ -832,8 +836,8 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
                  KiBitmap( export_options_pad_xpm ) );
 
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
-                 _( "Global Pads Edition" ),
-                 _( "Copy this pad settings to all pads in this footprint (or similar footprints)" ),
+                 _( "Edit All Pads" ),
+                 _( "Copy this pad's settings to all pads in this footprint (or similar footprints)" ),
                  KiBitmap( global_options_pad_xpm ) );
     sub_menu_Pad->AppendSeparator();
 
@@ -841,8 +845,8 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 
     if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
     {
-        menu->Append( ID_POPUP_PCB_AUTOROUTE_PAD, _( "Autoroute Pad" ) );
-        menu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _( "Autoroute Net" ) );
+        menu->Append( ID_POPUP_PCB_AUTOROUTE_PAD, _( "Automatically Route Pad" ) );
+        menu->Append( ID_POPUP_PCB_AUTOROUTE_NET, _( "Automatically Route Net" ) );
     }
 
     MODULE* module = (MODULE*) Pad->GetParent();
@@ -907,7 +911,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPo
 /**
  * Function Append_Track_Width_List
  * creates a wxMenu * which shows the last used track widths and via diameters
- * @return a pointeur to the menu
+ * @return a pointer to the menu
  */
 static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 {
@@ -938,7 +942,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
         msg.Printf( _( "Track %s" ), GetChars( value ) );
 
         if( ii == 0 )
-            msg << _( " (use NetClass)" );
+            msg << _( " uses NetClass" );
 
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_WIDTH1 + ii, msg, wxEmptyString, true );
     }
@@ -959,11 +963,11 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
         }
         else
         {
-            msg.Printf( _( "Via %s; (drl %s)" ), GetChars( value ), GetChars( drill ) );
+            msg.Printf( _( "Via %s, drill %s" ), GetChars( value ), GetChars( drill ) );
         }
 
         if( ii == 0 )
-            msg << _( " (use NetClass)" );
+            msg << _( " uses NetClass" );
 
         trackwidth_menu->Append( ID_POPUP_PCB_SELECT_VIASIZE1 + ii, msg, wxEmptyString, true );
     }

@@ -1487,17 +1487,18 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
                 CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
-                zone->m_Poly->Start( layer, kicad_x( r.x1 ), kicad_y( r.y1 ), outline_hatch );
+                zone->Outline()->Start( layer, kicad_x( r.x1 ), kicad_y( r.y1 ), outline_hatch );
                 zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
                 zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
-                zone->m_Poly->CloseLastContour();
+                zone->Outline()->CloseLastContour();
 
                 // this is not my fault:
-                zone->m_Poly->SetHatch( outline_hatch,
-                                      Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ),
-                                      true );
+                zone->Outline()->SetHatch( outline_hatch,
+                                           Mils2iu( zone->Outline()->GetDefaultHatchPitchMils() ),
+                                           true );
             }
+
             m_xpath->pop();
         }
 
@@ -2488,18 +2489,19 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                         // the ZONE_CONTAINER API needs work, as you can see:
                         if( first )
                         {
-                            zone->m_Poly->Start( layer,  kicad_x( v.x ), kicad_y( v.y ), outline_hatch );
+                            zone->Outline()->Start( layer,  kicad_x( v.x ), kicad_y( v.y ),
+                                                    outline_hatch );
                             first = false;
                         }
                         else
                             zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
                     }
 
-                    zone->m_Poly->CloseLastContour();
+                    zone->Outline()->CloseLastContour();
 
-                    zone->m_Poly->SetHatch( outline_hatch,
-                                            Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ),
-                                            true );
+                    zone->Outline()->SetHatch( outline_hatch,
+                                               Mils2iu( zone->Outline()->GetDefaultHatchPitchMils() ),
+                                               true );
 
                     // clearances, etc.
                     zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?

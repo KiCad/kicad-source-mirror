@@ -39,9 +39,6 @@
 #include <class_drawpanel.h>
 #include <class_base_screen.h>
 
-#ifndef DEFAULT_SIZE_TEXT
-#   define DEFAULT_SIZE_TEXT 50
-#endif
 
 #define EDA_DRAWBASE
 #include <newstroke_font.h>

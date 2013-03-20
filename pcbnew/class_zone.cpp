@@ -164,7 +164,8 @@ void ZONE_CONTAINER::SetNet( int aNetCode )
 }
 
 
-void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode, const wxPoint& offset )
+void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
+                           const wxPoint& offset )
 {
     if( DC == NULL )
         return;
@@ -293,7 +294,8 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
         CornersTypeBuffer.push_back( (char) corner->m_utility );
 
-        if( (corner->end_contour) || (ic == imax) ) // the last corner of a filled area is found: draw it
+        // the last corner of a filled area is found: draw it
+        if( (corner->end_contour) || (ic == imax) )
         {
             /* Draw the current filled area: draw segments outline first
              * Curiously, draw segments outline first and after draw filled polygons
@@ -318,7 +320,8 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                         int x1 = CornersBuffer[ie].x;
                         int y1 = CornersBuffer[ie].y;
 
-                        if( CornersTypeBuffer[ie] == 0 )   // Draw only basic outlines, not extra segments
+                        // Draw only basic outlines, not extra segments.
+                        if( CornersTypeBuffer[ie] == 0 )
                         {
                             if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
                                 GRCSegm( panel->GetClipBox(), DC,

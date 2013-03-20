@@ -44,6 +44,7 @@
 #include <drc_stuff.h>
 
 #include <dialog_drc.h>
+#include <wx/progdlg.h>
 
 
 void DRC::ShowDialog()
@@ -148,16 +149,6 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
 }
 
 
-/**
- * Function Drc
- * tests the outline segment starting at CornerIndex and returns the result and displays the error
- * in the status panel only if one exists.
- *      Test Edge inside other areas
- *      Test Edge too close other areas
- * @param aArea The areaparent which contains the corner.
- * @param aCornerIndex The starting point of the segment to test.
- * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
- */
 int DRC::Drc( ZONE_CONTAINER* aArea, int aCornerIndex )
 {
     updatePointers();
@@ -173,11 +164,6 @@ int DRC::Drc( ZONE_CONTAINER* aArea, int aCornerIndex )
 }
 
 
-/**
- * Function RunTests
- * will actually run all the tests specified with a previous call to
- * SetSettings()
- */
 void DRC::RunTests( wxTextCtrl* aMessages )
 {
     // Ensure ratsnest is up to date:
@@ -227,6 +213,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         aMessages->AppendText( _( "Track clearances...\n" ) );
         wxSafeYield();
     }
+
     testTracks( true );
 
     // Before testing segments and unconnected, refill all zones:
@@ -295,7 +282,7 @@ void DRC::ListUnconnectedPads()
 
 void DRC::updatePointers()
 {
-    // update my pointers, m_mainWindow is the only unchangable one
+    // update my pointers, m_mainWindow is the only unchangeable one
     m_pcb = m_mainWindow->GetBoard();
 
     if( m_ui )  // Use diag list boxes only in DRC dialog
@@ -466,12 +453,6 @@ void DRC::testPad2Pad()
 }
 
 
-#include <wx/progdlg.h>
-/* Function testTracks
- * performs the DRC on all tracks.
- * because this test can take a while, a progress bar can be displayed
- * (Note: it is shown only if there are many tracks)
- */
 void DRC::testTracks( bool aShowProgressBar )
 {
     wxProgressDialog * progressDialog = NULL;
@@ -482,28 +463,32 @@ void DRC::testTracks( bool aShowProgressBar )
         count++;
 
     int deltamax = count/delta;
+
     if( aShowProgressBar && deltamax > 3 )
     {
         progressDialog = new wxProgressDialog( _( "Track clearances" ), wxEmptyString,
-                                     deltamax, m_mainWindow,
-                                     wxPD_AUTO_HIDE | wxPD_CAN_ABORT );
+                                               deltamax, m_mainWindow,
+                                               wxPD_AUTO_HIDE | wxPD_CAN_ABORT );
         progressDialog->Update( 0, wxEmptyString );
     }
 
     int ii = 0;
     count = 0;
+
     for( TRACK* segm = m_pcb->m_Track; segm && segm->Next(); segm = segm->Next() )
     {
         if ( ii++ > delta )
         {
             ii = 0;
             count++;
+
             if( progressDialog )
             {
                 if( !progressDialog->Update( count, wxEmptyString ) )
                     break;  // Aborted by user
             }
         }
+
         if( !doTrackDrc( segm, segm->Next(), true ) )
         {
             wxASSERT( m_currentMarker );
@@ -511,6 +496,7 @@ void DRC::testTracks( bool aShowProgressBar )
             m_currentMarker = 0;
         }
     }
+
     if( progressDialog )
         progressDialog->Destroy();
 }
@@ -528,6 +514,7 @@ void DRC::testUnconnected()
         return;
 
     wxString msg;
+
     for( unsigned ii = 0; ii < m_pcb->GetRatsnestsCount();  ++ii )
     {
         RATSNEST_ITEM& rat = m_pcb->m_FullRatsnest[ii];
@@ -596,7 +583,8 @@ void DRC::testKeepoutAreas()
                 if( segm->GetLayer() != area->GetLayer() )
                     continue;
 
-                if( area->m_Poly->Distance( segm->GetStart(), segm->GetEnd(), segm->GetWidth() ) == 0 )
+                if( area->Outline()->Distance( segm->GetStart(), segm->GetEnd(),
+                                               segm->GetWidth() ) == 0 )
                 {
                     m_currentMarker = fillMarker( segm, NULL,
                                                   DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker );
@@ -612,7 +600,7 @@ void DRC::testKeepoutAreas()
                 if( ! ((SEGVIA*)segm)->IsOnLayer( area->GetLayer() ) )
                     continue;
 
-                if( area->m_Poly->Distance( segm->GetPosition() ) < segm->GetWidth()/2 )
+                if( area->Outline()->Distance( segm->GetPosition() ) < segm->GetWidth()/2 )
                 {
                     m_currentMarker = fillMarker( segm, NULL,
                                                   DRCE_VIA_INSIDE_KEEPOUT, m_currentMarker );
@@ -625,12 +613,7 @@ void DRC::testKeepoutAreas()
     }
 }
 
-/*
- * Function doTrackKeepoutDrc
- * tests the current segment or via.
- * aRefSeg is the segment to test
- * return true if no DRC err
- */
+
 bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
 {
     // Test keepout areas for vias, tracks and pads inside keepout areas
@@ -649,7 +632,8 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
             if( aRefSeg->GetLayer() != area->GetLayer() )
                 continue;
 
-            if( area->m_Poly->Distance( aRefSeg->GetStart(), aRefSeg->GetEnd(), aRefSeg->GetWidth() ) == 0 )
+            if( area->Outline()->Distance( aRefSeg->GetStart(), aRefSeg->GetEnd(),
+                                           aRefSeg->GetWidth() ) == 0 )
             {
                 m_currentMarker = fillMarker( aRefSeg, NULL,
                                               DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker );
@@ -664,7 +648,7 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
             if( ! ((SEGVIA*)aRefSeg)->IsOnLayer( area->GetLayer() ) )
                 continue;
 
-            if( area->m_Poly->Distance( aRefSeg->GetPosition() ) < aRefSeg->GetWidth()/2 )
+            if( area->Outline()->Distance( aRefSeg->GetPosition() ) < aRefSeg->GetWidth()/2 )
             {
                 m_currentMarker = fillMarker( aRefSeg, NULL,
                                               DRCE_VIA_INSIDE_KEEPOUT, m_currentMarker );

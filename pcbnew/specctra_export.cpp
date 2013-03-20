@@ -1171,16 +1171,16 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
             mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
-            int count = item->m_Poly->m_CornersList.size();
+            int count = item->Outline()->m_CornersList.size();
             int ndx = 0;  // used in 2 for() loops below
             for( ; ndx<count; ++ndx )
             {
-                wxPoint   point( item->m_Poly->m_CornersList[ndx].x,
-                                 item->m_Poly->m_CornersList[ndx].y );
+                wxPoint   point( item->Outline()->m_CornersList[ndx].x,
+                                 item->Outline()->m_CornersList[ndx].y );
                 mainPolygon->AppendPoint( mapPt(point) );
 
                 // this was the end of the main polygon
-                if( item->m_Poly->m_CornersList[ndx].end_contour )
+                if( item->Outline()->m_CornersList[ndx].end_contour )
                     break;
             }
 
@@ -1190,7 +1190,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             // handle the cutouts
             for( ++ndx; ndx<count; ++ndx )
             {
-                if( item->m_Poly->m_CornersList[ndx-1].end_contour )
+                if( item->Outline()->m_CornersList[ndx-1].end_contour )
                 {
                     window = new WINDOW( plane );
                     plane->AddWindow( window );
@@ -1204,8 +1204,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
                 wxASSERT( window );
                 wxASSERT( cutout );
 
-                wxPoint point(item->m_Poly->m_CornersList[ndx].x,
-                              item->m_Poly->m_CornersList[ndx].y );
+                wxPoint point(item->Outline()->m_CornersList[ndx].x,
+                              item->Outline()->m_CornersList[ndx].y );
                 cutout->AppendPoint( mapPt(point) );
             }
         }
@@ -1246,16 +1246,16 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
 
             mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
-            int count = item->m_Poly->m_CornersList.size();
+            int count = item->Outline()->m_CornersList.size();
             int ndx = 0;  // used in 2 for() loops below
             for( ; ndx<count; ++ndx )
             {
-                wxPoint   point( item->m_Poly->m_CornersList[ndx].x,
-                                 item->m_Poly->m_CornersList[ndx].y );
+                wxPoint   point( item->Outline()->m_CornersList[ndx].x,
+                                 item->Outline()->m_CornersList[ndx].y );
                 mainPolygon->AppendPoint( mapPt(point) );
 
                 // this was the end of the main polygon
-                if( item->m_Poly->m_CornersList[ndx].end_contour )
+                if( item->Outline()->m_CornersList[ndx].end_contour )
                     break;
             }
 
@@ -1265,7 +1265,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
             // handle the cutouts
             for( ++ndx; ndx<count; ++ndx )
             {
-                if( item->m_Poly->m_CornersList[ndx-1].end_contour )
+                if( item->Outline()->m_CornersList[ndx-1].end_contour )
                 {
                     window = new WINDOW( keepout );
                     keepout->AddWindow( window );
@@ -1279,8 +1279,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
                 wxASSERT( window );
                 wxASSERT( cutout );
 
-                wxPoint point(item->m_Poly->m_CornersList[ndx].x,
-                              item->m_Poly->m_CornersList[ndx].y );
+                wxPoint point(item->Outline()->m_CornersList[ndx].x,
+                              item->Outline()->m_CornersList[ndx].y );
                 cutout->AppendPoint( mapPt(point) );
             }
         }

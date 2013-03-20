@@ -2167,14 +2167,14 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             int flag = intParse( data );
 
             if( !sawCorner )
-                zc->m_Poly->Start( zc->GetLayer(), x, y, outline_hatch );
+                zc->Outline()->Start( zc->GetLayer(), x, y, outline_hatch );
             else
                 zc->AppendCorner( wxPoint( x, y ) );
 
             sawCorner = true;
 
             if( flag )
-                zc->m_Poly->CloseLastContour();
+                zc->Outline()->CloseLastContour();
         }
 
         else if( TESTLINE( "ZInfo" ) )      // general info found
@@ -2368,9 +2368,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 BIU ex = biuParse( data, &data );
                 BIU ey = biuParse( data );
 
-                zc->m_FillSegmList.push_back( SEGMENT(
-                        wxPoint( sx, sy ),
-                        wxPoint( ex, ey ) ) );
+                zc->FillSegments().push_back( SEGMENT( wxPoint( sx, sy ), wxPoint( ex, ey ) ) );
             }
         }
 
@@ -2397,9 +2395,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
                 // Hatch here, after outlines corners are read
                 // Set hatch here, after outlines corners are read
-                zc->m_Poly->SetHatch( outline_hatch,
-                                      Mils2iu( CPolyLine::GetDefaultHatchPitchMils() ),
-                                      true );
+                zc->Outline()->SetHatch( outline_hatch,
+                                         Mils2iu( CPolyLine::GetDefaultHatchPitchMils() ),
+                                         true );
 
                 m_board->Add( zc.release() );
             }
@@ -3682,7 +3680,8 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     typedef std::vector< CPolyPt >    CPOLY_PTS;
 
     // Save the corner list
-    const CPOLY_PTS& cv = me->m_Poly->m_CornersList;
+    const CPOLY_PTS& cv = me->Outline()->m_CornersList;
+
     for( CPOLY_PTS::const_iterator it = cv.begin();  it != cv.end();  ++it )
     {
         fprintf( m_fp,  "ZCorner %s %d\n",
@@ -3710,7 +3709,8 @@ void LEGACY_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     typedef std::vector< SEGMENT > SEGMENTS;
 
     // Save the filling segments list
-    const SEGMENTS& segs = me->m_FillSegmList;
+    const SEGMENTS& segs = me->FillSegments();
+
     if( segs.size() )
     {
         fprintf( m_fp, "$FILLSEGMENTS\n" );

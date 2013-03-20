@@ -1323,7 +1323,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     }
 
     m_out->Print( 0, " (hatch %s %s)\n", hatch.c_str(),
-                  FMT_IU( aZone->m_Poly->GetHatchPitch() ).c_str() );
+                  FMT_IU( aZone->Outline()->GetHatchPitch() ).c_str() );
 
     if( aZone->GetPriority() > 0 )
         m_out->Print( aNestLevel+1, "(priority %d)\n", aZone->GetPriority() );
@@ -1405,7 +1405,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     m_out->Print( 0, ")\n" );
 
-    const std::vector< CPolyPt >& cv = aZone->m_Poly->m_CornersList;
+    const std::vector< CPolyPt >& cv = aZone->Outline()->m_CornersList;
     int newLine = 0;
 
     if( cv.size() )
@@ -1501,7 +1501,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     }
 
     // Save the filling segments list
-    const std::vector< SEGMENT >& segs = aZone->m_FillSegmList;
+    const std::vector< SEGMENT >& segs = aZone->FillSegments();
 
     if( segs.size() )
     {

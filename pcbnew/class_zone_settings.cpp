@@ -51,9 +51,9 @@ ZONE_SETTINGS::ZONE_SETTINGS()
                                                                // ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
                                                                // or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF segments
 
-    // tickness of the gap in thermal reliefs:
+    // thickness of the gap in thermal reliefs:
     m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
-    // tickness of the copper bridge in thermal reliefs:
+    // thickness of the copper bridge in thermal reliefs:
     m_ThermalReliefCopperBridge = Mils2iu( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
 
     m_PadConnection = THERMAL_PAD;                             // How pads are covered by copper in zone
@@ -115,10 +115,10 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
         aTarget.SetPriority( m_ZonePriority );
         aTarget.SetNet( m_NetcodeSelection );
         aTarget.SetLayer( m_CurrentZone_Layer );
-        aTarget.m_Poly->SetLayer( m_CurrentZone_Layer );
+        aTarget.Outline()->SetLayer( m_CurrentZone_Layer );
     }
 
     // call SetHatch last, because hatch lines will be rebuilt,
     // using new parameters values
-    aTarget.m_Poly->SetHatch( m_Zone_HatchingStyle, Mils2iu( 20 ), true );
+    aTarget.Outline()->SetHatch( m_Zone_HatchingStyle, Mils2iu( 20 ), true );
 }

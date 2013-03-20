@@ -38,23 +38,7 @@
 #include <pcbnew.h>
 #include <zones.h>
 
-/* Local functions */
 
-/* Local variables */
-
-
-/**
- * Function BuildFilledPolysListData
- * Build m_FilledPolysList data from real outlines (m_Poly)
- * in order to have drawable (and plottable) filled polygons
- * drawable filled polygons are polygons without hole
- * @param aPcb: the current board (can be NULL for non copper zones)
- * @param aCornerBuffer: A reference to a buffer to put polygon corners, or NULL
- * if NULL (default), uses m_FilledPolysList and fill current zone.
- * @return number of polygons
- * This function does not add holes for pads and tracks but calls
- * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
- */
 int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>* aCornerBuffer )
 {
     if( aCornerBuffer == NULL )
@@ -125,11 +109,12 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb, std::vector <CPolyPt>
             CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
         }
         if ( m_FillMode )   // if fill mode uses segments, create them:
-            Fill_Zone_Areas_With_Segments( );
+            FillZoneAreasWithSegments( );
     }
 
     return 1;
 }
+
 
 // Sort function to build filled zones
 static bool SortByXValues( const int& a, const int &b)
@@ -138,22 +123,14 @@ static bool SortByXValues( const int& a, const int &b)
 }
 
 
-/**
- * Function Fill_Zone_Areas_With_Segments
- * Fill sub areas in a zone with segments with m_ZoneMinThickness width
- * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
- * all intersecting points with the horizontal infinite line and polygons to fill are calculated
- * a list of SEGZONE items is built, line per line
- * @return number of segments created
- */
-int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
+int ZONE_CONTAINER::FillZoneAreasWithSegments()
 {
     int      ics, ice;
     int count = 0;
     std::vector <int> x_coordinates;
     bool error = false;
 
-    int      istart, iend;      // index od the starting and the endif corner of one filled area in m_FilledPolysList
+    int      istart, iend;      // index of the starting and the endif corner of one filled area in m_FilledPolysList
 
     int margin = m_ZoneMinThickness * 2 / 10;
     int minwidth = Mils2iu( 2 );
@@ -165,6 +142,7 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
     m_FillSegmList.clear();
     istart = 0;
     int end_list =  m_FilledPolysList.size()-1;
+
     for( int ic = 0; ic <= end_list; ic++ )
     {
         CPolyPt* corner = &m_FilledPolysList[ic];
@@ -181,10 +159,12 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
             {
                 // find all intersection points of an infinite line with polyline sides
                 x_coordinates.clear();
+
                 for( ics = istart, ice = iend; ics <= iend; ice = ics, ics++ )
                 {
                     if ( m_FilledPolysList[ice].m_utility )
                         continue;
+
                     int seg_startX = m_FilledPolysList[ics].x;
                     int seg_startY = m_FilledPolysList[ics].y;
                     int seg_endX   = m_FilledPolysList[ice].x;
@@ -202,20 +182,25 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
                     /* at this point refy is between seg_startY and seg_endY
                      * see if an horizontal line at Y = refy is intersecting this segment
                     */
-                    // calculate the x position of the intersection of this segment and the infinite line
-                    // this is more easier if we move the X,Y axis origin to the segment start point:
+                    // calculate the x position of the intersection of this segment and the
+                    // infinite line this is more easier if we move the X,Y axis origin to
+                    // the segment start point:
                     seg_endX -= seg_startX;
                     seg_endY -= seg_startY;
                     double newrefy = (double) (refy - seg_startY);
                     double intersec_x;
+
                     if ( seg_endY == 0 )    // horizontal segment on the same line: skip
                         continue;
-                    // Now calculate the x intersection coordinate of the horizontal line at y = newrefy
-                    // and the segment from (0,0) to (seg_endX,seg_endY)
-                    // with the horizontal line at the new refy position
-                    // the line slope is slope = seg_endY/seg_endX; and inv_slope = seg_endX/seg_endY
-                    // and the x pos relative to the new origin is intersec_x = refy/slope = refy * inv_slope
-                    // Note: because horizontal segments are already tested and skipped, slope exists (seg_end_y not O)
+
+                    // Now calculate the x intersection coordinate of the horizontal line at
+                    // y = newrefy and the segment from (0,0) to (seg_endX,seg_endY) with the
+                    // horizontal line at the new refy position the line slope is:
+                    // slope = seg_endY/seg_endX; and inv_slope = seg_endX/seg_endY
+                    // and the x pos relative to the new origin is:
+                    // intersec_x = refy/slope = refy * inv_slope
+                    // Note: because horizontal segments are already tested and skipped, slope
+                    // exists (seg_end_y not O)
                     double inv_slope      = (double)seg_endX / seg_endY;
                     intersec_x = newrefy * inv_slope;
                     x_coordinates.push_back((int) intersec_x + seg_startX);

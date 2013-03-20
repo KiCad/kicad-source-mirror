@@ -45,149 +45,9 @@
 
 #define STRAIGHT 0      // To be remove after math_for_graphics code cleanup
 
-/**
- * Function AddArea
- * Add an empty copper area to board areas list
- * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful
- *                        in undo commands) can be NULL
- * @param aNetcode = the necode of the copper area (0 = no net)
- * @param aLayer = the layer of area
- * @param aStartPointPosition = position of the first point of the polygon outline of this area
- * @param aHatch = hacth option
- * @return pointer to the new area
- */
-ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
-                                int aLayer, wxPoint aStartPointPosition, int aHatch )
-{
-    ZONE_CONTAINER* new_area = InsertArea( aNetcode,
-                                           m_ZoneDescriptorList.size( ) - 1,
-                                           aLayer, aStartPointPosition.x,
-                                           aStartPointPosition.y, aHatch );
 
-    if( aNewZonesList )
-    {
-        ITEM_PICKER picker( new_area, UR_NEW );
-        aNewZonesList->PushItem( picker );
-    }
-    return new_area;
-}
-
-
-/**
- * Function RemoveArea
- * remove copper area from net, and put it in a deleted list (if exists)
- * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful in undo
- *                       commands) can be NULL
- * @param  area_to_remove = area to delete or put in deleted list
- */
-void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to_remove )
-{
-    if( area_to_remove == NULL )
-        return;
-
-    if( aDeletedList )
-    {
-        ITEM_PICKER picker( area_to_remove, UR_DELETED );
-        aDeletedList->PushItem( picker );
-        Remove( area_to_remove );   // remove from zone list, but does not delete it
-    }
-    else
-    {
-        Delete( area_to_remove );
-    }
-}
-
-
-/**
- * Function InsertArea
- * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
- * @return pointer to the new area
- */
-ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch )
-{
-    ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
-
-    new_area->SetNet( netcode );
-    new_area->SetLayer( layer );
-    new_area->SetTimeStamp( GetNewTimeStamp() );
-
-    if( iarea < (int) ( m_ZoneDescriptorList.size() - 1 ) )
-        m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + iarea + 1, new_area );
-    else
-        m_ZoneDescriptorList.push_back( new_area );
-
-    new_area->m_Poly->Start( layer, x, y, hatch );
-    return new_area;
-}
-
-
-/**
- * Function NormalizeAreaPolygon
- * Process an area that has been modified, by normalizing its polygon against itself.
- * i.e. convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
- * This may change the number and order of copper areas in the net.
- * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new created areas
- * @param aCurrArea = the zone to process
- * @return true if changes are made
- * Also sets areas->utility1 flags if areas are modified
- */
-bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
-                                  ZONE_CONTAINER* aCurrArea )
-{
-    CPolyLine* curr_polygon = aCurrArea->m_Poly;
-
-    // mark all areas as unmodified except this one, if modified
-    for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
-        m_ZoneDescriptorList[ia]->utility = 0;
-
-    aCurrArea->utility = 1;
-
-    if( curr_polygon->IsPolygonSelfIntersecting() )
-    {
-        std::vector<CPolyLine*>* pa = new std::vector<CPolyLine*>;
-        curr_polygon->UnHatch();
-        int n_poly = aCurrArea->m_Poly->NormalizeAreaOutlines( pa );
-
-        // If clipping has created some polygons, we must add these new copper areas.
-        if( n_poly > 1 )
-        {
-            ZONE_CONTAINER* NewArea;
-
-            for( int ip = 1; ip < n_poly; ip++ )
-            {
-                // create new copper area and copy poly into it
-                CPolyLine* new_p = (*pa)[ip - 1];
-                NewArea = AddArea( aNewZonesList, aCurrArea->GetNet(), aCurrArea->GetLayer(),
-                                   wxPoint(0, 0), CPolyLine::NO_HATCH );
-
-                // remove the poly that was automatically created for the new area
-                // and replace it with a poly from NormalizeAreaOutlines
-                delete NewArea->m_Poly;
-                NewArea->m_Poly = new_p;
-                NewArea->m_Poly->Hatch();
-                NewArea->utility = 1;
-            }
-        }
-        delete pa;
-    }
-
-    curr_polygon->Hatch();
-
-    return true;
-}
-
-
-/**
- * Process an area that has been modified, by normalizing its polygon
- * and merging the intersecting polygons for any other areas on the same net.
- * This may change the number and order of copper areas in the net.
- * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas
- *                             (useful in undo commands can be NULL
- * @param modified_area = area to test
- * @return true if some areas modified
- */
 bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
-                                ZONE_CONTAINER* modified_area )
+                                   ZONE_CONTAINER* modified_area )
 {
     // clip polygon against itself
     bool modified = NormalizeAreaPolygon( aModifiedZonesList, modified_area );
@@ -225,18 +85,8 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
 }
 
 
-/**
- * Function CombineAllAreasInNet
- * Checks all copper areas in net for intersections, combining them if found
- * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
- *                       in undo commands can be NULL
- * @param aNetCode = net to consider
- * @param aUseUtility : if true, don't check areas if both utility flags are 0
- * Sets utility flag = 1 for any areas modified
- * @return true if some areas modified
-  */
 bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
-                                 bool aUseUtility )
+                                  bool aUseUtility )
 {
     if( m_ZoneDescriptorList.size() <= 1 )
         return false;
@@ -247,11 +97,12 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
     for( unsigned ia1 = 0; ia1 < m_ZoneDescriptorList.size() - 1; ia1++ )
     {
         ZONE_CONTAINER* curr_area = m_ZoneDescriptorList[ia1];
+
         if( curr_area->GetNet() != aNetCode )
             continue;
 
         // legal polygon
-        CRect b1 = curr_area->m_Poly->GetCornerBounds();
+        CRect b1 = curr_area->Outline()->GetCornerBounds();
         bool  mod_ia1 = false;
 
         for( unsigned ia2 = m_ZoneDescriptorList.size() - 1; ia2 > ia1; ia2-- )
@@ -270,12 +121,13 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             if( curr_area->GetLayer() != area2->GetLayer() )
                 continue;
 
-            CRect b2 = area2->m_Poly->GetCornerBounds();
+            CRect b2 = area2->Outline()->GetCornerBounds();
+
             if( !( b1.left > b2.right || b1.right < b2.left
                    || b1.bottom > b2.top || b1.top < b2.bottom ) )
             {
                 // check area2 against curr_area
-                if( curr_area->utility || area2->utility || aUseUtility == false )
+                if( curr_area->GetFlags() || area2->GetFlags() || aUseUtility == false )
                 {
                     bool ret = TestAreaIntersection( curr_area, area2 );
 
@@ -299,11 +151,6 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
 }
 
 
-/**
- * Function TestAreaIntersections
- * Check for intersection of a given copper area with other areas in same net
- * @param area_to_test = area to compare to all other areas in the same net
- */
 bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 {
     for( unsigned ia2 = 0; ia2 < m_ZoneDescriptorList.size(); ia2++ )
@@ -336,22 +183,14 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
 }
 
 
-/**
- * Function TestAreaIntersection
- * Test for intersection of 2 copper areas
- * area_to_test must be after area_ref in m_ZoneDescriptorList
- * @param area_ref = area reference
- * @param area_to_test = area to compare for intersection calculations
- * @return : false if no intersection, true if intersection
- */
 bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area_to_test )
 {
     // see if areas are on same layer
     if( area_ref->GetLayer() != area_to_test->GetLayer() )
         return false;
 
-    CPolyLine* poly1 = area_ref->m_Poly;
-    CPolyLine* poly2 = area_to_test->m_Poly;
+    CPolyLine* poly1 = area_ref->Outline();
+    CPolyLine* poly2 = area_to_test->Outline();
 
     // test bounding rects
     CRect      b1 = poly1->GetCornerBounds();
@@ -443,20 +282,8 @@ bool BOARD::TestAreaIntersection( ZONE_CONTAINER* area_ref, ZONE_CONTAINER* area
 }
 
 
-/**
- * Function CombineAreas
- * Merge 2 copper areas (which  are expected intersecting)
- * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas
- *                      (useful for undo command)
- * @param area_ref = the main area (zone)
- * @param area_to_combine = the zone that can be merged with area_ref
- * area_ref must be BEFORE area_to_combine
- * area_to_combine will be deleted, if areas are combined
- * @return : true if area_to_combine is combined with area_ref (and therefore be deleted)
- */
-
 bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_ref,
-                         ZONE_CONTAINER* area_to_combine )
+                          ZONE_CONTAINER* area_to_combine )
 {
     if( area_ref == area_to_combine )
     {
@@ -467,8 +294,8 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
     // polygons intersect, combine them
     KI_POLYGON_WITH_HOLES areaRefPoly;
     KI_POLYGON_WITH_HOLES areaToMergePoly;
-    CopyPolysListToKiPolygonWithHole( area_ref->m_Poly->m_CornersList, areaRefPoly );
-    CopyPolysListToKiPolygonWithHole( area_to_combine->m_Poly->m_CornersList, areaToMergePoly );
+    CopyPolysListToKiPolygonWithHole( area_ref->Outline()->m_CornersList, areaRefPoly );
+    CopyPolysListToKiPolygonWithHole( area_to_combine->Outline()->m_CornersList, areaToMergePoly );
 
     KI_POLYGON_WITH_HOLES_SET mergedOutlines;
     mergedOutlines.push_back( areaRefPoly );
@@ -488,47 +315,48 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
         return false;
 
     areaRefPoly = mergedOutlines[0];
-    area_ref->m_Poly->RemoveAllContours();
+    area_ref->Outline()->RemoveAllContours();
 
     KI_POLYGON_WITH_HOLES::iterator_type corner = areaRefPoly.begin();
+
     // create area with external contour: Recreate only area edges, NOT holes
-    area_ref->m_Poly->Start( area_ref->GetLayer(), corner->x(), corner->y(),
-                             area_ref->m_Poly->GetHatchStyle() );
+    area_ref->Outline()->Start( area_ref->GetLayer(), corner->x(), corner->y(),
+                                area_ref->Outline()->GetHatchStyle() );
+
     while( ++corner != areaRefPoly.end() )
     {
-        area_ref->m_Poly->AppendCorner( corner->x(), corner->y() );
+        area_ref->Outline()->AppendCorner( corner->x(), corner->y() );
     }
 
-    area_ref->m_Poly->CloseLastContour();
+    area_ref->Outline()->CloseLastContour();
 
     // add holes (set of polygons)
     KI_POLYGON_WITH_HOLES::iterator_holes_type hole = areaRefPoly.begin_holes();
+
     while( hole != areaRefPoly.end_holes() )
     {
         KI_POLYGON::iterator_type hole_corner = hole->begin();
+
         // create area with external contour: Recreate only area edges, NOT holes
         while( hole_corner != hole->end() )
         {
-            area_ref->m_Poly->AppendCorner( hole_corner->x(), hole_corner->y() );
+            area_ref->Outline()->AppendCorner( hole_corner->x(), hole_corner->y() );
             hole_corner++;
         }
-        area_ref->m_Poly->CloseLastContour();
+
+        area_ref->Outline()->CloseLastContour();
         hole++;
     }
 
     RemoveArea( aDeletedList, area_to_combine );
 
-    area_ref->utility = 1;
-    area_ref->m_Poly->Hatch();
+    area_ref->SetFlags( 1 );
+    area_ref->Outline()->Hatch();
 
     return true;
 }
 
 
-/* Tests area outlines for DRC:  areas inside other areas or too close.
- * aArea_To_Examine: area to compare with other areas,
- * or if NULL then all areas are compared to all others.
- */
 int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,
                                                       bool            aCreate_Markers )
 {
@@ -713,15 +541,6 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 }
 
 
-/* tests a segment in ZONE_CONTAINER * aArea:
- *      Test Edge inside other areas
- *      Test Edge too close other areas
- * aArea is the current area.
- * aCornerIndex is the index of the first corner (starting point)
- * of the edge segment to test.
- * return false if DRC error or true if OK
- */
-
 bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
 {
     if( !aArea->IsOnCopperLayer() )    // Cannot have a Drc error if not on copper layer
@@ -733,7 +552,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
     wxPoint  end;
 
     // Search the end point of the edge starting at aCornerIndex
-    if( aArea->m_Poly->m_CornersList[aCornerIndex].end_contour == false
+    if( aArea->Outline()->m_CornersList[aCornerIndex].end_contour == false
        && aCornerIndex < (aArea->GetNumCorners() - 1) )
     {
         end = aArea->GetCornerPosition( aCornerIndex + 1 );
@@ -746,7 +565,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
 
         while( ii >= 0 )
         {
-            if( aArea->m_Poly->m_CornersList[ii].end_contour )
+            if( aArea->Outline()->m_CornersList[ii].end_contour )
                 break;
 
             end = aArea->GetCornerPosition( ii );
@@ -783,7 +602,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
             zone_clearance = 1;
 
         // test for ending line inside area_to_test
-        if( area_to_test->m_Poly->TestPointInside( end.x, end.y ) )
+        if( area_to_test->Outline()->TestPointInside( end.x, end.y ) )
         {
             // COPPERAREA_COPPERAREA error: corner inside copper area
             m_currentMarker = fillMarker( aArea, end,
@@ -798,26 +617,26 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
         int ax2    = end.x;
         int ay2    = end.y;
 
-        for( int icont2 = 0; icont2 < area_to_test->m_Poly->GetContoursCount(); icont2++ )
+        for( int icont2 = 0; icont2 < area_to_test->Outline()->GetContoursCount(); icont2++ )
         {
-            int ic_start2 = area_to_test->m_Poly->GetContourStart( icont2 );
-            int ic_end2   = area_to_test->m_Poly->GetContourEnd( icont2 );
+            int ic_start2 = area_to_test->Outline()->GetContourStart( icont2 );
+            int ic_end2   = area_to_test->Outline()->GetContourEnd( icont2 );
 
             for( int ic2 = ic_start2; ic2<=ic_end2; ic2++ )
             {
-                int bx1 = area_to_test->m_Poly->GetX( ic2 );
-                int by1 = area_to_test->m_Poly->GetY( ic2 );
+                int bx1 = area_to_test->Outline()->GetX( ic2 );
+                int by1 = area_to_test->Outline()->GetY( ic2 );
                 int bx2, by2;
 
                 if( ic2 == ic_end2 )
                 {
-                    bx2 = area_to_test->m_Poly->GetX( ic_start2 );
-                    by2 = area_to_test->m_Poly->GetY( ic_start2 );
+                    bx2 = area_to_test->Outline()->GetX( ic_start2 );
+                    by2 = area_to_test->Outline()->GetY( ic_start2 );
                 }
                 else
                 {
-                    bx2 = area_to_test->m_Poly->GetX( ic2 + 1 );
-                    by2 = area_to_test->m_Poly->GetY( ic2 + 1 );
+                    bx2 = area_to_test->Outline()->GetX( ic2 + 1 );
+                    by2 = area_to_test->Outline()->GetY( ic2 + 1 );
                 }
 
                 int x, y;   // variables containing the intersecting point coordinates

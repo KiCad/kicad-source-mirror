@@ -1,5 +1,29 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file pcbnew/pcbplot.h
+ * @brief Board plot function definition file.
  */
 
 #ifndef PCBPLOT_H_
@@ -46,8 +70,8 @@ class BOARD;
 class BRDITEMS_PLOTTER: public PCB_PLOT_PARAMS
 {
     PLOTTER* m_plotter;
-    BOARD* m_board;
-    int m_layerMask;
+    BOARD*   m_board;
+    int      m_layerMask;
 
 
 public:
@@ -62,7 +86,7 @@ public:
     /**
      * @return a 'width adjustment' for the postscript engine
      * (useful for controlling toner bleeding during direct transfer)
-     * addded to track width and via/pads size
+     * added to track width and via/pads size
      */
     int getFineWidthAdj()
     {
@@ -71,12 +95,22 @@ public:
         else
             return 0;
     }
+
     // Basic functions to plot a board item
     void SetLayerMask( int aLayerMask ){ m_layerMask = aLayerMask; }
     void Plot_Edges_Modules();
     void Plot_1_EdgeModule( EDGE_MODULE* aEdge );
     void PlotTextModule( TEXTE_MODULE* aTextMod, EDA_COLOR_T aColor );
+
+    /*
+     * Plot field of a module (footprint)
+     * Reference, Value, and other fields are plotted only if
+     * the corresponding option is enabled
+     * Invisible text fields are plotted only if PlotInvisibleText option is set
+     * usually they are not plotted.
+     */
     bool PlotAllTextsModule( MODULE* aModule );
+
     void PlotDimension( DIMENSION* Dimension );
     void PlotPcbTarget( PCB_TARGET* PtMire );
     void PlotFilledAreas( ZONE_CONTAINER* aZone );
@@ -134,7 +168,7 @@ PLOTTER* StartPlotBoard( BOARD* aBoard,
 /**
  * Function PlotOneBoardLayer
  * main function to plot one copper or technical layer.
- * It prepare options and calls the specilized plot function,
+ * It prepare options and calls the specialized plot function,
  * according to the layer type
  * @param aBoard = the board to plot
  * @param aPlotter = the plotter to use
@@ -154,8 +188,8 @@ void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, int aLayer,
  * @param aLayerMask = the mask to define the layers to plot
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  *
- * aPlotOpt has 3 important options to controle this plot,
- * which are set, depending on the layer typpe to plot
+ * aPlotOpt has 3 important options to control this plot,
+ * which are set, depending on the layer type to plot
  *      SetEnablePlotVia( bool aEnable )
  *          aEnable = true to plot vias, false to skip vias (has meaning
  *                      only for solder mask layers).
@@ -188,7 +222,7 @@ void PlotSilkScreen( BOARD* aBoard, PLOTTER* aPlotter, long aLayerMask,
  * @param aOutputDir = the wxFileName to modify
  *          (contains the absolute or relative to the board path
  * @param aBoardFilename = the board full filename
- * @param aMessageBox = a wxMessageBox to show meesage (can be NULL)
+ * @param aMessageBox = a wxMessageBox to show message (can be NULL)
  */
 bool EnsureOutputDirectory( wxFileName* aOutputDir,
                             const wxString& aBoardFilename,
@@ -207,9 +241,9 @@ bool EnsureOutputDirectory( wxFileName* aOutputDir,
  * @param aExtension = the file extension
  */
 void BuildPlotFileName( wxFileName* aFilename,
-                               const wxString& aOutputDir,
-                               const wxString& aSuffix,
-                               const wxString& aExtension );
+                        const wxString& aOutputDir,
+                        const wxString& aSuffix,
+                        const wxString& aExtension );
 
 // PLOTGERB.CPP
 void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );

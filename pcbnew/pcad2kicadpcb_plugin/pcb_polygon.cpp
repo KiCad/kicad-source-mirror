@@ -177,8 +177,8 @@ void PCB_POLYGON::AddToBoard()
         // add outline
         int outline_hatch = CPolyLine::DIAGONAL_EDGE;
 
-        zone->m_Poly->Start( m_KiCadLayer, KiROUND( m_outline[i]->x ),
-                             KiROUND( m_outline[i]->y ), outline_hatch );
+        zone->Outline()->Start( m_KiCadLayer, KiROUND( m_outline[i]->x ),
+                                KiROUND( m_outline[i]->y ), outline_hatch );
 
         for( i = 1; i < (int) m_outline.GetCount(); i++ )
         {
@@ -186,15 +186,15 @@ void PCB_POLYGON::AddToBoard()
                                          KiROUND( m_outline[i]->y ) ) );
         }
 
-        zone->m_Poly->CloseLastContour();
+        zone->Outline()->CloseLastContour();
 
         zone->SetZoneClearance( m_width );
 
         zone->SetPriority( m_priority );
 
-        zone->m_Poly->SetHatch( outline_hatch,
-                                Mils2iu( zone->m_Poly->GetDefaultHatchPitchMils() ),
-                                true );
+        zone->Outline()->SetHatch( outline_hatch,
+                                   Mils2iu( zone->Outline()->GetDefaultHatchPitchMils() ),
+                                   true );
 
         if ( m_objType == wxT( 'K' ) )
         {
