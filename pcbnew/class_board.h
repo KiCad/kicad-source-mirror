@@ -288,29 +288,6 @@ public:
     int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
 
     /**
-     * Function GetDefaultLayerName
-     * returns a default name of a PCB layer when given \a aLayerNumber.  This
-     * function is static so it can be called without a BOARD instance.  Use
-     * GetLayerName() if want the layer names of a specific BOARD, which could
-     * be different than the default if the user has renamed any copper layers.
-     *
-     * @param  aLayerNumber is the layer number to fetch
-     * @param  aTranslate = true to return the translated version
-     *                    = false to get the native version
-     * @return wxString - containing the layer name or "BAD INDEX" if aLayerNumber
-     *                      is not legal
-     */
-    static wxString GetDefaultLayerName( int aLayerNumber, bool aTranslate );
-
-    /**
-     * Function ReturnFlippedLayerNumber
-     * @return the layer number after flipping an item
-     * some (not all) layers: external copper, Mask, Paste, and solder
-     * are swapped between front and back sides
-     */
-    static int ReturnFlippedLayerNumber( int oldlayer );
-
-    /**
      * Function Add
      * adds the given item to this BOARD and takes ownership of its memory.
      * @param aBoardItem The item to add to this board.
@@ -604,22 +581,22 @@ public:
      * Function SetColorsSettings
      * @param aColorsSettings = the new COLORS_DESIGN_SETTINGS to use
      */
-    void SetColorsSettings(COLORS_DESIGN_SETTINGS* aColorsSettings)
+    void SetColorsSettings( COLORS_DESIGN_SETTINGS* aColorsSettings )
     {
         m_colorsSettings = aColorsSettings;
     }
 
     /**
      * Function GetLayerName
-     * returns the name of the layer given by aLayerIndex.
+     * returns the name of a layer given by aLayerIndex.  Copper layers may
+     * have custom names.
      *
      * @param aLayerIndex = A layer index, like LAYER_N_BACK, etc.
-     * @param  aTranslate = true to return the translated version (default)
-     *                    = false to get the native English name
-     *                   (Useful to build filenames from layer names)
-     * @return wxString - the layer name.
+     *
+     * @return wxString -   the layer name, which for copper layers may
+     *                      be custom, else standard.
      */
-    wxString GetLayerName( int aLayerIndex, bool aTranslate = true ) const;
+    wxString GetLayerName( int aLayerIndex ) const;
 
     /**
      * Function SetLayerName
@@ -631,6 +608,19 @@ public:
      *   layer names at other layer indices and aLayerIndex was within range, else false.
      */
     bool SetLayerName( int aLayerIndex, const wxString& aLayerName );
+
+    /**
+     * Function GetStandardLayerName
+     * returns an "English Standard" name of a PCB layer when given \a aLayerNumber.
+     * This function is static so it can be called without a BOARD instance.  Use
+     * GetLayerName() if want the layer names of a specific BOARD, which could
+     * be different than the default if the user has renamed any copper layers.
+     *
+     * @param  aLayerNumber is the layer number to fetch
+     * @return wxString - containing the layer name or "BAD INDEX" if aLayerNumber
+     *                      is not legal
+     */
+    static wxString GetStandardLayerName( int aLayerNumber );
 
     bool SetLayer( int aIndex, const LAYER& aLayer );
 
@@ -665,6 +655,14 @@ public:
      * gets a layer color for any valid layer, including non-copper ones.
      */
     EDA_COLOR_T GetLayerColor( int aLayer ) const;
+
+    /**
+     * Function ReturnFlippedLayerNumber
+     * @return the layer number after flipping an item
+     * some (not all) layers: external copper, Mask, Paste, and solder
+     * are swapped between front and back sides
+     */
+    static int ReturnFlippedLayerNumber( int oldlayer );
 
     /** Functions to get some items count */
     int GetNumSegmTrack() const;

@@ -325,7 +325,7 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
 {
     // Establish all the board's layer names into the dialog presentation, by
     // obtaining them from BOARD::GetLayerName() which calls
-    // BOARD::GetDefaultLayerName() for non-coppers.
+    // BOARD::GetStandardLayerName() for non-coppers.
 
     for( int layer=0; layer<NB_LAYERS;  ++layer )
     {
