@@ -54,12 +54,6 @@
  */
 
 
-/* Function getColor
- * return the layer colorfrom the layer id
- * White color is special: cannot be seen on a white paper
- * and in B&W mode, is plotted as white but other colors are plotted in BLACK
- * so the returned color is LIGHTGRAY when the layer color is WHITE
- */
 EDA_COLOR_T BRDITEMS_PLOTTER::getColor( int aLayer )
 {
     EDA_COLOR_T color = m_board->GetLayerColor( aLayer );
@@ -68,12 +62,7 @@ EDA_COLOR_T BRDITEMS_PLOTTER::getColor( int aLayer )
     return color;
 }
 
-/*
- * Plot a pad.
- * unlike other items, a pad had not a specific color,
- * and be drawn as a non filled item although the plot mode is filled
- * color and plot mode are needed by this function
- */
+
 void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T aPlotMode )
 {
     wxPoint shape_pos = aPad->ReturnShapePos();
@@ -90,7 +79,7 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T
 
     case PAD_OVAL:
         m_plotter->FlashPadOval( shape_pos, aPad->GetSize(),
-                        aPad->GetOrientation(), aPlotMode );
+                                 aPad->GetOrientation(), aPlotMode );
         break;
 
     case PAD_TRAPEZOID:
@@ -98,25 +87,19 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T
             wxPoint coord[4];
             aPad->BuildPadPolygon( coord, wxSize(0,0), 0 );
             m_plotter->FlashPadTrapez( shape_pos, coord,
-                          aPad->GetOrientation(), aPlotMode );
+                                       aPad->GetOrientation(), aPlotMode );
         }
         break;
 
     case PAD_RECT:
     default:
         m_plotter->FlashPadRect( shape_pos, aPad->GetSize(),
-                        aPad->GetOrientation(), aPlotMode );
+                                 aPad->GetOrientation(), aPlotMode );
         break;
     }
 }
 
-/*
- * Plot field of a module (footprint)
- * Reference, Value, and other fields are plotted only if
- * the corresponding option is enabled
- * Invisible text fields are plotted only if PlotInvisibleText option is set
- * usually they are not plotted.
- */
+
 bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 {
     // see if we want to plot VALUE and REF fields
@@ -221,8 +204,7 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
     }
 }
 
-void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte,
-                                       EDA_COLOR_T aColor )
+void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColor )
 {
     wxSize  size;
     wxPoint pos;
@@ -230,6 +212,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte,
 
     if( aColor == WHITE )
         aColor = LIGHTGRAY;
+
     m_plotter->SetColor( aColor );
 
     // calculate some text parameters :
@@ -323,6 +306,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
     draw.SetLayer( aMire->GetLayer() );
     draw.SetStart( aMire->GetPosition() );
     radius = aMire->GetSize() / 3;
+
     if( aMire->GetShape() )   // shape X
         radius = aMire->GetSize() / 2;
 
@@ -410,55 +394,53 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
         break;
 
     case S_ARC:
-        {
-            radius = (int) hypot( (double) ( end.x - pos.x ),
+    {
+        radius = (int) hypot( (double) ( end.x - pos.x ),
                                   (double) ( end.y - pos.y ) );
 
-            double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
+        double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
 
-            double endAngle = startAngle + aEdge->GetAngle();
+        double endAngle = startAngle + aEdge->GetAngle();
 
-            if ( ( GetFormat() == PLOT_FORMAT_DXF ) &&
-               ( m_layerMask & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
-                m_plotter->ThickArc( pos, -startAngle, -endAngle, radius,
-                                thickness, GetMode() );
-            else
-                m_plotter->ThickArc( pos, -endAngle, -startAngle, radius,
-                                thickness, GetMode() );
-        }
-        break;
+        if ( ( GetFormat() == PLOT_FORMAT_DXF ) &&
+             ( m_layerMask & ( SILKSCREEN_LAYER_BACK | DRAW_LAYER | COMMENT_LAYER ) ) )
+            m_plotter->ThickArc( pos, -startAngle, -endAngle, radius, thickness, GetMode() );
+        else
+            m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetMode() );
+    }
+    break;
 
     case S_POLYGON:
+    {
+        const std::vector<wxPoint>& polyPoints = aEdge->GetPolyPoints();
+
+        if( polyPoints.size() <= 1 )  // Malformed polygon
+            break;
+
+        // We must compute true coordinates from m_PolyList
+        // which are relative to module position, orientation 0
+        MODULE* module = aEdge->GetParentModule();
+
+        std::vector< wxPoint > cornerList;
+
+        cornerList.reserve( polyPoints.size() );
+
+        for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
         {
-            const std::vector<wxPoint>& polyPoints = aEdge->GetPolyPoints();
+            wxPoint corner = polyPoints[ii];
 
-            if( polyPoints.size() <= 1 )  // Malformed polygon
-                break;
-
-            // We must compute true coordinates from m_PolyList
-            // which are relative to module position, orientation 0
-            MODULE* module = aEdge->GetParentModule();
-
-            std::vector< wxPoint > cornerList;
-
-            cornerList.reserve( polyPoints.size() );
-
-            for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
+            if( module )
             {
-                wxPoint corner = polyPoints[ii];
-
-                if( module )
-                {
-                    RotatePoint( &corner, module->GetOrientation() );
-                    corner += module->GetPosition();
-                }
-
-                cornerList.push_back( corner );
+                RotatePoint( &corner, module->GetOrientation() );
+                corner += module->GetPosition();
             }
 
-            m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness );
+            cornerList.push_back( corner );
         }
-        break;
+
+        m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness );
+    }
+    break;
     }
 }
 
@@ -566,10 +548,10 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
                 }
                 else                            // We are using areas filled by
                 {                               // segments: plot them )
-                    for( unsigned iseg = 0; iseg < aZone->m_FillSegmList.size(); iseg++ )
+                    for( unsigned iseg = 0; iseg < aZone->FillSegments().size(); iseg++ )
                     {
-                        wxPoint start = aZone->m_FillSegmList[iseg].m_Start;
-                        wxPoint end   = aZone->m_FillSegmList[iseg].m_End;
+                        wxPoint start = aZone->FillSegments()[iseg].m_Start;
+                        wxPoint end   = aZone->FillSegments()[iseg].m_End;
                         m_plotter->ThickSegment( start, end,
                                                  aZone->GetMinThickness(),
                                                  GetMode() );
@@ -644,8 +626,8 @@ void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
 
             for( unsigned i = 1; i < bezierPoints.size(); i++ )
                 m_plotter->ThickSegment( bezierPoints[i - 1],
-                                        bezierPoints[i],
-                                        thickness, GetMode() );
+                                         bezierPoints[i],
+                                         thickness, GetMode() );
         }
         break;
 
@@ -653,6 +635,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment(  DRAWSEGMENT* aSeg )
         m_plotter->ThickSegment( start, end, thickness, GetMode() );
     }
 }
+
 
 /** Helper function to plot a single drill mark. It compensate and clamp
  *   the drill mark size depending on the current plot options
@@ -669,6 +652,7 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_SHAPE_T aDrillShape,
     // Round holes only have x diameter, slots have both
     aDrillSize.x -= getFineWidthAdj();
     aDrillSize.x = Clamp( 1, aDrillSize.x, aPadSize.x - 1 );
+
     if( aDrillShape == PAD_OVAL )
     {
         aDrillSize.y -= getFineWidthAdj();
@@ -679,12 +663,7 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_SHAPE_T aDrillShape,
         m_plotter->FlashPadCircle( aDrillPos, aDrillSize.x, GetMode() );
 }
 
-/* Function PlotDrillMarks
- * Draw a drill mark for pads and vias.
- * Must be called after all drawings, because it
- * redraw the drill mark on a pad or via, as a negative (i.e. white) shape in
- * FILLED plot mode (for PS and PDF outputs)
- */
+
 void BRDITEMS_PLOTTER::PlotDrillMarks()
 {
     /* If small drills marks were requested prepare a clamp value to pass
@@ -711,9 +690,8 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         if( pts->Type() != PCB_VIA_T )
             continue;
 
-        plotOneDrillMark(PAD_CIRCLE,
-                       pts->GetStart(), wxSize( pts->GetDrillValue(), 0 ),
-                       wxSize( pts->GetWidth(), 0 ), 0, small_drill );
+        plotOneDrillMark( PAD_CIRCLE,  pts->GetStart(), wxSize( pts->GetDrillValue(), 0 ),
+                          wxSize( pts->GetWidth(), 0 ), 0, small_drill );
     }
 
     for( MODULE *Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )
@@ -724,9 +702,9 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
                 continue;
 
             plotOneDrillMark( pad->GetDrillShape(),
-                           pad->GetPosition(), pad->GetDrillSize(),
-                           pad->GetSize(), pad->GetOrientation(),
-                           small_drill );
+                              pad->GetPosition(), pad->GetDrillSize(),
+                              pad->GetSize(), pad->GetOrientation(),
+                              small_drill );
         }
     }
 

@@ -58,10 +58,10 @@ extern void CheckGLError();
   */
 static bool    Is3DLayerEnabled( int aLayer );
 
- /* returns the Z orientation parmeter 1.0 or -1.0 for aLayer
+ /* returns the Z orientation parameter 1.0 or -1.0 for aLayer
   * Z orientation is 1.0 for all layers but "back" layers:
   *  LAYER_N_BACK , ADHESIVE_N_BACK, SOLDERPASTE_N_BACK ), SILKSCREEN_N_BACK
-  * used to calculate the Z orientation parmeter for glNormal3f
+  * used to calculate the Z orientation parameter for glNormal3f
   */
 static GLfloat  Get3DLayer_Z_Orientation( int aLayer );
 
@@ -110,6 +110,7 @@ void EDA_3D_CANVAS::Redraw( bool finish )
     }
 
     glFlush();
+
     if( finish )
         glFinish();
 
@@ -193,6 +194,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
         case PCB_LINE_T:
         {
             DRAWSEGMENT* segment = (DRAWSEGMENT*) PtStruct;
+
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( segment->GetLayer() ) )
                 Draw3D_DrawSegment( segment );
         }
@@ -201,6 +203,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
         case PCB_TEXT_T:
         {
             TEXTE_PCB* text = (TEXTE_PCB*) PtStruct;
+
             if( Is3DLayerEnabled( text->GetLayer() ) )
                 Draw3D_DrawText( text );
         }
@@ -258,9 +261,9 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
     else
     {
         // segments are used to fill areas
-        for( unsigned iseg = 0; iseg < aZone->m_FillSegmList.size(); iseg++ )
-            Draw3D_SolidSegment( aZone->m_FillSegmList[iseg].m_Start,
-                                 aZone->m_FillSegmList[iseg].m_End,
+        for( unsigned iseg = 0; iseg < aZone->FillSegments().size(); iseg++ )
+            Draw3D_SolidSegment( aZone->FillSegments()[iseg].m_Start,
+                                 aZone->FillSegments()[iseg].m_End,
                                  aZone->GetMinThickness(), thickness, zpos,
                                  g_Parm_3D_Visu.m_BiuTo3Dunits );
     }
@@ -426,6 +429,7 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
             SetGLColor( gridcolor );
         else
             SetGLColor( gridcolor_marker );
+
         double delta = ii * aGriSizeMM * IU_PER_MM  * scale;
 
         if( delta <= zmax )
@@ -505,8 +509,9 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
         glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
         Draw3D_ZaxisCylinder( via->GetStart(), (outer_radius + inner_radius)/2,
-                                  thickness, outer_radius - inner_radius,
-                                  zpos - (thickness/2), biu_to_3Dunits );
+                              thickness, outer_radius - inner_radius,
+                              zpos - (thickness/2), biu_to_3Dunits );
+
         if( layer >= top_layer )
             break;
     }
@@ -559,8 +564,8 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 
             default:
                 Draw3D_SolidSegment( segment->GetStart(), segment->GetEnd(),
-                                    segment->GetWidth(), thickness,
-                                    zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                     segment->GetWidth(), thickness,
+                                     zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
                 break;
             }
         }
@@ -593,8 +598,8 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 
             default:
                 Draw3D_SolidSegment( segment->GetStart(), segment->GetEnd(),
-                                    segment->GetWidth(), thickness,
-                                    zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                     segment->GetWidth(), thickness,
+                                     zpos, g_Parm_3D_Visu.m_BiuTo3Dunits );
                 break;
             }
         }
@@ -607,12 +612,13 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 // so they are static.
 int s_Text3DWidth, s_Text3DZPos, s_thickness;
 
+
 // This is a call back function, used by DrawGraphicText to draw the 3D text shape:
 static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
 {
     Draw3D_SolidSegment( wxPoint( x0, y0), wxPoint( xf, yf ),
-                        s_Text3DWidth, s_thickness, s_Text3DZPos,
-                        g_Parm_3D_Visu.m_BiuTo3Dunits );
+                         s_Text3DWidth, s_thickness, s_Text3DZPos,
+                         g_Parm_3D_Visu.m_BiuTo3Dunits );
 }
 
 
@@ -681,6 +687,7 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     if( g_Parm_3D_Visu.m_DrawFlags[g_Parm_3D_Visu.FL_MODULE] )
     {
         double zpos;
+
         if( IsFlipped() )
             zpos = g_Parm_3D_Visu.GetModulesZcoord3DIU( true );
         else
@@ -716,6 +723,7 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     }
 
     EDA_ITEM* Struct = m_Drawings;
+
     for( ; Struct != NULL; Struct = Struct->Next() )
     {
         switch( Struct->Type() )
@@ -760,6 +768,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
         MODULE* module = (MODULE*) m_Parent;
 
         CPolyPt corner;
+
         for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
         {
             corner.x = m_PolyPoints[ii].x;
@@ -798,7 +807,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
             case S_CIRCLE:
             {
                int radius = KiROUND( hypot( double(m_Start.x - m_End.x),
-                                             double(m_Start.y - m_End.y) )
+                                            double(m_Start.y - m_End.y) )
                                     );
                 Draw3D_ZaxisCylinder( m_Start, radius,
                                       thickness, GetWidth(),
@@ -953,12 +962,13 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
             SetGLColor( g_ColorsSettings.GetLayerColor( layer ) );
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
             int ring_radius = (m_Size.x + m_Drill.x) / 4;
+
             if( thickness == 0 )
                 glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
 
             Draw3D_ZaxisCylinder(shape_pos, ring_radius,
-                                  thickness, ( m_Size.x - m_Drill.x) / 2,
-                                  zpos - (thickness/2), scale );
+                                 thickness, ( m_Size.x - m_Drill.x) / 2,
+                                 zpos - (thickness/2), scale );
             }
 
         break;
@@ -967,6 +977,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
         {
         wxPoint ends_offset;
         int width;
+
         if( m_Size.x > m_Size.y ) // Horizontal ellipse
         {
             ends_offset.x = ( m_Size.x - m_Size.y ) / 2;
@@ -982,9 +993,12 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
         wxPoint start  = shape_pos + ends_offset;
         wxPoint end  = shape_pos - ends_offset;
         TransformRoundedEndsSegmentToPolygon( polyPadShape, start, end, slice, width );
+
         if( hasHole )
-            polyPadShape.insert( polyPadShape.end(), holecornersBuffer.begin(), holecornersBuffer.end() );
+            polyPadShape.insert( polyPadShape.end(), holecornersBuffer.begin(),
+                                 holecornersBuffer.end() );
         }
+
         break;
 
     case PAD_RECT:
@@ -993,14 +1007,17 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
         wxPoint coord[5];
         BuildPadPolygon( coord, wxSize(0,0), m_Orient );
         for( int ii = 0; ii < 4; ii ++ )
+
         {
             CPolyPt pt( coord[ii].x + shape_pos.x, coord[ii].y+ shape_pos.y );
             polyPadShape.push_back( pt );
         }
+
         polyPadShape.back().end_contour = true;
 
         if( hasHole )
-            polyPadShape.insert( polyPadShape.end(), holecornersBuffer.begin(), holecornersBuffer.end() );
+            polyPadShape.insert( polyPadShape.end(), holecornersBuffer.begin(),
+                                 holecornersBuffer.end() );
         }
     break;
 
@@ -1028,16 +1045,16 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 
             // If not hole: draw a single polygon
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
+
             if( hasHole )
             {
                 Draw3D_SolidHorizontalPolygonWithHoles( polyPadShape, zpos,
-                                thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                                        thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
             }
-
             else
             {
                 Draw3D_SolidHorizontalPolyPolygons( polyPadShape, zpos,
-                                          thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
+                                                    thickness, g_Parm_3D_Visu.m_BiuTo3Dunits );
             }
         }
     }
@@ -1047,6 +1064,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 bool Is3DLayerEnabled( int aLayer )
 {
     int flg = -1;
+
     // see if layer needs to be shown
     // check the flags
     switch (aLayer)
@@ -1067,6 +1085,7 @@ bool Is3DLayerEnabled( int aLayer )
             flg=g_Parm_3D_Visu.FL_ECO2;
             break;
     }
+
     // the layer was not a layer with a flag, so show it
     if( flg < 0 )
         return true;

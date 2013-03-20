@@ -518,7 +518,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
         m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, false );
+        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), false );
         break;
     }
 
@@ -527,7 +527,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
         m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->m_CornerSelection );
+        Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->GetSelectedCorner() );
         break;
     }
 
@@ -551,11 +551,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
          * and start move the new corner
          */
         zone_cont->Draw( m_canvas, &dc, GR_XOR );
-        zone_cont->m_Poly->InsertCorner( zone_cont->m_CornerSelection, pos.x, pos.y );
-        zone_cont->m_CornerSelection++;
+        zone_cont->Outline()->InsertCorner( zone_cont->GetSelectedCorner(), pos.x, pos.y );
+        zone_cont->SetSelectedCorner( zone_cont->GetSelectedCorner() + 1 );
         zone_cont->Draw( m_canvas, &dc, GR_XOR );
         m_canvas->SetAutoPanRequest( true );
-        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, true );
+        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->GetSelectedCorner(), true );
         break;
     }
 

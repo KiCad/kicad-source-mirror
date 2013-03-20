@@ -159,11 +159,11 @@ public:
     int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
 
     /**
-     * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
+     * Function TestForCopperIslandAndRemoveInsulatedIslands
      * Remove insulated copper islands found in m_FilledPolysList.
      * @param aPcb = the board to analyze
      */
-    void Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
+    void TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb );
 
     /**
      * Function CalculateSubAreaBoundaryBox
@@ -239,6 +239,20 @@ public:
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness ) { m_ZoneMinThickness = aMinThickness; }
 
+    int GetSelectedCorner() const { return m_CornerSelection; }
+    void SetSelectedCorner( int aCorner ) { m_CornerSelection = aCorner; }
+
+    int GetFlags() const { return utility; }
+    void SetFlags( int aFlags ) { utility = aFlags; }
+
+    std::vector <SEGMENT>& FillSegments() { return m_FillSegmList; }
+    const std::vector <SEGMENT>& FillSegments() const { return m_FillSegmList; }
+
+    CPolyLine* Outline() { return m_Poly; }
+    const CPolyLine* Outline() const { return const_cast< CPolyLine* >( m_Poly ); }
+
+    void SetOutline( CPolyLine* aOutline ) { m_Poly = aOutline; }
+
     /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
     virtual bool HitTest( const wxPoint& aPosition );
 
@@ -277,7 +291,7 @@ public:
      * Copy polygons from m_FilledPolysList to aKiPolyList
      * @param aKiPolyList = a KI_POLYGON_SET to fill by polygons.
      */
-    void  CopyPolygonsFromFilledPolysListToKiPolygonList( KI_POLYGON_SET& aKiPolyList );
+    void CopyPolygonsFromFilledPolysListToKiPolygonList( KI_POLYGON_SET& aKiPolyList );
 
     /**
      * Function AddClearanceAreasPolygonsToPolysList
@@ -327,14 +341,14 @@ public:
     int Fill_Zone( PCB_EDIT_FRAME* frame, wxDC* DC, bool verbose = true );
 
     /**
-     * Function Fill_Zone_Areas_With_Segments
+     * Function FillZoneAreasWithSegments
      *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
      * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
      * all intersecting points with the horizontal infinite line and polygons to fill are calculated
      * a list of SEGZONE items is built, line per line
      * @return number of segments created
      */
-    int Fill_Zone_Areas_With_Segments();
+    int FillZoneAreasWithSegments();
 
     /**
      * Function UnFill
@@ -554,23 +568,10 @@ public:
 #endif
 
 
-    CPolyLine*            m_Poly;                           // outlines
-
-    // For corner moving, corner index to drag, or -1 if no selection.
-    int                   m_CornerSelection;
-
-    int                   utility;                // flags used in polygon calculations
-
-    /* set of segments used to fill area, when fill zone by segment is used.
-     *  ( m_FillMode == 1 )
-     *  in this case segments have m_ZoneMinThickness width
-     */
-    std::vector <SEGMENT> m_FillSegmList;
-
-
 private:
-    wxString              m_Netname;            // Net Name
-    CPolyLine*            m_smoothedPoly;       // Corner-smoothed version of m_Poly
+    CPolyLine*            m_Poly;                ///< Outline of the zone.
+    wxString              m_Netname;             ///< Name of the net assigned to the zone.
+    CPolyLine*            m_smoothedPoly;        // Corner-smoothed version of m_Poly
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;
 
@@ -612,6 +613,17 @@ private:
 
     /// How to fill areas: 0 => use filled polygons, 1 => fill with segments.
     int                   m_FillMode;
+
+    /// The index of the corner being moved or -1 if no corner is selected.
+    int                   m_CornerSelection;
+
+    int                   utility;                ///< Flags used in polygon calculations.
+
+
+    /** Segments used to fill the zone (#m_FillMode ==1 ), when fill zone by segment is used.
+     *  In this case the segments have #m_ZoneMinThickness width.
+     */
+    std::vector <SEGMENT> m_FillSegmList;
 
     /* set of filled polygons used to draw a zone as a filled area.
      * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole

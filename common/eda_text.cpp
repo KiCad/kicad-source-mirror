@@ -36,10 +36,8 @@
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
 #include <class_board_item.h>
-#define MILS_TO_IU( x )     ( x * IU_PER_MILS );
 #elif defined( EESCHEMA )
 #include <sch_item_struct.h>
-#define MILS_TO_IU( x )     ( x )
 #else
 #error "Cannot resolve units formatting due to no definition of EESCHEMA or PCBNEW."
 #endif
@@ -346,7 +344,8 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
         aFormatter->Print( aNestLevel+1, "(effects" );
 
         if( ( m_Size.x != Mils2iu( DEFAULT_SIZE_TEXT ) )
-          || ( m_Size.y != Mils2iu( DEFAULT_SIZE_TEXT ) ) || m_Bold || m_Italic )
+          || ( m_Size.y != Mils2iu( DEFAULT_SIZE_TEXT ) )
+          || ( m_Thickness != 0 ) || m_Bold || m_Italic )
         {
             aFormatter->Print( 0, " (font" );
 

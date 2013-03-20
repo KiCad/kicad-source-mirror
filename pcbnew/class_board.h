@@ -1109,8 +1109,7 @@ public:
      * @return true if changes are made
      * Also sets areas->utility1 flags if areas are modified
      */
-    bool NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
-                               ZONE_CONTAINER* aCurrArea );
+    bool NormalizeAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList, ZONE_CONTAINER* aCurrArea );
 
     /**
      * Function OnAreaPolygonModified
@@ -1136,8 +1135,8 @@ public:
      * @return true if some areas modified
      */
     bool CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList,
-                              int                aNetCode,
-                              bool               aUseUtility );
+                               int                aNetCode,
+                               bool               aUseUtility );
 
     /**
      * Function RemoveArea

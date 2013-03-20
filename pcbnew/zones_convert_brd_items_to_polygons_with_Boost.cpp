@@ -437,7 +437,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
     // Remove insulated islands:
     if( GetNet() > 0 )
-        Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+        TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
 
     // Now we remove all unused thermal stubs.
     cornerBufferPolysToSubstract.clear();
@@ -462,7 +462,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         CopyPolygonsFromKiPolygonListToFilledPolysList( polyset_zone_solid_areas );
 
         if( GetNet() > 0 )
-            Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
+            TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
     }
 
     cornerBufferPolysToSubstract.clear();
