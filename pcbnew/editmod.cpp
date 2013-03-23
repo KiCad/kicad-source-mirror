@@ -4,12 +4,11 @@
 /************************************************/
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
+#include <class_drawpanel.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <module_editor_frame.h>
-#include <trigo.h>
 #include <3d_viewer.h>
 
 #include <class_module.h>
@@ -34,7 +33,7 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
     // Raising an Exception - Fixes #764678
     DIALOG_MODULE_BOARD_EDITOR* dialog = new DIALOG_MODULE_BOARD_EDITOR( this, Module, NULL );
 #endif
-    
+
     int retvalue = dialog->ShowModal(); /* retvalue =
                                          *  -1 if abort,
                                          *  0 if exchange module,
@@ -65,58 +64,6 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 }
 
 
-/*
- * Move the footprint anchor position to the current cursor position.
- */
-void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* aModule )
-{
-    wxPoint   moveVector;
-
-    if( aModule == NULL )
-        return;
-
-    moveVector = aModule->GetPosition() - GetScreen()->GetCrossHairPosition();
-
-    aModule->SetPosition( GetScreen()->GetCrossHairPosition() );
-
-    /* Update the relative coordinates:
-     * The coordinates are relative to the anchor point.
-     * Calculate deltaX and deltaY from the anchor. */
-    RotatePoint( &moveVector, -aModule->GetOrientation() );
-
-    // Update the pad coordinates.
-    for( D_PAD* pad = (D_PAD*) aModule->Pads();  pad;  pad = pad->Next() )
-    {
-        pad->SetPos0( pad->GetPos0() + moveVector );
-    }
-
-    // Update the draw element coordinates.
-    for( EDA_ITEM* item = aModule->GraphicalItems();  item;  item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_EDGE_T:
-            #undef STRUCT
-            #define STRUCT ( (EDGE_MODULE*) item )
-            STRUCT->m_Start0 += moveVector;
-            STRUCT->m_End0   += moveVector;
-            break;
-
-        case PCB_MODULE_TEXT_T:
-            #undef STRUCT
-            #define STRUCT ( (TEXTE_MODULE*) item )
-            STRUCT->SetPos0( STRUCT->GetPos0() + moveVector );
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    aModule->CalculateBoundingBox();
-}
-
-
 void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
 {
     if( Item == NULL )
@@ -134,13 +81,13 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
 
         if( text->GetType() == TEXT_is_REFERENCE )
         {
-            DisplayError( this, _( "Text is REFERENCE!" ) );
+            DisplayError( this, _( "Cannot delete REFERENCE!" ) );
             break;
         }
 
         if( text->GetType() == TEXT_is_VALUE )
         {
-            DisplayError( this, _( "Text is VALUE!" ) );
+            DisplayError( this, _( "Cannot delete VALUE!" ) );
             break;
         }
 
@@ -159,8 +106,8 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
     default:
     {
         wxString Line;
-        Line.Printf( wxT( " Remove: draw item type %d unknown." ), Item->Type() );
-        DisplayError( this, Line );
+        Line.Printf( wxT( " RemoveStruct: item type %d unknown." ), Item->Type() );
+        wxMessageBox( Line );
     }
     break;
     }
