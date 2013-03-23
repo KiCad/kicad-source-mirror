@@ -921,6 +921,63 @@ void MODULE::SetPosition( const wxPoint& newpos )
     CalculateBoundingBox();
 }
 
+void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
+{
+    /* Move the reference point of the footprint
+     * the footprints elements (pads, outlines, edges .. ) are moved
+     * but:
+     * - the footprint position is not modified.
+     * - the relative (local) coordinates of these items are modified
+     */
+
+    wxPoint footprintPos = GetPosition();
+
+    /* Update the relative coordinates:
+     * The coordinates are relative to the anchor point.
+     * Calculate deltaX and deltaY from the anchor. */
+    wxPoint moveVector = aMoveVector;
+    RotatePoint( &moveVector, -GetOrientation() );
+
+    // Update of the reference and value.
+    m_Reference->SetPos0( m_Reference->GetPos0() + moveVector );
+    m_Reference->SetDrawCoord();
+    m_Value->SetPos0( m_Value->GetPos0() + moveVector );
+    m_Value->SetDrawCoord();
+
+    // Update the pad local coordinates.
+    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    {
+        pad->SetPos0( pad->GetPos0() + moveVector );
+        pad->SetPosition( pad->GetPos0() + footprintPos );
+    }
+
+    // Update the draw element coordinates.
+    for( EDA_ITEM* item = GraphicalItems(); item; item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_EDGE_T:
+            #undef STRUCT
+            #define STRUCT ( (EDGE_MODULE*) item )
+            STRUCT->m_Start0 += moveVector;
+            STRUCT->m_End0   += moveVector;
+            STRUCT->SetDrawCoord();
+            break;
+
+        case PCB_MODULE_TEXT_T:
+            #undef STRUCT
+            #define STRUCT ( (TEXTE_MODULE*) item )
+            STRUCT->SetPos0( STRUCT->GetPos0() + moveVector );
+            STRUCT->SetDrawCoord();
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    CalculateBoundingBox();
+}
 
 void MODULE::SetOrientation( double newangle )
 {

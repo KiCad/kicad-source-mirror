@@ -163,6 +163,19 @@ public:
     void Flip( const wxPoint& aCentre );
 
     /**
+     * Function MoveAnchorPosition
+     * Move the reference point of the footprint
+     * It looks like a move footprint:
+     * the footprints elements (pads, outlines, edges .. ) are moved
+     * However:
+     * - the footprint position is not modified.
+     * - the relative (local) coordinates of these items are modified
+     * (a move footprint does not change these local coordinates,
+     * but changes the footprint position)
+     */
+    void MoveAnchorPosition( const wxPoint& aMoveVector );
+
+    /**
      * function IsFlipped
      * @return true if the module is flipped, i.e. on the back side of the board
      */

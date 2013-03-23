@@ -225,7 +225,6 @@ public:
 
 
     // Footprint edition
-    void Place_Ancre( MODULE* module );
     void RemoveStruct( EDA_ITEM* Item );
 
     /**

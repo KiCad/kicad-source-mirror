@@ -14,7 +14,6 @@
 #include <class_edge_mod.h>
 
 #include <pcbnew.h>
-//#include <protos.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <module_editor_frame.h>
@@ -112,7 +111,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             }
             else
             {
-                DisplayError( this, wxT( "ProcessCommand error: item flags error" ) );
+                wxMessageBox( wxT( "ProcessCommand error: unknown shape" ) );
             }
         }
         break;
@@ -140,13 +139,15 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             || (module->GetFlags() != 0) )
             break;
 
-        module->ClearFlags();
         SaveCopyInUndoList( module, UR_MODEDIT );
-        Place_Ancre( module );      // set the new relatives internal coordinates of items
-        RedrawScreen( wxPoint( 0, 0 ), true );
 
-        // Replace the module in position 0, to recalculate absolutes coordinates of items
-        module->SetPosition( wxPoint( 0, 0 ) );
+        // set the new relative internal local coordinates of footprint items
+        wxPoint moveVector = module->GetPosition() -
+                             GetScreen()->GetCrossHairPosition();
+        module->MoveAnchorPosition( moveVector );
+
+        // Usually, we do not need to change twice the anchor position,
+        // so deselect the active tool
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         SetCurItem( NULL );
         m_canvas->Refresh();
