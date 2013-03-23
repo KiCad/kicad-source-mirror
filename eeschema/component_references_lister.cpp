@@ -800,7 +800,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
                         GetChars( componentFlatList[ii].GetRef() ),
                         componentFlatList[ii].m_NumRef,
                         componentFlatList[ii].m_Unit,
-                        GetChars( componentFlatList[ii].m_Value-GetText() ),
+                        GetChars( componentFlatList[ii].m_Value->GetText() ),
                         GetChars( componentFlatList[next].GetRef() ),
                         componentFlatList[next].m_NumRef,
                         componentFlatList[next].m_Unit,
