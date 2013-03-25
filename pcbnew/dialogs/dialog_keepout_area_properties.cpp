@@ -149,13 +149,11 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     m_LayerSelectionCtrl->InsertColumn( 0, col0 );
     // Build copper layer list and append to layer widget
     int layerCount = board->GetCopperLayerCount();
-    int layerNumber, itemIndex;
-    EDA_COLOR_T layerColor;
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
     for( int ii = 0; ii < layerCount; ii++ )
     {
-        layerNumber = LAYER_N_BACK;
+        int layerNumber = LAYER_N_BACK;
 
         if( layerCount <= 1 || ii < layerCount - 1 )
             layerNumber = ii;
@@ -165,9 +163,9 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
         m_LayerId.insert( m_LayerId.begin(), layerNumber );
 
         msg = board->GetLayerName( layerNumber );
-        layerColor = board->GetLayerColor( layerNumber );
+        EDA_COLOR_T layerColor = board->GetLayerColor( layerNumber );
         imageList->Add( makeLayerBitmap( layerColor ) );
-        itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
+        int itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
 
         if( m_zonesettings.m_CurrentZone_Layer == layerNumber )
             m_LayerSelectionCtrl->Select( itemIndex );
