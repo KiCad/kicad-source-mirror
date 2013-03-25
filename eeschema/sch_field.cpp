@@ -90,7 +90,7 @@ EDA_ITEM* SCH_FIELD::Clone() const
 }
 
 
-const wxString SCH_FIELD::GetText() const
+const wxString SCH_FIELD::GetFullyQualifiedText() const
 {
     wxString text = m_Text;
 
@@ -194,7 +194,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
             color = ReturnLayerColor( LAYER_FIELDS );
     }
 
-    DrawGraphicText( panel, DC, textpos, color, GetText(), orient, m_Size,
+    DrawGraphicText( panel, DC, textpos, color, GetFullyQualifiedText(), orient, m_Size,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                      LineWidth, m_Italic, m_Bold );
 
@@ -387,7 +387,7 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
 {
     bool match;
-    wxString text = GetText();
+    wxString text = GetFullyQualifiedText();
 
     if( ((m_id > VALUE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS))
         || ((m_id == REFERENCE) && !(aSearchData.GetFlags() & FR_REPLACE_REFERENCES)) )
@@ -427,7 +427,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     bool isReplaced;
-    wxString text = GetText();
+    wxString text = GetFullyQualifiedText();
 
     if( m_id == REFERENCE && aAuxData != NULL )
     {
