@@ -246,9 +246,9 @@ void DIALOG_COPPER_ZONE::initDialog()
         m_settings.m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF ? 1 : 0 );
 
     // Create one column in m_LayerSelectionCtrl
-    wxListItem col0;
-    col0.SetId( 0 );
-    m_LayerSelectionCtrl->InsertColumn( 0, col0 );
+    wxListItem column0;
+    column0.SetId( 0 );
+    m_LayerSelectionCtrl->InsertColumn( 0, column0 );
     // Build copper layer list and append to layer widget
     int layerCount = board->GetCopperLayerCount();
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
@@ -272,6 +272,8 @@ void DIALOG_COPPER_ZONE::initDialog()
         if( m_settings.m_CurrentZone_Layer == layerNumber )
             m_LayerSelectionCtrl->Select( itemIndex );
     }
+
+    m_LayerSelectionCtrl->SetColumnWidth( -1, wxLIST_AUTOSIZE);
 
     wxString netNameDoNotShowFilter = wxT( "N-*" );
     if( m_Config )
