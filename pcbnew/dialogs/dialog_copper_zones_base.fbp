@@ -42,7 +42,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_COPPER_ZONE_BASE</property>
             <property name="pos"></property>
-            <property name="size">567,500</property>
+            <property name="size">567,443</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Copper Zone Properties</property>
@@ -103,7 +103,7 @@
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">m_layerSizer</property>
@@ -194,7 +194,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxRIGHT</property>
+                                    <property name="flag">wxRIGHT</property>
                                     <property name="proportion">1</property>
                                     <object class="wxListCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -241,7 +241,7 @@
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
-                                        <property name="style">wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL</property>
+                                        <property name="style">wxLC_ALIGN_LEFT|wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL</property>
                                         <property name="subclass">wxListView; </property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
@@ -305,7 +305,7 @@
                             <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
-                                <property name="name">bSizer7</property>
+                                <property name="name">bSizerNets</property>
                                 <property name="orient">wxVERTICAL</property>
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="0">

@@ -32,6 +32,7 @@ class wxListView;
 
 ///////////////////////////////////////////////////////////////////////////
 
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,6 +42,7 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 		
 		// Private event handlers
+		void _wxFB_OnSize( wxSizeEvent& event ){ OnSize( event ); }
 		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
 		void _wxFB_OnOkClick( wxCommandEvent& event ){ OnOkClick( event ); }
 		
@@ -60,13 +62,14 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Keepout Area Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 308,338 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER ); 
+		DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Keepout Area Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 358,338 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER ); 
 		~DIALOG_KEEPOUT_AREA_PROPERTIES_BASE();
 	
 };
