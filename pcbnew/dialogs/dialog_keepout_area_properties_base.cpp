@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -40,23 +40,21 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* m_OutilinesBoxOpt;
-	m_OutilinesBoxOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Outlines Options:") ), wxVERTICAL );
+	m_staticTextprops = new wxStaticText( this, wxID_ANY, _("Properties:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextprops->Wrap( -1 );
+	bSizerRight->Add( m_staticTextprops, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_OrientEdgesOptChoices[] = { _("Any"), _("H, V and 45 deg") };
 	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
 	m_OrientEdgesOpt = new wxRadioBox( this, wxID_ANY, _("Zone Edges Orient"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_OrientEdgesOpt->SetSelection( 0 );
-	m_OutilinesBoxOpt->Add( m_OrientEdgesOpt, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizerRight->Add( m_OrientEdgesOpt, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched Outline"), _("Full Hatched") };
 	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
 	m_OutlineAppearanceCtrl = new wxRadioBox( this, wxID_ANY, _("Outlines Appearence"), wxDefaultPosition, wxDefaultSize, m_OutlineAppearanceCtrlNChoices, m_OutlineAppearanceCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_OutlineAppearanceCtrl->SetSelection( 1 );
-	m_OutilinesBoxOpt->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
-	
-	
-	bSizerRight->Add( m_OutilinesBoxOpt, 0, wxEXPAND|wxALL, 5 );
+	bSizerRight->Add( m_OutlineAppearanceCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerCutoutOpts;
 	sbSizerCutoutOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Keepout Options:") ), wxVERTICAL );
