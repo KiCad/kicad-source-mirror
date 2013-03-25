@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+  * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,12 +55,12 @@ public:
     DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings );
 
 private:
-    PCB_BASE_FRAME* m_Parent;
-    wxConfig*       m_Config;               ///< Current config
+    PCB_BASE_FRAME* m_parent;
+    wxConfig*       m_config;               ///< Current config
     ZONE_SETTINGS   m_zonesettings;
     ZONE_SETTINGS*  m_ptr;
 
-    std::vector<int> m_LayerId;             ///< Handle the real layer number from layer
+    std::vector<int> m_layerId;             ///< Handle the real layer number from layer
                                             ///< name position in m_LayerSelectionCtrl
 
     /**
@@ -71,7 +71,6 @@ private:
 
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
-    void OnSize( wxSizeEvent& event );
 
     /**
      * Function AcceptOptionsForKeepOut
@@ -105,8 +104,8 @@ ZONE_EDIT_T InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSe
 DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings ) :
     DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( aParent )
 {
-    m_Parent = aParent;
-    m_Config = wxGetApp().GetSettings();
+    m_parent = aParent;
+    m_config = wxGetApp().GetSettings();
 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
@@ -116,12 +115,13 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
     initDialog();
 
     GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 
 void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 {
-    BOARD* board = m_Parent->GetBoard();
+    BOARD* board = m_parent->GetBoard();
 
     wxString msg;
 
@@ -144,34 +144,34 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     }
 
     // Create one column in m_LayerSelectionCtrl
-    wxListItem col0;
-    col0.SetId( 0 );
-    m_LayerSelectionCtrl->InsertColumn( 0, col0 );
+    wxListItem column0;
+    column0.SetId( 0 );
+    m_LayerSelectionCtrl->InsertColumn( 0, column0 );
     // Build copper layer list and append to layer widget
     int layerCount = board->GetCopperLayerCount();
-    int layerNumber, itemIndex;
-    EDA_COLOR_T layerColor;
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
     for( int ii = 0; ii < layerCount; ii++ )
     {
-        layerNumber = LAYER_N_BACK;
+        int layerNumber = LAYER_N_BACK;
 
         if( layerCount <= 1 || ii < layerCount - 1 )
             layerNumber = ii;
         else if( ii == layerCount - 1 )
             layerNumber = LAYER_N_FRONT;
 
-        m_LayerId.insert( m_LayerId.begin(), layerNumber );
+        m_layerId.insert( m_layerId.begin(), layerNumber );
 
         msg = board->GetLayerName( layerNumber );
-        layerColor = board->GetLayerColor( layerNumber );
+        EDA_COLOR_T layerColor = board->GetLayerColor( layerNumber );
         imageList->Add( makeLayerBitmap( layerColor ) );
-        itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
+        int itemIndex = m_LayerSelectionCtrl->InsertItem( 0, msg, ii );
 
         if( m_zonesettings.m_CurrentZone_Layer == layerNumber )
             m_LayerSelectionCtrl->Select( itemIndex );
     }
+
+    m_LayerSelectionCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE);
 
     // Init keepout parameters:
     m_cbTracksCtrl->SetValue( m_zonesettings.GetDoNotAllowTracks() );
@@ -191,16 +191,6 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::OnOkClick( wxCommandEvent& event )
         *m_ptr = m_zonesettings;
         EndModal( ZONE_OK );
     }
-}
-
-
-void DIALOG_KEEPOUT_AREA_PROPERTIES::OnSize( wxSizeEvent& event )
-{
-    Layout();
-
-    // Set layer list column width to widget width minus a few pixels
-    m_LayerSelectionCtrl->SetColumnWidth( 0, m_LayerSelectionCtrl->GetSize().x - 5 );
-    event.Skip();
 }
 
 bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
@@ -230,7 +220,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
         return false;
     }
 
-    m_zonesettings.m_CurrentZone_Layer = m_LayerId[ii];
+    m_zonesettings.m_CurrentZone_Layer = m_layerId[ii];
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:
@@ -246,9 +236,9 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
         break;
     }
 
-    if( m_Config )
+    if( m_config )
     {
-        m_Config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
+        m_config->Write( ZONE_NET_OUTLINES_HATCH_OPTION_KEY,
                          (long) m_zonesettings.m_Zone_HatchingStyle );
     }
 
