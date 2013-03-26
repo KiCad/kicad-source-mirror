@@ -2348,9 +2348,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 BIU     y = biuParse( data, &data );
 
                 bool    end_contour = intParse( data, &data );  // end_countour was a bool when file saved, so '0' or '1' here
-                int     utility     = intParse( data );
+                int     cornerUtilityFlg  = intParse( data );
 
-               polysList.push_back( CPolyPt( x, y, end_contour, utility ) );
+               polysList.push_back( CPolyPt( x, y, end_contour, cornerUtilityFlg ) );
             }
             zc->AddFilledPolysList( polysList );
         }

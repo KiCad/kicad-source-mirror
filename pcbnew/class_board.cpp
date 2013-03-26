@@ -2272,9 +2272,9 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
 
     // mark all areas as unmodified except this one, if modified
     for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
-        m_ZoneDescriptorList[ia]->SetFlags( 0 );
+        m_ZoneDescriptorList[ia]->SetLocalFlags( 0 );
 
-    aCurrArea->SetFlags( 1 );
+    aCurrArea->SetLocalFlags( 1 );
 
     if( curr_polygon->IsPolygonSelfIntersecting() )
     {
@@ -2299,7 +2299,7 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
                 delete NewArea->Outline();
                 NewArea->SetOutline( new_p );
                 NewArea->Outline()->Hatch();
-                NewArea->SetFlags( 1 );
+                NewArea->SetLocalFlags( 1 );
             }
         }
 

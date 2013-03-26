@@ -1107,7 +1107,6 @@ public:
      * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new created areas pickers
      * @param aCurrArea = the zone to process
      * @return true if changes are made
-     * Also sets areas->utility1 flags if areas are modified
      */
     bool NormalizeAreaPolygon( PICKED_ITEMS_LIST* aNewZonesList, ZONE_CONTAINER* aCurrArea );
 
@@ -1130,13 +1129,13 @@ public:
      * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
      *                       in undo commands can be NULL
      * @param aNetCode = net to consider
-     * @param aUseUtility : if true, don't check areas if both utility flags are 0
-     * Sets utility flag = 1 for any areas modified
+     * @param aUseLocalFlags : if true, don't check areas if both local flags are 0
+     * Sets local flag = 1 for any areas modified
      * @return true if some areas modified
      */
     bool CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList,
                                int                aNetCode,
-                               bool               aUseUtility );
+                               bool               aUseLocalFlags );
 
     /**
      * Function RemoveArea
