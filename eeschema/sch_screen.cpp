@@ -1084,10 +1084,10 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
              */
             SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
             if( fpfield->GetText().IsEmpty()
-              && ( fpfield->GetPosition() == component->GetPosition() ) )
+              && ( fpfield->GetTextPosition() == component->GetPosition() ) )
             {
                 fpfield->SetOrientation( component->GetField( VALUE )->GetOrientation() );
-                fpfield->SetPosition( component->GetField( VALUE )->GetPosition() );
+                fpfield->SetTextPosition( component->GetField( VALUE )->GetTextPosition() );
                 fpfield->SetSize( component->GetField( VALUE )->GetSize() );
 
                 if( fpfield->GetOrientation() == 0 )

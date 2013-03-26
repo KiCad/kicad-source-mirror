@@ -233,7 +233,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
-        m_FieldsBuf[i].SetPosition( m_FieldsBuf[i].GetPosition() + m_Cmp->m_Pos );
+        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() + m_Cmp->m_Pos );
     }
 
     // Delete any fields with no name before we copy all of m_FieldsBuf back into the component.
@@ -458,7 +458,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         m_FieldsBuf.push_back(  aComponent->m_Fields[i] );
 
         // make the editable field position relative to the component
-        m_FieldsBuf[i].SetPosition( m_FieldsBuf[i].GetPosition() - m_Cmp->m_Pos );
+        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() - m_Cmp->m_Pos );
     }
 
     // Add template fieldnames:
@@ -491,7 +491,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
             fld = *schField;
 
             // make the editable field position relative to the component
-            fld.SetPosition( fld.GetPosition() - m_Cmp->m_Pos );
+            fld.SetTextPosition( fld.GetTextPosition() - m_Cmp->m_Pos );
         }
 
         m_FieldsBuf.push_back( fld );
@@ -510,7 +510,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
             m_FieldsBuf.push_back( *cmp );
 
             // make the editable field position relative to the component
-            m_FieldsBuf[newNdx].SetPosition( m_FieldsBuf[newNdx].GetPosition() - m_Cmp->m_Pos );
+            m_FieldsBuf[newNdx].SetTextPosition( m_FieldsBuf[newNdx].GetTextPosition() -
+                                                 m_Cmp->m_Pos );
         }
     }
 
@@ -644,7 +645,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
 
-    wxPoint coord = field.GetPosition();
+    wxPoint coord = field.GetTextPosition();
     wxPoint zero  = -m_Cmp->m_Pos;  // relative zero
 
     // If the field value is empty and the position is at relative zero, we
@@ -655,10 +656,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     {
         rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].GetOrientation() == TEXT_ORIENT_VERT );
 
-        coord.x = m_FieldsBuf[REFERENCE].GetPosition().x
+        coord.x = m_FieldsBuf[REFERENCE].GetTextPosition().x
             + ( fieldNdx - MANDATORY_FIELDS + 1 ) * 100;
 
-        coord.y = m_FieldsBuf[REFERENCE].GetPosition().y
+        coord.y = m_FieldsBuf[REFERENCE].GetTextPosition().y
             + ( fieldNdx - MANDATORY_FIELDS + 1 ) * 100;
 
         // coord can compute negative if field is < MANDATORY_FIELDS, e.g. FOOTPRINT.
@@ -844,11 +845,11 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     // Perhaps the FOOTPRINT field should also be considered,
     // but for most of components it is not set in library
     LIB_FIELD& refField = entry->GetReferenceField();
-    m_Cmp->GetField( REFERENCE )->SetPosition( refField.GetPosition() + m_Cmp->m_Pos );
+    m_Cmp->GetField( REFERENCE )->SetTextPosition( refField.GetTextPosition() + m_Cmp->m_Pos );
     m_Cmp->GetField( REFERENCE )->ImportValues( refField );
 
     LIB_FIELD& valField = entry->GetValueField();
-    m_Cmp->GetField( VALUE )->SetPosition( valField.GetPosition() + m_Cmp->m_Pos );
+    m_Cmp->GetField( VALUE )->SetTextPosition( valField.GetTextPosition() + m_Cmp->m_Pos );
     m_Cmp->GetField( VALUE )->ImportValues( valField );
 
     m_Cmp->SetOrientation( CMP_NORMAL );
