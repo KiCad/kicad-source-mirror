@@ -818,15 +818,13 @@ static void export_vrml_zones( BOARD* pcb )
             {
                 CPolyPt* endcorner = &zone->m_FilledPolysList[ic];
 
-                if( begincorner->utility == 0 ) // Draw only basic outlines, not extra segments
-                    export_vrml_line( layer, begincorner->x, begincorner->y,
-                                      endcorner->x, endcorner->y, width, 1 );
+                export_vrml_line( layer, begincorner->x, begincorner->y,
+                                  endcorner->x, endcorner->y, width, 1 );
 
                 if( (endcorner->end_contour) || (ic == imax) )  // the last corner of a filled area is found: draw it
                 {
-                    if( endcorner->utility == 0 )               // Draw only basic outlines, not extra segments
-                        export_vrml_line( layer, endcorner->x, endcorner->y,
-                                          firstcorner->x, firstcorner->y, width, 1 );
+                    export_vrml_line( layer, endcorner->x, endcorner->y,
+                                      firstcorner->x, firstcorner->y, width, 1 );
                     ic++;
 
                     // A new contour?

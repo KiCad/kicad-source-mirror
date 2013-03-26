@@ -66,7 +66,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     SetDoNotAllowVias( true );                  // has meaning only if m_isKeepout == true
     SetDoNotAllowTracks( true );                // has meaning only if m_isKeepout == true
     m_cornerRadius = 0;
-    utility    = 0;                             // flags used in polygon calculations
+    SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly     = new CPolyLine();               // Outlines
     aBoard->GetZoneSettings().ExportSetting( *this );
 }
@@ -101,8 +101,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_cornerSmoothingType = aZone.m_cornerSmoothingType;
     m_cornerRadius = aZone.m_cornerRadius;
 
-
-    utility    = aZone.utility;
+    SetLocalFlags( aZone.GetLocalFlags() );
 }
 
 

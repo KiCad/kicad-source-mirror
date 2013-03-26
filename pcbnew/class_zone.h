@@ -242,8 +242,8 @@ public:
     int GetSelectedCorner() const { return m_CornerSelection; }
     void SetSelectedCorner( int aCorner ) { m_CornerSelection = aCorner; }
 
-    int GetFlags() const { return utility; }
-    void SetFlags( int aFlags ) { utility = aFlags; }
+    int GetLocalFlags() const { return m_localFlgs; }
+    void SetLocalFlags( int aFlags ) { m_localFlgs = aFlags; }
 
     std::vector <SEGMENT>& FillSegments() { return m_FillSegmList; }
     const std::vector <SEGMENT>& FillSegments() const { return m_FillSegmList; }
@@ -617,7 +617,7 @@ private:
     /// The index of the corner being moved or -1 if no corner is selected.
     int                   m_CornerSelection;
 
-    int                   utility;                ///< Flags used in polygon calculations.
+    int                   m_localFlgs;                ///< Flags used in polygon calculations.
 
 
     /** Segments used to fill the zone (#m_FillMode ==1 ), when fill zone by segment is used.

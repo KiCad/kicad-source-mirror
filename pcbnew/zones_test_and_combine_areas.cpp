@@ -86,7 +86,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
 
 
 bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
-                                  bool aUseUtility )
+                                  bool aUseLocalFlags )
 {
     if( m_ZoneDescriptorList.size() <= 1 )
         return false;
@@ -127,7 +127,8 @@ bool BOARD::CombineAllAreasInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
                    || b1.bottom > b2.top || b1.top < b2.bottom ) )
             {
                 // check area2 against curr_area
-                if( curr_area->GetFlags() || area2->GetFlags() || aUseUtility == false )
+                if( curr_area->GetLocalFlags() || area2->GetLocalFlags()
+                    || aUseLocalFlags == false )
                 {
                     bool ret = TestAreaIntersection( curr_area, area2 );
 
@@ -350,7 +351,7 @@ bool BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_
 
     RemoveArea( aDeletedList, area_to_combine );
 
-    area_ref->SetFlags( 1 );
+    area_ref->SetLocalFlags( 1 );
     area_ref->Outline()->Hatch();
 
     return true;
