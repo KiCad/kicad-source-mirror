@@ -13,7 +13,6 @@
 #define SIZETEXT         60             // worksheet text size
 #define SIZETEXT_REF     50             // worksheet frame reference text size
 #define PAS_REF          2000           // no reference markings on worksheet frame
-#define TEXT_VTAB_HEIGHT (SIZETEXT * 2)
 
 #if defined(KICAD_GOST)
 
