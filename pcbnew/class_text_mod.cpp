@@ -61,8 +61,9 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
         m_Type = TEXT_is_DIVERS;
 
     m_NoShow = false;
-    m_Size.x = m_Size.y = 400;
-    m_Thickness  = 120;   /* Set default dimension to a reasonable value. */
+
+    // Set text tickness to a default value
+    m_Thickness  = Millimeter2iu( 0.15 );
 
     SetLayer( SILKSCREEN_N_FRONT );
 
