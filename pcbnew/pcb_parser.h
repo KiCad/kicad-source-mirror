@@ -176,9 +176,10 @@ class PCB_PARSER : public PCB_LEXER
 
     inline int parseBoardUnits() throw( IO_ERROR )
     {
-        // There should be no rounding issues here, since the values in the file are in mm
-        // and get converted to nano-meters.  This product should be an integer, exactly.
-        return int( parseDouble() * IU_PER_MM );
+        // There should be no major rounding issues here,
+        // since the values in the file are in mm
+        // and get converted to nano-meters.
+        return KiROUND( parseDouble() * IU_PER_MM );
     }
 
     inline int parseBoardUnits( const char* aExpected ) throw( PARSE_ERROR )
