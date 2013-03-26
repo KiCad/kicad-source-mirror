@@ -661,7 +661,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
 
-    wxPoint coord = field.GetPosition();
+    wxPoint coord = field.GetTextPosition();
     wxPoint zero;
 
     // If the field value is empty and the position is at relative zero, we set the
@@ -672,8 +672,10 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     {
         rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].GetOrientation() == TEXT_ORIENT_VERT );
 
-        coord.x = m_FieldsBuf[REFERENCE].GetPosition().x + (fieldNdx - MANDATORY_FIELDS + 1) * 100;
-        coord.y = m_FieldsBuf[REFERENCE].GetPosition().y + (fieldNdx - MANDATORY_FIELDS + 1) * 100;
+        coord.x = m_FieldsBuf[REFERENCE].GetTextPosition().x +
+                  (fieldNdx - MANDATORY_FIELDS + 1) * 100;
+        coord.y = m_FieldsBuf[REFERENCE].GetTextPosition().y +
+                  (fieldNdx - MANDATORY_FIELDS + 1) * 100;
 
         // coord can compute negative if field is < MANDATORY_FIELDS, e.g. FOOTPRINT.
         // That is ok, we basically don't want all the new empty fields on
@@ -761,7 +763,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     // and the screen axis is top to bottom: we must change the y coord sign for editing
     NEGATE( pos.y );
 
-    field.SetPosition( pos );
+    field.SetTextPosition( pos );
 
     return true;
 }
