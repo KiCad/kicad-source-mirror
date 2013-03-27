@@ -302,17 +302,18 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
 #ifdef __WINDOWS__
     fullpath.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
+
     fullfilename = EDA_FileSelector( _( "3D Shape:" ),
                                      fullpath,
                                      wxEmptyString,
-                                     VrmlFileExtension,
-                                     wxGetTranslation( VrmlFileWildcard ),
+                                     wxEmptyString,
+                                     wxGetTranslation( Shapes3DFileWildcard ),
                                      this,
                                      wxFD_OPEN,
                                      true
                                      );
 
-    if( fullfilename == wxEmptyString )
+    if( fullfilename.IsEmpty() )
         return;
 
     wxFileName fn = fullfilename;
