@@ -155,8 +155,8 @@ class PCB_PARSER : public PCB_LEXER
 
     /**
      * Function parseDouble
-     * parses the current token as an ASCII numeric string with possible leading whitespace into
-     * a double precision floating point number.
+     * parses the current token as an ASCII numeric string with possible leading
+     * whitespace into a double precision floating point number.
      *
      * @throw IO_ERROR if an error occurs attempting to convert the current token.
      * @return The result of the parsed token.
@@ -176,9 +176,12 @@ class PCB_PARSER : public PCB_LEXER
 
     inline int parseBoardUnits() throw( IO_ERROR )
     {
-        // There should be no major rounding issues here,
-        // since the values in the file are in mm
-        // and get converted to nano-meters.
+        // There should be no major rounding issues here, since the values in
+        // the file are in mm and get converted to nano-meters.
+        // See test program tools/test-nm-biu-to-ascii-mm-round-tripping.cpp
+        // to confirm or experiment.  Use a similar strategy in both places, here
+        // and in the test program. Make that program with:
+        // $ make test-nm-biu-to-ascii-mm-round-tripping
         return KiROUND( parseDouble() * IU_PER_MM );
     }
 
