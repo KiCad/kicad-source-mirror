@@ -609,12 +609,20 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         wxPoint pointLeftTop( pageDUMMY.GetLeftMarginMils(), pageDUMMY.GetTopMarginMils() );
         wxPoint pointRightBottom( pageDUMMY.GetRightMarginMils(), pageDUMMY.GetBottomMarginMils() );
 
+        // Get page type
+        int idx = m_paperSizeComboBox->GetSelection();
+
+        if( idx < 0 )
+            idx = 0;
+
+        wxString paperType = m_pageFmt[idx].Left( m_pageFmt[idx].Index( wxT( " " ) ) );
+
         // Draw layout preview.
         wxString emptyString;
         GRResetPenAndBrush( ( wxDC* ) &memDC );
 
         m_Parent->TraceWorkSheet( (wxDC*) &memDC, dummySize, pointLeftTop, pointRightBottom,
-                                  emptyString, emptyString, m_tb, m_Screen->m_NumberOfScreens,
+                                  paperType, emptyString, m_tb, m_Screen->m_NumberOfScreens,
                                   m_Screen->m_ScreenNumber, 1, appScale, LIGHTGRAY, RED );
 
         memDC.SelectObject( wxNullBitmap );

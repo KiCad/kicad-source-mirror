@@ -44,7 +44,11 @@
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_JUNCTION_T )
 {
+#if defined(KICAD_GOST)
+#define DRAWJUNCTION_DIAMETER 50   /* Diameter of junction symbol between wires by GOST*/
+#else
 #define DRAWJUNCTION_DIAMETER 32   /* Diameter of junction symbol between wires */
+#endif
     m_pos    = pos;
     m_Layer  = LAYER_JUNCTION;
     m_size.x = m_size.y = DRAWJUNCTION_DIAMETER;

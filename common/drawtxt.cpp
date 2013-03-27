@@ -122,7 +122,11 @@ int NegableTextLength( const wxString& aText )
     {
         if( aText[i] == '~' )
         {
-            char_count--;
+            /* '~~' draw as '~' and count as two chars */
+            if( i > 0 && aText[i - 1] == '~' )
+                i--;
+            else
+                char_count--;
         }
     }
 
@@ -160,9 +164,13 @@ int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, boo
     {
         int AsciiCode = aText[i];
 
-        if( AsciiCode == '~' ) /* Skip the negation marks */
+        /* Skip the negation marks
+         * and first '~' char of '~~'
+         * ('~~' draw as '~') */
+        if( AsciiCode == '~' )
         {
-            continue;
+            if( i > 0 && aText[i - 1] != '~' )
+                continue;
         }
 
         const char* ptcar = GetHersheyShapeDescription( AsciiCode );
@@ -406,37 +414,44 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         overbar_italic_comp = 0;
     };
 
-    int overbars = 0;       // Number of ~ seen
+    int overbars = 0;       /* Number of '~' seen (except '~~') */
     ptr = 0;   /* ptr = text index */
     while( ptr < char_count )
     {
         if( aText[ptr + overbars] == '~' )
         {
-            /* Found an overbar, adjust the pointers */
-            overbars++;
+            if( ptr + overbars + 1 < aText.length() &&
+                aText[ptr + overbars + 1] == '~' )  /* '~~' draw as '~' */
+                ptr++;  // skip first '~' char and draw second
 
-            if( overbars & 1 )      // odd overbars count
-            {
-                /* Starting the overbar */
-                overbar_pos    = current_char_pos;
-                overbar_pos.x += overbar_italic_comp;
-                overbar_pos.y -= OverbarPositionY( size_v, aWidth );
-                RotatePoint( &overbar_pos, aPos, aOrient );
-            }
             else
             {
-                /* Ending the overbar */
-                coord[0]       = overbar_pos;
-                overbar_pos    = current_char_pos;
-                overbar_pos.x += overbar_italic_comp;
-                overbar_pos.y -= OverbarPositionY( size_v, aWidth );
-                RotatePoint( &overbar_pos, aPos, aOrient );
-                coord[1] = overbar_pos;
-                /* Plot the overbar segment */
-                DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
-                                      sketch_mode, 2, coord, aCallback, aPlotter );
+                /* Found an overbar, adjust the pointers */
+                overbars++;
+
+                if( overbars & 1 )      // odd overbars count
+                {
+                    /* Starting the overbar */
+                    overbar_pos    = current_char_pos;
+                    overbar_pos.x += overbar_italic_comp;
+                    overbar_pos.y -= OverbarPositionY( size_v, aWidth );
+                    RotatePoint( &overbar_pos, aPos, aOrient );
+                }
+                else
+                {
+                    /* Ending the overbar */
+                    coord[0]       = overbar_pos;
+                    overbar_pos    = current_char_pos;
+                    overbar_pos.x += overbar_italic_comp;
+                    overbar_pos.y -= OverbarPositionY( size_v, aWidth );
+                    RotatePoint( &overbar_pos, aPos, aOrient );
+                    coord[1] = overbar_pos;
+                    /* Plot the overbar segment */
+                    DrawGraphicTextPline( clipBox, aDC, aColor, aWidth,
+                                          sketch_mode, 2, coord, aCallback, aPlotter );
+                }
+                continue; /* Skip ~ processing */
             }
-            continue; /* Skip ~ processing */
         }
 
         AsciiCode = aText.GetChar( ptr + overbars );
