@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-23 20:11+0300\n"
-"PO-Revision-Date: 2013-03-23 20:27+0300\n"
+"POT-Creation-Date: 2013-03-27 23:58+0300\n"
+"PO-Revision-Date: 2013-03-28 00:00+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "Language: \n"
@@ -7118,8 +7118,8 @@ msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Файлы размещения посадочных мест (*.pos)|*.pos"
 
 #: common/wildcards_and_files_ext.cpp:98
-msgid "Vrml files (*.wrl)|*.wrl"
-msgstr "Файлы Vrml (*.wrl)|*.wrl"
+msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
+msgstr "Vrml и x3d файлы (*.wrl *.x3d)|*.wrl;*.x3d"
 
 #: common/eda_text.cpp:317
 msgid "Bold+Italic"
@@ -8101,40 +8101,40 @@ msgstr "Не удалось скопировать изображение в б�
 msgid "Can't save file"
 msgstr "Не удалось сохранить файл"
 
-#: pcbnew/class_text_mod.cpp:372
+#: pcbnew/class_text_mod.cpp:373
 msgid "Ref."
 msgstr "Поз."
 
-#: pcbnew/class_text_mod.cpp:393
+#: pcbnew/class_text_mod.cpp:394
 msgid "Display"
 msgstr "Показать"
 
-#: pcbnew/class_text_mod.cpp:406
+#: pcbnew/class_text_mod.cpp:407
 msgid " No"
 msgstr "Нет"
 
-#: pcbnew/class_text_mod.cpp:409
+#: pcbnew/class_text_mod.cpp:410
 msgid " Yes"
 msgstr "Да"
 
-#: pcbnew/class_text_mod.cpp:414
+#: pcbnew/class_text_mod.cpp:415
 msgid "Orient"
 msgstr "Поворот"
 
-#: pcbnew/class_text_mod.cpp:417
+#: pcbnew/class_text_mod.cpp:418
 msgid "Thickness"
 msgstr "Толщина"
 
-#: pcbnew/class_text_mod.cpp:420
+#: pcbnew/class_text_mod.cpp:421
 msgid "H Size"
 msgstr "Гориз.размер"
 
-#: pcbnew/class_text_mod.cpp:423
+#: pcbnew/class_text_mod.cpp:424
 msgid "V Size"
 msgstr "Верт.размер"
 
-#: pcbnew/class_text_mod.cpp:471
-#: pcbnew/class_text_mod.cpp:476
+#: pcbnew/class_text_mod.cpp:472
+#: pcbnew/class_text_mod.cpp:477
 msgid " of "
 msgstr " из "
 
@@ -8694,78 +8694,78 @@ msgstr "Дорожки внутри области запрета"
 msgid "Pad inside a keepout area"
 msgstr "КП внутри области запрета"
 
-#: pcbnew/class_zone.cpp:647
-#: pcbnew/class_zone.cpp:941
+#: pcbnew/class_zone.cpp:646
+#: pcbnew/class_zone.cpp:940
 msgid "Zone Outline"
 msgstr "Контур зоны"
 
-#: pcbnew/class_zone.cpp:654
-#: pcbnew/class_zone.cpp:946
+#: pcbnew/class_zone.cpp:653
+#: pcbnew/class_zone.cpp:945
 msgid "(Cutout)"
 msgstr "(очертание)"
 
-#: pcbnew/class_zone.cpp:663
+#: pcbnew/class_zone.cpp:662
 msgid "No via"
 msgstr "Без ПО"
 
-#: pcbnew/class_zone.cpp:670
+#: pcbnew/class_zone.cpp:669
 msgid "No track"
 msgstr "Без дорожек"
 
-#: pcbnew/class_zone.cpp:678
+#: pcbnew/class_zone.cpp:677
 msgid "No copper pour"
 msgstr "Без меди"
 
-#: pcbnew/class_zone.cpp:681
+#: pcbnew/class_zone.cpp:680
 msgid "Keepout"
 msgstr "Область запрета"
 
-#: pcbnew/class_zone.cpp:698
-#: pcbnew/class_zone.cpp:977
+#: pcbnew/class_zone.cpp:697
+#: pcbnew/class_zone.cpp:976
 msgid "Not Found"
 msgstr "Не найдено"
 
-#: pcbnew/class_zone.cpp:706
+#: pcbnew/class_zone.cpp:705
 msgid "NetCode"
 msgstr "Код цепи"
 
-#: pcbnew/class_zone.cpp:711
+#: pcbnew/class_zone.cpp:710
 msgid "Priority"
 msgstr "Приоритет"
 
-#: pcbnew/class_zone.cpp:715
+#: pcbnew/class_zone.cpp:714
 msgid "Non Copper Zone"
 msgstr "Не медная зона"
 
-#: pcbnew/class_zone.cpp:722
+#: pcbnew/class_zone.cpp:721
 msgid "Corners"
 msgstr "Углы"
 
-#: pcbnew/class_zone.cpp:725
+#: pcbnew/class_zone.cpp:724
 msgid "Segments"
 msgstr "Сегменты"
 
-#: pcbnew/class_zone.cpp:729
+#: pcbnew/class_zone.cpp:728
 msgid "Fill mode"
 msgstr "Режим заливки"
 
-#: pcbnew/class_zone.cpp:733
+#: pcbnew/class_zone.cpp:732
 msgid "Hatch lines"
 msgstr "Штрих.линии"
 
-#: pcbnew/class_zone.cpp:738
+#: pcbnew/class_zone.cpp:737
 msgid "Corners in DrawList"
 msgstr "Углов на изображении"
 
-#: pcbnew/class_zone.cpp:949
+#: pcbnew/class_zone.cpp:948
 msgid "(Keepout)"
 msgstr "(Область запрета)"
 
-#: pcbnew/class_zone.cpp:970
+#: pcbnew/class_zone.cpp:969
 msgid "** NO BOARD DEFINED **"
 msgstr "** ПЛАТА НЕ ОПРЕДЕЛЕНА **"
 
-#: pcbnew/class_zone.cpp:981
+#: pcbnew/class_zone.cpp:980
 msgid " on layer "
 msgstr "на слое"
 
@@ -9046,7 +9046,6 @@ msgid "Full Len"
 msgstr "Полная длина"
 
 #: pcbnew/class_track.cpp:985
-#: pcbnew/class_netinfo_item.cpp:173
 msgid "In Package"
 msgstr "В корпусе"
 
@@ -10903,23 +10902,23 @@ msgstr "Компонент [%s] заменен в библиотеке <%s>"
 msgid "Component [%s] added in  <%s>"
 msgstr "Компонент [%s] добавлен в библиотеку <%s>"
 
-#: pcbnew/class_edge_mod.cpp:248
+#: pcbnew/class_edge_mod.cpp:256
 msgid "Graphic Item"
 msgstr "Граф.элемент"
 
-#: pcbnew/class_edge_mod.cpp:252
+#: pcbnew/class_edge_mod.cpp:260
 msgid "TimeStamp"
 msgstr "Штамп"
 
-#: pcbnew/class_edge_mod.cpp:253
+#: pcbnew/class_edge_mod.cpp:261
 msgid "Mod Layer"
 msgstr "Слой мод."
 
-#: pcbnew/class_edge_mod.cpp:255
+#: pcbnew/class_edge_mod.cpp:263
 msgid "Seg Layer"
 msgstr "Слой сегм."
 
-#: pcbnew/class_edge_mod.cpp:266
+#: pcbnew/class_edge_mod.cpp:274
 msgid "Graphic"
 msgstr "Графика"
 
@@ -11571,7 +11570,6 @@ msgid "Footprint Library Browser"
 msgstr "Обзор библиотеки посадочных мест"
 
 #: pcbnew/modedit.cpp:93
-#: pcbnew/controle.cpp:204
 msgid "Selection Clarification"
 msgstr "Уточнение выбора"
 
@@ -13169,11 +13167,11 @@ msgstr "Начальная точка X"
 msgid "Start Point Y"
 msgstr "Начальная точка Y"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:220
+#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:210
 msgid "Tracks, vias and pads are allowed. The keepout is useless"
 msgstr "Дорожки, ПО и КП уже есть. Область запрета не поможет"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:229
+#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:219
 msgid "No layer selected."
 msgstr "Слой не выбран."
 
@@ -13333,7 +13331,6 @@ msgid "merge aligned track segments, and remove null segments"
 msgstr "Объединение ровных сегментов и удаление нулевых сегментов дорожек"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:32
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:113
 msgid "Delete unconnected tracks"
 msgstr "Удаление не подсоединенных дорожек"
 
@@ -13555,124 +13552,128 @@ msgstr "Выравнивание:"
 msgid "Orientation (0.1 deg):"
 msgstr "Ориентация (шаг 0.1°):"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:45
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:46
 msgid "Drill Units:"
 msgstr "Единицы сверловки:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:49
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Decimal format"
 msgstr "Десятичный формат"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:49
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Suppress leading zeros"
 msgstr "Подавлять начальные нули"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:49
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Suppress trailing zeros"
 msgstr "Подавлять завершающие нули"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:49
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Keep zeros"
 msgstr "Сохранять нули"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:51
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:52
 msgid "Zeros Format"
 msgstr "Формат нулей"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:53
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:54
 msgid "Choose EXCELLON numbers notation"
 msgstr "Выбор нотации представления чисел EXCELLON"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:58
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:60
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:59
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid "Precision"
 msgstr "Точность"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:73
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:74
 msgid "PostScript"
 msgstr "Postscript"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:75
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:76
 msgid "Drill Map File Format:"
 msgstr "Формат файла сверловки:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:77
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:78
 msgid "Creates a drill map in PS, HPGL or other formats"
 msgstr "Создать карту сверловки в PS, HPGL или другом формате"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:84
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:83
+msgid "Drill File Options:"
+msgstr "Параметры файла сверловки:"
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:85
 msgid "Mirror y axis"
 msgstr "Зеркалировать по оси Y"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:87
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:88
 msgid "Minimal header"
 msgstr "Минимальный заголовок"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:93
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
 msgid "Absolute"
 msgstr "Абсолютные"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:93
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
 msgid "Auxiliary axis"
 msgstr "Вспомогательные оси"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:95
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid "Drill Origin:"
 msgstr "Начало коорд. сверловки:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid "Choose the coordinate origin: absolute or relative to the auxiliray axis"
 msgstr "Выбор координат: абсолютно или относительно координатных осей"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:108
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:109
 msgid "Info:"
 msgstr "Инфо:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:110
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:111
 msgid "Default Vias Drill:"
 msgstr "Сверло перех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:112
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:113
 msgid "Via Drill Value"
 msgstr "Диаметр сверла перех.отв."
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:119
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:120
 msgid "Micro Vias Drill:"
 msgstr "Сверло микроперех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:121
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:122
 msgid "Micro Via Drill Value"
 msgstr "Диаметр сверла микроперех.отв."
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:129
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 msgid "Holes Count:"
 msgstr "Количество отверстий:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:131
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:132
 msgid "Plated Pads:"
 msgstr "Метал.конт.пл.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:135
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:136
 msgid "Not Plated Pads:"
 msgstr "Неметал.конт.пл.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:139
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:140
 msgid "Through Vias:"
 msgstr "Сквозные перех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:147
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:148
 msgid "Buried Vias:"
 msgstr "Глухие перех.отв.:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:166
-msgid "Drill Fille"
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:167
+msgid "Drill File"
 msgstr "Файл сверловки"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:170
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:171
 msgid "Map File"
 msgstr "Файл карты"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:173
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
 msgid "Report File"
 msgstr "Файл отчета"
 
@@ -13843,33 +13844,33 @@ msgstr "Список ошибок установок контактных пло
 msgid "Unknown netname, netname not changed"
 msgstr "Неизвестное имя цепи, изменение не выполнено"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:400
+#: pcbnew/dialogs/dialog_copper_zones.cpp:388
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
 msgstr "Зазор должен быть меньше %f\" / %f мм."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:412
+#: pcbnew/dialogs/dialog_copper_zones.cpp:400
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
 msgstr "Минимальная ширина должна быть больше %f\" / %f мм."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:451
+#: pcbnew/dialogs/dialog_copper_zones.cpp:439
 msgid "Thermal relief spoke width is smaller than the minimum width."
 msgstr "Ширина моста терморазгрузки меньше минимальной ширины."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:475
+#: pcbnew/dialogs/dialog_copper_zones.cpp:463
 msgid "No net selected."
 msgstr "Цепь не выбрана."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:482
+#: pcbnew/dialogs/dialog_copper_zones.cpp:470
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
 msgstr "Выбрана опция \"не соединено\". Будет создан изолированный полигон. Вы уверены?"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:515
+#: pcbnew/dialogs/dialog_copper_zones.cpp:503
 msgid "Chamfer distance"
 msgstr "Размер фаски"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:521
+#: pcbnew/dialogs/dialog_copper_zones.cpp:509
 msgid "Fillet radius"
 msgstr "Радиус скругления"
 
@@ -14225,7 +14226,7 @@ msgstr "Смещение образа(дюймы):"
 msgid "Shape Rotation (degrees):"
 msgstr "Вращение образа (градусы):"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:434
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:435
 msgid "3D Shape:"
 msgstr "3D вид:"
 
@@ -14416,19 +14417,23 @@ msgstr "Не выбран слой для этого элемента. Выбе�
 msgid "Ok to delete selected items ?"
 msgstr "Ok для удаления выделенного элемента?"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:62
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:43
+msgid "Properties:"
+msgstr "Свойства:"
+
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 msgid "Keepout Options:"
 msgstr "Параметры запрета:"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:64
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:62
 msgid "No Tracks"
 msgstr "Без дорожек"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:67
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:65
 msgid "No Vias"
 msgstr "Без ПО"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:70
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:68
 msgid "No Copper Pour"
 msgstr "Без меди"
 
@@ -15206,27 +15211,27 @@ msgstr "URL сайта FreeRouting.net"
 msgid "Help"
 msgstr "Справка"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:61
 msgid "Net Filtering"
 msgstr "Фильтр по цепям"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:68
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:67
 msgid "Show all (alphabetical)"
 msgstr "Все (по алфавиту)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:68
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:67
 msgid "Show all (advanced)"
 msgstr "Все (развернуто)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:68
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:67
 msgid "Filtered (alphabetical)"
 msgstr "Фильтр (по алфавиту)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:68
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:67
 msgid "Filtered (advanced)"
 msgstr "Фильтр (развернуто)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:74
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:73
 msgid "Hidden net filter:"
 msgstr "Фильтр скрытых цепей:"
 
@@ -15242,7 +15247,7 @@ msgstr ""
 msgid "Visible net filter:"
 msgstr "Фильтр цепей:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:88
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:89
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
@@ -15250,67 +15255,67 @@ msgstr ""
 "Шаблон для фильтрации цепей в списке.\n"
 "Отобразить цепи с именами, подходящими под шаблон."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:92
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:93
 msgid "Apply Filters"
 msgstr "Применить фильтр"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:102
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:103
 msgid "Settings"
 msgstr "Установки"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:114
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:116
 msgid "Minimum width"
 msgstr "Минимальная ширина"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:116
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:118
 msgid "Minimun thickness of filled areas."
 msgstr "Минимальная ширина заливаемых областей."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:123
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Corner smoothing:"
 msgstr "Сглаживание углов:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 msgid "Chamfer"
 msgstr "Фаска"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 msgid "Fillet"
 msgstr "Скругление"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:133
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:136
 msgid "Chamfer distance (mm):"
 msgstr "Размер фаски (мм):"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 msgid "THT thermal"
 msgstr "Терморазгрузка скв.отв."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:161
 msgid "Thermal Reliefs"
 msgstr "Терморазгрузка"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:159
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
 msgid "Antipad clearance"
 msgstr "Зазор antipad:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:169
 msgid "Clearance between pads in the same net and filled areas."
 msgstr "Зазор между контактными площадками одной цепи и залитой областью."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:168
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
 msgid "Spoke width"
 msgstr "Ширина термомоста"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
 msgid "Width of copper in thermal reliefs."
 msgstr "Задает ширину меди при терморазгрузке."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:192
 msgid "Priority level:"
 msgstr "Уровень приоритета:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:188
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:194
 msgid ""
 "On each copper layer, zones are filled by priority order.\n"
 "So when a zone is inside an other zone:\n"
@@ -15322,47 +15327,47 @@ msgstr ""
 "* и ее приоритет ниже внешней зоны, то ее контур удаляется с этого слоя.\n"
 "* и приоритеты зон одинаковые, то устанавливается ошибка DRC."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:195
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
 msgid "Fill mode:"
 msgstr "Режим заливки:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:211
 msgid "Segments / 360 deg:"
 msgstr "Сегментов / 360 град:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:209
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
 msgid "32"
 msgstr "32"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
 msgid "Outline slope:"
 msgstr "Наклон контура:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:225
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
 msgid "Arbitrary"
 msgstr "Любой"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:225
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
 msgid "H, V, and 45 deg only"
 msgstr "Гориз., верт. и 45 град."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:237
 msgid "Outline style:"
 msgstr "Стиль контура:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:235
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
 msgid "Hatched"
 msgstr "Штриховка"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:235
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
 msgid "Fully hatched"
 msgstr "Полная штриховка"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:250
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:256
 msgid "Export Settings to Other Zones"
 msgstr "Экспорт установок в другие зоны"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:251
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
 msgid "Export this zone setup (excluding layer and net selection) to all other copper zones."
 msgstr "Экспорт установок этой зоны (исключая слой и цепь) во все медные зоны."
 
@@ -16947,7 +16952,7 @@ msgstr "Таблицы PCB библиотек"
 msgid "Module Properties"
 msgstr "Параметры модуля"
 
-#: pcbnew/dialogs/dialog_gendrill_base.h:77
+#: pcbnew/dialogs/dialog_gendrill_base.h:79
 msgid "Drill Files Generation"
 msgstr "Создание файлов сверловки"
 
@@ -16959,7 +16964,7 @@ msgstr "Размеры текста"
 msgid "Dimension Properties"
 msgstr "Свойства размерной линии"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.h:65
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.h:70
 msgid "Keepout Area Properties"
 msgstr "Свойства области запрета"
 
@@ -16983,7 +16988,7 @@ msgstr "Глобальная правка конт.пл."
 msgid "Footprints Orientation"
 msgstr "Ориентация посадочного места"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.h:129
+#: pcbnew/dialogs/dialog_copper_zones_base.h:130
 msgid "Copper Zone Properties"
 msgstr "Свойства медной зоны"
 
