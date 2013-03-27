@@ -469,7 +469,11 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
         for( int i = 0; i < m_component->GetPartCount(); i++ )
         {
             wxString msg;
+#if defined(KICAD_GOST)
+            msg.Printf( _( "Part %d" ), i + 1 );
+#else
             msg.Printf( _( "Part %c" ), 'A' + i );
+#endif
             m_partSelectBox->Append( msg );
         }
     }
