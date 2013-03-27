@@ -2153,15 +2153,6 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
         case T_layers:
             {
                 int layerMask = parseBoardItemLayersAsMask();
-
-                // 15-Nov-2012 before today, only the cu layers that were used were
-                // saved.  After wildcard *.Cu support went into effect, this is no
-                // longer an issue, but in order to load the interrim s-expression files,
-                // turn on all Cu layers for thru hole pads.  New files will not need this
-                // and eventually this code can be removed.
-                if( pad->GetAttribute() == PAD_STANDARD )
-                    layerMask |= ALL_CU_LAYERS;
-
                 pad->SetLayerMask( layerMask );
             }
             break;
