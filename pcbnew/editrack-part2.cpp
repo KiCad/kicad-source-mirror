@@ -73,7 +73,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     // Is the current segment Ok (no DRC error) ?
-    if( Drc_On )
+    if( g_Drc_On )
     {
         if( BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
             // DRC error, the change layer is not made
@@ -150,7 +150,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             break;
     }
 
-    if( Drc_On && BAD_DRC == m_drc->Drc( via, GetBoard()->m_Track ) )
+    if( g_Drc_On && BAD_DRC == m_drc->Drc( via, GetBoard()->m_Track ) )
     {
         // DRC fault: the Via cannot be placed here ...
         delete via;

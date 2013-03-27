@@ -107,7 +107,7 @@ bool Project( wxPoint* aNearPos, wxPoint on_grid, const TRACK* track )
 bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 wxPoint on_grid, wxPoint* curpos )
 {
-    bool    doCheckNet = g_MagneticPadOption != capture_always && Drc_On;
+    bool    doCheckNet = g_MagneticPadOption != capture_always && g_Drc_On;
     bool    doTrack = false;
     bool    doPad = false;
     bool    amMovingVia = false;

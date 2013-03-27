@@ -140,8 +140,8 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     }
 
     memopos = CurrPosition;
-    lay_tmp_BOTTOM = Route_Layer_BOTTOM;
-    lay_tmp_TOP    = Route_Layer_TOP;
+    lay_tmp_BOTTOM = g_Route_Layer_BOTTOM;
+    lay_tmp_TOP    = g_Route_Layer_TOP;
 
     RoutingMatrix.m_GridRouting = (int) GetScreen()->GetGridSize().x;
 
@@ -353,8 +353,8 @@ end_of_tst:
 
     RoutingMatrix.UnInitRoutingMatrix();
 
-    Route_Layer_TOP    = lay_tmp_TOP;
-    Route_Layer_BOTTOM = lay_tmp_BOTTOM;
+    g_Route_Layer_TOP    = lay_tmp_TOP;
+    g_Route_Layer_BOTTOM = lay_tmp_BOTTOM;
 
     Module = GetBoard()->m_Modules;
 
@@ -447,12 +447,12 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     msg.Printf( wxT( "%d" ), RoutingMatrix.m_MemSize / 1024 );
     m_messagePanel->SetMessage( 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
-    Route_Layer_BOTTOM = LAYER_N_FRONT;
+    g_Route_Layer_BOTTOM = LAYER_N_FRONT;
 
     if( RoutingMatrix.m_RoutingLayersCount > 1 )
-        Route_Layer_BOTTOM = LAYER_N_BACK;
+        g_Route_Layer_BOTTOM = LAYER_N_BACK;
 
-    Route_Layer_TOP = LAYER_N_FRONT;
+    g_Route_Layer_TOP = LAYER_N_FRONT;
 
     /* Place the edge layer segments */
     TRACK TmpSegm( NULL );
@@ -969,10 +969,10 @@ void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1,
     DIST_CELL data, LocalKeepOut;
     int      lgain, cgain;
 
-    if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
         trace = 1;     /* Trace on bottom layer. */
 
-    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && RoutingMatrix.m_RoutingLayersCount )
+    if( ( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) ) && RoutingMatrix.m_RoutingLayersCount )
         trace |= 2;    /* Trace on top layer. */
 
     if( trace == 0 )

@@ -76,7 +76,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     {
         int diagdrc = OK_DRC;
 
-        if( Drc_On )
+        if( g_Drc_On )
             diagdrc = m_drc->Drc( aTrackItem, GetBoard()->m_Track );
 
         if( diagdrc == OK_DRC )
@@ -175,7 +175,7 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
 
     for( int ii = 0; ii < nb_segm; ii++, pt_track = pt_track->Next() )
     {
-        pt_track->SetState( BUSY, OFF );
+        pt_track->SetState( BUSY, false );
 
         if( SetTrackSegmentWidth( pt_track, &itemsListPicker, false ) )
             change = true;

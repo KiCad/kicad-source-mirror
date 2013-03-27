@@ -416,8 +416,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     int          marge;
     int          padLayerMaskStart;    /* Mask layers belonging to the starting pad. */
     int          padLayerMaskEnd;      /* Mask layers belonging to the ending pad. */
-    int          topLayerMask = GetLayerMask( Route_Layer_TOP );
-    int          bottomLayerMask = GetLayerMask( Route_Layer_BOTTOM );
+    int          topLayerMask = GetLayerMask( g_Route_Layer_TOP );
+    int          bottomLayerMask = GetLayerMask( g_Route_Layer_BOTTOM );
     int          routeLayerMask;       /* Mask two layers for routing. */
     int          tab_mask[2];       /* Enables the calculation of the mask layer being
                                      * tested. (side = TOP or BOTTOM) */
@@ -1169,7 +1169,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
         g_CurrentTrackList.PushBack( newTrack );
 
-        g_CurrentTrackSegment->SetState( TRACK_AR, ON );
+        g_CurrentTrackSegment->SetState( TRACK_AR, true );
         g_CurrentTrackSegment->SetLayer( 0x0F );
 
         g_CurrentTrackSegment->SetStart(wxPoint( pcb->GetBoundingBox().GetX() +
@@ -1189,12 +1189,12 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
 
         g_CurrentTrackList.PushBack( newTrack );
 
-        g_CurrentTrackSegment->SetLayer( Route_Layer_BOTTOM );
+        g_CurrentTrackSegment->SetLayer( g_Route_Layer_BOTTOM );
 
         if( side == TOP )
-            g_CurrentTrackSegment->SetLayer( Route_Layer_TOP );
+            g_CurrentTrackSegment->SetLayer( g_Route_Layer_TOP );
 
-        g_CurrentTrackSegment->SetState( TRACK_AR, ON );
+        g_CurrentTrackSegment->SetState( TRACK_AR, true );
         g_CurrentTrackSegment->SetEnd( wxPoint( pcb->GetBoundingBox().GetX() +
                                          ( RoutingMatrix.m_GridRouting * row ),
                                          pcb->GetBoundingBox().GetY() +
@@ -1305,12 +1305,12 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     g_FirstTrackSegment->start = pcbframe->GetBoard()->GetPad( g_FirstTrackSegment, FLG_START );
 
     if( g_FirstTrackSegment->start )
-        g_FirstTrackSegment->SetState( BEGIN_ONPAD, ON );
+        g_FirstTrackSegment->SetState( BEGIN_ONPAD, true );
 
     g_CurrentTrackSegment->end = pcbframe->GetBoard()->GetPad( g_CurrentTrackSegment, FLG_END );
 
     if( g_CurrentTrackSegment->end )
-        g_CurrentTrackSegment->SetState( END_ONPAD, ON );
+        g_CurrentTrackSegment->SetState( END_ONPAD, true );
 
     /* Out the new track on the matrix board */
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )

@@ -82,18 +82,17 @@ void DIALOG_GENERALOPTIONS::init()
     m_SaveTime->SetValue( timevalue );
     m_MaxShowLinks->SetValue( g_MaxLinksShowed );
 
-    m_DrcOn->SetValue( Drc_On );
+    m_DrcOn->SetValue( g_Drc_On );
     m_ShowModuleRatsnest->SetValue( g_Show_Module_Ratsnest );
     m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible( RATSNEST_VISIBLE ) );
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
-    m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
+    m_Segments_45_Only_Ctrl->SetValue( g_Segments_45_Only );
     m_ZoomNoCenterOpt->SetValue( GetParent()->GetCanvas()->GetEnableZoomNoCenter() );
     m_MiddleButtonPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableMiddleButtonPan() );
     m_OptMiddleButtonPanLimited->SetValue( GetParent()->GetCanvas()->GetMiddleButtonPanLimited() );
     m_OptMiddleButtonPanLimited->Enable( m_MiddleButtonPANOpt->GetValue() );
     m_AutoPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableAutoPan() );
-    m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
     m_Track_DoubleSegm_Ctrl->SetValue( g_TwoSegmentTrackBuild );
 
     m_MagneticPadOptCtrl->SetSelection( g_MagneticPadOption );
@@ -125,7 +124,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 
     /* Updating the combobox to display the active layer. */
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
-    Drc_On = m_DrcOn->GetValue();
+    g_Drc_On = m_DrcOn->GetValue();
 
     if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
     {
@@ -135,7 +134,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
-    Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
+    g_Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
 
     GetParent()->GetCanvas()->SetEnableZoomNoCenter( m_ZoomNoCenterOpt->GetValue() );
@@ -162,11 +161,11 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_DRC_OFF:
-        Drc_On = !state;
+        g_Drc_On = !state;
 
         if( GetToolId() == ID_TRACK_BUTT )
         {
-            if( Drc_On )
+            if( g_Drc_On )
                 m_canvas->SetCursor( wxCURSOR_PENCIL );
             else
                 m_canvas->SetCursor( wxCURSOR_QUESTION_ARROW );

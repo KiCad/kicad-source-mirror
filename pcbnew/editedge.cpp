@@ -343,7 +343,7 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( aErase )
         Segment->Draw( aPanel, aDC, GR_XOR );
 
-    if( Segments_45_Only && Segment->GetShape() == S_SEGMENT )
+    if( g_Segments_45_Only && Segment->GetShape() == S_SEGMENT )
     {
         wxPoint pt;
 

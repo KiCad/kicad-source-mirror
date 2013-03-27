@@ -49,17 +49,17 @@
 extern wxString g_DocModulesFileName;
 
 /* variables */
-extern bool Drc_On;
+extern bool g_Drc_On;
 extern bool g_AutoDeleteOldTrack;
 extern bool g_Show_Module_Ratsnest;
 extern bool g_Raccord_45_Auto;
 extern bool        g_Track_45_Only_Allowed;
 extern bool        g_Alternate_Track_Posture;
-extern bool        Segments_45_Only;
+extern bool        g_Segments_45_Only;
 
 /* Layer pair for auto routing and switch layers by hotkey */
-extern int         Route_Layer_TOP;
-extern int         Route_Layer_BOTTOM;
+extern int         g_Route_Layer_TOP;
+extern int         g_Route_Layer_BOTTOM;
 
 extern int         g_MaxLinksShowed;        // Max count links showed in routing
 extern bool        g_TwoSegmentTrackBuild;
