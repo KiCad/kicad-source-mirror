@@ -76,10 +76,10 @@ static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
         }                                                               \
         else                                                            \
         {                                                               \
-            if( layer == Route_Layer_BOTTOM )                           \
+            if( layer == g_Route_Layer_BOTTOM )                         \
                 RoutingMatrix.WriteCell( dy, dx, BOTTOM, color );       \
             if( RoutingMatrix.m_RoutingLayersCount > 1 )                                              \
-                if( layer == Route_Layer_TOP )                          \
+                if( layer == g_Route_Layer_TOP )                        \
                     RoutingMatrix.WriteCell( dy, dx, TOP, color );      \
         }                                                               \
     }
@@ -152,10 +152,10 @@ void TraceFilledCircle( int    cx, int cy, int radius,
     int   tstwrite = 0;
     int   distmin;
 
-    if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
         trace = 1;       // Trace on BOTTOM
 
-    if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) )
         if( RoutingMatrix.m_RoutingLayersCount > 1 )
             trace |= 2;  // Trace on TOP
 
@@ -275,13 +275,13 @@ void TraceSegmentPcb( TRACK* pt_segm, int color, int marge, int op_logic )
     {
         int mask_layer = 0;
 
-        if( pt_segm->IsOnLayer( Route_Layer_BOTTOM ) )
-            mask_layer = 1 << Route_Layer_BOTTOM;
+        if( pt_segm->IsOnLayer( g_Route_Layer_BOTTOM ) )
+            mask_layer = 1 << g_Route_Layer_BOTTOM;
 
-        if( pt_segm->IsOnLayer( Route_Layer_TOP ) )
+        if( pt_segm->IsOnLayer( g_Route_Layer_TOP ) )
         {
             if( mask_layer == 0 )
-                mask_layer = 1 << Route_Layer_TOP;
+                mask_layer = 1 << g_Route_Layer_TOP;
             else
                 mask_layer = -1;
         }
@@ -474,10 +474,10 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
     int  row_min, row_max, col_min, col_max;
     int  trace = 0;
 
-    if( ( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) ) )
+    if( ( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) ) )
         trace = 1;     // Trace on BOTTOM
 
-    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) &&
+    if( ( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) ) &&
         RoutingMatrix.m_RoutingLayersCount > 1 )
         trace |= 2;    // Trace on TOP
 
@@ -540,10 +540,10 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
     int  rotrow, rotcol;
     int  trace = 0;
 
-    if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_BOTTOM ) )
         trace = 1;     // Trace on BOTTOM
 
-    if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
+    if( aLayerMask & GetLayerMask( g_Route_Layer_TOP ) )
     {
         if( RoutingMatrix.m_RoutingLayersCount > 1 )
             trace |= 2;  // Trace on TOP

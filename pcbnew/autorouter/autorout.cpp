@@ -61,12 +61,12 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     if( GetBoard()->GetCopperLayerCount() > 1 )
     {
-        Route_Layer_TOP    = GetScreen()->m_Route_Layer_TOP;
-        Route_Layer_BOTTOM = GetScreen()->m_Route_Layer_BOTTOM;
+        g_Route_Layer_TOP    = GetScreen()->m_Route_Layer_TOP;
+        g_Route_Layer_BOTTOM = GetScreen()->m_Route_Layer_BOTTOM;
     }
     else
     {
-        Route_Layer_TOP = Route_Layer_BOTTOM = LAYER_N_BACK;
+        g_Route_Layer_TOP = g_Route_Layer_BOTTOM = LAYER_N_BACK;
     }
 
     switch( mode )
@@ -172,7 +172,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     /* Map the board */
     RoutingMatrix.m_RoutingLayersCount = 1;
 
-    if( Route_Layer_TOP != Route_Layer_BOTTOM )
+    if( g_Route_Layer_TOP != g_Route_Layer_BOTTOM )
         RoutingMatrix.m_RoutingLayersCount = 2;
 
     if( RoutingMatrix.InitRoutingMatrix() < 0 )

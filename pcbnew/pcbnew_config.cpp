@@ -451,7 +451,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                     &g_Show_Module_Ratsnest, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "TwoSegT" ),
                                                     &g_TwoSegmentTrackBuild, true ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" ), &Segments_45_Only,
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" ), &g_Segments_45_Only,
                                                     true ) );
     return m_configSettings;
 }

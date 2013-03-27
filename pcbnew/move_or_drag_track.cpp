@@ -90,7 +90,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     {
         TRACK* track = g_DragSegmentList[jj].m_Track;
         g_DragSegmentList[jj].RestoreInitialValues();
-        track->SetState( IN_EDIT, OFF );
+        track->SetState( IN_EDIT, false );
         track->ClearFlags();
     }
 
@@ -717,13 +717,13 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     //  Test if more than one segment is connected to this point
     if( TrackToStartPoint )
     {
-        TrackToStartPoint->SetState( BUSY, ON );
+        TrackToStartPoint->SetState( BUSY, true );
 
         if( ( TrackToStartPoint->Type() == PCB_VIA_T )
            || track->GetTrace( GetBoard()->m_Track, NULL, FLG_START ) )
             error = true;
 
-        TrackToStartPoint->SetState( BUSY, OFF );
+        TrackToStartPoint->SetState( BUSY, false );
     }
 
     if( ( track->end == NULL ) || ( track->end->Type() == PCB_TRACE_T ) )
@@ -732,13 +732,13 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     //  Test if more than one segment is connected to this point
     if( TrackToEndPoint )
     {
-        TrackToEndPoint->SetState( BUSY, ON );
+        TrackToEndPoint->SetState( BUSY, true );
 
         if( (TrackToEndPoint->Type() == PCB_VIA_T)
            || track->GetTrace( GetBoard()->m_Track, NULL, FLG_END ) )
             error = true;
 
-        TrackToEndPoint->SetState( BUSY, OFF );
+        TrackToEndPoint->SetState( BUSY, false );
     }
 
     if( error )
@@ -834,7 +834,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     int current_net_code = Track->GetNet();
 
     // DRC control:
-    if( Drc_On )
+    if( g_Drc_On )
     {
         errdrc = m_drc->Drc( Track, GetBoard()->m_Track );
 
@@ -853,13 +853,13 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 
     // DRC Ok: place track segments
     Track->ClearFlags();
-    Track->SetState( IN_EDIT, OFF );
+    Track->SetState( IN_EDIT, false );
 
     /* Draw dragged tracks */
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         Track = g_DragSegmentList[ii].m_Track;
-        Track->SetState( IN_EDIT, OFF );
+        Track->SetState( IN_EDIT, false );
         Track->ClearFlags();
 
         /* Test the connections modified by the move
@@ -869,16 +869,16 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
         Track->start = GetBoard()->GetPadFast( Track->GetStart(), layerMask );
 
         if( Track->start )
-            Track->SetState( BEGIN_ONPAD, ON );
+            Track->SetState( BEGIN_ONPAD, true );
         else
-            Track->SetState( BEGIN_ONPAD, OFF );
+            Track->SetState( BEGIN_ONPAD, false );
 
         Track->end = GetBoard()->GetPadFast( Track->GetEnd(), layerMask );
 
         if( Track->end )
-            Track->SetState( END_ONPAD, ON );
+            Track->SetState( END_ONPAD, true );
         else
-            Track->SetState( END_ONPAD, OFF );
+            Track->SetState( END_ONPAD, false );
     }
 
     EraseDragList();
