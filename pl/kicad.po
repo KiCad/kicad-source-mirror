@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-20 17:31+0100\n"
-"PO-Revision-Date: 2013-03-20 17:38+0100\n"
+"POT-Creation-Date: 2013-03-27 06:15+0100\n"
+"PO-Revision-Date: 2013-03-27 06:15+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -1225,8 +1225,8 @@ msgid "Part"
 msgstr "Element "
 
 #: eeschema/libedit.cpp:456 eeschema/viewlibs.cpp:292
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:191
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:488
@@ -1295,8 +1295,8 @@ msgstr "Symbol"
 #: eeschema/libedit.cpp:483 eeschema/lib_draw_item.cpp:65
 #: eeschema/lib_pin.cpp:1844 eeschema/sch_text.cpp:789
 #: pcbnew/class_drawsegment.cpp:327 pcbnew/class_marker_pcb.cpp:98
-#: pcbnew/class_text_mod.cpp:386 pcbnew/class_track.cpp:1055
-#: pcbnew/class_zone.cpp:656 pcbnew/dialogs/dialog_layers_setup.cpp:293
+#: pcbnew/class_text_mod.cpp:387 pcbnew/class_track.cpp:1055
+#: pcbnew/class_zone.cpp:655 pcbnew/dialogs/dialog_layers_setup.cpp:293
 #: gerbview/class_gerber_draw_item.cpp:549
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:160
@@ -1468,7 +1468,7 @@ msgstr "Usuń element"
 #: eeschema/onrightclick.cpp:191 eeschema/dialogs/dialog_color_config.cpp:226
 #: eeschema/dialogs/dialog_netlist_base.cpp:49
 #: eeschema/dialogs/dialog_netlist_base.cpp:130 pcbnew/mirepcb.cpp:100
-#: pcbnew/modedit_onclick.cpp:205 pcbnew/modedit_onclick.cpp:243
+#: pcbnew/modedit_onclick.cpp:206 pcbnew/modedit_onclick.cpp:244
 #: pcbnew/muonde.cpp:809 pcbnew/onrightclick.cpp:82 pcbnew/onrightclick.cpp:98
 #: pcbnew/sel_layer.cpp:166 pcbnew/sel_layer.cpp:319
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:382
@@ -1483,7 +1483,7 @@ msgid "Cancel"
 msgstr "Anuluj"
 
 #: eeschema/libedit_onrightclick.cpp:86 eeschema/onrightclick.cpp:163
-#: pcbnew/modedit_onclick.cpp:208 pcbnew/onrightclick.cpp:88
+#: pcbnew/modedit_onclick.cpp:209 pcbnew/onrightclick.cpp:88
 #: gerbview/onrightclick.cpp:42
 msgid "End Tool"
 msgstr "Wyłącz narzędzie"
@@ -1634,17 +1634,17 @@ msgid "Pin Num Size to Others"
 msgstr "Rozmiar numeru pinu dla innych"
 
 #: eeschema/libedit_onrightclick.cpp:321 eeschema/onrightclick.cpp:800
-#: pcbnew/modedit_onclick.cpp:220 pcbnew/onrightclick.cpp:440
+#: pcbnew/modedit_onclick.cpp:221 pcbnew/onrightclick.cpp:440
 #: gerbview/onrightclick.cpp:53
 msgid "Cancel Block"
 msgstr "Anuluj blok"
 
-#: eeschema/libedit_onrightclick.cpp:326 pcbnew/modedit_onclick.cpp:222
+#: eeschema/libedit_onrightclick.cpp:326 pcbnew/modedit_onclick.cpp:223
 msgid "Zoom Block (drag middle mouse)"
 msgstr "Powiększ blok (shift + przeciąganie myszką)"
 
 #: eeschema/libedit_onrightclick.cpp:331 eeschema/onrightclick.cpp:808
-#: pcbnew/modedit_onclick.cpp:226 pcbnew/onrightclick.cpp:444
+#: pcbnew/modedit_onclick.cpp:227 pcbnew/onrightclick.cpp:444
 #: gerbview/onrightclick.cpp:56
 msgid "Place Block"
 msgstr "Dodaj blok"
@@ -1893,7 +1893,7 @@ msgstr "Błąd podczas tworzenia "
 #: eeschema/lib_field.cpp:563 eeschema/onrightclick.cpp:307
 #: eeschema/onrightclick.cpp:420 eeschema/sch_component.cpp:1469
 #: eeschema/template_fieldnames.cpp:14
-#: eeschema/dialogs/dialog_color_config.cpp:37 pcbnew/class_text_mod.cpp:467
+#: eeschema/dialogs/dialog_color_config.cpp:37 pcbnew/class_text_mod.cpp:468
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:25
@@ -1906,8 +1906,8 @@ msgstr "Oznaczenie"
 #: eeschema/dialogs/dialog_color_config.cpp:38
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:79
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:163
-#: pcbnew/class_edge_mod.cpp:250 pcbnew/class_text_mod.cpp:372
-#: pcbnew/class_text_mod.cpp:471 pcbnew/footprint_wizard_frame.cpp:203
+#: pcbnew/class_edge_mod.cpp:250 pcbnew/class_text_mod.cpp:373
+#: pcbnew/class_text_mod.cpp:472 pcbnew/footprint_wizard_frame.cpp:203
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
@@ -1983,11 +1983,11 @@ msgid "Down"
 msgstr "Dół"
 
 #: eeschema/lib_pin.cpp:89 pcbnew/class_board_item.cpp:42
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:235
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
 #: pcbnew/dialogs/dialog_display_options_base.cpp:75
 #: pcbnew/dialogs/dialog_display_options_base.cpp:81
 #: pcbnew/dialogs/dialog_display_options_base.cpp:122
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:52
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_plot_base.cpp:161
 #: cvpcb/dialogs/dialog_display_options_base.cpp:25
@@ -2098,7 +2098,7 @@ msgid "Number"
 msgstr "Numer"
 
 #: eeschema/lib_pin.cpp:1851 pcbnew/class_pcb_text.cpp:137
-#: pcbnew/class_text_mod.cpp:391
+#: pcbnew/class_text_mod.cpp:392
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
 #: gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
@@ -2106,7 +2106,7 @@ msgid "Yes"
 msgstr "Tak"
 
 #: eeschema/lib_pin.cpp:1853 pcbnew/class_pcb_text.cpp:135
-#: pcbnew/class_text_mod.cpp:389
+#: pcbnew/class_text_mod.cpp:390
 #: pcbnew/dialogs/dialog_display_options_base.cpp:128
 #: gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
@@ -2177,8 +2177,8 @@ msgstr "prostokąt posiada tylko %d z wymaganych 7"
 msgid "Rectangle from (%s, %s) to (%s, %s)"
 msgstr "Prostokąt od (%s, %s) do (%s, %s)"
 
-#: eeschema/lib_text.cpp:52 pcbnew/class_text_mod.cpp:372
-#: pcbnew/class_text_mod.cpp:379 pcbnew/class_text_mod.cpp:476
+#: eeschema/lib_text.cpp:52 pcbnew/class_text_mod.cpp:373
+#: pcbnew/class_text_mod.cpp:380 pcbnew/class_text_mod.cpp:477
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
 #: cvpcb/dialogs/dialog_display_options_base.cpp:33
 msgid "Text"
@@ -2752,13 +2752,13 @@ msgstr "Przesuń"
 #: eeschema/onrightclick.cpp:320
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:82
-#: pcbnew/modedit_onclick.cpp:261 pcbnew/onrightclick.cpp:765
+#: pcbnew/modedit_onclick.cpp:262 pcbnew/onrightclick.cpp:765
 #: pcbnew/onrightclick.cpp:884 common/dialogs/dialog_image_editor_base.cpp:39
 msgid "Rotate"
 msgstr "Obrót"
 
 #: eeschema/onrightclick.cpp:333 eeschema/onrightclick.cpp:410
-#: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:770
+#: pcbnew/modedit_onclick.cpp:344 pcbnew/onrightclick.cpp:770
 #: pcbnew/onrightclick.cpp:825 pcbnew/onrightclick.cpp:888
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:37
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:54
@@ -4638,7 +4638,7 @@ msgid "15"
 msgstr "15"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:28
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:209
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:37
 msgid "16"
 msgstr "16"
@@ -4725,7 +4725,7 @@ msgstr "Odbij pionowo |"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:54
 #: pcbnew/class_pcb_text.cpp:135 pcbnew/class_pcb_text.cpp:137
-#: pcbnew/class_text_mod.cpp:411 pcbnew/modedit_onclick.cpp:263
+#: pcbnew/class_text_mod.cpp:412 pcbnew/modedit_onclick.cpp:264
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:75
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
 #: gerbview/class_gerber_draw_item.cpp:574
@@ -6233,7 +6233,7 @@ msgid "Bezier Curve"
 msgstr "Krzywa Beziera"
 
 #: pcbnew/class_board_item.cpp:47
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Polygon"
 msgstr "Wielokąt"
 
@@ -6255,14 +6255,14 @@ msgid "Curve"
 msgstr "Krzywa"
 
 #: pcbnew/class_drawsegment.cpp:348
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 msgid "Segment"
 msgstr "Segment"
 
 #: pcbnew/class_drawsegment.cpp:358 pcbnew/class_module.cpp:461
 #: pcbnew/class_pad.cpp:631 pcbnew/class_pcb_layer_widget.cpp:191
-#: pcbnew/class_pcb_text.cpp:131 pcbnew/class_text_mod.cpp:404
-#: pcbnew/class_track.cpp:1126 pcbnew/class_zone.cpp:719
+#: pcbnew/class_pcb_text.cpp:131 pcbnew/class_text_mod.cpp:405
+#: pcbnew/class_track.cpp:1126 pcbnew/class_zone.cpp:718
 #: pcbnew/layer_widget.cpp:533 pcbnew/sel_layer.cpp:147
 #: gerbview/class_gerbview_layer_widget.cpp:84
 #: gerbview/dialogs/dialog_print_using_printer.cpp:145
@@ -6404,7 +6404,7 @@ msgid "Graphic Item"
 msgstr "Elementy graficzne"
 
 #: pcbnew/class_edge_mod.cpp:249 pcbnew/class_module.cpp:509
-#: pcbnew/class_pad.cpp:516 pcbnew/class_text_mod.cpp:376 cvpcb/setvisu.cpp:36
+#: pcbnew/class_pad.cpp:516 pcbnew/class_text_mod.cpp:377 cvpcb/setvisu.cpp:36
 msgid "Module"
 msgstr "Footprint"
 
@@ -6424,8 +6424,8 @@ msgstr "Warstwa segmentu"
 msgid "Graphic"
 msgstr "Grafika"
 
-#: pcbnew/class_edge_mod.cpp:268 pcbnew/class_text_mod.cpp:471
-#: pcbnew/class_text_mod.cpp:476
+#: pcbnew/class_edge_mod.cpp:268 pcbnew/class_text_mod.cpp:472
+#: pcbnew/class_text_mod.cpp:477
 msgid " of "
 msgstr " z "
 
@@ -6455,7 +6455,7 @@ msgid "Stat"
 msgstr "Status"
 
 #: pcbnew/class_module.cpp:486 pcbnew/class_pad.cpp:665
-#: pcbnew/class_text_mod.cpp:414
+#: pcbnew/class_text_mod.cpp:415
 msgid "Orient"
 msgstr "Orientacja"
 
@@ -6525,11 +6525,11 @@ msgstr " & int"
 msgid "internal"
 msgstr "wewnętrzne"
 
-#: pcbnew/class_pad.cpp:636 pcbnew/class_text_mod.cpp:420
+#: pcbnew/class_pad.cpp:636 pcbnew/class_text_mod.cpp:421
 msgid "H Size"
 msgstr "Rozmiar poziomy"
 
-#: pcbnew/class_pad.cpp:639 pcbnew/class_text_mod.cpp:423
+#: pcbnew/class_pad.cpp:639 pcbnew/class_text_mod.cpp:424
 msgid "V Size"
 msgstr "Rozmiar pionowy"
 
@@ -6805,7 +6805,7 @@ msgstr "WYMIAR"
 msgid "PCB Text"
 msgstr "Tekst PCB"
 
-#: pcbnew/class_pcb_text.cpp:143 pcbnew/class_text_mod.cpp:417
+#: pcbnew/class_pcb_text.cpp:143 pcbnew/class_text_mod.cpp:418
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:73
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:110
 msgid "Thickness"
@@ -6816,21 +6816,21 @@ msgstr "Grubość"
 msgid "Pcb Text %s on %s"
 msgstr "Tekst PCB %s na %s"
 
-#: pcbnew/class_text_mod.cpp:372
+#: pcbnew/class_text_mod.cpp:373
 msgid "Ref."
 msgstr "Oznaczenie"
 
-#: pcbnew/class_text_mod.cpp:393
+#: pcbnew/class_text_mod.cpp:394
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:77
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:88
 msgid "Display"
 msgstr "Pokazuj"
 
-#: pcbnew/class_text_mod.cpp:406
+#: pcbnew/class_text_mod.cpp:407
 msgid " No"
 msgstr " Nie"
 
-#: pcbnew/class_text_mod.cpp:409
+#: pcbnew/class_text_mod.cpp:410
 msgid " Yes"
 msgstr " Tak"
 
@@ -6857,7 +6857,7 @@ msgid "Blind/Buried"
 msgstr "Ślepa/zagrzebana"
 
 #: pcbnew/class_track.cpp:220 pcbnew/class_track.cpp:1528
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:51
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:50
 msgid "Net:"
 msgstr "Sieć:"
 
@@ -6901,13 +6901,13 @@ msgstr "Przelotka ślepa/zagrzebana"
 msgid "Track"
 msgstr "Ścieżka"
 
-#: pcbnew/class_track.cpp:1067 pcbnew/class_zone.cpp:701
+#: pcbnew/class_track.cpp:1067 pcbnew/class_zone.cpp:700
 #: pcbnew/zones_by_polygon_fill_functions.cpp:111
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:46
 msgid "NetName"
 msgstr "Nazwa sieci"
 
-#: pcbnew/class_track.cpp:1071 pcbnew/class_zone.cpp:706
+#: pcbnew/class_track.cpp:1071 pcbnew/class_zone.cpp:705
 msgid "NetCode"
 msgstr "Kod sieci"
 
@@ -6935,76 +6935,76 @@ msgstr "Długość segmentu"
 msgid "Length:"
 msgstr "Długość:"
 
-#: pcbnew/class_zone.cpp:647 pcbnew/class_zone.cpp:941
+#: pcbnew/class_zone.cpp:646 pcbnew/class_zone.cpp:940
 msgid "Zone Outline"
 msgstr "Obrys strefy"
 
-#: pcbnew/class_zone.cpp:654 pcbnew/class_zone.cpp:946
+#: pcbnew/class_zone.cpp:653 pcbnew/class_zone.cpp:945
 msgid "(Cutout)"
 msgstr "(Obszar odcięty)"
 
-#: pcbnew/class_zone.cpp:663
+#: pcbnew/class_zone.cpp:662
 msgid "No via"
 msgstr "Bez przelotek"
 
-#: pcbnew/class_zone.cpp:670
+#: pcbnew/class_zone.cpp:669
 msgid "No track"
 msgstr "Bez ścieżek"
 
-#: pcbnew/class_zone.cpp:678
+#: pcbnew/class_zone.cpp:677
 msgid "No copper pour"
 msgstr "Bez stref wypełnień"
 
-#: pcbnew/class_zone.cpp:681
+#: pcbnew/class_zone.cpp:680
 msgid "Keepout"
 msgstr "Strefa chroniona"
 
-#: pcbnew/class_zone.cpp:698 pcbnew/class_zone.cpp:977
+#: pcbnew/class_zone.cpp:697 pcbnew/class_zone.cpp:976
 msgid "Not Found"
 msgstr "Nie znaleziono"
 
-#: pcbnew/class_zone.cpp:711
+#: pcbnew/class_zone.cpp:710
 msgid "Priority"
 msgstr "Priorytet"
 
-#: pcbnew/class_zone.cpp:715
+#: pcbnew/class_zone.cpp:714
 msgid "Non Copper Zone"
 msgstr "Strefa bez pola miedzi"
 
-#: pcbnew/class_zone.cpp:722
+#: pcbnew/class_zone.cpp:721
 msgid "Corners"
 msgstr "Narożniki"
 
-#: pcbnew/class_zone.cpp:725
+#: pcbnew/class_zone.cpp:724
 msgid "Segments"
 msgstr "Segmenty"
 
-#: pcbnew/class_zone.cpp:727
+#: pcbnew/class_zone.cpp:726
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
 msgid "Polygons"
 msgstr "Wielokąty"
 
-#: pcbnew/class_zone.cpp:729
+#: pcbnew/class_zone.cpp:728
 msgid "Fill mode"
 msgstr "Tryb wypełnienia"
 
-#: pcbnew/class_zone.cpp:733
+#: pcbnew/class_zone.cpp:732
 msgid "Hatch lines"
 msgstr "Linie kreskowe"
 
-#: pcbnew/class_zone.cpp:738
+#: pcbnew/class_zone.cpp:737
 msgid "Corners in DrawList"
 msgstr "Narożniki w liście rysunkowej"
 
-#: pcbnew/class_zone.cpp:949
+#: pcbnew/class_zone.cpp:948
 msgid "(Keepout)"
 msgstr "(Strefa chroniona)"
 
-#: pcbnew/class_zone.cpp:970
+#: pcbnew/class_zone.cpp:969
 msgid "** NO BOARD DEFINED **"
 msgstr "** NIE ZDEFINIOWANO PŁYTKI **"
 
-#: pcbnew/class_zone.cpp:981
+#: pcbnew/class_zone.cpp:980
 msgid " on layer "
 msgstr " na warstwie "
 
@@ -7231,13 +7231,13 @@ msgstr "Globalne usuwanie po stronie ścieżek jest niedozwolone!"
 msgid "Delete Layer "
 msgstr "Usuń warstwę "
 
-#: pcbnew/editmod.cpp:137
-msgid "Text is REFERENCE!"
-msgstr "Tekst jest OZNACZENIEM!"
+#: pcbnew/editmod.cpp:84
+msgid "Cannot delete REFERENCE!"
+msgstr "Nie mogę usunąć pola Oznaczenie!"
 
-#: pcbnew/editmod.cpp:143
-msgid "Text is VALUE!"
-msgstr "Tekst jest WARTOŚCIĄ!"
+#: pcbnew/editmod.cpp:90
+msgid "Cannot delete VALUE!"
+msgstr "Nie mogę usunąć pola Wartość!"
 
 #: pcbnew/editrack.cpp:817
 msgid "Pad to die"
@@ -8683,107 +8683,107 @@ msgstr "Ustaw punkt bazowy siatki"
 msgid "Pad settings"
 msgstr "Właściwości pól lutowniczych"
 
-#: pcbnew/modedit_onclick.cpp:228
+#: pcbnew/modedit_onclick.cpp:229
 msgid "Copy Block (shift + drag mouse)"
 msgstr "Kopiuj blok (shift + przeciąganie myszką)"
 
-#: pcbnew/modedit_onclick.cpp:231
+#: pcbnew/modedit_onclick.cpp:232
 msgid "Mirror Block (alt + drag mouse)"
 msgstr "Odbij blok (alt + przeciąganie myszką)"
 
-#: pcbnew/modedit_onclick.cpp:234
+#: pcbnew/modedit_onclick.cpp:235
 msgid "Rotate Block (ctrl + drag mouse)"
 msgstr "Obróć blok (ctrl + przeciąganie myszką)"
 
-#: pcbnew/modedit_onclick.cpp:237
+#: pcbnew/modedit_onclick.cpp:238
 msgid "Delete Block (shift+ctrl + drag mouse)"
 msgstr "Usuń blok (shift+ctrl + przeciąganie myszką)"
 
-#: pcbnew/modedit_onclick.cpp:265
+#: pcbnew/modedit_onclick.cpp:266
 msgid "Edit Module"
 msgstr "Edytuj footprint"
 
-#: pcbnew/modedit_onclick.cpp:268
+#: pcbnew/modedit_onclick.cpp:269
 msgid "Transform Module"
 msgstr "Przekształć footprint"
 
-#: pcbnew/modedit_onclick.cpp:275
+#: pcbnew/modedit_onclick.cpp:276
 msgid "Move Pad"
 msgstr "Przesuń pole"
 
-#: pcbnew/modedit_onclick.cpp:279
+#: pcbnew/modedit_onclick.cpp:280
 msgid "Edit Pad"
 msgstr "Edytuj pole"
 
-#: pcbnew/modedit_onclick.cpp:282
+#: pcbnew/modedit_onclick.cpp:283
 msgid "New Pad Settings"
 msgstr "Nowe ustawienia pola lutowniczego"
 
-#: pcbnew/modedit_onclick.cpp:284
+#: pcbnew/modedit_onclick.cpp:285
 msgid "Export Pad Settings"
 msgstr "Eksportuj ustawienia pola lutowniczego"
 
-#: pcbnew/modedit_onclick.cpp:285
+#: pcbnew/modedit_onclick.cpp:286
 msgid "Delete Pad"
 msgstr "Usuń pole"
 
-#: pcbnew/modedit_onclick.cpp:292
+#: pcbnew/modedit_onclick.cpp:293
 msgid "Global Pad Settings"
 msgstr "Globalne ustawienia pól lutowniczych"
 
-#: pcbnew/modedit_onclick.cpp:300
+#: pcbnew/modedit_onclick.cpp:301
 msgid "Move Text Mod."
 msgstr "Przesuń tekst footprintu"
 
-#: pcbnew/modedit_onclick.cpp:306
+#: pcbnew/modedit_onclick.cpp:307
 msgid "Rotate Text Mod."
 msgstr "Obróć tekst footprintu"
 
-#: pcbnew/modedit_onclick.cpp:312
+#: pcbnew/modedit_onclick.cpp:313
 msgid "Edit Text Mod."
 msgstr "Edytuj tekst footprintu"
 
-#: pcbnew/modedit_onclick.cpp:318
+#: pcbnew/modedit_onclick.cpp:319
 msgid "Delete Text Mod."
 msgstr "Usuń tekst footprintu"
 
-#: pcbnew/modedit_onclick.cpp:329
+#: pcbnew/modedit_onclick.cpp:330
 msgid "End edge"
 msgstr "Zakończ krawędź"
 
-#: pcbnew/modedit_onclick.cpp:334
+#: pcbnew/modedit_onclick.cpp:335
 msgid "Move edge"
 msgstr "Przesuń krawędź"
 
-#: pcbnew/modedit_onclick.cpp:339
+#: pcbnew/modedit_onclick.cpp:340
 msgid "Place edge"
 msgstr "Dodaj krawędź"
 
-#: pcbnew/modedit_onclick.cpp:345
+#: pcbnew/modedit_onclick.cpp:346
 msgid "Edit Body Item"
 msgstr "Edycja elementu"
 
-#: pcbnew/modedit_onclick.cpp:347
+#: pcbnew/modedit_onclick.cpp:348
 msgid "Change Body Item Width (Current)"
 msgstr "Zmień szerokość elementu (Bieżąca)"
 
-#: pcbnew/modedit_onclick.cpp:349
+#: pcbnew/modedit_onclick.cpp:350
 msgid "Change Body Items Width (All)"
 msgstr "Zmień szerokość elementu (Wszystkie)"
 
-#: pcbnew/modedit_onclick.cpp:351
+#: pcbnew/modedit_onclick.cpp:352
 msgid "Change Body Item Layer (Current)"
 msgstr "Zmień warstwę (Bieżąca)"
 
-#: pcbnew/modedit_onclick.cpp:353
+#: pcbnew/modedit_onclick.cpp:354
 msgid "Change Body Items Layer (All)"
 msgstr "Zmień warstwę (Wszystkie)"
 
-#: pcbnew/modedit_onclick.cpp:354
+#: pcbnew/modedit_onclick.cpp:355
 msgid "Delete edge"
 msgstr "Usuń krawędź"
 
-#: pcbnew/modedit_onclick.cpp:394
+#: pcbnew/modedit_onclick.cpp:395
 msgid "Set Line Width"
 msgstr "Ustaw szerokość linii"
 
@@ -10286,31 +10286,31 @@ msgstr "Usuń niepołączone ścieżki"
 msgid "delete track segment having a dangling end"
 msgstr "Usuń segment ścieżki z dyndającą końcówką"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:400
+#: pcbnew/dialogs/dialog_copper_zones.cpp:388
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
 msgstr "Prześwit musi być mniejszy niż %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:412
+#: pcbnew/dialogs/dialog_copper_zones.cpp:400
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
 msgstr "Minimalna szerokość musi być większa niż %f\" / %f mm."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:451
+#: pcbnew/dialogs/dialog_copper_zones.cpp:439
 msgid "Thermal relief spoke width is smaller than the minimum width."
 msgstr ""
 "Szerokość łącza połączenia termicznego jest mniejsza niż minimalna szerokość."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:464
-#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:229
+#: pcbnew/dialogs/dialog_copper_zones.cpp:452
+#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:219
 msgid "No layer selected."
 msgstr "Nie wybrano warstwy."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:475
+#: pcbnew/dialogs/dialog_copper_zones.cpp:463
 msgid "No net selected."
 msgstr "Nie wybrano sieci."
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:482
+#: pcbnew/dialogs/dialog_copper_zones.cpp:470
 msgid ""
 "You have chosen the \"not connected\" option. This will create insulated "
 "copper islands. Are you sure ?"
@@ -10318,47 +10318,48 @@ msgstr ""
 "Użyłeś opcji \"Niepołączone\". To spowoduje utworzenie izolowanych obszarów "
 "na płytce. Kontynuować?"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:515
+#: pcbnew/dialogs/dialog_copper_zones.cpp:503
 msgid "Chamfer distance"
 msgstr "Długość ścięcia"
 
-#: pcbnew/dialogs/dialog_copper_zones.cpp:521
+#: pcbnew/dialogs/dialog_copper_zones.cpp:509
 msgid "Fillet radius"
 msgstr "Promień zaokrąglenia"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:38
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:37
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:81
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:30
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:49
 msgid "Layer:"
 msgstr "Warstwa:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:61
 msgid "Net Filtering"
 msgstr "Filtrowanie Sieci"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:64
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:63
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:53
 msgid "Display:"
 msgstr "Pokazuj:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:68
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:67
 msgid "Show all (alphabetical)"
 msgstr "Pokaż wszystko (alfabetycznie)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:68
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:67
 msgid "Show all (advanced)"
 msgstr "Pokaż wszystko (widok zaawansowany)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:68
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:67
 msgid "Filtered (alphabetical)"
 msgstr "Filtrowane (alfabetycznie)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:68
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:67
 msgid "Filtered (advanced)"
 msgstr "Filtrowane (widok zaawansowany)"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:74
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:73
 msgid "Hidden net filter:"
 msgstr "Filtr sieci ukrytych:"
 
@@ -10379,7 +10380,7 @@ msgstr "Filtr sieci widocznych:"
 msgid "*"
 msgstr "*"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:88
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:89
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
@@ -10387,90 +10388,90 @@ msgstr ""
 "Maska filtrująca w trybie zaawansowanym.\n"
 "Tylko nazwy sieci odpowiadające masce są wyświetlane."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:92
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:93
 msgid "Apply Filters"
 msgstr "Zastosuj filtry"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:102
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:103
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:107
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:108
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:48
 #: pcbnew/dialogs/dialog_drc_base.cpp:34
 msgid "Clearance"
 msgstr "Prześwit"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:114
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:116
 msgid "Minimum width"
 msgstr "Szerokośc minimalna"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:116
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:118
 msgid "Minimun thickness of filled areas."
 msgstr "Minimalna szerokość dla wypełnień stref."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:123
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Corner smoothing:"
 msgstr "Wygładzanie narożników:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 msgid "Chamfer"
 msgstr "Ścięty"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 msgid "Fillet"
 msgstr "Wypełniony"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:133
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:136
 msgid "Chamfer distance (mm):"
 msgstr "Odległość ścięcia (mm):"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:146
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:484
 msgid "Pad connection:"
 msgstr "Sposób łączenia pól lutowniczych:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:191
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:488
 msgid "Solid"
 msgstr "Pełny"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:191
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:488
 msgid "Thermal relief"
 msgstr "Połączenie termiczne"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 msgid "THT thermal"
 msgstr "Połączenia termiczne z elem. THT"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:157
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:161
 msgid "Thermal Reliefs"
 msgstr "Połączenia termiczne"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:159
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
 msgid "Antipad clearance"
 msgstr "Prześwit pola lutowniczego"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:164
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:169
 msgid "Clearance between pads in the same net and filled areas."
 msgstr "Prześwit pomiędzy polami lutowniczymi z tej samej sieci a strefą."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:168
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
 msgid "Spoke width"
 msgstr "Szerokość łącza"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
 msgid "Width of copper in thermal reliefs."
 msgstr "Określ szerokość miedzi dla połączeń termicznych."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:192
 msgid "Priority level:"
 msgstr "Priorytet:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:188
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:194
 msgid ""
 "On each copper layer, zones are filled by priority order.\n"
 "So when a zone is inside an other zone:\n"
@@ -10484,47 +10485,47 @@ msgstr ""
 "* Jeśli jej priorytet jest wyższy: jej obrysy są usuwane z innej warstwy.\n"
 "* Jeśli jej priorytet jest taki sam: zostaje zgłoszony błąd DRC."
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:195
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
 msgid "Fill mode:"
 msgstr "Tryb wypełnienia:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:211
 msgid "Segments / 360 deg:"
 msgstr "Segmenty / 360 stopni:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:209
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:215
 msgid "32"
 msgstr "32"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:221
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
 msgid "Outline slope:"
 msgstr "Opcje wypełniania:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:225
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
 msgid "Arbitrary"
 msgstr "Dowolny"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:225
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
 msgid "H, V, and 45 deg only"
 msgstr "Tylko Poziomo, pionowo i 45 stopni"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:231
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:237
 msgid "Outline style:"
 msgstr "Styl obrysu:"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:235
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
 msgid "Hatched"
 msgstr "Kreskowany"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:235
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:241
 msgid "Fully hatched"
 msgstr "Pełne kreskowanie"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:250
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:256
 msgid "Export Settings to Other Zones"
 msgstr "Eksportuj ustawienia do innych stref"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:251
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:257
 msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
@@ -12697,66 +12698,59 @@ msgstr "Wybierz warstwę, na której ma znaleźć się tekst."
 msgid "No valid layer selected for this item. Please, select a layer"
 msgstr "Nie wybrano warstwy dla tego elementu. Proszę wybrać warstwę"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:220
+#: pcbnew/dialogs/dialog_keepout_area_properties.cpp:210
 msgid "Tracks, vias and pads are allowed. The keepout is useless"
 msgstr ""
 "Ścieżki, przelotki i pola lutownicze są dozwolone. Strefa chroniona jest "
 "nieprzydatna."
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:30
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:30
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:83
-msgid "Layer selection:"
-msgstr "Wybór warstwy:"
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:43
+msgid "Properties:"
+msgstr "Właściwości:"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:44
-#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-msgid "Outlines Options:"
-msgstr "Opcje obrysu:"
-
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:46
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:47
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:46
 msgid "Any"
 msgstr "Dowolna"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:46
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:47
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:46
 msgid "H, V and 45 deg"
 msgstr "Poziomo, pionowo i 45 stopni"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:48
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:49
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
 msgid "Zone Edges Orient"
 msgstr "Orientacja krawędzi strefy"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:52
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Hatched Outline"
 msgstr "Linia kreskowa"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:52
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Full Hatched"
 msgstr "Pełne kreskowanie"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:54
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:54
 msgid "Outlines Appearence"
 msgstr "Wygląd obrysów"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:62
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 msgid "Keepout Options:"
 msgstr "Opcje strefy chronionej:"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:64
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:62
 msgid "No Tracks"
 msgstr "Ścieżki wykluczone"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:67
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:65
 msgid "No Vias"
 msgstr "Przelotki wykluczone"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:70
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:68
 msgid "No Copper Pour"
 msgstr "Bez stref wypełnień"
 
@@ -13378,6 +13372,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:111
 msgid "Netlist File:"
 msgstr "Plik listy sieci:"
+
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:30
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:83
+msgid "Layer selection:"
+msgstr "Wybór warstwy:"
+
+#: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
+msgid "Outlines Options:"
+msgstr "Opcje obrysu:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
 msgid "Zone min thickness value"
@@ -17923,7 +17926,7 @@ msgstr "Odśwież widok"
 msgid "Cleaning Options"
 msgstr "Opcje czyszczenia"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.h:129
+#: pcbnew/dialogs/dialog_copper_zones_base.h:130
 msgid "Copper Zone Properties"
 msgstr "Właściwości stref miedzi"
 
@@ -17996,7 +17999,7 @@ msgstr "Teksty i rysunki"
 msgid "Graphic Item Properties"
 msgstr "Właściwości elementu graficznego"
 
-#: pcbnew/dialogs/dialog_keepout_area_properties_base.h:65
+#: pcbnew/dialogs/dialog_keepout_area_properties_base.h:70
 msgid "Keepout Area Properties"
 msgstr "Właściwości strefy chronionej"
 
@@ -18080,6 +18083,9 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "Text is VALUE!"
+#~ msgstr "Tekst jest WARTOŚCIĄ!"
 
 #~ msgid "F.Cu"
 #~ msgstr "Gorna"
