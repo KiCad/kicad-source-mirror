@@ -95,4 +95,4 @@ const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf
 const wxString PSFileWildcard( _( "PostScript files (.ps)|*.ps" ) );
 const wxString ReportFileWildcard = _( "Report files (*.rpt)|*.rpt" );
 const wxString FootprintPlaceFileWildcard = _( "Footprint place files (*.pos)|*.pos" );
-const wxString VrmlFileWildcard( _( "Vrml files (*.wrl)|*.wrl" ) );
+const wxString Shapes3DFileWildcard( _( "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d" ) );

@@ -19,6 +19,8 @@ set(3D-VIEWER_SRCS
     3d_toolbar.cpp
     info3d_visu.cpp
     trackball.cpp
+    x3dmodelparser.cpp
+    vrmlmodelparser.cpp
     )
 
 add_library(3d-viewer STATIC ${3D-VIEWER_SRCS})

@@ -40,6 +40,8 @@
 #include <class_pcb_text.h>
 #include <convert_from_iu.h>
 
+#include "../3d-viewer/modelparsers.h"
+
 #include <vector>
 #include <cmath>
 
@@ -1149,11 +1151,28 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                  vrmlm->m_MatScale.y * aVRMLModelsToBiu,
                  vrmlm->m_MatScale.z * aVRMLModelsToBiu );
 
-        fprintf( aOutputFile,
-//                 "  children [\n    Inline {\n      url \"file://%s\"\n    } ]\n",
-                 "  children [\n    Inline {\n      url \"%s\"\n    } ]\n",
-                 TO_UTF8( fname ) );
-        fprintf( aOutputFile, "  }\n" );
+        if( fname.EndsWith( wxT( "x3d" ) ) )
+        {
+            X3D_MODEL_PARSER* parser = new X3D_MODEL_PARSER(vrmlm);
+
+            if(parser)
+            {
+                // embed x3d model in vrml format
+                parser->Load(fname);
+                fprintf( aOutputFile,
+                         "  children [\n %s ]\n", TO_UTF8( parser->VRML_representation() ) );
+                fprintf( aOutputFile, "  }\n" );
+                delete parser;
+            }
+        }
+        else
+        {
+            fprintf( aOutputFile,
+                     "  children [\n    Inline {\n      url \"%s\"\n    } ]\n",
+                     TO_UTF8( fname ) );
+            fprintf( aOutputFile, "  }\n" );
+        }
+
     }
 }
 
