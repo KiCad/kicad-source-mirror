@@ -495,7 +495,7 @@ wxString LIB_TEXT::GetSelectMenuText() const
 }
 
 
-void LIB_TEXT::BeginEdit( int aEditMode, const wxPoint aPosition )
+void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
                  wxT( "Invalid edit mode for LIB_TEXT object." ) );

@@ -1990,11 +1990,14 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         int         makeType;
         time_t      timeStamp;
-        int         layer, type, flags, net_code;
+        int         layer, type, net_code, flags_int;
 
         // parse the 2nd line to determine the type of object
         // e.g. "De 15 1 7 0 0"   for a via
-        sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer, &type, &net_code, &timeStamp, &flags );
+        sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer, &type, &net_code,
+                &timeStamp, &flags_int );
+        STATUS_FLAGS flags;
+        flags = static_cast<STATUS_FLAGS>( flags_int );
 
         if( aStructType==PCB_TRACE_T && type==1 )
             makeType = PCB_VIA_T;

@@ -53,7 +53,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard );
 bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 {
     wxString    msg;
-    int         flags = 0;
+    STATUS_FLAGS flags = 0;
     bool        locate_track = false;
     bool        blockActive  = !GetScreen()->m_BlockLocate.IsIdle();
 

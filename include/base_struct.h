@@ -383,6 +383,7 @@ public:
                                    ///< already been edited, in some functions
 #define EDA_ITEM_ALL_FLAGS -1
 
+typedef unsigned STATUS_FLAGS;
 
 /**
  * Class EDA_ITEM
@@ -399,7 +400,7 @@ private:
      * functions.
      */
     KICAD_T       m_StructType;
-    int           m_Status;
+    STATUS_FLAGS  m_Status;
 
 protected:
     EDA_ITEM*     Pnext;          ///< next in linked list
@@ -414,7 +415,7 @@ protected:
     bool          m_forceVisible;
 
     /// Flag bits for editing and other uses.
-    int           m_Flags;
+    STATUS_FLAGS  m_Flags;
 
     // Link to an copy of the item use to save the item's state for undo/redo feature.
     EDA_ITEM*     m_Image;
@@ -475,12 +476,12 @@ public:
             m_Status &= ~type;
     }
 
-    int GetStatus() const           { return m_Status; }
-    void SetStatus( int aStatus )   { m_Status = aStatus; }
+    STATUS_FLAGS GetStatus() const           { return m_Status; }
+    void SetStatus( STATUS_FLAGS aStatus )   { m_Status = aStatus; }
 
-    void SetFlags( int aMask ) { m_Flags |= aMask; }
-    void ClearFlags( int aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
-    int GetFlags() const { return m_Flags; }
+    void SetFlags( STATUS_FLAGS aMask ) { m_Flags |= aMask; }
+    void ClearFlags( STATUS_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
+    STATUS_FLAGS GetFlags() const { return m_Flags; }
 
     void SetImage( EDA_ITEM* aItem ) { m_Image = aItem; }
 

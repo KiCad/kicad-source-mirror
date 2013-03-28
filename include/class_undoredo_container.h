@@ -81,7 +81,7 @@ enum UNDO_REDO_T {
 class ITEM_PICKER
 {
 private:
-    int            m_pickerFlags;      /* a copy of m_Flags member. useful in mode/drag
+    STATUS_FLAGS   m_pickerFlags;      /* a copy of m_Flags member. useful in mode/drag
                                         * undo/redo commands */
     UNDO_REDO_T    m_undoRedoStatus;   /* type of operation to undo/redo for this item */
     EDA_ITEM*      m_pickedItem;       /* Pointer on the schematic or board item that is concerned
@@ -113,9 +113,9 @@ public:
 
     UNDO_REDO_T GetStatus() { return m_undoRedoStatus; }
 
-    void SetFlags( int aFlags ) { m_pickerFlags = aFlags; }
+    void SetFlags( STATUS_FLAGS aFlags ) { m_pickerFlags = aFlags; }
 
-    int GetFlags() { return m_pickerFlags; }
+    STATUS_FLAGS GetFlags() const { return m_pickerFlags; }
 
     void SetLink( EDA_ITEM* aItem ) { m_link = aItem; }
 
@@ -231,7 +231,7 @@ public:
      * @param aIdx Index of the picker in the picked list
      * @return The value stored in the picker, if the picker exists, or 0 if does not exist
      */
-    int GetPickerFlags( unsigned aIdx );
+    STATUS_FLAGS GetPickerFlags( unsigned aIdx );
 
     /**
      * Function SetPickedItem
@@ -275,7 +275,7 @@ public:
      * @param aIdx Index of the picker in the picked list
      * @return True if the picker exists or false if does not exist
      */
-    bool SetPickerFlags( int aFlags, unsigned aIdx );
+    bool SetPickerFlags( STATUS_FLAGS aFlags, unsigned aIdx );
 
     /**
      * Function RemovePicker

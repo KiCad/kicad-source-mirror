@@ -574,7 +574,7 @@ wxString LIB_ARC::GetSelectMenuText() const
 }
 
 
-void LIB_ARC::BeginEdit( int aEditMode, const wxPoint aPosition )
+void LIB_ARC::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                  wxT( "Invalid edit mode for LIB_ARC object." ) );

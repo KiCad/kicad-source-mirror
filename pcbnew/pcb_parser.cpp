@@ -1282,7 +1282,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_status:
-            segment->SetStatus( parseHex() );
+            segment->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
@@ -1966,7 +1966,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_status:
-            segment->SetStatus( parseHex() );
+            segment->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
@@ -2263,7 +2263,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_status:
-            track->SetStatus( parseHex() );
+            track->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             break;
 
         default:
@@ -2343,7 +2343,7 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
             break;
 
         case T_status:
-            via->SetStatus( parseHex() );
+            via->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
             NeedRIGHT();
             break;
 

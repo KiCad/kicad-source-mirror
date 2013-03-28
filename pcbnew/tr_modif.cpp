@@ -41,7 +41,8 @@
 #include <protos.h>
 
 
-static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff );
+static void ListSetState( EDA_ITEM* Start, int NbItem, STATUS_FLAGS State,
+                          bool onoff );
 
 
 void DrawTraces( EDA_DRAW_PANEL* panel, wxDC* DC, TRACK* aTrackList, int nbsegment,
@@ -311,7 +312,8 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
 /* Set the bits of .m_State member to on/off value, using bit mask State
  * of a list of EDA_ITEM
  */
-static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff )
+static void ListSetState( EDA_ITEM* Start, int NbItem, STATUS_FLAGS State,
+                          bool onoff )
 {
     for( ; (Start != NULL ) && ( NbItem > 0 ); NbItem--, Start = Start->Next() )
     {
