@@ -905,6 +905,17 @@ public:
     /**
      * Function ExportVRML_File
      * Creates the file(s) exporting current BOARD to a VRML file.
+     *
+     * @note When copying 3D shapes files, the new filename is build from the full path
+     *       name, changing the separators by underscore.  This is needed because files
+     *       with the same shortname can exist in different directories
+     * @note ExportVRML_File generates coordinates in board units (BIU) inside the file.
+     * @todo Use mm inside the file.  A general scale transform is applied to the whole
+     *       file (1.0 to have the actual WRML unit im mm, 0.001 to have the actual WRML
+     *       unit in meters.
+     * @note For 3D models built by a 3D modeler, the unit is 0,1 inches.  A specfic scale
+     *       is applied to 3D models to convert them to internal units.
+     *
      * @param aFullFileName = the full filename of the file to create
      * @param aMMtoWRMLunit = the VRML scaling factor:
      *      1.0 to export in mm. 0.001 for meters

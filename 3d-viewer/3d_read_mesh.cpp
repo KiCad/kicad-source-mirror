@@ -41,22 +41,24 @@
 // Imported function:
 extern void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
 
-S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster, 
-                                            const wxString aExtension ) 
+
+S3D_MODEL_PARSER* S3D_MODEL_PARSER::Create( S3D_MASTER* aMaster,
+                                            const wxString aExtension )
 {
     if ( aExtension == wxT( "x3d" ) )
     {
-        return new X3D_MODEL_PARSER(aMaster);
+        return new X3D_MODEL_PARSER( aMaster );
     }
     else if ( aExtension == wxT( "wrl" ) )
     {
-        return new VRML_MODEL_PARSER(aMaster);
+        return new VRML_MODEL_PARSER( aMaster );
     }
     else
     {
         return NULL;
     }
 }
+
 
 int S3D_MASTER::ReadData()
 {
@@ -69,16 +71,17 @@ int S3D_MASTER::ReadData()
     }
 
     wxString shape3DNname = m_Shape3DName;
+
 #ifdef __WINDOWS__
-    shape3DNname.Replace( wxT("/"), wxT("\\") );
+    shape3DNname.Replace( wxT( "/" ), wxT( "\\" ) );
 #else
-    shape3DNname.Replace( wxT("\\"), wxT("/") );
+    shape3DNname.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
     if( wxFileName::FileExists( shape3DNname ) )
     {
         FullFilename = shape3DNname;
-        fn.Assign(FullFilename);
+        fn.Assign( FullFilename );
     }
     else
     {
@@ -94,20 +97,22 @@ int S3D_MASTER::ReadData()
     }
 
     wxString extension = fn.GetExt();
-    S3D_MODEL_PARSER* parser = S3D_MODEL_PARSER::Create(this, extension);
-    if(parser)
+    S3D_MODEL_PARSER* parser = S3D_MODEL_PARSER::Create( this, extension );
+
+    if( parser )
     {
-        parser->Load(FullFilename);
+        parser->Load( FullFilename );
         delete parser;
         return 0;
-    } 
-    else 
+    }
+    else
     {
         wxLogDebug( wxT( "Unknown file type <%s>" ), GetChars( extension ) );
     }
 
     return -1;
 }
+
 
 int STRUCT_3D_SHAPE::ReadData( FILE* file, int* LineNum )
 {
