@@ -80,7 +80,7 @@ void PCB_EDIT_FRAME::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
     for( ; (Track != NULL) && (nb_segm > 0); nb_segm-- )
     {
         Track->SetState( TRACK_LOCKED, Flag_On );
-        Track->SetState( BUSY, OFF );
+        Track->SetState( BUSY, false );
         Track = Track->Next();
     }
 

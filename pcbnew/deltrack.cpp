@@ -213,7 +213,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     for( ; ii < segments_to_delete_count; ii++, tracksegment = next_track )
     {
         next_track = tracksegment->Next();
-        tracksegment->SetState( BUSY, OFF );
+        tracksegment->SetState( BUSY, false );
 
         D( std::cout << __func__ << ": track " << tracksegment << " status=" \
                      << TO_UTF8( TRACK::ShowState( tracksegment->GetState( -1 ) ) ) \

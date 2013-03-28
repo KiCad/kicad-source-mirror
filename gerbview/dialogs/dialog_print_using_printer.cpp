@@ -138,7 +138,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     s_Parameters.m_PageSetupData = g_pageSetupData;
 
     layer_max = 32;
-    /* Create layer list */
+    // Create layer list
     int mask = 1, ii;
     for( ii = 0; ii < layer_max; ii++, mask <<= 1 )
     {

@@ -209,7 +209,7 @@ void DRAG_LIST::fillList( CONNECTIONS& aConnections )
             TRACK * track = pad->m_TracksConnected[jj];
             track->start = NULL;
             track->end = NULL;
-            track->SetState( START_ON_PAD|END_ON_PAD|BUSY, OFF );
+            track->SetState( START_ON_PAD|END_ON_PAD|BUSY, false );
         }
     }
 
@@ -226,13 +226,13 @@ void DRAG_LIST::fillList( CONNECTIONS& aConnections )
             if( pad->HitTest( track->GetStart() ) )
             {
                 track->start = pad;
-                track->SetState( START_ON_PAD, ON );
+                track->SetState( START_ON_PAD, false );
             }
 
             if( pad->HitTest( track->GetEnd() ) )
             {
                 track->end = pad;
-                track->SetState( END_ON_PAD, ON );
+                track->SetState( END_ON_PAD, false );
             }
 
             DRAG_SEGM_PICKER wrapper( track );
@@ -407,7 +407,7 @@ void UndrawAndMarkSegmentsToDrag( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
         TRACK* track = g_DragSegmentList[ii].m_Track;
 
         track->Draw( aCanvas, aDC, GR_XOR );
-        track->SetState( IN_EDIT, ON );
+        track->SetState( IN_EDIT, false );
 
         if( g_DragSegmentList[ii].m_Flag & STARTPOINT )
             track->SetFlags( STARTPOINT );
