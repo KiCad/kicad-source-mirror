@@ -248,6 +248,9 @@ include(Functions)
 #================================================
 include(CheckFindPackageResult)
 
+# Turn on wxWidgets compatibility mode for some classes 
+add_definitions(-DWX_COMPATIBILITY)
+
 #######################
 # Find OpenGL library #
 #######################
