@@ -345,7 +345,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                     if( other && other->Type() == PCB_VIA_T )
                     {
                         // search for another segment following the via
-                        track->SetState( BUSY, ON );
+                        track->SetState( BUSY, true );
 
                         SEGVIA* via = (SEGVIA*) other;
                         other = via->GetTrace( m_Brd->m_Track, NULL, FLG_START );
@@ -360,7 +360,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         if( (other == NULL) && (zone == NULL) )
                             flag_erase |= 2;
 
-                        track->SetState( BUSY, OFF );
+                        track->SetState( BUSY, false );
                     }
                 }
             }
@@ -401,7 +401,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                     {
                         // search for another segment following the via
 
-                        track->SetState( BUSY, ON );
+                        track->SetState( BUSY, true );
 
                         SEGVIA* via = (SEGVIA*) other;
                         other = via->GetTrace( m_Brd->m_Track, NULL, FLG_END );
@@ -416,7 +416,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
                         if( (other == NULL) && (zone == NULL) )
                             flag_erase |= 0x20;
 
-                        track->SetState( BUSY, OFF );
+                        track->SetState( BUSY, false );
                     }
                 }
             }
@@ -520,9 +520,9 @@ bool TRACKS_CLEANER::clean_segments()
                     break;
 
                 // We must have only one segment connected
-                segStart->SetState( BUSY, ON );
+                segStart->SetState( BUSY, true );
                 other = segment->GetTrace( m_Brd->m_Track, NULL, FLG_START );
-                segStart->SetState( BUSY, OFF );
+                segStart->SetState( BUSY, false );
 
                 if( other == NULL )
                     flag = 1;           // OK
@@ -558,9 +558,9 @@ bool TRACKS_CLEANER::clean_segments()
                     break;
 
                 // We must have only one segment connected
-                segEnd->SetState( BUSY, ON );
+                segEnd->SetState( BUSY, true );
                 other = segment->GetTrace( m_Brd->m_Track, NULL, FLG_END );
-                segEnd->SetState( BUSY, OFF );
+                segEnd->SetState( BUSY, false );
 
                 if( other == NULL )
                     flag |= 2;          // Ok
@@ -731,7 +731,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
 
     for( segment = GetBoard()->m_Track;  segment;  segment = (TRACK*) segment->Next() )
     {
-        segment->SetState( FLAG0, OFF );
+        segment->SetState( FLAG0, false );
 
         // find the netcode for segment using anything connected to the "start" of "segment"
         net_code_s = -1;
@@ -773,7 +773,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         // Netcodes do not agree, so mark the segment as "to be removed"
         if( net_code_s != net_code_e )
         {
-            segment->SetState( FLAG0, ON );
+            segment->SetState( FLAG0, true );
         }
     }
 
@@ -784,7 +784,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
 
         if( segment->GetState( FLAG0 ) )    // Segment is flagged to be removed
         {
-            segment->SetState( FLAG0, OFF );
+            segment->SetState( FLAG0, false );
             isModified = true;
             GetBoard()->m_Status_Pcb = 0;
             Remove_One_Track( NULL, segment );

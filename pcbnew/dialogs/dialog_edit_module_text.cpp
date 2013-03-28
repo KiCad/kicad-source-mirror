@@ -134,7 +134,7 @@ void DialogEditModuleText::initDlg( )
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
 
     int text_orient = m_currentText->GetOrientation();
-    NORMALIZE_ANGLE_90(text_orient)
+    NORMALIZE_ANGLE_90( text_orient );
 
     if( (text_orient != 0) )
         m_Orient->SetSelection( 1 );

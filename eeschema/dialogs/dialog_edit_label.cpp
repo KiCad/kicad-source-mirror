@@ -140,7 +140,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
         break;
     }
 
-    int MINTEXTWIDTH = 40;    // M's are big characters, a few establish a lot of width
+    const int MINTEXTWIDTH = 40;    // M's are big characters, a few establish a lot of width
 
     int max_len = 0;
 
