@@ -59,7 +59,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
     int      iusPerMil = plotter->GetIUsPerDecimil() * 10;
     wxSize   pageSize = aPageInfo.GetSizeMils();  // in mils
     int      xg, yg;
-    int      refx, refy;
+//    int      refx, refy;
     wxPoint  pos, end, ref;
     wxString msg;
     wxSize   text_size;

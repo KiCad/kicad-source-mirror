@@ -257,6 +257,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, //{{{
         "}\n",
         0 // End marker
     };
+
     int marker_found = 0, lineno = 0;
 
     while( marker_found < 4 )
@@ -553,6 +554,7 @@ static void export_vrml_arc( int layer, double centerx, double centery,
 
     ring.bag( layer, false );
 }
+
 
 static void export_vrml_varc( TRIANGLEBAG& triangles,
                               int top_layer, int bottom_layer,
@@ -958,28 +960,28 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
                 pad_dy = 0;
 
             case PAD_TRAPEZOID:
+            {
+                int coord[8] =
                 {
-                    int coord[8] =
-                    {
-                        KiROUND(-pad_w - pad_dy), KiROUND(+pad_h + pad_dx),
-                        KiROUND(-pad_w + pad_dy), KiROUND(-pad_h - pad_dx),
-                        KiROUND(+pad_w - pad_dy), KiROUND(+pad_h - pad_dx),
-                        KiROUND(+pad_w + pad_dy), KiROUND(-pad_h + pad_dx),
-                    };
+                    KiROUND( -pad_w - pad_dy ), KiROUND( +pad_h + pad_dx ),
+                    KiROUND( -pad_w + pad_dy ), KiROUND( -pad_h - pad_dx ),
+                    KiROUND( +pad_w - pad_dy ), KiROUND( +pad_h - pad_dx ),
+                    KiROUND( +pad_w + pad_dy ), KiROUND( -pad_h + pad_dx ),
+                };
 
-                    for( int i = 0; i < 4; i++ )
-                    {
-                        RotatePoint( &coord[i * 2], &coord[i * 2 + 1], aPad->GetOrientation() );
-                        coord[i * 2]     += KiROUND( pad_x );
-                        coord[i * 2 + 1] += KiROUND( pad_y );
-                    }
-
-                    bag_flat_quad( layer, coord[0], coord[1],
-                                   coord[2], coord[3],
-                                   coord[4], coord[5],
-                                   coord[6], coord[7] );
+                for( int i = 0; i < 4; i++ )
+                {
+                    RotatePoint( &coord[i * 2], &coord[i * 2 + 1], aPad->GetOrientation() );
+                    coord[i * 2]     += KiROUND( pad_x );
+                    coord[i * 2 + 1] += KiROUND( pad_y );
                 }
-                break;
+
+                bag_flat_quad( layer, coord[0], coord[1],
+                               coord[2], coord[3],
+                               coord[4], coord[5],
+                               coord[6], coord[7] );
+            }
+            break;
 
             default:
                 ;
@@ -1043,11 +1045,11 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            export_vrml_text_module( dynamic_cast<TEXTE_MODULE*>(item) );
+            export_vrml_text_module( dynamic_cast<TEXTE_MODULE*>( item ) );
             break;
 
         case PCB_MODULE_EDGE_T:
-            export_vrml_edge_module( dynamic_cast<EDGE_MODULE*>(item) );
+            export_vrml_edge_module( dynamic_cast<EDGE_MODULE*>( item ) );
             break;
 
         default:
@@ -1078,13 +1080,13 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                 fname = vrmlm->m_Shape3DName;
         }
 
-        fname.Replace(wxT("\\"), wxT("/" ) );
+        fname.Replace( wxT( "\\" ), wxT( "/" ) );
         wxString source_fname = fname;
 
         if( aExport3DFiles )    // Change illegal characters in short filename
         {
             ChangeIllegalCharacters( fname, true );
-            fname = a3D_Subdir + wxT("/") + fname;
+            fname = a3D_Subdir + wxT( "/" ) + fname;
 
             if( !wxFileExists( fname ) )
                 wxCopyFile( source_fname, fname );
@@ -1153,12 +1155,12 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
 
         if( fname.EndsWith( wxT( "x3d" ) ) )
         {
-            X3D_MODEL_PARSER* parser = new X3D_MODEL_PARSER(vrmlm);
+            X3D_MODEL_PARSER* parser = new X3D_MODEL_PARSER( vrmlm );
 
-            if(parser)
+            if( parser )
             {
                 // embed x3d model in vrml format
-                parser->Load(fname);
+                parser->Load( fname );
                 fprintf( aOutputFile,
                          "  children [\n %s ]\n", TO_UTF8( parser->VRML_representation() ) );
                 fprintf( aOutputFile, "  }\n" );
@@ -1187,28 +1189,7 @@ static void write_and_empty_triangle_bag( FILE* output_file, TRIANGLEBAG& triang
     }
 }
 
-/* ExportVRML_File
- * Creates the file(s) exporting current BOARD to a VRML file.
- * aFullFileName = the full filename of the file to create
- * aMMtoWRMLunit = the general WRML scaling factor. 1.0 to export in mm
- * @param aExport3DFiles = true to copy 3D shapes in the subdir a3D_Subdir
- * a3D_Subdir = sub directory where 3D shapes files are copied
- * used only when aExport3DFiles == true
- */
-/* Note1:
- * When copying 3D shapes files, the new filename is build from
- * the full path name, changing the separators by underscore.
- * this is needed because files with the same shortname can exist in different directories
- * Note 2:
- * ExportVRML_File generates coordinates in board units (BIU) inside the file.
- * (TODO: use mm inside the file)
- * A general scale transform is applied to the whole file
- * (1.0 to have the actual WRML unit im mm, 0.001 to have the actual WRML unit im meter
- * Note 3:
- * For 3D models built by a 3D modeler, the unit is 0,1 inch
- * A specfic scale is applied to 3D models to convert them to BIU
- *
- */
+
 bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
                                       double aMMtoWRMLunit, bool aExport3DFiles,
                                       const wxString & a3D_Subdir )
@@ -1218,6 +1199,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     BOARD*     pcb = GetBoard();
 
     output_file = wxFopen( aFullFileName, wxT( "wt" ) );
+
     if( output_file == NULL )
         return false;
 
@@ -1227,7 +1209,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     // Begin with the usual VRML boilerplate
     wxString name = aFullFileName;
 
-    name.Replace(wxT("\\"), wxT("/" ) );
+    name.Replace( wxT( "\\" ), wxT( "/" ) );
     ChangeIllegalCharacters( name, false );
     fprintf( output_file, "#VRML V2.0 utf8\n"
                           "WorldInfo {\n"
@@ -1275,6 +1257,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
      * is 2.54 * aMMtoWRMLunit
      */
     double wrml_3D_models_scaling_factor = 2.54 * aMMtoWRMLunit;
+
     // Export footprints
     for( MODULE* module = pcb->m_Modules; module != 0; module = module->Next() )
         export_vrml_module( pcb, module, output_file,
@@ -1307,6 +1290,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     return true;
 }
 
+
 /*
  * some characters cannot be used in filenames,
  * this function change them to "_"
@@ -1314,8 +1298,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
 static void ChangeIllegalCharacters( wxString & aFileName, bool aDirSepIsIllegal )
 {
     if( aDirSepIsIllegal )
-        aFileName.Replace(wxT("/"), wxT("_" ) );
+        aFileName.Replace( wxT( "/" ), wxT( "_" ) );
 
-    aFileName.Replace(wxT(" "), wxT("_" ) );
-    aFileName.Replace(wxT(":"), wxT("_" ) );
+    aFileName.Replace( wxT( " " ), wxT( "_" ) );
+    aFileName.Replace( wxT( ":" ), wxT( "_" ) );
 }

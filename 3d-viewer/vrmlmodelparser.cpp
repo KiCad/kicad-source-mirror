@@ -36,19 +36,21 @@
 
 #include "3d_struct.h"
 #include "modelparsers.h"
-    
+
 // separator chars
 static const char* sep_chars = " \t\n\r";
 
-VRML_MODEL_PARSER::VRML_MODEL_PARSER(S3D_MASTER* aMaster)
-:S3D_MODEL_PARSER(aMaster)
+VRML_MODEL_PARSER::VRML_MODEL_PARSER( S3D_MASTER* aMaster ) :
+    S3D_MODEL_PARSER( aMaster )
 {}
+
 
 VRML_MODEL_PARSER::~VRML_MODEL_PARSER()
 {}
 
-void VRML_MODEL_PARSER::Load(const wxString aFilename) 
-{ 
+
+void VRML_MODEL_PARSER::Load( const wxString aFilename )
+{
     char       line[1024], * text;
     FILE*      file;
     int        LineNum = 0;
@@ -67,7 +69,7 @@ void VRML_MODEL_PARSER::Load(const wxString aFilename)
     {
         text = strtok( line, sep_chars );
 
-        if( stricmp( text, "DEF" ) == 0 || stricmp( text, "Group" ) == 0)
+        if( stricmp( text, "DEF" ) == 0 || stricmp( text, "Group" ) == 0 )
         {
             while( GetLine( file, line, &LineNum, 512 ) )
             {
@@ -90,6 +92,7 @@ void VRML_MODEL_PARSER::Load(const wxString aFilename)
     fclose( file );
     SetLocaleTo_Default();       // revert to the current locale
 }
+
 
 int VRML_MODEL_PARSER::readMaterial( FILE* file, int* LineNum )
 {
@@ -258,7 +261,8 @@ int VRML_MODEL_PARSER::readAppearance( FILE* file, int* LineNum )
 
         if( *text == '}' )
         {
-            err = 0; break;
+            err = 0;
+            break;
         }
 
         if( stricmp( text, "material" ) == 0 )
@@ -278,24 +282,8 @@ int VRML_MODEL_PARSER::readAppearance( FILE* file, int* LineNum )
 
 #define BUFSIZE 2000
 
-/**
- * Function ReadCoordList
- * reads 3D coordinate lists like:
- *      coord Coordinate { point [
- *        -5.24489 6.57640e-3 -9.42129e-2,
- *        -5.11821 6.57421e-3 0.542654,
- *        -3.45868 0.256565 1.32000 ] }
- *  or:
- *  normal Normal { vector [
- *        0.995171 -6.08102e-6 9.81541e-2,
- *        0.923880 -4.09802e-6 0.382683,
- *        0.707107 -9.38186e-7 0.707107]
- *      }
- *
- *  text_buffer contains the first line of this node :
- *     "coord Coordinate { point ["
- */
-void VRML_MODEL_PARSER::readCoordsList( FILE* file, char* text_buffer, std::vector< double >& aList, int* LineNum )
+void VRML_MODEL_PARSER::readCoordsList( FILE* file, char* text_buffer,
+                                        std::vector< double >& aList, int* LineNum )
 {
     unsigned int ii = 0, jj = 0;
     char*        text;
@@ -399,6 +387,7 @@ int VRML_MODEL_PARSER::readGeometry( FILE* file, int* LineNum )
             else
             {
             }
+
             continue;
         }
 
