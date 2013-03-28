@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-27 06:15+0100\n"
-"PO-Revision-Date: 2013-03-27 06:15+0100\n"
+"POT-Creation-Date: 2013-03-28 06:13+0100\n"
+"PO-Revision-Date: 2013-03-28 06:16+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu\n"
@@ -705,50 +705,50 @@ msgstr "Plik dokumentacji biblioteki <%s> jest pusty."
 msgid "File <%s> is not a valid component library document file."
 msgstr "Plik <%s> nie jest poprawnym plikiem dokumentacji biblioteki."
 
-#: eeschema/component_references_lister.cpp:683
+#: eeschema/component_references_lister.cpp:711
 #, c-format
 msgid "Item not annotated: %s%s"
 msgstr "Element nie ma numeracji: %s%s"
 
-#: eeschema/component_references_lister.cpp:689
-#: eeschema/component_references_lister.cpp:756
-#: eeschema/component_references_lister.cpp:783
+#: eeschema/component_references_lister.cpp:717
+#: eeschema/component_references_lister.cpp:784
+#: eeschema/component_references_lister.cpp:811
 #, c-format
 msgid " (unit %d)"
 msgstr " (część %d)"
 
-#: eeschema/component_references_lister.cpp:711
+#: eeschema/component_references_lister.cpp:739
 #, c-format
 msgid "Error item %s%s"
 msgstr "Błąd elementu %s%s"
 
-#: eeschema/component_references_lister.cpp:714
+#: eeschema/component_references_lister.cpp:742
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " część %d i nie więcej niż %d elementów"
 
-#: eeschema/component_references_lister.cpp:750
-#: eeschema/component_references_lister.cpp:777
+#: eeschema/component_references_lister.cpp:778
+#: eeschema/component_references_lister.cpp:805
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Element wielokrotny %s%s"
 
-#: eeschema/component_references_lister.cpp:799
+#: eeschema/component_references_lister.cpp:827
 #, c-format
 msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
 msgstr "Różnica wartości dla %s%d.%d (%s) i %s%d.%d (%s)"
 
-#: eeschema/component_references_lister.cpp:809
+#: eeschema/component_references_lister.cpp:837
 #, c-format
 msgid "Different values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
 
-#: eeschema/component_references_lister.cpp:843
+#: eeschema/component_references_lister.cpp:871
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
 
-#: eeschema/controle.cpp:165 eeschema/libeditframe.cpp:1177
+#: eeschema/controle.cpp:165 eeschema/libeditframe.cpp:1181
 msgid "Clarify Selection"
 msgstr "Sprecyzuj Wybór"
 
@@ -1413,53 +1413,58 @@ msgstr ""
 "Biblioteka \"%s\" została zmieniona!\n"
 "Porzucić zmiany?"
 
-#: eeschema/libeditframe.cpp:472 eeschema/tool_viewlib.cpp:176
+#: eeschema/libeditframe.cpp:473
+#, c-format
+msgid "Part %d"
+msgstr "Element %d"
+
+#: eeschema/libeditframe.cpp:475 eeschema/tool_viewlib.cpp:176
 #, c-format
 msgid "Part %c"
 msgstr "Element %c"
 
-#: eeschema/libeditframe.cpp:1041
+#: eeschema/libeditframe.cpp:1045
 msgid "Add pin"
 msgstr "Dodaj pin"
 
-#: eeschema/libeditframe.cpp:1045
+#: eeschema/libeditframe.cpp:1049
 msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
-#: eeschema/libeditframe.cpp:1054 eeschema/schedit.cpp:523
+#: eeschema/libeditframe.cpp:1058 eeschema/schedit.cpp:523
 #: pcbnew/edit.cpp:1388 pcbnew/modedit.cpp:847
 msgid "Add text"
 msgstr "Dodaj tekst"
 
-#: eeschema/libeditframe.cpp:1058
+#: eeschema/libeditframe.cpp:1062
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1062 pcbnew/modedit.cpp:843
+#: eeschema/libeditframe.cpp:1066 pcbnew/modedit.cpp:843
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1066 pcbnew/modedit.cpp:839
+#: eeschema/libeditframe.cpp:1070 pcbnew/modedit.cpp:839
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1070 pcbnew/modedit.cpp:835
+#: eeschema/libeditframe.cpp:1074 pcbnew/modedit.cpp:835
 msgid "Add line"
 msgstr "Dodaj linię"
 
-#: eeschema/libeditframe.cpp:1074
+#: eeschema/libeditframe.cpp:1078
 msgid "Set anchor position"
 msgstr "Ustaw pozycję zakotwiczenia"
 
-#: eeschema/libeditframe.cpp:1078
+#: eeschema/libeditframe.cpp:1082
 msgid "Import"
 msgstr "Importuj"
 
-#: eeschema/libeditframe.cpp:1084
+#: eeschema/libeditframe.cpp:1088
 msgid "Export"
 msgstr "Eksportuj"
 
-#: eeschema/libeditframe.cpp:1096 eeschema/schedit.cpp:559
+#: eeschema/libeditframe.cpp:1100 eeschema/schedit.cpp:559
 #: pcbnew/edit.cpp:1400 pcbnew/modedit.cpp:872
 msgid "Delete item"
 msgstr "Usuń element"
@@ -3926,7 +3931,7 @@ msgstr "Nie potwierdzaj"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:70
 #: pcbnew/dialogs/dialog_find_base.cpp:45
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:176
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:177
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:96
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:373
@@ -3972,7 +3977,6 @@ msgstr ""
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:23
 #: eeschema/dialogs/dialog_netlist.cpp:147
 #: pcbnew/dialogs/dialog_drc_base.cpp:23
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:80
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
 msgid "Options:"
@@ -5045,16 +5049,16 @@ msgid "Default Path for Libraries"
 msgstr "Domyślna ścieżka dla bibliotek"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:374
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:464
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:333
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:465
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:334
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths.cpp:357
 #: cvpcb/dialogs/dialog_cvpcb_config.cpp:405
 msgid "Use a relative path?"
 msgstr "Użyć ścieżki względnej?"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:374
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:465
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:334
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:466
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:335
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths.cpp:358
 #: cvpcb/dialogs/dialog_cvpcb_config.cpp:406
 msgid "Path type"
@@ -5364,7 +5368,7 @@ msgstr "Utwórz plik raportu"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:368
 #: pcbnew/dialogs/dialog_drc_base.cpp:102
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:82
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:186
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:187
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:78
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:352
@@ -5861,24 +5865,24 @@ msgid "Postscript"
 msgstr "Postscript"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:73
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:74
 msgid "PDF"
 msgstr "PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:73
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:74
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "SVG"
 msgstr "SVG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:73
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:74
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "DXF"
 msgstr "DXF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:73
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:74
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "HPGL"
 msgstr "HPGL"
@@ -7502,8 +7506,9 @@ msgid "library directory '%s' has unexpected sub-directories"
 msgstr "folder z biblioteką '%s' zawiera niepożądane podfoldery"
 
 #: pcbnew/gpcb_plugin.cpp:927 pcbnew/kicad_plugin.cpp:1773
-msgid "unexpected file '%s' has found in library path '%'"
-msgstr "został znaleziony niepożądany plik '%s' w ścieżce '%'."
+#, c-format
+msgid "unexpected file '%s' has found in library path '%s'"
+msgstr "znaleziono niepożądany plik '%s' w ścieżce bibliotek '%s'"
 
 #: pcbnew/gpcb_plugin.cpp:945 pcbnew/kicad_plugin.cpp:1791
 #, c-format
@@ -7855,7 +7860,7 @@ msgid "GPcb foot print files (*)|*"
 msgstr "Pliki footprintów GPcb (*)|*"
 
 #: pcbnew/librairi.cpp:620
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:382
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:383
 #, c-format
 msgid ""
 "Error:\n"
@@ -9515,13 +9520,13 @@ msgstr ""
 "Plik <%s> nie istnieje.\n"
 "Jest to normalne w przypadku nowych projektów."
 
-#: pcbnew/pcbnew_config.cpp:76 pcbnew/dialogs/dialog_general_options.cpp:237
+#: pcbnew/pcbnew_config.cpp:76 pcbnew/dialogs/dialog_general_options.cpp:236
 #: gerbview/events_called_functions.cpp:381 gerbview/menubar.cpp:158
 #: gerbview/menubar.cpp:160 gerbview/options.cpp:64
 msgid "Hide &Layers Manager"
 msgstr "Ukryj menadżera warstw"
 
-#: pcbnew/pcbnew_config.cpp:76 pcbnew/dialogs/dialog_general_options.cpp:237
+#: pcbnew/pcbnew_config.cpp:76 pcbnew/dialogs/dialog_general_options.cpp:236
 #: gerbview/events_called_functions.cpp:381 gerbview/menubar.cpp:160
 #: gerbview/options.cpp:64
 msgid "Show &Layers Manager"
@@ -10782,7 +10787,7 @@ msgid "Allow micro vias"
 msgstr "Mikroprzelotki dozwolone"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:180
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:143
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:144
 msgid "Micro Vias:"
 msgstr "Mikroprzelotki:"
 
@@ -11290,8 +11295,8 @@ msgstr "Przesunięcie kształtu (w calach):"
 msgid "Shape Rotation (degrees):"
 msgstr "Obrót kształtu (w stopniach):"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:434
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:305
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:435
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:306
 msgid "3D Shape:"
 msgstr "Kształt 3D:"
 
@@ -11635,7 +11640,7 @@ msgid "Browse Libs modules"
 msgstr "Przeglądaj biblioteki footprintów"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:73
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:28
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:29
 #: pcbnew/dialogs/dialog_pcbnew_config_libs_and_paths_fbp.cpp:70
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:103
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:201
@@ -11908,14 +11913,14 @@ msgstr "Pliki AutoCAD DXF (.dxf)|*.dxf"
 msgid "Output directory:"
 msgstr "Folder wyjściowy:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:43
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:33
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:25
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
 msgid "Millimeters"
 msgstr "Milimetry"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:43
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:33
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:52
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:25
@@ -11926,132 +11931,136 @@ msgstr "Milimetry"
 msgid "Inches"
 msgstr "cale"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:45
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:46
 msgid "Drill Units:"
 msgstr "Jednostki wierceń:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:49
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Decimal format"
 msgstr "Format dziesiętny"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:49
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Suppress leading zeros"
 msgstr "Ukryj zera początkowe"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:49
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Suppress trailing zeros"
 msgstr "Ukryj zera końcowe"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:49
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Keep zeros"
 msgstr "Zachowaj zera"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:51
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:52
 msgid "Zeros Format"
 msgstr "Format zer"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:53
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:54
 msgid "Choose EXCELLON numbers notation"
 msgstr "Wybierz format liczb EXCELLON"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:58
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:60
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:59
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid "Precision"
 msgstr "Precyzja"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:73
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:74
 msgid "PostScript"
 msgstr "Postscript"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:73
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:74
 #: pcbnew/dialogs/dialog_plot_base.cpp:31
 msgid "Gerber"
 msgstr "Gerbera"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:75
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:76
 msgid "Drill Map File Format:"
 msgstr "Format pliku mapy wierceń:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:77
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:78
 msgid "Creates a drill map in PS, HPGL or other formats"
 msgstr "Tworzy mapę wierceń w formacie PS, HPGL lub innym"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:84
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:83
+msgid "Drill File Options:"
+msgstr "Opcje pliku wierceń:"
+
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:85
 msgid "Mirror y axis"
 msgstr "Odbij w osi y"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:87
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:88
 msgid "Minimal header"
 msgstr "Nagłówek minimalny"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:93
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
 msgid "Absolute"
 msgstr "Bezwzględny"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:93
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:94
 msgid "Auxiliary axis"
 msgstr "Oś pomocnicza"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:95
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid "Drill Origin:"
 msgstr "Punkt zerowy wierceń:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:97
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 msgid ""
 "Choose the coordinate origin: absolute or relative to the auxiliray axis"
 msgstr ""
 "Wybierz punkt zerowy współrzędnych: bezwzględny lub względny w stosunku do "
 "osi pomocniczej"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:108
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:109
 msgid "Info:"
 msgstr "Informacje:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:110
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:111
 msgid "Default Vias Drill:"
 msgstr "Domyślny otwór przelotek:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:112
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:113
 msgid "Via Drill Value"
 msgstr "Wielkość otworu przelotki"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:119
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:120
 msgid "Micro Vias Drill:"
 msgstr "Otwór mikroprzelotek:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:121
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:122
 msgid "Micro Via Drill Value"
 msgstr "Wielkość otworu mikroprzelotki"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:129
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:130
 msgid "Holes Count:"
 msgstr "Liczba otworów:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:131
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:132
 msgid "Plated Pads:"
 msgstr "Punkty lut. pokryte:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:135
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:136
 msgid "Not Plated Pads:"
 msgstr "Punkty lut. bez pokrycia:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:139
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:140
 msgid "Through Vias:"
 msgstr "Przelotki na wylot:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:147
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:148
 msgid "Buried Vias:"
 msgstr "Przelotki zagrzebane:"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:166
-msgid "Drill Fille"
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:167
+msgid "Drill File"
 msgstr "Plik wierceń"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:170
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:171
 msgid "Map File"
 msgstr "Mapa wierceń"
 
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:173
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:174
 msgid "Report File"
 msgstr "Plik raportu"
 
@@ -16076,8 +16085,8 @@ msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Pliki położeń footprintów (*.pos)|*.pos"
 
 #: common/wildcards_and_files_ext.cpp:98
-msgid "Vrml files (*.wrl)|*.wrl"
-msgstr "Pliki VRML (*.wrl)|*.wrl"
+msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
+msgstr "Pliki VRML i X3D (*.wrl *.x3d)|*.wrl;*.x3d"
 
 #: common/zoom.cpp:222
 msgid "Zoom select"
@@ -16246,7 +16255,7 @@ msgid "User (Custom)"
 msgstr "Użytkownika"
 
 #: common/dialogs/dialog_page_settings.cpp:261
-#: common/dialogs/dialog_page_settings.cpp:650
+#: common/dialogs/dialog_page_settings.cpp:658
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Portrait"
 msgstr "Pionowo"
@@ -16268,7 +16277,7 @@ msgstr ""
 msgid "Warning!"
 msgstr "Ostrzeżenie!"
 
-#: common/dialogs/dialog_page_settings.cpp:652
+#: common/dialogs/dialog_page_settings.cpp:660
 #: common/dialogs/dialog_page_settings_base.cpp:47
 msgid "Landscape"
 msgstr "Poziomo"
@@ -17967,7 +17976,7 @@ msgstr "Kreator Footprintów"
 msgid "PCB Library Tables"
 msgstr "Tabele bibliotek PCB"
 
-#: pcbnew/dialogs/dialog_gendrill_base.h:77
+#: pcbnew/dialogs/dialog_gendrill_base.h:79
 msgid "Drill Files Generation"
 msgstr "Generuj pliki wierceń"
 
@@ -18083,153 +18092,3 @@ msgstr "Parametry regulatora"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:290
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
-
-#~ msgid "Text is VALUE!"
-#~ msgstr "Tekst jest WARTOŚCIĄ!"
-
-#~ msgid "F.Cu"
-#~ msgstr "Gorna"
-
-#~ msgid "Inner1.Cu"
-#~ msgstr "Wewnetrzna_1"
-
-#~ msgid "Inner2.Cu"
-#~ msgstr "Wewnetrzna_2"
-
-#~ msgid "Inner3.Cu"
-#~ msgstr "Wewnetrzna_3"
-
-#~ msgid "Inner4.Cu"
-#~ msgstr "Wewnetrzna_4"
-
-#~ msgid "Inner5.Cu"
-#~ msgstr "Wewnetrzna_5"
-
-#~ msgid "Inner6.Cu"
-#~ msgstr "Wewnetrzna_6"
-
-#~ msgid "Inner7.Cu"
-#~ msgstr "Wewnetrzna_7"
-
-#~ msgid "Inner8.Cu"
-#~ msgstr "Wewnetrzna_8"
-
-#~ msgid "Inner9.Cu"
-#~ msgstr "Wewnetrzna_9"
-
-#~ msgid "Inner10.Cu"
-#~ msgstr "Wewnetrzna_10"
-
-#~ msgid "Inner11.Cu"
-#~ msgstr "Wewnetrzna_11"
-
-#~ msgid "Inner12.Cu"
-#~ msgstr "Wewnetrzna_12"
-
-#~ msgid "Inner13.Cu"
-#~ msgstr "Wewnetrzna_13"
-
-#~ msgid "Inner14.Cu"
-#~ msgstr "Wewnetrzna_14"
-
-#~ msgid "B.Cu"
-#~ msgstr "Dolna"
-
-#~ msgid "B.Adhes"
-#~ msgstr "Kleju_Dolna"
-
-#~ msgid "F.Adhes"
-#~ msgstr "Kleju_Gorna"
-
-#~ msgid "B.Paste"
-#~ msgstr "Pasty_Dolna"
-
-#~ msgid "F.Paste"
-#~ msgstr "Pasty_Gorna"
-
-#~ msgid "B.SilkS"
-#~ msgstr "Opisowa_Dolna"
-
-#~ msgid "F.SilkS"
-#~ msgstr "Opisowa_Gorna"
-
-#~ msgid "B.Mask"
-#~ msgstr "Maski_Dolna"
-
-#~ msgid "F.Mask"
-#~ msgstr "Maski_Gorna"
-
-#~ msgid "Dwgs.User"
-#~ msgstr "Rysunkowa"
-
-#~ msgid "Cmts.User"
-#~ msgstr "Komentarzy"
-
-#~ msgid "Eco1.User"
-#~ msgstr "ECO1"
-
-#~ msgid "Eco2.User"
-#~ msgstr "ECO2"
-
-#~ msgid "Edge.Cuts"
-#~ msgstr "Krawedziowa"
-
-#~ msgid "Autoroute Module"
-#~ msgstr "Autoroutowanie footprintu"
-
-#~ msgid "Global Tracks and Vias Edition"
-#~ msgstr "Edycja rozmiarów wszystkich ścieżek i przelotek"
-
-#~ msgid "Edit Zone Params"
-#~ msgstr "Edytuj parametry strefy"
-
-#~ msgid "Autoroute Pad"
-#~ msgstr "Automatyczne rozmieszczenie pola lutowniczego"
-
-#~ msgid "Autoroute Net"
-#~ msgstr "Automatyczne rozmieszczenie sieci"
-
-#~ msgid "Printer Problem!"
-#~ msgstr "Problem drukarki!"
-
-#~ msgid "Edit Prms"
-#~ msgstr "Edytuj parametry"
-
-#~ msgid "Move and Auto Place"
-#~ msgstr "Przesuwanie i autorozmieszczanie"
-
-#~ msgid "Auto Move and Place"
-#~ msgstr "Globalne przesuwanie i umieszczanie"
-
-#~ msgid "All pads nets clearance:"
-#~ msgstr "Prześwit dla wszystkich pól lutowniczych:"
-
-#~ msgid "Fields:"
-#~ msgstr "Pola:"
-
-#~ msgid "Attributs:"
-#~ msgstr "Atrybuty:"
-
-#~ msgid "Masks clearances local values:"
-#~ msgstr "Lokalna wartość prześwitu dla masek:"
-
-#~ msgid "Set these values to 0 to use global values"
-#~ msgstr "Ustaw wartość 0 by użyć globalnych ustawień"
-
-#~ msgid "All pads nets clearance"
-#~ msgstr "Prześwit dla pól lutowniczych"
-
-#~ msgid "3D Scale and Pos"
-#~ msgstr "Skala 3D i pozycja"
-
-#~ msgid "ElementLine token contains %d parameters."
-#~ msgstr "Token \"ElementLine\" zawiera %d parametrów."
-
-#~ msgid "ElementArc token contains %d parameters."
-#~ msgstr "Token \"ElementArc\" zawiera %d parametrów."
-
-#~ msgid "Pad token contains %d parameters."
-#~ msgstr "Token \"Pad\" zawiera %d parametrów."
-
-#~ msgid "Pin token contains %d parameters."
-#~ msgstr "Token \"Pin\" zawiera %d parametrów."
