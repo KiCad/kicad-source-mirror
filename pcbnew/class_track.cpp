@@ -273,9 +273,9 @@ bool TRACK::IsNull()
 }
 
 
-int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
+STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 {
-    int result = 0;
+    STATUS_FLAGS result = 0;
 
     if( min_dist < 0 )
         min_dist = m_Width / 2;
@@ -1408,15 +1408,15 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
         if( via )
         {
             layerMask |= via->ReturnMaskLayer();
-            via->SetState( BUSY, ON );
+            via->SetState( BUSY, true );
         }
 
-        Track->SetState( BUSY, ON );
+        Track->SetState( BUSY, true );
         segm = ::GetTrace( this, TrackListEnd, Track->m_Start, layerMask );
-        Track->SetState( BUSY, OFF );
+        Track->SetState( BUSY, false );
 
         if( via )
-            via->SetState( BUSY, OFF );
+            via->SetState( BUSY, false );
 
         if( segm == NULL )
         {
@@ -1434,13 +1434,13 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
                 BeginPad = Track->GetState( BEGIN_ONPAD );
                 EndPad   = Track->GetState( END_ONPAD );
 
-                Track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+                Track->SetState( BEGIN_ONPAD | END_ONPAD, false );
 
                 if( BeginPad )
-                    Track->SetState( END_ONPAD, ON );
+                    Track->SetState( END_ONPAD, true );
 
                 if( EndPad )
-                    Track->SetState( BEGIN_ONPAD, ON );
+                    Track->SetState( BEGIN_ONPAD, true );
 
                 EXCHG( Track->m_Start, Track->m_End );
                 EXCHG( Track->start, Track->end );
@@ -1455,15 +1455,15 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
         if( via )
         {
             layerMask |= via->ReturnMaskLayer();
-            via->SetState( BUSY, ON );
+            via->SetState( BUSY, true );
         }
 
-        Track->SetState( BUSY, ON );
+        Track->SetState( BUSY, true );
         segm = ::GetTrace( this, TrackListEnd, Track->m_End, layerMask );
-        Track->SetState( BUSY, OFF );
+        Track->SetState( BUSY, false );
 
         if( via )
-            via->SetState( BUSY, OFF );
+            via->SetState( BUSY, false );
 
         if( segm == NULL )
         {
@@ -1478,13 +1478,13 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
                 BeginPad = Track->GetState( BEGIN_ONPAD );
                 EndPad   = Track->GetState( END_ONPAD );
 
-                Track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+                Track->SetState( BEGIN_ONPAD | END_ONPAD, false );
 
                 if( BeginPad )
-                    Track->SetState( END_ONPAD, ON );
+                    Track->SetState( END_ONPAD, true );
 
                 if( EndPad )
-                    Track->SetState( BEGIN_ONPAD, ON );
+                    Track->SetState( BEGIN_ONPAD, true );
 
                 EXCHG( Track->m_Start, Track->m_End );
                 EXCHG( Track->start, Track->end );
@@ -1543,7 +1543,7 @@ void TRACK::Show( int nestLevel, std::ostream& os ) const
     " layer=\"" << m_Layer << '"' <<
     " width=\"" << m_Width << '"' <<
     " flags=\"" << m_Flags << '"' <<
-    " status=\"" << GetState( -1 ) << '"' <<
+    " status=\"" << GetStatus( ) << '"' <<
 
 //        " drill=\""     << GetDrillValue()   << '"' <<
     " netcode=\"" << GetNet() << "\">" <<

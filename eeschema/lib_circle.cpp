@@ -296,7 +296,7 @@ wxString LIB_CIRCLE::GetSelectMenuText() const
 }
 
 
-void LIB_CIRCLE::BeginEdit( int aEditMode, const wxPoint aPosition )
+void LIB_CIRCLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                  wxT( "Invalid edit mode for LIB_CIRCLE object." ) );

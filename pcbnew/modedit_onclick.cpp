@@ -253,7 +253,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 
     if( item  )
     {
-        int flags = item->GetFlags();
+        STATUS_FLAGS flags = item->GetFlags();
         switch( item->Type() )
         {
         case PCB_MODULE_T:

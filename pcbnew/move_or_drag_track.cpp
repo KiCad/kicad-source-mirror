@@ -637,7 +637,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
     }
     else
     {
-        int     diag = aTrack->IsPointOnEnds( GetScreen()->GetCrossHairPosition(), -1 );
+        STATUS_FLAGS diag = aTrack->IsPointOnEnds( GetScreen()->GetCrossHairPosition(), -1 );
         wxPoint pos;
 
         switch( aCommand )
@@ -766,7 +766,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
 
     if( TrackToStartPoint )
     {
-        int flag = STARTPOINT;
+        STATUS_FLAGS flag = STARTPOINT;
 
         if( track->GetStart() != TrackToStartPoint->GetStart() )
             flag = ENDPOINT;
@@ -777,7 +777,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
 
     if( TrackToEndPoint )
     {
-        int flag = STARTPOINT;
+        STATUS_FLAGS flag = STARTPOINT;
 
         if( track->GetEnd() != TrackToEndPoint->GetStart() )
             flag = ENDPOINT;

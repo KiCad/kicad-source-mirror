@@ -350,7 +350,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, int aLaye
         if( track->IsDragging() )
             continue;                       // already put in list
 
-        int flag = 0;
+        STATUS_FLAGS flag = 0;
         int maxdist = std::max( aMaxDist, track->GetWidth() / 2 );
 
         if( (track->GetFlags() & STARTPOINT) == 0 )

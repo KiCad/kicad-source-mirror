@@ -420,7 +420,7 @@ wxString LIB_POLYLINE::GetSelectMenuText() const
 }
 
 
-void LIB_POLYLINE::BeginEdit( int aEditMode, const wxPoint aPosition )
+void LIB_POLYLINE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                  wxT( "Invalid edit mode for LIB_POLYLINE object." ) );

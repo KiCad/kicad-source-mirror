@@ -139,7 +139,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 
         if( m_DelTracks->GetValue() )
         {
-            int track_mask_filter = 0;
+            STATUS_FLAGS track_mask_filter = 0;
 
             if( !m_TrackFilterLocked->GetValue() )
                 track_mask_filter |= TRACK_LOCKED;

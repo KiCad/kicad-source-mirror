@@ -72,7 +72,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     if( m_drawItem == NULL || m_drawItem->Type() != LIB_PIN_T )
         return;
 
-    int item_flags = m_drawItem->GetFlags();       // save flags to restore them after editing
+    STATUS_FLAGS item_flags = m_drawItem->GetFlags(); // save flags to restore them after editing
     LIB_PIN* pin = (LIB_PIN*) m_drawItem;
 
     DIALOG_LIB_EDIT_PIN dlg( this, pin );

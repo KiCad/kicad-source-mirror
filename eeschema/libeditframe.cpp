@@ -754,7 +754,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         m_canvas->MoveCursorToCrossHair();
-        int oldFlags = m_drawItem->GetFlags();
+        STATUS_FLAGS oldFlags = m_drawItem->GetFlags();
         m_drawItem->ClearFlags();
         m_drawItem->Draw( m_canvas, &dc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, g_XorMode, NULL, DefaultTransform );
         ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetScreen()->GetCrossHairPosition( true ) );
