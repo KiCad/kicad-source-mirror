@@ -149,6 +149,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* aPad, wxDC* DC )
     }
 
     // Save old module and old items values
+    aPad->ClearFlags();
     wxPoint pad_curr_position = aPad->GetPosition();
 
     aPad->SetPosition( Pad_OldPos );
@@ -191,8 +192,6 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* aPad, wxDC* DC )
 
     aPad->SetX0( dX + aPad->GetPos0().x );
     aPad->SetY0( dY + aPad->GetPos0().y );
-
-    aPad->ClearFlags();
 
     if( DC )
         aPad->Draw( m_canvas, DC, GR_OR );
