@@ -45,7 +45,7 @@
 
 #include <collectors.h>
 #include <class_drawpanel.h>
-#include <vector2d.h>
+#include <math/vector2d.h>
 
 
 // Configuration entry names.

@@ -42,7 +42,7 @@
 #include <kicad_device_context.h>
 #include <dialog_helpers.h>
 #include <base_units.h>
-#include <vector2d.h>
+#include <math/box2.h>
 
 #include <wx/fontdlg.h>
 
@@ -753,7 +753,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     DSIZE   clientSizeIU( clientSizeDU.x / scale, clientSizeDU.y / scale );
 
     // Full drawing or "page" rectangle in internal units
-    DBOX    pageRectIU( 0, 0, GetPageSizeIU().x, GetPageSizeIU().y );
+    DBOX    pageRectIU( wxPoint( 0, 0 ), wxSize( GetPageSizeIU().x, GetPageSizeIU().y ) );
 
     // The upper left corner of the client rectangle in internal units.
     double xIU = aCenterPositionIU.x - clientSizeIU.x / 2.0;
@@ -763,11 +763,11 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     if( screen->m_Center )
     {
         // half page offset.
-        xIU += pageRectIU.width  / 2.0;
-        yIU += pageRectIU.height / 2.0;
+        xIU += pageRectIU.GetWidth()  / 2.0;
+        yIU += pageRectIU.GetHeight() / 2.0;
     }
 
-    DBOX    clientRectIU( xIU, yIU, clientSizeIU.x, clientSizeIU.y );
+    DBOX    clientRectIU( wxPoint( xIU, yIU ), wxSize( clientSizeIU.x, clientSizeIU.y ) );
     wxPoint centerPositionIU;
 
 #if 1 || defined( USE_PCBNEW_NANOMETRES )
@@ -782,13 +782,13 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
         clientRectIU.MoveBottomTo( VIRT_MAX );
 #endif
 
-    centerPositionIU.x = KiROUND( clientRectIU.x + clientRectIU.width/2 );
-    centerPositionIU.y = KiROUND( clientRectIU.y + clientRectIU.height/2 );
+    centerPositionIU.x = KiROUND( clientRectIU.GetX() + clientRectIU.GetWidth() / 2 );
+    centerPositionIU.y = KiROUND( clientRectIU.GetY() + clientRectIU.GetHeight() / 2 );
 
     if( screen->m_Center )
     {
-        centerPositionIU.x -= KiROUND( pageRectIU.width  / 2.0 );
-        centerPositionIU.y -= KiROUND( pageRectIU.height  / 2.0 );
+        centerPositionIU.x -= KiROUND( pageRectIU.GetWidth() / 2.0 );
+        centerPositionIU.y -= KiROUND( pageRectIU.GetHeight() / 2.0 );
     }
 
     DSIZE   virtualSizeIU;
@@ -799,26 +799,26 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        double pageCenterX    = pageRectIU.x   + ( pageRectIU.width / 2 );
-        double clientCenterX  = clientRectIU.x + ( clientRectIU.width / 2 );
+        double pageCenterX    = pageRectIU.GetX()   + ( pageRectIU.GetWidth() / 2 );
+        double clientCenterX  = clientRectIU.GetX() + ( clientRectIU.GetWidth() / 2 );
 
-        if( clientRectIU.width > pageRectIU.width )
+        if( clientRectIU.GetWidth() > pageRectIU.GetWidth() )
         {
             if( pageCenterX > clientCenterX )
                 virtualSizeIU.x = ( pageCenterX - clientRectIU.GetLeft() ) * 2;
             else if( pageCenterX < clientCenterX )
                 virtualSizeIU.x = ( clientRectIU.GetRight() - pageCenterX ) * 2;
             else
-                virtualSizeIU.x = clientRectIU.width;
+                virtualSizeIU.x = clientRectIU.GetWidth();
         }
         else
         {
             if( pageCenterX > clientCenterX )
-                virtualSizeIU.x = pageRectIU.width + ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
+                virtualSizeIU.x = pageRectIU.GetWidth() + ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
             else if( pageCenterX < clientCenterX )
-                virtualSizeIU.x = pageRectIU.width + ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
+                virtualSizeIU.x = pageRectIU.GetWidth() + ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
             else
-                virtualSizeIU.x = pageRectIU.width;
+                virtualSizeIU.x = pageRectIU.GetWidth();
         }
     }
 
@@ -828,28 +828,28 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        double pageCenterY   = pageRectIU.y   + ( pageRectIU.height / 2 );
-        double clientCenterY = clientRectIU.y + ( clientRectIU.height / 2 );
+        double pageCenterY   = pageRectIU.GetY()   + ( pageRectIU.GetHeight() / 2 );
+        double clientCenterY = clientRectIU.GetY() + ( clientRectIU.GetHeight() / 2 );
 
-        if( clientRectIU.height > pageRectIU.height )
+        if( clientRectIU.GetHeight() > pageRectIU.GetHeight() )
         {
             if( pageCenterY > clientCenterY )
                 virtualSizeIU.y = ( pageCenterY - clientRectIU.GetTop() ) * 2;
             else if( pageCenterY < clientCenterY )
                 virtualSizeIU.y = ( clientRectIU.GetBottom() - pageCenterY ) * 2;
             else
-                virtualSizeIU.y = clientRectIU.height;
+                virtualSizeIU.y = clientRectIU.GetHeight();
         }
         else
         {
             if( pageCenterY > clientCenterY )
-                virtualSizeIU.y = pageRectIU.height +
+                virtualSizeIU.y = pageRectIU.GetHeight() +
                                 ( ( pageRectIU.GetTop() - clientRectIU.GetTop() ) * 2 );
             else if( pageCenterY < clientCenterY )
-                virtualSizeIU.y = pageRectIU.height +
+                virtualSizeIU.y = pageRectIU.GetHeight() +
                                 ( ( clientRectIU.GetBottom() - pageRectIU.GetBottom() ) * 2 );
             else
-                virtualSizeIU.y = pageRectIU.height;
+                virtualSizeIU.y = pageRectIU.GetHeight();
         }
     }
 
@@ -866,8 +866,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     }
     else
     {
-        screen->m_DrawOrg.x = -KiROUND( ( virtualSizeIU.x - pageRectIU.width )  / 2.0 );
-        screen->m_DrawOrg.y = -KiROUND( ( virtualSizeIU.y - pageRectIU.height ) / 2.0 );
+        screen->m_DrawOrg.x = -KiROUND( ( virtualSizeIU.x - pageRectIU.GetWidth() )  / 2.0 );
+        screen->m_DrawOrg.y = -KiROUND( ( virtualSizeIU.y - pageRectIU.GetHeight() ) / 2.0 );
     }
 
     /* Always set scrollbar pixels per unit to 1 unless you want the zoom
@@ -886,8 +886,8 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
     // center position at the center of client rectangle.
     screen->SetScrollCenterPosition( centerPositionIU );
 
-    double posX = centerPositionIU.x - clientRectIU.width /2.0 - screen->m_DrawOrg.x;
-    double posY = centerPositionIU.y - clientRectIU.height/2.0 - screen->m_DrawOrg.y;
+    double posX = centerPositionIU.x - clientRectIU.GetWidth()  / 2.0 - screen->m_DrawOrg.x;
+    double posY = centerPositionIU.y - clientRectIU.GetHeight() / 2.0 - screen->m_DrawOrg.y;
 
     // Convert scroll bar position to device units.
     posX = KiROUND( posX * scale );

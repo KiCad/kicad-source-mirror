@@ -9,7 +9,7 @@
 #define PLOT_COMMON_H_
 
 #include <vector>
-#include <vector2d.h>
+#include <math/box2.h>
 #include <drawtxt.h>
 #include <common.h>         // PAGE_INFO
 #include <eda_text.h>       // FILL_T
