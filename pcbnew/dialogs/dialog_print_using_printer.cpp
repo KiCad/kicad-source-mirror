@@ -314,8 +314,10 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 
     if( m_config )
     {
-        m_config->Write( OPTKEY_PRINT_X_FINESCALE_ADJ, s_Parameters.m_XScaleAdjust );
-        m_config->Write( OPTKEY_PRINT_Y_FINESCALE_ADJ, s_Parameters.m_YScaleAdjust );
+        ConfigBaseWriteDouble( m_config, OPTKEY_PRINT_X_FINESCALE_ADJ,
+                               s_Parameters.m_XScaleAdjust );
+        ConfigBaseWriteDouble( m_config, OPTKEY_PRINT_Y_FINESCALE_ADJ,
+                               s_Parameters.m_YScaleAdjust );
         m_config->Write( OPTKEY_PRINT_SCALE, m_ScaleOption->GetSelection() );
         m_config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
         m_config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
