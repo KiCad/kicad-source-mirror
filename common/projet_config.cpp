@@ -508,7 +508,11 @@ void PARAM_CFG_INT_WITH_SCALE::SaveParam( wxConfigBase* aConfig ) const
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
 
-    aConfig->Write( m_Ident, *m_Pt_param * m_BIU_to_cfgunit );
+    // We cannot use aConfig->Write for a double, because
+    // this function uses a format with very few digits in mantissa,
+    // and truncature issues are frequent.
+    // We uses our function.
+    ConfigBaseWriteDouble( aConfig, m_Ident, *m_Pt_param * m_BIU_to_cfgunit );
 }
 
 
@@ -617,7 +621,11 @@ void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig ) const
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
 
-    aConfig->Write( m_Ident, *m_Pt_param );
+    // We cannot use aConfig->Write for a double, because
+    // this function uses a format with very few digits in mantissa,
+    // and truncature issues are frequent.
+    // We uses our function.
+    ConfigBaseWriteDouble( aConfig, m_Ident, *m_Pt_param );
 }
 
 
