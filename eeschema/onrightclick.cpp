@@ -205,8 +205,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         return true;
     }
 
-    int  flags  = item->GetFlags();
-    bool is_new = (flags & IS_NEW) ? true : false;
+    bool is_new = item->IsNew();
 
     switch( item->Type() )
     {

@@ -436,22 +436,22 @@ bool SCH_LINE::IsSelectStateChanged( const wxRect& aRect )
 
     if( aRect.Contains( m_start ) && aRect.Contains( m_end ) )
     {
-        m_Flags |= SELECTED;
-        m_Flags &= ~(STARTPOINT | ENDPOINT);
+        SetFlags( SELECTED );
+        ClearFlags( STARTPOINT | ENDPOINT );
     }
     else if( aRect.Contains( m_start ) )
     {
-        m_Flags &= ~STARTPOINT;
-        m_Flags |= ( SELECTED | ENDPOINT );
+        ClearFlags( STARTPOINT );
+        SetFlags( SELECTED | ENDPOINT );
     }
     else if( aRect.Contains( m_end ) )
     {
-        m_Flags &= ~ENDPOINT;
-        m_Flags |= ( SELECTED | STARTPOINT );
+        ClearFlags( ENDPOINT );
+        SetFlags( SELECTED | STARTPOINT );
     }
     else
     {
-        m_Flags &= ~( SELECTED | STARTPOINT | ENDPOINT );
+        ClearFlags( SELECTED | STARTPOINT | ENDPOINT );
     }
 
     return previousState != IsSelected();

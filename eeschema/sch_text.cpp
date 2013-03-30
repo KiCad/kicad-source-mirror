@@ -543,7 +543,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
             break;
         }
 
-        if( m_isDangling == false )
+        if( !m_isDangling )
             break;
     }
 
@@ -556,9 +556,9 @@ bool SCH_TEXT::IsSelectStateChanged( const wxRect& aRect )
     bool previousState = IsSelected();
 
     if( aRect.Contains( m_Pos ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        SetFlags( SELECTED );
 
     return previousState != IsSelected();
 }
