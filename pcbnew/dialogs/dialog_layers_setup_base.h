@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,17 +11,18 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/choice.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
-#include <wx/stattext.h>
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/scrolwin.h>
@@ -126,8 +127,11 @@ class DIALOG_LAYERS_SETUP_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
+		wxStaticText* m_staticTextGrouping;
 		wxChoice* m_PresetsChoice;
+		wxStaticText* m_staticTextCopperLayers;
 		wxChoice* m_CopperLayersChoice;
+		wxStaticText* m_staticTextLayers;
 		wxPanel* m_TitlePanel;
 		wxScrolledWindow* m_LayersListPanel;
 		wxFlexGridSizer* m_LayerListFlexGridSizer;
