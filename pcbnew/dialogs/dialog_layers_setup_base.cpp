@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,35 +19,47 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bChoicesSizer;
 	bChoicesSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxStaticBoxSizer* sbPresetsSizer;
-	sbPresetsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Preset Layer Groupings") ), wxVERTICAL );
+	wxBoxSizer* bPresetsSizer;
+	bPresetsSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextGrouping = new wxStaticText( this, wxID_ANY, _("Preset Layer Groupings"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGrouping->Wrap( -1 );
+	bPresetsSizer->Add( m_staticTextGrouping, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_PresetsChoiceChoices[] = { _("Custom"), _("Two layers, parts on Front only"), _("Two layers, parts on Back only"), _("Two layers, parts on Front and Back"), _("Four layers, parts on Front only"), _("Four layers, parts on Front and Back"), _("All layers on") };
 	int m_PresetsChoiceNChoices = sizeof( m_PresetsChoiceChoices ) / sizeof( wxString );
 	m_PresetsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PresetsChoiceNChoices, m_PresetsChoiceChoices, 0 );
 	m_PresetsChoice->SetSelection( 0 );
-	sbPresetsSizer->Add( m_PresetsChoice, 0, wxEXPAND, 5 );
+	bPresetsSizer->Add( m_PresetsChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bChoicesSizer->Add( sbPresetsSizer, 2, wxALL|wxEXPAND, 5 );
+	bChoicesSizer->Add( bPresetsSizer, 1, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbCopperLayersSizer;
-	sbCopperLayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Copper Layers") ), wxVERTICAL );
+	wxBoxSizer* bCopperLayersSizer;
+	bCopperLayersSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCopperLayers->Wrap( -1 );
+	bCopperLayersSizer->Add( m_staticTextCopperLayers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_CopperLayersChoiceChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16") };
 	int m_CopperLayersChoiceNChoices = sizeof( m_CopperLayersChoiceChoices ) / sizeof( wxString );
 	m_CopperLayersChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_CopperLayersChoiceNChoices, m_CopperLayersChoiceChoices, 0 );
 	m_CopperLayersChoice->SetSelection( 0 );
-	sbCopperLayersSizer->Add( m_CopperLayersChoice, 0, wxEXPAND, 5 );
+	bCopperLayersSizer->Add( m_CopperLayersChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bChoicesSizer->Add( sbCopperLayersSizer, 1, wxALL|wxEXPAND, 5 );
+	bChoicesSizer->Add( bCopperLayersSizer, 1, wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bChoicesSizer, 0, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbLayersSizer;
-	sbLayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers") ), wxVERTICAL );
+	wxBoxSizer* b_layersListSizer;
+	b_layersListSizer = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextLayers = new wxStaticText( this, wxID_ANY, _("Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayers->Wrap( -1 );
+	b_layersListSizer->Add( m_staticTextLayers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bCaptionsSizer;
 	bCaptionsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -59,7 +71,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bCaptionsSizer->Add( m_TitlePanel, 1, wxEXPAND, 5 );
 	
 	
-	sbLayersSizer->Add( bCaptionsSizer, 0, wxALIGN_CENTER|wxEXPAND, 5 );
+	b_layersListSizer->Add( bCaptionsSizer, 0, wxALIGN_CENTER|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_LayersListPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxALWAYS_SHOW_SB|wxRAISED_BORDER|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_LayersListPanel->SetScrollRate( 0, 5 );
@@ -834,10 +846,10 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );
 	m_LayersListPanel->Layout();
 	m_LayerListFlexGridSizer->Fit( m_LayersListPanel );
-	sbLayersSizer->Add( m_LayersListPanel, 1, wxALL|wxEXPAND, 5 );
+	b_layersListSizer->Add( m_LayersListPanel, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( sbLayersSizer, 1, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( b_layersListSizer, 1, wxEXPAND, 5 );
 	
 	m_sdbSizer2 = new wxStdDialogButtonSizer();
 	m_sdbSizer2OK = new wxButton( this, wxID_OK );
