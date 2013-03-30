@@ -51,6 +51,7 @@
 #define LAYER_COUNT             32
 
 // Masks to identify a layer by a bit map
+typedef unsigned LAYER_MSK;
 #define LAYER_BACK              (1 << LAYER_N_BACK)     ///< bit mask for copper layer
 #define LAYER_2                 (1 << LAYER_N_2)        ///< bit mask for layer 2
 #define LAYER_3                 (1 << LAYER_N_3)        ///< bit mask for layer 3
@@ -92,6 +93,16 @@
 #define ALL_CU_LAYERS           0x0000FFFF
 #define INTERNAL_LAYERS         0x00007FFE
 #define EXTERNAL_LAYERS         0x00008001
+#define NO_LAYERS               0x00000000
+
+/** return a one bit layer mask from a layer number
+ * aLayerNumber = the layer number to convert (0 .. LAYERS-1)
+ */
+inline LAYER_MSK GetLayerMask( unsigned aLayerNumber )
+{
+    return 1 << aLayerNumber;
+}
+
 
 
 // layers order in dialogs (plot, print and toolbars)

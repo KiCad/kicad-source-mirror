@@ -188,7 +188,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             {
                 m_BoxSelectLayer[layer]->SetValue( option );
                 if( option )
-                    s_SelectedLayers |= 1 << layer;
+                    s_SelectedLayers |= GetLayerMask( layer );
             }
         }
     }
@@ -223,15 +223,15 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
 /**************************************************************/
 {
-    int page_count;
-    s_Parameters.m_PrintMaskLayer = 0;
+    int page_count = 0;
+    s_Parameters.m_PrintMaskLayer = NO_LAYERS;
     int ii;
     for( ii = 0, page_count = 0; ii < GERBVIEW_LAYER_COUNT; ii++ )
     {
         if( m_BoxSelectLayer[ii]->IsChecked() )
         {
             page_count++;
-            s_Parameters.m_PrintMaskLayer |= 1 << ii;
+            s_Parameters.m_PrintMaskLayer |= GetLayerMask( ii );
         }
     }
 

@@ -127,7 +127,7 @@ void DIALOG_SVG_PRINT::initDialog()
         if( m_boxSelectLayer[layer] == NULL )
             continue;
 
-        long mask = 1 << layer;
+        LAYER_MSK mask = GetLayerMask( layer );
 
         if( mask & s_SelectedLayers )
             m_boxSelectLayer[layer]->SetValue( true );
@@ -235,7 +235,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
     SetPenWidth();
 
     // Build layers mask
-    int printMaskLayer = 0;
+    LAYER_MSK printMaskLayer = NO_LAYERS;
 
     for( int layer = 0; layer<NB_LAYERS; layer++ )
     {
@@ -246,7 +246,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
     wxString    msg;
     for( int layer = 0; layer<NB_LAYERS; layer++ )
     {
-        int currlayer_mask = 1 << layer;
+        LAYER_MSK currlayer_mask = GetLayerMask( layer );
         if( (printMaskLayer & currlayer_mask ) == 0 )
             continue;
 

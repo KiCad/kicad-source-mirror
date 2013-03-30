@@ -70,7 +70,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     int     ii, jj, nb_segm, nbconnect;
     wxPoint start;
     wxPoint end;
-    int     startmasklayer, endmasklayer;
+    LAYER_MSK startmasklayer, endmasklayer;
 
     int     netcode = aNewTrack->GetNet();
 
@@ -135,14 +135,14 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         return 0;
 
     // Determine layers interconnected these points.
-    startmasklayer = StartTrack->ReturnMaskLayer();
-    endmasklayer   = EndTrack->ReturnMaskLayer();
+    startmasklayer = StartTrack->GetLayerMask();
+    endmasklayer   = EndTrack->GetLayerMask();
 
     // There may be a via or a pad on the end points.
     pt_segm = m_Pcb->m_Track->GetVia( NULL, start, startmasklayer );
 
     if( pt_segm )
-        startmasklayer |= pt_segm->ReturnMaskLayer();
+        startmasklayer |= pt_segm->GetLayerMask();
 
     if( StartTrack->start && ( StartTrack->start->Type() == PCB_PAD_T ) )
     {
@@ -154,7 +154,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     pt_segm = m_Pcb->m_Track->GetVia( NULL, end, endmasklayer );
 
     if( pt_segm )
-        endmasklayer |= pt_segm->ReturnMaskLayer();
+        endmasklayer |= pt_segm->GetLayerMask();
 
     if( EndTrack->end && ( EndTrack->end->Type() == PCB_PAD_T ) )
     {

@@ -270,7 +270,7 @@ public:
      * @param aPrintMirrorMode = true to plot mirrored
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, int aPrintMaskLayer, bool aPrintMirrorMode,
+    virtual void PrintPage( wxDC* aDC, LAYER_MSK aPrintMaskLayer, bool aPrintMirrorMode,
                             void * aData = NULL );
 
     void GetKicadAbout( wxCommandEvent& event );

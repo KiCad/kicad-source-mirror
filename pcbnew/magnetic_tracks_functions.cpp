@@ -157,7 +157,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
     if( doPad )
     {
-        int layer_mask = GetLayerMask( screen->m_Active_Layer );
+        LAYER_MSK layer_mask = GetLayerMask( screen->m_Active_Layer );
         D_PAD* pad = m_Pcb->GetPad( pos, layer_mask );
 
         if( pad )
@@ -192,7 +192,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
         if( !currTrack )
         {
-            int layer_mask = GetLayerMask( layer );
+            LAYER_MSK layer_mask = GetLayerMask( layer );
 
             TRACK* track = m_Pcb->GetTrace( m_Pcb->m_Track, pos, layer_mask );
 

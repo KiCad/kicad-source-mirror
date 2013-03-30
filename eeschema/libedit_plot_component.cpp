@@ -144,7 +144,7 @@ void LIB_EDIT_FRAME::SVG_Print_Component( const wxString& FullFileName )
                                             plotBW, plotFrameRef );
 }
 
-void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData)
+void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, LAYER_MSK aPrintMask, bool aPrintMirrorMode, void* aData)
 {
     if( ! m_component )
         return;

@@ -26,6 +26,7 @@
 
 #include <io_mgr.h>
 #include <string>
+#include <layers_id_colors_and_visibility.h>
 
 class BOARD;
 class BOARD_ITEM;
@@ -189,7 +190,7 @@ private:
 
     void formatLayer( const BOARD_ITEM* aItem ) const;
 
-    void formatLayers( int aLayerMask, int aNestLevel = 0 ) const
+    void formatLayers( LAYER_MSK aLayerMask, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
     /// we only cache one footprint library for now, this determines which one.

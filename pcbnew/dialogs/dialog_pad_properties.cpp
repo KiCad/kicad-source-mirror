@@ -65,7 +65,7 @@ static PAD_ATTR_T CodeType[] = {
 
 
 // Default mask layers setup for pads according to the pad type
-static long Std_Pad_Layers[] = {
+static const LAYER_MSK Std_Pad_Layers[] = {
 
     // PAD_STANDARD:
     PAD_STANDARD_DEFAULT_LAYERS,
@@ -114,7 +114,7 @@ private:
      * updates the CheckBox states in pad layers list,
      * @param layer_mask = pad layer mask (ORed layers bit mask)
      */
-    void setPadLayersList( long layer_mask );
+    void setPadLayersList( LAYER_MSK layer_mask );
 
     /// Copy values from dialog field to aPad's members
     bool transferDataToPad( D_PAD* aPad );
@@ -592,13 +592,12 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
-    long        layer_mask;
     unsigned    ii = m_PadType->GetSelection();
 
     if( ii >= NBTYPES ) // catches < 0 also
         ii = 0;
 
-    layer_mask = Std_Pad_Layers[ii];
+    LAYER_MSK layer_mask = Std_Pad_Layers[ii];
     setPadLayersList( layer_mask );
 
     // Enable/disable drill dialog items:
@@ -619,7 +618,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 }
 
 
-void DIALOG_PAD_PROPERTIES::setPadLayersList( long layer_mask )
+void DIALOG_PAD_PROPERTIES::setPadLayersList( LAYER_MSK layer_mask )
 {
     if( ( layer_mask & ALL_CU_LAYERS ) == LAYER_FRONT )
         m_rbCopperLayersSel->SetSelection(0);
@@ -672,7 +671,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         error_msgs.Add(  _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
     }
 
-    int padlayers_mask = m_dummyPad->GetLayerMask();
+    LAYER_MSK padlayers_mask = m_dummyPad->GetLayerMask();
     if( ( padlayers_mask == 0 ) && ( m_dummyPad->GetAttribute() != PAD_HOLE_NOT_PLATED ) )
         error_msgs.Add( _( "Error: pad has no layer and is not a mechanical pad" ) );
 
@@ -851,7 +850,6 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
 bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 {
-    long        padLayerMask;
     wxString    msg;
     int         x, y;
 
@@ -1038,7 +1036,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         break;
     }
 
-    padLayerMask = 0;
+    LAYER_MSK padLayerMask = NO_LAYERS;
 
     switch( m_rbCopperLayersSel->GetSelection() )
     {

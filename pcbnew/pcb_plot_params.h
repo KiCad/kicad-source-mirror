@@ -27,6 +27,7 @@
 #include <pcb_plot_params_lexer.h>
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <plot_common.h>
+#include <layers_id_colors_and_visibility.h>
 
 class PCB_PLOT_PARAMS;
 class LINE_READER;
@@ -115,7 +116,7 @@ private:
     bool        m_excludeEdgeLayer;
 
     /// Set of layers to plot
-    long        m_layerSelection;
+    LAYER_MSK   m_layerSelection;
 
     /** When plotting gerbers use a conventional set of extensions instead of
      * appending a suffix to the board name */

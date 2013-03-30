@@ -99,7 +99,7 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 {
     TRACK*      TrackOnStartPoint = NULL;
-    int         layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
+    LAYER_MSK   layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
     BOARD_CONNECTED_ITEM* LockPoint;
     wxPoint     pos = GetScreen()->GetCrossHairPosition();
 
@@ -411,7 +411,7 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
 
 bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 {
-    int layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
+    LAYER_MSK layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
 
     if( aTrack == NULL )
         return false;

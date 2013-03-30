@@ -37,6 +37,7 @@
 #include <gerbview.h>
 #include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
+#include <layers_id_colors_and_visibility.h>
 
 #define NO_AVAILABLE_LAYERS -1
 
@@ -299,7 +300,7 @@ public:
      * Returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    int     GetVisibleLayers() const;
+    LAYER_MSK GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
@@ -307,7 +308,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aLayerMask = The new bit-mask of visible layers
      */
-    void    SetVisibleLayers( int aLayerMask );
+    void    SetVisibleLayers( LAYER_MSK aLayerMask );
 
     /**
      * Function IsLayerVisible
@@ -716,7 +717,7 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void    PrintPage( wxDC* aDC, int aPrintMasklayer, bool aPrintMirrorMode,
+    virtual void    PrintPage( wxDC* aDC, LAYER_MSK aPrintMasklayer, bool aPrintMirrorMode,
                                void* aData = NULL );
 
     /**

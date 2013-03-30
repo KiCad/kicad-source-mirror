@@ -18,16 +18,8 @@ class TRACK;
 class BOARD;
 class DISPLAY_OPTIONS;
 
-
-/**
- * Function GetLayerMask
- * @return a one bit layer mask from a layer number
- * @param aLayerNumber = the layer number to convert (0 .. LAYER_COUNT-1)
- */
-int GetLayerMask( int aLayerNumber );
-
 /// Look up Table for conversion copper layer count -> general copper layer mask:
-extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
+extern LAYER_MSK g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 
 extern DISPLAY_OPTIONS DisplayOpt;
 

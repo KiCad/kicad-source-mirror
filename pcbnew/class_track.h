@@ -68,7 +68,7 @@ class MSG_PANEL_ITEM;
  * @return A TRACK object pointer if found otherwise NULL.
  */
 extern TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition,
-                        int aLayerMask );
+                        LAYER_MSK aLayerMask );
 
 
 class TRACK : public BOARD_CONNECTED_ITEM
@@ -215,12 +215,12 @@ public:
     bool IsDrillDefault()       { return m_Drill <= 0; }
 
     /**
-     * Function ReturnMaskLayer
+     * Function GetLayerMask
      * returns a "layer mask", which is a bitmap of all layers on which the
      * TRACK segment or SEGVIA physically resides.
      * @return int - a layer mask, see pcbstruct.h's LAYER_BACK, etc.
      */
-    int ReturnMaskLayer() const;
+    LAYER_MSK GetLayerMask() const;
 
     /**
      * Function IsPointOnEnds
@@ -265,10 +265,10 @@ public:
      * finds the first SEGVIA object at \a aPosition on \a aLayer starting at the trace.
      *
      * @param aPosition The wxPoint to HitTest() against.
-     * @param aLayerMask The layer to match, pass -1 for a don't care.
+     * @param aLayer The layer to match, pass -1 for a don't care.
      * @return A pointer to a SEGVIA object if found, else NULL.
      */
-    TRACK* GetVia( const wxPoint& aPosition, int aLayerMask = -1 );
+    TRACK* GetVia( const wxPoint& aPosition, int aLayer = -1 );
 
     /**
      * Function GetVia
@@ -280,7 +280,7 @@ public:
      * @param aLayerMask The layers to match, pass -1 for a don't care.
      * @return A pointer to a SEGVIA object if found, else NULL.
      */
-    TRACK* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask );
+    TRACK* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask );
 
     /**
      * Function GetTrace

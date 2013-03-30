@@ -29,7 +29,7 @@ GBR_LAYOUT::~GBR_LAYOUT()
  */
 bool GBR_LAYOUT::IsLayerVisible( int aLayerIndex ) const
 {
-    return m_printLayersMask & (1 << aLayerIndex );
+    return m_printLayersMask & GetLayerMask( aLayerIndex );
 }
 
 

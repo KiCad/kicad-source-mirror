@@ -3,6 +3,7 @@
 
 #include <hotkeys_basic.h>
 #include <wx/bmpcbox.h>
+#include <layers_id_colors_and_visibility.h>
 
 
 class wxAuiToolBar;

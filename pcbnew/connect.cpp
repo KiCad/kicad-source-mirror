@@ -122,7 +122,7 @@ void CONNECTIONS::SearchTracksConnectedToPads( bool add_to_padlist, bool add_to_
         {
             CONNECTED_POINT* cp_item = candidates[jj];
 
-            if( (pad->GetLayerMask() & cp_item->GetTrack()->ReturnMaskLayer()) == 0 )
+            if( (pad->GetLayerMask() & cp_item->GetTrack()->GetLayerMask()) == 0 )
                 continue;
 
             if( pad->HitTest( cp_item->GetPoint() ) )
@@ -296,7 +296,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     int count = 0;
     m_connected.clear();
 
-    int layerMask = aTrack->ReturnMaskLayer();
+    LAYER_MSK layerMask = aTrack->GetLayerMask();
 
     // Search for connections to starting point:
 #define USE_EXTENDED_SEARCH
@@ -318,7 +318,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
                     continue;
                 if( m_candidates[ii].GetPoint() != position )
                     break;
-                if( (m_candidates[ii].GetTrack()->ReturnMaskLayer() & layerMask ) != 0 )
+                if( m_candidates[ii].GetTrack()->GetLayerMask() & layerMask )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
             // search before:
@@ -328,7 +328,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
                     continue;
                 if( m_candidates[ii].GetPoint() != position )
                     break;
-                if( (m_candidates[ii].GetTrack()->ReturnMaskLayer() & layerMask ) != 0 )
+                if( m_candidates[ii].GetTrack()->GetLayerMask() & layerMask )
                     m_connected.push_back( m_candidates[ii].GetTrack() );
             }
         }
@@ -339,7 +339,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
         {
             TRACK * ctrack = tracks_candidates[ii]->GetTrack();
 
-            if( ( ctrack->ReturnMaskLayer() & layerMask ) == 0 )
+            if( ( ctrack->GetLayerMask() & layerMask ) == 0 )
                 continue;
 
             if( ctrack == aTrack )

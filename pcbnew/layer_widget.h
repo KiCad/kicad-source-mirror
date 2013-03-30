@@ -41,6 +41,7 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <layers_id_colors_and_visibility.h>
 #include <colors.h>
 
 #define LYR_COLUMN_COUNT        4           ///< Layer tab column count
