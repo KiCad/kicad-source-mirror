@@ -40,7 +40,6 @@
 #include <macros.h>
 
 #include <kicad.h>
-#include <prjconfig.h>
 
 static const wxString ZipFileExtension( wxT( "zip" ) );
 static const wxString ZipFileWildcard( wxT( "Zip file (*.zip) | *.zip" ) );

@@ -52,13 +52,8 @@ wxString       g_ProductName    = wxT( "KiCad E.D.A.  " );
 bool           g_ShowPageLimits = true;
 wxString       g_UserLibDirBuffer;
 
-wxString       g_Prj_Default_Config_FullFilename;
-wxString       g_Prj_Config_LocalFilename;
-
 EDA_UNITS_T    g_UserUnit;
-
 EDA_COLOR_T    g_GhostColor;
-
 
 #if defined(KICAD_GOST)
 static const bool s_gost = true;
