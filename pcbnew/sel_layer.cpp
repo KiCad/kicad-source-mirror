@@ -107,8 +107,8 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent,
 
     /* Build the layer list */
     LayerCount = 0;
-    int Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
-    Masque_Layer += ALL_NO_CU_LAYERS;
+    LAYER_MSK Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
+    Masque_Layer |= ALL_NO_CU_LAYERS;
 
     for( ii = 0; ii < NB_LAYERS; ii++ )
     {
@@ -262,8 +262,8 @@ SELECT_LAYERS_PAIR_DIALOG::SELECT_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* parent ) :
     m_Parent = parent;
 
     PCB_SCREEN* screen = (PCB_SCREEN*) m_Parent->GetScreen();
-    int         Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
-    Masque_Layer += ALL_NO_CU_LAYERS;
+    LAYER_MSK Masque_Layer = g_TabAllCopperLayerMask[board->GetCopperLayerCount() - 1];
+    Masque_Layer |= ALL_NO_CU_LAYERS;
 
     for( ii = 0, LayerCount = 0; ii < NB_COPPER_LAYERS; ii++ )
     {

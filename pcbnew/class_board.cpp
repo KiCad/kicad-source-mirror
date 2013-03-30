@@ -127,7 +127,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
 }
 
 
-void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList )
+void BOARD::chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_PTRS* aList )
 {
     TRACK* segment;             // The current segment being analyzed.
     TRACK* via;                 // The via identified, eventually destroy
@@ -166,7 +166,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* 
 
         if( via )
         {
-            aLayerMask = via->ReturnMaskLayer();
+            aLayerMask = via->GetLayerMask();
 
             aList->push_back( via );
         }
@@ -212,7 +212,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* 
              * candidate:
              * we must analyze connections to its other end
              */
-            aLayerMask = candidate->ReturnMaskLayer();
+            aLayerMask = candidate->GetLayerMask();
 
             if( aPosition == candidate->GetStart() )
             {
@@ -227,7 +227,7 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* 
 
             /* flag this item an push it in list of selected items */
             aList->push_back( candidate );
-            candidate->SetState( BUSY, ON );
+            candidate->SetState( BUSY, true );
         }
         else
         {
@@ -542,25 +542,25 @@ void BOARD::SetCopperLayerCount( int aCount )
 }
 
 
-int BOARD::GetEnabledLayers() const
+LAYER_MSK BOARD::GetEnabledLayers() const
 {
     return m_designSettings.GetEnabledLayers();
 }
 
 
-int BOARD::GetVisibleLayers() const
+LAYER_MSK BOARD::GetVisibleLayers() const
 {
     return m_designSettings.GetVisibleLayers();
 }
 
 
-void BOARD::SetEnabledLayers( int aLayerMask )
+void BOARD::SetEnabledLayers( LAYER_MSK aLayerMask )
 {
     m_designSettings.SetEnabledLayers( aLayerMask );
 }
 
 
-void BOARD::SetVisibleLayers( int aLayerMask )
+void BOARD::SetVisibleLayers( LAYER_MSK aLayerMask )
 {
     m_designSettings.SetVisibleLayers( aLayerMask );
 }
@@ -1557,7 +1557,7 @@ TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, int aLayerMask )
 }
 
 
-D_PAD* BOARD::GetPad( const wxPoint& aPosition, int aLayerMask )
+D_PAD* BOARD::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
     D_PAD* pad = NULL;
 
@@ -1578,7 +1578,7 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, int aEndPoint )
     D_PAD*  pad = NULL;
     wxPoint aPosition;
 
-    int     aLayerMask = GetLayerMask( aTrace->GetLayer() );
+    LAYER_MSK aLayerMask = GetLayerMask( aTrace->GetLayer() );
 
     if( aEndPoint == FLG_START )
     {
@@ -1601,7 +1601,7 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, int aEndPoint )
 }
 
 
-D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
+D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
     for( unsigned i=0; i<GetPadCount();  ++i )
     {
@@ -1619,7 +1619,7 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
 }
 
 
-D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, int aLayerMask )
+D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
     // Search the aPoint coordinates in aPadList
     // aPadList is sorted by X then Y values, and a fast binary search is used
@@ -1643,7 +1643,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
         if( pad->GetPosition() == aPosition )       // candidate found
         {
             // The pad must match the layer mask:
-            if( (aLayerMask & pad->GetLayerMask()) != 0 )
+            if( aLayerMask & pad->GetLayerMask())
                 return pad;
 
             // More than one pad can be at aPosition
@@ -1747,7 +1747,7 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 }
 
 
-TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask )
+TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
     for( TRACK* track = aTrace;   track;  track =  track->Next() )
     {
@@ -1798,11 +1798,11 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
     // Ensure the flag BUSY of all tracks of the board is cleared
     // because we use it to mark segments of the track
     for( TRACK* track = m_Track; track; track = track->Next() )
-        track->SetState( BUSY, OFF );
+        track->SetState( BUSY, false );
 
     /* Set flags of the initial track segment */
-    aTrace->SetState( BUSY, ON );
-    int layerMask = aTrace->ReturnMaskLayer();
+    aTrace->SetState( BUSY, true );
+    LAYER_MSK layerMask = aTrace->GetLayerMask();
 
     trackList.push_back( aTrace );
 
@@ -1838,13 +1838,13 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 
         if( Segm1 ) // search for others segments connected to the initial segment start point
         {
-            layerMask = Segm1->ReturnMaskLayer();
+            layerMask = Segm1->GetLayerMask();
             chainMarkedSegments( aTrace->GetStart(), layerMask, &trackList );
         }
 
         if( Segm2 ) // search for others segments connected to the initial segment end point
         {
-            layerMask = Segm2->ReturnMaskLayer();
+            layerMask = Segm2->GetLayerMask();
             chainMarkedSegments( aTrace->GetStart(), layerMask, &trackList );
         }
     }
@@ -1869,9 +1869,9 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
         if( via == aTrace )
             continue;
 
-        via->SetState( BUSY, ON );  // Try to flag it. the flag will be cleared later if needed
+        via->SetState( BUSY, true );  // Try to flag it. the flag will be cleared later if needed
 
-        layerMask = via->ReturnMaskLayer();
+        layerMask = via->GetLayerMask();
 
         TRACK* track = ::GetTrace( m_Track, NULL, via->GetStart(), layerMask );
 
@@ -1901,7 +1901,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
             {
                 // The via connects segments of an other track: it is removed
                 // from list because it is member of an other track
-                via->SetState( BUSY, OFF );
+                via->SetState( BUSY, false );
                 break;
             }
         }
@@ -1984,7 +1984,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
             if( track->GetState( BUSY ) )
             {
                 NbSegmBusy++;
-                track->SetState( BUSY, OFF );
+                track->SetState( BUSY, false );
                 full_len += track->GetLength();
 
                 // Add now length die.
@@ -2096,7 +2096,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, int aActiveLayer,
 }
 
 
-BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, int aLayerMask )
+BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
     for( MODULE* module = m_Modules; module; module = module->Next() )
     {
@@ -2155,7 +2155,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     // The new segment begins at the new point,
     newTrack->SetStart(lockPoint);
     newTrack->start = aSegment;
-    newTrack->SetState( BEGIN_ONPAD, OFF );
+    newTrack->SetState( BEGIN_ONPAD, false );
 
     DLIST<TRACK>* list = (DLIST<TRACK>*)aSegment->GetList();
     wxASSERT( list );
@@ -2177,16 +2177,16 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     // Old track segment now ends at new point.
     aSegment->SetEnd(lockPoint);
     aSegment->end = newTrack;
-    aSegment->SetState( END_ONPAD, OFF );
+    aSegment->SetState( END_ONPAD, false );
 
     D_PAD * pad = GetPad( newTrack, FLG_START );
 
     if ( pad )
     {
         newTrack->start = pad;
-        newTrack->SetState( BEGIN_ONPAD, ON );
+        newTrack->SetState( BEGIN_ONPAD, true );
         aSegment->end = pad;
-        aSegment->SetState( END_ONPAD, ON );
+        aSegment->SetState( END_ONPAD, true );
     }
 
     aPosition = lockPoint;

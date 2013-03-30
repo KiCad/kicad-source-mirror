@@ -56,7 +56,7 @@ public:
      * returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    int  GetVisibleLayers() const;
+    LAYER_MSK GetVisibleLayers() const;
 
     /**
      * Function SetVisibleAlls
@@ -70,7 +70,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aMask = The new bit-mask of visible layers
      */
-    void SetVisibleLayers( int aMask );
+    void SetVisibleLayers( LAYER_MSK aMask );
 
     /**
      * Function IsLayerVisible
@@ -85,7 +85,7 @@ public:
             return false;
 
         // If a layer is disabled, it is automatically invisible
-        return (bool) ( m_VisibleLayers & m_EnabledLayers & (1 << aLayerIndex) );
+        return bool( m_VisibleLayers & m_EnabledLayers & GetLayerMask( aLayerIndex ) );
     }
 
     /**
@@ -143,7 +143,7 @@ public:
      * returns a bit-mask of all the layers that are enabled
      * @return int - the enabled layers in bit-mapped form.
      */
-    inline int GetEnabledLayers() const
+    inline LAYER_MSK GetEnabledLayers() const
     {
         return m_EnabledLayers;
     }
@@ -153,7 +153,7 @@ public:
      * changes the bit-mask of enabled layers
      * @param aMask = The new bit-mask of enabled layers
      */
-    void SetEnabledLayers( int aMask );
+    void SetEnabledLayers( LAYER_MSK aMask );
 
     /**
      * Function IsLayerEnabled
@@ -163,7 +163,7 @@ public:
      */
     bool IsLayerEnabled( int aLayerIndex ) const
     {
-        return bool( m_EnabledLayers & (1 << aLayerIndex) );
+        return bool( m_EnabledLayers & GetLayerMask( aLayerIndex ) );
     }
 
     /**
@@ -194,11 +194,11 @@ public:
     void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
 
 private:
-    int     m_CopperLayerCount;     ///< Number of copper layers for this design
-    int     m_EnabledLayers;        ///< Bit-mask for layer enabling
-    int     m_VisibleLayers;        ///< Bit-mask for layer visibility
-    int     m_VisibleElements;      ///< Bit-mask for element category visibility
-    int     m_boardThickness;       ///< Board thickness for 3D viewer
+    int       m_CopperLayerCount;   ///< Number of copper layers for this design
+    LAYER_MSK m_EnabledLayers;      ///< Bit-mask for layer enabling
+    LAYER_MSK m_VisibleLayers;      ///< Bit-mask for layer visibility
+    int       m_VisibleElements;    ///< Bit-mask for element category visibility
+    int       m_boardThickness;     ///< Board thickness for 3D viewer
 };
 
 #endif  // BOARD_DESIGN_SETTINGS_H_

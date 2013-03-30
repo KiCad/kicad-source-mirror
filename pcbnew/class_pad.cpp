@@ -690,7 +690,7 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 // see class_pad.h
 bool D_PAD::IsOnLayer( int aLayer ) const
 {
-    return (1 << aLayer) & m_layerMask;
+    return ::GetLayerMask( aLayer ) & m_layerMask;
 }
 
 

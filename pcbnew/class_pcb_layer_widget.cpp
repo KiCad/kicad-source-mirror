@@ -263,7 +263,7 @@ void PCB_LAYER_WIDGET::ReFill()
     // show all coppers first, with front on top, back on bottom, then technical layers
 
     layer = LAYER_N_FRONT;
-    if( enabledLayers & (1 << layer) )
+    if( enabledLayers & GetLayerMask( layer ) )
     {
         AppendLayerRow( LAYER_WIDGET::ROW(
             brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Front copper layer"), true ) );
@@ -271,7 +271,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
     for( layer = LAYER_N_FRONT-1;  layer >= 1;  --layer )
     {
-        if( enabledLayers & (1 << layer) )
+        if( enabledLayers & GetLayerMask( layer ) )
         {
             AppendLayerRow( LAYER_WIDGET::ROW(
                 brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("An innner copper layer"), true ) );
@@ -279,7 +279,7 @@ void PCB_LAYER_WIDGET::ReFill()
     }
 
     layer = LAYER_N_BACK;
-    if( enabledLayers & (1 << layer) )
+    if( enabledLayers & GetLayerMask( layer ) )
     {
         AppendLayerRow( LAYER_WIDGET::ROW(
             brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Back copper layer"), true ) );
@@ -309,7 +309,7 @@ void PCB_LAYER_WIDGET::ReFill()
     {
         layer = techLayerSeq[i].layerId;
 
-        if( !(enabledLayers & (1 << layer)) )
+        if( !(enabledLayers & GetLayerMask( layer )) )
             continue;
 
         AppendLayerRow( LAYER_WIDGET::ROW(
@@ -349,12 +349,12 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
 {
     BOARD* brd = myframe->GetBoard();
 
-    int visibleLayers = brd->GetVisibleLayers();
+    LAYER_MSK visibleLayers = brd->GetVisibleLayers();
 
     if( isVisible )
-        visibleLayers |= (1 << aLayer);
+        visibleLayers |= GetLayerMask( aLayer );
     else
-        visibleLayers &= ~(1 << aLayer);
+        visibleLayers &= ~GetLayerMask( aLayer );
 
     brd->SetVisibleLayers( visibleLayers );
 

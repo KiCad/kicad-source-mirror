@@ -112,7 +112,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     if( textLayer >= LAYER_COUNT )
         return false;
 
-    if( ( ( 1 << textLayer ) & m_layerMask ) == 0 )
+    if( ( GetLayerMask( textLayer ) & m_layerMask ) == 0 )
         trace_ref = false;
 
     if( !textModule->IsVisible() && !GetPlotInvisibleText() )
@@ -124,7 +124,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     if( textLayer > LAYER_COUNT )
         return false;
 
-    if( ( (1 << textLayer) & m_layerMask ) == 0 )
+    if( ( GetLayerMask( textLayer ) & m_layerMask ) == 0 )
         trace_val = false;
 
     if( !textModule->IsVisible() && !GetPlotInvisibleText() )
@@ -164,7 +164,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
         if( textLayer >= LAYER_COUNT )
             return false;
 
-        if( !( ( 1 << textLayer ) & m_layerMask ) )
+        if( !( GetLayerMask( textLayer ) & m_layerMask ) )
             continue;
 
         PlotTextModule( textModule, getColor( textLayer ) );

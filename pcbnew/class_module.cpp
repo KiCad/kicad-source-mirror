@@ -573,7 +573,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 }
 
 
-D_PAD* MODULE::GetPad( const wxPoint& aPosition, int aLayerMask )
+D_PAD* MODULE::GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
     for( D_PAD* pad = m_Pads;   pad;   pad = pad->Next() )
     {

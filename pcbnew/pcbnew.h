@@ -9,6 +9,7 @@
 #include <fctsys.h>         // wxWidgets include.
 #include <base_struct.h>    // IS_DRAGGED and IN_EDIT definitions.
 #include <convert_to_biu.h> // to define DMils2iu() conversion function
+#include <layers_id_colors_and_visibility.h>
 
 // Arcs are approximated by segments: define the number of segments per 360 deg (KiCad uses 0.1
 // deg approximation).  Be aware 3600 / ARC_APPROX_SEGMENTS_COUNT_LOW_DEF is an integer.

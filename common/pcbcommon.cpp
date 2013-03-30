@@ -71,7 +71,7 @@ int GetLayerMask( int aLayerNumber )
 
 /* Look up Table for conversion copper layer count -> general copper layer
  * mask: */
-int g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
+LAYER_MSK g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
     0x0001, 0x8001, 0x8003, 0x8007,
     0x800F, 0x801F, 0x803F, 0x807F,
     0x80FF, 0x81FF, 0x83FF, 0x87FF,

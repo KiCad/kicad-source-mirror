@@ -94,10 +94,10 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
             }
         }
 
-        int masque_layer = 0;
-        int layers_filter = ALL_LAYERS;
+        LAYER_MSK masque_layer = NO_LAYERS;
+        LAYER_MSK layers_filter = ALL_LAYERS;
         if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
-            layers_filter = 1 << m_currentLayer;
+            layers_filter = GetLayerMask( m_currentLayer );
 
 
         if( m_DelDrawings->GetValue() )
@@ -111,7 +111,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         for( item = pcb->m_Drawings; item != NULL; item = nextitem )
         {
             nextitem = item->Next();
-            bool removeme = (GetLayerMask( item->GetLayer() ) & masque_layer) != 0;
+            bool removeme = GetLayerMask( item->GetLayer() ) & masque_layer;
 
             if( ( item->Type() == PCB_TEXT_T ) && m_DelTexts->GetValue() )
                 removeme = true;
@@ -162,7 +162,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
                 if( (track->Type() == PCB_VIA_T)  && !m_TrackFilterVias->GetValue() )
                     continue;
 
-                if( (track->ReturnMaskLayer() & layers_filter) == 0 )
+                if( (track->GetLayerMask() & layers_filter) == 0 )
                     continue;
 
                 itemPicker.SetItem( track );

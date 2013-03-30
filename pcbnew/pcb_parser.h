@@ -58,11 +58,12 @@ class FPL_CACHE;
  */
 class PCB_PARSER : public PCB_LEXER
 {
-    typedef KEYWORD_MAP     LAYER_MAP;
+    typedef boost::unordered_map< std::string, int > LAYER_NUM_MAP;
+    typedef boost::unordered_map< std::string, LAYER_MSK > LAYER_MSK_MAP;
 
     BOARD*          m_board;
-    LAYER_MAP       m_layerIndices;     ///< map layer name to it's index
-    LAYER_MAP       m_layerMasks;       ///< map layer names to their masks
+    LAYER_NUM_MAP   m_layerIndices;     ///< map layer name to it's index
+    LAYER_MSK_MAP   m_layerMasks;       ///< map layer names to their masks
 
 
     /**
@@ -99,13 +100,14 @@ class PCB_PARSER : public PCB_LEXER
      * Function lookUpLayer
      * parses the current token for the layer definition of a #BOARD_ITEM object.
      *
-     * @param aMap is the LAYER_MAP to use for the lookup.
+     * @param aMap is the LAYER_{NUM|MSK}_MAP to use for the lookup.
      *
      * @throw IO_ERROR if the layer is not valid.
      * @throw PARSE_ERROR if the layer syntax is incorrect.
      * @return int - The result of the parsed #BOARD_ITEM layer or set designator.
      */
-    int lookUpLayer( const LAYER_MAP& aMap ) throw( PARSE_ERROR, IO_ERROR );
+    template<class T, class M>
+    T lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR );
 
     /**
      * Function parseBoardItemLayer
@@ -125,7 +127,7 @@ class PCB_PARSER : public PCB_LEXER
      * @throw PARSE_ERROR if the layers syntax is incorrect.
      * @return The mask of layers the parsed #BOARD_ITEM is on.
      */
-    int parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR );
+    LAYER_MSK parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR );
 
     /**
      * Function parseXY

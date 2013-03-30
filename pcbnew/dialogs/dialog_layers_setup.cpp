@@ -76,7 +76,7 @@ private:
     PCB_EDIT_FRAME*     m_Parent;
 
     int                 m_CopperLayerCount;
-    int                 m_EnabledLayers;
+    LAYER_MSK           m_EnabledLayers;
 
     BOARD*              m_Pcb;
 
@@ -90,12 +90,12 @@ private:
 
     void showCopperChoice( int copperCount );
     void showBoardLayerNames();
-    void showSelectedLayerCheckBoxes( int enableLayerMask );
+    void showSelectedLayerCheckBoxes( LAYER_MSK enableLayerMask );
     void showLayerTypes();
-    void showPresets( int enabledLayerMask );
+    void showPresets( LAYER_MSK enabledLayerMask );
 
     /** return the selected layer mask within the UI checkboxes */
-    int getUILayerMask();
+    LAYER_MSK getUILayerMask();
     wxString getLayerName( int layer );
     int getLayerTypeIndex( int layer );
 
@@ -171,12 +171,12 @@ public:
 
 
 // Layer bit masks for each defined "Preset Layer Grouping"
-static const int presets[] =
+static const LAYER_MSK presets[] =
 {
 #define FRONT_AUX   (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT  | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
 #define BACK_AUX    (SILKSCREEN_LAYER_BACK  | SOLDERMASK_LAYER_BACK   | ADHESIVE_LAYER_BACK  | SOLDERPASTE_LAYER_BACK)
 
-    0,  // shift the array index up by one, matches with "Custom".
+    NO_LAYERS,  // shift the array index up by one, matches with "Custom".
 
     // "Two layers, parts on Front only"
     EDGE_LAYER | LAYER_FRONT | LAYER_BACK | FRONT_AUX,
@@ -348,16 +348,16 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
 }
 
 
-void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes( int enabledLayers )
+void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes( LAYER_MSK enabledLayers )
 {
     for( int layer=0;  layer<NB_LAYERS;  ++layer )
     {
-        setLayerCheckBox( layer, (1<<layer) & enabledLayers  );
+        setLayerCheckBox( layer, GetLayerMask( layer ) & enabledLayers );
     }
 }
 
 
-void DIALOG_LAYERS_SETUP::showPresets( int enabledLayers )
+void DIALOG_LAYERS_SETUP::showPresets( LAYER_MSK enabledLayers )
 {
     int presetsNdx = 0;     // the "Custom" setting, matches nothing
 
@@ -385,16 +385,16 @@ void DIALOG_LAYERS_SETUP::showLayerTypes()
 }
 
 
-int DIALOG_LAYERS_SETUP::getUILayerMask()
+LAYER_MSK DIALOG_LAYERS_SETUP::getUILayerMask()
 {
-    int layerMaskResult = 0;
+    LAYER_MSK layerMaskResult = NO_LAYERS;
 
     for( int layer=0;  layer<NB_LAYERS;  ++layer )
     {
         wxCheckBox*  ctl = getCheckBox( layer );
         if( ctl->GetValue() )
         {
-            layerMaskResult |= (1 << layer);
+            layerMaskResult |= GetLayerMask( layer );
         }
     }
 

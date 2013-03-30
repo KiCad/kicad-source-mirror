@@ -663,7 +663,7 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
 
 bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit )
 {
-    int layerMask = aRefPad->GetLayerMask() & ALL_CU_LAYERS;
+    LAYER_MSK layerMask = aRefPad->GetLayerMask() & ALL_CU_LAYERS;
 
     /* used to test DRC pad to holes: this dummy pad has the size and shape of the hole
      * to test pad to pad hole DRC, using the pad to pad DRC test function.

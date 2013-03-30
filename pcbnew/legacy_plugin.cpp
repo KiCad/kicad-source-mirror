@@ -409,7 +409,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "EnabledLayers" ) )
         {
-            int enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
+            LAYER_MSK enabledLayers = hexParse( line + SZ( "EnabledLayers" ) );
 
             // layer usage
             m_board->SetEnabledLayers( enabledLayers );
@@ -420,7 +420,7 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "VisibleLayers" ) )
         {
-            int visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
+            LAYER_MSK visibleLayers = hexParse( line + SZ( "VisibleLayers" ) );
             m_board->SetVisibleLayers( visibleLayers );
         }
 
@@ -1239,7 +1239,6 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             // sscanf( PtLine, "%s %s %X", BufLine, BufCar, &m_layerMask );
 
             PAD_ATTR_T  attribute;
-            int         layer_mask;
 
             data = strtok( line + SZ( "At" ), delims );
 
@@ -1255,7 +1254,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             data = strtok( NULL, delims );  // skip BufCar
             data = strtok( NULL, delims );
 
-            layer_mask = hexParse( data );
+            LAYER_MSK layer_mask = hexParse( data );
 
             pad->SetLayerMask( layer_mask );
             pad->SetAttribute( attribute );

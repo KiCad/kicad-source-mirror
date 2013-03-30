@@ -95,7 +95,7 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
     int layers_count = LAYER_COUNT;
 #endif
 
-    int mask_layer = m_PrintParams.m_PrintMaskLayer;
+    LAYER_MSK mask_layer = m_PrintParams.m_PrintMaskLayer;
 
     // compute layer mask from page number if we want one page per layer
     if( m_PrintParams.m_OptionPrintPage == 0 )  // One page per layer

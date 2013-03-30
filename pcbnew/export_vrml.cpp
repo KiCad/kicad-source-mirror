@@ -918,7 +918,7 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
     }
 
     // The pad proper, on the selected layers
-    int         layer_mask    = aPad->GetLayerMask();
+    LAYER_MSK   layer_mask    = aPad->GetLayerMask();
     int         copper_layers = pcb->GetCopperLayerCount( );
 
     // The (maybe offseted) pad position
@@ -939,7 +939,7 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
         if( (layer > FIRST_COPPER_LAYER) && (layer == copper_layers - 1) )
             layer = LAST_COPPER_LAYER;
 
-        if( layer_mask & (1 << layer) )
+        if( layer_mask & GetLayerMask( layer ) )
         {
             // OK, the pad is on this layer, export it
             switch( aPad->GetShape() )

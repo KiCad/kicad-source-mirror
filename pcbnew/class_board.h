@@ -234,7 +234,7 @@ private:
      * @param aLayerMask The allowed layers for segments to search.
      * @param aList The track list to fill with points of flagged segments.
      */
-    void chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList );
+    void chainMarkedSegments( wxPoint aPosition, LAYER_MSK aLayerMask, TRACK_PTRS* aList );
 
     void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,
                          int aControlBits ) const
@@ -425,7 +425,7 @@ public:
      * Returns a bit-mask of all the layers that are enabled
      * @return int - the enabled layers in bit-mapped form.
      */
-    int  GetEnabledLayers() const;
+    LAYER_MSK GetEnabledLayers() const;
 
     /**
      * Function SetEnabledLayers
@@ -433,7 +433,7 @@ public:
      * Changes the bit-mask of enabled layers
      * @param aLayerMask = The new bit-mask of enabled layers
      */
-    void SetEnabledLayers( int aLayerMask );
+    void SetEnabledLayers( LAYER_MSK aLayerMask );
 
     /**
      * Function IsLayerEnabled
@@ -465,7 +465,7 @@ public:
      * Returns a bit-mask of all the layers that are visible
      * @return int - the visible layers in bit-mapped form.
      */
-    int  GetVisibleLayers() const;
+    LAYER_MSK  GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
@@ -473,7 +473,7 @@ public:
      * changes the bit-mask of visible layers
      * @param aLayerMask = The new bit-mask of visible layers
      */
-    void SetVisibleLayers( int aLayerMask );
+    void SetVisibleLayers( LAYER_MSK aLayerMask );
 
     // these 2 functions are not tidy at this time, since there are PCB_VISIBLEs that
     // are not stored in the bitmap.
@@ -1223,7 +1223,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a D_PAD object if found or NULL if not found.
      */
-    D_PAD* GetPad( const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
+    D_PAD* GetPad( const wxPoint& aPosition, LAYER_MSK aLayerMask = ALL_LAYERS );
 
     /**
      * Function GetPad
@@ -1245,7 +1245,7 @@ public:
      * @param aLayer A layer or layers to mask the hit test.
      * @return A pointer to a D_PAD object if found or NULL if not found.
      */
-    D_PAD* GetPadFast( const wxPoint& aPosition, int aLayer );
+    D_PAD* GetPadFast( const wxPoint& aPosition, LAYER_MSK aLayerMask );
 
     /**
      * Function GetPad
@@ -1262,7 +1262,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return a D_PAD object pointer to the connected pad.
      */
-    D_PAD* GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, int aLayerMask );
+    D_PAD* GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, LAYER_MSK aLayerMask );
 
     /**
      * Function GetSortedPadListByXthenYCoord
@@ -1289,7 +1289,7 @@ public:
      *                   layer mask.
      * @return A TRACK object pointer if found otherwise NULL.
      */
-    TRACK* GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask );
+    TRACK* GetTrace( TRACK* aTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask );
 
     /**
      * Function MarkTrace
@@ -1348,7 +1348,7 @@ public:
      *                   layer mask.
      * @return A pointer to a BOARD_ITEM object if found otherwise NULL.
      */
-    BOARD_CONNECTED_ITEM* GetLockPoint( const wxPoint& aPosition, int aLayerMask );
+    BOARD_CONNECTED_ITEM* GetLockPoint( const wxPoint& aPosition, LAYER_MSK aLayerMask );
 
     /**
      * Function CreateLockPoint

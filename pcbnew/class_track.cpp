@@ -87,7 +87,7 @@ inline bool IsNear( wxPoint& p1, wxPoint& p2, int max_dist )
 }
 
 
-TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask )
+TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
     TRACK* PtSegm;
 
@@ -100,13 +100,13 @@ TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition,
         {
             if( aPosition == PtSegm->GetStart() )
             {
-                if( aLayerMask & PtSegm->ReturnMaskLayer() )
+                if( aLayerMask & PtSegm->GetLayerMask() )
                     return PtSegm;
             }
 
             if( aPosition == PtSegm->GetEnd() )
             {
-                if( aLayerMask & PtSegm->ReturnMaskLayer() )
+                if( aLayerMask & PtSegm->GetLayerMask() )
                     return PtSegm;
             }
         }
@@ -429,7 +429,7 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
 }
 
 
-int TRACK::ReturnMaskLayer() const
+LAYER_MSK TRACK::GetLayerMask() const
 {
     if( Type() == PCB_VIA_T )
     {
@@ -445,18 +445,19 @@ int TRACK::ReturnMaskLayer() const
         // ReturnLayerPair() knows how layers are stored
         ( (SEGVIA*) this )->ReturnLayerPair( &top_layer, &bottom_layer );
 
-        int layermask = 0;
+        LAYER_MSK layermask = NO_LAYERS;
 
         while( bottom_layer <= top_layer )
         {
-            layermask |= GetLayerMask( bottom_layer++ );
+            layermask |= ::GetLayerMask( bottom_layer );
+            ++bottom_layer;
         }
 
         return layermask;
     }
     else
     {
-        return GetLayerMask( m_Layer );
+        return ::GetLayerMask( m_Layer );
     }
 }
 
@@ -1190,7 +1191,7 @@ bool TRACK::HitTest( const EDA_RECT& aRect ) const
 }
 
 
-TRACK* TRACK::GetVia( const wxPoint& aPosition, int aLayerMask )
+TRACK* TRACK::GetVia( const wxPoint& aPosition, int aLayer )
 {
     TRACK* track;
 
@@ -1205,10 +1206,10 @@ TRACK* TRACK::GetVia( const wxPoint& aPosition, int aLayerMask )
         if( track->GetState( BUSY | IS_DELETED ) )
             continue;
 
-        if( aLayerMask < 0 )
+        if( aLayer < 0 )
             break;
 
-        if( track->IsOnLayer( aLayerMask ) )
+        if( track->IsOnLayer( aLayer ) )
             break;
     }
 
@@ -1216,7 +1217,7 @@ TRACK* TRACK::GetVia( const wxPoint& aPosition, int aLayerMask )
 }
 
 
-TRACK* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask )
+TRACK* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LAYER_MSK aLayerMask )
 {
     TRACK* trace;
 
@@ -1228,7 +1229,7 @@ TRACK* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask
             {
                 if( trace->GetState( BUSY | IS_DELETED ) == 0 )
                 {
-                    if( aLayerMask & trace->ReturnMaskLayer() )
+                    if( aLayerMask & trace->GetLayerMask() )
                         return trace;
                 }
             }
@@ -1258,7 +1259,7 @@ TRACK* TRACK::GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint )
     else
         position = m_End;
 
-    Reflayer = ReturnMaskLayer();
+    Reflayer = GetLayerMask();
 
     previousSegment = nextSegment = this;
 
@@ -1282,13 +1283,13 @@ TRACK* TRACK::GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint )
 
             if( IsNear( position, nextSegment->m_Start, max_dist ) )
             {
-                if( Reflayer & nextSegment->ReturnMaskLayer() )
+                if( Reflayer & nextSegment->GetLayerMask() )
                     return nextSegment;
             }
 
             if( IsNear( position, nextSegment->m_End, max_dist ) )
             {
-                if( Reflayer & nextSegment->ReturnMaskLayer() )
+                if( Reflayer & nextSegment->GetLayerMask() )
                     return nextSegment;
             }
 suite:
@@ -1310,13 +1311,13 @@ suite:
 
             if( IsNear( position, previousSegment->m_Start, max_dist ) )
             {
-                if( Reflayer & previousSegment->ReturnMaskLayer() )
+                if( Reflayer & previousSegment->GetLayerMask() )
                     return previousSegment;
             }
 
             if( IsNear( position, previousSegment->m_End, max_dist ) )
             {
-                if( Reflayer & previousSegment->ReturnMaskLayer() )
+                if( Reflayer & previousSegment->GetLayerMask() )
                     return previousSegment;
             }
 suite1:
@@ -1352,13 +1353,13 @@ suite1:
 
         if( IsNear( position, nextSegment->m_Start, max_dist ) )
         {
-            if( Reflayer & nextSegment->ReturnMaskLayer() )
+            if( Reflayer & nextSegment->GetLayerMask() )
                 return nextSegment;
         }
 
         if( IsNear( position, nextSegment->m_End, max_dist ) )
         {
-            if( Reflayer & nextSegment->ReturnMaskLayer() )
+            if( Reflayer & nextSegment->GetLayerMask() )
                 return nextSegment;
         }
 
@@ -1373,7 +1374,8 @@ suite1:
 int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
 {
     TRACK* Track, * via, * segm, * TrackListEnd;
-    int    NbEnds, layerMask, ii, ok = 0;
+    int      NbEnds, ii, ok = 0;
+    LAYER_MSK layerMask;
 
     if( aCount <= 1 )
     {
@@ -1402,12 +1404,12 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
         if( Track->Type() == PCB_VIA_T )
             continue;
 
-        layerMask = Track->ReturnMaskLayer();
+        layerMask = Track->GetLayerMask();
         via = GetVia( TrackListEnd, Track->m_Start, layerMask );
 
         if( via )
         {
-            layerMask |= via->ReturnMaskLayer();
+            layerMask |= via->GetLayerMask();
             via->SetState( BUSY, true );
         }
 
@@ -1449,12 +1451,12 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
             }
         }
 
-        layerMask = Track->ReturnMaskLayer();
+        layerMask = Track->GetLayerMask();
         via = GetVia( TrackListEnd, Track->m_End, layerMask );
 
         if( via )
         {
-            layerMask |= via->ReturnMaskLayer();
+            layerMask |= via->GetLayerMask();
             via->SetState( BUSY, true );
         }
 

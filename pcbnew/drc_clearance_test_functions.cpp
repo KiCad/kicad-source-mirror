@@ -150,7 +150,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 {
     TRACK*    track;
     wxPoint   delta;           // lenght on X and Y axis of segments
-    int       layerMask;
+    LAYER_MSK layerMask;
     int       net_code_ref;
     wxPoint   shape_pos;
 
@@ -164,7 +164,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     m_segmEnd   = delta = aRefSeg->GetEnd() - origin;
     m_segmAngle = 0;
 
-    layerMask    = aRefSeg->ReturnMaskLayer();
+    layerMask    = aRefSeg->GetLayerMask();
     net_code_ref = aRefSeg->GetNet();
 
     // Phase 0 : Test vias
@@ -343,7 +343,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             continue;
 
         // No problem if segment are on different layers :
-        if( ( layerMask & track->ReturnMaskLayer() ) == 0 )
+        if( ( layerMask & track->GetLayerMask() ) == 0 )
             continue;
 
         // the minimum distance = clearance plus half the reference track

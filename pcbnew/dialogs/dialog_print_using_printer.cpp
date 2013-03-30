@@ -282,7 +282,7 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
     int page_count;
     int layers_count = NB_LAYERS;
 
-    s_Parameters.m_PrintMaskLayer = 0;
+    s_Parameters.m_PrintMaskLayer = NO_LAYERS;
     int ii;
     for( ii = 0, page_count = 0; ii < layers_count; ii++ )
     {
@@ -291,7 +291,7 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
         if( m_BoxSelectLayer[ii]->IsChecked() )
         {
             page_count++;
-            s_Parameters.m_PrintMaskLayer |= 1 << ii;
+            s_Parameters.m_PrintMaskLayer |= GetLayerMask( ii );
         }
     }
 

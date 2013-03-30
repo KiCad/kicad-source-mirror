@@ -425,7 +425,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, "(layers\n" );
 
     unsigned mask = LAYER_FRONT;
-    unsigned layer = LAYER_N_FRONT;
+    int layer = LAYER_N_FRONT;
 
     // Save only the used copper layers from front to back.
     while( mask != 0 )
@@ -980,12 +980,12 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatLayers( int aLayerMask, int aNestLevel ) const
+void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
     throw( IO_ERROR )
 {
     m_out->Print( aNestLevel, "(layers" );
 
-    int cuMask = ALL_CU_LAYERS;
+    LAYER_MSK cuMask = ALL_CU_LAYERS;
 
     if( m_board )
         cuMask &= m_board->GetEnabledLayers();

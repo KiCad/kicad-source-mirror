@@ -19,7 +19,7 @@
 
 #include <pad_shapes.h>
 #include <wx/gdicmn.h>      // for wxPoint definition
-
+#include <layers_id_colors_and_visibility.h>
 #include <polygons_defs.h>
 
 class CRect

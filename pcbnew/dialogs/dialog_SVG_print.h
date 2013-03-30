@@ -17,7 +17,7 @@ private:
     PCB_BASE_FRAME* m_parent;
     BOARD*          m_board;
     wxConfig*       m_config;
-    long            m_printMaskLayer;
+    LAYER_MSK       m_printMaskLayer;
     wxCheckBox*     m_boxSelectLayer[32];
     bool            m_printBW;
     wxString        m_outputDirectory;

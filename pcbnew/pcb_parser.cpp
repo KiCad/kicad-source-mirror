@@ -66,7 +66,7 @@ void PCB_PARSER::init()
         std::string untranslated = TO_UTF8( BOARD::GetStandardLayerName( layerNdx ) );
 
         m_layerIndices[ untranslated ] = layerNdx;
-        m_layerMasks[ untranslated ]   = 1 << layerNdx;
+        m_layerMasks[ untranslated ]   = GetLayerMask( layerNdx );
     }
 
     m_layerMasks[ "*.Cu" ]      = ALL_CU_LAYERS;
@@ -667,8 +667,8 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     std::string type;
     int         layerIndex;
     bool        isVisible = true;
-    int         visibleLayers = 0;
-    int         enabledLayers = 0;
+    LAYER_MSK   visibleLayers = NO_LAYERS;
+    LAYER_MSK   enabledLayers = NO_LAYERS;
     int         copperLayerCount = 0;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -700,13 +700,13 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
             Expecting( "hide or )" );
         }
 
-        enabledLayers |= 1 << layerIndex;
+        enabledLayers |= GetLayerMask( layerIndex );
 
         if( isVisible )
-            visibleLayers |= 1 << layerIndex;
+            visibleLayers |= GetLayerMask( layerIndex );
 
         m_layerIndices[ name ] = layerIndex;
-        m_layerMasks[ name ]   = 1 << layerIndex;
+        m_layerMasks[ name ]   = GetLayerMask(layerIndex);
 
         wxString        wname = FROM_UTF8( name.c_str() );
         enum LAYER_T    layerType = LAYER::ParseType( type.c_str() );
@@ -736,10 +736,11 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-int PCB_PARSER::lookUpLayer( const LAYER_MAP& aMap ) throw( PARSE_ERROR, IO_ERROR )
+template<class T, class M>
+T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
 {
     // avoid constructing another std::string, use lexer's directly
-    LAYER_MAP::const_iterator it = aMap.find( curText );
+    typename M::const_iterator it = aMap.find( curText );
 
     if( it == aMap.end() )
     {
@@ -747,7 +748,7 @@ int PCB_PARSER::lookUpLayer( const LAYER_MAP& aMap ) throw( PARSE_ERROR, IO_ERRO
         // dump the whole darn table, there's something wrong with it.
         for( it = aMap.begin();  it != aMap.end();  ++it )
         {
-            printf( &aMap == &m_layerIndices ? "lm[%s] = %d\n" : "lm[%s] = %08X\n",
+            printf( &aMap == (void*)&m_layerIndices ? "lm[%s] = %d\n" : "lm[%s] = %08X\n",
                 it->first.c_str(), it->second );
         }
 #endif
@@ -771,7 +772,7 @@ int PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
 
     NextTok();
 
-    int layerIndex = lookUpLayer( m_layerIndices );
+    int layerIndex = lookUpLayer<int>( m_layerIndices );
 
     // Handle closing ) in object parser.
 
@@ -779,17 +780,17 @@ int PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-int PCB_PARSER::parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR )
+LAYER_MSK PCB_PARSER::parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR )
 {
-    wxCHECK_MSG( CurTok() == T_layers, 0,
+    wxCHECK_MSG( CurTok() == T_layers, NO_LAYERS,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as item layer mask." ) );
 
-    int layerMask = 0;
+    LAYER_MSK layerMask = NO_LAYERS;
 
     for( T token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-        int mask = lookUpLayer( m_layerMasks );
+        LAYER_MSK mask = lookUpLayer<LAYER_MSK>( m_layerMasks );
         layerMask |= mask;
     }
 
@@ -2152,7 +2153,7 @@ D_PAD* PCB_PARSER::parseD_PAD() throw( IO_ERROR, PARSE_ERROR )
 
         case T_layers:
             {
-                int layerMask = parseBoardItemLayersAsMask();
+                LAYER_MSK layerMask = parseBoardItemLayersAsMask();
                 pad->SetLayerMask( layerMask );
             }
             break;
@@ -2324,9 +2325,9 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
             {
                 int layer1, layer2;
                 NextTok();
-                layer1 = lookUpLayer( m_layerIndices );
+                layer1 = lookUpLayer<int>( m_layerIndices );
                 NextTok();
-                layer2 = lookUpLayer( m_layerIndices );
+                layer2 = lookUpLayer<int>( m_layerIndices );
                 via->SetLayerPair( layer1, layer2 );
                 NeedRIGHT();
             }

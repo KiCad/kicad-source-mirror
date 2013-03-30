@@ -27,6 +27,7 @@
  */
 
 #include <io_mgr.h>
+#include <layers_id_colors_and_visibility.h>
 
 
 // forward declaration on ptree template so we can confine use of big boost

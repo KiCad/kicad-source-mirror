@@ -246,8 +246,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
             // if routing between copper and component layers,
             // or the current layer is one of said 2 external copper layers,
             // then highlight only the current layer.
-            if( ( ( 1 << routeTop ) | ( 1 << routeBot ) ) == ( LAYER_BACK | LAYER_FRONT )
-               || ( ( 1 << screen->m_Active_Layer ) & ( LAYER_BACK | LAYER_FRONT ) ) )
+            if( ( ::GetLayerMask( routeTop ) | ::GetLayerMask( routeBot ) ) == ( LAYER_BACK | LAYER_FRONT )
+               || ( ::GetLayerMask( screen->m_Active_Layer ) & ( LAYER_BACK | LAYER_FRONT ) ) )
             {
                 if( !IsOnLayer( screen->m_Active_Layer ) )
                     ColorTurnToDarkDarkGray( &color );

@@ -171,7 +171,7 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
 
 // see pcbstruct.h
-int BOARD_DESIGN_SETTINGS::GetVisibleLayers() const
+LAYER_MSK BOARD_DESIGN_SETTINGS::GetVisibleLayers() const
 {
     return m_VisibleLayers;
 }
@@ -184,7 +184,7 @@ void BOARD_DESIGN_SETTINGS::SetVisibleAlls()
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetVisibleLayers( int aMask )
+void BOARD_DESIGN_SETTINGS::SetVisibleLayers( LAYER_MSK aMask )
 {
     // Although Pcbnew uses only 29, GerbView uses all 32 layers
     m_VisibleLayers = aMask & m_EnabledLayers & FULL_LAYERS;
@@ -198,9 +198,9 @@ void BOARD_DESIGN_SETTINGS::SetLayerVisibility( int aLayerIndex, bool aNewState 
         return;
 
     if( aNewState && IsLayerEnabled( aLayerIndex ) )
-        m_VisibleLayers |= 1 << aLayerIndex;
+        m_VisibleLayers |= GetLayerMask( aLayerIndex );
     else
-        m_VisibleLayers &= ~( 1 << aLayerIndex );
+        m_VisibleLayers &= ~GetLayerMask( aLayerIndex );
 }
 
 
@@ -229,12 +229,12 @@ void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
     if( m_CopperLayerCount > 1 )
         m_EnabledLayers |= LAYER_FRONT;
 
-    for( int ii = 1; ii < aNewLayerCount - 1; ii++ )
-        m_EnabledLayers |= 1 << ii;
+    for( int ii = LAYER_N_2; ii < aNewLayerCount - 1; ++ii )
+        m_EnabledLayers |= GetLayerMask( ii );
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetEnabledLayers( int aMask )
+void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LAYER_MSK aMask )
 {
     // Back and front layers are always enabled.
     aMask |= LAYER_BACK | LAYER_FRONT;

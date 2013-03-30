@@ -163,7 +163,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     int     rowCount;
     int     menuId = event.GetId();
     bool    visible = (menuId == ID_SHOW_ALL_COPPERS) ? true : false;;
-    int     visibleLayers = 0;
+    LAYER_MSK visibleLayers = NO_LAYERS;
 
     switch( menuId )
     {
@@ -181,9 +181,9 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
             cb->SetValue( loc_visible );
             if( loc_visible )
-                visibleLayers |= (1 << row);
+                visibleLayers |= GetLayerMask( row );
             else
-                visibleLayers &= ~(1 << row);
+                visibleLayers &= ~GetLayerMask( row );
         }
 
         myframe->SetVisibleLayers( visibleLayers );
@@ -235,12 +235,12 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
 
 void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
 {
-    int visibleLayers = myframe->GetVisibleLayers();
+    LAYER_MSK visibleLayers = myframe->GetVisibleLayers();
 
     if( isVisible )
-        visibleLayers |= (1 << aLayer);
+        visibleLayers |= GetLayerMask( aLayer );
     else
-        visibleLayers &= ~(1 << aLayer);
+        visibleLayers &= ~GetLayerMask( aLayer );
 
     myframe->SetVisibleLayers( visibleLayers );
 

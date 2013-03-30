@@ -79,9 +79,9 @@ int BOARD::ReturnFlippedLayerNumber( int oldlayer )
 /* Calculate the mask layer when flipping a footprint
  * BACK and FRONT copper layers , mask, paste, solder layers are swapped
  */
-int ChangeSideMaskLayer( int aMask )
+LAYER_MSK ChangeSideMaskLayer( LAYER_MSK aMask )
 {
-    int newMask;
+    LAYER_MSK newMask;
 
     newMask = aMask & ~(LAYER_BACK | LAYER_FRONT |
                            SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT |

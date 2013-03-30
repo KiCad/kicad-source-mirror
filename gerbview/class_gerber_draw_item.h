@@ -31,6 +31,7 @@
 
 #include <base_struct.h>
 #include <dlist.h>
+#include <layers_id_colors_and_visibility.h>
 #include <gr_basic.h>
 
 class GERBER_IMAGE;
@@ -133,9 +134,9 @@ public:
      */
     void SetLayer( int aLayer )  { m_Layer = aLayer; }
 
-    int ReturnMaskLayer()
+    LAYER_MSK GetLayerMask()
     {
-        return 1 << m_Layer;
+        return ::GetLayerMask( m_Layer );
     }
 
     bool GetLayerPolarity()

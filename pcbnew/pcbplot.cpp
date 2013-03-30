@@ -255,11 +255,9 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     // Save the current plot options in the board
     m_parent->SetPlotSettings( m_plotOpts );
 
-    long layerMask = 1;
-
-    for( layer = 0; layer < NB_LAYERS; layer++, layerMask <<= 1 )
+    for( layer = 0; layer < NB_LAYERS; ++layer )
     {
-        if( m_plotOpts.GetLayerSelection() & layerMask )
+        if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) )
         {
             // Pick the basename from the board file
             wxFileName fn( boardFilename );

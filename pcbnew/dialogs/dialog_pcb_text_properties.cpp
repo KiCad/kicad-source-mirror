@@ -126,11 +126,11 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->GetTextPosition().x );
     PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->GetTextPosition().y );
 
-    int enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
+    LAYER_MSK enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
 
-    for( int layer = 0; layer < NB_LAYERS;  ++layer )
+    for( int layer = 0; layer < NB_LAYERS; ++layer )
     {
-        if( enabledLayers & (1 << layer) )
+        if( enabledLayers & GetLayerMask( layer ) )
         {
             layerList.push_back( layer );
             int itemIndex =
