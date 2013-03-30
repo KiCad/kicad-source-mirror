@@ -262,9 +262,7 @@ void LIB_PIN::SetNumber( const wxString& number )
     SetPinNumFromString( tmp );
 
     if( m_number != oldNumber )
-    {
-        m_Flags |= IS_CHANGED;
-    }
+        SetFlags( IS_CHANGED );
 
     /* Others pin numbers marked by EnableEditMode() are not modified
      * because each pin has its own number
@@ -437,7 +435,7 @@ void LIB_PIN::SetConversion( int style )
         return;
 
     m_Convert = style;
-    m_Flags  |= IS_CHANGED;
+    SetFlags( IS_CHANGED );
 
     if( style == 0 )
     {
@@ -514,9 +512,9 @@ void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
            && !IsNew()
            && editPinByPin == false
            && enable )
-            pinList[i]->m_Flags |= IS_LINKED | IN_EDIT;
+            pinList[i]->SetFlags( IS_LINKED | IN_EDIT );
         else
-            pinList[i]->m_Flags &= ~( IS_LINKED | IN_EDIT );
+            pinList[i]->ClearFlags( IS_LINKED | IN_EDIT );
     }
 }
 
@@ -650,7 +648,7 @@ bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
     if( aFormatter.Print( 0, "\n" ) < 0 )
         return false;
 
-    m_Flags &= ~IS_CHANGED;
+    ClearFlags( IS_CHANGED );
 
     return true;
 }

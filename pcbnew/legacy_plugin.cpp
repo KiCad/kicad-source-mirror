@@ -1730,7 +1730,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                 case 4:
                     int state;
                     state = hexParse( data );
-                    dseg->SetState( state, ON );
+                    dseg->SetState( state, true );
                     break;
 
                     // Bezier Control Points
@@ -2046,7 +2046,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         }
 
         newTrack->SetNet( net_code );
-        newTrack->SetState( flags, ON );
+        newTrack->SetState( flags, true );
     }
 
     THROW_IO_ERROR( "Missing '$EndTRACK'" );

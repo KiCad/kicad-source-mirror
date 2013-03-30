@@ -100,6 +100,7 @@ typedef unsigned LAYER_MSK;
  */
 inline LAYER_MSK GetLayerMask( unsigned aLayerNumber )
 {
+    wxASSERT( aLayerNumber < LAYER_COUNT && aLayerNumber >= 0 );
     return 1 << aLayerNumber;
 }
 

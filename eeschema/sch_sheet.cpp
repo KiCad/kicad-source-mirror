@@ -992,9 +992,9 @@ bool SCH_SHEET::IsSelectStateChanged( const wxRect& aRect )
     EDA_RECT boundingBox = GetBoundingBox();
 
     if( aRect.Intersects( boundingBox ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        ClearFlags( SELECTED );
 
     return previousState != IsSelected();
 }
