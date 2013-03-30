@@ -93,7 +93,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText23;
 		wxChoice* m_trapDeltaDirChoice;
 		wxStaticText* m_staticText521;
-		wxBoxSizer* m_DrillShapeBoxSizer;
 		wxStaticText* m_staticTitleModuleRot;
 		wxStaticText* m_staticModuleRotValue;
 		wxStaticText* m_staticTitleModuleSide;
@@ -163,7 +162,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER ); 
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 745,725 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER ); 
 		~DIALOG_PAD_PROPERTIES_BASE();
 	
 };
