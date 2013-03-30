@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file dialog_edit_component_in_schematic.cpp
  */
@@ -142,8 +165,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
     if( newname.IsEmpty() )
+    {
         DisplayError( NULL, _( "No Component Name!" ) );
-
+    }
     else if( newname.CmpNoCase( m_Cmp->m_ChipName ) )
     {
         if( CMP_LIBRARY::FindLibraryEntry( newname ) == NULL )
@@ -230,12 +254,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     copyPanelToOptions();
 
-    // change all field positions from relative to absolute
-    for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
-    {
-        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() + m_Cmp->m_Pos );
-    }
-
     // Delete any fields with no name before we copy all of m_FieldsBuf back into the component.
     for( unsigned i = MANDATORY_FIELDS;  i<m_FieldsBuf.size(); )
     {
@@ -251,9 +269,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
             {
                 wxString msg;
 
-                msg.Printf( _( "The field name <%s> does not have a value and is not defined in \
-the field template list.  Empty field values are invalid an will be removed from the component.  \
-Do you wish to remove this and all remaining undefined fields?" ),
+                msg.Printf( _( "The field name <%s> does not have a value and is not defined in "
+                               "the field template list.  Empty field values are invalid an will "
+                               "be removed from the component.  Do you wish to remove this and "
+                               "all remaining undefined fields?" ),
                             GetChars( m_FieldsBuf[i].GetName( false ) ) );
 
                 wxMessageDialog dlg( this, msg, _( "Remove Fields" ), wxYES_NO | wxNO_DEFAULT );
@@ -269,6 +288,12 @@ Do you wish to remove this and all remaining undefined fields?" ),
         }
 
         ++i;
+    }
+
+    // change all field positions from relative to absolute
+    for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
+    {
+        m_FieldsBuf[i].SetTextPosition( m_FieldsBuf[i].GetTextPosition() + m_Cmp->m_Pos );
     }
 
     LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( m_Cmp->m_ChipName );
@@ -440,8 +465,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 #if 0 && defined(DEBUG)
     for( int i = 0;  i<aComponent->GetFieldCount();  ++i )
     {
-        printf( "Orig[%d] (x=%d, y=%d)\n", i, aComponent->m_Fields[i].m_Pos.x,
-                aComponent->m_Fields[i].m_Pos.y );
+        printf( "Orig[%d] (x=%d, y=%d)\n", i, aComponent->m_Fields[i].GetTextPosition().x,
+                aComponent->m_Fields[i].GetTextPosition().y );
     }
 
 #endif
@@ -607,18 +632,18 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
 
     // Select the right text justification
     if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-        m_FieldHJustifyCtrl->SetSelection(0);
+        m_FieldHJustifyCtrl->SetSelection( 0 );
     else if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-        m_FieldHJustifyCtrl->SetSelection(2);
+        m_FieldHJustifyCtrl->SetSelection( 2 );
     else
-        m_FieldHJustifyCtrl->SetSelection(1);
+        m_FieldHJustifyCtrl->SetSelection( 1 );
 
     if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
-        m_FieldVJustifyCtrl->SetSelection(0);
+        m_FieldVJustifyCtrl->SetSelection( 0 );
     else if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
-        m_FieldVJustifyCtrl->SetSelection(2);
+        m_FieldVJustifyCtrl->SetSelection( 2 );
     else
-        m_FieldVJustifyCtrl->SetSelection(1);
+        m_FieldVJustifyCtrl->SetSelection( 1 );
 
 
     fieldNameTextCtrl->SetValue( field.GetName( false ) );
@@ -729,7 +754,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     wxPoint pos;
     pos.x = ReturnValueFromString( g_UserUnit, posXTextCtrl->GetValue() );
     pos.y = ReturnValueFromString( g_UserUnit, posYTextCtrl->GetValue() );
-    field.SetPosition( pos );
+    field.SetTextPosition( pos );
 
     return true;
 }
