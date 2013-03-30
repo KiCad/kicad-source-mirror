@@ -51,7 +51,6 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
-#include <protos.h>
 #include <pcbnew_config.h>
 
 #include <dialog_mask_clearance.h>
@@ -348,6 +347,8 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                    &DisplayOpt.DisplayModText, FILLED, 0, 2 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbAffT" ),
                                                    &DisplayOpt.DisplayDrawItems, FILLED, 0, 2 ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "PcbShowZonesMode" ),
+                                                   &DisplayOpt.DisplayZonesMode, 0, 0, 2 ) );
 
     // Colors:
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay0" ), LOC_COLOR( 0 ),

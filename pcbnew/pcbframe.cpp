@@ -61,11 +61,11 @@
 
 // Keys used in read/write config
 #define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
-#define PCB_SHOW_FULL_RATSNET_OPT   wxT( "PcbFulRatsnest" )
-#define PCB_MAGNETIC_PADS_OPT   wxT( "PcbMagPadOpt" )
-#define PCB_MAGNETIC_TRACKS_OPT wxT( "PcbMagTrackOpt" )
-#define SHOW_MICROWAVE_TOOLS    wxT( "ShowMicrowaveTools" )
-#define SHOW_LAYER_MANAGER_TOOLS    wxT( "ShowLayerManagerTools" )
+#define PCB_SHOW_FULL_RATSNET_OPT       wxT( "PcbFullRatsnest" )
+#define PCB_MAGNETIC_PADS_OPT           wxT( "PcbMagPadOpt" )
+#define PCB_MAGNETIC_TRACKS_OPT         wxT( "PcbMagTrackOpt" )
+#define SHOW_MICROWAVE_TOOLS            wxT( "ShowMicrowaveTools" )
+#define SHOW_LAYER_MANAGER_TOOLS        wxT( "ShowLayerManagerTools" )
 
 
 BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
@@ -313,14 +313,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 
-    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
-    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
-    m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
-
-    m_DisplayModEdge = DisplayOpt.DisplayModEdge;
-    m_DisplayModText = DisplayOpt.DisplayModText;
-
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
     SetIcon( icon );
@@ -333,6 +325,16 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
     LoadSettings();
+
+    // Be sure options are updated
+    m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
+    m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+    m_DisplayViaFill = DisplayOpt.DisplayViaFill;
+    m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
+
+    m_DisplayModEdge = DisplayOpt.DisplayModEdge;
+    m_DisplayModText = DisplayOpt.DisplayModText;
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
@@ -592,6 +594,7 @@ void PCB_EDIT_FRAME::LoadSettings()
     long tmp;
     config->Read( PCB_SHOW_FULL_RATSNET_OPT, &tmp );
     GetBoard()->SetElementVisibility(RATSNEST_VISIBLE, tmp);
+
     config->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
     config->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
     config->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );

@@ -415,21 +415,20 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         m_settings.m_Zone_45_Only = true;
 
     m_settings.m_ThermalReliefGap = ReturnValueFromTextCtrl( *m_AntipadSizeValue );
-
     m_settings.m_ThermalReliefCopperBridge = ReturnValueFromTextCtrl( *m_CopperWidthValue );
 
     if( m_Config )
     {
-        m_Config->Write( ZONE_CLEARANCE_WIDTH_STRING_KEY,
-            (double) m_settings.m_ZoneClearance / IU_PER_MILS );
+        ConfigBaseWriteDouble( m_Config, ZONE_CLEARANCE_WIDTH_STRING_KEY,
+                               (double) m_settings.m_ZoneClearance / IU_PER_MILS );
 
-        m_Config->Write( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
+        ConfigBaseWriteDouble( m_Config, ZONE_MIN_THICKNESS_WIDTH_STRING_KEY,
             (double) m_settings.m_ZoneMinThickness / IU_PER_MILS );
 
-        m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
+        ConfigBaseWriteDouble( m_Config, ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
             (double) m_settings.m_ThermalReliefGap / IU_PER_MILS );
 
-        m_Config->Write( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
+        ConfigBaseWriteDouble( m_Config, ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
             (double) m_settings.m_ThermalReliefCopperBridge / IU_PER_MILS );
     }
 

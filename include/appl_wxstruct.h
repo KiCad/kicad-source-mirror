@@ -120,7 +120,7 @@ public:
      * @return true if the application can be started.
      */
     bool OnInit(); // should this be virtual
-        
+
     wxHtmlHelpController* GetHtmlHelpController() { return m_HtmlCtrl; }
 
     void SetHtmlHelpController( wxHtmlHelpController* aController );
@@ -248,10 +248,6 @@ public:
      *  saved parameters are parameters that have the .m_Setup member set to false
      *  saving file is the .pro file project
      */
-    void WriteProjectConfig( const wxString&  local_config_filename,
-                             const wxString&  GroupName,
-                             PARAM_CFG_BASE** List );
-
     void WriteProjectConfig( const wxString&  fileName,
                              const wxString&  GroupName,
                              const PARAM_CFG_ARRAY& params );
@@ -263,7 +259,6 @@ public:
      * true.
      * @param aList = array of PARAM_CFG_BASE pointers
      */
-    void SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
     void SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List );
 
     /**
@@ -273,7 +268,6 @@ public:
      * true.
      * @param aList = array of PARAM_CFG_BASE pointers
      */
-    void ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
     void ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List );
 
     /**

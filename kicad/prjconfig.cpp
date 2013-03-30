@@ -32,7 +32,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <kicad.h>
-#include <prjconfig.h>
+#include <param_config.h>
 #include <project_template.h>
 #include <tree_project_frame.h>
 #include <wildcards_and_files_ext.h>
@@ -47,11 +47,12 @@
 
 #define SEP()   wxFileName::GetPathSeparator()
 
+// Not really useful, provided to save/restore params in project config file,
+// (Add them in s_KicadManagerParams if any)
+// Used also to create new .pro files from the kicad.pro template file
+// for new projects
 static const wxString GeneralGroupName( wxT( "/general" ) );
-
-/* KiCad project file entry names. */
-static const wxString SchematicRootNameEntry( wxT( "RootSch" ) );
-static const wxString BoardFileNameEntry( wxT( "BoardNm" ) );
+PARAM_CFG_ARRAY s_KicadManagerParams;
 
 
 void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, bool aTemplateSelector = false )
@@ -75,7 +76,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, boo
         if( ::wxGetEnv( wxT( "KICAD" ), NULL ) )
         {
             wxString kicadEnv;
-            wxGetEnv( wxT( "KICAD"), &kicadEnv ); 
+            wxGetEnv( wxT( "KICAD"), &kicadEnv );
             templatePath = kicadEnv + SEP() + wxT("template")+SEP();
         }
         else
@@ -152,7 +153,8 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString aPrjFullFileName, boo
     m_ProjectFileName = newProjectName;
 
     // Write settings to project file
-    wxGetApp().WriteProjectConfig( aPrjFullFileName, GeneralGroupName, NULL );
+    wxGetApp().WriteProjectConfig( aPrjFullFileName,
+                                   GeneralGroupName, s_KicadManagerParams );
 }
 
 
@@ -239,7 +241,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     wxSetWorkingDirectory( m_ProjectFileName.GetPath() );
     wxGetApp().ReadProjectConfig( m_ProjectFileName.GetFullPath(),
-                                  GeneralGroupName, NULL, false );
+                                  GeneralGroupName, s_KicadManagerParams, false );
 
     title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
         wxT( " " ) +  m_ProjectFileName.GetFullPath();
@@ -269,5 +271,6 @@ void KICAD_MANAGER_FRAME::OnSaveProject( wxCommandEvent& event )
     if( !IsWritable( m_ProjectFileName ) )
         return;
 
-    wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(), GeneralGroupName, NULL );
+    wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
+                                   GeneralGroupName, s_KicadManagerParams );
 }

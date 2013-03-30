@@ -627,7 +627,7 @@ void DIALOG_PLOT::applyPlotSettings()
         m_messagesBox->AppendText( msg );
     }
 
-    m_config->Write( OPTKEY_PLOT_X_FINESCALE_ADJ, m_XScaleAdjust );
+   ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_X_FINESCALE_ADJ, m_XScaleAdjust );
 
     // Y scale
     msg = m_fineAdjustYscaleOpt->GetValue();
@@ -641,7 +641,7 @@ void DIALOG_PLOT::applyPlotSettings()
         m_messagesBox->AppendText( msg );
     }
 
-    m_config->Write( OPTKEY_PLOT_Y_FINESCALE_ADJ, m_YScaleAdjust );
+    ConfigBaseWriteDouble( m_config, OPTKEY_PLOT_Y_FINESCALE_ADJ, m_YScaleAdjust );
 
     // PS Width correction
     msg = m_PSFineAdjustWidthOpt->GetValue();
@@ -661,7 +661,8 @@ void DIALOG_PLOT::applyPlotSettings()
     }
 
     // Store m_PSWidthAdjust in mm in user config
-    m_config->Write( CONFIG_PS_FINEWIDTH_ADJ, (double)m_PSWidthAdjust / IU_PER_MM );
+    ConfigBaseWriteDouble( m_config, CONFIG_PS_FINEWIDTH_ADJ,
+                           (double)m_PSWidthAdjust / IU_PER_MM );
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
