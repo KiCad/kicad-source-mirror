@@ -78,13 +78,13 @@ class BOARD_ITEM : public EDA_ITEM
     void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 protected:
-    int m_Layer;
+    LAYER_NUM m_Layer;
 
 public:
 
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
         EDA_ITEM( aParent, idtype )
-        , m_Layer( 0 )
+        , m_Layer( FIRST_LAYER )
     {
     }
 
@@ -103,7 +103,7 @@ public:
      * Function GetLayer
      * returns the layer this item is on.
      */
-    int GetLayer() const { return m_Layer; }
+    LAYER_NUM GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
@@ -112,7 +112,7 @@ public:
      * is virtual because some items (in fact: class DIMENSION)
      * have a slightly different initialization
      */
-    virtual void SetLayer( int aLayer )  { m_Layer = aLayer; }
+    virtual void SetLayer( LAYER_NUM aLayer )  { m_Layer = aLayer; }
 
     /**
      * Function Draw
@@ -129,7 +129,7 @@ public:
      * @param aLayer The layer to test for.
      * @return bool - true if on given layer, else false.
      */
-    virtual bool IsOnLayer( int aLayer ) const
+    virtual bool IsOnLayer( LAYER_NUM aLayer ) const
     {
         return m_Layer == aLayer;
     }

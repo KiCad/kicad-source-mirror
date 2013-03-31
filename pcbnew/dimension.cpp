@@ -132,12 +132,12 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
     PutValueInLocalUnits( *m_textCtrlPosY, aDimension->Text().GetTextPosition().y );
     AddUnitSymbol( *m_staticTextPosY );
 
-    for( int layer = FIRST_NO_COPPER_LAYER;  layer<NB_LAYERS;  layer++ )
+    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
         m_SelLayerBox->Append( aParent->GetBoard()->GetLayerName( layer ) );
     }
 
-    m_SelLayerBox->SetSelection( aDimension->GetLayer() - FIRST_NO_COPPER_LAYER );
+    m_SelLayerBox->SetSelection( aDimension->GetLayer() - FIRST_NON_COPPER_LAYER );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -199,7 +199,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
 
-    CurrentDimension->SetLayer( m_SelLayerBox->GetCurrentSelection() + FIRST_NO_COPPER_LAYER );
+    CurrentDimension->SetLayer( FIRST_NON_COPPER_LAYER + m_SelLayerBox->GetCurrentSelection() );
 
     if( m_DC )     // Display new text
     {

@@ -65,14 +65,14 @@ int LAYER_BOX_SELECTOR::GetChoice()
 
 
 // Get Current Layer
-int LAYER_BOX_SELECTOR::GetLayerSelection()
+LAYER_NUM LAYER_BOX_SELECTOR::GetLayerSelection() const
 {
-    return (long) GetClientData( GetSelection() );
+    return (LAYER_NUM)((unsigned long) GetClientData( GetSelection() ) );
 }
 
 
 // Set Layer #
-int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
+int LAYER_BOX_SELECTOR::SetLayerSelection( LAYER_NUM layer )
 {
     int elements = GetCount();
 
@@ -97,8 +97,8 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( int layer )
 
 void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 {
-    int elements = GetCount();
-    for( int i = 0; i < elements; i++ )
+    LAYER_NUM elements = GetCount();
+    for( LAYER_NUM i = FIRST_LAYER; i < elements; ++i )
     {
         wxBitmap layerbmp( 14, 14 );
         SetBitmapLayer( layerbmp, i );
@@ -106,7 +106,7 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 }
 
 
-void LAYER_BOX_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, int aLayerIndex )
+void LAYER_BOX_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayerIndex )
 {
     wxMemoryDC bmpDC;
     wxBrush    brush;

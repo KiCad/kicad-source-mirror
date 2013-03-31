@@ -268,7 +268,7 @@ public:
      * @param aLayer The layer to match, pass -1 for a don't care.
      * @return A pointer to a SEGVIA object if found, else NULL.
      */
-    TRACK* GetVia( const wxPoint& aPosition, int aLayer = -1 );
+    TRACK* GetVia( const wxPoint& aPosition, LAYER_NUM aLayer = UNDEFINED_LAYER );
 
     /**
      * Function GetVia
@@ -377,7 +377,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    bool IsOnLayer( int aLayer ) const;
+    bool IsOnLayer( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerPair
@@ -389,7 +389,7 @@ public:
      * @param top_layer = first layer connected by the via
      * @param bottom_layer = last layer connected by the via
      */
-    void SetLayerPair( int top_layer, int bottom_layer );
+    void SetLayerPair( LAYER_NUM top_layer, LAYER_NUM bottom_layer );
 
     /**
      * Function ReturnLayerPair
@@ -398,7 +398,7 @@ public:
      *  @param top_layer = pointer to the first layer (can be null)
      *  @param bottom_layer = pointer to the last layer (can be null)
      */
-    void ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
+    void ReturnLayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const;
 
     const wxPoint& GetPosition() const  {  return m_Start; }       // was overload
     void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // was overload

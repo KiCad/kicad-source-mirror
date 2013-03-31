@@ -130,7 +130,7 @@ public:
 
     bool HitTest( const wxPoint& aPosition );
 
-    bool IsOnLayer( int aLayer ) const;
+    bool IsOnLayer( LAYER_NUM aLayer ) const;
 
 
     wxString GetClass() const

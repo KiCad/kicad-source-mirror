@@ -7,6 +7,7 @@
 #define _COLORS_DESIGN_SETTING_H
 #include <layers_id_colors_and_visibility.h>
 
+// XXX shouldn't these come from somewhere else?
 #define LAYERSCOLORSBUFFERSIZE 32
 #define ITEMSCOLORSBUFFERSIZE 32
 
@@ -33,14 +34,14 @@ public:
      * @return the color for aLayer which is one of the layer indices given
      * in pcbstruct.h or in schematic
      */
-    EDA_COLOR_T GetLayerColor( int aLayer ) const;
+    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerColor
      * sets the color for aLayer which is one of the layer indices given
      * in pcbstruct.h or in schematic
      */
-    void SetLayerColor( int aLayer, EDA_COLOR_T aColor );
+    void SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor );
 
     /**
      * Function GetItemColor

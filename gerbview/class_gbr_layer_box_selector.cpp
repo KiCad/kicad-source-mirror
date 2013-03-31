@@ -46,7 +46,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 {
     Clear();
 
-    for( int layerid = 0; layerid < LAYER_COUNT; layerid++ )
+    for( LAYER_NUM layerid = FIRST_LAYER; layerid < NB_LAYERS; ++layerid )
     {
         wxBitmap    layerbmp( 14, 14 );
         wxString    layername;
@@ -65,7 +65,7 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 
 
 // Returns a color index from the layer id
-EDA_COLOR_T GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
+EDA_COLOR_T GBR_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayerIndex ) const
 {
     GERBVIEW_FRAME* frame = (GERBVIEW_FRAME*) GetParent()->GetParent();
 
@@ -74,7 +74,7 @@ EDA_COLOR_T GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayerIndex ) const
 
 
 // Returns the name of the layer id
-wxString GBR_LAYER_BOX_SELECTOR::GetLayerName( int aLayerIndex ) const
+wxString GBR_LAYER_BOX_SELECTOR::GetLayerName( LAYER_NUM aLayerIndex ) const
 {
     wxString name;
     name.Printf( _( "Layer %d" ), aLayerIndex + 1 );

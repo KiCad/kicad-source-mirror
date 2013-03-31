@@ -43,7 +43,7 @@
 
 #include <wx/imaglist.h>    // needed for wx/listctrl.h, in wxGTK 2.8.12
 #include <wx/listctrl.h>
-
+#include <layers_id_colors_and_visibility.h>
 
 
 /**
@@ -70,7 +70,7 @@ private:
                                             ///< true = pad count sort.
 
     long            m_NetFiltering;
-    std::vector<int> m_LayerId;             ///< Handle the real layer number from layer
+    std::vector<LAYER_NUM> m_LayerId;       ///< Handle the real layer number from layer
                                             ///< name position in m_LayerSelectionCtrl
 
     static wxString m_netNameShowFilter;    ///< the filter to show nets (default * "*").
@@ -250,9 +250,9 @@ void DIALOG_COPPER_ZONE::initDialog()
     int layerCount = board->GetCopperLayerCount();
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
-    for( int ii = 0; ii < layerCount; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < layerCount; ++ii )
     {
-        int layerNumber = LAYER_N_BACK;
+        LAYER_NUM layerNumber = LAYER_N_BACK;
 
         if( layerCount <= 1 || ii < layerCount - 1 )
             layerNumber = ii;

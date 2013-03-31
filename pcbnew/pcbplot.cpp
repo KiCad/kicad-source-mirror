@@ -44,7 +44,7 @@
 
 /** Get the 'traditional' gerber extension depending on the layer
 */
-static wxString GetGerberExtension( int layer )/*{{{*/
+static wxString GetGerberExtension( LAYER_NUM layer )/*{{{*/
 {
     switch( layer )
     {
@@ -190,8 +190,6 @@ bool EnsureOutputDirectory( wxFileName *aOutputDir,
  */
 void DIALOG_PLOT::Plot( wxCommandEvent& event )
 {
-    int        layer;
-
     applyPlotSettings();
 
     // Create output directory if it does not exist (also transform it in
@@ -255,7 +253,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     // Save the current plot options in the board
     m_parent->SetPlotSettings( m_plotOpts );
 
-    for( layer = 0; layer < NB_LAYERS; ++layer )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
         if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) )
         {
@@ -372,7 +370,7 @@ bool PLOT_CONTROLLER::OpenPlotfile( const wxString &aSuffix, /*{{{*/
 }/*}}}*/
 
 /** Plot a single layer on the current plotfile */
-bool PLOT_CONTROLLER::PlotLayer( int aLayer )/*{{{*/
+bool PLOT_CONTROLLER::PlotLayer( LAYER_NUM aLayer )/*{{{*/
 {
     LOCALE_IO toggle;
 

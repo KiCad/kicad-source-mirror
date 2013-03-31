@@ -53,7 +53,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
     bool modified = NormalizeAreaPolygon( aModifiedZonesList, modified_area );
 
     // now see if we need to clip against other areas
-    int  layer = modified_area->GetLayer();
+    LAYER_NUM layer = modified_area->GetLayer();
     bool bCheckAllAreas = TestAreaIntersections( modified_area );
 
     if( bCheckAllAreas )
@@ -62,7 +62,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
         CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNet(), true );
     }
 
-    if( layer >= FIRST_NO_COPPER_LAYER )    // Refill non copper zones on this layer
+    if( layer >= FIRST_NON_COPPER_LAYER )    // Refill non copper zones on this layer
     {
         for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
             if( m_ZoneDescriptorList[ia]->GetLayer() == layer )

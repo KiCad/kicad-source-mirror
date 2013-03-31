@@ -56,7 +56,7 @@ private:
     PCB_EDIT_FRAME*     m_Parent;
     wxDC*               m_DC;
     TEXTE_PCB*          m_SelectedPCBText;
-    std::vector<int>    layerList;
+    std::vector<LAYER_NUM> layerList;
 
     void MyInit();
 
@@ -128,7 +128,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
 
     LAYER_MSK enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
 
-    for( int layer = 0; layer < NB_LAYERS; ++layer )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS;  ++layer )
     {
         if( enabledLayers & GetLayerMask( layer ) )
         {

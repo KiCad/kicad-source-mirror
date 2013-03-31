@@ -17,7 +17,7 @@
 class GBR_SCREEN : public BASE_SCREEN
 {
 public:
-    int m_Active_Layer;
+    LAYER_NUM m_Active_Layer;
     /**
      * Constructor
      * @param aPageSizeIU is the size of the initial paper page in internal units.

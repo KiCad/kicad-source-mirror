@@ -235,7 +235,7 @@ void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
  */
 void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 {
-    int layer = getActiveLayer();
+    LAYER_NUM layer = getActiveLayer();
 
     setActiveLayer( event.GetSelection() );
 
@@ -249,7 +249,7 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
  */
 void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
 {
-    int           layer = getActiveLayer();
+    LAYER_NUM     layer = getActiveLayer();
     GERBER_IMAGE* gerber_layer = g_GERBER_List[layer];
 
     if( gerber_layer )

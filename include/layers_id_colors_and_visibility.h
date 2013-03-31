@@ -30,10 +30,17 @@
 #ifndef _LAYERS_ID_AND_VISIBILITY_H_
 #define _LAYERS_ID_AND_VISIBILITY_H_
 
-#include <wx/debug.h>            // wxASSERT
+/* NOTE: the idea here is to have LAYER_NUM and LAYER_MSK as abstract
+ * type as possible (even if they're currently implemented as int and
+ * unsigned int, respectively). In this way it would be reasonably easy
+ * to overcome the current 32 layer limit. For example switching to a 64
+ * bit mask or even some kind of bit array */
 
 /* Layer identification (layer number) */
+typedef int LAYER_NUM;
 #define UNDEFINED_LAYER         -1
+#define NO_LAYER                0
+#define FIRST_LAYER             0
 #define FIRST_COPPER_LAYER      0
 #define LAYER_N_BACK            0
 #define LAYER_N_2               1
@@ -52,9 +59,9 @@
 #define LAYER_N_15              14
 #define LAYER_N_FRONT           15
 #define LAST_COPPER_LAYER       LAYER_N_FRONT
-#define NB_COPPER_LAYERS        (LAST_COPPER_LAYER + 1)
+#define NB_COPPER_LAYERS        (LAST_COPPER_LAYER - FIRST_COPPER_LAYER + 1)
 
-#define FIRST_NO_COPPER_LAYER   16
+#define FIRST_NON_COPPER_LAYER  16
 #define ADHESIVE_N_BACK         16
 #define ADHESIVE_N_FRONT        17
 #define SOLDERPASTE_N_BACK      18
@@ -68,13 +75,14 @@
 #define ECO1_N                  26
 #define ECO2_N                  27
 #define EDGE_N                  28
-#define LAST_NO_COPPER_LAYER    28
+#define LAST_NON_COPPER_LAYER   28
+#define NB_PCB_LAYERS           (LAST_NON_COPPER_LAYER + 1)
 #define UNUSED_LAYER_29         29
 #define UNUSED_LAYER_30         30
 #define UNUSED_LAYER_31         31
-#define NB_LAYERS               (LAST_NO_COPPER_LAYER + 1)
-
-#define LAYER_COUNT             32
+#define NB_GERBER_LAYERS        32
+#define NB_LAYERS               32
+#define UNSELECTED_LAYER        32
 
 // Masks to identify a layer by a bit map
 typedef unsigned LAYER_MSK;
@@ -108,9 +116,6 @@ typedef unsigned LAYER_MSK;
 #define ECO2_LAYER              (1 << ECO2_N)
 #define EDGE_LAYER              (1 << EDGE_N)
 
-#define FIRST_NON_COPPER_LAYER  ADHESIVE_N_BACK
-#define LAST_NON_COPPER_LAYER   EDGE_N
-
 //      extra bits              0xE0000000
 /* Helpful global layers mask : */
 #define ALL_LAYERS              0x1FFFFFFF              // Pcbnew used 29 layers
@@ -124,9 +129,8 @@ typedef unsigned LAYER_MSK;
 /** return a one bit layer mask from a layer number
  * aLayerNumber = the layer number to convert (0 .. LAYERS-1)
  */
-inline LAYER_MSK GetLayerMask( unsigned aLayerNumber )
+inline LAYER_MSK GetLayerMask( LAYER_NUM aLayerNumber )
 {
-    wxASSERT( aLayerNumber < LAYER_COUNT && aLayerNumber >= 0 );
     return 1 << aLayerNumber;
 }
 
@@ -135,7 +139,7 @@ inline LAYER_MSK GetLayerMask( unsigned aLayerNumber )
 // layers order in dialogs (plot, print and toolbars)
 // in same order than in setup layers dialog
 // (Front or Top to Back or Bottom)
-#define DECLARE_LAYERS_ORDER_LIST(list) int list[LAYER_COUNT] =\
+#define DECLARE_LAYERS_ORDER_LIST(list) LAYER_NUM list[NB_LAYERS] =\
 {   LAYER_N_FRONT,\
     LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12,\
     LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8,\
@@ -186,14 +190,14 @@ enum PCB_VISIBLE
 
 
 /**
- * Function IsValidLayerIndex
+ * Function IsValidPcbLayerIndex
  * tests whether a given integer is a valid layer index
  * @param aLayerIndex = Layer index to test
  * @return true if aLayerIndex is a valid layer index
  */
-inline bool IsValidLayerIndex( int aLayerIndex )
+inline bool IsValidPcbLayerIndex( LAYER_NUM aLayerIndex )
 {
-    return aLayerIndex >= 0 && aLayerIndex < NB_LAYERS;
+    return aLayerIndex >= FIRST_LAYER && aLayerIndex < NB_PCB_LAYERS;
 }
 
 /**
@@ -202,7 +206,7 @@ inline bool IsValidLayerIndex( int aLayerIndex )
  * @param aLayerIndex = Layer index to test
  * @return true if aLayerIndex is a valid copper layer index
  */
-inline bool IsValidCopperLayerIndex( int aLayerIndex )
+inline bool IsValidCopperLayerIndex( LAYER_NUM aLayerIndex )
 {
     return aLayerIndex >= FIRST_COPPER_LAYER && aLayerIndex <= LAST_COPPER_LAYER;
 }
@@ -213,10 +217,10 @@ inline bool IsValidCopperLayerIndex( int aLayerIndex )
  * @param aLayerIndex = Layer index to test
  * @return true if aLayerIndex is a valid non copper layer index
  */
-inline bool IsValidNonCopperLayerIndex( int aLayerIndex )
+inline bool IsValidNonCopperLayerIndex( LAYER_NUM aLayerIndex )
 {
-    return aLayerIndex >= FIRST_NO_COPPER_LAYER
-        && aLayerIndex <= LAST_NO_COPPER_LAYER;
+    return aLayerIndex >= FIRST_NON_COPPER_LAYER
+        && aLayerIndex <= LAST_NON_COPPER_LAYER;
 }
 
 #endif // _LAYERS_ID_AND_VISIBILITY_H_

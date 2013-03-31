@@ -193,9 +193,9 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     bool end = false;
 
-    for( int layer = 0; !end; layer++ )
+    for( LAYER_NUM layer = FIRST_LAYER; !end; ++layer )
     {
-        int active_layer = gerbFrame->getActiveLayer();
+        LAYER_NUM active_layer = gerbFrame->getActiveLayer();
 
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;

@@ -58,7 +58,7 @@ class FPL_CACHE;
  */
 class PCB_PARSER : public PCB_LEXER
 {
-    typedef boost::unordered_map< std::string, int > LAYER_NUM_MAP;
+    typedef boost::unordered_map< std::string, LAYER_NUM > LAYER_NUM_MAP;
     typedef boost::unordered_map< std::string, LAYER_MSK > LAYER_MSK_MAP;
 
     BOARD*          m_board;
@@ -117,7 +117,7 @@ class PCB_PARSER : public PCB_LEXER
      * @throw PARSE_ERROR if the layer syntax is incorrect.
      * @return The index the parsed #BOARD_ITEM layer.
      */
-    int parseBoardItemLayer() throw( IO_ERROR, PARSE_ERROR );
+    LAYER_NUM parseBoardItemLayer() throw( IO_ERROR, PARSE_ERROR );
 
     /**
      * Function parseBoardItemLayersAsMask

@@ -191,7 +191,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
 {
     MODULE* module    = GetBoard()->m_Modules;
-    int     new_layer = SILKSCREEN_N_FRONT;
+    LAYER_NUM new_layer = SILKSCREEN_N_FRONT;
 
     if( aEdge )
         new_layer = aEdge->GetLayer();

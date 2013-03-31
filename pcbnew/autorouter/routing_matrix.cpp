@@ -240,7 +240,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                 tmpSegm.SetLayer( edge->GetLayer() );
 
                 if( tmpSegm.GetLayer() == EDGE_N )
-                    tmpSegm.SetLayer( -1 );
+                    tmpSegm.SetLayer( UNDEFINED_LAYER );
 
                 tmpSegm.SetStart( edge->GetStart() );
                 tmpSegm.SetEnd(   edge->GetEnd() );
@@ -275,7 +275,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
             if( DrawSegm->GetLayer() == EDGE_N )
             {
-                tmpSegm.SetLayer( -1 );
+                tmpSegm.SetLayer( UNDEFINED_LAYER );
                 type_cell |= CELL_is_EDGE;
             }
 

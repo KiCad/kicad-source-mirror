@@ -7,7 +7,7 @@
 
 
 #include <dlist.h>
-#include <layers_id_colors_and_visibility.h>  // LAYER_COUNT and NB_COPPER_LAYERS definitions.
+#include <layers_id_colors_and_visibility.h>
 
 
 #define MIN_DRAW_WIDTH      1               ///< Minimum trace drawing width.

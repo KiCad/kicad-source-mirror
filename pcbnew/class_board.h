@@ -188,7 +188,7 @@ private:
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS         m_ZoneDescriptorList;
 
-    LAYER                   m_Layer[LAYER_COUNT];
+    LAYER                   m_Layer[NB_LAYERS];
                                                     // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO         m_highLight;                // current high light data
     HIGH_LIGHT_INFO         m_highLightPrevious;        // a previously stored high light data
@@ -442,7 +442,7 @@ public:
      * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerEnabled( int aLayer ) const
+    bool IsLayerEnabled( LAYER_NUM aLayer ) const
     {
         return m_designSettings.IsLayerEnabled( aLayer );
     }
@@ -454,7 +454,7 @@ public:
      * @param aLayerIndex = The index of the layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerVisible( int aLayerIndex ) const
+    bool IsLayerVisible( LAYER_NUM aLayerIndex ) const
     {
         return m_designSettings.IsLayerVisible( aLayerIndex );
     }
@@ -529,7 +529,7 @@ public:
      * @param layer One of the two allowed layers for modules: LAYER_N_FRONT or LAYER_N_BACK
      * @return bool - true if the layer is visible, else false.
      */
-    bool IsModuleLayerVisible( int layer );
+    bool IsModuleLayerVisible( LAYER_NUM layer );
 
     /**
      * Function GetVisibleElementColor
@@ -596,7 +596,7 @@ public:
      * @return wxString -   the layer name, which for copper layers may
      *                      be custom, else standard.
      */
-    wxString GetLayerName( int aLayerIndex ) const;
+    wxString GetLayerName( LAYER_NUM aLayerIndex ) const;
 
     /**
      * Function SetLayerName
@@ -607,7 +607,7 @@ public:
      * @return bool - true if aLayerName was legal and unique among other
      *   layer names at other layer indices and aLayerIndex was within range, else false.
      */
-    bool SetLayerName( int aLayerIndex, const wxString& aLayerName );
+    bool SetLayerName( LAYER_NUM aLayerIndex, const wxString& aLayerName );
 
     /**
      * Function GetStandardLayerName
@@ -620,9 +620,9 @@ public:
      * @return wxString - containing the layer name or "BAD INDEX" if aLayerNumber
      *                      is not legal
      */
-    static wxString GetStandardLayerName( int aLayerNumber );
+    static wxString GetStandardLayerName( LAYER_NUM aLayerNumber );
 
-    bool SetLayer( int aIndex, const LAYER& aLayer );
+    bool SetLayer( LAYER_NUM aIndex, const LAYER& aLayer );
 
     /**
      * Function GetLayerType
@@ -632,7 +632,7 @@ public:
      * @return LAYER_T - the layer type, or LAYER_T(-1) if the
      *  index was out of range.
      */
-    LAYER_T GetLayerType( int aLayerIndex ) const;
+    LAYER_T GetLayerType( LAYER_NUM aLayerIndex ) const;
 
     /**
      * Function SetLayerType
@@ -642,19 +642,19 @@ public:
      * @param aLayerType The new layer type.
      * @return bool - true if aLayerType was legal and aLayerIndex was within range, else false.
      */
-    bool SetLayerType( int aLayerIndex, LAYER_T aLayerType );
+    bool SetLayerType( LAYER_NUM aLayerIndex, LAYER_T aLayerType );
 
     /**
      * Function SetLayerColor
      * changes a layer color for any valid layer, including non-copper ones.
      */
-    void SetLayerColor( int aLayer, EDA_COLOR_T aColor );
+    void SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor );
 
     /**
      * Function GetLayerColor
      * gets a layer color for any valid layer, including non-copper ones.
      */
-    EDA_COLOR_T GetLayerColor( int aLayer ) const;
+    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
 
     /**
      * Function ReturnFlippedLayerNumber
@@ -662,7 +662,7 @@ public:
      * some (not all) layers: external copper, Mask, Paste, and solder
      * are swapped between front and back sides
      */
-    static int ReturnFlippedLayerNumber( int oldlayer );
+    static LAYER_NUM ReturnFlippedLayerNumber( LAYER_NUM oldlayer );
 
     /** Functions to get some items count */
     int GetNumSegmTrack() const;
@@ -1005,8 +1005,8 @@ public:
      * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
      */
     ZONE_CONTAINER* HitTestForAnyFilledArea( const wxPoint& aRefPos,
-                                             int            aStartLayer,
-                                             int            aEndLayer = -1 );
+                                             LAYER_NUM      aStartLayer,
+                                             LAYER_NUM      aEndLayer = UNDEFINED_LAYER );
 
     /**
      * Function RedrawAreasOutlines
@@ -1015,14 +1015,14 @@ public:
     void RedrawAreasOutlines( EDA_DRAW_PANEL* aPanel,
                               wxDC*           aDC,
                               GR_DRAWMODE     aDrawMode,
-                              int             aLayer );
+                              LAYER_NUM       aLayer );
 
     /**
      * Function RedrawFilledAreas
      * Redraw all filled areas on layer aLayer ( redraw all if aLayer < 0 )
      */
     void RedrawFilledAreas( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                            int aLayer );
+                            LAYER_NUM aLayer );
 
     /**
      * Function SetAreasNetCodesFromNetNames
@@ -1090,14 +1090,14 @@ public:
      * @return a reference to the new area
      */
     ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
-                             int aLayer, wxPoint aStartPointPosition, int aHatch );
+                             LAYER_NUM aLayer, wxPoint aStartPointPosition, int aHatch );
 
     /**
      * Function InsertArea
      * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
      * @return pointer to the new area
      */
-    ZONE_CONTAINER* InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch );
+    ZONE_CONTAINER* InsertArea( int netcode, int iarea, LAYER_NUM layer, int x, int y, int hatch );
 
     /**
      * Function NormalizeAreaPolygon
@@ -1210,10 +1210,10 @@ public:
      * of the via.
      * </p>
      * @param aPosition The wxPoint to HitTest() against.
-     * @param aLayerMask The layers to search.  Use -1 for a don't care.
+     * @param aLayer The layer to search.  Use -1 for a don't care.
      * @return TRACK* A point a to the SEGVIA object if found, else NULL.
      */
-    TRACK* GetViaByPosition( const wxPoint& aPosition, int aLayerMask = -1 );
+    TRACK* GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer = UNDEFINED_LAYER );
 
     /**
      * Function GetPad
@@ -1332,7 +1332,7 @@ public:
      * @param aIgnoreLocked Ignore locked modules when true.
      * @return MODULE* The best module or NULL if none.
      */
-    MODULE* GetFootprint( const wxPoint& aPosition, int aActiveLayer,
+    MODULE* GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
                           bool aVisibleOnly, bool aIgnoreLocked = false );
 
     /**

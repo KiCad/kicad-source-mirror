@@ -182,7 +182,7 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
         track->start = NULL;
         track->end = NULL;
         track->m_PadsConnected.clear();
-        track->SetState( START_ON_PAD|END_ON_PAD|BUSY, OFF );
+        track->SetState( START_ON_PAD|END_ON_PAD|BUSY, false );
     }
 
     // Build connections info tracks to pads
@@ -197,13 +197,13 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
             if( pad->HitTest( track->GetStart() ) )
             {
                 track->start = pad;
-                track->SetState( START_ON_PAD, ON );
+                track->SetState( START_ON_PAD, true );
             }
 
             if( pad->HitTest( track->GetEnd() ) )
             {
                 track->end = pad;
-                track->SetState( END_ON_PAD, ON );
+                track->SetState( END_ON_PAD, true );
             }
         }
     }
@@ -309,7 +309,7 @@ bool TRACKS_CLEANER::deleteUnconnectedTracks()
             // For via test, an enhancement could be to test if connected
             // to 2 items on different layers.
             // Currently a via must be connected to 2 items, that can be on the same layer
-            int top_layer, bottom_layer;
+            LAYER_NUM top_layer, bottom_layer;
             ZONE_CONTAINER* zone;
 
             if( (type_end & START_ON_PAD ) == 0 )

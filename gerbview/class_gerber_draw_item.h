@@ -90,7 +90,7 @@ public:
                                              * redundancy for these parameters
                                              */
 private:
-    int m_Layer;
+    LAYER_NUM m_Layer;
 
     // These values are used to draw this item, according to gerber layers parameters
     // Because they can change inside a gerber image, they are stored here
@@ -123,7 +123,7 @@ public:
      * Function GetLayer
      * returns the layer this item is on.
      */
-    int GetLayer() const { return m_Layer; }
+    LAYER_NUM GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
@@ -132,7 +132,7 @@ public:
      * is virtual because some items (in fact: class DIMENSION)
      * have a slightly different initialization
      */
-    void SetLayer( int aLayer )  { m_Layer = aLayer; }
+    void SetLayer( LAYER_NUM aLayer )  { m_Layer = aLayer; }
 
     LAYER_MSK GetLayerMask()
     {

@@ -142,7 +142,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LAYER_MSK aLayerMask,
     }
 }
 
-void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, int aLayer,
+void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
                      const PCB_PLOT_PARAMS& aPlotOpt )
 {
     PCB_PLOT_PARAMS plotOpt = aPlotOpt;
@@ -468,7 +468,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
                           long aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                           int aMinThickness )
 {
-    int layer = ( aLayerMask & SOLDERMASK_LAYER_BACK ) ?
+    LAYER_NUM layer = ( aLayerMask & SOLDERMASK_LAYER_BACK ) ?
                  SOLDERMASK_N_BACK : SOLDERMASK_N_FRONT;
     int inflate = aMinThickness/2;
 

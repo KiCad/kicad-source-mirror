@@ -78,13 +78,13 @@ extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 extern void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
-                                 int               aLayer,
+                                 LAYER_NUM         aLayer,
                                  const wxPoint&    aPos,
                                  wxSize            aSize,
                                  bool              aLayerNegative );
 void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
-                              int               aLayer,
+                              LAYER_NUM         aLayer,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
                               wxSize            aPenSize,
@@ -153,7 +153,7 @@ static EXCELLON_CMD excellon_G_CmdList[] =
 bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 {
     wxString msg;
-    int      layer = getActiveLayer();      // current layer used in GerbView
+    LAYER_NUM layer = getActiveLayer();      // current layer used in GerbView
 
     if( g_GERBER_List[layer] == NULL )
     {

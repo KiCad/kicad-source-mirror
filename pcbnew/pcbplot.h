@@ -148,7 +148,7 @@ public:
      * and in B&W mode, is plotted as white but other colors are plotted in BLACK
      * so the returned color is LIGHTGRAY when the layer color is WHITE
      */
-    EDA_COLOR_T getColor( int aLayer );
+    EDA_COLOR_T getColor( LAYER_NUM aLayer );
 
 private:
     /** Helper function to plot a single drill mark. It compensate and clamp
@@ -176,7 +176,7 @@ PLOTTER* StartPlotBoard( BOARD* aBoard,
  * @param aLayer = the layer id to plot
  * @param aPlotOpt = the plot options (files, sketch). Has meaning for some formats only
  */
-void PlotOneBoardLayer( BOARD* aBoard, PLOTTER* aPlotter, int aLayer,
+void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_NUM aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt );
 
 /**

@@ -305,9 +305,9 @@ void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 
 // Note: virtual, overridden in PCB_EDIT_FRAME;
-void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, int layer )
+void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_NUM layer )
 {
-    int preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
+    LAYER_NUM preslayer = ((PCB_SCREEN*)GetScreen())->m_Active_Layer;
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )

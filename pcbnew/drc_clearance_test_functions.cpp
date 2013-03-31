@@ -205,7 +205,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // and **only one layer** can be drilled
         if( aRefSeg->GetShape() == VIA_MICROVIA )
         {
-            int  layer1, layer2;
+            LAYER_NUM layer1, layer2;
             bool err = true;
 
             ( (SEGVIA*) aRefSeg )->ReturnLayerPair( &layer1, &layer2 );

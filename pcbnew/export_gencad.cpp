@@ -439,7 +439,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                  via->GetWidth(), via->GetDrillValue(), mask,
                  via->GetDrillValue() / SCALE_FACTOR );
 
-        for( int layer = 0; layer < 32; layer++ )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
         {
             if( mask & GetLayerMask( layer ) )
             {
@@ -463,7 +463,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         // Straight padstack
         fprintf( aFile, "PADSTACK PAD%d %g\n", i,
                  pad->GetDrillSize().x / SCALE_FACTOR );
-        for( int layer = 0; layer < 32; layer++ )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
         {
             if( pad->GetLayerMask() & GetLayerMask( layer ) & master_layermask )
             {
@@ -475,7 +475,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         // Flipped padstack
         fprintf( aFile, "PADSTACK PAD%dF %g\n", i,
                  pad->GetDrillSize().x / SCALE_FACTOR );
-        for( int layer = 0; layer < 32; layer++ )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
         {
             if( pad->GetLayerMask() & GetLayerMask( layer ) & master_layermask )
             {

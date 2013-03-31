@@ -345,7 +345,7 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
-    bool IsOnLayer( int aLayer ) const;
+    bool IsOnLayer( LAYER_NUM aLayer ) const;
 
     bool HitTest( const wxPoint& aPosition );
 

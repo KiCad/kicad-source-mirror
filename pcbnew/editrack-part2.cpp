@@ -109,8 +109,8 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->SetLayerPair( LAYER_N_BACK, LAYER_N_FRONT );
     via->SetDrill( GetBoard()->GetCurrentViaDrill() );
 
-    int first_layer = getActiveLayer();
-    int last_layer;
+    LAYER_NUM first_layer = getActiveLayer();
+    LAYER_NUM last_layer;
 
     // prepare switch to new active layer:
     if( first_layer != GetScreen()->m_Route_Layer_TOP )
@@ -127,7 +127,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
         case VIA_MICROVIA:  // from external to the near neighbor inner layer
         {
-            int last_inner_layer = GetBoard()->GetCopperLayerCount() - 2;
+            LAYER_NUM last_inner_layer = FIRST_LAYER + (GetBoard()->GetCopperLayerCount() - 2);
             if ( first_layer == LAYER_N_BACK )
                 last_layer = LAYER_N_2;
             else if ( first_layer == LAYER_N_FRONT )

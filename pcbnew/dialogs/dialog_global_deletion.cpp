@@ -22,7 +22,7 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
     : DIALOG_GLOBAL_DELETION_BASE( parent )
 {
     m_Parent = parent;
-    m_currentLayer = 0;
+    m_currentLayer = FIRST_LAYER;
     m_TrackFilterAR->Enable( m_DelTracks->GetValue() );
     m_TrackFilterLocked->Enable( m_DelTracks->GetValue() );
     m_TrackFilterNormal->Enable( m_DelTracks->GetValue() );
@@ -42,7 +42,7 @@ void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
     dlg.ShowModal();
 }
 
-void DIALOG_GLOBAL_DELETION::SetCurrentLayer( int aLayer )
+void DIALOG_GLOBAL_DELETION::SetCurrentLayer( LAYER_NUM aLayer )
 {
     m_currentLayer = aLayer;
     m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( aLayer ) );

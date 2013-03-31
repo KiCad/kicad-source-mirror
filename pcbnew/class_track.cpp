@@ -222,8 +222,8 @@ wxString SEGVIA::GetSelectMenuText() const
         if( shape != VIA_THROUGH )
         {
             // say which layers, only two for now
-            int topLayer;
-            int botLayer;
+            LAYER_NUM topLayer;
+            LAYER_NUM botLayer;
             ReturnLayerPair( &topLayer, &botLayer );
             text << _( " on " ) << board->GetLayerName( topLayer ).Trim() << wxT( " <-> " )
                  << board->GetLayerName( botLayer ).Trim();
@@ -416,9 +416,9 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
 }
 
 
-bool SEGVIA::IsOnLayer( int layer_number ) const
+bool SEGVIA::IsOnLayer( LAYER_NUM layer_number ) const
 {
-    int bottom_layer, top_layer;
+    LAYER_NUM bottom_layer, top_layer;
 
     ReturnLayerPair( &top_layer, &bottom_layer );
 
@@ -440,7 +440,7 @@ LAYER_MSK TRACK::GetLayerMask() const
 
         // VIA_BLIND_BURIED or VIA_MICRVIA:
 
-        int bottom_layer, top_layer;
+        LAYER_NUM bottom_layer, top_layer;
 
         // ReturnLayerPair() knows how layers are stored
         ( (SEGVIA*) this )->ReturnLayerPair( &top_layer, &bottom_layer );
@@ -462,7 +462,7 @@ LAYER_MSK TRACK::GetLayerMask() const
 }
 
 
-void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
+void SEGVIA::SetLayerPair( LAYER_NUM top_layer, LAYER_NUM bottom_layer )
 {
     if( GetShape() == VIA_THROUGH )
     {
@@ -473,17 +473,19 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
     if( bottom_layer > top_layer )
         EXCHG( bottom_layer, top_layer );
 
+    // XXX EVIL usage of LAYER
     m_Layer = (top_layer & 15) + ( (bottom_layer & 15) << 4 );
 }
 
 
-void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
+void SEGVIA::ReturnLayerPair( LAYER_NUM* top_layer, LAYER_NUM* bottom_layer ) const
 {
-    int b_layer = LAYER_N_BACK;
-    int t_layer = LAYER_N_FRONT;
+    LAYER_NUM b_layer = LAYER_N_BACK;
+    LAYER_NUM t_layer = LAYER_N_FRONT;
 
     if( GetShape() != VIA_THROUGH )
     {
+        // XXX EVIL usage of LAYER
         b_layer = (m_Layer >> 4) & 15;
         t_layer = m_Layer & 15;
 
@@ -586,7 +588,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 {
     int l_trace;
     int radius;
-    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     if( Type() == PCB_ZONE_T && DisplayOpt.DisplayZonesMode != 0 )
         return;
@@ -751,7 +753,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                    const wxPoint& aOffset )
 {
     int radius;
-    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     int fillvia = 0;
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) panel->GetParent();
@@ -906,7 +908,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( GetShape() == VIA_BLIND_BURIED )
     {
         int ax = 0, ay = radius, bx = 0, by = drill_radius;
-        int layer_top, layer_bottom;
+        LAYER_NUM layer_top, layer_bottom;
 
         ( (SEGVIA*) this )->ReturnLayerPair( &layer_top, &layer_bottom );
 
@@ -1114,7 +1116,7 @@ void TRACK::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
     if( Type() == PCB_VIA_T )
     {
         SEGVIA* Via = (SEGVIA*) this;
-        int     top_layer, bottom_layer;
+        LAYER_NUM top_layer, bottom_layer;
 
         Via->ReturnLayerPair( &top_layer, &bottom_layer );
         msg = board->GetLayerName( top_layer ) + wxT( "/" ) + board->GetLayerName( bottom_layer );
@@ -1191,7 +1193,7 @@ bool TRACK::HitTest( const EDA_RECT& aRect ) const
 }
 
 
-TRACK* TRACK::GetVia( const wxPoint& aPosition, int aLayer )
+TRACK* TRACK::GetVia( const wxPoint& aPosition, LAYER_NUM aLayer)
 {
     TRACK* track;
 
@@ -1206,7 +1208,7 @@ TRACK* TRACK::GetVia( const wxPoint& aPosition, int aLayer )
         if( track->GetState( BUSY | IS_DELETED ) )
             continue;
 
-        if( aLayer < 0 )
+        if( aLayer == UNDEFINED_LAYER  )
             break;
 
         if( track->IsOnLayer( aLayer ) )
@@ -1580,8 +1582,8 @@ void SEGVIA::Show( int nestLevel, std::ostream& os ) const
         break;
     }
 
-    int    topLayer;
-    int    botLayer;
+    LAYER_NUM topLayer;
+    LAYER_NUM botLayer;
     BOARD* board = (BOARD*) m_Parent;
 
 

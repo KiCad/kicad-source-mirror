@@ -78,7 +78,7 @@ COLORS_DESIGN_SETTINGS:: COLORS_DESIGN_SETTINGS()
  * @return the color for aLayer which is one of the layer indices given
  * in pcbstruct.h or in schematic
  */
-EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer ) const
+EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
     {
@@ -93,7 +93,7 @@ EDA_COLOR_T COLORS_DESIGN_SETTINGS::GetLayerColor( int aLayer ) const
  * sets the color for aLayer which is one of the layer indices given
  * in pcbstruct.h or in schematic
  */
-void COLORS_DESIGN_SETTINGS::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
+void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     if( (unsigned) aLayer < DIM(m_LayersColors) )
     {

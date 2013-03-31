@@ -57,7 +57,7 @@ public:
     MODULE*       m_Module;         // Link to the actual footprint
     const wxChar* m_Reference;      // Its schematic reference
     const wxChar* m_Value;          // Its schematic value
-    int           m_Layer;          // its side (LAYER_N_BACK, or LAYER_N_FRONT)
+    LAYER_NUM     m_Layer;          // its side (LAYER_N_BACK, or LAYER_N_FRONT)
 };
 
 
@@ -486,7 +486,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                  -module_pos.y * conv_unit,
                  double(list[ii].m_Module->GetOrientation()) / 10 );
 
-        int layer = list[ii].m_Module->GetLayer();
+        LAYER_NUM layer = list[ii].m_Module->GetLayer();
 
         wxASSERT( layer==LAYER_N_FRONT || layer==LAYER_N_BACK );
 

@@ -8,7 +8,7 @@
 #include <select_layers_to_pcb.h>
 
 // Exported function
-const wxString GetPCBDefaultLayerName( int aLayerNumber );
+const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
 
 
 enum layer_sel_id {
@@ -23,11 +23,11 @@ class SELECT_LAYER_DIALOG : public wxDialog
 private:
     GERBVIEW_FRAME* m_Parent;
     wxRadioBox*     m_LayerList;
-    int m_LayerId[NB_LAYERS + 1]; // One extra element for "(Deselect)" radiobutton
+    LAYER_NUM m_LayerId[int(NB_LAYERS) + 1]; // One extra element for "(Deselect)" radiobutton
 
 public:
     // Constructor and destructor
-    SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, int aDefaultLayer,
+    SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent, LAYER_NUM aDefaultLayer,
                          int aCopperLayerCount, bool aShowDeselectOption );
     ~SELECT_LAYER_DIALOG() { };
 
@@ -61,9 +61,9 @@ END_EVENT_TABLE()
  * different radiobutton is clicked on) prior to then clicking on the "Deselect"
  * button provided within the "Layer selection:" dialog box).
  */
-int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount, bool aShowDeselectOption )
+LAYER_NUM GERBVIEW_FRAME::SelectPCBLayer( LAYER_NUM aDefaultLayer, int aCopperLayerCount, bool aShowDeselectOption )
 {
-    int layer;
+    LAYER_NUM layer;
     SELECT_LAYER_DIALOG* frame = new SELECT_LAYER_DIALOG( this, aDefaultLayer,
                                                           aCopperLayerCount,
                                                           aShowDeselectOption );
@@ -81,14 +81,14 @@ int GERBVIEW_FRAME::SelectPCBLayer( int aDefaultLayer, int aCopperLayerCount, bo
  * to the right of that radiobox.
  */
 SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
-                                          int aDefaultLayer, int aCopperLayerCount,
+                                          LAYER_NUM aDefaultLayer, int aCopperLayerCount,
                                           bool aShowDeselectOption ) :
     wxDialog( parent, -1, _( "Select Layer:" ), wxPoint( -1, -1 ),
               wxSize( 470, 250 ),
               DIALOG_STYLE )
 {
     wxButton* Button;
-    int       ii;
+    LAYER_NUM ii;
     wxString  LayerList[NB_LAYERS + 1]; // One extra element for "(Deselect)"
                                         // radiobutton
     int       LayerCount, LayerSelect = -1;
@@ -97,11 +97,11 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
 
     // Build the layer list; first build copper layers list
     LayerCount = 0;
-    for( ii = 0; ii < BOARD_COPPER_LAYERS_MAX_COUNT; ii++ )
+    for( ii = FIRST_COPPER_LAYER; ii < NB_COPPER_LAYERS; ++ii )
     {
-        m_LayerId[ii] = 0;
+        m_LayerId[ii] = FIRST_LAYER;
 
-        if( ii == 0 || ii == BOARD_COPPER_LAYERS_MAX_COUNT-1 || ii < aCopperLayerCount-1 )
+        if( ii == FIRST_COPPER_LAYER || ii == LAST_COPPER_LAYER || ii < aCopperLayerCount-1 )
         {
             LayerList[LayerCount] = GetPCBDefaultLayerName( ii );
 
@@ -113,9 +113,9 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
         }
     }
     // Build the layer list; build copper layers list
-    for( ; ii < NB_LAYERS; ii++ )
+    for( ; ii < NB_LAYERS; ++ii )
     {
-        m_LayerId[ii] = 0;
+        m_LayerId[ii] = FIRST_LAYER;
 
         LayerList[LayerCount] = GetPCBDefaultLayerName( ii );
 
@@ -131,10 +131,10 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
     {
         LayerList[LayerCount] = _( "(Deselect)" );
 
-        if( NB_LAYERS == aDefaultLayer )
+        if( NB_PCB_LAYERS == aDefaultLayer )
             LayerSelect = LayerCount;
 
-        m_LayerId[LayerCount] = NB_LAYERS;
+        m_LayerId[LayerCount] = NB_PCB_LAYERS;
         LayerCount++;
     }
 
@@ -181,7 +181,7 @@ void SELECT_LAYER_DIALOG::OnCancelClick( wxCommandEvent& event )
     EndModal( -1 );
 }
 
-const wxString GetPCBDefaultLayerName( int aLayerNumber )
+const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber )
 {
     const wxChar* txt;
 

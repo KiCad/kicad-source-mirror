@@ -208,6 +208,14 @@ static inline int intParse( const char* next, const char** out = NULL )
     return (int) strtol( next, (char**) out, 10 );
 }
 
+/**
+ * Function layerParse
+ * Like intParse but returns a LAYER_NUM
+ */
+static inline LAYER_NUM layerParse( const char* next, const char** out = NULL )
+{
+    return intParse( next, out );
+}
 
 /**
  * Function hexParse
@@ -429,7 +437,9 @@ void LEGACY_PLUGIN::loadGENERAL()
             int layer_mask  = hexParse( line + SZ( "Ly" ) );
             int layer_count = 0;
 
-            for( int ii = 0;  ii < NB_COPPER_LAYERS && layer_mask;  ++ii, layer_mask >>= 1 )
+            for( LAYER_NUM ii = FIRST_COPPER_LAYER;
+                 ii < NB_COPPER_LAYERS && layer_mask;
+                 ++ii, layer_mask >>= 1 )
             {
                 if( layer_mask & 1 )
                     layer_count++;
@@ -657,7 +667,7 @@ void LEGACY_PLUGIN::loadSETUP()
         {
             // eg: "Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>"
 
-            int   layer = intParse( line + SZ( "Layer[" ), &data );
+            LAYER_NUM layer = layerParse( line + SZ( "Layer[" ), &data );
 
             data = strtok( (char*) data+1, delims );    // +1 for ']'
             if( data )
@@ -970,7 +980,7 @@ MODULE* LEGACY_PLUGIN::LoadMODULE()
             BIU pos_x  = biuParse( line + SZ( "Po" ), &data );
             BIU pos_y  = biuParse( data, &data );
             int orient = intParse( data, &data );
-            int layer  = intParse( data, &data );
+            LAYER_NUM layer = layerParse( data, &data );
 
             long edittime  = hexParse( data, &data );
             time_t timestamp = hexParse( data, &data );
@@ -1377,7 +1387,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
     // common to all cases, and we have to check their values uniformly at end
     BIU     width = 1;
-    int     layer = FIRST_NON_COPPER_LAYER;
+    LAYER_NUM layer = FIRST_NON_COPPER_LAYER;
 
     switch( shape )
     {
@@ -1391,7 +1401,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
             double  angle    = degParse( data, &data );
 
             width   = biuParse( data, &data );
-            layer   = intParse( data );
+            layer   = layerParse( data );
 
             dwg->SetAngle( angle );
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
@@ -1411,7 +1421,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
             BIU     end0_y   = biuParse( data, &data );
 
             width   = biuParse( data, &data );
-            layer   = intParse( data );
+            layer   = layerParse( data );
 
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
             dwg->m_End0   = wxPoint( end0_x, end0_y );
@@ -1430,7 +1440,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
             int ptCount  = intParse( data, &data );
 
             width   = biuParse( data, &data );
-            layer   = intParse( data );
+            layer   = layerParse( data );
 
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
             dwg->m_End0   = wxPoint( end0_x, end0_y );
@@ -1481,7 +1491,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
     // @todo: changes use of EDGE_MODULE these footprints and allows only
     // m_Layer >= FIRST_NON_COPPER_LAYER
-    if( layer < 0 || layer > LAST_NON_COPPER_LAYER )
+    if( layer < FIRST_LAYER || layer > LAST_NON_COPPER_LAYER )
         layer = SILKSCREEN_N_FRONT;
 
     dwg->SetWidth( width );
@@ -1543,7 +1553,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     char*   mirror  = strtok( (char*) data, delims );
     char*   hide    = strtok( NULL, delims );
     char*   tmp     = strtok( NULL, delims );
-    int     layer   = tmp ? intParse( tmp ) : SILKSCREEN_N_FRONT;
+    LAYER_NUM layer = tmp ? layerParse( tmp ) : SILKSCREEN_N_FRONT;
     char*   italic  = strtok( NULL, delims );
 
     char*   hjust   = strtok( (char*) txt_end, delims );
@@ -1584,10 +1594,10 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     if( vjust )
         aText->SetVertJustify( vertJustify( vjust ) );
 
-    if( layer < 0 )
-        layer = 0;
-    else if( layer > LAST_NO_COPPER_LAYER )
-        layer = LAST_NO_COPPER_LAYER;
+    if( layer < FIRST_LAYER )
+        layer = FIRST_LAYER;
+    else if( layer > LAST_NON_COPPER_LAYER )
+        layer = LAST_NON_COPPER_LAYER;
     else if( layer == LAYER_N_BACK )
         layer = SILKSCREEN_N_BACK;
     else if( layer == LAYER_N_FRONT )
@@ -1701,14 +1711,14 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                 switch( i )
                 {
                 case 0:
-                    int layer;
-                    layer = intParse( data );
+                    LAYER_NUM layer;
+                    layer = layerParse( data );
 
-                    if( layer < FIRST_NO_COPPER_LAYER )
-                        layer = FIRST_NO_COPPER_LAYER;
+                    if( layer < FIRST_NON_COPPER_LAYER )
+                        layer = FIRST_NON_COPPER_LAYER;
 
-                    else if( layer > LAST_NO_COPPER_LAYER )
-                        layer = LAST_NO_COPPER_LAYER;
+                    else if( layer > LAST_NON_COPPER_LAYER )
+                        layer = LAST_NON_COPPER_LAYER;
 
                     dseg->SetLayer( layer );
                     break;
@@ -1893,7 +1903,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             // e.g. "De 21 1 0 Normal C\r\n"
             // sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display, &m_TimeStamp, style, &hJustify );
 
-            int     layer       = intParse( line + SZ( "De" ), &data );
+            LAYER_NUM layer     = layerParse( line + SZ( "De" ), &data );
             int     notMirrored = intParse( data, &data );
             time_t  timestamp   = hexParse( data, &data );
             char*   style       = strtok( (char*) data, delims );
@@ -1917,8 +1927,8 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
 
             if( layer < FIRST_COPPER_LAYER )
                 layer = FIRST_COPPER_LAYER;
-            else if( layer > LAST_NO_COPPER_LAYER )
-                layer = LAST_NO_COPPER_LAYER;
+            else if( layer > LAST_NON_COPPER_LAYER )
+                layer = LAST_NON_COPPER_LAYER;
 
             pcbtxt->SetLayer( layer );
         }
@@ -2200,7 +2210,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
         {
-            int layer = intParse( line + SZ( "ZLayer" ) );
+            LAYER_NUM layer = layerParse( line + SZ( "ZLayer" ) );
             zc->SetLayer( layer );
         }
 
@@ -2435,17 +2445,18 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
         else if( TESTLINE( "Ge" ) )
         {
-            int     layer;
+            LAYER_NUM layer;
             time_t  timestamp;
             int     shape;
+            int     ilayer;
 
-            sscanf( line + SZ( "Ge" ), " %d %d %lX", &shape, &layer, &timestamp );
+            sscanf( line + SZ( "Ge" ), " %d %d %lX", &shape, &ilayer, &timestamp );
 
-            if( layer < FIRST_NO_COPPER_LAYER )
-                layer = FIRST_NO_COPPER_LAYER;
-
-            else if( layer > LAST_NO_COPPER_LAYER )
-                layer = LAST_NO_COPPER_LAYER;
+            if( ilayer < FIRST_NON_COPPER_LAYER )
+                layer = FIRST_NON_COPPER_LAYER;
+            else if( ilayer > LAST_NON_COPPER_LAYER )
+                layer = LAST_NON_COPPER_LAYER;
+            else layer = ilayer;
 
             dim->SetLayer( layer );
             dim->SetTimeStamp( timestamp );
@@ -2625,18 +2636,18 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
             // sscanf( Line + 2, " %X %d %d %d %d %d %lX", &m_Shape, &m_Layer, &m_Pos.x, &m_Pos.y, &m_Size, &m_Width, &m_TimeStamp );
 
             int shape = intParse( line + SZ( "Po" ), &data );
-            int layer = intParse( data, &data );
+            LAYER_NUM layer = layerParse( data, &data );
             BIU pos_x = biuParse( data, &data );
             BIU pos_y = biuParse( data, &data );
             BIU size  = biuParse( data, &data );
             BIU width = biuParse( data, &data );
             time_t timestamp = hexParse( data );
 
-            if( layer < FIRST_NO_COPPER_LAYER )
-                layer = FIRST_NO_COPPER_LAYER;
+            if( layer < FIRST_NON_COPPER_LAYER )
+                layer = FIRST_NON_COPPER_LAYER;
 
-            else if( layer > LAST_NO_COPPER_LAYER )
-                layer = LAST_NO_COPPER_LAYER;
+            else if( layer > LAST_NON_COPPER_LAYER )
+                layer = LAST_NON_COPPER_LAYER;
 
             PCB_TARGET* t = new PCB_TARGET( m_board, shape, layer, wxPoint( pos_x, pos_y ), size, width );
             m_board->Add( t, ADD_APPEND );
@@ -2973,7 +2984,7 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 
     unsigned layerMask = ALL_CU_LAYERS & aBoard->GetEnabledLayers();
 
-    for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
+    for( LAYER_NUM layer = FIRST_LAYER; layerMask; ++layer, layerMask >>= 1 )
     {
         if( layerMask & 1 )
         {

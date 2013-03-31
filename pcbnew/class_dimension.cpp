@@ -49,7 +49,7 @@ DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_DIMENSION_T ),
     m_Text( this )
 {
-    m_Layer = DRAW_LAYER;
+    m_Layer = DRAW_N;
     m_Width = Millimeter2iu( 0.2 );
     m_Value = 0;
     m_Shape = 0;
@@ -86,7 +86,7 @@ const wxString DIMENSION::GetText() const
 }
 
 
-void DIMENSION::SetLayer( int aLayer )
+void DIMENSION::SetLayer( LAYER_NUM aLayer )
 {
     m_Layer = aLayer;
     m_Text.SetLayer( aLayer );

@@ -83,6 +83,7 @@ enum DANGLING_END_T {
  */
 class DANGLING_END_ITEM
 {
+private:
     /// A pointer to the connectable object.
     const void*    m_item;
 

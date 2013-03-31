@@ -60,7 +60,7 @@ private:
     ZONE_SETTINGS   m_zonesettings;
     ZONE_SETTINGS*  m_ptr;
 
-    std::vector<int> m_layerId;             ///< Handle the real layer number from layer
+    std::vector<LAYER_NUM> m_layerId;       ///< Handle the real layer number from layer
                                             ///< name position in m_LayerSelectionCtrl
 
     /**
@@ -153,7 +153,7 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
     for( int ii = 0; ii < layerCount; ii++ )
     {
-        int layerNumber = LAYER_N_BACK;
+        LAYER_NUM layerNumber = LAYER_N_BACK;
 
         if( layerCount <= 1 || ii < layerCount - 1 )
             layerNumber = ii;

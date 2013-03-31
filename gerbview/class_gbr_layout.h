@@ -102,7 +102,7 @@ public:
      * @param aLayerIndex = The index of the layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool    IsLayerVisible( int aLayerIndex ) const;
+    bool    IsLayerVisible( LAYER_NUM aLayerIndex ) const;
 
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;  // overload

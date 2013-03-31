@@ -383,7 +383,7 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
     if( m_ctl & CTL_STD_LAYER_NAMES )
     {
-        int layer = aItem->GetLayer();
+        LAYER_NUM layer = aItem->GetLayer();
 
         // English layer names should never need quoting.
         m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
@@ -425,7 +425,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, "(layers\n" );
 
     unsigned mask = LAYER_FRONT;
-    int layer = LAYER_N_FRONT;
+    LAYER_NUM layer = LAYER_N_FRONT;
 
     // Save only the used copper layers from front to back.
     while( mask != 0 )
@@ -443,14 +443,14 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         }
 
         mask >>= 1;
-        layer--;
+        --layer;
     }
 
     mask = ADHESIVE_LAYER_BACK;
     layer = ADHESIVE_N_BACK;
 
     // Save used non-copper layers in the order they are defined.
-    while( layer < LAYER_COUNT )
+    while( layer < NB_LAYERS )
     {
         if( mask & aBoard->GetEnabledLayers() )
         {
@@ -464,7 +464,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         }
 
         mask <<= 1;
-        layer++;
+        ++layer;
     }
 
     m_out->Print( aNestLevel, ")\n\n" );
@@ -1036,7 +1036,7 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
 
     wxString layerName;
 
-    for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
+    for( LAYER_NUM layer = FIRST_LAYER; layerMask; ++layer, layerMask >>= 1 )
     {
         if( layerMask & 1 )
         {
@@ -1236,7 +1236,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
-        int layer1, layer2;
+        LAYER_NUM layer1, layer2;
 
         SEGVIA* via = (SEGVIA*) aTrack;
         BOARD* board = (BOARD*) via->GetParent();

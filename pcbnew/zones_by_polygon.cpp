@@ -372,7 +372,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
         return;
     }
 
-    int layer = aZone->GetLayer();
+    LAYER_NUM layer = aZone->GetLayer();
 
     if( DC )
     {
@@ -620,7 +620,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         }
 
         // Show the Net for zones on copper layers
-        if( zoneInfo.m_CurrentZone_Layer < FIRST_NO_COPPER_LAYER &&
+        if( zoneInfo.m_CurrentZone_Layer < FIRST_NON_COPPER_LAYER &&
             ! zoneInfo.GetIsKeepout() )
         {
             if( s_CurrentZone )
@@ -739,7 +739,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     m_canvas->SetMouseCapture( NULL, NULL );
 
     // Undraw old drawings, because they can have important changes
-    int layer = zone->GetLayer();
+    LAYER_NUM layer = zone->GetLayer();
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_XOR, layer );
     GetBoard()->RedrawFilledAreas( m_canvas, DC, GR_XOR, layer );
 
@@ -851,7 +851,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     // note the net name and the layer can be changed, so we must save all zones
     s_AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList.ClearListAndDeleteItems();
-    SaveCopyOfZones(s_PickedList, GetBoard(), -1, -1 );
+    SaveCopyOfZones(s_PickedList, GetBoard(), -1, UNDEFINED_LAYER );
 
     if( aZone->GetIsKeepout() )
     {
@@ -859,7 +859,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
         zoneInfo << *aZone;
         edited = InvokeKeepoutAreaEditor( this, &zoneInfo );
     }
-    else if( aZone->GetLayer() < FIRST_NO_COPPER_LAYER )
+    else if( aZone->GetLayer() < FIRST_NON_COPPER_LAYER )
     {
         // edit a zone on a copper layer
 
@@ -910,7 +910,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, aZone );
 
     // Redraw the real new zone outlines
-    GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_OR, -1 );
+    GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_OR, UNDEFINED_LAYER );
 
     UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
     SaveCopyInUndoList(s_PickedList, UR_UNSPECIFIED);

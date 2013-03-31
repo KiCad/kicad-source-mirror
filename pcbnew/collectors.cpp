@@ -350,7 +350,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
     if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
     {
-        int layer = item->GetLayer();
+        LAYER_NUM layer = item->GetLayer();
 
         // Modules and their subcomponents: text and pads are not sensitive to the layer
         // visibility controls.  They all have their own separate visibility controls
@@ -378,7 +378,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         // no effect on other criteria, since there is a separate "ignore" control for
         // those in the COLLECTORS_GUIDE
 
-        int layer = item->GetLayer();
+        LAYER_NUM layer = item->GetLayer();
 
         // Modules and their subcomponents: text and pads are not sensitive to the layer
         // visibility controls.  They all have their own separate visibility controls

@@ -65,8 +65,8 @@ bool           g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. an
 bool           g_Segments_45_Only;                // True to allow horiz, vert. and 45deg only graphic segments
 bool           g_TwoSegmentTrackBuild = true;
 
-int            g_Route_Layer_TOP;
-int            g_Route_Layer_BOTTOM;
+LAYER_NUM      g_Route_Layer_TOP;
+LAYER_NUM      g_Route_Layer_BOTTOM;
 int            g_MaxLinksShowed;
 int            g_MagneticPadOption   = capture_cursor_in_track_tool;
 int            g_MagneticTrackOption = capture_cursor_in_track_tool;

@@ -168,7 +168,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     }
 
     // Read gerber files: each file is loaded on a new GerbView layer
-    int layer = getActiveLayer();
+    LAYER_NUM layer = getActiveLayer();
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
@@ -249,7 +249,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     }
 
     // Read gerber files: each file is loaded on a new GerbView layer
-    int layer = getActiveLayer();
+    LAYER_NUM layer = getActiveLayer();
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {

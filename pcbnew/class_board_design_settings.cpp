@@ -191,7 +191,7 @@ void BOARD_DESIGN_SETTINGS::SetVisibleLayers( LAYER_MSK aMask )
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetLayerVisibility( int aLayerIndex, bool aNewState )
+void BOARD_DESIGN_SETTINGS::SetLayerVisibility( LAYER_NUM aLayerIndex, bool aNewState )
 {
     // Altough Pcbnew uses only 29, GerbView uses all 32 layers
     if( aLayerIndex < 0 || aLayerIndex >= 32 )
@@ -229,7 +229,7 @@ void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
     if( m_CopperLayerCount > 1 )
         m_EnabledLayers |= LAYER_FRONT;
 
-    for( int ii = LAYER_N_2; ii < aNewLayerCount - 1; ++ii )
+    for( LAYER_NUM ii = LAYER_N_2; ii < aNewLayerCount - 1; ++ii )
         m_EnabledLayers |= GetLayerMask( ii );
 }
 
@@ -247,9 +247,10 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LAYER_MSK aMask )
     // update m_CopperLayerCount to ensure its consistency with m_EnabledLayers
     m_CopperLayerCount = 0;
 
-    for( int ii = 0;  aMask && ii < NB_COPPER_LAYERS;  ii++, aMask >>= 1 )
+    unsigned shiftMask = aMask;
+    for( LAYER_NUM ii = FIRST_LAYER; aMask && ii < NB_COPPER_LAYERS; ++ii, shiftMask >>= 1 )
     {
-        if( aMask & 1 )
+        if( shiftMask & 1 )
             m_CopperLayerCount++;
     }
 }

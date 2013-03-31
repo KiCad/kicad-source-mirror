@@ -32,7 +32,7 @@ private:
     EDGE_MODULE* m_item;
     BOARD_DESIGN_SETTINGS  m_brdSettings;
     MODULE * m_module;
-    std::vector<int> m_layerId;         // the layer Id with the same order as m_LayerSelectionCtrl widget
+    std::vector<LAYER_NUM> m_layerId;   // the layer Id with the same order as m_LayerSelectionCtrl widget
 
 public:
     DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES( FOOTPRINT_EDIT_FRAME* aParent,
@@ -155,7 +155,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
     m_layerId.push_back( LAYER_N_BACK );
     m_LayerSelectionCtrl->Append( m_parent->GetBoard()->GetLayerName( LAYER_N_FRONT ) );
     m_layerId.push_back( LAYER_N_FRONT );
-    for( int layer = FIRST_NO_COPPER_LAYER; layer <= LAST_NO_COPPER_LAYER; ++layer )
+    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER; ++layer )
     {
         if( layer == EDGE_N )
         // Do not use pcb edge layer for footprints, this is a special layer
@@ -195,7 +195,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
         return;
     }
 
-    int layer = m_layerId[idx];
+    LAYER_NUM layer = m_layerId[idx];
     if( IsValidCopperLayerIndex( layer ) )
     {
         /* an edge is put on a copper layer, and it is very dangerous. a

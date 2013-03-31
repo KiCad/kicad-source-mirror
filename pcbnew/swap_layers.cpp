@@ -20,14 +20,14 @@
 
 
 #define LAYER_NO_CHANGE NB_LAYERS
-static int    New_Layer[NB_LAYERS];
-wxStaticText* layer_list[NB_LAYERS];
+static LAYER_NUM New_Layer[NB_PCB_LAYERS];
+wxStaticText* layer_list[NB_PCB_LAYERS];
 
 
 enum swap_layer_id {
     ID_WINEDA_SWAPLAYERFRAME = 1800,
     ID_BUTTON_0,
-    ID_TEXT_0 = ID_BUTTON_0 + NB_LAYERS
+    ID_TEXT_0 = ID_BUTTON_0 + NB_PCB_LAYERS
 };
 
 
@@ -59,7 +59,7 @@ private:
 
 
 BEGIN_EVENT_TABLE( WinEDA_SwapLayerFrame, wxDialog )
-    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + NB_LAYERS - 1,
+    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + NB_PCB_LAYERS - 1,
                        wxEVT_COMMAND_BUTTON_CLICKED,
                        WinEDA_SwapLayerFrame::Sel_Layer )
     EVT_BUTTON( wxID_OK, WinEDA_SwapLayerFrame::OnOkClick )
@@ -114,7 +114,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
     MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     OuterBoxSizer->Add( MainBoxSizer, 1, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
-    for( int ii = 0; ii < NB_LAYERS; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_PCB_LAYERS; ++ii )
     {
         // Provide a vertical line to separate the two FlexGrid sizers
         if( ii == 16 )
@@ -204,11 +204,11 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
          */
         if( ii == 0 )
         {
-            text = new wxStaticText( this, item_ID, board->GetLayerName( 0 ),
+            text = new wxStaticText( this, item_ID, board->GetLayerName( FIRST_LAYER ),
                                      wxDefaultPosition, wxDefaultSize, 0 );
             goodSize = text->GetSize();
 
-            for( int jj = 1; jj < NB_LAYERS; jj++ )
+            for( LAYER_NUM jj = LAYER_N_2; jj < NB_PCB_LAYERS; ++jj )
             {
                 text->SetLabel( board->GetLayerName( jj ) );
 
@@ -238,7 +238,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
      * FlexGrid sizer. (As it incorporates three columns, three spacers
      * are thus required for each otherwise unused row.)
      */
-    for( int ii = 3 * NB_LAYERS; ii < 96; ii++ )
+    for( int ii = 3 * NB_PCB_LAYERS; ii < 96; ii++ )
     {
         FlexColumnBoxSizer->Add( 5, h, 0, wxALIGN_CENTER_HORIZONTAL |
                                  wxALIGN_CENTER_VERTICAL | wxLEFT |
@@ -275,23 +275,23 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
 
 void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
 {
-    int ii, jj;
+    int ii;
 
     ii = event.GetId();
 
-    if( ii < ID_BUTTON_0 || ii >= ID_BUTTON_0 + NB_LAYERS )
+    if( ii < ID_BUTTON_0 || ii >= ID_BUTTON_0 + NB_PCB_LAYERS )
         return;
 
     ii = event.GetId() - ID_BUTTON_0;
 
-    jj = New_Layer[ii];
+    LAYER_NUM jj = New_Layer[ii];
 
-    if( (jj < 0) || (jj > NB_LAYERS) )
+    if( (jj < 0) || (jj > NB_PCB_LAYERS) )
         jj = LAYER_NO_CHANGE; // (Defaults to "No Change".)
 
-    jj = m_Parent->SelectLayer( jj, -1, -1, true );
+    jj = m_Parent->SelectLayer( jj, UNDEFINED_LAYER, UNDEFINED_LAYER, true );
 
-    if( (jj < 0) || (jj > NB_LAYERS) )
+    if( (jj < FIRST_LAYER) || (jj > NB_PCB_LAYERS) )
         return;
 
     // No change if the selected layer matches the layer being edited.
@@ -350,7 +350,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     EDA_ITEM*    PtStruct;
 
     /* Init default values */
-    for( ii = 0; ii < NB_LAYERS; ii++ )
+    for( ii = FIRST_LAYER; ii < NB_PCB_LAYERS; ii++ )
         New_Layer[ii] = LAYER_NO_CHANGE;
 
     WinEDA_SwapLayerFrame* frame = new WinEDA_SwapLayerFrame( this );
@@ -375,7 +375,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
             if( Via->GetShape() == VIA_THROUGH )
                 continue;
 
-            int     top_layer, bottom_layer;
+            LAYER_NUM top_layer, bottom_layer;
 
             Via->ReturnLayerPair( &top_layer, &bottom_layer );
 

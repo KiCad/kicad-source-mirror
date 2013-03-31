@@ -148,7 +148,8 @@ void DIALOG_PLOT::Init_Dialog()
     // List layers in same order than in setup layers dialog
     // (Front or Top to Back or Bottom)
     DECLARE_LAYERS_ORDER_LIST( layersOrder );
-    int layerIndex, checkIndex, layer;
+    int layerIndex, checkIndex;
+    LAYER_NUM layer;
 
     for( layerIndex = 0; layerIndex < NB_LAYERS; layerIndex++ )
     {

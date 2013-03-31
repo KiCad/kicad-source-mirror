@@ -100,7 +100,7 @@ int BOARD::GetCopperLayerCount() const
 }
 
 // a dummy to satisfy link of specctra_test without pulling in BOARD stuff.
-wxString BOARD::GetLayerName( int aLayer ) const
+wxString BOARD::GetLayerName( LAYER_NUM aLayer ) const
 {
     return wxEmptyString;
 }

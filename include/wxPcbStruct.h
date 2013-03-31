@@ -113,7 +113,7 @@ protected:
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    void setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true )
+    void setActiveLayer( LAYER_NUM aLayer, bool doLayerWidgetUpdate = true )
     {
         ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
@@ -125,7 +125,7 @@ protected:
      * Function getActiveLayer
      * returns the active layer
      */
-    int getActiveLayer()
+    LAYER_NUM getActiveLayer()
     {
         return ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
     }
@@ -1206,7 +1206,7 @@ public:
     bool MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
 
     void Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
-    void SwitchLayer( wxDC* DC, int layer );
+    void SwitchLayer( wxDC* DC, LAYER_NUM layer );
 
     /**
      * Function Add45DegreeSegment
@@ -1406,7 +1406,7 @@ public:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC );
     void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void Delete_Drawings_All_Layer( int aLayer );
+    void Delete_Drawings_All_Layer( LAYER_NUM aLayer );
 
     // Dimension handling:
     void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );

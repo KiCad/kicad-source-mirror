@@ -103,7 +103,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     int             ux0, uy0, dx, dy, radius, StAngle, EndAngle;
     int             type_trace;
     int             typeaff;
-    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     PCB_BASE_FRAME* frame;
     MODULE* module = (MODULE*) m_Parent;
 

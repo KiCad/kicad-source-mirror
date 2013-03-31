@@ -43,7 +43,7 @@ PCB_COMPONENT::PCB_COMPONENT( PCB_CALLBACKS*    aCallbacks,
     m_tag       = 0;
     m_objType   = wxT( '?' );
     m_PCadLayer     = 0;
-    m_KiCadLayer    = 0;
+    m_KiCadLayer    = NO_LAYER;
     m_timestamp     = 0;
     m_positionX     = 0;
     m_positionY     = 0;
@@ -77,9 +77,9 @@ void PCB_COMPONENT::Flip()
     m_positionX = -m_positionX;
 }
 
-int PCB_COMPONENT::FlipLayers( int aLayer )
+LAYER_NUM PCB_COMPONENT::FlipLayers( LAYER_NUM aLayer )
 {
-    int result = aLayer;    // dafault is no swap
+    LAYER_NUM result = aLayer;    // dafault is no swap
 
     // routed layers
     if( aLayer == LAYER_N_BACK )

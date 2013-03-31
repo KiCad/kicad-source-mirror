@@ -99,7 +99,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     wxPoint  PosOK;
     wxPoint  memopos;
     int      error;
-    int      lay_tmp_TOP, lay_tmp_BOTTOM;
+    LAYER_NUM lay_tmp_TOP, lay_tmp_BOTTOM;
 
     // Undo: init list
     PICKED_ITEMS_LIST  newList;
@@ -457,7 +457,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     /* Place the edge layer segments */
     TRACK TmpSegm( NULL );
 
-    TmpSegm.SetLayer( -1 );
+    TmpSegm.SetLayer( UNDEFINED_LAYER );
     TmpSegm.SetNet( -1 );
     TmpSegm.SetWidth( RoutingMatrix.m_GridRouting / 2 );
 
