@@ -1,24 +1,25 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_eeschema_config_fbp__
-#define __dialog_eeschema_config_fbp__
+#ifndef __DIALOG_EESCHEMA_CONFIG_FBP_H__
+#define __DIALOG_EESCHEMA_CONFIG_FBP_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
-#include <wx/listbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/listbox.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -38,19 +39,22 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 			ID_REMOVE_LIB,
 			ID_LIB_PATH_SEL,
 			wxID_INSERT_PATH,
-			wxID_REMOVE_PATH,
+			wxID_REMOVE_PATH
 		};
 		
+		wxStaticText* m_staticTextLibsList;
 		wxListBox* m_ListLibr;
 		wxButton* m_buttonAddLib;
 		wxButton* m_buttonIns;
 		wxButton* m_buttonRemoveLib;
 		wxButton* m_buttonUp;
 		wxButton* m_buttonDown;
+		wxStaticText* m_staticTextPaths;
 		wxListBox* m_listUserPaths;
 		wxButton* m_buttonAddPath;
 		wxButton* m_buttonInsPath;
 		wxButton* m_buttonRemovePath;
+		wxStaticText* m_staticTextPathlist;
 		wxListBox* m_DefaultLibraryPathslistBox;
 		wxStaticLine* m_staticline3;
 		
@@ -72,9 +76,9 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 		
-		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EESCHEMA_CONFIG_FBP();
 	
 };
 
-#endif //__dialog_eeschema_config_fbp__
+#endif //__DIALOG_EESCHEMA_CONFIG_FBP_H__

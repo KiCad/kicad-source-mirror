@@ -63,7 +63,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	bLibsChoiceSizer->Add( bLibsChoiceListSizer, 1, wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( bLibsChoiceSizer, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bLibsChoiceSizer, 2, wxEXPAND, 5 );
 	
 	wxBoxSizer* bModulesDocSizer;
 	bModulesDocSizer = new wxBoxSizer( wxVERTICAL );
@@ -119,10 +119,10 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	bSizerPathsChoice->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerPaths->Add( bSizerPathsChoice, 0, wxEXPAND, 5 );
+	bSizerPaths->Add( bSizerPathsChoice, 1, wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( bSizerPaths, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerPaths, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bLibPathSizer;
 	bLibPathSizer = new wxBoxSizer( wxVERTICAL );
@@ -135,10 +135,10 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	m_DefaultLibraryPathslistBox->SetToolTip( _("System and user paths used to search and load library files and component doc files.\nSorted by decreasing priority order.") );
 	m_DefaultLibraryPathslistBox->SetMinSize( wxSize( -1,70 ) );
 	
-	bLibPathSizer->Add( m_DefaultLibraryPathslistBox, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLibPathSizer->Add( m_DefaultLibraryPathslistBox, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bMainSizer->Add( bLibPathSizer, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bLibPathSizer, 1, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
