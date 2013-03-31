@@ -241,27 +241,47 @@ EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                          const wxPoint& offset )
 {
-    int             width, orient;
-    wxSize          size;
-    wxPoint         pos;      // Center of text
-    PCB_BASE_FRAME* frame;
-    MODULE*         module = (MODULE*) m_Parent;   /* parent must *not* be null
-                                                    *  (a module text without a footprint
-                                                    * parent has no sense) */
+    MODULE* module = (MODULE*) m_Parent;   
 
+    /* parent must *not* be NULL (a module text without a footprint
+       parent has no sense) */
+    wxASSERT( module );
 
     if( panel == NULL )
         return;
 
-    frame  = (PCB_BASE_FRAME*) panel->GetParent();
+    BOARD* brd = GetBoard( );
+    EDA_COLOR_T color;
+    // Determine the element color or suppress it element if hidden
+    switch( module->GetLayer() )
+    {
+    case LAYER_N_BACK:
+        if( !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) )
+            return;
+        color = brd->GetVisibleElementColor( MOD_TEXT_BK_VISIBLE );
+        break;
 
-    pos.x = m_Pos.x - offset.x;
-    pos.y = m_Pos.y - offset.y;
+    case LAYER_N_FRONT:
+        if( !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) )
+            return;
+        color = brd->GetVisibleElementColor( MOD_TEXT_FR_VISIBLE );
+        break;
 
-    size   = m_Size;
-    orient = GetDrawRotation();
-    width  = m_Thickness;
+    default:
+        color = brd->GetLayerColor( module->GetLayer() );
+    }
 
+    // 'Ghost' the element if forced show
+    if( m_NoShow )
+    {
+        if( !brd->IsElementVisible( MOD_TEXT_INVISIBLE ) )
+            return;
+        color = brd->GetVisibleElementColor( MOD_TEXT_INVISIBLE );
+    }
+
+    // Draw mode compensation for the width
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
+    int width = m_Thickness;
     if( ( frame->m_DisplayModText == LINE )
         || ( DC->LogicalToDeviceXRel( width ) < MIN_DRAW_WIDTH ) )
         width = 0;
@@ -269,51 +289,32 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         width = -width;
 
     GRSetDrawMode( DC, draw_mode );
+    wxPoint pos( m_Pos.x - offset.x, 
+                 m_Pos.y - offset.y);
 
-    BOARD * brd =  GetBoard( );
-    EDA_COLOR_T color;
+    // Draw the text anchor point
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
     {
-        color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
-
+        EDA_COLOR_T anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
         int anchor_size = DC->DeviceToLogicalXRel( 2 );
 
         GRLine( panel->GetClipBox(), DC,
                 pos.x - anchor_size, pos.y,
-                pos.x + anchor_size, pos.y, 0, color );
+                pos.x + anchor_size, pos.y, 0, anchor_color );
         GRLine( panel->GetClipBox(), DC,
                 pos.x, pos.y - anchor_size,
-                pos.x, pos.y + anchor_size, 0, color );
+                pos.x, pos.y + anchor_size, 0, anchor_color );
     }
 
-    color = brd->GetLayerColor(module->GetLayer());
+    // Draw the text proper, with the right attributes
+    wxSize size   = m_Size;
+    int    orient = GetDrawRotation();
 
-
-    if( module->GetLayer() == LAYER_N_BACK )
-    {
-        if( brd->IsElementVisible( MOD_TEXT_BK_VISIBLE ) == false )
-            return;
-        color = brd->GetVisibleElementColor(MOD_TEXT_BK_VISIBLE);
-    }
-    else if( module->GetLayer() == LAYER_N_FRONT )
-    {
-        if( brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ) == false )
-            return;
-        color = brd->GetVisibleElementColor(MOD_TEXT_FR_VISIBLE);
-    }
-
-    if( m_NoShow )
-    {
-        if( brd->IsElementVisible( MOD_TEXT_INVISIBLE ) == false )
-            return;
-        color = brd->GetVisibleElementColor(MOD_TEXT_INVISIBLE);
-    }
-
-    /* If the text is mirrored : negate size.x (mirror / Y axis) */
+    // If the text is mirrored : negate size.x (mirror / Y axis)
     if( m_Mirror )
         size.x = -size.x;
 
-    DrawGraphicText( panel, DC, pos, (enum EDA_COLOR_T) color, m_Text, orient,
+    DrawGraphicText( panel, DC, pos, color, m_Text, orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
