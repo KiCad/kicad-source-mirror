@@ -41,7 +41,6 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_no_connect.h>
-#include <sch_polyline.h>
 #include <sch_text.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
@@ -346,33 +345,7 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
     if( ( screen->GetCurItem() == NULL ) || !screen->GetCurItem()->IsNew() )
         return;
 
-    /* Cancel trace in progress */
-    if( screen->GetCurItem()->Type() == SCH_POLYLINE_T )
-    {
-        SCH_POLYLINE* polyLine = (SCH_POLYLINE*) screen->GetCurItem();
-        wxPoint       endpos;
-
-        endpos = screen->GetCrossHairPosition();
-
-        int idx = polyLine->GetCornerCount() - 1;
-        wxPoint pt = (*polyLine)[idx];
-
-        if( GetForceHVLines() )
-        {
-            /* Coerce the line to vertical or horizontal one: */
-            if( std::abs( endpos.x - pt.x ) < std::abs( endpos.y - pt.y ) )
-                endpos.x = pt.x;
-            else
-                endpos.y = pt.y;
-        }
-
-        polyLine->SetPoint( idx, endpos );
-        polyLine->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
-    }
-    else
-    {
         DrawSegment( m_canvas, DC, wxDefaultPosition, false );
-    }
 
     screen->Remove( screen->GetCurItem() );
     m_canvas->SetMouseCaptureCallback( NULL );
