@@ -35,12 +35,12 @@
 #include <select_layers_to_pcb.h>
 
 // Imported function
-extern const wxString GetPCBDefaultLayerName( int aLayerNumber );
+extern const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
 
 enum swap_layer_id {
     ID_LAYERS_MAP_DIALOG = ID_GERBER_END_LIST,
     ID_BUTTON_0,
-    ID_TEXT_0 = ID_BUTTON_0 + GERBVIEW_LAYER_COUNT
+    ID_TEXT_0 = ID_BUTTON_0 + NB_GERBER_LAYERS
 };
 
 
@@ -54,7 +54,7 @@ int LAYERS_MAP_DIALOG::m_exportBoardCopperLayersCount = 2;
 
 
 BEGIN_EVENT_TABLE( LAYERS_MAP_DIALOG, LAYERS_MAP_DIALOG_BASE )
-    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + GERBVIEW_LAYER_COUNT-1,
+    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + NB_GERBER_LAYERS-1,
                        wxEVT_COMMAND_BUTTON_CLICKED,
                        LAYERS_MAP_DIALOG::OnSelectLayer )
 END_EVENT_TABLE()
@@ -102,11 +102,11 @@ void LAYERS_MAP_DIALOG::initDialog()
     // the above code should be modified as required in the event that those
     // buttons should be some other size in that version.
 
-    for( int ii = 0; ii < GERBVIEW_LAYER_COUNT; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
     {
         // Specify the default value for each member of these arrays.
         m_buttonTable[ii] = -1;
-        m_layersLookUpTable[ii] = LAYER_UNSELECTED;
+        m_layersLookUpTable[ii] = UNSELECTED_LAYER;
     }
 
     // Ensure we have:
@@ -118,9 +118,9 @@ void LAYERS_MAP_DIALOG::initDialog()
     int idx = ( m_exportBoardCopperLayersCount / 2 ) - 1;
     m_comboCopperLayersCount->SetSelection( idx );
 
-    int pcb_layer_num = 0;
+    LAYER_NUM pcb_layer_num = FIRST_LAYER;
     m_itemsCount = 0;
-    for( int ii = 0; ii < GERBVIEW_LAYER_COUNT; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
     {
         if( g_GERBER_List[ii] == NULL )
             continue;
@@ -132,10 +132,10 @@ void LAYERS_MAP_DIALOG::initDialog()
         m_buttonTable[m_itemsCount] = ii;
         m_layersLookUpTable[ii]  = pcb_layer_num;
         m_itemsCount++;
-        pcb_layer_num++;
+        ++pcb_layer_num;
     }
 
-    if( m_itemsCount <= GERBVIEW_LAYER_COUNT/2 )    // Only one list is enough
+    if( m_itemsCount <= NB_GERBER_LAYERS/2 )    // Only one list is enough
     {
         m_staticlineSep->Hide();
     }
@@ -177,7 +177,7 @@ void LAYERS_MAP_DIALOG::initDialog()
         // is nb_items; otherwise, the number of rows is 16 (with two
         // separate columns of controls being used if nb_items > 16).
 
-        if( ii == GERBVIEW_LAYER_COUNT/2 )
+        if( ii == NB_GERBER_LAYERS/2 )
             flexColumnBoxSizer = m_flexRightColumnBoxSizer;
 
         // Provide a text string to identify the Gerber layer
@@ -225,7 +225,7 @@ void LAYERS_MAP_DIALOG::initDialog()
                                      wxDefaultSize, 0 );
             goodSize = text->GetSize();
 
-            for( int jj = 0; jj < BOARD_LAYERS_MAX_COUNT; jj++ )
+            for( LAYER_NUM jj = FIRST_LAYER; jj < NB_LAYERS; ++jj )
             {
                 text->SetLabel( GetPCBDefaultLayerName( jj ) );
                 if( goodSize.x < text->GetSize().x )
@@ -258,8 +258,8 @@ void LAYERS_MAP_DIALOG::normalizeBrdLayersCount()
     if( ( m_exportBoardCopperLayersCount & 1 ) )
         m_exportBoardCopperLayersCount++;
 
-    if( m_exportBoardCopperLayersCount > BOARD_COPPER_LAYERS_MAX_COUNT )
-        m_exportBoardCopperLayersCount = BOARD_COPPER_LAYERS_MAX_COUNT;
+    if( m_exportBoardCopperLayersCount > NB_LAYERS )
+        m_exportBoardCopperLayersCount = NB_LAYERS;
 
     if( m_exportBoardCopperLayersCount < 2 )
         m_exportBoardCopperLayersCount = 2;
@@ -281,8 +281,9 @@ void LAYERS_MAP_DIALOG::OnBrdLayersCountSelection( wxCommandEvent& event )
 void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
 {
     wxString msg;
-    int ii, layer;
-    for( ii = 0, layer = 0; ii < m_itemsCount; ii++, layer++ )
+    int ii;
+    LAYER_NUM layer;
+    for( ii = 0, layer = FIRST_LAYER; ii < m_itemsCount; ii++, ++layer )
     {
         if( (layer == m_exportBoardCopperLayersCount - 1)
            && (m_exportBoardCopperLayersCount > 1) )
@@ -304,7 +305,7 @@ void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
     config->Write( wxT("BrdLayersCount"), m_exportBoardCopperLayersCount );
 
     wxString key;
-    for( int ii = 0; ii < GERBVIEW_LAYER_COUNT; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
     {
         key.Printf( wxT("GbrLyr%dToPcb"), ii );
         config->Write( key, m_layersLookUpTable[ii] );
@@ -322,16 +323,18 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
     m_comboCopperLayersCount->SetSelection( idx );
 
     wxString key;
-    for( int ii = 0; ii < GERBVIEW_LAYER_COUNT; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
     {
         key.Printf( wxT("GbrLyr%dToPcb"), ii );
-        config->Read( key, &m_layersLookUpTable[ii] );
+        int ilayer;
+        config->Read( key, &ilayer);
+        m_layersLookUpTable[ii] = ilayer;
     }
 
     for( int ii = 0; ii < m_itemsCount; ii++ )
     {
-        int layer =  m_layersLookUpTable[ii];
-        if( layer == LAYER_UNSELECTED )
+        LAYER_NUM layer = m_layersLookUpTable[ii];
+        if( layer == UNSELECTED_LAYER )
         {
             m_layersList[ii]->SetLabel( _( "Do not export" ) );
             m_layersList[ii]->SetForegroundColour( *wxBLUE );
@@ -346,29 +349,29 @@ void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 
 void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
 {
-    int ii, jj;
+    int ii;
 
     ii = event.GetId() - ID_BUTTON_0;
 
-    if( (ii < 0) || (ii >= GERBVIEW_LAYER_COUNT) )
+    if( (ii < FIRST_LAYER) || (ii >= NB_GERBER_LAYERS) )
     {
         wxFAIL_MSG( wxT("Bad layer id") );
         return;
     }
 
-    jj = m_layersLookUpTable[m_buttonTable[ii]];
-    if( ( jj < 0 ) || ( jj > LAYER_UNSELECTED ) )
+    LAYER_NUM jj = m_layersLookUpTable[m_buttonTable[ii]];
+    if( ( jj < FIRST_LAYER ) || ( jj > NB_LAYERS ) )
         jj = LAYER_N_BACK;  // (Defaults to "Copper" layer.)
 
     jj = m_Parent->SelectPCBLayer( jj, m_exportBoardCopperLayersCount, true );
 
-    if( ( jj < 0 ) || ( jj > LAYER_UNSELECTED ) )
+    if( ( jj < FIRST_LAYER ) || ( jj > NB_LAYERS ) )
         return;
 
     if( jj != m_layersLookUpTable[m_buttonTable[ii]] )
     {
         m_layersLookUpTable[m_buttonTable[ii]] = jj;
-        if( jj == LAYER_UNSELECTED )
+        if( jj == UNSELECTED_LAYER )
         {
             m_layersList[ii]->SetLabel( _( "Do not export" ) );
 
@@ -402,7 +405,7 @@ void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
     normalizeBrdLayersCount();
 
     int inner_layer_max = 0;
-    for( int ii = 0; ii < GERBVIEW_LAYER_COUNT; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
     {
             if( m_layersLookUpTable[ii] < LAYER_N_FRONT )
             {
@@ -420,6 +423,7 @@ void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
         _("The exported board has not enough copper layers to handle selected inner layers") );
         return;
     }
-    m_layersLookUpTable[GERBVIEW_LAYER_COUNT] = m_exportBoardCopperLayersCount;
+    // XXX EVIL usage of LAYER
+    m_layersLookUpTable[NB_GERBER_LAYERS] = m_exportBoardCopperLayersCount;
     EndModal( wxID_OK );
 }

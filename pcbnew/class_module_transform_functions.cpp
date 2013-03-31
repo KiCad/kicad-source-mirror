@@ -22,9 +22,9 @@
  * some layers: external copper, Mask, Paste, and solder
  * are swapped between front and back sides
  */
-int BOARD::ReturnFlippedLayerNumber( int oldlayer )
+LAYER_NUM BOARD::ReturnFlippedLayerNumber( LAYER_NUM oldlayer )
 {
-    int newlayer;
+    LAYER_NUM newlayer;
 
     switch( oldlayer )
     {

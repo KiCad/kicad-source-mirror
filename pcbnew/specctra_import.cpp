@@ -224,7 +224,7 @@ static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 
 TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IO_ERROR )
 {
-    int layerNdx = findLayerName( aPath->layer_id );
+    LAYER_NUM layerNdx = findLayerName( aPath->layer_id );
 
     if( layerNdx == -1 )
     {
@@ -319,8 +319,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
     }
     else    // VIA_MICROVIA or VIA_BLIND_BURIED
     {
-        int topLayerNdx = -1;
-        int botLayerNdx = 7000;
+        LAYER_NUM topLayerNdx = UNDEFINED_LAYER;
+        LAYER_NUM botLayerNdx = 7000;
         int viaDiam = -1;
 
         for( int i=0; i<shapeCount;  ++i )
@@ -333,8 +333,8 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
             CIRCLE* circle = (CIRCLE*) shape->shape;
 
-            int layerNdx = findLayerName( circle->layer_id );
-            if( layerNdx == -1 )
+            LAYER_NUM layerNdx = findLayerName( circle->layer_id );
+            if( layerNdx == UNDEFINED_LAYER )
             {
                 wxString layerName = FROM_UTF8( circle->layer_id.c_str() );
                 ThrowIOError( _("Session file uses invalid layer id \"%s\""),

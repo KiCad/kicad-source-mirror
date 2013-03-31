@@ -55,7 +55,8 @@
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype )
 {
-    m_Width = m_Flags = m_Type = m_Angle = 0;
+    m_Width = m_Type = m_Angle = 0;
+    m_Flags = 0;
     m_Shape = S_SEGMENT;
 }
 
@@ -175,7 +176,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     int l_trace;
     int mode;
     int radius;
-    int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     EDA_COLOR_T color;
 
     BOARD * brd =  GetBoard( );

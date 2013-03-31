@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <cmath>
 #include <vector>
-
+#include <layers_id_colors_and_visibility.h>
 #include <potracelib.h>
 #include <auxiliary.h>
 
@@ -310,8 +310,7 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
 
     case PCBNEW_FMT:
     {
-        #define SILKSCREEN_N_FRONT 21
-        int layer = SILKSCREEN_N_FRONT;
+        LAYER_NUM layer = SILKSCREEN_N_FRONT;
         int width = 1;
         fprintf( m_Outfile, "DP %d %d %d %d %d %d %d\n",
                  0, 0, 0, 0,

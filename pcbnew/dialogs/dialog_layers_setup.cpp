@@ -85,7 +85,7 @@ private:
     wxStaticText*       m_TypeStaticText;
 
 
-    void setLayerCheckBox( int layer, bool isChecked );
+    void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
 
     void showCopperChoice( int copperCount );
@@ -96,8 +96,8 @@ private:
 
     /** return the selected layer mask within the UI checkboxes */
     LAYER_MSK getUILayerMask();
-    wxString getLayerName( int layer );
-    int getLayerTypeIndex( int layer );
+    wxString getLayerName( LAYER_NUM layer );
+    int getLayerTypeIndex( LAYER_NUM layer );
 
 
     void OnCancelButtonClick( wxCommandEvent& event );
@@ -114,19 +114,19 @@ private:
      * maps \a aLayerNumber to the wx IDs for that layer which are
      * the layer name control ID, checkbox control ID, and choice control ID
      */
-    CTLs getCTLs( int aLayerNumber );
+    CTLs getCTLs( LAYER_NUM aLayerNumber );
 
-    wxControl* getName( int aLayer )
+    wxControl* getName( LAYER_NUM aLayer )
     {
         return getCTLs( aLayer ).name;
     }
 
-    wxCheckBox* getCheckBox( int aLayer )
+    wxCheckBox* getCheckBox( LAYER_NUM aLayer )
     {
         return getCTLs( aLayer ).checkbox;
     }
 
-    wxChoice* getChoice( int aLayer )
+    wxChoice* getChoice( LAYER_NUM aLayer )
     {
         return (wxChoice*) getCTLs( aLayer ).choice;
     }
@@ -198,7 +198,7 @@ static const LAYER_MSK presets[] =
 };
 
 
-CTLs DIALOG_LAYERS_SETUP::getCTLs( int aLayerNumber )
+CTLs DIALOG_LAYERS_SETUP::getCTLs( LAYER_NUM aLayerNumber )
 {
 #define RETCOP(x)    return CTLs( x##Name, x##CheckBox, x##Choice, x##Panel );
 #define RETAUX(x)    return CTLs( x##Name, x##CheckBox, x##StaticText, x##Panel );
@@ -327,7 +327,7 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
     // obtaining them from BOARD::GetLayerName() which calls
     // BOARD::GetStandardLayerName() for non-coppers.
 
-    for( int layer=0; layer<NB_LAYERS;  ++layer )
+    for( LAYER_NUM layer=FIRST_LAYER; layer<NB_PCB_LAYERS;  ++layer )
     {
         wxControl*  ctl = getName( layer );
 
@@ -350,7 +350,7 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
 
 void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes( LAYER_MSK enabledLayers )
 {
-    for( int layer=0;  layer<NB_LAYERS;  ++layer )
+    for( LAYER_NUM layer=FIRST_LAYER; layer<NB_PCB_LAYERS; ++layer )
     {
         setLayerCheckBox( layer, GetLayerMask( layer ) & enabledLayers );
     }
@@ -376,7 +376,7 @@ void DIALOG_LAYERS_SETUP::showPresets( LAYER_MSK enabledLayers )
 
 void DIALOG_LAYERS_SETUP::showLayerTypes()
 {
-    for( int copperLayer =  FIRST_COPPER_LAYER;
+    for( LAYER_NUM copperLayer = FIRST_COPPER_LAYER;
              copperLayer <= LAST_COPPER_LAYER; ++copperLayer )
     {
         wxChoice* ctl = getChoice( copperLayer );
@@ -389,7 +389,7 @@ LAYER_MSK DIALOG_LAYERS_SETUP::getUILayerMask()
 {
     LAYER_MSK layerMaskResult = NO_LAYERS;
 
-    for( int layer=0;  layer<NB_LAYERS;  ++layer )
+    for( LAYER_NUM layer=FIRST_LAYER; layer<NB_PCB_LAYERS; ++layer )
     {
         wxCheckBox*  ctl = getCheckBox( layer );
         if( ctl->GetValue() )
@@ -402,7 +402,7 @@ LAYER_MSK DIALOG_LAYERS_SETUP::getUILayerMask()
 }
 
 
-void DIALOG_LAYERS_SETUP::setLayerCheckBox( int aLayer, bool isChecked )
+void DIALOG_LAYERS_SETUP::setLayerCheckBox( LAYER_NUM aLayer, bool isChecked )
 {
     wxCheckBox*  ctl = getCheckBox( aLayer );
     ctl->SetValue(  isChecked );
@@ -427,8 +427,7 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
         setLayerCheckBox( LAYER_N_FRONT, false );
     }
 
-    int layer;
-    for( layer=LAYER_N_2; layer < NB_COPPER_LAYERS-1;  ++layer, --copperCount )
+    for( LAYER_NUM layer=LAYER_N_2; layer < NB_COPPER_LAYERS-1; ++layer, --copperCount )
     {
         bool state = copperCount > 0;
 
@@ -548,10 +547,10 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
          */
         m_Pcb->SetVisibleLayers( m_EnabledLayers );
 
-        for( int layer =  FIRST_COPPER_LAYER;
+        for( LAYER_NUM layer = FIRST_COPPER_LAYER;
                  layer <= LAST_COPPER_LAYER; ++layer )
         {
-            if( (1<<layer) & m_EnabledLayers )
+            if( GetLayerMask( layer ) & m_EnabledLayers )
             {
                 name = getLayerName( layer );
 
@@ -571,7 +570,7 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
     }
 }
 
-int DIALOG_LAYERS_SETUP::getLayerTypeIndex( int aLayer )
+int DIALOG_LAYERS_SETUP::getLayerTypeIndex( LAYER_NUM aLayer )
 {
     wxChoice*  ctl =  getChoice( aLayer );
 
@@ -580,7 +579,7 @@ int DIALOG_LAYERS_SETUP::getLayerTypeIndex( int aLayer )
     return ret;
 }
 
-wxString DIALOG_LAYERS_SETUP::getLayerName( int aLayer )
+wxString DIALOG_LAYERS_SETUP::getLayerName( LAYER_NUM aLayer )
 {
     wxString ret;
 
@@ -607,10 +606,10 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
 
     wxTextCtrl*  ctl;
 
-    for( int layer=0;  layer<=LAST_COPPER_LAYER;  ++layer )
+    for( LAYER_NUM layer=FIRST_LAYER; layer<=LAST_COPPER_LAYER; ++layer )
     {
         // we _can_ rely on m_EnabledLayers being current here:
-        if( !(m_EnabledLayers & (1<<layer)) )
+        if( !(m_EnabledLayers & GetLayerMask( layer )) )
             continue;
 
         wxString name = getLayerName( layer );
@@ -677,16 +676,16 @@ void PCB_EDIT_FRAME::InstallDialogLayerSetup()
 
     // If the current active layer was removed, find the next avaiable layer to set as the
     // active layer.
-    if( ( ( 1 << getActiveLayer() ) & GetBoard()->GetEnabledLayers() ) == 0 )
+    if( !( GetLayerMask( getActiveLayer() ) & GetBoard()->GetEnabledLayers() ) )
     {
-        for( int i = 0;  i < LAYER_COUNT;  i++ )
+        for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
         {
-            int tmp = i;
+            LAYER_NUM tmp = i;
 
-            if( i >= LAYER_COUNT )
-                tmp = i - LAYER_COUNT;
+            if( i >= NB_LAYERS )
+                tmp = i - NB_LAYERS;
 
-            if( ( 1 << tmp ) & GetBoard()->GetEnabledLayers() )
+            if( GetLayerMask( tmp ) & GetBoard()->GetEnabledLayers() )
             {
                 wxLogDebug( wxT( "Setting current layer to  %d." ), getActiveLayer() );
                 setActiveLayer( tmp, true );

@@ -183,7 +183,7 @@ public:
      */
     bool IsOnCopperLayer( void ) const
     {
-        return ( GetLayer() < FIRST_NO_COPPER_LAYER ) ? true : false;
+        return ( GetLayer() < FIRST_NON_COPPER_LAYER ) ? true : false;
     }
 
     /**

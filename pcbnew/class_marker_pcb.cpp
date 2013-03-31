@@ -86,7 +86,7 @@ MARKER_PCB::~MARKER_PCB()
  * param aLayer The layer to test for.
  * return bool - true if on given layer, else false.
  */
-bool MARKER_PCB::IsOnLayer( int aLayer ) const
+bool MARKER_PCB::IsOnLayer( LAYER_NUM aLayer ) const
 {
     return IsValidCopperLayerIndex( aLayer );
 }

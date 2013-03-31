@@ -54,7 +54,7 @@
  */
 
 
-EDA_COLOR_T BRDITEMS_PLOTTER::getColor( int aLayer )
+EDA_COLOR_T BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
     EDA_COLOR_T color = m_board->GetLayerColor( aLayer );
     if (color == WHITE)
@@ -107,9 +107,9 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     bool trace_ref = GetPlotReference();
 
     TEXTE_MODULE* textModule = &aModule->Reference();
-    unsigned      textLayer = textModule->GetLayer();
+    LAYER_NUM     textLayer = textModule->GetLayer();
 
-    if( textLayer >= LAYER_COUNT )
+    if( textLayer >= NB_LAYERS )
         return false;
 
     if( ( GetLayerMask( textLayer ) & m_layerMask ) == 0 )
@@ -121,7 +121,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     textModule = &aModule->Value();
     textLayer = textModule->GetLayer();
 
-    if( textLayer > LAYER_COUNT )
+    if( textLayer > NB_LAYERS )
         return false;
 
     if( ( GetLayerMask( textLayer ) & m_layerMask ) == 0 )
@@ -161,7 +161,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 
         textLayer = textModule->GetLayer();
 
-        if( textLayer >= LAYER_COUNT )
+        if( textLayer >= NB_LAYERS )
             return false;
 
         if( !( GetLayerMask( textLayer ) & m_layerMask ) )

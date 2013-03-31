@@ -144,16 +144,16 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent )
 
 void DIALOG_PRINT_USING_PRINTER::InitValues( )
 {
-    int      layer_max = NB_LAYERS;
+    LAYER_NUM layer_max = NB_PCB_LAYERS;
     wxString msg;
     BOARD*   board = m_parent->GetBoard();
 
     s_Parameters.m_PageSetupData = s_pageSetupData;
 
      // Create layer list.
-    int      layer;
+    LAYER_NUM layer;
     wxString layerKey;
-    for( layer = 0; layer < NB_LAYERS; ++layer )
+    for( layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
         if( !board->IsLayerEnabled( layer ) )
             m_BoxSelectLayer[layer] = NULL;
@@ -166,16 +166,16 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     //  List layers in same order than in setup layers dialog
     // (Front or Top to Back or Bottom)
     DECLARE_LAYERS_ORDER_LIST(layersOrder);
-    for( int layer_idx = 0; layer_idx < NB_LAYERS; ++layer_idx )
+    for( LAYER_NUM layer_idx = FIRST_LAYER; layer_idx < NB_PCB_LAYERS; ++layer_idx )
     {
         layer = layersOrder[layer_idx];
 
-        wxASSERT(layer < NB_LAYERS);
+        wxASSERT(layer < NB_PCB_LAYERS);
 
         if( m_BoxSelectLayer[layer] == NULL )
             continue;
 
-        if( layer < NB_COPPER_LAYERS )
+        if( layer <= LAST_COPPER_LAYER )
             m_CopperLayersBoxSizer->Add( m_BoxSelectLayer[layer],
                                      0, wxGROW | wxALL, 1 );
         else
@@ -280,11 +280,10 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
 {
     int page_count;
-    int layers_count = NB_LAYERS;
 
     s_Parameters.m_PrintMaskLayer = NO_LAYERS;
-    int ii;
-    for( ii = 0, page_count = 0; ii < layers_count; ii++ )
+    LAYER_NUM ii;
+    for( ii = FIRST_LAYER, page_count = 0; ii < NB_PCB_LAYERS; ++ii )
     {
         if( m_BoxSelectLayer[ii] == NULL )
             continue;
@@ -324,7 +323,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_config->Write( OPTKEY_PRINT_PAGE_PER_LAYER, s_Parameters.m_OptionPrintPage );
         m_config->Write( OPTKEY_PRINT_PADS_DRILL, (long) s_Parameters.m_DrillShapeOpt );
         wxString layerKey;
-        for( int layer = 0; layer < NB_LAYERS;  ++layer )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS;  ++layer )
         {
             if( m_BoxSelectLayer[layer] == NULL )
                 continue;

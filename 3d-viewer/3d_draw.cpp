@@ -56,14 +56,14 @@ extern void CheckGLError();
 
  /* returns true if aLayer should be displayed, false otherwise
   */
-static bool    Is3DLayerEnabled( int aLayer );
+static bool    Is3DLayerEnabled( LAYER_NUM aLayer );
 
  /* returns the Z orientation parameter 1.0 or -1.0 for aLayer
   * Z orientation is 1.0 for all layers but "back" layers:
   *  LAYER_N_BACK , ADHESIVE_N_BACK, SOLDERPASTE_N_BACK ), SILKSCREEN_N_BACK
   * used to calculate the Z orientation parameter for glNormal3f
   */
-static GLfloat  Get3DLayer_Z_Orientation( int aLayer );
+static GLfloat  Get3DLayer_Z_Orientation( LAYER_NUM aLayer );
 
 void EDA_3D_CANVAS::Redraw( bool finish )
 {
@@ -163,7 +163,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
             Draw3D_Via( (SEGVIA*) track );
         else
         {
-            int    layer = track->GetLayer();
+            LAYER_NUM layer = track->GetLayer();
 
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) )
                 Draw3D_Track( track );
@@ -174,7 +174,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     {
         for( int ii = 0; ii < pcb->GetAreaCount(); ii++ )
         {
-            int layer = pcb->GetArea( ii )->GetLayer();
+            LAYER_NUM layer = pcb->GetArea( ii )->GetLayer();
 
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer )  )
                 Draw3D_Zone( pcb->GetArea( ii ) );
@@ -236,8 +236,8 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
  */
 void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
 {
-    int layer = aZone->GetLayer();
-    int color = g_ColorsSettings.GetLayerColor( layer );
+    LAYER_NUM layer = aZone->GetLayer();
+    EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
     int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
 
     if( layer == LAST_COPPER_LAYER )
@@ -456,7 +456,7 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
 
 void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
 {
-    int layer = aTrack->GetLayer();
+    LAYER_NUM layer = aTrack->GetLayer();
     int color = g_ColorsSettings.GetLayerColor( layer );
     int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
 
@@ -475,7 +475,7 @@ void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
 
 void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
 {
-    int    layer, top_layer, bottom_layer;
+    LAYER_NUM layer, top_layer, bottom_layer;
     int    color;
     double biu_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits ;
 
@@ -486,7 +486,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
     via->ReturnLayerPair( &top_layer, &bottom_layer );
 
     // Drawing horizontal thick rings:
-    for( layer = bottom_layer; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
+    for( layer = bottom_layer; layer < g_Parm_3D_Visu.m_CopperLayersCount; ++layer )
     {
         int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
 
@@ -530,7 +530,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
 
 void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 {
-    int layer = segment->GetLayer();
+    LAYER_NUM layer = segment->GetLayer();
     int color = g_ColorsSettings.GetLayerColor( layer );
     int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
 
@@ -538,7 +538,7 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 
     if( layer == EDGE_N )
     {
-        for( layer = 0; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
+        for( layer = FIRST_LAYER; layer < g_Parm_3D_Visu.m_CopperLayersCount; ++layer )
         {
             glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU(layer);
@@ -624,7 +624,7 @@ static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
 
 void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
 {
-    int layer = text->GetLayer();
+    LAYER_NUM layer = text->GetLayer();
     int color = g_ColorsSettings.GetLayerColor( layer );
 
     SetGLColor( color );
@@ -754,7 +754,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( m_Layer ) == false )
         return;
 
-    int color = g_ColorsSettings.GetLayerColor( m_Layer );
+    EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( m_Layer );
     SetGLColor( color );
 
     // for outline shape = S_POLYGON:
@@ -790,7 +790,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 
     if( m_Layer == EDGE_N )
     {
-        for( int layer = 0; layer < g_Parm_3D_Visu.m_CopperLayersCount; layer++ )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < g_Parm_3D_Visu.m_CopperLayersCount; ++layer )
         {
             glNormal3f( 0.0, 0.0, Get3DLayer_Z_Orientation( layer ) );
             int zpos = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );
@@ -948,7 +948,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
     switch( GetShape() )
     {
     case PAD_CIRCLE:
-        for( int layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
+        for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
         {
             if( layer && (layer == nlmax) )
                 layer = LAYER_N_FRONT;
@@ -1007,7 +1007,6 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
         wxPoint coord[5];
         BuildPadPolygon( coord, wxSize(0,0), m_Orient );
         for( int ii = 0; ii < 4; ii ++ )
-
         {
             CPolyPt pt( coord[ii].x + shape_pos.x, coord[ii].y+ shape_pos.y );
             polyPadShape.push_back( pt );
@@ -1027,7 +1026,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 
     if( polyPadShape.size() )
     {
-        for( int layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; layer++ )
+        for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
         {
             if( layer && (layer == nlmax) )
                 layer = LAYER_N_FRONT;
@@ -1061,41 +1060,41 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 
 }
 
-bool Is3DLayerEnabled( int aLayer )
+bool Is3DLayerEnabled( LAYER_NUM aLayer )
 {
-    int flg = -1;
+    int flg;
 
     // see if layer needs to be shown
     // check the flags
     switch (aLayer)
     {
         case DRAW_N:
-            flg=g_Parm_3D_Visu.FL_DRAWINGS;
+            flg = g_Parm_3D_Visu.FL_DRAWINGS;
             break;
 
         case COMMENT_N:
-            flg=g_Parm_3D_Visu.FL_COMMENTS;
+            flg = g_Parm_3D_Visu.FL_COMMENTS;
             break;
 
         case ECO1_N:
-            flg=g_Parm_3D_Visu.FL_ECO1;
+            flg = g_Parm_3D_Visu.FL_ECO1;
             break;
 
         case ECO2_N:
-            flg=g_Parm_3D_Visu.FL_ECO2;
+            flg = g_Parm_3D_Visu.FL_ECO2;
             break;
-    }
 
+        default:
     // the layer was not a layer with a flag, so show it
-    if( flg < 0 )
         return true;
+    }
 
     // if the layer has a flag, return the flag
     return g_Parm_3D_Visu.m_DrawFlags[flg];
 }
 
 
-GLfloat Get3DLayer_Z_Orientation( int aLayer )
+GLfloat Get3DLayer_Z_Orientation( LAYER_NUM aLayer )
 {
     double nZ;
 

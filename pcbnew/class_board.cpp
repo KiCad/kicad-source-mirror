@@ -75,7 +75,7 @@ BOARD::BOARD() :
 
     BuildListOfNets();                      // prepare pad and netlist containers.
 
-    for( int layer = 0; layer < LAYER_COUNT; ++layer )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
     {
         m_Layer[layer].m_Name = GetStandardLayerName( layer );
 
@@ -344,7 +344,7 @@ int BOARD::GetCurrentMicroViaDrill()
 }
 
 
-bool BOARD::SetLayer( int aIndex, const LAYER& aLayer )
+bool BOARD::SetLayer( LAYER_NUM aIndex, const LAYER& aLayer )
 {
     if( aIndex < NB_COPPER_LAYERS )
     {
@@ -356,9 +356,9 @@ bool BOARD::SetLayer( int aIndex, const LAYER& aLayer )
 }
 
 
-wxString BOARD::GetLayerName( int aLayerIndex ) const
+wxString BOARD::GetLayerName( LAYER_NUM aLayerIndex ) const
 {
-    if( !IsValidLayerIndex( aLayerIndex ) )
+    if( !IsValidPcbLayerIndex( aLayerIndex ) )
         return wxEmptyString;
 
     // All layer names are stored in the BOARD.
@@ -368,7 +368,7 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
         // over-ridden by BOARD::SetLayerName().
         // For copper layers, return the actual copper layer name,
         // otherwise return the Standard English layer name.
-        if( aLayerIndex < FIRST_NO_COPPER_LAYER )
+        if( aLayerIndex < FIRST_NON_COPPER_LAYER )
             return m_Layer[aLayerIndex].m_Name;
     }
 
@@ -376,7 +376,7 @@ wxString BOARD::GetLayerName( int aLayerIndex ) const
 }
 
 
-wxString BOARD::GetStandardLayerName( int aLayerNumber )
+wxString BOARD::GetStandardLayerName( LAYER_NUM aLayerNumber )
 {
     const wxChar* txt;
 
@@ -422,7 +422,7 @@ wxString BOARD::GetStandardLayerName( int aLayerNumber )
 }
 
 
-bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
+bool BOARD::SetLayerName( LAYER_NUM aLayerIndex, const wxString& aLayerName )
 {
     if( !IsValidCopperLayerIndex( aLayerIndex ) )
         return false;
@@ -441,7 +441,7 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
 
     if( IsLayerEnabled( aLayerIndex ) )
     {
-        for( int i = 0; i < NB_COPPER_LAYERS; i++ )
+        for( LAYER_NUM i = FIRST_COPPER_LAYER; i < NB_COPPER_LAYERS; ++i )
         {
             if( i != aLayerIndex && IsLayerEnabled( i ) && NameTemp == m_Layer[i].m_Name )
                 return false;
@@ -456,7 +456,7 @@ bool BOARD::SetLayerName( int aLayerIndex, const wxString& aLayerName )
 }
 
 
-LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
+LAYER_T BOARD::GetLayerType( LAYER_NUM aLayerIndex ) const
 {
     if( !IsValidCopperLayerIndex( aLayerIndex ) )
         return LT_SIGNAL;
@@ -470,7 +470,7 @@ LAYER_T BOARD::GetLayerType( int aLayerIndex ) const
 }
 
 
-bool BOARD::SetLayerType( int aLayerIndex, LAYER_T aLayerType )
+bool BOARD::SetLayerType( LAYER_NUM aLayerIndex, LAYER_T aLayerType )
 {
     if( !IsValidCopperLayerIndex( aLayerIndex ) )
         return false;
@@ -574,7 +574,7 @@ void BOARD::SetVisibleElements( int aMask )
     for( int ii = 0; ii < PCB_VISIBLE( END_PCB_VISIBLE_LIST ); ii++ )
     {
         int item_mask = 1 << ii;
-        SetElementVisibility( ii, bool( aMask & item_mask ) );
+        SetElementVisibility( ii, aMask & item_mask );
     }
 }
 
@@ -683,19 +683,19 @@ void BOARD::SetVisibleElementColor( int aPCB_VISIBLE, EDA_COLOR_T aColor )
 }
 
 
-void BOARD::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
+void BOARD::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     GetColorsSettings()->SetLayerColor( aLayer, aColor );
 }
 
 
-EDA_COLOR_T BOARD::GetLayerColor( int aLayer ) const
+EDA_COLOR_T BOARD::GetLayerColor( LAYER_NUM aLayer ) const
 {
     return GetColorsSettings()->GetLayerColor( aLayer );
 }
 
 
-bool BOARD::IsModuleLayerVisible( int layer )
+bool BOARD::IsModuleLayerVisible( LAYER_NUM layer )
 {
     if( layer==LAYER_N_FRONT )
         return IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) );
@@ -1195,16 +1195,16 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 /*  now using PcbGeneralLocateAndDisplay(), but this remains a useful example
  *   of how the INSPECTOR can be used in a lightweight way.
  *  // see pcbstruct.h
- *  BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, int layer )
+ *  BOARD_ITEM* BOARD::FindPadOrModule( const wxPoint& refPos, LAYER_NUM layer )
  *  {
  *   class PadOrModule : public INSPECTOR
  *   {
  *   public:
  *       BOARD_ITEM*         found;
- *       int                 layer;
+ *       LAYER_NUM           layer;
  *       int                 layer_mask;
  *
- *       PadOrModule( int alayer ) :
+ *       PadOrModule( LAYER_NUM alayer ) :
  *           found(0), layer(alayer), layer_mask( g_TabOneLayerMask[alayer] )
  *       {}
  *
@@ -1437,7 +1437,7 @@ int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCoun
 }
 
 
-void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, int aLayer )
+void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, LAYER_NUM aLayer )
 {
     if( !aDC )
         return;
@@ -1452,7 +1452,7 @@ void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE a
 }
 
 
-void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, int aLayer )
+void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, LAYER_NUM aLayer )
 {
     if( !aDC )
         return;
@@ -1468,8 +1468,8 @@ void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDr
 
 
 ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
-                                                int            aStartLayer,
-                                                int            aEndLayer )
+                                                LAYER_NUM      aStartLayer,
+                                                LAYER_NUM      aEndLayer )
 {
     if( aEndLayer < 0 )
         aEndLayer = aStartLayer;
@@ -1480,7 +1480,7 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
     for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
     {
         ZONE_CONTAINER* area  = m_ZoneDescriptorList[ia];
-        int             layer = area->GetLayer();
+        LAYER_NUM       layer = area->GetLayer();
 
         if( (layer < aStartLayer) || (layer > aEndLayer) )
             continue;
@@ -1531,7 +1531,7 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
 }
 
 
-TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, int aLayerMask )
+TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, LAYER_NUM aLayer)
 {
     TRACK* track;
 
@@ -1546,10 +1546,10 @@ TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, int aLayerMask )
         if( track->GetState( BUSY | IS_DELETED ) )
             continue;
 
-        if( aLayerMask < 0 )
+        if( aLayer == UNDEFINED_LAYER )
             break;
 
-        if( track->IsOnLayer( aLayerMask ) )
+        if( track->IsOnLayer( aLayer ) )
             break;
     }
 
@@ -1751,7 +1751,7 @@ TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, LAYER_MSK aLaye
 {
     for( TRACK* track = aTrace;   track;  track =  track->Next() )
     {
-        int layer = track->GetLayer();
+        LAYER_NUM layer = track->GetLayer();
 
         if( track->GetState( BUSY | IS_DELETED ) )
             continue;
@@ -1893,7 +1893,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
          * if there are on the same layer, the via is on the selected track
          * if there are on different layers, the via is on an other track
          */
-        int layer = track->GetLayer();
+        LAYER_NUM layer = track->GetLayer();
 
         while( ( track = ::GetTrace( track->Next(), NULL, via->GetStart(), layerMask ) ) != NULL )
         {
@@ -2018,7 +2018,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
 }
 
 
-MODULE* BOARD::GetFootprint( const wxPoint& aPosition, int aActiveLayer,
+MODULE* BOARD::GetFootprint( const wxPoint& aPosition, LAYER_NUM aActiveLayer,
                              bool aVisibleOnly, bool aIgnoreLocked )
 {
     MODULE* pt_module;
@@ -2026,7 +2026,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, int aActiveLayer,
     MODULE* Altmodule   = NULL;
     int     min_dim     = 0x7FFFFFFF;
     int     alt_min_dim = 0x7FFFFFFF;
-    int     layer;
+    LAYER_NUM layer;
 
     for( pt_module = m_Modules;  pt_module;  pt_module = (MODULE*) pt_module->Next() )
     {
@@ -2213,7 +2213,7 @@ void BOARD::SetTrackWidthIndex( unsigned aIndex )
 
 
 ZONE_CONTAINER* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
-                                int aLayer, wxPoint aStartPointPosition, int aHatch )
+                                LAYER_NUM aLayer, wxPoint aStartPointPosition, int aHatch )
 {
     ZONE_CONTAINER* new_area = InsertArea( aNetcode,
                                            m_ZoneDescriptorList.size( ) - 1,
@@ -2248,7 +2248,7 @@ void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to
 }
 
 
-ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int y, int hatch )
+ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, LAYER_NUM layer, int x, int y, int hatch )
 {
     ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
 

@@ -336,8 +336,8 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
 {
     unsigned    totalHoleCount;
     char        line[1024];
-    int         layer1  = LAYER_N_BACK;
-    int         layer2  = LAYER_N_FRONT;
+    LAYER_NUM   layer1 = LAYER_N_BACK;
+    LAYER_NUM   layer2 = LAYER_N_FRONT;
     bool        gen_through_holes   = true;
     bool        gen_NPTH_holes      = false;
 
@@ -443,7 +443,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
                     continue;
                 }
 
-                layer1++; layer2++;           // use next layer pair
+                ++layer1; ++layer2;           // use next layer pair
 
                 if( layer2 == m_pcb->GetCopperLayerCount() - 1 )
                     layer2 = LAYER_N_FRONT; // the last layer is always the

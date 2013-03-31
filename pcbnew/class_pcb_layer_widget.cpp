@@ -151,7 +151,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         for( int row=rowCount-1;  row>=0;  --row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            int layer = getDecodedId( cb->GetId() );
+            LAYER_NUM layer = getDecodedId( cb->GetId() );
             if( IsValidCopperLayerIndex( layer ) )
             {
                 lastCu = row;
@@ -162,7 +162,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         for( int row=0;  row<rowCount;  ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, 3 );
-            int layer = getDecodedId( cb->GetId() );
+            LAYER_NUM layer = getDecodedId( cb->GetId() );
 
             if( IsValidCopperLayerIndex( layer ) )
             {
@@ -241,7 +241,7 @@ void PCB_LAYER_WIDGET::SyncLayerVisibilities()
 
         wxWindow* w = getLayerComp( row, 0 );
 
-        int layerId = getDecodedId( w->GetId() );
+        LAYER_NUM layerId = getDecodedId( w->GetId() );
 
         // this does not fire a UI event
         SetLayerVisible( layerId, board->IsLayerVisible( layerId ) );
@@ -252,7 +252,7 @@ void PCB_LAYER_WIDGET::SyncLayerVisibilities()
 void PCB_LAYER_WIDGET::ReFill()
 {
     BOARD*  brd = myframe->GetBoard();
-    int     layer;
+    LAYER_NUM layer;
 
     int enabledLayers = brd->GetEnabledLayers();
 
@@ -269,7 +269,7 @@ void PCB_LAYER_WIDGET::ReFill()
             brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ), _("Front copper layer"), true ) );
     }
 
-    for( layer = LAYER_N_FRONT-1;  layer >= 1;  --layer )
+    for( layer = LAYER_N_FRONT-1; layer >= 1; --layer )
     {
         if( enabledLayers & GetLayerMask( layer ) )
         {
@@ -287,7 +287,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
     // technical layers are shown in this order:
     static const struct {
-        int         layerId;
+        LAYER_NUM   layerId;
         wxString    tooltip;
     } techLayerSeq[] = {
         { ADHESIVE_N_FRONT,     _( "Adhesive on board's front" )    },
@@ -324,7 +324,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
-void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
+void PCB_LAYER_WIDGET::OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     myframe->GetBoard()->SetLayerColor( aLayer, aColor );
     myframe->ReCreateLayerBox( NULL );
@@ -332,7 +332,7 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
 }
 
 
-bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
+bool PCB_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
 {
     // the layer change from the PCB_LAYER_WIDGET can be denied by returning
     // false from this function.
@@ -345,7 +345,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
 }
 
 
-void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
+void PCB_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
 {
     BOARD* brd = myframe->GetBoard();
 

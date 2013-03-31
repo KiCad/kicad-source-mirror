@@ -37,15 +37,15 @@ public:
 
     // Returns a color index from the layer id
     // Virtual function
-    EDA_COLOR_T GetLayerColor( int aLayerIndex ) const;
+    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayerIndex ) const;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function
-    bool IsLayerEnabled( int aLayerIndex ) const { return true; };
+    bool IsLayerEnabled( LAYER_NUM aLayerIndex ) const { return true; };
 
     // Returns the name of the layer id
     // Virtual function
-    wxString GetLayerName( int aLayerIndex ) const;
+    wxString GetLayerName( LAYER_NUM aLayerIndex ) const;
 };
 
 #endif //CLASS_GBR_LAYER_BOX_SELECTOR_H

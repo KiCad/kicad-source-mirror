@@ -156,7 +156,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     }
 
     save_opt = DisplayOpt;
-    int activeLayer = GetScreen()->m_Active_Layer;
+    LAYER_NUM activeLayer = GetScreen()->m_Active_Layer;
 
     DisplayOpt.ContrastModeDisplay = false;
     DisplayOpt.DisplayPadFill = true;
@@ -172,9 +172,9 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             DisplayOpt.DisplayPadFill = true;
 
             // Calculate the active layer number to print from its mask layer:
-            GetScreen()->m_Active_Layer = 0;
+            GetScreen()->m_Active_Layer = FIRST_LAYER;
 
-            for(int kk = 0; kk < 32; kk ++ )
+            for( LAYER_NUM kk = FIRST_LAYER; kk < NB_LAYERS; ++kk )
             {
                 if( GetLayerMask( kk ) & aPrintMaskLayer )
                 {

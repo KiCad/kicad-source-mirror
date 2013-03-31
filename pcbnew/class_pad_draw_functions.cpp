@@ -240,8 +240,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         // when routing tracks
         if( frame && frame->GetToolId() == ID_TRACK_BUTT )
         {
-            int routeTop = screen->m_Route_Layer_TOP;
-            int routeBot = screen->m_Route_Layer_BOTTOM;
+            LAYER_NUM routeTop = screen->m_Route_Layer_TOP;
+            LAYER_NUM routeBot = screen->m_Route_Layer_BOTTOM;
 
             // if routing between copper and component layers,
             // or the current layer is one of said 2 external copper layers,

@@ -123,7 +123,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 /************************************************************************/
 {
     SetFocus();
-    int      layer_max = GERBVIEW_LAYER_COUNT;
+    LAYER_NUM layer_max = NB_GERBER_LAYERS;
     wxString msg;
 
     if( g_pageSetupData == NULL )
@@ -137,11 +137,11 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
     s_Parameters.m_PageSetupData = g_pageSetupData;
 
-    layer_max = 32;
+    layer_max = NB_LAYERS;
     // Create layer list
-    int mask = 1, ii;
-    for( ii = 0; ii < layer_max; ii++, mask <<= 1 )
+    for(LAYER_NUM ii = FIRST_LAYER; ii < layer_max; ++ii )
     {
+        LAYER_MSK mask = GetLayerMask( ii );
         msg = _( "Layer" );
         msg << wxT( " " ) << ii + 1;
         m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
@@ -176,7 +176,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             s_Parameters.m_XScaleAdjust = s_Parameters.m_YScaleAdjust = 1.0;
 
         s_SelectedLayers = 0;
-        for( int layer = 0;  layer<layer_max;  ++layer )
+        for( LAYER_NUM layer = FIRST_LAYER; layer<layer_max; ++layer )
         {
             wxString layerKey;
             bool     option;
@@ -225,8 +225,7 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerMaskFromListSelection()
 {
     int page_count = 0;
     s_Parameters.m_PrintMaskLayer = NO_LAYERS;
-    int ii;
-    for( ii = 0, page_count = 0; ii < GERBVIEW_LAYER_COUNT; ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < NB_GERBER_LAYERS; ++ii )
     {
         if( m_BoxSelectLayer[ii]->IsChecked() )
         {
@@ -255,7 +254,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_Config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
         m_Config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
         wxString layerKey;
-        for( int layer = 0;  layer < GERBVIEW_LAYER_COUNT;  ++layer )
+        for( LAYER_NUM layer = FIRST_LAYER; layer < NB_GERBER_LAYERS; ++layer )
         {
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
             m_Config->Write( layerKey, m_BoxSelectLayer[layer]->IsChecked() );

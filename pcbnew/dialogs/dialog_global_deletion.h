@@ -11,11 +11,11 @@ class DIALOG_GLOBAL_DELETION: public DIALOG_GLOBAL_DELETION_BASE
 {
 private:
     PCB_EDIT_FRAME * m_Parent;
-    int m_currentLayer;
+    LAYER_NUM m_currentLayer;
 
 public:
     DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent );
-    void SetCurrentLayer( int aLayer );
+    void SetCurrentLayer( LAYER_NUM aLayer );
 
 private:
     void OnOkClick( wxCommandEvent& event )

@@ -98,9 +98,11 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
         break;
     }
 
-    for( int layer_number = FIRST_NO_COPPER_LAYER, ii = 0;
-         layer_number <= LAST_NO_COPPER_LAYER;
-         layer_number++, ii++ )
+    int ii;
+    LAYER_NUM layer_number;
+    for( layer_number = FIRST_NON_COPPER_LAYER, ii = 0;
+         layer_number <= LAST_NON_COPPER_LAYER;
+         ++layer_number, ++ii )
     {
         wxString msg;
 
@@ -171,7 +173,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnOkClick( wxCommandEvent& event )
         return;
     }
 
-    m_settings.m_CurrentZone_Layer = ii + FIRST_NO_COPPER_LAYER;
+    m_settings.m_CurrentZone_Layer = FIRST_NON_COPPER_LAYER + ii;
 
     *m_ptr = m_settings;
 

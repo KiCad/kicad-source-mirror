@@ -96,7 +96,7 @@ struct FLAT_FAN
     {
         pts.push_back( POINT_2D( x, y ) );
     }
-    void bag( int layer, bool close = true );
+    void bag( LAYER_NUM layer, bool close = true );
 };
 
 // A flat quad ring
@@ -114,7 +114,7 @@ struct FLAT_RING
         outer.push_back( POINT_2D( x, y ) );
     }
 
-    void bag( int layer, bool close = true );
+    void bag( LAYER_NUM layer, bool close = true );
 };
 
 // A vertical quad loop
@@ -131,11 +131,11 @@ struct VLoop
 };
 
 // The bags for all the layers
-static TRIANGLEBAG layer_triangles[LAYER_COUNT];
+static TRIANGLEBAG layer_triangles[NB_LAYERS];
 static TRIANGLEBAG via_triangles[4];
-static double      layer_z[LAYER_COUNT];
+static double      layer_z[NB_LAYERS];
 
-static void bag_flat_triangle( int layer, //{{{
+static void bag_flat_triangle( LAYER_NUM layer, //{{{
                                double x1, double y1,
                                double x2, double y2,
                                double x3, double y3 )
@@ -146,7 +146,7 @@ static void bag_flat_triangle( int layer, //{{{
 }
 
 
-void FLAT_FAN::bag( int layer, bool close ) //{{{
+void FLAT_FAN::bag( LAYER_NUM layer, bool close ) //{{{
 {
     unsigned i;
 
@@ -158,7 +158,7 @@ void FLAT_FAN::bag( int layer, bool close ) //{{{
 }
 
 
-static void bag_flat_quad( int layer, //{{{
+static void bag_flat_quad( LAYER_NUM layer, //{{{
                            double x1, double y1,
                            double x2, double y2,
                            double x3, double y3,
@@ -169,7 +169,7 @@ static void bag_flat_quad( int layer, //{{{
 }
 
 
-void FLAT_RING::bag( int layer, bool close ) //{{{
+void FLAT_RING::bag( LAYER_NUM layer, bool close ) //{{{
 {
     unsigned i;
 
@@ -343,7 +343,7 @@ static void compute_layer_Zs( BOARD* pcb ) //{{{
     double half_thickness  = board_thickness / 2;
 
     // Compute each layer's Z value, more or less like the 3d view
-    for( int i = 0; i <= LAYER_N_FRONT; i++ )
+    for( LAYER_NUM i = FIRST_LAYER; i <= LAYER_N_FRONT; ++i )
     {
         if( i < copper_layers )
             layer_z[i] = board_thickness * i / (copper_layers - 1) - half_thickness;
@@ -370,7 +370,7 @@ static void compute_layer_Zs( BOARD* pcb ) //{{{
 }
 
 
-static void export_vrml_line( int layer, double startx, double starty, //{{{
+static void export_vrml_line( LAYER_NUM layer, double startx, double starty, //{{{
                               double endx, double endy, double width, int divisions )
 {
     double  r     = width / 2;
@@ -399,7 +399,7 @@ static void export_vrml_line( int layer, double startx, double starty, //{{{
 }
 
 
-static void export_vrml_circle( int layer, double startx, double starty,
+static void export_vrml_circle( LAYER_NUM layer, double startx, double starty, //{{{
                                 double endx, double endy, double width )
 {
     double   hole, radius;
@@ -419,7 +419,7 @@ static void export_vrml_circle( int layer, double startx, double starty,
 
 
 static void export_vrml_slot( TRIANGLEBAG& triangles, //{{{
-                              int top_layer, int bottom_layer, double xc, double yc,
+                              LAYER_NUM top_layer, LAYER_NUM bottom_layer, double xc, double yc,
                               double dx, double dy, int orient )
 {
     double capx, capy; // Cap center
@@ -478,7 +478,7 @@ static void export_vrml_hole( TRIANGLEBAG& triangles,
 }
 
 
-static void export_vrml_oval_pad( int layer, double xc, double yc,
+static void export_vrml_oval_pad( LAYER_NUM layer, double xc, double yc,
                                   double dx, double dy, int orient )
 {
     double  capx, capy; // Cap center
@@ -521,7 +521,7 @@ static void export_vrml_oval_pad( int layer, double xc, double yc,
 }
 
 
-static void export_vrml_arc( int layer, double centerx, double centery,
+static void export_vrml_arc( LAYER_NUM layer, double centerx, double centery,
                              double arc_startx, double arc_starty,
                              double width, double arc_angle )
 {
@@ -557,7 +557,7 @@ static void export_vrml_arc( int layer, double centerx, double centery,
 
 
 static void export_vrml_varc( TRIANGLEBAG& triangles,
-                              int top_layer, int bottom_layer,
+                              LAYER_NUM top_layer, LAYER_NUM bottom_layer,
                               double centerx, double centery,
                               double arc_startx, double arc_starty,
                               double arc_angle )
@@ -594,7 +594,7 @@ static void export_vrml_varc( TRIANGLEBAG& triangles,
 
 static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) //{{{
 {
-    int    layer = drawseg->GetLayer();
+    LAYER_NUM layer = drawseg->GetLayer();
     double w     = drawseg->GetWidth();
     double x     = drawseg->GetStart().x;
     double y     = drawseg->GetStart().y;
@@ -658,7 +658,7 @@ static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) //{{{
 /* C++ doesn't have closures and neither continuation forms... this is
  * for coupling the vrml_text_callback with the common parameters */
 
-static int s_text_layer;
+static LAYER_NUM s_text_layer;
 static int s_text_width;
 static void vrml_text_callback( int x0, int y0, int xf, int yf )
 {
@@ -735,13 +735,12 @@ static void export_vrml_drawings( BOARD* pcb ) //{{{
 }
 
 
-static void export_round_padstack( BOARD* pcb, double x, double y,
-                                   double r,
-                                   int bottom_layer, int top_layer )
+static void export_round_padstack( BOARD* pcb, double x, double y, double r, //{{{
+                                   LAYER_NUM bottom_layer, LAYER_NUM top_layer )
 {
     int copper_layers = pcb->GetCopperLayerCount( );
 
-    for( int layer = bottom_layer; layer < copper_layers; layer++ )
+    for( LAYER_NUM layer = bottom_layer; layer < copper_layers; ++layer )
     {
         // The last layer is always the component one, unless it's single face
         if( (layer > FIRST_COPPER_LAYER) && (layer == copper_layers - 1) )
@@ -756,7 +755,7 @@ static void export_round_padstack( BOARD* pcb, double x, double y,
 static void export_vrml_via( BOARD* pcb, SEGVIA* via ) //{{{
 {
     double x, y, r, hole;
-    int    top_layer, bottom_layer;
+    LAYER_NUM top_layer, bottom_layer;
 
     r    = via->GetWidth() / 2;
     hole = via->GetDrillValue() / 2;
@@ -813,7 +812,7 @@ static void export_vrml_zones( BOARD* pcb )
         if( width > 0 )
         {
             int      imax  = zone->m_FilledPolysList.size() - 1;
-            int      layer = zone->GetLayer();
+            LAYER_NUM layer = zone->GetLayer();
             CPolyPt* firstcorner = &zone->m_FilledPolysList[0];
             CPolyPt* begincorner = firstcorner;
 
@@ -866,7 +865,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module ) //{{{
 
 static void export_vrml_edge_module( EDGE_MODULE* aOutline ) //{{{
 {
-    int    layer = aOutline->GetLayer();
+    LAYER_NUM layer = aOutline->GetLayer();
     double x     = aOutline->GetStart().x;
     double y     = aOutline->GetStart().y;
     double xf    = aOutline->GetEnd().x;
@@ -933,7 +932,7 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* aPad ) //{{{
     double      pad_w     = aPad->GetSize().x / 2;
     double      pad_h     = aPad->GetSize().y / 2;
 
-    for( int layer = FIRST_COPPER_LAYER; layer < copper_layers; layer++ )
+    for( LAYER_NUM layer = FIRST_COPPER_LAYER; layer < copper_layers; ++layer )
     {
         // The last layer is always the component one, unless it's single face
         if( (layer > FIRST_COPPER_LAYER) && (layer == copper_layers - 1) )
@@ -1267,7 +1266,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
 
     /* Output the bagged triangles for each layer
      * Each layer will be a separate shape */
-    for( int layer = 0; layer < LAYER_COUNT; layer++ )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_LAYERS; ++layer )
         write_and_empty_triangle_bag( output_file,
                                       layer_triangles[layer],
                                       pcb->GetLayerColor(layer),

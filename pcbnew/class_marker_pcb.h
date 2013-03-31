@@ -69,7 +69,7 @@ public:
         return HitTestMarker( aPosition );
     }
 
-    bool IsOnLayer( int aLayer ) const;
+    bool IsOnLayer( LAYER_NUM aLayer ) const;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 

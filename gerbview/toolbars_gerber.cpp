@@ -291,7 +291,7 @@ void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 {
-    int layer = getActiveLayer();
+    LAYER_NUM layer = getActiveLayer();
     GERBER_IMAGE* gerber = g_GERBER_List[layer];
     int selected = ( gerber ) ? gerber->m_Selected_Tool : 0;
 

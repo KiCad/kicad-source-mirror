@@ -144,7 +144,7 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( int aLayer )
+void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( LAYER_NUM aLayer )
 {
     if( aLayer <= LAST_COPPER_LAYER )
     {

@@ -44,7 +44,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_IMAGE* aGerberpa
     EDA_ITEM( (EDA_ITEM*)aParent, TYPE_GERBER_DRAW_ITEM )
 {
     m_imageParams = aGerberparams;
-    m_Layer         = 0;
+    m_Layer         = FIRST_LAYER;
     m_Shape         = GBR_SEGMENT;
     m_Flashed       = false;
     m_DCode         = 0;

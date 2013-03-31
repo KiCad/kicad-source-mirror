@@ -51,7 +51,7 @@ public:
     int         m_tag;
     char        m_objType;
     int         m_PCadLayer;
-    int         m_KiCadLayer;
+    LAYER_NUM   m_KiCadLayer;
     int         m_timestamp;
     int         m_positionX;
     int         m_positionY;
@@ -70,7 +70,7 @@ public:
     virtual void    AddToModule( MODULE* aModule );
     virtual void    AddToBoard() = 0;
 
-    int GetKiCadLayer() { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
+    LAYER_NUM GetKiCadLayer() { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
     int GetNewTimestamp() { return m_callbacks->GetNewTimestamp(); }
     int GetNetCode( wxString aNetName ) { return m_callbacks->GetNetCode( aNetName ); }
 
@@ -78,7 +78,7 @@ protected:
     PCB_CALLBACKS*  m_callbacks;
     BOARD*          m_board;
 
-    int             FlipLayers( int aLayer );
+    LAYER_NUM       FlipLayers( LAYER_NUM aLayer );
 };
 
 WX_DEFINE_ARRAY( PCB_COMPONENT*, PCB_COMPONENTS_ARRAY );

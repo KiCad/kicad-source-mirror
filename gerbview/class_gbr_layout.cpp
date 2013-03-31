@@ -27,7 +27,7 @@ GBR_LAYOUT::~GBR_LAYOUT()
  * param aLayerIndex = The index of the layer to be tested
  * return bool - true if the layer is visible.
  */
-bool GBR_LAYOUT::IsLayerVisible( int aLayerIndex ) const
+bool GBR_LAYOUT::IsLayerVisible( LAYER_NUM aLayerIndex ) const
 {
     return m_printLayersMask & GetLayerMask( aLayerIndex );
 }

@@ -61,7 +61,7 @@ void PCB_PARSER::init()
     // Add untranslated default (i.e. english) layernames.
     // Some may be overridden later if parsing a board rather than a footprint.
     // The english name will survive if parsing only a footprint.
-    for( int layerNdx = 0;  layerNdx < NB_LAYERS;  ++layerNdx )
+    for( LAYER_NUM layerNdx = FIRST_LAYER;  layerNdx < NB_PCB_LAYERS;  ++layerNdx )
     {
         std::string untranslated = TO_UTF8( BOARD::GetStandardLayerName( layerNdx ) );
 
@@ -665,7 +665,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
     T           token;
     std::string name;
     std::string type;
-    int         layerIndex;
+    LAYER_NUM   layerIndex;
     bool        isVisible = true;
     LAYER_MSK   visibleLayers = NO_LAYERS;
     LAYER_MSK   enabledLayers = NO_LAYERS;
@@ -765,14 +765,14 @@ T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-int PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
+LAYER_NUM PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_layer, UNDEFINED_LAYER,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as layer." ) );
 
     NextTok();
 
-    int layerIndex = lookUpLayer<int>( m_layerIndices );
+    LAYER_NUM layerIndex = lookUpLayer<LAYER_NUM>( m_layerIndices );
 
     // Handle closing ) in object parser.
 
@@ -2323,11 +2323,11 @@ SEGVIA* PCB_PARSER::parseSEGVIA() throw( IO_ERROR, PARSE_ERROR )
 
         case T_layers:
             {
-                int layer1, layer2;
+                LAYER_NUM layer1, layer2;
                 NextTok();
-                layer1 = lookUpLayer<int>( m_layerIndices );
+                layer1 = lookUpLayer<LAYER_NUM>( m_layerIndices );
                 NextTok();
-                layer2 = lookUpLayer<int>( m_layerIndices );
+                layer2 = lookUpLayer<LAYER_NUM>( m_layerIndices );
                 via->SetLayerPair( layer1, layer2 );
                 NeedRIGHT();
             }

@@ -46,7 +46,7 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
     if( aTypeloc == CURSEUR_ON_GRILLE )
         ref = GetScreen()->GetNearestGridPosition( ref );
 
-    int layer = getActiveLayer();
+    LAYER_NUM layer = getActiveLayer();
 
     // Search first on active layer
     GERBER_DRAW_ITEM* gerb_item = GetItemsList();

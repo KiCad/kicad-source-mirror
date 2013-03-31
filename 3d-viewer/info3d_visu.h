@@ -93,7 +93,7 @@ public:
     double  m_CurrentZpos;                          // temporary storage of current value of Z position,
                                                     // used in some calculation
 private:
-    double  m_LayerZcoord[LAYER_COUNT];             // Z position of each layer (normalized)
+    double  m_LayerZcoord[NB_LAYERS];               // Z position of each layer (normalized)
     double  m_CopperThickness;                      // Copper thickness (normalized)
     double  m_EpoxyThickness;                       // Epoxy thickness (normalized)
     double  m_NonCopperLayerThickness;              // Non copper layers thickness
@@ -173,7 +173,7 @@ public: INFO3D_VISU();
      */
     int GetLayerObjectThicknessBIU( int aLayerId) const
     {
-        return aLayerId >= FIRST_NO_COPPER_LAYER ?
+        return aLayerId >= FIRST_NON_COPPER_LAYER ?
                         GetNonCopperLayerThicknessBIU() :
                         GetCopperThicknessBIU();
     }

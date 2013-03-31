@@ -65,7 +65,7 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
 /* EDITRACK.C : */
 /****************/
 
-TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoint& aRef );
+TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const wxPoint& aRef );
 
 void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                    bool aErase );

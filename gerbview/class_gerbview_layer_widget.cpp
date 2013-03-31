@@ -196,10 +196,9 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
 void GERBER_LAYER_WIDGET::ReFill()
 {
-    int     layer;
     ClearLayerRows();
 
-    for( layer = 0; layer < GERBVIEW_LAYER_COUNT; layer++ )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_GERBER_LAYERS; ++layer )
     {
         wxString msg;
         msg.Printf( _("Layer %d"), layer+1 );
@@ -212,18 +211,18 @@ void GERBER_LAYER_WIDGET::ReFill()
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
-void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
+void GERBER_LAYER_WIDGET::OnLayerColorChange( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 {
     myframe->SetLayerColor( aLayer, aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
     myframe->GetCanvas()->Refresh();
 }
 
-bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
+bool GERBER_LAYER_WIDGET::OnLayerSelect( LAYER_NUM aLayer )
 {
     // the layer change from the GERBER_LAYER_WIDGET can be denied by returning
     // false from this function.
-    int layer = myframe->getActiveLayer( );
+    LAYER_NUM layer = myframe->getActiveLayer( );
     myframe->setActiveLayer( aLayer, false );
     myframe->syncLayerBox();
 
@@ -233,7 +232,7 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
     return true;
 }
 
-void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
+void GERBER_LAYER_WIDGET::OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal )
 {
     LAYER_MSK visibleLayers = myframe->GetVisibleLayers();
 

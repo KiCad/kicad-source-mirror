@@ -71,7 +71,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     {
         m_Pos = module->GetPosition();
 
-        int moduleLayer = module->GetLayer();
+        LAYER_NUM moduleLayer = module->GetLayer();
 
         if( moduleLayer == LAYER_N_BACK )
             SetLayer( SILKSCREEN_N_BACK );
@@ -397,7 +397,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     BOARD* board = NULL;
     board = (BOARD*) module->GetParent();
 
-    if( m_Layer < NB_LAYERS && board )
+    if( m_Layer < NB_PCB_LAYERS && board )
         msg = board->GetLayerName( m_Layer );
     else
         msg.Printf( wxT( "%d" ), m_Layer );
@@ -426,7 +426,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
 
 // see class_text_mod.h
-bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
+bool TEXTE_MODULE::IsOnLayer( LAYER_NUM aLayer ) const
 {
     if( m_Layer == aLayer )
         return true;

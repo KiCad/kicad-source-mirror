@@ -535,7 +535,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 }
 
 
-TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoint& aRef )
+TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const wxPoint& aRef )
 {
     int     net   = aTrack->GetNet();
     int     width = aTrack->GetWidth();

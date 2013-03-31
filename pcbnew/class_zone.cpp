@@ -170,7 +170,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
         return;
 
     wxPoint seg_start, seg_end;
-    int     curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     BOARD*  brd   = GetBoard();
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
@@ -255,7 +255,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
         return;
 
     BOARD* brd = GetBoard();
-    int    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 
     if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
@@ -400,7 +400,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( DC == NULL )
         return;
 
-    int    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    LAYER_NUM curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     BOARD* brd   = GetBoard();
     EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
 

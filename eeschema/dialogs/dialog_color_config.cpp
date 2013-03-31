@@ -11,6 +11,7 @@
 #include <protos.h>
 
 #include <dialog_color_config.h>
+#include <layers_id_colors_and_visibility.h>
 
 
 #define ID_COLOR_SETUP  1800
@@ -290,7 +291,7 @@ bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
 
     bool warning = false;
 
-    for( int ii = 0;  ii < MAX_LAYERS;  ii++ )
+    for( LAYER_NUM ii = FIRST_LAYER; ii < MAX_LAYERS; ++ii )
     {
         SetLayerColor( currentColors[ ii ], ii );
 

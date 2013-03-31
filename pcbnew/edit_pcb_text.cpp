@@ -203,7 +203,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
     {
         GetBoard()->Add( textePcb );
         textePcb->SetFlags( IS_NEW );
-        int layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
+        LAYER_NUM layer = ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer;
         textePcb->SetLayer( layer );
 
         // Set the mirrored option for layers on the BACK side of the board

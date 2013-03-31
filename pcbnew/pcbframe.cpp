@@ -658,7 +658,7 @@ void PCB_EDIT_FRAME::SetGridColor(EDA_COLOR_T aColor)
 bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
-    int currLayer = getActiveLayer();
+    LAYER_NUM currLayer = getActiveLayer();
 
     if( !GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
