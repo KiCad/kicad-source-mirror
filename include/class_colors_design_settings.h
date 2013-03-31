@@ -7,8 +7,7 @@
 #define _COLORS_DESIGN_SETTING_H
 #include <layers_id_colors_and_visibility.h>
 
-// XXX shouldn't these come from somewhere else?
-#define LAYERSCOLORSBUFFERSIZE 32
+#define LAYERSCOLORSBUFFERSIZE NB_LAYERS
 #define ITEMSCOLORSBUFFERSIZE 32
 
 /**

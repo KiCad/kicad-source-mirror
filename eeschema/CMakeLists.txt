@@ -132,7 +132,6 @@ set(EESCHEMA_SRCS
     sch_line.cpp
     sch_marker.cpp
     sch_no_connect.cpp
-    sch_polyline.cpp
     sch_screen.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp

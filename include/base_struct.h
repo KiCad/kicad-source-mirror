@@ -84,7 +84,6 @@ enum KICAD_T {
     SCH_NO_CONNECT_T,
     SCH_BUS_ENTRY_T,
     SCH_LINE_T,
-    SCH_POLYLINE_T,
     SCH_BITMAP_T,
     SCH_TEXT_T,
     SCH_LABEL_T,

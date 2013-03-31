@@ -15,7 +15,6 @@
 #include <sch_marker.h>
 #include <sch_line.h>
 #include <sch_no_connect.h>
-#include <sch_polyline.h>
 #include <sch_sheet.h>
 #include <sch_component.h>
 #include <sch_junction.h>
@@ -25,7 +24,6 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
 {
     switch( Struct->Type() )
     {
-    case SCH_POLYLINE_T:
     case SCH_JUNCTION_T:
     case SCH_TEXT_T:
     case SCH_LABEL_T:
@@ -185,7 +183,6 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
         {
             switch( newitem->Type() )
             {
-            case SCH_POLYLINE_T:
             case SCH_JUNCTION_T:
             case SCH_LINE_T:
             case SCH_BUS_ENTRY_T:

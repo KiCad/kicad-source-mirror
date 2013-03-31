@@ -41,7 +41,6 @@
 #include <sch_line.h>
 #include <sch_no_connect.h>
 #include <sch_component.h>
-#include <sch_polyline.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
@@ -180,10 +179,6 @@ again." );
 
         case 'E':        // Its a WIRE or BUS item.
             item = new SCH_BUS_ENTRY();
-            break;
-
-        case 'P':        // Its a polyline item.
-            item = new SCH_POLYLINE();
             break;
 
         case 'C':        // It is a connection item.
