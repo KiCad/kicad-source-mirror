@@ -64,7 +64,7 @@ static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component );
 static void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field );
 static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame );
 static void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap );
-static void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY * aBusEntry );
+static void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY_BASE * aBusEntry );
 
 
 
@@ -219,8 +219,9 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         addJunctionMenuEntries( PopMenu, (SCH_JUNCTION*) item );
         break;
 
-    case SCH_BUS_ENTRY_T:
-        AddMenusForBusEntry( PopMenu, (SCH_BUS_ENTRY*) item );
+    case SCH_BUS_BUS_ENTRY_T:
+    case SCH_BUS_WIRE_ENTRY_T:
+        AddMenusForBusEntry( PopMenu, dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ) );
         break;
 
     case SCH_MARKER_T:
@@ -873,7 +874,7 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
     }
 }
 
-void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY * aBusEntry )
+void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY_BASE* aBusEntry )
 {
     wxString msg;
     if( !aBusEntry->GetFlags() )

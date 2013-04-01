@@ -31,7 +31,8 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_COMPONENT_T:
     case SCH_LINE_T:
-    case SCH_BUS_ENTRY_T:
+    case SCH_BUS_BUS_ENTRY_T:
+    case SCH_BUS_WIRE_ENTRY_T:
     case SCH_SHEET_T:
     case SCH_MARKER_T:
     case SCH_NO_CONNECT_T:
@@ -185,7 +186,8 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             {
             case SCH_JUNCTION_T:
             case SCH_LINE_T:
-            case SCH_BUS_ENTRY_T:
+            case SCH_BUS_BUS_ENTRY_T:
+            case SCH_BUS_WIRE_ENTRY_T:
             case SCH_TEXT_T:
             case SCH_LABEL_T:
             case SCH_GLOBAL_LABEL_T:

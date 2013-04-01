@@ -33,13 +33,15 @@
 #include <sch_collectors.h>
 #include <sch_component.h>
 #include <sch_line.h>
+#include <sch_bus_entry.h>
 
 
 const KICAD_T SCH_COLLECTOR::AllItems[] = {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
     SCH_NO_CONNECT_T,
-    SCH_BUS_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_BITMAP_T,
     SCH_TEXT_T,
@@ -59,7 +61,8 @@ const KICAD_T SCH_COLLECTOR::AllItemsButPins[] = {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
     SCH_NO_CONNECT_T,
-    SCH_BUS_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_BITMAP_T,
     SCH_TEXT_T,
@@ -107,7 +110,8 @@ const KICAD_T SCH_COLLECTOR::MovableItems[] = {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
     SCH_NO_CONNECT_T,
-    SCH_BUS_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
 //    SCH_LINE_T,
     SCH_BITMAP_T,
     SCH_TEXT_T,
@@ -124,7 +128,8 @@ const KICAD_T SCH_COLLECTOR::MovableItems[] = {
 
 const KICAD_T SCH_COLLECTOR::DraggableItems[] = {
     SCH_JUNCTION_T,
-    SCH_BUS_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -152,7 +157,8 @@ const KICAD_T SCH_COLLECTOR::ParentItems[] = {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
     SCH_NO_CONNECT_T,
-    SCH_BUS_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
@@ -241,13 +247,16 @@ bool SCH_COLLECTOR::IsCorner() const
     if( GetCount() != 2 )
         return false;
 
+    bool is_busentry0 = dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_List[0] );
+    bool is_busentry1 = dynamic_cast<SCH_BUS_ENTRY_BASE*>( m_List[1] );
+
     if( (m_List[0]->Type() == SCH_LINE_T) && (m_List[1]->Type() == SCH_LINE_T) )
         return true;
 
-    if( (m_List[0]->Type() == SCH_LINE_T) && (m_List[1]->Type() == SCH_BUS_ENTRY_T) )
+    if( (m_List[0]->Type() == SCH_LINE_T) && is_busentry1 )
         return true;
 
-    if( (m_List[0]->Type() == SCH_BUS_ENTRY_T) && (m_List[1]->Type() == SCH_LINE_T) )
+    if( is_busentry0 && (m_List[1]->Type() == SCH_LINE_T) )
         return true;
 
     return false;

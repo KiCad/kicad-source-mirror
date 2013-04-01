@@ -42,80 +42,81 @@
 #include <sch_bus_entry.h>
 
 
-SCH_BUS_ENTRY::SCH_BUS_ENTRY( const wxPoint& pos, int shape, int id ) :
-    SCH_ITEM( NULL, SCH_BUS_ENTRY_T )
+SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, char shape ) :
+    SCH_ITEM( NULL, aType )
 {
     m_pos    = pos;
     m_size.x = 100;
     m_size.y = 100;
-    m_Layer  = LAYER_WIRE;
-    m_width  = 0;
-
-    if( id == BUS_TO_BUS )
-    {
-        m_Layer = LAYER_BUS;
-    }
 
     if( shape == '/' )
         m_size.y = -100;
 }
 
-
-EDA_ITEM* SCH_BUS_ENTRY::Clone() const
+SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, char shape ) :
+    SCH_BUS_ENTRY_BASE( SCH_BUS_WIRE_ENTRY_T, pos, shape )
 {
-    return new SCH_BUS_ENTRY( *this );
+    m_Layer  = LAYER_WIRE;
+}
+
+SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, char shape ) :
+    SCH_BUS_ENTRY_BASE( SCH_BUS_BUS_ENTRY_T, pos, shape )
+{
+        m_Layer = LAYER_BUS;
+}
+
+EDA_ITEM* SCH_BUS_WIRE_ENTRY::Clone() const
+{
+    return new SCH_BUS_WIRE_ENTRY( *this );
+}
+
+EDA_ITEM* SCH_BUS_BUS_ENTRY::Clone() const
+{
+    return new SCH_BUS_BUS_ENTRY( *this );
 }
 
 
-wxPoint SCH_BUS_ENTRY::m_End() const
+wxPoint SCH_BUS_ENTRY_BASE::m_End() const
 {
     return wxPoint( m_pos.x + m_size.x, m_pos.y + m_size.y );
 }
 
 
-void SCH_BUS_ENTRY::SwapData( SCH_ITEM* aItem )
+void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_BUS_ENTRY_T),
-                 wxT( "Cannot swap bus entry data with invalid item." ) );
+    SCH_BUS_ENTRY_BASE* item = dynamic_cast<SCH_BUS_ENTRY_BASE*>( aItem );
+    wxCHECK_RET( item, wxT( "Cannot swap bus entry data with invalid item." ) );
 
-    SCH_BUS_ENTRY* item = (SCH_BUS_ENTRY*)aItem;
     EXCHG( m_pos, item->m_pos );
     EXCHG( m_size, item->m_size );
-    EXCHG( m_width, item->m_width );
 }
 
 
-bool SCH_BUS_ENTRY::Save( FILE* aFile ) const
+bool SCH_BUS_WIRE_ENTRY::Save( FILE* aFile ) const
 {
-    bool        success = true;
-
-    const char* layer = "Wire";
-    const char* width = "Line";
-
-    if( GetLayer() == LAYER_BUS )
-    {
-        layer = "Bus"; width = "Bus";
-    }
-
-    if( fprintf( aFile, "Entry %s %s\n", layer, width ) == EOF )
-    {
-        success = false;
-    }
-    if( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n",
+    if( fprintf( aFile, "Entry Wire Line\n\t%-4d %-4d %-4d %-4d\n",
                  m_pos.x, m_pos.y, m_End().x, m_End().y ) == EOF )
-    {
-        success = false;
-    }
-
-    return success;
+        return false;
+    return true;
 }
 
 
-bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
+bool SCH_BUS_BUS_ENTRY::Save( FILE* aFile ) const
+{
+    if( fprintf( aFile, "Entry Bus Bus\n\t%-4d %-4d %-4d %-4d\n",
+                 m_pos.x, m_pos.y, m_End().x, m_End().y ) == EOF )
+        return false;
+    return true;
+}
+
+
+bool SCH_BUS_ENTRY_BASE::Load( LINE_READER& aLine, wxString& aErrorMsg, 
+                               SCH_ITEM **out )
 {
     char Name1[256];
     char Name2[256];
     char* line = (char*) aLine;
+    *out = NULL;
 
     while( (*line != ' ' ) && *line )
         line++;
@@ -128,13 +129,16 @@ bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    m_Layer = LAYER_WIRE;
-
+    SCH_BUS_ENTRY_BASE *this_new;
     if( Name1[0] == 'B' )
-        m_Layer = LAYER_BUS;
+        this_new = new SCH_BUS_BUS_ENTRY;
+    else
+        this_new = new SCH_BUS_WIRE_ENTRY;
+    *out = this_new;
 
-    if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ", &m_pos.x, &m_pos.y,
-                                      &m_size.x, &m_size.y ) != 4 )
+    if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ", 
+                &this_new->m_pos.x, &this_new->m_pos.y,
+                &this_new->m_size.x, &this_new->m_size.y ) != 4 )
     {
         aErrorMsg.Printf( wxT( "Eeschema file bus entry load error at line %d" ),
                           aLine.LineNumber() );
@@ -142,14 +146,14 @@ bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    m_size.x -= m_pos.x;
-    m_size.y -= m_pos.y;
+    this_new->m_size.x -= this_new->m_pos.x;
+    this_new->m_size.y -= this_new->m_pos.y;
 
     return true;
 }
 
 
-EDA_RECT SCH_BUS_ENTRY::GetBoundingBox() const
+EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 {
     EDA_RECT box;
 
@@ -157,27 +161,25 @@ EDA_RECT SCH_BUS_ENTRY::GetBoundingBox() const
     box.SetEnd( m_End() );
 
     box.Normalize();
-    int width = ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
-    box.Inflate( width / 2 );
+    box.Inflate( GetPenSize() / 2 );
 
     return box;
 }
 
 
-int SCH_BUS_ENTRY::GetPenSize() const
+int SCH_BUS_WIRE_ENTRY::GetPenSize() const
 {
-    int pensize = ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
-
-    if( m_Layer == LAYER_BUS )
-    {
-        pensize = ( m_width == 0 ) ? GetDefaultBusThickness() : m_width;
-    }
-
-    return pensize;
+    return GetDefaultLineThickness();
 }
 
 
-void SCH_BUS_ENTRY::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+int SCH_BUS_BUS_ENTRY::GetPenSize() const
+{
+    return GetDefaultBusThickness();
+}
+
+
+void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                           GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
 {
     EDA_COLOR_T color;
@@ -194,7 +196,7 @@ void SCH_BUS_ENTRY::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
 }
 
 
-void SCH_BUS_ENTRY::MirrorX( int aXaxis_position )
+void SCH_BUS_ENTRY_BASE::MirrorX( int aXaxis_position )
 {
     m_pos.y -= aXaxis_position;
     NEGATE(  m_pos.y );
@@ -203,7 +205,7 @@ void SCH_BUS_ENTRY::MirrorX( int aXaxis_position )
 }
 
 
-void SCH_BUS_ENTRY::MirrorY( int aYaxis_position )
+void SCH_BUS_ENTRY_BASE::MirrorY( int aYaxis_position )
 {
     m_pos.x -= aYaxis_position;
     NEGATE(  m_pos.x );
@@ -212,14 +214,14 @@ void SCH_BUS_ENTRY::MirrorY( int aYaxis_position )
 }
 
 
-void SCH_BUS_ENTRY::Rotate( wxPoint aPosition )
+void SCH_BUS_ENTRY_BASE::Rotate( wxPoint aPosition )
 {
     RotatePoint( &m_pos, aPosition, 900 );
     RotatePoint( &m_size.x, &m_size.y, 900 );
 }
 
 
-void SCH_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
+void SCH_BUS_ENTRY_BASE::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 {
     DANGLING_END_ITEM item( ENTRY_END, this, m_pos );
     aItemList.push_back( item );
@@ -229,44 +231,47 @@ void SCH_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 }
 
 
-bool SCH_BUS_ENTRY::IsSelectStateChanged( const wxRect& aRect )
+bool SCH_BUS_ENTRY_BASE::IsSelectStateChanged( const wxRect& aRect )
 {
     bool previousState = IsSelected();
 
     // If either end of the bus entry is inside the selection rectangle, the entire
     // bus entry is selected.  Bus entries have a fixed length and angle.
     if( aRect.Contains( m_pos ) || aRect.Contains( m_End() ) )
-        m_Flags |= SELECTED;
+        SetFlags( SELECTED );
     else
-        m_Flags &= ~SELECTED;
+        ClearFlags( SELECTED );
 
     return previousState != IsSelected();
 }
 
 
-void SCH_BUS_ENTRY::GetConnectionPoints( vector< wxPoint >& aPoints ) const
+void SCH_BUS_ENTRY_BASE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_pos );
     aPoints.push_back( m_End() );
 }
 
 
-wxString SCH_BUS_ENTRY::GetSelectMenuText() const
+wxString SCH_BUS_WIRE_ENTRY::GetSelectMenuText() const
 {
-    if( m_Layer == LAYER_WIRE )
         return wxString( _( "Bus to Wire Entry" ) );
+}
 
+
+wxString SCH_BUS_BUS_ENTRY::GetSelectMenuText() const
+{
     return wxString( _( "Bus to Bus Entry" ) );
 }
 
 
-bool SCH_BUS_ENTRY::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_BUS_ENTRY_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     return TestSegmentHit( aPosition, m_pos, m_End(), aAccuracy );
 }
 
 
-bool SCH_BUS_ENTRY::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool SCH_BUS_ENTRY_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT rect = aRect;
 
@@ -279,7 +284,7 @@ bool SCH_BUS_ENTRY::HitTest( const EDA_RECT& aRect, bool aContained, int aAccura
 }
 
 
-void SCH_BUS_ENTRY::Plot( PLOTTER* aPlotter )
+void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
 {
     aPlotter->SetCurrentLineWidth( GetPenSize() );
     aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
@@ -291,7 +296,7 @@ void SCH_BUS_ENTRY::Plot( PLOTTER* aPlotter )
  * Set the shape of the bus entry.
  * aShape = ascii code '/' or '\'
  */
-void SCH_BUS_ENTRY::SetBusEntryShape( int aShape )
+void SCH_BUS_ENTRY_BASE::SetBusEntryShape( char aShape )
 {
     switch( aShape )
     {
@@ -311,12 +316,11 @@ void SCH_BUS_ENTRY::SetBusEntryShape( int aShape )
 /* GetBusEntryShape:
  * return the shape of the bus entry, as an ascii code '/' or '\'
  */
-int SCH_BUS_ENTRY::GetBusEntryShape() const
+char SCH_BUS_ENTRY_BASE::GetBusEntryShape() const
 {
-    int shape = '\\';
-
     if( GetSize().y < 0 )
-        shape = '/';
-
-    return shape;
+        return '/';
+    else
+        return '\\';
 }
+

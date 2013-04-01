@@ -394,7 +394,10 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
         break;
 
     case LAYER_WIRE:
-        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_ENTRY_T ) )
+        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_WIRE_ENTRY_T) )
+            return true;
+
+        if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_BUS_BUS_ENTRY_T) )
             return true;
 
         if( GetItem( aPosition, std::max( GetDefaultLineThickness(), 3 ), SCH_JUNCTION_T ) )
@@ -958,13 +961,15 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
             if( BreakSegment( junction->GetPosition() ) )
                 brokenSegments = true;
         }
-        else if( item->Type() == SCH_BUS_ENTRY_T )
+        else 
         {
-            SCH_BUS_ENTRY* busEntry = ( SCH_BUS_ENTRY* ) item;
-
+            SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( item );
+            if( busEntry )
+        {
             if( BreakSegment( busEntry->GetPosition() )
                 || BreakSegment( busEntry->m_End() ) )
                 brokenSegments = true;
+            }
         }
     }
 
