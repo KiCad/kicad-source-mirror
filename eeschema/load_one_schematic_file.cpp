@@ -147,6 +147,7 @@ again." );
 
     while( reader.ReadLine() )
     {
+        itemLoaded = false;
         line = reader.Line();
 
         item = NULL;
@@ -167,6 +168,8 @@ again." );
                 itemLoaded = ReadSchemaDescr( &reader, msgDiag, aScreen );
             else if( line[1] == 'B' )
                 item = new SCH_BITMAP();
+            else if( line[1] == 'E' )
+                itemLoaded = true; // The EOF marker
             break;
 
         case 'L':        // Its a library item.
@@ -178,7 +181,9 @@ again." );
             break;
 
         case 'E':        // Its a WIRE or BUS item.
-            item = new SCH_BUS_ENTRY();
+            /* The bus entry can be represented by two different
+             * classes, so we need a factory function */
+            itemLoaded = SCH_BUS_ENTRY_BASE::Load( reader, msgDiag, &item );
             break;
 
         case 'C':        // It is a connection item.
@@ -220,6 +225,8 @@ again." );
 
         if( item )
         {
+            // Load it if it wasn't by a factory
+            if( !itemLoaded )
             itemLoaded = item->Load( reader, msgDiag );
 
             if( !itemLoaded )

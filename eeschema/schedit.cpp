@@ -137,12 +137,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
         m_canvas->MoveCursorToCrossHair();
-        SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) item, '/' );
+        SetBusEntryShape( &dc, dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ), '/' );
         break;
 
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
         m_canvas->MoveCursorToCrossHair();
-        SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) item, '\\' );
+        SetBusEntryShape( &dc, dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ), '\\' );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -417,7 +417,8 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 
     case SCH_JUNCTION_T:
     case SCH_NO_CONNECT_T:
-    case SCH_BUS_ENTRY_T:
+    case SCH_BUS_BUS_ENTRY_T:
+    case SCH_BUS_WIRE_ENTRY_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
@@ -939,7 +940,8 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
     switch( item->Type() )
     {
-    case SCH_BUS_ENTRY_T:
+    case SCH_BUS_BUS_ENTRY_T:
+    case SCH_BUS_WIRE_ENTRY_T:
     case SCH_LINE_T:
     case SCH_JUNCTION_T:
         if( item->GetLayer() == LAYER_BUS )
