@@ -15,7 +15,7 @@
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="internationalize">1</property>
-        <property name="name"></property>
+        <property name="name">dialog_edit_component_in_schematic_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -44,7 +44,7 @@
             <property name="pos"></property>
             <property name="size">700,482</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU</property>
-            <property name="subclass"></property>
+            <property name="subclass">; </property>
             <property name="title">Component Properties</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
