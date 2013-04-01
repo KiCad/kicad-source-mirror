@@ -8,10 +8,6 @@
 #include <dialogs/dialog_layers_select_to_pcb_base.h>
 #include <layers_id_colors_and_visibility.h>
 
-#define BOARD_LAYERS_MAX_COUNT NB_LAYERS
-#define BOARD_COPPER_LAYERS_MAX_COUNT NB_COPPER_LAYERS
-#define LAYER_UNSELECTED BOARD_LAYERS_MAX_COUNT
-
 /*
  * This dialog shows the gerber files loaded, and allows user to choose
  * equivalence tbetween gerber layers and pcb layers
