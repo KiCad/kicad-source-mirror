@@ -62,11 +62,6 @@
  * D10 ... D999 = Identification Tool: tool selection
  */
 
-// Photoplot actions:
-#define GERB_ACTIVE_DRAW 1      // Activate light (lower pen)
-#define GERB_STOP_DRAW   2      // Extinguish light (lift pen)
-#define GERB_FLASH       3      // Flash
-
 
 /* Local Functions (are lower case since they are private to this source file)
 **/
