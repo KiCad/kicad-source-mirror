@@ -102,18 +102,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     columnLabel.SetText( _( "Value" ) );
     fieldListCtrl->InsertColumn( 1, columnLabel );
 
-    wxString label = _( "Size" ) + ReturnUnitSymbol( g_UserUnit );
-    textSizeLabel->SetLabel( label );
-
-    label  = _( "Pos " );
-    label += _( "X" );
-    label += ReturnUnitSymbol( g_UserUnit );
-    posXLabel->SetLabel( label );
-
-    label  = _( "Pos " );
-    label += _( "Y" );
-    label += ReturnUnitSymbol( g_UserUnit );
-    posYLabel->SetLabel( label );
+    m_staticTextUnitSize->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_staticTextUnitPosX->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_staticTextUnitPosY->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
     copySelectedFieldToPanel();
 

@@ -34,8 +34,8 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB : public DIALOG_EDIT_LIBENTRY_FIELDS_IN
 /*****************************************************************************************/
 {
 private:
-    LIB_EDIT_FRAME*    m_Parent;
-    LIB_COMPONENT*     m_LibEntry;
+    LIB_EDIT_FRAME*    m_parent;
+    LIB_COMPONENT*     m_libEntry;
     bool               m_skipCopyFromPanel;
 
     /// a copy of the edited component's LIB_FIELDs
@@ -64,10 +64,10 @@ private:
     int  getSelectedFieldNdx();
 
     /**
-     * Function InitBuffers
+     * Function initBuffers
      * sets up to edit the given component.
      */
-    void InitBuffers();
+    void initBuffers();
 
     /**
      * Function findField
@@ -133,8 +133,8 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( aParent )
 /***********************************************************************/
 {
-    m_Parent   = aParent;
-    m_LibEntry = aLibEntry;
+    m_parent   = aParent;
+    m_libEntry = aLibEntry;
 
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -163,20 +163,11 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnInitDialog( wxInitDialogEvent& event 
     columnLabel.SetText( _( "Value" ) );
     fieldListCtrl->InsertColumn( COLUMN_TEXT, columnLabel );
 
-    wxString label = _( "Size" ) + ReturnUnitSymbol( g_UserUnit );
-    textSizeLabel->SetLabel( label );
+    m_staticTextUnitSize->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_staticTextUnitPosX->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_staticTextUnitPosY->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
-    label  = _( "Pos " );
-    label += _( "X" );
-    label += ReturnUnitSymbol( g_UserUnit );
-    posXLabel->SetLabel( label );
-
-    label  = _( "Pos " );
-    label += _( "Y" );
-    label += ReturnUnitSymbol( g_UserUnit );
-    posYLabel->SetLabel( label );
-
-    InitBuffers();
+    initBuffers();
     copySelectedFieldToPanel();
 
     stdDialogButtonSizerOK->SetDefault();
@@ -237,7 +228,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
      * or root alias of the component */
     wxString newvalue = m_FieldsBuf[VALUE].GetText();
 
-    if( m_LibEntry->HasAlias( newvalue ) && !m_LibEntry->GetAlias( newvalue )->IsRoot() )
+    if( m_libEntry->HasAlias( newvalue ) && !m_libEntry->GetAlias( newvalue )->IsRoot() )
     {
         wxString msg;
         msg.Printf( _( "A new name is entered for this component\n\
@@ -249,7 +240,7 @@ An alias %s already exists!\nCannot update this component" ),
     /* End unused code */
 
     /* save old cmp in undo list */
-    m_Parent->SaveCopyInUndoList( m_LibEntry, IS_CHANGED );
+    m_parent->SaveCopyInUndoList( m_libEntry, IS_CHANGED );
 
     // delete any fields with no name or no value before we copy all of m_FieldsBuf
     // back into the component
@@ -274,12 +265,12 @@ An alias %s already exists!\nCannot update this component" ),
 #endif
 
     // copy all the fields back, fully replacing any previous fields
-    m_LibEntry->SetFields( m_FieldsBuf );
+    m_libEntry->SetFields( m_FieldsBuf );
 
     // We need to keep the name and the value the same at the moment!
-    SetName( m_LibEntry->GetValueField().GetText() );
+    SetName( m_libEntry->GetValueField().GetText() );
 
-    m_Parent->OnModify();
+    m_parent->OnModify();
 
     EndModal( 0 );
 }
@@ -445,13 +436,11 @@ LIB_FIELD* DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::findField( const wxString& aField
 }
 
 
-/***********************************************************/
-void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
-/***********************************************************/
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
 {
     LIB_FIELDS cmpFields;
 
-    m_LibEntry->GetFields( cmpFields );
+    m_libEntry->GetFields( cmpFields );
 
 #if defined(DEBUG)
     for( unsigned i=0; i<cmpFields.size();  ++i )
@@ -492,7 +481,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
     // Now copy in the template fields, in the order that they are present in the
     // template field editor UI.
     const TEMPLATE_FIELDNAMES& tfnames =
-        ((SCH_EDIT_FRAME*)m_Parent->GetParent())->GetTemplateFieldNames();
+        ((SCH_EDIT_FRAME*)m_parent->GetParent())->GetTemplateFieldNames();
 
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {
