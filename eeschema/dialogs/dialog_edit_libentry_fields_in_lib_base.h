@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,18 +12,19 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include <wx/listctrl.h>
-#include <wx/string.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
+#include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,10 +53,14 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public wxDialog
 		wxTextCtrl* fieldValueTextCtrl;
 		wxStaticText* textSizeLabel;
 		wxTextCtrl* textSizeTextCtrl;
+		wxStaticText* m_staticTextUnitSize;
 		wxStaticText* posXLabel;
 		wxTextCtrl* posXTextCtrl;
+		wxStaticText* m_staticTextUnitPosX;
 		wxStaticText* posYLabel;
 		wxTextCtrl* posYTextCtrl;
+		wxStaticText* m_staticTextUnitPosY;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* stdDialogButtonSizer;
 		wxButton* stdDialogButtonSizerOK;
 		wxButton* stdDialogButtonSizerCancel;
@@ -73,7 +78,7 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fields Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 615,550 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fields Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 615,456 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE();
 	
 };

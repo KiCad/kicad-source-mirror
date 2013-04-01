@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,39 +16,40 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* fieldsSizer;
-	fieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fields") ), wxHORIZONTAL );
+	wxBoxSizer* bSizerFieldsSetup;
+	bSizerFieldsSetup = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxStaticBoxSizer* gridStaticBoxSizer;
-	gridStaticBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxEmptyString ), wxVERTICAL );
+	wxBoxSizer* bSizerFiledsList;
+	bSizerFiledsList = new wxBoxSizer( wxVERTICAL );
 	
 	fieldListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
 	fieldListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
-	gridStaticBoxSizer->Add( fieldListCtrl, 1, wxALL|wxEXPAND, 8 );
+	bSizerFiledsList->Add( fieldListCtrl, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
 	
 	addFieldButton = new wxButton( this, wxID_ANY, _("Add Field"), wxDefaultPosition, wxDefaultSize, 0 );
 	addFieldButton->SetToolTip( _("Add a new custom field") );
 	
-	gridStaticBoxSizer->Add( addFieldButton, 0, wxALL|wxEXPAND, 5 );
+	bSizerFiledsList->Add( addFieldButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	deleteFieldButton = new wxButton( this, wxID_ANY, _("Delete Field"), wxDefaultPosition, wxDefaultSize, 0 );
 	deleteFieldButton->SetToolTip( _("Delete one of the optional fields") );
 	
-	gridStaticBoxSizer->Add( deleteFieldButton, 0, wxALL|wxEXPAND, 5 );
+	bSizerFiledsList->Add( deleteFieldButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	moveUpButton = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	moveUpButton->SetToolTip( _("Move the selected optional fields up one position") );
 	
-	gridStaticBoxSizer->Add( moveUpButton, 0, wxALL|wxEXPAND, 5 );
+	bSizerFiledsList->Add( moveUpButton, 0, wxALL|wxEXPAND, 5 );
 	
-	fieldsSizer->Add( gridStaticBoxSizer, 5, wxEXPAND|wxRIGHT, 8 );
+	
+	bSizerFieldsSetup->Add( bSizerFiledsList, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* fieldEditBoxSizer;
 	fieldEditBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* optionsSizer;
-	optionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Text Justification:") ), wxHORIZONTAL );
+	wxBoxSizer* bSizerJustify;
+	bSizerJustify = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxString m_FieldHJustifyCtrlChoices[] = { _("Left"), _("Center"), _("Right") };
 	int m_FieldHJustifyCtrlNChoices = sizeof( m_FieldHJustifyCtrlChoices ) / sizeof( wxString );
@@ -56,7 +57,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	m_FieldHJustifyCtrl->SetSelection( 1 );
 	m_FieldHJustifyCtrl->SetToolTip( _("Select if the component is to be rotated when drawn") );
 	
-	optionsSizer->Add( m_FieldHJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 8 );
+	bSizerJustify->Add( m_FieldHJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_FieldVJustifyCtrlChoices[] = { _("Bottom"), _("Center"), _("Top") };
 	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
@@ -64,35 +65,38 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	m_FieldVJustifyCtrl->SetSelection( 0 );
 	m_FieldVJustifyCtrl->SetToolTip( _("Pick the graphical transformation to be used when displaying the component, if any") );
 	
-	optionsSizer->Add( m_FieldVJustifyCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 8 );
+	bSizerJustify->Add( m_FieldVJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	fieldEditBoxSizer->Add( optionsSizer, 0, wxALIGN_TOP|wxEXPAND|wxBOTTOM, 5 );
+	
+	fieldEditBoxSizer->Add( bSizerJustify, 0, wxEXPAND|wxBOTTOM, 5 );
+	
+	wxBoxSizer* bSizerAspect;
+	bSizerAspect = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* visibilitySizer;
-	visibilitySizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Visibility") ), wxHORIZONTAL );
-	
-	wxBoxSizer* bShowRotateSizer;
-	bShowRotateSizer = new wxBoxSizer( wxVERTICAL );
+	visibilitySizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Visibility") ), wxVERTICAL );
 	
 	showCheckBox = new wxCheckBox( this, wxID_ANY, _("Show"), wxDefaultPosition, wxDefaultSize, 0 );
 	showCheckBox->SetToolTip( _("Check if you want this field visible") );
 	
-	bShowRotateSizer->Add( showCheckBox, 0, wxALL, 5 );
+	visibilitySizer->Add( showCheckBox, 0, wxALL, 5 );
 	
 	rotateCheckBox = new wxCheckBox( this, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
 	rotateCheckBox->SetToolTip( _("Check if you want this field's text rotated 90 degrees") );
 	
-	bShowRotateSizer->Add( rotateCheckBox, 0, wxALL, 5 );
+	visibilitySizer->Add( rotateCheckBox, 0, wxALL, 5 );
 	
-	visibilitySizer->Add( bShowRotateSizer, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	
+	bSizerAspect->Add( visibilitySizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_StyleRadioBoxChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
 	int m_StyleRadioBoxNChoices = sizeof( m_StyleRadioBoxChoices ) / sizeof( wxString );
 	m_StyleRadioBox = new wxRadioBox( this, wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, m_StyleRadioBoxNChoices, m_StyleRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	m_StyleRadioBox->SetSelection( 1 );
-	visibilitySizer->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_StyleRadioBox->SetSelection( 0 );
+	bSizerAspect->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	fieldEditBoxSizer->Add( visibilitySizer, 0, wxEXPAND, 5 );
+	
+	fieldEditBoxSizer->Add( bSizerAspect, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxBoxSizer* fieldNameBoxSizer;
 	fieldNameBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -102,9 +106,11 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	fieldNameBoxSizer->Add( fieldNameLabel, 0, 0, 5 );
 	
 	fieldNameTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldNameTextCtrl->SetMaxLength( 0 ); 
 	fieldNameTextCtrl->SetToolTip( _("The text (or value) of the currently selected field") );
 	
 	fieldNameBoxSizer->Add( fieldNameTextCtrl, 0, wxEXPAND, 5 );
+	
 	
 	fieldEditBoxSizer->Add( fieldNameBoxSizer, 0, wxALL|wxEXPAND, 5 );
 	
@@ -116,60 +122,71 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	fieldTextBoxSizer->Add( fieldValueLabel, 0, 0, 5 );
 	
 	fieldValueTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fieldValueTextCtrl->SetMaxLength( 0 ); 
 	fieldValueTextCtrl->SetToolTip( _("The text (or value) of the currently selected field") );
 	
 	fieldTextBoxSizer->Add( fieldValueTextCtrl, 0, wxEXPAND, 5 );
 	
+	
 	fieldEditBoxSizer->Add( fieldTextBoxSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* textSizeBoxSizer;
-	textSizeBoxSizer = new wxBoxSizer( wxVERTICAL );
+	wxFlexGridSizer* fgSizerPosSize;
+	fgSizerPosSize = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgSizerPosSize->AddGrowableCol( 1 );
+	fgSizerPosSize->SetFlexibleDirection( wxBOTH );
+	fgSizerPosSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	textSizeLabel = new wxStaticText( this, wxID_ANY, _("Size(\")"), wxDefaultPosition, wxDefaultSize, 0 );
+	textSizeLabel = new wxStaticText( this, wxID_ANY, _("Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	textSizeLabel->Wrap( -1 );
-	textSizeBoxSizer->Add( textSizeLabel, 0, 0, 5 );
+	fgSizerPosSize->Add( textSizeLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	textSizeTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	textSizeTextCtrl->SetMaxLength( 0 ); 
 	textSizeTextCtrl->SetToolTip( _("The vertical height of the currently selected field's text in the schematic") );
 	
-	textSizeBoxSizer->Add( textSizeTextCtrl, 0, wxEXPAND, 5 );
+	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
-	fieldEditBoxSizer->Add( textSizeBoxSizer, 0, wxALL|wxEXPAND, 5 );
+	m_staticTextUnitSize = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextUnitSize->Wrap( -1 );
+	fgSizerPosSize->Add( m_staticTextUnitSize, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	wxBoxSizer* positionBoxSizer;
-	positionBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxBoxSizer* posXBoxSizer;
-	posXBoxSizer = new wxBoxSizer( wxVERTICAL );
-	
-	posXLabel = new wxStaticText( this, wxID_ANY, _("PosX(\")"), wxDefaultPosition, wxDefaultSize, 0 );
+	posXLabel = new wxStaticText( this, wxID_ANY, _("PosX"), wxDefaultPosition, wxDefaultSize, 0 );
 	posXLabel->Wrap( -1 );
-	posXBoxSizer->Add( posXLabel, 0, 0, 5 );
+	fgSizerPosSize->Add( posXLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	posXTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	posXBoxSizer->Add( posXTextCtrl, 0, wxEXPAND, 5 );
+	posXTextCtrl->SetMaxLength( 0 ); 
+	fgSizerPosSize->Add( posXTextCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 	
-	positionBoxSizer->Add( posXBoxSizer, 1, wxALL|wxEXPAND, 5 );
+	m_staticTextUnitPosX = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextUnitPosX->Wrap( -1 );
+	fgSizerPosSize->Add( m_staticTextUnitPosX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	wxBoxSizer* posYBoxSizer;
-	posYBoxSizer = new wxBoxSizer( wxVERTICAL );
-	
-	posYLabel = new wxStaticText( this, wxID_ANY, _("PosY(\")"), wxDefaultPosition, wxDefaultSize, 0 );
+	posYLabel = new wxStaticText( this, wxID_ANY, _("PosY"), wxDefaultPosition, wxDefaultSize, 0 );
 	posYLabel->Wrap( -1 );
-	posYBoxSizer->Add( posYLabel, 0, 0, 5 );
+	fgSizerPosSize->Add( posYLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	posYTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	posYTextCtrl->SetMaxLength( 0 ); 
 	posYTextCtrl->SetToolTip( _("The Y coordinate of the text relative to the component") );
 	
-	posYBoxSizer->Add( posYTextCtrl, 0, wxEXPAND, 5 );
+	fgSizerPosSize->Add( posYTextCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	positionBoxSizer->Add( posYBoxSizer, 1, wxALL|wxEXPAND, 5 );
+	m_staticTextUnitPosY = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextUnitPosY->Wrap( -1 );
+	fgSizerPosSize->Add( m_staticTextUnitPosY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	fieldEditBoxSizer->Add( positionBoxSizer, 1, wxEXPAND, 5 );
 	
-	fieldsSizer->Add( fieldEditBoxSizer, 3, wxEXPAND, 5 );
+	fieldEditBoxSizer->Add( fgSizerPosSize, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
-	mainSizer->Add( fieldsSizer, 1, wxEXPAND|wxALL, 5 );
+	
+	bSizerFieldsSetup->Add( fieldEditBoxSizer, 0, wxEXPAND, 5 );
+	
+	
+	mainSizer->Add( bSizerFieldsSetup, 1, wxEXPAND, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
@@ -177,7 +194,9 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	stdDialogButtonSizerCancel = new wxButton( this, wxID_CANCEL );
 	stdDialogButtonSizer->AddButton( stdDialogButtonSizerCancel );
 	stdDialogButtonSizer->Realize();
+	
 	mainSizer->Add( stdDialogButtonSizer, 0, wxALL|wxEXPAND, 8 );
+	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
