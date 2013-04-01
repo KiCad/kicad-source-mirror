@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 30 2011)
+// C++ code generated with wxFormBuilder (version Oct  8 2012)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,18 +12,18 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include <wx/string.h>
-#include <wx/choice.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
+#include <wx/choice.h>
 #include <wx/radiobox.h>
+#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
-#include <wx/stattext.h>
 #include <wx/button.h>
+#include <wx/statbox.h>
 #include <wx/listctrl.h>
 #include <wx/dialog.h>
 
@@ -38,9 +38,11 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 	private:
 	
 	protected:
+		wxStaticText* m_staticTextUnit;
 		wxChoice* unitChoice;
 		wxRadioBox* orientationRadioBox;
 		wxRadioBox* mirrorRadioBox;
+		wxStaticText* m_staticTextChipname;
 		wxTextCtrl* chipnameTextCtrl;
 		wxCheckBox* convertCheckBox;
 		wxStaticText* partsAreLockedLabel;
@@ -60,10 +62,13 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 		wxTextCtrl* fieldValueTextCtrl;
 		wxStaticText* textSizeLabel;
 		wxTextCtrl* textSizeTextCtrl;
+		wxStaticText* m_staticTextUnitSize;
 		wxStaticText* posXLabel;
 		wxTextCtrl* posXTextCtrl;
+		wxStaticText* m_staticTextUnitPosX;
 		wxStaticText* posYLabel;
 		wxTextCtrl* posYTextCtrl;
+		wxStaticText* m_staticTextUnitPosY;
 		wxStdDialogButtonSizer* stdDialogButtonSizer;
 		wxButton* stdDialogButtonSizerOK;
 		wxButton* stdDialogButtonSizerCancel;
@@ -81,7 +86,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public wxDialog
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 700,521 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 700,482 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP();
 	
 };
