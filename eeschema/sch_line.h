@@ -42,7 +42,6 @@ class SCH_LINE : public SCH_ITEM
 {
     bool    m_startIsDangling;  ///< True if start point is not connected.
     bool    m_endIsDangling;    ///< True if end point is not connected.
-    int     m_width;            ///< Set to 0 for wires and greater than 0 for busses.
     wxPoint m_start;            ///< Line start point
     wxPoint m_end;              ///< Line end point
 

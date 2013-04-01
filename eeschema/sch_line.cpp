@@ -49,7 +49,6 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
 {
     m_start = pos;
     m_end   = pos;
-    m_width = 0;        // Default thickness used
     m_startIsDangling = m_endIsDangling = false;
 
     switch( layer )
@@ -74,7 +73,6 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
 {
     m_start = aLine.m_start;
     m_end = aLine.m_end;
-    m_width = aLine.m_width;
     m_startIsDangling = m_endIsDangling = false;
 }
 
@@ -107,7 +105,6 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " layer=\"" << m_Layer << '"'
-                                 << " width=\"" << m_width << '"'
                                  << " startIsDangling=\"" << m_startIsDangling
                                  << '"' << " endIsDangling=\""
                                  << m_endIsDangling << '"' << ">"
@@ -210,14 +207,11 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 int SCH_LINE::GetPenSize() const
 {
-    int pensize = ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
 
     if( m_Layer == LAYER_BUS )
-    {
-        pensize = ( m_width == 0 ) ? GetDefaultBusThickness() : m_width;
-    }
+        return GetDefaultBusThickness();
 
-    return pensize;
+    return GetDefaultLineThickness();
 }
 
 
