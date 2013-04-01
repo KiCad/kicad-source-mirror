@@ -25,17 +25,17 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	fieldListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
 	fieldListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
-	bSizerFiledsList->Add( fieldListCtrl, 1, wxALL|wxEXPAND, 8 );
+	bSizerFiledsList->Add( fieldListCtrl, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
 	
 	addFieldButton = new wxButton( this, wxID_ANY, _("Add Field"), wxDefaultPosition, wxDefaultSize, 0 );
 	addFieldButton->SetToolTip( _("Add a new custom field") );
 	
-	bSizerFiledsList->Add( addFieldButton, 0, wxALL|wxEXPAND, 5 );
+	bSizerFiledsList->Add( addFieldButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	deleteFieldButton = new wxButton( this, wxID_ANY, _("Delete Field"), wxDefaultPosition, wxDefaultSize, 0 );
 	deleteFieldButton->SetToolTip( _("Delete one of the optional fields") );
 	
-	bSizerFiledsList->Add( deleteFieldButton, 0, wxALL|wxEXPAND, 5 );
+	bSizerFiledsList->Add( deleteFieldButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	moveUpButton = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	moveUpButton->SetToolTip( _("Move the selected optional fields up one position") );
@@ -68,7 +68,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizerJustify->Add( m_FieldVJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
-	fieldEditBoxSizer->Add( bSizerJustify, 0, wxEXPAND, 5 );
+	fieldEditBoxSizer->Add( bSizerJustify, 0, wxEXPAND|wxBOTTOM, 5 );
 	
 	wxBoxSizer* bSizerAspect;
 	bSizerAspect = new wxBoxSizer( wxHORIZONTAL );
@@ -96,7 +96,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizerAspect->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	fieldEditBoxSizer->Add( bSizerAspect, 0, wxEXPAND, 5 );
+	fieldEditBoxSizer->Add( bSizerAspect, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxBoxSizer* fieldNameBoxSizer;
 	fieldNameBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -186,7 +186,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	mainSizer->Add( bSizerFieldsSetup, 1, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	stdDialogButtonSizerOK = new wxButton( this, wxID_OK );
