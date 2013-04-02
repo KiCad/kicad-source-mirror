@@ -132,3 +132,11 @@ std::string BOARD_ITEM::FormatInternalUnits( const wxSize& aSize )
 {
     return FormatInternalUnits( aSize.GetWidth() ) + " " + FormatInternalUnits( aSize.GetHeight() );
 }
+
+
+void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    // Basic fallback
+    aCount = 1;
+    aLayers[0] = m_Layer;
+}

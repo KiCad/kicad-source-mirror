@@ -426,6 +426,13 @@ target_link_libraries(pcbnew
     ${PCBNEW_EXTRA_LIBS}
     )
 
+if(KICAD_GAL)
+target_link_libraries(pcbnew
+    gal
+    ${GLEW_LIBRARIES}
+    )
+endif(KICAD_GAL)
+
 ###
 # Add pcbnew as install target
 ###

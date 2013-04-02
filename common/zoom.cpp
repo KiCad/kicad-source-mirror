@@ -39,7 +39,11 @@
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
 #include <base_units.h>
-
+#ifdef KICAD_GAL
+#include <class_drawpanel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <view/view.h>
+#endif
 
 
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
@@ -82,7 +86,10 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     if( screen->m_FirstRedraw )
         screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
 
-    RedrawScreen( screen->GetScrollCenterPosition(), aWarpPointer );
+    if( !m_galCanvasActive )
+        RedrawScreen( screen->GetScrollCenterPosition(), aWarpPointer );
+    else
+        m_canvas->Hide();
 }
 
 
@@ -159,6 +166,36 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     case ID_ZOOM_REDRAW:
         m_canvas->Refresh();
         break;
+
+#ifdef KICAD_GAL
+    // Switch canvas between standard and GAL-based
+    case ID_SWITCH_CANVAS:
+    {
+        UseGalCanvas( !m_galCanvasActive );
+
+        KiGfx::VIEW* view = m_galCanvas->GetView();
+        KiGfx::GAL* gal = m_galCanvas->GetGAL();
+        double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+
+        // Display the same view after canvas switching
+        if( m_galCanvasActive )
+        {
+            double zoom =  1 / ( zoomFactor * m_canvas->GetZoom() );
+            view->SetScale( zoom );
+
+            view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+        }
+        else
+        {
+            double zoom = 1 / ( zoomFactor * view->GetScale() );
+            m_canvas->SetZoom( zoom );
+
+            VECTOR2D center = view->GetCenter();
+            RedrawScreen( wxPoint( center.x, center.y ), false );
+        }
+    }
+        break;
+#endif
 
     case ID_POPUP_ZOOM_CENTER:
         center = screen->GetCrossHairPosition();

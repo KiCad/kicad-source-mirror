@@ -82,6 +82,9 @@ static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                      HK_RESET_LOCAL_COORD, ' ' );
 static EDA_HOTKEY HkSwitchHighContrastMode( wxT("Switch Highcontrast mode"),
 					    HK_SWITCH_HIGHCONTRAST_MODE,'H');
+#ifdef KICAD_GAL
+static EDA_HOTKEY HkSwitchCanvas( wxT( "Switch canvas" ), HK_SWITCH_CANVAS, WXK_F12 );
+#endif
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
@@ -228,6 +231,9 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkRecordMacros6,          &HkCallMacros6,    &HkRecordMacros7,          &HkCallMacros7,
     &HkRecordMacros8,          &HkCallMacros8,    &HkRecordMacros9,          &HkCallMacros9,
     &HkSwitchHighContrastMode,
+#ifdef KICAD_GAL
+    &HkSwitchCanvas,
+#endif
     NULL
 };
 

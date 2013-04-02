@@ -958,6 +958,25 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 }
 
 
+void SEGVIA::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    /*int top_layer, bottom_layer;
+    ReturnLayerPair( &top_layer, &bottom_layer );
+
+    // We can add vias to all layers they belong, but then they are drawn this many times
+    aCount = 0;
+    for( int i = bottom_layer; i <= top_layer; ++i )
+    {
+        aLayers[aCount++] = i;
+    }*/
+
+    // Just show it on common via & via holes layers
+    aLayers[0] = ITEM_GAL_LAYER( VIAS_VISIBLE );
+    aLayers[1] = ITEM_GAL_LAYER( VIA_HOLES_VISIBLE );
+    aCount = 2;
+}
+
+
 // see class_track.h
 void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
