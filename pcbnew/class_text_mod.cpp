@@ -490,14 +490,27 @@ EDA_ITEM* TEXTE_MODULE::Clone() const
 
 void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    switch( GetParent()->GetLayer() )
+    switch( m_Type )
     {
-    case LAYER_N_BACK:
-        aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about SILKSCREEN_N_BACK?
+    case TEXT_is_REFERENCE:
+        aLayers[0] = ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE );
         break;
 
-    case LAYER_N_FRONT:
-        aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about SILKSCREEN_N_FRONT?
+    case TEXT_is_VALUE:
+        aLayers[0] = ITEM_GAL_LAYER( MOD_VALUES_VISIBLE );
+        break;
+
+    default:
+        switch( GetParent()->GetLayer() )
+        {
+        case LAYER_N_BACK:
+            aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );    // how about SILKSCREEN_N_BACK?
+            break;
+
+        case LAYER_N_FRONT:
+            aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );    // how about SILKSCREEN_N_FRONT?
+            break;
+        }
         break;
     }
 
