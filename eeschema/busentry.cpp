@@ -73,10 +73,6 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, c
 {
     if( BusEntry == NULL )
         return;
-    {
-        DisplayError( this, wxT( "SetBusEntryType: Bad StructType" ) );
-        return;
-    }
 
     /* Put old item in undo list if it is not currently in edit */
     if( BusEntry->GetFlags() == 0 )
