@@ -31,6 +31,10 @@
 #include <fctsys.h>
 #include <appl_wxstruct.h>
 #include <class_drawpanel.h>
+#ifdef KICAD_GAL
+#include <class_drawpanel_gal.h>
+#include <view/view.h>
+#endif
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <pcbstruct.h>      // enum PCB_VISIBLE
@@ -358,6 +362,20 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
 
     brd->SetVisibleLayers( visibleLayers );
 
+#ifdef KICAD_GAL
+    EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
+    if( galCanvas )
+    {
+        KiGfx::VIEW* view = galCanvas->GetView();
+        view->SetLayerVisible( aLayer, isVisible );
+
+        if( myframe->IsGalCanvasActive() )
+        {
+            galCanvas->Refresh();
+        }
+    }
+#endif /* KICAD_GAL */
+
     if( isFinal )
         myframe->GetCanvas()->Refresh();
 }
@@ -393,6 +411,20 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     default:
         brd->SetElementVisibility( aId, isEnabled );
     }
+
+#ifdef KICAD_GAL
+    EDA_DRAW_PANEL_GAL *galCanvas = myframe->GetGalCanvas();
+    if( galCanvas )
+    {
+        KiGfx::VIEW* view = galCanvas->GetView();
+        view->SetLayerVisible( ITEM_GAL_LAYER( aId ), isEnabled );
+
+        if( myframe->IsGalCanvasActive() )
+        {
+            galCanvas->Refresh();
+        }
+    }
+#endif /* KICAD_GAL */
 
     myframe->GetCanvas()->Refresh();
 }
