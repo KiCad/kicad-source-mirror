@@ -300,8 +300,8 @@ void PCB_LAYER_WIDGET::ReFill()
         { SOLDERMASK_N_BACK,    _( "Solder mask on board's back" )  },
         { DRAW_N,               _( "Explanatory drawings" )         },
         { COMMENT_N,            _( "Explanatory comments" )         },
-        { ECO1_N,               _( "TDB" )                          },
-        { ECO2_N,               _( "TBD" )                          },
+        { ECO1_N,               _( "User defined meaning" )         },
+        { ECO2_N,               _( "User defined meaning" )         },
         { EDGE_N,               _( "Board's perimeter definition" ) },
     };
 
