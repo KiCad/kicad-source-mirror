@@ -268,7 +268,7 @@ void VIEW::SetCenter( const VECTOR2D& aCenter )
 
 void VIEW::SetLayerVisible( int aLayer, bool aVisible )
 {
-    // FIXME
+    m_layers[aLayer].enabled = aVisible;
 }
 
 
@@ -355,15 +355,18 @@ void VIEW::redrawRect( const BOX2I& aRect )
 
     BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
     {
-        drawItem drawFunc( this, l->id );
+        if( l->enabled )
+        {
+            drawItem drawFunc( this, l->id );
 
-        m_gal->SetLayerDepth( (double) l->renderingOrder );
-        l->items->Query( aRect, drawFunc );
-        l->isDirty = false;
+            m_gal->SetLayerDepth( (double) l->renderingOrder );
+            l->items->Query( aRect, drawFunc );
+            l->isDirty = false;
 
-        totalItems    += drawFunc.count;
-        totalDrawTime += drawFunc.time;
-        totalCached   += drawFunc.countCached;
+            totalItems    += drawFunc.count;
+            totalDrawTime += drawFunc.time;
+            totalCached   += drawFunc.countCached;
+        }
     }
 
     prof_end( &totalCycles );
@@ -399,7 +402,7 @@ void VIEW::Clear()
             l->items->Query( r, v );
 
         l->items->RemoveAll();
-    };
+    }
 }
 
 
