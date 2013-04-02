@@ -34,6 +34,7 @@
 #include <macros.h>
 #include <id.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
 #include <class_base_screen.h>
 #include <wxstruct.h>
 
@@ -74,6 +75,9 @@ BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
     EVT_ERASE_BACKGROUND( EDA_DRAW_PANEL::OnEraseBackground )
     EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
     EVT_ACTIVATE( EDA_DRAW_PANEL::OnActivate )
+#ifdef KICAD_GAL
+    EVT_SIZE( EDA_DRAW_PANEL::OnSize )
+#endif
     EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, EDA_DRAW_PANEL::OnPan )
 END_EVENT_TABLE()
 
@@ -1375,6 +1379,18 @@ void EDA_DRAW_PANEL::OnPan( wxCommandEvent& event )
 
     Scroll( x/ppux, y/ppuy );
 }
+
+
+#ifdef KICAD_GAL
+void EDA_DRAW_PANEL::OnSize( wxSizeEvent& SizeEv )
+{
+    if( GetParent()->GetGalCanvas() != NULL )
+    {
+        GetParent()->GetGalCanvas()->SetPosition( GetPosition() );
+        GetParent()->GetGalCanvas()->SetSize( GetSize() );
+    }
+}
+#endif
 
 
 void EDA_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title,

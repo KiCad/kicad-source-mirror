@@ -35,6 +35,7 @@
 #include <macros.h>
 #include <id.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
 #include <class_base_screen.h>
 #include <msgpanel.h>
 #include <wxstruct.h>
@@ -66,6 +67,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, EDA_BASE_FRAME )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
     EVT_MENU_RANGE( ID_ZOOM_IN, ID_ZOOM_REDRAW, EDA_DRAW_FRAME::OnZoom )
+    EVT_MENU( ID_SWITCH_CANVAS, EDA_DRAW_FRAME::OnZoom )
     EVT_MENU_RANGE( ID_OFFCENTER_ZOOM_IN, ID_OFFCENTER_ZOOM_OUT, EDA_DRAW_FRAME::OnZoom )
     EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
                     EDA_DRAW_FRAME::OnZoom )
@@ -100,6 +102,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
     m_HotkeysZoomAndGridList = NULL;
 
     m_canvas              = NULL;
+    m_galCanvas           = NULL;
+    m_galCanvasActive     = false;
     m_messagePanel        = NULL;
     m_currentScreen       = NULL;
     m_toolId              = ID_NO_TOOL_SELECTED;
@@ -936,4 +940,28 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
                              screen->m_ScrollbarNumber.y,
                              screen->m_ScrollbarPos.x,
                              screen->m_ScrollbarPos.y, noRefresh );
+}
+
+
+void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
+{
+    if( !( aEnable ^ m_galCanvasActive ) )
+        return;
+
+    if( aEnable )
+    {
+        m_canvas->Hide();
+        m_galCanvas->Show();
+        m_galCanvas->Raise();
+        m_galCanvas->Refresh();
+    }
+    else
+    {
+        m_galCanvas->Hide();
+        m_canvas->Show();
+        m_canvas->Raise();
+        m_canvas->Refresh();
+    }
+
+    m_galCanvasActive = aEnable;
 }

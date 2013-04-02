@@ -104,6 +104,13 @@ target_link_libraries(cvpcb
     ${GDI_PLUS_LIBRARIES}
     )
 
+if(KICAD_GAL)
+target_link_libraries(cvpcb
+    gal
+    ${GLEW_LIBRARIES}
+    )
+endif(KICAD_GAL)
+
 ###
 # Add cvpcb as install target
 ###

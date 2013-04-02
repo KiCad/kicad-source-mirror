@@ -258,6 +258,9 @@ public:
     void OnCharHook( wxKeyEvent& event );
 
     void OnPan( wxCommandEvent& event );
+#ifdef KICAD_GAL
+    void OnSize( wxSizeEvent& event );
+#endif
 
     void EraseScreen( wxDC* DC );
     void OnScrollWin( wxCommandEvent& event );

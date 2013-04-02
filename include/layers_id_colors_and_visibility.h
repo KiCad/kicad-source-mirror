@@ -143,9 +143,19 @@ enum PCB_VISIBLE
     MOD_VALUES_VISIBLE,         ///< show modules values (when texts are visibles)
     MOD_REFERENCES_VISIBLE,     ///< show modules references (when texts are visibles)
 
+    TRACKS_VISIBLE,
+    PADS_VISIBLE,
+    VIA_HOLES_VISIBLE,
+    PAD_HOLES_VISIBLE,
+
     END_PCB_VISIBLE_LIST  // sentinel
 };
 
+/// macro for obtaining layer number for specific item (eg. pad or text)
+#define ITEM_GAL_LAYER(layer)	(LAYER_COUNT + layer)
+
+/// number of *all* layers including PCB and item layers
+#define TOTAL_LAYER_COUNT	    (LAYER_COUNT + END_PCB_VISIBLE_LIST)
 
 /**
  * Function IsValidLayerIndex

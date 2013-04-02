@@ -42,10 +42,18 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
+#include <class_track.h>
+#include <class_module.h>
+#include <class_drawsegment.h>
 
 #include <collectors.h>
 #include <class_drawpanel.h>
+#include <class_drawpanel_gal.h>
+#include <view/view.h>
 #include <math/vector2d.h>
+#ifdef KICAD_GAL
+#include <pcb_painter.h>
+#endif
 
 
 // Configuration entry names.
@@ -77,6 +85,27 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
+/// Rendering order of layers on GAL-based canvas (lower index in the array
+/// means that layer is displayed closer to the user, ie. on the top).
+const int m_galLayerOrder[] =
+{
+		DRAW_N,	COMMENT_N, ECO1_N, ECO2_N, EDGE_N,
+		UNUSED_LAYER_29, UNUSED_LAYER_30, UNUSED_LAYER_31,
+		ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
+		SILKSCREEN_N_FRONT, SOLDERPASTE_N_FRONT, ADHESIVE_N_FRONT, SOLDERMASK_N_FRONT,
+
+		ITEM_GAL_LAYER( VIA_HOLES_VISIBLE ), ITEM_GAL_LAYER( PAD_HOLES_VISIBLE ),
+		ITEM_GAL_LAYER( VIAS_VISIBLE ), ITEM_GAL_LAYER( PADS_VISIBLE ),
+
+		LAYER_N_FRONT, LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12, LAYER_N_11,
+		LAYER_N_10, LAYER_N_9, LAYER_N_8, LAYER_N_7, LAYER_N_6, LAYER_N_5, LAYER_N_4,
+		LAYER_N_3, LAYER_N_2, LAYER_N_BACK,
+
+		SOLDERMASK_N_BACK, ADHESIVE_N_BACK, SOLDERPASTE_N_BACK,	SILKSCREEN_N_BACK,
+		ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE )
+};
+
+
 PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
                                 const wxString& aTitle,
                                 const wxPoint& aPos, const wxSize& aSize,
@@ -101,6 +130,12 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow* aParent, ID_DRAWFRAME_TYPE aFrameType,
     m_FastGrid1           = 0;
     m_FastGrid2           = 0;
 
+#ifdef KICAD_GAL
+    m_galCanvas           = new EDA_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                              EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+    m_galCanvas->Hide();
+#endif /* KICAD_GAL */
+
     m_auxiliaryToolBar    = NULL;
 }
 
@@ -110,6 +145,9 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     delete m_Collector;
 
     delete m_Pcb;       // is already NULL for FOOTPRINT_EDIT_FRAME
+#ifdef KICAD_GAL
+    delete m_galCanvas;
+#endif /* KICAD_GAL */
 }
 
 
@@ -117,6 +155,78 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 {
     delete m_Pcb;
     m_Pcb = aBoard;
+
+#ifdef KICAD_GAL
+    if( m_galCanvas )
+    {
+        KiGfx::VIEW* view = m_galCanvas->GetView();
+        view->Clear();
+
+        // All of PCB drawing elements should be added to the VIEW
+        // in order to be displayed
+
+        // Load zones
+        for( int i = 0; i < m_Pcb->GetAreaCount(); ++i )
+        {
+            view->Add( (KiGfx::VIEW_ITEM*) ( m_Pcb->GetArea( i ) ) );
+        }
+
+        // Load drawings
+        for( BOARD_ITEM* drawing = m_Pcb->m_Drawings; drawing; drawing = drawing->Next() )
+        {
+            view->Add( drawing );
+        }
+
+        // Load tracks
+        for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
+        {
+            view->Add( track );
+        }
+
+        // Load modules and its additional elements
+        for( MODULE* module = m_Pcb->m_Modules; module; module = module->Next() )
+        {
+            // Load module's pads
+            for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+            {
+                view->Add( pad );
+            }
+
+            // Load module's drawing (mostly silkscreen)
+            for( BOARD_ITEM* drawing = module->GraphicalItems().GetFirst(); drawing;
+                 drawing = drawing->Next() )
+            {
+                view->Add( drawing );
+            }
+
+            // Load module's texts (name and value)
+            view->Add( &module->Reference() );
+            view->Add( &module->Value() );
+        }
+
+        // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
+        for( SEGZONE* zone = m_Pcb->m_Zone; zone; zone = zone->Next() )
+        {
+            view->Add( zone );
+        }
+
+        // Apply layer coloring scheme
+        if( view->GetPainter() )
+        {
+            KiGfx::PCB_RENDER_SETTINGS* colorSettings = new KiGfx::PCB_RENDER_SETTINGS();
+
+            // Load layers' colors from PCB data
+            colorSettings->ImportLegacyColors( m_Pcb->GetColorsSettings() );
+            view->GetPainter()->ApplySettings( colorSettings );
+        }
+
+        // Set rendering order of layers (check m_galLayerOrder to see the order)
+        for( unsigned int i = 0; i < sizeof( m_galLayerOrder ) / sizeof( int ); ++i )
+        {
+            view->SetLayerOrder( m_galLayerOrder[i], i );
+        }
+    }
+#endif
 }
 
 

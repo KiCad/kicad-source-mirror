@@ -348,6 +348,17 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&List Nets" ), _( "View a list of nets with names and id's" ),
                  KiBitmap( tools_xpm ) );
 
+#ifdef KICAD_GAL
+    // Switching GAL-based canvas on/off
+    viewMenu->AppendSeparator();
+
+    text = AddHotkeyName( _( "&Switch canvas" ), g_Pcbnew_Editor_Hokeys_Descr, HK_SWITCH_CANVAS, IS_ACCELERATOR );
+
+    AddMenuItem( viewMenu, ID_SWITCH_CANVAS,
+                 text, _( "Switch the canvas implementation between old (XOR-based) and new (GAL-based)" ),
+                KiBitmap( tools_xpm ) );
+#endif
+
     /** Create Place Menu **/
     wxMenu* placeMenu = new wxMenu;
 

@@ -850,6 +850,24 @@ EDA_ITEM* D_PAD::Clone() const
 }
 
 
+void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    if( m_Attribute == PAD_SMD || m_Attribute == PAD_CONN)
+    {
+        // Single layer pad (smd) without hole
+        aLayers[0] = GetParent()->GetLayer();
+        aCount     = 1;
+    }
+    else
+    {
+        // Multi layer pad with hole - pad is shown on one common layer, hole on the other
+        aLayers[0] = ITEM_GAL_LAYER( PADS_VISIBLE );
+        aLayers[1] = ITEM_GAL_LAYER( PAD_HOLES_VISIBLE );
+        aCount     = 2;
+    }
+}
+
+
 #if defined(DEBUG)
 
 void D_PAD::Show( int nestLevel, std::ostream& os ) const

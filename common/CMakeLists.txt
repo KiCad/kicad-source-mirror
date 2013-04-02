@@ -4,11 +4,28 @@ include_directories(
     ./dialogs
     ./dialog_about
     ${Boost_INCLUDE_DIR}
+    ${CAIRO_INCLUDE_DIR}
     ../3d-viewer
     ../pcbnew
     ../polygon
     ${INC_AFTER}
     )
+
+if(KICAD_GAL)
+set(GAL_SRCS
+    drawpanel_gal.cpp
+    painter.cpp
+    gal/graphics_abstraction_layer.cpp
+    gal/stroke_font.cpp
+    gal/color4d.cpp
+    gal/opengl/opengl_gal.cpp
+    gal/opengl/shader.cpp
+    gal/cairo/cairo_gal.cpp
+    view/wx_view_controls.cpp
+    )
+
+add_library(gal STATIC ${GAL_SRCS})
+endif(KICAD_GAL)
 
 set(COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
@@ -82,6 +99,14 @@ set(COMMON_SRCS
     zoom.cpp
     )
 
+if(KICAD_GAL)
+set(COMMON_SRCS
+	${COMMON_SRCS}
+	view/view.cpp
+	view/view_item.cpp
+    )
+endif(KICAD_GAL)
+
 add_library(common STATIC ${COMMON_SRCS})
 
 set(PCB_COMMON_SRCS
@@ -131,6 +156,12 @@ set(PCB_COMMON_SRCS
     fp_lib_table.cpp
 )
 
+if(KICAD_GAL)
+set(PCB_COMMON_SRCS
+    ${PCB_COMMON_SRCS} 
+    ../pcbnew/pcb_painter.cpp
+    )
+endif(KICAD_GAL)
 
 # add -DPCBNEW to compilation of these PCBNEW sources
 set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES

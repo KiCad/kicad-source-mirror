@@ -35,6 +35,7 @@
 #include <colors.h>
 #include <bitmaps.h>
 #include <richio.h>
+#include <view/view_item.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -389,7 +390,11 @@ public:
  * is a base class for most all the KiCad significant classes, used in
  * schematics and boards.
  */
+#ifdef KICAD_GAL
+class EDA_ITEM : public KiGfx::VIEW_ITEM
+#else
 class EDA_ITEM
+#endif
 {
 private:
 
@@ -739,6 +744,12 @@ public:
      *          as there is a known issue with wxString buffers.
      */
     virtual EDA_ITEM& operator=( const EDA_ITEM& aItem );
+
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const;
+
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
 
 #if defined(DEBUG)
 
