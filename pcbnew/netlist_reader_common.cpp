@@ -236,6 +236,7 @@ void NETLIST_READER::TestFootprintsMatchingAndExchange()
                 break;
             }
         }
+
         if( cmp_info == NULL )   // not found in netlist
              continue;
 
@@ -296,9 +297,11 @@ int NETLIST_READER::SetPadsNetName( const wxString & aModule, const wxString & a
 
     int padcount = 0;
     MODULE* module = m_pcbframe->GetBoard()->FindModuleByReference( aModule );
+
     if( module )
     {
         D_PAD * pad = module->FindPadByName( aPadname );
+
         if( pad )
         {
             padcount++;
@@ -316,6 +319,7 @@ int NETLIST_READER::SetPadsNetName( const wxString & aModule, const wxString & a
             }
             return padcount;
         }
+
         if( m_messageWindow )
         {
             wxString msg;

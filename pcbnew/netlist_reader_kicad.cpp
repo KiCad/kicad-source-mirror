@@ -173,61 +173,103 @@ void NETLIST_READER_KICAD_PARSER::SkipCurrent() throw( IO_ERROR, PARSE_ERROR )
 void NETLIST_READER_KICAD_PARSER::Parse( BOARD * aBrd )
     throw( IO_ERROR, PARSE_ERROR )
 {
-    wxString text;
+    int plevel = 0;     // the count of ')' to read and end of file,
+                        // after parsing all sections
+
     while( ( token = NextTok() ) != T_EOF )
     {
         if( token == T_LEFT )
             token = NextTok();
-        if( token == T_components )
-        {
-            // The section comp starts here.
-            while( ( token = NextTok() ) != T_RIGHT )
-            {
-                if( token == T_LEFT )
-                    token = NextTok();
-                if( token == T_comp )
-                {
-                    // A comp section if found. Read it
-                    COMPONENT_INFO* cmp_info = ParseComp();
-                    netlist_reader->AddModuleInfo( cmp_info );
-                }
-            }
-            if( netlist_reader->BuildModuleListOnlyOpt() )
-                return; // at this point, the module list is read and built.
-            // Load new footprints
-            netlist_reader->InitializeModules();
-            netlist_reader->TestFootprintsMatchingAndExchange();
-        }
 
-        if( token == T_nets )
+        switch( token )
         {
-            // The section nets starts here.
-            while( ( token = NextTok() ) != T_RIGHT )
-            {
-                if( token == T_LEFT )
-                    token = NextTok();
-                if( token == T_net )
-                {
-                    // A net section if found. Read it
-                    ParseNet( aBrd );
-                }
-            }
-        }
+            case T_export:  // The netlist starts here.
+                // nothing to do here,
+                // just increment the count of ')' to read and end of file
+                plevel++;
+                break;
 
-        if( token == T_libparts && netlist_reader->ReadLibpartSectionOpt() )
-        {
-            // The section libparts starts here.
-            while( ( token = NextTok() ) != T_RIGHT )
-            {
-                if( token == T_LEFT )
-                    token = NextTok();
-                if( token == T_libpart )
+            case T_version:  // The netlist starts here.
+                // version id not yet used: read it but does not use it
+                NextTok();
+                NeedRIGHT();
+                break;
+
+            case T_components:  // The section comp starts here.
+                while( ( token = NextTok() ) != T_RIGHT )
                 {
-                    // A libpart section if found. Read it
-                    ParseKicadLibpartList();
+                    if( token == T_LEFT )
+                        token = NextTok();
+                    if( token == T_comp )   // A comp section if found. Read it
+                    {
+                        COMPONENT_INFO* cmp_info = ParseComp();
+                        netlist_reader->AddModuleInfo( cmp_info );
+                    }
                 }
-            }
+                if( netlist_reader->BuildModuleListOnlyOpt() )
+                    return; // at this point, the module list is read and built.
+                // Load new footprints
+                netlist_reader->InitializeModules();
+                netlist_reader->TestFootprintsMatchingAndExchange();
+                break;
+
+            case T_nets:    // The section nets starts here.
+                while( ( token = NextTok() ) != T_RIGHT )
+                {
+                    if( token == T_LEFT )
+                        token = NextTok();
+                    if( token == T_net )
+                    {
+                        // A net section if found. Read it
+                        ParseNet( aBrd );
+                    }
+                }
+                break;
+
+            case T_libparts:    // The section libparts starts here.
+                if( netlist_reader->ReadLibpartSectionOpt() )
+                {
+                    while( ( token = NextTok() ) != T_RIGHT )
+                    {
+                        if( token == T_LEFT )
+                            token = NextTok();
+                        if( token == T_libpart )
+                        {
+                            // A libpart section if found. Read it
+                            ParseKicadLibpartList();
+                        }
+                    }
+                }
+                else
+                    SkipCurrent();
+                break;
+
+            case T_libraries:    // The section libraries starts here.
+                // List of libraries in use.
+                // Not used here, just skip it
+                SkipCurrent();
+                break;
+
+            case T_design:    // The section design starts here.
+                // Not used (mainly thet are comments), just skip it
+                SkipCurrent();
+                break;
+
+            case T_RIGHT:    // The closing parenthesis of the file.
+                // Not used (mainly thet are comments), just skip it
+                plevel--;
+                break;
+
+            default:
+                SkipCurrent();
+                break;
         }
+    }
+
+    if( plevel != 0 )
+    {
+        wxLogDebug(wxT("NETLIST_READER_KICAD_PARSER::Parse(): bad parenthesis count (count = %d"),
+                    plevel );
     }
 }
 
