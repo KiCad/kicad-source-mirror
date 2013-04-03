@@ -44,6 +44,8 @@ class SEGZONE;
 class ZONE_CONTAINER;
 class TEXTE_PCB;
 class TEXTE_MODULE;
+class DIMENSION;
+class PCB_TARGET;
 
 namespace KiGfx
 {
@@ -137,6 +139,8 @@ protected:
     void draw( const TEXTE_PCB* );
     void draw( const TEXTE_MODULE*, int );
     void draw( const ZONE_CONTAINER* );
+    void draw( const DIMENSION* );
+    void draw( const PCB_TARGET* );
 };
 } // namespace KiGfx
 

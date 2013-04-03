@@ -32,7 +32,7 @@
 #include <class_colors_design_settings.h>
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
-#include <eda_text.h>
+#include <class_mire.h>
 
 #include <view/view.h>
 #include <pcb_painter.h>
@@ -182,6 +182,14 @@ bool PCB_PAINTER::Draw( const EDA_ITEM* aItem, int aLayer )
 
     case PCB_ZONE_AREA_T:
         draw( (ZONE_CONTAINER*) aItem );
+        break;
+
+    case PCB_DIMENSION_T:
+        draw( (DIMENSION*) aItem );
+        break;
+
+    case PCB_TARGET_T:
+        draw( (PCB_TARGET*) aItem );
         break;
 
     default:
@@ -376,14 +384,14 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText )
 
 void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 {
-    COLOR4D strokeColor = getLayerColor( aLayer, 0 );
+    COLOR4D  strokeColor = getLayerColor( aLayer, 0 );
+    VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y);
+    double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
 
     m_gal->SetStrokeColor( strokeColor );
     m_gal->SetLineWidth( aText->GetThickness() );
     m_stroke_font->LoadAttributes( aText );
-    m_stroke_font->Draw( std::string( aText->GetText().mb_str() ),
-                         VECTOR2D( aText->GetTextPosition().x, aText->GetTextPosition().y),
-                         aText->GetDrawRotation() * M_PI / 1800.0 );
+    m_stroke_font->Draw( std::string( aText->GetText().mb_str() ), position, orientation );
 }
 
 
@@ -418,4 +426,49 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aContainer )
             corners.clear();
         }
     }
+}
+
+
+void PCB_PAINTER::draw( const DIMENSION* aDimension )
+{
+    COLOR4D strokeColor = getLayerColor( aDimension->GetLayer(), 0 );
+
+    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( aDimension->GetWidth() );
+
+    // Draw an arrow
+    m_gal->DrawLine( VECTOR2D( aDimension->m_crossBarO ), VECTOR2D( aDimension->m_crossBarF ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineGO ), VECTOR2D( aDimension->m_featureLineGF ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_featureLineDO ), VECTOR2D( aDimension->m_featureLineDF ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD1O ), VECTOR2D( aDimension->m_arrowD1F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowD2O ), VECTOR2D( aDimension->m_arrowD2F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG1O ), VECTOR2D( aDimension->m_arrowG1F ) );
+    m_gal->DrawLine( VECTOR2D( aDimension->m_arrowG2O ), VECTOR2D( aDimension->m_arrowG2F ) );
+
+    // Draw text
+    draw( &aDimension->Text() );
+}
+
+
+void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
+{
+    COLOR4D strokeColor = getLayerColor( aTarget->GetLayer(), 0 );
+    double  radius;
+
+    // according to PCB_TARGET::Draw() (class_mire.cpp)
+    if( aTarget->GetShape() )    // shape X
+    {
+        radius = aTarget->GetSize() / 2;
+    }
+    else
+    {
+        radius = aTarget->GetSize() / 3;
+    }
+
+    m_gal->SetStrokeColor( strokeColor );
+    m_gal->SetIsFill( true );
+    m_gal->SetIsStroke( true );
+    m_gal->DrawCircle( VECTOR2D( aTarget->GetPosition() ), radius );
 }
