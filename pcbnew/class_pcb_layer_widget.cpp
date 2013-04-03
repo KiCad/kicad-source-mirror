@@ -368,16 +368,18 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
     {
         KiGfx::VIEW* view = galCanvas->GetView();
         view->SetLayerVisible( aLayer, isVisible );
-
-        if( myframe->IsGalCanvasActive() )
-        {
-            galCanvas->Refresh();
-        }
     }
 #endif /* KICAD_GAL */
 
     if( isFinal )
-        myframe->GetCanvas()->Refresh();
+    {
+#ifdef KICAD_GAL
+        if( myframe->IsGalCanvasActive() )
+            galCanvas->Refresh();
+        else
+#endif /* KICAD_GAL */
+            myframe->GetCanvas()->Refresh();
+    }
 }
 
 void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
@@ -418,15 +420,13 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     {
         KiGfx::VIEW* view = galCanvas->GetView();
         view->SetLayerVisible( ITEM_GAL_LAYER( aId ), isEnabled );
-
-        if( myframe->IsGalCanvasActive() )
-        {
-            galCanvas->Refresh();
-        }
     }
-#endif /* KICAD_GAL */
 
-    myframe->GetCanvas()->Refresh();
+    if( myframe->IsGalCanvasActive() )
+        galCanvas->Refresh();
+    else
+#endif /* KICAD_GAL */
+        myframe->GetCanvas()->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------
