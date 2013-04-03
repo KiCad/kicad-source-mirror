@@ -226,6 +226,17 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
         {
             view->SetLayerOrder( m_galLayerOrder[i], i );
         }
+
+        // Load layer & elements visibility settings
+        for( unsigned int i = 0; i < LAYER_COUNT; ++i )
+        {
+            view->SetLayerVisible( i, m_Pcb->IsLayerVisible( i ) );
+        }
+
+        for( unsigned int i = 0; i < END_PCB_VISIBLE_LIST; ++i )
+        {
+            view->SetLayerVisible( ITEM_GAL_LAYER( i ), m_Pcb->IsElementVisible( i ) );
+        }
     }
 #endif
 }
