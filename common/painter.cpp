@@ -24,8 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eda_text.h>
-#include <view/view.h>
 #include <painter.h>
 #include <gal/stroke_font.h>
 #include <newstroke_font.h>
@@ -44,6 +42,7 @@ RENDER_SETTINGS::RENDER_SETTINGS()
     m_highlightEnabled  = false;
     m_hiContrastEnabled = false;
     m_hiContrastFactor  = 0.2;
+    m_activeLayer       = 0;
 
     // Store the predefined colors used in KiCad in format used by GAL
     for( int i = 0; i < NBCOLOR; i++ )

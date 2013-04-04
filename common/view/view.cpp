@@ -344,6 +344,7 @@ struct VIEW::drawItem
     VIEW*    view;
 };
 
+
 void VIEW::redrawRect( const BOX2I& aRect )
 {
     int          totalItems = 0, totalCached = 0;
