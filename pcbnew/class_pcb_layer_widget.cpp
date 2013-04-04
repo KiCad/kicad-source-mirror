@@ -34,6 +34,7 @@
 #ifdef KICAD_GAL
 #include <class_drawpanel_gal.h>
 #include <view/view.h>
+#include <painter.h>
 #endif
 #include <confirm.h>
 #include <wxPcbStruct.h>
@@ -342,8 +343,19 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
     // false from this function.
     myframe->setActiveLayer( aLayer, false );
 
+#ifdef KICAD_GAL
+    myframe->GetGalCanvas()->GetView()->GetPainter()->GetSettings()->SetActiveLayer( aLayer );
+#endif /* KICAD_GAL */
+
     if(DisplayOpt.ContrastModeDisplay)
-        myframe->GetCanvas()->Refresh();
+    {
+#ifdef KICAD_GAL
+        if( myframe->IsGalCanvasActive() )
+            myframe->GetGalCanvas()->Refresh();
+        else
+#endif
+            myframe->GetCanvas()->Refresh();
+    }
 
     return true;
 }
