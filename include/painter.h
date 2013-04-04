@@ -180,6 +180,16 @@ public:
     }
 
     /**
+     * Function GetSettings
+     * Returns pointer to current settings that are going to be used when drawing items.
+     * @return Current rendering settings.
+     */
+    virtual RENDER_SETTINGS* GetSettings()
+    {
+        return m_settings;
+    }
+
+    /**
      * Function Draw
      * Takes an instance of EDA_ITEM and passes it to a function that know how to draw the item.
      * @param aItem is an item to be drawn.
