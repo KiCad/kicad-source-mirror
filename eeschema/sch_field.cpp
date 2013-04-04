@@ -187,11 +187,11 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     else
     {
         if( m_id == REFERENCE )
-            color = ReturnLayerColor( LAYER_REFERENCEPART );
+            color = GetLayerColor( LAYER_REFERENCEPART );
         else if( m_id == VALUE )
-            color = ReturnLayerColor( LAYER_VALUEPART );
+            color = GetLayerColor( LAYER_VALUEPART );
         else
-            color = ReturnLayerColor( LAYER_FIELDS );
+            color = GetLayerColor( LAYER_FIELDS );
     }
 
     DrawGraphicText( panel, DC, textpos, color, GetFullyQualifiedText(), orient, m_Size,
@@ -537,7 +537,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     wxCHECK_RET( parent != NULL && parent->Type() == SCH_COMPONENT_T,
                  wxT( "Cannot plot field with invalid parent." ) );
 
-    EDA_COLOR_T color = ReturnLayerColor( GetLayer() );
+    EDA_COLOR_T color = GetLayerColor( GetLayer() );
 
     if( m_Attributs & TEXT_NO_VISIBLE )
         return;

@@ -371,13 +371,11 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
 
 void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 {
-    static const int MAX_COLOR = 0x8001F;
-
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
-    EDA_COLOR_T itmp = ColorFromInt( aConfig->Read( m_Ident, m_Default ) );
+    EDA_COLOR_T itmp = ColorByName( aConfig->Read( m_Ident, wxT("NONE") ) );
 
-    if( (itmp < 0) || (itmp > MAX_COLOR) )
+    if( itmp == UNSPECIFIED_COLOR )
         itmp = m_Default;
     *m_Pt_param = itmp;
 }
@@ -388,7 +386,7 @@ void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig ) const
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
 
-    aConfig->Write( m_Ident, (long) *m_Pt_param );
+    aConfig->Write( m_Ident, ColorGetName( *m_Pt_param ) );
 }
 
 

@@ -162,9 +162,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* aParent,
     m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
                                          wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
-    m_messagePanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
-                                                   ColorRefs[LIGHTGRAY].m_Green,
-                                                   ColorRefs[LIGHTGRAY].m_Blue ) );
+    m_messagePanel->SetBackgroundColour( MakeColour( LIGHTGRAY ) );
 }
 
 

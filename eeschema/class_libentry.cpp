@@ -391,7 +391,7 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
+        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
         bool fill = aPlotter->GetColorMode();
 
         item.Plot( aPlotter, aOffset, fill, aTransform );

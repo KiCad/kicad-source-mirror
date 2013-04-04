@@ -614,8 +614,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( draw_mode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(draw_mode & GR_AND) );
 
-    if( color & HIGHLIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+    ColorApplyHighlightFlag( &color );
 
     SetAlpha( &color, 150 );
 
@@ -780,8 +779,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( draw_mode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(draw_mode & GR_AND) );
 
-    if( color & HIGHLIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+    ColorApplyHighlightFlag( &color );
 
     SetAlpha( &color, 150 );
 

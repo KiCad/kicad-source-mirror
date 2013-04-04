@@ -28,7 +28,7 @@
 extern int g_DrawDefaultLineThickness;
 
 // Local variables
-static long   s_SelectedLayers;
+static LAYER_MSK s_SelectedLayers;
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };
 
@@ -144,7 +144,6 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent )
 
 void DIALOG_PRINT_USING_PRINTER::InitValues( )
 {
-    LAYER_NUM layer_max = NB_PCB_LAYERS;
     wxString msg;
     BOARD*   board = m_parent->GetBoard();
 
@@ -189,7 +188,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             m_BoxSelectLayer[layer]->SetValue( option );
         else
         {
-            long mask = 1 << layer;
+            LAYER_MSK mask = GetLayerMask( layer );
             if( mask & s_SelectedLayers )
                 m_BoxSelectLayer[layer]->SetValue( true );
         }
@@ -220,8 +219,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             s_Parameters.m_YScaleAdjust > MAX_SCALE )
             s_Parameters.m_XScaleAdjust = s_Parameters.m_YScaleAdjust = 1.0;
 
-        s_SelectedLayers = 0;
-        for( int layer = 0;  layer<layer_max;  ++layer )
+        s_SelectedLayers = NO_LAYERS;
+        for( LAYER_NUM layer = FIRST_LAYER; layer< NB_PCB_LAYERS; ++layer )
         {
             if( m_BoxSelectLayer[layer] == NULL )
                 continue;
@@ -236,7 +235,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
             {
                 m_BoxSelectLayer[layer]->SetValue( option );
                 if( option )
-                    s_SelectedLayers |= 1 << layer;
+                    s_SelectedLayers |= GetLayerMask( layer );
             }
         }
     }

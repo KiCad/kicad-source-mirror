@@ -111,8 +111,8 @@ void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     if( GetMarkerType() == MARK_ERC )
     {
-        color = ( GetErrorLevel() == WAR ) ? ReturnLayerColor( LAYER_ERC_WARN ) :
-                                             ReturnLayerColor( LAYER_ERC_ERR );
+        color = ( GetErrorLevel() == WAR ) ? GetLayerColor( LAYER_ERC_WARN ) :
+                                             GetLayerColor( LAYER_ERC_ERR );
     }
 
     if( aColor < 0 )

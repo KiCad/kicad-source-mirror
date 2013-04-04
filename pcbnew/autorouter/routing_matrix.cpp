@@ -198,7 +198,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 {
     int       ux0 = 0, uy0 = 0, ux1, uy1, dx, dy;
     int       marge, via_marge;
-    int       layerMask;
+    LAYER_MSK layerMask;
 
     // use the default NETCLASS?
     NETCLASS* nc = aPcb->m_NetClasses.GetDefault();

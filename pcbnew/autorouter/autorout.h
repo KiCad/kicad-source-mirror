@@ -34,6 +34,7 @@
 
 
 #include <base_struct.h>
+#include <layers_id_colors_and_visibility.h>
 
 
 class BOARD;
@@ -208,7 +209,7 @@ void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
 
 /* Same as above, but the rectangle is inclined angle angle. */
 void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1,
-                           int angle, int masque_layer, int color, int op_logic );
+                           int angle, LAYER_MSK masque_layer, int color, int op_logic );
 
 /* QUEUE.CPP */
 void FreeQueue();

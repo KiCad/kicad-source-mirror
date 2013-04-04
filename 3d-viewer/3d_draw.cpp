@@ -49,7 +49,7 @@
 #include <3d_draw_basic_functions.h>
 
 // Imported function:
-extern void SetGLColor( int color );
+extern void SetGLColor( EDA_COLOR_T color );
 extern void Set_Object_Data( std::vector< S3D_VERTEX >& aVertices, double aBiuTo3DUnits );
 extern void CheckGLError();
 
@@ -326,8 +326,8 @@ void EDA_3D_CANVAS::Draw3D_Zone( ZONE_CONTAINER* aZone )
 void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
 {
     double zpos = 0.0;
-    int gridcolor = DARKGRAY;           // Color of grid lines
-    int gridcolor_marker = LIGHTGRAY;   // Color of grid lines every 5 lines
+    EDA_COLOR_T gridcolor = DARKGRAY;           // Color of grid lines
+    EDA_COLOR_T gridcolor_marker = LIGHTGRAY;   // Color of grid lines every 5 lines
     double scale = g_Parm_3D_Visu.m_BiuTo3Dunits;
 
     glNormal3f( 0.0, 0.0, 1.0 );
@@ -457,7 +457,7 @@ void EDA_3D_CANVAS::DrawGrid( double aGriSizeMM )
 void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
 {
     LAYER_NUM layer = aTrack->GetLayer();
-    int color = g_ColorsSettings.GetLayerColor( layer );
+    EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
     int thickness = g_Parm_3D_Visu.GetCopperThicknessBIU();
 
     if( layer == LAST_COPPER_LAYER )
@@ -476,7 +476,7 @@ void EDA_3D_CANVAS::Draw3D_Track( TRACK* aTrack )
 void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
 {
     LAYER_NUM layer, top_layer, bottom_layer;
-    int    color;
+    EDA_COLOR_T color;
     double biu_to_3Dunits = g_Parm_3D_Visu.m_BiuTo3Dunits ;
 
     int outer_radius = via->GetWidth() / 2;
@@ -531,7 +531,7 @@ void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
 void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 {
     LAYER_NUM layer = segment->GetLayer();
-    int color = g_ColorsSettings.GetLayerColor( layer );
+    EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
     int thickness = g_Parm_3D_Visu.GetLayerObjectThicknessBIU( layer );
 
     SetGLColor( color );
@@ -625,7 +625,7 @@ static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
 void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
 {
     LAYER_NUM layer = text->GetLayer();
-    int color = g_ColorsSettings.GetLayerColor( layer );
+    EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( layer );
 
     SetGLColor( color );
     s_Text3DZPos  = g_Parm_3D_Visu.GetLayerZcoordBIU( layer );

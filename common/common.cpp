@@ -72,9 +72,9 @@ bool IsGOST()
  * Please: if you change a value, remember these values are carefully chosen
  * to have good results in Pcbnew, that uses the ORed value of basic colors
  * when displaying superimposed objects
- * This list must have exactly NBCOLOR items
+ * This list must have exactly NBCOLORS items
  */
-StructColors ColorRefs[NBCOLOR] =
+const StructColors g_ColorRefs[NBCOLORS] =
 {
     { 0,    0,   0,   BLACK,        wxT( "BLACK" ),        DARKDARKGRAY          },
     { 192,  0,   0,   BLUE,         wxT( "BLUE" ),         LIGHTBLUE             },

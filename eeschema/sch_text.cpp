@@ -350,7 +350,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     if( Color >= 0 )
         color = Color;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -657,7 +657,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector <wxPoint> Poly;
 
-    EDA_COLOR_T color = ReturnLayerColor( GetLayer() );
+    EDA_COLOR_T color = GetLayerColor( GetLayer() );
     wxPoint     textpos   = m_Pos + GetSchematicTextOffset();
     int         thickness = GetPenSize();
 
@@ -1276,7 +1276,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     if( Color >= 0 )
         color = Color;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -1614,7 +1614,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     if( Color >= 0 )
         color = Color;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 

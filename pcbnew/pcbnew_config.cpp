@@ -351,95 +351,95 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                    &DisplayOpt.DisplayZonesMode, 0, 0, 2 ) );
 
     // Colors:
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay0" ), LOC_COLOR( 0 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer0Ex" ), LOC_COLOR( 0 ),
                                                         GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay1" ), LOC_COLOR( 1 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer1Ex" ), LOC_COLOR( 1 ),
                                                         BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay2" ), LOC_COLOR( 2 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer2Ex" ), LOC_COLOR( 2 ),
                                                         LIGHTGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay3" ), LOC_COLOR( 3 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer3Ex" ), LOC_COLOR( 3 ),
                                                         MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay4" ), LOC_COLOR( 4 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer4Ex" ), LOC_COLOR( 4 ),
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay5" ), LOC_COLOR( 5 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer5Ex" ), LOC_COLOR( 5 ),
                                                         MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay6" ), LOC_COLOR( 6 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer6Ex" ), LOC_COLOR( 6 ),
                                                         BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay7" ), LOC_COLOR( 7 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer7Ex" ), LOC_COLOR( 7 ),
                                                         MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay8" ), LOC_COLOR( 8 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer8Ex" ), LOC_COLOR( 8 ),
                                                         LIGHTGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLay9" ), LOC_COLOR( 9 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer9Ex" ), LOC_COLOR( 9 ),
                                                         BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayA" ), LOC_COLOR( 10 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer10Ex" ), LOC_COLOR( 10 ),
                                                         GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayB" ), LOC_COLOR( 11 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer11Ex" ), LOC_COLOR( 11 ),
                                                         CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayC" ), LOC_COLOR( 12 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer12Ex" ), LOC_COLOR( 12 ),
                                                         LIGHTRED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayD" ), LOC_COLOR( 13 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer13Ex" ), LOC_COLOR( 13 ),
                                                         LIGHTMAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayE" ), LOC_COLOR( 14 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer14Ex" ), LOC_COLOR( 14 ),
                                                         YELLOW ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayF" ), LOC_COLOR( 15 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer15Ex" ), LOC_COLOR( 15 ),
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayG" ), LOC_COLOR( 16 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer16Ex" ), LOC_COLOR( 16 ),
                                                         BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayH" ), LOC_COLOR( 17 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer17Ex" ), LOC_COLOR( 17 ),
                                                         MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayI" ), LOC_COLOR( 18 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer18Ex" ), LOC_COLOR( 18 ),
                                                         LIGHTCYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayJ" ), LOC_COLOR( 19 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer19Ex" ), LOC_COLOR( 19 ),
                                                         RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayK" ), LOC_COLOR( 20 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer20Ex" ), LOC_COLOR( 20 ),
                                                         MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayL" ), LOC_COLOR( 21 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer21Ex" ), LOC_COLOR( 21 ),
                                                         CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayM" ), LOC_COLOR( 22 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer22Ex" ), LOC_COLOR( 22 ),
                                                         BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayN" ), LOC_COLOR( 23 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer23Ex" ), LOC_COLOR( 23 ),
                                                         MAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayO" ), LOC_COLOR( 24 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer24Ex" ), LOC_COLOR( 24 ),
                                                         LIGHTGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayP" ), LOC_COLOR( 25 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer25Ex" ), LOC_COLOR( 25 ),
                                                         BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayQ" ), LOC_COLOR( 26 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer26Ex" ), LOC_COLOR( 26 ),
                                                         GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayR" ), LOC_COLOR( 27 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer27Ex" ), LOC_COLOR( 27 ),
                                                         YELLOW ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayS" ), LOC_COLOR( 28 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer28Ex" ), LOC_COLOR( 28 ),
                                                         YELLOW ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayT" ), LOC_COLOR( 29 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer29Ex" ), LOC_COLOR( 29 ),
                                                         LIGHTMAGENTA ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayU" ), LOC_COLOR( 30 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer30Ex" ), LOC_COLOR( 30 ),
                                                         YELLOW ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColLayV" ), LOC_COLOR( 31 ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorLayer31Ex" ), LOC_COLOR( 31 ),
                                                         LIGHTGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CTxtMoC" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorTxtFrontEx" ),
                                                         ITEM_COLOR( MOD_TEXT_FR_VISIBLE ),
                                                         LIGHTGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CTxtMoS" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorTxtBackEx" ),
                                                         ITEM_COLOR( MOD_TEXT_BK_VISIBLE ),
                                                         BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CTxtVis" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorTxtInvisEx" ),
                                                         ITEM_COLOR( MOD_TEXT_INVISIBLE ),
                                                         DARKGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CAncreM" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorAnchorEx" ),
                                                         ITEM_COLOR( ANCHOR_VISIBLE ), BLUE ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CoPadCu" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPadBackEx" ),
                                                         ITEM_COLOR( PAD_BK_VISIBLE ), GREEN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CoPadCm" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPadFrontEx" ),
                                                         ITEM_COLOR( PAD_FR_VISIBLE ), RED ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CoViaTh" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorViaThruEx" ),
                                                         ITEM_COLOR( VIA_THROUGH_VISIBLE ),
                                                         LIGHTGRAY ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CoViaBu" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorViaBBlindEx" ),
                                                         ITEM_COLOR( VIA_BBLIND_VISIBLE ),
                                                         BROWN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CoViaMi" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorViaMicroEx" ),
                                                         ITEM_COLOR( VIA_MICROVIA_VISIBLE ),
                                                         CYAN ) );
-    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "CoRatsN" ),
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorRatsEx" ),
                                                         ITEM_COLOR( RATSNEST_VISIBLE ),
                                                         WHITE ) );
 

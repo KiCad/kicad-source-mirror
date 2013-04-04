@@ -134,12 +134,26 @@ inline LAYER_MSK GetLayerMask( LAYER_NUM aLayerNumber )
     return 1 << aLayerNumber;
 }
 
+/**
+ * Count the number of set layers in the mask
+ */
+inline int LayerMaskCountSet( LAYER_MSK aMask )
+{
+    int count = 0;
+
+    for( LAYER_NUM i = FIRST_LAYER; i < NB_LAYERS; ++i )
+    {
+        if( aMask & GetLayerMask( i ) )
+            ++count;
+    }
+    return count;
+}
 
 
 // layers order in dialogs (plot, print and toolbars)
 // in same order than in setup layers dialog
 // (Front or Top to Back or Bottom)
-#define DECLARE_LAYERS_ORDER_LIST(list) LAYER_NUM list[NB_LAYERS] =\
+#define DECLARE_LAYERS_ORDER_LIST(list) const LAYER_NUM list[NB_LAYERS] =\
 {   LAYER_N_FRONT,\
     LAYER_N_15, LAYER_N_14, LAYER_N_13, LAYER_N_12,\
     LAYER_N_11, LAYER_N_10, LAYER_N_9, LAYER_N_8,\
@@ -222,5 +236,40 @@ inline bool IsValidNonCopperLayerIndex( LAYER_NUM aLayerIndex )
     return aLayerIndex >= FIRST_NON_COPPER_LAYER
         && aLayerIndex <= LAST_NON_COPPER_LAYER;
 }
+
+/* IMPORTANT: If a layer is not a front layer not necessarily is true
+   the converse. The same hold for a back layer.
+   So a layer can be:
+   - Front
+   - Back
+   - Neither (internal or auxiliary) 
+   
+   The check most frequent is for back layers, since it involves flips */
+
+
+/** 
+ * Layer classification: check if it's a front layer
+ */
+inline bool IsFrontLayer( LAYER_NUM aLayer )
+{
+    return ( aLayer == LAYER_N_FRONT ||
+             aLayer == ADHESIVE_N_FRONT ||
+             aLayer == SOLDERPASTE_N_FRONT ||
+             aLayer == SILKSCREEN_N_FRONT ||
+             aLayer == SOLDERPASTE_N_FRONT );
+}
+
+/** 
+ * Layer classification: check if it's a back layer
+ */
+inline bool IsBackLayer( LAYER_NUM aLayer )
+{
+    return ( aLayer == LAYER_N_BACK ||
+             aLayer == ADHESIVE_N_BACK ||
+             aLayer == SOLDERPASTE_N_BACK ||
+             aLayer == SILKSCREEN_N_BACK ||
+             aLayer == SOLDERPASTE_N_BACK );
+}
+
 
 #endif // _LAYERS_ID_AND_VISIBILITY_H_
