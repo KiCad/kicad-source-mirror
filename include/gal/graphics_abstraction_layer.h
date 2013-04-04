@@ -471,6 +471,22 @@ public:
     }
 
     /**
+     * @brief Returns the minimum depth in the currently used range (the top).
+     */
+    inline double GetMinDepth()
+    {
+        return depthRange.x;
+    }
+
+    /**
+     * @brief Returns the maximum depth in the currently used range (the bottom).
+     */
+    inline double GetMaxDepth()
+    {
+        return depthRange.y;
+    }
+
+    /**
      * @brief Get the world scale.
      *
      * @return the actual world scale factor.
@@ -624,11 +640,17 @@ public:
         layerDepth -= 0.1;    // fixme: there should be a minimum step
     }
 
+    /**
+     * @brief Stores current drawing depth on the depth stack.
+     */
     void PushDepth()
     {
         depthStack.push( layerDepth );
     }
 
+    /**
+     * @brief Restores previously stored drawing depth for the depth stack.
+     */
     void PopDepth()
     {
         layerDepth = depthStack.top();
