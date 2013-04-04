@@ -138,7 +138,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     else
         drawInfo.m_ShowPadFilled = false;
 
-    EDA_COLOR_T color = ColorFromInt(0); // XXX EVIL (it will be ORed later)
+    EDA_COLOR_T color = BLACK;
     if( m_layerMask & LAYER_FRONT )
     {
         color = brd->GetVisibleElementColor( PAD_FR_VISIBLE );
@@ -146,13 +146,12 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
     if( m_layerMask & LAYER_BACK )
     {
-        // XXX EVIL merge
-        color = ColorFromInt( color | brd->GetVisibleElementColor( PAD_BK_VISIBLE ) );
+        color = ColorMix( color, brd->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
 
-    if( color == 0 ) // Not on a visible copper layer XXX EVIL check
+    if( color == BLACK ) // Not on a visible copper layer (i.e. still nothing to show)
     {
-        // If the pad in on only one tech layer, use the layer color else use DARKGRAY
+        // If the pad is on only one tech layer, use the layer color else use DARKGRAY
         int mask_non_copper_layers = m_layerMask & ~ALL_CU_LAYERS;
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
         mask_non_copper_layers &= brd->GetVisibleLayers();
@@ -328,8 +327,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     if( aDraw_mode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(aDraw_mode & GR_AND) );
 
-    if( color & HIGHLIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+    ColorApplyHighlightFlag( &color );
 
     bool DisplayIsol = DisplayOpt.DisplayPadIsol;
 
@@ -362,7 +360,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         drawInfo.m_Display_netname = false;
 
     // Display net names is restricted to pads that are on the active layer
-    // in hight contrast mode display
+    // in high contrast mode display
     if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
         !IsOnLayer( screen->m_Active_Layer ) && DisplayOpt.ContrastModeDisplay )
         drawInfo.m_Display_netname = false;

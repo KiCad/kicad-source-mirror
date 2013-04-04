@@ -273,19 +273,19 @@ static void write_triangle_bag( FILE* output_file, int color_index, //{{{
             case 1: // Material marker
                 fprintf( output_file,
                          "              diffuseColor %g %g %g\n",
-                         (double) ColorRefs[color_index].m_Red / 255.0,
-                         (double) ColorRefs[color_index].m_Green / 255.0,
-                         (double) ColorRefs[color_index].m_Blue / 255.0 );
+                         (double) g_ColorRefs[color_index].m_Red / 255.0,
+                         (double) g_ColorRefs[color_index].m_Green / 255.0,
+                         (double) g_ColorRefs[color_index].m_Blue / 255.0 );
                 fprintf( output_file,
                          "              specularColor %g %g %g\n",
-                         (double) ColorRefs[color_index].m_Red / 255.0,
-                         (double) ColorRefs[color_index].m_Green / 255.0,
-                         (double) ColorRefs[color_index].m_Blue / 255.0 );
+                         (double) g_ColorRefs[color_index].m_Red / 255.0,
+                         (double) g_ColorRefs[color_index].m_Green / 255.0,
+                         (double) g_ColorRefs[color_index].m_Blue / 255.0 );
                 fprintf( output_file,
                          "              emissiveColor %g %g %g\n",
-                         (double) ColorRefs[color_index].m_Red / 255.0,
-                         (double) ColorRefs[color_index].m_Green / 255.0,
-                         (double) ColorRefs[color_index].m_Blue / 255.0 );
+                         (double) g_ColorRefs[color_index].m_Red / 255.0,
+                         (double) g_ColorRefs[color_index].m_Green / 255.0,
+                         (double) g_ColorRefs[color_index].m_Blue / 255.0 );
                 break;
 
             case 2:

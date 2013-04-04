@@ -180,7 +180,7 @@ wxString TEXTE_PCB::GetSelectMenuText() const
     if( m_Text.Len() < 12 )
         shorttxt << m_Text;
     else
-        shorttxt += m_Text.Left( 10 ) + wxT( ".." );
+        shorttxt += m_Text.Left( 10 ) + wxT( "..." );
 
     text.Printf( _( "Pcb Text %s on %s"),
                  GetChars ( shorttxt ), GetChars( GetLayerName() ) );

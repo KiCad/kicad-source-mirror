@@ -434,18 +434,9 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "Ly" ) )    // Old format for Layer count
         {
-            int layer_mask  = hexParse( line + SZ( "Ly" ) );
-            int layer_count = 0;
+            LAYER_MSK layer_mask  = hexParse( line + SZ( "Ly" ) );
 
-            for( LAYER_NUM ii = FIRST_COPPER_LAYER;
-                 ii < NB_COPPER_LAYERS && layer_mask;
-                 ++ii, layer_mask >>= 1 )
-            {
-                if( layer_mask & 1 )
-                    layer_count++;
-            }
-
-            m_board->SetCopperLayerCount( layer_count );
+            m_board->SetCopperLayerCount( LayerMaskCountSet( layer_mask & ALL_CU_LAYERS ) );
         }
 
         else if( TESTLINE( "BoardThickness" ) )
@@ -1550,6 +1541,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     // after switching to strtok, there's no easy coming back because of the
     // embedded nul(s?) placed to the right of the current field.
+    // (that's the reason why strtok was deprecated...)
     char*   mirror  = strtok( (char*) data, delims );
     char*   hide    = strtok( NULL, delims );
     char*   tmp     = strtok( NULL, delims );
@@ -2984,9 +2976,9 @@ void LEGACY_PLUGIN::saveSETUP( const BOARD* aBoard ) const
 
     unsigned layerMask = ALL_CU_LAYERS & aBoard->GetEnabledLayers();
 
-    for( LAYER_NUM layer = FIRST_LAYER; layerMask; ++layer, layerMask >>= 1 )
+    for( LAYER_NUM layer = FIRST_LAYER; layer <= LAST_COPPER_LAYER; ++layer )
     {
-        if( layerMask & 1 )
+        if( layerMask & GetLayerMask( layer ) )
         {
             fprintf( m_fp, "Layer[%d] %s %s\n", layer,
                      TO_UTF8( aBoard->GetLayerName( layer ) ),

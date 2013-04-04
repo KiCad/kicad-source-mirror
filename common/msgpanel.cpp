@@ -205,9 +205,7 @@ void EDA_MSG_PANEL::showItem( wxDC& aDC, const MSG_PANEL_ITEM& aItem )
     if( color >= 0 )
     {
         color = ColorGetBase( color );
-        aDC.SetTextForeground( wxColour( ColorRefs[color].m_Red,
-                                         ColorRefs[color].m_Green,
-                                         ColorRefs[color].m_Blue ) );
+        aDC.SetTextForeground( MakeColour( color ) );
     }
 
     if( !aItem.m_UpperText.IsEmpty() )

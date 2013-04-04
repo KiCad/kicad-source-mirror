@@ -179,12 +179,12 @@ void LIB_RECTANGLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->Rect( pos, end, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
+    aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
     aPlotter->Rect( pos, end, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
@@ -201,7 +201,7 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 {
     wxPoint pos1, pos2;
 
-    EDA_COLOR_T color = ReturnLayerColor( LAYER_DEVICE );
+    EDA_COLOR_T color = GetLayerColor( LAYER_DEVICE );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -225,8 +225,8 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
         GRFilledRect( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, pos2.x, pos2.y, GetPenSize( ),
-                      (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
-                      ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                      (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
+                      GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( m_Fill == FILLED_SHAPE  && !aData )
         GRFilledRect( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, pos2.x, pos2.y,
                       GetPenSize(), color, color );

@@ -424,12 +424,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     // Layers.
     m_out->Print( aNestLevel, "(layers\n" );
 
-    unsigned mask = LAYER_FRONT;
-    LAYER_NUM layer = LAYER_N_FRONT;
-
     // Save only the used copper layers from front to back.
-    while( mask != 0 )
+    for( LAYER_NUM layer = LAST_COPPER_LAYER; layer >= FIRST_COPPER_LAYER; --layer) 
     {
+        LAYER_MSK mask = GetLayerMask( layer );
         if( mask & aBoard->GetEnabledLayers() )
         {
             m_out->Print( aNestLevel+1, "(%d %s %s", layer,
@@ -441,17 +439,12 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
             m_out->Print( 0, ")\n" );
         }
-
-        mask >>= 1;
-        --layer;
     }
 
-    mask = ADHESIVE_LAYER_BACK;
-    layer = ADHESIVE_N_BACK;
-
     // Save used non-copper layers in the order they are defined.
-    while( layer < NB_LAYERS )
+    for( LAYER_NUM layer = FIRST_NON_COPPER_LAYER; layer <= LAST_NON_COPPER_LAYER; ++layer)
     {
+        LAYER_MSK mask = GetLayerMask( layer );
         if( mask & aBoard->GetEnabledLayers() )
         {
             m_out->Print( aNestLevel+1, "(%d %s user", layer,
@@ -462,9 +455,6 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
             m_out->Print( 0, ")\n" );
         }
-
-        mask <<= 1;
-        ++layer;
     }
 
     m_out->Print( aNestLevel, ")\n\n" );
@@ -1029,16 +1019,14 @@ void PCB_IO::formatLayers( LAYER_MSK aLayerMask, int aNestLevel ) const
 
     // output any individual layers not handled in wildcard combos above
 
-    unsigned layerMask = aLayerMask;
-
     if( m_board )
-        layerMask &= m_board->GetEnabledLayers();
+        aLayerMask &= m_board->GetEnabledLayers();
 
     wxString layerName;
 
-    for( LAYER_NUM layer = FIRST_LAYER; layerMask; ++layer, layerMask >>= 1 )
+    for( LAYER_NUM layer = FIRST_LAYER; layer < NB_PCB_LAYERS; ++layer )
     {
-        if( layerMask & 1 )
+        if( aLayerMask & GetLayerMask( layer ) )
         {
             if( m_board && !(m_ctl & CTL_STD_LAYER_NAMES) )
                 layerName = m_board->GetLayerName( layer );

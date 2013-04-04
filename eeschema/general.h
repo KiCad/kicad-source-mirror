@@ -90,7 +90,7 @@ void SetDefaultLineThickness( int aThickness);
 int GetDefaultBusThickness();
 void SetDefaultBusThickness( int aThickness );
 
-EDA_COLOR_T ReturnLayerColor( int aLayer );
+EDA_COLOR_T GetLayerColor( int aLayer );
 
 // Color to draw selected items
 EDA_COLOR_T GetItemSelectedColor();

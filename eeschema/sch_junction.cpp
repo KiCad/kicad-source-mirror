@@ -125,7 +125,7 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
     if( aColor >= 0 )
         color = aColor;
     else
-        color = ReturnLayerColor( m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( aDC, aDrawMode );
 
@@ -242,6 +242,6 @@ bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->SetColor( ReturnLayerColor( GetLayer() ) );
+    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
     aPlotter->Circle( m_pos, m_size.x, FILLED_SHAPE );
 }

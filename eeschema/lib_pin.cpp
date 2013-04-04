@@ -860,7 +860,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
     int       posX    = aPinPos.x, posY = aPinPos.y, len = m_length;
     EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
 
-    EDA_COLOR_T color = ReturnLayerColor( LAYER_PIN );
+    EDA_COLOR_T color = GetLayerColor( LAYER_PIN );
 
     if( aColor < 0 )       // Used normal color or selected color
     {
@@ -1090,9 +1090,9 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
         Color = GetItemSelectedColor();
 
     NameColor = (EDA_COLOR_T) ( Color == UNSPECIFIED_COLOR ?
-                                ReturnLayerColor( LAYER_PINNAM ) : Color );
+                                GetLayerColor( LAYER_PINNAM ) : Color );
     NumColor  = (EDA_COLOR_T) ( Color == UNSPECIFIED_COLOR ?
-                                ReturnLayerColor( LAYER_PINNUM ) : Color );
+                                GetLayerColor( LAYER_PINNUM ) : Color );
 
     /* Create the pin num string */
     ReturnPinStringNum( StringPinNum );
@@ -1271,7 +1271,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation )
 {
     int         MapX1, MapY1, x1, y1;
-    EDA_COLOR_T color = ReturnLayerColor( LAYER_PIN );
+    EDA_COLOR_T color = GetLayerColor( LAYER_PIN );
 
     aPlotter->SetColor( color );
 
@@ -1385,8 +1385,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
     wxSize      PinNumSize  = wxSize( m_numTextSize, m_numTextSize );
 
     /* Get the num and name colors */
-    NameColor = ReturnLayerColor( LAYER_PINNAM );
-    NumColor  = ReturnLayerColor( LAYER_PINNUM );
+    NameColor = GetLayerColor( LAYER_PINNAM );
+    NumColor  = GetLayerColor( LAYER_PINNUM );
 
     /* Create the pin num string */
     ReturnPinStringNum( StringPinNum );

@@ -163,7 +163,7 @@ void DIALOG_PLOT::Init_Dialog()
         m_layerList.push_back( layer );
         checkIndex = m_layerCheckListBox->Append( m_board->GetLayerName( layer ) );
 
-        if( m_plotOpts.GetLayerSelection() & ( 1 << layer ) )
+        if( m_plotOpts.GetLayerSelection() & GetLayerMask( layer ) ) 
             m_layerCheckListBox->Check( checkIndex );
     }
 
@@ -241,7 +241,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
         case ID_LAYER_FAB: // Select layers usually neede d to build a board
             for( i = 0; i < m_layerList.size(); i++ )
             {
-                long layermask = 1 << m_layerList[ i ];
+                LAYER_MSK layermask = GetLayerMask( m_layerList[ i ] );
                 if( ( layermask &
                     ( ALL_CU_LAYERS | SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT |
                       SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
@@ -675,7 +675,7 @@ void DIALOG_PLOT::applyPlotSettings()
     for( i = 0; i < m_layerList.size(); i++ )
     {
         if( m_layerCheckListBox->IsChecked( i ) )
-            selectedLayers |= (1 << m_layerList[i]);
+            selectedLayers |= GetLayerMask( m_layerList[i] );
     }
 
     tempOptions.SetLayerSelection( selectedLayers );

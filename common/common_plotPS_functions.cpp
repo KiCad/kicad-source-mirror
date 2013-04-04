@@ -39,9 +39,9 @@ void PSLIKE_PLOTTER::SetColor( EDA_COLOR_T color )
 
     if( colorMode )
     {
-        double r = ColorRefs[color].m_Red / 255.0;
-        double g = ColorRefs[color].m_Green / 255.0;
-        double b = ColorRefs[color].m_Blue / 255.0;
+        double r = g_ColorRefs[color].m_Red / 255.0;
+        double g = g_ColorRefs[color].m_Green / 255.0;
+        double b = g_ColorRefs[color].m_Blue / 255.0;
         if( negativeMode )
             emitSetRGBColor( 1 - r, 1 - g, 1 - b );
         else

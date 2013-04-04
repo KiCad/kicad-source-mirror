@@ -242,13 +242,13 @@ void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
         aPlotter->PlotPoly( cornerList, FILLED_WITH_BG_BODYCOLOR, 0 );
         aFill = false;  // body is now filled, do not fill it later.
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    aPlotter->SetColor( ReturnLayerColor( LAYER_DEVICE ) );
+    aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
     aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
@@ -270,7 +270,7 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
                                 const TRANSFORM& aTransform )
 {
     wxPoint  pos1;
-    EDA_COLOR_T color = ReturnLayerColor( LAYER_DEVICE );
+    EDA_COLOR_T color = GetLayerColor( LAYER_DEVICE );
     wxPoint* buffer = NULL;
 
     if( aColor < 0 )                // Used normal color or selected color
@@ -299,8 +299,8 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
         GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
-                (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
-                ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
+                (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
+                GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
         GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
                 color, color );

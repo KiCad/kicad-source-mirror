@@ -328,8 +328,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     if( aDrawMode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
 
-    if( color & HIGHLIGHT_FLAG )
-        color = ColorRefs[color & MASKCOLOR].m_LightColor;
+    ColorApplyHighlightFlag( &color );
 
     alt_color = gerbFrame->GetNegativeItemsColor();
 

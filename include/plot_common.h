@@ -895,7 +895,7 @@ public:
 
 protected:
     bool textAsLines;
-    int currentColor;
+    EDA_COLOR_T m_currentColor;
 };
 
 class TITLE_BLOCK;

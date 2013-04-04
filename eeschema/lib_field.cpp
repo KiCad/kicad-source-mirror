@@ -523,15 +523,15 @@ EDA_COLOR_T LIB_FIELD::GetDefaultColor()
     switch( m_id )
     {
     case REFERENCE:
-        color = ReturnLayerColor( LAYER_REFERENCEPART );
+        color = GetLayerColor( LAYER_REFERENCEPART );
         break;
 
     case VALUE:
-        color = ReturnLayerColor( LAYER_VALUEPART );
+        color = GetLayerColor( LAYER_VALUEPART );
         break;
 
     default:
-        color = ReturnLayerColor( LAYER_FIELDS );
+        color = GetLayerColor( LAYER_FIELDS );
         break;
     }
 

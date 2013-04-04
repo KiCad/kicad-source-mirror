@@ -1451,3 +1451,103 @@ void GRBezier( EDA_RECT* ClipBox,
     std::vector<wxPoint> Points = Bezier2Poly( x1, y1, x2, y2, x3, y3, x4, y4 );
     GRPoly( ClipBox, DC, Points.size(), &Points[0], false, width, Color, Color );
 }
+
+
+EDA_COLOR_T ColorMix( EDA_COLOR_T aColor1, EDA_COLOR_T aColor2 )
+{
+    /* Memoization storage. This could be potentially called for each
+     * color merge so a cache is useful (there are few colours anyway) */ 
+    static EDA_COLOR_T mix_cache[NBCOLORS][NBCOLORS];
+
+    // TODO how is alpha used? it's a mac only thing, I have no idea
+    aColor1 = ColorGetBase( aColor1 );
+    aColor2 = ColorGetBase( aColor2 );
+
+    // First easy thing: a black gives always the other colour
+    if( aColor1 == BLACK )
+        return aColor2;
+    if( aColor2 == BLACK)
+        return aColor1;
+
+    /* Now we are sure that black can't occur, so the rule is: 
+     * BLACK means not computed yet. If we're lucky we already have
+     * an answer */
+    EDA_COLOR_T candidate = mix_cache[aColor1][aColor2];
+    if( candidate != BLACK )
+        return candidate;
+
+    // Blend the two colors (i.e. OR the RGB values)
+    const StructColors &c1 = g_ColorRefs[aColor1]; 
+    const StructColors &c2 = g_ColorRefs[aColor2]; 
+
+    // Ask the palette for the nearest color to the mix
+    wxColour mixed( c1.m_Red | c2.m_Red, 
+                    c1.m_Green | c2.m_Green,
+                    c1.m_Blue | c2.m_Blue );
+    candidate = ColorFindNearest( mixed );
+
+    /* Here, BLACK is *not* a good answer, since it would recompute the next time.
+     * Even theorically its not possible (with the current rules), but
+     * maybe the metric will change in the future */
+    if( candidate == BLACK) 
+        candidate = DARKDARKGRAY;
+
+    // Store the result in the cache. The operation is commutative, too
+    mix_cache[aColor1][aColor2] = candidate;
+    mix_cache[aColor2][aColor1] = candidate;
+    return candidate;
+}
+
+
+EDA_COLOR_T ColorByName( const wxChar *aName )
+{
+    // look for a match in the palette itself
+    for( EDA_COLOR_T trying = BLACK; trying < NBCOLORS; ++trying )
+    {
+        if( 0 == wxStricmp( aName, g_ColorRefs[trying].m_Name ) )
+            return trying;
+    }
+    
+    // Not found, no idea...
+    return UNSPECIFIED_COLOR;
+}
+
+
+EDA_COLOR_T ColorFindNearest( const wxColour &aColor )
+{
+    EDA_COLOR_T candidate = BLACK;
+
+    // These are ints because we will subtract them later
+    int r = aColor.Red();
+    int g = aColor.Green();
+    int b = aColor.Blue();
+
+    /* Find the 'nearest' color in the palette. This is fun. There is
+       a gazilion of metrics for the color space and no one of the
+       useful one is in the RGB color space. Who cares, this is a CAD,
+       not a photosomething... 
+       
+       I hereby declare that the distance is the sum of the square of the
+       component difference. Think about the RGB color cube. Now get the
+       euclidean distance, but without the square root... for ordering 
+       purposes it's the same, obviously. Also each component can't be
+       less of the target one, since I found this currently work better...
+       */
+    int nearest_distance = 255 * 255 * 3 + 1; // Can't beat this
+
+    for( EDA_COLOR_T trying = BLACK; trying < NBCOLORS; ++trying )
+    {
+        const StructColors &c = g_ColorRefs[trying]; 
+        int distance = (r - c.m_Red) * (r - c.m_Red) +
+            (g - c.m_Green) * (g - c.m_Green) +
+            (b - c.m_Blue) * (b - c.m_Blue);
+        if( distance < nearest_distance && c.m_Red >= r && 
+            c.m_Green >= g && c.m_Blue >= b )
+        {
+            nearest_distance = distance;
+            candidate = trying;
+        }
+    }
+
+    return candidate;
+}
