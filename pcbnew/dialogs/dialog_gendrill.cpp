@@ -523,7 +523,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
     }
     else
     {
-        msg.Printf( _( "Create report file %s\n" ), GetChars( dlg.GetPath() ) );
+        msg.Printf( _( "Report file %s created\n" ), GetChars( dlg.GetPath() ) );
         m_messagesBox->AppendText( msg );
     }
 }

@@ -679,6 +679,7 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 void PCB_EDIT_FRAME::syncLayerWidgetLayer()
 {
     m_Layers->SelectLayer( getActiveLayer() );
+    m_Layers->OnLayerSelected();
 }
 
 
